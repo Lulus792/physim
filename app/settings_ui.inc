@@ -117,8 +117,9 @@ static void open_settings(app *a) {
     preferences_capture(a);
     a->settings_draft = a->preferences;
     a->settings_previous_tab = a->tab;
+    a->settings_from_analysis=a->analysis_layout_active;a->settings_defaults=false;
     a->tab = 6;
-    laboratory_context(a);
+    workspace_context(a);
     a->settings_focus=0;a->settings_keyboard=false;a->settings_focus_scroll=false;
 }
 /* Semantic focus groups preserve the same draft and save transaction as pointer input. */
@@ -130,7 +131,8 @@ static void settings_commit(app *a) {
     next.height = a->preferences.height;
     next.maximized = a->preferences.maximized;
     bool laboratory=a->settings_previous_tab==1 && a->laboratory_initialized;
-    if(!laboratory)next.dock = a->preferences.dock;
+    bool analysis=a->settings_from_analysis;
+    if(!laboratory && !analysis && !a->settings_defaults)next.dock = a->preferences.dock;
     if((next.view_flags&PS_VIEW_LOG) && (next.dock.hidden&(1u<<PS_DOCK_LOG)))
         ps_dock_reveal(&next.dock,PS_DOCK_LOG,PS_DOCK_BOTTOM);
     if(!documentation_fonts_prepare_sizes(a,a->doc_zoom_size?a->doc_zoom_size:next.ui_size,
@@ -138,14 +140,25 @@ static void settings_commit(app *a) {
         snprintf(a->preferences_error,sizeof a->preferences_error,"Schriftgröße konnte nicht geladen werden. Einstellungen bleiben erhalten.");
         return;
     }
+    /* Workspace widths are session-owned. A global theme/font save must not
+     * replace the workbench layout with the caller's temporary geometry. */
+    ps_preferences persisted=next;
+    if((laboratory || analysis) && !a->settings_defaults) {
+        persisted.dock=a->preferences.dock;
+        persisted.sidebar_width=a->preferences.sidebar_width;
+        persisted.inspector_width=a->preferences.inspector_width;
+        persisted.log_height=a->preferences.log_height;
+        persisted.view_flags=(persisted.view_flags&~PS_VIEW_LOG)|(a->show_log?PS_VIEW_LOG:0);
+    }
     ps_result r =
-        a->preferences_path[0] ? ps_preferences_write(a->preferences_path, &next) : PS_IO;
+        a->preferences_path[0] ? ps_preferences_write(a->preferences_path, &persisted) : PS_IO;
     if (r == PS_OK) {
-        preferences_apply(a, &next);
-        /* Settings edit the caller's explicit layout. Returning to Simulieren
-         * must keep that accepted draft, including the log visibility, instead
-         * of restoring its older session snapshot over the user's save. */
-        if(laboratory)a->laboratory_layout=(ps_layout_state){next.dock,next.sidebar_width,
+        preferences_apply(a, &persisted);
+        /* Apply accepted geometry to its originating workspace on return. */
+        if(a->settings_defaults){a->laboratory_initialized=false;a->analysis_layout_initialized=false;}
+        if(laboratory && !a->settings_defaults)a->laboratory_layout=(ps_layout_state){next.dock,next.sidebar_width,
+            next.inspector_width,next.log_height,(next.view_flags&PS_VIEW_LOG)!=0};
+        if(analysis && !a->settings_defaults)a->analysis_layout=(ps_layout_state){next.dock,next.sidebar_width,
             next.inspector_width,next.log_height,(next.view_flags&PS_VIEW_LOG)!=0};
         a->preferences_writable = true;
         a->preferences_error[0] = 0;
@@ -157,6 +170,10 @@ static void settings_commit(app *a) {
             a->preferences_error, sizeof a->preferences_error,
             "Speichern fehlgeschlagen: %s. Deine bisherigen Einstellungen bleiben erhalten.",
             ps_result_string(r));
+}
+static void settings_defaults_draft(app *a) {
+    a->settings_defaults=true;a->settings_draft=PS_PREFERENCES_DEFAULT;
+    a->settings_draft.width=a->preferences.width;a->settings_draft.height=a->preferences.height;
 }
 static bool settings_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
     if(a->tab!=6 || a->project_manager || a->toolbar_menu || a->toolbar_keyboard)return false;
@@ -176,7 +193,7 @@ static bool settings_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
     ps_preferences *p=&a->settings_draft;int focus=a->settings_focus;
     if(focus==1 && activate && !key->repeat)settings_commit(a);
     else if(focus==2 && activate && !key->repeat){a->tab=a->settings_previous_tab;a->settings_keyboard=false;}
-    else if(focus==3 && activate && !key->repeat){*p=PS_PREFERENCES_DEFAULT;p->width=a->preferences.width;p->height=a->preferences.height;}
+    else if(focus==3 && activate && !key->repeat)settings_defaults_draft(a);
     else if(focus==0 || focus==5) {
         uint32_t *size=focus==0?&p->ui_size:&p->editor_size;
         unsigned minimum=focus==0?16:12,count=focus==0?4:6;
@@ -245,11 +262,7 @@ static void settings_view(app *a) {
         a->tab = a->settings_previous_tab;
     settings_focus_draw(a,2,a->settings_bounds[4]);
     a->settings_bounds[5] = nk_widget_bounds(ui);
-    if (nk_button_label(ui, "Standardwerte")) {
-        *p = PS_PREFERENCES_DEFAULT;
-        p->width = a->preferences.width;
-        p->height = a->preferences.height;
-    }
+    if (nk_button_label(ui, "Standardwerte"))settings_defaults_draft(a);
     settings_focus_draw(a,3,a->settings_bounds[5]);
     nk_layout_row_dynamic(ui, 28, 1);
     nk_label_wrap(ui,

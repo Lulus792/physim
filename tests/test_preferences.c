@@ -103,7 +103,14 @@ int main(int argc, char **argv) {
     p.inspector_open = 1;
     CHECK(ps_preferences_write(path, &p) == PS_OK && ps_preferences_read(path, &out) == PS_OK);
     CHECK(!memcmp(&p, &out, sizeof p));
+    p.sidebar_width = 480;
+    CHECK(ps_preferences_write(path, &p) == PS_OK && ps_preferences_read(path, &out) == PS_OK);
+    CHECK(!memcmp(&p, &out, sizeof p));
     ps_preferences invalid = p;
+    invalid.sidebar_width = 481;
+    CHECK(ps_preferences_write(path, &invalid) == PS_INVALID);
+    CHECK(ps_preferences_read(path, &out) == PS_OK && !memcmp(&p, &out, sizeof p));
+    invalid = p;
     invalid.editor_size = 17;
     CHECK(ps_preferences_write(path, &invalid) == PS_INVALID);
     CHECK(ps_preferences_read(path, &out) == PS_OK && !memcmp(&p, &out, sizeof p));

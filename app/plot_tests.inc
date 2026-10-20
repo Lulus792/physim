@@ -221,6 +221,18 @@ static void test_plot_wheel(app *a, float x, float y, float amount) {
     e.wheel.y = amount;
     SDL_PushEvent(&e);
 }
+static bool test_reveal_inspector_action(app *a,struct nk_rect action,struct nk_rect viewport) {
+    static unsigned settle;
+    /* Wheel input is queued, and Nuklear applies scrolling at panel end.
+     * Wait for a subsequent layout before using the new action rectangle. */
+    if(settle){settle--;return false;}
+    if(action.w<=0 || viewport.w<=0)return false;
+    if(action.y<viewport.y+18 || action.y+action.h>viewport.y+viewport.h-18) {
+        test_plot_wheel(a,viewport.x+viewport.w*.5f,viewport.y+viewport.h*.5f,action.y<viewport.y+18?3:-3);
+        settle=2;return false;
+    }
+    return true;
+}
 static void test_scene_key(app *a, SDL_Keycode key, SDL_Keymod mod, bool repeat) {
     SDL_Event e = {0};
     e.type = SDL_EVENT_KEY_DOWN;
@@ -403,6 +415,7 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
     case 36:
         break;
     case 37: {
+        double export_started=ps_clock();fprintf(stderr,"PLOT EXPORT PROFILE: regular images begin\n");
         size_t count = 0;
         unsigned char *exported = SDL_LoadFile(a->result_export, &count);
         ok = exported && count > 33 && !memcmp(exported, "\211PNG\r\n\032\n", 8);
@@ -420,10 +433,13 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
             }
         }
         SDL_free(exported);
+        fprintf(stderr,"PLOT EXPORT PROFILE: regular images %.6f s; dense begin\n",ps_clock()-export_started);export_started=ps_clock();
         if (ok)
             ok = test_plot_dense_image(a);
+        fprintf(stderr,"PLOT EXPORT PROFILE: dense %.6f s; scaled images begin\n",ps_clock()-export_started);export_started=ps_clock();
         if (ok)
             ok = a->png_scale == 2 && test_plot_scaled_images(a);
+        fprintf(stderr,"PLOT EXPORT PROFILE: scaled images %.6f s\n",ps_clock()-export_started);
         *capture = "plot-after-png.bmp";
         break;
     } break;
@@ -476,9 +492,14 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
         a->scene_disclosure = NK_MAXIMIZED;
         break;
     case 56:
+        if(!a->dock_visible[PS_DOCK_SIDEBAR]){test_mouse(a,a->laboratory_sides[0],true);*stage=82;return;}
         *capture = "scene-all.bmp";
         test_mouse(a, a->scene_visibility_bounds[0], true);
         break;
+    case 82:test_mouse(a,a->laboratory_sides[0],false);*stage=83;return;
+    case 83:
+        ok=a->dock_visible[PS_DOCK_SIDEBAR] && a->scene_visibility_bounds[0].w>0;
+        *stage=56;if(ok)return;break;
     case 57: test_mouse(a, a->scene_visibility_bounds[0], false); break;
     case 58:
         ok = !ps_scene_view_visible(&a->scene_view, 0) && ps_scene_view_visible(&a->scene_view, 1) && a->scene.count == 3;
@@ -544,9 +565,12 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
         a->scene.objects[0] = a->scene.objects[2];
         a->scene.objects[2] = swap;
         ps_scene_view_sync(&a->scene_view, &a->scene);
-        test_mouse(a, a->scene_hide_selection_bounds, true);
-        break;
+        *stage=84;return;
     }
+    case 84:
+        if(!test_reveal_inspector_action(a,a->scene_hide_selection_bounds,a->laboratory_inspector_body))return;
+        test_mouse(a, a->scene_hide_selection_bounds, true);
+        *stage=73;return;
     case 73: test_mouse(a, a->scene_hide_selection_bounds, false); break;
     case 74:
         ok = !a->scene_selected && !ps_scene_view_visible(&a->scene_view, 0) &&

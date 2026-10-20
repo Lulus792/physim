@@ -11,9 +11,12 @@ static void workspace_rule(struct nk_command_buffer *canvas,struct nk_rect line)
     nk_push_scissor(canvas,line);nk_fill_rect(canvas,line,0,UI_COLOR(border));nk_push_scissor(canvas,clip);
 }
 #include "laboratory_layout.inc"
+#include "analysis_layout.inc"
+#include "analysis_resize.inc"
 static float dock_header_height(const app *a) {return workbench_visible(a)?40:DOCK_HEADER_HEIGHT;}
 static float dock_panel_header_height(const app *a,unsigned panel) {
     if(a->panel_render)return 0;
+    if(analysis_visible(a))return 0;
     if(laboratory_visible(a)) {
         if(panel==PS_DOCK_WORKSPACE){uint32_t group=ps_dock_group(&a->preferences.dock,panel);
             return group!=PS_DOCK_NONE && a->preferences.dock.nodes[group].panels!=(1u<<panel)?38:0;}
@@ -25,6 +28,7 @@ static float dock_panel_header_height(const app *a,unsigned panel) {
 static float dock_gap(const app *a) {return workspace_shell_visible(a)?0:8;}
 static struct nk_rect dock_root_bounds(app *a,float w,float h) {
     if(laboratory_visible(a))return nk_rect(0,232,w,fmaxf(180,h-232-WORKSPACE_STATUS_HEIGHT-laboratory_dimension_value(a,1)));
+    if(analysis_visible(a))return nk_rect(0,198,w,h-198-WORKSPACE_STATUS_HEIGHT);
     if(workspace_shell_visible(a))return nk_rect(0,WORKSPACE_CONTENT_TOP,w,h-WORKSPACE_CONTENT_TOP-WORKSPACE_STATUS_HEIGHT);
     return nk_rect(8,72,w-16,h-80);
 }
@@ -57,7 +61,7 @@ static float dock_minimum(const app *a,uint32_t id,bool x) {
             if(n->panels&(1u<<PS_DOCK_WORKSPACE))return 440;
             if(n->panels&((1u<<PS_DOCK_SIDEBAR)|(1u<<PS_DOCK_INSPECTOR)))return 208;
         }
-        if(workbench_visible(a) && x) {
+        if((workbench_visible(a) || analysis_visible(a)) && x) {
             if(n->panels&(1u<<PS_DOCK_WORKSPACE))return 300;
             if(n->panels&((1u<<PS_DOCK_SIDEBAR)|(1u<<PS_DOCK_INSPECTOR)))return 208;
         }
@@ -69,8 +73,8 @@ static float dock_minimum(const app *a,uint32_t id,bool x) {
 }
 static const char *dock_resize_label(app *a,unsigned id,char text[48]) {
     ps_dock_layout *d=&a->preferences.dock;ps_dock_node *n=&d->nodes[id];
-    if(dock_sidebar_split(d,n))return laboratory_visible(a)?"Szenenbaum-Breite":"Workspace-Breite";
-    if(dock_context_split(d,n))return laboratory_visible(a)?"Inspektor-Breite":"Codekontext-Breite";
+    if(dock_sidebar_split(d,n))return laboratory_visible(a)?"Szenenbaum-Breite":analysis_visible(a)?"Messlauflisten-Breite":"Workspace-Breite";
+    if(dock_context_split(d,n))return laboratory_visible(a)?"Inspektor-Breite":analysis_visible(a)?"Laufdetails-Breite":"Codekontext-Breite";
     if(dock_log_split(d,n))return "Protokoll-Höhe";
     snprintf(text,48,"Paneltrenner %u",id+1);return text;
 }
@@ -79,8 +83,8 @@ static float dock_resize_value(app *a,unsigned id,float *minimum,float *maximum,
     struct nk_rect r=a->dock_rects[id];bool x=n->kind==PS_DOCK_X;
     float extent=fmaxf(1,(x?r.w:r.h)-dock_gap(a)),min_first=dock_minimum(a,n->first,x),min_second=dock_minimum(a,n->second,x);
     *reverse=false;
-    if(dock_sidebar_split(d,n)) {*minimum=208;*maximum=fminf(360,extent-min_second);*standard=248;return a->dock_rects[n->first].w;}
-    if(dock_context_split(d,n)) {*reverse=true;*minimum=208;*maximum=fminf(480,extent-min_first);*standard=280;return a->dock_rects[n->second].w;}
+    if(dock_sidebar_split(d,n)) {*minimum=208;*maximum=fminf(analysis_visible(a)?480:360,extent-min_second);*standard=analysis_visible(a)?232:248;return a->dock_rects[n->first].w;}
+    if(dock_context_split(d,n)) {*reverse=true;*minimum=208;*maximum=fminf(480,extent-min_first);*standard=analysis_visible(a)?242:280;return a->dock_rects[n->second].w;}
     if(dock_log_split(d,n)) {*reverse=true;*minimum=150;*maximum=fminf(340,extent-min_first);*standard=178;return a->dock_rects[n->second].h+dock_gap(a);}
     *minimum=fmaxf(min_first,extent/16);*maximum=fminf(extent-min_second,extent*15/16);*standard=extent*.5f;
     return extent*n->ratio/1024.f;
@@ -99,7 +103,14 @@ static void dock_resize_set(app *a,unsigned id,float value) {
     }
 }
 static void dock_resize_begin(app *a) {
-    if(!a->dock_resize_transaction){a->dock_resize_original=a->preferences;a->dock_resize_transaction=true;}
+    if(!a->dock_resize_transaction) {
+        a->dock_resize_original=a->preferences;a->dock_resize_mouse=a->ui->input.mouse.pos;
+        if(a->dock_resize) {
+            float minimum,maximum,standard;bool reverse;
+            a->dock_resize_initial_value=dock_resize_value(a,(unsigned)a->dock_resize-1,&minimum,&maximum,&standard,&reverse);
+        }
+        a->dock_resize_transaction=true;a->dock_resize_moved=false;SDL_CaptureMouse(true);
+    }
 }
 static void dock_resize_abort(app *a) {
     if(a->dock_resize_transaction) {
@@ -108,7 +119,7 @@ static void dock_resize_abort(app *a) {
         a->preferences.inspector_width=a->dock_resize_original.inspector_width;
         a->preferences.log_height=a->dock_resize_original.log_height;
     }
-    a->dock_resize_transaction=false;a->dock_resize=a->dock_float_resize=0;
+    a->dock_resize_transaction=false;a->dock_resize=a->dock_float_resize=0;SDL_CaptureMouse(false);
 }
 static bool dock_resize_key(app *a,const SDL_KeyboardEvent *key) {
     if(key->mod&(SDL_KMOD_CTRL|SDL_KMOD_GUI|SDL_KMOD_ALT) || a->recovery || a->dialog_pending || a->toolbar_menu)return false;
@@ -122,7 +133,7 @@ static bool dock_resize_key(app *a,const SDL_KeyboardEvent *key) {
         float value=dock_resize_value(a,id,&minimum,&maximum,&standard,&reverse);
         int direction=key->key==SDLK_LEFT || key->key==SDLK_UP?-1:key->key==SDLK_RIGHT || key->key==SDLK_DOWN?1:0;
         if(direction) {
-            dock_resize_begin(a);value+=(reverse?-direction:direction)*(key->mod&SDL_KMOD_SHIFT?40:10);
+            value+=(reverse?-direction:direction)*(key->mod&SDL_KMOD_SHIFT?40:10);
         } else if(key->key==SDLK_HOME)value=minimum;
         else if(key->key==SDLK_END)value=maximum;
         else if(key->key==SDLK_RETURN || key->key==SDLK_KP_ENTER){value=standard;a->dock_resize_transaction=false;}
@@ -150,8 +161,8 @@ static void dock_arrange(app *a,uint32_t id,struct nk_rect r) {
         first=extent-(a->show_log&&a->tab!=6?(float)a->preferences.log_height-gap:68.f);
     first=fmaxf(dock_minimum(a,n->first,x),fminf(extent-dock_minimum(a,n->second,x),first));
     struct nk_rect one=r,two=r,split=r;
-    if(x) { one.w=first; split.x=r.x+first-(workbench_visible(a)?4:0);split.w=workbench_visible(a)?9:8;two.x=r.x+first+gap;two.w=extent-first; }
-    else { one.h=first;split.y=r.y+first-(workbench_visible(a)?4:0);split.h=workbench_visible(a)?9:8;two.y=r.y+first+gap;two.h=extent-first; }
+    if(x) { one.w=first; split.x=r.x+first-(workspace_shell_visible(a)?4:0);split.w=workspace_shell_visible(a)?9:8;two.x=r.x+first+gap;two.w=extent-first; }
+    else { one.h=first;split.y=r.y+first-(workspace_shell_visible(a)?4:0);split.h=workspace_shell_visible(a)?9:8;two.y=r.y+first+gap;two.h=extent-first; }
     a->dock_splitters[id]=split;dock_arrange(a,n->first,one);dock_arrange(a,n->second,two);
 }
 static ps_dock_float dock_clamp_float(unsigned panel,struct nk_rect r,float w,float h) {
@@ -189,8 +200,8 @@ static void dock_fixed(app *a) {
     a->preferences.dock=workbench_visible(a)?ps_dock_fixed_workbench_layout(a->preferences.dock.hidden):ps_dock_fixed_layout(a->preferences.dock.hidden);
 }
 static void dock_prepare(app *a,float w,float h) {
-    laboratory_context(a);dock_fixed(a);laboratory_resize_input(a);
-    if(!a->panels[PS_DOCK_WORKSPACE].detached)file_tabs_prepare(a);
+    workspace_context(a);dock_fixed(a);laboratory_resize_input(a);
+    if(!analysis_visible(a) && !a->panels[PS_DOCK_WORKSPACE].detached)file_tabs_prepare(a);
     panel_pull_input(a,w,h);
     ps_dock_layout *d=&a->preferences.dock;
     if(!a->dock_started) { a->dock_last_tab=a->tab;a->dock_started=true; }
@@ -218,20 +229,21 @@ static void dock_prepare(app *a,float w,float h) {
     if(a->dock_resize && pressed && same_splitter_click && nk_input_is_mouse_pressed(in,NK_BUTTON_DOUBLE)) {
         unsigned id=(unsigned)a->dock_resize-1;float minimum,maximum,standard;bool reverse;
         dock_resize_value(a,id,&minimum,&maximum,&standard,&reverse);dock_resize_set(a,id,standard);
-        a->dock_resize=0;a->dock_resize_transaction=false;
+        a->dock_resize=0;a->dock_resize_transaction=false;SDL_CaptureMouse(false);
     }
     if(a->dock_resize && down) {
-        unsigned id=(unsigned)a->dock_resize-1;ps_dock_node *n=&d->nodes[id];struct nk_rect r=a->dock_rects[id];
+        unsigned id=(unsigned)a->dock_resize-1;ps_dock_node *n=&d->nodes[id];
         bool x=n->kind==PS_DOCK_X;
-        float gap=dock_gap(a),extent=(x?r.w:r.h)-gap;
-        float first=(x?in->mouse.pos.x-r.x:in->mouse.pos.y-r.y)-gap*.5f;
-        float value=dock_context_split(d,n)?extent-first:dock_log_split(d,n)?extent-first+gap:first;
-        dock_resize_set(a,id,value);
+        float delta=x?in->mouse.pos.x-a->dock_resize_mouse.x:in->mouse.pos.y-a->dock_resize_mouse.y;
+        float value=a->dock_resize_initial_value+((dock_context_split(d,n) || dock_log_split(d,n))?-delta:delta);
+        if(delta!=0)a->dock_resize_moved=true;
+        if(a->dock_resize_moved)dock_resize_set(a,id,value);
         if(dock_sidebar_split(d,n))a->panel_drag=1;
         if(dock_log_split(d,n))a->panel_drag=2;
     }
-    if(!down) { if(a->dock_resize || a->dock_float_resize)a->dock_resize_transaction=false;a->dock_resize=a->dock_float_resize=a->dock_drag=0;a->dock_dragging=false;a->panel_drag=0; }
+    if(!down) { if(a->dock_resize || a->dock_float_resize){a->dock_resize_transaction=false;SDL_CaptureMouse(false);}a->dock_resize=a->dock_float_resize=a->dock_drag=0;a->dock_dragging=false;a->panel_drag=0; }
     if(a->tab==6 && (a->dock_resize || a->dock_float_resize || a->dock_dragging)) {
+        a->settings_defaults=false;
         a->settings_draft.dock=*d;a->settings_draft.sidebar_width=a->preferences.sidebar_width;a->settings_draft.log_height=a->preferences.log_height;
         a->settings_draft.inspector_width=a->preferences.inspector_width;
     }
@@ -271,6 +283,7 @@ static bool dock_begin(app *a,unsigned panel) {
     struct nk_window *previous=a->ui->active;
     nk_style_push_float(a->ui,&a->ui->style.window.rounding,0);
     nk_flags flags=NK_WINDOW_BACKGROUND|(a->dock_visible[panel]?0:NK_WINDOW_HIDDEN);
+    if(analysis_visible(a) && ((panel==PS_DOCK_SIDEBAR && r.h>=420) || (panel==PS_DOCK_WORKSPACE && r.h>=720 && a->preferences.ui_size<=16 && !a->show_report && a->data.channel_count<=1 && analysis_plot_fits(a,r))))flags|=NK_WINDOW_NO_SCROLLBAR;
     if(laboratory_visible(a) && (panel==PS_DOCK_WORKSPACE || panel==PS_DOCK_INSPECTOR))flags|=NK_WINDOW_NO_SCROLLBAR;
     bool shown=nk_begin(a->ui,dock_windows[panel],r,flags);
     nk_style_pop_float(a->ui);
@@ -295,6 +308,7 @@ static void dock_headers(app *a) {
         bool floating=i>=PS_DOCK_NODES;unsigned p=floating?i-PS_DOCK_NODES:0;
         char name[48];snprintf(name,sizeof name,"dock-heading-%u",i);
         bool visible=floating?(d->floating&(1u<<p))!=0:d->nodes[i].kind==PS_DOCK_GROUP;
+        if(analysis_visible(a))visible=false;
         if(laboratory_visible(a) && (floating?p==PS_DOCK_WORKSPACE:d->nodes[i].panels==(1u<<PS_DOCK_WORKSPACE)))visible=false;
         nk_window_show(ui,name,visible?NK_SHOWN:NK_HIDDEN);
         if(!visible) continue;
@@ -470,7 +484,7 @@ static void dock_separator_views(app *a) {
         bool visible=r.w>0 && r.h>0 && (kind==PS_DOCK_X || kind==PS_DOCK_Y);
         nk_window_show(ui,window,visible?NK_SHOWN:NK_HIDDEN);if(!visible)continue;
         bool vertical=a->preferences.dock.nodes[id].kind==PS_DOCK_X;
-        if(!workbench_visible(a)){if(vertical){r.x-=.5f;r.w=9;}else {r.y-=.5f;r.h=9;}}
+        if(!workspace_shell_visible(a)){if(vertical){r.x-=.5f;r.w=9;}else {r.y-=.5f;r.h=9;}}
         nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(0,0));
         nk_style_push_float(ui,&ui->style.window.rounding,0);
         nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(nk_rgba(0,0,0,0)));
@@ -489,7 +503,10 @@ static void dock_separator_views(app *a) {
             if(ps_ui_separator_at(ui,r,name,minimum,&value,maximum))dock_resize_set(a,id,value);
             if(nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ui->input,r) && !blocked)
                 nk_sdl_accessibility_request_focus(ui,NULL,name);
-            if(nk_sdl_accessibility_is_focused(ui,NULL,name))nk_fill_rect(nk_window_get_canvas(ui),r,0,UI_COLOR(accent));
+            if(nk_sdl_accessibility_is_focused(ui,NULL,name) || (!blocked && nk_input_is_mouse_hovering_rect(&ui->input,r))) {
+                struct nk_rect line=vertical?nk_rect(floorf(r.x+r.w/2),r.y,1,r.h):nk_rect(r.x,floorf(r.y+r.h/2),r.w,1);
+                nk_fill_rect(nk_window_get_canvas(ui),line,0,UI_COLOR(accent));
+            }
         }
         nk_end(ui);nk_style_pop_style_item(ui);nk_style_pop_float(ui);nk_style_pop_vec2(ui);
         nk_sdl_window_raise(ui,window);

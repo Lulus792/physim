@@ -13,7 +13,7 @@ static bool name_valid(const char *name) {
     size_t n=strlen(name);return name[0]!=' ' && name[n-1]!=' ';
 }
 bool ps_layout_state_valid(const ps_layout_state *s) {
-    return s && ps_dock_valid(&s->dock) && s->sidebar_width>=208 && s->sidebar_width<=360 &&
+    return s && ps_dock_valid(&s->dock) && s->sidebar_width>=208 && s->sidebar_width<=480 &&
         s->inspector_width>=208 && s->inspector_width<=480 && s->log_height>=150 &&
         s->log_height<=340 && s->show_log<=1;
 }

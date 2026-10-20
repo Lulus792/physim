@@ -43,12 +43,21 @@ static bool run_details_test_start(app *a,const char *root,const char *mode) {
     run_details_test_editors[1]=ps_crc32((const unsigned char *)nk_str_get_const(&a->analysis.string),(size_t)nk_str_len_char(&a->analysis.string));
     return true;
 }
+static bool run_details_test_reveal_action(app *a) {
+    struct nk_rect button=a->run_details_button;
+    if(button.w<=0)return false;
+    if(analysis_visible(a)) {
+        struct nk_rect pane=a->dock_panels[PS_DOCK_INSPECTOR];
+        return test_reveal_inspector_action(a,button,pane);
+    }
+    return true;
+}
 static void run_details_test_frame(app *a,int *stage,int *code,const char **capture) {
     static bool settle;if(settle){settle=false;return;}settle=true;
     if(a->data.thread)return;
     bool ok=true;char path[4096];
     switch(*stage) {
-    case 0:if(!a->run_details_button.w)return;test_mouse(a,a->run_details_button,true);break;
+    case 0:if(!run_details_test_reveal_action(a))return;test_mouse(a,a->run_details_button,true);break;
     case 1:test_mouse(a,a->run_details_button,false);break;
     case 2:
         ok=a->run_details_manager && strstr(a->run_details_overview,"Idealisiert · Point mass") && strstr(a->run_details_overview,"Nicht modelliert · Vacuum") && strstr(a->run_details_overview,"Lineare Parameterstudie") && strstr(a->run_details_overview,"Wirksamer Studienwert [SI]: 2");
@@ -81,7 +90,7 @@ static void run_details_test_frame(app *a,int *stage,int *code,const char **capt
     case 14:ok=report_details_test_clipboard(a->run_details_metadata);test_key(a,SDLK_ESCAPE);break;
     case 15:
         ok=!a->run_details_manager;join(a->last_run,sizeof a->last_run,a->project,"runs/legacy.psrun");request_dataset(a);break;
-    case 16:test_mouse(a,a->run_details_button,true);break;
+    case 16:if(!run_details_test_reveal_action(a))return;test_mouse(a,a->run_details_button,true);break;
     case 17:test_mouse(a,a->run_details_button,false);break;
     case 18:
         ok=a->run_details_manager && strstr(a->run_details_overview,"Geometrie und Anfangszustand\nNicht dokumentiert") && !strstr(a->run_details_overview,"Fixture pendulum");

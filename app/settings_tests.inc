@@ -381,6 +381,7 @@ static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
             test_mouse(a, drag, true);
             break;
         case 16:
+            ok=a->preferences.sidebar_width==248; /* Press alone cannot jump a half-pixel handle. */
             test_plot_motion(a, drag.x + drag.w * .5f + 64, drag.y + drag.h * .5f);
             break;
         case 17:

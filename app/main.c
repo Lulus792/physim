@@ -135,6 +135,7 @@ typedef struct {
     struct nk_user_font laboratory_title_font;
     struct nk_user_font laboratory_measurement_font;
     struct nk_user_font workspace_status_font;
+    struct nk_user_font analysis_title_font, analysis_chart_font;
     unsigned workbench_sidebar_focus;
     struct nk_rect workbench_environment_bounds;
     float workbench_regular_em,workbench_bold_em;
@@ -146,6 +147,7 @@ typedef struct {
     char preferences_path[4096], preferences_error[192];
     bool preferences_writable, show_grid;
     int settings_previous_tab, panel_drag;
+    bool settings_from_analysis,settings_defaults;
     int settings_focus;
     struct nk_rect settings_focus_bounds[14];
     bool settings_keyboard, settings_focus_scroll;
@@ -158,7 +160,8 @@ typedef struct {
     struct nk_vec2 dock_origin, dock_grab, dock_resize_mouse;
     ps_dock_float dock_resize_start;
     ps_preferences dock_resize_original;
-    bool dock_resize_transaction;
+    float dock_resize_initial_value;
+    bool dock_resize_transaction,dock_resize_moved;
     ps_panel_window panels[PS_PANEL_COUNT];
     int panel_render; /* zero: main window, otherwise panel + 1 */
     unsigned panel_open_request, panel_return_request;
@@ -171,6 +174,16 @@ typedef struct {
     /* Simulieren owns session-only geometry; the user's common layout is kept. */
     bool laboratory_initialized, laboratory_active, laboratory_curves;
     ps_layout_state laboratory_layout, laboratory_previous;
+    bool analysis_layout_initialized, analysis_layout_active;
+    ps_layout_state analysis_layout, analysis_previous;
+    unsigned analysis_focus_return;
+    float analysis_plot_height,analysis_plot_content,analysis_plot_original,analysis_plot_auto_height;
+    bool analysis_plot_manual,analysis_plot_resizing,analysis_plot_was_manual,analysis_plot_cancelled,analysis_plot_hover,analysis_plot_moved;
+    struct nk_rect analysis_plot_splitter;
+    struct nk_vec2 analysis_plot_grab;
+    enum nk_collapse_states analysis_source_disclosure;
+    char analysis_query[128];
+    struct nk_rect analysis_side_buttons[2], analysis_tabs[2], analysis_run_bounds[8];
     float laboratory_measure_height,laboratory_closed_height,laboratory_timeline_height,laboratory_curve_ratio;
     float laboratory_resize_original;
     bool laboratory_resize_cancelled;
@@ -585,6 +598,10 @@ static void dock_show(app *a,unsigned panel);
 static bool laboratory_resize_key(app *a,const SDL_KeyboardEvent *key);
 static bool laboratory_visible(const app *a);
 static void laboratory_context(app *a);
+static void workspace_context(app *a);
+static void dock_resize_abort(app *a);
+static void analysis_plot_resize_abort(app *a);
+static bool analysis_plot_resize_key(app *a,const SDL_KeyboardEvent *key);
 static void model_edit_clear(app *a);
 static void model_edit_finish(app *a,bool success);
 static void model_edit_tick(app *a);
@@ -2482,10 +2499,14 @@ static void plot(app *a, const double *times, const double *values, int count, f
     if (have_values)
         plot_expand_range(&lo, &hi, true);
     double bounds[] = {count ? times[0] : 0, count ? times[count - 1] : 1, lo, hi};
-    nk_layout_row_dynamic(ui, 22, 1);
-    nk_label_colored(ui, label, NK_TEXT_LEFT, UI_COLOR(muted));
-    if (view)
-        plot_controls(a, view, have_values && count > 1 ? bounds : NULL);
+    bool analysis=a->tab==2 && a->analysis_tab==0 && !a->project_manager && view;
+    struct nk_color curve_color=analysis?ui_palette->curves[0]:UI_COLOR(accent);
+    if(analysis)analysis_plot_heading(a,view,have_values && count>1?bounds:NULL);
+    else {
+        nk_layout_row_dynamic(ui, 22, 1);
+        nk_label_colored(ui, label, NK_TEXT_LEFT, UI_COLOR(muted));
+        if(view)plot_controls(a, view, have_values && count > 1 ? bounds : NULL);
+    }
     nk_layout_row_dynamic(ui, height, 1);
     struct nk_rect r;
     nk_widget(&r, ui);
@@ -2502,7 +2523,8 @@ static void plot(app *a, const double *times, const double *values, int count, f
     }
     if (!(times[count - 1] > times[0]))
         return;
-    struct nk_rect area = nk_rect(r.x + 70, r.y + 20, r.w - 90, r.h - 55);
+    struct nk_rect area = analysis?nk_rect(r.x+66,r.y+54,r.w-94,r.h-106):nk_rect(r.x+70,r.y+20,r.w-90,r.h-55);
+    if(analysis){nk_draw_text(canvas,nk_rect(area.x,r.y+22,r.w-94,22),label,(int)strlen(label),ui->style.font,UI_COLOR(edit),UI_COLOR(muted));ps_ui_accessibility_label(ui,r,label);}
     ps_plot_view fit;
     ps_plot_view_reset(&fit);
     if (view)
@@ -2521,6 +2543,7 @@ static void plot(app *a, const double *times, const double *values, int count, f
                      ui->style.font, UI_COLOR(edit), UI_COLOR(muted));
     }
     int ticks = area.h < 80 ? 3 : 5;
+    if(analysis)for(unsigned i=0;i<6;i++){float x=area.x+area.w*(float)i/5;nk_stroke_line(canvas,x,area.y,x,area.y+area.h,1,UI_COLOR(plot_grid));}
     for (int i = 0; i < ticks; i++) {
         float y = area.y + area.h * (float)i / (float)(ticks - 1);
         nk_stroke_line(canvas, area.x, y, area.x + area.w, y, 1, UI_COLOR(plot_grid));
@@ -2539,14 +2562,14 @@ static void plot(app *a, const double *times, const double *values, int count, f
         double x2 = plot_fraction(view, bounds, 0, times[i]),
                y2 = plot_fraction(view, bounds, 1, values[i]);
         if (scatter) {
-            plot_dot(canvas, area, x2, y2, 2, UI_COLOR(accent));
+            plot_dot(canvas, area, x2, y2, 2, curve_color);
             continue;
         }
         if (!i || !isfinite(values[i - 1]))
             continue;
         double x1 = plot_fraction(view, bounds, 0, times[i - 1]),
                y1 = plot_fraction(view, bounds, 1, values[i - 1]);
-        plot_segment(canvas, area, x1, y1, x2, y2, UI_COLOR(accent));
+        plot_segment(canvas, area, x1, y1, x2, y2, curve_color);
     }
     if (a->tab == 1) {
         double x = plot_fraction(view, bounds, 0, display_time(a));
@@ -2557,14 +2580,21 @@ static void plot(app *a, const double *times, const double *values, int count, f
         }
     }
     nk_push_scissor(canvas, previous_clip);
-    for (int endpoint = 0; endpoint < 2; endpoint++) {
+    for (int endpoint = 0; endpoint < (analysis?6:2); endpoint++) {
         char text[48];
-        snprintf(text, sizeof text, "%.5g s", displayed[endpoint] - x_offset);
+        double tick=analysis?plot_tick(displayed[0]-x_offset,displayed[1]-x_offset,endpoint/5.):displayed[endpoint]-x_offset;
+        snprintf(text, sizeof text, analysis?"%.5g":"%.5g s",tick);
         float text_width = ui->style.font->width(ui->style.font->userdata, ui->style.font->height,
                                                  text, (int)strlen(text));
-        float x = endpoint ? area.x + area.w - text_width : area.x;
+        float x=analysis?area.x+area.w*(float)endpoint/5-text_width/2:endpoint?area.x+area.w-text_width:area.x;
         nk_draw_text(canvas, nk_rect(x, area.y + area.h + 10, text_width + 1, 22), text,
                      (int)strlen(text), ui->style.font, UI_COLOR(edit), UI_COLOR(muted));
+    }
+    if(analysis) {
+        nk_draw_text(canvas,nk_rect(area.x+area.w-70,area.y+area.h+40,70,22),"Zeit [s]",8,ui->style.font,UI_COLOR(edit),UI_COLOR(muted));
+        nk_layout_row_dynamic(ui,49,2);char range[160];snprintf(range,sizeof range,"Zeitachse %.6g–%.6g s",displayed[0],displayed[1]);
+        nk_label_colored(ui,range,NK_TEXT_LEFT,UI_COLOR(muted));
+        char preview[160];snprintf(preview,sizeof preview,"Vorschau %d / %llu Messpunkte",count,(unsigned long long)a->data.total);nk_label_colored(ui,preview,NK_TEXT_RIGHT,UI_COLOR(muted));
     }
 }
 static struct nk_text_edit *editor_search_target(app *a) {
@@ -3283,6 +3313,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "pchip_tests.inc"
 #include "channel_units_tests.inc"
 #include "analysis_project_tests.inc"
+#include "analysis_workspace_tests.inc"
 #include "library_selection_tests.inc"
 #include "report_details_tests.inc"
 #include "run_details_tests.inc"
@@ -3900,11 +3931,12 @@ int main(int argc, char **argv) {
             }
             if(event_window==a->window && e.type==SDL_EVENT_TEXT_INPUT)a->completion_typed=true;
             if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && e.key.key==SDLK_TAB)a->outline_keyboard=false;
-            if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && (laboratory_resize_key(a,&e.key) || dock_resize_key(a,&e.key)))continue;
+            if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && (analysis_plot_resize_key(a,&e.key) || laboratory_resize_key(a,&e.key) || dock_resize_key(a,&e.key)))continue;
             if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && editor_search_key(a,&e.key))continue;
             if(event_window==a->window && (e.type==SDL_EVENT_WINDOW_FOCUS_LOST || e.type==SDL_EVENT_WINDOW_RESIZED)) {
                 if(a->panel_pull)panel_pull_cancel(a);
                 if(a->laboratory_resize)laboratory_resize_abort(a);
+                if(a->analysis_plot_resizing)analysis_plot_resize_abort(a);
                 if(a->dock_resize || a->dock_float_resize)dock_resize_abort(a);
             }
             if(event_window==a->window && nk_sdl_accessibility_event(a->ui,&e))continue;
@@ -4050,7 +4082,7 @@ int main(int argc, char **argv) {
             /* The deliberate 80 ms frame delay also runs on hosted software GL.
              * Keep its bounded keyboard assertions; allow their extra wall time. */
             if (ps_clock() - test_started >
-                (!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
+                (!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"analysis-layout-",16)?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
                   !strncmp(argv[3], "isolation-", 10) || !strncmp(argv[3], "breakpoints-", 12) || !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || (!strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"pendulum-medium-",16)) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strncmp(argv[3],"logging-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15))) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
@@ -4125,7 +4157,11 @@ int main(int argc, char **argv) {
             } else
                 test_settings_frame(a, argv[3], &test_stage, &exit_code, &capture);
         } else if (plot_test) {
-            if (ps_clock() - test_started > 30) {
+            /* The complete export task renders regular, dense and four scaled
+             * PNGs up to 4800x3400, then exercises scene controls. Debug/ASan
+             * measured 17 s in the stage-37 exports alone on Windows. */
+            double plot_deadline=scene_visibility_test || camera_plane_test?30:60;
+            if (ps_clock() - test_started > plot_deadline) {
                 exit_code = 1;
                 a->quitting = true;
             } else if(scene_visibility_test)
@@ -5191,7 +5227,7 @@ int main(int argc, char **argv) {
     if (a->preferences_writable && a->preferences_path[0]) {
         preferences_capture(a);
         ps_preferences persisted=a->preferences;
-        if(a->laboratory_active){const ps_layout_state *regular=&a->laboratory_previous;persisted.dock=regular->dock;persisted.sidebar_width=regular->sidebar_width;persisted.inspector_width=regular->inspector_width;persisted.log_height=regular->log_height;persisted.view_flags=(persisted.view_flags&~PS_VIEW_LOG)|(regular->show_log?PS_VIEW_LOG:0);}
+        if(a->laboratory_active || a->analysis_layout_active){const ps_layout_state *regular=a->analysis_layout_active?&a->analysis_previous:&a->laboratory_previous;persisted.dock=regular->dock;persisted.sidebar_width=regular->sidebar_width;persisted.inspector_width=regular->inspector_width;persisted.log_height=regular->log_height;persisted.view_flags=(persisted.view_flags&~PS_VIEW_LOG)|(regular->show_log?PS_VIEW_LOG:0);}
         ps_result saved = ps_preferences_write(a->preferences_path, &persisted);
         if (saved != PS_OK) {
             fprintf(stderr, "Einstellungen nicht gespeichert: %s\n", ps_result_string(saved));

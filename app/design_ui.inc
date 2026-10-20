@@ -544,9 +544,17 @@ static void camera_inspector(app *a) {
 #include "channel_units_ui.inc"
 #include "workspace_catalog_ui.inc"
 #include "toolbar_ui.inc"
+static void analysis_runs_view(app *a);
+static void analysis_details_view(app *a);
 static void sidebar_panel(app *a) {
     struct nk_context *ui=a->ui;
     bool compact=workbench_visible(a);
+    if(analysis_visible(a)) {
+        nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(12,18));
+        nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(header)));
+        if(dock_begin(a,PS_DOCK_SIDEBAR))analysis_runs_view(a);
+        nk_end(ui);nk_style_pop_style_item(ui);nk_style_pop_vec2(ui);return;
+    }
     if(compact){nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(8,0));nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(0,0));}
     if (dock_begin(a, PS_DOCK_SIDEBAR)) {
         if(workbench_visible(a) && a->project_build_disclosure!=NK_MAXIMIZED) {
@@ -698,6 +706,12 @@ static void run_limits_view(app *a) {
 }
 static void inspector_panel(app *a) {
     struct nk_context *ui=a->ui;
+    if(analysis_visible(a)) {
+        nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(18,18));
+        nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(header)));
+        if(dock_begin(a,PS_DOCK_INSPECTOR))analysis_details_view(a);
+        nk_end(ui);nk_style_pop_style_item(ui);nk_style_pop_vec2(ui);return;
+    }
     bool compact=workbench_visible(a);
     if(compact)nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(16,4));
     if(dock_begin(a,PS_DOCK_INSPECTOR)) {
@@ -806,10 +820,12 @@ static void inspector_panel(app *a) {
     nk_end(ui);
     if(compact)nk_style_pop_vec2(ui);
 }
+#include "analysis_ui.inc"
 static void workspace_panel(app *a) {
     struct nk_context *ui=a->ui;
     bool compact=editor_search_target(a)!=NULL;
-    bool laboratory=laboratory_visible(a);
+    bool laboratory=laboratory_visible(a),analysis=analysis_visible(a);
+    if(analysis){nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(24,0));nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(8,0));nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(edit)));}
     if(laboratory){nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(0,0));nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(0,0));}
     if(compact) {
         nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(6,0));
@@ -819,7 +835,7 @@ static void workspace_panel(app *a) {
         nk_style_push_float(ui,&ui->style.edit.row_padding,11);
         nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(edit)));
     }
-    float content=fmaxf(100,a->dock_panels[PS_DOCK_WORKSPACE].h-dock_header_height(a));
+    float content=fmaxf(100,a->dock_panels[PS_DOCK_WORKSPACE].h-dock_panel_header_height(a,PS_DOCK_WORKSPACE));
     float status_space=workbench_visible(a) && (!a->dock_visible[PS_DOCK_LOG] ||
         fabsf(a->dock_panels[PS_DOCK_WORKSPACE].x-a->dock_panels[PS_DOCK_LOG].x)>=2 ||
         (a->preferences.dock.floating&((1u<<PS_DOCK_LOG)|(1u<<PS_DOCK_WORKSPACE))))?26:0;
@@ -960,137 +976,13 @@ static void workspace_panel(app *a) {
         } else if (a->tab == 1) {
             laboratory_workspace(a);
         } else {
-            nk_layout_row_dynamic(ui, 34, 2);
-            nk_style_push_font(ui, a->font_title);
-            nk_label(ui, "Auswertung", NK_TEXT_LEFT);
-            nk_style_pop_font(ui);
-            if (nk_button_label(ui, "Analysecode bearbeiten"))
-                a->analysis_tab = 1;
-            nk_layout_row_dynamic(ui, 32, 1);
-            nk_begin_disabled(ui,!idle(a) || a->library_thread || a->dialog_pending);a->import_bounds=nk_widget_bounds(ui);
-            if(nk_button_label(ui,"Messlauf importieren …"))choose_workspace_path(a,PS_DIALOG_IMPORT_RUN);
-            nk_end_disabled(ui);
-            nk_layout_row_dynamic(ui, 34, 3);
-            nk_begin_disabled(ui, !idle(a) || (!a->last_run[0] && !a->selected_count && !a->analysis_only));
-            char analyze_label[64];
-            if (a->selected_count > 1)
-                snprintf(analyze_label, sizeof analyze_label, "%u Läufe vergleichen",
-                         a->selected_count);
-            else
-                snprintf(analyze_label, sizeof analyze_label, "Analyse starten");
-            a->analysis_start_bounds=nk_widget_bounds(ui);
-            if (action_button(ui, analyze_label, true))
-                analyze(a, false);
-            nk_end_disabled(ui);
-            nk_begin_disabled(ui, !idle(a) || !a->last_run[0]);
-            a->raw_export_bounds=nk_widget_bounds(ui);
-            if (nk_button_label(ui, "CSV exportieren"))
-                analyze(a, true);
-            nk_end_disabled(ui);
-            if (nk_button_label(ui, "Läufe & Berichte"))
-                open_library(a);
-            nk_layout_row_dynamic(ui,30,1);a->run_details_button=nk_widget_bounds(ui);
-            nk_begin_disabled(ui,a->data.thread!=NULL || !a->data.channel_count || !a->data.path[0]);
-            if(nk_button_label(ui,"Modell & Laufdetails …"))(void)run_details_open(a);
-            nk_end_disabled(ui);
-            if (a->report_thread || a->result_error[0]) {
-                nk_layout_row_dynamic(ui, 42, 1);
-                nk_label_wrap(ui, a->report_thread ? "Analyseergebnis wird geprüft und geladen …"
-                                                   : a->result_error);
-            }
-            if (a->analysis_report) {
-                nk_layout_row_dynamic(ui, 32, 2);
-                if (action_button(ui, "Analyseergebnis", a->show_report))
-                    a->show_report = true;
-                if (action_button(ui, "Messdaten", !a->show_report))
-                    a->show_report = false;
-            }
-            if (a->analysis_report && a->show_report) {
-                report_view(a, content);
-            } else if (!a->data.thread && a->data.count) {
-                const char *names[PS_MAX_CHANNELS];
-                for (uint32_t i = 0; i < a->data.channel_count; i++)
-                    names[i] = a->data.channels[i].name;
-                nk_layout_row_dynamic(ui, 30, 2);
-                if (a->plot_channel >= (int)a->data.channel_count)
-                    a->plot_channel = 0;
-                a->plot_channel = nk_combo(ui, names, (int)a->data.channel_count, a->plot_channel,
-                                           28, nk_vec2(280, 240));
-                char total[120];
-                snprintf(total, sizeof total, "%llu Messpunkte · %s",
-                         (unsigned long long)a->data.total,
-                         a->data.result == PS_RECOVERED ? "rekonstruiert" : "vollständig");
-                nk_label_colored(ui, total, NK_TEXT_RIGHT, muted());
-                nk_layout_row_dynamic(ui,28,1);a->channel_unit_buttons[1]=nk_widget_bounds(ui);
-                if(nk_button_label(ui,"Anzeigeeinheit …"))channel_unit_open(a,&a->data.channels[a->plot_channel]);
-                ps_display_unit unit=channel_display_unit(a,&a->data.channels[a->plot_channel]);
-                double displayed[PREVIEW];
-                bool represented=channel_display_values(&unit,a->data.values[a->plot_channel],a->data.count,displayed);
-                char title[192];
-                snprintf(title, sizeof title, "%s [%s]%s", names[a->plot_channel],unit.symbol,
-                         represented?"":" · Werte nicht darstellbar");
-                int mask = -1;
-                (void)ps_channel_status_index(a->data.channels, a->data.channel_count,
-                                              (uint32_t)a->plot_channel, &mask);
-                if (mask >= 0) {
-                    nk_layout_row_dynamic(ui, 24, 1);
-                    char note[160];
-                    snprintf(note, sizeof note,
-                             "%llu gültige Messungen · Ausfälle und nicht fällige Werte sind "
-                             "ausgeschlossen.",
-                             (unsigned long long)a->data.stats[a->plot_channel].count);
-                    nk_label_colored(ui, note, NK_TEXT_LEFT, muted());
-                }
-                plot(a, a->data.time, displayed, a->data.count,
-                     content * .39f, title, mask >= 0, &a->data_views[a->plot_channel]);
-                section(ui, "Statistik des gesamten Laufs");
-                nk_layout_row_dynamic(ui,fminf(360,56+28*(float)a->data.channel_count),1);
-                if(nk_group_begin(ui,"measurement-statistics",0)) {
-                    int column_width=(int)fmaxf(136,(nk_window_get_content_region(ui).w-24)/5);
-                    nk_layout_row_static(ui,28,column_width,5);
-                    const char *head[] = {"Kanal", "Mittelwert", "Std.-Abw.", "Minimum", "Maximum"};
-                    for (int i = 0; i < 5; i++)
-                        nk_label_colored(ui, head[i], NK_TEXT_LEFT, muted());
-                    for (uint32_t i = 0; i < a->data.channel_count; i++) {
-                        ps_display_unit stat_unit=channel_display_unit(a,&a->data.channels[i]);
-                        char stat_label[128];snprintf(stat_label,sizeof stat_label,"%s [%s]",names[i],stat_unit.symbol);
-                        channel_unit_cell(ui,stat_label);
-                        double values[] = {a->data.stats[i].mean,
-                                           ps_statistics_stddev(&a->data.stats[i]),
-                                           a->data.stats[i].min, a->data.stats[i].max};
-                        for (int k = 0; k < 4; k++) {
-                            char text[80];
-                            double converted;
-                            if(ps_display_unit_value(&stat_unit,values[k],&converted)==PS_OK)snprintf(text,sizeof text,"%.8g",converted);
-                            else snprintf(text,sizeof text,"nicht darstellbar");
-                            if (!a->data.stats[i].count || (k == 1 && a->data.stats[i].count < 2))
-                                snprintf(text, sizeof text, "—");
-                            channel_unit_cell(ui,text);
-                        }
-                    }
-                    nk_group_end(ui);
-                }
-            } else {
-                nk_layout_row_dynamic(ui, 110, 1);
-                nk_label_wrap(ui, a->data.thread ? "Messdaten werden geladen …"
-                                  : a->last_run[0]
-                                      ? "Werte den gespeicherten Lauf aus. Die Analyse erstellt "
-                                        "Messkurven, Statistik und einen Bericht."
-                                      : "Hier werden Ergebnisse sichtbar. Starte zuerst eine "
-                                        "Simulation und zeichne einen Lauf auf.");
-            }
-            const char *source_path =
-                a->analysis_report && a->show_report ? a->loaded_report_path : a->last_run;
-            if (source_path[0] && nk_tree_push(ui, NK_TREE_TAB, "Quelldatei", NK_MINIMIZED)) {
-                nk_layout_row_dynamic(ui, 56, 1);
-                nk_label_wrap(ui, source_path);
-                nk_tree_pop(ui);
-            }
+            analysis_workspace_view(a,content);
         }
     }
     nk_end(ui);
     if(compact){nk_style_pop_style_item(ui);nk_style_pop_float(ui);nk_style_pop_float(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}
     if(laboratory){nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}
+    if(analysis){nk_style_pop_style_item(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}
 }
 static void workbench_log_panel(app *a) {
     struct nk_context *ui=a->ui;
@@ -1290,7 +1182,7 @@ static void draw_ui(app *a, int width, int height) {
     struct nk_context *ui = a->ui;
     /* Modal views also cross workspace boundaries (for example Settings with
      * the layout manager open); finish the session transition before returning. */
-    laboratory_context(a);
+    workspace_context(a);
     if(a->panel_pull && (a->recovery || a->layout_manager || a->channel_unit_manager || a->workspace_manager || a->run_details_manager))panel_pull_cancel(a);
     ps_graphics_backdrop(a->graphics,NULL);
     if(a->run_details_manager) {run_details_view(a,width,height);return;}
@@ -1380,6 +1272,8 @@ static void draw_ui(app *a, int width, int height) {
     a->laboratory_title_font=*a->font_title;a->laboratory_title_font.height=14*a->workbench_bold_em*a->preferences.ui_size/16.f;
     a->laboratory_measurement_font=*a->font_ui;a->laboratory_measurement_font.height=23*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->workspace_status_font=*a->font_ui;a->workspace_status_font.height=10*a->workbench_regular_em*a->preferences.ui_size/16.f;
+    a->analysis_title_font=*a->font_title;a->analysis_title_font.height=18*a->workbench_bold_em*a->preferences.ui_size/16.f;
+    a->analysis_chart_font=*a->font_title;a->analysis_chart_font.height=20*a->workbench_bold_em*a->preferences.ui_size/16.f;
     a->laboratory_card_font_count=0;
     float w=(float)width,h=(float)height;
     a->search_edit=NULL;
@@ -1399,8 +1293,9 @@ static void draw_ui(app *a, int width, int height) {
     nk_style_pop_vec2(ui);
     if(a->tab!=a->dock_last_tab) { dock_show(a,PS_DOCK_WORKSPACE);a->dock_last_tab=a->tab; }
     workspace_path_view(a,w);
-    laboratory_context(a);
+    workspace_context(a);
     laboratory_chrome(a,w,h);
+    analysis_chrome(a,w,h);
     dock_relayout(a,w,h);
     memset(a->laboratory_plots,0,sizeof a->laboratory_plots);
     a->laboratory_splitters[0]=a->laboratory_splitters[2]=nk_rect(0,0,0,0);

@@ -57,7 +57,25 @@ static bool report_details_test_start(app *a, const char *root, const char *mode
     return ok;
 }
 static bool report_details_test_clipboard(const char *expected) {
-    char *text = SDL_GetClipboardText(); bool ok = text && !strcmp(text, expected); SDL_free(text); return ok;
+    char *text = SDL_GetClipboardText(); bool ok=text!=NULL;
+    /* Windows text clipboard expands LF to CRLF. Compare the complete UTF-8
+     * content with paired newlines normalized on both sides; archive bytes
+     * and source snapshots retain their separate exact-file assertions. */
+    if(text) {
+        size_t a=0,b=0;
+        for(;;) {
+            if(expected[a]=='\r' && expected[a+1]=='\n')a++;
+            if(text[b]=='\r' && text[b+1]=='\n')b++;
+            if(expected[a]!=text[b]){ok=false;break;}
+            if(!expected[a])break;
+            a++;b++;
+        }
+    }
+    if(!ok) {
+        size_t first=0;if(text)while(text[first] && expected[first] && text[first]==expected[first])first++;
+        fprintf(stderr,"REPORT CLIPBOARD MISMATCH: expected-bytes=%zu received-bytes=%zu first-difference=%zu\n",strlen(expected),text?strlen(text):0,first);
+    }
+    SDL_free(text); return ok;
 }
 static void report_details_test_frame(app *a, const char *mode, int *stage, int *code, const char **capture) {
     static bool settle; static uint32_t original[2], display_crc;

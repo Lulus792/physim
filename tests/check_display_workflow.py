@@ -37,8 +37,8 @@ SIMPLE = {
     "box_collision_workflow": (["--self-test", "{directory}", "box_collision"], 150, True),
     "floating_workflow": (["--self-test", "{directory}", "buoyancy"], 150, True),
     "spring_workflow": (["--self-test", "{directory}", "spring"], 150, True),
-    "plot_workflow": (["--plot-test", "{directory}"], 35, True),
-    "plot_input_isolation": (["--plot-test-noise", "{directory}"], 35, True),
+    "plot_workflow": (["--plot-test", "{directory}"], 75, True),
+    "plot_input_isolation": (["--plot-test-noise", "{directory}"], 75, True),
     "graphics": (["--renderer-test"], 30, False),
     "batch_workflow": (["--batch-test", "{directory}"], 160, True),
     "window_smoke": (["--smoke"], 30, False),
@@ -47,6 +47,9 @@ SIMPLE = {
     "documents_build": (["--workspace-state-test", "{directory}", "documents-build"], 130, False),
     "documentation_window": (["--docs-test", "{directory}"], 30, True),
 }
+for variant in ("dark", "light", "contrast", "dark-large-narrow", "light-large-narrow"):
+    SIMPLE["analysis_layout_" + variant.replace("-", "_")] = (
+        ["--workspace-state-test", "{directory}", "analysis-layout-" + variant], 75, True)
 for size in ("16", "22"):
     SIMPLE["run_details_"+size] = (["--workspace-state-test", "{directory}", "run-details-"+size], 45, True)
 SIMPLE["documentation_pointer_isolation"] = (["--docs-test-noise", "{directory}"], 35, True)

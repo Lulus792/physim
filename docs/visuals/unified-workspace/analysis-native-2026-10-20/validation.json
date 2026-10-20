@@ -1,0 +1,3392 @@
+{
+  "scope": "Native analysis layout, real resizing, independent windows and preserved workflows; not complete UI fidelity or the pending multi-run/export dialog",
+  "source_21": {
+    "base": "2f32bf56cb4899f619a9a01a989b00997ee1cd1f",
+    "source_sha256_lf": {
+      "app/design_ui.inc": "e27663044de925241ffb240e680356d4b1a3b0fbddf5cf37c58024c772bd78fb",
+      "app/docking_ui.inc": "273a40a9f57d50103579fa17f835fc6fe76ec408869ea7f5ff7f1f89de96ba38",
+      "app/main.c": "57e0895facf587b94d246a6180c2ab74f4ab4800faad521f54947e56b48edc6a",
+      "app/panel_windows.inc": "19756c29282f5dc03fa7933c5bd26c4e89fb7373806ca84f22e0840912ff2cf0",
+      "app/plot_tests.inc": "3c730aa3c5fd5a87444973c5cb1734c909286970421f6c8bd5b2a73294a15b61",
+      "app/plot_ui.inc": "300a72b0dc1e3f476a99469eb8d94929ccca43dcee980eb1b6837d6e7c9e412e",
+      "app/report_details_tests.inc": "eff52c88636b5db6f371a9151975d88624e3d315c4e11e41a0ff55495bada6dc",
+      "app/run_details_tests.inc": "ad34f630ee605abfb78245d3701611a3c6d26f15eae85cab2b32a5e0b6447f35",
+      "app/toolbar_ui.inc": "9088302875addff90fe11b41609d80aff45f80c2936b2785b7a06d290e9d3fd1",
+      "app/workspace_tests.inc": "62b5c5c0dc550f8384a9220c2e8bcef052188d5c0be85b0b051479a35bf41cee",
+      "tests/check_display_workflow.py": "365fe005dafae9f3584a5cbeb4d43c8e5cd5e4665f7c622742a41598ea3dba40",
+      "tests/native_integration_cases.json": "23d5c35b94c6f370d440136625b8a97a481cdf47a84b7d620b7bc7dc5531d745",
+      "app/analysis_layout.inc": "74a9cb6997e41b6ae2c597494bc870f3a9b9de768de9d4ad1b7eff9d01deb48d",
+      "app/analysis_ui.inc": "25cd1f88fc69d1145d4ca6cc30cc3ee1f39b7b9e3b0168aae91087b0690d80f0",
+      "app/analysis_workspace_tests.inc": "8a4bb2a826946de53257654760f97f702d6f1d87a19cc47f5d1f458172ade8a2",
+      "app/preferences.c": "76b00a8147149d8a06482c6b5c8b7b100a2a23d82663e0af01c786ed2e9bf8ef",
+      "app/layout_catalog.c": "a467277f82d4796fe733c7bd5c8e36265e3d3fa891e7593226830ead02ae36ae",
+      "app/settings_ui.inc": "2e062615487b26ac98afaff9f7ff59e88ac766fc1fc63df8682970c494254476",
+      "tests/test_preferences.c": "505dbb54dffdb925f924e3ec6987efa13265a1e47f87654ba73066666d51a9fb",
+      "tests/test_layout_catalog.c": "4bf2383cdfa627da1791e264749092f74c5570197fae46079b810a88e032b8a5",
+      "app/analysis_resize.inc": "8ccc8dfa92d58f910d4ee9cacc04e96a93be01b12af2b603368205b00726eb88",
+      "app/settings_tests.inc": "107a0f1efff15d47b161bbca72d61bfc641db4ca552033713330504356394fb3",
+      "app/layout_ui.inc": "be51a9d8fe2d91391248416a942f8bfd2e3ba5dd3b4a75d12883140930b1613f",
+      "app/workbench_tests.inc": "1153571f6cea7f4c5e1d3535068b92d49abc05e0ca0cc5b6c2662d7f7db3359f"
+    },
+    "foreign_sha256_lf": {
+      ".github/workflows/linux-ui-sanitizers.yml": "80e5b0d925f75ddce52260e8812cfb02d0e5b6e4ccfef03ea86deea75c446085",
+      ".github/workflows/macos-f1-accessibility.yml": "c37bfbd09cdfb0d26922cf0fbd8527f2be70161dd113809435732b6150fd5650",
+      "app/accessibility_atspi.c": "fb32ff39647be57cdaa2c02a10d4319ecef2186747a1edc2338bb397e5668b0f",
+      "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+      "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+      "tests/check_documentation_orca.py": "e38b255bbd7bb12787e50cd78d4b32ed8f985ce60746afde2702285e22a728d5",
+      "tests/test_accessibility_tables_atspi.py": "623f5152d85dabe778728fedc9f999b93e3bfaef6d8d82679d6444675ad54d2f",
+      "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+      "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+      "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+    },
+    "source_18_helper_supplement": {
+      "path": "app/workbench_tests.inc",
+      "sha256_lf": "52ae2c7ac306d90b6adf38d2452c0fe2775e25745a9b710a495e5ab9429b2a62",
+      "captured_copy": "build/native/design-analysis-workbench-tests-18.inc",
+      "note": "This modified helper was omitted from the original source-18 hash list; its unchanged pre-fix contents were copied before the source-19 correction. Original source-18 snapshot is retained."
+    }
+  },
+  "platforms": {
+    "windows": {
+      "layout": {
+        "binary": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "881e9ad209f24ba8d643032c3bcbcb3305819f5208c8ea44027cb1876b2ac63d",
+        "groups": [
+          {
+            "variant": "dark",
+            "status": "passed",
+            "seconds": 10.202999999979511
+          },
+          {
+            "variant": "light",
+            "status": "passed",
+            "seconds": 11.562000000034459
+          },
+          {
+            "variant": "contrast",
+            "status": "passed",
+            "seconds": 9.26600000000326
+          },
+          {
+            "variant": "dark-large-narrow",
+            "status": "passed",
+            "seconds": 9.53200000000652
+          },
+          {
+            "variant": "light-large-narrow",
+            "status": "passed",
+            "seconds": 11.171999999962281
+          }
+        ]
+      },
+      "workflow_runs": [
+        {
+          "binary": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+          "sha256": "881e9ad209f24ba8d643032c3bcbcb3305819f5208c8ea44027cb1876b2ac63d",
+          "cases": [
+            {
+              "name": "workbench_workflow",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 35.73399999999674
+            },
+            {
+              "name": "run_details_16",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 8.48399999999674
+            },
+            {
+              "name": "run_details_22",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 6.827999999979511
+            },
+            {
+              "name": "report_details_workflow",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 25.06199999997625
+            },
+            {
+              "name": "plot_workflow",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 29.75
+            },
+            {
+              "name": "plot_input_isolation",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 31.45299999997951
+            }
+          ]
+        },
+        {
+          "binary": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+          "sha256": "881e9ad209f24ba8d643032c3bcbcb3305819f5208c8ea44027cb1876b2ac63d",
+          "cases": [
+            {
+              "name": "settings_workflow",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 73.29700000002049
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 23.45400000002701
+            },
+            {
+              "name": "layouts_workflow",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 141.40599999995902
+            },
+            {
+              "name": "docking_workflow",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 84.93699999997625
+            },
+            {
+              "name": "laboratory_workflow",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 289.09399999998277
+            },
+            {
+              "name": "inspector_workflow",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 115.39100000000326
+            },
+            {
+              "name": "toolbar_small",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 8.76600000000326
+            },
+            {
+              "name": "toolbar_large",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 8.797000000020489
+            },
+            {
+              "name": "documentation_h",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 17.405999999959022
+            }
+          ]
+        }
+      ],
+      "app_steps": [
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21\\dark",
+            "analysis-layout-dark"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "01d494ab741ddcaf4f628eceb4190e4bd5f252e1f23c1630111c33d2626e13dd",
+          "stderr_sha256": "9752a2fbab6d0a435adcdf329c381644e229969160ec710b95a9c01fe4147269",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "ANALYSIS LAYOUT: client=1440x1000 middle=232.0,198.0,966.0,774.0 import-bottom=960.0",
+            "ANALYSIS TAB FIT: width=64.00 text=57.54",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "ANALYSIS SETTINGS CONTEXT: workbench=248,280 session-analysis=232 session-laboratory=320 valid=1",
+            "ANALYSIS FOCUS CANCEL: resizing=0 actual-height=124.00 expected-height=124.00 wish=230.00 manual=1 focus-request=1",
+            "ANALYSIS CURVE SEPARATOR: actual 10/40 px, pointer Escape/focus cancel, automatic reset and native window passed=1",
+            "ANALYSIS CLAMPED WISH: inspector-desired=480 actual=300.0 press/release-preserved=1",
+            "ANALYSIS POINTER HOST: logical-active=1 transaction=1 mouse-focus=0 captured=0",
+            "ANALYSIS CONTEXT POINTER: capture released and original workspace wish restored=1",
+            "ANALYSIS STATISTICS SCROLL: offset=105 button-bottom=965.0 viewport-bottom=972.0 reachable=1 unchanged-view-and-statistics=1",
+            "ANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21\\light",
+            "analysis-layout-light"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "01d494ab741ddcaf4f628eceb4190e4bd5f252e1f23c1630111c33d2626e13dd",
+          "stderr_sha256": "791ae38e94cc1401944bb69a863ea0fdfb3db987b5a032d01de63d64bed1aea0",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "ANALYSIS LAYOUT: client=1440x1000 middle=232.0,198.0,966.0,774.0 import-bottom=960.0",
+            "ANALYSIS TAB FIT: width=64.00 text=57.54",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "ANALYSIS SETTINGS CONTEXT: workbench=248,280 session-analysis=232 session-laboratory=320 valid=1",
+            "ANALYSIS FOCUS CANCEL: resizing=0 actual-height=124.00 expected-height=124.00 wish=230.00 manual=1 focus-request=1",
+            "ANALYSIS CURVE SEPARATOR: actual 10/40 px, pointer Escape/focus cancel, automatic reset and native window passed=1",
+            "ANALYSIS CLAMPED WISH: inspector-desired=480 actual=300.0 press/release-preserved=1",
+            "ANALYSIS POINTER HOST: logical-active=1 transaction=1 mouse-focus=0 captured=0",
+            "ANALYSIS CONTEXT POINTER: capture released and original workspace wish restored=1",
+            "ANALYSIS STATISTICS SCROLL: offset=105 button-bottom=965.0 viewport-bottom=972.0 reachable=1 unchanged-view-and-statistics=1",
+            "ANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21\\contrast",
+            "analysis-layout-contrast"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "01d494ab741ddcaf4f628eceb4190e4bd5f252e1f23c1630111c33d2626e13dd",
+          "stderr_sha256": "32d0a9c050e48eed21afaf3407637bd70c7a0d5ae6555736b98efa5be288c3c8",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "ANALYSIS LAYOUT: client=1440x1000 middle=232.0,198.0,966.0,774.0 import-bottom=960.0",
+            "ANALYSIS TAB FIT: width=64.00 text=57.54",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "ANALYSIS SETTINGS CONTEXT: workbench=248,280 session-analysis=232 session-laboratory=320 valid=1",
+            "ANALYSIS FOCUS CANCEL: resizing=0 actual-height=124.00 expected-height=124.00 wish=230.00 manual=1 focus-request=1",
+            "ANALYSIS CURVE SEPARATOR: actual 10/40 px, pointer Escape/focus cancel, automatic reset and native window passed=1",
+            "ANALYSIS CLAMPED WISH: inspector-desired=480 actual=300.0 press/release-preserved=1",
+            "ANALYSIS POINTER HOST: logical-active=1 transaction=1 mouse-focus=0 captured=0",
+            "ANALYSIS CONTEXT POINTER: capture released and original workspace wish restored=1",
+            "ANALYSIS STATISTICS SCROLL: offset=105 button-bottom=965.0 viewport-bottom=972.0 reachable=1 unchanged-view-and-statistics=1",
+            "ANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21\\dark-large-narrow",
+            "analysis-layout-dark-large-narrow"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "6e651d6cb10302f857d57bd7d86907041f0c5ce07f90760969e66c3433b92bcd",
+          "stderr_sha256": "dc6eab197b1b59b5bb671321fbb6d6bb239a49c5e6563149e0c2243dc61ec50f",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "ANALYSIS LAYOUT: client=1080x740 middle=232.0,198.0,606.0,514.0 import-bottom=708.2",
+            "ANALYSIS TAB FIT: width=88.00 text=79.12",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "ANALYSIS SETTINGS CONTEXT: workbench=248,280 session-analysis=232 session-laboratory=320 valid=1",
+            "ANALYSIS FOCUS CANCEL: resizing=0 actual-height=124.00 expected-height=124.00 wish=230.00 manual=1 focus-request=1",
+            "ANALYSIS CURVE SEPARATOR: actual 10/40 px, pointer Escape/focus cancel, automatic reset and native window passed=1",
+            "ANALYSIS CLAMPED WISH: inspector-desired=480 actual=300.0 press/release-preserved=1",
+            "ANALYSIS POINTER HOST: logical-active=1 transaction=1 mouse-focus=0 captured=0",
+            "ANALYSIS CONTEXT POINTER: capture released and original workspace wish restored=1",
+            "ANALYSIS STATISTICS SCROLL: offset=105 button-bottom=705.0 viewport-bottom=712.0 reachable=1 unchanged-view-and-statistics=1",
+            "ANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21\\light-large-narrow",
+            "analysis-layout-light-large-narrow"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "6e651d6cb10302f857d57bd7d86907041f0c5ce07f90760969e66c3433b92bcd",
+          "stderr_sha256": "dff095d15e3dd2fe3faeaf4e05e0a080acc2c9c53cf3dc94b0a83c570bf986dc",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "ANALYSIS LAYOUT: client=1080x740 middle=232.0,198.0,606.0,514.0 import-bottom=708.2",
+            "ANALYSIS TAB FIT: width=88.00 text=79.12",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "ANALYSIS SETTINGS CONTEXT: workbench=248,280 session-analysis=232 session-laboratory=320 valid=1",
+            "ANALYSIS FOCUS CANCEL: resizing=0 actual-height=124.00 expected-height=124.00 wish=230.00 manual=1 focus-request=1",
+            "ANALYSIS CURVE SEPARATOR: actual 10/40 px, pointer Escape/focus cancel, automatic reset and native window passed=1",
+            "ANALYSIS CLAMPED WISH: inspector-desired=480 actual=300.0 press/release-preserved=1",
+            "ANALYSIS POINTER HOST: logical-active=1 transaction=1 mouse-focus=0 captured=0",
+            "ANALYSIS CONTEXT POINTER: capture released and original workspace wish restored=1",
+            "ANALYSIS STATISTICS SCROLL: offset=105 button-bottom=705.0 viewport-bottom=712.0 reachable=1 unchanged-view-and-statistics=1",
+            "ANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-functional\\workbench_workflow\\workflow ä\\dark",
+            "workbench-dark"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "7e0fafb2715d689dc822331a017d9fa9d29fb0b67edc4829aa0e910258423dee",
+          "stderr_sha256": "5801a6e6b5f1156772f83a2b6c999a3228ea9b77f22c604bea32847c1c2be748",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "WORKBENCH SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-functional\\workbench_workflow\\workflow ä\\light",
+            "workbench-light"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "7e0fafb2715d689dc822331a017d9fa9d29fb0b67edc4829aa0e910258423dee",
+          "stderr_sha256": "1e86dbab8a51d1dfa2d51a6b14c8f5c6848156d815f2a961be37d1098189a718",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "WORKBENCH SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-functional\\workbench_workflow\\workflow ä\\dark-narrow-visual",
+            "workbench-dark-narrow-visual"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "121341882972a7c0eddbaa2ac344adbbec5556beebce33d150ee54af013e7bd0",
+          "stderr_sha256": "4e78b16549d2985ff868775938dd1da2c39fcc83e34f8fea8fb00e9425180832",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "WORKBENCH SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-functional\\workbench_workflow\\workflow ä\\light-large-visual",
+            "workbench-light-large-visual"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "5f3e4007eaec3ea8330e4c6771eaf1256c88f682f302887fc38c2633edb067a1",
+          "stderr_sha256": "13c9e6314f413300dac5bb2434f18575ef3d5c3c4933da5de1e7982a4a68c738",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "WORKBENCH SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-functional\\workbench_workflow\\workflow ä\\dark-opaque-visual",
+            "workbench-dark-opaque-visual"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "7e0fafb2715d689dc822331a017d9fa9d29fb0b67edc4829aa0e910258423dee",
+          "stderr_sha256": "d55668fd7e4f630d57ab6e511507d73fac9abc09d9384a31b6192646151b169b",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "WORKBENCH SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-functional\\workbench_workflow\\workflow ä\\contrast-visual",
+            "workbench-contrast-visual"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "7e0fafb2715d689dc822331a017d9fa9d29fb0b67edc4829aa0e910258423dee",
+          "stderr_sha256": "82a9c9dd84ff80ab2ec427c606f98e947d38de1e78effc5618d0f38c3ac8abb4",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "WORKBENCH SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-functional\\run_details_16\\workflow ä",
+            "run-details-16"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "8495eb85620486670b4b89a31141039d89f707faeec084df8949972805a88027",
+          "stderr_sha256": "c601c651236694727d4c3889b22f7c7824f442772b61a244bc25573c2d349c30",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "RUN DETAILS: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-functional\\run_details_22\\workflow ä",
+            "run-details-22"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "8495eb85620486670b4b89a31141039d89f707faeec084df8949972805a88027",
+          "stderr_sha256": "8a988961083a0eff1aa9de12419f72fb9cd8f839d51e177a65273a381c48f1a0",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "RUN DETAILS: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-functional\\report_details_workflow\\workflow ä\\c-16",
+            "report-details-c"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "65a1bb98d4559e63bb098e499b1dd32d23f072494597b80a7b3520f3c6bfd430",
+          "stderr_sha256": "0f43f4cced530d46e618d9ff04457e354e3fe7c4dab80c6a340f6a900342006d",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "REPORT DETAILS SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-functional\\report_details_workflow\\workflow ä\\phys-16",
+            "report-details-phys"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "65a1bb98d4559e63bb098e499b1dd32d23f072494597b80a7b3520f3c6bfd430",
+          "stderr_sha256": "ffd13cb47b4b9d8a90257c387f5f77b3a1bbb1ede9f7c9763fcdbd6da62fe35e",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "REPORT DETAILS SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-functional\\report_details_workflow\\workflow ä\\c-22",
+            "report-details-c-22"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "65a1bb98d4559e63bb098e499b1dd32d23f072494597b80a7b3520f3c6bfd430",
+          "stderr_sha256": "c1a0fae6efe6658d8c03af1176b0cd09589282c6c1df6cba768c4304b01a9e84",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "REPORT DETAILS SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-functional\\report_details_workflow\\workflow ä\\phys-22",
+            "report-details-phys-22"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "65a1bb98d4559e63bb098e499b1dd32d23f072494597b80a7b3520f3c6bfd430",
+          "stderr_sha256": "744e9aa9125a8a0e2ccf9412f833c23d9fea509897e5e7b80cbf144f2ace965b",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "REPORT DETAILS SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--plot-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-functional\\plot_workflow\\workflow ä"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "0c0ec42ba9d5ab3a3ec57bfac20b902dbdfa03f41cc6cbad263dd9476e551ba9",
+          "stderr_sha256": "e869f0036916a027ed0209614e1e04bf652d0473f14e6b7e13fc655fda1df83c",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "PLOT UI SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--plot-test-noise",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-functional\\plot_input_isolation\\workflow ä"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "d7c8f16c8b1557a3f4805310bb1bc81174df254313b28f6b3ba3fa4c56955e61",
+          "stderr_sha256": "833cab7001868a9ea516a4139493317e0a0377b5c3d8f0484fed5475aa7ea6c8",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "PLOT UI SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--settings-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\settings_workflow\\workflow ä",
+            "write"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "31900be51d366c93dfdffada29cf75e1945f1db3aa896ae0de629a22772ab586",
+          "stderr_sha256": "0ceb9ea5ba8aaabfb29ae82f96184d5d3a454a206dc303c093ef46a75fce9d6c",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "SETTINGS write SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--settings-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\settings_workflow\\workflow ä",
+            "read"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "8033183ecdb9d51dfd55b89a04e59ceac0cd2f46b2af39e06afbccb68def4968",
+          "stderr_sha256": "fd4f42c0dd126f2aa1fa3e44c0fa1c6fc1ab99166db1d7346048aae9bd6ebe1c",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "SETTINGS read SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--settings-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\settings_workflow\\workflow ä",
+            "reset"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "50f9fc55dff916b7ba5bf7387fb68d233567b0c95b69d4b76192791c1eddd71c",
+          "stderr_sha256": "34c483fcaf7f60f978638deaef62958ecaf0c155168e213934527580a0699f25",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "SETTINGS reset SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--settings-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\settings_workflow\\workflow ä",
+            "defaults"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "4c22e1ca60cf0c7a3ad66d1448848d7b27c3676546ecaae44aef5d0c4b8d5c98",
+          "stderr_sha256": "4f3d1638fae4f68d3157d7f62181bae2d3f6546a6475228bfa015b691afa6d02",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "SETTINGS defaults SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--settings-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\settings_workflow\\workflow ä",
+            "maxwrite"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "3a6069608eb728ae09cb6d0628978a79690d18a666c943de373d88886c9544f5",
+          "stderr_sha256": "bbec55bd862b0f42266cacfcfde6dee2c71a84b563f814b0db4e49ab1fee6e03",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "SETTINGS maxwrite SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--settings-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\settings_workflow\\workflow ä",
+            "maxread"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "d7f6f2fa6b0874b45cd0d9cc71415ba49c488a0ddf6095e58d13ad5300ea5e1c",
+          "stderr_sha256": "60924ac752b40e4b61911da7c82063631c4ceb269a9d56221339df30b29a1573",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "SETTINGS maxread SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--settings-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\settings_workflow\\workflow ä",
+            "corrupt"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "0ab822ad4d8c2500f457fd5071581d0199b216022f5705afdcd564cbe6514255",
+          "stderr_sha256": "d80b536227c6bf67a5348f622e475e2d0e89ec696c5940ec017d6e29e4e351a1",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "SETTINGS corrupt SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--settings-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\settings_keyboard_workflow\\workflow ä",
+            "keyboard"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "8c489f8c48d6b02ec601f1f085ef9bbd1972937fc15feb432aece8965907f296",
+          "stderr_sha256": "c4d29e820a20fe0f182bbf5cbadade90b99261ada71477e98257f630784f3147",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "SETTINGS KEYBOARD SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--settings-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\settings_keyboard_workflow\\workflow ä",
+            "keyboard-read"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "60ecabaa138c1acc2eb73dd336353d258d534ab1be6391b7fc8fbc8b373e595f",
+          "stderr_sha256": "b634b50ec7a416f2599bcf3e7fe5e87c87cb5fc79af51bc05aa54fe37999f753",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "SETTINGS KEYBOARD SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\layouts_workflow\\workflow ä\\c",
+            "layouts-c"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "7d02f2153d9932c9fc234c47bc956d206ab7bed5faf1cf409db590d7d5e82861",
+          "stderr_sha256": "b856f93d655bdc3e207ec4f5f7c5f4dcd588a7e1c2db4c21dcc52d84dbf3f910",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "LAYOUTS layouts-c SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\layouts_workflow\\workflow ä\\c",
+            "layouts-read"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "615fdf7450be93b90eb0967bade4e532f80c45bb4b1888830d86c575af7bd779",
+          "stderr_sha256": "e669f6b115352a9b16d9525eb2aeb922c9fd686d7c9619b2977ee1d5f74daa90",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "LAYOUTS layouts-read SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\layouts_workflow\\workflow ä\\c",
+            "layouts-corrupt"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "1edf1517d22bb3d580688e415f2a0288bbabb351cedc89899c0ed819d8d12de9",
+          "stderr_sha256": "d831baba76416d325738946f70692138141693ebdd54476c9be36297b3df633b",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "LAYOUTS layouts-corrupt SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\layouts_workflow\\workflow ä\\c",
+            "layouts-reset"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "fe27a692dc193b4bf85dd07a0e617266bfd93442ccd2d9739b91c19fc8dd78e9",
+          "stderr_sha256": "ae640045a4a6c30dce43ccddf700a78386f43a18e13155497fc96dee6fa4f40e",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "LAYOUTS layouts-reset SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\layouts_workflow\\workflow ä\\phys",
+            "layouts-phys"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "c4aba0ab4153b235724139613acb6fd2f5e437c6cd72bbf7d9f994b6c9e3a8e1",
+          "stderr_sha256": "c07cbf0014b461804960cb5f86a4f6812332de45d1b045a6a1b48bd3a3eef0bc",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "LAYOUTS layouts-phys SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\layouts_workflow\\workflow ä\\phys",
+            "layouts-read"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "615fdf7450be93b90eb0967bade4e532f80c45bb4b1888830d86c575af7bd779",
+          "stderr_sha256": "e53ad4d85209504d04d8e61e14aac95d049c99ed00fd1959fee18c31d64f71b5",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "LAYOUTS layouts-read SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\layouts_workflow\\workflow ä\\phys",
+            "layouts-corrupt"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "1edf1517d22bb3d580688e415f2a0288bbabb351cedc89899c0ed819d8d12de9",
+          "stderr_sha256": "ce5ea19b5f3eec6e797e611b2805cd41adfe0f0517fbec5a665ade3ecad5e822",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "LAYOUTS layouts-corrupt SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\layouts_workflow\\workflow ä\\phys",
+            "layouts-reset"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "fe27a692dc193b4bf85dd07a0e617266bfd93442ccd2d9739b91c19fc8dd78e9",
+          "stderr_sha256": "a68980abb66ae024ffe5c141833a4aa40d41558c4ab30f7d413b4ce887834260",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "LAYOUTS layouts-reset SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\docking_workflow\\workflow ä\\c-dark-legacy",
+            "fixed-panels-c-dark-legacy"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "4f7a3b2ac38a237551c659effcfb6f4050a3dbba5f695c60fb8de6cb3cf63f93",
+          "stderr_sha256": "83fa222066c56c6ed90127c148079b94f36d19c0050b1a30a4cb19aee672ab57",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "FIXED PANELS fixed-panels-c-dark-legacy SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\docking_workflow\\workflow ä\\phys-light",
+            "fixed-panels-phys-light"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "cca0204ff6e75e271f7db3273919a3e207c8d4b85ad630c072b09b1f0b9f2dbb",
+          "stderr_sha256": "c95fa6354071d96572741af07cae3c4bda0cbe7c2d6fd75dcf50675f10739796",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "FIXED PANELS fixed-panels-phys-light SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\laboratory_workflow\\workflow ä\\startup",
+            "laboratory-startup"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "808e6862600c42a50b23714123a45159a8b12faad2c7ce19addde5d844ce0736",
+          "stderr_sha256": "e78202b6aa336418a4831d5bd28910c133f9c2b3107be9ade70e9e5ac1874a41",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "LABORATORY STARTUP SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\laboratory_workflow\\workflow ä\\custom",
+            "laboratory-custom"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "9eb581d2cf5bc8c3c69f24ed3558f0f4699b396ba2a052994b57760993230853",
+          "stderr_sha256": "66fd2a406d81bc6e1790d2ed24bbbe70aaef497fd76104e6b0e3546feed3eee9",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "LABORATORY CUSTOM SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\laboratory_workflow\\workflow ä\\custom",
+            "laboratory-custom-read"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "9eb581d2cf5bc8c3c69f24ed3558f0f4699b396ba2a052994b57760993230853",
+          "stderr_sha256": "3812db593924dfd847f426908e25770ae94d1185b91b5d07f9c6eb0661e172b8",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "LABORATORY CUSTOM SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\laboratory_workflow\\workflow ä\\dark",
+            "laboratory-dark"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "fde95db8fef1c97f07d99b9196c75711089915ae76e598cbc95a349927d726a2",
+          "stderr_sha256": "aee70f35cd93d1c21f006ec79163d2e34fc9400edd0390a1a4f018faa8686d20",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "LABORATORY laboratory-dark SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\laboratory_workflow\\workflow ä\\light",
+            "laboratory-light"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "5f20e5ae63edb0c526f33b831828d4547219a789c91ad6aa56638738a96983e2",
+          "stderr_sha256": "8a4ee8b27a7d0125abb969ab533e3766d329c8aab5a94af5098583806327b9bc",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "LABORATORY laboratory-light SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\laboratory_workflow\\workflow ä\\contrast",
+            "laboratory-contrast"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "c3a4c6a0371111ea67d8f389654986e7fa2943732e8aa3a9095b65e22f72ec3d",
+          "stderr_sha256": "4d0e229913c563afb4f9d812678d2ee315649012f6943332885a45d72f573cea",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "LABORATORY laboratory-contrast SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\laboratory_workflow\\workflow ä\\light-large-narrow",
+            "laboratory-light-large-narrow"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "d2f13f4ef03c278e936d0112a50ca91e1019a96bb2c061cd693f75cc44e2acdc",
+          "stderr_sha256": "e49c3b6826073510336e39cdf8af4cd094e2e79227a351c137a32648962b66e7",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "LABORATORY laboratory-light-large-narrow SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\laboratory_workflow\\workflow ä\\phys-dark",
+            "laboratory-phys-dark"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "68f43032f0cf1c8cd9421eaef39862dae0f200220f46431f46fe15b0bf3b9134",
+          "stderr_sha256": "2661214a9af2423cc400f13d0fce46a0894b9ce4bf3e98a3ca215dd7889e5752",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "LABORATORY laboratory-phys-dark SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\laboratory_workflow\\workflow ä\\projectile-light",
+            "laboratory-projectile-light"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "d11b0f907da431f8e0f34181438a518e5a2c762f3391378ba92527ccba2e1581",
+          "stderr_sha256": "a904a2795c198eb16e5d58187b875dc16940c11ac47b9754643c821ab37dfbbe",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "LABORATORY laboratory-projectile-light SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\inspector_workflow\\workflow ä\\c-contrast-large-narrow",
+            "fixed-panels-c-contrast-large-narrow"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "39765dc524c9011c3533ad4d027956c3c10749b2c7beea9343beb529eb63e849",
+          "stderr_sha256": "c6950f618cb9765b7f6d17f2acbf6472c82805f086715010ae7d1838515fde1a",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "FIXED PANELS fixed-panels-c-contrast-large-narrow SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\inspector_workflow\\workflow ä\\phys-light-large-narrow",
+            "fixed-panels-phys-light-large-narrow"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "0d9d344fafacf2b08b5a5d932a2dc1bfdd5fcc9c22e24c271028c143756283f3",
+          "stderr_sha256": "13e884b85ccaf6f77e0072a2274f72e62d2a5a05b508a947bb62c93d3e0c4ff7",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "FIXED PANELS fixed-panels-phys-light-large-narrow SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\toolbar_small\\workflow ä",
+            "toolbar"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "16a0af5e4ee1f29d1e6345f0a0db9656e08525130602df5e9453793fcb370e07",
+          "stderr_sha256": "cd2de5a99878d6d1d3cb1d1b657d52314c3933d2e067bde880e6cd23019540af",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\toolbar_large\\workflow ä",
+            "toolbar"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "3b99383cde29d866e513b0422903eab1d668c67d71312a8a36359e23f0e51a62",
+          "stderr_sha256": "481ff371832571b67ded488031374352efbdaa61f19f2fafccf52ce0c344c425",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-21-extra-functional\\documentation_h\\workflow ä",
+            "docs-keyboard-h"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "f714b9818d1ebf143cc2da2c4cf2de950f79a5225789b99dfee11e99bda95a50",
+          "stderr_sha256": "b076ba3c33a10e7d346c2b37bed54fa8cba2d8f3a134d3f2f89da6086e0dbc69",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "DOCUMENTATION H SELF-TEST: PASSED"
+          ]
+        }
+      ],
+      "source_12_codec_tests": [
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-preferences.exe",
+            "D:/Physim/build/native/Design-analysis/test-results/run-cfgrqj20/preferences"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Preferences: themes, contrast, v1/v2 migration, docked/floating roundtrip, replacement, bounds, CRC, truncations and failure preservation passed\n",
+          "stderr": "",
+          "seconds": 5.171,
+          "name": "preferences"
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-layout_catalog.exe",
+            "D:/Physim/build/native/Design-analysis/test-results/run-cfgrqj20/layout_catalog"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Named layouts: full graph, UTF-8, replacement, limits, deletion, roundtrip, mutations, versions and failure preservation passed\n",
+          "stderr": "",
+          "seconds": 38.969,
+          "name": "layout_catalog"
+        }
+      ]
+    },
+    "linux": {
+      "layout": {
+        "binary": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+        "sha256": "fab53ccb7a4a87949ff3f2117fdc270db5779a832d860a871f1dde9bdf96cd4a",
+        "groups": [
+          {
+            "variant": "dark",
+            "status": "passed",
+            "seconds": 18.395394069997565
+          },
+          {
+            "variant": "light",
+            "status": "passed",
+            "seconds": 17.206419518002804
+          },
+          {
+            "variant": "contrast",
+            "status": "passed",
+            "seconds": 17.76155433799795
+          },
+          {
+            "variant": "dark-large-narrow",
+            "status": "passed",
+            "seconds": 15.397998847001872
+          },
+          {
+            "variant": "light-large-narrow",
+            "status": "passed",
+            "seconds": 15.667048958999658
+          }
+        ]
+      },
+      "workflow_runs": [
+        {
+          "binary": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "fab53ccb7a4a87949ff3f2117fdc270db5779a832d860a871f1dde9bdf96cd4a",
+          "cases": [
+            {
+              "name": "settings_workflow",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 32.80667726400134
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 9.033147655998619
+            },
+            {
+              "name": "workbench_workflow",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 41.89506051900025
+            },
+            {
+              "name": "layouts_workflow",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 118.45739150100053
+            },
+            {
+              "name": "docking_workflow",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 87.02218852999795
+            },
+            {
+              "name": "laboratory_workflow",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 321.768428141997
+            },
+            {
+              "name": "inspector_workflow",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 145.37302191100025
+            },
+            {
+              "name": "toolbar_small",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 16.006765153000742
+            },
+            {
+              "name": "toolbar_large",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 16.92881109999871
+            },
+            {
+              "name": "run_details_16",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 11.878630110000813
+            },
+            {
+              "name": "run_details_22",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 10.404203963000327
+            },
+            {
+              "name": "report_details_workflow",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 53.82275410699731
+            },
+            {
+              "name": "plot_workflow",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 60.0886867779991
+            },
+            {
+              "name": "plot_input_isolation",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 44.50873914300246
+            },
+            {
+              "name": "documentation_h",
+              "status": "passed",
+              "exit_code": 0,
+              "seconds": 66.31892752500062
+            }
+          ]
+        }
+      ],
+      "app_steps": [
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21/dark",
+            "analysis-layout-dark"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "a7fe65004831df528ad750e2d35d7192ebb4d10611c12a7bd96f91cac42ba53d",
+          "stderr_sha256": "16edb3484ad9b69a9d7a2b413487604121aaab3eec03bd057aad1cdc7a3039f5",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "ANALYSIS LAYOUT: client=1440x1000 middle=232.0,198.0,966.0,774.0 import-bottom=960.0",
+            "ANALYSIS TAB FIT: width=66.00 text=64.90",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "ANALYSIS SETTINGS CONTEXT: workbench=248,280 session-analysis=232 session-laboratory=320 valid=1",
+            "ANALYSIS FOCUS CANCEL: resizing=0 actual-height=124.00 expected-height=124.00 wish=230.00 manual=1 focus-request=1",
+            "ANALYSIS CURVE SEPARATOR: actual 10/40 px, pointer Escape/focus cancel, automatic reset and native window passed=1",
+            "ANALYSIS CLAMPED WISH: inspector-desired=480 actual=300.0 press/release-preserved=1",
+            "ANALYSIS POINTER HOST: logical-active=1 transaction=1 mouse-focus=1 captured=1",
+            "ANALYSIS CONTEXT POINTER: capture released and original workspace wish restored=1",
+            "ANALYSIS STATISTICS SCROLL: offset=105 button-bottom=965.0 viewport-bottom=972.0 reachable=1 unchanged-view-and-statistics=1",
+            "ANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21/light",
+            "analysis-layout-light"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "a7fe65004831df528ad750e2d35d7192ebb4d10611c12a7bd96f91cac42ba53d",
+          "stderr_sha256": "45eb4fb6b7ba95870cd45d709aac6553dc77c9e1b41ce902ccae897d89af918e",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "ANALYSIS LAYOUT: client=1440x1000 middle=232.0,198.0,966.0,774.0 import-bottom=960.0",
+            "ANALYSIS TAB FIT: width=66.00 text=64.90",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "ANALYSIS SETTINGS CONTEXT: workbench=248,280 session-analysis=232 session-laboratory=320 valid=1",
+            "ANALYSIS FOCUS CANCEL: resizing=0 actual-height=124.00 expected-height=124.00 wish=230.00 manual=1 focus-request=1",
+            "ANALYSIS CURVE SEPARATOR: actual 10/40 px, pointer Escape/focus cancel, automatic reset and native window passed=1",
+            "ANALYSIS CLAMPED WISH: inspector-desired=480 actual=300.0 press/release-preserved=1",
+            "ANALYSIS POINTER HOST: logical-active=1 transaction=1 mouse-focus=1 captured=1",
+            "ANALYSIS CONTEXT POINTER: capture released and original workspace wish restored=1",
+            "ANALYSIS STATISTICS SCROLL: offset=105 button-bottom=965.0 viewport-bottom=972.0 reachable=1 unchanged-view-and-statistics=1",
+            "ANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21/contrast",
+            "analysis-layout-contrast"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "a7fe65004831df528ad750e2d35d7192ebb4d10611c12a7bd96f91cac42ba53d",
+          "stderr_sha256": "a44b83f5bd4b6b072172a4f2adbfdb816c697abd4b715674703496c8afbc4385",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "ANALYSIS LAYOUT: client=1440x1000 middle=232.0,198.0,966.0,774.0 import-bottom=960.0",
+            "ANALYSIS TAB FIT: width=66.00 text=64.90",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "ANALYSIS SETTINGS CONTEXT: workbench=248,280 session-analysis=232 session-laboratory=320 valid=1",
+            "ANALYSIS FOCUS CANCEL: resizing=0 actual-height=124.00 expected-height=124.00 wish=230.00 manual=1 focus-request=1",
+            "ANALYSIS CURVE SEPARATOR: actual 10/40 px, pointer Escape/focus cancel, automatic reset and native window passed=1",
+            "ANALYSIS CLAMPED WISH: inspector-desired=480 actual=300.0 press/release-preserved=1",
+            "ANALYSIS POINTER HOST: logical-active=1 transaction=1 mouse-focus=1 captured=1",
+            "ANALYSIS CONTEXT POINTER: capture released and original workspace wish restored=1",
+            "ANALYSIS STATISTICS SCROLL: offset=105 button-bottom=965.0 viewport-bottom=972.0 reachable=1 unchanged-view-and-statistics=1",
+            "ANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21/dark-large-narrow",
+            "analysis-layout-dark-large-narrow"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "91b1ac709f6cd7a278a66a2a55de3f90408588aa2273225942b3bda78c189289",
+          "stderr_sha256": "ed9c069d66e4b799c6207311f22c46dd73d684868d81f7f825bb079f42f96d3f",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "ANALYSIS LAYOUT: client=1080x740 middle=232.0,198.0,606.0,514.0 import-bottom=703.2",
+            "ANALYSIS TAB FIT: width=91.00 text=89.24",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "ANALYSIS SETTINGS CONTEXT: workbench=248,280 session-analysis=232 session-laboratory=320 valid=1",
+            "ANALYSIS FOCUS CANCEL: resizing=0 actual-height=124.00 expected-height=124.00 wish=230.00 manual=1 focus-request=1",
+            "ANALYSIS CURVE SEPARATOR: actual 10/40 px, pointer Escape/focus cancel, automatic reset and native window passed=1",
+            "ANALYSIS CLAMPED WISH: inspector-desired=480 actual=300.0 press/release-preserved=1",
+            "ANALYSIS POINTER HOST: logical-active=1 transaction=1 mouse-focus=1 captured=1",
+            "ANALYSIS CONTEXT POINTER: capture released and original workspace wish restored=1",
+            "ANALYSIS STATISTICS SCROLL: offset=105 button-bottom=705.0 viewport-bottom=712.0 reachable=1 unchanged-view-and-statistics=1",
+            "ANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21/light-large-narrow",
+            "analysis-layout-light-large-narrow"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "91b1ac709f6cd7a278a66a2a55de3f90408588aa2273225942b3bda78c189289",
+          "stderr_sha256": "c2c8d71f2b9ec87e7e28ed768576fe3c5960790ae4365df8b04b77ad831cb1a2",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "ANALYSIS LAYOUT: client=1080x740 middle=232.0,198.0,606.0,514.0 import-bottom=703.2",
+            "ANALYSIS TAB FIT: width=91.00 text=89.24",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "ANALYSIS SETTINGS CONTEXT: workbench=248,280 session-analysis=232 session-laboratory=320 valid=1",
+            "ANALYSIS FOCUS CANCEL: resizing=0 actual-height=124.00 expected-height=124.00 wish=230.00 manual=1 focus-request=1",
+            "ANALYSIS CURVE SEPARATOR: actual 10/40 px, pointer Escape/focus cancel, automatic reset and native window passed=1",
+            "ANALYSIS CLAMPED WISH: inspector-desired=480 actual=300.0 press/release-preserved=1",
+            "ANALYSIS POINTER HOST: logical-active=1 transaction=1 mouse-focus=1 captured=1",
+            "ANALYSIS CONTEXT POINTER: capture released and original workspace wish restored=1",
+            "ANALYSIS STATISTICS SCROLL: offset=105 button-bottom=705.0 viewport-bottom=712.0 reachable=1 unchanged-view-and-statistics=1",
+            "ANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--settings-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/settings_workflow/workflow ä",
+            "write"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "ae84ee2c04375ef80034fdeb22165ad15e61f2e4e440b3cb3de3709fcb3257cc",
+          "stderr_sha256": "e0ea8e395c8e7ab55aabd1b015e2e8dded99f098ae10cad041c02f049b7b47a6",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "SETTINGS write SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--settings-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/settings_workflow/workflow ä",
+            "read"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "991d01d9c7b95215f73580cd28ebee52e14307397019e1dba47129eef666dca7",
+          "stderr_sha256": "25f3a9ab04c9334df41938a1d8a0c101edcdd3b0c089ab0b775f6d95460f176e",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "SETTINGS read SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--settings-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/settings_workflow/workflow ä",
+            "reset"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "80f754dfd96bdfe80a301125d632d91e10e68fb9f779c4e9628a9b2da360f69b",
+          "stderr_sha256": "d8ce34e745494ee75f850b2b539f0fb05a939a8321d8a5d92d273f8a8834ef2b",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "SETTINGS reset SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--settings-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/settings_workflow/workflow ä",
+            "defaults"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "cda8338b1f76b9eef50583e3a59abfbfef4839c5d518a3948d8cf9f3990f8059",
+          "stderr_sha256": "4601134dce86dce6c5bbfb257c9881308bf8ffe205ae639dffe294919c800a11",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "SETTINGS defaults SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--settings-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/settings_workflow/workflow ä",
+            "maxwrite"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "8e65e18927f897ab9fb08d3401f26df05154b48aeb48f1220c889a99ae055a58",
+          "stderr_sha256": "d5e7d48e281e9775acaee3067572e6fe21181b73032361de735c61010c7c8678",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "SETTINGS maxwrite SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--settings-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/settings_workflow/workflow ä",
+            "maxread"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "06cd3d1b1bbbd6ee2ed0994ff879acef9332e9136e63a1beed7a50e8e131a8aa",
+          "stderr_sha256": "f69d49a54a3e6f0eabe88520db10845db4a2774a4511e2b040eb27b96b34ce2f",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "SETTINGS maxread SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--settings-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/settings_workflow/workflow ä",
+            "corrupt"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "87816b054519ba7f8cc75de6f4a397ddb438fb199ad86337b6e9fc314bf55a3a",
+          "stderr_sha256": "90ee8f34239425a3bb0c64f8af711c9f378108602b39ef0c510b25c86bf4e149",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "SETTINGS corrupt SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--settings-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/settings_keyboard_workflow/workflow ä",
+            "keyboard"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "d4d682c128b2ee729f748f6a289809df424c6b89ae6bdafe2fb87f209b31928b",
+          "stderr_sha256": "98e808c8cb26bf92e79c580cc4a3c271d64024388067dfa9ac719c42910da7bc",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "SETTINGS KEYBOARD SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--settings-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/settings_keyboard_workflow/workflow ä",
+            "keyboard-read"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "60ca391ffce8388124a9f6a57f2a2cb0674197ee778918a50a6ad8000e8911cb",
+          "stderr_sha256": "6f01b72a256bc9e66ae111f233e4d1eda5eb3261f6a612df279e60b59b53afd3",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "SETTINGS KEYBOARD SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/workbench_workflow/workflow ä/dark",
+            "workbench-dark"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "444d62bdbc1cd650e9ae4cb2f12e330904791bdc04c3b7a67a0504e3afc155f0",
+          "stderr_sha256": "12e49684a31aebf2be07ce6fbce64277e7782fc663d4d593f2b6f961d40885d3",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "WORKBENCH SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/workbench_workflow/workflow ä/light",
+            "workbench-light"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "444d62bdbc1cd650e9ae4cb2f12e330904791bdc04c3b7a67a0504e3afc155f0",
+          "stderr_sha256": "00ce452597b0ae48297c58fe6daea6216d8cf4ac9f5ae242dc259a2e37709ffe",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "WORKBENCH SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/workbench_workflow/workflow ä/dark-narrow-visual",
+            "workbench-dark-narrow-visual"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "40a80c75e28c882594e1797939f2878668aa79006a931d308302fdd366a0ead5",
+          "stderr_sha256": "a6b1aa013fa432312a95c9dbba4dd1120a94283567f187649c1cf5115ba5aa07",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "WORKBENCH SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/workbench_workflow/workflow ä/light-large-visual",
+            "workbench-light-large-visual"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "557af8f246d18ec5e48faf49cc2ec849898577f64036521b9d290c8c76d754a2",
+          "stderr_sha256": "98548352948810cb409306dfe745f93857d835e5c339bc5720b168706eb85ec5",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "WORKBENCH SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/workbench_workflow/workflow ä/dark-opaque-visual",
+            "workbench-dark-opaque-visual"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "444d62bdbc1cd650e9ae4cb2f12e330904791bdc04c3b7a67a0504e3afc155f0",
+          "stderr_sha256": "71712ac8be35c713a5403187fb82d0129c528cc1ed52984e464b8dd0982fd153",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "WORKBENCH SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/workbench_workflow/workflow ä/contrast-visual",
+            "workbench-contrast-visual"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "444d62bdbc1cd650e9ae4cb2f12e330904791bdc04c3b7a67a0504e3afc155f0",
+          "stderr_sha256": "e9b6772ea7fa2b291b9c2baf11330f621db6fef74bef7fbb4590a599d31632db",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "WORKBENCH SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/layouts_workflow/workflow ä/c",
+            "layouts-c"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "3068a9cf6d87401fcc7e0cbab26fe9b5bb366485efa400a9792b55ab91f406b5",
+          "stderr_sha256": "123caf04ea7f8c1e5fac9ed226bce47ce506d3d1fc0a9dcd7604d61437b6965a",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "LAYOUTS layouts-c SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/layouts_workflow/workflow ä/c",
+            "layouts-read"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "1c86369de75f6df2042a7256a31cbab8493ab5bb7dca37abf3d9c198bbfe7d23",
+          "stderr_sha256": "eb23c91e765cd88996acb9cd2aaa7d93dbbec51aa3e1ed6ace538431ed4ce8aa",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "LAYOUTS layouts-read SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/layouts_workflow/workflow ä/c",
+            "layouts-corrupt"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "da592d3e4154a3861ae806e61bf90fc3b488182942ab5683ec564e5dc829559f",
+          "stderr_sha256": "52103588616123a2e0dca96d082bec769c38cc49f82307666fca837a8ce0e92a",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "LAYOUTS layouts-corrupt SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/layouts_workflow/workflow ä/c",
+            "layouts-reset"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "d5211f7f526e8122d881c49ad161cc90f3846a968225e3357f34051423665d90",
+          "stderr_sha256": "2a1be6b333e48b665537288c1f22bffc6d3d0aa21354720dcd84d002ae30cab9",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "LAYOUTS layouts-reset SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/layouts_workflow/workflow ä/phys",
+            "layouts-phys"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "875fafd8979950f9a5e1693950357ca7223cce9752bf457c69a9fbf76788af0b",
+          "stderr_sha256": "cc8bb697dec18ada1c111f86446bf5f3c4fea30245d9afd4f37ec8548f363aa8",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "LAYOUTS layouts-phys SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/layouts_workflow/workflow ä/phys",
+            "layouts-read"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "1c86369de75f6df2042a7256a31cbab8493ab5bb7dca37abf3d9c198bbfe7d23",
+          "stderr_sha256": "39253f8ef605af3d73e8014bbf5d94ea01da0b62cd8e851ba889a6d728e51e8e",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "LAYOUTS layouts-read SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/layouts_workflow/workflow ä/phys",
+            "layouts-corrupt"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "da592d3e4154a3861ae806e61bf90fc3b488182942ab5683ec564e5dc829559f",
+          "stderr_sha256": "5e887d7d66c9ee35a002b07b05daf9fe97b42da998ad5ad815116810a922e0b7",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "LAYOUTS layouts-corrupt SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/layouts_workflow/workflow ä/phys",
+            "layouts-reset"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "d5211f7f526e8122d881c49ad161cc90f3846a968225e3357f34051423665d90",
+          "stderr_sha256": "b1c2072f04e19270797fd03b4ad90060d4789ddc943f9a253fa04c9de052c546",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "LAYOUTS layouts-reset SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/docking_workflow/workflow ä/c-dark-legacy",
+            "fixed-panels-c-dark-legacy"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "3bdf0800e17716a8efd34aef54e736b667cfbfb99ebe0fa6c5dc2a259f9b4b80",
+          "stderr_sha256": "2c78bc4a35394760cae66cbfac6dcbdf6584335c4632f6f3f4c5df0af46daff4",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "FIXED PANELS fixed-panels-c-dark-legacy SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/docking_workflow/workflow ä/phys-light",
+            "fixed-panels-phys-light"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "5df7712dfca321c59f06ee861dee82f3d478b5bd03d495be331ae1fee08079f1",
+          "stderr_sha256": "70653fabd93d031bdde262718862a9170e2c239d4119f9466ab8e926e0ec27e6",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "FIXED PANELS fixed-panels-phys-light SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/laboratory_workflow/workflow ä/startup",
+            "laboratory-startup"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "33152078d5e8d1f11af0f6abd3b13bb7028240f787ddaa94acdbea1e621b577e",
+          "stderr_sha256": "d5a5450dff995ebb24cfa0f9a3acb78db6feeb72fe5836c5aeee989960864b58",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "LABORATORY STARTUP SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/laboratory_workflow/workflow ä/custom",
+            "laboratory-custom"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "a04b645063870351906a0e58b5bb4ea1fec65e25b90ea9e8f115fd76524c0afd",
+          "stderr_sha256": "c220c4d698382728471da77052f65888dbe6f3ab45a0927d7ecf1909baec2d1f",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "LABORATORY CUSTOM SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/laboratory_workflow/workflow ä/custom",
+            "laboratory-custom-read"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "a04b645063870351906a0e58b5bb4ea1fec65e25b90ea9e8f115fd76524c0afd",
+          "stderr_sha256": "5666f53b28f29ab1b6cb0820559e166d2a2eb3ba51a4b4919e52c5998f75d340",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "LABORATORY CUSTOM SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/laboratory_workflow/workflow ä/dark",
+            "laboratory-dark"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "e202ad724dc5addc687e4c449d467df05a9622b11bdec7f1178925f8aa194351",
+          "stderr_sha256": "8711c6139ee9e17795cac60412a1b20456d7d096022f0fa56608a70239713fbb",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "LABORATORY laboratory-dark SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/laboratory_workflow/workflow ä/light",
+            "laboratory-light"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "21991ff93683298818892d22a48249850bb5953e24b1e9d9a922d540079afd4a",
+          "stderr_sha256": "b6bb9b811de97a7c756d9ae14cfec5656462fdc5d57d393f8978ee97b916c7dc",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "LABORATORY laboratory-light SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/laboratory_workflow/workflow ä/contrast",
+            "laboratory-contrast"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "da9b5d59628324778cda522857971bd82a3634dd73825c96488ad515eed12b29",
+          "stderr_sha256": "85ca9cac348787fcfdfacb82928242e86a07541c38151d37d831b7ba4702cd80",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "LABORATORY laboratory-contrast SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/laboratory_workflow/workflow ä/light-large-narrow",
+            "laboratory-light-large-narrow"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "6e4252903c4130efb4df651680e147e374665833aa0a4645e586f96a82f9f67c",
+          "stderr_sha256": "735c5b0075982b86255857026abf4d29eb4afb912f3078356e5bc2ac43e94360",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "LABORATORY laboratory-light-large-narrow SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/laboratory_workflow/workflow ä/phys-dark",
+            "laboratory-phys-dark"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "d58501bd1db20119695d5a070de3d7a1b30b1bdb7d844d722d9fc2f0a1b16062",
+          "stderr_sha256": "b25792d11c286a153731859ab85e7d73939f433188da312b8e6841324a736807",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "LABORATORY laboratory-phys-dark SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/laboratory_workflow/workflow ä/projectile-light",
+            "laboratory-projectile-light"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "b1f371d7cece82b89538518c26624d07f988b122bba9aaf3e2e28d8e302e186d",
+          "stderr_sha256": "9c314be0d3a6a155ab8c7829ae3c19d1f1dee6492e71a4dfcb5db8afdeb83fef",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "LABORATORY laboratory-projectile-light SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/inspector_workflow/workflow ä/c-contrast-large-narrow",
+            "fixed-panels-c-contrast-large-narrow"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "d113743b614a6c0e783b351d3f9002eb7b0363a4c3fbc3f51cfbcfb6b5d8cd61",
+          "stderr_sha256": "2dc856c1f50a0495d2745eb784884172ef45b0dc1e43add347ba78aa2311eb9a",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "FIXED PANELS fixed-panels-c-contrast-large-narrow SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/inspector_workflow/workflow ä/phys-light-large-narrow",
+            "fixed-panels-phys-light-large-narrow"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "b1edc2510a9a0d15169b52fa930a43eb3bed724726829a779843f0fe522b4095",
+          "stderr_sha256": "eddd748855bfeda5c3947ca75f9a8dfc19ed0d828fc0b52f635110476c44a9eb",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "FIXED PANELS fixed-panels-phys-light-large-narrow SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/toolbar_small/workflow ä",
+            "toolbar"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "28420bd66eab248d09051b738d9812568eeb029b94decae1f136433aa55c7e16",
+          "stderr_sha256": "f6383863810fb3b5bfa949b85d7e4f394d2102291df90bb1fb9b1a7f7e353966",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/toolbar_large/workflow ä",
+            "toolbar"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "46c64194a0548c6a091ad71548b7b45d37bc38e99e74c109b048e1500b98ea8d",
+          "stderr_sha256": "50645577df25a11d540d2c00c3781d2ba141259e08eb7cfecca5b3d243efd587",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/run_details_16/workflow ä",
+            "run-details-16"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "2139f7d6cd4fb4467e521ea96e1a6db61f0ecd0574b80bea4c224e2493254294",
+          "stderr_sha256": "d875c8e6ec511edab05a676c84642dc9647e48cad70e7f30a0152c27fad5dc00",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "RUN DETAILS: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/run_details_22/workflow ä",
+            "run-details-22"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "2139f7d6cd4fb4467e521ea96e1a6db61f0ecd0574b80bea4c224e2493254294",
+          "stderr_sha256": "a0624070653903e53a58ce6460d563b3c42f32b499491c8bb800f4b6d8b9b784",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "RUN DETAILS: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/report_details_workflow/workflow ä/c-16",
+            "report-details-c"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "708b6e83e897509ede2e2f17fba61fc937d1812b0812015c24e4944d2d505db8",
+          "stderr_sha256": "cec97295f203b7ecf9eed75a933c6e0173c4fd619d6fc6c7e12044e44b64be7a",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "REPORT DETAILS SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/report_details_workflow/workflow ä/phys-16",
+            "report-details-phys"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "708b6e83e897509ede2e2f17fba61fc937d1812b0812015c24e4944d2d505db8",
+          "stderr_sha256": "03cd825d8b51b855737feff4071f66be8db363345917cfb582ce827e72195dc9",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "REPORT DETAILS SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/report_details_workflow/workflow ä/c-22",
+            "report-details-c-22"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "708b6e83e897509ede2e2f17fba61fc937d1812b0812015c24e4944d2d505db8",
+          "stderr_sha256": "62cdd54cf2247b908e2072bc9ed06774399a07d27d0b60a8c1c218cc6f217d76",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "REPORT DETAILS SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/report_details_workflow/workflow ä/phys-22",
+            "report-details-phys-22"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "708b6e83e897509ede2e2f17fba61fc937d1812b0812015c24e4944d2d505db8",
+          "stderr_sha256": "b0312bc873af67d52f2f4f87eff205b950dfad5b9ef888a7ef4f4dd58432532c",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "REPORT DETAILS SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--plot-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/plot_workflow/workflow ä"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "8dac7254b4d42030ec1f0c0a74b30a7eefe56b380ac5fcd43527ad696908896b",
+          "stderr_sha256": "fa2e55339cb4e1381cdaa70ea0019eba1c910fdb63b0461615697f2d177479e9",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "PLOT UI SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--plot-test-noise",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/plot_input_isolation/workflow ä"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "846618c0413792e1ce0cca741202c2710e871d6a6b4121cc78d43abeed66a9f8",
+          "stderr_sha256": "e3a5b576acfbe4f8a65142cf618b645d9ff45eed57f3d7ffeb279600f510cdc3",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "PLOT UI SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-21-functional/documentation_h/workflow ä",
+            "docs-keyboard-h"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "5fcd9afd2eb1e41d5d7503ccd183c2dcaed11de01440d80e25b77162dca0a237",
+          "stderr_sha256": "3722705cf1238474e44c18bb734029bb90221b2b28c2faf0cd5d640a76d7f904",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "DOCUMENTATION H SELF-TEST: PASSED"
+          ]
+        }
+      ],
+      "source_12_codec_tests": [
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim-test-preferences",
+            "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-p58obv_2/preferences"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Preferences: themes, contrast, v1/v2 migration, docked/floating roundtrip, replacement, bounds, CRC, truncations and failure preservation passed\n",
+          "stderr": "",
+          "seconds": 5.518,
+          "name": "preferences"
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim-test-layout_catalog",
+            "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-p58obv_2/layout_catalog"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Named layouts: full graph, UTF-8, replacement, limits, deletion, roundtrip, mutations, versions and failure preservation passed\n",
+          "stderr": "",
+          "seconds": 43.133,
+          "name": "layout_catalog"
+        }
+      ]
+    }
+  },
+  "images": {
+    "captures": [
+      {
+        "platform": "linux",
+        "source": "D:/Physim/build/native/design-analysis-linux-14/dark-large-narrow/analysis-both.bmp",
+        "source_sha256": "ea7414656a87d9e1d001d4dfb3d8d873154dbe5933b43ff4f56a281b48ef1e11",
+        "file": "counterexample-linux-large-controls-v14.png",
+        "png_sha256": "20e77d5bb4866ba40ade7a9c5c3ee483f1b2107b541c73401c15f6a65c512732",
+        "identical_decoded_rgb": true,
+        "version": 14,
+        "purpose": "Counterexample: clipped large-font chart actions before source 15"
+      },
+      {
+        "platform": "windows",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-windows-21/dark/analysis-both.bmp",
+        "source_sha256": "f96806161d10115b362a20b398d51e4aadb0020d33c70c93e5789c4cc73cbc8e",
+        "file": "windows-analyze-dark-v21.png",
+        "png_sha256": "805ec7c388eee518a9b42b67d051196cfc834faa306dcd8aecb0d68c0bb87eba",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "windows",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-windows-21/light/analysis-both.bmp",
+        "source_sha256": "38b53e12639a55ce3d19f7570b54d1e3b5d075dbbd1734c8a1948d436fdf174b",
+        "file": "windows-analyze-light-v21.png",
+        "png_sha256": "301548bf6bd5919dec2faa0150b0310edd5cf010dafb76e056a931c02d56526b",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "windows",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-windows-21/dark/analysis-details.bmp",
+        "source_sha256": "7ab00353d178c220e8a85e9ffcfa57f4500dd7d3a344c1b6e52323be9bc99b97",
+        "file": "windows-details-only-v21.png",
+        "png_sha256": "dd587f4a06d8a0ca4c11ee5d6b88a59fa121e187d2356bd3bec0c3b068e32b84",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "windows",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-windows-21/dark/analysis-center.bmp",
+        "source_sha256": "b92b298cc12f55a88111d2ea3fa79dde97d2bd48828895113ac188c3f9d7f1ee",
+        "file": "windows-center-only-v21.png",
+        "png_sha256": "c84efe5ebe2d17354a9e4580f60b86b07c60f7a752d89b01a7b682f78b425f5b",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "windows",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-windows-21/dark/analysis-runs.bmp",
+        "source_sha256": "bc270f4c2984831c3305c9c0ba849f165b6af11ecf43ebb13c4673b1699dacc7",
+        "file": "windows-runs-only-v21.png",
+        "png_sha256": "27cbc0e9e01e36e22b1a98dec62c9c0743b4e7d76924421994933e1eb62282c7",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "windows",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-windows-21/dark-large-narrow/analysis-both.bmp",
+        "source_sha256": "1c4653baca851065e885a3676e81d8bb12eb13788da6d8cb96394a89b67e80ee",
+        "file": "windows-minimum-dark-v21.png",
+        "png_sha256": "0888bfbf7f06d66470784e5a8792daff425203eeeda868f946338bfb126fe24f",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "windows",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-windows-21/light-large-narrow/analysis-both.bmp",
+        "source_sha256": "257be6d4c643252ee059656fd9cf10745d0d58e28d978df1544feb9391fbeb27",
+        "file": "windows-minimum-light-v21.png",
+        "png_sha256": "0df037feb76f3522dcbc038d4006016d0f86be52081779d367e3d06ea1a6ec01",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "windows",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-windows-21/contrast/analysis-both.bmp",
+        "source_sha256": "e75427bd717c771e3219203e0e273dc146e96179f5cb1f1ea75af0cd3bce3c1e",
+        "file": "windows-contrast-v21.png",
+        "png_sha256": "029c959cc7797f1c0b76316f551becc06e0c0a058cfc48d0d9fc2488530a3780",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "windows",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-windows-21/dark/analysis-wide.bmp",
+        "source_sha256": "6b4f983283e31afdc4b6254fbddfac05dd45a69501b7c0de5809a649caa2a445",
+        "file": "windows-wide-runs-v21.png",
+        "png_sha256": "06931e1792e60e7f8950352fdd432e0cd112dbd741faad12711a143cd900c8e7",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "windows",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-windows-21/dark/analysis-curve-restored.bmp",
+        "source_sha256": "817af481ee246c1d21f8a2559144f3827c094f5a9219731fef16fb5fcfa7abd7",
+        "file": "windows-curve-restored-v21.png",
+        "png_sha256": "266c758b78ff0acebe9e008f306fcfed287eb9260cbebcaea4b769835f6579b7",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "windows",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-windows-21/dark/project/analysis-external-0.bmp",
+        "source_sha256": "3e7d7968d2eede30dd4518203657948b11a3a327b4154a4883d31a19a473c24a",
+        "file": "windows-external-0-v21.png",
+        "png_sha256": "0c16947634e0e4a6caf4c0d8cf7369a1d1b31da80c8c5d09296d4146b28cc95b",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "windows",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-windows-21/dark/project/analysis-external-1.bmp",
+        "source_sha256": "943062fae97c2cb086221b4923d34970230ba710a6b0815afd1fec24df7ac9ef",
+        "file": "windows-external-1-v21.png",
+        "png_sha256": "90d6b202c1be5a7fde0440bb18ea1aa11bb3b09455ffd3b6ce32aeb8e5f51ede",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "windows",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-windows-21/dark/project/analysis-external-2.bmp",
+        "source_sha256": "b2e3f542910739d354ee1d387bc9b633ffd01e3c7db24f19e4fdce5551d19033",
+        "file": "windows-external-2-v21.png",
+        "png_sha256": "30b2b8e3e72dfed464bd02854e0a4b645f1f6dcd922cb1655dd8cb1b77c20daf",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "windows",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-windows-21/dark/analysis-statistics-scrolled.bmp",
+        "source_sha256": "29440e505c919e8c5913b04804ba23f2917849329b263d294e6e52f8346a4aed",
+        "file": "windows-statistics-scrolled-v21.png",
+        "png_sha256": "8add6d74fba111950bfe00b9c07ef04f1b62740f3926d0939b15f53be4d76176",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "linux",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-linux-21/dark/analysis-both.bmp",
+        "source_sha256": "9bc5ec5cf7b8b90f21088d4100155d90bdc2f1ef5faa92c9671f347cb3cf41dd",
+        "file": "linux-analyze-dark-v21.png",
+        "png_sha256": "374c925868fce2acdb080694bef9677a8cdb59b8a5f50a7215442185772ab28a",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "linux",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-linux-21/light/analysis-both.bmp",
+        "source_sha256": "c1465968294b607360992289514bb05b51dc8ca3f591a804d6e5d1fdd08490b7",
+        "file": "linux-analyze-light-v21.png",
+        "png_sha256": "2b8c815ab4b6aad1992e48b9d255f298fd2a190f62048ef4d7d090e194533f20",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "linux",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-linux-21/dark/analysis-details.bmp",
+        "source_sha256": "cca49abf87573cc4801da2fd10f1155b79bb327308f10128905ee69578a03881",
+        "file": "linux-details-only-v21.png",
+        "png_sha256": "b1a5f0082ea42de22546ea92b22e299dbadc01de0d09290cb4b31547f650469c",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "linux",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-linux-21/dark/analysis-center.bmp",
+        "source_sha256": "889d7788df2491371a55c1f74b0275f2eba5d5ad04fc5ccc6c3a45d60239a6e3",
+        "file": "linux-center-only-v21.png",
+        "png_sha256": "0bec9c1c975e9e3ec8dbb9aff994fe247544d1305f8ce94041b308d17a38ed22",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "linux",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-linux-21/dark/analysis-runs.bmp",
+        "source_sha256": "262f112fb05f082ab897ebd3926a400bf97e8cc12abdb7cfb03a0adfa2514ffb",
+        "file": "linux-runs-only-v21.png",
+        "png_sha256": "2af1bfdd333a20a33488a9a73aa62c5bca72fee1ccd08bd04da55242d77844cf",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "linux",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-linux-21/dark-large-narrow/analysis-both.bmp",
+        "source_sha256": "9be2c9a2c02f17748de750c60bf38abaacbc32022d194fa117c903d211b577e6",
+        "file": "linux-minimum-dark-v21.png",
+        "png_sha256": "65294769e24ef234ff0138be8e726fcc916f7c66680d017a25abace0710d178f",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "linux",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-linux-21/light-large-narrow/analysis-both.bmp",
+        "source_sha256": "84fcbd0db60dc692a91db5367debff8623ed9f778e96d7208a2192714f72d91e",
+        "file": "linux-minimum-light-v21.png",
+        "png_sha256": "f99bce6778cfb94185b0165501fb08a51647493c978d0054cb59faccbd6bd2a8",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "linux",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-linux-21/contrast/analysis-both.bmp",
+        "source_sha256": "bc0490699113012939db749011d10989074273efb9d725d3d162eb49eb85f79e",
+        "file": "linux-contrast-v21.png",
+        "png_sha256": "4e785f46edb1dbfb0516ca51d21767f34437ebd10a9a183381cde5c2225bb1a8",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "linux",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-linux-21/dark/analysis-wide.bmp",
+        "source_sha256": "25d3e52f8ce64468e4613fc2642bcf49fd119397a427fc5b367d2dc26c419843",
+        "file": "linux-wide-runs-v21.png",
+        "png_sha256": "beea6fda391931817cf1120d6442fe10c5ded1a7f5c2eb94a841bd308ff913fd",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "linux",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-linux-21/dark/analysis-curve-restored.bmp",
+        "source_sha256": "22b1a20c5f01d0be91666d8ae0f76cd9902f8d18060973d08d15fe5329665553",
+        "file": "linux-curve-restored-v21.png",
+        "png_sha256": "12518167e17d9c3d1798fe8c5923159c2bebd79bf9a982ba3ccdeab838377ea7",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "linux",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-linux-21/dark/project/analysis-external-0.bmp",
+        "source_sha256": "999230334551f007fc41c2932f57eac84a570dc9a6bca51ac4ed9a73ae9c47fc",
+        "file": "linux-external-0-v21.png",
+        "png_sha256": "181ac0289f3585459f908690bd171d70dc2ca7d3e9aae87c3192d3110b2d6f41",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "linux",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-linux-21/dark/project/analysis-external-1.bmp",
+        "source_sha256": "ab8d9f363234fcdf48184911a75098e2992296bef35a434d46a80a45cfb30f67",
+        "file": "linux-external-1-v21.png",
+        "png_sha256": "5b4ab67613dfc08e5aa6c8d2af0fbf368226925cdc9a4f9d4b31577e1385d426",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "linux",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-linux-21/dark/project/analysis-external-2.bmp",
+        "source_sha256": "7e67fced0c488901f2814764ea063561a06aa8c35ac72b599e051a42e0b12606",
+        "file": "linux-external-2-v21.png",
+        "png_sha256": "c787cbe28164f6d24c19d389cfbbd4ec6862aac81d84c859f65f8a9be6195b36",
+        "identical_decoded_rgb": true
+      },
+      {
+        "platform": "linux",
+        "version": 21,
+        "source": "D:/Physim/build/native/design-analysis-linux-21/dark/analysis-statistics-scrolled.bmp",
+        "source_sha256": "28dc8a43ca7d338a6196103d7c0b32e6703704811351220a2be5e56d764ce312",
+        "file": "linux-statistics-scrolled-v21.png",
+        "png_sha256": "cd1f6c6b83e5909381eecf3656d9975e6efb73293ca59593b8e0b7a0ffb440ca",
+        "identical_decoded_rgb": true
+      }
+    ],
+    "chrome": [
+      {
+        "scope": "Compare shared native chrome with the selected PNG, without altering either image.\n\nThis verifies a bounded part of the design: client size, the three tab rectangles,\nthe two horizontal boundaries and five semantic surfaces. It is not a whole-app\nscore. Content, fonts, interactions and the rest of each workspace need their own\nproofs. Pillow is required, as for the existing workbench visual checker.",
+        "reference": "D:\\Physim\\docs\\visuals\\unified-workspace\\analyze-dark.png",
+        "native": "D:\\Physim\\docs\\visuals\\unified-workspace\\analysis-native-2026-10-20\\windows-analyze-dark-v21.png",
+        "sha256": [
+          "19574832c52aff19b3b13e4b204cc7f6132117b5af052d8a53c70ce4043cc01d",
+          "805ec7c388eee518a9b42b67d051196cfc834faa306dcd8aecb0d68c0bb87eba"
+        ],
+        "checks": [
+          {
+            "name": "actual client size",
+            "expected": [
+              1440,
+              1000
+            ],
+            "actual": [
+              1440,
+              1000
+            ],
+            "passed": true
+          },
+          {
+            "name": "menu surface",
+            "expected": [
+              37,
+              38,
+              43
+            ],
+            "actual": [
+              37,
+              38,
+              43
+            ],
+            "passed": true
+          },
+          {
+            "name": "path surface",
+            "expected": [
+              30,
+              31,
+              35
+            ],
+            "actual": [
+              30,
+              31,
+              35
+            ],
+            "passed": true
+          },
+          {
+            "name": "path left inset",
+            "expected": [
+              30,
+              31,
+              35
+            ],
+            "actual": [
+              30,
+              31,
+              35
+            ],
+            "passed": true
+          },
+          {
+            "name": "workspace surface",
+            "expected": [
+              30,
+              31,
+              35
+            ],
+            "actual": [
+              30,
+              31,
+              35
+            ],
+            "passed": true
+          },
+          {
+            "name": "footer surface",
+            "expected": [
+              37,
+              38,
+              43
+            ],
+            "actual": [
+              37,
+              38,
+              43
+            ],
+            "passed": true
+          },
+          {
+            "name": "selected tab coverage at y=43",
+            "expected": [
+              [
+                965,
+                1430
+              ]
+            ],
+            "actual": [
+              [
+                965,
+                1430
+              ]
+            ],
+            "passed": true
+          },
+          {
+            "name": "selected tab coverage at y=50",
+            "expected": [
+              [
+                963,
+                1223
+              ],
+              [
+                1236,
+                1432
+              ]
+            ],
+            "actual": [
+              [
+                963,
+                1223
+              ],
+              [
+                1236,
+                1432
+              ]
+            ],
+            "passed": true
+          },
+          {
+            "name": "selected tab coverage at y=69",
+            "expected": [
+              [
+                964,
+                1431
+              ]
+            ],
+            "actual": [
+              [
+                964,
+                1431
+              ]
+            ],
+            "passed": true
+          },
+          {
+            "name": "full one-pixel boundary at y=78",
+            "expected": 1440,
+            "actual": 1440,
+            "passed": true
+          },
+          {
+            "name": "full one-pixel boundary at y=117",
+            "expected": 1440,
+            "actual": 1440,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "scope": "Compare shared native chrome with the selected PNG, without altering either image.\n\nThis verifies a bounded part of the design: client size, the three tab rectangles,\nthe two horizontal boundaries and five semantic surfaces. It is not a whole-app\nscore. Content, fonts, interactions and the rest of each workspace need their own\nproofs. Pillow is required, as for the existing workbench visual checker.",
+        "reference": "D:\\Physim\\docs\\visuals\\unified-workspace\\analyze-light.png",
+        "native": "D:\\Physim\\docs\\visuals\\unified-workspace\\analysis-native-2026-10-20\\windows-analyze-light-v21.png",
+        "sha256": [
+          "f9fe041150631c5b36f35f49462a0701f9e617b80254de835ad3232f17395a95",
+          "301548bf6bd5919dec2faa0150b0310edd5cf010dafb76e056a931c02d56526b"
+        ],
+        "checks": [
+          {
+            "name": "actual client size",
+            "expected": [
+              1440,
+              1000
+            ],
+            "actual": [
+              1440,
+              1000
+            ],
+            "passed": true
+          },
+          {
+            "name": "menu surface",
+            "expected": [
+              237,
+              239,
+              243
+            ],
+            "actual": [
+              237,
+              239,
+              243
+            ],
+            "passed": true
+          },
+          {
+            "name": "path surface",
+            "expected": [
+              246,
+              247,
+              249
+            ],
+            "actual": [
+              246,
+              247,
+              249
+            ],
+            "passed": true
+          },
+          {
+            "name": "path left inset",
+            "expected": [
+              246,
+              247,
+              249
+            ],
+            "actual": [
+              246,
+              247,
+              249
+            ],
+            "passed": true
+          },
+          {
+            "name": "workspace surface",
+            "expected": [
+              246,
+              247,
+              249
+            ],
+            "actual": [
+              246,
+              247,
+              249
+            ],
+            "passed": true
+          },
+          {
+            "name": "footer surface",
+            "expected": [
+              237,
+              239,
+              243
+            ],
+            "actual": [
+              237,
+              239,
+              243
+            ],
+            "passed": true
+          },
+          {
+            "name": "selected tab coverage at y=43",
+            "expected": [
+              [
+                965,
+                1430
+              ]
+            ],
+            "actual": [
+              [
+                965,
+                1430
+              ]
+            ],
+            "passed": true
+          },
+          {
+            "name": "selected tab coverage at y=50",
+            "expected": [
+              [
+                963,
+                1223
+              ],
+              [
+                1236,
+                1432
+              ]
+            ],
+            "actual": [
+              [
+                963,
+                1223
+              ],
+              [
+                1236,
+                1432
+              ]
+            ],
+            "passed": true
+          },
+          {
+            "name": "selected tab coverage at y=69",
+            "expected": [
+              [
+                964,
+                1431
+              ]
+            ],
+            "actual": [
+              [
+                964,
+                1431
+              ]
+            ],
+            "passed": true
+          },
+          {
+            "name": "full one-pixel boundary at y=78",
+            "expected": 1440,
+            "actual": 1440,
+            "passed": true
+          },
+          {
+            "name": "full one-pixel boundary at y=117",
+            "expected": 1440,
+            "actual": 1440,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "scope": "Compare shared native chrome with the selected PNG, without altering either image.\n\nThis verifies a bounded part of the design: client size, the three tab rectangles,\nthe two horizontal boundaries and five semantic surfaces. It is not a whole-app\nscore. Content, fonts, interactions and the rest of each workspace need their own\nproofs. Pillow is required, as for the existing workbench visual checker.",
+        "reference": "D:\\Physim\\docs\\visuals\\unified-workspace\\analyze-dark.png",
+        "native": "D:\\Physim\\docs\\visuals\\unified-workspace\\analysis-native-2026-10-20\\linux-analyze-dark-v21.png",
+        "sha256": [
+          "19574832c52aff19b3b13e4b204cc7f6132117b5af052d8a53c70ce4043cc01d",
+          "374c925868fce2acdb080694bef9677a8cdb59b8a5f50a7215442185772ab28a"
+        ],
+        "checks": [
+          {
+            "name": "actual client size",
+            "expected": [
+              1440,
+              1000
+            ],
+            "actual": [
+              1440,
+              1000
+            ],
+            "passed": true
+          },
+          {
+            "name": "menu surface",
+            "expected": [
+              37,
+              38,
+              43
+            ],
+            "actual": [
+              37,
+              38,
+              43
+            ],
+            "passed": true
+          },
+          {
+            "name": "path surface",
+            "expected": [
+              30,
+              31,
+              35
+            ],
+            "actual": [
+              30,
+              31,
+              35
+            ],
+            "passed": true
+          },
+          {
+            "name": "path left inset",
+            "expected": [
+              30,
+              31,
+              35
+            ],
+            "actual": [
+              30,
+              31,
+              35
+            ],
+            "passed": true
+          },
+          {
+            "name": "workspace surface",
+            "expected": [
+              30,
+              31,
+              35
+            ],
+            "actual": [
+              30,
+              31,
+              35
+            ],
+            "passed": true
+          },
+          {
+            "name": "footer surface",
+            "expected": [
+              37,
+              38,
+              43
+            ],
+            "actual": [
+              37,
+              38,
+              43
+            ],
+            "passed": true
+          },
+          {
+            "name": "selected tab coverage at y=43",
+            "expected": [
+              [
+                965,
+                1430
+              ]
+            ],
+            "actual": [
+              [
+                965,
+                1430
+              ]
+            ],
+            "passed": true
+          },
+          {
+            "name": "selected tab coverage at y=50",
+            "expected": [
+              [
+                963,
+                1223
+              ],
+              [
+                1236,
+                1432
+              ]
+            ],
+            "actual": [
+              [
+                963,
+                1223
+              ],
+              [
+                1236,
+                1432
+              ]
+            ],
+            "passed": true
+          },
+          {
+            "name": "selected tab coverage at y=69",
+            "expected": [
+              [
+                964,
+                1431
+              ]
+            ],
+            "actual": [
+              [
+                964,
+                1431
+              ]
+            ],
+            "passed": true
+          },
+          {
+            "name": "full one-pixel boundary at y=78",
+            "expected": 1440,
+            "actual": 1440,
+            "passed": true
+          },
+          {
+            "name": "full one-pixel boundary at y=117",
+            "expected": 1440,
+            "actual": 1440,
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      {
+        "scope": "Compare shared native chrome with the selected PNG, without altering either image.\n\nThis verifies a bounded part of the design: client size, the three tab rectangles,\nthe two horizontal boundaries and five semantic surfaces. It is not a whole-app\nscore. Content, fonts, interactions and the rest of each workspace need their own\nproofs. Pillow is required, as for the existing workbench visual checker.",
+        "reference": "D:\\Physim\\docs\\visuals\\unified-workspace\\analyze-light.png",
+        "native": "D:\\Physim\\docs\\visuals\\unified-workspace\\analysis-native-2026-10-20\\linux-analyze-light-v21.png",
+        "sha256": [
+          "f9fe041150631c5b36f35f49462a0701f9e617b80254de835ad3232f17395a95",
+          "2b8c815ab4b6aad1992e48b9d255f298fd2a190f62048ef4d7d090e194533f20"
+        ],
+        "checks": [
+          {
+            "name": "actual client size",
+            "expected": [
+              1440,
+              1000
+            ],
+            "actual": [
+              1440,
+              1000
+            ],
+            "passed": true
+          },
+          {
+            "name": "menu surface",
+            "expected": [
+              237,
+              239,
+              243
+            ],
+            "actual": [
+              237,
+              239,
+              243
+            ],
+            "passed": true
+          },
+          {
+            "name": "path surface",
+            "expected": [
+              246,
+              247,
+              249
+            ],
+            "actual": [
+              246,
+              247,
+              249
+            ],
+            "passed": true
+          },
+          {
+            "name": "path left inset",
+            "expected": [
+              246,
+              247,
+              249
+            ],
+            "actual": [
+              246,
+              247,
+              249
+            ],
+            "passed": true
+          },
+          {
+            "name": "workspace surface",
+            "expected": [
+              246,
+              247,
+              249
+            ],
+            "actual": [
+              246,
+              247,
+              249
+            ],
+            "passed": true
+          },
+          {
+            "name": "footer surface",
+            "expected": [
+              237,
+              239,
+              243
+            ],
+            "actual": [
+              237,
+              239,
+              243
+            ],
+            "passed": true
+          },
+          {
+            "name": "selected tab coverage at y=43",
+            "expected": [
+              [
+                965,
+                1430
+              ]
+            ],
+            "actual": [
+              [
+                965,
+                1430
+              ]
+            ],
+            "passed": true
+          },
+          {
+            "name": "selected tab coverage at y=50",
+            "expected": [
+              [
+                963,
+                1223
+              ],
+              [
+                1236,
+                1432
+              ]
+            ],
+            "actual": [
+              [
+                963,
+                1223
+              ],
+              [
+                1236,
+                1432
+              ]
+            ],
+            "passed": true
+          },
+          {
+            "name": "selected tab coverage at y=69",
+            "expected": [
+              [
+                964,
+                1431
+              ]
+            ],
+            "actual": [
+              [
+                964,
+                1431
+              ]
+            ],
+            "passed": true
+          },
+          {
+            "name": "full one-pixel boundary at y=78",
+            "expected": 1440,
+            "actual": 1440,
+            "passed": true
+          },
+          {
+            "name": "full one-pixel boundary at y=117",
+            "expected": 1440,
+            "actual": 1440,
+            "passed": true
+          }
+        ],
+        "passed": true
+      }
+    ]
+  },
+  "negative_checks": [
+    {
+      "platform": "windows",
+      "version": 12,
+      "reason": "The synthetic focus-loss event lacked the existing fixture marker and was filtered.",
+      "result": {
+        "binary": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "59bcf2877f42a8f9ee9ad58e0c79c5149fc4c56c8212d88a4888862abc7c9f51",
+        "groups": [
+          {
+            "variant": "dark",
+            "status": "failed",
+            "error": "App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--workspace-state-test', 'D:\\\\Physim\\\\build\\\\native\\\\design-analysis-windows-12\\\\dark', 'analysis-layout-dark']",
+            "seconds": 8.969000000040978
+          }
+        ]
+      }
+    },
+    {
+      "platform": "windows",
+      "version": 13,
+      "reason": "Instrumentation confirmed the event was filtered; this is not a passed focus-loss check.",
+      "result": {
+        "binary": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "b008f21f17a23eea2c8d4f57ff39791c1972feb568976446260352dd7b5c8157",
+        "groups": [
+          {
+            "variant": "dark",
+            "status": "failed",
+            "error": "App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--workspace-state-test', 'D:\\\\Physim\\\\build\\\\native\\\\design-analysis-windows-13\\\\dark', 'analysis-layout-dark']",
+            "seconds": 9.985000000044238
+          }
+        ]
+      }
+    },
+    {
+      "platform": "linux",
+      "version": 12,
+      "reason": "Actual font advance exceeded the fixed tab width.",
+      "result": {
+        "binary": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+        "sha256": "643050f9beb891688da04c7b45f8d367ff331cbc5248b08a788c753f76b73719",
+        "groups": [
+          {
+            "variant": "dark",
+            "status": "failed",
+            "error": "App exited 1, expected 0: ['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--workspace-state-test', '/mnt/d/Physim/build/native/design-analysis-linux-12/dark', 'analysis-layout-dark']",
+            "seconds": 6.019728356000996
+          }
+        ]
+      }
+    },
+    {
+      "platform": "windows",
+      "version": 17,
+      "reason": "The test incorrectly required physical mouse capture although posted SDL events do not move the physical pointer.",
+      "result": {
+        "binary": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "3a5e151e515783d0e85f9246566b87e93038b6604a33e031a7d5ec1e56f472fe",
+        "groups": [
+          {
+            "variant": "dark",
+            "status": "failed",
+            "error": "App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--workspace-state-test', 'D:\\\\Physim\\\\build\\\\native\\\\design-analysis-windows-17\\\\dark', 'analysis-layout-dark']",
+            "seconds": 8.85899999999674
+          }
+        ]
+      }
+    },
+    {
+      "platform": "windows",
+      "version": 14,
+      "reason": "Shared separator press rounded a half-pixel origin to an extra pixel; the hidden launcher also lacked ProgramFiles system variables.",
+      "result": {
+        "binary": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "a57ba6417bf84dfccc68a3cfe2f9f4af71d648a49def96a26be99cc2bc5c5303",
+        "cases": [
+          {
+            "name": "run_details_16",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 6.047000000020489
+          },
+          {
+            "name": "run_details_22",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 5.110000000044238
+          },
+          {
+            "name": "report_details_workflow",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 22.82800000003772
+          },
+          {
+            "name": "plot_workflow",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 34.03200000000652
+          },
+          {
+            "name": "plot_input_isolation",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 29.67200000002049
+          },
+          {
+            "name": "settings_workflow",
+            "status": "failed",
+            "exit_code": 1,
+            "seconds": 5.297000000020489
+          },
+          {
+            "name": "settings_keyboard_workflow",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 9.421999999962281
+          },
+          {
+            "name": "layouts_workflow",
+            "status": "failed",
+            "exit_code": 1,
+            "seconds": 4.73499999998603
+          },
+          {
+            "name": "docking_workflow",
+            "status": "failed",
+            "exit_code": 1,
+            "seconds": 4.438000000023749
+          },
+          {
+            "name": "workbench_workflow",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 34.86000000004424
+          },
+          {
+            "name": "laboratory_workflow",
+            "status": "failed",
+            "exit_code": 1,
+            "seconds": 21.18800000002375
+          },
+          {
+            "name": "inspector_workflow",
+            "status": "failed",
+            "exit_code": 1,
+            "seconds": 4.577999999979511
+          },
+          {
+            "name": "toolbar_small",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 8.53100000001723
+          },
+          {
+            "name": "toolbar_large",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 7.25
+          }
+        ]
+      }
+    },
+    {
+      "platform": "windows",
+      "version": 15,
+      "reason": "The width drag was corrected, but global Defaults still retained the regular layout. Compiler setup did not restore missing ProgramFiles variables.",
+      "result": {
+        "binary": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "3651bd8d0ee7efc7f928622aba079761b0f12725895d35f7aae391c59f142950",
+        "cases": [
+          {
+            "name": "run_details_16",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 10.51600000000326
+          },
+          {
+            "name": "run_details_22",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 9.34299999999348
+          },
+          {
+            "name": "report_details_workflow",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 32.01500000001397
+          },
+          {
+            "name": "plot_workflow",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 44.09299999999348
+          },
+          {
+            "name": "plot_input_isolation",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 31.40600000001723
+          },
+          {
+            "name": "settings_workflow",
+            "status": "failed",
+            "exit_code": 1,
+            "seconds": 30.42200000002049
+          },
+          {
+            "name": "settings_keyboard_workflow",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 12.125
+          },
+          {
+            "name": "layouts_workflow",
+            "status": "failed",
+            "exit_code": 1,
+            "seconds": 5.280999999959022
+          },
+          {
+            "name": "docking_workflow",
+            "status": "failed",
+            "exit_code": 1,
+            "seconds": 5.188000000023749
+          },
+          {
+            "name": "workbench_workflow",
+            "status": "failed",
+            "exit_code": 1,
+            "seconds": 5.813000000023749
+          },
+          {
+            "name": "laboratory_workflow",
+            "status": "failed",
+            "exit_code": 1,
+            "seconds": 16.375
+          },
+          {
+            "name": "inspector_workflow",
+            "status": "failed",
+            "exit_code": 1,
+            "seconds": 4.5
+          },
+          {
+            "name": "toolbar_small",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 8.875
+          },
+          {
+            "name": "toolbar_large",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 7.312000000034459
+          }
+        ]
+      }
+    },
+    {
+      "platform": "windows",
+      "version": 18,
+      "reason": "All other 14 Windows workflow groups passed; the expanded workbench helper missed its jump back to stage 32 and timed out.",
+      "result": {
+        "binary": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "202a6fb1f3c19e563ef040dad29aeab7efda9b5c7f6a8e7bb7c01040aa9a4ed7",
+        "cases": [
+          {
+            "name": "settings_workflow",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 43.31300000002375
+          },
+          {
+            "name": "settings_keyboard_workflow",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 12.938000000023749
+          },
+          {
+            "name": "workbench_workflow",
+            "status": "failed",
+            "exit_code": 1,
+            "seconds": 45.31299999996554
+          },
+          {
+            "name": "layouts_workflow",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 76.125
+          },
+          {
+            "name": "docking_workflow",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 58.625
+          },
+          {
+            "name": "laboratory_workflow",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 141.625
+          },
+          {
+            "name": "inspector_workflow",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 56.13999999995576
+          },
+          {
+            "name": "toolbar_small",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 7.562000000034459
+          },
+          {
+            "name": "toolbar_large",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 7.094000000040978
+          },
+          {
+            "name": "run_details_16",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 6.313000000023749
+          },
+          {
+            "name": "run_details_22",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 5.25
+          },
+          {
+            "name": "report_details_workflow",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 22.219000000040978
+          },
+          {
+            "name": "plot_workflow",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 32.20400000002701
+          },
+          {
+            "name": "plot_input_isolation",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 30.54699999996228
+          },
+          {
+            "name": "documentation_h",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 30.17200000002049
+          }
+        ]
+      }
+    }
+  ],
+  "limitations": [
+    "Windows scripted pointer events do not move the physical pointer; SDL capture flags are checked against actual mouse focus. No full physical Windows pointer proof is claimed.",
+    "No new macOS, manual screenreader or physical mixed-monitor DPI proof.",
+    "Builds include the separately hashed unchanged foreign accessibility files. No clean-checkout build is claimed."
+  ]
+}

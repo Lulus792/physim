@@ -13,8 +13,9 @@ static bool panel_is_detached(const app *a,unsigned panel) {
 static void panel_pull_handle(app *a,unsigned panel,struct nk_rect bounds) {
     if(a->panel_render)return;
     a->panels[panel].action=panel_is_detached(a,panel)?nk_rect(0,0,0,0):bounds;
-    if((panel>=PS_PANEL_MEASURE || (panel==PS_DOCK_WORKSPACE && laboratory_visible(a))) && !panel_is_detached(a,panel)) {
-        char name[160];snprintf(name,sizeof name,"%s in eigenem Fenster \u00f6ffnen",panel_name(panel));
+    if((analysis_visible(a) || panel>=PS_PANEL_MEASURE || (panel==PS_DOCK_WORKSPACE && laboratory_visible(a))) && !panel_is_detached(a,panel)) {
+        const char *title=analysis_visible(a)?panel==PS_DOCK_SIDEBAR?"Messläufe":panel==PS_DOCK_WORKSPACE?"Messdaten und Analyseergebnis":"Laufdetails":panel_name(panel);
+        char name[160];snprintf(name,sizeof name,"%s in eigenem Fenster \u00f6ffnen",title);
         if(ps_ui_accessibility_button(a->ui,bounds,name))a->panel_open_request|=1u<<panel;
     }
 }
@@ -141,6 +142,13 @@ static bool panel_window_event(app *a,SDL_Event *event,SDL_Window *window) {
             a->ui=ui;a->window=win;a->tab=tab;a->laboratory_resize=resize;a->laboratory_resize_original=original;a->laboratory_resize_cancelled=cancelled;
             a->dock_panels[PS_DOCK_WORKSPACE]=bounds;a->laboratory_measure_bounds=measure_bounds;a->laboratory_measure_width=measure_width;if(handled)return true;
         }
+        if(i==PS_DOCK_WORKSPACE && p->tab==2) {
+            if(a->analysis_plot_resizing && (event->type==SDL_EVENT_WINDOW_FOCUS_LOST || event->type==SDL_EVENT_WINDOW_RESIZED))analysis_plot_resize_abort(a);
+            if(event->type==SDL_EVENT_KEY_DOWN) {
+                struct nk_context *ui=a->ui;int tab=a->tab;a->ui=p->ui;a->tab=p->tab;
+                bool handled=analysis_plot_resize_key(a,&event->key);a->ui=ui;a->tab=tab;if(handled)return true;
+            }
+        }
         /* Component keys include Shift=40 px and Enter=reset. The generic
          * range handler would otherwise consume them as a one-step adjustment. */
         if(nk_sdl_accessibility_event(p->ui,event))return true;
@@ -186,8 +194,8 @@ static bool panel_windows_render(app *a) {
         if(i<PS_DOCK_PANELS)p->tab=main_tab;
         a->window=p->window;a->graphics=p->graphics;a->ui=p->ui;a->tab=p->tab;a->panel_render=(int)i+1;
         int w,h;SDL_GetWindowSize(p->window,&w,&h);
-        ui_palette=workbench_visible(a)?ps_workbench_palette(palette):laboratory_visible(a)?ps_laboratory_palette(palette):palette;
-        style(p->ui);nk_style_set_font(p->ui,workbench_visible(a)?&a->workbench_fonts[0]:laboratory_visible(a)?&a->workbench_fonts[2]:a->font_ui);
+        ui_palette=workbench_visible(a) || analysis_visible(a)?ps_workbench_palette(palette):laboratory_visible(a)?ps_laboratory_palette(palette):palette;
+        style(p->ui);nk_style_set_font(p->ui,workbench_visible(a) || analysis_visible(a)?&a->workbench_fonts[0]:laboratory_visible(a)?&a->workbench_fonts[2]:a->font_ui);
         nk_sdl_set_ui_size(p->ui,a->preferences.ui_size);
         ps_graphics_background(p->graphics,UI_COLOR(canvas).r,UI_COLOR(canvas).g,UI_COLOR(canvas).b);
         ps_graphics_backdrop(p->graphics,NULL);

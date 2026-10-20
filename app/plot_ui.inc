@@ -124,3 +124,38 @@ static void plot_dot(struct nk_command_buffer *canvas, struct nk_rect area, doub
                                area.y + (1 - (float)y) * area.h - radius, 2 * radius, 2 * radius),
                        color);
 }
+static void analysis_plot_heading(app *a,ps_plot_view *view,const double full[4]) {
+    struct nk_context *ui=a->ui;struct nk_rect r;
+    nk_layout_row_dynamic(ui,76,1);nk_widget(&r,ui);
+    struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+    const struct nk_user_font *small=&a->workspace_status_font,*title=&a->analysis_chart_font;
+    nk_draw_text(canvas,nk_rect(r.x,r.y+22,r.w,small->height),"MESSKURVE",9,small,nk_rgba(0,0,0,0),UI_COLOR(muted));
+    const char *name=a->data.channels[a->plot_channel].name;
+    const struct nk_user_font *control_font=&a->workbench_fonts[0];float scale=a->preferences.ui_size/16.f;
+    const char *labels[]={"+","−","Alles zeigen"},*names[]={"Zoom +","Zoom -","Alles zeigen"};
+    float widths[]={28*scale,28*scale,fmaxf(82*scale,ceilf(control_font->width(control_font->userdata,control_font->height,labels[2],(int)strlen(labels[2]))+18*scale))};
+    float controls=widths[0]+widths[1]+widths[2]+8;
+    nk_draw_text(canvas,nk_rect(r.x,r.y+44,fmaxf(1,r.w-controls-14),title->height),name,(int)strlen(name),title,nk_rgba(0,0,0,0),UI_COLOR(text));
+    char description[192];snprintf(description,sizeof description,"Messkurve: %s",name);ps_ui_accessibility_label(ui,r,description);
+    float x=r.x+r.w-controls;
+    ps_plot_view before=*view;if(!view->initialized)ps_plot_view_reset(view);
+    for(unsigned i=0;i<3;i++) {
+        struct nk_rect button=nk_rect(x,r.y+34,widths[i],fmaxf(28,control_font->height+12));a->plot_buttons[i]=button;x+=widths[i]+4;
+        bool focused=nk_sdl_accessibility_is_focused(ui,NULL,names[i]);
+        nk_stroke_rect(canvas,button,5,focused?2:1,focused?UI_COLOR(accent):UI_COLOR(border));
+        const struct nk_user_font *font=&a->workbench_fonts[0];
+        float width=font->width(font->userdata,font->height,labels[i],(int)strlen(labels[i]));
+        nk_draw_text(canvas,nk_rect(button.x+(button.w-width)/2,button.y+(button.h-font->height)/2,width+1,font->height),labels[i],(int)strlen(labels[i]),font,nk_rgba(0,0,0,0),UI_COLOR(text));
+        if(ps_ui_button_at(ui,button,names[i],false)) {
+            if(i==2)ps_plot_view_reset(view);else ps_plot_view_zoom(view,i==0?2:.5,.5,.5);
+            a->plot_drag=NULL;
+        }
+    }
+    if(full){double shown[4];plot_display_bounds(view,full,shown);if(!(shown[0]<shown[1] && shown[2]<shown[3]))*view=before;}
+    nk_layout_row_dynamic(ui,30,1);nk_widget(&r,ui);
+    nk_stroke_line(canvas,r.x,r.y+14,r.x+20,r.y+14,2,ui_palette->curves[0]);
+    char legend[1200];snprintf(legend,sizeof legend,"%s%s",diagnostic_basename(a->data.path),selected_run(a,a->data.path)==0?" · Referenz":" · Aktiver Lauf");
+    const struct nk_user_font *legend_font=&a->workbench_fonts[2];
+    nk_draw_text(canvas,nk_rect(r.x+26,r.y+7,r.w-26,legend_font->height),legend,(int)strlen(legend),legend_font,nk_rgba(0,0,0,0),UI_COLOR(muted));
+    ps_ui_accessibility_label(ui,r,legend);
+}

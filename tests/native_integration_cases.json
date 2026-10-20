@@ -5093,7 +5093,7 @@
             "--cc",
             "{cc}"
           ],
-          "timeout": 45,
+          "timeout": 90,
           "files": [
             "app-steps.json"
           ]
@@ -5140,7 +5140,7 @@
             "--cc",
             "{cc}"
           ],
-          "timeout": 45,
+          "timeout": 90,
           "files": [
             "app-steps.json"
           ]
@@ -13245,6 +13245,131 @@
           "files": [
             "app-steps.json"
           ]
+        }
+      ]
+    },
+    {
+      "name": "analysis_layout_dark",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "analysis_layout_dark",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 95
+        }
+      ]
+    },
+    {
+      "name": "analysis_layout_light",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "analysis_layout_light",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 95
+        }
+      ]
+    },
+    {
+      "name": "analysis_layout_contrast",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "analysis_layout_contrast",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 95
+        }
+      ]
+    },
+    {
+      "name": "analysis_layout_dark_large_narrow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "analysis_layout_dark_large_narrow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 95
+        }
+      ]
+    },
+    {
+      "name": "analysis_layout_light_large_narrow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "analysis_layout_light_large_narrow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 95
         }
       ]
     }

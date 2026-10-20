@@ -48,6 +48,7 @@ static void layout_apply(app *a) {
     a->dock_resize=a->dock_float_resize=a->dock_drag=a->panel_drag=0;
     a->dock_dragging=false;a->dock_last_tab=a->tab;
     if(a->tab==6) {
+        a->settings_defaults=false;
         a->settings_draft.dock=a->preferences.dock;a->settings_draft.sidebar_width=s->sidebar_width;
         a->settings_draft.inspector_width=s->inspector_width;a->settings_draft.log_height=s->log_height;
         a->settings_draft.view_flags=s->show_log?a->settings_draft.view_flags|PS_VIEW_LOG:a->settings_draft.view_flags&~PS_VIEW_LOG;

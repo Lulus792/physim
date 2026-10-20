@@ -70,7 +70,7 @@ Entwickeln in Hell und Dunkel. **Das ist keine 100-%-Abnahme der Oberfläche.**
 | Gemeinsamer Rahmen | Fünf Referenzmenüs, Theme-Aktion, Fensteraktionen und Statusinhalte vollständig zusammenführen; alle zugehörigen Hover-/Fokus-/Auswahlzustände prüfen. |
 | Entwickeln | Kontextgliederung, API-Karte, Modellnotiz, Suchinsel, Dateitabs, Baum und Protokoll mit gleichwertigem echtem Inhalt geometrisch vergleichen; schmal, große Schrift, alle Seitenzustände. |
 | Simulieren | Szenenleiste, Szenenkopf, Objektfelder, Gruppen, Kurven, Legenden und komplette Zeitleiste einschließlich Bedienelementpositionen weiter angleichen; alle acht Seiten-/Kurvenzustände. |
-| Auswerten | Gewählte neue Bereichsanordnung nativ umsetzen: Kopf, Laufliste, mittlere Tabs/Kurve/Statistik, rechter Daten-/Herkunftskontext und Status; vier Seitenzustände und alle Exportzugänge. |
+| Auswerten | Gewählte Bereichsanordnung ist nativ aufgebaut; Seitenzustände, Teilfenster, Kurve-/Statistik-Trenner und Scrollzugang bestehen auf Windows/Linux. Sichtbare Kontrollformen, Einzüge, große Schrift und vollständiger Referenzvergleich bleiben offen. Der neue Exportdialog ist noch umzusetzen. [Geprüfter Teilstand und Bilder](ANALYSIS-NATIVE.md). |
 | Auswerten: Daten | Echte begrenzte Vorschauen mehrerer Läufe mit deren eigenen Zeitachsen, passenden Kanälen/Dimensionen und Statuslücken; gesamte Laufstatistik, ausdrücklicher aktiver Lauf und Referenz; Worker- und Berichtsherkunft erhalten. |
 | F1 | Aktuellen H-Stand erneut unmittelbar gegen H prüfen, einschließlich linker Navigation, C/Physim-Segmenten, Modell-/Beispiel-Tabs, Formeln und den unabhängigen Seitenzuständen. |
 | Gesamtabnahme | Native Aufgaben, Hell/Dunkel, Kontrast, reduzierte Transparenz, Textgrößen, Minimum/Normal/Maximiert, verfügbare DPI-/Monitorfälle, Tastatur, Fokuskehr und tatsächliche Assistive-Nachweise. |
@@ -153,4 +153,4 @@ Browserprüfung abgeleitet. PNGs sowie HTML-/CSS-Quellen waren lokal lesbar.
 
 Die oben aufgelisteten offenen Bereiche bleiben offen. Insbesondere ist die
 erfolgreiche F1-Funktionsgruppe noch kein neuer vollständiger Bildabgleich mit H,
-und Auswerten erhält durch gemeinsame Rahmenmaße noch nicht seine neue Anordnung.
+Die danach nativ aufgebaute Auswertung ist getrennt in [ANALYSIS-NATIVE.md](ANALYSIS-NATIVE.md) dokumentiert; sie ist weiterhin keine vollständige Designabnahme.

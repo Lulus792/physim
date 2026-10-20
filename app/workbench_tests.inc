@@ -135,12 +135,21 @@ static void workbench_test_frame(app *a,const char *mode,int *stage,int *code,co
     case 29:ok=a->preferences.sidebar_width==248;test_window_key_mod(a->window,SDLK_LEFT,0);break;
     case 30:ok=a->preferences.sidebar_width==238;test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
     case 31:
+        /* Escape cancels a pointer transaction; a completed keyboard step stays. */
+        ok=a->preferences.sidebar_width==238 && !a->dock_resize_transaction;
+        if(ok)ok=nk_sdl_accessibility_request_focus(a->ui,NULL,"Workspace-Breite");
+        if(!ok)break;*stage=60;return;
+    case 60:
+        if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"Workspace-Breite"))return;
+        test_window_key_mod(a->window,SDLK_RETURN,0);*stage=61;return;
+    case 61:
         ok=a->preferences.sidebar_width==248;
         if(ok && a->dock_panels[PS_DOCK_SIDEBAR].w!=248)return;
+        if(!ok)break;
         for(unsigned id=0;id<PS_DOCK_NODES;id++)if(dock_sidebar_split(&a->preferences.dock,&a->preferences.dock.nodes[id])) {
             struct nk_rect r=a->dock_splitters[id];fprintf(stderr,"WORKBENCH DRAG: id=%u rect=%.1f/%.1f/%.1f/%.1f width=%u\n",id,r.x,r.y,r.w,r.h,a->preferences.sidebar_width);test_mouse(a,r,true);
         }
-        break;
+        *stage=32;return;
     case 32:
         if(!a->dock_resize && !mouse_wait++)return;
         ok=a->dock_resize!=0;

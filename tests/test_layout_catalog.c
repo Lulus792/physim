@@ -24,10 +24,14 @@ int main(int argc,char **argv) {
     CHECK(ps_dock_hide(&s.dock,2));s.show_log=0;
     CHECK(ps_layout_catalog_put(&c,"Simulation",&s)==PS_OK);
     CHECK(ps_layout_catalog_write(path,&c)==PS_OK && ps_layout_catalog_read(path,&out)==PS_OK && !memcmp(&c,&out,sizeof c));
-    s.inspector_width=480;
+    s.inspector_width=480;s.sidebar_width=480;
     CHECK(ps_layout_catalog_put(&c,"Programmieren ä",&s)==PS_OK && c.count==2 && c.entries[0].state.inspector_width==480);
     CHECK(ps_layout_catalog_put(&c,c.entries[0].name,&c.entries[0].state)==PS_OK && c.count==2);
+    CHECK(ps_layout_catalog_write(path,&c)==PS_OK && ps_layout_catalog_read(path,&out)==PS_OK && !memcmp(&c,&out,sizeof c));
     ps_layout_catalog saved=c;
+    ps_layout_state invalid_width=s;invalid_width.sidebar_width=481;
+    CHECK(ps_layout_catalog_put(&c,"Too wide",&invalid_width)==PS_INVALID && !memcmp(&c,&saved,sizeof c));
+    CHECK(ps_layout_catalog_read(path,&out)==PS_OK && !memcmp(&c,&out,sizeof c));
     const char *invalid[]={""," leading","trailing ","line\nbreak","bad\x7f","bad\xc0\xaf","bad\xed\xa0\x80"};
     for(unsigned i=0;i<sizeof invalid/sizeof invalid[0];i++)
         CHECK(ps_layout_catalog_put(&c,invalid[i],&s)==PS_INVALID && !memcmp(&c,&saved,sizeof c));

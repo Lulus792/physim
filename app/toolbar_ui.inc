@@ -1,3 +1,8 @@
+static size_t workspace_run_count(const app *a) {
+    size_t count=0;
+    if(a->library)for(size_t i=0;i<a->library->count;i++)count+=a->library->items[i].kind==PS_LIBRARY_RUN;
+    return count;
+}
 static void select_workspace_tab(app *a, int tab) {
     dock_show(a,PS_DOCK_WORKSPACE);
     a->project_manager = false;
@@ -416,12 +421,32 @@ static void toolbar_view(app *a) {
                          selected ? (compact?UI_COLOR(button):UI_COLOR(button_hover)) : UI_COLOR(button));
         const struct nk_user_font *font = ui->style.font;
         float text_width = font->width(font->userdata, font->height, tabs[i], (int)strlen(tabs[i]));
+        size_t runs=compact && i==2?workspace_run_count(a):0;
+        const struct nk_user_font *count_font=&a->workspace_status_font;
+        char count[24];snprintf(count,sizeof count,"%zu",runs);
+        float count_width=runs?count_font->width(count_font->userdata,count_font->height,count,(int)strlen(count)):0;
+        float scale=a->preferences.ui_size/16.f;
+        /* Reference geometry: caption including its space/margin advances
+         * 64 px; the count has 5 px padding and 5.4 px per digit at 10 px.
+         * Keep the box stable across platform font advances; draw real text. */
+        float badge_width=runs?roundf((10+5.4f*(float)strlen(count))*scale):0;
+        float badge_x=roundf(bounds.x+bounds.w/2+(64*scale-badge_width)/2);
+        float space=font->width(font->userdata,font->height," ",1);
+        float caption_x=runs?badge_x-5*scale-space-text_width:bounds.x+(bounds.w-text_width)/2;
         nk_draw_text(canvas,
-                     nk_rect(bounds.x + (bounds.w - text_width) / 2,
+                     nk_rect(caption_x,
                              bounds.y + (bounds.h - font->height) / 2, text_width + 1,
                              font->height),
                      tabs[i], (int)strlen(tabs[i]), font, nk_rgba(0, 0, 0, 0),
                      selected ? UI_COLOR(text) : UI_COLOR(muted));
+        if(runs) {
+            float badge_height=roundf(16*scale);
+            struct nk_rect badge=nk_rect(badge_x,roundf(bounds.y+(bounds.h-badge_height)/2),badge_width,badge_height);
+            nk_fill_rect(canvas,badge,4,UI_COLOR(selection_active));
+            nk_draw_text(canvas,nk_rect(badge.x+(badge.w-count_width)/2,badge.y+(badge.h-count_font->height)/2,count_width+1,count_font->height),count,(int)strlen(count),count_font,nk_rgba(0,0,0,0),UI_COLOR(accent));
+            char description[96];snprintf(description,sizeof description,"%zu Laufdateien im Projekt",runs);ps_ui_accessibility_label(ui,badge,description);
+            if(!a->toolbar_menu && !a->toolbar_pointer_consumed && nk_input_is_mouse_hovering_rect(&ui->input,badge))nk_tooltip(ui,description);
+        }
     }
     if(compact)nk_style_pop_font(ui);
     if(compact)nk_fill_rect(nk_window_get_canvas(ui),nk_rect(0,WORKSPACE_HEADER_HEIGHT-1,available,1),0,UI_COLOR(border));
@@ -446,9 +471,11 @@ static void workspace_path_view(app *a,float w) {
         const char *name=a->loaded?project_name(a):a->workspace_open?workspace_name(a->workspace):"Workspace";
         const char *area=a->tab==1?"Messlabor":a->tab==2?"Auswertung":"Werkbank";
         float name_width=fminf(w*.34f,font->width(font->userdata,font->height,name,(int)strlen(name)));
-        float area_width=font->width(font->userdata,font->height,area,(int)strlen(area));
+        const struct nk_user_font *area_font=&a->workbench_fonts[3];
+        float area_width=ceilf(area_font->width(area_font->userdata,area_font->height,area,(int)strlen(area)))+1;
         float action_width=150*a->preferences.ui_size/16.f;
         float state_width=fminf(280*a->preferences.ui_size/16.f,w*.3f);
+        name_width=fminf(name_width,fmaxf(40,w-28-area_width-state_width-action_width-85));
         nk_layout_row_begin(ui,NK_STATIC,30,6);
         nk_layout_row_push(ui,name_width);nk_label_colored(ui,name,NK_TEXT_LEFT,muted());
         nk_layout_row_push(ui,5);nk_label_colored(ui,"/",NK_TEXT_LEFT,UI_COLOR(border));
