@@ -1,0 +1,1313 @@
+{
+  "schema": "physim.native-messlabor-validation.v1",
+  "created_utc": "2026-10-20T16:38:07.420661+00:00",
+  "objective": "Native Messlabor B/Wertefelder; fixed workspace slots, drag outside into real OS windows, no added visible extraction controls.",
+  "source_base": "ff055d9b4a7ce969ddafba04fda902cbea695e88",
+  "source_hash_normalization": "UTF-8 bytes with CRLF normalized to LF; code only, so the report does not hash itself.",
+  "source_sha256": {
+    "app/adaptive_tests.inc": "42a89c2cf1b67738e440e0c8eabe47bd8dfa0d3010462f514ce15f490cd52939",
+    "app/camera_plane_tests.inc": "0b6bc3c38615c9bcac29cc1c3cfb02714e6fb689de37016e064f11cb3149b311",
+    "app/channel_units_tests.inc": "79bfdb099fb163a01f523f32534f50a8668715883e7f91d5bdc42c8be77989cd",
+    "app/design_tokens.h": "f9eded503e06ea892dd8eb1712871b1f0f8d7f973f5a40190df43c38e68df533",
+    "app/design_ui.inc": "d9b071da0929a848176f1bd3f371310b227eacc47657a9d4f0aa2abd8530addd",
+    "app/docking.c": "19b7bf0a479367ed7d6d96f165a88ea7f188e148552714d90a80f089b11c37cc",
+    "app/docking.h": "a55585f006061f76b3ef3013df1ed670675ed8c17a144f3337efb3c21bcfdb1b",
+    "app/docking_tests.inc": "19899f115ed7e70a174b6067a2a20ca3aca177ac711958495b646c8ffb8573cf",
+    "app/docking_ui.inc": "497dfda535a443f964327316ca836845339c4bc1de2df72e7091150c071b0b8d",
+    "app/graphics.c": "93e15e5c75da183657ec2a75baeeff6834297b7b7368ba5f6b210ead9aedcc3b",
+    "app/graphics.h": "b2ef7c7008c43c4d00fedf9dfa29091be8935f3fa1d573b1710ae6115d31b91c",
+    "app/hierarchy_tests.inc": "c8635162e7355d64dd2709b4afaac7aa1572f7e9a9d7bcd081b58cbc2a8f32a0",
+    "app/inspector_tests.inc": "7f611f91b15b8cf7d9c82aa61ed0690e2f94ed1b0b7218d841b2662aff5317e3",
+    "app/laboratory_layout.inc": "09c4b5dabe6d117b658116c9dcb2145082dd65916415c7b2c3aa380d07b28719",
+    "app/laboratory_tests.inc": "5cee50d8a12f9f55f6976b39eacbc3a3f6472c87ff0735cbba6bcbba0d877b16",
+    "app/laboratory_ui.inc": "6f8cf0208feb1de26c72109db86d5abca08582f6e7ee9476d362275542ace352",
+    "app/layout_tests.inc": "bb0ba2bf4e5ba24a21fc68ec5e092fafd51b1808e05885a514072224b4a6b6d9",
+    "app/layout_ui.inc": "012b6fa9a66ab2eea4c7d1074d8455a69cc7349ee0aaff8baa45ff495caca527",
+    "app/logging_tests.inc": "99a4eeef48721180b4cf4eb454d2461f5ef9a9ebb1fbb1834c63c5a17c411fd0",
+    "app/main.c": "f61fcf8fae96feed59a76ab06a0acb2ef47484d760b0af536982f9e757387a53",
+    "app/model_edit.inc": "9d929dfbd6081b145135bb3f3cbbcfe92aba3201585252021387b54604f3d9dc",
+    "app/model_edit_tests.inc": "3033637a821c7928eded9768559871301e5731d16de866e951113b62435744f8",
+    "app/model_edit_ui.inc": "88a0a37cfcac998b45756b4f6675b5a5eef5934839550a52df283a618dd84058",
+    "app/model_values.c": "a575f14df49deab43b79b5e2a76e70b9d857d0e098fe7f76875b8854b8df75bd",
+    "app/model_values.h": "73a33a2fe9a365cea79bfa219c47f499b7637ea74c908910aada90275e735c97",
+    "app/panel_window_tests.inc": "9b0deff9739805b0173bb3da2a10efd810b6da0ea53cf1aa78726ef7ef648254",
+    "app/panel_windows.inc": "7006941144b6f2fc0f9c834a6b834e5f3f170f60548e3885d2dff0ce70b9aba4",
+    "app/parameter_form_tests.inc": "7f795a6eeebde2278b084ab6da97bebf887bf53a0bee4d98aed74f65ea9646fb",
+    "app/settings_ui.inc": "6030b44fed265e58ca3868952685a46c331ce408e464fec5d2991e9c0eda2f54",
+    "app/timeline_ui.inc": "11e139b5dca236b604ec8204ed71009de1c635b93ffa9148abafc1226f2b3afa",
+    "app/toolbar_ui.inc": "4aacfc0e81ed530ed1344f539e2b2c8cbe6eebd4483350f336ffaf85dfe9d3db",
+    "app/ui.h": "1630936a3f90a3b9c56b1105eb345a196eee7f13d1e398fbd1d17178d086428f",
+    "app/ui_backend.c": "8ee1fc9d0f330aa6b06f1aefe388502afff53006d4b3da735f1ced10580691a2",
+    "app/ui_sdl.c": "85f2a12ffe51d96e37ad448affe57245e51d4e9e8c62f4c063f84d08fe0f7166",
+    "app/workspace_tests.inc": "023e770a569e353180a5b22e4174d1ec930038dc3c60cb09330840512c068fc8",
+    "examples/language/pendulum.phys": "fca203cd04d15fa016e37b99ed58a3f13ce3a30471ee5706991317da58b9f623",
+    "examples/language/pendulum_integrator.phys": "ddd80d38ad4a3b2001273800985fe00664659c91ef0ee883804f8e60865cb562",
+    "examples/language/pendulum_rk4.phys": "88c941260862526b3751dbab2e57b16d65b2b4e4a0d06182763cd46d5e8f5434",
+    "examples/language/pendulum_rk45.phys": "8f638765fa1fd00199880332d73ba128a5ac46258557b461a0f6761ee97136dd",
+    "examples/language/pendulum_verlet.phys": "da74fd107c5f90cf6c775bd0ced7ae903b4aa3752150fec0037661229ff7a196",
+    "examples/pendulum/main.c": "e048fc5e5d7ed5873d2886397a646a3f2c311f9b46913a77b35ea60069f19492",
+    "tests/check_display_workflow.py": "0ed1bd0e03bd8fde64d0117ac99ec1626616e1c0722c2d9fa5695bf6d458bdfe",
+    "tests/test_docking.c": "3b6a2f865f171aaad970bf63e52fa9307f6ab5bbe5fb60d375a7e715815bddf7",
+    "tests/test_model_values.c": "624c3f0cd5ed01f6c3f840c224a78618fd347efa99e3b2b6aaa127a629395519",
+    "tools/build.py": "78996f77d5beeadd04e6283a8ab4d1b6391a0e611077626ebbd2e04935425a73",
+    "tools/native_tests.py": "9a96d1946d06e3dc6263f33025ea1d7f3c4fac1a446052073f2a35f2d1096cfa"
+  },
+  "preserved_foreign_work": {
+    "paths": [
+      ".github/workflows/linux-ui-sanitizers.yml",
+      ".github/workflows/macos-f1-accessibility.yml",
+      "app/accessibility_atspi.c",
+      "app/accessibility_text.h",
+      "app/accessibility_atspi_collection.inc",
+      "tests/check_documentation_orca.py",
+      "tests/test_accessibility_tables_atspi.py",
+      "tests/test_accessibility_text_index.c",
+      "tests/orca_reading_proof.py",
+      "tests/test_orca_reading_proof.py"
+    ],
+    "present_during_working_copy_build": true,
+    "intentionally_excluded_from_commit": true
+  },
+  "platforms": {
+    "windows": {
+      "compiler": "MSVC C17, AddressSanitizer",
+      "display": "Actual Windows desktop; NVIDIA OpenGL; two actual monitors at pixel density 1.0",
+      "actual_opengl": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2"
+    },
+    "linux": {
+      "distribution": "Alpine-Dev / Alpine Linux 3.24",
+      "compiler": "Native Linux C17, AddressSanitizer",
+      "display": "SDL X11, Xvfb + Openbox + D-Bus; llvmpipe software OpenGL",
+      "actual_opengl": "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)"
+    },
+    "macos": {
+      "status": "not_executed",
+      "reason": "No macOS execution host available; CI definitions are not platform acceptance."
+    }
+  },
+  "latest_builds": {
+    "windows": {
+      "path": "build/native/Messlabor-final-popouts/Debug-sanitized/bin/physim.exe",
+      "sha256": "b0420cf3b51dca7784c4e77a287d3a03197f58444373b8fb87a91d885b9956f0",
+      "configuration": "Debug, sanitizers",
+      "unit_tests": [
+        "model_values",
+        "docking"
+      ],
+      "unit_passed": 2,
+      "unit_total": 2,
+      "build_log": "build/native/laboratory-popouts-build-15.log"
+    },
+    "linux": {
+      "path": "build/native/Messlabor-final-popouts-linux/Debug-sanitized/bin/physim",
+      "sha256": "d7dc82c7683b8dc092246f48c574ffefa177404de5d0fe8b56f2b0750a110a6a",
+      "configuration": "Debug, sanitizers",
+      "unit_tests": [
+        "model_values",
+        "docking"
+      ],
+      "unit_passed": 2,
+      "unit_total": 2,
+      "build_log": "build/native/laboratory-popouts-linux-build-15.log"
+    }
+  },
+  "native_results": {
+    "windows": {
+      "broad_before_final_workbench_fix": [
+        {
+          "name": "docking",
+          "status": "passed",
+          "seconds": 149.375
+        },
+        {
+          "name": "inspector",
+          "status": "passed",
+          "seconds": 125.21899999998277
+        },
+        {
+          "name": "laboratory",
+          "status": "passed",
+          "seconds": 237.48399999999674
+        },
+        {
+          "name": "layouts",
+          "status": "passed",
+          "seconds": 142.01600000000326
+        },
+        {
+          "name": "model_values",
+          "status": "passed",
+          "seconds": 128.7029999999795
+        },
+        {
+          "name": "workbench",
+          "status": "failed",
+          "error": "App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\native\\\\Messlabor-popouts\\\\Debug-sanitized\\\\bin\\\\physim.exe', '--workspace-state-test', 'D:\\\\Physim\\\\build\\\\native\\\\popouts-windows-13\\\\workbench\\\\dark', 'workbench-dark']",
+          "seconds": 6.187000000034459
+        },
+        {
+          "name": "settings",
+          "status": "passed",
+          "seconds": 61.51600000000326
+        },
+        {
+          "name": "settings_keyboard",
+          "status": "passed",
+          "seconds": 16.905999999959022
+        },
+        {
+          "name": "documentation_h",
+          "status": "passed",
+          "seconds": 31.56200000003446
+        },
+        {
+          "name": "renderer",
+          "status": "passed",
+          "seconds": 2.7969999999622814
+        }
+      ],
+      "final_fixed_windows_workbench_settings_f1_renderer": [
+        {
+          "name": "docking",
+          "status": "passed",
+          "seconds": 74.01499999995576
+        },
+        {
+          "name": "inspector",
+          "status": "passed",
+          "seconds": 77.03200000000652
+        },
+        {
+          "name": "workbench",
+          "status": "passed",
+          "seconds": 52.76500000001397
+        },
+        {
+          "name": "settings",
+          "status": "passed",
+          "seconds": 40.95299999997951
+        },
+        {
+          "name": "settings_keyboard",
+          "status": "passed",
+          "seconds": 15.422000000020489
+        },
+        {
+          "name": "documentation_h",
+          "status": "passed",
+          "seconds": 20.125
+        },
+        {
+          "name": "renderer",
+          "status": "passed",
+          "seconds": 1.547000000020489
+        }
+      ],
+      "final_extraction_with_f1": [
+        {
+          "name": "docking",
+          "status": "passed",
+          "seconds": 59.51600000000326
+        },
+        {
+          "name": "inspector",
+          "status": "passed",
+          "seconds": 51.85899999999674
+        }
+      ],
+      "previous_build_exe_sha256": "d4340bce0f86f783aacb8c9aa2ef49edacb7e1c1fc79a2d92bf239f80a92ebb8",
+      "settings_saved_main_dimensions": [
+        [
+          "1440",
+          "940",
+          "1440",
+          "940",
+          "1"
+        ],
+        [
+          "1440",
+          "1000",
+          "1440",
+          "1000",
+          "1"
+        ],
+        [
+          "1080",
+          "740",
+          "1080",
+          "740",
+          "1"
+        ],
+        [
+          "1080",
+          "740",
+          "1080",
+          "740",
+          "1"
+        ]
+      ],
+      "actual_window_displays": [
+        [
+          "0",
+          "5",
+          "-1890",
+          "30",
+          "900",
+          "650",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "1",
+          "6",
+          "-1890",
+          "30",
+          "900",
+          "650",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "2",
+          "7",
+          "-1890",
+          "30",
+          "900",
+          "650",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "3",
+          "8",
+          "-1890",
+          "30",
+          "460",
+          "650",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "4",
+          "9",
+          "-1890",
+          "30",
+          "900",
+          "650",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "5",
+          "10",
+          "-1890",
+          "30",
+          "900",
+          "250",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "0",
+          "5",
+          "-1890",
+          "30",
+          "900",
+          "650",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "1",
+          "6",
+          "-1890",
+          "30",
+          "900",
+          "650",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "2",
+          "7",
+          "-1890",
+          "30",
+          "900",
+          "650",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "3",
+          "8",
+          "-1890",
+          "30",
+          "460",
+          "650",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "4",
+          "9",
+          "-1890",
+          "30",
+          "900",
+          "650",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "5",
+          "10",
+          "-1890",
+          "30",
+          "900",
+          "250",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "0",
+          "5",
+          "-1890",
+          "30",
+          "900",
+          "650",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "1",
+          "6",
+          "-1890",
+          "30",
+          "900",
+          "650",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "2",
+          "7",
+          "-1890",
+          "30",
+          "900",
+          "650",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "3",
+          "8",
+          "-1890",
+          "30",
+          "460",
+          "650",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "4",
+          "9",
+          "-1890",
+          "30",
+          "900",
+          "650",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "5",
+          "10",
+          "-1890",
+          "30",
+          "900",
+          "250",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "0",
+          "5",
+          "-1890",
+          "30",
+          "900",
+          "650",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "1",
+          "6",
+          "-1890",
+          "30",
+          "900",
+          "650",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "2",
+          "7",
+          "-1890",
+          "30",
+          "900",
+          "650",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "3",
+          "8",
+          "-1890",
+          "30",
+          "460",
+          "650",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "4",
+          "9",
+          "-1890",
+          "30",
+          "900",
+          "650",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ],
+        [
+          "5",
+          "10",
+          "-1890",
+          "30",
+          "900",
+          "250",
+          "1",
+          "2",
+          "1",
+          "1.000"
+        ]
+      ],
+      "step_log": "build/native/popouts-windows-15/app-steps.json",
+      "step_log_sha256": "92d0b0a8680a975652c16305f9f15a401da9f215ba35906ab251e868e6b3f7b1"
+    },
+    "linux": {
+      "broad_before_final_workbench_fix": [
+        {
+          "name": "docking",
+          "status": "passed",
+          "seconds": 95.88268993800011
+        },
+        {
+          "name": "inspector",
+          "status": "passed",
+          "seconds": 87.70156052000038
+        },
+        {
+          "name": "laboratory",
+          "status": "passed",
+          "seconds": 449.07235553600003
+        },
+        {
+          "name": "layouts",
+          "status": "passed",
+          "seconds": 172.98857891700027
+        },
+        {
+          "name": "model_values",
+          "status": "passed",
+          "seconds": 202.0030604679996
+        },
+        {
+          "name": "workbench",
+          "status": "failed",
+          "error": "App exited 1, expected 0: ['/mnt/d/Physim/build/native/Messlabor-popouts-linux/Debug-sanitized/bin/physim', '--workspace-state-test', '/mnt/d/Physim/build/native/popouts-linux-13/workbench/dark', 'workbench-dark']",
+          "seconds": 6.5091429200001585
+        },
+        {
+          "name": "settings",
+          "status": "passed",
+          "seconds": 44.642250906999834
+        },
+        {
+          "name": "settings_keyboard",
+          "status": "passed",
+          "seconds": 19.645387353999467
+        },
+        {
+          "name": "documentation_h",
+          "status": "passed",
+          "seconds": 65.22258226600024
+        },
+        {
+          "name": "renderer",
+          "status": "passed",
+          "seconds": 2.0838733480013616
+        }
+      ],
+      "final_fixed_windows_workbench_settings_f1_renderer": [
+        {
+          "name": "docking",
+          "status": "passed",
+          "seconds": 107.76084004100085
+        },
+        {
+          "name": "inspector",
+          "status": "passed",
+          "seconds": 82.40914244600026
+        },
+        {
+          "name": "workbench",
+          "status": "passed",
+          "seconds": 48.75542179100012
+        },
+        {
+          "name": "settings",
+          "status": "passed",
+          "seconds": 38.16191048800101
+        },
+        {
+          "name": "settings_keyboard",
+          "status": "passed",
+          "seconds": 13.17137810299937
+        },
+        {
+          "name": "documentation_h",
+          "status": "passed",
+          "seconds": 43.379039215999
+        },
+        {
+          "name": "renderer",
+          "status": "passed",
+          "seconds": 1.717487034999067
+        }
+      ],
+      "final_extraction_with_f1": [
+        {
+          "name": "docking",
+          "status": "passed",
+          "seconds": 85.0363119850008
+        },
+        {
+          "name": "inspector",
+          "status": "passed",
+          "seconds": 66.56786294999984
+        }
+      ],
+      "previous_build_exe_sha256": "a82baa0c7fb423cd86baf022a5cfae5ea91b6cc54e0fc6a24defb64102685a29",
+      "settings_saved_main_dimensions": [
+        [
+          "1440",
+          "940",
+          "1440",
+          "940",
+          "1"
+        ],
+        [
+          "1440",
+          "1000",
+          "1440",
+          "1000",
+          "1"
+        ],
+        [
+          "1080",
+          "740",
+          "1080",
+          "740",
+          "1"
+        ],
+        [
+          "1080",
+          "740",
+          "1080",
+          "740",
+          "1"
+        ]
+      ],
+      "actual_window_displays": [
+        [
+          "0",
+          "3",
+          "1019",
+          "97",
+          "900",
+          "650",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "1",
+          "4",
+          "1019",
+          "97",
+          "900",
+          "650",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "2",
+          "5",
+          "1019",
+          "97",
+          "900",
+          "650",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "3",
+          "6",
+          "1599",
+          "97",
+          "460",
+          "650",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "4",
+          "7",
+          "1019",
+          "97",
+          "900",
+          "650",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "5",
+          "8",
+          "1019",
+          "97",
+          "900",
+          "250",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "0",
+          "3",
+          "1019",
+          "97",
+          "900",
+          "650",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "1",
+          "4",
+          "1019",
+          "97",
+          "900",
+          "650",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "2",
+          "5",
+          "1019",
+          "97",
+          "900",
+          "650",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "3",
+          "6",
+          "1599",
+          "97",
+          "460",
+          "650",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "4",
+          "7",
+          "1019",
+          "97",
+          "900",
+          "650",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "5",
+          "8",
+          "1019",
+          "97",
+          "900",
+          "250",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "0",
+          "3",
+          "1019",
+          "97",
+          "900",
+          "650",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "1",
+          "4",
+          "1019",
+          "97",
+          "900",
+          "650",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "2",
+          "5",
+          "1019",
+          "97",
+          "900",
+          "650",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "3",
+          "6",
+          "1239",
+          "97",
+          "460",
+          "650",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "4",
+          "7",
+          "1019",
+          "97",
+          "900",
+          "650",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "5",
+          "8",
+          "1019",
+          "97",
+          "900",
+          "250",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "0",
+          "3",
+          "1019",
+          "97",
+          "900",
+          "650",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "1",
+          "4",
+          "1019",
+          "97",
+          "900",
+          "650",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "2",
+          "5",
+          "1019",
+          "97",
+          "900",
+          "650",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "3",
+          "6",
+          "1239",
+          "97",
+          "460",
+          "650",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "4",
+          "7",
+          "1019",
+          "97",
+          "900",
+          "650",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ],
+        [
+          "5",
+          "8",
+          "1019",
+          "97",
+          "900",
+          "250",
+          "1",
+          "1",
+          "1",
+          "1.000"
+        ]
+      ],
+      "step_log": "build/native/popouts-linux-15/app-steps.json",
+      "step_log_sha256": "4966885aeb7cbc9ecaadd5039447941710a15936caef02351d2830fd30f96379"
+    }
+  },
+  "appearance": {
+    "windows": {
+      "platform": "windows",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "pixels": 1440000,
+      "different_pixels": 0,
+      "identical": true,
+      "exe_sha256": {
+        "before": "02409daf3a46d5028657f5aeaa4682d0d8f150d9b3c56d7ab9713b192bd6823c",
+        "after": "b0420cf3b51dca7784c4e77a287d3a03197f58444373b8fb87a91d885b9956f0"
+      },
+      "bmp_sha256": {
+        "before": "dbf0e4233ba349ba35c371bddbfd956f931f6710ef29f6e3949bcfb699d416d8",
+        "after": "dbf0e4233ba349ba35c371bddbfd956f931f6710ef29f6e3949bcfb699d416d8"
+      }
+    },
+    "linux": {
+      "platform": "linux",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "pixels": 1440000,
+      "different_pixels": 0,
+      "identical": true,
+      "exe_sha256": {
+        "before": "97daa4be93907e3c7c4d896b39f2a21e8c26e1b0bb4d4c5fb48e789dc7b31eb1",
+        "after": "d7dc82c7683b8dc092246f48c574ffefa177404de5d0fe8b56f2b0750a110a6a"
+      },
+      "bmp_sha256": {
+        "before": "5aa5a5f53cce34675ee205921ab70604416eee2f854f843bf8689c5e625d95c4",
+        "after": "5aa5a5f53cce34675ee205921ab70604416eee2f854f843bf8689c5e625d95c4"
+      }
+    }
+  },
+  "images": [
+    {
+      "path": "docs/visuals/simulation-designs/native/counterexample-startup-theme.png",
+      "source": "build/native/laboratory-linux-reveal-17/adaptive/adaptive-scroll.bmp",
+      "source_sha256": "513ea0cb1a84ff34b5b92b196abb6baadfec76cdaf7e3dc8cbe37bb41e74c9c7",
+      "sha256": "c468d9b7fdb762164fd42b0b869834c56a934f1bf928d65d05c0bb38f1a2f7f3",
+      "size": [
+        1080,
+        740
+      ],
+      "retouched": false,
+      "rgb_sha256": "9246d4c48f01f022e6736e294a46a70fa9ff543a5e84c05520fb38ac6b03b7a2"
+    },
+    {
+      "path": "docs/visuals/simulation-designs/native/counterexample-curve-limit.png",
+      "source": "build/native/laboratory-windows-19/laboratory/light-large-narrow/laboratory-curve-limit.bmp",
+      "source_sha256": "57fd6a7ac4418e196257553fb4efc9dca23bbd7e723e0d3fd002d7dfc5ed95c0",
+      "sha256": "46e9faa02d8f1960eb127ef77eca72b1ab003b1581cbdc307888ac0be2a2d2fb",
+      "size": [
+        1080,
+        740
+      ],
+      "retouched": false,
+      "rgb_sha256": "b101d7d971492dc2781db08d46fdb913f13d0f3f9e43fa8b4a83eb6d24888610"
+    },
+    {
+      "path": "docs/visuals/simulation-designs/native/windows-dark.png",
+      "source": "build/native/popouts-windows-13/laboratory/dark/laboratory-initial.bmp",
+      "source_sha256": "9d1dcad5719b794605ec0fd2b9ecb6bc206bdefdebf4ef75468b93ea70f973d6",
+      "sha256": "7a95fe2d3a68bd43d9ced18fc2375f17613c4963a5ed09da67e1eeabfd1a53af",
+      "rgb_sha256": "d70053ad1b86d89605a92decc22a15808eb56bb15941b3f87a18856475ee6cd1",
+      "size": [
+        1440,
+        1000
+      ],
+      "retouched": false
+    },
+    {
+      "path": "docs/visuals/simulation-designs/native/windows-dark-curves.png",
+      "source": "build/native/popouts-windows-13/laboratory/dark/laboratory-state-7.bmp",
+      "source_sha256": "2fe9d0a89e4c3415777bbcb866ccadba1b2a06a0ea7107c59ab8c350ee75a3ec",
+      "sha256": "e11fb513eaa4be555c94e36dc9fc2b6ecb1dff042dc8871c8dcf9a834e900695",
+      "rgb_sha256": "5a461a3c8445864efc9f82ec4ecbcc0a06eadc7454ffce6421b6150ecde33ba9",
+      "size": [
+        1440,
+        1000
+      ],
+      "retouched": false
+    },
+    {
+      "path": "docs/visuals/simulation-designs/native/windows-light-curves.png",
+      "source": "build/native/popouts-windows-13/laboratory/light/laboratory-state-7.bmp",
+      "source_sha256": "bfa07824561c6d8a5665f115554c7cc932355b86affcaf73580b4afc06d82598",
+      "sha256": "c75a792230f977c782e2dfd9149eda05069861d2ebd956d5236a1a2583aa7c0b",
+      "rgb_sha256": "dfb811166777faeef3d1f9ade4a8f508fa42de824d212f646b21662051c8111a",
+      "size": [
+        1440,
+        1000
+      ],
+      "retouched": false
+    },
+    {
+      "path": "docs/visuals/simulation-designs/native/windows-high-contrast.png",
+      "source": "build/native/popouts-windows-13/laboratory/contrast/laboratory-state-7.bmp",
+      "source_sha256": "053272a65020b8632b70aef4b691907bced24c25e08374e6d03827722a6ce9a3",
+      "sha256": "9698350b2c61aeb7ff920796ed69f8ab8c6c7f5c9954c3ad172fd9f98e71d873",
+      "rgb_sha256": "9a170aa401eb03580e69899afc0532a29b4f55957a77149353102a683ca8f4e4",
+      "size": [
+        1440,
+        1000
+      ],
+      "retouched": false
+    },
+    {
+      "path": "docs/visuals/simulation-designs/native/windows-large-minimum.png",
+      "source": "build/native/popouts-windows-13/laboratory/light-large-narrow/laboratory-state-7.bmp",
+      "source_sha256": "989fef538761e550ebf3d18722d1a2556c4b6dbbcf986091a57531eef117fb4b",
+      "sha256": "5f0c86bc8730c729f8a33858ed24bab67c824653932e818a1f125ce24409b04f",
+      "rgb_sha256": "878e020c0e5ba303be8908b8895aa3226464f58d321818d5008c3d8f09b6edee",
+      "size": [
+        1080,
+        740
+      ],
+      "retouched": false
+    },
+    {
+      "path": "docs/visuals/simulation-designs/native/windows-history.png",
+      "source": "build/native/popouts-windows-13/laboratory/dark/laboratory-history.bmp",
+      "source_sha256": "708815d4b01bee04335dcb2b6630bdf005708f44e6c836c1331ba051db836def",
+      "sha256": "33a43bdee7dbd2ffd67e80d34e1002b99d79b3d7d18c023eb95d110ade45c326",
+      "rgb_sha256": "4b488a02f75a01def10123d1846892ca8d447eb6d43e451d1f6e963054cdcf36",
+      "size": [
+        1440,
+        1000
+      ],
+      "retouched": false
+    },
+    {
+      "path": "docs/visuals/simulation-designs/native/windows-model-staged.png",
+      "source": "build/native/popouts-windows-13/model_values/c/model-values-staged.bmp",
+      "source_sha256": "3c59782d71da8bf6682a01b497078d71a79a341ac234d6567808344952eab7f1",
+      "sha256": "677753df35cb3b7bbbdbf03d9e88a38ac4c83e4e26d96608ed2997a4585d75c5",
+      "rgb_sha256": "1036f9855765aa2ffb7be2fd15daf5fa35d4a52c76c56732e8932f5a3417c042",
+      "size": [
+        1440,
+        1000
+      ],
+      "retouched": false
+    },
+    {
+      "path": "docs/visuals/simulation-designs/native/windows-model-newer-edit.png",
+      "source": "build/native/popouts-windows-13/model_values/c/model-values-newer-edit.bmp",
+      "source_sha256": "87d8116b7634db4cd5ce999d9219239c7f2abb73e86b8beed97f0f85cd7f4588",
+      "sha256": "de829d3ec0affb7be0f36bd6bb6726a03e64a146c0680d8fbae22bf4b6f3fefb",
+      "rgb_sha256": "e07b44d18faa50b9515d7a975349d3f9f358e2e8fe98c6aab80f323f9bab8aed",
+      "size": [
+        1440,
+        1000
+      ],
+      "retouched": false
+    },
+    {
+      "path": "docs/visuals/simulation-designs/native/windows-model-build-error.png",
+      "source": "build/native/popouts-windows-13/model_values/c/model-values-build-error.bmp",
+      "source_sha256": "122a480625fdc99917a11784b63a34d11142e7e9bc9163ba0491da6b9043d556",
+      "sha256": "bab4498f46038b5266d476b5295ceb1f13129e7488221cc51bbcfcc475bf5ff0",
+      "rgb_sha256": "1f1bdbd460c4ba4392fde8f3405bbb2efa2d662e6a5e3ccdd33c1096318cd3e5",
+      "size": [
+        1440,
+        1000
+      ],
+      "retouched": false
+    },
+    {
+      "path": "docs/visuals/simulation-designs/native/windows-model-ready.png",
+      "source": "build/native/popouts-windows-13/model_values/phys/model-values-ready.bmp",
+      "source_sha256": "cc3ac79a625c33474dda10fcbdfa62f33db0c7f61f13301e059165832bf3c09f",
+      "sha256": "f7f591b1da61e4c669b1e07dc3dfe63fc394548f8a232dcf160b31f4382bc2f5",
+      "rgb_sha256": "102331dc617929edf7b21fdaded49542c61f381b230d55f112b0f8c78a2879fe",
+      "size": [
+        1440,
+        1000
+      ],
+      "retouched": false
+    },
+    {
+      "path": "docs/visuals/simulation-designs/native/linux-light-curves.png",
+      "source": "build/native/popouts-linux-13/laboratory/light/laboratory-state-7.bmp",
+      "source_sha256": "45a21c36e9603c2f38072730c8de8cd99ac271c3031d51b426d7dedcaffb867a",
+      "sha256": "0ada0f242dd11c3fea3dd5cf09518507e4a386ddb514c24faea78d6d22662b69",
+      "rgb_sha256": "7296b6a631aa5ec819118417ca411f9aca094389326c0a5f43665a81330e494b",
+      "size": [
+        1440,
+        1000
+      ],
+      "retouched": false
+    },
+    {
+      "path": "docs/visuals/simulation-designs/native/linux-large-curve-limit.png",
+      "source": "build/native/popouts-linux-13/laboratory/light-large-narrow/laboratory-curve-limit.bmp",
+      "source_sha256": "7567f475d8bcb887b584c9e91bad8d8643949a39790eeb2fc43cb7e15e29ac85",
+      "sha256": "9e053e6d0a5b173cc6b78e57fbe3638ed227162f21884946eaa43b7ec429ddf0",
+      "rgb_sha256": "602494fe788520b78a17b28256030d3658ae06d18f256efb7f6c8bf2302dd00a",
+      "size": [
+        1080,
+        740
+      ],
+      "retouched": false
+    },
+    {
+      "path": "docs/visuals/simulation-designs/native/windows-detached-scene.png",
+      "source": "build/native/popouts-windows-14/docking/c-dark-legacy/project/panel-1-detached.bmp",
+      "source_sha256": "c4d3bd4f13275404b21422470220bdcd3d33e8b9aeb499f419063d6e30dd3305",
+      "sha256": "21646073401c182ecb1b71036fa3a2cea0770b6fadf642942fae5eade3633e18",
+      "rgb_sha256": "b4a8c0bca1c289e5f26f3b0a05e7968324f52a1711f29aa98b1ee606043f22c4",
+      "size": [
+        900,
+        650
+      ],
+      "retouched": false
+    },
+    {
+      "path": "docs/visuals/simulation-designs/native/windows-detached-values.png",
+      "source": "build/native/popouts-windows-14/docking/c-dark-legacy/project/panel-measure-curves.bmp",
+      "source_sha256": "b05d1e47c2d023fdd3137e3acdcbc5f42a7d7f0302ed0bd4fbe78b35be6c0cc7",
+      "sha256": "f91c2e130046f64bbffe293b1ea800890d4077f71e7b71b0b4f92011bccbe5d7",
+      "rgb_sha256": "b41218006ea4a22980cbe49509d51ad041819ef66ea180f042464c7838b89e6d",
+      "size": [
+        900,
+        650
+      ],
+      "retouched": false
+    },
+    {
+      "path": "docs/visuals/simulation-designs/native/windows-detached-inspector.png",
+      "source": "build/native/popouts-windows-14/docking/c-dark-legacy/project/panel-3-detached.bmp",
+      "source_sha256": "b9dc8d1c5717b54fa648d5dac09a42bfa183ec613100e999f32789a8d7d82127",
+      "sha256": "0bdd91b6ba7cdec09df9d6c06aaf38a4f1adb8416842c52d4b2cdf1be99159bc",
+      "rgb_sha256": "6fab353f5d508e1e346be4a867ea36337df7f01f6b88bb3a164f144145be1714",
+      "size": [
+        460,
+        650
+      ],
+      "retouched": false
+    },
+    {
+      "path": "docs/visuals/simulation-designs/native/windows-detached-timeline.png",
+      "source": "build/native/popouts-windows-14/docking/phys-light/project/panel-5-detached.bmp",
+      "source_sha256": "baa57c09fc1f70c5407a23ca418e58a1c4514d03a04b76c649e6949a23b724d1",
+      "sha256": "b260a46f966c651d33b1de03a5e63405a28f70ed69235911d644e1431cdd204d",
+      "rgb_sha256": "0b5ac091d81adf4979c81dfeb1b8aa9f393457fb350f081fa54e890fcded143b",
+      "size": [
+        900,
+        250
+      ],
+      "retouched": false
+    },
+    {
+      "path": "docs/visuals/simulation-designs/native/linux-detached-values.png",
+      "source": "build/native/popouts-linux-14/docking/phys-light/project/panel-measure-curves.bmp",
+      "source_sha256": "f51c3141f1f3fdc6ef6682a32fc7b60980691b84bdceddddc5feed2561acd259",
+      "sha256": "d02e8432b8b36b7d70a4c259d0600188643da2c7ceba9d5efba909d40b78cd84",
+      "rgb_sha256": "80a037da45b045426c6c2bffe33b051607447eb01b3174e6be55f9c9829f88f2",
+      "size": [
+        900,
+        650
+      ],
+      "retouched": false
+    }
+  ],
+  "limitations": [
+    "Manual screenreader reading and mixed-DPI/mixed-GPU monitor transitions were not executed.",
+    "The actual two-monitor Windows test used density 1.0 on both displays; Linux used a virtual single display.",
+    "The HTML browser tool denied local-file navigation. Existing design PNGs and local source were inspected instead.",
+    "Native scene geometry, available metadata and channels come from real experiments; illustrative browser-only numbers, shadows and angle arcs are not fabricated.",
+    "With both side panels and curves at 1080x740/22px the scene can be small. Native minima, available controls, sizes and actual history constrain the layout."
+  ],
+  "earlier_broad_non_display_suite": {
+    "passed": 744,
+    "total": 749,
+    "path": "build/native/F1-reading-focus/Debug-sanitized/test-results/run-8nw05eyp/results.json",
+    "failures": [
+      {
+        "name": "language_checker",
+        "exit_code": 3221225477,
+        "reason": "Exit code 3221225477; expected 0"
+      },
+      {
+        "name": "language_native_optionalvalues",
+        "exit_code": null,
+        "reason": "Exceeded 10 seconds\n"
+      },
+      {
+        "name": "documentation_reference",
+        "exit_code": null,
+        "reason": "Exit code 1; expected 0\nTraceback (most recent call last):\n  File \"${repo}/tools/generate-reference.py\", line 1204, in <module>\n    main()\n  File \"${repo}/tools/generate-reference.py\", line 1198, in main\n    assert target in topics, f'Unreachable offline link: {topic} -> {target}'\n           ^^^^^^^^^^^^^^^^\nAssertionError: Unreachable offline link: docs/design-direction.md -> docs/visuals/develop-designs/DESIGN.md\n"
+      },
+      {
+        "name": "bitmap_archive",
+        "exit_code": null,
+        "reason": "Exit code 1; expected 0\nTraceback (most recent call last):\n  File \"${repo}/tests/test_bitmap_archive.py\", line 27, in <module>\n    (root/'foreign.bmp').symlink_to(external.resolve())\n  File \"${user-home}\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\pathlib.py\", line 1386, in symlink_to\n    os.symlink(target, self, target_is_directory)\nOSError: [WinError 1314] A required privilege is not held by the client: 'D:\\\\Physim\\\\build\\\\native\\\\F1-reading-focus\\\\Debug-sanitized\\\\test-results\\\\run-8nw05eyp\\\\bitmap_archive\\\\files �\\\\external.bmp' -> 'D:\\\\Physim\\\\build\\\\native\\\\F1-reading-focus\\\\Debug-sanitized\\\\test-results\\\\run-8nw05eyp\\\\bitmap_archive\\\\files �\\\\Generated evidence �\\\\foreign.bmp'\n"
+      },
+      {
+        "name": "documentation_anchors",
+        "exit_code": null,
+        "reason": "Exit code 1; expected 0\nNative topic link unreachable: docs/design-direction.md: visuals/develop-designs/DESIGN.md\nNative topic link unreachable: docs/design-direction.md: visuals/develop-designs/NEXT-CHAT.md\nNative topic link unreachable: docs/design-direction.md: visuals/develop-designs/IMPLEMENTATION.md\n"
+      }
+    ],
+    "interpretation": "Executed earlier during this implementation, not rerun in full after the final pane changes. Unchanged language-checker sources overflow the MSVC ASan stack; optionalvalues exceeded its original 10s budget; offline links are outside the handbook topic set; Windows denied symlink creation. No claim of a fully green broad suite or a separately executed clean historical baseline.",
+    "optionalvalues_recheck": {
+      "command": [
+        "D:\\Physim\\build\\native\\F1-reading-focus\\Debug-sanitized\\bin\\physim-test-language_native_optionalvalues.exe"
+      ],
+      "exit_code": 0,
+      "seconds": 16.31199999997625,
+      "stdout": "optional value checks passed\r\n",
+      "stderr": ""
+    }
+  },
+  "primary_windows_build": {
+    "files": 54,
+    "all_copied_hashes_verified": true,
+    "exe": "D:\\Physim\\build\\native\\Debug-sanitized\\bin\\physim.exe",
+    "sha256": "B0420CF3B51DCA7784C4E77A287D3A03197F58444373B8FB87A91D885B9956F0",
+    "backup": "D:/Physim/build/native/primary-before-messlabor",
+    "smoke_exit_code": 0
+  },
+  "cleanup": {
+    "removed_raw_bmps": 754,
+    "freed_bytes": 3653005236,
+    "freed_gib": 3.4,
+    "roots": [
+      "laboratory-windows-19",
+      "laboratory-windows-20",
+      "laboratory-windows-22",
+      "laboratory-windows-24",
+      "laboratory-windows-final",
+      "laboratory-linux-19",
+      "laboratory-linux-22",
+      "laboratory-linux-23",
+      "laboratory-linux-final",
+      "laboratory-linux-first"
+    ],
+    "scope": "Only superseded automatically generated BMPs outside test projects, run data, F1/documentation/renderer evidence and error captures. Final run evidence and lossless PNGs retained."
+  }
+}

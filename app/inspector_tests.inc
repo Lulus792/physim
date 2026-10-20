@@ -87,6 +87,10 @@ static void inspector_test_frame(app *a,const char *mode,int *stage,int *code,co
     case 25:
         if(!idle(a) || a->library_thread)return;
         ok=a->data.result==PS_EOF && a->data.total>2;
+        /* Explicitly save this personal layout from the regular workspace.
+         * Messlabor's temporary visibility defaults must not become a new
+         * automatic cross-session preference as a side effect of this test. */
+        {ps_layout_state personal=layout_capture(a);a->tab=0;laboratory_context(a);laboratory_apply(a,&personal);}
         preferences_capture(a);ok &= ps_preferences_write(a->preferences_path,&a->preferences)==PS_OK;
         a->quitting=true;break;
     }

@@ -16,11 +16,16 @@ static bool timing_text_field(struct nk_context *ui,char *text,double *displayed
     return false;
 }
 static void step_bound_editor(app *a,unsigned which,const char *label,double *value) {
-    nk_layout_row_dynamic(a->ui,32,2);
-    nk_label(a->ui,label,NK_TEXT_LEFT);
+    if(laboratory_visible(a)) {
+        nk_layout_row_dynamic(a->ui,24,1);nk_label(a->ui,label,NK_TEXT_LEFT);
+        nk_layout_row_dynamic(a->ui,46*a->preferences.ui_size/16.f,1);
+    } else nk_layout_row_dynamic(a->ui,32,2);
+    if(!laboratory_visible(a))nk_label(a->ui,label,NK_TEXT_LEFT);
     a->adaptive_limit_bounds[which]=nk_widget_bounds(a->ui);
+    if(laboratory_visible(a))nk_style_push_font(a->ui,&a->laboratory_value_font);
     if(timing_text_field(a->ui,a->adaptive_limit_text[which],&a->adaptive_limit_displayed[which],value))
         a->project_settings_dirty=true;
+    if(laboratory_visible(a))nk_style_pop_font(a->ui);
 }
 static void style(struct nk_context *ui) {
     struct nk_color c[NK_COLOR_COUNT];
@@ -198,7 +203,7 @@ static void parameter_form_view(app *a) {
     struct nk_context *ui=a->ui;
     if(!a->built || !a->parameters.count)return;
     struct nk_rect content=nk_window_get_content_region(ui);
-    bool expanded=nk_tree_state_push(ui, NK_TREE_TAB, "Parameter", &a->parameter_disclosure);
+    bool expanded=nk_tree_state_push(ui, NK_TREE_TAB, laboratory_visible(a)?"Laufparameter":"Parameter", &a->parameter_disclosure);
     struct nk_panel *layout=ui->current->layout;
     a->parameter_header_bounds=nk_rect(content.x,layout->at_y-(float)*layout->offset_y,content.w,
                                       ui->style.font->height+2*ui->style.tab.padding.y);
@@ -218,12 +223,14 @@ static void parameter_form_view(app *a) {
                      parameter->default_value/scale);
             nk_layout_row_dynamic(ui,documentation_height(a->font_ui,detail,strlen(detail),fmaxf(40,nk_window_get_content_region(ui).w-16))+8,1);
             nk_label_wrap(ui, detail);
-            nk_layout_row_dynamic(ui, 32, 2);
+            nk_layout_row_dynamic(ui,laboratory_visible(a)?46*a->preferences.ui_size/16.f:32,2);
             char previous[sizeof a->parameters.selected[i]];
             snprintf(previous, sizeof previous, "%s", a->parameters.selected[i]);
             a->parameter_input_bounds[i]=nk_widget_bounds(ui);
+            if(laboratory_visible(a))nk_style_push_font(ui,&a->laboratory_value_font);
             nk_edit_string_zero_terminated(ui, NK_EDIT_FIELD, a->parameters.selected[i],
                                            sizeof a->parameters.selected[i], nk_filter_default);
+            if(laboratory_visible(a))nk_style_pop_font(ui);
             if (strcmp(previous, a->parameters.selected[i]))
                 a->project_settings_dirty = true;
             a->parameter_default_bounds[i]=nk_widget_bounds(ui);
@@ -311,6 +318,7 @@ static void live_event_text(app *a,const ps_log_record *record) {
     nk_layout_row_dynamic(ui,documentation_height(a->font_ui,text,used,width)+8,1);
     struct nk_rect bounds;
     if(nk_widget(&bounds,ui)!=NK_WIDGET_INVALID) {
+        ps_ui_accessibility_label(ui,bounds,text);
         size_t at=0;float y=bounds.y+4;
         do{size_t length,consumed=documentation_line(a->font_ui,text+at,used-at,width,&length);
             nk_draw_text(nk_window_get_canvas(ui),nk_rect(bounds.x+8,y,width,a->font_ui->height+6),
@@ -354,10 +362,11 @@ static void scene_controls_view(app *a) {
         if(object->shape!=PS_GROUP) {
             ps_vec3 world,local=object->shape==PS_FRAME?ps_v3(0,0,0):object->a;
             if(ps_scene_world_point(scene,a->scene_selected_slot,local,&world)==PS_OK) {
-                char position[128];nk_layout_row_dynamic(ui,20,1);
-                snprintf(position,sizeof position,"Welt [m]: %.6g / %.6g / %.6g",world.x,world.y,world.z);nk_label(ui,position,NK_TEXT_LEFT);
-                nk_layout_row_dynamic(ui,20,1);
-                snprintf(position,sizeof position,"Lokal [m]: %.6g / %.6g / %.6g",object->a.x,object->a.y,object->a.z);nk_label(ui,position,NK_TEXT_LEFT);
+                char position[128];
+                snprintf(position,sizeof position,"Welt [m]: %.6g / %.6g / %.6g",world.x,world.y,world.z);
+                nk_layout_row_dynamic(ui,laboratory_visible(a)?documentation_height(ui->style.font,position,strlen(position),nk_window_get_content_region(ui).w)+8:20,1);nk_label_wrap(ui,position);
+                snprintf(position,sizeof position,"Lokal [m]: %.6g / %.6g / %.6g",object->a.x,object->a.y,object->a.z);
+                nk_layout_row_dynamic(ui,laboratory_visible(a)?documentation_height(ui->style.font,position,strlen(position),nk_window_get_content_region(ui).w)+8:20,1);nk_label_wrap(ui,position);
                 if(object->shape==PS_FRAME) {
                     nk_layout_row_dynamic(ui,20,1);
                     snprintf(position,sizeof position,"Skalierung: %.6g / %.6g / %.6g",object->b.x,object->b.y,object->b.z);nk_label(ui,position,NK_TEXT_LEFT);
@@ -452,9 +461,11 @@ static void scene_controls_view(app *a) {
 }
 static void camera_inspector(app *a) {
     struct nk_context *ui=a->ui;
-    parameter_form_view(a);
-    if(a->tab==1){if(!a->analysis_only){live_measurements_view(a);live_events_view(a);}}
-    else scene_controls_view(a);
+    if(!laboratory_visible(a)) {
+        parameter_form_view(a);
+        if(a->tab==1){if(!a->analysis_only){live_measurements_view(a);live_events_view(a);}}
+        else scene_controls_view(a);
+    }
     a->breakpoint_input_active=false;
     if (nk_tree_state_push(ui, NK_TREE_TAB, "Laufeinstellungen", &a->steps_disclosure)) {
         nk_layout_row_dynamic(ui, 24, 1);
@@ -465,8 +476,10 @@ static void camera_inspector(app *a) {
         snprintf(previous_seed, sizeof previous_seed, "%s", a->seed);
         if(a->adaptive_steps) step_bound_editor(a,2,"Start (s)",&a->dt);
         else {
-            nk_layout_row_dynamic(ui,32,1);
+            nk_layout_row_dynamic(ui,laboratory_visible(a)?46*a->preferences.ui_size/16.f:32,1);
+            if(laboratory_visible(a))nk_style_push_font(ui,&a->laboratory_value_font);
             nk_property_double(ui, "dt", DBL_MIN, &a->dt, 1, .001, .0001f);
+            if(laboratory_visible(a))nk_style_pop_font(ui);
         }
         nk_layout_row_dynamic(ui,26,1);
         bool previous_adaptive=a->adaptive_steps;
@@ -489,9 +502,11 @@ static void camera_inspector(app *a) {
                          previous_maximum!=a->maximum_dt)) a->project_settings_dirty=true;
         nk_layout_row_dynamic(ui, 24, 1);
         nk_label(ui, "Zufallsseed", NK_TEXT_LEFT);
-        nk_layout_row_dynamic(ui, 32, 1);
+        nk_layout_row_dynamic(ui,laboratory_visible(a)?46*a->preferences.ui_size/16.f:32,1);
+        if(laboratory_visible(a))nk_style_push_font(ui,&a->laboratory_value_font);
         nk_edit_string_zero_terminated(ui, NK_EDIT_FIELD, a->seed, sizeof a->seed,
                                        nk_filter_decimal);
+        if(laboratory_visible(a))nk_style_pop_font(ui);
         if (!a->analysis_only && nk_tree_state_push(ui, NK_TREE_TAB, "Haltepunkte", &a->breakpoint_disclosure)) {
             char previous[sizeof a->step_breakpoints]; strcpy(previous, a->step_breakpoints);
             nk_layout_row_dynamic(ui, 26, 1);
@@ -539,7 +554,10 @@ static void sidebar_panel(app *a) {
             else {nk_layout_row_dynamic(ui,56,1);nk_label_wrap(ui,"Öffne einen Ordner, um seine Dateien hier zu sehen.");}
             nk_end(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);return;
         }
-        if(a->loaded && a->tab==1 && !a->project_manager)scene_controls_view(a);
+        if(a->loaded && a->tab==1 && !a->project_manager) {
+            scene_controls_view(a);nk_end(ui);
+            if(compact){nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}return;
+        }
         {
             if (nk_tree_state_push(ui, NK_TREE_TAB, "Workspace", &a->workspace_disclosure)) {
                 if (a->workspace_open) {
@@ -651,6 +669,33 @@ static void sidebar_panel(app *a) {
     if(compact){nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}
 }
 #include "source_outline_ui.inc"
+#include "laboratory_ui.inc"
+#include "model_edit_ui.inc"
+static void run_limits_view(app *a) {
+    struct nk_context *ui=a->ui;
+            if (nk_tree_state_push(ui, NK_TREE_TAB, "Laufgrenzen", &a->limits_disclosure)) {
+                nk_begin_disabled(ui, !idle(a));
+                nk_layout_row_dynamic(ui, 26, 1);
+                nk_label(ui, "Speicherlimit in MiB", NK_TEXT_LEFT);
+                nk_layout_row_dynamic(ui,laboratory_visible(a)?46*a->preferences.ui_size/16.f:32,1);
+                a->limit_bounds[0] = nk_widget_bounds(ui);
+                if(laboratory_visible(a))nk_style_push_font(ui,&a->laboratory_value_font);
+                nk_property_int(ui, "#Speicher", 0, &a->runner_memory_mib, 16384, 128, 16);
+                if(laboratory_visible(a))nk_style_pop_font(ui);
+                nk_layout_row_dynamic(ui, 26, 1);
+                nk_label(ui, "Zeitlimit in Sekunden", NK_TEXT_LEFT);
+                nk_layout_row_dynamic(ui,laboratory_visible(a)?46*a->preferences.ui_size/16.f:32,1);
+                a->limit_bounds[1] = nk_widget_bounds(ui);
+                if(laboratory_visible(a))nk_style_push_font(ui,&a->laboratory_value_font);
+                nk_property_double(ui, "#Zeit", 0, &a->runner_wall_seconds, 86400, 30, 1);
+                if(laboratory_visible(a))nk_style_pop_font(ui);
+                nk_end_disabled(ui);
+                nk_layout_row_dynamic(ui, 98, 1);
+                nk_label_wrap(ui, "0 = ohne Grenze. Für neue Simulationen und Auswertungen; "
+                                  "Zeit zählt inklusive Pausen. Serien haben ein eigenes Zeitlimit.");
+                nk_tree_state_pop(ui);
+            }
+}
 static void inspector_panel(app *a) {
     struct nk_context *ui=a->ui;
     bool compact=workbench_visible(a);
@@ -714,25 +759,42 @@ static void inspector_panel(app *a) {
             nk_style_pop_font(ui);
             nk_style_pop_vec2(ui);
         } else if(a->loaded) {
-            camera_inspector(a);
-            if (nk_tree_state_push(ui, NK_TREE_TAB, "Laufgrenzen", &a->limits_disclosure)) {
-                nk_begin_disabled(ui, !idle(a));
-                nk_layout_row_dynamic(ui, 26, 1);
-                nk_label(ui, "Speicherlimit in MiB", NK_TEXT_LEFT);
-                nk_layout_row_dynamic(ui, 32, 1);
-                a->limit_bounds[0] = nk_widget_bounds(ui);
-                nk_property_int(ui, "#Speicher", 0, &a->runner_memory_mib, 16384, 128, 16);
-                nk_layout_row_dynamic(ui, 26, 1);
-                nk_label(ui, "Zeitlimit in Sekunden", NK_TEXT_LEFT);
-                nk_layout_row_dynamic(ui, 32, 1);
-                a->limit_bounds[1] = nk_widget_bounds(ui);
-                nk_property_double(ui, "#Zeit", 0, &a->runner_wall_seconds, 86400, 30, 1);
-                nk_end_disabled(ui);
-                nk_layout_row_dynamic(ui, 98, 1);
-                nk_label_wrap(ui, "0 = ohne Grenze. Für neue Simulationen und Auswertungen; "
-                                  "Zeit zählt inklusive Pausen. Serien haben ein eigenes Zeitlimit.");
-                nk_tree_state_pop(ui);
-            }
+            if(laboratory_visible(a)) {
+                float start=ui->current->layout->at_y;
+                model_edit_banner(a);
+                if(a->live_warning_valid){
+                    float used=ui->current->layout->at_y-start+ui->current->layout->row.height;
+                    float height=fminf(100,fmaxf(32,nk_window_get_content_region(ui).h-20-used-80));
+                    nk_layout_row_dynamic(ui,height,1);a->live_warning_bounds=nk_widget_bounds(ui);
+                    if(nk_group_begin(ui,"laboratory-warning",NK_WINDOW_BORDER)){live_event_text(a,&a->live_warning);nk_group_end(ui);}
+                }
+                if(a->runner.running && ps_clock()-a->heartbeat>3)laboratory_note(a,"Keine Runner-Antwort. Stoppen bleibt oben erreichbar.");
+                float used=ui->current->layout->at_y-start+ui->current->layout->row.height;
+                float body=fmaxf(40,nk_window_get_content_region(ui).h-20-used);
+                nk_layout_row_dynamic(ui,body,1);
+                a->laboratory_inspector_body=nk_widget_bounds(ui);
+                if(nk_group_scrolled_offset_begin(ui,&a->laboratory_scroll_x,&a->laboratory_scroll_y,"Messlabor-Inspektor",0)) {
+                    laboratory_object(a);
+                    model_edit_fields(a);
+                    parameter_form_view(a);
+                    camera_inspector(a);
+                    run_limits_view(a);
+                    if(nk_tree_state_push(ui,NK_TREE_TAB,"Messkanal und Einheit",&a->laboratory_groups[1])) {
+                        int channel=laboratory_channel_picker(a,0);uint32_t count;const ps_channel *channels=laboratory_channels(a,&count);
+                        if(channel>=0){nk_layout_row_dynamic(ui,32,1);a->channel_unit_buttons[0]=nk_widget_bounds(ui);if(nk_button_label(ui,"Anzeigeeinheit …"))channel_unit_open(a,&channels[channel]);}
+                        else laboratory_note(a,"Noch keine Messkanäle verfügbar.");
+                        nk_tree_state_pop(ui);
+                    }
+                    if(nk_tree_state_push(ui,NK_TREE_TAB,"Ereignisse",&a->laboratory_groups[2])){live_events_view(a);nk_tree_state_pop(ui);}
+                    if(nk_tree_state_push(ui,NK_TREE_TAB,"Kamera und Darstellung",&a->laboratory_groups[3])){scene_controls_view(a);nk_tree_state_pop(ui);}
+                    if(nk_tree_state_push(ui,NK_TREE_TAB,"Aufzeichnung",&a->laboratory_groups[4])){
+                        laboratory_note(a,*a->last_run?a->last_run:"Noch kein aufgezeichneter Lauf.");
+                        laboratory_note(a,a->timeline_scenes?"Messwerte und Szenenzustände":"Messwerte; keine aufgezeichnete Szene verfügbar");nk_tree_state_pop(ui);
+                    }
+                    nk_group_end(ui);
+                }
+            } else camera_inspector(a);
+            if(!laboratory_visible(a))run_limits_view(a);
         } else {
             nk_layout_row_dynamic(ui,64,1);
             nk_label_wrap(ui,"Öffne ein Physim-Projekt, um Szene, Kamera und Experimentparameter zu untersuchen.");
@@ -744,6 +806,8 @@ static void inspector_panel(app *a) {
 static void workspace_panel(app *a) {
     struct nk_context *ui=a->ui;
     bool compact=editor_search_target(a)!=NULL;
+    bool laboratory=laboratory_visible(a);
+    if(laboratory){nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(0,0));nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(0,0));}
     if(compact) {
         nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(6,0));
         nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(0,0));
@@ -890,101 +954,8 @@ static void workspace_panel(app *a) {
             bool analysis = a->tab == 2 || a->analysis_only;
             struct nk_text_edit *edit = analysis ? &a->analysis : &a->experiment;
             editor(a, edit, nk_window_get_content_region(ui).h - 2*ui->style.window.padding.y-status_space);
-        } else if (a->tab == 1 && a->analysis_only) {
-            nk_layout_row_dynamic(ui,44,1);nk_label_wrap(ui,"Gespeicherte Szene · Die Wiedergabe verändert den importierten Lauf nicht.");
-            viewport(a,fmaxf(180,content-170));timeline_controls(a);
-            nk_layout_row_dynamic(ui,32,1);
-            if(nk_button_label(ui,"Zur Auswertung")){a->tab=2;a->analysis_tab=0;}
         } else if (a->tab == 1) {
-            nk_layout_row_begin(ui, NK_DYNAMIC, 34, 2);
-            nk_layout_row_push(ui, .6f);
-            nk_style_push_font(ui, a->font_title);
-            nk_label(ui, "Simulation", NK_TEXT_LEFT);
-            nk_style_pop_font(ui);
-            nk_layout_row_push(ui, .4f);
-            char time[96];
-            if (a->timeline_browsing)
-                snprintf(time, sizeof time, "Rückblick %.6g s · %s %.6g s", display_time(a),
-                         a->runner.running ? "Live" : "Ende", a->simulation_time);
-            else snprintf(time, sizeof time, "%.6g s", a->simulation_time);
-            nk_label_colored(ui, time, NK_TEXT_RIGHT, muted());
-            nk_layout_row_end(ui);
-            bool compact_controls=nk_window_get_content_region(ui).w<480;
-            viewport(a,fmaxf(96,nk_window_get_content_region(ui).h-252-(a->preferences.ui_size>=20?80:0)-(compact_controls?34:0)-
-                       (nk_window_get_content_region(ui).w<560?30:0)));
-            timeline_controls(a);
-            nk_layout_row_dynamic(ui, 34, compact_controls?2:3);
-            a->run_control_bounds[0] = nk_widget_bounds(ui);
-            nk_begin_disabled(ui, a->runner.running || !idle(a));
-            if (action_button(ui, a->built ? "Neuer Lauf" : "Build",
-                              !a->runner.running && idle(a))) {
-                if (a->built)
-                    start_run(a);
-                else
-                    build_project(a);
-            }
-            nk_end_disabled(ui);
-            bool run_control_ready = runner_control_ready(a);
-            nk_begin_disabled(ui, !run_control_ready);
-            a->run_control_bounds[1] = nk_widget_bounds(ui);
-            if (action_button(ui, a->paused ? "Fortsetzen" : "Pause", run_control_ready))
-                command(a, a->paused ? PS_MSG_RUN : PS_MSG_PAUSE);
-            nk_begin_disabled(ui, !a->paused);
-            a->run_control_bounds[2] = nk_widget_bounds(ui);
-            if (nk_button_label(ui, "Einzelschritt"))
-                command(a, PS_MSG_STEP);
-            nk_end_disabled(ui);
-            nk_end_disabled(ui);
-            if(nk_input_is_mouse_hovering_rect(&ui->input,a->run_control_bounds[2]))
-                nk_tooltip(ui,"F8: Einzelschritt in einer pausierten Simulation");
-            if(!compact_controls)nk_layout_row_dynamic(ui, 34, 3);
-            a->run_control_bounds[3] = nk_widget_bounds(ui);
-            nk_begin_disabled(ui, !reset_available(a));
-            if (nk_button_label(ui, a->reset_pending ? "Zurücksetzen …" : "Zurücksetzen"))
-                reset_run(a);
-            nk_end_disabled(ui);
-            /* A hung create callback may never complete HELLO; stopping still works. */
-            nk_begin_disabled(ui, !a->runner.running || a->stop_at != 0);
-            a->run_control_bounds[4] = nk_widget_bounds(ui);
-            if (nk_button_label(ui, "Stoppen")) {
-                command(a, PS_MSG_STOP);
-                a->stop_at = ps_clock();
-            }
-            nk_end_disabled(ui);
-            if(nk_input_is_mouse_hovering_rect(&ui->input,a->run_control_bounds[4]))
-                nk_tooltip(ui,"F9: Lauf stoppen, auch während der Initialisierung");
-            a->run_control_bounds[5] = nk_widget_bounds(ui);
-            if (nk_button_label(ui, "Auswerten")) {
-                a->tab = 2;
-                a->analysis_tab = 0;
-            }
-            nk_layout_row_dynamic(ui, 30, 2);
-            nk_label(ui, "Geschwindigkeit", NK_TEXT_LEFT);
-            char speed_label[64];
-            if (a->simulation_speed == 0)
-                snprintf(speed_label, sizeof speed_label, "Offline · maximale Geschwindigkeit");
-            else
-                snprintf(speed_label, sizeof speed_label, "%.3g× Echtzeit", a->simulation_speed);
-            bool speed_ready = !a->reset_pending && !a->reset_starting &&
-                               (!a->runner.running || (a->hello && !a->stop_at));
-            nk_begin_disabled(ui, !speed_ready);
-            a->speed_bounds = nk_widget_bounds(ui);
-            if (nk_combo_begin_label(ui, speed_label, nk_vec2(300, 290))) {
-                const double speeds[] = {.25, .5, 1, 2, 4, 8, 16, 0};
-                nk_layout_row_dynamic(ui, 28, 1);
-                for (unsigned i = 0; i < 8; i++) {
-                    char label[64];
-                    if (speeds[i] == 0) snprintf(label, sizeof label, "Offline · maximal");
-                    else snprintf(label, sizeof label, "%.3g× Echtzeit", speeds[i]);
-                    a->speed_choices[i] = nk_widget_bounds(ui);
-                    if (nk_button_label(ui, label)) {
-                        select_simulation_speed(a, speeds[i]);
-                        nk_combo_close(ui);
-                    }
-                }
-                nk_combo_end(ui);
-            }
-            nk_end_disabled(ui);
+            laboratory_workspace(a);
         } else {
             nk_layout_row_dynamic(ui, 34, 2);
             nk_style_push_font(ui, a->font_title);
@@ -1116,6 +1087,7 @@ static void workspace_panel(app *a) {
     }
     nk_end(ui);
     if(compact){nk_style_pop_style_item(ui);nk_style_pop_float(ui);nk_style_pop_float(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}
+    if(laboratory){nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}
 }
 static void workbench_log_panel(app *a) {
     struct nk_context *ui=a->ui;
@@ -1313,6 +1285,10 @@ static void workbench_editor_status(app *a) {
 }
 static void draw_ui(app *a, int width, int height) {
     struct nk_context *ui = a->ui;
+    /* Modal views also cross workspace boundaries (for example Settings with
+     * the layout manager open); finish the session transition before returning. */
+    laboratory_context(a);
+    if(a->panel_pull && (a->recovery || a->layout_manager || a->channel_unit_manager || a->workspace_manager || a->run_details_manager))panel_pull_cancel(a);
     ps_graphics_backdrop(a->graphics,NULL);
     if(a->run_details_manager) {run_details_view(a,width,height);return;}
     if(a->channel_unit_manager) { channel_unit_manager_view(a,width,height);return; }
@@ -1377,6 +1353,7 @@ static void draw_ui(app *a, int width, int height) {
     const ps_ui_palette *previous_palette=ui_palette;
     const struct nk_user_font *previous_font=ui->style.font;
     bool workbench=workbench_visible(a);
+    bool laboratory=laboratory_visible(a);
     if(a->outline_keyboard && (editor_search_target(a)!=a->outline_editor || a->toolbar_menu || a->search_keyboard ||
        nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT)))a->outline_keyboard=false;
     const float sizes[]={11,9,12,11,20,16,10};
@@ -1389,6 +1366,15 @@ static void draw_ui(app *a, int width, int height) {
         ui_palette=ps_workbench_palette(ui_palette);style(ui);
         nk_style_set_font(ui,&a->workbench_fonts[0]);
     }
+    if(laboratory){ui_palette=ps_laboratory_palette(ui_palette);style(ui);nk_style_set_font(ui,&a->workbench_fonts[2]);
+        ui->style.combo.sym_normal=ui->style.combo.sym_hover=ui->style.combo.sym_active=NK_SYMBOL_CHEVRON_DOWN;
+        ui->style.combo.button_padding=nk_vec2(8,12);
+        ui->style.tab.sym_minimize=NK_SYMBOL_PLUS;ui->style.tab.sym_maximize=NK_SYMBOL_MINUS;
+        ui->style.tab.tab_minimize_button.normal=ui->style.tab.tab_maximize_button.normal=nk_style_item_color(UI_COLOR(window));
+        ui->style.tab.padding=nk_vec2(0,12);
+    }
+    a->laboratory_value_font=*a->ui_fonts[3];a->laboratory_value_font.height=21*a->workbench_regular_em*a->preferences.ui_size/16.f;
+    a->laboratory_card_font_count=0;
     float w=(float)width,h=(float)height;
     a->search_edit=NULL;
     a->toolbar_pointer_consumed=false;
@@ -1397,7 +1383,7 @@ static void draw_ui(app *a, int width, int height) {
     nk_style_push_vec2(ui, &ui->style.window.padding, nk_vec2(0, 0));
     nk_style_push_vec2(ui, &ui->style.window.spacing, nk_vec2(0, 0));
     nk_style_push_float(ui, &ui->style.window.rounding, 0);
-    if (nk_begin(ui, "header", nk_rect(0, 0, w, workbench?72:64), NK_WINDOW_NO_SCROLLBAR)) {
+    if (nk_begin(ui, "header", nk_rect(0, 0, w, workbench || laboratory?72:64), NK_WINDOW_NO_SCROLLBAR)) {
         toolbar_view(a);
         dock_overlay(a,w,h);
     }
@@ -1406,7 +1392,11 @@ static void draw_ui(app *a, int width, int height) {
     nk_style_pop_vec2(ui);
     nk_style_pop_vec2(ui);
     if(a->tab!=a->dock_last_tab) { dock_show(a,PS_DOCK_WORKSPACE);a->dock_last_tab=a->tab; }
+    laboratory_context(a);
+    laboratory_chrome(a,w,h);
     dock_relayout(a,w,h);
+    memset(a->laboratory_plots,0,sizeof a->laboratory_plots);
+    a->laboratory_splitters[0]=a->laboratory_splitters[2]=nk_rect(0,0,0,0);
     for(unsigned floating=0;floating<2;floating++) {
         for(unsigned panel=0;panel<PS_DOCK_PANELS;panel++) {
             if (((a->preferences.dock.floating >> panel)&1u)!=floating) continue;
@@ -1423,11 +1413,12 @@ static void draw_ui(app *a, int width, int height) {
         nk_window_set_focus(ui,"workspace");
     dock_order(a);
     dock_separator_views(a);
-    editor_search_view(a);
-    completion_view(a,width,height);
+    laboratory_separators(a);
+    if(!panel_is_detached(a,PS_DOCK_WORKSPACE)){editor_search_view(a);completion_view(a,width,height);}
     /* Docking temporarily routes hover/wheel to the panel under the pointer.
      * A declaration activation returns keyboard ownership to its source until
      * the user explicitly clicks, tabs, opens a menu or enters another field. */
     if(a->outline_keyboard)ui->active=nk_window_find(ui,"workspace");
-    if(workbench){ui_palette=previous_palette;style(ui);nk_style_set_font(ui,previous_font);}
+    if(workbench || laboratory){ui_palette=previous_palette;style(ui);}
+    if(workbench || laboratory)nk_style_set_font(ui,previous_font);
 }

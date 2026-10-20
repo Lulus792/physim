@@ -1,13 +1,17 @@
 // Adaptive RK45 callback with the vacuum parameters of the C pendulum.
 let radians = Unit(0, 0, 0, 0, 0, 0, 0, 1, "rad")
 let metres = Unit(1, 0, 0, 0, 0, 0, 0, 1, "m")
-let length = parameterWithUnit("length", metres, 1.5, 0.1, 10, "Pendulum length in metres")
+// @physim-model-value-v1 lengthDefault m 1 0.1 10 Fadenlänge
+let lengthDefault: Float64 = 1.5
+let length = parameterWithUnit("length", metres, lengthDefault, 0.1, 10, "Pendulum length in metres")
 let initialAngle = parameterWithUnit("initialAngle", radians, 0.45, -1.5, 1.5, "Initial angle in radians")
 let kilograms = Unit(0, 1, 0, 0, 0, 0, 0, 1, "kg")
 let densityUnit = Unit(-3, 1, 0, 0, 0, 0, 0, 1, "kg/m3")
 let areaUnit = Unit(2, 0, 0, 0, 0, 0, 0, 1, "m2")
 let one = Unit(0, 0, 0, 0, 0, 0, 0, 1, "1")
-let mass = parameterWithUnit("mass", kilograms, 1.0, 0.001, 1000, "Bob mass in kilograms")
+// @physim-model-value-v1 massDefault kg 1 0.001 1000 Masse
+let massDefault: Float64 = 1.0
+let mass = parameterWithUnit("mass", kilograms, massDefault, 0.001, 1000, "Bob mass in kilograms")
 let airDensity = parameterWithUnit("airDensity", densityUnit, 0.0, 0.0, 1000, "Medium density; zero disables drag")
 let dragCoefficient = parameterWithUnit("dragCoefficient", one, 0.47, 0.0, 2, "Quadratic drag coefficient")
 let area = parameterWithUnit("area", areaUnit, 0.01, 0.0, 1, "Drag cross-section in square metres")

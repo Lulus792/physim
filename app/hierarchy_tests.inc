@@ -8,14 +8,22 @@ static bool hierarchy_test_start(app *a,const char *root,const char *mode) {
     a->dt=.01;a->project_settings_dirty=true;select_build_profile(a,1);return true;
 }
 static bool hierarchy_test_click(app *a,struct nk_rect r) {
+    /* Wheel offsets are committed at panel end. Wait for one full reflow before
+     * targeting the new widget rectangles, rather than clicking stale bounds. */
+    static unsigned settle;
+    if(settle){settle--;return false;}
+    if(r.w<=0 || r.h<=0)return false;
     struct nk_rect panel=a->dock_panels[PS_DOCK_INSPECTOR],sidebar=a->dock_panels[PS_DOCK_SIDEBAR];
     if(r.x>=sidebar.x && r.x+r.w<=sidebar.x+sidebar.w)panel=sidebar;
-    if(r.y<panel.y+32 || r.y+r.h>panel.y+panel.h-12) {
-        test_plot_wheel(a,panel.x+panel.w/2,panel.y+panel.h/2,r.y<panel.y+32?1:-1);return false;
+    float top=32;
+    if(r.x>=a->dock_panels[PS_DOCK_INSPECTOR].x && laboratory_visible(a)){panel=a->laboratory_inspector_body;top=8;}
+    if(r.y<panel.y+top || r.y+r.h>panel.y+panel.h-12) {
+        test_plot_wheel(a,panel.x+panel.w/2,panel.y+panel.h/2,r.y<panel.y+top?1:-1);settle=2;return false;
     }
     test_mouse(a,r,true);return true;
 }
 static void hierarchy_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    static bool settle;if(settle){settle=false;return;}settle=true;
     if(!strcmp(mode,"hierarchy-v1")) {
         if(*stage>=4 && *stage<=21) {
             bool flat=a->timeline_scenes && a->timeline.latest.scene.count>=3 && !a->built && !a->runner.running;

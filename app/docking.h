@@ -22,6 +22,10 @@ typedef struct {
      {PS_DOCK_Y,5,2,800,0,0}}, 6,0,0, \
     {{24,96,280,560},{300,96,720,580},{80,140,600,240},{780,96,280,560}} }
 extern const ps_dock_layout PS_DOCK_DEFAULT;
+/* Fixed presentation topology, retaining visibility. Legacy graph decoders and
+ * mutations remain available for file compatibility; UI never reorders slots. */
+ps_dock_layout ps_dock_fixed_layout(uint32_t hidden);
+ps_dock_layout ps_dock_fixed_workbench_layout(uint32_t hidden);
 bool ps_dock_valid(const ps_dock_layout *layout);
 uint32_t ps_dock_group(const ps_dock_layout *layout, uint32_t panel);
 /* All mutations are transactional. target is a docked panel or NONE for an empty root. */

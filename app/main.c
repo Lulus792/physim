@@ -17,6 +17,7 @@
 #include "completion.h"
 #include "editor_search.h"
 #include "source_outline.h"
+#include "model_values.h"
 #include "report_image.h"
 #include "scene_view.h"
 #include "preferences.h"
@@ -74,6 +75,21 @@ static void nk_end_disabled(struct nk_context *ctx) {
 #define WORKSPACE_DOCUMENTS PS_WORKSPACE_DOCUMENTS
 #define FILE_TABS (WORKSPACE_DOCUMENTS + 2)
 #define DOCK_HEADER_HEIGHT 32
+enum { PS_PANEL_MEASURE=PS_DOCK_PANELS, PS_PANEL_TIMELINE, PS_PANEL_COUNT };
+typedef struct {
+    SDL_Window *window;
+    ps_graphics *graphics;
+    struct nk_context *ui;
+    int tab;
+    bool detached, restore_scroll, restore_editor_focus;
+    nk_uint scroll_x,scroll_y;
+    struct nk_rect action, home;
+    struct nk_rect splitters[3];
+    int resize;
+    float resize_original;
+    bool resize_cancelled;
+    char capture[4096]; /* Native regression capture; empty during normal use. */
+} ps_panel_window;
 typedef struct {
     ps_text_document file;
     char path[4096]; /* User-facing path; file.path resolves symbolic links for saving. */
@@ -138,6 +154,33 @@ typedef struct {
     ps_dock_float dock_resize_start;
     ps_preferences dock_resize_original;
     bool dock_resize_transaction;
+    ps_panel_window panels[PS_PANEL_COUNT];
+    int panel_render; /* zero: main window, otherwise panel + 1 */
+    unsigned panel_open_request, panel_return_request;
+    unsigned panel_pull;
+    bool panel_pull_dragging;
+    struct nk_vec2 panel_pull_origin;
+    int panel_drop_x,panel_drop_y;
+    unsigned panel_drop_mask;
+    unsigned panel_pull_file_order[FILE_TABS];
+    /* Simulieren owns session-only geometry; the user's common layout is kept. */
+    bool laboratory_initialized, laboratory_active, laboratory_curves;
+    ps_layout_state laboratory_layout, laboratory_previous;
+    float laboratory_measure_height,laboratory_closed_height,laboratory_timeline_height,laboratory_curve_ratio;
+    float laboratory_resize_original;
+    bool laboratory_resize_cancelled;
+    int laboratory_channels[2], laboratory_resize;
+    struct nk_rect laboratory_switch, laboratory_sides[2], laboratory_splitters[3], laboratory_plots[2];
+    struct nk_rect laboratory_inspector_body;
+    enum nk_collapse_states laboratory_groups[5];
+    unsigned laboratory_scroll_x, laboratory_scroll_y, laboratory_focus_return;
+    struct nk_user_font laboratory_value_font;
+    struct nk_user_font laboratory_card_fonts[8];
+    unsigned laboratory_card_font_count;
+    SDL_Cursor *laboratory_cursors[2];
+    ps_model_edit model_edit;
+    enum nk_collapse_states model_disclosure;
+    struct nk_rect model_input_bounds[PS_MODEL_VALUES_MAX],model_build_bounds,model_discard_bounds;
     struct nk_rect dock_menu_bounds[5];
     ps_layout_catalog layouts;
     char layouts_path[4096], layouts_error[192], layout_name[PS_LAYOUT_NAME_BYTES];
@@ -153,7 +196,7 @@ typedef struct {
     uint32_t dock_target, dock_side;
     struct nk_rect settings_bounds[6], theme_bounds[PS_THEME_COUNT], panel_bounds[2];
     struct nk_rect ui_size_bounds[4];
-    SDL_Window *window;
+    SDL_Window *window,*primary_window;
     ps_graphics *graphics;
     ps_vec3 camera_target;
     bool camera_2d;
@@ -531,6 +574,13 @@ static bool api_reference_open(app *a,const ps_completion_symbol *symbol);
 static void api_reference_from_editor(app *a,struct nk_text_edit *edit);
 static float documentation_height(const struct nk_user_font *font,const char *text,size_t n,float width);
 static void dock_show(app *a,unsigned panel);
+static bool laboratory_resize_key(app *a,const SDL_KeyboardEvent *key);
+static bool laboratory_visible(const app *a);
+static void laboratory_context(app *a);
+static void model_edit_clear(app *a);
+static void model_edit_finish(app *a,bool success);
+static void model_edit_tick(app *a);
+static void model_edit_submitted(app *a);
 static void scene_camera_plane(app *a,unsigned plane);
 static bool open_run_path(app *a,const char *path);
 static bool action_button(struct nk_context *ui, const char *label, bool primary);
@@ -1036,6 +1086,7 @@ static bool jobs_idle(app *a) {
 }
 static bool idle(app *a) { return !a->reset_pending && jobs_idle(a); }
 static void clear_project(app *a) {
+    model_edit_clear(a);
     completion_close(a);
     a->source_tab_closed[0]=a->source_tab_closed[1]=false;
     a->caret_edit=NULL;
@@ -1374,6 +1425,7 @@ static void build_project(app *a) {
     a->diagnostic_used = 0;
     a->build_revision = a->source_revision;
     if (ps_process_start(&a->job, args, a->project)) {
+        model_edit_submitted(a);
         a->profile_job_recorded = false;
         a->job_kind = 2;
         status(a,a->analysis_only?"Physim baut die Analyse ...":"Physim baut Experiment und Analyse ...");
@@ -1409,6 +1461,7 @@ static bool select_simulation_speed(app *a, double speed) {
     a->project_settings_dirty = true;
     return true;
 }
+#include "model_edit.inc"
 static void unique_path(app *a, char *out, size_t cap, const char *suffix) {
     time_t now = time(NULL);
     struct tm *t = localtime(&now);
@@ -1536,6 +1589,7 @@ static bool start_run_mode(app *a, bool paused) {
         return false;
     }
     if (ps_process_start_limited(&a->runner, args, a->project, &limits)) {
+        a->model_edit.ready=false;
         a->live_event_count=0;a->live_event_omitted=0;a->live_warning_valid=false;
         a->live_event_scroll_x=a->live_event_scroll_y=0;
         a->profile_runner_recorded = false;
@@ -2328,6 +2382,12 @@ static void viewport(app *a, float height) {
         visible_slots[i]=i;
         if(!scene_entry_enabled(a,i))visible.objects[i].color=0;
     }
+    /* Startup preferences can be loaded before the GL renderer exists. Use the
+     * actual frame palette here as well as in explicit theme changes. */
+    struct nk_color scene_clear=UI_COLOR(canvas),scene_grid=UI_COLOR(plot_grid);
+    ps_graphics_background(a->graphics,scene_clear.r,scene_clear.g,scene_clear.b);
+    ps_graphics_scene_colors(a->graphics,((uint32_t)scene_clear.r<<24)|((uint32_t)scene_clear.g<<16)|((uint32_t)scene_clear.b<<8)|255,
+        ((uint32_t)scene_grid.r<<24)|((uint32_t)scene_grid.g<<16)|((uint32_t)scene_grid.b<<8)|255);
     unsigned texture = ps_graphics_scene(a->graphics, &visible, &camera, width, pixels);
     if (texture) {
         if (a->profiler) a->profile_frame.has_scene = ps_graphics_scene_stats(a->graphics, &a->profile_frame.scene);
@@ -2480,8 +2540,8 @@ static void plot(app *a, const double *times, const double *values, int count, f
                y1 = plot_fraction(view, bounds, 1, values[i - 1]);
         plot_segment(canvas, area, x1, y1, x2, y2, UI_COLOR(accent));
     }
-    if (a->tab == 1 && a->timeline_browsing) {
-        double x = plot_fraction(view, bounds, 0, a->timeline_view.time);
+    if (a->tab == 1) {
+        double x = plot_fraction(view, bounds, 0, display_time(a));
         if (x >= 0 && x <= 1) {
             float position = area.x + (float)x * area.w;
             nk_stroke_line(canvas, position, area.y, position, area.y + area.h, 1,
@@ -2893,6 +2953,11 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
 }
 // clang-format off
 static bool documentation_window_open(app *a);
+static bool panel_is_detached(const app *a,unsigned panel);
+static void panel_pull_handle(app *a,unsigned panel,struct nk_rect bounds);
+static void panel_pull_input(app *a,float width,float height);
+static void panel_pull_cancel(app *a);
+static void panel_windows_destroy(app *a);
 #include "editor_search_ui.inc"
 static bool documentation_fonts_prepare(app *a,unsigned size,unsigned code_size);
 static bool documentation_fonts_prepare_sizes(app *a,unsigned size,unsigned code_size,unsigned ui_size,unsigned editor_size);
@@ -2903,6 +2968,7 @@ static bool documentation_fonts_prepare_sizes(app *a,unsigned size,unsigned code
 static void layouts_start(app *a);
 static void channel_units_start(app *a);
 #include "design_ui.inc"
+#include "panel_windows.inc"
 // clang-format on
 static struct nk_font *system_font_sampling(struct nk_font_atlas *atlas,const char *root,float size,bool code,bool title,
                                            unsigned char horizontal,unsigned char vertical) {
@@ -3229,6 +3295,9 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "source_outline_tests.inc"
 #include "file_tabs_tests.inc"
 #include "workbench_tests.inc"
+#include "laboratory_tests.inc"
+#include "panel_window_tests.inc"
+#include "model_edit_tests.inc"
 #include "api_reference_tests.inc"
 #include "parameter_form_tests.inc"
 #include "adaptive_tests.inc"
@@ -3515,6 +3584,7 @@ int main(int argc, char **argv) {
         return 1;
     }
     a->window = window;
+    a->primary_window = window;
     if (SDL_SetWindowHitTest(window, window_hit_test, a))
         SDL_SetWindowBordered(window, false);
     else
@@ -3785,6 +3855,7 @@ int main(int argc, char **argv) {
         nk_input_begin(a->ui);
         if (a->doc_ui)
             nk_input_begin(a->doc_ui);
+        for(unsigned i=0;i<PS_PANEL_COUNT;i++)if(a->panels[i].ui)nk_input_begin(a->panels[i].ui);
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
             if (e.type == workspace_dialog_event) {
@@ -3813,10 +3884,21 @@ int main(int argc, char **argv) {
                 doc_input_bytes += (unsigned)strlen(e.text.text);
             }
             SDL_Window *event_window = SDL_GetWindowFromEvent(&e);
+            if(panel_window_event(a,&e,event_window))continue;
+            if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && e.key.key==SDLK_ESCAPE && a->panel_pull){panel_pull_cancel(a);continue;}
+            if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && e.key.key==SDLK_RETURN && (e.key.mod&PS_UI_COMMAND_MOD) && (e.key.mod&SDL_KMOD_SHIFT)) {
+                for(unsigned i=0;i<PS_PANEL_COUNT;i++)if(a->panels[i].action.w>0 && nk_sdl_accessibility_keyboard_target(a->ui,a->panels[i].action))a->panel_open_request|=1u<<i;
+                continue;
+            }
             if(event_window==a->window && e.type==SDL_EVENT_TEXT_INPUT)a->completion_typed=true;
             if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && e.key.key==SDLK_TAB)a->outline_keyboard=false;
-            if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && dock_resize_key(a,&e.key))continue;
+            if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && (laboratory_resize_key(a,&e.key) || dock_resize_key(a,&e.key)))continue;
             if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && editor_search_key(a,&e.key))continue;
+            if(event_window==a->window && (e.type==SDL_EVENT_WINDOW_FOCUS_LOST || e.type==SDL_EVENT_WINDOW_RESIZED)) {
+                if(a->panel_pull)panel_pull_cancel(a);
+                if(a->laboratory_resize)laboratory_resize_abort(a);
+                if(a->dock_resize || a->dock_float_resize)dock_resize_abort(a);
+            }
             if(event_window==a->window && nk_sdl_accessibility_event(a->ui,&e))continue;
             if(event_window==a->doc_window && a->doc_ui && nk_sdl_accessibility_event(a->doc_ui,&e))continue;
             if (event_window == a->window && e.type == SDL_EVENT_WINDOW_FOCUS_LOST)
@@ -3931,6 +4013,7 @@ int main(int argc, char **argv) {
         nk_input_end(a->ui);
         if (a->doc_ui)
             nk_input_end(a->doc_ui);
+        for(unsigned i=0;i<PS_PANEL_COUNT;i++)if(a->panels[i].ui)nk_input_end(a->panels[i].ui);
         if(nk_sdl_accessibility_has_focus(a->ui)){a->settings_keyboard=false;toolbar_keyboard_close(a);}
         if(a->doc_ui && nk_sdl_accessibility_has_focus(a->doc_ui) && !nk_sdl_accessibility_keyboard_owned(a->doc_ui))a->doc_keyboard=false;
         if (a->profiler) {
@@ -3939,6 +4022,7 @@ int main(int argc, char **argv) {
             profile_phase = now;
         }
         pump(a);
+        model_edit_tick(a);
         autosave_tick(a, ps_clock());
         documents_autosave_tick(a, ps_clock());
         const char *capture = NULL;
@@ -3958,7 +4042,7 @@ int main(int argc, char **argv) {
             /* The deliberate 80 ms frame delay also runs on hosted software GL.
              * Keep its bounded keyboard assertions; allow their extra wall time. */
             if (ps_clock() - test_started >
-                (!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
+                (!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
                   !strncmp(argv[3], "isolation-", 10) || !strncmp(argv[3], "breakpoints-", 12) || !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || (!strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"pendulum-medium-",16)) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strncmp(argv[3],"logging-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15))) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
@@ -5061,6 +5145,8 @@ int main(int argc, char **argv) {
             profile_phase = now;
         }
         char doc_capture_path[4096];
+        if(!panel_windows_render(a)){fprintf(stderr,"Panel rendering: %s\n",SDL_GetError());exit_code=1;a->quitting=true;}
+        panel_requests(a);
         if (doc_capture)
             join(doc_capture_path, sizeof doc_capture_path, a->project, capture);
         if (!documentation_window_render(a, doc_capture ? doc_capture_path : NULL)) {
@@ -5096,7 +5182,9 @@ int main(int argc, char **argv) {
     }
     if (a->preferences_writable && a->preferences_path[0]) {
         preferences_capture(a);
-        ps_result saved = ps_preferences_write(a->preferences_path, &a->preferences);
+        ps_preferences persisted=a->preferences;
+        if(a->laboratory_active){const ps_layout_state *regular=&a->laboratory_previous;persisted.dock=regular->dock;persisted.sidebar_width=regular->sidebar_width;persisted.inspector_width=regular->inspector_width;persisted.log_height=regular->log_height;persisted.view_flags=(persisted.view_flags&~PS_VIEW_LOG)|(regular->show_log?PS_VIEW_LOG:0);}
+        ps_result saved = ps_preferences_write(a->preferences_path, &persisted);
         if (saved != PS_OK) {
             fprintf(stderr, "Einstellungen nicht gespeichert: %s\n", ps_result_string(saved));
             exit_code = 1;
@@ -5163,12 +5251,14 @@ int main(int argc, char **argv) {
     nk_textedit_free(&a->analysis);
     free(a->documentation);
     free(a->api_reference);
+    model_edit_clear(a);
     free(a->saved_source[0]);
     free(a->saved_source[1]);
     free(a->workspaces);
     ps_autosave_destroy(a->recovery);
     ps_workspace_tree_destroy(&a->workspace_tree);
     documents_clear(a);
+    panel_windows_destroy(a);
     documentation_window_destroy(a);
     bool profile_started = a->profiler != NULL;
     ps_app_profile_result profile_result = ps_app_profile_finish(a->profiler);
@@ -5181,6 +5271,8 @@ int main(int argc, char **argv) {
                 (unsigned long long)profile_result.process_written,
                 (unsigned long long)profile_result.process_dropped);
     free(a->outline_source);
+    SDL_SetCursor(SDL_GetDefaultCursor());
+    for(unsigned i=0;i<2;i++)if(a->laboratory_cursors[i])SDL_DestroyCursor(a->laboratory_cursors[i]);
     nk_sdl_shutdown(a->ui);
     SDL_SetWindowHitTest(window, NULL, NULL);
     free(a);

@@ -856,6 +856,53 @@ def api_reference(flow,directory):
             require((root/name).is_file(),"Missing actual API reference view: "+name)
 
 
+def laboratory(flow,directory):
+    flow.env.pop('PHYSIM_TEST_SMALL',None)
+    startup=directory/'startup';startup.mkdir(parents=True)
+    flow.run('--workspace-state-test',startup,'laboratory-startup',timeout=40,marker='LABORATORY STARTUP SELF-TEST: PASSED')
+    match=re.search(r'LABORATORY STARTUP: theme=(\d+) scene=([\d.]+),([\d.]+),([\d.]+),([\d.]+)',flow.steps[-1]['stdout'])
+    require(match is not None,'Missing actual startup scene geometry')
+    theme=int(match[1]);x,y,w,h=map(float,match.groups()[1:]);raw=(startup/'laboratory-startup.bmp').read_bytes()
+    offset=struct.unpack_from('<I',raw,10)[0];iw,ih=struct.unpack_from('<ii',raw,18);bits=struct.unpack_from('<H',raw,28)[0]
+    require(bits in (24,32),'Unsupported startup capture');stride=((iw*bits+31)//32)*4
+    at=offset+(abs(ih)-1-int(y+10) if ih>0 else int(y+10))*stride+int(x+10)*(bits//8)
+    require(tuple(reversed(raw[at:at+3]))==((232,235,241) if theme==1 else (0,0,0) if theme==2 else (20,21,24)),
+            'Initial renderer colors depend on an explicit theme change')
+    custom=directory/'custom';custom.mkdir(parents=True)
+    for mode in ('laboratory-custom','laboratory-custom-read'):
+        flow.run('--workspace-state-test',custom,mode,timeout=40,marker='LABORATORY CUSTOM SELF-TEST: PASSED')
+    for variant in ('dark','light','contrast','light-large-narrow','phys-dark','projectile-light'):
+        root=directory/variant;root.mkdir(parents=True)
+        flow.run('--workspace-state-test',root,'laboratory-'+variant,timeout=155,marker='SELF-TEST: PASSED')
+        output=flow.steps[-1]['stdout']
+        states=re.findall(r'LABORATORY STATE (\d+): scene ([\d.]+) ([\d.]+) ([\d.]+) ([\d.]+) time ([\d.]+)',output)
+        require([int(s[0]) for s in states]==list(range(8)),'Missing native workspace state combinations')
+        require(len({s[5] for s in states})==1,'Layout toggles changed the viewed time')
+        require(float(states[0][4])>float(states[4][4]),'Hidden curves failed to return scene height')
+        require('LABORATORY SWITCH: found=1 enabled=1 checked=1' in output,'Native toggle lost checked/enabled state')
+        for name in ['laboratory-initial.bmp','laboratory-history.bmp','laboratory-resized.bmp','laboratory-curve-limit.bmp']+[f'laboratory-state-{i}.bmp' for i in range(8)]:
+            require((root/name).is_file(),'Missing native laboratory capture: '+variant+'/'+name)
+        # The scene is rendered from the actual model, using semantic theme colors.
+        image=(root/'laboratory-state-7.bmp').read_bytes()
+        offset=struct.unpack_from('<I',image,10)[0];iw,ih=struct.unpack_from('<ii',image,18)
+        bits=struct.unpack_from('<H',image,28)[0];require(bits in (24,32),'Unsupported native capture')
+        stride=((iw*bits+31)//32)*4
+        def pixel(x,y):
+            at=offset+(abs(ih)-1-y if ih>0 else y)*stride+x*(bits//8)
+            return tuple(reversed(image[at:at+3]))
+        x,y,w,h=map(float,states[7][1:5])
+        expected=(0,0,0) if 'contrast' in variant else (232,235,241) if 'light' in variant else (20,21,24)
+        require(pixel(int(x+10),int(y+10))==expected,'Scene ignores the selected semantic theme')
+        require(sum(pixel(px,py)!=expected for py in range(int(y),int(y+h),2) for px in range(int(x),int(x+w),2))>100,'Native model scene contains no geometry')
+
+def model_values(flow,directory):
+    flow.env.pop('PHYSIM_TEST_SMALL',None)
+    for language in ('c','phys'):
+        root=directory/language;root.mkdir(parents=True)
+        flow.run('--workspace-state-test',root,'model-values-'+language,timeout=330,marker='MODEL VALUES SELF-TEST: PASSED')
+        for name in ('model-values-staged.bmp','model-values-newer-edit.bmp','model-values-build-error.bmp','model-values-ready.bmp'):
+            require((root/name).is_file(),'Missing model transaction capture: '+name)
+
 def source_outline(flow,directory):
     for variant in ("c-dark","phys-light","c-light-large"):
         root=directory/variant;root.mkdir(parents=True)
@@ -1212,20 +1259,9 @@ def layouts(flow, directory):
 
 
 def inspector(flow, directory):
-    for language in ("c", "phys"):
-        root=directory/language
-        root.mkdir(parents=True)
-        flow.run("--workspace-state-test",root,"inspector-"+language,timeout=130,
-                 marker="INSPECTOR inspector-"+language+" SELF-TEST: PASSED")
-        runs=list((root/"project/runs").glob("*.psrun"))
-        require(len(runs)==1,"Inspector movement restarted the simulation")
-        protected=runs+[root/"project/main.c" if language=="c" else root/"project/main.phys"]
-        hashes=[fingerprint(path) for path in protected]
-        for name in ("docked","floating","hidden","tabs","resized"):
-            require((root/("inspector-"+name+".bmp")).exists(),"Inspector capture missing: "+name)
-        flow.run("--workspace-state-test",root,"inspector-read",timeout=130,
-                 marker="INSPECTOR inspector-read SELF-TEST: PASSED")
-        require(hashes==[fingerprint(path) for path in protected],"Reopening inspector changed source or run")
+    # Free internal floating/tab docking was deliberately removed. Exercise the
+    # inspector in real OS windows with both languages, themes and large type.
+    fixed_panels(flow, directory, ('c-contrast-large-narrow', 'phys-light-large-narrow'))
 
 
 def adaptive(flow, directory):
@@ -1307,20 +1343,37 @@ def hierarchy(flow, directory):
                 "Replaying legacy scenes changed the original or version-1 file")
 
 
-def docking(flow, directory):
-    for language in ("c", "phys"):
-        root = directory / language
+def fixed_panels(flow, directory, variants=('c-dark', 'phys-light')):
+    flow.env.pop('PHYSIM_TEST_SMALL', None)
+    for variant in variants:
+        root = directory / variant
         root.mkdir(parents=True)
-        flow.run("--workspace-state-test", root, "dock-live-" + language, timeout=130,
-                 marker="DOCK dock-live-" + language + " SELF-TEST: PASSED")
-        require(len(list((root / "project/runs").glob("*.psrun"))) == 1,
-                "Moving panels created another simulation run")
-    for mode in ("write", "read", "corrupt"):
-        if mode == "corrupt":
-            write(directory / "preferences.bin", "damaged layout")
-        flow.run("--workspace-state-test", directory, "dock-" + mode, timeout=30,
-                 marker="DOCK dock-" + mode + " SELF-TEST: PASSED")
-    exact(directory / "preferences.bin", "damaged layout")
+        flow.run('--workspace-state-test', root, 'fixed-panels-' + variant, timeout=190,
+                 marker='FIXED PANELS fixed-panels-' + variant + ' SELF-TEST: PASSED')
+        output = flow.steps[-1]['stdout']
+        windows = re.findall(r'PANEL (\d+): window=(\d+) bounds=(-?\d+),(-?\d+),(\d+),(\d+) outside=(\d+)', output)
+        require([int(w[0]) for w in windows] == list(range(6)), 'Not all six native windows were tested')
+        require(len({w[1] for w in windows}) == 6 and all(w[6] == '1' for w in windows),
+                'Detached panels are not independent windows outside the parent')
+        require('PANEL SWITCH: curves=1 found=1 enabled=1 checked=1' in output,
+                'Detached measurement switch lost native semantics')
+        project = root / 'project'
+        require(len(list((project / 'runs').glob('*.psrun'))) == 1,
+                'Detach, timeline, or reattach created another simulation run')
+        for number in range(6):
+            require((project / f'panel-{number}-detached.bmp').is_file(), 'Missing actual external panel capture')
+        require((project / 'panel-measure-curves.bmp').is_file(), 'Missing external live curves')
+        for name in ('panels-all-detached.bmp', 'panels-reattached.bmp', 'panels-editor-return.bmp'):
+            require((root / name).is_file(), 'Missing fixed-slot capture: ' + name)
+        source = 'main.phys' if 'phys' in variant else 'main.c'
+        example = flow.root / ('examples/language/pendulum.phys' if 'phys' in variant else 'examples/pendulum/main.c')
+        require((project / source).read_bytes() == example.read_bytes(), 'Editor transfer or undo changed the saved source')
+        if 'legacy' in variant:
+            require((root / 'preferences.bin.before-fixed-panels').is_file(), 'Original layout backup missing')
+
+
+def docking(flow, directory):
+    fixed_panels(flow, directory, ('c-dark-legacy', 'phys-light'))
 
 
 def timeline(flow, directory):
@@ -1718,6 +1771,8 @@ SPECIAL["documentation_sidebar"]=documentation_sidebar
 SPECIAL["documentation_h"]=documentation_h
 SPECIAL["workbench_workflow"]=workbench
 SPECIAL["source_outline_workflow"]=source_outline
+SPECIAL["laboratory_workflow"]=laboratory
+SPECIAL["model_values_workflow"]=model_values
 
 def main():
     # App diagnostics and paths can contain Unicode even when Python inherits a

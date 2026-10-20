@@ -289,7 +289,10 @@ nk_bool ps_ui_option_label(struct nk_context *ctx,const char *group,const char *
     return accessibility_widget(ctx,text,3,bounds,selected,group,selected&&!active) || selected;
 }
 nk_bool ps_ui_separator_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,float minimum,float *value,float maximum) {
-    double range[]={*value,minimum,maximum,10};
+    return ps_ui_separator_step_at(ctx,bounds,name,minimum,value,maximum,10);
+}
+nk_bool ps_ui_separator_step_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,float minimum,float *value,float maximum,float step) {
+    double range[]={*value,minimum,maximum,step};
     if(accessibility_emit(ctx,name,8,bounds,false,NULL,false,range)){*value=(float)range[0];return nk_true;}
     return nk_false;
 }
@@ -324,6 +327,13 @@ nk_bool ps_ui_button_at(struct nk_context *ctx,struct nk_rect bounds,const char 
     nk_bool pressed=accessibility_widget(ctx,name,1,bounds,selected,NULL,false);
     bool enabled=!(ctx->current->layout->flags&NK_WINDOW_ROM) && !ctx->current->widgets_disabled;
     return pressed || (enabled && nk_input_is_mouse_pressed(&ctx->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ctx->input,bounds));
+}
+nk_bool ps_ui_switch_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,nk_bool *checked) {
+    if(!ctx || !checked || bounds.w<=0 || bounds.h<=0)return nk_false;
+    bool enabled=!(ctx->current->layout->flags&NK_WINDOW_ROM) && !ctx->current->widgets_disabled;
+    bool clicked=enabled && nk_input_is_mouse_pressed(&ctx->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ctx->input,bounds);
+    if(accessibility_widget(ctx,name,2,bounds,*checked,NULL,false) || clicked){*checked=!*checked;return nk_true;}
+    return nk_false;
 }
 nk_bool ps_ui_option_at(struct nk_context *ctx,struct nk_rect bounds,const char *group,const char *name,bool selected) {
     if(!ctx || !ctx->current || bounds.w<=0 || bounds.h<=0)return nk_false;

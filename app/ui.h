@@ -26,6 +26,9 @@
 #include "graphics.h"
 #include "nuklear.h"
 struct nk_context *nk_sdl_init(SDL_Window *window, ps_graphics *graphics);
+/* Borrow the owner's immutable font atlas in a shared GL context. The owner
+ * must outlive the borrower; input, windows and accessibility stay independent. */
+void nk_sdl_borrow_fonts(struct nk_context *ctx, const struct nk_context *owner);
 struct nk_font_atlas *nk_sdl_font_stash_begin(struct nk_context *ctx);
 /* Loaded Nuklear font contains a real source glyph and a matching baked entry,
  * rather than the fallback glyph. Baked source presence survives blob cleanup. */
@@ -77,6 +80,7 @@ bool nk_sdl_accessibility_event(struct nk_context *ctx,const SDL_Event *event);
 bool nk_sdl_accessibility_is_focused(struct nk_context *ctx,const char *group,const char *label);
 /* Read the published, grouped choice state without scheduling an action. */
 bool nk_sdl_accessibility_choice_state(struct nk_context *ctx,const char *group,const char *label,bool *selected);
+bool nk_sdl_accessibility_toggle_state(struct nk_context *ctx,const char *label,bool *enabled,bool *checked);
 bool nk_sdl_accessibility_has_focus(struct nk_context *ctx);
 /* Publish the custom keyboard route's visible target without queuing an
  * assistive action. A granted native focus request takes ownership back. */
@@ -142,6 +146,7 @@ nk_bool ps_ui_checkbox_label(struct nk_context *ctx,const char *text,nk_bool *ac
 nk_bool ps_ui_button_label(struct nk_context *ctx,const char *text);
 nk_bool ps_ui_slider_named(struct nk_context *ctx,const char *name,float minimum,float *value,float maximum,float increment);
 nk_bool ps_ui_separator_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,float minimum,float *value,float maximum);
+nk_bool ps_ui_separator_step_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,float minimum,float *value,float maximum,float step);
 void ps_ui_label(struct nk_context *ctx,const char *text,nk_flags alignment);
 void ps_ui_label_colored(struct nk_context *ctx,const char *text,nk_flags alignment,struct nk_color color);
 typedef enum {
@@ -155,6 +160,8 @@ typedef enum {
 void ps_ui_draw_icon(struct nk_command_buffer *canvas,ps_ui_icon icon,struct nk_rect bounds,struct nk_color color);
 nk_bool ps_ui_icon_button(struct nk_context *ctx,ps_ui_icon icon,const char *name);
 nk_bool ps_ui_button_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,bool selected);
+/* Custom painted switch, using the shared native checkbox/check-state contract. */
+nk_bool ps_ui_switch_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,nk_bool *checked);
 /* Input and native radio semantics for custom painted segmented controls/tabs. */
 nk_bool ps_ui_option_at(struct nk_context *ctx,struct nk_rect bounds,const char *group,const char *name,bool selected);
 /* Publish a single semantic button for a control drawn from multiple fragments.

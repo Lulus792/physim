@@ -1,4 +1,17 @@
 #include "docking.h"
+ps_dock_layout ps_dock_fixed_layout(uint32_t hidden) {
+    ps_dock_layout result=PS_DOCK_DEFAULT;
+    hidden&=PS_DOCK_ALL&~(1u<<PS_DOCK_WORKSPACE);
+    for(unsigned p=0;p<PS_DOCK_PANELS;p++)if(hidden&(1u<<p))ps_dock_hide(&result,p);
+    return result;
+}
+ps_dock_layout ps_dock_fixed_workbench_layout(uint32_t hidden) {
+    ps_dock_layout result=PS_DOCK_DEFAULT;
+    ps_dock_move(&result,PS_DOCK_LOG,PS_DOCK_WORKSPACE,PS_DOCK_BOTTOM);
+    hidden&=PS_DOCK_ALL&~(1u<<PS_DOCK_WORKSPACE);
+    for(unsigned p=0;p<PS_DOCK_PANELS;p++)if(hidden&(1u<<p))ps_dock_hide(&result,p);
+    return result;
+}
 #include <string.h>
 const ps_dock_layout PS_DOCK_DEFAULT = PS_DOCK_DEFAULT_INITIALIZER;
 static void dock_put32(unsigned char *p,uint32_t value) {

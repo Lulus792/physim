@@ -56,6 +56,7 @@ def catalog():
     cases.append(Case("accessibility_text_index", ("tests/test_accessibility_text_index.c",),libraries=()))
     cases.append(Case("accessibility_utf16", ("tests/test_accessibility_utf16.c",),libraries=()))
     cases.append(Case("editor_search", ("tests/test_editor_search.c",),libraries=()))
+    cases.append(Case("model_values",("tests/test_model_values.c","app/model_values.c"),libraries=()))
     cases.append(Case("source_outline",("tests/test_source_outline.c","app/source_outline.c"),libraries=("language","core")))
     cases.append(Case("editor_typing_undo",("tests/test_editor_typing_undo.c",),libraries=()))
     cases.append(Case("project_display",("tests/test_project_display.c","app/project_file.c","app/text_document.c","app/autosave.c","app/parameter_catalog.c"),app=True,arguments=("{work}",)))

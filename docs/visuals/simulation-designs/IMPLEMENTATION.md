@@ -1,5 +1,9 @@
 # Technische Übergabe: Messlabor mit vollständigem Inspektor
 
+Die native Umsetzung und ihr enger Modellwert-Bindungsvertrag werden in
+[NATIVE.md](NATIVE.md) dokumentiert. Die folgenden Abschnitte bleiben als
+Anforderungs- und Abnahmegrundlage erhalten; sie sind selbst kein Testnachweis.
+
 Stand 19. Oktober 2026. Der Nutzer hat **Simulieren nach Messlabor umbauen**
 bestätigt und zusätzlich einen Entwurf mit allen vorhandenen Inspektorfunktionen
 angefordert. Diese Datei und [NEXT-CHAT.md](NEXT-CHAT.md) bereiten die Umsetzung

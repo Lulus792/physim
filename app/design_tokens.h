@@ -159,5 +159,16 @@ static inline const ps_ui_palette *ps_workbench_palette(const ps_ui_palette *bas
     p->code_comment=is_light?nk_rgb(98,107,120):nk_rgb(150,157,168);
     return p;
 }
+/* Messlabor's inspector and individual value surfaces share semantic themes. */
+static inline const ps_ui_palette *ps_laboratory_palette(const ps_ui_palette *base) {
+    static ps_ui_palette dark,light;
+    if(base==&PS_UI_HIGH_CONTRAST)return base;
+    bool is_light=base==&PS_UI_LIGHT;ps_ui_palette *p=is_light?&light:&dark;*p=*base;
+    p->window=is_light?nk_rgb(243,244,247):nk_rgb(37,38,43);
+    p->edit=is_light?nk_rgb(246,247,250):nk_rgb(30,31,35);
+    p->border=is_light?nk_rgb(196,202,212):nk_rgb(55,56,62);
+    p->divider=p->border;
+    return p;
+}
 
 #endif

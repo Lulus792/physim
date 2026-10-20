@@ -11,7 +11,7 @@ static bool docking_test_start(app *a,const char *root,const char *mode) {
 }
 static void docking_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
     static struct nk_rect drag;static uint32_t source;static int reported=-1;
-    static bool started;static double held_time;
+    static bool started;static double held_time;static ps_dock_layout before_cancel;
     bool read=!strcmp(mode,"dock-read"),ok=true;
     bool live=!strncmp(mode,"dock-live-",10);
     ps_dock_layout *d=&a->preferences.dock;
@@ -37,9 +37,13 @@ static void docking_test_frame(app *a,const char *mode,int *stage,int *code,cons
                 }
                 if(!a->hello || a->simulation_time<.2) return;
                 held_time=a->simulation_time;
+                /* The docking exercise explicitly opens all panels. Default
+                 * Messlabor visibility is checked separately by laboratory tests. */
+                if(d->hidden&5){ps_dock_reveal_outer(d,PS_DOCK_SIDEBAR,PS_DOCK_LEFT);ps_dock_reveal_outer(d,PS_DOCK_LOG,PS_DOCK_BOTTOM);a->show_log=true;return;}
             }
             nk_str_append_text_char(&a->experiment.string,"\n/* unsaved panel test */\n",26);a->dirty=true;
             source=ps_crc32((const unsigned char*)nk_str_get_const(&a->experiment.string),(size_t)nk_str_len_char(&a->experiment.string));
+            before_cancel=*d;
             *stage=59;
         }
         break;
@@ -65,8 +69,10 @@ static void docking_test_frame(app *a,const char *mode,int *stage,int *code,cons
     case 9:
         ok=ps_dock_group(d,0)!=ps_dock_group(d,1) && a->dock_panels[0].x>a->dock_panels[1].x;
         *capture="dock-right.bmp";test_mouse(a,a->dock_headers[2],true);break;
-    case 10: test_plot_motion(a,970,400);break;
-    case 11: test_mouse(a,nk_rect(970,400,1,1),false);break;
+    /* Drop in the timeline region, outside docking targets and below the side
+     * headings needed by the following close/tab interactions. */
+    case 10: {int h;SDL_GetWindowSize(a->window,NULL,&h);test_plot_motion(a,970,laboratory_visible(a)?h-60:400);break;}
+    case 11: {int h;SDL_GetWindowSize(a->window,NULL,&h);test_mouse(a,nk_rect(970,laboratory_visible(a)?h-60:400,1,1),false);break;}
     case 12:
         ok=(d->floating&4)!=0;drag=a->dock_float_grips[2];
         *capture="dock-floating.bmp";test_mouse(a,drag,true);break;
@@ -157,7 +163,7 @@ static void docking_test_frame(app *a,const char *mode,int *stage,int *code,cons
     case 62: test_window_key_mod(a->window,SDLK_ESCAPE,SDL_KMOD_NONE);break;
     case 63: test_mouse(a,nk_rect(950,110,1,1),false);break;
     case 64:
-        ok=!memcmp(d,&PS_DOCK_DEFAULT,sizeof *d) && !a->dock_dragging;
+        ok=!memcmp(d,&before_cancel,sizeof *d) && !a->dock_dragging;
         *stage=0;break;
     }
     if(!ok) { fprintf(stderr,"Dock failure stage %d source=%u widths=%u/%u root=%u float=%u hidden=%u\n",*stage,source,d->floats[2].w,d->floats[2].h,d->root,d->floating,d->hidden);*code=1;a->quitting=true; }

@@ -41,14 +41,14 @@ static void layout_store(app *a) {
 }
 static void layout_apply(app *a) {
     const ps_layout_state *s=&a->layouts.entries[a->layout_selected].state;
-    a->preferences.dock=s->dock;a->preferences.sidebar_width=s->sidebar_width;
+    a->preferences.dock=ps_dock_fixed_layout(s->dock.hidden);a->preferences.sidebar_width=s->sidebar_width;
     a->preferences.inspector_width=s->inspector_width;a->preferences.log_height=s->log_height;
     a->show_log=s->show_log;
     a->preferences.view_flags=s->show_log?a->preferences.view_flags|PS_VIEW_LOG:a->preferences.view_flags&~PS_VIEW_LOG;
     a->dock_resize=a->dock_float_resize=a->dock_drag=a->panel_drag=0;
     a->dock_dragging=false;a->dock_last_tab=a->tab;
     if(a->tab==6) {
-        a->settings_draft.dock=s->dock;a->settings_draft.sidebar_width=s->sidebar_width;
+        a->settings_draft.dock=a->preferences.dock;a->settings_draft.sidebar_width=s->sidebar_width;
         a->settings_draft.inspector_width=s->inspector_width;a->settings_draft.log_height=s->log_height;
         a->settings_draft.view_flags=s->show_log?a->settings_draft.view_flags|PS_VIEW_LOG:a->settings_draft.view_flags&~PS_VIEW_LOG;
     }
@@ -70,7 +70,7 @@ static void layout_manager_view(app *a,int width,int height) {
         nk_style_push_font(ui,a->font_title);nk_layout_row_dynamic(ui,38,1);
         nk_label(ui,"Panelanordnungen",NK_TEXT_LEFT);nk_style_pop_font(ui);
         nk_layout_row_dynamic(ui,36,1);
-        nk_label_wrap(ui,"Speichere bis zu acht Anordnungen. Ein vorhandener Name wird beim Speichern ersetzt.");
+        nk_label_wrap(ui,"Speichere bis zu acht Vorgaben für Größen und Sichtbarkeit. Die Plätze bleiben fest; Bereiche lassen sich in eigene Fenster öffnen.");
         nk_layout_row_dynamic(ui,24,1);
         nk_label_colored(ui,"Gespeicherte Anordnungen",NK_TEXT_LEFT,muted());
         nk_layout_row_dynamic(ui,24,1);

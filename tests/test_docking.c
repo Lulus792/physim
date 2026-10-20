@@ -3,6 +3,21 @@
 #include <string.h>
 #define CHECK(x) do { if (!(x)) { fprintf(stderr,"Dock line %d: %s\n",__LINE__,#x);return 1;} } while(0)
 int main(void) {
+    for(unsigned hidden=0;hidden<16;hidden++) {
+        ps_dock_layout fixed=ps_dock_fixed_layout(hidden);
+        CHECK(ps_dock_valid(&fixed) && !fixed.floating && fixed.hidden==(hidden&~2u));
+        CHECK(ps_dock_group(&fixed,PS_DOCK_WORKSPACE)!=PS_DOCK_NONE);
+        ps_dock_layout workbench=ps_dock_fixed_workbench_layout(hidden);
+        CHECK(ps_dock_valid(&workbench) && !workbench.floating && workbench.hidden==(hidden&~2u));
+        if(!hidden) {
+            CHECK(workbench.nodes[workbench.root].kind==PS_DOCK_X);
+            CHECK(workbench.nodes[workbench.nodes[workbench.root].first].panels==(1u<<PS_DOCK_SIDEBAR));
+        }
+        for(unsigned p=0;p<PS_DOCK_PANELS;p++)if(!(fixed.hidden&(1u<<p))) {
+            uint32_t group=ps_dock_group(&fixed,p);
+            CHECK(group!=PS_DOCK_NONE && fixed.nodes[group].panels==(1u<<p));
+        }
+    }
     ps_dock_layout d=PS_DOCK_DEFAULT;
     CHECK(ps_dock_valid(&d));
     CHECK(ps_dock_move(&d,PS_DOCK_LOG,PS_DOCK_WORKSPACE,PS_DOCK_TAB));

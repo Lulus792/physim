@@ -6,38 +6,39 @@ static void timeline_controls(app *a) {
                             : count ? count - 1 : 0;
     bool ready = count && !a->reset_pending && !a->reset_starting;
     bool compact=nk_window_get_content_region(ui).w<560;
-    nk_layout_row_begin(ui,compact?NK_STATIC:NK_DYNAMIC,30,compact?4:5);
-    nk_layout_row_push(ui,compact?36:.06f);
+    bool laboratory=laboratory_visible(a);
+    nk_layout_row_begin(ui,compact || laboratory?NK_STATIC:NK_DYNAMIC,30,compact?4:5);
+    nk_layout_row_push(ui,compact || laboratory?36:.06f);
     a->timeline_bounds[0] = nk_widget_bounds(ui);
     nk_begin_disabled(ui, !ready || !selected);
-    if (nk_button_symbol(ui, NK_SYMBOL_TRIANGLE_LEFT)) {
+    if (nk_button_symbol(ui, NK_SYMBOL_CHEVRON_LEFT)) {
         a->timeline_playing = false;
         timeline_select(a, selected - 1);
     }
     nk_end_disabled(ui);
     if (nk_input_is_mouse_hovering_rect(&ui->input, a->timeline_bounds[0]))
         nk_tooltip(ui, "Vorheriger aufgezeichneter Zustand");
-    nk_layout_row_push(ui,compact?36:.06f);
+    nk_layout_row_push(ui,compact || laboratory?36:.06f);
     a->timeline_bounds[1] = nk_widget_bounds(ui);
     nk_begin_disabled(ui, !ready || selected + 1 >= count);
-    if (nk_button_symbol(ui, NK_SYMBOL_TRIANGLE_RIGHT)) {
+    if (nk_button_symbol(ui, NK_SYMBOL_CHEVRON_RIGHT)) {
         a->timeline_playing = false;
         timeline_select(a, selected + 1);
     }
     nk_end_disabled(ui);
-    nk_layout_row_push(ui,compact?76:.12f);
+    nk_layout_row_push(ui,compact || laboratory?76:.12f);
     a->timeline_bounds[2] = nk_widget_bounds(ui);
     nk_begin_disabled(ui, !ready);
-    if (action_button(ui, a->runner.running ? "Live" : "Letzter", !a->timeline_browsing)) timeline_live(a);
+    if (action_button(ui, laboratory || a->runner.running ? "Live" : "Letzter", !a->timeline_browsing)) timeline_live(a);
     float play_width=fmaxf(112,a->font_ui->width(a->font_ui->userdata,a->font_ui->height,"Abspielen",9)+2*ui->style.button.padding.x+8);
-    nk_layout_row_push(ui,compact?play_width:.20f);
+    nk_layout_row_push(ui,compact || laboratory?play_width:.20f);
     a->timeline_bounds[3] = nk_widget_bounds(ui);
     nk_begin_disabled(ui, count < 2);
     if (nk_button_label(ui, a->timeline_playing ? "Anhalten" : "Abspielen"))
         timeline_toggle_play(a);
     nk_end_disabled(ui);
     if(compact) {nk_layout_row_end(ui);nk_layout_row_dynamic(ui,30,1);}
-    else nk_layout_row_push(ui,.56f);
+    else nk_layout_row_push(ui,laboratory?fmaxf(80,nk_window_get_content_region(ui).w-72-76-play_width-32):.56f);
     a->timeline_bounds[4] = nk_widget_bounds(ui);
     if (ready && count > 1 &&
         nk_input_is_mouse_hovering_rect(&ui->input, a->timeline_bounds[4]) &&

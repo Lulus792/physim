@@ -5,7 +5,9 @@
 #include <stdlib.h>
 
 /* Edit these SI parameters, then Build. One state, fixed/adaptive steps, explicit seed. */
+// @physim-model-value-v1 length_m m 1 0.1 10 Fadenlänge
 static const double length_m = 1.5;
+// @physim-model-value-v1 mass_kg kg 1 0.001 1000 Masse
 static const double mass_kg = 1.0;
 static const double gravity_m_s2 = 9.80665;
 static const double initial_angle_rad = 0.45;

@@ -38,14 +38,17 @@ static void logging_test_frame(app *a,const char *mode,int *stage,int *code,cons
         ok &= a->live_warning_valid && a->live_warning.level==PS_LOG_WARNING && a->live_warning.time_s==0 &&
             !strcmp(a->live_warning.message,"Step\nnext line") && a->live_event_count>0 && a->live_event_count<=8;
         if(flood)ok &= a->live_event_count==8 && a->live_event_omitted>4000;
+        if(laboratory_visible(a)){a->laboratory_groups[0]=NK_MINIMIZED;a->model_disclosure=NK_MINIMIZED;a->laboratory_groups[2]=NK_MAXIMIZED;}
         *capture="live-inspector.bmp";
         break;
     case 5: {
         if(!a->show_log){a->show_log=true;dock_show(a,PS_DOCK_LOG);return;}
         struct nk_window *window=nk_window_find(a->ui,dock_windows[PS_DOCK_LOG]);
         ok=window!=NULL;
-        ok &= a->live_measurement_bounds.x>=a->scene_viewport_bounds.x+a->scene_viewport_bounds.w &&
-            a->live_warning_bounds.w>0 && a->live_event_bounds.w>0 &&
+        ok &= a->live_warning_bounds.w>0 && a->live_event_bounds.w>0;
+        if(laboratory_visible(a))ok &= a->live_measurement_bounds.y>=a->scene_viewport_bounds.y+a->scene_viewport_bounds.h &&
+            a->run_control_bounds[0].y+a->run_control_bounds[0].h<=a->scene_viewport_bounds.y;
+        else ok &= a->live_measurement_bounds.x>=a->scene_viewport_bounds.x+a->scene_viewport_bounds.w &&
             a->run_control_bounds[0].y>=a->scene_viewport_bounds.y+a->scene_viewport_bounds.h;
         if(window){window->edit.active=true;window->edit.name=0;
             window->edit.cursor=nk_utf_len(a->log,(int)strlen(a->log));

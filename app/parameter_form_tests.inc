@@ -48,15 +48,19 @@ static void parameter_form_test_frame(app *a,const char *mode,int *stage,int *co
             a->parameters.entries[0].maximum==2 && !a->parameters.units[1].declared;
         ok &= ps_parameter_catalog_value(&a->parameters,0,&distance)==PS_OK && distance==(read?.75:.5) &&
             ps_parameter_catalog_value(&a->parameters,1,&gain)==PS_OK && gain==(read?3.5:2);
+        a->tab=1;
+        a->laboratory_groups[0]=NK_MINIMIZED;a->model_disclosure=NK_MINIMIZED;
         break;
-    case 2:test_mouse(a,a->parameter_header_bounds,true);break;
+    case 2:
+        if(laboratory_visible(a)) {a->laboratory_groups[0]=NK_MINIMIZED;a->model_disclosure=NK_MINIMIZED;}
+        if(!hierarchy_test_click(a,a->parameter_header_bounds))return;break;
     case 3:test_mouse(a,a->parameter_header_bounds,false);break;
     case 4:
         ok=a->parameter_disclosure==NK_MAXIMIZED && a->parameter_input_bounds[0].w>0 && a->parameter_input_bounds[1].w>0;
         *capture=read?"parameters-restored.bmp":"parameters-default.bmp";
         if(read){ok &= !strcmp(a->parameters.selected[0],"75") && !strcmp(a->parameters.selected[1],"3.5");a->quitting=true;}
         break;
-    case 5:test_mouse(a,a->parameter_input_bounds[0],true);break;
+    case 5:if(!hierarchy_test_click(a,a->parameter_input_bounds[0]))return;break;
     case 6:test_mouse(a,a->parameter_input_bounds[0],false);break;
     case 7:test_key(a,SDLK_A);break;
     case 8:layout_test_text(a,"9");break;
@@ -64,15 +68,15 @@ static void parameter_form_test_frame(app *a,const char *mode,int *stage,int *co
         ok=!strcmp(a->parameters.selected[0],"9") && ps_parameter_catalog_value(&a->parameters,0,&distance)==PS_INVALID && a->project_settings_dirty;
         *capture="parameters-invalid.bmp";test_window_key_mod(a->window,SDLK_F6,0);break;
     case 10:ok=!a->runner.running && !a->last_run[0] && a->built;break;
-    case 11:scene_camera_2d(a,true);test_mouse(a,a->parameter_default_bounds[0],true);break;
+    case 11:scene_camera_2d(a,true);if(!hierarchy_test_click(a,a->parameter_default_bounds[0]))return;break;
     case 12:test_mouse(a,a->parameter_default_bounds[0],false);break;
     case 13:ok=a->camera_2d && !strcmp(a->parameters.selected[0],"50") && ps_parameter_catalog_value(&a->parameters,0,&distance)==PS_OK && distance==.5;break;
-    case 14:test_mouse(a,a->parameter_input_bounds[0],true);break;
+    case 14:if(!hierarchy_test_click(a,a->parameter_input_bounds[0]))return;break;
     case 15:test_mouse(a,a->parameter_input_bounds[0],false);break;
     case 16:test_key(a,SDLK_A);break;
     case 17:layout_test_text(a,"75");break;
     case 18:ok=!strcmp(a->parameters.selected[0],"75") && ps_parameter_catalog_value(&a->parameters,0,&distance)==PS_OK && distance==.75;break;
-    case 19:test_mouse(a,a->parameter_input_bounds[1],true);break;
+    case 19:if(!hierarchy_test_click(a,a->parameter_input_bounds[1]))return;break;
     case 20:test_mouse(a,a->parameter_input_bounds[1],false);break;
     case 21:test_key(a,SDLK_A);break;
     case 22:layout_test_text(a,"3.5");break;
@@ -82,7 +86,7 @@ static void parameter_form_test_frame(app *a,const char *mode,int *stage,int *co
     case 24:
         if(!a->hello || a->simulation_time<.02)return;
         ok=a->runner.running && a->values[0]==.75 && a->values[1]==3.5 && !a->project_settings_dirty;
-        test_mouse(a,a->parameter_default_bounds[0],true);break;
+        if(!hierarchy_test_click(a,a->parameter_default_bounds[0]))return;break;
     case 25:test_mouse(a,a->parameter_default_bounds[0],false);break;
     case 26:
         ok=!strcmp(a->parameters.selected[0],"75") && a->values[0]==.75 && !a->project_settings_dirty;

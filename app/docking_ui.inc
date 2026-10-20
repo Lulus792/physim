@@ -1,10 +1,20 @@
 static const char *dock_names[] = {"Seitenleiste", "Arbeitsbereich", "Protokoll", "Inspektor"};
 static const char *dock_windows[] = {"sidebar", "workspace", "log", "inspector"};
 static bool workbench_visible(const app *a) {return !a->project_manager && (a->tab==0 || a->tab==8);}
+#include "laboratory_layout.inc"
 static float dock_header_height(const app *a) {return workbench_visible(a)?40:DOCK_HEADER_HEIGHT;}
-static float dock_panel_header_height(const app *a,unsigned panel) {return workbench_visible(a) && panel==PS_DOCK_LOG?42:dock_header_height(a);}
-static float dock_gap(const app *a) {return workbench_visible(a)?1:8;}
+static float dock_panel_header_height(const app *a,unsigned panel) {
+    if(a->panel_render)return 0;
+    if(laboratory_visible(a)) {
+        if(panel==PS_DOCK_WORKSPACE){uint32_t group=ps_dock_group(&a->preferences.dock,panel);
+            return group!=PS_DOCK_NONE && a->preferences.dock.nodes[group].panels!=(1u<<panel)?38:0;}
+        return 38;
+    }
+    return workbench_visible(a) && panel==PS_DOCK_LOG?42:dock_header_height(a);
+}
+static float dock_gap(const app *a) {return workbench_visible(a) || laboratory_visible(a)?1:8;}
 static struct nk_rect dock_root_bounds(app *a,float w,float h) {
+    if(laboratory_visible(a))return nk_rect(0,190,w,fmaxf(180,h-231-laboratory_dimension_value(a,1)));
     return workbench_visible(a)?nk_rect(0,72,w,h-104):nk_rect(8,72,w-16,h-80);
 }
 static uint32_t dock_mask(const ps_dock_layout *d, uint32_t id) {
@@ -32,6 +42,10 @@ static bool dock_context_split(const ps_dock_layout *d,const ps_dock_node *n) {
 static float dock_minimum(const app *a,uint32_t id,bool x) {
     const ps_dock_layout *d=&a->preferences.dock;const ps_dock_node *n=&d->nodes[id];
     if(n->kind==PS_DOCK_GROUP) {
+        if(laboratory_visible(a) && x) {
+            if(n->panels&(1u<<PS_DOCK_WORKSPACE))return 440;
+            if(n->panels&((1u<<PS_DOCK_SIDEBAR)|(1u<<PS_DOCK_INSPECTOR)))return 208;
+        }
         if(workbench_visible(a) && x) {
             if(n->panels&(1u<<PS_DOCK_WORKSPACE))return 300;
             if(n->panels&((1u<<PS_DOCK_SIDEBAR)|(1u<<PS_DOCK_INSPECTOR)))return 208;
@@ -44,8 +58,8 @@ static float dock_minimum(const app *a,uint32_t id,bool x) {
 }
 static const char *dock_resize_label(app *a,unsigned id,char text[48]) {
     ps_dock_layout *d=&a->preferences.dock;ps_dock_node *n=&d->nodes[id];
-    if(dock_sidebar_split(d,n))return "Workspace-Breite";
-    if(dock_context_split(d,n))return "Codekontext-Breite";
+    if(dock_sidebar_split(d,n))return laboratory_visible(a)?"Szenenbaum-Breite":"Workspace-Breite";
+    if(dock_context_split(d,n))return laboratory_visible(a)?"Inspektor-Breite":"Codekontext-Breite";
     if(dock_log_split(d,n))return "Protokoll-Höhe";
     snprintf(text,48,"Paneltrenner %u",id+1);return text;
 }
@@ -142,7 +156,9 @@ static void dock_show(app *a,unsigned panel) {
     }
     ps_dock_reveal(&a->preferences.dock,panel,panel==PS_DOCK_SIDEBAR?PS_DOCK_LEFT:panel==PS_DOCK_LOG?PS_DOCK_BOTTOM:PS_DOCK_TAB);
 }
+static void dock_fixed(app *a);
 static void dock_relayout(app *a,float w,float h) {
+    dock_fixed(a);
     ps_dock_layout *d=&a->preferences.dock;
     memset(a->dock_visible,0,sizeof a->dock_visible);memset(a->dock_splitters,0,sizeof a->dock_splitters);
     if(d->root!=PS_DOCK_NONE) dock_arrange(a,d->root,dock_root_bounds(a,w,h));
@@ -156,8 +172,15 @@ static void dock_relayout(app *a,float w,float h) {
         if(dock_log_split(d,n)) a->panel_bounds[1]=a->dock_splitters[i];
     }
 }
+/* Legacy layouts remain readable; only visibility and dimensions participate
+ * in the new fixed topology. Never write a migration back merely on open. */
+static void dock_fixed(app *a) {
+    a->preferences.dock=workbench_visible(a)?ps_dock_fixed_workbench_layout(a->preferences.dock.hidden):ps_dock_fixed_layout(a->preferences.dock.hidden);
+}
 static void dock_prepare(app *a,float w,float h) {
-    file_tabs_prepare(a);
+    laboratory_context(a);dock_fixed(a);laboratory_resize_input(a);
+    if(!a->panels[PS_DOCK_WORKSPACE].detached)file_tabs_prepare(a);
+    panel_pull_input(a,w,h);
     ps_dock_layout *d=&a->preferences.dock;
     if(!a->dock_started) { a->dock_last_tab=a->tab;a->dock_started=true; }
     if(a->tab!=a->dock_last_tab) { dock_show(a,PS_DOCK_WORKSPACE);a->dock_last_tab=a->tab; }
@@ -174,27 +197,10 @@ static void dock_prepare(app *a,float w,float h) {
     struct nk_input *in=&a->ui->input;
     bool down=nk_input_is_mouse_down(in,NK_BUTTON_LEFT), pressed=nk_input_is_mouse_pressed(in,NK_BUTTON_LEFT);
     if(a->toolbar_menu || (a->ui->active && a->ui->active->popup.active && a->ui->active->popup.type!=NK_PANEL_TOOLTIP) || a->file_tab_drag) pressed=false;
-    unsigned under=PS_DOCK_NONE;
-    for(unsigned p=0;p<PS_DOCK_PANELS;p++)
-        if((d->floating&(1u<<p)) && nk_input_is_mouse_hovering_rect(in,a->dock_panels[p])) under=p;
-    if((d->floating&(1u<<a->dock_front)) && nk_input_is_mouse_hovering_rect(in,a->dock_panels[a->dock_front])) under=a->dock_front;
-    if(pressed) {
-        if(under!=PS_DOCK_NONE) a->dock_front=under;
-    }
-    if(!a->dock_drag && !a->dock_resize && !a->dock_float_resize && pressed) {
-        if(under==PS_DOCK_NONE) for(unsigned i=0;i<PS_DOCK_NODES;i++)
-            if(a->dock_splitters[i].w>0 && nk_input_is_mouse_hovering_rect(in,a->dock_splitters[i])) a->dock_resize=(int)i+1;
-        for(unsigned p=0;p<PS_DOCK_PANELS;p++) {
-            if(under!=PS_DOCK_NONE && under!=p) continue;
-            if((d->floating&(1u<<p)) && nk_input_is_mouse_hovering_rect(in,a->dock_float_grips[p])) {
-                a->dock_float_resize=(int)p+1;a->dock_resize_mouse=in->mouse.pos;a->dock_resize_start=d->floats[p];
-            }
-            if(nk_input_is_mouse_hovering_rect(in,a->dock_headers[p]) && !(d->hidden&(1u<<p))) {
-                a->dock_drag=(int)p+1;a->dock_origin=in->mouse.pos;
-                a->dock_grab=nk_vec2(in->mouse.pos.x-a->dock_panels[p].x,in->mouse.pos.y-a->dock_panels[p].y);
-            }
-        }
-    }
+    /* Fixed slots: only the separators can begin a pointer transaction. */
+    a->dock_drag=a->dock_float_resize=0;a->dock_dragging=false;
+    if(!a->dock_resize && pressed)for(unsigned i=0;i<PS_DOCK_NODES;i++)
+        if(a->dock_splitters[i].w>0 && nk_input_is_mouse_hovering_rect(in,a->dock_splitters[i]))a->dock_resize=(int)i+1;
     if((a->dock_resize || a->dock_float_resize) && pressed)dock_resize_begin(a);
     bool same_splitter_click=a->dock_resize && a->dock_resize_last_click==a->dock_resize;
     if(pressed)a->dock_resize_last_click=a->dock_resize;
@@ -212,46 +218,6 @@ static void dock_prepare(app *a,float w,float h) {
         dock_resize_set(a,id,value);
         if(dock_sidebar_split(d,n))a->panel_drag=1;
         if(dock_log_split(d,n))a->panel_drag=2;
-    }
-    if(a->dock_float_resize && down) {
-        unsigned p=(unsigned)a->dock_float_resize-1;ps_dock_float old=a->dock_resize_start;
-        d->floats[p]=dock_clamp_float(p,nk_rect((float)old.x,(float)old.y,old.w+in->mouse.pos.x-a->dock_resize_mouse.x,old.h+in->mouse.pos.y-a->dock_resize_mouse.y),w,h);
-    }
-    if(a->dock_drag && down && (fabsf(in->mouse.pos.x-a->dock_origin.x)>6 || fabsf(in->mouse.pos.y-a->dock_origin.y)>6)) a->dock_dragging=true;
-    a->dock_target=PS_DOCK_NONE;a->dock_side=PS_DOCK_NONE;
-    memset(a->dock_targets,0,sizeof a->dock_targets);
-    if(a->dock_dragging) {
-        unsigned panel=(unsigned)a->dock_drag-1;
-        for(unsigned i=0;i<PS_DOCK_NODES;i++) if(d->nodes[i].kind==PS_DOCK_GROUP && nk_input_is_mouse_hovering_rect(in,a->dock_rects[i])) {
-            unsigned target=d->nodes[i].active;
-            if(target==panel && d->nodes[i].panels==(1u<<panel)) continue;
-            if(target==panel) for(unsigned p=0;p<PS_DOCK_PANELS;p++) if(p!=panel && (d->nodes[i].panels&(1u<<p))) { target=p;break; }
-            struct nk_rect r=a->dock_rects[i];float cx=r.x+r.w/2,cy=r.y+r.h/2;
-            const float dx[]={0,-42,42,0,0},dy[]={0,0,0,-42,42};
-            /* The whole title strip and panel edges are useful drop targets,
-             * in addition to the explicit docking guides at the center. */
-            a->dock_target=target;
-            if(in->mouse.pos.y<r.y+dock_header_height(a))a->dock_side=PS_DOCK_TAB;
-            else if(in->mouse.pos.x<r.x+fminf(64,r.w*.2f))a->dock_side=PS_DOCK_LEFT;
-            else if(in->mouse.pos.x>r.x+r.w-fminf(64,r.w*.2f))a->dock_side=PS_DOCK_RIGHT;
-            else if(in->mouse.pos.y>r.y+r.h-fminf(64,r.h*.2f))a->dock_side=PS_DOCK_BOTTOM;
-            for(unsigned side=0;side<5;side++) {
-                a->dock_targets[side]=nk_rect(cx+dx[side]-16,cy+dy[side]-16,32,32);
-                if(nk_input_is_mouse_hovering_rect(in,a->dock_targets[side])) { a->dock_target=target;a->dock_side=side; }
-            }
-            break;
-        }
-        ps_dock_float old=d->floats[panel];
-        ps_dock_float preview=dock_clamp_float(panel,nk_rect(in->mouse.pos.x-a->dock_grab.x,in->mouse.pos.y-a->dock_grab.y,(float)old.w,(float)old.h),w,h);
-        a->dock_preview=nk_rect((float)preview.x,(float)preview.y,(float)preview.w,(float)preview.h);
-        if(!down) {
-            if(a->dock_side!=PS_DOCK_NONE) ps_dock_move(d,panel,a->dock_target,a->dock_side);
-            else if(d->root==PS_DOCK_NONE && nk_input_is_mouse_hovering_rect(in,nk_rect(8,72,w-16,h-80))) ps_dock_move(d,panel,PS_DOCK_NONE,PS_DOCK_TAB);
-            else {
-                ps_dock_float_panel(d,panel,preview);a->dock_front=panel;
-                if(panel==PS_DOCK_LOG) a->show_log=true;
-            }
-        }
     }
     if(!down) { if(a->dock_resize || a->dock_float_resize)a->dock_resize_transaction=false;a->dock_resize=a->dock_float_resize=a->dock_drag=0;a->dock_dragging=false;a->panel_drag=0; }
     if(a->tab==6 && (a->dock_resize || a->dock_float_resize || a->dock_dragging)) {
@@ -277,24 +243,35 @@ static void dock_input(app *a,unsigned panel,struct nk_rect r,struct nk_window *
     bool search_pointer=panel==PS_DOCK_WORKSPACE && a->show_search && editor_search_target(a) && nk_input_is_mouse_hovering_rect(&ui->input,a->search_island_bounds);
     bool mouse=!covered && !popup && !completion_pointer && !search_pointer && nk_input_is_mouse_hovering_rect(&ui->input,r);
     bool enabled=mouse || (body && previous==window && !covered && !popup);
-    if(a->dock_dragging || a->file_tab_dragging || a->dock_resize || a->dock_float_resize)enabled=false;
+    if(a->panel_render && (a->recovery || a->dialog_pending || a->layout_manager || a->channel_unit_manager || a->workspace_manager || a->run_details_manager))enabled=false;
+    if(a->panel_pull_dragging || a->dock_dragging || a->file_tab_dragging || a->dock_resize || a->dock_float_resize)enabled=false;
     /* Background windows otherwise activate even outside their bounds and consume
      * the wheel in nk_end. Keep keyboard focus and route mouse input by stacking. */
     ui->active=body && mouse?window:previous;
     if(enabled) { window->flags &= ~(nk_flags)NK_WINDOW_ROM;window->layout->flags &= ~(nk_flags)NK_WINDOW_ROM; }
     else { window->flags |= NK_WINDOW_ROM;window->layout->flags |= NK_WINDOW_ROM; }
     window->layout->has_scrolling=mouse && !a->dock_resize && !a->dock_float_resize;
-    ps_ui_accessibility_route(ui,!covered && !popup && !a->dock_resize && !a->dock_float_resize);
+    ps_ui_accessibility_route(ui,!covered && !popup && !a->dock_resize && !a->dock_float_resize &&
+        (!a->panel_render || !(a->recovery || a->dialog_pending || a->layout_manager || a->channel_unit_manager || a->workspace_manager || a->run_details_manager)));
 }
 static bool dock_begin(app *a,unsigned panel) {
     struct nk_rect r=a->dock_panels[panel];float heading=dock_panel_header_height(a,panel);r.y+=heading;r.h=fmaxf(1,r.h-heading);
     nk_window_show(a->ui,dock_windows[panel],a->dock_visible[panel]?NK_SHOWN:NK_HIDDEN);
     struct nk_window *previous=a->ui->active;
     nk_style_push_float(a->ui,&a->ui->style.window.rounding,0);
-    bool shown=nk_begin(a->ui,dock_windows[panel],r,NK_WINDOW_BACKGROUND|(a->dock_visible[panel]?0:NK_WINDOW_HIDDEN));
+    nk_flags flags=NK_WINDOW_BACKGROUND|(a->dock_visible[panel]?0:NK_WINDOW_HIDDEN);
+    if(laboratory_visible(a) && (panel==PS_DOCK_WORKSPACE || panel==PS_DOCK_INSPECTOR))flags|=NK_WINDOW_NO_SCROLLBAR;
+    bool shown=nk_begin(a->ui,dock_windows[panel],r,flags);
     nk_style_pop_float(a->ui);
     if(shown) dock_input(a,panel,r,previous,true);
-    else a->ui->active=previous;
+    if(shown && !a->panel_render && panel_is_detached(a,panel) && !(panel==PS_DOCK_WORKSPACE && laboratory_visible(a))) {
+        return false;
+    }
+    if(!shown)a->ui->active=previous;
+    ps_panel_window *p=&a->panels[panel];
+    if(shown && p->restore_scroll && p->tab==a->tab && ((bool)a->panel_render==p->detached)) {
+        nk_window_set_scroll(a->ui,p->scroll_x,p->scroll_y);p->restore_scroll=false;
+    }
     return shown;
 }
 static void dock_headers(app *a) {
@@ -307,14 +284,15 @@ static void dock_headers(app *a) {
         bool floating=i>=PS_DOCK_NODES;unsigned p=floating?i-PS_DOCK_NODES:0;
         char name[48];snprintf(name,sizeof name,"dock-heading-%u",i);
         bool visible=floating?(d->floating&(1u<<p))!=0:d->nodes[i].kind==PS_DOCK_GROUP;
+        if(laboratory_visible(a) && (floating?p==PS_DOCK_WORKSPACE:d->nodes[i].panels==(1u<<PS_DOCK_WORKSPACE)))visible=false;
         nk_window_show(ui,name,visible?NK_SHOWN:NK_HIDDEN);
         if(!visible) continue;
         uint32_t mask=floating?1u<<p:d->nodes[i].panels;
         struct nk_rect r=floating?a->dock_panels[p]:a->dock_rects[i];r.h=dock_panel_header_height(a,floating?p:d->nodes[i].active);
         nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(0,0));
         nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(0,0));
-        nk_style_push_vec2(ui,&ui->style.button.padding,nk_vec2(workbench_visible(a)?12:4,2));
-        nk_style_push_flags(ui,&ui->style.button.text_alignment,workbench_visible(a)?NK_TEXT_LEFT:NK_TEXT_CENTERED);
+        nk_style_push_vec2(ui,&ui->style.button.padding,nk_vec2(workbench_visible(a) || laboratory_visible(a)?12:4,2));
+        nk_style_push_flags(ui,&ui->style.button.text_alignment,workbench_visible(a) || laboratory_visible(a)?NK_TEXT_LEFT:NK_TEXT_CENTERED);
         nk_style_push_float(ui,&ui->style.window.rounding,0);
         nk_style_push_float(ui,&ui->style.button.rounding,0);
         nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(workbench_visible(a)?UI_COLOR(window):UI_COLOR(header)));
@@ -327,10 +305,11 @@ static void dock_headers(app *a) {
             float close_fraction=workbench_visible(a) && count==1 && (mask&(1u<<PS_DOCK_WORKSPACE))?0:fminf(.25f,close_size/fmaxf(1,r.w));
             nk_layout_row_begin(ui,NK_DYNAMIC,r.h,(int)count+1);
             for(unsigned j=0;j<PS_DOCK_PANELS;j++) if(mask&(1u<<j)) {
-                bool files=j==PS_DOCK_WORKSPACE && (floating || d->nodes[i].active==j) && !a->project_manager && (a->loaded || a->document_count);
+                bool files=!panel_is_detached(a,PS_DOCK_WORKSPACE) && !laboratory_visible(a) && j==PS_DOCK_WORKSPACE && (floating || d->nodes[i].active==j) && !a->project_manager && (a->loaded || a->document_count);
                 float fraction=count==1 || !(mask&(1u<<PS_DOCK_WORKSPACE))?(1-close_fraction)/count:j==PS_DOCK_WORKSPACE?(1-close_fraction)*.68f:(1-close_fraction)*.32f/(count-1);
                 nk_layout_row_push(ui,fraction);
                 a->dock_headers[j]=nk_widget_bounds(ui);
+                panel_pull_handle(a,j,a->dock_headers[j]);
                 if(files) {
                     struct nk_rect strip;nk_widget(&strip,ui);
                     a->dock_headers[j]=nk_rect(strip.x,strip.y,workbench_visible(a)?6:24,strip.h);
@@ -362,6 +341,9 @@ static void dock_headers(app *a) {
                         if(nk_sdl_accessibility_is_focused(ui,NULL,"Dokumentsuche öffnen"))nk_stroke_rect(nk_window_get_canvas(ui),a->workbench_search_bounds,5,2,UI_COLOR(accent));
                         strip.w=fmaxf(1,strip.w-reserved);
                     }
+                    struct nk_rect pull=strip;
+                    if(!workbench_visible(a)){pull.x=a->dock_headers[j].x;pull.w=strip.x+strip.w-pull.x;}
+                    panel_pull_handle(a,j,pull);
                     file_tabs_view(a,strip);
                 } else {
                     bool active=floating || d->nodes[i].active==j;
@@ -378,7 +360,8 @@ static void dock_headers(app *a) {
                     } else {
                         bool heading=workbench_visible(a) && (j==PS_DOCK_SIDEBAR || j==PS_DOCK_INSPECTOR);
                         if(heading)nk_style_push_font(ui,&a->workbench_fonts[3]);
-                        if(nk_button_label(ui,workbench_visible(a)?j==PS_DOCK_SIDEBAR?"Workspace":j==PS_DOCK_INSPECTOR?"CODEKONTEXT":dock_names[j]:dock_names[j]))ps_dock_select(d,j);
+                        const char *title=workbench_visible(a)?j==PS_DOCK_SIDEBAR?"Workspace":j==PS_DOCK_INSPECTOR?"CODEKONTEXT":dock_names[j]:laboratory_visible(a) && j==PS_DOCK_SIDEBAR?"Szenenbaum":dock_names[j];
+                        if(nk_button_label(ui,title))ps_dock_select(d,j);
                         if(heading)nk_style_pop_font(ui);
                     }
                     if(active && count>1) {
@@ -398,6 +381,10 @@ static void dock_headers(app *a) {
                 if(workbench_side_button(a,a->workbench_sidebar_bounds,false,true,"Workspace ein-/ausblenden")) {close=active;a->workbench_sidebar_focus=3;}
             } else if(ps_ui_icon_button(ui,PS_ICON_CLOSE,"Panel schließen"))close=active;
             nk_layout_row_end(ui);
+            if(laboratory_visible(a) && active==PS_DOCK_INSPECTOR && a->built && SDL_getenv("PHYSIM_TEST_TRACE")) {
+                static bool reported;
+                if(!reported){struct nk_rect clip=ui->current->layout->clip;printf("LABORATORY HEADER: r=%.1f,%.1f,%.1f,%.1f clip=%.1f,%.1f,%.1f,%.1f close=%.1f,%.1f,%.1f,%.1f\n",r.x,r.y,r.w,r.h,clip.x,clip.y,clip.w,clip.h,a->dock_closes[active].x,a->dock_closes[active].y,a->dock_closes[active].w,a->dock_closes[active].h);reported=true;}
+            }
             if(workbench_visible(a) && active==PS_DOCK_INSPECTOR && count==1) {
                 struct nk_text_edit *edit=editor_search_target(a);int language=edit?document_language(a,edit):-1;
                 const char *label=language<0?"Text":language?"Physim":"C";const struct nk_user_font *font=&a->workbench_fonts[1];
@@ -415,6 +402,7 @@ static void dock_headers(app *a) {
     }
     if(close!=PS_DOCK_NONE) {
         ps_dock_hide(d,close);
+        if(laboratory_visible(a) && (close==PS_DOCK_SIDEBAR || close==PS_DOCK_INSPECTOR))a->laboratory_focus_return=close==PS_DOCK_SIDEBAR?1:2;
         if(close==PS_DOCK_LOG) a->show_log=false;
     }
     if(a->workbench_sidebar_focus>1)a->workbench_sidebar_focus--;

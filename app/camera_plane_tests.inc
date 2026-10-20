@@ -15,9 +15,11 @@ static bool camera_test_click(app *a,struct nk_rect r) {
     if(a->ui->input.mouse.scroll_delta.y!=0)return false; /* Render queued scrolling before using its old bounds. */
     struct nk_rect panel=a->dock_panels[PS_DOCK_INSPECTOR],sidebar=a->dock_panels[PS_DOCK_SIDEBAR];
     if(r.x>=sidebar.x && r.x+r.w<=sidebar.x+sidebar.w)panel=sidebar;
+    float top=32;
+    if(r.x>=a->dock_panels[PS_DOCK_INSPECTOR].x && laboratory_visible(a)){panel=a->laboratory_inspector_body;top=8;}
     if(r.h<=0) return false;
-    if(r.y<panel.y+32 || r.y+r.h>panel.y+panel.h-12) {
-        test_plot_wheel(a,panel.x+panel.w/2,panel.y+panel.h/2,r.y<panel.y+32?1:-1);settle=2;return false;
+    if(r.y<panel.y+top || r.y+r.h>panel.y+panel.h-12) {
+        test_plot_wheel(a,panel.x+panel.w/2,panel.y+panel.h/2,r.y<panel.y+top?1:-1);settle=2;return false;
     }
     camera_test_pressed=r;test_mouse(a,r,true);return true;
 }

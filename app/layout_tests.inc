@@ -20,7 +20,7 @@ static void layout_test_frame(app *a,const char *mode,int *stage,int *code,const
     if(!strcmp(mode,"layouts-read")) {
         if(*stage==0){a->layout_manager=true;(*stage)++;return;}
         ok=a->layouts_writable && a->layouts.count==1 && !strcmp(a->layouts.entries[0].name,"Simulation") &&
-            (d->floating&8) && d->floats[3].w==320 && d->floats[3].h==480 && !a->runner.running;
+            !d->floating && a->preferences.inspector_width==480 && a->preferences.sidebar_width==360 && !a->runner.running;
         *capture="layouts-reopened.bmp";a->quitting=true;
     } else if(!strcmp(mode,"layouts-corrupt") || !strcmp(mode,"layouts-reset")) {
         switch(*stage) {
@@ -62,7 +62,7 @@ static void layout_test_frame(app *a,const char *mode,int *stage,int *code,const
         ok=!a->layout_manager;
         ps_preferences p=a->preferences;p.theme=PS_THEME_LIGHT;p.editor_size=18;p.inspector_width=480;p.sidebar_width=360;p.log_height=300;
         preferences_apply(a,&p);
-        ok &= ps_dock_move(d,0,1,PS_DOCK_TAB) && ps_dock_select(d,1) && ps_dock_float_panel(d,3,(ps_dock_float){500,120,320,480}) && ps_dock_hide(d,2);
+        ok &= ps_dock_hide(d,PS_DOCK_LOG);
         a->show_log=false;second=layout_capture(a);a->layout_manager=true;break;
     }
     case 14:test_mouse(a,a->layout_bounds[0],true);break;
@@ -108,7 +108,7 @@ static void layout_test_frame(app *a,const char *mode,int *stage,int *code,const
         for(unsigned p=0;p<PS_DOCK_PANELS;p++)ok &= ps_dock_hide(d,p);
         a->show_log=false;test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
     case 36:break;
-    case 37:ok=!a->layout_manager && d->hidden==PS_DOCK_ALL;test_mouse(a,a->toolbar_bounds[1],true);break;
+    case 37:ok=!a->layout_manager && d->hidden==(PS_DOCK_ALL&~2u);test_mouse(a,a->toolbar_bounds[1],true);break;
     case 38:test_mouse(a,a->toolbar_bounds[1],false);break;
     case 39:test_mouse(a,a->dock_menu_bounds[4],true);break;
     case 40:test_mouse(a,a->dock_menu_bounds[4],false);break;

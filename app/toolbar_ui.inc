@@ -281,7 +281,7 @@ static void toolbar_popup(app *a, int previous) {
 }
 static void toolbar_view(app *a) {
     struct nk_context *ui = a->ui;
-    bool compact=workbench_visible(a);
+    bool compact=workbench_visible(a) || laboratory_visible(a);
     nk_fill_rect(nk_window_get_canvas(ui), nk_rect(0, 0, nk_window_get_bounds(ui).w, compact?72:32), 0,
                  UI_COLOR(header));
     nk_style_push_vec2(ui, &ui->style.button.padding, nk_vec2(7, 2));
@@ -357,16 +357,16 @@ static void toolbar_view(app *a) {
                      menus[i], (int)strlen(menus[i]), font, nk_rgba(0, 0, 0, 0), UI_COLOR(text));
     }
     float menu_extent=(58+72+54+116+90+54)*factor;
-    float status_width=workbench_visible(a)?0:fminf(175,fmaxf(96,available-72-menu_extent-138-36));
+    float status_width=compact?0:fminf(175,fmaxf(96,available-72-menu_extent-138-36));
     nk_layout_row_push(ui, fmaxf(20, available - (compact?42:72) - menu_extent - 138 - status_width));
     struct nk_rect path_bounds = nk_widget_bounds(ui);
     char caption[256];snprintf(caption,sizeof caption,"%s — Physim",a->loaded?project_name(a):a->workspace_open?workspace_name(a->workspace):"Workspace");
-    nk_label_colored(ui, workbench_visible(a)?caption:a->workspace_open ? a->workspace : "Kein Ordner geöffnet", workbench_visible(a)?NK_TEXT_RIGHT:NK_TEXT_LEFT, muted());
+    nk_label_colored(ui, compact?caption:a->workspace_open ? a->workspace : "Kein Ordner geöffnet", compact?NK_TEXT_RIGHT:NK_TEXT_LEFT, muted());
     if (a->workspace_open && !ui->current->popup.active && !a->toolbar_menu &&
         nk_input_is_mouse_hovering_rect(&ui->input, path_bounds))
         nk_tooltip(ui, a->workspace);
     nk_layout_row_push(ui, status_width);
-    if(workbench_visible(a))nk_spacer(ui);else nk_label_colored(ui,
+    if(compact)nk_spacer(ui);else nk_label_colored(ui,
                      a->runner.running ? (a->paused ? "Pausiert" : "Simulation läuft")
                      : a->batch_thread ? "Laufserie läuft"
                      : a->job.running  ? "Wird verarbeitet …"

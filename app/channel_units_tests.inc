@@ -34,8 +34,12 @@ static void channel_units_test_frame(app *a,const char *mode,int *stage,int *cod
         ok=selected<a->channel_count && a->live_channels[selected].dimension[0]==1;
         if(!ok)break;
         a->plot_channel=(int)selected;started=a->simulation_time;
+        if(laboratory_visible(a)) {
+            a->laboratory_groups[0]=NK_MINIMIZED;a->model_disclosure=NK_MINIMIZED;
+            a->laboratory_groups[1]=NK_MAXIMIZED;a->laboratory_channels[0]=(int)selected;
+        }
         source=ps_crc32((const unsigned char*)nk_str_get_const(&a->experiment.string),(size_t)nk_str_len_char(&a->experiment.string));break;
-    case 3:test_mouse(a,a->channel_unit_buttons[0],true);break;
+    case 3:if(!hierarchy_test_click(a,a->channel_unit_buttons[0]))return;break;
     case 4:test_mouse(a,a->channel_unit_buttons[0],false);break;
     case 5:ok=a->channel_unit_manager;test_mouse(a,a->channel_unit_bounds[1],true);break;
     case 6:test_mouse(a,a->channel_unit_bounds[1],false);break;

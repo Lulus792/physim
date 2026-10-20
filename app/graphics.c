@@ -94,6 +94,7 @@ _Static_assert(SCENE_CAPACITY >= (PS_MAX_OBJECTS * (PS_MAX_SCENE_POINTS - 1) + 3
 struct ps_graphics {
     SDL_Window *window;
     float background[3];
+    uint32_t scene_background, scene_grid;
     SDL_GLContext context;
 #define GL_FIELD(ret, name, args) ret(APIENTRY *name) args;
     GL_FUNCTIONS(GL_FIELD)
@@ -128,6 +129,9 @@ struct ps_graphics {
     bool glass_failed;
 };
 void ps_graphics_backdrop(ps_graphics *g,const ps_ui_backdrop *backdrop) {if(g)g->backdrop=backdrop;}
+void ps_graphics_scene_colors(ps_graphics *g,uint32_t background,uint32_t grid) {
+    if(g){g->scene_background=background;g->scene_grid=grid;}
+}
 void ps_graphics_background(ps_graphics *g, uint8_t red, uint8_t green, uint8_t blue) {
     if (g) {
         g->background[0] = red / 255.f;
@@ -209,6 +213,7 @@ ps_graphics *ps_graphics_create(SDL_Window *window) {
     }
     g->window = window;
     ps_graphics_background(g, 20, 21, 24);
+    ps_graphics_scene_colors(g,0x0c1621ff,0x304457ff);
     ps_ui_geometry_init(&g->ui_geometry, ps_allocator_default(), 0);
     g->context = SDL_GL_CreateContext(window);
     if (!g->context || !SDL_GL_MakeCurrent(window, g->context))
@@ -882,7 +887,7 @@ unsigned ps_graphics_scene(ps_graphics *g, const ps_scene *scene, const ps_camer
     g->Enable(GL_DEPTH_TEST);
     g->DepthMask(GL_TRUE);
     g->DepthFunc(GL_LESS);
-    g->ClearColor(12 / 255.f, 22 / 255.f, 33 / 255.f, 1);
+    g->ClearColor((g->scene_background>>24)/255.f,((g->scene_background>>16)&255)/255.f,((g->scene_background>>8)&255)/255.f,1);
     g->Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     Uint64 geometry_started = SDL_GetTicksNS();
     g->count = 0;g->transform_active=false;
@@ -890,9 +895,9 @@ unsigned ps_graphics_scene(ps_graphics *g, const ps_scene *scene, const ps_camer
         for (int i = -8; i <= 8; i++) {
             double k = i * .5;
             tube(g, ps_v3(k, -1.65, -4), ps_v3(k, -1.65, 4), .005, .005,
-                 i ? 0x304457ff : 0x4289c7ff);
+                 i ? g->scene_grid : 0x4289c7ff);
             tube(g, ps_v3(-4, -1.65, k), ps_v3(4, -1.65, k), .005, .005,
-                 i ? 0x304457ff : 0xc06068ff);
+                 i ? g->scene_grid : 0xc06068ff);
         }
         tube(g, ps_v3(0, -1.65, 0), ps_v3(0, -1.05, 0), .008, .008, 0x55b99bff);
     }

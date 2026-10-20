@@ -26,6 +26,9 @@ static void adaptive_test_frame(app *a,const char *mode,int *stage,int *code,con
     case 1: test_mouse(a,a->adaptive_bounds,false);break;
     case 2:
         ok=a->adaptive_steps && a->project_settings_dirty;
+        if(!ok)break;
+        {static unsigned tries;if(++tries==20){*capture="adaptive-scroll.bmp";struct nk_rect r=a->adaptive_limit_bounds[0],body=a->laboratory_inspector_body;
+            fprintf(stderr,"ADAPTIVE REVEAL: target=%.1f,%.1f,%.1f,%.1f body=%.1f,%.1f,%.1f,%.1f scroll=%u\n",r.x,r.y,r.w,r.h,body.x,body.y,body.w,body.h,a->laboratory_scroll_y);}}
         if(!hierarchy_test_click(a,a->adaptive_limit_bounds[0]))return;break;
     case 3: test_mouse(a,a->adaptive_limit_bounds[0],false);break;
     case 4: test_key(a,SDLK_A);break;

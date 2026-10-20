@@ -155,6 +155,14 @@ struct nk_context *nk_sdl_init(SDL_Window *window, ps_graphics *graphics) {
 bool nk_sdl_accessibility_available(struct nk_context *ctx) {
     return ctx && ctx->userdata.ptr && ((struct nk_sdl *)ctx->userdata.ptr)->accessibility_native;
 }
+void nk_sdl_borrow_fonts(struct nk_context *ctx,const struct nk_context *owner) {
+    struct nk_sdl *sdl=ctx->userdata.ptr;
+    const struct nk_sdl *source=owner->userdata.ptr;
+    sdl->null_texture=source->null_texture;
+    sdl->font_raster_scale=source->font_raster_scale;
+    nk_style_set_font(ctx,owner->style.font);
+    nk_sdl_set_ui_size(ctx,source->font_layout.ui_size);
+}
 #if defined(_WIN32) || defined(__linux__) || defined(__APPLE__)
 static size_t nk_sdl_edit_byte(const char *text,int scalar) {
  size_t at=0;while(scalar>0 && text[at]){nk_rune rune;int n=nk_utf_decode(text+at,&rune,(int)strlen(text+at));if(n<=0)break;at+=(size_t)n;--scalar;}return at;
@@ -450,6 +458,16 @@ bool nk_sdl_accessibility_has_focus(struct nk_context *ctx) {
  if(!sdl->accessibility)return false;
  SDL_LockMutex(sdl->accessibility_mutex);
  bool focused=sdl->accessibility->focused_id!=0;SDL_UnlockMutex(sdl->accessibility_mutex);return focused;
+}
+bool nk_sdl_accessibility_toggle_state(struct nk_context *ctx,const char *label,bool *enabled,bool *checked) {
+    if(!ctx || !ctx->userdata.ptr || !label || !enabled || !checked)return false;
+    struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
+    SDL_LockMutex(sdl->accessibility_mutex);bool found=false;
+    const ps_a11y_model *model=sdl->accessibility;
+    if(!model->suspended)for(size_t i=0;i<model->count;i++)if(model->nodes[i].role==PS_A11Y_CHECKBOX && !strcmp(model->nodes[i].label,label)) {
+        *enabled=model->nodes[i].enabled;*checked=model->nodes[i].checked;found=true;break;
+    }
+    SDL_UnlockMutex(sdl->accessibility_mutex);return found;
 }
 void nk_sdl_accessibility_keyboard_begin(struct nk_context *ctx) {
  if(!ctx || !ctx->userdata.ptr)return;

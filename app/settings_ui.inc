@@ -11,6 +11,9 @@ static void preferences_apply(app *a, const ps_preferences *p) {
     nk_style_set_font(a->ui, a->font_ui);
     nk_sdl_set_ui_size(a->ui,p->ui_size);
     ps_graphics_background(a->graphics, UI_COLOR(canvas).r, UI_COLOR(canvas).g, UI_COLOR(canvas).b);
+    struct nk_color scene=UI_COLOR(canvas),grid=UI_COLOR(plot_grid);
+    ps_graphics_scene_colors(a->graphics,((uint32_t)scene.r<<24)|((uint32_t)scene.g<<16)|((uint32_t)scene.b<<8)|255,
+        ((uint32_t)grid.r<<24)|((uint32_t)grid.g<<16)|((uint32_t)grid.b<<8)|255);
     if (a->doc_ui) {
         a->doc_font_ui=a->doc_ui_fonts[(documentation_font_size(a)-16)/2];
         a->doc_font_title=a->doc_title_fonts[(documentation_font_size(a)-16)/2];
@@ -38,10 +41,11 @@ static void preferences_apply(app *a, const ps_preferences *p) {
 }
 static void preferences_capture(app *a) {
     ps_preferences *p = &a->preferences;
-    SDL_WindowFlags flags = SDL_GetWindowFlags(a->window);
+    SDL_Window *owner=a->primary_window?a->primary_window:a->window;
+    SDL_WindowFlags flags = SDL_GetWindowFlags(owner);
     if (!(flags & (SDL_WINDOW_MAXIMIZED | SDL_WINDOW_MINIMIZED))) {
         int w, h;
-        if (SDL_GetWindowSize(a->window, &w, &h) && w >= 1080 && w <= 8192 && h >= 740 &&
+        if (SDL_GetWindowSize(owner, &w, &h) && w >= 1080 && w <= 8192 && h >= 740 &&
             h <= 8192) {
             p->width = (uint32_t)w;
             p->height = (uint32_t)h;
@@ -72,6 +76,21 @@ static void preferences_start(app *a, const char *override_path) {
     }
     ps_preferences p = PS_PREFERENCES_DEFAULT;
     ps_result r = ps_preferences_read(a->preferences_path, &p);
+    if(r==PS_OK) {
+        ps_dock_layout fixed=ps_dock_fixed_layout(p.dock.hidden);
+        if(memcmp(&fixed,&p.dock,sizeof fixed)) {
+            char backup[4096];int n=snprintf(backup,sizeof backup,"%s.before-fixed-panels",a->preferences_path);
+            if(n>0 && (size_t)n<sizeof backup) {
+                FILE *existing=fopen(backup,"rb");
+                if(existing)fclose(existing);
+                else if(!copy_file_exclusive(a->preferences_path,backup)) {
+                    a->preferences_writable=false;
+                    snprintf(a->preferences_error,sizeof a->preferences_error,"Die bisherige Panelanordnung konnte nicht gesichert werden. Automatisches Speichern ist ausgesetzt.");
+                    preferences_apply(a,&p);return;
+                }
+            }
+        }
+    }
     a->preferences_writable = r == PS_OK || r == PS_EOF;
     if (!a->preferences_writable)
         snprintf(a->preferences_error, sizeof a->preferences_error,
@@ -99,6 +118,7 @@ static void open_settings(app *a) {
     a->settings_draft = a->preferences;
     a->settings_previous_tab = a->tab;
     a->tab = 6;
+    laboratory_context(a);
     a->settings_focus=0;a->settings_keyboard=false;a->settings_focus_scroll=false;
 }
 /* Semantic focus groups preserve the same draft and save transaction as pointer input. */
@@ -109,7 +129,8 @@ static void settings_commit(app *a) {
     next.width = a->preferences.width;
     next.height = a->preferences.height;
     next.maximized = a->preferences.maximized;
-    next.dock = a->preferences.dock;
+    bool laboratory=a->settings_previous_tab==1 && a->laboratory_initialized;
+    if(!laboratory)next.dock = a->preferences.dock;
     if((next.view_flags&PS_VIEW_LOG) && (next.dock.hidden&(1u<<PS_DOCK_LOG)))
         ps_dock_reveal(&next.dock,PS_DOCK_LOG,PS_DOCK_BOTTOM);
     if(!documentation_fonts_prepare_sizes(a,a->doc_zoom_size?a->doc_zoom_size:next.ui_size,
@@ -121,6 +142,11 @@ static void settings_commit(app *a) {
         a->preferences_path[0] ? ps_preferences_write(a->preferences_path, &next) : PS_IO;
     if (r == PS_OK) {
         preferences_apply(a, &next);
+        /* Settings edit the caller's explicit layout. Returning to Simulieren
+         * must keep that accepted draft, including the log visibility, instead
+         * of restoring its older session snapshot over the user's save. */
+        if(laboratory)a->laboratory_layout=(ps_layout_state){next.dock,next.sidebar_width,
+            next.inspector_width,next.log_height,(next.view_flags&PS_VIEW_LOG)!=0};
         a->preferences_writable = true;
         a->preferences_error[0] = 0;
         a->tab = a->settings_previous_tab;
