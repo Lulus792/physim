@@ -2,6 +2,7 @@
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
+  const unified=new URLSearchParams(location.search).get('unified')==='analyze';
   const runs = [
     {id:'024', time:'14:32', damping:0.055, amplitude:0.35},
     {id:'023', time:'14:18', damping:0.025, amplitude:0.35},
@@ -22,7 +23,10 @@
   const state = {selected:['024'], focus:'024', scenario:'ready', channel:'theta', unit:'rad', zoom:1, tab:'data', report:null, timer:null};
   const fmt = (v,d=4) => new Intl.NumberFormat('de-DE',{minimumFractionDigits:d,maximumFractionDigits:d}).format(Math.abs(v)<0.5*10**(-d)?0:v);
   const value = point => point[state.channel]*(state.unit==='deg'?180/Math.PI:1);
-  const selected = () => runs.filter(r=>state.selected.includes(r.id));
+  const selected = () => state.selected.map(id=>runs.find(r=>r.id===id)).filter(Boolean);
+  const duration = run => run.data.at(-1).t;
+  const pointCount = run => run.data.length.toLocaleString('de-DE');
+  const modelName = unified?'Einfaches Pendel':'Gedämpftes Pendel';
   const signature = () => state.selected.join(',');
   const say = message => { $('status').textContent=message; };
   const available = () => ['ready','compare'].includes(state.scenario) && state.selected.length>0;
@@ -36,15 +40,16 @@
   function renderRuns() {
     const query=$('search-runs').value.trim().toLocaleLowerCase('de');
     $('run-list').innerHTML = state.scenario==='empty' ? '<p class="small selection-hint">Noch keine gespeicherten Läufe.</p>' : runs.filter(r=>(`Lauf ${r.id} ${r.time} Dämpfung ${fmt(r.damping,3)}`).toLocaleLowerCase('de').includes(query)).map(r=>`
-      <label class="run-row ${state.selected.includes(r.id)?'selected':''}"><input type="checkbox" value="${r.id}" ${state.selected.includes(r.id)?'checked':''} aria-label="Lauf ${r.id} auswählen"><span class="run-copy"><span class="run-title">Lauf ${r.id}<time>${r.time}</time></span><span class="small">Dämpfung ${fmt(r.damping,3)} s⁻¹</span><span class="small">20,0 s · 1.001 Messpunkte</span></span></label>`).join('');
+      <label class="run-row ${state.selected.includes(r.id)?'selected':''}"><input type="checkbox" value="${r.id}" ${state.selected.includes(r.id)?'checked':''} aria-label="Lauf ${r.id} auswählen"><span class="run-copy"><span class="run-title">Lauf ${r.id}<time>${r.time}</time></span><span class="small">${unified?'Länge '+fmt(r.model.length,2)+' m':'Dämpfung '+fmt(r.damping,3)+' s⁻¹'}</span><span class="small">${fmt(duration(r),2)} s · ${pointCount(r)} Messpunkte</span></span></label>`).join('');
     if (state.scenario!=='empty' && !$('run-list').children.length) $('run-list').innerHTML='<p class="small selection-hint">Kein passender Messlauf.</p>';
     document.querySelector('.count').textContent=state.scenario==='empty'?'0':String(runs.length);
     $('selection-hint').textContent=state.selected.length>1?`${state.selected.length} Läufe für den Vergleich ausgewählt.`:'Weitere Läufe zum Vergleichen auswählen.';
   }
   function renderPlot() {
-    const list=selected(),svg=$('chart'),start=10-10/state.zoom,end=10+10/state.zoom;
-    const points=list.flatMap(r=>r.data.filter(p=>p.t>=start&&p.t<=end).map(value));
-    if(!points.length) return;
+    const list=selected(),svg=$('chart'),total=Math.max(...list.map(duration)),start=total/2-total/2/state.zoom,end=total/2+total/2/state.zoom;
+    const step=(end-start)/5,precision=step>=1?(Number.isInteger(step)?0:1):Math.min(6,Math.ceil(-Math.log10(step)));
+    let points=list.flatMap(r=>r.data.filter(p=>p.t>=start&&p.t<=end).map(value));
+    if(!points.length)points=list.flatMap(r=>r.data.map(value));
     let low=Math.min(...points),high=Math.max(...points),pad=(high-low)*.12||1; low-=pad;high+=pad;
     const x=t=>58+(t-start)/(end-start)*718, y=v=>274-(v-low)/(high-low)*234;
     const c=channels[state.channel];
@@ -55,25 +60,29 @@
     }
     for(let i=0;i<=5;i++) {
       const t=start+i*(end-start)/5,xx=x(t);
-      markup+=`<line class="grid" x1="${xx}" x2="${xx}" y1="40" y2="274"/><text x="${xx}" y="296" text-anchor="middle">${fmt(t,state.zoom>1?1:0)}</text>`;
+      markup+=`<line class="grid" x1="${xx}" x2="${xx}" y1="40" y2="274"/><text x="${xx}" y="296" text-anchor="middle">${fmt(t,precision)}</text>`;
     }
     if(low<0&&high>0) markup+=`<line class="zero" x1="58" x2="776" y1="${y(0)}" y2="${y(0)}"/>`;
     markup+=`<text x="58" y="20">${c.symbol} [${state.unit}]</text><text x="776" y="320" text-anchor="end">Zeit [s]</text>`;
     list.forEach((r,i)=>{
-      const data=r.data.filter(p=>p.t>=start&&p.t<=end);
+      const data=r.data;
       const d=data.map((p,j)=>`${j?'L':'M'}${x(p.t).toFixed(2)},${y(value(p)).toFixed(2)}`).join(' ');
       markup+=`<path class="curve series-${i+1}" clip-path="url(#plot-clip)" ${i?`stroke-dasharray="${i===1?'7 4':'2 4'}"`:''} d="${d}"/>`;
     });
     markup+='<line id="crosshair" class="crosshair" x1="0" x2="0" y1="40" y2="274" visibility="hidden"/>';
     svg.innerHTML=markup;
-    const resetReadout=()=>{$('cursor-readout').textContent=`Zeitachse ${fmt(start,1)}–${fmt(end,1)} s`;$('crosshair').setAttribute('visibility','hidden');};
+    const resetReadout=()=>{$('cursor-readout').textContent=`Zeitachse ${fmt(start,total<1?3:1)}–${fmt(end,total<1?3:1)} s`;$('crosshair').setAttribute('visibility','hidden');};
     resetReadout();
     svg.onpointermove=e=>{
       const box=svg.getBoundingClientRect(),px=(e.clientX-box.left)/box.width*800;
       if(px<58||px>776) {resetReadout();return;}
-      const t=start+(px-58)/718*(end-start),index=Math.max(0,Math.min(1000,Math.round(t*50)));
-      $('crosshair').setAttribute('x1',x(index/50));$('crosshair').setAttribute('x2',x(index/50));$('crosshair').setAttribute('visibility','visible');
-      $('cursor-readout').textContent=`t = ${fmt(index/50,2)} s · `+list.map(r=>`${r.id}: ${fmt(value(r.data[index]))} ${state.unit}`).join(' · ');
+      const t=start+(px-58)/718*(end-start);
+      $('crosshair').setAttribute('x1',x(t));$('crosshair').setAttribute('x2',x(t));$('crosshair').setAttribute('visibility','visible');
+      $('cursor-readout').textContent=`t ≈ ${fmt(t,3)} s · `+list.map(r=>{
+        if(t>duration(r))return `${r.id}: außerhalb des Laufs`;
+        const point=r.data.reduce((a,b)=>Math.abs(a.t-t)<=Math.abs(b.t-t)?a:b);
+        return `${r.id}: ${fmt(value(point))} ${state.unit} bei ${fmt(point.t,3)} s`;
+      }).join(' · ');
     };
     svg.onpointerleave=resetReadout;
     $('zoom-in').disabled=state.zoom>=8;$('zoom-out').disabled=state.zoom<=1;
@@ -81,8 +90,8 @@
   function renderDetails() {
     const run=runs.find(r=>r.id===state.focus)||runs[0];
     $('detail-title').textContent=state.selected.length?`Lauf ${run.id}`:'Kein Lauf ausgewählt';
-    $('run-details').innerHTML=state.selected.length?`<div><dt>Dauer</dt><dd>20,0 s</dd></div><div><dt>Messpunkte</dt><dd>1.001</dd></div><div><dt>Abtastrate</dt><dd>50 Hz</dd></div><div><dt>Dämpfung</dt><dd>${fmt(run.damping,3)} s⁻¹</dd></div><div><dt>Datenstatus</dt><dd>Vollständig</dd></div>`:'';
-    $('source-file').textContent=state.selected.length?`runs/pendel-${run.id}.psrun`:'—';
+    $('run-details').innerHTML=state.selected.length?`<div><dt>Dauer</dt><dd>${fmt(duration(run),3)} s</dd></div><div><dt>Messpunkte</dt><dd>${pointCount(run)}</dd></div><div><dt>Abtastrate</dt><dd>${fmt((run.data.length-1)/duration(run),1)} Hz</dd></div><div><dt>Dämpfung</dt><dd>${fmt(run.damping,3)} s⁻¹</dd></div>${unified?`<div><dt>Länge</dt><dd>${fmt(run.model.length,2)} m</dd></div><div><dt>Masse</dt><dd>${fmt(run.model.mass,2)} kg</dd></div><div><dt>Startwinkel</dt><dd>${fmt(run.model.amplitude,3)} rad</dd></div><div><dt>Gravitation</dt><dd>${fmt(run.model.gravity,4)} m/s²</dd></div>`:''}<div><dt>Datenstatus</dt><dd>${unified?'Übernommener Zeitbereich':'Vollständig'}</dd></div>`:'';
+    $('source-file').textContent=state.selected.length?unified?`Sitzung / Simulation / Lauf ${run.id}`:`runs/pendel-${run.id}.psrun`:'—';
     const disabled=!available(); $('channel').disabled=disabled;$('unit').disabled=disabled;
   }
   function emptyState(icon,title,text,action,label,error=false) {
@@ -93,7 +102,7 @@
     if(state.timer) {report.innerHTML=emptyState('◷','Analyse läuft','Die ausgewählten Läufe werden ausgewertet.','cancel','Abbrechen');return;}
     if(!state.report) {report.innerHTML=emptyState('≋','Bereit für deine Auswertung','Starte den Analysecode für die ausgewählten Messläufe. Das Ergebnis erscheint hier.',available()?'analyze':null,'Analyse starten');return;}
     const r=state.report,stale=r.signature!==signature();
-    report.innerHTML=`<div class="report-header"><p class="overline">ANALYSEERGEBNIS · BEISPIEL</p><h3>Gedämpftes Pendel</h3><p>${r.labels} · analysis.phys · ${r.timestamp}</p></div>${stale?'<div class="report-section"><p>Die Laufauswahl wurde geändert. Dieser Bericht bezieht sich weiterhin auf '+r.labels+'.</p><button class="text-button" data-action="analyze">Neue Auswahl auswerten →</button></div>':''}<section class="report-section"><h4>${r.channel} · Lauf ${r.first}</h4><div class="report-stats"><div class="report-stat"><span>Mittelwert [${r.unit}]</span><strong>${fmt(r.stats.mean)}</strong></div><div class="report-stat"><span>Standardabweichung [${r.unit}]</span><strong>${fmt(r.stats.std)}</strong></div><div class="report-stat"><span>Messpunkte</span><strong>1.001</strong></div></div></section><section class="report-section"><h4>Ergebnisse aller ausgewählten Läufe</h4><div class="table-scroll"><table><caption class="sr-only">Ergebnisstatistik in ${r.unit}</caption><thead><tr><th scope="col">Messlauf</th><th scope="col">Mittelwert</th><th scope="col">Std.-Abw.</th><th scope="col">Minimum</th><th scope="col">Maximum</th></tr></thead><tbody>${r.rows}</tbody></table></div><p>${r.channel} in ${r.unit}. Statistik über alle Messpunkte je Lauf; Stichprobenstandardabweichung.</p></section><section class="report-section"><h4>Nachvollziehbare Herkunft</h4><p>Grundlage: ${r.labels}. Der Bericht behält seine Laufauswahl und Anzeigeeinheit auch dann, wenn du anschließend andere Messdaten untersuchst.</p><p class="small">Vorschau aus synthetischen Daten. In der App stammen Inhalte und Methoden aus dem ausgeführten Analysemodul.</p><div class="report-source"><button class="text-button" data-action="data">Zurück zu den Messdaten →</button></div></section>`;
+    report.innerHTML=`<div class="report-header"><p class="overline">ANALYSEERGEBNIS · BEISPIEL</p><h3>${modelName}</h3><p>${r.labels} · ${unified?'analysis.c':'analysis.phys'} · ${r.timestamp}</p></div>${stale?'<div class="report-section"><p>Die Laufauswahl wurde geändert. Dieser Bericht bezieht sich weiterhin auf '+r.labels+'.</p><button class="text-button" data-action="analyze">Neue Auswahl auswerten →</button></div>':''}<section class="report-section"><h4>${r.channel} · Lauf ${r.first}</h4><div class="report-stats"><div class="report-stat"><span>Mittelwert [${r.unit}]</span><strong>${fmt(r.stats.mean)}</strong></div><div class="report-stat"><span>Standardabweichung [${r.unit}]</span><strong>${fmt(r.stats.std)}</strong></div><div class="report-stat"><span>Messpunkte</span><strong>${r.count}</strong></div></div></section><section class="report-section"><h4>Ergebnisse aller ausgewählten Läufe</h4><div class="table-scroll"><table><caption class="sr-only">Ergebnisstatistik in ${r.unit}</caption><thead><tr><th scope="col">Messlauf</th><th scope="col">Mittelwert</th><th scope="col">Std.-Abw.</th><th scope="col">Minimum</th><th scope="col">Maximum</th></tr></thead><tbody>${r.rows}</tbody></table></div><p>${r.channel} in ${r.unit}. Statistik über alle Messpunkte je Lauf; Stichprobenstandardabweichung.</p></section><section class="report-section"><h4>Nachvollziehbare Herkunft</h4><p>Grundlage: ${r.labels}. Der Bericht behält seine Laufauswahl und Anzeigeeinheit auch dann, wenn du anschließend andere Messdaten untersuchst.</p><p class="small">Vorschau aus synthetischen Daten. In der App stammen Inhalte und Methoden aus dem ausgeführten Analysemodul.</p><div class="report-source"><button class="text-button" data-action="data">Zurück zu den Messdaten →</button></div></section>`;
   }
   function setTab(tab,focus=false) {
     state.tab=tab;
@@ -108,10 +117,10 @@
   function render() {
     renderRuns();renderDetails();renderReport();
     const list=selected(),ready=available(),c=channels[state.channel];
-    $('selection-label').textContent='Gedämpftes Pendel / '+(list.length>1?`${list.length} Läufe im Vergleich`:list.length?`Lauf ${list[0].id}`:'Keine Auswahl');
+    $('selection-label').textContent=modelName+' / '+(list.length>1?`${list.length} Läufe im Vergleich`:list.length?`Lauf ${list[0].id}`:'Keine Auswahl');
     $('analyze').disabled=!ready&&!state.timer;
     $('analyze').textContent=state.timer?'Abbrechen':list.length>1?`${list.length} Läufe vergleichen`:'Analyse starten';
-    $('data-quality').textContent=ready?(list.length>1?`${list.length} Läufe · je 1.001 Punkte`:'Vollständig · 1.001 Messpunkte'):'Keine Datenansicht';
+    $('data-quality').textContent=ready?(list.length>1?`${list.length} Läufe · ${list.reduce((n,r)=>n+r.data.length,0).toLocaleString('de-DE')} Punkte`:`${unified?'Simulation':'Vollständig'} · ${pointCount(list[0])} Messpunkte`):'Keine Datenansicht';
     $('data-panel').hidden=state.tab!=='data'||!ready;$('report-panel').hidden=state.tab!=='report'||!ready;
     $('state-panel').hidden=ready;
     if(!ready) {
@@ -137,7 +146,7 @@
     if(state.timer) {cancelAnalysis();render();return;}
     if(!available()) return;
     const first=selected()[0];
-    const snapshot={signature:signature(),labels:selected().map(r=>'Lauf '+r.id).join(', '),first:first.id,channel:channels[state.channel].name,unit:state.unit,stats:stats(first),rows:rows(),timestamp:'gerade erstellt'};
+    const snapshot={signature:signature(),labels:selected().map(r=>'Lauf '+r.id).join(', '),first:first.id,channel:channels[state.channel].name,unit:state.unit,stats:stats(first),rows:rows(),timestamp:'gerade erstellt',count:pointCount(first)};
     state.timer=setTimeout(()=>{state.report=snapshot;state.timer=null;say(`Analyse abgeschlossen · ${snapshot.labels}`);render();},700);
     setTab('report');say('Analyse läuft …');render();
   }
@@ -200,5 +209,18 @@
     const blob=new Blob([lines.join('\r\n')],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
     a.href=url;a.download='physim-beispieldaten.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);say('CSV mit allen synthetischen Messpunkten exportiert.');
   };
+  if(unified){
+    runs.splice(0);state.selected=[];state.scenario='empty';
+    document.addEventListener('physim-preview-command',event=>{
+      const message=event.detail;if(message.type!=='runs'||!Array.isArray(message.runs)||message.runs.length>8)return;
+      const valid=message.runs.every(r=>/^\d{3}$/.test(r.id)&&/^\d{2}:\d{2}$/.test(r.time)&&r.model&&['length','mass','amplitude','gravity'].every(k=>Number.isFinite(r.model[k]))&&Array.isArray(r.data)&&r.data.length>=2&&r.data.length<=1001&&r.data.every((p,i)=>['t','theta','omega','energy'].every(k=>Number.isFinite(p[k]))&&p.t>=0&&(!i||p.t>r.data[i-1].t)));
+      if(!valid)return;
+      cancelAnalysis(false);runs.splice(0,runs.length,...message.runs);
+      state.selected=message.select?[message.select]:state.selected.filter(id=>runs.some(r=>r.id===id));state.focus=state.selected.at(-1);
+      state.scenario=runs.length?'ready':'empty';state.zoom=1;state.tab='data';$('search-runs').value='';setTab('data');render();
+      say(runs.length?'Messdaten aus der Simulation übernommen.':'Starte deinen ersten Lauf im Messlabor.');
+    });
+    document.querySelector('.chart-readout>span:last-child').textContent='Vorschau · übernommene Messpunkte';
+  }
   render();syncPanels();
 })();

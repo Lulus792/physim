@@ -1,5 +1,8 @@
 # Simulationsbereich: drei Designstudien
 
+Die [gemeinsame Designvorschau](../unified-workspace/index.html) verbindet das
+gewählte Messlabor mit Werkbank und Auswertung einschließlich Datenübergabe.
+
 Erstellt am 16. Oktober 2026 auf Grundlage des lokalen Physim-Stands und der
 [bestehenden Designrichtung](../../design-direction.md). Am 19. Oktober wurde
 **Messlabor** ausgewählt: Szenenbaum zu, Inspektor offen, Kurven zu. Die native Anwendung

@@ -1,0 +1,12 @@
+/* Only loaded by bridge.js in the explicitly requested unified preview. */
+html,body{height:100%;background:var(--window)}body{margin:0}body>main{max-width:none!important;margin:0!important;padding:0!important}
+main>.gallery-heading,main>.gallery-head,main>.presentation,main>.variants,main>.preview-heading,main>.preview-meta,main>.inspector-designs,main>.design-note,main>.material-options,main>.resize-help,main>.resize-note{display:none!important}
+.app-window>.menubar,.app-window>.menu-bar,.app-window>.workspace-tabs,.app-window>.app-status,.app-window>.statusbar,#workspace-resize{display:none!important}
+.app-window{border:0!important;border-radius:0!important;box-shadow:none!important;min-height:100dvh}
+.app-window.workbench>.workspace{height:100dvh;min-height:500px}
+.workspace-heading{min-height:72px}.shared-export{margin-left:auto;color:var(--accent)!important;background:transparent!important;white-space:normal!important}
+.unified-note{font-size:10px;color:var(--muted);padding:4px 14px;border-bottom:1px solid var(--border)}
+@media(min-width:1001px){body[data-unified=analyze] .app-window{display:flex;flex-direction:column;height:100dvh}body[data-unified=analyze] #workspace{flex:1;min-height:0;overflow:auto}body[data-unified=analyze] .analysis-pane,body[data-unified=analyze] .runs,body[data-unified=analyze] .inspector{min-height:0;overflow:auto}}
+@media(min-width:651px){body[data-unified=simulate] .app-window{display:flex;flex-direction:column;min-height:680px;height:100dvh}body[data-unified=simulate] .workspace{flex:1;min-height:360px;height:auto!important}body[data-unified=simulate] .timeline{flex-shrink:0}body[data-unified=simulate] .experiment-bar,body[data-unified=simulate] .panel-toolbar{flex-shrink:0}}
+@media(max-width:950px){.app-window.workbench>.workspace{height:auto;min-height:100dvh}.app-window.workbench .editor-pane{height:650px}}
+@media(max-width:650px){body[data-unified=simulate] .shared-export{font-size:10px}.app-window.workbench .editor-pane{height:560px}.editor-tools{padding-right:40px!important}}

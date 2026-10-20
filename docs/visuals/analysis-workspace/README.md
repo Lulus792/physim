@@ -1,5 +1,8 @@
 # Analysebereich: Übergabe zur nativen Umsetzung
 
+Die [gemeinsame Designvorschau](../unified-workspace/index.html) verbindet diese
+Auswertung mit Werkbank und Messlabor; sie verwendet dort erzeugte Beispielmessdaten.
+
 Stand: 19. Oktober 2026. Vorbereitet sind Design, interaktive Referenz,
 Referenzbilder, ein kopierfertiger Auftrag und eine technische Abnahmeliste.
 Die native Auswertungsseite wurde mit dieser Übergabe noch nicht umgebaut.

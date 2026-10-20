@@ -1,5 +1,8 @@
 # Finale Werkbank: Klarglas Kühl
 
+Die [gemeinsame Designvorschau](../unified-workspace/index.html) verbindet diese
+Werkbank mit Simulieren und Auswerten zu einem durchgängigen Beispielablauf.
+
 **Kühl ist gewählt.** Panelköpfe, kompakte Tabs, Workspace-Pfadlinien,
 schwebende Suchinsel und verstellbare Panels sind festgelegt. Veraltete
 Farbvarianten und ihre Auswahl wurden entfernt.

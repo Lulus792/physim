@@ -1,0 +1,978 @@
+{
+  "date": "2026-10-20T12:52:27.15Z",
+  "platform": "win32",
+  "browser": "155.0.4283.62",
+  "unified": {
+    "date": "2026-10-20T12:52:27.15Z",
+    "platform": "win32",
+    "browser": "155.0.4283.62",
+    "checks": [
+      "Edited/saved source → build → simulation → exact observed samples → CSV with matching model",
+      "Analysis code opens editor; pane/search state retained; inspector uses same source; historical snapshots and stale report provenance preserved",
+      "24 layouts, shared palette, 8 simulation/4 analysis panel states, short-run zoom/ticks, 2x density, forced colors, reduced motion/transparency, keyboard tabs/menus, dialog focus return"
+    ],
+    "layouts": [
+      {
+        "area": "develop",
+        "width": 1440,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "simulate",
+        "width": 1440,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "analyze",
+        "width": 1440,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "develop",
+        "width": 1440,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "simulate",
+        "width": 1440,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "analyze",
+        "width": 1440,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "develop",
+        "width": 1080,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "simulate",
+        "width": 1080,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "analyze",
+        "width": 1080,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "develop",
+        "width": 1080,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "simulate",
+        "width": 1080,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "analyze",
+        "width": 1080,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "develop",
+        "width": 760,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "simulate",
+        "width": 760,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "analyze",
+        "width": 760,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "develop",
+        "width": 760,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "simulate",
+        "width": 760,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "analyze",
+        "width": 760,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "develop",
+        "width": 500,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "simulate",
+        "width": 500,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "analyze",
+        "width": 500,
+        "height": 1000,
+        "theme": "dark"
+      },
+      {
+        "area": "develop",
+        "width": 500,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "simulate",
+        "width": 500,
+        "height": 1000,
+        "theme": "light"
+      },
+      {
+        "area": "analyze",
+        "width": 500,
+        "height": 1000,
+        "theme": "light"
+      }
+    ],
+    "errors": [],
+    "passed": true
+  },
+  "standalone": {
+    "develop": {
+      "browser": "155.0.4283.62",
+      "platform": "win32",
+      "layouts": [
+        {
+          "width": 1440,
+          "theme": "dark",
+          "glass": "cool",
+          "codeGap": 0,
+          "searchInset": 4
+        },
+        {
+          "width": 1440,
+          "theme": "light",
+          "glass": "cool",
+          "codeGap": 0,
+          "searchInset": 4
+        },
+        {
+          "width": 1080,
+          "theme": "dark",
+          "glass": "cool",
+          "codeGap": 0,
+          "searchInset": 4
+        },
+        {
+          "width": 1080,
+          "theme": "light",
+          "glass": "cool",
+          "codeGap": 0,
+          "searchInset": 4
+        },
+        {
+          "width": 760,
+          "theme": "dark",
+          "glass": "cool",
+          "codeGap": 0,
+          "searchInset": 4
+        },
+        {
+          "width": 760,
+          "theme": "light",
+          "glass": "cool",
+          "codeGap": 0,
+          "searchInset": 4
+        },
+        {
+          "width": 500,
+          "theme": "dark",
+          "glass": "cool",
+          "codeGap": 0,
+          "searchInset": 4
+        },
+        {
+          "width": 500,
+          "theme": "light",
+          "glass": "cool",
+          "codeGap": 0,
+          "searchInset": 4
+        }
+      ],
+      "contrasts": [
+        {
+          "theme": "dark",
+          "glass": "cool",
+          "selector": "#query",
+          "minimum": 5.174807243234705
+        },
+        {
+          "theme": "dark",
+          "glass": "cool",
+          "selector": "#find-next",
+          "minimum": 9.242972976146476
+        },
+        {
+          "theme": "dark",
+          "glass": "cool",
+          "selector": "#search-result",
+          "minimum": 9.446929141841796
+        },
+        {
+          "theme": "light",
+          "glass": "cool",
+          "selector": "#query",
+          "minimum": 6.280914111123411
+        },
+        {
+          "theme": "light",
+          "glass": "cool",
+          "selector": "#find-next",
+          "minimum": 9.86401635965322
+        },
+        {
+          "theme": "light",
+          "glass": "cool",
+          "selector": "#search-result",
+          "minimum": 7.2062061419543175
+        }
+      ],
+      "interactions": [
+        "compact top edge; no code shift on search or replacement",
+        "context toggle keeps identical position and remains rightmost when closed/open",
+        "transparent material; conservative control contrast over black/white",
+        "consistent 16px radius, 2px blur and SVG search icons",
+        "opaque fallback without layout change",
+        "forward/backward search, replace and Escape focus",
+        "file edits, safe highlighting, save, build and diagnostic jump",
+        "mouse/keyboard resizing, retained sizes, cancel and reset",
+        "scroll sync, narrow panels, forced colors and empty state"
+      ],
+      "errors": []
+    },
+    "simulation": {
+      "platform": "win32",
+      "browser": "155.0.4283.62",
+      "layouts": [
+        {
+          "theme": "dark",
+          "variant": "studio",
+          "width": 1440,
+          "overflow": false,
+          "sceneWidth": 840,
+          "sceneHeight": 510
+        },
+        {
+          "theme": "dark",
+          "variant": "studio",
+          "width": 1080,
+          "overflow": false,
+          "sceneWidth": 524,
+          "sceneHeight": 510
+        },
+        {
+          "theme": "dark",
+          "variant": "studio",
+          "width": 760,
+          "overflow": false,
+          "sceneWidth": 230,
+          "sceneHeight": 510
+        },
+        {
+          "theme": "dark",
+          "variant": "studio",
+          "width": 390,
+          "overflow": false,
+          "sceneWidth": 368,
+          "sceneHeight": 352
+        },
+        {
+          "theme": "dark",
+          "variant": "labor",
+          "width": 1440,
+          "overflow": false,
+          "sceneWidth": 1030,
+          "sceneHeight": 510
+        },
+        {
+          "theme": "dark",
+          "variant": "labor",
+          "width": 1080,
+          "overflow": false,
+          "sceneWidth": 714,
+          "sceneHeight": 510
+        },
+        {
+          "theme": "dark",
+          "variant": "labor",
+          "width": 760,
+          "overflow": false,
+          "sceneWidth": 394,
+          "sceneHeight": 510
+        },
+        {
+          "theme": "dark",
+          "variant": "labor",
+          "width": 390,
+          "overflow": false,
+          "sceneWidth": 368,
+          "sceneHeight": 365
+        },
+        {
+          "theme": "dark",
+          "variant": "focus",
+          "width": 1440,
+          "overflow": false,
+          "sceneWidth": 1350,
+          "sceneHeight": 510
+        },
+        {
+          "theme": "dark",
+          "variant": "focus",
+          "width": 1080,
+          "overflow": false,
+          "sceneWidth": 1034,
+          "sceneHeight": 510
+        },
+        {
+          "theme": "dark",
+          "variant": "focus",
+          "width": 760,
+          "overflow": false,
+          "sceneWidth": 714,
+          "sceneHeight": 510
+        },
+        {
+          "theme": "dark",
+          "variant": "focus",
+          "width": 390,
+          "overflow": false,
+          "sceneWidth": 368,
+          "sceneHeight": 400
+        },
+        {
+          "theme": "light",
+          "variant": "studio",
+          "width": 1440,
+          "overflow": false,
+          "sceneWidth": 840,
+          "sceneHeight": 510
+        },
+        {
+          "theme": "light",
+          "variant": "studio",
+          "width": 1080,
+          "overflow": false,
+          "sceneWidth": 524,
+          "sceneHeight": 510
+        },
+        {
+          "theme": "light",
+          "variant": "studio",
+          "width": 760,
+          "overflow": false,
+          "sceneWidth": 204,
+          "sceneHeight": 510
+        },
+        {
+          "theme": "light",
+          "variant": "studio",
+          "width": 390,
+          "overflow": false,
+          "sceneWidth": 368,
+          "sceneHeight": 352
+        },
+        {
+          "theme": "light",
+          "variant": "labor",
+          "width": 1440,
+          "overflow": false,
+          "sceneWidth": 1030,
+          "sceneHeight": 510
+        },
+        {
+          "theme": "light",
+          "variant": "labor",
+          "width": 1080,
+          "overflow": false,
+          "sceneWidth": 714,
+          "sceneHeight": 510
+        },
+        {
+          "theme": "light",
+          "variant": "labor",
+          "width": 760,
+          "overflow": false,
+          "sceneWidth": 394,
+          "sceneHeight": 510
+        },
+        {
+          "theme": "light",
+          "variant": "labor",
+          "width": 390,
+          "overflow": false,
+          "sceneWidth": 368,
+          "sceneHeight": 365
+        },
+        {
+          "theme": "light",
+          "variant": "focus",
+          "width": 1440,
+          "overflow": false,
+          "sceneWidth": 1350,
+          "sceneHeight": 510
+        },
+        {
+          "theme": "light",
+          "variant": "focus",
+          "width": 1080,
+          "overflow": false,
+          "sceneWidth": 1034,
+          "sceneHeight": 510
+        },
+        {
+          "theme": "light",
+          "variant": "focus",
+          "width": 760,
+          "overflow": false,
+          "sceneWidth": 714,
+          "sceneHeight": 510
+        },
+        {
+          "theme": "light",
+          "variant": "focus",
+          "width": 390,
+          "overflow": false,
+          "sceneWidth": 368,
+          "sceneHeight": 400
+        }
+      ],
+      "curves": [
+        {
+          "theme": "dark",
+          "variant": "studio",
+          "width": 1440,
+          "sceneBefore": 510,
+          "sceneAfter": 330
+        },
+        {
+          "theme": "dark",
+          "variant": "studio",
+          "width": 1080,
+          "sceneBefore": 510,
+          "sceneAfter": 330
+        },
+        {
+          "theme": "dark",
+          "variant": "studio",
+          "width": 760,
+          "sceneBefore": 510,
+          "sceneAfter": 330
+        },
+        {
+          "theme": "dark",
+          "variant": "studio",
+          "width": 390,
+          "sceneBefore": 352,
+          "sceneAfter": 282
+        },
+        {
+          "theme": "dark",
+          "variant": "labor",
+          "width": 1440,
+          "sceneBefore": 510,
+          "sceneAfter": 330
+        },
+        {
+          "theme": "dark",
+          "variant": "labor",
+          "width": 1080,
+          "sceneBefore": 510,
+          "sceneAfter": 330
+        },
+        {
+          "theme": "dark",
+          "variant": "labor",
+          "width": 760,
+          "sceneBefore": 510,
+          "sceneAfter": 330
+        },
+        {
+          "theme": "dark",
+          "variant": "labor",
+          "width": 390,
+          "sceneBefore": 365,
+          "sceneAfter": 282
+        },
+        {
+          "theme": "light",
+          "variant": "studio",
+          "width": 1440,
+          "sceneBefore": 510,
+          "sceneAfter": 330
+        },
+        {
+          "theme": "light",
+          "variant": "studio",
+          "width": 1080,
+          "sceneBefore": 510,
+          "sceneAfter": 330
+        },
+        {
+          "theme": "light",
+          "variant": "studio",
+          "width": 760,
+          "sceneBefore": 510,
+          "sceneAfter": 330
+        },
+        {
+          "theme": "light",
+          "variant": "studio",
+          "width": 390,
+          "sceneBefore": 352,
+          "sceneAfter": 282
+        },
+        {
+          "theme": "light",
+          "variant": "labor",
+          "width": 1440,
+          "sceneBefore": 510,
+          "sceneAfter": 330
+        },
+        {
+          "theme": "light",
+          "variant": "labor",
+          "width": 1080,
+          "sceneBefore": 510,
+          "sceneAfter": 330
+        },
+        {
+          "theme": "light",
+          "variant": "labor",
+          "width": 760,
+          "sceneBefore": 510,
+          "sceneAfter": 330
+        },
+        {
+          "theme": "light",
+          "variant": "labor",
+          "width": 390,
+          "sceneBefore": 365,
+          "sceneAfter": 282
+        }
+      ],
+      "contrast": [
+        {
+          "theme": "dark",
+          "pair": [
+            "text",
+            "window"
+          ],
+          "ratio": 14.2
+        },
+        {
+          "theme": "dark",
+          "pair": [
+            "muted",
+            "panel"
+          ],
+          "ratio": 6.42
+        },
+        {
+          "theme": "dark",
+          "pair": [
+            "muted",
+            "canvas"
+          ],
+          "ratio": 7.77
+        },
+        {
+          "theme": "dark",
+          "pair": [
+            "text",
+            "selected"
+          ],
+          "ratio": 9.81
+        },
+        {
+          "theme": "dark",
+          "pair": [
+            "accent",
+            "selected"
+          ],
+          "ratio": 4.73
+        },
+        {
+          "theme": "dark",
+          "pair": [
+            "on-primary",
+            "primary"
+          ],
+          "ratio": 4.77
+        },
+        {
+          "theme": "light",
+          "pair": [
+            "text",
+            "window"
+          ],
+          "ratio": 15.62
+        },
+        {
+          "theme": "light",
+          "pair": [
+            "muted",
+            "panel"
+          ],
+          "ratio": 6.65
+        },
+        {
+          "theme": "light",
+          "pair": [
+            "muted",
+            "canvas"
+          ],
+          "ratio": 6.12
+        },
+        {
+          "theme": "light",
+          "pair": [
+            "text",
+            "selected"
+          ],
+          "ratio": 12.86
+        },
+        {
+          "theme": "light",
+          "pair": [
+            "accent",
+            "selected"
+          ],
+          "ratio": 6.5
+        },
+        {
+          "theme": "light",
+          "pair": [
+            "on-primary",
+            "primary"
+          ],
+          "ratio": 8
+        }
+      ],
+      "interactions": [
+        {
+          "theme": "dark",
+          "variant": "studio",
+          "result": "panels, keyboard, history/live, run/pause, step/reset, restart, empty/error, theme, selection, visibility, camera passed"
+        },
+        {
+          "theme": "dark",
+          "variant": "labor",
+          "result": "panels, keyboard, history/live, run/pause, step/reset, restart, empty/error, theme, selection, visibility, camera passed"
+        },
+        {
+          "theme": "dark",
+          "variant": "focus",
+          "result": "panels, keyboard, history/live, run/pause, step/reset, restart, empty/error, theme, selection, visibility, camera passed"
+        },
+        {
+          "theme": "light",
+          "variant": "studio",
+          "result": "panels, keyboard, history/live, run/pause, step/reset, restart, empty/error, theme, selection, visibility, camera passed"
+        },
+        {
+          "theme": "light",
+          "variant": "labor",
+          "result": "panels, keyboard, history/live, run/pause, step/reset, restart, empty/error, theme, selection, visibility, camera passed"
+        },
+        {
+          "theme": "light",
+          "variant": "focus",
+          "result": "panels, keyboard, history/live, run/pause, step/reset, restart, empty/error, theme, selection, visibility, camera passed"
+        }
+      ],
+      "errors": []
+    },
+    "analysis": {
+      "browser": "155.0.4283.62",
+      "platform": "win32",
+      "layouts": [
+        {
+          "width": 1440,
+          "theme": "dark",
+          "documentWidth": 1440,
+          "viewport": 1440,
+          "chart": 848,
+          "content": 896
+        },
+        {
+          "width": 1440,
+          "theme": "light",
+          "documentWidth": 1440,
+          "viewport": 1440,
+          "chart": 848,
+          "content": 896
+        },
+        {
+          "width": 1080,
+          "theme": "dark",
+          "documentWidth": 1080,
+          "viewport": 1080,
+          "chart": 572,
+          "content": 608
+        },
+        {
+          "width": 1080,
+          "theme": "light",
+          "documentWidth": 1080,
+          "viewport": 1080,
+          "chart": 572,
+          "content": 608
+        },
+        {
+          "width": 760,
+          "theme": "dark",
+          "documentWidth": 760,
+          "viewport": 760,
+          "chart": 698,
+          "content": 734
+        },
+        {
+          "width": 760,
+          "theme": "light",
+          "documentWidth": 760,
+          "viewport": 760,
+          "chart": 698,
+          "content": 734
+        },
+        {
+          "width": 500,
+          "theme": "dark",
+          "documentWidth": 500,
+          "viewport": 500,
+          "chart": 438,
+          "content": 474
+        },
+        {
+          "width": 500,
+          "theme": "light",
+          "documentWidth": 500,
+          "viewport": 500,
+          "chart": 438,
+          "content": 474
+        }
+      ],
+      "contrast": [
+        {
+          "theme": "dark",
+          "fg": "text",
+          "bg": "window",
+          "ratio": 14.200964640990536
+        },
+        {
+          "theme": "dark",
+          "fg": "muted",
+          "bg": "header",
+          "ratio": 6.840499821444183
+        },
+        {
+          "theme": "dark",
+          "fg": "muted",
+          "bg": "plot",
+          "ratio": 7.394564424527547
+        },
+        {
+          "theme": "dark",
+          "fg": "onPrimary",
+          "bg": "primary",
+          "ratio": 4.7740186992095115
+        },
+        {
+          "theme": "light",
+          "fg": "text",
+          "bg": "window",
+          "ratio": 15.61975843652938
+        },
+        {
+          "theme": "light",
+          "fg": "muted",
+          "bg": "header",
+          "ratio": 6.591737935174193
+        },
+        {
+          "theme": "light",
+          "fg": "muted",
+          "bg": "plot",
+          "ratio": 7.313917596792534
+        },
+        {
+          "theme": "light",
+          "fg": "onPrimary",
+          "bg": "primary",
+          "ratio": 7.997492877951497
+        }
+      ],
+      "interactions": [
+        "zoom preserves full-run statistics",
+        "unit conversion updates curve and statistics",
+        "run comparison",
+        "analysis completion",
+        "report preserves source selection",
+        "keyboard tabs",
+        "dialog Escape and focus return",
+        "independent side panels",
+        "CSV contains all 1001 sample rows",
+        "all channels",
+        "empty/loading/error recovery",
+        "run search without results",
+        "analysis cancellation",
+        "compact panel navigation",
+        "200% enlargement smoke check"
+      ],
+      "errors": []
+    }
+  },
+  "source_sha256": {
+    "docs/visuals/unified-workspace/index.html": "58962c0ebe2172c78678e8556c902607fe48551612b5ac775535714d8220af62",
+    "docs/visuals/unified-workspace/workspace.js": "68fdae8b7d38b119886941dfcfb79ba48131d0b0cc5fbe2933baeee549b51433",
+    "docs/visuals/unified-workspace/workspace.css": "de7f9025c1b3665932ae9bd41307540bfbd0c0c655a7280df941a50099040214",
+    "docs/visuals/unified-workspace/bridge.js": "4e1ffb37ee7c41928a13e5ebd30738f3f882e2e000469616dd105eedd91deb76",
+    "docs/visuals/unified-workspace/embed.css": "e64901b8f951c2d47262748f630b060377ed224b2085604db3c0da18cc32a0d2",
+    "tools/check_unified_workspace.cjs": "56fce14434ded8070bed492fb5fe3809a648d75c2547ed17efa5ba2d4b45516c",
+    "docs/visuals/develop-designs/index.html": "fea12c9c8801153150c7213ad02de7800919fd331763a0a52b67475600182968",
+    "docs/visuals/develop-designs/develop.js": "2d5ff7115bc73cc9c9b77245c8a9c3cd815a7e15b6f8cf81f2643ff21f454418",
+    "docs/visuals/develop-designs/workbench.js": "5f7a005a7f82439df3805f4f960f439b57e2bf40a95b905436f5bd3aab322baa",
+    "docs/visuals/develop-designs/search-resize.js": "f25be86b0bd181c461288aa01141ea4f95dbbd3b41bd3e72d6bcbd3176f648e0",
+    "docs/visuals/develop-designs/workbench.css": "4f0a1d2ef71313e265d61590a344536ccc39aad715762d6d3355b7e3378e9743",
+    "docs/visuals/develop-designs/glass.css": "3aa9861bf2210a24d7bbcbc341a86320c1d32743e0b42656a599c6be29747688",
+    "docs/visuals/simulation-designs/index.html": "f7ba5f6d11ae7613bd8c0d560d6f9d6c8e0e53090a00c5a8c984ea49ca740803",
+    "docs/visuals/simulation-designs/simulation.js": "6cbd8026f866fcbde2a51e5374ab65f0d8e5c35e716d2ed1fbf77262448411fa",
+    "docs/visuals/simulation-designs/simulation.css": "0a9c2225e4a5dcd8040f6a9553118183d4f46f923d2528a9e8fb13058b30e650",
+    "docs/visuals/simulation-designs/inspector.js": "95f15b84d69f92ef01a1632e040143ea1ae16ed3cf9ea878678b24221df2e219",
+    "docs/visuals/simulation-designs/inspector.css": "71674b6b610229b88e76cf5668ee981c05906d9ecfc50b2890ab3861c1c7c026",
+    "docs/visuals/simulation-designs/inspector-variants.js": "67102bc8acdaf6d0e8272c67e06e38308a30c8a3c17f689552c640e88ce97c71",
+    "docs/visuals/simulation-designs/inspector-variants.css": "ce2b8d1549cb894dad08b4dd6781523cd41c6312e25c9c3aa84c71b06fe05520",
+    "docs/visuals/analysis-workspace/index.html": "74eab3ef5bc3efd6a2142ae1dbac879dd1007ea7acad2c1983fb14740489b331",
+    "docs/visuals/analysis-workspace/analysis.js": "e756024688ee0406332c0c0bf53d51afc0472a5f6fd5dd2251bcd12c6e27a903",
+    "docs/visuals/analysis-workspace/analysis.css": "d63ee876c6390f0571e720105fc0f28605a7e5554719245576ea60878b322acc"
+  },
+  "images_sha256": {
+    "analyze-dark.png": "2c7cf918e58cde87dc3e15b142bd4e39ea0a62b19170d10f460523d3c3c4b203",
+    "analyze-light.png": "5621de2bfe2cd58fbb9130620fd582676f68077e48a8f03b5002264a6005f641",
+    "develop-dark.png": "b4554a1b09689798c21a8fe771d5c706a03a711bd963c1b3d00b5d2fe270ec52",
+    "develop-light.png": "7a3e95e92f1e59dd61d0b0cff58e0787ab805996bcd2a88846200e1511441d0f",
+    "simulate-dark.png": "ba84c563a421e84cc7af99970958495c6740bbef44ea418ad9fcdcfc460af8dd",
+    "simulate-light.png": "161a296e659d980940d338f0cc256e4dcaf9cad2808ca3fc0a6aa2fbe9189927"
+  },
+  "visual_review": "Six browser captures inspected: common chrome/palette; cool search island; Messlabor default visibility; real transferred run comparison. Separate native/OS/screenreader review not claimed.",
+  "cleanup": {
+    "reason": "Successful generated browser raw images after visual review; six versioned final captures and JSON/log evidence retained. Only PNGs created/refreshed during this task in four explicit browser output directories removed.",
+    "count": 20,
+    "bytes": 4624952.0,
+    "removed": [
+      {
+        "path": "D:\\Physim\\build\\unified-workspace-review\\analyze-dark.png",
+        "bytes": 124960
+      },
+      {
+        "path": "D:\\Physim\\build\\unified-workspace-review\\analyze-light.png",
+        "bytes": 124063
+      },
+      {
+        "path": "D:\\Physim\\build\\unified-workspace-review\\develop-dark.png",
+        "bytes": 109714
+      },
+      {
+        "path": "D:\\Physim\\build\\unified-workspace-review\\develop-light.png",
+        "bytes": 113278
+      },
+      {
+        "path": "D:\\Physim\\build\\unified-workspace-review\\simulate-dark.png",
+        "bytes": 228542
+      },
+      {
+        "path": "D:\\Physim\\build\\unified-workspace-review\\simulate-light.png",
+        "bytes": 249039
+      },
+      {
+        "path": "D:\\Physim\\build\\develop-design-review\\glass-cool-dark.png",
+        "bytes": 102154
+      },
+      {
+        "path": "D:\\Physim\\build\\develop-design-review\\glass-cool-light.png",
+        "bytes": 105191
+      },
+      {
+        "path": "D:\\Physim\\build\\simulation-design-review\\focus-dark.png",
+        "bytes": 276052
+      },
+      {
+        "path": "D:\\Physim\\build\\simulation-design-review\\focus-light.png",
+        "bytes": 308509
+      },
+      {
+        "path": "D:\\Physim\\build\\simulation-design-review\\labor-dark-2x.png",
+        "bytes": 889720
+      },
+      {
+        "path": "D:\\Physim\\build\\simulation-design-review\\labor-dark.png",
+        "bytes": 304784
+      },
+      {
+        "path": "D:\\Physim\\build\\simulation-design-review\\labor-light.png",
+        "bytes": 333041
+      },
+      {
+        "path": "D:\\Physim\\build\\simulation-design-review\\studio-dark.png",
+        "bytes": 293660
+      },
+      {
+        "path": "D:\\Physim\\build\\simulation-design-review\\studio-light.png",
+        "bytes": 321070
+      },
+      {
+        "path": "D:\\Physim\\build\\simulation-design-review\\text-scale-200.png",
+        "bytes": 259222
+      },
+      {
+        "path": "D:\\Physim\\build\\analysis-design-review\\analysis-comparison.png",
+        "bytes": 137871
+      },
+      {
+        "path": "D:\\Physim\\build\\analysis-design-review\\analysis-dark.png",
+        "bytes": 117313
+      },
+      {
+        "path": "D:\\Physim\\build\\analysis-design-review\\analysis-light.png",
+        "bytes": 116598
+      },
+      {
+        "path": "D:\\Physim\\build\\analysis-design-review\\analysis-report.png",
+        "bytes": 110171
+      }
+    ]
+  }
+}

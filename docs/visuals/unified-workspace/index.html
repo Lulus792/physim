@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Physim · Gemeinsame Werkbank</title>
+  <link rel="stylesheet" href="workspace.css"><script src="workspace.js" defer></script>
+</head>
+<body>
+  <header class="menubar">
+    <a class="brand" href="#develop" aria-label="Physim · Entwickeln">p<span>·</span></a>
+    <nav aria-label="Hauptmenü" class="menus">
+      <div class="menu"><button aria-expanded="false" aria-controls="file-menu">Datei</button><div class="popup" id="file-menu" hidden><button data-action="save">Demodateien speichern <kbd>Strg S</kbd></button><button data-action="download">Projektkopie herunterladen</button></div></div>
+      <div class="menu"><button aria-expanded="false" aria-controls="edit-menu">Bearbeiten</button><div class="popup" id="edit-menu" hidden><button data-action="search">Im Code suchen <kbd>Strg F</kbd></button><button data-action="analysis-code">Analysecode öffnen</button></div></div>
+      <div class="menu"><button aria-expanded="false" aria-controls="view-menu">Ansicht</button><div class="popup" id="view-menu" hidden><button data-action="left">Linken Bereich umschalten</button><button data-action="right">Rechten Bereich umschalten</button><button data-action="curves">Messkurven umschalten</button></div></div>
+      <div class="menu"><button aria-expanded="false" aria-controls="build-menu">Build</button><div class="popup" id="build-menu" hidden><button data-action="build">Vorschau bauen <kbd>F5</kbd></button><button data-action="cancel">Build abbrechen</button></div></div>
+      <button data-action="help">Hilfe</button>
+    </nav>
+    <span class="project-title">Pendelstudie <span id="dirty-mark"></span></span>
+    <button class="theme-button" id="theme" aria-label="Helle Darstellung aktivieren">☀ <span>Hell</span></button>
+  </header>
+  <nav class="workspace-tabs" role="tablist" aria-label="Arbeitsbereiche">
+    <button id="tab-develop" role="tab" aria-selected="true" aria-controls="panel-develop" data-area="develop">Entwickeln</button>
+    <button id="tab-simulate" role="tab" aria-selected="false" aria-controls="panel-simulate" data-area="simulate" tabindex="-1">Simulieren</button>
+    <button id="tab-analyze" role="tab" aria-selected="false" aria-controls="panel-analyze" data-area="analyze" tabindex="-1">Auswerten <span id="run-count" hidden>0</span></button>
+  </nav>
+  <div class="workflow-bar"><span class="project-path">Pendelstudie <span>/</span> <b id="area-label">Werkbank</b></span><span id="workflow-state" role="status">Vorschau wird geladen …</span><button id="next-action">Zur Simulation →</button></div>
+  <main id="panels">
+    <section id="panel-develop" role="tabpanel" aria-labelledby="tab-develop"><iframe id="frame-develop" title="Entwickeln · Werkbank Klarglas Kühl" src="../develop-designs/index.html?unified=develop"></iframe></section>
+    <section id="panel-simulate" role="tabpanel" aria-labelledby="tab-simulate" hidden><iframe id="frame-simulate" title="Simulieren · Messlabor" src="../simulation-designs/index.html?unified=simulate"></iframe></section>
+    <section id="panel-analyze" role="tabpanel" aria-labelledby="tab-analyze" hidden><iframe id="frame-analyze" title="Auswerten · Messdaten und Berichte" src="../analysis-workspace/index.html?unified=analyze"></iframe></section>
+  </main>
+  <footer class="statusbar"><span id="global-status" role="status" aria-live="polite">Gemeinsame Designvorschau</span><span>Lokale Demo · kein nativer Compiler/Runner</span></footer>
+  <dialog id="help" aria-labelledby="help-title"><h1 id="help-title">Ein Arbeitsraum. Drei Perspektiven.</h1><p>Bearbeite main.c, speichere und baue die Vorschau. Starte in Simulieren einen Lauf und übernimm die Messdaten mit „Messlauf auswerten“. Dort kannst du Läufe vergleichen, Einheiten wechseln, Statistik und Berichte ansehen und CSV exportieren.</p><p>Die bekannten Konstanten length_m, gravity_m_s2 und initial_angle_rad steuern das Pendelbeispiel. Modellwerte im Inspektor werden in denselben Quelltext übernommen. Die Bewegung nutzt eine Kleinwinkelnäherung. C- und Analysecode werden hier nicht ausgeführt.</p><p>Änderungen und bis zu acht Messläufe bleiben während dieser Sitzung erhalten. Beim Bereichswechsel pausiert die Simulation. Eine Projektkopie kann als JSON heruntergeladen werden; die Vorschau verändert keine lokalen Projektdateien. Neuladen setzt die Sitzung zurück.</p><div class="help-options"><label><input type="checkbox" id="opaque"> Transparenz reduzieren</label></div><p>Tastatur: Strg/⌘ S speichern · F5 Vorschau bauen · Strg/⌘ F suchen · Alt 1/2/3 Bereich wechseln. Tab-Reihe: Pfeile, Pos1, Ende.</p><button id="help-close">Schließen</button></dialog>
+  <noscript>Diese interaktive Designvorschau benötigt JavaScript.</noscript>
+</body>
+</html>

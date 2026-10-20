@@ -60,6 +60,10 @@
     }
   },true);
   document.addEventListener('physim-demo-model-active',()=>{compiled=false;buildState();});
+  document.addEventListener('physim-preview-model',e=>{
+    builtModel={length:e.detail.length,mass:e.detail.mass};building=false;compiled=false;
+    $('model-length').value=fmt(builtModel.length);$('model-mass').value=fmt(builtModel.mass);buildState();
+  });
   new MutationObserver(buildState).observe(app,{attributes:true,attributeFilter:['data-state']});buildState();
 
   const sizes={left:190,right:320,workspace:660,timeline:120,measureClosed:150,measureOpen:330,plot:50};

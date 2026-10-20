@@ -11,11 +11,14 @@
   const objects = {mass:['Pendelkörper','Kugel · ID 3'],support:['Aufhängung','Box · ID 1'],rod:['Pendelstange','Linie · ID 2'],velocity:['Geschwindigkeit','Vektor · ID 4'],trail:['Bahnkurve','Pfad · ID 5']};
   let mode='paused', time=2.4, liveTime=2.4, browsing=false, replay=false, selected='mass', last=0;
   let activeModel={length:1.5,mass:1},nextModel={...activeModel};
+  let previewStarted=false;
+  const frequency=()=>Math.sqrt((activeModel.gravity??9.81)/activeModel.length);
+  const amplitude=()=>activeModel.amplitude??.5;
   document.addEventListener('physim-demo-model-built',e=>{nextModel={...e.detail};});
   const curvesByDesign={studio:false,labor:false,focus:false};
   const fmt = (n,d=2) => n.toLocaleString('de-DE',{minimumFractionDigits:d,maximumFractionDigits:d});
-  const angle = t => .5*Math.cos(Math.sqrt(9.81/activeModel.length)*t);
-  const speed = t => -activeModel.length*.5*Math.sqrt(9.81/activeModel.length)*Math.sin(Math.sqrt(9.81/activeModel.length)*t);
+  const angle = t => amplitude()*Math.cos(frequency()*t);
+  const speed = t => -activeModel.length*amplitude()*frequency()*Math.sin(frequency()*t);
   function panels() {
     for(const [id,cls] of [['tree','tree-closed'],['inspector','inspector-closed']]) $(id+'-toggle').setAttribute('aria-expanded',String(!app.classList.contains(cls)));
   }
@@ -70,6 +73,7 @@
     if($('position-y'))$('position-y').innerHTML=fmt(-activeModel.length*Math.cos(a))+' <span>m</span>';
     if($('object-mass-value'))$('object-mass-value').innerHTML=fmt(activeModel.mass)+' <span>kg</span>';
     $('measurement-time').textContent='bei t = '+fmt(time)+' s';$('time-value').innerHTML=fmt(time)+' <span>/ 6,00 s</span>';$('time').value=time;
+    if(new URLSearchParams(location.search).has('unified'))document.querySelector('.focus-note > span').textContent='m = '+fmt(activeModel.mass)+' kg · l = '+fmt(activeModel.length)+' m';
     document.querySelectorAll('.chart-cursor').forEach(e=>{e.setAttribute('x1',32+time/6*416);e.setAttribute('x2',32+time/6*416);});
     document.dispatchEvent(new CustomEvent('physim-demo-values',{detail:{angle:deg,velocity:v,height:h,length:activeModel.length,mass:activeModel.mass}}));
   }
@@ -80,8 +84,8 @@
   document.querySelectorAll('[data-object]').forEach(b=>b.addEventListener('click',()=>object(b.dataset.object)));
   for(const [id,target] of [['show-trail','trail'],['show-vectors','velocity'],['show-grid','floor-grid']]) $(id).addEventListener('change',()=>{(target==='floor-grid'?document.querySelector('.floor-grid'):$(target)).style.visibility=$(id).checked?'visible':'hidden';});
   $('state-select').addEventListener('change',()=>{mode=$('state-select').value;replay=false;browsing=false;if(mode==='ready'){time=0;liveTime=0;}status();render();});
-  $('run-button').addEventListener('click',()=>{if(mode==='ready'){liveTime=time=0;browsing=false;activeModel={...nextModel};updateCurves();document.dispatchEvent(new Event('physim-demo-model-active'));}mode=mode==='running'?'paused':'running';replay=false;status();render();});
-  $('step-button').addEventListener('click',()=>{liveTime=Math.min(6,liveTime+.001);if(!browsing)time=liveTime;status();render();});
+  $('run-button').addEventListener('click',()=>{if(mode==='ready'){previewStarted=true;liveTime=time=0;browsing=false;activeModel={...nextModel};updateCurves();document.dispatchEvent(new Event('physim-demo-model-active'));}mode=mode==='running'?'paused':'running';replay=false;status();render();});
+  $('step-button').addEventListener('click',()=>{previewStarted=true;liveTime=Math.min(6,liveTime+.001);if(!browsing)time=liveTime;status();render();});
   $('stop-button').addEventListener('click',()=>{mode='ready';replay=false;status();});
   $('reset-button').addEventListener('click',()=>{mode='paused';time=liveTime=0;browsing=replay=false;status();render();});
   $('overlay-action').addEventListener('click',()=>{mode='paused';time=liveTime=2.4;browsing=replay=false;status();render();});
@@ -97,7 +101,40 @@
     document.querySelector('.scene-hint').textContent='Kameraansichten: illustrative Projektion';
   }
   $('camera').addEventListener('change',camera);$('camera-reset').addEventListener('click',()=>{$('camera').value='perspective';camera();});
-  function updateCurves(){const vmax=.5*Math.sqrt(9.81*activeModel.length);for(const [id,fn,scale] of [['angle-curve',angle,.5],['velocity-curve',speed,vmax]]) {let d='';for(let i=0;i<=160;i++){const t=i/160*6;d+=(i?'L':'M')+(32+i/160*416).toFixed(2)+' '+(52-fn(t)/scale*35).toFixed(2)+' ';}$(id).setAttribute('d',d);}const labels=document.querySelectorAll('.chart:nth-child(2) .chart-axis text');if(labels.length>=3){labels[0].textContent=fmt(vmax,1);labels[2].textContent='−'+fmt(vmax,1);}}
+  function updateCurves(){
+    const vmax=Math.max(.001,Math.abs(amplitude())*Math.sqrt((activeModel.gravity??9.81)*activeModel.length));
+    for(const [id,fn,scale] of [['angle-curve',angle,Math.max(.001,Math.abs(amplitude()))],['velocity-curve',speed,vmax]]){
+      let d='';for(let i=0;i<=160;i++){const t=i/160*6;d+=(i?'L':'M')+(32+i/160*416).toFixed(2)+' '+(52-fn(t)/scale*35).toFixed(2)+' ';}$(id).setAttribute('d',d);
+    }
+    const labels=document.querySelectorAll('.chart:nth-child(2) .chart-axis text');
+    if(labels.length>=3){labels[0].textContent=fmt(vmax,1);labels[2].textContent='−'+fmt(vmax,1);}
+    if(new URLSearchParams(location.search).get('unified')==='simulate'){
+      const angleLabels=document.querySelectorAll('.chart:first-child .chart-axis text'),maximum=fmt(Math.max(.001,Math.abs(amplitude()))*180/Math.PI,1);
+      if(angleLabels.length>=3){angleLabels[0].textContent=maximum;angleLabels[2].textContent='−'+maximum;}
+    }
+  }
+  if(new URLSearchParams(location.search).get('unified')==='simulate'){
+    mode='ready';time=liveTime=0;
+    document.addEventListener('physim-preview-command',event=>{
+      const message=event.detail;
+      if(message.type==='visible'&&!message.visible){if(mode==='running')mode='paused';replay=false;status();}
+      if(message.type==='model'){
+        nextModel={...message.model};
+        if(!previewStarted){activeModel={...nextModel};updateCurves();render();}
+        document.dispatchEvent(new CustomEvent('physim-preview-model',{detail:nextModel}));
+      }
+      if(message.type==='export'){
+        if(liveTime<=0){document.dispatchEvent(new CustomEvent('physim-preview-output',{detail:{type:'status',message:'Zuerst einen Lauf starten oder einen Schritt ausführen.'}}));return;}
+        if(mode==='running')mode='paused';replay=false;status();
+        const count=Math.max(1,Math.ceil(liveTime*50));
+        const data=Array.from({length:count+1},(_,i)=>{
+          const t=i/count*liveTime,theta=angle(t),omega=speed(t)/activeModel.length;
+          return{t,theta,omega,energy:activeModel.mass*(speed(t)**2/2+(activeModel.gravity??9.81)*activeModel.length*(1-Math.cos(theta)))};
+        });
+        document.dispatchEvent(new CustomEvent('physim-preview-output',{detail:{type:'run',run:{time:new Date().toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'}),model:{...activeModel},damping:0,data}}}));
+      }
+    });
+  }
   updateCurves();
   function tick(now) {
     const dt=last?Math.min((now-last)/1000,.1):0;last=now;
