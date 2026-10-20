@@ -1,0 +1,1311 @@
+{
+  "scope": "Native analysis search, channel field, card flow and tab rule; no complete UI fidelity claim",
+  "source_24": {
+    "base": "a03bcef43aa36c8976c41d1bc8bb6da8617e4c0d",
+    "source_sha256_lf": {
+      "app/design_ui.inc": "e27663044de925241ffb240e680356d4b1a3b0fbddf5cf37c58024c772bd78fb",
+      "app/docking_ui.inc": "273a40a9f57d50103579fa17f835fc6fe76ec408869ea7f5ff7f1f89de96ba38",
+      "app/main.c": "57e0895facf587b94d246a6180c2ab74f4ab4800faad521f54947e56b48edc6a",
+      "app/panel_windows.inc": "19756c29282f5dc03fa7933c5bd26c4e89fb7373806ca84f22e0840912ff2cf0",
+      "app/plot_tests.inc": "3c730aa3c5fd5a87444973c5cb1734c909286970421f6c8bd5b2a73294a15b61",
+      "app/plot_ui.inc": "300a72b0dc1e3f476a99469eb8d94929ccca43dcee980eb1b6837d6e7c9e412e",
+      "app/report_details_tests.inc": "eff52c88636b5db6f371a9151975d88624e3d315c4e11e41a0ff55495bada6dc",
+      "app/run_details_tests.inc": "ad34f630ee605abfb78245d3701611a3c6d26f15eae85cab2b32a5e0b6447f35",
+      "app/toolbar_ui.inc": "9088302875addff90fe11b41609d80aff45f80c2936b2785b7a06d290e9d3fd1",
+      "app/workspace_tests.inc": "62b5c5c0dc550f8384a9220c2e8bcef052188d5c0be85b0b051479a35bf41cee",
+      "tests/check_display_workflow.py": "365fe005dafae9f3584a5cbeb4d43c8e5cd5e4665f7c622742a41598ea3dba40",
+      "tests/native_integration_cases.json": "23d5c35b94c6f370d440136625b8a97a481cdf47a84b7d620b7bc7dc5531d745",
+      "app/analysis_layout.inc": "74a9cb6997e41b6ae2c597494bc870f3a9b9de768de9d4ad1b7eff9d01deb48d",
+      "app/analysis_ui.inc": "97f4415c58beb4638a3a5f9a81fb4846269b39bcd096271b703c4d7da70de634",
+      "app/analysis_workspace_tests.inc": "8a4bb2a826946de53257654760f97f702d6f1d87a19cc47f5d1f458172ade8a2",
+      "app/preferences.c": "76b00a8147149d8a06482c6b5c8b7b100a2a23d82663e0af01c786ed2e9bf8ef",
+      "app/layout_catalog.c": "a467277f82d4796fe733c7bd5c8e36265e3d3fa891e7593226830ead02ae36ae",
+      "app/settings_ui.inc": "2e062615487b26ac98afaff9f7ff59e88ac766fc1fc63df8682970c494254476",
+      "tests/test_preferences.c": "505dbb54dffdb925f924e3ec6987efa13265a1e47f87654ba73066666d51a9fb",
+      "tests/test_layout_catalog.c": "4bf2383cdfa627da1791e264749092f74c5570197fae46079b810a88e032b8a5",
+      "app/analysis_resize.inc": "8ccc8dfa92d58f910d4ee9cacc04e96a93be01b12af2b603368205b00726eb88",
+      "app/settings_tests.inc": "107a0f1efff15d47b161bbca72d61bfc641db4ca552033713330504356394fb3",
+      "app/layout_ui.inc": "be51a9d8fe2d91391248416a942f8bfd2e3ba5dd3b4a75d12883140930b1613f",
+      "app/workbench_tests.inc": "1153571f6cea7f4c5e1d3535068b92d49abc05e0ca0cc5b6c2662d7f7db3359f"
+    },
+    "foreign_sha256_lf": {
+      ".github/workflows/linux-ui-sanitizers.yml": "80e5b0d925f75ddce52260e8812cfb02d0e5b6e4ccfef03ea86deea75c446085",
+      ".github/workflows/macos-f1-accessibility.yml": "c37bfbd09cdfb0d26922cf0fbd8527f2be70161dd113809435732b6150fd5650",
+      "app/accessibility_atspi.c": "fb32ff39647be57cdaa2c02a10d4319ecef2186747a1edc2338bb397e5668b0f",
+      "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+      "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+      "tests/check_documentation_orca.py": "e38b255bbd7bb12787e50cd78d4b32ed8f985ce60746afde2702285e22a728d5",
+      "tests/test_accessibility_tables_atspi.py": "623f5152d85dabe778728fedc9f999b93e3bfaef6d8d82679d6444675ad54d2f",
+      "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+      "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+      "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+    }
+  },
+  "platforms": {
+    "windows": {
+      "matrix": {
+        "binary": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "ee18061042c56933a3d44b42a385714d52e2177f37996c788c936aef70815537",
+        "groups": [
+          {
+            "variant": "dark",
+            "status": "passed",
+            "seconds": 14.85999999998603
+          },
+          {
+            "variant": "light",
+            "status": "passed",
+            "seconds": 15.530999999959022
+          },
+          {
+            "variant": "contrast",
+            "status": "passed",
+            "seconds": 12.59399999998277
+          },
+          {
+            "variant": "dark-large-narrow",
+            "status": "passed",
+            "seconds": 11.85999999998603
+          },
+          {
+            "variant": "light-large-narrow",
+            "status": "passed",
+            "seconds": 11.077999999979511
+          }
+        ]
+      },
+      "steps": [
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-24\\dark",
+            "analysis-layout-dark"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "01d494ab741ddcaf4f628eceb4190e4bd5f252e1f23c1630111c33d2626e13dd",
+          "stderr_sha256": "e2c1b423cb653a972e35c063954ee2571d16a824793860acd9a50f5ef53f37d7",
+          "observations": [
+            "ANALYSIS LAYOUT: client=1440x1000 middle=232.0,198.0,966.0,774.0 import-bottom=960.0",
+            "ANALYSIS TAB FIT: width=64.00 text=57.54",
+            "ANALYSIS STATISTICS SCROLL: offset=105 button-bottom=965.0 viewport-bottom=972.0 reachable=1 unchanged-view-and-statistics=1",
+            "ANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-24\\light",
+            "analysis-layout-light"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "01d494ab741ddcaf4f628eceb4190e4bd5f252e1f23c1630111c33d2626e13dd",
+          "stderr_sha256": "72848f06a82ff40165121cc5f131d810e30d5b1e84c0b79e2a97ce0ea74291fb",
+          "observations": [
+            "ANALYSIS LAYOUT: client=1440x1000 middle=232.0,198.0,966.0,774.0 import-bottom=960.0",
+            "ANALYSIS TAB FIT: width=64.00 text=57.54",
+            "ANALYSIS STATISTICS SCROLL: offset=105 button-bottom=965.0 viewport-bottom=972.0 reachable=1 unchanged-view-and-statistics=1",
+            "ANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-24\\contrast",
+            "analysis-layout-contrast"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "01d494ab741ddcaf4f628eceb4190e4bd5f252e1f23c1630111c33d2626e13dd",
+          "stderr_sha256": "3f97d8515e61fc158d6c2484149506f0cd577b1aaab56b672340ef44d07f4e99",
+          "observations": [
+            "ANALYSIS LAYOUT: client=1440x1000 middle=232.0,198.0,966.0,774.0 import-bottom=960.0",
+            "ANALYSIS TAB FIT: width=64.00 text=57.54",
+            "ANALYSIS STATISTICS SCROLL: offset=105 button-bottom=965.0 viewport-bottom=972.0 reachable=1 unchanged-view-and-statistics=1",
+            "ANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-24\\dark-large-narrow",
+            "analysis-layout-dark-large-narrow"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "cfa6ee4e742400a14fa79f327a6fd602f03d61a72b374c717b1958f979818c73",
+          "stderr_sha256": "47cb657e5df702636f093094a74c7dac1a17f4a90a18a844da59d83250790e22",
+          "observations": [
+            "ANALYSIS LAYOUT: client=1080x740 middle=232.0,198.0,606.0,514.0 import-bottom=700.0",
+            "ANALYSIS TAB FIT: width=88.00 text=79.12",
+            "ANALYSIS STATISTICS SCROLL: offset=105 button-bottom=705.0 viewport-bottom=712.0 reachable=1 unchanged-view-and-statistics=1",
+            "ANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-analysis-windows-24\\light-large-narrow",
+            "analysis-layout-light-large-narrow"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "cfa6ee4e742400a14fa79f327a6fd602f03d61a72b374c717b1958f979818c73",
+          "stderr_sha256": "8b6b8f050a78f009f1285615f99a11d7b95fd54aa117394f911387868e5e8365",
+          "observations": [
+            "ANALYSIS LAYOUT: client=1080x740 middle=232.0,198.0,606.0,514.0 import-bottom=700.0",
+            "ANALYSIS TAB FIT: width=88.00 text=79.12",
+            "ANALYSIS STATISTICS SCROLL: offset=105 button-bottom=705.0 viewport-bottom=712.0 reachable=1 unchanged-view-and-statistics=1",
+            "ANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED"
+          ]
+        }
+      ]
+    },
+    "linux": {
+      "matrix": {
+        "binary": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+        "sha256": "ccacc747372758585df05eec5bafce857890e99b564bb5a85d192f40174db222",
+        "groups": [
+          {
+            "variant": "dark",
+            "status": "passed",
+            "seconds": 19.616488663999917
+          },
+          {
+            "variant": "light",
+            "status": "passed",
+            "seconds": 19.84588449399962
+          },
+          {
+            "variant": "contrast",
+            "status": "passed",
+            "seconds": 18.82931470800031
+          },
+          {
+            "variant": "dark-large-narrow",
+            "status": "passed",
+            "seconds": 17.012860483999248
+          },
+          {
+            "variant": "light-large-narrow",
+            "status": "passed",
+            "seconds": 15.146113846003573
+          }
+        ]
+      },
+      "steps": [
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-24/dark",
+            "analysis-layout-dark"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "a7fe65004831df528ad750e2d35d7192ebb4d10611c12a7bd96f91cac42ba53d",
+          "stderr_sha256": "d84f6ed210d8c1528496f4c76f9dd3f666bc1451241532bac4123cf0768c68e8",
+          "observations": [
+            "ANALYSIS LAYOUT: client=1440x1000 middle=232.0,198.0,966.0,774.0 import-bottom=960.0",
+            "ANALYSIS TAB FIT: width=66.00 text=64.90",
+            "ANALYSIS STATISTICS SCROLL: offset=105 button-bottom=965.0 viewport-bottom=972.0 reachable=1 unchanged-view-and-statistics=1",
+            "ANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-24/light",
+            "analysis-layout-light"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "a7fe65004831df528ad750e2d35d7192ebb4d10611c12a7bd96f91cac42ba53d",
+          "stderr_sha256": "40984bd4c324291ef196a8fcb4f8a6a43438c1d0a85acf689f0737c9bd079cc7",
+          "observations": [
+            "ANALYSIS LAYOUT: client=1440x1000 middle=232.0,198.0,966.0,774.0 import-bottom=960.0",
+            "ANALYSIS TAB FIT: width=66.00 text=64.90",
+            "ANALYSIS STATISTICS SCROLL: offset=105 button-bottom=965.0 viewport-bottom=972.0 reachable=1 unchanged-view-and-statistics=1",
+            "ANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-24/contrast",
+            "analysis-layout-contrast"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "a7fe65004831df528ad750e2d35d7192ebb4d10611c12a7bd96f91cac42ba53d",
+          "stderr_sha256": "eb951beb2de9a94f588dffa48510541c45b9b61caa6e43df64c790708218af28",
+          "observations": [
+            "ANALYSIS LAYOUT: client=1440x1000 middle=232.0,198.0,966.0,774.0 import-bottom=960.0",
+            "ANALYSIS TAB FIT: width=66.00 text=64.90",
+            "ANALYSIS STATISTICS SCROLL: offset=105 button-bottom=965.0 viewport-bottom=972.0 reachable=1 unchanged-view-and-statistics=1",
+            "ANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-24/dark-large-narrow",
+            "analysis-layout-dark-large-narrow"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "36c1fad1f310edf9f67fa694e6c8861b3e448c05a158ea89046783cfaf6f819a",
+          "stderr_sha256": "e988a3dae72e6f5afade95dd7f86533e490304505025b38fc24df6c937021b47",
+          "observations": [
+            "ANALYSIS LAYOUT: client=1080x740 middle=232.0,198.0,606.0,514.0 import-bottom=708.2",
+            "ANALYSIS TAB FIT: width=91.00 text=89.24",
+            "ANALYSIS STATISTICS SCROLL: offset=105 button-bottom=705.0 viewport-bottom=712.0 reachable=1 unchanged-view-and-statistics=1",
+            "ANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-analysis-linux-24/light-large-narrow",
+            "analysis-layout-light-large-narrow"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "36c1fad1f310edf9f67fa694e6c8861b3e448c05a158ea89046783cfaf6f819a",
+          "stderr_sha256": "26d8e84ed37da7bd8f868b3d64b8f19641a80945d0479702fa81429952dad9b5",
+          "observations": [
+            "ANALYSIS LAYOUT: client=1080x740 middle=232.0,198.0,606.0,514.0 import-bottom=708.2",
+            "ANALYSIS TAB FIT: width=91.00 text=89.24",
+            "ANALYSIS STATISTICS SCROLL: offset=105 button-bottom=705.0 viewport-bottom=712.0 reachable=1 unchanged-view-and-statistics=1",
+            "ANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED"
+          ]
+        }
+      ]
+    }
+  },
+  "captures": [
+    {
+      "platform": "windows",
+      "variant": "dark",
+      "source": "D:\\Physim\\build\\native\\design-analysis-windows-24\\dark\\analysis-both.bmp",
+      "source_sha256": "6b8b987f0469dfce50dd03eb2676b5c2e08ebf32aea532222934923b94171296",
+      "file": "windows-dark-v24.png",
+      "sha256": "75b4cf7491524586216b75dc523d2ad5fdb4bc426d4d7d238213ffd05a89ca7e",
+      "identical_decoded_rgb": true
+    },
+    {
+      "platform": "windows",
+      "variant": "light",
+      "source": "D:\\Physim\\build\\native\\design-analysis-windows-24\\light\\analysis-both.bmp",
+      "source_sha256": "c37808183f6ce1ed883cc51b00a534d8513569451a6239a20e7bb4d584f030dd",
+      "file": "windows-light-v24.png",
+      "sha256": "9f955e6923cce7c7842f86be69779aa1f0cfd3d27caaa528125c29efe1e8e9c8",
+      "identical_decoded_rgb": true
+    },
+    {
+      "platform": "windows",
+      "variant": "contrast",
+      "source": "D:\\Physim\\build\\native\\design-analysis-windows-24\\contrast\\analysis-both.bmp",
+      "source_sha256": "59196e4c2db2163f5d929d2b71dddd1b464a87ea86bc27a3b5c9322faf67d85f",
+      "file": "windows-contrast-v24.png",
+      "sha256": "21f7da021604a548e37def11906075daf15161ca59c0f6a8cfdaf6cfc67162ad",
+      "identical_decoded_rgb": true
+    },
+    {
+      "platform": "windows",
+      "variant": "dark-large-narrow",
+      "source": "D:\\Physim\\build\\native\\design-analysis-windows-24\\dark-large-narrow\\analysis-both.bmp",
+      "source_sha256": "d9e3d86d2133f866175551c7cddbcb6d565b8e714507e99f4d21be434a8c3450",
+      "file": "windows-dark-large-narrow-v24.png",
+      "sha256": "29be94524d2f5d638f3a040bbcbed7ab32357f53c3556ab639679f4a6687cb21",
+      "identical_decoded_rgb": true
+    },
+    {
+      "platform": "windows",
+      "variant": "light-large-narrow",
+      "source": "D:\\Physim\\build\\native\\design-analysis-windows-24\\light-large-narrow\\analysis-both.bmp",
+      "source_sha256": "13dbaddd6b39b374b2eceb3aa7ca495cdec93d94283653d5b6295a4b03f7d264",
+      "file": "windows-light-large-narrow-v24.png",
+      "sha256": "887f002236b8eba757d8c3271027224df8be635fcd476a7a7a4f4d6381a885c0",
+      "identical_decoded_rgb": true
+    },
+    {
+      "platform": "linux",
+      "variant": "dark",
+      "source": "D:\\Physim\\build\\native\\design-analysis-linux-24\\dark\\analysis-both.bmp",
+      "source_sha256": "02b9a8f15c6b98908956c4bb2f27556c780396482de61021c95097bb4c608ffe",
+      "file": "linux-dark-v24.png",
+      "sha256": "bf0123573822e3ef044a6ccdb6fd6dd7929f54246fa82095c9bd2cb668926dbe",
+      "identical_decoded_rgb": true
+    },
+    {
+      "platform": "linux",
+      "variant": "light",
+      "source": "D:\\Physim\\build\\native\\design-analysis-linux-24\\light\\analysis-both.bmp",
+      "source_sha256": "6f39957da342a06561a5c6459d8f17cb4f7f9d7e5b3aeb4b1f5456cab9d697a5",
+      "file": "linux-light-v24.png",
+      "sha256": "7805e946c73deb419cb9826b24acd8ce2d390afd095419d3e3390feeef3e1000",
+      "identical_decoded_rgb": true
+    },
+    {
+      "platform": "linux",
+      "variant": "contrast",
+      "source": "D:\\Physim\\build\\native\\design-analysis-linux-24\\contrast\\analysis-both.bmp",
+      "source_sha256": "4bd18f35733a48b5fb3899bf9cbe9886871362326bebb7bff5ad3cc653708de4",
+      "file": "linux-contrast-v24.png",
+      "sha256": "2f7b1526f2e10584b37c1f75442ad5d43322143e5df4f84394e04e44f9fa3e1c",
+      "identical_decoded_rgb": true
+    },
+    {
+      "platform": "linux",
+      "variant": "dark-large-narrow",
+      "source": "D:\\Physim\\build\\native\\design-analysis-linux-24\\dark-large-narrow\\analysis-both.bmp",
+      "source_sha256": "709f62580d497c275f9ebd8b7f22b0a75b742a5221264ce854dcb353faabca6b",
+      "file": "linux-dark-large-narrow-v24.png",
+      "sha256": "d834fd588494bb7c080c68ff621f156597789f9dc963eea659d6445c27facebd",
+      "identical_decoded_rgb": true
+    },
+    {
+      "platform": "linux",
+      "variant": "light-large-narrow",
+      "source": "D:\\Physim\\build\\native\\design-analysis-linux-24\\light-large-narrow\\analysis-both.bmp",
+      "source_sha256": "81595e09424fe06505ab1ebc15990e54381ee6a4f2416db7076922760c6ccedf",
+      "file": "linux-light-large-narrow-v24.png",
+      "sha256": "75a275f14b75be5df03b8723c5ff30d6359e458b863c0a8bcf8ddedadddd570d",
+      "identical_decoded_rgb": true
+    }
+  ],
+  "reference_samples": [
+    {
+      "platform": "windows",
+      "theme": "dark",
+      "reference": "docs\\visuals\\unified-workspace\\analyze-dark.png",
+      "reference_sha256": "19574832c52aff19b3b13e4b204cc7f6132117b5af052d8a53c70ce4043cc01d",
+      "capture": "windows-dark-v24.png",
+      "checks": [
+        {
+          "name": "search top border",
+          "xy": [
+            30,
+            253
+          ],
+          "expected": [
+            59,
+            61,
+            69
+          ],
+          "actual": [
+            59,
+            61,
+            69
+          ],
+          "passed": true
+        },
+        {
+          "name": "search left border",
+          "xy": [
+            14,
+            265
+          ],
+          "expected": [
+            59,
+            61,
+            69
+          ],
+          "actual": [
+            59,
+            61,
+            69
+          ],
+          "passed": true
+        },
+        {
+          "name": "search interior",
+          "xy": [
+            30,
+            280
+          ],
+          "expected": [
+            25,
+            26,
+            30
+          ],
+          "actual": [
+            25,
+            26,
+            30
+          ],
+          "passed": true
+        },
+        {
+          "name": "tab bottom pixel",
+          "xy": [
+            270,
+            252
+          ],
+          "expected": [
+            138,
+            186,
+            255
+          ],
+          "actual": [
+            138,
+            186,
+            255
+          ],
+          "passed": true
+        },
+        {
+          "name": "channel interior",
+          "xy": [
+            1230,
+            335
+          ],
+          "expected": [
+            25,
+            26,
+            30
+          ],
+          "actual": [
+            25,
+            26,
+            30
+          ],
+          "passed": true
+        },
+        {
+          "name": "integrated chevron background",
+          "xy": [
+            1390,
+            340
+          ],
+          "expected": [
+            25,
+            26,
+            30
+          ],
+          "actual": [
+            25,
+            26,
+            30
+          ],
+          "passed": true
+        }
+      ]
+    },
+    {
+      "platform": "windows",
+      "theme": "light",
+      "reference": "docs\\visuals\\unified-workspace\\analyze-light.png",
+      "reference_sha256": "f9fe041150631c5b36f35f49462a0701f9e617b80254de835ad3232f17395a95",
+      "capture": "windows-light-v24.png",
+      "checks": [
+        {
+          "name": "search top border",
+          "xy": [
+            30,
+            253
+          ],
+          "expected": [
+            190,
+            195,
+            206
+          ],
+          "actual": [
+            190,
+            195,
+            206
+          ],
+          "passed": true
+        },
+        {
+          "name": "search left border",
+          "xy": [
+            14,
+            265
+          ],
+          "expected": [
+            190,
+            195,
+            206
+          ],
+          "actual": [
+            190,
+            195,
+            206
+          ],
+          "passed": true
+        },
+        {
+          "name": "search interior",
+          "xy": [
+            30,
+            280
+          ],
+          "expected": [
+            255,
+            255,
+            255
+          ],
+          "actual": [
+            255,
+            255,
+            255
+          ],
+          "passed": true
+        },
+        {
+          "name": "tab bottom pixel",
+          "xy": [
+            270,
+            252
+          ],
+          "expected": [
+            23,
+            86,
+            158
+          ],
+          "actual": [
+            23,
+            86,
+            158
+          ],
+          "passed": true
+        },
+        {
+          "name": "channel interior",
+          "xy": [
+            1230,
+            335
+          ],
+          "expected": [
+            255,
+            255,
+            255
+          ],
+          "actual": [
+            255,
+            255,
+            255
+          ],
+          "passed": true
+        },
+        {
+          "name": "integrated chevron background",
+          "xy": [
+            1390,
+            340
+          ],
+          "expected": [
+            255,
+            255,
+            255
+          ],
+          "actual": [
+            255,
+            255,
+            255
+          ],
+          "passed": true
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "theme": "dark",
+      "reference": "docs\\visuals\\unified-workspace\\analyze-dark.png",
+      "reference_sha256": "19574832c52aff19b3b13e4b204cc7f6132117b5af052d8a53c70ce4043cc01d",
+      "capture": "linux-dark-v24.png",
+      "checks": [
+        {
+          "name": "search top border",
+          "xy": [
+            30,
+            253
+          ],
+          "expected": [
+            59,
+            61,
+            69
+          ],
+          "actual": [
+            59,
+            61,
+            69
+          ],
+          "passed": true
+        },
+        {
+          "name": "search left border",
+          "xy": [
+            14,
+            265
+          ],
+          "expected": [
+            59,
+            61,
+            69
+          ],
+          "actual": [
+            59,
+            61,
+            69
+          ],
+          "passed": true
+        },
+        {
+          "name": "search interior",
+          "xy": [
+            30,
+            280
+          ],
+          "expected": [
+            25,
+            26,
+            30
+          ],
+          "actual": [
+            25,
+            26,
+            30
+          ],
+          "passed": true
+        },
+        {
+          "name": "tab bottom pixel",
+          "xy": [
+            270,
+            252
+          ],
+          "expected": [
+            138,
+            186,
+            255
+          ],
+          "actual": [
+            138,
+            186,
+            255
+          ],
+          "passed": true
+        },
+        {
+          "name": "channel interior",
+          "xy": [
+            1230,
+            335
+          ],
+          "expected": [
+            25,
+            26,
+            30
+          ],
+          "actual": [
+            25,
+            26,
+            30
+          ],
+          "passed": true
+        },
+        {
+          "name": "integrated chevron background",
+          "xy": [
+            1390,
+            340
+          ],
+          "expected": [
+            25,
+            26,
+            30
+          ],
+          "actual": [
+            25,
+            26,
+            30
+          ],
+          "passed": true
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "theme": "light",
+      "reference": "docs\\visuals\\unified-workspace\\analyze-light.png",
+      "reference_sha256": "f9fe041150631c5b36f35f49462a0701f9e617b80254de835ad3232f17395a95",
+      "capture": "linux-light-v24.png",
+      "checks": [
+        {
+          "name": "search top border",
+          "xy": [
+            30,
+            253
+          ],
+          "expected": [
+            190,
+            195,
+            206
+          ],
+          "actual": [
+            190,
+            195,
+            206
+          ],
+          "passed": true
+        },
+        {
+          "name": "search left border",
+          "xy": [
+            14,
+            265
+          ],
+          "expected": [
+            190,
+            195,
+            206
+          ],
+          "actual": [
+            190,
+            195,
+            206
+          ],
+          "passed": true
+        },
+        {
+          "name": "search interior",
+          "xy": [
+            30,
+            280
+          ],
+          "expected": [
+            255,
+            255,
+            255
+          ],
+          "actual": [
+            255,
+            255,
+            255
+          ],
+          "passed": true
+        },
+        {
+          "name": "tab bottom pixel",
+          "xy": [
+            270,
+            252
+          ],
+          "expected": [
+            23,
+            86,
+            158
+          ],
+          "actual": [
+            23,
+            86,
+            158
+          ],
+          "passed": true
+        },
+        {
+          "name": "channel interior",
+          "xy": [
+            1230,
+            335
+          ],
+          "expected": [
+            255,
+            255,
+            255
+          ],
+          "actual": [
+            255,
+            255,
+            255
+          ],
+          "passed": true
+        },
+        {
+          "name": "integrated chevron background",
+          "xy": [
+            1390,
+            340
+          ],
+          "expected": [
+            255,
+            255,
+            255
+          ],
+          "actual": [
+            255,
+            255,
+            255
+          ],
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "counterexamples": [
+    {
+      "source": "docs\\visuals\\unified-workspace\\analysis-native-2026-10-20\\windows-analyze-dark-v21.png",
+      "sha256": "805ec7c388eee518a9b42b67d051196cfc834faa306dcd8aecb0d68c0bb87eba",
+      "checks": [
+        {
+          "name": "search top border",
+          "xy": [
+            30,
+            253
+          ],
+          "expected": [
+            59,
+            61,
+            69
+          ],
+          "actual": [
+            25,
+            26,
+            30
+          ],
+          "passed": false
+        },
+        {
+          "name": "search left border",
+          "xy": [
+            14,
+            265
+          ],
+          "expected": [
+            59,
+            61,
+            69
+          ],
+          "actual": [
+            25,
+            26,
+            30
+          ],
+          "passed": false
+        },
+        {
+          "name": "search interior",
+          "xy": [
+            30,
+            280
+          ],
+          "expected": [
+            25,
+            26,
+            30
+          ],
+          "actual": [
+            25,
+            26,
+            30
+          ],
+          "passed": true
+        },
+        {
+          "name": "tab bottom pixel",
+          "xy": [
+            270,
+            252
+          ],
+          "expected": [
+            138,
+            186,
+            255
+          ],
+          "actual": [
+            59,
+            61,
+            69
+          ],
+          "passed": false
+        },
+        {
+          "name": "channel interior",
+          "xy": [
+            1230,
+            335
+          ],
+          "expected": [
+            25,
+            26,
+            30
+          ],
+          "actual": [
+            48,
+            49,
+            54
+          ],
+          "passed": false
+        },
+        {
+          "name": "integrated chevron background",
+          "xy": [
+            1390,
+            340
+          ],
+          "expected": [
+            25,
+            26,
+            30
+          ],
+          "actual": [
+            48,
+            49,
+            54
+          ],
+          "passed": false
+        }
+      ]
+    },
+    {
+      "source": "docs\\visuals\\unified-workspace\\analysis-native-2026-10-20\\windows-analyze-light-v21.png",
+      "sha256": "301548bf6bd5919dec2faa0150b0310edd5cf010dafb76e056a931c02d56526b",
+      "checks": [
+        {
+          "name": "search top border",
+          "xy": [
+            30,
+            253
+          ],
+          "expected": [
+            190,
+            195,
+            206
+          ],
+          "actual": [
+            255,
+            255,
+            255
+          ],
+          "passed": false
+        },
+        {
+          "name": "search left border",
+          "xy": [
+            14,
+            265
+          ],
+          "expected": [
+            190,
+            195,
+            206
+          ],
+          "actual": [
+            255,
+            255,
+            255
+          ],
+          "passed": false
+        },
+        {
+          "name": "search interior",
+          "xy": [
+            30,
+            280
+          ],
+          "expected": [
+            255,
+            255,
+            255
+          ],
+          "actual": [
+            255,
+            255,
+            255
+          ],
+          "passed": true
+        },
+        {
+          "name": "tab bottom pixel",
+          "xy": [
+            270,
+            252
+          ],
+          "expected": [
+            23,
+            86,
+            158
+          ],
+          "actual": [
+            190,
+            195,
+            206
+          ],
+          "passed": false
+        },
+        {
+          "name": "channel interior",
+          "xy": [
+            1230,
+            335
+          ],
+          "expected": [
+            255,
+            255,
+            255
+          ],
+          "actual": [
+            224,
+            227,
+            234
+          ],
+          "passed": false
+        },
+        {
+          "name": "integrated chevron background",
+          "xy": [
+            1390,
+            340
+          ],
+          "expected": [
+            255,
+            255,
+            255
+          ],
+          "actual": [
+            224,
+            227,
+            234
+          ],
+          "passed": false
+        }
+      ]
+    },
+    {
+      "source": "docs\\visuals\\unified-workspace\\analysis-native-2026-10-20\\linux-analyze-dark-v21.png",
+      "sha256": "374c925868fce2acdb080694bef9677a8cdb59b8a5f50a7215442185772ab28a",
+      "checks": [
+        {
+          "name": "search top border",
+          "xy": [
+            30,
+            253
+          ],
+          "expected": [
+            59,
+            61,
+            69
+          ],
+          "actual": [
+            25,
+            26,
+            30
+          ],
+          "passed": false
+        },
+        {
+          "name": "search left border",
+          "xy": [
+            14,
+            265
+          ],
+          "expected": [
+            59,
+            61,
+            69
+          ],
+          "actual": [
+            25,
+            26,
+            30
+          ],
+          "passed": false
+        },
+        {
+          "name": "search interior",
+          "xy": [
+            30,
+            280
+          ],
+          "expected": [
+            25,
+            26,
+            30
+          ],
+          "actual": [
+            25,
+            26,
+            30
+          ],
+          "passed": true
+        },
+        {
+          "name": "tab bottom pixel",
+          "xy": [
+            270,
+            252
+          ],
+          "expected": [
+            138,
+            186,
+            255
+          ],
+          "actual": [
+            59,
+            61,
+            69
+          ],
+          "passed": false
+        },
+        {
+          "name": "channel interior",
+          "xy": [
+            1230,
+            335
+          ],
+          "expected": [
+            25,
+            26,
+            30
+          ],
+          "actual": [
+            48,
+            49,
+            54
+          ],
+          "passed": false
+        },
+        {
+          "name": "integrated chevron background",
+          "xy": [
+            1390,
+            340
+          ],
+          "expected": [
+            25,
+            26,
+            30
+          ],
+          "actual": [
+            48,
+            49,
+            54
+          ],
+          "passed": false
+        }
+      ]
+    },
+    {
+      "source": "docs\\visuals\\unified-workspace\\analysis-native-2026-10-20\\linux-analyze-light-v21.png",
+      "sha256": "2b8c815ab4b6aad1992e48b9d255f298fd2a190f62048ef4d7d090e194533f20",
+      "checks": [
+        {
+          "name": "search top border",
+          "xy": [
+            30,
+            253
+          ],
+          "expected": [
+            190,
+            195,
+            206
+          ],
+          "actual": [
+            255,
+            255,
+            255
+          ],
+          "passed": false
+        },
+        {
+          "name": "search left border",
+          "xy": [
+            14,
+            265
+          ],
+          "expected": [
+            190,
+            195,
+            206
+          ],
+          "actual": [
+            255,
+            255,
+            255
+          ],
+          "passed": false
+        },
+        {
+          "name": "search interior",
+          "xy": [
+            30,
+            280
+          ],
+          "expected": [
+            255,
+            255,
+            255
+          ],
+          "actual": [
+            255,
+            255,
+            255
+          ],
+          "passed": true
+        },
+        {
+          "name": "tab bottom pixel",
+          "xy": [
+            270,
+            252
+          ],
+          "expected": [
+            23,
+            86,
+            158
+          ],
+          "actual": [
+            190,
+            195,
+            206
+          ],
+          "passed": false
+        },
+        {
+          "name": "channel interior",
+          "xy": [
+            1230,
+            335
+          ],
+          "expected": [
+            255,
+            255,
+            255
+          ],
+          "actual": [
+            224,
+            227,
+            234
+          ],
+          "passed": false
+        },
+        {
+          "name": "integrated chevron background",
+          "xy": [
+            1390,
+            340
+          ],
+          "expected": [
+            255,
+            255,
+            255
+          ],
+          "actual": [
+            224,
+            227,
+            234
+          ],
+          "passed": false
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Only the existing five analysis variants were rerun for this local presentation change. The 15 broad workflow groups remain source-21 evidence.",
+    "Font rasterisation, full control geometry, unit selection, multi-run data, approved export dialog and the remaining workspaces require further work.",
+    "No new physical Windows pointer, manual screenreader, mixed-monitor DPI or macOS proof. Builds include the unchanged separately hashed local accessibility work."
+  ]
+}

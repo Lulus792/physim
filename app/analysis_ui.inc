@@ -12,6 +12,13 @@ static void analysis_rule(app *a) {
     struct nk_rect r;nk_widget(&r,a->ui);
     nk_fill_rect(nk_window_get_canvas(a->ui),r,0,UI_COLOR(border));
 }
+static void analysis_field_background(app *a,struct nk_rect r,bool focused) {
+    /* A filled outer contour keeps the straight edges one solid pixel wide;
+     * a stroked Nuklear rectangle spreads that edge across adjacent pixels. */
+    float inset=focused?2:1;
+    nk_fill_rect(nk_window_get_canvas(a->ui),r,6,focused?UI_COLOR(accent):UI_COLOR(border));
+    nk_fill_rect(nk_window_get_canvas(a->ui),nk_rect(r.x+inset,r.y+inset,r.w-2*inset,r.h-2*inset),6-inset,UI_COLOR(edit));
+}
 static void analysis_side_toggle(app *a,unsigned side) {
     unsigned panel=side?PS_DOCK_INSPECTOR:PS_DOCK_SIDEBAR;
     if(a->preferences.dock.hidden&(1u<<panel))
@@ -72,10 +79,10 @@ static void analysis_chrome(app *a,float w,float h) {
 }
 static void analysis_runs_view(app *a) {
     struct nk_context *ui=a->ui;
-    nk_layout_row_dynamic(ui,24,1);struct nk_rect title;nk_widget(&title,ui);
+    nk_layout_row_dynamic(ui,29,1);struct nk_rect title;nk_widget(&title,ui);
     struct nk_command_buffer *heading_canvas=nk_window_get_canvas(ui);
     const struct nk_user_font *title_font=&a->laboratory_title_font,*count_font=&a->workbench_fonts[2];
-    nk_draw_text(heading_canvas,nk_rect(title.x+6,title.y+(title.h-title_font->height)/2,title.w-36,title_font->height),"Messläufe",10,title_font,nk_rgba(0,0,0,0),UI_COLOR(text));
+    nk_draw_text(heading_canvas,nk_rect(title.x+6,title.y+(24-title_font->height)/2,title.w-36,title_font->height),"Messläufe",10,title_font,nk_rgba(0,0,0,0),UI_COLOR(text));
     ps_ui_accessibility_label(ui,title,"Messläufe");
     char count_text[24];snprintf(count_text,sizeof count_text,"%zu",workspace_run_count(a));
     float count_width=count_font->width(count_font->userdata,count_font->height,count_text,(int)strlen(count_text));
@@ -84,11 +91,23 @@ static void analysis_runs_view(app *a) {
     nk_draw_text(heading_canvas,nk_rect(badge.x+(badge.w-count_width)/2,badge.y+(badge.h-count_font->height)/2,count_width+1,count_font->height),count_text,(int)strlen(count_text),count_font,nk_rgba(0,0,0,0),muted());
     char count_description[80];snprintf(count_description,sizeof count_description,"%zu Laufdateien im Projekt",workspace_run_count(a));ps_ui_accessibility_label(ui,badge,count_description);
     if(!a->panel_render)panel_pull_handle(a,PS_DOCK_SIDEBAR,nk_rect(a->dock_panels[PS_DOCK_SIDEBAR].x,a->dock_panels[PS_DOCK_SIDEBAR].y,a->dock_panels[PS_DOCK_SIDEBAR].w,44));
-    nk_layout_row_dynamic(ui,34,1);struct nk_rect search=nk_widget_bounds(ui);
-    nk_flags edited=nk_edit_string_zero_terminated(ui,NK_EDIT_FIELD,a->analysis_query,sizeof a->analysis_query,nk_filter_default);
+    nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(0,ui->style.window.spacing.y));
+    nk_layout_row_begin(ui,NK_STATIC,34,3);
+    nk_layout_row_push(ui,2);nk_spacer(ui);
+    nk_layout_row_push(ui,fmaxf(1,nk_window_get_content_region(ui).w-4));struct nk_rect search=nk_widget_bounds(ui);
+    struct nk_style_edit edit=ui->style.edit;
+    ui->style.edit.border=1;ui->style.edit.rounding=6;ui->style.edit.border_color=nk_rgba(0,0,0,0);ui->style.edit.padding=nk_vec2(9,6);
+    ui->style.edit.normal=ui->style.edit.hover=ui->style.edit.active=nk_style_item_color(nk_rgba(0,0,0,0));
+    bool search_focus=nk_sdl_accessibility_is_focused(ui,NULL,"Messläufe durchsuchen") || (nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ui->input,search));
+    analysis_field_background(a,search,search_focus);
+    nk_style_push_font(ui,&a->workbench_fonts[2]);
+    nk_flags edited=nk_sdl_edit_named(ui,"Messläufe durchsuchen",NK_EDIT_FIELD,a->analysis_query,sizeof a->analysis_query,nk_filter_default);
+    ui->style.edit=edit;
     if(!a->analysis_query[0] && !(edited&NK_EDIT_ACTIVE))report_text(a,nk_rect(search.x+9,search.y+8,search.w-18,18),"Läufe durchsuchen …",muted());
-    nk_layout_row_dynamic(ui,12,1);nk_spacer(ui);
-    analysis_heading(a,"IM PROJEKT",20,false);
+    nk_style_pop_font(ui);
+    nk_layout_row_push(ui,2);nk_spacer(ui);nk_layout_row_end(ui);nk_style_pop_vec2(ui);
+    nk_layout_row_dynamic(ui,6,1);nk_spacer(ui);
+    analysis_heading(a,"IM PROJEKT",18,false);
     char selected[100];snprintf(selected,sizeof selected,"%u von 8 Läufen für die Analyse ausgewählt.",a->selected_count);
     float hint_height=fmaxf(32,documentation_height(ui->style.font,selected,strlen(selected),nk_window_get_content_region(ui).w)+4);
     nk_uint list_scroll_x,list_scroll_y;nk_window_get_scroll(ui,&list_scroll_x,&list_scroll_y);
@@ -96,11 +115,12 @@ static void analysis_runs_view(app *a) {
     float list_height=fmaxf(80,ui->current->layout->clip.y+ui->current->layout->clip.h-list_top-hint_height-64-3*ui->style.window.spacing.y);
     size_t matching=0;
     if(a->library)for(size_t i=0;i<a->library->count;i++)if(a->library->items[i].kind==PS_LIBRARY_RUN && (!a->analysis_query[0] || ps_document_find(a->library->items[i].name,a->analysis_query)))matching++;
-    float list_space=list_height;list_height=fminf(list_space,fmaxf(80,(float)matching*94));
+    float card_pitch=90+ui->style.window.spacing.y;
+    float list_space=list_height;list_height=fminf(list_space,fmaxf(80,(float)matching*card_pitch));
     nk_layout_row_dynamic(ui,list_height,1);
     memset(a->analysis_run_bounds,0,sizeof a->analysis_run_bounds);
     nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(0,0));
-    if(nk_group_begin(ui,"analysis-run-list",matching*94<=list_height?NK_WINDOW_NO_SCROLLBAR:0)) {
+    if(nk_group_begin(ui,"analysis-run-list",matching*card_pitch<=list_height?NK_WINDOW_NO_SCROLLBAR:0)) {
         size_t shown=0;
         if(a->library)for(size_t i=0;i<a->library->count;i++) {
             const ps_library_item *item=&a->library->items[i];
@@ -111,11 +131,12 @@ static void analysis_runs_view(app *a) {
             if(nk_widget(&card,ui)==NK_WIDGET_INVALID){shown++;continue;}
             if(shown<8)a->analysis_run_bounds[shown]=card;
             struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+            bool hover=!(ui->current->layout->flags&NK_WINDOW_ROM) && !ui->current->widgets_disabled && nk_input_is_mouse_hovering_rect(&ui->input,card);
             if(checked) {
                 struct nk_color bg=UI_COLOR(header),sel=UI_COLOR(selection_active);
                 bg.r=(nk_byte)lroundf(.6f*bg.r+.4f*sel.r);bg.g=(nk_byte)lroundf(.6f*bg.g+.4f*sel.g);bg.b=(nk_byte)lroundf(.6f*bg.b+.4f*sel.b);
                 nk_fill_rect(canvas,card,7,bg);nk_stroke_rect(canvas,card,7,1,UI_COLOR(accent));
-            }
+            } else if(hover)nk_fill_rect(canvas,card,7,UI_COLOR(button));
             struct nk_rect checkbox=nk_rect(card.x+10,card.y+16,15,15);
             nk_fill_rect(canvas,checkbox,2,checked?UI_COLOR(primary):UI_COLOR(edit));
             nk_stroke_rect(canvas,checkbox,2,1,checked?UI_COLOR(primary):UI_COLOR(border));
@@ -166,9 +187,17 @@ static void analysis_details_view(app *a) {
         const char *names[PS_MAX_CHANNELS];for(uint32_t i=0;i<a->data.channel_count;i++)names[i]=a->data.channels[i].name;
         analysis_heading(a,"Messkanal",24,false);nk_layout_row_dynamic(ui,34,1);
         struct nk_style_combo combo=ui->style.combo;
+        ui->style.combo.normal=ui->style.combo.hover=ui->style.combo.active=nk_style_item_color(nk_rgba(0,0,0,0));
+        ui->style.combo.border=1;ui->style.combo.border_color=nk_rgba(0,0,0,0);ui->style.combo.rounding=6;
+        ui->style.combo.button.normal=ui->style.combo.button.hover=ui->style.combo.button.active=nk_style_item_color(nk_rgba(0,0,0,0));
+        ui->style.combo.button.border=0;
         ui->style.combo.sym_normal=ui->style.combo.sym_hover=ui->style.combo.sym_active=NK_SYMBOL_CHEVRON_DOWN;
         ui->style.combo.button.padding=nk_vec2(10,10);
+        struct nk_rect channel=nk_widget_bounds(ui);
+        analysis_field_background(a,channel,nk_sdl_accessibility_is_focused(ui,NULL,names[a->plot_channel]));
+        nk_style_push_font(ui,&a->workbench_fonts[2]);
         a->plot_channel=nk_combo(ui,names,(int)a->data.channel_count,a->plot_channel,28,nk_vec2(280,240));
+        nk_style_pop_font(ui);
         ui->style.combo=combo;
         analysis_heading(a,"Anzeigeeinheit",24,false);nk_layout_row_dynamic(ui,34,1);
         ps_display_unit unit=channel_display_unit(a,&a->data.channels[a->plot_channel]);
@@ -218,13 +247,15 @@ static void analysis_workspace_view(app *a,float content) {
         const struct nk_user_font *font=&a->workbench_fonts[2];
         nk_draw_text(nk_window_get_canvas(ui),nk_rect(tab.x,tab.y+(tab.h-font->height)/2,tab.w,font->height),tabs[i],(int)strlen(tabs[i]),font,nk_rgba(0,0,0,0),active?UI_COLOR(text):muted());
         if(ps_ui_option_at(ui,tab,"Auswertungsansicht",tabs[i],active))a->show_report=i!=0;
-        if(active)nk_fill_rect(nk_window_get_canvas(ui),nk_rect(tab.x,tab.y+tab.h-2,tab.w,2),0,UI_COLOR(accent));
         if(nk_sdl_accessibility_is_focused(ui,NULL,tabs[i]))nk_stroke_rect(nk_window_get_canvas(ui),tab,3,2,UI_COLOR(accent));
     }
     nk_layout_row_push(ui,fmaxf(20,nk_window_get_content_region(ui).w-tab_widths[0]-tab_widths[1]-2*ui->style.window.spacing.x));
     char total[100];snprintf(total,sizeof total,"%u %s · %llu Punkte im aktiven Lauf",a->selected_count,a->selected_count==1?"Lauf":"Läufe",(unsigned long long)a->data.total);
     nk_label_colored(ui,total,NK_TEXT_RIGHT,muted());nk_layout_row_end(ui);nk_style_pop_vec2(ui);
     analysis_rule(a);
+    /* The active rule shares the bottom pixel of the full-width border. */
+    struct nk_rect active_tab=a->analysis_tabs[a->show_report?1:0];
+    nk_fill_rect(nk_window_get_canvas(ui),nk_rect(active_tab.x,active_tab.y+active_tab.h-1,active_tab.w,2),0,UI_COLOR(accent));
     if (a->report_thread || a->result_error[0]) {
         nk_layout_row_dynamic(ui, 42, 1);
         nk_label_wrap(ui, a->report_thread ? "Analyseergebnis wird geprüft und geladen …"
