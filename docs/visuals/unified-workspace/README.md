@@ -12,9 +12,11 @@ Eine Browserprüfung ist weiterhin keine vollständige native Abnahme.
 [kopierfertiger Auftrag](NEXT-CHAT.md) · [Bestand und Abnahmeliste](IMPLEMENTATION.md)
 · [gemeinsamer Resizing-Vertrag](RESIZING.md).
 
-**Neu als bedienbares Beispiel:** [Grafikexport-Vorschau](../analysis-workspace/index.html?example=export)
+**Als Teil des fertigen Designs freigegeben:** [Grafikexport](EXPORT-EXAMPLE.md)
 mit PNG/SVG, Gesamt-/Ausschnittswahl, Darstellung und Bildgröße.
-[Exportentwurf und Grenzen](EXPORT-EXAMPLE.md).
+[Bedienbare Referenz](../analysis-workspace/index.html?example=export) ·
+[verbindliche Produktentscheidung und native Abnahme](../../decisions/010-analysis-graphic-export.md).
+Der umsetzende Chat soll diesen Dialog nativ mit implementieren.
 
 **Ergänzung vom 20. Oktober:** Entwickeln, Simulieren und Auswerten verwenden
 denselben Resizing-Baustein. Auswerten erhält verstellbare Lauflisten-/Detailbreiten

@@ -1,6 +1,10 @@
-# Bedienbares Beispiel: Grafikexport
+# Freigegebenes finales Design: Grafikexport
 
-Stand: 20. Oktober 2026. Ergänzender Designvorschlag, keine native Umsetzung.
+Status: vom Nutzer am 20. Oktober 2026 freigegeben und in das fertige Design
+übernommen. Gestaltung und Verhalten sind für den nativen Folgeauftrag
+verbindlich; die bisherige Einstufung als zusätzlicher Vorschlag ist aufgehoben.
+[Produktentscheidung und native Abnahme: ADR 010](../../decisions/010-analysis-graphic-export.md).
+Die Freigabe bestätigt keine bereits abgeschlossene native Umsetzung.
 
 [Beispiel direkt öffnen](../analysis-workspace/index.html?example=export).
 Die URL öffnet den Dialog automatisch mit zwei synthetischen Vergleichsläufen.
@@ -33,6 +37,20 @@ Zoomaktionen denselben Dialog für die tatsächlich übernommenen Beispielmessda
   Dateidialog, Browserdownloadziel und echtes „Datei anzeigen“ bleiben Aufgabe
   des Browsers; die Vorlage behauptet keinen Zugriff auf unbekannte Speicherpfade.
 
+## Verbindlicher nativer Folgeauftrag
+
+Den freigegebenen Dialog in der nativen Auswertung und an einzelnen exportierbaren
+Berichtsdiagrammen implementieren. **Grafik exportieren…** bleibt der sichtbare
+Zugang neben den Zoomaktionen. Layout, Beschriftungen, Optionen und Standardwerte
+aus den beiden Dialogbildern übernehmen; keine neue Designauswahl vorschalten.
+Die nächste Implementierung umfasst echte PNG-/SVG-Ausgabe, native Bildkopie,
+Dateidialog, Fehler-/Abbruchbehandlung und die Abnahmeliste aus ADR 010.
+
+Die vorhandenen Browserregeln für deaktivierte Kopieraktionen beschreiben nur
+Browserfähigkeiten. Nativ die vorhandenen beziehungsweise gezielt erweiterten
+Plattformadapter verwenden und echte Zwischenablageübergabe prüfen. Der offene
+Export hält seine Eingaben fest; die Ausgabe bleibt von Panelmaßen unabhängig.
+
 ## Technische Zuordnung
 
 `analysis-workspace/graphic-export.js` zeichnet die Exportgrafik aus einem beim
@@ -41,11 +59,10 @@ Läufe, den Kanal, die umgerechneten Anzeigewerte und die sichtbaren Zeitgrenzen
 `graphic-export.css` gestaltet den Dialog. Das Beispiel greift nicht auf native
 APIs zu und lädt keine Webressourcen.
 
-Für die spätere native Umsetzung bleibt dies ein zusätzlicher überprüfbarer
-Entwurf. Vorhandene PNG-/SVG-Gesamt-/Ausschnittswege und Größenwahl aus
+Für die beauftragte native Umsetzung die vorhandenen PNG-/SVG-Gesamt-/Ausschnittswege und Größenwahl aus
 `app/report_ui.inc` / `docs/reports.md` weiterverwenden. Native Datenmasken,
 Plotregeln, Speichergrenzen und bestehende CSV-Verträge erhalten. Der Dialog
-sollte künftig für einzelne echte Berichtsdiagramme denselben Ablauf anbieten;
+muss für einzelne echte Berichtsdiagramme denselben Ablauf anbieten;
 die hier vorhandenen Demo-Berichte enthalten noch keine solchen Diagramme.
 Keinen Browserrenderer in die native App übernehmen und keine Demoformel als
 Ersatz für echte Berichtsdaten verwenden.

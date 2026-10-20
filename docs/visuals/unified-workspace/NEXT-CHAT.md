@@ -1,5 +1,12 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
+**Verbindliche Nutzerfreigabe vom 20. Oktober 2026:** Der Grafikexport aus
+[EXPORT-EXAMPLE.md](EXPORT-EXAMPLE.md) gehört jetzt zum fertigen Design und ist
+nativ mit umzusetzen. Er ist kein optionaler zusätzlicher Entwurf mehr.
+[ADR 010](../../decisions/010-analysis-graphic-export.md) hält die Entscheidung
+und die native Abnahme fest. Diese Ergänzung gilt auch beim Fortsetzen des
+bereits laufenden nativen Referenzabgleichs.
+
 Aktueller nativer Folgeauftrag vom 20. Oktober: zuerst die gesamte Gestaltung
 einschließlich F1 direkt gegen die gewählten Referenzen angleichen. Der
 [native Abgleich](NATIVE-FIDELITY.md) nennt den aktuellen Zwischenstand und die
@@ -32,7 +39,8 @@ Lies anschließend:
 - `docs/visuals/unified-workspace/README.md`
 - `docs/visuals/unified-workspace/RESIZING.md`
 - `docs/visuals/unified-workspace/IMPLEMENTATION.md`
-- `docs/visuals/unified-workspace/EXPORT-EXAMPLE.md` als zusätzlichen Exportentwurf
+- `docs/decisions/010-analysis-graphic-export.md`
+- `docs/visuals/unified-workspace/EXPORT-EXAMPLE.md` als verbindliche Exportreferenz
 - `docs/design-direction.md` und `docs/workspace.md`
 - `docs/visuals/develop-designs/DESIGN.md` und `FIDELITY.md`
 - `docs/visuals/simulation-designs/IMPLEMENTATION.md` und `MODEL-EDITING.md`
@@ -78,6 +86,22 @@ Berichte behalten ihre ursprüngliche Auswahl, Einheiten und Herkunft auch nach
 neuer Laufwahl; alte Workerabschlüsse dürfen aktuelle Auswahl nicht überschreiben.
 Rohdaten-/Ausschnittexporte, CSV/SVG/PNG und PNG-Größenwahl bleiben erhalten.
 
+**Freigegebener Grafikexport:** Setze den Dialog aus `EXPORT-EXAMPLE.md` nativ um:
+beschrifteter Button **Grafik exportieren…** neben den Zoomaktionen, links die
+saubere Vorschau, rechts Format, Umfang, Darstellung und PNG-Größe, unten
+**Bild kopieren** sowie **PNG/SVG speichern…**. Standard: PNG, 2400 × 1700 Pixel,
+gesamtes Diagramm und Hell auf Weiß. Weitere PNG-Größen: 1200 × 850, 3600 × 2550,
+4800 × 3400. SVG ist skalierbar; PNG-Größenwahl dort deaktivieren. Sichtbarer
+Ausschnitt verwendet die tatsächlichen Achsengrenzen; die zweite Umfangsauswahl
+ist ohne Ausschnitt deaktiviert. **Wie in der Auswertung** übernimmt die beim
+Öffnen geltende Darstellung. Titel, Achsen, Einheiten, Legende, Referenz und alle
+gewählten Vergleichskurven gehören ins Bild. Ausgabe und Vorschau halten denselben
+beim Öffnen festgelegten Datenstand und bleiben unabhängig von Panelmaßen.
+Echte native Bildkopie, Dateidialog, Abbruch und Fehlerfälle implementieren; CSV
+als separaten Datenexport erhalten. Derselbe Ablauf gilt an einzelnen echten
+Berichtsdiagrammen. Mit den beiden freigegebenen Exportaufnahmen und ADR 010
+abgleichen; keine Browserformel oder WebView in die native Anwendung übernehmen.
+
 **Ein gemeinsames Resizing:** Verwende für alle drei Bereiche dieselbe native
 Trennerinteraktion auf Grundlage der bestehenden Werkbank/Docking-Implementierung.
 Ruhige Grenze, bei Hover/Fokus eine durchgehende dünne Akzentlinie, großzügige
@@ -111,6 +135,11 @@ Accessibility. Führe Linux-Builds/Tests bei verfügbarer Umgebung in der gemein
 Distribution `Alpine-Dev` aus. Linux/macOS nur nach tatsächlich ausgeführten
 Prüfungen als geprüft melden; Browserergebnisse oder vorhandene CI-YAML genügen
 nicht. Dokumentiere offene Plattform-/Screenreader-/DPI-Nachweise ehrlich.
+
+Prüfe zusätzlich die native Exportabnahme aus ADR 010: alle vier PNG-Größen,
+SVG, vollständige und gezoomte/verschobene Mehrlaufgrafiken, Vorschau-/Dateigleichheit,
+festgehaltene Eingaben bei späteren Datenwechseln, echte Zwischenablage, Fokuskehr,
+Speicher-/Renderfehler und von Panelresize/DPI unabhängige Ausgabemaße.
 
 Halte native Änderungen, ausgeführte Tests, echte Aufnahmen und begründete
 Abweichungen im gemeinsamen Designordner fest. Committe abgeschlossene geprüfte

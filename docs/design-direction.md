@@ -127,6 +127,23 @@ ist fertig, ihre native Übertragung steht aus. Der kopierfertige Auftrag liegt 
 [NEXT-CHAT.md](visuals/develop-designs/NEXT-CHAT.md), die Codezuordnung und native
 Abnahme in [IMPLEMENTATION.md](visuals/develop-designs/IMPLEMENTATION.md).
 
+## Finaler Grafikexport in Auswerten
+
+Verbindliche Nutzerfreigabe vom 20. Oktober 2026: Der gezeigte Grafikexport ist
+Teil des fertigen Designs und wird im nativen Folgeauftrag mit umgesetzt.
+Maßgeblich sind [ADR 010](decisions/010-analysis-graphic-export.md), die
+[freigegebene Spezifikation](visuals/unified-workspace/EXPORT-EXAMPLE.md) und die
+beiden dort verlinkten Dialogaufnahmen.
+
+Ein beschrifteter Exportbutton am Diagramm öffnet den Dialog mit Vorschau links
+und Optionen rechts. PNG/SVG, Gesamtdiagramm/sichtbarer Ausschnitt, Hell auf Weiß/
+aktuelle Darstellung, vier PNG-Größen sowie native Bildkopie und Speichern
+gehören zum Auftrag. Standard: PNG mit 2400 × 1700 Pixeln, gesamtes Diagramm,
+Hell auf Weiß. Derselbe Ablauf gilt für einzelne echte Berichtsdiagramme.
+Der offene Export hält seine Eingaben fest und bleibt von Panelmaßen unabhängig.
+Die native Fertigstellung wird mit eigenen Aufgaben und Ausgabedateien geprüft;
+die Browserreferenz und ihre Tests allein sind kein nativer Fertigstellungsnachweis.
+
 ## Abnahmekriterien
 
 Die neue Designrichtung gilt als umgesetzt, wenn:

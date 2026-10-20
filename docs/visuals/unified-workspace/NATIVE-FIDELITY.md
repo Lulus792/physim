@@ -16,6 +16,10 @@ in diesem Verzeichnis. Die Einzelverträge ergänzen Zustände und Fachfunktione
 - [Auswerten / Messdaten und Analyseergebnis](../analysis-workspace/DESIGN.md).
 - [F1 / Design H](../f1-layouts/DESIGN-H.md).
 - [Gemeinsame Trenner](RESIZING.md).
+- [Vom Nutzer freigegebener Grafikexport](EXPORT-EXAMPLE.md), verbindlich nach
+  [ADR 010](../../decisions/010-analysis-graphic-export.md). Der Exportdialog mit
+  Vorschau, PNG/SVG, Gesamt-/Ausschnittswahl und nativer Bildkopie gehört zum
+  aktuellen Folgeauftrag und muss eine eigene native Abnahme erhalten.
 
 Die jüngere Nutzerentscheidung zu festen Panelplätzen gilt weiterhin:
 Herausziehen an vorhandener Überschrift beziehungsweise vorhandenem Tab,

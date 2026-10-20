@@ -10,6 +10,16 @@
 - Linux- und macOS-Unterstützung anhand tatsächlich ausgeführter Builds und Tests bewerten.
   Eine vorhandene CI-Konfiguration allein beweist keine Funktionsgleichheit.
 
+## Verbindliche Designfreigabe: Grafikexport
+
+- Der Nutzer hat den Grafikexport am 20. Oktober 2026 als Teil des fertigen Designs
+  freigegeben. Bei Arbeiten an Auswerten, Berichtsdiagrammen oder Grafikexporten
+  [ADR 010](docs/decisions/010-analysis-graphic-export.md) und die
+  [freigegebene Spezifikation](docs/visuals/unified-workspace/EXPORT-EXAMPLE.md) lesen
+  und nativ mit umsetzen. Es handelt sich nicht mehr um einen optionalen Vorschlag.
+- Der [Gesamtauftrag für den umsetzenden Chat](docs/visuals/unified-workspace/NEXT-CHAT.md)
+  enthält diese Freigabe. Vorhandene Browsernachweise sind keine native Abnahme.
+
 ## Speicherpflege
 
 - Regelmäßiges Aufräumen gehört zur Projektarbeit. Nach abgeschlossener Arbeit

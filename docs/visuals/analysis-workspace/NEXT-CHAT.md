@@ -1,5 +1,10 @@
 # Kopierfertiger Umsetzungsauftrag
 
+**Aktuelle Nutzerfreigabe vom 20. Oktober 2026:** Der
+[Grafikexport](../unified-workspace/EXPORT-EXAMPLE.md) gehört verbindlich zum
+fertigen Design. [ADR 010](../../decisions/010-analysis-graphic-export.md) ist Teil
+dieses nativen Folgeauftrags; der Export ist kein optionales Beispiel mehr.
+
 Stand: 19. Oktober 2026. Der folgende Text kann vollständig in einen umsetzenden
 Chat mit dem Projekt D:\Physim kopiert werden. Er beauftragt die native Umsetzung;
 die Erstellung dieser Übergabe selbst hat noch keinen nativen Code geändert.
@@ -18,6 +23,8 @@ Lies zuerst AGENTS.md und D:/Skills/skills/AGENTS.md. Lies anschließend:
 - docs/visuals/analysis-workspace/IMPLEMENTATION.md
 - docs/design-direction.md
 - docs/reports.md
+- docs/decisions/010-analysis-graphic-export.md
+- docs/visuals/unified-workspace/EXPORT-EXAMPLE.md
 
 Öffne die interaktive Vorlage
 D:/Physim/docs/visuals/analysis-workspace/index.html im Browser. Die visuellen
@@ -72,6 +79,18 @@ PNG-Größenwahl, Status-/Lückenbehandlung und Kennzeichnung reduzierter Vorsch
 Die CSV-Umrechnung der Browserdemo ist kein Auftrag zur stillen Änderung des
 nativen Rohdatenexports. Eine gegebenenfalls zusätzliche Exportvariante für den
 Vergleich muss ihren Umfang, ihre Einheiten und ihre Eingaben klar benennen.
+
+Implementiere den freigegebenen Grafikexport aus ADR 010 als Teil dieser
+Auswertung: **Grafik exportieren…** neben den Zoomaktionen, Dialog mit Vorschau
+links und Optionen rechts, PNG/SVG, Gesamtdiagramm/sichtbarer Ausschnitt,
+Hell auf Weiß/aktuelle Darstellung und vier PNG-Größen. Standard ist PNG mit
+2400 × 1700 Pixeln, gesamtes Diagramm und Hell auf Weiß. **Bild kopieren** und
+**PNG/SVG speichern…** arbeiten auf demselben beim Öffnen festgehaltenen Datenstand;
+Titel, Achsen, Einheiten, Legende, Referenz und gewählte Vergleichsläufe übernehmen.
+Ausgabegröße ist unabhängig von Panelmaßen. Echte native Zwischenablage, Datei-
+und Fehlerwege anbinden; denselben Ablauf für einzelne echte Berichtsdiagramme
+bereitstellen. Mit den freigegebenen Dialogbildern und der nativen Abnahmeliste
+aus ADR 010 prüfen. CSV bleibt separater Datenexport mit seinem bisherigen Vertrag.
 
 Analyse starten führt weiter den echten C-/Physim-Analyseprozess aus; Analysecode
 öffnet den vorhandenen Editor. Erhalte Speichern/Build/Dirty-Prüfungen,

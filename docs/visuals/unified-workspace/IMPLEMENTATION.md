@@ -1,6 +1,9 @@
 # Übergabepaket für die native Umsetzung
 
 Stand: 20. Oktober 2026. Einstieg ist der [kopierfertige Auftrag](NEXT-CHAT.md).
+Der Grafikexport ist seit der ausdrücklichen Nutzerfreigabe am 20. Oktober
+verbindlicher Teil des fertigen Designs: [ADR 010](../../decisions/010-analysis-graphic-export.md).
+Den bestehenden nativen Folgeauftrag einschließlich dieses Dialogs fortsetzen.
 Der Vorgängerstand der gemeinsamen Vorschau ist Commit `1c303c8`; die neue
 Resizing-Ergänzung und diese Übergabe gehören zum nachfolgenden Commit. Den
 aktuellen Stand mit `git log -1 -- docs/visuals/unified-workspace/NEXT-CHAT.md`
@@ -12,7 +15,7 @@ auflösen. Nicht auf einen historischen nativen Zwischenstand zurücksetzen.
 | --- | --- |
 | Zusammenhängende Oberfläche | [index.html](index.html), [README.md](README.md), sechs PNGs im selben Ordner |
 | Gemeinsame Trenner | [RESIZING.md](RESIZING.md), [gemeinsamer Interaktionskern](../shared/resize.js), [Darstellung](../shared/resize.css) |
-| Zusätzliches Exportbeispiel | [Exportentwurf](EXPORT-EXAMPLE.md), [direkt bedienbare Vorschau](../analysis-workspace/index.html?example=export); noch keine native Umsetzung |
+| Freigegebener Grafikexport | [Verbindliche Spezifikation](EXPORT-EXAMPLE.md), [ADR 010](../../decisions/010-analysis-graphic-export.md), [bedienbare Referenz](../analysis-workspace/index.html?example=export); native Umsetzung beauftragt |
 | Entwickeln | [Design](../develop-designs/DESIGN.md), [aktueller nativer Abgleich](../develop-designs/FIDELITY.md) |
 | Simulieren | [Funktionsabgleich](../simulation-designs/IMPLEMENTATION.md), [Modellwertevertrag](../simulation-designs/MODEL-EDITING.md) |
 | Auswerten | [Funktions-/Datenvertrag](../analysis-workspace/IMPLEMENTATION.md), [Design](../analysis-workspace/DESIGN.md) |
@@ -66,6 +69,9 @@ den bestehenden Docking-/Preference-Vertrag neu zu erfinden.
 5. **Auswertung integrieren.** Reale Laufbibliothek, Mehrlaufdaten, Analyseprozesse,
    Berichte und Exporte. Diagrammhöhe bekommt einen eigenen Trenner gegenüber
    Statistik. Tabelleninhalt/Statistik ändern sich durch Resize oder Zoom nicht.
+   Den freigegebenen Grafikexport aus ADR 010 einschließlich nativer Bildkopie,
+   PNG-/SVG-Vorschau und Datei-/Fehlerbehandlung in Auswerten und an einzelnen
+   Berichtsdiagrammen mit umsetzen.
 6. **Ende-zu-Ende-Aufgabe.** Echtes Projekt öffnen → Code ändern/speichern/bauen →
    Lauf aufzeichnen → Modell ändern/bauen → zweiter neuer Lauf → Vergleich und
    Bericht → vollständiger und Ausschnittsexport. Alte Lauf-/Berichtsherkunft prüfen.
@@ -90,6 +96,10 @@ den bestehenden Docking-/Preference-Vertrag neu zu erfinden.
       Kanäle, Statuslücken, reduzierte Vorschauen und defekte/fehlende Dateien prüfen.
 - [ ] Berichte und asynchrone Worker bleiben an ihre tatsächlichen Eingaben gebunden.
       Analyseprojekte ohne Eingaben und reine Wiedergabe bleiben lauffähig.
+- [ ] Freigegebener Grafikexport gemäß ADR 010: beide Dialog-Themes, alle vier
+      PNG-Größen, SVG, Gesamt-/Ausschnittswahl, echte Zwischenablage, festgehaltene
+      Eingaben, Vorschau-/Dateigleichheit, Abbruch-/Fehlerfälle, Fokuskehr und
+      unveränderte Ausgabemaße nach Panelresize/DPI-Wechsel tatsächlich prüfen.
 - [ ] Hell/Dunkel, hoher Kontrast, reduzierte Transparenz/Bewegung, große App-Schrift
       und echte Tastatur-/Fokusbedienung; erreichbare Namen/Werte aller Separatoren.
 - [ ] Windows, verfügbare Linux-Umgebung `Alpine-Dev` und ggf. macOS getrennt mit

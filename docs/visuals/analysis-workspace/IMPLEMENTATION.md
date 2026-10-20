@@ -1,5 +1,11 @@
 # Technische Übergabe: Analysebereich nativ umarbeiten
 
+**Verbindliche Ergänzung vom 20. Oktober 2026:** Der Nutzer hat den
+[Grafikexportdialog](../unified-workspace/EXPORT-EXAMPLE.md) als Teil des fertigen
+Designs freigegeben. [ADR 010](../../decisions/010-analysis-graphic-export.md)
+gehört zur folgenden Implementierung und Abnahme; der Export ist kein optionales
+Zusatzbeispiel mehr. Die unten genannten älteren Code-/Prüfstände bleiben historisch.
+
 Stand: 19. Oktober 2026. Quellstand beim Abgleich: `ccc5bb9` auf
 `codex/f1-design-h`. Diese Notiz ist ein Implementierungsauftrag, kein Nachweis
 einer bereits erfolgten nativen Umstellung. Vor Arbeitsbeginn den inzwischen
@@ -150,7 +156,7 @@ bewusster Lauf mit `--export` erneuert die vier versionierten Designreferenzen.
 | Statistik/Zoom/Einheit | Statistik über den gesamten jeweiligen Lauf, korrekte Konversion, keine Veränderung gespeicherter Daten. |
 | Analyse/Editor | Echte C- und Physim-Module, fehlender Build/ungespeicherter Code, Abbruch, Diagnose, null Eingaben bei geeigneten Analyseprojekten. |
 | Ergebnis/Herkunft | Eigenes Modul mit Kurven/Histogramm/Tabelle, alter Bericht nach neuer Auswahl, Bericht ohne aktuelle Messdaten und Modul ohne Bericht. |
-| Export | CSV vollständig; SVG/PNG vollständig und Ausschnitt; PNG-Größenwahl; klare Eingaben/Einheiten, neue Dateinamen, Inhalte tatsächlich prüfen. |
+| Export | Freigegebener Dialog nach ADR 010, PNG/SVG vollständig und Ausschnitt, alle vier PNG-Größen, Vorschau-/Dateigleichheit, festgehaltene Eingaben, native Bildkopie/Fehler/Abbruch und Fokuskehr. CSV vollständig mit unverändertem Vertrag; klare Eingaben/Einheiten, neue Dateinamen, Inhalte tatsächlich prüfen. |
 | Laden/Fehler | Leerer Workspace/Projekt, keine Auswahl, Suche ohne Treffer, defekte/fehlende Datei und schnelle Auswahlwechsel ohne veraltete Daten. |
 | Bedienung | Tastatur, sichtbarer Fokus, Rückkehr vom Editor/Dialog, Fokus nach Ausblenden sowie native Namen/Rollen/Zustände. |
 | Skalierung | Reale Mindestfenstergröße, große Schrift, vorhandene DPI-Optionen, Hell/Dunkel/Hochkontrast; keine unerreichbare Aktion. |

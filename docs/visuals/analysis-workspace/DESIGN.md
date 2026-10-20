@@ -1,5 +1,11 @@
 # Analysebereich · Entwurf 01
 
+**Verbindliche Ergänzung, 20. Oktober 2026:** Der Nutzer hat den
+[Grafikexportdialog](../unified-workspace/EXPORT-EXAMPLE.md) in das fertige Design
+übernommen. Er ist gemäß [ADR 010](../../decisions/010-analysis-graphic-export.md)
+zusammen mit dieser Auswertungsoberfläche nativ zu implementieren. Die unten
+datierten älteren Prüfbelege behalten ihren historischen Geltungsbereich.
+
 Entwurf vom 16. Oktober 2026. Am 19. Oktober 2026 hat der Nutzer die Vorbereitung
 der nativen Umarbeitung auf diese Vorlage beauftragt. Die native Implementierung
 steht noch aus. Die nachfolgenden Browser-Prüfbelege bleiben auf ihren damaligen
