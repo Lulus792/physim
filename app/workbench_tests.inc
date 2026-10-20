@@ -7,7 +7,7 @@ static bool workbench_test_start(app *a,const char *root,const char *mode) {
     if(strstr(mode,"contrast"))p.theme=PS_THEME_HIGH_CONTRAST;
     if(strstr(mode,"large")){p.ui_size=22;p.editor_size=22;}
     preferences_apply(a,&p);
-    SDL_SetWindowSize(a->window,strstr(mode,"narrow")?1080:strstr(mode,"large")?1600:1204,strstr(mode,"narrow")?740:strstr(mode,"large")?1000:866);
+    SDL_SetWindowSize(a->window,strstr(mode,"narrow")?1080:strstr(mode,"large")?1600:strstr(mode,"unified")?1440:1204,strstr(mode,"narrow")?740:strstr(mode,"large") || strstr(mode,"unified")?1000:866);
     ps_dock_move(&a->preferences.dock,PS_DOCK_LOG,PS_DOCK_WORKSPACE,PS_DOCK_BOTTOM);
     a->show_log=true;refresh_workspace_entries(a);return true;
 }
@@ -22,6 +22,12 @@ static void workbench_test_frame(app *a,const char *mode,int *stage,int *code,co
     switch(*stage) {
     case 0:
         if(a->library_thread || a->source_editor_bounds.w<=0)return;
+        /* SDL test events do not activate the Windows host. Begin the focus
+         * task only after activation is actually observed, as for separators. */
+        if(SDL_GetKeyboardFocus()!=a->window) {
+            if(ps_clock()>=focus_retry){SDL_RaiseWindow(a->window);focus_retry=ps_clock()+.25;}
+            return;
+        }
         if(!warmup) {
             const struct nk_user_font *font=&a->workbench_fonts[0];
             printf("WORKBENCH TYPOGRAPHY: ui=%.3f em=%.6f role=%.3f Datei-width=%.3f code=%.3f\n",a->font_ui->height,a->workbench_regular_em,font->height,font->width(font->userdata,font->height,"Datei",5),a->font_code->height);
@@ -61,8 +67,19 @@ static void workbench_test_frame(app *a,const char *mode,int *stage,int *code,co
         ok=!a->show_search && workbench_test_rect(editor_rect,a->source_editor_bounds);
         ok=ok && edit->select_start==selected_start && edit->select_end==selected_end && edit->cursor==selected_cursor;
         ok=ok && edit->scrollbar.x==scroll.x && edit->scrollbar.y==scroll.y;
+        if(ok && !nk_sdl_accessibility_is_focused(a->ui,NULL,"Dokumentsuche öffnen")) {
+            /* Keep all geometry/selection assertions while waiting for the
+             * existing product focus request; never inject that request here. */
+            if(ps_clock()>=focus_retry){SDL_RaiseWindow(a->window);focus_retry=ps_clock()+.25;}
+            return;
+        }
         ok=ok && nk_sdl_accessibility_is_focused(a->ui,NULL,"Dokumentsuche öffnen");
-        if(!ok){fprintf(stderr,"Workbench close: visible=%d selection=%d..%d expected=%d..%d cursor=%d/%d scroll=%.1f/%.1f expected=%.1f/%.1f icon-focus=%d\n",a->show_search,edit->select_start,edit->select_end,selected_start,selected_end,edit->cursor,selected_cursor,edit->scrollbar.x,edit->scrollbar.y,scroll.x,scroll.y,nk_sdl_accessibility_is_focused(a->ui,NULL,"Dokumentsuche öffnen"));break;}
+        if(!ok){fprintf(stderr,"Workbench close: visible=%d selection=%d..%d expected=%d..%d cursor=%d/%d scroll=%.1f/%.1f expected=%.1f/%.1f icon-focus=%d keyboard-host=%d\n",a->show_search,edit->select_start,edit->select_end,selected_start,selected_end,edit->cursor,selected_cursor,edit->scrollbar.x,edit->scrollbar.y,scroll.x,scroll.y,nk_sdl_accessibility_is_focused(a->ui,NULL,"Dokumentsuche öffnen"),SDL_GetKeyboardFocus()==a->window);
+            for(struct nk_window *win=a->ui->begin;win;win=win->next) {
+                struct nk_rect cover=win->bounds,r=a->workbench_search_bounds;
+                if(!(win->flags&(NK_WINDOW_HIDDEN|NK_WINDOW_MINIMIZED|NK_WINDOW_CLOSED)) && cover.x<r.x+r.w && cover.x+cover.w>r.x && cover.y<r.y+r.h && cover.y+cover.h>r.y)
+                    fprintf(stderr,"WORKBENCH FOCUS COVER: %s %.1f/%.1f/%.1f/%.1f target %.1f/%.1f/%.1f/%.1f\n",win->name_string,cover.x,cover.y,cover.w,cover.h,r.x,r.y,r.w,r.h);
+            }break;}
         edit->scrollbar=nk_vec2(0,0);edit->cursor=edit->select_start=edit->select_end=0;
         editor_search_open(a);a->search_replace_open=false;break;
     case 8:

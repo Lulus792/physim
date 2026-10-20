@@ -12,13 +12,14 @@ static void toolbar_test_frame(app *a, int *stage, int *code, const char **captu
         }
         int width, height;
         SDL_GetWindowSize(a->window, &width, &height);
-        ok = a->toolbar_bounds[0].h <= 32 && a->toolbar_bounds[0].y <= 1 &&
-             a->navigation_bounds[0].h <= 30 &&
+        bool reference=workspace_shell_visible(a);
+        ok = a->toolbar_bounds[0].h <= (reference?38:32) && a->toolbar_bounds[0].y <= 1 &&
+             a->navigation_bounds[0].h <= (reference?40:30) &&
              a->navigation_bounds[0].y >= a->toolbar_bounds[0].y + a->toolbar_bounds[0].h &&
              a->navigation_bounds[0].y == a->navigation_bounds[2].y &&
-             fabsf(a->navigation_bounds[0].x) <= 1 &&
-             fabsf(a->navigation_bounds[0].w - (float)width / 3) <= 1 &&
-             fabsf(a->navigation_bounds[2].x + a->navigation_bounds[2].w - width) <= 1 &&
+             fabsf(a->navigation_bounds[0].x-(reference?8:0)) <= 1 &&
+             fabsf(a->navigation_bounds[0].w - ((float)width-(reference?32:0)) / 3) <= 1 &&
+             fabsf(a->navigation_bounds[2].x + a->navigation_bounds[2].w - width+(reference?8:0)) <= 1 &&
              (SDL_GetWindowFlags(a->window) & SDL_WINDOW_BORDERLESS);
         SDL_Point drag = {(int)(a->window_drag_bounds.x + 20), 15};
         SDL_Point menu = {(int)a->toolbar_bounds[0].x + 10, 15};

@@ -4,6 +4,10 @@ Stand: 20. Oktober 2026. [Vorschau öffnen](index.html).
 Die Datei lässt sich direkt lokal im Browser öffnen, ohne Installation, Server
 oder externe Ressourcen.
 
+Der laufende [native Referenzabgleich](NATIVE-FIDELITY.md) führt Umsetzung,
+begrenzte Nachweise und die noch offenen Unterschiede aller vier Bereiche.
+Eine Browserprüfung ist weiterhin keine vollständige native Abnahme.
+
 **Für die native Umsetzung in einem anderen Chat:**
 [kopierfertiger Auftrag](NEXT-CHAT.md) · [Bestand und Abnahmeliste](IMPLEMENTATION.md)
 · [gemeinsamer Resizing-Vertrag](RESIZING.md).

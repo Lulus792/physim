@@ -1,6 +1,15 @@
 static const char *dock_names[] = {"Seitenleiste", "Arbeitsbereich", "Protokoll", "Inspektor"};
 static const char *dock_windows[] = {"sidebar", "workspace", "log", "inspector"};
 static bool workbench_visible(const app *a) {return !a->project_manager && (a->tab==0 || a->tab==8);}
+static bool workspace_shell_visible(const app *a) {
+    return !a->project_manager && (a->tab==0 || a->tab==1 || a->tab==2 || a->tab==8);
+}
+enum { WORKSPACE_HEADER_HEIGHT=79, WORKSPACE_PATH_HEIGHT=39,
+       WORKSPACE_CONTENT_TOP=118, WORKSPACE_STATUS_HEIGHT=28 };
+static void workspace_rule(struct nk_command_buffer *canvas,struct nk_rect line) {
+    struct nk_rect clip=canvas->clip;
+    nk_push_scissor(canvas,line);nk_fill_rect(canvas,line,0,UI_COLOR(border));nk_push_scissor(canvas,clip);
+}
 #include "laboratory_layout.inc"
 static float dock_header_height(const app *a) {return workbench_visible(a)?40:DOCK_HEADER_HEIGHT;}
 static float dock_panel_header_height(const app *a,unsigned panel) {
@@ -12,10 +21,12 @@ static float dock_panel_header_height(const app *a,unsigned panel) {
     }
     return workbench_visible(a) && panel==PS_DOCK_LOG?42:dock_header_height(a);
 }
-static float dock_gap(const app *a) {return workbench_visible(a) || laboratory_visible(a)?1:8;}
+/* The reference uses borders inside adjoining panels, not empty layout gaps. */
+static float dock_gap(const app *a) {return workspace_shell_visible(a)?0:8;}
 static struct nk_rect dock_root_bounds(app *a,float w,float h) {
-    if(laboratory_visible(a))return nk_rect(0,190,w,fmaxf(180,h-231-laboratory_dimension_value(a,1)));
-    return workbench_visible(a)?nk_rect(0,72,w,h-104):nk_rect(8,72,w-16,h-80);
+    if(laboratory_visible(a))return nk_rect(0,232,w,fmaxf(180,h-232-WORKSPACE_STATUS_HEIGHT-laboratory_dimension_value(a,1)));
+    if(workspace_shell_visible(a))return nk_rect(0,WORKSPACE_CONTENT_TOP,w,h-WORKSPACE_CONTENT_TOP-WORKSPACE_STATUS_HEIGHT);
+    return nk_rect(8,72,w-16,h-80);
 }
 static uint32_t dock_mask(const ps_dock_layout *d, uint32_t id) {
     const ps_dock_node *n=&d->nodes[id];
@@ -490,7 +501,11 @@ static void dock_overlay(app *a,float w,float h) {
     nk_push_scissor(canvas,nk_rect(0,0,w,h));
     for(unsigned i=0;i<PS_DOCK_NODES;i++) if(a->dock_splitters[i].w>0) {
         struct nk_rect r=a->dock_splitters[i];bool x=a->preferences.dock.nodes[i].kind==PS_DOCK_X;
-        nk_stroke_line(canvas,r.x+(x?r.w/2:0),r.y+(x?0:r.h/2),r.x+(x?r.w/2:r.w),r.y+(x?r.h:r.h/2),2,UI_COLOR(divider));
+        if(workspace_shell_visible(a)) {
+            float position=floorf(x?r.x+r.w/2:r.y+r.h/2);
+            if(x && dock_sidebar_split(&a->preferences.dock,&a->preferences.dock.nodes[i]))position-=1;
+            nk_fill_rect(canvas,x?nk_rect(position,r.y,1,r.h):nk_rect(r.x,position,r.w,1),0,UI_COLOR(divider));
+        } else nk_stroke_line(canvas,r.x+(x?r.w/2:0),r.y+(x?0:r.h/2),r.x+(x?r.w/2:r.w),r.y+(x?r.h:r.h/2),2,UI_COLOR(divider));
     }
     for(unsigned p=0;p<3;p++) if(a->preferences.dock.floating&(1u<<p)) nk_stroke_rect(canvas,a->dock_float_grips[p],2,1,UI_COLOR(accent));
     if(a->dock_dragging) {

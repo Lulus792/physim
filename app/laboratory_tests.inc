@@ -19,7 +19,7 @@ static bool laboratory_test_start(app *a,const char *root,const char *mode) {
 }
 static void laboratory_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
     static unsigned combo,phase,warmup;static float dimension;static struct nk_rect grip;static double time;static float yaw;static uint32_t selected;static char image[80];
-    static double focus_retry;
+    static double focus_retry;static nk_uint measurement_scroll_before,measurement_scroll_after;static bool focus_diagnosed;
     bool ok=true;
     if(strstr(mode,"startup")) {
         if(warmup++<3)return;
@@ -46,6 +46,10 @@ static void laboratory_test_frame(app *a,const char *mode,int *stage,int *code,c
     }
     switch(*stage) {
     case 0:
+        if(SDL_GetKeyboardFocus()!=a->window) {
+            if(ps_clock()>=focus_retry){SDL_RaiseWindow(a->window);focus_retry=ps_clock()+.25;}
+            return;
+        }
         if(warmup++<3)return;
         ok=(a->preferences.dock.hidden&1) && !(a->preferences.dock.hidden&8) && !a->laboratory_curves;
         build_project(a);break;
@@ -87,6 +91,17 @@ static void laboratory_test_frame(app *a,const char *mode,int *stage,int *code,c
         ok=ok && nk_sdl_accessibility_request_focus(a->ui,NULL,"Kurven anzeigen");break;
     case 10:
         if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"Kurven anzeigen")) {
+            if(!focus_diagnosed) {
+                focus_diagnosed=true;bool enabled=false,checked=false;
+                bool found=nk_sdl_accessibility_toggle_state(a->ui,"Kurven anzeigen",&enabled,&checked);
+                fprintf(stderr,"LABORATORY FOCUS: found=%d enabled=%d checked=%d keyboard-host=%d\n",found,enabled,checked,SDL_GetKeyboardFocus()==a->window);
+                struct nk_window *win=nk_window_find(a->ui,"workspace");
+                for(struct nk_window *above=win?win->next:NULL;above;above=above->next) {
+                    struct nk_rect cover=above->bounds,r=a->laboratory_switch;
+                    if(!(above->flags&(NK_WINDOW_HIDDEN|NK_WINDOW_MINIMIZED|NK_WINDOW_CLOSED)) && cover.x<r.x+r.w && cover.x+cover.w>r.x && cover.y<r.y+r.h && cover.y+cover.h>r.y)
+                        fprintf(stderr,"LABORATORY FOCUS COVER: %s %.1f/%.1f/%.1f/%.1f target %.1f/%.1f/%.1f/%.1f\n",above->name_string,cover.x,cover.y,cover.w,cover.h,r.x,r.y,r.w,r.h);
+                }
+            }
             if(ps_clock()>=focus_retry){SDL_RaiseWindow(a->window);nk_sdl_accessibility_request_focus(a->ui,NULL,"Kurven anzeigen");focus_retry=ps_clock()+.25;}return;
         }
         test_window_key_mod(a->window,SDLK_RETURN,0);break;
@@ -102,11 +117,12 @@ static void laboratory_test_frame(app *a,const char *mode,int *stage,int *code,c
         if(!nk_sdl_accessibility_is_focused(a->ui,NULL,laboratory_separator_name(0))){if(ps_clock()>=focus_retry){SDL_RaiseWindow(a->window);nk_sdl_accessibility_request_focus(a->ui,NULL,laboratory_separator_name(0));focus_retry=ps_clock()+.25;}return;}
         test_window_key_mod(a->window,SDLK_DOWN,0);break;
     case 14:ok=laboratory_dimension_value(a,0)==dimension-10;test_window_key_mod(a->window,SDLK_RETURN,0);break;
-    case 15:grip=a->laboratory_splitters[2];test_mouse(a,grip,true);break;
+    case 15:grip=laboratory_handle_bounds(a,2);ok=grip.w>0 && grip.h>0;test_mouse(a,grip,true);break;
     case 16:test_plot_motion(a,grip.x+40,grip.y+grip.h/2);break;
     case 17:test_mouse(a,nk_rect(grip.x+40,grip.y,1,1),false);break;
     case 18:
         if(a->laboratory_resize)return;
+        printf("LABORATORY CURVE DRAG: ratio=%.6f grip=%.1f,%.1f,%.1f,%.1f mouse=%.1f,%.1f\n",a->laboratory_curve_ratio,grip.x,grip.y,grip.w,grip.h,a->ui->input.mouse.pos.x,a->ui->input.mouse.pos.y);
         ok=a->laboratory_curve_ratio>.5f && !a->laboratory_resize;
         dimension=laboratory_dimension_value(a,1);ok=ok && nk_sdl_accessibility_request_focus(a->ui,NULL,laboratory_separator_name(1));break;
     case 19:
@@ -128,7 +144,23 @@ static void laboratory_test_frame(app *a,const char *mode,int *stage,int *code,c
     case 27:break;
     case 28:
         ok=a->laboratory_plots[0].w>=179 && a->laboratory_plots[1].w>=179 && display_time(a)==time && a->yaw==yaw;
-        *capture="laboratory-curve-limit.bmp";a->quitting=true;break;
+        *capture="laboratory-curve-limit.bmp";
+        if(strstr(mode,"large-narrow")) {
+            ok=ok && a->scene_viewport_bounds.h>=179 && nk_sdl_accessibility_request_focus(a->ui,NULL,"Kurven anzeigen");
+            measurement_scroll_before=a->laboratory_measure_scroll_y;
+        } else a->quitting=true;
+        break;
+    case 29:
+        if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"Kurven anzeigen"))return;
+        test_window_key_mod(a->window,SDLK_PAGEDOWN,0);break;
+    case 30:
+        measurement_scroll_after=a->laboratory_measure_scroll_y;
+        ok=measurement_scroll_after>measurement_scroll_before && display_time(a)==time && a->yaw==yaw && a->scene_viewport_bounds.h>=179;
+        printf("LABORATORY MEASUREMENT SCROLL: before=%u after=%u scene=%.1f clip=%.1f/%.1f\n",measurement_scroll_before,measurement_scroll_after,a->scene_viewport_bounds.h,a->laboratory_measure_bounds.y,a->laboratory_measure_bounds.h);
+        *capture="laboratory-measurement-scrolled.bmp";test_window_key_mod(a->window,SDLK_PAGEUP,0);break;
+    case 31:
+        ok=a->laboratory_measure_scroll_y<measurement_scroll_after && display_time(a)==time && a->yaw==yaw;
+        a->quitting=true;break;
     }
     if(!ok){fprintf(stderr,"LABORATORY failed stage %d combo %u: %s\n",*stage,combo,a->status);*code=1;a->quitting=true;}
     if(a->quitting)printf("LABORATORY %s SELF-TEST: %s\n",mode,*code?"FAILED":"PASSED");

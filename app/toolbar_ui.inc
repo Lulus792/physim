@@ -281,15 +281,16 @@ static void toolbar_popup(app *a, int previous) {
 }
 static void toolbar_view(app *a) {
     struct nk_context *ui = a->ui;
-    bool compact=workbench_visible(a) || laboratory_visible(a);
-    nk_fill_rect(nk_window_get_canvas(ui), nk_rect(0, 0, nk_window_get_bounds(ui).w, compact?72:32), 0,
+    bool compact=workspace_shell_visible(a);
+    nk_fill_rect(nk_window_get_canvas(ui), nk_rect(0, 0, nk_window_get_bounds(ui).w, compact?WORKSPACE_HEADER_HEIGHT:32), 0,
                  UI_COLOR(header));
     nk_style_push_vec2(ui, &ui->style.button.padding, nk_vec2(7, 2));
     nk_style_push_style_item(ui, &ui->style.button.normal, nk_style_item_color(UI_COLOR(header)));
     nk_menubar_begin(ui);
     float available = nk_window_get_content_region(ui).w;
-    nk_layout_row_begin(ui, NK_STATIC, compact?36:32, 12);
-    nk_layout_row_push(ui, compact?42:72);
+    if(compact)nk_style_push_font(ui,&a->workbench_fonts[2]);
+    nk_layout_row_begin(ui, NK_STATIC, compact?38:32, 12);
+    nk_layout_row_push(ui, compact?52:72);
     if(compact) {
         struct nk_rect mark;nk_widget(&mark,ui);struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
         const struct nk_user_font *font=&a->workbench_fonts[4];
@@ -298,7 +299,12 @@ static void toolbar_view(app *a) {
     } else nk_label(ui, "Physim", NK_TEXT_CENTERED);
     const char *menus[] = {"Datei", "Ansicht", "Hilfe", "Einstellungen", "Bearbeiten", "Build"};
     float factor=a->preferences.ui_size/16.f*(compact?.75f:1.f);
-    const float menu_width[] = {58*factor,72*factor,54*factor,116*factor,90*factor,54*factor};
+    float menu_width[] = {58*factor,72*factor,54*factor,116*factor,90*factor,54*factor};
+    float menu_extent=0;
+    for(unsigned i=0;i<SDL_arraysize(menu_width);i++) {
+        if(compact)menu_width[i]=ui->style.font->width(ui->style.font->userdata,ui->style.font->height,menus[i],(int)strlen(menus[i]))+24;
+        menu_extent+=menu_width[i];
+    }
     int previous = a->toolbar_popup_menu;
     /* Header actions remain responsive while the popup makes its parent read-only. */
     bool press = nk_input_is_mouse_pressed(&ui->input, NK_BUTTON_LEFT);
@@ -351,14 +357,13 @@ static void toolbar_view(app *a) {
         float text_width =
             font->width(font->userdata, font->height, menus[i], (int)strlen(menus[i]));
         nk_draw_text(canvas,
-                     nk_rect(bounds.x + (bounds.w - text_width) / 2,
+                     nk_rect(bounds.x + (compact?9:(bounds.w - text_width) / 2),
                              bounds.y + (bounds.h - font->height) / 2, text_width + 1,
                              font->height),
                      menus[i], (int)strlen(menus[i]), font, nk_rgba(0, 0, 0, 0), UI_COLOR(text));
     }
-    float menu_extent=(58+72+54+116+90+54)*factor;
     float status_width=compact?0:fminf(175,fmaxf(96,available-72-menu_extent-138-36));
-    nk_layout_row_push(ui, fmaxf(20, available - (compact?42:72) - menu_extent - 138 - status_width));
+    nk_layout_row_push(ui, fmaxf(20, available - (compact?52:72) - menu_extent - 138 - status_width));
     struct nk_rect path_bounds = nk_widget_bounds(ui);
     char caption[256];snprintf(caption,sizeof caption,"%s — Physim",a->loaded?project_name(a):a->workspace_open?workspace_name(a->workspace):"Workspace");
     nk_label_colored(ui, compact?caption:a->workspace_open ? a->workspace : "Kein Ordner geöffnet", compact?NK_TEXT_RIGHT:NK_TEXT_LEFT, muted());
@@ -385,21 +390,27 @@ static void toolbar_view(app *a) {
     toolbar_popup(a, previous);
     a->toolbar_popup_menu = a->toolbar_menu;
     nk_menubar_end(ui);
+    if(compact)nk_style_pop_font(ui);
     nk_style_pop_style_item(ui);
     if(compact)nk_style_push_font(ui,&a->workbench_fonts[2]);
-    nk_layout_row_dynamic(ui, compact?36:30, 3);
+    nk_layout_row_dynamic(ui, compact?40:30, 3);
     const char *tabs[] = {"Entwickeln", "Simulieren", "Auswerten"};
     for (int i = 0; i < 3; i++) {
         bool selected = !a->project_manager && (a->tab == i || (a->tab == 8 && i == 0));
         struct nk_rect bounds;
         enum nk_widget_layout_states state = nk_widget(&bounds, ui);
+        if(compact) {
+            float tab_width=fmaxf(1,(available-32)/3);
+            float left=8+i*(tab_width+8);
+            bounds.x=roundf(left);bounds.w=roundf(left+tab_width)-bounds.x;
+        }
         a->navigation_bounds[i] = bounds;
         bool hovered = !a->toolbar_pointer_consumed && nk_input_is_mouse_hovering_rect(&ui->input, bounds);
         if (state == NK_WIDGET_VALID && !a->toolbar_menu && !a->toolbar_pointer_consumed && hovered &&
             nk_input_is_mouse_pressed(&ui->input, NK_BUTTON_LEFT))
             select_workspace_tab(a, i);
         struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
-        struct nk_rect surface = nk_rect(bounds.x + (compact?8:5), bounds.y + 4, bounds.w - (compact?16:10), bounds.h - 8);
+        struct nk_rect surface = nk_rect(bounds.x + (compact?0:5), bounds.y + 4, bounds.w - (compact?0:10), bounds.h - (compact?10:8));
         if (selected || hovered)
             nk_fill_rect(canvas, surface, compact?5:8,
                          selected ? (compact?UI_COLOR(button):UI_COLOR(button_hover)) : UI_COLOR(button));
@@ -413,5 +424,50 @@ static void toolbar_view(app *a) {
                      selected ? UI_COLOR(text) : UI_COLOR(muted));
     }
     if(compact)nk_style_pop_font(ui);
+    if(compact)nk_fill_rect(nk_window_get_canvas(ui),nk_rect(0,WORKSPACE_HEADER_HEIGHT-1,available,1),0,UI_COLOR(border));
     nk_style_pop_vec2(ui);
+}
+
+/* Product state in the shared reference's breadcrumb strip, never demo data. */
+static void workspace_path_view(app *a,float w) {
+    struct nk_context *ui=a->ui;
+    bool visible=workspace_shell_visible(a);
+    nk_window_show(ui,"workspace-path",visible?NK_SHOWN:NK_HIDDEN);
+    if(!visible)return;
+    nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(14,4));
+    nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(16,0));
+    nk_style_push_float(ui,&ui->style.window.rounding,0);
+    nk_style_push_font(ui,&a->workbench_fonts[0]);
+    struct nk_rect bounds=nk_rect(0,WORKSPACE_HEADER_HEIGHT,w,WORKSPACE_PATH_HEIGHT);
+    struct nk_window *previous=ui->active;
+    if(nk_begin(ui,"workspace-path",bounds,NK_WINDOW_BACKGROUND|NK_WINDOW_NO_SCROLLBAR)) {
+        dock_input(a,PS_DOCK_WORKSPACE,bounds,previous,true);
+        const struct nk_user_font *font=ui->style.font;
+        const char *name=a->loaded?project_name(a):a->workspace_open?workspace_name(a->workspace):"Workspace";
+        const char *area=a->tab==1?"Messlabor":a->tab==2?"Auswertung":"Werkbank";
+        float name_width=fminf(w*.34f,font->width(font->userdata,font->height,name,(int)strlen(name)));
+        float area_width=font->width(font->userdata,font->height,area,(int)strlen(area));
+        float action_width=150*a->preferences.ui_size/16.f;
+        float state_width=fminf(280*a->preferences.ui_size/16.f,w*.3f);
+        nk_layout_row_begin(ui,NK_STATIC,30,6);
+        nk_layout_row_push(ui,name_width);nk_label_colored(ui,name,NK_TEXT_LEFT,muted());
+        nk_layout_row_push(ui,5);nk_label_colored(ui,"/",NK_TEXT_LEFT,UI_COLOR(border));
+        nk_layout_row_push(ui,area_width);nk_style_push_font(ui,&a->workbench_fonts[3]);nk_label(ui,area,NK_TEXT_LEFT);nk_style_pop_font(ui);
+        nk_layout_row_push(ui,fmaxf(0,w-28-name_width-area_width-state_width-action_width-85));nk_spacer(ui);
+        const char *state=a->job.running?"Build läuft …":a->runner.running?(a->paused?"Simulation pausiert":"Simulation läuft"):
+            !a->loaded?"Ordner öffnen":a->dirty || a->analysis_dirty || documents_dirty(a)?"Ungespeicherte Änderungen":a->built?"Modell bereit":"Build erforderlich";
+        nk_layout_row_push(ui,state_width);nk_label_colored(ui,state,NK_TEXT_RIGHT,muted());
+        nk_layout_row_push(ui,action_width);
+        nk_style_push_style_item(ui,&ui->style.button.normal,nk_style_item_color(UI_COLOR(window)));
+        nk_style_push_flags(ui,&ui->style.button.text_alignment,NK_TEXT_RIGHT);
+        nk_style_push_color(ui,&ui->style.button.text_normal,UI_COLOR(accent));
+        nk_begin_disabled(ui,!a->loaded);
+        if(nk_button_label(ui,a->tab==1?"Messlauf auswerten →":a->tab==2?"Zum Modell →":"Zur Simulation →"))select_workspace_tab(a,a->tab==1?2:a->tab==2?0:1);
+        nk_end_disabled(ui);nk_style_pop_color(ui);nk_style_pop_flags(ui);nk_style_pop_style_item(ui);
+        nk_layout_row_end(ui);
+        struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+        nk_push_scissor(canvas,bounds);
+        nk_fill_rect(canvas,nk_rect(0,WORKSPACE_CONTENT_TOP-1,w,1),0,UI_COLOR(border));
+    }nk_end(ui);
+    nk_style_pop_font(ui);nk_style_pop_float(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
 }

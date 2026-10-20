@@ -866,7 +866,7 @@ def laboratory(flow,directory):
     offset=struct.unpack_from('<I',raw,10)[0];iw,ih=struct.unpack_from('<ii',raw,18);bits=struct.unpack_from('<H',raw,28)[0]
     require(bits in (24,32),'Unsupported startup capture');stride=((iw*bits+31)//32)*4
     at=offset+(abs(ih)-1-int(y+10) if ih>0 else int(y+10))*stride+int(x+10)*(bits//8)
-    require(tuple(reversed(raw[at:at+3]))==((232,235,241) if theme==1 else (0,0,0) if theme==2 else (20,21,24)),
+    require(tuple(reversed(raw[at:at+3]))==((230,233,238) if theme==1 else (0,0,0) if theme==2 else (20,21,24)),
             'Initial renderer colors depend on an explicit theme change')
     custom=directory/'custom';custom.mkdir(parents=True)
     for mode in ('laboratory-custom','laboratory-custom-read'):
@@ -891,7 +891,7 @@ def laboratory(flow,directory):
             at=offset+(abs(ih)-1-y if ih>0 else y)*stride+x*(bits//8)
             return tuple(reversed(image[at:at+3]))
         x,y,w,h=map(float,states[7][1:5])
-        expected=(0,0,0) if 'contrast' in variant else (232,235,241) if 'light' in variant else (20,21,24)
+        expected=(0,0,0) if 'contrast' in variant else (230,233,238) if 'light' in variant else (20,21,24)
         require(pixel(int(x+10),int(y+10))==expected,'Scene ignores the selected semantic theme')
         require(sum(pixel(px,py)!=expected for py in range(int(y),int(y+h),2) for px in range(int(x),int(x+w),2))>100,'Native model scene contains no geometry')
 

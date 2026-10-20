@@ -18,7 +18,7 @@ import time
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--app',type=Path,required=True)
 parser.add_argument('--work',type=Path,required=True)
-parser.add_argument('--mode',choices=('docs-keyboard-panes','workbench-dark'),default='docs-keyboard-panes')
+parser.add_argument('--mode',choices=('docs-keyboard-panes','workbench-dark','workbench-dark-visual-unified'),default='docs-keyboard-panes')
 parser.add_argument('--deadline',type=float,default=90)
 parser.add_argument('--force-raise',action='store_true',help='Diagnostic opt-in for SDL forced foreground activation')
 args=parser.parse_args()

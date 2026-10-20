@@ -1,0 +1,2611 @@
+{
+  "date": "2026-10-20",
+  "base": "6f066cfdcdd273b0ecbd88cd79def275aa208eb9",
+  "status": "partial implementation; full design acceptance pending",
+  "scope": "Shared frame and measurement area; does not certify full Develop, Simulate, Analysis or F1 fidelity.",
+  "source_10": {
+    "base": "6f066cfdcdd273b0ecbd88cd79def275aa208eb9",
+    "source_sha256_lf": {
+      "app/design_tokens.h": "1068837deff08028916b4ed2c31d7afe0045ba043311d0ba4ef7accdb90ae64f",
+      "app/design_ui.inc": "d6c91ce671d21d6df0ebd1e2ecd7f128ce0f00c7aa8416a811dd67b4e062b6ef",
+      "app/docking_ui.inc": "e1dccb029069955ad03e4193661bfc2adc95c84ebcdc7c5da4b68b0e79f1e325",
+      "app/laboratory_layout.inc": "fb3a90bfbf7cced9223cbf56c30eb9a4b88b4949d4d5ed508ad660078484175f",
+      "app/laboratory_ui.inc": "1a1e607c09e2c952611afb1353be0d38fdc5131bb751725f051cf1305bf36b79",
+      "app/main.c": "16b8d6a24bd50582e583e1a12800fecff45320868e5d22ce8c49ee00cef11a51",
+      "app/panel_windows.inc": "5c34b4c491227d0957fb8842f28b15f51e02b0c71ed35f125c4d90e65836e4bd",
+      "app/toolbar_ui.inc": "94520c7a5116870419b631d31c2c97d5265e6138908a1db22a690221e00839ea",
+      "app/laboratory_tests.inc": "5cb7fd5932c557b8109d4bcdcd78ea59285d8bd85719536e1a535c18be5aed98",
+      "app/workbench_tests.inc": "d4e81bbf0953960d7383e6889db34848becf4a0bf1cb3828471eecdeb1d78853",
+      "app/toolbar_tests.inc": "4029d2c50500f61c0a513bfef12bb88bb0245869eb48c972388dbab23b7d9ef8",
+      "tests/check_display_workflow.py": "93f643d906f8cf3b25926f4b9246aa424b8f345df9c895dea695b30320d5fb29",
+      "tests/check_documentation_windows_host.py": "0157e2896412ae908cb260071ddf9b71911a03ddc0b4ae6d5499de21ccd6b08a",
+      "tests/check_unified_chrome.py": "9c640bb836cddbbc78c8075b29046e6c1dfc201a13949f595d3e4942bd8c60df"
+    },
+    "preserved_foreign_sha256_lf": {
+      ".github/workflows/linux-ui-sanitizers.yml": "80e5b0d925f75ddce52260e8812cfb02d0e5b6e4ccfef03ea86deea75c446085",
+      ".github/workflows/macos-f1-accessibility.yml": "c37bfbd09cdfb0d26922cf0fbd8527f2be70161dd113809435732b6150fd5650",
+      "app/accessibility_atspi.c": "fb32ff39647be57cdaa2c02a10d4319ecef2186747a1edc2338bb397e5668b0f",
+      "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+      "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+      "tests/check_documentation_orca.py": "e38b255bbd7bb12787e50cd78d4b32ed8f985ce60746afde2702285e22a728d5",
+      "tests/test_accessibility_tables_atspi.py": "623f5152d85dabe778728fedc9f999b93e3bfaef6d8d82679d6444675ad54d2f",
+      "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+      "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+      "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+    },
+    "binaries": {
+      "windows": {
+        "path": "build/native/Design-exact/bin/physim.exe",
+        "sha256": "0d336bbf9b356624dbb2350484b40dba751dd1d6682c2ed6085698c3e78c81aa"
+      },
+      "linux": {
+        "path": "build/native/Design-exact-linux/bin/physim",
+        "sha256": "e9cf7746a17016d7bf700df7d0a85723823a20e512e9ecebee5aef0bdead3359"
+      }
+    }
+  },
+  "source_13_sha256_lf": {
+    "app/design_tokens.h": "1068837deff08028916b4ed2c31d7afe0045ba043311d0ba4ef7accdb90ae64f",
+    "app/design_ui.inc": "d6c91ce671d21d6df0ebd1e2ecd7f128ce0f00c7aa8416a811dd67b4e062b6ef",
+    "app/docking_ui.inc": "e1dccb029069955ad03e4193661bfc2adc95c84ebcdc7c5da4b68b0e79f1e325",
+    "app/laboratory_layout.inc": "fb3a90bfbf7cced9223cbf56c30eb9a4b88b4949d4d5ed508ad660078484175f",
+    "app/laboratory_ui.inc": "9b04e9ea170d3b3d0689f15fad980f372f1ffd5a45152e75eebe7865596f0454",
+    "app/main.c": "16b8d6a24bd50582e583e1a12800fecff45320868e5d22ce8c49ee00cef11a51",
+    "app/panel_windows.inc": "455297249d9557396b3a8d2c8f04a636bc62d9d350c1c3978b5af301cb6b9d09",
+    "app/toolbar_ui.inc": "94520c7a5116870419b631d31c2c97d5265e6138908a1db22a690221e00839ea",
+    "app/laboratory_tests.inc": "5cb7fd5932c557b8109d4bcdcd78ea59285d8bd85719536e1a535c18be5aed98",
+    "app/workbench_tests.inc": "d4e81bbf0953960d7383e6889db34848becf4a0bf1cb3828471eecdeb1d78853",
+    "app/toolbar_tests.inc": "4029d2c50500f61c0a513bfef12bb88bb0245869eb48c972388dbab23b7d9ef8",
+    "tests/check_display_workflow.py": "93f643d906f8cf3b25926f4b9246aa424b8f345df9c895dea695b30320d5fb29",
+    "tests/check_documentation_windows_host.py": "0157e2896412ae908cb260071ddf9b71911a03ddc0b4ae6d5499de21ccd6b08a",
+    "tests/check_unified_chrome.py": "9c640bb836cddbbc78c8075b29046e6c1dfc201a13949f595d3e4942bd8c60df",
+    "app/panel_window_tests.inc": "76a50959c5194b9f587af6aa9250097ea6f2ca32369a90d5f03475e5710fd49c"
+  },
+  "runs": [
+    {
+      "platform": "windows",
+      "version": "10-final",
+      "binary": "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+      "sha256": "0d336bbf9b356624dbb2350484b40dba751dd1d6682c2ed6085698c3e78c81aa",
+      "groups": [
+        {
+          "name": "unified",
+          "status": "passed",
+          "seconds": 12.23399999999674
+        },
+        {
+          "name": "workbench",
+          "status": "passed",
+          "seconds": 35.29599999997299
+        },
+        {
+          "name": "laboratory",
+          "status": "passed",
+          "seconds": 180.07800000003772
+        },
+        {
+          "name": "docking",
+          "status": "passed",
+          "seconds": 72.25
+        },
+        {
+          "name": "inspector",
+          "status": "passed",
+          "seconds": 76
+        },
+        {
+          "name": "toolbar",
+          "status": "passed",
+          "seconds": 13.046999999962281
+        },
+        {
+          "name": "keyboard-menu",
+          "status": "passed",
+          "seconds": 11.28100000001723
+        },
+        {
+          "name": "documentation_h",
+          "status": "passed",
+          "seconds": 22.81300000002375
+        }
+      ],
+      "commands": [
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\unified\\dark",
+            "workbench-dark-visual-unified"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\unified\\light",
+            "workbench-light-visual-unified"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\workbench\\dark",
+            "workbench-dark"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\workbench\\light",
+            "workbench-light"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\workbench\\dark-narrow-visual",
+            "workbench-dark-narrow-visual"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\workbench\\light-large-visual",
+            "workbench-light-large-visual"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\workbench\\dark-opaque-visual",
+            "workbench-dark-opaque-visual"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\workbench\\contrast-visual",
+            "workbench-contrast-visual"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\laboratory\\startup",
+            "laboratory-startup"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\laboratory\\custom",
+            "laboratory-custom"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\laboratory\\custom",
+            "laboratory-custom-read"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\laboratory\\dark",
+            "laboratory-dark"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\laboratory\\light",
+            "laboratory-light"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\laboratory\\contrast",
+            "laboratory-contrast"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\laboratory\\light-large-narrow",
+            "laboratory-light-large-narrow"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\laboratory\\phys-dark",
+            "laboratory-phys-dark"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\laboratory\\projectile-light",
+            "laboratory-projectile-light"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\docking\\c-dark-legacy",
+            "fixed-panels-c-dark-legacy"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\docking\\phys-light",
+            "fixed-panels-phys-light"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\inspector\\c-contrast-large-narrow",
+            "fixed-panels-c-contrast-large-narrow"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\inspector\\phys-light-large-narrow",
+            "fixed-panels-phys-light-large-narrow"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\toolbar",
+            "toolbar"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\keyboard-menu",
+            "toolbar-keyboard"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-10-final\\documentation_h",
+            "docs-keyboard-h"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        }
+      ],
+      "results_sha256": "641c69710b6c127ff4f7ef9bb5be59f02d25d3933684f6c9dd1fb4712f8b3e89",
+      "steps_sha256": "fbcd2d24c962de695bb3e37c58ff5273c66599b9ddcb38eb71aae9818d402ca7"
+    },
+    {
+      "platform": "windows",
+      "version": "13",
+      "binary": "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+      "sha256": "bef66f15b47c051b1688d4ee60c41c40b44408ad85ee1820c7faf27f5ce0bf49",
+      "groups": [
+        {
+          "name": "laboratory",
+          "status": "passed",
+          "seconds": 183.60999999998603
+        },
+        {
+          "name": "docking",
+          "status": "passed",
+          "seconds": 77.75
+        },
+        {
+          "name": "inspector",
+          "status": "passed",
+          "seconds": 97.79700000002049
+        }
+      ],
+      "commands": [
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-13\\laboratory\\startup",
+            "laboratory-startup"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-13\\laboratory\\custom",
+            "laboratory-custom"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-13\\laboratory\\custom",
+            "laboratory-custom-read"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-13\\laboratory\\dark",
+            "laboratory-dark"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-13\\laboratory\\light",
+            "laboratory-light"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-13\\laboratory\\contrast",
+            "laboratory-contrast"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-13\\laboratory\\light-large-narrow",
+            "laboratory-light-large-narrow"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-13\\laboratory\\phys-dark",
+            "laboratory-phys-dark"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-13\\laboratory\\projectile-light",
+            "laboratory-projectile-light"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-13\\docking\\c-dark-legacy",
+            "fixed-panels-c-dark-legacy"
+          ],
+          "exit_code": 0,
+          "curve_geometry": [
+            "PANEL CURVE KEYBOARD: child-width=720.000 main-width=872.000 right-pixels=9.999980 actual-width-change=10.000000",
+            "PANEL CURVE SHIFT: net-pixels=-30.000025 actual-width-change=-30.000031"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-13\\docking\\phys-light",
+            "fixed-panels-phys-light"
+          ],
+          "exit_code": 0,
+          "curve_geometry": [
+            "PANEL CURVE KEYBOARD: child-width=720.000 main-width=872.000 right-pixels=9.999980 actual-width-change=10.000000",
+            "PANEL CURVE SHIFT: net-pixels=-30.000025 actual-width-change=-30.000031"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-13\\inspector\\c-contrast-large-narrow",
+            "fixed-panels-c-contrast-large-narrow"
+          ],
+          "exit_code": 0,
+          "curve_geometry": [
+            "PANEL CURVE KEYBOARD: child-width=720.000 main-width=512.000 right-pixels=9.999980 actual-width-change=10.000000",
+            "PANEL CURVE SHIFT: net-pixels=-30.000025 actual-width-change=-30.000031"
+          ]
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-exact\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-exact-windows-13\\inspector\\phys-light-large-narrow",
+            "fixed-panels-phys-light-large-narrow"
+          ],
+          "exit_code": 0,
+          "curve_geometry": [
+            "PANEL CURVE KEYBOARD: child-width=720.000 main-width=512.000 right-pixels=9.999980 actual-width-change=10.000000",
+            "PANEL CURVE SHIFT: net-pixels=-30.000025 actual-width-change=-30.000031"
+          ]
+        }
+      ],
+      "results_sha256": "064ecae49ded22f36b17579810caaf0746a133e6bb6e367229a2b1807b905ad5",
+      "steps_sha256": "60ceffa3d941749c381a63162ca328db8b7fbf4cc6bd83bac78d3646f3c71a79"
+    },
+    {
+      "platform": "linux",
+      "version": "10-final",
+      "binary": "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+      "sha256": "e9cf7746a17016d7bf700df7d0a85723823a20e512e9ecebee5aef0bdead3359",
+      "groups": [
+        {
+          "name": "unified",
+          "status": "passed",
+          "seconds": 14.033783536000556
+        },
+        {
+          "name": "workbench",
+          "status": "passed",
+          "seconds": 43.17736168900046
+        },
+        {
+          "name": "laboratory",
+          "status": "passed",
+          "seconds": 258.9105046149998
+        },
+        {
+          "name": "docking",
+          "status": "passed",
+          "seconds": 96.81775697000012
+        },
+        {
+          "name": "inspector",
+          "status": "passed",
+          "seconds": 70.84241960799955
+        },
+        {
+          "name": "toolbar",
+          "status": "passed",
+          "seconds": 10.393334238000534
+        },
+        {
+          "name": "keyboard-menu",
+          "status": "passed",
+          "seconds": 6.658211239000593
+        },
+        {
+          "name": "documentation_h",
+          "status": "passed",
+          "seconds": 45.130945402999714
+        }
+      ],
+      "commands": [
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/unified/dark",
+            "workbench-dark-visual-unified"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/unified/light",
+            "workbench-light-visual-unified"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/workbench/dark",
+            "workbench-dark"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/workbench/light",
+            "workbench-light"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/workbench/dark-narrow-visual",
+            "workbench-dark-narrow-visual"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/workbench/light-large-visual",
+            "workbench-light-large-visual"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/workbench/dark-opaque-visual",
+            "workbench-dark-opaque-visual"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/workbench/contrast-visual",
+            "workbench-contrast-visual"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/laboratory/startup",
+            "laboratory-startup"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/laboratory/custom",
+            "laboratory-custom"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/laboratory/custom",
+            "laboratory-custom-read"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/laboratory/dark",
+            "laboratory-dark"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/laboratory/light",
+            "laboratory-light"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/laboratory/contrast",
+            "laboratory-contrast"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/laboratory/light-large-narrow",
+            "laboratory-light-large-narrow"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/laboratory/phys-dark",
+            "laboratory-phys-dark"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/laboratory/projectile-light",
+            "laboratory-projectile-light"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/docking/c-dark-legacy",
+            "fixed-panels-c-dark-legacy"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/docking/phys-light",
+            "fixed-panels-phys-light"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/inspector/c-contrast-large-narrow",
+            "fixed-panels-c-contrast-large-narrow"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/inspector/phys-light-large-narrow",
+            "fixed-panels-phys-light-large-narrow"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/toolbar",
+            "toolbar"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/keyboard-menu",
+            "toolbar-keyboard"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-10-final/documentation_h",
+            "docs-keyboard-h"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        }
+      ],
+      "results_sha256": "7a55f34ba2f1cb1de94dd0e152e2fb7bd042a736e0f8554c553b683561d0f95a",
+      "steps_sha256": "c27bd563a2348790252c66174b05ff25c897f7fe56d9333a7b59a579bed8a005"
+    },
+    {
+      "platform": "linux",
+      "version": "13",
+      "binary": "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+      "sha256": "b5ee7b20d988d35db5991eaca6f5a5a7c18eb92884828e873e64afb710fc15d7",
+      "groups": [
+        {
+          "name": "laboratory",
+          "status": "passed",
+          "seconds": 338.1072380580008
+        },
+        {
+          "name": "docking",
+          "status": "passed",
+          "seconds": 127.56596033500136
+        },
+        {
+          "name": "inspector",
+          "status": "passed",
+          "seconds": 142.07358515799933
+        }
+      ],
+      "commands": [
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-13/laboratory/startup",
+            "laboratory-startup"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-13/laboratory/custom",
+            "laboratory-custom"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-13/laboratory/custom",
+            "laboratory-custom-read"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-13/laboratory/dark",
+            "laboratory-dark"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-13/laboratory/light",
+            "laboratory-light"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-13/laboratory/contrast",
+            "laboratory-contrast"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-13/laboratory/light-large-narrow",
+            "laboratory-light-large-narrow"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-13/laboratory/phys-dark",
+            "laboratory-phys-dark"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-13/laboratory/projectile-light",
+            "laboratory-projectile-light"
+          ],
+          "exit_code": 0,
+          "curve_geometry": []
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-13/docking/c-dark-legacy",
+            "fixed-panels-c-dark-legacy"
+          ],
+          "exit_code": 0,
+          "curve_geometry": [
+            "PANEL CURVE KEYBOARD: child-width=720.000 main-width=872.000 right-pixels=9.999980 actual-width-change=10.000000",
+            "PANEL CURVE SHIFT: net-pixels=-30.000025 actual-width-change=-30.000031"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-13/docking/phys-light",
+            "fixed-panels-phys-light"
+          ],
+          "exit_code": 0,
+          "curve_geometry": [
+            "PANEL CURVE KEYBOARD: child-width=720.000 main-width=872.000 right-pixels=9.999980 actual-width-change=10.000000",
+            "PANEL CURVE SHIFT: net-pixels=-30.000025 actual-width-change=-30.000031"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-13/inspector/c-contrast-large-narrow",
+            "fixed-panels-c-contrast-large-narrow"
+          ],
+          "exit_code": 0,
+          "curve_geometry": [
+            "PANEL CURVE KEYBOARD: child-width=720.000 main-width=512.000 right-pixels=9.999980 actual-width-change=10.000000",
+            "PANEL CURVE SHIFT: net-pixels=-30.000025 actual-width-change=-30.000031"
+          ]
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Design-exact-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-exact-linux-13/inspector/phys-light-large-narrow",
+            "fixed-panels-phys-light-large-narrow"
+          ],
+          "exit_code": 0,
+          "curve_geometry": [
+            "PANEL CURVE KEYBOARD: child-width=720.000 main-width=512.000 right-pixels=9.999980 actual-width-change=10.000000",
+            "PANEL CURVE SHIFT: net-pixels=-30.000025 actual-width-change=-30.000031"
+          ]
+        }
+      ],
+      "results_sha256": "54dc125d060b237b1ac5c3a7d3a1bf454c553146821e14c53b790d26bf186250",
+      "steps_sha256": "673966f1315ddacbd9319ad1e6256fce0f7e637f35ea1432769db38f9ec77d75"
+    }
+  ],
+  "chrome": [
+    {
+      "platform": "windows",
+      "area": "develop",
+      "theme": "dark",
+      "version": "10-final",
+      "scope": "Compare shared native chrome with the selected PNG, without altering either image.\n\nThis verifies a bounded part of the design: client size, the three tab rectangles,\nthe two horizontal boundaries and five semantic surfaces. It is not a whole-app\nscore. Content, fonts, interactions and the rest of each workspace need their own\nproofs. Pillow is required, as for the existing workbench visual checker.",
+      "reference": "D:\\Physim\\docs\\visuals\\unified-workspace\\develop-dark.png",
+      "native": "build\\native\\design-exact-windows-10-final\\unified\\dark\\workbench-dark.bmp",
+      "sha256": [
+        "b4554a1b09689798c21a8fe771d5c706a03a711bd963c1b3d00b5d2fe270ec52",
+        "e831067ebb01bd86b1423b5ec9b27e225eea970be2ea5ded66173df752eb0435"
+      ],
+      "checks": [
+        {
+          "name": "actual client size",
+          "expected": [
+            1440,
+            1000
+          ],
+          "actual": [
+            1440,
+            1000
+          ],
+          "passed": true
+        },
+        {
+          "name": "menu surface",
+          "expected": [
+            37,
+            38,
+            43
+          ],
+          "actual": [
+            37,
+            38,
+            43
+          ],
+          "passed": true
+        },
+        {
+          "name": "path surface",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "path left inset",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "workspace surface",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "footer surface",
+          "expected": [
+            37,
+            38,
+            43
+          ],
+          "actual": [
+            37,
+            38,
+            43
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=43",
+          "expected": [
+            [
+              10,
+              475
+            ]
+          ],
+          "actual": [
+            [
+              10,
+              475
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=50",
+          "expected": [
+            [
+              8,
+              477
+            ]
+          ],
+          "actual": [
+            [
+              8,
+              477
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=69",
+          "expected": [
+            [
+              9,
+              476
+            ]
+          ],
+          "actual": [
+            [
+              9,
+              476
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=78",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=117",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "platform": "windows",
+      "area": "develop",
+      "theme": "light",
+      "version": "10-final",
+      "scope": "Compare shared native chrome with the selected PNG, without altering either image.\n\nThis verifies a bounded part of the design: client size, the three tab rectangles,\nthe two horizontal boundaries and five semantic surfaces. It is not a whole-app\nscore. Content, fonts, interactions and the rest of each workspace need their own\nproofs. Pillow is required, as for the existing workbench visual checker.",
+      "reference": "D:\\Physim\\docs\\visuals\\unified-workspace\\develop-light.png",
+      "native": "build\\native\\design-exact-windows-10-final\\unified\\light\\workbench-light.bmp",
+      "sha256": [
+        "7a3e95e92f1e59dd61d0b0cff58e0787ab805996bcd2a88846200e1511441d0f",
+        "a35d556f418223383e582175b4b0dba28c93f5bce34984104c574d9555ae74a9"
+      ],
+      "checks": [
+        {
+          "name": "actual client size",
+          "expected": [
+            1440,
+            1000
+          ],
+          "actual": [
+            1440,
+            1000
+          ],
+          "passed": true
+        },
+        {
+          "name": "menu surface",
+          "expected": [
+            237,
+            239,
+            243
+          ],
+          "actual": [
+            237,
+            239,
+            243
+          ],
+          "passed": true
+        },
+        {
+          "name": "path surface",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "path left inset",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "workspace surface",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "footer surface",
+          "expected": [
+            237,
+            239,
+            243
+          ],
+          "actual": [
+            237,
+            239,
+            243
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=43",
+          "expected": [
+            [
+              10,
+              475
+            ]
+          ],
+          "actual": [
+            [
+              10,
+              475
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=50",
+          "expected": [
+            [
+              8,
+              477
+            ]
+          ],
+          "actual": [
+            [
+              8,
+              477
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=69",
+          "expected": [
+            [
+              9,
+              476
+            ]
+          ],
+          "actual": [
+            [
+              9,
+              476
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=78",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=117",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "platform": "windows",
+      "area": "simulate",
+      "theme": "dark",
+      "version": "13",
+      "scope": "Compare shared native chrome with the selected PNG, without altering either image.\n\nThis verifies a bounded part of the design: client size, the three tab rectangles,\nthe two horizontal boundaries and five semantic surfaces. It is not a whole-app\nscore. Content, fonts, interactions and the rest of each workspace need their own\nproofs. Pillow is required, as for the existing workbench visual checker.",
+      "reference": "D:\\Physim\\docs\\visuals\\unified-workspace\\simulate-dark.png",
+      "native": "build\\native\\design-exact-windows-13\\laboratory\\dark\\laboratory-initial.bmp",
+      "sha256": [
+        "77168a7f8ee9273dde347a657e8119657c307466a706ebfaa8da331b8a9d1534",
+        "3e1eb57ed2fdfd8026f6f949c0a22812491ae315b82a484a6f820c0dc058d317"
+      ],
+      "checks": [
+        {
+          "name": "actual client size",
+          "expected": [
+            1440,
+            1000
+          ],
+          "actual": [
+            1440,
+            1000
+          ],
+          "passed": true
+        },
+        {
+          "name": "menu surface",
+          "expected": [
+            37,
+            38,
+            43
+          ],
+          "actual": [
+            37,
+            38,
+            43
+          ],
+          "passed": true
+        },
+        {
+          "name": "path surface",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "path left inset",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "workspace surface",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "footer surface",
+          "expected": [
+            37,
+            38,
+            43
+          ],
+          "actual": [
+            37,
+            38,
+            43
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=43",
+          "expected": [
+            [
+              487,
+              953
+            ]
+          ],
+          "actual": [
+            [
+              487,
+              953
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=50",
+          "expected": [
+            [
+              485,
+              955
+            ]
+          ],
+          "actual": [
+            [
+              485,
+              955
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=69",
+          "expected": [
+            [
+              486,
+              954
+            ]
+          ],
+          "actual": [
+            [
+              486,
+              954
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=78",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=117",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "platform": "windows",
+      "area": "simulate",
+      "theme": "light",
+      "version": "13",
+      "scope": "Compare shared native chrome with the selected PNG, without altering either image.\n\nThis verifies a bounded part of the design: client size, the three tab rectangles,\nthe two horizontal boundaries and five semantic surfaces. It is not a whole-app\nscore. Content, fonts, interactions and the rest of each workspace need their own\nproofs. Pillow is required, as for the existing workbench visual checker.",
+      "reference": "D:\\Physim\\docs\\visuals\\unified-workspace\\simulate-light.png",
+      "native": "build\\native\\design-exact-windows-13\\laboratory\\light\\laboratory-initial.bmp",
+      "sha256": [
+        "d72aaab6813e8434fe3c4fcbe3f88571c4a4a5f4bfa7e53fdf3e179dc7c638b3",
+        "30a6a0548b72ccbb6f2d310136c1939cbd70249b8edd1263296b862b57a4b9e5"
+      ],
+      "checks": [
+        {
+          "name": "actual client size",
+          "expected": [
+            1440,
+            1000
+          ],
+          "actual": [
+            1440,
+            1000
+          ],
+          "passed": true
+        },
+        {
+          "name": "menu surface",
+          "expected": [
+            237,
+            239,
+            243
+          ],
+          "actual": [
+            237,
+            239,
+            243
+          ],
+          "passed": true
+        },
+        {
+          "name": "path surface",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "path left inset",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "workspace surface",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "footer surface",
+          "expected": [
+            237,
+            239,
+            243
+          ],
+          "actual": [
+            237,
+            239,
+            243
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=43",
+          "expected": [
+            [
+              487,
+              953
+            ]
+          ],
+          "actual": [
+            [
+              487,
+              953
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=50",
+          "expected": [
+            [
+              485,
+              955
+            ]
+          ],
+          "actual": [
+            [
+              485,
+              955
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=69",
+          "expected": [
+            [
+              486,
+              954
+            ]
+          ],
+          "actual": [
+            [
+              486,
+              954
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=78",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=117",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "platform": "linux",
+      "area": "develop",
+      "theme": "dark",
+      "version": "10-final",
+      "scope": "Compare shared native chrome with the selected PNG, without altering either image.\n\nThis verifies a bounded part of the design: client size, the three tab rectangles,\nthe two horizontal boundaries and five semantic surfaces. It is not a whole-app\nscore. Content, fonts, interactions and the rest of each workspace need their own\nproofs. Pillow is required, as for the existing workbench visual checker.",
+      "reference": "D:\\Physim\\docs\\visuals\\unified-workspace\\develop-dark.png",
+      "native": "build\\native\\design-exact-linux-10-final\\unified\\dark\\workbench-dark.bmp",
+      "sha256": [
+        "b4554a1b09689798c21a8fe771d5c706a03a711bd963c1b3d00b5d2fe270ec52",
+        "c65762c45a664c9e53da866e20d4303f26d139e592ca99d5594a6b7400e205ff"
+      ],
+      "checks": [
+        {
+          "name": "actual client size",
+          "expected": [
+            1440,
+            1000
+          ],
+          "actual": [
+            1440,
+            1000
+          ],
+          "passed": true
+        },
+        {
+          "name": "menu surface",
+          "expected": [
+            37,
+            38,
+            43
+          ],
+          "actual": [
+            37,
+            38,
+            43
+          ],
+          "passed": true
+        },
+        {
+          "name": "path surface",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "path left inset",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "workspace surface",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "footer surface",
+          "expected": [
+            37,
+            38,
+            43
+          ],
+          "actual": [
+            37,
+            38,
+            43
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=43",
+          "expected": [
+            [
+              10,
+              475
+            ]
+          ],
+          "actual": [
+            [
+              10,
+              475
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=50",
+          "expected": [
+            [
+              8,
+              477
+            ]
+          ],
+          "actual": [
+            [
+              8,
+              477
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=69",
+          "expected": [
+            [
+              9,
+              476
+            ]
+          ],
+          "actual": [
+            [
+              9,
+              476
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=78",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=117",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "platform": "linux",
+      "area": "develop",
+      "theme": "light",
+      "version": "10-final",
+      "scope": "Compare shared native chrome with the selected PNG, without altering either image.\n\nThis verifies a bounded part of the design: client size, the three tab rectangles,\nthe two horizontal boundaries and five semantic surfaces. It is not a whole-app\nscore. Content, fonts, interactions and the rest of each workspace need their own\nproofs. Pillow is required, as for the existing workbench visual checker.",
+      "reference": "D:\\Physim\\docs\\visuals\\unified-workspace\\develop-light.png",
+      "native": "build\\native\\design-exact-linux-10-final\\unified\\light\\workbench-light.bmp",
+      "sha256": [
+        "7a3e95e92f1e59dd61d0b0cff58e0787ab805996bcd2a88846200e1511441d0f",
+        "da6fb3480311bf54122c7f1038963fcdf57fc715ae1df0ce086c498c14d15d3e"
+      ],
+      "checks": [
+        {
+          "name": "actual client size",
+          "expected": [
+            1440,
+            1000
+          ],
+          "actual": [
+            1440,
+            1000
+          ],
+          "passed": true
+        },
+        {
+          "name": "menu surface",
+          "expected": [
+            237,
+            239,
+            243
+          ],
+          "actual": [
+            237,
+            239,
+            243
+          ],
+          "passed": true
+        },
+        {
+          "name": "path surface",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "path left inset",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "workspace surface",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "footer surface",
+          "expected": [
+            237,
+            239,
+            243
+          ],
+          "actual": [
+            237,
+            239,
+            243
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=43",
+          "expected": [
+            [
+              10,
+              475
+            ]
+          ],
+          "actual": [
+            [
+              10,
+              475
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=50",
+          "expected": [
+            [
+              8,
+              477
+            ]
+          ],
+          "actual": [
+            [
+              8,
+              477
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=69",
+          "expected": [
+            [
+              9,
+              476
+            ]
+          ],
+          "actual": [
+            [
+              9,
+              476
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=78",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=117",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "platform": "linux",
+      "area": "simulate",
+      "theme": "dark",
+      "version": "13",
+      "scope": "Compare shared native chrome with the selected PNG, without altering either image.\n\nThis verifies a bounded part of the design: client size, the three tab rectangles,\nthe two horizontal boundaries and five semantic surfaces. It is not a whole-app\nscore. Content, fonts, interactions and the rest of each workspace need their own\nproofs. Pillow is required, as for the existing workbench visual checker.",
+      "reference": "D:\\Physim\\docs\\visuals\\unified-workspace\\simulate-dark.png",
+      "native": "build\\native\\design-exact-linux-13\\laboratory\\dark\\laboratory-initial.bmp",
+      "sha256": [
+        "77168a7f8ee9273dde347a657e8119657c307466a706ebfaa8da331b8a9d1534",
+        "9766705b780ddb344e564ca5146a320ee9af8222274e9bce46c7142f933a0c92"
+      ],
+      "checks": [
+        {
+          "name": "actual client size",
+          "expected": [
+            1440,
+            1000
+          ],
+          "actual": [
+            1440,
+            1000
+          ],
+          "passed": true
+        },
+        {
+          "name": "menu surface",
+          "expected": [
+            37,
+            38,
+            43
+          ],
+          "actual": [
+            37,
+            38,
+            43
+          ],
+          "passed": true
+        },
+        {
+          "name": "path surface",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "path left inset",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "workspace surface",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "footer surface",
+          "expected": [
+            37,
+            38,
+            43
+          ],
+          "actual": [
+            37,
+            38,
+            43
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=43",
+          "expected": [
+            [
+              487,
+              953
+            ]
+          ],
+          "actual": [
+            [
+              487,
+              953
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=50",
+          "expected": [
+            [
+              485,
+              955
+            ]
+          ],
+          "actual": [
+            [
+              485,
+              955
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=69",
+          "expected": [
+            [
+              486,
+              954
+            ]
+          ],
+          "actual": [
+            [
+              486,
+              954
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=78",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=117",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "platform": "linux",
+      "area": "simulate",
+      "theme": "light",
+      "version": "13",
+      "scope": "Compare shared native chrome with the selected PNG, without altering either image.\n\nThis verifies a bounded part of the design: client size, the three tab rectangles,\nthe two horizontal boundaries and five semantic surfaces. It is not a whole-app\nscore. Content, fonts, interactions and the rest of each workspace need their own\nproofs. Pillow is required, as for the existing workbench visual checker.",
+      "reference": "D:\\Physim\\docs\\visuals\\unified-workspace\\simulate-light.png",
+      "native": "build\\native\\design-exact-linux-13\\laboratory\\light\\laboratory-initial.bmp",
+      "sha256": [
+        "d72aaab6813e8434fe3c4fcbe3f88571c4a4a5f4bfa7e53fdf3e179dc7c638b3",
+        "bcbd018e41dd4d369a6a1e94c70b8673f010afe3a1bfa1b2b93ed4995e92684c"
+      ],
+      "checks": [
+        {
+          "name": "actual client size",
+          "expected": [
+            1440,
+            1000
+          ],
+          "actual": [
+            1440,
+            1000
+          ],
+          "passed": true
+        },
+        {
+          "name": "menu surface",
+          "expected": [
+            237,
+            239,
+            243
+          ],
+          "actual": [
+            237,
+            239,
+            243
+          ],
+          "passed": true
+        },
+        {
+          "name": "path surface",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "path left inset",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "workspace surface",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "footer surface",
+          "expected": [
+            237,
+            239,
+            243
+          ],
+          "actual": [
+            237,
+            239,
+            243
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=43",
+          "expected": [
+            [
+              487,
+              953
+            ]
+          ],
+          "actual": [
+            [
+              487,
+              953
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=50",
+          "expected": [
+            [
+              485,
+              955
+            ]
+          ],
+          "actual": [
+            [
+              485,
+              955
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=69",
+          "expected": [
+            [
+              486,
+              954
+            ]
+          ],
+          "actual": [
+            [
+              486,
+              954
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=78",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=117",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "host_focus": [
+    {
+      "source": "build/native/design-exact-host-10/host-audit/results.json",
+      "status": "passed",
+      "app_sha256": "0d336bbf9b356624dbb2350484b40dba751dd1d6682c2ed6085698c3e78c81aa",
+      "observations": [
+        {
+          "seconds": 0,
+          "windows": []
+        },
+        {
+          "seconds": 0.844,
+          "windows": [
+            {
+              "title": "Physim | Experiment Studio",
+              "window": 986018,
+              "foreground": true,
+              "active": true,
+              "focus": false,
+              "focus_present": false,
+              "thread_info": true,
+              "foreground_pid": 13304,
+              "process_id": 13304
+            }
+          ]
+        },
+        {
+          "seconds": 0.86,
+          "windows": [
+            {
+              "title": "Physim | Experiment Studio",
+              "window": 986018,
+              "foreground": true,
+              "active": true,
+              "focus": true,
+              "focus_present": true,
+              "thread_info": true,
+              "foreground_pid": 13304,
+              "process_id": 13304
+            }
+          ]
+        },
+        {
+          "seconds": 5.469,
+          "windows": []
+        }
+      ],
+      "exit_code": 0
+    },
+    {
+      "source": "build/native/design-exact-host-unified-10/host-audit/results.json",
+      "status": "passed",
+      "app_sha256": "0d336bbf9b356624dbb2350484b40dba751dd1d6682c2ed6085698c3e78c81aa",
+      "observations": [
+        {
+          "seconds": 0.015,
+          "windows": []
+        },
+        {
+          "seconds": 0.89,
+          "windows": [
+            {
+              "title": "Physim | Experiment Studio",
+              "window": 2362510,
+              "foreground": true,
+              "active": true,
+              "focus": true,
+              "focus_present": true,
+              "thread_info": true,
+              "foreground_pid": 36748,
+              "process_id": 36748
+            }
+          ]
+        },
+        {
+          "seconds": 4.203,
+          "windows": []
+        }
+      ],
+      "exit_code": 0
+    }
+  ],
+  "images": [
+    {
+      "file": "docs/visuals/unified-workspace/native-2026-10-20/windows-develop-dark.png",
+      "source": "build/native/design-exact-windows-10-final/unified/dark/workbench-dark.bmp",
+      "version": 10,
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "source_sha256": "e831067ebb01bd86b1423b5ec9b27e225eea970be2ea5ded66173df752eb0435",
+      "png_sha256": "4e5cbafad9755ba987f7f8c08c808395f0c264546de44af98c98c8630b91accc",
+      "rgb_sha256": "1e9e6feaf01a70739cf1237d893176a3ba89f83d9dad4c8fb4bc4722e1620c45",
+      "rgb_identical": true,
+      "status": "passed bounded chrome; whole workspace still under refinement"
+    },
+    {
+      "file": "docs/visuals/unified-workspace/native-2026-10-20/windows-develop-light.png",
+      "source": "build/native/design-exact-windows-10-final/unified/light/workbench-light.bmp",
+      "version": 10,
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "source_sha256": "a35d556f418223383e582175b4b0dba28c93f5bce34984104c574d9555ae74a9",
+      "png_sha256": "66ad160a71e93c05aa83539982b54ee66cfe692925f6814a1847c3d9859dfe1a",
+      "rgb_sha256": "5daf9e692a18b1ef9e631b19e98f44570766faafc8bb95d245c0c6f4a2f6fecd",
+      "rgb_identical": true,
+      "status": "passed bounded chrome; whole workspace still under refinement"
+    },
+    {
+      "file": "docs/visuals/unified-workspace/native-2026-10-20/windows-simulate-dark.png",
+      "source": "build/native/design-exact-windows-10-final/laboratory/dark/laboratory-initial.bmp",
+      "version": 10,
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "source_sha256": "0d91c34a0338c0c8503e39dd9d29c6f6c761db5453240b3abe70c99bfc5078b7",
+      "png_sha256": "0e5c11a64cfc9976b22b4ff1dfe80db3c0eb51b93755480347ff9764c4d2bf98",
+      "rgb_sha256": "ccce2d9bd2973a85f6a6ae55bcb0ea290458bf2519076c5c8b7c18133bf672c2",
+      "rgb_identical": true,
+      "status": "passed bounded chrome; whole workspace still under refinement"
+    },
+    {
+      "file": "docs/visuals/unified-workspace/native-2026-10-20/windows-simulate-light.png",
+      "source": "build/native/design-exact-windows-10-final/laboratory/light/laboratory-initial.bmp",
+      "version": 10,
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "source_sha256": "c9db5c4a4bd7f9557c55f674580ac6c06c9740f33b3b58d16052ffa5fb5cb93e",
+      "png_sha256": "efddacf4e4805a294afa18928f6145e6963266b4e4f12d6b07ed777bf911903d",
+      "rgb_sha256": "133e4bd901136e4539e3d8b5ed6bfc5d612412e6c943686302e22e37ee475e08",
+      "rgb_identical": true,
+      "status": "passed bounded chrome; whole workspace still under refinement"
+    },
+    {
+      "file": "docs/visuals/unified-workspace/native-2026-10-20/linux-develop-dark.png",
+      "source": "build/native/design-exact-linux-10-final/unified/dark/workbench-dark.bmp",
+      "version": 10,
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "source_sha256": "c65762c45a664c9e53da866e20d4303f26d139e592ca99d5594a6b7400e205ff",
+      "png_sha256": "cf6c31f211c1e4a021545af583c6259296bc5ddd96be70e7d584c35bbc14cc7d",
+      "rgb_sha256": "5b3351c37abcd2dc20b69705f1f82772a80da03317f7fb32cc460bd233cc0527",
+      "rgb_identical": true,
+      "status": "passed bounded chrome; whole workspace still under refinement"
+    },
+    {
+      "file": "docs/visuals/unified-workspace/native-2026-10-20/linux-develop-light.png",
+      "source": "build/native/design-exact-linux-10-final/unified/light/workbench-light.bmp",
+      "version": 10,
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "source_sha256": "da6fb3480311bf54122c7f1038963fcdf57fc715ae1df0ce086c498c14d15d3e",
+      "png_sha256": "90830ac0e7f396b5a2df2e10d51fb8276b43763e0c74ce4720da05e4043823b3",
+      "rgb_sha256": "edb27cf74ea684c6485638858d1745bb6b2cbcbcd893f1c8592d84eb240d8e50",
+      "rgb_identical": true,
+      "status": "passed bounded chrome; whole workspace still under refinement"
+    },
+    {
+      "file": "docs/visuals/unified-workspace/native-2026-10-20/linux-simulate-dark.png",
+      "source": "build/native/design-exact-linux-10-final/laboratory/dark/laboratory-initial.bmp",
+      "version": 10,
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "source_sha256": "0b67397d6b27e41e7db71c5b9d496d0971fba41e97fb890529b71d0f6d0174e6",
+      "png_sha256": "070d31452018d28d03f050c9b23463fee60b37f75e396c775858dc4de5def0e7",
+      "rgb_sha256": "65902535970d3e55ff579ab1ff10832ee659ef9bad41f736cb8c94a4e1c1e5a7",
+      "rgb_identical": true,
+      "status": "passed bounded chrome; whole workspace still under refinement"
+    },
+    {
+      "file": "docs/visuals/unified-workspace/native-2026-10-20/linux-simulate-light.png",
+      "source": "build/native/design-exact-linux-10-final/laboratory/light/laboratory-initial.bmp",
+      "version": 10,
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "source_sha256": "8ec6cdb25338666cedd05f49697773af664cbb289dc54d291a4dee7c4b5e3b83",
+      "png_sha256": "240341c642f8e485dbec694892fd40c3f7e86924be3c0bddb4f238fc9a57f07c",
+      "rgb_sha256": "fcb422f6d92bb4f9d5c1bfeea367129bbd30ff856e440701d58d5c0c761181fd",
+      "rgb_identical": true,
+      "status": "passed bounded chrome; whole workspace still under refinement"
+    },
+    {
+      "file": "docs/visuals/unified-workspace/native-2026-10-20/counterexample-hidden-tooltip.png",
+      "source": "build/native/design-exact-windows-10-final/laboratory/light-large-narrow/laboratory-measurement-scrolled.bmp",
+      "version": 10,
+      "dimensions": [
+        1080,
+        740
+      ],
+      "source_sha256": "75bc4d03d29af82e46970882e335a65385cd898e9da12c95dc0351e20e0f337c",
+      "png_sha256": "5e72662df461eff608726259007daf40e4f9460ad8122925828d150500a2a5cf",
+      "rgb_sha256": "95a08c31e3e62bc4688e084d754b447d46f54610594a0a9702cab937526963ec",
+      "rgb_identical": true,
+      "status": "failed visual counterexample: hidden card tooltip covers measurement heading"
+    },
+    {
+      "file": "docs/visuals/unified-workspace/native-2026-10-20/windows-minimum-scrolled.png",
+      "source": "build/native/design-exact-windows-11/lab-min/laboratory-measurement-scrolled.bmp",
+      "version": 11,
+      "dimensions": [
+        1080,
+        740
+      ],
+      "source_sha256": "746e59a322f4578245101f59e9dd65d74deb4b4764499c1d46ad0196567a91d9",
+      "png_sha256": "ddba7f7ce1c19c350a7b104aa560ea23fe6e68cffb687c68a9b1809474173a88",
+      "rgb_sha256": "b6956f756378210e06d72e314b3b19e5fc474dae0d2598bb749707d3b3fa733e",
+      "rgb_identical": true,
+      "status": "minimum window, UI 22, actual keyboard scrolling; inspect final image"
+    },
+    {
+      "file": "docs/visuals/unified-workspace/native-2026-10-20/linux-minimum-scrolled.png",
+      "source": "build/native/design-exact-linux-11/lab-min/laboratory-measurement-scrolled.bmp",
+      "version": 11,
+      "dimensions": [
+        1080,
+        740
+      ],
+      "source_sha256": "a355a7e05660e25e63dc88c2654c1ab944e3a37dd511369dbcca9c6011837533",
+      "png_sha256": "83e34d8051de5f57769ae4951fa8cc348ec34109c37d19b4205020dad2532c20",
+      "rgb_sha256": "ca107f7ce54a09592dc9d038ad800c93d44721b63397f2a5affce0c461a322e3",
+      "rgb_identical": true,
+      "status": "minimum window, UI 22, actual keyboard scrolling; inspect final image"
+    },
+    {
+      "file": "docs/visuals/unified-workspace/native-2026-10-20/windows-simulate-dark-v13.png",
+      "source": "build/native/design-exact-windows-13/laboratory/dark/laboratory-initial.bmp",
+      "version": 13,
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "source_sha256": "3e1eb57ed2fdfd8026f6f949c0a22812491ae315b82a484a6f820c0dc058d317",
+      "png_sha256": "dd879a08817bf139c98d41684ed4db43614f69a1924ed9a46cda4d2686ed2f60",
+      "rgb_sha256": "875911b4f89578ad47273ef4e71e91a4378922ceabc205ad54ec5061a21cf724",
+      "rgb_identical": true,
+      "status": "measurement content fills the reference width when no scrollbar is needed"
+    },
+    {
+      "file": "docs/visuals/unified-workspace/native-2026-10-20/windows-simulate-light-v13.png",
+      "source": "build/native/design-exact-windows-13/laboratory/light/laboratory-initial.bmp",
+      "version": 13,
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "source_sha256": "30a6a0548b72ccbb6f2d310136c1939cbd70249b8edd1263296b862b57a4b9e5",
+      "png_sha256": "76c72c63a2d5271c4fbe2c2df9bffb3c846f1973091c57037e5f8a5f5454795e",
+      "rgb_sha256": "ad99b990229cc9a737f8b598f0b669a7f42a254a76ccd36620369c2a834e2a44",
+      "rgb_identical": true,
+      "status": "measurement content fills the reference width when no scrollbar is needed"
+    },
+    {
+      "file": "docs/visuals/unified-workspace/native-2026-10-20/windows-minimum-scrolled-v13.png",
+      "source": "build/native/design-exact-windows-13/laboratory/light-large-narrow/laboratory-measurement-scrolled.bmp",
+      "version": 13,
+      "dimensions": [
+        1080,
+        740
+      ],
+      "source_sha256": "0fde4975e985ac85c0a00d94ca85efbce2df53728b850e8be7b65ef0a3345570",
+      "png_sha256": "c31a65c544c6f526b74f8c9a5ffd1d1b303d9203cdba12768f26079790aa3997",
+      "rgb_sha256": "bf55bd4858c91c28d96831d6695d77da9b0da1f9e336d1e900cb86bbda3adbcf",
+      "rgb_identical": true,
+      "status": "minimum window with clipped hidden-card tooltips"
+    },
+    {
+      "file": "docs/visuals/unified-workspace/native-2026-10-20/windows-external-measurement-keyboard-v13.png",
+      "source": "build/native/design-exact-windows-13/docking/c-dark-legacy/project/panel-measure-curve-keyboard.bmp",
+      "version": 13,
+      "dimensions": [
+        720,
+        440
+      ],
+      "source_sha256": "0fb1a05429b9d11a6cfe808a8460343d48caec9d3d7f2d5260c7344e5d0d11b2",
+      "png_sha256": "3e7440a041337527a61a537f701504edcb7242c1450bc3a1bc86b31fb622c25f",
+      "rgb_sha256": "30da8932512a0f28fd8aef9d3f4d3f4af62cf0283360dc8911d04f25a6f7bbf5",
+      "rgb_identical": true,
+      "status": "actual native child window after one right-arrow step; complete checks recorded separately"
+    },
+    {
+      "file": "docs/visuals/unified-workspace/native-2026-10-20/linux-simulate-dark-v13.png",
+      "source": "build/native/design-exact-linux-13/laboratory/dark/laboratory-initial.bmp",
+      "version": 13,
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "source_sha256": "9766705b780ddb344e564ca5146a320ee9af8222274e9bce46c7142f933a0c92",
+      "png_sha256": "f99f6cd1d4c0f86273d65ee07d35282f3135d8340736afd88f36873a7ee3dd76",
+      "rgb_sha256": "c3ac35f2079e834d4fb8da0362c3da178af003676b07a5d55d580e68fdb877ab",
+      "rgb_identical": true,
+      "status": "measurement content fills the reference width when no scrollbar is needed"
+    },
+    {
+      "file": "docs/visuals/unified-workspace/native-2026-10-20/linux-simulate-light-v13.png",
+      "source": "build/native/design-exact-linux-13/laboratory/light/laboratory-initial.bmp",
+      "version": 13,
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "source_sha256": "bcbd018e41dd4d369a6a1e94c70b8673f010afe3a1bfa1b2b93ed4995e92684c",
+      "png_sha256": "cd2e445dad220eea1d966ff665651da34518b621e751451da364b0470744e86d",
+      "rgb_sha256": "c82ea00fb5226bc4a7ce1a687168b9464ee960a2a0d82ed21803cedc6eacd0ec",
+      "rgb_identical": true,
+      "status": "measurement content fills the reference width when no scrollbar is needed"
+    },
+    {
+      "file": "docs/visuals/unified-workspace/native-2026-10-20/linux-minimum-scrolled-v13.png",
+      "source": "build/native/design-exact-linux-13/laboratory/light-large-narrow/laboratory-measurement-scrolled.bmp",
+      "version": 13,
+      "dimensions": [
+        1080,
+        740
+      ],
+      "source_sha256": "06518554dc427c4aed2138981a27a40c89cbe24489c99ee122cab35e140adbc4",
+      "png_sha256": "20cda263d9c5a94d8b85605d3286b4af1733fc88a4afe6e473c8b51f9c0148ae",
+      "rgb_sha256": "548dd18af4add150de521961c2242a03f6e1d8685794c330fa3c3e036d54e97b",
+      "rgb_identical": true,
+      "status": "minimum window with clipped hidden-card tooltips"
+    },
+    {
+      "file": "docs/visuals/unified-workspace/native-2026-10-20/linux-external-measurement-keyboard-v13.png",
+      "source": "build/native/design-exact-linux-13/docking/c-dark-legacy/project/panel-measure-curve-keyboard.bmp",
+      "version": 13,
+      "dimensions": [
+        720,
+        440
+      ],
+      "source_sha256": "02cb881b8c3b0926a7d69bfc0e2d9b53e6f81af5c5d04beb3017660035738b3a",
+      "png_sha256": "d86f66de6798bb5a1147108c93c811d5d13a6afca68dca5aad31db11ed48d649",
+      "rgb_sha256": "d6ad5176cb6bfa4636e203e4437380da08eda8aefa4000aefd0db40d92f97db4",
+      "rgb_identical": true,
+      "status": "actual native child window after one right-arrow step; complete checks recorded separately"
+    }
+  ],
+  "limitations": [
+    "Uncommitted accessibility files from another work item were present in the build; their hashes are recorded and their contents were preserved.",
+    "No macOS build, manual screenreader session or physical mixed-DPI/monitor test in this phase.",
+    "Browser tool rejected local file: navigation; no new interactive browser run claimed.",
+    "Broad eight-group suites use version 10. Version 13 reruns the three groups touched by the final measurement changes.",
+    "Whole design has remaining differences listed in NATIVE-FIDELITY.md."
+  ]
+}

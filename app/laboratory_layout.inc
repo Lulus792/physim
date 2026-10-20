@@ -24,8 +24,7 @@ static void laboratory_context(app *a) {
                 ps_dock_hide(&a->laboratory_layout.dock,PS_DOCK_LOG);
                 a->laboratory_layout.show_log=false;a->laboratory_layout.inspector_width=320;
             }
-            float scale=a->preferences.ui_size/16.f;
-            a->laboratory_measure_height=330*scale;a->laboratory_closed_height=118*scale;a->laboratory_timeline_height=110*scale;
+            a->laboratory_measure_height=330;a->laboratory_closed_height=150;a->laboratory_timeline_height=120;
             a->laboratory_curve_ratio=.5f;a->laboratory_channels[0]=0;a->laboratory_channels[1]=1;
             a->laboratory_groups[0]=NK_MAXIMIZED;
             a->model_disclosure=NK_MAXIMIZED;
@@ -44,14 +43,18 @@ static const char *laboratory_separator_name(unsigned i) {
 static float *laboratory_dimension(app *a,unsigned i) {
     return i==0?(a->laboratory_curves?&a->laboratory_measure_height:&a->laboratory_closed_height):i==1?&a->laboratory_timeline_height:&a->laboratory_curve_ratio;
 }
+static float laboratory_curve_width(const app *a) {
+    return a->laboratory_measure_width>0?a->laboratory_measure_width:a->dock_panels[PS_DOCK_WORKSPACE].w;
+}
+static struct nk_rect laboratory_handle_bounds(const app *a,unsigned i) {
+    return i==2?plot_intersection(a->laboratory_splitters[i],a->laboratory_measure_bounds):a->laboratory_splitters[i];
+}
 static void laboratory_dimension_limits(app *a,unsigned i,float *minimum,float *maximum,float *standard) {
-    int w,h;SDL_GetWindowSize(a->window,&w,&h);float scale=a->preferences.ui_size/16.f;
-    *minimum=i==2?.2f:(i==0?(a->laboratory_curves?200:118):84)*scale;
-    *maximum=i==2?.8f:fmaxf(*minimum,(float)h*(i==0?.48f:.28f));
-    if(i==2){float width=a->dock_panels[PS_DOCK_WORKSPACE].w;*minimum=fminf(.5f,fmaxf(.25f,180/fmaxf(1,width-9)));*maximum=1-*minimum;}
-    if(i==0 && a->dock_panels[PS_DOCK_WORKSPACE].h>0)
-        *maximum=fminf(*maximum,fmaxf(*minimum,a->dock_panels[PS_DOCK_WORKSPACE].h-70));
-    *standard=i==2?.5f:(i==0?(a->laboratory_curves?330:118):110)*scale;
+    int w,h;SDL_GetWindowSize(a->window,&w,&h);
+    *minimum=i==2?.25f:i==0?130:95;
+    *maximum=i==2?.75f:i==0?fmaxf(130,a->dock_panels[PS_DOCK_WORKSPACE].h-181):fmaxf(95,fminf(280,(float)h-232-28-180-130-1));
+    if(i==2){float width=laboratory_curve_width(a);*minimum=fminf(.5f,fmaxf(.25f,180/fmaxf(1,width-9)));*maximum=1-*minimum;}
+    *standard=i==2?.5f:i==0?(a->laboratory_curves?330:150):120;
 }
 static void laboratory_dimension_set(app *a,unsigned i,float value) {
     float lo,hi,standard;laboratory_dimension_limits(a,i,&lo,&hi,&standard);
@@ -67,18 +70,25 @@ static void laboratory_resize_abort(app *a) {
 }
 static void laboratory_dimension_reset(app *a,unsigned i) {
     float lo,hi,standard;laboratory_dimension_limits(a,i,&lo,&hi,&standard);laboratory_dimension_set(a,i,standard);
-    if(i==0){float scale=a->preferences.ui_size/16.f;a->laboratory_measure_height=330*scale;a->laboratory_closed_height=118*scale;}
+    if(i==0){a->laboratory_measure_height=330;a->laboratory_closed_height=150;}
 }
 static bool laboratory_resize_key(app *a,const SDL_KeyboardEvent *key) {
     if(!laboratory_visible(a) || a->toolbar_menu || key->mod&(SDL_KMOD_CTRL|SDL_KMOD_ALT|SDL_KMOD_GUI))return false;
     if(key->key==SDLK_ESCAPE && a->laboratory_resize) {
         laboratory_resize_abort(a);return true;
     }
+    if((key->key==SDLK_PAGEDOWN || key->key==SDLK_PAGEUP) &&
+       nk_sdl_accessibility_is_focused(a->ui,NULL,"Kurven anzeigen")) {
+        nk_uint step=(nk_uint)fmaxf(32,a->laboratory_measure_bounds.h*.8f);
+        if(key->key==SDLK_PAGEUP)a->laboratory_measure_scroll_y=a->laboratory_measure_scroll_y>step?a->laboratory_measure_scroll_y-step:0;
+        else if(a->laboratory_measure_scroll_y<=(nk_uint)-1-step)a->laboratory_measure_scroll_y+=step;
+        return true;
+    }
     for(unsigned i=0;i<3;i++)if(nk_sdl_accessibility_is_focused(a->ui,NULL,laboratory_separator_name(i))) {
         int dir=i==2?(key->key==SDLK_LEFT?-1:key->key==SDLK_RIGHT?1:0):(key->key==SDLK_UP?-1:key->key==SDLK_DOWN?1:0);
         float lo,hi,standard;laboratory_dimension_limits(a,i,&lo,&hi,&standard);
         float step=key->mod&SDL_KMOD_SHIFT?40:10;
-        if(dir)laboratory_dimension_set(a,i,laboratory_dimension_value(a,i)+(i==2?dir*step/fmaxf(1,a->dock_panels[PS_DOCK_WORKSPACE].w-9):-dir*step));
+        if(dir)laboratory_dimension_set(a,i,laboratory_dimension_value(a,i)+(i==2?dir*step/fmaxf(1,laboratory_curve_width(a)-9):-dir*step));
         else if(key->key==SDLK_HOME)laboratory_dimension_set(a,i,lo);
         else if(key->key==SDLK_END)laboratory_dimension_set(a,i,hi);
         else if(key->key==SDLK_RETURN || key->key==SDLK_KP_ENTER)laboratory_dimension_reset(a,i);
@@ -93,7 +103,7 @@ static void laboratory_resize_input(app *a) {
     if(!nk_input_is_mouse_down(in,NK_BUTTON_LEFT)){a->laboratory_resize=0;a->laboratory_resize_cancelled=false;if(SDL_GetMouseFocus()==a->window)SDL_CaptureMouse(false);return;}
     if(a->laboratory_resize_cancelled)return;
     if(!a->toolbar_menu && !a->toolbar_pointer_consumed && nk_input_is_mouse_pressed(in,NK_BUTTON_LEFT)) {
-        for(unsigned i=0;i<3;i++)if(a->laboratory_splitters[i].w>0 && nk_input_is_mouse_hovering_rect(in,a->laboratory_splitters[i])) {
+        for(unsigned i=0;i<3;i++)if(a->laboratory_splitters[i].w>0 && nk_input_is_mouse_hovering_rect(in,laboratory_handle_bounds(a,i))) {
             a->laboratory_resize=(int)i+1;SDL_CaptureMouse(true);
             a->laboratory_resize_original=*laboratory_dimension(a,i);
             if(nk_input_is_mouse_pressed(in,NK_BUTTON_DOUBLE)){laboratory_dimension_reset(a,i);a->laboratory_resize=0;}
@@ -102,7 +112,7 @@ static void laboratory_resize_input(app *a) {
     }
     if(a->laboratory_resize) {
         unsigned i=(unsigned)a->laboratory_resize-1;struct nk_rect r=a->laboratory_splitters[i];
-        float value=i==2?(in->mouse.pos.x-a->dock_panels[PS_DOCK_WORKSPACE].x)/fmaxf(1,a->dock_panels[PS_DOCK_WORKSPACE].w):
+        float value=i==2?(in->mouse.pos.x-a->laboratory_measure_bounds.x)/fmaxf(1,laboratory_curve_width(a)):
             laboratory_dimension_value(a,i)+r.y-in->mouse.pos.y;
         laboratory_dimension_set(a,i,value);
     }

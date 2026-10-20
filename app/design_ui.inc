@@ -718,7 +718,10 @@ static void inspector_panel(app *a) {
             nk_layout_row_dynamic(ui,20,1);nk_spacer(ui);
             float width=nk_window_get_content_region(ui).w;
             const struct nk_user_font *small=&a->workbench_fonts[1];
-            nk_layout_row_dynamic(ui,235,1);
+            /* Leave the reference's note and environment visible in the shorter
+             * native window too; the card keeps its normal 235 px when it fits. */
+            float card_height=fminf(235,fmaxf(150,ui->current->layout->clip.y+ui->current->layout->clip.h-ui->current->layout->at_y-220));
+            nk_layout_row_dynamic(ui,card_height,1);
             if(a->api_reference) {
                 nk_style_push_float(ui,&ui->style.window.rounding,7);
                 nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(13,13));
@@ -1201,12 +1204,12 @@ static void workbench_status_view(app *a,float w,float h) {
     nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(8,2));
     nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(8,0));
     nk_style_push_float(ui,&ui->style.window.rounding,0);
-    nk_style_push_font(ui,&a->workbench_fonts[1]);
+    nk_style_push_font(ui,&a->workspace_status_font);
     nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(header)));
     struct nk_window *previous=ui->active;
-    if(nk_begin(ui,"workbench-status",nk_rect(0,h-32,w,32),NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BACKGROUND)) {
+    if(nk_begin(ui,"workbench-status",nk_rect(0,h-WORKSPACE_STATUS_HEIGHT,w,WORKSPACE_STATUS_HEIGHT),NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BACKGROUND)) {
         bool blocked=a->toolbar_menu || a->toolbar_pointer_consumed;
-        bool pointer=nk_input_is_mouse_hovering_rect(&ui->input,nk_rect(0,h-32,w,32));
+        bool pointer=nk_input_is_mouse_hovering_rect(&ui->input,nk_rect(0,h-WORKSPACE_STATUS_HEIGHT,w,WORKSPACE_STATUS_HEIGHT));
         bool owns=!blocked && (pointer || previous==ui->current || ui->current->popup.active);
         ui->active=owns?ui->current:previous;
         if(owns){ui->current->flags&=~(nk_flags)NK_WINDOW_ROM;ui->current->layout->flags&=~(nk_flags)NK_WINDOW_ROM;}
@@ -1220,8 +1223,8 @@ static void workbench_status_view(app *a,float w,float h) {
         float profile_width=fmaxf(70,font->width(font->userdata,font->height,"Release",7)+24);
         float build_width=fmaxf(130,font->width(font->userdata,font->height,"Build erforderlich",18)+4);
         float action_width=a->job.running?80:0;
-        struct nk_command_buffer *canvas=nk_window_get_canvas(ui);nk_stroke_line(canvas,0,h-32,w,h-32,1,UI_COLOR(border));
-        nk_layout_row_begin(ui,NK_STATIC,25,6);
+        struct nk_command_buffer *canvas=nk_window_get_canvas(ui);workspace_rule(canvas,nk_rect(0,h-WORKSPACE_STATUS_HEIGHT,w,1));
+        nk_layout_row_begin(ui,NK_STATIC,23,6);
         nk_layout_row_push(ui,profile_label);nk_label_colored(ui,"Profil",NK_TEXT_LEFT,muted());
         nk_layout_row_push(ui,profile_width);const char *profiles[]={"Debug","Release"};
         a->project_profile_bounds=nk_widget_bounds(ui);
@@ -1352,17 +1355,17 @@ static void draw_ui(app *a, int width, int height) {
     }
     const ps_ui_palette *previous_palette=ui_palette;
     const struct nk_user_font *previous_font=ui->style.font;
-    bool workbench=workbench_visible(a);
     bool laboratory=laboratory_visible(a);
+    bool workspace_shell=workspace_shell_visible(a);
     if(a->outline_keyboard && (editor_search_target(a)!=a->outline_editor || a->toolbar_menu || a->search_keyboard ||
        nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT)))a->outline_keyboard=false;
-    const float sizes[]={11,9,12,11,20,16,10};
+    const float sizes[]={11,9,12,11,23,16,10};
     for(unsigned i=0;i<7;i++) {
         a->workbench_fonts[i]=*(i>=3?a->font_title:a->font_ui);
         float em=i>=3?a->workbench_bold_em:a->workbench_regular_em;
         a->workbench_fonts[i].height=sizes[i]*em*a->preferences.ui_size/16.f;
     }
-    if(workbench) {
+    if(workspace_shell && !laboratory) {
         ui_palette=ps_workbench_palette(ui_palette);style(ui);
         nk_style_set_font(ui,&a->workbench_fonts[0]);
     }
@@ -1374,6 +1377,9 @@ static void draw_ui(app *a, int width, int height) {
         ui->style.tab.padding=nk_vec2(0,12);
     }
     a->laboratory_value_font=*a->ui_fonts[3];a->laboratory_value_font.height=21*a->workbench_regular_em*a->preferences.ui_size/16.f;
+    a->laboratory_title_font=*a->font_title;a->laboratory_title_font.height=14*a->workbench_bold_em*a->preferences.ui_size/16.f;
+    a->laboratory_measurement_font=*a->font_ui;a->laboratory_measurement_font.height=23*a->workbench_regular_em*a->preferences.ui_size/16.f;
+    a->workspace_status_font=*a->font_ui;a->workspace_status_font.height=10*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->laboratory_card_font_count=0;
     float w=(float)width,h=(float)height;
     a->search_edit=NULL;
@@ -1383,7 +1389,7 @@ static void draw_ui(app *a, int width, int height) {
     nk_style_push_vec2(ui, &ui->style.window.padding, nk_vec2(0, 0));
     nk_style_push_vec2(ui, &ui->style.window.spacing, nk_vec2(0, 0));
     nk_style_push_float(ui, &ui->style.window.rounding, 0);
-    if (nk_begin(ui, "header", nk_rect(0, 0, w, workbench || laboratory?72:64), NK_WINDOW_NO_SCROLLBAR)) {
+    if (nk_begin(ui, "header", nk_rect(0, 0, w, workspace_shell?WORKSPACE_HEADER_HEIGHT:64), NK_WINDOW_NO_SCROLLBAR)) {
         toolbar_view(a);
         dock_overlay(a,w,h);
     }
@@ -1392,6 +1398,7 @@ static void draw_ui(app *a, int width, int height) {
     nk_style_pop_vec2(ui);
     nk_style_pop_vec2(ui);
     if(a->tab!=a->dock_last_tab) { dock_show(a,PS_DOCK_WORKSPACE);a->dock_last_tab=a->tab; }
+    workspace_path_view(a,w);
     laboratory_context(a);
     laboratory_chrome(a,w,h);
     dock_relayout(a,w,h);
@@ -1419,6 +1426,6 @@ static void draw_ui(app *a, int width, int height) {
      * A declaration activation returns keyboard ownership to its source until
      * the user explicitly clicks, tabs, opens a menu or enters another field. */
     if(a->outline_keyboard)ui->active=nk_window_find(ui,"workspace");
-    if(workbench || laboratory){ui_palette=previous_palette;style(ui);}
-    if(workbench || laboratory)nk_style_set_font(ui,previous_font);
+    if(workspace_shell){ui_palette=previous_palette;style(ui);}
+    if(workspace_shell)nk_style_set_font(ui,previous_font);
 }

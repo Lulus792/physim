@@ -1,5 +1,11 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
+Aktueller nativer Folgeauftrag vom 20. Oktober: zuerst die gesamte Gestaltung
+einschließlich F1 direkt gegen die gewählten Referenzen angleichen. Der
+[native Abgleich](NATIVE-FIDELITY.md) nennt den aktuellen Zwischenstand und die
+noch erforderlichen Schritte. Bestehende Umsetzung übernehmen; die folgende
+ursprüngliche Übergabe bleibt Anforderungsgrundlage, nicht Fertigstellungsnachweis.
+
 Stand: 20. Oktober 2026. Die Browserreferenz verbindet die drei gewählten Designs
 einschließlich gemeinsamem Resizing. Dieser Text ist zur Übergabe in einen
 anderen Chat bestimmt. Die Vorschauarbeit selbst ist keine native Umsetzung.

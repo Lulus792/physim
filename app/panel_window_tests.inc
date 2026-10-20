@@ -18,7 +18,7 @@ static bool panel_test_start(app *a,const char *root,const char *mode) {
 }
 static void panel_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
     static unsigned panel,phase,settle;static struct nk_rect drop;static ps_dock_layout layout;static struct nk_rect slot;
-    static double time;static float yaw;static uint32_t selection,source;static int source_bytes,main_width,main_height;static SDL_WindowID ids[PS_PANEL_COUNT];
+    static double time;static float yaw,curve_before,curve_width,curve_pixels_before;static double curve_focus_retry;static uint32_t selection,source;static int source_bytes,main_width,main_height;static SDL_WindowID ids[PS_PANEL_COUNT];
     bool ok=true;
     switch(*stage) {
     case 0:if(settle++<3)return;build_project(a);break;
@@ -79,8 +79,37 @@ static void panel_test_frame(app *a,const char *mode,int *stage,int *code,const 
         ok=a->laboratory_curves && found && enabled && checked;
         if(!ok)break;
         join(a->panels[PS_PANEL_MEASURE].capture,sizeof a->panels[PS_PANEL_MEASURE].capture,a->project,"panel-measure-curves.bmp");
-        panel=phase=0;a->tab=0;*stage=90;return;
+        panel=phase=0;*stage=300;return;
     }
+    case 300:
+        SDL_SetWindowSize(a->panels[PS_PANEL_MEASURE].window,720,440);settle=0;break;
+    case 301:
+        if(settle++<3)return;
+        ok=a->panels[PS_PANEL_MEASURE].measure_width>0 && fabsf(a->panels[PS_PANEL_MEASURE].measure_width-a->dock_panels[PS_DOCK_WORKSPACE].w)>100;
+        ok=ok && nk_sdl_accessibility_request_focus(a->panels[PS_PANEL_MEASURE].ui,NULL,laboratory_separator_name(2));break;
+    case 302:
+        if(!nk_sdl_accessibility_is_focused(a->panels[PS_PANEL_MEASURE].ui,NULL,laboratory_separator_name(2))) {
+            if(ps_clock()>=curve_focus_retry){SDL_RaiseWindow(a->panels[PS_PANEL_MEASURE].window);nk_sdl_accessibility_request_focus(a->panels[PS_PANEL_MEASURE].ui,NULL,laboratory_separator_name(2));curve_focus_retry=ps_clock()+.25;}
+            return;
+        }
+        curve_before=a->laboratory_curve_ratio;curve_width=a->panels[PS_PANEL_MEASURE].measure_width;curve_pixels_before=a->laboratory_plots[0].w;settle=0;
+        test_window_key_mod(a->panels[PS_PANEL_MEASURE].window,SDLK_RIGHT,0);break;
+    case 303:
+        if(settle++<2)return;
+        ok=fabsf((a->laboratory_curve_ratio-curve_before)*(curve_width-9)-10)<.1f;
+        ok=ok && fabsf(a->laboratory_plots[0].w-curve_pixels_before-10)<=1;
+        printf("PANEL CURVE KEYBOARD: child-width=%.3f main-width=%.3f right-pixels=%.6f actual-width-change=%.6f\n",curve_width,a->dock_panels[PS_DOCK_WORKSPACE].w,(a->laboratory_curve_ratio-curve_before)*(curve_width-9),a->laboratory_plots[0].w-curve_pixels_before);
+        join(a->panels[PS_PANEL_MEASURE].capture,sizeof a->panels[PS_PANEL_MEASURE].capture,a->project,"panel-measure-curve-keyboard.bmp");settle=0;
+        test_window_key_mod(a->panels[PS_PANEL_MEASURE].window,SDLK_LEFT,SDL_KMOD_SHIFT);break;
+    case 304:
+        if(settle++<2)return;
+        ok=fabsf((a->laboratory_curve_ratio-curve_before)*(curve_width-9)+30)<.1f;
+        ok=ok && fabsf(a->laboratory_plots[0].w-curve_pixels_before+30)<=1;
+        printf("PANEL CURVE SHIFT: net-pixels=%.6f actual-width-change=%.6f\n",(a->laboratory_curve_ratio-curve_before)*(curve_width-9),a->laboratory_plots[0].w-curve_pixels_before);
+        test_window_key_mod(a->panels[PS_PANEL_MEASURE].window,SDLK_RETURN,0);break;
+    case 305:
+        ok=a->laboratory_curve_ratio==.5f && display_time(a)==time && a->yaw==yaw;
+        a->tab=0;*stage=90;if(ok)return;break;
     case 90:
         ok=a->panels[PS_DOCK_WORKSPACE].tab==0 && panel_is_detached(a,PS_DOCK_WORKSPACE) && a->runner.running && a->paused;
         a->tab=1;*stage=91;if(ok)return;break;

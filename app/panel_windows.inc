@@ -126,20 +126,24 @@ static bool panel_window_event(app *a,SDL_Event *event,SDL_Window *window) {
         if(i==PS_PANEL_MEASURE && p->resize && (event->type==SDL_EVENT_WINDOW_FOCUS_LOST || event->type==SDL_EVENT_WINDOW_RESIZED)) {
             a->laboratory_curve_ratio=p->resize_original;p->resize=0;p->resize_cancelled=true;SDL_CaptureMouse(false);
         }
-        if(nk_sdl_accessibility_event(p->ui,event))return true;
         if(i==PS_PANEL_MEASURE && event->type==SDL_EVENT_KEY_DOWN) {
             struct nk_context *ui=a->ui;SDL_Window *win=a->window;int tab=a->tab,resize=a->laboratory_resize;
             struct nk_rect bounds=a->dock_panels[PS_DOCK_WORKSPACE];
+            struct nk_rect measure_bounds=a->laboratory_measure_bounds;float measure_width=a->laboratory_measure_width;
             float original=a->laboratory_resize_original;bool cancelled=a->laboratory_resize_cancelled;
             int w,h;SDL_GetWindowSize(p->window,&w,&h);
             a->ui=p->ui;a->window=p->window;a->tab=p->tab;a->laboratory_resize=p->resize;
             a->laboratory_resize_original=p->resize_original;a->laboratory_resize_cancelled=p->resize_cancelled;
             a->dock_panels[PS_DOCK_WORKSPACE]=nk_rect(0,0,(float)w,(float)h);
+            a->laboratory_measure_bounds=p->measure_bounds;a->laboratory_measure_width=p->measure_width;
             bool handled=laboratory_resize_key(a,&event->key);
             p->resize=a->laboratory_resize;p->resize_original=a->laboratory_resize_original;p->resize_cancelled=a->laboratory_resize_cancelled;
             a->ui=ui;a->window=win;a->tab=tab;a->laboratory_resize=resize;a->laboratory_resize_original=original;a->laboratory_resize_cancelled=cancelled;
-            a->dock_panels[PS_DOCK_WORKSPACE]=bounds;if(handled)return true;
+            a->dock_panels[PS_DOCK_WORKSPACE]=bounds;a->laboratory_measure_bounds=measure_bounds;a->laboratory_measure_width=measure_width;if(handled)return true;
         }
+        /* Component keys include Shift=40 px and Enter=reset. The generic
+         * range handler would otherwise consume them as a one-step adjustment. */
+        if(nk_sdl_accessibility_event(p->ui,event))return true;
         if(i==PS_DOCK_WORKSPACE) {
             int tab=a->tab;struct nk_context *ui=a->ui;a->tab=p->tab;a->ui=p->ui;
             bool handled=event->type==SDL_EVENT_KEY_DOWN && (editor_search_key(a,&event->key) || file_tabs_keyboard(a,&event->key));
@@ -171,6 +175,7 @@ static bool panel_windows_render(app *a) {
     int main_tab=a->tab;bool ok=true;
     struct nk_rect saved[PS_DOCK_PANELS];bool visible[PS_DOCK_PANELS];
     struct nk_rect splitters[3];memcpy(splitters,a->laboratory_splitters,sizeof splitters);
+    struct nk_rect measure_bounds=a->laboratory_measure_bounds;float measure_width=a->laboratory_measure_width;
     struct nk_rect dock_splitters[PS_DOCK_NODES];memcpy(dock_splitters,a->dock_splitters,sizeof dock_splitters);
     int resize=a->laboratory_resize;float original=a->laboratory_resize_original;bool cancelled=a->laboratory_resize_cancelled;
     memcpy(saved,a->dock_panels,sizeof saved);memcpy(visible,a->dock_visible,sizeof visible);
@@ -186,6 +191,11 @@ static bool panel_windows_render(app *a) {
         nk_sdl_set_ui_size(p->ui,a->preferences.ui_size);
         ps_graphics_background(p->graphics,UI_COLOR(canvas).r,UI_COLOR(canvas).g,UI_COLOR(canvas).b);
         ps_graphics_backdrop(p->graphics,NULL);
+        bool auxiliary=i>=PS_DOCK_PANELS;
+        if(auxiliary) {
+            nk_style_push_vec2(p->ui,&p->ui->style.window.padding,i==PS_PANEL_MEASURE?nk_vec2(0,0):nk_vec2(18,6));
+            nk_style_push_vec2(p->ui,&p->ui->style.window.spacing,nk_vec2(6,4));
+        }
         if(i<PS_DOCK_PANELS) {
             a->dock_panels[i]=nk_rect(0,0,(float)w,(float)h);a->dock_visible[i]=true;
             if(i==PS_DOCK_WORKSPACE && workbench_visible(a)) {
@@ -204,13 +214,15 @@ static bool panel_windows_render(app *a) {
             a->dock_panels[PS_DOCK_WORKSPACE]=nk_rect(0,0,(float)w,(float)h);
             if(i==PS_PANEL_MEASURE) {
                 memcpy(a->laboratory_splitters,p->splitters,sizeof p->splitters);
+                a->laboratory_measure_bounds=p->measure_bounds;a->laboratory_measure_width=p->measure_width;
                 a->laboratory_resize=p->resize;a->laboratory_resize_original=p->resize_original;a->laboratory_resize_cancelled=p->resize_cancelled;
                 laboratory_resize_input(a);
-                laboratory_measurements(a,fmaxf(100,(float)h-22));
+                laboratory_measurements(a,fmaxf(100,nk_window_get_content_region(p->ui).h));
             }
             else {nk_layout_row_dynamic(p->ui,28,1);nk_label(p->ui,"Zeitleiste",NK_TEXT_LEFT);timeline_controls(a);}
             nk_end(p->ui);
         } else nk_end(p->ui);
+        if(auxiliary){nk_style_pop_vec2(p->ui);nk_style_pop_vec2(p->ui);}
         if(i==PS_PANEL_MEASURE) {
             a->laboratory_splitters[0]=a->laboratory_splitters[1]=nk_rect(0,0,0,0);
             memset(a->dock_splitters,0,sizeof a->dock_splitters);
@@ -219,12 +231,14 @@ static bool panel_windows_render(app *a) {
         }
         nk_sdl_update_TextInput(p->ui);
         memcpy(p->splitters,a->laboratory_splitters,sizeof p->splitters);
+        if(i==PS_PANEL_MEASURE){p->measure_bounds=a->laboratory_measure_bounds;p->measure_width=a->laboratory_measure_width;}
         if(!nk_sdl_render(p->ui))ok=false;
         if(p->capture[0]){if(!ps_graphics_capture(p->graphics,p->capture))ok=false;p->capture[0]=0;}
         if(!ps_graphics_present(p->graphics))ok=false;
         if(i<PS_DOCK_PANELS && a->tab!=p->tab)main_tab=a->tab;
         memcpy(a->dock_panels,saved,sizeof saved);memcpy(a->dock_visible,visible,sizeof visible);
         memcpy(a->laboratory_splitters,splitters,sizeof splitters);memcpy(a->dock_splitters,dock_splitters,sizeof dock_splitters);
+        a->laboratory_measure_bounds=measure_bounds;a->laboratory_measure_width=measure_width;
         a->laboratory_resize=resize;a->laboratory_resize_original=original;a->laboratory_resize_cancelled=cancelled;
     }
     a->panel_render=0;a->window=main_window;a->graphics=main_graphics;a->ui=main_ui;a->tab=main_tab;

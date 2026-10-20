@@ -85,6 +85,8 @@ typedef struct {
     nk_uint scroll_x,scroll_y;
     struct nk_rect action, home;
     struct nk_rect splitters[3];
+    struct nk_rect measure_bounds;
+    float measure_width;
     int resize;
     float resize_original;
     bool resize_cancelled;
@@ -130,6 +132,9 @@ typedef struct {
     struct nk_context *ui;
     const struct nk_user_font *font_ui, *font_code, *font_title;
     struct nk_user_font workbench_fonts[7]; /* Role sizes share the DPI-aware atlas. */
+    struct nk_user_font laboratory_title_font;
+    struct nk_user_font laboratory_measurement_font;
+    struct nk_user_font workspace_status_font;
     unsigned workbench_sidebar_focus;
     struct nk_rect workbench_environment_bounds;
     float workbench_regular_em,workbench_bold_em;
@@ -171,6 +176,9 @@ typedef struct {
     bool laboratory_resize_cancelled;
     int laboratory_channels[2], laboratory_resize;
     struct nk_rect laboratory_switch, laboratory_sides[2], laboratory_splitters[3], laboratory_plots[2];
+    struct nk_rect laboratory_measure_bounds;
+    float laboratory_measure_width;
+    nk_uint laboratory_measure_scroll_x,laboratory_measure_scroll_y;
     struct nk_rect laboratory_inspector_body;
     enum nk_collapse_states laboratory_groups[5];
     unsigned laboratory_scroll_x, laboratory_scroll_y, laboratory_focus_return;

@@ -148,9 +148,14 @@ static inline const ps_ui_palette *ps_workbench_palette(const ps_ui_palette *bas
     p->border=is_light?nk_rgb(190,195,206):nk_rgb(59,61,69);
     p->divider=p->border;p->gutter=p->edit=is_light?nk_rgb(255,255,255):nk_rgb(25,26,30);
     p->button=is_light?nk_rgb(224,227,234):nk_rgb(53,54,62);
+    p->surface=is_light?p->button:nk_rgb(48,49,54);
     p->button_hover=is_light?nk_rgb(213,218,228):nk_rgb(66,68,78);
     p->selection_active=is_light?nk_rgb(217,230,248):nk_rgb(43,61,89);
     p->accent=is_light?nk_rgb(23,86,158):nk_rgb(138,186,255);
+    p->primary=is_light?nk_rgb(21,86,172):nk_rgb(25,101,206);
+    p->primary_text=nk_rgb(255,255,255);
+    p->canvas=is_light?nk_rgb(230,233,238):nk_rgb(20,21,24);
+    p->error=is_light?nk_rgb(165,41,37):nk_rgb(255,170,162);
     p->gutter_text=p->muted;p->code_text=p->text;
     p->code_keyword=is_light?nk_rgb(120,68,160):nk_rgb(201,166,232);
     p->code_preprocessor=p->code_keyword;p->code_type=p->accent;
@@ -163,10 +168,9 @@ static inline const ps_ui_palette *ps_workbench_palette(const ps_ui_palette *bas
 static inline const ps_ui_palette *ps_laboratory_palette(const ps_ui_palette *base) {
     static ps_ui_palette dark,light;
     if(base==&PS_UI_HIGH_CONTRAST)return base;
-    bool is_light=base==&PS_UI_LIGHT;ps_ui_palette *p=is_light?&light:&dark;*p=*base;
-    p->window=is_light?nk_rgb(243,244,247):nk_rgb(37,38,43);
+    bool is_light=base==&PS_UI_LIGHT;ps_ui_palette *p=is_light?&light:&dark;
+    *p=*ps_workbench_palette(base);
     p->edit=is_light?nk_rgb(246,247,250):nk_rgb(30,31,35);
-    p->border=is_light?nk_rgb(196,202,212):nk_rgb(55,56,62);
     p->divider=p->border;
     return p;
 }
