@@ -61,6 +61,22 @@ static void preferences_capture(app *a) {
     if (a->tab >= 0 && a->tab <= 2)
         p->workspace = (uint32_t)a->tab;
 }
+static void preferences_theme_tick(app *a) {
+    if(!a->theme_request)return;
+    unsigned theme=a->theme_request-1;a->theme_request=0;if(theme>=PS_THEME_COUNT)return;
+    /* A presentation-only change at a frame boundary. Do not apply a stale
+     * full preferences draft over the current workspace or view state. */
+    a->preferences.theme=theme;
+    ui_palette=theme==PS_THEME_LIGHT?&PS_UI_LIGHT:theme==PS_THEME_HIGH_CONTRAST?&PS_UI_HIGH_CONTRAST:&PS_UI_DARK;
+    style(a->ui);nk_style_set_font(a->ui,a->font_ui);
+    ps_graphics_background(a->graphics,UI_COLOR(canvas).r,UI_COLOR(canvas).g,UI_COLOR(canvas).b);
+    if(a->doc_ui) {
+        style(a->doc_ui);nk_style_set_font(a->doc_ui,a->doc_font_ui);
+        ps_graphics_background(a->doc_graphics,UI_COLOR(canvas).r,UI_COLOR(canvas).g,UI_COLOR(canvas).b);
+        if(a->documentation)a->documentation->layout_width=0;
+        if(a->doc_visible && a->doc_keyboard)a->doc_focus_reveal=true;
+    }
+}
 static void preferences_start(app *a, const char *override_path) {
     if (override_path)
         snprintf(a->preferences_path, sizeof a->preferences_path, "%s", override_path);

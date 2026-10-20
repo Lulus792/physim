@@ -133,7 +133,10 @@ typedef struct {
     void *accessibility_user;
     const struct nk_window *accessibility_route_window;
     bool accessibility_route_allowed;
+    struct nk_color focus_color;
 } ps_ui_font_layout;
+void ps_ui_set_focus_color(struct nk_context *ctx,struct nk_color color);
+struct nk_color ps_ui_focus_color(const struct nk_context *ctx);
 /* Finish queued field input before a semantic keyboard focus change. */
 void ps_ui_flush_edit(struct nk_context *ctx,const char *window,char *text,size_t capacity,struct nk_rect bounds);
 float nk_sdl_row_height(const struct nk_context *ctx, float requested);

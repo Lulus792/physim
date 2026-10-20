@@ -100,12 +100,12 @@ static void toolbar_test_frame(app *a, int *stage, int *code, const char **captu
     case 82:
         ok = a->toolbar_menu == 2;
         *capture = "toolbar-hover-switch.bmp";
-        test_mouse(a, a->toolbar_bounds[3], true);
-        *stage = 70;
+        test_mouse(a, a->toolbar_bounds[4], true);
+        *stage = 170;
         break;
-    case 70:
-        test_mouse(a, a->toolbar_bounds[3], false);
-        break;
+    case 170:test_mouse(a,a->toolbar_bounds[4],false);break;
+    case 171:ok=a->toolbar_menu==5 && a->toolbar_settings_bounds.w>0;test_mouse(a,a->toolbar_settings_bounds,true);break;
+    case 172:test_mouse(a,a->toolbar_settings_bounds,false);*stage=72;break;
     case 72:
         ok = !a->toolbar_menu && a->tab == 6;
         *capture = "toolbar-settings-selected.bmp";
@@ -151,11 +151,13 @@ static void toolbar_test_frame(app *a, int *stage, int *code, const char **captu
         break;
     case 19:
         ok = a->show_log;
-        test_mouse(a, a->toolbar_bounds[3], true);
+        test_mouse(a, a->toolbar_bounds[4], true);
         break;
     case 20:
-        test_mouse(a, a->toolbar_bounds[3], false);
+        test_mouse(a, a->toolbar_bounds[4], false);
         break;
+    case 21:ok=a->toolbar_menu==5;test_mouse(a,a->toolbar_settings_bounds,true);*stage=180;break;
+    case 180:test_mouse(a,a->toolbar_settings_bounds,false);*stage=22;break;
     case 22:
         ok = a->tab == 6;
         test_key(a, SDLK_1);

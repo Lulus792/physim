@@ -4,6 +4,10 @@ Stand: 21. Oktober 2026. Fortsetzung des [nativen Aufbaus](ANALYSIS-NATIVE.md)
 und des [Feldabgleichs](ANALYSIS-CONTROLS.md). Der Gesamtauftrag für Entwickeln,
 Simulieren, Auswerten und F1 bleibt offen.
 
+Der spätere [gemeinsame Rahmen](SHELL-NATIVE.md) korrigiert die hier noch als
+offen dokumentierte Fokusfarbe. Die folgenden Stand-30-Belege bleiben historisch
+unverändert.
+
 ## Umsetzung
 
 Die Anzeigeeinheit ist jetzt eine kompakte Auswahl im Stil der Vorlage. Bei

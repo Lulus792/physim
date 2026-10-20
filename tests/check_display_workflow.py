@@ -53,6 +53,9 @@ for variant in ("dark", "light", "contrast", "dark-large-narrow", "light-large-n
 for variant in ("dark", "light-large-narrow"):
     SIMPLE["analysis_units_" + variant.replace("-", "_")] = (
         ["--workspace-state-test", "{directory}", "analysis-units-" + variant], 75, True)
+for variant in ("dark", "light-large-narrow", "contrast"):
+    SIMPLE["shell_theme_" + variant.replace("-", "_")] = (
+        ["--workspace-state-test", "{directory}", "shell-theme-" + variant], 75, True)
 for size in ("16", "22"):
     SIMPLE["run_details_"+size] = (["--workspace-state-test", "{directory}", "run-details-"+size], 45, True)
 SIMPLE["documentation_pointer_isolation"] = (["--docs-test-noise", "{directory}"], 35, True)

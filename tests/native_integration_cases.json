@@ -13485,6 +13485,81 @@
           "timeout": 95
         }
       ]
+    },
+    {
+      "name": "shell_theme_dark",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "shell_theme_dark",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 95
+        }
+      ]
+    },
+    {
+      "name": "shell_theme_light_large_narrow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "shell_theme_light_large_narrow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 95
+        }
+      ]
+    },
+    {
+      "name": "shell_theme_contrast",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "shell_theme_contrast",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 95
+        }
+      ]
     }
   ]
 }

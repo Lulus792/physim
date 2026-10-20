@@ -247,6 +247,17 @@ void ps_ui_draw_backdrop(struct nk_context *ctx,const ps_ui_backdrop *material) 
     nk_fill_rect(canvas,nk_rect(material->x,material->y,material->w,material->h),16,nk_rgb(255,255,255));
     nk_set_user_data(ctx,userdata);nk_push_scissor(canvas,clip);
 }
+void ps_ui_set_focus_color(struct nk_context *ctx,struct nk_color color) {
+    if(!ctx || !ctx->userdata.ptr)return;
+    ps_ui_font_layout *layout=ctx->userdata.ptr;if(layout->magic==PS_UI_LAYOUT_MAGIC)layout->focus_color=color;
+}
+struct nk_color ps_ui_focus_color(const struct nk_context *ctx) {
+    if(ctx && ctx->userdata.ptr) {
+        const ps_ui_font_layout *layout=ctx->userdata.ptr;
+        if(layout->magic==PS_UI_LAYOUT_MAGIC && layout->focus_color.a)return layout->focus_color;
+    }
+    return ctx?ctx->style.button.text_normal:nk_rgb(255,255,255);
+}
 static bool accessibility_emit(struct nk_context *ctx,const char *text,int role,struct nk_rect bounds,bool checked,const char *group,bool activated,double *range) {
     if(!ctx || !ctx->userdata.ptr || !ctx->current || !ctx->current->layout || !text)return false;
     const ps_ui_font_layout *layout=ctx->userdata.ptr;
@@ -274,7 +285,7 @@ static bool accessibility_emit(struct nk_context *ctx,const char *text,int role,
          * set_focus for their name would clear ctx->active instead. */
         nk_window_set_focus(ctx,owner->name_string);
     }
-    if((result&4u) && right-left>3 && bottom-top>3)nk_stroke_rect(nk_window_get_canvas(ctx),nk_rect(left+1,top+1,right-left-2,bottom-top-2),3,2,ctx->style.button.text_normal);
+    if((result&4u) && right-left>3 && bottom-top>3)nk_stroke_rect(nk_window_get_canvas(ctx),nk_rect(left+1,top+1,right-left-2,bottom-top-2),3,2,ps_ui_focus_color(ctx));
     return (result&1u)!=0;
 }
 static bool accessibility_widget(struct nk_context *ctx,const char *text,int role,struct nk_rect bounds,bool checked,const char *group,bool activated) {
@@ -346,7 +357,7 @@ nk_bool ps_ui_combo_begin_named(struct nk_context *ctx,const char *name,const ch
     nk_draw_text(&window->buffer,nk_rect(bounds.x+9,bounds.y+(bounds.h-font->height)/2,fmaxf(1,bounds.w-42),font->height),label,(int)strlen(label),font,nk_rgba(0,0,0,0),color);
     nk_draw_symbol(&window->buffer,NK_SYMBOL_CHEVRON_DOWN,nk_rect(bounds.x+bounds.w-25,bounds.y+(bounds.h-8)/2,8,8),nk_rgba(0,0,0,0),color,1,font);
     ps_ui_accessibility_label(ctx,bounds,label);
-    if(nk_sdl_accessibility_is_focused(ctx,NULL,name))nk_stroke_rect(&window->buffer,bounds,6,2,ctx->style.edit.cursor_normal);
+    if(nk_sdl_accessibility_is_focused(ctx,NULL,name))nk_stroke_rect(&window->buffer,bounds,6,2,ps_ui_focus_color(ctx));
     nk_bool open=nk_combo_begin(ctx,window,size,activated || clicked,bounds);
     if(open) {
         /* Nuklear's internal popup has no public name. Stable owner/name

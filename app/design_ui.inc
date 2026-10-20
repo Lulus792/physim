@@ -28,6 +28,7 @@ static void step_bound_editor(app *a,unsigned which,const char *label,double *va
     if(laboratory_visible(a))nk_style_pop_font(a->ui);
 }
 static void style(struct nk_context *ui) {
+    ps_ui_set_focus_color(ui,UI_COLOR(accent));
     struct nk_color c[NK_COLOR_COUNT];
     nk_style_default(ui);
     for (int i = 0; i < NK_COLOR_COUNT; i++)

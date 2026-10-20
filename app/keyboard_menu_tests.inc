@@ -33,7 +33,10 @@ static void keyboard_menu_test_frame(app *a, const char *root, int *stage, int *
     case 17:
         if(ps_clock()<ready){--*stage;return;}
         MENU_KEY(SDLK_F10);test_window_key_mod(a->window,SDLK_TAB,SDL_KMOD_SHIFT);break;
-    case 18: ok=a->toolbar_keyboard_top==3;MENU_KEY(SDLK_RETURN);break;
+    case 18:
+        ok=a->toolbar_keyboard_top==2;
+        MENU_KEY(SDLK_LEFT);MENU_KEY(SDLK_LEFT);MENU_KEY(SDLK_LEFT);
+        MENU_KEY(SDLK_RETURN);MENU_KEY(SDLK_RETURN);break;
     case 19: ok=a->tab==6 && !a->toolbar_keyboard;MENU_KEY(SDLK_F10);MENU_KEY(SDLK_DOWN);MENU_KEY(SDLK_ESCAPE);break;
     case 20: ok=!a->toolbar_keyboard && !a->toolbar_menu;MENU_KEY(SDLK_F10);MENU_KEY(SDLK_DOWN);MENU_KEY(SDLK_DOWN);MENU_KEY(SDLK_SPACE);break;
     case 21:

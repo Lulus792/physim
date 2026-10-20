@@ -67,7 +67,7 @@ Entwickeln in Hell und Dunkel. **Das ist keine 100-%-Abnahme der Oberfläche.**
 
 | Bereich | Noch abzugleichen oder umzusetzen |
 | --- | --- |
-| Gemeinsamer Rahmen | Fünf Referenzmenüs, Theme-Aktion, Fensteraktionen und Statusinhalte vollständig zusammenführen; alle zugehörigen Hover-/Fokus-/Auswahlzustände prüfen. |
+| Gemeinsamer Rahmen | [Fünf Menüs, direkter Theme-Wechsel und Akzentfokus](SHELL-NATIVE.md) sind nativ umgesetzt und auf Windows/Linux geprüft. Fensteraktionen, Statusinhalte und sämtliche Hover-/Fokus-/Auswahlzustände vollständig abgleichen. |
 | Entwickeln | Kontextgliederung, API-Karte, Modellnotiz, Suchinsel, Dateitabs, Baum und Protokoll mit gleichwertigem echtem Inhalt geometrisch vergleichen; schmal, große Schrift, alle Seitenzustände. |
 | Simulieren | Szenenleiste, Szenenkopf, Objektfelder, Gruppen, Kurven, Legenden und komplette Zeitleiste einschließlich Bedienelementpositionen weiter angleichen; alle acht Seiten-/Kurvenzustände. |
 | Auswerten | Gewählte Bereichsanordnung ist nativ aufgebaut; Seitenzustände, Teilfenster, Kurve-/Statistik-Trenner und Scrollzugang bestehen auf Windows/Linux. [Felder, Konturen und Tabgrenze](ANALYSIS-CONTROLS.md) sowie [kompakte Einheitenwahl und Textkorrekturen](ANALYSIS-UNITS.md) sind weiter angeglichen. Weitere Kontrollformen, Einzüge, Fokusfarben, große Schrift und vollständiger Referenzvergleich bleiben offen. Der neue Exportdialog ist noch umzusetzen. [Aufbau und Fachgrenzen](ANALYSIS-NATIVE.md). |

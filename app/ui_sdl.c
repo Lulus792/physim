@@ -377,7 +377,7 @@ bool nk_sdl_accessibility_document_link_target(struct nk_context *ctx,const char
   SDL_RaiseWindow(sdl->win);nk_window_set_focus(ctx,ctx->current->name_string);nk_edit_unfocus(ctx);
  }
  if(focused && !sdl->accessibility_custom_keyboard && visible[2]>0 && visible[3]>0)nk_stroke_rect(nk_window_get_canvas(ctx),
-     nk_rect(left-3,top-2,right-left+6,bottom-top+4),3,1,ctx->style.button.text_normal);
+     nk_rect(left-3,top-2,right-left+6,bottom-top+4),3,1,ps_ui_focus_color(ctx));
  return pressed;
 }
 bool nk_sdl_accessibility_document_link(struct nk_context *ctx,const char *name,uint64_t version,

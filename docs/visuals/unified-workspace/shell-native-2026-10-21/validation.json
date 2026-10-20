@@ -1,0 +1,781 @@
+{
+  "scope": "Five native menus, direct theme action and semantic focus color; no complete UI-fidelity claim",
+  "source_33": {
+    "base": "fad76ef31d05348a58d5f6e5fd51d7153823b932",
+    "source_sha256_lf": {
+      "app/design_ui.inc": "c8dadc37c927b745ce503c9e4d06cef5a1ad0e59a5bbdbb6a1eee30ce6541f5b",
+      "app/docking_ui.inc": "273a40a9f57d50103579fa17f835fc6fe76ec408869ea7f5ff7f1f89de96ba38",
+      "app/main.c": "b418edb69bbe841e0fec7e192ef8c87ee64faf7b4618a627bca8fa8a8d6d020e",
+      "app/panel_windows.inc": "19756c29282f5dc03fa7933c5bd26c4e89fb7373806ca84f22e0840912ff2cf0",
+      "app/plot_tests.inc": "3c730aa3c5fd5a87444973c5cb1734c909286970421f6c8bd5b2a73294a15b61",
+      "app/plot_ui.inc": "8b933b3bb27c9d53be932f1e49ee949bab21a5a587c85f5f5e0fbf801b7b9815",
+      "app/report_details_tests.inc": "eff52c88636b5db6f371a9151975d88624e3d315c4e11e41a0ff55495bada6dc",
+      "app/run_details_tests.inc": "ad34f630ee605abfb78245d3701611a3c6d26f15eae85cab2b32a5e0b6447f35",
+      "app/toolbar_ui.inc": "822c1e27835d9e2c0ca2a18255ca85c4452cd5fc16ac7dd83c33674efe3afe1c",
+      "app/workspace_tests.inc": "64a141a488116d7be9786763d6d0349e3583560a863f8f8734d87142ebb7d9a5",
+      "tests/check_display_workflow.py": "3358b9b5b887242e7871fde384dc515732fb5525e0093bf00b96c306aaa9a42d",
+      "tests/native_integration_cases.json": "8eaf2468c5e8d7bac62f01f218b910c1d6c76cbf8764ecebd4d4b268f312d37b",
+      "app/analysis_layout.inc": "74a9cb6997e41b6ae2c597494bc870f3a9b9de768de9d4ad1b7eff9d01deb48d",
+      "app/analysis_ui.inc": "b64974dd94bdb9466114b182bd5a1b7867828a8fb6a3ebf571fb5172230224ec",
+      "app/analysis_workspace_tests.inc": "8a4bb2a826946de53257654760f97f702d6f1d87a19cc47f5d1f458172ade8a2",
+      "app/preferences.c": "76b00a8147149d8a06482c6b5c8b7b100a2a23d82663e0af01c786ed2e9bf8ef",
+      "app/layout_catalog.c": "a467277f82d4796fe733c7bd5c8e36265e3d3fa891e7593226830ead02ae36ae",
+      "app/settings_ui.inc": "9c2363eeb3762256f90edae7a8fa1446d6ebd0d645b9277bf60c777590534203",
+      "tests/test_preferences.c": "505dbb54dffdb925f924e3ec6987efa13265a1e47f87654ba73066666d51a9fb",
+      "tests/test_layout_catalog.c": "4bf2383cdfa627da1791e264749092f74c5570197fae46079b810a88e032b8a5",
+      "app/analysis_resize.inc": "8ccc8dfa92d58f910d4ee9cacc04e96a93be01b12af2b603368205b00726eb88",
+      "app/settings_tests.inc": "107a0f1efff15d47b161bbca72d61bfc641db4ca552033713330504356394fb3",
+      "app/layout_ui.inc": "be51a9d8fe2d91391248416a942f8bfd2e3ba5dd3b4a75d12883140930b1613f",
+      "app/workbench_tests.inc": "1153571f6cea7f4c5e1d3535068b92d49abc05e0ca0cc5b6c2662d7f7db3359f",
+      "app/channel_units_ui.inc": "dbe90c981c123bac6afaac9e85c9c977cc6581c1d01b84f77c531bad59955a8a",
+      "app/channel_units_tests.inc": "7f71e05664cfefab012fc0363622541e72b890ea4a48b8e02d6f40f0b93cfdff",
+      "app/analysis_units_tests.inc": "5b299a53559c760f332b5c66c9ece3b352f9ad1c8928f842d55311a6763f4afd",
+      "app/ui.h": "3a92d4b103f560300c60b5be55e1f0a9d3a89d7a30bb300857f83eb3be912c58",
+      "app/ui_backend.c": "3cd43242181d0c392b0827711eed9ac014f63ffc0c969e0c649040f6141dcc9c",
+      "app/ui_sdl.c": "7497e7875c57107ba2742cab561be96ef358ec592e336c04c130e0cf1d3ae3d5",
+      "app/toolbar_tests.inc": "16f96ab0fc7088cd766a634c94ee44d2ae97313f3018aadeb2603fe2d265259c",
+      "app/keyboard_menu_tests.inc": "bdb2b255ce95d0dcb85992d8ada3d57c7729cd49fa36dfb7ee202f8748cde682",
+      "app/shell_theme_tests.inc": "4b7452b932bbf9b6b09c681ed418d81de92854eaa11b9fceed61ca0c1084534a"
+    },
+    "foreign_sha256_lf": {
+      ".github/workflows/linux-ui-sanitizers.yml": "80e5b0d925f75ddce52260e8812cfb02d0e5b6e4ccfef03ea86deea75c446085",
+      ".github/workflows/macos-f1-accessibility.yml": "c37bfbd09cdfb0d26922cf0fbd8527f2be70161dd113809435732b6150fd5650",
+      "app/accessibility_atspi.c": "fb32ff39647be57cdaa2c02a10d4319ecef2186747a1edc2338bb397e5668b0f",
+      "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+      "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+      "tests/check_documentation_orca.py": "e38b255bbd7bb12787e50cd78d4b32ed8f985ce60746afde2702285e22a728d5",
+      "tests/test_accessibility_tables_atspi.py": "623f5152d85dabe778728fedc9f999b93e3bfaef6d8d82679d6444675ad54d2f",
+      "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+      "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+      "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+    }
+  },
+  "platforms": {
+    "windows": {
+      "checks": {
+        "binary": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "954c32ab6ea585552363efb78a8e4b48917dab7404a69c9bdc0eb88d048a1724",
+        "cases": [
+          {
+            "name": "shell_theme_dark",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 7.5310000000172295
+          },
+          {
+            "name": "shell_theme_light_large_narrow",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 8.98499999998603
+          },
+          {
+            "name": "shell_theme_contrast",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 7.937999999965541
+          },
+          {
+            "name": "toolbar_small",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 7.5939999999827705
+          },
+          {
+            "name": "toolbar_large",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 7.39100000000326
+          },
+          {
+            "name": "keyboard_menu_small",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 9.952999999979511
+          },
+          {
+            "name": "keyboard_menu_large",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 7.545999999972992
+          },
+          {
+            "name": "analysis_units_light_large_narrow",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 7.453000000037719
+          },
+          {
+            "name": "documentation_h",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 22.39100000000326
+          }
+        ]
+      },
+      "app_steps": [
+        {
+          "group": "shell_theme_dark",
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-shell-windows-33-functional\\shell_theme_dark\\workflow ä",
+            "shell-theme-dark"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "1b372b6ea3ee9367e9e82fe004408ddf4eab742bbdfaf065c7972f511389d437",
+          "stderr_sha256": "4ac39f308d9ae82cb6242b96e2a5cb2bcbdb6d30ff86598ef02819523a0f87ee",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "SHELL THEME INVARIANTS: source, selection, layout wishes, samples, statistics, view and simulation time unchanged=1",
+            "SHELL THEME SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "group": "shell_theme_light_large_narrow",
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-shell-windows-33-functional\\shell_theme_light_large_narrow\\workflow ä",
+            "shell-theme-light-large-narrow"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "68d8d7279589c45859543590a8c7b9a04e3a1549723d92a839018e737861acbe",
+          "stderr_sha256": "c8acb3d6a528b835de620465e36d30f2800bbb6ddb74cc08e41a220527c6748e",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "SHELL THEME INVARIANTS: source, selection, layout wishes, samples, statistics, view and simulation time unchanged=1",
+            "SHELL THEME SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "group": "shell_theme_contrast",
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-shell-windows-33-functional\\shell_theme_contrast\\workflow ä",
+            "shell-theme-contrast"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "1b372b6ea3ee9367e9e82fe004408ddf4eab742bbdfaf065c7972f511389d437",
+          "stderr_sha256": "e1bb77508de1e7dfce081c65cdccf1e5443a3cd2d4c9a46555177b5909f9a110",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "SHELL THEME INVARIANTS: source, selection, layout wishes, samples, statistics, view and simulation time unchanged=1",
+            "SHELL THEME SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "group": "toolbar_small",
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-shell-windows-33-functional\\toolbar_small\\workflow ä",
+            "toolbar"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "b453d4b14e7ad15e8446ade6d611e747e8e6066f01600a002e28e77213b383b4",
+          "stderr_sha256": "fe688b5341aed1ae38df3d39ad4cbf26c82a01663d75ebe8886e5072b7d3f0f5",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2"
+          ]
+        },
+        {
+          "group": "toolbar_large",
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-shell-windows-33-functional\\toolbar_large\\workflow ä",
+            "toolbar"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "45ab3a26cee85d45e0d07cdd06aa6ae8f27688c89d429c430a96605e9429f8df",
+          "stderr_sha256": "6f59c9df90dd44819622410168984fd896e11d7538ecd763db9836ddd28441e5",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2"
+          ]
+        },
+        {
+          "group": "keyboard_menu_small",
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-shell-windows-33-functional\\keyboard_menu_small\\workflow ä",
+            "toolbar-keyboard"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "87689e91c8bd5d9469a7271e868c519c5aeb9bd9e6461878913ac5c6f094a887",
+          "stderr_sha256": "d35e68619de0ee8312e7753e0416f96e5bf86f87f64edda3acbbf464469bba3d",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "KEYBOARD MENU SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "group": "keyboard_menu_large",
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-shell-windows-33-functional\\keyboard_menu_large\\workflow ä",
+            "toolbar-keyboard"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "87689e91c8bd5d9469a7271e868c519c5aeb9bd9e6461878913ac5c6f094a887",
+          "stderr_sha256": "ad503f7ab5f554c6df561120140db9851bf175aa17d0e1c5fee01e73e01b9b6f",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "KEYBOARD MENU SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "group": "analysis_units_light_large_narrow",
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-shell-windows-33-functional\\analysis_units_light_large_narrow\\workflow ä",
+            "analysis-units-light-large-narrow"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "0579f919cbed37703e63394c08b7b01f6a54256955ecf917025d117ebf331f23",
+          "stderr_sha256": "b968f0f2e6797911f12221b0790630be6b80403e82d0bc44dd2be1d48876e771",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "ANALYSIS UNIT INVARIANTS: raw file, times, values, statistics, view and selection unchanged=1",
+            "ANALYSIS UNIT CHOOSER SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "group": "documentation_h",
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-shell-windows-33-functional\\documentation_h\\workflow ä",
+            "docs-keyboard-h"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "f714b9818d1ebf143cc2da2c4cf2de950f79a5225789b99dfee11e99bda95a50",
+          "stderr_sha256": "a5fef67100dfa8f87842d33278e52312878b4e23f07fcb9052f5f46da1e361e2",
+          "observations": [
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+            "DOCUMENTATION H SELF-TEST: PASSED"
+          ]
+        }
+      ]
+    },
+    "linux": {
+      "checks": {
+        "binary": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+        "sha256": "f97cafdee74d2a46ad8733c45ebd73f30098d15a5258cc538d997cb1136134ab",
+        "cases": [
+          {
+            "name": "shell_theme_dark",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 10.463792722999642
+          },
+          {
+            "name": "shell_theme_light_large_narrow",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 9.516927509001107
+          },
+          {
+            "name": "shell_theme_contrast",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 10.989092973999504
+          },
+          {
+            "name": "toolbar_small",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 10.507413936000376
+          },
+          {
+            "name": "toolbar_large",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 11.425365167000564
+          },
+          {
+            "name": "keyboard_menu_small",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 7.9914559989992995
+          },
+          {
+            "name": "keyboard_menu_large",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 8.678355914998974
+          },
+          {
+            "name": "analysis_units_light_large_narrow",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 8.11568629300018
+          },
+          {
+            "name": "documentation_h",
+            "status": "passed",
+            "exit_code": 0,
+            "seconds": 52.32032774899926
+          }
+        ]
+      },
+      "app_steps": [
+        {
+          "group": "shell_theme_dark",
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-shell-linux-33-functional/shell_theme_dark/workflow ä",
+            "shell-theme-dark"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "dda901cc26f3621451c55981a2113f3a3375fcdc6dbb0a565d0bba705758e0ab",
+          "stderr_sha256": "f3b53f7f0c37a047a420cd66a758b420ed730ad4b2a32a7ad2004d1e7e6e603d",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "SHELL THEME INVARIANTS: source, selection, layout wishes, samples, statistics, view and simulation time unchanged=1",
+            "SHELL THEME SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "group": "shell_theme_light_large_narrow",
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-shell-linux-33-functional/shell_theme_light_large_narrow/workflow ä",
+            "shell-theme-light-large-narrow"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "df64f1a9beb9c29335135785a173465dc4fd1abf4c37f715eb277dd40d0ddfd0",
+          "stderr_sha256": "80fe2eae74904a120444cbe482314769a5ec48877a324d698bd9f91c14bbd800",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "SHELL THEME INVARIANTS: source, selection, layout wishes, samples, statistics, view and simulation time unchanged=1",
+            "SHELL THEME SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "group": "shell_theme_contrast",
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-shell-linux-33-functional/shell_theme_contrast/workflow ä",
+            "shell-theme-contrast"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "dda901cc26f3621451c55981a2113f3a3375fcdc6dbb0a565d0bba705758e0ab",
+          "stderr_sha256": "3de8755495b0ab79993bd8eda4a003ca18ffa0013c5805bbc57b5452586c0313",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "SHELL THEME INVARIANTS: source, selection, layout wishes, samples, statistics, view and simulation time unchanged=1",
+            "SHELL THEME SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "group": "toolbar_small",
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-shell-linux-33-functional/toolbar_small/workflow ä",
+            "toolbar"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "9cd6cebe5484a19a89b9d04de84b9f128de8040de11967c885c5f531d2fbcaa7",
+          "stderr_sha256": "dad6aa86a46b0ff9a3031ebbed4c4bd3b1ba5cb426305541bc01c645be6790ba",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)"
+          ]
+        },
+        {
+          "group": "toolbar_large",
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-shell-linux-33-functional/toolbar_large/workflow ä",
+            "toolbar"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "5bd27979ebb9e18d56830449f6d123fc6b02517e6de00b68c0ba04be794203d8",
+          "stderr_sha256": "a98b141c393ba7b0b3d86c7ec3b766063e49764e43d079791c1031be08853d45",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)"
+          ]
+        },
+        {
+          "group": "keyboard_menu_small",
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-shell-linux-33-functional/keyboard_menu_small/workflow ä",
+            "toolbar-keyboard"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "34060a6837e11b11d409bfc834cebe159cca3fa361bced5ac0b894e227878fec",
+          "stderr_sha256": "e0fb3193e2f2e3feb88844b31711f6e39f7755f98f0053757ebd55cdc68abfbe",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "KEYBOARD MENU SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "group": "keyboard_menu_large",
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-shell-linux-33-functional/keyboard_menu_large/workflow ä",
+            "toolbar-keyboard"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "34060a6837e11b11d409bfc834cebe159cca3fa361bced5ac0b894e227878fec",
+          "stderr_sha256": "f9716a98324c3fb1b9d6e73624ffa622ff81cfd4e5b23ebf3f138962187f4eff",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "KEYBOARD MENU SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "group": "analysis_units_light_large_narrow",
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-shell-linux-33-functional/analysis_units_light_large_narrow/workflow ä",
+            "analysis-units-light-large-narrow"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "01ef1495bca526d5965bec96492c0ad617626b3fe9538e60c22a4265ca097e3c",
+          "stderr_sha256": "829957d5aa8b8c87185286dd8d1c7c0c6a89cb74f1dbe3ca72cc1ec96439fc78",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "ANALYSIS UNIT INVARIANTS: raw file, times, values, statistics, view and selection unchanged=1",
+            "ANALYSIS UNIT CHOOSER SELF-TEST: PASSED"
+          ]
+        },
+        {
+          "group": "documentation_h",
+          "command": [
+            "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "--workspace-state-test",
+            "/mnt/d/Physim/build/native/design-shell-linux-33-functional/documentation_h/workflow ä",
+            "docs-keyboard-h"
+          ],
+          "exit_code": 0,
+          "stdout_sha256": "5fcd9afd2eb1e41d5d7503ccd183c2dcaed11de01440d80e25b77162dca0a237",
+          "stderr_sha256": "d2e56521ec1c0d03d938b56c9e7a72b9d0053cdbc2c7bbe0966c73fea6e50dd9",
+          "observations": [
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+            "DOCUMENTATION H SELF-TEST: PASSED"
+          ]
+        }
+      ]
+    }
+  },
+  "captures": [
+    {
+      "platform": "windows",
+      "source": "D:\\Physim\\build\\native\\design-shell-windows-33-functional\\shell_theme_dark\\workflow ä\\shell-before.bmp",
+      "source_sha256": "81db305307a9c8779e174276145e4e72afd562f39de6c050bb3289a42e8b0c2a",
+      "file": "windows-develop-dark-v33.png",
+      "sha256": "150d2faa7542d90062500ff656fa0323a1dcdfe5d62d6eb20cd4ef0c4ade473d",
+      "identical_decoded_rgb": true,
+      "purpose": "Unmodified native capture of the final source-33 task"
+    },
+    {
+      "platform": "windows",
+      "source": "D:\\Physim\\build\\native\\design-shell-windows-33-functional\\shell_theme_dark\\workflow ä\\shell-develop-toggled.bmp",
+      "source_sha256": "a96d52c796feb4a584c143f2c689b3200a1b764626358a80d640c3c9f0d2d8db",
+      "file": "windows-develop-light-v33.png",
+      "sha256": "45f5875fdeb44c40d20747a007272f7b7544e5e044311ab55ed1d8190b65090d",
+      "identical_decoded_rgb": true,
+      "purpose": "Unmodified native capture of the final source-33 task"
+    },
+    {
+      "platform": "windows",
+      "source": "D:\\Physim\\build\\native\\design-shell-windows-33-functional\\shell_theme_dark\\workflow ä\\shell-simulate-toggled.bmp",
+      "source_sha256": "ad6df7188b505e893f67ba9e18d8ab3540ccf4a14bcccc8d3481d62e636c066b",
+      "file": "windows-simulate-dark-v33.png",
+      "sha256": "ebaaf1b21f2c43adb7b40f63f775968c0c96b62b318f62c776295159897ff203",
+      "identical_decoded_rgb": true,
+      "purpose": "Unmodified native capture of the final source-33 task"
+    },
+    {
+      "platform": "windows",
+      "source": "D:\\Physim\\build\\native\\design-shell-windows-33-functional\\shell_theme_dark\\workflow ä\\shell-analyze-toggled.bmp",
+      "source_sha256": "aae1f72bf3c7b55e3e5442e82a764d5fd75f4fa9a77e68ca897689dadac5310d",
+      "file": "windows-analyze-light-v33.png",
+      "sha256": "7abb8c542b71d56e6420a5e183d571dfccc9768bf74ab41cd52c62f4fc4500ca",
+      "identical_decoded_rgb": true,
+      "purpose": "Unmodified native capture of the final source-33 task"
+    },
+    {
+      "platform": "windows",
+      "source": "D:\\Physim\\build\\native\\design-shell-windows-33-functional\\shell_theme_light_large_narrow\\workflow ä\\shell-before.bmp",
+      "source_sha256": "75930df5a8cf04ff23c14708b1686963f3f4f3ede82f7e1434348cfb8db7f9de",
+      "file": "windows-develop-light-large-narrow-v33.png",
+      "sha256": "18a6b584d730c42a733cbec8f6ec8f43f231ac30585e3d530687cc481029cb55",
+      "identical_decoded_rgb": true,
+      "purpose": "Unmodified native capture of the final source-33 task"
+    },
+    {
+      "platform": "windows",
+      "source": "D:\\Physim\\build\\native\\design-shell-windows-33-functional\\shell_theme_contrast\\workflow ä\\shell-before.bmp",
+      "source_sha256": "321d68a8e5e3fb8622a138b68d7f3275abe040f731fdf28ddcfd6f0389d3d67c",
+      "file": "windows-develop-contrast-v33.png",
+      "sha256": "d4139fe5b2aae78afeb37439e2720782dd5ac82d8ba4ee7e929057e85bae43d3",
+      "identical_decoded_rgb": true,
+      "purpose": "Unmodified native capture of the final source-33 task"
+    },
+    {
+      "platform": "windows",
+      "source": "D:\\Physim\\build\\native\\design-shell-windows-33-functional\\analysis_units_light_large_narrow\\workflow ä\\analysis-unit-degrees.bmp",
+      "source_sha256": "540c25f5c68d1672b789946590083551a47a644ab8f8616d97282c12a987001d",
+      "file": "windows-units-light-large-focus-v33.png",
+      "sha256": "4f32838da459835ead856781743e9e13806aafbc636765c1e5ed38672e08c7ff",
+      "identical_decoded_rgb": true,
+      "purpose": "Unmodified native capture of the final source-33 task"
+    },
+    {
+      "platform": "windows",
+      "source": "D:\\Physim\\build\\native\\design-shell-windows-33-functional\\toolbar_small\\workflow ä\\toolbar-file-menu.bmp",
+      "source_sha256": "0289010c74d879b0e495ce6405c4444039b10067b77d9b5fdb12d5ef00b52645",
+      "file": "windows-file-menu-v33.png",
+      "sha256": "7d6ff3fea724f943d3e8fa13ee3a0ae5512cce2cc43f1a8af7e442619936df02",
+      "identical_decoded_rgb": true,
+      "purpose": "Unmodified native capture of the final source-33 task"
+    },
+    {
+      "platform": "linux",
+      "source": "D:\\Physim\\build\\native\\design-shell-linux-33-functional\\shell_theme_dark\\workflow ä\\shell-before.bmp",
+      "source_sha256": "b3022bb67156c4dce8f0579289b615fff96246db09e3816076b1dfc3a94236c3",
+      "file": "linux-develop-dark-v33.png",
+      "sha256": "143db8289a57b80a2cbd3c55f4635578d9d4dfa1d3aead7627dce5fb031ed7ac",
+      "identical_decoded_rgb": true,
+      "purpose": "Unmodified native capture of the final source-33 task"
+    },
+    {
+      "platform": "linux",
+      "source": "D:\\Physim\\build\\native\\design-shell-linux-33-functional\\shell_theme_dark\\workflow ä\\shell-develop-toggled.bmp",
+      "source_sha256": "3763ea75efc977a64c96d313794c231d6f251b1e4f3850fa468aeb3ad30b4dd1",
+      "file": "linux-develop-light-v33.png",
+      "sha256": "2002cbc016b6e45251360ef28cc5dfb4fc5dcd63837640fd9a8056dba8437291",
+      "identical_decoded_rgb": true,
+      "purpose": "Unmodified native capture of the final source-33 task"
+    },
+    {
+      "platform": "linux",
+      "source": "D:\\Physim\\build\\native\\design-shell-linux-33-functional\\shell_theme_dark\\workflow ä\\shell-simulate-toggled.bmp",
+      "source_sha256": "dae65d3c7ea4f3407f59db3e7bd1f655a1886da9f222933f8378961494df7d39",
+      "file": "linux-simulate-dark-v33.png",
+      "sha256": "c0ceecbc524d74f5cdde7b95704487ae1f76aa99ed8fb44d115e178d35d5419c",
+      "identical_decoded_rgb": true,
+      "purpose": "Unmodified native capture of the final source-33 task"
+    },
+    {
+      "platform": "linux",
+      "source": "D:\\Physim\\build\\native\\design-shell-linux-33-functional\\shell_theme_dark\\workflow ä\\shell-analyze-toggled.bmp",
+      "source_sha256": "4c9255ca92ff4bd550c5d546f71087bab405f9d7c89d2f440db5c0ea598356a2",
+      "file": "linux-analyze-light-v33.png",
+      "sha256": "d3d8f0f1f19a05f6732a7d83118dfd5ae9bb1c44772b37e32f91c16f372a5b7c",
+      "identical_decoded_rgb": true,
+      "purpose": "Unmodified native capture of the final source-33 task"
+    },
+    {
+      "platform": "linux",
+      "source": "D:\\Physim\\build\\native\\design-shell-linux-33-functional\\shell_theme_light_large_narrow\\workflow ä\\shell-before.bmp",
+      "source_sha256": "12a13d6ad79fd6b7ee23b83ab1a17713d4ab7c1c1d03a3f0c005fddf981e059b",
+      "file": "linux-develop-light-large-narrow-v33.png",
+      "sha256": "50670df607410f98b442f6e6453cf54d6179b00f6dfffa50eaf491a28313275f",
+      "identical_decoded_rgb": true,
+      "purpose": "Unmodified native capture of the final source-33 task"
+    },
+    {
+      "platform": "linux",
+      "source": "D:\\Physim\\build\\native\\design-shell-linux-33-functional\\shell_theme_contrast\\workflow ä\\shell-before.bmp",
+      "source_sha256": "0fca55078f2e05d66f4575c15fd0df0d67e5ceec905874d38a56d65b43ee159c",
+      "file": "linux-develop-contrast-v33.png",
+      "sha256": "5243bd2af45f40dcff07f92465f81c70abbe3b9bd0e4928774f2d515b5289f84",
+      "identical_decoded_rgb": true,
+      "purpose": "Unmodified native capture of the final source-33 task"
+    },
+    {
+      "platform": "linux",
+      "source": "D:\\Physim\\build\\native\\design-shell-linux-33-functional\\analysis_units_light_large_narrow\\workflow ä\\analysis-unit-degrees.bmp",
+      "source_sha256": "654b5fe4515295171e9684109b2c377418d61c7bab79badae9d4be00cdca4ef7",
+      "file": "linux-units-light-large-focus-v33.png",
+      "sha256": "9bcbd955828293468aafd1a798d368046079c0257523d5a6c4a42e30d0f62cff",
+      "identical_decoded_rgb": true,
+      "purpose": "Unmodified native capture of the final source-33 task"
+    },
+    {
+      "platform": "linux",
+      "source": "D:\\Physim\\build\\native\\design-shell-linux-33-functional\\toolbar_small\\workflow ä\\toolbar-file-menu.bmp",
+      "source_sha256": "17c965b2ff154966caeee10898723118a17a97d8c479e37a6c9969c8da321c17",
+      "file": "linux-file-menu-v33.png",
+      "sha256": "2fc7455f1733645a1ead72a3406acfb5c18f86ccdd6208c72412273a523a35e9",
+      "identical_decoded_rgb": true,
+      "purpose": "Unmodified native capture of the final source-33 task"
+    },
+    {
+      "platform": "windows",
+      "source": "D:\\Physim\\build\\native\\design-shell-windows-31-functional\\shell_theme_dark\\workflow ä\\shell-theme-failed.bmp",
+      "source_sha256": "a96d52c796feb4a584c143f2c689b3200a1b764626358a80d640c3c9f0d2d8db",
+      "file": "counterexample-theme-focus-v31.png",
+      "sha256": "45f5875fdeb44c40d20747a007272f7b7544e5e044311ab55ed1d8190b65090d",
+      "identical_decoded_rgb": true,
+      "purpose": "Negative source-31 focus task"
+    }
+  ],
+  "negative_checks": [
+    {
+      "version": 31,
+      "reason": "Theme pointer action passed, but the header action was excluded from the native focus route after switching to Simulate.",
+      "source": {
+        "base": "fad76ef31d05348a58d5f6e5fd51d7153823b932",
+        "source_sha256_lf": {
+          "app/design_ui.inc": "c8dadc37c927b745ce503c9e4d06cef5a1ad0e59a5bbdbb6a1eee30ce6541f5b",
+          "app/docking_ui.inc": "273a40a9f57d50103579fa17f835fc6fe76ec408869ea7f5ff7f1f89de96ba38",
+          "app/main.c": "b418edb69bbe841e0fec7e192ef8c87ee64faf7b4618a627bca8fa8a8d6d020e",
+          "app/panel_windows.inc": "19756c29282f5dc03fa7933c5bd26c4e89fb7373806ca84f22e0840912ff2cf0",
+          "app/plot_tests.inc": "3c730aa3c5fd5a87444973c5cb1734c909286970421f6c8bd5b2a73294a15b61",
+          "app/plot_ui.inc": "8b933b3bb27c9d53be932f1e49ee949bab21a5a587c85f5f5e0fbf801b7b9815",
+          "app/report_details_tests.inc": "eff52c88636b5db6f371a9151975d88624e3d315c4e11e41a0ff55495bada6dc",
+          "app/run_details_tests.inc": "ad34f630ee605abfb78245d3701611a3c6d26f15eae85cab2b32a5e0b6447f35",
+          "app/toolbar_ui.inc": "834b2dd3159d8b39ff9593b9f42dc10f506684499084305a6386d6884b961f59",
+          "app/workspace_tests.inc": "64a141a488116d7be9786763d6d0349e3583560a863f8f8734d87142ebb7d9a5",
+          "tests/check_display_workflow.py": "3358b9b5b887242e7871fde384dc515732fb5525e0093bf00b96c306aaa9a42d",
+          "tests/native_integration_cases.json": "8eaf2468c5e8d7bac62f01f218b910c1d6c76cbf8764ecebd4d4b268f312d37b",
+          "app/analysis_layout.inc": "74a9cb6997e41b6ae2c597494bc870f3a9b9de768de9d4ad1b7eff9d01deb48d",
+          "app/analysis_ui.inc": "b64974dd94bdb9466114b182bd5a1b7867828a8fb6a3ebf571fb5172230224ec",
+          "app/analysis_workspace_tests.inc": "8a4bb2a826946de53257654760f97f702d6f1d87a19cc47f5d1f458172ade8a2",
+          "app/preferences.c": "76b00a8147149d8a06482c6b5c8b7b100a2a23d82663e0af01c786ed2e9bf8ef",
+          "app/layout_catalog.c": "a467277f82d4796fe733c7bd5c8e36265e3d3fa891e7593226830ead02ae36ae",
+          "app/settings_ui.inc": "9c2363eeb3762256f90edae7a8fa1446d6ebd0d645b9277bf60c777590534203",
+          "tests/test_preferences.c": "505dbb54dffdb925f924e3ec6987efa13265a1e47f87654ba73066666d51a9fb",
+          "tests/test_layout_catalog.c": "4bf2383cdfa627da1791e264749092f74c5570197fae46079b810a88e032b8a5",
+          "app/analysis_resize.inc": "8ccc8dfa92d58f910d4ee9cacc04e96a93be01b12af2b603368205b00726eb88",
+          "app/settings_tests.inc": "107a0f1efff15d47b161bbca72d61bfc641db4ca552033713330504356394fb3",
+          "app/layout_ui.inc": "be51a9d8fe2d91391248416a942f8bfd2e3ba5dd3b4a75d12883140930b1613f",
+          "app/workbench_tests.inc": "1153571f6cea7f4c5e1d3535068b92d49abc05e0ca0cc5b6c2662d7f7db3359f",
+          "app/channel_units_ui.inc": "dbe90c981c123bac6afaac9e85c9c977cc6581c1d01b84f77c531bad59955a8a",
+          "app/channel_units_tests.inc": "7f71e05664cfefab012fc0363622541e72b890ea4a48b8e02d6f40f0b93cfdff",
+          "app/analysis_units_tests.inc": "5b299a53559c760f332b5c66c9ece3b352f9ad1c8928f842d55311a6763f4afd",
+          "app/ui.h": "3a92d4b103f560300c60b5be55e1f0a9d3a89d7a30bb300857f83eb3be912c58",
+          "app/ui_backend.c": "3cd43242181d0c392b0827711eed9ac014f63ffc0c969e0c649040f6141dcc9c",
+          "app/ui_sdl.c": "7497e7875c57107ba2742cab561be96ef358ec592e336c04c130e0cf1d3ae3d5",
+          "app/toolbar_tests.inc": "16f96ab0fc7088cd766a634c94ee44d2ae97313f3018aadeb2603fe2d265259c",
+          "app/keyboard_menu_tests.inc": "bdb2b255ce95d0dcb85992d8ada3d57c7729cd49fa36dfb7ee202f8748cde682",
+          "app/shell_theme_tests.inc": "0856aad209e5147a4bca792b077010fff6a581a877290eff8c237d5eb93e0b64"
+        },
+        "foreign_sha256_lf": {
+          ".github/workflows/linux-ui-sanitizers.yml": "80e5b0d925f75ddce52260e8812cfb02d0e5b6e4ccfef03ea86deea75c446085",
+          ".github/workflows/macos-f1-accessibility.yml": "c37bfbd09cdfb0d26922cf0fbd8527f2be70161dd113809435732b6150fd5650",
+          "app/accessibility_atspi.c": "fb32ff39647be57cdaa2c02a10d4319ecef2186747a1edc2338bb397e5668b0f",
+          "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+          "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+          "tests/check_documentation_orca.py": "e38b255bbd7bb12787e50cd78d4b32ed8f985ce60746afde2702285e22a728d5",
+          "tests/test_accessibility_tables_atspi.py": "623f5152d85dabe778728fedc9f999b93e3bfaef6d8d82679d6444675ad54d2f",
+          "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+          "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+          "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+        }
+      },
+      "app_steps": [
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\native\\design-shell-windows-31-functional\\shell_theme_dark\\workflow ä",
+            "shell-theme-dark"
+          ],
+          "exit_code": 1,
+          "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nSHELL THEME SELF-TEST: FAILED\nBereit. Ordner öffnen oder ein neues Projekt anlegen.\nProjekt geladen. Build kompiliert die lokalen Quelldateien.\n301 Messpunkte geladen.\n\nAPP TEST EXIT: 1\n",
+          "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 485573.156154\nAPP TEST TRACE: main font sources ready 485573.271876\nAPP TEST TRACE: main atlas bake seconds=2.922851\nAPP TEST TRACE: main atlas validation/upload seconds=0.031389\nAPP TEST TRACE: main fonts ready 485576.234007\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=4235305300\nAPP TEST TRACE: stage 2 -> 3, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 3 -> 4, status 301 Messpunkte geladen.\nShell theme stage 4 failed: theme=1 expected=0\nAPP TEST TRACE: stage 4 -> 5, status 301 Messpunkte geladen.\nFirst workflow failure at stage 4 (next 5): 301 Messpunkte geladen. (tab=1, selected=1, samples=301, report=0, query=)\nWorkflow failed at stage 5: 301 Messpunkte geladen. (tab=1, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\n"
+        }
+      ]
+    },
+    {
+      "version": 32,
+      "reason": "Windows build failed: diagnostic used an unavailable helper; no Linux source-32 build claimed.",
+      "source": {
+        "base": "fad76ef31d05348a58d5f6e5fd51d7153823b932",
+        "source_sha256_lf": {
+          "app/design_ui.inc": "c8dadc37c927b745ce503c9e4d06cef5a1ad0e59a5bbdbb6a1eee30ce6541f5b",
+          "app/docking_ui.inc": "273a40a9f57d50103579fa17f835fc6fe76ec408869ea7f5ff7f1f89de96ba38",
+          "app/main.c": "b418edb69bbe841e0fec7e192ef8c87ee64faf7b4618a627bca8fa8a8d6d020e",
+          "app/panel_windows.inc": "19756c29282f5dc03fa7933c5bd26c4e89fb7373806ca84f22e0840912ff2cf0",
+          "app/plot_tests.inc": "3c730aa3c5fd5a87444973c5cb1734c909286970421f6c8bd5b2a73294a15b61",
+          "app/plot_ui.inc": "8b933b3bb27c9d53be932f1e49ee949bab21a5a587c85f5f5e0fbf801b7b9815",
+          "app/report_details_tests.inc": "eff52c88636b5db6f371a9151975d88624e3d315c4e11e41a0ff55495bada6dc",
+          "app/run_details_tests.inc": "ad34f630ee605abfb78245d3701611a3c6d26f15eae85cab2b32a5e0b6447f35",
+          "app/toolbar_ui.inc": "822c1e27835d9e2c0ca2a18255ca85c4452cd5fc16ac7dd83c33674efe3afe1c",
+          "app/workspace_tests.inc": "64a141a488116d7be9786763d6d0349e3583560a863f8f8734d87142ebb7d9a5",
+          "tests/check_display_workflow.py": "3358b9b5b887242e7871fde384dc515732fb5525e0093bf00b96c306aaa9a42d",
+          "tests/native_integration_cases.json": "8eaf2468c5e8d7bac62f01f218b910c1d6c76cbf8764ecebd4d4b268f312d37b",
+          "app/analysis_layout.inc": "74a9cb6997e41b6ae2c597494bc870f3a9b9de768de9d4ad1b7eff9d01deb48d",
+          "app/analysis_ui.inc": "b64974dd94bdb9466114b182bd5a1b7867828a8fb6a3ebf571fb5172230224ec",
+          "app/analysis_workspace_tests.inc": "8a4bb2a826946de53257654760f97f702d6f1d87a19cc47f5d1f458172ade8a2",
+          "app/preferences.c": "76b00a8147149d8a06482c6b5c8b7b100a2a23d82663e0af01c786ed2e9bf8ef",
+          "app/layout_catalog.c": "a467277f82d4796fe733c7bd5c8e36265e3d3fa891e7593226830ead02ae36ae",
+          "app/settings_ui.inc": "9c2363eeb3762256f90edae7a8fa1446d6ebd0d645b9277bf60c777590534203",
+          "tests/test_preferences.c": "505dbb54dffdb925f924e3ec6987efa13265a1e47f87654ba73066666d51a9fb",
+          "tests/test_layout_catalog.c": "4bf2383cdfa627da1791e264749092f74c5570197fae46079b810a88e032b8a5",
+          "app/analysis_resize.inc": "8ccc8dfa92d58f910d4ee9cacc04e96a93be01b12af2b603368205b00726eb88",
+          "app/settings_tests.inc": "107a0f1efff15d47b161bbca72d61bfc641db4ca552033713330504356394fb3",
+          "app/layout_ui.inc": "be51a9d8fe2d91391248416a942f8bfd2e3ba5dd3b4a75d12883140930b1613f",
+          "app/workbench_tests.inc": "1153571f6cea7f4c5e1d3535068b92d49abc05e0ca0cc5b6c2662d7f7db3359f",
+          "app/channel_units_ui.inc": "dbe90c981c123bac6afaac9e85c9c977cc6581c1d01b84f77c531bad59955a8a",
+          "app/channel_units_tests.inc": "7f71e05664cfefab012fc0363622541e72b890ea4a48b8e02d6f40f0b93cfdff",
+          "app/analysis_units_tests.inc": "5b299a53559c760f332b5c66c9ece3b352f9ad1c8928f842d55311a6763f4afd",
+          "app/ui.h": "3a92d4b103f560300c60b5be55e1f0a9d3a89d7a30bb300857f83eb3be912c58",
+          "app/ui_backend.c": "3cd43242181d0c392b0827711eed9ac014f63ffc0c969e0c649040f6141dcc9c",
+          "app/ui_sdl.c": "7497e7875c57107ba2742cab561be96ef358ec592e336c04c130e0cf1d3ae3d5",
+          "app/toolbar_tests.inc": "16f96ab0fc7088cd766a634c94ee44d2ae97313f3018aadeb2603fe2d265259c",
+          "app/keyboard_menu_tests.inc": "bdb2b255ce95d0dcb85992d8ada3d57c7729cd49fa36dfb7ee202f8748cde682",
+          "app/shell_theme_tests.inc": "9b9cd45e768d2f1360f3c156f4f78b26cc95e7a08a6be9dc9fb80dee3fa70865"
+        },
+        "foreign_sha256_lf": {
+          ".github/workflows/linux-ui-sanitizers.yml": "80e5b0d925f75ddce52260e8812cfb02d0e5b6e4ccfef03ea86deea75c446085",
+          ".github/workflows/macos-f1-accessibility.yml": "c37bfbd09cdfb0d26922cf0fbd8527f2be70161dd113809435732b6150fd5650",
+          "app/accessibility_atspi.c": "fb32ff39647be57cdaa2c02a10d4319ecef2186747a1edc2338bb397e5668b0f",
+          "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+          "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+          "tests/check_documentation_orca.py": "e38b255bbd7bb12787e50cd78d4b32ed8f985ce60746afde2702285e22a728d5",
+          "tests/test_accessibility_tables_atspi.py": "623f5152d85dabe778728fedc9f999b93e3bfaef6d8d82679d6444675ad54d2f",
+          "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+          "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+          "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+        }
+      },
+      "build_log": "D:\\Physim\\build\\native\\design-shell-build-windows-32.log",
+      "build_log_sha256": "de465687c3b869c4df4738f747168dc5bc7ef2cc9b0223e696902189061e5686",
+      "diagnostic": [
+        "main.obj : error LNK2019: unresolved external symbol nk_rect_is_intersecting referenced in function shell_theme_test_frame",
+        "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.pending.exe : fatal error LNK1120: 1 unresolved externals"
+      ]
+    }
+  ],
+  "limitations": [
+    "Synthetic 301-point layout fixture, no physics or multi-run validation.",
+    "Native SDL event and accessibility-model tests, no new external UIA/AT-SPI client, manual screenreader, physical pointer or mixed-monitor DPI proof.",
+    "Separate hashed local accessibility changes included unchanged; no clean-checkout build or new macOS acceptance.",
+    "Workbench geometry and the remaining full design/state comparison, multi-run display and approved graphic-export dialog remain pending."
+  ]
+}
