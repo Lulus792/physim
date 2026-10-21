@@ -1147,30 +1147,31 @@ static void documentation_focus_draw(app *a,int id,struct nk_rect bounds,bool bo
     if(body) {if(delta)a->doc_scroll_adjustment=delta;}
     else if(!strcmp(ui->current->name_string,"topics")) {
         if(delta)a->doc_navigation_scroll_y=(nk_uint)fmaxf(0,(float)a->doc_navigation_scroll_y+delta);
+    } else if(!strcmp(ui->current->name_string,"documentation-context") && ui->current->layout->type==NK_PANEL_GROUP) {
+        unsigned tab=a->doc_context_example?1:0;
+        if(delta)a->doc_context_scroll_y[tab]=(nk_uint)fmaxf(0,(float)a->doc_context_scroll_y[tab]+delta);
     } else {nk_uint x,y;nk_window_get_scroll(ui,&x,&y);if(delta)nk_window_set_scroll(ui,x,(nk_uint)fmaxf(0,(float)y+delta));}
     if(!delta)a->doc_focus_reveal=false;
 }
 #include "documentation_media.inc"
+static void documentation_h_text_draw(app *a,const struct nk_user_font *font,const char *text,struct nk_rect r,float line,struct nk_color ink);
+static struct nk_rect documentation_h_snap(struct nk_rect r);
 static bool documentation_topic_button(app *a,const char *label,bool selected,struct nk_rect *actual) {
     struct nk_context *ui=a->doc_ui;struct nk_rect bounds;
+    struct nk_rect measured=nk_widget_bounds(ui);
     enum nk_widget_layout_states visible=nk_widget(&bounds,ui);
-    /* nk_widget snaps fractional chrome metrics to integer bounds. Use that
-     * same rectangle for native focus, rather than the preceding layout peek. */
-    *actual=bounds;
+    /* Quantize the measured edges together for painting, native input and
+     * focus; nk_widget's independent size truncation would shorten the row. */
+    bounds=documentation_h_snap(measured);*actual=bounds;
     if(visible==NK_WIDGET_INVALID)return false;
     bool pressed=ps_ui_button_at(ui,bounds,label,selected);
     struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
     bool hover=nk_input_is_mouse_hovering_rect(&ui->input,bounds);
-    if(selected || hover)nk_fill_rect(canvas,bounds,4,selected?UI_COLOR(selection_active):UI_COLOR(button_hover));
+    if(selected || hover)nk_fill_rect(canvas,bounds,5,selected?UI_COLOR(selection_active):UI_COLOR(button_hover));
     if(selected)nk_fill_rect(canvas,nk_rect(bounds.x,bounds.y+3,3,bounds.h-6),1,UI_COLOR(accent));
     const struct nk_user_font *font=ui->style.font;
-    size_t at=0,n=strlen(label);float y=bounds.y+8;
-    do {
-        size_t length,used=documentation_line(font,label+at,n-at,bounds.w-20,&length);
-        nk_draw_text(canvas,nk_rect(bounds.x+10,y,bounds.w-20,font->height+6),
-            label+at,(int)length,font,nk_rgba(0,0,0,0),UI_COLOR(text));
-        at+=used;y+=font->height+6;
-    } while(at<n);
+    documentation_h_text_draw(a,font,label,nk_rect(bounds.x+10,bounds.y+9,bounds.w-20,bounds.h-18),
+        13*a->preferences.ui_size/16.f*1.45f,selected?UI_COLOR(text):UI_COLOR(doc_text));
     return pressed;
 }
 /* Diagnostic counterprobe reads the actual queued draw payload, independently

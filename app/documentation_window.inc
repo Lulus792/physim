@@ -251,9 +251,10 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     nk_window_show(ui,"topics",a->doc_navigation_hidden?NK_HIDDEN:NK_SHOWN);
     if(!a->doc_navigation_hidden) {
         nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(0,0));
-        nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(8,2));
+        nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(8,0));
         if(nk_begin(ui,"topics",a->doc_left_slot,NK_WINDOW_NO_SCROLLBAR)) {
             a->doc_left_slot=nk_window_get_bounds(ui);
+            documentation_side_border(a,false);
             if(a->doc_reset_sidebar){a->doc_navigation_scroll_x=a->doc_navigation_scroll_y=0;a->doc_reset_sidebar=false;}
             ps_ui_accessibility_route(ui,true);documentation_sidebar(a);
         }nk_end(ui);
@@ -261,12 +262,14 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     }
     nk_window_show(ui,"documentation-context",a->doc_context_hidden?NK_HIDDEN:NK_SHOWN);
     if(!a->doc_context_hidden) {
-        nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(w<=900?7:12,0));
+        nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(0,0));
+        nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(8,0));
         if(nk_begin(ui,"documentation-context",a->doc_right_slot,NK_WINDOW_NO_SCROLLBAR)) {
             a->doc_right_slot=nk_window_get_bounds(ui);
+            documentation_side_border(a,true);
             ps_ui_accessibility_route(ui,true);documentation_context_view(a);
         }nk_end(ui);
-        nk_style_pop_vec2(ui);
+        nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
     }
     nk_style_pop_style_item(ui);
     nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(header)));

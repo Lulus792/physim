@@ -220,10 +220,8 @@ def documentation_h_chrome_pixels(path, bounds, dark, right_visible, scale=1, pi
     if right_visible:
         x,y,w,h=model
         require(w<90 and any(equal(pixel(x+4,y+4),color) for color in (panel,hover)),'Context tab is a filled/full-width button')
-        # The adjacent one-pixel divider blends the edge of the two-pixel
-        # underline. Require its solid accent core within that narrow band.
-        require(any(equal(pixel(x+w/2,y+h-offset),accent) for offset in (1,2,3)),
-                'Selected context tab has no thin accent underline')
+        require(all(equal(pixel(x+w/2,y+h-offset),accent) for offset in (1,2)),
+                'Selected context tab lost a row of its two-pixel underline')
 
 
 def documentation_h_typography(output):
@@ -321,6 +319,25 @@ def documentation_h(flow,directory):
     require(preserved and all(int(value)>0 for value in preserved.groups()),'Missing byte-exact nonempty editor or accessible footer focus proof')
     documentation_h_typography(output)
     documentation_h_flow(output)
+    nav_flow=re.findall(r'DOCUMENTATION H NAV FLOW: case=(\d+) group=([\d.,]+) topic=([\d.,]+) caption=([\d.,]+) section=([\d.,]+) ui=(\d+) complete=(\d)',output)
+    context_flow=re.findall(r'DOCUMENTATION H CONTEXT FLOW: case=(\d+) title=([\d.,]+) figure=([\d.,]+) caption=([\d.,]+) table=([\d.,]+) rows=(\d+) column=([\d.]+) complete=(\d)',output)
+    require(len(nav_flow)==28 and len(context_flow)==28,'Missing native side-pane CSS matrix')
+    require(all(int(row[-1])==1 for row in nav_flow+context_flow),'Native side-pane flow differs from CSS contract')
+    require('DOCUMENTATION H CONTEXT COPY:' in output and 'revealed=1' in output,'Offscreen example copy was not revealed')
+    for row in context_flow:
+        index=int(row[0]);table=tuple(map(float,row[4].split(',')));column=float(row[6])
+        require(int(row[5])==5 and 10<column<table[2]-10,'Model rows/columns lost real values')
+        raw=(directory/f'docs-h-{index:02}.bmp').read_bytes()
+        width,height=struct.unpack_from('<ii',raw,18);depth=struct.unpack_from('<H',raw,28)[0]
+        start=struct.unpack_from('<I',raw,10)[0];stride=((width*depth+31)//32)*4
+        logical_w=captures[f'docs-h-{index:02}.bmp'][0];scale=width/logical_w
+        def pixel(x,y):
+            px,py=round(x*scale),round(y*scale);r=abs(height)-1-py if height>0 else py
+            at=start+r*stride+px*(depth//8);return tuple(reversed(raw[at:at+3]))
+        theme=index//16 if index<48 else (index-48)//4
+        expected=((32,33,37),(242,243,246),(0,0,0))[theme]
+        actual=pixel(table[0]+2,table[1]+2)
+        require(actual==expected,f'Model label column lost its H background: case={index} actual={actual} expected={expected}')
     require('DOCUMENTATION H BREAKPOINT: widths=900,901 sides=220,250 source-and-view-preserved=1' in output,'Missing native H responsive boundary and state preservation')
     for name in ('example-c','example-physim','empty-search','no-context','pointer-search','actions-keyboard','find-overlay','actions-pointer','actions-zoom','actions-pointer-zoom','actions-context','breakpoint-900','breakpoint-901'):
         require((directory/f'docs-h-{name}.bmp').is_file(),'Missing Design H task capture')
@@ -1905,6 +1922,9 @@ def main():
                     require((directory/f'docs-scroll-{index}-{state}.bmp').is_file(),'Missing actual scroll capture')
         elif args.case == "documentation_panes":
             output=flow.steps[-1]['stdout']
+            code_heads=re.findall(r'DOCUMENTATION PANES CODE HEAD: case=(\d+) wrapped=(\d+) height=([\d.]+) complete=(\d)',output)
+            require([int(row[0]) for row in code_heads]==[1,5,9,13,17,21] and all(row[-1]=='1' for row in code_heads),
+                    'Example code header overlaps or lost its native copy target')
             require('DOCUMENTATION PANES SELF-TEST: PASSED' in output,'Missing actual pane navigation result')
             records=re.findall(r'DOCUMENTATION PANES: case=(\d+) groups=(\d+) track=(\d+) size=(\d+) ui=(\d+) theme=(\d+) scroll=(\d+) complete=(\d+)',output)
             require(len(records)==24 and [int(r[0]) for r in records]==list(range(24)),'Missing pane navigation matrix')

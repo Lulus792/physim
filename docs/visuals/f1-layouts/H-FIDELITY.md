@@ -6,7 +6,14 @@ Dieser Bericht ergänzt die historische Abnahme in [NATIVE-H.md](NATIVE-H.md).
 
 ## Aktuelle Nachprüfung vom 21. Oktober 2026
 
-Der aktuelle [Scrollabgleich](SCROLL.md) vereint Herkunftszeile und Artikel,
+Der aktuelle [Navigations-/Kontextabgleich](NAV-CONTEXT.md) übernimmt Gruppen-,
+Themen- und Abschnittsmaße, die äußere 1-px-Panelkante, Modelltabelle und
+Beispielkopf. C/Physim und Modell/Beispiel verwenden die tatsächlichen
+Schriftbreiten; die Unterstreichung bleibt zwei Pixel hoch. Der Bericht enthält
+native Bilder, die aktuellen Windows-/Linux-Ergebnisse und verbleibende
+Schrift-, Raster- und Laufzeitunterschiede. Eine vollständige H-Abnahme bleibt offen.
+
+Der vorhergehende [Scrollabgleich](SCROLL.md) vereint Herkunftszeile und Artikel,
 verwendet die volle mittlere Fläche als Viewport und erhält die CSS-Inhaltsbreite
 auch mit Scrollleiste. Die linke Navigation verliert dadurch keine zusätzlichen
 7 px. Native Prüfungen erfassen Mausrad, Tastatur, Suchauswahl, Schriftumbruch
@@ -16,7 +23,7 @@ Quellstände, vollständige Läufe und gezielte Wiederholungen.
 Der vorhergehende [Paarabstands-Abgleich](KERNING.md) liest die bislang
 übersprungenen OpenType-Erweiterungstabellen und besteht die Windows-Titelkanten-
 prüfung bei unveränderter Toleranz. Sein Cache-Vergleich umfasst 112 vollständige
-Vorher-/Nachher-Bildpaare. Linux-Schrift, weitere Navigations-/Kontextdetails und
+Vorher-/Nachher-Bildpaare. Linux-Schrift, weitere Raster-/Kontextdetails und
 die vollständige H-/Gesamtoberflächenabnahme bleiben offen.
 
 Die folgenden Absätze beschreiben ihre jeweiligen historischen Teilstände.

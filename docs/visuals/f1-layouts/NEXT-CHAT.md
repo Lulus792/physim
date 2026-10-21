@@ -1,5 +1,11 @@
 Stand: Der native F1-Artikel wird weiter mit der gewählten H-Vorlage abgeglichen.
-Der [aktuelle Scrollabgleich](SCROLL.md) führt Herkunft und Artikel in einem
+Der [aktuelle Navigations-/Kontextabgleich](NAV-CONTEXT.md) korrigiert die
+Seitenleisten nach CSS, einschließlich der Panelkante, Gruppen- und
+Abschnittsmaße, Modellwerte und Beispielkopf. Die Reiter verwenden intrinsische
+Schriftbreiten und eine volle 2-px-Unterstreichung. Prüfungen und offene
+Schrift-/Raster-/Laufzeitbefunde sind dort getrennt dokumentiert.
+
+Der vorhergehende [Scrollabgleich](SCROLL.md) führt Herkunft und Artikel in einem
 Viewport zusammen, stellt die volle Navigationsbreite her und dokumentiert
 native Eingabe-/Umbruchprüfungen samt fehlgeschlagenen Vorläufen.
 
@@ -11,8 +17,8 @@ historischen Stand. Maßgeblich für den Folgeauftrag sind der aktuelle
 [visuelle Abgleich](H-FIDELITY.md) und der
 [Gesamtoberflächenstand](../unified-workspace/NATIVE-FIDELITY.md).
 
-Weiter offen sind unter anderem Linux-Schrift/Glyphenrasterung, weitere
-Navigationsmetriken und Kontextdetails sowie die vollständige H-Abnahme.
+Weiter offen sind unter anderem Linux-Schrift/Glyphenrasterung, SVG-Schrift,
+horizontale Codevorschau und weitere Kontextdetails sowie die vollständige H-Abnahme.
 Browser-PNGs oder bestandene Funktionsgruppen ersetzen diese Abnahme nicht.
 Die lokale HTML-Datei blieb im Browserwerkzeug gesperrt; daraus wird keine
 neue interaktive Browserprüfung abgeleitet. macOS und vollständige externe

@@ -1,0 +1,71 @@
+{
+  "scope": "Bounded final source/proof audit; no whole-UI acceptance.",
+  "checks": {
+    "source_sha256_lf": 71,
+    "foreign_sha256_lf": 10,
+    "reference_hashes": 8,
+    "terminal_runs": 13,
+    "native_pngs": 16,
+    "article_pairs": 112,
+    "local_doc_links": 129,
+    "source_and_foreign_unchanged": true,
+    "strict_reference_failures_preserved": 6,
+    "cleanup_completed": true,
+    "python_syntax": true,
+    "json_syntax": true,
+    "git_diff_check": true
+  },
+  "inputs": [
+    {
+      "path": "docs/visuals/f1-layouts/side-flow-2026-10-21/validation.json",
+      "sha256": "2ab85999338931365413a79121739280ba8447641f0920462575093a758cf4cb"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/side-flow-2026-10-21/cleanup.json",
+      "sha256": "aac82b9007f1c4c9a86a3410666f401259471c6eced3ad003a394050e6b0a46f"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/NAV-CONTEXT.md",
+      "sha256": "c8562a0283e184c203e0dcef8b5ab7c1fddb1f719ea02758877c7cee54b7661f"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "sha256": "00a42aa45e535f0bc83cf82188a1cdd972685ca8237b7d3c7ac69590b0e978b1"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/NEXT-CHAT.md",
+      "sha256": "8d484e0f32d77eafd7b6076c0bf0a9aa45710fcb12268083ce4a3cd8c8efd8db"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/README.md",
+      "sha256": "00c3cb3255f6a54c81a2d4568202bf6874a9151aed132997990efe6f743e86be"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "sha256": "9ca12c462d3f39680fe7a5e751385e65a469748778a3f282e040832cdb8cf65d"
+    }
+  ],
+  "owned_source_files": [
+    "app/main.c",
+    "app/documentation_h.inc",
+    "app/documentation_h_tests.inc",
+    "app/documentation_pane_tests.inc",
+    "app/documentation_scroll_tests.inc",
+    "app/documentation_typography.inc",
+    "app/documentation_ui.inc",
+    "app/documentation_window.inc",
+    "tests/check_display_workflow.py"
+  ],
+  "manual_review": [
+    "32 persistent borrowed font roles; four tracked roles but only two owned pair resources.",
+    "Style/font/group stacks and clip edges reviewed.",
+    "Paint, native input and focus share snapped bounds.",
+    "Context copy reveal changes its own scroll offset; actual source/clipboard checks passed.",
+    "No foreign accessibility changes included in owned patch."
+  ],
+  "generator": {
+    "path": "build/native/audit-f1-side-flow.py",
+    "sha256": "465b7813dd8ee482ee032963daa34792e5a4708d12cbeb08f41de83f7cc0f566",
+    "source": "import ast,hashlib,json,re,subprocess\nfrom pathlib import Path\nfrom PIL import Image\nroot=Path('D:/Physim');out=root/'docs/visuals/f1-layouts/side-flow-2026-10-21'\nload=lambda p:json.loads(p.read_text(encoding='utf-8-sig'))\ndef sha(p,lf=False):\n    data=p.read_bytes();return hashlib.sha256(data.replace(b'\\r\\n',b'\\n') if lf else data).hexdigest()\nrel=lambda p:p.relative_to(root).as_posix()\nd=load(out/'validation.json');checks={}\nfor bank in ('source_sha256_lf','foreign_sha256_lf'):\n    for name,h in d['sources']['83'][bank].items():assert sha(root/name,True)==h,name\n    checks[bank]=len(d['sources']['83'][bank])\nfor name,h in d['references'].items():assert sha(root/name)==h,name\nfor run in d['runs']:\n    assert sha(root/run['path'])==run['sha256']\n    records=load(root/run['path']);assert records==run['records']\nfor record in d['images']:\n    p=root/record['path'];assert sha(p)==record['sha256']\n    source=root/record['source'];assert sha(source)==record['source_sha256']\n    im=Image.open(p).convert('RGB');assert im.tobytes()==Image.open(source).convert('RGB').tobytes()\n    assert hashlib.sha256(im.tobytes()).hexdigest()==record['rgb_sha256']\nfor record in d['checks']:assert sha(root/record['path'])==record['sha256']\nfor record in d['build_logs']:assert sha(root/record['path'])==record['sha256']\nfor platform,scope in d['final_unique_scope'].items():\n    assert scope['count']==16 and len(scope['groups'])==16\n    assert sha(root/scope['binary']['path'])==scope['binary']['sha256']\nfor platform,scope in d['side_flow'].items():assert sha(root/scope['path'])==scope['sha256']\nassert len(d['article_parity'])==112 and all(x['equal'] for x in d['article_parity'])\nassert [x['passed'] for x in d['reference_geometry']]==[False,True,False,True,False,False,False,False]\nassert all(x['vertical_and_right_edges_match'] for x in d['reference_geometry'] if x['kind']=='topic-row')\nprobe=d['storage_probe'];assert sha(root/probe['path'])==probe['sha256']\nassert probe['record']['status']=='passed' and probe['record']['exit_code']==0\nassert probe['record']['app_deadline_seconds']==60 and probe['record']['seconds']<60\nassert d['generator']['source']==Path(root/d['generator']['path']).read_text(encoding='utf-8')\nassert sha(root/d['generator']['path'])==d['generator']['sha256']\ncleanup=load(out/'cleanup.json');assert cleanup['status']=='completed'\nassert cleanup['count']==len(cleanup['files'])==870\nassert cleanup['bytes']==sum(x['bytes'] for x in cleanup['files'])==1863192060\nassert all(not (root/x['path']).exists() for x in cleanup['files'])\ndocs=[root/'docs/visuals/f1-layouts'/n for n in ('NAV-CONTEXT.md','H-FIDELITY.md','NEXT-CHAT.md')]\ndocs.extend(root/'docs/visuals/unified-workspace'/n for n in ('README.md','NATIVE-FIDELITY.md'))\nlinks=0\nfor p in docs:\n    content=p.read_text(encoding='utf-8');assert 'Ã' not in content and 'Â' not in content,p\n    for link in re.findall(r'\\]\\(([^)]+)\\)',content):\n        if re.match(r'\\w+://',link) or link.startswith('#'):continue\n        target=(p.parent/link.split('#')[0].split('?')[0]).resolve()\n        if target==out/'audit.json':continue\n        assert target.exists(),(p,link);links+=1\nowned=['app/main.c','app/documentation_h.inc','app/documentation_h_tests.inc','app/documentation_pane_tests.inc','app/documentation_scroll_tests.inc','app/documentation_typography.inc','app/documentation_ui.inc','app/documentation_window.inc','tests/check_display_workflow.py']\ndiff=subprocess.run(['git','diff','--check','--',*owned,*map(rel,docs)],cwd=root,capture_output=True,text=True)\nassert diff.returncode==0,diff.stdout+diff.stderr\nast.parse((root/'tests/check_display_workflow.py').read_text(encoding='utf-8'))\nfor p in out.glob('*.json'):load(p)\nchecks.update(reference_hashes=len(d['references']),terminal_runs=len(d['runs']),native_pngs=len(d['images']),article_pairs=112,local_doc_links=links,source_and_foreign_unchanged=True,strict_reference_failures_preserved=6,cleanup_completed=True,python_syntax=True,json_syntax=True,git_diff_check=True)\naudit=dict(scope='Bounded final source/proof audit; no whole-UI acceptance.',checks=checks,inputs=[dict(path=rel(p),sha256=sha(p)) for p in [out/'validation.json',out/'cleanup.json',*docs]],owned_source_files=owned,manual_review=['32 persistent borrowed font roles; four tracked roles but only two owned pair resources.','Style/font/group stacks and clip edges reviewed.','Paint, native input and focus share snapped bounds.','Context copy reveal changes its own scroll offset; actual source/clipboard checks passed.','No foreign accessibility changes included in owned patch.'],generator=dict(path=rel(Path(__file__)),sha256=sha(Path(__file__)),source=Path(__file__).read_text(encoding='utf-8')))\n(out/'audit.json').write_text(json.dumps(audit,ensure_ascii=False,indent=2)+'\\n',encoding='utf-8')\nprint(json.dumps(checks))\n"
+  }
+}

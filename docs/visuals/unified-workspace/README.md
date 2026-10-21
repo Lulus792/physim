@@ -17,14 +17,18 @@ Der [Werkbank-Kontext](WORKBENCH-CONTEXT.md) führt den aktuellen Abgleich der
 gefüllten API-Karte, dokumentierter Beispiele und des Protokollkopfs fort.
 Der [Folgeabgleich der Kontextspalte](WORKBENCH-CONTEXT-FLOW.md) ergänzt volle
 Breite, CSS-Zeilenboxen, Gliederungsdetails und Scrollzugang bei kurzen Fenstern.
-Der aktuelle [F1-Scrollabgleich](../f1-layouts/SCROLL.md) vereint Herkunft und
+Der aktuelle [F1-Navigations-/Kontextabgleich](../f1-layouts/NAV-CONTEXT.md)
+übernimmt Seitenleistenmaße, Panelkante, Modelltabelle, Beispielkopf und die
+intrinsischen Reiterbreiten. Native Aufnahmen und verbleibende Unterschiede
+sind mit den tatsächlich ausgeführten Prüfungen verknüpft.
+Der vorhergehende [F1-Scrollabgleich](../f1-layouts/SCROLL.md) vereint Herkunft und
 Artikel in einer scrollenden Fläche und erhält die volle Navigationsbreite.
 Er ergänzt [Paarabstände](../f1-layouts/KERNING.md),
 [Artikelzeilen](../f1-layouts/ARTICLE-FLOW.md),
 [Schriftrollen](../f1-layouts/TYPOGRAPHY.md) und
 [Artikelaktionen](../f1-layouts/SECONDARY-ACTIONS.md). Die Berichte trennen ihre
 jeweiligen historischen Prüfstände. Vollständige H-Gleichheit, Linux-Schrift,
-weitere Navigations-/Kontextdetails und die Gesamtoberflächenabnahme bleiben offen.
+Rasterung, weitere Kontextdetails und die Gesamtoberflächenabnahme bleiben offen.
 
 **Für die native Umsetzung in einem anderen Chat:**
 [kopierfertiger Auftrag](NEXT-CHAT.md) · [Bestand und Abnahmeliste](IMPLEMENTATION.md)

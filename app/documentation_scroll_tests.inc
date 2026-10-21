@@ -52,7 +52,7 @@ static void documentation_scroll_test_frame(app *a,int *stage,int *code,const ch
             fabsf(a->doc_article_column_bounds.w-(box-2*padding))<1 &&
             fabsf(crumb.x-a->doc_article_column_bounds.x)<1 && fabsf(crumb.w-a->doc_article_column_bounds.w)<1 &&
             fabsf(crumb.y-viewport.y-(w<=900?35:37))<1 &&
-            fabsf(a->doc_active_topic_bounds.w-(left.w-30))<1;
+            fabsf(a->doc_active_topic_bounds.w-(left.w-31))<1;
         printf("DOCUMENTATION SCROLL GEOMETRY: case=%u viewport=%.0f,%.0f,%.0f,%.0f column=%.0f,%.0f nav=%.0f ok=%d\n",
             sample,viewport.x,viewport.y,viewport.w,viewport.h,a->doc_article_column_bounds.x,a->doc_article_column_bounds.w,a->doc_active_topic_bounds.w,ok);
         snprintf(image,sizeof image,"docs-scroll-%u-top.bmp",sample);*capture=image;

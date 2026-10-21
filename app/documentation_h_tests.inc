@@ -117,10 +117,30 @@ static void documentation_h_test_frame(app *a,int *stage,int *code,const char **
         printf("DOCUMENTATION H CHROME: case=%u c=%.2f,%.2f,%.2f,%.2f physim=%.2f,%.2f,%.2f,%.2f model=%.2f,%.2f,%.2f,%.2f\n",
             index,a->doc_track_bounds[0].x,a->doc_track_bounds[0].y,a->doc_track_bounds[0].w,a->doc_track_bounds[0].h,
             a->doc_track_bounds[1].x,a->doc_track_bounds[1].y,a->doc_track_bounds[1].w,a->doc_track_bounds[1].h,
-            a->doc_right_slot.x+12,a->doc_right_slot.y,documentation_tab_width(a,"Modell"),fmaxf(46,chrome->height+16));
+            a->doc_right_slot.x+13,a->doc_right_slot.y,documentation_tab_width(a,"Modell",!a->doc_context_example),fmaxf(46,chrome->height+16));
         if(!a->doc_navigation_hidden)printf("DOCUMENTATION H NAV: case=%u topic=%.2f,%.2f,%.2f,%.2f section=%.2f,%.2f,%.2f,%.2f\n",
             index,a->doc_active_topic_bounds.x,a->doc_active_topic_bounds.y,a->doc_active_topic_bounds.w,a->doc_active_topic_bounds.h,
             a->doc_first_section_bounds.x,a->doc_first_section_bounds.y,a->doc_first_section_bounds.w,a->doc_first_section_bounds.h);
+        if(!a->doc_navigation_hidden) {
+            struct nk_rect group=a->doc_nav_group_bounds[1],topic=a->doc_active_topic_bounds,section=a->doc_first_section_bounds;
+            struct nk_rect caption=a->doc_section_caption_bounds;
+            bool flow=fabsf(topic.y-group.y-group.h-13)<1.1f && fabsf(section.x-topic.x-19)<1.1f &&
+                fabsf(caption.y-topic.y-topic.h-9)<1.1f && fabsf(section.y-caption.y-caption.h-13)<1.1f;
+            printf("DOCUMENTATION H NAV FLOW: case=%u group=%.2f,%.2f,%.2f,%.2f topic=%.2f,%.2f caption=%.2f,%.2f,%.2f,%.2f section=%.2f,%.2f ui=%u complete=%d\n",
+                index,group.x,group.y,group.w,group.h,topic.y,topic.h,caption.x,caption.y,caption.w,caption.h,section.x,section.y,a->preferences.ui_size,flow);
+            ok=ok && flow;
+        }
+        if(!a->doc_context_hidden) {
+            struct nk_rect title=a->doc_context_title_bounds,figure=a->doc_context_figure_bounds,table=a->doc_context_table_bounds;
+            struct nk_rect caption=a->doc_context_table_caption_bounds;
+            float padding=a->doc_right_slot.w<=220?13:18,scale=a->preferences.ui_size/16.f;
+            bool flow=fabsf(title.x-a->doc_right_slot.x-padding-1)<1.1f && fabsf(title.y-a->doc_right_slot.y-46-21)<1.1f &&
+                fabsf(figure.y-title.y-title.h-14-5)<1.1f && fabsf(figure.w-a->doc_right_slot.w+2*padding+1)<1.1f &&
+                fabsf(caption.y-figure.y-figure.h-14-4*scale)<1.1f && fabsf(table.y-caption.y-caption.h-8)<1.1f && a->doc_context_table_rows==5;
+            printf("DOCUMENTATION H CONTEXT FLOW: case=%u title=%.2f,%.2f,%.2f,%.2f figure=%.2f,%.2f,%.2f,%.2f caption=%.2f,%.2f,%.2f,%.2f table=%.2f,%.2f,%.2f,%.2f rows=%u column=%.2f complete=%d\n",
+                index,title.x,title.y,title.w,title.h,figure.x,figure.y,figure.w,figure.h,caption.x,caption.y,caption.w,caption.h,table.x,table.y,table.w,table.h,a->doc_context_table_rows,a->doc_context_table_column,flow);
+            ok=ok && flow;
+        }
         break;
     case 4:
         if(++index<56)*stage=2;
@@ -135,10 +155,18 @@ static void documentation_h_test_frame(app *a,int *stage,int *code,const char **
         if(frame++<2){--*stage;return;}
         ok=documentation_context_code(a)!=NULL;
         *capture="docs-h-example-c.bmp";
-        a->doc_keyboard=true;a->doc_focus=DOC_CONTEXT_COPY;
-        test_window_key_mod(a->doc_window,SDLK_RETURN,0);break;
+        *stage=51;break;
+    case 51:
+        a->doc_context_scroll_y[1]=160;frame=0;*stage=52;break;
+    case 52:
+        if(frame++<2){*stage=52;return;}
+        if(!documentation_test_seek(a,DOC_CONTEXT_COPY,stage,code))return;
+        ok=a->doc_context_scroll_y[1]<160 && a->doc_focus_bounds.y>=a->doc_context_content_bounds.y;
+        printf("DOCUMENTATION H CONTEXT COPY: scroll=%u revealed=%d\n",a->doc_context_scroll_y[1],ok);
+        SDL_SetClipboardText("sentinel");test_window_key_mod(a->doc_window,SDLK_RETURN,0);*stage=6;break;
     case 6:
         ok=documentation_test_clipboard(documentation_context_code(a));
+        a->doc_context_scroll_y[1]=0;
         documentation_language(a,2);frame=0;break;
     case 7:
         if(frame++<2){--*stage;return;}

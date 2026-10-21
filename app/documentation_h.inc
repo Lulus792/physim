@@ -8,27 +8,54 @@ static const struct nk_user_font *documentation_chrome_font(app *a) {
 static const struct nk_user_font *documentation_control_font(app *a,bool selected) {
     return documentation_type_font(a,selected?DOC_TYPE_CONTROL_STRONG:DOC_TYPE_CONTROL);
 }
-static float documentation_tab_width(app *a,const char *label) {
+static float documentation_tab_width(app *a,const char *label,bool selected) {
     size_t n=strlen(label);
-    return fmaxf(documentation_text_width(documentation_control_font(a,false),label,n),
-        documentation_text_width(documentation_control_font(a,true),label,n))+2;
+    return documentation_text_width(documentation_control_font(a,selected),label,n);
 }
-static void documentation_h_label_inset(app *a,const char *text,bool muted,float inset) {
-    struct nk_context *ui=a->doc_ui;const struct nk_user_font *font=ui->style.font;
-    nk_layout_row_dynamic(ui,documentation_height(font,text,strlen(text),nk_window_get_content_region(ui).w-2*inset)+8,1);
-    struct nk_rect r;enum nk_widget_layout_states visible=nk_widget(&r,ui);
-    ps_ui_accessibility_label(ui,r,text);
-    if(visible==NK_WIDGET_INVALID)return;
-    size_t at=0,n=strlen(text);float y=r.y+4;
+/* Snap the two edges together. Truncating origin and size independently can
+ * lose almost two pixels and changes both the painted and native hit target. */
+static struct nk_rect documentation_h_snap(struct nk_rect r) {
+    float x=roundf(r.x),y=roundf(r.y);
+    return nk_rect(x,y,roundf(r.x+r.w)-x,roundf(r.y+r.h)-y);
+}
+static void documentation_side_border(app *a,bool right) {
+    struct nk_context *ui=a->doc_ui;struct nk_panel *panel=ui->current->layout;
+    struct nk_rect slot=right?a->doc_right_slot:a->doc_left_slot;
+    nk_fill_rect(nk_window_get_canvas(ui),nk_rect(right?slot.x:slot.x+slot.w-1,slot.y,1,slot.h),0,UI_COLOR(divider));
+    /* CSS border-box: the one-pixel outer rule is outside both the scrolling
+     * viewport and its padding, not another pixel of usable content. */
+    if(right){panel->bounds.x+=1;panel->at_x+=1;panel->clip.x+=1;}
+    panel->bounds.w-=1;panel->clip.w-=1;
+    nk_push_scissor(nk_window_get_canvas(ui),panel->clip);
+}
+static float documentation_h_text_height(const struct nk_user_font *font,const char *text,float width,float line) {
+    size_t at=0,n=strlen(text);unsigned lines=0;
+    do {size_t length,used=documentation_line(font,text+at,n-at,fmaxf(1,width),&length);at+=used;++lines;}while(at<n);
+    return lines*line;
+}
+static void documentation_h_text_draw(app *a,const struct nk_user_font *font,const char *text,struct nk_rect r,float line,struct nk_color ink) {
+    size_t at=0,n=strlen(text);float y=r.y+(line-font->height)/2;
     do {
-        size_t length,used=documentation_line(font,text+at,n-at,r.w-2*inset,&length);
-        nk_draw_text(nk_window_get_canvas(ui),nk_rect(r.x+inset,y,r.w-2*inset,font->height+6),text+at,(int)length,
-            font,nk_rgba(0,0,0,0),muted?UI_COLOR(muted):UI_COLOR(text));
-        at+=used;y+=font->height+6;
+        size_t length,used=documentation_line(font,text+at,n-at,fmaxf(1,r.w),&length);
+        nk_draw_text(nk_window_get_canvas(a->doc_ui),nk_rect(r.x,y,r.w+1,font->height),text+at,(int)length,
+            font,nk_rgba(0,0,0,0),ink);
+        at+=used;y+=line;
     }while(at<n);
 }
-static void documentation_h_label(app *a,const char *text,bool muted) {
-    documentation_h_label_inset(a,text,muted,4);
+static struct nk_rect documentation_h_text_row(app *a,unsigned role,const char *text,float leading,float inset,float top,float bottom,bool muted) {
+    struct nk_context *ui=a->doc_ui;const struct nk_user_font *font=documentation_type_font(a,role);
+    float line=font->height/a->doc_type_em[role]*leading;
+    float height=documentation_h_text_height(font,text,ui->current->layout->bounds.w-2*inset,line);
+    ps_ui_row_exact_dynamic(ui,top+height+bottom,1);struct nk_rect r;
+    struct nk_rect measured=nk_widget_bounds(ui);
+    enum nk_widget_layout_states visible=nk_widget(&r,ui);r=documentation_h_snap(measured);
+    struct nk_rect text_bounds=nk_rect(r.x+inset,r.y+top,r.w-2*inset,height);
+    ps_ui_accessibility_label(ui,text_bounds,text);
+    if(visible!=NK_WIDGET_INVALID)documentation_h_text_draw(a,font,text,text_bounds,line,muted?UI_COLOR(muted):UI_COLOR(doc_text));
+    return text_bounds;
+}
+static void documentation_h_spacer(app *a,float height) {
+    if(height>0){ps_ui_row_exact_dynamic(a->doc_ui,height,1);nk_spacer(a->doc_ui);}
 }
 static bool documentation_pane_button(app *a,bool right) {
     struct nk_context *ui=a->doc_ui;struct nk_rect r;
@@ -63,14 +90,13 @@ static bool documentation_segment(app *a,struct nk_rect r,const char *group,cons
     struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
     /* H keeps text tabs transparent, including on hover. Only the selected
      * language segment has a surface; keyboard focus has its own outline. */
-    if(selected && !tab)nk_fill_rect(canvas,r,4,UI_COLOR(button));
+    if(selected && !tab)nk_fill_rect(canvas,r,5,UI_COLOR(button));
     if(selected && !tab && a->preferences.theme==PS_THEME_HIGH_CONTRAST)
         nk_stroke_rect(canvas,nk_rect(r.x+1,r.y+1,r.w-2,r.h-2),3,2,UI_COLOR(accent));
     const struct nk_user_font *font=documentation_control_font(a,selected);
     float width=documentation_text_width(font,label,strlen(label));
     nk_draw_text(canvas,nk_rect(r.x+(r.w-width)/2,r.y+(r.h-font->height)/2,width+1,font->height),
         label,(int)strlen(label),font,nk_rgba(0,0,0,0),selected?UI_COLOR(doc_text):UI_COLOR(muted));
-    if(tab && selected)nk_stroke_line(canvas,r.x,r.y+r.h-1,r.x+r.w,r.y+r.h-1,2,UI_COLOR(accent));
     if(nk_sdl_accessibility_is_focused(ui,group,label))nk_stroke_rect(canvas,nk_rect(r.x+1,r.y+1,r.w-2,r.h-2),3,2,UI_COLOR(accent));
     return pressed;
 }
@@ -81,8 +107,8 @@ static void documentation_header(app *a) {
     const struct nk_user_font *handbook_font=documentation_control_font(a,false);
     float brand_name=documentation_text_width(brand_font,"PHYSIM",6);
     float brand=brand_name+8+documentation_text_width(handbook_font,"Handbuch",8)+2;
-    float physim=documentation_tab_width(a,"Physim")+18;
-    float cwidth=documentation_tab_width(a,"C")+18;
+    float physim=documentation_tab_width(a,"Physim",a->doc_track==2)+20;
+    float cwidth=documentation_tab_width(a,"C",a->doc_track==1)+20;
     float language=cwidth+physim+8;
     float available=width-brand-language-64-5*ui->style.window.spacing.x;
     float search=fminf(310,fmaxf(100,available)),spacer=fmaxf(0,available-search);
@@ -140,62 +166,71 @@ static void documentation_sections(app *a) {
     }
     struct nk_context *ui=a->doc_ui;
     struct nk_rect content=nk_window_get_content_region(ui);
-    float indent=18;
-    nk_layout_row_dynamic(ui,30,1);struct nk_rect caption;nk_widget(&caption,ui);
-    ps_ui_accessibility_label(ui,caption,"IN DIESEM ARTIKEL");
-    nk_draw_text(nk_window_get_canvas(ui),nk_rect(caption.x+indent+6,caption.y+8,caption.w-indent-6,ui->style.font->height),
-        "IN DIESEM ARTIKEL",17,ui->style.font,nk_rgba(0,0,0,0),UI_COLOR(muted));
+    float indent=19,ui_scale=a->preferences.ui_size/16.f;
+    documentation_h_spacer(a,9);
+    ps_ui_row_exact_dynamic(ui,1,1);struct nk_rect caption=nk_widget_bounds(ui);
+    const struct nk_user_font *group=documentation_type_font(a,DOC_TYPE_GROUP);
+    float caption_height=documentation_h_text_height(group,"IN DIESEM ARTIKEL",content.w-indent-14,15*ui_scale);
+    ui->current->layout->row.height=caption_height+13;
+    struct nk_rect caption_measured=nk_widget_bounds(ui);
+    enum nk_widget_layout_states caption_visible=nk_widget(&caption,ui);
+    caption=documentation_h_snap(caption_measured);
+    struct nk_rect label=nk_rect(caption.x+indent+7,caption.y,caption.w-indent-14,caption_height);
+    a->doc_section_caption_bounds=label;
+    ps_ui_accessibility_label(ui,label,"IN DIESEM ARTIKEL");
+    if(caption_visible!=NK_WIDGET_INVALID)documentation_h_text_draw(a,group,"IN DIESEM ARTIKEL",label,15*ui_scale,UI_COLOR(muted));
     float top=caption.y,bottom=caption.y+caption.h;bool first=true;
     for(size_t i=0;i<a->documentation->count;i++) {
         ps_doc_block *b=&a->documentation->blocks[i];
         if(!documentation_contents_heading(a,b) || b->level==1)continue;
         const char *label=a->documentation->text+b->text;
-        float extra=b->level>2?8:0;
         bool selected=current==(int)i;
         const struct nk_user_font *font=documentation_type_font(a,selected?DOC_TYPE_SECTION_STRONG:DOC_TYPE_SECTION);
-        nk_layout_row_begin(ui,NK_STATIC,documentation_height(font,label,strlen(label),content.w-indent-extra-12)+10,2);
-        nk_layout_row_push(ui,indent+extra-ui->style.window.spacing.x);nk_spacing(ui,1);
-        nk_layout_row_push(ui,content.w-indent-extra);struct nk_rect bounds=nk_widget_bounds(ui);
-        if(first){a->doc_first_section_bounds=bounds;first=false;}
+        float line=12*ui_scale*1.55f;
+        ps_ui_row_exact_begin(ui,NK_STATIC,documentation_h_text_height(font,label,content.w-indent-12,line)+14,2);
+        nk_layout_row_push(ui,indent-ui->style.window.spacing.x);nk_spacing(ui,1);
+        nk_layout_row_push(ui,content.w-indent);struct nk_rect bounds=nk_widget_bounds(ui);
         struct nk_rect hit;enum nk_widget_layout_states visible=nk_widget(&hit,ui);
+        hit=documentation_h_snap(bounds);bounds=hit;
+        if(first){a->doc_first_section_bounds=hit;first=false;}
         if(ps_ui_button_at(ui,hit,label,selected))a->doc_jump_block=(int)i;
         if(visible!=NK_WIDGET_INVALID) {
             struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
             if(selected || nk_input_is_mouse_hovering_rect(&ui->input,hit))nk_fill_rect(canvas,hit,0,selected?UI_COLOR(selection_active):UI_COLOR(button_hover));
             if(selected)nk_fill_rect(canvas,nk_rect(hit.x,hit.y,2,hit.h),0,UI_COLOR(accent));
-            size_t at=0,n=strlen(label);float y=hit.y+5;
-            do {size_t length,used=documentation_line(font,label+at,n-at,hit.w-12,&length);
-                nk_draw_text(canvas,nk_rect(hit.x+6,y,hit.w-12,font->height+6),label+at,(int)length,font,
-                    nk_rgba(0,0,0,0),selected?UI_COLOR(text):UI_COLOR(muted));
-                at+=used;y+=font->height+6;
-            }while(at<n);
+            documentation_h_text_draw(a,font,label,nk_rect(hit.x+6,hit.y+7,hit.w-12,hit.h-14),line,
+                selected?UI_COLOR(text):UI_COLOR(muted));
         }
         documentation_focus_draw(a,DOC_HEADING+(int)i,bounds,false);
         bottom=bounds.y+bounds.h;nk_layout_row_end(ui);
     }
     nk_stroke_line(nk_window_get_canvas(ui),caption.x+11,top,caption.x+11,bottom,1,UI_COLOR(divider));
-    nk_layout_row_dynamic(ui,14,1);nk_spacing(ui,1);
+    documentation_h_spacer(a,15);
 }
 static void documentation_sidebar_content(app *a) {
     struct nk_context *ui=a->doc_ui;
     a->doc_first_result_bounds=nk_rect(0,0,0,0);
     a->doc_active_topic_bounds=a->doc_first_section_bounds=nk_rect(0,0,0,0);
-    if(a->doc_filter[0])documentation_h_label(a,"SUCHERGEBNISSE",true);
+    a->doc_nav_group_bounds[0]=a->doc_nav_group_bounds[1]=nk_rect(0,0,0,0);
+    a->doc_section_caption_bounds=nk_rect(0,0,0,0);
+    if(a->doc_filter[0])documentation_h_text_row(a,DOC_TYPE_GROUP,"SUCHERGEBNISSE",1.5f,7,0,13,true);
     const char *groups[]={a->doc_track==2?"TEIL II · PHYSIM":"TEIL I · C","MECHANIK","NACHSCHLAGEN",
         "APP & LERNEN","FACHTHEMEN","REFERENZ","PROJEKTTECHNIK","QUELLEN"};
     int order[DOCUMENTATION_TOPIC_COUNT];unsigned count=documentation_topic_order(a,order);
-    int previous=-1;
+    int previous=-1;unsigned group_index=0;
         for(unsigned n=0;n<count;n++) {
             int topic=order[n];
             int group=documentation_h_group(topic);
             if(!a->doc_filter[0] && group!=previous) {
-                if(previous>=0){nk_layout_row_dynamic(ui,8,1);nk_spacing(ui,1);}
-                nk_style_push_font(ui,documentation_type_font(a,DOC_TYPE_GROUP));
-                documentation_h_label_inset(a,groups[group],true,7);nk_style_pop_font(ui);previous=group;
+                if(previous>=0)documentation_h_spacer(a,21);
+                struct nk_rect caption=documentation_h_text_row(a,DOC_TYPE_GROUP,groups[group],1.5f,7,0,13,true);
+                if(group_index<2)a->doc_nav_group_bounds[group_index]=caption;
+                ++group_index;previous=group;
             }
             const char *title=documentation_topics[topic].title;
             nk_style_push_font(ui,documentation_type_font(a,topic==a->doc_topic?DOC_TYPE_NAV_STRONG:DOC_TYPE_NAV));
-            nk_layout_row_dynamic(ui,documentation_height(ui->style.font,title,strlen(title),nk_window_get_content_region(ui).w-20)+14,1);
+            ps_ui_row_exact_dynamic(ui,documentation_h_text_height(ui->style.font,title,ui->current->layout->bounds.w-20,
+                13*a->preferences.ui_size/16.f*1.45f)+18,1);
             struct nk_rect bounds;
             bool pressed=documentation_topic_button(a,title,topic==a->doc_topic,&bounds);
             nk_style_pop_font(ui);
@@ -208,7 +243,7 @@ static void documentation_sidebar_content(app *a) {
             documentation_focus_draw(a,DOC_TOPIC+topic,bounds,false);
             if(!a->doc_filter[0] && topic==a->doc_topic)documentation_sections(a);
         }
-    if(!count)documentation_h_label(a,"Keine Treffer in diesem Sprachlernweg. Anderen Begriff suchen oder die Suche leeren.",true);
+    if(!count)documentation_h_text_row(a,DOC_TYPE_CONTEXT,"Keine Treffer in diesem Sprachlernweg. Anderen Begriff suchen oder die Suche leeren.",1.65f,7,12,12,true);
 }
 /* F1 has overlay rails: the viewport owns the scrollbar, while its padded
  * content keeps the CSS width. Nuklear normally reserves that rail inside
@@ -242,20 +277,19 @@ static void documentation_scroll_end(app *a) {
 }
 static void documentation_sidebar(app *a) {
     struct nk_context *ui=a->doc_ui;struct nk_rect content=nk_window_get_content_region(ui),head;
-    nk_layout_row_dynamic(ui,46,1);nk_widget(&head,ui);
+    ps_ui_row_exact_dynamic(ui,46,1);nk_widget(&head,ui);
     ps_ui_accessibility_label(ui,head,"THEMEN & ABSCHNITTE");
     nk_fill_rect(nk_window_get_canvas(ui),head,0,UI_COLOR(header));
-    nk_draw_text(nk_window_get_canvas(ui),nk_rect(head.x+12,head.y+(head.h-ui->style.font->height)/2,head.w-24,ui->style.font->height),
-        "THEMEN & ABSCHNITTE",19,ui->style.font,nk_rgba(0,0,0,0),UI_COLOR(muted));
-    nk_stroke_line(nk_window_get_canvas(ui),head.x,head.y+head.h,head.x+head.w,head.y+head.h,1,UI_COLOR(divider));
-    nk_layout_row_dynamic(ui,fmaxf(20,content.h-48),1);
+    const struct nk_user_font *caption_font=documentation_type_font(a,DOC_TYPE_PANEL_CAPTION);
+    nk_draw_text(nk_window_get_canvas(ui),nk_rect(head.x+12,head.y+(head.h-caption_font->height)/2,head.w-24,caption_font->height),
+        "THEMEN & ABSCHNITTE",19,caption_font,nk_rgba(0,0,0,0),UI_COLOR(muted));
+    nk_fill_rect(nk_window_get_canvas(ui),nk_rect(head.x,head.y+head.h-1,head.w,1),0,UI_COLOR(divider));
+    ps_ui_row_exact_dynamic(ui,fmaxf(20,content.h-46),1);
     nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(15,20));
     if(documentation_scroll_begin(a,&a->doc_navigation_scroll_x,&a->doc_navigation_scroll_y,"navigation-content")) {
         documentation_sidebar_content(a);documentation_scroll_end(a);
     }
     nk_style_pop_vec2(ui);
-    nk_stroke_line(nk_window_get_canvas(ui),a->doc_left_slot.x+a->doc_left_slot.w-1,a->doc_left_slot.y,
-        a->doc_left_slot.x+a->doc_left_slot.w-1,a->doc_left_slot.y+a->doc_left_slot.h,1,UI_COLOR(divider));
 }
 typedef struct {const char *article,*title,*values,*hint,*source[2];int diagram;} documentation_context;
 static const documentation_context documentation_contexts[]={
@@ -293,39 +327,58 @@ static const char *documentation_context_code(app *a) {
     }
     return a->doc_context_source;
 }
+static struct nk_color documentation_context_svg_color(app *a,int red,int green,int blue) {
+    if(a->preferences.theme==PS_THEME_HIGH_CONTRAST)return UI_COLOR(doc_text);
+    if(a->preferences.theme==PS_THEME_DARK) {
+        red=(int)roundf(224.4f-.76f*red);green=(int)roundf(224.4f-.76f*green);blue=(int)roundf(224.4f-.76f*blue);
+    }
+    return nk_rgb(red,green,blue);
+}
 static void documentation_context_figure(app *a,int kind,struct nk_rect r) {
     struct nk_command_buffer *c=nk_window_get_canvas(a->doc_ui);struct nk_color ink=UI_COLOR(doc_text);
     float x=r.x+r.w*.25f,y=r.y+24,w=r.w*.6f,h=r.h-48;
     if(kind==1) {
         /* Same logical vector geometry as the selected H model.svg. */
         const char *caption="Ideales Pendel · Vakuum";
-        const struct nk_user_font *caption_font=a->doc_ui->style.font;
-        float caption_height=documentation_height(caption_font,caption,strlen(caption),r.w-8);
-        float s=fminf(r.w/220,fmaxf(1,r.h-caption_height-8)/182),ox=r.x+(r.w-220*s)/2,oy=r.y;
-        nk_stroke_line(c,ox+44*s,oy+22*s,ox+146*s,oy+22*s,1.5f,UI_COLOR(muted));
-        for(int i=0;i<6;i++)nk_stroke_line(c,ox+(54+i*14)*s,oy+22*s,ox+(62+i*14)*s,oy+13*s,1,UI_COLOR(muted));
-        for(int i=0;i<17;i++)nk_stroke_line(c,ox+92*s,oy+(24+i*9)*s,ox+92*s,oy+(28+i*9)*s,1,UI_COLOR(muted));
-        nk_stroke_line(c,ox+92*s,oy+24*s,ox+155*s,oy+161*s,2.5f,ink);
+        const struct nk_user_font *caption_font=documentation_type_font(a,DOC_TYPE_FIGURE_CAPTION);
+        float caption_line=19.5f*a->preferences.ui_size/16.f;
+        float caption_height=documentation_h_text_height(caption_font,caption,r.w-8,caption_line);
+        float s=fminf(r.w/220,fminf(r.h/210,fmaxf(1,r.h-caption_height)/182)),ox=r.x+(r.w-220*s)/2;
+        bool single_caption=caption_height<=caption_line+.01f;
+        float oy=r.y+(single_caption?(r.h-210*s)/2:0);
+        ink=documentation_context_svg_color(a,50,50,46);
+        struct nk_color muted=documentation_context_svg_color(a,98,98,93),guide=documentation_context_svg_color(a,163,163,156);
+        nk_stroke_line(c,ox+44*s,oy+22*s,ox+146*s,oy+22*s,1.5f*s,muted);
+        for(int i=0;i<6;i++)nk_stroke_line(c,ox+(54+i*14)*s,oy+22*s,ox+(62+i*14)*s,oy+13*s,s,muted);
+        for(int i=0;i<17;i++)nk_stroke_line(c,ox+92*s,oy+(24+i*9)*s,ox+92*s,oy+(28+i*9)*s,s,guide);
+        nk_stroke_line(c,ox+92*s,oy+24*s,ox+155*s,oy+161*s,2.5f*s,ink);
         nk_fill_circle(c,nk_rect(ox+89*s,oy+21*s,6*s,6*s),ink);
-        nk_fill_circle(c,nk_rect(ox+142*s,oy+148*s,26*s,26*s),UI_COLOR(button_hover));
-        nk_stroke_circle(c,nk_rect(ox+142*s,oy+148*s,26*s,26*s),1.5f,ink);
+        nk_fill_circle(c,nk_rect(ox+142*s,oy+148*s,26*s,26*s),documentation_context_svg_color(a,180,180,171));
+        nk_stroke_circle(c,nk_rect(ox+142*s,oy+148*s,26*s,26*s),1.5f*s,ink);
         for(int i=0;i<12;i++) {
             float a=i*.43f/12,b=(i+1)*.43f/12;
             nk_stroke_line(c,ox+(92+sinf(a)*49)*s,oy+(24+cosf(a)*49)*s,
-                ox+(92+sinf(b)*49)*s,oy+(24+cosf(b)*49)*s,1,UI_COLOR(muted));
+                ox+(92+sinf(b)*49)*s,oy+(24+cosf(b)*49)*s,s,muted);
         }
-        const struct nk_user_font *font=documentation_control_font(a,false);
+        const struct nk_user_font *font=documentation_type_font(a,DOC_TYPE_FIGURE_LABEL);
+        const struct nk_font *native=font->userdata.ptr;
+        float baseline=(native->info.ascent+.5f)*font->height/native->info.height;
         const char *labels[]={"θ","L","m"};float lx[]={99,136,176},ly[]={95,95,168};
-        for(unsigned i=0;i<3;i++)nk_draw_text(c,nk_rect(ox+lx[i]*s,oy+ly[i]*s-font->height,30,font->height),
+        for(unsigned i=0;i<3;i++)nk_draw_text(c,nk_rect(ox+lx[i]*s,oy+ly[i]*s-baseline,40,font->height),
             labels[i],(int)strlen(labels[i]),font,nk_rgba(0,0,0,0),ink);
         struct nk_rect caption_bounds=nk_rect(r.x+4,floorf(r.y+r.h-caption_height),r.w-8,ceilf(caption_height));
-        size_t at=0,n=strlen(caption);float cy=caption_bounds.y;
+        size_t at=0,n=strlen(caption);float cy=caption_bounds.y+(caption_line-caption_font->height)/2;
+        if(single_caption) {
+            const struct nk_font *native_caption=caption_font->userdata.ptr;
+            cy=oy+203*s-(native_caption->info.ascent+.5f)*caption_font->height/native_caption->info.height;
+            caption_bounds.y=floorf(cy);caption_bounds.h=ceilf(caption_font->height+1);
+        }
         do {
             size_t length,used=documentation_line(caption_font,caption+at,n-at,caption_bounds.w,&length);
             float width=documentation_text_width(caption_font,caption+at,length);
-            nk_draw_text(c,nk_rect(caption_bounds.x+(caption_bounds.w-width)/2,cy,width+1,caption_font->height+6),
-                caption+at,(int)length,caption_font,nk_rgba(0,0,0,0),UI_COLOR(muted));
-            at+=used;cy+=caption_font->height+6;
+            nk_draw_text(c,nk_rect(caption_bounds.x+(caption_bounds.w-width)/2,cy,width+1,caption_font->height),
+                caption+at,(int)length,caption_font,nk_rgba(0,0,0,0),documentation_context_svg_color(a,101,101,96));
+            at+=used;cy+=caption_line;
         }while(at<n);
         if(a->doc_context_caption_test) {
             a->doc_context_caption_bounds=caption_bounds;
@@ -349,111 +402,158 @@ static void documentation_context_figure(app *a,int kind,struct nk_rect r) {
 }
 static void documentation_context_content(app *a);
 static void documentation_context_view(app *a) {
-    struct nk_context *ui=a->doc_ui;float row=fmaxf(46,ui->style.font->height+16);
-    float model=documentation_tab_width(a,"Modell");
-    float example=documentation_tab_width(a,"Beispiel");
+    struct nk_context *ui=a->doc_ui;float row=46;
+    float model=documentation_tab_width(a,"Modell",!a->doc_context_example),example=documentation_tab_width(a,"Beispiel",a->doc_context_example);
     nk_fill_rect(nk_window_get_canvas(ui),nk_rect(a->doc_right_slot.x,a->doc_right_slot.y,a->doc_right_slot.w,row),0,UI_COLOR(header));
-    nk_layout_row_begin(ui,NK_STATIC,row,3);nk_layout_row_push(ui,model);
-    struct nk_rect r;nk_widget(&r,ui);
+    ps_ui_row_exact_begin(ui,NK_STATIC,row,4);nk_layout_row_push(ui,4);nk_spacing(ui,1);
+    nk_layout_row_push(ui,model);struct nk_rect r;nk_widget(&r,ui);
+    struct nk_rect model_bounds=r;
     if(documentation_segment(a,r,"Kontextansicht","Modell",!a->doc_context_example,true))a->doc_context_example=false;
     documentation_focus_draw(a,DOC_MODEL_TAB,r,false);
     nk_layout_row_push(ui,0);nk_spacing(ui,1);nk_layout_row_push(ui,example);nk_widget(&r,ui);
+    struct nk_rect example_bounds=r;
     if(documentation_segment(a,r,"Kontextansicht","Beispiel",a->doc_context_example,true))a->doc_context_example=true;
-    documentation_focus_draw(a,DOC_EXAMPLE_TAB,r,false);
-    nk_layout_row_end(ui);
-    nk_stroke_line(nk_window_get_canvas(ui),a->doc_right_slot.x,r.y+r.h,a->doc_right_slot.x+a->doc_right_slot.w,r.y+r.h,1,UI_COLOR(divider));
+    documentation_focus_draw(a,DOC_EXAMPLE_TAB,r,false);nk_layout_row_end(ui);
+    nk_fill_rect(nk_window_get_canvas(ui),nk_rect(a->doc_right_slot.x,r.y+r.h-1,a->doc_right_slot.w,1),0,UI_COLOR(divider));
+    struct nk_rect selected=a->doc_context_example?example_bounds:model_bounds;
+    nk_fill_rect(nk_window_get_canvas(ui),nk_rect(selected.x,selected.y+selected.h-2,selected.w,2),0,UI_COLOR(accent));
     struct nk_rect next=nk_widget_bounds(ui),clip=nk_window_get_content_region(ui);
-    nk_layout_row_dynamic(ui,fmaxf(20,clip.y+clip.h-next.y),1);
-    unsigned tab=a->doc_context_example?1:0;
-    nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(6,17));
-    if(nk_group_scrolled_offset_begin(ui,&a->doc_context_scroll_x[tab],&a->doc_context_scroll_y[tab],"context-content",0)) {
-        nk_style_push_font(ui,documentation_type_font(a,DOC_TYPE_CONTEXT));
-        documentation_context_content(a);nk_style_pop_font(ui);nk_group_scrolled_end(ui);
+    ps_ui_row_exact_dynamic(ui,fmaxf(20,clip.y+clip.h-next.y),1);
+    a->doc_context_content_bounds=nk_widget_bounds(ui);
+    unsigned tab=a->doc_context_example?1:0;int w,h;SDL_GetWindowSize(a->doc_window,&w,&h);(void)h;
+    nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(w<=900?13:18,21));
+    if(documentation_scroll_begin(a,&a->doc_context_scroll_x[tab],&a->doc_context_scroll_y[tab],"context-content")) {
+        documentation_context_content(a);documentation_h_spacer(a,30);documentation_scroll_end(a);
     }
     nk_style_pop_vec2(ui);
 }
 static void documentation_context_content(app *a) {
-    struct nk_context *ui=a->doc_ui;float row=fmaxf(34,ui->style.font->height+16);struct nk_rect r;
+    struct nk_context *ui=a->doc_ui;float scale=a->preferences.ui_size/16.f;
+    struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
     const documentation_context *context=documentation_context_for(a);
+    a->doc_context_title_bounds=a->doc_context_figure_bounds=a->doc_context_table_bounds=a->doc_context_table_caption_bounds=
+        a->doc_context_notice_bounds=a->doc_context_source_bounds=nk_rect(0,0,0,0);
+    a->doc_context_head_bounds=a->doc_context_copy_bounds=a->doc_context_head_label_bounds=nk_rect(0,0,0,0);
+    a->doc_context_table_rows=0;
+    a->doc_context_title_bounds=documentation_h_text_row(a,DOC_TYPE_CONTEXT_TITLE,
+        context?(a->doc_context_example?context->title:"Das Versuchsmodell"):
+        (a->doc_context_example?"Kein Beispiel zu diesem Artikel":"Kein Modell zu diesem Artikel"),1.5f,0,0,14,false);
     if(!context) {
-        documentation_h_label(a,a->doc_context_example?"Kein Beispiel zu diesem Artikel":"Kein Modell zu diesem Artikel",false);
-        documentation_h_label(a,"Der vollständige Artikel und seine verknüpften Quellen stehen im Lesebereich.",true);return;
-    }
-    if(a->doc_context_example)documentation_h_label(a,context->title,false);
-    else {
-        nk_style_push_font(ui,documentation_type_font(a,DOC_TYPE_CONTEXT_TITLE));
-        documentation_h_label(a,"Das Versuchsmodell",false);nk_style_pop_font(ui);
+        documentation_h_text_row(a,DOC_TYPE_CONTEXT,"Der vollständige Artikel und seine verknüpften Quellen stehen im Lesebereich.",1.7f,0,0,10,true);return;
     }
     if(a->doc_context_example) {
         const char *code=documentation_context_code(a);
-        documentation_h_label(a,context->source[a->doc_track==2],true);
-        if(!code){documentation_h_label(a,"Beispielquelle konnte nicht geladen werden.",true);return;}
-        nk_layout_row_dynamic(ui,row,1);r=nk_widget_bounds(ui);
-        if(nk_button_label(ui,"Code kopieren"))SDL_SetClipboardText(code);
-        documentation_focus_draw(a,DOC_CONTEXT_COPY,r,false);
-        /* Complete source: wrap at measured UTF-8 boundaries in the side pane. */
+        if(!code){documentation_h_text_row(a,DOC_TYPE_CONTEXT,"Beispielquelle konnte nicht geladen werden.",1.7f,0,0,10,true);return;}
+        const struct nk_user_font *head_font=documentation_type_font(a,DOC_TYPE_SOURCE);
+        const char *language=a->doc_track==2?"Physim-Lernweg":"C-Lernweg";
+        float control=fmaxf(30,head_font->height+12),copy=documentation_text_width(head_font,"Kopieren",8)+18;
+        float content=ui->current->layout->bounds.w-22;
+        bool wrap=documentation_text_width(head_font,language,strlen(language))+copy+8>content;
+        float label_height=documentation_h_text_height(head_font,language,wrap?content:content-copy-8,16.5f*scale);
+        float head_height=21+(wrap?label_height+8+control:fmaxf(label_height,control));
+        ps_ui_row_exact_dynamic(ui,head_height,1);struct nk_rect head_measured=nk_widget_bounds(ui),head;
+        enum nk_widget_layout_states visible=nk_widget(&head,ui);head=documentation_h_snap(head_measured);
+        a->doc_context_head_bounds=head;
+        nk_fill_rect(canvas,head,0,UI_COLOR(edit));nk_stroke_rect(canvas,head,0,1,UI_COLOR(divider));
+        struct nk_rect button=nk_rect(wrap?head.x+11:head.x+head.w-copy-11,
+            head.y+11+(wrap?label_height+8:0),copy,control);
+        button=documentation_h_snap(button);
+        a->doc_context_copy_bounds=button;
+        struct nk_rect label_bounds=nk_rect(head.x+11,head.y+11+(wrap?0:(control-label_height)/2),wrap?content:content-copy-8,label_height);
+        a->doc_context_head_label_bounds=label_bounds;
+        if(visible!=NK_WIDGET_INVALID) {
+            ps_ui_accessibility_label(ui,label_bounds,language);
+            documentation_h_text_draw(a,head_font,language,label_bounds,16.5f*scale,UI_COLOR(code_text));
+            if(ps_ui_button_at(ui,button,"Code kopieren",false))SDL_SetClipboardText(code);
+            nk_fill_rect(canvas,button,3,nk_input_is_mouse_hovering_rect(&ui->input,button)?UI_COLOR(button_hover):UI_COLOR(button));
+            nk_stroke_rect(canvas,button,3,1,UI_COLOR(divider));
+            float label=documentation_text_width(head_font,"Kopieren",8);
+            nk_draw_text(canvas,nk_rect(button.x+(button.w-label)/2,button.y+(button.h-head_font->height)/2,label+1,head_font->height),
+                "Kopieren",8,head_font,nk_rgba(0,0,0,0),UI_COLOR(doc_text));
+        }
+        documentation_focus_draw(a,DOC_CONTEXT_COPY,button,false);
+        /* Keep the complete real source and its original clipboard bytes. The
+         * narrow native preview wraps source lines without removing content. */
         const struct nk_user_font *font=documentation_type_font(a,DOC_TYPE_CONTEXT_CODE);
-        nk_style_push_font(ui,font);
-        const char *line=code;
-        while(*line) {
-            const char *end=strchr(line,'\n');size_t n=end?(size_t)(end-line):strlen(line);
-            if(n && line[n-1]=='\r')--n; /* Display LF; copy retains the complete source. */
-            char text[4096];if(n>=sizeof text)n=sizeof text-1;
-            memcpy(text,line,n);text[n]=0;documentation_h_label(a,text,false);
-            line=end?end+1:line+strlen(line);
+        float line=font->height/a->doc_type_em[DOC_TYPE_CONTEXT_CODE]*1.75f;
+        ps_ui_row_exact_dynamic(ui,15,1);struct nk_rect pad;nk_widget(&pad,ui);
+        nk_fill_rect(canvas,pad,0,UI_COLOR(edit));
+        const char *at=code;
+        while(*at) {
+            size_t length,used=documentation_line(font,at,strlen(at),ui->current->layout->bounds.w-22,&length);
+            char text[4096];size_t n=length<sizeof text-1?length:sizeof text-1;
+            memcpy(text,at,n);text[n]=0;
+            ps_ui_row_exact_dynamic(ui,line,1);struct nk_rect r;visible=nk_widget(&r,ui);
+            nk_fill_rect(canvas,r,0,UI_COLOR(edit));
+            nk_fill_rect(canvas,nk_rect(r.x,r.y,1,r.h),0,UI_COLOR(divider));
+            nk_fill_rect(canvas,nk_rect(r.x+r.w-1,r.y,1,r.h),0,UI_COLOR(divider));
+            ps_ui_accessibility_label(ui,nk_rect(r.x+11,r.y,r.w-22,r.h),text);
+            if(visible!=NK_WIDGET_INVALID)documentation_h_text_draw(a,font,text,nk_rect(r.x+11,r.y,r.w-22,r.h),line,UI_COLOR(code_text));
+            at+=used;
         }
-        nk_style_pop_font(ui);
-    } else {
-        int window_width,window_height;SDL_GetWindowSize(a->doc_window,&window_width,&window_height);(void)window_height;
-        nk_layout_row_dynamic(ui,window_width<=900?180:205,1);r=nk_widget_bounds(ui);nk_widget(&r,ui);
-        ps_ui_accessibility_label(ui,r,context->title);
-        documentation_context_figure(a,context->diagram,r);
-        documentation_h_label(a,context->diagram<3?"Ausgangswerte · Vakuum":"Ausgangswerte",true);
-        const char *line=context->values;
-        while(*line) {
-            const char *end=strchr(line,'\n');size_t length=end?(size_t)(end-line):strlen(line);
-            const char *colon=memchr(line,':',length);
-            if(colon) {
-                char label[128],value[128];size_t n=(size_t)(colon-line),v=length-n-1;
-                if(n>=sizeof label)n=sizeof label-1;memcpy(label,line,n);label[n]=0;
-                const char *start=colon+1;while(v && *start==' '){start++;v--;}
-                if(v>=sizeof value)v=sizeof value-1;memcpy(value,start,v);value[v]=0;
-                float column=(nk_window_get_content_region(ui).w-ui->style.window.spacing.x)/2;
-                float height=fmaxf(documentation_height(ui->style.font,label,strlen(label),column-10),
-                    documentation_height(ui->style.font,value,strlen(value),column-10))+20;
-                nk_layout_row_dynamic(ui,height,2);struct nk_rect cell={0};
-                const char *cells[]={label,value};
-                for(unsigned i=0;i<2;i++) {
-                    enum nk_widget_layout_states visible=nk_widget(&cell,ui);
-                    ps_ui_accessibility_label(ui,cell,cells[i]);
-                    if(visible==NK_WIDGET_INVALID)continue;
-                    size_t at=0,length=strlen(cells[i]);float y=cell.y+10;
-                    do {size_t drawn,used=documentation_line(ui->style.font,cells[i]+at,length-at,cell.w-10,&drawn);
-                        nk_draw_text(nk_window_get_canvas(ui),nk_rect(cell.x+5,y,cell.w-10,ui->style.font->height+6),cells[i]+at,(int)drawn,
-                            ui->style.font,nk_rgba(0,0,0,0),UI_COLOR(text));at+=used;y+=ui->style.font->height+6;
-                    }while(at<length);
-                }
-                nk_stroke_line(nk_window_get_canvas(ui),cell.x-cell.w-ui->style.window.spacing.x,cell.y+cell.h,
-                    cell.x+cell.w,cell.y+cell.h,1,UI_COLOR(divider));
-            }
-            line=end?end+1:line+length;
-        }
-        nk_layout_row_dynamic(ui,14,1);nk_spacing(ui,1);
-        float width=nk_window_get_content_region(ui).w-16;
-        float notice_height=documentation_height(ui->style.font,context->hint,strlen(context->hint),width)+ui->style.font->height+20;
-        nk_layout_row_dynamic(ui,notice_height,1);struct nk_rect notice;nk_widget(&notice,ui);
-        ps_ui_accessibility_label(ui,notice,context->hint);
-        struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
-        nk_fill_rect(canvas,nk_rect(notice.x,notice.y,2,notice.h),0,UI_COLOR(accent));
-        nk_draw_text(canvas,nk_rect(notice.x+13,notice.y+8,width,ui->style.font->height),"Worauf achten?",14,
-            ui->style.font,nk_rgba(0,0,0,0),UI_COLOR(text));
-        size_t at=0,n=strlen(context->hint);float y=notice.y+ui->style.font->height+14;
-        do {size_t length,used=documentation_line(ui->style.font,context->hint+at,n-at,width,&length);
-            nk_draw_text(canvas,nk_rect(notice.x+13,y,width,ui->style.font->height+6),context->hint+at,(int)length,
-                ui->style.font,nk_rgba(0,0,0,0),UI_COLOR(text));at+=used;y+=ui->style.font->height+6;
-        }while(at<n);
-        documentation_h_label(a,context->article,true);
+        ps_ui_row_exact_dynamic(ui,15,1);nk_widget(&pad,ui);nk_fill_rect(canvas,pad,0,UI_COLOR(edit));
+        nk_fill_rect(canvas,nk_rect(pad.x,pad.y+pad.h-1,pad.w,1),0,UI_COLOR(divider));
+        a->doc_context_source_bounds=documentation_h_text_row(a,DOC_TYPE_SOURCE,context->source[a->doc_track==2],1.7f,0,10,10,true);
+        return;
     }
+    int window_width,window_height;SDL_GetWindowSize(a->doc_window,&window_width,&window_height);(void)window_height;
+    documentation_h_spacer(a,5);
+    ps_ui_row_exact_dynamic(ui,window_width<=900?180:205,1);
+    a->doc_context_figure_bounds=documentation_h_snap(nk_widget_bounds(ui));struct nk_rect figure_widget;nk_widget(&figure_widget,ui);
+    ps_ui_accessibility_label(ui,a->doc_context_figure_bounds,context->title);
+    documentation_context_figure(a,context->diagram,a->doc_context_figure_bounds);
+    /* The reference's inline SVG also occupies the anonymous line's descent
+     * below its margin box: 4 px at the context's 14 px base text size. */
+    documentation_h_spacer(a,14+4*scale);
+    a->doc_context_table_caption_bounds=documentation_h_text_row(a,DOC_TYPE_SOURCE,context->diagram<3?"Ausgangswerte · Vakuum":"Ausgangswerte",1.5f,0,0,8,true);
+    const struct nk_user_font *labels=documentation_type_font(a,DOC_TYPE_CONTEXT_STRONG),*values=documentation_type_font(a,DOC_TYPE_CONTEXT);
+    const char *at=context->values;float intrinsic[2]={1,1},width=ui->current->layout->bounds.w;
+    /* Two plain columns: share available width in proportion to their actual
+     * maximum-content widths, including CSS cell padding. No fixed 50% split. */
+    while(*at) {
+        const char *end=strchr(at,'\n');size_t n=end?(size_t)(end-at):strlen(at);const char *colon=memchr(at,':',n);
+        if(colon){size_t left=(size_t)(colon-at),right=n-left-1;const char *value=colon+1;while(right && *value==' '){value++;right--;}
+            intrinsic[0]=fmaxf(intrinsic[0],documentation_text_width(labels,at,left)+10);
+            intrinsic[1]=fmaxf(intrinsic[1],documentation_text_width(values,value,right)+10);}
+        at=end?end+1:at+n;
+    }
+    float column=width*intrinsic[0]/(intrinsic[0]+intrinsic[1]);a->doc_context_table_column=column;
+    at=context->values;float line=18*scale;
+    while(*at) {
+        const char *end=strchr(at,'\n');size_t length=end?(size_t)(end-at):strlen(at);const char *colon=memchr(at,':',length);
+        if(colon) {
+            char text[2][128];size_t n=(size_t)(colon-at),v=length-n-1;const char *value=colon+1;while(v && *value==' '){value++;v--;}
+            if(n>=sizeof text[0])n=sizeof text[0]-1;if(v>=sizeof text[1])v=sizeof text[1]-1;
+            memcpy(text[0],at,n);text[0][n]=0;memcpy(text[1],value,v);text[1][v]=0;
+            float height=fmaxf(documentation_h_text_height(labels,text[0],column-10,line),documentation_h_text_height(values,text[1],width-column-10,line))+21;
+            ps_ui_row_exact_dynamic(ui,height,1);struct nk_rect measured=nk_widget_bounds(ui),row;
+            enum nk_widget_layout_states visible=nk_widget(&row,ui);row=documentation_h_snap(measured);
+            if(!a->doc_context_table_rows)a->doc_context_table_bounds=row;
+            a->doc_context_table_bounds.h=row.y+row.h-a->doc_context_table_bounds.y;++a->doc_context_table_rows;
+            struct nk_rect cells[]={nk_rect(row.x+5,row.y+10,column-10,row.h-21),nk_rect(row.x+column+5,row.y+10,row.w-column-10,row.h-21)};
+            for(unsigned i=0;i<2;i++)ps_ui_accessibility_label(ui,cells[i],text[i]);
+            if(visible!=NK_WIDGET_INVALID) {
+                nk_fill_rect(canvas,nk_rect(row.x,row.y,column,row.h-1),0,UI_COLOR(header));
+                documentation_h_text_draw(a,labels,text[0],cells[0],line,UI_COLOR(doc_text));
+                documentation_h_text_draw(a,values,text[1],cells[1],line,UI_COLOR(doc_text));
+                nk_fill_rect(canvas,nk_rect(row.x,row.y+row.h-1,row.w,1),0,UI_COLOR(divider));
+            }
+        }
+        at=end?end+1:at+length;
+    }
+    documentation_h_spacer(a,22);
+    float inset=16,notice_line=20.4f*scale;
+    const struct nk_user_font *font=documentation_type_font(a,DOC_TYPE_CONTEXT);
+    float notice_height=14+notice_line+documentation_h_text_height(font,context->hint,width-inset,notice_line);
+    ps_ui_row_exact_dynamic(ui,notice_height,1);struct nk_rect notice;enum nk_widget_layout_states visible=nk_widget(&notice,ui);
+    a->doc_context_notice_bounds=notice;
+    ps_ui_accessibility_label(ui,notice,"Worauf achten?");ps_ui_accessibility_label(ui,notice,context->hint);
+    if(visible!=NK_WIDGET_INVALID) {
+        nk_fill_rect(canvas,nk_rect(notice.x,notice.y,3,notice.h),0,UI_COLOR(accent));
+        documentation_h_text_draw(a,labels,"Worauf achten?",nk_rect(notice.x+inset,notice.y+7,width-inset,notice_line),notice_line,UI_COLOR(doc_text));
+        documentation_h_text_draw(a,font,context->hint,nk_rect(notice.x+inset,notice.y+7+notice_line,width-inset,notice.h-notice_line-14),notice_line,UI_COLOR(doc_text));
+    }
+    a->doc_context_source_bounds=documentation_h_text_row(a,DOC_TYPE_SOURCE,context->article,1.7f,0,22,10,true);
 }
 static void documentation_footer(app *a) {
     struct nk_context *ui=a->doc_ui;float h=ui->style.font->height+8;

@@ -9,9 +9,10 @@ enum {
     DOC_TYPE_CONTEXT,DOC_TYPE_SOURCE,DOC_TYPE_CONTEXT_CODE,DOC_TYPE_CRUMB,DOC_TYPE_GRID,
     DOC_TYPE_LEAD,DOC_TYPE_LEAD_STRONG,DOC_TYPE_LEAD_CODE,
     DOC_TYPE_TABLE,DOC_TYPE_TABLE_STRONG,DOC_TYPE_TABLE_CODE,DOC_TYPE_CODE_HEAD,
+    DOC_TYPE_PANEL_CAPTION,DOC_TYPE_CONTEXT_STRONG,DOC_TYPE_FIGURE_CAPTION,DOC_TYPE_FIGURE_LABEL,
     DOC_TYPE_COUNT
 };
-_Static_assert(DOC_TYPE_COUNT==28,"Update the persistent H font role bank");
+_Static_assert(DOC_TYPE_COUNT==32,"Update the persistent H font role bank");
 static float documentation_spacing_after(const documentation_spaced_font *font,float height,nk_rune next) {
     if(next) {
         char text[4];int bytes=nk_utf_encode(next,text,sizeof text);
@@ -58,25 +59,28 @@ static void documentation_typography_update(app *a) {
         13*ui,13*ui,12*ui,12*ui,10*ui,15*ui,12*ui,11*ui,
         .75f*(a->preferences.editor_size<16?16:a->preferences.editor_size),.7f*reading,.8f*documentation_code_size(a),
         .94f*reading,.94f*reading,.94f*.9f*documentation_code_size(a),
-        .8125f*reading,.8125f*reading,.8125f*.9f*documentation_code_size(a),.75f*reading};
+        .8125f*reading,.8125f*reading,.8125f*.9f*documentation_code_size(a),.75f*reading,
+        11*ui,12*ui,13*ui,20*ui};
     const struct nk_user_font *sources[DOC_TYPE_COUNT]={
         a->doc_ui_fonts[reader],a->doc_bold_fonts[reader],a->doc_title_fonts[reader],
         a->doc_bold_fonts[reader+2],a->doc_bold_fonts[reader],a->doc_code_fonts[code],a->doc_code_fonts[code],
         a->doc_chrome_fonts[chrome],a->doc_ui_fonts[chrome],a->doc_bold_fonts[chrome],
         a->doc_ui_fonts[chrome],a->doc_bold_fonts[chrome],a->doc_ui_fonts[chrome],a->doc_bold_fonts[chrome],
-        a->doc_chrome_fonts[chrome],a->doc_bold_fonts[chrome],a->doc_ui_fonts[chrome],a->doc_chrome_fonts[chrome],
+        a->doc_bold_fonts[chrome],a->doc_bold_fonts[chrome],a->doc_ui_fonts[chrome],a->doc_chrome_fonts[chrome],
         a->doc_code_fonts[((a->preferences.editor_size<16?16:a->preferences.editor_size)-16)/2],a->doc_ui_fonts[reader],a->doc_code_fonts[code],
         a->doc_ui_fonts[reader],a->doc_bold_fonts[reader],a->doc_code_fonts[code],
-        a->doc_ui_fonts[reader],a->doc_bold_fonts[reader],a->doc_code_fonts[code],a->doc_ui_fonts[reader]};
+        a->doc_ui_fonts[reader],a->doc_bold_fonts[reader],a->doc_code_fonts[code],a->doc_ui_fonts[reader],
+        a->doc_bold_fonts[chrome],a->doc_bold_fonts[chrome],a->doc_ui_fonts[chrome],a->doc_ui_fonts[chrome]};
     const float em[DOC_TYPE_COUNT]={
         a->doc_font_em[0][reader],a->doc_font_em[2][reader],a->doc_font_em[1][reader],
         a->doc_font_em[2][reader+2],a->doc_font_em[2][reader],a->doc_font_em[3][code],a->doc_font_em[3][code],
         a->doc_font_em[4][chrome],a->doc_font_em[0][chrome],a->doc_font_em[2][chrome],
         a->doc_font_em[0][chrome],a->doc_font_em[2][chrome],a->doc_font_em[0][chrome],a->doc_font_em[2][chrome],
-        a->doc_font_em[4][chrome],a->doc_font_em[2][chrome],a->doc_font_em[0][chrome],a->doc_font_em[4][chrome],
+        a->doc_font_em[2][chrome],a->doc_font_em[2][chrome],a->doc_font_em[0][chrome],a->doc_font_em[4][chrome],
         a->doc_font_em[3][((a->preferences.editor_size<16?16:a->preferences.editor_size)-16)/2],a->doc_font_em[0][reader],a->doc_font_em[3][code],
         a->doc_font_em[0][reader],a->doc_font_em[2][reader],a->doc_font_em[3][code],
-        a->doc_font_em[0][reader],a->doc_font_em[2][reader],a->doc_font_em[3][code],a->doc_font_em[0][reader]};
+        a->doc_font_em[0][reader],a->doc_font_em[2][reader],a->doc_font_em[3][code],a->doc_font_em[0][reader],
+        a->doc_font_em[2][chrome],a->doc_font_em[2][chrome],a->doc_font_em[0][chrome],a->doc_font_em[0][chrome]};
     for(unsigned i=0;i<DOC_TYPE_COUNT;i++) {
         const struct nk_user_font *source=sources[i];
         if(!source)continue;
@@ -85,11 +89,12 @@ static void documentation_typography_update(app *a) {
         a->doc_type_em[i]=em[i];
         a->doc_type_fonts[i]=*source;a->doc_type_fonts[i].height=sizes[i]*a->doc_type_em[i];
     }
-    const unsigned tracked[]={DOC_TYPE_TITLE,DOC_TYPE_H2};const float spacing[]={-.55f,-.2f};
-    for(unsigned i=0;i<2;i++) {
+    const unsigned tracked[]={DOC_TYPE_TITLE,DOC_TYPE_H2,DOC_TYPE_GROUP,DOC_TYPE_PANEL_CAPTION};
+    const float spacing[]={-.55f,-.2f,.8f,.6f};
+    for(unsigned i=0;i<4;i++) {
         unsigned role=tracked[i];documentation_spaced_font *font=&a->doc_spaced_fonts[i];
         font->base=sources[role];font->native=*(const struct nk_font *)font->base->userdata.ptr;
-        font->pairs=a->doc_font_pairs[i];
+        font->pairs=i<2?a->doc_font_pairs[i]:NULL;
         font->spacing=spacing[i];font->reference_height=a->doc_type_fonts[role].height;
         a->doc_type_fonts[role].userdata=nk_handle_ptr(font);
         a->doc_type_fonts[role].width=documentation_spaced_width;a->doc_type_fonts[role].query=documentation_spaced_query;

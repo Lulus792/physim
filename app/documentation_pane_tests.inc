@@ -79,6 +79,15 @@ static void documentation_pane_test_frame(app *a,int *stage,int *code,const char
         if(++step<count*2) {
             test_window_key_mod(a->doc_window,SDLK_F6,step>=count?SDL_KMOD_SHIFT:0);frames=0;--*stage;
         } else {
+            if(a->doc_context_example && !a->doc_context_hidden) {
+                struct nk_rect head=a->doc_context_head_bounds,copy=a->doc_context_copy_bounds,label=a->doc_context_head_label_bounds;
+                bool wrapped=label.y+label.h<=copy.y-7;
+                bool layout=head.w>100 && copy.y>=head.y+10 && copy.y+copy.h<=head.y+head.h-9 &&
+                    copy.x>=head.x+10 && copy.x+copy.w<=head.x+head.w-9 &&
+                    label.y+label.h<=head.y+head.h-9 && (wrapped || label.x+label.w<=copy.x-7);
+                ok=ok && layout;
+                printf("DOCUMENTATION PANES CODE HEAD: case=%u wrapped=%d height=%.2f complete=%d\n",sample,wrapped,head.h,layout);
+            }
             printf("DOCUMENTATION PANES: case=%u groups=%u track=%d size=%u ui=%u theme=%d scroll=%u complete=%d\n",
                 sample,count,a->doc_track,documentation_font_size(a),a->preferences.ui_size,a->preferences.theme,scroll,ok);
             snprintf(image,sizeof image,"docs-panes-%02u.bmp",sample);*capture=image;
