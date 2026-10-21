@@ -9,10 +9,10 @@ bereits laufenden nativen Referenzabgleichs.
 
 Der [native Export-Umsetzungsstand](GRAPHIC-EXPORT-NATIVE.md) enthält inzwischen
 die geprüfte gemeinsame Datenbasis für Berichtsdiagramme und bis zu acht
-Messläufe. Sichtbarer Mehrlaufcache, gemeinsame Grafikdarstellung, Dialog,
-Dateiauswahl und echte Bildkopie bleiben als nächster zusammenhängender Teil
-des vollständigen Auftrags umzusetzen. Die reine Datenprüfung ersetzt dessen
-native Abnahme ausdrücklich nicht.
+Messläufe sowie [Zeichenbeschreibung und SVG](GRAPHIC-FIGURE-NATIVE.md).
+Sichtbarer Mehrlaufcache, Rasteradapter mit echten Schriftmetriken, Vorschau,
+Dialog, Dateiauswahl und echte Bildkopie bleiben zusammenhängend umzusetzen.
+Die bisherigen Daten-/Geometrieprüfungen ersetzen diese native Abnahme nicht.
 
 Aktueller nativer Folgeauftrag vom 20. Oktober: zuerst die gesamte Gestaltung
 einschließlich F1 direkt gegen die gewählten Referenzen angleichen. Der

@@ -1,0 +1,41 @@
+{
+  "status": "passed",
+  "files": [
+    {
+      "name": "figure-0-0.svg",
+      "bytes": 18601,
+      "sha256": "d0cc2047aa69b0481506f206c223e9c44c0530230f6f34f5337dcfc3684e4c4a",
+      "xml": true,
+      "reference_geometry": true
+    },
+    {
+      "name": "figure-0-1.svg",
+      "bytes": 11257,
+      "sha256": "5d5ad613450bde28ed4bebd92fda94d9397dbba6d346e722475f4ee3aca8e0e3",
+      "xml": true,
+      "reference_geometry": true
+    },
+    {
+      "name": "figure-1-0.svg",
+      "bytes": 18601,
+      "sha256": "19ddfc379f32eeb48423669dacfea4822c67675a338ec432698c8db1e65b78b2",
+      "xml": true,
+      "reference_geometry": true
+    },
+    {
+      "name": "figure-1-1.svg",
+      "bytes": 11257,
+      "sha256": "503c2b71995a7ddcff9f3d30428006906ff2679c52b0f0591c45dd38b2f835ba",
+      "xml": true,
+      "reference_geometry": true
+    },
+    {
+      "name": "figure-extreme.svg",
+      "bytes": 7680,
+      "sha256": "f999cb21af4975ca3888ce69a5d00ac24164c85ae45f0d1a78001b800f2c9e8f",
+      "xml": true,
+      "reference_geometry": false
+    }
+  ],
+  "limits": "XML and geometry, deterministic test metrics; no font/PNG/browser acceptance."
+}

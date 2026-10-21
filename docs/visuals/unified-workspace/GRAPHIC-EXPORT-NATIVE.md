@@ -5,6 +5,11 @@ Der freigegebene [Grafikexport](EXPORT-EXAMPLE.md) nach
 beauftragt. Dieser Stand ergänzt seine Datengrundlage; der neue Dialog,
 seine Vorschau und die native Bildkopie sind noch nicht angebunden.
 
+Anschließend ergänzt die [gemeinsame Zeichenbeschreibung](GRAPHIC-FIGURE-NATIVE.md)
+das freigegebene Figurenlayout und echte SVG-Ausgabe. Native Rasterausgabe,
+sichtbare Vorschau und Dialog bleiben anzubinden. Die folgenden Datenprüfungen
+behalten ihren eigenen eingefrorenen Quellstand.
+
 ## Festgehaltene Diagrammdaten
 
 `app/graphic_snapshot.c` stellt einen unveränderlichen, eigenen Diagrammstand
@@ -83,7 +88,7 @@ Checkout nur dieses Patches. Es gibt keine aktuelle macOS-Ausführung.
 | Teil | Noch erforderliche Arbeit |
 | --- | --- |
 | Datenansicht | Gemeinsamen Mehrlaufcache in die sichtbare Kurve, Referenz, Legende und Vergleichsstatistik anbinden; asynchrone Ergebnisse anhand der tatsächlichen Auswahl verwerfen. |
-| Gemeinsame Darstellung | Eine native Grafikbeschreibung für Vorschau, PNG und SVG gemäß `graphic-export.js` aufbauen. Die bisherigen PNG-/SVG-Wege haben noch unterschiedliche Layouts. |
+| Gemeinsame Darstellung | Die [Zeichenbeschreibung und SVG](GRAPHIC-FIGURE-NATIVE.md) sind geprüft. Rasteradapter mit echten Schriftmetriken und dieselbe Beschreibung an PNG/Vorschau anbinden; die bisherigen sichtbaren Exportwege verwenden weiter unterschiedliche Layouts. |
 | Dialog und Zugänge | Freigegebenes Hell-/Dunkellayout einschließlich kleiner Fenster, Grafikbuttons und einzelner Berichtsdiagramme umsetzen. |
 | Optionen | PNG/SVG, vier PNG-Größen, vollständige/sichtbare Grenzen und beim Öffnen festgehaltene Darstellung anbinden. |
 | Speichern | Native Dateiauswahl, Abbruch, bestehende Dateien und Schreib-/Renderfehler mit derselben festgehaltenen Ausgabe prüfen. |

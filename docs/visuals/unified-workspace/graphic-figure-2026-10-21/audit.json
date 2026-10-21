@@ -1,0 +1,152 @@
+{
+  "created_utc": "2026-10-21T20:15:06.037551+00:00",
+  "checks": {
+    "frozen_sources": 108,
+    "foreign_unchanged": 10,
+    "final_groups_each_os": 4,
+    "recorded_runs": 12,
+    "allocation_failure_points": {
+      "figure": 3,
+      "svg": 5
+    },
+    "svg_xml_checks": 10,
+    "identical_cross_platform_svg_pairs": 5,
+    "unchanged_svg_after_offset_fix": 10,
+    "rejected_altered_svg_cases": 3,
+    "real_offset_counterexample_rejected_each_os": true,
+    "app_builds": 2,
+    "catalog_runs": 2,
+    "local_doc_links": 89,
+    "owned_staged_only": true,
+    "git_diff_check": true,
+    "python_json_syntax": true,
+    "new_native_png_or_dialog_acceptance": false
+  },
+  "owned_files": [
+    "app/graphic_figure.c",
+    "app/graphic_figure.h",
+    "tests/test_graphic_figure.c",
+    "tests/check_graphic_figure_svg.py",
+    "tools/build.py",
+    "tools/native_tests.py",
+    "docs/visuals/unified-workspace/GRAPHIC-FIGURE-NATIVE.md",
+    "docs/visuals/unified-workspace/GRAPHIC-EXPORT-NATIVE.md",
+    "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+    "docs/visuals/unified-workspace/NEXT-CHAT.md",
+    "docs/visuals/unified-workspace/README.md",
+    "docs/visuals/unified-workspace/graphic-figure-2026-10-21/audit.json",
+    "docs/visuals/unified-workspace/graphic-figure-2026-10-21/figure-0-0.svg",
+    "docs/visuals/unified-workspace/graphic-figure-2026-10-21/figure-0-1.svg",
+    "docs/visuals/unified-workspace/graphic-figure-2026-10-21/figure-1-0.svg",
+    "docs/visuals/unified-workspace/graphic-figure-2026-10-21/figure-1-1.svg",
+    "docs/visuals/unified-workspace/graphic-figure-2026-10-21/figure-extreme.svg",
+    "docs/visuals/unified-workspace/graphic-figure-2026-10-21/linux-svg-check.json",
+    "docs/visuals/unified-workspace/graphic-figure-2026-10-21/validation.json",
+    "docs/visuals/unified-workspace/graphic-figure-2026-10-21/windows-svg-check.json"
+  ],
+  "inputs": [
+    {
+      "path": "app/graphic_figure.c",
+      "bytes": 17441,
+      "sha256": "72fa082315ae5e51b4329920c3d93ddbbb05aa6f7b98c0f5dc3df241e7ad8158"
+    },
+    {
+      "path": "app/graphic_figure.h",
+      "bytes": 3591,
+      "sha256": "61c5a40f295f159fe66df68149dddb6bb119f35fc00f9ecd007aabb7fb5a7f45"
+    },
+    {
+      "path": "tests/test_graphic_figure.c",
+      "bytes": 13309,
+      "sha256": "f89e6c2ae2109eec27f1bdc85f587f25e67a45e643bad3347173b0a954007891"
+    },
+    {
+      "path": "tests/check_graphic_figure_svg.py",
+      "bytes": 4082,
+      "sha256": "1d21a8a5e3f871699af4cc05b73f33ba40690f13d16b1d755ff255306db0f271"
+    },
+    {
+      "path": "tools/build.py",
+      "bytes": 39615,
+      "sha256": "f1e59f8756178aaecb037921ffdba0e48b01933dd0800d6cb824be2e346d17d0"
+    },
+    {
+      "path": "tools/native_tests.py",
+      "bytes": 42866,
+      "sha256": "29277f2b2e9bcd6e3279d2128c134aa77ea8943bf00b69325ca17cc511c769b3"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/GRAPHIC-FIGURE-NATIVE.md",
+      "bytes": 5663,
+      "sha256": "b1c37fde88e5b3a5877a3001f6354518ecd8d8a0dbc7fd76ac3f915c1405832c"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/GRAPHIC-EXPORT-NATIVE.md",
+      "bytes": 7773,
+      "sha256": "1799fb2b0ab03425dba4b77c2ed399b861be054ea080cd15a0f6dab0f08716c0"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "bytes": 13934,
+      "sha256": "298b8180b921146a4cfd996687fbc62c753320122bb47545e236c23e32d5ba9d"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/NEXT-CHAT.md",
+      "bytes": 10327,
+      "sha256": "47d65211874f1d7f1067e9cb62786b1df8e6181d6c68f0649b8a30913842448b"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/README.md",
+      "bytes": 10538,
+      "sha256": "dba1252be237fb21a45a0f3756cadf7ce82b3868c12eb5d683fefcb4c744f036"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/graphic-figure-2026-10-21/figure-0-0.svg",
+      "bytes": 18601,
+      "sha256": "d0cc2047aa69b0481506f206c223e9c44c0530230f6f34f5337dcfc3684e4c4a"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/graphic-figure-2026-10-21/figure-0-1.svg",
+      "bytes": 11257,
+      "sha256": "5d5ad613450bde28ed4bebd92fda94d9397dbba6d346e722475f4ee3aca8e0e3"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/graphic-figure-2026-10-21/figure-1-0.svg",
+      "bytes": 18601,
+      "sha256": "19ddfc379f32eeb48423669dacfea4822c67675a338ec432698c8db1e65b78b2"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/graphic-figure-2026-10-21/figure-1-1.svg",
+      "bytes": 11257,
+      "sha256": "503c2b71995a7ddcff9f3d30428006906ff2679c52b0f0591c45dd38b2f835ba"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/graphic-figure-2026-10-21/figure-extreme.svg",
+      "bytes": 7680,
+      "sha256": "f999cb21af4975ca3888ce69a5d00ac24164c85ae45f0d1a78001b800f2c9e8f"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/graphic-figure-2026-10-21/linux-svg-check.json",
+      "bytes": 1195,
+      "sha256": "15d1adf22bd4eff13e5d5782ead2e0735c997b6f433c9305604956ee9ebf3b39"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/graphic-figure-2026-10-21/validation.json",
+      "bytes": 178643,
+      "sha256": "d936cd589f4ebad4bf9e1baa2425928da2b1694f6cd941ca3af2f9f17e07ac2b"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/graphic-figure-2026-10-21/windows-svg-check.json",
+      "bytes": 1195,
+      "sha256": "15d1adf22bd4eff13e5d5782ead2e0735c997b6f433c9305604956ee9ebf3b39"
+    }
+  ],
+  "limits": [
+    "No native raster adapter, PNG/clipboard/dialog integration or whole-design acceptance yet",
+    "Figure unit tests use deterministic metrics, not a real font/raster proof",
+    "No current macOS or external screenreader execution",
+    "Local app builds include ten separately hashed foreign changes",
+    "Command and SVG byte budgets can reject extreme diagrams; no silently truncated output",
+    "Coordinates beyond 1e9 viewport widths return PS_LIMIT rather than promise precision"
+  ]
+}

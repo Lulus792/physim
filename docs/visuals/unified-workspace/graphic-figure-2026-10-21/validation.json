@@ -1,0 +1,2480 @@
+{
+  "created_utc": "2026-10-21T20:15:05.544443+00:00",
+  "scope": "Canonical owned native figure geometry and SVG for the full approved export; no completed UI export claim.",
+  "sources": {
+    "1": {
+      "base": "c79ef47ae1495e721f5c6818f8985a49a0674174",
+      "created_utc": "2026-10-21T19:55:02.446992+00:00",
+      "source_sha256_lf": {
+        ".gitattributes": "d5b4568db93fb652f7318f74c69b78abaf2ab2e2b5c2fabe331552d63eedc8f4",
+        "README.md": "4765e741ed11e7ca1299ee6520452767ec6a3dcbbe55e5b993db7a68e032236f",
+        "app/analysis_layout.inc": "74a9cb6997e41b6ae2c597494bc870f3a9b9de768de9d4ad1b7eff9d01deb48d",
+        "app/analysis_resize.inc": "8ccc8dfa92d58f910d4ee9cacc04e96a93be01b12af2b603368205b00726eb88",
+        "app/analysis_ui.inc": "b64974dd94bdb9466114b182bd5a1b7867828a8fb6a3ebf571fb5172230224ec",
+        "app/analysis_units_tests.inc": "5b299a53559c760f332b5c66c9ece3b352f9ad1c8928f842d55311a6763f4afd",
+        "app/analysis_workspace_tests.inc": "8a4bb2a826946de53257654760f97f702d6f1d87a19cc47f5d1f458172ade8a2",
+        "app/api_card_tests.inc": "e02e56843d3c719a004f5bb5a328b69a3ea9f7bac50866248718c6023e2f262c",
+        "app/api_reference_tests.inc": "53e5373f929589b68064b8e0369e90f07eb4284429ea5bb640b662da16ea66bb",
+        "app/api_reference_ui.inc": "b2ca3cd9215b9b79ed3b826cb33443a7c4f5dfe2eb37f0b320fd983696a5c19d",
+        "app/channel_units_tests.inc": "7f71e05664cfefab012fc0363622541e72b890ea4a48b8e02d6f40f0b93cfdff",
+        "app/channel_units_ui.inc": "dbe90c981c123bac6afaac9e85c9c977cc6581c1d01b84f77c531bad59955a8a",
+        "app/code_preview.c": "014cfb421cd4a3a9c514e3608ce5e910b9f774166a1772438eae87ea153a1bea",
+        "app/code_preview.h": "33f2ed5f96d675b6b1d9fa7e40740f6654ff579ae53b5c550c35dff3e55f17c7",
+        "app/design_ui.inc": "44a97be7b323d8ccb0208afcba69a998aade07902f477d6cf26fb6c878c2eb1f",
+        "app/docking_ui.inc": "db470ed74b46b4a7d0eee0b5c12428c249768aa9d81475cf48e71048324ba35b",
+        "app/documentation.c": "62c802e4572e3ef988f7b4121541865ccd2d7968000cb2074ce7d93500ed5fa1",
+        "app/documentation.h": "31805cf0517336ef59ed915c4a57d19b6a132467d6e73274f3908a9881f4e69c",
+        "app/documentation_actions.inc": "4b372fb77fe89eeefa04b66e2ece3022e91854f14b8f186dceeabfa144e4a349",
+        "app/documentation_article_flow.inc": "7cec4d787059dffa08733ab93e3a1bca2958ee81f85f97b1608fece14fbf0141",
+        "app/documentation_code_preview.inc": "f8068ede433a0bcffd971901bce86730bdbcfbe4b52b735ff96e669b2b675030",
+        "app/documentation_code_preview_tests.inc": "b2adf12bfebdcaf8e38bcbcdba4061f8e1c6d064d2ec29098e768dc80bdc16bf",
+        "app/documentation_figure_font.inc": "1d47e8e3927e7fc31b1dafc76b8af4b671a761c2bc2430b0e8af89a6922d4804",
+        "app/documentation_h.inc": "160ee1f61ef559012fe5c73a4da2271570f91db2bd90d0263cd7bdc99716c024",
+        "app/documentation_h_tests.inc": "18bfb146c790082f71f36b994e3934ebc108a1b86ea36dda16c3c7ca6710d55e",
+        "app/documentation_keyboard_tests.inc": "b59b0c4ac0139c317745be2fc5caa4a51a3dd8def89f17d8962bdf7d3839241a",
+        "app/documentation_layout.h": "2c199412f287e438b1b531525befb50edae3d9ff22bfe4d83438a946a6fb3631",
+        "app/documentation_math.inc": "626a3351a1e03ccb13ce81bf030c47cafe1712a1672a9c75179888e4bac879f0",
+        "app/documentation_media.inc": "c34fc5d426715d1b218fdcf686ade0e2e2ff29625456fe70fb3d3d82c72a1021",
+        "app/documentation_model_tests.inc": "6c35554765989555ecdefaec5c15826949a1a3f40c10c706fbcc9744e6a95720",
+        "app/documentation_pane_tests.inc": "82ec692a802dc9853cf423fb1c56c01aa077940f3bbbcb13b72a34e0aaf2ac6e",
+        "app/documentation_scroll_tests.inc": "9b9932b64ffa838d29709f9be0990102ad8c6dc97b4f7e9c9916d46760694d76",
+        "app/documentation_typography.inc": "cac4c53cd2d76f9a9e689a2a304a5169a3adcdea8186c8a0141a8c074baba010",
+        "app/documentation_ui.inc": "c9a937e25f3869e819561d3475c574a45b0084d81ed0e33b4a3f80e79f0ec9f4",
+        "app/documentation_window.inc": "b0c6683b0621059951960738f54edb193641b1ed6874170eb4a8c1ceb7e94d37",
+        "app/editor_search_ui.inc": "31ea341e322ef983a2d7e1f4319511fb1632169b545daa87f807988d9fe799f0",
+        "app/graphic_snapshot.c": "6c899b66d54d81109684b17c077ac2f8afd4eb8bb0db73af23bc75bcb75d9889",
+        "app/graphic_snapshot.h": "cfd6000b4c79794158862b03a194c2b034c70f57353ea5abf0e0041ca6b18f82",
+        "app/keyboard_menu_tests.inc": "bdb2b255ce95d0dcb85992d8ada3d57c7729cd49fa36dfb7ee202f8748cde682",
+        "app/layout_catalog.c": "5004ab858261242185d86389d5de0f39a75f9a0fd3e627a8a38c991371a16c01",
+        "app/layout_ui.inc": "be51a9d8fe2d91391248416a942f8bfd2e3ba5dd3b4a75d12883140930b1613f",
+        "app/main.c": "66a2015a8309ee9acc31be96e46ee301fbe8af6db3e93f5c0c03ebc1e65223fd",
+        "app/panel_windows.inc": "4a38f644a77403cd673618818466e5229cebf598b843fd50821b696ab22350ef",
+        "app/plot_tests.inc": "3c730aa3c5fd5a87444973c5cb1734c909286970421f6c8bd5b2a73294a15b61",
+        "app/plot_ui.inc": "8b933b3bb27c9d53be932f1e49ee949bab21a5a587c85f5f5e0fbf801b7b9815",
+        "app/preferences.c": "e2df26e2c2a0d054dfa1e4dd4b500bb0cf996debe7f861b05f3db2479088c360",
+        "app/report_details_tests.inc": "eff52c88636b5db6f371a9151975d88624e3d315c4e11e41a0ff55495bada6dc",
+        "app/report_image.c": "2e8472e798c76e2881658388203a8be8579e358c3af4a1e75a7e7a3aecc8ca0b",
+        "app/run_details_tests.inc": "ad34f630ee605abfb78245d3701611a3c6d26f15eae85cab2b32a5e0b6447f35",
+        "app/settings_tests.inc": "5202dece8488dba847ce67e3347ce67be17365f7a1fdde65c98bb62296dc2497",
+        "app/settings_ui.inc": "fab45b1548dadc0b8ef7b7a2f0577c0bc2d5363b4108a2ba855fa6113ccad4d1",
+        "app/shell_theme_tests.inc": "4b7452b932bbf9b6b09c681ed418d81de92854eaa11b9fceed61ca0c1084534a",
+        "app/source_outline_tests.inc": "7b8f0af18999e192d90d8db2eed179ca789921eee0af19796b2cf8c53b9ab952",
+        "app/source_outline_ui.inc": "c3ce8ceaf0827360d0620bdbc2bcd9196e63faff5cf8c5f2923e953ebac62bc4",
+        "app/toolbar_tests.inc": "16f96ab0fc7088cd766a634c94ee44d2ae97313f3018aadeb2603fe2d265259c",
+        "app/toolbar_ui.inc": "619f88a4dd1457f233d39de85fa23d033c4ebed6b754435a3632a33c40a7edf8",
+        "app/ui.h": "9ffbdbe8982071e053d670efe1dee7da5074d5a5fb55878faee3cffd01dbb66f",
+        "app/ui_backend.c": "5bf9d3d25f63f4821b500f502345835aa232339b6a7ef1fb381b491e280f500d",
+        "app/ui_sdl.c": "82b2023360a8ddef2da8068bba38514b340a69068c13b6060f2d16bdf4e51dbf",
+        "app/workbench_api_ui.inc": "3fa1f492af3ae84ee335b42757730f67ce4ec6c79094bfe170901474f86ca669",
+        "app/workbench_context_ui.inc": "79efa3ea59f163452c49c18f14b08a360acf0be1b89bb1c1e40686b2001a8f1a",
+        "app/workbench_tests.inc": "1bc37a41bb50b47972ad64f37f31be77519b53ac30695a7bc791d729d999cd69",
+        "app/workbench_text_ui.inc": "70755ae951d2fd3fdfddc37691ab8ec6dba33a81ab9670b72f8ef3af91174ba6",
+        "app/workspace_tests.inc": "f8a8746e28859bb1b50b50393a1ccd6d907ec26fa52224ecc947c804c04c9803",
+        "docs/decisions/010-analysis-graphic-export.md": "0ff356badb4010b75fe8e85dce67097f9d22f7c53847acbfd8fa1a34fe4209ce",
+        "docs/reference/experiment.md": "549238a1d1c61fd3e9b743cdae5cd9b5469c80f1da55e8492fb4258799ffd0d1",
+        "docs/reference/language-library.md": "3b77d247f174cc7970c8e049a1ee43bcd0cfae534d5d1ba66c4b0070a1d27cc3",
+        "docs/visuals/f1-layouts/final-h.css": "ec6a83c767f02eb6679a638407709225651c89919ae2df773e0b3b8271e9e6f0",
+        "docs/visuals/f1-layouts/layouts.css": "6ae773eb10452dfbbd2331208cdfc8e8c6672869cc877e6fef59abb8c9739c6b",
+        "docs/visuals/f1-layouts/model.svg": "3b11ef46528fcf84a9b1f4fd36b55227edffd0c4c93f6e382042beab0458105a",
+        "docs/visuals/f1-layouts/refinements.css": "db878953549a411037f0c067340c34c7490c101a7af2b5112505a79be880fcb7",
+        "docs/visuals/unified-workspace/EXPORT-EXAMPLE.md": "9d59831f3af7b5fad784fff540e68b440925baef2d4c2e05eedb938a88c428dc",
+        "docs/workspace.md": "1f630769e597f8b899626f8321af78c0e7c20b3bcfe9f81ae1f5763b60831267",
+        "include/physim/report.h": "0fdf73094af4cc7849bf07e09a7645ca526546dc3d7758118cf02e5a3b3d37cd",
+        "include/physim/series.h": "02d390887ad6e633832b1caaa52abe7ea0d5c4c607da34d3aed42d4dc32cce5a",
+        "src/report.c": "d1869f74c7fafb508e8c62c14edf74759adbef30af7f9da4e0a04ceedac3cad7",
+        "src/report_export.c": "eb26aed1ce00abbccacc3f9c4e93e42292f0ee07e465232a976c6440540f9a1b",
+        "src/report_mask.inc": "76b7089f321a628e16626e23fc5d755a6abfb408139802e5d032f16b5f8312db",
+        "src/series.c": "14b4fb4db7ec5194d5d27a1600e5fa54fa32bbf683e49182b45113b450371e93",
+        "tests/check_display_workflow.py": "d595f6f5ab5ce174c7e8b2219a682b5ae774294e197da8073a7f1e93edcf1e51",
+        "tests/check_f1_h_reference.py": "1f2bfdf6aaf0e1b850b740d4d934375cebfe2a6d24825ff365ac825c2d42a712",
+        "tests/check_unified_chrome.py": "2ec9fb6b1a54566cd69754bfd07f248daaf0a42d7135e7355812683422157b3e",
+        "tests/check_workbench_context.py": "bfa23b2e0d1fdd915cd15a7df988eaf2720dad0a41b1c90a5d7befb45eb9041c",
+        "tests/native_integration_cases.json": "c55c9d5094a09ddb160ad6a648f6ffda04e857d0ed1fc94e9ff2f5a6d3f4a3eb",
+        "tests/probe_font_shaping.py": "0e5f6f383a53988064dd998978fe8ced04bd6a71cf1ff312e8d01159347a6ab0",
+        "tests/test_allocator.h": "52f7105cf12f7947f07b98b73ddf4eb0ba002be6b843eb6d27dbd6a271e48625",
+        "tests/test_api_reference.c": "ade8ed122d85a690018f5b8c60a55d8c3a2ad936a0581d82bb67fc537da8c3cd",
+        "tests/test_code_linebreak.c": "cb061fe6d45104680ccc444ba16cfac1a059329457e29e018b85bdf71f73d30a",
+        "tests/test_code_preview.c": "01c6806fc4f79a75cc21c09b3f42c8481364d1b97d82d02841d9046cd9a88219",
+        "tests/test_font_faces.c": "fe71e02cd7a829d1bef8603a53c83d923c161a157a9180a78ae4903268de8ba1",
+        "tests/test_graphic_snapshot.c": "ea521f8cfc429d79dbe93ee5f6a8a8f954b4afd9618095c0ca7790efaa312092",
+        "tests/test_layout_catalog.c": "21077c44d0181840841f351ef46ff219e454b596a768b64d8b71d30ba610d36c",
+        "tests/test_native_test_runner.py": "4630ac724adcf24e686a168138f8381db31bf732b27013b78d7e8dd0344b7122",
+        "tests/test_preferences.c": "54d372d06bfe74b2b1f71ff0d6bb9785ed5dce9a8e12391ee0a8b21f746643b8",
+        "third_party/README.md": "aac6107ec5668c64b8cd49461c3da8ac90c93ab8c8b3127b2df3433b55e90d21",
+        "third_party/fonts/README.md": "7d0bcda8e1d7cabef874cb4cd77cac7389455146d9401a6b455c457290d802f2",
+        "third_party/fonts/manifest.json": "cf6be7a07ab8a16af6fd619667bc54cdd6665ddb5a76fca6829542a1ed92a6b9",
+        "third_party/libunibreak-8.0/README.md": "38a024448aa0a76effea8b5f151f1dcfb5c52cca1c05baaddea741fa6fa73fc2",
+        "third_party/nuklear.h": "fbd8ac79c8281fff46084a91d40ab45f80a8542b88d0281042202c4bfb440aae",
+        "tools/build.py": "e237a8f6d2ee1d72a4d247fac509ebf53628dc3bf74908b027a1eafc9a02f352",
+        "tools/native_tests.py": "d3c2824c5c020b44b87ec80c63144647f81dbd9c86329e05d8607d50792d450c",
+        "tools/profile_font_pairs.c": "ea49680a92e6a6f28f0af8a3cb5a6f53a41835d7002452c430d8ab62d91fc48a",
+        "app/graphic_figure.c": "5c9c7782789f742421364bf972eba8720e4873904f6eeb75d44eaf6960f170a6",
+        "app/graphic_figure.h": "d76c9da54d8c3da6cb5e4ca4ca4864d5b72b20eb37f1b472628f32dd549671d3",
+        "app/plot_view.c": "507f52080cc97dd92a3fc827a130bca12192f5104cc0a050ebea1de06e58a12f",
+        "app/plot_view.h": "60207a43569e8f6ccab3bb1a4d0f9ca84aea186f81b90211a11c25f6ad173e10",
+        "tests/test_graphic_figure.c": "d5b1d9dbd7e8d310973835f328396562da38fd8136341f9627452e0af5654424"
+      },
+      "foreign_sha256_lf": {
+        ".github/workflows/linux-ui-sanitizers.yml": "80e5b0d925f75ddce52260e8812cfb02d0e5b6e4ccfef03ea86deea75c446085",
+        ".github/workflows/macos-f1-accessibility.yml": "c37bfbd09cdfb0d26922cf0fbd8527f2be70161dd113809435732b6150fd5650",
+        "app/accessibility_atspi.c": "fb32ff39647be57cdaa2c02a10d4319ecef2186747a1edc2338bb397e5668b0f",
+        "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+        "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+        "tests/check_documentation_orca.py": "e38b255bbd7bb12787e50cd78d4b32ed8f985ce60746afde2702285e22a728d5",
+        "tests/test_accessibility_tables_atspi.py": "623f5152d85dabe778728fedc9f999b93e3bfaef6d8d82679d6444675ad54d2f",
+        "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+        "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+        "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+      },
+      "font_assets_sha256": {
+        "third_party/fonts/notoemoji-OFL.txt": "500bb1ccf43df7bbb522112f9133a52b16e1c35e809632f5d8609b179152de5b",
+        "third_party/fonts/NotoEmoji.ttf": "de6c18832938afc99caf132b39d6a30a19bac7f2e812e28db2535b4608d27551",
+        "third_party/fonts/NotoSans-Bold.ttf": "c976e4b1b99edc88775377fcc21692ca4bfa46b6d6ca6522bfda505b28ff9d6a",
+        "third_party/fonts/notosans-OFL.txt": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+        "third_party/fonts/NotoSans.ttf": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d",
+        "third_party/fonts/notosansbold-OFL.txt": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb",
+        "third_party/fonts/notosansmath-OFL.txt": "403a95275b469061b7d4371c328e0ada3bc7d63328abe2e88aad5cd243b2fe21",
+        "third_party/fonts/NotoSansMath-Regular.ttf": "3f495fe933c06786e4d5f6d86b8ee70b6753a68ee3b9d87528726de0f6e2c47d",
+        "third_party/fonts/notosansmono-OFL.txt": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+        "third_party/fonts/NotoSansMono.ttf": "2cb2adb378a8f574213e23df697050b83c54c27df465a2015552740b2769a081",
+        "third_party/fonts/notosanssymbols2-OFL.txt": "b118dd41337806a5d4797052c77caf3bd096aed783e5eb21b4d11154351e1ac0",
+        "third_party/fonts/NotoSansSymbols2-Regular.ttf": "7d5fb73b7ca67a6798101741f5d280a3d016a56a197afcd4199dbb57b4b82a21",
+        "third_party/fonts/NotoSerif-Italic.ttf": "0ea81d6b54fc8aa5dff0fd6ebe7cfa431e9e6cf747a8d4aa33581fa0aaccffea",
+        "third_party/fonts/notoserifitalic-OFL.txt": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
+      },
+      "font_style_metadata": [
+        {
+          "path": "C:\\Windows\\Fonts\\georgiai.ttf",
+          "sha256": "d3e4bad27651d120ac8f2cea42cf4b4f077264fb243f66b3caffcfd35465f49b",
+          "macStyle": 2,
+          "italic_angle": -13.0,
+          "names": [
+            "Corsivo",
+            "Cursief",
+            "Cursiva",
+            "Dőlt",
+            "Etzana",
+            "Georgia",
+            "Georgia Corsivo",
+            "Georgia Cursief",
+            "Georgia Cursiva",
+            "Georgia Dőlt",
+            "Georgia Etzana",
+            "Georgia Italic",
+            "Georgia Italique",
+            "Georgia Itálico",
+            "Georgia Kursiv",
+            "Georgia Kursivoitu",
+            "Georgia Kursywa",
+            "Georgia Kurzíva",
+            "Georgia Poševno",
+            "Georgia kursiv",
+            "Georgia kurzíva",
+            "Georgia İtalik",
+            "Georgia Πλάγια",
+            "Georgia Курсив",
+            "Georgia-Italic",
+            "Italic",
+            "Italique",
+            "Itálico",
+            "Kursiv",
+            "Kursivoitu",
+            "Kursywa",
+            "Kurzíva",
+            "Poševno",
+            "kursiv",
+            "kurzíva",
+            "İtalik",
+            "Πλάγια",
+            "Курсив"
+          ]
+        },
+        {
+          "path": "D:\\Physim\\third_party\\fonts\\NotoSerif-Italic.ttf",
+          "sha256": "0ea81d6b54fc8aa5dff0fd6ebe7cfa431e9e6cf747a8d4aa33581fa0aaccffea",
+          "macStyle": 0,
+          "italic_angle": -12.0,
+          "names": [
+            "Italic",
+            "Noto Serif",
+            "Noto Serif Italic",
+            "NotoSerif-Italic",
+            "Regular"
+          ]
+        }
+      ],
+      "linebreak_assets_sha256": {
+        "third_party/libunibreak-8.0/eastasianwidthdata.c": "cfdc4c2abb651092cfa92fa8004a8dc7ae1e82841912720cb2b627b02534fab7",
+        "third_party/libunibreak-8.0/eastasianwidthdef.c": "f609d5915e4cf7572765e66aaa8bda6d315cc8ec89e01085c92683a2b1edd42d",
+        "third_party/libunibreak-8.0/eastasianwidthdef.h": "181068f45ca8a6ada6acf3567caee7d86ce12a30c077949b1e7dc3738b4d2707",
+        "third_party/libunibreak-8.0/LICENCE": "0c57e2ec42ece17791a75d2f9b2f8e0663181be008667a507f765b3ef22522db",
+        "third_party/libunibreak-8.0/linebreak.c": "35fa884d87b37105cc541b4cfd085935f0262b8c472532edfb659fe37b9cc51e",
+        "third_party/libunibreak-8.0/linebreak.h": "394d9879d87d6a9930a42a9256c0b732417bbac30d051138b1a0da7c18347538",
+        "third_party/libunibreak-8.0/linebreakauxdata.c": "09b9327653433d22cc1c3ff4cbdd176abe577286365275cc70617a79adea29db",
+        "third_party/libunibreak-8.0/linebreakdata.c": "d2a1008ad93a15c15389e5cdd3c2d21b5e03820ed9daeee5a5a902ef56649719",
+        "third_party/libunibreak-8.0/linebreakdef.c": "105b926c59ed3b1a87e2c7a19ba68adaec69032b501d0c61d9a7043f534bd62b",
+        "third_party/libunibreak-8.0/linebreakdef.h": "5b5c1470331752a11b340eea2c0f48b7f04bd908c20864d475f05aec498a9906",
+        "third_party/libunibreak-8.0/LineBreakTest.txt.gz": "11ccaca034f591acbe31abfc9139a3151a975c13b73669a1a8beca6aba7cd60c",
+        "third_party/libunibreak-8.0/manifest.json": "25f46d89704e034db72ccb3266238ee12bfb1f0754ebad6d8089d63a41e9ad68",
+        "third_party/libunibreak-8.0/NEWS": "6dc1d862c2be012f29ae43d05f6b4096f98475fe9d56b6f71ce06a23f6f5bb02",
+        "third_party/libunibreak-8.0/README.md": "38a024448aa0a76effea8b5f151f1dcfb5c52cca1c05baaddea741fa6fa73fc2",
+        "third_party/libunibreak-8.0/unibreakbase.c": "aa44089bcde4bf6cedb387af7bed3ba58d02d3a2c1202b306812a0be74bc0834",
+        "third_party/libunibreak-8.0/unibreakbase.h": "3880a7c664fe6eec033950935ec99c297d9c44fe154fbd6972b4d8a55fd20976",
+        "third_party/libunibreak-8.0/unibreakdef.c": "9d0f2a973ee07e748091ec18e09131ab7109899ae15b17fa769c93794a7fd58e",
+        "third_party/libunibreak-8.0/unibreakdef.h": "2cffd22ab7ed6a69f819905e30b2214891518c2b601d566e75186a0047095b40",
+        "third_party/libunibreak-8.0/UNICODE-LICENSE.txt": "e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96",
+        "third_party/libunibreak-8.0/UPSTREAM-README.md": "cc38c7b86a88afb77dd3710628b2622c01bfb90d78709e868f0da95c70c02cf5"
+      }
+    },
+    "2": {
+      "base": "c79ef47ae1495e721f5c6818f8985a49a0674174",
+      "created_utc": "2026-10-21T19:57:41.052199+00:00",
+      "source_sha256_lf": {
+        ".gitattributes": "d5b4568db93fb652f7318f74c69b78abaf2ab2e2b5c2fabe331552d63eedc8f4",
+        "README.md": "4765e741ed11e7ca1299ee6520452767ec6a3dcbbe55e5b993db7a68e032236f",
+        "app/analysis_layout.inc": "74a9cb6997e41b6ae2c597494bc870f3a9b9de768de9d4ad1b7eff9d01deb48d",
+        "app/analysis_resize.inc": "8ccc8dfa92d58f910d4ee9cacc04e96a93be01b12af2b603368205b00726eb88",
+        "app/analysis_ui.inc": "b64974dd94bdb9466114b182bd5a1b7867828a8fb6a3ebf571fb5172230224ec",
+        "app/analysis_units_tests.inc": "5b299a53559c760f332b5c66c9ece3b352f9ad1c8928f842d55311a6763f4afd",
+        "app/analysis_workspace_tests.inc": "8a4bb2a826946de53257654760f97f702d6f1d87a19cc47f5d1f458172ade8a2",
+        "app/api_card_tests.inc": "e02e56843d3c719a004f5bb5a328b69a3ea9f7bac50866248718c6023e2f262c",
+        "app/api_reference_tests.inc": "53e5373f929589b68064b8e0369e90f07eb4284429ea5bb640b662da16ea66bb",
+        "app/api_reference_ui.inc": "b2ca3cd9215b9b79ed3b826cb33443a7c4f5dfe2eb37f0b320fd983696a5c19d",
+        "app/channel_units_tests.inc": "7f71e05664cfefab012fc0363622541e72b890ea4a48b8e02d6f40f0b93cfdff",
+        "app/channel_units_ui.inc": "dbe90c981c123bac6afaac9e85c9c977cc6581c1d01b84f77c531bad59955a8a",
+        "app/code_preview.c": "014cfb421cd4a3a9c514e3608ce5e910b9f774166a1772438eae87ea153a1bea",
+        "app/code_preview.h": "33f2ed5f96d675b6b1d9fa7e40740f6654ff579ae53b5c550c35dff3e55f17c7",
+        "app/design_ui.inc": "44a97be7b323d8ccb0208afcba69a998aade07902f477d6cf26fb6c878c2eb1f",
+        "app/docking_ui.inc": "db470ed74b46b4a7d0eee0b5c12428c249768aa9d81475cf48e71048324ba35b",
+        "app/documentation.c": "62c802e4572e3ef988f7b4121541865ccd2d7968000cb2074ce7d93500ed5fa1",
+        "app/documentation.h": "31805cf0517336ef59ed915c4a57d19b6a132467d6e73274f3908a9881f4e69c",
+        "app/documentation_actions.inc": "4b372fb77fe89eeefa04b66e2ece3022e91854f14b8f186dceeabfa144e4a349",
+        "app/documentation_article_flow.inc": "7cec4d787059dffa08733ab93e3a1bca2958ee81f85f97b1608fece14fbf0141",
+        "app/documentation_code_preview.inc": "f8068ede433a0bcffd971901bce86730bdbcfbe4b52b735ff96e669b2b675030",
+        "app/documentation_code_preview_tests.inc": "b2adf12bfebdcaf8e38bcbcdba4061f8e1c6d064d2ec29098e768dc80bdc16bf",
+        "app/documentation_figure_font.inc": "1d47e8e3927e7fc31b1dafc76b8af4b671a761c2bc2430b0e8af89a6922d4804",
+        "app/documentation_h.inc": "160ee1f61ef559012fe5c73a4da2271570f91db2bd90d0263cd7bdc99716c024",
+        "app/documentation_h_tests.inc": "18bfb146c790082f71f36b994e3934ebc108a1b86ea36dda16c3c7ca6710d55e",
+        "app/documentation_keyboard_tests.inc": "b59b0c4ac0139c317745be2fc5caa4a51a3dd8def89f17d8962bdf7d3839241a",
+        "app/documentation_layout.h": "2c199412f287e438b1b531525befb50edae3d9ff22bfe4d83438a946a6fb3631",
+        "app/documentation_math.inc": "626a3351a1e03ccb13ce81bf030c47cafe1712a1672a9c75179888e4bac879f0",
+        "app/documentation_media.inc": "c34fc5d426715d1b218fdcf686ade0e2e2ff29625456fe70fb3d3d82c72a1021",
+        "app/documentation_model_tests.inc": "6c35554765989555ecdefaec5c15826949a1a3f40c10c706fbcc9744e6a95720",
+        "app/documentation_pane_tests.inc": "82ec692a802dc9853cf423fb1c56c01aa077940f3bbbcb13b72a34e0aaf2ac6e",
+        "app/documentation_scroll_tests.inc": "9b9932b64ffa838d29709f9be0990102ad8c6dc97b4f7e9c9916d46760694d76",
+        "app/documentation_typography.inc": "cac4c53cd2d76f9a9e689a2a304a5169a3adcdea8186c8a0141a8c074baba010",
+        "app/documentation_ui.inc": "c9a937e25f3869e819561d3475c574a45b0084d81ed0e33b4a3f80e79f0ec9f4",
+        "app/documentation_window.inc": "b0c6683b0621059951960738f54edb193641b1ed6874170eb4a8c1ceb7e94d37",
+        "app/editor_search_ui.inc": "31ea341e322ef983a2d7e1f4319511fb1632169b545daa87f807988d9fe799f0",
+        "app/graphic_snapshot.c": "6c899b66d54d81109684b17c077ac2f8afd4eb8bb0db73af23bc75bcb75d9889",
+        "app/graphic_snapshot.h": "cfd6000b4c79794158862b03a194c2b034c70f57353ea5abf0e0041ca6b18f82",
+        "app/keyboard_menu_tests.inc": "bdb2b255ce95d0dcb85992d8ada3d57c7729cd49fa36dfb7ee202f8748cde682",
+        "app/layout_catalog.c": "5004ab858261242185d86389d5de0f39a75f9a0fd3e627a8a38c991371a16c01",
+        "app/layout_ui.inc": "be51a9d8fe2d91391248416a942f8bfd2e3ba5dd3b4a75d12883140930b1613f",
+        "app/main.c": "66a2015a8309ee9acc31be96e46ee301fbe8af6db3e93f5c0c03ebc1e65223fd",
+        "app/panel_windows.inc": "4a38f644a77403cd673618818466e5229cebf598b843fd50821b696ab22350ef",
+        "app/plot_tests.inc": "3c730aa3c5fd5a87444973c5cb1734c909286970421f6c8bd5b2a73294a15b61",
+        "app/plot_ui.inc": "8b933b3bb27c9d53be932f1e49ee949bab21a5a587c85f5f5e0fbf801b7b9815",
+        "app/preferences.c": "e2df26e2c2a0d054dfa1e4dd4b500bb0cf996debe7f861b05f3db2479088c360",
+        "app/report_details_tests.inc": "eff52c88636b5db6f371a9151975d88624e3d315c4e11e41a0ff55495bada6dc",
+        "app/report_image.c": "2e8472e798c76e2881658388203a8be8579e358c3af4a1e75a7e7a3aecc8ca0b",
+        "app/run_details_tests.inc": "ad34f630ee605abfb78245d3701611a3c6d26f15eae85cab2b32a5e0b6447f35",
+        "app/settings_tests.inc": "5202dece8488dba847ce67e3347ce67be17365f7a1fdde65c98bb62296dc2497",
+        "app/settings_ui.inc": "fab45b1548dadc0b8ef7b7a2f0577c0bc2d5363b4108a2ba855fa6113ccad4d1",
+        "app/shell_theme_tests.inc": "4b7452b932bbf9b6b09c681ed418d81de92854eaa11b9fceed61ca0c1084534a",
+        "app/source_outline_tests.inc": "7b8f0af18999e192d90d8db2eed179ca789921eee0af19796b2cf8c53b9ab952",
+        "app/source_outline_ui.inc": "c3ce8ceaf0827360d0620bdbc2bcd9196e63faff5cf8c5f2923e953ebac62bc4",
+        "app/toolbar_tests.inc": "16f96ab0fc7088cd766a634c94ee44d2ae97313f3018aadeb2603fe2d265259c",
+        "app/toolbar_ui.inc": "619f88a4dd1457f233d39de85fa23d033c4ebed6b754435a3632a33c40a7edf8",
+        "app/ui.h": "9ffbdbe8982071e053d670efe1dee7da5074d5a5fb55878faee3cffd01dbb66f",
+        "app/ui_backend.c": "5bf9d3d25f63f4821b500f502345835aa232339b6a7ef1fb381b491e280f500d",
+        "app/ui_sdl.c": "82b2023360a8ddef2da8068bba38514b340a69068c13b6060f2d16bdf4e51dbf",
+        "app/workbench_api_ui.inc": "3fa1f492af3ae84ee335b42757730f67ce4ec6c79094bfe170901474f86ca669",
+        "app/workbench_context_ui.inc": "79efa3ea59f163452c49c18f14b08a360acf0be1b89bb1c1e40686b2001a8f1a",
+        "app/workbench_tests.inc": "1bc37a41bb50b47972ad64f37f31be77519b53ac30695a7bc791d729d999cd69",
+        "app/workbench_text_ui.inc": "70755ae951d2fd3fdfddc37691ab8ec6dba33a81ab9670b72f8ef3af91174ba6",
+        "app/workspace_tests.inc": "f8a8746e28859bb1b50b50393a1ccd6d907ec26fa52224ecc947c804c04c9803",
+        "docs/decisions/010-analysis-graphic-export.md": "0ff356badb4010b75fe8e85dce67097f9d22f7c53847acbfd8fa1a34fe4209ce",
+        "docs/reference/experiment.md": "549238a1d1c61fd3e9b743cdae5cd9b5469c80f1da55e8492fb4258799ffd0d1",
+        "docs/reference/language-library.md": "3b77d247f174cc7970c8e049a1ee43bcd0cfae534d5d1ba66c4b0070a1d27cc3",
+        "docs/visuals/f1-layouts/final-h.css": "ec6a83c767f02eb6679a638407709225651c89919ae2df773e0b3b8271e9e6f0",
+        "docs/visuals/f1-layouts/layouts.css": "6ae773eb10452dfbbd2331208cdfc8e8c6672869cc877e6fef59abb8c9739c6b",
+        "docs/visuals/f1-layouts/model.svg": "3b11ef46528fcf84a9b1f4fd36b55227edffd0c4c93f6e382042beab0458105a",
+        "docs/visuals/f1-layouts/refinements.css": "db878953549a411037f0c067340c34c7490c101a7af2b5112505a79be880fcb7",
+        "docs/visuals/unified-workspace/EXPORT-EXAMPLE.md": "9d59831f3af7b5fad784fff540e68b440925baef2d4c2e05eedb938a88c428dc",
+        "docs/workspace.md": "1f630769e597f8b899626f8321af78c0e7c20b3bcfe9f81ae1f5763b60831267",
+        "include/physim/report.h": "0fdf73094af4cc7849bf07e09a7645ca526546dc3d7758118cf02e5a3b3d37cd",
+        "include/physim/series.h": "02d390887ad6e633832b1caaa52abe7ea0d5c4c607da34d3aed42d4dc32cce5a",
+        "src/report.c": "d1869f74c7fafb508e8c62c14edf74759adbef30af7f9da4e0a04ceedac3cad7",
+        "src/report_export.c": "eb26aed1ce00abbccacc3f9c4e93e42292f0ee07e465232a976c6440540f9a1b",
+        "src/report_mask.inc": "76b7089f321a628e16626e23fc5d755a6abfb408139802e5d032f16b5f8312db",
+        "src/series.c": "14b4fb4db7ec5194d5d27a1600e5fa54fa32bbf683e49182b45113b450371e93",
+        "tests/check_display_workflow.py": "d595f6f5ab5ce174c7e8b2219a682b5ae774294e197da8073a7f1e93edcf1e51",
+        "tests/check_f1_h_reference.py": "1f2bfdf6aaf0e1b850b740d4d934375cebfe2a6d24825ff365ac825c2d42a712",
+        "tests/check_unified_chrome.py": "2ec9fb6b1a54566cd69754bfd07f248daaf0a42d7135e7355812683422157b3e",
+        "tests/check_workbench_context.py": "bfa23b2e0d1fdd915cd15a7df988eaf2720dad0a41b1c90a5d7befb45eb9041c",
+        "tests/native_integration_cases.json": "c55c9d5094a09ddb160ad6a648f6ffda04e857d0ed1fc94e9ff2f5a6d3f4a3eb",
+        "tests/probe_font_shaping.py": "0e5f6f383a53988064dd998978fe8ced04bd6a71cf1ff312e8d01159347a6ab0",
+        "tests/test_allocator.h": "52f7105cf12f7947f07b98b73ddf4eb0ba002be6b843eb6d27dbd6a271e48625",
+        "tests/test_api_reference.c": "ade8ed122d85a690018f5b8c60a55d8c3a2ad936a0581d82bb67fc537da8c3cd",
+        "tests/test_code_linebreak.c": "cb061fe6d45104680ccc444ba16cfac1a059329457e29e018b85bdf71f73d30a",
+        "tests/test_code_preview.c": "01c6806fc4f79a75cc21c09b3f42c8481364d1b97d82d02841d9046cd9a88219",
+        "tests/test_font_faces.c": "fe71e02cd7a829d1bef8603a53c83d923c161a157a9180a78ae4903268de8ba1",
+        "tests/test_graphic_snapshot.c": "ea521f8cfc429d79dbe93ee5f6a8a8f954b4afd9618095c0ca7790efaa312092",
+        "tests/test_layout_catalog.c": "21077c44d0181840841f351ef46ff219e454b596a768b64d8b71d30ba610d36c",
+        "tests/test_native_test_runner.py": "4630ac724adcf24e686a168138f8381db31bf732b27013b78d7e8dd0344b7122",
+        "tests/test_preferences.c": "54d372d06bfe74b2b1f71ff0d6bb9785ed5dce9a8e12391ee0a8b21f746643b8",
+        "third_party/README.md": "aac6107ec5668c64b8cd49461c3da8ac90c93ab8c8b3127b2df3433b55e90d21",
+        "third_party/fonts/README.md": "7d0bcda8e1d7cabef874cb4cd77cac7389455146d9401a6b455c457290d802f2",
+        "third_party/fonts/manifest.json": "cf6be7a07ab8a16af6fd619667bc54cdd6665ddb5a76fca6829542a1ed92a6b9",
+        "third_party/libunibreak-8.0/README.md": "38a024448aa0a76effea8b5f151f1dcfb5c52cca1c05baaddea741fa6fa73fc2",
+        "third_party/nuklear.h": "fbd8ac79c8281fff46084a91d40ab45f80a8542b88d0281042202c4bfb440aae",
+        "tools/build.py": "e237a8f6d2ee1d72a4d247fac509ebf53628dc3bf74908b027a1eafc9a02f352",
+        "tools/native_tests.py": "d3c2824c5c020b44b87ec80c63144647f81dbd9c86329e05d8607d50792d450c",
+        "tools/profile_font_pairs.c": "ea49680a92e6a6f28f0af8a3cb5a6f53a41835d7002452c430d8ab62d91fc48a",
+        "app/graphic_figure.c": "8fa8d98383212aecc5fae63a679c6a380161813778bfa59cea3f64c99d9fa03b",
+        "app/graphic_figure.h": "d76c9da54d8c3da6cb5e4ca4ca4864d5b72b20eb37f1b472628f32dd549671d3",
+        "app/plot_view.c": "507f52080cc97dd92a3fc827a130bca12192f5104cc0a050ebea1de06e58a12f",
+        "app/plot_view.h": "60207a43569e8f6ccab3bb1a4d0f9ca84aea186f81b90211a11c25f6ad173e10",
+        "tests/test_graphic_figure.c": "645da35842329aefb206fdbe879dc2d2f105801e68ff5237052cd1da2c9a0e4b"
+      },
+      "foreign_sha256_lf": {
+        ".github/workflows/linux-ui-sanitizers.yml": "80e5b0d925f75ddce52260e8812cfb02d0e5b6e4ccfef03ea86deea75c446085",
+        ".github/workflows/macos-f1-accessibility.yml": "c37bfbd09cdfb0d26922cf0fbd8527f2be70161dd113809435732b6150fd5650",
+        "app/accessibility_atspi.c": "fb32ff39647be57cdaa2c02a10d4319ecef2186747a1edc2338bb397e5668b0f",
+        "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+        "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+        "tests/check_documentation_orca.py": "e38b255bbd7bb12787e50cd78d4b32ed8f985ce60746afde2702285e22a728d5",
+        "tests/test_accessibility_tables_atspi.py": "623f5152d85dabe778728fedc9f999b93e3bfaef6d8d82679d6444675ad54d2f",
+        "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+        "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+        "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+      },
+      "font_assets_sha256": {
+        "third_party/fonts/notoemoji-OFL.txt": "500bb1ccf43df7bbb522112f9133a52b16e1c35e809632f5d8609b179152de5b",
+        "third_party/fonts/NotoEmoji.ttf": "de6c18832938afc99caf132b39d6a30a19bac7f2e812e28db2535b4608d27551",
+        "third_party/fonts/NotoSans-Bold.ttf": "c976e4b1b99edc88775377fcc21692ca4bfa46b6d6ca6522bfda505b28ff9d6a",
+        "third_party/fonts/notosans-OFL.txt": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+        "third_party/fonts/NotoSans.ttf": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d",
+        "third_party/fonts/notosansbold-OFL.txt": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb",
+        "third_party/fonts/notosansmath-OFL.txt": "403a95275b469061b7d4371c328e0ada3bc7d63328abe2e88aad5cd243b2fe21",
+        "third_party/fonts/NotoSansMath-Regular.ttf": "3f495fe933c06786e4d5f6d86b8ee70b6753a68ee3b9d87528726de0f6e2c47d",
+        "third_party/fonts/notosansmono-OFL.txt": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+        "third_party/fonts/NotoSansMono.ttf": "2cb2adb378a8f574213e23df697050b83c54c27df465a2015552740b2769a081",
+        "third_party/fonts/notosanssymbols2-OFL.txt": "b118dd41337806a5d4797052c77caf3bd096aed783e5eb21b4d11154351e1ac0",
+        "third_party/fonts/NotoSansSymbols2-Regular.ttf": "7d5fb73b7ca67a6798101741f5d280a3d016a56a197afcd4199dbb57b4b82a21",
+        "third_party/fonts/NotoSerif-Italic.ttf": "0ea81d6b54fc8aa5dff0fd6ebe7cfa431e9e6cf747a8d4aa33581fa0aaccffea",
+        "third_party/fonts/notoserifitalic-OFL.txt": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
+      },
+      "font_style_metadata": [
+        {
+          "path": "C:\\Windows\\Fonts\\georgiai.ttf",
+          "sha256": "d3e4bad27651d120ac8f2cea42cf4b4f077264fb243f66b3caffcfd35465f49b",
+          "macStyle": 2,
+          "italic_angle": -13.0,
+          "names": [
+            "Corsivo",
+            "Cursief",
+            "Cursiva",
+            "Dőlt",
+            "Etzana",
+            "Georgia",
+            "Georgia Corsivo",
+            "Georgia Cursief",
+            "Georgia Cursiva",
+            "Georgia Dőlt",
+            "Georgia Etzana",
+            "Georgia Italic",
+            "Georgia Italique",
+            "Georgia Itálico",
+            "Georgia Kursiv",
+            "Georgia Kursivoitu",
+            "Georgia Kursywa",
+            "Georgia Kurzíva",
+            "Georgia Poševno",
+            "Georgia kursiv",
+            "Georgia kurzíva",
+            "Georgia İtalik",
+            "Georgia Πλάγια",
+            "Georgia Курсив",
+            "Georgia-Italic",
+            "Italic",
+            "Italique",
+            "Itálico",
+            "Kursiv",
+            "Kursivoitu",
+            "Kursywa",
+            "Kurzíva",
+            "Poševno",
+            "kursiv",
+            "kurzíva",
+            "İtalik",
+            "Πλάγια",
+            "Курсив"
+          ]
+        },
+        {
+          "path": "D:\\Physim\\third_party\\fonts\\NotoSerif-Italic.ttf",
+          "sha256": "0ea81d6b54fc8aa5dff0fd6ebe7cfa431e9e6cf747a8d4aa33581fa0aaccffea",
+          "macStyle": 0,
+          "italic_angle": -12.0,
+          "names": [
+            "Italic",
+            "Noto Serif",
+            "Noto Serif Italic",
+            "NotoSerif-Italic",
+            "Regular"
+          ]
+        }
+      ],
+      "linebreak_assets_sha256": {
+        "third_party/libunibreak-8.0/eastasianwidthdata.c": "cfdc4c2abb651092cfa92fa8004a8dc7ae1e82841912720cb2b627b02534fab7",
+        "third_party/libunibreak-8.0/eastasianwidthdef.c": "f609d5915e4cf7572765e66aaa8bda6d315cc8ec89e01085c92683a2b1edd42d",
+        "third_party/libunibreak-8.0/eastasianwidthdef.h": "181068f45ca8a6ada6acf3567caee7d86ce12a30c077949b1e7dc3738b4d2707",
+        "third_party/libunibreak-8.0/LICENCE": "0c57e2ec42ece17791a75d2f9b2f8e0663181be008667a507f765b3ef22522db",
+        "third_party/libunibreak-8.0/linebreak.c": "35fa884d87b37105cc541b4cfd085935f0262b8c472532edfb659fe37b9cc51e",
+        "third_party/libunibreak-8.0/linebreak.h": "394d9879d87d6a9930a42a9256c0b732417bbac30d051138b1a0da7c18347538",
+        "third_party/libunibreak-8.0/linebreakauxdata.c": "09b9327653433d22cc1c3ff4cbdd176abe577286365275cc70617a79adea29db",
+        "third_party/libunibreak-8.0/linebreakdata.c": "d2a1008ad93a15c15389e5cdd3c2d21b5e03820ed9daeee5a5a902ef56649719",
+        "third_party/libunibreak-8.0/linebreakdef.c": "105b926c59ed3b1a87e2c7a19ba68adaec69032b501d0c61d9a7043f534bd62b",
+        "third_party/libunibreak-8.0/linebreakdef.h": "5b5c1470331752a11b340eea2c0f48b7f04bd908c20864d475f05aec498a9906",
+        "third_party/libunibreak-8.0/LineBreakTest.txt.gz": "11ccaca034f591acbe31abfc9139a3151a975c13b73669a1a8beca6aba7cd60c",
+        "third_party/libunibreak-8.0/manifest.json": "25f46d89704e034db72ccb3266238ee12bfb1f0754ebad6d8089d63a41e9ad68",
+        "third_party/libunibreak-8.0/NEWS": "6dc1d862c2be012f29ae43d05f6b4096f98475fe9d56b6f71ce06a23f6f5bb02",
+        "third_party/libunibreak-8.0/README.md": "38a024448aa0a76effea8b5f151f1dcfb5c52cca1c05baaddea741fa6fa73fc2",
+        "third_party/libunibreak-8.0/unibreakbase.c": "aa44089bcde4bf6cedb387af7bed3ba58d02d3a2c1202b306812a0be74bc0834",
+        "third_party/libunibreak-8.0/unibreakbase.h": "3880a7c664fe6eec033950935ec99c297d9c44fe154fbd6972b4d8a55fd20976",
+        "third_party/libunibreak-8.0/unibreakdef.c": "9d0f2a973ee07e748091ec18e09131ab7109899ae15b17fa769c93794a7fd58e",
+        "third_party/libunibreak-8.0/unibreakdef.h": "2cffd22ab7ed6a69f819905e30b2214891518c2b601d566e75186a0047095b40",
+        "third_party/libunibreak-8.0/UNICODE-LICENSE.txt": "e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96",
+        "third_party/libunibreak-8.0/UPSTREAM-README.md": "cc38c7b86a88afb77dd3710628b2622c01bfb90d78709e868f0da95c70c02cf5"
+      }
+    },
+    "3": {
+      "base": "c79ef47ae1495e721f5c6818f8985a49a0674174",
+      "created_utc": "2026-10-21T20:01:21.660802+00:00",
+      "source_sha256_lf": {
+        ".gitattributes": "d5b4568db93fb652f7318f74c69b78abaf2ab2e2b5c2fabe331552d63eedc8f4",
+        "README.md": "4765e741ed11e7ca1299ee6520452767ec6a3dcbbe55e5b993db7a68e032236f",
+        "app/analysis_layout.inc": "74a9cb6997e41b6ae2c597494bc870f3a9b9de768de9d4ad1b7eff9d01deb48d",
+        "app/analysis_resize.inc": "8ccc8dfa92d58f910d4ee9cacc04e96a93be01b12af2b603368205b00726eb88",
+        "app/analysis_ui.inc": "b64974dd94bdb9466114b182bd5a1b7867828a8fb6a3ebf571fb5172230224ec",
+        "app/analysis_units_tests.inc": "5b299a53559c760f332b5c66c9ece3b352f9ad1c8928f842d55311a6763f4afd",
+        "app/analysis_workspace_tests.inc": "8a4bb2a826946de53257654760f97f702d6f1d87a19cc47f5d1f458172ade8a2",
+        "app/api_card_tests.inc": "e02e56843d3c719a004f5bb5a328b69a3ea9f7bac50866248718c6023e2f262c",
+        "app/api_reference_tests.inc": "53e5373f929589b68064b8e0369e90f07eb4284429ea5bb640b662da16ea66bb",
+        "app/api_reference_ui.inc": "b2ca3cd9215b9b79ed3b826cb33443a7c4f5dfe2eb37f0b320fd983696a5c19d",
+        "app/channel_units_tests.inc": "7f71e05664cfefab012fc0363622541e72b890ea4a48b8e02d6f40f0b93cfdff",
+        "app/channel_units_ui.inc": "dbe90c981c123bac6afaac9e85c9c977cc6581c1d01b84f77c531bad59955a8a",
+        "app/code_preview.c": "014cfb421cd4a3a9c514e3608ce5e910b9f774166a1772438eae87ea153a1bea",
+        "app/code_preview.h": "33f2ed5f96d675b6b1d9fa7e40740f6654ff579ae53b5c550c35dff3e55f17c7",
+        "app/design_ui.inc": "44a97be7b323d8ccb0208afcba69a998aade07902f477d6cf26fb6c878c2eb1f",
+        "app/docking_ui.inc": "db470ed74b46b4a7d0eee0b5c12428c249768aa9d81475cf48e71048324ba35b",
+        "app/documentation.c": "62c802e4572e3ef988f7b4121541865ccd2d7968000cb2074ce7d93500ed5fa1",
+        "app/documentation.h": "31805cf0517336ef59ed915c4a57d19b6a132467d6e73274f3908a9881f4e69c",
+        "app/documentation_actions.inc": "4b372fb77fe89eeefa04b66e2ece3022e91854f14b8f186dceeabfa144e4a349",
+        "app/documentation_article_flow.inc": "7cec4d787059dffa08733ab93e3a1bca2958ee81f85f97b1608fece14fbf0141",
+        "app/documentation_code_preview.inc": "f8068ede433a0bcffd971901bce86730bdbcfbe4b52b735ff96e669b2b675030",
+        "app/documentation_code_preview_tests.inc": "b2adf12bfebdcaf8e38bcbcdba4061f8e1c6d064d2ec29098e768dc80bdc16bf",
+        "app/documentation_figure_font.inc": "1d47e8e3927e7fc31b1dafc76b8af4b671a761c2bc2430b0e8af89a6922d4804",
+        "app/documentation_h.inc": "160ee1f61ef559012fe5c73a4da2271570f91db2bd90d0263cd7bdc99716c024",
+        "app/documentation_h_tests.inc": "18bfb146c790082f71f36b994e3934ebc108a1b86ea36dda16c3c7ca6710d55e",
+        "app/documentation_keyboard_tests.inc": "b59b0c4ac0139c317745be2fc5caa4a51a3dd8def89f17d8962bdf7d3839241a",
+        "app/documentation_layout.h": "2c199412f287e438b1b531525befb50edae3d9ff22bfe4d83438a946a6fb3631",
+        "app/documentation_math.inc": "626a3351a1e03ccb13ce81bf030c47cafe1712a1672a9c75179888e4bac879f0",
+        "app/documentation_media.inc": "c34fc5d426715d1b218fdcf686ade0e2e2ff29625456fe70fb3d3d82c72a1021",
+        "app/documentation_model_tests.inc": "6c35554765989555ecdefaec5c15826949a1a3f40c10c706fbcc9744e6a95720",
+        "app/documentation_pane_tests.inc": "82ec692a802dc9853cf423fb1c56c01aa077940f3bbbcb13b72a34e0aaf2ac6e",
+        "app/documentation_scroll_tests.inc": "9b9932b64ffa838d29709f9be0990102ad8c6dc97b4f7e9c9916d46760694d76",
+        "app/documentation_typography.inc": "cac4c53cd2d76f9a9e689a2a304a5169a3adcdea8186c8a0141a8c074baba010",
+        "app/documentation_ui.inc": "c9a937e25f3869e819561d3475c574a45b0084d81ed0e33b4a3f80e79f0ec9f4",
+        "app/documentation_window.inc": "b0c6683b0621059951960738f54edb193641b1ed6874170eb4a8c1ceb7e94d37",
+        "app/editor_search_ui.inc": "31ea341e322ef983a2d7e1f4319511fb1632169b545daa87f807988d9fe799f0",
+        "app/graphic_snapshot.c": "6c899b66d54d81109684b17c077ac2f8afd4eb8bb0db73af23bc75bcb75d9889",
+        "app/graphic_snapshot.h": "cfd6000b4c79794158862b03a194c2b034c70f57353ea5abf0e0041ca6b18f82",
+        "app/keyboard_menu_tests.inc": "bdb2b255ce95d0dcb85992d8ada3d57c7729cd49fa36dfb7ee202f8748cde682",
+        "app/layout_catalog.c": "5004ab858261242185d86389d5de0f39a75f9a0fd3e627a8a38c991371a16c01",
+        "app/layout_ui.inc": "be51a9d8fe2d91391248416a942f8bfd2e3ba5dd3b4a75d12883140930b1613f",
+        "app/main.c": "66a2015a8309ee9acc31be96e46ee301fbe8af6db3e93f5c0c03ebc1e65223fd",
+        "app/panel_windows.inc": "4a38f644a77403cd673618818466e5229cebf598b843fd50821b696ab22350ef",
+        "app/plot_tests.inc": "3c730aa3c5fd5a87444973c5cb1734c909286970421f6c8bd5b2a73294a15b61",
+        "app/plot_ui.inc": "8b933b3bb27c9d53be932f1e49ee949bab21a5a587c85f5f5e0fbf801b7b9815",
+        "app/preferences.c": "e2df26e2c2a0d054dfa1e4dd4b500bb0cf996debe7f861b05f3db2479088c360",
+        "app/report_details_tests.inc": "eff52c88636b5db6f371a9151975d88624e3d315c4e11e41a0ff55495bada6dc",
+        "app/report_image.c": "2e8472e798c76e2881658388203a8be8579e358c3af4a1e75a7e7a3aecc8ca0b",
+        "app/run_details_tests.inc": "ad34f630ee605abfb78245d3701611a3c6d26f15eae85cab2b32a5e0b6447f35",
+        "app/settings_tests.inc": "5202dece8488dba847ce67e3347ce67be17365f7a1fdde65c98bb62296dc2497",
+        "app/settings_ui.inc": "fab45b1548dadc0b8ef7b7a2f0577c0bc2d5363b4108a2ba855fa6113ccad4d1",
+        "app/shell_theme_tests.inc": "4b7452b932bbf9b6b09c681ed418d81de92854eaa11b9fceed61ca0c1084534a",
+        "app/source_outline_tests.inc": "7b8f0af18999e192d90d8db2eed179ca789921eee0af19796b2cf8c53b9ab952",
+        "app/source_outline_ui.inc": "c3ce8ceaf0827360d0620bdbc2bcd9196e63faff5cf8c5f2923e953ebac62bc4",
+        "app/toolbar_tests.inc": "16f96ab0fc7088cd766a634c94ee44d2ae97313f3018aadeb2603fe2d265259c",
+        "app/toolbar_ui.inc": "619f88a4dd1457f233d39de85fa23d033c4ebed6b754435a3632a33c40a7edf8",
+        "app/ui.h": "9ffbdbe8982071e053d670efe1dee7da5074d5a5fb55878faee3cffd01dbb66f",
+        "app/ui_backend.c": "5bf9d3d25f63f4821b500f502345835aa232339b6a7ef1fb381b491e280f500d",
+        "app/ui_sdl.c": "82b2023360a8ddef2da8068bba38514b340a69068c13b6060f2d16bdf4e51dbf",
+        "app/workbench_api_ui.inc": "3fa1f492af3ae84ee335b42757730f67ce4ec6c79094bfe170901474f86ca669",
+        "app/workbench_context_ui.inc": "79efa3ea59f163452c49c18f14b08a360acf0be1b89bb1c1e40686b2001a8f1a",
+        "app/workbench_tests.inc": "1bc37a41bb50b47972ad64f37f31be77519b53ac30695a7bc791d729d999cd69",
+        "app/workbench_text_ui.inc": "70755ae951d2fd3fdfddc37691ab8ec6dba33a81ab9670b72f8ef3af91174ba6",
+        "app/workspace_tests.inc": "f8a8746e28859bb1b50b50393a1ccd6d907ec26fa52224ecc947c804c04c9803",
+        "docs/decisions/010-analysis-graphic-export.md": "0ff356badb4010b75fe8e85dce67097f9d22f7c53847acbfd8fa1a34fe4209ce",
+        "docs/reference/experiment.md": "549238a1d1c61fd3e9b743cdae5cd9b5469c80f1da55e8492fb4258799ffd0d1",
+        "docs/reference/language-library.md": "3b77d247f174cc7970c8e049a1ee43bcd0cfae534d5d1ba66c4b0070a1d27cc3",
+        "docs/visuals/f1-layouts/final-h.css": "ec6a83c767f02eb6679a638407709225651c89919ae2df773e0b3b8271e9e6f0",
+        "docs/visuals/f1-layouts/layouts.css": "6ae773eb10452dfbbd2331208cdfc8e8c6672869cc877e6fef59abb8c9739c6b",
+        "docs/visuals/f1-layouts/model.svg": "3b11ef46528fcf84a9b1f4fd36b55227edffd0c4c93f6e382042beab0458105a",
+        "docs/visuals/f1-layouts/refinements.css": "db878953549a411037f0c067340c34c7490c101a7af2b5112505a79be880fcb7",
+        "docs/visuals/unified-workspace/EXPORT-EXAMPLE.md": "9d59831f3af7b5fad784fff540e68b440925baef2d4c2e05eedb938a88c428dc",
+        "docs/workspace.md": "1f630769e597f8b899626f8321af78c0e7c20b3bcfe9f81ae1f5763b60831267",
+        "include/physim/report.h": "0fdf73094af4cc7849bf07e09a7645ca526546dc3d7758118cf02e5a3b3d37cd",
+        "include/physim/series.h": "02d390887ad6e633832b1caaa52abe7ea0d5c4c607da34d3aed42d4dc32cce5a",
+        "src/report.c": "d1869f74c7fafb508e8c62c14edf74759adbef30af7f9da4e0a04ceedac3cad7",
+        "src/report_export.c": "eb26aed1ce00abbccacc3f9c4e93e42292f0ee07e465232a976c6440540f9a1b",
+        "src/report_mask.inc": "76b7089f321a628e16626e23fc5d755a6abfb408139802e5d032f16b5f8312db",
+        "src/series.c": "14b4fb4db7ec5194d5d27a1600e5fa54fa32bbf683e49182b45113b450371e93",
+        "tests/check_display_workflow.py": "d595f6f5ab5ce174c7e8b2219a682b5ae774294e197da8073a7f1e93edcf1e51",
+        "tests/check_f1_h_reference.py": "1f2bfdf6aaf0e1b850b740d4d934375cebfe2a6d24825ff365ac825c2d42a712",
+        "tests/check_unified_chrome.py": "2ec9fb6b1a54566cd69754bfd07f248daaf0a42d7135e7355812683422157b3e",
+        "tests/check_workbench_context.py": "bfa23b2e0d1fdd915cd15a7df988eaf2720dad0a41b1c90a5d7befb45eb9041c",
+        "tests/native_integration_cases.json": "c55c9d5094a09ddb160ad6a648f6ffda04e857d0ed1fc94e9ff2f5a6d3f4a3eb",
+        "tests/probe_font_shaping.py": "0e5f6f383a53988064dd998978fe8ced04bd6a71cf1ff312e8d01159347a6ab0",
+        "tests/test_allocator.h": "52f7105cf12f7947f07b98b73ddf4eb0ba002be6b843eb6d27dbd6a271e48625",
+        "tests/test_api_reference.c": "ade8ed122d85a690018f5b8c60a55d8c3a2ad936a0581d82bb67fc537da8c3cd",
+        "tests/test_code_linebreak.c": "cb061fe6d45104680ccc444ba16cfac1a059329457e29e018b85bdf71f73d30a",
+        "tests/test_code_preview.c": "01c6806fc4f79a75cc21c09b3f42c8481364d1b97d82d02841d9046cd9a88219",
+        "tests/test_font_faces.c": "fe71e02cd7a829d1bef8603a53c83d923c161a157a9180a78ae4903268de8ba1",
+        "tests/test_graphic_snapshot.c": "ea521f8cfc429d79dbe93ee5f6a8a8f954b4afd9618095c0ca7790efaa312092",
+        "tests/test_layout_catalog.c": "21077c44d0181840841f351ef46ff219e454b596a768b64d8b71d30ba610d36c",
+        "tests/test_native_test_runner.py": "4630ac724adcf24e686a168138f8381db31bf732b27013b78d7e8dd0344b7122",
+        "tests/test_preferences.c": "54d372d06bfe74b2b1f71ff0d6bb9785ed5dce9a8e12391ee0a8b21f746643b8",
+        "third_party/README.md": "aac6107ec5668c64b8cd49461c3da8ac90c93ab8c8b3127b2df3433b55e90d21",
+        "third_party/fonts/README.md": "7d0bcda8e1d7cabef874cb4cd77cac7389455146d9401a6b455c457290d802f2",
+        "third_party/fonts/manifest.json": "cf6be7a07ab8a16af6fd619667bc54cdd6665ddb5a76fca6829542a1ed92a6b9",
+        "third_party/libunibreak-8.0/README.md": "38a024448aa0a76effea8b5f151f1dcfb5c52cca1c05baaddea741fa6fa73fc2",
+        "third_party/nuklear.h": "fbd8ac79c8281fff46084a91d40ab45f80a8542b88d0281042202c4bfb440aae",
+        "tools/build.py": "e237a8f6d2ee1d72a4d247fac509ebf53628dc3bf74908b027a1eafc9a02f352",
+        "tools/native_tests.py": "d3c2824c5c020b44b87ec80c63144647f81dbd9c86329e05d8607d50792d450c",
+        "tools/profile_font_pairs.c": "ea49680a92e6a6f28f0af8a3cb5a6f53a41835d7002452c430d8ab62d91fc48a",
+        "app/graphic_figure.c": "60002d68837f968a15d10371b9a51b0489fd8a5948f04c0b939ae77bb482edd1",
+        "app/graphic_figure.h": "d76c9da54d8c3da6cb5e4ca4ca4864d5b72b20eb37f1b472628f32dd549671d3",
+        "app/plot_view.c": "507f52080cc97dd92a3fc827a130bca12192f5104cc0a050ebea1de06e58a12f",
+        "app/plot_view.h": "60207a43569e8f6ccab3bb1a4d0f9ca84aea186f81b90211a11c25f6ad173e10",
+        "tests/test_graphic_figure.c": "017021928a65d798114da481c2f9072525b6e381d1395d45a2b60769470e8362"
+      },
+      "foreign_sha256_lf": {
+        ".github/workflows/linux-ui-sanitizers.yml": "80e5b0d925f75ddce52260e8812cfb02d0e5b6e4ccfef03ea86deea75c446085",
+        ".github/workflows/macos-f1-accessibility.yml": "c37bfbd09cdfb0d26922cf0fbd8527f2be70161dd113809435732b6150fd5650",
+        "app/accessibility_atspi.c": "fb32ff39647be57cdaa2c02a10d4319ecef2186747a1edc2338bb397e5668b0f",
+        "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+        "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+        "tests/check_documentation_orca.py": "e38b255bbd7bb12787e50cd78d4b32ed8f985ce60746afde2702285e22a728d5",
+        "tests/test_accessibility_tables_atspi.py": "623f5152d85dabe778728fedc9f999b93e3bfaef6d8d82679d6444675ad54d2f",
+        "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+        "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+        "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+      },
+      "font_assets_sha256": {
+        "third_party/fonts/notoemoji-OFL.txt": "500bb1ccf43df7bbb522112f9133a52b16e1c35e809632f5d8609b179152de5b",
+        "third_party/fonts/NotoEmoji.ttf": "de6c18832938afc99caf132b39d6a30a19bac7f2e812e28db2535b4608d27551",
+        "third_party/fonts/NotoSans-Bold.ttf": "c976e4b1b99edc88775377fcc21692ca4bfa46b6d6ca6522bfda505b28ff9d6a",
+        "third_party/fonts/notosans-OFL.txt": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+        "third_party/fonts/NotoSans.ttf": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d",
+        "third_party/fonts/notosansbold-OFL.txt": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb",
+        "third_party/fonts/notosansmath-OFL.txt": "403a95275b469061b7d4371c328e0ada3bc7d63328abe2e88aad5cd243b2fe21",
+        "third_party/fonts/NotoSansMath-Regular.ttf": "3f495fe933c06786e4d5f6d86b8ee70b6753a68ee3b9d87528726de0f6e2c47d",
+        "third_party/fonts/notosansmono-OFL.txt": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+        "third_party/fonts/NotoSansMono.ttf": "2cb2adb378a8f574213e23df697050b83c54c27df465a2015552740b2769a081",
+        "third_party/fonts/notosanssymbols2-OFL.txt": "b118dd41337806a5d4797052c77caf3bd096aed783e5eb21b4d11154351e1ac0",
+        "third_party/fonts/NotoSansSymbols2-Regular.ttf": "7d5fb73b7ca67a6798101741f5d280a3d016a56a197afcd4199dbb57b4b82a21",
+        "third_party/fonts/NotoSerif-Italic.ttf": "0ea81d6b54fc8aa5dff0fd6ebe7cfa431e9e6cf747a8d4aa33581fa0aaccffea",
+        "third_party/fonts/notoserifitalic-OFL.txt": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
+      },
+      "font_style_metadata": [
+        {
+          "path": "C:\\Windows\\Fonts\\georgiai.ttf",
+          "sha256": "d3e4bad27651d120ac8f2cea42cf4b4f077264fb243f66b3caffcfd35465f49b",
+          "macStyle": 2,
+          "italic_angle": -13.0,
+          "names": [
+            "Corsivo",
+            "Cursief",
+            "Cursiva",
+            "Dőlt",
+            "Etzana",
+            "Georgia",
+            "Georgia Corsivo",
+            "Georgia Cursief",
+            "Georgia Cursiva",
+            "Georgia Dőlt",
+            "Georgia Etzana",
+            "Georgia Italic",
+            "Georgia Italique",
+            "Georgia Itálico",
+            "Georgia Kursiv",
+            "Georgia Kursivoitu",
+            "Georgia Kursywa",
+            "Georgia Kurzíva",
+            "Georgia Poševno",
+            "Georgia kursiv",
+            "Georgia kurzíva",
+            "Georgia İtalik",
+            "Georgia Πλάγια",
+            "Georgia Курсив",
+            "Georgia-Italic",
+            "Italic",
+            "Italique",
+            "Itálico",
+            "Kursiv",
+            "Kursivoitu",
+            "Kursywa",
+            "Kurzíva",
+            "Poševno",
+            "kursiv",
+            "kurzíva",
+            "İtalik",
+            "Πλάγια",
+            "Курсив"
+          ]
+        },
+        {
+          "path": "D:\\Physim\\third_party\\fonts\\NotoSerif-Italic.ttf",
+          "sha256": "0ea81d6b54fc8aa5dff0fd6ebe7cfa431e9e6cf747a8d4aa33581fa0aaccffea",
+          "macStyle": 0,
+          "italic_angle": -12.0,
+          "names": [
+            "Italic",
+            "Noto Serif",
+            "Noto Serif Italic",
+            "NotoSerif-Italic",
+            "Regular"
+          ]
+        }
+      ],
+      "linebreak_assets_sha256": {
+        "third_party/libunibreak-8.0/eastasianwidthdata.c": "cfdc4c2abb651092cfa92fa8004a8dc7ae1e82841912720cb2b627b02534fab7",
+        "third_party/libunibreak-8.0/eastasianwidthdef.c": "f609d5915e4cf7572765e66aaa8bda6d315cc8ec89e01085c92683a2b1edd42d",
+        "third_party/libunibreak-8.0/eastasianwidthdef.h": "181068f45ca8a6ada6acf3567caee7d86ce12a30c077949b1e7dc3738b4d2707",
+        "third_party/libunibreak-8.0/LICENCE": "0c57e2ec42ece17791a75d2f9b2f8e0663181be008667a507f765b3ef22522db",
+        "third_party/libunibreak-8.0/linebreak.c": "35fa884d87b37105cc541b4cfd085935f0262b8c472532edfb659fe37b9cc51e",
+        "third_party/libunibreak-8.0/linebreak.h": "394d9879d87d6a9930a42a9256c0b732417bbac30d051138b1a0da7c18347538",
+        "third_party/libunibreak-8.0/linebreakauxdata.c": "09b9327653433d22cc1c3ff4cbdd176abe577286365275cc70617a79adea29db",
+        "third_party/libunibreak-8.0/linebreakdata.c": "d2a1008ad93a15c15389e5cdd3c2d21b5e03820ed9daeee5a5a902ef56649719",
+        "third_party/libunibreak-8.0/linebreakdef.c": "105b926c59ed3b1a87e2c7a19ba68adaec69032b501d0c61d9a7043f534bd62b",
+        "third_party/libunibreak-8.0/linebreakdef.h": "5b5c1470331752a11b340eea2c0f48b7f04bd908c20864d475f05aec498a9906",
+        "third_party/libunibreak-8.0/LineBreakTest.txt.gz": "11ccaca034f591acbe31abfc9139a3151a975c13b73669a1a8beca6aba7cd60c",
+        "third_party/libunibreak-8.0/manifest.json": "25f46d89704e034db72ccb3266238ee12bfb1f0754ebad6d8089d63a41e9ad68",
+        "third_party/libunibreak-8.0/NEWS": "6dc1d862c2be012f29ae43d05f6b4096f98475fe9d56b6f71ce06a23f6f5bb02",
+        "third_party/libunibreak-8.0/README.md": "38a024448aa0a76effea8b5f151f1dcfb5c52cca1c05baaddea741fa6fa73fc2",
+        "third_party/libunibreak-8.0/unibreakbase.c": "aa44089bcde4bf6cedb387af7bed3ba58d02d3a2c1202b306812a0be74bc0834",
+        "third_party/libunibreak-8.0/unibreakbase.h": "3880a7c664fe6eec033950935ec99c297d9c44fe154fbd6972b4d8a55fd20976",
+        "third_party/libunibreak-8.0/unibreakdef.c": "9d0f2a973ee07e748091ec18e09131ab7109899ae15b17fa769c93794a7fd58e",
+        "third_party/libunibreak-8.0/unibreakdef.h": "2cffd22ab7ed6a69f819905e30b2214891518c2b601d566e75186a0047095b40",
+        "third_party/libunibreak-8.0/UNICODE-LICENSE.txt": "e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96",
+        "third_party/libunibreak-8.0/UPSTREAM-README.md": "cc38c7b86a88afb77dd3710628b2622c01bfb90d78709e868f0da95c70c02cf5"
+      }
+    },
+    "4": {
+      "base": "c79ef47ae1495e721f5c6818f8985a49a0674174",
+      "created_utc": "2026-10-21T20:05:29.208584+00:00",
+      "source_sha256_lf": {
+        ".gitattributes": "d5b4568db93fb652f7318f74c69b78abaf2ab2e2b5c2fabe331552d63eedc8f4",
+        "README.md": "4765e741ed11e7ca1299ee6520452767ec6a3dcbbe55e5b993db7a68e032236f",
+        "app/analysis_layout.inc": "74a9cb6997e41b6ae2c597494bc870f3a9b9de768de9d4ad1b7eff9d01deb48d",
+        "app/analysis_resize.inc": "8ccc8dfa92d58f910d4ee9cacc04e96a93be01b12af2b603368205b00726eb88",
+        "app/analysis_ui.inc": "b64974dd94bdb9466114b182bd5a1b7867828a8fb6a3ebf571fb5172230224ec",
+        "app/analysis_units_tests.inc": "5b299a53559c760f332b5c66c9ece3b352f9ad1c8928f842d55311a6763f4afd",
+        "app/analysis_workspace_tests.inc": "8a4bb2a826946de53257654760f97f702d6f1d87a19cc47f5d1f458172ade8a2",
+        "app/api_card_tests.inc": "e02e56843d3c719a004f5bb5a328b69a3ea9f7bac50866248718c6023e2f262c",
+        "app/api_reference_tests.inc": "53e5373f929589b68064b8e0369e90f07eb4284429ea5bb640b662da16ea66bb",
+        "app/api_reference_ui.inc": "b2ca3cd9215b9b79ed3b826cb33443a7c4f5dfe2eb37f0b320fd983696a5c19d",
+        "app/channel_units_tests.inc": "7f71e05664cfefab012fc0363622541e72b890ea4a48b8e02d6f40f0b93cfdff",
+        "app/channel_units_ui.inc": "dbe90c981c123bac6afaac9e85c9c977cc6581c1d01b84f77c531bad59955a8a",
+        "app/code_preview.c": "014cfb421cd4a3a9c514e3608ce5e910b9f774166a1772438eae87ea153a1bea",
+        "app/code_preview.h": "33f2ed5f96d675b6b1d9fa7e40740f6654ff579ae53b5c550c35dff3e55f17c7",
+        "app/design_ui.inc": "44a97be7b323d8ccb0208afcba69a998aade07902f477d6cf26fb6c878c2eb1f",
+        "app/docking_ui.inc": "db470ed74b46b4a7d0eee0b5c12428c249768aa9d81475cf48e71048324ba35b",
+        "app/documentation.c": "62c802e4572e3ef988f7b4121541865ccd2d7968000cb2074ce7d93500ed5fa1",
+        "app/documentation.h": "31805cf0517336ef59ed915c4a57d19b6a132467d6e73274f3908a9881f4e69c",
+        "app/documentation_actions.inc": "4b372fb77fe89eeefa04b66e2ece3022e91854f14b8f186dceeabfa144e4a349",
+        "app/documentation_article_flow.inc": "7cec4d787059dffa08733ab93e3a1bca2958ee81f85f97b1608fece14fbf0141",
+        "app/documentation_code_preview.inc": "f8068ede433a0bcffd971901bce86730bdbcfbe4b52b735ff96e669b2b675030",
+        "app/documentation_code_preview_tests.inc": "b2adf12bfebdcaf8e38bcbcdba4061f8e1c6d064d2ec29098e768dc80bdc16bf",
+        "app/documentation_figure_font.inc": "1d47e8e3927e7fc31b1dafc76b8af4b671a761c2bc2430b0e8af89a6922d4804",
+        "app/documentation_h.inc": "160ee1f61ef559012fe5c73a4da2271570f91db2bd90d0263cd7bdc99716c024",
+        "app/documentation_h_tests.inc": "18bfb146c790082f71f36b994e3934ebc108a1b86ea36dda16c3c7ca6710d55e",
+        "app/documentation_keyboard_tests.inc": "b59b0c4ac0139c317745be2fc5caa4a51a3dd8def89f17d8962bdf7d3839241a",
+        "app/documentation_layout.h": "2c199412f287e438b1b531525befb50edae3d9ff22bfe4d83438a946a6fb3631",
+        "app/documentation_math.inc": "626a3351a1e03ccb13ce81bf030c47cafe1712a1672a9c75179888e4bac879f0",
+        "app/documentation_media.inc": "c34fc5d426715d1b218fdcf686ade0e2e2ff29625456fe70fb3d3d82c72a1021",
+        "app/documentation_model_tests.inc": "6c35554765989555ecdefaec5c15826949a1a3f40c10c706fbcc9744e6a95720",
+        "app/documentation_pane_tests.inc": "82ec692a802dc9853cf423fb1c56c01aa077940f3bbbcb13b72a34e0aaf2ac6e",
+        "app/documentation_scroll_tests.inc": "9b9932b64ffa838d29709f9be0990102ad8c6dc97b4f7e9c9916d46760694d76",
+        "app/documentation_typography.inc": "cac4c53cd2d76f9a9e689a2a304a5169a3adcdea8186c8a0141a8c074baba010",
+        "app/documentation_ui.inc": "c9a937e25f3869e819561d3475c574a45b0084d81ed0e33b4a3f80e79f0ec9f4",
+        "app/documentation_window.inc": "b0c6683b0621059951960738f54edb193641b1ed6874170eb4a8c1ceb7e94d37",
+        "app/editor_search_ui.inc": "31ea341e322ef983a2d7e1f4319511fb1632169b545daa87f807988d9fe799f0",
+        "app/graphic_snapshot.c": "6c899b66d54d81109684b17c077ac2f8afd4eb8bb0db73af23bc75bcb75d9889",
+        "app/graphic_snapshot.h": "cfd6000b4c79794158862b03a194c2b034c70f57353ea5abf0e0041ca6b18f82",
+        "app/keyboard_menu_tests.inc": "bdb2b255ce95d0dcb85992d8ada3d57c7729cd49fa36dfb7ee202f8748cde682",
+        "app/layout_catalog.c": "5004ab858261242185d86389d5de0f39a75f9a0fd3e627a8a38c991371a16c01",
+        "app/layout_ui.inc": "be51a9d8fe2d91391248416a942f8bfd2e3ba5dd3b4a75d12883140930b1613f",
+        "app/main.c": "66a2015a8309ee9acc31be96e46ee301fbe8af6db3e93f5c0c03ebc1e65223fd",
+        "app/panel_windows.inc": "4a38f644a77403cd673618818466e5229cebf598b843fd50821b696ab22350ef",
+        "app/plot_tests.inc": "3c730aa3c5fd5a87444973c5cb1734c909286970421f6c8bd5b2a73294a15b61",
+        "app/plot_ui.inc": "8b933b3bb27c9d53be932f1e49ee949bab21a5a587c85f5f5e0fbf801b7b9815",
+        "app/preferences.c": "e2df26e2c2a0d054dfa1e4dd4b500bb0cf996debe7f861b05f3db2479088c360",
+        "app/report_details_tests.inc": "eff52c88636b5db6f371a9151975d88624e3d315c4e11e41a0ff55495bada6dc",
+        "app/report_image.c": "2e8472e798c76e2881658388203a8be8579e358c3af4a1e75a7e7a3aecc8ca0b",
+        "app/run_details_tests.inc": "ad34f630ee605abfb78245d3701611a3c6d26f15eae85cab2b32a5e0b6447f35",
+        "app/settings_tests.inc": "5202dece8488dba847ce67e3347ce67be17365f7a1fdde65c98bb62296dc2497",
+        "app/settings_ui.inc": "fab45b1548dadc0b8ef7b7a2f0577c0bc2d5363b4108a2ba855fa6113ccad4d1",
+        "app/shell_theme_tests.inc": "4b7452b932bbf9b6b09c681ed418d81de92854eaa11b9fceed61ca0c1084534a",
+        "app/source_outline_tests.inc": "7b8f0af18999e192d90d8db2eed179ca789921eee0af19796b2cf8c53b9ab952",
+        "app/source_outline_ui.inc": "c3ce8ceaf0827360d0620bdbc2bcd9196e63faff5cf8c5f2923e953ebac62bc4",
+        "app/toolbar_tests.inc": "16f96ab0fc7088cd766a634c94ee44d2ae97313f3018aadeb2603fe2d265259c",
+        "app/toolbar_ui.inc": "619f88a4dd1457f233d39de85fa23d033c4ebed6b754435a3632a33c40a7edf8",
+        "app/ui.h": "9ffbdbe8982071e053d670efe1dee7da5074d5a5fb55878faee3cffd01dbb66f",
+        "app/ui_backend.c": "5bf9d3d25f63f4821b500f502345835aa232339b6a7ef1fb381b491e280f500d",
+        "app/ui_sdl.c": "82b2023360a8ddef2da8068bba38514b340a69068c13b6060f2d16bdf4e51dbf",
+        "app/workbench_api_ui.inc": "3fa1f492af3ae84ee335b42757730f67ce4ec6c79094bfe170901474f86ca669",
+        "app/workbench_context_ui.inc": "79efa3ea59f163452c49c18f14b08a360acf0be1b89bb1c1e40686b2001a8f1a",
+        "app/workbench_tests.inc": "1bc37a41bb50b47972ad64f37f31be77519b53ac30695a7bc791d729d999cd69",
+        "app/workbench_text_ui.inc": "70755ae951d2fd3fdfddc37691ab8ec6dba33a81ab9670b72f8ef3af91174ba6",
+        "app/workspace_tests.inc": "f8a8746e28859bb1b50b50393a1ccd6d907ec26fa52224ecc947c804c04c9803",
+        "docs/decisions/010-analysis-graphic-export.md": "0ff356badb4010b75fe8e85dce67097f9d22f7c53847acbfd8fa1a34fe4209ce",
+        "docs/reference/experiment.md": "549238a1d1c61fd3e9b743cdae5cd9b5469c80f1da55e8492fb4258799ffd0d1",
+        "docs/reference/language-library.md": "3b77d247f174cc7970c8e049a1ee43bcd0cfae534d5d1ba66c4b0070a1d27cc3",
+        "docs/visuals/f1-layouts/final-h.css": "ec6a83c767f02eb6679a638407709225651c89919ae2df773e0b3b8271e9e6f0",
+        "docs/visuals/f1-layouts/layouts.css": "6ae773eb10452dfbbd2331208cdfc8e8c6672869cc877e6fef59abb8c9739c6b",
+        "docs/visuals/f1-layouts/model.svg": "3b11ef46528fcf84a9b1f4fd36b55227edffd0c4c93f6e382042beab0458105a",
+        "docs/visuals/f1-layouts/refinements.css": "db878953549a411037f0c067340c34c7490c101a7af2b5112505a79be880fcb7",
+        "docs/visuals/unified-workspace/EXPORT-EXAMPLE.md": "9d59831f3af7b5fad784fff540e68b440925baef2d4c2e05eedb938a88c428dc",
+        "docs/workspace.md": "1f630769e597f8b899626f8321af78c0e7c20b3bcfe9f81ae1f5763b60831267",
+        "include/physim/report.h": "0fdf73094af4cc7849bf07e09a7645ca526546dc3d7758118cf02e5a3b3d37cd",
+        "include/physim/series.h": "02d390887ad6e633832b1caaa52abe7ea0d5c4c607da34d3aed42d4dc32cce5a",
+        "src/report.c": "d1869f74c7fafb508e8c62c14edf74759adbef30af7f9da4e0a04ceedac3cad7",
+        "src/report_export.c": "eb26aed1ce00abbccacc3f9c4e93e42292f0ee07e465232a976c6440540f9a1b",
+        "src/report_mask.inc": "76b7089f321a628e16626e23fc5d755a6abfb408139802e5d032f16b5f8312db",
+        "src/series.c": "14b4fb4db7ec5194d5d27a1600e5fa54fa32bbf683e49182b45113b450371e93",
+        "tests/check_display_workflow.py": "d595f6f5ab5ce174c7e8b2219a682b5ae774294e197da8073a7f1e93edcf1e51",
+        "tests/check_f1_h_reference.py": "1f2bfdf6aaf0e1b850b740d4d934375cebfe2a6d24825ff365ac825c2d42a712",
+        "tests/check_unified_chrome.py": "2ec9fb6b1a54566cd69754bfd07f248daaf0a42d7135e7355812683422157b3e",
+        "tests/check_workbench_context.py": "bfa23b2e0d1fdd915cd15a7df988eaf2720dad0a41b1c90a5d7befb45eb9041c",
+        "tests/native_integration_cases.json": "c55c9d5094a09ddb160ad6a648f6ffda04e857d0ed1fc94e9ff2f5a6d3f4a3eb",
+        "tests/probe_font_shaping.py": "0e5f6f383a53988064dd998978fe8ced04bd6a71cf1ff312e8d01159347a6ab0",
+        "tests/test_allocator.h": "52f7105cf12f7947f07b98b73ddf4eb0ba002be6b843eb6d27dbd6a271e48625",
+        "tests/test_api_reference.c": "ade8ed122d85a690018f5b8c60a55d8c3a2ad936a0581d82bb67fc537da8c3cd",
+        "tests/test_code_linebreak.c": "cb061fe6d45104680ccc444ba16cfac1a059329457e29e018b85bdf71f73d30a",
+        "tests/test_code_preview.c": "01c6806fc4f79a75cc21c09b3f42c8481364d1b97d82d02841d9046cd9a88219",
+        "tests/test_font_faces.c": "fe71e02cd7a829d1bef8603a53c83d923c161a157a9180a78ae4903268de8ba1",
+        "tests/test_graphic_snapshot.c": "ea521f8cfc429d79dbe93ee5f6a8a8f954b4afd9618095c0ca7790efaa312092",
+        "tests/test_layout_catalog.c": "21077c44d0181840841f351ef46ff219e454b596a768b64d8b71d30ba610d36c",
+        "tests/test_native_test_runner.py": "4630ac724adcf24e686a168138f8381db31bf732b27013b78d7e8dd0344b7122",
+        "tests/test_preferences.c": "54d372d06bfe74b2b1f71ff0d6bb9785ed5dce9a8e12391ee0a8b21f746643b8",
+        "third_party/README.md": "aac6107ec5668c64b8cd49461c3da8ac90c93ab8c8b3127b2df3433b55e90d21",
+        "third_party/fonts/README.md": "7d0bcda8e1d7cabef874cb4cd77cac7389455146d9401a6b455c457290d802f2",
+        "third_party/fonts/manifest.json": "cf6be7a07ab8a16af6fd619667bc54cdd6665ddb5a76fca6829542a1ed92a6b9",
+        "third_party/libunibreak-8.0/README.md": "38a024448aa0a76effea8b5f151f1dcfb5c52cca1c05baaddea741fa6fa73fc2",
+        "third_party/nuklear.h": "fbd8ac79c8281fff46084a91d40ab45f80a8542b88d0281042202c4bfb440aae",
+        "tools/build.py": "e237a8f6d2ee1d72a4d247fac509ebf53628dc3bf74908b027a1eafc9a02f352",
+        "tools/native_tests.py": "d3c2824c5c020b44b87ec80c63144647f81dbd9c86329e05d8607d50792d450c",
+        "tools/profile_font_pairs.c": "ea49680a92e6a6f28f0af8a3cb5a6f53a41835d7002452c430d8ab62d91fc48a",
+        "app/graphic_figure.c": "7b49927fb6ee23418b443e1579fab5236cb6de426a5f031cfc677a97bf46bfb4",
+        "app/graphic_figure.h": "61c5a40f295f159fe66df68149dddb6bb119f35fc00f9ecd007aabb7fb5a7f45",
+        "app/plot_view.c": "507f52080cc97dd92a3fc827a130bca12192f5104cc0a050ebea1de06e58a12f",
+        "app/plot_view.h": "60207a43569e8f6ccab3bb1a4d0f9ca84aea186f81b90211a11c25f6ad173e10",
+        "tests/test_graphic_figure.c": "4821b539d80e66c2b56d45d1356eebf373d7cd930465d2d1cae342bbf42eaa9d",
+        "tests/check_graphic_figure_svg.py": "1d21a8a5e3f871699af4cc05b73f33ba40690f13d16b1d755ff255306db0f271"
+      },
+      "foreign_sha256_lf": {
+        ".github/workflows/linux-ui-sanitizers.yml": "80e5b0d925f75ddce52260e8812cfb02d0e5b6e4ccfef03ea86deea75c446085",
+        ".github/workflows/macos-f1-accessibility.yml": "c37bfbd09cdfb0d26922cf0fbd8527f2be70161dd113809435732b6150fd5650",
+        "app/accessibility_atspi.c": "fb32ff39647be57cdaa2c02a10d4319ecef2186747a1edc2338bb397e5668b0f",
+        "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+        "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+        "tests/check_documentation_orca.py": "e38b255bbd7bb12787e50cd78d4b32ed8f985ce60746afde2702285e22a728d5",
+        "tests/test_accessibility_tables_atspi.py": "623f5152d85dabe778728fedc9f999b93e3bfaef6d8d82679d6444675ad54d2f",
+        "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+        "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+        "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+      },
+      "font_assets_sha256": {
+        "third_party/fonts/notoemoji-OFL.txt": "500bb1ccf43df7bbb522112f9133a52b16e1c35e809632f5d8609b179152de5b",
+        "third_party/fonts/NotoEmoji.ttf": "de6c18832938afc99caf132b39d6a30a19bac7f2e812e28db2535b4608d27551",
+        "third_party/fonts/NotoSans-Bold.ttf": "c976e4b1b99edc88775377fcc21692ca4bfa46b6d6ca6522bfda505b28ff9d6a",
+        "third_party/fonts/notosans-OFL.txt": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+        "third_party/fonts/NotoSans.ttf": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d",
+        "third_party/fonts/notosansbold-OFL.txt": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb",
+        "third_party/fonts/notosansmath-OFL.txt": "403a95275b469061b7d4371c328e0ada3bc7d63328abe2e88aad5cd243b2fe21",
+        "third_party/fonts/NotoSansMath-Regular.ttf": "3f495fe933c06786e4d5f6d86b8ee70b6753a68ee3b9d87528726de0f6e2c47d",
+        "third_party/fonts/notosansmono-OFL.txt": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+        "third_party/fonts/NotoSansMono.ttf": "2cb2adb378a8f574213e23df697050b83c54c27df465a2015552740b2769a081",
+        "third_party/fonts/notosanssymbols2-OFL.txt": "b118dd41337806a5d4797052c77caf3bd096aed783e5eb21b4d11154351e1ac0",
+        "third_party/fonts/NotoSansSymbols2-Regular.ttf": "7d5fb73b7ca67a6798101741f5d280a3d016a56a197afcd4199dbb57b4b82a21",
+        "third_party/fonts/NotoSerif-Italic.ttf": "0ea81d6b54fc8aa5dff0fd6ebe7cfa431e9e6cf747a8d4aa33581fa0aaccffea",
+        "third_party/fonts/notoserifitalic-OFL.txt": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
+      },
+      "font_style_metadata": [
+        {
+          "path": "C:\\Windows\\Fonts\\georgiai.ttf",
+          "sha256": "d3e4bad27651d120ac8f2cea42cf4b4f077264fb243f66b3caffcfd35465f49b",
+          "macStyle": 2,
+          "italic_angle": -13.0,
+          "names": [
+            "Corsivo",
+            "Cursief",
+            "Cursiva",
+            "Dőlt",
+            "Etzana",
+            "Georgia",
+            "Georgia Corsivo",
+            "Georgia Cursief",
+            "Georgia Cursiva",
+            "Georgia Dőlt",
+            "Georgia Etzana",
+            "Georgia Italic",
+            "Georgia Italique",
+            "Georgia Itálico",
+            "Georgia Kursiv",
+            "Georgia Kursivoitu",
+            "Georgia Kursywa",
+            "Georgia Kurzíva",
+            "Georgia Poševno",
+            "Georgia kursiv",
+            "Georgia kurzíva",
+            "Georgia İtalik",
+            "Georgia Πλάγια",
+            "Georgia Курсив",
+            "Georgia-Italic",
+            "Italic",
+            "Italique",
+            "Itálico",
+            "Kursiv",
+            "Kursivoitu",
+            "Kursywa",
+            "Kurzíva",
+            "Poševno",
+            "kursiv",
+            "kurzíva",
+            "İtalik",
+            "Πλάγια",
+            "Курсив"
+          ]
+        },
+        {
+          "path": "D:\\Physim\\third_party\\fonts\\NotoSerif-Italic.ttf",
+          "sha256": "0ea81d6b54fc8aa5dff0fd6ebe7cfa431e9e6cf747a8d4aa33581fa0aaccffea",
+          "macStyle": 0,
+          "italic_angle": -12.0,
+          "names": [
+            "Italic",
+            "Noto Serif",
+            "Noto Serif Italic",
+            "NotoSerif-Italic",
+            "Regular"
+          ]
+        }
+      ],
+      "linebreak_assets_sha256": {
+        "third_party/libunibreak-8.0/eastasianwidthdata.c": "cfdc4c2abb651092cfa92fa8004a8dc7ae1e82841912720cb2b627b02534fab7",
+        "third_party/libunibreak-8.0/eastasianwidthdef.c": "f609d5915e4cf7572765e66aaa8bda6d315cc8ec89e01085c92683a2b1edd42d",
+        "third_party/libunibreak-8.0/eastasianwidthdef.h": "181068f45ca8a6ada6acf3567caee7d86ce12a30c077949b1e7dc3738b4d2707",
+        "third_party/libunibreak-8.0/LICENCE": "0c57e2ec42ece17791a75d2f9b2f8e0663181be008667a507f765b3ef22522db",
+        "third_party/libunibreak-8.0/linebreak.c": "35fa884d87b37105cc541b4cfd085935f0262b8c472532edfb659fe37b9cc51e",
+        "third_party/libunibreak-8.0/linebreak.h": "394d9879d87d6a9930a42a9256c0b732417bbac30d051138b1a0da7c18347538",
+        "third_party/libunibreak-8.0/linebreakauxdata.c": "09b9327653433d22cc1c3ff4cbdd176abe577286365275cc70617a79adea29db",
+        "third_party/libunibreak-8.0/linebreakdata.c": "d2a1008ad93a15c15389e5cdd3c2d21b5e03820ed9daeee5a5a902ef56649719",
+        "third_party/libunibreak-8.0/linebreakdef.c": "105b926c59ed3b1a87e2c7a19ba68adaec69032b501d0c61d9a7043f534bd62b",
+        "third_party/libunibreak-8.0/linebreakdef.h": "5b5c1470331752a11b340eea2c0f48b7f04bd908c20864d475f05aec498a9906",
+        "third_party/libunibreak-8.0/LineBreakTest.txt.gz": "11ccaca034f591acbe31abfc9139a3151a975c13b73669a1a8beca6aba7cd60c",
+        "third_party/libunibreak-8.0/manifest.json": "25f46d89704e034db72ccb3266238ee12bfb1f0754ebad6d8089d63a41e9ad68",
+        "third_party/libunibreak-8.0/NEWS": "6dc1d862c2be012f29ae43d05f6b4096f98475fe9d56b6f71ce06a23f6f5bb02",
+        "third_party/libunibreak-8.0/README.md": "38a024448aa0a76effea8b5f151f1dcfb5c52cca1c05baaddea741fa6fa73fc2",
+        "third_party/libunibreak-8.0/unibreakbase.c": "aa44089bcde4bf6cedb387af7bed3ba58d02d3a2c1202b306812a0be74bc0834",
+        "third_party/libunibreak-8.0/unibreakbase.h": "3880a7c664fe6eec033950935ec99c297d9c44fe154fbd6972b4d8a55fd20976",
+        "third_party/libunibreak-8.0/unibreakdef.c": "9d0f2a973ee07e748091ec18e09131ab7109899ae15b17fa769c93794a7fd58e",
+        "third_party/libunibreak-8.0/unibreakdef.h": "2cffd22ab7ed6a69f819905e30b2214891518c2b601d566e75186a0047095b40",
+        "third_party/libunibreak-8.0/UNICODE-LICENSE.txt": "e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96",
+        "third_party/libunibreak-8.0/UPSTREAM-README.md": "cc38c7b86a88afb77dd3710628b2622c01bfb90d78709e868f0da95c70c02cf5"
+      }
+    },
+    "5": {
+      "base": "c79ef47ae1495e721f5c6818f8985a49a0674174",
+      "created_utc": "2026-10-21T20:12:48.815365+00:00",
+      "source_sha256_lf": {
+        ".gitattributes": "d5b4568db93fb652f7318f74c69b78abaf2ab2e2b5c2fabe331552d63eedc8f4",
+        "README.md": "4765e741ed11e7ca1299ee6520452767ec6a3dcbbe55e5b993db7a68e032236f",
+        "app/analysis_layout.inc": "74a9cb6997e41b6ae2c597494bc870f3a9b9de768de9d4ad1b7eff9d01deb48d",
+        "app/analysis_resize.inc": "8ccc8dfa92d58f910d4ee9cacc04e96a93be01b12af2b603368205b00726eb88",
+        "app/analysis_ui.inc": "b64974dd94bdb9466114b182bd5a1b7867828a8fb6a3ebf571fb5172230224ec",
+        "app/analysis_units_tests.inc": "5b299a53559c760f332b5c66c9ece3b352f9ad1c8928f842d55311a6763f4afd",
+        "app/analysis_workspace_tests.inc": "8a4bb2a826946de53257654760f97f702d6f1d87a19cc47f5d1f458172ade8a2",
+        "app/api_card_tests.inc": "e02e56843d3c719a004f5bb5a328b69a3ea9f7bac50866248718c6023e2f262c",
+        "app/api_reference_tests.inc": "53e5373f929589b68064b8e0369e90f07eb4284429ea5bb640b662da16ea66bb",
+        "app/api_reference_ui.inc": "b2ca3cd9215b9b79ed3b826cb33443a7c4f5dfe2eb37f0b320fd983696a5c19d",
+        "app/channel_units_tests.inc": "7f71e05664cfefab012fc0363622541e72b890ea4a48b8e02d6f40f0b93cfdff",
+        "app/channel_units_ui.inc": "dbe90c981c123bac6afaac9e85c9c977cc6581c1d01b84f77c531bad59955a8a",
+        "app/code_preview.c": "014cfb421cd4a3a9c514e3608ce5e910b9f774166a1772438eae87ea153a1bea",
+        "app/code_preview.h": "33f2ed5f96d675b6b1d9fa7e40740f6654ff579ae53b5c550c35dff3e55f17c7",
+        "app/design_ui.inc": "44a97be7b323d8ccb0208afcba69a998aade07902f477d6cf26fb6c878c2eb1f",
+        "app/docking_ui.inc": "db470ed74b46b4a7d0eee0b5c12428c249768aa9d81475cf48e71048324ba35b",
+        "app/documentation.c": "62c802e4572e3ef988f7b4121541865ccd2d7968000cb2074ce7d93500ed5fa1",
+        "app/documentation.h": "31805cf0517336ef59ed915c4a57d19b6a132467d6e73274f3908a9881f4e69c",
+        "app/documentation_actions.inc": "4b372fb77fe89eeefa04b66e2ece3022e91854f14b8f186dceeabfa144e4a349",
+        "app/documentation_article_flow.inc": "7cec4d787059dffa08733ab93e3a1bca2958ee81f85f97b1608fece14fbf0141",
+        "app/documentation_code_preview.inc": "f8068ede433a0bcffd971901bce86730bdbcfbe4b52b735ff96e669b2b675030",
+        "app/documentation_code_preview_tests.inc": "b2adf12bfebdcaf8e38bcbcdba4061f8e1c6d064d2ec29098e768dc80bdc16bf",
+        "app/documentation_figure_font.inc": "1d47e8e3927e7fc31b1dafc76b8af4b671a761c2bc2430b0e8af89a6922d4804",
+        "app/documentation_h.inc": "160ee1f61ef559012fe5c73a4da2271570f91db2bd90d0263cd7bdc99716c024",
+        "app/documentation_h_tests.inc": "18bfb146c790082f71f36b994e3934ebc108a1b86ea36dda16c3c7ca6710d55e",
+        "app/documentation_keyboard_tests.inc": "b59b0c4ac0139c317745be2fc5caa4a51a3dd8def89f17d8962bdf7d3839241a",
+        "app/documentation_layout.h": "2c199412f287e438b1b531525befb50edae3d9ff22bfe4d83438a946a6fb3631",
+        "app/documentation_math.inc": "626a3351a1e03ccb13ce81bf030c47cafe1712a1672a9c75179888e4bac879f0",
+        "app/documentation_media.inc": "c34fc5d426715d1b218fdcf686ade0e2e2ff29625456fe70fb3d3d82c72a1021",
+        "app/documentation_model_tests.inc": "6c35554765989555ecdefaec5c15826949a1a3f40c10c706fbcc9744e6a95720",
+        "app/documentation_pane_tests.inc": "82ec692a802dc9853cf423fb1c56c01aa077940f3bbbcb13b72a34e0aaf2ac6e",
+        "app/documentation_scroll_tests.inc": "9b9932b64ffa838d29709f9be0990102ad8c6dc97b4f7e9c9916d46760694d76",
+        "app/documentation_typography.inc": "cac4c53cd2d76f9a9e689a2a304a5169a3adcdea8186c8a0141a8c074baba010",
+        "app/documentation_ui.inc": "c9a937e25f3869e819561d3475c574a45b0084d81ed0e33b4a3f80e79f0ec9f4",
+        "app/documentation_window.inc": "b0c6683b0621059951960738f54edb193641b1ed6874170eb4a8c1ceb7e94d37",
+        "app/editor_search_ui.inc": "31ea341e322ef983a2d7e1f4319511fb1632169b545daa87f807988d9fe799f0",
+        "app/graphic_snapshot.c": "6c899b66d54d81109684b17c077ac2f8afd4eb8bb0db73af23bc75bcb75d9889",
+        "app/graphic_snapshot.h": "cfd6000b4c79794158862b03a194c2b034c70f57353ea5abf0e0041ca6b18f82",
+        "app/keyboard_menu_tests.inc": "bdb2b255ce95d0dcb85992d8ada3d57c7729cd49fa36dfb7ee202f8748cde682",
+        "app/layout_catalog.c": "5004ab858261242185d86389d5de0f39a75f9a0fd3e627a8a38c991371a16c01",
+        "app/layout_ui.inc": "be51a9d8fe2d91391248416a942f8bfd2e3ba5dd3b4a75d12883140930b1613f",
+        "app/main.c": "66a2015a8309ee9acc31be96e46ee301fbe8af6db3e93f5c0c03ebc1e65223fd",
+        "app/panel_windows.inc": "4a38f644a77403cd673618818466e5229cebf598b843fd50821b696ab22350ef",
+        "app/plot_tests.inc": "3c730aa3c5fd5a87444973c5cb1734c909286970421f6c8bd5b2a73294a15b61",
+        "app/plot_ui.inc": "8b933b3bb27c9d53be932f1e49ee949bab21a5a587c85f5f5e0fbf801b7b9815",
+        "app/preferences.c": "e2df26e2c2a0d054dfa1e4dd4b500bb0cf996debe7f861b05f3db2479088c360",
+        "app/report_details_tests.inc": "eff52c88636b5db6f371a9151975d88624e3d315c4e11e41a0ff55495bada6dc",
+        "app/report_image.c": "2e8472e798c76e2881658388203a8be8579e358c3af4a1e75a7e7a3aecc8ca0b",
+        "app/run_details_tests.inc": "ad34f630ee605abfb78245d3701611a3c6d26f15eae85cab2b32a5e0b6447f35",
+        "app/settings_tests.inc": "5202dece8488dba847ce67e3347ce67be17365f7a1fdde65c98bb62296dc2497",
+        "app/settings_ui.inc": "fab45b1548dadc0b8ef7b7a2f0577c0bc2d5363b4108a2ba855fa6113ccad4d1",
+        "app/shell_theme_tests.inc": "4b7452b932bbf9b6b09c681ed418d81de92854eaa11b9fceed61ca0c1084534a",
+        "app/source_outline_tests.inc": "7b8f0af18999e192d90d8db2eed179ca789921eee0af19796b2cf8c53b9ab952",
+        "app/source_outline_ui.inc": "c3ce8ceaf0827360d0620bdbc2bcd9196e63faff5cf8c5f2923e953ebac62bc4",
+        "app/toolbar_tests.inc": "16f96ab0fc7088cd766a634c94ee44d2ae97313f3018aadeb2603fe2d265259c",
+        "app/toolbar_ui.inc": "619f88a4dd1457f233d39de85fa23d033c4ebed6b754435a3632a33c40a7edf8",
+        "app/ui.h": "9ffbdbe8982071e053d670efe1dee7da5074d5a5fb55878faee3cffd01dbb66f",
+        "app/ui_backend.c": "5bf9d3d25f63f4821b500f502345835aa232339b6a7ef1fb381b491e280f500d",
+        "app/ui_sdl.c": "82b2023360a8ddef2da8068bba38514b340a69068c13b6060f2d16bdf4e51dbf",
+        "app/workbench_api_ui.inc": "3fa1f492af3ae84ee335b42757730f67ce4ec6c79094bfe170901474f86ca669",
+        "app/workbench_context_ui.inc": "79efa3ea59f163452c49c18f14b08a360acf0be1b89bb1c1e40686b2001a8f1a",
+        "app/workbench_tests.inc": "1bc37a41bb50b47972ad64f37f31be77519b53ac30695a7bc791d729d999cd69",
+        "app/workbench_text_ui.inc": "70755ae951d2fd3fdfddc37691ab8ec6dba33a81ab9670b72f8ef3af91174ba6",
+        "app/workspace_tests.inc": "f8a8746e28859bb1b50b50393a1ccd6d907ec26fa52224ecc947c804c04c9803",
+        "docs/decisions/010-analysis-graphic-export.md": "0ff356badb4010b75fe8e85dce67097f9d22f7c53847acbfd8fa1a34fe4209ce",
+        "docs/reference/experiment.md": "549238a1d1c61fd3e9b743cdae5cd9b5469c80f1da55e8492fb4258799ffd0d1",
+        "docs/reference/language-library.md": "3b77d247f174cc7970c8e049a1ee43bcd0cfae534d5d1ba66c4b0070a1d27cc3",
+        "docs/visuals/f1-layouts/final-h.css": "ec6a83c767f02eb6679a638407709225651c89919ae2df773e0b3b8271e9e6f0",
+        "docs/visuals/f1-layouts/layouts.css": "6ae773eb10452dfbbd2331208cdfc8e8c6672869cc877e6fef59abb8c9739c6b",
+        "docs/visuals/f1-layouts/model.svg": "3b11ef46528fcf84a9b1f4fd36b55227edffd0c4c93f6e382042beab0458105a",
+        "docs/visuals/f1-layouts/refinements.css": "db878953549a411037f0c067340c34c7490c101a7af2b5112505a79be880fcb7",
+        "docs/visuals/unified-workspace/EXPORT-EXAMPLE.md": "9d59831f3af7b5fad784fff540e68b440925baef2d4c2e05eedb938a88c428dc",
+        "docs/workspace.md": "1f630769e597f8b899626f8321af78c0e7c20b3bcfe9f81ae1f5763b60831267",
+        "include/physim/report.h": "0fdf73094af4cc7849bf07e09a7645ca526546dc3d7758118cf02e5a3b3d37cd",
+        "include/physim/series.h": "02d390887ad6e633832b1caaa52abe7ea0d5c4c607da34d3aed42d4dc32cce5a",
+        "src/report.c": "d1869f74c7fafb508e8c62c14edf74759adbef30af7f9da4e0a04ceedac3cad7",
+        "src/report_export.c": "eb26aed1ce00abbccacc3f9c4e93e42292f0ee07e465232a976c6440540f9a1b",
+        "src/report_mask.inc": "76b7089f321a628e16626e23fc5d755a6abfb408139802e5d032f16b5f8312db",
+        "src/series.c": "14b4fb4db7ec5194d5d27a1600e5fa54fa32bbf683e49182b45113b450371e93",
+        "tests/check_display_workflow.py": "d595f6f5ab5ce174c7e8b2219a682b5ae774294e197da8073a7f1e93edcf1e51",
+        "tests/check_f1_h_reference.py": "1f2bfdf6aaf0e1b850b740d4d934375cebfe2a6d24825ff365ac825c2d42a712",
+        "tests/check_unified_chrome.py": "2ec9fb6b1a54566cd69754bfd07f248daaf0a42d7135e7355812683422157b3e",
+        "tests/check_workbench_context.py": "bfa23b2e0d1fdd915cd15a7df988eaf2720dad0a41b1c90a5d7befb45eb9041c",
+        "tests/native_integration_cases.json": "c55c9d5094a09ddb160ad6a648f6ffda04e857d0ed1fc94e9ff2f5a6d3f4a3eb",
+        "tests/probe_font_shaping.py": "0e5f6f383a53988064dd998978fe8ced04bd6a71cf1ff312e8d01159347a6ab0",
+        "tests/test_allocator.h": "52f7105cf12f7947f07b98b73ddf4eb0ba002be6b843eb6d27dbd6a271e48625",
+        "tests/test_api_reference.c": "ade8ed122d85a690018f5b8c60a55d8c3a2ad936a0581d82bb67fc537da8c3cd",
+        "tests/test_code_linebreak.c": "cb061fe6d45104680ccc444ba16cfac1a059329457e29e018b85bdf71f73d30a",
+        "tests/test_code_preview.c": "01c6806fc4f79a75cc21c09b3f42c8481364d1b97d82d02841d9046cd9a88219",
+        "tests/test_font_faces.c": "fe71e02cd7a829d1bef8603a53c83d923c161a157a9180a78ae4903268de8ba1",
+        "tests/test_graphic_snapshot.c": "ea521f8cfc429d79dbe93ee5f6a8a8f954b4afd9618095c0ca7790efaa312092",
+        "tests/test_layout_catalog.c": "21077c44d0181840841f351ef46ff219e454b596a768b64d8b71d30ba610d36c",
+        "tests/test_native_test_runner.py": "4630ac724adcf24e686a168138f8381db31bf732b27013b78d7e8dd0344b7122",
+        "tests/test_preferences.c": "54d372d06bfe74b2b1f71ff0d6bb9785ed5dce9a8e12391ee0a8b21f746643b8",
+        "third_party/README.md": "aac6107ec5668c64b8cd49461c3da8ac90c93ab8c8b3127b2df3433b55e90d21",
+        "third_party/fonts/README.md": "7d0bcda8e1d7cabef874cb4cd77cac7389455146d9401a6b455c457290d802f2",
+        "third_party/fonts/manifest.json": "cf6be7a07ab8a16af6fd619667bc54cdd6665ddb5a76fca6829542a1ed92a6b9",
+        "third_party/libunibreak-8.0/README.md": "38a024448aa0a76effea8b5f151f1dcfb5c52cca1c05baaddea741fa6fa73fc2",
+        "third_party/nuklear.h": "fbd8ac79c8281fff46084a91d40ab45f80a8542b88d0281042202c4bfb440aae",
+        "tools/build.py": "e237a8f6d2ee1d72a4d247fac509ebf53628dc3bf74908b027a1eafc9a02f352",
+        "tools/native_tests.py": "d3c2824c5c020b44b87ec80c63144647f81dbd9c86329e05d8607d50792d450c",
+        "tools/profile_font_pairs.c": "ea49680a92e6a6f28f0af8a3cb5a6f53a41835d7002452c430d8ab62d91fc48a",
+        "app/graphic_figure.c": "7b49927fb6ee23418b443e1579fab5236cb6de426a5f031cfc677a97bf46bfb4",
+        "app/graphic_figure.h": "61c5a40f295f159fe66df68149dddb6bb119f35fc00f9ecd007aabb7fb5a7f45",
+        "app/plot_view.c": "507f52080cc97dd92a3fc827a130bca12192f5104cc0a050ebea1de06e58a12f",
+        "app/plot_view.h": "60207a43569e8f6ccab3bb1a4d0f9ca84aea186f81b90211a11c25f6ad173e10",
+        "tests/test_graphic_figure.c": "f89e6c2ae2109eec27f1bdc85f587f25e67a45e643bad3347173b0a954007891",
+        "tests/check_graphic_figure_svg.py": "1d21a8a5e3f871699af4cc05b73f33ba40690f13d16b1d755ff255306db0f271"
+      },
+      "foreign_sha256_lf": {
+        ".github/workflows/linux-ui-sanitizers.yml": "80e5b0d925f75ddce52260e8812cfb02d0e5b6e4ccfef03ea86deea75c446085",
+        ".github/workflows/macos-f1-accessibility.yml": "c37bfbd09cdfb0d26922cf0fbd8527f2be70161dd113809435732b6150fd5650",
+        "app/accessibility_atspi.c": "fb32ff39647be57cdaa2c02a10d4319ecef2186747a1edc2338bb397e5668b0f",
+        "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+        "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+        "tests/check_documentation_orca.py": "e38b255bbd7bb12787e50cd78d4b32ed8f985ce60746afde2702285e22a728d5",
+        "tests/test_accessibility_tables_atspi.py": "623f5152d85dabe778728fedc9f999b93e3bfaef6d8d82679d6444675ad54d2f",
+        "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+        "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+        "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+      },
+      "font_assets_sha256": {
+        "third_party/fonts/notoemoji-OFL.txt": "500bb1ccf43df7bbb522112f9133a52b16e1c35e809632f5d8609b179152de5b",
+        "third_party/fonts/NotoEmoji.ttf": "de6c18832938afc99caf132b39d6a30a19bac7f2e812e28db2535b4608d27551",
+        "third_party/fonts/NotoSans-Bold.ttf": "c976e4b1b99edc88775377fcc21692ca4bfa46b6d6ca6522bfda505b28ff9d6a",
+        "third_party/fonts/notosans-OFL.txt": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+        "third_party/fonts/NotoSans.ttf": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d",
+        "third_party/fonts/notosansbold-OFL.txt": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb",
+        "third_party/fonts/notosansmath-OFL.txt": "403a95275b469061b7d4371c328e0ada3bc7d63328abe2e88aad5cd243b2fe21",
+        "third_party/fonts/NotoSansMath-Regular.ttf": "3f495fe933c06786e4d5f6d86b8ee70b6753a68ee3b9d87528726de0f6e2c47d",
+        "third_party/fonts/notosansmono-OFL.txt": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+        "third_party/fonts/NotoSansMono.ttf": "2cb2adb378a8f574213e23df697050b83c54c27df465a2015552740b2769a081",
+        "third_party/fonts/notosanssymbols2-OFL.txt": "b118dd41337806a5d4797052c77caf3bd096aed783e5eb21b4d11154351e1ac0",
+        "third_party/fonts/NotoSansSymbols2-Regular.ttf": "7d5fb73b7ca67a6798101741f5d280a3d016a56a197afcd4199dbb57b4b82a21",
+        "third_party/fonts/NotoSerif-Italic.ttf": "0ea81d6b54fc8aa5dff0fd6ebe7cfa431e9e6cf747a8d4aa33581fa0aaccffea",
+        "third_party/fonts/notoserifitalic-OFL.txt": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
+      },
+      "font_style_metadata": [
+        {
+          "path": "C:\\Windows\\Fonts\\georgiai.ttf",
+          "sha256": "d3e4bad27651d120ac8f2cea42cf4b4f077264fb243f66b3caffcfd35465f49b",
+          "macStyle": 2,
+          "italic_angle": -13.0,
+          "names": [
+            "Corsivo",
+            "Cursief",
+            "Cursiva",
+            "Dőlt",
+            "Etzana",
+            "Georgia",
+            "Georgia Corsivo",
+            "Georgia Cursief",
+            "Georgia Cursiva",
+            "Georgia Dőlt",
+            "Georgia Etzana",
+            "Georgia Italic",
+            "Georgia Italique",
+            "Georgia Itálico",
+            "Georgia Kursiv",
+            "Georgia Kursivoitu",
+            "Georgia Kursywa",
+            "Georgia Kurzíva",
+            "Georgia Poševno",
+            "Georgia kursiv",
+            "Georgia kurzíva",
+            "Georgia İtalik",
+            "Georgia Πλάγια",
+            "Georgia Курсив",
+            "Georgia-Italic",
+            "Italic",
+            "Italique",
+            "Itálico",
+            "Kursiv",
+            "Kursivoitu",
+            "Kursywa",
+            "Kurzíva",
+            "Poševno",
+            "kursiv",
+            "kurzíva",
+            "İtalik",
+            "Πλάγια",
+            "Курсив"
+          ]
+        },
+        {
+          "path": "D:\\Physim\\third_party\\fonts\\NotoSerif-Italic.ttf",
+          "sha256": "0ea81d6b54fc8aa5dff0fd6ebe7cfa431e9e6cf747a8d4aa33581fa0aaccffea",
+          "macStyle": 0,
+          "italic_angle": -12.0,
+          "names": [
+            "Italic",
+            "Noto Serif",
+            "Noto Serif Italic",
+            "NotoSerif-Italic",
+            "Regular"
+          ]
+        }
+      ],
+      "linebreak_assets_sha256": {
+        "third_party/libunibreak-8.0/eastasianwidthdata.c": "cfdc4c2abb651092cfa92fa8004a8dc7ae1e82841912720cb2b627b02534fab7",
+        "third_party/libunibreak-8.0/eastasianwidthdef.c": "f609d5915e4cf7572765e66aaa8bda6d315cc8ec89e01085c92683a2b1edd42d",
+        "third_party/libunibreak-8.0/eastasianwidthdef.h": "181068f45ca8a6ada6acf3567caee7d86ce12a30c077949b1e7dc3738b4d2707",
+        "third_party/libunibreak-8.0/LICENCE": "0c57e2ec42ece17791a75d2f9b2f8e0663181be008667a507f765b3ef22522db",
+        "third_party/libunibreak-8.0/linebreak.c": "35fa884d87b37105cc541b4cfd085935f0262b8c472532edfb659fe37b9cc51e",
+        "third_party/libunibreak-8.0/linebreak.h": "394d9879d87d6a9930a42a9256c0b732417bbac30d051138b1a0da7c18347538",
+        "third_party/libunibreak-8.0/linebreakauxdata.c": "09b9327653433d22cc1c3ff4cbdd176abe577286365275cc70617a79adea29db",
+        "third_party/libunibreak-8.0/linebreakdata.c": "d2a1008ad93a15c15389e5cdd3c2d21b5e03820ed9daeee5a5a902ef56649719",
+        "third_party/libunibreak-8.0/linebreakdef.c": "105b926c59ed3b1a87e2c7a19ba68adaec69032b501d0c61d9a7043f534bd62b",
+        "third_party/libunibreak-8.0/linebreakdef.h": "5b5c1470331752a11b340eea2c0f48b7f04bd908c20864d475f05aec498a9906",
+        "third_party/libunibreak-8.0/LineBreakTest.txt.gz": "11ccaca034f591acbe31abfc9139a3151a975c13b73669a1a8beca6aba7cd60c",
+        "third_party/libunibreak-8.0/manifest.json": "25f46d89704e034db72ccb3266238ee12bfb1f0754ebad6d8089d63a41e9ad68",
+        "third_party/libunibreak-8.0/NEWS": "6dc1d862c2be012f29ae43d05f6b4096f98475fe9d56b6f71ce06a23f6f5bb02",
+        "third_party/libunibreak-8.0/README.md": "38a024448aa0a76effea8b5f151f1dcfb5c52cca1c05baaddea741fa6fa73fc2",
+        "third_party/libunibreak-8.0/unibreakbase.c": "aa44089bcde4bf6cedb387af7bed3ba58d02d3a2c1202b306812a0be74bc0834",
+        "third_party/libunibreak-8.0/unibreakbase.h": "3880a7c664fe6eec033950935ec99c297d9c44fe154fbd6972b4d8a55fd20976",
+        "third_party/libunibreak-8.0/unibreakdef.c": "9d0f2a973ee07e748091ec18e09131ab7109899ae15b17fa769c93794a7fd58e",
+        "third_party/libunibreak-8.0/unibreakdef.h": "2cffd22ab7ed6a69f819905e30b2214891518c2b601d566e75186a0047095b40",
+        "third_party/libunibreak-8.0/UNICODE-LICENSE.txt": "e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96",
+        "third_party/libunibreak-8.0/UPSTREAM-README.md": "cc38c7b86a88afb77dd3710628b2622c01bfb90d78709e868f0da95c70c02cf5"
+      }
+    },
+    "6": {
+      "base": "c79ef47ae1495e721f5c6818f8985a49a0674174",
+      "created_utc": "2026-10-21T20:13:41.744578+00:00",
+      "source_sha256_lf": {
+        ".gitattributes": "d5b4568db93fb652f7318f74c69b78abaf2ab2e2b5c2fabe331552d63eedc8f4",
+        "README.md": "4765e741ed11e7ca1299ee6520452767ec6a3dcbbe55e5b993db7a68e032236f",
+        "app/analysis_layout.inc": "74a9cb6997e41b6ae2c597494bc870f3a9b9de768de9d4ad1b7eff9d01deb48d",
+        "app/analysis_resize.inc": "8ccc8dfa92d58f910d4ee9cacc04e96a93be01b12af2b603368205b00726eb88",
+        "app/analysis_ui.inc": "b64974dd94bdb9466114b182bd5a1b7867828a8fb6a3ebf571fb5172230224ec",
+        "app/analysis_units_tests.inc": "5b299a53559c760f332b5c66c9ece3b352f9ad1c8928f842d55311a6763f4afd",
+        "app/analysis_workspace_tests.inc": "8a4bb2a826946de53257654760f97f702d6f1d87a19cc47f5d1f458172ade8a2",
+        "app/api_card_tests.inc": "e02e56843d3c719a004f5bb5a328b69a3ea9f7bac50866248718c6023e2f262c",
+        "app/api_reference_tests.inc": "53e5373f929589b68064b8e0369e90f07eb4284429ea5bb640b662da16ea66bb",
+        "app/api_reference_ui.inc": "b2ca3cd9215b9b79ed3b826cb33443a7c4f5dfe2eb37f0b320fd983696a5c19d",
+        "app/channel_units_tests.inc": "7f71e05664cfefab012fc0363622541e72b890ea4a48b8e02d6f40f0b93cfdff",
+        "app/channel_units_ui.inc": "dbe90c981c123bac6afaac9e85c9c977cc6581c1d01b84f77c531bad59955a8a",
+        "app/code_preview.c": "014cfb421cd4a3a9c514e3608ce5e910b9f774166a1772438eae87ea153a1bea",
+        "app/code_preview.h": "33f2ed5f96d675b6b1d9fa7e40740f6654ff579ae53b5c550c35dff3e55f17c7",
+        "app/design_ui.inc": "44a97be7b323d8ccb0208afcba69a998aade07902f477d6cf26fb6c878c2eb1f",
+        "app/docking_ui.inc": "db470ed74b46b4a7d0eee0b5c12428c249768aa9d81475cf48e71048324ba35b",
+        "app/documentation.c": "62c802e4572e3ef988f7b4121541865ccd2d7968000cb2074ce7d93500ed5fa1",
+        "app/documentation.h": "31805cf0517336ef59ed915c4a57d19b6a132467d6e73274f3908a9881f4e69c",
+        "app/documentation_actions.inc": "4b372fb77fe89eeefa04b66e2ece3022e91854f14b8f186dceeabfa144e4a349",
+        "app/documentation_article_flow.inc": "7cec4d787059dffa08733ab93e3a1bca2958ee81f85f97b1608fece14fbf0141",
+        "app/documentation_code_preview.inc": "f8068ede433a0bcffd971901bce86730bdbcfbe4b52b735ff96e669b2b675030",
+        "app/documentation_code_preview_tests.inc": "b2adf12bfebdcaf8e38bcbcdba4061f8e1c6d064d2ec29098e768dc80bdc16bf",
+        "app/documentation_figure_font.inc": "1d47e8e3927e7fc31b1dafc76b8af4b671a761c2bc2430b0e8af89a6922d4804",
+        "app/documentation_h.inc": "160ee1f61ef559012fe5c73a4da2271570f91db2bd90d0263cd7bdc99716c024",
+        "app/documentation_h_tests.inc": "18bfb146c790082f71f36b994e3934ebc108a1b86ea36dda16c3c7ca6710d55e",
+        "app/documentation_keyboard_tests.inc": "b59b0c4ac0139c317745be2fc5caa4a51a3dd8def89f17d8962bdf7d3839241a",
+        "app/documentation_layout.h": "2c199412f287e438b1b531525befb50edae3d9ff22bfe4d83438a946a6fb3631",
+        "app/documentation_math.inc": "626a3351a1e03ccb13ce81bf030c47cafe1712a1672a9c75179888e4bac879f0",
+        "app/documentation_media.inc": "c34fc5d426715d1b218fdcf686ade0e2e2ff29625456fe70fb3d3d82c72a1021",
+        "app/documentation_model_tests.inc": "6c35554765989555ecdefaec5c15826949a1a3f40c10c706fbcc9744e6a95720",
+        "app/documentation_pane_tests.inc": "82ec692a802dc9853cf423fb1c56c01aa077940f3bbbcb13b72a34e0aaf2ac6e",
+        "app/documentation_scroll_tests.inc": "9b9932b64ffa838d29709f9be0990102ad8c6dc97b4f7e9c9916d46760694d76",
+        "app/documentation_typography.inc": "cac4c53cd2d76f9a9e689a2a304a5169a3adcdea8186c8a0141a8c074baba010",
+        "app/documentation_ui.inc": "c9a937e25f3869e819561d3475c574a45b0084d81ed0e33b4a3f80e79f0ec9f4",
+        "app/documentation_window.inc": "b0c6683b0621059951960738f54edb193641b1ed6874170eb4a8c1ceb7e94d37",
+        "app/editor_search_ui.inc": "31ea341e322ef983a2d7e1f4319511fb1632169b545daa87f807988d9fe799f0",
+        "app/graphic_snapshot.c": "6c899b66d54d81109684b17c077ac2f8afd4eb8bb0db73af23bc75bcb75d9889",
+        "app/graphic_snapshot.h": "cfd6000b4c79794158862b03a194c2b034c70f57353ea5abf0e0041ca6b18f82",
+        "app/keyboard_menu_tests.inc": "bdb2b255ce95d0dcb85992d8ada3d57c7729cd49fa36dfb7ee202f8748cde682",
+        "app/layout_catalog.c": "5004ab858261242185d86389d5de0f39a75f9a0fd3e627a8a38c991371a16c01",
+        "app/layout_ui.inc": "be51a9d8fe2d91391248416a942f8bfd2e3ba5dd3b4a75d12883140930b1613f",
+        "app/main.c": "66a2015a8309ee9acc31be96e46ee301fbe8af6db3e93f5c0c03ebc1e65223fd",
+        "app/panel_windows.inc": "4a38f644a77403cd673618818466e5229cebf598b843fd50821b696ab22350ef",
+        "app/plot_tests.inc": "3c730aa3c5fd5a87444973c5cb1734c909286970421f6c8bd5b2a73294a15b61",
+        "app/plot_ui.inc": "8b933b3bb27c9d53be932f1e49ee949bab21a5a587c85f5f5e0fbf801b7b9815",
+        "app/preferences.c": "e2df26e2c2a0d054dfa1e4dd4b500bb0cf996debe7f861b05f3db2479088c360",
+        "app/report_details_tests.inc": "eff52c88636b5db6f371a9151975d88624e3d315c4e11e41a0ff55495bada6dc",
+        "app/report_image.c": "2e8472e798c76e2881658388203a8be8579e358c3af4a1e75a7e7a3aecc8ca0b",
+        "app/run_details_tests.inc": "ad34f630ee605abfb78245d3701611a3c6d26f15eae85cab2b32a5e0b6447f35",
+        "app/settings_tests.inc": "5202dece8488dba847ce67e3347ce67be17365f7a1fdde65c98bb62296dc2497",
+        "app/settings_ui.inc": "fab45b1548dadc0b8ef7b7a2f0577c0bc2d5363b4108a2ba855fa6113ccad4d1",
+        "app/shell_theme_tests.inc": "4b7452b932bbf9b6b09c681ed418d81de92854eaa11b9fceed61ca0c1084534a",
+        "app/source_outline_tests.inc": "7b8f0af18999e192d90d8db2eed179ca789921eee0af19796b2cf8c53b9ab952",
+        "app/source_outline_ui.inc": "c3ce8ceaf0827360d0620bdbc2bcd9196e63faff5cf8c5f2923e953ebac62bc4",
+        "app/toolbar_tests.inc": "16f96ab0fc7088cd766a634c94ee44d2ae97313f3018aadeb2603fe2d265259c",
+        "app/toolbar_ui.inc": "619f88a4dd1457f233d39de85fa23d033c4ebed6b754435a3632a33c40a7edf8",
+        "app/ui.h": "9ffbdbe8982071e053d670efe1dee7da5074d5a5fb55878faee3cffd01dbb66f",
+        "app/ui_backend.c": "5bf9d3d25f63f4821b500f502345835aa232339b6a7ef1fb381b491e280f500d",
+        "app/ui_sdl.c": "82b2023360a8ddef2da8068bba38514b340a69068c13b6060f2d16bdf4e51dbf",
+        "app/workbench_api_ui.inc": "3fa1f492af3ae84ee335b42757730f67ce4ec6c79094bfe170901474f86ca669",
+        "app/workbench_context_ui.inc": "79efa3ea59f163452c49c18f14b08a360acf0be1b89bb1c1e40686b2001a8f1a",
+        "app/workbench_tests.inc": "1bc37a41bb50b47972ad64f37f31be77519b53ac30695a7bc791d729d999cd69",
+        "app/workbench_text_ui.inc": "70755ae951d2fd3fdfddc37691ab8ec6dba33a81ab9670b72f8ef3af91174ba6",
+        "app/workspace_tests.inc": "f8a8746e28859bb1b50b50393a1ccd6d907ec26fa52224ecc947c804c04c9803",
+        "docs/decisions/010-analysis-graphic-export.md": "0ff356badb4010b75fe8e85dce67097f9d22f7c53847acbfd8fa1a34fe4209ce",
+        "docs/reference/experiment.md": "549238a1d1c61fd3e9b743cdae5cd9b5469c80f1da55e8492fb4258799ffd0d1",
+        "docs/reference/language-library.md": "3b77d247f174cc7970c8e049a1ee43bcd0cfae534d5d1ba66c4b0070a1d27cc3",
+        "docs/visuals/f1-layouts/final-h.css": "ec6a83c767f02eb6679a638407709225651c89919ae2df773e0b3b8271e9e6f0",
+        "docs/visuals/f1-layouts/layouts.css": "6ae773eb10452dfbbd2331208cdfc8e8c6672869cc877e6fef59abb8c9739c6b",
+        "docs/visuals/f1-layouts/model.svg": "3b11ef46528fcf84a9b1f4fd36b55227edffd0c4c93f6e382042beab0458105a",
+        "docs/visuals/f1-layouts/refinements.css": "db878953549a411037f0c067340c34c7490c101a7af2b5112505a79be880fcb7",
+        "docs/visuals/unified-workspace/EXPORT-EXAMPLE.md": "9d59831f3af7b5fad784fff540e68b440925baef2d4c2e05eedb938a88c428dc",
+        "docs/workspace.md": "1f630769e597f8b899626f8321af78c0e7c20b3bcfe9f81ae1f5763b60831267",
+        "include/physim/report.h": "0fdf73094af4cc7849bf07e09a7645ca526546dc3d7758118cf02e5a3b3d37cd",
+        "include/physim/series.h": "02d390887ad6e633832b1caaa52abe7ea0d5c4c607da34d3aed42d4dc32cce5a",
+        "src/report.c": "d1869f74c7fafb508e8c62c14edf74759adbef30af7f9da4e0a04ceedac3cad7",
+        "src/report_export.c": "eb26aed1ce00abbccacc3f9c4e93e42292f0ee07e465232a976c6440540f9a1b",
+        "src/report_mask.inc": "76b7089f321a628e16626e23fc5d755a6abfb408139802e5d032f16b5f8312db",
+        "src/series.c": "14b4fb4db7ec5194d5d27a1600e5fa54fa32bbf683e49182b45113b450371e93",
+        "tests/check_display_workflow.py": "d595f6f5ab5ce174c7e8b2219a682b5ae774294e197da8073a7f1e93edcf1e51",
+        "tests/check_f1_h_reference.py": "1f2bfdf6aaf0e1b850b740d4d934375cebfe2a6d24825ff365ac825c2d42a712",
+        "tests/check_unified_chrome.py": "2ec9fb6b1a54566cd69754bfd07f248daaf0a42d7135e7355812683422157b3e",
+        "tests/check_workbench_context.py": "bfa23b2e0d1fdd915cd15a7df988eaf2720dad0a41b1c90a5d7befb45eb9041c",
+        "tests/native_integration_cases.json": "c55c9d5094a09ddb160ad6a648f6ffda04e857d0ed1fc94e9ff2f5a6d3f4a3eb",
+        "tests/probe_font_shaping.py": "0e5f6f383a53988064dd998978fe8ced04bd6a71cf1ff312e8d01159347a6ab0",
+        "tests/test_allocator.h": "52f7105cf12f7947f07b98b73ddf4eb0ba002be6b843eb6d27dbd6a271e48625",
+        "tests/test_api_reference.c": "ade8ed122d85a690018f5b8c60a55d8c3a2ad936a0581d82bb67fc537da8c3cd",
+        "tests/test_code_linebreak.c": "cb061fe6d45104680ccc444ba16cfac1a059329457e29e018b85bdf71f73d30a",
+        "tests/test_code_preview.c": "01c6806fc4f79a75cc21c09b3f42c8481364d1b97d82d02841d9046cd9a88219",
+        "tests/test_font_faces.c": "fe71e02cd7a829d1bef8603a53c83d923c161a157a9180a78ae4903268de8ba1",
+        "tests/test_graphic_snapshot.c": "ea521f8cfc429d79dbe93ee5f6a8a8f954b4afd9618095c0ca7790efaa312092",
+        "tests/test_layout_catalog.c": "21077c44d0181840841f351ef46ff219e454b596a768b64d8b71d30ba610d36c",
+        "tests/test_native_test_runner.py": "4630ac724adcf24e686a168138f8381db31bf732b27013b78d7e8dd0344b7122",
+        "tests/test_preferences.c": "54d372d06bfe74b2b1f71ff0d6bb9785ed5dce9a8e12391ee0a8b21f746643b8",
+        "third_party/README.md": "aac6107ec5668c64b8cd49461c3da8ac90c93ab8c8b3127b2df3433b55e90d21",
+        "third_party/fonts/README.md": "7d0bcda8e1d7cabef874cb4cd77cac7389455146d9401a6b455c457290d802f2",
+        "third_party/fonts/manifest.json": "cf6be7a07ab8a16af6fd619667bc54cdd6665ddb5a76fca6829542a1ed92a6b9",
+        "third_party/libunibreak-8.0/README.md": "38a024448aa0a76effea8b5f151f1dcfb5c52cca1c05baaddea741fa6fa73fc2",
+        "third_party/nuklear.h": "fbd8ac79c8281fff46084a91d40ab45f80a8542b88d0281042202c4bfb440aae",
+        "tools/build.py": "e237a8f6d2ee1d72a4d247fac509ebf53628dc3bf74908b027a1eafc9a02f352",
+        "tools/native_tests.py": "d3c2824c5c020b44b87ec80c63144647f81dbd9c86329e05d8607d50792d450c",
+        "tools/profile_font_pairs.c": "ea49680a92e6a6f28f0af8a3cb5a6f53a41835d7002452c430d8ab62d91fc48a",
+        "app/graphic_figure.c": "72fa082315ae5e51b4329920c3d93ddbbb05aa6f7b98c0f5dc3df241e7ad8158",
+        "app/graphic_figure.h": "61c5a40f295f159fe66df68149dddb6bb119f35fc00f9ecd007aabb7fb5a7f45",
+        "app/plot_view.c": "507f52080cc97dd92a3fc827a130bca12192f5104cc0a050ebea1de06e58a12f",
+        "app/plot_view.h": "60207a43569e8f6ccab3bb1a4d0f9ca84aea186f81b90211a11c25f6ad173e10",
+        "tests/test_graphic_figure.c": "f89e6c2ae2109eec27f1bdc85f587f25e67a45e643bad3347173b0a954007891",
+        "tests/check_graphic_figure_svg.py": "1d21a8a5e3f871699af4cc05b73f33ba40690f13d16b1d755ff255306db0f271"
+      },
+      "foreign_sha256_lf": {
+        ".github/workflows/linux-ui-sanitizers.yml": "80e5b0d925f75ddce52260e8812cfb02d0e5b6e4ccfef03ea86deea75c446085",
+        ".github/workflows/macos-f1-accessibility.yml": "c37bfbd09cdfb0d26922cf0fbd8527f2be70161dd113809435732b6150fd5650",
+        "app/accessibility_atspi.c": "fb32ff39647be57cdaa2c02a10d4319ecef2186747a1edc2338bb397e5668b0f",
+        "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+        "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+        "tests/check_documentation_orca.py": "e38b255bbd7bb12787e50cd78d4b32ed8f985ce60746afde2702285e22a728d5",
+        "tests/test_accessibility_tables_atspi.py": "623f5152d85dabe778728fedc9f999b93e3bfaef6d8d82679d6444675ad54d2f",
+        "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+        "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+        "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+      },
+      "font_assets_sha256": {
+        "third_party/fonts/notoemoji-OFL.txt": "500bb1ccf43df7bbb522112f9133a52b16e1c35e809632f5d8609b179152de5b",
+        "third_party/fonts/NotoEmoji.ttf": "de6c18832938afc99caf132b39d6a30a19bac7f2e812e28db2535b4608d27551",
+        "third_party/fonts/NotoSans-Bold.ttf": "c976e4b1b99edc88775377fcc21692ca4bfa46b6d6ca6522bfda505b28ff9d6a",
+        "third_party/fonts/notosans-OFL.txt": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+        "third_party/fonts/NotoSans.ttf": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d",
+        "third_party/fonts/notosansbold-OFL.txt": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb",
+        "third_party/fonts/notosansmath-OFL.txt": "403a95275b469061b7d4371c328e0ada3bc7d63328abe2e88aad5cd243b2fe21",
+        "third_party/fonts/NotoSansMath-Regular.ttf": "3f495fe933c06786e4d5f6d86b8ee70b6753a68ee3b9d87528726de0f6e2c47d",
+        "third_party/fonts/notosansmono-OFL.txt": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+        "third_party/fonts/NotoSansMono.ttf": "2cb2adb378a8f574213e23df697050b83c54c27df465a2015552740b2769a081",
+        "third_party/fonts/notosanssymbols2-OFL.txt": "b118dd41337806a5d4797052c77caf3bd096aed783e5eb21b4d11154351e1ac0",
+        "third_party/fonts/NotoSansSymbols2-Regular.ttf": "7d5fb73b7ca67a6798101741f5d280a3d016a56a197afcd4199dbb57b4b82a21",
+        "third_party/fonts/NotoSerif-Italic.ttf": "0ea81d6b54fc8aa5dff0fd6ebe7cfa431e9e6cf747a8d4aa33581fa0aaccffea",
+        "third_party/fonts/notoserifitalic-OFL.txt": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
+      },
+      "font_style_metadata": [
+        {
+          "path": "C:\\Windows\\Fonts\\georgiai.ttf",
+          "sha256": "d3e4bad27651d120ac8f2cea42cf4b4f077264fb243f66b3caffcfd35465f49b",
+          "macStyle": 2,
+          "italic_angle": -13.0,
+          "names": [
+            "Corsivo",
+            "Cursief",
+            "Cursiva",
+            "Dőlt",
+            "Etzana",
+            "Georgia",
+            "Georgia Corsivo",
+            "Georgia Cursief",
+            "Georgia Cursiva",
+            "Georgia Dőlt",
+            "Georgia Etzana",
+            "Georgia Italic",
+            "Georgia Italique",
+            "Georgia Itálico",
+            "Georgia Kursiv",
+            "Georgia Kursivoitu",
+            "Georgia Kursywa",
+            "Georgia Kurzíva",
+            "Georgia Poševno",
+            "Georgia kursiv",
+            "Georgia kurzíva",
+            "Georgia İtalik",
+            "Georgia Πλάγια",
+            "Georgia Курсив",
+            "Georgia-Italic",
+            "Italic",
+            "Italique",
+            "Itálico",
+            "Kursiv",
+            "Kursivoitu",
+            "Kursywa",
+            "Kurzíva",
+            "Poševno",
+            "kursiv",
+            "kurzíva",
+            "İtalik",
+            "Πλάγια",
+            "Курсив"
+          ]
+        },
+        {
+          "path": "D:\\Physim\\third_party\\fonts\\NotoSerif-Italic.ttf",
+          "sha256": "0ea81d6b54fc8aa5dff0fd6ebe7cfa431e9e6cf747a8d4aa33581fa0aaccffea",
+          "macStyle": 0,
+          "italic_angle": -12.0,
+          "names": [
+            "Italic",
+            "Noto Serif",
+            "Noto Serif Italic",
+            "NotoSerif-Italic",
+            "Regular"
+          ]
+        }
+      ],
+      "linebreak_assets_sha256": {
+        "third_party/libunibreak-8.0/eastasianwidthdata.c": "cfdc4c2abb651092cfa92fa8004a8dc7ae1e82841912720cb2b627b02534fab7",
+        "third_party/libunibreak-8.0/eastasianwidthdef.c": "f609d5915e4cf7572765e66aaa8bda6d315cc8ec89e01085c92683a2b1edd42d",
+        "third_party/libunibreak-8.0/eastasianwidthdef.h": "181068f45ca8a6ada6acf3567caee7d86ce12a30c077949b1e7dc3738b4d2707",
+        "third_party/libunibreak-8.0/LICENCE": "0c57e2ec42ece17791a75d2f9b2f8e0663181be008667a507f765b3ef22522db",
+        "third_party/libunibreak-8.0/linebreak.c": "35fa884d87b37105cc541b4cfd085935f0262b8c472532edfb659fe37b9cc51e",
+        "third_party/libunibreak-8.0/linebreak.h": "394d9879d87d6a9930a42a9256c0b732417bbac30d051138b1a0da7c18347538",
+        "third_party/libunibreak-8.0/linebreakauxdata.c": "09b9327653433d22cc1c3ff4cbdd176abe577286365275cc70617a79adea29db",
+        "third_party/libunibreak-8.0/linebreakdata.c": "d2a1008ad93a15c15389e5cdd3c2d21b5e03820ed9daeee5a5a902ef56649719",
+        "third_party/libunibreak-8.0/linebreakdef.c": "105b926c59ed3b1a87e2c7a19ba68adaec69032b501d0c61d9a7043f534bd62b",
+        "third_party/libunibreak-8.0/linebreakdef.h": "5b5c1470331752a11b340eea2c0f48b7f04bd908c20864d475f05aec498a9906",
+        "third_party/libunibreak-8.0/LineBreakTest.txt.gz": "11ccaca034f591acbe31abfc9139a3151a975c13b73669a1a8beca6aba7cd60c",
+        "third_party/libunibreak-8.0/manifest.json": "25f46d89704e034db72ccb3266238ee12bfb1f0754ebad6d8089d63a41e9ad68",
+        "third_party/libunibreak-8.0/NEWS": "6dc1d862c2be012f29ae43d05f6b4096f98475fe9d56b6f71ce06a23f6f5bb02",
+        "third_party/libunibreak-8.0/README.md": "38a024448aa0a76effea8b5f151f1dcfb5c52cca1c05baaddea741fa6fa73fc2",
+        "third_party/libunibreak-8.0/unibreakbase.c": "aa44089bcde4bf6cedb387af7bed3ba58d02d3a2c1202b306812a0be74bc0834",
+        "third_party/libunibreak-8.0/unibreakbase.h": "3880a7c664fe6eec033950935ec99c297d9c44fe154fbd6972b4d8a55fd20976",
+        "third_party/libunibreak-8.0/unibreakdef.c": "9d0f2a973ee07e748091ec18e09131ab7109899ae15b17fa769c93794a7fd58e",
+        "third_party/libunibreak-8.0/unibreakdef.h": "2cffd22ab7ed6a69f819905e30b2214891518c2b601d566e75186a0047095b40",
+        "third_party/libunibreak-8.0/UNICODE-LICENSE.txt": "e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96",
+        "third_party/libunibreak-8.0/UPSTREAM-README.md": "cc38c7b86a88afb77dd3710628b2622c01bfb90d78709e868f0da95c70c02cf5"
+      }
+    }
+  },
+  "runs": [
+    {
+      "source": 1,
+      "platform": "windows",
+      "log": {
+        "path": "build/native/graphic-figure-windows-1.log",
+        "bytes": 6383,
+        "sha256": "6d02d5993379ae217109b55d15d09a19a76df8fa61b577f290e3a30a9470b2e0"
+      },
+      "result_file": {
+        "path": "build/native/Graphic-unit/test-results/run-c6q7cxd5/results.json",
+        "bytes": 2021,
+        "sha256": "086dad88ac53f7fbeefe54f5696c67822a1564a41c4cbcd4626d3057a0d7a267"
+      },
+      "records": [
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-graphic_figure.exe",
+            "D:/Physim/build/native/Graphic-unit/test-results/run-c6q7cxd5/graphic_figure"
+          ],
+          "status": "failed",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "Graphic figure 111: make_snapshot(&axes,&s)==PS_OK\n",
+          "reason": "Exit code 1; expected 0",
+          "seconds": 0.094,
+          "name": "graphic_figure"
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-graphic_snapshot.exe",
+            "D:/Physim/build/native/Graphic-unit/test-results/run-c6q7cxd5/graphic_snapshot"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "GRAPHIC SNAPSHOT REPORT: deep-copy, masks, kinds, reference, crop and 5 allocation failures passed\nGRAPHIC SNAPSHOT RUNS: independent times, units, extrema/gaps, full statistics, 8 inputs, source deletion, quota/cancel and 9 allocation failures passed\nGRAPHIC SNAPSHOT TYPES: scatter, rad/degree, angle/scalar separation, invalid unnamed schema and intact UTF8 labels passed\nGraphic snapshot: immutable report/run data and transactional ownership passed\n",
+          "stderr": "",
+          "seconds": 0.343,
+          "name": "graphic_snapshot"
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-report.exe"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Reports: roundtrip, hostile files, units, extrema, histograms and exports passed\n",
+          "stderr": "",
+          "seconds": 13.922,
+          "name": "report"
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-series_mask.exe",
+            "D:/Physim/build/native/Graphic-unit/test-results/run-c6q7cxd5/series_mask"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Series masks: alignment, quota, numerics, resampling, statistics, CSV and report roundtrip passed\n",
+          "stderr": "",
+          "seconds": 0.187,
+          "name": "series_mask"
+        }
+      ]
+    },
+    {
+      "source": 1,
+      "platform": "linux",
+      "log": {
+        "path": "build/native/graphic-figure-linux-1.log",
+        "bytes": 26839,
+        "sha256": "f12153d33266f0052e714d09582cd891c4b6bed2555932235cd1977ae9435ce9"
+      },
+      "result_file": {
+        "path": "build/native/Graphic-unit-linux/test-results/run-x6kgo6uz/results.json",
+        "bytes": 2000,
+        "sha256": "eeb093b6bd8ecde73ad38d05ed66494acb42d10ffdba9ebbb79359c4e556ef35"
+      },
+      "records": [
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-graphic_figure",
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/test-results/run-x6kgo6uz/graphic_figure"
+          ],
+          "status": "failed",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "Graphic figure 111: make_snapshot(&axes,&s)==PS_OK\n",
+          "reason": "Exit code 1; expected 0",
+          "seconds": 0.046,
+          "name": "graphic_figure"
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-graphic_snapshot",
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/test-results/run-x6kgo6uz/graphic_snapshot"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "GRAPHIC SNAPSHOT REPORT: deep-copy, masks, kinds, reference, crop and 5 allocation failures passed\nGRAPHIC SNAPSHOT RUNS: independent times, units, extrema/gaps, full statistics, 8 inputs, source deletion, quota/cancel and 9 allocation failures passed\nGRAPHIC SNAPSHOT TYPES: scatter, rad/degree, angle/scalar separation, invalid unnamed schema and intact UTF8 labels passed\nGraphic snapshot: immutable report/run data and transactional ownership passed\n",
+          "stderr": "",
+          "seconds": 4.297,
+          "name": "graphic_snapshot"
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-report"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Reports: roundtrip, hostile files, units, extrema, histograms and exports passed\n",
+          "stderr": "",
+          "seconds": 9.485,
+          "name": "report"
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-series_mask",
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/test-results/run-x6kgo6uz/series_mask"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Series masks: alignment, quota, numerics, resampling, statistics, CSV and report roundtrip passed\n",
+          "stderr": "",
+          "seconds": 0.295,
+          "name": "series_mask"
+        }
+      ]
+    },
+    {
+      "source": 2,
+      "platform": "windows",
+      "log": {
+        "path": "build/native/graphic-figure-windows-2.log",
+        "bytes": 411,
+        "sha256": "ecadcc105a4c8f59cf92842e780d6596eca1fb38e8fa0d9a29f36f22775f0a7a"
+      },
+      "result_file": {
+        "path": "build/native/Graphic-unit/test-results/run-uu38_u2x/results.json",
+        "bytes": 2199,
+        "sha256": "2e1972e4a8bf2133aa1f423a6219b3605d6c30968e2c5955ec8130db319e12e3"
+      },
+      "records": [
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-graphic_figure.exe",
+            "D:/Physim/build/native/Graphic-unit/test-results/run-uu38_u2x/graphic_figure"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "GRAPHIC FIGURE OWNERSHIP: 3 scene and 5 SVG allocation failures, detached text/data and sink failure passed\nGRAPHIC FIGURE: canonical layout, explicit reference, independent axes, masks, dashes, scatter, histograms, full XY crop, themes and bounded numeric errors passed\n",
+          "stderr": "",
+          "seconds": 0.156,
+          "name": "graphic_figure"
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-graphic_snapshot.exe",
+            "D:/Physim/build/native/Graphic-unit/test-results/run-uu38_u2x/graphic_snapshot"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "GRAPHIC SNAPSHOT REPORT: deep-copy, masks, kinds, reference, crop and 5 allocation failures passed\nGRAPHIC SNAPSHOT RUNS: independent times, units, extrema/gaps, full statistics, 8 inputs, source deletion, quota/cancel and 9 allocation failures passed\nGRAPHIC SNAPSHOT TYPES: scatter, rad/degree, angle/scalar separation, invalid unnamed schema and intact UTF8 labels passed\nGraphic snapshot: immutable report/run data and transactional ownership passed\n",
+          "stderr": "",
+          "seconds": 0.359,
+          "name": "graphic_snapshot"
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-report.exe"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Reports: roundtrip, hostile files, units, extrema, histograms and exports passed\n",
+          "stderr": "",
+          "seconds": 4.125,
+          "name": "report"
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-series_mask.exe",
+            "D:/Physim/build/native/Graphic-unit/test-results/run-uu38_u2x/series_mask"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Series masks: alignment, quota, numerics, resampling, statistics, CSV and report roundtrip passed\n",
+          "stderr": "",
+          "seconds": 0.094,
+          "name": "series_mask"
+        }
+      ]
+    },
+    {
+      "source": 2,
+      "platform": "linux",
+      "log": {
+        "path": "build/native/graphic-figure-linux-2.log",
+        "bytes": 377,
+        "sha256": "1f127561721c87aa59ce6105c29fa5b00b1a944bafe19541305b6b5ae3f41fd8"
+      },
+      "result_file": {
+        "path": "build/native/Graphic-unit-linux/test-results/run-uylqnnvr/results.json",
+        "bytes": 2180,
+        "sha256": "14ec55357d21fff6fec1438881e4c86db320325eadb75285996c1184906ba4f3"
+      },
+      "records": [
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-graphic_figure",
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/test-results/run-uylqnnvr/graphic_figure"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "GRAPHIC FIGURE OWNERSHIP: 3 scene and 5 SVG allocation failures, detached text/data and sink failure passed\nGRAPHIC FIGURE: canonical layout, explicit reference, independent axes, masks, dashes, scatter, histograms, full XY crop, themes and bounded numeric errors passed\n",
+          "stderr": "",
+          "seconds": 0.077,
+          "name": "graphic_figure"
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-graphic_snapshot",
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/test-results/run-uylqnnvr/graphic_snapshot"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "GRAPHIC SNAPSHOT REPORT: deep-copy, masks, kinds, reference, crop and 5 allocation failures passed\nGRAPHIC SNAPSHOT RUNS: independent times, units, extrema/gaps, full statistics, 8 inputs, source deletion, quota/cancel and 9 allocation failures passed\nGRAPHIC SNAPSHOT TYPES: scatter, rad/degree, angle/scalar separation, invalid unnamed schema and intact UTF8 labels passed\nGraphic snapshot: immutable report/run data and transactional ownership passed\n",
+          "stderr": "",
+          "seconds": 4.191,
+          "name": "graphic_snapshot"
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-report"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Reports: roundtrip, hostile files, units, extrema, histograms and exports passed\n",
+          "stderr": "",
+          "seconds": 8.388,
+          "name": "report"
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-series_mask",
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/test-results/run-uylqnnvr/series_mask"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Series masks: alignment, quota, numerics, resampling, statistics, CSV and report roundtrip passed\n",
+          "stderr": "",
+          "seconds": 0.271,
+          "name": "series_mask"
+        }
+      ]
+    },
+    {
+      "source": 3,
+      "platform": "windows",
+      "log": {
+        "path": "build/native/graphic-figure-windows-3.log",
+        "bytes": 1023,
+        "sha256": "f87d9f70fc9e48f61c9ff91af0aaa77ed7b064e1e779eb43d293a12e2492ec34"
+      },
+      "result_file": {
+        "path": "build/native/Graphic-unit/test-results/run-_f1ajet3/results.json",
+        "bytes": 2247,
+        "sha256": "d8b88ee6225518696007ed3b00a3ce5f7f86887f1c7c8df0ec5153295e13fc48"
+      },
+      "records": [
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-graphic_figure.exe",
+            "D:/Physim/build/native/Graphic-unit/test-results/run-_f1ajet3/graphic_figure"
+          ],
+          "status": "failed",
+          "exit_code": 1,
+          "stdout": "GRAPHIC FIGURE OWNERSHIP: 3 scene and 5 SVG allocation failures, detached text/data and sink failure passed\n",
+          "stderr": "Graphic figure 127: ps_graphic_figure_svg(f,test_domain(&tracker),&svg)==PS_LIMIT && !svg && !tracker.live_blocks && !tracker.invalid\nGraphic figure 167: resources()==0\n",
+          "reason": "Exit code 1; expected 0",
+          "seconds": 7.563,
+          "name": "graphic_figure"
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-graphic_snapshot.exe",
+            "D:/Physim/build/native/Graphic-unit/test-results/run-_f1ajet3/graphic_snapshot"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "GRAPHIC SNAPSHOT REPORT: deep-copy, masks, kinds, reference, crop and 5 allocation failures passed\nGRAPHIC SNAPSHOT RUNS: independent times, units, extrema/gaps, full statistics, 8 inputs, source deletion, quota/cancel and 9 allocation failures passed\nGRAPHIC SNAPSHOT TYPES: scatter, rad/degree, angle/scalar separation, invalid unnamed schema and intact UTF8 labels passed\nGraphic snapshot: immutable report/run data and transactional ownership passed\n",
+          "stderr": "",
+          "seconds": 0.391,
+          "name": "graphic_snapshot"
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-report.exe"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Reports: roundtrip, hostile files, units, extrema, histograms and exports passed\n",
+          "stderr": "",
+          "seconds": 5.296,
+          "name": "report"
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-series_mask.exe",
+            "D:/Physim/build/native/Graphic-unit/test-results/run-_f1ajet3/series_mask"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Series masks: alignment, quota, numerics, resampling, statistics, CSV and report roundtrip passed\n",
+          "stderr": "",
+          "seconds": 0.25,
+          "name": "series_mask"
+        }
+      ]
+    },
+    {
+      "source": 3,
+      "platform": "linux",
+      "log": {
+        "path": "build/native/graphic-figure-linux-3.log",
+        "bytes": 9575,
+        "sha256": "64241f4af9129aa2c7d3dd43ef1ba48a1e368d376a581845a47bcf3e180a6ae5"
+      },
+      "result_file": {
+        "path": "build/native/Graphic-unit-linux/test-results/run-1_rc8q0z/results.json",
+        "bytes": 11208,
+        "sha256": "7234b058f218043c39427671bba1ca698db98922a2c2075c089a763b5bfef089"
+      },
+      "records": [
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-graphic_figure",
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/test-results/run-1_rc8q0z/graphic_figure"
+          ],
+          "status": "failed",
+          "exit_code": 1,
+          "stdout": "GRAPHIC FIGURE OWNERSHIP: 3 scene and 5 SVG allocation failures, detached text/data and sink failure passed\n",
+          "stderr": "Graphic figure 127: ps_graphic_figure_svg(f,test_domain(&tracker),&svg)==PS_LIMIT && !svg && !tracker.live_blocks && !tracker.invalid\nGraphic figure 167: resources()==0\n\n=================================================================\n==192==ERROR: LeakSanitizer: detected memory leaks\n\nDirect leak of 35440 byte(s) in 1 object(s) allocated from:\n    #0 0x7ecc62aeda1d in malloc (/usr/lib/libasan.so.8+0xeda1d) (BuildId: 49cdec61ea4a7e68d1b3321b11e733d1f2124ac9)\n    #1 0x588e63af4bf1 in default_allocate /mnt/d/Physim/src/memory.c:7\n    #2 0x588e63af4fa8 in ps_memory_allocate /mnt/d/Physim/src/memory.c:21\n    #3 0x588e63af5231 in ps_memory_zero /mnt/d/Physim/src/memory.c:34\n    #4 0x588e63acfc08 in create /mnt/d/Physim/app/graphic_snapshot.c:28\n    #5 0x588e63ad121b in ps_graphic_snapshot_from_report /mnt/d/Physim/app/graphic_snapshot.c:61\n    #6 0x588e63ac0a55 in resources /mnt/d/Physim/tests/test_graphic_figure.c:123\n    #7 0x588e63ac3b04 in main /mnt/d/Physim/tests/test_graphic_figure.c:167\n    #8 0x7ecc63243193 in libc_start_main_stage2 src/env/__libc_start_main.c:95\n    #9 0x7ffd8b3fdd7e  ([stack]+0x20d7e)\n\nDirect leak of 32888 byte(s) in 1 object(s) allocated from:\n    #0 0x7ecc62aed405 in calloc (/usr/lib/libasan.so.8+0xed405) (BuildId: 49cdec61ea4a7e68d1b3321b11e733d1f2124ac9)\n    #1 0x588e63ac0145 in resources /mnt/d/Physim/tests/test_graphic_figure.c:118\n    #2 0x588e63ac3b04 in main /mnt/d/Physim/tests/test_graphic_figure.c:167\n    #3 0x7ecc63243193 in libc_start_main_stage2 src/env/__libc_start_main.c:95\n    #4 0x7ffd8b3fdd7e  ([stack]+0x20d7e)\n\nDirect leak of 19360 byte(s) in 1 object(s) allocated from:\n    #0 0x7ecc62aeda1d in malloc (/usr/lib/libasan.so.8+0xeda1d) (BuildId: 49cdec61ea4a7e68d1b3321b11e733d1f2124ac9)\n    #1 0x588e63af4bf1 in default_allocate /mnt/d/Physim/src/memory.c:7\n    #2 0x588e63af4fa8 in ps_memory_allocate /mnt/d/Physim/src/memory.c:21\n    #3 0x588e63af5231 in ps_memory_zero /mnt/d/Physim/src/memory.c:34\n    #4 0x588e63b466a8 in report_memory /mnt/d/Physim/src/report.c:29\n    #5 0x588e63b47350 in ps_report_create_with_allocator /mnt/d/Physim/src/report.c:59\n    #6 0x588e63b471ab in ps_report_create /mnt/d/Physim/src/report.c:52\n    #7 0x588e63abfc6f in resources /mnt/d/Physim/tests/test_graphic_figure.c:114\n    #8 0x588e63ac3b04 in main /mnt/d/Physim/tests/test_graphic_figure.c:167\n    #9 0x7ecc63243193 in libc_start_main_stage2 src/env/__libc_start_main.c:95\n    #10 0x7ffd8b3fdd7e  ([stack]+0x20d7e)\n\nDirect leak of 48 byte(s) in 1 object(s) allocated from:\n    #0 0x7ecc62aeda1d in malloc (/usr/lib/libasan.so.8+0xeda1d) (BuildId: 49cdec61ea4a7e68d1b3321b11e733d1f2124ac9)\n    #1 0x588e63ab7f5d in test_allocate /mnt/d/Physim/tests/test_allocator.h:34\n    #2 0x588e63af4fa8 in ps_memory_allocate /mnt/d/Physim/src/memory.c:21\n    #3 0x588e63af5231 in ps_memory_zero /mnt/d/Physim/src/memory.c:34\n    #4 0x588e63ace1e3 in ps_graphic_figure_svg /mnt/d/Physim/app/graphic_figure.c:274\n    #5 0x588e63ac0ee6 in resources /mnt/d/Physim/tests/test_graphic_figure.c:127\n    #6 0x588e63ac3b04 in main /mnt/d/Physim/tests/test_graphic_figure.c:167\n    #7 0x7ecc63243193 in libc_start_main_stage2 src/env/__libc_start_main.c:95\n    #8 0x7ffd8b3fdd7e  ([stack]+0x20d7e)\n\nIndirect leak of 33554432 byte(s) in 1 object(s) allocated from:\n    #0 0x7ecc62aeda1d in malloc (/usr/lib/libasan.so.8+0xeda1d) (BuildId: 49cdec61ea4a7e68d1b3321b11e733d1f2124ac9)\n    #1 0x588e63ab7f5d in test_allocate /mnt/d/Physim/tests/test_allocator.h:34\n    #2 0x588e63af4fa8 in ps_memory_allocate /mnt/d/Physim/src/memory.c:21\n    #3 0x588e63af571f in ps_memory_resize /mnt/d/Physim/src/memory.c:55\n    #4 0x588e63acc420 in append /mnt/d/Physim/app/graphic_figure.c:220\n    #5 0x588e63acca63 in literal /mnt/d/Physim/app/graphic_figure.c:225\n    #6 0x588e63acdb5d in svg_command /mnt/d/Physim/app/graphic_figure.c:262\n    #7 0x588e63ac57fe in ps_graphic_figure_draw /mnt/d/Physim/app/graphic_figure.c:64\n    #8 0x588e63ace7be in ps_graphic_figure_svg /mnt/d/Physim/app/graphic_figure.c:280\n    #9 0x588e63ac0ee6 in resources /mnt/d/Physim/tests/test_graphic_figure.c:127\n    #10 0x588e63ac3b04 in main /mnt/d/Physim/tests/test_graphic_figure.c:167\n    #11 0x7ecc63243193 in libc_start_main_stage2 src/env/__libc_start_main.c:95\n    #12 0x7ffd8b3fdd7e  ([stack]+0x20d7e)\n\nIndirect leak of 23068672 byte(s) in 1 object(s) allocated from:\n    #0 0x7ecc62aeda1d in malloc (/usr/lib/libasan.so.8+0xeda1d) (BuildId: 49cdec61ea4a7e68d1b3321b11e733d1f2124ac9)\n    #1 0x588e63af4bf1 in default_allocate /mnt/d/Physim/src/memory.c:7\n    #2 0x588e63af4fa8 in ps_memory_allocate /mnt/d/Physim/src/memory.c:21\n    #3 0x588e63af571f in ps_memory_resize /mnt/d/Physim/src/memory.c:55\n    #4 0x588e63ac4276 in push /mnt/d/Physim/app/graphic_figure.c:30\n    #5 0x588e63ac480c in line /mnt/d/Physim/app/graphic_figure.c:38\n    #6 0x588e63ac6659 in segment /mnt/d/Physim/app/graphic_figure.c:110\n    #7 0x588e63ac7c3d in curve_draw /mnt/d/Physim/app/graphic_figure.c:132\n    #8 0x588e63acb519 in ps_graphic_figure_create /mnt/d/Physim/app/graphic_figure.c:199\n    #9 0x588e63ac0bee in resources /mnt/d/Physim/tests/test_graphic_figure.c:124\n    #10 0x588e63ac3b04 in main /mnt/d/Physim/tests/test_graphic_figure.c:167\n    #11 0x7ecc63243193 in libc_start_main_stage2 src/env/__libc_start_main.c:95\n    #12 0x7ffd8b3fdd7e  ([stack]+0x20d7e)\n\nIndirect leak of 98664 byte(s) in 3 object(s) allocated from:\n    #0 0x7ecc62aeda1d in malloc (/usr/lib/libasan.so.8+0xeda1d) (BuildId: 49cdec61ea4a7e68d1b3321b11e733d1f2124ac9)\n    #1 0x588e63af4bf1 in default_allocate /mnt/d/Physim/src/memory.c:7\n    #2 0x588e63af4fa8 in ps_memory_allocate /mnt/d/Physim/src/memory.c:21\n    #3 0x588e63af5231 in ps_memory_zero /mnt/d/Physim/src/memory.c:34\n    #4 0x588e63b466a8 in report_memory /mnt/d/Physim/src/report.c:29\n    #5 0x588e63b4a007 in ps_report_add_curve_masked /mnt/d/Physim/src/report.c:145\n    #6 0x588e63b495bb in ps_report_add_curve /mnt/d/Physim/src/report.c:127\n    #7 0x588e63ac07ad in resources /mnt/d/Physim/tests/test_graphic_figure.c:121\n    #8 0x588e63ac3b04 in main /mnt/d/Physim/tests/test_graphic_figure.c:167\n    #9 0x7ecc63243193 in libc_start_main_stage2 src/env/__libc_start_main.c:95\n    #10 0x7ffd8b3fdd7e  ([stack]+0x20d7e)\n\nIndirect leak of 98664 byte(s) in 3 object(s) allocated from:\n    #0 0x7ecc62aeda1d in malloc (/usr/lib/libasan.so.8+0xeda1d) (BuildId: 49cdec61ea4a7e68d1b3321b11e733d1f2124ac9)\n    #1 0x588e63af4bf1 in default_allocate /mnt/d/Physim/src/memory.c:7\n    #2 0x588e63af4fa8 in ps_memory_allocate /mnt/d/Physim/src/memory.c:21\n    #3 0x588e63af5231 in ps_memory_zero /mnt/d/Physim/src/memory.c:34\n    #4 0x588e63b466a8 in report_memory /mnt/d/Physim/src/report.c:29\n    #5 0x588e63b4a007 in ps_report_add_curve_masked /mnt/d/Physim/src/report.c:145\n    #6 0x588e63ad155e in ps_graphic_snapshot_from_report /mnt/d/Physim/app/graphic_snapshot.c:68\n    #7 0x588e63ac0a55 in resources /mnt/d/Physim/tests/test_graphic_figure.c:123\n    #8 0x588e63ac3b04 in main /mnt/d/Physim/tests/test_graphic_figure.c:167\n    #9 0x7ecc63243193 in libc_start_main_stage2 src/env/__libc_start_main.c:95\n    #10 0x7ffd8b3fdd7e  ([stack]+0x20d7e)\n\nIndirect leak of 24648 byte(s) in 1 object(s) allocated from:\n    #0 0x7ecc62aeda1d in malloc (/usr/lib/libasan.so.8+0xeda1d) (BuildId: 49cdec61ea4a7e68d1b3321b11e733d1f2124ac9)\n    #1 0x588e63af4bf1 in default_allocate /mnt/d/Physim/src/memory.c:7\n    #2 0x588e63af4fa8 in ps_memory_allocate /mnt/d/Physim/src/memory.c:21\n    #3 0x588e63af5231 in ps_memory_zero /mnt/d/Physim/src/memory.c:34\n    #4 0x588e63ac862e in ps_graphic_figure_create /mnt/d/Physim/app/graphic_figure.c:150\n    #5 0x588e63ac0bee in resources /mnt/d/Physim/tests/test_graphic_figure.c:124\n    #6 0x588e63ac3b04 in main /mnt/d/Physim/tests/test_graphic_figure.c:167\n    #7 0x7ecc63243193 in libc_start_main_stage2 src/env/__libc_start_main.c:95\n    #8 0x7ffd8b3fdd7e  ([stack]+0x20d7e)\n\nIndirect leak of 19360 byte(s) in 1 object(s) allocated from:\n    #0 0x7ecc62aeda1d in malloc (/usr/lib/libasan.so.8+0xeda1d) (BuildId: 49cdec61ea4a7e68d1b3321b11e733d1f2124ac9)\n    #1 0x588e63af4bf1 in default_allocate /mnt/d/Physim/src/memory.c:7\n    #2 0x588e63af4fa8 in ps_memory_allocate /mnt/d/Physim/src/memory.c:21\n    #3 0x588e63af5231 in ps_memory_zero /mnt/d/Physim/src/memory.c:34\n    #4 0x588e63b466a8 in report_memory /mnt/d/Physim/src/report.c:29\n    #5 0x588e63b47350 in ps_report_create_with_allocator /mnt/d/Physim/src/report.c:59\n    #6 0x588e63acfe3e in create /mnt/d/Physim/app/graphic_snapshot.c:31\n    #7 0x588e63ad121b in ps_graphic_snapshot_from_report /mnt/d/Physim/app/graphic_snapshot.c:61\n    #8 0x588e63ac0a55 in resources /mnt/d/Physim/tests/test_graphic_figure.c:123\n    #9 0x588e63ac3b04 in main /mnt/d/Physim/tests/test_graphic_figure.c:167\n    #10 0x7ecc63243193 in libc_start_main_stage2 src/env/__libc_start_main.c:95\n    #11 0x7ffd8b3fdd7e  ([stack]+0x20d7e)\n\nSUMMARY: AddressSanitizer: 56952176 byte(s) leaked in 14 allocation(s).\n",
+          "reason": "Exit code 1; expected 0",
+          "seconds": 3.441,
+          "name": "graphic_figure"
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-graphic_snapshot",
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/test-results/run-1_rc8q0z/graphic_snapshot"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "GRAPHIC SNAPSHOT REPORT: deep-copy, masks, kinds, reference, crop and 5 allocation failures passed\nGRAPHIC SNAPSHOT RUNS: independent times, units, extrema/gaps, full statistics, 8 inputs, source deletion, quota/cancel and 9 allocation failures passed\nGRAPHIC SNAPSHOT TYPES: scatter, rad/degree, angle/scalar separation, invalid unnamed schema and intact UTF8 labels passed\nGraphic snapshot: immutable report/run data and transactional ownership passed\n",
+          "stderr": "",
+          "seconds": 17.266,
+          "name": "graphic_snapshot"
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-report"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Reports: roundtrip, hostile files, units, extrema, histograms and exports passed\n",
+          "stderr": "",
+          "seconds": 15.473,
+          "name": "report"
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-series_mask",
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/test-results/run-1_rc8q0z/series_mask"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Series masks: alignment, quota, numerics, resampling, statistics, CSV and report roundtrip passed\n",
+          "stderr": "",
+          "seconds": 0.369,
+          "name": "series_mask"
+        }
+      ]
+    },
+    {
+      "source": 4,
+      "platform": "windows",
+      "log": {
+        "path": "build/native/graphic-figure-windows-4.log",
+        "bytes": 6400,
+        "sha256": "3ce0a92b7367e467a472b92a7ff10bf7b0dd5d88ebfc6912f78a509c9d65b0d0"
+      },
+      "result_file": {
+        "path": "build/native/Graphic-unit/test-results/run-9f50wbhk/results.json",
+        "bytes": 2299,
+        "sha256": "92eb843066e4b91c06ebaf13938231eb9ed5f6c6651494bd43379ac224c838f2"
+      },
+      "records": [
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-graphic_figure.exe",
+            "D:/Physim/build/native/Graphic-unit/test-results/run-9f50wbhk/graphic_figure"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "GRAPHIC FIGURE OWNERSHIP: 3 scene and 5 SVG allocation failures, detached text/data and sink failure passed\nGRAPHIC FIGURE LIMITS: command/SVG budgets release all ownership; finite overflow clipping survives\nGRAPHIC FIGURE: canonical layout, explicit reference, independent axes, masks, dashes, scatter, histograms, full XY crop, themes and bounded numeric errors passed\n",
+          "stderr": "",
+          "seconds": 0.516,
+          "name": "graphic_figure"
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-graphic_snapshot.exe",
+            "D:/Physim/build/native/Graphic-unit/test-results/run-9f50wbhk/graphic_snapshot"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "GRAPHIC SNAPSHOT REPORT: deep-copy, masks, kinds, reference, crop and 5 allocation failures passed\nGRAPHIC SNAPSHOT RUNS: independent times, units, extrema/gaps, full statistics, 8 inputs, source deletion, quota/cancel and 9 allocation failures passed\nGRAPHIC SNAPSHOT TYPES: scatter, rad/degree, angle/scalar separation, invalid unnamed schema and intact UTF8 labels passed\nGraphic snapshot: immutable report/run data and transactional ownership passed\n",
+          "stderr": "",
+          "seconds": 0.438,
+          "name": "graphic_snapshot"
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-report.exe"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Reports: roundtrip, hostile files, units, extrema, histograms and exports passed\n",
+          "stderr": "",
+          "seconds": 9.11,
+          "name": "report"
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-series_mask.exe",
+            "D:/Physim/build/native/Graphic-unit/test-results/run-9f50wbhk/series_mask"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Series masks: alignment, quota, numerics, resampling, statistics, CSV and report roundtrip passed\n",
+          "stderr": "",
+          "seconds": 0.203,
+          "name": "series_mask"
+        }
+      ]
+    },
+    {
+      "source": 4,
+      "platform": "linux",
+      "log": {
+        "path": "build/native/graphic-figure-linux-4.log",
+        "bytes": 23155,
+        "sha256": "27fc293143bb99ca6f8399250bb25acd10b68c495d5b5d6a7d93e51fa44229ae"
+      },
+      "result_file": {
+        "path": "build/native/Graphic-unit-linux/test-results/run-m00ucwgj/results.json",
+        "bytes": 2282,
+        "sha256": "95268dd613ec4cd13f8f18c7963b0ba361f66189eb43c3f2f8982f288f686dcb"
+      },
+      "records": [
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-graphic_figure",
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/test-results/run-m00ucwgj/graphic_figure"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "GRAPHIC FIGURE OWNERSHIP: 3 scene and 5 SVG allocation failures, detached text/data and sink failure passed\nGRAPHIC FIGURE LIMITS: command/SVG budgets release all ownership; finite overflow clipping survives\nGRAPHIC FIGURE: canonical layout, explicit reference, independent axes, masks, dashes, scatter, histograms, full XY crop, themes and bounded numeric errors passed\n",
+          "stderr": "",
+          "seconds": 0.205,
+          "name": "graphic_figure"
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-graphic_snapshot",
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/test-results/run-m00ucwgj/graphic_snapshot"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "GRAPHIC SNAPSHOT REPORT: deep-copy, masks, kinds, reference, crop and 5 allocation failures passed\nGRAPHIC SNAPSHOT RUNS: independent times, units, extrema/gaps, full statistics, 8 inputs, source deletion, quota/cancel and 9 allocation failures passed\nGRAPHIC SNAPSHOT TYPES: scatter, rad/degree, angle/scalar separation, invalid unnamed schema and intact UTF8 labels passed\nGraphic snapshot: immutable report/run data and transactional ownership passed\n",
+          "stderr": "",
+          "seconds": 4.762,
+          "name": "graphic_snapshot"
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-report"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Reports: roundtrip, hostile files, units, extrema, histograms and exports passed\n",
+          "stderr": "",
+          "seconds": 11.633,
+          "name": "report"
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-series_mask",
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/test-results/run-m00ucwgj/series_mask"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Series masks: alignment, quota, numerics, resampling, statistics, CSV and report roundtrip passed\n",
+          "stderr": "",
+          "seconds": 0.271,
+          "name": "series_mask"
+        }
+      ]
+    },
+    {
+      "source": 5,
+      "platform": "windows",
+      "log": {
+        "path": "build/native/graphic-figure-windows-5.log",
+        "bytes": 932,
+        "sha256": "6d15cab334982d87ab9c16e3ee1ad59a154108e2e26f6a69ac8235339566b6e8"
+      },
+      "result_file": {
+        "path": "build/native/Graphic-unit/test-results/run-t_xgrkze/results.json",
+        "bytes": 580,
+        "sha256": "a95fed7b030f873ffeab9d7ce7e70e5edbc77205b0da062c3699800b63e9b10c"
+      },
+      "records": [
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-graphic_figure.exe",
+            "D:/Physim/build/native/Graphic-unit/test-results/run-t_xgrkze/graphic_figure"
+          ],
+          "status": "failed",
+          "exit_code": 1,
+          "stdout": "GRAPHIC FIGURE OWNERSHIP: 3 scene and 5 SVG allocation failures, detached text/data and sink failure passed\n",
+          "stderr": "Graphic figure 166: ticks==6 && distinct\nGraphic figure 188: resources()==0\n",
+          "reason": "Exit code 1; expected 0",
+          "seconds": 0.39,
+          "name": "graphic_figure"
+        }
+      ]
+    },
+    {
+      "source": 5,
+      "platform": "linux",
+      "log": {
+        "path": "build/native/graphic-figure-linux-5.log",
+        "bytes": 528,
+        "sha256": "bef728404025a4c2d2d187d5e370e332d77ed382c38e44135767fd36b11ab2c4"
+      },
+      "result_file": {
+        "path": "build/native/Graphic-unit-linux/test-results/run-4yg5gbsh/results.json",
+        "bytes": 576,
+        "sha256": "2517f5b8f88a9aff09ba960b4380c6391c8aaa5884388e9c78e5b832ff8e3aed"
+      },
+      "records": [
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-graphic_figure",
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/test-results/run-4yg5gbsh/graphic_figure"
+          ],
+          "status": "failed",
+          "exit_code": 1,
+          "stdout": "GRAPHIC FIGURE OWNERSHIP: 3 scene and 5 SVG allocation failures, detached text/data and sink failure passed\n",
+          "stderr": "Graphic figure 166: ticks==6 && distinct\nGraphic figure 188: resources()==0\n",
+          "reason": "Exit code 1; expected 0",
+          "seconds": 0.199,
+          "name": "graphic_figure"
+        }
+      ]
+    },
+    {
+      "source": 6,
+      "platform": "windows",
+      "log": {
+        "path": "build/native/graphic-figure-windows-6.log",
+        "bytes": 350,
+        "sha256": "40094bad3d0a5046b8b7322145af2833a435c562f976cc3c07361c1b8db28d3b"
+      },
+      "result_file": {
+        "path": "build/native/Graphic-unit/test-results/run-tfy1vnsy/results.json",
+        "bytes": 2335,
+        "sha256": "a0bd0d31704774ef2119e92331c65c0acf4efab6affef5505512be9d4134e3f0"
+      },
+      "records": [
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-graphic_figure.exe",
+            "D:/Physim/build/native/Graphic-unit/test-results/run-tfy1vnsy/graphic_figure"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "GRAPHIC FIGURE OWNERSHIP: 3 scene and 5 SVG allocation failures, detached text/data and sink failure passed\nGRAPHIC FIGURE LIMITS: command/SVG budgets release all ownership; finite overflow clipping and six distinct large-offset ticks survive\nGRAPHIC FIGURE: canonical layout, explicit reference, independent axes, masks, dashes, scatter, histograms, full XY crop, themes and bounded numeric errors passed\n",
+          "stderr": "",
+          "seconds": 0.406,
+          "name": "graphic_figure"
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-graphic_snapshot.exe",
+            "D:/Physim/build/native/Graphic-unit/test-results/run-tfy1vnsy/graphic_snapshot"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "GRAPHIC SNAPSHOT REPORT: deep-copy, masks, kinds, reference, crop and 5 allocation failures passed\nGRAPHIC SNAPSHOT RUNS: independent times, units, extrema/gaps, full statistics, 8 inputs, source deletion, quota/cancel and 9 allocation failures passed\nGRAPHIC SNAPSHOT TYPES: scatter, rad/degree, angle/scalar separation, invalid unnamed schema and intact UTF8 labels passed\nGraphic snapshot: immutable report/run data and transactional ownership passed\n",
+          "stderr": "",
+          "seconds": 0.344,
+          "name": "graphic_snapshot"
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-report.exe"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Reports: roundtrip, hostile files, units, extrema, histograms and exports passed\n",
+          "stderr": "",
+          "seconds": 3.766,
+          "name": "report"
+        },
+        {
+          "command": [
+            "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-series_mask.exe",
+            "D:/Physim/build/native/Graphic-unit/test-results/run-tfy1vnsy/series_mask"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Series masks: alignment, quota, numerics, resampling, statistics, CSV and report roundtrip passed\n",
+          "stderr": "",
+          "seconds": 0.094,
+          "name": "series_mask"
+        }
+      ]
+    },
+    {
+      "source": 6,
+      "platform": "linux",
+      "log": {
+        "path": "build/native/graphic-figure-linux-6.log",
+        "bytes": 340,
+        "sha256": "89b1229598e435cb7f1630b3aafb557b146e444231eec4e35e9785953d2d5102"
+      },
+      "result_file": {
+        "path": "build/native/Graphic-unit-linux/test-results/run-bam0qgdu/results.json",
+        "bytes": 2315,
+        "sha256": "47992aa16fdeb786b2eba74a69e180ec5b7358a846825127657e4db9ca784716"
+      },
+      "records": [
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-graphic_figure",
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/test-results/run-bam0qgdu/graphic_figure"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "GRAPHIC FIGURE OWNERSHIP: 3 scene and 5 SVG allocation failures, detached text/data and sink failure passed\nGRAPHIC FIGURE LIMITS: command/SVG budgets release all ownership; finite overflow clipping and six distinct large-offset ticks survive\nGRAPHIC FIGURE: canonical layout, explicit reference, independent axes, masks, dashes, scatter, histograms, full XY crop, themes and bounded numeric errors passed\n",
+          "stderr": "",
+          "seconds": 0.23,
+          "name": "graphic_figure"
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-graphic_snapshot",
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/test-results/run-bam0qgdu/graphic_snapshot"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "GRAPHIC SNAPSHOT REPORT: deep-copy, masks, kinds, reference, crop and 5 allocation failures passed\nGRAPHIC SNAPSHOT RUNS: independent times, units, extrema/gaps, full statistics, 8 inputs, source deletion, quota/cancel and 9 allocation failures passed\nGRAPHIC SNAPSHOT TYPES: scatter, rad/degree, angle/scalar separation, invalid unnamed schema and intact UTF8 labels passed\nGraphic snapshot: immutable report/run data and transactional ownership passed\n",
+          "stderr": "",
+          "seconds": 3.869,
+          "name": "graphic_snapshot"
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-report"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Reports: roundtrip, hostile files, units, extrema, histograms and exports passed\n",
+          "stderr": "",
+          "seconds": 6.594,
+          "name": "report"
+        },
+        {
+          "command": [
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-series_mask",
+            "/mnt/d/Physim/build/native/Graphic-unit-linux/test-results/run-bam0qgdu/series_mask"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Series masks: alignment, quota, numerics, resampling, statistics, CSV and report roundtrip passed\n",
+          "stderr": "",
+          "seconds": 0.201,
+          "name": "series_mask"
+        }
+      ]
+    }
+  ],
+  "application_builds": [
+    {
+      "platform": "windows",
+      "log": {
+        "path": "build/native/graphic-figure-app-windows-6.log",
+        "bytes": 178,
+        "sha256": "2a24064b9d9ff781286cd88c8dba26a47e7c4f1dcc5a85c21158becdae8573f5"
+      },
+      "binary": {
+        "path": "build/native/Design-analysis/bin/physim.exe",
+        "bytes": 9076224,
+        "sha256": "0ffa5e9882a730834a289b110e03cf3bbbf69ae5f4529f1f4dedc0584397769e"
+      },
+      "runtime_or_visual_acceptance": false
+    },
+    {
+      "platform": "linux",
+      "log": {
+        "path": "build/native/graphic-figure-app-linux-6.log",
+        "bytes": 162,
+        "sha256": "02f1cad41c58de5297a7172736f0ffbed9bc6631b9a500c26d0ec9e3fa471f30"
+      },
+      "binary": {
+        "path": "build/native/Design-analysis-linux/bin/physim",
+        "bytes": 41457072,
+        "sha256": "5ae0a6637ab7181d6785fa53366ed03751ac7612850f2e6bd1512f9168cc2bb9"
+      },
+      "runtime_or_visual_acceptance": false
+    }
+  ],
+  "catalog": [
+    {
+      "source": 3,
+      "platform": "windows",
+      "log": {
+        "path": "build/native/graphic-figure-catalog-windows-3.log",
+        "bytes": 1477,
+        "sha256": "280226c7462dfd97c07498f0ffcf204c040148bcc413fcf37493853f12a60b69"
+      },
+      "scope": "Catalog/build runner unchanged from source 3 to 6; later edits affect figure API, implementation and its tests/checker."
+    },
+    {
+      "source": 3,
+      "platform": "linux",
+      "log": {
+        "path": "build/native/graphic-figure-catalog-linux-3.log",
+        "bytes": 1454,
+        "sha256": "b66414d283b3f7530b6b172b4082bebffd2b8c3129b3a4c799598122ed567930"
+      },
+      "scope": "Catalog/build runner unchanged from source 3 to 6; later edits affect figure API, implementation and its tests/checker."
+    }
+  ],
+  "references": [
+    {
+      "path": "docs/visuals/analysis-workspace/graphic-export.js",
+      "bytes": 10376,
+      "sha256": "0ebba605c1cf4679ea963a4c78adf9b0c342f45650a2a802f700c680a8e251c6"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/export-dialog-dark.png",
+      "bytes": 230145,
+      "sha256": "7a1124a87508e1e69ca76f7b241187316ecc56c207314ed5345b7208ef43b5fd"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/export-dialog-light.png",
+      "bytes": 239998,
+      "sha256": "ff6eeb42ee6f946116a338df26e0b55d54833f0c6af5345b7b98672abb0a1752"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/export-example.svg",
+      "bytes": 38096,
+      "sha256": "63354075cf641fe854640e914762ee35ef5f0685ab4d2ad8029310ff10f22417"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/export-example.png",
+      "bytes": 363859,
+      "sha256": "74e702edf79a733680baa38c1dbceaac6d7a3127c30a2d298ed74bcaeb75669e"
+    }
+  ],
+  "svg_checks": {
+    "windows": [
+      {
+        "name": "figure-0-0.svg",
+        "bytes": 18601,
+        "sha256": "d0cc2047aa69b0481506f206c223e9c44c0530230f6f34f5337dcfc3684e4c4a",
+        "xml": true,
+        "reference_geometry": true
+      },
+      {
+        "name": "figure-0-1.svg",
+        "bytes": 11257,
+        "sha256": "5d5ad613450bde28ed4bebd92fda94d9397dbba6d346e722475f4ee3aca8e0e3",
+        "xml": true,
+        "reference_geometry": true
+      },
+      {
+        "name": "figure-1-0.svg",
+        "bytes": 18601,
+        "sha256": "19ddfc379f32eeb48423669dacfea4822c67675a338ec432698c8db1e65b78b2",
+        "xml": true,
+        "reference_geometry": true
+      },
+      {
+        "name": "figure-1-1.svg",
+        "bytes": 11257,
+        "sha256": "503c2b71995a7ddcff9f3d30428006906ff2679c52b0f0591c45dd38b2f835ba",
+        "xml": true,
+        "reference_geometry": true
+      },
+      {
+        "name": "figure-extreme.svg",
+        "bytes": 7680,
+        "sha256": "f999cb21af4975ca3888ce69a5d00ac24164c85ae45f0d1a78001b800f2c9e8f",
+        "xml": true,
+        "reference_geometry": false
+      }
+    ],
+    "linux": [
+      {
+        "name": "figure-0-0.svg",
+        "bytes": 18601,
+        "sha256": "d0cc2047aa69b0481506f206c223e9c44c0530230f6f34f5337dcfc3684e4c4a",
+        "xml": true,
+        "reference_geometry": true
+      },
+      {
+        "name": "figure-0-1.svg",
+        "bytes": 11257,
+        "sha256": "5d5ad613450bde28ed4bebd92fda94d9397dbba6d346e722475f4ee3aca8e0e3",
+        "xml": true,
+        "reference_geometry": true
+      },
+      {
+        "name": "figure-1-0.svg",
+        "bytes": 18601,
+        "sha256": "19ddfc379f32eeb48423669dacfea4822c67675a338ec432698c8db1e65b78b2",
+        "xml": true,
+        "reference_geometry": true
+      },
+      {
+        "name": "figure-1-1.svg",
+        "bytes": 11257,
+        "sha256": "503c2b71995a7ddcff9f3d30428006906ff2679c52b0f0591c45dd38b2f835ba",
+        "xml": true,
+        "reference_geometry": true
+      },
+      {
+        "name": "figure-extreme.svg",
+        "bytes": 7680,
+        "sha256": "f999cb21af4975ca3888ce69a5d00ac24164c85ae45f0d1a78001b800f2c9e8f",
+        "xml": true,
+        "reference_geometry": false
+      }
+    ]
+  },
+  "svg_files": [
+    {
+      "platform": "windows",
+      "source": {
+        "path": "build/native/Graphic-unit/test-results/run-tfy1vnsy/graphic_figure/figure-0-0.svg",
+        "bytes": 18601,
+        "sha256": "d0cc2047aa69b0481506f206c223e9c44c0530230f6f34f5337dcfc3684e4c4a"
+      },
+      "saved": {
+        "path": "docs/visuals/unified-workspace/graphic-figure-2026-10-21/figure-0-0.svg",
+        "bytes": 18601,
+        "sha256": "d0cc2047aa69b0481506f206c223e9c44c0530230f6f34f5337dcfc3684e4c4a"
+      }
+    },
+    {
+      "platform": "windows",
+      "source": {
+        "path": "build/native/Graphic-unit/test-results/run-tfy1vnsy/graphic_figure/figure-0-1.svg",
+        "bytes": 11257,
+        "sha256": "5d5ad613450bde28ed4bebd92fda94d9397dbba6d346e722475f4ee3aca8e0e3"
+      },
+      "saved": {
+        "path": "docs/visuals/unified-workspace/graphic-figure-2026-10-21/figure-0-1.svg",
+        "bytes": 11257,
+        "sha256": "5d5ad613450bde28ed4bebd92fda94d9397dbba6d346e722475f4ee3aca8e0e3"
+      }
+    },
+    {
+      "platform": "windows",
+      "source": {
+        "path": "build/native/Graphic-unit/test-results/run-tfy1vnsy/graphic_figure/figure-1-0.svg",
+        "bytes": 18601,
+        "sha256": "19ddfc379f32eeb48423669dacfea4822c67675a338ec432698c8db1e65b78b2"
+      },
+      "saved": {
+        "path": "docs/visuals/unified-workspace/graphic-figure-2026-10-21/figure-1-0.svg",
+        "bytes": 18601,
+        "sha256": "19ddfc379f32eeb48423669dacfea4822c67675a338ec432698c8db1e65b78b2"
+      }
+    },
+    {
+      "platform": "windows",
+      "source": {
+        "path": "build/native/Graphic-unit/test-results/run-tfy1vnsy/graphic_figure/figure-1-1.svg",
+        "bytes": 11257,
+        "sha256": "503c2b71995a7ddcff9f3d30428006906ff2679c52b0f0591c45dd38b2f835ba"
+      },
+      "saved": {
+        "path": "docs/visuals/unified-workspace/graphic-figure-2026-10-21/figure-1-1.svg",
+        "bytes": 11257,
+        "sha256": "503c2b71995a7ddcff9f3d30428006906ff2679c52b0f0591c45dd38b2f835ba"
+      }
+    },
+    {
+      "platform": "windows",
+      "source": {
+        "path": "build/native/Graphic-unit/test-results/run-tfy1vnsy/graphic_figure/figure-extreme.svg",
+        "bytes": 7680,
+        "sha256": "f999cb21af4975ca3888ce69a5d00ac24164c85ae45f0d1a78001b800f2c9e8f"
+      },
+      "saved": {
+        "path": "docs/visuals/unified-workspace/graphic-figure-2026-10-21/figure-extreme.svg",
+        "bytes": 7680,
+        "sha256": "f999cb21af4975ca3888ce69a5d00ac24164c85ae45f0d1a78001b800f2c9e8f"
+      }
+    },
+    {
+      "platform": "linux",
+      "source": {
+        "path": "build/native/Graphic-unit-linux/test-results/run-bam0qgdu/graphic_figure/figure-0-0.svg",
+        "bytes": 18601,
+        "sha256": "d0cc2047aa69b0481506f206c223e9c44c0530230f6f34f5337dcfc3684e4c4a"
+      },
+      "saved": {
+        "path": "docs/visuals/unified-workspace/graphic-figure-2026-10-21/figure-0-0.svg",
+        "bytes": 18601,
+        "sha256": "d0cc2047aa69b0481506f206c223e9c44c0530230f6f34f5337dcfc3684e4c4a"
+      }
+    },
+    {
+      "platform": "linux",
+      "source": {
+        "path": "build/native/Graphic-unit-linux/test-results/run-bam0qgdu/graphic_figure/figure-0-1.svg",
+        "bytes": 11257,
+        "sha256": "5d5ad613450bde28ed4bebd92fda94d9397dbba6d346e722475f4ee3aca8e0e3"
+      },
+      "saved": {
+        "path": "docs/visuals/unified-workspace/graphic-figure-2026-10-21/figure-0-1.svg",
+        "bytes": 11257,
+        "sha256": "5d5ad613450bde28ed4bebd92fda94d9397dbba6d346e722475f4ee3aca8e0e3"
+      }
+    },
+    {
+      "platform": "linux",
+      "source": {
+        "path": "build/native/Graphic-unit-linux/test-results/run-bam0qgdu/graphic_figure/figure-1-0.svg",
+        "bytes": 18601,
+        "sha256": "19ddfc379f32eeb48423669dacfea4822c67675a338ec432698c8db1e65b78b2"
+      },
+      "saved": {
+        "path": "docs/visuals/unified-workspace/graphic-figure-2026-10-21/figure-1-0.svg",
+        "bytes": 18601,
+        "sha256": "19ddfc379f32eeb48423669dacfea4822c67675a338ec432698c8db1e65b78b2"
+      }
+    },
+    {
+      "platform": "linux",
+      "source": {
+        "path": "build/native/Graphic-unit-linux/test-results/run-bam0qgdu/graphic_figure/figure-1-1.svg",
+        "bytes": 11257,
+        "sha256": "503c2b71995a7ddcff9f3d30428006906ff2679c52b0f0591c45dd38b2f835ba"
+      },
+      "saved": {
+        "path": "docs/visuals/unified-workspace/graphic-figure-2026-10-21/figure-1-1.svg",
+        "bytes": 11257,
+        "sha256": "503c2b71995a7ddcff9f3d30428006906ff2679c52b0f0591c45dd38b2f835ba"
+      }
+    },
+    {
+      "platform": "linux",
+      "source": {
+        "path": "build/native/Graphic-unit-linux/test-results/run-bam0qgdu/graphic_figure/figure-extreme.svg",
+        "bytes": 7680,
+        "sha256": "f999cb21af4975ca3888ce69a5d00ac24164c85ae45f0d1a78001b800f2c9e8f"
+      },
+      "saved": {
+        "path": "docs/visuals/unified-workspace/graphic-figure-2026-10-21/figure-extreme.svg",
+        "bytes": 7680,
+        "sha256": "f999cb21af4975ca3888ce69a5d00ac24164c85ae45f0d1a78001b800f2c9e8f"
+      }
+    }
+  ],
+  "unchanged_svg_after_offset_fix": [
+    {
+      "platform": "windows",
+      "name": "figure-0-0.svg",
+      "source_versions": [
+        4,
+        6
+      ],
+      "byte_identical": true,
+      "sha256": "d0cc2047aa69b0481506f206c223e9c44c0530230f6f34f5337dcfc3684e4c4a"
+    },
+    {
+      "platform": "windows",
+      "name": "figure-0-1.svg",
+      "source_versions": [
+        4,
+        6
+      ],
+      "byte_identical": true,
+      "sha256": "5d5ad613450bde28ed4bebd92fda94d9397dbba6d346e722475f4ee3aca8e0e3"
+    },
+    {
+      "platform": "windows",
+      "name": "figure-1-0.svg",
+      "source_versions": [
+        4,
+        6
+      ],
+      "byte_identical": true,
+      "sha256": "19ddfc379f32eeb48423669dacfea4822c67675a338ec432698c8db1e65b78b2"
+    },
+    {
+      "platform": "windows",
+      "name": "figure-1-1.svg",
+      "source_versions": [
+        4,
+        6
+      ],
+      "byte_identical": true,
+      "sha256": "503c2b71995a7ddcff9f3d30428006906ff2679c52b0f0591c45dd38b2f835ba"
+    },
+    {
+      "platform": "windows",
+      "name": "figure-extreme.svg",
+      "source_versions": [
+        4,
+        6
+      ],
+      "byte_identical": true,
+      "sha256": "f999cb21af4975ca3888ce69a5d00ac24164c85ae45f0d1a78001b800f2c9e8f"
+    },
+    {
+      "platform": "linux",
+      "name": "figure-0-0.svg",
+      "source_versions": [
+        4,
+        6
+      ],
+      "byte_identical": true,
+      "sha256": "d0cc2047aa69b0481506f206c223e9c44c0530230f6f34f5337dcfc3684e4c4a"
+    },
+    {
+      "platform": "linux",
+      "name": "figure-0-1.svg",
+      "source_versions": [
+        4,
+        6
+      ],
+      "byte_identical": true,
+      "sha256": "5d5ad613450bde28ed4bebd92fda94d9397dbba6d346e722475f4ee3aca8e0e3"
+    },
+    {
+      "platform": "linux",
+      "name": "figure-1-0.svg",
+      "source_versions": [
+        4,
+        6
+      ],
+      "byte_identical": true,
+      "sha256": "19ddfc379f32eeb48423669dacfea4822c67675a338ec432698c8db1e65b78b2"
+    },
+    {
+      "platform": "linux",
+      "name": "figure-1-1.svg",
+      "source_versions": [
+        4,
+        6
+      ],
+      "byte_identical": true,
+      "sha256": "503c2b71995a7ddcff9f3d30428006906ff2679c52b0f0591c45dd38b2f835ba"
+    },
+    {
+      "platform": "linux",
+      "name": "figure-extreme.svg",
+      "source_versions": [
+        4,
+        6
+      ],
+      "byte_identical": true,
+      "sha256": "f999cb21af4975ca3888ce69a5d00ac24164c85ae45f0d1a78001b800f2c9e8f"
+    }
+  ],
+  "checker_counterexamples": [
+    {
+      "case": "clip",
+      "replacement": [
+        "width=\"1032\"",
+        "width=\"1031\""
+      ],
+      "rejected": true,
+      "altered_sha256": "f0c1f116e0cdd310007404dd41052dd93d9e2fea55cdad6bddb1db85847764c6"
+    },
+    {
+      "case": "paper",
+      "replacement": [
+        "#ffffff",
+        "#000000"
+      ],
+      "rejected": true,
+      "altered_sha256": "9dfda526ac2863d24ed40d039ec4ed9a14025cc74acbc0e6614770df6e1927f6"
+    },
+    {
+      "case": "reference",
+      "replacement": [
+        "Referenz B · Referenz",
+        "Vergleich B"
+      ],
+      "rejected": true,
+      "altered_sha256": "8aa588ee7fa84e15dd8951af4037cbd2a750b3b57c9f26fa3e84c5a43e8ec723"
+    }
+  ],
+  "limits": [
+    "No native raster adapter, PNG/clipboard/dialog integration or whole-design acceptance yet",
+    "Figure unit tests use deterministic metrics, not a real font/raster proof",
+    "No current macOS or external screenreader execution",
+    "Local app builds include ten separately hashed foreign changes",
+    "Command and SVG byte budgets can reject extreme diagrams; no silently truncated output",
+    "Coordinates beyond 1e9 viewport widths return PS_LIMIT rather than promise precision"
+  ],
+  "generator": {
+    "path": "build/native/audit-graphic-figure.py",
+    "bytes": 9512,
+    "sha256": "2d19e47266489a73f59ec6b8cd2c5f606b27c5d571a7433276af6a4399940130",
+    "text": "import ast,datetime,hashlib,importlib.util,json,pathlib,re,subprocess,sys\nsys.dont_write_bytecode=True\nroot=pathlib.Path('D:/Physim');native=root/'build/native';out=root/'docs/visuals/unified-workspace/graphic-figure-2026-10-21';out.mkdir(exist_ok=True)\ndef sha(p,lf=False):\n    b=p.read_bytes();return hashlib.sha256(b.replace(b'\\r\\n',b'\\n') if lf else b).hexdigest()\ndef read(p):return json.loads(p.read_text(encoding='utf-8-sig'))\ndef evidence(p,text=False):\n    d={'path':p.relative_to(root).as_posix(),'bytes':p.stat().st_size,'sha256':sha(p)}\n    if text:d['text']=p.read_text(encoding='utf-8')\n    return d\ndef write(name,data):(out/name).write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\\n',encoding='utf-8')\nsources={str(i):read(native/f'graphic-figure-source-{i}.json') for i in range(1,7)};final=sources['6']\nfor bank in ('source_sha256_lf','foreign_sha256_lf','font_assets_sha256','linebreak_assets_sha256'):\n    for name,digest in final[bank].items():assert sha(root/name,bank.endswith('_lf'))==digest,(bank,name)\nruns=[];final_dirs={}\nfor i in range(1,7):\n    for platform in ('windows','linux'):\n        log=native/f'graphic-figure-{platform}-{i}.log';text=log.read_text(encoding='utf-8')\n        m=re.search(r'Native tests: (\\d+)/(\\d+) passed\\. Results: (.+)',text);assert m,log\n        path=pathlib.Path(m[3].strip().replace('/mnt/d/Physim/','D:/Physim/'))/'results.json'\n        records=read(path);assert len(records)==(1 if i==5 else 4)\n        if i==5:assert records[0]['status']=='failed' and 'ticks==6 && distinct' in records[0]['stderr']\n        if i==6:\n            assert all(x['status']=='passed' for x in records)\n            stdout=next(x['stdout'] for x in records if x['name']=='graphic_figure')\n            assert '3 scene and 5 SVG allocation failures' in stdout and 'command/SVG budgets release all ownership' in stdout\n            final_dirs[platform]=path.parent/'graphic_figure'\n        runs.append({'source':i,'platform':platform,'log':evidence(log),'result_file':evidence(path),'records':records})\nspec=importlib.util.spec_from_file_location('figure_svg_check',root/'tests/check_graphic_figure_svg.py');checker=importlib.util.module_from_spec(spec);spec.loader.exec_module(checker)\nchecks={};images=[]\nfor platform,work in final_dirs.items():\n    check=checker.check(work);checks[platform]=check;write(f'{platform}-svg-check.json',{'status':'passed','files':check,'limits':'XML and geometry, deterministic test metrics; no font/PNG/browser acceptance.'})\n    for file in check:\n        p=work/file['name']\n        if platform=='windows':(out/file['name']).write_bytes(p.read_bytes())\n        assert p.read_bytes()==(out/file['name']).read_bytes()\n        images.append({'platform':platform,'source':evidence(p),'saved':evidence(out/file['name'])})\nassert [x['sha256'] for x in checks['windows']]==[x['sha256'] for x in checks['linux']]\nparity=[]\nfor platform,work in final_dirs.items():\n    prior=next(x for x in runs if x['source']==4 and x['platform']==platform)\n    old=root/prior['result_file']['path'];old=old.parent/'graphic_figure'\n    for file in checks[platform]:\n        assert (old/file['name']).read_bytes()==(work/file['name']).read_bytes()\n        parity.append({'platform':platform,'name':file['name'],'source_versions':[4,6],'byte_identical':True,'sha256':file['sha256']})\n# Check that this independent parser rejects altered outputs. Temporary copied\n# SVGs are owned fixtures, not prior failed native-run evidence.\ncounters=[];counter_base=native/'graphic-figure-svg-counters';counter_base.mkdir(exist_ok=True)\nassert counter_base.resolve().is_relative_to(native.resolve())\nfor label,old,new in [('clip','width=\"1032\"','width=\"1031\"'),('paper','#ffffff','#000000'),('reference','Referenz B · Referenz','Vergleich B')]:\n    directory=counter_base/label;directory.mkdir(exist_ok=True)\n    files=[]\n    for p in out.glob('figure-*.svg'):\n        q=directory/p.name;q.write_bytes(p.read_bytes());files.append(q)\n    q=directory/'figure-0-0.svg';text=q.read_text(encoding='utf-8');assert old in text;q.write_text(text.replace(old,new,1),encoding='utf-8')\n    rejected=False\n    try:checker.check(directory)\n    except AssertionError:rejected=True\n    assert rejected,label\n    counters.append({'case':label,'replacement':[old,new],'rejected':rejected,'altered_sha256':sha(q)})\n    for q in files:\n        assert q.resolve().is_relative_to(counter_base.resolve());q.unlink()\n    directory.rmdir()\ncounter_base.rmdir()\nbuilds=[]\nfor platform in ('windows','linux'):\n    log=native/f'graphic-figure-app-{platform}-6.log';assert 'Build complete:' in log.read_text(encoding='utf-8')\n    binary=native/('Design-analysis' if platform=='windows' else 'Design-analysis-linux')/'bin'/('physim.exe' if platform=='windows' else 'physim')\n    builds.append({'platform':platform,'log':evidence(log),'binary':evidence(binary),'runtime_or_visual_acceptance':False})\ncatalog=[]\nfor platform in ('windows','linux'):\n    log=native/f'graphic-figure-catalog-{platform}-3.log';assert 'complete reports passed' in log.read_text(encoding='utf-8')\n    for name in ('tools/build.py','tools/native_tests.py','tests/test_native_test_runner.py'):assert sources['3']['source_sha256_lf'][name]==final['source_sha256_lf'][name]\n    catalog.append({'source':3,'platform':platform,'log':evidence(log),'scope':'Catalog/build runner unchanged from source 3 to 6; later edits affect figure API, implementation and its tests/checker.'})\nrefs=[evidence(root/name) for name in ['docs/visuals/analysis-workspace/graphic-export.js','docs/visuals/unified-workspace/export-dialog-dark.png','docs/visuals/unified-workspace/export-dialog-light.png','docs/visuals/unified-workspace/export-example.svg','docs/visuals/unified-workspace/export-example.png']]\nlimits=['No native raster adapter, PNG/clipboard/dialog integration or whole-design acceptance yet','Figure unit tests use deterministic metrics, not a real font/raster proof','No current macOS or external screenreader execution','Local app builds include ten separately hashed foreign changes','Command and SVG byte budgets can reject extreme diagrams; no silently truncated output','Coordinates beyond 1e9 viewport widths return PS_LIMIT rather than promise precision']\nwrite('validation.json',{'created_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'scope':'Canonical owned native figure geometry and SVG for the full approved export; no completed UI export claim.','sources':sources,'runs':runs,'application_builds':builds,'catalog':catalog,'references':refs,'svg_checks':checks,'svg_files':images,'unchanged_svg_after_offset_fix':parity,'checker_counterexamples':counters,'limits':limits,'generator':evidence(pathlib.Path(__file__).resolve(),True),'cleanup':'Only this audit\\'s fifteen altered SVG counter-fixtures removed after recorded rejection. All real failed native runs, current proof files, references, programs and symbols preserved.'})\nif not (out/'audit.json').exists():write('audit.json',{'status':'pending'})\nowned=['app/graphic_figure.c','app/graphic_figure.h','tests/test_graphic_figure.c','tests/check_graphic_figure_svg.py','tools/build.py','tools/native_tests.py','docs/visuals/unified-workspace/GRAPHIC-FIGURE-NATIVE.md','docs/visuals/unified-workspace/GRAPHIC-EXPORT-NATIVE.md','docs/visuals/unified-workspace/NATIVE-FIDELITY.md','docs/visuals/unified-workspace/NEXT-CHAT.md','docs/visuals/unified-workspace/README.md']\nowned+=sorted(p.relative_to(root).as_posix() for p in out.iterdir() if p.is_file())\nassert len(owned)==20 and len(set(owned))==20 and not set(owned)&set(final['foreign_sha256_lf'])\nlinks=0\nfor name in owned:\n    p=root/name\n    if p.suffix=='.py':ast.parse(p.read_text(encoding='utf-8'))\n    if p.suffix=='.json':read(p)\n    if p.suffix=='.md':\n        text=p.read_text(encoding='utf-8');assert '\\ufffd' not in text\n        for target in re.findall(r'!?\\[[^\\]]*\\]\\(([^)]+)\\)',text):\n            target=target.strip('<>').split('#',1)[0].split('?',1)[0]\n            if not target or re.match(r'^[a-zA-Z]+:',target):continue\n            assert (p.parent/target).exists(),(name,target);links+=1\nsubprocess.run(['git','diff','--check'],cwd=root,capture_output=True,check=True)\nif '--stage' in sys.argv:subprocess.run(['git','add','--',*owned],cwd=root,capture_output=True,check=True)\nstaged=subprocess.check_output(['git','diff','--cached','--name-only','-z'],cwd=root).decode('utf-8').strip('\\0').split('\\0')\nassert set(staged)==set(owned),(set(staged)-set(owned),set(owned)-set(staged))\nsubprocess.run(['git','diff','--cached','--check'],cwd=root,capture_output=True,check=True)\nwrite('audit.json',{'created_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'checks':{'frozen_sources':len(final['source_sha256_lf']),'foreign_unchanged':10,'final_groups_each_os':4,'recorded_runs':12,'allocation_failure_points':{'figure':3,'svg':5},'svg_xml_checks':10,'identical_cross_platform_svg_pairs':5,'unchanged_svg_after_offset_fix':10,'rejected_altered_svg_cases':3,'real_offset_counterexample_rejected_each_os':True,'app_builds':2,'catalog_runs':2,'local_doc_links':links,'owned_staged_only':True,'git_diff_check':True,'python_json_syntax':True,'new_native_png_or_dialog_acceptance':False},'owned_files':owned,'inputs':[evidence(root/n) for n in owned if not n.endswith('/audit.json')],'limits':limits})\nif '--stage' in sys.argv:subprocess.run(['git','add','--',str(out/'audit.json')],cwd=root,capture_output=True,check=True)\nprint(json.dumps(read(out/'audit.json')['checks']))\n"
+  },
+  "cleanup": "Only this audit's fifteen altered SVG counter-fixtures removed after recorded rejection. All real failed native runs, current proof files, references, programs and symbols preserved."
+}

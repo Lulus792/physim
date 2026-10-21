@@ -7,8 +7,8 @@ oder externe Ressourcen.
 Der laufende [native Referenzabgleich](NATIVE-FIDELITY.md) führt Umsetzung,
 begrenzte Nachweise und die noch offenen Unterschiede aller vier Bereiche.
 Der [native Grafikexport-Umsetzungsstand](GRAPHIC-EXPORT-NATIVE.md) dokumentiert
-die geprüfte Datenbasis und die weiter beauftragten Darstellungs-, Dialog- und
-Plattformschritte des freigegebenen Exports.
+die geprüfte Datenbasis, [Zeichenbeschreibung und SVG](GRAPHIC-FIGURE-NATIVE.md)
+sowie die weiter beauftragten Raster-, Dialog- und Plattformschritte des Exports.
 Eine Browserprüfung ist weiterhin keine vollständige native Abnahme.
 Der [native Auswertungsstand](ANALYSIS-NATIVE.md) trennt den neuen Aufbau von
 den noch offenen Mehrlauf-, Export- und vollständigen Bildabgleich-Aufgaben.

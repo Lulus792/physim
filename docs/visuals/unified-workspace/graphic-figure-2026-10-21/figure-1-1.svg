@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="850" viewBox="0 0 1200 850" role="img" aria-labelledby="figure-title figure-desc">
+<title id="figure-title">Auslenkung &lt;&amp;&gt; α</title><desc id="figure-desc">Physim: festgehaltene native Diagrammdaten.</desc>
+<defs><clipPath id="plot-clip"><rect x="116" y="230" width="1032" height="470"/></clipPath></defs>
+<g font-family="Segoe UI, Arial, sans-serif">
+<rect x="0.000000" y="0.000000" width="1200.000000" height="850.000000" fill="#1b1c20"/>
+<text x="64.000000" y="58.000000" font-size="13.000000" font-weight="400" letter-spacing="2.000000" text-anchor="start" fill="#a6a9b1" textLength="159.500000" lengthAdjust="spacingAndGlyphs">PHYSIM / AUSWERTUNG</text>
+<text x="64.000000" y="104.000000" font-size="34.000000" font-weight="600" letter-spacing="0.000000" text-anchor="start" fill="#edeef2" textLength="299.200000" lengthAdjust="spacingAndGlyphs">Auslenkung &lt;&amp;&gt; α</text>
+<text x="64.000000" y="136.000000" font-size="18.000000" font-weight="400" letter-spacing="0.000000" text-anchor="start" fill="#a6a9b1" textLength="270.000000" lengthAdjust="spacingAndGlyphs">Modell &lt;&amp;&gt; α · 2,0000–8,0000 s</text>
+<line x1="64.000000" y1="168.000000" x2="67.000000" y2="168.000000" stroke="#8abaff" stroke-width="3.000000"/>
+<line x1="73.000000" y1="168.000000" x2="76.000000" y2="168.000000" stroke="#8abaff" stroke-width="3.000000"/>
+<line x1="82.000000" y1="168.000000" x2="85.000000" y2="168.000000" stroke="#8abaff" stroke-width="3.000000"/>
+<line x1="91.000000" y1="168.000000" x2="94.000000" y2="168.000000" stroke="#8abaff" stroke-width="3.000000"/>
+<text x="104.000000" y="173.000000" font-size="17.000000" font-weight="400" letter-spacing="0.000000" text-anchor="start" fill="#a6a9b1" textLength="59.500000" lengthAdjust="spacingAndGlyphs">A &lt;&amp;&gt; α</text>
+<line x1="344.000000" y1="168.000000" x2="374.000000" y2="168.000000" stroke="#f5b46c" stroke-width="3.000000"/>
+<text x="384.000000" y="173.000000" font-size="17.000000" font-weight="400" letter-spacing="0.000000" text-anchor="start" fill="#a6a9b1" textLength="178.500000" lengthAdjust="spacingAndGlyphs">Referenz B · Referenz</text>
+<circle cx="639.000000" cy="168.000000" r="3.000000" fill="#8bcca5"/>
+<text x="664.000000" y="173.000000" font-size="17.000000" font-weight="400" letter-spacing="0.000000" text-anchor="start" fill="#a6a9b1" textLength="76.500000" lengthAdjust="spacingAndGlyphs">Scatter C</text>
+<rect x="904.000000" y="160.000000" width="30.000000" height="12.000000" fill="#d0a6ec"/>
+<text x="944.000000" y="173.000000" font-size="4.294737" font-weight="400" letter-spacing="0.000000" text-anchor="start" fill="#a6a9b1" textLength="204.000000" lengthAdjust="spacingAndGlyphs">DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD</text>
+<line x1="116.000000" y1="230.000000" x2="1148.000000" y2="230.000000" stroke="#3b3d45" stroke-width="1.000000"/>
+<text x="98.000000" y="237.000000" font-size="19.000000" font-weight="400" letter-spacing="0.000000" text-anchor="end" fill="#a6a9b1" textLength="38.000000" lengthAdjust="spacingAndGlyphs">2,00</text>
+<line x1="116.000000" y1="347.500000" x2="1148.000000" y2="347.500000" stroke="#3b3d45" stroke-width="1.000000"/>
+<text x="98.000000" y="354.500000" font-size="19.000000" font-weight="400" letter-spacing="0.000000" text-anchor="end" fill="#a6a9b1" textLength="38.000000" lengthAdjust="spacingAndGlyphs">1,00</text>
+<line x1="116.000000" y1="465.000000" x2="1148.000000" y2="465.000000" stroke="#3b3d45" stroke-width="1.000000"/>
+<text x="98.000000" y="472.000000" font-size="19.000000" font-weight="400" letter-spacing="0.000000" text-anchor="end" fill="#a6a9b1" textLength="38.000000" lengthAdjust="spacingAndGlyphs">0,00</text>
+<line x1="116.000000" y1="582.500000" x2="1148.000000" y2="582.500000" stroke="#3b3d45" stroke-width="1.000000"/>
+<text x="98.000000" y="589.500000" font-size="19.000000" font-weight="400" letter-spacing="0.000000" text-anchor="end" fill="#a6a9b1" textLength="47.500000" lengthAdjust="spacingAndGlyphs">-1,00</text>
+<line x1="116.000000" y1="700.000000" x2="1148.000000" y2="700.000000" stroke="#3b3d45" stroke-width="1.000000"/>
+<text x="98.000000" y="707.000000" font-size="19.000000" font-weight="400" letter-spacing="0.000000" text-anchor="end" fill="#a6a9b1" textLength="47.500000" lengthAdjust="spacingAndGlyphs">-2,00</text>
+<line x1="116.000000" y1="230.000000" x2="116.000000" y2="700.000000" stroke="#3b3d45" stroke-width="1.000000"/>
+<text x="116.000000" y="734.000000" font-size="19.000000" font-weight="400" letter-spacing="0.000000" text-anchor="middle" fill="#a6a9b1" textLength="28.500000" lengthAdjust="spacingAndGlyphs">2,0</text>
+<line x1="322.400000" y1="230.000000" x2="322.400000" y2="700.000000" stroke="#3b3d45" stroke-width="1.000000"/>
+<text x="322.400000" y="734.000000" font-size="19.000000" font-weight="400" letter-spacing="0.000000" text-anchor="middle" fill="#a6a9b1" textLength="28.500000" lengthAdjust="spacingAndGlyphs">3,2</text>
+<line x1="528.800000" y1="230.000000" x2="528.800000" y2="700.000000" stroke="#3b3d45" stroke-width="1.000000"/>
+<text x="528.800000" y="734.000000" font-size="19.000000" font-weight="400" letter-spacing="0.000000" text-anchor="middle" fill="#a6a9b1" textLength="28.500000" lengthAdjust="spacingAndGlyphs">4,4</text>
+<line x1="735.200000" y1="230.000000" x2="735.200000" y2="700.000000" stroke="#3b3d45" stroke-width="1.000000"/>
+<text x="735.200000" y="734.000000" font-size="19.000000" font-weight="400" letter-spacing="0.000000" text-anchor="middle" fill="#a6a9b1" textLength="28.500000" lengthAdjust="spacingAndGlyphs">5,6</text>
+<line x1="941.600000" y1="230.000000" x2="941.600000" y2="700.000000" stroke="#3b3d45" stroke-width="1.000000"/>
+<text x="941.600000" y="734.000000" font-size="19.000000" font-weight="400" letter-spacing="0.000000" text-anchor="middle" fill="#a6a9b1" textLength="28.500000" lengthAdjust="spacingAndGlyphs">6,8</text>
+<line x1="1148.000000" y1="230.000000" x2="1148.000000" y2="700.000000" stroke="#3b3d45" stroke-width="1.000000"/>
+<text x="1148.000000" y="734.000000" font-size="19.000000" font-weight="400" letter-spacing="0.000000" text-anchor="middle" fill="#a6a9b1" textLength="28.500000" lengthAdjust="spacingAndGlyphs">8,0</text>
+<line x1="116.000000" y1="465.000000" x2="1148.000000" y2="465.000000" stroke="#606268" stroke-width="1.000000"/>
+<text x="116.000000" y="216.000000" font-size="19.000000" font-weight="400" letter-spacing="0.000000" text-anchor="start" fill="#a6a9b1" textLength="95.000000" lengthAdjust="spacingAndGlyphs">Signal [1]</text>
+<text x="1148.000000" y="773.000000" font-size="19.000000" font-weight="400" letter-spacing="0.000000" text-anchor="end" fill="#a6a9b1" textLength="76.000000" lengthAdjust="spacingAndGlyphs">Zeit [s]</text>
+<g clip-path="url(#plot-clip)">
+<line x1="979.413868" y1="695.335704" x2="981.185725" y2="692.914852" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="984.729440" y1="688.073149" x2="986.501297" y2="685.652298" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="990.045011" y1="680.810595" x2="991.816869" y2="678.389743" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="995.360583" y1="673.548040" x2="997.132440" y2="671.127189" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1000.676155" y1="666.285486" x2="1002.448012" y2="663.864634" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1005.991727" y1="659.022932" x2="1007.763584" y2="656.602080" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1011.307298" y1="651.760377" x2="1013.079156" y2="649.339526" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1016.622870" y1="644.497823" x2="1018.394727" y2="642.076971" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1021.938442" y1="637.235268" x2="1023.710299" y2="634.814417" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1027.254014" y1="629.972714" x2="1029.025871" y2="627.551862" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1032.569586" y1="622.710159" x2="1034.341443" y2="620.289308" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1037.885157" y1="615.447605" x2="1039.657015" y2="613.026753" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1043.200729" y1="608.185050" x2="1044.972586" y2="605.764199" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1048.516301" y1="600.922496" x2="1050.288158" y2="598.501645" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1053.831873" y1="593.659942" x2="1055.603730" y2="591.239090" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1059.147444" y1="586.397387" x2="1060.919302" y2="583.976536" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1064.463016" y1="579.134833" x2="1066.234873" y2="576.713981" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1069.778588" y1="571.872278" x2="1071.550445" y2="569.451427" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1075.094160" y1="564.609724" x2="1076.866017" y2="562.188872" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1080.409731" y1="557.347169" x2="1082.181589" y2="554.926318" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1085.725303" y1="550.084615" x2="1087.497160" y2="547.663764" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1091.040875" y1="542.822061" x2="1092.812732" y2="540.401209" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1096.356447" y1="535.559506" x2="1098.128304" y2="533.138655" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1101.672018" y1="528.296952" x2="1103.443876" y2="525.876100" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1106.987590" y1="521.034397" x2="1108.759447" y2="518.613546" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1112.303162" y1="513.771843" x2="1114.075019" y2="511.350991" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1117.618734" y1="506.509288" x2="1119.390591" y2="504.088437" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1122.934305" y1="499.246734" x2="1124.706163" y2="496.825882" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1128.249877" y1="491.984180" x2="1130.021734" y2="489.563328" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1133.565449" y1="484.721625" x2="1135.337306" y2="482.300774" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1138.881021" y1="477.459071" x2="1140.652878" y2="475.038219" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="1144.196592" y1="470.196516" x2="1145.968450" y2="467.775665" stroke="#8abaff" stroke-width="2.500000"/>
+<line x1="116.000000" y1="347.500000" x2="1148.000000" y2="347.500000" stroke="#f5b46c" stroke-width="2.500000"/>
+<circle cx="632.000000" cy="347.500000" r="3.000000" fill="#8bcca5"/>
+<rect x="116.000000" y="230.000000" width="172.000000" height="235.000000" fill="#d0a6ec"/>
+<rect x="976.000000" y="230.000000" width="172.000000" height="235.000000" fill="#d0a6ec"/>
+</g>
+<text x="64.000000" y="814.000000" font-size="14.000000" font-weight="400" letter-spacing="0.000000" text-anchor="start" fill="#a6a9b1" textLength="637.000000" lengthAdjust="spacingAndGlyphs">Sichtbarer Ausschnitt · 4 Kurven · Vorschau reduziert; mehr Pixel erzeugen keine Messpunkte</text>
+</g></svg>
