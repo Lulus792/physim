@@ -1,0 +1,47 @@
+{
+  "scope": "Original cropped user screenshots, no inferred full-window/revision metadata",
+  "images": [
+    {
+      "path": "user-233621.png",
+      "original": "C:\\Users\\angel\\Downloads\\Screenshot 2026-10-21 233621.png",
+      "bytes": 2327,
+      "sha256": "38b15995ade2795792d0eef9761810a8a2703488488b8abfdddf383904c0e18a"
+    },
+    {
+      "path": "user-233603.png",
+      "original": "C:\\Users\\angel\\Downloads\\Screenshot 2026-10-21 233603.png",
+      "bytes": 68238,
+      "sha256": "884a42f6cf894d37e9ddd157a3fe1e8c75f30ac2902d6f17c0b2eddfade8f7d2"
+    },
+    {
+      "path": "user-233420.png",
+      "original": "C:\\Users\\angel\\Downloads\\Screenshot 2026-10-21 233420.png",
+      "bytes": 26118,
+      "sha256": "2fca1ce9ef0ca2a811b80d3c0142d6121b728b895fc96be8d9a2419b6d461510"
+    },
+    {
+      "path": "user-233342.png",
+      "original": "C:\\Users\\angel\\Downloads\\Screenshot 2026-10-21 233342.png",
+      "bytes": 17521,
+      "sha256": "12e973fdb2131f0adbb7c4a1c4dec7c77c0a51bd466242f8a1ea762eb064f31e"
+    },
+    {
+      "path": "user-233247.png",
+      "original": "C:\\Users\\angel\\Downloads\\Screenshot 2026-10-21 233247.png",
+      "bytes": 1069,
+      "sha256": "42fc7b4f8fc015eee14d46e5e49fd964fe73e79ae4e910b53264fcfd6731926c"
+    },
+    {
+      "path": "user-233130.png",
+      "original": "C:\\Users\\angel\\Downloads\\Screenshot 2026-10-21 233130.png",
+      "bytes": 846,
+      "sha256": "dc3285cec56b26727479c8f3518b35c3f1d9d73f55532b84c18bb8016833f99d"
+    },
+    {
+      "path": "user-233108.png",
+      "original": "C:\\Users\\angel\\Downloads\\Screenshot 2026-10-21 233108.png",
+      "bytes": 6315,
+      "sha256": "b1eafc14be644db712bce1a8aefb81204c2ad1190c2f1fbbfa8d400de7c5423b"
+    }
+  ]
+}

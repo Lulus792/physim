@@ -6,6 +6,19 @@ Gestaltung umsetzen. Jede verbleibende Abweichung braucht eine konkrete
 Begründung. Die bisherigen Funktionsprüfungen oder ein Vergleich zweier nativer
 Versionen sind keine vollständige Designabnahme.
 
+Die [sieben tatsächlichen Nutzeraufnahmen vom 21. Oktober](USER-REVIEW-2026-10-21.md)
+zeigen weitere sichtbare Mängel, insbesondere die alte Berichtsbedienung,
+Auswahlpfeile, Szenenzeilen, Inspektorabschnitte und Workspace-Symbole. Sie haben
+Vorrang beim nächsten Komponentenabgleich. Die Gesamtabnahme wird dadurch nicht
+auf diese sieben Ausschnitte begrenzt.
+
+Der anschließende [native Komponentenabgleich](COMPONENTS-NATIVE.md) korrigiert
+Auswahlpfeile, Workspace-Chevrons, umbrechende Szenenzeilen und Inspektorregeln
+sowie dessen Modellfehler-Scrollblockade. Sechs Windows- und sieben Linux-
+Gruppen bestehen. Das ersetzt keine vollständige visuelle, Assistive- oder
+Plattformabnahme; die übrigen sichtbaren Lücken einschließlich der alten
+Berichtsbedienung bleiben offen.
+
 ## Verbindlicher Umfang
 
 Für die drei Hauptbereiche gelten die sechs Bilder und die interaktive Vorlage

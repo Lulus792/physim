@@ -106,10 +106,14 @@ static void workspace_tree_view(app *a) {
         if (entry->directory) {
             struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
             float x = bounds.x + 8, y = bounds.y + bounds.h * .5f;
-            if (entry->expanded)
-                nk_fill_triangle(canvas, x, y - 3, x + 8, y - 3, x + 4, y + 3, UI_COLOR(text));
-            else
-                nk_fill_triangle(canvas, x, y - 4, x, y + 4, x + 6, y, UI_COLOR(text));
+            struct nk_color color=UI_COLOR(muted);
+            if (entry->expanded) {
+                nk_stroke_line(canvas,x-2,y-2,x+1,y+1,1,color);
+                nk_stroke_line(canvas,x+1,y+1,x+4,y-2,1,color);
+            } else {
+                nk_stroke_line(canvas,x-1,y-3,x+2,y,1,color);
+                nk_stroke_line(canvas,x+2,y,x-1,y+3,1,color);
+            }
         }
         if (nk_input_is_mouse_hovering_rect(&ui->input, bounds))
             nk_tooltip(ui, entry->path);

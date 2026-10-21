@@ -1,0 +1,3 @@
+# Frozen diagnostics and SHA-256 values retain their original bytes.
+* -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+*.log -whitespace

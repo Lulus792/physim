@@ -1,0 +1,18 @@
+{
+  "scope": "Existing Release executable predating this component patch, with unchanged current scene visibility fixture/checker",
+  "command": [
+    "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "D:\\Physim/tests/check_display_workflow.py",
+    "scene_visibility_16",
+    "--app",
+    "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+    "--work",
+    "D:\\Physim\\build\\native\\user-components-baseline-visibility-windows-2",
+    "--root",
+    "D:\\Physim"
+  ],
+  "exit_code": 1,
+  "seconds": 31.26500000001397,
+  "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\r\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\r\nBereit. Ordner öffnen oder ein neues Projekt anlegen.\r\n5 Messpunkte geladen.\r\n\r\nAPP TEST EXIT: 1\r\n",
+  "stderr": "APP TEST TRACE: initializing SDL\r\nAPP TEST TRACE: SDL initialized, video driver windows\r\nAPP TEST TRACE: creating window\r\nAPP TEST TRACE: window created, creating OpenGL context\r\nAPP TEST TRACE: window and OpenGL ready\r\nAPP TEST TRACE: main fonts begin 569840.498680\r\nAPP TEST TRACE: main font sources ready 569840.563015\r\nAPP TEST TRACE: main atlas bake seconds=0.258082\r\nAPP TEST TRACE: main atlas validation/upload seconds=0.007756\r\nAPP TEST TRACE: main fonts ready 569840.840641\r\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\r\nAPP TEST TRACE: stage 0 -> 1, status 5 Messpunkte geladen.\r\nAPP TEST TRACE: stage 1 -> 2, status 5 Messpunkte geladen.\r\nFirst workflow failure at stage 2 (next 2): 5 Messpunkte geladen. (tab=1, selected=0, samples=5, report=1, query=)\r\nWorkflow failed at stage 2: 5 Messpunkte geladen. (tab=1, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\r\nTraceback (most recent call last):\r\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 2138, in <module>\r\n    main()\r\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 1937, in main\r\n    SPECIAL[args.case](flow, directory)\r\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 1873, in <lambda>\r\n    SPECIAL = {\"scene_visibility_16\": lambda flow,directory: scene_visibility(flow,directory,\"16\"),\"scene_visibility_22\": lambda flow,directory: scene_visibility(flow,directory,\"22\"),\"project_display_16\": lambda flow,directory: project_display(flow,directory,\"16\"), \"project_display_22\": lambda flow,directory: project_display(flow,directory,\"22\"),\"camera_plane_16\": lambda flow,directory: camera_plane(flow,directory,\"16\"), \"camera_plane_22\": lambda flow,directory: camera_plane(flow,directory,\"22\"),\"report_details_workflow\": report_details, \"library_selection_workflow\": library_selection, \"api_reference_workflow\": api_reference,\r\n                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 645, in scene_visibility\r\n    flow.run(\"--scene-visibility-test\",directory,size,timeout=35,marker=\"SCENE VISIBILITY SELF-TEST: PASSED\")\r\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 593, in run\r\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\r\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 530, in require\r\n    raise RuntimeError(message)\r\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\native\\\\Release\\\\bin\\\\physim.exe', '--scene-visibility-test', 'D:\\\\Physim\\\\build\\\\native\\\\user-components-baseline-visibility-windows-2\\\\workflow ä', '16']\r\n"
+}

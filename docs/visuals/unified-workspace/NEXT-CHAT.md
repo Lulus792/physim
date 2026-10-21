@@ -7,6 +7,13 @@ nativ mit umzusetzen. Er ist kein optionaler zusätzlicher Entwurf mehr.
 und die native Abnahme fest. Diese Ergänzung gilt auch beim Fortsetzen des
 bereits laufenden nativen Referenzabgleichs.
 
+**Jüngste Nutzerbefunde vom 21. Oktober:** Die
+[Originalaufnahmen und ihre offenen Korrekturen](USER-REVIEW-2026-10-21.md)
+zeigen weiterhin sichtbare Standard-/Altbedienelemente. Zuerst diese gemeinsamen
+Komponenten und die übrigen sichtbaren Abweichungen angleichen. Ein fertiger
+Export-Rasterbaustein ist kein Ersatz für den sichtbaren Dialog oder eine fertige
+Gesamtoberfläche.
+
 Der [native Export-Umsetzungsstand](GRAPHIC-EXPORT-NATIVE.md) enthält inzwischen
 die geprüfte gemeinsame Datenbasis für Berichtsdiagramme und bis zu acht
 Messläufe sowie [Zeichenbeschreibung und SVG](GRAPHIC-FIGURE-NATIVE.md).

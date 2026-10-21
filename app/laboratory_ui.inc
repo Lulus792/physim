@@ -26,7 +26,7 @@ static void laboratory_value(app *a,const char *label,const char *value,bool mea
 }
 static void laboratory_object(app *a) {
     struct nk_context *ui=a->ui;scene_selection_sync(a);
-    if(!nk_tree_state_push(ui,NK_TREE_TAB,"Objekt",&a->laboratory_groups[0]))return;
+    if(!workspace_section_begin(a,"Objekt",&a->laboratory_groups[0]))return;
     const ps_scene *scene=display_scene(a);
     if(!a->scene_selected || a->scene_selected_slot>=scene->count)laboratory_note(a,"Wähle ein Objekt in der Szene oder im Szenenbaum.");
     else {

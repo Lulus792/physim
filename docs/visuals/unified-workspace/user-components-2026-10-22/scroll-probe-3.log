@@ -1,0 +1,64 @@
+Breakpoint 1 at 0xecbea4: file /mnt/d/Physim/app/camera_plane_tests.inc, line 20.
+APP TEST TRACE: initializing SDL
+[Detaching after fork from child process 4073]
+APP TEST TRACE: SDL initialized, video driver x11
+APP TEST TRACE: creating window
+[New LWP 4082]
+[New LWP 4083]
+[New LWP 4084]
+[New LWP 4085]
+[New LWP 4086]
+[New LWP 4087]
+[New LWP 4088]
+[New LWP 4089]
+[New LWP 4090]
+[New LWP 4091]
+[New LWP 4092]
+[New LWP 4093]
+[New LWP 4094]
+[New LWP 4095]
+[New LWP 4096]
+[New LWP 4097]
+[New LWP 4098]
+APP TEST TRACE: window created, creating OpenGL context
+OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)
+APP TEST TRACE: window and OpenGL ready
+[Detaching after fork from child process 4100]
+[New LWP 4109]
+APP TEST TRACE: main fonts begin 1520.107895
+APP TEST TRACE: main font sources ready 1522.659518
+APP TEST TRACE: main atlas bake seconds=5.971293
+APP TEST TRACE: main atlas validation/upload seconds=0.063216
+APP TEST TRACE: main fonts ready 1528.757500
+[New LWP 4174]
+APP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.
+[New LWP 4175]
+[LWP 4174 exited]
+[LWP 4175 exited]
+APP TEST TRACE: stage 0 -> 1, status 5 Messpunkte geladen.
+APP TEST TRACE: stage 1 -> 2, status 5 Messpunkte geladen.
+SCROLL_PROBE n=1 target=867,1354.9,148,28 body=843,284,219,150 scroll=0 mouse=0,0 wheel=0
+SCROLL_FIELD vector=867,1354.9,148,28 panel=843,284,219,150
+SCROLL_PROBE n=2 target=867,1340.9,148,28 body=843,284,219,150 scroll=14 mouse=952.5,359 wheel=0
+SCROLL_FIELD vector=867,1340.9,148,28 panel=843,284,219,150
+SCROLL_PROBE n=3 target=867,1326.9,148,28 body=843,284,219,150 scroll=28 mouse=952.5,359 wheel=0
+SCROLL_FIELD vector=867,1326.9,148,28 panel=843,284,219,150
+SCROLL_PROBE n=4 target=867,1312.9,148,28 body=843,284,219,150 scroll=42 mouse=952.5,359 wheel=0
+SCROLL_FIELD vector=867,1312.9,148,28 panel=843,284,219,150
+SCROLL_PROBE n=5 target=867,1298.9,148,28 body=843,284,219,150 scroll=56 mouse=952.5,359 wheel=0
+SCROLL_FIELD vector=867,1298.9,148,28 panel=843,284,219,150
+SCROLL_PROBE n=6 target=867,1298.9,148,28 body=843,284,219,150 scroll=56 mouse=952.5,359 wheel=0
+SCROLL_FIELD vector=867,1298.9,148,28 panel=843,284,219,150
+SCROLL_PROBE n=7 target=867,1298.9,148,28 body=843,284,219,150 scroll=56 mouse=952.5,359 wheel=0
+SCROLL_FIELD vector=867,1298.9,148,28 panel=843,284,219,150
+SCROLL_PROBE n=8 target=867,1298.9,148,28 body=843,284,219,150 scroll=56 mouse=952.5,359 wheel=0
+SCROLL_FIELD vector=867,1298.9,148,28 panel=843,284,219,150
+SCROLL_PROBE n=9 target=867,1298.9,148,28 body=843,284,219,150 scroll=56 mouse=952.5,359 wheel=0
+SCROLL_FIELD vector=867,1298.9,148,28 panel=843,284,219,150
+SCROLL_PROBE n=10 target=867,1298.9,148,28 body=843,284,219,150 scroll=56 mouse=952.5,359 wheel=0
+SCROLL_FIELD vector=867,1298.9,148,28 panel=843,284,219,150
+SCROLL_PROBE n=11 target=867,1298.9,148,28 body=843,284,219,150 scroll=56 mouse=952.5,359 wheel=0
+SCROLL_FIELD vector=867,1298.9,148,28 panel=843,284,219,150
+SCROLL_PROBE n=12 target=867,1298.9,148,28 body=843,284,219,150 scroll=56 mouse=952.5,359 wheel=0
+SCROLL_FIELD vector=867,1298.9,148,28 panel=843,284,219,150
+DIAGNOSTIC ONLY: intentionally stop own inferior after 12 geometry probes; no application completion claimed

@@ -5,8 +5,12 @@ static float model_edit_banner(app *a) {
     float start=ui->current->layout->at_y;
     laboratory_note(a,m->stop_build?"Lauf wird vor dem Build gestoppt …":m->building?"Modell wird kompiliert …":dirty?"Modellwerte geändert":"Build erfolgreich · Neuer Lauf verwendet die neuen Artefakte");
     if(*m->error) {
-        nk_layout_row_dynamic(ui,32,1);
-        if(nk_group_begin(ui,"model-value-error",NK_WINDOW_BORDER)){laboratory_note(a,m->error);nk_group_end(ui);}
+        /* One wrapping message in the inspector's scroll flow. An inner
+         * scrollable group captured the wheel when it moved under the pointer,
+         * stopping the parent before the remaining settings were reachable. */
+        nk_style_push_color(ui,&ui->style.text.color,UI_COLOR(error));
+        laboratory_note(a,m->error);
+        nk_style_pop_color(ui);
     }
     if(m->building) {
         nk_layout_row_dynamic(ui,34,1);
@@ -24,7 +28,7 @@ static float model_edit_banner(app *a) {
 }
 static void model_edit_fields(app *a) {
     struct nk_context *ui=a->ui;ps_model_edit *m=&a->model_edit;
-    if(!nk_tree_state_push(ui,NK_TREE_TAB,"Modellwerte",&a->model_disclosure))return;
+    if(!workspace_section_begin(a,"Modellwerte",&a->model_disclosure))return;
     if(*m->bindings.error)laboratory_note(a,m->bindings.error);
     else if(!m->bindings.count)laboratory_note(a,"Keine buildgebundenen Modellwerte deklariert. Freigegebene Laufparameter stehen separat darunter.");
     else {

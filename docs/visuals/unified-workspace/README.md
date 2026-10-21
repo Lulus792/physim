@@ -11,6 +11,10 @@ die geprüfte Datenbasis, [Zeichenbeschreibung und SVG](GRAPHIC-FIGURE-NATIVE.md
 sowie den [nativen Rasteradapter mit PNG und Vorschautextur](GRAPHIC-RASTER-NATIVE.md).
 Dialog- und Plattformschritte des Exports bleiben weiter beauftragt.
 Eine Browserprüfung ist weiterhin keine vollständige native Abnahme.
+Die [aktuellen Nutzerbefunde](USER-REVIEW-2026-10-21.md) und der folgende
+[native Komponentenabgleich](COMPONENTS-NATIVE.md) führen weitere sichtbare
+Fehler und deren erste geprüfte Korrekturen. Die übrige Oberfläche bleibt weiter
+abzugleichen; volle Designgleichheit ist nicht erreicht.
 Der [native Auswertungsstand](ANALYSIS-NATIVE.md) trennt den neuen Aufbau von
 den noch offenen Mehrlauf-, Export- und vollständigen Bildabgleich-Aufgaben.
 Der anschließende [Abgleich der Auswertungsfelder](ANALYSIS-CONTROLS.md) enthält

@@ -1,0 +1,10 @@
+{
+  "all_final_groups_passed": true,
+  "source_banks_match_current": true,
+  "foreign_font_linebreak_banks_unchanged_all_versions": true,
+  "original_user_images_unchanged": 7,
+  "lossless_native_images": 17,
+  "artifact_sha_verified": true,
+  "entire_design_complete": false,
+  "model_error_capture_name_does_not_prove_error_frame": true
+}

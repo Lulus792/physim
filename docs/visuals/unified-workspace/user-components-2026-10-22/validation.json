@@ -1,0 +1,820 @@
+{
+  "created_utc": "2026-10-21T22:45:08.143413+00:00",
+  "base": "62310033698b3a3efa954972aba95677b04db3f7",
+  "version": 4,
+  "source_banks": {
+    "source_sha256_lf": 126,
+    "foreign_sha256_lf": 10,
+    "font_assets_sha256": 14,
+    "linebreak_assets_sha256": 20
+  },
+  "final": {
+    "windows": {
+      "run": "build/native/Design-analysis/test-results/run-_078sg2o",
+      "program_sha256": "2d514a7e45478a6982804cf9bdcaa122340eda54ad830487ac023441b2bab50b",
+      "groups": [
+        {
+          "name": "plot_workflow",
+          "status": "passed",
+          "seconds": 17.625
+        },
+        {
+          "name": "workspace_tree_workflow",
+          "status": "passed",
+          "seconds": 5.531
+        },
+        {
+          "name": "hierarchy_workflow",
+          "status": "passed",
+          "seconds": 84.516
+        },
+        {
+          "name": "scene_visibility_16",
+          "status": "passed",
+          "seconds": 8.015
+        },
+        {
+          "name": "scene_visibility_22",
+          "status": "passed",
+          "seconds": 11.36
+        },
+        {
+          "name": "model_values_workflow",
+          "status": "passed",
+          "seconds": 134.515
+        }
+      ]
+    },
+    "linux": {
+      "run": "build/native/Design-analysis-linux/test-results/run-w0mg6jcj",
+      "program_sha256": "068e0fa277ebb39384119dd8c797f8552d70423d7e7805201f247ce4489ff621",
+      "groups": [
+        {
+          "name": "plot_workflow",
+          "status": "passed",
+          "seconds": 32.094
+        },
+        {
+          "name": "workspace_tree_workflow",
+          "status": "passed",
+          "seconds": 7.176
+        },
+        {
+          "name": "hierarchy_workflow",
+          "status": "passed",
+          "seconds": 115.451
+        },
+        {
+          "name": "scene_visibility_16",
+          "status": "passed",
+          "seconds": 14.135
+        },
+        {
+          "name": "scene_visibility_22",
+          "status": "passed",
+          "seconds": 18.679
+        },
+        {
+          "name": "laboratory_workflow",
+          "status": "passed",
+          "seconds": 262.368
+        },
+        {
+          "name": "model_values_workflow",
+          "status": "passed",
+          "seconds": 168.686
+        }
+      ]
+    }
+  },
+  "history": [
+    {
+      "platform": "windows",
+      "version": 1,
+      "run": "run-0by_feon",
+      "groups": [
+        {
+          "name": "workspace_tree_workflow",
+          "status": "passed",
+          "seconds": 5.891,
+          "reason": ""
+        },
+        {
+          "name": "hierarchy_workflow",
+          "status": "failed",
+          "seconds": 125.046,
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 569120.751257\nAPP TEST TRACE: main font sources ready 569120.874833\nAPP TEST TRACE: main atlas bake seconds=3.208802\nAPP TEST TRACE: main atlas validation/upload seconds=0.011347\nAPP TEST TRACE: main fonts ready 569124.103321\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status Physim baut Experiment und Analyse ...\nAPP TEST TRACE: stage 1 -> 2, status Runner gestartet; Versionsabgleich ...\nAPP TEST TRACE: stage 2 -> 3, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=25081162700\nAPP TEST TRACE: stage 3 -> 4, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 4 -> 5, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 5 -> 6, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=25262330400\nAPP TEST TRACE: stage 6 -> 7, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 7 -> 8, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=25395083800\nAPP TEST TRACE: stage 8 -> 9, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 9 -> 10, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=25479708800\nAPP TEST TRACE: stage 10 -> 11, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 11 -> 12, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=25571327500\nAPP TEST TRACE: stage 12 -> 13, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 13 -> 14, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=25826662300\nAPP TEST TRACE: stage 14 -> 15, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 15 -> 16, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 16 -> 17, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 17 -> 18, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 18 -> 19, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=101170274700\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=1 id=0 ticks=106669398100\nWorkspace self-test timeout: hierarchy-c after 120.006 wall seconds\nFirst workflow failure at stage 19 (next 19): Simulation pausiert. Einzelschritt oder Fortsetzen wählen. (tab=1, selected=1, samples=0, report=0, query=)\nWorkflow failed at stage 19: Simulation pausiert. Einzelschritt oder Fortsetzen wählen. (tab=1, sweep=0, ready=0, built=1, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 2138, in <module>\n    main()\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 1937, in main\n    SPECIAL[args.case](flow, directory)\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 1420, in hierarchy\n    flow.run(\"--workspace-state-test\", root, \"hierarchy-\" + language, timeout=130,\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 593, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 530, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--workspace-state-test', 'D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\test-results\\\\run-0by_feon\\\\hierarchy_workflow\\\\files ä\\\\workflow ä\\\\c', 'hierarchy-c']\n"
+        },
+        {
+          "name": "scene_visibility_16",
+          "status": "failed",
+          "seconds": 35.469,
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 569246.362953\nAPP TEST TRACE: main font sources ready 569246.598378\nAPP TEST TRACE: main atlas bake seconds=4.364719\nAPP TEST TRACE: main atlas validation/upload seconds=0.012081\nAPP TEST TRACE: main fonts ready 569250.989173\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=6196485900\nAPP TEST TRACE: stage 0 -> 1, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 5 Messpunkte geladen.\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 575, in run\n    result = subprocess.run(command, cwd=self.work, env=self.env, capture_output=True,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\subprocess.py\", line 550, in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\subprocess.py\", line 1209, in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\subprocess.py\", line 1630, in _communicate\n    raise TimeoutExpired(self.args, orig_timeout)\nsubprocess.TimeoutExpired: Command '['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--scene-visibility-test', 'D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\test-results\\\\run-0by_feon\\\\scene_visibility_16\\\\files ä\\\\workflow ä', '16']' timed out after 35 seconds\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 2138, in <module>\n    main()\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 1937, in main\n    SPECIAL[args.case](flow, directory)\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 1873, in <lambda>\n    SPECIAL = {\"scene_visibility_16\": lambda flow,directory: scene_visibility(flow,directory,\"16\"),\"scene_visibility_22\": lambda flow,directory: scene_visibility(flow,directory,\"22\"),\"project_display_16\": lambda flow,directory: project_display(flow,directory,\"16\"), \"project_display_22\": lambda flow,directory: project_display(flow,directory,\"22\"),\"camera_plane_16\": lambda flow,directory: camera_plane(flow,directory,\"16\"), \"camera_plane_22\": lambda flow,directory: camera_plane(flow,directory,\"22\"),\"report_details_workflow\": report_details, \"library_selection_workflow\": library_selection, \"api_reference_workflow\": api_reference,\n                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 645, in scene_visibility\n    flow.run(\"--scene-visibility-test\",directory,size,timeout=35,marker=\"SCENE VISIBILITY SELF-TEST: PASSED\")\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 584, in run\n    raise RuntimeError(f\"App exceeded {timeout} seconds: {command}\") from error\nRuntimeError: App exceeded 35 seconds: ['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--scene-visibility-test', 'D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\test-results\\\\run-0by_feon\\\\scene_visibility_16\\\\files ä\\\\workflow ä', '16']\n"
+        },
+        {
+          "name": "scene_visibility_22",
+          "status": "failed",
+          "seconds": 35.687,
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 569281.519005\nAPP TEST TRACE: main font sources ready 569281.683649\nAPP TEST TRACE: main atlas bake seconds=4.714610\nAPP TEST TRACE: main atlas validation/upload seconds=0.015679\nAPP TEST TRACE: main fonts ready 569286.423317\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=6164224100\nAPP TEST TRACE: stage 0 -> 1, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 5 Messpunkte geladen.\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 575, in run\n    result = subprocess.run(command, cwd=self.work, env=self.env, capture_output=True,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\subprocess.py\", line 550, in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\subprocess.py\", line 1209, in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\subprocess.py\", line 1630, in _communicate\n    raise TimeoutExpired(self.args, orig_timeout)\nsubprocess.TimeoutExpired: Command '['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--scene-visibility-test', 'D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\test-results\\\\run-0by_feon\\\\scene_visibility_22\\\\files ä\\\\workflow ä', '22']' timed out after 35 seconds\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 2138, in <module>\n    main()\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 1937, in main\n    SPECIAL[args.case](flow, directory)\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 1873, in <lambda>\n    SPECIAL = {\"scene_visibility_16\": lambda flow,directory: scene_visibility(flow,directory,\"16\"),\"scene_visibility_22\": lambda flow,directory: scene_visibility(flow,directory,\"22\"),\"project_display_16\": lambda flow,directory: project_display(flow,directory,\"16\"), \"project_display_22\": lambda flow,directory: project_display(flow,directory,\"22\"),\"camera_plane_16\": lambda flow,directory: camera_plane(flow,directory,\"16\"), \"camera_plane_22\": lambda flow,directory: camera_plane(flow,directory,\"22\"),\"report_details_workflow\": report_details, \"library_selection_workflow\": library_selection, \"api_reference_workflow\": api_reference,\n                                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 645, in scene_visibility\n    flow.run(\"--scene-visibility-test\",directory,size,timeout=35,marker=\"SCENE VISIBILITY SELF-TEST: PASSED\")\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 584, in run\n    raise RuntimeError(f\"App exceeded {timeout} seconds: {command}\") from error\nRuntimeError: App exceeded 35 seconds: ['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--scene-visibility-test', 'D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\test-results\\\\run-0by_feon\\\\scene_visibility_22\\\\files ä\\\\workflow ä', '22']\n"
+        },
+        {
+          "name": "laboratory_workflow",
+          "status": "failed",
+          "seconds": 174.828,
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 569317.498326\nAPP TEST TRACE: main font sources ready 569317.669092\nAPP TEST TRACE: main atlas bake seconds=5.932942\nAPP TEST TRACE: main atlas validation/upload seconds=0.015204\nAPP TEST TRACE: main fonts ready 569323.627303\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=7661005000\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 569325.705964\nAPP TEST TRACE: main font sources ready 569325.878842\nAPP TEST TRACE: main atlas bake seconds=3.499597\nAPP TEST TRACE: main atlas validation/upload seconds=0.011920\nAPP TEST TRACE: main fonts ready 569329.398426\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=5299390100\nAPP TEST TRACE: stage 0 -> 1, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=0 ticks=5354160700\nAPP TEST TRACE: stage 1 -> 2, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 2 -> 3, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 3 -> 4, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 4 -> 5, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 569331.448314\nAPP TEST TRACE: main font sources ready 569331.614519\nAPP TEST TRACE: main atlas bake seconds=3.543880\nAPP TEST TRACE: main atlas validation/upload seconds=0.010125\nAPP TEST TRACE: main fonts ready 569335.176524\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=5244269400\nAPP TEST TRACE: stage 0 -> 1, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 569336.717887\nAPP TEST TRACE: main font sources ready 569336.863124\nAPP TEST TRACE: main atlas bake seconds=3.134312\nAPP TEST TRACE: main atlas validation/upload seconds=0.012253\nAPP TEST TRACE: main fonts ready 569340.019155\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=4474980300\nWorkspace self-test timeout: laboratory-dark after 150.011 wall seconds\nFirst workflow failure at stage 0 (next 0): Projekt geladen. Build kompiliert die lokalen Quelldateien. (tab=1, selected=0, samples=0, report=0, query=)\nWorkflow failed at stage 0: Projekt geladen. Build kompiliert die lokalen Quelldateien. (tab=1, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 2138, in <module>\n    main()\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 1937, in main\n    SPECIAL[args.case](flow, directory)\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 986, in laboratory\n    flow.run('--workspace-state-test',root,'laboratory-'+variant,timeout=155,marker='SELF-TEST: PASSED')\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 593, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 530, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--workspace-state-test', 'D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\test-results\\\\run-0by_feon\\\\laboratory_workflow\\\\files ä\\\\workflow ä\\\\dark', 'laboratory-dark']\n"
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "version": 1,
+      "run": "run-f3bp9qx0",
+      "groups": [
+        {
+          "name": "workspace_tree_workflow",
+          "status": "passed",
+          "seconds": 6.726,
+          "reason": ""
+        },
+        {
+          "name": "hierarchy_workflow",
+          "status": "failed",
+          "seconds": 125.134,
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 127.382597\nAPP TEST TRACE: main font sources ready 128.257745\nAPP TEST TRACE: main atlas bake seconds=2.729852\nAPP TEST TRACE: main atlas validation/upload seconds=0.036984\nAPP TEST TRACE: main fonts ready 131.068297\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status Physim baut Experiment und Analyse ...\nAPP TEST TRACE: stage 1 -> 2, status Runner gestartet; Versionsabgleich ...\nAPP TEST TRACE: stage 2 -> 3, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=35631004718\nAPP TEST TRACE: stage 3 -> 4, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 4 -> 5, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 5 -> 6, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=36234997329\nAPP TEST TRACE: stage 6 -> 7, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 7 -> 8, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=36782422794\nAPP TEST TRACE: stage 8 -> 9, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 9 -> 10, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=36900262142\nAPP TEST TRACE: stage 10 -> 11, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 11 -> 12, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=37036373292\nAPP TEST TRACE: stage 12 -> 13, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 13 -> 14, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=37395694602\nAPP TEST TRACE: stage 14 -> 15, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 15 -> 16, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 16 -> 17, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 17 -> 18, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 18 -> 19, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nWorkspace self-test timeout: hierarchy-c after 120.024 wall seconds\nFirst workflow failure at stage 19 (next 19): Simulation pausiert. Einzelschritt oder Fortsetzen wählen. (tab=1, selected=1, samples=0, report=0, query=)\nWorkflow failed at stage 19: Simulation pausiert. Einzelschritt oder Fortsetzen wählen. (tab=1, sweep=0, ready=0, built=1, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 2138, in <module>\n    main()\n    ~~~~^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1937, in main\n    SPECIAL[args.case](flow, directory)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1420, in hierarchy\n    flow.run(\"--workspace-state-test\", root, \"hierarchy-\" + language, timeout=130,\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n             marker=\"HIERARCHY hierarchy-\" + language + \" SELF-TEST: PASSED\")\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 593, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 530, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--workspace-state-test', '/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-f3bp9qx0/hierarchy_workflow/files ä/workflow ä/c', 'hierarchy-c']\n"
+        },
+        {
+          "name": "scene_visibility_16",
+          "status": "failed",
+          "seconds": 34.485,
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 252.440278\nAPP TEST TRACE: main font sources ready 253.267561\nAPP TEST TRACE: main atlas bake seconds=2.308083\nAPP TEST TRACE: main atlas validation/upload seconds=0.024832\nAPP TEST TRACE: main fonts ready 255.625375\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 0 -> 1, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 5 Messpunkte geladen.\nFirst workflow failure at stage 2 (next 2): 5 Messpunkte geladen. (tab=1, selected=0, samples=5, report=1, query=)\nWorkflow failed at stage 2: 5 Messpunkte geladen. (tab=1, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 2138, in <module>\n    main()\n    ~~~~^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1937, in main\n    SPECIAL[args.case](flow, directory)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1873, in <lambda>\n    SPECIAL = {\"scene_visibility_16\": lambda flow,directory: scene_visibility(flow,directory,\"16\"),\"scene_visibility_22\": lambda flow,directory: scene_visibility(flow,directory,\"22\"),\"project_display_16\": lambda flow,directory: project_display(flow,directory,\"16\"), \"project_display_22\": lambda flow,directory: project_display(flow,directory,\"22\"),\"camera_plane_16\": lambda flow,directory: camera_plane(flow,directory,\"16\"), \"camera_plane_22\": lambda flow,directory: camera_plane(flow,directory,\"22\"),\"report_details_workflow\": report_details, \"library_selection_workflow\": library_selection, \"api_reference_workflow\": api_reference,\n                                                             ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 645, in scene_visibility\n    flow.run(\"--scene-visibility-test\",directory,size,timeout=35,marker=\"SCENE VISIBILITY SELF-TEST: PASSED\")\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 593, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 530, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--scene-visibility-test', '/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-f3bp9qx0/scene_visibility_16/files ä/workflow ä', '16']\n"
+        },
+        {
+          "name": "scene_visibility_22",
+          "status": "failed",
+          "seconds": 34.567,
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 286.926371\nAPP TEST TRACE: main font sources ready 287.749728\nAPP TEST TRACE: main atlas bake seconds=2.259519\nAPP TEST TRACE: main atlas validation/upload seconds=0.027944\nAPP TEST TRACE: main fonts ready 290.069098\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 0 -> 1, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 5 Messpunkte geladen.\nFirst workflow failure at stage 2 (next 2): 5 Messpunkte geladen. (tab=1, selected=0, samples=5, report=1, query=)\nWorkflow failed at stage 2: 5 Messpunkte geladen. (tab=1, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 2138, in <module>\n    main()\n    ~~~~^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1937, in main\n    SPECIAL[args.case](flow, directory)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1873, in <lambda>\n    SPECIAL = {\"scene_visibility_16\": lambda flow,directory: scene_visibility(flow,directory,\"16\"),\"scene_visibility_22\": lambda flow,directory: scene_visibility(flow,directory,\"22\"),\"project_display_16\": lambda flow,directory: project_display(flow,directory,\"16\"), \"project_display_22\": lambda flow,directory: project_display(flow,directory,\"22\"),\"camera_plane_16\": lambda flow,directory: camera_plane(flow,directory,\"16\"), \"camera_plane_22\": lambda flow,directory: camera_plane(flow,directory,\"22\"),\"report_details_workflow\": report_details, \"library_selection_workflow\": library_selection, \"api_reference_workflow\": api_reference,\n                                                                                                                                                 ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 645, in scene_visibility\n    flow.run(\"--scene-visibility-test\",directory,size,timeout=35,marker=\"SCENE VISIBILITY SELF-TEST: PASSED\")\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 593, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 530, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--scene-visibility-test', '/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-f3bp9qx0/scene_visibility_22/files ä/workflow ä', '22']\n"
+        },
+        {
+          "name": "laboratory_workflow",
+          "status": "passed",
+          "seconds": 261.58,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "platform": "windows",
+      "version": 2,
+      "run": "run-_cugtjt9",
+      "groups": [
+        {
+          "name": "workspace_tree_workflow",
+          "status": "passed",
+          "seconds": 6.688,
+          "reason": ""
+        },
+        {
+          "name": "hierarchy_workflow",
+          "status": "passed",
+          "seconds": 106.687,
+          "reason": ""
+        },
+        {
+          "name": "scene_visibility_16",
+          "status": "failed",
+          "seconds": 34.891,
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 570109.260050\nAPP TEST TRACE: main font sources ready 570109.416938\nAPP TEST TRACE: main atlas bake seconds=3.148719\nAPP TEST TRACE: main atlas validation/upload seconds=0.021561\nAPP TEST TRACE: main fonts ready 570112.595089\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 0 -> 1, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 5 Messpunkte geladen.\nFirst workflow failure at stage 2 (next 2): 5 Messpunkte geladen. (tab=1, selected=0, samples=5, report=1, query=)\nWorkflow failed at stage 2: 5 Messpunkte geladen. (tab=1, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 2138, in <module>\n    main()\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 1937, in main\n    SPECIAL[args.case](flow, directory)\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 1873, in <lambda>\n    SPECIAL = {\"scene_visibility_16\": lambda flow,directory: scene_visibility(flow,directory,\"16\"),\"scene_visibility_22\": lambda flow,directory: scene_visibility(flow,directory,\"22\"),\"project_display_16\": lambda flow,directory: project_display(flow,directory,\"16\"), \"project_display_22\": lambda flow,directory: project_display(flow,directory,\"22\"),\"camera_plane_16\": lambda flow,directory: camera_plane(flow,directory,\"16\"), \"camera_plane_22\": lambda flow,directory: camera_plane(flow,directory,\"22\"),\"report_details_workflow\": report_details, \"library_selection_workflow\": library_selection, \"api_reference_workflow\": api_reference,\n                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 645, in scene_visibility\n    flow.run(\"--scene-visibility-test\",directory,size,timeout=35,marker=\"SCENE VISIBILITY SELF-TEST: PASSED\")\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 593, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 530, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--scene-visibility-test', 'D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\test-results\\\\run-_cugtjt9\\\\scene_visibility_16\\\\files ä\\\\workflow ä', '16']\n"
+        },
+        {
+          "name": "scene_visibility_22",
+          "status": "passed",
+          "seconds": 9.375,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "version": 2,
+      "run": "run-_qzkbl8b",
+      "groups": [
+        {
+          "name": "workspace_tree_workflow",
+          "status": "passed",
+          "seconds": 5.646,
+          "reason": ""
+        },
+        {
+          "name": "hierarchy_workflow",
+          "status": "passed",
+          "seconds": 112.912,
+          "reason": ""
+        },
+        {
+          "name": "scene_visibility_16",
+          "status": "failed",
+          "seconds": 35.933,
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 295.773141\nAPP TEST TRACE: main font sources ready 297.128824\nAPP TEST TRACE: main atlas bake seconds=3.930222\nAPP TEST TRACE: main atlas validation/upload seconds=0.038643\nAPP TEST TRACE: main fonts ready 301.153582\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 0 -> 1, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 5 Messpunkte geladen.\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 575, in run\n    result = subprocess.run(command, cwd=self.work, env=self.env, capture_output=True,\n                            timeout=timeout, encoding=\"utf-8\", errors=\"replace\")\n  File \"/usr/lib/python3.14/subprocess.py\", line 557, in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/subprocess.py\", line 1221, in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/subprocess.py\", line 2154, in _communicate\n    self._check_timeout(endtime, orig_timeout, stdout, stderr)\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/subprocess.py\", line 1268, in _check_timeout\n    raise TimeoutExpired(\n    ...<2 lines>...\n            stderr=b''.join(stderr_seq) if stderr_seq else None)\nsubprocess.TimeoutExpired: Command '['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--scene-visibility-test', '/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-_qzkbl8b/scene_visibility_16/files ä/workflow ä', '16']' timed out after 35 seconds\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 2138, in <module>\n    main()\n    ~~~~^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1937, in main\n    SPECIAL[args.case](flow, directory)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1873, in <lambda>\n    SPECIAL = {\"scene_visibility_16\": lambda flow,directory: scene_visibility(flow,directory,\"16\"),\"scene_visibility_22\": lambda flow,directory: scene_visibility(flow,directory,\"22\"),\"project_display_16\": lambda flow,directory: project_display(flow,directory,\"16\"), \"project_display_22\": lambda flow,directory: project_display(flow,directory,\"22\"),\"camera_plane_16\": lambda flow,directory: camera_plane(flow,directory,\"16\"), \"camera_plane_22\": lambda flow,directory: camera_plane(flow,directory,\"22\"),\"report_details_workflow\": report_details, \"library_selection_workflow\": library_selection, \"api_reference_workflow\": api_reference,\n                                                             ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 645, in scene_visibility\n    flow.run(\"--scene-visibility-test\",directory,size,timeout=35,marker=\"SCENE VISIBILITY SELF-TEST: PASSED\")\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 584, in run\n    raise RuntimeError(f\"App exceeded {timeout} seconds: {command}\") from error\nRuntimeError: App exceeded 35 seconds: ['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--scene-visibility-test', '/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-_qzkbl8b/scene_visibility_16/files ä/workflow ä', '16']\n"
+        },
+        {
+          "name": "scene_visibility_22",
+          "status": "passed",
+          "seconds": 18.039,
+          "reason": ""
+        },
+        {
+          "name": "laboratory_workflow",
+          "status": "passed",
+          "seconds": 252.868,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "platform": "windows",
+      "version": 3,
+      "run": "run-uv90jaqm",
+      "groups": [
+        {
+          "name": "plot_workflow",
+          "status": "passed",
+          "seconds": 23.109,
+          "reason": ""
+        },
+        {
+          "name": "workspace_tree_workflow",
+          "status": "passed",
+          "seconds": 7.094,
+          "reason": ""
+        },
+        {
+          "name": "hierarchy_workflow",
+          "status": "passed",
+          "seconds": 89.938,
+          "reason": ""
+        },
+        {
+          "name": "scene_visibility_16",
+          "status": "passed",
+          "seconds": 10.14,
+          "reason": ""
+        },
+        {
+          "name": "scene_visibility_22",
+          "status": "failed",
+          "seconds": 35.594,
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 570733.627319\nAPP TEST TRACE: main font sources ready 570733.780260\nAPP TEST TRACE: main atlas bake seconds=4.145284\nAPP TEST TRACE: main atlas validation/upload seconds=0.011754\nAPP TEST TRACE: main fonts ready 570737.946521\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 0 -> 1, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 5 Messpunkte geladen.\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 575, in run\n    result = subprocess.run(command, cwd=self.work, env=self.env, capture_output=True,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\subprocess.py\", line 550, in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\subprocess.py\", line 1209, in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\subprocess.py\", line 1630, in _communicate\n    raise TimeoutExpired(self.args, orig_timeout)\nsubprocess.TimeoutExpired: Command '['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--scene-visibility-test', 'D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\test-results\\\\run-uv90jaqm\\\\scene_visibility_22\\\\files ä\\\\workflow ä', '22']' timed out after 35 seconds\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 2138, in <module>\n    main()\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 1937, in main\n    SPECIAL[args.case](flow, directory)\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 1873, in <lambda>\n    SPECIAL = {\"scene_visibility_16\": lambda flow,directory: scene_visibility(flow,directory,\"16\"),\"scene_visibility_22\": lambda flow,directory: scene_visibility(flow,directory,\"22\"),\"project_display_16\": lambda flow,directory: project_display(flow,directory,\"16\"), \"project_display_22\": lambda flow,directory: project_display(flow,directory,\"22\"),\"camera_plane_16\": lambda flow,directory: camera_plane(flow,directory,\"16\"), \"camera_plane_22\": lambda flow,directory: camera_plane(flow,directory,\"22\"),\"report_details_workflow\": report_details, \"library_selection_workflow\": library_selection, \"api_reference_workflow\": api_reference,\n                                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 645, in scene_visibility\n    flow.run(\"--scene-visibility-test\",directory,size,timeout=35,marker=\"SCENE VISIBILITY SELF-TEST: PASSED\")\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 584, in run\n    raise RuntimeError(f\"App exceeded {timeout} seconds: {command}\") from error\nRuntimeError: App exceeded 35 seconds: ['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--scene-visibility-test', 'D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\test-results\\\\run-uv90jaqm\\\\scene_visibility_22\\\\files ä\\\\workflow ä', '22']\n"
+        },
+        {
+          "name": "model_values_workflow",
+          "status": "passed",
+          "seconds": 163.188,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "version": 3,
+      "run": "run-smvnbnhr",
+      "groups": [
+        {
+          "name": "plot_workflow",
+          "status": "passed",
+          "seconds": 33.732,
+          "reason": ""
+        },
+        {
+          "name": "workspace_tree_workflow",
+          "status": "passed",
+          "seconds": 7.209,
+          "reason": ""
+        },
+        {
+          "name": "hierarchy_workflow",
+          "status": "passed",
+          "seconds": 155.489,
+          "reason": ""
+        },
+        {
+          "name": "scene_visibility_16",
+          "status": "passed",
+          "seconds": 20.006,
+          "reason": ""
+        },
+        {
+          "name": "scene_visibility_22",
+          "status": "failed",
+          "seconds": 35.872,
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 985.221252\nAPP TEST TRACE: main font sources ready 986.623772\nAPP TEST TRACE: main atlas bake seconds=3.604053\nAPP TEST TRACE: main atlas validation/upload seconds=0.030301\nAPP TEST TRACE: main fonts ready 990.290932\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 0 -> 1, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 5 Messpunkte geladen.\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 575, in run\n    result = subprocess.run(command, cwd=self.work, env=self.env, capture_output=True,\n                            timeout=timeout, encoding=\"utf-8\", errors=\"replace\")\n  File \"/usr/lib/python3.14/subprocess.py\", line 557, in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/subprocess.py\", line 1221, in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/subprocess.py\", line 2154, in _communicate\n    self._check_timeout(endtime, orig_timeout, stdout, stderr)\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/subprocess.py\", line 1268, in _check_timeout\n    raise TimeoutExpired(\n    ...<2 lines>...\n            stderr=b''.join(stderr_seq) if stderr_seq else None)\nsubprocess.TimeoutExpired: Command '['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--scene-visibility-test', '/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-smvnbnhr/scene_visibility_22/files ä/workflow ä', '22']' timed out after 35 seconds\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 2138, in <module>\n    main()\n    ~~~~^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1937, in main\n    SPECIAL[args.case](flow, directory)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1873, in <lambda>\n    SPECIAL = {\"scene_visibility_16\": lambda flow,directory: scene_visibility(flow,directory,\"16\"),\"scene_visibility_22\": lambda flow,directory: scene_visibility(flow,directory,\"22\"),\"project_display_16\": lambda flow,directory: project_display(flow,directory,\"16\"), \"project_display_22\": lambda flow,directory: project_display(flow,directory,\"22\"),\"camera_plane_16\": lambda flow,directory: camera_plane(flow,directory,\"16\"), \"camera_plane_22\": lambda flow,directory: camera_plane(flow,directory,\"22\"),\"report_details_workflow\": report_details, \"library_selection_workflow\": library_selection, \"api_reference_workflow\": api_reference,\n                                                                                                                                                 ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 645, in scene_visibility\n    flow.run(\"--scene-visibility-test\",directory,size,timeout=35,marker=\"SCENE VISIBILITY SELF-TEST: PASSED\")\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 584, in run\n    raise RuntimeError(f\"App exceeded {timeout} seconds: {command}\") from error\nRuntimeError: App exceeded 35 seconds: ['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--scene-visibility-test', '/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-smvnbnhr/scene_visibility_22/files ä/workflow ä', '22']\n"
+        },
+        {
+          "name": "laboratory_workflow",
+          "status": "passed",
+          "seconds": 366.436,
+          "reason": ""
+        },
+        {
+          "name": "model_values_workflow",
+          "status": "passed",
+          "seconds": 282.67,
+          "reason": ""
+        }
+      ]
+    }
+  ],
+  "pictures": [
+    {
+      "path": "windows-hierarchy.png",
+      "source_bmp": "build/native/Design-analysis/test-results/run-_078sg2o/hierarchy_workflow/files ä/workflow ä/c/hierarchy-expanded.bmp",
+      "source_sha256": "98ed03665f6da08c8698e2ee435d6bb4abfb4dac7bbd8525e8833240f4b627c8",
+      "size": [
+        1080,
+        740
+      ],
+      "rgb_sha256": "fda292a7ccbc5cfbcfc4d3b43e6122e741299d03fe4119f33463ae78a6089958",
+      "png_sha256": "2ca9e9d38fee573e95193bf530215e1ef5a841f69f1e11eece8a3df2b59ecd43",
+      "scope": "Lossless format conversion of real native framebuffer; full RGB verified, no new rendering"
+    },
+    {
+      "path": "windows-hierarchy-scrolled.png",
+      "source_bmp": "build/native/Design-analysis/test-results/run-_078sg2o/hierarchy_workflow/files ä/workflow ä/c/hierarchy-hidden-subgroup.bmp",
+      "source_sha256": "500b7b633004551375bbf3f15396f2eeb431a3699bd2b778ce10967db0a4693f",
+      "size": [
+        1080,
+        740
+      ],
+      "rgb_sha256": "ec8c7e01b5a82531b312b3dfbcb15bcfaee098a00b77265a4cefe90921ec7ed5",
+      "png_sha256": "08fe9c53933ade317a42a9e7e8f610a0bb3156f5202b701e0f360296b40ad95d",
+      "scope": "Lossless format conversion of real native framebuffer; full RGB verified, no new rendering"
+    },
+    {
+      "path": "windows-workspace.png",
+      "source_bmp": "build/native/Design-analysis/test-results/run-_078sg2o/workspace_tree_workflow/files ä/workflow ä/workspace-tree-open.bmp",
+      "source_sha256": "e624a8c450971e1f9687bed616bc82f4355961ade9df9c9c9225e117d97f5a6e",
+      "size": [
+        1080,
+        740
+      ],
+      "rgb_sha256": "5b8a2a54dcc267e2965d833be9afb8e68a57df6b7b78578da5f533aa0beac174",
+      "png_sha256": "cd370344820315cfb2c58dad8e221a5ff82b86fb90878ca93145fc2a8a917f31",
+      "scope": "Lossless format conversion of real native framebuffer; full RGB verified, no new rendering"
+    },
+    {
+      "path": "windows-visibility-large.png",
+      "source_bmp": "build/native/Design-analysis/test-results/run-_078sg2o/scene_visibility_22/files ä/workflow ä/visibility-restored.bmp",
+      "source_sha256": "b135197ac8fb6e0071204aa114346a251b7475d91abc6de8d8170a09640dc35f",
+      "size": [
+        1080,
+        740
+      ],
+      "rgb_sha256": "697a50fd6e13453bb6f1f3b494c8aed5849b25e874862cd2faac73f16969ceb1",
+      "png_sha256": "c51824a646f9b87d5a7dbfde96f5d4ff1ec00e014270fd01484cac2552a48205",
+      "scope": "Lossless format conversion of real native framebuffer; full RGB verified, no new rendering"
+    },
+    {
+      "path": "windows-model-build.png",
+      "source_bmp": "build/native/Design-analysis/test-results/run-_078sg2o/model_values_workflow/files ä/workflow ä/c/model-values-build-error.bmp",
+      "source_sha256": "4a6e2e09b1bf1e92b4892c6442c2f20a1b215d47ac92a2677f82b1147e51197d",
+      "size": [
+        1440,
+        1000
+      ],
+      "rgb_sha256": "67bcb37f919bb0c4e859a8afebebf25659776fb03a963d7baa5344f174e9e946",
+      "png_sha256": "16fef20a2da3998782261b342bb34caafa20ea2d7ae8c6ab8c1898f6e7323c77",
+      "scope": "Lossless format conversion of real native framebuffer; full RGB verified, no new rendering",
+      "visible_state": "Subsequent build in progress, despite historical source BMP name; not visual error evidence"
+    },
+    {
+      "path": "linux-hierarchy.png",
+      "source_bmp": "build/native/Design-analysis-linux/test-results/run-w0mg6jcj/hierarchy_workflow/files ä/workflow ä/c/hierarchy-expanded.bmp",
+      "source_sha256": "0b8d55be44423aa2b9b01e1487f10f42ae80272c2f3ef54ef176106812a14ce3",
+      "size": [
+        1080,
+        740
+      ],
+      "rgb_sha256": "b1157d889b3bb0c7d002dc46ad949cb61b7b701b9786c3e5fad19def0165ee15",
+      "png_sha256": "907d884bf27ddef578bd3e07942b16bed270ad01b2e50371b9513c7c3de1f327",
+      "scope": "Lossless format conversion of real native framebuffer; full RGB verified, no new rendering"
+    },
+    {
+      "path": "linux-hierarchy-scrolled.png",
+      "source_bmp": "build/native/Design-analysis-linux/test-results/run-w0mg6jcj/hierarchy_workflow/files ä/workflow ä/c/hierarchy-hidden-subgroup.bmp",
+      "source_sha256": "7a5225ce7ba725860ffe0f9f0108d0b98d95e609bf3c55d22b406cf4cfa2c872",
+      "size": [
+        1080,
+        740
+      ],
+      "rgb_sha256": "7a3d128f0f7983dd81f26a73a0b15d13321b66dcf7eb18526fa8f235f54bd7dd",
+      "png_sha256": "03f074618bb251060e0b93bfc064aa14ae4b174e42055af02b2fa4f633eadf70",
+      "scope": "Lossless format conversion of real native framebuffer; full RGB verified, no new rendering"
+    },
+    {
+      "path": "linux-workspace.png",
+      "source_bmp": "build/native/Design-analysis-linux/test-results/run-w0mg6jcj/workspace_tree_workflow/files ä/workflow ä/workspace-tree-open.bmp",
+      "source_sha256": "4bf5c5cab9449beea346df6909baabd0251a4437f96a313b6a87bef98aacc1f5",
+      "size": [
+        1080,
+        740
+      ],
+      "rgb_sha256": "eefc01ef943035645d5bb19012c4a9b5bd681614cf3eaf3617ecdbc6e930f6f4",
+      "png_sha256": "f5fee29ff8b75cd6151b942f0c5eeab0f3cc4670c0b7cc043dad77ff346d76bb",
+      "scope": "Lossless format conversion of real native framebuffer; full RGB verified, no new rendering"
+    },
+    {
+      "path": "linux-visibility-large.png",
+      "source_bmp": "build/native/Design-analysis-linux/test-results/run-w0mg6jcj/scene_visibility_22/files ä/workflow ä/visibility-restored.bmp",
+      "source_sha256": "d9997c78c9e38676a8e35415041c768e1d5b658e6696877f19a8f834e5976a02",
+      "size": [
+        1080,
+        740
+      ],
+      "rgb_sha256": "03c56a25547165437383c1a6cc149871ab8b18c3368c145fdf6d8d9b8850916a",
+      "png_sha256": "53fd73c7d08478e99fafa6d585e9f88d1ab0934ad896c569b476a50768a21268",
+      "scope": "Lossless format conversion of real native framebuffer; full RGB verified, no new rendering"
+    },
+    {
+      "path": "linux-model-build.png",
+      "source_bmp": "build/native/Design-analysis-linux/test-results/run-w0mg6jcj/model_values_workflow/files ä/workflow ä/c/model-values-build-error.bmp",
+      "source_sha256": "4a4247237fc9400428265041731593bfce43fe52176e3638b84f6d5a81aaf95f",
+      "size": [
+        1440,
+        1000
+      ],
+      "rgb_sha256": "7b6c192c7851d7754c8b0dfa5d522f88a7a3dad65f74bbd5f875e4d502972392",
+      "png_sha256": "70217b04b7775e5cc5f6126894f979d4c49620de0059ff2af175c21b5a92ed40",
+      "scope": "Lossless format conversion of real native framebuffer; full RGB verified, no new rendering",
+      "visible_state": "Subsequent build in progress, despite historical source BMP name; not visual error evidence"
+    },
+    {
+      "path": "linux-laboratory-dark.png",
+      "source_bmp": "build/native/Design-analysis-linux/test-results/run-w0mg6jcj/laboratory_workflow/files ä/workflow ä/dark/laboratory-state-7.bmp",
+      "source_sha256": "252d836c7f36f3bfaf5a507a349800ac215f756c40a87cb920b269c83bf8bcf6",
+      "size": [
+        1440,
+        1000
+      ],
+      "rgb_sha256": "797f4b52c1f0298fb9d2ad8a16bc60e22439d4ea9e255be37a0445aed770a13f",
+      "png_sha256": "70767c5de4553b13b2e4e2b45c103bfcbfd813e067f58b55a9fed90796735132",
+      "scope": "Lossless format conversion of real native framebuffer; full RGB verified, no new rendering"
+    },
+    {
+      "path": "linux-laboratory-light.png",
+      "source_bmp": "build/native/Design-analysis-linux/test-results/run-w0mg6jcj/laboratory_workflow/files ä/workflow ä/light/laboratory-state-7.bmp",
+      "source_sha256": "00283ca0d6487d396db42749965aa3286f4a263e94ff07870bc011bbe5749045",
+      "size": [
+        1440,
+        1000
+      ],
+      "rgb_sha256": "63066f3888f3e277a79e4a8ebd6bba9d1d153beb128a8fe6b42c9f749d1724fb",
+      "png_sha256": "ed6a87b5f480ada63864e1bc2302090745738538b443dbc483e4944a00c08366",
+      "scope": "Lossless format conversion of real native framebuffer; full RGB verified, no new rendering"
+    },
+    {
+      "path": "linux-laboratory-contrast.png",
+      "source_bmp": "build/native/Design-analysis-linux/test-results/run-w0mg6jcj/laboratory_workflow/files ä/workflow ä/contrast/laboratory-state-7.bmp",
+      "source_sha256": "52d7a305d47b7f7347548de0d7b5b1f3a6f650e752f991435a046928d92c5f2f",
+      "size": [
+        1440,
+        1000
+      ],
+      "rgb_sha256": "665cc6f6da8108018eef83336fde834f4ccfd55ab4b2713370be9d979f119cdb",
+      "png_sha256": "f4e3c66d097abe70133c9b5bc21b00bfebc8b3754e3e3fb3e832334fe58a7927",
+      "scope": "Lossless format conversion of real native framebuffer; full RGB verified, no new rendering"
+    },
+    {
+      "path": "linux-laboratory-light-large-narrow.png",
+      "source_bmp": "build/native/Design-analysis-linux/test-results/run-w0mg6jcj/laboratory_workflow/files ä/workflow ä/light-large-narrow/laboratory-state-7.bmp",
+      "source_sha256": "59542ecab46356630786c5ad0c34b29b7a753c039021cf7a21bc7d15b7148af6",
+      "size": [
+        1080,
+        740
+      ],
+      "rgb_sha256": "9bec83ee1b3ea098e1719ff43a582b585758d20c17a6e4662f5bdca586b3f68b",
+      "png_sha256": "c6dbf84a62ecc14f754a60f6446adca11b4e3c66bb78f86ec1a71e7fb7699ae0",
+      "scope": "Lossless format conversion of real native framebuffer; full RGB verified, no new rendering"
+    },
+    {
+      "path": "windows-error-large.png",
+      "source_bmp": "build/native/Design-analysis/test-results/run-_078sg2o/scene_visibility_22/files ä/workflow ä/visibility-all.bmp",
+      "source_sha256": "4123cbf51bc62094b7da49d1ef1a29467745680f044d3e6cdbb8c7f681430ab9",
+      "size": [
+        1080,
+        740
+      ],
+      "rgb_sha256": "d32538f7cac1b7c773030c50e2cd388986c1be369324b4ba93e801756246df53",
+      "png_sha256": "c2b2885b9a79c50249b47a5e769732e93cea2cc19ca11c595b9b9fe807ef6b06",
+      "scope": "Lossless native error message in synthetic visibility fixture, not real build error"
+    },
+    {
+      "path": "linux-error-large.png",
+      "source_bmp": "build/native/Design-analysis-linux/test-results/run-w0mg6jcj/scene_visibility_22/files ä/workflow ä/visibility-all.bmp",
+      "source_sha256": "734c2d3f47ffb04506233e2700914305b261a276cdfa9d910a64625c6cfd705a",
+      "size": [
+        1080,
+        740
+      ],
+      "rgb_sha256": "a18215e74a8a7b159c66de3b4e632d50acfc9c664cec1d845b8a9589cc66f875",
+      "png_sha256": "cbf6e518094f08cfd870f0aae6313adfe5b24feb3cd4f7da2627b052023fab40",
+      "scope": "Lossless native error message in synthetic visibility fixture, not real build error"
+    },
+    {
+      "path": "counter-error-inner-group.png",
+      "source_bmp": "build/native/Design-analysis/test-results/run-uv90jaqm/scene_visibility_22/files ä/workflow ä/visibility-all.bmp",
+      "source_sha256": "9cf254d9fd8805ce8abc4e342f43dc12a90bd08881c0ed23c56cd265e410205b",
+      "size": [
+        1080,
+        740
+      ],
+      "rgb_sha256": "1a414dab7ee362770f31014c9e33d02b7761f8deedc9221c55336ebf05701442",
+      "png_sha256": "966149e766ba3e9e712847de58c5e8f4d792ae0f6ea2cf90a2939a708e97ed94",
+      "scope": "Recorded failed source3 large visibility fixture, before removal of the inner scroll group"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "source-1.json",
+      "source": "build/native/user-components-source-1.json",
+      "bytes": 19669,
+      "sha256": "7693ce39c46c7068493e3d16d73a6349435201f8c29e10a078cc866da9e8ea3f"
+    },
+    {
+      "path": "source-2.json",
+      "source": "build/native/user-components-source-2.json",
+      "bytes": 19669,
+      "sha256": "757039855f3f071af9484df1cd7b36c70a4f33f8768b205848fb7beb6ddb4ebf"
+    },
+    {
+      "path": "source-3.json",
+      "source": "build/native/user-components-source-3.json",
+      "bytes": 19669,
+      "sha256": "f4e7144185ddcbcfd2b8aefd41867b8bc405eeeecd594d25e47209a95d4c72ba"
+    },
+    {
+      "path": "source-4.json",
+      "source": "build/native/user-components-source-4.json",
+      "bytes": 19669,
+      "sha256": "58f4635779723b84ffd822977a14c2e16ad8fb621d3bdba8666231142b84df04"
+    },
+    {
+      "path": "windows-results.json",
+      "source": "build/native/Design-analysis/test-results/run-_078sg2o/results.json",
+      "bytes": 122426,
+      "sha256": "3df39846869093a7b81c9c8d3036f2ab468caad343ddbc15038062d04c656eac"
+    },
+    {
+      "path": "windows-hierarchy_workflow-steps.json",
+      "source": "build/native/Design-analysis/test-results/run-_078sg2o/hierarchy_workflow/files ä/app-steps.json",
+      "bytes": 33556,
+      "sha256": "5a2e42e1dd3faaa8fce33795d3bb7e01447a22fde00cb8465b479381d45b8da8"
+    },
+    {
+      "path": "windows-scene_visibility_22-steps.json",
+      "source": "build/native/Design-analysis/test-results/run-_078sg2o/scene_visibility_22/files ä/app-steps.json",
+      "bytes": 4921,
+      "sha256": "705359a60e3591f9351263536c92610c7afe81b094237a61e040bb2de5f1489e"
+    },
+    {
+      "path": "windows-model_values_workflow-steps.json",
+      "source": "build/native/Design-analysis/test-results/run-_078sg2o/model_values_workflow/files ä/app-steps.json",
+      "bytes": 53577,
+      "sha256": "1e6a2e29496736051c745dba284c85d5d8ba103285525cee34d5b27e57785ff2"
+    },
+    {
+      "path": "linux-results.json",
+      "source": "build/native/Design-analysis-linux/test-results/run-w0mg6jcj/results.json",
+      "bytes": 141173,
+      "sha256": "bfdb2132246beae586ae4aed6f87b5a48d2b8193dabec04a4a2fd6b0adab31e1"
+    },
+    {
+      "path": "linux-hierarchy_workflow-steps.json",
+      "source": "build/native/Design-analysis-linux/test-results/run-w0mg6jcj/hierarchy_workflow/files ä/app-steps.json",
+      "bytes": 25690,
+      "sha256": "a8c2cf8ed7d41a042c5b980043e60ca24c7ca7869412f8678155ad0278cda963"
+    },
+    {
+      "path": "linux-scene_visibility_22-steps.json",
+      "source": "build/native/Design-analysis-linux/test-results/run-w0mg6jcj/scene_visibility_22/files ä/app-steps.json",
+      "bytes": 4912,
+      "sha256": "dc9989100dbe92a3786e1976ad880bb46d4678cbd599a8618ab4fc2d0d23c28e"
+    },
+    {
+      "path": "linux-model_values_workflow-steps.json",
+      "source": "build/native/Design-analysis-linux/test-results/run-w0mg6jcj/model_values_workflow/files ä/app-steps.json",
+      "bytes": 26085,
+      "sha256": "bb1d2de04069dc3a89b37e750a8fb566de4d39d99dfd3334b29095f922f3d36b"
+    },
+    {
+      "path": "linux-laboratory-steps.json",
+      "source": "build/native/Design-analysis-linux/test-results/run-w0mg6jcj/laboratory_workflow/files ä/app-steps.json",
+      "bytes": 57421,
+      "sha256": "5c5a706ea3da7a5d2ca5d248672a397d32637ac3e0d1f93c13cc26ad306f5bdc"
+    },
+    {
+      "path": "windows-1-results.json",
+      "source": "build/native/Design-analysis/test-results/run-0by_feon/results.json",
+      "bytes": 53725,
+      "sha256": "9d5bc57db2eadf89b79223f266ce7950066450d021ea767c91aa98e5f32536b5"
+    },
+    {
+      "path": "linux-1-results.json",
+      "source": "build/native/Design-analysis-linux/test-results/run-f3bp9qx0/results.json",
+      "bytes": 90912,
+      "sha256": "b7db861216a8057fb62f74de9892ebf5dcbfff7516c29e72f9bd48cd6d073d35"
+    },
+    {
+      "path": "windows-2-results.json",
+      "source": "build/native/Design-analysis/test-results/run-_cugtjt9/results.json",
+      "bytes": 52779,
+      "sha256": "f8a1aa322f5137c10ae9258c89914879948865b55f1778a99e3d836aa0b38843"
+    },
+    {
+      "path": "linux-2-results.json",
+      "source": "build/native/Design-analysis-linux/test-results/run-_qzkbl8b/results.json",
+      "bytes": 101921,
+      "sha256": "f4d502b834b0d54c6eaf403dba40cb551eb5c982c4c37afa53d5d8fff6a7b948"
+    },
+    {
+      "path": "windows-3-results.json",
+      "source": "build/native/Design-analysis/test-results/run-uv90jaqm/results.json",
+      "bytes": 125702,
+      "sha256": "77ac2822e539a5946dd61bebc381223541fd2195777ddca411568406d26dc8c8"
+    },
+    {
+      "path": "linux-3-results.json",
+      "source": "build/native/Design-analysis-linux/test-results/run-smvnbnhr/results.json",
+      "bytes": 145133,
+      "sha256": "aacca251088ee8ce27d0a585dd78928806d9a0ad9fe5e684ec26258671b8447c"
+    },
+    {
+      "path": "baseline-user-components-baseline-visibility-windows.json",
+      "source": "build/native/user-components-baseline-visibility-windows.json",
+      "bytes": 4048,
+      "sha256": "d125ad1d21889055a07b7483dc827cbd3336aba577f7e6cf60afb4a6e612b377"
+    },
+    {
+      "path": "baseline-user-components-baseline-visibility-windows-2.json",
+      "source": "build/native/user-components-baseline-visibility-windows-2.json",
+      "bytes": 3708,
+      "sha256": "e588bb6fb61f1ab63f5177ba480d104239f2a826775d3b6a84572439b33fb17b"
+    },
+    {
+      "path": "baseline-steps.json",
+      "source": "build/native/user-components-baseline-visibility-windows-2/app-steps.json",
+      "bytes": 1475,
+      "sha256": "598a50d01ff9956a1b397add0c80d6cfd9c3d52898fcdaab0b7d2c471abeea88"
+    },
+    {
+      "path": "scroll-probe.log",
+      "source": "build/native/user-components-scroll-probe.log",
+      "bytes": 1218,
+      "sha256": "1e3e510d143ccacc68787f06fbd8ab5161ae61221b10da0bf6de24b4dd9ef90e"
+    },
+    {
+      "path": "scroll-probe.gdb",
+      "source": "build/native/probe-components-scroll.gdb",
+      "bytes": 733,
+      "sha256": "2e3d03a1b3dda4530fdae52281e2f745c739e0dc72ce68477069667feccfa638"
+    },
+    {
+      "path": "scroll-probe.sh",
+      "source": "build/native/probe-components-scroll.sh",
+      "bytes": 512,
+      "sha256": "335805d3b2664ff17349dad69120a626b06454c9c9ffbd93146f2a265f973e94"
+    },
+    {
+      "path": "scroll-probe-2.log",
+      "source": "build/native/user-components-scroll-probe-2.log",
+      "bytes": 2692,
+      "sha256": "7ccc6f0f4dc1b8275520f799a9337b4a85b064c62e66c871f5ffdae2e71b3a84"
+    },
+    {
+      "path": "scroll-probe-2.gdb",
+      "source": "build/native/probe-components-scroll-2.gdb",
+      "bytes": 805,
+      "sha256": "f4941a523c612bcbbaef590bd5bdcde93d2a2e17d9d606087c12db4e5cd4096b"
+    },
+    {
+      "path": "scroll-probe-2.sh",
+      "source": "build/native/probe-components-scroll-2.sh",
+      "bytes": 522,
+      "sha256": "37d525253d8ff63d6190d4f56e728109f83ed3ce6d1278c63e8e2368e00360c4"
+    },
+    {
+      "path": "scroll-probe-3.log",
+      "source": "build/native/user-components-scroll-probe-3.log",
+      "bytes": 3315,
+      "sha256": "7585b05bd5444f88fbd5a5b8d9fbca19e6afcd10c94f3524dab6a58e6f07c2f9"
+    },
+    {
+      "path": "scroll-probe-3.gdb",
+      "source": "build/native/probe-components-scroll-3.gdb",
+      "bytes": 1019,
+      "sha256": "5c3d24a67202b52487c2835047d2a38bf7cc5954979d763eb5791b5aa4686ac1"
+    },
+    {
+      "path": "scroll-probe-3.sh",
+      "source": "build/native/probe-components-scroll-3.sh",
+      "bytes": 522,
+      "sha256": "defba43af85f48135f1a0852b9876a313c4436c920e6db2be175d6906602d8bc"
+    },
+    {
+      "path": "user-components-linux-1-wm.log",
+      "source": "build/native/user-components-linux-1-wm.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "user-components-linux-1.log",
+      "source": "build/native/user-components-linux-1.log",
+      "bytes": 152567,
+      "sha256": "7d609d9a557caf7ea9de2efb5f375efef2828986765f9307acc9e8a1ae0e9fc9"
+    },
+    {
+      "path": "user-components-linux-2-wm.log",
+      "source": "build/native/user-components-linux-2-wm.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "user-components-linux-2.log",
+      "source": "build/native/user-components-linux-2.log",
+      "bytes": 145415,
+      "sha256": "ef665af341bd1e69e50e4532facb54aca168a9c3d343dcf76d8b49383994c83b"
+    },
+    {
+      "path": "user-components-linux-3-wm.log",
+      "source": "build/native/user-components-linux-3-wm.log",
+      "bytes": 65,
+      "sha256": "7c4629fe6ed1d7048e8fda5a7a8af8c1745c21d39317577b35f69f55d119d4cd"
+    },
+    {
+      "path": "user-components-linux-3.log",
+      "source": "build/native/user-components-linux-3.log",
+      "bytes": 145647,
+      "sha256": "2763c39f9f6fb37e05996e19d458fbdb150d738c90dac83a4ebf824209ce795f"
+    },
+    {
+      "path": "user-components-linux-4-wm.log",
+      "source": "build/native/user-components-linux-4-wm.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "user-components-linux-4.log",
+      "source": "build/native/user-components-linux-4.log",
+      "bytes": 141549,
+      "sha256": "eb51421ef40f6b39262c40e4faaf50fed3bbe3d787ae41fae45f6ad599ec8a05"
+    },
+    {
+      "path": "user-components-windows-1-build.log",
+      "source": "build/native/user-components-windows-1-build.log",
+      "bytes": 39043,
+      "sha256": "e2ce78ac346592d853f06449ec30786713c56254259c3423be9c32f5917892d8"
+    },
+    {
+      "path": "user-components-windows-1.log",
+      "source": "build/native/user-components-windows-1.log",
+      "bytes": 134,
+      "sha256": "71bd340d6d69eda36a649bb7dd119e2b6af233072b6bc3883b45f9479b8e8f70"
+    },
+    {
+      "path": "user-components-windows-2.log",
+      "source": "build/native/user-components-windows-2.log",
+      "bytes": 24714,
+      "sha256": "005eefb3baa76a09325e4a5a608f883b909a190f1ed4a95a7ff2ed6f9a2f1fbb"
+    },
+    {
+      "path": "user-components-windows-3.log",
+      "source": "build/native/user-components-windows-3.log",
+      "bytes": 25912,
+      "sha256": "db235837beb1048d3ec7e82200e8cd65d1cadd0d23e77ae5e8b9686da8a06029"
+    },
+    {
+      "path": "user-components-windows-4.log",
+      "source": "build/native/user-components-windows-4.log",
+      "bytes": 22061,
+      "sha256": "bdec4899a3b6738c909b8247414a56317c139374f64b7ca363e14e03014e30b6"
+    },
+    {
+      "path": "run-linux-4.sh",
+      "source": "build/native/run-user-components-linux-4.sh",
+      "bytes": 682,
+      "sha256": "9242fc12b627fb696b8e59832d090e9b241ddc0976454d1f646b27d45f7f4e7c"
+    }
+  ],
+  "scope": [
+    "Native UI components only, full reference fidelity remains unproven",
+    "Windows full laboratory workflow has an unresolved source1 stage0 host-focus timeout; it is not included in the six final Windows groups",
+    "Real SDL queued-input fixtures; no external screenreader, physical DPI or macOS acceptance",
+    "GDB probes are diagnostic, leaks disabled under ptrace and inferior deliberately stopped; not application passes",
+    "Ten unchanged foreign accessibility changes included in local binaries, not a clean-checkout test",
+    "Historical model-values-build-error.bmp frames show a subsequent build start; documented as build-phase images, not visual error acceptance."
+  ],
+  "baseline_release_checked_after_execution": {
+    "path": "build/native/Release/bin/physim.exe",
+    "sha256": "e1fdc2297e5789dbbd844f64400dfb1d02f9e1f292df76390a9faa81db46cdf4",
+    "last_modified_utc": "2026-10-21T18:18:43.280100+00:00",
+    "scope": "Existing Release executable used in baseline2; no exact source-revision claim"
+  }
+}

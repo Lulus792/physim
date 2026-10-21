@@ -1,0 +1,427 @@
+649 C and 615 Physim completion symbols verified
+array.c
+Compiled src/array.c
+memory.c
+Compiled src/memory.c
+string_view.c
+core.c
+D:\Physim\src\core.c(403) : warning C4706: assignment within conditional expression
+Compiled src/string_view.c
+Compiled src/core.c
+hashmap.c
+Compiled src/hashmap.c
+math.c
+Compiled src/math.c
+run_stream.c
+Compiled src/run_stream.c
+data.c
+D:\Physim\src\data.c(293) : warning C4701: potentially uninitialized local variable 'unit' used
+Compiled src/data.c
+run_index.c
+Compiled src/run_index.c
+snapshot.c
+Compiled src/snapshot.c
+scene.c
+Compiled src/scene.c
+analysis.c
+Compiled src/analysis.c
+numerics.c
+Compiled src/numerics.c
+units.c
+Compiled src/units.c
+report.c
+Compiled src/report.c
+report_export.c
+Compiled src/report_export.c
+mechanics.c
+Compiled src/mechanics.c
+contact_world.c
+Compiled src/contact_world.c
+box_contacts.c
+Compiled src/box_contacts.c
+collision.c
+Compiled src/collision.c
+series.c
+Compiled src/series.c
+thermodynamics.c
+measurement.c
+Compiled src/thermodynamics.c
+Compiled src/measurement.c
+electromagnetism.c
+Compiled src/electromagnetism.c
+waves.c
+Compiled src/waves.c
+optics.c
+Compiled src/optics.c
+fluid.c
+Compiled src/fluid.c
+properties.c
+Compiled src/properties.c
+protocol.c
+Compiled src/protocol.c
+runner_output.c
+D:\Physim\src\runner_output.c(20): warning C4200: nonstandard extension used: zero-sized array in struct/union
+platform.c
+Compiled src/runner_output.c
+Compiled src/platform.c
+lexer.c
+Compiled src/language/lexer.c
+parser.c
+Compiled src/language/parser.c
+builtins.c
+Compiled src/language/builtins.c
+emitter.c
+Compiled src/language/emitter.c
+checker.c
+Compiled src/language/checker.c
+batch.c
+Compiled src/batch.c
+crc32.c
+Compiled third_party/zlib-1.3.2/crc32.c
+adler32.c
+trees.c
+Compiled third_party/zlib-1.3.2/adler32.c
+Compiled third_party/zlib-1.3.2/trees.c
+deflate.c
+Compiled third_party/zlib-1.3.2/deflate.c
+uncompr.c
+Compiled third_party/zlib-1.3.2/uncompr.c
+zutil.c
+inftrees.c
+Compiled third_party/zlib-1.3.2/zutil.c
+Compiled third_party/zlib-1.3.2/inftrees.c
+inflate.c
+Compiled third_party/zlib-1.3.2/inflate.c
+inffast.c
+Compiled third_party/zlib-1.3.2/inffast.c
+loader.c
+main.c
+Compiled src/language/loader.c
+Compiled src/language/main.c
+Linked physimc.exe
+experiment.c
+D:\Physim\runners\experiment.c(363) : warning C4701: potentially uninitialized local variable 'writer' used
+Compiled runners/experiment.c
+Linked physim-runner.exe
+analysis.c
+Compiled runners/analysis.c
+Linked physim-analysis-runner.exe
+batch.c
+Compiled runners/batch.c
+Linked physim-batch.exe
+main.c
+Compiled examples/pendulum/main.c
+   Creating library D:\Physim\build\native\Design-analysis\lib\pendulum.lib and object D:\Physim\build\native\Design-analysis\lib\pendulum.exp
+Linked pendulum.dll
+main.c
+Compiled examples/projectile/main.c
+   Creating library D:\Physim\build\native\Design-analysis\lib\projectile.lib and object D:\Physim\build\native\Design-analysis\lib\projectile.exp
+Linked projectile.dll
+main.c
+Compiled examples/collision/main.c
+   Creating library D:\Physim\build\native\Design-analysis\lib\collision.lib and object D:\Physim\build\native\Design-analysis\lib\collision.exp
+Linked collision.dll
+main.c
+Compiled examples/box_floor/main.c
+   Creating library D:\Physim\build\native\Design-analysis\lib\box_floor.lib and object D:\Physim\build\native\Design-analysis\lib\box_floor.exp
+Linked box_floor.dll
+main.c
+Compiled examples/spring/main.c
+   Creating library D:\Physim\build\native\Design-analysis\lib\spring.lib and object D:\Physim\build\native\Design-analysis\lib\spring.exp
+Linked spring.dll
+main.c
+Compiled examples/uncertain_projectile/main.c
+   Creating library D:\Physim\build\native\Design-analysis\lib\uncertain_projectile.lib and object D:\Physim\build\native\Design-analysis\lib\uncertain_projectile.exp
+Linked uncertain_projectile.dll
+main.c
+Compiled examples/box_collision/main.c
+   Creating library D:\Physim\build\native\Design-analysis\lib\box_collision.lib and object D:\Physim\build\native\Design-analysis\lib\box_collision.exp
+Linked box_collision.dll
+main.c
+Compiled examples/buoyancy/main.c
+   Creating library D:\Physim\build\native\Design-analysis\lib\buoyancy.lib and object D:\Physim\build\native\Design-analysis\lib\buoyancy.exp
+Linked buoyancy.dll
+main.c
+Compiled examples/ccd_events/main.c
+   Creating library D:\Physim\build\native\Design-analysis\lib\ccd_events.lib and object D:\Physim\build\native\Design-analysis\lib\ccd_events.exp
+Linked ccd_events.dll
+analysis.c
+Compiled examples/pendulum/analysis.c
+   Creating library D:\Physim\build\native\Design-analysis\lib\pendulum_analysis.lib and object D:\Physim\build\native\Design-analysis\lib\pendulum_analysis.exp
+Linked pendulum_analysis.dll
+batch_analysis.c
+D:\Physim\examples\documentation\batch_analysis.c(25) : warning C4701: potentially uninitialized local variable 'endpoints' used
+D:\Physim\examples\documentation\batch_analysis.c(33) : warning C4701: potentially uninitialized local variable 'table' used
+Compiled examples/documentation/batch_analysis.c
+   Creating library D:\Physim\build\native\Design-analysis\lib\batch_analysis.lib and object D:\Physim\build\native\Design-analysis\lib\batch_analysis.exp
+Linked batch_analysis.dll
+parameter_catalog.c
+Compiled app/parameter_catalog.c
+autosave.c
+Compiled app/autosave.c
+project_file.c
+D:\Physim\app\project_file.c(301) : warning C4701: potentially uninitialized local variable 'previous' used
+Compiled app/project_file.c
+text_document.c
+Compiled app/text_document.c
+build_main.c
+Compiled app/build_main.c
+Linked physim-build.exe
+source_outline.c
+Compiled app/source_outline.c
+code_preview.c
+Compiled app/code_preview.c
+graphic_snapshot.c
+model_values.c
+Compiled app/graphic_snapshot.c
+Compiled app/model_values.c
+compiler_diagnostic.c
+Compiled app/compiler_diagnostic.c
+graphic_figure.c
+Compiled app/graphic_figure.c
+completion.c
+Compiled app/completion.c
+accessibility.c
+Compiled app/accessibility.c
+graphic_raster.c
+D:\Physim\third_party\nuklear.h(4891): warning C4200: nonstandard extension used: zero-sized array in struct/union
+Compiled app/graphic_raster.c
+profiling.c
+Compiled app/profiling.c
+timeline.c
+accessibility_atspi.c
+Compiled app/timeline.c
+Compiled app/accessibility_atspi.c
+docking.c
+Compiled app/docking.c
+layout_catalog.c
+Compiled app/layout_catalog.c
+channel_units.c
+Compiled app/channel_units.c
+accessibility_native.c
+Compiled app/accessibility_native.c
+run_import.c
+Compiled app/run_import.c
+ui_backend.c
+Compiled app/ui_backend.c
+main.c
+D:\Physim\third_party\nuklear.h(4891): warning C4200: nonstandard extension used: zero-sized array in struct/union
+D:\Physim\app\batch_actions.inc(81): warning C4456: declaration of 'selected' hides previous local declaration
+D:\Physim\app\batch_actions.inc(35): note: see declaration of 'selected'
+D:\Physim\app\plot_ui.inc(152): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\editor_search_ui.inc(44): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\editor_search_ui.inc(155): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\editor_search_ui.inc(155): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\documentation_article_flow.inc(22): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\documentation_article_flow.inc(23): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\documentation_article_flow.inc(24): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\documentation_media.inc(115): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\documentation_media.inc(115): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\documentation_h.inc(186): warning C4456: declaration of 'label' hides previous local declaration
+D:\Physim\app\documentation_h.inc(178): note: see declaration of 'label'
+D:\Physim\app\documentation_code_preview.inc(37): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\documentation_h.inc(371): warning C4457: declaration of 'a' hides function parameter
+D:\Physim\app\documentation_h.inc(341): note: see declaration of 'a'
+D:\Physim\app\documentation_h.inc(464): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\documentation_h.inc(530): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\documentation_actions.inc(144): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\documentation_ui.inc(1441): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\documentation_ui.inc(1436): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\design_ui.inc(179): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\design_ui.inc(184): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\file_tabs_ui.inc(92): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\file_tabs_ui.inc(115): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\file_tabs_ui.inc(116): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\file_tabs_ui.inc(122): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\laboratory_layout.inc(90): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\analysis_resize.inc(31): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_ui.inc(16): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_ui.inc(22): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_ui.inc(28): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_ui.inc(71): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_ui.inc(96): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_ui.inc(96): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_ui.inc(96): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_ui.inc(97): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_ui.inc(97): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_ui.inc(98): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_ui.inc(98): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_ui.inc(98): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_ui.inc(174): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_ui.inc(175): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_ui.inc(179): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_ui.inc(179): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_ui.inc(332): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_ui.inc(353): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_ui.inc(342): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_ui.inc(364): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\design_ui.inc(424): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\workspace_tree_ui.inc(69): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\workspace_tree_ui.inc(88): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\workspace_tree_ui.inc(105): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\workspace_tree_ui.inc(89): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\toolbar_ui.inc(210): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\toolbar_ui.inc(254): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\toolbar_ui.inc(326): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\toolbar_ui.inc(333): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\toolbar_ui.inc(334): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\toolbar_ui.inc(433): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\toolbar_ui.inc(452): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\laboratory_ui.inc(12): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\laboratory_ui.inc(137): warning C4456: declaration of 'title' hides previous local declaration
+D:\Physim\app\laboratory_ui.inc(78): note: see declaration of 'title'
+D:\Physim\app\design_ui.inc(936): warning C4456: declaration of 'analysis' hides previous local declaration
+D:\Physim\app\design_ui.inc(790): note: see declaration of 'analysis'
+D:\Physim\app\design_ui.inc(804): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\design_ui.inc(953): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\design_ui.inc(1080): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\design_ui.inc(1251): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\documentation_layout.h(8): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\documentation_window.inc(31): warning C4090: 'function': different 'const' qualifiers
+D:\Physim\app\documentation_window.inc(31): warning C4090: 'function': different 'const' qualifiers
+D:\Physim\app\documentation_window.inc(32): warning C4090: 'function': different 'const' qualifiers
+D:\Physim\app\documentation_window.inc(32): warning C4090: 'function': different 'const' qualifiers
+D:\Physim\app\documentation_window.inc(33): warning C4090: 'function': different 'const' qualifiers
+D:\Physim\app\documentation_window.inc(34): warning C4090: 'function': different 'const' qualifiers
+D:\Physim\app\documentation_window.inc(60): warning C4090: 'function': different 'const' qualifiers
+D:\Physim\app\documentation_window.inc(60): warning C4090: 'function': different 'const' qualifiers
+D:\Physim\app\documentation_window.inc(61): warning C4090: 'function': different 'const' qualifiers
+D:\Physim\app\documentation_window.inc(61): warning C4090: 'function': different 'const' qualifiers
+D:\Physim\app\documentation_window.inc(62): warning C4090: 'function': different 'const' qualifiers
+D:\Physim\app\documentation_window.inc(63): warning C4090: 'function': different 'const' qualifiers
+D:\Physim\app\documentation_window.inc(101): warning C4090: 'function': different 'const' qualifiers
+D:\Physim\app\documentation_window.inc(101): warning C4090: 'function': different 'const' qualifiers
+D:\Physim\app\documentation_window.inc(102): warning C4090: 'function': different 'const' qualifiers
+D:\Physim\app\documentation_window.inc(102): warning C4090: 'function': different 'const' qualifiers
+D:\Physim\app\documentation_window.inc(103): warning C4090: 'function': different 'const' qualifiers
+D:\Physim\app\documentation_window.inc(104): warning C4090: 'function': different 'const' qualifiers
+D:\Physim\app\plot_tests.inc(231): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\camera_plane_tests.inc(5): warning C4244: '=': conversion from 'unsigned int' to 'Uint8', possible loss of data
+D:\Physim\app\camera_plane_tests.inc(22): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\ui_size_tests.inc(49): warning C4244: '=': conversion from 'uint64_t' to 'uint32_t', possible loss of data
+D:\Physim\app\settings_tests.inc(5): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\settings_tests.inc(42): warning C4244: '=': conversion from 'uint64_t' to 'uint32_t', possible loss of data
+D:\Physim\app\settings_tests.inc(209): warning C4389: '==': signed/unsigned mismatch
+D:\Physim\app\documentation_keyboard_tests.inc(456): warning C4389: '==': signed/unsigned mismatch
+D:\Physim\app\documentation_keyboard_tests.inc(965): warning C4389: '==': signed/unsigned mismatch
+D:\Physim\app\documentation_keyboard_tests.inc(1045): warning C4389: '==': signed/unsigned mismatch
+D:\Physim\app\documentation_keyboard_tests.inc(1082): warning C4389: '==': signed/unsigned mismatch
+D:\Physim\app\documentation_inline_math_tests.inc(94): warning C4389: '==': signed/unsigned mismatch
+D:\Physim\app\documentation_h_tests.inc(136): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\documentation_scroll_tests.inc(46): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\documentation_model_tests.inc(16): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_tests.inc(74): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\docking_tests.inc(75): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\hierarchy_tests.inc(21): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\material_tutorial_tests.inc(33): warning C4305: '=': truncation from 'double' to 'float'
+D:\Physim\app\diagnostic_tests.inc(44): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\diagnostic_tests.inc(106): warning C4456: declaration of 'file' hides previous local declaration
+D:\Physim\app\diagnostic_tests.inc(100): note: see declaration of 'file'
+D:\Physim\app\series_tests.inc(31): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\library_selection_tests.inc(173) : warning C4701: potentially uninitialized local variable 'curve' used
+D:\Physim\app\frame_tests.inc(30) : warning C4701: potentially uninitialized local variable 'world' used
+Compiled app/main.c
+ui_geometry.c
+D:\Physim\third_party\nuklear.h(4891): warning C4200: nonstandard extension used: zero-sized array in struct/union
+Compiled app/ui_geometry.c
+documentation.c
+Compiled app/documentation.c
+ui_sdl.c
+D:\Physim\third_party\nuklear.h(4891): warning C4200: nonstandard extension used: zero-sized array in struct/union
+Compiled app/ui_sdl.c
+library.c
+Compiled app/library.c
+run_details.c
+Compiled app/run_details.c
+graphics.c
+D:\Physim\third_party\nuklear.h(4891): warning C4200: nonstandard extension used: zero-sized array in struct/union
+D:\Physim\app\graphics.c(16): warning C4200: nonstandard extension used: zero-sized array in struct/union
+D:\Physim\app\graphics.c(466): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\graphics.c(466): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+Compiled app/graphics.c
+preferences.c
+Compiled app/preferences.c
+workspace_state.c
+Compiled app/workspace_state.c
+workspace_catalog.c
+Compiled app/workspace_catalog.c
+plot_view.c
+Compiled app/plot_view.c
+workspace_tree.c
+Compiled app/workspace_tree.c
+png.c
+Compiled app/png.c
+linebreak.c
+Compiled third_party/libunibreak-8.0/linebreak.c
+linebreakdef.c
+Compiled third_party/libunibreak-8.0/linebreakdef.c
+eastasianwidthdef.c
+Compiled third_party/libunibreak-8.0/eastasianwidthdef.c
+linebreakdata.c
+report_image.c
+D:\Physim\third_party\nuklear.h(4891): warning C4200: nonstandard extension used: zero-sized array in struct/union
+Compiled third_party/libunibreak-8.0/linebreakdata.c
+Compiled app/report_image.c
+unibreakbase.c
+Compiled third_party/libunibreak-8.0/unibreakbase.c
+unibreakdef.c
+Compiled third_party/libunibreak-8.0/unibreakdef.c
+Linked physim.exe
+test_png.c
+png.c
+Compiled app/png.c
+Compiled tests/test_png.c
+Linked integration-physim-png-tests.exe
+TEST plot_workflow: passed
+TEST workspace_tree_workflow: passed
+TEST hierarchy_workflow: passed
+TEST scene_visibility_16: passed
+TEST scene_visibility_22: failed
+Exit code 1; expected 0
+APP TEST TRACE: initializing SDL
+APP TEST TRACE: SDL initialized, video driver windows
+APP TEST TRACE: creating window
+APP TEST TRACE: window created, creating OpenGL context
+APP TEST TRACE: window and OpenGL ready
+APP TEST TRACE: main fonts begin 570733.627319
+APP TEST TRACE: main font sources ready 570733.780260
+APP TEST TRACE: main atlas bake seconds=4.145284
+APP TEST TRACE: main atlas validation/upload seconds=0.011754
+APP TEST TRACE: main fonts ready 570737.946521
+APP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.
+APP TEST TRACE: stage 0 -> 1, status 5 Messpunkte geladen.
+APP TEST TRACE: stage 1 -> 2, status 5 Messpunkte geladen.
+Traceback (most recent call last):
+  File "D:\Physim/tests/check_display_workflow.py", line 575, in run
+    result = subprocess.run(command, cwd=self.work, env=self.env, capture_output=True,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\angel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\subprocess.py", line 550, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\angel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\subprocess.py", line 1209, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\angel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\subprocess.py", line 1630, in _communicate
+    raise TimeoutExpired(self.args, orig_timeout)
+subprocess.TimeoutExpired: Command '['D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe', '--scene-visibility-test', 'D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-uv90jaqm\\scene_visibility_22\\files ä\\workflow ä', '22']' timed out after 35 seconds
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Physim/tests/check_display_workflow.py", line 2138, in <module>
+    main()
+  File "D:\Physim/tests/check_display_workflow.py", line 1937, in main
+    SPECIAL[args.case](flow, directory)
+  File "D:\Physim/tests/check_display_workflow.py", line 1873, in <lambda>
+    SPECIAL = {"scene_visibility_16": lambda flow,directory: scene_visibility(flow,directory,"16"),"scene_visibility_22": lambda flow,directory: scene_visibility(flow,directory,"22"),"project_display_16": lambda flow,directory: project_display(flow,directory,"16"), "project_display_22": lambda flow,directory: project_display(flow,directory,"22"),"camera_plane_16": lambda flow,directory: camera_plane(flow,directory,"16"), "camera_plane_22": lambda flow,directory: camera_plane(flow,directory,"22"),"report_details_workflow": report_details, "library_selection_workflow": library_selection, "api_reference_workflow": api_reference,
+                                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Physim/tests/check_display_workflow.py", line 645, in scene_visibility
+    flow.run("--scene-visibility-test",directory,size,timeout=35,marker="SCENE VISIBILITY SELF-TEST: PASSED")
+  File "D:\Physim/tests/check_display_workflow.py", line 584, in run
+    raise RuntimeError(f"App exceeded {timeout} seconds: {command}") from error
+RuntimeError: App exceeded 35 seconds: ['D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe', '--scene-visibility-test', 'D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-uv90jaqm\\scene_visibility_22\\files ä\\workflow ä', '22']
+
+
+TEST model_values_workflow: passed
+Build failed: 1 native tests failed; see D:\Physim\build\native\Design-analysis\test-results\run-uv90jaqm
+Native tests: 5/6 passed. Results: D:\Physim\build\native\Design-analysis\test-results\run-uv90jaqm

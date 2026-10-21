@@ -13,6 +13,13 @@ static void scene_visibility_test_frame(app *a,int *stage,int *code,const char *
     if(*stage==0) {
         if(a->data.thread || a->library_thread)return;
         timeline_clear(a);timeline_live(a);a->tab=1;
+        /* Exercise the current Messlabor controls rather than waiting for
+         * widgets inside its initially closed camera section. */
+        laboratory_context(a);
+        a->laboratory_groups[0]=NK_MINIMIZED;a->model_disclosure=NK_MINIMIZED;
+        a->parameter_disclosure=a->steps_disclosure=a->limits_disclosure=NK_MINIMIZED;
+        a->laboratory_groups[3]=NK_MAXIMIZED;
+        ps_dock_reveal_outer(&a->preferences.dock,PS_DOCK_SIDEBAR,PS_DOCK_LEFT);
         a->scene_disclosure=a->view_disclosure=NK_MAXIMIZED;a->camera_disclosure=NK_MINIMIZED;
         a->preferences.sidebar_width=360;ps_dock_hide(&a->preferences.dock,PS_DOCK_LOG);
         a->yaw=a->pitch=0;a->zoom=6;a->camera_target=ps_v3(0,0,0);a->orthographic=true;a->show_grid=false;
@@ -28,6 +35,8 @@ static void scene_visibility_test_frame(app *a,int *stage,int *code,const char *
         original=a->scene;memcpy(values,a->values,sizeof values);time=a->simulation_time;
     } else if(*stage==1) {
         ok=ps_graphics_scene_stats(a->graphics,&stats) && stats.vertices>0 && visibility_test_pick(a,0)==0;
+        ok &= a->display_vector_bounds.w>0 && a->display_path_bounds.w>0 &&
+              a->display_points_bounds.w>0 && a->display_labels_bounds.w>0;
         vertices=stats.vertices;*capture="visibility-all.bmp";
     } else if(*stage<26) {
         unsigned control=(unsigned)(*stage-2)/6,step=(unsigned)(*stage-2)%6;

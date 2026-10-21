@@ -1,0 +1,13 @@
+[
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+      "--scene-visibility-test",
+      "D:\\Physim\\build\\native\\user-components-baseline-visibility-windows-2\\workflow \u00e4",
+      "16"
+    ],
+    "exit_code": 1,
+    "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\n5 Messpunkte geladen.\n\nAPP TEST EXIT: 1\n",
+    "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 569840.498680\nAPP TEST TRACE: main font sources ready 569840.563015\nAPP TEST TRACE: main atlas bake seconds=0.258082\nAPP TEST TRACE: main atlas validation/upload seconds=0.007756\nAPP TEST TRACE: main fonts ready 569840.840641\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 0 -> 1, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 5 Messpunkte geladen.\nFirst workflow failure at stage 2 (next 2): 5 Messpunkte geladen. (tab=1, selected=0, samples=5, report=1, query=)\nWorkflow failed at stage 2: 5 Messpunkte geladen. (tab=1, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\n"
+  }
+]

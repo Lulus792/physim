@@ -1,0 +1,2 @@
+649 C and 615 Physim completion symbols verified
+Build failed: SDL3 headers not found. Pass --sdl with an SDL3 installation prefix.
