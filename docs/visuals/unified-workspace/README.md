@@ -17,7 +17,11 @@ Der [Werkbank-Kontext](WORKBENCH-CONTEXT.md) führt den aktuellen Abgleich der
 gefüllten API-Karte, dokumentierter Beispiele und des Protokollkopfs fort.
 Der [Folgeabgleich der Kontextspalte](WORKBENCH-CONTEXT-FLOW.md) ergänzt volle
 Breite, CSS-Zeilenboxen, Gliederungsdetails und Scrollzugang bei kurzen Fenstern.
-Die aktuelle [F1-Codevorschau](../f1-layouts/CODE-PREVIEW.md) erhält lange Tokens,
+Der aktuelle [F1-Kontextdetail-Abgleich](../f1-layouts/CONTEXT-DETAILS.md) korrigiert
+Codekopfkontur und Bildunterschrift. Windows/Linux bestehen sechs native Gruppen;
+Modelle sind mit System-/Offline-Schriften bei 1×/2× gezeichnet. Verbleibende
+Schrift-/Raster-/Plattformgrenzen und die Linux-Speicherbedingung sind benannt.
+Die vorhergehende [F1-Codevorschau](../f1-layouts/CODE-PREVIEW.md) erhält lange Tokens,
 Leerraum und die vollständigen Quellbytes. Horizontaler Tastatur-/Rad-/Ziehzugriff,
 Unicode-Konformität, Windows-Hostfokus und Lizenzkopien sind separat geprüft.
 112 vollständige native H-Bildpaare bleiben unverändert; die vollständige

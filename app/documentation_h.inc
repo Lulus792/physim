@@ -350,6 +350,14 @@ static void documentation_context_figure(app *a,int kind,struct nk_rect r) {
         float s=fminf(r.w/220,fminf(r.h/210,fmaxf(1,r.h-caption_height)/182)),ox=r.x+(r.w-220*s)/2;
         bool single_caption=caption_height<=caption_line+.01f;
         float oy=r.y+(single_caption?(r.h-210*s)/2:0);
+        /* The SVG viewBox transforms its caption as well as its vector labels.
+         * Keep an address that outlives queued draw commands. Large UI text
+         * that needs multiple lines retains its accessible reflow below. */
+        a->doc_figure_caption_draw_font=*caption_font;
+        if(single_caption) {
+            a->doc_figure_caption_draw_font.height*=s;caption_line*=s;caption_height=caption_line;
+        }
+        caption_font=&a->doc_figure_caption_draw_font;
         ink=documentation_context_svg_color(a,50,50,46);
         struct nk_color muted=documentation_context_svg_color(a,98,98,93),guide=documentation_context_svg_color(a,163,163,156);
         nk_stroke_line(c,ox+44*s,oy+22*s,ox+146*s,oy+22*s,1.5f*s,muted);
@@ -406,6 +414,26 @@ static void documentation_context_figure(app *a,int kind,struct nk_rect r) {
         }
         nk_stroke_rect(c,nk_rect(prevx,prevy-20,w/4,40),3,2,ink);
     }
+}
+/* Inspect actual queued caption commands before render clears the buffer. */
+static void documentation_context_svg_probe(app *a) {
+    if(!a->doc_context_caption_test || a->doc_context_hidden || a->doc_context_example)return;
+    struct nk_rect r=a->doc_context_caption_bounds;const struct nk_command *command;
+    unsigned lines=0;float em=0,center=0,baseline=0;
+    nk_foreach(command,a->doc_ui)if(command->type==NK_COMMAND_TEXT) {
+        const struct nk_command_text *t=(const struct nk_command_text *)command;
+        if(t->x<r.x || t->x>=r.x+r.w || t->y<r.y || t->y>=r.y+r.h)continue;
+        if(!lines) {
+            const struct nk_font *font=t->font->userdata.ptr;
+            em=t->height/a->doc_type_em[DOC_TYPE_FIGURE_CAPTION];
+            center=t->x+documentation_text_width(t->font,t->string,(size_t)t->length)/2;
+            baseline=t->y+(font->info.ascent+.5f)*t->height/font->info.height;
+        }
+        ++lines;
+    }
+    struct nk_rect f=a->doc_context_figure_bounds;
+    printf("DOCUMENTATION SVG CAPTION: case=%u figure=%.3f,%.3f,%.3f,%.3f lines=%u em=%.3f center=%.3f baseline=%.3f complete=%d\n",
+        a->doc_detail_test_case,f.x,f.y,f.w,f.h,lines,em,center,baseline,a->doc_detail_test_ok);
 }
 static void documentation_context_content(app *a);
 static void documentation_context_view(app *a) {
@@ -467,7 +495,15 @@ static void documentation_context_content(app *a) {
         ps_ui_row_exact_dynamic(ui,head_height,1);struct nk_rect head_measured=nk_widget_bounds(ui),head;
         enum nk_widget_layout_states visible=nk_widget(&head,ui);head=documentation_h_snap(head_measured);
         a->doc_context_head_bounds=head;
-        nk_fill_rect(canvas,head,0,UI_COLOR(edit));nk_stroke_rect(canvas,head,0,1,UI_COLOR(divider));
+        struct nk_rect head_clip=ui->current->layout->clip;
+        struct nk_rect head_visible=documentation_code_intersection(head,head_clip);
+        if(head_visible.w>0 && head_visible.h>0)nk_fill_rect(canvas,head_visible,0,UI_COLOR(edit));
+        /* .code-head has only top/left/right borders; pre owns the shared edge. */
+        struct nk_rect edges[]={nk_rect(head.x,head.y,head.w,1),nk_rect(head.x,head.y,1,head.h),nk_rect(head.x+head.w-1,head.y,1,head.h)};
+        for(unsigned i=0;i<3;i++) {
+            struct nk_rect edge=documentation_code_intersection(edges[i],head_clip);
+            if(edge.w>0 && edge.h>0)nk_fill_rect(canvas,edge,0,UI_COLOR(divider));
+        }
         struct nk_rect button=nk_rect(wrap?head.x+11:head.x+head.w-copy-11,
             head.y+11+(wrap?label_height+8:0),copy,control);
         button=documentation_h_snap(button);

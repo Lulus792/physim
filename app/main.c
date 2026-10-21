@@ -364,7 +364,7 @@ typedef struct {
     const struct nk_user_font *doc_ui_fonts[9], *doc_title_fonts[9];
     const struct nk_user_font *doc_figure_fonts[4];
     struct nk_user_font doc_type_fonts[32];
-    struct nk_user_font doc_figure_draw_font;
+    struct nk_user_font doc_figure_draw_font,doc_figure_caption_draw_font;
     float doc_type_em[32],doc_font_em[6][11];
     documentation_spaced_font doc_spaced_fonts[4];
     ps_ui_font_pairs *doc_font_pairs[2];

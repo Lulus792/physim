@@ -1,5 +1,9 @@
 # F1 H: Codevorschau mit erhaltenen Tokens und horizontalem Zugriff
 
+Fortgeschrieben durch den [Kontextdetail-Abgleich](CONTEXT-DETAILS.md): Der dort
+geprüfte Folgestand beseitigt den unten noch offenen Codekopf-Konturrest und
+korrigiert die SVG-Bildunterschrift. Die folgenden Nachweise beschreiben Stand 91.
+
 Der Folgeabgleich vom 21. Oktober 2026 setzt den Vertrag aus
 `final-h.css` für `.context-content pre` um: `white-space: pre-wrap`,
 `overflow-wrap: normal`, `overflow-x: auto`. Er ergänzt den

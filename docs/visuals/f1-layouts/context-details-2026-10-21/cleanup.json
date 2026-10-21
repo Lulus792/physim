@@ -1,0 +1,237 @@
+{
+  "status": "completed",
+  "scope": "Only superseded successful source93 font-demand, density and Windows pane raw images. All failed groups (including Linux panes), source92 countercases, source91 parity references and all final94 outputs are protected. Programs and symbols retained.",
+  "files": [
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_font_demand/files ä/workflow ä/docs-font-demand-cache.bmp",
+      "bytes": 1641738,
+      "sha256": "5d468e80a1d0636e6e814dfa989591530e19a11ff14f3eb466c0474be8dcddf5"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_font_demand/files ä/workflow ä/docs-font-demand-density.png",
+      "bytes": 225946,
+      "sha256": "5877ecef04955ed81c9c4170c73d3b3dfdf5397e5427cfac7a356549f0b912ed"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_font_demand/files ä/workflow ä/docs-font-demand-failed.bmp",
+      "bytes": 1641738,
+      "sha256": "89470810d15946c539b4e088f9bb9ce572e29c03690f5b14863b46d6261a1e17"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_font_demand/files ä/workflow ä/docs-font-demand-ready.bmp",
+      "bytes": 1641738,
+      "sha256": "5d468e80a1d0636e6e814dfa989591530e19a11ff14f3eb466c0474be8dcddf5"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_font_demand/files ä/workflow ä/docs-font-demand-reset.bmp",
+      "bytes": 1641738,
+      "sha256": "5d468e80a1d0636e6e814dfa989591530e19a11ff14f3eb466c0474be8dcddf5"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_font_demand/files ä/workflow ä/docs-font-demand-retry.bmp",
+      "bytes": 1641738,
+      "sha256": "2dbb28d3853f2ae0e81db8ddddbb0504c7773f6db62fe82cf40744ed23238f3d"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_font_demand/files ä/workflow ä/docs-font-demand-settings.bmp",
+      "bytes": 1641738,
+      "sha256": "371af6347a2bea2a780f53413669f4bb505433f6febf8055e4072a533ab87889"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_density/files ä/workflow ä/docs-density-125.bmp",
+      "bytes": 1641738,
+      "sha256": "c3815d640c4d3ae845ba603b7aa8b596dfb67ac1ceb97f7bbea57db148dc4d07"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_density/files ä/workflow ä/docs-density-150.bmp",
+      "bytes": 1641738,
+      "sha256": "08370e74e6446aa0d91adb86951ac27836d02e44b9b0e9600231b1fc1d2f8685"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_density/files ä/workflow ä/docs-density-200.png",
+      "bytes": 225946,
+      "sha256": "5877ecef04955ed81c9c4170c73d3b3dfdf5397e5427cfac7a356549f0b912ed"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_density/files ä/workflow ä/docs-density-reset.bmp",
+      "bytes": 1641738,
+      "sha256": "5d468e80a1d0636e6e814dfa989591530e19a11ff14f3eb466c0474be8dcddf5"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-00.bmp",
+      "bytes": 1641738,
+      "sha256": "70f45d373791b6d927c4a771f44b15e56764a918db180ebb8b33fae117fe080e"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-01.bmp",
+      "bytes": 1641738,
+      "sha256": "cb487fd75c1ab9a61e67b53625d3ba522359806df48156bb3ba2d24a8d871f64"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-02.bmp",
+      "bytes": 1641738,
+      "sha256": "9635a38c51b629d0de2286e1e537ab004ec4618d753cf521fea90910f26074ad"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-03.bmp",
+      "bytes": 1641738,
+      "sha256": "b51e144b69f072f69dc88306d8f1e30b74942d6329db1331121a51087d215969"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-04.bmp",
+      "bytes": 1641738,
+      "sha256": "ab9095ffe60110c01fa21535365d58ee5634c3fa255edc7489b92dada91ac873"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-05.bmp",
+      "bytes": 1641738,
+      "sha256": "7e1635f0209cb479b10359d586843d6e5d74e2c167288dd72281d0da1af2b1d3"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-06.bmp",
+      "bytes": 1641738,
+      "sha256": "408e3bca4185cb785df4408e99df38935f24e4e285faa296d23ebbe238032425"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-07.bmp",
+      "bytes": 1641738,
+      "sha256": "2d7cbe040e530e40d6d5dc934bc943b13a583031c475d0d9dd7912239ac57fe8"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-08.bmp",
+      "bytes": 1641738,
+      "sha256": "dd3c2b30749e8863b1ead1956ca5df55c8cf4105e49c218685f73dfe900fb9bf"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-09.bmp",
+      "bytes": 1641738,
+      "sha256": "b3cb0d5f8afcf546037f279baf15bacdfb8aa93dd04378f7dc798d5754ac929c"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-10.bmp",
+      "bytes": 1641738,
+      "sha256": "df0619ea7ffa6757efc82987084d4b07cae3fdcd6dfc386803cc869136290bf5"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-11.bmp",
+      "bytes": 1641738,
+      "sha256": "4c07c2eefa287ea0190b7ef5473bad11d6caecd5d3fab70ee88b8ca75dc8b210"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-12.bmp",
+      "bytes": 1641738,
+      "sha256": "0b222be52bccd0ab31fdc32eede26fdbe2cd9440f5edc5ab31b22b96806213fb"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-13.bmp",
+      "bytes": 1641738,
+      "sha256": "9afda9c61da2d0158f710a38516c3b1747c608b04de0cb26bbc19a6ede5528fc"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-14.bmp",
+      "bytes": 1641738,
+      "sha256": "74b61a0f2c56cdfe38992dab4c3c3bea7fefa38830c9adec48b4fc526a333bcf"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-15.bmp",
+      "bytes": 1641738,
+      "sha256": "61ad5f765cdb4136f68f5679b76b4370a60c2c606dd1ef1236b3e2af82ccbbac"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-16.bmp",
+      "bytes": 1641738,
+      "sha256": "f79f6a6348fec73d677500c4de290f53a58e5bed53f0b08d18e6556b225234b6"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-17.bmp",
+      "bytes": 1641738,
+      "sha256": "11983805145ba194cd3c5369919c91d572f337802562e931ff083651294fcf06"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-18.bmp",
+      "bytes": 1641738,
+      "sha256": "2f1613cc03dfef00fcd4a4d247dfa61c90319ea582f67ec09671579e0fe465b9"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-19.bmp",
+      "bytes": 1641738,
+      "sha256": "d852ce360d47d558c47863e47742b967d37a4b6a96a428eb5a1495a1f6931a88"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-20.bmp",
+      "bytes": 1641738,
+      "sha256": "5438539ccb2e116663faeb636e1f98dca0119574ce171076c3e0d65cbe35bc15"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-21.bmp",
+      "bytes": 1641738,
+      "sha256": "a618309d38e7a11c4611d5cf91055de340de70b132a8b9c4071724585be8cf27"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-22.bmp",
+      "bytes": 1641738,
+      "sha256": "d9d5eb1a09504427fb25a44e56df7d6debaea54a59b1ea5b033b55a44ead8e33"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-1e1s401_/documentation_panes/files ä/workflow ä/docs-panes-23.bmp",
+      "bytes": 1641738,
+      "sha256": "88dcfc82d935989b1b8b4c08f0f04acb599c117da84c37633dd7ebe5c0c4fd20"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-et2a7zsp/documentation_font_demand/files ä/workflow ä/docs-font-demand-cache.bmp",
+      "bytes": 1641738,
+      "sha256": "4bcfb5d701d627dafb4853cafb6a5af405799602bc571350bb65a3104a0034c2"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-et2a7zsp/documentation_font_demand/files ä/workflow ä/docs-font-demand-density.png",
+      "bytes": 210465,
+      "sha256": "cba0f1b58411df5f205290388626850b42e695aa80fca884b4210327e5445ace"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-et2a7zsp/documentation_font_demand/files ä/workflow ä/docs-font-demand-failed.bmp",
+      "bytes": 1641738,
+      "sha256": "e6c7eb8aa8f7c5df62987605f531be6c45e03bd2d3921efa8de97596f85d7683"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-et2a7zsp/documentation_font_demand/files ä/workflow ä/docs-font-demand-ready.bmp",
+      "bytes": 1641738,
+      "sha256": "4ff8d2bcfa1f3065f9b792c990a17d1b0e7619377e76969dc6f2506a1900d700"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-et2a7zsp/documentation_font_demand/files ä/workflow ä/docs-font-demand-reset.bmp",
+      "bytes": 1641738,
+      "sha256": "4bcfb5d701d627dafb4853cafb6a5af405799602bc571350bb65a3104a0034c2"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-et2a7zsp/documentation_font_demand/files ä/workflow ä/docs-font-demand-retry.bmp",
+      "bytes": 1641738,
+      "sha256": "046506e9887d98f32518541fba41ab576edb0523a7e40d98d67c6876fe68aeac"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-et2a7zsp/documentation_font_demand/files ä/workflow ä/docs-font-demand-settings.bmp",
+      "bytes": 1641738,
+      "sha256": "2ea850617f0c8f3110a551cf6125751a19ef32ef5c2f20755fc728ff3da214a2"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-et2a7zsp/documentation_density/files ä/workflow ä/docs-density-125.bmp",
+      "bytes": 1641738,
+      "sha256": "1682b9f90eba062c6dfe99cb023eb0b7503d81ef602a15ed7cb2a56148c48e6e"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-et2a7zsp/documentation_density/files ä/workflow ä/docs-density-150.bmp",
+      "bytes": 1641738,
+      "sha256": "208d4803a7effb6f32ac644a9472a651c53bef6da0c2bff212603ae292a860f8"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-et2a7zsp/documentation_density/files ä/workflow ä/docs-density-200.png",
+      "bytes": 210465,
+      "sha256": "cba0f1b58411df5f205290388626850b42e695aa80fca884b4210327e5445ace"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-et2a7zsp/documentation_density/files ä/workflow ä/docs-density-reset.bmp",
+      "bytes": 1641738,
+      "sha256": "4bcfb5d701d627dafb4853cafb6a5af405799602bc571350bb65a3104a0034c2"
+    }
+  ],
+  "total_bytes": 69825818
+}

@@ -1,5 +1,9 @@
 # F1 H: echte kursive Serifenschrift im Modell
 
+Der [spätere Kontextdetail-Abgleich](CONTEXT-DETAILS.md) ergänzt die korrekt
+skalierte Bildunterschrift sowie tatsächliche Modellraster mit System- und
+Offline-Schriften bei 1×/2×. Die folgenden Nachweise beschreiben Stand 86.
+
 Der Folgeabgleich vom 21. Oktober 2026 ergänzt den
 [Navigations-/Kontextabgleich](NAV-CONTEXT.md). Das verbindliche `model.svg`
 verwendet für θ, L und m `Georgia,serif`, 20 SVG-Einheiten und kursiven Stil.

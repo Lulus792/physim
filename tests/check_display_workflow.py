@@ -13,6 +13,7 @@ import struct
 import sys
 import unicodedata
 import zlib
+import xml.etree.ElementTree as ET
 
 
 LANGUAGE_MODES = ("full", "mixed", "projectile", "sensors", "body", "contact", "joint",
@@ -65,6 +66,7 @@ SIMPLE["documentation_keyboard"] = (["--workspace-state-test", "{directory}", "d
 SIMPLE["documentation_panes"] = (["--workspace-state-test", "{directory}", "docs-keyboard-panes"], 75, True)
 SIMPLE["documentation_scroll"] = (["--workspace-state-test", "{directory}", "docs-keyboard-scroll"], 75, True)
 SIMPLE["documentation_context_code"] = (["--workspace-state-test", "{directory}", "docs-keyboard-context-code"], 75, True)
+SIMPLE["documentation_model"] = (["--workspace-state-test", "{directory}", "docs-keyboard-model"], 90, True)
 SIMPLE["documentation_history"] = (["--workspace-state-test", "{directory}", "docs-keyboard-history"], 90, True)
 SIMPLE["documentation_zoom"] = (["--workspace-state-test", "{directory}", "docs-keyboard-zoom"], 90, True)
 SIMPLE["documentation_density"] = (["--workspace-state-test", "{directory}", "docs-keyboard-density"], 120, True)
@@ -99,6 +101,21 @@ for name, fixture in (("unicode", "unicode_identifiers"), ("multiline", "multili
     SIMPLE[f"language_editor_{name}_preview"] = (["--syntax-preview-test", "{directory}",
         "{root}/tests/fixtures/language/" + fixture + ".phys"], 30, False)
 
+
+def documentation_code_frame_pixels(path,head,pre,edit,divider):
+    raw=path.read_bytes();require(raw[:2]==b'BM','Missing actual code frame image')
+    width,height=struct.unpack_from('<ii',raw,18);depth=struct.unpack_from('<H',raw,28)[0]
+    offset=struct.unpack_from('<I',raw,10)[0];stride=((width*depth+31)//32)*4
+    require(depth in (24,32),'Unsupported code frame image format')
+    def pixel(x,y):
+        require(0<=x<width and 0<=y<abs(height),'Code frame sample outside window')
+        row=abs(height)-1-y if height>0 else y;begin=offset+row*stride+x*(depth//8)
+        return tuple(reversed(raw[begin:begin+3]))
+    x,y,w,h=head;px,py,pw,_=pre
+    require(x==px and w==pw and y+h==py,'Code head and pre do not share one boundary')
+    require(all(pixel(sx,py-1)==edit for sx in (x+8,x+w//2,x+w-8)),'Code head still draws an extra bottom border')
+    require(all(pixel(sx,sy)==divider for sx,sy in ((x+w//2,y),(x,y+2),(x+w-1,y+2),(x,py-2),(x+w-1,py-2))),'Code head outer edges are not crisp one-pixel borders')
+    require(pixel(x+2,y+2)==edit,'Code head border extends into its background')
 
 def documentation_density_pixels(path):
     raw=path.read_bytes()
@@ -1872,6 +1889,30 @@ SPECIAL["source_outline_workflow"]=source_outline
 SPECIAL["laboratory_workflow"]=laboratory
 SPECIAL["model_values_workflow"]=model_values
 
+def documentation_model_contract(flow,directory,output):
+    rows=re.findall(r'DOCUMENTATION SVG CAPTION: case=(\d+) figure=([\d.,]+) lines=(\d+) em=([\d.]+) center=([\d.]+) baseline=([\d.]+) complete=(\d)',output)
+    require([int(row[0]) for row in rows]==list(range(6)) and all(row[-1]=='1' for row in rows),'Missing complete actual SVG caption commands')
+    svg=ET.parse(flow.root/'docs/visuals/f1-layouts/model.svg').getroot()
+    _,_,vw,vh=map(float,svg.attrib['viewBox'].split())
+    caption=svg.findall('{http://www.w3.org/2000/svg}text')[-1]
+    cx,cy,size=(float(caption.attrib[key]) for key in ('x','y','font-size'))
+    require(caption.attrib.get('text-anchor')=='middle','SVG caption anchor contract changed')
+    for row in rows:
+        case=int(row[0]);x,y,w,h=map(float,row[1].split(','));lines=int(row[2]);em,center,baseline=map(float,row[3:6])
+        if case%3<2:
+            scale=min(w/vw,h/vh)
+            require(lines==1 and abs(em-size*scale)<.02,f'SVG caption font did not follow its viewBox transform: case={case}, em={em}, expected={size*scale}')
+            require(abs(center-(x+(w-vw*scale)/2+cx*scale))<1.1 and abs(baseline-(y+(h-vh*scale)/2+cy*scale))<1.1,'SVG caption lost its actual center/baseline')
+        else:require(lines>=1 and em>size,'Large UI caption stopped respecting text scaling')
+        path=directory/(f'docs-model-{case}.'+('png' if case>=3 else 'bmp'))
+        raw=path.read_bytes();dimensions=struct.unpack('>II',raw[16:24]) if case>=3 else struct.unpack_from('<ii',raw,18)
+        expected=(1080,780) if case%3==0 else (760,540)
+        require(dimensions==tuple(v*(2 if case>=3 else 1) for v in expected),'Model raster did not have the requested real export dimensions')
+    states=re.findall(r'DOCUMENTATION MODEL RASTER: case=(\d+) ui=(\d+) reader=(\d+) density=([\d.]+) complete=(\d)',output)
+    require(len(states)==6 and all(int(row[0])==i and float(row[3])==(2 if i>=3 else 1) and row[4]=='1' for i,row in enumerate(states)),'Incomplete model atlas-density matrix')
+    require('DOCUMENTATION MODEL RASTER SELF-TEST: PASSED' in output,'Missing model rendering completion')
+
+
 def main():
     # App diagnostics and paths can contain Unicode even when Python inherits a
     # legacy Windows console encoding through a captured subprocess pipe.
@@ -1918,13 +1959,30 @@ def main():
         arguments, timeout, _ = SIMPLE[args.case]
         paths = dict(directory=str(directory), root=str(flow.root))
         flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)
-        if args.case == "documentation_context_code":
+        if args.case == "documentation_model":
+            platform_output=flow.steps[-1]['stdout']
+            bundled=directory/'bundled-fonts';bundled.mkdir()
+            previous=flow.env.get('PHYSIM_TEST_BUNDLED_FONTS');flow.env['PHYSIM_TEST_BUNDLED_FONTS']='1'
+            try:flow.run('--workspace-state-test',bundled,'docs-keyboard-model',timeout=90,marker='DOCUMENTATION MODEL RASTER SELF-TEST: PASSED')
+            finally:
+                if previous is None:flow.env.pop('PHYSIM_TEST_BUNDLED_FONTS',None)
+                else:flow.env['PHYSIM_TEST_BUNDLED_FONTS']=previous
+            bundled_output=flow.steps[-1]['stdout']
+            serif_sources=[line.replace('\\','/') for line in bundled_output.splitlines() if line.startswith('F1 figure font: ')]
+            require(serif_sources and all(line.endswith('/third_party/fonts/NotoSerif-Italic.ttf') for line in serif_sources),'Bundled model rendering used a platform serif font')
+            documentation_model_contract(flow,directory,platform_output)
+            documentation_model_contract(flow,bundled,bundled_output)
+        elif args.case == "documentation_context_code":
             output=flow.steps[-1]['stdout']
             rows=re.findall(r'DOCUMENTATION CODE PREVIEW: case=(\d+) track=(\d+) ui=(\d+) editor=(\d+) theme=(\d+) bytes=(\d+) rows=(\d+) max=([\d.]+) keys=1 wheel=1 shift-wheel=1 drag=1 clipboard-and-editors=(\d) synthetic=(\d)',output)
             require([int(row[0]) for row in rows]==list(range(7)) and all(row[-2]=='1' and float(row[7])>0 for row in rows),'Missing real context-code input matrix')
             require(rows[-1][-1]=='1' and int(rows[-1][5])>6000,'Missing complete long-token UTF8 countercase')
+            frames=re.findall(r'DOCUMENTATION CODE FRAME: case=(\d+) head=([\d,]+) pre=([\d,]+) edit=([\d,]+) divider=([\d,]+)',output)
+            require([int(row[0]) for row in frames]==list(range(7)),'Missing actual code head frame matrix')
+            for case,head,pre,edit,divider in frames:
+                documentation_code_frame_pixels(directory/f'docs-code-{case}-head.bmp',*[tuple(map(int,value.split(','))) for value in (head,pre,edit,divider)])
             for case in range(7):
-                for state in ('start','end','drag'):require((directory/f'docs-code-{case}-{state}.bmp').is_file(),'Missing actual code preview capture')
+                for state in ('head','start','end','drag'):require((directory/f'docs-code-{case}-{state}.bmp').is_file(),'Missing actual code preview capture')
             require('DOCUMENTATION CODE PREVIEW SELF-TEST: PASSED' in output,'Missing actual context-code result')
         elif args.case == "documentation_scroll":
             output=flow.steps[-1]['stdout']

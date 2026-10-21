@@ -6,7 +6,13 @@ Dieser Bericht ergänzt die historische Abnahme in [NATIVE-H.md](NATIVE-H.md).
 
 ## Aktuelle Nachprüfung vom 21. Oktober 2026
 
-Die aktuelle [Codevorschau](CODE-PREVIEW.md) erhält Quellbytes, Leerraum und
+Der aktuelle [Kontextdetail-Abgleich](CONTEXT-DETAILS.md) übernimmt die
+dreiseitige Codekopfkontur und den SVG-Maßstab der einzeiligen Bildunterschrift.
+Windows und Linux bestehen sechs native Prüfgruppen. Modellraster bei 1×/2×
+und System-/Offline-Schriften, sieben Codeköpfe sowie eng begrenzte Bildpaare
+sind getrennt belegt. Vollständige H-Gleichheit bleibt offen.
+
+Die vorhergehende [Codevorschau](CODE-PREVIEW.md) erhält Quellbytes, Leerraum und
 lange Tokens gemäß `pre-wrap` und macht horizontalen Überlauf per Tastatur,
 Rad und Ziehen erreichbar. Native Eingabefälle, Unicode-Konformität,
 Windows-Hostfokus und Release-Lizenzkopien sind getrennt nachgewiesen.

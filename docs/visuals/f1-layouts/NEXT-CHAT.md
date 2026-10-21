@@ -1,5 +1,11 @@
 Stand: Der native F1-Artikel wird weiter mit der gewählten H-Vorlage abgeglichen.
-Die [aktuelle Codevorschau](CODE-PREVIEW.md) erhält Tokens und Quellbytes und
+Der [aktuelle Kontextdetail-Abgleich](CONTEXT-DETAILS.md) korrigiert Codekopfkontur
+und SVG-Bildunterschrift. Sechs native Gruppen je Windows/Linux bestehen;
+Modelle sind mit System-/Offline-Schriften bei Atlas-/Exportraster 1×/2× geprüft.
+112 H-Paare ändern ausschließlich Bildunterschriften, vier Beispielpaare
+ausschließlich Codeköpfe. Linux verwendet ausdrücklich ext4-Arbeitsdaten.
+
+Die vorhergehende [Codevorschau](CODE-PREVIEW.md) erhält Tokens und Quellbytes und
 ergänzt horizontalen Zugriff per Tastatur, Mausrad und Ziehen. Windows/Linux
 bestehen die nativen Eingabefälle und den vollständigen Unicode-Umbruchtest;
 auch der unabhängige Windows-Hostfokusnachweis besteht. Quellen, Gegenfälle,
@@ -28,8 +34,10 @@ historischen Stand. Maßgeblich für den Folgeauftrag sind der aktuelle
 [visuelle Abgleich](H-FIDELITY.md) und der
 [Gesamtoberflächenstand](../unified-workspace/NATIVE-FIDELITY.md).
 
-Weiter offen sind unter anderem Linux-Schrift/Glyphenrasterung, Bildunterschrift,
-Kontur-/Fokusdetails des Beispielkopfs und die vollständige H-Abnahme.
+Weiter offen sind unter anderem Schriftfamilien/Glyphenrasterung, weitere
+Kontext-/Fokuszustände und die vollständige H-Abnahme. Die freigegebene native
+Grafikexport-Gestaltung in Auswerten ist ein weiterer verbindlicher Baustein
+des Gesamtauftrags und weiterhin umzusetzen.
 Browser-PNGs oder bestandene Funktionsgruppen ersetzen diese Abnahme nicht.
 Die lokale HTML-Datei blieb im Browserwerkzeug gesperrt; daraus wird keine
 neue interaktive Browserprüfung abgeleitet. macOS und vollständige externe

@@ -34,6 +34,7 @@ static void documentation_window_destroy(app *a) {
     memset(a->doc_figure_fonts,0,sizeof a->doc_figure_fonts);
     memset(a->doc_type_fonts,0,sizeof a->doc_type_fonts);memset(a->doc_type_em,0,sizeof a->doc_type_em);
     memset(&a->doc_figure_draw_font,0,sizeof a->doc_figure_draw_font);
+    memset(&a->doc_figure_caption_draw_font,0,sizeof a->doc_figure_caption_draw_font);
     memset(a->doc_font_em,0,sizeof a->doc_font_em);
     memset(a->doc_spaced_fonts,0,sizeof a->doc_spaced_fonts);
     a->doc_type_document=NULL;a->doc_type_version=0;a->doc_lead_text=SIZE_MAX;
@@ -108,7 +109,8 @@ static bool documentation_fonts_load(app *a,float density,unsigned size,unsigned
     }
     a->doc_raster_density=density;a->doc_failed_density=0;
     if(replace){memset(a->doc_type_fonts,0,sizeof a->doc_type_fonts);memset(a->doc_type_em,0,sizeof a->doc_type_em);
-        memset(&a->doc_figure_draw_font,0,sizeof a->doc_figure_draw_font);}
+        memset(&a->doc_figure_draw_font,0,sizeof a->doc_figure_draw_font);
+        memset(&a->doc_figure_caption_draw_font,0,sizeof a->doc_figure_caption_draw_font);}
     printf("F1 font demand: %s %u variants, density %.3f\n",replace?"replace":"append",added,density);
     if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: F1 fonts ready %.6f\n",ps_clock());
     return true;
@@ -313,6 +315,7 @@ static bool documentation_window_render(app *a, const char *capture_path) {
         a->doc_detail_test_requested=true;
     }
     documentation_detail_draw_probe(a);
+    if(capture_path)documentation_context_svg_probe(a);
     documentation_sidebar_draw_probe(a);
     documentation_math_draw_probe(a);
     documentation_inline_math_draw_probe(a);

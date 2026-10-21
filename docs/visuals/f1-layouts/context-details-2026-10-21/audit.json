@@ -1,0 +1,962 @@
+{
+  "created_utc": "2026-10-21T18:27:56.225230+00:00",
+  "scope": "Bounded native code-head/caption implementation and proof self-audit; full H and whole UI remain open.",
+  "checks": {
+    "frozen_source_files": 89,
+    "foreign_files_unchanged": 10,
+    "font_assets": 14,
+    "linebreak_assets": 20,
+    "recorded_terminal_runs": 6,
+    "final_display_groups_per_platform": 6,
+    "catalog_per_platform": "passed",
+    "actual_model_states_per_platform": 12,
+    "actual_head_states_per_platform": 7,
+    "model_raster_scales": [
+      1,
+      2
+    ],
+    "native_pngs": 24,
+    "h_image_pairs_identical_outside_caption": 112,
+    "changed_caption_images": 48,
+    "example_pairs_identical_outside_head": 4,
+    "old_head_pixel_check": "expected-failure",
+    "production_unchanged_between_93_and_94": true,
+    "release_build": "completed",
+    "cleanup_files": 46,
+    "cleanup_bytes": 69825818,
+    "local_doc_links": 167,
+    "python_and_json_syntax": true,
+    "git_diff_check": true,
+    "all_staged_owned_only": true
+  },
+  "owned_files": [
+    "app/documentation_code_preview_tests.inc",
+    "app/documentation_h.inc",
+    "app/documentation_keyboard_tests.inc",
+    "app/documentation_model_tests.inc",
+    "app/documentation_window.inc",
+    "app/main.c",
+    "tests/check_display_workflow.py",
+    "tests/native_integration_cases.json",
+    "docs/visuals/f1-layouts/CODE-PREVIEW.md",
+    "docs/visuals/f1-layouts/CONTEXT-DETAILS.md",
+    "docs/visuals/f1-layouts/H-FIDELITY.md",
+    "docs/visuals/f1-layouts/NEXT-CHAT.md",
+    "docs/visuals/f1-layouts/SVG-LABELS.md",
+    "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+    "docs/visuals/unified-workspace/README.md",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/audit.json",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/cleanup.json",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/linux-bundled-model-dark-2x.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/linux-bundled-model-large-contrast-2x.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/linux-code-c-dark.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/linux-code-c-large-light.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/linux-code-physim-large-contrast.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/linux-code-physim-large-dark.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/linux-model-dark-1x.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/linux-model-dark-2x.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/linux-model-large-contrast-1x.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/linux-model-large-contrast-2x.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/linux-model-narrow-light-1x.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/linux-model-narrow-light-2x.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/validation.json",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/windows-bundled-model-dark-2x.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/windows-bundled-model-large-contrast-2x.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/windows-code-c-dark.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/windows-code-c-large-light.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/windows-code-physim-large-contrast.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/windows-code-physim-large-dark.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/windows-model-dark-1x.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/windows-model-dark-2x.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/windows-model-large-contrast-1x.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/windows-model-large-contrast-2x.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/windows-model-narrow-light-1x.png",
+    "docs/visuals/f1-layouts/context-details-2026-10-21/windows-model-narrow-light-2x.png"
+  ],
+  "inputs": [
+    {
+      "path": "app/documentation_code_preview_tests.inc",
+      "bytes": 8284,
+      "sha256": "b2adf12bfebdcaf8e38bcbcdba4061f8e1c6d064d2ec29098e768dc80bdc16bf"
+    },
+    {
+      "path": "app/documentation_h.inc",
+      "bytes": 42156,
+      "sha256": "47fa3e365915085f7ac1e81623395b3129ffae3496cc75b81457e322fc8ec0c5"
+    },
+    {
+      "path": "app/documentation_keyboard_tests.inc",
+      "bytes": 103677,
+      "sha256": "c7baa4edc10e6cc63b9891d25b9a09f996fe2799c4f05d366c7303bf809a2e56"
+    },
+    {
+      "path": "app/documentation_model_tests.inc",
+      "bytes": 3011,
+      "sha256": "6c35554765989555ecdefaec5c15826949a1a3f40c10c706fbcc9744e6a95720"
+    },
+    {
+      "path": "app/documentation_window.inc",
+      "bytes": 19789,
+      "sha256": "b0c6683b0621059951960738f54edb193641b1ed6874170eb4a8c1ceb7e94d37"
+    },
+    {
+      "path": "app/main.c",
+      "bytes": 277434,
+      "sha256": "1fef82ee0b8d7c39054a887bb19e7e20aa00918acc66d97bab95f9d80a1cb6f5"
+    },
+    {
+      "path": "tests/check_display_workflow.py",
+      "bytes": 146266,
+      "sha256": "4bab0e62328660953ba38d261765fc2796822663f8a7b4850eeb9ccdc9005ede"
+    },
+    {
+      "path": "tests/native_integration_cases.json",
+      "bytes": 325431,
+      "sha256": "9c991b57ef8f9b610838b295c6aeb502c9374bb93c6207adbefca0aef75aa040"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/CODE-PREVIEW.md",
+      "bytes": 11811,
+      "sha256": "05b476b2fd28e23bf2364111cbafe7e5a7797c17963968c6c17cf4a6498c7d5d"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/CONTEXT-DETAILS.md",
+      "bytes": 7972,
+      "sha256": "319e82af5259ec1cbfcab742e9d83ce9f5b954346593272c9cfa69fc607e9e65"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "bytes": 29620,
+      "sha256": "af2114d21342d8c04d907eab557b5182551a5022a9505b1636c653b0235d3ee9"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/NEXT-CHAT.md",
+      "bytes": 6635,
+      "sha256": "778d875d376942e25f4db7457732ffebe1ba37a4c5f0af13e36c8cc77497965b"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "bytes": 9224,
+      "sha256": "a40623a35fc3b7a8489aba8f4135b206c8515550369f5fcea338b2b8caa98f3d"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "bytes": 13633,
+      "sha256": "0481e49883785434a641b48c732f02363675d36dd56431ebf3b2bdfd1fcfd66d"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/README.md",
+      "bytes": 10293,
+      "sha256": "afca6c5e1ebe46b35ff4d16d41a4a42dcc4c562c55ba648e0457d622824d1b5b"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/cleanup.json",
+      "bytes": 12446,
+      "sha256": "cd7b88164e091bcea36726385315e2911ea690fb4592d57d5f8c8d0c55fe02e7"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/linux-bundled-model-dark-2x.png",
+      "bytes": 386398,
+      "sha256": "c127d47580b80bfdf9644b21fa08ca390798dd68cc2e4da74412d743b409e932"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/linux-bundled-model-large-contrast-2x.png",
+      "bytes": 209129,
+      "sha256": "00f0ed64f704ea675a7765e63b1305701ecc901b85e3f2adac6f3c261b86b7ed"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/linux-code-c-dark.png",
+      "bytes": 156620,
+      "sha256": "6c9b9e7809d4bb96a33d1f080fd81a63c817edf4d079b9a14fc23f5b443ab06d"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/linux-code-c-large-light.png",
+      "bytes": 134497,
+      "sha256": "4794b079f5c3f8bcaac432d7acd1a0dad616fd48e22bb378d6eea29d2d7ebf86"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/linux-code-physim-large-contrast.png",
+      "bytes": 124511,
+      "sha256": "2b0a3a8ccc68e5d1c2e768b837c5c93355e9dc036b5e460e1d6c49ebc665baa7"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/linux-code-physim-large-dark.png",
+      "bytes": 132208,
+      "sha256": "28233535d1eff136d7cce38aac58df12f8ced6782f6f9f799895fafec61dddb7"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/linux-model-dark-1x.png",
+      "bytes": 184726,
+      "sha256": "1989be899806a8740fda76397b858665b625825975434219cbd037aa01bee9f3"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/linux-model-dark-2x.png",
+      "bytes": 376321,
+      "sha256": "229d4afdda725d3fbe7ebaaabf3e95674ae897300fd6bb18e869f1ff888e6792"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/linux-model-large-contrast-1x.png",
+      "bytes": 92507,
+      "sha256": "4f6b7143f4157763a1df95164df42fe0492099e7a7d78dc9c89bde1b2aa727d9"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/linux-model-large-contrast-2x.png",
+      "bytes": 175159,
+      "sha256": "65660bff60e6815aa9dc9e819f69dd5f5b6acba9db86d14ed6dc698f9bb916f4"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/linux-model-narrow-light-1x.png",
+      "bytes": 122581,
+      "sha256": "d91410bc2c0e0577d0ad8f07d0e0b017b3e6d3fe14672381892fe54c6b54b0cb"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/linux-model-narrow-light-2x.png",
+      "bytes": 237668,
+      "sha256": "db5970fb4374a95f7cda2bbcccb63a467b1a6e9c2bc86eeb93f30795a01ef0ee"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/validation.json",
+      "bytes": 306359,
+      "sha256": "683b2018a5210e274902a0da4fca0598b40ad3170fa4cb0482083ce35fcbf33d"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/windows-bundled-model-dark-2x.png",
+      "bytes": 382580,
+      "sha256": "9b67d8a0ff623a1feeaaf32f8ac72dee3142da287a1423adda13e783d96d72b0"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/windows-bundled-model-large-contrast-2x.png",
+      "bytes": 209111,
+      "sha256": "7363e20d8526a54e137ff0f8abefa8b569892b972add55592bb47e54ce474d65"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/windows-code-c-dark.png",
+      "bytes": 137101,
+      "sha256": "7385b25555ef8b72cbdd3bc23968bd03d31449276bc9bc88e921f67665d80c3d"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/windows-code-c-large-light.png",
+      "bytes": 123537,
+      "sha256": "22bc4ecfb25ae7c11937e3c32fdd72afbe821ea819573721f8bd74c9af7172d2"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/windows-code-physim-large-contrast.png",
+      "bytes": 114551,
+      "sha256": "c35d63939374a2cb09d03bbc77295665caf557f632c986e7ed7f810f2bf84066"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/windows-code-physim-large-dark.png",
+      "bytes": 117914,
+      "sha256": "cb8d6be9b15ff31d35b62851aabed9945cc26013e227ce165365fe6e4f1a15e4"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/windows-model-dark-1x.png",
+      "bytes": 166525,
+      "sha256": "e4eded21be0c2e5de80c6f5cb0fc6da566efdb9dd3584735188a530437a140fb"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/windows-model-dark-2x.png",
+      "bytes": 370854,
+      "sha256": "1aa6328dcead87c08f9888cc8a767b9cf07ed908d033f488b161524bf90e05b9"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/windows-model-large-contrast-1x.png",
+      "bytes": 104208,
+      "sha256": "bac47a7170638b44442cd1034ae0357a09ec6f00b91109413f0153fa4364133b"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/windows-model-large-contrast-2x.png",
+      "bytes": 204160,
+      "sha256": "2ef14d8fa3a72145237ecc23b013e2779ebef3c1b9b9537c3d13a427a705b44f"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/windows-model-narrow-light-1x.png",
+      "bytes": 118210,
+      "sha256": "07bee6cfc90da7216a6515450a9800614834a226917b22abc12781f5329b0635"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/context-details-2026-10-21/windows-model-narrow-light-2x.png",
+      "bytes": 252221,
+      "sha256": "87ada7b8f57b2319ddfe61392d9165e2369b31807892451230accde1bf094948"
+    }
+  ],
+  "local_links": [
+    {
+      "document": "docs/visuals/f1-layouts/CODE-PREVIEW.md",
+      "target": "CONTEXT-DETAILS.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CODE-PREVIEW.md",
+      "target": "SVG-LABELS.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CODE-PREVIEW.md",
+      "target": "../../../third_party/libunibreak-8.0/README.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CODE-PREVIEW.md",
+      "target": "code-preview-2026-10-21/windows-c-start.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CODE-PREVIEW.md",
+      "target": "code-preview-2026-10-21/windows-long-token-end.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CODE-PREVIEW.md",
+      "target": "code-preview-2026-10-21/linux-c-large-start.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CODE-PREVIEW.md",
+      "target": "code-preview-2026-10-21/validation.json"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CODE-PREVIEW.md",
+      "target": "code-preview-2026-10-21/audit.json"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CODE-PREVIEW.md",
+      "target": "code-preview-2026-10-21/cleanup.json"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CODE-PREVIEW.md",
+      "target": "../unified-workspace/NATIVE-FIDELITY.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CONTEXT-DETAILS.md",
+      "target": "CODE-PREVIEW.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CONTEXT-DETAILS.md",
+      "target": "SVG-LABELS.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CONTEXT-DETAILS.md",
+      "target": "DESIGN-H.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CONTEXT-DETAILS.md",
+      "target": "context-details-2026-10-21/windows-model-dark-2x.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CONTEXT-DETAILS.md",
+      "target": "context-details-2026-10-21/windows-code-c-dark.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CONTEXT-DETAILS.md",
+      "target": "context-details-2026-10-21/windows-code-physim-large-dark.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CONTEXT-DETAILS.md",
+      "target": "context-details-2026-10-21/windows-bundled-model-dark-2x.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CONTEXT-DETAILS.md",
+      "target": "context-details-2026-10-21/linux-model-narrow-light-2x.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CONTEXT-DETAILS.md",
+      "target": "context-details-2026-10-21/linux-model-large-contrast-2x.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CONTEXT-DETAILS.md",
+      "target": "../unified-workspace/NATIVE-FIDELITY.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CONTEXT-DETAILS.md",
+      "target": "context-details-2026-10-21/validation.json"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CONTEXT-DETAILS.md",
+      "target": "context-details-2026-10-21/audit.json"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/CONTEXT-DETAILS.md",
+      "target": "context-details-2026-10-21/cleanup.json"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "NATIVE-H.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "CONTEXT-DETAILS.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "CODE-PREVIEW.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "SVG-LABELS.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "NAV-CONTEXT.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "SCROLL.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "KERNING.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "ARTICLE-FLOW.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "TYPOGRAPHY.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "SECONDARY-ACTIONS.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "../unified-workspace/WORKBENCH-CONTEXT-FLOW.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "native-h-reference-dark.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "native-h-reference-light.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "native-h-reference-minimum.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "native-h-reference-large.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "native-h-controls-dark.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "native-h-controls-light.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "native-h-controls-minimum.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "native-h-controls-large.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "PLAIN-LETTER-INPUT.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "native-h-fidelity-dark.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "native-h-fidelity-light.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "native-h-fidelity-dark-left-closed.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "native-h-fidelity-light-left-closed.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "native-h-fidelity-dark-both-closed.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "native-h-fidelity-light-both-closed.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "native-h-fidelity-dark-right-closed.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "native-h-fidelity-light-right-closed.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "native-h-fidelity-minimum.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "native-h-fidelity-large.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "native-h-fidelity-example.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "native-h-fidelity-contrast.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "READING-FOCUS.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "target": "PANE-NAVIGATION.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/NEXT-CHAT.md",
+      "target": "CONTEXT-DETAILS.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/NEXT-CHAT.md",
+      "target": "CODE-PREVIEW.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/NEXT-CHAT.md",
+      "target": "SVG-LABELS.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/NEXT-CHAT.md",
+      "target": "NAV-CONTEXT.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/NEXT-CHAT.md",
+      "target": "SCROLL.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/NEXT-CHAT.md",
+      "target": "KERNING.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/NEXT-CHAT.md",
+      "target": "ARTICLE-FLOW.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/NEXT-CHAT.md",
+      "target": "TYPOGRAPHY.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/NEXT-CHAT.md",
+      "target": "SECONDARY-ACTIONS.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/NEXT-CHAT.md",
+      "target": "H-FIDELITY.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/NEXT-CHAT.md",
+      "target": "../unified-workspace/NATIVE-FIDELITY.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/NEXT-CHAT.md",
+      "target": "READING-FOCUS.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/NEXT-CHAT.md",
+      "target": "PANE-NAVIGATION.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/NEXT-CHAT.md",
+      "target": "WINDOWS-FOCUS-STATE.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/NEXT-CHAT.md",
+      "target": "PLAIN-LETTER-INPUT.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/NEXT-CHAT.md",
+      "target": "NATIVE-H.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "CONTEXT-DETAILS.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "NAV-CONTEXT.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "../unified-workspace/NATIVE-FIDELITY.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "figure-font-2026-10-21/validation.json"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "NAV-CONTEXT.md"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "figure-font-2026-10-21/windows-h-dark.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "figure-font-2026-10-21/windows-h-light.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "figure-font-2026-10-21/windows-reader-32.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "figure-font-2026-10-21/windows-ui-22-dark.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "figure-font-2026-10-21/windows-ui-22-light.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "figure-font-2026-10-21/windows-high-contrast.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "figure-font-2026-10-21/windows-bundled-16.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "figure-font-2026-10-21/windows-bundled-32.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "figure-font-2026-10-21/linux-h-dark.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "figure-font-2026-10-21/linux-h-light.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "figure-font-2026-10-21/linux-reader-32.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "figure-font-2026-10-21/linux-ui-22-dark.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "figure-font-2026-10-21/linux-ui-22-light.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "figure-font-2026-10-21/linux-high-contrast.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "figure-font-2026-10-21/linux-bundled-16.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "figure-font-2026-10-21/linux-bundled-32.png"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "figure-font-2026-10-21/audit.json"
+    },
+    {
+      "document": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "target": "figure-font-2026-10-21/cleanup.json"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "../develop-designs/DESIGN.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "../simulation-designs/DESIGN.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "../analysis-workspace/DESIGN.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "../f1-layouts/DESIGN-H.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "RESIZING.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "EXPORT-EXAMPLE.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "../../decisions/010-analysis-graphic-export.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "WORKBENCH-CONTEXT-FLOW.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "SHELL-NATIVE.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "WORKBENCH-GEOMETRY.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "WORKBENCH-CONTEXT.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "WORKBENCH-CONTEXT-FLOW.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "ANALYSIS-CONTROLS.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "ANALYSIS-UNITS.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "ANALYSIS-NATIVE.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "../f1-layouts/CONTEXT-DETAILS.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "../f1-layouts/CODE-PREVIEW.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "../f1-layouts/SVG-LABELS.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "../f1-layouts/NAV-CONTEXT.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "../f1-layouts/SCROLL.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "../f1-layouts/KERNING.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "../f1-layouts/ARTICLE-FLOW.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "../f1-layouts/TYPOGRAPHY.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "../f1-layouts/SECONDARY-ACTIONS.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "native-2026-10-20/validation.json"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "native-2026-10-20/counterexample-hidden-tooltip.png"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "native-2026-10-20/windows-minimum-scrolled-v13.png"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "native-2026-10-20/linux-minimum-scrolled-v13.png"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "native-2026-10-20/windows-develop-dark.png"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "native-2026-10-20/windows-develop-light.png"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "native-2026-10-20/linux-develop-dark.png"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "native-2026-10-20/linux-develop-light.png"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "native-2026-10-20/windows-simulate-dark-v13.png"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "native-2026-10-20/windows-simulate-light-v13.png"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "native-2026-10-20/linux-simulate-dark-v13.png"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "native-2026-10-20/linux-simulate-light-v13.png"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "target": "ANALYSIS-NATIVE.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "index.html"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "NATIVE-FIDELITY.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "ANALYSIS-NATIVE.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "ANALYSIS-CONTROLS.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "ANALYSIS-UNITS.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "WORKBENCH-CONTEXT.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "WORKBENCH-CONTEXT-FLOW.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "../f1-layouts/CONTEXT-DETAILS.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "../f1-layouts/CODE-PREVIEW.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "../f1-layouts/SVG-LABELS.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "../f1-layouts/NAV-CONTEXT.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "../f1-layouts/SCROLL.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "../f1-layouts/KERNING.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "../f1-layouts/ARTICLE-FLOW.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "../f1-layouts/TYPOGRAPHY.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "../f1-layouts/SECONDARY-ACTIONS.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "NEXT-CHAT.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "IMPLEMENTATION.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "RESIZING.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "EXPORT-EXAMPLE.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "../analysis-workspace/index.html"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "../../decisions/010-analysis-graphic-export.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "resizing-validation.json"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "../develop-designs/README.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "../simulation-designs/README.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "../analysis-workspace/README.md"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "validation.json"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "resizing-validation.json"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "develop-dark.png"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "develop-light.png"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "simulate-dark.png"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "simulate-light.png"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "analyze-dark.png"
+    },
+    {
+      "document": "docs/visuals/unified-workspace/README.md",
+      "target": "analyze-light.png"
+    }
+  ],
+  "limits": [
+    "2x atlas and explicit GL export target are not a hardware monitor/DPI transition",
+    "Large UI text keeps accessible caption reflow instead of fixed SVG typography",
+    "System/fallback fonts and native rasterization can differ from the browser reference",
+    "No new interactive browser reference or macOS execution",
+    "No new full external screenreader acceptance",
+    "Local binaries include separately hashed foreign changes",
+    "Full H and whole UI acceptance, including mandatory graphic export, remain open"
+  ]
+}

@@ -49,10 +49,15 @@ static void documentation_code_preview_test_frame(app *a,int *stage,int *code,co
     case 4:
         ok=a->doc_focus==DOC_EXAMPLE_TAB;test_window_key_mod(a->doc_window,SDLK_TAB,0);break;
     case 5:
-        ok=a->doc_focus==DOC_CONTEXT_COPY;test_window_key_mod(a->doc_window,SDLK_TAB,0);frames=0;break;
+        ok=a->doc_focus==DOC_CONTEXT_COPY;
+        snprintf(image,sizeof image,"docs-code-%u-head.bmp",sample);*capture=image;
+        test_window_key_mod(a->doc_window,SDLK_TAB,0);frames=0;break;
     case 6:
         if(frames++<2 || a->doc_focus_reveal){--*stage;return;}
         ok=a->doc_focus==DOC_CONTEXT_CODE && nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Beispielcode horizontal scrollen");
+        {struct nk_rect h=a->doc_context_head_bounds,p=a->doc_context_code_bounds;struct nk_color edit=UI_COLOR(edit),divider=UI_COLOR(divider);
+         printf("DOCUMENTATION CODE FRAME: case=%u head=%.0f,%.0f,%.0f,%.0f pre=%.0f,%.0f,%.0f,%.0f edit=%u,%u,%u divider=%u,%u,%u\n",
+            sample,h.x,h.y,h.w,h.h,p.x,p.y,p.w,p.h,edit.r,edit.g,edit.b,divider.r,divider.g,divider.b);}
         snprintf(image,sizeof image,"docs-code-%u-start.bmp",sample);*capture=image;
         test_window_key_mod(a->doc_window,SDLK_END,0);break;
     case 7:
