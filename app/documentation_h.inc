@@ -374,7 +374,8 @@ static void documentation_context_content(app *a) {
         }
         nk_style_pop_font(ui);
     } else {
-        nk_layout_row_dynamic(ui,205,1);r=nk_widget_bounds(ui);nk_widget(&r,ui);
+        int window_width,window_height;SDL_GetWindowSize(a->doc_window,&window_width,&window_height);(void)window_height;
+        nk_layout_row_dynamic(ui,window_width<=900?180:205,1);r=nk_widget_bounds(ui);nk_widget(&r,ui);
         ps_ui_accessibility_label(ui,r,context->title);
         documentation_context_figure(a,context->diagram,r);
         documentation_h_label(a,context->diagram<3?"Ausgangswerte · Vakuum":"Ausgangswerte",true);

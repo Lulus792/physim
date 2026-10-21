@@ -477,7 +477,8 @@ static const struct nk_user_font *documentation_block_font(const app *a,const ps
         if(b->level==1)return documentation_type_font(a,DOC_TYPE_TITLE);
         return documentation_type_font(a,b->level==2?DOC_TYPE_H2:DOC_TYPE_H3);
     }
-    if(b->kind==PS_DOC_TABLE_ROW && b->level)return documentation_type_font(a,DOC_TYPE_STRONG);
+    if(b->kind==PS_DOC_TABLE_ROW)return documentation_type_font(a,b->level?DOC_TYPE_TABLE_STRONG:DOC_TYPE_TABLE);
+    if(documentation_is_lead(a,b))return documentation_type_font(a,DOC_TYPE_LEAD);
     return documentation_type_font(a,DOC_TYPE_BODY);
 }
 #include "documentation_math.inc"
@@ -489,8 +490,10 @@ static const ps_doc_span *documentation_span_at(const ps_document *d,const ps_do
 }
 static const struct nk_user_font *documentation_span_font(const app *a,const ps_doc_block *b,const ps_doc_span *s) {
     if(b->kind==PS_DOC_HEADING)return documentation_block_font(a,b);
-    if(s && (s->style&PS_DOC_INLINE_CODE))return documentation_type_font(a,DOC_TYPE_INLINE_CODE);
-    if(s && (s->style&PS_DOC_BOLD))return documentation_type_font(a,DOC_TYPE_STRONG);
+    if(s && (s->style&PS_DOC_INLINE_CODE))return documentation_type_font(a,b->kind==PS_DOC_TABLE_ROW?DOC_TYPE_TABLE_CODE:
+        documentation_is_lead(a,b)?DOC_TYPE_LEAD_CODE:DOC_TYPE_INLINE_CODE);
+    if(s && (s->style&PS_DOC_BOLD))return documentation_type_font(a,b->kind==PS_DOC_TABLE_ROW?DOC_TYPE_TABLE_STRONG:
+        documentation_is_lead(a,b)?DOC_TYPE_LEAD_STRONG:DOC_TYPE_STRONG);
     return documentation_block_font(a,b);
 }
 static float documentation_glyph_width(const struct nk_user_font *font,const char *text,int bytes) {
@@ -521,6 +524,7 @@ static float documentation_font_baseline(const struct nk_user_font *font) {
     const struct nk_font *native=font->userdata.ptr;
     return native->info.ascent*font->height/native->info.height;
 }
+#include "documentation_article_flow.inc"
 static const ps_doc_formula_variant *documentation_inline_variant(const app *a,const ps_doc_span *span,float width) {
     if(!span || !span->formula)return NULL;
     const ps_doc_formula *f=span->formula;float zoom=(documentation_font_size(a)/16.f);
@@ -531,32 +535,32 @@ static const ps_doc_formula_variant *documentation_inline_variant(const app *a,c
 static size_t documentation_rich_line_metrics(const app *a,const ps_document *d,const ps_doc_block *b,
     size_t at,float width,size_t *length,float *height,float *baseline) {
     const char *text=d->text+b->text;size_t begin=at,space=SIZE_MAX;
-    float used=0,h=b->code_line_height>0?b->code_line_height:documentation_block_font(a,b)->height+6,space_height=h;
-    float above=documentation_font_baseline(documentation_block_font(a,b)),below=h-above,space_above=above;
-    bool has_math=false,space_math=false;
+    const struct nk_user_font *base=documentation_block_font(a,b);
+    float used=0,h=documentation_block_line_height(a,b),space_height=h;
+    float above=documentation_font_baseline(base)+(h-base->height)/2,below=h-above,space_above=above;
     while(at<b->length) {
-        if(text[at]=='\r'){*length=at-begin;*height=h;*baseline=has_math?above:-1;return at-begin+(at+1<b->length && text[at+1]=='\n'?2:1);}
-        if(text[at]=='\n'){*length=at-begin;*height=h;*baseline=has_math?above:-1;return at-begin+1;}
+        if(text[at]=='\r'){*length=at-begin;*height=h;*baseline=above;return at-begin+(at+1<b->length && text[at+1]=='\n'?2:1);}
+        if(text[at]=='\n'){*length=at-begin;*height=h;*baseline=above;return at-begin+1;}
         const ps_doc_span *span=documentation_span_at(d,b,b->text+at);
         const struct nk_user_font *font=documentation_span_font(a,b,span);
-        nk_rune rune;int bytes=nk_utf_decode(text+at,&rune,(int)(b->length-at));if(bytes<=0)bytes=1;
-        float glyph=documentation_glyph_width(font,text+at,bytes);
+        float glyph;size_t bytes=documentation_rich_cluster(font,text+at,b->length-at,&glyph);
         const ps_doc_formula_variant *math=documentation_inline_variant(a,span,width);
-        if(math) {bytes=(int)span->length;glyph=math->width*(documentation_font_size(a)/16.f);}
+        if(math) {bytes=span->length;glyph=math->width*(documentation_font_size(a)/16.f);}
         if(at>begin && used+glyph>width) {
-            if(space!=SIZE_MAX && space>begin){*length=space-begin;*height=space_height;*baseline=space_math?space_above:-1;return space-begin+1;}
-            *length=at-begin;*height=h;*baseline=has_math?above:-1;return at-begin;
+            if(space!=SIZE_MAX && space>begin){*length=space-begin;*height=space_height;*baseline=space_above;return space-begin+1;}
+            *length=at-begin;*height=h;*baseline=above;return at-begin;
         }
         if(b->code_line_height<=0) {
-            float ascent=math?math->baseline*(documentation_font_size(a)/16.f)+3:documentation_font_baseline(font);
-            float descent=math?(math->height-math->baseline)*(documentation_font_size(a)/16.f)+3:font->height+6-ascent;
-            above=fmaxf(above,ascent);below=fmaxf(below,descent);has_math |= math!=NULL;
-            h=has_math?ceilf(above+below):fmaxf(h,font->height+6);
+            float line=documentation_span_line_height(a,b,span);
+            float ascent=math?math->baseline*(documentation_font_size(a)/16.f)+3:
+                documentation_font_baseline(font)+(line-font->height)/2;
+            float descent=math?(math->height-math->baseline)*(documentation_font_size(a)/16.f)+3:line-ascent;
+            above=fmaxf(above,ascent);below=fmaxf(below,descent);h=above+below;
         }
-        if(!math && (text[at]==' ' || text[at]=='\t')){space=at;space_height=h;space_above=above;space_math=has_math;}
+        if(!math && (text[at]==' ' || text[at]=='\t')){space=at;space_height=h;space_above=above;}
         used+=glyph;at+=(size_t)bytes;
     }
-    *length=at-begin;*height=h;*baseline=has_math?above:-1;return at-begin;
+    *length=at-begin;*height=h;*baseline=above;return at-begin;
 }
 static size_t documentation_rich_line(const app *a,const ps_document *d,const ps_doc_block *b,
     size_t at,float width,size_t *length,float *height) {
@@ -567,6 +571,15 @@ static float documentation_rich_height(const app *a,const ps_document *d,const p
     do {size_t length;float height;size_t used=documentation_rich_line(a,d,b,at,width,&length,&height);
         at+=used;total+=height;}while(at<b->length);
     return total;
+}
+static float documentation_rich_offset(const app *a,const ps_document *d,const ps_doc_block *b,size_t target,float width) {
+    size_t at=0;float y=0;
+    while(at<b->length) {
+        size_t length;float height;size_t used=documentation_rich_line(a,d,b,at,width,&length,&height);
+        if(target<at+used || at+used>=b->length)return y;
+        at+=used;y+=height;
+    }
+    return y;
 }
 static void documentation_rich_draw(app *a,ps_document *d,const ps_doc_block *b,struct nk_rect bounds) {
     struct nk_context *ui=a->doc_ui;struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
@@ -601,10 +614,10 @@ static void documentation_rich_draw(app *a,ps_document *d,const ps_doc_block *b,
             size_t next=span?span->text+span->length-b->text:end;if(next>end)next=end;
             const ps_doc_formula_variant *math=documentation_inline_variant(a,span,bounds.w);
             float zoom=(documentation_font_size(a)/16.f);
-            float width=math?math->width*zoom:documentation_text_width(font,text+pos,next-pos);
-            float draw_y=b->code_line_height>0?y+grid_offset:baseline<0?y:y+baseline-documentation_font_baseline(font);
+            float width=math?math->width*zoom:documentation_rich_width(font,text+pos,next-pos);
+            float draw_y=b->code_line_height>0?y+grid_offset:y+baseline-documentation_font_baseline(font);
             struct nk_rect part=math?nk_rect(x,y+baseline-math->baseline*zoom,width,math->height*zoom):
-                nk_rect(x,draw_y,width,b->code_line_height>0?height:font->height+6);
+                nk_rect(x,y,width,height);
             bool link=span && (span->style&PS_DOC_INLINE_LINK) && span->link<d->count;
             if(link) {
                 ps_doc_block *action=&d->blocks[span->link];float *hit=action->hit;
@@ -621,8 +634,8 @@ static void documentation_rich_draw(app *a,ps_document *d,const ps_doc_block *b,
                     if(math)nk_sdl_accessibility_text_box(ui,b->reading_begin+pos,b->reading_begin+next,part);
                     for(size_t glyph=pos;!math && glyph<next;) {
                         nk_rune rune;int bytes=nk_utf_decode(text+glyph,&rune,(int)(next-glyph));if(bytes<=0)bytes=1;
-                        float glyph_width=documentation_glyph_width(font,text+glyph,bytes);
-                        struct nk_rect box=nk_rect(glyph_x,draw_y,glyph_width,font->height+6);
+                        float glyph_width=documentation_rich_advance(font,text+glyph,next-glyph,bytes);
+                        struct nk_rect box=nk_rect(glyph_x,y,fmaxf(0,glyph_width),height);
                         if(b->code_line_height>0) {
                             struct nk_user_font_glyph ink={0};font->query(font->userdata,font->height,&ink,rune,0);
                             box=ink.width>0 && ink.height>0
@@ -635,10 +648,8 @@ static void documentation_rich_draw(app *a,ps_document *d,const ps_doc_block *b,
                 }
                 if(!searched || (match && match<text+pos)){match=ps_document_find(text+pos,a->doc_query);searched=true;}
                 bool found=match && match<text+next;
-                if(span && (span->style&PS_DOC_INLINE_CODE))
-                    nk_fill_rect(canvas,nk_rect(x-2,y-2,width+4,font->height+4),3,UI_COLOR(edit));
                 if(found)nk_stroke_rect(canvas,part,2,1,UI_COLOR(accent));
-                struct nk_color color=link || found?UI_COLOR(accent):UI_COLOR(doc_text);
+                struct nk_color color=link || found?UI_COLOR(accent):b->kind==PS_DOC_CODE?UI_COLOR(code_text):UI_COLOR(doc_text);
                 if(math) {
                     unsigned texture=documentation_math_texture_for(a,math);
                     if(texture){struct nk_image image=nk_image_id((int)texture);nk_draw_image(canvas,part,&image,color);}
@@ -647,12 +658,12 @@ static void documentation_rich_draw(app *a,ps_document *d,const ps_doc_block *b,
                 size_t chunk=pos;float draw_x=x;
                 while(!math && chunk<next) {
                     const char *tab=memchr(text+chunk,'\t',next-chunk);size_t last=tab?(size_t)(tab-text):next;
-                    float run_width=documentation_text_width(font,text+chunk,last-chunk);
+                    float run_width=documentation_rich_width(font,text+chunk,last-chunk);
                     if(last>chunk)nk_draw_text(canvas,nk_rect(draw_x,draw_y,run_width+1,font->height+6),text+chunk,(int)(last-chunk),font,nk_rgba(0,0,0,0),color);
                     draw_x+=run_width;if(tab)draw_x+=documentation_glyph_width(font,"\t",1);chunk=last+(tab?1:0);
                 }
                 if(link) {
-                    float underline=math?part.y+part.h-2:draw_y+font->height+2;
+                    float underline=math?part.y+part.h-2:y+baseline+3;
                     nk_stroke_line(canvas,x,underline,x+width,underline,1,color);
                 }
             }
@@ -726,18 +737,19 @@ static float documentation_table(app *a, const ps_doc_block *block, float width,
         ps_doc_block cell=*block;cell.text=range->text;cell.length=range->length;
         height =
             fmaxf(height,
-                  documentation_rich_height(a,a->documentation,&cell,fmaxf(1,cell_width-20))+16);
+                  documentation_rich_height(a,a->documentation,&cell,fmaxf(1,cell_width-16))+25);
     }
     if (!bounds)
         return height;
     struct nk_command_buffer *canvas = nk_window_get_canvas(a->doc_ui);
-    nk_fill_rect(canvas, *bounds, 4, block->level ? UI_COLOR(doc_header) : UI_COLOR(doc_body));
+    nk_fill_rect(canvas, *bounds, 0, block->level ? UI_COLOR(doc_header) : UI_COLOR(doc_body));
+    nk_fill_rect(canvas,nk_rect(bounds->x,bounds->y+bounds->h-1,bounds->w,1),0,UI_COLOR(divider));
     for (size_t i = 0; i < count; i++) {
         const ps_doc_cell *range=&a->documentation->cells[block->first_cell+i];
         ps_doc_block cell=*block;cell.text=range->text;cell.length=range->length;
         if(cell.reading_begin!=SIZE_MAX)cell.reading_begin+=cell.text-block->text;
-        documentation_rich_draw(a,a->documentation,&cell,nk_rect(bounds->x+(float)i*cell_width+10,
-            bounds->y+8,fmaxf(1,cell_width-20),bounds->h-16));
+        documentation_rich_draw(a,a->documentation,&cell,nk_rect(bounds->x+(float)i*cell_width+8,
+            bounds->y+12,fmaxf(1,cell_width-16),bounds->h-25));
     }
     return height;
 }
@@ -1097,17 +1109,24 @@ static bool documentation_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
 }
 static void documentation_focus_draw(app *a,int id,struct nk_rect bounds,bool body) {
     struct nk_context *ui=a->doc_ui;
-    if(nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ui->input,bounds)){a->doc_keyboard=false;a->doc_focus=id;}
+    if(!(ui->current->layout->flags&NK_WINDOW_ROM) && nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) &&
+       nk_input_is_mouse_hovering_rect(&ui->input,nk_window_get_content_region(ui)) &&
+       nk_input_is_mouse_hovering_rect(&ui->input,bounds)){a->doc_keyboard=false;a->doc_focus=id;}
     if(!a->doc_keyboard || a->doc_focus!=id)return;
     if(id!=DOC_BODY)nk_sdl_accessibility_keyboard_target(ui,bounds);
     if(body)bounds.h=fminf(bounds.h,nk_window_get_content_region(ui).h);
     if(id==DOC_BODY){struct nk_rect clip=nk_window_get_content_region(ui);bounds.h=fmaxf(0,fminf(bounds.h,clip.y+clip.h-bounds.y));}
+    bounds.x=truncf(bounds.x);bounds.y=truncf(bounds.y);bounds.w=truncf(bounds.w);bounds.h=truncf(bounds.h);
     a->doc_focus_bounds=bounds;
     nk_stroke_rect(nk_window_get_canvas(ui),bounds,3,2,UI_COLOR(accent));
     if(!a->doc_focus_reveal)return;
     struct nk_rect clip=nk_window_get_content_region(ui);float delta=0;
-    if(bounds.y<clip.y)delta=bounds.y-clip.y;
-    else if(bounds.y+bounds.h>clip.y+clip.h)delta=bounds.y+bounds.h-clip.y-clip.h;
+    /* Match nk_stroke_rect / nk_push_scissor's integer command geometry.
+     * Comparing unsnapped CSS fractions can never settle an nk_uint scroll. */
+    float top=truncf(bounds.y),bottom=top+truncf(bounds.h);
+    float clip_top=truncf(clip.y),clip_bottom=clip_top+truncf(clip.h);
+    if(top<clip_top)delta=top-clip_top;
+    else if(bottom>clip_bottom)delta=bottom-clip_bottom;
     if(body) {if(delta)a->doc_scroll_adjustment=delta;}
     else if(!strcmp(ui->current->name_string,"topics")) {
         if(delta)a->doc_navigation_scroll_y=(nk_uint)fmaxf(0,(float)a->doc_navigation_scroll_y+delta);
@@ -1227,24 +1246,97 @@ static void documentation_detail_draw_probe(app *a) {
 static struct nk_rect documentation_detail_label(app *a,const char *text) {
     struct nk_context *ui=a->doc_ui;const struct nk_user_font *font=documentation_type_font(a,DOC_TYPE_CRUMB);
     /* Configure once: a second layout call would insert an unused row. */
-    nk_layout_row_dynamic(ui,1,1);
+    ps_ui_row_exact_dynamic(ui,1,1);
     struct nk_rect bounds=nk_widget_bounds(ui);
-    float width=fmaxf(1,bounds.w-8);
-    float height=documentation_height(font,text,strlen(text),width)+8;
+    float width=fmaxf(1,bounds.w-32),line=.7f*documentation_font_size(a)*1.65f;
+    size_t measured=0;unsigned lines=0;
+    do {size_t count,used=documentation_line(font,text+measured,strlen(text)-measured,width,&count);measured+=used;++lines;}while(measured<strlen(text));
+    float height=lines*line;
     ui->current->layout->row.height=height+ui->style.window.spacing.y;
     enum nk_widget_layout_states visible=nk_widget(&bounds,ui);
+    bounds.x+=16;bounds.w=width;
     ps_ui_accessibility_label(ui,bounds,text);
     if(visible==NK_WIDGET_INVALID)return bounds;
-    size_t at=0,length=strlen(text);float y=bounds.y+4;
+    size_t at=0,length=strlen(text);float y=bounds.y+(line-font->height)/2;
     do {
         size_t count,used=documentation_line(font,text+at,length-at,width,&count);
         nk_draw_text(nk_window_get_canvas(ui),nk_rect(bounds.x,y,width+1,font->height),text+at,(int)count,
             font,nk_rgba(0,0,0,0),a->doc_error[0]?UI_COLOR(error):UI_COLOR(muted));
-        at+=used;y+=font->height+6;
+        at+=used;y+=line;
     } while(at<length);
     return bounds;
 }
 #include "documentation_actions.inc"
+static void documentation_code_header(app *a,const char *text,size_t block,float width,float gap) {
+    struct nk_context *ui=a->doc_ui;const struct nk_user_font *font=documentation_type_font(a,DOC_TYPE_CODE_HEAD);
+    float control=fmaxf(30,.75f*documentation_font_size(a)*1.2f+12),height=control+22;
+    ps_ui_row_exact_dynamic(ui,height+gap,1);struct nk_rect outer;
+    enum nk_widget_layout_states visible=nk_widget(&outer,ui);
+    struct nk_rect frame=nk_rect(outer.x+12,outer.y+gap,width-24,height);
+    struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+    nk_fill_rect(canvas,frame,0,UI_COLOR(edit));
+    nk_fill_rect(canvas,nk_rect(frame.x,frame.y,frame.w,1),0,UI_COLOR(divider));
+    nk_fill_rect(canvas,nk_rect(frame.x,frame.y,1,frame.h),0,UI_COLOR(divider));
+    nk_fill_rect(canvas,nk_rect(frame.x+frame.w-1,frame.y,1,frame.h),0,UI_COLOR(divider));
+    float copy=fminf(frame.w-22,documentation_text_width(font,"Code kopieren",13)+18);
+    struct nk_rect action=nk_rect(frame.x+frame.w-11-copy,frame.y+11,copy,control);
+    if(visible==NK_WIDGET_INVALID){documentation_focus_draw(a,DOC_COPY+(int)block,action,true);return;}
+    ps_ui_accessibility_label(ui,nk_rect(frame.x+11,frame.y+11,fmaxf(0,frame.w-copy-30),control),"Code");
+    nk_draw_text(canvas,nk_rect(frame.x+11,frame.y+(height-font->height)/2,fmaxf(0,frame.w-copy-30),font->height),
+        "Code",4,font,nk_rgba(0,0,0,0),UI_COLOR(code_text));
+    nk_style_push_font(ui,font);
+    bool enabled=!(ui->current->layout->flags&NK_WINDOW_ROM) && !ui->current->widgets_disabled;
+    if(ps_ui_accessibility_button(ui,action,"Code kopieren") || (enabled &&
+       nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) &&
+       nk_input_is_mouse_hovering_rect(&ui->input,nk_window_get_content_region(ui)) &&
+       nk_input_is_mouse_hovering_rect(&ui->input,action)))SDL_SetClipboardText(text);
+    nk_fill_rect(canvas,action,5,nk_input_is_mouse_hovering_rect(&ui->input,action)?UI_COLOR(button_hover):UI_COLOR(button));
+    float label=documentation_text_width(font,"Code kopieren",13);
+    nk_draw_text(canvas,nk_rect(action.x+(action.w-label)/2,action.y+(action.h-font->height)/2,label+1,font->height),
+        "Code kopieren",13,font,nk_rgba(0,0,0,0),UI_COLOR(code_text));
+    nk_style_pop_font(ui);documentation_focus_draw(a,DOC_COPY+(int)block,action,true);
+}
+static bool documentation_article_probe(app *a,const char *capture) {
+    if(!capture || !a->documentation)return true;
+    const char *name=capture,*slash=strrchr(capture,'/'),*backslash=strrchr(capture,'\\');
+    if(slash)name=slash+1;if(backslash && backslash+1>name)name=backslash+1;
+    unsigned index=0;int consumed=0;
+    if(sscanf(name,"docs-h-%u.bmp%n",&index,&consumed)!=1 || name[consumed])return true;
+    const ps_doc_block *heading=NULL;
+    for(size_t i=0;i<a->documentation->count;i++)if(a->documentation->blocks[i].kind==PS_DOC_HEADING && a->documentation->blocks[i].level==1){heading=&a->documentation->blocks[i];break;}
+    if(!heading)return false;
+    const struct nk_user_font *font=documentation_block_font(a,heading);
+    struct nk_user_font_glyph actual_glyph={0},base_glyph={0};
+    font->query(font->userdata,font->height,&actual_glyph,'A','B');
+    const documentation_spaced_font *spaced=font->userdata.ptr;
+    spaced->base->query(spaced->base->userdata,font->height,&base_glyph,'A','B');
+    float tracking=actual_glyph.xadvance-base_glyph.xadvance,step=0,first=-1,title_x=-1,crumb_x=-1;
+    char actual[4096];size_t used=0;const struct nk_command *command;
+    nk_foreach(command,a->doc_ui)if(command->type==NK_COMMAND_TEXT) {
+        const struct nk_command_text *text=(const struct nk_command_text *)command;
+        if(text->font==documentation_type_font(a,DOC_TYPE_CRUMB) && crumb_x<0)crumb_x=text->x;
+        if(text->font!=font || text->y<heading->hit[1]-font->height || text->y>=heading->hit[1]+heading->hit[3])continue;
+        if(title_x<0)title_x=text->x;
+        if(first<0)first=text->y;else if(!step && text->y>first)step=text->y-first;
+        for(int i=0;i<text->length;i++)if(!isspace((unsigned char)text->string[i]) && used<sizeof actual)actual[used++]=text->string[i];
+    }
+    size_t expected=0;bool bytes=true;const char *source=a->documentation->text+heading->text;
+    for(size_t i=0;i<heading->length;i++)if(!isspace((unsigned char)source[i])) {
+        if(expected>=used || actual[expected]!=source[i])bytes=false;++expected;
+    }
+    bytes=bytes && expected==used;
+    ps_doc_block body={0};body.kind=PS_DOC_TEXT;body.text=SIZE_MAX;
+    float line=documentation_block_line_height(a,heading),gap=-1;
+    for(size_t i=0;i<a->documentation->count;i++)if(documentation_is_lead(a,&a->documentation->blocks[i])) {
+        gap=a->documentation->blocks[i].hit[1]-heading->hit[1]-heading->hit[3];break;
+    }
+    printf("DOCUMENTATION H FLOW: case=%u title-line=%.3f title-step=%.3f body-line=%.3f lead-gap=%.3f inset-delta=%.3f lead-em=%.3f table-em=%.3f tracking=%.3f title-bytes=%d\n",
+        index,line,step,documentation_block_line_height(a,&body),gap,crumb_x-title_x,
+        documentation_type_font(a,DOC_TYPE_LEAD)->height/a->doc_type_em[DOC_TYPE_LEAD],
+        documentation_type_font(a,DOC_TYPE_TABLE)->height/a->doc_type_em[DOC_TYPE_TABLE],tracking,bytes);
+    return bytes && fabsf(tracking+.55f)<.001f && (!step || fabsf(step-line)<=1.01f) &&
+        fabsf(gap-20)<=1.01f && crumb_x>=0 && title_x>=0 && fabsf(crumb_x-title_x)<=1.01f;
+}
 static void documentation_view(app *a, float height) {
     struct nk_context *ui = a->doc_ui;
     a->doc_inline_clicked=-1;
@@ -1256,7 +1348,7 @@ static void documentation_view(app *a, float height) {
     /* CSS article padding and the breadcrumb paragraph's top margin. The
      * body group supplies the existing horizontal inset independently. */
     int window_width,window_height;SDL_GetWindowSize(a->doc_window,&window_width,&window_height);(void)window_height;
-    ps_ui_row_exact_dynamic(ui,window_width<1000?22:24,1);nk_spacer(ui);
+    ps_ui_row_exact_dynamic(ui,window_width<=900?35:37,1);nk_spacer(ui);
     if(strcmp(a->doc_last_query,a->doc_query)) {
         snprintf(a->doc_last_query,sizeof a->doc_last_query,"%s",a->doc_query);a->doc_match=0;a->doc_move_match=true;
     }
@@ -1296,11 +1388,15 @@ static void documentation_view(app *a, float height) {
     /* Peek the next row after the consumed detail row. An unused placeholder
      * row would be advanced by the following layout call and shift the group
      * below this measurement, making its scrollbar taller than its real clip. */
+    ps_ui_row_exact_dynamic(ui,21,1);nk_spacer(ui);
     struct nk_rect remaining=nk_widget_bounds(ui),clip=nk_window_get_content_region(ui);
-    nk_layout_row_dynamic(ui,fmaxf(20,fminf(height,clip.y+clip.h-remaining.y)),1);
+    ps_ui_row_exact_dynamic(ui,fmaxf(20,fminf(height,clip.y+clip.h-remaining.y)),1);
     struct nk_rect body_bounds=nk_widget_bounds(ui);
+    body_bounds.x=truncf(body_bounds.x);body_bounds.y=truncf(body_bounds.y);
+    body_bounds.w=truncf(body_bounds.w);body_bounds.h=truncf(body_bounds.h);
     a->doc_body_bounds=body_bounds;
     documentation_focus_draw(a,DOC_BODY,body_bounds,false);
+    nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(4,0));
     if (nk_group_scrolled_offset_begin(ui, &a->doc_scroll_x, &a->doc_scroll_y, "document-body",
                                        0)) {
         if (d) {
@@ -1311,28 +1407,31 @@ static void documentation_view(app *a, float height) {
                 a->doc_search_focus=a->doc_filter_focus=false;
             }
             for(size_t i=0;i<d->count;i++)d->blocks[i].hit[2]=0;
-            float width = fmaxf(40, nk_window_get_content_region(ui).w - 8);
+            float width = fmaxf(40,ui->current->layout->bounds.w);
             /* A dynamic single-column widget uses the panel bounds, while
              * content_region is its clip. Select the same formula variant for
              * measurement and drawing, including near a wrapping threshold. */
             float math_width=ui->current->layout->bounds.w;
             if (d->layout_width != width) {
+                float previous=0;
                 for (size_t i = 0; i < d->count; i++) {
                     ps_doc_block *b = &d->blocks[i];
                     b->code_line_height=documentation_grid_pitch(a,d,b);
+                    float gap=documentation_block_gap(a,b,&previous);
                     b->height =
                         b->kind == PS_DOC_TABLE_ROW
-                            ? documentation_table(a, b, width, NULL)
+                            ? documentation_table(a, b, width-24, NULL)
                         : b->kind == PS_DOC_MATH && documentation_math_variant(a,d,b,math_width-24)
                             ? documentation_math_variant(a,d,b,math_width-24)->height*((documentation_font_size(a)/16.f))+24
                         : b->kind == PS_DOC_IMAGE && documentation_media_kind(d->text+b->target)==3 ? 900
                         : b->kind == PS_DOC_IMAGE && documentation_media_kind(d->text+b->target) ? (documentation_media_kind(d->text+b->target)==1?320:480)
-                        : b->kind == PS_DOC_RULE ? 14
+                        : b->kind == PS_DOC_RULE ? 1
                         : b->kind == PS_DOC_LINK && b->inline_parent!=SIZE_MAX ? 0
                         : b->kind == PS_DOC_LINK
                             ? 32
-                            : documentation_rich_height(a,d,b,width - 24) +
-                                  16;
+                            : documentation_rich_height(a,d,b,width-(b->kind==PS_DOC_CODE?54:24))+
+                                  (b->kind==PS_DOC_CODE?36:0);
+                    if(!(b->kind==PS_DOC_LINK && b->inline_parent!=SIZE_MAX))b->height+=gap;
                 }
                 d->layout_width = width;
             }
@@ -1348,10 +1447,12 @@ static void documentation_view(app *a, float height) {
              * measured target only after this entire group has been submitted. */
             a->doc_jump_block = -1;
             a->doc_move_match = false;
+            float previous=0;
             for (size_t i = 0; i < d->count; i++) {
                 ps_doc_block *b = &d->blocks[i];
                 const char *text = d->text + b->text;
                 const struct nk_user_font *font = documentation_block_font(a,b);
+                float gap=documentation_block_gap(a,b,&previous);
                 if(b->kind==PS_DOC_LINK && b->inline_parent!=SIZE_MAX) {
                     struct nk_rect link_bounds=nk_rect(b->hit[0],b->hit[1],b->hit[2],b->hit[3]);
                     if(link_bounds.w>0) {
@@ -1363,23 +1464,22 @@ static void documentation_view(app *a, float height) {
                     }
                     continue;
                 }
+                float row_height=b->height;
                 if (b->kind == PS_DOC_CODE) {
-                    nk_layout_row_dynamic(ui, 28, 2);
-                    nk_label_colored(ui, "Code", NK_TEXT_LEFT, UI_COLOR(muted));
-                    struct nk_rect copy_bounds=nk_widget_bounds(ui);
-                    if (nk_button_label(ui, "Code kopieren"))
-                        SDL_SetClipboardText(text);
-                    documentation_focus_draw(a,DOC_COPY+(int)i,copy_bounds,true);
+                    documentation_code_header(a,text,i,width,gap);row_height-=gap;gap=0;
                 }
                 if(b->kind==PS_DOC_IMAGE && documentation_media_kind(d->text+b->target)==3) {
-                    documentation_pendulum(a,(int)i,width,b->height);
+                    if(gap>0){ps_ui_row_exact_dynamic(ui,gap,1);nk_spacer(ui);}
+                    documentation_pendulum(a,(int)i,width,b->height-gap);
                     if((int)i==a->doc_anchor_heading)a->doc_anchor_bounds=a->doc_visual_bounds[0];
                     if((int)i==target)section_scroll=fmaxf(0,a->doc_visual_bounds[0].y+(float)submitted_scroll-body_origin);
                     continue;
                 }
-                nk_layout_row_dynamic(ui, b->height, 1);
+                ps_ui_row_exact_dynamic(ui,row_height,1);
                 struct nk_rect block_bounds=nk_widget_bounds(ui);
+                block_bounds.y+=gap;block_bounds.h-=gap;
                 b->hit[0]=block_bounds.x;b->hit[1]=block_bounds.y;b->hit[2]=block_bounds.w;b->hit[3]=block_bounds.h;
+                if(b->kind==PS_DOC_TABLE_ROW || b->kind==PS_DOC_CODE){b->hit[0]+=12;b->hit[2]=width-24;}
                 if((int)i==a->doc_anchor_heading)a->doc_anchor_bounds=block_bounds;
                 if((int)i==target) {
                     float prefix=0;
@@ -1388,8 +1488,7 @@ static void documentation_view(app *a, float height) {
                     if(reading_offset>b->length)reading_offset=b->length;
                     const char *match=reading_byte!=SIZE_MAX?text+reading_offset:ps_document_find(text,a->doc_query);
                     if((!explicit_jump || reading_byte!=SIZE_MAX) && b->kind!=PS_DOC_TABLE_ROW && b->kind!=PS_DOC_MATH && match && match>text) {
-                        ps_doc_block preceding=*b;preceding.length=(size_t)(match-text);
-                        prefix=fmaxf(0,documentation_rich_height(a,d,&preceding,width-24)-(font->height+6));
+                        prefix=documentation_rich_offset(a,d,b,(size_t)(match-text),width-(b->kind==PS_DOC_CODE?54:24));
                     }
                     section_scroll=explicit_jump && target==0 && reading_byte==SIZE_MAX?0:fmaxf(0,block_bounds.y+(float)submitted_scroll-body_origin+prefix);
                     if(reading_byte!=SIZE_MAX && !reading_top)
@@ -1410,6 +1509,7 @@ static void documentation_view(app *a, float height) {
                 } else {
                     struct nk_rect rect;
                     enum nk_widget_layout_states state = nk_widget(&rect, ui);
+                    rect.y+=gap;rect.h-=gap;
                     bool link_geometry=(target>=0 && d->blocks[target].inline_parent==i) ||
                         (a->doc_keyboard && a->doc_focus>=DOC_LINK && a->doc_focus<DOC_LINK+(int)d->count &&
                          d->blocks[a->doc_focus-DOC_LINK].inline_parent==i);
@@ -1418,23 +1518,28 @@ static void documentation_view(app *a, float height) {
                         if(b->kind==PS_DOC_MATH && documentation_math_draw(a,d,b,rect)) {}
                         else if(b->kind==PS_DOC_IMAGE && documentation_media_kind(d->text+b->target))
                             documentation_diagram(a,documentation_media_kind(d->text+b->target),rect);
-                        else if (b->kind == PS_DOC_TABLE_ROW)
-                            documentation_table(a, b, width, &rect);
+                        else if (b->kind == PS_DOC_TABLE_ROW) {
+                            struct nk_rect table=nk_rect(rect.x+12,rect.y,width-24,rect.h);
+                            memcpy(b->hit,&table,sizeof b->hit);documentation_table(a,b,width-24,&table);
+                        }
                         else if (b->kind == PS_DOC_RULE)
-                            nk_stroke_line(canvas, rect.x, rect.y + 7, rect.x + rect.w, rect.y + 7,
-                                           1, UI_COLOR(border));
+                            nk_fill_rect(canvas,nk_rect(rect.x+12,rect.y,width-24,1),0,UI_COLOR(divider));
                         else {
                             if (b->kind == PS_DOC_CODE) {
-                                float x=fmaxf(rect.x,canvas->clip.x),y=fmaxf(rect.y,canvas->clip.y);
-                                float right=fminf(rect.x+rect.w,canvas->clip.x+canvas->clip.w);
-                                float bottom=fminf(rect.y+rect.h,canvas->clip.y+canvas->clip.h);
-                                if(right>x && bottom>y)nk_fill_rect(canvas,nk_rect(x,y,right-x,bottom-y),7,UI_COLOR(edit));
+                                struct nk_rect pre=nk_rect(rect.x+12,rect.y,width-24,rect.h);
+                                memcpy(b->hit,&pre,sizeof b->hit);nk_fill_rect(canvas,pre,0,UI_COLOR(edit));
+                                nk_fill_rect(canvas,nk_rect(pre.x,pre.y,pre.w,1),0,UI_COLOR(divider));
+                                nk_fill_rect(canvas,nk_rect(pre.x,pre.y+pre.h-1,pre.w,1),0,UI_COLOR(divider));
+                                nk_fill_rect(canvas,nk_rect(pre.x,pre.y,1,pre.h),0,UI_COLOR(divider));
+                                nk_fill_rect(canvas,nk_rect(pre.x+pre.w-1,pre.y,1,pre.h),0,UI_COLOR(divider));
                             }
-                            documentation_rich_draw(a,d,b,nk_rect(rect.x+12,rect.y+8,width-24,rect.h-16));
+                            documentation_rich_draw(a,d,b,b->kind==PS_DOC_CODE?
+                                nk_rect(rect.x+27,rect.y+18,width-54,rect.h-36):nk_rect(rect.x+12,rect.y,width-24,rect.h));
                         }
                     }
                 }
             }
+            ps_ui_row_exact_dynamic(ui,previous+(window_width<=900?36:40),1);nk_spacer(ui);
             /* Native links retain their document identity outside the viewport.
              * Pointer actions still use the renderer's individual fragments. */
             if(a->documentation==d && !documentation_publish_tables(a,d))
@@ -1450,6 +1555,7 @@ static void documentation_view(app *a, float height) {
         }
         nk_group_scrolled_end(ui);
     }
+    nk_style_pop_vec2(ui);
     if(a->doc_inline_clicked>=0 && a->documentation==d) {
         documentation_activate_link(a,(size_t)a->doc_inline_clicked);
     }

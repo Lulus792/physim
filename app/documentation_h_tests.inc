@@ -322,6 +322,26 @@ static void documentation_h_test_frame(app *a,int *stage,int *code,const char **
         ok=!a->doc_actions_open && documentation_h_sources_unchanged(a,experiment_copy,experiment_bytes,analysis_copy,analysis_bytes) && a->simulation_time==simulation;
         printf("DOCUMENTATION H SOURCE: experiment-bytes=%d analysis-bytes=%d byte-exact=%d footer-name-and-focus=%d\n",experiment_bytes,analysis_bytes,ok,ok);
         printf("DOCUMENTATION H SECONDARY: menu=keyboard,pointer,context escape-focus=restored find=overlay text-input=restored outside-click=consumed zoom=shortcut,menu,mouse source-preserved=%d\n",ok);
+        reading_scroll=a->doc_scroll_y;frame=0;
+        ok=ok && SDL_SetWindowSize(a->doc_window,900,wide_height) && SDL_SyncWindow(a->doc_window);break;
+    case 45:
+        if(frame++<2 || a->doc_scroll_pending){--*stage;return;}
+        ok=!a->doc_navigation_hidden && !a->doc_context_hidden && a->doc_left_slot.w==220 &&
+            a->doc_right_slot.w==220 && a->doc_article_slot.x==220 && a->doc_article_slot.w==460 &&
+            a->doc_scroll_y==reading_scroll && a->doc_track==2 && a->doc_context_example &&
+            !strcmp(a->doc_filter,"Pendel") && !strcmp(a->doc_query,reading_query);
+        *capture="docs-h-breakpoint-900.bmp";break;
+    case 46:
+        frame=0;ok=SDL_SetWindowSize(a->doc_window,901,wide_height) && SDL_SyncWindow(a->doc_window);break;
+    case 47:
+        if(frame++<2 || a->doc_scroll_pending){--*stage;return;}
+        ok=a->doc_left_slot.w==250 && a->doc_right_slot.w==250 && a->doc_article_slot.x==250 &&
+            a->doc_article_slot.w==401 && a->doc_scroll_y==reading_scroll && a->doc_track==2 &&
+            a->doc_context_example && !strcmp(a->doc_filter,"Pendel") && !strcmp(a->doc_query,reading_query);
+        *capture="docs-h-breakpoint-901.bmp";break;
+    case 48:
+        ok=documentation_h_sources_unchanged(a,experiment_copy,experiment_bytes,analysis_copy,analysis_bytes) && a->simulation_time==simulation;
+        printf("DOCUMENTATION H BREAKPOINT: widths=900,901 sides=220,250 source-and-view-preserved=%d\n",ok);
         a->quitting=true;break;
     }
     if(!ok){fprintf(stderr,"Design H stage %d failed\n",*stage-1);*code=1;a->quitting=true;}

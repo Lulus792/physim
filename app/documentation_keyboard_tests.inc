@@ -497,7 +497,7 @@ static void documentation_inline_test_frame(app *a,int *stage,int *code,const ch
         ps_doc_block *b=&d->blocks[link];clicked=nk_rect(b->hit[0],b->hit[1],b->hit[2],b->hit[3]);
         ok &= clicked.w>20 && clicked.w<150 && clicked.y>=a->doc_body_bounds.y;
         b=&d->blocks[copy];
-        printf("DOCUMENTATION INLINE CODE INK: %.0f %.0f %.0f %.0f\n",b->hit[0]+12,b->hit[1]+8,b->hit[2]-24,b->hit[3]-16);
+        printf("DOCUMENTATION INLINE CODE INK: %.0f %.0f %.0f %.0f\n",b->hit[0]+15,b->hit[1]+18,b->hit[2]-30,b->hit[3]-36);
         *capture="docs-inline-16.bmp";test_window_mouse(a->doc_window,clicked,true);break;
     }
     case 3:test_window_mouse(a->doc_window,clicked,false);break;
@@ -520,6 +520,8 @@ static void documentation_inline_test_frame(app *a,int *stage,int *code,const ch
         *capture="docs-inline-32-light.bmp";break;
     case 6:
         if(!documentation_test_seek(a,DOC_LINK+external,stage,code))return;
+        printf("DOCUMENTATION INLINE FOCUS: outline=%.3f,%.3f viewport=%.3f,%.3f full-height=%.3f\n",
+            a->doc_focus_bounds.y,a->doc_focus_bounds.h,a->doc_body_bounds.y,a->doc_body_bounds.h,a->documentation->blocks[external].hit[3]);
         ok=a->doc_focus_bounds.h<=a->doc_body_bounds.h && a->doc_focus_bounds.y>=a->doc_body_bounds.y &&
            a->documentation->blocks[external].hit[3]>a->doc_body_bounds.h;
         *capture="docs-inline-wrapped-focus.bmp";INLINE_KEY(SDLK_SPACE);break;

@@ -27,6 +27,8 @@ static void documentation_window_destroy(app *a) {
     memset(a->doc_chrome_fonts,0,sizeof a->doc_chrome_fonts);
     memset(a->doc_type_fonts,0,sizeof a->doc_type_fonts);memset(a->doc_type_em,0,sizeof a->doc_type_em);
     memset(a->doc_font_em,0,sizeof a->doc_font_em);
+    memset(a->doc_spaced_fonts,0,sizeof a->doc_spaced_fonts);
+    a->doc_type_document=NULL;a->doc_type_version=0;a->doc_lead_text=SIZE_MAX;
     ps_graphics_make_current(a->graphics);
 }
 
@@ -248,7 +250,7 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     }
     nk_window_show(ui,"documentation-context",a->doc_context_hidden?NK_HIDDEN:NK_SHOWN);
     if(!a->doc_context_hidden) {
-        nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(12,0));
+        nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(w<=900?7:12,0));
         if(nk_begin(ui,"documentation-context",a->doc_right_slot,NK_WINDOW_NO_SCROLLBAR)) {
             a->doc_right_slot=nk_window_get_bounds(ui);
             ps_ui_accessibility_route(ui,true);documentation_context_view(a);
@@ -269,13 +271,14 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     a->doc_article_slot=nk_rect(article_x,layout.article.y,article_width,layout.article.h);
     documentation_find_view(a);
     /* The body group contributes another 16 px: total reader inset 20 / 28. */
-    nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(w<1000?4:12,12));
+    nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(w<=900?4:12,0));
+    nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(ui->style.window.spacing.x,0));
     nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(doc_body)));
     if(nk_begin(ui,"document",nk_rect(article_x,layout.article.y,article_width,layout.article.h),NK_WINDOW_NO_SCROLLBAR)) {
         a->doc_article_slot=nk_window_get_bounds(ui);
         ps_ui_accessibility_route(ui,true);documentation_view(a,layout.article.h);
     }nk_end(ui);
-    nk_style_pop_style_item(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
+    nk_style_pop_style_item(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
     nk_style_pop_float(ui);
     documentation_actions_view(a);
     if(a->doc_search_active && !a->doc_actions_open)documentation_overlay_focus(ui,"documentation-find");
@@ -291,7 +294,7 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     documentation_sidebar_draw_probe(a);
     documentation_math_draw_probe(a);
     documentation_inline_math_draw_probe(a);
-    bool type_ok=documentation_typography_probe(a,capture_path);
+    bool type_ok=documentation_typography_probe(a,capture_path) && documentation_article_probe(a,capture_path);
     nk_sdl_update_TextInput(ui);
     bool scaled_capture=capture_path && strlen(capture_path)>=4 && !strcmp(capture_path+strlen(capture_path)-4,".png");
     bool ok=!scaled_capture || nk_sdl_export_png_scaled(ui,ui,w,h,2,capture_path)==PS_OK;

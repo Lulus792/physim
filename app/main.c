@@ -129,6 +129,12 @@ typedef struct {
     bool foreign,structured;
 } diagnostic;
 typedef struct {
+    /* Native metadata stays first for the existing baseline/glyph helpers. */
+    struct nk_font native;
+    const struct nk_user_font *base;
+    float spacing,reference_height;
+} documentation_spaced_font;
+typedef struct {
     struct nk_context *ui;
     const struct nk_user_font *font_ui, *font_code, *font_title;
     struct nk_user_font workbench_fonts[12]; /* UI 0–6, API 7–10, outline code 11. */
@@ -354,8 +360,12 @@ typedef struct {
     struct nk_rect doc_inline_math_test_link;
     const struct nk_user_font *doc_font_ui, *doc_font_title, *doc_font_code, *doc_code_fonts[9];
     const struct nk_user_font *doc_ui_fonts[9], *doc_title_fonts[9];
-    struct nk_user_font doc_type_fonts[21];
-    float doc_type_em[21],doc_font_em[5][11];
+    struct nk_user_font doc_type_fonts[28];
+    float doc_type_em[28],doc_font_em[5][11];
+    documentation_spaced_font doc_spaced_fonts[2];
+    const ps_document *doc_type_document;
+    uint64_t doc_type_version;
+    size_t doc_lead_text;
     const struct nk_user_font *doc_bold_fonts[11];
     const struct nk_user_font *doc_chrome_fonts[4];
     int doc_inline_clicked;
@@ -4111,7 +4121,7 @@ int main(int argc, char **argv) {
             /* The deliberate 80 ms frame delay also runs on hosted software GL.
              * Keep its bounded keyboard assertions; allow their extra wall time. */
             if (ps_clock() - test_started >
-                (!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
+                (!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
                   !strncmp(argv[3], "isolation-", 10) || !strncmp(argv[3], "breakpoints-", 12) || !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || (!strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"pendulum-medium-",16)) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strncmp(argv[3],"logging-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15))) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",

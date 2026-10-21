@@ -240,6 +240,18 @@ def documentation_h_typography(output):
                 title_height>body_height,'Missing actual font em correction in native H drawing')
 
 
+def documentation_h_flow(output):
+    rows=re.findall(r'DOCUMENTATION H FLOW: case=(\d+) title-line=([\d.]+) title-step=([\d.]+) body-line=([\d.]+) lead-gap=(-?[\d.]+) inset-delta=(-?[\d.]+) lead-em=([\d.]+) table-em=([\d.]+) tracking=(-?[\d.]+) title-bytes=(\d+)',output)
+    require(len(rows)==56,'Missing actual article flow matrix')
+    for index,row in enumerate(rows):
+        case,title,step,body,gap,inset,lead,table,tracking,preserved=map(float,row)
+        size=32 if index>=48 or (index//4)%2 else 16
+        require(case==index and preserved==1 and abs(tracking+.55)<.001 and abs(gap-20)<=1.01 and abs(inset)<=1.01,'Heading tracking, margins, column or UTF-8 payload changed')
+        require(abs(title-size*(1.3 if size==32 else 1.65)*1.2)<.01 and
+                (not step or abs(step-title)<=1.01) and abs(body-size*1.65)<.01 and
+                abs(lead-size*.94)<.01 and abs(table-size*.8125)<.01,'Article CSS struts or roles differ from H')
+
+
 def documentation_h(flow,directory):
     directory.mkdir(parents=True)
     flow.run('--workspace-state-test',directory,'docs-keyboard-h',timeout=120,
@@ -301,7 +313,9 @@ def documentation_h(flow,directory):
     preserved=re.search(r'DOCUMENTATION H SOURCE: experiment-bytes=(\d+) analysis-bytes=(\d+) byte-exact=1 footer-name-and-focus=1',output)
     require(preserved and all(int(value)>0 for value in preserved.groups()),'Missing byte-exact nonempty editor or accessible footer focus proof')
     documentation_h_typography(output)
-    for name in ('example-c','example-physim','empty-search','no-context','pointer-search','actions-keyboard','find-overlay','actions-pointer','actions-zoom','actions-pointer-zoom','actions-context'):
+    documentation_h_flow(output)
+    require('DOCUMENTATION H BREAKPOINT: widths=900,901 sides=220,250 source-and-view-preserved=1' in output,'Missing native H responsive boundary and state preservation')
+    for name in ('example-c','example-physim','empty-search','no-context','pointer-search','actions-keyboard','find-overlay','actions-pointer','actions-zoom','actions-pointer-zoom','actions-context','breakpoint-900','breakpoint-901'):
         require((directory/f'docs-h-{name}.bmp').is_file(),'Missing Design H task capture')
 
 

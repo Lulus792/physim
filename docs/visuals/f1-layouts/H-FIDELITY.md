@@ -6,6 +6,13 @@ Dieser Bericht ergänzt die historische Abnahme in [NATIVE-H.md](NATIVE-H.md).
 
 ## Aktuelle Nachprüfung vom 21. Oktober 2026
 
+Der nachfolgende [Artikel-/Zeilenabgleich](ARTICLE-FLOW.md) überträgt CSS-Zeilenboxen,
+zusammenfallende Blockabstände, Titel-Laufweiten, Einleitungs-, Tabellen- und
+Codekopfrollen sowie die tatsächliche 900-/901-px-Grenze. Die begrenzte
+Titelkantenprüfung bleibt wegen vier Pixeln zusätzlicher Windows-Titelbreite rot.
+Der Bericht trennt aktuelle native Prüfungen, frühere Gegenfälle und fehlenden
+Windows-Hostfokus. Eine vollständige H-Abnahme ist weiterhin offen.
+
 Der jüngste [Abgleich der CSS-Schriftrollen](TYPOGRAPHY.md) korrigiert die
 Verwechslung von em-Größe und Nuklear-Schrifthöhe, bewahrt vor dem Atlasaufbau
 ermittelte Fontmetriken und erhält durchgehende Codegrafiken. Linux besteht

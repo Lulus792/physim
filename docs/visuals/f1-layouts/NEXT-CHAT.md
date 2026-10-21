@@ -1,5 +1,11 @@
 Stand: Design H ist nativ umgesetzt; der anschließende engere Abgleich mit der
 Vorlage verbessert Navigation, Sprachsegmente und Modell-/Beispielreiter.
+Der aktuelle [Artikel-/Zeilenabgleich](ARTICLE-FLOW.md) ergänzt CSS-Zeilenboxen,
+zusammenfallende Abstände, Einleitungs-/Tabellen-/Codekopfrollen, Titel-Laufweite
+und den 900-/901-px-Wechsel. Die Windows-Titelbreite liegt noch vier Pixel neben
+der Referenz. Kerning/Rasterung, weitere Navigation-/Kontextdetails und die
+vollständige native Abnahme bleiben offen; die nachfolgenden Berichte nennen
+ihre jeweils historischen Prüfstände.
 Der weitere Detailabgleich trennt kleine Beschriftungen von größeren
 Bedienlabels mit echter aktiver Fettschrift und gleicht Suchfeld-/Paneelkopfkonturen an.
 Der jüngste Abgleich übernimmt die exakten Paneel-Iconproportionen aus der

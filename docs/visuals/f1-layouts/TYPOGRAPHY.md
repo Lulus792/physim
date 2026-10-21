@@ -6,6 +6,12 @@ unveränderten H-Bilder sowie `layouts.css`, `refinements.css` und `final-h.css`
 Der gesamte [native Designauftrag](../unified-workspace/NATIVE-FIDELITY.md)
 ist damit noch nicht abgeschlossen.
 
+Der nachfolgende [Artikel-/Zeilenabgleich](ARTICLE-FLOW.md) setzt die hier noch
+offenen Zeilenboxen, Blockabstände, negative Titel-Laufweite und erste
+Absatzrolle um. Seine aktuellen Prüfungen und verbleibenden Unterschiede sind
+getrennt dokumentiert; die folgenden Ergebnisse bleiben die historischen
+Nachweise dieses Schriftgrößenschritts.
+
 ## Änderung
 
 Die Schriftgröße einer CSS-em-Box ist nicht dasselbe wie die von stb/Nuklear

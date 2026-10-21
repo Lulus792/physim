@@ -1,0 +1,71 @@
+{
+  "scope": "Measure only the shared H heading's ink edges; not a whole-UI score.\n\nThe original has a 1 px frame and a 34 px mock title bar. Native screenshots\ncontain client pixels. Both full input images remain unchanged. The fixed\nheading region and foreground thresholds are recorded in the JSON report.",
+  "reference": "D:\\Physim\\docs\\visuals\\f1-layouts\\h-dark.png",
+  "native": "D:\\Physim\\docs\\visuals\\f1-layouts\\article-flow-2026-10-21\\linux-h-dark.png",
+  "sha256": [
+    "c9f74a90b12627f015a5d8c08fc0c58c7ff90aa0495d723b1512ba3a2317e72c",
+    "bee2a1d0d6b07b69ab0e2adc618d843411ab309438cfa3016378c81ab7e5dffb"
+  ],
+  "sizes": [
+    [
+      1080,
+      808
+    ],
+    [
+      1080,
+      780
+    ]
+  ],
+  "region": [
+    270,
+    125,
+    810,
+    190
+  ],
+  "reference_origin": [
+    1,
+    35
+  ],
+  "native_origin": [
+    0,
+    0
+  ],
+  "foreground": "min(R,G,B)>180",
+  "reference_box": [
+    281,
+    143,
+    717,
+    168
+  ],
+  "native_box": [
+    281,
+    141,
+    644,
+    190
+  ],
+  "supported": true,
+  "region_complete": false,
+  "checks": [
+    {
+      "edge": "left",
+      "delta_px": 0,
+      "passed": true
+    },
+    {
+      "edge": "top",
+      "delta_px": -2,
+      "passed": false
+    },
+    {
+      "edge": "right",
+      "delta_px": -73,
+      "passed": false
+    },
+    {
+      "edge": "bottom",
+      "delta_px": 22,
+      "passed": false
+    }
+  ],
+  "aligned": false
+}

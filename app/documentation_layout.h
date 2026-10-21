@@ -5,7 +5,7 @@ typedef struct { float x,y,w,h; } ps_doc_rect;
 typedef struct { ps_doc_rect header,left,article,right,footer; } ps_doc_layout;
 static ps_doc_layout ps_documentation_layout(float width,float height,float ui_size,
                                             int left_hidden,int right_hidden) {
-    float side=width<1000?220:250;
+    float side=width<=900?220:250;
     float header=ui_size+36>60?ui_size+36:60;
     float footer=ui_size+16>32?ui_size+16:32;
     float left=left_hidden?0:side,right=right_hidden?0:side;

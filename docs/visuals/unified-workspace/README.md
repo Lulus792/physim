@@ -23,6 +23,10 @@ Linux-Nachweise und die offene Windows-Hostfokusprüfung sind getrennt erfasst.
 Der nachfolgende [F1-Schriftrollen-Abgleich](../f1-layouts/TYPOGRAPHY.md)
 übernimmt CSS-em-Größen, bewahrt Fontmetriken und prüft Codegrafiken sowie
 Formelskalierung; die vollständigen Abstände und Laufweiten bleiben offen.
+Der nachfolgende [F1-Artikel-/Zeilenabgleich](../f1-layouts/ARTICLE-FLOW.md)
+überträgt Zeilenboxen, Blockabstände, Titel-Laufweite und Einleitungs-/Tabellenrollen.
+Die begrenzte Titelkantenprüfung bleibt rot; vollständige H-Gestaltung und
+Windows-Hostfokus sind weiterhin offen.
 
 **Für die native Umsetzung in einem anderen Chat:**
 [kopierfertiger Auftrag](NEXT-CHAT.md) · [Bestand und Abnahmeliste](IMPLEMENTATION.md)
