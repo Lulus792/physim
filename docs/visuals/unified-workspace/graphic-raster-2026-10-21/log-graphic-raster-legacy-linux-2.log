@@ -1,0 +1,73 @@
+649 C and 615 Physim completion symbols verified
+Compiled app/png.c
+Compiled tests/test_png.c
+Linked integration-physim-png-tests
+TEST plot_workflow: failed
+Exit code 1; expected 0
+APP TEST TRACE: initializing SDL
+APP TEST TRACE: SDL initialized, video driver x11
+APP TEST TRACE: creating window
+APP TEST TRACE: window created, creating OpenGL context
+APP TEST TRACE: window and OpenGL ready
+APP TEST TRACE: main fonts begin 339.039389
+APP TEST TRACE: main font sources ready 340.314901
+APP TEST TRACE: main atlas bake seconds=3.995829
+APP TEST TRACE: main atlas validation/upload seconds=0.030788
+APP TEST TRACE: main fonts ready 344.378141
+APP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.
+APP TEST TRACE: stage 0 -> 1, status 5 Messpunkte geladen.
+APP TEST TRACE: stage 1 -> 2, status 5 Messpunkte geladen.
+Plot window analysis-status flags=1120 active=0 bounds=0.0/712.0/1080.0/28.0
+Plot window analysis-heading flags=1120 active=0 bounds=0.0/118.0/1080.0/80.0
+Plot window workspace-path flags=1120 active=0 bounds=0.0/79.0/1080.0/39.0
+Plot window sidebar flags=1120 active=0 bounds=0.0/198.0/232.0/514.0
+Plot window workspace flags=100 active=1 bounds=232.0/198.0/606.0/514.0
+Plot window log flags=2100 active=0 bounds=0.0/0.0/0.0/1.0
+Plot window inspector flags=1100 active=0 bounds=838.0/198.0/242.0/514.0
+Plot window header flags=20 active=0 bounds=0.0/0.0/1080.0/79.0
+Plot window dock-splitter-4 flags=120 active=0 bounds=834.0/198.0/9.0/514.0
+Plot window dock-splitter-6 flags=120 active=0 bounds=228.0/198.0/9.0/514.0
+Plot UI stage 2 failed, area=(342.0,467.0,439.0,106.0), range=(0.163804103,0.329433954)
+APP TEST TRACE: stage 2 -> 3, status 5 Messpunkte geladen.
+First workflow failure at stage 2 (next 3): 5 Messpunkte geladen. (tab=2, selected=0, samples=5, report=1, query=)
+Workflow failed at stage 3: 5 Messpunkte geladen. (tab=2, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)
+Traceback (most recent call last):
+  File "/mnt/d/Physim/tests/check_display_workflow.py", line 2138, in <module>
+    main()
+    ~~~~^^
+  File "/mnt/d/Physim/tests/check_display_workflow.py", line 1961, in main
+    flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Physim/tests/check_display_workflow.py", line 593, in run
+    require(result.returncode == expected_exit_code, f"App exited {result.returncode}, expected {expected_exit_code}: {command}")
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Physim/tests/check_display_workflow.py", line 530, in require
+    raise RuntimeError(message)
+RuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--plot-test', '/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-rxedvyb7/plot_workflow/files ä/workflow ä']
+
+
+TEST graphics: failed
+Exit code 1; expected 0
+APP TEST TRACE: initializing SDL
+APP TEST TRACE: SDL initialized, video driver x11
+APP TEST TRACE: creating window
+APP TEST TRACE: window created, creating OpenGL context
+GPU TEST: Coverage atlas differs from RGBA atlas samples
+Traceback (most recent call last):
+  File "/mnt/d/Physim/tests/check_display_workflow.py", line 2138, in <module>
+    main()
+    ~~~~^^
+  File "/mnt/d/Physim/tests/check_display_workflow.py", line 1961, in main
+    flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Physim/tests/check_display_workflow.py", line 593, in run
+    require(result.returncode == expected_exit_code, f"App exited {result.returncode}, expected {expected_exit_code}: {command}")
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Physim/tests/check_display_workflow.py", line 530, in require
+    raise RuntimeError(message)
+RuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--renderer-test']
+
+
+TEST series_mask_workflow: passed
+Build failed: 2 native tests failed; see /mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-rxedvyb7
+Native tests: 1/3 passed. Results: /mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-rxedvyb7

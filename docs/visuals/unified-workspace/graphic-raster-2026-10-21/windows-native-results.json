@@ -1,0 +1,225 @@
+[
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "cf479194cdd0257f4232886e48e2e8a960acfa38ccf93ceb49765504752beea5"
+      },
+      {
+        "status": "passed",
+        "target": "physim-png-tests",
+        "artifact": "D:\\Physim\\build\\native\\Design-analysis\\bin\\integration-physim-png-tests.exe",
+        "sha256": "115bd6eac96c0fa47b6b5d49b8b489b5fb47e01fa5ef366232e7e5f85910287b"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_display_workflow.py",
+          "plot_workflow",
+          "--app",
+          "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+          "--work",
+          "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\plot_workflow\\files \u00e4",
+          "--root",
+          "D:\\Physim",
+          "--cc",
+          "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nPLOT UI SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\n5 Messpunkte geladen.\nExport: D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\plot_workflow\\files \u00e4\\workflow \u00e4/runs/20261021-232024-10012615000-ergebnis.csv\n\nExport gespeichert. Pfad im Protokoll.\nAnalyseergebnis geladen. Diagramme und Tabellen sind bereit.\nExport: D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\plot_workflow\\files \u00e4\\workflow \u00e4/runs/20261021-232025-10844986200-diagramm.png\n\nExport gespeichert. Pfad im Protokoll.\nExport: D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\plot_workflow\\files \u00e4\\workflow \u00e4/runs/20261021-232036-22074721900-diagramm.png\n\nExport gespeichert. Pfad im Protokoll.\nExport: D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\plot_workflow\\files \u00e4\\workflow \u00e4/runs/20261021-232036-22386922800-diagramm.png\n\nExport gespeichert. Pfad im Protokoll.\nExport: D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\plot_workflow\\files \u00e4\\workflow \u00e4/runs/20261021-232039-24870306200-ausschnitt.png\n\nExport gespeichert. Pfad im Protokoll.\nExport: D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\plot_workflow\\files \u00e4\\workflow \u00e4/runs/20261021-232039-25578751700-ausschnitt.svg\n\nExport gespeichert. Pfad im Protokoll.\n\nAPP TEST EXIT: 0\nplot_workflow: app workflow and persisted files passed\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 567464.919955\nAPP TEST TRACE: main font sources ready 567465.242565\nAPP TEST TRACE: main atlas bake seconds=7.253497\nAPP TEST TRACE: main atlas validation/upload seconds=0.052714\nAPP TEST TRACE: main fonts ready 567472.560044\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 0 -> 1, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 2 -> 3, status 5 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=9677563200\nAPP TEST TRACE: stage 3 -> 4, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 4 -> 5, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 5 -> 6, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 6 -> 7, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 7 -> 8, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 8 -> 80, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 80 -> 9, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 9 -> 10, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 10 -> 11, status 5 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=10009231900\nAPP TEST TRACE: stage 11 -> 12, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 12 -> 13, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 13 -> 14, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=10066119100\nAPP TEST TRACE: stage 14 -> 15, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 15 -> 16, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 16 -> 17, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 17 -> 18, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 18 -> 19, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 19 -> 81, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 81 -> 20, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 20 -> 21, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=10254037700\nAPP TEST TRACE: stage 21 -> 22, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 22 -> 23, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 23 -> 24, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 24 -> 25, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 25 -> 26, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 26 -> 27, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 27 -> 28, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 28 -> 29, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 29 -> 30, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 30 -> 31, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 31 -> 32, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=10792056800\nAPP TEST TRACE: stage 32 -> 33, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 33 -> 34, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 34 -> 35, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=10843364700\nAPP TEST TRACE: stage 35 -> 36, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 36 -> 37, status Export gespeichert. Pfad im Protokoll.\nPLOT EXPORT PROFILE: regular images begin\nPLOT EXPORT PROFILE: regular images 2.786518 s; dense begin\nPLOT EXPORT PROFILE: dense 1.711029 s; scaled images begin\nPLOT EXPORT PROFILE: scaled images 5.979565 s\nAPP TEST TRACE: stage 37 -> 38, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 38 -> 39, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=22004796200\nAPP TEST TRACE: stage 39 -> 40, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 40 -> 41, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=22038845300\nAPP TEST TRACE: stage 41 -> 42, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 42 -> 43, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=22073299700\nAPP TEST TRACE: stage 43 -> 44, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 44 -> 45, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=22274097100\nAPP TEST TRACE: stage 45 -> 46, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 46 -> 47, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=22306527100\nAPP TEST TRACE: stage 47 -> 48, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 48 -> 49, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=22384960900\nAPP TEST TRACE: stage 49 -> 50, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 50 -> 51, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=24868593800\nAPP TEST TRACE: stage 51 -> 52, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 52 -> 53, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=25576859900\nAPP TEST TRACE: stage 53 -> 54, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 54 -> 55, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 55 -> 56, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 56 -> 82, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=25660179200\nAPP TEST TRACE: stage 82 -> 83, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 83 -> 56, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 56 -> 57, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=162 pending=0 window=2 keyboard=2 ticks=25788151100\nAPP TEST TRACE: stage 57 -> 58, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 58 -> 59, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=25889651200\nAPP TEST TRACE: stage 59 -> 60, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 60 -> 61, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=25939057500\nAPP TEST TRACE: stage 61 -> 62, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 62 -> 63, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 63 -> 64, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 64 -> 65, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=26079304500\nAPP TEST TRACE: stage 65 -> 66, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 66 -> 67, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 67 -> 68, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=26203463300\nAPP TEST TRACE: stage 68 -> 69, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 69 -> 70, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=26266058800\nAPP TEST TRACE: stage 70 -> 71, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 71 -> 72, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 72 -> 84, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 84 -> 73, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=27083648600\nAPP TEST TRACE: stage 73 -> 74, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 74 -> 100, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 100 -> 101, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 101 -> 102, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 102 -> 103, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 103 -> 104, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 104 -> 105, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 105 -> 106, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 106 -> 107, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 107 -> 108, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 108 -> 109, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 109 -> 110, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 110 -> 111, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 111 -> 112, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 112 -> 113, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 113 -> 114, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 114 -> 115, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 115 -> 116, status Export gespeichert. Pfad im Protokoll.\n",
+        "seconds": 28.5,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\plot_workflow\\files \u00e4\\app-steps.json",
+            "bytes": 12676,
+            "sha256": "826bdbf3e35606e9b3effd26879fe2248472561dbea2b6717073a13eca4a9423"
+          }
+        ]
+      },
+      {
+        "command": [
+          "D:\\Physim\\build\\native\\Design-analysis\\bin\\integration-physim-png-tests.exe",
+          "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\plot_workflow\\files \u00e4/png-reference.png"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "PNG input validation and exclusive output passed\n",
+        "stderr": "",
+        "seconds": 0.187,
+        "reason": "",
+        "artifacts": []
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/verify_png.py",
+          "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\plot_workflow\\files \u00e4",
+          "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\plot_workflow\\files \u00e4/workflow \u00e4"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "PNG references: exact pixels, padded rows, limits, noise and compression passed\nfigure-0.png: CRC, zlib, dimensions, orientation and expected pixels passed\nfigure-1.png: CRC, zlib, dimensions, orientation and expected pixels passed\nfigure-2.png: CRC, zlib, dimensions, orientation and expected pixels passed\nfigure-3.png: CRC, zlib, dimensions, orientation and expected pixels passed\nfigure-dense.png: CRC, zlib, dimensions, orientation and expected pixels passed\nPNG references passed\nPNG region: crossing lines, clipped bars and excluded scatter points passed\n",
+        "stderr": "",
+        "seconds": 0.532,
+        "reason": "",
+        "artifacts": []
+      }
+    ],
+    "seconds": 30.063,
+    "reason": "",
+    "name": "plot_workflow"
+  },
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "cf479194cdd0257f4232886e48e2e8a960acfa38ccf93ceb49765504752beea5"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_display_workflow.py",
+          "graphics",
+          "--app",
+          "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+          "--work",
+          "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\graphics\\files \u00e4",
+          "--root",
+          "D:\\Physim",
+          "--cc",
+          "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nCoverage atlas: RGBA/R8 GPU samples identical, odd rows and linear filtering\nGPU TEST: depth, rotated box/plane, points, polylines, label projection, resize, clipping, transparency, nested coordinate frames and picking PASSED\nPLAIN LETTER INPUT: key=a expected=theta actual=theta copy=0 paste=0 passed=1\nPLAIN LETTER INPUT: key=c expected=scd actual=scd copy=0 paste=0 passed=1\nPLAIN LETTER INPUT: key=v expected=seved actual=seved copy=0 paste=0 passed=1\nPLAIN LETTER INPUT: key=x expected=sxd actual=sxd copy=0 paste=0 passed=1\nPLAIN LETTER INPUT: key=b expected=sebed actual=sebed copy=0 paste=0 passed=1\nPLAIN LETTER INPUT: key=e expected=seeed actual=seeed copy=0 paste=0 passed=1\nCOMMAND LETTER INPUT: mac=0 key=a copy=0 paste=0 passed=1\nCOMMAND LETTER INPUT: mac=0 key=c copy=1 paste=0 passed=1\nCOMMAND LETTER INPUT: mac=0 key=v copy=0 paste=1 passed=1\nCOMMAND LETTER INPUT: mac=0 key=x copy=1 paste=0 passed=1\nCOMMAND LETTER INPUT: mac=0 key=b copy=0 paste=0 passed=1\nCOMMAND LETTER INPUT: mac=0 key=e copy=0 paste=0 passed=1\nINPUT TEST: UTF-8, undo/redo, clipboard, Mac/PC navigation/selection, focus PASSED\ngraphics: app workflow and persisted files passed\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\n",
+        "seconds": 2.328,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\graphics\\files \u00e4\\app-steps.json",
+            "bytes": 1573,
+            "sha256": "8eee514ba6816f458928d3bc191b62d40932aaf33716ecdb1fc00960ff5815f9"
+          }
+        ]
+      }
+    ],
+    "seconds": 2.375,
+    "reason": "",
+    "name": "graphics"
+  },
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "cf479194cdd0257f4232886e48e2e8a960acfa38ccf93ceb49765504752beea5"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_display_workflow.py",
+          "series_mask_workflow",
+          "--app",
+          "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+          "--work",
+          "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\series_mask_workflow\\files \u00e4",
+          "--root",
+          "D:\\Physim",
+          "--cc",
+          "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nSERIES MASK mask-c SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAnalyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nProjekt gespeichert.\nPhysim baut die Analyse ...\nCompiler: C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE\nProfile: Release\n\ncore.c\n\n\ncore.c\n\nCompile: D:\\Physim/src/core.c\n\nsdk-core.obj.compile.i\n\nD:\\Physim\\src\\core.c(403) : warning C4706: assignment within conditional expression\n\n\nmemory.c\n\n\nmemory.c\n\nCompile: D:\\Physim/src/memory.c\n\nsdk-memory.obj.compile.i\n\n\narray.c\n\n\narray.c\n\nCompile: D:\\Physim/src/array.c\n\nsdk-array.obj.compile.i\n\n\nstring_view.c\n\n\nstring_view.c\n\nCompile: D:\\Physim/src/string_view.c\n\nsdk-string_view.obj.compile.i\n\n\nhashmap.c\n\n\nhashmap.c\n\nCompile: D:\\Physim/src/hashmap.c\n\nsdk-hashmap.obj.compile.i\n\n\nmath.c\n\n\nmath.c\n\nCompile: D:\\Physim/src/math.c\n\nsdk-math.obj.compile.i\n\n\ndata.c\n\n\ndata.c\n\nCompile: D:\\Physim/src/data.c\n\nsdk-data.obj.compile.i\n\nD:\\Physim\\src\\data.c(293) : warning C4701: potentially uninitialized local variable 'unit' used\n\n\nrun_stream.c\n\n\nrun_stream.c\n\nCompile: D:\\Physim/src/run_stream.c\n\nsdk-run_stream.obj.compile.i\n\n\nrun_index.c\n\n\nrun_index.c\n\nCompile: D:\\Physim/src/run_index.c\n\nsdk-run_index.obj.compile.i\n\n\nsnapshot.c\n\n\nsnapshot.c\n\nCompile: D:\\Physim/src/snapshot.c\n\nsdk-snapshot.obj.compile.i\n\n\nanalysis.c\n\n\nanalysis.c\n\nCompile: D:\\Physim/src/analysis.c\n\nsdk-analysis.obj.compile.i\n\n\nscene.c\n\n\nscene.c\n\nCompile: D:\\Physim/src/scene.c\n\nsdk-scene.obj.compile.i\n\n\nnumerics.c\n\n\nnumerics.c\n\nCompile: D:\\Physim/src/numerics.c\n\nsdk-numerics.obj.compile.i\n\n\nunits.c\n\n\nunits.c\n\nCompile: D:\\Physim/src/units.c\n\nsdk-units.obj.compile.i\n\n\nseries.c\n\n\nseries.c\n\nCompile: D:\\Physim/src/series.c\n\nsdk-series.obj.compile.i\n\n\nreport.c\n\n\nreport.c\n\nCompile: D:\\Physim/src/report.c\n\nsdk-report.obj.compile.i\n\n\nreport_export.c\n\n\nreport_export.c\n\nCompile: D:\\Physim/src/report_export.c\n\nsdk-report_export.obj.compile.i\n\n\nmechanics.c\n\n\nmechanics.c\n\nCompile: D:\\Physim/src/mechanics.c\n\nsdk-mechanics.obj.compile.i\n\n\ncontact_world.c\n\n\ncontact_world.c\n\nCompile: D:\\Physim/src/contact_world.c\n\nsdk-contact_world.obj.compile.i\n\n\nbox_contacts.c\n\n\nbox_contacts.c\n\nCompile: D:\\Physim/src/box_contacts.c\n\nsdk-box_contacts.obj.compile.i\n\n\ncollision.c\n\n\ncollision.c\n\nCompile: D:\\Physim/src/collision.c\n\nsdk-collision.obj.compile.i\n\n\nmeasurement.c\n\n\nmeasurement.c\n\nCompile: D:\\Physim/src/measurement.c\n\nsdk-measurement.obj.compile.i\n\n\nthermodynamics.c\n\n\nthermodynamics.c\n\nCompile: D:\\Physim/src/thermodynamics.c\n\nsdk-thermodynamics.obj.compile.i\n\n\nelectromagnetism.c\n\n\nelectromagnetism.c\n\nCompile: D:\\Physim/src/electromagnetism.c\n\nsdk-electromagnetism.obj.compile.i\n\n\nwaves.c\n\n\nwaves.c\n\nCompile: D:\\Physim/src/waves.c\n\nsdk-waves.obj.compile.i\n\n\noptics.c\n\n\noptics.c\n\nCompile: D:\\Physim/src/optics.c\n\nsdk-optics.obj.compile.i\n\n\nfluid.c\n\n\nfluid.c\n\nCompile: D:\\Physim/src/fluid.c\n\nsdk-fluid.obj.compile.i\n\n\nproperties.c\n\n\nproperties.c\n\nCompile: D:\\Physim/src/properties.c\n\nsdk-properties.obj.compile.i\n\n\nanalysis.c\n\n\nanalysis.c\n\nCompile: D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\series_mask_workflow\\files \u00e4\\workflow \u00e4\\c\\project/analysis.c\n\nanalysis.obj.compile.i\n\nD:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\series_mask_workflow\\files \ufffd\\workflow \ufffd\\c\\project\\analysis.c(20) : warning C4701: potentially uninitialized local variable 'x' used\n\nD:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\series_mask_workflow\\files \ufffd\\workflow \ufffd\\c\\project\\analysis.c(22) : warning C4701: potentially uninitialized local variable 'raw' used\n\nD:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\series_mask_workflow\\files \ufffd\\workflow \ufffd\\c\\project\\analysis.c(22) : warning C4701: potentially uninitialized local variable 'status' used\n\nD:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\series_mask_workflow\\files \ufffd\\workflow \ufffd\\c\\project\\analysis.c(23) : warning C4701: potentially uninitialized local variable 'y' used\n\nD:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\series_mask_workflow\\files \ufffd\\workflow \ufffd\\c\\project\\analysis.c(28) : warning C4701: potentially uninitialized local variable 'derivative' used\n\nD:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\series_mask_workflow\\files \ufffd\\workflow \ufffd\\c\\project\\analysis.c(25) : warning C4701: potentially uninitialized local variable 'q' used\n\nD:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\series_mask_workflow\\files \ufffd\\workflow \ufffd\\c\\project\\analysis.c(29) : warning C4701: potentially uninitialized local variable 'resampled' used\n\nLink: D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\series_mask_workflow\\files \u00e4\\workflow \u00e4\\c\\project\\build\\Release/analysis.next.dll\n\n   Creating library D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\series_mask_workflow\\files \ufffd\\workflow \ufffd\\c\\project\\build\\Release\\analysis.next.lib and object D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\series_mask_workflow\\files \ufffd\\workflow \ufffd\\c\\project\\build\\Release\\analysis.next.exp\n\n\nBuild successful.\n\nAnalyse erfolgreich gebaut. Gespeicherte L\u00e4ufe k\u00f6nnen ausgewertet werden.\nAnalyse laeuft im separaten Prozess ...\nAnalysis: OK\n\nAuswertung abgeschlossen; Ergebnisse im runs-Ordner.\nAnalyseergebnis geladen. Diagramme und Tabellen sind bereit.\n\nAPP TEST EXIT: 0\nOpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nSERIES MASK mask-read SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAnalyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAnalyseergebnis geladen. Diagramme und Tabellen sind bereit.\n\nAPP TEST EXIT: 0\nOpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nSERIES MASK mask-phys SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAnalyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nProjekt gespeichert.\nPhysim baut die Analyse ...\nCompiler: C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE\nProfile: Release\n\ncore.c\n\n\ncore.c\n\nCompile: D:\\Physim/src/core.c\n\nsdk-core.obj.compile.i\n\nD:\\Physim\\src\\core.c(403) : warning C4706: assignment within conditional expression\n\n\nmemory.c\n\n\nmemory.c\n\nCompile: D:\\Physim/src/memory.c\n\nsdk-memory.obj.compile.i\n\n\narray.c\n\n\narray.c\n\nCompile: D:\\Physim/src/array.c\n\nsdk-array.obj.compile.i\n\n\nstring_view.c\n\n\nstring_view.c\n\nCompile: D:\\Physim/src/string_view.c\n\nsdk-string_view.obj.compile.i\n\n\nhashmap.c\n\n\nhashmap.c\n\nCompile: D:\\Physim/src/hashmap.c\n\nsdk-hashmap.obj.compile.i\n\n\nmath.c\n\n\nmath.c\n\nCompile: D:\\Physim/src/math.c\n\nsdk-math.obj.compile.i\n\n\ndata.c\n\n\ndata.c\n\nCompile: D:\\Physim/src/data.c\n\nsdk-data.obj.compile.i\n\nD:\\Physim\\src\\data.c(293) : warning C4701: potentially uninitialized local variable 'unit' used\n\n\nrun_stream.c\n\n\nrun_stream.c\n\nCompile: D:\\Physim/src/run_stream.c\n\nsdk-run_stream.obj.compile.i\n\n\nrun_index.c\n\n\nrun_index.c\n\nCompile: D:\\Physim/src/run_index.c\n\nsdk-run_index.obj.compile.i\n\n\nsnapshot.c\n\n\nsnapshot.c\n\nCompile: D:\\Physim/src/snapshot.c\n\nsdk-snapshot.obj.compile.i\n\n\nanalysis.c\n\n\nanalysis.c\n\nCompile: D:\\Physim/src/analysis.c\n\nsdk-analysis.obj.compile.i\n\n\nscene.c\n\n\nscene.c\n\nCompile: D:\\Physim/src/scene.c\n\nsdk-scene.obj.compile.i\n\n\nnumerics.c\n\n\nnumerics.c\n\nCompile: D:\\Physim/src/numerics.c\n\nsdk-numerics.obj.compile.i\n\n\nunits.c\n\n\nunits.c\n\nCompile: D:\\Physim/src/units.c\n\nsdk-units.obj.compile.i\n\n\nseries.c\n\n\nseries.c\n\nCompile: D:\\Physim/src/series.c\n\nsdk-series.obj.compile.i\n\n\nreport.c\n\n\nreport.c\n\nCompile: D:\\Physim/src/report.c\n\nsdk-report.obj.compile.i\n\n\nreport_export.c\n\n\nreport_export.c\n\nCompile: D:\\Physim/src/report_export.c\n\nsdk-report_export.obj.compile.i\n\n\nmechanics.c\n\n\nmechanics.c\n\nCompile: D:\\Physim/src/mechanics.c\n\nsdk-mechanics.obj.compile.i\n\n\ncontact_world.c\n\n\ncontact_world.c\n\nCompile: D:\\Physim/src/contact_world.c\n\nsdk-contact_world.obj.compile.i\n\n\nbox_contacts.c\n\n\nbox_contacts.c\n\nCompile: D:\\Physim/src/box_contacts.c\n\nsdk-box_contacts.obj.compile.i\n\n\ncollision.c\n\n\ncollision.c\n\nCompile: D:\\Physim/src/collision.c\n\nsdk-collision.obj.compile.i\n\n\nmeasurement.c\n\n\nmeasurement.c\n\nCompile: D:\\Physim/src/measurement.c\n\nsdk-measurement.obj.compile.i\n\n\nthermodynamics.c\n\n\nthermodynamics.c\n\nCompile: D:\\Physim/src/thermodynamics.c\n\nsdk-thermodynamics.obj.compile.i\n\n\nelectromagnetism.c\n\n\nelectromagnetism.c\n\nCompile: D:\\Physim/src/electromagnetism.c\n\nsdk-electromagnetism.obj.compile.i\n\n\nwaves.c\n\n\nwaves.c\n\nCompile: D:\\Physim/src/waves.c\n\nsdk-waves.obj.compile.i\n\n\noptics.c\n\n\noptics.c\n\nCompile: D:\\Physim/src/optics.c\n\nsdk-optics.obj.compile.i\n\n\nfluid.c\n\n\nfluid.c\n\nCompile: D:\\Physim/src/fluid.c\n\nsdk-fluid.obj.compile.i\n\n\nproperties.c\n\n\nproperties.c\n\nCompile: D:\\Physim/src/properties.c\n\nsdk-properties.obj.compile.i\n\n\nanalysis.physim.c\n\n\nanalysis.physim.c\n\nCompile: D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\series_mask_workflow\\files \u00e4\\workflow \u00e4\\phys\\project\\build\\Release/analysis.physim.c\n\nanalysis.obj.compile.i\n\nD:\\Physim\\include\\physim\\language_run_stream.h(381): warning C4223: nonstandard extension used: non-lvalue array converted to pointer\n\nD:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\series_mask_workflow\\files \ufffd\\workflow \ufffd\\phys\\project\\analysis.phys(39): warning C4100: 'psstate': unreferenced formal parameter\n\nLink: D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\series_mask_workflow\\files \u00e4\\workflow \u00e4\\phys\\project\\build\\Release/analysis.next.dll\n\n   Creating library D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\series_mask_workflow\\files \ufffd\\workflow \ufffd\\phys\\project\\build\\Release\\analysis.next.lib and object D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\series_mask_workflow\\files \ufffd\\workflow \ufffd\\phys\\project\\build\\Release\\analysis.next.exp\n\n\nBuild successful.\n\nAnalyse erfolgreich gebaut. Gespeicherte L\u00e4ufe k\u00f6nnen ausgewertet werden.\nAnalyse laeuft im separaten Prozess ...\nAnalysis: OK\n\nAuswertung abgeschlossen; Ergebnisse im runs-Ordner.\nAnalyseergebnis geladen. Diagramme und Tabellen sind bereit.\n\nAPP TEST EXIT: 0\nOpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nSERIES MASK mask-read SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAnalyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAnalyseergebnis geladen. Diagramme und Tabellen sind bereit.\n\nAPP TEST EXIT: 0\nseries_mask_workflow: app workflow and persisted files passed\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 567495.889161\nAPP TEST TRACE: main font sources ready 567496.064621\nAPP TEST TRACE: main atlas bake seconds=5.999189\nAPP TEST TRACE: main atlas validation/upload seconds=0.039301\nAPP TEST TRACE: main fonts ready 567502.113043\nAPP TEST TRACE: initial stage 0, status Analyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAPP TEST TRACE: stage 0 -> 1, status Physim baut die Analyse ...\nAPP TEST TRACE: stage 1 -> 2, status Analyse erfolgreich gebaut. Gespeicherte L\u00e4ufe k\u00f6nnen ausgewertet werden.\nAPP TEST TRACE: stage 2 -> 3, status Analyse erfolgreich gebaut. Gespeicherte L\u00e4ufe k\u00f6nnen ausgewertet werden.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=34058476700\nAPP TEST TRACE: stage 3 -> 4, status Analyse laeuft im separaten Prozess ...\nAPP TEST TRACE: stage 4 -> 5, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 5 -> 6, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 6 -> 7, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 7 -> 8, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 567532.526799\nAPP TEST TRACE: main font sources ready 567532.729667\nAPP TEST TRACE: main atlas bake seconds=7.062123\nAPP TEST TRACE: main atlas validation/upload seconds=0.055017\nAPP TEST TRACE: main fonts ready 567539.859867\nAPP TEST TRACE: initial stage 0, status Analyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAPP TEST TRACE: stage 0 -> 4, status Analyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAPP TEST TRACE: stage 4 -> 5, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 5 -> 6, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 6 -> 7, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 7 -> 8, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 567545.158940\nAPP TEST TRACE: main font sources ready 567545.367118\nAPP TEST TRACE: main atlas bake seconds=6.086834\nAPP TEST TRACE: main atlas validation/upload seconds=0.023617\nAPP TEST TRACE: main fonts ready 567551.490811\nAPP TEST TRACE: initial stage 0, status Analyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAPP TEST TRACE: stage 0 -> 1, status Physim baut die Analyse ...\nAPP TEST TRACE: stage 1 -> 2, status Analyse erfolgreich gebaut. Gespeicherte L\u00e4ufe k\u00f6nnen ausgewertet werden.\nAPP TEST TRACE: stage 2 -> 3, status Analyse erfolgreich gebaut. Gespeicherte L\u00e4ufe k\u00f6nnen ausgewertet werden.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=37984913200\nAPP TEST TRACE: stage 3 -> 4, status Analyse laeuft im separaten Prozess ...\nAPP TEST TRACE: stage 4 -> 5, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 5 -> 6, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 6 -> 7, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 7 -> 8, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 567582.855431\nAPP TEST TRACE: main font sources ready 567583.043651\nAPP TEST TRACE: main atlas bake seconds=6.769875\nAPP TEST TRACE: main atlas validation/upload seconds=0.032355\nAPP TEST TRACE: main fonts ready 567589.856692\nAPP TEST TRACE: initial stage 0, status Analyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAPP TEST TRACE: stage 0 -> 4, status Analyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAPP TEST TRACE: stage 4 -> 5, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 5 -> 6, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 6 -> 7, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 7 -> 8, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\n",
+        "seconds": 96.516,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\series_mask_workflow\\files \u00e4\\app-steps.json",
+            "bytes": 18461,
+            "sha256": "e1b54f46ea44cdae39c23e00369f7416c965e96c102709f94be466b81be54c95"
+          }
+        ]
+      }
+    ],
+    "seconds": 96.562,
+    "reason": "",
+    "name": "series_mask_workflow"
+  },
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "cf479194cdd0257f4232886e48e2e8a960acfa38ccf93ceb49765504752beea5"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_graphic_raster.py",
+          "--app",
+          "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+          "--root",
+          "D:\\Physim",
+          "--work",
+          "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\graphic_raster\\files \u00e4"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "Graphic raster: 24 real PNG/figure cases, 2 exact RGB texture previews, actual font atlases, masks and atomic failures passed\n",
+        "stderr": "",
+        "seconds": 59.032,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\graphic_raster\\files \u00e4\\app-steps.json",
+            "bytes": 39665,
+            "sha256": "1257de5d981211a09ad06f2c3dd94d1486f3440c878473429c77ea2eeaa6bb21"
+          }
+        ]
+      }
+    ],
+    "seconds": 59.078,
+    "reason": "",
+    "name": "graphic_raster"
+  }
+]

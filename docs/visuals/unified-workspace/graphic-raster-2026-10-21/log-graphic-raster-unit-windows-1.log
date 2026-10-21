@@ -1,0 +1,190 @@
+array.c
+string_view.c
+Compiled src/array.c
+memory.c
+Compiled src/string_view.c
+Compiled src/memory.c
+core.c
+D:\Physim\src\core.c(403) : warning C4706: assignment within conditional expression
+Compiled src/core.c
+hashmap.c
+Compiled src/hashmap.c
+math.c
+Compiled src/math.c
+data.c
+D:\Physim\src\data.c(293) : warning C4701: potentially uninitialized local variable 'unit' used
+Compiled src/data.c
+run_stream.c
+Compiled src/run_stream.c
+run_index.c
+Compiled src/run_index.c
+snapshot.c
+analysis.c
+scene.c
+Compiled src/analysis.c
+Compiled src/scene.c
+Compiled src/snapshot.c
+numerics.c
+Compiled src/numerics.c
+units.c
+Compiled src/units.c
+report.c
+Compiled src/report.c
+report_export.c
+Compiled src/report_export.c
+mechanics.c
+Compiled src/mechanics.c
+contact_world.c
+box_contacts.c
+Compiled src/contact_world.c
+Compiled src/box_contacts.c
+series.c
+Compiled src/series.c
+thermodynamics.c
+Compiled src/thermodynamics.c
+measurement.c
+collision.c
+Compiled src/measurement.c
+Compiled src/collision.c
+electromagnetism.c
+Compiled src/electromagnetism.c
+waves.c
+Compiled src/waves.c
+optics.c
+Compiled src/optics.c
+fluid.c
+Compiled src/fluid.c
+properties.c
+Compiled src/properties.c
+protocol.c
+Compiled src/protocol.c
+platform.c
+runner_output.c
+D:\Physim\src\runner_output.c(20): warning C4200: nonstandard extension used: zero-sized array in struct/union
+Compiled src/runner_output.c
+Compiled src/platform.c
+lexer.c
+Compiled src/language/lexer.c
+parser.c
+Compiled src/language/parser.c
+builtins.c
+Compiled src/language/builtins.c
+emitter.c
+Compiled src/language/emitter.c
+checker.c
+Compiled src/language/checker.c
+batch.c
+Compiled src/batch.c
+adler32.c
+Compiled third_party/zlib-1.3.2/adler32.c
+crc32.c
+Compiled third_party/zlib-1.3.2/crc32.c
+trees.c
+Compiled third_party/zlib-1.3.2/trees.c
+deflate.c
+Compiled third_party/zlib-1.3.2/deflate.c
+uncompr.c
+Compiled third_party/zlib-1.3.2/uncompr.c
+zutil.c
+Compiled third_party/zlib-1.3.2/zutil.c
+inftrees.c
+inflate.c
+Compiled third_party/zlib-1.3.2/inftrees.c
+Compiled third_party/zlib-1.3.2/inflate.c
+inffast.c
+Compiled third_party/zlib-1.3.2/inffast.c
+loader.c
+main.c
+Compiled src/language/loader.c
+Compiled src/language/main.c
+Linked physimc.exe
+experiment.c
+D:\Physim\runners\experiment.c(363) : warning C4701: potentially uninitialized local variable 'writer' used
+Compiled runners/experiment.c
+Linked physim-runner.exe
+analysis.c
+Compiled runners/analysis.c
+Linked physim-analysis-runner.exe
+batch.c
+Compiled runners/batch.c
+Linked physim-batch.exe
+main.c
+Compiled examples/pendulum/main.c
+   Creating library D:\Physim\build\native\Graphic-unit\lib\pendulum.lib and object D:\Physim\build\native\Graphic-unit\lib\pendulum.exp
+Linked pendulum.dll
+main.c
+Compiled examples/projectile/main.c
+   Creating library D:\Physim\build\native\Graphic-unit\lib\projectile.lib and object D:\Physim\build\native\Graphic-unit\lib\projectile.exp
+Linked projectile.dll
+main.c
+Compiled examples/collision/main.c
+   Creating library D:\Physim\build\native\Graphic-unit\lib\collision.lib and object D:\Physim\build\native\Graphic-unit\lib\collision.exp
+Linked collision.dll
+main.c
+Compiled examples/box_floor/main.c
+   Creating library D:\Physim\build\native\Graphic-unit\lib\box_floor.lib and object D:\Physim\build\native\Graphic-unit\lib\box_floor.exp
+Linked box_floor.dll
+main.c
+Compiled examples/spring/main.c
+   Creating library D:\Physim\build\native\Graphic-unit\lib\spring.lib and object D:\Physim\build\native\Graphic-unit\lib\spring.exp
+Linked spring.dll
+main.c
+Compiled examples/uncertain_projectile/main.c
+   Creating library D:\Physim\build\native\Graphic-unit\lib\uncertain_projectile.lib and object D:\Physim\build\native\Graphic-unit\lib\uncertain_projectile.exp
+Linked uncertain_projectile.dll
+main.c
+Compiled examples/box_collision/main.c
+   Creating library D:\Physim\build\native\Graphic-unit\lib\box_collision.lib and object D:\Physim\build\native\Graphic-unit\lib\box_collision.exp
+Linked box_collision.dll
+main.c
+Compiled examples/buoyancy/main.c
+   Creating library D:\Physim\build\native\Graphic-unit\lib\buoyancy.lib and object D:\Physim\build\native\Graphic-unit\lib\buoyancy.exp
+Linked buoyancy.dll
+main.c
+Compiled examples/ccd_events/main.c
+   Creating library D:\Physim\build\native\Graphic-unit\lib\ccd_events.lib and object D:\Physim\build\native\Graphic-unit\lib\ccd_events.exp
+Linked ccd_events.dll
+analysis.c
+Compiled examples/pendulum/analysis.c
+   Creating library D:\Physim\build\native\Graphic-unit\lib\pendulum_analysis.lib and object D:\Physim\build\native\Graphic-unit\lib\pendulum_analysis.exp
+Linked pendulum_analysis.dll
+batch_analysis.c
+D:\Physim\examples\documentation\batch_analysis.c(25) : warning C4701: potentially uninitialized local variable 'endpoints' used
+D:\Physim\examples\documentation\batch_analysis.c(33) : warning C4701: potentially uninitialized local variable 'table' used
+Compiled examples/documentation/batch_analysis.c
+   Creating library D:\Physim\build\native\Graphic-unit\lib\batch_analysis.lib and object D:\Physim\build\native\Graphic-unit\lib\batch_analysis.exp
+Linked batch_analysis.dll
+plot_view.c
+Compiled app/plot_view.c
+graphic_snapshot.c
+Compiled app/graphic_snapshot.c
+graphic_figure.c
+Compiled app/graphic_figure.c
+test_graphic_figure.c
+D:\Physim\tests\test_graphic_figure.c(119): warning C4244: '=': conversion from 'uint64_t' to 'uint32_t', possible loss of data
+D:\Physim\tests\test_graphic_figure.c(139): warning C4244: '=': conversion from 'uint64_t' to 'uint32_t', possible loss of data
+D:\Physim\tests\test_graphic_figure.c(150): warning C4244: '=': conversion from 'uint64_t' to 'uint32_t', possible loss of data
+Compiled tests/test_graphic_figure.c
+Linked physim-test-graphic_figure.exe
+TEST graphic_figure: passed
+test_graphic_snapshot.c
+Compiled tests/test_graphic_snapshot.c
+Linked physim-test-graphic_snapshot.exe
+TEST graphic_snapshot: passed
+test_report.c
+Compiled tests/test_report.c
+Linked physim-test-report.exe
+TEST report: passed
+test_series_mask.c
+D:\Physim\tests\test_series_mask.c(109): warning C4244: '=': conversion from 'uint64_t' to 'uint32_t', possible loss of data
+Compiled tests/test_series_mask.c
+Linked physim-test-series_mask.exe
+TEST series_mask: passed
+png.c
+test_png.c
+Compiled app/png.c
+Compiled tests/test_png.c
+Linked physim-test-png.exe
+TEST png: passed
+Native tests: 5/5 passed. Results: D:\Physim\build\native\Graphic-unit\test-results\run-sg35dcvb
+Build complete: D:\Physim\build\native\Graphic-unit\bin

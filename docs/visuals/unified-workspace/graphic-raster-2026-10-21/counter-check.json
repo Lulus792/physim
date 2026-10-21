@@ -1,0 +1,194 @@
+[
+  {
+    "platform": "windows",
+    "source_version": 1,
+    "scope": "Current checker re-evaluates recorded original native image, no old-binary rerun",
+    "rejected": true,
+    "geometry": {
+      "samples": [
+        {
+          "x": 322,
+          "expected": 330.38775884902725,
+          "actual": 330.0,
+          "error": -0.3877588490272501,
+          "coverage": 2.0
+        },
+        {
+          "x": 631,
+          "expected": 365.22442109651587,
+          "actual": 365.0,
+          "error": -0.2244210965158686,
+          "coverage": 2.0
+        },
+        {
+          "x": 632,
+          "expected": 365.32105590348414,
+          "actual": 365.06226669242295,
+          "error": -0.2587892110611847,
+          "coverage": 2.0866178617338824
+        },
+        {
+          "x": 683,
+          "expected": 559.871391059676,
+          "actual": 558.9377333075771,
+          "error": -0.9336577520988385,
+          "coverage": 2.0866178617338824
+        },
+        {
+          "x": 734,
+          "expected": 374.7574209934912,
+          "actual": 374.0,
+          "error": -0.7574209934912233,
+          "coverage": 2.0
+        },
+        {
+          "x": 786,
+          "expected": 550.8504280743063,
+          "actual": 550.0,
+          "error": -0.8504280743062509,
+          "coverage": 2.0
+        },
+        {
+          "x": 837,
+          "expected": 383.3885463362212,
+          "actual": 383.0,
+          "error": -0.3885463362212249,
+          "coverage": 2.0
+        },
+        {
+          "x": 889,
+          "expected": 542.6787558426464,
+          "actual": 542.0,
+          "error": -0.6787558426464102,
+          "coverage": 2.0
+        },
+        {
+          "x": 890,
+          "expected": 542.6029200718896,
+          "actual": 541.9377333075771,
+          "error": -0.665186764312466,
+          "coverage": 2.0866178617338824
+        },
+        {
+          "x": 941,
+          "expected": 391.10890606786296,
+          "actual": 391.0,
+          "error": -0.10890606786296075,
+          "coverage": 2.0
+        },
+        {
+          "x": 1044,
+          "expected": 398.14135356546564,
+          "actual": 398.0,
+          "error": -0.1413535654656357,
+          "coverage": 2.0
+        },
+        {
+          "x": 1096,
+          "expected": 528.6057599971233,
+          "actual": 527.9377333075771,
+          "error": -0.6680266895461955,
+          "coverage": 2.0866178617338824
+        }
+      ],
+      "maximum_center_error_px": 0.9336577520988385,
+      "mean_coverage_px": 2.028872620577961
+    }
+  },
+  {
+    "platform": "linux",
+    "source_version": 1,
+    "scope": "Current checker re-evaluates recorded original native image, no old-binary rerun",
+    "rejected": true,
+    "geometry": {
+      "samples": [
+        {
+          "x": 322,
+          "expected": 330.38775884902725,
+          "actual": 330.0,
+          "error": -0.3877588490272501,
+          "coverage": 2.0
+        },
+        {
+          "x": 631,
+          "expected": 365.22442109651587,
+          "actual": 365.0,
+          "error": -0.2244210965158686,
+          "coverage": 2.0
+        },
+        {
+          "x": 632,
+          "expected": 365.32105590348414,
+          "actual": 365.06226669242295,
+          "error": -0.2587892110611847,
+          "coverage": 2.0866178617338824
+        },
+        {
+          "x": 683,
+          "expected": 559.871391059676,
+          "actual": 558.9377333075771,
+          "error": -0.9336577520988385,
+          "coverage": 2.0866178617338824
+        },
+        {
+          "x": 734,
+          "expected": 374.7574209934912,
+          "actual": 374.15759648241936,
+          "error": -0.5998245110718585,
+          "coverage": 2.234797481316862
+        },
+        {
+          "x": 786,
+          "expected": 550.8504280743063,
+          "actual": 550.0,
+          "error": -0.8504280743062509,
+          "coverage": 2.0
+        },
+        {
+          "x": 837,
+          "expected": 383.3885463362212,
+          "actual": 383.0,
+          "error": -0.3885463362212249,
+          "coverage": 2.0
+        },
+        {
+          "x": 889,
+          "expected": 542.6787558426464,
+          "actual": 542.0,
+          "error": -0.6787558426464102,
+          "coverage": 2.0
+        },
+        {
+          "x": 890,
+          "expected": 542.6029200718896,
+          "actual": 541.9377333075771,
+          "error": -0.665186764312466,
+          "coverage": 2.0866178617338824
+        },
+        {
+          "x": 941,
+          "expected": 391.10890606786296,
+          "actual": 391.0,
+          "error": -0.10890606786296075,
+          "coverage": 2.0
+        },
+        {
+          "x": 1044,
+          "expected": 398.14135356546564,
+          "actual": 398.0,
+          "error": -0.1413535654656357,
+          "coverage": 2.0
+        },
+        {
+          "x": 1096,
+          "expected": 528.6057599971233,
+          "actual": 527.9377333075771,
+          "error": -0.6680266895461955,
+          "coverage": 2.0866178617338824
+        }
+      ],
+      "maximum_center_error_px": 0.9336577520988385,
+      "mean_coverage_px": 2.048439077354366
+    }
+  }
+]

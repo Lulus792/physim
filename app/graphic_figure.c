@@ -1,5 +1,6 @@
 #include "graphic_figure.h"
 #include "plot_view.h"
+#include "text_validation.h"
 #include <math.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -13,6 +14,7 @@ struct ps_graphic_figure {
     size_t count,capacity;
     unsigned texts;
     char text[TEXT_COUNT][TEXT_BYTES];
+    char family[2][96];
     ps_figure_measure measure;
     void *measure_user;
 };
@@ -75,6 +77,14 @@ static void number(char out[64],double value,double step,bool y) {
     if((fabs(value)>0 && fabs(value)<1e-7) || fabs(value)>=1e9 || (s>0 && s<1e-7))snprintf(out,64,"%.9g",value);
     else snprintf(out,64,"%.*f",(int)digits,value);
     for(char *p=out;*p;p++)if(*p=='.')*p=',';
+}
+static void range_numbers(char first[64],char last[64],double low,double high) {
+    snprintf(first,64,"%.3f",low);snprintf(last,64,"%.3f",high);
+    if(fmax(fabs(low),fabs(high))>=1e9 || high-low<.001 || !strcmp(first,last)) {
+        snprintf(first,64,"%.17g",low);snprintf(last,64,"%.17g",high);
+    }
+    for(char *p=first;*p;p++)if(*p=='.')*p=',';
+    for(char *p=last;*p;p++)if(*p=='.')*p=',';
 }
 static unsigned blend(unsigned a,unsigned b) {
     unsigned c=0;for(unsigned shift=0;shift<24;shift+=8)c|=((((a>>shift)&255)+((b>>shift)&255))/2)<<shift;return c;
@@ -147,8 +157,12 @@ ps_result ps_graphic_figure_create(const ps_graphic_snapshot *snapshot,const ps_
     ps_graphic_description d;ps_graphic_figure_options o={0};if(options)o=*options;
     if(!out || !measure || !ps_allocator_valid(allocator) || ps_graphic_snapshot_describe(snapshot,&d)!=PS_OK ||
        (o.visible && !d.axes.cropped))return PS_INVALID;
+    if((o.font_family && (!*o.font_family || !ps_text_valid(o.font_family,96,false))) ||
+       (o.strong_font_family && (!*o.strong_font_family || !ps_text_valid(o.strong_font_family,96,false))))return PS_INVALID;
     void *memory=NULL;ps_result r=ps_memory_zero(allocator,1,sizeof(ps_graphic_figure),&memory);if(r!=PS_OK)return r;
     ps_graphic_figure *f=memory;f->allocator=allocator;f->measure=measure;f->measure_user=user;
+    if(o.font_family)snprintf(f->family[0],96,"%s",o.font_family);
+    if(o.strong_font_family || o.font_family)snprintf(f->family[1],96,"%s",o.strong_font_family?o.strong_font_family:o.font_family);
     const palette *p=o.dark?&dark:&light;
     const double *b=o.visible?d.axes.visible:d.axes.full;
     double xo=ps_plot_axis_offset(b[0],b[1]),yo=ps_plot_axis_offset(b[2],b[3]);
@@ -160,7 +174,7 @@ ps_result ps_graphic_figure_create(const ps_graphic_snapshot *snapshot,const ps_
     DO(push(f,(ps_figure_command){.kind=PS_FIGURE_RECT,.color=p->paper,.w=1200,.h=850,.curve=-1}));
     DO(text(f,64,58,1084,13,p->muted,PS_FIGURE_START,false,2,"PHYSIM / AUSWERTUNG"));
     DO(text(f,64,104,1084,34,p->ink,PS_FIGURE_START,true,0,d.plot.title));
-    number(a,b[0],.001,false);number(z,b[1],.001,false);
+    range_numbers(a,z,b[0],b[1]);
     snprintf(label,sizeof label,"%s · %s–%s%s%s",title,a,z,d.plot.x_unit.symbol[0]?" ":"",d.plot.x_unit.symbol);
     DO(text(f,64,136,1084,18,p->muted,PS_FIGURE_START,false,0,label));
     for(uint32_t i=0;i<d.plot.curves;i++) {
@@ -237,8 +251,10 @@ static void scalar(char out[32],double value) {
     unsigned long long scaled=(unsigned long long)floor(value*1000000+.5);
     snprintf(out,32,"%llu.%06u",scaled/1000000,(unsigned)(scaled%1000000));
 }
+typedef struct {ps_graphic_svg *svg;const ps_graphic_figure *figure;} svg_drawing;
 static ps_result svg_command(void *user,const ps_figure_command *c) {
-    ps_graphic_svg *s=user;char x[32],y[32],w[32],h[32],stroke[32],spacing[32],advance[32],linebuf[768];
+    svg_drawing *drawing=user;ps_graphic_svg *s=drawing->svg;
+    char x[32],y[32],w[32],h[32],stroke[32],spacing[32],advance[32],linebuf[768];
     scalar(x,c->x);scalar(y,c->y);scalar(w,c->w);scalar(h,c->h);scalar(stroke,c->stroke);scalar(spacing,c->spacing);
     switch(c->kind) {
     case PS_FIGURE_RECT:snprintf(linebuf,sizeof linebuf,"<rect x=\"%s\" y=\"%s\" width=\"%s\" height=\"%s\" fill=\"#%06x\"/>\n",x,y,w,h,c->color);break;
@@ -251,6 +267,10 @@ static ps_result svg_command(void *user,const ps_figure_command *c) {
         scalar(advance,c->advance);
         snprintf(linebuf,sizeof linebuf,"<text x=\"%s\" y=\"%s\" font-size=\"%s\" font-weight=\"%u\" letter-spacing=\"%s\" text-anchor=\"%s\" fill=\"#%06x\"",x,y,h,c->strong?600:400,spacing,anchor,c->color);
         ps_result r=literal(s,linebuf);
+        const char *family=drawing->figure->family[c->strong?1:0];
+        if(r==PS_OK && *family)r=literal(s," font-family=\"");
+        if(r==PS_OK && *family)r=xml(s,family);
+        if(r==PS_OK && *family)r=literal(s,"\"");
         if(r==PS_OK && c->advance>0){snprintf(linebuf,sizeof linebuf," textLength=\"%s\" lengthAdjust=\"spacingAndGlyphs\"",advance);r=literal(s,linebuf);}
         if(r==PS_OK)r=literal(s,">");
         if(r==PS_OK)r=xml(s,c->text);
@@ -278,7 +298,8 @@ ps_result ps_graphic_figure_svg(const ps_graphic_figure *f,size_t byte_limit,ps_
     const char *title="Diagramm";for(size_t i=0;i<f->count;i++)if(f->commands[i].kind==PS_FIGURE_TEXT && f->commands[i].strong){title=f->commands[i].text;break;}
     if(r==PS_OK)r=xml(s,title);
     if(r==PS_OK)r=literal(s,"</title><desc id=\"figure-desc\">Physim: festgehaltene native Diagrammdaten.</desc>\n<defs><clipPath id=\"plot-clip\"><rect x=\"116\" y=\"230\" width=\"1032\" height=\"470\"/></clipPath></defs>\n<g font-family=\"Segoe UI, Arial, sans-serif\">\n");
-    if(r==PS_OK)r=ps_graphic_figure_draw(f,svg_command,s);
+    svg_drawing drawing={s,f};
+    if(r==PS_OK)r=ps_graphic_figure_draw(f,svg_command,&drawing);
     if(r==PS_OK)r=literal(s,"</g></svg>\n");
     if(r!=PS_OK){ps_graphic_svg_destroy(s);return r;}
     *out=s;return PS_OK;

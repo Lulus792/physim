@@ -10,8 +10,10 @@ bereits laufenden nativen Referenzabgleichs.
 Der [native Export-Umsetzungsstand](GRAPHIC-EXPORT-NATIVE.md) enthält inzwischen
 die geprüfte gemeinsame Datenbasis für Berichtsdiagramme und bis zu acht
 Messläufe sowie [Zeichenbeschreibung und SVG](GRAPHIC-FIGURE-NATIVE.md).
-Sichtbarer Mehrlaufcache, Rasteradapter mit echten Schriftmetriken, Vorschau,
-Dialog, Dateiauswahl und echte Bildkopie bleiben zusammenhängend umzusetzen.
+Der [native Rasteradapter](GRAPHIC-RASTER-NATIVE.md) ergänzt reale Schriftmetriken,
+PNG in allen vier Größen und eine eigene RGB-Vorschautextur. Sichtbarer
+Mehrlaufcache, Vorschau im freigegebenen Dialog, Dateiauswahl und echte Bildkopie
+bleiben zusammenhängend umzusetzen.
 Die bisherigen Daten-/Geometrieprüfungen ersetzen diese native Abnahme nicht.
 
 Aktueller nativer Folgeauftrag vom 20. Oktober: zuerst die gesamte Gestaltung

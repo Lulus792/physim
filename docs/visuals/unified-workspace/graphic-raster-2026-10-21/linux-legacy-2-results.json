@@ -1,0 +1,138 @@
+[
+  {
+    "status": "failed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "/usr/bin/python3",
+        "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+        "sha256": "ef5a4dc412afdd8ab62dc97259f31961bb6f913241a680253ad7dc4d061befa8"
+      },
+      {
+        "status": "passed",
+        "target": "physim-png-tests",
+        "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/integration-physim-png-tests",
+        "sha256": "8d177ec6d79d1fa0370772eb8a68cdc6887200773b9aec60a23f2df5c99aaf4b"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/tests/check_display_workflow.py",
+          "plot_workflow",
+          "--app",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "--work",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-rxedvyb7/plot_workflow/files \u00e4",
+          "--root",
+          "/mnt/d/Physim",
+          "--cc",
+          "/usr/bin/cc"
+        ],
+        "status": "failed",
+        "exit_code": 1,
+        "stdout": "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)\nFont atlas: 2048x16384, 80 fonts, GPU limit 16384\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\n5 Messpunkte geladen.\n\nAPP TEST EXIT: 1\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 339.039389\nAPP TEST TRACE: main font sources ready 340.314901\nAPP TEST TRACE: main atlas bake seconds=3.995829\nAPP TEST TRACE: main atlas validation/upload seconds=0.030788\nAPP TEST TRACE: main fonts ready 344.378141\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 0 -> 1, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 5 Messpunkte geladen.\nPlot window analysis-status flags=1120 active=0 bounds=0.0/712.0/1080.0/28.0\nPlot window analysis-heading flags=1120 active=0 bounds=0.0/118.0/1080.0/80.0\nPlot window workspace-path flags=1120 active=0 bounds=0.0/79.0/1080.0/39.0\nPlot window sidebar flags=1120 active=0 bounds=0.0/198.0/232.0/514.0\nPlot window workspace flags=100 active=1 bounds=232.0/198.0/606.0/514.0\nPlot window log flags=2100 active=0 bounds=0.0/0.0/0.0/1.0\nPlot window inspector flags=1100 active=0 bounds=838.0/198.0/242.0/514.0\nPlot window header flags=20 active=0 bounds=0.0/0.0/1080.0/79.0\nPlot window dock-splitter-4 flags=120 active=0 bounds=834.0/198.0/9.0/514.0\nPlot window dock-splitter-6 flags=120 active=0 bounds=228.0/198.0/9.0/514.0\nPlot UI stage 2 failed, area=(342.0,467.0,439.0,106.0), range=(0.163804103,0.329433954)\nAPP TEST TRACE: stage 2 -> 3, status 5 Messpunkte geladen.\nFirst workflow failure at stage 2 (next 3): 5 Messpunkte geladen. (tab=2, selected=0, samples=5, report=1, query=)\nWorkflow failed at stage 3: 5 Messpunkte geladen. (tab=2, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 2138, in <module>\n    main()\n    ~~~~^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1961, in main\n    flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 593, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 530, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--plot-test', '/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-rxedvyb7/plot_workflow/files \u00e4/workflow \u00e4']\n",
+        "reason": "Exit code 1; expected 0",
+        "seconds": 8.303
+      }
+    ],
+    "seconds": 10.259,
+    "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 339.039389\nAPP TEST TRACE: main font sources ready 340.314901\nAPP TEST TRACE: main atlas bake seconds=3.995829\nAPP TEST TRACE: main atlas validation/upload seconds=0.030788\nAPP TEST TRACE: main fonts ready 344.378141\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 0 -> 1, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 5 Messpunkte geladen.\nPlot window analysis-status flags=1120 active=0 bounds=0.0/712.0/1080.0/28.0\nPlot window analysis-heading flags=1120 active=0 bounds=0.0/118.0/1080.0/80.0\nPlot window workspace-path flags=1120 active=0 bounds=0.0/79.0/1080.0/39.0\nPlot window sidebar flags=1120 active=0 bounds=0.0/198.0/232.0/514.0\nPlot window workspace flags=100 active=1 bounds=232.0/198.0/606.0/514.0\nPlot window log flags=2100 active=0 bounds=0.0/0.0/0.0/1.0\nPlot window inspector flags=1100 active=0 bounds=838.0/198.0/242.0/514.0\nPlot window header flags=20 active=0 bounds=0.0/0.0/1080.0/79.0\nPlot window dock-splitter-4 flags=120 active=0 bounds=834.0/198.0/9.0/514.0\nPlot window dock-splitter-6 flags=120 active=0 bounds=228.0/198.0/9.0/514.0\nPlot UI stage 2 failed, area=(342.0,467.0,439.0,106.0), range=(0.163804103,0.329433954)\nAPP TEST TRACE: stage 2 -> 3, status 5 Messpunkte geladen.\nFirst workflow failure at stage 2 (next 3): 5 Messpunkte geladen. (tab=2, selected=0, samples=5, report=1, query=)\nWorkflow failed at stage 3: 5 Messpunkte geladen. (tab=2, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 2138, in <module>\n    main()\n    ~~~~^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1961, in main\n    flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 593, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 530, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--plot-test', '/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-rxedvyb7/plot_workflow/files \u00e4/workflow \u00e4']\n",
+    "name": "plot_workflow"
+  },
+  {
+    "status": "failed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "/usr/bin/python3",
+        "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+        "sha256": "ef5a4dc412afdd8ab62dc97259f31961bb6f913241a680253ad7dc4d061befa8"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/tests/check_display_workflow.py",
+          "graphics",
+          "--app",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "--work",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-rxedvyb7/graphics/files \u00e4",
+          "--root",
+          "/mnt/d/Physim",
+          "--cc",
+          "/usr/bin/cc"
+        ],
+        "status": "failed",
+        "exit_code": 1,
+        "stdout": "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nGPU TEST: Coverage atlas differs from RGBA atlas samples\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 2138, in <module>\n    main()\n    ~~~~^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1961, in main\n    flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 593, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 530, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--renderer-test']\n",
+        "reason": "Exit code 1; expected 0",
+        "seconds": 1.12
+      }
+    ],
+    "seconds": 1.616,
+    "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nGPU TEST: Coverage atlas differs from RGBA atlas samples\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 2138, in <module>\n    main()\n    ~~~~^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1961, in main\n    flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 593, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 530, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--renderer-test']\n",
+    "name": "graphics"
+  },
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "/usr/bin/python3",
+        "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+        "sha256": "ef5a4dc412afdd8ab62dc97259f31961bb6f913241a680253ad7dc4d061befa8"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/tests/check_display_workflow.py",
+          "series_mask_workflow",
+          "--app",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "--work",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-rxedvyb7/series_mask_workflow/files \u00e4",
+          "--root",
+          "/mnt/d/Physim",
+          "--cc",
+          "/usr/bin/cc"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)\nFont atlas: 2048x16384, 80 fonts, GPU limit 16384\nSERIES MASK mask-c SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAnalyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nProjekt gespeichert.\nPhysim baut die Analyse ...\nCompiler: /usr/bin/gcc\nProfile: Release\n\nCompile: /mnt/d/Physim/src/core.c\n\nCompile: /mnt/d/Physim/src/memory.c\n\nCompile: /mnt/d/Physim/src/array.c\n\nCompile: /mnt/d/Physim/src/string_view.c\n\nCompile: /mnt/d/Physim/src/hashmap.c\n\nCompile: /mnt/d/Physim/src/math.c\n\nCompile: /mnt/d/Physim/src/data.c\n\nCompile: /mnt/d/Physim/src/run_stream.c\n\nCompile: /mnt/d/Physim/src/run_index.c\n\nCompile: /mnt/d/Physim/src/snapshot.c\n\nCompile: /mnt/d/Physim/src/analysis.c\n\nCompile: /mnt/d/Physim/src/scene.c\n\nCompile: /mnt/d/Physim/src/numerics.c\n\nCompile: /mnt/d/Physim/src/units.c\n\nCompile: /mnt/d/Physim/src/series.c\n\nCompile: /mnt/d/Physim/src/report.c\n\nCompile: /mnt/d/Physim/src/report_export.c\n\nCompile: /mnt/d/Physim/src/mechanics.c\n\nCompile: /mnt/d/Physim/src/contact_world.c\n\nCompile: /mnt/d/Physim/src/box_contacts.c\n\nCompile: /mnt/d/Physim/src/collision.c\n\nCompile: /mnt/d/Physim/src/measurement.c\n\nCompile: /mnt/d/Physim/src/thermodynamics.c\n\nCompile: /mnt/d/Physim/src/electromagnetism.c\n\nCompile: /mnt/d/Physim/src/waves.c\n\nCompile: /mnt/d/Physim/src/optics.c\n\nCompile: /mnt/d/Physim/src/fluid.c\n\nCompile: /mnt/d/Physim/src/properties.c\n\nCompile: /mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-rxedvyb7/series_mask_workflow/files \u00e4/workflow \u00e4/c/project/analysis.c\n\nLink: /mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-rxedvyb7/series_mask_workflow/files \u00e4/workflow \u00e4/c/project/build/Release/analysis.next.so\n\nBuild successful.\n\nAnalyse erfolgreich gebaut. Gespeicherte L\u00e4ufe k\u00f6nnen ausgewertet werden.\nAnalyse laeuft im separaten Prozess ...\nAnalysis: OK\n\nAuswertung abgeschlossen; Ergebnisse im runs-Ordner.\nAnalyseergebnis geladen. Diagramme und Tabellen sind bereit.\n\nAPP TEST EXIT: 0\nOpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)\nFont atlas: 2048x16384, 80 fonts, GPU limit 16384\nSERIES MASK mask-read SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAnalyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAnalyseergebnis geladen. Diagramme und Tabellen sind bereit.\n\nAPP TEST EXIT: 0\nOpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)\nFont atlas: 2048x16384, 80 fonts, GPU limit 16384\nSERIES MASK mask-phys SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAnalyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nProjekt gespeichert.\nPhysim baut die Analyse ...\nCompiler: /usr/bin/gcc\nProfile: Release\n\nCompile: /mnt/d/Physim/src/core.c\n\nCompile: /mnt/d/Physim/src/memory.c\n\nCompile: /mnt/d/Physim/src/array.c\n\nCompile: /mnt/d/Physim/src/string_view.c\n\nCompile: /mnt/d/Physim/src/hashmap.c\n\nCompile: /mnt/d/Physim/src/math.c\n\nCompile: /mnt/d/Physim/src/data.c\n\nCompile: /mnt/d/Physim/src/run_stream.c\n\nCompile: /mnt/d/Physim/src/run_index.c\n\nCompile: /mnt/d/Physim/src/snapshot.c\n\nCompile: /mnt/d/Physim/src/analysis.c\n\nCompile: /mnt/d/Physim/src/scene.c\n\nCompile: /mnt/d/Physim/src/numerics.c\n\nCompile: /mnt/d/Physim/src/units.c\n\nCompile: /mnt/d/Physim/src/series.c\n\nCompile: /mnt/d/Physim/src/report.c\n\nCompile: /mnt/d/Physim/src/report_export.c\n\nCompile: /mnt/d/Physim/src/mechanics.c\n\nCompile: /mnt/d/Physim/src/contact_world.c\n\nCompile: /mnt/d/Physim/src/box_contacts.c\n\nCompile: /mnt/d/Physim/src/collision.c\n\nCompile: /mnt/d/Physim/src/measurement.c\n\nCompile: /mnt/d/Physim/src/thermodynamics.c\n\nCompile: /mnt/d/Physim/src/electromagnetism.c\n\nCompile: /mnt/d/Physim/src/waves.c\n\nCompile: /mnt/d/Physim/src/optics.c\n\nCompile: /mnt/d/Physim/src/fluid.c\n\nCompile: /mnt/d/Physim/src/properties.c\n\nCompile: /mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-rxedvyb7/series_mask_workflow/files \u00e4/workflow \u00e4/phys/project/build/Release/analysis.physim.c\n\nLink: /mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-rxedvyb7/series_mask_workflow/files \u00e4/workflow \u00e4/phys/project/build/Release/analysis.next.so\n\nBuild successful.\n\nAnalyse erfolgreich gebaut. Gespeicherte L\u00e4ufe k\u00f6nnen ausgewertet werden.\nAnalyse laeuft im separaten Prozess ...\nAnalysis: OK\n\nAuswertung abgeschlossen; Ergebnisse im runs-Ordner.\nAnalyseergebnis geladen. Diagramme und Tabellen sind bereit.\n\nAPP TEST EXIT: 0\nOpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)\nFont atlas: 2048x16384, 80 fonts, GPU limit 16384\nSERIES MASK mask-read SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAnalyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAnalyseergebnis geladen. Diagramme und Tabellen sind bereit.\n\nAPP TEST EXIT: 0\nseries_mask_workflow: app workflow and persisted files passed\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 349.344140\nAPP TEST TRACE: main font sources ready 350.583765\nAPP TEST TRACE: main atlas bake seconds=3.804762\nAPP TEST TRACE: main atlas validation/upload seconds=0.036608\nAPP TEST TRACE: main fonts ready 354.458885\nAPP TEST TRACE: initial stage 0, status Analyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAPP TEST TRACE: stage 0 -> 1, status Physim baut die Analyse ...\nAPP TEST TRACE: stage 1 -> 2, status Analyse erfolgreich gebaut. Gespeicherte L\u00e4ufe k\u00f6nnen ausgewertet werden.\nAPP TEST TRACE: stage 2 -> 3, status Analyse erfolgreich gebaut. Gespeicherte L\u00e4ufe k\u00f6nnen ausgewertet werden.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=55165557818\nAPP TEST TRACE: stage 3 -> 4, status Analyse laeuft im separaten Prozess ...\nAPP TEST TRACE: stage 4 -> 5, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 5 -> 6, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 6 -> 7, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 7 -> 8, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 408.490786\nAPP TEST TRACE: main font sources ready 409.830745\nAPP TEST TRACE: main atlas bake seconds=4.172977\nAPP TEST TRACE: main atlas validation/upload seconds=0.054488\nAPP TEST TRACE: main fonts ready 414.101311\nAPP TEST TRACE: initial stage 0, status Analyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAPP TEST TRACE: stage 0 -> 4, status Analyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAPP TEST TRACE: stage 4 -> 5, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 5 -> 6, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 6 -> 7, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 7 -> 8, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 417.372274\nAPP TEST TRACE: main font sources ready 418.611095\nAPP TEST TRACE: main atlas bake seconds=2.945008\nAPP TEST TRACE: main atlas validation/upload seconds=0.040973\nAPP TEST TRACE: main fonts ready 421.637929\nAPP TEST TRACE: initial stage 0, status Analyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAPP TEST TRACE: stage 0 -> 1, status Physim baut die Analyse ...\nAPP TEST TRACE: stage 1 -> 2, status Analyse erfolgreich gebaut. Gespeicherte L\u00e4ufe k\u00f6nnen ausgewertet werden.\nAPP TEST TRACE: stage 2 -> 3, status Analyse erfolgreich gebaut. Gespeicherte L\u00e4ufe k\u00f6nnen ausgewertet werden.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=50011697095\nAPP TEST TRACE: stage 3 -> 4, status Analyse laeuft im separaten Prozess ...\nAPP TEST TRACE: stage 4 -> 5, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 5 -> 6, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 6 -> 7, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 7 -> 8, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 471.718708\nAPP TEST TRACE: main font sources ready 473.030166\nAPP TEST TRACE: main atlas bake seconds=3.066431\nAPP TEST TRACE: main atlas validation/upload seconds=0.039763\nAPP TEST TRACE: main fonts ready 476.169394\nAPP TEST TRACE: initial stage 0, status Analyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAPP TEST TRACE: stage 0 -> 4, status Analyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAPP TEST TRACE: stage 4 -> 5, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 5 -> 6, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 6 -> 7, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 7 -> 8, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\n",
+        "seconds": 129.922,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-rxedvyb7/series_mask_workflow/files \u00e4/app-steps.json",
+            "bytes": 11628,
+            "sha256": "a3d251c580f64601b3daccca2c523155acd92600747ca36ce9a1598c4b464250"
+          }
+        ]
+      }
+    ],
+    "seconds": 130.397,
+    "reason": "",
+    "name": "series_mask_workflow"
+  }
+]

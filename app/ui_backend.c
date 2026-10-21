@@ -7,6 +7,9 @@
 #include "ui.h"
 #include <limits.h>
 #include <math.h>
+void ps_ui_draw_list_clip(struct nk_draw_list *list,struct nk_rect bounds) {
+ if(list)nk_draw_list_add_clip(list,bounds);
+}
 static unsigned font_be32(const unsigned char *p) {
  return ((unsigned)p[0]<<24)|((unsigned)p[1]<<16)|((unsigned)p[2]<<8)|p[3];
 }

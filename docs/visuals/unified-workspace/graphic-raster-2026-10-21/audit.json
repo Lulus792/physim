@@ -1,0 +1,17 @@
+{
+  "source_banks_match_current": {
+    "source_sha256_lf": 119,
+    "foreign_sha256_lf": 10,
+    "font_assets_sha256": 14,
+    "linebreak_assets_sha256": 20
+  },
+  "foreign_banks_unchanged_all_four_versions": true,
+  "native_groups_per_platform": 4,
+  "unit_groups_per_platform": 5,
+  "raster_cases_per_platform": 24,
+  "preview_roundtrips_per_platform": 2,
+  "negative_images_rejected": 2,
+  "benchmark_decoded_rgb_identity_reports": 4,
+  "all_artifacts_sha_verified": true,
+  "completion": false
+}

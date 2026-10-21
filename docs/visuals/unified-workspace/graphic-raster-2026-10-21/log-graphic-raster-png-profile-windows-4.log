@@ -1,0 +1,5 @@
+benchmark_png_levels.c
+Compiled tests/benchmark_png_levels.c
+Linked physim-png-level-profile.exe
+full-light-2.png {'1': 0.4390029, '6': 2.569948} ratio 0.17082170534189794
+full-dark-2.png {'1': 0.5313089, '6': 2.5888289} ratio 0.20523136928825228

@@ -1,0 +1,18 @@
+649 C and 615 Physim completion symbols verified
+TEST graphic_raster: failed
+Exit code 1; expected 0
+Traceback (most recent call last):
+  File "/mnt/d/Physim/tests/check_graphic_raster.py", line 86, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "/mnt/d/Physim/tests/check_graphic_raster.py", line 83, in main
+    step['checks']=inspect(work,step['stdout'])
+                   ~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/d/Physim/tests/check_graphic_raster.py", line 38, in inspect
+    assert (int(window_w),int(window_h))==((760,540) if scale%2 else (1600,900))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+
+Build failed: 1 native tests failed; see /mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-amqwkt0l
+Native tests: 0/1 passed. Results: /mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-amqwkt0l

@@ -4,8 +4,12 @@ Auf die [festgehaltenen Diagrammdaten](GRAPHIC-EXPORT-NATIVE.md) folgt eine
 eigene unveränderliche Zeichenbeschreibung in `app/graphic_figure.c`.
 Sie übernimmt Layout und Hell-/Dunkelpaletten der
 [freigegebenen Vorlage](EXPORT-EXAMPLE.md). SVG verwendet bereits diese
-Beschreibung. Native Rasterausgabe, Vorschau und Dialog bleiben anzubinden;
-dies ist keine fertige Export- oder Designabnahme.
+Beschreibung. Der folgende [native Rasteradapter](GRAPHIC-RASTER-NATIVE.md)
+ergänzt reale Schriftmetriken, vier PNG-Größen und eine RGB-Vorschautextur.
+Sichtbare Vorschau und Dialog bleiben anzubinden; dies ist keine fertige
+Export- oder Designabnahme. Die folgenden Tests behalten ihren eingefrorenen
+Figurenstand; der Rasterbericht führt spätere Änderungen an Schriftmetadaten
+und der dreistelligen Bereichsbeschriftung separat.
 
 Die Basisfläche bleibt **1200 × 850**, die Diagrammfläche liegt bei
 **116/230/1032/470**. Titel, Untertitel, Legende, fünf Y- und sechs X-Gitterlinien,

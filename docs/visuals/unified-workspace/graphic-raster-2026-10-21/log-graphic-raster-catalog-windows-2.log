@@ -1,0 +1,31 @@
+649 C and 615 Physim completion symbols verified
+649 C and 615 Physim completion symbols verified
+649 C and 615 Physim completion symbols verified
+649 C and 615 Physim completion symbols verified
+649 C and 615 Physim completion symbols verified
+649 C and 615 Physim completion symbols verified
+649 C and 615 Physim completion symbols verified
+649 C and 615 Physim completion symbols verified
+649 C and 615 Physim completion symbols verified
+before timeout
+TEST build_error: build_failed
+Expected compiler failure
+
+TEST exit_error: failed
+Exit code 7; expected 0
+
+TEST later_success: passed
+Native tests: 1/3 passed. Results: D:\Physim\build\native\graphic-raster-catalog2-windows\test runner ä ujq0l4gq\test-results\run-2v5n5eqv
+TEST later_success: passed
+Native tests: 1/1 passed. Results: D:\Physim\build\native\graphic-raster-catalog2-windows\test runner ä ujq0l4gq\test-results\run-1v_5r8sm
+TEST build_error: build_failed
+Expected compiler failure
+
+TEST exit_error: failed
+Exit code 7; expected 0
+
+TEST later_success: passed
+Native tests: 1/3 passed. Results: D:\Physim\build\native\graphic-raster-catalog2-windows\test runner ä ujq0l4gq\test-results\run-qtj7vbcc
+TEST display_only: passed
+Native tests: 1/1 passed. Results: D:\Physim\build\native\graphic-raster-catalog2-windows\test runner ä ujq0l4gq\test-results\run-7yndjd0v
+Native test runner: expected exits, diagnostics, timeouts, launch/build failures and complete reports passed

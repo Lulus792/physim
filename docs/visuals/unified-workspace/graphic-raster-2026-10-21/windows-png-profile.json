@@ -1,0 +1,165 @@
+{
+  "scope": "Paired same-process DEFLATE 6/1 profile on actual native PNG input pixels.\n\nUses existing sanitized or normal native unit libraries. Times include encoding\nand writing/closing a new file, without claiming durable storage or UI latency.\n",
+  "config": "Debug",
+  "sanitizers": true,
+  "png_source_sha256": "911daef1f829c43fb954be676161c8ae2f6eac0687f945780bb7eb1679727072",
+  "program_sha256": "fd777fbfb83b23c1b0924359729e58951004144ad65940ed0f68c61969cd4d56",
+  "reports": [
+    {
+      "input": "build\\native\\Design-analysis\\test-results\\run-830y9lur\\graphic_raster\\files ä\\platform\\full-light-2.png",
+      "input_sha256": "3ece5f02ae4e05ef0e38a13f5d682f3c80d43b426f4e08933176607c57378179",
+      "size": [
+        2400,
+        1700
+      ],
+      "rgb_sha256": "237d1dd5518c9c02ce8bdd3013505a70b7742de1b38477ba756a3bb92ef02008",
+      "command": [
+        "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-png-level-profile.exe",
+        "D:\\Physim\\build\\native\\graphic-raster-png-profile-windows-4\\input-0.rgb",
+        "D:\\Physim\\build\\native\\graphic-raster-png-profile-windows-4\\output-0"
+      ],
+      "exit_code": 0,
+      "stdout": "PNG INPUT: width=2400 height=1700 bytes=12240000 crc=b4663a8b\r\nPNG LEVEL: pair=0 level=6 seconds=2.195926700 bytes=245910\r\nPNG LEVEL: pair=0 level=1 seconds=0.439002900 bytes=301537\r\nPNG LEVEL: pair=1 level=1 seconds=0.515641900 bytes=301537\r\nPNG LEVEL: pair=1 level=6 seconds=2.569948000 bytes=245910\r\nPNG LEVEL: pair=2 level=6 seconds=2.909169300 bytes=245910\r\nPNG LEVEL: pair=2 level=1 seconds=0.413528300 bytes=301537\r\n",
+      "stderr": "",
+      "samples": [
+        {
+          "pair": 0,
+          "level": 6,
+          "seconds": 2.1959267,
+          "bytes": 245910,
+          "path": "build\\native\\graphic-raster-png-profile-windows-4\\output-0-level6-0.png",
+          "sha256": "3ece5f02ae4e05ef0e38a13f5d682f3c80d43b426f4e08933176607c57378179",
+          "rgb_identical": true
+        },
+        {
+          "pair": 0,
+          "level": 1,
+          "seconds": 0.4390029,
+          "bytes": 301537,
+          "path": "build\\native\\graphic-raster-png-profile-windows-4\\output-0-level1-0.png",
+          "sha256": "3382fd28ddae634f5c753b1cf25751bfb2167d9fac85312b289f1b7bb238dd0b",
+          "rgb_identical": true
+        },
+        {
+          "pair": 1,
+          "level": 1,
+          "seconds": 0.5156419,
+          "bytes": 301537,
+          "path": "build\\native\\graphic-raster-png-profile-windows-4\\output-0-level1-1.png",
+          "sha256": "3382fd28ddae634f5c753b1cf25751bfb2167d9fac85312b289f1b7bb238dd0b",
+          "rgb_identical": true
+        },
+        {
+          "pair": 1,
+          "level": 6,
+          "seconds": 2.569948,
+          "bytes": 245910,
+          "path": "build\\native\\graphic-raster-png-profile-windows-4\\output-0-level6-1.png",
+          "sha256": "3ece5f02ae4e05ef0e38a13f5d682f3c80d43b426f4e08933176607c57378179",
+          "rgb_identical": true
+        },
+        {
+          "pair": 2,
+          "level": 6,
+          "seconds": 2.9091693,
+          "bytes": 245910,
+          "path": "build\\native\\graphic-raster-png-profile-windows-4\\output-0-level6-2.png",
+          "sha256": "3ece5f02ae4e05ef0e38a13f5d682f3c80d43b426f4e08933176607c57378179",
+          "rgb_identical": true
+        },
+        {
+          "pair": 2,
+          "level": 1,
+          "seconds": 0.4135283,
+          "bytes": 301537,
+          "path": "build\\native\\graphic-raster-png-profile-windows-4\\output-0-level1-2.png",
+          "sha256": "3382fd28ddae634f5c753b1cf25751bfb2167d9fac85312b289f1b7bb238dd0b",
+          "rgb_identical": true
+        }
+      ],
+      "medians": {
+        "1": 0.4390029,
+        "6": 2.569948
+      },
+      "level1_over_level6": 0.17082170534189794
+    },
+    {
+      "input": "build\\native\\Design-analysis\\test-results\\run-830y9lur\\graphic_raster\\files ä\\platform\\full-dark-2.png",
+      "input_sha256": "42c612483c7293470971df6240ba382fe474ae6d43aa8bfacbf54a7a4c7e1d1e",
+      "size": [
+        2400,
+        1700
+      ],
+      "rgb_sha256": "6fb130cfebad9fc566dc05e6f0a5d2c9dce551291b5022af68c5989398a0312b",
+      "command": [
+        "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-png-level-profile.exe",
+        "D:\\Physim\\build\\native\\graphic-raster-png-profile-windows-4\\input-1.rgb",
+        "D:\\Physim\\build\\native\\graphic-raster-png-profile-windows-4\\output-1"
+      ],
+      "exit_code": 0,
+      "stdout": "PNG INPUT: width=2400 height=1700 bytes=12240000 crc=1ab6a0a5\r\nPNG LEVEL: pair=0 level=6 seconds=1.998795800 bytes=243524\r\nPNG LEVEL: pair=0 level=1 seconds=0.514225500 bytes=299799\r\nPNG LEVEL: pair=1 level=1 seconds=0.531597500 bytes=299799\r\nPNG LEVEL: pair=1 level=6 seconds=2.815030500 bytes=243524\r\nPNG LEVEL: pair=2 level=6 seconds=2.588828900 bytes=243524\r\nPNG LEVEL: pair=2 level=1 seconds=0.531308900 bytes=299799\r\n",
+      "stderr": "",
+      "samples": [
+        {
+          "pair": 0,
+          "level": 6,
+          "seconds": 1.9987958,
+          "bytes": 243524,
+          "path": "build\\native\\graphic-raster-png-profile-windows-4\\output-1-level6-0.png",
+          "sha256": "42c612483c7293470971df6240ba382fe474ae6d43aa8bfacbf54a7a4c7e1d1e",
+          "rgb_identical": true
+        },
+        {
+          "pair": 0,
+          "level": 1,
+          "seconds": 0.5142255,
+          "bytes": 299799,
+          "path": "build\\native\\graphic-raster-png-profile-windows-4\\output-1-level1-0.png",
+          "sha256": "f4362b3e936f3a0f3eb5a3ff9cf5b3f06d4a4b91879fcefb5457641994ceff18",
+          "rgb_identical": true
+        },
+        {
+          "pair": 1,
+          "level": 1,
+          "seconds": 0.5315975,
+          "bytes": 299799,
+          "path": "build\\native\\graphic-raster-png-profile-windows-4\\output-1-level1-1.png",
+          "sha256": "f4362b3e936f3a0f3eb5a3ff9cf5b3f06d4a4b91879fcefb5457641994ceff18",
+          "rgb_identical": true
+        },
+        {
+          "pair": 1,
+          "level": 6,
+          "seconds": 2.8150305,
+          "bytes": 243524,
+          "path": "build\\native\\graphic-raster-png-profile-windows-4\\output-1-level6-1.png",
+          "sha256": "42c612483c7293470971df6240ba382fe474ae6d43aa8bfacbf54a7a4c7e1d1e",
+          "rgb_identical": true
+        },
+        {
+          "pair": 2,
+          "level": 6,
+          "seconds": 2.5888289,
+          "bytes": 243524,
+          "path": "build\\native\\graphic-raster-png-profile-windows-4\\output-1-level6-2.png",
+          "sha256": "42c612483c7293470971df6240ba382fe474ae6d43aa8bfacbf54a7a4c7e1d1e",
+          "rgb_identical": true
+        },
+        {
+          "pair": 2,
+          "level": 1,
+          "seconds": 0.5313089,
+          "bytes": 299799,
+          "path": "build\\native\\graphic-raster-png-profile-windows-4\\output-1-level1-2.png",
+          "sha256": "f4362b3e936f3a0f3eb5a3ff9cf5b3f06d4a4b91879fcefb5457641994ceff18",
+          "rgb_identical": true
+        }
+      ],
+      "medians": {
+        "1": 0.5313089,
+        "6": 2.5888289
+      },
+      "level1_over_level6": 0.20523136928825228
+    }
+  ]
+}

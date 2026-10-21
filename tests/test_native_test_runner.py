@@ -146,6 +146,7 @@ def main():
         "project_migration_app": ("tests/test_project_migration_app.py", ()),
         "project_identity_app": ("tests/test_project_migration_app.py", ("--identities",)),
         "app_profiling_workflow": ("tests/test_app_profiling_workflow.py", ()),
+        "graphic_raster": ("tests/check_graphic_raster.py", ("--root",)),
     }
     if sys.platform == "linux":
         specialized_display.update({

@@ -1,0 +1,40 @@
+[
+  {
+    "status": "failed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "/usr/bin/python3",
+        "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+        "sha256": "fd889b29a375b0bc2f949ad36eafb385ea151cbf79d9f4cb585e331bdfb01982"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/tests/check_graphic_raster.py",
+          "--app",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "--root",
+          "/mnt/d/Physim",
+          "--work",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-amqwkt0l/graphic_raster/files \u00e4"
+        ],
+        "status": "failed",
+        "exit_code": 1,
+        "stdout": "",
+        "stderr": "Traceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_graphic_raster.py\", line 86, in <module>\n    if __name__=='__main__':main()\n                            ~~~~^^\n  File \"/mnt/d/Physim/tests/check_graphic_raster.py\", line 83, in main\n    step['checks']=inspect(work,step['stdout'])\n                   ~~~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_graphic_raster.py\", line 38, in inspect\n    assert (int(window_w),int(window_h))==((760,540) if scale%2 else (1600,900))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+        "reason": "Exit code 1; expected 0",
+        "seconds": 23.541
+      }
+    ],
+    "seconds": 23.848,
+    "reason": "Exit code 1; expected 0\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_graphic_raster.py\", line 86, in <module>\n    if __name__=='__main__':main()\n                            ~~~~^^\n  File \"/mnt/d/Physim/tests/check_graphic_raster.py\", line 83, in main\n    step['checks']=inspect(work,step['stdout'])\n                   ~~~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_graphic_raster.py\", line 38, in inspect\n    assert (int(window_w),int(window_h))==((760,540) if scale%2 else (1600,900))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n",
+    "name": "graphic_raster"
+  }
+]

@@ -2,12 +2,14 @@
 
 Der freigegebene [Grafikexport](EXPORT-EXAMPLE.md) nach
 [ADR 010](../../decisions/010-analysis-graphic-export.md) bleibt vollständig
-beauftragt. Dieser Stand ergänzt seine Datengrundlage; der neue Dialog,
-seine Vorschau und die native Bildkopie sind noch nicht angebunden.
+beauftragt. Datenbasis, gemeinsame Figur und nativer Rasteradapter sind vorhanden;
+der sichtbare neue Dialog und die native Bildkopie sind noch nicht angebunden.
 
 Anschließend ergänzt die [gemeinsame Zeichenbeschreibung](GRAPHIC-FIGURE-NATIVE.md)
-das freigegebene Figurenlayout und echte SVG-Ausgabe. Native Rasterausgabe,
-sichtbare Vorschau und Dialog bleiben anzubinden. Die folgenden Datenprüfungen
+das freigegebene Figurenlayout und echte SVG-Ausgabe. Der folgende
+[Rasteradapter](GRAPHIC-RASTER-NATIVE.md) ergänzt echte Schriften, PNG in vier
+Größen und eine aus denselben RGB-Pixeln erzeugte Vorschautextur. Sichtbare
+Vorschau und Dialog bleiben anzubinden. Die folgenden Datenprüfungen
 behalten ihren eigenen eingefrorenen Quellstand.
 
 ## Festgehaltene Diagrammdaten
@@ -88,7 +90,7 @@ Checkout nur dieses Patches. Es gibt keine aktuelle macOS-Ausführung.
 | Teil | Noch erforderliche Arbeit |
 | --- | --- |
 | Datenansicht | Gemeinsamen Mehrlaufcache in die sichtbare Kurve, Referenz, Legende und Vergleichsstatistik anbinden; asynchrone Ergebnisse anhand der tatsächlichen Auswahl verwerfen. |
-| Gemeinsame Darstellung | Die [Zeichenbeschreibung und SVG](GRAPHIC-FIGURE-NATIVE.md) sind geprüft. Rasteradapter mit echten Schriftmetriken und dieselbe Beschreibung an PNG/Vorschau anbinden; die bisherigen sichtbaren Exportwege verwenden weiter unterschiedliche Layouts. |
+| Gemeinsame Darstellung | [Zeichenbeschreibung/SVG](GRAPHIC-FIGURE-NATIVE.md) und [Rasteradapter mit realen Schriften, PNG und RGB-Vorschautextur](GRAPHIC-RASTER-NATIVE.md) sind geprüft. Segmentübergänge, acht Kurven und externe SVG-Schriften weiter abgleichen; gemeinsame Ausgabe an den sichtbaren Dialog anbinden. Die bisherigen sichtbaren Exportwege verwenden weiter unterschiedliche Layouts. |
 | Dialog und Zugänge | Freigegebenes Hell-/Dunkellayout einschließlich kleiner Fenster, Grafikbuttons und einzelner Berichtsdiagramme umsetzen. |
 | Optionen | PNG/SVG, vier PNG-Größen, vollständige/sichtbare Grenzen und beim Öffnen festgehaltene Darstellung anbinden. |
 | Speichern | Native Dateiauswahl, Abbruch, bestehende Dateien und Schreib-/Renderfehler mit derselben festgehaltenen Ausgabe prüfen. |

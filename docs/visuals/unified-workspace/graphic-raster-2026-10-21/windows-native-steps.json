@@ -1,0 +1,996 @@
+[
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+      "--graphic-raster-test",
+      "D:\\Physim",
+      "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\graphic_raster\\files ä\\platform"
+    ],
+    "seconds": 17.593999999924563,
+    "exit_code": 0,
+    "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\r\nGRAPHIC RASTER CASE: name=full-light-1 width=1200 height=850 scale=1 glyphs=100 atlas=512,256 font=25.27148,45.22266 peak=4951676 window=760,540 crc=d712f9a3\r\nGRAPHIC RASTER FONT: Segoe UI | Segoe UI\r\nGRAPHIC RASTER GLYPH: name=full-light-1 A=13.000,23.000\r\nGRAPHIC RASTER TIME: name=full-light-1 resize=0.000819 fonts=0.033650 render=0.028130 total=0.062172\r\nGRAPHIC RASTER CASE: name=full-light-2 width=2400 height=1700 scale=2 glyphs=100 atlas=512,1024 font=50.54297,90.44531 peak=4951676 window=1600,900 crc=1af13a96\r\nGRAPHIC RASTER FONT: Segoe UI | Segoe UI\r\nGRAPHIC RASTER GLYPH: name=full-light-2 A=25.000,45.000\r\nGRAPHIC RASTER TIME: name=full-light-2 resize=0.001644 fonts=0.076127 render=0.038478 total=0.114702\r\nGRAPHIC RASTER CASE: name=full-light-3 width=3600 height=2550 scale=3 glyphs=100 atlas=512,2048 font=75.81445,135.66797 peak=4993220 window=760,540 crc=15ab7659\r\nGRAPHIC RASTER FONT: Segoe UI | Segoe UI\r\nGRAPHIC RASTER GLYPH: name=full-light-3 A=36.500,67.500\r\nGRAPHIC RASTER TIME: name=full-light-3 resize=0.001342 fonts=0.118247 render=0.075546 total=0.193883\r\nGRAPHIC RASTER CASE: name=full-light-4 width=4800 height=3400 scale=4 glyphs=100 atlas=512,4096 font=101.08594,180.89062 peak=6042516 window=1600,900 crc=7ed0feef\r\nGRAPHIC RASTER FONT: Segoe UI | Segoe UI\r\nGRAPHIC RASTER GLYPH: name=full-light-4 A=48.500,89.500\r\nGRAPHIC RASTER TIME: name=full-light-4 resize=0.001258 fonts=0.146205 render=0.116221 total=0.262530\r\nGRAPHIC RASTER CASE: name=full-dark-1 width=1200 height=850 scale=1 glyphs=100 atlas=512,256 font=25.27148,45.22266 peak=4951676 window=760,540 crc=42267c64\r\nGRAPHIC RASTER FONT: Segoe UI | Segoe UI\r\nGRAPHIC RASTER GLYPH: name=full-dark-1 A=13.000,23.000\r\nGRAPHIC RASTER TIME: name=full-dark-1 resize=0.002295 fonts=0.054983 render=0.023501 total=0.078582\r\nGRAPHIC RASTER CASE: name=full-dark-2 width=2400 height=1700 scale=2 glyphs=100 atlas=512,1024 font=50.54297,90.44531 peak=4951676 window=1600,900 crc=a98dbd24\r\nGRAPHIC RASTER FONT: Segoe UI | Segoe UI\r\nGRAPHIC RASTER GLYPH: name=full-dark-2 A=25.000,45.000\r\nGRAPHIC RASTER TIME: name=full-dark-2 resize=0.001320 fonts=0.079157 render=0.040264 total=0.119509\r\nGRAPHIC RASTER CASE: name=full-dark-3 width=3600 height=2550 scale=3 glyphs=100 atlas=512,2048 font=75.81445,135.66797 peak=4993220 window=760,540 crc=c5acc7a6\r\nGRAPHIC RASTER FONT: Segoe UI | Segoe UI\r\nGRAPHIC RASTER GLYPH: name=full-dark-3 A=36.500,67.500\r\nGRAPHIC RASTER TIME: name=full-dark-3 resize=0.001729 fonts=0.152850 render=0.085790 total=0.238735\r\nGRAPHIC RASTER CASE: name=full-dark-4 width=4800 height=3400 scale=4 glyphs=100 atlas=512,4096 font=101.08594,180.89062 peak=6042516 window=1600,900 crc=2daca533\r\nGRAPHIC RASTER FONT: Segoe UI | Segoe UI\r\nGRAPHIC RASTER GLYPH: name=full-dark-4 A=48.500,89.500\r\nGRAPHIC RASTER TIME: name=full-dark-4 resize=0.001332 fonts=0.173736 render=0.107301 total=0.281140\r\nGRAPHIC RASTER CASE: name=crop-light-2 width=2400 height=1700 scale=2 glyphs=100 atlas=512,1024 font=50.54297,90.44531 peak=4951676 window=1600,900 crc=79f1d007\r\nGRAPHIC RASTER FONT: Segoe UI | Segoe UI\r\nGRAPHIC RASTER GLYPH: name=crop-light-2 A=25.000,45.000\r\nGRAPHIC RASTER TIME: name=crop-light-2 resize=0.000618 fonts=0.065071 render=0.032393 total=0.097547\r\nGRAPHIC RASTER CASE: name=crop-dark-2 width=2400 height=1700 scale=2 glyphs=100 atlas=512,1024 font=50.54297,90.44531 peak=4951676 window=1600,900 crc=e6da78b2\r\nGRAPHIC RASTER FONT: Segoe UI | Segoe UI\r\nGRAPHIC RASTER GLYPH: name=crop-dark-2 A=25.000,45.000\r\nGRAPHIC RASTER TIME: name=crop-dark-2 resize=0.000603 fonts=0.069599 render=0.032971 total=0.102642\r\nGRAPHIC RASTER CASE: name=marks-light-1 width=1200 height=850 scale=1 glyphs=100 atlas=512,256 font=25.27148,45.22266 peak=4951676 window=760,540 crc=c654e8db\r\nGRAPHIC RASTER FONT: Segoe UI | Segoe UI\r\nGRAPHIC RASTER GLYPH: name=marks-light-1 A=13.000,23.000\r\nGRAPHIC RASTER TIME: name=marks-light-1 resize=0.001518 fonts=0.054333 render=0.015884 total=0.070434\r\nGRAPHIC RASTER CASE: name=marks-dark-1 width=1200 height=850 scale=1 glyphs=100 atlas=512,256 font=25.27148,45.22266 peak=4951676 window=760,540 crc=3cfaf0ee\r\nGRAPHIC RASTER FONT: Segoe UI | Segoe UI\r\nGRAPHIC RASTER GLYPH: name=marks-dark-1 A=13.000,23.000\r\nGRAPHIC RASTER TIME: name=marks-dark-1 resize=0.007000 fonts=0.053047 render=0.010345 total=0.063472\r\nGRAPHIC RASTER SELF-TEST: PASSED sizes=4 themes=2 crop=xy marks=line,scatter,histogram preview=identical-rgb source=detached errors=atomic\r\n",
+    "stderr": "APP TEST TRACE: initializing SDL\r\nAPP TEST TRACE: SDL initialized, video driver windows\r\nAPP TEST TRACE: creating window\r\nAPP TEST TRACE: window created, creating OpenGL context\r\n",
+    "checks": {
+      "cases": [
+        {
+          "name": "full-light-1",
+          "size": [
+            1200,
+            850
+          ],
+          "rgb_crc32": "d712f9a3",
+          "png_sha256": "d48b9d54c87a998a48f9906739797fd0c835ac9abe51c7f3c281b4fa0aa856ea",
+          "title_ink_samples": 1786,
+          "atlas": [
+            512,
+            256
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            25.27148,
+            45.22266
+          ],
+          "font_peak_bytes": 4951676,
+          "window_size": [
+            760,
+            540
+          ],
+          "subpixel_geometry": {
+            "samples": [
+              {
+                "x": 322,
+                "expected": 330.38775884902725,
+                "actual": 330.5041546845147,
+                "error": 0.11639583548742394,
+                "coverage": 2.7767936902194044
+              },
+              {
+                "x": 632,
+                "expected": 365.32105590348414,
+                "actual": 365.40158714280955,
+                "error": 0.08053123932540984,
+                "coverage": 2.613765605595137
+              },
+              {
+                "x": 683,
+                "expected": 559.871391059676,
+                "actual": 559.7466122584002,
+                "error": -0.12477880127573826,
+                "coverage": 2.7003834673290195
+              },
+              {
+                "x": 734,
+                "expected": 374.7574209934912,
+                "actual": 374.80950063637056,
+                "error": 0.05207964287933464,
+                "coverage": 3.05572259624812
+              },
+              {
+                "x": 786,
+                "expected": 550.8504280743063,
+                "actual": 550.7254285530506,
+                "error": -0.12499952125563141,
+                "coverage": 2.7098067411813407
+              },
+              {
+                "x": 837,
+                "expected": 383.3885463362212,
+                "actual": 383.50515868921684,
+                "error": 0.11661235299561667,
+                "coverage": 2.74529925703205
+              },
+              {
+                "x": 889,
+                "expected": 542.6787558426464,
+                "actual": 542.6409596460315,
+                "error": -0.03779619661486322,
+                "coverage": 2.5162973614833213
+              },
+              {
+                "x": 890,
+                "expected": 542.6029200718896,
+                "actual": 542.4910415841584,
+                "error": -0.11187848773113274,
+                "coverage": 2.7507244482210167
+              },
+              {
+                "x": 941,
+                "expected": 391.10890606786296,
+                "actual": 391.0,
+                "error": -0.10890606786296075,
+                "coverage": 2.0
+              },
+              {
+                "x": 993,
+                "expected": 535.2604548940551,
+                "actual": 535.2826239962919,
+                "error": 0.02216910223683044,
+                "coverage": 2.5384120966511974
+              },
+              {
+                "x": 1044,
+                "expected": 398.14135356546564,
+                "actual": 398.1690242054195,
+                "error": 0.027670639953839782,
+                "coverage": 2.501448896442033
+              },
+              {
+                "x": 1096,
+                "expected": 528.6057599971233,
+                "actual": 528.4925886986615,
+                "error": -0.11317129846179341,
+                "coverage": 2.735505588600562
+              }
+            ],
+            "maximum_center_error_px": 0.12499952125563141,
+            "mean_coverage_px": 2.6370133124169333
+          }
+        },
+        {
+          "name": "full-light-2",
+          "size": [
+            2400,
+            1700
+          ],
+          "rgb_crc32": "1af13a96",
+          "png_sha256": "a7f77cbb83c23eec5082f410c4de4f296160463b2d06017f400b8f265e636a79",
+          "title_ink_samples": 1692,
+          "atlas": [
+            512,
+            1024
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            50.54297,
+            90.44531
+          ],
+          "font_peak_bytes": 4951676,
+          "window_size": [
+            1600,
+            900
+          ],
+          "subpixel_geometry": null
+        },
+        {
+          "name": "full-light-3",
+          "size": [
+            3600,
+            2550
+          ],
+          "rgb_crc32": "15ab7659",
+          "png_sha256": "3d09efa89894feb89247c871e502fb177d9f2c6a7508e0d7284bcfccc430f511",
+          "title_ink_samples": 1650,
+          "atlas": [
+            512,
+            2048
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            75.81445,
+            135.66797
+          ],
+          "font_peak_bytes": 4993220,
+          "window_size": [
+            760,
+            540
+          ],
+          "subpixel_geometry": null
+        },
+        {
+          "name": "full-light-4",
+          "size": [
+            4800,
+            3400
+          ],
+          "rgb_crc32": "7ed0feef",
+          "png_sha256": "cd78daca40952add453fab62b026ecb2be11931fbf4e0136cf1155d20f3a7319",
+          "title_ink_samples": 1631,
+          "atlas": [
+            512,
+            4096
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            101.08594,
+            180.89062
+          ],
+          "font_peak_bytes": 6042516,
+          "window_size": [
+            1600,
+            900
+          ],
+          "subpixel_geometry": null
+        },
+        {
+          "name": "full-dark-1",
+          "size": [
+            1200,
+            850
+          ],
+          "rgb_crc32": "42267c64",
+          "png_sha256": "d0cf7a92d2d27d6579fab9fc82d2c3fce2cfdcad34be5df22c5333524d230bf3",
+          "title_ink_samples": 1775,
+          "atlas": [
+            512,
+            256
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            25.27148,
+            45.22266
+          ],
+          "font_peak_bytes": 4951676,
+          "window_size": [
+            760,
+            540
+          ],
+          "subpixel_geometry": null
+        },
+        {
+          "name": "full-dark-2",
+          "size": [
+            2400,
+            1700
+          ],
+          "rgb_crc32": "a98dbd24",
+          "png_sha256": "f5a9dbb7c5ea9dde4ed4efcb4683bdac90d3399d32cd47482c543854ccfa0dd4",
+          "title_ink_samples": 1690,
+          "atlas": [
+            512,
+            1024
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            50.54297,
+            90.44531
+          ],
+          "font_peak_bytes": 4951676,
+          "window_size": [
+            1600,
+            900
+          ],
+          "subpixel_geometry": null
+        },
+        {
+          "name": "full-dark-3",
+          "size": [
+            3600,
+            2550
+          ],
+          "rgb_crc32": "c5acc7a6",
+          "png_sha256": "05f28057189591f9e96ee93841fc57fdd02549a49820930558928fce52715887",
+          "title_ink_samples": 1643,
+          "atlas": [
+            512,
+            2048
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            75.81445,
+            135.66797
+          ],
+          "font_peak_bytes": 4993220,
+          "window_size": [
+            760,
+            540
+          ],
+          "subpixel_geometry": null
+        },
+        {
+          "name": "full-dark-4",
+          "size": [
+            4800,
+            3400
+          ],
+          "rgb_crc32": "2daca533",
+          "png_sha256": "bb334f950510bca863ce7d331326e8baef7b1da7465a836aa856a7d7b9126e5c",
+          "title_ink_samples": 1630,
+          "atlas": [
+            512,
+            4096
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            101.08594,
+            180.89062
+          ],
+          "font_peak_bytes": 6042516,
+          "window_size": [
+            1600,
+            900
+          ],
+          "subpixel_geometry": null
+        },
+        {
+          "name": "crop-light-2",
+          "size": [
+            2400,
+            1700
+          ],
+          "rgb_crc32": "79f1d007",
+          "png_sha256": "5a2860ff438c240a33c88eb6379bd3461384cdbbeaa442097bfbfb17caab746c",
+          "title_ink_samples": 1692,
+          "atlas": [
+            512,
+            1024
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            50.54297,
+            90.44531
+          ],
+          "font_peak_bytes": 4951676,
+          "window_size": [
+            1600,
+            900
+          ],
+          "subpixel_geometry": null
+        },
+        {
+          "name": "crop-dark-2",
+          "size": [
+            2400,
+            1700
+          ],
+          "rgb_crc32": "e6da78b2",
+          "png_sha256": "06c9803b9fcbfd7e3dfd8323fbbb2a317278eb56da392ac3a8594aa6c0bfb5fb",
+          "title_ink_samples": 1690,
+          "atlas": [
+            512,
+            1024
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            50.54297,
+            90.44531
+          ],
+          "font_peak_bytes": 4951676,
+          "window_size": [
+            1600,
+            900
+          ],
+          "subpixel_geometry": null
+        },
+        {
+          "name": "marks-light-1",
+          "size": [
+            1200,
+            850
+          ],
+          "rgb_crc32": "c654e8db",
+          "png_sha256": "f2b6bad44fc2098b92dc7be9b5e45b97380bf2ab55d7786b64a91925e4ac076d",
+          "title_ink_samples": 4564,
+          "atlas": [
+            512,
+            256
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            25.27148,
+            45.22266
+          ],
+          "font_peak_bytes": 4951676,
+          "window_size": [
+            760,
+            540
+          ],
+          "subpixel_geometry": null
+        },
+        {
+          "name": "marks-dark-1",
+          "size": [
+            1200,
+            850
+          ],
+          "rgb_crc32": "3cfaf0ee",
+          "png_sha256": "7624cb7764e64e73d1fae399a4de0ccbcef5e0f1da5a958a6aaffebcff0c36e0",
+          "title_ink_samples": 4512,
+          "atlas": [
+            512,
+            256
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            25.27148,
+            45.22266
+          ],
+          "font_peak_bytes": 4951676,
+          "window_size": [
+            760,
+            540
+          ],
+          "subpixel_geometry": null
+        }
+      ],
+      "preview_rgb_identical": true,
+      "preview_png_sha256": "d48b9d54c87a998a48f9906739797fd0c835ac9abe51c7f3c281b4fa0aa856ea",
+      "glyph_probes": [
+        [
+          "full-light-1",
+          "13.000",
+          "23.000"
+        ],
+        [
+          "full-light-2",
+          "25.000",
+          "45.000"
+        ],
+        [
+          "full-light-3",
+          "36.500",
+          "67.500"
+        ],
+        [
+          "full-light-4",
+          "48.500",
+          "89.500"
+        ],
+        [
+          "full-dark-1",
+          "13.000",
+          "23.000"
+        ],
+        [
+          "full-dark-2",
+          "25.000",
+          "45.000"
+        ],
+        [
+          "full-dark-3",
+          "36.500",
+          "67.500"
+        ],
+        [
+          "full-dark-4",
+          "48.500",
+          "89.500"
+        ],
+        [
+          "crop-light-2",
+          "25.000",
+          "45.000"
+        ],
+        [
+          "crop-dark-2",
+          "25.000",
+          "45.000"
+        ],
+        [
+          "marks-light-1",
+          "13.000",
+          "23.000"
+        ],
+        [
+          "marks-dark-1",
+          "13.000",
+          "23.000"
+        ]
+      ],
+      "font_families": [
+        "Segoe UI | Segoe UI",
+        "Segoe UI | Segoe UI",
+        "Segoe UI | Segoe UI",
+        "Segoe UI | Segoe UI",
+        "Segoe UI | Segoe UI",
+        "Segoe UI | Segoe UI",
+        "Segoe UI | Segoe UI",
+        "Segoe UI | Segoe UI",
+        "Segoe UI | Segoe UI",
+        "Segoe UI | Segoe UI",
+        "Segoe UI | Segoe UI",
+        "Segoe UI | Segoe UI"
+      ],
+      "phase_times": [
+        "name=full-light-1 resize=0.000819 fonts=0.033650 render=0.028130 total=0.062172\r",
+        "name=full-light-2 resize=0.001644 fonts=0.076127 render=0.038478 total=0.114702\r",
+        "name=full-light-3 resize=0.001342 fonts=0.118247 render=0.075546 total=0.193883\r",
+        "name=full-light-4 resize=0.001258 fonts=0.146205 render=0.116221 total=0.262530\r",
+        "name=full-dark-1 resize=0.002295 fonts=0.054983 render=0.023501 total=0.078582\r",
+        "name=full-dark-2 resize=0.001320 fonts=0.079157 render=0.040264 total=0.119509\r",
+        "name=full-dark-3 resize=0.001729 fonts=0.152850 render=0.085790 total=0.238735\r",
+        "name=full-dark-4 resize=0.001332 fonts=0.173736 render=0.107301 total=0.281140\r",
+        "name=crop-light-2 resize=0.000618 fonts=0.065071 render=0.032393 total=0.097547\r",
+        "name=crop-dark-2 resize=0.000603 fonts=0.069599 render=0.032971 total=0.102642\r",
+        "name=marks-light-1 resize=0.001518 fonts=0.054333 render=0.015884 total=0.070434\r",
+        "name=marks-dark-1 resize=0.007000 fonts=0.053047 render=0.010345 total=0.063472\r"
+      ]
+    }
+  },
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+      "--graphic-raster-test",
+      "D:\\Physim",
+      "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-4jmblmnl\\graphic_raster\\files ä\\bundled"
+    ],
+    "seconds": 12.172000000020489,
+    "exit_code": 0,
+    "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans.ttf\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans-Bold.ttf\r\nGRAPHIC RASTER CASE: name=full-light-1 width=1200 height=850 scale=1 glyphs=100 atlas=512,256 font=25.87800,46.30800 peak=6730696 window=760,540 crc=8739331e\r\nGRAPHIC RASTER FONT: Noto Sans | Noto Sans\r\nGRAPHIC RASTER GLYPH: name=full-light-1 A=13.000,24.000\r\nGRAPHIC RASTER TIME: name=full-light-1 resize=0.001077 fonts=0.034065 render=0.023234 total=0.057385\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans.ttf\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans-Bold.ttf\r\nGRAPHIC RASTER CASE: name=full-light-2 width=2400 height=1700 scale=2 glyphs=100 atlas=512,1024 font=51.75600,92.61600 peak=6730696 window=1600,900 crc=2488457f\r\nGRAPHIC RASTER FONT: Noto Sans | Noto Sans\r\nGRAPHIC RASTER GLYPH: name=full-light-2 A=25.000,47.500\r\nGRAPHIC RASTER TIME: name=full-light-2 resize=0.001526 fonts=0.056359 render=0.033008 total=0.089470\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans.ttf\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans-Bold.ttf\r\nGRAPHIC RASTER CASE: name=full-light-3 width=3600 height=2550 scale=3 glyphs=100 atlas=512,2048 font=77.63400,138.92401 peak=6730696 window=760,540 crc=1b6faced\r\nGRAPHIC RASTER FONT: Noto Sans | Noto Sans\r\nGRAPHIC RASTER GLYPH: name=full-light-3 A=37.000,71.000\r\nGRAPHIC RASTER TIME: name=full-light-3 resize=0.001284 fonts=0.072427 render=0.050196 total=0.122711\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans.ttf\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans-Bold.ttf\r\nGRAPHIC RASTER CASE: name=full-light-4 width=4800 height=3400 scale=4 glyphs=100 atlas=512,4096 font=103.51201,185.23201 peak=7422528 window=1600,900 crc=84490caa\r\nGRAPHIC RASTER FONT: Noto Sans | Noto Sans\r\nGRAPHIC RASTER GLYPH: name=full-light-4 A=49.000,94.500\r\nGRAPHIC RASTER TIME: name=full-light-4 resize=0.001460 fonts=0.143890 render=0.083468 total=0.227440\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans.ttf\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans-Bold.ttf\r\nGRAPHIC RASTER CASE: name=full-dark-1 width=1200 height=850 scale=1 glyphs=100 atlas=512,256 font=25.87800,46.30800 peak=6730696 window=760,540 crc=6b5d0984\r\nGRAPHIC RASTER FONT: Noto Sans | Noto Sans\r\nGRAPHIC RASTER GLYPH: name=full-dark-1 A=13.000,24.000\r\nGRAPHIC RASTER TIME: name=full-dark-1 resize=0.001363 fonts=0.042017 render=0.029541 total=0.071633\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans.ttf\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans-Bold.ttf\r\nGRAPHIC RASTER CASE: name=full-dark-2 width=2400 height=1700 scale=2 glyphs=100 atlas=512,1024 font=51.75600,92.61600 peak=6730696 window=1600,900 crc=0ade8738\r\nGRAPHIC RASTER FONT: Noto Sans | Noto Sans\r\nGRAPHIC RASTER GLYPH: name=full-dark-2 A=25.000,47.500\r\nGRAPHIC RASTER TIME: name=full-dark-2 resize=0.001657 fonts=0.052401 render=0.038959 total=0.091443\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans.ttf\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans-Bold.ttf\r\nGRAPHIC RASTER CASE: name=full-dark-3 width=3600 height=2550 scale=3 glyphs=100 atlas=512,2048 font=77.63400,138.92401 peak=6730696 window=760,540 crc=e646380e\r\nGRAPHIC RASTER FONT: Noto Sans | Noto Sans\r\nGRAPHIC RASTER GLYPH: name=full-dark-3 A=37.000,71.000\r\nGRAPHIC RASTER TIME: name=full-dark-3 resize=0.001428 fonts=0.078678 render=0.058840 total=0.137591\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans.ttf\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans-Bold.ttf\r\nGRAPHIC RASTER CASE: name=full-dark-4 width=4800 height=3400 scale=4 glyphs=100 atlas=512,4096 font=103.51201,185.23201 peak=7422528 window=1600,900 crc=f6ecfcf8\r\nGRAPHIC RASTER FONT: Noto Sans | Noto Sans\r\nGRAPHIC RASTER GLYPH: name=full-dark-4 A=49.000,94.500\r\nGRAPHIC RASTER TIME: name=full-dark-4 resize=0.001256 fonts=0.095055 render=0.080903 total=0.178678\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans.ttf\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans-Bold.ttf\r\nGRAPHIC RASTER CASE: name=crop-light-2 width=2400 height=1700 scale=2 glyphs=100 atlas=512,1024 font=51.75600,92.61600 peak=6730696 window=1600,900 crc=2a7b3421\r\nGRAPHIC RASTER FONT: Noto Sans | Noto Sans\r\nGRAPHIC RASTER GLYPH: name=crop-light-2 A=25.000,47.500\r\nGRAPHIC RASTER TIME: name=crop-light-2 resize=0.000992 fonts=0.046252 render=0.023206 total=0.069555\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans.ttf\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans-Bold.ttf\r\nGRAPHIC RASTER CASE: name=crop-dark-2 width=2400 height=1700 scale=2 glyphs=100 atlas=512,1024 font=51.75600,92.61600 peak=6730696 window=1600,900 crc=8db81ed8\r\nGRAPHIC RASTER FONT: Noto Sans | Noto Sans\r\nGRAPHIC RASTER GLYPH: name=crop-dark-2 A=25.000,47.500\r\nGRAPHIC RASTER TIME: name=crop-dark-2 resize=0.000466 fonts=0.092455 render=0.031699 total=0.124254\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans.ttf\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans-Bold.ttf\r\nGRAPHIC RASTER CASE: name=marks-light-1 width=1200 height=850 scale=1 glyphs=100 atlas=512,256 font=25.87800,46.30800 peak=6730696 window=760,540 crc=567c5439\r\nGRAPHIC RASTER FONT: Noto Sans | Noto Sans\r\nGRAPHIC RASTER GLYPH: name=marks-light-1 A=13.000,24.000\r\nGRAPHIC RASTER TIME: name=marks-light-1 resize=0.001713 fonts=0.037737 render=0.009502 total=0.047310\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans.ttf\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans-Bold.ttf\r\nGRAPHIC RASTER CASE: name=marks-dark-1 width=1200 height=850 scale=1 glyphs=100 atlas=512,256 font=25.87800,46.30800 peak=6730696 window=760,540 crc=8af1b621\r\nGRAPHIC RASTER FONT: Noto Sans | Noto Sans\r\nGRAPHIC RASTER GLYPH: name=marks-dark-1 A=13.000,24.000\r\nGRAPHIC RASTER TIME: name=marks-dark-1 resize=0.000758 fonts=0.042380 render=0.009995 total=0.052472\r\nBundled primary font: D:\\Physim/third_party/fonts/NotoSans.ttf\r\nGRAPHIC RASTER SELF-TEST: PASSED sizes=4 themes=2 crop=xy marks=line,scatter,histogram preview=identical-rgb source=detached errors=atomic\r\n",
+    "stderr": "APP TEST TRACE: initializing SDL\r\nAPP TEST TRACE: SDL initialized, video driver windows\r\nAPP TEST TRACE: creating window\r\nAPP TEST TRACE: window created, creating OpenGL context\r\n",
+    "checks": {
+      "cases": [
+        {
+          "name": "full-light-1",
+          "size": [
+            1200,
+            850
+          ],
+          "rgb_crc32": "8739331e",
+          "png_sha256": "9429b2e0afb9db4d45b855c7222dc250d07d9a38b77dd9e4325f3eb69404c210",
+          "title_ink_samples": 2308,
+          "atlas": [
+            512,
+            256
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            25.878,
+            46.308
+          ],
+          "font_peak_bytes": 6730696,
+          "window_size": [
+            760,
+            540
+          ],
+          "subpixel_geometry": {
+            "samples": [
+              {
+                "x": 322,
+                "expected": 330.38775884902725,
+                "actual": 330.5041546845147,
+                "error": 0.11639583548742394,
+                "coverage": 2.7767936902194044
+              },
+              {
+                "x": 632,
+                "expected": 365.32105590348414,
+                "actual": 365.40158714280955,
+                "error": 0.08053123932540984,
+                "coverage": 2.613765605595137
+              },
+              {
+                "x": 683,
+                "expected": 559.871391059676,
+                "actual": 559.7466122584002,
+                "error": -0.12477880127573826,
+                "coverage": 2.7003834673290195
+              },
+              {
+                "x": 734,
+                "expected": 374.7574209934912,
+                "actual": 374.80950063637056,
+                "error": 0.05207964287933464,
+                "coverage": 3.05572259624812
+              },
+              {
+                "x": 786,
+                "expected": 550.8504280743063,
+                "actual": 550.7254285530506,
+                "error": -0.12499952125563141,
+                "coverage": 2.7098067411813407
+              },
+              {
+                "x": 837,
+                "expected": 383.3885463362212,
+                "actual": 383.50515868921684,
+                "error": 0.11661235299561667,
+                "coverage": 2.74529925703205
+              },
+              {
+                "x": 889,
+                "expected": 542.6787558426464,
+                "actual": 542.6409596460315,
+                "error": -0.03779619661486322,
+                "coverage": 2.5162973614833213
+              },
+              {
+                "x": 890,
+                "expected": 542.6029200718896,
+                "actual": 542.4910415841584,
+                "error": -0.11187848773113274,
+                "coverage": 2.7507244482210167
+              },
+              {
+                "x": 941,
+                "expected": 391.10890606786296,
+                "actual": 391.0,
+                "error": -0.10890606786296075,
+                "coverage": 2.0
+              },
+              {
+                "x": 993,
+                "expected": 535.2604548940551,
+                "actual": 535.2826239962919,
+                "error": 0.02216910223683044,
+                "coverage": 2.5384120966511974
+              },
+              {
+                "x": 1044,
+                "expected": 398.14135356546564,
+                "actual": 398.1690242054195,
+                "error": 0.027670639953839782,
+                "coverage": 2.501448896442033
+              },
+              {
+                "x": 1096,
+                "expected": 528.6057599971233,
+                "actual": 528.4925886986615,
+                "error": -0.11317129846179341,
+                "coverage": 2.735505588600562
+              }
+            ],
+            "maximum_center_error_px": 0.12499952125563141,
+            "mean_coverage_px": 2.6370133124169333
+          }
+        },
+        {
+          "name": "full-light-2",
+          "size": [
+            2400,
+            1700
+          ],
+          "rgb_crc32": "2488457f",
+          "png_sha256": "3cd5115f9bd4eb050ab1b5bcf55f98b16e8faf4fec03ca5c3d156352b8a90d40",
+          "title_ink_samples": 2273,
+          "atlas": [
+            512,
+            1024
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            51.756,
+            92.616
+          ],
+          "font_peak_bytes": 6730696,
+          "window_size": [
+            1600,
+            900
+          ],
+          "subpixel_geometry": null
+        },
+        {
+          "name": "full-light-3",
+          "size": [
+            3600,
+            2550
+          ],
+          "rgb_crc32": "1b6faced",
+          "png_sha256": "0aec6b66d60705b1123c7e623eebae818536f32f6c4eb3b3dd0c9454a64af646",
+          "title_ink_samples": 2251,
+          "atlas": [
+            512,
+            2048
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            77.634,
+            138.92401
+          ],
+          "font_peak_bytes": 6730696,
+          "window_size": [
+            760,
+            540
+          ],
+          "subpixel_geometry": null
+        },
+        {
+          "name": "full-light-4",
+          "size": [
+            4800,
+            3400
+          ],
+          "rgb_crc32": "84490caa",
+          "png_sha256": "0f126529634ff07b6bb0e058a45b4a5d368ad044a62e8e82183ac1b6b57bd988",
+          "title_ink_samples": 2242,
+          "atlas": [
+            512,
+            4096
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            103.51201,
+            185.23201
+          ],
+          "font_peak_bytes": 7422528,
+          "window_size": [
+            1600,
+            900
+          ],
+          "subpixel_geometry": null
+        },
+        {
+          "name": "full-dark-1",
+          "size": [
+            1200,
+            850
+          ],
+          "rgb_crc32": "6b5d0984",
+          "png_sha256": "d87879edb7eab9674f93d0f16877e6ba59c77b376b1ce6a33de328a2d737f73e",
+          "title_ink_samples": 2291,
+          "atlas": [
+            512,
+            256
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            25.878,
+            46.308
+          ],
+          "font_peak_bytes": 6730696,
+          "window_size": [
+            760,
+            540
+          ],
+          "subpixel_geometry": null
+        },
+        {
+          "name": "full-dark-2",
+          "size": [
+            2400,
+            1700
+          ],
+          "rgb_crc32": "0ade8738",
+          "png_sha256": "3427126467f08a9e6345046210e3baebb74ad5bb634308b48269bd5255050e8a",
+          "title_ink_samples": 2269,
+          "atlas": [
+            512,
+            1024
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            51.756,
+            92.616
+          ],
+          "font_peak_bytes": 6730696,
+          "window_size": [
+            1600,
+            900
+          ],
+          "subpixel_geometry": null
+        },
+        {
+          "name": "full-dark-3",
+          "size": [
+            3600,
+            2550
+          ],
+          "rgb_crc32": "e646380e",
+          "png_sha256": "bcaca0f379cd625008dc8ea9a7ad56d93b83a47815a70802606b07b033d1739e",
+          "title_ink_samples": 2249,
+          "atlas": [
+            512,
+            2048
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            77.634,
+            138.92401
+          ],
+          "font_peak_bytes": 6730696,
+          "window_size": [
+            760,
+            540
+          ],
+          "subpixel_geometry": null
+        },
+        {
+          "name": "full-dark-4",
+          "size": [
+            4800,
+            3400
+          ],
+          "rgb_crc32": "f6ecfcf8",
+          "png_sha256": "333d037bbbbfe0bb489b4163c510b515a3175db128ff20c1cc4b7a26fd0317e6",
+          "title_ink_samples": 2240,
+          "atlas": [
+            512,
+            4096
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            103.51201,
+            185.23201
+          ],
+          "font_peak_bytes": 7422528,
+          "window_size": [
+            1600,
+            900
+          ],
+          "subpixel_geometry": null
+        },
+        {
+          "name": "crop-light-2",
+          "size": [
+            2400,
+            1700
+          ],
+          "rgb_crc32": "2a7b3421",
+          "png_sha256": "e4a4ac77e8c1ee31b9ca0eb8706a719750daf13b76b2fd74c564b36a25588797",
+          "title_ink_samples": 2273,
+          "atlas": [
+            512,
+            1024
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            51.756,
+            92.616
+          ],
+          "font_peak_bytes": 6730696,
+          "window_size": [
+            1600,
+            900
+          ],
+          "subpixel_geometry": null
+        },
+        {
+          "name": "crop-dark-2",
+          "size": [
+            2400,
+            1700
+          ],
+          "rgb_crc32": "8db81ed8",
+          "png_sha256": "80e0029e7ce18703cb77ea97086b9ef20458eee887defe3c8730a52e7dfbb663",
+          "title_ink_samples": 2269,
+          "atlas": [
+            512,
+            1024
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            51.756,
+            92.616
+          ],
+          "font_peak_bytes": 6730696,
+          "window_size": [
+            1600,
+            900
+          ],
+          "subpixel_geometry": null
+        },
+        {
+          "name": "marks-light-1",
+          "size": [
+            1200,
+            850
+          ],
+          "rgb_crc32": "567c5439",
+          "png_sha256": "bd2f510b70704458beee75f94797242c2c4abe7ec2047958dbc3383020db6519",
+          "title_ink_samples": 5362,
+          "atlas": [
+            512,
+            256
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            25.878,
+            46.308
+          ],
+          "font_peak_bytes": 6730696,
+          "window_size": [
+            760,
+            540
+          ],
+          "subpixel_geometry": null
+        },
+        {
+          "name": "marks-dark-1",
+          "size": [
+            1200,
+            850
+          ],
+          "rgb_crc32": "8af1b621",
+          "png_sha256": "c3c004b2cd257b4880eb7219faa5d7f299c7ea9aa595c7d426759eaaf10a46de",
+          "title_ink_samples": 5285,
+          "atlas": [
+            512,
+            256
+          ],
+          "glyphs": 100,
+          "font_raster_heights": [
+            25.878,
+            46.308
+          ],
+          "font_peak_bytes": 6730696,
+          "window_size": [
+            760,
+            540
+          ],
+          "subpixel_geometry": null
+        }
+      ],
+      "preview_rgb_identical": true,
+      "preview_png_sha256": "9429b2e0afb9db4d45b855c7222dc250d07d9a38b77dd9e4325f3eb69404c210",
+      "glyph_probes": [
+        [
+          "full-light-1",
+          "13.000",
+          "24.000"
+        ],
+        [
+          "full-light-2",
+          "25.000",
+          "47.500"
+        ],
+        [
+          "full-light-3",
+          "37.000",
+          "71.000"
+        ],
+        [
+          "full-light-4",
+          "49.000",
+          "94.500"
+        ],
+        [
+          "full-dark-1",
+          "13.000",
+          "24.000"
+        ],
+        [
+          "full-dark-2",
+          "25.000",
+          "47.500"
+        ],
+        [
+          "full-dark-3",
+          "37.000",
+          "71.000"
+        ],
+        [
+          "full-dark-4",
+          "49.000",
+          "94.500"
+        ],
+        [
+          "crop-light-2",
+          "25.000",
+          "47.500"
+        ],
+        [
+          "crop-dark-2",
+          "25.000",
+          "47.500"
+        ],
+        [
+          "marks-light-1",
+          "13.000",
+          "24.000"
+        ],
+        [
+          "marks-dark-1",
+          "13.000",
+          "24.000"
+        ]
+      ],
+      "font_families": [
+        "Noto Sans | Noto Sans",
+        "Noto Sans | Noto Sans",
+        "Noto Sans | Noto Sans",
+        "Noto Sans | Noto Sans",
+        "Noto Sans | Noto Sans",
+        "Noto Sans | Noto Sans",
+        "Noto Sans | Noto Sans",
+        "Noto Sans | Noto Sans",
+        "Noto Sans | Noto Sans",
+        "Noto Sans | Noto Sans",
+        "Noto Sans | Noto Sans",
+        "Noto Sans | Noto Sans"
+      ],
+      "phase_times": [
+        "name=full-light-1 resize=0.001077 fonts=0.034065 render=0.023234 total=0.057385\r",
+        "name=full-light-2 resize=0.001526 fonts=0.056359 render=0.033008 total=0.089470\r",
+        "name=full-light-3 resize=0.001284 fonts=0.072427 render=0.050196 total=0.122711\r",
+        "name=full-light-4 resize=0.001460 fonts=0.143890 render=0.083468 total=0.227440\r",
+        "name=full-dark-1 resize=0.001363 fonts=0.042017 render=0.029541 total=0.071633\r",
+        "name=full-dark-2 resize=0.001657 fonts=0.052401 render=0.038959 total=0.091443\r",
+        "name=full-dark-3 resize=0.001428 fonts=0.078678 render=0.058840 total=0.137591\r",
+        "name=full-dark-4 resize=0.001256 fonts=0.095055 render=0.080903 total=0.178678\r",
+        "name=crop-light-2 resize=0.000992 fonts=0.046252 render=0.023206 total=0.069555\r",
+        "name=crop-dark-2 resize=0.000466 fonts=0.092455 render=0.031699 total=0.124254\r",
+        "name=marks-light-1 resize=0.001713 fonts=0.037737 render=0.009502 total=0.047310\r",
+        "name=marks-dark-1 resize=0.000758 fonts=0.042380 render=0.009995 total=0.052472\r"
+      ]
+    }
+  }
+]

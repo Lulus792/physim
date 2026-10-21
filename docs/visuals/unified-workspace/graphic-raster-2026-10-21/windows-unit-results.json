@@ -1,0 +1,61 @@
+[
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-graphic_figure.exe",
+      "D:/Physim/build/native/Graphic-unit/test-results/run-yrlntuey/graphic_figure"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "GRAPHIC FIGURE OWNERSHIP: 3 scene and 5 SVG allocation failures, detached text/data and sink failure passed\nGRAPHIC FIGURE LIMITS: command/SVG budgets release all ownership; finite overflow clipping and six distinct large-offset ticks survive\nGRAPHIC FIGURE: canonical layout, explicit reference, independent axes, masks, dashes, scatter, histograms, full XY crop, themes and bounded numeric errors passed\n",
+    "stderr": "",
+    "seconds": 0.484,
+    "name": "graphic_figure"
+  },
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-graphic_snapshot.exe",
+      "D:/Physim/build/native/Graphic-unit/test-results/run-yrlntuey/graphic_snapshot"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "GRAPHIC SNAPSHOT REPORT: deep-copy, masks, kinds, reference, crop and 5 allocation failures passed\nGRAPHIC SNAPSHOT RUNS: independent times, units, extrema/gaps, full statistics, 8 inputs, source deletion, quota/cancel and 9 allocation failures passed\nGRAPHIC SNAPSHOT TYPES: scatter, rad/degree, angle/scalar separation, invalid unnamed schema and intact UTF8 labels passed\nGraphic snapshot: immutable report/run data and transactional ownership passed\n",
+    "stderr": "",
+    "seconds": 1.093,
+    "name": "graphic_snapshot"
+  },
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-report.exe"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "Reports: roundtrip, hostile files, units, extrema, histograms and exports passed\n",
+    "stderr": "",
+    "seconds": 10.625,
+    "name": "report"
+  },
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-series_mask.exe",
+      "D:/Physim/build/native/Graphic-unit/test-results/run-yrlntuey/series_mask"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "Series masks: alignment, quota, numerics, resampling, statistics, CSV and report roundtrip passed\n",
+    "stderr": "",
+    "seconds": 0.281,
+    "name": "series_mask"
+  },
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Graphic-unit\\bin\\physim-test-png.exe",
+      "D:/Physim/build/native/Graphic-unit/test-results/run-yrlntuey/png/png-reference.png"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "PNG input validation and exclusive output passed\n",
+    "stderr": "",
+    "seconds": 0.218,
+    "name": "png"
+  }
+]

@@ -9,6 +9,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+struct ps_graphics_image {
+    ps_allocator allocator;
+    size_t allocation,stride;
+    unsigned width,height;
+    unsigned char pixels[];
+};
+
 /* Load even GL 1.x entrypoints through SDL: no platform GL import library. */
 // clang-format off
 #define GL_FUNCTIONS(X) \
@@ -355,9 +362,9 @@ void ps_graphics_destroy(ps_graphics *g) {
     free(g);
 }
 int ps_graphics_texture_limit(const ps_graphics *g) {return g?g->max_texture:0;}
-static unsigned texture_create(ps_graphics *g, const void *pixels, int w, int h, bool alpha) {
-    if (w < 1 || h < 1 || w > g->max_texture || h > g->max_texture) {
-        SDL_SetError("Invalid texture size %dx%d (GPU limit %d)",w,h,g->max_texture);
+static unsigned texture_create(ps_graphics *g, const void *pixels, int w, int h, unsigned channels) {
+    if (!g || w < 1 || h < 1 || w > g->max_texture || h > g->max_texture) {
+        SDL_SetError("Invalid texture size %dx%d (GPU limit %d)",w,h,g?g->max_texture:0);
         return 0;
     }
     GLuint id = 0;
@@ -366,13 +373,15 @@ static unsigned texture_create(ps_graphics *g, const void *pixels, int w, int h,
         SDL_SetError("OpenGL could not allocate a texture");
         return 0;
     }
+    GLint previous=0,unpack=4;
+    g->GetIntegerv(GL_TEXTURE_BINDING_2D,&previous);g->GetIntegerv(GL_UNPACK_ALIGNMENT,&unpack);
     g->BindTexture(GL_TEXTURE_2D, id);
     g->TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     g->TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     g->TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     g->TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     g->PixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    if (alpha) {
+    if (channels==1) {
         /* Nuklear's RGBA atlas is white RGB plus coverage. Keep coverage in
          * one channel and reconstruct the same shader sample (OpenGL 3.3). */
         g->TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_R, GL_ONE);
@@ -380,19 +389,24 @@ static unsigned texture_create(ps_graphics *g, const void *pixels, int w, int h,
         g->TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_B, GL_ONE);
         g->TexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_A, GL_RED);
     }
-    g->TexImage2D(GL_TEXTURE_2D, 0, alpha ? GL_R8 : GL_RGBA8, w, h, 0,
-                  alpha ? GL_RED : GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-    if (!gl_ok(g, "texture")) {
+    g->TexImage2D(GL_TEXTURE_2D, 0, channels==1?GL_R8:channels==3?GL_RGB8:GL_RGBA8, w, h, 0,
+                  channels==1?GL_RED:channels==3?GL_RGB:GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    bool ok=gl_ok(g,"texture");
+    g->PixelStorei(GL_UNPACK_ALIGNMENT,unpack);g->BindTexture(GL_TEXTURE_2D,(GLuint)previous);
+    if (!ok) {
         g->DeleteTextures(1, &id);
         return 0;
     }
     return id;
 }
 unsigned ps_graphics_texture(ps_graphics *g, const void *rgba, int w, int h) {
-    return texture_create(g, rgba, w, h, false);
+    return texture_create(g, rgba, w, h, 4);
 }
 unsigned ps_graphics_alpha_texture(ps_graphics *g, const void *coverage, int w, int h) {
-    return texture_create(g, coverage, w, h, true);
+    return texture_create(g, coverage, w, h, 1);
+}
+unsigned ps_graphics_image_texture(ps_graphics *g,const ps_graphics_image *image) {
+    return image?texture_create(g,image->pixels,(int)image->width,(int)image->height,3):0;
 }
 void ps_graphics_delete_texture(ps_graphics *g, unsigned texture) {
     g->DeleteTextures(1, &texture);
@@ -571,25 +585,39 @@ ps_result ps_graphics_ui_png(ps_graphics *g, struct nk_context *ui,
                              const char *path) {
     return ps_graphics_ui_png_scaled(g, ui, null_texture, width, height, 2, path);
 }
-ps_result ps_graphics_ui_png_scaled(ps_graphics *g, struct nk_context *ui,
-                                    const struct nk_draw_null_texture *null_texture, int width,
-                                    int height, unsigned scale, const char *path) {
-    if (!g || !ui || !null_texture || !path || width <= 0 || height <= 0 || width > 4096 ||
-        height > 4096 || scale < 1 || scale > 4)
-        return PS_INVALID;
-    int pw = width * (int)scale, ph = height * (int)scale;
-    if (pw > 8192 || ph > 8192 || pw > g->max_texture || ph > g->max_texture)
-        return PS_LIMIT;
-    size_t stride = (size_t)pw * 3;
-    unsigned char *pixels = malloc(stride * (size_t)ph), *row = malloc(stride);
-    if (!pixels || !row) {
-        free(pixels);
-        free(row);
-        return PS_MEMORY;
-    }
+ps_result ps_graphics_image_read(const ps_graphics_image *image,unsigned *width,unsigned *height,
+    size_t *stride,const unsigned char **pixels) {
+    if(!image)return PS_INVALID;
+    if(width)*width=image->width;
+    if(height)*height=image->height;
+    if(stride)*stride=image->stride;
+    if(pixels)*pixels=image->pixels;
+    return PS_OK;
+}
+void ps_graphics_image_destroy(ps_graphics_image *image) {
+    if(image)ps_memory_free(image->allocator,image,image->allocation);
+}
+ps_result ps_graphics_image_png(const ps_graphics_image *image,const char *path) {
+    if(!image || !path)return PS_INVALID;
+    return ps_png_write(path,image->pixels,image->width,image->height,image->stride);
+}
+static ps_result ui_image(ps_graphics *g,struct nk_context *ui,
+    const struct nk_draw_null_texture *null_texture,int width,int height,int pw,int ph,
+    ps_allocator allocator,ps_graphics_image **out) {
+    if (!g || !ui || !null_texture || !out || !ps_allocator_valid(allocator) ||
+        width<=0 || height<=0 || pw<=0 || ph<=0)return PS_INVALID;
+    if(pw>8192 || ph>8192 || pw>g->max_texture || ph>g->max_texture)return PS_LIMIT;
+    size_t stride=(size_t)pw*3,bytes=stride*(size_t)ph;
+    if(bytes>SIZE_MAX-sizeof(ps_graphics_image))return PS_LIMIT;
+    void *memory=NULL;ps_result result=ps_memory_allocate(allocator,sizeof(ps_graphics_image)+bytes,&memory);
+    if(result!=PS_OK)return result;
+    ps_graphics_image *image=memory;image->allocator=allocator;image->allocation=sizeof *image+bytes;
+    image->width=(unsigned)pw;image->height=(unsigned)ph;image->stride=stride;
     GLuint target = 0, texture = 0;
-    GLint previous = 0, pack = 4;
-    g->GetIntegerv(GL_FRAMEBUFFER_BINDING, &previous);
+    GLint draw=0,read=0,pack=4,active=0,previous_texture=0,viewport[4]={0};
+    g->GetIntegerv(GL_DRAW_FRAMEBUFFER_BINDING,&draw);g->GetIntegerv(GL_READ_FRAMEBUFFER_BINDING,&read);
+    g->GetIntegerv(GL_VIEWPORT,viewport);g->GetIntegerv(GL_ACTIVE_TEXTURE,&active);
+    g->ActiveTexture(GL_TEXTURE0);g->GetIntegerv(GL_TEXTURE_BINDING_2D,&previous_texture);
     g->GetIntegerv(GL_PACK_ALIGNMENT, &pack);
     g->GenTextures(1, &texture);
     g->BindTexture(GL_TEXTURE_2D, texture);
@@ -601,32 +629,42 @@ ps_result ps_graphics_ui_png_scaled(ps_graphics *g, struct nk_context *ui,
     g->FramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
     struct nk_buffer commands;
     nk_buffer_init_default(&commands);
-    bool ok = g->CheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE &&
+    bool ok = texture && target && g->CheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE &&
               ui_target(g, ui, &commands, null_texture, target, width, height, pw, ph);
     if (ok) {
         g->PixelStorei(GL_PACK_ALIGNMENT, 1);
-        g->ReadPixels(0, 0, pw, ph, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+        g->ReadPixels(0, 0, pw, ph, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
         ok = gl_ok(g, "Diagram readback");
     }
     nk_buffer_free(&commands);
     g->PixelStorei(GL_PACK_ALIGNMENT, pack);
-    g->BindFramebuffer(GL_FRAMEBUFFER, (GLuint)previous);
+    g->BindFramebuffer(GL_DRAW_FRAMEBUFFER,(GLuint)draw);g->BindFramebuffer(GL_READ_FRAMEBUFFER,(GLuint)read);
+    g->Viewport(viewport[0],viewport[1],viewport[2],viewport[3]);
+    g->BindTexture(GL_TEXTURE_2D,(GLuint)previous_texture);g->ActiveTexture((GLenum)active);
     g->DeleteFramebuffers(1, &target);
     g->DeleteTextures(1, &texture);
-    ps_result result = PS_IO;
-    if (ok) {
-        for (int y = 0; y < ph / 2; y++) {
-            unsigned char *top = pixels + (size_t)y * stride;
-            unsigned char *bottom = pixels + (size_t)(ph - 1 - y) * stride;
-            memcpy(row, top, stride);
-            memcpy(top, bottom, stride);
-            memcpy(bottom, row, stride);
-        }
-        result = ps_png_write(path, pixels, (unsigned)pw, (unsigned)ph, stride);
+    if(!ok){ps_graphics_image_destroy(image);return PS_IO;}
+    unsigned char row[8192u*3u];
+    for (int y=0;y<ph/2;y++) {
+        unsigned char *top=image->pixels+(size_t)y*stride,*bottom=image->pixels+(size_t)(ph-1-y)*stride;
+        memcpy(row,top,stride);memcpy(top,bottom,stride);memcpy(bottom,row,stride);
     }
-    free(pixels);
-    free(row);
-    return result;
+    *out=image;return PS_OK;
+}
+ps_result ps_graphics_ui_image(ps_graphics *g,struct nk_context *drawing,
+    const struct nk_draw_null_texture *null_texture,unsigned width,unsigned height,
+    ps_allocator allocator,ps_graphics_image **out) {
+    if(!width || !height)return PS_INVALID;
+    if(width>8192 || height>8192)return PS_LIMIT;
+    return ui_image(g,drawing,null_texture,(int)width,(int)height,(int)width,(int)height,allocator,out);
+}
+ps_result ps_graphics_ui_png_scaled(ps_graphics *g,struct nk_context *ui,
+    const struct nk_draw_null_texture *null_texture,int width,int height,unsigned scale,const char *path) {
+    if(!path || width<=0 || height<=0 || width>4096 || height>4096 || scale<1 || scale>4)return PS_INVALID;
+    ps_graphics_image *image=NULL;ps_result result=ui_image(g,ui,null_texture,width,height,
+        width*(int)scale,height*(int)scale,ps_allocator_default(),&image);
+    if(result==PS_OK)result=ps_graphics_image_png(image,path);
+    ps_graphics_image_destroy(image);return result;
 }
 static bool finite_vector(ps_vec3 p) {
     return isfinite(p.x) && isfinite(p.y) && isfinite(p.z) && fabs(p.x) < 1e12 &&

@@ -1,0 +1,146 @@
+{
+  "scope": "Only verified duplicate PNG profile outputs and reconstructible raw RGB inputs; original native reference images, logs, profiles, programs and all failed runs retained.",
+  "removed": [
+    {
+      "path": "build/native/graphic-raster-png-profile-windows-4/input-0.rgb",
+      "bytes": 12240016,
+      "sha256": "cc3d4cb6cbf6df9dbd1182d4ed2725fa6c87a2d3d0f94a50e71fe0c5c7924c8f"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-windows-4/output-0-level6-0.png",
+      "bytes": 245910,
+      "sha256": "3ece5f02ae4e05ef0e38a13f5d682f3c80d43b426f4e08933176607c57378179"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-windows-4/output-0-level1-1.png",
+      "bytes": 301537,
+      "sha256": "3382fd28ddae634f5c753b1cf25751bfb2167d9fac85312b289f1b7bb238dd0b"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-windows-4/output-0-level6-1.png",
+      "bytes": 245910,
+      "sha256": "3ece5f02ae4e05ef0e38a13f5d682f3c80d43b426f4e08933176607c57378179"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-windows-4/output-0-level6-2.png",
+      "bytes": 245910,
+      "sha256": "3ece5f02ae4e05ef0e38a13f5d682f3c80d43b426f4e08933176607c57378179"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-windows-4/output-0-level1-2.png",
+      "bytes": 301537,
+      "sha256": "3382fd28ddae634f5c753b1cf25751bfb2167d9fac85312b289f1b7bb238dd0b"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-windows-4/input-1.rgb",
+      "bytes": 12240016,
+      "sha256": "d708b01b2f432238a6f8e61c923adea321fa10e31651f0bb5d7cb8ed6933b478"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-windows-4/output-1-level6-0.png",
+      "bytes": 243524,
+      "sha256": "42c612483c7293470971df6240ba382fe474ae6d43aa8bfacbf54a7a4c7e1d1e"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-windows-4/output-1-level1-1.png",
+      "bytes": 299799,
+      "sha256": "f4362b3e936f3a0f3eb5a3ff9cf5b3f06d4a4b91879fcefb5457641994ceff18"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-windows-4/output-1-level6-1.png",
+      "bytes": 243524,
+      "sha256": "42c612483c7293470971df6240ba382fe474ae6d43aa8bfacbf54a7a4c7e1d1e"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-windows-4/output-1-level6-2.png",
+      "bytes": 243524,
+      "sha256": "42c612483c7293470971df6240ba382fe474ae6d43aa8bfacbf54a7a4c7e1d1e"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-windows-4/output-1-level1-2.png",
+      "bytes": 299799,
+      "sha256": "f4362b3e936f3a0f3eb5a3ff9cf5b3f06d4a4b91879fcefb5457641994ceff18"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-linux-4/input-0.rgb",
+      "bytes": 12240016,
+      "sha256": "cc3d4cb6cbf6df9dbd1182d4ed2725fa6c87a2d3d0f94a50e71fe0c5c7924c8f"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-linux-4/output-0-level6-0.png",
+      "bytes": 245910,
+      "sha256": "3ece5f02ae4e05ef0e38a13f5d682f3c80d43b426f4e08933176607c57378179"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-linux-4/output-0-level1-0.png",
+      "bytes": 301537,
+      "sha256": "3382fd28ddae634f5c753b1cf25751bfb2167d9fac85312b289f1b7bb238dd0b"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-linux-4/output-0-level1-1.png",
+      "bytes": 301537,
+      "sha256": "3382fd28ddae634f5c753b1cf25751bfb2167d9fac85312b289f1b7bb238dd0b"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-linux-4/output-0-level6-1.png",
+      "bytes": 245910,
+      "sha256": "3ece5f02ae4e05ef0e38a13f5d682f3c80d43b426f4e08933176607c57378179"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-linux-4/output-0-level6-2.png",
+      "bytes": 245910,
+      "sha256": "3ece5f02ae4e05ef0e38a13f5d682f3c80d43b426f4e08933176607c57378179"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-linux-4/output-0-level1-2.png",
+      "bytes": 301537,
+      "sha256": "3382fd28ddae634f5c753b1cf25751bfb2167d9fac85312b289f1b7bb238dd0b"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-linux-4/input-1.rgb",
+      "bytes": 12240016,
+      "sha256": "d708b01b2f432238a6f8e61c923adea321fa10e31651f0bb5d7cb8ed6933b478"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-linux-4/output-1-level6-0.png",
+      "bytes": 243524,
+      "sha256": "42c612483c7293470971df6240ba382fe474ae6d43aa8bfacbf54a7a4c7e1d1e"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-linux-4/output-1-level1-0.png",
+      "bytes": 299799,
+      "sha256": "f4362b3e936f3a0f3eb5a3ff9cf5b3f06d4a4b91879fcefb5457641994ceff18"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-linux-4/output-1-level1-1.png",
+      "bytes": 299799,
+      "sha256": "f4362b3e936f3a0f3eb5a3ff9cf5b3f06d4a4b91879fcefb5457641994ceff18"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-linux-4/output-1-level6-1.png",
+      "bytes": 243524,
+      "sha256": "42c612483c7293470971df6240ba382fe474ae6d43aa8bfacbf54a7a4c7e1d1e"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-linux-4/output-1-level6-2.png",
+      "bytes": 243524,
+      "sha256": "42c612483c7293470971df6240ba382fe474ae6d43aa8bfacbf54a7a4c7e1d1e"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-linux-4/output-1-level1-2.png",
+      "bytes": 299799,
+      "sha256": "f4362b3e936f3a0f3eb5a3ff9cf5b3f06d4a4b91879fcefb5457641994ceff18"
+    }
+  ],
+  "retained": [
+    {
+      "path": "build/native/graphic-raster-png-profile-windows-4/output-0-level1-0.png",
+      "sha256": "3382fd28ddae634f5c753b1cf25751bfb2167d9fac85312b289f1b7bb238dd0b"
+    },
+    {
+      "path": "build/native/graphic-raster-png-profile-windows-4/output-1-level1-0.png",
+      "sha256": "f4362b3e936f3a0f3eb5a3ff9cf5b3f06d4a4b91879fcefb5457641994ceff18"
+    }
+  ],
+  "freed_bytes": 54903348
+}

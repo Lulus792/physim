@@ -1,0 +1,47 @@
+[
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "fcaff042c3d98b94d2f65bd1e8e54d0a58a0e4de44a7542218e9938eef6dd103"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_graphic_raster.py",
+          "--app",
+          "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+          "--root",
+          "D:\\Physim",
+          "--work",
+          "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-ta_socag\\graphic_raster\\files \u00e4"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "Graphic raster: 24 real PNG/figure cases, 2 exact RGB texture previews, actual font atlases, masks and atomic failures passed\n",
+        "stderr": "",
+        "seconds": 138.313,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-ta_socag\\graphic_raster\\files \u00e4\\app-steps.json",
+            "bytes": 27683,
+            "sha256": "409ee99d7f756edddff928c82720285c9644ff774d286991595cb5841ee85aef"
+          }
+        ]
+      }
+    ],
+    "seconds": 138.359,
+    "reason": "",
+    "name": "graphic_raster"
+  }
+]

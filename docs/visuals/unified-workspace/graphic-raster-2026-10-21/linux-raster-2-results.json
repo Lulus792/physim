@@ -1,0 +1,47 @@
+[
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "/usr/bin/python3",
+        "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+        "sha256": "ef5a4dc412afdd8ab62dc97259f31961bb6f913241a680253ad7dc4d061befa8"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/tests/check_graphic_raster.py",
+          "--app",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "--root",
+          "/mnt/d/Physim",
+          "--work",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-g10472p7/graphic_raster/files \u00e4"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "Graphic raster: 24 real PNG/figure cases, 2 exact RGB texture previews, actual font atlases, masks and atomic failures passed\n",
+        "stderr": "",
+        "seconds": 82.959,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-g10472p7/graphic_raster/files \u00e4/app-steps.json",
+            "bytes": 38575,
+            "sha256": "606dc84cdc6dd8875be52de30e3d9318cc341b38c82e6596434164d3973d7512"
+          }
+        ]
+      }
+    ],
+    "seconds": 83.519,
+    "reason": "",
+    "name": "graphic_raster"
+  }
+]

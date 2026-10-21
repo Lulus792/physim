@@ -13674,6 +13674,33 @@
           ]
         }
       ]
+    },
+    {
+      "name": "graphic_raster",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_graphic_raster.py",
+            "--app",
+            "{physim}",
+            "--root",
+            "{root}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 270,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
     }
   ]
 }

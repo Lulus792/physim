@@ -1,0 +1,2688 @@
+{
+  "created_utc": "2026-10-21T21:30:47.334012+00:00",
+  "base": "0cacb1e23242268de425016453f14e909537247d",
+  "source_version": 4,
+  "verified_banks": {
+    "source_sha256_lf": 119,
+    "foreign_sha256_lf": 10,
+    "font_assets_sha256": 14,
+    "linebreak_assets_sha256": 20
+  },
+  "final_runs": [
+    {
+      "label": "windows-native",
+      "directory": "build/native/Design-analysis/test-results/run-4jmblmnl",
+      "groups": [
+        {
+          "name": "plot_workflow",
+          "status": "passed",
+          "seconds": 30.063
+        },
+        {
+          "name": "graphics",
+          "status": "passed",
+          "seconds": 2.375
+        },
+        {
+          "name": "series_mask_workflow",
+          "status": "passed",
+          "seconds": 96.562
+        },
+        {
+          "name": "graphic_raster",
+          "status": "passed",
+          "seconds": 59.078
+        }
+      ]
+    },
+    {
+      "label": "linux-native",
+      "directory": "build/native/Design-analysis-linux/test-results/run-jofis9te",
+      "groups": [
+        {
+          "name": "plot_workflow",
+          "status": "passed",
+          "seconds": 38.437
+        },
+        {
+          "name": "graphics",
+          "status": "passed",
+          "seconds": 1.841
+        },
+        {
+          "name": "series_mask_workflow",
+          "status": "passed",
+          "seconds": 113.297
+        },
+        {
+          "name": "graphic_raster",
+          "status": "passed",
+          "seconds": 47.337
+        }
+      ]
+    },
+    {
+      "label": "windows-unit",
+      "directory": "build/native/Graphic-unit/test-results/run-yrlntuey",
+      "groups": [
+        {
+          "name": "graphic_figure",
+          "status": "passed",
+          "seconds": 0.484
+        },
+        {
+          "name": "graphic_snapshot",
+          "status": "passed",
+          "seconds": 1.093
+        },
+        {
+          "name": "report",
+          "status": "passed",
+          "seconds": 10.625
+        },
+        {
+          "name": "series_mask",
+          "status": "passed",
+          "seconds": 0.281
+        },
+        {
+          "name": "png",
+          "status": "passed",
+          "seconds": 0.218
+        }
+      ]
+    },
+    {
+      "label": "linux-unit",
+      "directory": "build/native/Graphic-unit-linux/test-results/run-qg29r1sh",
+      "groups": [
+        {
+          "name": "graphic_figure",
+          "status": "passed",
+          "seconds": 0.224
+        },
+        {
+          "name": "graphic_snapshot",
+          "status": "passed",
+          "seconds": 5.457
+        },
+        {
+          "name": "report",
+          "status": "passed",
+          "seconds": 22.241
+        },
+        {
+          "name": "series_mask",
+          "status": "passed",
+          "seconds": 0.403
+        },
+        {
+          "name": "png",
+          "status": "passed",
+          "seconds": 0.137
+        }
+      ]
+    }
+  ],
+  "raster": {
+    "windows-native": {
+      "platform": {
+        "gpu": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+        "families": [
+          "Segoe UI | Segoe UI",
+          "Segoe UI | Segoe UI",
+          "Segoe UI | Segoe UI",
+          "Segoe UI | Segoe UI",
+          "Segoe UI | Segoe UI",
+          "Segoe UI | Segoe UI",
+          "Segoe UI | Segoe UI",
+          "Segoe UI | Segoe UI",
+          "Segoe UI | Segoe UI",
+          "Segoe UI | Segoe UI",
+          "Segoe UI | Segoe UI",
+          "Segoe UI | Segoe UI"
+        ],
+        "cases": [
+          {
+            "name": "full-light-1",
+            "size": [
+              1200,
+              850
+            ],
+            "rgb_crc32": "d712f9a3",
+            "png_sha256": "d48b9d54c87a998a48f9906739797fd0c835ac9abe51c7f3c281b4fa0aa856ea",
+            "title_ink_samples": 1786,
+            "atlas": [
+              512,
+              256
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              25.27148,
+              45.22266
+            ],
+            "font_peak_bytes": 4951676,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": {
+              "samples": [
+                {
+                  "x": 322,
+                  "expected": 330.38775884902725,
+                  "actual": 330.5041546845147,
+                  "error": 0.11639583548742394,
+                  "coverage": 2.7767936902194044
+                },
+                {
+                  "x": 632,
+                  "expected": 365.32105590348414,
+                  "actual": 365.40158714280955,
+                  "error": 0.08053123932540984,
+                  "coverage": 2.613765605595137
+                },
+                {
+                  "x": 683,
+                  "expected": 559.871391059676,
+                  "actual": 559.7466122584002,
+                  "error": -0.12477880127573826,
+                  "coverage": 2.7003834673290195
+                },
+                {
+                  "x": 734,
+                  "expected": 374.7574209934912,
+                  "actual": 374.80950063637056,
+                  "error": 0.05207964287933464,
+                  "coverage": 3.05572259624812
+                },
+                {
+                  "x": 786,
+                  "expected": 550.8504280743063,
+                  "actual": 550.7254285530506,
+                  "error": -0.12499952125563141,
+                  "coverage": 2.7098067411813407
+                },
+                {
+                  "x": 837,
+                  "expected": 383.3885463362212,
+                  "actual": 383.50515868921684,
+                  "error": 0.11661235299561667,
+                  "coverage": 2.74529925703205
+                },
+                {
+                  "x": 889,
+                  "expected": 542.6787558426464,
+                  "actual": 542.6409596460315,
+                  "error": -0.03779619661486322,
+                  "coverage": 2.5162973614833213
+                },
+                {
+                  "x": 890,
+                  "expected": 542.6029200718896,
+                  "actual": 542.4910415841584,
+                  "error": -0.11187848773113274,
+                  "coverage": 2.7507244482210167
+                },
+                {
+                  "x": 941,
+                  "expected": 391.10890606786296,
+                  "actual": 391.0,
+                  "error": -0.10890606786296075,
+                  "coverage": 2.0
+                },
+                {
+                  "x": 993,
+                  "expected": 535.2604548940551,
+                  "actual": 535.2826239962919,
+                  "error": 0.02216910223683044,
+                  "coverage": 2.5384120966511974
+                },
+                {
+                  "x": 1044,
+                  "expected": 398.14135356546564,
+                  "actual": 398.1690242054195,
+                  "error": 0.027670639953839782,
+                  "coverage": 2.501448896442033
+                },
+                {
+                  "x": 1096,
+                  "expected": 528.6057599971233,
+                  "actual": 528.4925886986615,
+                  "error": -0.11317129846179341,
+                  "coverage": 2.735505588600562
+                }
+              ],
+              "maximum_center_error_px": 0.12499952125563141,
+              "mean_coverage_px": 2.6370133124169333
+            }
+          },
+          {
+            "name": "full-light-2",
+            "size": [
+              2400,
+              1700
+            ],
+            "rgb_crc32": "1af13a96",
+            "png_sha256": "a7f77cbb83c23eec5082f410c4de4f296160463b2d06017f400b8f265e636a79",
+            "title_ink_samples": 1692,
+            "atlas": [
+              512,
+              1024
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              50.54297,
+              90.44531
+            ],
+            "font_peak_bytes": 4951676,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-light-3",
+            "size": [
+              3600,
+              2550
+            ],
+            "rgb_crc32": "15ab7659",
+            "png_sha256": "3d09efa89894feb89247c871e502fb177d9f2c6a7508e0d7284bcfccc430f511",
+            "title_ink_samples": 1650,
+            "atlas": [
+              512,
+              2048
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              75.81445,
+              135.66797
+            ],
+            "font_peak_bytes": 4993220,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-light-4",
+            "size": [
+              4800,
+              3400
+            ],
+            "rgb_crc32": "7ed0feef",
+            "png_sha256": "cd78daca40952add453fab62b026ecb2be11931fbf4e0136cf1155d20f3a7319",
+            "title_ink_samples": 1631,
+            "atlas": [
+              512,
+              4096
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              101.08594,
+              180.89062
+            ],
+            "font_peak_bytes": 6042516,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-dark-1",
+            "size": [
+              1200,
+              850
+            ],
+            "rgb_crc32": "42267c64",
+            "png_sha256": "d0cf7a92d2d27d6579fab9fc82d2c3fce2cfdcad34be5df22c5333524d230bf3",
+            "title_ink_samples": 1775,
+            "atlas": [
+              512,
+              256
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              25.27148,
+              45.22266
+            ],
+            "font_peak_bytes": 4951676,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-dark-2",
+            "size": [
+              2400,
+              1700
+            ],
+            "rgb_crc32": "a98dbd24",
+            "png_sha256": "f5a9dbb7c5ea9dde4ed4efcb4683bdac90d3399d32cd47482c543854ccfa0dd4",
+            "title_ink_samples": 1690,
+            "atlas": [
+              512,
+              1024
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              50.54297,
+              90.44531
+            ],
+            "font_peak_bytes": 4951676,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-dark-3",
+            "size": [
+              3600,
+              2550
+            ],
+            "rgb_crc32": "c5acc7a6",
+            "png_sha256": "05f28057189591f9e96ee93841fc57fdd02549a49820930558928fce52715887",
+            "title_ink_samples": 1643,
+            "atlas": [
+              512,
+              2048
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              75.81445,
+              135.66797
+            ],
+            "font_peak_bytes": 4993220,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-dark-4",
+            "size": [
+              4800,
+              3400
+            ],
+            "rgb_crc32": "2daca533",
+            "png_sha256": "bb334f950510bca863ce7d331326e8baef7b1da7465a836aa856a7d7b9126e5c",
+            "title_ink_samples": 1630,
+            "atlas": [
+              512,
+              4096
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              101.08594,
+              180.89062
+            ],
+            "font_peak_bytes": 6042516,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "crop-light-2",
+            "size": [
+              2400,
+              1700
+            ],
+            "rgb_crc32": "79f1d007",
+            "png_sha256": "5a2860ff438c240a33c88eb6379bd3461384cdbbeaa442097bfbfb17caab746c",
+            "title_ink_samples": 1692,
+            "atlas": [
+              512,
+              1024
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              50.54297,
+              90.44531
+            ],
+            "font_peak_bytes": 4951676,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "crop-dark-2",
+            "size": [
+              2400,
+              1700
+            ],
+            "rgb_crc32": "e6da78b2",
+            "png_sha256": "06c9803b9fcbfd7e3dfd8323fbbb2a317278eb56da392ac3a8594aa6c0bfb5fb",
+            "title_ink_samples": 1690,
+            "atlas": [
+              512,
+              1024
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              50.54297,
+              90.44531
+            ],
+            "font_peak_bytes": 4951676,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "marks-light-1",
+            "size": [
+              1200,
+              850
+            ],
+            "rgb_crc32": "c654e8db",
+            "png_sha256": "f2b6bad44fc2098b92dc7be9b5e45b97380bf2ab55d7786b64a91925e4ac076d",
+            "title_ink_samples": 4564,
+            "atlas": [
+              512,
+              256
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              25.27148,
+              45.22266
+            ],
+            "font_peak_bytes": 4951676,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "marks-dark-1",
+            "size": [
+              1200,
+              850
+            ],
+            "rgb_crc32": "3cfaf0ee",
+            "png_sha256": "7624cb7764e64e73d1fae399a4de0ccbcef5e0f1da5a958a6aaffebcff0c36e0",
+            "title_ink_samples": 4512,
+            "atlas": [
+              512,
+              256
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              25.27148,
+              45.22266
+            ],
+            "font_peak_bytes": 4951676,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": null
+          }
+        ],
+        "glyphs": [
+          [
+            "full-light-1",
+            "13.000",
+            "23.000"
+          ],
+          [
+            "full-light-2",
+            "25.000",
+            "45.000"
+          ],
+          [
+            "full-light-3",
+            "36.500",
+            "67.500"
+          ],
+          [
+            "full-light-4",
+            "48.500",
+            "89.500"
+          ],
+          [
+            "full-dark-1",
+            "13.000",
+            "23.000"
+          ],
+          [
+            "full-dark-2",
+            "25.000",
+            "45.000"
+          ],
+          [
+            "full-dark-3",
+            "36.500",
+            "67.500"
+          ],
+          [
+            "full-dark-4",
+            "48.500",
+            "89.500"
+          ],
+          [
+            "crop-light-2",
+            "25.000",
+            "45.000"
+          ],
+          [
+            "crop-dark-2",
+            "25.000",
+            "45.000"
+          ],
+          [
+            "marks-light-1",
+            "13.000",
+            "23.000"
+          ],
+          [
+            "marks-dark-1",
+            "13.000",
+            "23.000"
+          ]
+        ],
+        "phase_times": [
+          "name=full-light-1 resize=0.000819 fonts=0.033650 render=0.028130 total=0.062172\r",
+          "name=full-light-2 resize=0.001644 fonts=0.076127 render=0.038478 total=0.114702\r",
+          "name=full-light-3 resize=0.001342 fonts=0.118247 render=0.075546 total=0.193883\r",
+          "name=full-light-4 resize=0.001258 fonts=0.146205 render=0.116221 total=0.262530\r",
+          "name=full-dark-1 resize=0.002295 fonts=0.054983 render=0.023501 total=0.078582\r",
+          "name=full-dark-2 resize=0.001320 fonts=0.079157 render=0.040264 total=0.119509\r",
+          "name=full-dark-3 resize=0.001729 fonts=0.152850 render=0.085790 total=0.238735\r",
+          "name=full-dark-4 resize=0.001332 fonts=0.173736 render=0.107301 total=0.281140\r",
+          "name=crop-light-2 resize=0.000618 fonts=0.065071 render=0.032393 total=0.097547\r",
+          "name=crop-dark-2 resize=0.000603 fonts=0.069599 render=0.032971 total=0.102642\r",
+          "name=marks-light-1 resize=0.001518 fonts=0.054333 render=0.015884 total=0.070434\r",
+          "name=marks-dark-1 resize=0.007000 fonts=0.053047 render=0.010345 total=0.063472\r"
+        ]
+      },
+      "bundled": {
+        "gpu": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+        "families": [
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans"
+        ],
+        "cases": [
+          {
+            "name": "full-light-1",
+            "size": [
+              1200,
+              850
+            ],
+            "rgb_crc32": "8739331e",
+            "png_sha256": "9429b2e0afb9db4d45b855c7222dc250d07d9a38b77dd9e4325f3eb69404c210",
+            "title_ink_samples": 2308,
+            "atlas": [
+              512,
+              256
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              25.878,
+              46.308
+            ],
+            "font_peak_bytes": 6730696,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": {
+              "samples": [
+                {
+                  "x": 322,
+                  "expected": 330.38775884902725,
+                  "actual": 330.5041546845147,
+                  "error": 0.11639583548742394,
+                  "coverage": 2.7767936902194044
+                },
+                {
+                  "x": 632,
+                  "expected": 365.32105590348414,
+                  "actual": 365.40158714280955,
+                  "error": 0.08053123932540984,
+                  "coverage": 2.613765605595137
+                },
+                {
+                  "x": 683,
+                  "expected": 559.871391059676,
+                  "actual": 559.7466122584002,
+                  "error": -0.12477880127573826,
+                  "coverage": 2.7003834673290195
+                },
+                {
+                  "x": 734,
+                  "expected": 374.7574209934912,
+                  "actual": 374.80950063637056,
+                  "error": 0.05207964287933464,
+                  "coverage": 3.05572259624812
+                },
+                {
+                  "x": 786,
+                  "expected": 550.8504280743063,
+                  "actual": 550.7254285530506,
+                  "error": -0.12499952125563141,
+                  "coverage": 2.7098067411813407
+                },
+                {
+                  "x": 837,
+                  "expected": 383.3885463362212,
+                  "actual": 383.50515868921684,
+                  "error": 0.11661235299561667,
+                  "coverage": 2.74529925703205
+                },
+                {
+                  "x": 889,
+                  "expected": 542.6787558426464,
+                  "actual": 542.6409596460315,
+                  "error": -0.03779619661486322,
+                  "coverage": 2.5162973614833213
+                },
+                {
+                  "x": 890,
+                  "expected": 542.6029200718896,
+                  "actual": 542.4910415841584,
+                  "error": -0.11187848773113274,
+                  "coverage": 2.7507244482210167
+                },
+                {
+                  "x": 941,
+                  "expected": 391.10890606786296,
+                  "actual": 391.0,
+                  "error": -0.10890606786296075,
+                  "coverage": 2.0
+                },
+                {
+                  "x": 993,
+                  "expected": 535.2604548940551,
+                  "actual": 535.2826239962919,
+                  "error": 0.02216910223683044,
+                  "coverage": 2.5384120966511974
+                },
+                {
+                  "x": 1044,
+                  "expected": 398.14135356546564,
+                  "actual": 398.1690242054195,
+                  "error": 0.027670639953839782,
+                  "coverage": 2.501448896442033
+                },
+                {
+                  "x": 1096,
+                  "expected": 528.6057599971233,
+                  "actual": 528.4925886986615,
+                  "error": -0.11317129846179341,
+                  "coverage": 2.735505588600562
+                }
+              ],
+              "maximum_center_error_px": 0.12499952125563141,
+              "mean_coverage_px": 2.6370133124169333
+            }
+          },
+          {
+            "name": "full-light-2",
+            "size": [
+              2400,
+              1700
+            ],
+            "rgb_crc32": "2488457f",
+            "png_sha256": "3cd5115f9bd4eb050ab1b5bcf55f98b16e8faf4fec03ca5c3d156352b8a90d40",
+            "title_ink_samples": 2273,
+            "atlas": [
+              512,
+              1024
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              51.756,
+              92.616
+            ],
+            "font_peak_bytes": 6730696,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-light-3",
+            "size": [
+              3600,
+              2550
+            ],
+            "rgb_crc32": "1b6faced",
+            "png_sha256": "0aec6b66d60705b1123c7e623eebae818536f32f6c4eb3b3dd0c9454a64af646",
+            "title_ink_samples": 2251,
+            "atlas": [
+              512,
+              2048
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              77.634,
+              138.92401
+            ],
+            "font_peak_bytes": 6730696,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-light-4",
+            "size": [
+              4800,
+              3400
+            ],
+            "rgb_crc32": "84490caa",
+            "png_sha256": "0f126529634ff07b6bb0e058a45b4a5d368ad044a62e8e82183ac1b6b57bd988",
+            "title_ink_samples": 2242,
+            "atlas": [
+              512,
+              4096
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              103.51201,
+              185.23201
+            ],
+            "font_peak_bytes": 7422528,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-dark-1",
+            "size": [
+              1200,
+              850
+            ],
+            "rgb_crc32": "6b5d0984",
+            "png_sha256": "d87879edb7eab9674f93d0f16877e6ba59c77b376b1ce6a33de328a2d737f73e",
+            "title_ink_samples": 2291,
+            "atlas": [
+              512,
+              256
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              25.878,
+              46.308
+            ],
+            "font_peak_bytes": 6730696,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-dark-2",
+            "size": [
+              2400,
+              1700
+            ],
+            "rgb_crc32": "0ade8738",
+            "png_sha256": "3427126467f08a9e6345046210e3baebb74ad5bb634308b48269bd5255050e8a",
+            "title_ink_samples": 2269,
+            "atlas": [
+              512,
+              1024
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              51.756,
+              92.616
+            ],
+            "font_peak_bytes": 6730696,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-dark-3",
+            "size": [
+              3600,
+              2550
+            ],
+            "rgb_crc32": "e646380e",
+            "png_sha256": "bcaca0f379cd625008dc8ea9a7ad56d93b83a47815a70802606b07b033d1739e",
+            "title_ink_samples": 2249,
+            "atlas": [
+              512,
+              2048
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              77.634,
+              138.92401
+            ],
+            "font_peak_bytes": 6730696,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-dark-4",
+            "size": [
+              4800,
+              3400
+            ],
+            "rgb_crc32": "f6ecfcf8",
+            "png_sha256": "333d037bbbbfe0bb489b4163c510b515a3175db128ff20c1cc4b7a26fd0317e6",
+            "title_ink_samples": 2240,
+            "atlas": [
+              512,
+              4096
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              103.51201,
+              185.23201
+            ],
+            "font_peak_bytes": 7422528,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "crop-light-2",
+            "size": [
+              2400,
+              1700
+            ],
+            "rgb_crc32": "2a7b3421",
+            "png_sha256": "e4a4ac77e8c1ee31b9ca0eb8706a719750daf13b76b2fd74c564b36a25588797",
+            "title_ink_samples": 2273,
+            "atlas": [
+              512,
+              1024
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              51.756,
+              92.616
+            ],
+            "font_peak_bytes": 6730696,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "crop-dark-2",
+            "size": [
+              2400,
+              1700
+            ],
+            "rgb_crc32": "8db81ed8",
+            "png_sha256": "80e0029e7ce18703cb77ea97086b9ef20458eee887defe3c8730a52e7dfbb663",
+            "title_ink_samples": 2269,
+            "atlas": [
+              512,
+              1024
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              51.756,
+              92.616
+            ],
+            "font_peak_bytes": 6730696,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "marks-light-1",
+            "size": [
+              1200,
+              850
+            ],
+            "rgb_crc32": "567c5439",
+            "png_sha256": "bd2f510b70704458beee75f94797242c2c4abe7ec2047958dbc3383020db6519",
+            "title_ink_samples": 5362,
+            "atlas": [
+              512,
+              256
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              25.878,
+              46.308
+            ],
+            "font_peak_bytes": 6730696,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "marks-dark-1",
+            "size": [
+              1200,
+              850
+            ],
+            "rgb_crc32": "8af1b621",
+            "png_sha256": "c3c004b2cd257b4880eb7219faa5d7f299c7ea9aa595c7d426759eaaf10a46de",
+            "title_ink_samples": 5285,
+            "atlas": [
+              512,
+              256
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              25.878,
+              46.308
+            ],
+            "font_peak_bytes": 6730696,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": null
+          }
+        ],
+        "glyphs": [
+          [
+            "full-light-1",
+            "13.000",
+            "24.000"
+          ],
+          [
+            "full-light-2",
+            "25.000",
+            "47.500"
+          ],
+          [
+            "full-light-3",
+            "37.000",
+            "71.000"
+          ],
+          [
+            "full-light-4",
+            "49.000",
+            "94.500"
+          ],
+          [
+            "full-dark-1",
+            "13.000",
+            "24.000"
+          ],
+          [
+            "full-dark-2",
+            "25.000",
+            "47.500"
+          ],
+          [
+            "full-dark-3",
+            "37.000",
+            "71.000"
+          ],
+          [
+            "full-dark-4",
+            "49.000",
+            "94.500"
+          ],
+          [
+            "crop-light-2",
+            "25.000",
+            "47.500"
+          ],
+          [
+            "crop-dark-2",
+            "25.000",
+            "47.500"
+          ],
+          [
+            "marks-light-1",
+            "13.000",
+            "24.000"
+          ],
+          [
+            "marks-dark-1",
+            "13.000",
+            "24.000"
+          ]
+        ],
+        "phase_times": [
+          "name=full-light-1 resize=0.001077 fonts=0.034065 render=0.023234 total=0.057385\r",
+          "name=full-light-2 resize=0.001526 fonts=0.056359 render=0.033008 total=0.089470\r",
+          "name=full-light-3 resize=0.001284 fonts=0.072427 render=0.050196 total=0.122711\r",
+          "name=full-light-4 resize=0.001460 fonts=0.143890 render=0.083468 total=0.227440\r",
+          "name=full-dark-1 resize=0.001363 fonts=0.042017 render=0.029541 total=0.071633\r",
+          "name=full-dark-2 resize=0.001657 fonts=0.052401 render=0.038959 total=0.091443\r",
+          "name=full-dark-3 resize=0.001428 fonts=0.078678 render=0.058840 total=0.137591\r",
+          "name=full-dark-4 resize=0.001256 fonts=0.095055 render=0.080903 total=0.178678\r",
+          "name=crop-light-2 resize=0.000992 fonts=0.046252 render=0.023206 total=0.069555\r",
+          "name=crop-dark-2 resize=0.000466 fonts=0.092455 render=0.031699 total=0.124254\r",
+          "name=marks-light-1 resize=0.001713 fonts=0.037737 render=0.009502 total=0.047310\r",
+          "name=marks-dark-1 resize=0.000758 fonts=0.042380 render=0.009995 total=0.052472\r"
+        ]
+      }
+    },
+    "linux-native": {
+      "platform": {
+        "gpu": "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+        "families": [
+          "DejaVu Sans | DejaVu Sans",
+          "DejaVu Sans | DejaVu Sans",
+          "DejaVu Sans | DejaVu Sans",
+          "DejaVu Sans | DejaVu Sans",
+          "DejaVu Sans | DejaVu Sans",
+          "DejaVu Sans | DejaVu Sans",
+          "DejaVu Sans | DejaVu Sans",
+          "DejaVu Sans | DejaVu Sans",
+          "DejaVu Sans | DejaVu Sans",
+          "DejaVu Sans | DejaVu Sans",
+          "DejaVu Sans | DejaVu Sans",
+          "DejaVu Sans | DejaVu Sans"
+        ],
+        "cases": [
+          {
+            "name": "full-light-1",
+            "size": [
+              1200,
+              850
+            ],
+            "rgb_crc32": "7837f922",
+            "png_sha256": "0d5bfb1ad21bec6327a51e64a2d11d0f30d5aca8944029ed6db677d7f7d87023",
+            "title_ink_samples": 2823,
+            "atlas": [
+              512,
+              512
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              22.11719,
+              39.57812
+            ],
+            "font_peak_bytes": 4276816,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": {
+              "samples": [
+                {
+                  "x": 322,
+                  "expected": 330.38775884902725,
+                  "actual": 330.5035200927205,
+                  "error": 0.1157612436932709,
+                  "coverage": 2.782218881408371
+                },
+                {
+                  "x": 632,
+                  "expected": 365.32105590348414,
+                  "actual": 365.40264823451037,
+                  "error": 0.0815923310262292,
+                  "coverage": 2.616293003900037
+                },
+                {
+                  "x": 683,
+                  "expected": 559.871391059676,
+                  "actual": 559.744959872365,
+                  "error": -0.12643118731091363,
+                  "coverage": 2.703967579580365
+                },
+                {
+                  "x": 734,
+                  "expected": 374.7574209934912,
+                  "actual": 374.73405850905857,
+                  "error": -0.023362484432652764,
+                  "coverage": 2.9343965836547046
+                },
+                {
+                  "x": 786,
+                  "expected": 550.8504280743063,
+                  "actual": 550.727407255288,
+                  "error": -0.12302081901827933,
+                  "coverage": 2.7054382639388197
+                },
+                {
+                  "x": 837,
+                  "expected": 383.3885463362212,
+                  "actual": 383.50515868921684,
+                  "error": 0.11661235299561667,
+                  "coverage": 2.74529925703205
+                },
+                {
+                  "x": 889,
+                  "expected": 542.6787558426464,
+                  "actual": 542.6385050047736,
+                  "error": -0.04025083787280437,
+                  "coverage": 2.521722552672288
+                },
+                {
+                  "x": 890,
+                  "expected": 542.6029200718896,
+                  "actual": 542.4910415841584,
+                  "error": -0.11187848773113274,
+                  "coverage": 2.7507244482210167
+                },
+                {
+                  "x": 941,
+                  "expected": 391.10890606786296,
+                  "actual": 391.0,
+                  "error": -0.10890606786296075,
+                  "coverage": 2.0
+                },
+                {
+                  "x": 993,
+                  "expected": 535.2604548940551,
+                  "actual": 535.2821598050532,
+                  "error": 0.02170491099809624,
+                  "coverage": 2.5482057650826855
+                },
+                {
+                  "x": 1044,
+                  "expected": 398.14135356546564,
+                  "actual": 398.1690242054195,
+                  "error": 0.027670639953839782,
+                  "coverage": 2.501448896442033
+                },
+                {
+                  "x": 1096,
+                  "expected": 528.6057599971233,
+                  "actual": 528.4915383360717,
+                  "error": -0.11422166105160159,
+                  "coverage": 2.7384033814846287
+                }
+              ],
+              "maximum_center_error_px": 0.12643118731091363,
+              "mean_coverage_px": 2.6290098844514165
+            }
+          },
+          {
+            "name": "full-light-2",
+            "size": [
+              2400,
+              1700
+            ],
+            "rgb_crc32": "9869568f",
+            "png_sha256": "9b051e6490891fa00b8e8824b6fb016a8ec45c9aad088ad610b76c4a1f658d9d",
+            "title_ink_samples": 2667,
+            "atlas": [
+              512,
+              2048
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              44.23438,
+              79.15625
+            ],
+            "font_peak_bytes": 4276816,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-light-3",
+            "size": [
+              3600,
+              2550
+            ],
+            "rgb_crc32": "c4e5b177",
+            "png_sha256": "c605331fef644521a57bb507e7d9dba407c3ae78b3e75f9a81ac9a9411c4bdea",
+            "title_ink_samples": 2613,
+            "atlas": [
+              512,
+              4096
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              66.35156,
+              118.73438
+            ],
+            "font_peak_bytes": 5097916,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-light-4",
+            "size": [
+              4800,
+              3400
+            ],
+            "rgb_crc32": "53304a6d",
+            "png_sha256": "9e393f279eaf4f54b288798ffd6095e5a16aec33dae16779494cc7701cab664b",
+            "title_ink_samples": 2591,
+            "atlas": [
+              512,
+              8192
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              88.46875,
+              158.3125
+            ],
+            "font_peak_bytes": 7195876,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-dark-1",
+            "size": [
+              1200,
+              850
+            ],
+            "rgb_crc32": "d175c7d7",
+            "png_sha256": "63cf2c328ea97f387e36b5865ef19e84d53ae69376d2182f0dc18a35aa293ee3",
+            "title_ink_samples": 2794,
+            "atlas": [
+              512,
+              512
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              22.11719,
+              39.57812
+            ],
+            "font_peak_bytes": 4276816,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-dark-2",
+            "size": [
+              2400,
+              1700
+            ],
+            "rgb_crc32": "ade20edc",
+            "png_sha256": "53e083d8043216b6230035527c5524b338418735dd9c3b1f6ca71616b75709fb",
+            "title_ink_samples": 2661,
+            "atlas": [
+              512,
+              2048
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              44.23438,
+              79.15625
+            ],
+            "font_peak_bytes": 4276816,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-dark-3",
+            "size": [
+              3600,
+              2550
+            ],
+            "rgb_crc32": "e53744b3",
+            "png_sha256": "25cbe0e3d3fa85d8639b4d11cfc790b5cfa32dd0796d4b625e2ae93ed416195d",
+            "title_ink_samples": 2607,
+            "atlas": [
+              512,
+              4096
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              66.35156,
+              118.73438
+            ],
+            "font_peak_bytes": 5097916,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-dark-4",
+            "size": [
+              4800,
+              3400
+            ],
+            "rgb_crc32": "421c8a1f",
+            "png_sha256": "f8bc50472ffdeedaf9af9e2d1fc137ddd35df7ce73093ecc31caf152acdb7844",
+            "title_ink_samples": 2584,
+            "atlas": [
+              512,
+              8192
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              88.46875,
+              158.3125
+            ],
+            "font_peak_bytes": 7195876,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "crop-light-2",
+            "size": [
+              2400,
+              1700
+            ],
+            "rgb_crc32": "21362f63",
+            "png_sha256": "a72d2fb111c1591d115f4fe6f725cf493981bc7ca7a945aaa08b617fe5341f24",
+            "title_ink_samples": 2667,
+            "atlas": [
+              512,
+              2048
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              44.23438,
+              79.15625
+            ],
+            "font_peak_bytes": 4276816,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "crop-dark-2",
+            "size": [
+              2400,
+              1700
+            ],
+            "rgb_crc32": "172c2f8d",
+            "png_sha256": "28461503dd4271e3725c6e964a0a1e6ac9937899d4f8f3ee69e6cb5027282239",
+            "title_ink_samples": 2661,
+            "atlas": [
+              512,
+              2048
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              44.23438,
+              79.15625
+            ],
+            "font_peak_bytes": 4276816,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "marks-light-1",
+            "size": [
+              1200,
+              850
+            ],
+            "rgb_crc32": "0b8c586b",
+            "png_sha256": "fd50387ba6b01c0e81c83494ac82267c8bf029de0fbe18981ce8a9ace8b494bc",
+            "title_ink_samples": 5564,
+            "atlas": [
+              512,
+              512
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              22.11719,
+              39.57812
+            ],
+            "font_peak_bytes": 4276816,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "marks-dark-1",
+            "size": [
+              1200,
+              850
+            ],
+            "rgb_crc32": "9935cc4e",
+            "png_sha256": "b9268be0c66d1be0cb7c3a8e1cb1c74483f27b757e5bb1fa372127697e45f26c",
+            "title_ink_samples": 5522,
+            "atlas": [
+              512,
+              512
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              22.11719,
+              39.57812
+            ],
+            "font_peak_bytes": 4276816,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": null
+          }
+        ],
+        "glyphs": [
+          [
+            "full-light-1",
+            "13.500",
+            "27.000"
+          ],
+          [
+            "full-light-2",
+            "26.500",
+            "53.000"
+          ],
+          [
+            "full-light-3",
+            "39.500",
+            "79.000"
+          ],
+          [
+            "full-light-4",
+            "51.500",
+            "105.000"
+          ],
+          [
+            "full-dark-1",
+            "13.500",
+            "27.000"
+          ],
+          [
+            "full-dark-2",
+            "26.500",
+            "53.000"
+          ],
+          [
+            "full-dark-3",
+            "39.500",
+            "79.000"
+          ],
+          [
+            "full-dark-4",
+            "51.500",
+            "105.000"
+          ],
+          [
+            "crop-light-2",
+            "26.500",
+            "53.000"
+          ],
+          [
+            "crop-dark-2",
+            "26.500",
+            "53.000"
+          ],
+          [
+            "marks-light-1",
+            "13.500",
+            "27.000"
+          ],
+          [
+            "marks-dark-1",
+            "13.500",
+            "27.000"
+          ]
+        ],
+        "phase_times": [
+          "name=full-light-1 resize=0.012407 fonts=0.205045 render=0.060230 total=0.265630",
+          "name=full-light-2 resize=0.021443 fonts=0.181204 render=0.083363 total=0.264891",
+          "name=full-light-3 resize=0.011418 fonts=0.238496 render=0.175573 total=0.414402",
+          "name=full-light-4 resize=0.012502 fonts=0.230309 render=0.240596 total=0.471214",
+          "name=full-dark-1 resize=0.011173 fonts=0.174387 render=0.059289 total=0.234129",
+          "name=full-dark-2 resize=0.021418 fonts=0.265474 render=0.105703 total=0.371723",
+          "name=full-dark-3 resize=0.011498 fonts=0.218510 render=0.180542 total=0.399579",
+          "name=full-dark-4 resize=0.022992 fonts=0.273907 render=0.386476 total=0.660744",
+          "name=crop-light-2 resize=0.011121 fonts=0.249034 render=0.110446 total=0.359901",
+          "name=crop-dark-2 resize=0.010805 fonts=0.198136 render=0.095243 total=0.293827",
+          "name=marks-light-1 resize=0.011388 fonts=0.195639 render=0.026577 total=0.222543",
+          "name=marks-dark-1 resize=0.010787 fonts=0.176701 render=0.022117 total=0.199331"
+        ]
+      },
+      "bundled": {
+        "gpu": "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+        "families": [
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans",
+          "Noto Sans | Noto Sans"
+        ],
+        "cases": [
+          {
+            "name": "full-light-1",
+            "size": [
+              1200,
+              850
+            ],
+            "rgb_crc32": "f0c51339",
+            "png_sha256": "b0dff050182a44c9e6e778976d8cf7f77e71b701e61473d49cdeb8065a255a0d",
+            "title_ink_samples": 2309,
+            "atlas": [
+              512,
+              256
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              25.878,
+              46.308
+            ],
+            "font_peak_bytes": 6730912,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": {
+              "samples": [
+                {
+                  "x": 322,
+                  "expected": 330.38775884902725,
+                  "actual": 330.5035200927205,
+                  "error": 0.1157612436932709,
+                  "coverage": 2.782218881408371
+                },
+                {
+                  "x": 632,
+                  "expected": 365.32105590348414,
+                  "actual": 365.40264823451037,
+                  "error": 0.0815923310262292,
+                  "coverage": 2.616293003900037
+                },
+                {
+                  "x": 683,
+                  "expected": 559.871391059676,
+                  "actual": 559.744959872365,
+                  "error": -0.12643118731091363,
+                  "coverage": 2.703967579580365
+                },
+                {
+                  "x": 734,
+                  "expected": 374.7574209934912,
+                  "actual": 374.73405850905857,
+                  "error": -0.023362484432652764,
+                  "coverage": 2.9343965836547046
+                },
+                {
+                  "x": 786,
+                  "expected": 550.8504280743063,
+                  "actual": 550.727407255288,
+                  "error": -0.12302081901827933,
+                  "coverage": 2.7054382639388197
+                },
+                {
+                  "x": 837,
+                  "expected": 383.3885463362212,
+                  "actual": 383.50515868921684,
+                  "error": 0.11661235299561667,
+                  "coverage": 2.74529925703205
+                },
+                {
+                  "x": 889,
+                  "expected": 542.6787558426464,
+                  "actual": 542.6385050047736,
+                  "error": -0.04025083787280437,
+                  "coverage": 2.521722552672288
+                },
+                {
+                  "x": 890,
+                  "expected": 542.6029200718896,
+                  "actual": 542.4910415841584,
+                  "error": -0.11187848773113274,
+                  "coverage": 2.7507244482210167
+                },
+                {
+                  "x": 941,
+                  "expected": 391.10890606786296,
+                  "actual": 391.0,
+                  "error": -0.10890606786296075,
+                  "coverage": 2.0
+                },
+                {
+                  "x": 993,
+                  "expected": 535.2604548940551,
+                  "actual": 535.2821598050532,
+                  "error": 0.02170491099809624,
+                  "coverage": 2.5482057650826855
+                },
+                {
+                  "x": 1044,
+                  "expected": 398.14135356546564,
+                  "actual": 398.1690242054195,
+                  "error": 0.027670639953839782,
+                  "coverage": 2.501448896442033
+                },
+                {
+                  "x": 1096,
+                  "expected": 528.6057599971233,
+                  "actual": 528.4915383360717,
+                  "error": -0.11422166105160159,
+                  "coverage": 2.7384033814846287
+                }
+              ],
+              "maximum_center_error_px": 0.12643118731091363,
+              "mean_coverage_px": 2.6290098844514165
+            }
+          },
+          {
+            "name": "full-light-2",
+            "size": [
+              2400,
+              1700
+            ],
+            "rgb_crc32": "4facf4c5",
+            "png_sha256": "9b9b493b4ad6c0c51c566dd9467ff11513b75647867abeba923061cedf4dd576",
+            "title_ink_samples": 2273,
+            "atlas": [
+              512,
+              1024
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              51.756,
+              92.616
+            ],
+            "font_peak_bytes": 6730912,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-light-3",
+            "size": [
+              3600,
+              2550
+            ],
+            "rgb_crc32": "98ab86e0",
+            "png_sha256": "cf71f467e69b1884688243cc1f2067da7b532a9850fb89947374399a67ccb99c",
+            "title_ink_samples": 2250,
+            "atlas": [
+              512,
+              2048
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              77.634,
+              138.92401
+            ],
+            "font_peak_bytes": 6730912,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-light-4",
+            "size": [
+              4800,
+              3400
+            ],
+            "rgb_crc32": "2e114725",
+            "png_sha256": "5ac4532773ba8fc5493f99d36868f3f9bd109aaf62341939a0ba83dd2f68c4af",
+            "title_ink_samples": 2242,
+            "atlas": [
+              512,
+              4096
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              103.51201,
+              185.23201
+            ],
+            "font_peak_bytes": 7422984,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-dark-1",
+            "size": [
+              1200,
+              850
+            ],
+            "rgb_crc32": "552bb538",
+            "png_sha256": "4ea1f1b6b46288196d05dc65a88df00aa2c348aad4f74aa67e8b6f6e4471623d",
+            "title_ink_samples": 2292,
+            "atlas": [
+              512,
+              256
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              25.878,
+              46.308
+            ],
+            "font_peak_bytes": 6730912,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-dark-2",
+            "size": [
+              2400,
+              1700
+            ],
+            "rgb_crc32": "08ee78a7",
+            "png_sha256": "46db4ad63a550fb72eda81c11c9bfeae17c14d1f99815cec820906e0354dffdc",
+            "title_ink_samples": 2269,
+            "atlas": [
+              512,
+              1024
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              51.756,
+              92.616
+            ],
+            "font_peak_bytes": 6730912,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-dark-3",
+            "size": [
+              3600,
+              2550
+            ],
+            "rgb_crc32": "1609bdcf",
+            "png_sha256": "a39ef33de458d649e438d779c0ae7b214149203966c0b700d1ed7dc2e5851c43",
+            "title_ink_samples": 2249,
+            "atlas": [
+              512,
+              2048
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              77.634,
+              138.92401
+            ],
+            "font_peak_bytes": 6730912,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "full-dark-4",
+            "size": [
+              4800,
+              3400
+            ],
+            "rgb_crc32": "66e98457",
+            "png_sha256": "fefa7e495385dc10734bace179387ae403b4611907ba379ff6046c66c0e70ee7",
+            "title_ink_samples": 2240,
+            "atlas": [
+              512,
+              4096
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              103.51201,
+              185.23201
+            ],
+            "font_peak_bytes": 7422984,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "crop-light-2",
+            "size": [
+              2400,
+              1700
+            ],
+            "rgb_crc32": "c73cbe69",
+            "png_sha256": "9da0d206b0664df5bac4516a706287c9107475a7b48e62b1fce3fbfa4cdd175f",
+            "title_ink_samples": 2273,
+            "atlas": [
+              512,
+              1024
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              51.756,
+              92.616
+            ],
+            "font_peak_bytes": 6730912,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "crop-dark-2",
+            "size": [
+              2400,
+              1700
+            ],
+            "rgb_crc32": "d132c978",
+            "png_sha256": "afd65df510a89d8ddbc485666404f5fbde4b21382a52d16cc027ef875e4a4caf",
+            "title_ink_samples": 2269,
+            "atlas": [
+              512,
+              1024
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              51.756,
+              92.616
+            ],
+            "font_peak_bytes": 6730912,
+            "window_size": [
+              1600,
+              900
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "marks-light-1",
+            "size": [
+              1200,
+              850
+            ],
+            "rgb_crc32": "3fab5675",
+            "png_sha256": "a2f9b0986a773581c897839d5d67aab4fafd582f76799575a5117e1c0a9a6843",
+            "title_ink_samples": 5345,
+            "atlas": [
+              512,
+              256
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              25.878,
+              46.308
+            ],
+            "font_peak_bytes": 6730912,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": null
+          },
+          {
+            "name": "marks-dark-1",
+            "size": [
+              1200,
+              850
+            ],
+            "rgb_crc32": "752af8c1",
+            "png_sha256": "aca1bcc7c03143973000f43dd2e9bea42708867a0e22f1bd1887c9bdda983a3b",
+            "title_ink_samples": 5285,
+            "atlas": [
+              512,
+              256
+            ],
+            "glyphs": 100,
+            "font_raster_heights": [
+              25.878,
+              46.308
+            ],
+            "font_peak_bytes": 6730912,
+            "window_size": [
+              760,
+              540
+            ],
+            "subpixel_geometry": null
+          }
+        ],
+        "glyphs": [
+          [
+            "full-light-1",
+            "13.000",
+            "24.000"
+          ],
+          [
+            "full-light-2",
+            "25.000",
+            "47.500"
+          ],
+          [
+            "full-light-3",
+            "37.000",
+            "71.000"
+          ],
+          [
+            "full-light-4",
+            "49.000",
+            "94.500"
+          ],
+          [
+            "full-dark-1",
+            "13.000",
+            "24.000"
+          ],
+          [
+            "full-dark-2",
+            "25.000",
+            "47.500"
+          ],
+          [
+            "full-dark-3",
+            "37.000",
+            "71.000"
+          ],
+          [
+            "full-dark-4",
+            "49.000",
+            "94.500"
+          ],
+          [
+            "crop-light-2",
+            "25.000",
+            "47.500"
+          ],
+          [
+            "crop-dark-2",
+            "25.000",
+            "47.500"
+          ],
+          [
+            "marks-light-1",
+            "13.000",
+            "24.000"
+          ],
+          [
+            "marks-dark-1",
+            "13.000",
+            "24.000"
+          ]
+        ],
+        "phase_times": [
+          "name=full-light-1 resize=0.011739 fonts=0.196701 render=0.069777 total=0.267047",
+          "name=full-light-2 resize=0.021837 fonts=0.212095 render=0.075964 total=0.288627",
+          "name=full-light-3 resize=0.021628 fonts=0.282548 render=0.199721 total=0.483094",
+          "name=full-light-4 resize=0.011217 fonts=0.254390 render=0.332379 total=0.587712",
+          "name=full-dark-1 resize=0.011466 fonts=0.200583 render=0.057780 total=0.258902",
+          "name=full-dark-2 resize=0.021383 fonts=0.207765 render=0.071581 total=0.279821",
+          "name=full-dark-3 resize=0.021358 fonts=0.200806 render=0.145588 total=0.346986",
+          "name=full-dark-4 resize=0.011371 fonts=0.241725 render=0.264782 total=0.507378",
+          "name=crop-light-2 resize=0.010613 fonts=0.186633 render=0.080253 total=0.267408",
+          "name=crop-dark-2 resize=0.010927 fonts=0.193403 render=0.069515 total=0.263547",
+          "name=marks-light-1 resize=0.021323 fonts=0.191740 render=0.022193 total=0.214385",
+          "name=marks-dark-1 resize=0.010716 fonts=0.199407 render=0.015811 total=0.215796"
+        ]
+      }
+    }
+  },
+  "history": [
+    {
+      "label": "windows-raster-1",
+      "groups": [
+        {
+          "name": "graphic_raster",
+          "status": "passed",
+          "seconds": 138.359,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "label": "linux-raster-1",
+      "groups": [
+        {
+          "name": "graphic_raster",
+          "status": "failed",
+          "seconds": 23.848,
+          "reason": "Exit code 1; expected 0\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_graphic_raster.py\", line 86, in <module>\n    if __name__=='__main__':main()\n                            ~~~~^^\n  File \"/mnt/d/Physim/tests/check_graphic_raster.py\", line 83, in main\n    step['checks']=inspect(work,step['stdout'])\n                   ~~~~~~~^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_graphic_raster.py\", line 38, in inspect\n    assert (int(window_w),int(window_h))==((760,540) if scale%2 else (1600,900))\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+        }
+      ]
+    },
+    {
+      "label": "windows-raster-2",
+      "groups": [
+        {
+          "name": "graphic_raster",
+          "status": "passed",
+          "seconds": 196.906,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "label": "linux-raster-2",
+      "groups": [
+        {
+          "name": "graphic_raster",
+          "status": "passed",
+          "seconds": 83.519,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "label": "windows-legacy-2",
+      "groups": [
+        {
+          "name": "plot_workflow",
+          "status": "failed",
+          "seconds": 76.391,
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 565944.784134\nAPP TEST TRACE: main font sources ready 565944.986936\nAPP TEST TRACE: main atlas bake seconds=5.732940\nAPP TEST TRACE: main atlas validation/upload seconds=0.033905\nAPP TEST TRACE: main fonts ready 565950.764656\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 0 -> 1, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 2 -> 3, status 5 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=7741458400\nAPP TEST TRACE: stage 3 -> 4, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 4 -> 5, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 5 -> 6, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 6 -> 7, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 7 -> 8, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 8 -> 80, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 80 -> 9, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 9 -> 10, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 10 -> 11, status 5 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=8072060500\nAPP TEST TRACE: stage 11 -> 12, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 12 -> 13, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 13 -> 14, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=8134217400\nAPP TEST TRACE: stage 14 -> 15, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 15 -> 16, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 16 -> 17, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 17 -> 18, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 18 -> 19, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 19 -> 81, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 81 -> 20, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 20 -> 21, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=8347414300\nAPP TEST TRACE: stage 21 -> 22, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 22 -> 23, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 23 -> 24, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 24 -> 25, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 25 -> 26, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 26 -> 27, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 27 -> 28, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 28 -> 29, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 29 -> 30, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 30 -> 31, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 31 -> 32, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=8753998400\nAPP TEST TRACE: stage 32 -> 33, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 33 -> 34, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 34 -> 35, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=8813390200\nAPP TEST TRACE: stage 35 -> 36, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 36 -> 37, status Export gespeichert. Pfad im Protokoll.\nPLOT EXPORT PROFILE: regular images begin\nPLOT EXPORT PROFILE: regular images 14.512319 s; dense begin\nPLOT EXPORT PROFILE: dense 4.386595 s; scaled images begin\nPLOT EXPORT PROFILE: scaled images 30.075968 s\nAPP TEST TRACE: stage 37 -> 38, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 38 -> 39, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=61663509800\nAPP TEST TRACE: stage 39 -> 40, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 40 -> 41, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=61702866600\nAPP TEST TRACE: stage 41 -> 42, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 42 -> 43, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=61741901500\nAPP TEST TRACE: stage 43 -> 44, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 44 -> 45, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=62936658400\nAPP TEST TRACE: stage 45 -> 46, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 46 -> 47, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=62980595900\nAPP TEST TRACE: stage 47 -> 48, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 48 -> 49, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=63073129100\nAPP TEST TRACE: stage 49 -> 50, status Export gespeichert. Pfad im Protokoll.\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 575, in run\n    result = subprocess.run(command, cwd=self.work, env=self.env, capture_output=True,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\subprocess.py\", line 550, in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\subprocess.py\", line 1209, in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\subprocess.py\", line 1630, in _communicate\n    raise TimeoutExpired(self.args, orig_timeout)\nsubprocess.TimeoutExpired: Command '['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--plot-test', 'D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\test-results\\\\run-z4a1cjhx\\\\plot_workflow\\\\files ä\\\\workflow ä']' timed out after 75 seconds\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 2138, in <module>\n    main()\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 1961, in main\n    flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 584, in run\n    raise RuntimeError(f\"App exceeded {timeout} seconds: {command}\") from error\nRuntimeError: App exceeded 75 seconds: ['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--plot-test', 'D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\test-results\\\\run-z4a1cjhx\\\\plot_workflow\\\\files ä\\\\workflow ä']\n"
+        },
+        {
+          "name": "graphics",
+          "status": "failed",
+          "seconds": 2.813,
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nGPU TEST: Coverage atlas differs from RGBA atlas samples\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 2138, in <module>\n    main()\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 1961, in main\n    flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 593, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 530, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--renderer-test']\n"
+        },
+        {
+          "name": "series_mask_workflow",
+          "status": "passed",
+          "seconds": 88.969,
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "label": "linux-legacy-2",
+      "groups": [
+        {
+          "name": "plot_workflow",
+          "status": "failed",
+          "seconds": 10.259,
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 339.039389\nAPP TEST TRACE: main font sources ready 340.314901\nAPP TEST TRACE: main atlas bake seconds=3.995829\nAPP TEST TRACE: main atlas validation/upload seconds=0.030788\nAPP TEST TRACE: main fonts ready 344.378141\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 0 -> 1, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 5 Messpunkte geladen.\nPlot window analysis-status flags=1120 active=0 bounds=0.0/712.0/1080.0/28.0\nPlot window analysis-heading flags=1120 active=0 bounds=0.0/118.0/1080.0/80.0\nPlot window workspace-path flags=1120 active=0 bounds=0.0/79.0/1080.0/39.0\nPlot window sidebar flags=1120 active=0 bounds=0.0/198.0/232.0/514.0\nPlot window workspace flags=100 active=1 bounds=232.0/198.0/606.0/514.0\nPlot window log flags=2100 active=0 bounds=0.0/0.0/0.0/1.0\nPlot window inspector flags=1100 active=0 bounds=838.0/198.0/242.0/514.0\nPlot window header flags=20 active=0 bounds=0.0/0.0/1080.0/79.0\nPlot window dock-splitter-4 flags=120 active=0 bounds=834.0/198.0/9.0/514.0\nPlot window dock-splitter-6 flags=120 active=0 bounds=228.0/198.0/9.0/514.0\nPlot UI stage 2 failed, area=(342.0,467.0,439.0,106.0), range=(0.163804103,0.329433954)\nAPP TEST TRACE: stage 2 -> 3, status 5 Messpunkte geladen.\nFirst workflow failure at stage 2 (next 3): 5 Messpunkte geladen. (tab=2, selected=0, samples=5, report=1, query=)\nWorkflow failed at stage 3: 5 Messpunkte geladen. (tab=2, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 2138, in <module>\n    main()\n    ~~~~^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1961, in main\n    flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 593, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 530, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--plot-test', '/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-rxedvyb7/plot_workflow/files ä/workflow ä']\n"
+        },
+        {
+          "name": "graphics",
+          "status": "failed",
+          "seconds": 1.616,
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nGPU TEST: Coverage atlas differs from RGBA atlas samples\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 2138, in <module>\n    main()\n    ~~~~^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1961, in main\n    flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 593, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 530, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--renderer-test']\n"
+        },
+        {
+          "name": "series_mask_workflow",
+          "status": "passed",
+          "seconds": 130.397,
+          "reason": ""
+        }
+      ]
+    }
+  ],
+  "catalog_source2_unchanged_registration": [
+    "tests/native_integration_cases.json",
+    "tests/test_native_test_runner.py",
+    "tools/build.py"
+  ],
+  "profiles": {
+    "windows": [
+      {
+        "size": [
+          2400,
+          1700
+        ],
+        "rgb_sha256": "237d1dd5518c9c02ce8bdd3013505a70b7742de1b38477ba756a3bb92ef02008",
+        "medians": {
+          "1": 0.4390029,
+          "6": 2.569948
+        },
+        "level1_over_level6": 0.17082170534189794,
+        "bytes_by_level": {
+          "6": 245910,
+          "1": 301537
+        }
+      },
+      {
+        "size": [
+          2400,
+          1700
+        ],
+        "rgb_sha256": "6fb130cfebad9fc566dc05e6f0a5d2c9dce551291b5022af68c5989398a0312b",
+        "medians": {
+          "1": 0.5313089,
+          "6": 2.5888289
+        },
+        "level1_over_level6": 0.20523136928825228,
+        "bytes_by_level": {
+          "6": 243524,
+          "1": 299799
+        }
+      }
+    ],
+    "linux": [
+      {
+        "size": [
+          2400,
+          1700
+        ],
+        "rgb_sha256": "237d1dd5518c9c02ce8bdd3013505a70b7742de1b38477ba756a3bb92ef02008",
+        "medians": {
+          "1": 0.426159604,
+          "6": 1.463628166
+        },
+        "level1_over_level6": 0.29116657761832115,
+        "bytes_by_level": {
+          "6": 245910,
+          "1": 301537
+        }
+      },
+      {
+        "size": [
+          2400,
+          1700
+        ],
+        "rgb_sha256": "6fb130cfebad9fc566dc05e6f0a5d2c9dce551291b5022af68c5989398a0312b",
+        "medians": {
+          "1": 0.370738848,
+          "6": 1.281721389
+        },
+        "level1_over_level6": 0.28925073044872157,
+        "bytes_by_level": {
+          "6": 243524,
+          "1": 299799
+        }
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "path": "source-1.json",
+      "source": "build/native/graphic-raster-source-1.json",
+      "bytes": 18480,
+      "sha256": "bacc15c5a67f2afd00062f10d4ad453f695a239c596371fa8ba94a6751b7697b"
+    },
+    {
+      "path": "source-2.json",
+      "source": "build/native/graphic-raster-source-2.json",
+      "bytes": 18480,
+      "sha256": "5f140f10b9011b2d89cbce94146017228efebb2869b4fdbad1f75d9d9789e9d8"
+    },
+    {
+      "path": "source-3.json",
+      "source": "build/native/graphic-raster-source-3.json",
+      "bytes": 18960,
+      "sha256": "88167f27a5e6d0c3ec70385a140dd0af85adab4e1fafab3b665ff509f2924f6e"
+    },
+    {
+      "path": "source-4.json",
+      "source": "build/native/graphic-raster-source-4.json",
+      "bytes": 18960,
+      "sha256": "f4b3876a87b2de5eab670f5afd779979a23651c53eb25d90669a4dc963ffb725"
+    },
+    {
+      "path": "windows-native-results.json",
+      "source": "build/native/Design-analysis/test-results/run-4jmblmnl/results.json",
+      "bytes": 40115,
+      "sha256": "e7828ed7549ccd33a0d21b795ff2f026185566412031a1b3e05a307c2e300410"
+    },
+    {
+      "path": "windows-native-steps.json",
+      "source": "build/native/Design-analysis/test-results/run-4jmblmnl/graphic_raster/files ä/app-steps.json",
+      "bytes": 39665,
+      "sha256": "1257de5d981211a09ad06f2c3dd94d1486f3440c878473429c77ea2eeaa6bb21"
+    },
+    {
+      "path": "windows-native-platform-full-light-1.png",
+      "source": "build/native/Design-analysis/test-results/run-4jmblmnl/graphic_raster/files ä/platform/full-light-1.png",
+      "bytes": 119507,
+      "sha256": "d48b9d54c87a998a48f9906739797fd0c835ac9abe51c7f3c281b4fa0aa856ea"
+    },
+    {
+      "path": "windows-native-platform-full-light-2.png",
+      "source": "build/native/Design-analysis/test-results/run-4jmblmnl/graphic_raster/files ä/platform/full-light-2.png",
+      "bytes": 300435,
+      "sha256": "a7f77cbb83c23eec5082f410c4de4f296160463b2d06017f400b8f265e636a79"
+    },
+    {
+      "path": "windows-native-platform-full-dark-2.png",
+      "source": "build/native/Design-analysis/test-results/run-4jmblmnl/graphic_raster/files ä/platform/full-dark-2.png",
+      "bytes": 298695,
+      "sha256": "f5a9dbb7c5ea9dde4ed4efcb4683bdac90d3399d32cd47482c543854ccfa0dd4"
+    },
+    {
+      "path": "windows-native-platform-crop-dark-2.png",
+      "source": "build/native/Design-analysis/test-results/run-4jmblmnl/graphic_raster/files ä/platform/crop-dark-2.png",
+      "bytes": 287980,
+      "sha256": "06c9803b9fcbfd7e3dfd8323fbbb2a317278eb56da392ac3a8594aa6c0bfb5fb"
+    },
+    {
+      "path": "windows-native-platform-marks-light-1.png",
+      "source": "build/native/Design-analysis/test-results/run-4jmblmnl/graphic_raster/files ä/platform/marks-light-1.png",
+      "bytes": 61286,
+      "sha256": "f2b6bad44fc2098b92dc7be9b5e45b97380bf2ab55d7786b64a91925e4ac076d"
+    },
+    {
+      "path": "windows-native-platform-full-light-3.png",
+      "source": "build/native/Design-analysis/test-results/run-4jmblmnl/graphic_raster/files ä/platform/full-light-3.png",
+      "bytes": 520630,
+      "sha256": "3d09efa89894feb89247c871e502fb177d9f2c6a7508e0d7284bcfccc430f511"
+    },
+    {
+      "path": "windows-native-platform-full-light-4.png",
+      "source": "build/native/Design-analysis/test-results/run-4jmblmnl/graphic_raster/files ä/platform/full-light-4.png",
+      "bytes": 780162,
+      "sha256": "cd78daca40952add453fab62b026ecb2be11931fbf4e0136cf1155d20f3a7319"
+    },
+    {
+      "path": "windows-native-platform-full-light-1.svg",
+      "source": "build/native/Design-analysis/test-results/run-4jmblmnl/graphic_raster/files ä/platform/full-light-1.svg",
+      "bytes": 210543,
+      "sha256": "bf55e9101fe67bd74bd71053011de984bd694b8f845bcfc76564b6289df6e2ec"
+    },
+    {
+      "path": "windows-native-platform-crop-dark-2.svg",
+      "source": "build/native/Design-analysis/test-results/run-4jmblmnl/graphic_raster/files ä/platform/crop-dark-2.svg",
+      "bytes": 76018,
+      "sha256": "4dd77eade488067442bd83b49d03d6f41f0957e56de2f4e2333d4c8ca0e1d3dc"
+    },
+    {
+      "path": "windows-native-bundled-full-light-1.png",
+      "source": "build/native/Design-analysis/test-results/run-4jmblmnl/graphic_raster/files ä/bundled/full-light-1.png",
+      "bytes": 120897,
+      "sha256": "9429b2e0afb9db4d45b855c7222dc250d07d9a38b77dd9e4325f3eb69404c210"
+    },
+    {
+      "path": "windows-native-bundled-full-light-2.png",
+      "source": "build/native/Design-analysis/test-results/run-4jmblmnl/graphic_raster/files ä/bundled/full-light-2.png",
+      "bytes": 303609,
+      "sha256": "3cd5115f9bd4eb050ab1b5bcf55f98b16e8faf4fec03ca5c3d156352b8a90d40"
+    },
+    {
+      "path": "windows-native-bundled-full-dark-2.png",
+      "source": "build/native/Design-analysis/test-results/run-4jmblmnl/graphic_raster/files ä/bundled/full-dark-2.png",
+      "bytes": 302128,
+      "sha256": "3427126467f08a9e6345046210e3baebb74ad5bb634308b48269bd5255050e8a"
+    },
+    {
+      "path": "windows-native-bundled-crop-dark-2.png",
+      "source": "build/native/Design-analysis/test-results/run-4jmblmnl/graphic_raster/files ä/bundled/crop-dark-2.png",
+      "bytes": 290886,
+      "sha256": "80e0029e7ce18703cb77ea97086b9ef20458eee887defe3c8730a52e7dfbb663"
+    },
+    {
+      "path": "windows-native-bundled-marks-light-1.png",
+      "source": "build/native/Design-analysis/test-results/run-4jmblmnl/graphic_raster/files ä/bundled/marks-light-1.png",
+      "bytes": 63060,
+      "sha256": "bd2f510b70704458beee75f94797242c2c4abe7ec2047958dbc3383020db6519"
+    },
+    {
+      "path": "windows-native-bundled-full-light-1.svg",
+      "source": "build/native/Design-analysis/test-results/run-4jmblmnl/graphic_raster/files ä/bundled/full-light-1.svg",
+      "bytes": 210562,
+      "sha256": "f77a3d7e8030e58e2c8282257d521a26970c41648a5ff8a40975db54d5a55443"
+    },
+    {
+      "path": "windows-native-bundled-crop-dark-2.svg",
+      "source": "build/native/Design-analysis/test-results/run-4jmblmnl/graphic_raster/files ä/bundled/crop-dark-2.svg",
+      "bytes": 76037,
+      "sha256": "ce6a7c3dfa0318601233f25dd8b1707cd516254b727505f171bf9d174202b902"
+    },
+    {
+      "path": "linux-native-results.json",
+      "source": "build/native/Design-analysis-linux/test-results/run-jofis9te/results.json",
+      "bytes": 32107,
+      "sha256": "ab21439a2beae25f8cb1f7dc122d924cee58a3fc022ce43d5eafba207601a202"
+    },
+    {
+      "path": "linux-native-steps.json",
+      "source": "build/native/Design-analysis-linux/test-results/run-jofis9te/graphic_raster/files ä/app-steps.json",
+      "bytes": 38582,
+      "sha256": "28567d986436c4dfa45932987dd2223ef8e5698f6764b400b073a0b423b7c960"
+    },
+    {
+      "path": "linux-native-platform-full-light-1.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-jofis9te/graphic_raster/files ä/platform/full-light-1.png",
+      "bytes": 121861,
+      "sha256": "0d5bfb1ad21bec6327a51e64a2d11d0f30d5aca8944029ed6db677d7f7d87023"
+    },
+    {
+      "path": "linux-native-platform-full-light-2.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-jofis9te/graphic_raster/files ä/platform/full-light-2.png",
+      "bytes": 307054,
+      "sha256": "9b051e6490891fa00b8e8824b6fb016a8ec45c9aad088ad610b76c4a1f658d9d"
+    },
+    {
+      "path": "linux-native-platform-full-dark-2.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-jofis9te/graphic_raster/files ä/platform/full-dark-2.png",
+      "bytes": 305804,
+      "sha256": "53e083d8043216b6230035527c5524b338418735dd9c3b1f6ca71616b75709fb"
+    },
+    {
+      "path": "linux-native-platform-crop-dark-2.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-jofis9te/graphic_raster/files ä/platform/crop-dark-2.png",
+      "bytes": 295293,
+      "sha256": "28461503dd4271e3725c6e964a0a1e6ac9937899d4f8f3ee69e6cb5027282239"
+    },
+    {
+      "path": "linux-native-platform-marks-light-1.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-jofis9te/graphic_raster/files ä/platform/marks-light-1.png",
+      "bytes": 65368,
+      "sha256": "fd50387ba6b01c0e81c83494ac82267c8bf029de0fbe18981ce8a9ace8b494bc"
+    },
+    {
+      "path": "linux-native-platform-full-light-1.svg",
+      "source": "build/native/Design-analysis-linux/test-results/run-jofis9te/graphic_raster/files ä/platform/full-light-1.svg",
+      "bytes": 210600,
+      "sha256": "b6598b7cf38c86cef71361da545b3144661974ebbee670ca9df9391aec80c4a0"
+    },
+    {
+      "path": "linux-native-platform-crop-dark-2.svg",
+      "source": "build/native/Design-analysis-linux/test-results/run-jofis9te/graphic_raster/files ä/platform/crop-dark-2.svg",
+      "bytes": 76075,
+      "sha256": "d05cd58b7adaf638f105d38312f202dcbddf6499a6e9776133d656bca46628c1"
+    },
+    {
+      "path": "linux-native-bundled-full-light-1.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-jofis9te/graphic_raster/files ä/bundled/full-light-1.png",
+      "bytes": 120013,
+      "sha256": "b0dff050182a44c9e6e778976d8cf7f77e71b701e61473d49cdeb8065a255a0d"
+    },
+    {
+      "path": "linux-native-bundled-full-light-2.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-jofis9te/graphic_raster/files ä/bundled/full-light-2.png",
+      "bytes": 303878,
+      "sha256": "9b9b493b4ad6c0c51c566dd9467ff11513b75647867abeba923061cedf4dd576"
+    },
+    {
+      "path": "linux-native-bundled-full-dark-2.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-jofis9te/graphic_raster/files ä/bundled/full-dark-2.png",
+      "bytes": 302740,
+      "sha256": "46db4ad63a550fb72eda81c11c9bfeae17c14d1f99815cec820906e0354dffdc"
+    },
+    {
+      "path": "linux-native-bundled-crop-dark-2.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-jofis9te/graphic_raster/files ä/bundled/crop-dark-2.png",
+      "bytes": 291567,
+      "sha256": "afd65df510a89d8ddbc485666404f5fbde4b21382a52d16cc027ef875e4a4caf"
+    },
+    {
+      "path": "linux-native-bundled-marks-light-1.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-jofis9te/graphic_raster/files ä/bundled/marks-light-1.png",
+      "bytes": 63377,
+      "sha256": "a2f9b0986a773581c897839d5d67aab4fafd582f76799575a5117e1c0a9a6843"
+    },
+    {
+      "path": "linux-native-bundled-full-light-1.svg",
+      "source": "build/native/Design-analysis-linux/test-results/run-jofis9te/graphic_raster/files ä/bundled/full-light-1.svg",
+      "bytes": 210562,
+      "sha256": "f77a3d7e8030e58e2c8282257d521a26970c41648a5ff8a40975db54d5a55443"
+    },
+    {
+      "path": "linux-native-bundled-crop-dark-2.svg",
+      "source": "build/native/Design-analysis-linux/test-results/run-jofis9te/graphic_raster/files ä/bundled/crop-dark-2.svg",
+      "bytes": 76037,
+      "sha256": "ce6a7c3dfa0318601233f25dd8b1707cd516254b727505f171bf9d174202b902"
+    },
+    {
+      "path": "windows-unit-results.json",
+      "source": "build/native/Graphic-unit/test-results/run-yrlntuey/results.json",
+      "bytes": 2718,
+      "sha256": "8b90ebb3d994a7872ce94e58ad4b732a524c06f9028feeb8897019bd8679fe68"
+    },
+    {
+      "path": "linux-unit-results.json",
+      "source": "build/native/Graphic-unit-linux/test-results/run-qg29r1sh/results.json",
+      "bytes": 2697,
+      "sha256": "027260ed25892a1613e5c1783061c019781a8c7e25ef1a46a755c26c7e133919"
+    },
+    {
+      "path": "windows-png-profile.json",
+      "source": "build/native/graphic-raster-png-profile-windows-4/profile.json",
+      "bytes": 7347,
+      "sha256": "a34a52b32a331518478c17791e8c33ca3238dd4ba21fa3e8ae2e363d31a31f58"
+    },
+    {
+      "path": "linux-png-profile.json",
+      "source": "build/native/graphic-raster-png-profile-linux-4/profile.json",
+      "bytes": 7099,
+      "sha256": "2288f16f25d2b255e417882ffeb7824003f3fd34cbedbb47723f06950032ca1e"
+    },
+    {
+      "path": "counter-windows-quantized.png",
+      "source": "build/native/Design-analysis/test-results/run-ta_socag/graphic_raster/files ä/platform/full-light-1.png",
+      "bytes": 75052,
+      "sha256": "ffcbea74640dd02fa0784bd795a68594d69251b4be8f55d1352ec14d9e7e70e1"
+    },
+    {
+      "path": "counter-windows-quantized.svg",
+      "source": "build/native/Design-analysis/test-results/run-ta_socag/graphic_raster/files ä/platform/full-light-1.svg",
+      "bytes": 210545,
+      "sha256": "acc33677ad6512b1c1bce65685e96d7792317aa1bebb25d4b0fa367533096d22"
+    },
+    {
+      "path": "counter-linux-quantized.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-amqwkt0l/graphic_raster/files ä/platform/full-light-1.png",
+      "bytes": 79026,
+      "sha256": "61ad86dde23d5fb65d3dd7786a25803290f7c54626443136b8de89f1092c7ed8"
+    },
+    {
+      "path": "counter-linux-quantized.svg",
+      "source": "build/native/Design-analysis-linux/test-results/run-amqwkt0l/graphic_raster/files ä/platform/full-light-1.svg",
+      "bytes": 210602,
+      "sha256": "6fca4f45468c7001b34c0fdb5538a954235b0ce83a32fba6962367c4d1db023e"
+    },
+    {
+      "path": "windows-raster-1-results.json",
+      "source": "build/native/Design-analysis/test-results/run-ta_socag/results.json",
+      "bytes": 1765,
+      "sha256": "b039885f5967484db9398587ecd5791c014745aacab7770927ede80f042d13e0"
+    },
+    {
+      "path": "linux-raster-1-results.json",
+      "source": "build/native/Design-analysis-linux/test-results/run-amqwkt0l/results.json",
+      "bytes": 2398,
+      "sha256": "6a21061facedd1a21f7cf9880eca6b9ea147ea5911ca5d1b26b1b3f2286c8276"
+    },
+    {
+      "path": "windows-raster-2-results.json",
+      "source": "build/native/Design-analysis/test-results/run-830y9lur/results.json",
+      "bytes": 1765,
+      "sha256": "b9b9a0fa218d52410822619ad7fb46e5013c23cf1295fcb0185d585ac5ce35dd"
+    },
+    {
+      "path": "linux-raster-2-results.json",
+      "source": "build/native/Design-analysis-linux/test-results/run-g10472p7/results.json",
+      "bytes": 1563,
+      "sha256": "8f9e7af8718c1918aa69a2e9e833351f948debe26d88c888390cfeaa9d9f2a2c"
+    },
+    {
+      "path": "windows-legacy-2-results.json",
+      "source": "build/native/Design-analysis/test-results/run-z4a1cjhx/results.json",
+      "bytes": 40712,
+      "sha256": "2f6917055bdcc982b29db1f490056fdea56fd570a84080f025429c1329a2ef57"
+    },
+    {
+      "path": "linux-legacy-2-results.json",
+      "source": "build/native/Design-analysis-linux/test-results/run-rxedvyb7/results.json",
+      "bytes": 23008,
+      "sha256": "c2d6129f9be5c819388043385a89b020c09e795f9880aa47a53de684aa099e1e"
+    },
+    {
+      "path": "log-graphic-raster-app-linux-1.log",
+      "source": "build/native/graphic-raster-app-linux-1.log",
+      "bytes": 141228,
+      "sha256": "08d5712d9aad45bfd6e0b7e9e4f4960bb79bf826bce1a9c64939dffdae3dcf1e"
+    },
+    {
+      "path": "log-graphic-raster-catalog-linux-2.log",
+      "source": "build/native/graphic-raster-catalog-linux-2.log",
+      "bytes": 1454,
+      "sha256": "c196e2058fa5431c1c87c3fa2b99b6751caa39edad8a112b8bf3cbe8d2c4c0df"
+    },
+    {
+      "path": "log-graphic-raster-catalog-windows-2.log",
+      "source": "build/native/graphic-raster-catalog-windows-2.log",
+      "bytes": 1477,
+      "sha256": "1bf38f2df5d6f290949da6fc43892e59df18a598ea7c6803435d025f8701899b"
+    },
+    {
+      "path": "log-graphic-raster-legacy-linux-2.log",
+      "source": "build/native/graphic-raster-legacy-linux-2.log",
+      "bytes": 4468,
+      "sha256": "9b4cb087b546dd348a15d0fe07ea5cfbe3fb4c6d8384fa03cb0165e660c91c77"
+    },
+    {
+      "path": "log-graphic-raster-legacy-windows-2.log",
+      "source": "build/native/graphic-raster-legacy-windows-2.log",
+      "bytes": 9540,
+      "sha256": "9ce855035efb8cd3e6b12188b68494e813d8f7a048623e87631bde9f2488af8e"
+    },
+    {
+      "path": "log-graphic-raster-linux-1.log",
+      "source": "build/native/graphic-raster-linux-1.log",
+      "bytes": 945,
+      "sha256": "745c7c01c856e7cd5aa5fbe738cee5821f217453f2b001651ec1fe55bce7152a"
+    },
+    {
+      "path": "log-graphic-raster-linux-2.log",
+      "source": "build/native/graphic-raster-linux-2.log",
+      "bytes": 139621,
+      "sha256": "c0fba7fdf5a5cbae488dce3599245944ed3ac143185dc5a89f8659791b09ecc8"
+    },
+    {
+      "path": "log-graphic-raster-linux-4-wm.log",
+      "source": "build/native/graphic-raster-linux-4-wm.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "log-graphic-raster-linux-4.log",
+      "source": "build/native/graphic-raster-linux-4.log",
+      "bytes": 141427,
+      "sha256": "9f3f6473a6e882babde2e421823e8a9f283c94da3485c6ca376307e97c25acc2"
+    },
+    {
+      "path": "log-graphic-raster-png-profile-linux-4.log",
+      "source": "build/native/graphic-raster-png-profile-linux-4.log",
+      "bytes": 229,
+      "sha256": "13b66af5ff0f6b0b4953a3ae6a88be7f6c90155365c66769882bf5f6727a2f0e"
+    },
+    {
+      "path": "log-graphic-raster-png-profile-windows-3.log",
+      "source": "build/native/graphic-raster-png-profile-windows-3.log",
+      "bytes": 342,
+      "sha256": "0d2c0f87c7b32aa3d31565991957ad12318e28d572ad30f6fefe3dbdb3526045"
+    },
+    {
+      "path": "log-graphic-raster-png-profile-windows-4.log",
+      "source": "build/native/graphic-raster-png-profile-windows-4.log",
+      "bytes": 252,
+      "sha256": "47225baac8525374857eca8b6562709f0f2a7a804946dfcfccb78e7f25c3103b"
+    },
+    {
+      "path": "log-graphic-raster-unit-linux-1.log",
+      "source": "build/native/graphic-raster-unit-linux-1.log",
+      "bytes": 23240,
+      "sha256": "85bae477d5c0a9d95cc940e0e6523bce08014b9eba24d220da941a8b63228a72"
+    },
+    {
+      "path": "log-graphic-raster-unit-linux-2.log",
+      "source": "build/native/graphic-raster-unit-linux-2.log",
+      "bytes": 23240,
+      "sha256": "769e95f2e8df6006c4c63c40084d4666006fed9457324da0061e1320010be491"
+    },
+    {
+      "path": "log-graphic-raster-unit-linux-4.log",
+      "source": "build/native/graphic-raster-unit-linux-4.log",
+      "bytes": 23240,
+      "sha256": "e55baf5cd73f870d93fd64fc663390aa9e4a254e3fcee7896098750df49b35ee"
+    },
+    {
+      "path": "log-graphic-raster-unit-windows-1.log",
+      "source": "build/native/graphic-raster-unit-windows-1.log",
+      "bytes": 6641,
+      "sha256": "6e0a5d01557ea7071a0089adc2a140eec153dd58640e5246557975e198a0e98f"
+    },
+    {
+      "path": "log-graphic-raster-unit-windows-2.log",
+      "source": "build/native/graphic-raster-unit-windows-2.log",
+      "bytes": 6641,
+      "sha256": "86f9b0c7dcece56e67d83e59af9a1b17c3db2385d8fd20e0d0a29b586dca0596"
+    },
+    {
+      "path": "log-graphic-raster-unit-windows-4.log",
+      "source": "build/native/graphic-raster-unit-windows-4.log",
+      "bytes": 6641,
+      "sha256": "ee2c3683c142742a3b01a42c5956c39392831cfe5f973c2d74dba2c8cfb88881"
+    },
+    {
+      "path": "log-graphic-raster-windows-1.log",
+      "source": "build/native/graphic-raster-windows-1.log",
+      "bytes": 21780,
+      "sha256": "e0847ac08674d65899bc1c601e0cc736ab2b6cf60a03b7d6fa9d9465706a7dfe"
+    },
+    {
+      "path": "log-graphic-raster-windows-2.log",
+      "source": "build/native/graphic-raster-windows-2.log",
+      "bytes": 21780,
+      "sha256": "a66572500ffe6b03dd8f5ce4241f2dcbf62fdec8e11dd162fdac2cdef0c04d31"
+    },
+    {
+      "path": "log-graphic-raster-windows-4.log",
+      "source": "build/native/graphic-raster-windows-4.log",
+      "bytes": 21973,
+      "sha256": "f8767f2523866c2fd5bec9ebcfb55863b46d92b407ba46924a78856867d10f7f"
+    },
+    {
+      "path": "run-graphic-raster-final-linux-4.sh",
+      "source": "build/native/run-graphic-raster-final-linux-4.sh",
+      "bytes": 561,
+      "sha256": "f9288630fd2b1b68becee9f957fa857c69017afa1f96d4d64a33b3f09c80b44c"
+    }
+  ],
+  "limits": [
+    "Native raster/PNG/preview texture only; export modal, visible multirun cache, save dialog and OS image clipboard remain unimplemented",
+    "Synthetic core report fixtures, no browser pixel equality, physical DPI/monitor or macOS acceptance",
+    "10 separate foreign accessibility changes included in local app binaries, not a clean-checkout test",
+    "SVG records primary font family but embeds no fonts; fallback/raster parity in external viewers unproven"
+  ]
+}

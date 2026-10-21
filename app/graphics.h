@@ -1,11 +1,13 @@
 #ifndef PHYSIM_GRAPHICS_H
 #define PHYSIM_GRAPHICS_H
 #include "physim/experiment.h"
+#include "physim/memory.h"
 #include <SDL3/SDL.h>
 struct nk_context;
 struct nk_buffer;
 struct nk_draw_null_texture;
 typedef struct ps_graphics ps_graphics;
+typedef struct ps_graphics_image ps_graphics_image;
 /* A frame-local command marker for one bounded UI backdrop. Register before
  * submission; ps_ui_draw_backdrop records its isolated rounded command. No CPU
  * pixels are read; unsupported filtering is opaque. */
@@ -74,6 +76,20 @@ ps_result ps_graphics_ui_png(ps_graphics *g, struct nk_context *ui,
 ps_result ps_graphics_ui_png_scaled(ps_graphics *g, struct nk_context *ui,
                                     const struct nk_draw_null_texture *null_texture, int width,
                                     int height, unsigned scale, const char *path);
+/* Owned RGB8, top row first. Drawing coordinates are actual image pixels,
+ * independent of window size/DPI. Dimensions 1..8192 and GPU texture limit.
+ * The supplied allocator owns the image/pixels, not GL/conversion buffers.
+ * Failure leaves *out unchanged. Current GL thread/context required to render. */
+ps_result ps_graphics_ui_image(ps_graphics *g,struct nk_context *drawing,
+    const struct nk_draw_null_texture *null_texture,unsigned width,unsigned height,
+    ps_allocator allocator,ps_graphics_image **out);
+ps_result ps_graphics_image_read(const ps_graphics_image *image,unsigned *width,unsigned *height,
+    size_t *stride,const unsigned char **pixels);
+void ps_graphics_image_destroy(ps_graphics_image *image);
+ps_result ps_graphics_image_png(const ps_graphics_image *image,const char *path);
+/* Independent texture copy for native previews; delete with this renderer.
+ * A failed upload does not invalidate the owned RGB image/save path. */
+unsigned ps_graphics_image_texture(ps_graphics *g,const ps_graphics_image *image);
 bool ps_graphics_present(ps_graphics *g);
 /* Projects to normalized top-left viewport coordinates. False outside the frustum. */
 bool ps_graphics_project(const ps_camera *camera, ps_vec3 position, double aspect, float *x,

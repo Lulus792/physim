@@ -20,6 +20,7 @@
 #include "source_outline.h"
 #include "model_values.h"
 #include "report_image.h"
+#include "graphic_raster.h"
 #include "scene_view.h"
 #include "preferences.h"
 #include "layout_catalog.h"
@@ -3057,26 +3058,29 @@ static void channel_units_start(app *a);
 #include "design_ui.inc"
 #include "panel_windows.inc"
 // clang-format on
-static struct nk_font *system_font_sampling(struct nk_font_atlas *atlas,const char *root,float size,bool code,bool title,
-                                           unsigned char horizontal,unsigned char vertical) {
+static struct nk_font *system_font_sampling_demand(struct nk_font_atlas *atlas,const char *root,float size,bool code,bool title,
+    unsigned char horizontal,unsigned char vertical,const nk_rune *demand,char family[96]) {
     static const nk_rune ui_ranges[] = {0x20,0x17f,0x192,0x192,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
                                       0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x2c7c,0x2c7c,0};
     static const nk_rune code_ranges[] = {0x20,0x17f,0x192,0x192,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
                                         0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x2c7c,0x2c7c,0};
     struct nk_font_config config = nk_font_config(size);
-    config.range = code ? code_ranges : ui_ranges;
+    config.range = demand?demand:code?code_ranges:ui_ranges;
     config.oversample_h = horizontal;
     config.oversample_v = vertical;
     char path[4096];
 #ifdef _WIN32
+    const char *platform_family=code?"Consolas":"Segoe UI";
     const char *windows = SDL_getenv("WINDIR");
     snprintf(path, sizeof path, "%s/Fonts/%s", windows ? windows : "C:/Windows",
              code    ? "consola.ttf"
              : title ? "seguisb.ttf"
                      : "segoeui.ttf");
 #elif defined(__APPLE__)
+    const char *platform_family=code?"Menlo":"Helvetica";
     snprintf(path, sizeof path, "/System/Library/Fonts/%s", code ? "Menlo.ttc" : "Helvetica.ttc");
 #else
+    const char *platform_family=code?"DejaVu Sans Mono":"DejaVu Sans";
     snprintf(path, sizeof path, "/usr/share/fonts/truetype/dejavu/%s",
              code    ? "DejaVuSansMono.ttf"
              : title ? "DejaVuSans-Bold.ttf"
@@ -3098,7 +3102,8 @@ static struct nk_font *system_font_sampling(struct nk_font_atlas *atlas,const ch
                        code?"NotoSansMono.ttf":title?"NotoSans-Bold.ttf":"NotoSans.ttf");
         if(n>=0 && (size_t)n<sizeof path)font=nk_font_atlas_add_from_file(atlas,path,size,&config);
         if(force_bundled && font)printf("Bundled primary font: %s\n",path);
-    }
+        if(font && family)snprintf(family,96,"%s",code?"Noto Sans Mono":"Noto Sans");
+    } else if(family)snprintf(family,96,"%s",platform_family);
     if(!font)return NULL;
     /* Offline fallback covers our text ranges, phonetic modifiers, diagrams and
      * emoji. Add only glyphs absent from earlier sources, keeping the atlas small. */
@@ -3108,15 +3113,24 @@ static struct nk_font *system_font_sampling(struct nk_font_atlas *atlas,const ch
     for(size_t i=0;i<sizeof files/sizeof files[0];i++) {
         if(i==0 && !title)continue;
         int n=snprintf(path,sizeof path,"%s/third_party/fonts/%s",root,files[i]);
-        if(n<0 || (size_t)n>=sizeof path || !ps_ui_font_add_fallback(atlas,font,path,fallback_ranges)) {
+        if(n<0 || (size_t)n>=sizeof path || !ps_ui_font_add_fallback(atlas,font,path,demand?demand:fallback_ranges)) {
             SDL_SetError("Offline fallback font unavailable: %s",files[i]);return NULL;
         }
     }
     return font;
 }
+static struct nk_font *system_font_sampling(struct nk_font_atlas *atlas,const char *root,float size,bool code,bool title,
+    unsigned char horizontal,unsigned char vertical) {
+    return system_font_sampling_demand(atlas,root,size,code,title,horizontal,vertical,NULL,NULL);
+}
+static struct nk_font *graphic_font_load(void *user,struct nk_font_atlas *atlas,float height,bool strong,
+    const unsigned *ranges,char family[96]) {
+    return system_font_sampling_demand(atlas,user,height,false,strong,2,1,ranges,family);
+}
 static struct nk_font *system_font(struct nk_font_atlas *atlas,const char *root,float size,bool code,bool title) {
     return system_font_sampling(atlas,root,size,code,title,3,2);
 }
+#include "graphic_raster_tests.inc"
 #include "documentation_window.inc"
 static void test_window_key_mod(SDL_Window *window, SDL_Keycode key, SDL_Keymod mod) {
     SDL_Event e; SDL_zero(e);
@@ -3475,6 +3489,8 @@ static bool test_general_balance_report(const app *a) {
 }
 int main(int argc, char **argv) {
     double profile_app_started = ps_clock();
+    bool graphic_raster_test=argc>1 && !strcmp(argv[1],"--graphic-raster-test");
+    if(graphic_raster_test && argc!=4)return 2;
     bool workspace_test = argc > 1 && !strcmp(argv[1], "--workspace-test");
     bool workspace_state_test = argc > 1 && !strcmp(argv[1], "--workspace-state-test");
     if (workspace_state_test && argc != 4)
@@ -3641,7 +3657,8 @@ int main(int argc, char **argv) {
         fprintf(stderr, "APP TEST TRACE: creating window\n");
     SDL_Window *window =
         SDL_CreateWindow("Physim | Experiment Studio", 1440, 940,
-                         SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY | SDL_WINDOW_OPENGL);
+                         SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIGH_PIXEL_DENSITY | SDL_WINDOW_OPENGL |
+                         (graphic_raster_test?SDL_WINDOW_HIDDEN:0));
     if (trace_test)
         fprintf(stderr, "APP TEST TRACE: window %s, creating OpenGL context\n", window ? "created" : "failed");
     ps_graphics *graphics = window ? ps_graphics_create(window) : NULL;
@@ -3653,6 +3670,10 @@ int main(int argc, char **argv) {
         SDL_DestroyWindow(window);
         SDL_Quit();
         return 1;
+    }
+    if(graphic_raster_test) {
+        bool ok=graphic_raster_self_test(graphics,window,argv[2],argv[3]);
+        ps_graphics_destroy(graphics);SDL_DestroyWindow(window);SDL_Quit();return ok?0:1;
     }
     if (argc > 1 && !strcmp(argv[1], "--renderer-test")) {
         bool ok = ps_graphics_test(graphics, argc > 2 ? argv[2] : NULL) &&
@@ -3794,14 +3815,20 @@ int main(int argc, char **argv) {
     bool self_test = migration_test || settings_test || plot_test || batch_test || docs_test || recovery_test ||
                      workspace_test || workspace_state_test || syntax_preview_test ||
                      workflow_test;
-    if (self_test && SDL_getenv("PHYSIM_TEST_SMALL"))
-        SDL_SetWindowSize(window, 1080, 740);
+    bool test_resize_failed=false;
+    if (self_test && SDL_getenv("PHYSIM_TEST_SMALL")) {
+        if(!SDL_SetWindowSize(window,1080,740) || !SDL_SyncWindow(window)) {
+            fprintf(stderr,"Test window resize: %s\n",SDL_GetError());
+            a->quitting=true;test_resize_failed=true;
+        }
+        SDL_PumpEvents();
+    }
     if (argc < 2 || strncmp(argv[1], "--", 2)) {
         preferences_start(a, NULL);
         workspace_state_start(a, NULL);
         document_drafts_start(a, NULL);
     }
-    int test_stage = 0, exit_code = 0;
+    int test_stage=0,exit_code=test_resize_failed?1:0;
     double test_started = ps_clock(), paused_time = 0;
     unsigned doc_input_events = 0, doc_input_bytes = 0;
     nk_uint test_doc_scroll = 0;

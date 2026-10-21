@@ -1,0 +1,4 @@
+# Frozen raw evidence and its recorded SHA-256 values must survive checkouts.
+* -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+# Preserve compiler output verbatim, including its indentation/trailing spaces.
+*.log -whitespace

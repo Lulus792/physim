@@ -1,0 +1,225 @@
+[
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "/usr/bin/python3",
+        "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+        "sha256": "a9f44dda04914d2ad58ab9d6690b1a0e8d9b641339c40c4546362eaa4954a4d7"
+      },
+      {
+        "status": "passed",
+        "target": "physim-png-tests",
+        "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/integration-physim-png-tests",
+        "sha256": "4b606fedb47afebd142e7a6bc44ea9b656157ba82d02f4d2004290c4929da758"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/tests/check_display_workflow.py",
+          "plot_workflow",
+          "--app",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "--work",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/plot_workflow/files \u00e4",
+          "--root",
+          "/mnt/d/Physim",
+          "--cc",
+          "/usr/bin/cc"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)\nFont atlas: 2048x16384, 80 fonts, GPU limit 16384\nPLOT UI SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\n5 Messpunkte geladen.\nExport: /mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/plot_workflow/files \u00e4/workflow \u00e4/runs/20261021-232231-9004600577-ergebnis.csv\n\nExport gespeichert. Pfad im Protokoll.\nAnalyseergebnis geladen. Diagramme und Tabellen sind bereit.\nExport: /mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/plot_workflow/files \u00e4/workflow \u00e4/runs/20261021-232235-12967515005-diagramm.png\n\nExport gespeichert. Pfad im Protokoll.\nExport: /mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/plot_workflow/files \u00e4/workflow \u00e4/runs/20261021-232244-21861027110-diagramm.png\n\nExport gespeichert. Pfad im Protokoll.\nExport: /mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/plot_workflow/files \u00e4/workflow \u00e4/runs/20261021-232245-23026110184-diagramm.png\n\nExport gespeichert. Pfad im Protokoll.\nExport: /mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/plot_workflow/files \u00e4/workflow \u00e4/runs/20261021-232247-24922039274-ausschnitt.png\n\nExport gespeichert. Pfad im Protokoll.\nExport: /mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/plot_workflow/files \u00e4/workflow \u00e4/runs/20261021-232248-26336395780-ausschnitt.svg\n\nExport gespeichert. Pfad im Protokoll.\n\nAPP TEST EXIT: 0\nplot_workflow: app workflow and persisted files passed\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 507.771115\nAPP TEST TRACE: main font sources ready 509.034034\nAPP TEST TRACE: main atlas bake seconds=3.966130\nAPP TEST TRACE: main atlas validation/upload seconds=0.049847\nAPP TEST TRACE: main fonts ready 513.096623\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 0 -> 1, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 2 -> 3, status 5 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=7094455894\nAPP TEST TRACE: stage 3 -> 4, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 4 -> 5, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 5 -> 6, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 6 -> 7, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 7 -> 8, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 8 -> 80, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 80 -> 9, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 9 -> 10, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 10 -> 11, status 5 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=9002565971\nAPP TEST TRACE: stage 11 -> 12, status 5 Messpunkte geladen.\nAPP TEST TRACE: stage 12 -> 13, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 13 -> 14, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=9106101715\nAPP TEST TRACE: stage 14 -> 15, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 15 -> 16, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 16 -> 17, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 17 -> 18, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 18 -> 19, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 19 -> 81, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 81 -> 20, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 20 -> 21, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=9905658569\nAPP TEST TRACE: stage 21 -> 22, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 22 -> 23, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 23 -> 24, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 24 -> 25, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 25 -> 26, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 26 -> 27, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 27 -> 28, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 28 -> 29, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 29 -> 30, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 30 -> 31, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 31 -> 32, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=12862912293\nAPP TEST TRACE: stage 32 -> 33, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 33 -> 34, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 34 -> 35, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=12963463157\nAPP TEST TRACE: stage 35 -> 36, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 36 -> 37, status Export gespeichert. Pfad im Protokoll.\nPLOT EXPORT PROFILE: regular images begin\nPLOT EXPORT PROFILE: regular images 1.790985 s; dense begin\nPLOT EXPORT PROFILE: dense 2.017056 s; scaled images begin\nPLOT EXPORT PROFILE: scaled images 3.592338 s\nAPP TEST TRACE: stage 37 -> 38, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 38 -> 39, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=21551767523\nAPP TEST TRACE: stage 39 -> 40, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 40 -> 41, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=21683259655\nAPP TEST TRACE: stage 41 -> 42, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 42 -> 43, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=21859369553\nAPP TEST TRACE: stage 43 -> 44, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 44 -> 45, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=22144609592\nAPP TEST TRACE: stage 45 -> 46, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 46 -> 47, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=22288489665\nAPP TEST TRACE: stage 47 -> 48, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 48 -> 49, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=23024209472\nAPP TEST TRACE: stage 49 -> 50, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 50 -> 51, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=24919802200\nAPP TEST TRACE: stage 51 -> 52, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 52 -> 53, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=26332813545\nAPP TEST TRACE: stage 53 -> 54, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 54 -> 55, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 55 -> 56, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 56 -> 82, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=26796373778\nAPP TEST TRACE: stage 82 -> 83, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 83 -> 56, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 56 -> 57, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=161 pending=0 window=2 keyboard=2 ticks=27543775881\nAPP TEST TRACE: stage 57 -> 58, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 58 -> 59, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=28202552817\nAPP TEST TRACE: stage 59 -> 60, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 60 -> 61, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=28390984410\nAPP TEST TRACE: stage 61 -> 62, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 62 -> 63, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 63 -> 64, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 64 -> 65, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=29098523407\nAPP TEST TRACE: stage 65 -> 66, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 66 -> 67, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 67 -> 68, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=29706223096\nAPP TEST TRACE: stage 68 -> 69, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 69 -> 70, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=29845504834\nAPP TEST TRACE: stage 70 -> 71, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 71 -> 72, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 72 -> 84, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 84 -> 73, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=32008095436\nAPP TEST TRACE: stage 73 -> 74, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 74 -> 100, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 100 -> 101, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 101 -> 102, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 102 -> 103, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 103 -> 104, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 104 -> 105, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 105 -> 106, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 106 -> 107, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 107 -> 108, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 108 -> 109, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 109 -> 110, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 110 -> 111, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 111 -> 112, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 112 -> 113, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 113 -> 114, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 114 -> 115, status Export gespeichert. Pfad im Protokoll.\nAPP TEST TRACE: stage 115 -> 116, status Export gespeichert. Pfad im Protokoll.\n",
+        "seconds": 34.915,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/plot_workflow/files \u00e4/app-steps.json",
+            "bytes": 12661,
+            "sha256": "ba4dfed90fdbc4db15723085a6c49f142491c8b6a5a3c0849874682ddf1d06f1"
+          }
+        ]
+      },
+      {
+        "command": [
+          "/mnt/d/Physim/build/native/Design-analysis-linux/bin/integration-physim-png-tests",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/plot_workflow/files \u00e4/png-reference.png"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "PNG input validation and exclusive output passed\n",
+        "stderr": "",
+        "seconds": 0.093,
+        "reason": "",
+        "artifacts": []
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/tests/verify_png.py",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/plot_workflow/files \u00e4",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/plot_workflow/files \u00e4/workflow \u00e4"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "PNG references: exact pixels, padded rows, limits, noise and compression passed\nfigure-0.png: CRC, zlib, dimensions, orientation and expected pixels passed\nfigure-1.png: CRC, zlib, dimensions, orientation and expected pixels passed\nfigure-2.png: CRC, zlib, dimensions, orientation and expected pixels passed\nfigure-3.png: CRC, zlib, dimensions, orientation and expected pixels passed\nfigure-dense.png: CRC, zlib, dimensions, orientation and expected pixels passed\nPNG references passed\nPNG region: crossing lines, clipped bars and excluded scatter points passed\n",
+        "stderr": "",
+        "seconds": 0.598,
+        "reason": "",
+        "artifacts": []
+      }
+    ],
+    "seconds": 38.437,
+    "reason": "",
+    "name": "plot_workflow"
+  },
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "/usr/bin/python3",
+        "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+        "sha256": "a9f44dda04914d2ad58ab9d6690b1a0e8d9b641339c40c4546362eaa4954a4d7"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/tests/check_display_workflow.py",
+          "graphics",
+          "--app",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "--work",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/graphics/files \u00e4",
+          "--root",
+          "/mnt/d/Physim",
+          "--cc",
+          "/usr/bin/cc"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)\nCoverage atlas: RGBA/R8 GPU samples identical, odd rows and linear filtering\nGPU TEST: depth, rotated box/plane, points, polylines, label projection, resize, clipping, transparency, nested coordinate frames and picking PASSED\nPLAIN LETTER INPUT: key=a expected=theta actual=theta copy=0 paste=0 passed=1\nPLAIN LETTER INPUT: key=c expected=scd actual=scd copy=0 paste=0 passed=1\nPLAIN LETTER INPUT: key=v expected=seved actual=seved copy=0 paste=0 passed=1\nPLAIN LETTER INPUT: key=x expected=sxd actual=sxd copy=0 paste=0 passed=1\nPLAIN LETTER INPUT: key=b expected=sebed actual=sebed copy=0 paste=0 passed=1\nPLAIN LETTER INPUT: key=e expected=seeed actual=seeed copy=0 paste=0 passed=1\nCOMMAND LETTER INPUT: mac=0 key=a copy=0 paste=0 passed=1\nCOMMAND LETTER INPUT: mac=0 key=c copy=1 paste=0 passed=1\nCOMMAND LETTER INPUT: mac=0 key=v copy=0 paste=1 passed=1\nCOMMAND LETTER INPUT: mac=0 key=x copy=1 paste=0 passed=1\nCOMMAND LETTER INPUT: mac=0 key=b copy=0 paste=0 passed=1\nCOMMAND LETTER INPUT: mac=0 key=e copy=0 paste=0 passed=1\nINPUT TEST: UTF-8, undo/redo, clipboard, Mac/PC navigation/selection, focus PASSED\ngraphics: app workflow and persisted files passed\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\n",
+        "seconds": 1.458,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/graphics/files \u00e4/app-steps.json",
+            "bytes": 1565,
+            "sha256": "ba34c33d91771d1d29f100421c9746323237a3ab84da1bb3bb945f31a4fef095"
+          }
+        ]
+      }
+    ],
+    "seconds": 1.841,
+    "reason": "",
+    "name": "graphics"
+  },
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "/usr/bin/python3",
+        "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+        "sha256": "a9f44dda04914d2ad58ab9d6690b1a0e8d9b641339c40c4546362eaa4954a4d7"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/tests/check_display_workflow.py",
+          "series_mask_workflow",
+          "--app",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "--work",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/series_mask_workflow/files \u00e4",
+          "--root",
+          "/mnt/d/Physim",
+          "--cc",
+          "/usr/bin/cc"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)\nFont atlas: 2048x16384, 80 fonts, GPU limit 16384\nSERIES MASK mask-c SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAnalyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nProjekt gespeichert.\nPhysim baut die Analyse ...\nCompiler: /usr/bin/gcc\nProfile: Release\n\nCompile: /mnt/d/Physim/src/core.c\n\nCompile: /mnt/d/Physim/src/memory.c\n\nCompile: /mnt/d/Physim/src/array.c\n\nCompile: /mnt/d/Physim/src/string_view.c\n\nCompile: /mnt/d/Physim/src/hashmap.c\n\nCompile: /mnt/d/Physim/src/math.c\n\nCompile: /mnt/d/Physim/src/data.c\n\nCompile: /mnt/d/Physim/src/run_stream.c\n\nCompile: /mnt/d/Physim/src/run_index.c\n\nCompile: /mnt/d/Physim/src/snapshot.c\n\nCompile: /mnt/d/Physim/src/analysis.c\n\nCompile: /mnt/d/Physim/src/scene.c\n\nCompile: /mnt/d/Physim/src/numerics.c\n\nCompile: /mnt/d/Physim/src/units.c\n\nCompile: /mnt/d/Physim/src/series.c\n\nCompile: /mnt/d/Physim/src/report.c\n\nCompile: /mnt/d/Physim/src/report_export.c\n\nCompile: /mnt/d/Physim/src/mechanics.c\n\nCompile: /mnt/d/Physim/src/contact_world.c\n\nCompile: /mnt/d/Physim/src/box_contacts.c\n\nCompile: /mnt/d/Physim/src/collision.c\n\nCompile: /mnt/d/Physim/src/measurement.c\n\nCompile: /mnt/d/Physim/src/thermodynamics.c\n\nCompile: /mnt/d/Physim/src/electromagnetism.c\n\nCompile: /mnt/d/Physim/src/waves.c\n\nCompile: /mnt/d/Physim/src/optics.c\n\nCompile: /mnt/d/Physim/src/fluid.c\n\nCompile: /mnt/d/Physim/src/properties.c\n\nCompile: /mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/series_mask_workflow/files \u00e4/workflow \u00e4/c/project/analysis.c\n\nLink: /mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/series_mask_workflow/files \u00e4/workflow \u00e4/c/project/build/Release/analysis.next.so\n\nBuild successful.\n\nAnalyse erfolgreich gebaut. Gespeicherte L\u00e4ufe k\u00f6nnen ausgewertet werden.\nAnalyse laeuft im separaten Prozess ...\nAnalysis: OK\n\nAuswertung abgeschlossen; Ergebnisse im runs-Ordner.\nAnalyseergebnis geladen. Diagramme und Tabellen sind bereit.\n\nAPP TEST EXIT: 0\nOpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)\nFont atlas: 2048x16384, 80 fonts, GPU limit 16384\nSERIES MASK mask-read SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAnalyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAnalyseergebnis geladen. Diagramme und Tabellen sind bereit.\n\nAPP TEST EXIT: 0\nOpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)\nFont atlas: 2048x16384, 80 fonts, GPU limit 16384\nSERIES MASK mask-phys SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAnalyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nProjekt gespeichert.\nPhysim baut die Analyse ...\nCompiler: /usr/bin/gcc\nProfile: Release\n\nCompile: /mnt/d/Physim/src/core.c\n\nCompile: /mnt/d/Physim/src/memory.c\n\nCompile: /mnt/d/Physim/src/array.c\n\nCompile: /mnt/d/Physim/src/string_view.c\n\nCompile: /mnt/d/Physim/src/hashmap.c\n\nCompile: /mnt/d/Physim/src/math.c\n\nCompile: /mnt/d/Physim/src/data.c\n\nCompile: /mnt/d/Physim/src/run_stream.c\n\nCompile: /mnt/d/Physim/src/run_index.c\n\nCompile: /mnt/d/Physim/src/snapshot.c\n\nCompile: /mnt/d/Physim/src/analysis.c\n\nCompile: /mnt/d/Physim/src/scene.c\n\nCompile: /mnt/d/Physim/src/numerics.c\n\nCompile: /mnt/d/Physim/src/units.c\n\nCompile: /mnt/d/Physim/src/series.c\n\nCompile: /mnt/d/Physim/src/report.c\n\nCompile: /mnt/d/Physim/src/report_export.c\n\nCompile: /mnt/d/Physim/src/mechanics.c\n\nCompile: /mnt/d/Physim/src/contact_world.c\n\nCompile: /mnt/d/Physim/src/box_contacts.c\n\nCompile: /mnt/d/Physim/src/collision.c\n\nCompile: /mnt/d/Physim/src/measurement.c\n\nCompile: /mnt/d/Physim/src/thermodynamics.c\n\nCompile: /mnt/d/Physim/src/electromagnetism.c\n\nCompile: /mnt/d/Physim/src/waves.c\n\nCompile: /mnt/d/Physim/src/optics.c\n\nCompile: /mnt/d/Physim/src/fluid.c\n\nCompile: /mnt/d/Physim/src/properties.c\n\nCompile: /mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/series_mask_workflow/files \u00e4/workflow \u00e4/phys/project/build/Release/analysis.physim.c\n\nLink: /mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/series_mask_workflow/files \u00e4/workflow \u00e4/phys/project/build/Release/analysis.next.so\n\nBuild successful.\n\nAnalyse erfolgreich gebaut. Gespeicherte L\u00e4ufe k\u00f6nnen ausgewertet werden.\nAnalyse laeuft im separaten Prozess ...\nAnalysis: OK\n\nAuswertung abgeschlossen; Ergebnisse im runs-Ordner.\nAnalyseergebnis geladen. Diagramme und Tabellen sind bereit.\n\nAPP TEST EXIT: 0\nOpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)\nFont atlas: 2048x16384, 80 fonts, GPU limit 16384\nSERIES MASK mask-read SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAnalyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAnalyseergebnis geladen. Diagramme und Tabellen sind bereit.\n\nAPP TEST EXIT: 0\nseries_mask_workflow: app workflow and persisted files passed\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 545.279857\nAPP TEST TRACE: main font sources ready 546.339753\nAPP TEST TRACE: main atlas bake seconds=2.802126\nAPP TEST TRACE: main atlas validation/upload seconds=0.036206\nAPP TEST TRACE: main fonts ready 549.211457\nAPP TEST TRACE: initial stage 0, status Analyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAPP TEST TRACE: stage 0 -> 1, status Physim baut die Analyse ...\nAPP TEST TRACE: stage 1 -> 2, status Analyse erfolgreich gebaut. Gespeicherte L\u00e4ufe k\u00f6nnen ausgewertet werden.\nAPP TEST TRACE: stage 2 -> 3, status Analyse erfolgreich gebaut. Gespeicherte L\u00e4ufe k\u00f6nnen ausgewertet werden.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=35824154940\nAPP TEST TRACE: stage 3 -> 4, status Analyse laeuft im separaten Prozess ...\nAPP TEST TRACE: stage 4 -> 5, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 5 -> 6, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 6 -> 7, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 7 -> 8, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 583.817407\nAPP TEST TRACE: main font sources ready 584.891028\nAPP TEST TRACE: main atlas bake seconds=2.979202\nAPP TEST TRACE: main atlas validation/upload seconds=0.034349\nAPP TEST TRACE: main fonts ready 587.941092\nAPP TEST TRACE: initial stage 0, status Analyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAPP TEST TRACE: stage 0 -> 4, status Analyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAPP TEST TRACE: stage 4 -> 5, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 5 -> 6, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 6 -> 7, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 7 -> 8, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 592.705614\nAPP TEST TRACE: main font sources ready 595.945727\nAPP TEST TRACE: main atlas bake seconds=2.705609\nAPP TEST TRACE: main atlas validation/upload seconds=0.027468\nAPP TEST TRACE: main fonts ready 598.707264\nAPP TEST TRACE: initial stage 0, status Analyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAPP TEST TRACE: stage 0 -> 1, status Physim baut die Analyse ...\nAPP TEST TRACE: stage 1 -> 2, status Analyse erfolgreich gebaut. Gespeicherte L\u00e4ufe k\u00f6nnen ausgewertet werden.\nAPP TEST TRACE: stage 2 -> 3, status Analyse erfolgreich gebaut. Gespeicherte L\u00e4ufe k\u00f6nnen ausgewertet werden.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=55384032642\nAPP TEST TRACE: stage 3 -> 4, status Analyse laeuft im separaten Prozess ...\nAPP TEST TRACE: stage 4 -> 5, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 5 -> 6, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 6 -> 7, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 7 -> 8, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 651.212970\nAPP TEST TRACE: main font sources ready 652.401755\nAPP TEST TRACE: main atlas bake seconds=2.654733\nAPP TEST TRACE: main atlas validation/upload seconds=0.029168\nAPP TEST TRACE: main fonts ready 655.115192\nAPP TEST TRACE: initial stage 0, status Analyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAPP TEST TRACE: stage 0 -> 4, status Analyseprojekt geladen. Messl\u00e4ufe importieren und Analyse bauen.\nAPP TEST TRACE: stage 4 -> 5, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 5 -> 6, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 6 -> 7, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\nAPP TEST TRACE: stage 7 -> 8, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.\n",
+        "seconds": 112.901,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/series_mask_workflow/files \u00e4/app-steps.json",
+            "bytes": 11628,
+            "sha256": "0fd86e18a2096dbc5362b5aedca65ae31f1004bf9585a2e067310d1286900dec"
+          }
+        ]
+      }
+    ],
+    "seconds": 113.297,
+    "reason": "",
+    "name": "series_mask_workflow"
+  },
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "/usr/bin/python3",
+        "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+        "sha256": "a9f44dda04914d2ad58ab9d6690b1a0e8d9b641339c40c4546362eaa4954a4d7"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/tests/check_graphic_raster.py",
+          "--app",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "--root",
+          "/mnt/d/Physim",
+          "--work",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/graphic_raster/files \u00e4"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "Graphic raster: 24 real PNG/figure cases, 2 exact RGB texture previews, actual font atlases, masks and atomic failures passed\n",
+        "stderr": "",
+        "seconds": 46.947,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-jofis9te/graphic_raster/files \u00e4/app-steps.json",
+            "bytes": 38582,
+            "sha256": "28567d986436c4dfa45932987dd2223ef8e5698f6764b400b073a0b423b7c960"
+          }
+        ]
+      }
+    ],
+    "seconds": 47.337,
+    "reason": "",
+    "name": "graphic_raster"
+  }
+]

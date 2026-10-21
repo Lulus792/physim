@@ -19,8 +19,8 @@ static bool chunk(FILE *f, unsigned char *buffer, const char *type, size_t size)
     return fwrite(length, 1, 4, f) == 4 && fwrite(buffer, 1, size + 4, f) == size + 4 &&
            fwrite(crc, 1, 4, f) == 4;
 }
-ps_result ps_png_write(const char *path, const unsigned char *rgb, unsigned width, unsigned height,
-                       size_t stride) {
+static ps_result write_png(const char *path,const unsigned char *rgb,unsigned width,unsigned height,
+    size_t stride,int compression) {
     if (!path || !*path || !rgb || !width || !height || width > 8192 || height > 8192 ||
         stride < (size_t)width * 3 || stride > SIZE_MAX / height)
         return PS_INVALID;
@@ -34,7 +34,7 @@ ps_result ps_png_write(const char *path, const unsigned char *rgb, unsigned widt
         return PS_MEMORY;
     }
     z_stream stream = {0};
-    int status = deflateInit(&stream, 6);
+    int status = deflateInit(&stream, compression);
     if (status != Z_OK) {
         free(input);
         free(buffer);
@@ -87,4 +87,8 @@ ps_result ps_png_write(const char *path, const unsigned char *rgb, unsigned widt
     if (!ok)
         remove(path); /* Only our exclusively created, incomplete output. */
     return ok ? PS_OK : (status == Z_MEM_ERROR ? PS_MEMORY : PS_IO);
+}
+ps_result ps_png_write(const char *path,const unsigned char *rgb,unsigned width,unsigned height,size_t stride) {
+    /* Compression speed changes file size, never image quality or RGB bytes. */
+    return write_png(path,rgb,width,height,stride,Z_BEST_SPEED);
 }

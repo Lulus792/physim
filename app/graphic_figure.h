@@ -24,7 +24,12 @@ typedef struct {
     bool strong;
     int curve; /* -1 for layout; actual report curve index otherwise */
 } ps_figure_command;
-typedef struct {bool dark,visible;} ps_graphic_figure_options;
+typedef struct {
+    bool dark,visible;
+    /* Optional actual primary font families, copied at construction (95 bytes).
+     * SVG retains their identity; installed viewer fonts still govern glyphs. */
+    const char *font_family,*strong_font_family;
+} ps_graphic_figure_options;
 /* Actual font metrics in canonical CSS em units, including letter spacing.
  * Called only while creating the figure. No callback/user pointer survives.
  * Must return a finite nonnegative width and scale proportionally with size.

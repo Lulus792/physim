@@ -44,6 +44,9 @@ typedef struct ps_ui_font_pairs ps_ui_font_pairs;
 ps_ui_font_pairs *ps_ui_font_pairs_create(const struct nk_font *font,const struct nk_allocator *allocator);
 void ps_ui_font_pairs_destroy(ps_ui_font_pairs *pairs);
 float ps_ui_font_pair_advance(const ps_ui_font_pairs *pairs,float height,nk_rune first,nk_rune second);
+/* Custom export callbacks retain floating coordinates through conversion;
+ * this is the same clip operation as Nuklear's ordinary scissor conversion. */
+void ps_ui_draw_list_clip(struct nk_draw_list *list,struct nk_rect bounds);
 /* Load the first non-italic face matching the OpenType bold flag. A missing
  * match leaves the atlas unchanged, allowing the caller's offline fallback. */
 struct nk_font *ps_ui_font_add_file_face(struct nk_font_atlas *atlas,const char *path,

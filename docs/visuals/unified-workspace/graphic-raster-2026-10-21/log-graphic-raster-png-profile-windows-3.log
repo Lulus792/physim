@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "D:\Physim\tools\profile_png.py", line 40, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "D:\Physim\tools\profile_png.py", line 19, in main
+    assert all(x.is_file() for x in libraries)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

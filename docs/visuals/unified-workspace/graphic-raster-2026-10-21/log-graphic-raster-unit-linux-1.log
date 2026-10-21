@@ -1,0 +1,329 @@
+Compiled src/memory.c
+Compiled src/string_view.c
+Compiled src/array.c
+Compiled src/hashmap.c
+Compiled src/run_stream.c
+/mnt/d/Physim/src/data.c: In function 'ps_run_identity_read':
+/mnt/d/Physim/src/data.c:180:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  180 |             if(seen&field)return PS_CORRUPT;seen|=field;
+      |             ^~
+/mnt/d/Physim/src/data.c:180:45: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  180 |             if(seen&field)return PS_CORRUPT;seen|=field;
+      |                                             ^~~~
+/mnt/d/Physim/src/data.c:186:17: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  186 |                 if(!ps_run_identity_valid(target))return PS_CORRUPT;available|=field;
+      |                 ^~
+/mnt/d/Physim/src/data.c:186:69: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  186 |                 if(!ps_run_identity_valid(target))return PS_CORRUPT;available|=field;
+      |                                                                     ^~~~~~~~~
+/mnt/d/Physim/src/data.c: In function 'ps_run_start_time_read':
+/mnt/d/Physim/src/data.c:223:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  223 |             if(seen&field)return PS_CORRUPT;seen|=field;
+      |             ^~
+/mnt/d/Physim/src/data.c:223:45: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  223 |             if(seen&field)return PS_CORRUPT;seen|=field;
+      |                                             ^~~~
+/mnt/d/Physim/src/data.c: In function 'ps_run_create_with_identity':
+/mnt/d/Physim/src/data.c:332:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  332 |     if(r==PS_OK)*w=draft;return r;
+      |     ^~
+/mnt/d/Physim/src/data.c:332:26: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  332 |     if(r==PS_OK)*w=draft;return r;
+      |                          ^~~~~~
+/mnt/d/Physim/src/data.c: At top level:
+/mnt/d/Physim/src/data.c:504:60: warning: argument 3 of type 'double *' declared as a pointer [-Warray-parameter=]
+  504 | ps_result ps_run_next(ps_run_reader *r, double *t, double *v) {
+      |                                                    ~~~~~~~~^
+In file included from /mnt/d/Physim/src/data.c:1:
+/mnt/d/Physim/include/physim/data.h:58:69: note: previously declared as an array 'double[16]'
+   58 | ps_result ps_run_next(ps_run_reader *reader, double *time_s, double values[PS_MAX_CHANNELS]);
+      |                                                              ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+Compiled src/data.c
+Compiled src/core.c
+Compiled src/run_index.c
+Compiled src/snapshot.c
+Compiled src/math.c
+Compiled src/units.c
+Compiled src/scene.c
+Compiled src/analysis.c
+Compiled src/numerics.c
+Compiled src/report_export.c
+Compiled src/report.c
+Compiled src/box_contacts.c
+Compiled src/contact_world.c
+Compiled src/series.c
+Compiled src/mechanics.c
+Compiled src/measurement.c
+Compiled src/thermodynamics.c
+/mnt/d/Physim/src/electromagnetism.c: In function 'ps_lorentz_force':
+/mnt/d/Physim/src/electromagnetism.c:77:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   77 |     if(!finite3(result))return PS_NUMERIC;*out=result;return PS_OK;
+      |     ^~
+/mnt/d/Physim/src/electromagnetism.c:77:43: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   77 |     if(!finite3(result))return PS_NUMERIC;*out=result;return PS_OK;
+      |                                           ^
+Compiled src/electromagnetism.c
+Compiled src/waves.c
+/mnt/d/Physim/src/optics.c: In function 'ps_ray_reflect':
+/mnt/d/Physim/src/optics.c:23:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   23 |     if(!out)return PS_INVALID;double cosine;
+      |     ^~
+/mnt/d/Physim/src/optics.c:23:31: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   23 |     if(!out)return PS_INVALID;double cosine;
+      |                               ^~~~~~
+/mnt/d/Physim/src/optics.c: In function 'ps_ray_refract':
+/mnt/d/Physim/src/optics.c:29:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   29 |     if(!out || !positive(n1) || !positive(n2))return PS_INVALID;double cosine;
+      |     ^~
+/mnt/d/Physim/src/optics.c:29:65: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   29 |     if(!out || !positive(n1) || !positive(n2))return PS_INVALID;double cosine;
+      |                                                                 ^~~~~~
+Compiled src/optics.c
+/mnt/d/Physim/src/properties.c: In function 'blend':
+/mnt/d/Physim/src/properties.c:33:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   33 |     if(t==0)return a;if(t==1)return b;
+      |     ^~
+/mnt/d/Physim/src/properties.c:33:22: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   33 |     if(t==0)return a;if(t==1)return b;
+      |                      ^~
+Compiled src/properties.c
+Compiled src/fluid.c
+Compiled src/collision.c
+Compiled src/protocol.c
+/mnt/d/Physim/src/runner_output.c: In function 'ps_runner_output_send':
+/mnt/d/Physim/src/runner_output.c:130:17: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  130 |                 if(o->tail==at)o->tail=previous;o->queued-=sizeof *at+at->bytes;free(at);break;
+      |                 ^~
+/mnt/d/Physim/src/runner_output.c:130:49: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  130 |                 if(o->tail==at)o->tail=previous;o->queued-=sizeof *at+at->bytes;free(at);break;
+      |                                                 ^
+/mnt/d/Physim/src/runner_output.c: In function 'ps_runner_output_healthy':
+/mnt/d/Physim/src/runner_output.c:140:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  140 |     if(!o)return false;lock_output(o);bool ok=!o->failed && !o->overflow && !o->closing;unlock_output(o);return ok;
+      |     ^~
+/mnt/d/Physim/src/runner_output.c:140:24: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  140 |     if(!o)return false;lock_output(o);bool ok=!o->failed && !o->overflow && !o->closing;unlock_output(o);return ok;
+      |                        ^~~~~~~~~~~
+Compiled src/runner_output.c
+Compiled src/platform.c
+Compiled src/language/lexer.c
+Compiled src/language/parser.c
+Compiled src/language/builtins.c
+Compiled src/language/emitter.c
+Compiled src/language/checker.c
+In file included from /mnt/d/Physim/src/batch.c:5:
+/mnt/d/Physim/src/run_series.h: In function 'ps_series_uint':
+/mnt/d/Physim/src/run_series.h:10:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   10 |     if(!text || !*text)return false;uint64_t value=0;
+      |     ^~
+/mnt/d/Physim/src/run_series.h:10:37: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   10 |     if(!text || !*text)return false;uint64_t value=0;
+      |                                     ^~~~~~~~
+/mnt/d/Physim/src/run_series.h: In function 'ps_series_parse':
+/mnt/d/Physim/src/run_series.h:15:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   15 |     if(!text || !out)return false;size_t length=0;while(length<512 && text[length])length++;if(length==512)return false;
+      |     ^~
+/mnt/d/Physim/src/run_series.h:15:35: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   15 |     if(!text || !out)return false;size_t length=0;while(length<512 && text[length])length++;if(length==512)return false;
+      |                                   ^~~~~~
+/mnt/d/Physim/src/run_series.h: In function 'ps_series_value':
+/mnt/d/Physim/src/run_series.h:35:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   35 |     if(series->index==1)return series->start;if(series->index==series->count)return series->end;
+      |     ^~
+/mnt/d/Physim/src/run_series.h:35:46: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   35 |     if(series->index==1)return series->start;if(series->index==series->count)return series->end;
+      |                                              ^~
+In file included from /mnt/d/Physim/src/batch.c:84:
+/mnt/d/Physim/src/batch_checkpoint.inc: In function 'batch_checkpoint_write':
+/mnt/d/Physim/src/batch_checkpoint.inc:39:90: warning: '/resume.bin' directive output may be truncated writing 11 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+   39 |     ps_put_u32(bytes+at,ps_crc32(bytes,at));char path[4096];snprintf(path,sizeof path,"%s/resume.bin",o->directory);
+      |                                                                                          ^~~~~~~~~~~
+/mnt/d/Physim/src/batch_checkpoint.inc:39:61: note: 'snprintf' output between 12 and 4107 bytes into a destination of size 4096
+   39 |     ps_put_u32(bytes+at,ps_crc32(bytes,at));char path[4096];snprintf(path,sizeof path,"%s/resume.bin",o->directory);
+      |                                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c: In function 'batch_reuse':
+/mnt/d/Physim/src/batch.c:452:60: warning: '/completed.csv' directive output may be truncated writing 14 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  452 |     char path[4096],line[512];snprintf(path,sizeof path,"%s/completed.csv",o->resume_from);
+      |                                                            ^~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:452:31: note: 'snprintf' output between 15 and 4110 bytes into a destination of size 4096
+  452 |     char path[4096],line[512];snprintf(path,sizeof path,"%s/completed.csv",o->resume_from);
+      |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:475:82: warning: '%s' directive output may be truncated writing up to 63 bytes into a region of size between 0 and 4095 [-Wformat-truncation=]
+  475 |         batch_slot slot={.index=index-1};snprintf(slot.path,sizeof slot.path,"%s/%s",o->resume_from,name);
+      |                                                                                  ^~                 ~~~~
+/mnt/d/Physim/src/batch.c:475:42: note: 'snprintf' output between 2 and 4160 bytes into a destination of size 4096
+  475 |         batch_slot slot={.index=index-1};snprintf(slot.path,sizeof slot.path,"%s/%s",o->resume_from,name);
+      |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:490:39: warning: '%s' directive output may be truncated writing up to 63 bytes into a region of size between 0 and 4095 [-Wformat-truncation=]
+  490 |         snprintf(path,sizeof path,"%s/%s",o->directory,name);
+      |                                       ^~               ~~~~
+/mnt/d/Physim/src/batch.c:490:9: note: 'snprintf' output between 2 and 4160 bytes into a destination of size 4096
+  490 |         snprintf(path,sizeof path,"%s/%s",o->directory,name);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c: In function 'run_pool':
+/mnt/d/Physim/src/batch.c:616:44: warning: '/work-' directive output may be truncated writing 6 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  616 |             snprintf(work, sizeof work, "%s/work-%04u", o->directory, next + 1);
+      |                                            ^~~~~~
+/mnt/d/Physim/src/batch.c:616:13: note: 'snprintf' output between 11 and 4112 bytes into a destination of size 4096
+  616 |             snprintf(work, sizeof work, "%s/work-%04u", o->directory, next + 1);
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:621:56: warning: '/run-' directive output may be truncated writing 5 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  621 |             snprintf(slot->path, sizeof slot->path, "%s/run-%04u.psrun", o->directory, next + 1);
+      |                                                        ^~~~~
+/mnt/d/Physim/src/batch.c:621:13: note: 'snprintf' output between 16 and 4117 bytes into a destination of size 4096
+  621 |             snprintf(slot->path, sizeof slot->path, "%s/run-%04u.psrun", o->directory, next + 1);
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c: In function 'ordered_endpoints':
+/mnt/d/Physim/src/batch.c:682:36: warning: '/endpoints.csv' directive output may be truncated writing 14 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  682 |     snprintf(path, sizeof path, "%s/endpoints.csv", o->directory);
+      |                                    ^~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:682:5: note: 'snprintf' output between 15 and 4110 bytes into a destination of size 4096
+  682 |     snprintf(path, sizeof path, "%s/endpoints.csv", o->directory);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c: In function 'ps_batch_run':
+/mnt/d/Physim/src/batch.c:724:40: warning: '/experiment.so' directive output may be truncated writing 14 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  724 |     snprintf(module, sizeof module, "%s/experiment.so", o->directory);
+      |                                        ^~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:724:5: note: 'snprintf' output between 15 and 4110 bytes into a destination of size 4096
+  724 |     snprintf(module, sizeof module, "%s/experiment.so", o->directory);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:736:40: warning: '/experiment.' directive output may be truncated writing 12 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  736 |         snprintf(path, sizeof path, "%s/experiment.%s", o->directory, extension);
+      |                                        ^~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:736:9: note: 'snprintf' output 14 or more bytes (assuming 4109) into a destination of size 4096
+  736 |         snprintf(path, sizeof path, "%s/experiment.%s", o->directory, extension);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:755:36: warning: '/series.txt' directive output may be truncated writing 11 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  755 |     snprintf(path, sizeof path, "%s/series.txt", o->directory);
+      |                                    ^~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:755:5: note: 'snprintf' output between 12 and 4107 bytes into a destination of size 4096
+  755 |     snprintf(path, sizeof path, "%s/series.txt", o->directory);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:794:36: warning: '/completed.csv' directive output may be truncated writing 14 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  794 |     snprintf(path, sizeof path, "%s/completed.csv", o->directory);
+      |                                    ^~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:794:5: note: 'snprintf' output between 15 and 4110 bytes into a destination of size 4096
+  794 |     snprintf(path, sizeof path, "%s/completed.csv", o->directory);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:808:38: warning: '/series.txt' directive output may be truncated writing 11 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  808 |         snprintf(path,sizeof path,"%s/series.txt",o->directory);
+      |                                      ^~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:808:9: note: 'snprintf' output between 12 and 4107 bytes into a destination of size 4096
+  808 |         snprintf(path,sizeof path,"%s/series.txt",o->directory);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:870:44: warning: '/summary.psreport' directive output may be truncated writing 17 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  870 |             snprintf(path, sizeof path, "%s/summary.psreport", o->directory);
+      |                                            ^~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:870:13: note: 'snprintf' output between 18 and 4113 bytes into a destination of size 4096
+  870 |             snprintf(path, sizeof path, "%s/summary.psreport", o->directory);
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:884:36: warning: '/status.txt' directive output may be truncated writing 11 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  884 |     snprintf(path, sizeof path, "%s/status.txt", o->directory);
+      |                                    ^~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:884:5: note: 'snprintf' output between 12 and 4107 bytes into a destination of size 4096
+  884 |     snprintf(path, sizeof path, "%s/status.txt", o->directory);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:899:40: warning: '/summary.psreport' directive output may be truncated writing 17 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  899 |         snprintf(path, sizeof path, "%s/summary.psreport", o->directory);
+      |                                        ^~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:899:9: note: 'snprintf' output between 18 and 4113 bytes into a destination of size 4096
+  899 |         snprintf(path, sizeof path, "%s/summary.psreport", o->directory);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Compiled src/batch.c
+Compiled third_party/zlib-1.3.2/adler32.c
+Compiled third_party/zlib-1.3.2/crc32.c
+Compiled third_party/zlib-1.3.2/zutil.c
+Compiled third_party/zlib-1.3.2/uncompr.c
+Compiled third_party/zlib-1.3.2/inftrees.c
+Compiled third_party/zlib-1.3.2/inffast.c
+Compiled third_party/zlib-1.3.2/trees.c
+Compiled third_party/zlib-1.3.2/inflate.c
+Compiled third_party/zlib-1.3.2/deflate.c
+Compiled src/language/main.c
+Compiled src/language/loader.c
+In file included from /mnt/d/Physim/runners/experiment.c:8:
+/mnt/d/Physim/src/run_series.h: In function 'ps_series_uint':
+/mnt/d/Physim/src/run_series.h:10:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   10 |     if(!text || !*text)return false;uint64_t value=0;
+      |     ^~
+/mnt/d/Physim/src/run_series.h:10:37: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   10 |     if(!text || !*text)return false;uint64_t value=0;
+      |                                     ^~~~~~~~
+/mnt/d/Physim/src/run_series.h: In function 'ps_series_parse':
+/mnt/d/Physim/src/run_series.h:15:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   15 |     if(!text || !out)return false;size_t length=0;while(length<512 && text[length])length++;if(length==512)return false;
+      |     ^~
+/mnt/d/Physim/src/run_series.h:15:35: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   15 |     if(!text || !out)return false;size_t length=0;while(length<512 && text[length])length++;if(length==512)return false;
+      |                                   ^~~~~~
+/mnt/d/Physim/src/run_series.h: In function 'ps_series_value':
+/mnt/d/Physim/src/run_series.h:35:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   35 |     if(series->index==1)return series->start;if(series->index==series->count)return series->end;
+      |     ^~
+/mnt/d/Physim/src/run_series.h:35:46: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   35 |     if(series->index==1)return series->start;if(series->index==series->count)return series->end;
+      |                                              ^~
+Compiled runners/experiment.c
+Linked physim-runner
+Compiled runners/analysis.c
+Linked physim-analysis-runner
+Compiled runners/batch.c
+Linked physim-batch
+Compiled examples/pendulum/main.c
+Linked pendulum.so
+Compiled examples/projectile/main.c
+Linked projectile.so
+Compiled examples/collision/main.c
+Linked collision.so
+Compiled examples/box_floor/main.c
+Linked box_floor.so
+Compiled examples/spring/main.c
+Linked spring.so
+Compiled examples/uncertain_projectile/main.c
+Linked uncertain_projectile.so
+Compiled examples/box_collision/main.c
+Linked box_collision.so
+Compiled examples/buoyancy/main.c
+Linked buoyancy.so
+Compiled examples/ccd_events/main.c
+Linked ccd_events.so
+/mnt/d/Physim/examples/pendulum/analysis.c: In function 'ps_get_analysis':
+/mnt/d/Physim/examples/pendulum/analysis.c:726:41: warning: missing initializer for field 'run_diagnostic' of 'ps_analysis_api' [-Wmissing-field-initializers]
+  726 |                                         "Energy, period and run comparison", analyze, analyze_many};
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /mnt/d/Physim/examples/pendulum/analysis.c:1:
+/mnt/d/Physim/include/physim/analysis.h:33:17: note: 'run_diagnostic' declared here
+   33 |     ps_result (*run_diagnostic)(const char *const *input_runs, size_t count,
+      |                 ^~~~~~~~~~~~~~
+Compiled examples/pendulum/analysis.c
+Linked pendulum_analysis.so
+Compiled examples/documentation/batch_analysis.c
+Linked batch_analysis.so
+Compiled app/plot_view.c
+/mnt/d/Physim/app/graphic_snapshot.c: In function 'status_domain':
+/mnt/d/Physim/app/graphic_snapshot.c:108:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  108 |         if(result!=PS_OK)return result;if(!count)return PS_CORRUPT;
+      |         ^~
+/mnt/d/Physim/app/graphic_snapshot.c:108:40: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  108 |         if(result!=PS_OK)return result;if(!count)return PS_CORRUPT;
+      |                                        ^~
+Compiled app/graphic_snapshot.c
+Compiled app/graphic_figure.c
+Compiled tests/test_graphic_figure.c
+Linked physim-test-graphic_figure
+TEST graphic_figure: passed
+Compiled tests/test_graphic_snapshot.c
+Linked physim-test-graphic_snapshot
+TEST graphic_snapshot: passed
+Compiled tests/test_report.c
+Linked physim-test-report
+TEST report: passed
+Compiled tests/test_series_mask.c
+Linked physim-test-series_mask
+TEST series_mask: passed
+Compiled tests/test_png.c
+Compiled app/png.c
+Linked physim-test-png
+TEST png: passed
+Native tests: 5/5 passed. Results: /mnt/d/Physim/build/native/Graphic-unit-linux/test-results/run-88dtjlel
+Build complete: /mnt/d/Physim/build/native/Graphic-unit-linux/bin
