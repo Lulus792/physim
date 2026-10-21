@@ -13618,6 +13618,34 @@
           ]
         }
       ]
+    },
+    {
+      "name": "documentation_context_code",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "documentation_context_code",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 90,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
     }
   ]
 }

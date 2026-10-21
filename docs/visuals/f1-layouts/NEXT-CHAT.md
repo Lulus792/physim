@@ -1,5 +1,11 @@
 Stand: Der native F1-Artikel wird weiter mit der gewählten H-Vorlage abgeglichen.
-Der [aktuelle SVG-Schriftabgleich](SVG-LABELS.md) ergänzt echte kursive
+Die [aktuelle Codevorschau](CODE-PREVIEW.md) erhält Tokens und Quellbytes und
+ergänzt horizontalen Zugriff per Tastatur, Mausrad und Ziehen. Windows/Linux
+bestehen die nativen Eingabefälle und den vollständigen Unicode-Umbruchtest;
+auch der unabhängige Windows-Hostfokusnachweis besteht. Quellen, Gegenfälle,
+112 unveränderte vollständige H-Bildpaare und Grenzen sind dort belegt.
+
+Der vorhergehende [SVG-Schriftabgleich](SVG-LABELS.md) ergänzt echte kursive
 Serifenglyphen für das Kontextmodell und einen vollständig offline nutzbaren
 Font. Sanitizer-Gegenfälle und erfolgreiche native Prüfungen sind dort getrennt
 belegt; außerhalb der Modellgrafik bleiben 112 native Bildpaare pixelidentisch.
@@ -23,7 +29,7 @@ historischen Stand. Maßgeblich für den Folgeauftrag sind der aktuelle
 [Gesamtoberflächenstand](../unified-workspace/NATIVE-FIDELITY.md).
 
 Weiter offen sind unter anderem Linux-Schrift/Glyphenrasterung, Bildunterschrift,
-horizontale Codevorschau und weitere Kontextdetails sowie die vollständige H-Abnahme.
+Kontur-/Fokusdetails des Beispielkopfs und die vollständige H-Abnahme.
 Browser-PNGs oder bestandene Funktionsgruppen ersetzen diese Abnahme nicht.
 Die lokale HTML-Datei blieb im Browserwerkzeug gesperrt; daraus wird keine
 neue interaktive Browserprüfung abgeleitet. macOS und vollständige externe

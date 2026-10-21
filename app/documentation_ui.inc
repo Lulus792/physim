@@ -843,7 +843,7 @@ static bool documentation_activate_link(app *a,size_t index) {
 }
 /* Stable semantic IDs are rebuilt from current content for each key event. */
 enum { DOC_C=1,DOC_PHYSIM,DOC_TOPICS,DOC_CONTENTS,DOC_FILTER,DOC_GROUP,DOC_BACK,DOC_HOME,DOC_WORKSPACE,DOC_SEARCH,DOC_PREVIOUS,DOC_NEXT,DOC_BODY,DOC_FORWARD,DOC_ZOOM_OUT,DOC_ZOOM_RESET,DOC_ZOOM_IN,DOC_NAVIGATION,
-       DOC_CONTEXT,DOC_MODEL_TAB,DOC_EXAMPLE_TAB,DOC_CONTEXT_COPY,DOC_ACTIONS,DOC_FIND_CLOSE,
+       DOC_CONTEXT,DOC_MODEL_TAB,DOC_EXAMPLE_TAB,DOC_CONTEXT_COPY,DOC_ACTIONS,DOC_FIND_CLOSE,DOC_CONTEXT_CODE,
        DOC_TOPIC=10000,DOC_HEADING=20000,DOC_COPY=30000,DOC_LINK=40000,DOC_VISUAL=50000 };
 static int documentation_media_kind(const char *target) {
     if(!strcmp(target,"visuals/workflow.svg"))return 1;
@@ -962,7 +962,10 @@ static unsigned documentation_focus_list(app *a,int *entries) {
     }
     if(!a->doc_context_hidden) {
         entries[count++]=DOC_MODEL_TAB;entries[count++]=DOC_EXAMPLE_TAB;
-        if(a->doc_context_example && documentation_context_code(a))entries[count++]=DOC_CONTEXT_COPY;
+        if(a->doc_context_example && documentation_context_code(a)) {
+            entries[count++]=DOC_CONTEXT_COPY;
+            if(a->doc_context_code_max>0)entries[count++]=DOC_CONTEXT_CODE;
+        }
     }
     entries[count++]=DOC_ACTIONS;
     return count;
@@ -972,7 +975,7 @@ static unsigned documentation_focus_list(app *a,int *entries) {
 static int documentation_focus_region(int focus) {
     if(focus==DOC_NAVIGATION || focus==DOC_C || focus==DOC_PHYSIM || focus==DOC_FILTER || focus==DOC_CONTEXT)return 0;
     if(focus>=DOC_TOPIC && focus<DOC_COPY)return 1;
-    if(focus==DOC_MODEL_TAB || focus==DOC_EXAMPLE_TAB || focus==DOC_CONTEXT_COPY)return 3;
+    if(focus==DOC_MODEL_TAB || focus==DOC_EXAMPLE_TAB || focus==DOC_CONTEXT_COPY || focus==DOC_CONTEXT_CODE)return 3;
     return 2;
 }
 static void documentation_focus_pane(app *a,int direction) {
@@ -1050,6 +1053,18 @@ static bool documentation_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
     int direction=key->key==SDLK_LEFT || key->key==SDLK_UP?-1:key->key==SDLK_RIGHT || key->key==SDLK_DOWN?1:0;
     if(activate && key->repeat)return true;
     int focus=a->doc_focus;
+    if(focus==DOC_CONTEXT_CODE) {
+        if(key->key==SDLK_LSHIFT || key->key==SDLK_RSHIFT)return false;
+        unsigned track=a->doc_track==2;float *x=&a->doc_context_code_x[track];
+        if(key->key==SDLK_LEFT || key->key==SDLK_RIGHT)*x=fmaxf(0,fminf(a->doc_context_code_max,*x+direction*a->doc_context_code_step));
+        else if(key->key==SDLK_HOME)*x=0;
+        else if(key->key==SDLK_END)*x=a->doc_context_code_max;
+        else if(key->key==SDLK_UP || key->key==SDLK_DOWN || key->key==SDLK_PAGEUP || key->key==SDLK_PAGEDOWN) {
+            float delta=key->key==SDLK_PAGEUP?-a->doc_context_content_bounds.h*.7f:key->key==SDLK_PAGEDOWN?a->doc_context_content_bounds.h*.7f:direction*48;
+            a->doc_context_scroll_y[1]=(nk_uint)fmaxf(0,(float)a->doc_context_scroll_y[1]+delta);
+        }
+        return true;
+    }
     if((focus==DOC_MODEL_TAB || focus==DOC_EXAMPLE_TAB) && direction) {
         a->doc_context_example=direction>0;a->doc_focus=direction>0?DOC_EXAMPLE_TAB:DOC_MODEL_TAB;
         a->doc_focus_reveal=true;nk_sdl_accessibility_keyboard_begin(a->doc_ui);return true;
@@ -1126,7 +1141,9 @@ static bool documentation_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
 }
 static void documentation_focus_draw(app *a,int id,struct nk_rect bounds,bool body) {
     struct nk_context *ui=a->doc_ui;
-    if(!(ui->current->layout->flags&NK_WINDOW_ROM) && nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) &&
+    /* The code viewport explicitly takes its keyboard route on pointer input,
+     * allowing Shift+Tab back to Copy after dragging its horizontal scrollbar. */
+    if(id!=DOC_CONTEXT_CODE && !(ui->current->layout->flags&NK_WINDOW_ROM) && nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) &&
        nk_input_is_mouse_hovering_rect(&ui->input,nk_window_get_content_region(ui)) &&
        nk_input_is_mouse_hovering_rect(&ui->input,bounds)){a->doc_keyboard=false;a->doc_focus=id;}
     if(!a->doc_keyboard || a->doc_focus!=id)return;

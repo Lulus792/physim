@@ -6,7 +6,14 @@ Dieser Bericht ergänzt die historische Abnahme in [NATIVE-H.md](NATIVE-H.md).
 
 ## Aktuelle Nachprüfung vom 21. Oktober 2026
 
-Der aktuelle [SVG-Schriftabgleich](SVG-LABELS.md) ersetzt die normalen UI-Zeichen
+Die aktuelle [Codevorschau](CODE-PREVIEW.md) erhält Quellbytes, Leerraum und
+lange Tokens gemäß `pre-wrap` und macht horizontalen Überlauf per Tastatur,
+Rad und Ziehen erreichbar. Native Eingabefälle, Unicode-Konformität,
+Windows-Hostfokus und Release-Lizenzkopien sind getrennt nachgewiesen.
+112 vollständige native H-Bildpaare bleiben unverändert; eine vollständige
+Browser-/H-Abnahme ist das nicht.
+
+Der vorhergehende [SVG-Schriftabgleich](SVG-LABELS.md) ersetzt die normalen UI-Zeichen
 im Kontextmodell durch echte kursive Serifen: unter Windows Georgia, unter Linux
 eine verfügbare kursive Serifenschrift, offline Noto Serif Italic. Der Bericht
 trennt die ausgeführten Quellen-/Bedarfs-/Dichte-/UI-Prüfungen, Sanitizer-Gegenfälle

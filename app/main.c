@@ -2,6 +2,7 @@
 #include "autosave.h"
 #include "batch.h"
 #include "documentation.h"
+#include "code_preview.h"
 #include "library.h"
 #include "run_import.h"
 #include "run_details.h"
@@ -398,6 +399,12 @@ typedef struct {
     struct nk_rect doc_section_caption_bounds;
     struct nk_rect doc_left_slot,doc_article_slot,doc_right_slot,doc_context_toggle_bounds;
     char *doc_context_source;
+    ps_code_preview *doc_context_code_layout;
+    const void *doc_context_code_font;
+    float doc_context_code_width,doc_context_code_font_height,doc_context_code_density;
+    struct nk_rect doc_context_code_bounds,doc_context_code_bar;
+    float doc_context_code_x[2],doc_context_code_max,doc_context_code_step;
+    ps_ui_scrollbar_drag doc_context_code_drag;
     int doc_context_source_topic,doc_context_source_track;
     int doc_focus;
     struct nk_rect doc_focus_bounds,doc_anchor_bounds,doc_body_bounds,doc_navigation_bounds;

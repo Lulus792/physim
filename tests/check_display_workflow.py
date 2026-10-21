@@ -64,6 +64,7 @@ SIMPLE["documentation_keyboard_22"] = (["--workspace-state-test", "{directory}",
 SIMPLE["documentation_keyboard"] = (["--workspace-state-test", "{directory}", "docs-keyboard"], 75, True)
 SIMPLE["documentation_panes"] = (["--workspace-state-test", "{directory}", "docs-keyboard-panes"], 75, True)
 SIMPLE["documentation_scroll"] = (["--workspace-state-test", "{directory}", "docs-keyboard-scroll"], 75, True)
+SIMPLE["documentation_context_code"] = (["--workspace-state-test", "{directory}", "docs-keyboard-context-code"], 75, True)
 SIMPLE["documentation_history"] = (["--workspace-state-test", "{directory}", "docs-keyboard-history"], 90, True)
 SIMPLE["documentation_zoom"] = (["--workspace-state-test", "{directory}", "docs-keyboard-zoom"], 90, True)
 SIMPLE["documentation_density"] = (["--workspace-state-test", "{directory}", "docs-keyboard-density"], 120, True)
@@ -1917,7 +1918,15 @@ def main():
         arguments, timeout, _ = SIMPLE[args.case]
         paths = dict(directory=str(directory), root=str(flow.root))
         flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)
-        if args.case == "documentation_scroll":
+        if args.case == "documentation_context_code":
+            output=flow.steps[-1]['stdout']
+            rows=re.findall(r'DOCUMENTATION CODE PREVIEW: case=(\d+) track=(\d+) ui=(\d+) editor=(\d+) theme=(\d+) bytes=(\d+) rows=(\d+) max=([\d.]+) keys=1 wheel=1 shift-wheel=1 drag=1 clipboard-and-editors=(\d) synthetic=(\d)',output)
+            require([int(row[0]) for row in rows]==list(range(7)) and all(row[-2]=='1' and float(row[7])>0 for row in rows),'Missing real context-code input matrix')
+            require(rows[-1][-1]=='1' and int(rows[-1][5])>6000,'Missing complete long-token UTF8 countercase')
+            for case in range(7):
+                for state in ('start','end','drag'):require((directory/f'docs-code-{case}-{state}.bmp').is_file(),'Missing actual code preview capture')
+            require('DOCUMENTATION CODE PREVIEW SELF-TEST: PASSED' in output,'Missing actual context-code result')
+        elif args.case == "documentation_scroll":
             output=flow.steps[-1]['stdout']
             require('DOCUMENTATION SCROLL SELF-TEST: PASSED' in output,'Missing native scroll completion')
             for label in ('GEOMETRY','END','CASE'):

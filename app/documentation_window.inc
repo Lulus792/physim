@@ -3,7 +3,11 @@
 /* Independent native window: its input, fonts and GL resources belong to this viewer. */
 static void documentation_window_destroy(app *a) {
     for(unsigned i=0;i<2;i++){ps_ui_font_pairs_destroy(a->doc_font_pairs[i]);a->doc_font_pairs[i]=NULL;}
+    ps_code_preview_destroy(a->doc_context_code_layout);a->doc_context_code_layout=NULL;
     free(a->doc_context_source);a->doc_context_source=NULL;
+    a->doc_context_code_bounds=a->doc_context_code_bar=nk_rect(0,0,0,0);
+    a->doc_context_code_x[0]=a->doc_context_code_x[1]=a->doc_context_code_max=0;
+    memset(&a->doc_context_code_drag,0,sizeof a->doc_context_code_drag);
     for (int i = 0; i < DOCUMENTATION_TOPIC_COUNT; i++) {
         free(documentation_index[i]);
         documentation_index[i] = NULL;

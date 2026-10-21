@@ -171,6 +171,15 @@ assert dialogs no longer prevent a caller from retaining its prior font atlas.
 The real F1 density workflow injects a failing candidate and continues with
 the live atlas. Invalid API precondition assertions remain separate.
 
+## F1-Codevorschau
+
+Die native Codevorschau verwendet die unveränderte Zeilenumbruch-Teilmenge von
+libunibreak 8.0, fest auf `28a2756b864c343f438cd22537d49d394d4666a5`.
+[Herkunft, Dateihashes und Lizenzen](libunibreak-8.0/README.md) sind offline
+enthalten. Die zlib/libpng-Lizenz und die Unicode-Datennotiz werden in SDKs
+mitgeliefert. Unicode-Umbruchmöglichkeiten werden mit Physims eigenem
+`pre-wrap`-Layout kombiniert; das ist keine Browser- oder Shaping-Engine.
+
 ## F1-Formelsatz
 
 Die gesetzten Formel-Assets verwenden MathJax und MathJax-NewCM 4.1.3.

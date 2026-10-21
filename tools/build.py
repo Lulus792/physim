@@ -24,7 +24,8 @@ WINDOWS = sys.platform == "win32"
 MAC = sys.platform == "darwin"
 CORE = "core memory array string_view hashmap math data run_stream run_index snapshot analysis scene numerics units series report report_export mechanics contact_world box_contacts collision measurement thermodynamics electromagnetism waves optics fluid properties".split()
 LANGUAGE = "lexer parser checker emitter builtins".split()
-APP = "model_values source_outline completion compiler_diagnostic profiling accessibility accessibility_native accessibility_atspi main timeline docking layout_catalog channel_units run_import ui_backend ui_sdl ui_geometry graphics documentation library run_details preferences workspace_state workspace_catalog workspace_tree plot_view report_image png".split()
+APP = "model_values source_outline code_preview completion compiler_diagnostic profiling accessibility accessibility_native accessibility_atspi main timeline docking layout_catalog channel_units run_import ui_backend ui_sdl ui_geometry graphics documentation library run_details preferences workspace_state workspace_catalog workspace_tree plot_view report_image png".split()
+LINEBREAK = [f"third_party/libunibreak-8.0/{name}.c" for name in "linebreak linebreakdata linebreakdef eastasianwidthdef unibreakbase unibreakdef".split()]
 PROJECT = "project_file text_document autosave parameter_catalog".split()
 ZLIB = "adler32 crc32 deflate trees zutil uncompr inflate inftrees inffast".split()
 EXAMPLES = "pendulum projectile collision box_floor spring uncertain_projectile box_collision buoyancy ccd_events".split()
@@ -432,7 +433,7 @@ class Builder:
             project = self.archive("physim-project", [f"app/{name}.c" for name in PROJECT])
             libraries["project"] = project
             products.append(self.executable("physim-build", ["app/build_main.c"], [project, platform, core], sdl=True))
-            products.append(self.executable("physim", [f"app/{name}.c" for name in APP],
+            products.append(self.executable("physim", [f"app/{name}.c" for name in APP]+LINEBREAK,
                             [project, batch, platform, language, zlib, core], sdl=True,
                             defines=("Z_PREFIX", f'PS_SOURCE_DIR="{ROOT.as_posix()}"')))
             products.append(self.runtime)
@@ -503,6 +504,8 @@ class Builder:
         (staging / "licenses").mkdir()
         shutil.copytree(ROOT / "third_party/fonts",staging / "third_party/fonts")
         for source, name in (("third_party/Nuklear-LICENSE", "Nuklear-LICENSE"),
+                             ("third_party/libunibreak-8.0/LICENCE", "libunibreak-LICENCE.txt"),
+                             ("third_party/libunibreak-8.0/UNICODE-LICENSE.txt", "libunibreak-Unicode-LICENSE.txt"),
                              ("third_party/zlib-1.3.2/LICENSE", "zlib-LICENSE.txt"),
                              ("third_party/SDL3-LICENSE.txt", "SDL3-LICENSE.txt"),
                              ("third_party/README.md", "Dependencies.md")):

@@ -1090,7 +1090,9 @@ static void documentation_detail_test_frame(app *a,int *stage,int *code,const ch
 #include "documentation_h_tests.inc"
 #include "documentation_pane_tests.inc"
 #include "documentation_scroll_tests.inc"
+#include "documentation_code_preview_tests.inc"
 static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strcmp(mode,"docs-keyboard-context-code")){documentation_code_preview_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-scroll")){documentation_scroll_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-panes")){documentation_pane_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-h")){documentation_h_test_frame(a,stage,code,capture);return;}

@@ -342,6 +342,39 @@ nk_bool ps_ui_slider_named(struct nk_context *ctx,const char *name,float minimum
     if(accessibility_emit(ctx,name,5,bounds,false,NULL,false,range)){*value=(float)range[0];changed=nk_true;}
     return changed;
 }
+nk_bool ps_ui_range_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,float *value,float maximum,float increment) {
+    if(!ctx || !value || !isfinite(*value) || !isfinite(maximum) || maximum<=0 || !isfinite(increment) || increment<=0)return nk_false;
+    double range[]={*value,0,maximum,increment};
+    if(accessibility_emit(ctx,name,5,bounds,false,NULL,false,range)){*value=(float)range[0];return nk_true;}
+    return nk_false;
+}
+nk_bool ps_ui_horizontal_scrollbar_at(struct nk_context *ctx,struct nk_rect r,float *value,float maximum,float page,ps_ui_scrollbar_drag *drag,bool input_enabled) {
+    if(!ctx || !ctx->current || !value || !drag || !isfinite(r.x) || !isfinite(r.y) || !isfinite(r.w) || !isfinite(r.h) ||
+       r.w<=0 || r.h<=0 || !isfinite(*value) || !isfinite(maximum) || maximum<=0 || !isfinite(page) || page<=0 || !isfinite(maximum+page))return nk_false;
+    float before=*value;*value=fmaxf(0,fminf(maximum,*value));
+    struct nk_rect clip=ctx->current->layout->clip;
+    bool visible=r.x<clip.x+clip.w && r.x+r.w>clip.x && r.y<clip.y+clip.h && r.y+r.h>clip.y;
+    bool enabled=input_enabled && visible && !(ctx->current->layout->flags&NK_WINDOW_ROM) && !ctx->current->widgets_disabled;
+    struct nk_input *input=&ctx->input;
+    float thumb=fminf(r.w,fmaxf(18,r.w*page/(maximum+page))),travel=r.w-thumb;
+    struct nk_rect cursor=nk_rect(r.x+(travel>0?travel*(*value/maximum):0),r.y,thumb,r.h);
+    if(!enabled || !nk_input_is_mouse_down(input,NK_BUTTON_LEFT))drag->active=false;
+    if(enabled && nk_input_is_mouse_pressed(input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(input,r)) {
+        if(nk_input_is_mouse_hovering_rect(input,cursor)) {
+            drag->active=true;drag->pointer=input->mouse.pos.x;drag->value=*value;
+        } else *value=fmaxf(0,fminf(maximum,*value+(input->mouse.pos.x<cursor.x?-page:page)));
+    }
+    if(drag->active && travel>0)*value=fmaxf(0,fminf(maximum,drag->value+(input->mouse.pos.x-drag->pointer)*maximum/travel));
+    cursor.x=r.x+(travel>0?travel*(*value/maximum):0);
+    nk_flags state=drag->active?NK_WIDGET_STATE_ACTIVE:nk_input_is_mouse_hovering_rect(input,r)?NK_WIDGET_STATE_HOVERED:0;
+    if(visible) {
+        const struct nk_style_scrollbar *style=&ctx->style.scrollh;struct nk_command_buffer *canvas=nk_window_get_canvas(ctx);
+        if(style->draw_begin)style->draw_begin(canvas,style->userdata);
+        nk_draw_scrollbar(canvas,state,style,&r,&cursor);
+        if(style->draw_end)style->draw_end(canvas,style->userdata);
+    }
+    return before!=*value;
+}
 nk_bool ps_ui_option_label(struct nk_context *ctx,const char *group,const char *text,nk_bool active) {
     if(!ctx)return active;
     struct nk_rect bounds=nk_widget_bounds(ctx);

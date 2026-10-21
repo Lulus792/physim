@@ -17,7 +17,12 @@ Der [Werkbank-Kontext](WORKBENCH-CONTEXT.md) führt den aktuellen Abgleich der
 gefüllten API-Karte, dokumentierter Beispiele und des Protokollkopfs fort.
 Der [Folgeabgleich der Kontextspalte](WORKBENCH-CONTEXT-FLOW.md) ergänzt volle
 Breite, CSS-Zeilenboxen, Gliederungsdetails und Scrollzugang bei kurzen Fenstern.
-Der aktuelle [F1-SVG-Schriftabgleich](../f1-layouts/SVG-LABELS.md) ergänzt echte
+Die aktuelle [F1-Codevorschau](../f1-layouts/CODE-PREVIEW.md) erhält lange Tokens,
+Leerraum und die vollständigen Quellbytes. Horizontaler Tastatur-/Rad-/Ziehzugriff,
+Unicode-Konformität, Windows-Hostfokus und Lizenzkopien sind separat geprüft.
+112 vollständige native H-Bildpaare bleiben unverändert; die vollständige
+Designabnahme bleibt offen.
+Der vorhergehende [F1-SVG-Schriftabgleich](../f1-layouts/SVG-LABELS.md) ergänzt echte
 kursive Serifen im Modell samt Offline-Font, überprüften Lebenszeiten und
 nativen Vergleichsbildern. Er belegt keine vollständige H-Gleichheit.
 Der vorhergehende [F1-Navigations-/Kontextabgleich](../f1-layouts/NAV-CONTEXT.md)

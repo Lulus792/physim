@@ -320,6 +320,9 @@ static const char *documentation_context_code(app *a) {
     const documentation_context *context=documentation_context_for(a);
     if(!context)return NULL;
     if(!a->doc_context_source || a->doc_context_source_topic!=a->doc_topic || a->doc_context_source_track!=a->doc_track) {
+        ps_code_preview_destroy(a->doc_context_code_layout);a->doc_context_code_layout=NULL;
+        a->doc_context_code_drag.active=false;
+        if(a->doc_context_source_topic!=a->doc_topic)a->doc_context_code_x[0]=a->doc_context_code_x[1]=0;
         free(a->doc_context_source);char path[4096];size_t size;
         join(path,sizeof path,a->root,context->source[a->doc_track==2]);
         a->doc_context_source=load_utf8_text_limit(path,&size,PS_DOC_MAX_CODE_BYTES);
@@ -327,6 +330,7 @@ static const char *documentation_context_code(app *a) {
     }
     return a->doc_context_source;
 }
+#include "documentation_code_preview.inc"
 static struct nk_color documentation_context_svg_color(app *a,int red,int green,int blue) {
     if(a->preferences.theme==PS_THEME_HIGH_CONTRAST)return UI_COLOR(doc_text);
     if(a->preferences.theme==PS_THEME_DARK) {
@@ -423,6 +427,11 @@ static void documentation_context_view(app *a) {
     struct nk_rect next=nk_widget_bounds(ui),clip=nk_window_get_content_region(ui);
     ps_ui_row_exact_dynamic(ui,fmaxf(20,clip.y+clip.h-next.y),1);
     a->doc_context_content_bounds=nk_widget_bounds(ui);
+    if(a->doc_context_example && a->doc_context_code_max>0 && !a->doc_actions_open &&
+       ((SDL_GetModState()&SDL_KMOD_SHIFT) || nk_input_is_key_down(&ui->input,NK_KEY_SHIFT)) && nk_input_is_mouse_hovering_rect(&ui->input,a->doc_context_code_bounds) &&
+       !(a->doc_find_open && nk_input_is_mouse_hovering_rect(&ui->input,a->doc_find_bounds))) {
+        ui->input.mouse.scroll_delta.x+=ui->input.mouse.scroll_delta.y;ui->input.mouse.scroll_delta.y=0;
+    }
     unsigned tab=a->doc_context_example?1:0;int w,h;SDL_GetWindowSize(a->doc_window,&w,&h);(void)h;
     nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(w<=900?13:18,21));
     if(documentation_scroll_begin(a,&a->doc_context_scroll_x[tab],&a->doc_context_scroll_y[tab],"context-content")) {
@@ -437,6 +446,7 @@ static void documentation_context_content(app *a) {
     a->doc_context_title_bounds=a->doc_context_figure_bounds=a->doc_context_table_bounds=a->doc_context_table_caption_bounds=
         a->doc_context_notice_bounds=a->doc_context_source_bounds=nk_rect(0,0,0,0);
     a->doc_context_head_bounds=a->doc_context_copy_bounds=a->doc_context_head_label_bounds=nk_rect(0,0,0,0);
+    a->doc_context_code_bounds=a->doc_context_code_bar=nk_rect(0,0,0,0);a->doc_context_code_max=0;
     a->doc_context_table_rows=0;
     a->doc_context_title_bounds=documentation_h_text_row(a,DOC_TYPE_CONTEXT_TITLE,
         context?(a->doc_context_example?context->title:"Das Versuchsmodell"):
@@ -475,27 +485,7 @@ static void documentation_context_content(app *a) {
                 "Kopieren",8,head_font,nk_rgba(0,0,0,0),UI_COLOR(doc_text));
         }
         documentation_focus_draw(a,DOC_CONTEXT_COPY,button,false);
-        /* Keep the complete real source and its original clipboard bytes. The
-         * narrow native preview wraps source lines without removing content. */
-        const struct nk_user_font *font=documentation_type_font(a,DOC_TYPE_CONTEXT_CODE);
-        float line=font->height/a->doc_type_em[DOC_TYPE_CONTEXT_CODE]*1.75f;
-        ps_ui_row_exact_dynamic(ui,15,1);struct nk_rect pad;nk_widget(&pad,ui);
-        nk_fill_rect(canvas,pad,0,UI_COLOR(edit));
-        const char *at=code;
-        while(*at) {
-            size_t length,used=documentation_line(font,at,strlen(at),ui->current->layout->bounds.w-22,&length);
-            char text[4096];size_t n=length<sizeof text-1?length:sizeof text-1;
-            memcpy(text,at,n);text[n]=0;
-            ps_ui_row_exact_dynamic(ui,line,1);struct nk_rect r;visible=nk_widget(&r,ui);
-            nk_fill_rect(canvas,r,0,UI_COLOR(edit));
-            nk_fill_rect(canvas,nk_rect(r.x,r.y,1,r.h),0,UI_COLOR(divider));
-            nk_fill_rect(canvas,nk_rect(r.x+r.w-1,r.y,1,r.h),0,UI_COLOR(divider));
-            ps_ui_accessibility_label(ui,nk_rect(r.x+11,r.y,r.w-22,r.h),text);
-            if(visible!=NK_WIDGET_INVALID)documentation_h_text_draw(a,font,text,nk_rect(r.x+11,r.y,r.w-22,r.h),line,UI_COLOR(code_text));
-            at+=used;
-        }
-        ps_ui_row_exact_dynamic(ui,15,1);nk_widget(&pad,ui);nk_fill_rect(canvas,pad,0,UI_COLOR(edit));
-        nk_fill_rect(canvas,nk_rect(pad.x,pad.y+pad.h-1,pad.w,1),0,UI_COLOR(divider));
+        documentation_context_code_view(a,code);
         a->doc_context_source_bounds=documentation_h_text_row(a,DOC_TYPE_SOURCE,context->source[a->doc_track==2],1.7f,0,10,10,true);
         return;
     }
