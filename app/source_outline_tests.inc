@@ -28,7 +28,8 @@ static void outline_test_frame(app *a,const char *mode,int *stage,int *code,cons
         wait=0;break;
     case 1:
         if(wait++<3)return;
-        ok=edit && completion_test_equal(edit,outline_test_source(language)) && a->outline.status==PS_OUTLINE_OK && a->outline.count==2 && a->outline_bounds[1].w>0;
+        ok=edit && completion_test_equal(edit,outline_test_source(language)) && a->outline.status==PS_OUTLINE_OK && a->outline.count==2 && a->outline_bounds[1].w>0 &&
+            ps_ui_font_has_glyph(&a->workbench_fonts[11],0x192) && ps_ui_font_has_glyph(&a->workbench_fonts[11],0x2261);
         if(ok) {
             if(target)ok=nk_sdl_accessibility_request_focus(a->ui,NULL,"derivative");
             else test_mouse(a,a->outline_bounds[1],true);

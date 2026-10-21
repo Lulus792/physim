@@ -459,6 +459,16 @@ bool nk_sdl_accessibility_has_focus(struct nk_context *ctx) {
  SDL_LockMutex(sdl->accessibility_mutex);
  bool focused=sdl->accessibility->focused_id!=0;SDL_UnlockMutex(sdl->accessibility_mutex);return focused;
 }
+bool nk_sdl_accessibility_focus_in(struct nk_context *ctx,struct nk_rect bounds) {
+ if(!ctx || !ctx->userdata.ptr || bounds.w<=0 || bounds.h<=0)return false;
+ struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
+ SDL_LockMutex(sdl->accessibility_mutex);
+ const ps_a11y_model *m=sdl->accessibility;const ps_a11y_node *node=ps_a11y_find(m,m->focused_id);
+ bool focused=!m->suspended && m->keyboard_focus && node && node->focused && node->focusable && node->enabled &&
+  node->bounds[0]>=bounds.x-.5f && node->bounds[1]>=bounds.y-.5f &&
+  node->bounds[0]+node->bounds[2]<=bounds.x+bounds.w+.5f && node->bounds[1]+node->bounds[3]<=bounds.y+bounds.h+.5f;
+ SDL_UnlockMutex(sdl->accessibility_mutex);return focused;
+}
 bool nk_sdl_accessibility_toggle_state(struct nk_context *ctx,const char *label,bool *enabled,bool *checked) {
     if(!ctx || !ctx->userdata.ptr || !label || !enabled || !checked)return false;
     struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;

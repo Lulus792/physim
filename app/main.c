@@ -131,7 +131,7 @@ typedef struct {
 typedef struct {
     struct nk_context *ui;
     const struct nk_user_font *font_ui, *font_code, *font_title;
-    struct nk_user_font workbench_fonts[11]; /* UI roles 0–6; API code/label/body/name 7–10. */
+    struct nk_user_font workbench_fonts[12]; /* UI 0–6, API 7–10, outline code 11. */
     struct nk_user_font laboratory_title_font;
     struct nk_user_font laboratory_measurement_font;
     struct nk_user_font workspace_status_font;
@@ -331,6 +331,8 @@ typedef struct {
     struct nk_rect api_card_bounds,api_card_action_bounds;
     struct nk_rect api_card_arguments_bounds;
     float api_card_natural_height,api_card_measured_body_height;
+    float workbench_context_expected_height,workbench_context_measured_height;
+    bool workbench_context_scrollbar;
     char api_reference_name[128],api_reference_path[256];
     nk_uint api_reference_scroll_x,api_reference_scroll_y;
     struct nk_rect api_reference_bounds,api_reference_close_bounds,api_reference_handbook_bounds,api_reference_button_bounds,completion_reference_bounds;
@@ -3022,9 +3024,9 @@ static void channel_units_start(app *a);
 // clang-format on
 static struct nk_font *system_font_sampling(struct nk_font_atlas *atlas,const char *root,float size,bool code,bool title,
                                            unsigned char horizontal,unsigned char vertical) {
-    static const nk_rune ui_ranges[] = {0x20,0x17f,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
+    static const nk_rune ui_ranges[] = {0x20,0x17f,0x192,0x192,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
                                       0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x2c7c,0x2c7c,0};
-    static const nk_rune code_ranges[] = {0x20,0x17f,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
+    static const nk_rune code_ranges[] = {0x20,0x17f,0x192,0x192,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
                                         0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x2c7c,0x2c7c,0};
     struct nk_font_config config = nk_font_config(size);
     config.range = code ? code_ranges : ui_ranges;
@@ -3065,7 +3067,7 @@ static struct nk_font *system_font_sampling(struct nk_font_atlas *atlas,const ch
     if(!font)return NULL;
     /* Offline fallback covers our text ranges, phonetic modifiers, diagrams and
      * emoji. Add only glyphs absent from earlier sources, keeping the atlas small. */
-    static const nk_rune fallback_ranges[]={0x20,0x17f,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
+    static const nk_rune fallback_ranges[]={0x20,0x17f,0x192,0x192,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
         0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x2603,0x2603,0x2c7c,0x2c7c,0x1f30d,0x1f30d,0x1f600,0x1f600,0};
     static const char *const files[]={"NotoSans-Bold.ttf","NotoSans.ttf","NotoSansMono.ttf","NotoSansMath-Regular.ttf","NotoSansSymbols2-Regular.ttf","NotoEmoji.ttf"};
     for(size_t i=0;i<sizeof files/sizeof files[0];i++) {
@@ -3950,6 +3952,7 @@ int main(int argc, char **argv) {
             if(event_window==a->window && e.type==SDL_EVENT_TEXT_INPUT)a->completion_typed=true;
             if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && e.key.key==SDLK_TAB)a->outline_keyboard=false;
             if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && (analysis_plot_resize_key(a,&e.key) || laboratory_resize_key(a,&e.key) || dock_resize_key(a,&e.key)))continue;
+            if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && workbench_context_key(a,a->ui,&e.key,false))continue;
             if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && editor_search_key(a,&e.key))continue;
             if(event_window==a->window && (e.type==SDL_EVENT_WINDOW_FOCUS_LOST || e.type==SDL_EVENT_WINDOW_RESIZED)) {
                 if(a->panel_pull)panel_pull_cancel(a);

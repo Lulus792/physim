@@ -151,6 +151,7 @@ static bool panel_window_event(app *a,SDL_Event *event,SDL_Window *window) {
         }
         /* Component keys include Shift=40 px and Enter=reset. The generic
          * range handler would otherwise consume them as a one-step adjustment. */
+        if(i==PS_DOCK_INSPECTOR && event->type==SDL_EVENT_KEY_DOWN && workbench_context_key(a,p->ui,&event->key,true))return true;
         if(nk_sdl_accessibility_event(p->ui,event))return true;
         if(i==PS_DOCK_WORKSPACE) {
             int tab=a->tab;struct nk_context *ui=a->ui;a->tab=p->tab;a->ui=p->ui;

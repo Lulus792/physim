@@ -1,5 +1,8 @@
 # Werkbank: API-Karte und Protokollkopf
 
+Nachfolgender Stand: [Kontextmaße, Schriftlaufweite und Scrollzugang](WORKBENCH-CONTEXT-FLOW.md).
+Die nachstehenden Bilder und Prüfdaten bleiben der historische Stand 47.
+
 Fortsetzung des nativen Referenzabgleichs vom 21. Oktober 2026, auf Grundlage
 von `6d07783`. Dies ist ein weiterer Teilstand, keine vollständige Designabnahme.
 Maßgeblich bleiben die unveränderten `develop-light.png`, `develop-dark.png`

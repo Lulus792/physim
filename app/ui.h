@@ -78,6 +78,8 @@ bool nk_sdl_accessibility_focus(struct nk_context *ctx,const char *group,const c
 bool nk_sdl_accessibility_request_focus(struct nk_context *ctx,const char *group,const char *label);
 bool nk_sdl_accessibility_event(struct nk_context *ctx,const SDL_Event *event);
 bool nk_sdl_accessibility_is_focused(struct nk_context *ctx,const char *group,const char *label);
+/* Read the published focused target inside logical bounds, without changing it. */
+bool nk_sdl_accessibility_focus_in(struct nk_context *ctx,struct nk_rect bounds);
 /* Read the published, grouped choice state without scheduling an action. */
 bool nk_sdl_accessibility_choice_state(struct nk_context *ctx,const char *group,const char *label,bool *selected);
 bool nk_sdl_accessibility_toggle_state(struct nk_context *ctx,const char *label,bool *enabled,bool *checked);

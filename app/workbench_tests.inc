@@ -107,11 +107,38 @@ static void workbench_test_frame(app *a,const char *mode,int *stage,int *code,co
         }
         if(a->preferences.ui_size==16 && !strstr(mode,"narrow")) {
             struct nk_rect pane=a->dock_panels[PS_DOCK_INSPECTOR],environment=a->workbench_environment_bounds;
-            ok=ok && environment.h>0 && environment.y>=pane.y && environment.y+environment.h<=pane.y+pane.h-4;
+            struct nk_window *owner=nk_window_find(a->ui,dock_windows[PS_DOCK_INSPECTOR]);
+            ok=ok && environment.h>0 && owner;
+            if(a->workbench_context_scrollbar) {
+                /* The reference keeps the card's CSS height in a short window.
+                 * Prove the environment through the actual outer scroll path. */
+                ok=ok && !(owner->flags&NK_WINDOW_NO_SCROLLBAR);
+                printf("WORKBENCH ENVIRONMENT NEEDS SCROLL: %.1f/%.1f within %.1f/%.1f\n",environment.y,environment.y+environment.h,pane.y,pane.y+pane.h);
+                if(!ok)break;
+                wheel_wait=0;test_plot_wheel(a,pane.x+pane.w-14,pane.y+200,-12);*stage=83;return;
+            }
+            ok=ok && environment.y>=pane.y && environment.y+environment.h<=pane.y+pane.h-4;
             printf("WORKBENCH ENVIRONMENT: %.1f/%.1f within %.1f/%.1f visible=%d\n",environment.y,environment.y+environment.h,pane.y,pane.y+pane.h,ok);
         }
         *capture=strstr(mode,"light")?"workbench-light.bmp":"workbench-dark.bmp";
         if(!ok)break;
+        if(strstr(mode,"visual"))a->quitting=true;
+        else {wheel_wait=0;test_plot_wheel(a,a->source_editor_bounds.x+20,a->source_editor_bounds.y+200,-2);*stage=50;return;}
+        break;
+    case 83: {
+        if(wheel_wait++<2)return;
+        struct nk_rect pane=a->dock_panels[PS_DOCK_INSPECTOR],environment=a->workbench_environment_bounds;
+        struct nk_window *owner=nk_window_find(a->ui,dock_windows[PS_DOCK_INSPECTOR]);
+        ok=owner && owner->scrollbar.y>0 && environment.h>0 && environment.y>=pane.y && environment.y+environment.h<=pane.y+pane.h-4 &&
+            workbench_test_rect(editor_rect,a->source_editor_bounds);
+        printf("WORKBENCH ENVIRONMENT SCROLLED: top=%.1f bottom=%.1f outer-offset=%u visible=%d\n",environment.y,environment.y+environment.h,owner?owner->scrollbar.y:0,ok);
+        *capture="workbench-environment-scrolled.bmp";
+        if(ok)owner->scrollbar.y=0;
+        wheel_wait=0;break;
+    }
+    case 84:
+        if(wheel_wait++<2)return;
+        *capture=strstr(mode,"light")?"workbench-light.bmp":"workbench-dark.bmp";
         if(strstr(mode,"visual"))a->quitting=true;
         else {wheel_wait=0;test_plot_wheel(a,a->source_editor_bounds.x+20,a->source_editor_bounds.y+200,-2);*stage=50;return;}
         break;

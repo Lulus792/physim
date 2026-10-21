@@ -1,0 +1,180 @@
+{
+  "scope": "Compare shared native chrome with the selected PNG, without altering either image.\n\nThis verifies a bounded part of the design: client size, the three tab rectangles,\nthe two horizontal boundaries and five semantic surfaces. The optional workbench\ncheck also compares side and log/status boundaries. It is not a whole-app\nscore. Content, fonts, interactions and the rest of each workspace need their own\nproofs. Pillow is required, as for the existing workbench visual checker.",
+  "reference": "D:\\Physim\\docs\\visuals\\unified-workspace\\develop-light.png",
+  "native": "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\linux-workbench-light.png",
+  "sha256": [
+    "7a3e95e92f1e59dd61d0b0cff58e0787ab805996bcd2a88846200e1511441d0f",
+    "af221ae42ec354d0f201de31b4c11320e83e97ca14b9b90bc268e7a12b296d09"
+  ],
+  "checks": [
+    {
+      "name": "actual client size",
+      "expected": [
+        1440,
+        1000
+      ],
+      "actual": [
+        1440,
+        1000
+      ],
+      "passed": true
+    },
+    {
+      "name": "menu surface",
+      "expected": [
+        237,
+        239,
+        243
+      ],
+      "actual": [
+        237,
+        239,
+        243
+      ],
+      "passed": true
+    },
+    {
+      "name": "path surface",
+      "expected": [
+        246,
+        247,
+        249
+      ],
+      "actual": [
+        246,
+        247,
+        249
+      ],
+      "passed": true
+    },
+    {
+      "name": "path left inset",
+      "expected": [
+        246,
+        247,
+        249
+      ],
+      "actual": [
+        246,
+        247,
+        249
+      ],
+      "passed": true
+    },
+    {
+      "name": "workspace surface",
+      "expected": [
+        246,
+        247,
+        249
+      ],
+      "actual": [
+        246,
+        247,
+        249
+      ],
+      "passed": true
+    },
+    {
+      "name": "footer surface",
+      "expected": [
+        237,
+        239,
+        243
+      ],
+      "actual": [
+        237,
+        239,
+        243
+      ],
+      "passed": true
+    },
+    {
+      "name": "selected tab coverage at y=43",
+      "expected": [
+        [
+          10,
+          475
+        ]
+      ],
+      "actual": [
+        [
+          10,
+          475
+        ]
+      ],
+      "passed": true
+    },
+    {
+      "name": "selected tab coverage at y=50",
+      "expected": [
+        [
+          8,
+          477
+        ]
+      ],
+      "actual": [
+        [
+          8,
+          477
+        ]
+      ],
+      "passed": true
+    },
+    {
+      "name": "selected tab coverage at y=69",
+      "expected": [
+        [
+          9,
+          476
+        ]
+      ],
+      "actual": [
+        [
+          9,
+          476
+        ]
+      ],
+      "passed": true
+    },
+    {
+      "name": "full one-pixel boundary at y=78",
+      "expected": 1440,
+      "actual": 1440,
+      "passed": true
+    },
+    {
+      "name": "full one-pixel boundary at y=117",
+      "expected": 1440,
+      "actual": 1440,
+      "passed": true
+    },
+    {
+      "name": "workspace and code-context boundaries",
+      "expected": [
+        217,
+        1185
+      ],
+      "actual": [
+        217,
+        1185
+      ],
+      "passed": true
+    },
+    {
+      "name": "protocol, body and editor-status boundaries",
+      "expected": [
+        820,
+        861,
+        948
+      ],
+      "actual": [
+        820,
+        861,
+        948
+      ],
+      "passed": true
+    }
+  ],
+  "passed": true
+}

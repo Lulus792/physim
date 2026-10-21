@@ -1,0 +1,2665 @@
+{
+  "scope": "Native workbench context flow, exact straight card borders, outline glyphs, keyboard/mouse scroll and resize restoration. Partial fidelity only.",
+  "created_utc": "2026-10-21T01:32:56.987295+00:00",
+  "source_52": {
+    "base": "6f527f6578400b9be5a6f25eeacfdc2314a6b738",
+    "source_sha256_lf": {
+      "app/design_ui.inc": "44a97be7b323d8ccb0208afcba69a998aade07902f477d6cf26fb6c878c2eb1f",
+      "app/docking_ui.inc": "db470ed74b46b4a7d0eee0b5c12428c249768aa9d81475cf48e71048324ba35b",
+      "app/main.c": "e034e76d86fdc962384a72ad4cf6431cd2605031d93a9443aee033086200d61b",
+      "app/panel_windows.inc": "4a38f644a77403cd673618818466e5229cebf598b843fd50821b696ab22350ef",
+      "app/plot_tests.inc": "3c730aa3c5fd5a87444973c5cb1734c909286970421f6c8bd5b2a73294a15b61",
+      "app/plot_ui.inc": "8b933b3bb27c9d53be932f1e49ee949bab21a5a587c85f5f5e0fbf801b7b9815",
+      "app/report_details_tests.inc": "eff52c88636b5db6f371a9151975d88624e3d315c4e11e41a0ff55495bada6dc",
+      "app/run_details_tests.inc": "ad34f630ee605abfb78245d3701611a3c6d26f15eae85cab2b32a5e0b6447f35",
+      "app/toolbar_ui.inc": "619f88a4dd1457f233d39de85fa23d033c4ebed6b754435a3632a33c40a7edf8",
+      "app/workspace_tests.inc": "f8a8746e28859bb1b50b50393a1ccd6d907ec26fa52224ecc947c804c04c9803",
+      "tests/check_display_workflow.py": "032ef0a805604073cef12fd651c24c29974a3e245b162750669924be4eec8855",
+      "tests/native_integration_cases.json": "313973c14d62da5c19bfaa8aa933c110adccd20f1d2e9b22d4d8399490c3f9d2",
+      "app/analysis_layout.inc": "74a9cb6997e41b6ae2c597494bc870f3a9b9de768de9d4ad1b7eff9d01deb48d",
+      "app/analysis_ui.inc": "b64974dd94bdb9466114b182bd5a1b7867828a8fb6a3ebf571fb5172230224ec",
+      "app/analysis_workspace_tests.inc": "8a4bb2a826946de53257654760f97f702d6f1d87a19cc47f5d1f458172ade8a2",
+      "app/preferences.c": "e2df26e2c2a0d054dfa1e4dd4b500bb0cf996debe7f861b05f3db2479088c360",
+      "app/layout_catalog.c": "5004ab858261242185d86389d5de0f39a75f9a0fd3e627a8a38c991371a16c01",
+      "app/settings_ui.inc": "9c2363eeb3762256f90edae7a8fa1446d6ebd0d645b9277bf60c777590534203",
+      "tests/test_preferences.c": "54d372d06bfe74b2b1f71ff0d6bb9785ed5dce9a8e12391ee0a8b21f746643b8",
+      "tests/test_layout_catalog.c": "21077c44d0181840841f351ef46ff219e454b596a768b64d8b71d30ba610d36c",
+      "app/analysis_resize.inc": "8ccc8dfa92d58f910d4ee9cacc04e96a93be01b12af2b603368205b00726eb88",
+      "app/settings_tests.inc": "5202dece8488dba847ce67e3347ce67be17365f7a1fdde65c98bb62296dc2497",
+      "app/layout_ui.inc": "be51a9d8fe2d91391248416a942f8bfd2e3ba5dd3b4a75d12883140930b1613f",
+      "app/workbench_tests.inc": "1bc37a41bb50b47972ad64f37f31be77519b53ac30695a7bc791d729d999cd69",
+      "app/channel_units_ui.inc": "dbe90c981c123bac6afaac9e85c9c977cc6581c1d01b84f77c531bad59955a8a",
+      "app/channel_units_tests.inc": "7f71e05664cfefab012fc0363622541e72b890ea4a48b8e02d6f40f0b93cfdff",
+      "app/analysis_units_tests.inc": "5b299a53559c760f332b5c66c9ece3b352f9ad1c8928f842d55311a6763f4afd",
+      "app/ui.h": "57ffc97cc23e533e61d9fd2a294a616488ab4056c583530ab341204386f5de4e",
+      "app/ui_backend.c": "3cd43242181d0c392b0827711eed9ac014f63ffc0c969e0c649040f6141dcc9c",
+      "app/ui_sdl.c": "82b2023360a8ddef2da8068bba38514b340a69068c13b6060f2d16bdf4e51dbf",
+      "app/toolbar_tests.inc": "16f96ab0fc7088cd766a634c94ee44d2ae97313f3018aadeb2603fe2d265259c",
+      "app/keyboard_menu_tests.inc": "bdb2b255ce95d0dcb85992d8ada3d57c7729cd49fa36dfb7ee202f8748cde682",
+      "app/shell_theme_tests.inc": "4b7452b932bbf9b6b09c681ed418d81de92854eaa11b9fceed61ca0c1084534a",
+      "tests/check_unified_chrome.py": "2ec9fb6b1a54566cd69754bfd07f248daaf0a42d7135e7355812683422157b3e",
+      "app/editor_search_ui.inc": "31ea341e322ef983a2d7e1f4319511fb1632169b545daa87f807988d9fe799f0",
+      "app/documentation.h": "31805cf0517336ef59ed915c4a57d19b6a132467d6e73274f3908a9881f4e69c",
+      "app/documentation.c": "62c802e4572e3ef988f7b4121541865ccd2d7968000cb2074ce7d93500ed5fa1",
+      "app/api_reference_ui.inc": "b2ca3cd9215b9b79ed3b826cb33443a7c4f5dfe2eb37f0b320fd983696a5c19d",
+      "app/api_reference_tests.inc": "53e5373f929589b68064b8e0369e90f07eb4284429ea5bb640b662da16ea66bb",
+      "app/workbench_api_ui.inc": "3fa1f492af3ae84ee335b42757730f67ce4ec6c79094bfe170901474f86ca669",
+      "docs/reference/experiment.md": "549238a1d1c61fd3e9b743cdae5cd9b5469c80f1da55e8492fb4258799ffd0d1",
+      "docs/reference/language-library.md": "3b77d247f174cc7970c8e049a1ee43bcd0cfae534d5d1ba66c4b0070a1d27cc3",
+      "tests/test_api_reference.c": "ade8ed122d85a690018f5b8c60a55d8c3a2ad936a0581d82bb67fc537da8c3cd",
+      "app/api_card_tests.inc": "e02e56843d3c719a004f5bb5a328b69a3ea9f7bac50866248718c6023e2f262c",
+      "app/source_outline_ui.inc": "c3ce8ceaf0827360d0620bdbc2bcd9196e63faff5cf8c5f2923e953ebac62bc4",
+      "app/workbench_text_ui.inc": "70755ae951d2fd3fdfddc37691ab8ec6dba33a81ab9670b72f8ef3af91174ba6",
+      "app/workbench_context_ui.inc": "79efa3ea59f163452c49c18f14b08a360acf0be1b89bb1c1e40686b2001a8f1a",
+      "app/source_outline_tests.inc": "7b8f0af18999e192d90d8db2eed179ca789921eee0af19796b2cf8c53b9ab952",
+      "tests/check_workbench_context.py": "bfa23b2e0d1fdd915cd15a7df988eaf2720dad0a41b1c90a5d7befb45eb9041c"
+    },
+    "foreign_sha256_lf": {
+      ".github/workflows/linux-ui-sanitizers.yml": "80e5b0d925f75ddce52260e8812cfb02d0e5b6e4ccfef03ea86deea75c446085",
+      ".github/workflows/macos-f1-accessibility.yml": "c37bfbd09cdfb0d26922cf0fbd8527f2be70161dd113809435732b6150fd5650",
+      "app/accessibility_atspi.c": "fb32ff39647be57cdaa2c02a10d4319ecef2186747a1edc2338bb397e5668b0f",
+      "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+      "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+      "tests/check_documentation_orca.py": "e38b255bbd7bb12787e50cd78d4b32ed8f985ce60746afde2702285e22a728d5",
+      "tests/test_accessibility_tables_atspi.py": "623f5152d85dabe778728fedc9f999b93e3bfaef6d8d82679d6444675ad54d2f",
+      "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+      "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+      "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+    }
+  },
+  "environments": {
+    "windows": "Windows 11 Pro 10.0.26200, MSVC ASan, native SDL windows",
+    "linux": "Alpine-Dev / Alpine Linux 3.24.2, native SDL x11/OpenGL under owned xvfb-run -a, ASan/UBSan; API repeated with Openbox 3.6.1"
+  },
+  "tests": {
+    "windows": {
+      "run": "run-gd_xcb6d",
+      "result_path": "build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\results.json",
+      "results_sha256": "d04934a40b02e7a2e8f1526b3ef96182c13063e25f4ff52803943b5569b367d6",
+      "binary": "build\\native\\Design-analysis\\bin\\physim.exe",
+      "binary_sha256": "7cf7ef311579ffeaf5adeab7f2a26ae2525fb8d7162255bd6f7253cc82d37772",
+      "groups": [
+        {
+          "name": "source_outline_workflow",
+          "run": "run-gd_xcb6d",
+          "status": "passed",
+          "seconds": 30.984,
+          "app_steps_sha256": "5142bd7e84b6ca3725436a515bf8678b889a70f1656135493986dd21e5437578",
+          "modes": [
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\source_outline_workflow\\files ä\\workflow ä\\c-dark",
+                "outline-c-dark"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "OUTLINE SELF-TEST: PASSED"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\source_outline_workflow\\files ä\\workflow ä\\phys-light",
+                "outline-phys-light"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "OUTLINE SELF-TEST: PASSED"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\source_outline_workflow\\files ä\\workflow ä\\c-light-large",
+                "outline-c-light-large"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "OUTLINE SELF-TEST: PASSED"
+              ],
+              "failure_stderr": ""
+            }
+          ]
+        },
+        {
+          "name": "workbench_workflow",
+          "run": "run-gd_xcb6d",
+          "status": "passed",
+          "seconds": 88.5,
+          "app_steps_sha256": "7fa6555811ccd23c25c3b00419fa31b1c4fe54fb7619edc79a4b6ea7bf5dd536",
+          "modes": [
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\workbench_workflow\\files ä\\workflow ä\\dark",
+                "workbench-dark"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "WORKBENCH ENVIRONMENT NEEDS SCROLL: 756.0/837.0 within 118.0/838.0",
+                "WORKBENCH ENVIRONMENT SCROLLED: top=739.0 bottom=820.0 outer-offset=17 visible=1"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\workbench_workflow\\files ä\\workflow ä\\light",
+                "workbench-light"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "WORKBENCH ENVIRONMENT NEEDS SCROLL: 756.0/837.0 within 118.0/838.0",
+                "WORKBENCH ENVIRONMENT SCROLLED: top=739.0 bottom=820.0 outer-offset=17 visible=1"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\workbench_workflow\\files ä\\workflow ä\\dark-narrow-visual",
+                "workbench-dark-narrow-visual"
+              ],
+              "exit_code": 0,
+              "observations": [],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\workbench_workflow\\files ä\\workflow ä\\light-large-visual",
+                "workbench-light-large-visual"
+              ],
+              "exit_code": 0,
+              "observations": [],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\workbench_workflow\\files ä\\workflow ä\\light-large-narrow-visual",
+                "workbench-light-large-narrow-visual"
+              ],
+              "exit_code": 0,
+              "observations": [],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\workbench_workflow\\files ä\\workflow ä\\dark-opaque-visual",
+                "workbench-dark-opaque-visual"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "WORKBENCH ENVIRONMENT NEEDS SCROLL: 756.0/837.0 within 118.0/838.0",
+                "WORKBENCH ENVIRONMENT SCROLLED: top=739.0 bottom=820.0 outer-offset=17 visible=1"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\workbench_workflow\\files ä\\workflow ä\\contrast-visual",
+                "workbench-contrast-visual"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "WORKBENCH ENVIRONMENT NEEDS SCROLL: 756.0/837.0 within 118.0/838.0",
+                "WORKBENCH ENVIRONMENT SCROLLED: top=739.0 bottom=820.0 outer-offset=17 visible=1"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\workbench_workflow\\files ä\\workflow ä\\dark-unified-visual",
+                "workbench-dark-unified-visual"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "WORKBENCH ENVIRONMENT: 756.0/837.0 within 118.0/972.0 visible=1"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\workbench_workflow\\files ä\\workflow ä\\light-unified-visual",
+                "workbench-light-unified-visual"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "WORKBENCH ENVIRONMENT: 756.0/837.0 within 118.0/972.0 visible=1"
+              ],
+              "failure_stderr": ""
+            }
+          ]
+        },
+        {
+          "name": "api_reference_workflow",
+          "run": "run-gd_xcb6d",
+          "status": "passed",
+          "seconds": 20.75,
+          "app_steps_sha256": "edeef93b9a5fc60ce33f4d631e5923ff25c90cf274617096a25d5382089e5cda",
+          "modes": [
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\api_reference_workflow\\files ä\\workflow ä\\c",
+                "api-reference-c"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "API REFERENCE SELF-TEST: PASSED"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\api_reference_workflow\\files ä\\workflow ä\\phys",
+                "api-reference-phys"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "API REFERENCE SELF-TEST: PASSED"
+              ],
+              "failure_stderr": ""
+            }
+          ]
+        },
+        {
+          "name": "api_card_workflow",
+          "run": "run-gd_xcb6d",
+          "status": "failed",
+          "seconds": 213.813,
+          "app_steps_sha256": "98f106582b7058098b9de07fb6e83f69af8d269e5f835d244d59ef865997f2a7",
+          "modes": [
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\api_card_workflow\\files ä\\workflow ä\\c-dark",
+                "api-card-c-dark"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "API CARD BODY: natural=236.000 measured=171.000 available=171.000 last-argument=588.000/13.000 action=609.000",
+                "CONTEXT FLOW: expected=697.500 measured=697.500 scroll=0 card-width=222.0",
+                "API CARD CAPTION: 1216.0,431.0,194.0,12.0 inside-card=1",
+                "API CARD GEOMETRY: card=1202.0,417.0,222.0,236.0 action=1216.0,609.0,194.0,30.0 ui=16 detached=0",
+                "API CARD BUILD/RUN: language=C rows=32 exact-time-channel=1",
+                "CONTEXT KEYBOARD: detached=0 page=down offset=170 source-preserved=1",
+                "CONTEXT KEYBOARD: detached=0 page=up offset=0 restored=1",
+                "CONTEXT RESIZE RESTORED: width=222.0 offset=0 no-scrollbar=1 source-and-analysis-preserved=1",
+                "API CARD SELF-TEST: PASSED"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\api_card_workflow\\files ä\\workflow ä\\phys-light",
+                "api-card-phys-light"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "API CARD BODY: natural=270.000 measured=205.000 available=205.000 last-argument=622.000/13.000 action=643.000",
+                "CONTEXT FLOW: expected=731.500 measured=731.500 scroll=0 card-width=222.0",
+                "API CARD CAPTION: 1216.0,431.0,194.0,12.0 inside-card=1",
+                "API CARD GEOMETRY: card=1202.0,417.0,222.0,270.0 action=1216.0,643.0,194.0,30.0 ui=16 detached=0",
+                "API CARD BUILD/RUN: language=Physim rows=22 exact-time-channel=1",
+                "CONTEXT KEYBOARD: detached=0 page=down offset=204 source-preserved=1",
+                "CONTEXT KEYBOARD: detached=0 page=up offset=0 restored=1",
+                "CONTEXT RESIZE RESTORED: width=222.0 offset=0 no-scrollbar=1 source-and-analysis-preserved=1",
+                "API CARD SELF-TEST: PASSED"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\api_card_workflow\\files ä\\workflow ä\\c-light-large-narrow",
+                "api-card-c-light-large-narrow"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "API CARD BODY: natural=384.125 measured=305.250 available=305.250 last-argument=613.000/18.000 action=642.125",
+                "CONTEXT FLOW: expected=1031.062 measured=1031.062 scroll=1 card-width=215.0",
+                "API CARD CAPTION: 856.0,327.0,187.0,16.0 inside-card=1",
+                "API CARD GEOMETRY: card=842.0,313.2,215.0,384.1 action=856.0,642.1,187.0,41.2 ui=22 detached=0",
+                "API CARD BUILD/RUN: language=C rows=29 exact-time-channel=1",
+                "API CARD SELF-TEST: PASSED"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\api_card_workflow\\files ä\\workflow ä\\c-light-detached",
+                "api-card-c-light-detached"
+              ],
+              "exit_code": 1,
+              "observations": [],
+              "failure_stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 495660.951258\nAPP TEST TRACE: main font sources ready 495661.098485\nAPP TEST TRACE: main atlas bake seconds=3.180616\nAPP TEST TRACE: main atlas validation/upload seconds=0.012867\nAPP TEST TRACE: main fonts ready 495664.301272\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=4716274400\nWorkspace self-test timeout: api-card-c-light-detached after 120.054 wall seconds\nFirst workflow failure at stage 0 (next 0): Projekt geladen. Build kompiliert die lokalen Quelldateien. (tab=0, selected=0, samples=0, report=0, query=)\nWorkflow failed at stage 0: Projekt gespeichert. (tab=0, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\n"
+            }
+          ]
+        }
+      ]
+    },
+    "linux": {
+      "run": "run-aw1jw1fr",
+      "result_path": "build\\native\\Design-analysis-linux\\test-results\\run-aw1jw1fr\\results.json",
+      "results_sha256": "e3bc1c4864c5db9d437afee12eb87af8525fb89b054b40e0017d52fae6b3d80d",
+      "binary": "build\\native\\Design-analysis-linux\\bin\\physim",
+      "binary_sha256": "ad29d01f95df64c02552a883c588fa0c208469b9e6ef4f846c8f68caa8f71fa2",
+      "groups": [
+        {
+          "name": "source_outline_workflow",
+          "run": "run-aw1jw1fr",
+          "status": "passed",
+          "seconds": 30.992,
+          "app_steps_sha256": "066dc96fa99ef2331c992b503757b8e0bd6736bbd4cdd3f92faaf09fa7803fd2",
+          "modes": [
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-aw1jw1fr/source_outline_workflow/files ä/workflow ä/c-dark",
+                "outline-c-dark"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "OUTLINE SELF-TEST: PASSED"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-aw1jw1fr/source_outline_workflow/files ä/workflow ä/phys-light",
+                "outline-phys-light"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "OUTLINE SELF-TEST: PASSED"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-aw1jw1fr/source_outline_workflow/files ä/workflow ä/c-light-large",
+                "outline-c-light-large"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "OUTLINE SELF-TEST: PASSED"
+              ],
+              "failure_stderr": ""
+            }
+          ]
+        },
+        {
+          "name": "workbench_workflow",
+          "run": "run-aw1jw1fr",
+          "status": "passed",
+          "seconds": 92.428,
+          "app_steps_sha256": "1fc807b964b914e28c8b37303404fd57c1d224a1bd67420060804034e28ddd34",
+          "modes": [
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-aw1jw1fr/workbench_workflow/files ä/workflow ä/dark",
+                "workbench-dark"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "WORKBENCH ENVIRONMENT NEEDS SCROLL: 756.0/837.0 within 118.0/838.0",
+                "WORKBENCH ENVIRONMENT SCROLLED: top=739.0 bottom=820.0 outer-offset=17 visible=1"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-aw1jw1fr/workbench_workflow/files ä/workflow ä/light",
+                "workbench-light"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "WORKBENCH ENVIRONMENT NEEDS SCROLL: 756.0/837.0 within 118.0/838.0",
+                "WORKBENCH ENVIRONMENT SCROLLED: top=739.0 bottom=820.0 outer-offset=17 visible=1"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-aw1jw1fr/workbench_workflow/files ä/workflow ä/dark-narrow-visual",
+                "workbench-dark-narrow-visual"
+              ],
+              "exit_code": 0,
+              "observations": [],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-aw1jw1fr/workbench_workflow/files ä/workflow ä/light-large-visual",
+                "workbench-light-large-visual"
+              ],
+              "exit_code": 0,
+              "observations": [],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-aw1jw1fr/workbench_workflow/files ä/workflow ä/light-large-narrow-visual",
+                "workbench-light-large-narrow-visual"
+              ],
+              "exit_code": 0,
+              "observations": [],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-aw1jw1fr/workbench_workflow/files ä/workflow ä/dark-opaque-visual",
+                "workbench-dark-opaque-visual"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "WORKBENCH ENVIRONMENT NEEDS SCROLL: 756.0/837.0 within 118.0/838.0",
+                "WORKBENCH ENVIRONMENT SCROLLED: top=739.0 bottom=820.0 outer-offset=17 visible=1"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-aw1jw1fr/workbench_workflow/files ä/workflow ä/contrast-visual",
+                "workbench-contrast-visual"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "WORKBENCH ENVIRONMENT NEEDS SCROLL: 756.0/837.0 within 118.0/838.0",
+                "WORKBENCH ENVIRONMENT SCROLLED: top=739.0 bottom=820.0 outer-offset=17 visible=1"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-aw1jw1fr/workbench_workflow/files ä/workflow ä/dark-unified-visual",
+                "workbench-dark-unified-visual"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "WORKBENCH ENVIRONMENT: 756.0/837.0 within 118.0/972.0 visible=1"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-aw1jw1fr/workbench_workflow/files ä/workflow ä/light-unified-visual",
+                "workbench-light-unified-visual"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "WORKBENCH ENVIRONMENT: 756.0/837.0 within 118.0/972.0 visible=1"
+              ],
+              "failure_stderr": ""
+            }
+          ]
+        },
+        {
+          "name": "api_reference_workflow",
+          "run": "run-aw1jw1fr",
+          "status": "passed",
+          "seconds": 18.457,
+          "app_steps_sha256": "e745a95bde4e7f8d923567cf39a31772493c56ba6e4a4efb05615ff3092965ae",
+          "modes": [
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-aw1jw1fr/api_reference_workflow/files ä/workflow ä/c",
+                "api-reference-c"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "API REFERENCE SELF-TEST: PASSED"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-aw1jw1fr/api_reference_workflow/files ä/workflow ä/phys",
+                "api-reference-phys"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "API REFERENCE SELF-TEST: PASSED"
+              ],
+              "failure_stderr": ""
+            }
+          ]
+        },
+        {
+          "name": "api_card_workflow",
+          "run": "run-637lhdpn",
+          "status": "passed",
+          "seconds": 189.893,
+          "app_steps_sha256": "52310ca029fd7cb4eeb6235281a2a4c1240f65a4a3049e7b93cd4e96b11bfb9e",
+          "modes": [
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-637lhdpn/api_card_workflow/files ä/workflow ä/c-dark",
+                "api-card-c-dark"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "API CARD BODY: natural=236.000 measured=171.000 available=171.000 last-argument=588.000/13.000 action=609.000",
+                "CONTEXT FLOW: expected=697.500 measured=697.500 scroll=0 card-width=222.0",
+                "API CARD CAPTION: 1216.0,431.0,194.0,12.0 inside-card=1",
+                "API CARD GEOMETRY: card=1202.0,417.0,222.0,236.0 action=1216.0,609.0,194.0,30.0 ui=16 detached=0",
+                "API CARD BUILD/RUN: language=C rows=59 exact-time-channel=1",
+                "CONTEXT KEYBOARD: detached=0 page=down offset=177 source-preserved=1",
+                "CONTEXT KEYBOARD: detached=0 page=up offset=0 restored=1",
+                "CONTEXT RESIZE RESTORED: width=222.0 offset=0 no-scrollbar=1 source-and-analysis-preserved=1",
+                "API CARD SELF-TEST: PASSED"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-637lhdpn/api_card_workflow/files ä/workflow ä/phys-light",
+                "api-card-phys-light"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "API CARD BODY: natural=270.000 measured=205.000 available=205.000 last-argument=622.000/13.000 action=643.000",
+                "CONTEXT FLOW: expected=731.500 measured=731.500 scroll=0 card-width=222.0",
+                "API CARD CAPTION: 1216.0,431.0,194.0,12.0 inside-card=1",
+                "API CARD GEOMETRY: card=1202.0,417.0,222.0,270.0 action=1216.0,643.0,194.0,30.0 ui=16 detached=0",
+                "API CARD BUILD/RUN: language=Physim rows=45 exact-time-channel=1",
+                "CONTEXT KEYBOARD: detached=0 page=down offset=177 source-preserved=1",
+                "CONTEXT KEYBOARD: detached=0 page=up offset=0 restored=1",
+                "CONTEXT RESIZE RESTORED: width=222.0 offset=0 no-scrollbar=1 source-and-analysis-preserved=1",
+                "API CARD SELF-TEST: PASSED"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-637lhdpn/api_card_workflow/files ä/workflow ä/c-light-large-narrow",
+                "api-card-c-light-large-narrow"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "API CARD BODY: natural=400.625 measured=321.750 available=321.750 last-argument=630.000/18.000 action=658.625",
+                "CONTEXT FLOW: expected=1047.562 measured=1047.562 scroll=1 card-width=215.0",
+                "API CARD CAPTION: 856.0,327.0,187.0,33.0 inside-card=1",
+                "API CARD GEOMETRY: card=842.0,313.2,215.0,400.6 action=856.0,658.6,187.0,41.2 ui=22 detached=0",
+                "API CARD BUILD/RUN: language=C rows=30 exact-time-channel=1",
+                "API CARD SELF-TEST: PASSED"
+              ],
+              "failure_stderr": ""
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-637lhdpn/api_card_workflow/files ä/workflow ä/c-light-detached",
+                "api-card-c-light-detached"
+              ],
+              "exit_code": 0,
+              "observations": [
+                "API CARD BODY: natural=219.000 measured=154.000 available=171.000 last-argument=398.000/13.000 action=436.000",
+                "CONTEXT FLOW: expected=664.500 measured=664.500 scroll=1 card-width=420.0",
+                "API CARD CAPTION: 31.0,258.0,392.0,12.0 inside-card=1",
+                "API CARD GEOMETRY: card=17.0,244.0,420.0,236.0 action=31.0,436.0,392.0,30.0 ui=16 detached=1",
+                "CONTEXT KEYBOARD: detached=1 page=down offset=24 source-preserved=1",
+                "CONTEXT KEYBOARD: detached=1 page=up offset=0 restored=1",
+                "API CARD BUILD/RUN: language=C rows=45 exact-time-channel=1",
+                "CONTEXT KEYBOARD: detached=0 page=down offset=177 source-preserved=1",
+                "CONTEXT KEYBOARD: detached=0 page=up offset=0 restored=1",
+                "CONTEXT RESIZE RESTORED: width=222.0 offset=0 no-scrollbar=1 source-and-analysis-preserved=1",
+                "API CARD SELF-TEST: PASSED"
+              ],
+              "failure_stderr": ""
+            }
+          ]
+        }
+      ],
+      "api_repeat_results_sha256": "aa0a2b24f1b2ac6861ee9620c10f8ac23233a092bc22ebbe8c7448759e1333ae",
+      "api_repeat_results_path": "build\\native\\Design-analysis-linux\\test-results\\run-637lhdpn\\results.json",
+      "launcher_content": "#!/bin/sh\nset -eu\ncd /mnt/d/Physim\nif [ \"${1-}\" != inside ]; then\n    exec xvfb-run -a -s '-screen 0 1600x1200x24' sh \"$0\" inside\nfi\nopenbox --sm-disable > build/native/context-linux-52-wm.log 2>&1 &\ncontext_wm_pid=$!\ntrap 'kill \"$context_wm_pid\" 2>/dev/null || :' EXIT HUP INT TERM\npython3 tools/build.py --config Debug --sanitizers --build-dir build/native/Design-analysis-linux --sdl build/native/F1-linux/sdl-install --jobs 4 --test-display --test-filter api_card_workflow > build/native/context-linux-52-api.log 2>&1\n"
+    }
+  },
+  "images": [
+    {
+      "file": "windows-api-c-dark.png",
+      "purpose": "Filled native C API card",
+      "source": "build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\api_card_workflow\\files ä\\workflow ä\\c-dark\\api-card-ready.bmp",
+      "source_sha256": "8df98d3d35e584b44cea981e72762ee169e028d51d8588f66abcbac4168de7ed",
+      "png_sha256": "a4651c8314404d3543dea0d27297b6e25c4a74bdaaf6a91ac2bf4d14616fb6eb",
+      "rgb_sha256": "f99a9b80afb2cf97945547550e39b513dcde630ffcd0c95a417b7c88eaa1a67d",
+      "size": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "windows-api-phys-light.png",
+      "purpose": "Filled native Physim API card",
+      "source": "build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\api_card_workflow\\files ä\\workflow ä\\phys-light\\api-card-ready.bmp",
+      "source_sha256": "e1db94bed384d69648e5a9816703c0d6e239da84fc20a4a197109db6d8d5943e",
+      "png_sha256": "d23494ee624a87788cc36205b070a53150100e123cfc906526e64eb29464e5ba",
+      "rgb_sha256": "726d4723e2cc7904ea9a625c65385d4bac4267e3c42bb16c19c6445185f79420",
+      "size": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "windows-api-large-narrow.png",
+      "purpose": "UI size 22 in a narrow context",
+      "source": "build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\api_card_workflow\\files ä\\workflow ä\\c-light-large-narrow\\api-card-ready.bmp",
+      "source_sha256": "aecfd1ce5cd84d84922868943880e3f19e6ccb146b53fce4ecb65718b503e93a",
+      "png_sha256": "1ef349735b380b4cb1e00462319f82493398355da70bd2188ce6d3b0e4d2ceff",
+      "rgb_sha256": "f7e8ea44ae8cffaab56ebe1e2bf30900e33b2a7a92dd8c7ba0775c9a9b954a73",
+      "size": [
+        1080,
+        740
+      ]
+    },
+    {
+      "file": "windows-context-keyboard.png",
+      "purpose": "PageDown in the short native window",
+      "source": "build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\api_card_workflow\\files ä\\workflow ä\\c-dark\\api-card-context-keyboard.bmp",
+      "source_sha256": "e9f93c53f592ef795d05908c9c25ea833164ae7afdecc0748f2b4c0b490edcff",
+      "png_sha256": "242eab92c7ce997322b1f2c2a19e83eef4f9ad3d89afe8708f6e5527d418a416",
+      "rgb_sha256": "80c1ba12982182b4a7d4bd12868c3d3eab736ef05e09daa164da3579a1e1a557",
+      "size": [
+        1080,
+        740
+      ]
+    },
+    {
+      "file": "windows-context-restored.png",
+      "purpose": "1440x1000 restored without stale scroll offset",
+      "source": "build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\api_card_workflow\\files ä\\workflow ä\\c-dark\\api-card-resized-back.bmp",
+      "source_sha256": "2a0cb84b8ba1e0af5ce39fc985393512a94236e030b570fb5cd6b797430fbdf4",
+      "png_sha256": "820862082117b50d0ee48338eaca665ba07e6f6db21ee229df7d93744ee3a4ca",
+      "rgb_sha256": "55f83c5bbfb414f8438729bfa14da3a97a3c78463e76d9fcf4f598f0ede5c129",
+      "size": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "windows-workbench-dark.png",
+      "purpose": "Native workbench shell and empty context card; unchanged original reference",
+      "source": "build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\workbench_workflow\\files ä\\workflow ä\\dark-unified-visual\\workbench-dark.bmp",
+      "source_sha256": "af7a3a800fc2d48b042d13bef82ad8cced99cc7e753c316872f3b44f504843a0",
+      "png_sha256": "ac039d85fbc477029a0e52ee443672dfda53ba411dd49b7759d42ff6395afe39",
+      "rgb_sha256": "56c041e3ca055005e155df3be9fb69f655f504ea40adcc5528a544a9f6c22abe",
+      "size": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "windows-workbench-light.png",
+      "purpose": "Native workbench shell and empty context card; unchanged original reference",
+      "source": "build\\native\\Design-analysis\\test-results\\run-gd_xcb6d\\workbench_workflow\\files ä\\workflow ä\\light-unified-visual\\workbench-light.bmp",
+      "source_sha256": "e217920684d2c516d04edb0d4044f2785295017cedd09a9069936bec5b36be99",
+      "png_sha256": "9e93d781cedaf257f7a5e6f6bd4a6d971b43ee57c046c9b82348c1905349bae1",
+      "rgb_sha256": "d0f5918e3c2a4b5c89f76f94000326ba9c2c226d3fe4b98b9439a86e934aa82e",
+      "size": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "linux-api-c-dark.png",
+      "purpose": "Filled native C API card",
+      "source": "build\\native\\Design-analysis-linux\\test-results\\run-637lhdpn\\api_card_workflow\\files ä\\workflow ä\\c-dark\\api-card-ready.bmp",
+      "source_sha256": "6aabd0184784b9262681e65e5343a03e5ea45f583f5ec8ce00e5e115d1446170",
+      "png_sha256": "5f9acfc68704d11f4e92ffe01736caceb96c19c8dbca3074c9c5a9488445eb4a",
+      "rgb_sha256": "16c59bb4748f1592277d47e1167e196647e70f93c7f651096f7033b5e82e3684",
+      "size": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "linux-api-phys-light.png",
+      "purpose": "Filled native Physim API card",
+      "source": "build\\native\\Design-analysis-linux\\test-results\\run-637lhdpn\\api_card_workflow\\files ä\\workflow ä\\phys-light\\api-card-ready.bmp",
+      "source_sha256": "746e53db5c5214d0833693df5e7ec099248809c9d3483082b3bd06ac6ef9fb24",
+      "png_sha256": "8e518c0ae30e51a9c90dce5418a35fc2a5357896e93234b220b7c111b145b8b6",
+      "rgb_sha256": "1289c63c94aa5264213db5b9b582377cdee5f1935e56511f972628edd1fb10bc",
+      "size": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "linux-api-large-narrow.png",
+      "purpose": "UI size 22 in a narrow context",
+      "source": "build\\native\\Design-analysis-linux\\test-results\\run-637lhdpn\\api_card_workflow\\files ä\\workflow ä\\c-light-large-narrow\\api-card-ready.bmp",
+      "source_sha256": "516b5a193d9add1f24d9981aabd3f31c059fe1ec1d8518625c9bd77c9d493a29",
+      "png_sha256": "ecad59ced1f7ca1f1f12674fcd52a63ebcf585d75ea4ac0918330d648a3d14a2",
+      "rgb_sha256": "676f9f157030c554436ce4c8b879eb40aa4d5825fb10e58f15be7b13f1da2fb9",
+      "size": [
+        1080,
+        740
+      ]
+    },
+    {
+      "file": "linux-api-detached.png",
+      "purpose": "Separate native context window",
+      "source": "build\\native\\Design-analysis-linux\\test-results\\run-637lhdpn\\api_card_workflow\\files ä\\workflow ä\\c-light-detached\\project\\api-card-detached.bmp",
+      "source_sha256": "bb4d65b590454faf98cdb66082fc76c0d6a9ff56e4a2e129f00f4277af1b1962",
+      "png_sha256": "4d41e12d5a327a532e0cb0592a623cf1b52d8821f39eec893aaa1ef7483e47cf",
+      "rgb_sha256": "f71c067be3ce8571552e58ab0d9eb8ebe7749a76e191404cc19e7a2c034e8d58",
+      "size": [
+        460,
+        640
+      ]
+    },
+    {
+      "file": "linux-api-returned.png",
+      "purpose": "Context restored to its fixed native slot after insertion and Undo/Redo",
+      "source": "build\\native\\Design-analysis-linux\\test-results\\run-637lhdpn\\api_card_workflow\\files ä\\workflow ä\\c-light-detached\\api-card-inserted.bmp",
+      "source_sha256": "d534b9fc9022bed20d3512f8f0e69f468e509cef4d4ef48deaba48e304f3a9a6",
+      "png_sha256": "5df4044742f24476724fb58d90acf24a11384fce1158d3a94f8048ea290157a0",
+      "rgb_sha256": "c6e12847c0f7187ce5fad97f4f282f50ecc76046ecda4ac2a00fa4d7c19b881c",
+      "size": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "linux-context-keyboard.png",
+      "purpose": "PageDown in the short native window",
+      "source": "build\\native\\Design-analysis-linux\\test-results\\run-637lhdpn\\api_card_workflow\\files ä\\workflow ä\\c-dark\\api-card-context-keyboard.bmp",
+      "source_sha256": "e06921b4e9e33876d1f4883e287dc7ec926c979bdfc7b1945d79b8498f4a6b96",
+      "png_sha256": "806e861076041e045675304689b389b75953dab84fc421b637a0bbfecf10bbe9",
+      "rgb_sha256": "1f268d2aacdf9559fcae2f01d816338785884142720156e0e9d952e2fcff3396",
+      "size": [
+        1080,
+        740
+      ]
+    },
+    {
+      "file": "linux-context-restored.png",
+      "purpose": "1440x1000 restored without stale scroll offset",
+      "source": "build\\native\\Design-analysis-linux\\test-results\\run-637lhdpn\\api_card_workflow\\files ä\\workflow ä\\c-dark\\api-card-resized-back.bmp",
+      "source_sha256": "d7238098410b7f0f3983a0c64196246246fdf3f5083a403c9bf956986db1f581",
+      "png_sha256": "c5136b447da829f385a73ae620171f296ccb470a96bd5dc6ea4377009fcb0e0a",
+      "rgb_sha256": "2bfc3193f05f6caf08097d3e8ed4f728523d727067ee5bd43806e0c2886e59a0",
+      "size": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "linux-workbench-dark.png",
+      "purpose": "Native workbench shell and empty context card; unchanged original reference",
+      "source": "build\\native\\Design-analysis-linux\\test-results\\run-aw1jw1fr\\workbench_workflow\\files ä\\workflow ä\\dark-unified-visual\\workbench-dark.bmp",
+      "source_sha256": "9775c5c50d2181c6724950482d6d7f60ebb6eeb14621c25e3fbb46f707a59d91",
+      "png_sha256": "7b516f43bf10018130099881849475c3af6e90b3c6cbdeb6354cad27f97e36d7",
+      "rgb_sha256": "47864e86194faf1db8ba7995b81e4e865510d045836e941311e74920f8d3e2c6",
+      "size": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "linux-workbench-light.png",
+      "purpose": "Native workbench shell and empty context card; unchanged original reference",
+      "source": "build\\native\\Design-analysis-linux\\test-results\\run-aw1jw1fr\\workbench_workflow\\files ä\\workflow ä\\light-unified-visual\\workbench-light.bmp",
+      "source_sha256": "6d57cfd4be9373851e0df6adb05c27e3ae00751d6f9991f6b4c72a09e645088e",
+      "png_sha256": "af221ae42ec354d0f201de31b4c11320e83e97ca14b9b90bc268e7a12b296d09",
+      "rgb_sha256": "30f3ccbef6b91511934aab44260155e4152e1395ada8548adaac2366df4f2ba3",
+      "size": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "file": "counterexample-light-frame-51.png",
+      "purpose": "Previous rounded fills blend the top/bottom border red channel to 191 instead of 190",
+      "source": "build\\native\\context-shell-windows-light-51.png",
+      "source_sha256": "1757e6b6152268d73c757c41ab519dd422aaae59b49ed54a7023ad6dcb028aa2",
+      "png_sha256": "1757e6b6152268d73c757c41ab519dd422aaae59b49ed54a7023ad6dcb028aa2",
+      "rgb_sha256": "07490932dd748f4176e22a099f1cf56d6dae976f002c1347adc73893bf1562bb",
+      "size": [
+        1440,
+        1000
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "name": "windows-card-dark",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\tests\\check_workbench_context.py",
+        "--native",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\windows-workbench-dark.png",
+        "--theme",
+        "dark",
+        "--report",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\windows-card-dark.json",
+        "--match-reference-height"
+      ],
+      "exit_code": 0,
+      "report": "windows-card-dark.json",
+      "sha256": "9df1df2e1eb6aab3998937521fa0586666fe607ecb179b14cbd8f99eb7284043",
+      "passed": true,
+      "checks": [
+        {
+          "name": "actual client size",
+          "passed": true,
+          "reference": [
+            1440,
+            1000
+          ],
+          "native": [
+            1440,
+            1000
+          ]
+        },
+        {
+          "name": "reference card has two straight sides",
+          "passed": true,
+          "reference": 2,
+          "native": 2
+        },
+        {
+          "name": "native sides have the exact reference border color",
+          "passed": true,
+          "reference": 2,
+          "native": 2
+        },
+        {
+          "name": "same card horizontal bounds",
+          "passed": true,
+          "reference": [
+            1202,
+            1423
+          ],
+          "native": [
+            1202,
+            1423
+          ]
+        },
+        {
+          "name": "two native horizontal rules",
+          "passed": true,
+          "reference": 2,
+          "native": 2
+        },
+        {
+          "name": "same card vertical bounds",
+          "passed": true,
+          "reference": [
+            417,
+            652
+          ],
+          "native": [
+            417,
+            652
+          ]
+        }
+      ]
+    },
+    {
+      "name": "windows-chrome-dark",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\tests\\check_unified_chrome.py",
+        "--native",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\windows-workbench-dark.png",
+        "--theme",
+        "dark",
+        "--report",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\windows-chrome-dark.json",
+        "--area",
+        "develop",
+        "--workbench"
+      ],
+      "exit_code": 0,
+      "report": "windows-chrome-dark.json",
+      "sha256": "6193a0d69bab87ece5fc8dcf405fc8bb897e36afda6872ec6b062883fb1a2ac1",
+      "passed": true,
+      "checks": [
+        {
+          "name": "actual client size",
+          "expected": [
+            1440,
+            1000
+          ],
+          "actual": [
+            1440,
+            1000
+          ],
+          "passed": true
+        },
+        {
+          "name": "menu surface",
+          "expected": [
+            37,
+            38,
+            43
+          ],
+          "actual": [
+            37,
+            38,
+            43
+          ],
+          "passed": true
+        },
+        {
+          "name": "path surface",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "path left inset",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "workspace surface",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "footer surface",
+          "expected": [
+            37,
+            38,
+            43
+          ],
+          "actual": [
+            37,
+            38,
+            43
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=43",
+          "expected": [
+            [
+              10,
+              475
+            ]
+          ],
+          "actual": [
+            [
+              10,
+              475
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=50",
+          "expected": [
+            [
+              8,
+              477
+            ]
+          ],
+          "actual": [
+            [
+              8,
+              477
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=69",
+          "expected": [
+            [
+              9,
+              476
+            ]
+          ],
+          "actual": [
+            [
+              9,
+              476
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=78",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=117",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "workspace and code-context boundaries",
+          "expected": [
+            217,
+            1185
+          ],
+          "actual": [
+            217,
+            1185
+          ],
+          "passed": true
+        },
+        {
+          "name": "protocol, body and editor-status boundaries",
+          "expected": [
+            820,
+            861,
+            948
+          ],
+          "actual": [
+            820,
+            861,
+            948
+          ],
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "windows-card-light",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\tests\\check_workbench_context.py",
+        "--native",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\windows-workbench-light.png",
+        "--theme",
+        "light",
+        "--report",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\windows-card-light.json",
+        "--match-reference-height"
+      ],
+      "exit_code": 0,
+      "report": "windows-card-light.json",
+      "sha256": "27e39e708e2a7cb5e89463a5d543b4e7d30149bec96c9c3bbec11e347fe2fa08",
+      "passed": true,
+      "checks": [
+        {
+          "name": "actual client size",
+          "passed": true,
+          "reference": [
+            1440,
+            1000
+          ],
+          "native": [
+            1440,
+            1000
+          ]
+        },
+        {
+          "name": "reference card has two straight sides",
+          "passed": true,
+          "reference": 2,
+          "native": 2
+        },
+        {
+          "name": "native sides have the exact reference border color",
+          "passed": true,
+          "reference": 2,
+          "native": 2
+        },
+        {
+          "name": "same card horizontal bounds",
+          "passed": true,
+          "reference": [
+            1202,
+            1423
+          ],
+          "native": [
+            1202,
+            1423
+          ]
+        },
+        {
+          "name": "two native horizontal rules",
+          "passed": true,
+          "reference": 2,
+          "native": 2
+        },
+        {
+          "name": "same card vertical bounds",
+          "passed": true,
+          "reference": [
+            417,
+            652
+          ],
+          "native": [
+            417,
+            652
+          ]
+        }
+      ]
+    },
+    {
+      "name": "windows-chrome-light",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\tests\\check_unified_chrome.py",
+        "--native",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\windows-workbench-light.png",
+        "--theme",
+        "light",
+        "--report",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\windows-chrome-light.json",
+        "--area",
+        "develop",
+        "--workbench"
+      ],
+      "exit_code": 0,
+      "report": "windows-chrome-light.json",
+      "sha256": "c4322203319434320d10eedb57c228545f21aed56a52950187eda7f309f76078",
+      "passed": true,
+      "checks": [
+        {
+          "name": "actual client size",
+          "expected": [
+            1440,
+            1000
+          ],
+          "actual": [
+            1440,
+            1000
+          ],
+          "passed": true
+        },
+        {
+          "name": "menu surface",
+          "expected": [
+            237,
+            239,
+            243
+          ],
+          "actual": [
+            237,
+            239,
+            243
+          ],
+          "passed": true
+        },
+        {
+          "name": "path surface",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "path left inset",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "workspace surface",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "footer surface",
+          "expected": [
+            237,
+            239,
+            243
+          ],
+          "actual": [
+            237,
+            239,
+            243
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=43",
+          "expected": [
+            [
+              10,
+              475
+            ]
+          ],
+          "actual": [
+            [
+              10,
+              475
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=50",
+          "expected": [
+            [
+              8,
+              477
+            ]
+          ],
+          "actual": [
+            [
+              8,
+              477
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=69",
+          "expected": [
+            [
+              9,
+              476
+            ]
+          ],
+          "actual": [
+            [
+              9,
+              476
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=78",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=117",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "workspace and code-context boundaries",
+          "expected": [
+            217,
+            1185
+          ],
+          "actual": [
+            217,
+            1185
+          ],
+          "passed": true
+        },
+        {
+          "name": "protocol, body and editor-status boundaries",
+          "expected": [
+            820,
+            861,
+            948
+          ],
+          "actual": [
+            820,
+            861,
+            948
+          ],
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "linux-card-dark",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\tests\\check_workbench_context.py",
+        "--native",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\linux-workbench-dark.png",
+        "--theme",
+        "dark",
+        "--report",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\linux-card-dark.json",
+        "--match-reference-height"
+      ],
+      "exit_code": 0,
+      "report": "linux-card-dark.json",
+      "sha256": "551da722dc51e1dd9275a57ca55e00a74339f9f6fba8c72c323e9a4ffea1b6c5",
+      "passed": true,
+      "checks": [
+        {
+          "name": "actual client size",
+          "passed": true,
+          "reference": [
+            1440,
+            1000
+          ],
+          "native": [
+            1440,
+            1000
+          ]
+        },
+        {
+          "name": "reference card has two straight sides",
+          "passed": true,
+          "reference": 2,
+          "native": 2
+        },
+        {
+          "name": "native sides have the exact reference border color",
+          "passed": true,
+          "reference": 2,
+          "native": 2
+        },
+        {
+          "name": "same card horizontal bounds",
+          "passed": true,
+          "reference": [
+            1202,
+            1423
+          ],
+          "native": [
+            1202,
+            1423
+          ]
+        },
+        {
+          "name": "two native horizontal rules",
+          "passed": true,
+          "reference": 2,
+          "native": 2
+        },
+        {
+          "name": "same card vertical bounds",
+          "passed": true,
+          "reference": [
+            417,
+            652
+          ],
+          "native": [
+            417,
+            652
+          ]
+        }
+      ]
+    },
+    {
+      "name": "linux-chrome-dark",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\tests\\check_unified_chrome.py",
+        "--native",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\linux-workbench-dark.png",
+        "--theme",
+        "dark",
+        "--report",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\linux-chrome-dark.json",
+        "--area",
+        "develop",
+        "--workbench"
+      ],
+      "exit_code": 0,
+      "report": "linux-chrome-dark.json",
+      "sha256": "e72a4f4bd742c2c8100018f9fd5c402e2428145af4c5678ede09e202800c215b",
+      "passed": true,
+      "checks": [
+        {
+          "name": "actual client size",
+          "expected": [
+            1440,
+            1000
+          ],
+          "actual": [
+            1440,
+            1000
+          ],
+          "passed": true
+        },
+        {
+          "name": "menu surface",
+          "expected": [
+            37,
+            38,
+            43
+          ],
+          "actual": [
+            37,
+            38,
+            43
+          ],
+          "passed": true
+        },
+        {
+          "name": "path surface",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "path left inset",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "workspace surface",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "footer surface",
+          "expected": [
+            37,
+            38,
+            43
+          ],
+          "actual": [
+            37,
+            38,
+            43
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=43",
+          "expected": [
+            [
+              10,
+              475
+            ]
+          ],
+          "actual": [
+            [
+              10,
+              475
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=50",
+          "expected": [
+            [
+              8,
+              477
+            ]
+          ],
+          "actual": [
+            [
+              8,
+              477
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=69",
+          "expected": [
+            [
+              9,
+              476
+            ]
+          ],
+          "actual": [
+            [
+              9,
+              476
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=78",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=117",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "workspace and code-context boundaries",
+          "expected": [
+            217,
+            1185
+          ],
+          "actual": [
+            217,
+            1185
+          ],
+          "passed": true
+        },
+        {
+          "name": "protocol, body and editor-status boundaries",
+          "expected": [
+            820,
+            861,
+            948
+          ],
+          "actual": [
+            820,
+            861,
+            948
+          ],
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "linux-card-light",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\tests\\check_workbench_context.py",
+        "--native",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\linux-workbench-light.png",
+        "--theme",
+        "light",
+        "--report",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\linux-card-light.json",
+        "--match-reference-height"
+      ],
+      "exit_code": 0,
+      "report": "linux-card-light.json",
+      "sha256": "cf5326baf04f9cf4814e9f997398c3fddc042d9b07148a2f326834b42f10fea3",
+      "passed": true,
+      "checks": [
+        {
+          "name": "actual client size",
+          "passed": true,
+          "reference": [
+            1440,
+            1000
+          ],
+          "native": [
+            1440,
+            1000
+          ]
+        },
+        {
+          "name": "reference card has two straight sides",
+          "passed": true,
+          "reference": 2,
+          "native": 2
+        },
+        {
+          "name": "native sides have the exact reference border color",
+          "passed": true,
+          "reference": 2,
+          "native": 2
+        },
+        {
+          "name": "same card horizontal bounds",
+          "passed": true,
+          "reference": [
+            1202,
+            1423
+          ],
+          "native": [
+            1202,
+            1423
+          ]
+        },
+        {
+          "name": "two native horizontal rules",
+          "passed": true,
+          "reference": 2,
+          "native": 2
+        },
+        {
+          "name": "same card vertical bounds",
+          "passed": true,
+          "reference": [
+            417,
+            652
+          ],
+          "native": [
+            417,
+            652
+          ]
+        }
+      ]
+    },
+    {
+      "name": "linux-chrome-light",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\tests\\check_unified_chrome.py",
+        "--native",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\linux-workbench-light.png",
+        "--theme",
+        "light",
+        "--report",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\linux-chrome-light.json",
+        "--area",
+        "develop",
+        "--workbench"
+      ],
+      "exit_code": 0,
+      "report": "linux-chrome-light.json",
+      "sha256": "8b76909b37d8efb0667248777217adc53e2a209a5fac3c66f7dfcb78d5b16128",
+      "passed": true,
+      "checks": [
+        {
+          "name": "actual client size",
+          "expected": [
+            1440,
+            1000
+          ],
+          "actual": [
+            1440,
+            1000
+          ],
+          "passed": true
+        },
+        {
+          "name": "menu surface",
+          "expected": [
+            237,
+            239,
+            243
+          ],
+          "actual": [
+            237,
+            239,
+            243
+          ],
+          "passed": true
+        },
+        {
+          "name": "path surface",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "path left inset",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "workspace surface",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "footer surface",
+          "expected": [
+            237,
+            239,
+            243
+          ],
+          "actual": [
+            237,
+            239,
+            243
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=43",
+          "expected": [
+            [
+              10,
+              475
+            ]
+          ],
+          "actual": [
+            [
+              10,
+              475
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=50",
+          "expected": [
+            [
+              8,
+              477
+            ]
+          ],
+          "actual": [
+            [
+              8,
+              477
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=69",
+          "expected": [
+            [
+              9,
+              476
+            ]
+          ],
+          "actual": [
+            [
+              9,
+              476
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=78",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=117",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "workspace and code-context boundaries",
+          "expected": [
+            217,
+            1185
+          ],
+          "actual": [
+            217,
+            1185
+          ],
+          "passed": true
+        },
+        {
+          "name": "protocol, body and editor-status boundaries",
+          "expected": [
+            820,
+            861,
+            948
+          ],
+          "actual": [
+            820,
+            861,
+            948
+          ],
+          "passed": true
+        }
+      ]
+    },
+    {
+      "name": "reference-selfcheck-dark",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\tests\\check_workbench_context.py",
+        "--native",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\develop-dark.png",
+        "--theme",
+        "dark",
+        "--report",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\reference-selfcheck-dark.json",
+        "--match-reference-height"
+      ],
+      "exit_code": 0,
+      "report": "reference-selfcheck-dark.json",
+      "sha256": "ef0dbd921a6e8aa543d4059da339e3427703420475198655248e3fa4617a669b",
+      "passed": true,
+      "checks": [
+        {
+          "name": "actual client size",
+          "passed": true,
+          "reference": [
+            1440,
+            1000
+          ],
+          "native": [
+            1440,
+            1000
+          ]
+        },
+        {
+          "name": "reference card has two straight sides",
+          "passed": true,
+          "reference": 2,
+          "native": 2
+        },
+        {
+          "name": "native sides have the exact reference border color",
+          "passed": true,
+          "reference": 2,
+          "native": 2
+        },
+        {
+          "name": "same card horizontal bounds",
+          "passed": true,
+          "reference": [
+            1202,
+            1423
+          ],
+          "native": [
+            1202,
+            1423
+          ]
+        },
+        {
+          "name": "two native horizontal rules",
+          "passed": true,
+          "reference": 2,
+          "native": 2
+        },
+        {
+          "name": "same card vertical bounds",
+          "passed": true,
+          "reference": [
+            417,
+            652
+          ],
+          "native": [
+            417,
+            652
+          ]
+        }
+      ]
+    },
+    {
+      "name": "reference-selfcheck-light",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\tests\\check_workbench_context.py",
+        "--native",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\develop-light.png",
+        "--theme",
+        "light",
+        "--report",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\reference-selfcheck-light.json",
+        "--match-reference-height"
+      ],
+      "exit_code": 0,
+      "report": "reference-selfcheck-light.json",
+      "sha256": "0d9d4a683ac92cce602b2655b8803124d2d182c620a9fb259bd0f721e7064c1a",
+      "passed": true,
+      "checks": [
+        {
+          "name": "actual client size",
+          "passed": true,
+          "reference": [
+            1440,
+            1000
+          ],
+          "native": [
+            1440,
+            1000
+          ]
+        },
+        {
+          "name": "reference card has two straight sides",
+          "passed": true,
+          "reference": 2,
+          "native": 2
+        },
+        {
+          "name": "native sides have the exact reference border color",
+          "passed": true,
+          "reference": 2,
+          "native": 2
+        },
+        {
+          "name": "same card horizontal bounds",
+          "passed": true,
+          "reference": [
+            1202,
+            1423
+          ],
+          "native": [
+            1202,
+            1423
+          ]
+        },
+        {
+          "name": "two native horizontal rules",
+          "passed": true,
+          "reference": 2,
+          "native": 2
+        },
+        {
+          "name": "same card vertical bounds",
+          "passed": true,
+          "reference": [
+            417,
+            652
+          ],
+          "native": [
+            417,
+            652
+          ]
+        }
+      ]
+    },
+    {
+      "name": "counterexample-light-frame-51",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\tests\\check_workbench_context.py",
+        "--native",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\counterexample-light-frame-51.png",
+        "--theme",
+        "light",
+        "--report",
+        "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\counterexample-light-frame-51.json",
+        "--match-reference-height"
+      ],
+      "exit_code": 1,
+      "report": "counterexample-light-frame-51.json",
+      "sha256": "2936a0eaf7b3c6a656d5d4fe4c9691e39b4e4596564ed30ba91f46da05f96fa3",
+      "passed": false,
+      "checks": [
+        {
+          "name": "actual client size",
+          "passed": true,
+          "reference": [
+            1440,
+            1000
+          ],
+          "native": [
+            1440,
+            1000
+          ]
+        },
+        {
+          "name": "reference card has two straight sides",
+          "passed": true,
+          "reference": 2,
+          "native": 2
+        },
+        {
+          "name": "native sides have the exact reference border color",
+          "passed": true,
+          "reference": 2,
+          "native": 2
+        },
+        {
+          "name": "same card horizontal bounds",
+          "passed": true,
+          "reference": [
+            1202,
+            1423
+          ],
+          "native": [
+            1202,
+            1423
+          ]
+        },
+        {
+          "name": "two native horizontal rules",
+          "passed": false,
+          "reference": 2,
+          "native": 0
+        },
+        {
+          "name": "same card vertical bounds",
+          "passed": false,
+          "reference": [
+            417,
+            652
+          ],
+          "native": []
+        }
+      ]
+    }
+  ],
+  "historical_attempts": [
+    {
+      "name": "windows-50",
+      "source_snapshot": 50,
+      "result_path": "build\\native\\Design-analysis\\test-results\\run-9muwmqeo\\results.json",
+      "sha256": "f9bdbc1efd9c636ac3be4b39b47908d7345aec49a9abb3bb1d74e5d9b65b2f9b",
+      "groups": [
+        {
+          "name": "source_outline_workflow",
+          "status": "passed",
+          "reason": ""
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "passed",
+          "reason": ""
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed",
+          "reason": ""
+        },
+        {
+          "name": "api_card_workflow",
+          "status": "passed",
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "name": "linux-50",
+      "source_snapshot": 50,
+      "result_path": "build\\native\\Design-analysis-linux\\test-results\\run-656m5zdp\\results.json",
+      "sha256": "a18dd725304687e603b2e6b044b512e54e9087e573eecefe3fd6e9eda8df58c6",
+      "groups": [
+        {
+          "name": "source_outline_workflow",
+          "status": "passed",
+          "reason": ""
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "passed",
+          "reason": ""
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed",
+          "reason": ""
+        },
+        {
+          "name": "api_card_workflow",
+          "status": "passed",
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "name": "windows-51",
+      "source_snapshot": 51,
+      "result_path": "build\\native\\Design-analysis\\test-results\\run-k7nbrmfs\\results.json",
+      "sha256": "4fe5d540def89091dfb5720c9061ed4ba8caedb5fafc2f5bf19bd6ecee73d605",
+      "groups": [
+        {
+          "name": "source_outline_workflow",
+          "status": "passed",
+          "reason": ""
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "passed",
+          "reason": ""
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed",
+          "reason": ""
+        },
+        {
+          "name": "api_card_workflow",
+          "status": "failed",
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 494746.574771\nAPP TEST TRACE: main font sources ready 494746.768254\nAPP TEST TRACE: main atlas bake seconds=8.705239\nAPP TEST TRACE: main atlas validation/upload seconds=0.035043\nAPP TEST TRACE: main fonts ready 494755.518862\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=10606021600\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 489, in run\n    result = subprocess.run(command, cwd=self.work, env=self.env, capture_output=True,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\subprocess.py\", line 550, in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\subprocess.py\", line 1209, in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\subprocess.py\", line 1630, in _communicate\n    raise TimeoutExpired(self.args, orig_timeout)\nsubprocess.TimeoutExpired: Command '['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--workspace-state-test', 'D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\test-results\\\\run-k7nbrmfs\\\\api_card_workflow\\\\files ä\\\\workflow ä\\\\c-dark', 'api-card-c-dark']' timed out after 130 seconds\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 1991, in <module>\n    main()\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 1827, in main\n    SPECIAL[args.case](flow, directory)\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 863, in api_card\n    flow.run(\"--workspace-state-test\",root,\"api-card-\"+variant,timeout=130,marker=\"API CARD SELF-TEST: PASSED\")\n  File \"D:\\Physim/tests/check_display_workflow.py\", line 498, in run\n    raise RuntimeError(f\"App exceeded {timeout} seconds: {command}\") from error\nRuntimeError: App exceeded 130 seconds: ['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--workspace-state-test', 'D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\test-results\\\\run-k7nbrmfs\\\\api_card_workflow\\\\files ä\\\\workflow ä\\\\c-dark', 'api-card-c-dark']\n"
+        }
+      ]
+    },
+    {
+      "name": "linux-51",
+      "source_snapshot": 51,
+      "result_path": "build\\native\\Design-analysis-linux\\test-results\\run-k9xh91mf\\results.json",
+      "sha256": "5c5698c955d1d62921df3915e229fec55f7b454d87dd7e6e732457c53b028c71",
+      "groups": [
+        {
+          "name": "source_outline_workflow",
+          "status": "passed",
+          "reason": ""
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "failed",
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 40800.052096\nAPP TEST TRACE: main font sources ready 40801.388860\nAPP TEST TRACE: main atlas bake seconds=4.690386\nAPP TEST TRACE: main atlas validation/upload seconds=0.036246\nAPP TEST TRACE: main fonts ready 40806.167841\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 1 -> 2, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 2 -> 3, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=53 pending=0 window=2 keyboard=2 ticks=7841917564\nAPP TEST TRACE: stage 3 -> 4, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 4 -> 5, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 5 -> 6, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 6 -> 7, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 7 -> 8, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 8 -> 83, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 83 -> 84, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 84 -> 50, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 50 -> 9, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 9 -> 10, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=67 pending=0 window=2 keyboard=2 ticks=12682680741\nAPP TEST TRACE: stage 10 -> 11, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 11 -> 12, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 12 -> 13, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=43 pending=0 window=2 keyboard=2 ticks=14009469208\nAPP TEST TRACE: stage 13 -> 14, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 14 -> 51, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=43 pending=0 window=2 keyboard=2 ticks=14223895135\nAPP TEST TRACE: stage 51 -> 15, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 15 -> 16, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=14443515556\nAPP TEST TRACE: stage 16 -> 17, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 17 -> 18, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 18 -> 19, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=43 pending=0 window=2 keyboard=2 ticks=15508612235\nAPP TEST TRACE: stage 19 -> 20, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 20 -> 21, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 21 -> 22, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=43 pending=0 window=2 keyboard=2 ticks=16619842646\nAPP TEST TRACE: stage 22 -> 23, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 23 -> 24, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 24 -> 25, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 25 -> 26, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 26 -> 27, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 27 -> 28, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 28 -> 29, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 29 -> 30, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 30 -> 31, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 31 -> 60, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 60 -> 61, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nWORKBENCH DRAG: id=6 rect=214.0/118.0/9.0/720.0 width=218\nAPP TEST TRACE: stage 61 -> 32, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=120 pending=0 window=2 keyboard=2 ticks=18706727921\nAPP TEST TRACE: stage 32 -> 33, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 33 -> 34, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 34 -> 35, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 35 -> 36, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 36 -> 37, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=19464574253\nAPP TEST TRACE: stage 37 -> 38, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 38 -> 39, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 39 -> 40, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 40 -> 70, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nWORKBENCH SEPARATOR WAIT: Codekontext-Breite owner=dock-splitter-4 seq=68/current=69\nAPP TEST TRACE: stage 70 -> 71, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 71 -> 72, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 72 -> 73, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 73 -> 74, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 74 -> 75, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 75 -> 76, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 76 -> 77, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 77 -> 78, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 78 -> 79, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 79 -> 80, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 80 -> 81, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 81 -> 82, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 82 -> 83, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 40822.954100\nAPP TEST TRACE: main font sources ready 40824.443333\nAPP TEST TRACE: main atlas bake seconds=4.561592\nAPP TEST TRACE: main atlas validation/upload seconds=0.037389\nAPP TEST TRACE: main fonts ready 40829.087614\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 1 -> 2, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 2 -> 3, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=53 pending=0 window=2 keyboard=2 ticks=7916291763\nAPP TEST TRACE: stage 3 -> 4, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 4 -> 5, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 5 -> 6, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 6 -> 7, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 7 -> 8, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 8 -> 83, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 83 -> 84, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 84 -> 50, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 50 -> 9, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 9 -> 10, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=67 pending=0 window=2 keyboard=2 ticks=11844965064\nAPP TEST TRACE: stage 10 -> 11, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 11 -> 12, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 12 -> 13, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=43 pending=0 window=2 keyboard=2 ticks=12817152622\nAPP TEST TRACE: stage 13 -> 14, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 14 -> 51, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=43 pending=0 window=2 keyboard=2 ticks=13012605214\nAPP TEST TRACE: stage 51 -> 15, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 15 -> 16, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=13203403835\nAPP TEST TRACE: stage 16 -> 17, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 17 -> 18, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 18 -> 19, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=43 pending=0 window=2 keyboard=2 ticks=14142856336\nAPP TEST TRACE: stage 19 -> 20, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 20 -> 21, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 21 -> 22, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=43 pending=0 window=2 keyboard=2 ticks=14956513626\nAPP TEST TRACE: stage 22 -> 23, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 23 -> 24, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 24 -> 25, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 25 -> 26, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 26 -> 27, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 27 -> 28, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 28 -> 29, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 29 -> 30, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 30 -> 31, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 31 -> 60, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 60 -> 61, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nWORKBENCH DRAG: id=6 rect=214.0/118.0/9.0/720.0 width=218\nAPP TEST TRACE: stage 61 -> 32, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=120 pending=0 window=2 keyboard=2 ticks=16381811173\nAPP TEST TRACE: stage 32 -> 33, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 33 -> 34, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 34 -> 35, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 35 -> 36, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 36 -> 37, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=16881237040\nAPP TEST TRACE: stage 37 -> 38, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 38 -> 39, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 39 -> 40, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 40 -> 70, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nWORKBENCH SEPARATOR WAIT: Codekontext-Breite owner=dock-splitter-4 seq=68/current=69\nAPP TEST TRACE: stage 70 -> 71, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 71 -> 72, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 72 -> 73, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 73 -> 74, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 74 -> 75, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 75 -> 76, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 76 -> 77, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 77 -> 78, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 78 -> 79, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 79 -> 80, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 80 -> 81, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 81 -> 82, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 82 -> 83, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 40842.197167\nAPP TEST TRACE: main font sources ready 40843.251017\nAPP TEST TRACE: main atlas bake seconds=3.376111\nAPP TEST TRACE: main atlas validation/upload seconds=0.032027\nAPP TEST TRACE: main fonts ready 40846.692412\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 1 -> 2, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 2 -> 3, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=49 pending=0 window=2 keyboard=2 ticks=6074256152\nAPP TEST TRACE: stage 3 -> 4, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 4 -> 5, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 5 -> 6, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 6 -> 7, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 7 -> 8, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 8 -> 9, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 40850.689256\nAPP TEST TRACE: main font sources ready 40852.062661\nAPP TEST TRACE: main atlas bake seconds=4.728306\nAPP TEST TRACE: main atlas validation/upload seconds=0.062050\nAPP TEST TRACE: main fonts ready 40856.901862\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 1 -> 2, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 2 -> 3, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=51 pending=0 window=2 keyboard=2 ticks=8710956085\nAPP TEST TRACE: stage 3 -> 4, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 4 -> 5, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 5 -> 6, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 6 -> 7, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 7 -> 8, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 8 -> 9, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 40863.746582\nAPP TEST TRACE: main font sources ready 40865.053472\nAPP TEST TRACE: main atlas bake seconds=5.548592\nAPP TEST TRACE: main atlas validation/upload seconds=0.038431\nAPP TEST TRACE: main fonts ready 40870.685682\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 1 -> 2, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 2 -> 3, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 3 -> 4, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 4 -> 5, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 5 -> 6, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 6 -> 7, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 489, in run\n    result = subprocess.run(command, cwd=self.work, env=self.env, capture_output=True,\n                            timeout=timeout, encoding=\"utf-8\", errors=\"replace\")\n  File \"/usr/lib/python3.14/subprocess.py\", line 557, in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/subprocess.py\", line 1221, in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/subprocess.py\", line 2154, in _communicate\n    self._check_timeout(endtime, orig_timeout, stdout, stderr)\n    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.14/subprocess.py\", line 1268, in _check_timeout\n    raise TimeoutExpired(\n    ...<2 lines>...\n            stderr=b''.join(stderr_seq) if stderr_seq else None)\nsubprocess.TimeoutExpired: Command '['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--workspace-state-test', '/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-k9xh91mf/workbench_workflow/files ä/workflow ä/light-large-narrow-visual', 'workbench-light-large-narrow-visual']' timed out after 45 seconds\n\nThe above exception was the direct cause of the following exception:\n\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1991, in <module>\n    main()\n    ~~~~^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1827, in main\n    SPECIAL[args.case](flow, directory)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 998, in workbench\n    flow.run(\"--workspace-state-test\",target,\"workbench-\"+mode,timeout=45,marker=\"WORKBENCH SELF-TEST: PASSED\")\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 498, in run\n    raise RuntimeError(f\"App exceeded {timeout} seconds: {command}\") from error\nRuntimeError: App exceeded 45 seconds: ['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--workspace-state-test', '/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-k9xh91mf/workbench_workflow/files ä/workflow ä/light-large-narrow-visual', 'workbench-light-large-narrow-visual']\n"
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed",
+          "reason": ""
+        },
+        {
+          "name": "api_card_workflow",
+          "status": "passed",
+          "reason": ""
+        }
+      ]
+    },
+    {
+      "name": "linux-52-no-window-manager",
+      "source_snapshot": 52,
+      "result_path": "build\\native\\Design-analysis-linux\\test-results\\run-aw1jw1fr\\results.json",
+      "sha256": "e3bc1c4864c5db9d437afee12eb87af8525fb89b054b40e0017d52fae6b3d80d",
+      "groups": [
+        {
+          "name": "source_outline_workflow",
+          "status": "passed",
+          "reason": ""
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "passed",
+          "reason": ""
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed",
+          "reason": ""
+        },
+        {
+          "name": "api_card_workflow",
+          "status": "failed",
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 41718.488798\nAPP TEST TRACE: main font sources ready 41719.400323\nAPP TEST TRACE: main atlas bake seconds=2.510317\nAPP TEST TRACE: main atlas validation/upload seconds=0.047121\nAPP TEST TRACE: main fonts ready 41721.997132\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 1 -> 2, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 2 -> 3, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 3 -> 4, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 4 -> 5, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 5 -> 6, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 6 -> 7, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 7 -> 8, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 8 -> 9, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 9 -> 10, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 10 -> 11, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 11 -> 12, status Build und Parameterabfrage erfolgreich. Experiment bereit.\nAPP TEST TRACE: stage 12 -> 13, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 13 -> 14, status 55 Messpunkte geladen.\nAPP TEST TRACE: stage 14 -> 17, status 55 Messpunkte geladen.\nAPP TEST TRACE: stage 17 -> 18, status 55 Messpunkte geladen.\nAPP TEST TRACE: stage 18 -> 19, status 55 Messpunkte geladen.\nAPP TEST TRACE: stage 19 -> 15, status 55 Messpunkte geladen.\nAPP TEST TRACE: stage 15 -> 16, status 55 Messpunkte geladen.\nAPP TEST TRACE: stage 16 -> 17, status 55 Messpunkte geladen.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 41787.090960\nAPP TEST TRACE: main font sources ready 41788.123858\nAPP TEST TRACE: main atlas bake seconds=4.733781\nAPP TEST TRACE: main atlas validation/upload seconds=0.065271\nAPP TEST TRACE: main fonts ready 41792.983644\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 1 -> 2, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 2 -> 3, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 3 -> 4, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 4 -> 5, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 5 -> 6, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 6 -> 7, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 7 -> 8, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 8 -> 9, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 9 -> 10, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 10 -> 11, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 11 -> 12, status Build und Parameterabfrage erfolgreich. Experiment bereit.\nAPP TEST TRACE: stage 12 -> 13, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 13 -> 14, status 56 Messpunkte geladen.\nAPP TEST TRACE: stage 14 -> 17, status 56 Messpunkte geladen.\nAPP TEST TRACE: stage 17 -> 18, status 56 Messpunkte geladen.\nAPP TEST TRACE: stage 18 -> 19, status 56 Messpunkte geladen.\nAPP TEST TRACE: stage 19 -> 15, status 56 Messpunkte geladen.\nAPP TEST TRACE: stage 15 -> 16, status 56 Messpunkte geladen.\nAPP TEST TRACE: stage 16 -> 17, status 56 Messpunkte geladen.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 41850.185388\nAPP TEST TRACE: main font sources ready 41851.096192\nAPP TEST TRACE: main atlas bake seconds=3.025260\nAPP TEST TRACE: main atlas validation/upload seconds=0.035330\nAPP TEST TRACE: main fonts ready 41854.189749\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 1 -> 2, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 2 -> 3, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 3 -> 4, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 4 -> 5, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 5 -> 6, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 6 -> 7, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 7 -> 8, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 8 -> 9, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 9 -> 10, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 10 -> 11, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 11 -> 12, status Build und Parameterabfrage erfolgreich. Experiment bereit.\nAPP TEST TRACE: stage 12 -> 13, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 13 -> 14, status 40 Messpunkte geladen.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 41894.013129\nAPP TEST TRACE: main font sources ready 41894.774115\nAPP TEST TRACE: main atlas bake seconds=2.542506\nAPP TEST TRACE: main atlas validation/upload seconds=0.024932\nAPP TEST TRACE: main fonts ready 41897.367417\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 1 -> 2, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=4257426774\nAPP TEST TRACE: stage 2 -> 3, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 3 -> 4, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=4544503093\nAPP TEST TRACE: stage 4 -> 5, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 5 -> 6, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 6 -> 21, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 21 -> 22, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 22 -> 7, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 7 -> 8, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nWorkspace self-test timeout: api-card-c-light-detached after 120.020 wall seconds\nFirst workflow failure at stage 8 (next 8): Projekt geladen. Build kompiliert die lokalen Quelldateien. (tab=0, selected=0, samples=0, report=0, query=)\nWorkflow failed at stage 8: Projekt gespeichert. (tab=0, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1991, in <module>\n    main()\n    ~~~~^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1827, in main\n    SPECIAL[args.case](flow, directory)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 863, in api_card\n    flow.run(\"--workspace-state-test\",root,\"api-card-\"+variant,timeout=130,marker=\"API CARD SELF-TEST: PASSED\")\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 507, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 444, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--workspace-state-test', '/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-aw1jw1fr/api_card_workflow/files ä/workflow ä/c-light-detached', 'api-card-c-light-detached']\n"
+        }
+      ]
+    }
+  ],
+  "review": {
+    "method": "Single-agent code review using local code-reviewer, ui-implementation and test-engineer skills; no independent review claimed.",
+    "checks": [
+      "Read-only published-focus query holds the native accessibility mutex and does not schedule focus actions.",
+      "Page keys route before editor input, reject modal/modifier states and preserve source/analysis in native tests.",
+      "Measured and drawn context use the same font handles, wrapping and row heights.",
+      "Scrollbar decision uses full content width before reserving the scrollbar; restoring a fitting slot clears its offset.",
+      "Border checker accepts original references and rejects the previous actual light frame."
+    ],
+    "limits": [
+      "No complete typography/corner/hover/focus pixel equality claimed.",
+      "Physical input, external screen reader, mixed DPI and macOS not tested in this batch.",
+      "Real outline declarations differ from illustrative reference grouping; model notes and broader workspaces remain open.",
+      "Builds include unchanged separately fingerprinted local accessibility work; not a clean-checkout proof."
+    ]
+  },
+  "source_53": {
+    "base": "6f527f6578400b9be5a6f25eeacfdc2314a6b738",
+    "source_sha256_lf": {
+      "app/design_ui.inc": "44a97be7b323d8ccb0208afcba69a998aade07902f477d6cf26fb6c878c2eb1f",
+      "app/docking_ui.inc": "db470ed74b46b4a7d0eee0b5c12428c249768aa9d81475cf48e71048324ba35b",
+      "app/main.c": "e034e76d86fdc962384a72ad4cf6431cd2605031d93a9443aee033086200d61b",
+      "app/panel_windows.inc": "4a38f644a77403cd673618818466e5229cebf598b843fd50821b696ab22350ef",
+      "app/plot_tests.inc": "3c730aa3c5fd5a87444973c5cb1734c909286970421f6c8bd5b2a73294a15b61",
+      "app/plot_ui.inc": "8b933b3bb27c9d53be932f1e49ee949bab21a5a587c85f5f5e0fbf801b7b9815",
+      "app/report_details_tests.inc": "eff52c88636b5db6f371a9151975d88624e3d315c4e11e41a0ff55495bada6dc",
+      "app/run_details_tests.inc": "ad34f630ee605abfb78245d3701611a3c6d26f15eae85cab2b32a5e0b6447f35",
+      "app/toolbar_ui.inc": "619f88a4dd1457f233d39de85fa23d033c4ebed6b754435a3632a33c40a7edf8",
+      "app/workspace_tests.inc": "f8a8746e28859bb1b50b50393a1ccd6d907ec26fa52224ecc947c804c04c9803",
+      "tests/check_display_workflow.py": "0da078297c74b33e3d53a8a4dd8ce89b3a9e369c95bc0525ca2d9f6cb6a48035",
+      "tests/native_integration_cases.json": "313973c14d62da5c19bfaa8aa933c110adccd20f1d2e9b22d4d8399490c3f9d2",
+      "app/analysis_layout.inc": "74a9cb6997e41b6ae2c597494bc870f3a9b9de768de9d4ad1b7eff9d01deb48d",
+      "app/analysis_ui.inc": "b64974dd94bdb9466114b182bd5a1b7867828a8fb6a3ebf571fb5172230224ec",
+      "app/analysis_workspace_tests.inc": "8a4bb2a826946de53257654760f97f702d6f1d87a19cc47f5d1f458172ade8a2",
+      "app/preferences.c": "e2df26e2c2a0d054dfa1e4dd4b500bb0cf996debe7f861b05f3db2479088c360",
+      "app/layout_catalog.c": "5004ab858261242185d86389d5de0f39a75f9a0fd3e627a8a38c991371a16c01",
+      "app/settings_ui.inc": "9c2363eeb3762256f90edae7a8fa1446d6ebd0d645b9277bf60c777590534203",
+      "tests/test_preferences.c": "54d372d06bfe74b2b1f71ff0d6bb9785ed5dce9a8e12391ee0a8b21f746643b8",
+      "tests/test_layout_catalog.c": "21077c44d0181840841f351ef46ff219e454b596a768b64d8b71d30ba610d36c",
+      "app/analysis_resize.inc": "8ccc8dfa92d58f910d4ee9cacc04e96a93be01b12af2b603368205b00726eb88",
+      "app/settings_tests.inc": "5202dece8488dba847ce67e3347ce67be17365f7a1fdde65c98bb62296dc2497",
+      "app/layout_ui.inc": "be51a9d8fe2d91391248416a942f8bfd2e3ba5dd3b4a75d12883140930b1613f",
+      "app/workbench_tests.inc": "1bc37a41bb50b47972ad64f37f31be77519b53ac30695a7bc791d729d999cd69",
+      "app/channel_units_ui.inc": "dbe90c981c123bac6afaac9e85c9c977cc6581c1d01b84f77c531bad59955a8a",
+      "app/channel_units_tests.inc": "7f71e05664cfefab012fc0363622541e72b890ea4a48b8e02d6f40f0b93cfdff",
+      "app/analysis_units_tests.inc": "5b299a53559c760f332b5c66c9ece3b352f9ad1c8928f842d55311a6763f4afd",
+      "app/ui.h": "57ffc97cc23e533e61d9fd2a294a616488ab4056c583530ab341204386f5de4e",
+      "app/ui_backend.c": "3cd43242181d0c392b0827711eed9ac014f63ffc0c969e0c649040f6141dcc9c",
+      "app/ui_sdl.c": "82b2023360a8ddef2da8068bba38514b340a69068c13b6060f2d16bdf4e51dbf",
+      "app/toolbar_tests.inc": "16f96ab0fc7088cd766a634c94ee44d2ae97313f3018aadeb2603fe2d265259c",
+      "app/keyboard_menu_tests.inc": "bdb2b255ce95d0dcb85992d8ada3d57c7729cd49fa36dfb7ee202f8748cde682",
+      "app/shell_theme_tests.inc": "4b7452b932bbf9b6b09c681ed418d81de92854eaa11b9fceed61ca0c1084534a",
+      "tests/check_unified_chrome.py": "2ec9fb6b1a54566cd69754bfd07f248daaf0a42d7135e7355812683422157b3e",
+      "app/editor_search_ui.inc": "31ea341e322ef983a2d7e1f4319511fb1632169b545daa87f807988d9fe799f0",
+      "app/documentation.h": "31805cf0517336ef59ed915c4a57d19b6a132467d6e73274f3908a9881f4e69c",
+      "app/documentation.c": "62c802e4572e3ef988f7b4121541865ccd2d7968000cb2074ce7d93500ed5fa1",
+      "app/api_reference_ui.inc": "b2ca3cd9215b9b79ed3b826cb33443a7c4f5dfe2eb37f0b320fd983696a5c19d",
+      "app/api_reference_tests.inc": "53e5373f929589b68064b8e0369e90f07eb4284429ea5bb640b662da16ea66bb",
+      "app/workbench_api_ui.inc": "3fa1f492af3ae84ee335b42757730f67ce4ec6c79094bfe170901474f86ca669",
+      "docs/reference/experiment.md": "549238a1d1c61fd3e9b743cdae5cd9b5469c80f1da55e8492fb4258799ffd0d1",
+      "docs/reference/language-library.md": "3b77d247f174cc7970c8e049a1ee43bcd0cfae534d5d1ba66c4b0070a1d27cc3",
+      "tests/test_api_reference.c": "ade8ed122d85a690018f5b8c60a55d8c3a2ad936a0581d82bb67fc537da8c3cd",
+      "app/api_card_tests.inc": "e02e56843d3c719a004f5bb5a328b69a3ea9f7bac50866248718c6023e2f262c",
+      "app/source_outline_ui.inc": "c3ce8ceaf0827360d0620bdbc2bcd9196e63faff5cf8c5f2923e953ebac62bc4",
+      "app/workbench_text_ui.inc": "70755ae951d2fd3fdfddc37691ab8ec6dba33a81ab9670b72f8ef3af91174ba6",
+      "app/workbench_context_ui.inc": "79efa3ea59f163452c49c18f14b08a360acf0be1b89bb1c1e40686b2001a8f1a",
+      "app/source_outline_tests.inc": "7b8f0af18999e192d90d8db2eed179ca789921eee0af19796b2cf8c53b9ab952",
+      "tests/check_workbench_context.py": "bfa23b2e0d1fdd915cd15a7df988eaf2720dad0a41b1c90a5d7befb45eb9041c"
+    },
+    "foreign_sha256_lf": {
+      ".github/workflows/linux-ui-sanitizers.yml": "80e5b0d925f75ddce52260e8812cfb02d0e5b6e4ccfef03ea86deea75c446085",
+      ".github/workflows/macos-f1-accessibility.yml": "c37bfbd09cdfb0d26922cf0fbd8527f2be70161dd113809435732b6150fd5650",
+      "app/accessibility_atspi.c": "fb32ff39647be57cdaa2c02a10d4319ecef2186747a1edc2338bb397e5668b0f",
+      "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+      "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+      "tests/check_documentation_orca.py": "e38b255bbd7bb12787e50cd78d4b32ed8f985ce60746afde2702285e22a728d5",
+      "tests/test_accessibility_tables_atspi.py": "623f5152d85dabe778728fedc9f999b93e3bfaef6d8d82679d6444675ad54d2f",
+      "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+      "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+      "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+    }
+  },
+  "source_50_sha256_lf": {
+    "app/design_ui.inc": "44a97be7b323d8ccb0208afcba69a998aade07902f477d6cf26fb6c878c2eb1f",
+    "app/docking_ui.inc": "db470ed74b46b4a7d0eee0b5c12428c249768aa9d81475cf48e71048324ba35b",
+    "app/main.c": "e034e76d86fdc962384a72ad4cf6431cd2605031d93a9443aee033086200d61b",
+    "app/panel_windows.inc": "4a38f644a77403cd673618818466e5229cebf598b843fd50821b696ab22350ef",
+    "app/plot_tests.inc": "3c730aa3c5fd5a87444973c5cb1734c909286970421f6c8bd5b2a73294a15b61",
+    "app/plot_ui.inc": "8b933b3bb27c9d53be932f1e49ee949bab21a5a587c85f5f5e0fbf801b7b9815",
+    "app/report_details_tests.inc": "eff52c88636b5db6f371a9151975d88624e3d315c4e11e41a0ff55495bada6dc",
+    "app/run_details_tests.inc": "ad34f630ee605abfb78245d3701611a3c6d26f15eae85cab2b32a5e0b6447f35",
+    "app/toolbar_ui.inc": "619f88a4dd1457f233d39de85fa23d033c4ebed6b754435a3632a33c40a7edf8",
+    "app/workspace_tests.inc": "f8a8746e28859bb1b50b50393a1ccd6d907ec26fa52224ecc947c804c04c9803",
+    "tests/check_display_workflow.py": "032ef0a805604073cef12fd651c24c29974a3e245b162750669924be4eec8855",
+    "tests/native_integration_cases.json": "313973c14d62da5c19bfaa8aa933c110adccd20f1d2e9b22d4d8399490c3f9d2",
+    "app/analysis_layout.inc": "74a9cb6997e41b6ae2c597494bc870f3a9b9de768de9d4ad1b7eff9d01deb48d",
+    "app/analysis_ui.inc": "b64974dd94bdb9466114b182bd5a1b7867828a8fb6a3ebf571fb5172230224ec",
+    "app/analysis_workspace_tests.inc": "8a4bb2a826946de53257654760f97f702d6f1d87a19cc47f5d1f458172ade8a2",
+    "app/preferences.c": "e2df26e2c2a0d054dfa1e4dd4b500bb0cf996debe7f861b05f3db2479088c360",
+    "app/layout_catalog.c": "5004ab858261242185d86389d5de0f39a75f9a0fd3e627a8a38c991371a16c01",
+    "app/settings_ui.inc": "9c2363eeb3762256f90edae7a8fa1446d6ebd0d645b9277bf60c777590534203",
+    "tests/test_preferences.c": "54d372d06bfe74b2b1f71ff0d6bb9785ed5dce9a8e12391ee0a8b21f746643b8",
+    "tests/test_layout_catalog.c": "21077c44d0181840841f351ef46ff219e454b596a768b64d8b71d30ba610d36c",
+    "app/analysis_resize.inc": "8ccc8dfa92d58f910d4ee9cacc04e96a93be01b12af2b603368205b00726eb88",
+    "app/settings_tests.inc": "5202dece8488dba847ce67e3347ce67be17365f7a1fdde65c98bb62296dc2497",
+    "app/layout_ui.inc": "be51a9d8fe2d91391248416a942f8bfd2e3ba5dd3b4a75d12883140930b1613f",
+    "app/workbench_tests.inc": "1bc37a41bb50b47972ad64f37f31be77519b53ac30695a7bc791d729d999cd69",
+    "app/channel_units_ui.inc": "dbe90c981c123bac6afaac9e85c9c977cc6581c1d01b84f77c531bad59955a8a",
+    "app/channel_units_tests.inc": "7f71e05664cfefab012fc0363622541e72b890ea4a48b8e02d6f40f0b93cfdff",
+    "app/analysis_units_tests.inc": "5b299a53559c760f332b5c66c9ece3b352f9ad1c8928f842d55311a6763f4afd",
+    "app/ui.h": "57ffc97cc23e533e61d9fd2a294a616488ab4056c583530ab341204386f5de4e",
+    "app/ui_backend.c": "3cd43242181d0c392b0827711eed9ac014f63ffc0c969e0c649040f6141dcc9c",
+    "app/ui_sdl.c": "82b2023360a8ddef2da8068bba38514b340a69068c13b6060f2d16bdf4e51dbf",
+    "app/toolbar_tests.inc": "16f96ab0fc7088cd766a634c94ee44d2ae97313f3018aadeb2603fe2d265259c",
+    "app/keyboard_menu_tests.inc": "bdb2b255ce95d0dcb85992d8ada3d57c7729cd49fa36dfb7ee202f8748cde682",
+    "app/shell_theme_tests.inc": "4b7452b932bbf9b6b09c681ed418d81de92854eaa11b9fceed61ca0c1084534a",
+    "tests/check_unified_chrome.py": "2ec9fb6b1a54566cd69754bfd07f248daaf0a42d7135e7355812683422157b3e",
+    "app/editor_search_ui.inc": "31ea341e322ef983a2d7e1f4319511fb1632169b545daa87f807988d9fe799f0",
+    "app/documentation.h": "31805cf0517336ef59ed915c4a57d19b6a132467d6e73274f3908a9881f4e69c",
+    "app/documentation.c": "62c802e4572e3ef988f7b4121541865ccd2d7968000cb2074ce7d93500ed5fa1",
+    "app/api_reference_ui.inc": "b2ca3cd9215b9b79ed3b826cb33443a7c4f5dfe2eb37f0b320fd983696a5c19d",
+    "app/api_reference_tests.inc": "53e5373f929589b68064b8e0369e90f07eb4284429ea5bb640b662da16ea66bb",
+    "app/workbench_api_ui.inc": "d9252e5e8a351f165fcf783cac733e63c0e247cb9ba9a3d9b732b65be50ce374",
+    "docs/reference/experiment.md": "549238a1d1c61fd3e9b743cdae5cd9b5469c80f1da55e8492fb4258799ffd0d1",
+    "docs/reference/language-library.md": "3b77d247f174cc7970c8e049a1ee43bcd0cfae534d5d1ba66c4b0070a1d27cc3",
+    "tests/test_api_reference.c": "ade8ed122d85a690018f5b8c60a55d8c3a2ad936a0581d82bb67fc537da8c3cd",
+    "app/api_card_tests.inc": "d5654b729981f14b4cd5fdfec9408426e50f142558d5fc1b11576ee988f2e9f5",
+    "app/source_outline_ui.inc": "c3ce8ceaf0827360d0620bdbc2bcd9196e63faff5cf8c5f2923e953ebac62bc4",
+    "app/workbench_text_ui.inc": "70755ae951d2fd3fdfddc37691ab8ec6dba33a81ab9670b72f8ef3af91174ba6",
+    "app/workbench_context_ui.inc": "79efa3ea59f163452c49c18f14b08a360acf0be1b89bb1c1e40686b2001a8f1a",
+    "app/source_outline_tests.inc": "7b8f0af18999e192d90d8db2eed179ca789921eee0af19796b2cf8c53b9ab952",
+    "tests/check_workbench_context.py": "bfa23b2e0d1fdd915cd15a7df988eaf2720dad0a41b1c90a5d7befb45eb9041c"
+  },
+  "changes_50_to_52": [
+    "app/workbench_api_ui.inc",
+    "app/api_card_tests.inc"
+  ],
+  "changes_52_to_53": [
+    "tests/check_display_workflow.py"
+  ],
+  "f1_regression": {
+    "scope": "Current native F1 H/control and mathematics regression; not full reference pixel equality.",
+    "runs": [
+      {
+        "run": "run-po1bhx2a",
+        "results_sha256": "06a6a53e28f023ab604c2f11292e2cf9f11c37a7814fbdcccd117f9d622afe4d",
+        "groups": [
+          {
+            "name": "documentation_math",
+            "status": "failed",
+            "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 42278.584536\nAPP TEST TRACE: main font sources ready 42279.316295\nAPP TEST TRACE: main atlas bake seconds=2.640925\nAPP TEST TRACE: main atlas validation/upload seconds=0.035397\nAPP TEST TRACE: main fonts ready 42282.023760\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 0 -> 1, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: F1 fonts begin 42282.166226\nAPP TEST TRACE: F1 font sources ready 42284.863699\nAPP TEST TRACE: F1 atlas bake seconds=5.515356\nAPP TEST TRACE: F1 atlas validation/upload seconds=0.071441\nAPP TEST TRACE: F1 fonts ready 42290.534893\nAPP TEST TRACE: stage 1 -> 2, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=12798335319\nAPP TEST TRACE: link inventory begin 42290.700306\nAPP TEST TRACE: link inventory page 0 42290.701349\nAPP TEST TRACE: link inventory page 32 42291.188843\nAPP TEST TRACE: link inventory page 64 42291.741479\nAPP TEST TRACE: link inventory page 96 42292.136323\nAPP TEST TRACE: link inventory page 128 42292.517164\nAPP TEST TRACE: link inventory page 160 42292.823455\nAPP TEST TRACE: link inventory end 42293.091258\nAPP TEST TRACE: stage 2 -> 3, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 3 -> 4, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 4 -> 5, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: F1 fonts begin 42293.755265\nAPP TEST TRACE: F1 fonts begin 42293.755511\nAPP TEST TRACE: F1 fonts begin 42293.755704\nAPP TEST TRACE: F1 fonts begin 42293.755893\nAPP TEST TRACE: F1 fonts begin 42293.756152\nAPP TEST TRACE: F1 fonts begin 42293.756348\nAPP TEST TRACE: F1 fonts begin 42293.756537\nAPP TEST TRACE: F1 fonts begin 42293.756725\nAPP TEST TRACE: stage 5 -> 6, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: F1 fonts begin 42294.252679\nAPP TEST TRACE: stage 6 -> 7, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 7 -> 8, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 8 -> 9, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: F1 fonts begin 42294.834176\nAPP TEST TRACE: F1 fonts begin 42294.834414\nAPP TEST TRACE: F1 fonts begin 42294.834630\nAPP TEST TRACE: F1 fonts begin 42294.834825\nAPP TEST TRACE: F1 fonts begin 42294.835018\nAPP TEST TRACE: F1 fonts begin 42294.835208\nAPP TEST TRACE: F1 fonts begin 42294.835400\nAPP TEST TRACE: F1 fonts begin 42294.835592\nAPP TEST TRACE: stage 9 -> 10, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: F1 fonts begin 42295.222376\nAPP TEST TRACE: stage 10 -> 11, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 11 -> 12, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 12 -> 13, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: F1 fonts begin 42296.033003\nAPP TEST TRACE: F1 fonts begin 42296.033274\nAPP TEST TRACE: F1 fonts begin 42296.033478\nAPP TEST TRACE: F1 fonts begin 42296.033667\nAPP TEST TRACE: F1 fonts begin 42296.033856\nAPP TEST TRACE: F1 fonts begin 42296.034044\nAPP TEST TRACE: F1 fonts begin 42296.034231\nAPP TEST TRACE: F1 fonts begin 42296.034419\nAPP TEST TRACE: stage 13 -> 14, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nDocumentation seek stage=14 target=13 focus=13 reveal=0 topic=95 scroll=103 entries=181 bounds=224.000/188.000/312.000/320.000\nAPP TEST TRACE: stage 14 -> 15, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 15 -> 16, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 42297.610738\nAPP TEST TRACE: main font sources ready 42298.492882\nAPP TEST TRACE: main atlas bake seconds=2.126036\nAPP TEST TRACE: main atlas validation/upload seconds=0.028647\nAPP TEST TRACE: main fonts ready 42300.675073\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 0 -> 1, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: F1 fonts begin 42300.821460\nAPP TEST TRACE: F1 font sources ready 42303.737406\nAPP TEST TRACE: F1 atlas bake seconds=4.248888\nAPP TEST TRACE: F1 atlas validation/upload seconds=0.027391\nAPP TEST TRACE: F1 fonts ready 42308.088156\nAPP TEST TRACE: stage 1 -> 2, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=10801102794\nAPP TEST TRACE: link inventory begin 42308.251263\nAPP TEST TRACE: link inventory page 0 42308.252404\nAPP TEST TRACE: link inventory page 32 42308.707616\nAPP TEST TRACE: link inventory page 64 42309.264052\nAPP TEST TRACE: link inventory page 96 42309.664539\nAPP TEST TRACE: link inventory page 128 42310.079332\nAPP TEST TRACE: link inventory page 160 42310.377860\nAPP TEST TRACE: link inventory end 42310.622875\nAPP TEST TRACE: stage 2 -> 3, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 3 -> 4, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 4 -> 5, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: F1 fonts begin 42311.210234\nAPP TEST TRACE: F1 fonts begin 42311.210553\nAPP TEST TRACE: F1 fonts begin 42311.210787\nAPP TEST TRACE: F1 fonts begin 42311.210994\nAPP TEST TRACE: F1 fonts begin 42311.211199\nAPP TEST TRACE: F1 fonts begin 42311.211404\nAPP TEST TRACE: F1 fonts begin 42311.211609\nAPP TEST TRACE: F1 fonts begin 42311.211817\nAPP TEST TRACE: stage 5 -> 6, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: F1 fonts begin 42311.692344\nAPP TEST TRACE: stage 6 -> 7, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 7 -> 8, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 8 -> 9, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: F1 fonts begin 42312.446430\nAPP TEST TRACE: F1 fonts begin 42312.446810\nAPP TEST TRACE: F1 fonts begin 42312.447084\nAPP TEST TRACE: F1 fonts begin 42312.447355\nAPP TEST TRACE: F1 fonts begin 42312.447638\nAPP TEST TRACE: F1 fonts begin 42312.447856\nAPP TEST TRACE: F1 fonts begin 42312.448062\nAPP TEST TRACE: F1 fonts begin 42312.448284\nAPP TEST TRACE: stage 9 -> 10, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: F1 fonts begin 42312.864820\nAPP TEST TRACE: stage 10 -> 11, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 11 -> 12, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 12 -> 13, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: F1 fonts begin 42313.657893\nAPP TEST TRACE: F1 fonts begin 42313.658170\nAPP TEST TRACE: F1 fonts begin 42313.658431\nAPP TEST TRACE: F1 fonts begin 42313.658672\nAPP TEST TRACE: F1 fonts begin 42313.658868\nAPP TEST TRACE: F1 fonts begin 42313.659059\nAPP TEST TRACE: F1 fonts begin 42313.659251\nAPP TEST TRACE: F1 fonts begin 42313.659444\nAPP TEST TRACE: stage 13 -> 14, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nDocumentation seek stage=14 target=13 focus=13 reveal=0 topic=95 scroll=43 entries=181 bounds=224.000/188.000/312.000/320.000\nAPP TEST TRACE: stage 14 -> 15, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 15 -> 16, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1991, in <module>\n    main()\n    ~~~~^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 1827, in main\n    SPECIAL[args.case](flow, directory)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 172, in documentation_math\n    require(output.count('Bundled primary font: ')==54,'Incomplete bypass of main/F1 platform font handles')\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 444, in require\n    raise RuntimeError(message)\nRuntimeError: Incomplete bypass of main/F1 platform font handles\n",
+            "seconds": 38.562,
+            "app_steps_sha256": "88e44c539ffa6c5dab03c7dff0fc50bc160d30c487c9f8b3e1841c677f3feea0",
+            "observations": [
+              "DOCUMENTATION LINK INVENTORY: 185 pages, 1082 links, 119 maximum per page",
+              "DOCUMENTATION MATH GLYPHS: 183 characters in 42 font variants",
+              "DOCUMENTATION MATH SELF-TEST: PASSED",
+              "DOCUMENTATION LINK INVENTORY: 185 pages, 1082 links, 119 maximum per page",
+              "DOCUMENTATION MATH GLYPHS: 183 characters in 42 font variants",
+              "DOCUMENTATION MATH SELF-TEST: PASSED",
+              {
+                "primary_count": 56,
+                "faces": {
+                  "NotoSans.ttf": 17,
+                  "NotoSans-Bold.ttf": 24,
+                  "NotoSansMono.ttf": 15
+                }
+              }
+            ]
+          },
+          {
+            "name": "documentation_inline_math",
+            "status": "passed",
+            "reason": "",
+            "seconds": 42.414,
+            "app_steps_sha256": "6b206657a227fa89d64ecb3bf2ec3ab07b620e29a80944b03b8e4634cfa257eb",
+            "observations": [
+              "INLINE MATH TRANSITIONS: resizes=2 themes=6 elapsed=34.840",
+              "INLINE MATH SELF-TEST: PASSED count=48"
+            ]
+          },
+          {
+            "name": "documentation_h",
+            "status": "passed",
+            "reason": "",
+            "seconds": 47.344,
+            "app_steps_sha256": "9bef72890255bf7e42de1873870974bbf6b2f3c2e6725f0f71da17ee8ea04cfc",
+            "observations": [
+              "DOCUMENTATION H SELF-TEST: PASSED"
+            ]
+          }
+        ]
+      },
+      {
+        "run": "run-8u7jrgs2",
+        "results_sha256": "8662935d9774c83ef3f70f30afd9db86e5182ced0bf31783aec54bdc7e5485be",
+        "groups": [
+          {
+            "name": "documentation_math",
+            "status": "passed",
+            "reason": "",
+            "seconds": 38.101,
+            "app_steps_sha256": "ed1e3094f3246d5c43ad2c6f3b8b787198bcddfbdfe240b184eb157c208d5a94",
+            "observations": [
+              "DOCUMENTATION LINK INVENTORY: 185 pages, 1082 links, 119 maximum per page",
+              "DOCUMENTATION MATH GLYPHS: 183 characters in 42 font variants",
+              "DOCUMENTATION MATH SELF-TEST: PASSED",
+              "DOCUMENTATION LINK INVENTORY: 185 pages, 1082 links, 119 maximum per page",
+              "DOCUMENTATION MATH GLYPHS: 183 characters in 42 font variants",
+              "DOCUMENTATION MATH SELF-TEST: PASSED",
+              {
+                "primary_count": 56,
+                "faces": {
+                  "NotoSans.ttf": 17,
+                  "NotoSans-Bold.ttf": 24,
+                  "NotoSansMono.ttf": 15
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "images": [
+      {
+        "file": "linux-f1-h-dark.png",
+        "source": "build\\native\\Design-analysis-linux\\test-results\\run-po1bhx2a\\documentation_h\\files ä\\workflow ä\\docs-h-00.bmp",
+        "source_sha256": "81e5109b733f40c785fc4195c89df85c0374599d685224b884d1fa10ede2ce2a",
+        "png_sha256": "be802afc0875525c8028e33f745bc35c1ac5f6d0026b0772295fe54c606b9a70",
+        "rgb_sha256": "1c2b588fc0a4d2cb8ba31fca38e34036aa25c85cf6521edb4aa53d13b08e0c9e",
+        "size": [
+          1080,
+          780
+        ]
+      },
+      {
+        "file": "linux-f1-h-light.png",
+        "source": "build\\native\\Design-analysis-linux\\test-results\\run-po1bhx2a\\documentation_h\\files ä\\workflow ä\\docs-h-16.bmp",
+        "source_sha256": "f236a347bf81d38881b97b8962a3efcea39b8bc010d88b73f2cc213a5b78f790",
+        "png_sha256": "662fae49013b245576117200fd20a4b64ffdb1e70bf5a938b25196314fda1331",
+        "rgb_sha256": "72df0d65c1a1938d0276d5e7aeaeaec15b6a3d0d0c3b463d2b91a337b8abd5e2",
+        "size": [
+          1080,
+          780
+        ]
+      },
+      {
+        "file": "linux-f1-h-minimum.png",
+        "source": "build\\native\\Design-analysis-linux\\test-results\\run-po1bhx2a\\documentation_h\\files ä\\workflow ä\\docs-h-08.bmp",
+        "source_sha256": "30dad5c83d634eed6503d66edde46109fc8fef17b8d9198c3c8df0a076e23bc5",
+        "png_sha256": "648cda1dcd810d0ea834f4369b8aa5bc82ef37a98311c8c3c4c54250a3ab29b1",
+        "rgb_sha256": "eca310274faa95c32c55165c5312d45c93bb391a33de228df7c22475536390d1",
+        "size": [
+          760,
+          540
+        ]
+      },
+      {
+        "file": "linux-f1-h-large.png",
+        "source": "build\\native\\Design-analysis-linux\\test-results\\run-po1bhx2a\\documentation_h\\files ä\\workflow ä\\docs-h-48.bmp",
+        "source_sha256": "f1fca1996881f63399fb7b0ef72e7ee93c82e7c1919a15c03f06ad871aef6c33",
+        "png_sha256": "12d53d2c0ca03df2f3f4bb5703a61464699c5397f747583d658f1da886dd9aa1",
+        "rgb_sha256": "d4e22d25ee76144116ce2d45c82c646c058f51e4f22609ddf5579e607971fefa",
+        "size": [
+          760,
+          540
+        ]
+      },
+      {
+        "file": "linux-f1-math-32.png",
+        "source": "build\\native\\Design-analysis-linux\\test-results\\run-8u7jrgs2\\documentation_math\\files ä\\workflow ä\\docs-math-32.bmp",
+        "source_sha256": "0ed0374a3ed6d4633b0091bc8ac389e1a2ddeaa11b648e7749e78eab7db384b4",
+        "png_sha256": "4e7dfc98f23e1ba8d0142b4f2aeeaacda67465f605a8a2cfb90e379a5636b2f1",
+        "rgb_sha256": "401fcc3778cf645da94da38244dee9867cc7d4093f08df2921544c7c02cc1bff",
+        "size": [
+          760,
+          540
+        ]
+      },
+      {
+        "file": "linux-f1-bundled-glyphs-32.png",
+        "source": "build\\native\\Design-analysis-linux\\test-results\\run-8u7jrgs2\\documentation_math\\files ä\\workflow ä\\bundled-fonts\\docs-unicode-boxes-32.bmp",
+        "source_sha256": "75f51207e9e57feeb8fffeb24530ad9f826f9ed0e8895a7f58629d25fc530085",
+        "png_sha256": "b31b495b6811d01bfbcccb8c45b28b60c460fc9a3a4dc0522ec27e57cfcc7376",
+        "rgb_sha256": "58648e73718b431824e42730c8466ff298aec45729c776c4d325f1ec7421bfea",
+        "size": [
+          760,
+          540
+        ]
+      }
+    ],
+    "remaining": [
+      "Additional native article toolbar and footer zoom actions still differ from the selected H image.",
+      "No new Windows/macOS F1 or external-screenreader proof in this batch."
+    ]
+  },
+  "final_binaries_verified": {
+    "windows": "7cf7ef311579ffeaf5adeab7f2a26ae2525fb8d7162255bd6f7253cc82d37772",
+    "linux": "ad29d01f95df64c02552a883c588fa0c208469b9e6ef4f846c8f68caa8f71fa2"
+  },
+  "duplicate_review_cleanup": {
+    "reason": "Duplicate review PNGs after lossless retained proof copies; raw/negative/frozen results preserved",
+    "files": [
+      {
+        "path": "build\\native\\context-shell-windows-dark-52.png",
+        "bytes": 200512,
+        "sha256": "ac039d85fbc477029a0e52ee443672dfda53ba411dd49b7759d42ff6395afe39",
+        "retained": "docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\windows-workbench-dark.png"
+      },
+      {
+        "path": "build\\native\\context-shell-windows-light-52.png",
+        "bytes": 202607,
+        "sha256": "9e93d781cedaf257f7a5e6f6bd4a6d971b43ee57c046c9b82348c1905349bae1",
+        "retained": "docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\windows-workbench-light.png"
+      },
+      {
+        "path": "build\\native\\context-shell-linux-dark-52.png",
+        "bytes": 200299,
+        "sha256": "7b516f43bf10018130099881849475c3af6e90b3c6cbdeb6354cad27f97e36d7",
+        "retained": "docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\linux-workbench-dark.png"
+      },
+      {
+        "path": "build\\native\\context-shell-linux-light-52.png",
+        "bytes": 200689,
+        "sha256": "af221ae42ec354d0f201de31b4c11320e83e97ca14b9b90bc268e7a12b296d09",
+        "retained": "docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\linux-workbench-light.png"
+      },
+      {
+        "path": "build\\native\\context-api-windows-c-dark-52.png",
+        "bytes": 157864,
+        "sha256": "a4651c8314404d3543dea0d27297b6e25c4a74bdaaf6a91ac2bf4d14616fb6eb",
+        "retained": "docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\windows-api-c-dark.png"
+      },
+      {
+        "path": "build\\native\\context-api-windows-large-52.png",
+        "bytes": 160152,
+        "sha256": "1ef349735b380b4cb1e00462319f82493398355da70bd2188ce6d3b0e4d2ceff",
+        "retained": "docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\windows-api-large-narrow.png"
+      },
+      {
+        "path": "build\\native\\context-f1-linux-dark-52.png",
+        "bytes": 171012,
+        "sha256": "be802afc0875525c8028e33f745bc35c1ac5f6d0026b0772295fe54c606b9a70",
+        "retained": "docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\linux-f1-h-dark.png"
+      }
+    ],
+    "bytes": 1293135
+  },
+  "reference_sha256": {
+    "docs/visuals/unified-workspace/develop-dark.png": "b4554a1b09689798c21a8fe771d5c706a03a711bd963c1b3d00b5d2fe270ec52",
+    "docs/visuals/unified-workspace/develop-light.png": "7a3e95e92f1e59dd61d0b0cff58e0787ab805996bcd2a88846200e1511441d0f",
+    "docs/visuals/develop-designs/workbench.css": "4f0a1d2ef71313e265d61590a344536ccc39aad715762d6d3355b7e3378e9743",
+    "docs/visuals/f1-layouts/h-dark.png": "c9f74a90b12627f015a5d8c08fc0c58c7ff90aa0495d723b1512ba3a2317e72c",
+    "docs/visuals/f1-layouts/h-light.png": "dfdacd3f8d8ff5d9a1028aa100c3f03c53b709117b313643217e69a31f93b512",
+    "docs/visuals/f1-layouts/final-h.css": "ec6a83c767f02eb6679a638407709225651c89919ae2df773e0b3b8271e9e6f0",
+    "docs/visuals/f1-layouts/refinements.css": "db878953549a411037f0c067340c34c7490c101a7af2b5112505a79be880fcb7"
+  }
+}

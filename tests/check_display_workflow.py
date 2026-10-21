@@ -169,9 +169,14 @@ def documentation_math(flow, directory):
     try:
         flow.run('--workspace-state-test',bundled,'docs-keyboard-math',timeout=45,marker='DOCUMENTATION MATH SELF-TEST: PASSED')
         output=flow.steps[-1]['stdout']
-        require(output.count('Bundled primary font: ')==54,'Incomplete bypass of main/F1 platform font handles')
         primaries=[line for line in output.splitlines() if line.startswith('Bundled primary font: ')]
-        require(sum(line.endswith('/NotoSans-Bold.ttf') for line in primaries)==24,'Main/F1 strong roles did not load the real bold face')
+        # Main bank: 4 regular + 4 title + 6 code (including editor 12/14).
+        # F1 inventory: 9 regular + 9 title + 11 strong + 9 code + 4 chrome.
+        # Require every primary and its real face, not merely a minimum count.
+        expected_primaries={'NotoSans.ttf':17,'NotoSans-Bold.ttf':24,'NotoSansMono.ttf':15}
+        require(len(primaries)==sum(expected_primaries.values()),'Incomplete bypass of main/F1 platform font handles')
+        for name,count in expected_primaries.items():
+            require(sum(line.endswith('/'+name) for line in primaries)==count,'Main/F1 primary face coverage differs: '+name)
         require(f'DOCUMENTATION MATH GLYPHS: {len(characters)} characters in 42 font variants' in output,'Incomplete bundled primary glyph coverage')
         require((bundled/'docs-unicode-boxes-32.bmp').is_file(),'Missing bundled-primary diagram image')
         documentation_grid_ink(bundled,output)
@@ -865,6 +870,9 @@ def api_card(flow,directory):
         require('exact-time-channel=1' in output,'Documented example did not produce the actual angle/rad run')
         for name in ("api-card-inserted.bmp","api-card-built.bmp"):
             require((root/name).is_file(),"Missing actual API card view: "+variant+"/"+name)
+        if 'large' not in variant:
+            for name in ('api-card-context-keyboard.bmp','api-card-context-scrolled.bmp','api-card-resized-back.bmp'):
+                require((root/name).is_file(),'Missing actual context scroll/resize capture: '+variant+'/'+name)
         image=root/'project/api-card-detached.bmp' if 'detached' in variant else root/'api-card-ready.bmp'
         require(image.is_file(),'Missing native example action capture: '+variant)
 

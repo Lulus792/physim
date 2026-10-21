@@ -15,6 +15,8 @@ Die [kompakte Einheitenwahl und große Schrift](ANALYSIS-UNITS.md) dokumentieren
 den nächsten nativen Teilstand einschließlich echter Speicher-/Abbruchfälle.
 Der [Werkbank-Kontext](WORKBENCH-CONTEXT.md) führt den aktuellen Abgleich der
 gefüllten API-Karte, dokumentierter Beispiele und des Protokollkopfs fort.
+Der [Folgeabgleich der Kontextspalte](WORKBENCH-CONTEXT-FLOW.md) ergänzt volle
+Breite, CSS-Zeilenboxen, Gliederungsdetails und Scrollzugang bei kurzen Fenstern.
 
 **Für die native Umsetzung in einem anderen Chat:**
 [kopierfertiger Auftrag](NEXT-CHAT.md) · [Bestand und Abnahmeliste](IMPLEMENTATION.md)

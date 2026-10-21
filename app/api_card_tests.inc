@@ -74,23 +74,39 @@ static void api_card_test_frame(app *a,const char *mode,int *stage,int *code,con
         if(!nk_sdl_accessibility_request_focus(ui,NULL,"Beispiel einfügen")) {
             if(scrolls++>20){ok=false;break;}
             if(detached){SDL_Event wheel={0};wheel.type=SDL_EVENT_MOUSE_WHEEL;wheel.wheel.windowID=SDL_GetWindowID(window);wheel.wheel.y=-2;wheel.wheel.mouse_x=50;wheel.wheel.mouse_y=200;SDL_PushEvent(&wheel);}
-            else {struct nk_rect r=a->dock_panels[PS_DOCK_INSPECTOR];test_plot_wheel(a,r.x+40,r.y+100,-2);}
+            else {struct nk_rect r=a->dock_panels[PS_DOCK_INSPECTOR];test_plot_wheel(a,r.x+r.w-14,r.y+100,-2);}
             return;
         }
         break;
     case 5:
         if(!nk_sdl_accessibility_is_focused(ui,NULL,"Beispiel einfügen"))return;
         printf("API CARD BODY: natural=%.3f measured=%.3f available=%.3f last-argument=%.3f/%.3f action=%.3f\n",a->api_card_natural_height,a->api_card_measured_body_height,a->api_reference_bounds.h,a->api_card_arguments_bounds.y,a->api_card_arguments_bounds.h,a->api_card_action_bounds.y);
+        printf("CONTEXT FLOW: expected=%.3f measured=%.3f scroll=%d card-width=%.1f\n",a->workbench_context_expected_height,a->workbench_context_measured_height,a->workbench_context_scrollbar,a->api_card_bounds.w);
         ok=a->api_reference_handbook_bounds.x>=a->api_card_bounds.x+12 && a->api_reference_handbook_bounds.y>=a->api_card_bounds.y+12 &&
             a->api_reference_handbook_bounds.y+a->api_reference_handbook_bounds.h<=a->api_card_action_bounds.y-7 &&
             a->api_reference_bounds.y>=a->api_card_bounds.y+12 && a->api_reference_bounds.y+a->api_reference_bounds.h<=a->api_card_action_bounds.y-7 &&
             a->api_card_action_bounds.y+a->api_card_action_bounds.h<=a->api_card_bounds.y+a->api_card_bounds.h-12;
         ok=ok && a->api_card_arguments_bounds.y+a->api_card_arguments_bounds.h<=a->api_reference_bounds.y+a->api_reference_bounds.h+.5f;
+        ok=ok && fabsf(a->workbench_context_expected_height-a->workbench_context_measured_height)<.51f;
+        if(!detached && !strstr(mode,"large"))ok=ok && !a->workbench_context_scrollbar && a->api_card_bounds.w==222;
         printf("API CARD CAPTION: %.1f,%.1f,%.1f,%.1f inside-card=%d\n",a->api_reference_handbook_bounds.x,a->api_reference_handbook_bounds.y,a->api_reference_handbook_bounds.w,a->api_reference_handbook_bounds.h,ok);
         printf("API CARD GEOMETRY: card=%.1f,%.1f,%.1f,%.1f action=%.1f,%.1f,%.1f,%.1f ui=%u detached=%d\n",a->api_card_bounds.x,a->api_card_bounds.y,a->api_card_bounds.w,a->api_card_bounds.h,a->api_card_action_bounds.x,a->api_card_action_bounds.y,a->api_card_action_bounds.w,a->api_card_action_bounds.h,a->preferences.ui_size,detached);
         if(detached)join(panel->capture,sizeof panel->capture,a->project,"api-card-detached.bmp");else *capture="api-card-ready.bmp";
         break;
-    case 6:test_window_key_mod(window,SDLK_RETURN,0);break;
+    case 6:
+        if(detached){test_window_key_mod(window,SDLK_PAGEDOWN,0);*stage=21;return;}
+        test_window_key_mod(window,SDLK_RETURN,0);break;
+    case 21: {
+        struct nk_window *owner=nk_window_find(ui,dock_windows[PS_DOCK_INSPECTOR]);
+        ok=owner && owner->scrollbar.y>0 && completion_test_equal(edit,original);
+        printf("CONTEXT KEYBOARD: detached=1 page=down offset=%u source-preserved=%d\n",owner?owner->scrollbar.y:0,ok);
+        test_window_key_mod(window,SDLK_PAGEUP,0);break;
+    }
+    case 22: {
+        struct nk_window *owner=nk_window_find(ui,dock_windows[PS_DOCK_INSPECTOR]);ok=owner && !owner->scrollbar.y;
+        printf("CONTEXT KEYBOARD: detached=1 page=up offset=%u restored=%d\n",owner?owner->scrollbar.y:0,ok);
+        if(ok){test_window_key_mod(window,SDLK_RETURN,0);*stage=7;return;}break;
+    }
     case 7: {
         ok=completion_test_equal(edit,changed) && a->dirty && !a->built && !a->job.running && !a->runner.running;
         char path[4096];join(path,sizeof path,a->project,experiment_source(a));size_t bytes;char *disk=load_utf8_text(path,&bytes);
@@ -120,7 +136,41 @@ static void api_card_test_frame(app *a,const char *mode,int *stage,int *code,con
             ok=ok && result==PS_EOF && rows>=4;ps_run_reader_close(&run);
         }
         printf("API CARD BUILD/RUN: language=%s rows=%u exact-time-channel=%d\n",language?"Physim":"C",rows,ok);
-        *capture="api-card-built.bmp";a->quitting=true;break;
+        *capture="api-card-built.bmp";
+        if(strstr(mode,"large"))a->quitting=true;else {select_workspace_tab(a,0);SDL_SetWindowSize(a->window,1080,740);}
+        break;
+    }
+    case 14: {
+        ok=a->workbench_context_scrollbar && nk_sdl_accessibility_request_focus(a->ui,NULL,"Codekontext ein-/ausblenden");
+        if(ok){*stage=17;return;}break;
+    }
+    case 17:
+        if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"Codekontext ein-/ausblenden"))return;
+        test_window_key_mod(a->window,SDLK_PAGEDOWN,0);break;
+    case 18: {
+        struct nk_window *owner=nk_window_find(a->ui,dock_windows[PS_DOCK_INSPECTOR]);
+        ok=owner && owner->scrollbar.y>0 && completion_test_equal(edit,changed);
+        printf("CONTEXT KEYBOARD: detached=0 page=down offset=%u source-preserved=%d\n",owner?owner->scrollbar.y:0,ok);
+        *capture="api-card-context-keyboard.bmp";test_window_key_mod(a->window,SDLK_PAGEUP,0);break;
+    }
+    case 19: {
+        struct nk_window *owner=nk_window_find(a->ui,dock_windows[PS_DOCK_INSPECTOR]);
+        ok=owner && !owner->scrollbar.y;
+        printf("CONTEXT KEYBOARD: detached=0 page=up offset=%u restored=%d\n",owner?owner->scrollbar.y:0,ok);
+        if(ok){struct nk_rect r=a->dock_panels[PS_DOCK_INSPECTOR];test_plot_wheel(a,r.x+r.w-14,r.y+200,-8);*stage=15;return;}break;
+    }
+    case 15: {
+        struct nk_window *owner=nk_window_find(a->ui,dock_windows[PS_DOCK_INSPECTOR]);
+        ok=owner && owner->scrollbar.y>0;
+        *capture="api-card-context-scrolled.bmp";SDL_SetWindowSize(a->window,1440,1000);break;
+    }
+    case 16: {
+        struct nk_window *owner=nk_window_find(a->ui,dock_windows[PS_DOCK_INSPECTOR]);
+        ok=owner && (owner->flags&NK_WINDOW_NO_SCROLLBAR) && !owner->scrollbar.y && !a->workbench_context_scrollbar &&
+            a->api_card_bounds.w==222 && completion_test_equal(edit,changed) &&
+            analysis_crc==ps_crc32((const unsigned char*)nk_str_get_const(&a->analysis.string),(size_t)nk_str_len_char(&a->analysis.string));
+        printf("CONTEXT RESIZE RESTORED: width=%.1f offset=%u no-scrollbar=%d source-and-analysis-preserved=%d\n",a->api_card_bounds.w,owner?owner->scrollbar.y:0,owner?(owner->flags&NK_WINDOW_NO_SCROLLBAR)!=0:0,ok);
+        *capture="api-card-resized-back.bmp";a->quitting=true;break;
     }
     }
     if(!ok){fprintf(stderr,"API card stage %d failed: %s\n",*stage,a->status);*code=1;a->quitting=true;*capture="api-card-failed.bmp";}

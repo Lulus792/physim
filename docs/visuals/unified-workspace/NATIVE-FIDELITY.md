@@ -44,8 +44,10 @@ teilweise weich gerasterten Linien entsprechen nicht der Vorlage.
 Der Simulationskopf erhält die vorhandene Modellbezeichnung mit Kennzeichnung,
 kompaktere Laufaktionen, getrennte Tempo-Beschriftung und Statuskapsel. Die
 Messwerte erhalten größere Zahlen und ihre farbigen Linien. Die Kurvenhöhe,
-Auswahl und Datenquelle bleiben fachlich gebunden. Am kurzen Entwickeln-Fenster
-passt sich die API-Kartenhöhe an, damit Buildinformationen sichtbar bleiben.
+Auswahl und Datenquelle bleiben fachlich gebunden. Der nachfolgende
+[Werkbank-Kontextabgleich](WORKBENCH-CONTEXT-FLOW.md) erhält die Kartenhöhe auch
+am kurzen Entwickeln-Fenster und macht die Buildinformationen durch Scrollen
+erreichbar. Er ersetzt damit die frühere Höhenverkürzung.
 
 Am Mindestfenster bleiben mindestens 180 logische Pixel für die Szene erhalten.
 Der Messbereich besitzt ab 130 px einen eigenen Scrollbereich; Messkarten und
@@ -68,11 +70,11 @@ Entwickeln in Hell und Dunkel. **Das ist keine 100-%-Abnahme der Oberfläche.**
 | Bereich | Noch abzugleichen oder umzusetzen |
 | --- | --- |
 | Gemeinsamer Rahmen | [Fünf Menüs, direkter Theme-Wechsel und Akzentfokus](SHELL-NATIVE.md) sind nativ umgesetzt und auf Windows/Linux geprüft. Fensteraktionen, Statusinhalte und sämtliche Hover-/Fokus-/Auswahlzustände vollständig abgleichen. |
-| Entwickeln | [Standardmaße, scharfe Grenzen, begrenzter Suchschatten und freie API-Aktion](WORKBENCH-GEOMETRY.md) sowie [gefüllte API-Karte, dokumentierte Beispiele und Protokollkopf](WORKBENCH-CONTEXT.md) sind weiter angeglichen und auf Windows/Linux geprüft. Sieben Pixel Kontext-Scrollraum, Kategorienlaufweite, Gliederungsabstände, Modellnotiz, Dateitabs, Baum und weitere Protokollaktionen bleiben offen; sämtliche Schrift-/Seiten-/Plattformzustände vollständig abnehmen. |
+| Entwickeln | [Standardmaße, scharfe Grenzen, begrenzter Suchschatten und freie API-Aktion](WORKBENCH-GEOMETRY.md) sowie [gefüllte API-Karte, dokumentierte Beispiele und Protokollkopf](WORKBENCH-CONTEXT.md) sind weiter angeglichen. Der [Folgeabgleich des Kontexts](WORKBENCH-CONTEXT-FLOW.md) entfernt die unnötige Scrollbarspalte und übernimmt Kategorienlaufweite, zweizeilige Gliederung, Kartenabstände und native Seitenwechsel. Modellnotiz, Parametergruppierung, Dateitabs, Baum und weitere Protokollaktionen bleiben offen; sämtliche Schrift-/Seiten-/Plattformzustände vollständig abnehmen. |
 | Simulieren | Szenenleiste, Szenenkopf, Objektfelder, Gruppen, Kurven, Legenden und komplette Zeitleiste einschließlich Bedienelementpositionen weiter angleichen; alle acht Seiten-/Kurvenzustände. |
 | Auswerten | Gewählte Bereichsanordnung ist nativ aufgebaut; Seitenzustände, Teilfenster, Kurve-/Statistik-Trenner und Scrollzugang bestehen auf Windows/Linux. [Felder, Konturen und Tabgrenze](ANALYSIS-CONTROLS.md) sowie [kompakte Einheitenwahl und Textkorrekturen](ANALYSIS-UNITS.md) sind weiter angeglichen. Weitere Kontrollformen, Einzüge, Fokusfarben, große Schrift und vollständiger Referenzvergleich bleiben offen. Der neue Exportdialog ist noch umzusetzen. [Aufbau und Fachgrenzen](ANALYSIS-NATIVE.md). |
 | Auswerten: Daten | Echte begrenzte Vorschauen mehrerer Läufe mit deren eigenen Zeitachsen, passenden Kanälen/Dimensionen und Statuslücken; gesamte Laufstatistik, ausdrücklicher aktiver Lauf und Referenz; Worker- und Berichtsherkunft erhalten. |
-| F1 | Aktuellen H-Stand erneut unmittelbar gegen H prüfen, einschließlich linker Navigation, C/Physim-Segmenten, Modell-/Beispiel-Tabs, Formeln und den unabhängigen Seitenzuständen. |
+| F1 | Die [aktuelle Linux-Prüfung und Bilder](WORKBENCH-CONTEXT-FLOW.md#ergänzende-aktuelle-f1-formelprüfung) bestätigen H mit 56 Zuständen, 48 Inline-Fällen und vollständigem Schriftinventar. Der unmittelbare H-Bildvergleich zeigt weiter die zusätzliche Artikelwerkzeugzeile und Zoomaktionen; deren Gestaltung sowie Navigation, C/Physim-Segmente, Modell-/Beispiel-Tabs und Formeln vollständig abgleichen. Neue Windows-/macOS-Abnahme fehlt. |
 | Gesamtabnahme | Native Aufgaben, Hell/Dunkel, Kontrast, reduzierte Transparenz, Textgrößen, Minimum/Normal/Maximiert, verfügbare DPI-/Monitorfälle, Tastatur, Fokuskehr und tatsächliche Assistive-Nachweise. |
 
 Eine erfolgreiche Teilprüfung entfernt keine andere Zeile dieser Liste.

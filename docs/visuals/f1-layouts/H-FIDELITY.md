@@ -4,6 +4,21 @@ Nach dem Nutzervergleich vom 16. Oktober 2026 wurde die native Umsetzung erneut
 direkt mit `h-dark.png`, `h-light.png` und den zugehörigen CSS-Regeln verglichen.
 Dieser Bericht ergänzt die historische Abnahme in [NATIVE-H.md](NATIVE-H.md).
 
+## Aktuelle Nachprüfung vom 21. Oktober 2026
+
+Der [erneute native Linux-Abgleich](../unified-workspace/WORKBENCH-CONTEXT-FLOW.md#ergänzende-aktuelle-f1-formelprüfung)
+enthält aktuelle H-Bilder und besteht 56 H-Zustände, 48 Inline-Formelfälle sowie
+183 Zeichen in allen 42 F1-Schriftvarianten einschließlich gebündelter Fonts.
+Der dort dokumentierte alte Schriftzähler wird anhand der tatsächlichen
+Hauptfenster-/F1-Banken korrigiert; die native Mathematikprüfung besteht erneut.
+Für diesen Stand gibt es keine neue Windows-/macOS-F1-Abnahme.
+
+Der jüngere Auftrag zum möglichst identischen Gesamtauftritt gilt auch für die
+zusätzliche Artikelwerkzeugzeile und die Zoomaktionen. Ihre unten historisch
+beschriebene bewusste Abweichung ist deshalb keine aktuelle Designfreigabe.
+Die Funktionen müssen erhalten und ihre sichtbare Gestaltung weiter mit H
+abgeglichen werden. Eine technische Unmöglichkeit ist dafür nicht nachgewiesen.
+
 ## Weitere Annäherung an die Referenz (17. Oktober 2026)
 
 Die Paneel-Icons verwenden jetzt unmittelbar die Geometrie von `panelIcon()` aus

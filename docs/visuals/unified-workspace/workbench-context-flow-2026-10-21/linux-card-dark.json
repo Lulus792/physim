@@ -1,0 +1,95 @@
+{
+  "scope": "Bounded direct PNG comparison of the API card's straight border segments.\n\nUses the unchanged selected reference, without resizing, masks or retouching.\nThis is not a typography, corner-antialiasing, interaction or whole-UI score.\nPillow is optional, as for check_unified_chrome.py; native workflows need none.",
+  "reference": "D:\\Physim\\docs\\visuals\\unified-workspace\\develop-dark.png",
+  "native": "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-flow-2026-10-21\\linux-workbench-dark.png",
+  "sha256": [
+    "b4554a1b09689798c21a8fe771d5c706a03a711bd963c1b3d00b5d2fe270ec52",
+    "7b516f43bf10018130099881849475c3af6e90b3c6cbdeb6354cad27f97e36d7"
+  ],
+  "border": [
+    59,
+    61,
+    69
+  ],
+  "frames": [
+    {
+      "columns": [
+        1202,
+        1423
+      ],
+      "maximum_vertical_pixels": 224,
+      "rows": [
+        417,
+        652
+      ]
+    },
+    {
+      "columns": [
+        1202,
+        1423
+      ],
+      "maximum_vertical_pixels": 222,
+      "rows": [
+        417,
+        652
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "name": "actual client size",
+      "passed": true,
+      "reference": [
+        1440,
+        1000
+      ],
+      "native": [
+        1440,
+        1000
+      ]
+    },
+    {
+      "name": "reference card has two straight sides",
+      "passed": true,
+      "reference": 2,
+      "native": 2
+    },
+    {
+      "name": "native sides have the exact reference border color",
+      "passed": true,
+      "reference": 2,
+      "native": 2
+    },
+    {
+      "name": "same card horizontal bounds",
+      "passed": true,
+      "reference": [
+        1202,
+        1423
+      ],
+      "native": [
+        1202,
+        1423
+      ]
+    },
+    {
+      "name": "two native horizontal rules",
+      "passed": true,
+      "reference": 2,
+      "native": 2
+    },
+    {
+      "name": "same card vertical bounds",
+      "passed": true,
+      "reference": [
+        417,
+        652
+      ],
+      "native": [
+        417,
+        652
+      ]
+    }
+  ],
+  "passed": true
+}
