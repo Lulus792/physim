@@ -1,5 +1,10 @@
 Stand: Der native F1-Artikel wird weiter mit der gewählten H-Vorlage abgeglichen.
-Der [aktuelle Navigations-/Kontextabgleich](NAV-CONTEXT.md) korrigiert die
+Der [aktuelle SVG-Schriftabgleich](SVG-LABELS.md) ergänzt echte kursive
+Serifenglyphen für das Kontextmodell und einen vollständig offline nutzbaren
+Font. Sanitizer-Gegenfälle und erfolgreiche native Prüfungen sind dort getrennt
+belegt; außerhalb der Modellgrafik bleiben 112 native Bildpaare pixelidentisch.
+
+Der vorhergehende [Navigations-/Kontextabgleich](NAV-CONTEXT.md) korrigiert die
 Seitenleisten nach CSS, einschließlich der Panelkante, Gruppen- und
 Abschnittsmaße, Modellwerte und Beispielkopf. Die Reiter verwenden intrinsische
 Schriftbreiten und eine volle 2-px-Unterstreichung. Prüfungen und offene
@@ -17,7 +22,7 @@ historischen Stand. Maßgeblich für den Folgeauftrag sind der aktuelle
 [visuelle Abgleich](H-FIDELITY.md) und der
 [Gesamtoberflächenstand](../unified-workspace/NATIVE-FIDELITY.md).
 
-Weiter offen sind unter anderem Linux-Schrift/Glyphenrasterung, SVG-Schrift,
+Weiter offen sind unter anderem Linux-Schrift/Glyphenrasterung, Bildunterschrift,
 horizontale Codevorschau und weitere Kontextdetails sowie die vollständige H-Abnahme.
 Browser-PNGs oder bestandene Funktionsgruppen ersetzen diese Abnahme nicht.
 Die lokale HTML-Datei blieb im Browserwerkzeug gesperrt; daraus wird keine

@@ -621,7 +621,16 @@ static bool documentation_math_fonts(app *a) {
   }
  }
  if(!feof(input) || count<1)ok=false;fclose(input);
- if(ok)printf("DOCUMENTATION MATH GLYPHS: %u characters in 42 font variants\n",count);return ok;
+ static const nk_rune figure_glyphs[]={'L','m',0x3b8};
+ for(unsigned i=0;i<4;i++) {
+  const struct nk_user_font *font=a->doc_figure_fonts[i];
+  if(!font || font==a->doc_ui_fonts[i] || !ps_ui_font_has_glyph(font,'A') || ps_ui_font_has_glyph(font,0x378))ok=false;
+  for(unsigned j=0;j<3;j++)if(!ps_ui_font_has_glyph(font,figure_glyphs[j])) {
+   fprintf(stderr,"Documentation figure missing U+%04X variant=%u\n",figure_glyphs[j],i);ok=false;
+  }
+ }
+ if(ok){printf("DOCUMENTATION MATH GLYPHS: %u characters in 42 font variants\n",count);
+  puts("DOCUMENTATION FIGURE GLYPHS: 3 characters in 4 italic serif variants");}return ok;
 }
 static void documentation_math_test_frame(app *a,int *stage,int *code,const char **capture) {
  static unsigned zoom_frames;bool ok=true;switch((*stage)++) {
@@ -837,7 +846,8 @@ static void documentation_navigation_test_frame(app *a,int *stage,int *code,cons
 }
 static unsigned documentation_font_variants(const app *a) {
     unsigned count=0;for(unsigned i=0;i<9;i++)count+=(a->doc_ui_fonts[i]!=NULL)+(a->doc_title_fonts[i]!=NULL)+(a->doc_code_fonts[i]!=NULL);
-    for(unsigned i=0;i<11;i++)count+=a->doc_bold_fonts[i]!=NULL;for(unsigned i=0;i<4;i++)count+=a->doc_chrome_fonts[i]!=NULL;return count;
+    for(unsigned i=0;i<11;i++)count+=a->doc_bold_fonts[i]!=NULL;
+    for(unsigned i=0;i<4;i++)count+=(a->doc_chrome_fonts[i]!=NULL)+(a->doc_figure_fonts[i]!=NULL);return count;
 }
 static void documentation_font_demand_test(app *a,int *stage,int *code,const char **capture) {
     static const struct nk_user_font *original;static uint64_t version;
@@ -848,7 +858,7 @@ static void documentation_font_demand_test(app *a,int *stage,int *code,const cha
         initial=a->preferences;editor=a->experiment.string.len;simulation=a->simulation_time;
         test_window_key_mod(a->window,SDLK_F1,0);break;
     case 1:
-        ok=a->doc_visible && documentation_font_variants(a)==6 && documentation_inline_fixture(a,a->doc_topic);
+        ok=a->doc_visible && documentation_font_variants(a)==7 && documentation_inline_fixture(a,a->doc_topic);
         ok=ok && SDL_SetWindowSize(a->doc_window,760,540) && SDL_SyncWindow(a->doc_window);
         original=a->doc_font_ui;version=a->doc_reading_version;
         printf("FONT DEMAND: initial variants=%u\n",documentation_font_variants(a));
@@ -859,7 +869,7 @@ static void documentation_font_demand_test(app *a,int *stage,int *code,const cha
         SDL_GLContext before=SDL_GL_GetCurrentContext();a->doc_test_font_allocator=&allocator;
         documentation_zoom(a,1);a->doc_test_font_allocator=NULL;
         ok=documentation_font_size(a)==16 && a->doc_font_ui==original && a->doc_ui->style.font==original &&
-           documentation_font_variants(a)==6 && a->doc_reading_version==version && !failure.live &&
+           documentation_font_variants(a)==7 && a->doc_reading_version==version && !failure.live &&
            failure.requests>=3 && SDL_GL_GetCurrentContext()==before && a->doc_error[0];
         *capture="docs-font-demand-failed.bmp";break;
     }
@@ -872,7 +882,7 @@ static void documentation_font_demand_test(app *a,int *stage,int *code,const cha
         ps_result after=ps_preferences_read(a->preferences_path,&disk_after);
         ok=before==after && (before!=PS_OK || !memcmp(&disk_before,&disk_after,sizeof disk_before)) &&
            a->preferences.ui_size==initial.ui_size && a->preferences.editor_size==initial.editor_size && a->doc_font_ui==original &&
-           documentation_font_variants(a)==6 && !failure.live && a->preferences_error[0];
+           documentation_font_variants(a)==7 && !failure.live && a->preferences_error[0];
         puts("FONT DEMAND: failed zoom/settings preserve fonts, context, values and preference file");
         break;
     }
@@ -880,22 +890,22 @@ static void documentation_font_demand_test(app *a,int *stage,int *code,const cha
         documentation_zoom(a,1);
         ok=documentation_font_size(a)==18 && a->doc_font_ui->height==18 &&
            fabsf(a->doc_font_code->height/a->doc_font_em[3][1]-14.4f)<.01f &&
-           a->doc_ui_fonts[0]==original && documentation_font_variants(a)==11 && !a->doc_error[0];
+           a->doc_ui_fonts[0]==original && documentation_font_variants(a)==12 && !a->doc_error[0];
         *capture="docs-font-demand-retry.bmp";break;
     case 5: {
-        documentation_zoom(a,0);ok=a->doc_font_ui==original && documentation_font_variants(a)==11;
+        documentation_zoom(a,0);ok=a->doc_font_ui==original && documentation_font_variants(a)==12;
         ps_preferences p=a->preferences;p.ui_size=22;p.editor_size=18;preferences_apply(a,&p);
         break;
     }
     case 6:
         ok=documentation_font_size(a)==22 && documentation_code_size(a)==18 &&
            a->doc_font_ui->height==22 && fabsf(a->doc_font_code->height/a->doc_font_em[3][1]-14.4f)<.01f && a->doc_ui_fonts[0]==original &&
-           documentation_font_variants(a)==15 && a->doc_reading_version==version;
+           documentation_font_variants(a)==17 && a->doc_reading_version==version;
         printf("FONT DEMAND: independent sizes ui=22 code=18 variants=%u\n",documentation_font_variants(a));
         *capture="docs-font-demand-settings.bmp";break;
     case 7:
         preferences_apply(a,&initial);
-        ok=a->doc_font_ui==original && fabsf(a->doc_font_code->height/a->doc_font_em[3][0]-12.8f)<.01f && documentation_font_variants(a)==15 &&
+        ok=a->doc_font_ui==original && fabsf(a->doc_font_code->height/a->doc_font_em[3][0]-12.8f)<.01f && documentation_font_variants(a)==17 &&
            a->doc_reading_version==version && a->experiment.string.len==editor && a->simulation_time==simulation;
         *capture="docs-font-demand-cache.bmp";break;
     case 8:a->doc_test_density=2;frames=0;break;
@@ -903,14 +913,14 @@ static void documentation_font_demand_test(app *a,int *stage,int *code,const cha
         if(frames++<2){--*stage;return;}
         const struct nk_font *font=a->doc_font_ui->userdata.ptr;
         ok=a->doc_raster_density==2 && font->info.height==32 && a->doc_font_ui->height==16 &&
-           documentation_font_variants(a)==6 && !a->doc_ui_fonts[1] && !a->doc_code_fonts[1] &&
+           documentation_font_variants(a)==7 && !a->doc_ui_fonts[1] && !a->doc_code_fonts[1] &&
            a->doc_reading_version==version;
         *capture="docs-font-demand-density.png";break;
     }
     case 10:a->doc_test_density=1;frames=0;break;
     case 11:
         if(frames++<2){--*stage;return;}
-        ok=a->doc_raster_density==1 && a->doc_font_ui->height==16 && documentation_font_variants(a)==6 &&
+        ok=a->doc_raster_density==1 && a->doc_font_ui->height==16 && documentation_font_variants(a)==7 &&
            a->doc_reading_version==version && a->experiment.string.len==editor && a->simulation_time==simulation;
         puts("FONT DEMAND: populated bank retired at density 2 and rebuilt at density 1");
         *capture="docs-font-demand-reset.bmp";a->doc_test_density=0;a->quitting=true;break;

@@ -1,4 +1,5 @@
 #include "documentation_layout.h"
+#include "documentation_figure_font.inc"
 /* Independent native window: its input, fonts and GL resources belong to this viewer. */
 static void documentation_window_destroy(app *a) {
     for(unsigned i=0;i<2;i++){ps_ui_font_pairs_destroy(a->doc_font_pairs[i]);a->doc_font_pairs[i]=NULL;}
@@ -26,7 +27,9 @@ static void documentation_window_destroy(app *a) {
     memset(a->doc_ui_fonts,0,sizeof a->doc_ui_fonts);memset(a->doc_title_fonts,0,sizeof a->doc_title_fonts);
     memset(a->doc_bold_fonts,0,sizeof a->doc_bold_fonts);memset(a->doc_code_fonts,0,sizeof a->doc_code_fonts);
     memset(a->doc_chrome_fonts,0,sizeof a->doc_chrome_fonts);
+    memset(a->doc_figure_fonts,0,sizeof a->doc_figure_fonts);
     memset(a->doc_type_fonts,0,sizeof a->doc_type_fonts);memset(a->doc_type_em,0,sizeof a->doc_type_em);
+    memset(&a->doc_figure_draw_font,0,sizeof a->doc_figure_draw_font);
     memset(a->doc_font_em,0,sizeof a->doc_font_em);
     memset(a->doc_spaced_fonts,0,sizeof a->doc_spaced_fonts);
     a->doc_type_document=NULL;a->doc_type_version=0;a->doc_lead_text=SIZE_MAX;
@@ -45,13 +48,14 @@ static bool documentation_fonts_load(app *a,float density,unsigned size,unsigned
     unsigned index=(size-16)/2,code_index=(code_size-16)/2;
     bool replace=!a->doc_font_ui || fabsf(density-a->doc_raster_density)>.01f;
     const struct nk_user_font *regular[9]={0},*titles[9]={0},*bold[11]={0},*code[9]={0};
-    const struct nk_user_font *chrome[4]={0};
-    float em[5][11]={{0}};
+    const struct nk_user_font *chrome[4]={0},*figures[4]={0};
+    float em[6][11]={{0}};
     ps_ui_font_pairs *pairs[2]={replace?NULL:a->doc_font_pairs[0],replace?NULL:a->doc_font_pairs[1]};
     if(!replace) {
         memcpy(regular,a->doc_ui_fonts,sizeof regular);memcpy(titles,a->doc_title_fonts,sizeof titles);
         memcpy(bold,a->doc_bold_fonts,sizeof bold);memcpy(code,a->doc_code_fonts,sizeof code);
         memcpy(chrome,a->doc_chrome_fonts,sizeof chrome);
+        memcpy(figures,a->doc_figure_fonts,sizeof figures);
         memcpy(em,a->doc_font_em,sizeof em);
     }
     struct nk_font_atlas candidate;
@@ -61,24 +65,25 @@ static bool documentation_fonts_load(app *a,float density,unsigned size,unsigned
     struct nk_font *default_font=NULL;
     unsigned added=0;
     if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: F1 fonts begin %.6f\n",ps_clock());
-    for(unsigned role=0;role<5;role++)for(unsigned i=0;i<(role==4?4u:role==2?11u:9u);i++) {
-        bool needed=a->doc_full_font_inventory || (role==4?i==(ui_size-16)/2:role==3?(i==code_index || i==(editor_size-16)/2):role==2?(i==index || i==index+2 || i==(ui_size-16)/2):
+    for(unsigned role=0;role<6;role++)for(unsigned i=0;i<(role>=4?4u:role==2?11u:9u);i++) {
+        bool needed=a->doc_full_font_inventory || (role>=4?i==(ui_size-16)/2:role==3?(i==code_index || i==(editor_size-16)/2):role==2?(i==index || i==index+2 || i==(ui_size-16)/2):
             (i==index || (role==0 && i==(ui_size-16)/2)));
-        const struct nk_user_font **slot=role==0?&regular[i]:role==1?&titles[i]:role==2?&bold[i]:role==3?&code[i]:&chrome[i];
+        const struct nk_user_font **slot=role==0?&regular[i]:role==1?&titles[i]:role==2?&bold[i]:role==3?&code[i]:role==4?&chrome[i]:&figures[i];
         if(!needed || *slot)continue;
-        float pixels=(role==4?(16.f+i*2)*.875f:(float)((role==1?26:16)+i*2))*density;
-        struct nk_font *font=system_font_sampling(&candidate,a->root,pixels,role==3,role==1 || role==2,2,1);
+        float pixels=(role>=4?(16.f+i*2)*(role==4?.875f:1.25f):(float)((role==1?26:16)+i*2))*density;
+        struct nk_font *font=role==5?documentation_figure_font(&candidate,a->root,pixels):
+            system_font_sampling(&candidate,a->root,pixels,role==3,role==1 || role==2,2,1);
         if(!font)goto fail;
         em[role][i]=ps_ui_font_em_ratio(font);
         if((role==1 || role==2) && !pairs[role-1]) {
             pairs[role-1]=ps_ui_font_pairs_create(font,&candidate.permanent);
             if(!pairs[role-1])goto fail;
         }
-        if(role==3) {
-            /* Code is .8em in H. Bake its actual drawing size instead of
-             * resampling a larger cell: box glyph edges must meet exactly. */
+        if(role==3 || role==5) {
+            /* Code is .8em in H; SVG labels have their own 20px CSS em.
+             * Bake their actual em sizes instead of resampling a larger cell. */
             struct nk_font_config *config=font->config;
-            do {config->size*=.8f*em[role][i];config=config->n;}while(config!=font->config);
+            do {config->size*=(role==3?.8f:1.f)*em[role][i];config=config->n;}while(config!=font->config);
         }
         if(role==0 && i==index)default_font=font;
         *slot=&font->handle;added++;
@@ -91,13 +96,15 @@ static bool documentation_fonts_load(app *a,float density,unsigned size,unsigned
     memcpy(a->doc_ui_fonts,regular,sizeof regular);memcpy(a->doc_title_fonts,titles,sizeof titles);
     memcpy(a->doc_bold_fonts,bold,sizeof bold);memcpy(a->doc_code_fonts,code,sizeof code);
     memcpy(a->doc_chrome_fonts,chrome,sizeof chrome);
+    memcpy(a->doc_figure_fonts,figures,sizeof figures);
     memcpy(a->doc_font_em,em,sizeof em);
     for(unsigned i=0;i<2;i++) {
         if(pairs[i]!=a->doc_font_pairs[i])ps_ui_font_pairs_destroy(a->doc_font_pairs[i]);
         a->doc_font_pairs[i]=pairs[i];
     }
     a->doc_raster_density=density;a->doc_failed_density=0;
-    if(replace){memset(a->doc_type_fonts,0,sizeof a->doc_type_fonts);memset(a->doc_type_em,0,sizeof a->doc_type_em);}
+    if(replace){memset(a->doc_type_fonts,0,sizeof a->doc_type_fonts);memset(a->doc_type_em,0,sizeof a->doc_type_em);
+        memset(&a->doc_figure_draw_font,0,sizeof a->doc_figure_draw_font);}
     printf("F1 font demand: %s %u variants, density %.3f\n",replace?"replace":"append",added,density);
     if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: F1 fonts ready %.6f\n",ps_clock());
     return true;

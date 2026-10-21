@@ -1,0 +1,179 @@
+{
+  "status": "completed",
+  "scope": "Superseded successful font-bank/demand/density raw images from sources84/85 only. All failed groups, source83 parity references and all final86 outputs remain protected.",
+  "files": [
+    {
+      "path": "build/native/Design-analysis/test-results/run-24si8qto/font_bank_ui/font-added.bmp",
+      "bytes": 204938,
+      "sha256": "abca5fc65a7573dc2c467110edd7a075bf3f1522338752625fbe5f895fd7efb7"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-24si8qto/font_bank_ui/font-after.bmp",
+      "bytes": 204938,
+      "sha256": "b17de83304f029e8fbec80d9ec715d209442b91ef72ad36a4f3c525532ee962c"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-24si8qto/font_bank_ui/font-before.bmp",
+      "bytes": 204938,
+      "sha256": "b17de83304f029e8fbec80d9ec715d209442b91ef72ad36a4f3c525532ee962c"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-4uugl5ed/font_bank_ui/font-added.bmp",
+      "bytes": 204938,
+      "sha256": "f5a9525bf74cbb06a18ca5c8eb9c138a808731636c438b4981c7d58b0c62de3d"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-4uugl5ed/font_bank_ui/font-after.bmp",
+      "bytes": 204938,
+      "sha256": "1e972e4d5ead6108bed9abb20657729a9c7c8658ce8acb10670e2f6bc1c04ee5"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-4uugl5ed/font_bank_ui/font-before.bmp",
+      "bytes": 204938,
+      "sha256": "1e972e4d5ead6108bed9abb20657729a9c7c8658ce8acb10670e2f6bc1c04ee5"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-a6975xp8/font_bank_ui/font-added.bmp",
+      "bytes": 204938,
+      "sha256": "abca5fc65a7573dc2c467110edd7a075bf3f1522338752625fbe5f895fd7efb7"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-a6975xp8/font_bank_ui/font-after.bmp",
+      "bytes": 204938,
+      "sha256": "b17de83304f029e8fbec80d9ec715d209442b91ef72ad36a4f3c525532ee962c"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-a6975xp8/font_bank_ui/font-before.bmp",
+      "bytes": 204938,
+      "sha256": "b17de83304f029e8fbec80d9ec715d209442b91ef72ad36a4f3c525532ee962c"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-a6975xp8/documentation_font_demand/files ä/workflow ä/docs-font-demand-cache.bmp",
+      "bytes": 1641738,
+      "sha256": "5d468e80a1d0636e6e814dfa989591530e19a11ff14f3eb466c0474be8dcddf5"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-a6975xp8/documentation_font_demand/files ä/workflow ä/docs-font-demand-density.png",
+      "bytes": 225946,
+      "sha256": "5877ecef04955ed81c9c4170c73d3b3dfdf5397e5427cfac7a356549f0b912ed"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-a6975xp8/documentation_font_demand/files ä/workflow ä/docs-font-demand-failed.bmp",
+      "bytes": 1641738,
+      "sha256": "89470810d15946c539b4e088f9bb9ce572e29c03690f5b14863b46d6261a1e17"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-a6975xp8/documentation_font_demand/files ä/workflow ä/docs-font-demand-ready.bmp",
+      "bytes": 1641738,
+      "sha256": "5d468e80a1d0636e6e814dfa989591530e19a11ff14f3eb466c0474be8dcddf5"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-a6975xp8/documentation_font_demand/files ä/workflow ä/docs-font-demand-reset.bmp",
+      "bytes": 1641738,
+      "sha256": "5d468e80a1d0636e6e814dfa989591530e19a11ff14f3eb466c0474be8dcddf5"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-a6975xp8/documentation_font_demand/files ä/workflow ä/docs-font-demand-retry.bmp",
+      "bytes": 1641738,
+      "sha256": "2dbb28d3853f2ae0e81db8ddddbb0504c7773f6db62fe82cf40744ed23238f3d"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-a6975xp8/documentation_font_demand/files ä/workflow ä/docs-font-demand-settings.bmp",
+      "bytes": 1641738,
+      "sha256": "371af6347a2bea2a780f53413669f4bb505433f6febf8055e4072a533ab87889"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-a6975xp8/documentation_density/files ä/workflow ä/docs-density-125.bmp",
+      "bytes": 1641738,
+      "sha256": "c3815d640c4d3ae845ba603b7aa8b596dfb67ac1ceb97f7bbea57db148dc4d07"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-a6975xp8/documentation_density/files ä/workflow ä/docs-density-150.bmp",
+      "bytes": 1641738,
+      "sha256": "08370e74e6446aa0d91adb86951ac27836d02e44b9b0e9600231b1fc1d2f8685"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-a6975xp8/documentation_density/files ä/workflow ä/docs-density-200.png",
+      "bytes": 225946,
+      "sha256": "5877ecef04955ed81c9c4170c73d3b3dfdf5397e5427cfac7a356549f0b912ed"
+    },
+    {
+      "path": "build/native/Design-analysis/test-results/run-a6975xp8/documentation_density/files ä/workflow ä/docs-density-reset.bmp",
+      "bytes": 1641738,
+      "sha256": "5d468e80a1d0636e6e814dfa989591530e19a11ff14f3eb466c0474be8dcddf5"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-t90z2kor/font_bank_ui/font-added.bmp",
+      "bytes": 204938,
+      "sha256": "f5a9525bf74cbb06a18ca5c8eb9c138a808731636c438b4981c7d58b0c62de3d"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-t90z2kor/font_bank_ui/font-after.bmp",
+      "bytes": 204938,
+      "sha256": "1e972e4d5ead6108bed9abb20657729a9c7c8658ce8acb10670e2f6bc1c04ee5"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-t90z2kor/font_bank_ui/font-before.bmp",
+      "bytes": 204938,
+      "sha256": "1e972e4d5ead6108bed9abb20657729a9c7c8658ce8acb10670e2f6bc1c04ee5"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-t90z2kor/documentation_font_demand/files ä/workflow ä/docs-font-demand-cache.bmp",
+      "bytes": 1641738,
+      "sha256": "4bcfb5d701d627dafb4853cafb6a5af405799602bc571350bb65a3104a0034c2"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-t90z2kor/documentation_font_demand/files ä/workflow ä/docs-font-demand-density.png",
+      "bytes": 210465,
+      "sha256": "cba0f1b58411df5f205290388626850b42e695aa80fca884b4210327e5445ace"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-t90z2kor/documentation_font_demand/files ä/workflow ä/docs-font-demand-failed.bmp",
+      "bytes": 1641738,
+      "sha256": "e6c7eb8aa8f7c5df62987605f531be6c45e03bd2d3921efa8de97596f85d7683"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-t90z2kor/documentation_font_demand/files ä/workflow ä/docs-font-demand-ready.bmp",
+      "bytes": 1641738,
+      "sha256": "4ff8d2bcfa1f3065f9b792c990a17d1b0e7619377e76969dc6f2506a1900d700"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-t90z2kor/documentation_font_demand/files ä/workflow ä/docs-font-demand-reset.bmp",
+      "bytes": 1641738,
+      "sha256": "4bcfb5d701d627dafb4853cafb6a5af405799602bc571350bb65a3104a0034c2"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-t90z2kor/documentation_font_demand/files ä/workflow ä/docs-font-demand-retry.bmp",
+      "bytes": 1641738,
+      "sha256": "046506e9887d98f32518541fba41ab576edb0523a7e40d98d67c6876fe68aeac"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-t90z2kor/documentation_font_demand/files ä/workflow ä/docs-font-demand-settings.bmp",
+      "bytes": 1641738,
+      "sha256": "2ea850617f0c8f3110a551cf6125751a19ef32ef5c2f20755fc728ff3da214a2"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-t90z2kor/documentation_density/files ä/workflow ä/docs-density-125.bmp",
+      "bytes": 1641738,
+      "sha256": "1682b9f90eba062c6dfe99cb023eb0b7503d81ef602a15ed7cb2a56148c48e6e"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-t90z2kor/documentation_density/files ä/workflow ä/docs-density-150.bmp",
+      "bytes": 1641738,
+      "sha256": "208d4803a7effb6f32ac644a9472a651c53bef6da0c2bff212603ae292a860f8"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-t90z2kor/documentation_density/files ä/workflow ä/docs-density-200.png",
+      "bytes": 210465,
+      "sha256": "cba0f1b58411df5f205290388626850b42e695aa80fca884b4210327e5445ace"
+    },
+    {
+      "path": "build/native/Design-analysis-linux/test-results/run-t90z2kor/documentation_density/files ä/workflow ä/docs-density-reset.bmp",
+      "bytes": 1641738,
+      "sha256": "4bcfb5d701d627dafb4853cafb6a5af405799602bc571350bb65a3104a0034c2"
+    }
+  ],
+  "count": 34,
+  "bytes": 32883362,
+  "completed_utc": "2026-10-21T16:35:18.7030801Z"
+}

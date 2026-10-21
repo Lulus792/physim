@@ -1,0 +1,77 @@
+{
+  "scope": "Bounded source/proof/asset self-audit; full H and whole UI still open.",
+  "checks": {
+    "source_sha256_lf": 74,
+    "foreign_sha256_lf": 10,
+    "font_assets_sha256": 14,
+    "terminal_build_runs": 8,
+    "additional_linux_h": true,
+    "native_pngs": 16,
+    "article_and_outside_figure_pairs": 112,
+    "changed_model_images_per_platform": 28,
+    "font_manifest_entries": 14,
+    "local_doc_links": 134,
+    "cleanup_completed": true,
+    "json_syntax": true,
+    "python_syntax": true,
+    "git_diff_check": true,
+    "foreign_changes_unchanged": true
+  },
+  "owned_files": [
+    "app/documentation_figure_font.inc",
+    "app/documentation_h.inc",
+    "app/documentation_h_tests.inc",
+    "app/documentation_keyboard_tests.inc",
+    "app/documentation_typography.inc",
+    "app/documentation_window.inc",
+    "app/main.c",
+    "tests/check_display_workflow.py",
+    "third_party/fonts/README.md",
+    "third_party/fonts/manifest.json",
+    "third_party/fonts/NotoSerif-Italic.ttf",
+    "third_party/fonts/notoserifitalic-OFL.txt"
+  ],
+  "inputs": [
+    {
+      "path": "docs/visuals/f1-layouts/figure-font-2026-10-21/validation.json",
+      "sha256": "2cd81ef02e81de9070a293dcadccf7d9c12505ea903f6a7f85ed1daf2b6b556d"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/figure-font-2026-10-21/cleanup.json",
+      "sha256": "47a492ff3faf991d90c3a7bccf9bb78ede8dd97e655dd9e021fa518a68b4dc37"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/SVG-LABELS.md",
+      "sha256": "0caf64218aeff222817d0020f41deb8a7a19ff6e43373b1d8951286f6db6be12"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/H-FIDELITY.md",
+      "sha256": "e89d038ada56fdfde899217be5ee1b181f221c4b924a44f764c118e1a8a10ae5"
+    },
+    {
+      "path": "docs/visuals/f1-layouts/NEXT-CHAT.md",
+      "sha256": "5d995bbf794881423d17c77536bec8bd1d67951ed6b8ee93b8a76ddba32f4d66"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/README.md",
+      "sha256": "94119b5ba36a2c253bf5f1c59305ea5ad7bb44fb49003b1161d522dbfb9db8ca"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "sha256": "cf49dc8beffbec28cdef22517fc62744b534d24e70019b647377cd13c1cce8ae"
+    }
+  ],
+  "manual_review": [
+    "SVG font sources and bounded ranges retain unchanged ASCII upload invariants.",
+    "Candidate commit occurs only after successful bake/upload; prior handles are retained on failure.",
+    "Queued scaled draw font is persistent app state, not stack storage; same native sanitizer cases now pass.",
+    "Figure roles and scaled draw state are reset with density replacement/window destruction.",
+    "Only model-label drawing changes; all112 images are identical outside the model rectangle.",
+    "Offline font and license are pinned and stored in existing packaged font directory."
+  ],
+  "generator": {
+    "path": "build/native/audit-f1-figure.py",
+    "sha256": "63bfa87b0d9e5d95497bc5213e1a8e5c65970c7c63f124256e19b447b99c3fd0",
+    "source": "import ast,hashlib,json,re,subprocess\nfrom pathlib import Path\nfrom PIL import Image\nroot=Path('D:/Physim');out=root/'docs/visuals/f1-layouts/figure-font-2026-10-21'\nload=lambda p:json.loads(p.read_text(encoding='utf-8-sig'))\ndef sha(p,lf=False):\n    b=p.read_bytes();return hashlib.sha256(b.replace(b'\\r\\n',b'\\n') if lf else b).hexdigest()\nrel=lambda p:p.relative_to(root).as_posix()\nd=load(out/'validation.json');checks={}\nfor bank,lf in [('source_sha256_lf',True),('foreign_sha256_lf',True),('font_assets_sha256',False)]:\n    for p,h in d['sources']['86'][bank].items():assert sha(root/p,lf)==h,p\n    checks[bank]=len(d['sources']['86'][bank])\nfor p,h in d['references'].items():assert sha(root/p)==h,p\nfor r in d['runs']:\n    assert sha(root/r['path'])==r['sha256']\n    assert load(root/r['path'])==r['records']\n    if r['source']==86:assert r['passed']==r['total']\nassert len(d['runs'])==8\nassert all(v['count']==8 for v in d['final_unique_scope'].values())\nfor scope in d['final_unique_scope'].values():assert sha(root/scope['binary']['path'])==scope['binary']['sha256']\nfor image in d['images']:\n    p=root/image['path'];source=root/image['source'];assert sha(p)==image['sha256'] and sha(source)==image['source_sha256']\n    b=Image.open(p).convert('RGB').tobytes();assert b==Image.open(source).convert('RGB').tobytes()\n    assert hashlib.sha256(b).hexdigest()==image['rgb_sha256']\nfor scope in d['native_h'].values():\n    assert sha(root/scope['path'])==scope['sha256']\n    assert len(scope['figure_font_records'])==28 and all(r[1]=='1' for r in scope['figure_font_records'])\nassert sha(root/d['linux_h']['path'])==d['linux_h']['sha256']\nassert d['linux_h']['record']['status']=='passed' and d['linux_h']['record']['app_deadline_seconds']==60\nassert len(d['parity'])==112 and all(p['article_equal'] and p['outside_figure_equal'] for p in d['parity'])\nfor platform in ('windows','linux'):assert sum(bool(p['full_difference']) for p in d['parity'] if p['platform']==platform)==28\nfor r in d['font_manifest']['files']:\n    p=root/'third_party/fonts'/r['file'];assert p.stat().st_size==r['bytes'] and sha(p)==r['sha256']\nfor r in d['build_logs']:assert sha(root/r['path'])==r['sha256']\nfor r in d['execution_sources']:assert sha(root/r['path'])==r['sha256'] and (root/r['path']).read_text(encoding='utf-8')==r['source']\nassert sha(root/d['generator']['path'])==d['generator']['sha256']\nassert (root/d['generator']['path']).read_text(encoding='utf-8')==d['generator']['source']\ncleanup=load(out/'cleanup.json');assert cleanup['status']=='completed'\nassert cleanup['count']==len(cleanup['files'])==34\nassert cleanup['bytes']==sum(f['bytes'] for f in cleanup['files'])==32883362\nassert all(not (root/f['path']).exists() for f in cleanup['files'])\nowned=['app/documentation_figure_font.inc','app/documentation_h.inc','app/documentation_h_tests.inc','app/documentation_keyboard_tests.inc','app/documentation_typography.inc','app/documentation_window.inc','app/main.c','tests/check_display_workflow.py','third_party/fonts/README.md','third_party/fonts/manifest.json','third_party/fonts/NotoSerif-Italic.ttf','third_party/fonts/notoserifitalic-OFL.txt']\ndocs=[root/'docs/visuals/f1-layouts'/p for p in ('SVG-LABELS.md','H-FIDELITY.md','NEXT-CHAT.md')]\ndocs.extend(root/'docs/visuals/unified-workspace'/p for p in ('README.md','NATIVE-FIDELITY.md'))\nlinks=0\nfor p in docs:\n    text=p.read_text(encoding='utf-8');assert 'Ã' not in text and 'Â' not in text\n    for target in re.findall(r'\\]\\(([^)]+)\\)',text):\n        if re.match(r'\\w+://',target) or target.startswith('#'):continue\n        file=(p.parent/target.split('#')[0].split('?')[0]).resolve()\n        if file==out/'audit.json':continue\n        assert file.exists(),(p,target);links+=1\nfor p in out.glob('*.json'):load(p)\nast.parse((root/'tests/check_display_workflow.py').read_text(encoding='utf-8'))\nresult=subprocess.run(['git','diff','--check','--',*owned,*map(rel,docs)],cwd=root,capture_output=True,text=True);assert result.returncode==0,result.stdout+result.stderr\nchecks.update(terminal_build_runs=8,additional_linux_h=True,native_pngs=16,article_and_outside_figure_pairs=112,changed_model_images_per_platform=28,font_manifest_entries=len(d['font_manifest']['files']),local_doc_links=links,cleanup_completed=True,json_syntax=True,python_syntax=True,git_diff_check=True,foreign_changes_unchanged=True)\naudit=dict(scope='Bounded source/proof/asset self-audit; full H and whole UI still open.',checks=checks,owned_files=owned,inputs=[dict(path=rel(p),sha256=sha(p)) for p in [out/'validation.json',out/'cleanup.json',*docs]],manual_review=['SVG font sources and bounded ranges retain unchanged ASCII upload invariants.','Candidate commit occurs only after successful bake/upload; prior handles are retained on failure.','Queued scaled draw font is persistent app state, not stack storage; same native sanitizer cases now pass.','Figure roles and scaled draw state are reset with density replacement/window destruction.','Only model-label drawing changes; all112 images are identical outside the model rectangle.','Offline font and license are pinned and stored in existing packaged font directory.'],generator=dict(path=rel(Path(__file__)),sha256=sha(Path(__file__)),source=Path(__file__).read_text(encoding='utf-8')))\n(out/'audit.json').write_text(json.dumps(audit,ensure_ascii=False,indent=2)+'\\n',encoding='utf-8');print(json.dumps(checks))\n"
+  }
+}

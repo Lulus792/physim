@@ -78,6 +78,22 @@
       "revision": "ffebf8c1ee449e544955a7e813c54f9b73848eac",
       "bytes": 4377,
       "sha256": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
+    },
+    {
+      "file": "NotoSerif-Italic.ttf",
+      "source": "hinted/ttf/NotoSerif/NotoSerif-Italic.ttf",
+      "repository": "https://github.com/notofonts/noto-fonts",
+      "revision": "ffebf8c1ee449e544955a7e813c54f9b73848eac",
+      "bytes": 657092,
+      "sha256": "0ea81d6b54fc8aa5dff0fd6ebe7cfa431e9e6cf747a8d4aa33581fa0aaccffea"
+    },
+    {
+      "file": "notoserifitalic-OFL.txt",
+      "source": "LICENSE",
+      "repository": "https://github.com/notofonts/noto-fonts",
+      "revision": "ffebf8c1ee449e544955a7e813c54f9b73848eac",
+      "bytes": 4377,
+      "sha256": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
     }
   ]
 }

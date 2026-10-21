@@ -125,9 +125,9 @@ def documentation_font_demand(flow,directory):
     flow.run('--workspace-state-test',directory,'docs-keyboard-font-demand',timeout=60,
              marker='DOCUMENTATION FONT DEMAND SELF-TEST: PASSED')
     output=flow.steps[-1]['stdout']
-    require('FONT DEMAND: initial variants=6' in output,'Initial F1 fonts were not limited to the needed sizes')
+    require('FONT DEMAND: initial variants=7' in output,'Initial F1 fonts were not limited to the needed sizes')
     require('failed zoom/settings preserve fonts, context, values and preference file' in output,'Missing actual failed font transaction')
-    require('FONT DEMAND: independent sizes ui=22 code=18 variants=15' in output,'Independent UI/code sizes or cache reuse missing')
+    require('FONT DEMAND: independent sizes ui=22 code=18 variants=17' in output,'Independent UI/code sizes or cache reuse missing')
     require('FONT DEMAND: populated bank retired at density 2 and rebuilt at density 1' in output,'Populated font bank did not survive density replacement')
     require('DOCUMENTATION RASTER TARGET: logical=760x540 pixels=1520x1080 density=2.000' in output,'Missing doubled framebuffer after populated-bank replacement')
     documentation_density_pixels(directory/'docs-font-demand-density.png')
@@ -157,6 +157,7 @@ def documentation_math(flow, directory):
     (flow.work/'math-inventory.json').write_text(json.dumps(dict(pages=paths,characters=[dict(codepoint=f'U+{ord(c):04X}',char=c,name=unicodedata.name(c,'')) for c in sorted(characters)]),ensure_ascii=False,indent=2),encoding='utf-8')
     flow.run('--workspace-state-test',directory,'docs-keyboard-math',timeout=45,marker='DOCUMENTATION MATH SELF-TEST: PASSED')
     require(f'DOCUMENTATION MATH GLYPHS: {len(characters)} characters in 42 font variants' in flow.steps[-1]['stdout'], 'Incomplete real font coverage')
+    require('DOCUMENTATION FIGURE GLYPHS: 3 characters in 4 italic serif variants' in flow.steps[-1]['stdout'],'Incomplete real SVG-label coverage')
     require(f'DOCUMENTATION LINK INVENTORY: {len(paths)} pages, ' in flow.steps[-1]['stdout'], 'Incomplete parsed link-range inventory')
     documentation_grid_ink(directory,flow.steps[-1]['stdout'])
     for name in ('docs-math-16.bmp','docs-math-32.bmp','docs-reading-16.bmp','docs-reading-32.bmp','docs-reading-reset.bmp','docs-unicode-16.bmp','docs-unicode-32.bmp','docs-unicode-boxes-32.bmp'):
@@ -179,6 +180,9 @@ def documentation_math(flow, directory):
         for name,count in expected_primaries.items():
             require(sum(line.endswith('/'+name) for line in primaries)==count,'Main/F1 primary face coverage differs: '+name)
         require(f'DOCUMENTATION MATH GLYPHS: {len(characters)} characters in 42 font variants' in output,'Incomplete bundled primary glyph coverage')
+        require('DOCUMENTATION FIGURE GLYPHS: 3 characters in 4 italic serif variants' in output,'Incomplete platform/bundled SVG-label coverage')
+        serif_sources=[line.replace('\\','/') for line in output.splitlines() if line.startswith('F1 figure font: ')]
+        require(len(serif_sources)==4 and all(line.endswith('/third_party/fonts/NotoSerif-Italic.ttf') for line in serif_sources),'Bundled SVG-label font was not forced for all UI sizes')
         require((bundled/'docs-unicode-boxes-32.bmp').is_file(),'Missing bundled-primary diagram image')
         documentation_grid_ink(bundled,output)
     finally:
@@ -324,6 +328,8 @@ def documentation_h(flow,directory):
     require(len(nav_flow)==28 and len(context_flow)==28,'Missing native side-pane CSS matrix')
     require(all(int(row[-1])==1 for row in nav_flow+context_flow),'Native side-pane flow differs from CSS contract')
     require('DOCUMENTATION H CONTEXT COPY:' in output and 'revealed=1' in output,'Offscreen example copy was not revealed')
+    figure_fonts=re.findall(r'DOCUMENTATION H FIGURE FONT: case=(\d+) serif-source=(\d+) em=([\d.]+)',output)
+    require(len(figure_fonts)==28 and all(row[1]=='1' and abs(float(row[2])-(27.5 if int(row[0])>=48 else 20))<.01 for row in figure_fonts),'Model SVG labels lost their real serif source or CSS em')
     for row in context_flow:
         index=int(row[0]);table=tuple(map(float,row[4].split(',')));column=float(row[6])
         require(int(row[5])==5 and 10<column<table[2]-10,'Model rows/columns lost real values')

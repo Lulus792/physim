@@ -361,8 +361,10 @@ typedef struct {
     struct nk_rect doc_inline_math_test_link;
     const struct nk_user_font *doc_font_ui, *doc_font_title, *doc_font_code, *doc_code_fonts[9];
     const struct nk_user_font *doc_ui_fonts[9], *doc_title_fonts[9];
+    const struct nk_user_font *doc_figure_fonts[4];
     struct nk_user_font doc_type_fonts[32];
-    float doc_type_em[32],doc_font_em[5][11];
+    struct nk_user_font doc_figure_draw_font;
+    float doc_type_em[32],doc_font_em[6][11];
     documentation_spaced_font doc_spaced_fonts[4];
     ps_ui_font_pairs *doc_font_pairs[2];
     const ps_document *doc_type_document;

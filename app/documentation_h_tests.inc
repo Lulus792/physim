@@ -137,6 +137,11 @@ static void documentation_h_test_frame(app *a,int *stage,int *code,const char **
             bool flow=fabsf(title.x-a->doc_right_slot.x-padding-1)<1.1f && fabsf(title.y-a->doc_right_slot.y-46-21)<1.1f &&
                 fabsf(figure.y-title.y-title.h-14-5)<1.1f && fabsf(figure.w-a->doc_right_slot.w+2*padding+1)<1.1f &&
                 fabsf(caption.y-figure.y-figure.h-14-4*scale)<1.1f && fabsf(table.y-caption.y-caption.h-8)<1.1f && a->doc_context_table_rows==5;
+            const struct nk_user_font *serif=a->doc_figure_fonts[(a->preferences.ui_size-16)/2];
+            bool glyphs=serif && serif!=a->doc_ui_fonts[(a->preferences.ui_size-16)/2] &&
+                ps_ui_font_has_glyph(serif,'L') && ps_ui_font_has_glyph(serif,'m') && ps_ui_font_has_glyph(serif,0x3b8);
+            printf("DOCUMENTATION H FIGURE FONT: case=%u serif-source=%d em=%.3f\n",index,glyphs,documentation_type_font(a,DOC_TYPE_FIGURE_LABEL)->height/a->doc_type_em[DOC_TYPE_FIGURE_LABEL]);
+            flow=flow && glyphs;
             printf("DOCUMENTATION H CONTEXT FLOW: case=%u title=%.2f,%.2f,%.2f,%.2f figure=%.2f,%.2f,%.2f,%.2f caption=%.2f,%.2f,%.2f,%.2f table=%.2f,%.2f,%.2f,%.2f rows=%u column=%.2f complete=%d\n",
                 index,title.x,title.y,title.w,title.h,figure.x,figure.y,figure.w,figure.h,caption.x,caption.y,caption.w,caption.h,table.x,table.y,table.w,table.h,a->doc_context_table_rows,a->doc_context_table_column,flow);
             ok=ok && flow;

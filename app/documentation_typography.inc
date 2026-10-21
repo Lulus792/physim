@@ -70,7 +70,7 @@ static void documentation_typography_update(app *a) {
         a->doc_code_fonts[((a->preferences.editor_size<16?16:a->preferences.editor_size)-16)/2],a->doc_ui_fonts[reader],a->doc_code_fonts[code],
         a->doc_ui_fonts[reader],a->doc_bold_fonts[reader],a->doc_code_fonts[code],
         a->doc_ui_fonts[reader],a->doc_bold_fonts[reader],a->doc_code_fonts[code],a->doc_ui_fonts[reader],
-        a->doc_bold_fonts[chrome],a->doc_bold_fonts[chrome],a->doc_ui_fonts[chrome],a->doc_ui_fonts[chrome]};
+        a->doc_bold_fonts[chrome],a->doc_bold_fonts[chrome],a->doc_ui_fonts[chrome],a->doc_figure_fonts[chrome]};
     const float em[DOC_TYPE_COUNT]={
         a->doc_font_em[0][reader],a->doc_font_em[2][reader],a->doc_font_em[1][reader],
         a->doc_font_em[2][reader+2],a->doc_font_em[2][reader],a->doc_font_em[3][code],a->doc_font_em[3][code],
@@ -80,7 +80,7 @@ static void documentation_typography_update(app *a) {
         a->doc_font_em[3][((a->preferences.editor_size<16?16:a->preferences.editor_size)-16)/2],a->doc_font_em[0][reader],a->doc_font_em[3][code],
         a->doc_font_em[0][reader],a->doc_font_em[2][reader],a->doc_font_em[3][code],
         a->doc_font_em[0][reader],a->doc_font_em[2][reader],a->doc_font_em[3][code],a->doc_font_em[0][reader],
-        a->doc_font_em[2][chrome],a->doc_font_em[2][chrome],a->doc_font_em[0][chrome],a->doc_font_em[0][chrome]};
+        a->doc_font_em[2][chrome],a->doc_font_em[2][chrome],a->doc_font_em[0][chrome],a->doc_font_em[5][chrome]};
     for(unsigned i=0;i<DOC_TYPE_COUNT;i++) {
         const struct nk_user_font *source=sources[i];
         if(!source)continue;

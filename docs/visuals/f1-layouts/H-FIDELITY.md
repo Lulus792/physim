@@ -6,7 +6,13 @@ Dieser Bericht ergänzt die historische Abnahme in [NATIVE-H.md](NATIVE-H.md).
 
 ## Aktuelle Nachprüfung vom 21. Oktober 2026
 
-Der aktuelle [Navigations-/Kontextabgleich](NAV-CONTEXT.md) übernimmt Gruppen-,
+Der aktuelle [SVG-Schriftabgleich](SVG-LABELS.md) ersetzt die normalen UI-Zeichen
+im Kontextmodell durch echte kursive Serifen: unter Windows Georgia, unter Linux
+eine verfügbare kursive Serifenschrift, offline Noto Serif Italic. Der Bericht
+trennt die ausgeführten Quellen-/Bedarfs-/Dichte-/UI-Prüfungen, Sanitizer-Gegenfälle
+und 112 native Bildpaare außerhalb der Grafik. Eine vollständige H-Abnahme bleibt offen.
+
+Der vorhergehende [Navigations-/Kontextabgleich](NAV-CONTEXT.md) übernimmt Gruppen-,
 Themen- und Abschnittsmaße, die äußere 1-px-Panelkante, Modelltabelle und
 Beispielkopf. C/Physim und Modell/Beispiel verwenden die tatsächlichen
 Schriftbreiten; die Unterstreichung bleibt zwei Pixel hoch. Der Bericht enthält

@@ -360,7 +360,10 @@ static void documentation_context_figure(app *a,int kind,struct nk_rect r) {
             nk_stroke_line(c,ox+(92+sinf(a)*49)*s,oy+(24+cosf(a)*49)*s,
                 ox+(92+sinf(b)*49)*s,oy+(24+cosf(b)*49)*s,s,muted);
         }
-        const struct nk_user_font *font=documentation_type_font(a,DOC_TYPE_FIGURE_LABEL);
+        /* nk_draw_text retains the font pointer until the later GL conversion. */
+        a->doc_figure_draw_font=*documentation_type_font(a,DOC_TYPE_FIGURE_LABEL);
+        a->doc_figure_draw_font.height*=s;
+        const struct nk_user_font *font=&a->doc_figure_draw_font;
         const struct nk_font *native=font->userdata.ptr;
         float baseline=(native->info.ascent+.5f)*font->height/native->info.height;
         const char *labels[]={"θ","L","m"};float lx[]={99,136,176},ly[]={95,95,168};
