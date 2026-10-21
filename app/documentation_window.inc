@@ -25,6 +25,8 @@ static void documentation_window_destroy(app *a) {
     memset(a->doc_ui_fonts,0,sizeof a->doc_ui_fonts);memset(a->doc_title_fonts,0,sizeof a->doc_title_fonts);
     memset(a->doc_bold_fonts,0,sizeof a->doc_bold_fonts);memset(a->doc_code_fonts,0,sizeof a->doc_code_fonts);
     memset(a->doc_chrome_fonts,0,sizeof a->doc_chrome_fonts);
+    memset(a->doc_type_fonts,0,sizeof a->doc_type_fonts);memset(a->doc_type_em,0,sizeof a->doc_type_em);
+    memset(a->doc_font_em,0,sizeof a->doc_font_em);
     ps_graphics_make_current(a->graphics);
 }
 
@@ -41,10 +43,12 @@ static bool documentation_fonts_load(app *a,float density,unsigned size,unsigned
     bool replace=!a->doc_font_ui || fabsf(density-a->doc_raster_density)>.01f;
     const struct nk_user_font *regular[9]={0},*titles[9]={0},*bold[11]={0},*code[9]={0};
     const struct nk_user_font *chrome[4]={0};
+    float em[5][11]={{0}};
     if(!replace) {
         memcpy(regular,a->doc_ui_fonts,sizeof regular);memcpy(titles,a->doc_title_fonts,sizeof titles);
         memcpy(bold,a->doc_bold_fonts,sizeof bold);memcpy(code,a->doc_code_fonts,sizeof code);
         memcpy(chrome,a->doc_chrome_fonts,sizeof chrome);
+        memcpy(em,a->doc_font_em,sizeof em);
     }
     struct nk_font_atlas candidate;
     if(a->doc_test_font_allocator)nk_font_atlas_init(&candidate,a->doc_test_font_allocator);
@@ -61,6 +65,13 @@ static bool documentation_fonts_load(app *a,float density,unsigned size,unsigned
         float pixels=(role==4?(16.f+i*2)*.875f:(float)((role==1?26:16)+i*2))*density;
         struct nk_font *font=system_font_sampling(&candidate,a->root,pixels,role==3,role==1 || role==2,2,1);
         if(!font)goto fail;
+        em[role][i]=ps_ui_font_em_ratio(font);
+        if(role==3) {
+            /* Code is .8em in H. Bake its actual drawing size instead of
+             * resampling a larger cell: box glyph edges must meet exactly. */
+            struct nk_font_config *config=font->config;
+            do {config->size*=.8f*em[role][i];config=config->n;}while(config!=font->config);
+        }
         if(role==0 && i==index)default_font=font;
         *slot=&font->handle;added++;
     }
@@ -72,7 +83,9 @@ static bool documentation_fonts_load(app *a,float density,unsigned size,unsigned
     memcpy(a->doc_ui_fonts,regular,sizeof regular);memcpy(a->doc_title_fonts,titles,sizeof titles);
     memcpy(a->doc_bold_fonts,bold,sizeof bold);memcpy(a->doc_code_fonts,code,sizeof code);
     memcpy(a->doc_chrome_fonts,chrome,sizeof chrome);
+    memcpy(a->doc_font_em,em,sizeof em);
     a->doc_raster_density=density;a->doc_failed_density=0;
+    if(replace){memset(a->doc_type_fonts,0,sizeof a->doc_type_fonts);memset(a->doc_type_em,0,sizeof a->doc_type_em);}
     printf("F1 font demand: %s %u variants, density %.3f\n",replace?"replace":"append",added,density);
     if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: F1 fonts ready %.6f\n",ps_clock());
     return true;
@@ -84,6 +97,7 @@ static bool documentation_window_fonts(app *a,float density) {
     unsigned index=(documentation_font_size(a)-16)/2;
     a->doc_font_ui=a->doc_ui_fonts[index];a->doc_font_title=a->doc_title_fonts[index];
     a->doc_font_code=a->doc_code_fonts[(documentation_code_size(a)-16)/2];
+    documentation_typography_update(a);
     if(a->documentation) {
         nk_sdl_accessibility_document_preserve_position(a->doc_ui,a->doc_reading_version);
         a->documentation->layout_width=0;
@@ -202,6 +216,7 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     if (a->documentation && a->doc_font_code != code)
         a->documentation->layout_width = 0;
     a->doc_font_code = code;
+    documentation_typography_update(a);
     ps_doc_layout layout=ps_documentation_layout((float)w,(float)h,(float)a->preferences.ui_size,
         a->doc_navigation_hidden,a->doc_context_hidden);
     a->doc_left_slot=nk_rect(layout.left.x,layout.left.y,layout.left.w,layout.left.h);
@@ -276,10 +291,11 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     documentation_sidebar_draw_probe(a);
     documentation_math_draw_probe(a);
     documentation_inline_math_draw_probe(a);
+    bool type_ok=documentation_typography_probe(a,capture_path);
     nk_sdl_update_TextInput(ui);
     bool scaled_capture=capture_path && strlen(capture_path)>=4 && !strcmp(capture_path+strlen(capture_path)-4,".png");
     bool ok=!scaled_capture || nk_sdl_export_png_scaled(ui,ui,w,h,2,capture_path)==PS_OK;
-    ok=nk_sdl_render(ui) && ok;
+    ok=nk_sdl_render(ui) && ok && type_ok;
     if (ok && capture_path && !scaled_capture) {
         int pixels_w=0,pixels_h=0;ok=SDL_GetWindowSizeInPixels(a->doc_window,&pixels_w,&pixels_h);
         const char *name=capture_path,*slash=strrchr(capture_path,'/'),*backslash=strrchr(capture_path,'\\');

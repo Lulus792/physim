@@ -6,6 +6,11 @@ Der jüngste Abgleich übernimmt die exakten Paneel-Iconproportionen aus der
 H-Vektorreferenz sowie Schalterhöhe, Markenbeschriftung und transparente Tabzustände.
 Aktuelle Windows-/Linux-Nachweise, native Fensterbilder und begründete
 Abweichungen: [H-FIDELITY.md](H-FIDELITY.md).
+Der aktuelle [Schriftrollen-Abgleich](TYPOGRAPHY.md) übernimmt die CSS-em-Größen
+mit vor dem Atlasaufbau gespeicherten Metriken. Formelskalierung und Codegrafiken
+sind geprüft; Absatz-/Zeilenabstände, Laufweiten, erste Absatzrolle und weitere
+Navigations-/Kontextdetails sind der nächste visuelle Schritt. Windows-Hostfokus
+und die übrigen externen Plattformnachweise bleiben offen.
 Der jüngere [Artikel-/Aktionsabgleich](SECONDARY-ACTIONS.md) entfernt die
 zusätzliche Werkzeugzeile und gefüllte Zoomknöpfe. Funktionen bleiben im
 nativen Menü und über Kürzel erreichbar. Schriftrollen/Abstände und die

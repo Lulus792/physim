@@ -20,6 +20,9 @@ Breite, CSS-Zeilenboxen, Gliederungsdetails und Scrollzugang bei kurzen Fenstern
 Der [F1-Artikel-/Aktionsabgleich](../f1-layouts/SECONDARY-ACTIONS.md) entfernt
 zusätzliche Standardleisten und erhält die Befehle im nativen Menü; aktuelle
 Linux-Nachweise und die offene Windows-Hostfokusprüfung sind getrennt erfasst.
+Der nachfolgende [F1-Schriftrollen-Abgleich](../f1-layouts/TYPOGRAPHY.md)
+übernimmt CSS-em-Größen, bewahrt Fontmetriken und prüft Codegrafiken sowie
+Formelskalierung; die vollständigen Abstände und Laufweiten bleiben offen.
 
 **Für die native Umsetzung in einem anderen Chat:**
 [kopierfertiger Auftrag](NEXT-CHAT.md) · [Bestand und Abnahmeliste](IMPLEMENTATION.md)

@@ -1,15 +1,12 @@
 /* Design H: common header, direct navigation and article-specific context.
  * This file uses the viewer's fonts/GL resources and semantic palette only. */
 static const struct nk_user_font *documentation_chrome_font(app *a) {
-    const struct nk_user_font *font=a->doc_chrome_fonts[(a->preferences.ui_size-16)/2];
-    return font?font:a->doc_font_ui;
+    return documentation_type_font(a,DOC_TYPE_CHROME);
 }
 /* Captions use compact chrome; actionable labels match H's larger text and
  * genuine selected weight. Both roles follow UI size, never reader zoom. */
 static const struct nk_user_font *documentation_control_font(app *a,bool selected) {
-    unsigned i=(a->preferences.ui_size-16)/2;
-    const struct nk_user_font *font=selected?a->doc_bold_fonts[i]:a->doc_ui_fonts[i];
-    return font?font:documentation_chrome_font(a);
+    return documentation_type_font(a,selected?DOC_TYPE_CONTROL_STRONG:DOC_TYPE_CONTROL);
 }
 static float documentation_tab_width(app *a,const char *label) {
     size_t n=strlen(label);
@@ -155,7 +152,7 @@ static void documentation_sections(app *a) {
         const char *label=a->documentation->text+b->text;
         float extra=b->level>2?8:0;
         bool selected=current==(int)i;
-        const struct nk_user_font *font=documentation_control_font(a,selected);
+        const struct nk_user_font *font=documentation_type_font(a,selected?DOC_TYPE_SECTION_STRONG:DOC_TYPE_SECTION);
         nk_layout_row_begin(ui,NK_STATIC,documentation_height(font,label,strlen(label),content.w-indent-extra-12)+10,2);
         nk_layout_row_push(ui,indent+extra-ui->style.window.spacing.x);nk_spacing(ui,1);
         nk_layout_row_push(ui,content.w-indent-extra);struct nk_rect bounds=nk_widget_bounds(ui);
@@ -193,10 +190,11 @@ static void documentation_sidebar_content(app *a) {
             int group=documentation_h_group(topic);
             if(!a->doc_filter[0] && group!=previous) {
                 if(previous>=0){nk_layout_row_dynamic(ui,8,1);nk_spacing(ui,1);}
-                documentation_h_label_inset(a,groups[group],true,7);previous=group;
+                nk_style_push_font(ui,documentation_type_font(a,DOC_TYPE_GROUP));
+                documentation_h_label_inset(a,groups[group],true,7);nk_style_pop_font(ui);previous=group;
             }
             const char *title=documentation_topics[topic].title;
-            nk_style_push_font(ui,documentation_control_font(a,topic==a->doc_topic));
+            nk_style_push_font(ui,documentation_type_font(a,topic==a->doc_topic?DOC_TYPE_NAV_STRONG:DOC_TYPE_NAV));
             nk_layout_row_dynamic(ui,documentation_height(ui->style.font,title,strlen(title),nk_window_get_content_region(ui).w-20)+14,1);
             struct nk_rect bounds;
             bool pressed=documentation_topic_button(a,title,topic==a->doc_topic,&bounds);
@@ -339,7 +337,8 @@ static void documentation_context_view(app *a) {
     unsigned tab=a->doc_context_example?1:0;
     nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(6,17));
     if(nk_group_scrolled_offset_begin(ui,&a->doc_context_scroll_x[tab],&a->doc_context_scroll_y[tab],"context-content",0)) {
-        documentation_context_content(a);nk_group_scrolled_end(ui);
+        nk_style_push_font(ui,documentation_type_font(a,DOC_TYPE_CONTEXT));
+        documentation_context_content(a);nk_style_pop_font(ui);nk_group_scrolled_end(ui);
     }
     nk_style_pop_vec2(ui);
 }
@@ -352,7 +351,7 @@ static void documentation_context_content(app *a) {
     }
     if(a->doc_context_example)documentation_h_label(a,context->title,false);
     else {
-        nk_style_push_font(ui,a->doc_ui_fonts[(a->preferences.ui_size-16)/2]);
+        nk_style_push_font(ui,documentation_type_font(a,DOC_TYPE_CONTEXT_TITLE));
         documentation_h_label(a,"Das Versuchsmodell",false);nk_style_pop_font(ui);
     }
     if(a->doc_context_example) {
@@ -363,9 +362,7 @@ static void documentation_context_content(app *a) {
         if(nk_button_label(ui,"Code kopieren"))SDL_SetClipboardText(code);
         documentation_focus_draw(a,DOC_CONTEXT_COPY,r,false);
         /* Complete source: wrap at measured UTF-8 boundaries in the side pane. */
-        unsigned size=a->preferences.editor_size<16?16:a->preferences.editor_size;
-        const struct nk_user_font *font=a->doc_code_fonts[(size-16)/2];
-        if(!font)font=ui->style.font;
+        const struct nk_user_font *font=documentation_type_font(a,DOC_TYPE_CONTEXT_CODE);
         nk_style_push_font(ui,font);
         const char *line=code;
         while(*line) {

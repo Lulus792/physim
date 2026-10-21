@@ -225,6 +225,21 @@ def documentation_h_chrome_pixels(path, bounds, dark, right_visible, scale=1, pi
                 'Selected context tab has no thin accent underline')
 
 
+def documentation_h_typography(output):
+    typography=re.findall(r'DOCUMENTATION H TYPE: case=(\d+) reader=(\d+) ui=(\d+) body-em=([\d.]+) title-em=([\d.]+) control-em=([\d.]+) nav-em=([\d.]+) title-draws=(\d+) body-draws=(\d+)',output)
+    require(len(typography)==56,'Missing native H typography matrix')
+    metrics=re.findall(r'DOCUMENTATION H METRIC: case=(\d+) primary-em=([\d.]+) body-height=([\d.]+) title-height=([\d.]+)',output)
+    require(len(metrics)==56,'Missing retained pre-bake font metrics')
+    for expected,row in enumerate(typography):
+        case,reader,ui,body,title,control,nav,titles,_=map(float,row)
+        require(case==expected and reader in (16,32) and ui in (16,22) and titles>0,'Missing actual H title drawing')
+        require(abs(body-reader)<.01 and abs(title-reader*(1.3 if reader==32 else 1.65))<.01 and
+                abs(control-12*ui/16)<.01 and abs(nav-13*ui/16)<.01,'H CSS em roles differ from reference')
+        metric_case,em,body_height,title_height=map(float,metrics[expected])
+        require(metric_case==expected and 1.05<em<2 and abs(body_height/em-reader)<.01 and
+                title_height>body_height,'Missing actual font em correction in native H drawing')
+
+
 def documentation_h(flow,directory):
     directory.mkdir(parents=True)
     flow.run('--workspace-state-test',directory,'docs-keyboard-h',timeout=120,
@@ -285,6 +300,7 @@ def documentation_h(flow,directory):
     require('DOCUMENTATION H SECONDARY: menu=keyboard,pointer,context escape-focus=restored find=overlay text-input=restored outside-click=consumed zoom=shortcut,menu,mouse source-preserved=1' in output,'Missing native on-demand handbook actions proof')
     preserved=re.search(r'DOCUMENTATION H SOURCE: experiment-bytes=(\d+) analysis-bytes=(\d+) byte-exact=1 footer-name-and-focus=1',output)
     require(preserved and all(int(value)>0 for value in preserved.groups()),'Missing byte-exact nonempty editor or accessible footer focus proof')
+    documentation_h_typography(output)
     for name in ('example-c','example-physim','empty-search','no-context','pointer-search','actions-keyboard','find-overlay','actions-pointer','actions-zoom','actions-pointer-zoom','actions-context'):
         require((directory/f'docs-h-{name}.bmp').is_file(),'Missing Design H task capture')
 
@@ -355,7 +371,7 @@ def documentation_grid_ink(directory,stdout):
     match=re.search(r'DOCUMENTATION GRID: ([0-9. ]+)',stdout)
     require(match,'Missing actual grid draw geometry')
     left,top,width,pitch,span,clip=map(float,match.group(1).split())
-    require(width>0 and pitch>0 and abs(pitch-span)<.1 and top+3.5*pitch<clip,'Invalid or clipped grid cells')
+    require(width>0 and pitch>0 and -.01<=span-pitch<=1.01 and top+3.5*pitch<clip,'Invalid or clipped grid cells')
     raw=(directory/'docs-unicode-boxes-32.bmp').read_bytes()
     require(raw[:2]==b'BM' and len(raw)>=54,'Missing grid bitmap')
     offset=struct.unpack_from('<I',raw,10)[0]

@@ -18,6 +18,7 @@ static void preferences_apply(app *a, const ps_preferences *p) {
         a->doc_font_ui=a->doc_ui_fonts[(documentation_font_size(a)-16)/2];
         a->doc_font_title=a->doc_title_fonts[(documentation_font_size(a)-16)/2];
         a->doc_font_code=a->doc_code_fonts[(documentation_code_size(a)-16)/2];
+        documentation_typography_update(a);
         if(a->documentation)a->documentation->layout_width=0;
         style(a->doc_ui);
         nk_style_set_font(a->doc_ui, a->doc_font_ui);

@@ -354,6 +354,8 @@ typedef struct {
     struct nk_rect doc_inline_math_test_link;
     const struct nk_user_font *doc_font_ui, *doc_font_title, *doc_font_code, *doc_code_fonts[9];
     const struct nk_user_font *doc_ui_fonts[9], *doc_title_fonts[9];
+    struct nk_user_font doc_type_fonts[21];
+    float doc_type_em[21],doc_font_em[5][11];
     const struct nk_user_font *doc_bold_fonts[11];
     const struct nk_user_font *doc_chrome_fonts[4];
     int doc_inline_clicked;

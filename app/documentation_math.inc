@@ -14,7 +14,7 @@ static void documentation_math_begin_frame(app *a) {
 static const ps_doc_formula_variant *documentation_math_variant(app *a,const ps_document *d,const ps_doc_block *b,float width) {
     const char *tex=d->text+b->target;const ps_doc_formula *formula=ps_document_formula(tex,strlen(tex));
     if(!formula)return NULL;
-    float zoom=a->doc_font_ui->height/16;
+    float zoom=(documentation_font_size(a)/16.f);
     for(size_t i=formula->count;i>0;i--)if(formula->variants[i-1].width*zoom<=width)return &formula->variants[i-1];
     return NULL;
 }
@@ -52,7 +52,7 @@ static unsigned documentation_math_texture_for(app *a,const ps_doc_formula_varia
     if(!a->doc_math)a->doc_math=calloc(1,sizeof *a->doc_math);
     if(!a->doc_math)return 0;
     struct documentation_math_cache *cache=a->doc_math;
-    float scale=(a->doc_font_ui->height/16)*a->doc_raster_density;
+    float scale=((documentation_font_size(a)/16.f))*a->doc_raster_density;
     if(!isfinite(scale) || scale<=0 || scale>8)return 0;
     unsigned w=(unsigned)fmin(v->raster_width,ceil(v->width*scale));
     unsigned h=(unsigned)fmin(v->raster_height,ceil(v->height*scale));
@@ -87,7 +87,7 @@ static void documentation_math_clear(app *a) {
 static bool documentation_math_draw(app *a,const ps_document *d,const ps_doc_block *b,struct nk_rect bounds) {
     const ps_doc_formula_variant *v=documentation_math_variant(a,d,b,bounds.w-24);if(!v)return false;
     unsigned texture=documentation_math_texture_for(a,v);if(!texture)return false;
-    float zoom=a->doc_font_ui->height/16;
+    float zoom=(documentation_font_size(a)/16.f);
     struct nk_rect frame=nk_rect(bounds.x+12,bounds.y+12,v->width*zoom,v->height*zoom);
     struct nk_image image=nk_image_id((int)texture);
     nk_draw_image(nk_window_get_canvas(a->doc_ui),frame,&image,UI_COLOR(doc_text));
@@ -101,7 +101,7 @@ static void documentation_math_draw_probe(app *a) {
     ps_doc_block *b=&a->documentation->blocks[a->doc_math_test_block];
     const ps_doc_formula_variant *v=documentation_math_variant(a,a->documentation,b,b->hit[2]-24);
     if(!v || !a->doc_math)return;
-    float zoom=a->doc_font_ui->height/16;unsigned texture=0;
+    float zoom=(documentation_font_size(a)/16.f);unsigned texture=0;
     float scale=zoom*a->doc_raster_density;
     unsigned width=(unsigned)fmin(v->raster_width,ceil(v->width*scale));
     unsigned height=(unsigned)fmin(v->raster_height,ceil(v->height*scale));

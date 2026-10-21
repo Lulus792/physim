@@ -1,7 +1,7 @@
 /* Bundled diagrams are drawn with native vector commands; no SVG interpreter,
  * web view or document scripts. The inert Markdown targets select these figures. */
 static void documentation_diagram_text(app *a,struct nk_rect r,const char *text,struct nk_color color) {
-    nk_draw_text(nk_window_get_canvas(a->doc_ui),r,text,(int)strlen(text),a->doc_font_ui,nk_rgba(0,0,0,0),color);
+    nk_draw_text(nk_window_get_canvas(a->doc_ui),r,text,(int)strlen(text),documentation_type_font(a,DOC_TYPE_BODY),nk_rgba(0,0,0,0),color);
 }
 static void documentation_diagram(app *a,int kind,struct nk_rect r) {
     a->doc_diagram_bounds=r;
@@ -19,8 +19,8 @@ static void documentation_diagram(app *a,int kind,struct nk_rect r) {
             documentation_diagram_text(a,nk_rect(box.x+8,box.y+5,box.w-16,28),labels[i],UI_COLOR(doc_text));
             if(narrow)documentation_diagram_text(a,nk_rect(box.x+170,box.y+14,fmaxf(1,box.w-178),28),details[i],UI_COLOR(muted));
             else {
-                size_t length;documentation_line(a->doc_font_ui,details[i],strlen(details[i]),box.w-16,&length);
-                nk_draw_text(c,nk_rect(box.x+8,box.y+45,box.w-16,28),details[i],(int)length,a->doc_font_ui,nk_rgba(0,0,0,0),UI_COLOR(muted));
+                size_t length;documentation_line(documentation_type_font(a,DOC_TYPE_BODY),details[i],strlen(details[i]),box.w-16,&length);
+                nk_draw_text(c,nk_rect(box.x+8,box.y+45,box.w-16,28),details[i],(int)length,documentation_type_font(a,DOC_TYPE_BODY),nk_rgba(0,0,0,0),UI_COLOR(muted));
                 if(length<strlen(details[i]))documentation_diagram_text(a,nk_rect(box.x+8,box.y+78,box.w-16,28),details[i]+length,UI_COLOR(muted));
             }
         }
@@ -72,17 +72,17 @@ static void documentation_space_text(app *a,const char *text,bool wrap) {
     size_t at=0,n=strlen(text);float y=r.y;
     do {
         size_t length=n-at,used=length;
-        if(wrap)used=documentation_line(a->doc_font_ui,text+at,n-at,r.w,&length);
-        if(y+a->doc_font_ui->height>r.y+r.h)break;
-        nk_draw_text(nk_window_get_canvas(a->doc_ui),nk_rect(r.x,y,r.w,a->doc_font_ui->height+6),text+at,(int)length,a->doc_font_ui,nk_rgba(0,0,0,0),UI_COLOR(doc_text));
-        at+=used;y+=a->doc_font_ui->height+6;
+        if(wrap)used=documentation_line(documentation_type_font(a,DOC_TYPE_BODY),text+at,n-at,r.w,&length);
+        if(y+documentation_type_font(a,DOC_TYPE_BODY)->height>r.y+r.h)break;
+        nk_draw_text(nk_window_get_canvas(a->doc_ui),nk_rect(r.x,y,r.w,documentation_type_font(a,DOC_TYPE_BODY)->height+6),text+at,(int)length,documentation_type_font(a,DOC_TYPE_BODY),nk_rgba(0,0,0,0),UI_COLOR(doc_text));
+        at+=used;y+=documentation_type_font(a,DOC_TYPE_BODY)->height+6;
     } while(wrap && at<n);
 }
 static void documentation_pendulum(app *a,int block,float width,float height) {
     documentation_model_init(a);
     struct nk_context *ui=a->doc_ui;
     nk_layout_space_begin(ui,NK_STATIC,height,32);
-    float row=fmaxf(34,a->doc_font_ui->height+12),y=0;
+    float row=fmaxf(34,documentation_type_font(a,DOC_TYPE_BODY)->height+12),y=0;
     const char *labels[]={"Winkel θ (rad)","Länge L (m)","Winkeltempo ω (rad/s)","Kamera seitlich (rad)","Kamera hoch (rad)","Kameraabstand (m)"};
     float *values[]={&a->doc_theta,&a->doc_length,&a->doc_omega,&a->doc_yaw,&a->doc_pitch,&a->doc_zoom};
     float lo[]={-1.2f,.5f,-3,-(float)PS_PI,-(float)PS_PI/2,2},hi[]={1.2f,3,3,(float)PS_PI,(float)PS_PI/2,12},step[]={.01f,.05f,.05f,.08f,.08f,.2f};

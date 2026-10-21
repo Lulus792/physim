@@ -61,7 +61,8 @@ static void documentation_h_test_frame(app *a,int *stage,int *code,const char **
         /* Workspace preferences support 16..22 px; the reader supports 32 px. */
         p.ui_size=index>=48?22:16;p.editor_size=16;
         preferences_apply(a,&p);
-        ok=a->preferences.ui_size==p.ui_size && documentation_chrome_font(a)->height==(float)p.ui_size*.875f &&
+        ok=a->preferences.ui_size==p.ui_size && fabsf(documentation_chrome_font(a)->height/
+            a->doc_type_em[DOC_TYPE_CHROME]-11.f*p.ui_size/16)<.01f &&
             nk_sdl_row_height(a->doc_ui,16)==(p.ui_size>16?(float)p.ui_size+4:16.f) &&
             a->doc_code_fonts[(p.editor_size-16)/2]!=NULL;
         a->doc_zoom_size=size?32:16;

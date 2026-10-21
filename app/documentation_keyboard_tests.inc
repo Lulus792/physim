@@ -715,8 +715,9 @@ static void documentation_math_test_frame(app *a,int *stage,int *code,const char
    nk_sdl_accessibility_document_visible(a->doc_ui,a->doc_reading_version,(size_t)(r-a->documentation->reading));
   *capture="docs-unicode-boxes-32.bmp";
   printf("DOCUMENTATION GRID: %.3f %.3f %.3f %.3f %.3f %.3f\n",a->doc_grid_probe[0],a->doc_grid_probe[1],a->doc_grid_probe[2],a->doc_grid_probe[3],a->doc_grid_probe[4],a->doc_grid_probe[5]);
-  if(fabsf(a->doc_grid_probe[3]-a->doc_grid_probe[4])>.1f) {
-   fprintf(stderr,"Documentation grid row %.3f does not meet source vertical span %.3f\n",a->doc_grid_probe[3],a->doc_grid_probe[4]);ok=false;
+  float overlap=a->doc_grid_probe[4]-a->doc_grid_probe[3];
+  if(overlap<-.01f || overlap>1.01f) {
+   fprintf(stderr,"Documentation grid row %.3f has invalid overlap with source vertical span %.3f\n",a->doc_grid_probe[3],a->doc_grid_probe[4]);ok=false;
   }
   if(a->doc_grid_probe[1]+3.5f*a->doc_grid_probe[3]>a->doc_grid_probe[5]-1) {
    fprintf(stderr,"Documentation grid closing stroke clipped\n");ok=false;
@@ -875,7 +876,8 @@ static void documentation_font_demand_test(app *a,int *stage,int *code,const cha
     }
     case 4:
         documentation_zoom(a,1);
-        ok=documentation_font_size(a)==18 && a->doc_font_ui->height==18 && a->doc_font_code->height==18 &&
+        ok=documentation_font_size(a)==18 && a->doc_font_ui->height==18 &&
+           fabsf(a->doc_font_code->height/a->doc_font_em[3][1]-14.4f)<.01f &&
            a->doc_ui_fonts[0]==original && documentation_font_variants(a)==11 && !a->doc_error[0];
         *capture="docs-font-demand-retry.bmp";break;
     case 5: {
@@ -885,13 +887,13 @@ static void documentation_font_demand_test(app *a,int *stage,int *code,const cha
     }
     case 6:
         ok=documentation_font_size(a)==22 && documentation_code_size(a)==18 &&
-           a->doc_font_ui->height==22 && a->doc_font_code->height==18 && a->doc_ui_fonts[0]==original &&
+           a->doc_font_ui->height==22 && fabsf(a->doc_font_code->height/a->doc_font_em[3][1]-14.4f)<.01f && a->doc_ui_fonts[0]==original &&
            documentation_font_variants(a)==15 && a->doc_reading_version==version;
         printf("FONT DEMAND: independent sizes ui=22 code=18 variants=%u\n",documentation_font_variants(a));
         *capture="docs-font-demand-settings.bmp";break;
     case 7:
         preferences_apply(a,&initial);
-        ok=a->doc_font_ui==original && a->doc_font_code->height==16 && documentation_font_variants(a)==15 &&
+        ok=a->doc_font_ui==original && fabsf(a->doc_font_code->height/a->doc_font_em[3][0]-12.8f)<.01f && documentation_font_variants(a)==15 &&
            a->doc_reading_version==version && a->experiment.string.len==editor && a->simulation_time==simulation;
         *capture="docs-font-demand-cache.bmp";break;
     case 8:a->doc_test_density=2;frames=0;break;

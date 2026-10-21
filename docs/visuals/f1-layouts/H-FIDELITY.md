@@ -6,6 +6,13 @@ Dieser Bericht ergänzt die historische Abnahme in [NATIVE-H.md](NATIVE-H.md).
 
 ## Aktuelle Nachprüfung vom 21. Oktober 2026
 
+Der jüngste [Abgleich der CSS-Schriftrollen](TYPOGRAPHY.md) korrigiert die
+Verwechslung von em-Größe und Nuklear-Schrifthöhe, bewahrt vor dem Atlasaufbau
+ermittelte Fontmetriken und erhält durchgehende Codegrafiken. Linux besteht
+elf verschiedene Prüfgruppen über zwei Läufe mit gleicher Darstellungslogik;
+Windows neun, während der Seiten-/H-Hostfokus offen bleibt. Abstände, Laufweiten
+und weitere H-Details sind weiterhin keine vollständige Designabnahme.
+
 Der jüngere [Abgleich der Artikelansicht und Aktionen](SECONDARY-ACTIONS.md)
 entfernt die zusätzliche Artikelwerkzeugzeile und die gefüllten Zoomknöpfe.
 Ihre Funktionen bleiben über ein natives Menü und Tastenkürzel zugänglich.

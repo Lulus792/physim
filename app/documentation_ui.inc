@@ -409,6 +409,7 @@ static unsigned documentation_code_size(const app *a) {
 static float documentation_control_height(const app *a) {
     return (float)documentation_font_size(a)+16;
 }
+#include "documentation_typography.inc"
 static void documentation_zoom(app *a,int direction) {
     unsigned old=documentation_font_size(a);
     int size=direction?(int)old+direction*2:0;
@@ -421,6 +422,7 @@ static void documentation_zoom(app *a,int direction) {
     a->doc_font_ui=a->doc_ui_fonts[(now-16)/2];
     a->doc_font_title=a->doc_title_fonts[(now-16)/2];
     a->doc_font_code=a->doc_code_fonts[(documentation_code_size(a)-16)/2];
+    documentation_typography_update(a);
     nk_style_set_font(a->doc_ui,a->doc_font_ui);nk_sdl_set_ui_size(a->doc_ui,a->preferences.ui_size);
     if(a->documentation)a->documentation->layout_width=0;
     a->doc_scroll_y=(nk_uint)((double)a->doc_scroll_y*now/old);
@@ -470,14 +472,13 @@ static float documentation_height(const struct nk_user_font *font, const char *t
     return lines * (font->height + 6);
 }
 static const struct nk_user_font *documentation_block_font(const app *a,const ps_doc_block *b) {
-    unsigned size=documentation_font_size(a);
-    if(b->kind==PS_DOC_CODE)return a->doc_font_code;
+    if(b->kind==PS_DOC_CODE)return documentation_type_font(a,b->code_line_height>0?DOC_TYPE_GRID:DOC_TYPE_CODE);
     if(b->kind==PS_DOC_HEADING) {
-        if(b->level==1)return a->doc_font_title;
-        return a->doc_bold_fonts[(size-16)/2+(b->level==2?2:0)];
+        if(b->level==1)return documentation_type_font(a,DOC_TYPE_TITLE);
+        return documentation_type_font(a,b->level==2?DOC_TYPE_H2:DOC_TYPE_H3);
     }
-    if(b->kind==PS_DOC_TABLE_ROW && b->level)return a->doc_bold_fonts[(size-16)/2];
-    return a->doc_font_ui;
+    if(b->kind==PS_DOC_TABLE_ROW && b->level)return documentation_type_font(a,DOC_TYPE_STRONG);
+    return documentation_type_font(a,DOC_TYPE_BODY);
 }
 #include "documentation_math.inc"
 static const ps_doc_span *documentation_span_at(const ps_document *d,const ps_doc_block *b,size_t at) {
@@ -488,8 +489,8 @@ static const ps_doc_span *documentation_span_at(const ps_document *d,const ps_do
 }
 static const struct nk_user_font *documentation_span_font(const app *a,const ps_doc_block *b,const ps_doc_span *s) {
     if(b->kind==PS_DOC_HEADING)return documentation_block_font(a,b);
-    if(s && (s->style&PS_DOC_INLINE_CODE))return a->doc_font_code;
-    if(s && (s->style&PS_DOC_BOLD))return a->doc_bold_fonts[(documentation_font_size(a)-16)/2];
+    if(s && (s->style&PS_DOC_INLINE_CODE))return documentation_type_font(a,DOC_TYPE_INLINE_CODE);
+    if(s && (s->style&PS_DOC_BOLD))return documentation_type_font(a,DOC_TYPE_STRONG);
     return documentation_block_font(a,b);
 }
 static float documentation_glyph_width(const struct nk_user_font *font,const char *text,int bytes) {
@@ -510,9 +511,11 @@ static float documentation_grid_pitch(const app *a,const ps_document *d,const ps
         if(rune>=0x2500 && rune<=0x257f){grid=true;break;}at+=(size_t)n;
     }
     if(!grid)return 0;
-    const struct nk_user_font *font=documentation_block_font(a,b);
+    const struct nk_user_font *font=documentation_type_font(a,DOC_TYPE_GRID);
     struct nk_user_font_glyph vertical={0};font->query(font->userdata,font->height,&vertical,0x2502,0);
-    return ps_ui_font_has_glyph(font,0x2502) && vertical.height>0?vertical.height:0;
+    /* The first/last antialiased row is not an opaque rule. Let those edge
+     * rows overlap; complete glyphs still draw with their measured bounds. */
+    return ps_ui_font_has_glyph(font,0x2502) && vertical.height>1?vertical.height-1:0;
 }
 static float documentation_font_baseline(const struct nk_user_font *font) {
     const struct nk_font *native=font->userdata.ptr;
@@ -520,7 +523,7 @@ static float documentation_font_baseline(const struct nk_user_font *font) {
 }
 static const ps_doc_formula_variant *documentation_inline_variant(const app *a,const ps_doc_span *span,float width) {
     if(!span || !span->formula)return NULL;
-    const ps_doc_formula *f=span->formula;float zoom=a->doc_font_ui->height/16;
+    const ps_doc_formula *f=span->formula;float zoom=(documentation_font_size(a)/16.f);
     if(f->inline_variant->width*zoom<=width)return f->inline_variant;
     for(size_t i=f->count;i>0;i--)if(f->variants[i-1].width*zoom<=width)return &f->variants[i-1];
     return NULL;
@@ -539,14 +542,14 @@ static size_t documentation_rich_line_metrics(const app *a,const ps_document *d,
         nk_rune rune;int bytes=nk_utf_decode(text+at,&rune,(int)(b->length-at));if(bytes<=0)bytes=1;
         float glyph=documentation_glyph_width(font,text+at,bytes);
         const ps_doc_formula_variant *math=documentation_inline_variant(a,span,width);
-        if(math) {bytes=(int)span->length;glyph=math->width*a->doc_font_ui->height/16;}
+        if(math) {bytes=(int)span->length;glyph=math->width*(documentation_font_size(a)/16.f);}
         if(at>begin && used+glyph>width) {
             if(space!=SIZE_MAX && space>begin){*length=space-begin;*height=space_height;*baseline=space_math?space_above:-1;return space-begin+1;}
             *length=at-begin;*height=h;*baseline=has_math?above:-1;return at-begin;
         }
         if(b->code_line_height<=0) {
-            float ascent=math?math->baseline*a->doc_font_ui->height/16+3:documentation_font_baseline(font);
-            float descent=math?(math->height-math->baseline)*a->doc_font_ui->height/16+3:font->height+6-ascent;
+            float ascent=math?math->baseline*(documentation_font_size(a)/16.f)+3:documentation_font_baseline(font);
+            float descent=math?(math->height-math->baseline)*(documentation_font_size(a)/16.f)+3:font->height+6-ascent;
             above=fmaxf(above,ascent);below=fmaxf(below,descent);has_math |= math!=NULL;
             h=has_math?ceilf(above+below):fmaxf(h,font->height+6);
         }
@@ -597,7 +600,7 @@ static void documentation_rich_draw(app *a,ps_document *d,const ps_doc_block *b,
             const struct nk_user_font *font=documentation_span_font(a,b,span);
             size_t next=span?span->text+span->length-b->text:end;if(next>end)next=end;
             const ps_doc_formula_variant *math=documentation_inline_variant(a,span,bounds.w);
-            float zoom=a->doc_font_ui->height/16;
+            float zoom=(documentation_font_size(a)/16.f);
             float width=math?math->width*zoom:documentation_text_width(font,text+pos,next-pos);
             float draw_y=b->code_line_height>0?y+grid_offset:baseline<0?y:y+baseline-documentation_font_baseline(font);
             struct nk_rect part=math?nk_rect(x,y+baseline-math->baseline*zoom,width,math->height*zoom):
@@ -666,7 +669,7 @@ static void documentation_inline_math_draw_probe(app *a) {
     for(size_t i=0;i<b->span_count;i++) {
         const ps_doc_span *span=&d->spans[b->first_span+i];if(!span->formula)continue;
         const ps_doc_formula_variant *v=documentation_inline_variant(a,span,b->hit[2]-24);unsigned texture=0;
-        float zoom=a->doc_font_ui->height/16;
+        float zoom=(documentation_font_size(a)/16.f);
         if(v) {
             float scale=zoom*a->doc_raster_density;
             unsigned width=(unsigned)fmin(v->raster_width,ceil(v->width*scale));
@@ -1222,7 +1225,7 @@ static void documentation_detail_draw_probe(app *a) {
 #include "documentation_h.inc"
 /* Detail text uses the same bounded UTF-8 line breaks for measurement and drawing. */
 static struct nk_rect documentation_detail_label(app *a,const char *text) {
-    struct nk_context *ui=a->doc_ui;const struct nk_user_font *font=documentation_chrome_font(a);
+    struct nk_context *ui=a->doc_ui;const struct nk_user_font *font=documentation_type_font(a,DOC_TYPE_CRUMB);
     /* Configure once: a second layout call would insert an unused row. */
     nk_layout_row_dynamic(ui,1,1);
     struct nk_rect bounds=nk_widget_bounds(ui);
@@ -1321,7 +1324,7 @@ static void documentation_view(app *a, float height) {
                         b->kind == PS_DOC_TABLE_ROW
                             ? documentation_table(a, b, width, NULL)
                         : b->kind == PS_DOC_MATH && documentation_math_variant(a,d,b,math_width-24)
-                            ? documentation_math_variant(a,d,b,math_width-24)->height*(a->doc_font_ui->height/16)+24
+                            ? documentation_math_variant(a,d,b,math_width-24)->height*((documentation_font_size(a)/16.f))+24
                         : b->kind == PS_DOC_IMAGE && documentation_media_kind(d->text+b->target)==3 ? 900
                         : b->kind == PS_DOC_IMAGE && documentation_media_kind(d->text+b->target) ? (documentation_media_kind(d->text+b->target)==1?320:480)
                         : b->kind == PS_DOC_RULE ? 14
