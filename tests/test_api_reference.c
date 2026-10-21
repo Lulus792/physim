@@ -18,6 +18,8 @@ int main(int argc,char **argv) {
     ps_document *d=NULL;CHECK(ps_document_parse(text,strlen(text),false,&d)==PS_OK);
     size_t first=99,end=98;
     CHECK(ps_document_api_section(d,"ps_vlength",false,&first,&end)==PS_OK && !strcmp(d->text+d->blocks[first].text,"ps_vlength") && end==first+3);
+    ps_doc_api_preview preview;
+    CHECK(ps_document_api_preview(d,first,end,&preview)==PS_OK && preview.summary==first+1 && preview.signature==first+2 && preview.example==SIZE_MAX && preview.arguments==SIZE_MAX);
     CHECK(ps_document_api_section(d,"ps_vec3",false,&first,&end)==PS_OK && d->blocks[first].kind==PS_DOC_HEADING);
     CHECK(ps_document_api_section(d,"PS_OK",false,&first,&end)==PS_OK && d->blocks[first].kind==PS_DOC_CODE);
     CHECK(ps_document_api_section(d,"PS_O",false,&first,&end)==PS_INVALID);
@@ -27,6 +29,14 @@ int main(int argc,char **argv) {
     CHECK(ps_document_api_section(d,"Vec3.norm",true,&first,&end)==PS_INVALID && first==before_first && end==before_end);
     CHECK(ps_document_api_section(NULL,"x",false,&first,&end)==PS_INVALID && ps_document_api_section(d,"",false,&first,&end)==PS_INVALID);
     CHECK(ps_document_api_section(d,"x",false,NULL,&end)==PS_INVALID);
+    free(d);
+    const char *example="# API\n\n## call\n\nDescription.\n\n```c\nvoid call(void);\n```\n\n```c\nvoid overload(int x);\n```\n\nBeispiel für den Editor:\n\n```c\ncall();\n```\n\n| Argument | Bedeutung |\n| --- | --- |\n| x | Value |\n\n## next\n\nBeispiel für den Editor:\n\n```c\nnext();\n```\n";
+    CHECK(ps_document_parse(example,strlen(example),false,&d)==PS_OK && ps_document_api_section(d,"call",false,&first,&end)==PS_OK);
+    CHECK(ps_document_api_preview(d,first,end,&preview)==PS_OK && !strcmp(d->text+d->blocks[preview.example].text,"call();\n") && preview.arguments!=SIZE_MAX);
+    CHECK(!strcmp(d->text+d->blocks[preview.signature].text,"void call(void);\n"));
+    ps_doc_api_preview saved=preview;
+    CHECK(ps_document_api_preview(d,end,first,&preview)==PS_INVALID && !memcmp(&preview,&saved,sizeof saved));
+    CHECK(ps_document_api_preview(d,first,d->count+1,&preview)==PS_INVALID && !memcmp(&preview,&saved,sizeof saved));
     free(d);
     const char *export_note="# Module\n\n`PS_EXPORT` exports the module entry point.\n\n## Types\n";
     CHECK(ps_document_parse(export_note,strlen(export_note),false,&d)==PS_OK);

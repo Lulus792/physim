@@ -1,0 +1,2056 @@
+{
+  "scope": "Filled native API preview, explicit insertion transaction, large-text body, external inspector and log header; partial reference fidelity only",
+  "created_utc": "2026-10-21T00:23:03.102583+00:00",
+  "source_47": {
+    "base": "6d077836548b7fe7ba97eec5b2b9bb1cc99f90f7",
+    "source_sha256_lf": {
+      "app/design_ui.inc": "62aa0de96d6197d9bfde8c5b92b0c135a7184e407b9f0173135f178ec8f5496a",
+      "app/docking_ui.inc": "bc5e465013dad4b3b929db3ae2ee0e0958e0b5541e3a98d31b0991bac9d90ae0",
+      "app/main.c": "122915aec7b0295c8f59993b4f70695a6a8e4053fc100d3ee7c95bdae81ba708",
+      "app/panel_windows.inc": "19756c29282f5dc03fa7933c5bd26c4e89fb7373806ca84f22e0840912ff2cf0",
+      "app/plot_tests.inc": "3c730aa3c5fd5a87444973c5cb1734c909286970421f6c8bd5b2a73294a15b61",
+      "app/plot_ui.inc": "8b933b3bb27c9d53be932f1e49ee949bab21a5a587c85f5f5e0fbf801b7b9815",
+      "app/report_details_tests.inc": "eff52c88636b5db6f371a9151975d88624e3d315c4e11e41a0ff55495bada6dc",
+      "app/run_details_tests.inc": "ad34f630ee605abfb78245d3701611a3c6d26f15eae85cab2b32a5e0b6447f35",
+      "app/toolbar_ui.inc": "619f88a4dd1457f233d39de85fa23d033c4ebed6b754435a3632a33c40a7edf8",
+      "app/workspace_tests.inc": "f8a8746e28859bb1b50b50393a1ccd6d907ec26fa52224ecc947c804c04c9803",
+      "tests/check_display_workflow.py": "47ddb0e47a14a7735ada6f5d192da89a9b8138aa6f5c7421fc1dd7a751eaf062",
+      "tests/native_integration_cases.json": "313973c14d62da5c19bfaa8aa933c110adccd20f1d2e9b22d4d8399490c3f9d2",
+      "app/analysis_layout.inc": "74a9cb6997e41b6ae2c597494bc870f3a9b9de768de9d4ad1b7eff9d01deb48d",
+      "app/analysis_ui.inc": "b64974dd94bdb9466114b182bd5a1b7867828a8fb6a3ebf571fb5172230224ec",
+      "app/analysis_workspace_tests.inc": "8a4bb2a826946de53257654760f97f702d6f1d87a19cc47f5d1f458172ade8a2",
+      "app/preferences.c": "e2df26e2c2a0d054dfa1e4dd4b500bb0cf996debe7f861b05f3db2479088c360",
+      "app/layout_catalog.c": "5004ab858261242185d86389d5de0f39a75f9a0fd3e627a8a38c991371a16c01",
+      "app/settings_ui.inc": "9c2363eeb3762256f90edae7a8fa1446d6ebd0d645b9277bf60c777590534203",
+      "tests/test_preferences.c": "54d372d06bfe74b2b1f71ff0d6bb9785ed5dce9a8e12391ee0a8b21f746643b8",
+      "tests/test_layout_catalog.c": "21077c44d0181840841f351ef46ff219e454b596a768b64d8b71d30ba610d36c",
+      "app/analysis_resize.inc": "8ccc8dfa92d58f910d4ee9cacc04e96a93be01b12af2b603368205b00726eb88",
+      "app/settings_tests.inc": "5202dece8488dba847ce67e3347ce67be17365f7a1fdde65c98bb62296dc2497",
+      "app/layout_ui.inc": "be51a9d8fe2d91391248416a942f8bfd2e3ba5dd3b4a75d12883140930b1613f",
+      "app/workbench_tests.inc": "762dd57cff2f7d20a3280af14dd9a8a164ce7bc5ee9695fff3204e2f1d78f499",
+      "app/channel_units_ui.inc": "dbe90c981c123bac6afaac9e85c9c977cc6581c1d01b84f77c531bad59955a8a",
+      "app/channel_units_tests.inc": "7f71e05664cfefab012fc0363622541e72b890ea4a48b8e02d6f40f0b93cfdff",
+      "app/analysis_units_tests.inc": "5b299a53559c760f332b5c66c9ece3b352f9ad1c8928f842d55311a6763f4afd",
+      "app/ui.h": "c2416e7b713b5d77d4f8a715b561a96263df3d7d6d588bb999a1be2b7359323d",
+      "app/ui_backend.c": "3cd43242181d0c392b0827711eed9ac014f63ffc0c969e0c649040f6141dcc9c",
+      "app/ui_sdl.c": "7497e7875c57107ba2742cab561be96ef358ec592e336c04c130e0cf1d3ae3d5",
+      "app/toolbar_tests.inc": "16f96ab0fc7088cd766a634c94ee44d2ae97313f3018aadeb2603fe2d265259c",
+      "app/keyboard_menu_tests.inc": "bdb2b255ce95d0dcb85992d8ada3d57c7729cd49fa36dfb7ee202f8748cde682",
+      "app/shell_theme_tests.inc": "4b7452b932bbf9b6b09c681ed418d81de92854eaa11b9fceed61ca0c1084534a",
+      "tests/check_unified_chrome.py": "2ec9fb6b1a54566cd69754bfd07f248daaf0a42d7135e7355812683422157b3e",
+      "app/editor_search_ui.inc": "31ea341e322ef983a2d7e1f4319511fb1632169b545daa87f807988d9fe799f0",
+      "app/documentation.h": "31805cf0517336ef59ed915c4a57d19b6a132467d6e73274f3908a9881f4e69c",
+      "app/documentation.c": "62c802e4572e3ef988f7b4121541865ccd2d7968000cb2074ce7d93500ed5fa1",
+      "app/api_reference_ui.inc": "b2ca3cd9215b9b79ed3b826cb33443a7c4f5dfe2eb37f0b320fd983696a5c19d",
+      "app/api_reference_tests.inc": "53e5373f929589b68064b8e0369e90f07eb4284429ea5bb640b662da16ea66bb",
+      "app/workbench_api_ui.inc": "aaecbc6a7b3213d79fdd6d43361eb88b7f19f63fe59b2f96da77d93b1f0b9b7f",
+      "docs/reference/experiment.md": "549238a1d1c61fd3e9b743cdae5cd9b5469c80f1da55e8492fb4258799ffd0d1",
+      "docs/reference/language-library.md": "3b77d247f174cc7970c8e049a1ee43bcd0cfae534d5d1ba66c4b0070a1d27cc3",
+      "tests/test_api_reference.c": "ade8ed122d85a690018f5b8c60a55d8c3a2ad936a0581d82bb67fc537da8c3cd",
+      "app/api_card_tests.inc": "e218e65187326ee8a21879697228ecd14c84511b2acb8d57eb8e24ce686c4225"
+    },
+    "foreign_sha256_lf": {
+      ".github/workflows/linux-ui-sanitizers.yml": "80e5b0d925f75ddce52260e8812cfb02d0e5b6e4ccfef03ea86deea75c446085",
+      ".github/workflows/macos-f1-accessibility.yml": "c37bfbd09cdfb0d26922cf0fbd8527f2be70161dd113809435732b6150fd5650",
+      "app/accessibility_atspi.c": "fb32ff39647be57cdaa2c02a10d4319ecef2186747a1edc2338bb397e5668b0f",
+      "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+      "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+      "tests/check_documentation_orca.py": "e38b255bbd7bb12787e50cd78d4b32ed8f985ce60746afde2702285e22a728d5",
+      "tests/test_accessibility_tables_atspi.py": "623f5152d85dabe778728fedc9f999b93e3bfaef6d8d82679d6444675ad54d2f",
+      "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+      "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+      "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+    }
+  },
+  "source_45": {
+    "base": "6d077836548b7fe7ba97eec5b2b9bb1cc99f90f7",
+    "source_sha256_lf": {
+      "app/design_ui.inc": "62aa0de96d6197d9bfde8c5b92b0c135a7184e407b9f0173135f178ec8f5496a",
+      "app/docking_ui.inc": "bc5e465013dad4b3b929db3ae2ee0e0958e0b5541e3a98d31b0991bac9d90ae0",
+      "app/main.c": "0039dedb39481237d760087cd57f3b011afdf91ceb8f6b4a364956516ee470d2",
+      "app/panel_windows.inc": "19756c29282f5dc03fa7933c5bd26c4e89fb7373806ca84f22e0840912ff2cf0",
+      "app/plot_tests.inc": "3c730aa3c5fd5a87444973c5cb1734c909286970421f6c8bd5b2a73294a15b61",
+      "app/plot_ui.inc": "8b933b3bb27c9d53be932f1e49ee949bab21a5a587c85f5f5e0fbf801b7b9815",
+      "app/report_details_tests.inc": "eff52c88636b5db6f371a9151975d88624e3d315c4e11e41a0ff55495bada6dc",
+      "app/run_details_tests.inc": "ad34f630ee605abfb78245d3701611a3c6d26f15eae85cab2b32a5e0b6447f35",
+      "app/toolbar_ui.inc": "619f88a4dd1457f233d39de85fa23d033c4ebed6b754435a3632a33c40a7edf8",
+      "app/workspace_tests.inc": "f8a8746e28859bb1b50b50393a1ccd6d907ec26fa52224ecc947c804c04c9803",
+      "tests/check_display_workflow.py": "47ddb0e47a14a7735ada6f5d192da89a9b8138aa6f5c7421fc1dd7a751eaf062",
+      "tests/native_integration_cases.json": "313973c14d62da5c19bfaa8aa933c110adccd20f1d2e9b22d4d8399490c3f9d2",
+      "app/analysis_layout.inc": "74a9cb6997e41b6ae2c597494bc870f3a9b9de768de9d4ad1b7eff9d01deb48d",
+      "app/analysis_ui.inc": "b64974dd94bdb9466114b182bd5a1b7867828a8fb6a3ebf571fb5172230224ec",
+      "app/analysis_workspace_tests.inc": "8a4bb2a826946de53257654760f97f702d6f1d87a19cc47f5d1f458172ade8a2",
+      "app/preferences.c": "e2df26e2c2a0d054dfa1e4dd4b500bb0cf996debe7f861b05f3db2479088c360",
+      "app/layout_catalog.c": "5004ab858261242185d86389d5de0f39a75f9a0fd3e627a8a38c991371a16c01",
+      "app/settings_ui.inc": "9c2363eeb3762256f90edae7a8fa1446d6ebd0d645b9277bf60c777590534203",
+      "tests/test_preferences.c": "54d372d06bfe74b2b1f71ff0d6bb9785ed5dce9a8e12391ee0a8b21f746643b8",
+      "tests/test_layout_catalog.c": "21077c44d0181840841f351ef46ff219e454b596a768b64d8b71d30ba610d36c",
+      "app/analysis_resize.inc": "8ccc8dfa92d58f910d4ee9cacc04e96a93be01b12af2b603368205b00726eb88",
+      "app/settings_tests.inc": "5202dece8488dba847ce67e3347ce67be17365f7a1fdde65c98bb62296dc2497",
+      "app/layout_ui.inc": "be51a9d8fe2d91391248416a942f8bfd2e3ba5dd3b4a75d12883140930b1613f",
+      "app/workbench_tests.inc": "762dd57cff2f7d20a3280af14dd9a8a164ce7bc5ee9695fff3204e2f1d78f499",
+      "app/channel_units_ui.inc": "dbe90c981c123bac6afaac9e85c9c977cc6581c1d01b84f77c531bad59955a8a",
+      "app/channel_units_tests.inc": "7f71e05664cfefab012fc0363622541e72b890ea4a48b8e02d6f40f0b93cfdff",
+      "app/analysis_units_tests.inc": "5b299a53559c760f332b5c66c9ece3b352f9ad1c8928f842d55311a6763f4afd",
+      "app/ui.h": "3a92d4b103f560300c60b5be55e1f0a9d3a89d7a30bb300857f83eb3be912c58",
+      "app/ui_backend.c": "3cd43242181d0c392b0827711eed9ac014f63ffc0c969e0c649040f6141dcc9c",
+      "app/ui_sdl.c": "7497e7875c57107ba2742cab561be96ef358ec592e336c04c130e0cf1d3ae3d5",
+      "app/toolbar_tests.inc": "16f96ab0fc7088cd766a634c94ee44d2ae97313f3018aadeb2603fe2d265259c",
+      "app/keyboard_menu_tests.inc": "bdb2b255ce95d0dcb85992d8ada3d57c7729cd49fa36dfb7ee202f8748cde682",
+      "app/shell_theme_tests.inc": "4b7452b932bbf9b6b09c681ed418d81de92854eaa11b9fceed61ca0c1084534a",
+      "tests/check_unified_chrome.py": "2ec9fb6b1a54566cd69754bfd07f248daaf0a42d7135e7355812683422157b3e",
+      "app/editor_search_ui.inc": "31ea341e322ef983a2d7e1f4319511fb1632169b545daa87f807988d9fe799f0",
+      "app/documentation.h": "31805cf0517336ef59ed915c4a57d19b6a132467d6e73274f3908a9881f4e69c",
+      "app/documentation.c": "62c802e4572e3ef988f7b4121541865ccd2d7968000cb2074ce7d93500ed5fa1",
+      "app/api_reference_ui.inc": "b2ca3cd9215b9b79ed3b826cb33443a7c4f5dfe2eb37f0b320fd983696a5c19d",
+      "app/api_reference_tests.inc": "53e5373f929589b68064b8e0369e90f07eb4284429ea5bb640b662da16ea66bb",
+      "app/workbench_api_ui.inc": "fa3ff95f771e329eae50566d1a23d5d6a96f64781d83d1fdd064c87d0399e819",
+      "docs/reference/experiment.md": "549238a1d1c61fd3e9b743cdae5cd9b5469c80f1da55e8492fb4258799ffd0d1",
+      "docs/reference/language-library.md": "3b77d247f174cc7970c8e049a1ee43bcd0cfae534d5d1ba66c4b0070a1d27cc3",
+      "tests/test_api_reference.c": "ade8ed122d85a690018f5b8c60a55d8c3a2ad936a0581d82bb67fc537da8c3cd",
+      "app/api_card_tests.inc": "11a4b565f96242f848198921a0446bcd59a8a0fc9c973e124c5b941cf88da399"
+    },
+    "foreign_sha256_lf": {
+      ".github/workflows/linux-ui-sanitizers.yml": "80e5b0d925f75ddce52260e8812cfb02d0e5b6e4ccfef03ea86deea75c446085",
+      ".github/workflows/macos-f1-accessibility.yml": "c37bfbd09cdfb0d26922cf0fbd8527f2be70161dd113809435732b6150fd5650",
+      "app/accessibility_atspi.c": "fb32ff39647be57cdaa2c02a10d4319ecef2186747a1edc2338bb397e5668b0f",
+      "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+      "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+      "tests/check_documentation_orca.py": "e38b255bbd7bb12787e50cd78d4b32ed8f985ce60746afde2702285e22a728d5",
+      "tests/test_accessibility_tables_atspi.py": "623f5152d85dabe778728fedc9f999b93e3bfaef6d8d82679d6444675ad54d2f",
+      "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+      "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+      "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+    }
+  },
+  "source_42": {
+    "base": "6d077836548b7fe7ba97eec5b2b9bb1cc99f90f7",
+    "source_sha256_lf": {
+      "app/design_ui.inc": "d725cd5cd6aa2c581748ab5b245bcffbba9144e3a340a1bf2b4be5244b2ef2fd",
+      "app/docking_ui.inc": "bc5e465013dad4b3b929db3ae2ee0e0958e0b5541e3a98d31b0991bac9d90ae0",
+      "app/main.c": "bc8658ff9a37fc82f1515a174f57471ec049ad724c5a882b1256abb8c14ed747",
+      "app/panel_windows.inc": "19756c29282f5dc03fa7933c5bd26c4e89fb7373806ca84f22e0840912ff2cf0",
+      "app/plot_tests.inc": "3c730aa3c5fd5a87444973c5cb1734c909286970421f6c8bd5b2a73294a15b61",
+      "app/plot_ui.inc": "8b933b3bb27c9d53be932f1e49ee949bab21a5a587c85f5f5e0fbf801b7b9815",
+      "app/report_details_tests.inc": "eff52c88636b5db6f371a9151975d88624e3d315c4e11e41a0ff55495bada6dc",
+      "app/run_details_tests.inc": "ad34f630ee605abfb78245d3701611a3c6d26f15eae85cab2b32a5e0b6447f35",
+      "app/toolbar_ui.inc": "619f88a4dd1457f233d39de85fa23d033c4ebed6b754435a3632a33c40a7edf8",
+      "app/workspace_tests.inc": "64a141a488116d7be9786763d6d0349e3583560a863f8f8734d87142ebb7d9a5",
+      "tests/check_display_workflow.py": "ef1e062a974b125401efb73aefb5dc91d695a8b0232e917dba87d84988e38d05",
+      "tests/native_integration_cases.json": "125743c405d56339aec8f137c7c358a27a0a2753716eb79053c9067248d03b11",
+      "app/analysis_layout.inc": "74a9cb6997e41b6ae2c597494bc870f3a9b9de768de9d4ad1b7eff9d01deb48d",
+      "app/analysis_ui.inc": "b64974dd94bdb9466114b182bd5a1b7867828a8fb6a3ebf571fb5172230224ec",
+      "app/analysis_workspace_tests.inc": "8a4bb2a826946de53257654760f97f702d6f1d87a19cc47f5d1f458172ade8a2",
+      "app/preferences.c": "e2df26e2c2a0d054dfa1e4dd4b500bb0cf996debe7f861b05f3db2479088c360",
+      "app/layout_catalog.c": "5004ab858261242185d86389d5de0f39a75f9a0fd3e627a8a38c991371a16c01",
+      "app/settings_ui.inc": "9c2363eeb3762256f90edae7a8fa1446d6ebd0d645b9277bf60c777590534203",
+      "tests/test_preferences.c": "54d372d06bfe74b2b1f71ff0d6bb9785ed5dce9a8e12391ee0a8b21f746643b8",
+      "tests/test_layout_catalog.c": "21077c44d0181840841f351ef46ff219e454b596a768b64d8b71d30ba610d36c",
+      "app/analysis_resize.inc": "8ccc8dfa92d58f910d4ee9cacc04e96a93be01b12af2b603368205b00726eb88",
+      "app/settings_tests.inc": "5202dece8488dba847ce67e3347ce67be17365f7a1fdde65c98bb62296dc2497",
+      "app/layout_ui.inc": "be51a9d8fe2d91391248416a942f8bfd2e3ba5dd3b4a75d12883140930b1613f",
+      "app/workbench_tests.inc": "762dd57cff2f7d20a3280af14dd9a8a164ce7bc5ee9695fff3204e2f1d78f499",
+      "app/channel_units_ui.inc": "dbe90c981c123bac6afaac9e85c9c977cc6581c1d01b84f77c531bad59955a8a",
+      "app/channel_units_tests.inc": "7f71e05664cfefab012fc0363622541e72b890ea4a48b8e02d6f40f0b93cfdff",
+      "app/analysis_units_tests.inc": "5b299a53559c760f332b5c66c9ece3b352f9ad1c8928f842d55311a6763f4afd",
+      "app/ui.h": "3a92d4b103f560300c60b5be55e1f0a9d3a89d7a30bb300857f83eb3be912c58",
+      "app/ui_backend.c": "3cd43242181d0c392b0827711eed9ac014f63ffc0c969e0c649040f6141dcc9c",
+      "app/ui_sdl.c": "7497e7875c57107ba2742cab561be96ef358ec592e336c04c130e0cf1d3ae3d5",
+      "app/toolbar_tests.inc": "16f96ab0fc7088cd766a634c94ee44d2ae97313f3018aadeb2603fe2d265259c",
+      "app/keyboard_menu_tests.inc": "bdb2b255ce95d0dcb85992d8ada3d57c7729cd49fa36dfb7ee202f8748cde682",
+      "app/shell_theme_tests.inc": "4b7452b932bbf9b6b09c681ed418d81de92854eaa11b9fceed61ca0c1084534a",
+      "tests/check_unified_chrome.py": "2ec9fb6b1a54566cd69754bfd07f248daaf0a42d7135e7355812683422157b3e",
+      "app/editor_search_ui.inc": "31ea341e322ef983a2d7e1f4319511fb1632169b545daa87f807988d9fe799f0",
+      "app/documentation.h": "31805cf0517336ef59ed915c4a57d19b6a132467d6e73274f3908a9881f4e69c",
+      "app/documentation.c": "62c802e4572e3ef988f7b4121541865ccd2d7968000cb2074ce7d93500ed5fa1",
+      "app/api_reference_ui.inc": "b2ca3cd9215b9b79ed3b826cb33443a7c4f5dfe2eb37f0b320fd983696a5c19d",
+      "app/api_reference_tests.inc": "53e5373f929589b68064b8e0369e90f07eb4284429ea5bb640b662da16ea66bb",
+      "app/workbench_api_ui.inc": "87328b47576a05ff8333cff0942708c5b9265a75f59c326a1d924a0c43e05236",
+      "docs/reference/experiment.md": "549238a1d1c61fd3e9b743cdae5cd9b5469c80f1da55e8492fb4258799ffd0d1",
+      "docs/reference/language-library.md": "3b77d247f174cc7970c8e049a1ee43bcd0cfae534d5d1ba66c4b0070a1d27cc3",
+      "tests/test_api_reference.c": "ade8ed122d85a690018f5b8c60a55d8c3a2ad936a0581d82bb67fc537da8c3cd"
+    },
+    "foreign_sha256_lf": {
+      ".github/workflows/linux-ui-sanitizers.yml": "80e5b0d925f75ddce52260e8812cfb02d0e5b6e4ccfef03ea86deea75c446085",
+      ".github/workflows/macos-f1-accessibility.yml": "c37bfbd09cdfb0d26922cf0fbd8527f2be70161dd113809435732b6150fd5650",
+      "app/accessibility_atspi.c": "fb32ff39647be57cdaa2c02a10d4319ecef2186747a1edc2338bb397e5668b0f",
+      "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+      "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+      "tests/check_documentation_orca.py": "e38b255bbd7bb12787e50cd78d4b32ed8f985ce60746afde2702285e22a728d5",
+      "tests/test_accessibility_tables_atspi.py": "623f5152d85dabe778728fedc9f999b93e3bfaef6d8d82679d6444675ad54d2f",
+      "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+      "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+      "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+    }
+  },
+  "source_46": {
+    "base": "6d077836548b7fe7ba97eec5b2b9bb1cc99f90f7",
+    "source_sha256_lf": {
+      "app/design_ui.inc": "62aa0de96d6197d9bfde8c5b92b0c135a7184e407b9f0173135f178ec8f5496a",
+      "app/docking_ui.inc": "bc5e465013dad4b3b929db3ae2ee0e0958e0b5541e3a98d31b0991bac9d90ae0",
+      "app/main.c": "122915aec7b0295c8f59993b4f70695a6a8e4053fc100d3ee7c95bdae81ba708",
+      "app/panel_windows.inc": "19756c29282f5dc03fa7933c5bd26c4e89fb7373806ca84f22e0840912ff2cf0",
+      "app/plot_tests.inc": "3c730aa3c5fd5a87444973c5cb1734c909286970421f6c8bd5b2a73294a15b61",
+      "app/plot_ui.inc": "8b933b3bb27c9d53be932f1e49ee949bab21a5a587c85f5f5e0fbf801b7b9815",
+      "app/report_details_tests.inc": "eff52c88636b5db6f371a9151975d88624e3d315c4e11e41a0ff55495bada6dc",
+      "app/run_details_tests.inc": "ad34f630ee605abfb78245d3701611a3c6d26f15eae85cab2b32a5e0b6447f35",
+      "app/toolbar_ui.inc": "619f88a4dd1457f233d39de85fa23d033c4ebed6b754435a3632a33c40a7edf8",
+      "app/workspace_tests.inc": "f8a8746e28859bb1b50b50393a1ccd6d907ec26fa52224ecc947c804c04c9803",
+      "tests/check_display_workflow.py": "47ddb0e47a14a7735ada6f5d192da89a9b8138aa6f5c7421fc1dd7a751eaf062",
+      "tests/native_integration_cases.json": "313973c14d62da5c19bfaa8aa933c110adccd20f1d2e9b22d4d8399490c3f9d2",
+      "app/analysis_layout.inc": "74a9cb6997e41b6ae2c597494bc870f3a9b9de768de9d4ad1b7eff9d01deb48d",
+      "app/analysis_ui.inc": "b64974dd94bdb9466114b182bd5a1b7867828a8fb6a3ebf571fb5172230224ec",
+      "app/analysis_workspace_tests.inc": "8a4bb2a826946de53257654760f97f702d6f1d87a19cc47f5d1f458172ade8a2",
+      "app/preferences.c": "e2df26e2c2a0d054dfa1e4dd4b500bb0cf996debe7f861b05f3db2479088c360",
+      "app/layout_catalog.c": "5004ab858261242185d86389d5de0f39a75f9a0fd3e627a8a38c991371a16c01",
+      "app/settings_ui.inc": "9c2363eeb3762256f90edae7a8fa1446d6ebd0d645b9277bf60c777590534203",
+      "tests/test_preferences.c": "54d372d06bfe74b2b1f71ff0d6bb9785ed5dce9a8e12391ee0a8b21f746643b8",
+      "tests/test_layout_catalog.c": "21077c44d0181840841f351ef46ff219e454b596a768b64d8b71d30ba610d36c",
+      "app/analysis_resize.inc": "8ccc8dfa92d58f910d4ee9cacc04e96a93be01b12af2b603368205b00726eb88",
+      "app/settings_tests.inc": "5202dece8488dba847ce67e3347ce67be17365f7a1fdde65c98bb62296dc2497",
+      "app/layout_ui.inc": "be51a9d8fe2d91391248416a942f8bfd2e3ba5dd3b4a75d12883140930b1613f",
+      "app/workbench_tests.inc": "762dd57cff2f7d20a3280af14dd9a8a164ce7bc5ee9695fff3204e2f1d78f499",
+      "app/channel_units_ui.inc": "dbe90c981c123bac6afaac9e85c9c977cc6581c1d01b84f77c531bad59955a8a",
+      "app/channel_units_tests.inc": "7f71e05664cfefab012fc0363622541e72b890ea4a48b8e02d6f40f0b93cfdff",
+      "app/analysis_units_tests.inc": "5b299a53559c760f332b5c66c9ece3b352f9ad1c8928f842d55311a6763f4afd",
+      "app/ui.h": "3a92d4b103f560300c60b5be55e1f0a9d3a89d7a30bb300857f83eb3be912c58",
+      "app/ui_backend.c": "3cd43242181d0c392b0827711eed9ac014f63ffc0c969e0c649040f6141dcc9c",
+      "app/ui_sdl.c": "7497e7875c57107ba2742cab561be96ef358ec592e336c04c130e0cf1d3ae3d5",
+      "app/toolbar_tests.inc": "16f96ab0fc7088cd766a634c94ee44d2ae97313f3018aadeb2603fe2d265259c",
+      "app/keyboard_menu_tests.inc": "bdb2b255ce95d0dcb85992d8ada3d57c7729cd49fa36dfb7ee202f8748cde682",
+      "app/shell_theme_tests.inc": "4b7452b932bbf9b6b09c681ed418d81de92854eaa11b9fceed61ca0c1084534a",
+      "tests/check_unified_chrome.py": "2ec9fb6b1a54566cd69754bfd07f248daaf0a42d7135e7355812683422157b3e",
+      "app/editor_search_ui.inc": "31ea341e322ef983a2d7e1f4319511fb1632169b545daa87f807988d9fe799f0",
+      "app/documentation.h": "31805cf0517336ef59ed915c4a57d19b6a132467d6e73274f3908a9881f4e69c",
+      "app/documentation.c": "62c802e4572e3ef988f7b4121541865ccd2d7968000cb2074ce7d93500ed5fa1",
+      "app/api_reference_ui.inc": "b2ca3cd9215b9b79ed3b826cb33443a7c4f5dfe2eb37f0b320fd983696a5c19d",
+      "app/api_reference_tests.inc": "53e5373f929589b68064b8e0369e90f07eb4284429ea5bb640b662da16ea66bb",
+      "app/workbench_api_ui.inc": "513e94c3a4ff26f6a47d055decdcbff19f33a9154fd65e39a505a26094f87c95",
+      "docs/reference/experiment.md": "549238a1d1c61fd3e9b743cdae5cd9b5469c80f1da55e8492fb4258799ffd0d1",
+      "docs/reference/language-library.md": "3b77d247f174cc7970c8e049a1ee43bcd0cfae534d5d1ba66c4b0070a1d27cc3",
+      "tests/test_api_reference.c": "ade8ed122d85a690018f5b8c60a55d8c3a2ad936a0581d82bb67fc537da8c3cd",
+      "app/api_card_tests.inc": "e218e65187326ee8a21879697228ecd14c84511b2acb8d57eb8e24ce686c4225"
+    },
+    "foreign_sha256_lf": {
+      ".github/workflows/linux-ui-sanitizers.yml": "80e5b0d925f75ddce52260e8812cfb02d0e5b6e4ccfef03ea86deea75c446085",
+      ".github/workflows/macos-f1-accessibility.yml": "c37bfbd09cdfb0d26922cf0fbd8527f2be70161dd113809435732b6150fd5650",
+      "app/accessibility_atspi.c": "fb32ff39647be57cdaa2c02a10d4319ecef2186747a1edc2338bb397e5668b0f",
+      "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+      "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+      "tests/check_documentation_orca.py": "e38b255bbd7bb12787e50cd78d4b32ed8f985ce60746afde2702285e22a728d5",
+      "tests/test_accessibility_tables_atspi.py": "623f5152d85dabe778728fedc9f999b93e3bfaef6d8d82679d6444675ad54d2f",
+      "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+      "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+      "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08"
+    }
+  },
+  "environment": {
+    "windows": "Windows 11 Pro 10.0.26200, MSVC AddressSanitizer",
+    "linux": "Alpine-Dev 3.24.2, GCC AddressSanitizer/UndefinedBehaviorSanitizer, SDL native windows on WSLg",
+    "input": "Injected SDL pointer/keyboard events and the actual native accessibility focus model; not physical pointer or screenreader evidence"
+  },
+  "native_runs": {
+    "windows_regression_45": {
+      "path": "build\\native\\Design-analysis\\test-results\\run-ndi42eu5",
+      "results_sha256": "0b6a68f4d7d3793cbdaaf5d97f872223b350296529bf3496baf1d52d213b0be2",
+      "groups": [
+        {
+          "name": "source_outline_workflow",
+          "status": "passed",
+          "seconds": 21.859,
+          "steps_file": "build\\native\\Design-analysis\\test-results\\run-ndi42eu5\\source_outline_workflow\\files ä\\app-steps.json",
+          "steps_sha256": "1f1ef1663f1aa04fc309bf001194e334d32e44e88a785152d32e76b7c93bc569",
+          "app_commands": [
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-ndi42eu5\\source_outline_workflow\\files ä\\workflow ä\\c-dark",
+                "outline-c-dark"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "352f93f2a47394722811f50380abf143dfe586ae020be4923a79f4d40610cca2",
+              "markers": [
+                "OUTLINE SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-ndi42eu5\\source_outline_workflow\\files ä\\workflow ä\\phys-light",
+                "outline-phys-light"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "352f93f2a47394722811f50380abf143dfe586ae020be4923a79f4d40610cca2",
+              "markers": [
+                "OUTLINE SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-ndi42eu5\\source_outline_workflow\\files ä\\workflow ä\\c-light-large",
+                "outline-c-light-large"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "352f93f2a47394722811f50380abf143dfe586ae020be4923a79f4d40610cca2",
+              "markers": [
+                "OUTLINE SELF-TEST: PASSED"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "passed",
+          "seconds": 65.5,
+          "steps_file": "build\\native\\Design-analysis\\test-results\\run-ndi42eu5\\workbench_workflow\\files ä\\app-steps.json",
+          "steps_sha256": "9694273ae5d40d984ee7860b61ade703ed17c580c874733f08c13459798f9aa8",
+          "app_commands": [
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-ndi42eu5\\workbench_workflow\\files ä\\workflow ä\\dark",
+                "workbench-dark"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "1ea086870d37369c7d12c302c25e38d7ed7246b85aa2410d54b767f42b739799",
+              "markers": [
+                "WORKBENCH TYPOGRAPHY: ui=16.000 em=1.330078 role=14.631 Datei-width=25.454 code=12.000",
+                "WORKBENCH API EMPTY: message-bottom=465.912 hint=511.281/523.252 action-top=596.000 disjoint=1",
+                "WORKBENCH ENVIRONMENT: 747.0/831.0 within 118.0/838.0 visible=1",
+                "WORKBENCH GEOMETRY: workspace=218.0 context=255.0 log=152.0 body=86.0 editor-height=568.0",
+                "WORKBENCH SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-ndi42eu5\\workbench_workflow\\files ä\\workflow ä\\light",
+                "workbench-light"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "1ea086870d37369c7d12c302c25e38d7ed7246b85aa2410d54b767f42b739799",
+              "markers": [
+                "WORKBENCH TYPOGRAPHY: ui=16.000 em=1.330078 role=14.631 Datei-width=25.454 code=12.000",
+                "WORKBENCH API EMPTY: message-bottom=465.912 hint=511.281/523.252 action-top=596.000 disjoint=1",
+                "WORKBENCH ENVIRONMENT: 747.0/831.0 within 118.0/838.0 visible=1",
+                "WORKBENCH GEOMETRY: workspace=218.0 context=255.0 log=152.0 body=86.0 editor-height=568.0",
+                "WORKBENCH SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-ndi42eu5\\workbench_workflow\\files ä\\workflow ä\\dark-narrow-visual",
+                "workbench-dark-narrow-visual"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "a49c304937ef2970d8e19f80e3c5b8e456f105c1b878b84f605fb4192ea63aba",
+              "markers": [
+                "WORKBENCH TYPOGRAPHY: ui=16.000 em=1.330078 role=14.631 Datei-width=25.454 code=12.000",
+                "WORKBENCH API EMPTY: message-bottom=465.912 hint=493.311/505.281 action-top=519.281 disjoint=1",
+                "WORKBENCH SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-ndi42eu5\\workbench_workflow\\files ä\\workflow ä\\light-large-visual",
+                "workbench-light-large-visual"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "b70d02ffdb42ed867f56cdd5ea1d1e9ad4f18936b37c842dc0069bc4d45c5878",
+              "markers": [
+                "WORKBENCH TYPOGRAPHY: ui=22.000 em=1.330078 role=20.117 Datei-width=34.999 code=22.000",
+                "WORKBENCH API EMPTY: message-bottom=514.497 hint=529.262/567.181 action-top=622.262 disjoint=1",
+                "WORKBENCH SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-ndi42eu5\\workbench_workflow\\files ä\\workflow ä\\light-large-narrow-visual",
+                "workbench-light-large-narrow-visual"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "e9afca509cc86b05f4dd4658082370cf9a09b674c73b76dd524258c23010d763",
+              "markers": [
+                "WORKBENCH TYPOGRAPHY: ui=22.000 em=1.330078 role=20.117 Datei-width=34.999 code=22.000",
+                "WORKBENCH API EMPTY: message-bottom=514.497 hint=528.497/566.416 action-top=580.416 disjoint=1",
+                "WORKBENCH SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-ndi42eu5\\workbench_workflow\\files ä\\workflow ä\\dark-opaque-visual",
+                "workbench-dark-opaque-visual"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "81251a2c112f730936a41f704d18aea8b1e91e96988201dd8f0294ce32d1a5fb",
+              "markers": [
+                "WORKBENCH TYPOGRAPHY: ui=16.000 em=1.330078 role=14.631 Datei-width=25.454 code=12.000",
+                "WORKBENCH API EMPTY: message-bottom=465.912 hint=511.281/523.252 action-top=596.000 disjoint=1",
+                "WORKBENCH ENVIRONMENT: 747.0/831.0 within 118.0/838.0 visible=1",
+                "WORKBENCH SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-ndi42eu5\\workbench_workflow\\files ä\\workflow ä\\contrast-visual",
+                "workbench-contrast-visual"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "81251a2c112f730936a41f704d18aea8b1e91e96988201dd8f0294ce32d1a5fb",
+              "markers": [
+                "WORKBENCH TYPOGRAPHY: ui=16.000 em=1.330078 role=14.631 Datei-width=25.454 code=12.000",
+                "WORKBENCH API EMPTY: message-bottom=465.912 hint=511.281/523.252 action-top=596.000 disjoint=1",
+                "WORKBENCH ENVIRONMENT: 747.0/831.0 within 118.0/838.0 visible=1",
+                "WORKBENCH SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-ndi42eu5\\workbench_workflow\\files ä\\workflow ä\\dark-unified-visual",
+                "workbench-dark-unified-visual"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "d8ba55a9f7abfaefb8ce7728939e7c08a2aada2762b60441ef30bb1f188c6a14",
+              "markers": [
+                "WORKBENCH TYPOGRAPHY: ui=16.000 em=1.330078 role=14.631 Datei-width=25.454 code=12.000",
+                "WORKBENCH API EMPTY: message-bottom=465.912 hint=511.281/523.252 action-top=604.281 disjoint=1",
+                "WORKBENCH ENVIRONMENT: 755.0/839.3 within 118.0/972.0 visible=1",
+                "WORKBENCH SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-ndi42eu5\\workbench_workflow\\files ä\\workflow ä\\light-unified-visual",
+                "workbench-light-unified-visual"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "d8ba55a9f7abfaefb8ce7728939e7c08a2aada2762b60441ef30bb1f188c6a14",
+              "markers": [
+                "WORKBENCH TYPOGRAPHY: ui=16.000 em=1.330078 role=14.631 Datei-width=25.454 code=12.000",
+                "WORKBENCH API EMPTY: message-bottom=465.912 hint=511.281/523.252 action-top=604.281 disjoint=1",
+                "WORKBENCH ENVIRONMENT: 755.0/839.3 within 118.0/972.0 visible=1",
+                "WORKBENCH SELF-TEST: PASSED"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed",
+          "seconds": 17.109,
+          "steps_file": "build\\native\\Design-analysis\\test-results\\run-ndi42eu5\\api_reference_workflow\\files ä\\app-steps.json",
+          "steps_sha256": "39bd1cd2e668eefff02dcabfe26e5ed918053093c2eb9a4d3b4db0f4c95250a1",
+          "app_commands": [
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-ndi42eu5\\api_reference_workflow\\files ä\\workflow ä\\c",
+                "api-reference-c"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "e46b1dcf5837a26abc596f86bfe458506d5bb1234443899ef8c4cb33bd79d115",
+              "markers": [
+                "API REFERENCE SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-ndi42eu5\\api_reference_workflow\\files ä\\workflow ä\\phys",
+                "api-reference-phys"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "e46b1dcf5837a26abc596f86bfe458506d5bb1234443899ef8c4cb33bd79d115",
+              "markers": [
+                "API REFERENCE SELF-TEST: PASSED"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "linux_regression_45": {
+      "path": "build\\native\\Design-analysis-linux\\test-results\\run-avf4wfq3",
+      "results_sha256": "01cd785775b6581027f2c8b0ce28082367039c29318a9f49e0bb59ac9124a75a",
+      "groups": [
+        {
+          "name": "source_outline_workflow",
+          "status": "passed",
+          "seconds": 24.866,
+          "steps_file": "build\\native\\Design-analysis-linux\\test-results\\run-avf4wfq3\\source_outline_workflow\\files ä\\app-steps.json",
+          "steps_sha256": "95f083ac07cc0d589b788d43884d3570b1345ad5ea4f2b81390af1cacec8fca4",
+          "app_commands": [
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-avf4wfq3/source_outline_workflow/files ä/workflow ä/c-dark",
+                "outline-c-dark"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "8dbfdccdf865f23c36c47f96f3cf9be53ea7c461ead73ff963b0947d20e607f4",
+              "markers": [
+                "OUTLINE SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-avf4wfq3/source_outline_workflow/files ä/workflow ä/phys-light",
+                "outline-phys-light"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "8dbfdccdf865f23c36c47f96f3cf9be53ea7c461ead73ff963b0947d20e607f4",
+              "markers": [
+                "OUTLINE SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-avf4wfq3/source_outline_workflow/files ä/workflow ä/c-light-large",
+                "outline-c-light-large"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "8dbfdccdf865f23c36c47f96f3cf9be53ea7c461ead73ff963b0947d20e607f4",
+              "markers": [
+                "OUTLINE SELF-TEST: PASSED"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "passed",
+          "seconds": 90.346,
+          "steps_file": "build\\native\\Design-analysis-linux\\test-results\\run-avf4wfq3\\workbench_workflow\\files ä\\app-steps.json",
+          "steps_sha256": "006de013e8030f362c22c42bc5cfb305f1446053fdd66c332b6553cf3022954b",
+          "app_commands": [
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-avf4wfq3/workbench_workflow/files ä/workflow ä/dark",
+                "workbench-dark"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "1bc883339b84c7326648fa10a87fd702ae0272049558f56a1e7185b341465b21",
+              "markers": [
+                "WORKBENCH TYPOGRAPHY: ui=16.000 em=1.164062 role=12.805 Datei-width=29.348 code=12.000",
+                "WORKBENCH API EMPTY: message-bottom=461.430 hint=508.625/534.578 action-top=596.000 disjoint=1",
+                "WORKBENCH ENVIRONMENT: 747.0/832.0 within 118.0/838.0 visible=1",
+                "WORKBENCH GEOMETRY: workspace=218.0 context=255.0 log=152.0 body=86.0 editor-height=568.0",
+                "WORKBENCH SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-avf4wfq3/workbench_workflow/files ä/workflow ä/light",
+                "workbench-light"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "1bc883339b84c7326648fa10a87fd702ae0272049558f56a1e7185b341465b21",
+              "markers": [
+                "WORKBENCH TYPOGRAPHY: ui=16.000 em=1.164062 role=12.805 Datei-width=29.348 code=12.000",
+                "WORKBENCH API EMPTY: message-bottom=461.430 hint=508.625/534.578 action-top=596.000 disjoint=1",
+                "WORKBENCH ENVIRONMENT: 747.0/832.0 within 118.0/838.0 visible=1",
+                "WORKBENCH GEOMETRY: workspace=218.0 context=255.0 log=152.0 body=86.0 editor-height=568.0",
+                "WORKBENCH SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-avf4wfq3/workbench_workflow/files ä/workflow ä/dark-narrow-visual",
+                "workbench-dark-narrow-visual"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "54aad3abe7658770080638525d70409f65a3f419c8a1b2f960498a6bf251408e",
+              "markers": [
+                "WORKBENCH TYPOGRAPHY: ui=16.000 em=1.164062 role=12.805 Datei-width=29.348 code=12.000",
+                "WORKBENCH API EMPTY: message-bottom=461.430 hint=476.672/502.625 action-top=516.625 disjoint=1",
+                "WORKBENCH SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-avf4wfq3/workbench_workflow/files ä/workflow ä/light-large-visual",
+                "workbench-light-large-visual"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "6fe7fdd385ec448801338bf622d90e3286708566bdef7f15eba965c361b3307f",
+              "markers": [
+                "WORKBENCH TYPOGRAPHY: ui=22.000 em=1.164062 role=17.606 Datei-width=40.353 code=22.000",
+                "WORKBENCH API EMPTY: message-bottom=526.035 hint=545.822/579.633 action-top=638.822 disjoint=1",
+                "WORKBENCH SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-avf4wfq3/workbench_workflow/files ä/workflow ä/light-large-narrow-visual",
+                "workbench-light-large-narrow-visual"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "774e346ad81cf9bbb4c31c7a3fabf771edce57f9f4e25485df36b8e031a85caa",
+              "markers": [
+                "WORKBENCH TYPOGRAPHY: ui=22.000 em=1.164062 role=17.606 Datei-width=40.353 code=22.000",
+                "WORKBENCH API EMPTY: message-bottom=526.035 hint=540.035/573.846 action-top=587.846 disjoint=1",
+                "WORKBENCH SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-avf4wfq3/workbench_workflow/files ä/workflow ä/dark-opaque-visual",
+                "workbench-dark-opaque-visual"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "e1c451115229f76bf42949490e7c23da05f0d50266e1da6551143bd9f4c07e4c",
+              "markers": [
+                "WORKBENCH TYPOGRAPHY: ui=16.000 em=1.164062 role=12.805 Datei-width=29.348 code=12.000",
+                "WORKBENCH API EMPTY: message-bottom=461.430 hint=508.625/534.578 action-top=596.000 disjoint=1",
+                "WORKBENCH ENVIRONMENT: 747.0/832.0 within 118.0/838.0 visible=1",
+                "WORKBENCH SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-avf4wfq3/workbench_workflow/files ä/workflow ä/contrast-visual",
+                "workbench-contrast-visual"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "e1c451115229f76bf42949490e7c23da05f0d50266e1da6551143bd9f4c07e4c",
+              "markers": [
+                "WORKBENCH TYPOGRAPHY: ui=16.000 em=1.164062 role=12.805 Datei-width=29.348 code=12.000",
+                "WORKBENCH API EMPTY: message-bottom=461.430 hint=508.625/534.578 action-top=596.000 disjoint=1",
+                "WORKBENCH ENVIRONMENT: 747.0/832.0 within 118.0/838.0 visible=1",
+                "WORKBENCH SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-avf4wfq3/workbench_workflow/files ä/workflow ä/dark-unified-visual",
+                "workbench-dark-unified-visual"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "0e29ada2e4586595c7e0d8ac422e5b82993407a26779721d3f78152851c9aa72",
+              "markers": [
+                "WORKBENCH TYPOGRAPHY: ui=16.000 em=1.164062 role=12.805 Datei-width=29.348 code=12.000",
+                "WORKBENCH API EMPTY: message-bottom=461.430 hint=508.625/534.578 action-top=601.625 disjoint=1",
+                "WORKBENCH ENVIRONMENT: 753.0/837.6 within 118.0/972.0 visible=1",
+                "WORKBENCH SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-avf4wfq3/workbench_workflow/files ä/workflow ä/light-unified-visual",
+                "workbench-light-unified-visual"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "0e29ada2e4586595c7e0d8ac422e5b82993407a26779721d3f78152851c9aa72",
+              "markers": [
+                "WORKBENCH TYPOGRAPHY: ui=16.000 em=1.164062 role=12.805 Datei-width=29.348 code=12.000",
+                "WORKBENCH API EMPTY: message-bottom=461.430 hint=508.625/534.578 action-top=601.625 disjoint=1",
+                "WORKBENCH ENVIRONMENT: 753.0/837.6 within 118.0/972.0 visible=1",
+                "WORKBENCH SELF-TEST: PASSED"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed",
+          "seconds": 36.214,
+          "steps_file": "build\\native\\Design-analysis-linux\\test-results\\run-avf4wfq3\\api_reference_workflow\\files ä\\app-steps.json",
+          "steps_sha256": "79b457c4f70b4a242b883c6119fdc9de503eb0358ad4ab91e2e102ba750d5f12",
+          "app_commands": [
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-avf4wfq3/api_reference_workflow/files ä/workflow ä/c",
+                "api-reference-c"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "d1e501b4c797c261466d0e39ea2051e29d18fb46e344cb3ef454a34924d4fe49",
+              "markers": [
+                "API REFERENCE SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-avf4wfq3/api_reference_workflow/files ä/workflow ä/phys",
+                "api-reference-phys"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "d1e501b4c797c261466d0e39ea2051e29d18fb46e344cb3ef454a34924d4fe49",
+              "markers": [
+                "API REFERENCE SELF-TEST: PASSED"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "windows_api_47": {
+      "path": "build\\native\\Design-analysis\\test-results\\run-scz1rmjg",
+      "results_sha256": "26dd9723a17d6c94a55be97855265ce2e71959cd06aca5ac469c07687ed4a261",
+      "groups": [
+        {
+          "name": "api_card_workflow",
+          "status": "passed",
+          "seconds": 113.688,
+          "steps_file": "build\\native\\Design-analysis\\test-results\\run-scz1rmjg\\api_card_workflow\\files ä\\app-steps.json",
+          "steps_sha256": "491db2c788bfedafe7d94f54c16cd11da5d738b2ad22d763dc9a299a906ec16b",
+          "app_commands": [
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-scz1rmjg\\api_card_workflow\\files ä\\workflow ä\\c-dark",
+                "api-card-c-dark"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "b7e18a64a92321b4e87762cdfe724bba991474702fdd7e46781137203596cd04",
+              "markers": [
+                "API CARD BODY: natural=223.641 measured=160.641 available=172.000 last-argument=573.000/12.000 action=604.281",
+                "API CARD CAPTION: 1215.0,425.0,189.0,10.0 inside-card=1",
+                "API CARD GEOMETRY: card=1202.0,412.3,215.0,235.0 action=1215.0,604.3,189.0,30.0 ui=16 detached=0",
+                "API CARD BUILD/RUN: language=C rows=25 exact-time-channel=1",
+                "API CARD SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-scz1rmjg\\api_card_workflow\\files ä\\workflow ä\\phys-light",
+                "api-card-phys-light"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "640d519dc30eae720b7f7c241c3a624d8696cd6bd0636d8132aeb2a3fa0f16e7",
+              "markers": [
+                "API CARD BODY: natural=257.641 measured=194.641 available=194.641 last-argument=607.000/12.000 action=626.922",
+                "API CARD CAPTION: 1215.0,425.0,189.0,10.0 inside-card=1",
+                "API CARD GEOMETRY: card=1202.0,412.3,215.0,257.6 action=1215.0,626.9,189.0,30.0 ui=16 detached=0",
+                "API CARD BUILD/RUN: language=Physim rows=22 exact-time-channel=1",
+                "API CARD SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-scz1rmjg\\api_card_workflow\\files ä\\workflow ä\\c-light-large-narrow",
+                "api-card-c-light-large-narrow"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "89757495e13ffc3286e3c99e123a829cc5c2252809aa153acf261a4e69b53e4d",
+              "markers": [
+                "API CARD BODY: natural=369.506 measured=292.631 available=292.631 last-argument=609.000/17.000 action=636.518",
+                "API CARD CAPTION: 855.0,334.0,189.0,14.0 inside-card=1",
+                "API CARD GEOMETRY: card=842.0,321.3,215.0,369.5 action=855.0,636.5,189.0,41.2 ui=22 detached=0",
+                "API CARD BUILD/RUN: language=C rows=25 exact-time-channel=1",
+                "API CARD SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-scz1rmjg\\api_card_workflow\\files ä\\workflow ä\\c-light-detached",
+                "api-card-c-light-detached"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "16263fba974d79cdb5e57d55bc25afe5a282cdce47827567c995bfdfaa43ced2",
+              "markers": [
+                "API CARD BODY: natural=206.641 measured=143.641 available=143.641 last-argument=398.000/12.000 action=417.922",
+                "API CARD CAPTION: 30.0,267.0,394.0,10.0 inside-card=1",
+                "API CARD GEOMETRY: card=17.0,254.3,420.0,206.6 action=30.0,417.9,394.0,30.0 ui=16 detached=1",
+                "API CARD BUILD/RUN: language=C rows=22 exact-time-channel=1",
+                "API CARD SELF-TEST: PASSED"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "linux_api_47": {
+      "path": "build\\native\\Design-analysis-linux\\test-results\\run-83l9mnbx",
+      "results_sha256": "a103ab52628896c6b4e825e6fd146f2525f10ca564d16061b60c6dc86f096ac8",
+      "groups": [
+        {
+          "name": "api_card_workflow",
+          "status": "passed",
+          "seconds": 173.125,
+          "steps_file": "build\\native\\Design-analysis-linux\\test-results\\run-83l9mnbx\\api_card_workflow\\files ä\\app-steps.json",
+          "steps_sha256": "cd33d07fcdba4438f5bb88293783138ed7e4d9a7e36403c3a5ecbd52cf08d6ee",
+          "app_commands": [
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-83l9mnbx/api_card_workflow/files ä/workflow ä/c-dark",
+                "api-card-c-dark"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "c83f1faf783b2a5f25f79bbfeb9387bbb06f2eecdc61134bc602c7e9679ebbeb",
+              "markers": [
+                "API CARD BODY: natural=256.312 measured=193.312 available=193.312 last-argument=604.000/11.000 action=622.938",
+                "API CARD CAPTION: 1215.0,422.0,189.0,9.0 inside-card=1",
+                "API CARD GEOMETRY: card=1202.0,409.6,215.0,256.3 action=1215.0,622.9,189.0,30.0 ui=16 detached=0",
+                "API CARD BUILD/RUN: language=C rows=24 exact-time-channel=1",
+                "API CARD SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-83l9mnbx/api_card_workflow/files ä/workflow ä/phys-light",
+                "api-card-phys-light"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "fee1cb44ae4d62089d5ba04e5f9342c3cea75da26abc96dbda4adb355efb26ce",
+              "markers": [
+                "API CARD BODY: natural=256.312 measured=193.312 available=193.312 last-argument=604.000/11.000 action=622.938",
+                "API CARD CAPTION: 1215.0,422.0,189.0,9.0 inside-card=1",
+                "API CARD GEOMETRY: card=1202.0,409.6,215.0,256.3 action=1215.0,622.9,189.0,30.0 ui=16 detached=0",
+                "API CARD BUILD/RUN: language=Physim rows=46 exact-time-channel=1",
+                "API CARD SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-83l9mnbx/api_card_workflow/files ä/workflow ä/c-light-large-narrow",
+                "api-card-c-light-large-narrow"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "366a507d2e3b4f593d3d15af34bf95b6a82ad9efa192489ba446ff0dff4395a4",
+              "markers": [
+                "API CARD BODY: natural=366.680 measured=289.805 available=289.805 last-argument=625.000/15.000 action=650.252",
+                "API CARD CAPTION: 855.0,350.0,189.0,12.0 inside-card=1",
+                "API CARD GEOMETRY: card=842.0,337.8,215.0,366.7 action=855.0,650.3,189.0,41.2 ui=22 detached=0",
+                "API CARD BUILD/RUN: language=C rows=36 exact-time-channel=1",
+                "API CARD SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-83l9mnbx/api_card_workflow/files ä/workflow ä/c-light-detached",
+                "api-card-c-light-detached"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "159b65c6ad2e9a736c1451009b92e5bb93a21d69cccc735e928d4e70d91cf728",
+              "markers": [
+                "API CARD BODY: natural=205.312 measured=142.312 available=142.312 last-argument=395.000/11.000 action=413.938",
+                "API CARD CAPTION: 30.0,264.0,394.0,9.0 inside-card=1",
+                "API CARD GEOMETRY: card=17.0,251.6,420.0,205.3 action=30.0,413.9,394.0,30.0 ui=16 detached=1",
+                "API CARD BUILD/RUN: language=C rows=44 exact-time-channel=1",
+                "API CARD SELF-TEST: PASSED"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "windows_reference_47": {
+      "path": "build\\native\\Design-analysis\\test-results\\run-iywf5tcm",
+      "results_sha256": "3226a9a5e175969f0916c5e3639904511ac951fe5c12f879a3b4303260d00e22",
+      "groups": [
+        {
+          "name": "api_reference_workflow",
+          "status": "passed",
+          "seconds": 21.797,
+          "steps_file": "build\\native\\Design-analysis\\test-results\\run-iywf5tcm\\api_reference_workflow\\files ä\\app-steps.json",
+          "steps_sha256": "e009e6b03b2a43c85d112f9d2e505513548b7be569b470ef733f1f09845a434f",
+          "app_commands": [
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-iywf5tcm\\api_reference_workflow\\files ä\\workflow ä\\c",
+                "api-reference-c"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "e46b1dcf5837a26abc596f86bfe458506d5bb1234443899ef8c4cb33bd79d115",
+              "markers": [
+                "API REFERENCE SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-iywf5tcm\\api_reference_workflow\\files ä\\workflow ä\\phys",
+                "api-reference-phys"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "e46b1dcf5837a26abc596f86bfe458506d5bb1234443899ef8c4cb33bd79d115",
+              "markers": [
+                "API REFERENCE SELF-TEST: PASSED"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "linux_reference_47": {
+      "path": "build\\native\\Design-analysis-linux\\test-results\\run-a1aw55xy",
+      "results_sha256": "3d7f04d4af3cced7fc98e2c4977542a9bca3838c381a1b7ba0b6f764bd9ea606",
+      "groups": [
+        {
+          "name": "api_reference_workflow",
+          "status": "passed",
+          "seconds": 16.619,
+          "steps_file": "build\\native\\Design-analysis-linux\\test-results\\run-a1aw55xy\\api_reference_workflow\\files ä\\app-steps.json",
+          "steps_sha256": "3e6c2dba558e255277e73df2c8d4581ddeaad3879734fdc396feab658aa8ad41",
+          "app_commands": [
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-a1aw55xy/api_reference_workflow/files ä/workflow ä/c",
+                "api-reference-c"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "d1e501b4c797c261466d0e39ea2051e29d18fb46e344cb3ef454a34924d4fe49",
+              "markers": [
+                "API REFERENCE SELF-TEST: PASSED"
+              ]
+            },
+            {
+              "command": [
+                "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-a1aw55xy/api_reference_workflow/files ä/workflow ä/phys",
+                "api-reference-phys"
+              ],
+              "exit_code": 0,
+              "stdout_sha256": "d1e501b4c797c261466d0e39ea2051e29d18fb46e344cb3ef454a34924d4fe49",
+              "markers": [
+                "API REFERENCE SELF-TEST: PASSED"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "captures": [
+    {
+      "path": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\windows-c-dark-v47.png",
+      "source": "build\\native\\Design-analysis\\test-results\\run-scz1rmjg\\api_card_workflow\\files ä\\workflow ä\\c-dark\\api-card-ready.bmp",
+      "sha256": "60c74a6815b643892b59ff616f00b78ec0d1bb001c2ebefef781bac1f536ad94",
+      "source_sha256": "aa74c49b5aa15d0a4a08b2aa97854794b5e31c96d42bf5b6e066470626ddae0c",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "decoded_rgb_identical": true
+    },
+    {
+      "path": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\windows-phys-light-v47.png",
+      "source": "build\\native\\Design-analysis\\test-results\\run-scz1rmjg\\api_card_workflow\\files ä\\workflow ä\\phys-light\\api-card-ready.bmp",
+      "sha256": "084a5d2749afd5aad2b8a6e4c6b6ed20a209a543245fe138875882584e4b793d",
+      "source_sha256": "d2779cd50b26d2638e055798219c9e34fe8fc89147d46108fc34da27ee9f5ff0",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "decoded_rgb_identical": true
+    },
+    {
+      "path": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\windows-c-light-large-narrow-v47.png",
+      "source": "build\\native\\Design-analysis\\test-results\\run-scz1rmjg\\api_card_workflow\\files ä\\workflow ä\\c-light-large-narrow\\api-card-ready.bmp",
+      "sha256": "4d38bb19edf8af33c3efb7ce7e99f191812d0b33a9dc17cfccbd684d19e7e179",
+      "source_sha256": "3e77affaf225c8741661254a66f0e0d569e3e9029341ea13dd096e01555c6ccf",
+      "dimensions": [
+        1080,
+        740
+      ],
+      "decoded_rgb_identical": true
+    },
+    {
+      "path": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\windows-c-light-detached-v47.png",
+      "source": "build\\native\\Design-analysis\\test-results\\run-scz1rmjg\\api_card_workflow\\files ä\\workflow ä\\c-light-detached\\project\\api-card-detached.bmp",
+      "sha256": "69aca7a6032caa07142dee4cf772747556654c7558868cdeac5f2ceaa06acd6a",
+      "source_sha256": "b6f55d9b2f2e67396045722a949e62f2dd4599302a87d51166457fe24b39d0fc",
+      "dimensions": [
+        460,
+        640
+      ],
+      "decoded_rgb_identical": true
+    },
+    {
+      "path": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\windows-c-light-returned-v47.png",
+      "source": "build\\native\\Design-analysis\\test-results\\run-scz1rmjg\\api_card_workflow\\files ä\\workflow ä\\c-light-detached\\api-card-inserted.bmp",
+      "sha256": "2ca4154b5c53adb929a7dd4e09726309b6f6e0f95286addcced32a0113690af8",
+      "source_sha256": "4015d81b54d278668f6ad4de0844f3b40d97861aef35d01f9f21f44c615782f5",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "decoded_rgb_identical": true
+    },
+    {
+      "path": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\windows-shell-dark-v45.png",
+      "source": "build\\native\\Design-analysis\\test-results\\run-ndi42eu5\\workbench_workflow\\files ä\\workflow ä\\dark-unified-visual\\workbench-dark.bmp",
+      "sha256": "9be60bad3769bf1ef22b27757ee52568ef8dd5d6a3d3b2041891faa3b1d3d757",
+      "source_sha256": "659b2f61584ffdfa8bbb4edd0d7928f56832249f10b548aa3451037c6ffcf284",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "decoded_rgb_identical": true
+    },
+    {
+      "path": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\windows-shell-light-v45.png",
+      "source": "build\\native\\Design-analysis\\test-results\\run-ndi42eu5\\workbench_workflow\\files ä\\workflow ä\\light-unified-visual\\workbench-light.bmp",
+      "sha256": "40092ae2f07de53819f0e65e39f3ba30b198d4d72aef130744b2c4424d1363b3",
+      "source_sha256": "c918fafe26eb0ca394f278da2172f79e65360ffc9cf4d48642d006eb68284282",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "decoded_rgb_identical": true
+    },
+    {
+      "path": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\linux-c-dark-v47.png",
+      "source": "build\\native\\Design-analysis-linux\\test-results\\run-83l9mnbx\\api_card_workflow\\files ä\\workflow ä\\c-dark\\api-card-ready.bmp",
+      "sha256": "5f26030bfb1a55af5b9c727795efcb22dc217834f53a4dea49583e74c5ed313a",
+      "source_sha256": "c9ab50e185b84af2c4dc935652e6de2371e38c019284193127b22db8355a7f4f",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "decoded_rgb_identical": true
+    },
+    {
+      "path": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\linux-phys-light-v47.png",
+      "source": "build\\native\\Design-analysis-linux\\test-results\\run-83l9mnbx\\api_card_workflow\\files ä\\workflow ä\\phys-light\\api-card-ready.bmp",
+      "sha256": "9a431eeb13eae3fea49ecdeb38870151a91f2e307f876ad5ed45d80e26dd0ebf",
+      "source_sha256": "e70cc8f03c4346adba77f144ce592d6b1bf96b4e72c1a1b7b9b34a658aa41e7d",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "decoded_rgb_identical": true
+    },
+    {
+      "path": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\linux-c-light-large-narrow-v47.png",
+      "source": "build\\native\\Design-analysis-linux\\test-results\\run-83l9mnbx\\api_card_workflow\\files ä\\workflow ä\\c-light-large-narrow\\api-card-ready.bmp",
+      "sha256": "db9b677bc00485bd35a6b189c6d8edfb28e49f47940305772f4ce0d5c5e7797b",
+      "source_sha256": "55327f3a0fa35d26aeacad799d5f82bbd331f2c77cb828730e03bfcae42d3a7a",
+      "dimensions": [
+        1080,
+        740
+      ],
+      "decoded_rgb_identical": true
+    },
+    {
+      "path": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\linux-c-light-detached-v47.png",
+      "source": "build\\native\\Design-analysis-linux\\test-results\\run-83l9mnbx\\api_card_workflow\\files ä\\workflow ä\\c-light-detached\\project\\api-card-detached.bmp",
+      "sha256": "f72bdc967fd9ad0f009a761b7aa98369aa332acda8492f63293a03b531d7d411",
+      "source_sha256": "7f17f5be4723979e80a1e6805b88a56d8b4c515f6f3df285b38813a899c14470",
+      "dimensions": [
+        460,
+        640
+      ],
+      "decoded_rgb_identical": true
+    },
+    {
+      "path": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\linux-c-light-returned-v47.png",
+      "source": "build\\native\\Design-analysis-linux\\test-results\\run-83l9mnbx\\api_card_workflow\\files ä\\workflow ä\\c-light-detached\\api-card-inserted.bmp",
+      "sha256": "aa493d567249898ac3900f49f42734ce4aaab11502ca80475e7ce911371da1d4",
+      "source_sha256": "0d517d598555c6fdd11d9faba7a30e392218791e42946484c921181d1a60db7c",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "decoded_rgb_identical": true
+    },
+    {
+      "path": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\linux-shell-dark-v45.png",
+      "source": "build\\native\\Design-analysis-linux\\test-results\\run-avf4wfq3\\workbench_workflow\\files ä\\workflow ä\\dark-unified-visual\\workbench-dark.bmp",
+      "sha256": "421a50f8b0dde01093961996faf8bc1b7970b8447cd8076f6d4fdfea5b5fd8a6",
+      "source_sha256": "1f3e55548e9051c955944512c658a9a6848028a8ccd0d63a202ab56708cd6528",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "decoded_rgb_identical": true
+    },
+    {
+      "path": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\linux-shell-light-v45.png",
+      "source": "build\\native\\Design-analysis-linux\\test-results\\run-avf4wfq3\\workbench_workflow\\files ä\\workflow ä\\light-unified-visual\\workbench-light.bmp",
+      "sha256": "f2cdaef2b20b6be387d2edc07ddfb1f50084b1105c9191f375301ff848178571",
+      "source_sha256": "73a3e22487e6cb1b000aa04d8cdf3781f8a534172e92b4070bce48540f436f10",
+      "dimensions": [
+        1440,
+        1000
+      ],
+      "decoded_rgb_identical": true
+    },
+    {
+      "path": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\counterexample-position-v43.png",
+      "sha256": "4d1195c49178dadd99c73856a12b78918bbb8e20bd8366ded17519a96fe89d4e",
+      "dimensions": [
+        1080,
+        740
+      ],
+      "negative": true
+    },
+    {
+      "path": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\counterexample-windows-large-arguments-v45.png",
+      "sha256": "644abe3fa44e31be962c7717576cc4dbc330d8d528a74db370364a9922cec577",
+      "dimensions": [
+        1080,
+        740
+      ],
+      "negative": true
+    },
+    {
+      "path": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\counterexample-linux-large-arguments-v45.png",
+      "sha256": "32f138407a6bb5c52c9cd0ea759774f45fd86d6ecf5a66603d0ca6d9944dceef",
+      "dimensions": [
+        1080,
+        740
+      ],
+      "negative": true
+    }
+  ],
+  "chrome_comparisons": [
+    {
+      "scope": "Compare shared native chrome with the selected PNG, without altering either image.\n\nThis verifies a bounded part of the design: client size, the three tab rectangles,\nthe two horizontal boundaries and five semantic surfaces. The optional workbench\ncheck also compares side and log/status boundaries. It is not a whole-app\nscore. Content, fonts, interactions and the rest of each workspace need their own\nproofs. Pillow is required, as for the existing workbench visual checker.",
+      "reference": "D:\\Physim\\docs\\visuals\\unified-workspace\\develop-dark.png",
+      "native": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\windows-shell-dark-v45.png",
+      "sha256": [
+        "b4554a1b09689798c21a8fe771d5c706a03a711bd963c1b3d00b5d2fe270ec52",
+        "9be60bad3769bf1ef22b27757ee52568ef8dd5d6a3d3b2041891faa3b1d3d757"
+      ],
+      "checks": [
+        {
+          "name": "actual client size",
+          "expected": [
+            1440,
+            1000
+          ],
+          "actual": [
+            1440,
+            1000
+          ],
+          "passed": true
+        },
+        {
+          "name": "menu surface",
+          "expected": [
+            37,
+            38,
+            43
+          ],
+          "actual": [
+            37,
+            38,
+            43
+          ],
+          "passed": true
+        },
+        {
+          "name": "path surface",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "path left inset",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "workspace surface",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "footer surface",
+          "expected": [
+            37,
+            38,
+            43
+          ],
+          "actual": [
+            37,
+            38,
+            43
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=43",
+          "expected": [
+            [
+              10,
+              475
+            ]
+          ],
+          "actual": [
+            [
+              10,
+              475
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=50",
+          "expected": [
+            [
+              8,
+              477
+            ]
+          ],
+          "actual": [
+            [
+              8,
+              477
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=69",
+          "expected": [
+            [
+              9,
+              476
+            ]
+          ],
+          "actual": [
+            [
+              9,
+              476
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=78",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=117",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "workspace and code-context boundaries",
+          "expected": [
+            217,
+            1185
+          ],
+          "actual": [
+            217,
+            1185
+          ],
+          "passed": true
+        },
+        {
+          "name": "protocol, body and editor-status boundaries",
+          "expected": [
+            820,
+            861,
+            948
+          ],
+          "actual": [
+            820,
+            861,
+            948
+          ],
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "scope": "Compare shared native chrome with the selected PNG, without altering either image.\n\nThis verifies a bounded part of the design: client size, the three tab rectangles,\nthe two horizontal boundaries and five semantic surfaces. The optional workbench\ncheck also compares side and log/status boundaries. It is not a whole-app\nscore. Content, fonts, interactions and the rest of each workspace need their own\nproofs. Pillow is required, as for the existing workbench visual checker.",
+      "reference": "D:\\Physim\\docs\\visuals\\unified-workspace\\develop-light.png",
+      "native": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\windows-shell-light-v45.png",
+      "sha256": [
+        "7a3e95e92f1e59dd61d0b0cff58e0787ab805996bcd2a88846200e1511441d0f",
+        "40092ae2f07de53819f0e65e39f3ba30b198d4d72aef130744b2c4424d1363b3"
+      ],
+      "checks": [
+        {
+          "name": "actual client size",
+          "expected": [
+            1440,
+            1000
+          ],
+          "actual": [
+            1440,
+            1000
+          ],
+          "passed": true
+        },
+        {
+          "name": "menu surface",
+          "expected": [
+            237,
+            239,
+            243
+          ],
+          "actual": [
+            237,
+            239,
+            243
+          ],
+          "passed": true
+        },
+        {
+          "name": "path surface",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "path left inset",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "workspace surface",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "footer surface",
+          "expected": [
+            237,
+            239,
+            243
+          ],
+          "actual": [
+            237,
+            239,
+            243
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=43",
+          "expected": [
+            [
+              10,
+              475
+            ]
+          ],
+          "actual": [
+            [
+              10,
+              475
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=50",
+          "expected": [
+            [
+              8,
+              477
+            ]
+          ],
+          "actual": [
+            [
+              8,
+              477
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=69",
+          "expected": [
+            [
+              9,
+              476
+            ]
+          ],
+          "actual": [
+            [
+              9,
+              476
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=78",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=117",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "workspace and code-context boundaries",
+          "expected": [
+            217,
+            1185
+          ],
+          "actual": [
+            217,
+            1185
+          ],
+          "passed": true
+        },
+        {
+          "name": "protocol, body and editor-status boundaries",
+          "expected": [
+            820,
+            861,
+            948
+          ],
+          "actual": [
+            820,
+            861,
+            948
+          ],
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "scope": "Compare shared native chrome with the selected PNG, without altering either image.\n\nThis verifies a bounded part of the design: client size, the three tab rectangles,\nthe two horizontal boundaries and five semantic surfaces. The optional workbench\ncheck also compares side and log/status boundaries. It is not a whole-app\nscore. Content, fonts, interactions and the rest of each workspace need their own\nproofs. Pillow is required, as for the existing workbench visual checker.",
+      "reference": "D:\\Physim\\docs\\visuals\\unified-workspace\\develop-dark.png",
+      "native": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\linux-shell-dark-v45.png",
+      "sha256": [
+        "b4554a1b09689798c21a8fe771d5c706a03a711bd963c1b3d00b5d2fe270ec52",
+        "421a50f8b0dde01093961996faf8bc1b7970b8447cd8076f6d4fdfea5b5fd8a6"
+      ],
+      "checks": [
+        {
+          "name": "actual client size",
+          "expected": [
+            1440,
+            1000
+          ],
+          "actual": [
+            1440,
+            1000
+          ],
+          "passed": true
+        },
+        {
+          "name": "menu surface",
+          "expected": [
+            37,
+            38,
+            43
+          ],
+          "actual": [
+            37,
+            38,
+            43
+          ],
+          "passed": true
+        },
+        {
+          "name": "path surface",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "path left inset",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "workspace surface",
+          "expected": [
+            30,
+            31,
+            35
+          ],
+          "actual": [
+            30,
+            31,
+            35
+          ],
+          "passed": true
+        },
+        {
+          "name": "footer surface",
+          "expected": [
+            37,
+            38,
+            43
+          ],
+          "actual": [
+            37,
+            38,
+            43
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=43",
+          "expected": [
+            [
+              10,
+              475
+            ]
+          ],
+          "actual": [
+            [
+              10,
+              475
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=50",
+          "expected": [
+            [
+              8,
+              477
+            ]
+          ],
+          "actual": [
+            [
+              8,
+              477
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=69",
+          "expected": [
+            [
+              9,
+              476
+            ]
+          ],
+          "actual": [
+            [
+              9,
+              476
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=78",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=117",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "workspace and code-context boundaries",
+          "expected": [
+            217,
+            1185
+          ],
+          "actual": [
+            217,
+            1185
+          ],
+          "passed": true
+        },
+        {
+          "name": "protocol, body and editor-status boundaries",
+          "expected": [
+            820,
+            861,
+            948
+          ],
+          "actual": [
+            820,
+            861,
+            948
+          ],
+          "passed": true
+        }
+      ],
+      "passed": true
+    },
+    {
+      "scope": "Compare shared native chrome with the selected PNG, without altering either image.\n\nThis verifies a bounded part of the design: client size, the three tab rectangles,\nthe two horizontal boundaries and five semantic surfaces. The optional workbench\ncheck also compares side and log/status boundaries. It is not a whole-app\nscore. Content, fonts, interactions and the rest of each workspace need their own\nproofs. Pillow is required, as for the existing workbench visual checker.",
+      "reference": "D:\\Physim\\docs\\visuals\\unified-workspace\\develop-light.png",
+      "native": "docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\linux-shell-light-v45.png",
+      "sha256": [
+        "7a3e95e92f1e59dd61d0b0cff58e0787ab805996bcd2a88846200e1511441d0f",
+        "f2cdaef2b20b6be387d2edc07ddfb1f50084b1105c9191f375301ff848178571"
+      ],
+      "checks": [
+        {
+          "name": "actual client size",
+          "expected": [
+            1440,
+            1000
+          ],
+          "actual": [
+            1440,
+            1000
+          ],
+          "passed": true
+        },
+        {
+          "name": "menu surface",
+          "expected": [
+            237,
+            239,
+            243
+          ],
+          "actual": [
+            237,
+            239,
+            243
+          ],
+          "passed": true
+        },
+        {
+          "name": "path surface",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "path left inset",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "workspace surface",
+          "expected": [
+            246,
+            247,
+            249
+          ],
+          "actual": [
+            246,
+            247,
+            249
+          ],
+          "passed": true
+        },
+        {
+          "name": "footer surface",
+          "expected": [
+            237,
+            239,
+            243
+          ],
+          "actual": [
+            237,
+            239,
+            243
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=43",
+          "expected": [
+            [
+              10,
+              475
+            ]
+          ],
+          "actual": [
+            [
+              10,
+              475
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=50",
+          "expected": [
+            [
+              8,
+              477
+            ]
+          ],
+          "actual": [
+            [
+              8,
+              477
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "selected tab coverage at y=69",
+          "expected": [
+            [
+              9,
+              476
+            ]
+          ],
+          "actual": [
+            [
+              9,
+              476
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=78",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "full one-pixel boundary at y=117",
+          "expected": 1440,
+          "actual": 1440,
+          "passed": true
+        },
+        {
+          "name": "workspace and code-context boundaries",
+          "expected": [
+            217,
+            1185
+          ],
+          "actual": [
+            217,
+            1185
+          ],
+          "passed": true
+        },
+        {
+          "name": "protocol, body and editor-status boundaries",
+          "expected": [
+            820,
+            861,
+            948
+          ],
+          "actual": [
+            820,
+            861,
+            948
+          ],
+          "passed": true
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "negative_attempts": [
+    {
+      "name": "windows_font_42",
+      "path": "build/native/Design-analysis/test-results/run-di2tb7fe",
+      "results_sha256": "934c6b559ad24b72ec65f616f9c7b31203fbd2d727bf451b67ec7225f724a5f8",
+      "cause": "ASan rejects user-font handle passed as nk_font",
+      "statuses": [
+        {
+          "name": "api_reference_workflow",
+          "status": "failed"
+        }
+      ]
+    },
+    {
+      "name": "windows_fixture_43",
+      "path": "build/native/Design-analysis/test-results/run-75e3j3oj",
+      "results_sha256": "42dd192ade6da8eb9d1999db4df3a0a31ac71ce4bc9357c6de4d29f4c4963607",
+      "cause": "Fixture reopened while initial library scan was running; API reference images also show displaced card",
+      "statuses": [
+        {
+          "name": "api_reference_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "api_card_workflow",
+          "status": "failed"
+        }
+      ]
+    },
+    {
+      "name": "windows_fixture_44",
+      "path": "build/native/Design-analysis/test-results/run-aggn6c98",
+      "results_sha256": "03ad8c2eed30cb41e7e2c57fe23ef47ea97604044ff375fdedc03b048955fd32",
+      "cause": "Physim fixture lacks mandatory create callback",
+      "statuses": [
+        {
+          "name": "api_card_workflow",
+          "status": "failed"
+        }
+      ]
+    },
+    {
+      "name": "linux_fixture_44",
+      "path": "build/native/Design-analysis-linux/test-results/run-wifu3age",
+      "results_sha256": "620877d1ab7449010166fc0616043171b475186124fa72c9e1b7a729bdc1821d",
+      "cause": "Same missing mandatory create callback",
+      "statuses": [
+        {
+          "name": "api_reference_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "api_card_workflow",
+          "status": "failed"
+        }
+      ]
+    },
+    {
+      "name": "windows_arguments_46",
+      "path": "build/native/Design-analysis/test-results/run-5xvgpwdr",
+      "results_sha256": "93fefbb1a3b4a2a9b0cda1df00a59441f87bb5d8ac208e9fb9969ee412c4a9bf",
+      "cause": "Stricter last-row guard rejects 335.881 px of content in 292.631 px; object-like row aliases were still applying minimum heights",
+      "statuses": [
+        {
+          "name": "api_card_workflow",
+          "status": "failed"
+        }
+      ]
+    },
+    {
+      "name": "source45_visual_failure",
+      "cause": "Both registry API card groups passed activation/build tests, but visual inspection found clipped final argument rows at UI 22; source46 makes this a failing native assertion. Source45 API card groups excluded from accepted final API proof."
+    }
+  ],
+  "open": [
+    "Outer inspector reserves 7 px scrollbar space even without a visible scrollbar",
+    "Category letter spacing, exact outline geometry and vertical alignment remain to compare",
+    "Model note data contract and diagnostic error/warning classification remain incomplete",
+    "Native macOS, mixed monitor DPI, physical pointer, fresh external screenreader, clean checkout and whole UI acceptance remain open"
+  ],
+  "binaries": {
+    "build/native/Design-analysis/bin/physim.exe": "b72ebbb37a134efbb25a064ecef99ba8cbc1adefa894d61e6a1b4348e9e46ed7",
+    "build/native/Design-analysis-linux/bin/physim": "f5f8af5890d1988b7009c19ae971b0d7361843d5b947204edea10f2a58eb30ab",
+    "build/native/Design-analysis/bin/physim-test-api_reference.exe": "9255212c8a5ed0c155fd8dd1d93de2727ab113c5b0b9d19beebdb6947dde214e",
+    "build/native/Design-analysis-linux/bin/physim-test-api_reference": "884a302705c0941121b8c3b4ddaf1c21c9c2e7e458a4b5010cccbda9fc80174f"
+  },
+  "unit_checks": {
+    "executed_current": true,
+    "commands": [
+      [
+        "build/native/Design-analysis/bin/physim-test-api_reference.exe",
+        "D:/Physim"
+      ],
+      [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim-test-api_reference",
+        "/mnt/d/Physim"
+      ]
+    ],
+    "exit_codes": [
+      0,
+      0
+    ],
+    "resolved_symbols": 1264,
+    "language_type_guide_fallbacks": 15,
+    "checked": "Exact sections/constants/overloads, explicitly marked examples, argument table selection and failure preservation; corresponding unit source and documentation hashes unchanged since source42/43 successful unit builds",
+    "relevant_sources_unchanged_since_source42": true
+  },
+  "cleanup": {
+    "reason": "Removed superseded review-only PNG copies after preserving native BMPs, current final PNGs, original references and all three visual counterexamples",
+    "files": [
+      {
+        "path": "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\windows-c-dark-v45.png",
+        "bytes": 153109,
+        "sha256": "60c74a6815b643892b59ff616f00b78ec0d1bb001c2ebefef781bac1f536ad94"
+      },
+      {
+        "path": "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\windows-phys-light-v45.png",
+        "bytes": 120403,
+        "sha256": "084a5d2749afd5aad2b8a6e4c6b6ed20a209a543245fe138875882584e4b793d"
+      },
+      {
+        "path": "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\windows-c-light-detached-v45.png",
+        "bytes": 31903,
+        "sha256": "69aca7a6032caa07142dee4cf772747556654c7558868cdeac5f2ceaa06acd6a"
+      },
+      {
+        "path": "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\windows-c-light-returned-v45.png",
+        "bytes": 161311,
+        "sha256": "2ca4154b5c53adb929a7dd4e09726309b6f6e0f95286addcced32a0113690af8"
+      },
+      {
+        "path": "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\linux-c-dark-v45.png",
+        "bytes": 158911,
+        "sha256": "5f26030bfb1a55af5b9c727795efcb22dc217834f53a4dea49583e74c5ed313a"
+      },
+      {
+        "path": "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\linux-phys-light-v45.png",
+        "bytes": 127052,
+        "sha256": "9a431eeb13eae3fea49ecdeb38870151a91f2e307f876ad5ed45d80e26dd0ebf"
+      },
+      {
+        "path": "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\linux-c-light-detached-v45.png",
+        "bytes": 36242,
+        "sha256": "f72bdc967fd9ad0f009a761b7aa98369aa332acda8492f63293a03b531d7d411"
+      },
+      {
+        "path": "D:\\Physim\\docs\\visuals\\unified-workspace\\workbench-context-2026-10-21\\linux-c-light-returned-v45.png",
+        "bytes": 165217,
+        "sha256": "aa493d567249898ac3900f49f42734ce4aaab11502ca80475e7ce911371da1d4"
+      },
+      {
+        "path": "D:\\Physim\\build\\native\\api-card-c-dark-45.png",
+        "bytes": 195478,
+        "sha256": "bcc5a494e9d435a37e2803cdfbd52f76b0729fe5ebe517d8659fad8de74f7954"
+      },
+      {
+        "path": "D:\\Physim\\build\\native\\api-reference-preview-43.png",
+        "bytes": 84174,
+        "sha256": "c981d809dbb6b383fc7c5fff7380b84dfd8e5f30b0aaab6958b2543789c7c9f4"
+      }
+    ],
+    "bytes": 1233800
+  }
+}

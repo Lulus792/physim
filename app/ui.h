@@ -176,6 +176,14 @@ nk_bool ps_ui_option_at(struct nk_context *ctx,struct nk_rect bounds,const char 
 nk_bool ps_ui_accessibility_button(struct nk_context *ctx,struct nk_rect bounds,const char *name);
 /* Keep short label/control rows readable with enlarged UI fonts. Spacer and
  * chart/editor heights remain explicit; the default 16 px layout is unchanged. */
+/* Measured font-role layouts already include text scaling. Keep a direct path
+ * before the object-like Nuklear aliases below; parentheses cannot bypass them. */
+static inline void ps_ui_row_exact_dynamic(struct nk_context *ctx,float height,int columns) {
+    nk_layout_row_dynamic(ctx,height,columns);
+}
+static inline void ps_ui_row_exact_begin(struct nk_context *ctx,enum nk_layout_format format,float height,int columns) {
+    nk_layout_row_begin(ctx,format,height,columns);
+}
 static inline void ps_ui_row_dynamic(struct nk_context *ctx,float height,int columns) {
     nk_layout_row_dynamic(ctx,nk_sdl_row_height(ctx,height),columns);
 }

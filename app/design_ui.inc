@@ -686,6 +686,7 @@ static void sidebar_panel(app *a) {
     if(compact){nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}
 }
 #include "source_outline_ui.inc"
+#include "workbench_api_ui.inc"
 #include "laboratory_ui.inc"
 #include "model_edit_ui.inc"
 static void run_limits_view(app *a) {
@@ -750,16 +751,10 @@ static void inspector_panel(app *a) {
              * native window too; the card keeps its normal 235 px when it fits. */
             float card_height=fminf(235,fmaxf(150,ui->current->layout->clip.y+ui->current->layout->clip.h-ui->current->layout->at_y-220));
             if(!a->api_reference)card_height=fmaxf(card_height,39+empty_height+14+hint_height+14+30+13);
-            nk_layout_row_dynamic(ui,card_height,1);
             if(a->api_reference) {
-                nk_style_push_float(ui,&ui->style.window.rounding,7);
-                nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(13,13));
-                nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(edit)));
-                nk_style_push_style_item(ui,&ui->style.button.normal,nk_style_item_color(UI_COLOR(edit)));
-                nk_style_push_float(ui,&ui->style.button.border,1);
-                if(nk_group_begin(ui,"workbench-api-card",NK_WINDOW_BORDER)) {api_reference_view(a);nk_group_end(ui);}
-                nk_style_pop_float(ui);nk_style_pop_style_item(ui);nk_style_pop_style_item(ui);nk_style_pop_vec2(ui);nk_style_pop_float(ui);
+                workbench_api_card(a,card_height);
             } else {
+            nk_layout_row_dynamic(ui,card_height,1);
             struct nk_rect card=nk_widget_bounds(ui);
             struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
             nk_fill_rect(canvas,card,7,UI_COLOR(edit));nk_stroke_rect(canvas,card,7,1,UI_COLOR(border));
@@ -1268,10 +1263,11 @@ static void draw_ui(app *a, int width, int height) {
     bool workspace_shell=workspace_shell_visible(a);
     if(a->outline_keyboard && (editor_search_target(a)!=a->outline_editor || a->toolbar_menu || a->search_keyboard ||
        nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT)))a->outline_keyboard=false;
-    const float sizes[]={11,9,12,11,23,16,10};
-    for(unsigned i=0;i<7;i++) {
-        a->workbench_fonts[i]=*(i>=3?a->font_title:a->font_ui);
-        float em=i>=3?a->workbench_bold_em:a->workbench_regular_em;
+    const float sizes[]={11,9,12,11,23,16,10,10,8,10,12};
+    for(unsigned i=0;i<SDL_arraysize(a->workbench_fonts);i++) {
+        bool mono=i==7 || i==10,bold=i>=3 && i<=6;
+        a->workbench_fonts[i]=*(mono?a->font_code:bold?a->font_title:a->font_ui);
+        float em=mono?a->workbench_code_em:bold?a->workbench_bold_em:a->workbench_regular_em;
         a->workbench_fonts[i].height=sizes[i]*em*a->preferences.ui_size/16.f;
     }
     if(workspace_shell && !laboratory) {

@@ -486,6 +486,22 @@ static bool api_heading(const char *heading,const char *name,bool language,bool 
     return !heading[n] || (language && (heading[n]=='(' || (members && heading[n]=='.')));
 }
 static bool api_word(unsigned char c){return isalnum(c) || c=='_';}
+ps_result ps_document_api_preview(const ps_document *d,size_t first,size_t end,ps_doc_api_preview *out) {
+    if(!d || !out || first>=end || end>d->count)return PS_INVALID;
+    ps_doc_api_preview p={SIZE_MAX,SIZE_MAX,SIZE_MAX,SIZE_MAX};
+    const char marker[]="Beispiel für den Editor:";bool marked=false;
+    for(size_t i=first;i<end;i++) {
+        const ps_doc_block *b=&d->blocks[i];
+        bool label=b->kind==PS_DOC_TEXT && b->length==sizeof marker-1 && !memcmp(d->text+b->text,marker,sizeof marker-1);
+        if(b->kind==PS_DOC_CODE) {
+            if(marked && p.example==SIZE_MAX && b->length)p.example=i;
+            else if(p.signature==SIZE_MAX)p.signature=i;
+        } else if(b->kind==PS_DOC_TEXT && !label && p.summary==SIZE_MAX)p.summary=i;
+        if(b->kind==PS_DOC_TABLE_ROW && b->level==1 && b->cell_count==2 && p.arguments==SIZE_MAX)p.arguments=i;
+        marked=label;
+    }
+    *out=p;return PS_OK;
+}
 ps_result ps_document_api_section(const ps_document *d,const char *name,bool language,size_t *first,size_t *end) {
     if(!d || !name || !*name || !first || !end)return PS_INVALID;
     size_t begin=d->count;bool members=false;

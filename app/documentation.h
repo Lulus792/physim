@@ -86,6 +86,14 @@ typedef struct {
     size_t reading_length;
     char reading[PS_DOC_MAX_READING_BYTES+1];
 } ps_document;
+typedef struct {
+    size_t summary,signature,example,arguments; /* Block indices; SIZE_MAX if absent. */
+} ps_doc_api_preview;
+/* Preview of an already resolved section. An insertable example must be a code
+ * block immediately following the exact paragraph "Beispiel für den Editor:".
+ * Ordinary signatures/overloads are never treated as editable examples. */
+ps_result ps_document_api_preview(const ps_document *document,size_t first,size_t end,
+                                  ps_doc_api_preview *out);
 /* Small, inert Markdown reader for the bundled documentation. Caller validates
  * UTF-8. Images retain their alt text and inert target for the native renderer.
  * No HTML, scripts, network access or automatic URL navigation.

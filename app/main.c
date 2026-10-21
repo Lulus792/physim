@@ -131,14 +131,14 @@ typedef struct {
 typedef struct {
     struct nk_context *ui;
     const struct nk_user_font *font_ui, *font_code, *font_title;
-    struct nk_user_font workbench_fonts[7]; /* Role sizes share the DPI-aware atlas. */
+    struct nk_user_font workbench_fonts[11]; /* UI roles 0–6; API code/label/body/name 7–10. */
     struct nk_user_font laboratory_title_font;
     struct nk_user_font laboratory_measurement_font;
     struct nk_user_font workspace_status_font;
     struct nk_user_font analysis_title_font, analysis_chart_font;
     unsigned workbench_sidebar_focus;
     struct nk_rect workbench_environment_bounds;
-    float workbench_regular_em,workbench_bold_em;
+    float workbench_regular_em,workbench_bold_em,workbench_code_em;
     struct nk_rect diagnostic_view_bounds;
     uint16_t workbench_tree_order[PS_WORKSPACE_TREE_LIMIT];
     const struct nk_user_font *ui_fonts[4], *title_fonts[4];
@@ -324,6 +324,13 @@ typedef struct {
     bool outline_cached,outline_reset_scroll,outline_keyboard;
     struct nk_rect outline_bounds[PS_OUTLINE_LIMIT];
     size_t api_reference_first,api_reference_end;
+    ps_doc_api_preview api_reference_preview;
+    const ps_completion_symbol *api_reference_symbol; /* Static completion catalogue. */
+    bool api_example_pending;
+    struct nk_text_edit *api_example_edit;
+    struct nk_rect api_card_bounds,api_card_action_bounds;
+    struct nk_rect api_card_arguments_bounds;
+    float api_card_natural_height,api_card_measured_body_height;
     char api_reference_name[128],api_reference_path[256];
     nk_uint api_reference_scroll_x,api_reference_scroll_y;
     struct nk_rect api_reference_bounds,api_reference_close_bounds,api_reference_handbook_bounds,api_reference_button_bounds,completion_reference_bounds;
@@ -3345,6 +3352,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "panel_window_tests.inc"
 #include "model_edit_tests.inc"
 #include "api_reference_tests.inc"
+#include "api_card_tests.inc"
 #include "parameter_form_tests.inc"
 #include "adaptive_tests.inc"
 #include "series_tests.inc"
@@ -3687,6 +3695,7 @@ int main(int argc, char **argv) {
     struct nk_font *title_font = title_fonts[0];
     a->workbench_regular_em=ps_ui_font_em_ratio(font);
     a->workbench_bold_em=ps_ui_font_em_ratio(title_font);
+    a->workbench_code_em=ps_ui_font_em_ratio(code_fonts[0]);
     if(trace_test)fprintf(stderr,"APP TEST TRACE: main font sources ready %.6f\n",ps_clock());
     if (!ui_fonts_ok || !code_fonts_ok || !title_font || !nk_sdl_font_stash_end(a->ui)) {
         fprintf(stderr, "Font initialization: %s\n", SDL_GetError());
@@ -3899,6 +3908,7 @@ int main(int argc, char **argv) {
             a->profile_frame.frame = frames;
         }
         preferences_theme_tick(a);
+        api_reference_insert_tick(a);
         nk_input_begin(a->ui);
         if (a->doc_ui)
             nk_input_begin(a->doc_ui);
@@ -4090,7 +4100,7 @@ int main(int argc, char **argv) {
             /* The deliberate 80 ms frame delay also runs on hosted software GL.
              * Keep its bounded keyboard assertions; allow their extra wall time. */
             if (ps_clock() - test_started >
-                (!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
+                (!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
                   !strncmp(argv[3], "isolation-", 10) || !strncmp(argv[3], "breakpoints-", 12) || !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || (!strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"pendulum-medium-",16)) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strncmp(argv[3],"logging-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15))) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",

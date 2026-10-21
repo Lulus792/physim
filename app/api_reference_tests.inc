@@ -74,7 +74,14 @@ static void api_reference_test_frame(app *a,const char *mode,int *stage,int *cod
         if(a->doc_jump_block>=0){--*stage;return;}
         ok &= a->doc_scroll_y>0;
         test_window_key_mod(a->doc_window,SDLK_ESCAPE,0);break;
-    case 13:ok=!a->doc_visible && a->api_reference && !strcmp(a->api_reference_name,desired);test_mouse(a,a->api_reference_close_bounds,true);break;
+    case 13:
+        ok=!a->doc_visible && a->api_reference && !strcmp(a->api_reference_name,desired);
+        if(workbench_visible(a)){test_mouse(a,a->toolbar_bounds[2],true);*stage=42;}
+        else test_mouse(a,a->api_reference_close_bounds,true);
+        break;
+    case 42:test_mouse(a,a->toolbar_bounds[2],false);break;
+    case 43:ok=a->toolbar_menu==3;test_mouse(a,a->api_reference_close_bounds,true);break;
+    case 44:test_mouse(a,a->api_reference_close_bounds,false);*stage=15;break;
     case 14:test_mouse(a,a->api_reference_close_bounds,false);break;
     case 15:break;
     case 16:

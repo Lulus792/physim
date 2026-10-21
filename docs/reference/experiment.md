@@ -217,7 +217,9 @@ ps_result ps_experiment_diagnostic(const ps_context *context, ps_diagnostic *out
 
 ## ps_channel_add
 
-Kopiert einen eindeutigen SI-Kanal mit Skala 1 und begrenzten UTF-8-Metadaten ohne Kürzung; liefert Index oder -1 und erhält den Kontext bei Fehlern.
+Definiert einen SI-Messkanal mit Name, Einheit und Beschreibung.
+
+Kopiert einen eindeutigen Kanal mit Skala 1 und begrenzten UTF-8-Metadaten ohne Kürzung; liefert Index oder -1 und erhält den Kontext bei Fehlern.
 
 ```c
 int ps_channel_add(
@@ -228,6 +230,22 @@ int ps_channel_add(
 ```
 
 Declare a canonical SI channel: unit.scale must equal 1. Samples are SI numbers; convert display-unit inputs explicitly before storing in values. Copies bounded UTF-8 metadata without truncation: name 1..47 bytes, symbol 0..15, description 0..95. Name/symbol have no controls; descriptions permit tab/newline. Names must be unique. Returns index or -1, preserving the entire context on failure. No allocation or retained pointers. Legacy raw schemas retain their existing file-format semantics; this validates declarations.
+
+Beispiel für den Editor:
+
+```c
+ps_channel_add(context, "angle",
+    PS_RADIAN, "Winkel in rad");
+```
+
+| Argument | Bedeutung im Beispiel |
+| --- | --- |
+| context | Experimentkontext |
+| unit | z. B. PS_RADIAN |
+
+Den Ausschnitt im create-Callback verwenden. `context` bezeichnet dessen vorhandenen
+Experimentkontext; einen anders benannten Parameter entsprechend einsetzen. Den
+Kanalnamen nur einmal registrieren und den zurückgegebenen Index bei Bedarf speichern.
 
 ## ps_channel_sample_quantity
 

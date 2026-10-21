@@ -15,10 +15,37 @@ static bool api_reference_open(app *a,const ps_completion_symbol *symbol) {
     }
     if(result!=PS_OK){free(document);status(a,"API-Referenz konnte nicht geladen werden. Bisherige Referenz bleibt erhalten.");return false;}
     free(a->api_reference);a->api_reference=document;a->api_reference_first=first;a->api_reference_end=end;
+    a->api_reference_symbol=symbol;
+    ps_document_api_preview(document,first,end,&a->api_reference_preview);
     snprintf(a->api_reference_name,sizeof a->api_reference_name,"%s",symbol->name);
     snprintf(a->api_reference_path,sizeof a->api_reference_path,"%s",relative);
     a->api_reference_scroll_x=a->api_reference_scroll_y=0;dock_show(a,PS_DOCK_INSPECTOR);
     return true;
+}
+static void api_reference_handbook(app *a) {
+    int topic=-1;for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(!strcmp(documentation_topics[i].path,a->api_reference_path)){topic=i;break;}
+    if(topic>=0){open_documentation(a,topic);if(a->documentation && a->doc_topic==topic)a->doc_jump_block=(int)a->api_reference_first;}
+}
+static void api_reference_close(app *a) {
+    free(a->api_reference);a->api_reference=NULL;a->api_reference_symbol=NULL;
+    a->api_example_pending=false;a->api_example_edit=NULL;
+}
+static void api_reference_insert_tick(app *a) {
+    if(!a->api_example_pending)return;
+    a->api_example_pending=false;struct nk_text_edit *edit=a->api_example_edit;a->api_example_edit=NULL;
+    struct nk_text_edit *current=completion_target(a);
+    if(!edit || edit!=current || !idle(a) || !a->api_reference || !a->api_reference_symbol ||
+       document_language(a,edit)!=(int)a->api_reference_symbol->language || a->api_reference_preview.example==SIZE_MAX)return;
+    const ps_doc_block *b=&a->api_reference->blocks[a->api_reference_preview.example];
+    int start=edit->select_start,end=edit->select_end,cursor=edit->cursor;
+    if(!nk_textedit_paste(edit,a->api_reference->text+b->text,(int)b->length)) {
+        edit->select_start=start;edit->select_end=end;edit->cursor=cursor;
+        status(a,"Beispiel konnte nicht eingefügt werden. Text bleibt erhalten.");return;
+    }
+    if(edit==&a->experiment){a->dirty=true;invalidate_build(a);}
+    else if(edit==&a->analysis){a->analysis_dirty=true;invalidate_build(a);}
+    else document_changed(a,edit);
+    a->completion_focus_edit=edit;
 }
 static void api_reference_from_editor(app *a,struct nk_text_edit *edit) {
     if(a->completion_active && a->completion_edit==edit) {
@@ -55,11 +82,10 @@ static void api_reference_view(app *a) {
     float button_width=ui->style.font->width(ui->style.font->userdata,ui->style.font->height,close_label,(int)strlen(close_label))+2*ui->style.button.padding.x+2*ui->style.button.border;
     nk_layout_row_dynamic(ui,28,compact && nk_window_get_content_region(ui).w<2*button_width+ui->style.window.spacing.x?1:2);a->api_reference_handbook_bounds=nk_widget_bounds(ui);
     if(nk_button_label(ui,"Handbuch")) {
-        int topic=-1;for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(!strcmp(documentation_topics[i].path,a->api_reference_path)){topic=i;break;}
-        if(topic>=0){open_documentation(a,topic);if(a->documentation && a->doc_topic==topic)a->doc_jump_block=(int)a->api_reference_first;}
+        api_reference_handbook(a);
     }
     a->api_reference_close_bounds=nk_widget_bounds(ui);
-    if(nk_button_label(ui,"Schließen")){free(a->api_reference);a->api_reference=NULL;return;}
+    if(nk_button_label(ui,"Schließen")){api_reference_close(a);return;}
     nk_layout_row_dynamic(ui,12,1);struct nk_rect remaining=nk_widget_bounds(ui),clip=nk_window_get_content_region(ui);
     nk_layout_row_dynamic(ui,fmaxf(40,clip.y+clip.h-remaining.y),1);a->api_reference_bounds=nk_widget_bounds(ui);
     if(nk_group_scrolled_offset_begin(ui,&a->api_reference_scroll_x,&a->api_reference_scroll_y,"api-reference-body",0)) {

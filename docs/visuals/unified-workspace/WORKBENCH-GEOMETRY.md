@@ -113,3 +113,9 @@ der Referenzkopf zeigt dort nur das Profil. Dies ist ein noch offener
 Gestaltungsabgleich und keine belegte technische Unmöglichkeit. Quellen,
 Projektname, Verzeichnisse und Buildstatus bleiben echte Daten des Testprojekts;
 die illustrativen Pendeldaten aus dem Browser werden nicht ergänzt.
+
+Nachfolgender Teilstand: [API-Karte und Protokollkopf](WORKBENCH-CONTEXT.md).
+Er entfernt das hier für Stand 40 beschriebene zusätzliche Schließenkreuz,
+gleicht die gefüllte Karte weiter an und prüft dokumentierte Einfügung,
+vollständige Argumentzeilen bei großer Schrift und das separate Kontextfenster.
+Die oben eingefrorenen Prüfungen und ihre begrenzte Aussage bleiben unverändert.

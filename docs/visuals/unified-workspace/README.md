@@ -13,6 +13,8 @@ Der anschließende [Abgleich der Auswertungsfelder](ANALYSIS-CONTROLS.md) enthä
 aktuelle native Aufnahmen und ausdrücklich begrenzte Kontur-/Farbvergleiche.
 Die [kompakte Einheitenwahl und große Schrift](ANALYSIS-UNITS.md) dokumentieren
 den nächsten nativen Teilstand einschließlich echter Speicher-/Abbruchfälle.
+Der [Werkbank-Kontext](WORKBENCH-CONTEXT.md) führt den aktuellen Abgleich der
+gefüllten API-Karte, dokumentierter Beispiele und des Protokollkopfs fort.
 
 **Für die native Umsetzung in einem anderen Chat:**
 [kopierfertiger Auftrag](NEXT-CHAT.md) · [Bestand und Abnahmeliste](IMPLEMENTATION.md)

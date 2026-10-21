@@ -676,9 +676,28 @@ Distanzhülle 1e-8 m und 4096 konservative Suchschritte; Modellmaßstab und Gena
 Channel(name: String, unit: Unit, description: String) -> Channel
 ```
 
-Deklariert einen eindeutigen Messkanal mit kanonischer SI-Skala 1 und begrenzten UTF-8-Metadaten. Werte vorher ausdrücklich nach SI umrechnen. Fehler sind mit attempt abfangbar und verbrauchen keinen Slot.
+Deklariert einen SI-Messkanal mit Name, Einheit und Beschreibung.
+
+Der Name muss eindeutig sein; kanonische SI-Skala 1 und begrenzte UTF-8-Metadaten
+sind erforderlich. Werte vorher ausdrücklich nach SI umrechnen. Fehler sind mit
+attempt abfangbar und verbrauchen keinen Slot.
 
 Experimentmodul erforderlich.
+
+Beispiel für den Editor:
+
+```text
+let radians = Unit(0, 0, 0, 0, 0, 0, 0, 1, "rad")
+let angle = Channel("angle", radians, "Winkel in rad")
+```
+
+| Argument | Bedeutung im Beispiel |
+| --- | --- |
+| name | Eindeutiger Kanalname |
+| unit | SI-Skala 1 |
+
+Auf Modulebene eines Experimentmoduls einfügen. Vorhandene Bezeichner und
+Kanalnamen bei Bedarf anpassen; einen Namen nur einmal registrieren.
 
 ## Channel.sample
 

@@ -857,6 +857,18 @@ def parameter_form(flow,directory):
             require((root/name).is_file(),"Missing actual parameter form view: "+name)
 
 
+def api_card(flow,directory):
+    for variant in ("c-dark","phys-light","c-light-large-narrow","c-light-detached"):
+        root=directory/variant;root.mkdir(parents=True)
+        flow.run("--workspace-state-test",root,"api-card-"+variant,timeout=130,marker="API CARD SELF-TEST: PASSED")
+        output=flow.steps[-1]['stdout']
+        require('exact-time-channel=1' in output,'Documented example did not produce the actual angle/rad run')
+        for name in ("api-card-inserted.bmp","api-card-built.bmp"):
+            require((root/name).is_file(),"Missing actual API card view: "+variant+"/"+name)
+        image=root/'project/api-card-detached.bmp' if 'detached' in variant else root/'api-card-ready.bmp'
+        require(image.is_file(),'Missing native example action capture: '+variant)
+
+
 def api_reference(flow,directory):
     for language in ("c","phys"):
         root=directory/language;root.mkdir(parents=True)
@@ -1782,6 +1794,7 @@ SPECIAL["documentation_density"]=documentation_density
 SPECIAL["documentation_navigation"]=documentation_navigation
 SPECIAL["documentation_sidebar"]=documentation_sidebar
 SPECIAL["documentation_h"]=documentation_h
+SPECIAL["api_card_workflow"]=api_card
 SPECIAL["workbench_workflow"]=workbench
 SPECIAL["source_outline_workflow"]=source_outline
 SPECIAL["laboratory_workflow"]=laboratory

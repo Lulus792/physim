@@ -12,7 +12,7 @@ typedef enum {
     TOOLBAR_OPEN, TOOLBAR_ADD_FILE, TOOLBAR_ADD_FOLDER, TOOLBAR_NEW, TOOLBAR_SAVE,
     TOOLBAR_WORKSPACES, TOOLBAR_LOG, TOOLBAR_REFRESH, TOOLBAR_LIBRARY, TOOLBAR_BATCH,
     TOOLBAR_SIDEBAR, TOOLBAR_WORKSPACE, TOOLBAR_RESET_LAYOUT, TOOLBAR_INSPECTOR, TOOLBAR_LAYOUTS,
-    TOOLBAR_RELOAD, TOOLBAR_SEARCH, TOOLBAR_BUILD, TOOLBAR_HELP, TOOLBAR_REFERENCE, TOOLBAR_COMPLETION, TOOLBAR_BUILD_SETTINGS,TOOLBAR_SETTINGS
+    TOOLBAR_RELOAD, TOOLBAR_SEARCH, TOOLBAR_BUILD, TOOLBAR_HELP, TOOLBAR_REFERENCE, TOOLBAR_COMPLETION, TOOLBAR_BUILD_SETTINGS,TOOLBAR_SETTINGS,TOOLBAR_REFERENCE_CLOSE
 } toolbar_action;
 typedef struct { const char *text; toolbar_action action; bool enabled; } toolbar_entry;
 /* Bounds keep stable semantic slots; presentation follows the familiar IDE order. */
@@ -63,7 +63,8 @@ static unsigned toolbar_entries(app *a, int menu, toolbar_entry entries[9]) {
         toolbar_entry help[]={
             {"Handbuch\tF1",TOOLBAR_HELP,true},
             {"API-Referenz\tShift+F1",TOOLBAR_REFERENCE,code},
-            {"Vervollständigen\tCtrl+Space",TOOLBAR_COMPLETION,code}
+            {"Vervollständigen\tCtrl+Space",TOOLBAR_COMPLETION,code},
+            {"API-Referenz schließen",TOOLBAR_REFERENCE_CLOSE,a->api_reference!=NULL}
         };
         memcpy(entries,help,sizeof help);return SDL_arraysize(help);
     }
@@ -108,6 +109,7 @@ static void toolbar_dispatch(app *a, toolbar_action action) {
     case TOOLBAR_COMPLETION: {struct nk_text_edit *edit=completion_target(a);if(edit)completion_open(a,edit);break;}
     case TOOLBAR_BUILD_SETTINGS: a->project_build_disclosure=NK_MAXIMIZED;dock_show(a,PS_DOCK_SIDEBAR);break;
     case TOOLBAR_SETTINGS:a->project_manager=false;open_settings(a);break;
+    case TOOLBAR_REFERENCE_CLOSE:api_reference_close(a);break;
     }
 }
 static void toolbar_keyboard_close(app *a) {
@@ -192,6 +194,7 @@ static ps_ui_icon toolbar_action_icon(toolbar_action action) {
     case TOOLBAR_REFERENCE:return PS_ICON_REFERENCE;
     case TOOLBAR_COMPLETION:return PS_ICON_COMPLETION;
     case TOOLBAR_SETTINGS:return PS_ICON_LAYOUT;
+    case TOOLBAR_REFERENCE_CLOSE:return PS_ICON_CLOSE;
     }
     return PS_ICON_FILE;
 }
@@ -272,6 +275,7 @@ static void toolbar_popup(app *a, int previous) {
                 if(menu==2 && i==3)a->batch_navigation_bounds=bounds;
                 if(menu==2 && i>=4)a->dock_menu_bounds[i-4]=bounds;
                 if(entries[i].action==TOOLBAR_SETTINGS)a->toolbar_settings_bounds=bounds;
+                if(entries[i].action==TOOLBAR_REFERENCE_CLOSE)a->api_reference_close_bounds=bounds;
                 bool focused=a->toolbar_keyboard && a->toolbar_keyboard_item==(int)i;
                 bool clicked=toolbar_menu_item(ui,&entries[i],focused,compact);
                 if(entries[i].enabled && clicked) {
