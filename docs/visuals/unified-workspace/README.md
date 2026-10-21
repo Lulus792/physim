@@ -17,20 +17,14 @@ Der [Werkbank-Kontext](WORKBENCH-CONTEXT.md) führt den aktuellen Abgleich der
 gefüllten API-Karte, dokumentierter Beispiele und des Protokollkopfs fort.
 Der [Folgeabgleich der Kontextspalte](WORKBENCH-CONTEXT-FLOW.md) ergänzt volle
 Breite, CSS-Zeilenboxen, Gliederungsdetails und Scrollzugang bei kurzen Fenstern.
-Der [F1-Artikel-/Aktionsabgleich](../f1-layouts/SECONDARY-ACTIONS.md) entfernt
-zusätzliche Standardleisten und erhält die Befehle im nativen Menü; aktuelle
-Linux-Nachweise und die offene Windows-Hostfokusprüfung sind getrennt erfasst.
-Der nachfolgende [F1-Schriftrollen-Abgleich](../f1-layouts/TYPOGRAPHY.md)
-übernimmt CSS-em-Größen, bewahrt Fontmetriken und prüft Codegrafiken sowie
-Formelskalierung; die vollständigen Abstände und Laufweiten bleiben offen.
-Der nachfolgende [F1-Artikel-/Zeilenabgleich](../f1-layouts/ARTICLE-FLOW.md)
-überträgt Zeilenboxen, Blockabstände, Titel-Laufweite und Einleitungs-/Tabellenrollen.
-Die begrenzte Titelkantenprüfung bleibt rot; vollständige H-Gestaltung und
-Windows-Hostfokus sind weiterhin offen.
-Der jüngste [F1-Paarabstands-Abgleich](../f1-layouts/KERNING.md) beseitigt die
-zusätzliche Windows-Titelbreite und erhält alle 112 vollständigen Bildpaare beim
-Cache-Vergleich. Die vollständige H-Gestaltung einschließlich gemeinsamer
-Scrollbewegung von Artikel und Herkunftszeile sowie die Linux-Schrift bleiben offen.
+Der aktuelle [F1-Scrollabgleich](../f1-layouts/SCROLL.md) vereint Herkunft und
+Artikel in einer scrollenden Fläche und erhält die volle Navigationsbreite.
+Er ergänzt [Paarabstände](../f1-layouts/KERNING.md),
+[Artikelzeilen](../f1-layouts/ARTICLE-FLOW.md),
+[Schriftrollen](../f1-layouts/TYPOGRAPHY.md) und
+[Artikelaktionen](../f1-layouts/SECONDARY-ACTIONS.md). Die Berichte trennen ihre
+jeweiligen historischen Prüfstände. Vollständige H-Gleichheit, Linux-Schrift,
+weitere Navigations-/Kontextdetails und die Gesamtoberflächenabnahme bleiben offen.
 
 **Für die native Umsetzung in einem anderen Chat:**
 [kopierfertiger Auftrag](NEXT-CHAT.md) · [Bestand und Abnahmeliste](IMPLEMENTATION.md)

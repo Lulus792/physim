@@ -379,10 +379,10 @@ typedef struct {
     bool doc_full_font_inventory; /* Actual all-size coverage probe, not normal startup. */
     struct nk_allocator *doc_test_font_allocator; /* Fault probe; null in normal operation. */
     int doc_topic, doc_loaded_track, doc_match, doc_jump_block,doc_anchor_heading;
-    nk_uint doc_scroll_x, doc_scroll_y;
+    nk_uint doc_scroll_x, doc_scroll_y,doc_scroll_limit;
     float doc_scroll_adjustment;
     char doc_query[128], doc_last_query[128], doc_error[160];
-    bool doc_search_focus, doc_search_active, doc_move_match, doc_reset_sidebar,doc_scroll_pending;
+    bool doc_search_focus, doc_search_active, doc_move_match, doc_reset_sidebar,doc_scroll_pending,doc_scroll_to_end;
     bool doc_find_open,doc_actions_open,doc_actions_return_keyboard,doc_actions_wait_release;
     int doc_actions_return_focus,doc_action_pending;
     struct nk_vec2 doc_actions_position;
@@ -397,6 +397,7 @@ typedef struct {
     int doc_context_source_topic,doc_context_source_track;
     int doc_focus;
     struct nk_rect doc_focus_bounds,doc_anchor_bounds,doc_body_bounds,doc_navigation_bounds;
+    struct nk_rect doc_crumb_bounds,doc_article_column_bounds;
     struct nk_rect doc_filter_bounds,doc_search_bounds,doc_first_result_bounds;
     char doc_filter[128], doc_last_filter[128];
     bool doc_filter_active, doc_contents;

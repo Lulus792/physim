@@ -1,43 +1,27 @@
-Stand: Design H ist nativ umgesetzt; der anschließende engere Abgleich mit der
-Vorlage verbessert Navigation, Sprachsegmente und Modell-/Beispielreiter.
-Der aktuelle [Paarabstands-Abgleich](KERNING.md) korrigiert die Windows-Titelbreite
-mit tatsächlichen OpenType-Paarwerten und einem begrenzten Cache. Je Plattform
-sind 20 verschiedene Prüfgruppen über mehrere unveränderte 73er-Läufe positiv;
-die breiten Läufe enthalten dennoch je einen dokumentierten Fokus-/Zeitfehler.
-Als nächster nativer Designabgleich bleiben Navigation, Kontext und der gemeinsame
-Scrollbereich von Herkunftszeile und Artikel sowie die davon betroffenen
-Innenabstände/Scrollleisten. Die HTML-Herkunftszeile scrollt mit dem Artikel,
-nativ steht sie bislang außerhalb der Artikelgruppe. Linux verwendet weiterhin
-eine andere Schrift; keine vollständige H-/Gesamtoberflächenabnahme behaupten.
-Der aktuelle [Artikel-/Zeilenabgleich](ARTICLE-FLOW.md) ergänzt CSS-Zeilenboxen,
-zusammenfallende Abstände, Einleitungs-/Tabellen-/Codekopfrollen, Titel-Laufweite
-und den 900-/901-px-Wechsel. Die Windows-Titelbreite liegt noch vier Pixel neben
-der Referenz. Kerning/Rasterung, weitere Navigation-/Kontextdetails und die
-vollständige native Abnahme bleiben offen; die nachfolgenden Berichte nennen
-ihre jeweils historischen Prüfstände.
-Der weitere Detailabgleich trennt kleine Beschriftungen von größeren
-Bedienlabels mit echter aktiver Fettschrift und gleicht Suchfeld-/Paneelkopfkonturen an.
-Der jüngste Abgleich übernimmt die exakten Paneel-Iconproportionen aus der
-H-Vektorreferenz sowie Schalterhöhe, Markenbeschriftung und transparente Tabzustände.
-Aktuelle Windows-/Linux-Nachweise, native Fensterbilder und begründete
-Abweichungen: [H-FIDELITY.md](H-FIDELITY.md).
-Der aktuelle [Schriftrollen-Abgleich](TYPOGRAPHY.md) übernimmt die CSS-em-Größen
-mit vor dem Atlasaufbau gespeicherten Metriken. Formelskalierung und Codegrafiken
-sind geprüft; Absatz-/Zeilenabstände, Laufweiten, erste Absatzrolle und weitere
-Navigations-/Kontextdetails sind der nächste visuelle Schritt. Windows-Hostfokus
-und die übrigen externen Plattformnachweise bleiben offen.
-Der jüngere [Artikel-/Aktionsabgleich](SECONDARY-ACTIONS.md) entfernt die
-zusätzliche Werkzeugzeile und gefüllte Zoomknöpfe. Funktionen bleiben im
-nativen Menü und über Kürzel erreichbar. Schriftrollen/Abstände und die
-aktuelle Windows-Hostfokus-Abnahme bleiben offen; keine vollständige H-Abnahme.
-Nachfolgende Fokusarbeiten und ihre abgegrenzten Plattformnachweise:
-[READING-FOCUS.md](READING-FOCUS.md), [PANE-NAVIGATION.md](PANE-NAVIGATION.md).
-[Windows-Fokuszustände](WINDOWS-FOCUS-STATE.md) ergänzt die aktuelle COM-Gegenprobe
-und den unabhängigen Win32-Beobachter; sporadische Aktivierung bleibt offen.
-[Normale Buchstaben und Tastenkürzel](PLAIN-LETTER-INPUT.md) dokumentiert die
-nachfolgende Korrektur der lokalen Suche mit sechs gezielten Fehlergegenfällen.
-Historische Abnahme und Plattformbefunde: [NATIVE-H.md](NATIVE-H.md).
-Der folgende ursprüngliche Umsetzungsauftrag bleibt als historische Abnahmegrundlage erhalten.
+Stand: Der native F1-Artikel wird weiter mit der gewählten H-Vorlage abgeglichen.
+Der [aktuelle Scrollabgleich](SCROLL.md) führt Herkunft und Artikel in einem
+Viewport zusammen, stellt die volle Navigationsbreite her und dokumentiert
+native Eingabe-/Umbruchprüfungen samt fehlgeschlagenen Vorläufen.
+
+Der [Paarabstands-Abgleich](KERNING.md) korrigiert die Windows-Titelbreite über
+OpenType-Paarwerte. Frühere Teilstände bleiben in [Artikelzeilen](ARTICLE-FLOW.md),
+[Schriftrollen](TYPOGRAPHY.md) und [Artikelaktionen](SECONDARY-ACTIONS.md)
+nachvollziehbar; ihre damaligen offenen Punkte beschreiben den jeweiligen
+historischen Stand. Maßgeblich für den Folgeauftrag sind der aktuelle
+[visuelle Abgleich](H-FIDELITY.md) und der
+[Gesamtoberflächenstand](../unified-workspace/NATIVE-FIDELITY.md).
+
+Weiter offen sind unter anderem Linux-Schrift/Glyphenrasterung, weitere
+Navigationsmetriken und Kontextdetails sowie die vollständige H-Abnahme.
+Browser-PNGs oder bestandene Funktionsgruppen ersetzen diese Abnahme nicht.
+Die lokale HTML-Datei blieb im Browserwerkzeug gesperrt; daraus wird keine
+neue interaktive Browserprüfung abgeleitet. macOS und vollständige externe
+Assistive-Nachweise sind weiterhin nicht belegt.
+
+Frühere Fokusarbeiten: [Lesefokus](READING-FOCUS.md),
+[Paneelnavigation](PANE-NAVIGATION.md), [Windows-Fokus](WINDOWS-FOCUS-STATE.md),
+[Texteingabe](PLAIN-LETTER-INPUT.md). Historische Erstabnahme: [NATIVE-H.md](NATIVE-H.md).
+Der folgende ursprüngliche Umsetzungsauftrag bleibt als Abnahmegrundlage erhalten.
 
 ---
 

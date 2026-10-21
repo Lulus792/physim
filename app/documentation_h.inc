@@ -210,6 +210,36 @@ static void documentation_sidebar_content(app *a) {
         }
     if(!count)documentation_h_label(a,"Keine Treffer in diesem Sprachlernweg. Anderen Begriff suchen oder die Suche leeren.",true);
 }
+/* F1 has overlay rails: the viewport owns the scrollbar, while its padded
+ * content keeps the CSS width. Nuklear normally reserves that rail inside
+ * the content. Expand only this group's layout, then reconstruct the full
+ * viewport for its native scrollbar/input/clamping at end. */
+static bool documentation_scroll_begin(app *a,nk_uint *x,nk_uint *y,const char *name) {
+    struct nk_context *ui=a->doc_ui;
+    struct nk_rect viewport=nk_widget_bounds(ui);
+    float wheel=ui->input.mouse.scroll_delta.y;
+    if(wheel && !a->doc_actions_open && nk_input_is_mouse_hovering_rect(&ui->input,viewport) &&
+       !(a->doc_find_open && nk_input_is_mouse_hovering_rect(&ui->input,a->doc_find_bounds))) {
+        *y=(nk_uint)fmaxf(0,(float)*y-wheel*viewport.h*.1f);
+        ui->input.mouse.scroll_delta.y=0;
+    }
+    nk_style_push_vec2(ui,&ui->style.window.scrollbar_size,nk_vec2(ui->style.window.scrollbar_size.x,0));
+    if(!nk_group_scrolled_offset_begin(ui,x,y,name,0)) {nk_style_pop_vec2(ui);return false;}
+    struct nk_panel *g=ui->current->layout;
+    g->bounds.w+=ui->style.window.scrollbar_size.x;
+    g->clip.w=fmaxf(0,fminf(g->bounds.x+g->bounds.w,g->parent->clip.x+g->parent->clip.w)-g->clip.x);
+    nk_push_scissor(nk_window_get_canvas(ui),g->clip);
+    return true;
+}
+static void documentation_scroll_end(app *a) {
+    struct nk_context *ui=a->doc_ui;struct nk_panel *g=ui->current->layout;
+    float padding=ui->style.window.group_padding.x;
+    g->bounds.x-=padding;
+    g->bounds.w+=2*padding-ui->style.window.scrollbar_size.x;
+    nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(0,ui->style.window.group_padding.y));
+    nk_group_scrolled_end(ui);
+    nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
+}
 static void documentation_sidebar(app *a) {
     struct nk_context *ui=a->doc_ui;struct nk_rect content=nk_window_get_content_region(ui),head;
     nk_layout_row_dynamic(ui,46,1);nk_widget(&head,ui);
@@ -220,8 +250,8 @@ static void documentation_sidebar(app *a) {
     nk_stroke_line(nk_window_get_canvas(ui),head.x,head.y+head.h,head.x+head.w,head.y+head.h,1,UI_COLOR(divider));
     nk_layout_row_dynamic(ui,fmaxf(20,content.h-48),1);
     nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(15,20));
-    if(nk_group_scrolled_offset_begin(ui,&a->doc_navigation_scroll_x,&a->doc_navigation_scroll_y,"navigation-content",0)) {
-        documentation_sidebar_content(a);nk_group_scrolled_end(ui);
+    if(documentation_scroll_begin(a,&a->doc_navigation_scroll_x,&a->doc_navigation_scroll_y,"navigation-content")) {
+        documentation_sidebar_content(a);documentation_scroll_end(a);
     }
     nk_style_pop_vec2(ui);
     nk_stroke_line(nk_window_get_canvas(ui),a->doc_left_slot.x+a->doc_left_slot.w-1,a->doc_left_slot.y,

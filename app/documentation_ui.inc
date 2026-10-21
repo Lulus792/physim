@@ -347,6 +347,7 @@ static void open_documentation(app *a, int topic) {
     a->doc_error[0] = 0;
     a->doc_history_restore=0;
     a->doc_scroll_x = a->doc_scroll_y = 0;
+    a->doc_scroll_to_end=false;
     a->doc_match = 0;
     a->doc_move_match = true;
     a->doc_jump_block = -1;
@@ -410,6 +411,19 @@ static float documentation_control_height(const app *a) {
     return (float)documentation_font_size(a)+16;
 }
 #include "documentation_typography.inc"
+static void documentation_preserve_reading_position(app *a) {
+    /* Native reading offsets describe source text, not the breadcrumb. Keep
+     * the leading article region at its current pixel offset during reflow. */
+    if(!a->doc_scroll_y || !a->documentation)return;
+    for(size_t i=0;i<a->documentation->count;i++) {
+        const ps_doc_block *b=&a->documentation->blocks[i];
+        if(b->inline_parent==SIZE_MAX && b->hit[2]>0) {
+            if(b->hit[1]>=a->doc_body_bounds.y)return;
+            break;
+        }
+    }
+    nk_sdl_accessibility_document_preserve_position(a->doc_ui,a->doc_reading_version);
+}
 static void documentation_zoom(app *a,int direction) {
     unsigned old=documentation_font_size(a);
     int size=direction?(int)old+direction*2:0;
@@ -418,7 +432,7 @@ static void documentation_zoom(app *a,int direction) {
     if(!documentation_fonts_prepare(a,now,requested?requested:a->preferences.editor_size))return;
     a->doc_zoom_size=requested;
     if(now!=old && !a->doc_query[0] && a->documentation)
-        nk_sdl_accessibility_document_preserve_position(a->doc_ui,a->doc_reading_version);
+        documentation_preserve_reading_position(a);
     a->doc_font_ui=a->doc_ui_fonts[(now-16)/2];
     a->doc_font_title=a->doc_title_fonts[(now-16)/2];
     a->doc_font_code=a->doc_code_fonts[(documentation_code_size(a)-16)/2];
@@ -904,7 +918,7 @@ static void documentation_finish_edits(app *a) {
 }
 static void documentation_navigation_toggle(app *a) {
     documentation_finish_edits(a);
-    nk_sdl_accessibility_document_preserve_position(a->doc_ui,a->doc_reading_version);
+    documentation_preserve_reading_position(a);
     a->doc_navigation_hidden=!a->doc_navigation_hidden;
     a->doc_filter_active=a->doc_filter_focus=a->doc_search_active=a->doc_search_focus=false;
     a->doc_keyboard=true;a->doc_focus=DOC_NAVIGATION;a->doc_focus_reveal=true;
@@ -913,7 +927,7 @@ static void documentation_navigation_toggle(app *a) {
 }
 static void documentation_context_toggle(app *a) {
     documentation_finish_edits(a);
-    nk_sdl_accessibility_document_preserve_position(a->doc_ui,a->doc_reading_version);
+    documentation_preserve_reading_position(a);
     a->doc_context_hidden=!a->doc_context_hidden;
     a->doc_keyboard=true;a->doc_focus=DOC_CONTEXT;a->doc_focus_reveal=true;
     nk_sdl_accessibility_keyboard_begin(a->doc_ui);
@@ -1061,13 +1075,14 @@ static bool documentation_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
         return true;
     }
     if(focus==DOC_BODY) {
+        /* Resolve End after this frame's reflow, not against stale heights
+         * from before a queued zoom/resize. Other navigation cancels it. */
+        a->doc_scroll_to_end=key->key==SDLK_END;
+        if(a->doc_scroll_to_end)return true;
         int w,h;SDL_GetWindowSize(a->doc_window,&w,&h);(void)w;
         double delta=key->key==SDLK_PAGEUP?-h*.7:key->key==SDLK_PAGEDOWN?h*.7:direction*48;
         double y=(double)a->doc_scroll_y+delta;
         if(key->key==SDLK_HOME)y=0;
-        if(key->key==SDLK_END && a->documentation) {
-            y=0;for(size_t i=0;i<a->documentation->count;i++){const ps_doc_block *b=&a->documentation->blocks[i];y+=b->height+8+(b->kind==PS_DOC_CODE?36:0);}
-        }
         a->doc_scroll_y=(nk_uint)fmax(0,fmin(UINT32_MAX,y));return true;
     }
     if(focus==DOC_GROUP && (activate || direction)) {
@@ -1250,13 +1265,13 @@ static struct nk_rect documentation_detail_label(app *a,const char *text) {
     /* Configure once: a second layout call would insert an unused row. */
     ps_ui_row_exact_dynamic(ui,1,1);
     struct nk_rect bounds=nk_widget_bounds(ui);
-    float width=fmaxf(1,bounds.w-32),line=.7f*documentation_font_size(a)*1.65f;
+    float width=fmaxf(1,bounds.w-24),line=.7f*documentation_font_size(a)*1.65f;
     size_t measured=0;unsigned lines=0;
     do {size_t count,used=documentation_line(font,text+measured,strlen(text)-measured,width,&count);measured+=used;++lines;}while(measured<strlen(text));
     float height=lines*line;
     ui->current->layout->row.height=height+ui->style.window.spacing.y;
     enum nk_widget_layout_states visible=nk_widget(&bounds,ui);
-    bounds.x+=16;bounds.w=width;
+    bounds.x+=12;bounds.w=width;
     ps_ui_accessibility_label(ui,bounds,text);
     if(visible==NK_WIDGET_INVALID)return bounds;
     size_t at=0,length=strlen(text);float y=bounds.y+(line-font->height)/2;
@@ -1362,10 +1377,7 @@ static void documentation_view(app *a, float height) {
     float section_scroll=-1;
     ps_document *section_document=NULL;
     a->doc_scroll_pending=false;
-    /* CSS article padding and the breadcrumb paragraph's top margin. The
-     * body group supplies the existing horizontal inset independently. */
     int window_width,window_height;SDL_GetWindowSize(a->doc_window,&window_width,&window_height);(void)window_height;
-    ps_ui_row_exact_dynamic(ui,window_width<=900?35:37,1);nk_spacer(ui);
     if(strcmp(a->doc_last_query,a->doc_query)) {
         snprintf(a->doc_last_query,sizeof a->doc_last_query,"%s",a->doc_query);a->doc_match=0;a->doc_move_match=true;
     }
@@ -1397,27 +1409,26 @@ static void documentation_view(app *a, float height) {
         snprintf(detail,sizeof detail,"%s / %s / %s",a->doc_track==2?"Teil II · Physim":"Teil I · C",
             groups[documentation_h_group(a->doc_topic)],d?documentation_topics[a->doc_topic].title:"Dokument nicht verfügbar");
     }
-    struct nk_rect detail_bounds=documentation_detail_label(a,detail);
-    if(a->doc_detail_test_requested) {
-        a->doc_detail_test_bounds=detail_bounds;
-        snprintf(a->doc_detail_test_text,sizeof a->doc_detail_test_text,"%s",detail);
-    }
-    /* Peek the next row after the consumed detail row. An unused placeholder
-     * row would be advanced by the following layout call and shift the group
-     * below this measurement, making its scrollbar taller than its real clip. */
-    ps_ui_row_exact_dynamic(ui,21,1);nk_spacer(ui);
-    struct nk_rect remaining=nk_widget_bounds(ui),clip=nk_window_get_content_region(ui);
-    ps_ui_row_exact_dynamic(ui,fmaxf(20,fminf(height,clip.y+clip.h-remaining.y)),1);
+    ps_ui_row_exact_dynamic(ui,height,1);
     struct nk_rect body_bounds=nk_widget_bounds(ui);
     body_bounds.x=truncf(body_bounds.x);body_bounds.y=truncf(body_bounds.y);
     body_bounds.w=truncf(body_bounds.w);body_bounds.h=truncf(body_bounds.h);
     a->doc_body_bounds=body_bounds;
     documentation_focus_draw(a,DOC_BODY,body_bounds,false);
-    nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(4,0));
-    if (nk_group_scrolled_offset_begin(ui, &a->doc_scroll_x, &a->doc_scroll_y, "document-body",
-                                       0)) {
+    float margin=fmaxf(0,(body_bounds.w-810)/2),padding=window_width<=900?20:28;
+    a->doc_article_column_bounds=nk_rect(body_bounds.x+margin+padding,body_bounds.y,
+        body_bounds.w-2*(margin+padding),body_bounds.h);
+    nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(margin+padding-12,0));
+    if (documentation_scroll_begin(a,&a->doc_scroll_x,&a->doc_scroll_y,"document-body")) {
+        ps_ui_row_exact_dynamic(ui,window_width<=900?35:37,1);nk_spacer(ui);
+        a->doc_crumb_bounds=documentation_detail_label(a,detail);
+        if(a->doc_detail_test_requested) {
+            a->doc_detail_test_bounds=a->doc_crumb_bounds;
+            snprintf(a->doc_detail_test_text,sizeof a->doc_detail_test_text,"%s",detail);
+        }
+        ps_ui_row_exact_dynamic(ui,21,1);nk_spacer(ui);
         if (d) {
-            nk_sdl_accessibility_document(ui,a->doc_reading_version,documentation_topics[a->doc_topic].title,d->reading,nk_window_get_content_region(ui));
+            nk_sdl_accessibility_document(ui,a->doc_reading_version,documentation_topics[a->doc_topic].title,d->reading,body_bounds);
             if(nk_sdl_accessibility_document_focus(ui,a->doc_reading_version,a->doc_keyboard && a->doc_focus==DOC_BODY)) {
                 a->doc_keyboard=true;a->doc_focus=DOC_BODY;a->doc_focus_reveal=true;
                 a->doc_search_active=a->doc_filter_active=false;
@@ -1457,7 +1468,8 @@ static void documentation_view(app *a, float height) {
                              : (a->doc_move_match && match_count ? matches[a->doc_match] : -1);
             bool explicit_jump=a->doc_jump_block>=0;
             if(explicit_jump)a->doc_anchor_heading=target;
-            float body_origin=nk_window_get_content_region(ui).y;
+            float body_origin=body_bounds.y;
+            float target_inset=a->doc_find_open?fmaxf(0,a->doc_find_bounds.y+a->doc_find_bounds.h-body_origin)+8:0;
             nk_uint submitted_scroll=a->doc_scroll_y;
             section_document=d;
             /* Wrapped buttons and copy rows determine real geometry. Apply a
@@ -1477,7 +1489,7 @@ static void documentation_view(app *a, float height) {
                         snprintf(label,sizeof label,"%s%s",external?"Quellenadresse kopieren: ":"Öffnen: ",text);
                         if(external && ps_ui_accessibility_button(ui,link_bounds,label))a->doc_inline_clicked=(int)i;
                         documentation_focus_draw(a,DOC_LINK+(int)i,link_bounds,true);
-                        if((int)i==target)section_scroll=fmaxf(0,link_bounds.y+(float)submitted_scroll-body_origin);
+                        if((int)i==target)section_scroll=fmaxf(0,link_bounds.y+(float)submitted_scroll-body_origin-target_inset);
                     }
                     continue;
                 }
@@ -1489,7 +1501,7 @@ static void documentation_view(app *a, float height) {
                     if(gap>0){ps_ui_row_exact_dynamic(ui,gap,1);nk_spacer(ui);}
                     documentation_pendulum(a,(int)i,width,b->height-gap);
                     if((int)i==a->doc_anchor_heading)a->doc_anchor_bounds=a->doc_visual_bounds[0];
-                    if((int)i==target)section_scroll=fmaxf(0,a->doc_visual_bounds[0].y+(float)submitted_scroll-body_origin);
+                    if((int)i==target)section_scroll=fmaxf(0,a->doc_visual_bounds[0].y+(float)submitted_scroll-body_origin-target_inset);
                     continue;
                 }
                 ps_ui_row_exact_dynamic(ui,row_height,1);
@@ -1507,7 +1519,11 @@ static void documentation_view(app *a, float height) {
                     if((!explicit_jump || reading_byte!=SIZE_MAX) && b->kind!=PS_DOC_TABLE_ROW && b->kind!=PS_DOC_MATH && match && match>text) {
                         prefix=documentation_rich_offset(a,d,b,(size_t)(match-text),width-(b->kind==PS_DOC_CODE?54:24));
                     }
-                    section_scroll=explicit_jump && target==0 && reading_byte==SIZE_MAX?0:fmaxf(0,block_bounds.y+(float)submitted_scroll-body_origin+prefix);
+                    float target_y=block_bounds.y+prefix;
+                    bool visible=target_y>=body_origin+target_inset && target_y+font->height<=body_origin+body_bounds.h;
+                    if(explicit_jump || !visible)
+                        section_scroll=explicit_jump && target==0 && reading_byte==SIZE_MAX?0:
+                            fmaxf(0,target_y+(float)submitted_scroll-body_origin-target_inset);
                     if(reading_byte!=SIZE_MAX && !reading_top)
                         section_scroll=fmaxf(0,section_scroll-fmaxf(0,nk_window_get_content_region(ui).h-font->height-22));
                 }
@@ -1570,7 +1586,13 @@ static void documentation_view(app *a, float height) {
                     nk_sdl_accessibility_keyboard_target(ui,nk_rect(b->hit[0],b->hit[1],b->hit[2],b->hit[3]));
             }
         }
-        nk_group_scrolled_end(ui);
+        struct nk_panel *group=ui->current->layout;
+        a->doc_scroll_limit=(nk_uint)fmaxf(0,(float)(int)(group->at_y+group->row.height-group->bounds.y)-group->bounds.h);
+        if(a->doc_scroll_to_end) {
+            a->doc_scroll_y=a->doc_scroll_limit;a->doc_scroll_to_end=false;
+            a->doc_scroll_adjustment=0;a->doc_scroll_pending=true;section_scroll=-1;
+        }
+        documentation_scroll_end(a);
     }
     nk_style_pop_vec2(ui);
     if(a->doc_inline_clicked>=0 && a->documentation==d) {

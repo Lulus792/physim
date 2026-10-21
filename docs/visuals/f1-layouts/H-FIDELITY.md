@@ -6,14 +6,20 @@ Dieser Bericht ergänzt die historische Abnahme in [NATIVE-H.md](NATIVE-H.md).
 
 ## Aktuelle Nachprüfung vom 21. Oktober 2026
 
-Der aktuelle [Paarabstands-Abgleich](KERNING.md) liest die bislang übersprungenen
-OpenType-Erweiterungstabellen und besteht die Windows-Titelkantenprüfung bei
-unveränderter Toleranz. 112 vollständige Vorher-/Nachher-Bildpaare belegen
-unveränderte Pixel durch den begrenzten Cache. Beide Plattformen bestehen
-20 verschiedene Gruppen über breite und gezielte Läufe; frühere Fokus-/Zeitfehler
-bleiben getrennt erfasst. Linux-Schrift, Navigation-/Kontextdetails und der
-gemeinsame Scrollbereich von Herkunft und Artikel bleiben offen.
+Der aktuelle [Scrollabgleich](SCROLL.md) vereint Herkunftszeile und Artikel,
+verwendet die volle mittlere Fläche als Viewport und erhält die CSS-Inhaltsbreite
+auch mit Scrollleiste. Die linke Navigation verliert dadurch keine zusätzlichen
+7 px. Native Prüfungen erfassen Mausrad, Tastatur, Suchauswahl, Schriftumbruch
+und unabhängige Seitenflächen. Die verlinkten Nachweise trennen Plattformen,
+Quellstände, vollständige Läufe und gezielte Wiederholungen.
 
+Der vorhergehende [Paarabstands-Abgleich](KERNING.md) liest die bislang
+übersprungenen OpenType-Erweiterungstabellen und besteht die Windows-Titelkanten-
+prüfung bei unveränderter Toleranz. Sein Cache-Vergleich umfasst 112 vollständige
+Vorher-/Nachher-Bildpaare. Linux-Schrift, weitere Navigations-/Kontextdetails und
+die vollständige H-/Gesamtoberflächenabnahme bleiben offen.
+
+Die folgenden Absätze beschreiben ihre jeweiligen historischen Teilstände.
 Der nachfolgende [Artikel-/Zeilenabgleich](ARTICLE-FLOW.md) überträgt CSS-Zeilenboxen,
 zusammenfallende Blockabstände, Titel-Laufweiten, Einleitungs-, Tabellen- und
 Codekopfrollen sowie die tatsächliche 900-/901-px-Grenze. Die begrenzte

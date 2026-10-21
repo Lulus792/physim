@@ -1,0 +1,14 @@
+{
+  "created_utc": "2026-10-21T13:36:03.992662+00:00",
+  "scope": "File/link/source/image integrity audit; does not replace native tests or full design acceptance.",
+  "validation_sha256": "2a7d0511410f8a7aaec64e3e7e94b61824582f080ddb9da6f7cb0f811efe364a",
+  "source_files": 70,
+  "foreign_unchanged": 10,
+  "native_images": 16,
+  "image_pairs": 112,
+  "rail_raster_checks": 12,
+  "positive_groups_per_os": 16,
+  "utf8_links_and_python_json_syntax": "passed",
+  "git_diff_check": "passed",
+  "status": "passed"
+}

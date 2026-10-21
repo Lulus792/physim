@@ -112,7 +112,7 @@ static bool documentation_window_fonts(app *a,float density) {
     a->doc_font_code=a->doc_code_fonts[(documentation_code_size(a)-16)/2];
     documentation_typography_update(a);
     if(a->documentation) {
-        nk_sdl_accessibility_document_preserve_position(a->doc_ui,a->doc_reading_version);
+        documentation_preserve_reading_position(a);
         a->documentation->layout_width=0;
     }
     const struct nk_font *font=a->doc_font_ui->userdata.ptr;
@@ -275,17 +275,14 @@ static bool documentation_window_render(app *a, const char *capture_path) {
         ps_ui_accessibility_route(ui,true);documentation_footer(a);
     }nk_end(ui);nk_style_pop_vec2(ui);nk_style_pop_style_item(ui);
     nk_style_pop_font(ui);
-    float article_width=fminf(810,layout.article.w);
-    float article_x=layout.article.x+(layout.article.w-article_width)/2;
     /* Commit the overlay edit before computing matches/reading boxes. Its
      * window is raised after layout, so the article never paints over it. */
-    a->doc_article_slot=nk_rect(article_x,layout.article.y,article_width,layout.article.h);
+    a->doc_article_slot=nk_rect(layout.article.x,layout.article.y,layout.article.w,layout.article.h);
     documentation_find_view(a);
-    /* The body group contributes another 16 px: total reader inset 20 / 28. */
-    nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(w<=900?4:12,0));
+    nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(0,0));
     nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(ui->style.window.spacing.x,0));
     nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(doc_body)));
-    if(nk_begin(ui,"document",nk_rect(article_x,layout.article.y,article_width,layout.article.h),NK_WINDOW_NO_SCROLLBAR)) {
+    if(nk_begin(ui,"document",a->doc_article_slot,NK_WINDOW_NO_SCROLLBAR)) {
         a->doc_article_slot=nk_window_get_bounds(ui);
         ps_ui_accessibility_route(ui,true);documentation_view(a,layout.article.h);
     }nk_end(ui);

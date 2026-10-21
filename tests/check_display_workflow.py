@@ -63,6 +63,7 @@ SIMPLE["documentation_keyboard_delayed"] = (["--workspace-state-test", "{directo
 SIMPLE["documentation_keyboard_22"] = (["--workspace-state-test", "{directory}", "docs-keyboard-22"], 75, True)
 SIMPLE["documentation_keyboard"] = (["--workspace-state-test", "{directory}", "docs-keyboard"], 75, True)
 SIMPLE["documentation_panes"] = (["--workspace-state-test", "{directory}", "docs-keyboard-panes"], 75, True)
+SIMPLE["documentation_scroll"] = (["--workspace-state-test", "{directory}", "docs-keyboard-scroll"], 75, True)
 SIMPLE["documentation_history"] = (["--workspace-state-test", "{directory}", "docs-keyboard-history"], 90, True)
 SIMPLE["documentation_zoom"] = (["--workspace-state-test", "{directory}", "docs-keyboard-zoom"], 90, True)
 SIMPLE["documentation_density"] = (["--workspace-state-test", "{directory}", "docs-keyboard-density"], 120, True)
@@ -1893,7 +1894,16 @@ def main():
         arguments, timeout, _ = SIMPLE[args.case]
         paths = dict(directory=str(directory), root=str(flow.root))
         flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)
-        if args.case == "documentation_panes":
+        if args.case == "documentation_scroll":
+            output=flow.steps[-1]['stdout']
+            require('DOCUMENTATION SCROLL SELF-TEST: PASSED' in output,'Missing native scroll completion')
+            for label in ('GEOMETRY','END','CASE'):
+                rows=re.findall(r'DOCUMENTATION SCROLL '+label+r': case=(\d+).* (?:ok|complete)=1',output)
+                require(list(map(int,rows))==list(range(6)),'Incomplete scroll '+label+' matrix')
+            for index in range(6):
+                for state in ('top','page','end','find'):
+                    require((directory/f'docs-scroll-{index}-{state}.bmp').is_file(),'Missing actual scroll capture')
+        elif args.case == "documentation_panes":
             output=flow.steps[-1]['stdout']
             require('DOCUMENTATION PANES SELF-TEST: PASSED' in output,'Missing actual pane navigation result')
             records=re.findall(r'DOCUMENTATION PANES: case=(\d+) groups=(\d+) track=(\d+) size=(\d+) ui=(\d+) theme=(\d+) scroll=(\d+) complete=(\d+)',output)
