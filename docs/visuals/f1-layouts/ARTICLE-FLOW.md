@@ -6,6 +6,10 @@ Folgearbeit vom 21. Oktober 2026 auf Grundlage von `4ca5018` und dem
 Dieser Schritt ist keine vollständige H- oder Gesamtoberflächenabnahme.
 Der [gesamte Designauftrag](../unified-workspace/NATIVE-FIDELITY.md) bleibt offen.
 
+Der nachfolgende [Paarabstands-Abgleich](KERNING.md) beseitigt die hier noch
+gemessenen vier zusätzlichen Windows-Titelpixel. Die folgenden Ergebnisse
+bleiben die historischen Nachweise dieses Artikel-/Zeilenstands.
+
 ## Native Änderung
 
 Der Artikel verwendet die Zeilenboxen der Vorlage anstelle der bisherigen

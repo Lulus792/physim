@@ -132,6 +132,7 @@ typedef struct {
     /* Native metadata stays first for the existing baseline/glyph helpers. */
     struct nk_font native;
     const struct nk_user_font *base;
+    const ps_ui_font_pairs *pairs;
     float spacing,reference_height;
 } documentation_spaced_font;
 typedef struct {
@@ -363,6 +364,7 @@ typedef struct {
     struct nk_user_font doc_type_fonts[28];
     float doc_type_em[28],doc_font_em[5][11];
     documentation_spaced_font doc_spaced_fonts[2];
+    ps_ui_font_pairs *doc_font_pairs[2];
     const ps_document *doc_type_document;
     uint64_t doc_type_version;
     size_t doc_lead_text;

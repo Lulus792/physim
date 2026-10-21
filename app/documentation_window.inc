@@ -1,6 +1,7 @@
 #include "documentation_layout.h"
 /* Independent native window: its input, fonts and GL resources belong to this viewer. */
 static void documentation_window_destroy(app *a) {
+    for(unsigned i=0;i<2;i++){ps_ui_font_pairs_destroy(a->doc_font_pairs[i]);a->doc_font_pairs[i]=NULL;}
     free(a->doc_context_source);a->doc_context_source=NULL;
     for (int i = 0; i < DOCUMENTATION_TOPIC_COUNT; i++) {
         free(documentation_index[i]);
@@ -46,6 +47,7 @@ static bool documentation_fonts_load(app *a,float density,unsigned size,unsigned
     const struct nk_user_font *regular[9]={0},*titles[9]={0},*bold[11]={0},*code[9]={0};
     const struct nk_user_font *chrome[4]={0};
     float em[5][11]={{0}};
+    ps_ui_font_pairs *pairs[2]={replace?NULL:a->doc_font_pairs[0],replace?NULL:a->doc_font_pairs[1]};
     if(!replace) {
         memcpy(regular,a->doc_ui_fonts,sizeof regular);memcpy(titles,a->doc_title_fonts,sizeof titles);
         memcpy(bold,a->doc_bold_fonts,sizeof bold);memcpy(code,a->doc_code_fonts,sizeof code);
@@ -68,6 +70,10 @@ static bool documentation_fonts_load(app *a,float density,unsigned size,unsigned
         struct nk_font *font=system_font_sampling(&candidate,a->root,pixels,role==3,role==1 || role==2,2,1);
         if(!font)goto fail;
         em[role][i]=ps_ui_font_em_ratio(font);
+        if((role==1 || role==2) && !pairs[role-1]) {
+            pairs[role-1]=ps_ui_font_pairs_create(font,&candidate.permanent);
+            if(!pairs[role-1])goto fail;
+        }
         if(role==3) {
             /* Code is .8em in H. Bake its actual drawing size instead of
              * resampling a larger cell: box glyph edges must meet exactly. */
@@ -86,12 +92,17 @@ static bool documentation_fonts_load(app *a,float density,unsigned size,unsigned
     memcpy(a->doc_bold_fonts,bold,sizeof bold);memcpy(a->doc_code_fonts,code,sizeof code);
     memcpy(a->doc_chrome_fonts,chrome,sizeof chrome);
     memcpy(a->doc_font_em,em,sizeof em);
+    for(unsigned i=0;i<2;i++) {
+        if(pairs[i]!=a->doc_font_pairs[i])ps_ui_font_pairs_destroy(a->doc_font_pairs[i]);
+        a->doc_font_pairs[i]=pairs[i];
+    }
     a->doc_raster_density=density;a->doc_failed_density=0;
     if(replace){memset(a->doc_type_fonts,0,sizeof a->doc_type_fonts);memset(a->doc_type_em,0,sizeof a->doc_type_em);}
     printf("F1 font demand: %s %u variants, density %.3f\n",replace?"replace":"append",added,density);
     if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: F1 fonts ready %.6f\n",ps_clock());
     return true;
 fail:
+    for(unsigned i=0;i<2;i++)if(pairs[i]!=a->doc_font_pairs[i])ps_ui_font_pairs_destroy(pairs[i]);
     nk_font_atlas_clear(&candidate);return false;
 }
 static bool documentation_window_fonts(app *a,float density) {

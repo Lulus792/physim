@@ -1,5 +1,14 @@
 Stand: Design H ist nativ umgesetzt; der anschließende engere Abgleich mit der
 Vorlage verbessert Navigation, Sprachsegmente und Modell-/Beispielreiter.
+Der aktuelle [Paarabstands-Abgleich](KERNING.md) korrigiert die Windows-Titelbreite
+mit tatsächlichen OpenType-Paarwerten und einem begrenzten Cache. Je Plattform
+sind 20 verschiedene Prüfgruppen über mehrere unveränderte 73er-Läufe positiv;
+die breiten Läufe enthalten dennoch je einen dokumentierten Fokus-/Zeitfehler.
+Als nächster nativer Designabgleich bleiben Navigation, Kontext und der gemeinsame
+Scrollbereich von Herkunftszeile und Artikel sowie die davon betroffenen
+Innenabstände/Scrollleisten. Die HTML-Herkunftszeile scrollt mit dem Artikel,
+nativ steht sie bislang außerhalb der Artikelgruppe. Linux verwendet weiterhin
+eine andere Schrift; keine vollständige H-/Gesamtoberflächenabnahme behaupten.
 Der aktuelle [Artikel-/Zeilenabgleich](ARTICLE-FLOW.md) ergänzt CSS-Zeilenboxen,
 zusammenfallende Abstände, Einleitungs-/Tabellen-/Codekopfrollen, Titel-Laufweite
 und den 900-/901-px-Wechsel. Die Windows-Titelbreite liegt noch vier Pixel neben

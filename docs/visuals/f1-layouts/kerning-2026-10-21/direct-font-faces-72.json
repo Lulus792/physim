@@ -1,0 +1,41 @@
+{
+  "scope": "Direct native font_faces execution with ASan/UBSan/LSan. Unused UI sections removed by linker; does not replace official target linkage check.",
+  "compile": [
+    "wsl",
+    "-d",
+    "Alpine-Dev",
+    "--exec",
+    "cc",
+    "-std=c17",
+    "-O0",
+    "-g",
+    "-ffunction-sections",
+    "-fdata-sections",
+    "-fsanitize=address,undefined",
+    "-I/mnt/d/Physim/app",
+    "-I/mnt/d/Physim/include",
+    "-I/mnt/d/Physim/third_party",
+    "-I/mnt/d/Physim/build/native/F1-linux/sdl-install/include",
+    "/mnt/d/Physim/tests/test_font_faces.c",
+    "/mnt/d/Physim/app/ui_backend.c",
+    "-Wl,--gc-sections",
+    "-lm",
+    "-o",
+    "/mnt/d/Physim/build/native/font-pairs-positive"
+  ],
+  "command": [
+    "wsl",
+    "-d",
+    "Alpine-Dev",
+    "--exec",
+    "env",
+    "ASAN_OPTIONS=detect_leaks=1",
+    "/mnt/d/Physim/build/native/font-pairs-positive",
+    "/mnt/d/Physim",
+    "/mnt/d/Physim/build/native/font-pairs-positive-work"
+  ],
+  "exit_code": 0,
+  "stdout": "FONT PAIRS: direct=-3.007342 extension=-3.007342 copied-after-free=1 scale=2 failures-balanced=1\nFont faces: selected TTC index 2, italic rejection, selected cmap fallback, raster identity, invalid indices, allocation rollback and cleanup passed\n",
+  "stderr": "",
+  "binary_sha256": "5672b1c81c40fab7e7508db3109cec6e94e60e7fc4bc6031584674f28152eac9"
+}

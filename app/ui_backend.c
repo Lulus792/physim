@@ -5,6 +5,7 @@
 #endif
 #define NK_IMPLEMENTATION
 #include "ui.h"
+#include <limits.h>
 #include <math.h>
 static unsigned font_be32(const unsigned char *p) {
  return ((unsigned)p[0]<<24)|((unsigned)p[1]<<16)|((unsigned)p[2]<<8)|p[3];
@@ -54,6 +55,48 @@ float ps_ui_font_em_ratio(const struct nk_font *font) {
  float pixel=stbtt_ScaleForPixelHeight(&info,1),em=stbtt_ScaleForMappingEmToPixels(&info,1);
  float ratio=em/pixel;
  return isfinite(ratio) && ratio>=.5f && ratio<=3?ratio:1;
+}
+enum { PS_UI_PAIR_CACHE=512 };
+typedef struct {nk_rune first,second;int units;} ps_ui_pair_entry;
+struct ps_ui_font_pairs {
+ struct nk_allocator allocator;
+ stbtt_fontinfo font;
+ ps_ui_pair_entry *cache;
+ float height_span;
+};
+ps_ui_font_pairs *ps_ui_font_pairs_create(const struct nk_font *font,const struct nk_allocator *allocator) {
+ if(!font || !font->config || !allocator || !allocator->alloc || !allocator->free)return NULL;
+ const struct nk_font_config *cfg=font->config;
+ size_t overhead=sizeof(ps_ui_font_pairs)+PS_UI_PAIR_CACHE*sizeof(ps_ui_pair_entry);
+ if(!cfg->ttf_blob || cfg->ttf_size<12 || cfg->ttf_size>INT_MAX || cfg->ttf_index<0 ||
+    cfg->ttf_size>SIZE_MAX-overhead)return NULL;
+ ps_ui_font_pairs *pairs=allocator->alloc(allocator->userdata,NULL,overhead+cfg->ttf_size);
+ if(!pairs)return NULL;
+ memset(pairs,0,overhead);pairs->allocator=*allocator;pairs->cache=(ps_ui_pair_entry *)(pairs+1);
+ unsigned char *bytes=(unsigned char *)(pairs->cache+PS_UI_PAIR_CACHE);memcpy(bytes,cfg->ttf_blob,cfg->ttf_size);
+ int offset=stbtt_GetFontOffsetForIndex(bytes,cfg->ttf_index);
+ if(offset<0 || (nk_size)offset>cfg->ttf_size-12 || !stbtt_InitFont(&pairs->font,bytes,offset)) {
+  ps_ui_font_pairs_destroy(pairs);return NULL;
+ }
+ int ascent,descent;stbtt_GetFontVMetrics(&pairs->font,&ascent,&descent,NULL);
+ pairs->height_span=(float)(ascent-descent);
+ if(pairs->height_span<=0){ps_ui_font_pairs_destroy(pairs);return NULL;}
+ return pairs;
+}
+void ps_ui_font_pairs_destroy(ps_ui_font_pairs *pairs) {
+ if(pairs)pairs->allocator.free(pairs->allocator.userdata,pairs);
+}
+float ps_ui_font_pair_advance(const ps_ui_font_pairs *pairs,float height,nk_rune first,nk_rune second) {
+ if(!pairs || !first || !second || first>0x10ffffu || second>0x10ffffu || !isfinite(height) || height<=0)return 0;
+ unsigned index=(first*0x9e3779b1u^second)&(PS_UI_PAIR_CACHE-1);
+ ps_ui_pair_entry *entry=&pairs->cache[index];
+ if(entry->first!=first || entry->second!=second) {
+  int a=stbtt_FindGlyphIndex(&pairs->font,(int)first),b=stbtt_FindGlyphIndex(&pairs->font,(int)second);
+  entry->units=a && b?stbtt_GetGlyphKernAdvance(&pairs->font,a,b):0;
+  entry->first=first;entry->second=second;
+ }
+ /* Preserve stb's arithmetic order; cache only font units, never a size. */
+ return entry->units*(height/pairs->height_span);
 }
 bool ps_ui_font_logical_scale(struct nk_font_atlas *atlas,float raster_scale) {
  if(!atlas || !atlas->glyphs || !isfinite(raster_scale) || raster_scale<1 || raster_scale>4)return false;
@@ -357,7 +400,7 @@ nk_bool ps_ui_combo_begin_named(struct nk_context *ctx,const char *name,const ch
     nk_draw_text(&window->buffer,nk_rect(bounds.x+9,bounds.y+(bounds.h-font->height)/2,fmaxf(1,bounds.w-42),font->height),label,(int)strlen(label),font,nk_rgba(0,0,0,0),color);
     nk_draw_symbol(&window->buffer,NK_SYMBOL_CHEVRON_DOWN,nk_rect(bounds.x+bounds.w-25,bounds.y+(bounds.h-8)/2,8,8),nk_rgba(0,0,0,0),color,1,font);
     ps_ui_accessibility_label(ctx,bounds,label);
-    if(nk_sdl_accessibility_is_focused(ctx,NULL,name))nk_stroke_rect(&window->buffer,bounds,6,2,ps_ui_focus_color(ctx));
+    /* accessibility_widget already paints the hook's native focus result. */
     nk_bool open=nk_combo_begin(ctx,window,size,activated || clicked,bounds);
     if(open) {
         /* Nuklear's internal popup has no public name. Stable owner/name

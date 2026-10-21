@@ -49,6 +49,19 @@ static float documentation_rich_advance(const struct nk_user_font *font,const ch
     struct nk_user_font_glyph glyph={0};font->query(font->userdata,font->height,&glyph,rune,next);
     return glyph.xadvance;
 }
+/* Add a preceding pair only after accepting the next cluster on this line.
+ * A forced wrap must never retain kerning toward the following line. */
+static float documentation_rich_join(const struct nk_user_font *font,const ps_document *document,const ps_doc_block *block,
+                                    const char *text,size_t begin,size_t at,size_t end) {
+    if(font->query!=documentation_spaced_query || at<=begin || at>=end)return 0;
+    const ps_doc_span *span=documentation_span_at(document,block,block->text+at-1);
+    if(span && span->formula)return 0;
+    size_t previous=at-1;while(previous>begin && ((unsigned char)text[previous]&0xc0)==0x80)--previous;
+    nk_rune first=0,second=0;
+    nk_utf_decode(text+previous,&first,(int)(at-previous));nk_utf_decode(text+at,&second,(int)(end-at));
+    const documentation_spaced_font *spaced=font->userdata.ptr;
+    return ps_ui_font_pair_advance(spaced->pairs,font->height,first,second);
+}
 static float documentation_rich_width(const struct nk_user_font *font,const char *text,size_t count) {
     float width=0;
     for(size_t at=0;at<count;) {

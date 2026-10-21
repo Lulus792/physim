@@ -13,6 +13,61 @@ static void *allocate(nk_handle u,void *old,nk_size n) {
 static void release(nk_handle u,void *p) {if(p){memory_state *m=u.ptr;m->live--;free(p);}}
 static unsigned be32(const unsigned char *p) {return ((unsigned)p[0]<<24)|((unsigned)p[1]<<16)|((unsigned)p[2]<<8)|p[3];}
 static void put32(unsigned char *p,unsigned n) {p[0]=(unsigned char)(n>>24);p[1]=(unsigned char)(n>>16);p[2]=(unsigned char)(n>>8);p[3]=(unsigned char)n;}
+static void put16(unsigned char *p,unsigned n) {p[0]=(unsigned char)(n>>8);p[1]=(unsigned char)n;}
+/* The same simple class-pair table, directly and behind ExtensionPos. This
+ * exercises the reader without requiring a proprietary installed font. */
+static unsigned char *pair_fixture(const struct nk_font_config *source,bool extension,size_t *length) {
+ size_t begin=(source->ttf_size+3)&~(size_t)3,size=begin+(extension?66:58);
+ unsigned char *data=calloc(1,size);if(!data)return NULL;
+ memcpy(data,source->ttf_blob,source->ttf_size);
+ unsigned tables=((unsigned)data[4]<<8)|data[5];bool found=false;
+ for(unsigned i=0;i<tables;i++) {
+  unsigned char *entry=data+12+i*16;
+  if(!memcmp(entry,"GPOS",4)){put32(entry+8,(unsigned)begin);put32(entry+12,(unsigned)(size-begin));found=true;break;}
+ }
+ if(!found){free(data);return NULL;}
+ unsigned char *gpos=data+begin;put16(gpos,1);put16(gpos+8,10);put16(gpos+10,1);put16(gpos+12,4);
+ put16(gpos+14,extension?9:2);put16(gpos+18,1);put16(gpos+20,8);
+ unsigned char *pair=gpos+22;
+ if(extension){put16(pair,1);put16(pair+2,2);put32(pair+4,8);pair+=8;}
+ put16(pair,2);put16(pair+2,18);put16(pair+4,4);put16(pair+8,28);put16(pair+10,32);
+ put16(pair+12,1);put16(pair+14,1);put16(pair+16,0xff80); /* xAdvance=-128 font units */
+ put16(pair+18,2);put16(pair+20,1);put16(pair+24,0xffff); /* all glyphs covered */
+ put16(pair+28,2);put16(pair+32,2); /* both default to class zero */
+ *length=size;return data;
+}
+static int pair_resources(const struct nk_font *source,const struct nk_allocator *allocator,memory_state *memory) {
+ size_t baseline=memory->live;
+ struct nk_font_config cfg=*source->config;struct nk_font face={0};face.config=&cfg;
+ ps_ui_font_pairs *pairs[2]={0};
+ for(unsigned extension=0;extension<2;extension++) {
+  size_t length=0;unsigned char *data=pair_fixture(source->config,extension!=0,&length);CHECK(data);
+  cfg.ttf_blob=data;cfg.ttf_size=length;cfg.ttf_index=0;
+  memory->fail=memory->requests+1;
+  CHECK(!ps_ui_font_pairs_create(&face,allocator) && memory->live==baseline+extension);
+  memory->fail=0;pairs[extension]=ps_ui_font_pairs_create(&face,allocator);CHECK(pairs[extension]);
+  free(data);cfg.ttf_blob=NULL; /* resources must no longer borrow the input */
+ }
+ float plain=ps_ui_font_pair_advance(pairs[0],32,'A','V'),wrapped=ps_ui_font_pair_advance(pairs[1],32,'A','V');
+ CHECK(plain<0 && fabsf(plain-wrapped)<.0001f &&
+       fabsf(ps_ui_font_pair_advance(pairs[1],64,'A','V')-2*plain)<.0001f);
+ CHECK(ps_ui_font_pair_advance(pairs[1],32,'A',0)==0 && ps_ui_font_pair_advance(pairs[1],32,'A',0x10ffff)==0 &&
+       ps_ui_font_pair_advance(NULL,32,'A','V')==0 && ps_ui_font_pair_advance(pairs[1],NAN,'A','V')==0);
+ CHECK(!ps_ui_font_pairs_create(&face,allocator));
+ cfg=*source->config;cfg.ttf_size=11;CHECK(!ps_ui_font_pairs_create(&face,allocator));
+ cfg=*source->config;cfg.ttf_index=1;CHECK(!ps_ui_font_pairs_create(&face,allocator));
+ ps_ui_font_pairs *actual=ps_ui_font_pairs_create(source,allocator);CHECK(actual);
+ float av=ps_ui_font_pair_advance(actual,32,'A','V'),hh=ps_ui_font_pair_advance(actual,32,'H','H');
+ CHECK(av<0 && hh==0);
+ for(nk_rune rune=32;rune<2000;rune++)ps_ui_font_pair_advance(actual,16,'A',rune);
+ CHECK(ps_ui_font_pair_advance(actual,32,'A','V')==av && ps_ui_font_pair_advance(actual,32,'H','H')==hh &&
+       ps_ui_font_pair_advance(actual,64,'A','V')==2*av);
+ ps_ui_font_pairs_destroy(actual);
+ ps_ui_font_pairs_destroy(pairs[0]);ps_ui_font_pairs_destroy(pairs[1]);ps_ui_font_pairs_destroy(NULL);
+ CHECK(memory->live==baseline);
+ printf("FONT PAIRS: direct=%.6f extension=%.6f copied-after-free=1 scale=2 cache-eviction=1 failures-balanced=1\n",plain,wrapped);
+ return 0;
+}
 static unsigned char *load(const char *path,size_t *size) {
  FILE *f=fopen(path,"rb");if(!f)return NULL;
  if(fseek(f,0,SEEK_END)){fclose(f);return NULL;}long n=ftell(f);
@@ -75,6 +130,7 @@ int main(int argc,char **argv) {
  struct nk_font *plain=ps_ui_font_add_file_face(&atlas,regular,32,&config,false);CHECK(plain && plain->config->ttf_index==0);
  struct nk_font *emoji=ps_ui_font_add_file_face(&atlas,collection,32,&config,false);CHECK(emoji && emoji->config->ttf_index==0);
  struct nk_font *reference=ps_ui_font_add_file_face(&atlas,bold,32,&config,true);CHECK(reference);
+ CHECK(pair_resources(reference,&allocator,&m)==0);
  struct nk_font *selected=ps_ui_font_add_file_face(&atlas,collection,32,&config,true);CHECK(selected && selected->config->ttf_index==2);
  size_t before=m.live;int fonts=atlas.font_num;
  CHECK(ps_ui_font_add_fallback(&atlas,selected,regular,ascii));

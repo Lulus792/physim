@@ -1,0 +1,247 @@
+{
+  "created_utc": "2026-10-21T11:43:58.129980+00:00",
+  "scope": "Fixed AB/BA/AB on identical sanitized Debug pair-query workload. Each process has seven batches of 144000 calls. No app/GPU/frame or general-font speedup claim.",
+  "order": [
+    "before",
+    "after",
+    "after",
+    "before",
+    "before",
+    "after"
+  ],
+  "source_before_sha256_lf": "73e0024d852e260c2fea81a5e6e567440030f5eaf2d8f1348f44986f0af57099",
+  "source_after_sha256_lf": "22bc944ff04ba68e9870ac9e5c491dac8818cb844f7fdd0e0349a73808647617",
+  "profiler_sha256_lf": "ea49680a92e6a6f28f0af8a3cb5a6f53a41835d7002452c430d8ab62d91fc48a",
+  "rows": [
+    {
+      "index": 0,
+      "variant": "before",
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "/mnt/d/Physim/build/native/profile-font-pairs-before",
+        "/mnt/c/Windows/Fonts/seguisb.ttf",
+        "/mnt/d/Physim/build/native/pair-profile-paired-00-before.bin"
+      ],
+      "exit_code": 0,
+      "stdout": "PAIR PROFILE: batch=0 seconds=1.554468058 calls=144000 sum=-17269.789181650\nPAIR PROFILE: batch=1 seconds=1.365552445 calls=144000 sum=-34539.578363299\nPAIR PROFILE: batch=2 seconds=1.396640923 calls=144000 sum=-51809.367544949\nPAIR PROFILE: batch=3 seconds=1.357352116 calls=144000 sum=-69079.156726599\nPAIR PROFILE: batch=4 seconds=1.363318999 calls=144000 sum=-86348.945908248\nPAIR PROFILE: batch=5 seconds=1.332717672 calls=144000 sum=-103618.735089898\nPAIR PROFILE: batch=6 seconds=1.317872257 calls=144000 sum=-120888.524271548\n",
+      "stderr": "",
+      "samples": [
+        1.554468058,
+        1.365552445,
+        1.396640923,
+        1.357352116,
+        1.363318999,
+        1.332717672,
+        1.317872257
+      ],
+      "output_sha256": "36e9cb11a317e33dd438215dd8101b591f617954468dc411f1b7c9b188a81354",
+      "output_bytes": 576,
+      "executable_sha256": "19a6a917d05efe4656e204c70c92f1185d22dfe382c12452531048f08ded4055"
+    },
+    {
+      "index": 1,
+      "variant": "after",
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "/mnt/d/Physim/build/native/profile-font-pairs-after",
+        "/mnt/c/Windows/Fonts/seguisb.ttf",
+        "/mnt/d/Physim/build/native/pair-profile-paired-01-after.bin"
+      ],
+      "exit_code": 0,
+      "stdout": "PAIR PROFILE: batch=0 seconds=0.054358278 calls=144000 sum=-17269.789181650\nPAIR PROFILE: batch=1 seconds=0.056783719 calls=144000 sum=-34539.578363299\nPAIR PROFILE: batch=2 seconds=0.063318403 calls=144000 sum=-51809.367544949\nPAIR PROFILE: batch=3 seconds=0.051499331 calls=144000 sum=-69079.156726599\nPAIR PROFILE: batch=4 seconds=0.053510442 calls=144000 sum=-86348.945908248\nPAIR PROFILE: batch=5 seconds=0.052286089 calls=144000 sum=-103618.735089898\nPAIR PROFILE: batch=6 seconds=0.052356286 calls=144000 sum=-120888.524271548\n",
+      "stderr": "",
+      "samples": [
+        0.054358278,
+        0.056783719,
+        0.063318403,
+        0.051499331,
+        0.053510442,
+        0.052286089,
+        0.052356286
+      ],
+      "output_sha256": "36e9cb11a317e33dd438215dd8101b591f617954468dc411f1b7c9b188a81354",
+      "output_bytes": 576,
+      "executable_sha256": "56c9c61f9c97e4a771c4e65750ba3f2da1b0c37919e4dd130f80ef7b62aea209"
+    },
+    {
+      "index": 2,
+      "variant": "after",
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "/mnt/d/Physim/build/native/profile-font-pairs-after",
+        "/mnt/c/Windows/Fonts/seguisb.ttf",
+        "/mnt/d/Physim/build/native/pair-profile-paired-02-after.bin"
+      ],
+      "exit_code": 0,
+      "stdout": "PAIR PROFILE: batch=0 seconds=0.055243349 calls=144000 sum=-17269.789181650\nPAIR PROFILE: batch=1 seconds=0.058762732 calls=144000 sum=-34539.578363299\nPAIR PROFILE: batch=2 seconds=0.053460020 calls=144000 sum=-51809.367544949\nPAIR PROFILE: batch=3 seconds=0.051724777 calls=144000 sum=-69079.156726599\nPAIR PROFILE: batch=4 seconds=0.055284730 calls=144000 sum=-86348.945908248\nPAIR PROFILE: batch=5 seconds=0.053955062 calls=144000 sum=-103618.735089898\nPAIR PROFILE: batch=6 seconds=0.053228140 calls=144000 sum=-120888.524271548\n",
+      "stderr": "",
+      "samples": [
+        0.055243349,
+        0.058762732,
+        0.05346002,
+        0.051724777,
+        0.05528473,
+        0.053955062,
+        0.05322814
+      ],
+      "output_sha256": "36e9cb11a317e33dd438215dd8101b591f617954468dc411f1b7c9b188a81354",
+      "output_bytes": 576,
+      "executable_sha256": "56c9c61f9c97e4a771c4e65750ba3f2da1b0c37919e4dd130f80ef7b62aea209"
+    },
+    {
+      "index": 3,
+      "variant": "before",
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "/mnt/d/Physim/build/native/profile-font-pairs-before",
+        "/mnt/c/Windows/Fonts/seguisb.ttf",
+        "/mnt/d/Physim/build/native/pair-profile-paired-03-before.bin"
+      ],
+      "exit_code": 0,
+      "stdout": "PAIR PROFILE: batch=0 seconds=1.798041957 calls=144000 sum=-17269.789181650\nPAIR PROFILE: batch=1 seconds=1.401477899 calls=144000 sum=-34539.578363299\nPAIR PROFILE: batch=2 seconds=1.334659222 calls=144000 sum=-51809.367544949\nPAIR PROFILE: batch=3 seconds=1.335317417 calls=144000 sum=-69079.156726599\nPAIR PROFILE: batch=4 seconds=1.392577635 calls=144000 sum=-86348.945908248\nPAIR PROFILE: batch=5 seconds=1.423188395 calls=144000 sum=-103618.735089898\nPAIR PROFILE: batch=6 seconds=1.383688643 calls=144000 sum=-120888.524271548\n",
+      "stderr": "",
+      "samples": [
+        1.798041957,
+        1.401477899,
+        1.334659222,
+        1.335317417,
+        1.392577635,
+        1.423188395,
+        1.383688643
+      ],
+      "output_sha256": "36e9cb11a317e33dd438215dd8101b591f617954468dc411f1b7c9b188a81354",
+      "output_bytes": 576,
+      "executable_sha256": "19a6a917d05efe4656e204c70c92f1185d22dfe382c12452531048f08ded4055"
+    },
+    {
+      "index": 4,
+      "variant": "before",
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "/mnt/d/Physim/build/native/profile-font-pairs-before",
+        "/mnt/c/Windows/Fonts/seguisb.ttf",
+        "/mnt/d/Physim/build/native/pair-profile-paired-04-before.bin"
+      ],
+      "exit_code": 0,
+      "stdout": "PAIR PROFILE: batch=0 seconds=1.380639449 calls=144000 sum=-17269.789181650\nPAIR PROFILE: batch=1 seconds=1.353617573 calls=144000 sum=-34539.578363299\nPAIR PROFILE: batch=2 seconds=1.334518686 calls=144000 sum=-51809.367544949\nPAIR PROFILE: batch=3 seconds=1.383391069 calls=144000 sum=-69079.156726599\nPAIR PROFILE: batch=4 seconds=1.366684112 calls=144000 sum=-86348.945908248\nPAIR PROFILE: batch=5 seconds=1.394417525 calls=144000 sum=-103618.735089898\nPAIR PROFILE: batch=6 seconds=1.397443584 calls=144000 sum=-120888.524271548\n",
+      "stderr": "",
+      "samples": [
+        1.380639449,
+        1.353617573,
+        1.334518686,
+        1.383391069,
+        1.366684112,
+        1.394417525,
+        1.397443584
+      ],
+      "output_sha256": "36e9cb11a317e33dd438215dd8101b591f617954468dc411f1b7c9b188a81354",
+      "output_bytes": 576,
+      "executable_sha256": "19a6a917d05efe4656e204c70c92f1185d22dfe382c12452531048f08ded4055"
+    },
+    {
+      "index": 5,
+      "variant": "after",
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "/mnt/d/Physim/build/native/profile-font-pairs-after",
+        "/mnt/c/Windows/Fonts/seguisb.ttf",
+        "/mnt/d/Physim/build/native/pair-profile-paired-05-after.bin"
+      ],
+      "exit_code": 0,
+      "stdout": "PAIR PROFILE: batch=0 seconds=0.061247002 calls=144000 sum=-17269.789181650\nPAIR PROFILE: batch=1 seconds=0.052276326 calls=144000 sum=-34539.578363299\nPAIR PROFILE: batch=2 seconds=0.052792736 calls=144000 sum=-51809.367544949\nPAIR PROFILE: batch=3 seconds=0.051845251 calls=144000 sum=-69079.156726599\nPAIR PROFILE: batch=4 seconds=0.062844326 calls=144000 sum=-86348.945908248\nPAIR PROFILE: batch=5 seconds=0.061429009 calls=144000 sum=-103618.735089898\nPAIR PROFILE: batch=6 seconds=0.061582367 calls=144000 sum=-120888.524271548\n",
+      "stderr": "",
+      "samples": [
+        0.061247002,
+        0.052276326,
+        0.052792736,
+        0.051845251,
+        0.062844326,
+        0.061429009,
+        0.061582367
+      ],
+      "output_sha256": "36e9cb11a317e33dd438215dd8101b591f617954468dc411f1b7c9b188a81354",
+      "output_bytes": 576,
+      "executable_sha256": "56c9c61f9c97e4a771c4e65750ba3f2da1b0c37919e4dd130f80ef7b62aea209"
+    }
+  ],
+  "summary": {
+    "before": {
+      "median": 1.380639449,
+      "min": 1.317872257,
+      "max": 1.798041957
+    },
+    "after": {
+      "median": 0.053955062,
+      "min": 0.051499331,
+      "max": 0.063318403
+    }
+  },
+  "all_144_float_values_byte_identical": true,
+  "compile_commands": {
+    "before": [
+      "wsl",
+      "-d",
+      "Alpine-Dev",
+      "--exec",
+      "cc",
+      "-std=c17",
+      "-O0",
+      "-g",
+      "-ffunction-sections",
+      "-fdata-sections",
+      "-fsanitize=address,undefined",
+      "-I/mnt/d/Physim/app",
+      "-I/mnt/d/Physim/include",
+      "-I/mnt/d/Physim/third_party",
+      "-I/mnt/d/Physim/build/native/F1-linux/sdl-install/include",
+      "/mnt/d/Physim/tools/profile_font_pairs.c",
+      "/mnt/d/Physim/build/native/font-pairs-before.c",
+      "-Wl,--gc-sections",
+      "-lm",
+      "-o",
+      "/mnt/d/Physim/build/native/profile-font-pairs-before"
+    ],
+    "after": [
+      "wsl",
+      "-d",
+      "Alpine-Dev",
+      "--exec",
+      "cc",
+      "-std=c17",
+      "-O0",
+      "-g",
+      "-ffunction-sections",
+      "-fdata-sections",
+      "-fsanitize=address,undefined",
+      "-I/mnt/d/Physim/app",
+      "-I/mnt/d/Physim/include",
+      "-I/mnt/d/Physim/third_party",
+      "-I/mnt/d/Physim/build/native/F1-linux/sdl-install/include",
+      "/mnt/d/Physim/tools/profile_font_pairs.c",
+      "/mnt/d/Physim/app/ui_backend.c",
+      "-Wl,--gc-sections",
+      "-lm",
+      "-o",
+      "/mnt/d/Physim/build/native/profile-font-pairs-after"
+    ]
+  },
+  "baseline_source_archive": "docs/visuals/f1-layouts/kerning-2026-10-21/baseline-sources-72.json; extract files.app/ui_backend.c.text_lf as build/native/font-pairs-before.c"
+}

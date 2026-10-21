@@ -35,6 +35,15 @@ struct nk_font_atlas *nk_sdl_font_stash_begin(struct nk_context *ctx);
 bool ps_ui_font_has_glyph(const struct nk_user_font *font,nk_rune codepoint);
 /* Before atlas cleanup: convert CSS em sizing to stb's ascent/descent height. */
 float ps_ui_font_em_ratio(const struct nk_font *font);
+/* Copy the primary face before atlas cleanup. The independent resource uses
+ * the supplied allocator until destroy; append/replacement owns it separately.
+ * A bounded pair cache belongs to the UI thread. Pair adjustment is in
+ * logical pixels at stb ascent/descent height. This is
+ * pair kerning only, not general script shaping or fallback-font positioning. */
+typedef struct ps_ui_font_pairs ps_ui_font_pairs;
+ps_ui_font_pairs *ps_ui_font_pairs_create(const struct nk_font *font,const struct nk_allocator *allocator);
+void ps_ui_font_pairs_destroy(ps_ui_font_pairs *pairs);
+float ps_ui_font_pair_advance(const ps_ui_font_pairs *pairs,float height,nk_rune first,nk_rune second);
 /* Load the first non-italic face matching the OpenType bold flag. A missing
  * match leaves the atlas unchanged, allowing the caller's offline fallback. */
 struct nk_font *ps_ui_font_add_file_face(struct nk_font_atlas *atlas,const char *path,

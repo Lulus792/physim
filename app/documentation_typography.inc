@@ -24,14 +24,14 @@ static float documentation_spaced_width(nk_handle handle,float height,const char
     for(int at=0;at<length;) {
         nk_rune rune,next=0;int bytes=nk_utf_decode(text+at,&rune,length-at);if(bytes<=0)bytes=1;
         if(at+bytes<length)nk_utf_decode(text+at+bytes,&next,length-at-bytes);
-        spacing+=documentation_spacing_after(font,height,next);at+=bytes;
+        spacing+=documentation_spacing_after(font,height,next)+ps_ui_font_pair_advance(font->pairs,height,rune,next);at+=bytes;
     }
     return fmaxf(0,font->base->width(font->base->userdata,height,text,length)+spacing);
 }
 static void documentation_spaced_query(nk_handle handle,float height,struct nk_user_font_glyph *glyph,nk_rune rune,nk_rune next) {
     const documentation_spaced_font *font=handle.ptr;
     font->base->query(font->base->userdata,height,glyph,rune,next);
-    glyph->xadvance+=documentation_spacing_after(font,height,next);
+    glyph->xadvance+=documentation_spacing_after(font,height,next)+ps_ui_font_pair_advance(font->pairs,height,rune,next);
 }
 static bool documentation_is_lead(const app *a,const ps_doc_block *block) {
     return block->kind==PS_DOC_TEXT && a->doc_lead_text!=SIZE_MAX && block->text==a->doc_lead_text;
@@ -89,6 +89,7 @@ static void documentation_typography_update(app *a) {
     for(unsigned i=0;i<2;i++) {
         unsigned role=tracked[i];documentation_spaced_font *font=&a->doc_spaced_fonts[i];
         font->base=sources[role];font->native=*(const struct nk_font *)font->base->userdata.ptr;
+        font->pairs=a->doc_font_pairs[i];
         font->spacing=spacing[i];font->reference_height=a->doc_type_fonts[role].height;
         a->doc_type_fonts[role].userdata=nk_handle_ptr(font);
         a->doc_type_fonts[role].width=documentation_spaced_width;a->doc_type_fonts[role].query=documentation_spaced_query;

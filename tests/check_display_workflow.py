@@ -241,6 +241,12 @@ def documentation_h_typography(output):
 
 
 def documentation_h_flow(output):
+    kern=re.findall(r'DOCUMENTATION H KERN: case=(\d+) measured=([\d.]+) queried=([\d.]+) base=([\d.]+) spacing=(-?[\d.]+) pair=(-?[\d.]+) retained=1 consistent=1',output)
+    require(len(kern)==56,'Missing retained pair-kerning measurement/query matrix')
+    for index,row in enumerate(kern):
+        case,measured,queried,base,spacing,pair=map(float,row)
+        require(case==index and abs(measured-queried)<.01 and abs(base+spacing+pair-measured)<.01,
+                'Heading measurement and actual glyph advances differ')
     rows=re.findall(r'DOCUMENTATION H FLOW: case=(\d+) title-line=([\d.]+) title-step=([\d.]+) body-line=([\d.]+) lead-gap=(-?[\d.]+) inset-delta=(-?[\d.]+) lead-em=([\d.]+) table-em=([\d.]+) tracking=(-?[\d.]+) title-bytes=(\d+)',output)
     require(len(rows)==56,'Missing actual article flow matrix')
     for index,row in enumerate(rows):

@@ -6,6 +6,14 @@ Dieser Bericht ergänzt die historische Abnahme in [NATIVE-H.md](NATIVE-H.md).
 
 ## Aktuelle Nachprüfung vom 21. Oktober 2026
 
+Der aktuelle [Paarabstands-Abgleich](KERNING.md) liest die bislang übersprungenen
+OpenType-Erweiterungstabellen und besteht die Windows-Titelkantenprüfung bei
+unveränderter Toleranz. 112 vollständige Vorher-/Nachher-Bildpaare belegen
+unveränderte Pixel durch den begrenzten Cache. Beide Plattformen bestehen
+20 verschiedene Gruppen über breite und gezielte Läufe; frühere Fokus-/Zeitfehler
+bleiben getrennt erfasst. Linux-Schrift, Navigation-/Kontextdetails und der
+gemeinsame Scrollbereich von Herkunft und Artikel bleiben offen.
+
 Der nachfolgende [Artikel-/Zeilenabgleich](ARTICLE-FLOW.md) überträgt CSS-Zeilenboxen,
 zusammenfallende Blockabstände, Titel-Laufweiten, Einleitungs-, Tabellen- und
 Codekopfrollen sowie die tatsächliche 900-/901-px-Grenze. Die begrenzte

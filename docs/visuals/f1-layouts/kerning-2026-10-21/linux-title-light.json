@@ -1,0 +1,71 @@
+{
+  "scope": "Measure only the shared H heading's ink edges; not a whole-UI score.\n\nThe original has a 1 px frame and a 34 px mock title bar. Native screenshots\ncontain client pixels. Both full input images remain unchanged. The fixed\nheading region and foreground thresholds are recorded in the JSON report.",
+  "reference": "D:\\Physim\\docs\\visuals\\f1-layouts\\h-light.png",
+  "native": "D:\\Physim\\docs\\visuals\\f1-layouts\\kerning-2026-10-21\\linux-h-light.png",
+  "sha256": [
+    "dfdacd3f8d8ff5d9a1028aa100c3f03c53b709117b313643217e69a31f93b512",
+    "bce07afce16a73c118eb601b6cd99df704c19b92bf0b4783d9fd1af17318f484"
+  ],
+  "sizes": [
+    [
+      1080,
+      808
+    ],
+    [
+      1080,
+      780
+    ]
+  ],
+  "region": [
+    270,
+    125,
+    810,
+    190
+  ],
+  "reference_origin": [
+    1,
+    35
+  ],
+  "native_origin": [
+    0,
+    0
+  ],
+  "foreground": "max(R,G,B)<100",
+  "reference_box": [
+    281,
+    143,
+    717,
+    168
+  ],
+  "native_box": [
+    281,
+    141,
+    642,
+    190
+  ],
+  "supported": true,
+  "region_complete": false,
+  "checks": [
+    {
+      "edge": "left",
+      "delta_px": 0,
+      "passed": true
+    },
+    {
+      "edge": "top",
+      "delta_px": -2,
+      "passed": false
+    },
+    {
+      "edge": "right",
+      "delta_px": -75,
+      "passed": false
+    },
+    {
+      "edge": "bottom",
+      "delta_px": 22,
+      "passed": false
+    }
+  ],
+  "aligned": false
+}

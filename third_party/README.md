@@ -23,6 +23,15 @@ included as `licenses/zlib-LICENSE.txt` in the portable package.
 
 ## Nuklear snapshot
 
+Local patch (2026-10-21): the embedded stb pair-kerning reader follows a format-1
+ExtensionPos lookup (type 9) when it wraps PairPos (type 2). Other extension
+types remain ignored. `font_faces` compares identical direct/extended class-pair
+tables generated from a tracked font, checks retained ownership after source
+release, scaling, allocation failure and complete release. F1 heading adapters
+use the retained primary face for measurement, wrapping and glyph advances;
+the generic Nuklear font drawing callbacks retain their original behavior.
+This is pair kerning, not a general OpenType shaping implementation.
+
 Local patch (2026-10-20): ordinary insertion inside existing text now records
 an undo operation after a successful string insertion, as insertion at the end
 already did. Replace mode keeps its existing replacement record. The independent

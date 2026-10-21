@@ -544,6 +544,7 @@ static size_t documentation_rich_line_metrics(const app *a,const ps_document *d,
         const ps_doc_span *span=documentation_span_at(d,b,b->text+at);
         const struct nk_user_font *font=documentation_span_font(a,b,span);
         float glyph;size_t bytes=documentation_rich_cluster(font,text+at,b->length-at,&glyph);
+        glyph+=documentation_rich_join(font,d,b,text,begin,at,b->length);
         const ps_doc_formula_variant *math=documentation_inline_variant(a,span,width);
         if(math) {bytes=span->length;glyph=math->width*(documentation_font_size(a)/16.f);}
         if(at>begin && used+glyph>width) {
@@ -614,6 +615,7 @@ static void documentation_rich_draw(app *a,ps_document *d,const ps_doc_block *b,
             size_t next=span?span->text+span->length-b->text:end;if(next>end)next=end;
             const ps_doc_formula_variant *math=documentation_inline_variant(a,span,bounds.w);
             float zoom=(documentation_font_size(a)/16.f);
+            if(!math)x+=documentation_rich_join(font,d,b,text,at,pos,end);
             float width=math?math->width*zoom:documentation_rich_width(font,text+pos,next-pos);
             float draw_y=b->code_line_height>0?y+grid_offset:y+baseline-documentation_font_baseline(font);
             struct nk_rect part=math?nk_rect(x,y+baseline-math->baseline*zoom,width,math->height*zoom):
@@ -1311,6 +1313,7 @@ static bool documentation_article_probe(app *a,const char *capture) {
     const documentation_spaced_font *spaced=font->userdata.ptr;
     spaced->base->query(spaced->base->userdata,font->height,&base_glyph,'A','B');
     float tracking=actual_glyph.xadvance-base_glyph.xadvance,step=0,first=-1,title_x=-1,crumb_x=-1;
+    tracking-=ps_ui_font_pair_advance(spaced->pairs,font->height,'A','B');
     char actual[4096];size_t used=0;const struct nk_command *command;
     nk_foreach(command,a->doc_ui)if(command->type==NK_COMMAND_TEXT) {
         const struct nk_command_text *text=(const struct nk_command_text *)command;
@@ -1325,6 +1328,20 @@ static bool documentation_article_probe(app *a,const char *capture) {
         if(expected>=used || actual[expected]!=source[i])bytes=false;++expected;
     }
     bytes=bytes && expected==used;
+    float query_width=0,pair_width=0,spacing_width=0;
+    for(size_t at=0;at<heading->length;) {
+        nk_rune rune,next=0;int count=nk_utf_decode(source+at,&rune,(int)(heading->length-at));if(count<=0)count=1;
+        if(at+(size_t)count<heading->length)nk_utf_decode(source+at+count,&next,(int)(heading->length-at-(size_t)count));
+        struct nk_user_font_glyph glyph={0};font->query(font->userdata,font->height,&glyph,rune,next);
+        query_width+=glyph.xadvance;pair_width+=ps_ui_font_pair_advance(spaced->pairs,font->height,rune,next);
+        spacing_width+=documentation_spacing_after(spaced,font->height,next);at+=(size_t)count;
+    }
+    float measured_width=font->width(font->userdata,font->height,source,(int)heading->length);
+    float unspaced_width=spaced->base->width(spaced->base->userdata,font->height,source,(int)heading->length);
+    bool pairs=spaced->pairs && fabsf(query_width-measured_width)<.01f &&
+        fabsf(unspaced_width+spacing_width+pair_width-measured_width)<.01f;
+    printf("DOCUMENTATION H KERN: case=%u measured=%.3f queried=%.3f base=%.3f spacing=%.3f pair=%.3f retained=%d consistent=%d\n",
+        index,measured_width,query_width,unspaced_width,spacing_width,pair_width,spaced->pairs!=NULL,pairs);
     ps_doc_block body={0};body.kind=PS_DOC_TEXT;body.text=SIZE_MAX;
     float line=documentation_block_line_height(a,heading),gap=-1;
     for(size_t i=0;i<a->documentation->count;i++)if(documentation_is_lead(a,&a->documentation->blocks[i])) {
@@ -1334,7 +1351,7 @@ static bool documentation_article_probe(app *a,const char *capture) {
         index,line,step,documentation_block_line_height(a,&body),gap,crumb_x-title_x,
         documentation_type_font(a,DOC_TYPE_LEAD)->height/a->doc_type_em[DOC_TYPE_LEAD],
         documentation_type_font(a,DOC_TYPE_TABLE)->height/a->doc_type_em[DOC_TYPE_TABLE],tracking,bytes);
-    return bytes && fabsf(tracking+.55f)<.001f && (!step || fabsf(step-line)<=1.01f) &&
+    return bytes && pairs && fabsf(tracking+.55f)<.001f && (!step || fabsf(step-line)<=1.01f) &&
         fabsf(gap-20)<=1.01f && crumb_x>=0 && title_x>=0 && fabsf(crumb_x-title_x)<=1.01f;
 }
 static void documentation_view(app *a, float height) {

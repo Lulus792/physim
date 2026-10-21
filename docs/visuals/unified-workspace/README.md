@@ -27,6 +27,10 @@ Der nachfolgende [F1-Artikel-/Zeilenabgleich](../f1-layouts/ARTICLE-FLOW.md)
 überträgt Zeilenboxen, Blockabstände, Titel-Laufweite und Einleitungs-/Tabellenrollen.
 Die begrenzte Titelkantenprüfung bleibt rot; vollständige H-Gestaltung und
 Windows-Hostfokus sind weiterhin offen.
+Der jüngste [F1-Paarabstands-Abgleich](../f1-layouts/KERNING.md) beseitigt die
+zusätzliche Windows-Titelbreite und erhält alle 112 vollständigen Bildpaare beim
+Cache-Vergleich. Die vollständige H-Gestaltung einschließlich gemeinsamer
+Scrollbewegung von Artikel und Herkunftszeile sowie die Linux-Schrift bleiben offen.
 
 **Für die native Umsetzung in einem anderen Chat:**
 [kopierfertiger Auftrag](NEXT-CHAT.md) · [Bestand und Abnahmeliste](IMPLEMENTATION.md)
