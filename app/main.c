@@ -369,6 +369,10 @@ typedef struct {
     float doc_scroll_adjustment;
     char doc_query[128], doc_last_query[128], doc_error[160];
     bool doc_search_focus, doc_search_active, doc_move_match, doc_reset_sidebar,doc_scroll_pending;
+    bool doc_find_open,doc_actions_open,doc_actions_return_keyboard,doc_actions_wait_release;
+    int doc_actions_return_focus,doc_action_pending;
+    struct nk_vec2 doc_actions_position;
+    struct nk_rect doc_actions_bounds,doc_actions_trigger_bounds,doc_find_bounds;
     bool doc_keyboard,doc_focus_reveal,doc_filter_focus,doc_navigation_hidden;
     bool doc_context_hidden,doc_context_example;
     nk_uint doc_context_scroll_x[2],doc_context_scroll_y[2];
@@ -3911,6 +3915,7 @@ int main(int argc, char **argv) {
         }
         preferences_theme_tick(a);
         api_reference_insert_tick(a);
+        documentation_actions_tick(a);
         nk_input_begin(a->ui);
         if (a->doc_ui)
             nk_input_begin(a->doc_ui);
@@ -3961,6 +3966,7 @@ int main(int argc, char **argv) {
                 if(a->dock_resize || a->dock_float_resize)dock_resize_abort(a);
             }
             if(event_window==a->window && nk_sdl_accessibility_event(a->ui,&e))continue;
+            if(event_window==a->doc_window && a->doc_ui && documentation_actions_event(a,&e))continue;
             if(event_window==a->doc_window && a->doc_ui && nk_sdl_accessibility_event(a->doc_ui,&e))continue;
             if (event_window == a->window && e.type == SDL_EVENT_WINDOW_FOCUS_LOST)
                 { completion_close(a);toolbar_keyboard_close(a);a->settings_keyboard=false; }
@@ -4953,10 +4959,15 @@ int main(int argc, char **argv) {
                 if(a->doc_track!=1 || a->doc_topic!=DOCUMENTATION_C_GUIDE_TOPIC)exit_code=1;
                 documentation_link(a,"c-workflow.md");
                 if(strcmp(documentation_topics[a->doc_topic].path,"docs/c-workflow.md") || a->doc_track!=1)exit_code=1;
-                test_window_mouse(a->doc_window,a->doc_home_bounds,true);test_stage=283;
+                test_window_key_mod(a->doc_window,SDLK_F10,SDL_KMOD_SHIFT);test_stage=2821;
+            } else if(test_stage==2821) {
+                if(!a->doc_actions_open){exit_code=1;a->quitting=true;}
+                else if(a->doc_home_bounds.w>0 && nk_sdl_accessibility_request_focus(a->doc_ui,NULL,"Start")) {
+                    test_window_mouse(a->doc_window,a->doc_home_bounds,true);test_stage=283;
+                }
             } else if(test_stage==283) {
                 test_window_mouse(a->doc_window,a->doc_home_bounds,false);test_stage=284;
-            } else if(test_stage==284) {
+            } else if(test_stage==284 && !a->doc_actions_open && !a->doc_action_pending) {
                 if(a->doc_topic!=DOCUMENTATION_C_GUIDE_TOPIC || a->doc_track!=1)exit_code=1;
                 capture="docs-c-track.bmp";
                 test_window_mouse(a->doc_window,a->doc_track_bounds[1],true);test_stage=285;
@@ -4968,10 +4979,15 @@ int main(int argc, char **argv) {
                 if(strcmp(documentation_topics[a->doc_topic].path,"docs/physim-workflow.md") || a->doc_track!=2)exit_code=1;
                 documentation_link(a,"reference/language-library.md");
                 if(strcmp(documentation_topics[a->doc_topic].path,"docs/reference/language-library.md") || a->doc_track!=2)exit_code=1;
-                test_window_mouse(a->doc_window,a->doc_home_bounds,true);test_stage=287;
+                test_window_key_mod(a->doc_window,SDLK_F10,SDL_KMOD_SHIFT);test_stage=2861;
+            } else if(test_stage==2861) {
+                if(!a->doc_actions_open){exit_code=1;a->quitting=true;}
+                else if(a->doc_home_bounds.w>0 && nk_sdl_accessibility_request_focus(a->doc_ui,NULL,"Start")) {
+                    test_window_mouse(a->doc_window,a->doc_home_bounds,true);test_stage=287;
+                }
             } else if(test_stage==287) {
                 test_window_mouse(a->doc_window,a->doc_home_bounds,false);test_stage=288;
-            } else if(test_stage==288) {
+            } else if(test_stage==288 && !a->doc_actions_open && !a->doc_action_pending) {
                 if(a->doc_topic!=DOCUMENTATION_PHYSIM_GUIDE_TOPIC || a->doc_track!=2)exit_code=1;
                 capture="docs-physim-track.bmp";
                 /* Closing the main window exits with either learning route open. */

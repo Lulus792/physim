@@ -18,6 +18,8 @@ static void documentation_window_destroy(app *a) {
     a->doc_graphics = NULL;
     a->doc_ui = NULL;
     a->doc_visible = false;
+    a->doc_find_open=a->doc_actions_open=false;
+    a->doc_action_pending=0;
     a->doc_raster_density=a->doc_failed_density=0;
     a->doc_font_ui=a->doc_font_title=a->doc_font_code=NULL;
     memset(a->doc_ui_fonts,0,sizeof a->doc_ui_fonts);memset(a->doc_title_fonts,0,sizeof a->doc_title_fonts);
@@ -174,6 +176,8 @@ static void documentation_window_hide(app *a) {
     nk_sdl_accessibility_suspend(a->doc_ui);
     a->doc_visible = false;
     a->doc_keyboard=a->doc_search_active=a->doc_filter_active=false;
+    a->doc_find_open=a->doc_actions_open=false;
+    a->doc_action_pending=0;
 }
 
 static bool documentation_window_render(app *a, const char *capture_path) {
@@ -245,17 +249,21 @@ static bool documentation_window_render(app *a, const char *capture_path) {
     nk_style_pop_font(ui);
     float article_width=fminf(810,layout.article.w);
     float article_x=layout.article.x+(layout.article.w-article_width)/2;
+    /* Commit the overlay edit before computing matches/reading boxes. Its
+     * window is raised after layout, so the article never paints over it. */
+    a->doc_article_slot=nk_rect(article_x,layout.article.y,article_width,layout.article.h);
+    documentation_find_view(a);
     /* The body group contributes another 16 px: total reader inset 20 / 28. */
     nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(w<1000?4:12,12));
     nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(doc_body)));
-    if(a->doc_search_focus || a->doc_search_active)nk_window_set_focus(ui,"document");
     if(nk_begin(ui,"document",nk_rect(article_x,layout.article.y,article_width,layout.article.h),NK_WINDOW_NO_SCROLLBAR)) {
         a->doc_article_slot=nk_window_get_bounds(ui);
         ps_ui_accessibility_route(ui,true);documentation_view(a,layout.article.h);
     }nk_end(ui);
     nk_style_pop_style_item(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
     nk_style_pop_float(ui);
-    if(a->doc_search_active)nk_window_set_focus(ui,"document");
+    documentation_actions_view(a);
+    if(a->doc_search_active && !a->doc_actions_open)documentation_overlay_focus(ui,"documentation-find");
     else if(a->doc_filter_active)nk_window_set_focus(ui,"documentation-header");
     /* The article records its own metadata bounds while it is built. Select
      * the independent caption target only after all windows have been built. */

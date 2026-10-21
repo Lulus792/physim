@@ -282,7 +282,10 @@ def documentation_h(flow,directory):
     except RuntimeError:
         rejected=True
     require(rejected,'H pixel oracle accepted the previous filled blue controls')
-    for name in ('example-c','example-physim','empty-search','no-context','pointer-search'):
+    require('DOCUMENTATION H SECONDARY: menu=keyboard,pointer,context escape-focus=restored find=overlay text-input=restored outside-click=consumed zoom=shortcut,menu,mouse source-preserved=1' in output,'Missing native on-demand handbook actions proof')
+    preserved=re.search(r'DOCUMENTATION H SOURCE: experiment-bytes=(\d+) analysis-bytes=(\d+) byte-exact=1 footer-name-and-focus=1',output)
+    require(preserved and all(int(value)>0 for value in preserved.groups()),'Missing byte-exact nonempty editor or accessible footer focus proof')
+    for name in ('example-c','example-physim','empty-search','no-context','pointer-search','actions-keyboard','find-overlay','actions-pointer','actions-zoom','actions-pointer-zoom','actions-context'):
         require((directory/f'docs-h-{name}.bmp').is_file(),'Missing Design H task capture')
 
 

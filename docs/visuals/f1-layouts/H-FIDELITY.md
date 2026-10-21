@@ -6,6 +6,15 @@ Dieser Bericht ergänzt die historische Abnahme in [NATIVE-H.md](NATIVE-H.md).
 
 ## Aktuelle Nachprüfung vom 21. Oktober 2026
 
+Der jüngere [Abgleich der Artikelansicht und Aktionen](SECONDARY-ACTIONS.md)
+entfernt die zusätzliche Artikelwerkzeugzeile und die gefüllten Zoomknöpfe.
+Ihre Funktionen bleiben über ein natives Menü und Tastenkürzel zugänglich.
+Der Bericht enthält aktuelle Linux-/Windows-Aufnahmen und getrennte Befunde:
+Linux besteht die acht Prüfgruppen über zwei Läufe mit gleicher Anwendungslogik;
+die aktuelle Windows-H-/Seitenprüfung scheitert weiterhin am Hostfokus.
+Schriftmetriken und vollständige H-Abstände bleiben offen. Die folgenden
+älteren Nachweise beschreiben ihre jeweiligen Zwischenstände.
+
 Der [erneute native Linux-Abgleich](../unified-workspace/WORKBENCH-CONTEXT-FLOW.md#ergänzende-aktuelle-f1-formelprüfung)
 enthält aktuelle H-Bilder und besteht 56 H-Zustände, 48 Inline-Formelfälle sowie
 183 Zeichen in allen 42 F1-Schriftvarianten einschließlich gebündelter Fonts.
@@ -16,8 +25,9 @@ Für diesen Stand gibt es keine neue Windows-/macOS-F1-Abnahme.
 Der jüngere Auftrag zum möglichst identischen Gesamtauftritt gilt auch für die
 zusätzliche Artikelwerkzeugzeile und die Zoomaktionen. Ihre unten historisch
 beschriebene bewusste Abweichung ist deshalb keine aktuelle Designfreigabe.
-Die Funktionen müssen erhalten und ihre sichtbare Gestaltung weiter mit H
-abgeglichen werden. Eine technische Unmöglichkeit ist dafür nicht nachgewiesen.
+Diese Funktionen sind im jüngeren Folgeabgleich erhalten und aus der
+Standardansicht verlagert. Eine technische Unmöglichkeit der Angleichung
+ist nicht nachgewiesen.
 
 ## Weitere Annäherung an die Referenz (17. Oktober 2026)
 

@@ -17,6 +17,9 @@ Der [Werkbank-Kontext](WORKBENCH-CONTEXT.md) führt den aktuellen Abgleich der
 gefüllten API-Karte, dokumentierter Beispiele und des Protokollkopfs fort.
 Der [Folgeabgleich der Kontextspalte](WORKBENCH-CONTEXT-FLOW.md) ergänzt volle
 Breite, CSS-Zeilenboxen, Gliederungsdetails und Scrollzugang bei kurzen Fenstern.
+Der [F1-Artikel-/Aktionsabgleich](../f1-layouts/SECONDARY-ACTIONS.md) entfernt
+zusätzliche Standardleisten und erhält die Befehle im nativen Menü; aktuelle
+Linux-Nachweise und die offene Windows-Hostfokusprüfung sind getrennt erfasst.
 
 **Für die native Umsetzung in einem anderen Chat:**
 [kopierfertiger Auftrag](NEXT-CHAT.md) · [Bestand und Abnahmeliste](IMPLEMENTATION.md)

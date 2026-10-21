@@ -29,6 +29,17 @@ static bool documentation_test_clipboard(const char *expected) {
 static bool documentation_test_seek(app *a,int id,int *stage,int *code) {
     static unsigned seeks,attempts,tabs,panes;static double started;
     static int target,last_topic=-1,last_stage=-1;
+    bool action=id==DOC_BACK || id==DOC_FORWARD || id==DOC_HOME || id==DOC_WORKSPACE ||
+        id==DOC_ZOOM_OUT || id==DOC_ZOOM_RESET || id==DOC_ZOOM_IN;
+    if(action && !a->doc_actions_open) {
+        test_window_key_mod(a->doc_window,SDLK_F10,SDL_KMOD_SHIFT);--*stage;return false;
+    }
+    if(!action && a->doc_actions_open) {
+        test_window_key_mod(a->doc_window,SDLK_ESCAPE,0);--*stage;return false;
+    }
+    if((id==DOC_SEARCH || id==DOC_PREVIOUS || id==DOC_NEXT) && !a->doc_find_open) {
+        test_window_key_mod(a->doc_window,SDLK_F,PS_UI_COMMAND_MOD);--*stage;return false;
+    }
     int entries[12*PS_DOC_MAX_BLOCKS+DOCUMENTATION_TOPIC_COUNT+16];
     unsigned count=documentation_focus_list(a,entries);
     if(target!=id || last_topic!=a->doc_topic || last_stage!=*stage) {

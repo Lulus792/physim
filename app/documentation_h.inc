@@ -430,16 +430,16 @@ static void documentation_context_content(app *a) {
 static void documentation_footer(app *a) {
     struct nk_context *ui=a->doc_ui;float h=ui->style.font->height+8;
     float width=nk_window_get_content_region(ui).w;
-    float reset=fmaxf(72,documentation_text_width(ui->style.font,"32 px",5)+16);
-    nk_layout_row_begin(ui,NK_STATIC,h,4);nk_layout_row_push(ui,fmaxf(100,width-reset-64-3*ui->style.window.spacing.x));
-    const char *status=a->preferences.ui_size>=24?(a->doc_track==2?"Physim · Offline-Handbuch":"C · Offline-Handbuch"):
-        (a->doc_track==2?"Teil II · Physim · Offline-Handbuch":"Teil I · C · Offline-Handbuch");
+    char value[32];snprintf(value,sizeof value,"%u px",documentation_font_size(a));
+    float action=fmaxf(72,documentation_text_width(ui->style.font,value,strlen(value))+16);
+    nk_layout_row_begin(ui,NK_STATIC,h,2);nk_layout_row_push(ui,fmaxf(100,width-action-ui->style.window.spacing.x));
+    const char *status=a->doc_track==2?"Teil II · Physim · Offline-Handbuch":"Teil I · C · Offline-Handbuch";
     nk_label(ui,status,NK_TEXT_LEFT);
-    const int ids[]={DOC_ZOOM_OUT,DOC_ZOOM_RESET,DOC_ZOOM_IN};
-    for(int i=0;i<3;i++) {
-        nk_layout_row_push(ui,i==1?reset:32);struct nk_rect r=nk_widget_bounds(ui);
-        if(documentation_zoom_button(a,i-1))documentation_zoom(a,i-1);
-        documentation_focus_draw(a,ids[i],r,false);
-    }
+    nk_layout_row_push(ui,action);struct nk_rect r;nk_widget(&r,ui);a->doc_actions_trigger_bounds=r;
+    char accessible[96];snprintf(accessible,sizeof accessible,"Handbuchaktionen · Leseschrift %s",value);
+    if(ps_ui_button_at(ui,r,accessible,false))documentation_actions_open(a,r.x,r.y);
+    nk_draw_text(nk_window_get_canvas(ui),r,value,(int)strlen(value),ui->style.font,nk_rgba(0,0,0,0),UI_COLOR(muted));
+    documentation_focus_draw(a,DOC_ACTIONS,r,false);
+    if(nk_input_is_mouse_hovering_rect(&ui->input,r))nk_tooltip(ui,"Handbuchaktionen: Verlauf, Suche und Leseschrift · Umschalt+F10");
     nk_layout_row_end(ui);
 }

@@ -4,6 +4,10 @@ Folgeabgleich vom 21. Oktober 2026 auf Grundlage von `6f527f6`.
 Die unveränderten Original-PNGs und `develop-designs/workbench.css` bleiben die
 Referenz. Der [vorherige Bericht](WORKBENCH-CONTEXT.md) beschreibt Stand 47.
 
+Nachfolgende F1-Arbeiten und aktuelle Plattformgrenzen stehen im
+[Abgleich der Artikelansicht und Aktionen](../f1-layouts/SECONDARY-ACTIONS.md).
+Die unten enthaltene F1-Prüfung beschreibt den früheren Stand 52.
+
 ## Native Umsetzung
 
 Die Kontextspalte berechnet ihren vollständigen Platzbedarf vor dem Öffnen des

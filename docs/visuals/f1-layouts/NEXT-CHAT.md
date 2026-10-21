@@ -6,6 +6,10 @@ Der jüngste Abgleich übernimmt die exakten Paneel-Iconproportionen aus der
 H-Vektorreferenz sowie Schalterhöhe, Markenbeschriftung und transparente Tabzustände.
 Aktuelle Windows-/Linux-Nachweise, native Fensterbilder und begründete
 Abweichungen: [H-FIDELITY.md](H-FIDELITY.md).
+Der jüngere [Artikel-/Aktionsabgleich](SECONDARY-ACTIONS.md) entfernt die
+zusätzliche Werkzeugzeile und gefüllte Zoomknöpfe. Funktionen bleiben im
+nativen Menü und über Kürzel erreichbar. Schriftrollen/Abstände und die
+aktuelle Windows-Hostfokus-Abnahme bleiben offen; keine vollständige H-Abnahme.
 Nachfolgende Fokusarbeiten und ihre abgegrenzten Plattformnachweise:
 [READING-FOCUS.md](READING-FOCUS.md), [PANE-NAVIGATION.md](PANE-NAVIGATION.md).
 [Windows-Fokuszustände](WINDOWS-FOCUS-STATE.md) ergänzt die aktuelle COM-Gegenprobe

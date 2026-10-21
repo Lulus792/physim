@@ -246,7 +246,9 @@ sind noch offen. Die verbindliche Richtung steht in [docs/design-direction.md](d
 in einem eigenen, frei verschiebbaren Fenster, auch ohne geöffnetes Projekt.
 Es kann neben Editor oder Simulation geöffnet bleiben. Themen, öffentliche Header und
 Abschnittsnavigation sind offline verfügbar. Ctrl+F sucht im aktuellen Dokument;
-Codebeispiele lassen sich kopieren. **Zurück zum Arbeitsbereich** fokussiert das Hauptfenster,
+Codebeispiele lassen sich kopieren. Rechtsklick im Artikel, Shift+F10 oder die
+Schriftgrößenangabe unten öffnen **Handbuchaktionen** für Verlauf, Start und Zoom.
+**Arbeitsbereich** in diesem Menü fokussiert das Hauptfenster,
 während die Dokumentation offen bleibt. Schließen oder Escape blendet nur das
 Dokumentationsfenster aus; F1 öffnet es mit Thema, Suchtext und Leseposition erneut.
 Die Hilfe zeigt Diagramme und die interaktive 3D-Erklärung direkt in Physim.

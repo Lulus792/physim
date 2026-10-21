@@ -630,7 +630,9 @@ Im Texteditor gelten außerdem die plattformüblichen Sprungbefehle:
 
 Mit zusätzlichem **Shift** wird der Text bis zum Ziel ausgewählt.
 
-Im Hilfefenster sucht **Ctrl+F** (macOS **Cmd+F**) nur im Artikel. Die Suche
+Im Hilfefenster sucht **Ctrl+F** (macOS **Cmd+F**) nur im Artikel. Das Suchfeld
+erscheint über dem Artikel, ohne dessen Größe zu verändern. Die Pfeile wechseln
+den Treffer; **Artikelsuche schließen** blendet das Feld wieder aus. Die Suche
 im gemeinsamen Kopf durchsucht den gewählten C- oder Physim-Lernweg, seine
 Artikel, Referenzen und registrierten Quellen. Die einmalige Sprachwahl im Kopf
 gilt auch für Anleitungen und den Beispielcode rechts. Gemeinsame Physikerklärungen
@@ -661,13 +663,20 @@ beim Schließen erhalten. Die beiden Icons, die Sprachwahl und die globale Suche
 bleiben im Kopf erreichbar. Ausgeblendete Seiteninhalte werden bei Tastatur und
 nativer Accessibility ausgelassen. F1 erhält die Ansicht innerhalb derselben Sitzung.
 
+Rechtsklick im Artikel, **Shift+F10**, die Kontextmenütaste oder ein Klick auf
+die Schriftgrößenangabe unten öffnen die **Handbuchaktionen**. Dort findest du
+Verlauf, **Start**, **Arbeitsbereich**, Artikelsuche und Leseschrift. Pfeile,
+Pos1/Ende und Tab wählen einen verfügbaren Eintrag; Enter oder Leertaste führt
+ihn aus. Escape schließt das Menü und kehrt zum vorherigen Fokus zurück.
+Die Standardansicht benötigt dafür keine zusätzliche Artikelwerkzeugleiste.
+
 **Zurück / Alt+Pfeil links** und **Vorwärts / Alt+Pfeil rechts** folgen dem
 Verlauf mit bis zu 64 besuchten Seiten und Abschnittszielen. Dabei bleiben
 Leseposition, Suchbegriff und Sprachweg erhalten. Eine neue
 Navigation nach Zurück verwirft nur den bisherigen Vorwärtszweig.
-Die Schaltflächen **Minus** und **Plus** oder **Ctrl/Cmd + Plus/Minus** ändern
-die Leseschrift zwischen 16 und 32 Pixeln. Ein Klick auf die angezeigte
-Schriftgröße in der Mitte oder **Ctrl/Cmd+0** übernimmt wieder die
+**Leseschrift verkleinern / vergrößern** im Menü oder **Ctrl/Cmd + Plus/Minus**
+ändern die Leseschrift zwischen 16 und 32 Pixeln. **Standardleseschrift** im
+Menü oder **Ctrl/Cmd+0** übernimmt wieder die
 eingestellten UI- und Codegrößen. Die Vergrößerung gilt für das Hilfefenster
 und bleibt beim Schließen und erneuten Öffnen während derselben Sitzung erhalten.
 32 Pixel entsprechen der doppelten Standardschrift von 16 Pixeln.
@@ -744,9 +753,11 @@ hier nicht geprüft.
 
 Im Handbuch beginnt Tab beim linken Paneel-Icon; Shift+Tab führt rückwärts.
 Es folgen die globale C-/Physim-Wahl, die globale Suche, das rechte Paneel-Icon,
-die sichtbaren Abschnittssprünge und Themen, Verlauf/Start/Arbeitsbereich,
-Schriftgröße, Artikelsuche, Treffersteuerung, Lesebereich und Textaktionen sowie
-die sichtbaren rechten Tabs und Codekopieren. Der Rahmen scrollt zum fokussierten
+die sichtbaren Abschnittssprünge und Themen, eine geöffnete Artikelsuche mit
+Treffersteuerung und Schließen, Lesebereich und Textaktionen sowie die sichtbaren
+rechten Tabs, Codekopieren und die Handbuchaktionen in der Statuszeile.
+Das Aktionsmenü enthält Verlauf, Start, Arbeitsbereich und Schriftgröße und ist
+auch mit Shift+F10 erreichbar. Der Rahmen scrollt zum fokussierten
 Eintrag. Enter oder Leertaste aktiviert eine Auswahl; in den rechten Tabs wechseln
 auch Links/Rechts den Tab. Suchfelder unterstützen die üblichen Texttasten.
 Tab schließt die Eingabe ab, ohne das letzte Zeichen zu verlieren.

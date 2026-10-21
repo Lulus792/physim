@@ -1,0 +1,253 @@
+{
+  "scope": "Bounded direct H-reference check of the clear article top and plain footer.\n\nThe reference contains a 35 px mock window title, the native PNG a client area.\nOnly explicitly listed flat samples are compared at their own coordinates;\nneither input is resized, cropped, recolored or masked. This is not a full H,\ntypography, content, interaction or platform-equivalence score. Pillow optional.",
+  "reference": "D:\\Physim\\docs\\visuals\\f1-layouts\\h-dark.png",
+  "native": "D:\\Physim\\docs\\visuals\\f1-layouts\\h-dark.png",
+  "sha256": [
+    "c9f74a90b12627f015a5d8c08fc0c58c7ff90aa0495d723b1512ba3a2317e72c",
+    "c9f74a90b12627f015a5d8c08fc0c58c7ff90aa0495d723b1512ba3a2317e72c"
+  ],
+  "sizes": [
+    [
+      1080,
+      808
+    ],
+    [
+      1080,
+      808
+    ]
+  ],
+  "native_title_height": 35,
+  "checks": [
+    {
+      "name": "same reference width",
+      "reference": 1080,
+      "native": 1080,
+      "points": null,
+      "passed": true
+    },
+    {
+      "name": "supported native client/reference size",
+      "reference": true,
+      "native": true,
+      "points": null,
+      "passed": true
+    },
+    {
+      "name": "clear article top at x=268",
+      "reference": [
+        25,
+        26,
+        30
+      ],
+      "native": [
+        25,
+        26,
+        30
+      ],
+      "points": {
+        "reference": [
+          268,
+          112
+        ],
+        "native": [
+          268,
+          112
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "clear article top at x=310",
+      "reference": [
+        25,
+        26,
+        30
+      ],
+      "native": [
+        25,
+        26,
+        30
+      ],
+      "points": {
+        "reference": [
+          310,
+          112
+        ],
+        "native": [
+          310,
+          112
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "clear article top at x=356",
+      "reference": [
+        25,
+        26,
+        30
+      ],
+      "native": [
+        25,
+        26,
+        30
+      ],
+      "points": {
+        "reference": [
+          356,
+          112
+        ],
+        "native": [
+          356,
+          112
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "clear article top at x=390",
+      "reference": [
+        25,
+        26,
+        30
+      ],
+      "native": [
+        25,
+        26,
+        30
+      ],
+      "points": {
+        "reference": [
+          390,
+          112
+        ],
+        "native": [
+          390,
+          112
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "clear article top at x=764",
+      "reference": [
+        25,
+        26,
+        30
+      ],
+      "native": [
+        25,
+        26,
+        30
+      ],
+      "points": {
+        "reference": [
+          764,
+          112
+        ],
+        "native": [
+          764,
+          112
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "clear article top at x=808",
+      "reference": [
+        25,
+        26,
+        30
+      ],
+      "native": [
+        25,
+        26,
+        30
+      ],
+      "points": {
+        "reference": [
+          808,
+          112
+        ],
+        "native": [
+          808,
+          112
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "plain footer at x=930",
+      "reference": [
+        32,
+        33,
+        37
+      ],
+      "native": [
+        32,
+        33,
+        37
+      ],
+      "points": {
+        "reference": [
+          930,
+          784
+        ],
+        "native": [
+          930,
+          784
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "plain footer at x=980",
+      "reference": [
+        32,
+        33,
+        37
+      ],
+      "native": [
+        32,
+        33,
+        37
+      ],
+      "points": {
+        "reference": [
+          980,
+          784
+        ],
+        "native": [
+          980,
+          784
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "plain footer at x=1050",
+      "reference": [
+        32,
+        33,
+        37
+      ],
+      "native": [
+        32,
+        33,
+        37
+      ],
+      "points": {
+        "reference": [
+          1050,
+          784
+        ],
+        "native": [
+          1050,
+          784
+        ]
+      },
+      "passed": true
+    }
+  ],
+  "passed": true
+}
