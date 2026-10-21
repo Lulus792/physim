@@ -7,6 +7,13 @@ nativ mit umzusetzen. Er ist kein optionaler zusätzlicher Entwurf mehr.
 und die native Abnahme fest. Diese Ergänzung gilt auch beim Fortsetzen des
 bereits laufenden nativen Referenzabgleichs.
 
+Der [native Export-Umsetzungsstand](GRAPHIC-EXPORT-NATIVE.md) enthält inzwischen
+die geprüfte gemeinsame Datenbasis für Berichtsdiagramme und bis zu acht
+Messläufe. Sichtbarer Mehrlaufcache, gemeinsame Grafikdarstellung, Dialog,
+Dateiauswahl und echte Bildkopie bleiben als nächster zusammenhängender Teil
+des vollständigen Auftrags umzusetzen. Die reine Datenprüfung ersetzt dessen
+native Abnahme ausdrücklich nicht.
+
 Aktueller nativer Folgeauftrag vom 20. Oktober: zuerst die gesamte Gestaltung
 einschließlich F1 direkt gegen die gewählten Referenzen angleichen. Der
 [native Abgleich](NATIVE-FIDELITY.md) nennt den aktuellen Zwischenstand und die

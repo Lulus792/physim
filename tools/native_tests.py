@@ -46,6 +46,7 @@ class Case:
 
 def catalog():
     cases = []
+    cases.append(Case("graphic_snapshot",("tests/test_graphic_snapshot.c","app/graphic_snapshot.c"),arguments=("{work}",)))
     linebreak=tuple(f"third_party/libunibreak-8.0/{name}.c" for name in "linebreak linebreakdata linebreakdef eastasianwidthdef unibreakbase unibreakdef".split())
     cases.append(Case("code_preview",("tests/test_code_preview.c","app/code_preview.c",*linebreak),libraries=()))
     cases.append(Case("code_linebreak",("tests/test_code_linebreak.c",*linebreak),libraries=("zlib",),defines=("Z_PREFIX",),arguments=("{source}/third_party/libunibreak-8.0/LineBreakTest.txt.gz",)))

@@ -49,6 +49,12 @@ zugehörigen Sitzungszustand. Abbrechen stellt keinen fremden Bereich um.
 
 ## Noch erforderliche Produktarbeit
 
+Der spätere [Export-Umsetzungsstand](GRAPHIC-EXPORT-NATIVE.md) ergänzt eine
+eigene, geprüfte Diagrammkopie und einen gemeinsamen Mehrlauf-Datenbaustein
+einschließlich Zeitachsen, Einheiten, Masken und vollständiger Statistik.
+Die sichtbare Datenansicht und der Exportdialog sind noch daran anzubinden;
+die folgenden Produktpunkte bleiben dadurch offen.
+
 | Anforderung | Aktueller, eingegrenzter Stand |
 | --- | --- |
 | Mehrere echte Rohdatenkurven | Noch offen. Die vorhandene Analyse kann mehrere Dateien erhalten; die neue Rohdatenansicht zeichnet weiterhin den ausdrücklich aktiven einzelnen Lauf. |

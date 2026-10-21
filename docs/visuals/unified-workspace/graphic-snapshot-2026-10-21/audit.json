@@ -1,0 +1,102 @@
+{
+  "created_utc": "2026-10-21T19:42:03.817578+00:00",
+  "scope": "Owned native diagram snapshots for the full approved graphic export and comparison pipeline; no dialog/render/clipboard completion claim.",
+  "checks": {
+    "frozen_source_files": 102,
+    "foreign_files_unchanged": 10,
+    "recorded_unit_runs": 14,
+    "final_groups_each_platform": 3,
+    "targeted_report_allocation_failures": 5,
+    "targeted_run_allocation_failures": 9,
+    "cooperative_cancel_boundaries": 8,
+    "final_scratch_or_input_files_left": 0,
+    "application_builds": 2,
+    "catalog_runs": 2,
+    "local_links": 119,
+    "python_json_syntax": true,
+    "git_diff_check": true,
+    "all_staged_owned_only": true,
+    "new_ui_or_clipboard_acceptance": false
+  },
+  "owned_files": [
+    "app/graphic_snapshot.c",
+    "app/graphic_snapshot.h",
+    "tests/test_graphic_snapshot.c",
+    "tools/build.py",
+    "tools/native_tests.py",
+    "docs/visuals/unified-workspace/GRAPHIC-EXPORT-NATIVE.md",
+    "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+    "docs/visuals/unified-workspace/NEXT-CHAT.md",
+    "docs/visuals/unified-workspace/ANALYSIS-NATIVE.md",
+    "docs/visuals/unified-workspace/README.md",
+    "docs/visuals/unified-workspace/graphic-snapshot-2026-10-21/audit.json",
+    "docs/visuals/unified-workspace/graphic-snapshot-2026-10-21/validation.json"
+  ],
+  "inputs": [
+    {
+      "path": "app/graphic_snapshot.c",
+      "bytes": 12239,
+      "sha256": "6c899b66d54d81109684b17c077ac2f8afd4eb8bb0db73af23bc75bcb75d9889"
+    },
+    {
+      "path": "app/graphic_snapshot.h",
+      "bytes": 3455,
+      "sha256": "cfd6000b4c79794158862b03a194c2b034c70f57353ea5abf0e0041ca6b18f82"
+    },
+    {
+      "path": "tests/test_graphic_snapshot.c",
+      "bytes": 17265,
+      "sha256": "81e4cfcc660da61106920757be4e202bc033025c573e5b5f0c296a1dace8dce5"
+    },
+    {
+      "path": "tools/build.py",
+      "bytes": 39600,
+      "sha256": "b7ee09d92ac5c63487a50127f92a79b1274ccf1021f8e7c068fbf604792a8454"
+    },
+    {
+      "path": "tools/native_tests.py",
+      "bytes": 42704,
+      "sha256": "c1860e2c50fb87ae76f49138655fe940730569fe8a4683aa9939eed54495f62c"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/GRAPHIC-EXPORT-NATIVE.md",
+      "bytes": 7395,
+      "sha256": "adce954e9bf9caf6aa983936208712f74da5bd70e93fa4ed4d9ed2050bbbcac1"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/NATIVE-FIDELITY.md",
+      "bytes": 13867,
+      "sha256": "94848e77ab08f5e98819852223fe73a450fe55455770edc17106dd70cb20a947"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/NEXT-CHAT.md",
+      "bytes": 10288,
+      "sha256": "f6e430b392d0ded6b77b81a30fe2eee03b833e4fd09f0569f65efda31f8e9d33"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/ANALYSIS-NATIVE.md",
+      "bytes": 12537,
+      "sha256": "3666cf80c12b9d90dbd2a183683e61d5df0ce249f58ddb5bd75f86e1776af3c5"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/README.md",
+      "bytes": 10499,
+      "sha256": "1cc2bda5480e46ebc65544c5df83adf8b57af3cc27d32c0764505d6690634347"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/graphic-snapshot-2026-10-21/validation.json",
+      "bytes": 168732,
+      "sha256": "f4967986c52c6b55432c50008b3076df1e80a3402f36a2d008ffcd215a9db6d5"
+    }
+  ],
+  "cleanup": "Successful fixtures delete only their own generated .psrun files; no bulk cleanup. All negative run evidence, existing UI references, programs and symbols retained.",
+  "limits": [
+    "No native export dialog or new graphic renderer is wired yet",
+    "No new PNG/SVG or native clipboard acceptance",
+    "No visible multi-run worker/cache is wired yet",
+    "No current macOS execution",
+    "App binaries include separately hashed foreign changes",
+    "Phase/block cancellation does not interrupt a running core import/reduction call",
+    "Full UI/design/export/project goal remains active"
+  ]
+}
