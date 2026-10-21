@@ -1,5 +1,9 @@
 # Windows: tatsächlicher Fokus und gespeichertes Fokusziel
 
+Aktuelle Wiederholungsprüfung vom 21. Oktober 2026:
+[24 native F1-Zustände und unabhängiger Win32-Fokus](WINDOWS-FOCUS-CURRENT.md).
+Die folgende Untersuchung dokumentiert ihren damaligen Quellstand.
+
 Die Untersuchung setzt auf dem H-/F6-Stand c01ac79 auf. Die anschließenden
 Projektanweisungen und Designstudien bleiben erhalten. Die konservative
 Gesamtwertung UI 8/10, Dokumentationsaufgabe 8/10 und Barrierefreiheit 5/10
