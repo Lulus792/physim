@@ -1,0 +1,14 @@
+[
+  {
+    "command": [
+      "/mnt/d/Physim/build/native/Graphic-unit-linux/bin/physim-test-graphic_figure",
+      "/mnt/d/Physim/build/native/Graphic-unit-linux/test-results/run-ow0g1wc3/graphic_figure"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "GRAPHIC FIGURE OWNERSHIP: 3 scene and 5 SVG allocation failures, detached text/data and sink failure passed\nGRAPHIC FIGURE LIMITS: command/SVG budgets release all ownership; finite overflow clipping and six distinct large-offset ticks survive\nGRAPHIC FIGURE: canonical layout, explicit reference, independent axes, masks, dashes, scatter, histograms, full XY crop, themes and bounded numeric errors passed\n",
+    "stderr": "",
+    "seconds": 0.217,
+    "name": "graphic_figure"
+  }
+]

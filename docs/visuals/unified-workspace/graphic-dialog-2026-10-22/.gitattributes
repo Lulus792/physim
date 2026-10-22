@@ -1,0 +1,7 @@
+*.json text eol=lf
+*.log -text whitespace=cr-at-eol
+*.gdb -text whitespace=cr-at-eol
+*.sh text eol=lf
+*.svg -text
+*.png binary
+*.gz binary

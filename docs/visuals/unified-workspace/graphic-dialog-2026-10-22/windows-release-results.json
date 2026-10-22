@@ -1,0 +1,95 @@
+[
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+        "sha256": "ed0394b5bfc540aca7805a095511d1b87ed47b9894253221f943dc0e8db4d2dd"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_display_workflow.py",
+          "window_smoke",
+          "--app",
+          "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+          "--work",
+          "D:\\Physim\\build\\native\\Release\\test-results\\run-t76tws90\\window_smoke\\files \u00e4",
+          "--root",
+          "D:\\Physim",
+          "--cc",
+          "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nwindow_smoke: app workflow and persisted files passed\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 646583.039478\nAPP TEST TRACE: main font sources ready 646583.121567\nAPP TEST TRACE: main atlas bake seconds=0.433559\nAPP TEST TRACE: main atlas validation/upload seconds=0.011429\nAPP TEST TRACE: main fonts ready 646583.579621\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\n",
+        "seconds": 1.969,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "D:\\Physim\\build\\native\\Release\\test-results\\run-t76tws90\\window_smoke\\files \u00e4\\app-steps.json",
+            "bytes": 881,
+            "sha256": "aafa30669f85faf8287f17db6c6ea2a8900a23f1e54f368c77b3e1e1d8a7e4ce"
+          }
+        ]
+      }
+    ],
+    "seconds": 2.0,
+    "reason": "",
+    "name": "window_smoke"
+  },
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+        "sha256": "ed0394b5bfc540aca7805a095511d1b87ed47b9894253221f943dc0e8db4d2dd"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_graphic_dialog.py",
+          "--app",
+          "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+          "--root",
+          "D:\\Physim",
+          "--work",
+          "D:\\Physim\\build\\native\\Release\\test-results\\run-t76tws90\\graphic_dialog\\files \u00e4"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "graphic_dialog: native UI, frozen preview, save/cancel/error and independent clipboard RGB passed\n",
+        "stderr": "",
+        "seconds": 7.89,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "D:\\Physim\\build\\native\\Release\\test-results\\run-t76tws90\\graphic_dialog\\files \u00e4\\app-steps.json",
+            "bytes": 21340,
+            "sha256": "b0a75e6bc021d07883587e586390502f50c3ed12bcab91e25bb311c12ef3b434"
+          }
+        ]
+      }
+    ],
+    "seconds": 7.906,
+    "reason": "",
+    "name": "graphic_dialog"
+  }
+]

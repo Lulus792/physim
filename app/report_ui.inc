@@ -14,7 +14,30 @@ static void report_plot(app *a, uint32_t index, float height) {
         return;
     ps_plot_view *view = &a->report_views[index];
     ps_result bounds_result = ps_report_plot_bounds(a->analysis_report, index, b);
-    plot_controls(a, view, bounds_result == PS_OK ? b : NULL);
+    if(!view->initialized)ps_plot_view_reset(view);
+    nk_layout_row_dynamic(ui,34*a->preferences.ui_size/16.f,1);
+    struct nk_rect tools;nk_widget(&tools,ui);
+    float f=a->preferences.ui_size/16.f,x=tools.x;
+    const char *labels[]={"+","−","Alles zeigen","Grafik exportieren…"};
+    const char *actions[]={"Zoom +","Zoom -","Alles zeigen","Grafik exportieren…"};
+    const float widths[]={28,28,82,157};
+    const struct nk_user_font *font=&a->workbench_fonts[0];
+    for(unsigned i=0;i<4;i++) {
+        struct nk_rect button=nk_rect(x,tools.y,widths[i]*f,29*f);x+=button.w+4*f;
+        if(i<3)a->plot_buttons[i]=button;else a->result_export_bounds[2]=button;
+        struct nk_command_buffer *c=nk_window_get_canvas(ui);
+        bool focus=nk_sdl_accessibility_is_focused(ui,NULL,actions[i]);
+        nk_stroke_rect(c,button,5*f,focus?2:1,focus?UI_COLOR(accent):UI_COLOR(border));
+        float tw=font->width(font->userdata,font->height,labels[i],(int)strlen(labels[i]));
+        nk_draw_text(c,nk_rect(button.x+(button.w-tw)/2,button.y+(button.h-font->height)/2,tw+1,font->height),
+                     labels[i],(int)strlen(labels[i]),font,nk_rgba(0,0,0,0),i==3?UI_COLOR(accent):UI_COLOR(text));
+        nk_begin_disabled(ui,bounds_result!=PS_OK);
+        if(ps_ui_button_at(ui,button,actions[i],false)) {
+            if(i==3)graphic_export_report(a,index);
+            else {if(i==2)ps_plot_view_reset(view);else ps_plot_view_zoom(view,i==0?2:.5,.5,.5);a->plot_drag=NULL;}
+        }
+        nk_end_disabled(ui);
+    }
     nk_layout_row_dynamic(ui, 24, 1);
     char label[256];
     snprintf(label, sizeof label, "%s%s%s%s", p.y_label,p.y_unit.symbol[0]?" [":"",
@@ -187,10 +210,10 @@ static void report_view(app *a, float height) {
     if (a->result_view < 0 || (uint32_t)a->result_view > plots + tables)
         a->result_view = 0;
     nk_layout_row_begin(ui, NK_DYNAMIC, 32, 2);
-    nk_layout_row_push(ui, .75f);
+    nk_layout_row_push(ui, .88f);
     a->result_view =
         nk_combo(ui, names, (int)(plots + tables + 1), a->result_view, 30, nk_vec2(580, 260));
-    nk_layout_row_push(ui, .25f);
+    nk_layout_row_push(ui, .12f);
     a->report_details_bounds = nk_widget_bounds(ui);
     if (action_button(ui, "Details", (uint32_t)a->result_view == plots + tables))
         a->result_view = (int)(plots + tables);
@@ -205,53 +228,16 @@ static void report_view(app *a, float height) {
         report_details_view(a, provenance, height);
         return;
     }
-    nk_layout_row_dynamic(ui, 30, a->preferences.ui_size>=20?2:3);
     bool is_plot = (uint32_t)a->result_view < plots;
-    bool cropped = is_plot && ps_plot_view_changed(&a->report_views[a->result_view]);
-    a->result_export_bounds[0] = nk_widget_bounds(ui);
-    if (nk_button_label(ui, is_plot ? (cropped ? "CSV · Alle Daten" : "CSV · Diagrammdaten")
-                                    : "Tabelle als CSV"))
-        report_export(a, REPORT_CSV);
-    nk_begin_disabled(ui, !is_plot);
-    a->result_export_bounds[1] = nk_widget_bounds(ui);
-    if (nk_button_label(ui, cropped ? "SVG · Gesamt" : "SVG · Diagramm"))
-        report_export(a, REPORT_SVG);
-    a->result_export_bounds[2] = nk_widget_bounds(ui);
-    if (nk_button_label(ui, cropped ? "PNG · Gesamt" : "PNG · Diagramm"))
-        report_export(a, REPORT_PNG);
-    nk_end_disabled(ui);
+    /* Data export stays separate from the graphic dialog. */
+    nk_layout_row_static(ui,28,172,1);
+    a->result_export_bounds[0]=nk_widget_bounds(ui);
+    if(nk_button_label(ui,is_plot?"CSV · Diagrammdaten":"Tabelle als CSV"))report_export(a,REPORT_CSV);
     if (is_plot) {
-        const char *sizes[] = {"1200 × 850", "2400 × 1700", "3600 × 2550", "4800 × 3400"};
-        float available=nk_window_get_content_region(ui).w;
-        bool compact=available<740;
-        nk_layout_row_begin(ui,NK_STATIC,26,compact?2:4);
-        float label_width=150*(a->preferences.ui_size/16.f);
-        nk_layout_row_push(ui,label_width);
-        nk_label(ui, "PNG-Größe (Pixel)", NK_TEXT_LEFT);
-        nk_layout_row_push(ui,compact?fmaxf(120,fminf(230,available-label_width-8)):230);
-        a->png_size_bounds = nk_widget_bounds(ui);
-        if (nk_combo_begin_label(ui, sizes[a->png_scale - 1], nk_vec2(230, 145))) {
-            nk_layout_row_dynamic(ui, 28, 1);
-            for (int i = 0; i < 4; i++) {
-                a->png_size_choices[i] = nk_widget_bounds(ui);
-                if (nk_combo_item_label(ui, sizes[i], NK_TEXT_LEFT)) a->png_scale = i + 1;
-            }
-            nk_combo_end(ui);
-        }
-        if(compact){nk_layout_row_end(ui);nk_layout_row_dynamic(ui,30,2);}
-        else nk_layout_row_push(ui,160);
-        nk_begin_disabled(ui, !cropped);
-        a->png_region_bounds = nk_widget_bounds(ui);
-        if (nk_button_label(ui, "PNG · Ausschnitt")) report_export(a, REPORT_PNG_REGION);
-        if(!compact)nk_layout_row_push(ui,160);
-        a->svg_region_bounds = nk_widget_bounds(ui);
-        if (nk_button_label(ui, "SVG · Ausschnitt")) report_export(a, REPORT_SVG_REGION);
-        nk_end_disabled(ui);
-        if(!compact)nk_layout_row_end(ui);
         ps_plot_info selected;
         ps_report_plot_read(a->analysis_report, (uint32_t)a->result_view, &selected);
         float legend_height = (float)((selected.curves + 1) / 2) * 30;
-        report_plot(a, (uint32_t)a->result_view, fmaxf(170, height - 464 - legend_height));
+        report_plot(a, (uint32_t)a->result_view, fmaxf(170, height - 348 - legend_height));
     } else {
         uint32_t index = (uint32_t)a->result_view - plots;
         ps_table_info table;

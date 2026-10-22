@@ -9,7 +9,9 @@ begrenzte Nachweise und die noch offenen Unterschiede aller vier Bereiche.
 Der [native Grafikexport-Umsetzungsstand](GRAPHIC-EXPORT-NATIVE.md) dokumentiert
 die geprüfte Datenbasis, [Zeichenbeschreibung und SVG](GRAPHIC-FIGURE-NATIVE.md)
 sowie den [nativen Rasteradapter mit PNG und Vorschautextur](GRAPHIC-RASTER-NATIVE.md).
-Dialog- und Plattformschritte des Exports bleiben weiter beauftragt.
+Der [sichtbare native Berichtsdialog](GRAPHIC-DIALOG-NATIVE.md) ergänzt jetzt
+Vorschau, Optionen, Speichern und echte Bildkopie. Mehrlaufzugang und vollständige
+Design-/Plattformabnahme des Exports bleiben weiter beauftragt.
 Eine Browserprüfung ist weiterhin keine vollständige native Abnahme.
 Die [aktuellen Nutzerbefunde](USER-REVIEW-2026-10-21.md) und der folgende
 [native Komponentenabgleich](COMPONENTS-NATIVE.md) führen weitere sichtbare

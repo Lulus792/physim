@@ -1,0 +1,169 @@
+Breakpoint 1 at 0xdc73e2: file /mnt/d/Physim/app/graphic_export_ui.inc, line 387.
+Breakpoint 2 at 0x12494fb: file /mnt/d/Physim/third_party/nuklear.h, line 20692.
+APP TEST TRACE: initializing SDL
+[Detaching after fork from child process 2841]
+APP TEST TRACE: SDL initialized, video driver x11
+APP TEST TRACE: creating window
+[New LWP 2846]
+[New LWP 2847]
+[New LWP 2848]
+[New LWP 2849]
+[New LWP 2850]
+[New LWP 2851]
+[New LWP 2852]
+[New LWP 2853]
+[New LWP 2854]
+[New LWP 2855]
+[New LWP 2856]
+[New LWP 2857]
+[New LWP 2858]
+[New LWP 2859]
+[New LWP 2860]
+[New LWP 2861]
+[New LWP 2862]
+APP TEST TRACE: window created, creating OpenGL context
+OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)
+APP TEST TRACE: window and OpenGL ready
+[Detaching after fork from child process 2863]
+[New LWP 2871]
+APP TEST TRACE: main fonts begin 928.947293
+APP TEST TRACE: main font sources ready 929.689960
+APP TEST TRACE: main atlas bake seconds=2.082070
+APP TEST TRACE: main atlas validation/upload seconds=0.036090
+APP TEST TRACE: main fonts ready 931.836412
+[New LWP 2877]
+APP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.
+[LWP 2877 exited]
+[New LWP 2878]
+[LWP 2878 exited]
+APP TEST TRACE: stage 0 -> 1, status 5 Messpunkte geladen.
+APP TEST TRACE: stage 1 -> 2, status 5 Messpunkte geladen.
+APP TEST TRACE: stage 2 -> 3, status 5 Messpunkte geladen.
+APP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=4893093557
+APP TEST TRACE: stage 3 -> 4, status 5 Messpunkte geladen.
+APP TEST TRACE: stage 4 -> 5, status 5 Messpunkte geladen.
+APP TEST TRACE: stage 5 -> 6, status 5 Messpunkte geladen.
+APP TEST TRACE: stage 6 -> 7, status 5 Messpunkte geladen.
+APP TEST TRACE: stage 7 -> 8, status 5 Messpunkte geladen.
+APP TEST TRACE: stage 8 -> 80, status 5 Messpunkte geladen.
+APP TEST TRACE: stage 80 -> 9, status 5 Messpunkte geladen.
+APP TEST TRACE: stage 9 -> 10, status 5 Messpunkte geladen.
+APP TEST TRACE: stage 10 -> 11, status 5 Messpunkte geladen.
+APP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=6488331539
+APP TEST TRACE: stage 11 -> 12, status 5 Messpunkte geladen.
+APP TEST TRACE: stage 12 -> 13, status Export gespeichert. Pfad im Protokoll.
+APP TEST TRACE: stage 13 -> 14, status Export gespeichert. Pfad im Protokoll.
+APP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=6570459077
+APP TEST TRACE: stage 14 -> 15, status Export gespeichert. Pfad im Protokoll.
+APP TEST TRACE: stage 15 -> 16, status Export gespeichert. Pfad im Protokoll.
+APP TEST TRACE: stage 16 -> 17, status Export gespeichert. Pfad im Protokoll.
+APP TEST TRACE: stage 17 -> 18, status Export gespeichert. Pfad im Protokoll.
+APP TEST TRACE: stage 18 -> 19, status Export gespeichert. Pfad im Protokoll.
+APP TEST TRACE: stage 19 -> 81, status Export gespeichert. Pfad im Protokoll.
+APP TEST TRACE: stage 81 -> 20, status Export gespeichert. Pfad im Protokoll.
+APP TEST TRACE: stage 20 -> 21, status Export gespeichert. Pfad im Protokoll.
+APP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=7227292445
+APP TEST TRACE: stage 21 -> 22, status Export gespeichert. Pfad im Protokoll.
+APP TEST TRACE: stage 22 -> 23, status Export gespeichert. Pfad im Protokoll.
+APP TEST TRACE: stage 23 -> 24, status Export gespeichert. Pfad im Protokoll.
+APP TEST TRACE: stage 24 -> 25, status Export gespeichert. Pfad im Protokoll.
+APP TEST TRACE: stage 25 -> 26, status Export gespeichert. Pfad im Protokoll.
+APP TEST TRACE: stage 26 -> 27, status Export gespeichert. Pfad im Protokoll.
+[New LWP 2879]
+[LWP 2879 exited]
+APP TEST TRACE: stage 27 -> 28, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: stage 28 -> 29, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: stage 29 -> 30, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: stage 30 -> 31, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: stage 31 -> 32, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=9222831884
+APP TEST TRACE: stage 32 -> 33, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: stage 33 -> 34, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: stage 34 -> 35, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=9297600077
+APP TEST TRACE: stage 35 -> 36, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+GRAPHIC DIALOG RASTER: scale=2 visible=0 dark=0 seconds=0.189316 result=OK
+APP TEST TRACE: stage 36 -> 37, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: accessibility blur event=1025 focused=138 pending=0 window=2 keyboard=2 ticks=10096235408
+APP TEST TRACE: stage 37 -> 38, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+[New LWP 2880]
+[LWP 2880 exited]
+APP TEST TRACE: stage 38 -> 39, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: stage 39 -> 40, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=16375636574
+APP TEST TRACE: stage 40 -> 41, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: stage 41 -> 42, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=16501839306
+APP TEST TRACE: stage 42 -> 43, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: stage 43 -> 44, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+GRAPHIC DIALOG RASTER: scale=1 visible=0 dark=0 seconds=0.156175 result=OK
+APP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=16786968058
+APP TEST TRACE: stage 44 -> 45, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+[New LWP 2881]
+[LWP 2881 exited]
+APP TEST TRACE: stage 45 -> 46, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=17035185445
+APP TEST TRACE: stage 46 -> 47, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: stage 47 -> 48, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=17155866529
+APP TEST TRACE: stage 48 -> 49, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: stage 49 -> 50, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+GRAPHIC DIALOG RASTER: scale=4 visible=0 dark=0 seconds=0.366731 result=OK
+APP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=18147979374
+APP TEST TRACE: stage 50 -> 51, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+[New LWP 2882]
+[LWP 2882 exited]
+APP TEST TRACE: stage 51 -> 204, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=19196903261
+APP TEST TRACE: stage 204 -> 205, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: stage 205 -> 206, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=19318181815
+APP TEST TRACE: stage 206 -> 207, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: stage 207 -> 52, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+GRAPHIC DIALOG RASTER: scale=1 visible=1 dark=0 seconds=0.174070 result=OK
+APP TEST TRACE: stage 52 -> 53, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=19675591250
+APP TEST TRACE: stage 53 -> 54, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+[New LWP 2883]
+[LWP 2883 exited]
+APP TEST TRACE: stage 54 -> 200, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=20643228368
+APP TEST TRACE: stage 200 -> 201, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: stage 201 -> 202, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=20762058507
+APP TEST TRACE: stage 202 -> 203, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+[New LWP 2884]
+[LWP 2884 exited]
+APP TEST TRACE: stage 203 -> 208, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: stage 208 -> 210, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: stage 210 -> 211, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+GRAPHIC DIALOG RASTER: scale=2 visible=0 dark=0 seconds=0.200432 result=OK
+APP TEST TRACE: publication cleared focus id=224 window=2 ticks=21394301470
+APP TEST TRACE: stage 211 -> 212, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+APP TEST TRACE: stage 212 -> 213, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+GRAPHIC DIALOG FOCUS: granted=PNG
+APP TEST TRACE: stage 213 -> 214, status Analyseergebnis geladen. Diagramme und Tabellen sind bereit.
+BEFORE_END n=1 win=0x77b18d26e4d0 flags=0 rowtype=6 rowheight=52.457 rowindex=33 columns=100 at_y=10 bounds=10,10,653,713 scrollbar=0 offset=0 focus=0 total=1460.1
+AFTER_SCROLL n=1 target=52 result=0 offset=0 rowheight=52.457 at_y=62.457 bounds_h=713 flags=0 active=1 wheel=0 keys=0,0,0,0
+APP TEST TRACE: publication cleared focus id=265 window=2 ticks=22538771312
+BEFORE_END n=2 win=0x77b18d26e4d0 flags=0 rowtype=6 rowheight=52.457 rowindex=33 columns=100 at_y=10 bounds=10,10,653,713 scrollbar=0 offset=0 focus=0 total=1460.1
+AFTER_SCROLL n=2 target=52 result=0 offset=0 rowheight=52.457 at_y=62.457 bounds_h=713 flags=0 active=1 wheel=0 keys=0,0,0,0
+GRAPHIC DIALOG FOCUS: tab=1 target=SVG
+BEFORE_END n=3 win=0x77b18d26e4d0 flags=0 rowtype=6 rowheight=52.457 rowindex=33 columns=100 at_y=10 bounds=10,10,653,713 scrollbar=209 offset=209 focus=3 total=1460.1
+AFTER_SCROLL n=3 target=52 result=0 offset=0 rowheight=52.457 at_y=62.457 bounds_h=713 flags=0 active=1 wheel=0 keys=0,0,0,0
+GRAPHIC DIALOG FOCUS: reveal=3 scroll=0.0->209 target=843.0/82.0 viewport=18.0/716.0
+BEFORE_END n=4 win=0x77b18d26e4d0 flags=0 rowtype=6 rowheight=52.457 rowindex=33 columns=100 at_y=10 bounds=10,10,653,713 scrollbar=209 offset=209 focus=3 total=1460.1
+AFTER_SCROLL n=4 target=52 result=0 offset=0 rowheight=52.457 at_y=62.457 bounds_h=713 flags=0 active=1 wheel=0 keys=0,0,0,0
+GRAPHIC DIALOG FOCUS: reveal=3 scroll=0.0->209 target=843.0/82.0 viewport=18.0/716.0
+BEFORE_END n=5 win=0x77b18d26e4d0 flags=0 rowtype=6 rowheight=52.457 rowindex=33 columns=100 at_y=10 bounds=10,10,653,713 scrollbar=209 offset=209 focus=3 total=1460.1
+AFTER_SCROLL n=5 target=52 result=0 offset=0 rowheight=52.457 at_y=62.457 bounds_h=713 flags=0 active=1 wheel=0 keys=0,0,0,0
+GRAPHIC DIALOG FOCUS: reveal=3 scroll=0.0->209 target=843.0/82.0 viewport=18.0/716.0
+BEFORE_END n=6 win=0x77b18d26e4d0 flags=0 rowtype=6 rowheight=52.457 rowindex=33 columns=100 at_y=10 bounds=10,10,653,713 scrollbar=209 offset=209 focus=3 total=1460.1
+AFTER_SCROLL n=6 target=52 result=0 offset=0 rowheight=52.457 at_y=62.457 bounds_h=713 flags=0 active=1 wheel=0 keys=0,0,0,0
+GRAPHIC DIALOG FOCUS: reveal=3 scroll=0.0->209 target=843.0/82.0 viewport=18.0/716.0
+BEFORE_END n=7 win=0x77b18d26e4d0 flags=0 rowtype=6 rowheight=52.457 rowindex=33 columns=100 at_y=10 bounds=10,10,653,713 scrollbar=209 offset=209 focus=3 total=1460.1
+AFTER_SCROLL n=7 target=52 result=0 offset=0 rowheight=52.457 at_y=62.457 bounds_h=713 flags=0 active=1 wheel=0 keys=0,0,0,0
+GRAPHIC DIALOG FOCUS: reveal=3 scroll=0.0->209 target=843.0/82.0 viewport=18.0/716.0
+BEFORE_END n=8 win=0x77b18d26e4d0 flags=0 rowtype=6 rowheight=52.457 rowindex=33 columns=100 at_y=10 bounds=10,10,653,713 scrollbar=209 offset=209 focus=3 total=1460.1
+AFTER_SCROLL n=8 target=52 result=0 offset=0 rowheight=52.457 at_y=62.457 bounds_h=713 flags=0 active=1 wheel=0 keys=0,0,0,0
+DIAGNOSTIC ONLY: intentionally stop own inferior after eight complete sheet/scroll probes. No application completion claimed.

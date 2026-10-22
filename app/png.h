@@ -7,4 +7,8 @@
  * zlib. Compression size may vary; decoded RGB bytes are always unchanged. */
 ps_result ps_png_write(const char *path, const unsigned char *rgb, unsigned width, unsigned height,
                        size_t stride);
+/* Identical encoder into owned malloc storage; free(*out) after use. Failure
+ * preserves both outputs. Used for native clipboard and immutable save jobs. */
+ps_result ps_png_encode(const unsigned char *rgb,unsigned width,unsigned height,size_t stride,
+                        unsigned char **out,size_t *size);
 #endif

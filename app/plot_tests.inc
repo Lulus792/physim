@@ -247,6 +247,37 @@ static void test_scene_key(app *a, SDL_Keycode key, SDL_Keymod mod, bool repeat)
     e.key.repeat = false;
     SDL_PushEvent(&e);
 }
+static bool test_graphic_jobs(app *a) {
+    char path[4096];
+    for(unsigned test=0;test<4;test++) {
+        ps_graphic_bytes bytes={malloc(4),4};if(!bytes.data)return false;memcpy(bytes.data,"test",4);
+        ps_graphic_save *job=ps_graphic_save_create(&bytes);if(!job){ps_graphic_bytes_free(&bytes);return false;}
+        join(path,sizeof path,a->project,test==1?"runs":"atomic-output.txt");
+        if(test<2)ps_graphic_save_resolve(job,NULL,test==1);
+        else ps_graphic_save_resolve(job,test==2?path:a->project,false);
+        ps_graphic_save_state state=PS_GRAPHIC_SAVE_WAITING;
+        Uint64 end=SDL_GetTicks()+2000;
+        do {state=ps_graphic_save_poll(job);if(state==PS_GRAPHIC_SAVE_WAITING || state==PS_GRAPHIC_SAVE_WRITING)SDL_Delay(1);else break;}while(SDL_GetTicks()<end);
+        ps_graphic_save_state expected=test==0?PS_GRAPHIC_SAVE_CANCELLED:test==2?PS_GRAPHIC_SAVE_OK:PS_GRAPHIC_SAVE_ERROR;
+        bool ok=state==expected;
+        ps_graphic_save_destroy(job);if(!ok)return false;
+        if(test==2) {
+            size_t size;void *data=SDL_LoadFile(path,&size);ok=data && size==4 && !memcmp(data,"test",4);SDL_free(data);if(!ok)return false;
+        }
+    }
+    SDL_PathInfo info;return SDL_GetPathInfo(a->project,&info) && info.type==SDL_PATHTYPE_DIRECTORY;
+}
+static bool test_graphic_reveal(app *a,struct nk_rect target) {
+    static unsigned settling;
+    if(settling){settling--;return false;}
+    graphic_dialog *d=a->graphic_export;if(!d || target.w<=0 || target.h<=0)return false;
+    struct nk_rect viewport=d->bounds;
+    if(target.y<viewport.y+8 || target.y+target.h>viewport.y+viewport.h-14) {
+        test_plot_wheel(a,viewport.x+viewport.w*.5f,viewport.y+viewport.h*.5f,target.y<viewport.y+8?6:-6);
+        settling=2;return false;
+    }
+    return true;
+}
 static void test_plot_frame(app *a, int *stage, int *code, const char **capture) {
     static ps_plot_view panned, raw;
     static struct nk_rect pick_target;
@@ -407,80 +438,222 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
         break;
     case 34:
         ok = fabs((a->report_views[3].high[0] - a->report_views[3].low[0]) - .8192) < 1e-9;
-        test_mouse(a, a->result_export_bounds[2], true);
-        break;
-    case 35:
-        test_mouse(a, a->result_export_bounds[2], false);
-        break;
+        test_mouse(a, a->result_export_bounds[2], true);break;
+    case 35: test_mouse(a,a->result_export_bounds[2],false);break;
     case 36:
-        break;
-    case 37: {
-        double export_started=ps_clock();fprintf(stderr,"PLOT EXPORT PROFILE: regular images begin\n");
-        size_t count = 0;
-        unsigned char *exported = SDL_LoadFile(a->result_export, &count);
-        ok = exported && count > 33 && !memcmp(exported, "\211PNG\r\n\032\n", 8);
-        for (uint32_t i = 0; ok && i < 4; i++) {
-            char path[4096], name[64];
-            snprintf(name, sizeof name, "figure-%u.png", i);
-            join(path, sizeof path, a->project, name);
-            ok = ps_report_image(a->ui, a->font_ui, a->analysis_report, i, path) == PS_OK;
-            if (ok && i == 3) {
-                size_t size = 0;
-                void *full = SDL_LoadFile(path, &size);
-                ok = full && size == count && !memcmp(full, exported, count) &&
-                     ps_report_image(a->ui, a->font_ui, a->analysis_report, i, path) == PS_IO;
-                SDL_free(full);
-            }
+        if(!test_graphic_reveal(a,a->graphic_export->store))return;
+        ok=a->graphic_export && a->graphic_export->raster && a->graphic_export->scale==2 &&
+            !a->graphic_export->visible && !a->graphic_export->appearance;
+        if(!ok)break;
+        *capture="plot-export-dialog.bmp";
+        join(a->graphic_export_test_path,sizeof a->graphic_export_test_path,a->project,"native-export.png");
+        test_mouse(a,a->graphic_export->store,true);break;
+    case 37: test_mouse(a,a->graphic_export->store,false);break;
+    case 38: {
+        if(a->graphic_export->save)return;
+        ok=test_plot_png_size(a->result_export,2400,1700);
+        char expected[4096];join(expected,sizeof expected,a->project,"native-preview.png");
+        if(ok)ok=ps_graphics_image_png(ps_graphic_raster_image(a->graphic_export->raster),expected)==PS_OK;
+        size_t count=0,bytes=0;void *actual=SDL_LoadFile(a->result_export,&count),*want=SDL_LoadFile(expected,&bytes);
+        ok=ok && actual && want && count==bytes && !memcmp(actual,want,count);SDL_free(actual);SDL_free(want);
+        for(uint32_t i=0;ok && i<4;i++) {
+            char path[4096],name[64];snprintf(name,sizeof name,"figure-%u.png",i);join(path,sizeof path,a->project,name);
+            ok=ps_report_image(a->ui,a->font_ui,a->analysis_report,i,path)==PS_OK &&
+                ps_report_image(a->ui,a->font_ui,a->analysis_report,i,path)==PS_IO;
         }
-        SDL_free(exported);
-        fprintf(stderr,"PLOT EXPORT PROFILE: regular images %.6f s; dense begin\n",ps_clock()-export_started);export_started=ps_clock();
-        if (ok)
-            ok = test_plot_dense_image(a);
-        fprintf(stderr,"PLOT EXPORT PROFILE: dense %.6f s; scaled images begin\n",ps_clock()-export_started);export_started=ps_clock();
-        if (ok)
-            ok = a->png_scale == 2 && test_plot_scaled_images(a);
-        fprintf(stderr,"PLOT EXPORT PROFILE: scaled images %.6f s\n",ps_clock()-export_started);
-        *capture = "plot-after-png.bmp";
-        break;
-    } break;
-    case 38: test_mouse(a, a->png_size_bounds, true); break;
-    case 39: test_mouse(a, a->png_size_bounds, false); break;
-    case 40: test_mouse(a, a->png_size_choices[0], true); break;
-    case 41: test_mouse(a, a->png_size_choices[0], false); break;
-    case 42:
-        ok = a->png_scale == 1;
-        test_mouse(a, a->result_export_bounds[2], true);
-        break;
-    case 43: test_mouse(a, a->result_export_bounds[2], false); break;
-    case 44:
-        ok = test_plot_png_size(a->result_export, 1200, 850);
-        test_mouse(a, a->png_size_bounds, true);
-        break;
-    case 45: test_mouse(a, a->png_size_bounds, false); break;
-    case 46: test_mouse(a, a->png_size_choices[3], true); break;
-    case 47: test_mouse(a, a->png_size_choices[3], false); break;
-    case 48:
-        ok = a->png_scale == 4;
-        *capture = "plot-png-size.bmp";
-        test_mouse(a, a->result_export_bounds[2], true);
-        break;
-    case 49: test_mouse(a, a->result_export_bounds[2], false); break;
-    case 50:
-        ok = test_plot_png_size(a->result_export, 4800, 3400);
-        a->png_scale = 1;
-        test_mouse(a, a->png_region_bounds, true);
-        break;
-    case 51: test_mouse(a, a->png_region_bounds, false); break;
+        if(ok)ok=test_plot_dense_image(a) && test_plot_scaled_images(a);
+        *capture="plot-after-png.bmp";break;
+    }
+    case 39:
+        if(!test_graphic_reveal(a,a->graphic_export->fields[2]))return;test_mouse(a,a->graphic_export->fields[2],true);break;
+    case 40:test_mouse(a,a->graphic_export->fields[2],false);break;
+    case 41:test_mouse(a,a->graphic_export->choices[2][0],true);break;
+    case 42:test_mouse(a,a->graphic_export->choices[2][0],false);break;
+    case 43:
+        if(!test_graphic_reveal(a,a->graphic_export->store))return;
+        ok=a->graphic_export->scale==1;
+        join(a->graphic_export_test_path,sizeof a->graphic_export_test_path,a->project,"native-scale1.png");
+        test_mouse(a,a->graphic_export->store,true);break;
+    case 44:test_mouse(a,a->graphic_export->store,false);break;
+    case 45:
+        if(!test_graphic_reveal(a,a->graphic_export->fields[2]))return;
+        if(a->graphic_export->save)return;
+        ok=test_plot_png_size(a->result_export,1200,850);test_mouse(a,a->graphic_export->fields[2],true);break;
+    case 46:test_mouse(a,a->graphic_export->fields[2],false);break;
+    case 47:test_mouse(a,a->graphic_export->choices[2][3],true);break;
+    case 48:test_mouse(a,a->graphic_export->choices[2][3],false);break;
+    case 49:
+        if(!test_graphic_reveal(a,a->graphic_export->store))return;
+        ok=a->graphic_export->scale==4;*capture="plot-png-size.bmp";
+        join(a->graphic_export_test_path,sizeof a->graphic_export_test_path,a->project,"native-scale4.png");
+        test_mouse(a,a->graphic_export->store,true);break;
+    case 50:test_mouse(a,a->graphic_export->store,false);break;
+    case 51:
+        if(a->graphic_export->save)return;
+        if(!test_plot_png_size(a->result_export,4800,3400)){ok=false;break;}
+        if(!test_graphic_reveal(a,a->graphic_export->fields[2]))return;
+        test_mouse(a,a->graphic_export->fields[2],true);*stage=300;return;
+    case 300:test_mouse(a,a->graphic_export->fields[2],false);*stage=301;return;
+    case 301:test_mouse(a,a->graphic_export->choices[2][2],true);*stage=302;return;
+    case 302:test_mouse(a,a->graphic_export->choices[2][2],false);*stage=303;return;
+    case 303:
+        if(a->graphic_export->scale!=3){ok=false;break;}
+        if(!test_graphic_reveal(a,a->graphic_export->store))return;
+        join(a->graphic_export_test_path,sizeof a->graphic_export_test_path,a->project,"native-scale3.png");
+        test_mouse(a,a->graphic_export->store,true);*stage=304;return;
+    case 304:test_mouse(a,a->graphic_export->store,false);*stage=305;return;
+    case 305:
+        if(a->graphic_export->save)return;
+        if(!test_plot_png_size(a->result_export,3600,2550)){ok=false;break;}
+        if(!test_graphic_reveal(a,a->graphic_export->fields[0]))return;
+        test_mouse(a,a->graphic_export->fields[0],true);*stage=204;return;
+    case 204:test_mouse(a,a->graphic_export->fields[0],false);*stage=205;return;
+    case 205:test_mouse(a,a->graphic_export->choices[0][1],true);*stage=206;return;
+    case 206:test_mouse(a,a->graphic_export->choices[0][1],false);*stage=207;return;
+    case 207:
+        if(!a->graphic_export->visible){*code=1;a->quitting=true;return;}
+        a->graphic_export->scale=1;a->graphic_export->dirty=true;
+        join(a->graphic_export_test_path,sizeof a->graphic_export_test_path,a->project,"native-ausschnitt.png");
+        *stage=52;return;
     case 52:
-        ok = strstr(a->result_export, "-ausschnitt.png") &&
-             test_plot_png_size(a->result_export, 1200, 850) && test_plot_region_images(a);
-        *capture = "plot-region-export.bmp";
-        test_mouse(a, a->svg_region_bounds, true);
-        break;
-    case 53: test_mouse(a, a->svg_region_bounds, false); break;
+        if(!test_graphic_reveal(a,a->graphic_export->store))return;
+        if(a->graphic_export->dirty)return;
+        test_mouse(a,a->graphic_export->store,true);break;
+    case 53:test_mouse(a,a->graphic_export->store,false);break;
     case 54:
-        ok = strstr(a->result_export, "-ausschnitt.svg") && exists(a->result_export);
-        break;
+        if(!test_graphic_reveal(a,a->graphic_export->formats[1]))return;
+        if(a->graphic_export->save)return;
+        ok=strstr(a->result_export,"-ausschnitt.png") && test_plot_png_size(a->result_export,1200,850) && test_plot_region_images(a);
+        if(!ok){*code=1;a->quitting=true;return;}
+        *capture="plot-region-export.bmp";
+        test_mouse(a,a->graphic_export->formats[1],true);*stage=200;return;
+    case 200:test_mouse(a,a->graphic_export->formats[1],false);*stage=201;return;
+    case 201:
+        if(!test_graphic_reveal(a,a->graphic_export->store))return;
+        if(!a->graphic_export->svg){*code=1;a->quitting=true;return;}
+        join(a->graphic_export_test_path,sizeof a->graphic_export_test_path,a->project,"native-ausschnitt.svg");
+        test_mouse(a,a->graphic_export->store,true);*stage=202;return;
+    case 202:test_mouse(a,a->graphic_export->store,false);*stage=203;return;
+    case 203:
+        if(a->graphic_export->save)return;
+        if(!strstr(a->result_export,"-ausschnitt.svg") || !exists(a->result_export)){*code=1;a->quitting=true;return;}
+        test_scene_key(a,SDLK_ESCAPE,0,false);*stage=208;return;
+    case 208:
+        if(a->graphic_export || a->graphic_return_ui)return;
+        a->graphic_export_test_path[0]=0;
+        *stage=SDL_getenv("PHYSIM_TEST_GRAPHIC_DIALOG")?210:55;return;
+    case 210: {
+        ps_preferences preferences=a->preferences;preferences.theme=PS_THEME_LIGHT;preferences.ui_size=16;preferences_apply(a,&preferences);
+        if(!graphic_export_report(a,3)){*code=1;a->quitting=true;return;}
+        a->result_view=0; /* Later selection does not change the owned graphic. */
+        *stage=211;return;
+    }
+    case 211:
+        if(!a->graphic_export || !a->graphic_export->raster || strcmp(a->graphic_export->description.plot.title,"Kleine Abweichungen mit großem Offset")) {ok=false;break;}
+        *capture="graphic-dialog-light.bmp";*stage=212;return;
+    case 212: {
+        ps_preferences preferences=a->preferences;preferences.theme=PS_THEME_HIGH_CONTRAST;preferences_apply(a,&preferences);
+        *capture="graphic-dialog-contrast.bmp";*stage=213;return;
+    }
+    case 213: {
+        ps_preferences preferences=a->preferences;preferences.theme=PS_THEME_DARK;preferences.ui_size=22;preferences_apply(a,&preferences);
+        SDL_SetWindowMinimumSize(a->window,640,480); /* Exercise the size allowed by detached workspaces. */
+        if(!SDL_SetWindowSize(a->window,680,740) || !SDL_SyncWindow(a->window)){ok=false;break;}
+        *capture="graphic-dialog-large-narrow.bmp";*stage=214;return;
+    }
+    case 214: {
+        static unsigned tab_steps;
+        if(a->graphic_export->focus_target)return;
+        if(tab_steps<6){test_scene_key(a,SDLK_TAB,0,false);tab_steps++;return;}
+        if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"PNG speichern…")){ok=false;break;}
+        *capture="graphic-dialog-narrow-footer.bmp";
+        *stage=228;return;
+    }
+    case 228: {
+        ps_preferences preferences=a->preferences;preferences.ui_size=16;preferences_apply(a,&preferences);
+        if(!SDL_SetWindowSize(a->window,1440,940) || !SDL_SyncWindow(a->window)){ok=false;break;}
+        *stage=215;return;
+    }
+    case 215:
+        if(!test_graphic_reveal(a,a->graphic_export->fields[1]))return;
+        test_mouse(a,a->graphic_export->fields[1],true);*stage=216;return;
+    case 216:test_mouse(a,a->graphic_export->fields[1],false);*stage=217;return;
+    case 217:test_mouse(a,a->graphic_export->choices[1][1],true);*stage=218;return;
+    case 218:test_mouse(a,a->graphic_export->choices[1][1],false);*stage=219;return;
+    case 219: {
+        graphic_dialog *d=a->graphic_export;ps_figure_command first;
+        if(!d->appearance || d->dark || ps_graphic_figure_command(ps_graphic_raster_figure(d->raster),0,&first)!=PS_OK || first.color!=0xffffff){ok=false;break;}
+        *capture="graphic-dialog-frozen-light.bmp";*stage=220;return;
+    }
+    case 220:
+        if(!test_graphic_reveal(a,a->graphic_export->copy))return;
+        test_mouse(a,a->graphic_export->copy,true);*stage=221;return;
+    case 221:test_mouse(a,a->graphic_export->copy,false);*stage=222;return;
+    case 222: {
+        graphic_dialog *d=a->graphic_export;
+        if(strcmp(d->message,"Bild in die Zwischenablage kopiert.")){ok=false;break;}
+        char path[4096];join(path,sizeof path,a->project,"clipboard-reference.png");
+        if(ps_graphics_image_png(ps_graphic_raster_image(d->raster),path)!=PS_OK){ok=false;break;}
+        test_scene_key(a,SDLK_ESCAPE,0,false);*stage=223;return;
+    }
+    case 223:
+        if(a->graphic_export || a->graphic_return_ui)return;
+        {char path[4096];join(path,sizeof path,a->project,"clipboard-ready.txt");FILE *file=fopen(path,"wb");if(!file){ok=false;break;}fputs("source dialog and raster destroyed",file);fclose(file);}
+        *stage=224;return;
+    case 224: {
+        char path[4096];join(path,sizeof path,a->project,"clipboard-read.txt");if(!exists(path))return;
+        a->result_view=3;if(!graphic_export_report(a,3)){ok=false;break;}*stage=225;return;
+    }
+    case 225:
+        a->graphic_export->appearance=true;a->graphic_export->dirty=true;*stage=226;return;
+    case 226:
+        *capture="graphic-dialog-dark-paper.bmp";
+        if(!test_graphic_jobs(a)){ok=false;break;}
+        test_scene_key(a,SDLK_ESCAPE,0,false);*stage=227;return;
+    case 227:
+        if(a->graphic_export || a->graphic_return_ui)return;
+        {ps_preferences preferences=a->preferences;preferences.theme=PS_THEME_HIGH_CONTRAST;preferences_apply(a,&preferences);}
+        if(!graphic_export_report(a,3)){ok=false;break;}
+        a->graphic_export->appearance=true;a->graphic_export->dirty=true;*stage=229;return;
+    case 229: {
+        graphic_dialog *d=a->graphic_export;ps_figure_command first;
+        if(!d->contrast || ps_graphic_figure_command(ps_graphic_raster_figure(d->raster),0,&first)!=PS_OK || first.color!=0){ok=false;break;}
+        char path[4096];join(path,sizeof path,a->project,"contrast-paper.png");
+        if(ps_graphics_image_png(ps_graphic_raster_image(d->raster),path)!=PS_OK){ok=false;break;}
+        *capture="graphic-dialog-contrast-paper.bmp";*stage=231;return;
+    }
+    case 231: {
+        ps_preferences held=a->preferences,invalid=held;const struct nk_user_font *font=a->font_ui;
+        invalid.ui_size=32;preferences_apply(a,&invalid);
+        if(memcmp(&held,&a->preferences,sizeof held) || font!=a->font_ui){ok=false;break;}
+        ps_preferences preferences=held;preferences.theme=PS_THEME_DARK;preferences.ui_size=22;preferences_apply(a,&preferences);
+        /* Exercise the component at 2x without indexing beyond the four
+         * supported main-UI font banks (16..22). This is a layout stress case,
+         * not evidence that a global 32-pixel UI setting exists. */
+        a->graphic_export->scale_override=2;
+        if(!SDL_SetWindowSize(a->window,680,740) || !SDL_SyncWindow(a->window)){ok=false;break;}
+        a->graphic_export->focus_target=0;
+        struct nk_window *window=nk_window_find(a->ui,"graphic-export");if(window)window->scrollbar.y=0;
+        *stage=232;return;
+    }
+    case 232: {
+        ps_graphic_raster_info image;
+        if(ps_graphic_raster_describe(a->graphic_export->raster,&image)!=PS_OK || image.width!=2400 || image.height!=1700 || !a->graphic_export->contrast){ok=false;break;}
+        *capture="graphic-dialog-200pct.bmp";*stage=233;return;
+    }
+    case 233: {
+        static unsigned large_tabs;
+        if(a->graphic_export->focus_target)return;
+        if(large_tabs<6){test_scene_key(a,SDLK_TAB,0,false);large_tabs++;return;}
+        if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"PNG speichern…")){ok=false;break;}
+        *capture="graphic-dialog-200pct-footer.bmp";test_scene_key(a,SDLK_ESCAPE,0,false);*stage=230;return;
+    }
+    case 230:
+        if(a->graphic_export || a->graphic_return_ui)return;
+        {ps_preferences preferences=a->preferences;preferences.theme=PS_THEME_DARK;preferences.ui_size=16;preferences_apply(a,&preferences);}
+        if(!SDL_SetWindowSize(a->window,1440,940) || !SDL_SyncWindow(a->window)){ok=false;break;}
+        puts("GRAPHIC DIALOG SELF-TEST: PASSED preview=canonical-rgb sizes=1,2,3,4 crop=xy themes=3 contrast=paper narrow=680 font=22 layout-stress=2x invalid-font-size=rejected selection=frozen clipboard=detached jobs=cancel,error,replace");
+        *stage=55;return;
     case 55:
         a->tab = 1;
         a->scene = (ps_scene){0};

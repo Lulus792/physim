@@ -13701,6 +13701,37 @@
           ]
         }
       ]
+    },
+    {
+      "name": "graphic_dialog",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_graphic_dialog.py",
+            "--app",
+            "{physim}",
+            "--root",
+            "{root}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 150,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ],
+      "platforms": [
+        "win32",
+        "linux"
+      ]
     }
   ]
 }

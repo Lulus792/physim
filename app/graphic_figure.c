@@ -24,6 +24,9 @@ static const palette light={0xffffff,0x20242c,0x555e6c,0xdce1e9,
     {0x17569e,0x914800,0x00643b,0x7844a0,0xa52d52,0x126875,0x6e6410,0x4c4f9f}};
 static const palette dark={0x1b1c20,0xedeef2,0xa6a9b1,0x3b3d45,
     {0x8abaff,0xf5b46c,0x8bcca5,0xd0a6ec,0xf4a9b8,0x7dd5df,0xddd48c,0xbcbcff}};
+/* Same semantic colors as PS_UI_HIGH_CONTRAST, without a UI/SDL dependency. */
+static const palette high_contrast={0x000000,0xffffff,0xd4d4d4,0x8c8c8c,
+    {0x8cc8ff,0xffd282,0x82f5aa,0xdcb4ff,0xffaad7,0x8cebf5,0xfff08c,0xe6e6e6}};
 static ps_result push(ps_graphic_figure *f,ps_figure_command command) {
     if(f->count==PS_GRAPHIC_FIGURE_COMMAND_LIMIT)return PS_LIMIT;
     if(f->count==f->capacity) {
@@ -163,7 +166,7 @@ ps_result ps_graphic_figure_create(const ps_graphic_snapshot *snapshot,const ps_
     ps_graphic_figure *f=memory;f->allocator=allocator;f->measure=measure;f->measure_user=user;
     if(o.font_family)snprintf(f->family[0],96,"%s",o.font_family);
     if(o.strong_font_family || o.font_family)snprintf(f->family[1],96,"%s",o.strong_font_family?o.strong_font_family:o.font_family);
-    const palette *p=o.dark?&dark:&light;
+    const palette *p=o.high_contrast?&high_contrast:o.dark?&dark:&light;
     const double *b=o.visible?d.axes.visible:d.axes.full;
     double xo=ps_plot_axis_offset(b[0],b[1]),yo=ps_plot_axis_offset(b[2],b[3]);
     double xs=(b[1]-xo)/5-(b[0]-xo)/5,ys=(b[3]-yo)/4-(b[2]-yo)/4;

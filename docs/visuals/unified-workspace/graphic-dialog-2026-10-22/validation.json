@@ -1,0 +1,273 @@
+{
+  "date": "2026-10-22T21:24:16.591927+02:00",
+  "base": "1b61a0a54eb92afcc56a497c7509da7faf76bbab",
+  "source_version": 17,
+  "source_manifest": "export-dialog-source17.json",
+  "final_runs": [
+    {
+      "label": "windows-debug",
+      "run": "build\\native\\Design-analysis\\test-results\\run-25crf6_j",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 30.656
+        }
+      ],
+      "raw_clipboard": {
+        "path": "build\\native\\Design-analysis\\test-results\\run-25crf6_j\\graphic_dialog\\files ä\\clipboard-native.dib",
+        "bytes": 12240040,
+        "sha256": "8990f796f017cba488513e32bc4e441dd39f0ba2859db4a61956730d89f60f12"
+      },
+      "binary_sha256": "9a36997bcbad5b43fde860a66adf772e9a6248d6cc89786d1aa75ce0818063e0"
+    },
+    {
+      "label": "linux-debug",
+      "run": "build\\native\\Design-analysis-linux\\test-results\\run-r4a7iqdx",
+      "groups": [
+        {
+          "name": "settings_keyboard_workflow",
+          "status": "passed",
+          "seconds": 18.426
+        },
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 68.211
+        }
+      ],
+      "raw_clipboard": {
+        "path": "build\\native\\Design-analysis-linux\\test-results\\run-r4a7iqdx\\graphic_dialog\\files ä\\clipboard-native.bmp",
+        "bytes": 12240054,
+        "sha256": "5cc8b1fc846d7e875ce3a905ab1b47fde0cabbc0eb7cf1eaec7571bb28eaa6ff"
+      },
+      "binary_sha256": "8101f4d1bc1e2cb540a495711bff21b08bbdb2b9ae4e95b872c16e1d6ecf4c4c"
+    },
+    {
+      "label": "windows-release",
+      "run": "build\\native\\Release\\test-results\\run-t76tws90",
+      "groups": [
+        {
+          "name": "window_smoke",
+          "status": "passed",
+          "seconds": 2.0
+        },
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 7.906
+        }
+      ],
+      "raw_clipboard": {
+        "path": "build\\native\\Release\\test-results\\run-t76tws90\\graphic_dialog\\files ä\\clipboard-native.dib",
+        "bytes": 12240040,
+        "sha256": "8990f796f017cba488513e32bc4e441dd39f0ba2859db4a61956730d89f60f12"
+      },
+      "binary_sha256": "ed0394b5bfc540aca7805a095511d1b87ed47b9894253221f943dc0e8db4d2dd"
+    }
+  ],
+  "historical_runs": [
+    {
+      "label": "windows",
+      "run": "build\\native\\Design-analysis\\test-results\\run-a1dfwjor",
+      "results_sha256": "3af5130fb34d5d84f7e4c08fb1b54207c5b94646abd442fb018d405ae2a707b5"
+    },
+    {
+      "label": "windows",
+      "run": "build\\native\\Design-analysis\\test-results\\run-uubi5g4s",
+      "results_sha256": "d8587d70f4de64e8cec57e09ecebbace4e594e28aa393c06cad55c235ad3f78f"
+    },
+    {
+      "label": "windows",
+      "run": "build\\native\\Design-analysis\\test-results\\run-10pwt8jj",
+      "results_sha256": "88a0cf33f4258d86412d0c6b5f63044e5514b7740c93701e9fb7c84d298378b5"
+    },
+    {
+      "label": "windows",
+      "run": "build\\native\\Design-analysis\\test-results\\run-1tn0fgfi",
+      "results_sha256": "e2e17e2ba10e62e31359c1d7c4d20f83ecd253d6bafd116dcdb3dbff70f3b777"
+    },
+    {
+      "label": "windows",
+      "run": "build\\native\\Design-analysis\\test-results\\run-v2h9bzp2",
+      "results_sha256": "b79f074a14782f834d535a0e650b6e2f5db6ec7ffee2bf5b4dc84057efbcd903"
+    },
+    {
+      "label": "windows",
+      "run": "build\\native\\Design-analysis\\test-results\\run-91m83458",
+      "results_sha256": "5c7777b17066743420cef6e8f9f9f1f20053acb7ddccf77b0b16ecabc353b9ff"
+    },
+    {
+      "label": "windows",
+      "run": "build\\native\\Design-analysis\\test-results\\run-pvgp_9oj",
+      "results_sha256": "26bd2cac8eace579dcf5138909b9388bb0a23a01e5afdd4597df821c36aa371f"
+    },
+    {
+      "label": "windows",
+      "run": "build\\native\\Design-analysis\\test-results\\run-0d4f7d1w",
+      "results_sha256": "f57d93da9e16be33b2bc36b179f6d68fb16d6b4bd28abde779ae4c5b1ebb4b37"
+    },
+    {
+      "label": "windows",
+      "run": "build\\native\\Design-analysis\\test-results\\run-02seldhu",
+      "results_sha256": "39066c9def57073e86c2b9f533f549a290d808c194a3f4cbbc4ba180a04dcadb"
+    },
+    {
+      "label": "windows",
+      "run": "build\\native\\Design-analysis\\test-results\\run-ixmi810n",
+      "results_sha256": "8e2d1bbb6b9a34ede168b4a096602eaf1d63ad66f30439debeca8a3ca70b6b69"
+    },
+    {
+      "label": "windows",
+      "run": "build\\native\\Design-analysis\\test-results\\run-nnzpddmf",
+      "results_sha256": "9c56243e394cfd314ad9f51ac5dbf5061db5966fcd214b665a007798c9a3d827"
+    },
+    {
+      "label": "windows",
+      "run": "build\\native\\Design-analysis\\test-results\\run-5u_ggcia",
+      "results_sha256": "c11d0acd18cbfb977824886afb22405d583955934510a59d258ca5e8c2b59150"
+    },
+    {
+      "label": "windows",
+      "run": "build\\native\\Design-analysis\\test-results\\run-_21k0utm",
+      "results_sha256": "81251c6bf3ead16d34976378ffda4a4eba7fc645a85544795d87e890adf0b283"
+    },
+    {
+      "label": "windows",
+      "run": "build\\native\\Design-analysis\\test-results\\run-894hs1xz",
+      "results_sha256": "2ab759bf0ec04c83eac17550ef7ffa3613095eee34db37548a14a016221ed907"
+    },
+    {
+      "label": "linux",
+      "run": "build\\native\\Design-analysis-linux\\test-results\\run-r_ga2aht",
+      "results_sha256": "014147c67baff424450e27de3c232d86aa193f5f559e975aedc6b58ff89a304d"
+    },
+    {
+      "label": "linux",
+      "run": "build\\native\\Design-analysis-linux\\test-results\\run-1o6nqfyj",
+      "results_sha256": "b91ee6772560fb91631c27c92cd0f973ef12144a60e64f907912391251c46e7c"
+    },
+    {
+      "label": "linux",
+      "run": "build\\native\\Design-analysis-linux\\test-results\\run-4g54cy94",
+      "results_sha256": "4022bfadd908881c69b55a7ac5dd796558ce8accb94b148fa0ffa161ef3265a7"
+    },
+    {
+      "label": "linux",
+      "run": "build\\native\\Design-analysis-linux\\test-results\\run-8v27o__0",
+      "results_sha256": "574c02fe8fb5f2cb43f2597c44a29a022aad4b28bb744e6690968402217314d3"
+    },
+    {
+      "label": "linux",
+      "run": "build\\native\\Design-analysis-linux\\test-results\\run-b4d6i76a",
+      "results_sha256": "3bd76b7ab82429498e672547359ae4a7327dd2911bbe20b80ab7a2f1ae58ecfa"
+    },
+    {
+      "label": "linux",
+      "run": "build\\native\\Design-analysis-linux\\test-results\\run-osjwscg0",
+      "results_sha256": "926fb04ec50eb5d7e508cf33144ac79100084821c05b6556c8a7a907d6c2515a"
+    },
+    {
+      "label": "linux",
+      "run": "build\\native\\Design-analysis-linux\\test-results\\run-j_pug60c",
+      "results_sha256": "8cd0cdb96c7f2ba34d3512f8c79a37761cd6b0adbaec450faf2f92498d1e39c3"
+    },
+    {
+      "label": "linux",
+      "run": "build\\native\\Design-analysis-linux\\test-results\\run-uwytrk9i",
+      "results_sha256": "8a4d289775312189223021919d59fd77bbbf9704da8bb25dfb62bd3e225fe4bc"
+    },
+    {
+      "label": "linux",
+      "run": "build\\native\\Design-analysis-linux\\test-results\\run-v9c4uxe3",
+      "results_sha256": "4900b0d1c6856adabf43698d5e41f189be5432a4a35f9d5517c02daa978906ee"
+    },
+    {
+      "label": "linux",
+      "run": "build\\native\\Design-analysis-linux\\test-results\\run-dzp1f_e4",
+      "results_sha256": "c28899604af9ce757403f9da4787623d80e2ecc88c48a5e86e7a69038904805d"
+    },
+    {
+      "label": "linux",
+      "run": "build\\native\\Design-analysis-linux\\test-results\\run-cj5fjxqm",
+      "results_sha256": "4636f0df56ab6affbb67ee95da9829a9be01ca51f00ba50787029b7425c879f5"
+    },
+    {
+      "label": "linux",
+      "run": "build\\native\\Design-analysis-linux\\test-results\\run-72np1p6z",
+      "results_sha256": "ae195b6b4c0d09601f8dad210769b893ad84c855e1d97ffbf2503c0629c38d1d"
+    },
+    {
+      "label": "linux",
+      "run": "build\\native\\Design-analysis-linux\\test-results\\run-hwq3jepx",
+      "results_sha256": "40466bfa1b47f590814f6572003d904b6e426e13a1d2aab9d23062e596df9910"
+    },
+    {
+      "label": "linux",
+      "run": "build\\native\\Design-analysis-linux\\test-results\\run-0zn82o69",
+      "results_sha256": "6955bc4625a39d14718aeed13aebd7d102ae64db1bba4524d0d784dd6e91836f"
+    },
+    {
+      "label": "linux",
+      "run": "build\\native\\Design-analysis-linux\\test-results\\run-kfmgek0m",
+      "results_sha256": "66ae6597dee3726aebc3e906c4ad294f38662c4b066735847cd415778a2307a4"
+    },
+    {
+      "label": "release",
+      "run": "build\\native\\Release\\test-results\\run-z1lrt534",
+      "results_sha256": "83a6d7daaead1382b0326be8844c8aa2030933f35df5c53dbf88d78bd3fdf26e"
+    },
+    {
+      "label": "release",
+      "run": "build\\native\\Release\\test-results\\run-qcs_f4zz",
+      "results_sha256": "301c12ddf62b2be39ba9d093f623190151e9205bb32b290c030919c520e4c32e"
+    },
+    {
+      "label": "release",
+      "run": "build\\native\\Release\\test-results\\run-y9mm4_tg",
+      "results_sha256": "3f28d0a1b91e56ccf2be74a6bb9c373fdb6f4a481b95b0f74760918d1d08e704"
+    }
+  ],
+  "font_assets": {
+    "third_party\\fonts\\notoemoji-OFL.txt": "500bb1ccf43df7bbb522112f9133a52b16e1c35e809632f5d8609b179152de5b",
+    "third_party\\fonts\\NotoEmoji.ttf": "de6c18832938afc99caf132b39d6a30a19bac7f2e812e28db2535b4608d27551",
+    "third_party\\fonts\\NotoSans-Bold.ttf": "c976e4b1b99edc88775377fcc21692ca4bfa46b6d6ca6522bfda505b28ff9d6a",
+    "third_party\\fonts\\notosans-OFL.txt": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+    "third_party\\fonts\\NotoSans.ttf": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d",
+    "third_party\\fonts\\notosansbold-OFL.txt": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb",
+    "third_party\\fonts\\notosansmath-OFL.txt": "403a95275b469061b7d4371c328e0ada3bc7d63328abe2e88aad5cd243b2fe21",
+    "third_party\\fonts\\NotoSansMath-Regular.ttf": "3f495fe933c06786e4d5f6d86b8ee70b6753a68ee3b9d87528726de0f6e2c47d",
+    "third_party\\fonts\\notosansmono-OFL.txt": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+    "third_party\\fonts\\NotoSansMono.ttf": "2cb2adb378a8f574213e23df697050b83c54c27df465a2015552740b2769a081",
+    "third_party\\fonts\\notosanssymbols2-OFL.txt": "b118dd41337806a5d4797052c77caf3bd096aed783e5eb21b4d11154351e1ac0",
+    "third_party\\fonts\\NotoSansSymbols2-Regular.ttf": "7d5fb73b7ca67a6798101741f5d280a3d016a56a197afcd4199dbb57b4b82a21",
+    "third_party\\fonts\\NotoSerif-Italic.ttf": "0ea81d6b54fc8aa5dff0fd6ebe7cfa431e9e6cf747a8d4aa33581fa0aaccffea",
+    "third_party\\fonts\\notoserifitalic-OFL.txt": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
+  },
+  "foreign_preserved": {
+    ".github/workflows/linux-ui-sanitizers.yml": "517c7d628b9d496a0422d145f747a0427da24a4a304a218294f857ac9f6aaa24",
+    ".github/workflows/macos-f1-accessibility.yml": "54c64dc5b9a5ddc478d704fbd6eccae4548155216130c25778466ab60a48a9af",
+    "app/accessibility_atspi.c": "cb7570a937751358f3de0c1c9c18df15c6f00680843a58d1ed05a8ef6cd13ff0",
+    "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+    "tests/check_documentation_orca.py": "ef3298800cfa8032cf6333b6b7ee902fc75d17fc3200b0f5ec6e801b2eba37ac",
+    "tests/test_accessibility_tables_atspi.py": "ef47a57f9c6a5d2073d19b22807aa5998bb7c0401ee0189504152cf62a900a53",
+    "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+    "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+    "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+    "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08",
+    "docs/status.md": "4159a86157c20dec896f13f6d950cfdbd85cdb56ee50fd4b8f510f140542ed09",
+    "docs/storage-cleanup-2026-10-22.md": "5bbc8778efe4da1236883d3affc8a41d07a983ceb0e804a0bbfe3cb02ce72d88"
+  },
+  "limits": [
+    "No full product/pixel-identical acceptance",
+    "Report plots only: visible 8-run cache/export remains open",
+    "No native OS picker interaction proof: reply injection",
+    "No macOS run",
+    "No external screenreader/modal-role acceptance",
+    "No physical DPI/monitor/popout matrix",
+    "Valid global UI sizes 16/18/20/22; 2x dialog layout is separate component stress",
+    "Source14/15 Windows nominal passes contain invalid font index and are not 32px acceptance",
+    "Source16 Linux timeout is failed; source17 extended-dialog-only deadline 120s",
+    "Local builds include separately owned accessibility changes; not isolated clean checkout"
+  ]
+}

@@ -2,14 +2,16 @@
 
 Der freigegebene [Grafikexport](EXPORT-EXAMPLE.md) nach
 [ADR 010](../../decisions/010-analysis-graphic-export.md) bleibt vollständig
-beauftragt. Datenbasis, gemeinsame Figur und nativer Rasteradapter sind vorhanden;
-der sichtbare neue Dialog und die native Bildkopie sind noch nicht angebunden.
+beauftragt. Datenbasis, gemeinsame Figur und nativer Rasteradapter sind vorhanden.
+Der folgende [sichtbare Berichtsdialog](GRAPHIC-DIALOG-NATIVE.md) bindet Vorschau,
+Optionen, Speichern und echte OS-Bildkopie inzwischen an Berichtsdiagramme an.
+Der sichtbare Mehrlauf-Messdatenpfad und die Gesamtabnahme bleiben offen.
 
 Anschließend ergänzt die [gemeinsame Zeichenbeschreibung](GRAPHIC-FIGURE-NATIVE.md)
 das freigegebene Figurenlayout und echte SVG-Ausgabe. Der folgende
 [Rasteradapter](GRAPHIC-RASTER-NATIVE.md) ergänzt echte Schriften, PNG in vier
-Größen und eine aus denselben RGB-Pixeln erzeugte Vorschautextur. Sichtbare
-Vorschau und Dialog bleiben anzubinden. Die folgenden Datenprüfungen
+Größen und eine aus denselben RGB-Pixeln erzeugte Vorschautextur. Der anschließende
+Dialog verwendet diese Textur für echte Berichte. Die folgenden Datenprüfungen
 behalten ihren eigenen eingefrorenen Quellstand.
 
 ## Festgehaltene Diagrammdaten
@@ -90,12 +92,12 @@ Checkout nur dieses Patches. Es gibt keine aktuelle macOS-Ausführung.
 | Teil | Noch erforderliche Arbeit |
 | --- | --- |
 | Datenansicht | Gemeinsamen Mehrlaufcache in die sichtbare Kurve, Referenz, Legende und Vergleichsstatistik anbinden; asynchrone Ergebnisse anhand der tatsächlichen Auswahl verwerfen. |
-| Gemeinsame Darstellung | [Zeichenbeschreibung/SVG](GRAPHIC-FIGURE-NATIVE.md) und [Rasteradapter mit realen Schriften, PNG und RGB-Vorschautextur](GRAPHIC-RASTER-NATIVE.md) sind geprüft. Segmentübergänge, acht Kurven und externe SVG-Schriften weiter abgleichen; gemeinsame Ausgabe an den sichtbaren Dialog anbinden. Die bisherigen sichtbaren Exportwege verwenden weiter unterschiedliche Layouts. |
-| Dialog und Zugänge | Freigegebenes Hell-/Dunkellayout einschließlich kleiner Fenster, Grafikbuttons und einzelner Berichtsdiagramme umsetzen. |
-| Optionen | PNG/SVG, vier PNG-Größen, vollständige/sichtbare Grenzen und beim Öffnen festgehaltene Darstellung anbinden. |
-| Speichern | Native Dateiauswahl, Abbruch, bestehende Dateien und Schreib-/Renderfehler mit derselben festgehaltenen Ausgabe prüfen. |
-| Bildkopie | Tatsächliche Übergabe an die native Zwischenablage und unabhängiges Übernehmen des Bildes prüfen. |
-| Bedienung und Abnahme | Dialogfokus, Escape/Rückkehr, Tastatur, große Schrift, Kontrast, Resize/DPI und sämtliche ADR-010-Fälle tatsächlich ausführen. |
+| Gemeinsame Darstellung | In den sichtbaren Berichtsdialog integriert; Mehrlaufansicht, acht sichtbare Kurven und externe SVG-Schriftwiedergabe weiter abgleichen. |
+| Dialog und Zugänge | Berichtsdiagramme besitzen den neuen Zugang. Hintergrundblur, weitere Schrift-/Komponentendetails und Zugang am Messdatenvergleich bleiben offen. |
+| Optionen | PNG/SVG, vier Größen, Gesamt-/X/Y-Ausschnitt und eingefrorenes Theme sind im Berichtsdialog angebunden und nativ geprüft. |
+| Speichern | Native API und sichere Schreibaufträge angeschlossen; Antwortinjektion prüft Abbruch/Fehler/Ersetzen. Echte OS-Dateiauswahl samt Fokus/Überschreibdialog noch manuell prüfen. |
+| Bildkopie | Unabhängiger vollständiger RGB-Vergleich über Windows CF_DIB und Linux X11 bestanden; macOS offen. |
+| Bedienung und Abnahme | Native Tabfolge, Escape/Rückkehr, 22-px-Schrift und doppelte Dialogskalierung geprüft. Externe Screenreader, Dialogsemantik, Popout/DPI/Monitor und volle ADR-010-Matrix bleiben offen. |
 
 Die noch offenen Teile bleiben beauftragt. Der geprüfte Datenbaustein erfüllt
 keine dieser gesamten Produktabnahmen für sich allein.
@@ -107,8 +109,8 @@ Die verwendete SDL-Version ist 3.2.30. Ihr
 übergibt Bilder über `image/bmp` als `CF_DIB`. Andere angebotene Bildtypen
 können in dieser Fassung lediglich im SDL-internen Speicher liegen. Ein
 erfolgreiches Zurücklesen von `image/png` im gleichen Prozess beweist deshalb
-keine echte Windows-Bildkopie. Das ist ein Quellbefund, noch kein ausgeführter
-Bildkopienachweis.
+keine echte Windows-Bildkopie. Der spätere [Berichtsdialog](GRAPHIC-DIALOG-NATIVE.md)
+ergänzt deshalb einen unabhängigen CF_DIB-Verbraucher und vollständigen RGB-Vergleich.
 
 [SDL_SetClipboardData](https://wiki.libsdl.org/SDL3/SDL_SetClipboardData) gehört
 auf den Hauptthread und bietet Daten über einen späteren Callback an.

@@ -21,6 +21,8 @@
 #include "model_values.h"
 #include "report_image.h"
 #include "graphic_raster.h"
+#include "graphic_output.h"
+#include "png.h"
 #include "scene_view.h"
 #include "preferences.h"
 #include "layout_catalog.h"
@@ -447,6 +449,9 @@ typedef struct {
     struct nk_rect report_details_bounds, report_details_tabs[4], report_details_copy_bounds,
         report_details_text_bounds;
     int png_scale;
+    struct graphic_dialog *graphic_export;
+    struct nk_context *graphic_return_ui;unsigned graphic_return_frames;
+    char graphic_export_test_path[4096];
     struct nk_rect png_region_bounds;
     struct nk_rect svg_region_bounds;
     struct nk_rect png_size_bounds, png_size_choices[4];
@@ -3051,6 +3056,11 @@ static bool documentation_fonts_prepare(app *a,unsigned size,unsigned code_size)
 static bool documentation_fonts_prepare_sizes(app *a,unsigned size,unsigned code_size,unsigned ui_size,unsigned editor_size);
 #include "documentation_ui.inc"
 #include "api_reference_ui.inc"
+static struct nk_font *graphic_font_load(void *user,struct nk_font_atlas *atlas,float height,bool strong,
+                                        const unsigned *ranges,char family[96]);
+static void style(struct nk_context *ui);
+static void toolbar_keyboard_close(app *a);
+#include "graphic_export_ui.inc"
 #include "report_ui.inc"
 #include "library_ui.inc"
 static void layouts_start(app *a);
@@ -3971,6 +3981,7 @@ int main(int argc, char **argv) {
             a->profile_frame = (ps_app_profile_frame){0};
             a->profile_frame.frame = frames;
         }
+        graphic_export_tick(a);
         preferences_theme_tick(a);
         api_reference_insert_tick(a);
         documentation_actions_tick(a);
@@ -4006,6 +4017,7 @@ int main(int argc, char **argv) {
                 doc_input_bytes += (unsigned)strlen(e.text.text);
             }
             SDL_Window *event_window = SDL_GetWindowFromEvent(&e);
+            if(graphic_export_event(a,&e,event_window))continue;
             if(panel_window_event(a,&e,event_window))continue;
             if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && e.key.key==SDLK_ESCAPE && a->panel_pull){panel_pull_cancel(a);continue;}
             if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && e.key.key==SDLK_RETURN && (e.key.mod&PS_UI_COMMAND_MOD) && (e.key.mod&SDL_KMOD_SHIFT)) {
@@ -4245,8 +4257,11 @@ int main(int argc, char **argv) {
             /* The complete export task renders regular, dense and four scaled
              * PNGs up to 4800x3400, then exercises scene controls. Debug/ASan
              * measured 17 s in the stage-37 exports alone on Windows. */
-            double plot_deadline=scene_visibility_test || camera_plane_test?30:60;
+            double plot_deadline=scene_visibility_test || camera_plane_test?30:
+                SDL_getenv("PHYSIM_TEST_GRAPHIC_DIALOG")?120:60;
             if (ps_clock() - test_started > plot_deadline) {
+                fprintf(stderr,"Plot self-test timeout at stage %d after %.3f wall seconds (limit %.0f)\n",
+                        test_stage,ps_clock()-test_started,plot_deadline);
                 exit_code = 1;
                 a->quitting = true;
             } else if(scene_visibility_test)
@@ -5397,6 +5412,7 @@ int main(int argc, char **argv) {
     ps_autosave_destroy(a->recovery);
     ps_workspace_tree_destroy(&a->workspace_tree);
     documents_clear(a);
+    graphic_export_close(a);
     panel_windows_destroy(a);
     documentation_window_destroy(a);
     bool profile_started = a->profiler != NULL;

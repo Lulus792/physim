@@ -422,6 +422,9 @@ bool nk_sdl_accessibility_request_focus(struct nk_context *ctx,const char *group
     bool requested=false;SDL_LockMutex(sdl->accessibility_mutex);ps_a11y_model *model=sdl->accessibility;
     for(size_t i=0;i<model->count;i++) {
         const ps_a11y_node *node=&model->nodes[i],*parent=ps_a11y_find(model,node->parent);
+        /* A visible field label and its button may share a name. Continue to
+         * the actual enabled control instead of stopping at read-only text. */
+        if(!node->focusable || !node->enabled)continue;
         if(!strcmp(node->label,label) && (!group || (parent && !strcmp(parent->label,group)))) {
             requested=ps_a11y_focus(model,node->id);break;
         }

@@ -1,0 +1,95 @@
+[
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "/usr/bin/python3",
+        "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+        "sha256": "8101f4d1bc1e2cb540a495711bff21b08bbdb2b9ae4e95b872c16e1d6ecf4c4c"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/tests/check_display_workflow.py",
+          "settings_keyboard_workflow",
+          "--app",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "--work",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-r4a7iqdx/settings_keyboard_workflow/files \u00e4",
+          "--root",
+          "/mnt/d/Physim",
+          "--cc",
+          "/usr/bin/cc"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)\nFont atlas: 2048x16384, 80 fonts, GPU limit 16384\nSETTINGS KEYBOARD SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nEinstellungen gespeichert.\n\nAPP TEST EXIT: 0\nOpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)\nFont atlas: 2048x16384, 80 fonts, GPU limit 16384\nSETTINGS KEYBOARD SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\n\nAPP TEST EXIT: 0\nsettings_keyboard_workflow: app workflow and persisted files passed\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 100.979499\nAPP TEST TRACE: main font sources ready 102.187574\nAPP TEST TRACE: main atlas bake seconds=4.956822\nAPP TEST TRACE: main atlas validation/upload seconds=0.089230\nAPP TEST TRACE: main fonts ready 107.282722\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 0 -> 1, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 1 -> 2, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 2 -> 3, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 3 -> 4, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 4 -> 5, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 5 -> 6, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 6 -> 7, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 7 -> 8, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 8 -> 9, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 9 -> 10, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 10 -> 11, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 11 -> 12, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 12 -> 13, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 13 -> 14, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 14 -> 15, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 15 -> 16, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 16 -> 17, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 17 -> 18, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 18 -> 19, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 19 -> 23, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 23 -> 20, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 20 -> 21, status Einstellungen gespeichert.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 110.302546\nAPP TEST TRACE: main font sources ready 111.445874\nAPP TEST TRACE: main atlas bake seconds=4.616806\nAPP TEST TRACE: main atlas validation/upload seconds=0.047432\nAPP TEST TRACE: main fonts ready 116.153910\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 0 -> 1, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 1 -> 2, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 2 -> 21, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 21 -> 22, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 22 -> 20, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 20 -> 21, status Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\n",
+        "seconds": 17.991,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-r4a7iqdx/settings_keyboard_workflow/files \u00e4/app-steps.json",
+            "bytes": 4928,
+            "sha256": "fa1bf0d1aa89420e4b63417975085e92fef28ffa1f47852b945767af7d10512f"
+          }
+        ]
+      }
+    ],
+    "seconds": 18.426,
+    "reason": "",
+    "name": "settings_keyboard_workflow"
+  },
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "/usr/bin/python3",
+        "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+        "sha256": "8101f4d1bc1e2cb540a495711bff21b08bbdb2b9ae4e95b872c16e1d6ecf4c4c"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/tests/check_graphic_dialog.py",
+          "--app",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "--root",
+          "/mnt/d/Physim",
+          "--work",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-r4a7iqdx/graphic_dialog/files \u00e4"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "graphic_dialog: native UI, frozen preview, save/cancel/error and independent clipboard RGB passed\n",
+        "stderr": "",
+        "seconds": 67.769,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-r4a7iqdx/graphic_dialog/files \u00e4/app-steps.json",
+            "bytes": 21454,
+            "sha256": "943f4f04ec1cebcc3cb353ec659b4060898a026e1a7f300ca8c1cfb7c908f2e8"
+          }
+        ]
+      }
+    ],
+    "seconds": 68.211,
+    "reason": "",
+    "name": "graphic_dialog"
+  }
+]

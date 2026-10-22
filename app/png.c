@@ -11,17 +11,29 @@ static void big32(unsigned char *p, uint32_t v) {
     p[3] = (unsigned char)v;
 }
 /* Buffer includes four bytes before the payload for the chunk type. */
-static bool chunk(FILE *f, unsigned char *buffer, const char *type, size_t size) {
+typedef struct {FILE *file;unsigned char *data;size_t size,capacity;bool memory;} png_sink;
+static bool put(png_sink *sink,const void *data,size_t size) {
+    if(!sink->memory)return fwrite(data,1,size,sink->file)==size;
+    if(size>64u*1024u*1024u-sink->size)return false;
+    size_t need=sink->size+size;
+    if(need>sink->capacity) {
+        size_t capacity=sink->capacity?sink->capacity:65536;
+        while(capacity<need)capacity*=2;
+        unsigned char *next=realloc(sink->data,capacity);if(!next)return false;
+        sink->data=next;sink->capacity=capacity;
+    }
+    memcpy(sink->data+sink->size,data,size);sink->size=need;return true;
+}
+static bool chunk(png_sink *f, unsigned char *buffer, const char *type, size_t size) {
     unsigned char length[4], crc[4];
     memcpy(buffer, type, 4);
     big32(length, (uint32_t)size);
     big32(crc, ps_crc32(buffer, size + 4));
-    return fwrite(length, 1, 4, f) == 4 && fwrite(buffer, 1, size + 4, f) == size + 4 &&
-           fwrite(crc, 1, 4, f) == 4;
+    return put(f,length,4) && put(f,buffer,size+4) && put(f,crc,4);
 }
-static ps_result write_png(const char *path,const unsigned char *rgb,unsigned width,unsigned height,
+static ps_result encode(png_sink *f,const unsigned char *rgb,unsigned width,unsigned height,
     size_t stride,int compression) {
-    if (!path || !*path || !rgb || !width || !height || width > 8192 || height > 8192 ||
+    if (!rgb || !width || !height || width > 8192 || height > 8192 ||
         stride < (size_t)width * 3 || stride > SIZE_MAX / height)
         return PS_INVALID;
     size_t row = (size_t)width * 3;
@@ -40,20 +52,13 @@ static ps_result write_png(const char *path,const unsigned char *rgb,unsigned wi
         free(buffer);
         return status == Z_MEM_ERROR ? PS_MEMORY : PS_IO;
     }
-    FILE *f = fopen(path, "wbx");
-    if (!f) {
-        deflateEnd(&stream);
-        free(input);
-        free(buffer);
-        return PS_IO;
-    }
     static const unsigned char signature[] = {137, 80, 78, 71, 13, 10, 26, 10};
     unsigned char header[17] = {0};
     big32(header + 4, width);
     big32(header + 8, height);
     header[12] = 8;
     header[13] = 2; /* RGB, no alpha; filter 0, non-interlaced. */
-    bool ok = fwrite(signature, 1, 8, f) == 8 && chunk(f, header, "IHDR", 13);
+    bool ok = put(f,signature,8) && chunk(f, header, "IHDR", 13);
     for (unsigned y = 0; ok && y < height; y++) {
         input[0] = 0; /* PNG filter None */
         memcpy(input + 1, rgb + (size_t)y * stride, row);
@@ -80,13 +85,27 @@ static ps_result write_png(const char *path,const unsigned char *rgb,unsigned wi
     deflateEnd(&stream);
     if (ok)
         ok = chunk(f, buffer, "IEND", 0);
-    if (fclose(f))
-        ok = false;
     free(buffer);
     free(input);
-    if (!ok)
-        remove(path); /* Only our exclusively created, incomplete output. */
     return ok ? PS_OK : (status == Z_MEM_ERROR ? PS_MEMORY : PS_IO);
+}
+static ps_result write_png(const char *path,const unsigned char *rgb,unsigned width,unsigned height,
+    size_t stride,int compression) {
+    if(!path || !*path || !rgb || !width || !height || width>8192 || height>8192 ||
+       stride<(size_t)width*3 || stride>SIZE_MAX/height)return PS_INVALID;
+    png_sink sink={0};sink.file=fopen(path,"wbx");if(!sink.file)return PS_IO;
+    ps_result result=encode(&sink,rgb,width,height,stride,compression);
+    if(fclose(sink.file) && result==PS_OK)result=PS_IO;
+    if(result!=PS_OK)remove(path);
+    return result;
+}
+ps_result ps_png_encode(const unsigned char *rgb,unsigned width,unsigned height,size_t stride,
+    unsigned char **out,size_t *size) {
+    if(!out || !size)return PS_INVALID;
+    png_sink sink={0};sink.memory=true;
+    ps_result result=encode(&sink,rgb,width,height,stride,Z_BEST_SPEED);
+    if(result!=PS_OK){free(sink.data);return result;}
+    *out=sink.data;*size=sink.size;return PS_OK;
 }
 ps_result ps_png_write(const char *path,const unsigned char *rgb,unsigned width,unsigned height,size_t stride) {
     /* Compression speed changes file size, never image quality or RGB bytes. */

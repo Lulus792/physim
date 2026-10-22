@@ -148,6 +148,8 @@ def main():
         "app_profiling_workflow": ("tests/test_app_profiling_workflow.py", ()),
         "graphic_raster": ("tests/check_graphic_raster.py", ("--root",)),
     }
+    if sys.platform in ("win32","linux"):
+        specialized_display["graphic_dialog"]=("tests/check_graphic_dialog.py",("--root",))
     if sys.platform == "linux":
         specialized_display.update({
             "accessibility_document_atspi": ("tests/test_accessibility_document_atspi.py", ("--root",)),

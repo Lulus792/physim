@@ -29,6 +29,7 @@ typedef struct {
     /* Optional actual primary font families, copied at construction (95 bytes).
      * SVG retains their identity; installed viewer fonts still govern glyphs. */
     const char *font_family,*strong_font_family;
+    bool high_contrast; /* Captured high-contrast appearance; overrides dark. */
 } ps_graphic_figure_options;
 /* Actual font metrics in canonical CSS em units, including letter spacing.
  * Called only while creating the figure. No callback/user pointer survives.

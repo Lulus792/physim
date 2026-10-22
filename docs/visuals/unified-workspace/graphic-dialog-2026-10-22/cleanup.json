@@ -1,0 +1,9 @@
+{
+  "status": "rejected_by_automatic_approval_review",
+  "reason": "blocked by policy; no more specific reason supplied",
+  "files_planned": 1058,
+  "bytes_planned": 4637014302,
+  "files_deleted": 0,
+  "bytes_freed": 0,
+  "scope": "Exact owned completed test BMPs and replaced local previews; no workaround attempted"
+}

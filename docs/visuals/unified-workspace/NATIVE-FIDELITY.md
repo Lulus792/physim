@@ -16,8 +16,10 @@ Der anschließende [native Komponentenabgleich](COMPONENTS-NATIVE.md) korrigiert
 Auswahlpfeile, Workspace-Chevrons, umbrechende Szenenzeilen und Inspektorregeln
 sowie dessen Modellfehler-Scrollblockade. Sechs Windows- und sieben Linux-
 Gruppen bestehen. Das ersetzt keine vollständige visuelle, Assistive- oder
-Plattformabnahme; die übrigen sichtbaren Lücken einschließlich der alten
-Berichtsbedienung bleiben offen.
+Plattformabnahme. Der anschließende [native Berichts-Exportdialog](GRAPHIC-DIALOG-NATIVE.md)
+ersetzt die alte breite Exportleiste durch den freigegebenen Zugang mit Vorschau,
+Optionen, PNG/SVG und nativer Bildkopie. Die dort aufgeführten Abweichungen,
+der Mehrlauf-Messdatenexport und die übrige Oberfläche bleiben offen.
 
 ## Verbindlicher Umfang
 

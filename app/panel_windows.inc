@@ -107,6 +107,7 @@ fail:
     *p=(ps_panel_window){0};ps_graphics_make_current(a->graphics);return false;
 }
 static void panel_requests(app *a) {
+    if(a->graphic_export)return;
     unsigned returns=a->panel_return_request,opens=a->panel_open_request;
     a->panel_return_request=a->panel_open_request=0;
     for(unsigned panel=0;panel<PS_PANEL_COUNT;panel++) {
@@ -195,6 +196,7 @@ static bool panel_windows_render(app *a) {
         if(i<PS_DOCK_PANELS)p->tab=main_tab;
         a->window=p->window;a->graphics=p->graphics;a->ui=p->ui;a->tab=p->tab;a->panel_render=(int)i+1;
         int w,h;SDL_GetWindowSize(p->window,&w,&h);
+        graphic_input_guard export_guard=graphic_export_guard(a);
         ui_palette=workbench_visible(a) || analysis_visible(a)?ps_workbench_palette(palette):laboratory_visible(a)?ps_laboratory_palette(palette):palette;
         style(p->ui);nk_style_set_font(p->ui,workbench_visible(a) || analysis_visible(a)?&a->workbench_fonts[0]:laboratory_visible(a)?&a->workbench_fonts[2]:a->font_ui);
         nk_sdl_set_ui_size(p->ui,a->preferences.ui_size);
@@ -238,6 +240,8 @@ static bool panel_windows_render(app *a) {
             laboratory_separators(a);
             p->resize=a->laboratory_resize;p->resize_original=a->laboratory_resize_original;p->resize_cancelled=a->laboratory_resize_cancelled;
         }
+        graphic_export_unguard(a,export_guard);
+        graphic_export_view(a,w,h);
         nk_sdl_update_TextInput(p->ui);
         memcpy(p->splitters,a->laboratory_splitters,sizeof p->splitters);
         if(i==PS_PANEL_MEASURE){p->measure_bounds=a->laboratory_measure_bounds;p->measure_width=a->laboratory_measure_width;}

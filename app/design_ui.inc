@@ -1142,7 +1142,7 @@ static void workbench_editor_status(app *a) {
     }
     nk_end(ui);nk_style_pop_float(ui);nk_style_pop_vec2(ui);
 }
-static void draw_ui(app *a, int width, int height) {
+static void workspace_draw_ui(app *a, int width, int height) {
     struct nk_context *ui = a->ui;
     /* Modal views also cross workspace boundaries (for example Settings with
      * the layout manager open); finish the session transition before returning. */
@@ -1288,4 +1288,13 @@ static void draw_ui(app *a, int width, int height) {
     if(a->outline_keyboard)ui->active=nk_window_find(ui,"workspace");
     if(workspace_shell){ui_palette=previous_palette;style(ui);}
     if(workspace_shell)nk_style_set_font(ui,previous_font);
+}
+
+/* Modal input and semantic publication are scoped to the source window. The
+ * rest of the scene still renders, but has no active controls behind the sheet. */
+static void draw_ui(app *a,int width,int height) {
+    graphic_input_guard guard=graphic_export_guard(a);
+    workspace_draw_ui(a,width,height);
+    graphic_export_unguard(a,guard);
+    graphic_export_view(a,width,height);
 }

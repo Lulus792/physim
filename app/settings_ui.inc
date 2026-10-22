@@ -1,5 +1,6 @@
 /* App-owned presentation state, separate from project sources and run metadata. */
 static void preferences_apply(app *a, const ps_preferences *p) {
+    if(!ps_preferences_valid(p))return;
     if(!documentation_fonts_prepare_sizes(a,a->doc_zoom_size?a->doc_zoom_size:p->ui_size,
         a->doc_zoom_size?a->doc_zoom_size:p->editor_size,p->ui_size,p->editor_size))return;
     a->preferences = *p;

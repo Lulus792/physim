@@ -36,6 +36,14 @@ int main(int argc, char **argv) {
     CHECK(!memcmp(header, "\211PNG\r\n\032\n", 8));
     CHECK(header[19] == 64 && header[23] == 65 && header[24] == 8 && header[25] == 2);
     CHECK(!fclose(f));
+    unsigned char *encoded=NULL;size_t encoded_size=0;
+    CHECK(ps_png_encode(&pixels[0][0],64,65,200,&encoded,&encoded_size)==PS_OK);
+    f=fopen(argv[1],"rb");CHECK(f);size_t encoded_at=0;int byte;
+    while((byte=fgetc(f))!=EOF){CHECK(encoded_at<encoded_size && encoded[encoded_at++]==(unsigned char)byte);}
+    CHECK(encoded_at==encoded_size && !fclose(f));
+    unsigned char *preserved=encoded;size_t prior_size=encoded_size;
+    CHECK(ps_png_encode(NULL,64,65,200,&encoded,&encoded_size)==PS_INVALID);
+    CHECK(encoded==preserved && encoded_size==prior_size);free(encoded);
     unsigned char *edge = malloc(8192 * 3);
     CHECK(edge);
     for (unsigned i = 0; i < 8192; i++) {

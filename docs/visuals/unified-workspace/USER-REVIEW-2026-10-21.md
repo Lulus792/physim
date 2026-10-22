@@ -25,5 +25,10 @@ Auswahlpfeile, Workspace-Chevrons und Szenenzeilen, ergänzt Inspektorabschnitte
 und behebt dessen blockierenden Modellfehler-Scrollbereich. Windows besteht
 sechs ausgewählte native Gruppen, Linux sieben. Die vollständige Windows-
 Messlaborgruppe besitzt weiterhin einen getrennten offenen Hostfokus-Nachweis.
-Die gesamte Tabelle ist keine Abnahme. Der große Bericht, Zoom-/Tooltipdetails
+Der folgende [native Berichts-Exportdialog](GRAPHIC-DIALOG-NATIVE.md) ersetzt
+die alte PNG-/SVG-/Größenleiste der Aufnahme 23:36:03 durch **Grafik exportieren…**
+neben kompakten Zoomaktionen und öffnet die freigegebene Vorschau mit Optionen.
+Das ist keine vollständige Erledigung dieses Screenshots: verbleibende
+Typografie-/Blur-/Komponentendetails, Mehrlaufansicht und Gesamtzustände sind
+weiter aufgelistet. Die gesamte Tabelle ist keine Abnahme; Zoom-/Tooltipdetails
 und die übrigen Oberflächenzustände bleiben ausdrücklich offen.

@@ -176,6 +176,19 @@ int main(int argc,char **argv) {
         CHECK(snprintf(path,sizeof path,"%s/figure-%u-%u.svg",argv[1],theme,crop)>0 && write_svg(f,path)==0);
         ps_graphic_figure_destroy(f);
     }
+    {
+        ps_graphic_figure_options contrast={.dark=true,.high_contrast=true};ps_graphic_figure *figure=NULL;
+        CHECK(ps_graphic_figure_create(s,&contrast,measure,NULL,ps_allocator_default(),&figure)==PS_OK);
+        ps_figure_command command;CHECK(ps_graphic_figure_command(figure,0,&command)==PS_OK && command.color==0);
+        bool curve=false,grid=false,title=false;
+        for(size_t i=0;i<ps_graphic_figure_count(figure);i++) {
+            CHECK(ps_graphic_figure_command(figure,i,&command)==PS_OK);
+            if(command.curve==0){CHECK(command.color==0x8cc8ff);curve=true;}
+            grid|=command.kind==PS_FIGURE_LINE && command.color==0x8c8c8c;
+            title|=command.kind==PS_FIGURE_TEXT && command.strong && command.color==0xffffff;
+        }
+        CHECK(curve && grid && title);ps_graphic_figure_destroy(figure);
+    }
     ps_graphic_snapshot_destroy(s);CHECK(ownership()==0);
     axes.visible[1]=1e-20;axes.visible[0]=0;s=NULL;CHECK(make_snapshot(&axes,&s)==PS_OK);
     ps_graphic_figure_options o={.visible=true};ps_graphic_figure *f=NULL;
