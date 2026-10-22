@@ -1,0 +1,6 @@
+Linked physim-test-ui-subpixel-negative.exe
+OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2
+
+Subpixel GPU 35: error<=1.1 && p[0]==p[1] && p[1]==p[2] ()
+
+NEGATIVE_EXIT 1

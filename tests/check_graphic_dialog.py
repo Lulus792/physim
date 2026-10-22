@@ -114,8 +114,17 @@ def main():
     assert bitmap((project/'plot-export-dialog.bmp').read_bytes())==png(project/'plot-export-dialog.png')[:3],'PNG capture differs from paired actual BMP readback'
     match=re.search(r'GRAPHIC DIALOG LIGHT FIELD: ([0-9.,]+)',stderr);assert match
     field_x,field_y,field_w,field_h=map(float,match.group(1).split(','));w,h,rgb,_=png(project/'graphic-dialog-light.png')
-    at=(int(field_y)*w+int(field_x+field_w/2))*3
+    # Contours snap to target pixels; the logged hit/layout rectangle retains
+    # its fractional origin. This capture is explicitly a 1x target.
+    at=(int(field_y+.5)*w+int(field_x+field_w/2))*3
     assert rgb[at:at+3]==bytes((180,188,200)),'Light field border must match approved CSS/reference color'
+    # Independent samples read directly from the approved 1440x1100 images.
+    # Keep all three one-pixel field contours exact in both themes.
+    for theme,color in [('light',(180,188,200)),('dark',(55,56,62))]:
+        w,h,rgb,_=png(project/('graphic-dialog-reference-'+theme+'.png'))
+        for y in (476,554,632):
+            at=(y*w+1100)*3
+            assert rgb[at:at+3]==bytes(color),f'{theme} reference field contour at y={y}'
     match=re.search(r'GRAPHIC DIALOG REFLOW: width=680 paper=([0-9.,]+)',stderr);assert match
     left,top,width,height=map(float,match.group(1).split(','));w,h,rgb,_=png(project/'graphic-dialog-680-default.png')
     def pixel(x,y):

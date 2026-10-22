@@ -600,16 +600,14 @@ static bool ui_target(ps_graphics *g, struct nk_context *ui, struct nk_buffer *c
     nk_draw_foreach(cmd, ui, commands) {
         if (!cmd->elem_count)
             continue;
-        int x = (int)floorf(cmd->clip_rect.x * sx),
-            y = (int)floorf((h - cmd->clip_rect.y - cmd->clip_rect.h) * sy);
-        int cw = (int)ceilf(cmd->clip_rect.w * sx), ch = (int)ceilf(cmd->clip_rect.h * sy);
-        if (cw > 0 && ch > 0) {
+        int clip[4];
+        if (ps_ui_geometry_scissor(cmd->clip_rect,w,h,pw,ph,clip)) {
             bool glass=g->backdrop && cmd->userdata.ptr==g->backdrop;
             const ps_ui_shadow *shadow=NULL;
             for(unsigned i=0;i<g->shadow_count;i++)if(cmd->userdata.ptr==&g->shadows[i]){shadow=&g->shadows[i];break;}
             bool filtered=glass && backdrop_draw_prepare(g,framebuffer,pw,ph,sx,sy,matrix);
             bool shaded=shadow && shadow_prepare(g,shadow,matrix);
-            g->Scissor(x, y, cw, ch);
+            g->Scissor(clip[0],clip[1],clip[2],clip[3]);
             if(!filtered && !shaded) {
                 g->BindTexture(GL_TEXTURE_2D, (GLuint)cmd->texture.id);
                 g->Uniform1i(g->ui_flip, (GLuint)cmd->texture.id == g->scene_texture);

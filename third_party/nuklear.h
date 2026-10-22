@@ -86,6 +86,7 @@
  * NK_INCLUDE_COMMAND_USERDATA     | Defining this adds a userdata pointer into each command. Can be useful for example if you want to provide custom shaders depending on the used widget. Can be combined with the style structures.
  * NK_BUTTON_TRIGGER_ON_RELEASE    | Different platforms require button clicks occurring either on buttons being pressed (up to down) or released (down to up). By default this library will react on buttons being pressed, but if you define this it will only trigger if a button is released.
  * NK_ZERO_COMMAND_MEMORY          | Defining this will zero out memory for each drawing command added to a drawing queue (inside nk_command_buffer_push). Zeroing command memory is very useful for fast checking (using memcmp) if command buffers are equal and avoid drawing frames when nothing on screen has changed since previous frame.
+ * NK_INCLUDE_FLOAT_COMMANDS       | Physim: float command dimensions/callback ABI and allocated widget rectangles
  * NK_UINT_DRAW_INDEX              | Defining this will set the size of vertex index elements when using NK_VERTEX_BUFFER_OUTPUT to 32bit instead of the default of 16bit
  * NK_KEYSTATE_BASED_INPUT         | Define this if your backend uses key state for each frame rather than key press/release events
  * NK_IS_WORD_BOUNDARY(c)          | Define this to a function macro that takes a single nk_rune (nk_uint) and returns true if it's a word separator. If not defined, uses the default definition (see nk_is_word_boundary())
@@ -104,6 +105,7 @@
  * - NK_INCLUDE_FONT_BAKING
  * - NK_INCLUDE_DEFAULT_FONT
  * - NK_INCLUDE_COMMAND_USERDATA
+ * - NK_INCLUDE_FLOAT_COMMANDS
  * - NK_UINT_DRAW_INDEX
  *
  * @subsection constants Constants
@@ -4730,6 +4732,19 @@ enum nk_command_type {
     NK_COMMAND_CUSTOM
 };
 
+/* Physim extension: retain logical coordinates until vertex conversion.
+ * This changes command layouts and the custom callback ABI; define consistently
+ * in every translation unit. Without the flag the original short ABI remains. */
+#ifdef NK_INCLUDE_FLOAT_COMMANDS
+typedef float nk_command_coord;
+typedef float nk_command_size;
+typedef struct nk_vec2 nk_command_point;
+#else
+typedef short nk_command_coord;
+typedef unsigned short nk_command_size;
+typedef struct nk_vec2i nk_command_point;
+#endif
+
  /** command base and header of every command inside the buffer */
 struct nk_command {
     enum nk_command_type type;
@@ -4741,48 +4756,48 @@ struct nk_command {
 
 struct nk_command_scissor {
     struct nk_command header;
-    short x, y;
-    unsigned short w, h;
+    nk_command_coord x, y;
+    nk_command_size w, h;
 };
 
 struct nk_command_line {
     struct nk_command header;
-    unsigned short line_thickness;
-    struct nk_vec2i begin;
-    struct nk_vec2i end;
+    nk_command_size line_thickness;
+    nk_command_point begin;
+    nk_command_point end;
     struct nk_color color;
 };
 
 struct nk_command_curve {
     struct nk_command header;
-    unsigned short line_thickness;
-    struct nk_vec2i begin;
-    struct nk_vec2i end;
-    struct nk_vec2i ctrl[2];
+    nk_command_size line_thickness;
+    nk_command_point begin;
+    nk_command_point end;
+    nk_command_point ctrl[2];
     struct nk_color color;
 };
 
 struct nk_command_rect {
     struct nk_command header;
-    unsigned short rounding;
-    unsigned short line_thickness;
-    short x, y;
-    unsigned short w, h;
+    nk_command_size rounding;
+    nk_command_size line_thickness;
+    nk_command_coord x, y;
+    nk_command_size w, h;
     struct nk_color color;
 };
 
 struct nk_command_rect_filled {
     struct nk_command header;
-    unsigned short rounding;
-    short x, y;
-    unsigned short w, h;
+    nk_command_size rounding;
+    nk_command_coord x, y;
+    nk_command_size w, h;
     struct nk_color color;
 };
 
 struct nk_command_rect_multi_color {
     struct nk_command header;
-    short x, y;
-    unsigned short w, h;
+    nk_command_coord x, y;
+    nk_command_size w, h;
     struct nk_color left;
     struct nk_color top;
     struct nk_color bottom;
@@ -4791,49 +4806,49 @@ struct nk_command_rect_multi_color {
 
 struct nk_command_triangle {
     struct nk_command header;
-    unsigned short line_thickness;
-    struct nk_vec2i a;
-    struct nk_vec2i b;
-    struct nk_vec2i c;
+    nk_command_size line_thickness;
+    nk_command_point a;
+    nk_command_point b;
+    nk_command_point c;
     struct nk_color color;
 };
 
 struct nk_command_triangle_filled {
     struct nk_command header;
-    struct nk_vec2i a;
-    struct nk_vec2i b;
-    struct nk_vec2i c;
+    nk_command_point a;
+    nk_command_point b;
+    nk_command_point c;
     struct nk_color color;
 };
 
 struct nk_command_circle {
     struct nk_command header;
-    short x, y;
-    unsigned short line_thickness;
-    unsigned short w, h;
+    nk_command_coord x, y;
+    nk_command_size line_thickness;
+    nk_command_size w, h;
     struct nk_color color;
 };
 
 struct nk_command_circle_filled {
     struct nk_command header;
-    short x, y;
-    unsigned short w, h;
+    nk_command_coord x, y;
+    nk_command_size w, h;
     struct nk_color color;
 };
 
 struct nk_command_arc {
     struct nk_command header;
-    short cx, cy;
-    unsigned short r;
-    unsigned short line_thickness;
+    nk_command_coord cx, cy;
+    nk_command_size r;
+    nk_command_size line_thickness;
     float a[2];
     struct nk_color color;
 };
 
 struct nk_command_arc_filled {
     struct nk_command header;
-    short cx, cy;
-    unsigned short r;
+    nk_command_coord cx, cy;
+    nk_command_size r;
     float a[2];
     struct nk_color color;
 };
@@ -4841,40 +4856,40 @@ struct nk_command_arc_filled {
 struct nk_command_polygon {
     struct nk_command header;
     struct nk_color color;
-    unsigned short line_thickness;
+    nk_command_size line_thickness;
     unsigned short point_count;
-    struct nk_vec2i points[1];
+    nk_command_point points[1];
 };
 
 struct nk_command_polygon_filled {
     struct nk_command header;
     struct nk_color color;
     unsigned short point_count;
-    struct nk_vec2i points[1];
+    nk_command_point points[1];
 };
 
 struct nk_command_polyline {
     struct nk_command header;
     struct nk_color color;
-    unsigned short line_thickness;
+    nk_command_size line_thickness;
     unsigned short point_count;
-    struct nk_vec2i points[1];
+    nk_command_point points[1];
 };
 
 struct nk_command_image {
     struct nk_command header;
-    short x, y;
-    unsigned short w, h;
+    nk_command_coord x, y;
+    nk_command_size w, h;
     struct nk_image img;
     struct nk_color col;
 };
 
-typedef void (*nk_command_custom_callback)(void *canvas, short x,short y,
-    unsigned short w, unsigned short h, nk_handle callback_data);
+typedef void (*nk_command_custom_callback)(void *canvas, nk_command_coord x,nk_command_coord y,
+    nk_command_size w, nk_command_size h, nk_handle callback_data);
 struct nk_command_custom {
     struct nk_command header;
-    short x, y;
-    unsigned short w, h;
+    nk_command_coord x, y;
+    nk_command_size w, h;
     nk_handle callback_data;
     nk_command_custom_callback callback;
 };
@@ -4884,8 +4899,8 @@ struct nk_command_text {
     const struct nk_user_font *font;
     struct nk_color background;
     struct nk_color foreground;
-    short x, y;
-    unsigned short w, h;
+    nk_command_coord x, y;
+    nk_command_size w, h;
     float height;
     int length;
     char string[]; /* C17 flexible tail; allocation includes length + NUL. */
@@ -9381,10 +9396,10 @@ nk_push_scissor(struct nk_command_buffer *b, struct nk_rect r)
         nk_command_buffer_push(b, NK_COMMAND_SCISSOR, sizeof(*cmd));
 
     if (!cmd) return;
-    cmd->x = (short)r.x;
-    cmd->y = (short)r.y;
-    cmd->w = (unsigned short)NK_MAX(0, r.w);
-    cmd->h = (unsigned short)NK_MAX(0, r.h);
+    cmd->x = (nk_command_coord)r.x;
+    cmd->y = (nk_command_coord)r.y;
+    cmd->w = (nk_command_size)NK_MAX(0, r.w);
+    cmd->h = (nk_command_size)NK_MAX(0, r.h);
 }
 NK_API void
 nk_stroke_line(struct nk_command_buffer *b, float x0, float y0,
@@ -9396,11 +9411,11 @@ nk_stroke_line(struct nk_command_buffer *b, float x0, float y0,
     cmd = (struct nk_command_line*)
         nk_command_buffer_push(b, NK_COMMAND_LINE, sizeof(*cmd));
     if (!cmd) return;
-    cmd->line_thickness = (unsigned short)line_thickness;
-    cmd->begin.x = (short)x0;
-    cmd->begin.y = (short)y0;
-    cmd->end.x = (short)x1;
-    cmd->end.y = (short)y1;
+    cmd->line_thickness = (nk_command_size)line_thickness;
+    cmd->begin.x = (nk_command_coord)x0;
+    cmd->begin.y = (nk_command_coord)y0;
+    cmd->end.x = (nk_command_coord)x1;
+    cmd->end.y = (nk_command_coord)y1;
     cmd->color = c;
 }
 NK_API void
@@ -9415,15 +9430,15 @@ nk_stroke_curve(struct nk_command_buffer *b, float ax, float ay,
     cmd = (struct nk_command_curve*)
         nk_command_buffer_push(b, NK_COMMAND_CURVE, sizeof(*cmd));
     if (!cmd) return;
-    cmd->line_thickness = (unsigned short)line_thickness;
-    cmd->begin.x = (short)ax;
-    cmd->begin.y = (short)ay;
-    cmd->ctrl[0].x = (short)ctrl0x;
-    cmd->ctrl[0].y = (short)ctrl0y;
-    cmd->ctrl[1].x = (short)ctrl1x;
-    cmd->ctrl[1].y = (short)ctrl1y;
-    cmd->end.x = (short)bx;
-    cmd->end.y = (short)by;
+    cmd->line_thickness = (nk_command_size)line_thickness;
+    cmd->begin.x = (nk_command_coord)ax;
+    cmd->begin.y = (nk_command_coord)ay;
+    cmd->ctrl[0].x = (nk_command_coord)ctrl0x;
+    cmd->ctrl[0].y = (nk_command_coord)ctrl0y;
+    cmd->ctrl[1].x = (nk_command_coord)ctrl1x;
+    cmd->ctrl[1].y = (nk_command_coord)ctrl1y;
+    cmd->end.x = (nk_command_coord)bx;
+    cmd->end.y = (nk_command_coord)by;
     cmd->color = col;
 }
 NK_API void
@@ -9441,12 +9456,12 @@ nk_stroke_rect(struct nk_command_buffer *b, struct nk_rect rect,
     cmd = (struct nk_command_rect*)
         nk_command_buffer_push(b, NK_COMMAND_RECT, sizeof(*cmd));
     if (!cmd) return;
-    cmd->rounding = (unsigned short)rounding;
-    cmd->line_thickness = (unsigned short)line_thickness;
-    cmd->x = (short)rect.x;
-    cmd->y = (short)rect.y;
-    cmd->w = (unsigned short)NK_MAX(0, rect.w);
-    cmd->h = (unsigned short)NK_MAX(0, rect.h);
+    cmd->rounding = (nk_command_size)rounding;
+    cmd->line_thickness = (nk_command_size)line_thickness;
+    cmd->x = (nk_command_coord)rect.x;
+    cmd->y = (nk_command_coord)rect.y;
+    cmd->w = (nk_command_size)NK_MAX(0, rect.w);
+    cmd->h = (nk_command_size)NK_MAX(0, rect.h);
     cmd->color = c;
 }
 NK_API void
@@ -9465,11 +9480,11 @@ nk_fill_rect(struct nk_command_buffer *b, struct nk_rect rect,
     cmd = (struct nk_command_rect_filled*)
         nk_command_buffer_push(b, NK_COMMAND_RECT_FILLED, sizeof(*cmd));
     if (!cmd) return;
-    cmd->rounding = (unsigned short)rounding;
-    cmd->x = (short)rect.x;
-    cmd->y = (short)rect.y;
-    cmd->w = (unsigned short)NK_MAX(0, rect.w);
-    cmd->h = (unsigned short)NK_MAX(0, rect.h);
+    cmd->rounding = (nk_command_size)rounding;
+    cmd->x = (nk_command_coord)rect.x;
+    cmd->y = (nk_command_coord)rect.y;
+    cmd->w = (nk_command_size)NK_MAX(0, rect.w);
+    cmd->h = (nk_command_size)NK_MAX(0, rect.h);
     cmd->color = c;
 }
 NK_API void
@@ -9489,10 +9504,10 @@ nk_fill_rect_multi_color(struct nk_command_buffer *b, struct nk_rect rect,
     cmd = (struct nk_command_rect_multi_color*)
         nk_command_buffer_push(b, NK_COMMAND_RECT_MULTI_COLOR, sizeof(*cmd));
     if (!cmd) return;
-    cmd->x = (short)rect.x;
-    cmd->y = (short)rect.y;
-    cmd->w = (unsigned short)NK_MAX(0, rect.w);
-    cmd->h = (unsigned short)NK_MAX(0, rect.h);
+    cmd->x = (nk_command_coord)rect.x;
+    cmd->y = (nk_command_coord)rect.y;
+    cmd->w = (nk_command_size)NK_MAX(0, rect.w);
+    cmd->h = (nk_command_size)NK_MAX(0, rect.h);
     cmd->left = left;
     cmd->top = top;
     cmd->right = right;
@@ -9513,11 +9528,11 @@ nk_stroke_circle(struct nk_command_buffer *b, struct nk_rect r,
     cmd = (struct nk_command_circle*)
         nk_command_buffer_push(b, NK_COMMAND_CIRCLE, sizeof(*cmd));
     if (!cmd) return;
-    cmd->line_thickness = (unsigned short)line_thickness;
-    cmd->x = (short)r.x;
-    cmd->y = (short)r.y;
-    cmd->w = (unsigned short)NK_MAX(r.w, 0);
-    cmd->h = (unsigned short)NK_MAX(r.h, 0);
+    cmd->line_thickness = (nk_command_size)line_thickness;
+    cmd->x = (nk_command_coord)r.x;
+    cmd->y = (nk_command_coord)r.y;
+    cmd->w = (nk_command_size)NK_MAX(r.w, 0);
+    cmd->h = (nk_command_size)NK_MAX(r.h, 0);
     cmd->color = c;
 }
 NK_API void
@@ -9535,10 +9550,10 @@ nk_fill_circle(struct nk_command_buffer *b, struct nk_rect r, struct nk_color c)
     cmd = (struct nk_command_circle_filled*)
         nk_command_buffer_push(b, NK_COMMAND_CIRCLE_FILLED, sizeof(*cmd));
     if (!cmd) return;
-    cmd->x = (short)r.x;
-    cmd->y = (short)r.y;
-    cmd->w = (unsigned short)NK_MAX(r.w, 0);
-    cmd->h = (unsigned short)NK_MAX(r.h, 0);
+    cmd->x = (nk_command_coord)r.x;
+    cmd->y = (nk_command_coord)r.y;
+    cmd->w = (nk_command_size)NK_MAX(r.w, 0);
+    cmd->h = (nk_command_size)NK_MAX(r.h, 0);
     cmd->color = c;
 }
 NK_API void
@@ -9550,10 +9565,10 @@ nk_stroke_arc(struct nk_command_buffer *b, float cx, float cy, float radius,
     cmd = (struct nk_command_arc*)
         nk_command_buffer_push(b, NK_COMMAND_ARC, sizeof(*cmd));
     if (!cmd) return;
-    cmd->line_thickness = (unsigned short)line_thickness;
-    cmd->cx = (short)cx;
-    cmd->cy = (short)cy;
-    cmd->r = (unsigned short)radius;
+    cmd->line_thickness = (nk_command_size)line_thickness;
+    cmd->cx = (nk_command_coord)cx;
+    cmd->cy = (nk_command_coord)cy;
+    cmd->r = (nk_command_size)radius;
     cmd->a[0] = a_min;
     cmd->a[1] = a_max;
     cmd->color = c;
@@ -9568,9 +9583,9 @@ nk_fill_arc(struct nk_command_buffer *b, float cx, float cy, float radius,
     cmd = (struct nk_command_arc_filled*)
         nk_command_buffer_push(b, NK_COMMAND_ARC_FILLED, sizeof(*cmd));
     if (!cmd) return;
-    cmd->cx = (short)cx;
-    cmd->cy = (short)cy;
-    cmd->r = (unsigned short)radius;
+    cmd->cx = (nk_command_coord)cx;
+    cmd->cy = (nk_command_coord)cy;
+    cmd->r = (nk_command_size)radius;
     cmd->a[0] = a_min;
     cmd->a[1] = a_max;
     cmd->color = c;
@@ -9593,13 +9608,13 @@ nk_stroke_triangle(struct nk_command_buffer *b, float x0, float y0, float x1,
     cmd = (struct nk_command_triangle*)
         nk_command_buffer_push(b, NK_COMMAND_TRIANGLE, sizeof(*cmd));
     if (!cmd) return;
-    cmd->line_thickness = (unsigned short)line_thickness;
-    cmd->a.x = (short)x0;
-    cmd->a.y = (short)y0;
-    cmd->b.x = (short)x1;
-    cmd->b.y = (short)y1;
-    cmd->c.x = (short)x2;
-    cmd->c.y = (short)y2;
+    cmd->line_thickness = (nk_command_size)line_thickness;
+    cmd->a.x = (nk_command_coord)x0;
+    cmd->a.y = (nk_command_coord)y0;
+    cmd->b.x = (nk_command_coord)x1;
+    cmd->b.y = (nk_command_coord)y1;
+    cmd->c.x = (nk_command_coord)x2;
+    cmd->c.y = (nk_command_coord)y2;
     cmd->color = c;
 }
 NK_API void
@@ -9621,12 +9636,12 @@ nk_fill_triangle(struct nk_command_buffer *b, float x0, float y0, float x1,
     cmd = (struct nk_command_triangle_filled*)
         nk_command_buffer_push(b, NK_COMMAND_TRIANGLE_FILLED, sizeof(*cmd));
     if (!cmd) return;
-    cmd->a.x = (short)x0;
-    cmd->a.y = (short)y0;
-    cmd->b.x = (short)x1;
-    cmd->b.y = (short)y1;
-    cmd->c.x = (short)x2;
-    cmd->c.y = (short)y2;
+    cmd->a.x = (nk_command_coord)x0;
+    cmd->a.y = (nk_command_coord)y0;
+    cmd->b.x = (nk_command_coord)x1;
+    cmd->b.y = (nk_command_coord)y1;
+    cmd->c.x = (nk_command_coord)x2;
+    cmd->c.y = (nk_command_coord)y2;
     cmd->color = c;
 }
 NK_API void
@@ -9638,16 +9653,17 @@ nk_stroke_polygon(struct nk_command_buffer *b, const float *points, int point_co
     struct nk_command_polygon *cmd;
 
     NK_ASSERT(b);
+    if (!points || point_count < 1 || point_count > 65535) return;
     if (!b || col.a == 0 || line_thickness <= 0) return;
-    size = sizeof(*cmd) + sizeof(short) * 2 * (nk_size)point_count;
+    size = sizeof(*cmd) + sizeof(nk_command_point) * (nk_size)point_count;
     cmd = (struct nk_command_polygon*) nk_command_buffer_push(b, NK_COMMAND_POLYGON, size);
     if (!cmd) return;
     cmd->color = col;
-    cmd->line_thickness = (unsigned short)line_thickness;
+    cmd->line_thickness = (nk_command_size)line_thickness;
     cmd->point_count = (unsigned short)point_count;
     for (i = 0; i < point_count; ++i) {
-        cmd->points[i].x = (short)points[i*2];
-        cmd->points[i].y = (short)points[i*2+1];
+        cmd->points[i].x = (nk_command_coord)points[i*2];
+        cmd->points[i].y = (nk_command_coord)points[i*2+1];
     }
 }
 NK_API void
@@ -9659,16 +9675,17 @@ nk_fill_polygon(struct nk_command_buffer *b, const float *points, int point_coun
     struct nk_command_polygon_filled *cmd;
 
     NK_ASSERT(b);
+    if (!points || point_count < 1 || point_count > 65535) return;
     if (!b || col.a == 0) return;
-    size = sizeof(*cmd) + sizeof(short) * 2 * (nk_size)point_count;
+    size = sizeof(*cmd) + sizeof(nk_command_point) * (nk_size)point_count;
     cmd = (struct nk_command_polygon_filled*)
         nk_command_buffer_push(b, NK_COMMAND_POLYGON_FILLED, size);
     if (!cmd) return;
     cmd->color = col;
     cmd->point_count = (unsigned short)point_count;
     for (i = 0; i < point_count; ++i) {
-        cmd->points[i].x = (short)points[i*2+0];
-        cmd->points[i].y = (short)points[i*2+1];
+        cmd->points[i].x = (nk_command_coord)points[i*2+0];
+        cmd->points[i].y = (nk_command_coord)points[i*2+1];
     }
 }
 NK_API void
@@ -9680,16 +9697,17 @@ nk_stroke_polyline(struct nk_command_buffer *b, const float *points, int point_c
     struct nk_command_polyline *cmd;
 
     NK_ASSERT(b);
+    if (!points || point_count < 1 || point_count > 65535) return;
     if (!b || col.a == 0 || line_thickness <= 0) return;
-    size = sizeof(*cmd) + sizeof(short) * 2 * (nk_size)point_count;
+    size = sizeof(*cmd) + sizeof(nk_command_point) * (nk_size)point_count;
     cmd = (struct nk_command_polyline*) nk_command_buffer_push(b, NK_COMMAND_POLYLINE, size);
     if (!cmd) return;
     cmd->color = col;
     cmd->point_count = (unsigned short)point_count;
-    cmd->line_thickness = (unsigned short)line_thickness;
+    cmd->line_thickness = (nk_command_size)line_thickness;
     for (i = 0; i < point_count; ++i) {
-        cmd->points[i].x = (short)points[i*2];
-        cmd->points[i].y = (short)points[i*2+1];
+        cmd->points[i].x = (nk_command_coord)points[i*2];
+        cmd->points[i].y = (nk_command_coord)points[i*2+1];
     }
 }
 NK_API void
@@ -9708,10 +9726,10 @@ nk_draw_image(struct nk_command_buffer *b, struct nk_rect r,
     cmd = (struct nk_command_image*)
         nk_command_buffer_push(b, NK_COMMAND_IMAGE, sizeof(*cmd));
     if (!cmd) return;
-    cmd->x = (short)r.x;
-    cmd->y = (short)r.y;
-    cmd->w = (unsigned short)NK_MAX(0, r.w);
-    cmd->h = (unsigned short)NK_MAX(0, r.h);
+    cmd->x = (nk_command_coord)r.x;
+    cmd->y = (nk_command_coord)r.y;
+    cmd->w = (nk_command_size)NK_MAX(0, r.w);
+    cmd->h = (nk_command_size)NK_MAX(0, r.h);
     cmd->img = *img;
     cmd->col = col;
 }
@@ -9808,10 +9826,10 @@ nk_push_custom(struct nk_command_buffer *b, struct nk_rect r,
     cmd = (struct nk_command_custom*)
         nk_command_buffer_push(b, NK_COMMAND_CUSTOM, sizeof(*cmd));
     if (!cmd) return;
-    cmd->x = (short)r.x;
-    cmd->y = (short)r.y;
-    cmd->w = (unsigned short)NK_MAX(0, r.w);
-    cmd->h = (unsigned short)NK_MAX(0, r.h);
+    cmd->x = (nk_command_coord)r.x;
+    cmd->y = (nk_command_coord)r.y;
+    cmd->w = (nk_command_size)NK_MAX(0, r.w);
+    cmd->h = (nk_command_size)NK_MAX(0, r.h);
     cmd->callback_data = usr;
     cmd->callback = cb;
 }
@@ -9844,10 +9862,10 @@ nk_draw_text(struct nk_command_buffer *b, struct nk_rect r,
     cmd = (struct nk_command_text*)
         nk_command_buffer_push(b, NK_COMMAND_TEXT, sizeof(*cmd) + (nk_size)(length + 1));
     if (!cmd) return;
-    cmd->x = (short)r.x;
-    cmd->y = (short)r.y;
-    cmd->w = (unsigned short)r.w;
-    cmd->h = (unsigned short)r.h;
+    cmd->x = (nk_command_coord)r.x;
+    cmd->y = (nk_command_coord)r.y;
+    cmd->w = (nk_command_size)r.w;
+    cmd->h = (nk_command_size)r.h;
     cmd->background = bg;
     cmd->foreground = fg;
     cmd->font = font;
@@ -23943,6 +23961,7 @@ nk_widget(struct nk_rect *bounds, const struct nk_context *ctx)
     NK_ASSERT(!(layout->flags & NK_WINDOW_HIDDEN));
     NK_ASSERT(!(layout->flags & NK_WINDOW_CLOSED));
 
+#ifndef NK_INCLUDE_FLOAT_COMMANDS
     /* need to convert to int here to remove floating point errors */
     bounds->x = (float)((int)bounds->x);
     bounds->y = (float)((int)bounds->y);
@@ -23953,6 +23972,8 @@ nk_widget(struct nk_rect *bounds, const struct nk_context *ctx)
     c.y = (float)((int)c.y);
     c.w = (float)((int)c.w);
     c.h = (float)((int)c.h);
+
+#endif
 
     nk_unify(&v, &c, bounds->x, bounds->y, bounds->x + bounds->w, bounds->y + bounds->h);
     if (!NK_INTERSECT(c.x, c.y, c.w, c.h, bounds->x, bounds->y, bounds->w, bounds->h))

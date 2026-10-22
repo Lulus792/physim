@@ -90,7 +90,7 @@ static int large_close_button(void) {
     nk_foreach(command,&ctx)if(command->type==NK_COMMAND_TEXT) {
         const struct nk_command_text *text=(const struct nk_command_text *)command;
         if(text->length!=1 || text->w<11 || text->h<22)
-            fprintf(stderr,"Close glyph: length=%d width=%u height=%u text=%s\n",text->length,text->w,text->h,text->string);
+            fprintf(stderr,"Close glyph: length=%d width=%.3f height=%.3f text=%s\n",text->length,(double)text->w,(double)text->h,text->string);
         CHECK(text->length==1 && text->string[0]=='x' && text->w>=11 && text->h>=22);
         found=true;
     }

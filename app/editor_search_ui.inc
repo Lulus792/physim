@@ -9,7 +9,7 @@ static void search_line(struct nk_draw_list *c,float x0,float y0,float x1,float 
     nk_draw_list_fill_circle(c,nk_vec2(x0,y0),t*.5f,color,12);
     nk_draw_list_fill_circle(c,nk_vec2(x1,y1),t*.5f,color,12);
 }
-static void search_icon_render(void *canvas,short bx,short by,unsigned short bw,unsigned short bh,nk_handle data) {
+static void search_icon_render(void *canvas,nk_command_coord bx,nk_command_coord by,nk_command_size bw,nk_command_size bh,nk_handle data) {
     struct nk_draw_list *c=canvas;unsigned packed=(unsigned)data.id;
     search_icon icon=(search_icon)(packed&15);
     struct nk_color color=nk_rgb((packed>>4)&255,(packed>>12)&255,(packed>>20)&255);

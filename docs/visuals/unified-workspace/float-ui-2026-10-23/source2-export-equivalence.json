@@ -1,0 +1,42 @@
+{
+  "native-export.png": {
+    "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-export.png",
+    "byte_equal": true,
+    "sha256": "3d6d9cbc571f8847317a21c84ad733f9df31254d8afe2bbf162d3fdb6dc66898"
+  },
+  "native-scale1.png": {
+    "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-scale1.png",
+    "byte_equal": true,
+    "sha256": "29dc5fcb8420f4ae4ea86018b9479acabbbe19d35678cbfba799c91b6d67e2ae"
+  },
+  "native-scale3.png": {
+    "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-scale3.png",
+    "byte_equal": true,
+    "sha256": "ec42249f66edea5915c058ba2fcdc96ea6184e2fa4d132ac6b3cf2ccc0c1ff12"
+  },
+  "native-scale4.png": {
+    "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-scale4.png",
+    "byte_equal": true,
+    "sha256": "de5bb14cb68522d489d47209814972f20c980874a75e55aea107a9dbd6eeae3c"
+  },
+  "native-ausschnitt.png": {
+    "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-ausschnitt.png",
+    "byte_equal": true,
+    "sha256": "e1d73b343b99a306720748357d190256ebf312532df5ba8a9cfeb92a07527422"
+  },
+  "native-ausschnitt.svg": {
+    "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-ausschnitt.svg",
+    "byte_equal": true,
+    "sha256": "74bbc37b28acca463fc17a8460e55a6c4361bdd1030e3daeac2ac22ed37469b9"
+  },
+  "clipboard-reference.png": {
+    "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-clipboard-reference.png",
+    "byte_equal": true,
+    "sha256": "3d6d9cbc571f8847317a21c84ad733f9df31254d8afe2bbf162d3fdb6dc66898"
+  },
+  "contrast-paper.png": {
+    "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-contrast-paper.png",
+    "byte_equal": true,
+    "sha256": "b15743a7a3570992ed9d2fcaeace0a6b356f5de578802b979184e4950b8773c2"
+  }
+}

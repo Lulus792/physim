@@ -1,0 +1,26 @@
+[
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-backdrop_ui.exe",
+      "D:/Physim/build/native/Design-analysis/test-results/run-9ehijfup/backdrop_ui"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 512x64, 1 fonts, GPU limit 32768\nGPU SHADOW ORACLE: samples=510 max_channel_error=0.935493876\nGPU backdrop: glass, pure sigma3, independent rounded shadows, fallback and ordering passed\n",
+    "stderr": "",
+    "seconds": 1.844,
+    "name": "backdrop_ui"
+  },
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-ui_subpixel_gpu.exe",
+      "D:/Physim/build/native/Design-analysis/test-results/run-9ehijfup/ui_subpixel_gpu"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFLOAT GPU: 71 stroke samples, max channel error 0.500000; fractional clip enclosed at 12x21\n",
+    "stderr": "",
+    "seconds": 1.172,
+    "name": "ui_subpixel_gpu"
+  }
+]

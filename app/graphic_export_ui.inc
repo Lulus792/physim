@@ -238,14 +238,25 @@ static bool graphic_export_button(graphic_dialog *d,float x,float y,float w,floa
     bool clicked=ps_ui_fixed_button_label(ui,label);
     ui->style.button=previous;nk_style_pop_font(ui);return clicked;
 }
+/* Align painted control contours to the actual target's pixel edges. Layout,
+ * hit bounds, text and figure geometry keep their fractional coordinates. */
+static struct nk_rect graphic_export_contour(graphic_dialog *d,struct nk_rect r) {
+    int w,h,pw,ph;
+    if(!SDL_GetWindowSize(d->window,&w,&h) || !SDL_GetWindowSizeInPixels(d->window,&pw,&ph) ||
+       w<=0 || h<=0 || pw<=0 || ph<=0)return r;
+    float sx=(float)pw/w,sy=(float)ph/h;
+    float x=roundf(r.x*sx)/sx,y=roundf(r.y*sy)/sy;
+    return nk_rect(x,y,roundf((r.x+r.w)*sx)/sx-x,roundf((r.y+r.h)*sy)/sy-y);
+}
 static bool graphic_export_combo(graphic_dialog *d,unsigned field,float x,float y,float w,float f,
     const char *name,const char *const *items,int count,int *selected,bool disabled) {
     struct nk_context *ui=d->ui;bool changed=false;
     nk_style_push_font(ui,&d->fonts[2]);nk_begin_disabled(ui,disabled);
     nk_layout_space_push(ui,nk_rect(x,y,w,34*f));d->fields[field]=nk_widget_bounds(ui);
-    nk_fill_rect(nk_window_get_canvas(ui),d->fields[field],6*f,UI_COLOR(border));
-    nk_fill_rect(nk_window_get_canvas(ui),nk_rect(d->fields[field].x+1,d->fields[field].y+1,
-        d->fields[field].w-2,d->fields[field].h-2),fmaxf(0,6*f-1),UI_COLOR(edit));
+    struct nk_rect paint=graphic_export_contour(d,d->fields[field]);
+    nk_fill_rect(nk_window_get_canvas(ui),paint,6*f,UI_COLOR(border));
+    nk_fill_rect(nk_window_get_canvas(ui),nk_rect(paint.x+1,paint.y+1,
+        paint.w-2,paint.h-2),fmaxf(0,6*f-1),UI_COLOR(edit));
     if(ps_ui_combo_begin_named_scaled(ui,name,items[*selected],nk_vec2(w,36*f*count+12*f),f)) {
         d->menu_field=field+1;
         nk_layout_row_dynamic(ui,34*f,1);
@@ -405,9 +416,9 @@ static void graphic_export_view(app *a,int width,int height) {
         for(unsigned i=0;i<2;i++) {
             float card_x=sx+(columns?i*(field_w+16*f):0),card_y=sy+((narrow?46:50)+(columns?0:i*67))*f,card_w=columns?field_w:sw;
             d->formats[i]=graphic_export_slot(ui,card_x,card_y,card_w,60*f);
-            struct nk_rect card=d->formats[i];bool selected=d->svg==(i==1);
-            nk_fill_rect(canvas,card,7*f,selected?UI_COLOR(accent):UI_COLOR(border));
-            nk_fill_rect(canvas,nk_rect(card.x+1,card.y+1,card.w-2,card.h-2),fmaxf(0,7*f-1),selected?UI_COLOR(selection_active):UI_COLOR(edit));
+            struct nk_rect card=d->formats[i],paint=graphic_export_contour(d,card);bool selected=d->svg==(i==1);
+            nk_fill_rect(canvas,paint,7*f,selected?UI_COLOR(accent):UI_COLOR(border));
+            nk_fill_rect(canvas,nk_rect(paint.x+1,paint.y+1,paint.w-2,paint.h-2),fmaxf(0,7*f-1),selected?UI_COLOR(selection_active):UI_COLOR(edit));
             struct nk_color radio=ui_palette==&PS_UI_DARK?UI_COLOR(primary_text):UI_COLOR(accent);
             nk_stroke_circle(canvas,nk_rect(card.x+12*f,card.y+23*f,14*f,14*f),f,selected?radio:UI_COLOR(muted));
             if(selected)nk_fill_circle(canvas,nk_rect(card.x+16*f,card.y+27*f,6*f,6*f),radio);

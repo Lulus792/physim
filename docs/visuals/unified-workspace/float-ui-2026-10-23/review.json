@@ -1,0 +1,23 @@
+{
+  "staged_files": 120,
+  "artifact_hashes_match_git_blobs": 102,
+  "frozen_source_files": 235,
+  "foreign_files_byte_equal": 12,
+  "utf8_and_markdown_links": "passed",
+  "final_groups": [
+    [
+      "windows-debug",
+      1
+    ],
+    [
+      "windows-release",
+      2
+    ],
+    [
+      "linux-debug",
+      2
+    ]
+  ],
+  "all_24_matching_platform_exports_byte_equal": true,
+  "scope": "Reviewed Float command ABI and emission, custom callbacks, variable point storage, clip conversion, painted contours separate from hit geometry. No full design acceptance."
+}

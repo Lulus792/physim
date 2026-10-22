@@ -1,9 +1,22 @@
 #include "ui_geometry.h"
 #include <stddef.h>
 #include <string.h>
+#include <math.h>
 
 #define INITIAL_CAPACITY 4096u
 #define DEFAULT_LIMIT (64u * 1024u * 1024u)
+
+bool ps_ui_geometry_scissor(struct nk_rect c,int w,int h,int pw,int ph,int out[4]) {
+    if(!out || w<=0 || h<=0 || pw<=0 || ph<=0 || !isfinite(c.x) || !isfinite(c.y) ||
+       !isfinite(c.w) || !isfinite(c.h) || c.w<=0 || c.h<=0)return false;
+    double sx=(double)pw/w,sy=(double)ph/h;
+    double left=c.x*sx,right=((double)c.x+c.w)*sx;
+    double bottom=ph-((double)c.y+c.h)*sy,top=ph-c.y*sy;
+    int x=(int)floor(fmax(0,fmin(pw,left))),y=(int)floor(fmax(0,fmin(ph,bottom)));
+    int r=(int)ceil(fmax(0,fmin(pw,right))),t=(int)ceil(fmax(0,fmin(ph,top)));
+    if(r<=x || t<=y)return false;
+    out[0]=x;out[1]=y;out[2]=r-x;out[3]=t-y;return true;
+}
 
 ps_result ps_ui_geometry_init(ps_ui_geometry *g, ps_allocator allocator, size_t byte_limit) {
     if (!g || !ps_allocator_valid(allocator) || (byte_limit && byte_limit < 2 * INITIAL_CAPACITY))

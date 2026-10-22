@@ -49,6 +49,7 @@ def catalog():
     cases.append(Case("graphic_figure",("tests/test_graphic_figure.c","app/graphic_figure.c","app/graphic_snapshot.c","app/plot_view.c"),arguments=("{work}",)))
     cases.append(Case("graphic_snapshot",("tests/test_graphic_snapshot.c","app/graphic_snapshot.c"),arguments=("{work}",)))
     cases.append(Case("analysis_comparison",("tests/test_analysis_comparison.c","app/analysis_comparison.c","app/graphic_snapshot.c"),app=True,arguments=("{work}",)))
+    cases.append(Case("nuklear_command_legacy",("tests/test_nuklear_command_legacy.c",),libraries=()))
     linebreak=tuple(f"third_party/libunibreak-8.0/{name}.c" for name in "linebreak linebreakdata linebreakdef eastasianwidthdef unibreakbase unibreakdef".split())
     cases.append(Case("code_preview",("tests/test_code_preview.c","app/code_preview.c",*linebreak),libraries=()))
     cases.append(Case("code_linebreak",("tests/test_code_linebreak.c",*linebreak),libraries=("zlib",),defines=("Z_PREFIX",),arguments=("{source}/third_party/libunibreak-8.0/LineBreakTest.txt.gz",)))
@@ -86,6 +87,7 @@ def catalog():
         cases.append(Case("accessibility_ui", ("tests/test_accessibility_ui.c", "app/accessibility.c", "app/accessibility_native.c", "app/ui_backend.c", "app/ui_sdl.c", "app/ui_geometry.c", "app/graphics.c", "app/png.c"),libraries=("platform","zlib","core"),defines=("Z_PREFIX",),app=True,display=True))
     cases.append(Case("font_bank_ui", ("tests/test_font_bank_ui.c", "app/accessibility.c", "app/accessibility_native.c", "app/accessibility_atspi.c", "app/ui_backend.c", "app/ui_sdl.c", "app/ui_geometry.c", "app/graphics.c", "app/png.c"),libraries=("platform","zlib","core"),defines=("Z_PREFIX",),arguments=("{work}",),app=True,display=True))
     cases.append(Case("backdrop_ui", ("tests/test_backdrop_ui.c", "app/accessibility.c", "app/accessibility_native.c", "app/accessibility_atspi.c", "app/ui_backend.c", "app/ui_sdl.c", "app/ui_geometry.c", "app/graphics.c", "app/png.c"),libraries=("platform","zlib","core"),defines=("Z_PREFIX",),arguments=("{work}",),app=True,display=True))
+    cases.append(Case("ui_subpixel_gpu", ("tests/test_ui_subpixel_gpu.c", "app/ui_backend.c", "app/ui_geometry.c", "app/graphics.c", "app/png.c"),libraries=("platform","zlib","core"),defines=("Z_PREFIX",),arguments=("{work}",),app=True,display=True))
     for name in ("core", "linear_range", "transform_range", "scalar_range", "ode_range", "quantity_sum", "real_gas", "properties", "numerics", "mechanics", "thermodynamics", "electromagnetism", "waves_optics", "fluid", "hashmap", "string_view", "array",
                  "memory", "memory_owners", "math", "box_contacts", "convex", "convex_sweep", "motion_sweep", "contact_graph",
                  "distance_joint", "constraint_graph", "contact_world", "ccd_step", "broad_phase", "measurement",
@@ -163,6 +165,7 @@ def catalog():
         Case("project_migration", ("tests/test_project_migration.c",), ("project", "core"),
              app=True,arguments=("{work}",)),
         Case("ui_geometry", ("tests/test_ui_geometry.c", "app/ui_geometry.c", "app/ui_backend.c"), app=True),
+        Case("ui_subpixel", ("tests/test_ui_subpixel.c", "app/ui_geometry.c", "app/ui_backend.c"), app=True),
         Case("ui_text_tail", ("tests/test_ui_text_tail.c", "app/ui_backend.c"), app=True),
         Case("editor_clipboard", ("tests/test_editor_clipboard.c", "app/ui_backend.c"), app=True),
         Case("editor_readonly", ("tests/test_editor_readonly.c", "app/ui_backend.c"), app=True),

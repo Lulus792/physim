@@ -1,0 +1,13 @@
+[
+  {
+    "command": [
+      "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim-test-ui_subpixel"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "ACTUAL LINE: begin=10.250,20.750 end=40.500,20.750 thickness=1.500\nFLOAT COMMANDS: types=0x7fffe logical widget=11.250,2.750 21.500x10.250; text vertex 10.375,151.125 and custom rectangle preserved\n",
+    "stderr": "",
+    "seconds": 0.065,
+    "name": "ui_subpixel"
+  }
+]

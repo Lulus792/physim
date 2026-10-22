@@ -31,4 +31,8 @@ void ps_ui_geometry_config(struct nk_convert_config *config,
 ps_result ps_ui_geometry_convert(ps_ui_geometry *geometry, struct nk_context *ui,
                                  struct nk_buffer *commands,
                                  const struct nk_draw_null_texture *null_texture);
+/* Conservative physical enclosure of a logical clip, clamped before integer
+ * conversion. GPU scissors are integer rectangles, not fractional AA masks.
+ * No output mutation for invalid/empty/offscreen rectangles. */
+bool ps_ui_geometry_scissor(struct nk_rect clip,int width,int height,int pixels_w,int pixels_h,int out[4]);
 #endif

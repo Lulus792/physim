@@ -1,0 +1,14 @@
+[
+  {
+    "command": [
+      "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim-test-ui_subpixel_gpu",
+      "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-vgeq4wwr/ui_subpixel_gpu"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)\nFLOAT GPU: 71 stroke samples, max channel error 0.500000; fractional clip enclosed at 12x21\n",
+    "stderr": "",
+    "seconds": 0.54,
+    "name": "ui_subpixel_gpu"
+  }
+]

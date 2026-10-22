@@ -1,0 +1,40 @@
+ui_geometry.c
+D:\Physim\third_party\nuklear.h(4906): warning C4200: nonstandard extension used: zero-sized array in struct/union
+Compiled app/ui_geometry.c
+test_ui_subpixel_gpu.c
+D:\Physim\third_party\nuklear.h(4906): warning C4200: nonstandard extension used: zero-sized array in struct/union
+Compiled tests/test_ui_subpixel_gpu.c
+png.c
+Compiled app/png.c
+graphics.c
+D:\Physim\third_party\nuklear.h(4906): warning C4200: nonstandard extension used: zero-sized array in struct/union
+D:\Physim\app\graphics.c(16): warning C4200: nonstandard extension used: zero-sized array in struct/union
+D:\Physim\app\graphics.c(484): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\graphics.c(484): warning C4244: 'function': conversion from 'int' to 'float', possible loss of data
+D:\Physim\app\graphics.c(482): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+Compiled app/graphics.c
+ui_backend.c
+Compiled D:\Physim\build\native\float-ui-negative\mutant\ui_backend.c
+Traceback (most recent call last):
+  File "D:\Physim\build\native\check-float-ui-negative.py", line 10, in <module>
+    program=b.executable('physim-test-ui-subpixel-negative',['tests/test_ui_subpixel_gpu.c',str(src/'ui_backend.c'),'app/ui_geometry.c','app/graphics.c','app/png.c'],libraries,sdl=True,defines=('Z_PREFIX',))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Physim\tools\build.py", line 364, in executable
+    if self.execute(output, command, inputs, sign=MAC):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Physim\tools\build.py", line 232, in execute
+    signature = self.signature(command, inputs) + extra + ("|macos-adhoc-v1" if sign else "")
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Physim\tools\build.py", line 227, in signature
+    data = [args, digest_files(inputs), self.toolchain, self.environment]
+                  ^^^^^^^^^^^^^^^^^^^^
+  File "D:\Physim\tools\build.py", line 111, in digest_files
+    digest.update(path.read_bytes())
+                  ^^^^^^^^^^^^^^^^^
+  File "C:\Users\angel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\pathlib.py", line 1019, in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\angel\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'D:\\Physim\\build\\native\\Design-analysis\\lib\\platform.lib'

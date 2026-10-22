@@ -1,0 +1,7 @@
+{
+  "mutation": "Only nk_stroke_line emission casts restored to short/ushort; command ABI remains Float",
+  "exit_code": 1,
+  "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\n",
+  "stderr": "Subpixel GPU 35: error<=1.1 && p[0]==p[1] && p[1]==p[2] ()\n",
+  "mutant_header_sha256": "168d37d1133a81b5a696b9df85d68f9f2dedb5eee8260adf0806245847ea03e4"
+}

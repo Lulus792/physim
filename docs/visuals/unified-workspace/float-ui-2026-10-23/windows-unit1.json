@@ -1,0 +1,116 @@
+[
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-nuklear_command_legacy.exe"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "Standalone Nuklear: original short command ABI retained\n",
+    "stderr": "",
+    "seconds": 0.078,
+    "name": "nuklear_command_legacy"
+  },
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-ui_geometry.exe"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "UI geometry: identical commands, vertices, indices; stable allocations; 4 failure points\n",
+    "stderr": "",
+    "seconds": 9.297,
+    "name": "ui_geometry"
+  },
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-ui_subpixel.exe"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "ACTUAL LINE: begin=10.250,20.750 end=40.500,20.750 thickness=1.500\nFLOAT COMMANDS: types=0x7fffe logical widget=11.250,2.750 21.500x10.250; text vertex 10.375,151.125 and custom rectangle preserved\n",
+    "stderr": "",
+    "seconds": 0.078,
+    "name": "ui_subpixel"
+  },
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-ui_text_tail.exe"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "UI text tail: 1500-byte rendered UTF-8 command, complete copy and trailing NUL passed\n",
+    "stderr": "",
+    "seconds": 0.063,
+    "name": "ui_text_tail"
+  },
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-font_shape.exe"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "Font shapes: singleton off-curve contours preserve boundaries\n",
+    "stderr": "",
+    "seconds": 0.062,
+    "name": "font_shape"
+  },
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-font_atlas_limits.exe"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "Complete font atlas 2048x2048 within 2048: adaptive width, every ASCII glyph, pixel ink, failure cleanup and retry passed\n",
+    "stderr": "Failure offset 1: pixels=0, requests=57, target=57\nFailure offset 2: pixels=0, requests=59, target=59\nFailure offset 3: pixels=0, requests=63, target=62\nFailure offset 4: pixels=0, requests=67, target=67\nFailure offset 5: pixels=0, requests=73, target=72\nFailure offset 6: pixels=0, requests=79, target=79\nFailure offset 7: pixels=0, requests=86, target=86\nFailure offset 8: pixels=0, requests=6287, target=94\nMeasured atlas: pixels=1 width=2048 height=2048 live=38 baseline=36\n",
+    "seconds": 0.797,
+    "name": "font_atlas_limits"
+  },
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-font_fallback.exe",
+      "D:/Physim"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "Font fallback: last-handle merge, missing-source overlap, raster ink and post-cleanup lookup passed\n",
+    "stderr": "",
+    "seconds": 0.094,
+    "name": "font_fallback"
+  },
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-font_sources.exe",
+      "D:/Physim"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "Offline font sources: missing glyphs, 16/32 raster ink, real strong coverage, failed-add ownership, retry and cleanup passed\n",
+    "stderr": "Actual Latin raster coverage: regular=526290 strong=821164\n",
+    "seconds": 0.141,
+    "name": "font_sources"
+  },
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-font_faces.exe",
+      "D:/Physim",
+      "D:/Physim/build/native/Design-analysis/test-results/run-u6oy2e7w/font_faces"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "FONT PAIRS: direct=-3.007342 extension=-3.007342 copied-after-free=1 scale=2 cache-eviction=1 failures-balanced=1\nFont faces: selected TTC index 2, italic rejection, selected cmap fallback, raster identity, invalid indices, allocation rollback and cleanup passed\n",
+    "stderr": "",
+    "seconds": 0.109,
+    "name": "font_faces"
+  },
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-font_density.exe"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "Raster density 1.00: baked 16.0, logical 16.0, width 146.462\nRaster density 1.25: baked 20.0, logical 16.0, width 146.462\nRaster density 1.50: baked 24.0, logical 16.0, width 146.462\nRaster density 2.00: baked 32.0, logical 16.0, width 146.462\nDevice raster normalization: 1/1.25/1.5/2, stable logical metrics, repeated mapping and invalid input passed\n",
+    "stderr": "",
+    "seconds": 0.109,
+    "name": "font_density"
+  }
+]

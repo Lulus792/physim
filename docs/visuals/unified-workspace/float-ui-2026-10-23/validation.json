@@ -1,0 +1,436 @@
+{
+  "date": "2026-10-23T00:39:41.652772+02:00",
+  "base": "bcb95d10e8d6f986cbef8a8fec19bd1b3aa445e6",
+  "final_source_version": 4,
+  "source_normalization": "CRLF -> LF",
+  "font_assets": {
+    "third_party\\fonts\\notoemoji-OFL.txt": "500bb1ccf43df7bbb522112f9133a52b16e1c35e809632f5d8609b179152de5b",
+    "third_party\\fonts\\NotoEmoji.ttf": "de6c18832938afc99caf132b39d6a30a19bac7f2e812e28db2535b4608d27551",
+    "third_party\\fonts\\NotoSans-Bold.ttf": "c976e4b1b99edc88775377fcc21692ca4bfa46b6d6ca6522bfda505b28ff9d6a",
+    "third_party\\fonts\\notosans-OFL.txt": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+    "third_party\\fonts\\NotoSans.ttf": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d",
+    "third_party\\fonts\\notosansbold-OFL.txt": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb",
+    "third_party\\fonts\\notosansmath-OFL.txt": "403a95275b469061b7d4371c328e0ada3bc7d63328abe2e88aad5cd243b2fe21",
+    "third_party\\fonts\\NotoSansMath-Regular.ttf": "3f495fe933c06786e4d5f6d86b8ee70b6753a68ee3b9d87528726de0f6e2c47d",
+    "third_party\\fonts\\notosansmono-OFL.txt": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+    "third_party\\fonts\\NotoSansMono.ttf": "2cb2adb378a8f574213e23df697050b83c54c27df465a2015552740b2769a081",
+    "third_party\\fonts\\notosanssymbols2-OFL.txt": "b118dd41337806a5d4797052c77caf3bd096aed783e5eb21b4d11154351e1ac0",
+    "third_party\\fonts\\NotoSansSymbols2-Regular.ttf": "7d5fb73b7ca67a6798101741f5d280a3d016a56a197afcd4199dbb57b4b82a21",
+    "third_party\\fonts\\NotoSerif-Italic.ttf": "0ea81d6b54fc8aa5dff0fd6ebe7cfa431e9e6cf747a8d4aa33581fa0aaccffea",
+    "third_party\\fonts\\notoserifitalic-OFL.txt": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
+  },
+  "final_runs": [
+    {
+      "label": "windows-debug",
+      "source_version": 4,
+      "directory": "build/native/Design-analysis/test-results/run-y42sr8jg",
+      "binary_sha256": "1763ee4105f3f65fbfd624870ffee365c3006a3fa019f844d77e45e49ab72cf9",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 58.563
+        }
+      ]
+    },
+    {
+      "label": "windows-release",
+      "source_version": 4,
+      "directory": "build/native/Release/test-results/run-mw9vsxmg",
+      "binary_sha256": "75aa4e2ecf66343d6604011754d541f2852adcda3b96c4a08d555c33e99d5ac7",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 8.171
+        },
+        {
+          "name": "comparison_light_large_narrow",
+          "status": "passed",
+          "seconds": 5.266
+        }
+      ]
+    },
+    {
+      "label": "linux-debug",
+      "source_version": 4,
+      "directory": "build/native/Design-analysis-linux/test-results/run-r8zob6rj",
+      "binary_sha256": "661de183015cfea9c98c40e84667805cbead3055260b1c215e5fe3a99a835e5c",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 44.903
+        },
+        {
+          "name": "comparison_light_large_narrow",
+          "status": "passed",
+          "seconds": 19.927
+        }
+      ]
+    }
+  ],
+  "report_exports_unchanged": {
+    "windows-debug": {
+      "native-export.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-export.png",
+        "sha256": "3d6d9cbc571f8847317a21c84ad733f9df31254d8afe2bbf162d3fdb6dc66898",
+        "byte_equal": true
+      },
+      "native-scale1.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-scale1.png",
+        "sha256": "29dc5fcb8420f4ae4ea86018b9479acabbbe19d35678cbfba799c91b6d67e2ae",
+        "byte_equal": true
+      },
+      "native-scale3.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-scale3.png",
+        "sha256": "ec42249f66edea5915c058ba2fcdc96ea6184e2fa4d132ac6b3cf2ccc0c1ff12",
+        "byte_equal": true
+      },
+      "native-scale4.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-scale4.png",
+        "sha256": "de5bb14cb68522d489d47209814972f20c980874a75e55aea107a9dbd6eeae3c",
+        "byte_equal": true
+      },
+      "native-ausschnitt.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-ausschnitt.png",
+        "sha256": "e1d73b343b99a306720748357d190256ebf312532df5ba8a9cfeb92a07527422",
+        "byte_equal": true
+      },
+      "native-ausschnitt.svg": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-ausschnitt.svg",
+        "sha256": "74bbc37b28acca463fc17a8460e55a6c4361bdd1030e3daeac2ac22ed37469b9",
+        "byte_equal": true
+      },
+      "clipboard-reference.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-clipboard-reference.png",
+        "sha256": "3d6d9cbc571f8847317a21c84ad733f9df31254d8afe2bbf162d3fdb6dc66898",
+        "byte_equal": true
+      },
+      "contrast-paper.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-contrast-paper.png",
+        "sha256": "b15743a7a3570992ed9d2fcaeace0a6b356f5de578802b979184e4950b8773c2",
+        "byte_equal": true
+      }
+    },
+    "windows-release": {
+      "native-export.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-native-export.png",
+        "sha256": "3d6d9cbc571f8847317a21c84ad733f9df31254d8afe2bbf162d3fdb6dc66898",
+        "byte_equal": true
+      },
+      "native-scale1.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-native-scale1.png",
+        "sha256": "29dc5fcb8420f4ae4ea86018b9479acabbbe19d35678cbfba799c91b6d67e2ae",
+        "byte_equal": true
+      },
+      "native-scale3.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-native-scale3.png",
+        "sha256": "ec42249f66edea5915c058ba2fcdc96ea6184e2fa4d132ac6b3cf2ccc0c1ff12",
+        "byte_equal": true
+      },
+      "native-scale4.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-native-scale4.png",
+        "sha256": "de5bb14cb68522d489d47209814972f20c980874a75e55aea107a9dbd6eeae3c",
+        "byte_equal": true
+      },
+      "native-ausschnitt.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-native-ausschnitt.png",
+        "sha256": "e1d73b343b99a306720748357d190256ebf312532df5ba8a9cfeb92a07527422",
+        "byte_equal": true
+      },
+      "native-ausschnitt.svg": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-native-ausschnitt.svg",
+        "sha256": "74bbc37b28acca463fc17a8460e55a6c4361bdd1030e3daeac2ac22ed37469b9",
+        "byte_equal": true
+      },
+      "clipboard-reference.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-clipboard-reference.png",
+        "sha256": "3d6d9cbc571f8847317a21c84ad733f9df31254d8afe2bbf162d3fdb6dc66898",
+        "byte_equal": true
+      },
+      "contrast-paper.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-contrast-paper.png",
+        "sha256": "b15743a7a3570992ed9d2fcaeace0a6b356f5de578802b979184e4950b8773c2",
+        "byte_equal": true
+      }
+    },
+    "linux-debug": {
+      "native-export.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-native-export.png",
+        "sha256": "ec92b40bc2a35d29d328778c1130ebec85b7bb2df11bf3f83dd7b1479cb66685",
+        "byte_equal": true
+      },
+      "native-scale1.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-native-scale1.png",
+        "sha256": "7cf3f5dab314338d0b46b9be0d9195dd74f513f3f4271c325927f28a0ca3dc1e",
+        "byte_equal": true
+      },
+      "native-scale3.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-native-scale3.png",
+        "sha256": "106426dfecaeaa37f34ddec16c11b4ae750e513f41c86aa24e9799c42a8d4213",
+        "byte_equal": true
+      },
+      "native-scale4.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-native-scale4.png",
+        "sha256": "27bbf7095b28a24bc32b270e9cc5bb5d7bca42c0465fb2e1bbbaca79d7ecf46e",
+        "byte_equal": true
+      },
+      "native-ausschnitt.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-native-ausschnitt.png",
+        "sha256": "1c6ddfa8fb33a8d2f27271b5461895ab3831233bf3e6e98440eefecbd6b3772c",
+        "byte_equal": true
+      },
+      "native-ausschnitt.svg": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-native-ausschnitt.svg",
+        "sha256": "0ee3c6538ac34f443e9fcd69dbfd760a5a2359814dc582f9a5a89c1d767ea15b",
+        "byte_equal": true
+      },
+      "clipboard-reference.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-clipboard-reference.png",
+        "sha256": "ec92b40bc2a35d29d328778c1130ebec85b7bb2df11bf3f83dd7b1479cb66685",
+        "byte_equal": true
+      },
+      "contrast-paper.png": {
+        "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-contrast-paper.png",
+        "sha256": "a61340560fabedb4aa66c9bc262d9a44fe1eebadc083c0ac4705b0219060301c",
+        "byte_equal": true
+      }
+    }
+  },
+  "images": [
+    {
+      "artifact": "windows-debug-export-dark-v4.png",
+      "source": "build/native/Design-analysis/test-results/run-y42sr8jg/graphic_dialog/files ä/dialog ä/graphic-dialog-reference-dark.png",
+      "bytes": 246377,
+      "sha256": "b70534483e703c4e096a48fb154a7ee13f7a44651a62f518d60218551d24d300"
+    },
+    {
+      "artifact": "windows-debug-export-light-v4.png",
+      "source": "build/native/Design-analysis/test-results/run-y42sr8jg/graphic_dialog/files ä/dialog ä/graphic-dialog-reference-light.png",
+      "bytes": 297671,
+      "sha256": "53a1e0334e3530661d59eed15832ea6fe6acdc1fa3eaabeb31dd37de9aadbbd1"
+    },
+    {
+      "artifact": "windows-debug-graphic-dialog-480-footer-v4.png",
+      "source": "build/native/Design-analysis/test-results/run-y42sr8jg/graphic_dialog/files ä/dialog ä/graphic-dialog-480-footer.png",
+      "bytes": 60024,
+      "sha256": "73205f291a3dd3e5f7141943bc7af5d7a79f8a6d5752a4029beaefd22cc3f782"
+    },
+    {
+      "artifact": "windows-debug-graphic-dialog-680-default-v4.png",
+      "source": "build/native/Design-analysis/test-results/run-y42sr8jg/graphic_dialog/files ä/dialog ä/graphic-dialog-680-default.png",
+      "bytes": 62508,
+      "sha256": "7957d2d2f6099b615de31b52d1e831cec00f397304b8f6089c47ffd2f9fdaa79"
+    },
+    {
+      "artifact": "windows-debug-graphic-dialog-800-centered-v4.png",
+      "source": "build/native/Design-analysis/test-results/run-y42sr8jg/graphic_dialog/files ä/dialog ä/graphic-dialog-800-centered.png",
+      "bytes": 84935,
+      "sha256": "09b1128f4e45802d763b15ef31474234973a30cede1c46c74180133a2cc53560"
+    },
+    {
+      "artifact": "windows-release-export-dark-v4.png",
+      "source": "build/native/Release/test-results/run-mw9vsxmg/graphic_dialog/files ä/dialog ä/graphic-dialog-reference-dark.png",
+      "bytes": 246377,
+      "sha256": "b70534483e703c4e096a48fb154a7ee13f7a44651a62f518d60218551d24d300"
+    },
+    {
+      "artifact": "windows-release-export-light-v4.png",
+      "source": "build/native/Release/test-results/run-mw9vsxmg/graphic_dialog/files ä/dialog ä/graphic-dialog-reference-light.png",
+      "bytes": 297671,
+      "sha256": "53a1e0334e3530661d59eed15832ea6fe6acdc1fa3eaabeb31dd37de9aadbbd1"
+    },
+    {
+      "artifact": "windows-release-graphic-dialog-480-footer-v4.png",
+      "source": "build/native/Release/test-results/run-mw9vsxmg/graphic_dialog/files ä/dialog ä/graphic-dialog-480-footer.png",
+      "bytes": 60024,
+      "sha256": "73205f291a3dd3e5f7141943bc7af5d7a79f8a6d5752a4029beaefd22cc3f782"
+    },
+    {
+      "artifact": "windows-release-graphic-dialog-680-default-v4.png",
+      "source": "build/native/Release/test-results/run-mw9vsxmg/graphic_dialog/files ä/dialog ä/graphic-dialog-680-default.png",
+      "bytes": 62508,
+      "sha256": "7957d2d2f6099b615de31b52d1e831cec00f397304b8f6089c47ffd2f9fdaa79"
+    },
+    {
+      "artifact": "windows-release-graphic-dialog-800-centered-v4.png",
+      "source": "build/native/Release/test-results/run-mw9vsxmg/graphic_dialog/files ä/dialog ä/graphic-dialog-800-centered.png",
+      "bytes": 84935,
+      "sha256": "09b1128f4e45802d763b15ef31474234973a30cede1c46c74180133a2cc53560"
+    },
+    {
+      "artifact": "windows-release-comparison-eight-v4.png",
+      "source": "build/native/Release/test-results/run-mw9vsxmg/comparison_light_large_narrow/files ä/workflow ä/comparison-eight.png",
+      "bytes": 138671,
+      "sha256": "bc394cc6f30991f1925dea356b8582d25e13816d4028b0fcf716e0bbb2441336"
+    },
+    {
+      "artifact": "windows-release-comparison-reference-v4.png",
+      "source": "build/native/Release/test-results/run-mw9vsxmg/comparison_light_large_narrow/files ä/workflow ä/comparison-reference.png",
+      "bytes": 133974,
+      "sha256": "5e0fc3572af42763325101e356f79c6ddf5c3094cc298e827ecd5a27550a8dab"
+    },
+    {
+      "artifact": "windows-release-comparison-export-v4.png",
+      "source": "build/native/Release/test-results/run-mw9vsxmg/comparison_light_large_narrow/files ä/workflow ä/comparison-export.png",
+      "bytes": 104604,
+      "sha256": "a8f41cbd3b12e645e92eb184b7f3e7a6814d139058af67f20fb9b04c0c25b482"
+    },
+    {
+      "artifact": "linux-debug-export-dark-v4.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-r8zob6rj/graphic_dialog/files ä/dialog ä/graphic-dialog-reference-dark.png",
+      "bytes": 270353,
+      "sha256": "1fcc871a34a6ab09f1a05bba0d43de6eaec48638db7efd15866cf1e2b5613663"
+    },
+    {
+      "artifact": "linux-debug-export-light-v4.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-r8zob6rj/graphic_dialog/files ä/dialog ä/graphic-dialog-reference-light.png",
+      "bytes": 321158,
+      "sha256": "eb8e41201457b62f7917035ce105e62fd88d1ec4feb5d96af08248e57194bab1"
+    },
+    {
+      "artifact": "linux-debug-graphic-dialog-480-footer-v4.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-r8zob6rj/graphic_dialog/files ä/dialog ä/graphic-dialog-480-footer.png",
+      "bytes": 65252,
+      "sha256": "d4f0b439be3452ece56c72c402862ff4cace4ddd9dc6fe14755e78f25b18453f"
+    },
+    {
+      "artifact": "linux-debug-graphic-dialog-680-default-v4.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-r8zob6rj/graphic_dialog/files ä/dialog ä/graphic-dialog-680-default.png",
+      "bytes": 64820,
+      "sha256": "b76a1b0e3f3f5a122d165439725706eadc3e4291027fec3eba0f4f0476c2dcf3"
+    },
+    {
+      "artifact": "linux-debug-graphic-dialog-800-centered-v4.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-r8zob6rj/graphic_dialog/files ä/dialog ä/graphic-dialog-800-centered.png",
+      "bytes": 91372,
+      "sha256": "02aee8b2366617aaf3d73710f2bde056c214aa7853c55af6f89fb553c9884c4f"
+    },
+    {
+      "artifact": "linux-debug-comparison-eight-v4.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-r8zob6rj/comparison_light_large_narrow/files ä/workflow ä/comparison-eight.png",
+      "bytes": 139394,
+      "sha256": "b36152fb158238f84003970c27c8dcd6233f34eca83e81623ad9dc2ff7344301"
+    },
+    {
+      "artifact": "linux-debug-comparison-reference-v4.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-r8zob6rj/comparison_light_large_narrow/files ä/workflow ä/comparison-reference.png",
+      "bytes": 132970,
+      "sha256": "2ac08fc7638a4c5d5aa36ca75f791ab3b9596db625a03a5d7589d87a20433121"
+    },
+    {
+      "artifact": "linux-debug-comparison-export-v4.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-r8zob6rj/comparison_light_large_narrow/files ä/workflow ä/comparison-export.png",
+      "bytes": 108853,
+      "sha256": "ed059aaaf581fce8c5c4025e919fb3146db0faf5fca469c0b8b461898278850f"
+    },
+    {
+      "artifact": "linux-docs-code-0-start-v2.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-kpt06t9s/documentation_context_code/files ä/workflow ä/docs-code-0-start.bmp",
+      "source_sha256": "581e3beee43d2699455797e40a1720d93899bfb9069d45eb45b5da7eb7897804",
+      "sha256": "6afedf32159f2c3c9e6eb0fc5ef74d24a37f3ad40ca65cad4bd691217ab0a9bd",
+      "conversion": "BMP -> PNG, complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-hierarchy-expanded-v2.png",
+      "source": "build/native/Release/test-results/run-is_wqmg8/hierarchy_workflow/files ä/workflow ä/c/hierarchy-expanded.bmp",
+      "source_sha256": "39120cbdd809ee5ae850b8286f68e23336b6a273e52f026568e9394b4384868e",
+      "sha256": "947e18fc06268134b8e4988bbe70a11171f0a9acf3dadb86c80230ab0b2c927c",
+      "conversion": "BMP -> PNG, complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-workspace-tree-open-v2.png",
+      "source": "build/native/Release/test-results/run-is_wqmg8/workspace_tree_workflow/files ä/workflow ä/workspace-tree-open.bmp",
+      "source_sha256": "c1c59b932bd29ca4da7863b26eb54092eab885f7bf7a4d4d5dc513d7b5e6eba4",
+      "sha256": "792ba18922f93bc16195ff5926ca62431ff6ddf96dfe136412a92eaff4e6c029",
+      "conversion": "BMP -> PNG, complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-develop-dark.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-kpt06t9s/workbench_workflow/files ä/workflow ä/dark-unified-visual/workbench-dark.bmp",
+      "source_sha256": "2d50437e18ce1345799b7868584434b1d3eb18249c1b1d20dcd99c4f7af05b2a",
+      "sha256": "9ae8508d819327639da7cf195cb6fd218e07eaeda1ce041d53a2887bb379f235",
+      "conversion": "BMP -> PNG, complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-develop-light.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-kpt06t9s/workbench_workflow/files ä/workflow ä/light-unified-visual/workbench-light.bmp",
+      "source_sha256": "569a802631fddf087f917441a3465cb5747d8d5cf56bc42f1887adcb343d69ed",
+      "sha256": "caa75e31247eb81ad497b42d3d2cff70d3046c38dcfac8e85f97bbec3e2e5fac",
+      "conversion": "BMP -> PNG, complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-simulate-dark.png",
+      "source": "build/native/Design-analysis/test-results/run-rv3u3ph7/laboratory_workflow/files ä/workflow ä/dark/laboratory-initial.bmp",
+      "source_sha256": "681c7fe041a3b0f83355eb19797725666f9c6ed6cde56a89d453069a56fc8b2b",
+      "sha256": "55caf8813e09e41369e620bcf0292730214c71ca63f8a67520470b20d0e0e573",
+      "conversion": "BMP -> PNG, complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-simulate-light.png",
+      "source": "build/native/Design-analysis/test-results/run-rv3u3ph7/laboratory_workflow/files ä/workflow ä/light/laboratory-initial.bmp",
+      "source_sha256": "573bcda5c3140e0d407b996a5665f26c185b4030f814d4f352b6177790fa38db",
+      "sha256": "a919607dd7eb713e39477bb1c0086f8f66fef53b6550d5b8111313c891febfd5",
+      "conversion": "BMP -> PNG, complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-f1-code.png",
+      "source": "build/native/Design-analysis/test-results/run-rv3u3ph7/documentation_context_code/files ä/workflow ä/docs-code-0-start.bmp",
+      "source_sha256": "152a6cb3eb6b16fc631a128647272b1801194e99f0d2e9ae99f6078e5510796c",
+      "sha256": "1c83cc4985d8b64f9db28a960a7b23806f2b6b6392faf774f7d2c31706af1745",
+      "conversion": "BMP -> PNG, complete RGB equality verified"
+    }
+  ],
+  "foreign_preserved": {
+    ".github/workflows/linux-ui-sanitizers.yml": "517c7d628b9d496a0422d145f747a0427da24a4a304a218294f857ac9f6aaa24",
+    ".github/workflows/macos-f1-accessibility.yml": "54c64dc5b9a5ddc478d704fbd6eccae4548155216130c25778466ab60a48a9af",
+    "app/accessibility_atspi.c": "cb7570a937751358f3de0c1c9c18df15c6f00680843a58d1ed05a8ef6cd13ff0",
+    "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+    "tests/check_documentation_orca.py": "ef3298800cfa8032cf6333b6b7ee902fc75d17fc3200b0f5ec6e801b2eba37ac",
+    "tests/test_accessibility_tables_atspi.py": "ef47a57f9c6a5d2073d19b22807aa5998bb7c0401ee0189504152cf62a900a53",
+    "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+    "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+    "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+    "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08",
+    "docs/status.md": "4159a86157c20dec896f13f6d950cfdbd85cdb56ee50fd4b8f510f140542ed09",
+    "docs/storage-cleanup-2026-10-22.md": "5bbc8778efe4da1236883d3affc8a41d07a983ceb0e804a0bbfe3cb02ce72d88"
+  },
+  "related_passed_evidence": {
+    "windows-unit1.json": 10,
+    "linux-unit1.json": 10,
+    "windows-unit2.json": 1,
+    "linux-unit2.json": 1,
+    "windows-gpu2.json": 2,
+    "linux-gpu2.json": 1,
+    "windows-release-unit2.json": 10,
+    "windows-release-context2.json": 5,
+    "windows-final3.json": 2,
+    "linux-final3.json": 3
+  },
+  "partial_or_failed_evidence": {
+    "windows-context2.json": "3/5: host focus in workbench, real field contour failure in export",
+    "linux-context2.json": "4/5: same field contour failure; final CR filter excluded backdrop, not counted"
+  },
+  "negative_controls": [
+    "before.log: actual old pipeline loses fractional coordinates and width",
+    "negative.json: only emission casts restored; actual GPU test rejects",
+    "counter-field-border.json: original six reference colors differ before painted-contour alignment"
+  ],
+  "review": [
+    "All app TUs use ui.h flag; both custom callbacks updated; standalone ABI is separate and tested",
+    "Variable point lists use actual point size; count and pointer guarded",
+    "Scissor clamps finite doubles before integer conversion and leaves output intact on invalid input",
+    "Only painted contour coordinates snap; format hit targets and radio positions retained after review",
+    "No source/header edit while any corresponding live build or test used that frozen version",
+    "Foreign twelve files remain byte-identical; not staged"
+  ],
+  "limits": [
+    "No full design/pixel identity acceptance",
+    "Physical DPI and monitor switching not exercised; arithmetic and raster probes are scoped",
+    "macOS and external assistive acceptance remain open",
+    "App builds include preserved foreign accessibility work",
+    "Earlier failed preflight helpers are not GPU/test success",
+    "Existing protected raw captures and dependencies retained"
+  ]
+}

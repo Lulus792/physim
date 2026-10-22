@@ -43,3 +43,9 @@ verbindet jetzt bis zu acht Kurven mit Referenz, vollständiger Statistik und
 demselben Exportzugang. Er belegt weitere echte Auswertungszustände; die
 verbleibenden Schrift-/Raster-/Komponentenunterschiede der gesamten Oberfläche
 sind damit weiterhin nicht vollständig abgenommen.
+
+Der [gemeinsame Float-Zeichenpfad](FLOAT-GEOMETRY-NATIVE.md) erhält nun auch
+gebrochene Widgetmaße, Symbolpositionen und Strichbreiten. Die erste native
+Gegenprobe belegt deren vorherige Kürzung. Die scharfen Exportfeldkonturen
+werden anschließend direkt gegen beide Originalreferenzen geprüft. Die
+Zoom-/Tooltipdetails und die Gesamtabnahme dieser Befunde bleiben offen.

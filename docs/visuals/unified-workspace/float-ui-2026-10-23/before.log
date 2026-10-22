@@ -1,0 +1,17 @@
+649 C and 615 Physim completion symbols verified
+ui_geometry.c
+D:\Physim\third_party\nuklear.h(4891): warning C4200: nonstandard extension used: zero-sized array in struct/union
+Compiled app/ui_geometry.c
+test_ui_subpixel.c
+D:\Physim\third_party\nuklear.h(4891): warning C4200: nonstandard extension used: zero-sized array in struct/union
+Compiled tests/test_ui_subpixel.c
+ui_backend.c
+Compiled app/ui_backend.c
+Linked physim-test-ui_subpixel.exe
+TEST ui_subpixel: failed
+Exit code 1; expected 0
+ACTUAL LINE: begin=10.000,20.000 end=40.000,20.000 thickness=1.000
+UI subpixel 52: c->begin.x==10.25f && c->begin.y==20.75f && c->end.x==40.5f && c->line_thickness==1.5f
+
+Build failed: 1 native tests failed; see D:\Physim\build\native\Design-analysis\test-results\run-jb93wif6
+Native tests: 0/1 passed. Results: D:\Physim\build\native\Design-analysis\test-results\run-jb93wif6

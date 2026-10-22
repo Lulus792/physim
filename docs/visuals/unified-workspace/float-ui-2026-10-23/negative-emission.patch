@@ -1,0 +1,19 @@
+--- third_party/nuklear.h
++++ mutant/nuklear.h
+@@ -9411,11 +9411,11 @@
+     cmd = (struct nk_command_line*)
+         nk_command_buffer_push(b, NK_COMMAND_LINE, sizeof(*cmd));
+     if (!cmd) return;
+-    cmd->line_thickness = (nk_command_size)line_thickness;
+-    cmd->begin.x = (nk_command_coord)x0;
+-    cmd->begin.y = (nk_command_coord)y0;
+-    cmd->end.x = (nk_command_coord)x1;
+-    cmd->end.y = (nk_command_coord)y1;
++    cmd->line_thickness = (unsigned short)line_thickness;
++    cmd->begin.x = (short)x0;
++    cmd->begin.y = (short)y0;
++    cmd->end.x = (short)x1;
++    cmd->end.y = (short)y1;
+     cmd->color = c;
+ }
+ NK_API void

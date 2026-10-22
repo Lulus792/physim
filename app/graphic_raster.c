@@ -132,7 +132,7 @@ static ps_result draw_command(void *user,const ps_figure_command *c) {
     }
     return w->domain.failure;
 }
-static void drawing_callback(void *canvas,short x,short y,unsigned short width,unsigned short height,nk_handle user) {
+static void drawing_callback(void *canvas,nk_command_coord x,nk_command_coord y,nk_command_size width,nk_command_size height,nk_handle user) {
     (void)x;(void)y;(void)width;(void)height;raster_work *w=user.ptr;
     /* Geometry conversion can retry with larger buffers. Start the immutable
      * figure again; never accumulate font slots across those conversion passes. */
