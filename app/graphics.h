@@ -16,6 +16,10 @@ typedef struct {
     uint8_t red,green,blue;
     bool light,opaque;
     uint8_t fallback[3];
+    /* Pure Gaussian sigma 3 logical px, without glass tint/saturation/rounding.
+     * opaque or unavailable filtering leaves the background unchanged; callers
+     * draw their dimming overlay separately. Zero preserves the search glass. */
+    bool blur_only;
 } ps_ui_backdrop;
 void ps_graphics_backdrop(ps_graphics *g,const ps_ui_backdrop *backdrop);
 /* Last UI submission, including PNG drawing. CPU timings exclude swap/vsync and

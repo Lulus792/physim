@@ -4,6 +4,7 @@ typedef struct graphic_dialog {
     ps_graphic_snapshot *snapshot;ps_graphic_raster *raster;ps_graphic_save *save;
     SDL_Window *window;ps_graphics *graphics;struct nk_context *ui;
     ps_graphic_description description;struct nk_user_font fonts[8];
+    ps_ui_backdrop backdrop;
     char source[64],directory[4096],message[256],filename[192],saved_path[8192];
     unsigned scale,focus_target,menu_field;float factor,content_height,scale_override;bool svg,visible,appearance,dark,contrast,dirty,close,first;
     struct nk_rect bounds,paper,formats[2],fields[3],choices[3][4],copy,store,exit;
@@ -23,7 +24,7 @@ static void graphic_export_unguard(app *a,graphic_input_guard guard) {
 }
 static void graphic_export_close(app *a) {
     graphic_dialog *d=a->graphic_export;if(!d)return;
-    ps_graphics_make_current(d->graphics);ps_graphic_raster_destroy(d->raster);
+    ps_graphics_make_current(d->graphics);ps_graphics_backdrop(d->graphics,NULL);ps_graphic_raster_destroy(d->raster);
     ps_graphic_snapshot_destroy(d->snapshot);ps_graphic_save_destroy(d->save);
     nk_window_close(d->ui,"graphic-export");nk_window_close(d->ui,"graphic-export-backdrop");
     nk_window_set_focus(d->ui,d->source);
@@ -226,7 +227,7 @@ static bool graphic_export_combo(graphic_dialog *d,unsigned field,float x,float 
     nk_layout_space_push(ui,nk_rect(x,y,w,34*f));d->fields[field]=nk_widget_bounds(ui);
     nk_fill_rect(nk_window_get_canvas(ui),d->fields[field],6*f,UI_COLOR(edit));
     nk_stroke_rect(nk_window_get_canvas(ui),d->fields[field],6*f,1,UI_COLOR(border));
-    if(ps_ui_combo_begin_named(ui,name,items[*selected],nk_vec2(w,36*f*count+12))) {
+    if(ps_ui_combo_begin_named_scaled(ui,name,items[*selected],nk_vec2(w,36*f*count+12*f),f)) {
         d->menu_field=field+1;
         nk_layout_row_dynamic(ui,34*f,1);
         for(int i=0;i<count;i++) {
@@ -267,8 +268,15 @@ static void graphic_export_view(app *a,int width,int height) {
     }
     ui->style.window.padding=nk_vec2(0,0);ui->style.window.spacing=nk_vec2(0,0);
     ui->style.window.border=0;ui->style.window.rounding=14*f;
-    ui->style.window.fixed_background=nk_style_item_color(nk_rgba(8,12,20,125));
-    if(nk_begin(ui,"graphic-export-backdrop",nk_rect(0,0,(float)width,(float)height),NK_WINDOW_NO_INPUT|NK_WINDOW_NO_SCROLLBAR)){}
+    ui->style.window.fixed_background=nk_style_item_hide();
+    if(nk_begin(ui,"graphic-export-backdrop",nk_rect(0,0,(float)width,(float)height),NK_WINDOW_NO_INPUT|NK_WINDOW_NO_SCROLLBAR)) {
+        struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+        nk_push_scissor(canvas,nk_rect(0,0,(float)width,(float)height));
+        d->backdrop=(ps_ui_backdrop){.w=(float)width,.h=(float)height,.blur_only=true,
+            .opaque=a->preferences.theme==PS_THEME_HIGH_CONTRAST || nk_sdl_reduce_transparency(ui)};
+        ps_graphics_backdrop(d->graphics,&d->backdrop);ps_ui_draw_backdrop(ui,&d->backdrop);
+        nk_fill_rect(canvas,nk_rect(0,0,(float)width,(float)height),0,nk_rgba(8,12,20,125));
+    }
     nk_end(ui);nk_sdl_window_raise(ui,"graphic-export-backdrop");
     ui->style.window.fixed_background=nk_style_item_color(UI_COLOR(window));
     float margin=width<=760*f?10:20,w=fminf(1080*f,width-2*margin),outer_w=w;

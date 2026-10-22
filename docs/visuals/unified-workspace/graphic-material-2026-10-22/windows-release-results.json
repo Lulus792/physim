@@ -1,0 +1,59 @@
+[
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Release\\bin\\physim-test-backdrop_ui.exe",
+      "D:/Physim/build/native/Release/test-results/run-23sns3du/backdrop_ui"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 512x64, 1 fonts, GPU limit 32768\nGPU backdrop: glass and pure sigma3 Gaussian pixels, fallback, order, close and reopen passed\n",
+    "stderr": "",
+    "seconds": 0.922,
+    "name": "backdrop_ui"
+  },
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+        "sha256": "ac496f6138ae397f02bd5b95ac22ae3b88eebf9d23a5ae494892b59219d64706"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_graphic_dialog.py",
+          "--app",
+          "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+          "--root",
+          "D:\\Physim",
+          "--work",
+          "D:\\Physim\\build\\native\\Release\\test-results\\run-23sns3du\\graphic_dialog\\files \u00e4"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "graphic_dialog: native UI, frozen preview, save/cancel/error and independent clipboard RGB passed\n",
+        "stderr": "",
+        "seconds": 6.625,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "D:\\Physim\\build\\native\\Release\\test-results\\run-23sns3du\\graphic_dialog\\files \u00e4\\app-steps.json",
+            "bytes": 21339,
+            "sha256": "0255b77af1e571e09d3b3315cd09a1b01c02384f54e8beb6635dc03d450bcf2a"
+          }
+        ]
+      }
+    ],
+    "seconds": 6.641,
+    "reason": "",
+    "name": "graphic_dialog"
+  }
+]

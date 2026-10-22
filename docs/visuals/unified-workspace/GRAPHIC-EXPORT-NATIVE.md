@@ -93,7 +93,7 @@ Checkout nur dieses Patches. Es gibt keine aktuelle macOS-Ausführung.
 | --- | --- |
 | Datenansicht | Gemeinsamen Mehrlaufcache in die sichtbare Kurve, Referenz, Legende und Vergleichsstatistik anbinden; asynchrone Ergebnisse anhand der tatsächlichen Auswahl verwerfen. |
 | Gemeinsame Darstellung | In den sichtbaren Berichtsdialog integriert; Mehrlaufansicht, acht sichtbare Kurven und externe SVG-Schriftwiedergabe weiter abgleichen. |
-| Dialog und Zugänge | Berichtsdiagramme besitzen den neuen Zugang. Hintergrundblur, weitere Schrift-/Komponentendetails und Zugang am Messdatenvergleich bleiben offen. |
+| Dialog und Zugänge | Berichtsdiagramme besitzen den neuen Zugang und den folgenden [Hintergrundfilter mit skalierten Feldern](GRAPHIC-MATERIAL-NATIVE.md). Schatten, weitere Schrift-/Komponentendetails und Zugang am Messdatenvergleich bleiben offen. |
 | Optionen | PNG/SVG, vier Größen, Gesamt-/X/Y-Ausschnitt und eingefrorenes Theme sind im Berichtsdialog angebunden und nativ geprüft. |
 | Speichern | Native API und sichere Schreibaufträge angeschlossen; Antwortinjektion prüft Abbruch/Fehler/Ersetzen. Echte OS-Dateiauswahl samt Fokus/Überschreibdialog noch manuell prüfen. |
 | Bildkopie | Unabhängiger vollständiger RGB-Vergleich über Windows CF_DIB und Linux X11 bestanden; macOS offen. |

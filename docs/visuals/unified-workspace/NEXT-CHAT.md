@@ -21,7 +21,8 @@ Der [native Rasteradapter](GRAPHIC-RASTER-NATIVE.md) ergänzt reale Schriftmetri
 PNG in allen vier Größen und eine eigene RGB-Vorschautextur. Der folgende
 [native Berichtsdialog](GRAPHIC-DIALOG-NATIVE.md) ersetzt die alte breite
 Berichtsleiste und ergänzt echte Vorschau, Optionen, Speicheraufträge und native
-Bildkopie. Sichtbarer Mehrlaufcache, dessen Zugang, Blur und die vollständige
+Bildkopie. Der folgende [Materialabgleich](GRAPHIC-MATERIAL-NATIVE.md) ergänzt Blur
+und skalierte Felder. Sichtbarer Mehrlaufcache, dessen Zugang, Schatten und die vollständige
 Dialog-/OS-/Assistive-/DPI-Abnahme bleiben zusammenhängend umzusetzen.
 Die bisherigen Daten-/Geometrieprüfungen ersetzen diese native Abnahme nicht.
 

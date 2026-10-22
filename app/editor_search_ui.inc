@@ -145,7 +145,7 @@ static void editor_search_view(app *a) {
         a->search_material=(ps_ui_backdrop){island.x,island.y,island.w,island.h,
             contrast?UI_COLOR(window).r:light?232:36,contrast?UI_COLOR(window).g:light?243:53,
             contrast?UI_COLOR(window).b:light?255:73,light,opaque,
-            {UI_COLOR(window).r,UI_COLOR(window).g,UI_COLOR(window).b}};
+            {UI_COLOR(window).r,UI_COLOR(window).g,UI_COLOR(window).b},false};
         ps_graphics_backdrop(a->graphics,&a->search_material);
         ps_ui_draw_backdrop(ui,&a->search_material);
         nk_stroke_rect(c,island,16,1,edge);

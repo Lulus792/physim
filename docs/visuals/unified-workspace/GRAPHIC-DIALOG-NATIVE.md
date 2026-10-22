@@ -88,11 +88,10 @@ bleiben erhalten. Ein Timeout wird ausdrücklich als fehlgeschlagen erfasst.
 - Der sichtbare Mehrlauf-Messdatenvergleich muss noch den gemeinsamen Cache und
   denselben Exportzugang erhalten. Der vorhandene Kern für bis zu acht Läufe
   ersetzt diese Integration nicht. Der neue Zugang gilt derzeit für Berichte.
-- Die Vorlage verwischt den Hintergrund mit 3 px. Nativ ist bisher nur die
-  Abdunklung umgesetzt. Ein echter Blur ist technisch möglich, noch offen.
-  Auswahlpfeile und einige Innenabstände sind bei großer Schrift ebenfalls
-  noch nicht vollständig proportional; Schriftgewicht und Rasterung bleiben
-  gegen die Referenz abzugleichen. Es besteht keine behauptete Pixelidentität.
+- Der folgende [Materialabgleich](GRAPHIC-MATERIAL-NATIVE.md) ergänzt den reinen
+  Sigma-3-Hintergrundfilter und skalierte Auswahlfelder. Dialog-/Papierschatten,
+  weitere Schrift- und Komponentendetails bleiben gegen die Referenz abzugleichen.
+  Es besteht keine behauptete Pixelidentität.
 - Die echten Dateidialog-APIs sind angeschlossen; automatisierte Speichertests
   injizieren deren Antwort. Die Bedienung des OS-Auswahldialogs, dessen
   Überschreiben-/Abbruchfokus und reale Monitorwechsel sind damit nicht belegt.

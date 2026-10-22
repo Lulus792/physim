@@ -12,6 +12,8 @@ sowie den [nativen Rasteradapter mit PNG und Vorschautextur](GRAPHIC-RASTER-NATI
 Der [sichtbare native Berichtsdialog](GRAPHIC-DIALOG-NATIVE.md) ergänzt jetzt
 Vorschau, Optionen, Speichern und echte Bildkopie. Mehrlaufzugang und vollständige
 Design-/Plattformabnahme des Exports bleiben weiter beauftragt.
+Der folgende [native Materialabgleich](GRAPHIC-MATERIAL-NATIVE.md) ergänzt den
+Hintergrundfilter und bei großer Schrift proportional gezeichnete Auswahlfelder.
 Eine Browserprüfung ist weiterhin keine vollständige native Abnahme.
 Die [aktuellen Nutzerbefunde](USER-REVIEW-2026-10-21.md) und der folgende
 [native Komponentenabgleich](COMPONENTS-NATIVE.md) führen weitere sichtbare

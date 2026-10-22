@@ -1,0 +1,59 @@
+[
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-backdrop_ui.exe",
+      "D:/Physim/build/native/Design-analysis/test-results/run-f0tw8ohc/backdrop_ui"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 512x64, 1 fonts, GPU limit 32768\nGPU backdrop: glass and pure sigma3 Gaussian pixels, fallback, order, close and reopen passed\n",
+    "stderr": "",
+    "seconds": 3.703,
+    "name": "backdrop_ui"
+  },
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "e1fe3b7400197739eee9b62428a88fa429fdbd916e7bfa69307de826215d315d"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_graphic_dialog.py",
+          "--app",
+          "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+          "--root",
+          "D:\\Physim",
+          "--work",
+          "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-f0tw8ohc\\graphic_dialog\\files \u00e4"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "graphic_dialog: native UI, frozen preview, save/cancel/error and independent clipboard RGB passed\n",
+        "stderr": "",
+        "seconds": 31.203,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-f0tw8ohc\\graphic_dialog\\files \u00e4\\app-steps.json",
+            "bytes": 21441,
+            "sha256": "d39ee29349316a8dc0772f7ff53b9b1fd56345cdf1e74dcd8d0df7dc4e0fed64"
+          }
+        ]
+      }
+    ],
+    "seconds": 31.266,
+    "reason": "",
+    "name": "graphic_dialog"
+  }
+]

@@ -1,0 +1,230 @@
+{
+  ".gitattributes": {
+    "bytes": 61,
+    "sha256": "c6c1a9493c91fd930c688dd8ec2cb650ed9c38c7a199fe454ead13d7062af0d9"
+  },
+  "export-material-linux-1-wm.log.gz": {
+    "bytes": 83,
+    "sha256": "fceb95a2935a81ec9c947a7848927ea4a71536eee835810704dc8810d0de5610"
+  },
+  "export-material-linux-1.log.gz": {
+    "bytes": 16755,
+    "sha256": "0bda3151423c7b24b294624d6011690ffd217d80d7bfdfecbf42b5a8e638171f"
+  },
+  "export-material-linux-2-wm.log.gz": {
+    "bytes": 20,
+    "sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+  },
+  "export-material-linux-2.log.gz": {
+    "bytes": 16480,
+    "sha256": "5dff6b4d880eb331a39936cf50ff5a48b7d8a5954191ff9a9e3dad7826e4043e"
+  },
+  "export-material-release-1.log.gz": {
+    "bytes": 471,
+    "sha256": "73bc5ffae77a5f5cf54d3c6839eaffbd6498f5c6d5665642bc382a33097c1450"
+  },
+  "export-material-release-2.log.gz": {
+    "bytes": 468,
+    "sha256": "65569826153f6881670f1e2e202d8fffc9e94d05926125a9a27449318b49a42d"
+  },
+  "export-material-release-build1.log.gz": {
+    "bytes": 2681,
+    "sha256": "346e0fa23ff58d5745f3affdf7d1ae46a53bf072dfeb43c1211139cb76625b51"
+  },
+  "export-material-release-build2.log.gz": {
+    "bytes": 2673,
+    "sha256": "bd472eec8a5fd1fe30a161d1b654081b2052f7615cdb6f4c6d974c7aff3f73ad"
+  },
+  "export-material-source1.json": {
+    "bytes": 23331,
+    "sha256": "c7970077dca93fbfcc72f2f1f228fc950621a249b49ba1c7dc4371434338ddd2"
+  },
+  "export-material-source2.json": {
+    "bytes": 23331,
+    "sha256": "ad885d39868a088e6560913af0170cfc6348918c90d0fbf129cae1b0ef9d5068"
+  },
+  "export-material-windows-1.log.gz": {
+    "bytes": 2830,
+    "sha256": "5dcf16f6abad04261c7d5f0add28bd42f4eaf83f0e469b7b349f04521a1009c9"
+  },
+  "export-material-windows-2.log.gz": {
+    "bytes": 2811,
+    "sha256": "f73453194b9a5608631245d0844606693b732829bd320209e8cb4e79868d0011"
+  },
+  "linux-debug-backdrop-0.png": {
+    "bytes": 2512,
+    "sha256": "f1191f28c565a52ec73f1cef66afd67154f205c65c595338bdb9dee54a513d92"
+  },
+  "linux-debug-backdrop-1.png": {
+    "bytes": 1707,
+    "sha256": "de4a69bb15e06583f2e4406dae5c974536f2c0890d4788afede32fab66bec74a"
+  },
+  "linux-debug-backdrop-2.png": {
+    "bytes": 787,
+    "sha256": "902acbc0109cc1855380f0873bdf62c5bd367e22cce6f0497087087f36b4d644"
+  },
+  "linux-debug-backdrop-3.png": {
+    "bytes": 2512,
+    "sha256": "f1191f28c565a52ec73f1cef66afd67154f205c65c595338bdb9dee54a513d92"
+  },
+  "linux-debug-graphic-dialog-200pct-footer.png": {
+    "bytes": 87888,
+    "sha256": "4a0ce46f2e83053413029a0d103cfae220dca082c9b2ba6ee008341877ab41a6"
+  },
+  "linux-debug-graphic-dialog-contrast.png": {
+    "bytes": 208261,
+    "sha256": "ba568dcd60fbed607a075ddb5c43b0b4b58109171021f7e60ee67b15c9b5087a"
+  },
+  "linux-debug-graphic-dialog-large-narrow.png": {
+    "bytes": 83656,
+    "sha256": "b7c7ea5606107622f45b424dfdd25ae840668f19701d59ee9d9c4dec8683c56a"
+  },
+  "linux-debug-graphic-dialog-light.png": {
+    "bytes": 216649,
+    "sha256": "bd5fbeee38c219183cc44b3dce30e09589e39e916fe851f8086b57d7dbf61b7f"
+  },
+  "linux-debug-plot-export-dialog.png": {
+    "bytes": 215013,
+    "sha256": "49b7e0c0b92298bea4739136a625f6228e129176395022776dbfed526b16e3e2"
+  },
+  "linux-debug-pure-blur-0.png": {
+    "bytes": 859,
+    "sha256": "319b3b404d4dee7831677ac3b88770596e280db336978f8f9cda08b494937e50"
+  },
+  "linux-debug-pure-blur-1.png": {
+    "bytes": 783,
+    "sha256": "2b4152a3d944e7f40876e1972006efc2921e18565e60fbb37d1916e43b52a6c1"
+  },
+  "linux-debug-results.json": {
+    "bytes": 2091,
+    "sha256": "78666d02098b3f9f0b225be711ea7d318abfef24503c4b1d979cf64c5fc4c22f"
+  },
+  "linux-debug-steps.json": {
+    "bytes": 21453,
+    "sha256": "24caf78770ae209ca54e84d6fd0f6c5d47cb3422f12fd442babf0e4aad816546"
+  },
+  "linux-source1-results.json.gz": {
+    "bytes": 807,
+    "sha256": "1380ace2c31e67668196212504a8550f2b3645b4baeeedbdc74eb8c55d9e7d17"
+  },
+  "release-source1-results.json.gz": {
+    "bytes": 860,
+    "sha256": "c2a62d5eba5892a9c69d508bad29a09d8932f797445d0f45d0eb07007a92c58b"
+  },
+  "run-export-material-linux-2.sh": {
+    "bytes": 492,
+    "sha256": "817c6e05a50a105df8366c746ff555f2f7feee75fc9659997fc75e3b817c8f74"
+  },
+  "validation.json": {
+    "bytes": 16472,
+    "sha256": "519de271f80aff251d525ef9448a08040a2f0a3e9d4c86f71237d652819efd42"
+  },
+  "windows-debug-backdrop-0.png": {
+    "bytes": 2613,
+    "sha256": "582c058adc1b9d5a655c1521b3c01c36b5948af2c2c6156d7ddc693e04510157"
+  },
+  "windows-debug-backdrop-1.png": {
+    "bytes": 1712,
+    "sha256": "7ee29dae314495dc28f9a632f9823220fcff0475f28ab32d855d65946b4e8318"
+  },
+  "windows-debug-backdrop-2.png": {
+    "bytes": 787,
+    "sha256": "902acbc0109cc1855380f0873bdf62c5bd367e22cce6f0497087087f36b4d644"
+  },
+  "windows-debug-backdrop-3.png": {
+    "bytes": 2613,
+    "sha256": "582c058adc1b9d5a655c1521b3c01c36b5948af2c2c6156d7ddc693e04510157"
+  },
+  "windows-debug-graphic-dialog-200pct-footer.png": {
+    "bytes": 80615,
+    "sha256": "23137cdaf27c1cb6cfc1250e320a3ceb0d4aca84178cd73f97bae01a3530abe1"
+  },
+  "windows-debug-graphic-dialog-contrast.png": {
+    "bytes": 190684,
+    "sha256": "e1de79412bbc479fab97d1725e24076f7dc7f50a5f3f4ac9d625d035fc6f35db"
+  },
+  "windows-debug-graphic-dialog-large-narrow.png": {
+    "bytes": 75910,
+    "sha256": "647c4becf2518df91d4e0e27abffb0eb30d72f0ab35a4ed24cc05eee70fd2f08"
+  },
+  "windows-debug-graphic-dialog-light.png": {
+    "bytes": 196050,
+    "sha256": "8373e4fb1f64a355cdce286c9275e3e4ef0554e3c629bfd3842ec397235bc6ed"
+  },
+  "windows-debug-plot-export-dialog.png": {
+    "bytes": 192650,
+    "sha256": "426c7f898ff8c0f6f78004599a6b275e19843732f193539c5171833cc4922c62"
+  },
+  "windows-debug-pure-blur-0.png": {
+    "bytes": 858,
+    "sha256": "8ee6262f83fe8a91847d75d7b2164de2562191ca6f5cb2db5c55b8ea1a22a5b8"
+  },
+  "windows-debug-pure-blur-1.png": {
+    "bytes": 783,
+    "sha256": "2b4152a3d944e7f40876e1972006efc2921e18565e60fbb37d1916e43b52a6c1"
+  },
+  "windows-debug-results.json": {
+    "bytes": 2228,
+    "sha256": "9fa12b13d6002694651ea803d247443f0ebd5eada101b25d0f31429e796731da"
+  },
+  "windows-debug-steps.json": {
+    "bytes": 21423,
+    "sha256": "1b40490f5fbf71c46d30d47872be6fcd2b543f5034d31ee0b3fe1fba26ec0146"
+  },
+  "windows-release-backdrop-0.png": {
+    "bytes": 2613,
+    "sha256": "582c058adc1b9d5a655c1521b3c01c36b5948af2c2c6156d7ddc693e04510157"
+  },
+  "windows-release-backdrop-1.png": {
+    "bytes": 1712,
+    "sha256": "7ee29dae314495dc28f9a632f9823220fcff0475f28ab32d855d65946b4e8318"
+  },
+  "windows-release-backdrop-2.png": {
+    "bytes": 787,
+    "sha256": "902acbc0109cc1855380f0873bdf62c5bd367e22cce6f0497087087f36b4d644"
+  },
+  "windows-release-backdrop-3.png": {
+    "bytes": 2613,
+    "sha256": "582c058adc1b9d5a655c1521b3c01c36b5948af2c2c6156d7ddc693e04510157"
+  },
+  "windows-release-graphic-dialog-200pct-footer.png": {
+    "bytes": 80615,
+    "sha256": "23137cdaf27c1cb6cfc1250e320a3ceb0d4aca84178cd73f97bae01a3530abe1"
+  },
+  "windows-release-graphic-dialog-contrast.png": {
+    "bytes": 190684,
+    "sha256": "e1de79412bbc479fab97d1725e24076f7dc7f50a5f3f4ac9d625d035fc6f35db"
+  },
+  "windows-release-graphic-dialog-large-narrow.png": {
+    "bytes": 75910,
+    "sha256": "647c4becf2518df91d4e0e27abffb0eb30d72f0ab35a4ed24cc05eee70fd2f08"
+  },
+  "windows-release-graphic-dialog-light.png": {
+    "bytes": 196050,
+    "sha256": "8373e4fb1f64a355cdce286c9275e3e4ef0554e3c629bfd3842ec397235bc6ed"
+  },
+  "windows-release-plot-export-dialog.png": {
+    "bytes": 192650,
+    "sha256": "426c7f898ff8c0f6f78004599a6b275e19843732f193539c5171833cc4922c62"
+  },
+  "windows-release-pure-blur-0.png": {
+    "bytes": 858,
+    "sha256": "8ee6262f83fe8a91847d75d7b2164de2562191ca6f5cb2db5c55b8ea1a22a5b8"
+  },
+  "windows-release-pure-blur-1.png": {
+    "bytes": 783,
+    "sha256": "2b4152a3d944e7f40876e1972006efc2921e18565e60fbb37d1916e43b52a6c1"
+  },
+  "windows-release-results.json": {
+    "bytes": 2178,
+    "sha256": "e5df3d636565bf554c818cfa739d58d17d3ca7d0459e03f25a2cc8ee27c28309"
+  },
+  "windows-release-steps.json": {
+    "bytes": 21321,
+    "sha256": "ff22d6eceffdf2eb0e8f00be833629f309d01d1b41824fd25d1a31a42aa32ff0"
+  },
+  "windows-source1-results.json.gz": {
+    "bytes": 868,
+    "sha256": "45730ebb9a564b38aac1c35d971e77d2df68ba7da733b375deb5ab75f90a321a"
+  }
+}

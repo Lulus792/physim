@@ -1,0 +1,59 @@
+[
+  {
+    "command": [
+      "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim-test-backdrop_ui",
+      "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-qqkivmk6/backdrop_ui"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)\nFont atlas: 512x64, 1 fonts, GPU limit 16384\nGPU backdrop: glass and pure sigma3 Gaussian pixels, fallback, order, close and reopen passed\n",
+    "stderr": "",
+    "seconds": 2.017,
+    "name": "backdrop_ui"
+  },
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "/usr/bin/python3",
+        "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+        "sha256": "8c4509d4e4aec244058044b4882ccb33499a11cfe2aa3bde75742e677dd44353"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/tests/check_graphic_dialog.py",
+          "--app",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "--root",
+          "/mnt/d/Physim",
+          "--work",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-qqkivmk6/graphic_dialog/files \u00e4"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "graphic_dialog: native UI, frozen preview, save/cancel/error and independent clipboard RGB passed\n",
+        "stderr": "",
+        "seconds": 55.96,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-qqkivmk6/graphic_dialog/files \u00e4/app-steps.json",
+            "bytes": 21453,
+            "sha256": "24caf78770ae209ca54e84d6fd0f6c5d47cb3422f12fd442babf0e4aad816546"
+          }
+        ]
+      }
+    ],
+    "seconds": 56.294,
+    "reason": "",
+    "name": "graphic_dialog"
+  }
+]

@@ -420,18 +420,30 @@ static bool backdrop_allocate(ps_graphics *g,int w,int h) {
     if(g->glass_failed || w<1 || h<1 || w>g->max_texture || h>g->max_texture)return false;
     if(!g->blur_program) {
         const char *filter=
-            "vec4 blur(vec2 uv,vec2 step){vec4 v=texture(image,uv)*.204164;"
+            "vec4 blur(vec2 uv,vec2 step){if(plain!=0){"
+            "vec4 v=texture(image,uv)*.133175996;"
+            "v+=(texture(image,uv-step)+texture(image,uv+step))*.125979094;"
+            "v+=(texture(image,uv-2*step)+texture(image,uv+2*step))*.106639001;"
+            "v+=(texture(image,uv-3*step)+texture(image,uv+3*step))*.080775325;"
+            "v+=(texture(image,uv-4*step)+texture(image,uv+4*step))*.054750289;"
+            "v+=(texture(image,uv-5*step)+texture(image,uv+5*step))*.033207729;"
+            "v+=(texture(image,uv-6*step)+texture(image,uv+6*step))*.018023411;"
+            "v+=(texture(image,uv-7*step)+texture(image,uv+7*step))*.008753462;"
+            "v+=(texture(image,uv-8*step)+texture(image,uv+8*step))*.003804239;"
+            "v+=(texture(image,uv-9*step)+texture(image,uv+9*step))*.001479452;return v;}"
+            "vec4 v=texture(image,uv)*.204164;"
             "v+=(texture(image,uv-step)+texture(image,uv+step))*.180174;"
             "v+=(texture(image,uv-2*step)+texture(image,uv+2*step))*.123832;"
             "v+=(texture(image,uv-3*step)+texture(image,uv+3*step))*.066282;"
             "v+=(texture(image,uv-4*step)+texture(image,uv+4*step))*.027630;return v;}";
         char fragment[4096];
-        snprintf(fragment,sizeof fragment,"#version 330 core\nuniform sampler2D image;uniform vec2 step;in vec2 uv;out vec4 result;%svoid main(){result=blur(uv,step);}",filter);
+        snprintf(fragment,sizeof fragment,"#version 330 core\nuniform sampler2D image;uniform vec2 step;uniform int plain;in vec2 uv;out vec4 result;%svoid main(){result=blur(uv,step);}",filter);
         g->blur_program=program(g,
             "#version 330 core\nout vec2 uv;void main(){vec2 p=vec2((gl_VertexID<<1)&2,gl_VertexID&2);uv=p;gl_Position=vec4(p*2-1,0,1);}",fragment);
         snprintf(fragment,sizeof fragment,
-            "#version 330 core\nuniform sampler2D image;uniform vec2 step;uniform vec4 capture;uniform vec4 material;uniform vec4 rect;uniform int light;in vec4 col;out vec4 result;%s"
+            "#version 330 core\nuniform sampler2D image;uniform vec2 step;uniform vec4 capture;uniform vec4 material;uniform vec4 rect;uniform int light;uniform int plain;in vec4 col;out vec4 result;%s"
             "void main(){vec2 uv=(gl_FragCoord.xy-capture.xy)/capture.zw;vec3 bg=blur(uv,step).rgb;"
+            "if(plain!=0){result=vec4(bg,col.a);return;}"
             "float l=dot(bg,vec3(.2126,.7152,.0722));bg=mix(vec3(l),bg,1.15);"
             "vec2 local=(gl_FragCoord.xy-rect.xy)/rect.zw;vec2 direction=light!=0?vec2(.7071068,.7071068):vec2(.3420201,.9396926);"
             "float position=dot(vec2(local.x-.5,.5-local.y)*rect.zw,direction)/dot(rect.zw,abs(direction))+.5;"
@@ -457,13 +469,14 @@ static bool backdrop_allocate(ps_graphics *g,int w,int h) {
     }
     g->glass_width=w;g->glass_height=h;return true;
 }
-/* Captures only the island and a four-logical-pixel filter halo. The horizontal
+/* Captures only the marked area and its filter halo (glass 4, pure blur 9). The horizontal
  * pass uses a separate attachment; the final vertical pass is clipped by the
  * original rounded Nuklear mesh. Never sample the framebuffer being written. */
 static bool backdrop_draw_prepare(ps_graphics *g,GLuint framebuffer,int pw,int ph,float sx,float sy,const float matrix[16]) {
     const ps_ui_backdrop *b=g->backdrop;
-    int left=(int)fmaxf(0,floorf((b->x-4)*sx)),bottom=(int)fmaxf(0,floorf(ph-(b->y+b->h+4)*sy));
-    int right=(int)fminf(pw,ceilf((b->x+b->w+4)*sx)),top=(int)fminf(ph,ceilf(ph-(b->y-4)*sy));
+    float halo=b->blur_only?9:4;
+    int left=(int)fmaxf(0,floorf((b->x-halo)*sx)),bottom=(int)fmaxf(0,floorf(ph-(b->y+b->h+halo)*sy));
+    int right=(int)fminf(pw,ceilf((b->x+b->w+halo)*sx)),top=(int)fminf(ph,ceilf(ph-(b->y-halo)*sy));
     int width=right-left,height=top-bottom;
     bool filtered=!b->opaque && backdrop_allocate(g,width,height);
     if(filtered) {
@@ -474,6 +487,7 @@ static bool backdrop_draw_prepare(ps_graphics *g,GLuint framebuffer,int pw,int p
         g->BindFramebuffer(GL_FRAMEBUFFER,g->glass_framebuffers[1]);g->Viewport(0,0,width,height);
         g->UseProgram(g->blur_program);g->BindTexture(GL_TEXTURE_2D,g->glass_textures[0]);
         g->Uniform1i(g->GetUniformLocation(g->blur_program,"image"),0);
+        g->Uniform1i(g->GetUniformLocation(g->blur_program,"plain"),b->blur_only);
         g->Uniform2f(g->GetUniformLocation(g->blur_program,"step"),sx/width,0);
         g->DrawArrays(GL_TRIANGLES,0,3);
         g->BindFramebuffer(GL_FRAMEBUFFER,framebuffer);g->Viewport(0,0,pw,ph);
@@ -481,6 +495,7 @@ static bool backdrop_draw_prepare(ps_graphics *g,GLuint framebuffer,int pw,int p
         g->UseProgram(g->glass_program);g->BindTexture(GL_TEXTURE_2D,g->glass_textures[1]);
         g->UniformMatrix4fv(g->GetUniformLocation(g->glass_program,"projection"),1,GL_FALSE,matrix);
         g->Uniform1i(g->GetUniformLocation(g->glass_program,"image"),0);
+        g->Uniform1i(g->GetUniformLocation(g->glass_program,"plain"),b->blur_only);
         g->Uniform2f(g->GetUniformLocation(g->glass_program,"step"),0,sy/height);
         g->Uniform4f(g->GetUniformLocation(g->glass_program,"capture"),(float)left,(float)bottom,(float)width,(float)height);
         g->Uniform4f(g->GetUniformLocation(g->glass_program,"rect"),b->x*sx,ph-(b->y+b->h)*sy,b->w*sx,b->h*sy);
@@ -563,9 +578,12 @@ static bool ui_target(ps_graphics *g, struct nk_context *ui, struct nk_buffer *c
                 g->BindTexture(GL_TEXTURE_2D, (GLuint)cmd->texture.id);
                 g->Uniform1i(g->ui_flip, (GLuint)cmd->texture.id == g->scene_texture);
             }
-            g->DrawElements(GL_TRIANGLES, (GLsizei)cmd->elem_count,
-                            sizeof(nk_draw_index) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT,
-                            (void *)offset);
+            /* Pure blur's accessible/unavailable fallback preserves the actual
+             * background. Its ordinary dim overlay still follows this marker. */
+            if(!(glass && g->backdrop->blur_only && !filtered))
+                g->DrawElements(GL_TRIANGLES, (GLsizei)cmd->elem_count,
+                                sizeof(nk_draw_index) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT,
+                                (void *)offset);
             if(glass){g->UseProgram(g->ui_program);g->Uniform1i(g->GetUniformLocation(g->ui_program,"fallback"),0);}
         }
         offset += cmd->elem_count * sizeof(nk_draw_index);

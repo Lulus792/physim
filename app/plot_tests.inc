@@ -550,12 +550,15 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
     }
     case 211:
         if(!a->graphic_export || !a->graphic_export->raster || strcmp(a->graphic_export->description.plot.title,"Kleine Abweichungen mit großem Offset")) {ok=false;break;}
+        {ps_ui_render_stats stats;if(!ps_graphics_ui_stats(a->graphics,&stats) || stats.backdrop_passes!=2){ok=false;break;}}
         *capture="graphic-dialog-light.bmp";*stage=212;return;
     case 212: {
         ps_preferences preferences=a->preferences;preferences.theme=PS_THEME_HIGH_CONTRAST;preferences_apply(a,&preferences);
         *capture="graphic-dialog-contrast.bmp";*stage=213;return;
     }
     case 213: {
+        ps_ui_render_stats stats;
+        if(!ps_graphics_ui_stats(a->graphics,&stats) || stats.backdrop_passes){ok=false;break;}
         ps_preferences preferences=a->preferences;preferences.theme=PS_THEME_DARK;preferences.ui_size=22;preferences_apply(a,&preferences);
         SDL_SetWindowMinimumSize(a->window,640,480); /* Exercise the size allowed by detached workspaces. */
         if(!SDL_SetWindowSize(a->window,680,740) || !SDL_SyncWindow(a->window)){ok=false;break;}

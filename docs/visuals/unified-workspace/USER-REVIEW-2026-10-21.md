@@ -29,6 +29,9 @@ Der folgende [native Berichts-Exportdialog](GRAPHIC-DIALOG-NATIVE.md) ersetzt
 die alte PNG-/SVG-/Größenleiste der Aufnahme 23:36:03 durch **Grafik exportieren…**
 neben kompakten Zoomaktionen und öffnet die freigegebene Vorschau mit Optionen.
 Das ist keine vollständige Erledigung dieses Screenshots: verbleibende
-Typografie-/Blur-/Komponentendetails, Mehrlaufansicht und Gesamtzustände sind
+Typografie-/Schatten-/Komponentendetails, Mehrlaufansicht und Gesamtzustände sind
 weiter aufgelistet. Die gesamte Tabelle ist keine Abnahme; Zoom-/Tooltipdetails
 und die übrigen Oberflächenzustände bleiben ausdrücklich offen.
+
+Der folgende [Materialabgleich](GRAPHIC-MATERIAL-NATIVE.md) ergänzt den bislang
+fehlenden Hintergrund-Blur und die proportionale Feldzeichnung bei großer Schrift.

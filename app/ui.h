@@ -167,6 +167,8 @@ nk_bool ps_ui_fixed_button_label(struct nk_context *ctx,const char *text);
 /* Named menu button using Nuklear's ordinary nonblocking combo lifecycle.
  * The caller draws the field background before reserving its layout slot. */
 nk_bool ps_ui_combo_begin_named(struct nk_context *ctx,const char *name,const char *label,struct nk_vec2 size);
+/* Same lifecycle/semantics with explicit logical scale for custom role fonts. */
+nk_bool ps_ui_combo_begin_named_scaled(struct nk_context *ctx,const char *name,const char *label,struct nk_vec2 size,float scale);
 nk_bool ps_ui_slider_named(struct nk_context *ctx,const char *name,float minimum,float *value,float maximum,float increment);
 typedef struct {bool active;float pointer,value;} ps_ui_scrollbar_drag;
 /* Same scrollbar material as Nuklear, with a minimum usable thumb. Numeric

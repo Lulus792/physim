@@ -290,7 +290,7 @@ void ps_ui_draw_backdrop(struct nk_context *ctx,const ps_ui_backdrop *material) 
     /* Solid shapes do not split conversion batches on userdata alone. The
      * scissor commands isolate this material from the ordinary UI shader. */
     nk_set_user_data(ctx,nk_handle_ptr((void*)material));nk_push_scissor(canvas,clip);
-    nk_fill_rect(canvas,nk_rect(material->x,material->y,material->w,material->h),16,nk_rgb(255,255,255));
+    nk_fill_rect(canvas,nk_rect(material->x,material->y,material->w,material->h),material->blur_only?0:16,nk_rgb(255,255,255));
     nk_set_user_data(ctx,userdata);nk_push_scissor(canvas,clip);
 }
 void ps_ui_set_focus_color(struct nk_context *ctx,struct nk_color color) {
@@ -425,7 +425,11 @@ nk_bool ps_ui_button_at(struct nk_context *ctx,struct nk_rect bounds,const char 
     return pressed || (enabled && nk_input_is_mouse_pressed(&ctx->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ctx->input,ctx->current->layout->clip) && nk_input_is_mouse_hovering_rect(&ctx->input,bounds));
 }
 nk_bool ps_ui_combo_begin_named(struct nk_context *ctx,const char *name,const char *label,struct nk_vec2 size) {
+    return ps_ui_combo_begin_named_scaled(ctx,name,label,size,1);
+}
+nk_bool ps_ui_combo_begin_named_scaled(struct nk_context *ctx,const char *name,const char *label,struct nk_vec2 size,float scale) {
     if(!ctx || !ctx->current || !name || !label)return nk_false;
+    if(!isfinite(scale) || scale<=0)return nk_false;
     struct nk_window *window=ctx->current;struct nk_rect bounds;
     if(nk_widget(&bounds,ctx)==NK_WIDGET_INVALID)return nk_false;
     bool expanded=window->popup.win && window->popup.type==NK_PANEL_COMBO && window->popup.name==window->popup.combo_count;
@@ -433,8 +437,8 @@ nk_bool ps_ui_combo_begin_named(struct nk_context *ctx,const char *name,const ch
     bool enabled=!window->widgets_disabled && !(window->layout->flags&NK_WINDOW_ROM);
     bool clicked=enabled && nk_input_is_mouse_pressed(&ctx->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ctx->input,ctx->current->layout->clip) && nk_input_is_mouse_hovering_rect(&ctx->input,bounds);
     const struct nk_user_font *font=ctx->style.font;struct nk_color color=ctx->style.combo.label_normal;
-    nk_draw_text(&window->buffer,nk_rect(bounds.x+9,bounds.y+(bounds.h-font->height)/2,fmaxf(1,bounds.w-42),font->height),label,(int)strlen(label),font,nk_rgba(0,0,0,0),color);
-    nk_draw_symbol(&window->buffer,NK_SYMBOL_CHEVRON_DOWN,nk_rect(bounds.x+bounds.w-25,bounds.y+(bounds.h-8)/2,8,8),nk_rgba(0,0,0,0),color,1,font);
+    nk_draw_text(&window->buffer,nk_rect(bounds.x+9*scale,bounds.y+(bounds.h-font->height)/2,fmaxf(1,bounds.w-42*scale),font->height),label,(int)strlen(label),font,nk_rgba(0,0,0,0),color);
+    nk_draw_symbol(&window->buffer,NK_SYMBOL_CHEVRON_DOWN,nk_rect(bounds.x+bounds.w-25*scale,bounds.y+(bounds.h-8*scale)/2,8*scale,8*scale),nk_rgba(0,0,0,0),color,scale,font);
     ps_ui_accessibility_label(ctx,bounds,label);
     /* accessibility_widget already paints the hook's native focus result. */
     nk_bool open=nk_combo_begin(ctx,window,size,activated || clicked,bounds);
