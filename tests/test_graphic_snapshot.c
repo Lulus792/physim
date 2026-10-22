@@ -183,6 +183,31 @@ static int runs(const char *work) {
     CHECK(ps_graphic_snapshot_from_runs(&request,prefix,0,NULL,NULL,ps_allocator_default(),&candidate,&failure)==PS_OK);
     CHECK(ps_graphic_snapshot_describe(candidate,&d)==PS_OK && d.input_count==8 && d.plot.curves==8 && d.reference==7);ps_graphic_snapshot_destroy(candidate);candidate=snapshot;
     request.count=9;CHECK(ps_graphic_snapshot_from_runs(&request,prefix,0,NULL,NULL,ps_allocator_default(),&candidate,&failure)==PS_INVALID && candidate==snapshot);
+    request.count=3;request.reference=2;
+    request.inputs[0]=(ps_graphic_run_input){.path=bad};request.inputs[1]=(ps_graphic_run_input){.path=small};request.inputs[2]=(ps_graphic_run_input){.path=b};
+    candidate=NULL;CHECK(ps_graphic_snapshot_compare_runs(&request,prefix,0,NULL,NULL,ps_allocator_default(),&candidate,&failure)==PS_OK);
+    CHECK(ps_graphic_snapshot_describe(candidate,&d)==PS_OK && d.input_count==3 && d.plot.curves==2 && d.reference==1);
+    CHECK(ps_graphic_snapshot_run(candidate,0,&info)==PS_OK && info.result==PS_CORRUPT && info.curve==PS_GRAPHIC_NO_REFERENCE);
+    CHECK(ps_graphic_snapshot_run(candidate,2,&info)==PS_OK && info.result==PS_OK && info.curve==1 && info.samples==9);
+    ps_graphic_snapshot_destroy(candidate);request.reference=0;candidate=NULL;
+    CHECK(ps_graphic_snapshot_compare_runs(&request,prefix,0,NULL,NULL,ps_allocator_default(),&candidate,&failure)==PS_OK);
+    CHECK(ps_graphic_snapshot_describe(candidate,&d)==PS_OK && d.reference==PS_GRAPHIC_NO_REFERENCE);
+    ps_graphic_snapshot *partial=NULL;CHECK(ps_graphic_snapshot_copy(candidate,NULL,ps_allocator_default(),&partial)==PS_OK);
+    ps_graphic_snapshot_destroy(candidate);CHECK(ps_graphic_snapshot_run(partial,0,&info)==PS_OK && info.result==PS_CORRUPT);
+    ps_graphic_snapshot_destroy(partial);
+    request.count=1;candidate=snapshot;
+    CHECK(ps_graphic_snapshot_compare_runs(&request,prefix,0,NULL,NULL,ps_allocator_default(),&candidate,&failure)==PS_INVALID && candidate==snapshot);
+    request.count=2;request.reference=1;request.inputs[0].path=small;request.inputs[1].path=b;
+    test_allocator comparisons={0};candidate=NULL;
+    CHECK(ps_graphic_snapshot_compare_runs(&request,prefix,0,NULL,NULL,test_domain(&comparisons),&candidate,&failure)==PS_OK);
+    size_t comparison_allocations=comparisons.attempts;ps_graphic_snapshot_destroy(candidate);
+    CHECK(!comparisons.live_blocks && !comparisons.live_bytes && !comparisons.invalid);
+    for(size_t fail=1;fail<=comparison_allocations;fail++) {
+        test_allocator failing={.fail_on=fail};candidate=snapshot;
+        CHECK(ps_graphic_snapshot_compare_runs(&request,prefix,0,NULL,NULL,test_domain(&failing),&candidate,&failure)==PS_MEMORY && candidate==snapshot);
+        CHECK(!failing.live_blocks && !failing.live_bytes && !failing.invalid);
+    }
+    printf("GRAPHIC COMPARISON: partial inputs, unavailable reference, mapping/copy and %zu allocation failures passed\n",comparison_allocations);
     CHECK(!remove(a) && !remove(b) && !remove(small) && !remove(bad) && !remove(missing) && !remove(numeric));
     CHECK(ps_graphic_snapshot_describe(snapshot,&d)==PS_OK && d.reference==1 && d.axes.visible[1]==200);
     CHECK(ps_graphic_snapshot_run(snapshot,0,&info)==PS_OK && info.samples==6001 && !strcmp(info.path,a));

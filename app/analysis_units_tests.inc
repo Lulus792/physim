@@ -3,7 +3,7 @@ static void analysis_units_test_frame(app *a,int *stage,int *code,const char **c
     static bool settle;static ps_statistics statistics;static ps_plot_view view;
     static uint32_t values_crc,time_crc,file_crc;static char units_path[4096];
     if(settle){settle=false;return;}settle=true;
-    if(a->data.thread || a->library_thread)return;
+    if(a->data.thread || a->library_thread || ps_comparison_read(a->comparison).loading)return;
     bool ok=true;const ps_channel *channel=&a->data.channels[0];
     switch(*stage) {
     case 0: {

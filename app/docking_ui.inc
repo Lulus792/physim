@@ -295,7 +295,7 @@ static bool dock_begin(app *a,unsigned panel) {
     nk_style_push_float(a->ui,&a->ui->style.window.rounding,0);
     nk_flags flags=NK_WINDOW_BACKGROUND|(a->dock_visible[panel]?0:NK_WINDOW_HIDDEN);
     if(workbench_visible(a) && panel==PS_DOCK_INSPECTOR && !workbench_context_needs_scrollbar(a,r))flags|=NK_WINDOW_NO_SCROLLBAR;
-    if(analysis_visible(a) && ((panel==PS_DOCK_SIDEBAR && r.h>=420) || (panel==PS_DOCK_WORKSPACE && r.h>=720 && a->preferences.ui_size<=16 && !a->show_report && a->data.channel_count<=1 && analysis_plot_fits(a,r))))flags|=NK_WINDOW_NO_SCROLLBAR;
+    if(analysis_visible(a) && ((panel==PS_DOCK_SIDEBAR && r.h>=420) || (panel==PS_DOCK_WORKSPACE && r.h>=720 && a->preferences.ui_size<=16 && !a->show_report && a->selected_count<=1 && analysis_plot_fits(a,r))))flags|=NK_WINDOW_NO_SCROLLBAR;
     if(laboratory_visible(a) && (panel==PS_DOCK_WORKSPACE || panel==PS_DOCK_INSPECTOR))flags|=NK_WINDOW_NO_SCROLLBAR;
     bool shown=nk_begin(a->ui,dock_windows[panel],r,flags);
     nk_style_pop_float(a->ui);

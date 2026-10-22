@@ -1,5 +1,9 @@
 # Auswerten: Felder, Laufliste und aktive Tabgrenze
 
+**Späterer Stand, 22. Oktober:** Der [sichtbare native Messlaufvergleich](ANALYSIS-COMPARISON-NATIVE.md)
+integriert jetzt Kurven, Referenz, Legende, vollständige Statistik und denselben
+Grafikexportdialog. Die folgenden früheren Prüfungen behalten ihren datierten Umfang.
+
 Dieser Schritt führt den [nativen Auswertungsstand](ANALYSIS-NATIVE.md) näher an
 die unveränderten Referenzen heran. Er ersetzt weder deren offene Fachfunktionen
 noch den vollständigen Abgleich aller Arbeitsbereiche.

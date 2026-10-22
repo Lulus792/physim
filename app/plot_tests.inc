@@ -178,6 +178,7 @@ static bool test_plot_setup(app *a, const char *directory) {
             ok = false;
     }
     a->loaded = true;
+    select_run(a,a->last_run,true);
     a->tab = 2;
     a->show_report = true;
     request_dataset(a);
@@ -282,6 +283,8 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
     static ps_plot_view panned, raw;
     static struct nk_rect pick_target;
     bool ok = true;
+    if(!a->show_report && (ps_comparison_read(a->comparison).loading ||
+       a->active_plot_view!=&a->data_views[a->plot_channel]))return;
     struct nk_rect area = a->plot_area;
     switch (*stage) {
     case 0:

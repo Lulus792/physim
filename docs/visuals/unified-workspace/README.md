@@ -10,8 +10,10 @@ Der [native Grafikexport-Umsetzungsstand](GRAPHIC-EXPORT-NATIVE.md) dokumentiert
 die geprüfte Datenbasis, [Zeichenbeschreibung und SVG](GRAPHIC-FIGURE-NATIVE.md)
 sowie den [nativen Rasteradapter mit PNG und Vorschautextur](GRAPHIC-RASTER-NATIVE.md).
 Der [sichtbare native Berichtsdialog](GRAPHIC-DIALOG-NATIVE.md) ergänzt jetzt
-Vorschau, Optionen, Speichern und echte Bildkopie. Mehrlaufzugang und vollständige
-Design-/Plattformabnahme des Exports bleiben weiter beauftragt.
+Vorschau, Optionen, Speichern und echte Bildkopie. Der spätere
+[sichtbare Messlaufvergleich](ANALYSIS-COMPARISON-NATIVE.md) ergänzt acht echte
+Kurven, Referenz, Statistik und denselben Exportzugang. Die vollständige
+Design-/Plattformabnahme des Exports bleibt weiter beauftragt.
 Der folgende [native Materialabgleich](GRAPHIC-MATERIAL-NATIVE.md) ergänzt den
 Hintergrundfilter und bei großer Schrift proportional gezeichnete Auswahlfelder.
 Der [Schatten-/Maßabgleich](GRAPHIC-SHADOW-NATIVE.md) ergänzt Referenzgröße,

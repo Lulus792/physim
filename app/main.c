@@ -21,6 +21,7 @@
 #include "model_values.h"
 #include "report_image.h"
 #include "graphic_raster.h"
+#include "analysis_comparison.h"
 #include "graphic_output.h"
 #include "png.h"
 #include "scene_view.h"
@@ -456,6 +457,10 @@ typedef struct {
     struct nk_rect svg_region_bounds;
     struct nk_rect png_size_bounds, png_size_choices[4];
     ps_plot_view report_views[PS_REPORT_MAX_PLOTS], data_views[PS_MAX_CHANNELS];
+    ps_comparison *comparison;uint64_t comparison_revision;
+    struct nk_rect comparison_retry_bounds;
+    char comparison_pending_active[4096];
+    ps_channel plot_channel_identity;bool plot_channel_identity_valid;
     ps_plot_view *plot_drag, *active_plot_view;
     struct nk_vec2 plot_drag_position;
     struct nk_rect plot_area, plot_buttons[3];
@@ -658,6 +663,8 @@ static void dock_resize_abort(app *a);
 static void analysis_plot_resize_abort(app *a);
 static bool analysis_plot_resize_key(app *a,const SDL_KeyboardEvent *key);
 static void model_edit_clear(app *a);
+static bool graphic_export_comparison(app *a);
+static void analysis_text(app *a,struct nk_rect r,const char *text,const struct nk_user_font *font,struct nk_color color);
 static void model_edit_finish(app *a,bool success);
 static void model_edit_tick(app *a);
 static void model_edit_submitted(app *a);
@@ -1166,6 +1173,9 @@ static bool jobs_idle(app *a) {
 }
 static bool idle(app *a) { return !a->reset_pending && jobs_idle(a); }
 static void clear_project(app *a) {
+    ps_comparison_key empty={.revision=++a->comparison_revision};
+    if(a->comparison)(void)ps_comparison_request(a->comparison,&empty);
+    a->comparison_pending_active[0]=0;
     model_edit_clear(a);
     completion_close(a);
     a->source_tab_closed[0]=a->source_tab_closed[1]=false;
@@ -1815,6 +1825,10 @@ static int load_dataset(void *user) {
 static void request_dataset(app *a) {
     if (a->data.thread || !a->last_run[0])
         return;
+    a->comparison_revision++;
+    if(a->data.count && a->plot_channel>=0 && a->plot_channel<(int)a->data.channel_count) {
+        a->plot_channel_identity=a->data.channels[a->plot_channel];a->plot_channel_identity_valid=true;
+    }
     if (strcmp(a->plot_data_path, a->last_run)) {
         memset(a->data_views, 0, sizeof a->data_views);
         snprintf(a->plot_data_path, sizeof a->plot_data_path, "%s", a->last_run);
@@ -2240,6 +2254,16 @@ static void pump(app *a) {
     if (a->data.thread && SDL_GetAtomicInt(&a->data.done)) {
         SDL_WaitThread(a->data.thread, NULL);
         a->data.thread = NULL;
+        if(a->plot_channel_identity_valid) {
+            a->plot_channel=0;
+            for(uint32_t i=0;i<a->data.channel_count;i++) {
+                const ps_channel *wanted=&a->plot_channel_identity,*candidate=a->data.channels+i;
+                bool wanted_angle=!strcmp(wanted->unit,"rad") || !strcmp(wanted->unit,"deg") || !strcmp(wanted->unit,"°");
+                bool candidate_angle=!strcmp(candidate->unit,"rad") || !strcmp(candidate->unit,"deg") || !strcmp(candidate->unit,"°");
+                if(!strcmp(wanted->name,candidate->name) && !memcmp(wanted->dimension,candidate->dimension,7) && wanted_angle==candidate_angle){a->plot_channel=(int)i;break;}
+            }
+            a->plot_channel_identity_valid=false;
+        }
         if (a->data.result == PS_EOF || a->data.result == PS_RECOVERED) {
             ps_timeline_destroy(&a->timeline);
             a->timeline = a->data.timeline;
@@ -2541,8 +2565,8 @@ static void viewport(app *a, float height) {
 // clang-format off
 #include "plot_ui.inc"
 // clang-format on
-static void plot(app *a, const double *times, const double *values, int count, float height,
-                 const char *label, bool scatter, ps_plot_view *view) {
+static void plot_draw(app *a, const double *times, const double *values, int count, float height,
+                 const char *label, bool scatter, ps_plot_view *view,const ps_graphic_snapshot *comparison) {
     struct nk_context *ui = a->ui;
     double lo = INFINITY, hi = -INFINITY;
     for (int i = 0; i < count; i++)
@@ -2550,13 +2574,16 @@ static void plot(app *a, const double *times, const double *values, int count, f
             lo = fmin(lo, values[i]);
             hi = fmax(hi, values[i]);
         }
-    bool have_values = isfinite(lo);
+    ps_graphic_description description={0};
+    bool compared=comparison && ps_graphic_snapshot_describe(comparison,&description)==PS_OK;
+    bool have_values = compared || isfinite(lo);
     if (have_values)
         plot_expand_range(&lo, &hi, true);
     double bounds[] = {count ? times[0] : 0, count ? times[count - 1] : 1, lo, hi};
+    if(compared)memcpy(bounds,description.axes.full,sizeof bounds);
     bool analysis=a->tab==2 && a->analysis_tab==0 && !a->project_manager && view;
     struct nk_color curve_color=analysis?ui_palette->curves[0]:UI_COLOR(accent);
-    if(analysis)analysis_plot_heading(a,view,have_values && count>1?bounds:NULL);
+    if(analysis)analysis_plot_heading(a,view,have_values && (compared || count>1)?bounds:NULL,comparison);
     else {
         nk_layout_row_dynamic(ui, 22, 1);
         nk_label_colored(ui, label, NK_TEXT_LEFT, UI_COLOR(muted));
@@ -2567,7 +2594,7 @@ static void plot(app *a, const double *times, const double *values, int count, f
     nk_widget(&r, ui);
     struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
     nk_fill_rect(canvas, r, 6, UI_COLOR(edit));
-    if (count < 2)
+    if (!compared && count < 2)
         return;
     if (!have_values) {
         const char *message = "Keine gültigen Messwerte in dieser Vorschau.";
@@ -2576,7 +2603,7 @@ static void plot(app *a, const double *times, const double *values, int count, f
                      UI_COLOR(muted));
         return;
     }
-    if (!(times[count - 1] > times[0]))
+    if (!compared && !(times[count - 1] > times[0]))
         return;
     struct nk_rect area = analysis?nk_rect(r.x+66,r.y+54,r.w-94,r.h-106):nk_rect(r.x+70,r.y+20,r.w-90,r.h-55);
     if(analysis){nk_draw_text(canvas,nk_rect(area.x,r.y+22,r.w-94,22),label,(int)strlen(label),ui->style.font,UI_COLOR(edit),UI_COLOR(muted));ps_ui_accessibility_label(ui,r,label);}
@@ -2611,20 +2638,25 @@ static void plot(app *a, const double *times, const double *values, int count, f
     }
     struct nk_rect previous_clip = canvas->clip;
     nk_push_scissor(canvas, plot_intersection(area, previous_clip));
-    for (int i = 0; i < count; i++) {
-        if (!isfinite(values[i]))
-            continue;
-        double x2 = plot_fraction(view, bounds, 0, times[i]),
-               y2 = plot_fraction(view, bounds, 1, values[i]);
-        if (scatter) {
-            plot_dot(canvas, area, x2, y2, 2, curve_color);
-            continue;
+    for(uint32_t j=0;j<(compared?description.plot.curves:1);j++) {
+        const ps_curve_data *curve=NULL;const uint8_t *mask=NULL;
+        if(compared) {
+            ps_report_curve_view(ps_graphic_snapshot_report(comparison),0,j,&curve);
+            ps_report_curve_mask(ps_graphic_snapshot_report(comparison),0,j,&mask);
         }
-        if (!i || !isfinite(values[i - 1]))
-            continue;
-        double x1 = plot_fraction(view, bounds, 0, times[i - 1]),
-               y1 = plot_fraction(view, bounds, 1, values[i - 1]);
-        plot_segment(canvas, area, x1, y1, x2, y2, curve_color);
+        const double *t=compared?curve->x:times,*v=compared?curve->y:values;
+        uint32_t n=compared?curve->count:(uint32_t)count;bool dots=compared?curve->kind==PS_PLOT_SCATTER:scatter;
+        struct nk_color color=compared?ui_palette->curves[j]:curve_color;
+        double dash=compared && j!=description.reference && !(description.reference==PS_GRAPHIC_NO_REFERENCE && !j)?(j%2?10:3):0,phase=0;
+        for(uint32_t i=0;i<n;i++) {
+            if(!isfinite(v[i]) || (mask && !(mask[i]&1))){phase=0;continue;}
+            double x2=plot_fraction(view,bounds,0,t[i]),y2=plot_fraction(view,bounds,1,v[i]);
+            bool before=i && isfinite(v[i-1]) && (!mask || ((mask[i-1]&1) && !(mask[i]&2)));
+            bool after=i+1<n && isfinite(v[i+1]) && (!mask || ((mask[i+1]&1) && !(mask[i+1]&2)));
+            if(dots || (!before && !after))plot_dot(canvas,area,x2,y2,2,color);
+            if(!before)phase=0;
+            if(!dots && before)plot_pattern(canvas,area,plot_fraction(view,bounds,0,t[i-1]),plot_fraction(view,bounds,1,v[i-1]),x2,y2,dash,&phase,color);
+        }
     }
     if (a->tab == 1) {
         double x = plot_fraction(view, bounds, 0, display_time(a));
@@ -2647,10 +2679,23 @@ static void plot(app *a, const double *times, const double *values, int count, f
     }
     if(analysis) {
         nk_draw_text(canvas,nk_rect(area.x+area.w-70,area.y+area.h+40,70,22),"Zeit [s]",8,ui->style.font,UI_COLOR(edit),UI_COLOR(muted));
-        nk_layout_row_dynamic(ui,49,2);char range[160];snprintf(range,sizeof range,"Zeitachse %.6g–%.6g s",displayed[0],displayed[1]);
-        nk_label_colored(ui,range,NK_TEXT_LEFT,UI_COLOR(muted));
-        char preview[160];snprintf(preview,sizeof preview,"Vorschau %d / %llu Messpunkte",count,(unsigned long long)a->data.total);nk_label_colored(ui,preview,NK_TEXT_RIGHT,UI_COLOR(muted));
+        char range[160],preview[160];snprintf(range,sizeof range,"Zeitachse %.6g–%.6g s",displayed[0],displayed[1]);
+        if(compared)snprintf(preview,sizeof preview,"%u Läufe%s",description.plot.curves,description.reduced?" · reduzierte Vorschau, Spitzen bleiben erhalten":" · alle Messpunkte");
+        else snprintf(preview,sizeof preview,"Vorschau %d / %llu Messpunkte",count,(unsigned long long)a->data.total);
+        float available=nk_window_get_content_region(ui).w,half=(available-ui->style.window.spacing.x)/2;
+        bool stack=ui->style.font->width(ui->style.font->userdata,ui->style.font->height,range,(int)strlen(range))>half ||
+            ui->style.font->width(ui->style.font->userdata,ui->style.font->height,preview,(int)strlen(preview))>half;
+        if(stack) {
+            nk_layout_row_dynamic(ui,ui->style.font->height+6,1);nk_label_colored(ui,range,NK_TEXT_LEFT,UI_COLOR(muted));
+            nk_layout_row_dynamic(ui,documentation_height(ui->style.font,preview,strlen(preview),available)+4,1);nk_label_colored_wrap(ui,preview,UI_COLOR(muted));
+        } else {
+            nk_layout_row_dynamic(ui,49,2);nk_label_colored(ui,range,NK_TEXT_LEFT,UI_COLOR(muted));nk_label_colored(ui,preview,NK_TEXT_RIGHT,UI_COLOR(muted));
+        }
     }
+}
+static void plot(app *a,const double *times,const double *values,int count,float height,
+    const char *label,bool scatter,ps_plot_view *view) {
+    plot_draw(a,times,values,count,height,label,scatter,view,NULL);
 }
 static struct nk_text_edit *editor_search_target(app *a) {
     if(a->recovery || a->document_pending || a->dialog_pending || a->project_manager ||
@@ -3388,6 +3433,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "analysis_project_tests.inc"
 #include "analysis_workspace_tests.inc"
 #include "analysis_units_tests.inc"
+#include "analysis_comparison_tests.inc"
 #include "shell_theme_tests.inc"
 #include "library_selection_tests.inc"
 #include "report_details_tests.inc"
@@ -4159,6 +4205,7 @@ int main(int argc, char **argv) {
             profile_phase = now;
         }
         pump(a);
+        analysis_comparison_sync(a);
         model_edit_tick(a);
         autosave_tick(a, ps_clock());
         documents_autosave_tick(a, ps_clock());
@@ -4179,7 +4226,7 @@ int main(int argc, char **argv) {
             /* The deliberate 80 ms frame delay also runs on hosted software GL.
              * Keep its bounded keyboard assertions; allow their extra wall time. */
             if (ps_clock() - test_started >
-                (!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
+                (!strncmp(argv[3],"comparison-",11)?120:!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
                   !strncmp(argv[3], "isolation-", 10) || !strncmp(argv[3], "breakpoints-", 12) || !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || (!strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"pendulum-medium-",16)) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strncmp(argv[3],"logging-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15))) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
@@ -5381,6 +5428,7 @@ int main(int argc, char **argv) {
         printf("BATCH UI SELF-TEST: %s\n", exit_code ? "FAILED" : "PASSED");
     }
     free(a->batch_source);
+    ps_comparison_destroy(a->comparison);a->comparison=NULL;
     if (a->data.thread)
         SDL_WaitThread(a->data.thread, NULL);
     if (a->report_thread)

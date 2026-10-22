@@ -6,17 +6,20 @@ static int selected_run(const app *a, const char *path) {
 }
 static void select_run(app *a, const char *path, bool selected) {
     int index = selected_run(a, path);
+    bool active=!strcmp(path,a->last_run);
     if (index >= 0 && !selected) {
         if ((unsigned)index + 1 < a->selected_count)
             memmove(a->selected_runs[index], a->selected_runs[index + 1],
                     (a->selected_count - (unsigned)index - 1) * sizeof a->selected_runs[0]);
         a->selected_count--;
+        if(active && a->selected_count)snprintf(a->comparison_pending_active,sizeof a->comparison_pending_active,"%s",a->selected_runs[0]);
     } else if (index < 0 && selected) {
         if (a->selected_count == PS_ANALYSIS_MAX_INPUTS) {
             status(a, "Höchstens acht Läufe gleichzeitig auswählen.");
             return;
         }
         snprintf(a->selected_runs[a->selected_count++], sizeof a->selected_runs[0], "%s", path);
+        if(!a->last_run[0])snprintf(a->comparison_pending_active,sizeof a->comparison_pending_active,"%s",path);
     }
 }
 static void reference_run(app *a, const char *path) {

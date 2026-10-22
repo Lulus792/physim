@@ -18,8 +18,10 @@ sowie dessen Modellfehler-Scrollblockade. Sechs Windows- und sieben Linux-
 Gruppen bestehen. Das ersetzt keine vollständige visuelle, Assistive- oder
 Plattformabnahme. Der anschließende [native Berichts-Exportdialog](GRAPHIC-DIALOG-NATIVE.md)
 ersetzt die alte breite Exportleiste durch den freigegebenen Zugang mit Vorschau,
-Optionen, PNG/SVG und nativer Bildkopie. Die dort aufgeführten Abweichungen,
-der Mehrlauf-Messdatenexport und die übrige Oberfläche bleiben offen.
+Optionen, PNG/SVG und nativer Bildkopie. Die dort aufgeführten Abweichungen
+und die übrige Oberfläche bleiben offen. Der folgende
+[sichtbare Messlaufvergleich](ANALYSIS-COMPARISON-NATIVE.md) ergänzt jetzt
+echte Vergleichskurven, Statistik und den gemeinsamen Exportzugang.
 
 ## Verbindlicher Umfang
 

@@ -109,7 +109,8 @@ Schriftfamilie/-gewicht, weitere Komponenten und kontinuierliche Scrollzustände
 bleiben gegen die Referenzen abzugleichen. Browser- und native Rasterung werden
 nicht allein aus den bestandenen Funktionsgruppen gleichgesetzt.
 
-Der sichtbare Mehrlaufcache mit gemeinsamer Kurve, Referenz, Legende, Statistik
-und Export bleibt vollständig beauftragt. Auch externe Screenreader, echte
+Der folgende [sichtbare Mehrlaufvergleich](ANALYSIS-COMPARISON-NATIVE.md) bindet
+den Cache an Kurve, Referenz, Legende, vollständige Statistik und Export.
+Externe Screenreader, echte
 OS-Dateiauswahlbedienung, physische DPI-/Monitorwechsel, ausgehängter Quellbereich
 und macOS bleiben gesonderte offene Abnahmen.

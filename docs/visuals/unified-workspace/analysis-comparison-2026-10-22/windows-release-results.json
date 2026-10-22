@@ -1,0 +1,207 @@
+[
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+        "sha256": "2c9d5d84e9634c19a5ca44a5eb18460b5ccd042b58ca75ab1e71a121c30b3b7b"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_graphic_dialog.py",
+          "--app",
+          "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+          "--root",
+          "D:\\Physim",
+          "--work",
+          "D:\\Physim\\build\\native\\Release\\test-results\\run-tul40hk6\\graphic_dialog\\files \u00e4"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "graphic_dialog: native UI, frozen preview, save/cancel/error and independent clipboard RGB passed\n",
+        "stderr": "",
+        "seconds": 7.328,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "D:\\Physim\\build\\native\\Release\\test-results\\run-tul40hk6\\graphic_dialog\\files \u00e4\\app-steps.json",
+            "bytes": 23924,
+            "sha256": "78ca2b35a3a9e652f5edb83efdaf7b1b1bc78c5d4ba37e302d56df05f9231dec"
+          }
+        ]
+      }
+    ],
+    "seconds": 7.375,
+    "reason": "",
+    "name": "graphic_dialog"
+  },
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+        "sha256": "2c9d5d84e9634c19a5ca44a5eb18460b5ccd042b58ca75ab1e71a121c30b3b7b"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_display_workflow.py",
+          "comparison_dark",
+          "--app",
+          "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+          "--work",
+          "D:\\Physim\\build\\native\\Release\\test-results\\run-tul40hk6\\comparison_dark\\files \u00e4",
+          "--root",
+          "D:\\Physim"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nCOMPARISON NATIVE: inputs=8 curves=8 reference=0 full=6001 valid=5999 independent-x1=0.26100000000000001\nCOMPARISON AREA: 322.0,443.0,817.0,265.0\nCOMPARISON COLOR: 0 100 170 255\nCOMPARISON COLOR: 1 245 166 87\nCOMPARISON COLOR: 2 109 207 148\nCOMPARISON COLOR: 3 193 151 240\nCOMPARISON COLOR: 4 242 140 178\nCOMPARISON COLOR: 5 89 205 220\nCOMPARISON COLOR: 6 222 204 110\nCOMPARISON COLOR: 7 188 197 212\nCOMPARISON BACKGROUND: 27 28 32\nCOMPARISON UI SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nProjekt geladen. Build kompiliert die lokalen Quelldateien.\n6001 Messpunkte geladen.\n306 Messpunkte geladen.\nGrafik gespeichert: D:\\Physim\\build\\native\\Release\\test-results\\run-tul40hk6\\comparison_dark\\files \u00e4\\workflow \u00e4/project/comparison-eight.svg\n\n\nAPP TEST EXIT: 0\ncomparison_dark: app workflow and persisted files passed\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 655341.810474\nAPP TEST TRACE: main font sources ready 655341.885871\nAPP TEST TRACE: main atlas bake seconds=0.371899\nAPP TEST TRACE: main atlas validation/upload seconds=0.009945\nAPP TEST TRACE: main fonts ready 655342.282469\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 2 -> 3, status 6001 Messpunkte geladen.\nAPP TEST TRACE: publication cleared focus id=156 window=2 ticks=1691228600\nAPP TEST TRACE: stage 3 -> 4, status 6001 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=1773899500\nAPP TEST TRACE: stage 4 -> 5, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 5 -> 6, status 6001 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=1827650900\nAPP TEST TRACE: stage 6 -> 7, status 6001 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=1852054500\nAPP TEST TRACE: stage 7 -> 8, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 8 -> 9, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 9 -> 10, status 6001 Messpunkte geladen.\nGRAPHIC DIALOG RASTER: scale=2 visible=0 dark=0 seconds=0.028318 result=OK\nAPP TEST TRACE: publication cleared focus id=165 window=2 ticks=1973713100\nAPP TEST TRACE: stage 10 -> 11, status 6001 Messpunkte geladen.\nGRAPHIC DIALOG FOCUS: granted=PNG\nAPP TEST TRACE: stage 11 -> 12, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 12 -> 13, status 306 Messpunkte geladen.\nGRAPHIC DIALOG FOCUS: tab=1 target=Zeitbereich\nGRAPHIC DIALOG FOCUS: granted=Zeitbereich\nGRAPHIC DIALOG FOCUS: tab=1 target=Darstellung\nGRAPHIC DIALOG FOCUS: granted=Darstellung\nGRAPHIC DIALOG FOCUS: tab=1 target=Bild kopieren\nGRAPHIC DIALOG FOCUS: granted=Bild kopieren\nGRAPHIC DIALOG FOCUS: tab=1 target=SVG speichern\u2026\nGRAPHIC DIALOG FOCUS: granted=SVG speichern\u2026\nAPP TEST TRACE: stage 13 -> 14, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 14 -> 15, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 15 -> 16, status 306 Messpunkte geladen.\nGRAPHIC DIALOG RASTER: scale=1 visible=1 dark=0 seconds=0.028429 result=OK\nGRAPHIC DIALOG RASTER: scale=2 visible=1 dark=0 seconds=0.024394 result=OK\nGRAPHIC DIALOG RASTER: scale=3 visible=1 dark=0 seconds=0.041651 result=OK\nGRAPHIC DIALOG RASTER: scale=4 visible=1 dark=0 seconds=0.050420 result=OK\nAPP TEST TRACE: stage 16 -> 17, status 306 Messpunkte geladen.\nGRAPHIC RETURN: requested=1 focused=0 remaining=3\nCOMPARISON RETURN OBSERVE: focused=0 snapshot=1 unit=cm channel=1 scroll=0 flags=288\nAPP TEST TRACE: stage 17 -> 18, status 306 Messpunkte geladen.\nAPP TEST TRACE: publication cleared focus id=298 window=2 ticks=2970149000\nAPP TEST TRACE: stage 18 -> 19, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 19 -> 20, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 20 -> 21, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 21 -> 22, status 306 Messpunkte geladen.\n",
+        "seconds": 7.344,
+        "reason": "",
+        "artifacts": []
+      }
+    ],
+    "seconds": 7.36,
+    "reason": "",
+    "name": "comparison_dark"
+  },
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+        "sha256": "2c9d5d84e9634c19a5ca44a5eb18460b5ccd042b58ca75ab1e71a121c30b3b7b"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_display_workflow.py",
+          "comparison_light",
+          "--app",
+          "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+          "--work",
+          "D:\\Physim\\build\\native\\Release\\test-results\\run-tul40hk6\\comparison_light\\files \u00e4",
+          "--root",
+          "D:\\Physim"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nCOMPARISON NATIVE: inputs=8 curves=8 reference=0 full=6001 valid=5999 independent-x1=0.26100000000000001\nCOMPARISON AREA: 322.0,443.0,817.0,265.0\nCOMPARISON COLOR: 0 0 75 165\nCOMPARISON COLOR: 1 145 72 0\nCOMPARISON COLOR: 2 0 100 59\nCOMPARISON COLOR: 3 115 48 163\nCOMPARISON COLOR: 4 158 34 95\nCOMPARISON COLOR: 5 0 90 107\nCOMPARISON COLOR: 6 106 86 0\nCOMPARISON COLOR: 7 60 71 89\nCOMPARISON BACKGROUND: 255 255 255\nCOMPARISON UI SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nProjekt geladen. Build kompiliert die lokalen Quelldateien.\n6001 Messpunkte geladen.\n306 Messpunkte geladen.\nGrafik gespeichert: D:\\Physim\\build\\native\\Release\\test-results\\run-tul40hk6\\comparison_light\\files \u00e4\\workflow \u00e4/project/comparison-eight.svg\n\n\nAPP TEST EXIT: 0\ncomparison_light: app workflow and persisted files passed\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 655349.080502\nAPP TEST TRACE: main font sources ready 655349.155176\nAPP TEST TRACE: main atlas bake seconds=0.399007\nAPP TEST TRACE: main atlas validation/upload seconds=0.011045\nAPP TEST TRACE: main fonts ready 655349.579721\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 2 -> 3, status 6001 Messpunkte geladen.\nAPP TEST TRACE: publication cleared focus id=156 window=2 ticks=1721054200\nAPP TEST TRACE: stage 3 -> 4, status 6001 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=1801461300\nAPP TEST TRACE: stage 4 -> 5, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 5 -> 6, status 6001 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=1855323000\nAPP TEST TRACE: stage 6 -> 7, status 6001 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=1880515600\nAPP TEST TRACE: stage 7 -> 8, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 8 -> 9, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 9 -> 10, status 6001 Messpunkte geladen.\nGRAPHIC DIALOG RASTER: scale=2 visible=0 dark=0 seconds=0.029213 result=OK\nAPP TEST TRACE: publication cleared focus id=165 window=2 ticks=2002882700\nAPP TEST TRACE: stage 10 -> 11, status 6001 Messpunkte geladen.\nGRAPHIC DIALOG FOCUS: granted=PNG\nAPP TEST TRACE: stage 11 -> 12, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 12 -> 13, status 306 Messpunkte geladen.\nGRAPHIC DIALOG FOCUS: tab=1 target=Zeitbereich\nGRAPHIC DIALOG FOCUS: granted=Zeitbereich\nGRAPHIC DIALOG FOCUS: tab=1 target=Darstellung\nGRAPHIC DIALOG FOCUS: granted=Darstellung\nGRAPHIC DIALOG FOCUS: tab=1 target=Bild kopieren\nGRAPHIC DIALOG FOCUS: granted=Bild kopieren\nGRAPHIC DIALOG FOCUS: tab=1 target=SVG speichern\u2026\nGRAPHIC DIALOG FOCUS: granted=SVG speichern\u2026\nAPP TEST TRACE: stage 13 -> 14, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 14 -> 15, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 15 -> 16, status 306 Messpunkte geladen.\nGRAPHIC DIALOG RASTER: scale=1 visible=1 dark=0 seconds=0.020634 result=OK\nGRAPHIC DIALOG RASTER: scale=2 visible=1 dark=0 seconds=0.041306 result=OK\nGRAPHIC DIALOG RASTER: scale=3 visible=1 dark=0 seconds=0.059476 result=OK\nGRAPHIC DIALOG RASTER: scale=4 visible=1 dark=0 seconds=0.057246 result=OK\nAPP TEST TRACE: stage 16 -> 17, status 306 Messpunkte geladen.\nGRAPHIC RETURN: requested=1 focused=0 remaining=3\nCOMPARISON RETURN OBSERVE: focused=0 snapshot=1 unit=cm channel=1 scroll=0 flags=288\nAPP TEST TRACE: stage 17 -> 18, status 306 Messpunkte geladen.\nAPP TEST TRACE: publication cleared focus id=298 window=2 ticks=3190563100\nAPP TEST TRACE: stage 18 -> 19, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 19 -> 20, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 20 -> 21, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 21 -> 22, status 306 Messpunkte geladen.\n",
+        "seconds": 10.031,
+        "reason": "",
+        "artifacts": []
+      }
+    ],
+    "seconds": 10.031,
+    "reason": "",
+    "name": "comparison_light"
+  },
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+        "sha256": "2c9d5d84e9634c19a5ca44a5eb18460b5ccd042b58ca75ab1e71a121c30b3b7b"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_display_workflow.py",
+          "comparison_light_large_narrow",
+          "--app",
+          "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+          "--work",
+          "D:\\Physim\\build\\native\\Release\\test-results\\run-tul40hk6\\comparison_light_large_narrow\\files \u00e4",
+          "--root",
+          "D:\\Physim"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nCOMPARISON NATIVE: inputs=8 curves=8 reference=0 full=6001 valid=5999 independent-x1=0.26100000000000001\nCOMPARISON AREA: 322.0,484.0,457.0,119.0\nCOMPARISON COLOR: 0 0 75 165\nCOMPARISON COLOR: 1 145 72 0\nCOMPARISON COLOR: 2 0 100 59\nCOMPARISON COLOR: 3 115 48 163\nCOMPARISON COLOR: 4 158 34 95\nCOMPARISON COLOR: 5 0 90 107\nCOMPARISON COLOR: 6 106 86 0\nCOMPARISON COLOR: 7 60 71 89\nCOMPARISON BACKGROUND: 255 255 255\nCOMPARISON UI SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nProjekt geladen. Build kompiliert die lokalen Quelldateien.\n6001 Messpunkte geladen.\n306 Messpunkte geladen.\nGrafik gespeichert: D:\\Physim\\build\\native\\Release\\test-results\\run-tul40hk6\\comparison_light_large_narrow\\files \u00e4\\workflow \u00e4/project/comparison-eight.svg\n\n\nAPP TEST EXIT: 0\ncomparison_light_large_narrow: app workflow and persisted files passed\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 655359.274684\nAPP TEST TRACE: main font sources ready 655359.348908\nAPP TEST TRACE: main atlas bake seconds=0.365876\nAPP TEST TRACE: main atlas validation/upload seconds=0.010443\nAPP TEST TRACE: main fonts ready 655359.744093\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 2 -> 3, status 6001 Messpunkte geladen.\nAPP TEST TRACE: publication cleared focus id=91 window=2 ticks=1831290000\nAPP TEST TRACE: stage 3 -> 4, status 6001 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=1893253100\nAPP TEST TRACE: stage 4 -> 5, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 5 -> 6, status 6001 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=1937940300\nAPP TEST TRACE: stage 6 -> 7, status 6001 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=1961997400\nAPP TEST TRACE: stage 7 -> 8, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 8 -> 9, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 9 -> 10, status 6001 Messpunkte geladen.\nGRAPHIC DIALOG RASTER: scale=2 visible=0 dark=0 seconds=0.034277 result=OK\nAPP TEST TRACE: publication cleared focus id=100 window=2 ticks=2076317900\nAPP TEST TRACE: stage 10 -> 11, status 6001 Messpunkte geladen.\nGRAPHIC DIALOG FOCUS: granted=PNG\nAPP TEST TRACE: stage 11 -> 12, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 12 -> 13, status 306 Messpunkte geladen.\nGRAPHIC DIALOG FOCUS: tab=1 target=Zeitbereich\nGRAPHIC DIALOG FOCUS: granted=Zeitbereich\nGRAPHIC DIALOG FOCUS: tab=1 target=Darstellung\nGRAPHIC DIALOG FOCUS: granted=Darstellung\nGRAPHIC DIALOG FOCUS: tab=1 target=Bild kopieren\nGRAPHIC DIALOG FOCUS: granted=Bild kopieren\nGRAPHIC DIALOG FOCUS: tab=1 target=SVG speichern\u2026\nGRAPHIC DIALOG FOCUS: granted=SVG speichern\u2026\nAPP TEST TRACE: stage 13 -> 14, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 14 -> 15, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 15 -> 16, status 306 Messpunkte geladen.\nGRAPHIC DIALOG RASTER: scale=1 visible=1 dark=0 seconds=0.021588 result=OK\nGRAPHIC DIALOG RASTER: scale=2 visible=1 dark=0 seconds=0.025870 result=OK\nGRAPHIC DIALOG RASTER: scale=3 visible=1 dark=0 seconds=0.037006 result=OK\nGRAPHIC DIALOG RASTER: scale=4 visible=1 dark=0 seconds=0.063827 result=OK\nAPP TEST TRACE: stage 16 -> 17, status 306 Messpunkte geladen.\nGRAPHIC RETURN: requested=1 focused=0 remaining=3\nCOMPARISON RETURN OBSERVE: focused=0 snapshot=1 unit=cm channel=1 scroll=0 flags=256\nAPP TEST TRACE: stage 17 -> 18, status 306 Messpunkte geladen.\nAPP TEST TRACE: publication cleared focus id=196 window=2 ticks=3130851000\nAPP TEST TRACE: stage 18 -> 19, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 19 -> 20, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 20 -> 21, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 21 -> 22, status 306 Messpunkte geladen.\n",
+        "seconds": 5.156,
+        "reason": "",
+        "artifacts": []
+      }
+    ],
+    "seconds": 5.156,
+    "reason": "",
+    "name": "comparison_light_large_narrow"
+  },
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+        "sha256": "2c9d5d84e9634c19a5ca44a5eb18460b5ccd042b58ca75ab1e71a121c30b3b7b"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_display_workflow.py",
+          "comparison_contrast",
+          "--app",
+          "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+          "--work",
+          "D:\\Physim\\build\\native\\Release\\test-results\\run-tul40hk6\\comparison_contrast\\files \u00e4",
+          "--root",
+          "D:\\Physim"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nCOMPARISON NATIVE: inputs=8 curves=8 reference=0 full=6001 valid=5999 independent-x1=0.26100000000000001\nCOMPARISON AREA: 322.0,443.0,817.0,265.0\nCOMPARISON COLOR: 0 140 200 255\nCOMPARISON COLOR: 1 255 210 130\nCOMPARISON COLOR: 2 130 245 170\nCOMPARISON COLOR: 3 220 180 255\nCOMPARISON COLOR: 4 255 170 215\nCOMPARISON COLOR: 5 140 235 245\nCOMPARISON COLOR: 6 255 240 140\nCOMPARISON COLOR: 7 230 230 230\nCOMPARISON BACKGROUND: 0 0 0\nCOMPARISON UI SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nProjekt geladen. Build kompiliert die lokalen Quelldateien.\n6001 Messpunkte geladen.\n306 Messpunkte geladen.\nGrafik gespeichert: D:\\Physim\\build\\native\\Release\\test-results\\run-tul40hk6\\comparison_contrast\\files \u00e4\\workflow \u00e4/project/comparison-eight.svg\n\n\nAPP TEST EXIT: 0\ncomparison_contrast: app workflow and persisted files passed\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 655364.288702\nAPP TEST TRACE: main font sources ready 655364.373438\nAPP TEST TRACE: main atlas bake seconds=0.427336\nAPP TEST TRACE: main atlas validation/upload seconds=0.009563\nAPP TEST TRACE: main fonts ready 655364.820412\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 2 -> 3, status 6001 Messpunkte geladen.\nAPP TEST TRACE: publication cleared focus id=156 window=2 ticks=1878634100\nAPP TEST TRACE: stage 3 -> 4, status 6001 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=1972306700\nAPP TEST TRACE: stage 4 -> 5, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 5 -> 6, status 6001 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=2033905500\nAPP TEST TRACE: stage 6 -> 7, status 6001 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=2074584200\nAPP TEST TRACE: stage 7 -> 8, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 8 -> 9, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 9 -> 10, status 6001 Messpunkte geladen.\nGRAPHIC DIALOG RASTER: scale=2 visible=0 dark=0 seconds=0.034861 result=OK\nAPP TEST TRACE: publication cleared focus id=165 window=2 ticks=2211781900\nAPP TEST TRACE: stage 10 -> 11, status 6001 Messpunkte geladen.\nGRAPHIC DIALOG FOCUS: granted=PNG\nAPP TEST TRACE: stage 11 -> 12, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 12 -> 13, status 306 Messpunkte geladen.\nGRAPHIC DIALOG FOCUS: tab=1 target=Zeitbereich\nGRAPHIC DIALOG FOCUS: granted=Zeitbereich\nGRAPHIC DIALOG FOCUS: tab=1 target=Darstellung\nGRAPHIC DIALOG FOCUS: granted=Darstellung\nGRAPHIC DIALOG FOCUS: tab=1 target=Bild kopieren\nGRAPHIC DIALOG FOCUS: granted=Bild kopieren\nGRAPHIC DIALOG FOCUS: tab=1 target=SVG speichern\u2026\nGRAPHIC DIALOG FOCUS: granted=SVG speichern\u2026\nAPP TEST TRACE: stage 13 -> 14, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 14 -> 15, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 15 -> 16, status 306 Messpunkte geladen.\nGRAPHIC DIALOG RASTER: scale=1 visible=1 dark=0 seconds=0.036767 result=OK\nGRAPHIC DIALOG RASTER: scale=2 visible=1 dark=0 seconds=0.028462 result=OK\nGRAPHIC DIALOG RASTER: scale=3 visible=1 dark=0 seconds=0.038347 result=OK\nGRAPHIC DIALOG RASTER: scale=4 visible=1 dark=0 seconds=0.064835 result=OK\nAPP TEST TRACE: stage 16 -> 17, status 306 Messpunkte geladen.\nGRAPHIC RETURN: requested=1 focused=0 remaining=3\nCOMPARISON RETURN OBSERVE: focused=0 snapshot=1 unit=cm channel=1 scroll=0 flags=288\nAPP TEST TRACE: stage 17 -> 18, status 306 Messpunkte geladen.\nAPP TEST TRACE: publication cleared focus id=298 window=2 ticks=3405100900\nAPP TEST TRACE: stage 18 -> 19, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 19 -> 20, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 20 -> 21, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 21 -> 22, status 306 Messpunkte geladen.\n",
+        "seconds": 9.375,
+        "reason": "",
+        "artifacts": []
+      }
+    ],
+    "seconds": 9.391,
+    "reason": "",
+    "name": "comparison_contrast"
+  }
+]

@@ -52,15 +52,17 @@ zugehörigen Sitzungszustand. Abbrechen stellt keinen fremden Bereich um.
 Der spätere [Export-Umsetzungsstand](GRAPHIC-EXPORT-NATIVE.md) ergänzt eine
 eigene, geprüfte Diagrammkopie und einen gemeinsamen Mehrlauf-Datenbaustein
 einschließlich Zeitachsen, Einheiten, Masken und vollständiger Statistik.
-Die sichtbare Datenansicht und der Exportdialog sind noch daran anzubinden;
-die folgenden Produktpunkte bleiben dadurch offen.
+Der folgende [native Vergleich](ANALYSIS-COMPARISON-NATIVE.md) bindet die
+sichtbare Datenansicht und denselben Exportdialog jetzt an. Frühere Nachweise
+weiter unten behalten ihren damaligen Umfang; die folgenden offenen Punkte
+werden nicht allein aus ihnen als erledigt betrachtet.
 
 | Anforderung | Aktueller, eingegrenzter Stand |
 | --- | --- |
-| Mehrere echte Rohdatenkurven | Noch offen. Die vorhandene Analyse kann mehrere Dateien erhalten; die neue Rohdatenansicht zeichnet weiterhin den ausdrücklich aktiven einzelnen Lauf. |
-| Vollständige Statistik je Vergleichslauf | Noch offen. Die aktuelle Tabelle enthält die vollständige Kanalstatistik des aktiven Laufs, unabhängig vom Zoom. Sie ist noch keine Vergleichstabelle je Lauf. |
-| Unabhängige Zeitvektoren, passende Kanäle und Lücken im Vergleich | Der bestehende Einzelpfad bleibt erhalten; ein begrenzter Mehrlaufcache mit veraltete Antworten verwerfenden Workern ist noch umzusetzen. |
-| Freigegebener Grafikexportdialog | Noch offen. Die bisherigen echten Berichts-CSV-/SVG-/PNG-Wege einschließlich Größen und Ausschnitten bleiben erhalten. Sie ersetzen weder den neuen Dialog noch die native Bildkopie. |
+| Mehrere echte Rohdatenkurven | Im späteren sichtbaren Vergleich bis zu acht ausgewählte Läufe; eigene native Pixel-/Aufgabennachweise. |
+| Vollständige Statistik je Vergleichslauf | Der spätere Vergleich verwendet die vollständige SI-Statistik jedes gewählten Laufs vor Reduktion und zeigt dieselbe Einheit wie die Kurve; Zoom ändert sie nicht. |
+| Unabhängige Zeitvektoren, passende Kanäle und Lücken im Vergleich | Im späteren Vergleich mit eigenen begrenzten Worker-Aufträgen, expliziter Kanalidentität, Masken und Versionsprüfung angebunden. |
+| Freigegebener Grafikexportdialog | Separat für Berichte und Messlaufvergleich implementiert und nativ geprüft; vollständige visuelle/OS-/Assistive-/DPI-Abnahme bleibt offen. |
 | Analysecode in der gewählten Werkbank | Der bestehende Editor ist erreichbar; vollständige gemeinsame Gestaltung und Zuordnung bleiben abzugleichen. |
 | Detailherkunft wie in der Demo | Echte vorhandene Angaben werden verwendet. Weitere zuverlässig gespeicherte Modellfelder sind noch zuzuordnen; fehlende Metadaten bleiben unbekannt. |
 | Seitengrenzen der Browserdemo | Nativ gelten derzeit mindestens 208 Pixel je Seite und 300 für die Mitte. Die Demo erlaubt 140/180. Das ist eine bestehende Implementierungsgrenze, kein nachgewiesenes technisches Hindernis. |

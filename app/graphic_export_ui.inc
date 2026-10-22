@@ -32,6 +32,16 @@ static void graphic_export_close(app *a) {
     a->graphic_return_ui=d->ui;a->graphic_return_frames=3;
     a->graphic_export=NULL;free(d);ps_graphics_make_current(a->graphics);
 }
+static bool graphic_export_open(app *a,graphic_dialog *d) {
+    ps_graphic_snapshot_describe(d->snapshot,&d->description);
+    d->window=a->window;d->graphics=a->graphics;d->ui=a->ui;d->dark=a->preferences.theme!=PS_THEME_LIGHT;
+    d->contrast=a->preferences.theme==PS_THEME_HIGH_CONTRAST;
+    snprintf(d->source,sizeof d->source,"%s",a->ui->current?a->ui->current->name_string:"workspace");
+    snprintf(d->directory,sizeof d->directory,"%s",a->project);d->scale=2;d->dirty=d->first=true;
+    snprintf(d->message,sizeof d->message,"PNG oder SVG direkt aus dieser Vorschau speichern.");
+    d->focus_target=2;a->graphic_export=d;a->plot_drag=NULL;completion_close(a);toolbar_keyboard_close(a);
+    return true;
+}
 static bool graphic_export_report(app *a,uint32_t index) {
     if(a->graphic_export)return false;
     graphic_dialog *d=calloc(1,sizeof *d);if(!d){status(a,"Grafikvorschau: nicht genügend Speicher.");return false;}
@@ -43,18 +53,25 @@ static bool graphic_export_report(app *a,uint32_t index) {
                                              ps_allocator_default(),&d->snapshot);
     }
     if(result!=PS_OK){free(d);status(a,"Dieses Diagramm kann nicht als Grafik dargestellt werden.");return false;}
-    ps_graphic_snapshot_describe(d->snapshot,&d->description);
-    d->window=a->window;d->graphics=a->graphics;d->ui=a->ui;d->dark=a->preferences.theme!=PS_THEME_LIGHT;
-    d->contrast=a->preferences.theme==PS_THEME_HIGH_CONTRAST;
-    snprintf(d->source,sizeof d->source,"%s",a->ui->current?a->ui->current->name_string:"workspace");
-    snprintf(d->directory,sizeof d->directory,"%s",a->project);d->scale=2;d->dirty=d->first=true;
-    snprintf(d->message,sizeof d->message,"PNG oder SVG direkt aus dieser Vorschau speichern.");
-    d->focus_target=2;a->graphic_export=d;a->plot_drag=NULL;completion_close(a);toolbar_keyboard_close(a);
-    return true;
+    return graphic_export_open(a,d);
+}
+static bool graphic_export_comparison(app *a) {
+    ps_comparison_state state=ps_comparison_read(a->comparison);
+    if(a->graphic_export || state.loading || !state.snapshot || a->plot_channel<0 || a->plot_channel>=PS_MAX_CHANNELS)return false;
+    graphic_dialog *d=calloc(1,sizeof *d);if(!d){status(a,"Grafikvorschau: nicht genügend Speicher.");return false;}
+    ps_graphic_description description;ps_graphic_snapshot_describe(state.snapshot,&description);
+    ps_graphic_axes axes=description.axes;
+    plot_display_bounds(&a->data_views[a->plot_channel],axes.full,axes.visible);
+    axes.cropped=ps_plot_view_changed(&a->data_views[a->plot_channel]);
+    ps_result result=ps_graphic_snapshot_copy(state.snapshot,&axes,ps_allocator_default(),&d->snapshot);
+    if(result!=PS_OK){free(d);status(a,"Diese Messkurve kann nicht als Grafik dargestellt werden.");return false;}
+    return graphic_export_open(a,d);
 }
 static void graphic_export_tick(app *a) {
     if(a->graphic_return_ui) {
-        if(nk_sdl_accessibility_request_focus(a->graphic_return_ui,NULL,"Grafik exportieren…") || !--a->graphic_return_frames)
+        bool requested=nk_sdl_accessibility_request_focus(a->graphic_return_ui,NULL,"Grafik exportieren…");
+        if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"GRAPHIC RETURN: requested=%d focused=%d remaining=%u\n",requested,nk_sdl_accessibility_is_focused(a->graphic_return_ui,NULL,"Grafik exportieren…"),a->graphic_return_frames);
+        if(requested || !--a->graphic_return_frames)
             a->graphic_return_ui=NULL;
     }
     graphic_dialog *d=a->graphic_export;if(!d)return;

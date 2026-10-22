@@ -5,7 +5,9 @@ Der freigegebene [Grafikexport](EXPORT-EXAMPLE.md) nach
 beauftragt. Datenbasis, gemeinsame Figur und nativer Rasteradapter sind vorhanden.
 Der folgende [sichtbare Berichtsdialog](GRAPHIC-DIALOG-NATIVE.md) bindet Vorschau,
 Optionen, Speichern und echte OS-Bildkopie inzwischen an Berichtsdiagramme an.
-Der sichtbare Mehrlauf-Messdatenpfad und die Gesamtabnahme bleiben offen.
+Der folgende [sichtbare Messlaufvergleich](ANALYSIS-COMPARISON-NATIVE.md)
+integriert Mehrlaufdaten, Legende, Referenz, vollständige Statistik und denselben
+Exportzugang. Die Gesamtabnahme bleibt offen.
 
 Anschließend ergänzt die [gemeinsame Zeichenbeschreibung](GRAPHIC-FIGURE-NATIVE.md)
 das freigegebene Figurenlayout und echte SVG-Ausgabe. Der folgende
@@ -45,10 +47,10 @@ halben Schnappschuss; das vorherige Ausgabeobjekt bleibt erhalten.
 Kooperative Abbruchpunkte liegen an Phasen- und Blockgrenzen. Ein bereits
 laufender Snapshot-/Reduktionsaufruf des Kerns wird nicht unterbrochen.
 
-Die Vergleichsoberfläche muss diesen Pfad noch über eigene Worker-Aufträge mit
-veraltete Antworten verwerfender Übernahme verwenden. Der Exportdialog soll
-anschließend genau die bereits angezeigte Kopie übernehmen. Er soll keine
-Messdateien nachträglich erneut öffnen, um ein scheinbar gleiches Bild zu erzeugen.
+Der folgende [sichtbare Vergleich](ANALYSIS-COMPARISON-NATIVE.md) verwendet
+jetzt eigene Worker-Aufträge mit veraltete Antworten verwerfender Übernahme.
+Sein Exportdialog übernimmt die bereits angezeigte Kopie und öffnet die
+Messdateien dafür nicht erneut.
 
 ## Tatsächlich geprüfter Datenbaustein
 
@@ -91,9 +93,9 @@ Checkout nur dieses Patches. Es gibt keine aktuelle macOS-Ausführung.
 
 | Teil | Noch erforderliche Arbeit |
 | --- | --- |
-| Datenansicht | Gemeinsamen Mehrlaufcache in die sichtbare Kurve, Referenz, Legende und Vergleichsstatistik anbinden; asynchrone Ergebnisse anhand der tatsächlichen Auswahl verwerfen. |
-| Gemeinsame Darstellung | In den sichtbaren Berichtsdialog integriert; Mehrlaufansicht, acht sichtbare Kurven und externe SVG-Schriftwiedergabe weiter abgleichen. |
-| Dialog und Zugänge | Berichtsdiagramme besitzen den neuen Zugang, [Hintergrundfilter und skalierte Felder](GRAPHIC-MATERIAL-NATIVE.md) sowie [Schatten, Referenzmaße und kleine Umbrüche](GRAPHIC-SHADOW-NATIVE.md). Weitere Schrift-/Raster-/Komponentendetails und Zugang am Messdatenvergleich bleiben offen. |
+| Datenansicht | Im späteren [sichtbaren Vergleich](ANALYSIS-COMPARISON-NATIVE.md) angebunden; eigene Worker-Aufträge, Versionsprüfung, Kurve, Referenz, Legende und vollständige Statistik je gewähltem Lauf. Gesamte visuelle/Assistive-Abnahme weiter offen. |
+| Gemeinsame Darstellung | In Bericht und Messlaufvergleich integriert; acht sichtbare Kurven und die gemeinsame Figur nativ geprüft. Vollständige Referenztreue und externe SVG-Schriftwiedergabe weiter abgleichen. |
+| Dialog und Zugänge | Berichtsdiagramme besitzen den neuen Zugang, [Hintergrundfilter und skalierte Felder](GRAPHIC-MATERIAL-NATIVE.md) sowie [Schatten, Referenzmaße und kleine Umbrüche](GRAPHIC-SHADOW-NATIVE.md). Der Messdatenvergleich erhält anschließend denselben Zugang; weitere Schrift-/Raster-/Komponentendetails bleiben offen. |
 | Optionen | PNG/SVG, vier Größen, Gesamt-/X/Y-Ausschnitt und eingefrorenes Theme sind im Berichtsdialog angebunden und nativ geprüft. |
 | Speichern | Native API und sichere Schreibaufträge angeschlossen; Antwortinjektion prüft Abbruch/Fehler/Ersetzen. Echte OS-Dateiauswahl samt Fokus/Überschreibdialog noch manuell prüfen. |
 | Bildkopie | Unabhängiger vollständiger RGB-Vergleich über Windows CF_DIB und Linux X11 bestanden; macOS offen. |

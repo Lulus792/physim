@@ -158,7 +158,7 @@ ps_result ps_graphic_snapshot_from_runs(const ps_graphic_run_request *request,co
         uint32_t channel=0;while(channel<dataset_info.channel_count && !channel_matches(&request->channel,dataset_info.channels+channel))channel++;
         if(channel==dataset_info.channel_count || !dataset_info.samples){result=PS_INVALID;goto done;}
         ps_graphic_run_info *run=s->inputs+i;snprintf(run->path,sizeof run->path,"%s",request->inputs[i].path);
-        run_label(run->label,request->inputs+i);run->channel=dataset_info.channels[channel];run->recovered=recovered;run->samples=dataset_info.samples;
+        run_label(run->label,request->inputs+i);run->channel=dataset_info.channels[channel];run->recovered=recovered;run->samples=dataset_info.samples;run->curve=i;
         ps_series time,values;result=ps_dataset_series(context,dataset,"time",&time);if(result!=PS_OK)goto done;
         result=ps_dataset_channel_series(context,dataset,channel,&values);if(result!=PS_OK)goto done;
         double edge;size_t read=0;result=ps_series_read(context,time,0,&edge,1,&read);if(result!=PS_OK || read!=1){if(result==PS_OK)result=PS_CORRUPT;goto done;}first=fmin(first,edge);
@@ -182,6 +182,61 @@ ps_result ps_graphic_snapshot_from_runs(const ps_graphic_run_request *request,co
     *out=s;s=NULL;result=PS_OK;
 done:
     ps_analysis_destroy(context);ps_graphic_snapshot_destroy(s);
+    if(failure)*failure=(ps_graphic_failure){result,failed,cancelled};
+    return result;
+}
+ps_result ps_graphic_snapshot_compare_runs(const ps_graphic_run_request *request,const char *prefix,uint64_t quota,
+    ps_graphic_cancel cancel,void *user,ps_allocator allocator,ps_graphic_snapshot **out,ps_graphic_failure *failure) {
+    ps_result result=PS_INVALID;uint32_t failed=UINT32_MAX,curves=0;bool cancelled=false;
+    ps_graphic_snapshot *s=NULL,*one=NULL;
+    if(!request || !out || !prefix || !ps_allocator_valid(allocator) || !request->count || request->count>PS_GRAPHIC_MAX_INPUTS ||
+       (request->reference!=PS_GRAPHIC_NO_REFERENCE && request->reference>=request->count))goto done;
+    if(!request->channel.name[0] || !ps_text_valid(request->channel.name,sizeof request->channel.name,false) ||
+       !ps_text_valid(request->channel.unit,sizeof request->channel.unit,false) ||
+       !ps_text_valid(request->display_unit.symbol,sizeof request->display_unit.symbol,false) ||
+       !isfinite(request->display_unit.scale) || request->display_unit.scale<=0 ||
+       memcmp(request->channel.dimension,request->display_unit.dimension,7))goto done;
+    /* Validate the whole request before allocating or copying borrowed strings. */
+    for(uint32_t i=0;i<request->count;i++) {
+        const ps_graphic_run_input *in=request->inputs+i;
+        if(!in->path || !*in->path || !ps_text_valid(in->path,PS_GRAPHIC_PATH_BYTES,false) ||
+           (in->label && (!*in->label || !ps_text_valid(in->label,96,false))) ||
+           (in->kind && in->kind!=PS_PLOT_LINE && in->kind!=PS_PLOT_SCATTER)){failed=i;goto done;}
+    }
+    result=create(request->channel.name,"Festgehaltene Messdatenvorschau",allocator,&s);if(result!=PS_OK)goto done;
+    s->input_count=request->count;double first=INFINITY,last=-INFINITY;ps_plot_handle plot={0};
+    for(uint32_t i=0;i<request->count;i++) {
+        failed=i;ps_graphic_run_request single=*request;single.count=1;single.reference=0;single.inputs[0]=request->inputs[i];
+        ps_graphic_failure error={0};
+        result=ps_graphic_snapshot_from_runs(&single,prefix,quota,cancel,user,allocator,&one,&error);
+        ps_graphic_run_info *run=s->inputs+i;run->curve=PS_GRAPHIC_NO_REFERENCE;run->result=result;
+        run->statistics_result=PS_INVALID;snprintf(run->path,sizeof run->path,"%s",request->inputs[i].path);run_label(run->label,request->inputs+i);
+        if(result!=PS_OK) {
+            if(error.cancelled || result==PS_MEMORY || result==PS_LIMIT){cancelled=error.cancelled;goto done;}
+            continue;
+        }
+        *run=one->inputs[0];run->curve=curves;run->result=PS_OK;
+        if(!curves) {
+            ps_plot_info info;result=ps_report_plot_read(one->report,0,&info);if(result!=PS_OK)goto done;
+            info.curves=0;result=ps_report_add_plot(s->report,&info,&plot);if(result!=PS_OK)goto done;
+        }
+        const ps_curve_data *curve=NULL;const uint8_t *mask=NULL;
+        result=ps_report_curve_view(one->report,0,0,&curve);
+        if(result==PS_OK)result=ps_report_curve_mask(one->report,0,0,&mask);
+        if(result==PS_OK)result=ps_report_add_curve_masked(s->report,plot,curve,mask);
+        if(result!=PS_OK)goto done;
+        if(i==request->reference)s->reference=curves;
+        first=fmin(first,one->axes.full[0]);last=fmax(last,one->axes.full[1]);curves++;
+        ps_graphic_snapshot_destroy(one);one=NULL;
+    }
+    if(cancel && cancel(user)){cancelled=true;result=PS_EOF;goto done;}
+    if(!curves){failed=0;result=PS_INVALID;goto done;}
+    result=ps_report_plot_bounds(s->report,0,s->axes.full);if(result!=PS_OK)goto done;
+    if(first<last){s->axes.full[0]=first;s->axes.full[1]=last;}
+    memcpy(s->axes.visible,s->axes.full,sizeof s->axes.visible);
+    *out=s;s=NULL;failed=UINT32_MAX;result=PS_OK;
+done:
+    ps_graphic_snapshot_destroy(one);ps_graphic_snapshot_destroy(s);
     if(failure)*failure=(ps_graphic_failure){result,failed,cancelled};
     return result;
 }

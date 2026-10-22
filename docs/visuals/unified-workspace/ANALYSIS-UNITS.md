@@ -1,5 +1,9 @@
 # Auswerten: kompakte Einheitenwahl und große Schrift
 
+**Späterer Stand, 22. Oktober:** Der [sichtbare native Messlaufvergleich](ANALYSIS-COMPARISON-NATIVE.md)
+integriert jetzt Kurven, Referenz, Legende, vollständige Statistik und denselben
+Grafikexportdialog. Die folgenden früheren Prüfungen behalten ihren datierten Umfang.
+
 Stand: 21. Oktober 2026. Fortsetzung des [nativen Aufbaus](ANALYSIS-NATIVE.md)
 und des [Feldabgleichs](ANALYSIS-CONTROLS.md). Der Gesamtauftrag für Entwickeln,
 Simulieren, Auswerten und F1 bleibt offen.

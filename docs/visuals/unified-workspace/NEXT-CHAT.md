@@ -23,8 +23,10 @@ PNG in allen vier Größen und eine eigene RGB-Vorschautextur. Der folgende
 Berichtsleiste und ergänzt echte Vorschau, Optionen, Speicheraufträge und native
 Bildkopie. Der folgende [Materialabgleich](GRAPHIC-MATERIAL-NATIVE.md) ergänzt Blur
 und skalierte Felder. [Schatten, Referenzmaße und kleine Umbrüche](GRAPHIC-SHADOW-NATIVE.md)
-sind anschließend nativ ergänzt. Sichtbarer Mehrlaufcache, dessen Zugang und die vollständige
-Dialog-/OS-/Assistive-/DPI-Abnahme bleiben zusammenhängend umzusetzen.
+sind anschließend nativ ergänzt. Der folgende [sichtbare Messlaufvergleich](ANALYSIS-COMPARISON-NATIVE.md)
+bindet bis zu acht Läufe an Kurve, Referenz, Legende, vollständige Statistik und
+denselben Exportdialog. Die vollständige Design-/OS-/Assistive-/DPI-Abnahme
+bleibt zusammenhängend umzusetzen.
 Die bisherigen Daten-/Geometrieprüfungen ersetzen diese native Abnahme nicht.
 
 Aktueller nativer Folgeauftrag vom 20. Oktober: zuerst die gesamte Gestaltung

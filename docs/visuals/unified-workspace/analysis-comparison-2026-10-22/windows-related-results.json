@@ -1,0 +1,162 @@
+[
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "3ccd02a3faddf70990657d941cdbd032067cbf60c9aa4baf0e3e6694bebac312"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_display_workflow.py",
+          "analysis_layout_dark",
+          "--app",
+          "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+          "--work",
+          "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gejsuy_6\\analysis_layout_dark\\files \u00e4",
+          "--root",
+          "D:\\Physim"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nANALYSIS LAYOUT: client=1440x1000 middle=232.0,198.0,966.0,774.0 import-bottom=960.0\nANALYSIS TAB FIT: width=64.00 text=57.54\nOpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nOpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nOpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nANALYSIS SETTINGS CONTEXT: workbench=218,255 session-analysis=232 session-laboratory=320 valid=1\nANALYSIS FOCUS CANCEL: resizing=0 actual-height=124.00 expected-height=124.00 wish=230.00 manual=1 focus-request=1\nANALYSIS CURVE SEPARATOR: actual 10/40 px, pointer Escape/focus cancel, automatic reset and native window passed=1\nANALYSIS CLAMPED WISH: inspector-desired=480 actual=300.0 press/release-preserved=1\nANALYSIS POINTER HOST: logical-active=1 transaction=1 mouse-focus=1 captured=1\nANALYSIS CONTEXT POINTER: capture released and original workspace wish restored=1\nANALYSIS STATISTICS SCROLL: offset=129 button-bottom=965.6 viewport-bottom=972.0 reachable=1 unchanged-view-and-statistics=1\nANALYSIS WORKSPACE LAYOUT SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nProjekt geladen. Build kompiliert die lokalen Quelldateien.\n301 Messpunkte geladen.\nEinstellungen gespeichert.\nEinstellungen gespeichert.\n\nAPP TEST EXIT: 0\nanalysis_layout_dark: app workflow and persisted files passed\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 654541.210798\nAPP TEST TRACE: main font sources ready 654541.396719\nAPP TEST TRACE: main atlas bake seconds=5.931846\nAPP TEST TRACE: main atlas validation/upload seconds=0.012675\nAPP TEST TRACE: main fonts ready 654547.349718\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nANALYSIS START OBSERVATION: dataset-worker=1 library-worker=1 library-done=0 host=2 keyboard=2 flags=9778\nAPP TEST TRACE: stage 0 -> 1, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=7959778900\nAPP TEST TRACE: stage 2 -> 3, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 3 -> 4, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=57 pending=0 window=2 keyboard=2 ticks=8164935900\nAPP TEST TRACE: stage 4 -> 5, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 5 -> 6, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=61 pending=0 window=2 keyboard=2 ticks=8331503700\nAPP TEST TRACE: stage 6 -> 7, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 7 -> 8, status 301 Messpunkte geladen.\nAPP TEST TRACE: publication cleared focus id=57 window=2 ticks=8459649500\nAPP TEST TRACE: stage 8 -> 9, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 9 -> 10, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 10 -> 11, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 11 -> 12, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 12 -> 13, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 13 -> 14, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=248 pending=0 window=2 keyboard=2 ticks=9067844800\nAPP TEST TRACE: stage 14 -> 15, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=9139772600\nAPP TEST TRACE: stage 15 -> 16, status 301 Messpunkte geladen.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=9606312700\nAPP TEST TRACE: stage 16 -> 17, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 17 -> 18, status 301 Messpunkte geladen.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=1 id=0 ticks=9821621000\nAPP TEST TRACE: stage 18 -> 13, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 13 -> 14, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=9925414800\nAPP TEST TRACE: stage 14 -> 15, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=9999032800\nAPP TEST TRACE: stage 15 -> 16, status 301 Messpunkte geladen.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=10440340900\nAPP TEST TRACE: stage 16 -> 17, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 17 -> 18, status 301 Messpunkte geladen.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=1 id=0 ticks=10661097600\nAPP TEST TRACE: stage 18 -> 13, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 13 -> 14, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=10766498700\nAPP TEST TRACE: stage 14 -> 15, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=10839084500\nAPP TEST TRACE: stage 15 -> 16, status 301 Messpunkte geladen.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=11286724500\nAPP TEST TRACE: stage 16 -> 17, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 17 -> 18, status 301 Messpunkte geladen.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=1 id=0 ticks=11489092500\nAPP TEST TRACE: stage 18 -> 19, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 19 -> 20, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 20 -> 21, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 21 -> 22, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 22 -> 23, status 301 Messpunkte geladen.\nAPP TEST TRACE: publication cleared focus id=294 window=2 ticks=11998207600\nAPP TEST TRACE: stage 23 -> 24, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 24 -> 25, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 25 -> 26, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=12180869100\nAPP TEST TRACE: stage 26 -> 27, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 27 -> 28, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 28 -> 29, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 29 -> 30, status Einstellungen gespeichert.\nAPP TEST TRACE: publication cleared focus id=687 window=2 ticks=12446706600\nAPP TEST TRACE: stage 30 -> 31, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 31 -> 32, status Einstellungen gespeichert.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=12568166700\nAPP TEST TRACE: stage 32 -> 33, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 33 -> 34, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 34 -> 35, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 35 -> 36, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 36 -> 37, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 37 -> 38, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 38 -> 39, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 39 -> 40, status Einstellungen gespeichert.\nAPP TEST TRACE: accessibility blur event=1025 focused=912 pending=0 window=2 keyboard=2 ticks=13164810600\nAPP TEST TRACE: stage 40 -> 41, status Einstellungen gespeichert.\nAPP TEST TRACE: accessibility blur event=1025 focused=912 pending=0 window=2 keyboard=2 ticks=13230443700\nAPP TEST TRACE: stage 41 -> 42, status Einstellungen gespeichert.\nANALYSIS RESIZE ABORT: current=249.50 original=230.00 manual=1 restore-manual=1\nAPP TEST TRACE: stage 42 -> 43, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 43 -> 44, status Einstellungen gespeichert.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=13426444000\nAPP TEST TRACE: stage 44 -> 45, status Einstellungen gespeichert.\nAPP TEST TRACE: accessibility blur event=1025 focused=912 pending=0 window=2 keyboard=2 ticks=13494029700\nAPP TEST TRACE: stage 45 -> 46, status Einstellungen gespeichert.\nANALYSIS RESIZE ABORT: current=249.50 original=230.00 manual=1 restore-manual=1\nAPP TEST TRACE: accessibility blur event=527 focused=0 pending=0 window=2 keyboard=2 ticks=13559135300\nAPP TEST TRACE: stage 46 -> 47, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 47 -> 48, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 48 -> 49, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 49 -> 50, status Einstellungen gespeichert.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=912 ticks=13834409200\nAPP TEST TRACE: publication cleared focus id=912 window=2 ticks=13834652800\nAPP TEST TRACE: keyboard focus changed window=4 keyboard=1 id=0 ticks=13932739300\nAPP TEST TRACE: stage 50 -> 51, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 51 -> 52, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 52 -> 53, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 53 -> 54, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 54 -> 55, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 55 -> 56, status Einstellungen gespeichert.\nAPP TEST TRACE: accessibility blur event=1025 focused=14 pending=0 window=4 keyboard=4 ticks=14354752400\nAPP TEST TRACE: stage 56 -> 57, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 57 -> 58, status Einstellungen gespeichert.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=1 id=0 ticks=14558424500\nAPP TEST TRACE: stage 58 -> 59, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 59 -> 60, status Einstellungen gespeichert.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=14675909600\nAPP TEST TRACE: stage 60 -> 61, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 61 -> 62, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 62 -> 63, status Einstellungen gespeichert.\nAPP TEST TRACE: accessibility blur event=1025 focused=949 pending=0 window=2 keyboard=2 ticks=14905317200\nAPP TEST TRACE: stage 63 -> 64, status Einstellungen gespeichert.\nAPP TEST TRACE: publication cleared focus id=950 window=2 ticks=14975228900\nAPP TEST TRACE: stage 64 -> 65, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 65 -> 66, status Einstellungen gespeichert.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=15139113900\nAPP TEST TRACE: stage 66 -> 67, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 67 -> 68, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 68 -> 69, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 69 -> 70, status Einstellungen gespeichert.\nAPP TEST TRACE: accessibility blur event=1025 focused=1076 pending=0 window=2 keyboard=2 ticks=15433151200\nAPP TEST TRACE: stage 70 -> 71, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 71 -> 72, status Einstellungen gespeichert.\n",
+        "seconds": 16.797,
+        "reason": "",
+        "artifacts": []
+      }
+    ],
+    "seconds": 16.844,
+    "reason": "",
+    "name": "analysis_layout_dark"
+  },
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "3ccd02a3faddf70990657d941cdbd032067cbf60c9aa4baf0e3e6694bebac312"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_display_workflow.py",
+          "analysis_units_light_large_narrow",
+          "--app",
+          "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+          "--work",
+          "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gejsuy_6\\analysis_units_light_large_narrow\\files \u00e4",
+          "--root",
+          "D:\\Physim"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nANALYSIS UNIT MENU: custom-item-width=203.0 degree-focus-request=1\nANALYSIS UNIT INVARIANTS: raw file, times, values, statistics, view and selection unchanged=1\nANALYSIS UNIT CHOOSER SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nProjekt geladen. Build kompiliert die lokalen Quelldateien.\n301 Messpunkte geladen.\n\nAPP TEST EXIT: 0\nanalysis_units_light_large_narrow: app workflow and persisted files passed\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 654558.732029\nAPP TEST TRACE: main font sources ready 654559.145147\nAPP TEST TRACE: main atlas bake seconds=6.423063\nAPP TEST TRACE: main atlas validation/upload seconds=0.012636\nAPP TEST TRACE: main fonts ready 654565.590628\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 2 -> 3, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 3 -> 4, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 4 -> 5, status 301 Messpunkte geladen.\nAPP TEST TRACE: publication cleared focus id=104 window=2 ticks=9789716400\nAPP TEST TRACE: stage 5 -> 6, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=92 pending=0 window=2 keyboard=2 ticks=9978141200\nAPP TEST TRACE: stage 6 -> 7, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 7 -> 8, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 8 -> 9, status 301 Messpunkte geladen.\nAPP TEST TRACE: publication cleared focus id=121 window=2 ticks=10152555300\nAPP TEST TRACE: stage 9 -> 10, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 10 -> 11, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=10228859200\nAPP TEST TRACE: stage 11 -> 12, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 12 -> 13, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 13 -> 14, status 301 Messpunkte geladen.\nAPP TEST TRACE: publication cleared focus id=196 window=2 ticks=10395656000\nAPP TEST TRACE: stage 14 -> 15, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=10475190100\nAPP TEST TRACE: stage 15 -> 16, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 16 -> 17, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 17 -> 18, status 301 Messpunkte geladen.\nAPP TEST TRACE: publication cleared focus id=200 window=2 ticks=10653394200\nAPP TEST TRACE: stage 18 -> 19, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=185 pending=0 window=2 keyboard=2 ticks=10787337000\nAPP TEST TRACE: stage 19 -> 20, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 20 -> 21, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 21 -> 22, status 301 Messpunkte geladen.\nAPP TEST TRACE: publication cleared focus id=223 window=2 ticks=11008712500\nAPP TEST TRACE: stage 22 -> 23, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 23 -> 24, status 301 Messpunkte geladen.\n",
+        "seconds": 12.516,
+        "reason": "",
+        "artifacts": []
+      }
+    ],
+    "seconds": 12.578,
+    "reason": "",
+    "name": "analysis_units_light_large_narrow"
+  },
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "3ccd02a3faddf70990657d941cdbd032067cbf60c9aa4baf0e3e6694bebac312"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_display_workflow.py",
+          "comparison_dark",
+          "--app",
+          "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+          "--work",
+          "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gejsuy_6\\comparison_dark\\files \u00e4",
+          "--root",
+          "D:\\Physim"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nCOMPARISON NATIVE: inputs=8 curves=8 reference=0 full=6001 valid=5999 independent-x1=0.26100000000000001\nCOMPARISON AREA: 322.0,443.0,817.0,265.0\nCOMPARISON COLOR: 0 100 170 255\nCOMPARISON COLOR: 1 245 166 87\nCOMPARISON COLOR: 2 109 207 148\nCOMPARISON COLOR: 3 193 151 240\nCOMPARISON COLOR: 4 242 140 178\nCOMPARISON COLOR: 5 89 205 220\nCOMPARISON COLOR: 6 222 204 110\nCOMPARISON COLOR: 7 188 197 212\nCOMPARISON BACKGROUND: 27 28 32\nCOMPARISON UI SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nProjekt geladen. Build kompiliert die lokalen Quelldateien.\n6001 Messpunkte geladen.\n306 Messpunkte geladen.\nGrafik gespeichert: D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gejsuy_6\\comparison_dark\\files \u00e4\\workflow \u00e4/project/comparison-eight.svg\n\n\nAPP TEST EXIT: 0\ncomparison_dark: app workflow and persisted files passed\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 654571.940606\nAPP TEST TRACE: main font sources ready 654572.187957\nAPP TEST TRACE: main atlas bake seconds=6.795989\nAPP TEST TRACE: main atlas validation/upload seconds=0.022186\nAPP TEST TRACE: main fonts ready 654579.016298\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 2 -> 3, status 6001 Messpunkte geladen.\nAPP TEST TRACE: publication cleared focus id=156 window=2 ticks=11258590400\nAPP TEST TRACE: stage 3 -> 4, status 6001 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=11846497800\nAPP TEST TRACE: stage 4 -> 5, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 5 -> 6, status 6001 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=12003183800\nAPP TEST TRACE: stage 6 -> 7, status 6001 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=12073875000\nAPP TEST TRACE: stage 7 -> 8, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 8 -> 9, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 9 -> 10, status 6001 Messpunkte geladen.\nGRAPHIC DIALOG RASTER: scale=2 visible=0 dark=0 seconds=0.146002 result=OK\nAPP TEST TRACE: publication cleared focus id=165 window=2 ticks=12531189700\nAPP TEST TRACE: stage 10 -> 11, status 6001 Messpunkte geladen.\nGRAPHIC DIALOG FOCUS: granted=PNG\nAPP TEST TRACE: stage 11 -> 12, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 12 -> 13, status 306 Messpunkte geladen.\nGRAPHIC DIALOG FOCUS: tab=1 target=Zeitbereich\nGRAPHIC DIALOG FOCUS: granted=Zeitbereich\nGRAPHIC DIALOG FOCUS: tab=1 target=Darstellung\nGRAPHIC DIALOG FOCUS: granted=Darstellung\nGRAPHIC DIALOG FOCUS: tab=1 target=Bild kopieren\nGRAPHIC DIALOG FOCUS: granted=Bild kopieren\nGRAPHIC DIALOG FOCUS: tab=1 target=SVG speichern\u2026\nGRAPHIC DIALOG FOCUS: granted=SVG speichern\u2026\nAPP TEST TRACE: stage 13 -> 14, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 14 -> 15, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 15 -> 16, status 306 Messpunkte geladen.\nGRAPHIC DIALOG RASTER: scale=1 visible=1 dark=0 seconds=0.067958 result=OK\nGRAPHIC DIALOG RASTER: scale=2 visible=1 dark=0 seconds=0.131962 result=OK\nGRAPHIC DIALOG RASTER: scale=3 visible=1 dark=0 seconds=0.198751 result=OK\nGRAPHIC DIALOG RASTER: scale=4 visible=1 dark=0 seconds=0.338752 result=OK\nAPP TEST TRACE: stage 16 -> 17, status 306 Messpunkte geladen.\nGRAPHIC RETURN: requested=1 focused=0 remaining=3\nCOMPARISON RETURN OBSERVE: focused=0 snapshot=1 unit=cm channel=1 scroll=0 flags=288\nAPP TEST TRACE: stage 17 -> 18, status 306 Messpunkte geladen.\nAPP TEST TRACE: publication cleared focus id=298 window=2 ticks=20043263400\nAPP TEST TRACE: stage 18 -> 19, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 19 -> 20, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 20 -> 21, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 21 -> 22, status 306 Messpunkte geladen.\n",
+        "seconds": 27.703,
+        "reason": "",
+        "artifacts": []
+      }
+    ],
+    "seconds": 27.75,
+    "reason": "",
+    "name": "comparison_dark"
+  },
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "3ccd02a3faddf70990657d941cdbd032067cbf60c9aa4baf0e3e6694bebac312"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_display_workflow.py",
+          "comparison_light_large_narrow",
+          "--app",
+          "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+          "--work",
+          "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gejsuy_6\\comparison_light_large_narrow\\files \u00e4",
+          "--root",
+          "D:\\Physim"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nCOMPARISON NATIVE: inputs=8 curves=8 reference=0 full=6001 valid=5999 independent-x1=0.26100000000000001\nCOMPARISON AREA: 322.0,484.0,457.0,119.0\nCOMPARISON COLOR: 0 0 75 165\nCOMPARISON COLOR: 1 145 72 0\nCOMPARISON COLOR: 2 0 100 59\nCOMPARISON COLOR: 3 115 48 163\nCOMPARISON COLOR: 4 158 34 95\nCOMPARISON COLOR: 5 0 90 107\nCOMPARISON COLOR: 6 106 86 0\nCOMPARISON COLOR: 7 60 71 89\nCOMPARISON BACKGROUND: 255 255 255\nCOMPARISON UI SELF-TEST: PASSED\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nProjekt geladen. Build kompiliert die lokalen Quelldateien.\n6001 Messpunkte geladen.\n306 Messpunkte geladen.\nGrafik gespeichert: D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-gejsuy_6\\comparison_light_large_narrow\\files \u00e4\\workflow \u00e4/project/comparison-eight.svg\n\n\nAPP TEST EXIT: 0\ncomparison_light_large_narrow: app workflow and persisted files passed\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 654598.116204\nAPP TEST TRACE: main font sources ready 654598.287878\nAPP TEST TRACE: main atlas bake seconds=4.638099\nAPP TEST TRACE: main atlas validation/upload seconds=0.010677\nAPP TEST TRACE: main fonts ready 654602.947118\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 2 -> 3, status 6001 Messpunkte geladen.\nAPP TEST TRACE: publication cleared focus id=91 window=2 ticks=7479888500\nAPP TEST TRACE: stage 3 -> 4, status 6001 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=7826949000\nAPP TEST TRACE: stage 4 -> 5, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 5 -> 6, status 6001 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=7962901000\nAPP TEST TRACE: stage 6 -> 7, status 6001 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=8023023300\nAPP TEST TRACE: stage 7 -> 8, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 8 -> 9, status 6001 Messpunkte geladen.\nAPP TEST TRACE: stage 9 -> 10, status 6001 Messpunkte geladen.\nGRAPHIC DIALOG RASTER: scale=2 visible=0 dark=0 seconds=0.098875 result=OK\nAPP TEST TRACE: publication cleared focus id=100 window=2 ticks=8347424000\nAPP TEST TRACE: stage 10 -> 11, status 6001 Messpunkte geladen.\nGRAPHIC DIALOG FOCUS: granted=PNG\nAPP TEST TRACE: stage 11 -> 12, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 12 -> 13, status 306 Messpunkte geladen.\nGRAPHIC DIALOG FOCUS: tab=1 target=Zeitbereich\nGRAPHIC DIALOG FOCUS: granted=Zeitbereich\nGRAPHIC DIALOG FOCUS: tab=1 target=Darstellung\nGRAPHIC DIALOG FOCUS: granted=Darstellung\nGRAPHIC DIALOG FOCUS: tab=1 target=Bild kopieren\nGRAPHIC DIALOG FOCUS: granted=Bild kopieren\nGRAPHIC DIALOG FOCUS: tab=1 target=SVG speichern\u2026\nGRAPHIC DIALOG FOCUS: granted=SVG speichern\u2026\nAPP TEST TRACE: stage 13 -> 14, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 14 -> 15, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 15 -> 16, status 306 Messpunkte geladen.\nGRAPHIC DIALOG RASTER: scale=1 visible=1 dark=0 seconds=0.072338 result=OK\nGRAPHIC DIALOG RASTER: scale=2 visible=1 dark=0 seconds=0.094193 result=OK\nGRAPHIC DIALOG RASTER: scale=3 visible=1 dark=0 seconds=0.167550 result=OK\nGRAPHIC DIALOG RASTER: scale=4 visible=1 dark=0 seconds=0.302247 result=OK\nAPP TEST TRACE: stage 16 -> 17, status 306 Messpunkte geladen.\nGRAPHIC RETURN: requested=1 focused=0 remaining=3\nCOMPARISON RETURN OBSERVE: focused=0 snapshot=1 unit=cm channel=1 scroll=0 flags=256\nAPP TEST TRACE: stage 17 -> 18, status 306 Messpunkte geladen.\nAPP TEST TRACE: publication cleared focus id=196 window=2 ticks=14575407400\nAPP TEST TRACE: stage 18 -> 19, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 19 -> 20, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 20 -> 21, status 306 Messpunkte geladen.\nAPP TEST TRACE: stage 21 -> 22, status 306 Messpunkte geladen.\n",
+        "seconds": 17.641,
+        "reason": "",
+        "artifacts": []
+      }
+    ],
+    "seconds": 17.688,
+    "reason": "",
+    "name": "comparison_light_large_narrow"
+  }
+]

@@ -1,5 +1,9 @@
 # Grafikexport: native Rasterausgabe und Vorschautextur
 
+**Späterer Stand, 22. Oktober:** Der [sichtbare native Messlaufvergleich](ANALYSIS-COMPARISON-NATIVE.md)
+integriert jetzt Kurven, Referenz, Legende, vollständige Statistik und denselben
+Grafikexportdialog. Die folgenden früheren Prüfungen behalten ihren datierten Umfang.
+
 Der Export besitzt jetzt einen nativen Rasteradapter für die
 [gemeinsame Zeichenbeschreibung](GRAPHIC-FIGURE-NATIVE.md). Er erzeugt echte
 PNG-Dateien und eine eigene Vorschautextur aus denselben RGB-Pixeln. Der sichtbare

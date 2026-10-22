@@ -74,8 +74,9 @@ Dialogschatten (`0 28px 100px`) und der Papierschatten werden im folgenden
 Schriftgewicht, Hoverdetails und die übrigen gemeinsamen Komponenten benötigen
 weiter ihren vollständigen Referenzabgleich.
 
-Der sichtbare Mehrlaufcache mit gemeinsamer Kurve, Referenz, Legende, Statistik
-und Export ist weiterhin beauftragt. Auch externe Screenreader, native
+Der folgende [sichtbare Mehrlaufvergleich](ANALYSIS-COMPARISON-NATIVE.md) bindet
+Kurve, Referenz, Legende, vollständige Statistik und Export an denselben Cache.
+Externe Screenreader, native
 Dateiauswahlbedienung, physische DPI-/Monitorwechsel, ausgehängter Quellbereich
 und macOS bleiben eigene offene Abnahmen. Die 2×/3×-GPU-Exporte des Glasmaterials
 und doppelte Dialoggeometrie ersetzen keinen physischen Monitorfall. Testlaufzeit

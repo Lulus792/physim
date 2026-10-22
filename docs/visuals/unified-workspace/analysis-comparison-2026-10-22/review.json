@@ -1,0 +1,30 @@
+{
+  "kind": "self-review",
+  "base": "681584b4dc32cee596808870e4c9e38bc91d2820",
+  "source_version": 7,
+  "invariants": [
+    "Worker owns copied key and output; only atomic cancellation/done shared, main joins before reading/freeing",
+    "One in-flight worker plus latest pending key; version predicate protects publication; stale-accept mutant rejected",
+    "Source snapshot is copied before opening dialog; cache changes and removal of one fixture file preserve eight captured inputs/unit/reference",
+    "Unavailable inputs retain explicit result/curve mapping; strict API unchanged; global quota/OOM/cancel never silently publishes partial success",
+    "Actual independent axes and complete SI statistics before reduction; UI/export unit conversion is linear and consistent",
+    "Line masks preserve gaps; dash/legend/reference roles agree; actual one-curve renderer mutant rejected",
+    "Main active path changes preserve semantic channel identity across reordered schemas; raw CSV remains active-run export",
+    "Clearing cache removes stale plot interaction geometry; narrow metadata and legend wrap; native focus waits assert granted states",
+    "Generated builds stay ignored;12foreign files and14font/license assets remain unchanged"
+  ],
+  "evidence": {
+    "windows_debug_gui": "run-5a546u1m:3/3",
+    "linux_debug_gui": "run-unq3mba1:3/3",
+    "windows_release_gui": "run-tul40hk6:5/5",
+    "core_runs": "See validation.json; three configurations each2/2",
+    "report_exports": "24byte-identical to frozen report baseline",
+    "negative_controls": "one-curve and stale publication explicitly rejected"
+  },
+  "open": [
+    "Whole UI reference fidelity remains unaccepted; fonts/early integer raster and other components remain",
+    "Singular wording in some comparison captions still needs polishing",
+    "No external screenreader, physical DPI/monitor, detached comparison or native OS picker interaction acceptance",
+    "No measured interactive frame-time/cancellation-latency budget or current macOS execution"
+  ]
+}

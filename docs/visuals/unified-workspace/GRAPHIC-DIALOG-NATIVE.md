@@ -85,9 +85,10 @@ bleiben erhalten. Ein Timeout wird ausdrücklich als fehlgeschlagen erfasst.
 
 ## Verbleibende Abweichungen und Abnahme
 
-- Der sichtbare Mehrlauf-Messdatenvergleich muss noch den gemeinsamen Cache und
-  denselben Exportzugang erhalten. Der vorhandene Kern für bis zu acht Läufe
-  ersetzt diese Integration nicht. Der neue Zugang gilt derzeit für Berichte.
+- Der folgende [sichtbare Messlaufvergleich](ANALYSIS-COMPARISON-NATIVE.md)
+  integriert den gemeinsamen Cache und denselben Exportzugang für bis zu acht
+  ausgewählte Läufe. Seine eigenen Nachweise bleiben von dieser früheren
+  Berichtsdialog-Abnahme getrennt.
 - Der folgende [Materialabgleich](GRAPHIC-MATERIAL-NATIVE.md) ergänzt den reinen
   Sigma-3-Hintergrundfilter und skalierte Auswahlfelder. Der folgende
   [Schatten-/Maßabgleich](GRAPHIC-SHADOW-NATIVE.md) ergänzt die Schatten,

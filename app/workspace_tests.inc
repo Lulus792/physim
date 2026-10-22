@@ -32,6 +32,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
     if(!strncmp(mode,"analysis-project-",17))return analysis_project_test_start(a,root,mode);
     if(!strncmp(mode,"analysis-layout-",16))return analysis_workspace_test_start(a,root,mode);
     if(!strncmp(mode,"analysis-units-",15))return analysis_workspace_test_start(a,root,mode);
+    if(!strncmp(mode,"comparison-",11))return comparison_test_start(a,root,mode);
     if(!strncmp(mode,"shell-theme-",12))return analysis_workspace_test_start(a,root,mode);
     if(!strncmp(mode,"units-",6))return channel_units_test_start(a,root,mode);
     if(!strncmp(mode,"pchip-",6))return pchip_test_start(a,root,mode);
@@ -167,6 +168,7 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
     if(!strncmp(mode,"analysis-project-",17)){analysis_project_test_frame(a,a->manager_parent,mode,stage,code,capture);return;}
     if(!strncmp(mode,"analysis-layout-",16)){analysis_workspace_test_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"analysis-units-",15)){analysis_units_test_frame(a,stage,code,capture);return;}
+    if(!strncmp(mode,"comparison-",11)){comparison_test_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"shell-theme-",12)){shell_theme_test_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"units-",6)){channel_units_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"logging-",8)){logging_test_frame(a,mode,stage,code,capture);return;}

@@ -32,7 +32,7 @@ static void analysis_workspace_test_frame(app *a,int *stage,int *code,const char
         fprintf(stderr,"ANALYSIS START OBSERVATION: dataset-worker=%d library-worker=%d library-done=%d host=%u keyboard=%u flags=%llu\n",a->data.thread!=NULL,a->library_thread!=NULL,SDL_GetAtomicInt(&a->library_done),SDL_GetWindowID(a->window),SDL_GetWindowID(SDL_GetKeyboardFocus()),(unsigned long long)SDL_GetWindowFlags(a->window));probe_at=ps_clock()+1;
     }
     if(settle++<2)return;settle=0;
-    if(a->data.thread || a->library_thread)return;
+    if(a->data.thread || a->library_thread || ps_comparison_read(a->comparison).loading)return;
     switch(*stage) {
     case 0:
         if(SDL_GetKeyboardFocus()!=a->window){if(ps_clock()>=focus_retry){SDL_RaiseWindow(a->window);focus_retry=ps_clock()+.25;}return;}

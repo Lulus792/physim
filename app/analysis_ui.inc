@@ -1,5 +1,36 @@
 /* Native analysis workspace. Every action uses the existing project, run and
  * report paths; the HTML reference supplies geometry, never measurement data. */
+static void analysis_comparison_sync(app *a) {
+    if(a->comparison_pending_active[0] && idle(a)) {
+        if(a->selected_count) {
+            const char *next=selected_run(a,a->comparison_pending_active)>=0?a->comparison_pending_active:a->selected_runs[0];
+            snprintf(a->last_run,sizeof a->last_run,"%s",next);timeline_clear(a);a->scene.count=0;a->channel_count=0;a->history_count=0;
+            request_dataset(a);
+        }
+        a->comparison_pending_active[0]=0;
+    }
+    if(!a->comparison && a->loaded)a->comparison=ps_comparison_create();
+    if(!a->comparison)return;
+    ps_comparison_key key={.revision=a->comparison_revision}; /* existing core scratch quota */
+    snprintf(key.scope,sizeof key.scope,"%s",a->project);
+    if(a->loaded && !a->data.thread && a->data.channel_count && a->data.count && a->selected_count) {
+        if(a->plot_channel<0 || a->plot_channel>=(int)a->data.channel_count)a->plot_channel=0;
+        key.count=a->selected_count;key.reference=0;key.channel=a->data.channels[a->plot_channel];
+        ps_display_unit unit=channel_display_unit(a,&key.channel);
+        key.unit.scale=unit.scale;memcpy(key.unit.dimension,unit.dimension,7);snprintf(key.unit.symbol,sizeof key.unit.symbol,"%s",unit.symbol);
+        /* Use the existing writable per-user/fixture state directory, even when
+         * the opened project is read-only or has never been built. */
+        const char *path=a->preferences_path,*slash=strrchr(path,'/'),*back=strrchr(path,'\\');
+        if(back && (!slash || back>slash))slash=back;
+        size_t parent=slash?(size_t)(slash-path)+1:0;
+        if(parent+sizeof "physim-comparison"<=sizeof key.scratch_prefix) {
+            memcpy(key.scratch_prefix,path,parent);memcpy(key.scratch_prefix+parent,"physim-comparison",sizeof "physim-comparison");
+        }
+        for(uint32_t i=0;i<key.count;i++)snprintf(key.paths[i],sizeof key.paths[i],"%s",a->selected_runs[i]);
+    }
+    (void)ps_comparison_request(a->comparison,&key);
+    ps_comparison_poll(a->comparison);
+}
 static void analysis_heading(app *a,const char *text,float height,bool strong) {
     struct nk_context *ui=a->ui;
     nk_layout_row_dynamic(ui,height,1);
@@ -254,12 +285,20 @@ static void analysis_runs_view(app *a) {
             analysis_text(a,name,item->name,font,UI_COLOR(text));
             char accessible[1200];snprintf(accessible,sizeof accessible,"Messlauf anzeigen: %s",item->name);
             nk_begin_disabled(ui,!idle(a));
-            if(ps_ui_button_at(ui,nk_rect(card.x+32,card.y,card.w-32,card.h),accessible,!strcmp(a->data.path,path)))open_run_path(a,path);
+            if(ps_ui_button_at(ui,nk_rect(card.x+32,card.y,card.w-32,selection>0?state_y:card.h),accessible,!strcmp(a->data.path,path)))open_run_path(a,path);
             nk_end_disabled(ui);
             if(nk_sdl_accessibility_is_focused(ui,NULL,accessible))nk_stroke_rect(canvas,card,7,2,UI_COLOR(accent));
             analysis_wrapped_text(a,nk_rect(card.x+36,card.y+meta_y,card.w-44,state_y-meta_y),meta,small,muted());
-            const char *state=selection==0?"Referenz":!strcmp(a->data.path,path)?"Aktiver Lauf":checked?"Für Vergleich ausgewählt":"";
-            analysis_text(a,nk_rect(card.x+36,card.y+state_y,card.w-44,small->height),state,small,selection==0?UI_COLOR(accent):muted());
+            char state[96];snprintf(state,sizeof state,"%s%s",selection==0?"Referenz":checked?"Für Vergleich ausgewählt":"",
+                !strcmp(a->data.path,path)?checked?" · Aktiver Lauf":"Aktiver Lauf":"");
+            struct nk_rect state_rect=nk_rect(card.x+36,card.y+state_y,card.w-44,small->height);
+            const char *reference_label=!strcmp(a->data.path,path)?"Als Referenz · Aktiver Lauf":"Als Referenz verwenden";
+            analysis_text(a,state_rect,selection>0?reference_label:state,small,selection>=0?UI_COLOR(accent):muted());
+            if(selection>0) {
+                char reference[1200];snprintf(reference,sizeof reference,"Als Referenz verwenden: %s",item->name);
+                nk_begin_disabled(ui,!idle(a));if(ps_ui_button_at(ui,state_rect,reference,false))reference_run(a,path);nk_end_disabled(ui);
+                if(nk_sdl_accessibility_is_focused(ui,NULL,reference))nk_stroke_rect(canvas,state_rect,2,2,UI_COLOR(accent));
+            }
             shown++;
         }
         if(!shown){nk_layout_row_dynamic(ui,64,1);nk_label_wrap(ui,a->library_thread?"Messläufe werden geladen …":a->analysis_query[0]?"Keine passenden Messläufe. Die Auswahl bleibt erhalten.":"Noch keine Messläufe. Eine Simulation starten oder einen Messlauf importieren.");}
@@ -325,9 +364,11 @@ static void analysis_details_view(app *a) {
 
 static void analysis_workspace_view(app *a,float content) {
     struct nk_context *ui=a->ui;
-    if(a->show_report || a->data.thread || !a->data.count) {
+    analysis_comparison_sync(a);ps_comparison_state comparison=ps_comparison_read(a->comparison);
+    if(a->show_report || !comparison.snapshot) {
         if(a->analysis_plot_resizing)analysis_plot_resize_abort(a);
         a->analysis_plot_splitter=nk_rect(0,0,0,0);
+        if(!a->show_report){a->plot_area=nk_rect(0,0,0,0);a->active_plot_view=NULL;a->plot_drag=NULL;}
     }
     if(!a->panel_render)panel_pull_handle(a,PS_DOCK_WORKSPACE,nk_rect(a->dock_panels[PS_DOCK_WORKSPACE].x+24,a->dock_panels[PS_DOCK_WORKSPACE].y,a->dock_panels[PS_DOCK_WORKSPACE].w-48,54));
     float tab_scale=a->preferences.ui_size/16.f;
@@ -345,7 +386,7 @@ static void analysis_workspace_view(app *a,float content) {
         if(nk_sdl_accessibility_is_focused(ui,NULL,tabs[i]))nk_stroke_rect(nk_window_get_canvas(ui),tab,3,2,UI_COLOR(accent));
     }
     nk_layout_row_push(ui,fmaxf(20,nk_window_get_content_region(ui).w-tab_widths[0]-tab_widths[1]-2*ui->style.window.spacing.x));
-    char total[100];snprintf(total,sizeof total,"%llu Punkte · aktiver Lauf",(unsigned long long)a->data.total);
+    char total[100];snprintf(total,sizeof total,a->show_report?"Analysebericht · eigene Eingaben":"%u Läufe ausgewählt",a->selected_count);
     nk_label_colored(ui,total,NK_TEXT_RIGHT,muted());nk_layout_row_end(ui);nk_style_pop_vec2(ui);
     analysis_rule(a);
     /* The active rule shares the bottom pixel of the full-width border. */
@@ -361,33 +402,22 @@ static void analysis_workspace_view(app *a,float content) {
             nk_layout_row_dynamic(ui,100,1);nk_label_wrap(ui,a->job.running?"Analyse läuft … Vorhandene Messdaten bleiben im Messdaten-Tab erreichbar.":"Noch kein Analysebericht geladen. Analyse starten oder einen bestehenden Bericht in Läufe & Berichte öffnen.");
         } else
         report_view(a, content);
-    } else if (!a->data.thread && a->data.count) {
-        const char *names[PS_MAX_CHANNELS];
-        for (uint32_t i = 0; i < a->data.channel_count; i++)
-            names[i] = a->data.channels[i].name;
-        if(a->plot_channel<0 || a->plot_channel>=(int)a->data.channel_count)a->plot_channel=0;
-        ps_display_unit unit=channel_display_unit(a,&a->data.channels[a->plot_channel]);
-        double displayed[PREVIEW];
-        bool represented=channel_display_values(&unit,a->data.values[a->plot_channel],a->data.count,displayed);
+    } else if (comparison.snapshot) {
+        ps_graphic_description description;ps_graphic_snapshot_describe(comparison.snapshot,&description);
+        ps_display_unit unit={.scale=description.plot.y_unit.scale};memcpy(unit.dimension,description.plot.y_unit.dimension,7);
+        snprintf(unit.symbol,sizeof unit.symbol,"%s",description.plot.y_unit.symbol);
         char title[192];
-        snprintf(title, sizeof title, "%s [%s]%s", names[a->plot_channel],unit.symbol,
-                 represented?"":" · Werte nicht darstellbar");
-        int mask = -1;
-        (void)ps_channel_status_index(a->data.channels, a->data.channel_count,
-                                      (uint32_t)a->plot_channel, &mask);
-        if (mask >= 0) {
-            nk_layout_row_dynamic(ui, 24, 1);
-            char note[160];
-            snprintf(note, sizeof note,
-                     "%llu gültige Messungen · Ausfälle und nicht fällige Werte sind "
-                     "ausgeschlossen.",
-                     (unsigned long long)a->data.stats[a->plot_channel].count);
-            nk_label_colored(ui, note, NK_TEXT_LEFT, muted());
+        snprintf(title,sizeof title,"%s [%s]",description.plot.y_label,unit.symbol);
+        for(uint32_t i=0;i<description.input_count;i++) {
+            ps_graphic_run_info run;ps_graphic_snapshot_run(comparison.snapshot,i,&run);
+            if(run.result==PS_OK && run.statistics_result==PS_OK)continue;
+            const char *reason=run.result==PS_OK?"Vollständige Statistik nicht verfügbar":run.result==PS_INVALID?"Messkanal fehlt, ist inkompatibel oder hat keine gültigen Werte":ps_result_string(run.result);
+            char note[256];snprintf(note,sizeof note,"%s: %s%s",run.label,reason,i==0 && run.result!=PS_OK?" · Referenz nicht verfügbar":"");
+            nk_layout_row_dynamic(ui,documentation_height(ui->style.font,note,strlen(note),nk_window_get_content_region(ui).w)+4,1);nk_label_wrap(ui,note);
         }
         /* The reference SVG is 800 × 326 before a manual height is chosen. */
         a->analysis_plot_auto_height=roundf(nk_window_get_content_region(ui).w*326.f/800.f);
-        plot(a, a->data.time, displayed, a->data.count,
-             analysis_plot_dimension(a,content), title, mask >= 0, &a->data_views[a->plot_channel]);
+        plot_draw(a,NULL,NULL,0,analysis_plot_dimension(a,content),title,false,&a->data_views[a->plot_channel],comparison.snapshot);
         analysis_plot_separator(a);
         const char *stat_note="Gesamter Lauf · unabhängig vom Zoom";
         float heading_width=ceilf(a->laboratory_title_font.width(a->laboratory_title_font.userdata,a->laboratory_title_font.height,"Statistik",9))+4;
@@ -398,28 +428,26 @@ static void analysis_workspace_view(app *a,float content) {
         if(!stack_note){nk_layout_row_push(ui,note_width);nk_label_colored(ui,stat_note,NK_TEXT_RIGHT,muted());}
         nk_layout_row_end(ui);
         if(stack_note){nk_layout_row_dynamic(ui,documentation_height(ui->style.font,stat_note,strlen(stat_note),nk_window_get_content_region(ui).w),1);nk_style_push_color(ui,&ui->style.text.color,muted());nk_label_wrap(ui,stat_note);nk_style_pop_color(ui);}
-        nk_layout_row_dynamic(ui,fminf(280,28+39*(float)a->data.channel_count),1);
+        nk_layout_row_dynamic(ui,fminf(360,28+39*(float)description.input_count),1);
         nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(0,0));
         nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(0,0));
-        if(nk_group_begin(ui,"measurement-statistics",a->data.channel_count<=5 && a->preferences.ui_size<=16?NK_WINDOW_NO_SCROLLBAR:0)) {
+        if(nk_group_begin(ui,"measurement-statistics",description.input_count<=5 && a->preferences.ui_size<=16?NK_WINDOW_NO_SCROLLBAR:0)) {
             nk_layout_row_dynamic(ui,28,5);
-            const char *head[] = {"Kanal", "Mittelwert", "Std.-Abw.", "Minimum", "Maximum"};
+            const char *head[] = {"Messlauf", "Mittelwert", "Std.-Abw.", "Minimum", "Maximum"};
             for (int i = 0; i < 5; i++)
                 nk_label_colored(ui, head[i], NK_TEXT_LEFT, muted());
-            for (uint32_t i = 0; i < a->data.channel_count; i++) {
+            for (uint32_t i = 0; i < description.input_count; i++) {
+                ps_graphic_run_info run;ps_graphic_snapshot_run(comparison.snapshot,i,&run);
                 nk_layout_row_dynamic(ui,39,5);
-                ps_display_unit stat_unit=channel_display_unit(a,&a->data.channels[i]);
-                char stat_label[128];snprintf(stat_label,sizeof stat_label,"%s [%s]",names[i],stat_unit.symbol);
+                char stat_label[160];snprintf(stat_label,sizeof stat_label,"%s%s",run.label,i==0?" · Referenz":"");
                 channel_unit_cell(ui,stat_label);
-                double values[] = {a->data.stats[i].mean,
-                                   ps_statistics_stddev(&a->data.stats[i]),
-                                   a->data.stats[i].min, a->data.stats[i].max};
+                double values[] = {run.si_statistics.mean,ps_statistics_stddev(&run.si_statistics),run.si_statistics.min,run.si_statistics.max};
                 for (int k = 0; k < 4; k++) {
                     char text[80];
                     double converted;
-                    if(ps_display_unit_value(&stat_unit,values[k],&converted)==PS_OK)snprintf(text,sizeof text,"%.8g",converted);
+                    if(ps_display_unit_value(&unit,values[k],&converted)==PS_OK)snprintf(text,sizeof text,"%.8g",converted);
                     else snprintf(text,sizeof text,"nicht darstellbar");
-                    if (!a->data.stats[i].count || (k == 1 && a->data.stats[i].count < 2))
+                    if (run.result!=PS_OK || run.statistics_result!=PS_OK || !run.si_statistics.count || (k == 1 && run.si_statistics.count < 2))
                         snprintf(text, sizeof text, "—");
                     channel_unit_cell(ui,text);
                 }
@@ -427,14 +455,20 @@ static void analysis_workspace_view(app *a,float content) {
             nk_group_end(ui);
         }
         nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
+        char statistics_unit[256];snprintf(statistics_unit,sizeof statistics_unit,"%s in %s · vollständige gültige Messwerte je Lauf · Stichprobenstandardabweichung",description.plot.y_label,unit.symbol);
+        nk_layout_row_dynamic(ui,documentation_height(ui->style.font,statistics_unit,strlen(statistics_unit),nk_window_get_content_region(ui).w)+4,1);nk_label_colored_wrap(ui,statistics_unit,muted());
     } else {
         nk_layout_row_dynamic(ui, 110, 1);
-        nk_label_wrap(ui, a->data.thread ? "Messdaten werden geladen …"
+        nk_label_wrap(ui, !a->selected_count?"Wähle links mindestens einen Messlauf für Kurve und Statistik aus.":comparison.loading?"Vergleichskurven und vollständige Statistiken werden geladen …":comparison.result==PS_MEMORY?"Der Vergleich konnte wegen Speichermangels nicht geladen werden.":comparison.result==PS_LIMIT?"Der Vergleich überschreitet das Ressourcenlimit. Weniger oder kleinere Läufe wählen.":comparison.result!=PS_OK?"Die gewählten Läufe enthalten keine darstellbare gemeinsame Messkurve. Kanal, Einheit und Laufdateien prüfen.":a->data.thread ? "Messdaten werden geladen …"
                           : a->last_run[0]
                               ? "Werte den gespeicherten Lauf aus. Die Analyse erstellt "
                                 "Messkurven, Statistik und einen Bericht."
                               : "Hier werden Ergebnisse sichtbar. Starte zuerst eine "
                                 "Simulation und zeichne einen Lauf auf.");
+        if(!comparison.loading && comparison.result!=PS_OK && a->selected_count) {
+            nk_layout_row_dynamic(ui,32,1);a->comparison_retry_bounds=nk_widget_bounds(ui);
+            if(nk_button_label(ui,"Vergleich erneut laden"))a->comparison_revision++;
+        }
     }
     float bottom=ui->current->layout->clip.y+ui->current->layout->clip.h;
     nk_uint scroll_x,scroll_y;nk_window_get_scroll(ui,&scroll_x,&scroll_y);

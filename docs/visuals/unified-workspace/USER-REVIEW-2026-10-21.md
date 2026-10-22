@@ -37,3 +37,9 @@ Der folgende [Materialabgleich](GRAPHIC-MATERIAL-NATIVE.md) ergänzt den bislang
 fehlenden Hintergrund-Blur und die proportionale Feldzeichnung bei großer Schrift.
 Der folgende [Schatten-/Maßabgleich](GRAPHIC-SHADOW-NATIVE.md) ergänzt beide
 Schatten, normale helle Konturen, die Referenzgröße und weitere kleine Fensterzustände.
+
+Der folgende [sichtbare Messlaufvergleich](ANALYSIS-COMPARISON-NATIVE.md)
+verbindet jetzt bis zu acht Kurven mit Referenz, vollständiger Statistik und
+demselben Exportzugang. Er belegt weitere echte Auswertungszustände; die
+verbleibenden Schrift-/Raster-/Komponentenunterschiede der gesamten Oberfläche
+sind damit weiterhin nicht vollständig abgenommen.

@@ -1,0 +1,26 @@
+[
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-graphic_snapshot.exe",
+      "D:/Physim/build/native/Design-analysis/test-results/run-16cuqqo0/graphic_snapshot"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "GRAPHIC SNAPSHOT REPORT: deep-copy, masks, kinds, reference, crop and 5 allocation failures passed\nGRAPHIC COMPARISON: partial inputs, unavailable reference, mapping/copy and 18 allocation failures passed\nGRAPHIC SNAPSHOT RUNS: independent times, units, extrema/gaps, full statistics, 8 inputs, source deletion, quota/cancel and 9 allocation failures passed\nGRAPHIC SNAPSHOT TYPES: scatter, rad/degree, angle/scalar separation, invalid unnamed schema and intact UTF8 labels passed\nGraphic snapshot: immutable report/run data and transactional ownership passed\n",
+    "stderr": "",
+    "seconds": 0.453,
+    "name": "graphic_snapshot"
+  },
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-analysis_comparison.exe",
+      "D:/Physim/build/native/Design-analysis/test-results/run-16cuqqo0/analysis_comparison"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "COMPARISON CACHE: owned keys, latest publication, stale discard, 8 axes, units, clear/shutdown and frozen copy passed\n",
+    "stderr": "",
+    "seconds": 0.344,
+    "name": "analysis_comparison"
+  }
+]

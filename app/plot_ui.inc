@@ -131,38 +131,79 @@ static void plot_dot(struct nk_command_buffer *canvas, struct nk_rect area, doub
                                area.y + (1 - (float)y) * area.h - radius, 2 * radius, 2 * radius),
                        color);
 }
-static void analysis_plot_heading(app *a,ps_plot_view *view,const double full[4]) {
+/* Continue a logical-pixel dash phase across adjacent samples; gaps reset it.
+ * The same solid/long/short roles are used by the canonical export figure. */
+static void plot_pattern(struct nk_command_buffer *canvas,struct nk_rect area,double x,double y,double xx,double yy,
+    double dash,double *phase,struct nk_color color) {
+    if(!dash){plot_segment(canvas,area,x,y,xx,yy,color);return;}
+    double length=hypot((xx-x)*area.w,(yy-y)*area.h),period=dash+6,old=*phase;
+    if(!isfinite(length))return;
+    *phase=fmod(old+fmod(length,period),period);
+    double x0=x,y0=y,x1=xx,y1=yy;if(!ps_plot_clip_line(&x0,&y0,&x1,&y1))return;
+    double clipped=hypot((x1-x0)*area.w,(y1-y0)*area.h);if(!clipped)return;
+    double skipped=hypot((x0-x)*area.w,(y0-y)*area.h),at=0,pos=fmod(old+fmod(skipped,period),period);
+    while(at<clipped) {
+        bool ink=pos<dash;double amount=fmin(clipped-at,(ink?dash:period)-pos);if(amount<=0)return;
+        if(ink){double a=at/clipped,b=(at+amount)/clipped;plot_segment(canvas,area,x0+(x1-x0)*a,y0+(y1-y0)*a,x0+(x1-x0)*b,y0+(y1-y0)*b,color);}
+        at+=amount;pos=ink?dash:0;
+    }
+}
+static void analysis_plot_legend(app *a,const ps_graphic_snapshot *snapshot) {
+    const ps_report *report=ps_graphic_snapshot_report(snapshot);ps_graphic_description d;ps_graphic_snapshot_describe(snapshot,&d);
+    const struct nk_user_font *font=&a->workbench_fonts[2];float available=nk_window_get_content_region(a->ui).w;
+    float height=fmaxf(30,font->height+12),x=0;unsigned rows=1;char labels[8][160];float widths[8];
+    for(uint32_t i=0;i<d.plot.curves;i++) {
+        const ps_curve_data *c;ps_report_curve_view(report,0,i,&c);
+        snprintf(labels[i],sizeof labels[i],"%s%s",c->label,i==d.reference?" · Referenz":"");
+        widths[i]=fminf(available,32+font->width(font->userdata,font->height,labels[i],(int)strlen(labels[i])));
+        if(x && x+widths[i]>available){rows++;x=0;}x+=widths[i]+14;
+    }
+    struct nk_rect r;nk_layout_row_dynamic(a->ui,height*rows,1);nk_widget(&r,a->ui);x=r.x;float y=r.y;
+    for(uint32_t i=0;i<d.plot.curves;i++) {
+        if(x>r.x && x+widths[i]>r.x+r.w){x=r.x;y+=height;}
+        double dash=(i==d.reference || (d.reference==PS_GRAPHIC_NO_REFERENCE && !i))?0:(i%2?10:3),phase=0;
+        plot_pattern(nk_window_get_canvas(a->ui),nk_rect(x,y+height/2,20,1),0,1,1,1,dash,&phase,ui_palette->curves[i]);
+        analysis_text(a,nk_rect(x+26,y+(height-font->height)/2,widths[i]-26,font->height),labels[i],font,UI_COLOR(muted));
+        x+=widths[i]+14;
+    }
+}
+static void analysis_plot_heading(app *a,ps_plot_view *view,const double full[4],const ps_graphic_snapshot *snapshot) {
     struct nk_context *ui=a->ui;struct nk_rect r;
-    nk_layout_row_dynamic(ui,76,1);nk_widget(&r,ui);
-    struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
-    const struct nk_user_font *small=&a->workspace_status_font,*title=&a->analysis_chart_font;
-    nk_draw_text(canvas,nk_rect(r.x,r.y+22,r.w,small->height),"MESSKURVE",9,small,nk_rgba(0,0,0,0),UI_COLOR(muted));
+    const struct nk_user_font *small=&a->workspace_status_font,*title=&a->analysis_chart_font,*font=&a->workbench_fonts[0];
+    float scale=a->preferences.ui_size/16.f;
+    const char *labels[]={"+","−","Alles zeigen","Grafik exportieren…"},*names[]={"Zoom +","Zoom -","Alles zeigen","Grafik exportieren…"};
+    float widths[]={28*scale,28*scale,0,0};
+    for(unsigned i=2;i<4;i++)widths[i]=fmaxf((i==2?82:157)*scale,ceilf(font->width(font->userdata,font->height,labels[i],(int)strlen(labels[i]))+18*scale));
+    unsigned actions=snapshot?4:3;float controls=4*scale*(actions-1);
+    for(unsigned i=0;i<actions;i++)controls+=widths[i];
     const char *name=a->data.channels[a->plot_channel].name;
-    const struct nk_user_font *control_font=&a->workbench_fonts[0];float scale=a->preferences.ui_size/16.f;
-    const char *labels[]={"+","−","Alles zeigen"},*names[]={"Zoom +","Zoom -","Alles zeigen"};
-    float widths[]={28*scale,28*scale,fmaxf(82*scale,ceilf(control_font->width(control_font->userdata,control_font->height,labels[2],(int)strlen(labels[2]))+18*scale))};
-    float controls=widths[0]+widths[1]+widths[2]+8;
-    nk_draw_text(canvas,nk_rect(r.x,r.y+44,fmaxf(1,r.w-controls-14),title->height),name,(int)strlen(name),title,nk_rgba(0,0,0,0),UI_COLOR(text));
-    char description[192];snprintf(description,sizeof description,"Messkurve: %s",name);ps_ui_accessibility_label(ui,r,description);
-    float x=r.x+r.w-controls;
+    float title_width=title->width(title->userdata,title->height,name,(int)strlen(name));
+    float button_height=fmaxf(28*scale,font->height+12*scale),available=nk_window_get_content_region(ui).w;
+    bool wrap=title_width+controls+14>available;unsigned tool_rows=1;float used=0;
+    for(unsigned i=0;i<actions;i++){if(used && used+widths[i]>available){tool_rows++;used=0;}used+=widths[i]+4*scale;}
+    float tool_top=wrap?44+title->height+12:34;
+    float height=wrap?tool_top+button_height+12:76;
+    height+=(tool_rows-1)*(button_height+8*scale);
+    nk_layout_row_dynamic(ui,height,1);nk_widget(&r,ui);struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+    nk_draw_text(canvas,nk_rect(r.x,r.y+22,r.w,small->height),"MESSKURVE",9,small,nk_rgba(0,0,0,0),UI_COLOR(muted));
+    analysis_text(a,nk_rect(r.x,r.y+44,wrap?r.w:fmaxf(1,r.w-controls-14),title->height),name,title,UI_COLOR(text));
+    float x=wrap?r.x:r.x+r.w-controls,y=r.y+tool_top;
     ps_plot_view before=*view;if(!view->initialized)ps_plot_view_reset(view);
-    for(unsigned i=0;i<3;i++) {
-        struct nk_rect button=nk_rect(x,r.y+34,widths[i],fmaxf(28,control_font->height+12));a->plot_buttons[i]=button;x+=widths[i]+4;
+    for(unsigned i=0;i<actions;i++) {
+        if(x>r.x && x+widths[i]>r.x+r.w){x=r.x;y+=button_height+8*scale;}
+        struct nk_rect button=nk_rect(x,y,fminf(widths[i],r.w),button_height);x+=button.w+4*scale;
+        if(i<3)a->plot_buttons[i]=button;else a->result_export_bounds[2]=button;
         bool focused=nk_sdl_accessibility_is_focused(ui,NULL,names[i]);
-        nk_stroke_rect(canvas,button,5,focused?2:1,focused?UI_COLOR(accent):UI_COLOR(border));
-        const struct nk_user_font *font=&a->workbench_fonts[0];
-        float width=font->width(font->userdata,font->height,labels[i],(int)strlen(labels[i]));
-        nk_draw_text(canvas,nk_rect(button.x+(button.w-width)/2,button.y+(button.h-font->height)/2,width+1,font->height),labels[i],(int)strlen(labels[i]),font,nk_rgba(0,0,0,0),UI_COLOR(text));
+        nk_stroke_rect(canvas,button,5*scale,focused?2.f:1.f,focused?UI_COLOR(accent):UI_COLOR(border));
+        float text_width=font->width(font->userdata,font->height,labels[i],(int)strlen(labels[i]));
+        nk_draw_text(canvas,nk_rect(button.x+(button.w-text_width)/2,button.y+(button.h-font->height)/2,text_width+1,font->height),labels[i],(int)strlen(labels[i]),font,nk_rgba(0,0,0,0),i==3?UI_COLOR(accent):UI_COLOR(text));
+        nk_begin_disabled(ui,!full);
         if(ps_ui_button_at(ui,button,names[i],false)) {
-            if(i==2)ps_plot_view_reset(view);else ps_plot_view_zoom(view,i==0?2:.5,.5,.5);
-            a->plot_drag=NULL;
+            if(i==3)graphic_export_comparison(a);
+            else {if(i==2)ps_plot_view_reset(view);else ps_plot_view_zoom(view,i==0?2:.5,.5,.5);a->plot_drag=NULL;}
         }
+        nk_end_disabled(ui);
     }
     if(full){double shown[4];plot_display_bounds(view,full,shown);if(!(shown[0]<shown[1] && shown[2]<shown[3]))*view=before;}
-    nk_layout_row_dynamic(ui,30,1);nk_widget(&r,ui);
-    nk_stroke_line(canvas,r.x,r.y+14,r.x+20,r.y+14,2,ui_palette->curves[0]);
-    char legend[1200];snprintf(legend,sizeof legend,"%s%s",diagnostic_basename(a->data.path),selected_run(a,a->data.path)==0?" · Referenz":" · Aktiver Lauf");
-    const struct nk_user_font *legend_font=&a->workbench_fonts[2];
-    nk_draw_text(canvas,nk_rect(r.x+26,r.y+7,r.w-26,legend_font->height),legend,(int)strlen(legend),legend_font,nk_rgba(0,0,0,0),UI_COLOR(muted));
-    ps_ui_accessibility_label(ui,r,legend);
+    if(snapshot)analysis_plot_legend(a,snapshot);
 }

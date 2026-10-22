@@ -21,6 +21,8 @@ typedef struct {
     ps_channel channel;
     uint64_t samples;
     bool recovered;
+    ps_result result; /* comparison: unavailable inputs remain named, without a curve */
+    uint32_t curve; /* PS_GRAPHIC_NO_REFERENCE when unavailable; otherwise plot curve index */
     ps_result statistics_result;
     ps_statistics si_statistics; /* full valid source samples, before display conversion */
 } ps_graphic_run_info;
@@ -53,6 +55,13 @@ ps_result ps_graphic_snapshot_from_report(const ps_report *report,uint32_t plot,
  * an in-progress core snapshot/reduction operation; it returns PS_EOF with
  * failure.cancelled=true. It never publishes a partial snapshot. */
 ps_result ps_graphic_snapshot_from_runs(const ps_graphic_run_request *request,
+    const char *scratch_prefix,uint64_t scratch_quota,ps_graphic_cancel cancel,void *user,
+    ps_allocator allocator,ps_graphic_snapshot **out,ps_graphic_failure *failure);
+/* Visible comparison: retain unavailable inputs and their errors while drawing
+ * compatible inputs in selection order. Resource/cancellation failures remain
+ * transactional. No valid curve returns PS_INVALID with out unchanged. reference
+ * describes the selected reference's curve, or NO_REFERENCE if unavailable. */
+ps_result ps_graphic_snapshot_compare_runs(const ps_graphic_run_request *request,
     const char *scratch_prefix,uint64_t scratch_quota,ps_graphic_cancel cancel,void *user,
     ps_allocator allocator,ps_graphic_snapshot **out,ps_graphic_failure *failure);
 /* Copy the currently displayed cache at dialog-open time, without reopening its

@@ -1,0 +1,1784 @@
+{
+  "date": "2026-10-22T23:51:00.149802+02:00",
+  "base": "681584b4dc32cee596808870e4c9e38bc91d2820",
+  "final_source_version": 7,
+  "source_hash_normalization": "CRLF -> LF",
+  "final_runs": [
+    {
+      "label": "windows-debug",
+      "source_version": 7,
+      "directory": "build\\native\\Design-analysis\\test-results\\run-5a546u1m",
+      "binary_sha256": "a16b1aa4c44e45ca54ec4cdfbc7329cab1f81112b454fa9d93db6f471e942d6a",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 32.203
+        },
+        {
+          "name": "comparison_dark",
+          "status": "passed",
+          "seconds": 17.281
+        },
+        {
+          "name": "comparison_light_large_narrow",
+          "status": "passed",
+          "seconds": 16.828
+        }
+      ],
+      "comparison_cases": [
+        {
+          "name": "comparison_dark",
+          "images": {
+            "comparison-eight": {
+              "artifact": "windows-debug-comparison_dark-comparison-eight.png",
+              "bytes": 183373,
+              "sha256": "106bcf21d1b1a5bccfe1fa9548857868dc82552eff0ba4b3a9abae698c02c034"
+            },
+            "comparison-reference": {
+              "artifact": "windows-debug-comparison_dark-comparison-reference.png",
+              "bytes": 150522,
+              "sha256": "cac017d61b49fd9eca57c40ff8d65d5f3d066aeef9eb4ba60fe4f32f587ada07"
+            },
+            "comparison-export": {
+              "artifact": "windows-debug-comparison_dark-comparison-export.png",
+              "bytes": 217152,
+              "sha256": "823bfb95a0b0ee42540af0141c76943d52d1d9370c698341106f2722591d6718"
+            },
+            "comparison-current": {
+              "artifact": "windows-debug-comparison_dark-comparison-current.png",
+              "bytes": 141851,
+              "sha256": "c8ff103c6dddad20060d622c2cee7044dcee157514c805eefaf20423c36d32c0"
+            },
+            "comparison-partial": {
+              "artifact": "windows-debug-comparison_dark-comparison-partial.png",
+              "bytes": 147678,
+              "sha256": "1ebf0357727c0798c43bf954da6b217e463f094a9e3d3def71dfe8a86a20d320"
+            },
+            "comparison-empty": {
+              "artifact": "windows-debug-comparison_dark-comparison-empty.png",
+              "bytes": 104918,
+              "sha256": "a10a76b1e41f30462e462ccfc8af8f6061619d9b20051773bf64acd7d18d6884"
+            },
+            "comparison-channel": {
+              "artifact": "windows-debug-comparison_dark-comparison-channel.png",
+              "bytes": 142132,
+              "sha256": "c98142898cb218f3d658be32ed7a78ddbbaa1b762272ff8edc72ba3996b56445"
+            },
+            "comparison-error": {
+              "artifact": "windows-debug-comparison_dark-comparison-error.png",
+              "bytes": 108594,
+              "sha256": "3ff50aa1154286a768f86f91a3eb948aa20111b253512382c79df2f288559949"
+            }
+          },
+          "outputs": {
+            "comparison-scale1.png": {
+              "artifact": "output-e80388ba627540407f98.png",
+              "sha256": "e80388ba627540407f982af3beef531bdd375d086e9f0c48974466f130678d5e",
+              "bytes": 69194
+            },
+            "comparison-scale2.png": {
+              "artifact": "output-85fc485597f773d2c90b.png",
+              "sha256": "85fc485597f773d2c90b3835ec6c77d629b33d28497414a695879c5789ce9824",
+              "bytes": 185251
+            },
+            "comparison-scale3.png": {
+              "artifact": "output-ede8519315a21627560b.png",
+              "sha256": "ede8519315a21627560b52ef48d02c63b2982d271b18a431fd3cca264e3023ad",
+              "bytes": 328510
+            },
+            "comparison-scale4.png": {
+              "artifact": "output-a75ba4802d0a9e5681ea.png",
+              "sha256": "a75ba4802d0a9e5681eaeeaf3c3ff1a49a22978a82885b3250f913d2f6406177",
+              "bytes": 504640
+            },
+            "comparison-full.png": {
+              "artifact": "output-43bc63b20b6372102554.png",
+              "sha256": "43bc63b20b6372102554521bb3ca03c851e9752f90281c78fc9327e495738ec2",
+              "bytes": 203631
+            },
+            "comparison-eight.svg": {
+              "artifact": "output-50253ecc6428e529d315.svg",
+              "sha256": "50253ecc6428e529d315797f94c692a540d90f78e7d9cf3bf9b7d01de66f4d5c",
+              "bytes": 317343
+            },
+            "comparison-cropped.svg": {
+              "artifact": "output-9d3a82602480d11beffd.svg",
+              "sha256": "9d3a82602480d11beffd251aba47256c06d8a020171769430856b9d3a04d07f2",
+              "bytes": 90713
+            }
+          },
+          "actual_curve_probe": {
+            "area": [
+              322.0,
+              443.0,
+              817.0,
+              265.0
+            ],
+            "fill": [
+              27,
+              28,
+              32
+            ],
+            "counts": [
+              {
+                "curve": 0,
+                "color": [
+                  100,
+                  170,
+                  255
+                ],
+                "qualifying_pixels": 1901
+              },
+              {
+                "curve": 1,
+                "color": [
+                  245,
+                  166,
+                  87
+                ],
+                "qualifying_pixels": 55
+              },
+              {
+                "curve": 2,
+                "color": [
+                  109,
+                  207,
+                  148
+                ],
+                "qualifying_pixels": 37
+              },
+              {
+                "curve": 3,
+                "color": [
+                  193,
+                  151,
+                  240
+                ],
+                "qualifying_pixels": 67
+              },
+              {
+                "curve": 4,
+                "color": [
+                  242,
+                  140,
+                  178
+                ],
+                "qualifying_pixels": 38
+              },
+              {
+                "curve": 5,
+                "color": [
+                  89,
+                  205,
+                  220
+                ],
+                "qualifying_pixels": 79
+              },
+              {
+                "curve": 6,
+                "color": [
+                  222,
+                  204,
+                  110
+                ],
+                "qualifying_pixels": 52
+              },
+              {
+                "curve": 7,
+                "color": [
+                  188,
+                  197,
+                  212
+                ],
+                "qualifying_pixels": 98
+              }
+            ],
+            "alpha_minimum": 0.3,
+            "maximum_rgb_residual": 2
+          },
+          "removed_fixture_source": "build\\native\\Design-analysis\\test-results\\run-5a546u1m\\comparison_dark\\files ä\\workflow ä\\project\\runs\\Lauf 001.psrun"
+        },
+        {
+          "name": "comparison_light_large_narrow",
+          "images": {
+            "comparison-eight": {
+              "artifact": "windows-debug-comparison_light_large_narrow-comparison-eight.png",
+              "bytes": 128693,
+              "sha256": "6c16f2ad2a51811945bb9c8f20aa3b69ec531265893880566161626c1367388a"
+            },
+            "comparison-reference": {
+              "artifact": "windows-debug-comparison_light_large_narrow-comparison-reference.png",
+              "bytes": 124254,
+              "sha256": "0ea7eebd84fc7b9b21d843b87bb205ab3cdb4f8fb6c414bb1365311f4d91df47"
+            },
+            "comparison-export": {
+              "artifact": "windows-debug-comparison_light_large_narrow-comparison-export.png",
+              "bytes": 102679,
+              "sha256": "cff2b2e6f64510eb2bee749939f8338227946d0fb31a873420f403c449c9e7f0"
+            },
+            "comparison-current": {
+              "artifact": "windows-debug-comparison_light_large_narrow-comparison-current.png",
+              "bytes": 129231,
+              "sha256": "ee6256536a20e513218627e4e8e263c9b4c9529056b7ea900a7698606de5a977"
+            },
+            "comparison-partial": {
+              "artifact": "windows-debug-comparison_light_large_narrow-comparison-partial.png",
+              "bytes": 132357,
+              "sha256": "cab9c9ae36453ead3f5e2a642e2e982f29d5c21873113f4ae33ed7acb871171e"
+            },
+            "comparison-empty": {
+              "artifact": "windows-debug-comparison_light_large_narrow-comparison-empty.png",
+              "bytes": 102858,
+              "sha256": "e4767413f583669532ef6c3e5ec19abe6a54dd12b69ab897af9e9a70376e05eb"
+            },
+            "comparison-channel": {
+              "artifact": "windows-debug-comparison_light_large_narrow-comparison-channel.png",
+              "bytes": 128907,
+              "sha256": "cefebb8286e21e98b105cecc4c904b8df0f419ba7526b177b27a3e7d2741ec78"
+            },
+            "comparison-error": {
+              "artifact": "windows-debug-comparison_light_large_narrow-comparison-error.png",
+              "bytes": 108045,
+              "sha256": "87e6e663b491d7f7f79e57b22b7a42ef88c4d743fb7df3e63fac85fe62505ea6"
+            }
+          },
+          "outputs": {
+            "comparison-scale1.png": {
+              "artifact": "output-ca8dbc13e769c1bd8521.png",
+              "sha256": "ca8dbc13e769c1bd85217eed5ad97b68d741b977dc0c7b173576ac072e7d20ec",
+              "bytes": 68327
+            },
+            "comparison-scale2.png": {
+              "artifact": "output-0ed6f762fed87b94f968.png",
+              "sha256": "0ed6f762fed87b94f968002937928ff7d04e6546d9d6bc2afc8b5365d711d8fc",
+              "bytes": 183672
+            },
+            "comparison-scale3.png": {
+              "artifact": "output-cc59d8486785fbeccf73.png",
+              "sha256": "cc59d8486785fbeccf739ae0cad03181d62e594b9fc0f7b823781b62e660fc7f",
+              "bytes": 328116
+            },
+            "comparison-scale4.png": {
+              "artifact": "output-1adf555b91433b5277f4.png",
+              "sha256": "1adf555b91433b5277f41e632a44f2d3b82fd70b05e4612da23188993b85cae9",
+              "bytes": 496880
+            },
+            "comparison-full.png": {
+              "artifact": "output-43bc63b20b6372102554.png",
+              "sha256": "43bc63b20b6372102554521bb3ca03c851e9752f90281c78fc9327e495738ec2",
+              "bytes": 203631
+            },
+            "comparison-eight.svg": {
+              "artifact": "output-50253ecc6428e529d315.svg",
+              "sha256": "50253ecc6428e529d315797f94c692a540d90f78e7d9cf3bf9b7d01de66f4d5c",
+              "bytes": 317343
+            },
+            "comparison-cropped.svg": {
+              "artifact": "output-178b8eaafb0a6ac77050.svg",
+              "sha256": "178b8eaafb0a6ac7705041ef2b01775b92283408bb36453f10c726656cb0673c",
+              "bytes": 91056
+            }
+          },
+          "actual_curve_probe": {
+            "area": [
+              322.0,
+              484.0,
+              457.0,
+              119.0
+            ],
+            "fill": [
+              255,
+              255,
+              255
+            ],
+            "counts": [
+              {
+                "curve": 0,
+                "color": [
+                  0,
+                  75,
+                  165
+                ],
+                "qualifying_pixels": 1017
+              },
+              {
+                "curve": 1,
+                "color": [
+                  145,
+                  72,
+                  0
+                ],
+                "qualifying_pixels": 16
+              },
+              {
+                "curve": 2,
+                "color": [
+                  0,
+                  100,
+                  59
+                ],
+                "qualifying_pixels": 13
+              },
+              {
+                "curve": 3,
+                "color": [
+                  115,
+                  48,
+                  163
+                ],
+                "qualifying_pixels": 24
+              },
+              {
+                "curve": 4,
+                "color": [
+                  158,
+                  34,
+                  95
+                ],
+                "qualifying_pixels": 10
+              },
+              {
+                "curve": 5,
+                "color": [
+                  0,
+                  90,
+                  107
+                ],
+                "qualifying_pixels": 40
+              },
+              {
+                "curve": 6,
+                "color": [
+                  106,
+                  86,
+                  0
+                ],
+                "qualifying_pixels": 16
+              },
+              {
+                "curve": 7,
+                "color": [
+                  60,
+                  71,
+                  89
+                ],
+                "qualifying_pixels": 50
+              }
+            ],
+            "alpha_minimum": 0.3,
+            "maximum_rgb_residual": 2
+          },
+          "removed_fixture_source": "build\\native\\Design-analysis\\test-results\\run-5a546u1m\\comparison_light_large_narrow\\files ä\\workflow ä\\project\\runs\\Lauf 001.psrun"
+        }
+      ],
+      "report_exports_unchanged": {
+        "native-export.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-export.png",
+          "sha256": "3d6d9cbc571f8847317a21c84ad733f9df31254d8afe2bbf162d3fdb6dc66898",
+          "byte_equal": true
+        },
+        "native-scale1.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-scale1.png",
+          "sha256": "29dc5fcb8420f4ae4ea86018b9479acabbbe19d35678cbfba799c91b6d67e2ae",
+          "byte_equal": true
+        },
+        "native-scale3.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-scale3.png",
+          "sha256": "ec42249f66edea5915c058ba2fcdc96ea6184e2fa4d132ac6b3cf2ccc0c1ff12",
+          "byte_equal": true
+        },
+        "native-scale4.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-scale4.png",
+          "sha256": "de5bb14cb68522d489d47209814972f20c980874a75e55aea107a9dbd6eeae3c",
+          "byte_equal": true
+        },
+        "native-ausschnitt.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-ausschnitt.png",
+          "sha256": "e1d73b343b99a306720748357d190256ebf312532df5ba8a9cfeb92a07527422",
+          "byte_equal": true
+        },
+        "native-ausschnitt.svg": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-ausschnitt.svg",
+          "sha256": "74bbc37b28acca463fc17a8460e55a6c4361bdd1030e3daeac2ac22ed37469b9",
+          "byte_equal": true
+        },
+        "clipboard-reference.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-clipboard-reference.png",
+          "sha256": "3d6d9cbc571f8847317a21c84ad733f9df31254d8afe2bbf162d3fdb6dc66898",
+          "byte_equal": true
+        },
+        "contrast-paper.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-contrast-paper.png",
+          "sha256": "b15743a7a3570992ed9d2fcaeace0a6b356f5de578802b979184e4950b8773c2",
+          "byte_equal": true
+        }
+      }
+    },
+    {
+      "label": "linux-debug",
+      "source_version": 7,
+      "directory": "build\\native\\Design-analysis-linux\\test-results\\run-unq3mba1",
+      "binary_sha256": "c8c2f68a0e5354c0c296f947e7469c0dd336f1ea3398e266e90d64a66a92d6cc",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 68.155
+        },
+        {
+          "name": "comparison_dark",
+          "status": "passed",
+          "seconds": 39.12
+        },
+        {
+          "name": "comparison_light_large_narrow",
+          "status": "passed",
+          "seconds": 32.194
+        }
+      ],
+      "comparison_cases": [
+        {
+          "name": "comparison_dark",
+          "images": {
+            "comparison-eight": {
+              "artifact": "linux-debug-comparison_dark-comparison-eight.png",
+              "bytes": 191963,
+              "sha256": "099c5e65138b18fded836afb17b1c29df3f394537afa6537050b8d9953c6d1c0"
+            },
+            "comparison-reference": {
+              "artifact": "linux-debug-comparison_dark-comparison-reference.png",
+              "bytes": 158747,
+              "sha256": "eafa77fc9d275b3456bb218c10a593ba89471154108bc910bef7f6bad21f3816"
+            },
+            "comparison-export": {
+              "artifact": "linux-debug-comparison_dark-comparison-export.png",
+              "bytes": 236881,
+              "sha256": "205a6e6147685e7895964d597d753e6be74b185b3f086d64af811d1108e9365c"
+            },
+            "comparison-current": {
+              "artifact": "linux-debug-comparison_dark-comparison-current.png",
+              "bytes": 151556,
+              "sha256": "a9be6193ebeb1db5ce5ebe91ed68e9c60d9fcf0adebc464cc619f7d3d67c1175"
+            },
+            "comparison-partial": {
+              "artifact": "linux-debug-comparison_dark-comparison-partial.png",
+              "bytes": 157161,
+              "sha256": "bc2106022a70a1ebb3ad09b0b869dfa701215e4911b4d7b544ef2ffbbdb073e3"
+            },
+            "comparison-empty": {
+              "artifact": "linux-debug-comparison_dark-comparison-empty.png",
+              "bytes": 113027,
+              "sha256": "6e6a7c24f9511a644b85fea95337f3614ce1b355462a6920cfbccdee28bf2b5c"
+            },
+            "comparison-channel": {
+              "artifact": "linux-debug-comparison_dark-comparison-channel.png",
+              "bytes": 151554,
+              "sha256": "91a0837b56066b2fa98dddb62eedee3a8ef64e0bd19494181b8a8916ec3fba5c"
+            },
+            "comparison-error": {
+              "artifact": "linux-debug-comparison_dark-comparison-error.png",
+              "bytes": 116875,
+              "sha256": "b705fd7daeeddd85373422fe894980f1c4857c39d133e59e787c89f29b8f84da"
+            }
+          },
+          "outputs": {
+            "comparison-scale1.png": {
+              "artifact": "output-140f098bbd57e1bddf23.png",
+              "sha256": "140f098bbd57e1bddf2323cb0f6684197eb067b332f594f9827dce9b1619f5fb",
+              "bytes": 73215
+            },
+            "comparison-scale2.png": {
+              "artifact": "output-f56bfa68277d845bd27d.png",
+              "sha256": "f56bfa68277d845bd27d9d7411d83397ee3326a779e9baea1701325a969bb6db",
+              "bytes": 193300
+            },
+            "comparison-scale3.png": {
+              "artifact": "output-144a6087e16eb32d94ed.png",
+              "sha256": "144a6087e16eb32d94ed57acf245ef4da9b79c0ee51d4194f8022029c0c8e48b",
+              "bytes": 340311
+            },
+            "comparison-scale4.png": {
+              "artifact": "output-7e3882bf42ae475f771e.png",
+              "sha256": "7e3882bf42ae475f771eff1f930fbdccb736ab6f7805d1ee9cbb10c29eb76400",
+              "bytes": 518881
+            },
+            "comparison-full.png": {
+              "artifact": "output-8a4411b22f04929d6863.png",
+              "sha256": "8a4411b22f04929d6863e8bb2e5ca9578467b6197a720f6cf34bd6bad1d563a6",
+              "bytes": 212099
+            },
+            "comparison-eight.svg": {
+              "artifact": "output-73299c223dd48a6f13a3.svg",
+              "sha256": "73299c223dd48a6f13a3a8a985cabcf94baaa88494d8db8e6942f5df93de2b94",
+              "bytes": 317419
+            },
+            "comparison-cropped.svg": {
+              "artifact": "output-300810ddd425a6445094.svg",
+              "sha256": "300810ddd425a64450949a7345a1316b0a87e8f38f2b0f11b994e06732d11e55",
+              "bytes": 90789
+            }
+          },
+          "actual_curve_probe": {
+            "area": [
+              322.0,
+              443.0,
+              817.0,
+              265.0
+            ],
+            "fill": [
+              27,
+              28,
+              32
+            ],
+            "counts": [
+              {
+                "curve": 0,
+                "color": [
+                  100,
+                  170,
+                  255
+                ],
+                "qualifying_pixels": 1900
+              },
+              {
+                "curve": 1,
+                "color": [
+                  245,
+                  166,
+                  87
+                ],
+                "qualifying_pixels": 54
+              },
+              {
+                "curve": 2,
+                "color": [
+                  109,
+                  207,
+                  148
+                ],
+                "qualifying_pixels": 37
+              },
+              {
+                "curve": 3,
+                "color": [
+                  193,
+                  151,
+                  240
+                ],
+                "qualifying_pixels": 69
+              },
+              {
+                "curve": 4,
+                "color": [
+                  242,
+                  140,
+                  178
+                ],
+                "qualifying_pixels": 42
+              },
+              {
+                "curve": 5,
+                "color": [
+                  89,
+                  205,
+                  220
+                ],
+                "qualifying_pixels": 79
+              },
+              {
+                "curve": 6,
+                "color": [
+                  222,
+                  204,
+                  110
+                ],
+                "qualifying_pixels": 52
+              },
+              {
+                "curve": 7,
+                "color": [
+                  188,
+                  197,
+                  212
+                ],
+                "qualifying_pixels": 98
+              }
+            ],
+            "alpha_minimum": 0.3,
+            "maximum_rgb_residual": 2
+          },
+          "removed_fixture_source": "build\\native\\Design-analysis-linux\\test-results\\run-unq3mba1\\comparison_dark\\files ä\\workflow ä\\project\\runs\\Lauf 001.psrun"
+        },
+        {
+          "name": "comparison_light_large_narrow",
+          "images": {
+            "comparison-eight": {
+              "artifact": "linux-debug-comparison_light_large_narrow-comparison-eight.png",
+              "bytes": 130963,
+              "sha256": "7b93619ea5dd8fe66b3e8f17e8ec41048867581fff983614ddace71717ac907e"
+            },
+            "comparison-reference": {
+              "artifact": "linux-debug-comparison_light_large_narrow-comparison-reference.png",
+              "bytes": 125486,
+              "sha256": "1955a126b3ef05c49019e067dcf959bff192c0458e8ecf7cbe10f47182ac6a05"
+            },
+            "comparison-export": {
+              "artifact": "linux-debug-comparison_light_large_narrow-comparison-export.png",
+              "bytes": 108687,
+              "sha256": "14d93341a7e6925c69d7e6846c59fb030ea23b3c9e0d47a313a1696e117c2725"
+            },
+            "comparison-current": {
+              "artifact": "linux-debug-comparison_light_large_narrow-comparison-current.png",
+              "bytes": 129164,
+              "sha256": "62c2b0e5340ce3d49b014f7c152386a65029738a39a13f4f0cc0eb16f05efa37"
+            },
+            "comparison-partial": {
+              "artifact": "linux-debug-comparison_light_large_narrow-comparison-partial.png",
+              "bytes": 132303,
+              "sha256": "fa35e8ce69f0abd7015490793440a29c3ed3bc5bd3569ca65805e7e254f739b7"
+            },
+            "comparison-empty": {
+              "artifact": "linux-debug-comparison_light_large_narrow-comparison-empty.png",
+              "bytes": 110130,
+              "sha256": "b8e596a7c54c36b925fa6a1b2d721384948adbf22fddfae7ad130dd79b7dc94d"
+            },
+            "comparison-channel": {
+              "artifact": "linux-debug-comparison_light_large_narrow-comparison-channel.png",
+              "bytes": 128352,
+              "sha256": "c77e7f29fd5d1a65abfb190573440f025cad0241b5dbf97f88bf0f401ac8d5f4"
+            },
+            "comparison-error": {
+              "artifact": "linux-debug-comparison_light_large_narrow-comparison-error.png",
+              "bytes": 116197,
+              "sha256": "1d8c112c102b97f7e9300f1c7347a9850866e75aa025ca134135ab4a0cdd0d71"
+            }
+          },
+          "outputs": {
+            "comparison-scale1.png": {
+              "artifact": "output-7e670352c911780d6194.png",
+              "sha256": "7e670352c911780d6194a594eba94d4f8f756d6940aeb89f5adcb47536925758",
+              "bytes": 72578
+            },
+            "comparison-scale2.png": {
+              "artifact": "output-8ce51d0d66827898cb53.png",
+              "sha256": "8ce51d0d66827898cb5309f82a41c10ab000bbf908919634e72582a110806338",
+              "bytes": 191273
+            },
+            "comparison-scale3.png": {
+              "artifact": "output-89abb719e54a063d814d.png",
+              "sha256": "89abb719e54a063d814da03956c6098f68467de066d4964962996778640080f8",
+              "bytes": 336833
+            },
+            "comparison-scale4.png": {
+              "artifact": "output-7c060a050cc7334aefa8.png",
+              "sha256": "7c060a050cc7334aefa8f1f31bdd65fdff80a237f8b8bb6cf9397bca60870217",
+              "bytes": 513654
+            },
+            "comparison-full.png": {
+              "artifact": "output-8a4411b22f04929d6863.png",
+              "sha256": "8a4411b22f04929d6863e8bb2e5ca9578467b6197a720f6cf34bd6bad1d563a6",
+              "bytes": 212099
+            },
+            "comparison-eight.svg": {
+              "artifact": "output-73299c223dd48a6f13a3.svg",
+              "sha256": "73299c223dd48a6f13a3a8a985cabcf94baaa88494d8db8e6942f5df93de2b94",
+              "bytes": 317419
+            },
+            "comparison-cropped.svg": {
+              "artifact": "output-9513bde01a91130956e6.svg",
+              "sha256": "9513bde01a91130956e67f7066aab859f883a992d7efbee04bbd433c51af5d85",
+              "bytes": 91132
+            }
+          },
+          "actual_curve_probe": {
+            "area": [
+              322.0,
+              539.0,
+              457.0,
+              119.0
+            ],
+            "fill": [
+              255,
+              255,
+              255
+            ],
+            "counts": [
+              {
+                "curve": 0,
+                "color": [
+                  0,
+                  75,
+                  165
+                ],
+                "qualifying_pixels": 1024
+              },
+              {
+                "curve": 1,
+                "color": [
+                  145,
+                  72,
+                  0
+                ],
+                "qualifying_pixels": 16
+              },
+              {
+                "curve": 2,
+                "color": [
+                  0,
+                  100,
+                  59
+                ],
+                "qualifying_pixels": 13
+              },
+              {
+                "curve": 3,
+                "color": [
+                  115,
+                  48,
+                  163
+                ],
+                "qualifying_pixels": 22
+              },
+              {
+                "curve": 4,
+                "color": [
+                  158,
+                  34,
+                  95
+                ],
+                "qualifying_pixels": 10
+              },
+              {
+                "curve": 5,
+                "color": [
+                  0,
+                  90,
+                  107
+                ],
+                "qualifying_pixels": 40
+              },
+              {
+                "curve": 6,
+                "color": [
+                  106,
+                  86,
+                  0
+                ],
+                "qualifying_pixels": 16
+              },
+              {
+                "curve": 7,
+                "color": [
+                  60,
+                  71,
+                  89
+                ],
+                "qualifying_pixels": 50
+              }
+            ],
+            "alpha_minimum": 0.3,
+            "maximum_rgb_residual": 2
+          },
+          "removed_fixture_source": "build\\native\\Design-analysis-linux\\test-results\\run-unq3mba1\\comparison_light_large_narrow\\files ä\\workflow ä\\project\\runs\\Lauf 001.psrun"
+        }
+      ],
+      "report_exports_unchanged": {
+        "native-export.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-native-export.png",
+          "sha256": "ec92b40bc2a35d29d328778c1130ebec85b7bb2df11bf3f83dd7b1479cb66685",
+          "byte_equal": true
+        },
+        "native-scale1.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-native-scale1.png",
+          "sha256": "7cf3f5dab314338d0b46b9be0d9195dd74f513f3f4271c325927f28a0ca3dc1e",
+          "byte_equal": true
+        },
+        "native-scale3.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-native-scale3.png",
+          "sha256": "106426dfecaeaa37f34ddec16c11b4ae750e513f41c86aa24e9799c42a8d4213",
+          "byte_equal": true
+        },
+        "native-scale4.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-native-scale4.png",
+          "sha256": "27bbf7095b28a24bc32b270e9cc5bb5d7bca42c0465fb2e1bbbaca79d7ecf46e",
+          "byte_equal": true
+        },
+        "native-ausschnitt.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-native-ausschnitt.png",
+          "sha256": "1c6ddfa8fb33a8d2f27271b5461895ab3831233bf3e6e98440eefecbd6b3772c",
+          "byte_equal": true
+        },
+        "native-ausschnitt.svg": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-native-ausschnitt.svg",
+          "sha256": "0ee3c6538ac34f443e9fcd69dbfd760a5a2359814dc582f9a5a89c1d767ea15b",
+          "byte_equal": true
+        },
+        "clipboard-reference.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-clipboard-reference.png",
+          "sha256": "ec92b40bc2a35d29d328778c1130ebec85b7bb2df11bf3f83dd7b1479cb66685",
+          "byte_equal": true
+        },
+        "contrast-paper.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-contrast-paper.png",
+          "sha256": "a61340560fabedb4aa66c9bc262d9a44fe1eebadc083c0ac4705b0219060301c",
+          "byte_equal": true
+        }
+      }
+    },
+    {
+      "label": "windows-release",
+      "source_version": 7,
+      "directory": "build\\native\\Release\\test-results\\run-tul40hk6",
+      "binary_sha256": "2c9d5d84e9634c19a5ca44a5eb18460b5ccd042b58ca75ab1e71a121c30b3b7b",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 7.375
+        },
+        {
+          "name": "comparison_dark",
+          "status": "passed",
+          "seconds": 7.36
+        },
+        {
+          "name": "comparison_light",
+          "status": "passed",
+          "seconds": 10.031
+        },
+        {
+          "name": "comparison_light_large_narrow",
+          "status": "passed",
+          "seconds": 5.156
+        },
+        {
+          "name": "comparison_contrast",
+          "status": "passed",
+          "seconds": 9.391
+        }
+      ],
+      "comparison_cases": [
+        {
+          "name": "comparison_dark",
+          "images": {
+            "comparison-eight": {
+              "artifact": "windows-release-comparison_dark-comparison-eight.png",
+              "bytes": 183373,
+              "sha256": "106bcf21d1b1a5bccfe1fa9548857868dc82552eff0ba4b3a9abae698c02c034"
+            },
+            "comparison-reference": {
+              "artifact": "windows-release-comparison_dark-comparison-reference.png",
+              "bytes": 150522,
+              "sha256": "cac017d61b49fd9eca57c40ff8d65d5f3d066aeef9eb4ba60fe4f32f587ada07"
+            },
+            "comparison-export": {
+              "artifact": "windows-release-comparison_dark-comparison-export.png",
+              "bytes": 217152,
+              "sha256": "823bfb95a0b0ee42540af0141c76943d52d1d9370c698341106f2722591d6718"
+            },
+            "comparison-current": {
+              "artifact": "windows-release-comparison_dark-comparison-current.png",
+              "bytes": 141851,
+              "sha256": "c8ff103c6dddad20060d622c2cee7044dcee157514c805eefaf20423c36d32c0"
+            },
+            "comparison-partial": {
+              "artifact": "windows-release-comparison_dark-comparison-partial.png",
+              "bytes": 147678,
+              "sha256": "1ebf0357727c0798c43bf954da6b217e463f094a9e3d3def71dfe8a86a20d320"
+            },
+            "comparison-empty": {
+              "artifact": "windows-release-comparison_dark-comparison-empty.png",
+              "bytes": 104918,
+              "sha256": "a10a76b1e41f30462e462ccfc8af8f6061619d9b20051773bf64acd7d18d6884"
+            },
+            "comparison-channel": {
+              "artifact": "windows-release-comparison_dark-comparison-channel.png",
+              "bytes": 142132,
+              "sha256": "c98142898cb218f3d658be32ed7a78ddbbaa1b762272ff8edc72ba3996b56445"
+            },
+            "comparison-error": {
+              "artifact": "windows-release-comparison_dark-comparison-error.png",
+              "bytes": 108594,
+              "sha256": "3ff50aa1154286a768f86f91a3eb948aa20111b253512382c79df2f288559949"
+            }
+          },
+          "outputs": {
+            "comparison-scale1.png": {
+              "artifact": "output-e80388ba627540407f98.png",
+              "sha256": "e80388ba627540407f982af3beef531bdd375d086e9f0c48974466f130678d5e",
+              "bytes": 69194
+            },
+            "comparison-scale2.png": {
+              "artifact": "output-85fc485597f773d2c90b.png",
+              "sha256": "85fc485597f773d2c90b3835ec6c77d629b33d28497414a695879c5789ce9824",
+              "bytes": 185251
+            },
+            "comparison-scale3.png": {
+              "artifact": "output-ede8519315a21627560b.png",
+              "sha256": "ede8519315a21627560b52ef48d02c63b2982d271b18a431fd3cca264e3023ad",
+              "bytes": 328510
+            },
+            "comparison-scale4.png": {
+              "artifact": "output-a75ba4802d0a9e5681ea.png",
+              "sha256": "a75ba4802d0a9e5681eaeeaf3c3ff1a49a22978a82885b3250f913d2f6406177",
+              "bytes": 504640
+            },
+            "comparison-full.png": {
+              "artifact": "output-43bc63b20b6372102554.png",
+              "sha256": "43bc63b20b6372102554521bb3ca03c851e9752f90281c78fc9327e495738ec2",
+              "bytes": 203631
+            },
+            "comparison-eight.svg": {
+              "artifact": "output-50253ecc6428e529d315.svg",
+              "sha256": "50253ecc6428e529d315797f94c692a540d90f78e7d9cf3bf9b7d01de66f4d5c",
+              "bytes": 317343
+            },
+            "comparison-cropped.svg": {
+              "artifact": "output-9d3a82602480d11beffd.svg",
+              "sha256": "9d3a82602480d11beffd251aba47256c06d8a020171769430856b9d3a04d07f2",
+              "bytes": 90713
+            }
+          },
+          "actual_curve_probe": {
+            "area": [
+              322.0,
+              443.0,
+              817.0,
+              265.0
+            ],
+            "fill": [
+              27,
+              28,
+              32
+            ],
+            "counts": [
+              {
+                "curve": 0,
+                "color": [
+                  100,
+                  170,
+                  255
+                ],
+                "qualifying_pixels": 1901
+              },
+              {
+                "curve": 1,
+                "color": [
+                  245,
+                  166,
+                  87
+                ],
+                "qualifying_pixels": 55
+              },
+              {
+                "curve": 2,
+                "color": [
+                  109,
+                  207,
+                  148
+                ],
+                "qualifying_pixels": 37
+              },
+              {
+                "curve": 3,
+                "color": [
+                  193,
+                  151,
+                  240
+                ],
+                "qualifying_pixels": 67
+              },
+              {
+                "curve": 4,
+                "color": [
+                  242,
+                  140,
+                  178
+                ],
+                "qualifying_pixels": 38
+              },
+              {
+                "curve": 5,
+                "color": [
+                  89,
+                  205,
+                  220
+                ],
+                "qualifying_pixels": 79
+              },
+              {
+                "curve": 6,
+                "color": [
+                  222,
+                  204,
+                  110
+                ],
+                "qualifying_pixels": 52
+              },
+              {
+                "curve": 7,
+                "color": [
+                  188,
+                  197,
+                  212
+                ],
+                "qualifying_pixels": 98
+              }
+            ],
+            "alpha_minimum": 0.3,
+            "maximum_rgb_residual": 2
+          },
+          "removed_fixture_source": "build\\native\\Release\\test-results\\run-tul40hk6\\comparison_dark\\files ä\\workflow ä\\project\\runs\\Lauf 001.psrun"
+        },
+        {
+          "name": "comparison_light",
+          "images": {
+            "comparison-eight": {
+              "artifact": "windows-release-comparison_light-comparison-eight.png",
+              "bytes": 186160,
+              "sha256": "0817ddc5742c8847460849139d3049909fa7b9486cabe535ffa29707119159e8"
+            },
+            "comparison-export": {
+              "artifact": "windows-release-comparison_light-comparison-export.png",
+              "bytes": 265139,
+              "sha256": "03b8d0d6467ffb1886ea2e7702efbb8ea9d54c15dd1ad58d41a1b31a1fd8244c"
+            }
+          },
+          "outputs": {
+            "comparison-scale1.png": {
+              "artifact": "output-e80388ba627540407f98.png",
+              "sha256": "e80388ba627540407f982af3beef531bdd375d086e9f0c48974466f130678d5e",
+              "bytes": 69194
+            },
+            "comparison-scale2.png": {
+              "artifact": "output-85fc485597f773d2c90b.png",
+              "sha256": "85fc485597f773d2c90b3835ec6c77d629b33d28497414a695879c5789ce9824",
+              "bytes": 185251
+            },
+            "comparison-scale3.png": {
+              "artifact": "output-ede8519315a21627560b.png",
+              "sha256": "ede8519315a21627560b52ef48d02c63b2982d271b18a431fd3cca264e3023ad",
+              "bytes": 328510
+            },
+            "comparison-scale4.png": {
+              "artifact": "output-a75ba4802d0a9e5681ea.png",
+              "sha256": "a75ba4802d0a9e5681eaeeaf3c3ff1a49a22978a82885b3250f913d2f6406177",
+              "bytes": 504640
+            },
+            "comparison-full.png": {
+              "artifact": "output-43bc63b20b6372102554.png",
+              "sha256": "43bc63b20b6372102554521bb3ca03c851e9752f90281c78fc9327e495738ec2",
+              "bytes": 203631
+            },
+            "comparison-eight.svg": {
+              "artifact": "output-50253ecc6428e529d315.svg",
+              "sha256": "50253ecc6428e529d315797f94c692a540d90f78e7d9cf3bf9b7d01de66f4d5c",
+              "bytes": 317343
+            },
+            "comparison-cropped.svg": {
+              "artifact": "output-9d3a82602480d11beffd.svg",
+              "sha256": "9d3a82602480d11beffd251aba47256c06d8a020171769430856b9d3a04d07f2",
+              "bytes": 90713
+            }
+          },
+          "actual_curve_probe": {
+            "area": [
+              322.0,
+              443.0,
+              817.0,
+              265.0
+            ],
+            "fill": [
+              255,
+              255,
+              255
+            ],
+            "counts": [
+              {
+                "curve": 0,
+                "color": [
+                  0,
+                  75,
+                  165
+                ],
+                "qualifying_pixels": 1892
+              },
+              {
+                "curve": 1,
+                "color": [
+                  145,
+                  72,
+                  0
+                ],
+                "qualifying_pixels": 54
+              },
+              {
+                "curve": 2,
+                "color": [
+                  0,
+                  100,
+                  59
+                ],
+                "qualifying_pixels": 37
+              },
+              {
+                "curve": 3,
+                "color": [
+                  115,
+                  48,
+                  163
+                ],
+                "qualifying_pixels": 65
+              },
+              {
+                "curve": 4,
+                "color": [
+                  158,
+                  34,
+                  95
+                ],
+                "qualifying_pixels": 36
+              },
+              {
+                "curve": 5,
+                "color": [
+                  0,
+                  90,
+                  107
+                ],
+                "qualifying_pixels": 81
+              },
+              {
+                "curve": 6,
+                "color": [
+                  106,
+                  86,
+                  0
+                ],
+                "qualifying_pixels": 52
+              },
+              {
+                "curve": 7,
+                "color": [
+                  60,
+                  71,
+                  89
+                ],
+                "qualifying_pixels": 98
+              }
+            ],
+            "alpha_minimum": 0.3,
+            "maximum_rgb_residual": 2
+          },
+          "removed_fixture_source": "build\\native\\Release\\test-results\\run-tul40hk6\\comparison_light\\files ä\\workflow ä\\project\\runs\\Lauf 001.psrun"
+        },
+        {
+          "name": "comparison_light_large_narrow",
+          "images": {
+            "comparison-eight": {
+              "artifact": "windows-release-comparison_light_large_narrow-comparison-eight.png",
+              "bytes": 128693,
+              "sha256": "6c16f2ad2a51811945bb9c8f20aa3b69ec531265893880566161626c1367388a"
+            },
+            "comparison-export": {
+              "artifact": "windows-release-comparison_light_large_narrow-comparison-export.png",
+              "bytes": 102679,
+              "sha256": "cff2b2e6f64510eb2bee749939f8338227946d0fb31a873420f403c449c9e7f0"
+            },
+            "comparison-partial": {
+              "artifact": "windows-release-comparison_light_large_narrow-comparison-partial.png",
+              "bytes": 132357,
+              "sha256": "cab9c9ae36453ead3f5e2a642e2e982f29d5c21873113f4ae33ed7acb871171e"
+            }
+          },
+          "outputs": {
+            "comparison-scale1.png": {
+              "artifact": "output-ca8dbc13e769c1bd8521.png",
+              "sha256": "ca8dbc13e769c1bd85217eed5ad97b68d741b977dc0c7b173576ac072e7d20ec",
+              "bytes": 68327
+            },
+            "comparison-scale2.png": {
+              "artifact": "output-0ed6f762fed87b94f968.png",
+              "sha256": "0ed6f762fed87b94f968002937928ff7d04e6546d9d6bc2afc8b5365d711d8fc",
+              "bytes": 183672
+            },
+            "comparison-scale3.png": {
+              "artifact": "output-cc59d8486785fbeccf73.png",
+              "sha256": "cc59d8486785fbeccf739ae0cad03181d62e594b9fc0f7b823781b62e660fc7f",
+              "bytes": 328116
+            },
+            "comparison-scale4.png": {
+              "artifact": "output-1adf555b91433b5277f4.png",
+              "sha256": "1adf555b91433b5277f41e632a44f2d3b82fd70b05e4612da23188993b85cae9",
+              "bytes": 496880
+            },
+            "comparison-full.png": {
+              "artifact": "output-43bc63b20b6372102554.png",
+              "sha256": "43bc63b20b6372102554521bb3ca03c851e9752f90281c78fc9327e495738ec2",
+              "bytes": 203631
+            },
+            "comparison-eight.svg": {
+              "artifact": "output-50253ecc6428e529d315.svg",
+              "sha256": "50253ecc6428e529d315797f94c692a540d90f78e7d9cf3bf9b7d01de66f4d5c",
+              "bytes": 317343
+            },
+            "comparison-cropped.svg": {
+              "artifact": "output-178b8eaafb0a6ac77050.svg",
+              "sha256": "178b8eaafb0a6ac7705041ef2b01775b92283408bb36453f10c726656cb0673c",
+              "bytes": 91056
+            }
+          },
+          "actual_curve_probe": {
+            "area": [
+              322.0,
+              484.0,
+              457.0,
+              119.0
+            ],
+            "fill": [
+              255,
+              255,
+              255
+            ],
+            "counts": [
+              {
+                "curve": 0,
+                "color": [
+                  0,
+                  75,
+                  165
+                ],
+                "qualifying_pixels": 1017
+              },
+              {
+                "curve": 1,
+                "color": [
+                  145,
+                  72,
+                  0
+                ],
+                "qualifying_pixels": 16
+              },
+              {
+                "curve": 2,
+                "color": [
+                  0,
+                  100,
+                  59
+                ],
+                "qualifying_pixels": 13
+              },
+              {
+                "curve": 3,
+                "color": [
+                  115,
+                  48,
+                  163
+                ],
+                "qualifying_pixels": 24
+              },
+              {
+                "curve": 4,
+                "color": [
+                  158,
+                  34,
+                  95
+                ],
+                "qualifying_pixels": 10
+              },
+              {
+                "curve": 5,
+                "color": [
+                  0,
+                  90,
+                  107
+                ],
+                "qualifying_pixels": 40
+              },
+              {
+                "curve": 6,
+                "color": [
+                  106,
+                  86,
+                  0
+                ],
+                "qualifying_pixels": 16
+              },
+              {
+                "curve": 7,
+                "color": [
+                  60,
+                  71,
+                  89
+                ],
+                "qualifying_pixels": 50
+              }
+            ],
+            "alpha_minimum": 0.3,
+            "maximum_rgb_residual": 2
+          },
+          "removed_fixture_source": "build\\native\\Release\\test-results\\run-tul40hk6\\comparison_light_large_narrow\\files ä\\workflow ä\\project\\runs\\Lauf 001.psrun"
+        },
+        {
+          "name": "comparison_contrast",
+          "images": {
+            "comparison-eight": {
+              "artifact": "windows-release-comparison_contrast-comparison-eight.png",
+              "bytes": 180038,
+              "sha256": "4b029a82e3425e06f760c99c0e30f86f0c4c46c9022288e0fbcc475c7bebdaf0"
+            },
+            "comparison-export": {
+              "artifact": "windows-release-comparison_contrast-comparison-export.png",
+              "bytes": 151422,
+              "sha256": "ee50940aa0b6863f919981ebfac0e91df57a67e4af939be0e72424ef7f430fae"
+            }
+          },
+          "outputs": {
+            "comparison-scale1.png": {
+              "artifact": "output-e80388ba627540407f98.png",
+              "sha256": "e80388ba627540407f982af3beef531bdd375d086e9f0c48974466f130678d5e",
+              "bytes": 69194
+            },
+            "comparison-scale2.png": {
+              "artifact": "output-85fc485597f773d2c90b.png",
+              "sha256": "85fc485597f773d2c90b3835ec6c77d629b33d28497414a695879c5789ce9824",
+              "bytes": 185251
+            },
+            "comparison-scale3.png": {
+              "artifact": "output-ede8519315a21627560b.png",
+              "sha256": "ede8519315a21627560b52ef48d02c63b2982d271b18a431fd3cca264e3023ad",
+              "bytes": 328510
+            },
+            "comparison-scale4.png": {
+              "artifact": "output-a75ba4802d0a9e5681ea.png",
+              "sha256": "a75ba4802d0a9e5681eaeeaf3c3ff1a49a22978a82885b3250f913d2f6406177",
+              "bytes": 504640
+            },
+            "comparison-full.png": {
+              "artifact": "output-43bc63b20b6372102554.png",
+              "sha256": "43bc63b20b6372102554521bb3ca03c851e9752f90281c78fc9327e495738ec2",
+              "bytes": 203631
+            },
+            "comparison-eight.svg": {
+              "artifact": "output-50253ecc6428e529d315.svg",
+              "sha256": "50253ecc6428e529d315797f94c692a540d90f78e7d9cf3bf9b7d01de66f4d5c",
+              "bytes": 317343
+            },
+            "comparison-cropped.svg": {
+              "artifact": "output-9d3a82602480d11beffd.svg",
+              "sha256": "9d3a82602480d11beffd251aba47256c06d8a020171769430856b9d3a04d07f2",
+              "bytes": 90713
+            }
+          },
+          "actual_curve_probe": {
+            "area": [
+              322.0,
+              443.0,
+              817.0,
+              265.0
+            ],
+            "fill": [
+              0,
+              0,
+              0
+            ],
+            "counts": [
+              {
+                "curve": 0,
+                "color": [
+                  140,
+                  200,
+                  255
+                ],
+                "qualifying_pixels": 1853
+              },
+              {
+                "curve": 1,
+                "color": [
+                  255,
+                  210,
+                  130
+                ],
+                "qualifying_pixels": 54
+              },
+              {
+                "curve": 2,
+                "color": [
+                  130,
+                  245,
+                  170
+                ],
+                "qualifying_pixels": 34
+              },
+              {
+                "curve": 3,
+                "color": [
+                  220,
+                  180,
+                  255
+                ],
+                "qualifying_pixels": 63
+              },
+              {
+                "curve": 4,
+                "color": [
+                  255,
+                  170,
+                  215
+                ],
+                "qualifying_pixels": 36
+              },
+              {
+                "curve": 5,
+                "color": [
+                  140,
+                  235,
+                  245
+                ],
+                "qualifying_pixels": 79
+              },
+              {
+                "curve": 6,
+                "color": [
+                  255,
+                  240,
+                  140
+                ],
+                "qualifying_pixels": 52
+              },
+              {
+                "curve": 7,
+                "color": [
+                  230,
+                  230,
+                  230
+                ],
+                "qualifying_pixels": 9046
+              }
+            ],
+            "alpha_minimum": 0.3,
+            "maximum_rgb_residual": 2
+          },
+          "removed_fixture_source": "build\\native\\Release\\test-results\\run-tul40hk6\\comparison_contrast\\files ä\\workflow ä\\project\\runs\\Lauf 001.psrun"
+        }
+      ],
+      "report_exports_unchanged": {
+        "native-export.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-native-export.png",
+          "sha256": "3d6d9cbc571f8847317a21c84ad733f9df31254d8afe2bbf162d3fdb6dc66898",
+          "byte_equal": true
+        },
+        "native-scale1.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-native-scale1.png",
+          "sha256": "29dc5fcb8420f4ae4ea86018b9479acabbbe19d35678cbfba799c91b6d67e2ae",
+          "byte_equal": true
+        },
+        "native-scale3.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-native-scale3.png",
+          "sha256": "ec42249f66edea5915c058ba2fcdc96ea6184e2fa4d132ac6b3cf2ccc0c1ff12",
+          "byte_equal": true
+        },
+        "native-scale4.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-native-scale4.png",
+          "sha256": "de5bb14cb68522d489d47209814972f20c980874a75e55aea107a9dbd6eeae3c",
+          "byte_equal": true
+        },
+        "native-ausschnitt.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-native-ausschnitt.png",
+          "sha256": "e1d73b343b99a306720748357d190256ebf312532df5ba8a9cfeb92a07527422",
+          "byte_equal": true
+        },
+        "native-ausschnitt.svg": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-native-ausschnitt.svg",
+          "sha256": "74bbc37b28acca463fc17a8460e55a6c4361bdd1030e3daeac2ac22ed37469b9",
+          "byte_equal": true
+        },
+        "clipboard-reference.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-clipboard-reference.png",
+          "sha256": "3d6d9cbc571f8847317a21c84ad733f9df31254d8afe2bbf162d3fdb6dc66898",
+          "byte_equal": true
+        },
+        "contrast-paper.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-contrast-paper.png",
+          "sha256": "b15743a7a3570992ed9d2fcaeace0a6b356f5de578802b979184e4950b8773c2",
+          "byte_equal": true
+        }
+      }
+    }
+  ],
+  "related_runs": [
+    {
+      "label": "windows-unit",
+      "source_version": 1,
+      "directory": "build\\native\\Design-analysis\\test-results\\run-16cuqqo0",
+      "groups": [
+        {
+          "name": "graphic_snapshot",
+          "status": "passed",
+          "seconds": 0.453
+        },
+        {
+          "name": "analysis_comparison",
+          "status": "passed",
+          "seconds": 0.344
+        }
+      ]
+    },
+    {
+      "label": "linux-unit",
+      "source_version": 5,
+      "directory": "build\\native\\Design-analysis-linux\\test-results\\run-bx2_o24o",
+      "groups": [
+        {
+          "name": "graphic_snapshot",
+          "status": "passed",
+          "seconds": 4.632
+        },
+        {
+          "name": "analysis_comparison",
+          "status": "passed",
+          "seconds": 4.412
+        }
+      ]
+    },
+    {
+      "label": "release-unit",
+      "source_version": 6,
+      "directory": "build\\native\\Release\\test-results\\run-a9bk20nd",
+      "groups": [
+        {
+          "name": "graphic_snapshot",
+          "status": "passed",
+          "seconds": 0.343
+        },
+        {
+          "name": "analysis_comparison",
+          "status": "passed",
+          "seconds": 0.297
+        }
+      ]
+    },
+    {
+      "label": "windows-related",
+      "source_version": 5,
+      "directory": "build\\native\\Design-analysis\\test-results\\run-gejsuy_6",
+      "groups": [
+        {
+          "name": "analysis_layout_dark",
+          "status": "passed",
+          "seconds": 16.844
+        },
+        {
+          "name": "analysis_units_light_large_narrow",
+          "status": "passed",
+          "seconds": 12.578
+        },
+        {
+          "name": "comparison_dark",
+          "status": "passed",
+          "seconds": 27.75
+        },
+        {
+          "name": "comparison_light_large_narrow",
+          "status": "passed",
+          "seconds": 17.688
+        }
+      ]
+    },
+    {
+      "label": "linux-related",
+      "source_version": 5,
+      "directory": "build\\native\\Design-analysis-linux\\test-results\\run-jgpllqsn",
+      "groups": [
+        {
+          "name": "analysis_layout_dark",
+          "status": "passed",
+          "seconds": 24.047
+        },
+        {
+          "name": "analysis_units_light_large_narrow",
+          "status": "passed",
+          "seconds": 10.562
+        },
+        {
+          "name": "comparison_dark",
+          "status": "passed",
+          "seconds": 29.333
+        },
+        {
+          "name": "comparison_light_large_narrow",
+          "status": "passed",
+          "seconds": 24.415
+        }
+      ]
+    }
+  ],
+  "historical_runs": [
+    {
+      "directory": "build\\native\\Design-analysis\\test-results\\run-kjwih2n8",
+      "groups": [
+        {
+          "name": "comparison_dark",
+          "status": "failed"
+        },
+        {
+          "name": "comparison_light_large_narrow",
+          "status": "failed"
+        }
+      ]
+    },
+    {
+      "directory": "build\\native\\Design-analysis\\test-results\\run-duk_juaf",
+      "groups": [
+        {
+          "name": "comparison_dark",
+          "status": "failed"
+        },
+        {
+          "name": "comparison_light_large_narrow",
+          "status": "failed"
+        }
+      ]
+    },
+    {
+      "directory": "build\\native\\Design-analysis\\test-results\\run-36vbxcm_",
+      "groups": [
+        {
+          "name": "comparison_dark",
+          "status": "failed"
+        },
+        {
+          "name": "comparison_light_large_narrow",
+          "status": "failed"
+        }
+      ]
+    },
+    {
+      "directory": "build\\native\\Design-analysis\\test-results\\run-x_ejakw0",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "failed"
+        },
+        {
+          "name": "comparison_dark",
+          "status": "passed"
+        },
+        {
+          "name": "comparison_light_large_narrow",
+          "status": "failed"
+        }
+      ]
+    },
+    {
+      "directory": "build\\native\\Design-analysis-linux\\test-results\\run-s9gkb5d5",
+      "groups": [
+        {
+          "name": "comparison_dark",
+          "status": "failed"
+        },
+        {
+          "name": "comparison_light_large_narrow",
+          "status": "failed"
+        }
+      ]
+    },
+    {
+      "directory": "build\\native\\Design-analysis-linux\\test-results\\run-2vzc1du4",
+      "groups": [
+        {
+          "name": "comparison_dark",
+          "status": "failed"
+        },
+        {
+          "name": "comparison_light_large_narrow",
+          "status": "failed"
+        }
+      ]
+    },
+    {
+      "directory": "build\\native\\Design-analysis-linux\\test-results\\run-pwjb68l8",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "failed"
+        },
+        {
+          "name": "comparison_dark",
+          "status": "passed"
+        },
+        {
+          "name": "comparison_light_large_narrow",
+          "status": "passed"
+        }
+      ]
+    }
+  ],
+  "foreign_preserved": {
+    ".github/workflows/linux-ui-sanitizers.yml": "517c7d628b9d496a0422d145f747a0427da24a4a304a218294f857ac9f6aaa24",
+    ".github/workflows/macos-f1-accessibility.yml": "54c64dc5b9a5ddc478d704fbd6eccae4548155216130c25778466ab60a48a9af",
+    "app/accessibility_atspi.c": "cb7570a937751358f3de0c1c9c18df15c6f00680843a58d1ed05a8ef6cd13ff0",
+    "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+    "tests/check_documentation_orca.py": "ef3298800cfa8032cf6333b6b7ee902fc75d17fc3200b0f5ec6e801b2eba37ac",
+    "tests/test_accessibility_tables_atspi.py": "ef47a57f9c6a5d2073d19b22807aa5998bb7c0401ee0189504152cf62a900a53",
+    "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+    "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+    "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+    "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08",
+    "docs/status.md": "4159a86157c20dec896f13f6d950cfdbd85cdb56ee50fd4b8f510f140542ed09",
+    "docs/storage-cleanup-2026-10-22.md": "5bbc8778efe4da1236883d3affc8a41d07a983ceb0e804a0bbfe3cb02ce72d88"
+  },
+  "font_assets": {
+    "third_party\\fonts\\notoemoji-OFL.txt": "500bb1ccf43df7bbb522112f9133a52b16e1c35e809632f5d8609b179152de5b",
+    "third_party\\fonts\\NotoEmoji.ttf": "de6c18832938afc99caf132b39d6a30a19bac7f2e812e28db2535b4608d27551",
+    "third_party\\fonts\\NotoSans-Bold.ttf": "c976e4b1b99edc88775377fcc21692ca4bfa46b6d6ca6522bfda505b28ff9d6a",
+    "third_party\\fonts\\notosans-OFL.txt": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+    "third_party\\fonts\\NotoSans.ttf": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d",
+    "third_party\\fonts\\notosansbold-OFL.txt": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb",
+    "third_party\\fonts\\notosansmath-OFL.txt": "403a95275b469061b7d4371c328e0ada3bc7d63328abe2e88aad5cd243b2fe21",
+    "third_party\\fonts\\NotoSansMath-Regular.ttf": "3f495fe933c06786e4d5f6d86b8ee70b6753a68ee3b9d87528726de0f6e2c47d",
+    "third_party\\fonts\\notosansmono-OFL.txt": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+    "third_party\\fonts\\NotoSansMono.ttf": "2cb2adb378a8f574213e23df697050b83c54c27df465a2015552740b2769a081",
+    "third_party\\fonts\\notosanssymbols2-OFL.txt": "b118dd41337806a5d4797052c77caf3bd096aed783e5eb21b4d11154351e1ac0",
+    "third_party\\fonts\\NotoSansSymbols2-Regular.ttf": "7d5fb73b7ca67a6798101741f5d280a3d016a56a197afcd4199dbb57b4b82a21",
+    "third_party\\fonts\\NotoSerif-Italic.ttf": "0ea81d6b54fc8aa5dff0fd6ebe7cfa431e9e6cf747a8d4aa33581fa0aaccffea",
+    "third_party\\fonts\\notoserifitalic-OFL.txt": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
+  },
+  "version_scope": "Production C is unchanged5->7.6/7 refine fixture capture timing, explicit selection in the legacy raw plot fixture, and actual rendered-target waits. Cache/snapshot kernel files are unchanged1->7. No combined fictional global run.",
+  "negative_controls": [
+    {
+      "name": "one-curve-renderer",
+      "source_version": 5,
+      "mutation": "Only the native UI draw loop j limit becomes1; cache/figure still contain8",
+      "binary_sha256": "7e168686ec042a4de38af94bc3e5c3d9f8eff517449646de113dbc330d357439",
+      "expected_rejection": "Curve 1 is not visible in the actual native plot",
+      "log": "comparison-negative-5b.log.gz"
+    },
+    {
+      "name": "stale-cache-publication",
+      "source_version": 5,
+      "mutation": "Replace the request-version acceptance predicate by true",
+      "binary_sha256": "c8f47a60b8498721cf943db77194fdfc725e940ae67ec64c50802255d607cea9",
+      "expected_rejection": "state.published==2",
+      "log": "comparison-stale-negative-5.log.gz"
+    }
+  ],
+  "counter_audit": [
+    "2: reference target002 was offscreen in timestamp-sorted library.3 uses the existing search state.",
+    "3: queued focus is not yet granted; native return arrives a later frame. Narrow save requires real Tab reveal.4 observes those transitions.",
+    "4: pixel probe preceded first drawn cache and exact opaque RGB excluded legitimate AA strokes.5 waits actual plot geometry and checks independently predicted blends; a real one-curve mutant is rejected.",
+    "5: passed tasks, but some screenshots followed the next fixture action.6/7 hold the named state before mutation.",
+    "6: old report fixture had no selected raw run; new design correctly shows empty.7 selects its actual file and waits actual raw render. A newly finished failure may precede the retry button publication;7 waits that real target.",
+    "First negative-helper invocation lacked its required work directory; only corrected5b is accepted. First runner-selftest invocation lacked --work; only6b exit0 is accepted."
+  ],
+  "limits": [
+    "No whole-product or pixel-identical acceptance",
+    "Only actual Windows/Linux and named theme/text/size cases are accepted; no macOS/physical DPI or monitor proof",
+    "No external screenreader/modal-table acceptance",
+    "Actual OS picker interaction and detached comparison sources remain open",
+    "No interactive frame-time or maximum cancellation-latency budget",
+    "No deletion of prior captures attempted",
+    "App builds include preserved foreign accessibility work; no isolated clean checkout claim"
+  ]
+}

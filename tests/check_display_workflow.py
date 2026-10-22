@@ -54,6 +54,9 @@ for variant in ("dark", "light", "contrast", "dark-large-narrow", "light-large-n
 for variant in ("dark", "light-large-narrow"):
     SIMPLE["analysis_units_" + variant.replace("-", "_")] = (
         ["--workspace-state-test", "{directory}", "analysis-units-" + variant], 75, True)
+for variant in ("dark", "light", "light-large-narrow", "contrast"):
+    SIMPLE["comparison_" + variant.replace("-", "_")] = (
+        ["--workspace-state-test", "{directory}", "comparison-" + variant], 150, True)
 for variant in ("dark", "light-large-narrow", "contrast"):
     SIMPLE["shell_theme_" + variant.replace("-", "_")] = (
         ["--workspace-state-test", "{directory}", "shell-theme-" + variant], 75, True)
@@ -1959,6 +1962,37 @@ def main():
         arguments, timeout, _ = SIMPLE[args.case]
         paths = dict(directory=str(directory), root=str(flow.root))
         flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)
+        if args.case.startswith("comparison_"):
+            from check_graphic_dialog import png
+            output=flow.steps[-1]['stdout'];project=directory/'project'
+            require('COMPARISON UI SELF-TEST: PASSED' in output,'Missing native comparison completion')
+            for scale in range(1,5):
+                width,height,_,_=png(project/f'comparison-scale{scale}.png')
+                require((width,height)==(1200*scale,850*scale),'Comparison export size changed')
+            width,height,_,_=png(project/'comparison-full.png')
+            require((width,height)==(2400,1700),'Full comparison PNG default size changed')
+            for name in ('comparison-eight.svg','comparison-cropped.svg'):
+                svg=ET.parse(project/name);ns={'s':'http://www.w3.org/2000/svg'}
+                text=' '.join(''.join(t.itertext()) for t in svg.findall('.//s:text',ns))
+                require(all(f'Lauf {i:03d}.psrun' in text for i in range(1,9)),'Frozen comparison export lost a selected run')
+                require('Lauf 002.psrun · Referenz' in text,'Frozen reference changed')
+                require('Position [m]' in text and '[cm]' not in text,'Open comparison export changed its unit')
+                colors={line.get('stroke') for group in svg.findall('.//s:g',ns) for line in group.findall('.//s:line',ns)}
+                require(len(colors)>=8,'Comparison SVG omits curve colors')
+            require(not (project/'runs/Lauf 001.psrun').exists(),'Fixture did not remove a captured source before export')
+            probe=re.search(r'COMPARISON AREA: ([0-9.,]+)',output);require(probe,'Missing actual curve bounds')
+            x,y,w,h=map(float,probe.group(1).split(','));width,height,rgb,_=png(directory/'comparison-eight.png')
+            points=[rgb[(py*width+px)*3:(py*width+px)*3+3] for py in range(max(0,int(y)),min(height,int(y+h))) for px in range(max(0,int(x)),min(width,int(x+w)))]
+            background=re.search(r'COMPARISON BACKGROUND: (\d+) (\d+) (\d+)',output);require(background,'Missing plot fill color')
+            fill=tuple(map(int,background.groups()))
+            for index,red,green,blue in re.findall(r'COMPARISON COLOR: (\d+) (\d+) (\d+) (\d+)',output):
+                color=tuple(map(int,(red,green,blue)));delta=tuple(c-b for c,b in zip(color,fill));length=sum(v*v for v in delta)
+                def covered(pixel):
+                    alpha=sum((p-b)*d for p,b,d in zip(pixel,fill,delta))/length
+                    return .3<=alpha<=1.01 and max(abs(p-(b+alpha*d)) for p,b,d in zip(pixel,fill,delta))<=2
+                # Native 1-px antialiased strokes need not contain an opaque
+                # center sample. Check their independently predicted RGB blends.
+                require(sum(covered(p) for p in points)>=3,f'Curve {index} is not visible in the actual native plot')
         if args.case == "documentation_model":
             platform_output=flow.steps[-1]['stdout']
             bundled=directory/'bundled-fonts';bundled.mkdir()
