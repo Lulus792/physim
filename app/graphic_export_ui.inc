@@ -3,8 +3,9 @@
 typedef struct graphic_dialog {
     ps_graphic_snapshot *snapshot;ps_graphic_raster *raster;ps_graphic_save *save;
     SDL_Window *window;ps_graphics *graphics;struct nk_context *ui;
-    ps_graphic_description description;struct nk_user_font fonts[8];
+    ps_graphic_description description;struct nk_user_font fonts[10];
     ps_ui_backdrop backdrop;
+    ps_ui_shadow shadows[2];
     char source[64],directory[4096],message[256],filename[192],saved_path[8192];
     unsigned scale,focus_target,menu_field;float factor,content_height,scale_override;bool svg,visible,appearance,dark,contrast,dirty,close,first;
     struct nk_rect bounds,paper,formats[2],fields[3],choices[3][4],copy,store,exit;
@@ -24,7 +25,7 @@ static void graphic_export_unguard(app *a,graphic_input_guard guard) {
 }
 static void graphic_export_close(app *a) {
     graphic_dialog *d=a->graphic_export;if(!d)return;
-    ps_graphics_make_current(d->graphics);ps_graphics_backdrop(d->graphics,NULL);ps_graphic_raster_destroy(d->raster);
+    ps_graphics_make_current(d->graphics);ps_graphics_backdrop(d->graphics,NULL);ps_graphics_shadows(d->graphics,NULL,0);ps_graphic_raster_destroy(d->raster);
     ps_graphic_snapshot_destroy(d->snapshot);ps_graphic_save_destroy(d->save);
     nk_window_close(d->ui,"graphic-export");nk_window_close(d->ui,"graphic-export-backdrop");
     nk_window_set_focus(d->ui,d->source);
@@ -172,8 +173,8 @@ static struct nk_rect graphic_export_slot(struct nk_context *ui,float x,float y,
 }
 static void graphic_export_text(graphic_dialog *d,float x,float y,float w,float h,const char *text,unsigned role,struct nk_color color) {
     struct nk_rect r=graphic_export_slot(d->ui,x,y,w,h);
-    if(role==0) {
-        float at=r.x,spacing=(!strncmp(text,"PHYSIM",6)?1.5f:1.1f)*d->factor;
+    if(role==0 || role==8 || role==5) {
+        float at=r.x,spacing=(role==5?1:!strncmp(text,"PHYSIM",6)?1.5f:1.1f)*d->factor;
         for(size_t i=0;text[i];i++) {
             float advance=d->fonts[role].width(d->fonts[role].userdata,d->fonts[role].height,text+i,1);
             nk_draw_text(nk_window_get_canvas(d->ui),nk_rect(at,r.y,advance+1,r.h),text+i,1,&d->fonts[role],nk_rgba(0,0,0,0),color);
@@ -225,8 +226,9 @@ static bool graphic_export_combo(graphic_dialog *d,unsigned field,float x,float 
     struct nk_context *ui=d->ui;bool changed=false;
     nk_style_push_font(ui,&d->fonts[2]);nk_begin_disabled(ui,disabled);
     nk_layout_space_push(ui,nk_rect(x,y,w,34*f));d->fields[field]=nk_widget_bounds(ui);
-    nk_fill_rect(nk_window_get_canvas(ui),d->fields[field],6*f,UI_COLOR(edit));
-    nk_stroke_rect(nk_window_get_canvas(ui),d->fields[field],6*f,1,UI_COLOR(border));
+    nk_fill_rect(nk_window_get_canvas(ui),d->fields[field],6*f,UI_COLOR(border));
+    nk_fill_rect(nk_window_get_canvas(ui),nk_rect(d->fields[field].x+1,d->fields[field].y+1,
+        d->fields[field].w-2,d->fields[field].h-2),fmaxf(0,6*f-1),UI_COLOR(edit));
     if(ps_ui_combo_begin_named_scaled(ui,name,items[*selected],nk_vec2(w,36*f*count+12*f),f)) {
         d->menu_field=field+1;
         nk_layout_row_dynamic(ui,34*f,1);
@@ -255,33 +257,28 @@ static void graphic_export_view(app *a,int width,int height) {
     }
     graphic_export_filename(d);
     struct nk_context *ui=d->ui;const ps_ui_palette *previous=ui_palette;
+    ps_ui_palette reference_light=PS_UI_LIGHT;reference_light.border=nk_rgb(180,188,200);
     ui_palette=a->preferences.theme==PS_THEME_HIGH_CONTRAST?&PS_UI_HIGH_CONTRAST:
-        a->preferences.theme==PS_THEME_LIGHT?&PS_UI_LIGHT:&PS_UI_DARK;
+        a->preferences.theme==PS_THEME_LIGHT?&reference_light:&PS_UI_DARK;
     struct nk_style saved_style=ui->style;style(ui);
     float f=d->scale_override>0?d->scale_override:a->preferences.ui_size/16.f;
     d->factor=f;
-    const float sizes[]={10,width<=420*f?18:width<=760*f?20:24,12,11,10,9,10,12};
-    for(unsigned i=0;i<8;i++) {
+    const float sizes[]={10,width<=420*f?18:width<=760*f?20:24,12,11,10,9,10,12,width<=760*f?9:10,width<=760*f?9:10};
+    for(unsigned i=0;i<10;i++) {
         bool strong=i==1 || i==7,mono=i==6;
         d->fonts[i]=*(mono?a->font_code:strong?a->font_title:a->font_ui);
         d->fonts[i].height=sizes[i]*f*(mono?a->workbench_code_em:strong?a->workbench_bold_em:a->workbench_regular_em);
     }
     ui->style.window.padding=nk_vec2(0,0);ui->style.window.spacing=nk_vec2(0,0);
     ui->style.window.border=0;ui->style.window.rounding=14*f;
-    ui->style.window.fixed_background=nk_style_item_hide();
-    if(nk_begin(ui,"graphic-export-backdrop",nk_rect(0,0,(float)width,(float)height),NK_WINDOW_NO_INPUT|NK_WINDOW_NO_SCROLLBAR)) {
-        struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
-        nk_push_scissor(canvas,nk_rect(0,0,(float)width,(float)height));
-        d->backdrop=(ps_ui_backdrop){.w=(float)width,.h=(float)height,.blur_only=true,
-            .opaque=a->preferences.theme==PS_THEME_HIGH_CONTRAST || nk_sdl_reduce_transparency(ui)};
-        ps_graphics_backdrop(d->graphics,&d->backdrop);ps_ui_draw_backdrop(ui,&d->backdrop);
-        nk_fill_rect(canvas,nk_rect(0,0,(float)width,(float)height),0,nk_rgba(8,12,20,125));
-    }
-    nk_end(ui);nk_sdl_window_raise(ui,"graphic-export-backdrop");
-    ui->style.window.fixed_background=nk_style_item_color(UI_COLOR(window));
-    float margin=width<=760*f?10:20,w=fminf(1080*f,width-2*margin),outer_w=w;
+    float margin=width<=760*f?10:20,outer_w=fminf(1080*f,width-2*margin),w=outer_w-2;
     bool narrow=width<=760*f,columns=narrow && width>420*f,tiny=width<=420*f;
-    float pad=(narrow?18:28)*f,header=0,footer=0,side=0,preview_w=0,paper_w=0,paper_h=0,preview_h=0,body=0,total=0,h=0;
+    float footer_pad=(narrow?18:24)*f;
+    const char *save_label=d->svg?"SVG speichern…":"PNG speichern…";
+    float button_w=d->fonts[2].width(d->fonts[2].userdata,d->fonts[2].height,"Bild kopieren",13)+27*f;
+    float save_w=d->fonts[2].width(d->fonts[2].userdata,d->fonts[2].height,save_label,(int)strlen(save_label))+27*f;
+    bool stack_actions=false;
+    float pad=(narrow?18:28)*f,header=0,footer=0,side=0,preview_w=0,paper_w=0,paper_h=0,preview_h=0,preview_content=0,body=0,total=0,h=0;
     unsigned header_lines=1,note_lines=1,status_lines=1;
     const char *subtitle="Titel, Einheiten und Legende werden übernommen.";
     char note[512],range[160];const double *axes=d->visible?d->description.axes.visible:d->description.axes.full;
@@ -290,32 +287,52 @@ static void graphic_export_view(app *a,int width,int height) {
         range,d->description.plot.x_unit.symbol,d->visible?"sichtbarer Ausschnitt":"gesamtes Diagramm");
     for(unsigned pass=0;pass<2;pass++) {
         side=narrow?w:285*f;preview_w=narrow?w:w-side;paper_w=fmaxf(80,preview_w-(narrow?36:56)*f);paper_h=paper_w*17/24;
-        if(narrow && paper_h>360*f){paper_h=360*f;paper_w=paper_h*24/17;}
-        header_lines=graphic_export_wrap(d,0,0,w-2*pad,subtitle,2,18*f,false);
-        note_lines=graphic_export_wrap(d,0,0,preview_w-2*pad,note,3,18*f,false);
-        status_lines=graphic_export_wrap(d,0,0,narrow?w-48*f:w*.55f,d->message,3,18*f,false);
-        header=((narrow?(tiny?107:109):128)+18*(header_lines-1))*f;
-        footer=((narrow?104:68)+18*fmaxf(0,(float)status_lines-(narrow?1:2)))*f;
-        preview_h=paper_h+(126+18*(note_lines-1))*f;
+        if(narrow && paper_h>360*f)paper_h=360*f;
+        header_lines=graphic_export_wrap(d,0,0,w-2*pad-50*f,subtitle,2,18*f,false);
+        note_lines=graphic_export_wrap(d,0,0,preview_w-2*pad,note,3,17.6f*f,false);
+        status_lines=graphic_export_wrap(d,0,0,narrow?w-2*footer_pad:(w-2*footer_pad)*.55f,d->message,3,17.6f*f,false);
+        stack_actions=button_w+save_w+8*f>w-2*footer_pad;
+        header=((narrow?(tiny?109:112):128)+18*(header_lines-1))*f;
+        footer=(narrow?90.6f+17.6f*(status_lines-1)+(stack_actions?42:0):33+fmaxf(34,17.6f*status_lines))*f;
+        preview_content=preview_h=paper_h+((narrow?116.1f:129.6f)+17.6f*(note_lines-1))*f;
         if(!narrow)preview_h=fmaxf(440*f,preview_h);
-        unsigned filename_lines=graphic_export_wrap(d,0,0,side-(narrow?36:48)*f,d->filename,6,17*f,false);
+        unsigned filename_lines=graphic_export_wrap(d,0,0,side-(narrow?36:48)*f-(narrow?0:1),d->filename,6,17*f,false);
         /* Keep the filename rule below the final hint even for the longest
          * generated name at 200% text size in a detached, narrow workspace. */
-        float settings_h=fmaxf((columns?403:568)*f,((columns?292:438)+19+57+17*filename_lines)*f);
-        body=narrow?preview_h+settings_h:fmaxf(preview_h,settings_h);total=header+body+footer;
-        h=fminf(total,height-2*margin);
-        if(pass==0 && total>h){w-=ui->style.window.scrollbar_size.x;continue;}
+        float settings_h=((narrow?(columns?346.5f:488.5f):509.5f)+17*filename_lines)*f;
+        body=narrow?preview_h+settings_h:fmaxf(preview_h,settings_h);if(!narrow)preview_h=body;total=header+body+footer;
+        h=fminf(total+2,height-2*margin);
+        if(pass==0 && total>h-2){w-=ui->style.window.scrollbar_size.x;continue;}
         break;
     }
     d->bounds=nk_rect((width-outer_w)/2,(height-h)/2,outer_w,h);
-    d->content_height=total;
+    float preview_shift=narrow?0:(preview_h-preview_content)/2;
+    d->content_height=total+2;
+    float corner=(narrow?10:14)*f;
+    bool effects=a->preferences.theme!=PS_THEME_HIGH_CONTRAST && !nk_sdl_reduce_transparency(ui);
+    d->shadows[0]=(ps_ui_shadow){.x=d->bounds.x,.y=d->bounds.y,.w=d->bounds.w,.h=d->bounds.h,
+        .radius=corner,.offset_y=28*f,.blur=100*f,.alpha=119};
+    ps_graphics_shadows(d->graphics,d->shadows,effects?2:0);
+    ui->style.window.fixed_background=nk_style_item_hide();
+    ui->style.window.rounding=0;
+    if(nk_begin(ui,"graphic-export-backdrop",nk_rect(0,0,(float)width,(float)height),NK_WINDOW_NO_INPUT|NK_WINDOW_NO_SCROLLBAR)) {
+        struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+        nk_push_scissor(canvas,nk_rect(0,0,(float)width,(float)height));
+        d->backdrop=(ps_ui_backdrop){.w=(float)width,.h=(float)height,.blur_only=true,.opaque=!effects};
+        ps_graphics_backdrop(d->graphics,&d->backdrop);ps_ui_draw_backdrop(ui,&d->backdrop);
+        nk_fill_rect(canvas,nk_rect(0,0,(float)width,(float)height),0,nk_rgba(8,12,20,125));
+        if(effects)ps_ui_draw_shadow(ui,&d->shadows[0]);
+    }
+    nk_end(ui);nk_sdl_window_raise(ui,"graphic-export-backdrop");
+    ui->style.window.fixed_background=nk_style_item_color(UI_COLOR(window));ui->style.window.rounding=corner;
+    ui->style.window.border=1;ui->style.window.border_color=UI_COLOR(border);
     nk_window_show(ui,"graphic-export",NK_SHOWN);
     struct nk_window *modal=nk_window_find(ui,"graphic-export");
     if(modal) {
         /* NO_SCROLLBAR hides scroll handling; it does not reset Nuklear's
          * cached offset. Reflowing a formerly tall sheet must keep its content
          * inside the new range before any widget bounds are constructed. */
-        float maximum=total>h?fmaxf(0,total-h+ui->style.window.scrollbar_size.y):0;
+        float maximum=total>h-2?fmaxf(0,total-(h-2)+ui->style.window.scrollbar_size.y):0;
         modal->scrollbar.x=0;
         modal->scrollbar.y=(nk_uint)fminf((float)modal->scrollbar.y,maximum);
     }
@@ -323,7 +340,7 @@ static void graphic_export_view(app *a,int width,int height) {
      * that window ROM. Restore its real input focus before panel_begin copies
      * those flags into the layout. A live combo keeps its parent read-only. */
     if(modal && !modal->popup.active)nk_window_set_focus(ui,"graphic-export");
-    if(nk_begin(ui,"graphic-export",d->bounds,total>h?0:NK_WINDOW_NO_SCROLLBAR)) {
+    if(nk_begin(ui,"graphic-export",d->bounds,NK_WINDOW_BORDER | (total>h-2?0:NK_WINDOW_NO_SCROLLBAR))) {
         if(d->first){nk_window_set_focus(ui,"graphic-export");d->first=false;}
         if(d->focus_target) {
             const char *names[]={"Grafikexport schließen","PNG","SVG","Zeitbereich","Darstellung","PNG-Größe","Bild kopieren",d->svg?"SVG speichern…":"PNG speichern…"};
@@ -335,10 +352,10 @@ static void graphic_export_view(app *a,int width,int height) {
         }
         nk_sdl_window_raise(ui,"graphic-export");
         nk_layout_space_begin(ui,NK_STATIC,total,100);
-        graphic_export_text(d,pad,(narrow?17:24)*f,w-100*f,16*f,"PHYSIM / AUSWERTUNG",0,UI_COLOR(muted));
-        graphic_export_text(d,pad,(narrow?43:50)*f,w-85*f,33*f,"Grafik exportieren",1,UI_COLOR(text));
-        graphic_export_wrap(d,pad,(narrow?(tiny?77:79):91)*f,w-2*pad,subtitle,2,18*f,true);
-        d->exit=graphic_export_slot(ui,w-58*f,24*f,30*f,30*f);
+        graphic_export_text(d,pad,(narrow?17:24)*f,w-2*pad-50*f,15*f,"PHYSIM / AUSWERTUNG",0,UI_COLOR(muted));
+        graphic_export_text(d,pad,(narrow?39:46)*f,w-2*pad-50*f,(narrow?(tiny?27:30):36)*f,"Grafik exportieren",1,UI_COLOR(text));
+        graphic_export_wrap(d,pad,(narrow?(tiny?73:76):89)*f,w-2*pad-50*f,subtitle,2,18*f,true);
+        d->exit=graphic_export_slot(ui,w-pad-30*f,(narrow?17:24)*f,30*f,32*f);
         float cx=d->exit.x+d->exit.w/2,cy=d->exit.y+d->exit.h/2;
         nk_stroke_line(nk_window_get_canvas(ui),cx-5*f,cy-5*f,cx+5*f,cy+5*f,1.5f*f,UI_COLOR(text));
         nk_stroke_line(nk_window_get_canvas(ui),cx+5*f,cy-5*f,cx-5*f,cy+5*f,1.5f*f,UI_COLOR(text));
@@ -346,27 +363,34 @@ static void graphic_export_view(app *a,int width,int height) {
         struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
         struct nk_rect preview=graphic_export_slot(ui,0,header,preview_w,preview_h);
         nk_fill_rect(canvas,preview,0,UI_COLOR(canvas));
-        graphic_export_text(d,pad,header+24*f,preview_w-180*f,16*f,"EXPORTVORSCHAU",0,UI_COLOR(muted));
         char dimensions[64];snprintf(dimensions,sizeof dimensions,d->svg?"Skalierbares SVG":"%u × %u px",1200*d->scale,850*d->scale);
-        graphic_export_text(d,preview_w-150*f,header+24*f,124*f,16*f,dimensions,4,UI_COLOR(muted));
-        d->paper=graphic_export_slot(ui,(preview_w-paper_w)/2,header+56*f,paper_w,paper_h);
-        nk_fill_rect(canvas,nk_rect(d->paper.x,d->paper.y+6*f,paper_w,paper_h),0,nk_rgba(0,0,0,25));
+        float dimensions_width=d->fonts[9].width(d->fonts[9].userdata,d->fonts[9].height,dimensions,(int)strlen(dimensions));
+        graphic_export_text(d,pad,header+preview_shift+(narrow?18:24)*f,preview_w-2*pad-dimensions_width-12*f,(narrow?13.5f:15)*f,"EXPORTVORSCHAU",8,UI_COLOR(muted));
+        graphic_export_text(d,preview_w-pad-dimensions_width,header+preview_shift+(narrow?18:24)*f,dimensions_width+1,(narrow?13.5f:15)*f,dimensions,9,UI_COLOR(muted));
+        float paper_top=preview_shift+(narrow?47.5f:55)*f;
+        d->paper=graphic_export_slot(ui,(preview_w-paper_w)/2,header+paper_top,paper_w,paper_h);
+        d->shadows[1]=(ps_ui_shadow){.x=d->paper.x,.y=d->paper.y,.w=d->paper.w,.h=d->paper.h,
+            .offset_y=8*f,.blur=28*f,.alpha=34};
+        if(effects)ps_ui_draw_shadow(ui,&d->shadows[1]);
         unsigned texture=d->raster?ps_graphic_raster_texture(d->raster):0;
-        if(texture){struct nk_image image=nk_image_id((int)texture);nk_draw_image(canvas,d->paper,&image,nk_rgb(255,255,255));}
+        if(texture){struct nk_image image=nk_image_id((int)texture);
+            float image_w=fminf(paper_w,paper_h*24/17),image_h=image_w*17/24;
+            nk_fill_rect(canvas,d->paper,0,nk_rgb(255,255,255));
+            nk_draw_image(canvas,nk_rect(d->paper.x+(paper_w-image_w)/2,d->paper.y+(paper_h-image_h)/2,image_w,image_h),&image,nk_rgb(255,255,255));}
         else nk_fill_rect(canvas,d->paper,0,UI_COLOR(edit));
         nk_stroke_rect(canvas,d->paper,0,1,UI_COLOR(border));
-        graphic_export_wrap(d,pad,header+paper_h+73*f,preview_w-2*pad,note,3,18*f,true);
-        graphic_export_text(d,pad,header+paper_h+(97+18*(note_lines-1))*f,preview_w-2*pad,16*f,"Beim Öffnen festgehaltene Diagrammdaten.",4,UI_COLOR(muted));
-        float sx=narrow?18*f:preview_w+24*f,sy=narrow?header+preview_h:header,sw=side-(narrow?36:48)*f;
+        graphic_export_wrap(d,pad,header+paper_top+paper_h+13*f,preview_w-2*pad,note,3,17.6f*f,true);
+        graphic_export_text(d,pad,header+paper_top+paper_h+(17+17.6f*note_lines)*f,preview_w-2*pad,16*f,"Beim Öffnen festgehaltene Diagrammdaten.",4,UI_COLOR(muted));
+        float sx=narrow?18*f:preview_w+1+24*f,sy=narrow?header+preview_h:header,sw=side-(narrow?36:48)*f-(narrow?0:1);
         float field_w=columns?(sw-16*f)/2:sw;
-        graphic_export_text(d,sx,sy+23*f,sw,18*f,"Dateiformat",7,UI_COLOR(text));
+        graphic_export_text(d,sx,sy+(narrow?19:23)*f,sw,18*f,"Dateiformat",7,UI_COLOR(text));
         nk_begin_disabled(ui,d->save!=NULL);
         for(unsigned i=0;i<2;i++) {
-            float card_x=sx+(columns?i*(field_w+16*f):0),card_y=sy+(51+(columns?0:i*67))*f,card_w=columns?field_w:sw;
+            float card_x=sx+(columns?i*(field_w+16*f):0),card_y=sy+((narrow?46:50)+(columns?0:i*67))*f,card_w=columns?field_w:sw;
             d->formats[i]=graphic_export_slot(ui,card_x,card_y,card_w,60*f);
             struct nk_rect card=d->formats[i];bool selected=d->svg==(i==1);
-            nk_fill_rect(canvas,card,7*f,selected?UI_COLOR(selection_active):UI_COLOR(edit));
-            nk_stroke_rect(canvas,card,7*f,1,selected?UI_COLOR(accent):UI_COLOR(border));
+            nk_fill_rect(canvas,card,7*f,selected?UI_COLOR(accent):UI_COLOR(border));
+            nk_fill_rect(canvas,nk_rect(card.x+1,card.y+1,card.w-2,card.h-2),fmaxf(0,7*f-1),selected?UI_COLOR(selection_active):UI_COLOR(edit));
             struct nk_color radio=ui_palette==&PS_UI_DARK?UI_COLOR(primary_text):UI_COLOR(accent);
             nk_stroke_circle(canvas,nk_rect(card.x+12*f,card.y+23*f,14*f,14*f),f,selected?radio:UI_COLOR(muted));
             if(selected)nk_fill_circle(canvas,nk_rect(card.x+16*f,card.y+27*f,6*f,6*f),radio);
@@ -378,55 +402,51 @@ static void graphic_export_view(app *a,int width,int height) {
         const char *scope[]={"Gesamtes Diagramm","Sichtbarer Ausschnitt"},*appearance[]={"Hell auf Weiß","Wie in der Auswertung"};
         const char *sizes_text[]={"1200 × 850 px","2400 × 1700 px","3600 × 2550 px","4800 × 3400 px"};
         int scope_index=d->visible,appearance_index=d->appearance,scale_index=(int)d->scale-1;
-        float field_y=sy+(columns?131:199)*f;
+        float field_y=sy+(narrow?(columns?122:189):196)*f;
         graphic_export_text(d,sx,field_y,field_w,18*f,"Zeitbereich",7,UI_COLOR(text));
-        if(graphic_export_combo(d,0,sx,field_y+24*f,field_w,f,"Zeitbereich",scope,2,&scope_index,d->save!=NULL)){d->visible=scope_index!=0;d->dirty=true;}
-        float ax=columns?sx+field_w+16*f:sx,ay=columns?field_y:field_y+78*f;
+        if(graphic_export_combo(d,0,sx,field_y+25*f,field_w,f,"Zeitbereich",scope,2,&scope_index,d->save!=NULL)){d->visible=scope_index!=0;d->dirty=true;}
+        float ax=columns?sx+field_w+16*f:sx,ay=columns?field_y:field_y+(narrow?75:78)*f;
         graphic_export_text(d,ax,ay,field_w,18*f,"Darstellung",7,UI_COLOR(text));
-        if(graphic_export_combo(d,1,ax,ay+24*f,field_w,f,"Darstellung",appearance,2,&appearance_index,d->save!=NULL)){d->appearance=appearance_index!=0;d->dirty=true;}
-        float size_y=field_y+(columns?78:156)*f;
+        if(graphic_export_combo(d,1,ax,ay+25*f,field_w,f,"Darstellung",appearance,2,&appearance_index,d->save!=NULL)){d->appearance=appearance_index!=0;d->dirty=true;}
+        float size_y=field_y+(narrow?(columns?75:150):156)*f;
         graphic_export_text(d,sx,size_y,field_w,18*f,"PNG-Größe",7,d->svg?UI_COLOR(muted):UI_COLOR(text));
-        if(graphic_export_combo(d,2,sx,size_y+24*f,field_w,f,"PNG-Größe",sizes_text,4,&scale_index,d->svg || d->save!=NULL)){d->scale=(unsigned)scale_index+1;d->dirty=true;}
-        graphic_export_text(d,sx,size_y+67*f,field_w,16*f,d->svg?"SVG bleibt ohne feste Pixelgröße.":"Mehr Bildpixel, dieselben Messdaten.",4,UI_COLOR(muted));
+        if(graphic_export_combo(d,2,sx,size_y+25*f,field_w,f,"PNG-Größe",sizes_text,4,&scale_index,d->svg || d->save!=NULL)){d->scale=(unsigned)scale_index+1;d->dirty=true;}
+        graphic_export_text(d,sx,size_y+66*f,field_w,15*f,d->svg?"SVG bleibt ohne feste Pixelgröße.":"Mehr Bildpixel, dieselben Messdaten.",4,UI_COLOR(muted));
         unsigned file_lines=graphic_export_wrap(d,0,0,sw,d->filename,6,17*f,false);
-        float file_y=sy+body-(narrow?preview_h:0)-(43+file_lines*17)*f;
-        struct nk_rect file_rule=graphic_export_slot(ui,sx,file_y-14*f,sw,1);nk_fill_rect(canvas,file_rule,0,UI_COLOR(border));
-        graphic_export_text(d,sx,file_y,sw,14*f,"DATEINAME",5,UI_COLOR(muted));
-        graphic_export_wrap(d,sx,file_y+22*f,sw,d->filename,6,17*f,true);
-        ps_ui_accessibility_label(ui,nk_layout_space_rect_to_screen(ui,nk_rect(sx,file_y+22*f,sw,file_lines*17*f)),d->filename);
+        float file_y=narrow?sy+(columns?309:451)*f:sy+body-(42.5f+file_lines*17)*f;
+        struct nk_rect file_rule=graphic_export_slot(ui,sx,file_y-15*f,sw,1);nk_fill_rect(canvas,file_rule,0,UI_COLOR(border));
+        graphic_export_text(d,sx,file_y,sw,13.5f*f,"DATEINAME",5,UI_COLOR(muted));
+        graphic_export_wrap(d,sx,file_y+19.5f*f,sw,d->filename,6,17*f,true);
+        ps_ui_accessibility_label(ui,nk_layout_space_rect_to_screen(ui,nk_rect(sx,file_y+19.5f*f,sw,file_lines*17*f)),d->filename);
         float bottom=header+body;
-        struct nk_rect line=graphic_export_slot(ui,0,header,w,1);nk_fill_rect(canvas,line,0,UI_COLOR(border));
+        struct nk_rect line=graphic_export_slot(ui,0,header-1,w,1);nk_fill_rect(canvas,line,0,UI_COLOR(border));
         line=graphic_export_slot(ui,narrow?0:preview_w,narrow?sy:header,narrow?w:1,narrow?1:body);nk_fill_rect(canvas,line,0,UI_COLOR(border));
         line=graphic_export_slot(ui,0,bottom,w,1);nk_fill_rect(canvas,line,0,UI_COLOR(border));
-        const char *save_label=d->svg?"SVG speichern…":"PNG speichern…";
-        float actions_y=bottom+(narrow?52+18*(status_lines-1):16)*f;
-        /* Nuklear's text clamp excludes a glyph at an exactly equal advance.
-         * Keep a three-pixel fitting guard beyond the two 12-pixel insets. */
-        float button_w=d->fonts[2].width(d->fonts[2].userdata,d->fonts[2].height,"Bild kopieren",13)+27*f;
-        float save_w=d->fonts[2].width(d->fonts[2].userdata,d->fonts[2].height,save_label,(int)strlen(save_label))+27*f;
-        graphic_export_wrap(d,24*f,bottom+(narrow?14:status_lines>1?16:21)*f,narrow?w-48*f:w*.55f,d->message,3,18*f,true);
+        float actions_y=narrow?bottom+(25+17.6f*status_lines)*f:bottom+(footer+f-34*f)/2;
+        float status_y=narrow?bottom+15*f:bottom+(footer+f-17.6f*status_lines*f)/2;
+        graphic_export_wrap(d,footer_pad,status_y,narrow?w-2*footer_pad:(w-2*footer_pad)*.55f,d->message,3,17.6f*f,true);
+        float copy_width=stack_actions?w-2*footer_pad:tiny?(w-2*footer_pad-8*f)/2:button_w;
+        float save_width=stack_actions?w-2*footer_pad:tiny?copy_width:save_w;
+        float copy_x=stack_actions?footer_pad:w-footer_pad-save_width-8*f-copy_width;
+        float save_x=w-footer_pad-save_width,save_y=actions_y+(stack_actions?42*f:0);
         bool unavailable=!d->raster || d->dirty || d->save;nk_begin_disabled(ui,unavailable);
-        d->copy=nk_layout_space_rect_to_screen(ui,nk_rect(w-24*f-save_w-8*f-button_w,actions_y,button_w,34*f));
-        if(graphic_export_button(d,w-24*f-save_w-8*f-button_w,actions_y,button_w,34*f,"Bild kopieren",false)) {
+        d->copy=nk_layout_space_rect_to_screen(ui,nk_rect(copy_x,actions_y,copy_width,34*f));
+        if(graphic_export_button(d,copy_x,actions_y,copy_width,34*f,"Bild kopieren",false)) {
             ps_result result=ps_graphic_image_clipboard(ps_graphic_raster_image(d->raster));
             snprintf(d->message,sizeof d->message,"%s",result==PS_OK?"Bild in die Zwischenablage kopiert.":"Bild konnte nicht kopiert werden.");
         }
-        d->store=nk_layout_space_rect_to_screen(ui,nk_rect(w-24*f-save_w,actions_y,save_w,34*f));
-        if(graphic_export_button(d,w-24*f-save_w,actions_y,save_w,34*f,save_label,true))graphic_export_save(a,NULL);
+        d->store=nk_layout_space_rect_to_screen(ui,nk_rect(save_x,save_y,save_width,34*f));
+        if(graphic_export_button(d,save_x,save_y,save_width,34*f,save_label,true))graphic_export_save(a,NULL);
         nk_end_disabled(ui);
         if(d->focus_target) {
             struct nk_rect targets[]={d->exit,d->formats[0],d->formats[1],d->fields[0],d->fields[1],d->fields[2],d->copy,d->store};
             struct nk_rect target=targets[d->focus_target-1];float low=d->bounds.y+8,high=d->bounds.y+d->bounds.h-14;
             float offset=(float)ui->current->scrollbar.y,prior=offset;
             if(target.y<low)offset+=target.y-low;else if(target.y+target.h>high)offset+=target.y+target.h-high;
-            ui->current->scrollbar.y=(nk_uint)fmaxf(0,fminf(fmaxf(0,total-d->bounds.h+16),offset));
+            ui->current->scrollbar.y=(nk_uint)fmaxf(0,fminf(fmaxf(0,total+2-d->bounds.h+16),offset));
             if(prior!=ui->current->scrollbar.y && SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"GRAPHIC DIALOG FOCUS: reveal=%u scroll=%.1f->%u target=%.1f/%.1f viewport=%.1f/%.1f row=%.1f total=%.1f\n",d->focus_target,prior,ui->current->scrollbar.y,target.y,target.h,low,high,ui->current->layout->row.height,total);
         }
         nk_layout_space_end(ui);
-        struct nk_rect previous_clip=canvas->clip;
-        nk_push_scissor(canvas,d->bounds);
-        nk_stroke_rect(canvas,d->bounds,14*f,1,UI_COLOR(border));
-        nk_push_scissor(canvas,previous_clip);
     }
     nk_end(ui);ui->style=saved_style;ui_palette=previous;
 }

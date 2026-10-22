@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-22T22:36:02.966775+02:00",
+  "css": "docs/visuals/analysis-workspace/analysis.css",
+  "reference_pixels": [
+    {
+      "path": "docs\\visuals\\unified-workspace\\export-dialog-dark.png",
+      "sha256": "7a1124a87508e1e69ca76f7b241187316ecc56c207314ed5345b7208ef43b5fd",
+      "canvas_at_220_280": [
+        20,
+        21,
+        24
+      ],
+      "field_border_at_1100_476": [
+        55,
+        56,
+        62
+      ]
+    },
+    {
+      "path": "docs\\visuals\\unified-workspace\\export-dialog-light.png",
+      "sha256": "ff6eeb42ee6f946116a338df26e0b55d54833f0c6af5345b7b98672abb0a1752",
+      "canvas_at_220_280": [
+        232,
+        235,
+        241
+      ],
+      "field_border_at_1100_476": [
+        180,
+        188,
+        200
+      ]
+    }
+  ],
+  "rejected_oracle_canvas": [
+    18,
+    19,
+    22
+  ],
+  "correct_canvas": [
+    20,
+    21,
+    24
+  ],
+  "light_border_required": [
+    180,
+    188,
+    200
+  ]
+}

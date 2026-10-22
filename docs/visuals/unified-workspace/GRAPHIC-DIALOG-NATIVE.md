@@ -89,8 +89,9 @@ bleiben erhalten. Ein Timeout wird ausdrücklich als fehlgeschlagen erfasst.
   denselben Exportzugang erhalten. Der vorhandene Kern für bis zu acht Läufe
   ersetzt diese Integration nicht. Der neue Zugang gilt derzeit für Berichte.
 - Der folgende [Materialabgleich](GRAPHIC-MATERIAL-NATIVE.md) ergänzt den reinen
-  Sigma-3-Hintergrundfilter und skalierte Auswahlfelder. Dialog-/Papierschatten,
-  weitere Schrift- und Komponentendetails bleiben gegen die Referenz abzugleichen.
+  Sigma-3-Hintergrundfilter und skalierte Auswahlfelder. Der folgende
+  [Schatten-/Maßabgleich](GRAPHIC-SHADOW-NATIVE.md) ergänzt die Schatten,
+  Referenzgröße und kleine Umbrüche. Weitere Schrift-/Raster-/Komponentendetails bleiben abzugleichen.
   Es besteht keine behauptete Pixelidentität.
 - Die echten Dateidialog-APIs sind angeschlossen; automatisierte Speichertests
   injizieren deren Antwort. Die Bedienung des OS-Auswahldialogs, dessen

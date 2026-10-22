@@ -1,0 +1,52 @@
+[
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-backdrop_ui.exe",
+      "D:/Physim/build/native/Design-analysis/test-results/run-fvyboit7/backdrop_ui"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 512x64, 1 fonts, GPU limit 32768\nGPU SHADOW ORACLE: samples=510 max_channel_error=0.935493876\nGPU backdrop: glass, pure sigma3, independent rounded shadows, fallback and ordering passed\n",
+    "stderr": "",
+    "seconds": 3.641,
+    "name": "backdrop_ui"
+  },
+  {
+    "status": "failed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "e17a7694911eed477ae6e5b74bacb6b05a4f27a4374d7697dd9f150f6baf6a71"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_graphic_dialog.py",
+          "--app",
+          "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+          "--root",
+          "D:\\Physim",
+          "--work",
+          "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-fvyboit7\\graphic_dialog\\files \u00e4"
+        ],
+        "status": "failed",
+        "exit_code": 1,
+        "stdout": "",
+        "stderr": "Traceback (most recent call last):\n  File \"D:\\Physim/tests/check_graphic_dialog.py\", line 120, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"D:\\Physim/tests/check_graphic_dialog.py\", line 90, in main\n    assert time.monotonic()-started<65,'Clipboard publication timed out'\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Clipboard publication timed out\n",
+        "reason": "Exit code 1; expected 0",
+        "seconds": 65.735
+      }
+    ],
+    "seconds": 65.797,
+    "reason": "Exit code 1; expected 0\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_graphic_dialog.py\", line 120, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"D:\\Physim/tests/check_graphic_dialog.py\", line 90, in main\n    assert time.monotonic()-started<65,'Clipboard publication timed out'\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: Clipboard publication timed out\n",
+    "name": "graphic_dialog"
+  }
+]

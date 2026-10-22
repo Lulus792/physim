@@ -1149,6 +1149,7 @@ static void workspace_draw_ui(app *a, int width, int height) {
     workspace_context(a);
     if(a->panel_pull && (a->recovery || a->layout_manager || a->channel_unit_manager || a->workspace_manager || a->run_details_manager))panel_pull_cancel(a);
     ps_graphics_backdrop(a->graphics,NULL);
+    ps_graphics_shadows(a->graphics,NULL,0);
     if(a->run_details_manager) {run_details_view(a,width,height);return;}
     if(a->channel_unit_manager) { channel_unit_manager_view(a,width,height);return; }
     if(a->layout_manager) { layout_manager_view(a,width,height);return; }

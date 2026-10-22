@@ -1,0 +1,50 @@
+[
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "/usr/bin/python3",
+        "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+        "sha256": "6ccb5f143d9909b5126f643c901247af07434c199b491d2068f27d833af5313e"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/tests/check_display_workflow.py",
+          "graphics",
+          "--app",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "--work",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-vi_wld12/graphics/files \u00e4",
+          "--root",
+          "/mnt/d/Physim",
+          "--cc",
+          "/usr/bin/cc"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)\nCoverage atlas: RGBA/R8 GPU samples identical, odd rows and linear filtering\nGPU TEST: depth, rotated box/plane, points, polylines, label projection, resize, clipping, transparency, nested coordinate frames and picking PASSED\nPLAIN LETTER INPUT: key=a expected=theta actual=theta copy=0 paste=0 passed=1\nPLAIN LETTER INPUT: key=c expected=scd actual=scd copy=0 paste=0 passed=1\nPLAIN LETTER INPUT: key=v expected=seved actual=seved copy=0 paste=0 passed=1\nPLAIN LETTER INPUT: key=x expected=sxd actual=sxd copy=0 paste=0 passed=1\nPLAIN LETTER INPUT: key=b expected=sebed actual=sebed copy=0 paste=0 passed=1\nPLAIN LETTER INPUT: key=e expected=seeed actual=seeed copy=0 paste=0 passed=1\nCOMMAND LETTER INPUT: mac=0 key=a copy=0 paste=0 passed=1\nCOMMAND LETTER INPUT: mac=0 key=c copy=1 paste=0 passed=1\nCOMMAND LETTER INPUT: mac=0 key=v copy=0 paste=1 passed=1\nCOMMAND LETTER INPUT: mac=0 key=x copy=1 paste=0 passed=1\nCOMMAND LETTER INPUT: mac=0 key=b copy=0 paste=0 passed=1\nCOMMAND LETTER INPUT: mac=0 key=e copy=0 paste=0 passed=1\nINPUT TEST: UTF-8, undo/redo, clipboard, Mac/PC navigation/selection, focus PASSED\ngraphics: app workflow and persisted files passed\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\n",
+        "seconds": 1.453,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-vi_wld12/graphics/files \u00e4/app-steps.json",
+            "bytes": 1565,
+            "sha256": "ba34c33d91771d1d29f100421c9746323237a3ab84da1bb3bb945f31a4fef095"
+          }
+        ]
+      }
+    ],
+    "seconds": 1.756,
+    "reason": "",
+    "name": "graphics"
+  }
+]

@@ -87,7 +87,10 @@ def main():
             ready=project/'clipboard-ready.txt'
             while not ready.exists():
                 assert process.poll() is None,'App failed before native clipboard publication'
-                assert time.monotonic()-started<65,'Clipboard publication timed out'
+                # The app's expanded native task is bounded at 120s after
+                # startup. Allow that same task plus font/SDL initialization;
+                # do not kill it halfway through the pre-publication UI cases.
+                assert time.monotonic()-started<135,'Clipboard publication timed out'
                 if client:client.SDL_PumpEvents()
                 time.sleep(.03)
             if client:client.SDL_PumpEvents()
@@ -104,9 +107,22 @@ def main():
             stdout=(work/'app.stdout').read_text(encoding='utf-8',errors='replace');stderr=(work/'app.stderr').read_text(encoding='utf-8',errors='replace')
             (work/'app-steps.json').write_text(json.dumps([{'command':command,'exit_code':process.returncode,'stdout':stdout,'stderr':stderr,'clipboard':record}],indent=2),encoding='utf-8')
     assert 'GRAPHIC DIALOG SELF-TEST: PASSED' in stdout and 'PLOT UI SELF-TEST: PASSED' in stdout
-    names=['graphic-dialog-light','graphic-dialog-contrast','graphic-dialog-large-narrow','graphic-dialog-narrow-footer','graphic-dialog-frozen-light','graphic-dialog-dark-paper','graphic-dialog-contrast-paper','graphic-dialog-200pct','graphic-dialog-200pct-footer','plot-export-dialog']
+    names=['graphic-dialog-light','graphic-dialog-contrast','graphic-dialog-large-narrow','graphic-dialog-narrow-footer','graphic-dialog-frozen-light','graphic-dialog-dark-paper','graphic-dialog-contrast-paper','graphic-dialog-200pct','graphic-dialog-200pct-footer','plot-export-dialog','graphic-dialog-reference-light','graphic-dialog-reference-dark','graphic-dialog-480','graphic-dialog-480-footer','graphic-dialog-680-default','graphic-dialog-800-centered']
     for name in names:
-        pixels=bitmap((project/(name+'.bmp')).read_bytes());assert pixels[0:2]==((680,740) if name in ('graphic-dialog-large-narrow','graphic-dialog-narrow-footer','graphic-dialog-200pct','graphic-dialog-200pct-footer') else (1440,940))
+        expected=(800,740) if name=='graphic-dialog-800-centered' else (480,740) if name.startswith('graphic-dialog-480') else (1440,1100) if name.startswith('graphic-dialog-reference-') else (680,740) if name in ('graphic-dialog-large-narrow','graphic-dialog-narrow-footer','graphic-dialog-200pct','graphic-dialog-200pct-footer','graphic-dialog-680-default') else (1440,940)
+        pixels=png(project/(name+'.png'));assert pixels[0:2]==expected
+    assert bitmap((project/'plot-export-dialog.bmp').read_bytes())==png(project/'plot-export-dialog.png')[:3],'PNG capture differs from paired actual BMP readback'
+    match=re.search(r'GRAPHIC DIALOG LIGHT FIELD: ([0-9.,]+)',stderr);assert match
+    field_x,field_y,field_w,field_h=map(float,match.group(1).split(','));w,h,rgb,_=png(project/'graphic-dialog-light.png')
+    at=(int(field_y)*w+int(field_x+field_w/2))*3
+    assert rgb[at:at+3]==bytes((180,188,200)),'Light field border must match approved CSS/reference color'
+    match=re.search(r'GRAPHIC DIALOG REFLOW: width=680 paper=([0-9.,]+)',stderr);assert match
+    left,top,width,height=map(float,match.group(1).split(','));w,h,rgb,_=png(project/'graphic-dialog-680-default.png')
+    def pixel(x,y):
+        at=(int(y)*w+int(x))*3;return rgb[at:at+3]
+    assert pixel(left+4,top+height/2)==b'\xff\xff\xff' and pixel(left+width/2,top+8)==b'\0\0\0','Capped frame must preserve proportional black source with white letterbox'
+    w,h,rgb,_=png(project/'graphic-dialog-800-centered.png');at=(650*w+30)*3
+    assert rgb[at:at+3]==bytes((20,21,24)),'Preview canvas must fill the settings-height column'
     for scale,name in [(1,'native-scale1.png'),(2,'native-export.png'),(3,'native-scale3.png'),(4,'native-scale4.png')]:
         width,height,_,_=png(project/name);assert (width,height)==(1200*scale,850*scale)
     width,height,rgb,_=png(project/'contrast-paper.png')

@@ -14,6 +14,8 @@ Vorschau, Optionen, Speichern und echte Bildkopie. Mehrlaufzugang und vollständ
 Design-/Plattformabnahme des Exports bleiben weiter beauftragt.
 Der folgende [native Materialabgleich](GRAPHIC-MATERIAL-NATIVE.md) ergänzt den
 Hintergrundfilter und bei großer Schrift proportional gezeichnete Auswahlfelder.
+Der [Schatten-/Maßabgleich](GRAPHIC-SHADOW-NATIVE.md) ergänzt Referenzgröße,
+korrekte Inhaltsmaße, 480-/680-/800-px-Fälle und verlustfreie PNG-Aufnahmen.
 Eine Browserprüfung ist weiterhin keine vollständige native Abnahme.
 Die [aktuellen Nutzerbefunde](USER-REVIEW-2026-10-21.md) und der folgende
 [native Komponentenabgleich](COMPONENTS-NATIVE.md) führen weitere sichtbare

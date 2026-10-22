@@ -134,8 +134,12 @@ struct ps_graphics {
     GLuint glass_program,blur_program,glass_textures[2],glass_framebuffers[2];
     int glass_width,glass_height;
     bool glass_failed;
+    const ps_ui_shadow *shadows;unsigned shadow_count;GLuint shadow_program;bool shadow_failed;
 };
 void ps_graphics_backdrop(ps_graphics *g,const ps_ui_backdrop *backdrop) {if(g)g->backdrop=backdrop;}
+void ps_graphics_shadows(ps_graphics *g,const ps_ui_shadow *shadows,unsigned count) {
+    if(g){g->shadows=shadows;g->shadow_count=shadows?(count>4?4:count):0;}
+}
 void ps_graphics_scene_colors(ps_graphics *g,uint32_t background,uint32_t grid) {
     if(g){g->scene_background=background;g->scene_grid=grid;}
 }
@@ -354,6 +358,7 @@ void ps_graphics_destroy(ps_graphics *g) {
     g->DeleteFramebuffers(2,g->glass_framebuffers);
     if(g->glass_program)g->DeleteProgram(g->glass_program);
     if(g->blur_program)g->DeleteProgram(g->blur_program);
+    if(g->shadow_program)g->DeleteProgram(g->shadow_program);
     SDL_GL_DestroyContext(g->context);
     ps_ui_geometry_destroy(&g->ui_geometry);
     free(g->vertices);
@@ -509,6 +514,33 @@ static bool backdrop_draw_prepare(ps_graphics *g,GLuint framebuffer,int pw,int p
     }
     return filtered;
 }
+static bool shadow_prepare(ps_graphics *g,const ps_ui_shadow *s,const float matrix[16]) {
+    if(g->shadow_failed)return false;
+    if(!g->shadow_program) {
+        g->shadow_program=program(g,
+            "#version 330 core\nlayout(location=0)in vec2 p;layout(location=2)in vec4 c;uniform mat4 projection;out vec2 point;out vec4 col;void main(){point=p;col=c;gl_Position=projection*vec4(p,0,1);}",
+            "#version 330 core\nuniform vec4 box;uniform vec4 effect;in vec2 point;in vec4 col;out vec4 result;"
+            "vec4 erf4(vec4 v){vec4 t=1/(1+.3275911*abs(v));return sign(v)*(1-(((((1.061405429*t-1.453152027)*t+1.421413741)*t-.284496736)*t+.254829592)*t)*exp(-v*v));}"
+            "void main(){float r=effect.w,s=effect.z;vec2 halfsize=box.zw*.5;"
+            "vec2 q=abs(point-box.xy-halfsize)-halfsize+r;"
+            "if(min(max(q.x,q.y),0)+length(max(q,0))-r<0)discard;"
+            "vec4 e=erf4((point.xyxy-vec4(box.xy+effect.xy,box.xy+box.zw+effect.xy))/(1.41421356237*s));"
+            "float coverage=.25*(e.x-e.z)*(e.y-e.w);"
+            /* Missing quarter-corner areas are small for r/s<=.3. Their exact
+             * area/centroid retain the leading Gaussian moments; the independent
+             * rounded-mask quadrature in the GPU test bounds the pixel error. */
+            "if(r>0){vec2 lo=box.xy+effect.xy+.22336793895*r,hi=box.xy+box.zw+effect.xy-.22336793895*r;"
+            "vec4 dx=point.x-vec4(lo.x,hi.x,lo.x,hi.x),dy=point.y-vec4(lo.y,lo.y,hi.y,hi.y);"
+            "coverage-=r*r*.21460183660*.15915494309/(s*s)*dot(exp(-(dx*dx+dy*dy)/(2*s*s)),vec4(1));}"
+            "result=vec4(col.rgb,col.a*clamp(coverage,0,1));}");
+        if(!g->shadow_program){g->shadow_failed=true;while(g->GetError()!=GL_NO_ERROR){}return false;}
+    }
+    g->UseProgram(g->shadow_program);
+    g->UniformMatrix4fv(g->GetUniformLocation(g->shadow_program,"projection"),1,GL_FALSE,matrix);
+    g->Uniform4f(g->GetUniformLocation(g->shadow_program,"box"),s->x,s->y,s->w,s->h);
+    g->Uniform4f(g->GetUniformLocation(g->shadow_program,"effect"),s->offset_x,s->offset_y,s->blur*.5f,s->radius);
+    g->ui_stats.shadow_draws++;return true;
+}
 static bool ui_target(ps_graphics *g, struct nk_context *ui, struct nk_buffer *commands,
                       const struct nk_draw_null_texture *null_texture, GLuint framebuffer, int w,
                       int h, int pw, int ph) {
@@ -517,6 +549,7 @@ static bool ui_target(ps_graphics *g, struct nk_context *ui, struct nk_buffer *c
     Uint64 convert_start = SDL_GetTicksNS();
     g->ui_stats.upload_seconds = 0;
     g->ui_stats.backdrop_passes=0;g->ui_stats.backdrop_pixels=0;
+    g->ui_stats.shadow_draws=0;
     ps_result converted = ps_ui_geometry_convert(&g->ui_geometry, ui, commands, null_texture);
     struct nk_buffer *vertices = &g->ui_geometry.vertices, *indices = &g->ui_geometry.indices;
     g->ui_stats.conversion_seconds = (double)(SDL_GetTicksNS() - convert_start) / 1e9;
@@ -572,19 +605,22 @@ static bool ui_target(ps_graphics *g, struct nk_context *ui, struct nk_buffer *c
         int cw = (int)ceilf(cmd->clip_rect.w * sx), ch = (int)ceilf(cmd->clip_rect.h * sy);
         if (cw > 0 && ch > 0) {
             bool glass=g->backdrop && cmd->userdata.ptr==g->backdrop;
+            const ps_ui_shadow *shadow=NULL;
+            for(unsigned i=0;i<g->shadow_count;i++)if(cmd->userdata.ptr==&g->shadows[i]){shadow=&g->shadows[i];break;}
             bool filtered=glass && backdrop_draw_prepare(g,framebuffer,pw,ph,sx,sy,matrix);
+            bool shaded=shadow && shadow_prepare(g,shadow,matrix);
             g->Scissor(x, y, cw, ch);
-            if(!filtered) {
+            if(!filtered && !shaded) {
                 g->BindTexture(GL_TEXTURE_2D, (GLuint)cmd->texture.id);
                 g->Uniform1i(g->ui_flip, (GLuint)cmd->texture.id == g->scene_texture);
             }
             /* Pure blur's accessible/unavailable fallback preserves the actual
              * background. Its ordinary dim overlay still follows this marker. */
-            if(!(glass && g->backdrop->blur_only && !filtered))
+            if(!(glass && g->backdrop->blur_only && !filtered) && !(shadow && !shaded))
                 g->DrawElements(GL_TRIANGLES, (GLsizei)cmd->elem_count,
                                 sizeof(nk_draw_index) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT,
                                 (void *)offset);
-            if(glass){g->UseProgram(g->ui_program);g->Uniform1i(g->GetUniformLocation(g->ui_program,"fallback"),0);}
+            if(glass || shadow){g->UseProgram(g->ui_program);g->Uniform1i(g->GetUniformLocation(g->ui_program,"fallback"),0);}
         }
         offset += cmd->elem_count * sizeof(nk_draw_index);
     }
@@ -1107,6 +1143,7 @@ int ps_graphics_pick(const ps_graphics *g, double x, double y) {
 }
 static bool capture_framebuffer(ps_graphics *g, GLuint framebuffer, int w, int h,
                                 const char *path) {
+    if(!path || !*path)return false;
     SDL_Surface *surface = SDL_CreateSurface(w, h, SDL_PIXELFORMAT_RGBA32);
     if (!surface)
         return false;
@@ -1124,8 +1161,16 @@ static bool capture_framebuffer(ps_graphics *g, GLuint framebuffer, int w, int h
             *a = *b;
             *b = temp;
         }
-    if (ok)
-        ok = SDL_SaveBMP(surface, path);
+    if (ok) {
+        const char *suffix=strrchr(path,'.');
+        if(suffix && !SDL_strcasecmp(suffix,".png")) {
+            /* Pack RGB forward in the owned readback. Each destination precedes
+             * its RGBA source; no later unread pixel is overwritten. */
+            for(int y=0;y<h;y++)for(int x=0;x<w;x++)
+                memmove(pixels+((size_t)y*w+x)*3,pixels+(size_t)y*surface->pitch+x*4,3);
+            ok=ps_png_write(path,pixels,(unsigned)w,(unsigned)h,(size_t)w*3)==PS_OK;
+        } else ok=SDL_SaveBMP(surface,path);
+    }
     SDL_DestroySurface(surface);
     g->BindFramebuffer(GL_FRAMEBUFFER, 0);
     return ok;

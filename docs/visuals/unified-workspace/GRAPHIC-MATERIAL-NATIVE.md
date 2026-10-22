@@ -68,8 +68,9 @@ ein isolierter sauberer Checkout wird nicht behauptet.
 
 Die browserseitige und native endliche Filterapproximation können einzelne Pixel
 unterschiedlich rastern. Der geprüfte Sigma-/Farbvertrag ist kein Nachweis einer
-vollständigen Bitmapgleichheit mit einem Browser. Insbesondere bleiben der weiche
-Dialogschatten (`0 28px 100px`) und der Papierschatten der Vorlage weiter anzugleichen.
+vollständigen Bitmapgleichheit mit einem Browser. Der weiche
+Dialogschatten (`0 28px 100px`) und der Papierschatten werden im folgenden
+[nativen Schatten-/Maßabgleich](GRAPHIC-SHADOW-NATIVE.md) ergänzt und geprüft.
 Schriftgewicht, Hoverdetails und die übrigen gemeinsamen Komponenten benötigen
 weiter ihren vollständigen Referenzabgleich.
 

@@ -22,6 +22,14 @@ typedef struct {
     bool blur_only;
 } ps_ui_backdrop;
 void ps_graphics_backdrop(ps_graphics *g,const ps_ui_backdrop *backdrop);
+/* Frame-local broad outer shadows. blur is the CSS blur radius (sigma=blur/2).
+ * Rounded corner correction supports radius<=.3*sigma; rectangular shadows have
+ * no ratio restriction. Register up to four persistent descriptors until render. */
+typedef struct {
+    float x,y,w,h,radius,offset_x,offset_y,blur;
+    uint8_t red,green,blue,alpha;
+} ps_ui_shadow;
+void ps_graphics_shadows(ps_graphics *g,const ps_ui_shadow *shadows,unsigned count);
 /* Last UI submission, including PNG drawing. CPU timings exclude swap/vsync and
  * do not measure GPU completion. Allocation count covers conversion VBO/EBO data. */
 typedef struct {
@@ -29,6 +37,7 @@ typedef struct {
     uint64_t allocations;
     size_t vertex_bytes, index_bytes, retained_bytes;
     unsigned backdrop_passes;
+    unsigned shadow_draws;
     size_t backdrop_pixels;
 } ps_ui_render_stats;
 bool ps_graphics_ui_stats(const ps_graphics *g, ps_ui_render_stats *out);
@@ -70,6 +79,7 @@ unsigned ps_graphics_scene(ps_graphics *g, const ps_scene *scene, const ps_camer
  * coordinates. Returns its scene index, or -1 for background/invalid input.
  * Grid occludes but is not selectable; labels are handled by the UI overlay. */
 int ps_graphics_pick(const ps_graphics *g, double x, double y);
+/* Actual framebuffer readback: .png is lossless RGB, other suffixes keep BMP. */
 bool ps_graphics_capture(ps_graphics *g, const char *path);
 /* Standalone UI drawing rendered at twice the logical dimensions, RGB PNG. */
 ps_result ps_graphics_ui_png(ps_graphics *g, struct nk_context *ui,

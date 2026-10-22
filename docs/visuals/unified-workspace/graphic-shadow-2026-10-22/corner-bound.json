@@ -1,0 +1,9 @@
+{
+  "derivation": "For one missing corner: area=(1-pi/4)r^2; centroid=(5/6-pi/4)/(1-pi/4)*r each axis; centered polar second moment=(2-5pi/8-2*area_factor*centroid_factor^2)r^4. Gaussian Hessian spectral norm <=1/(2pi sigma^4). Taylor remainder <=.5*Hessian*moment; sum four corners.",
+  "area_factor": 0.21460183660255172,
+  "centroid_factor": 0.22336793894575233,
+  "centered_polar_second_moment_factor": 0.015090231283193218,
+  "four_corner_coverage_error_bound_at_ratio_0_3": 3.8907295398146514e-05,
+  "max_channel_error_at_alpha119": 0.004629968152379435,
+  "scope": "Continuous exact Gaussian vs four corner centroid correction, radius/sigma <=.3. Excludes erf approximation, float rounding, raster antialiasing and final 8bit quantization."
+}

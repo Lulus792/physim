@@ -135,6 +135,7 @@ bool nk_sdl_reduce_transparency(struct nk_context *ctx);
 /* Force conversion boundaries around a backdrop marker; Nuklear can otherwise
  * merge consecutive solid shapes despite their different command userdata. */
 void ps_ui_draw_backdrop(struct nk_context *ctx,const ps_ui_backdrop *material);
+void ps_ui_draw_shadow(struct nk_context *ctx,const ps_ui_shadow *shadow);
 enum { PS_UI_LAYOUT_MAGIC = 0x50534C59u };
 typedef unsigned (*ps_ui_a11y_hook)(void *user,const char *window,const char *label,
                                 int role,const float bounds[4],bool enabled,bool checked,const char *group,bool activated);

@@ -1,0 +1,50 @@
+[
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "e17a7694911eed477ae6e5b74bacb6b05a4f27a4374d7697dd9f150f6baf6a71"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_display_workflow.py",
+          "graphics",
+          "--app",
+          "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+          "--work",
+          "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-soz1hy7o\\graphics\\files \u00e4",
+          "--root",
+          "D:\\Physim",
+          "--cc",
+          "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nCoverage atlas: RGBA/R8 GPU samples identical, odd rows and linear filtering\nGPU TEST: depth, rotated box/plane, points, polylines, label projection, resize, clipping, transparency, nested coordinate frames and picking PASSED\nPLAIN LETTER INPUT: key=a expected=theta actual=theta copy=0 paste=0 passed=1\nPLAIN LETTER INPUT: key=c expected=scd actual=scd copy=0 paste=0 passed=1\nPLAIN LETTER INPUT: key=v expected=seved actual=seved copy=0 paste=0 passed=1\nPLAIN LETTER INPUT: key=x expected=sxd actual=sxd copy=0 paste=0 passed=1\nPLAIN LETTER INPUT: key=b expected=sebed actual=sebed copy=0 paste=0 passed=1\nPLAIN LETTER INPUT: key=e expected=seeed actual=seeed copy=0 paste=0 passed=1\nCOMMAND LETTER INPUT: mac=0 key=a copy=0 paste=0 passed=1\nCOMMAND LETTER INPUT: mac=0 key=c copy=1 paste=0 passed=1\nCOMMAND LETTER INPUT: mac=0 key=v copy=0 paste=1 passed=1\nCOMMAND LETTER INPUT: mac=0 key=x copy=1 paste=0 passed=1\nCOMMAND LETTER INPUT: mac=0 key=b copy=0 paste=0 passed=1\nCOMMAND LETTER INPUT: mac=0 key=e copy=0 paste=0 passed=1\nINPUT TEST: UTF-8, undo/redo, clipboard, Mac/PC navigation/selection, focus PASSED\ngraphics: app workflow and persisted files passed\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\n",
+        "seconds": 1.578,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-soz1hy7o\\graphics\\files \u00e4\\app-steps.json",
+            "bytes": 1573,
+            "sha256": "8eee514ba6816f458928d3bc191b62d40932aaf33716ecdb1fc00960ff5815f9"
+          }
+        ]
+      }
+    ],
+    "seconds": 1.625,
+    "reason": "",
+    "name": "graphics"
+  }
+]

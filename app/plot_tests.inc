@@ -550,15 +550,36 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
     }
     case 211:
         if(!a->graphic_export || !a->graphic_export->raster || strcmp(a->graphic_export->description.plot.title,"Kleine Abweichungen mit großem Offset")) {ok=false;break;}
-        {ps_ui_render_stats stats;if(!ps_graphics_ui_stats(a->graphics,&stats) || stats.backdrop_passes!=2){ok=false;break;}}
-        *capture="graphic-dialog-light.bmp";*stage=212;return;
+        {ps_ui_render_stats stats;if(!ps_graphics_ui_stats(a->graphics,&stats) || stats.backdrop_passes!=2 || stats.shadow_draws!=2){ok=false;break;}}
+        /* Independent CSS target: 1080 border-box, 2px outer borders, 285px
+         * settings, 28px preview insets, 24:17 paper, measured line boxes. */
+        if(fabsf(a->graphic_export->bounds.w-1080)>.1f || fabsf(a->graphic_export->bounds.h-848.642f)>.1f ||
+           fabsf(a->graphic_export->paper.w-737)>1.1f || fabsf(a->graphic_export->paper.x-a->graphic_export->bounds.x-29)>1.1f){ok=false;break;}
+        fprintf(stderr,"GRAPHIC DIALOG CSS BOX: outer=%.3fx%.3f paper=%.3fx%.3f inset=%.3f/%.3f\n",
+            a->graphic_export->bounds.w,a->graphic_export->bounds.h,a->graphic_export->paper.w,a->graphic_export->paper.h,
+            a->graphic_export->paper.x-a->graphic_export->bounds.x,a->graphic_export->paper.y-a->graphic_export->bounds.y);
+        fprintf(stderr,"GRAPHIC DIALOG LIGHT FIELD: %.3f,%.3f,%.3f,%.3f\n",a->graphic_export->fields[0].x,
+            a->graphic_export->fields[0].y,a->graphic_export->fields[0].w,a->graphic_export->fields[0].h);
+        *capture="graphic-dialog-light.bmp";*stage=234;return;
+    case 234:
+        if(!SDL_SetWindowSize(a->window,1440,1100) || !SDL_SyncWindow(a->window)){ok=false;break;}
+        *stage=235;return;
+    case 235:*capture="graphic-dialog-reference-light.bmp";*stage=236;return;
+    case 236: {
+        ps_preferences preferences=a->preferences;preferences.theme=PS_THEME_DARK;preferences_apply(a,&preferences);
+        *stage=237;return;
+    }
+    case 237:*capture="graphic-dialog-reference-dark.bmp";*stage=238;return;
+    case 238:
+        if(!SDL_SetWindowSize(a->window,1440,940) || !SDL_SyncWindow(a->window)){ok=false;break;}
+        *stage=212;return;
     case 212: {
         ps_preferences preferences=a->preferences;preferences.theme=PS_THEME_HIGH_CONTRAST;preferences_apply(a,&preferences);
         *capture="graphic-dialog-contrast.bmp";*stage=213;return;
     }
     case 213: {
         ps_ui_render_stats stats;
-        if(!ps_graphics_ui_stats(a->graphics,&stats) || stats.backdrop_passes){ok=false;break;}
+        if(!ps_graphics_ui_stats(a->graphics,&stats) || stats.backdrop_passes || stats.shadow_draws){ok=false;break;}
         ps_preferences preferences=a->preferences;preferences.theme=PS_THEME_DARK;preferences.ui_size=22;preferences_apply(a,&preferences);
         SDL_SetWindowMinimumSize(a->window,640,480); /* Exercise the size allowed by detached workspaces. */
         if(!SDL_SetWindowSize(a->window,680,740) || !SDL_SyncWindow(a->window)){ok=false;break;}
@@ -649,13 +670,55 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
         if(a->graphic_export->focus_target)return;
         if(large_tabs<6){test_scene_key(a,SDLK_TAB,0,false);large_tabs++;return;}
         if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"PNG speichern…")){ok=false;break;}
-        *capture="graphic-dialog-200pct-footer.bmp";test_scene_key(a,SDLK_ESCAPE,0,false);*stage=230;return;
+        *capture="graphic-dialog-200pct-footer.bmp";*stage=239;return;
     }
+    case 239: {
+        SDL_SetWindowMinimumSize(a->window,480,480); /* Detached-panel component scope. */
+        if(!SDL_SetWindowSize(a->window,480,740) || !SDL_SyncWindow(a->window)){ok=false;break;}
+        a->graphic_export->focus_target=2;
+        struct nk_window *window=nk_window_find(a->ui,"graphic-export");if(window)window->scrollbar.y=0;
+        *stage=240;return;
+    }
+    case 240:
+        if(a->graphic_export->focus_target)return;
+        *capture="graphic-dialog-480.bmp";*stage=241;return;
+    case 241: {
+        static unsigned tiny_tabs;
+        if(a->graphic_export->focus_target)return;
+        if(tiny_tabs<6){test_scene_key(a,SDLK_TAB,0,false);tiny_tabs++;return;}
+        graphic_dialog *d=a->graphic_export;
+        if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"PNG speichern…") || d->copy.w<300 ||
+           fabsf(d->copy.w-d->store.w)>1 || fabsf(d->copy.x-d->store.x)>1 ||
+           d->store.y<d->copy.y+d->copy.h || d->store.x<d->bounds.x ||
+           d->store.x+d->store.w>d->bounds.x+d->bounds.w){ok=false;break;}
+        *capture="graphic-dialog-480-footer.bmp";*stage=242;return;
+    }
+    case 242: {
+        ps_preferences preferences=a->preferences;preferences.ui_size=16;preferences_apply(a,&preferences);
+        a->graphic_export->scale_override=0;a->graphic_export->focus_target=0;
+        if(!SDL_SetWindowSize(a->window,680,740) || !SDL_SyncWindow(a->window)){ok=false;break;}
+        struct nk_window *window=nk_window_find(a->ui,"graphic-export");if(window)window->scrollbar.y=0;
+        *stage=243;return;
+    }
+    case 243: {
+        graphic_dialog *d=a->graphic_export;
+        if(d->paper.w<500 || fabsf(d->paper.h-360)>.1f || !d->appearance || !d->contrast){ok=false;break;}
+        fprintf(stderr,"GRAPHIC DIALOG REFLOW: width=680 paper=%.3f,%.3f,%.3f,%.3f\n",d->paper.x,d->paper.y,d->paper.w,d->paper.h);
+        *capture="graphic-dialog-680-default.bmp";*stage=244;return;
+    }
+    case 244: {
+        if(!SDL_SetWindowSize(a->window,800,740) || !SDL_SyncWindow(a->window)){ok=false;break;}
+        struct nk_window *window=nk_window_find(a->ui,"graphic-export");if(window)window->scrollbar.y=0;
+        *stage=245;return;
+    }
+    case 245:
+        if(a->graphic_export->paper.y-a->graphic_export->bounds.y<230){ok=false;break;}
+        *capture="graphic-dialog-800-centered.bmp";test_scene_key(a,SDLK_ESCAPE,0,false);*stage=230;return;
     case 230:
         if(a->graphic_export || a->graphic_return_ui)return;
         {ps_preferences preferences=a->preferences;preferences.theme=PS_THEME_DARK;preferences.ui_size=16;preferences_apply(a,&preferences);}
         if(!SDL_SetWindowSize(a->window,1440,940) || !SDL_SyncWindow(a->window)){ok=false;break;}
-        puts("GRAPHIC DIALOG SELF-TEST: PASSED preview=canonical-rgb sizes=1,2,3,4 crop=xy themes=3 contrast=paper narrow=680 font=22 layout-stress=2x invalid-font-size=rejected selection=frozen clipboard=detached jobs=cancel,error,replace");
+        puts("GRAPHIC DIALOG SELF-TEST: PASSED preview=canonical-rgb sizes=1,2,3,4 crop=xy themes=3 contrast=paper narrow=680,480 medium=800 buttons=stacked preview=letterbox,centered font=22 layout-stress=2x invalid-font-size=rejected selection=frozen clipboard=detached jobs=cancel,error,replace");
         *stage=55;return;
     case 55:
         a->tab = 1;

@@ -202,6 +202,7 @@ static bool panel_windows_render(app *a) {
         nk_sdl_set_ui_size(p->ui,a->preferences.ui_size);
         ps_graphics_background(p->graphics,UI_COLOR(canvas).r,UI_COLOR(canvas).g,UI_COLOR(canvas).b);
         ps_graphics_backdrop(p->graphics,NULL);
+        ps_graphics_shadows(p->graphics,NULL,0);
         bool auxiliary=i>=PS_DOCK_PANELS;
         if(auxiliary) {
             nk_style_push_vec2(p->ui,&p->ui->style.window.padding,i==PS_PANEL_MEASURE?nk_vec2(0,0):nk_vec2(18,6));

@@ -22,7 +22,8 @@ PNG in allen vier Größen und eine eigene RGB-Vorschautextur. Der folgende
 [native Berichtsdialog](GRAPHIC-DIALOG-NATIVE.md) ersetzt die alte breite
 Berichtsleiste und ergänzt echte Vorschau, Optionen, Speicheraufträge und native
 Bildkopie. Der folgende [Materialabgleich](GRAPHIC-MATERIAL-NATIVE.md) ergänzt Blur
-und skalierte Felder. Sichtbarer Mehrlaufcache, dessen Zugang, Schatten und die vollständige
+und skalierte Felder. [Schatten, Referenzmaße und kleine Umbrüche](GRAPHIC-SHADOW-NATIVE.md)
+sind anschließend nativ ergänzt. Sichtbarer Mehrlaufcache, dessen Zugang und die vollständige
 Dialog-/OS-/Assistive-/DPI-Abnahme bleiben zusammenhängend umzusetzen.
 Die bisherigen Daten-/Geometrieprüfungen ersetzen diese native Abnahme nicht.
 

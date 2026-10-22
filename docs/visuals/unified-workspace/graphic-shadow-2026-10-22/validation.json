@@ -1,0 +1,970 @@
+{
+  "date": "2026-10-22T22:53:03.864547+02:00",
+  "base": "de8ee1d68fd510325a147fbff4210cfc18718b81",
+  "final_source_version": 6,
+  "source_manifest": "export-shadow-source6.json",
+  "final_runs": [
+    {
+      "label": "windows-debug",
+      "source_version": 5,
+      "directory": "build\\native\\Design-analysis\\test-results\\run-e0s4o6pj",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 45.312
+        }
+      ],
+      "binary_sha256": "04cb33366ba993667b00fddd90b7e6930e1adb134a4c320eec340ae04445c657",
+      "unchanged_exports": {
+        "native-export.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-export.png",
+          "current": "build\\native\\Design-analysis\\test-results\\run-e0s4o6pj\\graphic_dialog\\files ä\\dialog ä\\native-export.png",
+          "bytes": 259448,
+          "sha256": "3d6d9cbc571f8847317a21c84ad733f9df31254d8afe2bbf162d3fdb6dc66898",
+          "byte_equal": true
+        },
+        "native-scale1.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-scale1.png",
+          "current": "build\\native\\Design-analysis\\test-results\\run-e0s4o6pj\\graphic_dialog\\files ä\\dialog ä\\native-scale1.png",
+          "bytes": 99191,
+          "sha256": "29dc5fcb8420f4ae4ea86018b9479acabbbe19d35678cbfba799c91b6d67e2ae",
+          "byte_equal": true
+        },
+        "native-scale3.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-scale3.png",
+          "current": "build\\native\\Design-analysis\\test-results\\run-e0s4o6pj\\graphic_dialog\\files ä\\dialog ä\\native-scale3.png",
+          "bytes": 447443,
+          "sha256": "ec42249f66edea5915c058ba2fcdc96ea6184e2fa4d132ac6b3cf2ccc0c1ff12",
+          "byte_equal": true
+        },
+        "native-scale4.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-scale4.png",
+          "current": "build\\native\\Design-analysis\\test-results\\run-e0s4o6pj\\graphic_dialog\\files ä\\dialog ä\\native-scale4.png",
+          "bytes": 667300,
+          "sha256": "de5bb14cb68522d489d47209814972f20c980874a75e55aea107a9dbd6eeae3c",
+          "byte_equal": true
+        },
+        "native-ausschnitt.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-ausschnitt.png",
+          "current": "build\\native\\Design-analysis\\test-results\\run-e0s4o6pj\\graphic_dialog\\files ä\\dialog ä\\native-ausschnitt.png",
+          "bytes": 94119,
+          "sha256": "e1d73b343b99a306720748357d190256ebf312532df5ba8a9cfeb92a07527422",
+          "byte_equal": true
+        },
+        "native-ausschnitt.svg": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-native-ausschnitt.svg",
+          "current": "build\\native\\Design-analysis\\test-results\\run-e0s4o6pj\\graphic_dialog\\files ä\\dialog ä\\native-ausschnitt.svg",
+          "bytes": 7970,
+          "sha256": "74bbc37b28acca463fc17a8460e55a6c4361bdd1030e3daeac2ac22ed37469b9",
+          "byte_equal": true
+        },
+        "clipboard-reference.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-clipboard-reference.png",
+          "current": "build\\native\\Design-analysis\\test-results\\run-e0s4o6pj\\graphic_dialog\\files ä\\dialog ä\\clipboard-reference.png",
+          "bytes": 259448,
+          "sha256": "3d6d9cbc571f8847317a21c84ad733f9df31254d8afe2bbf162d3fdb6dc66898",
+          "byte_equal": true
+        },
+        "contrast-paper.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-debug-contrast-paper.png",
+          "current": "build\\native\\Design-analysis\\test-results\\run-e0s4o6pj\\graphic_dialog\\files ä\\dialog ä\\contrast-paper.png",
+          "bytes": 252835,
+          "sha256": "b15743a7a3570992ed9d2fcaeace0a6b356f5de578802b979184e4950b8773c2",
+          "byte_equal": true
+        }
+      },
+      "paired_readback": {
+        "width": 1440,
+        "height": 940,
+        "bmp_sha256": "02f34be7bbeaeef3eac601544483ad6e130487c6d210778cd6ca917b4b11fd01",
+        "png_sha256": "f8dffc653d41cd89a7f06e9189a38485ff05826143cc012c2c73e31b1aa7c9cb",
+        "rgb_sha256": "9b6bfd6da26df1119c19050fef63f4c5f315056e700727bef5149ef05839d450",
+        "all_rgb_equal": true
+      },
+      "clipboard": {
+        "bytes": 12240040,
+        "sha256": "8990f796f017cba488513e32bc4e441dd39f0ba2859db4a61956730d89f60f12"
+      },
+      "capture_storage": {
+        "common_images": [
+          {
+            "name": "graphic-dialog-200pct-footer",
+            "prior_bmp_bytes": 2012938,
+            "new_png_bytes": 67434
+          },
+          {
+            "name": "graphic-dialog-200pct",
+            "prior_bmp_bytes": 2012938,
+            "new_png_bytes": 65556
+          },
+          {
+            "name": "graphic-dialog-contrast-paper",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 151002
+          },
+          {
+            "name": "graphic-dialog-contrast",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 153221
+          },
+          {
+            "name": "graphic-dialog-dark-paper",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 225778
+          },
+          {
+            "name": "graphic-dialog-frozen-light",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 227605
+          },
+          {
+            "name": "graphic-dialog-large-narrow",
+            "prior_bmp_bytes": 2012938,
+            "new_png_bytes": 68501
+          },
+          {
+            "name": "graphic-dialog-light",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 273157
+          },
+          {
+            "name": "graphic-dialog-narrow-footer",
+            "prior_bmp_bytes": 2012938,
+            "new_png_bytes": 64948
+          },
+          {
+            "name": "plot-after-png",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 225196
+          },
+          {
+            "name": "plot-data",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 127712
+          },
+          {
+            "name": "plot-export-dialog",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 226902
+          },
+          {
+            "name": "plot-fit",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 126034
+          },
+          {
+            "name": "plot-histogram",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 117615
+          },
+          {
+            "name": "plot-offset-zoom",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 131290
+          },
+          {
+            "name": "plot-offset",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 135308
+          },
+          {
+            "name": "plot-pan",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 124315
+          },
+          {
+            "name": "plot-png-size",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 214837
+          },
+          {
+            "name": "plot-region-export",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 233716
+          },
+          {
+            "name": "plot-reopened",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 127547
+          },
+          {
+            "name": "plot-scatter",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 118758
+          },
+          {
+            "name": "plot-sensor",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 124054
+          },
+          {
+            "name": "plot-zoom",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 123532
+          },
+          {
+            "name": "scene-all",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 150855
+          },
+          {
+            "name": "scene-hidden",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 147365
+          },
+          {
+            "name": "scene-keyboard",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 143426
+          },
+          {
+            "name": "scene-picked",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 146188
+          },
+          {
+            "name": "scene-reordered",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 147396
+          }
+        ],
+        "prior_bmp_bytes": 138000664,
+        "new_png_bytes": 4189248,
+        "compatibility_bmp_bytes": 5414538,
+        "new_png_capture_count": 34
+      }
+    },
+    {
+      "label": "windows-release",
+      "source_version": 5,
+      "directory": "build\\native\\Release\\test-results\\run-__91lssr",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 9.547
+        }
+      ],
+      "binary_sha256": "e48b8ec0a14481790e79a950f820cd5b14266a30737950d8bfc9fba3e542d5bd",
+      "unchanged_exports": {
+        "native-export.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-native-export.png",
+          "current": "build\\native\\Release\\test-results\\run-__91lssr\\graphic_dialog\\files ä\\dialog ä\\native-export.png",
+          "bytes": 259448,
+          "sha256": "3d6d9cbc571f8847317a21c84ad733f9df31254d8afe2bbf162d3fdb6dc66898",
+          "byte_equal": true
+        },
+        "native-scale1.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-native-scale1.png",
+          "current": "build\\native\\Release\\test-results\\run-__91lssr\\graphic_dialog\\files ä\\dialog ä\\native-scale1.png",
+          "bytes": 99191,
+          "sha256": "29dc5fcb8420f4ae4ea86018b9479acabbbe19d35678cbfba799c91b6d67e2ae",
+          "byte_equal": true
+        },
+        "native-scale3.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-native-scale3.png",
+          "current": "build\\native\\Release\\test-results\\run-__91lssr\\graphic_dialog\\files ä\\dialog ä\\native-scale3.png",
+          "bytes": 447443,
+          "sha256": "ec42249f66edea5915c058ba2fcdc96ea6184e2fa4d132ac6b3cf2ccc0c1ff12",
+          "byte_equal": true
+        },
+        "native-scale4.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-native-scale4.png",
+          "current": "build\\native\\Release\\test-results\\run-__91lssr\\graphic_dialog\\files ä\\dialog ä\\native-scale4.png",
+          "bytes": 667300,
+          "sha256": "de5bb14cb68522d489d47209814972f20c980874a75e55aea107a9dbd6eeae3c",
+          "byte_equal": true
+        },
+        "native-ausschnitt.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-native-ausschnitt.png",
+          "current": "build\\native\\Release\\test-results\\run-__91lssr\\graphic_dialog\\files ä\\dialog ä\\native-ausschnitt.png",
+          "bytes": 94119,
+          "sha256": "e1d73b343b99a306720748357d190256ebf312532df5ba8a9cfeb92a07527422",
+          "byte_equal": true
+        },
+        "native-ausschnitt.svg": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-native-ausschnitt.svg",
+          "current": "build\\native\\Release\\test-results\\run-__91lssr\\graphic_dialog\\files ä\\dialog ä\\native-ausschnitt.svg",
+          "bytes": 7970,
+          "sha256": "74bbc37b28acca463fc17a8460e55a6c4361bdd1030e3daeac2ac22ed37469b9",
+          "byte_equal": true
+        },
+        "clipboard-reference.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-clipboard-reference.png",
+          "current": "build\\native\\Release\\test-results\\run-__91lssr\\graphic_dialog\\files ä\\dialog ä\\clipboard-reference.png",
+          "bytes": 259448,
+          "sha256": "3d6d9cbc571f8847317a21c84ad733f9df31254d8afe2bbf162d3fdb6dc66898",
+          "byte_equal": true
+        },
+        "contrast-paper.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\windows-release-contrast-paper.png",
+          "current": "build\\native\\Release\\test-results\\run-__91lssr\\graphic_dialog\\files ä\\dialog ä\\contrast-paper.png",
+          "bytes": 252835,
+          "sha256": "b15743a7a3570992ed9d2fcaeace0a6b356f5de578802b979184e4950b8773c2",
+          "byte_equal": true
+        }
+      },
+      "paired_readback": {
+        "width": 1440,
+        "height": 940,
+        "bmp_sha256": "02f34be7bbeaeef3eac601544483ad6e130487c6d210778cd6ca917b4b11fd01",
+        "png_sha256": "f8dffc653d41cd89a7f06e9189a38485ff05826143cc012c2c73e31b1aa7c9cb",
+        "rgb_sha256": "9b6bfd6da26df1119c19050fef63f4c5f315056e700727bef5149ef05839d450",
+        "all_rgb_equal": true
+      },
+      "clipboard": {
+        "bytes": 12240040,
+        "sha256": "8990f796f017cba488513e32bc4e441dd39f0ba2859db4a61956730d89f60f12"
+      },
+      "capture_storage": {
+        "common_images": [
+          {
+            "name": "graphic-dialog-200pct-footer",
+            "prior_bmp_bytes": 2012938,
+            "new_png_bytes": 67434
+          },
+          {
+            "name": "graphic-dialog-200pct",
+            "prior_bmp_bytes": 2012938,
+            "new_png_bytes": 65556
+          },
+          {
+            "name": "graphic-dialog-contrast-paper",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 151002
+          },
+          {
+            "name": "graphic-dialog-contrast",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 153221
+          },
+          {
+            "name": "graphic-dialog-dark-paper",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 225778
+          },
+          {
+            "name": "graphic-dialog-frozen-light",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 227605
+          },
+          {
+            "name": "graphic-dialog-large-narrow",
+            "prior_bmp_bytes": 2012938,
+            "new_png_bytes": 68501
+          },
+          {
+            "name": "graphic-dialog-light",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 273157
+          },
+          {
+            "name": "graphic-dialog-narrow-footer",
+            "prior_bmp_bytes": 2012938,
+            "new_png_bytes": 64948
+          },
+          {
+            "name": "plot-after-png",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 225196
+          },
+          {
+            "name": "plot-data",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 127712
+          },
+          {
+            "name": "plot-export-dialog",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 226902
+          },
+          {
+            "name": "plot-fit",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 126034
+          },
+          {
+            "name": "plot-histogram",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 117615
+          },
+          {
+            "name": "plot-offset-zoom",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 131290
+          },
+          {
+            "name": "plot-offset",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 135308
+          },
+          {
+            "name": "plot-pan",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 124315
+          },
+          {
+            "name": "plot-png-size",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 214837
+          },
+          {
+            "name": "plot-region-export",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 233716
+          },
+          {
+            "name": "plot-reopened",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 127547
+          },
+          {
+            "name": "plot-scatter",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 118758
+          },
+          {
+            "name": "plot-sensor",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 124054
+          },
+          {
+            "name": "plot-zoom",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 123532
+          },
+          {
+            "name": "scene-all",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 150855
+          },
+          {
+            "name": "scene-hidden",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 147365
+          },
+          {
+            "name": "scene-keyboard",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 143426
+          },
+          {
+            "name": "scene-picked",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 146188
+          },
+          {
+            "name": "scene-reordered",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 147396
+          }
+        ],
+        "prior_bmp_bytes": 138000664,
+        "new_png_bytes": 4189248,
+        "compatibility_bmp_bytes": 5414538,
+        "new_png_capture_count": 34
+      }
+    },
+    {
+      "label": "linux-debug",
+      "source_version": 6,
+      "directory": "build\\native\\Design-analysis-linux\\test-results\\run-mdkcrjua",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 74.021
+        }
+      ],
+      "binary_sha256": "836ca98f87ce6a9d9c3292efa5ef4fafd1888eec28e55afec4ef29a48de67715",
+      "unchanged_exports": {
+        "native-export.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-native-export.png",
+          "current": "build\\native\\Design-analysis-linux\\test-results\\run-mdkcrjua\\graphic_dialog\\files ä\\dialog ä\\native-export.png",
+          "bytes": 270928,
+          "sha256": "ec92b40bc2a35d29d328778c1130ebec85b7bb2df11bf3f83dd7b1479cb66685",
+          "byte_equal": true
+        },
+        "native-scale1.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-native-scale1.png",
+          "current": "build\\native\\Design-analysis-linux\\test-results\\run-mdkcrjua\\graphic_dialog\\files ä\\dialog ä\\native-scale1.png",
+          "bytes": 104711,
+          "sha256": "7cf3f5dab314338d0b46b9be0d9195dd74f513f3f4271c325927f28a0ca3dc1e",
+          "byte_equal": true
+        },
+        "native-scale3.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-native-scale3.png",
+          "current": "build\\native\\Design-analysis-linux\\test-results\\run-mdkcrjua\\graphic_dialog\\files ä\\dialog ä\\native-scale3.png",
+          "bytes": 461151,
+          "sha256": "106426dfecaeaa37f34ddec16c11b4ae750e513f41c86aa24e9799c42a8d4213",
+          "byte_equal": true
+        },
+        "native-scale4.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-native-scale4.png",
+          "current": "build\\native\\Design-analysis-linux\\test-results\\run-mdkcrjua\\graphic_dialog\\files ä\\dialog ä\\native-scale4.png",
+          "bytes": 687960,
+          "sha256": "27bbf7095b28a24bc32b270e9cc5bb5d7bca42c0465fb2e1bbbaca79d7ecf46e",
+          "byte_equal": true
+        },
+        "native-ausschnitt.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-native-ausschnitt.png",
+          "current": "build\\native\\Design-analysis-linux\\test-results\\run-mdkcrjua\\graphic_dialog\\files ä\\dialog ä\\native-ausschnitt.png",
+          "bytes": 100317,
+          "sha256": "1c6ddfa8fb33a8d2f27271b5461895ab3831233bf3e6e98440eefecbd6b3772c",
+          "byte_equal": true
+        },
+        "native-ausschnitt.svg": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-native-ausschnitt.svg",
+          "current": "build\\native\\Design-analysis-linux\\test-results\\run-mdkcrjua\\graphic_dialog\\files ä\\dialog ä\\native-ausschnitt.svg",
+          "bytes": 8028,
+          "sha256": "0ee3c6538ac34f443e9fcd69dbfd760a5a2359814dc582f9a5a89c1d767ea15b",
+          "byte_equal": true
+        },
+        "clipboard-reference.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-clipboard-reference.png",
+          "current": "build\\native\\Design-analysis-linux\\test-results\\run-mdkcrjua\\graphic_dialog\\files ä\\dialog ä\\clipboard-reference.png",
+          "bytes": 270928,
+          "sha256": "ec92b40bc2a35d29d328778c1130ebec85b7bb2df11bf3f83dd7b1479cb66685",
+          "byte_equal": true
+        },
+        "contrast-paper.png": {
+          "prior": "docs\\visuals\\unified-workspace\\graphic-dialog-2026-10-22\\linux-debug-contrast-paper.png",
+          "current": "build\\native\\Design-analysis-linux\\test-results\\run-mdkcrjua\\graphic_dialog\\files ä\\dialog ä\\contrast-paper.png",
+          "bytes": 264047,
+          "sha256": "a61340560fabedb4aa66c9bc262d9a44fe1eebadc083c0ac4705b0219060301c",
+          "byte_equal": true
+        }
+      },
+      "paired_readback": {
+        "width": 1440,
+        "height": 940,
+        "bmp_sha256": "c67428e570512f7caef821eeea8ecb3ae511abb3332a443d702016d23c32a3a4",
+        "png_sha256": "4779e366ad9d587430633fadcda630a5e6ebfa5afac23dc946e4269fb8557809",
+        "rgb_sha256": "148b28416696475ed0874a359297a6223b0a1c2ebdf489b2fb7a248b22562765",
+        "all_rgb_equal": true
+      },
+      "clipboard": {
+        "bytes": 12240054,
+        "sha256": "5cc8b1fc846d7e875ce3a905ab1b47fde0cabbc0eb7cf1eaec7571bb28eaa6ff"
+      },
+      "capture_storage": {
+        "common_images": [
+          {
+            "name": "graphic-dialog-200pct-footer",
+            "prior_bmp_bytes": 2012938,
+            "new_png_bytes": 69962
+          },
+          {
+            "name": "graphic-dialog-200pct",
+            "prior_bmp_bytes": 2012938,
+            "new_png_bytes": 69521
+          },
+          {
+            "name": "graphic-dialog-contrast-paper",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 160603
+          },
+          {
+            "name": "graphic-dialog-contrast",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 163430
+          },
+          {
+            "name": "graphic-dialog-dark-paper",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 248526
+          },
+          {
+            "name": "graphic-dialog-frozen-light",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 250566
+          },
+          {
+            "name": "graphic-dialog-large-narrow",
+            "prior_bmp_bytes": 2012938,
+            "new_png_bytes": 73198
+          },
+          {
+            "name": "graphic-dialog-light",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 293462
+          },
+          {
+            "name": "graphic-dialog-narrow-footer",
+            "prior_bmp_bytes": 2012938,
+            "new_png_bytes": 71815
+          },
+          {
+            "name": "plot-after-png",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 248077
+          },
+          {
+            "name": "plot-data",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 135204
+          },
+          {
+            "name": "plot-export-dialog",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 249784
+          },
+          {
+            "name": "plot-fit",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 135374
+          },
+          {
+            "name": "plot-histogram",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 126149
+          },
+          {
+            "name": "plot-offset-zoom",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 142642
+          },
+          {
+            "name": "plot-offset",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 146365
+          },
+          {
+            "name": "plot-pan",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 134084
+          },
+          {
+            "name": "plot-png-size",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 236669
+          },
+          {
+            "name": "plot-region-export",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 258947
+          },
+          {
+            "name": "plot-reopened",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 137069
+          },
+          {
+            "name": "plot-scatter",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 128651
+          },
+          {
+            "name": "plot-sensor",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 132126
+          },
+          {
+            "name": "plot-zoom",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 132857
+          },
+          {
+            "name": "scene-all",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 160126
+          },
+          {
+            "name": "scene-hidden",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 156288
+          },
+          {
+            "name": "scene-keyboard",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 150975
+          },
+          {
+            "name": "scene-picked",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 154146
+          },
+          {
+            "name": "scene-reordered",
+            "prior_bmp_bytes": 5414538,
+            "new_png_bytes": 156294
+          }
+        ],
+        "prior_bmp_bytes": 138000664,
+        "new_png_bytes": 4522910,
+        "compatibility_bmp_bytes": 5414538,
+        "new_png_capture_count": 34
+      }
+    }
+  ],
+  "gpu_runs": [
+    {
+      "label": "windows-unit",
+      "source_version": 2,
+      "directory": "build\\native\\Design-analysis\\test-results\\run-fvyboit7",
+      "selected_case": {
+        "command": [
+          "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-backdrop_ui.exe",
+          "D:/Physim/build/native/Design-analysis/test-results/run-fvyboit7/backdrop_ui"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 512x64, 1 fonts, GPU limit 32768\nGPU SHADOW ORACLE: samples=510 max_channel_error=0.935493876\nGPU backdrop: glass, pure sigma3, independent rounded shadows, fallback and ordering passed\n",
+        "stderr": "",
+        "seconds": 3.641,
+        "name": "backdrop_ui"
+      },
+      "unchanged_dependencies": [
+        "app/graphics.c",
+        "app/graphics.h",
+        "app/ui.h",
+        "app/ui_backend.c",
+        "tests/test_backdrop_ui.c"
+      ],
+      "note": "Windows full run also contains an explicitly failed host-focus dialog case; only the successful GPU group is counted here."
+    },
+    {
+      "label": "linux-unit",
+      "source_version": 2,
+      "directory": "build\\native\\Design-analysis-linux\\test-results\\run-nf0apyyj",
+      "selected_case": {
+        "command": [
+          "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim-test-backdrop_ui",
+          "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-nf0apyyj/backdrop_ui"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)\nFont atlas: 512x64, 1 fonts, GPU limit 16384\nGPU SHADOW ORACLE: samples=510 max_channel_error=0.816958857\nGPU backdrop: glass, pure sigma3, independent rounded shadows, fallback and ordering passed\n",
+        "stderr": "",
+        "seconds": 1.504,
+        "name": "backdrop_ui"
+      },
+      "unchanged_dependencies": [
+        "app/graphics.c",
+        "app/graphics.h",
+        "app/ui.h",
+        "app/ui_backend.c",
+        "tests/test_backdrop_ui.c"
+      ],
+      "note": ""
+    },
+    {
+      "label": "release-unit",
+      "source_version": 2,
+      "directory": "build\\native\\Release\\test-results\\run-72b7mi6v",
+      "selected_case": {
+        "command": [
+          "D:\\Physim\\build\\native\\Release\\bin\\physim-test-backdrop_ui.exe",
+          "D:/Physim/build/native/Release/test-results/run-72b7mi6v/backdrop_ui"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 512x64, 1 fonts, GPU limit 32768\nGPU SHADOW ORACLE: samples=510 max_channel_error=0.935493876\nGPU backdrop: glass, pure sigma3, independent rounded shadows, fallback and ordering passed\n",
+        "stderr": "",
+        "seconds": 1.375,
+        "name": "backdrop_ui"
+      },
+      "unchanged_dependencies": [
+        "app/graphics.c",
+        "app/graphics.h",
+        "app/ui.h",
+        "app/ui_backend.c",
+        "tests/test_backdrop_ui.c"
+      ],
+      "note": ""
+    }
+  ],
+  "historical_runs": [
+    {
+      "directory": "build\\native\\Design-analysis\\test-results\\run-n9od6muy",
+      "results_sha256": "275d19b25ebda4f22b54a4bedc3d721ad076168c047cddff5f59f8011818b84c",
+      "groups": [
+        {
+          "name": "backdrop_ui",
+          "status": "passed"
+        },
+        {
+          "name": "graphic_dialog",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "directory": "build\\native\\Design-analysis\\test-results\\run-fvyboit7",
+      "results_sha256": "99d1f84aea9130e314f10416c0f4c52850020cb7caed58cd889432deeb625e86",
+      "groups": [
+        {
+          "name": "backdrop_ui",
+          "status": "passed"
+        },
+        {
+          "name": "graphic_dialog",
+          "status": "failed"
+        }
+      ]
+    },
+    {
+      "directory": "build\\native\\Design-analysis\\test-results\\run-c3mzyet4",
+      "results_sha256": "c92fe172d00d2e27b0a09ec0e8ddf929e8fb8f3badca8318535c2f1e621795d5",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "directory": "build\\native\\Design-analysis\\test-results\\run-ipvx8bm7",
+      "results_sha256": "e23edc5e94860627f7eb9298dd0cad036fee0fda7629fccba4cd85efdb734a4a",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "directory": "build\\native\\Design-analysis\\test-results\\run-gznuy18c",
+      "results_sha256": "ee020afcc4d5d1e1d56f4f122ae054beb7538a04b794681ed0558b201679eaec",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "failed"
+        }
+      ]
+    },
+    {
+      "directory": "build\\native\\Design-analysis-linux\\test-results\\run-rv4s44_9",
+      "results_sha256": "948fc006e1b6ccdfca941a327707ca47921149dbc8dea15329fc1541e8f0f6c2",
+      "groups": [
+        {
+          "name": "backdrop_ui",
+          "status": "passed"
+        },
+        {
+          "name": "graphic_dialog",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "directory": "build\\native\\Design-analysis-linux\\test-results\\run-nf0apyyj",
+      "results_sha256": "1500c5f58f4f2b3c6d2beb5a18defe23ad024a5e76b8324a39fbb1e8e62f6dfd",
+      "groups": [
+        {
+          "name": "backdrop_ui",
+          "status": "passed"
+        },
+        {
+          "name": "graphic_dialog",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "directory": "build\\native\\Design-analysis-linux\\test-results\\run-uhr198r_",
+      "results_sha256": "1b995cbb9722c29af5a8629a6f6c4e8f66a94cedc57c69d43e72b4e37800d334",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "directory": "build\\native\\Design-analysis-linux\\test-results\\run-uuec9hvq",
+      "results_sha256": "262733831dae83dcc28111aa6c9991d50094caf8762902d7937c7b9c82ad37fb",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "failed"
+        }
+      ]
+    },
+    {
+      "directory": "build\\native\\Design-analysis-linux\\test-results\\run-i2onivf1",
+      "results_sha256": "5e93fa1e4151affeb92a68aedd379c2cdfcecf1fceb5fe2c4e7b13a6c0a683d2",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "failed"
+        }
+      ]
+    },
+    {
+      "directory": "build\\native\\Release\\test-results\\run-ixvvbf8m",
+      "results_sha256": "17da2b12b99cb66bec528e7a531b4b58b5e48fa4add703fd616fa25a535a69d0",
+      "groups": [
+        {
+          "name": "backdrop_ui",
+          "status": "passed"
+        },
+        {
+          "name": "graphic_dialog",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "directory": "build\\native\\Release\\test-results\\run-72b7mi6v",
+      "results_sha256": "26baf9afb37d74382b21e3182a6969ae7e17fd6a54d07860c8dc755797ce1cc5",
+      "groups": [
+        {
+          "name": "backdrop_ui",
+          "status": "passed"
+        },
+        {
+          "name": "graphic_dialog",
+          "status": "passed"
+        }
+      ]
+    }
+  ],
+  "foreign_preserved": {
+    ".github/workflows/linux-ui-sanitizers.yml": "517c7d628b9d496a0422d145f747a0427da24a4a304a218294f857ac9f6aaa24",
+    ".github/workflows/macos-f1-accessibility.yml": "54c64dc5b9a5ddc478d704fbd6eccae4548155216130c25778466ab60a48a9af",
+    "app/accessibility_atspi.c": "cb7570a937751358f3de0c1c9c18df15c6f00680843a58d1ed05a8ef6cd13ff0",
+    "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+    "tests/check_documentation_orca.py": "ef3298800cfa8032cf6333b6b7ee902fc75d17fc3200b0f5ec6e801b2eba37ac",
+    "tests/test_accessibility_tables_atspi.py": "ef47a57f9c6a5d2073d19b22807aa5998bb7c0401ee0189504152cf62a900a53",
+    "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+    "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+    "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+    "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08",
+    "docs/status.md": "4159a86157c20dec896f13f6d950cfdbd85cdb56ee50fd4b8f510f140542ed09",
+    "docs/storage-cleanup-2026-10-22.md": "5bbc8778efe4da1236883d3affc8a41d07a983ceb0e804a0bbfe3cb02ce72d88"
+  },
+  "font_assets": {
+    "third_party\\fonts\\notoemoji-OFL.txt": "500bb1ccf43df7bbb522112f9133a52b16e1c35e809632f5d8609b179152de5b",
+    "third_party\\fonts\\NotoEmoji.ttf": "de6c18832938afc99caf132b39d6a30a19bac7f2e812e28db2535b4608d27551",
+    "third_party\\fonts\\NotoSans-Bold.ttf": "c976e4b1b99edc88775377fcc21692ca4bfa46b6d6ca6522bfda505b28ff9d6a",
+    "third_party\\fonts\\notosans-OFL.txt": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+    "third_party\\fonts\\NotoSans.ttf": "bfb7bb691513f12e734dc346c03a03f784912432d7e3fa8e56efcf906fe86b3d",
+    "third_party\\fonts\\notosansbold-OFL.txt": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb",
+    "third_party\\fonts\\notosansmath-OFL.txt": "403a95275b469061b7d4371c328e0ada3bc7d63328abe2e88aad5cd243b2fe21",
+    "third_party\\fonts\\NotoSansMath-Regular.ttf": "3f495fe933c06786e4d5f6d86b8ee70b6753a68ee3b9d87528726de0f6e2c47d",
+    "third_party\\fonts\\notosansmono-OFL.txt": "cee9892f9f0cc8fe882c9e9537ee6a89621d86ee7ceaf70b02e2b2b1c25c061a",
+    "third_party\\fonts\\NotoSansMono.ttf": "2cb2adb378a8f574213e23df697050b83c54c27df465a2015552740b2769a081",
+    "third_party\\fonts\\notosanssymbols2-OFL.txt": "b118dd41337806a5d4797052c77caf3bd096aed783e5eb21b4d11154351e1ac0",
+    "third_party\\fonts\\NotoSansSymbols2-Regular.ttf": "7d5fb73b7ca67a6798101741f5d280a3d016a56a197afcd4199dbb57b4b82a21",
+    "third_party\\fonts\\NotoSerif-Italic.ttf": "0ea81d6b54fc8aa5dff0fd6ebe7cfa431e9e6cf747a8d4aa33581fa0aaccffea",
+    "third_party\\fonts\\notoserifitalic-OFL.txt": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
+  },
+  "version_scope": "Production C is identical in5/6;6 changes only Python publication watchdog65->135 to permit the native120s task plus startup. GPU dependencies are byte-identical from2 through6. No fictional combined final run is claimed.",
+  "counter_audit": [
+    "Source2 Windows full1/2: no keyboard focus from startup; unchanged retry1/1 passes.",
+    "Source4 Windows/Linux: app workflow completed, post-check wrongly expected canvas18,19,22. CSS and reference pixels prove20,21,24; strict expectation corrected, real light-border133->180 discrepancy fixed with a new reference-color probe.",
+    "Source5 Linux: Python65s publication watchdog terminated actively progressing focused app at214; outer135s follows unchanged native120s limit.6 actually completes."
+  ],
+  "limits": [
+    "No full product/pixel-identical acceptance",
+    "Nuklear integer command coordinates still cause measured1px vertical differences vs CSS",
+    "Font family/weight and continuous scroll states need full comparison",
+    "Component480px/twofold layout is not ordinary main-window minimum, global32px setting or physical DPI proof",
+    "No macOS, external screenreader, actual OS chooser interaction or detached-source matrix acceptance",
+    "Visible8-run cache/curve/legend/statistics/export still unimplemented",
+    "Workflow runtime is not interactive GPU frame-time budget",
+    "No deletion attempted; previous cleanup rejection is preserved"
+  ]
+}

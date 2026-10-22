@@ -293,6 +293,19 @@ void ps_ui_draw_backdrop(struct nk_context *ctx,const ps_ui_backdrop *material) 
     nk_fill_rect(canvas,nk_rect(material->x,material->y,material->w,material->h),material->blur_only?0:16,nk_rgb(255,255,255));
     nk_set_user_data(ctx,userdata);nk_push_scissor(canvas,clip);
 }
+void ps_ui_draw_shadow(struct nk_context *ctx,const ps_ui_shadow *shadow) {
+    if(!ctx || !ctx->current || !shadow || !isfinite(shadow->x) || !isfinite(shadow->y) ||
+       !isfinite(shadow->w) || !isfinite(shadow->h) || !isfinite(shadow->radius) ||
+       !isfinite(shadow->offset_x) || !isfinite(shadow->offset_y) || !isfinite(shadow->blur) ||
+       shadow->w<=0 || shadow->h<=0 || shadow->blur<=0 || shadow->radius<0 ||
+       shadow->radius>shadow->blur*.15f || shadow->radius>fminf(shadow->w,shadow->h)*.5f)return;
+    struct nk_command_buffer *canvas=nk_window_get_canvas(ctx);struct nk_rect clip=canvas->clip;
+    nk_handle userdata=ctx->userdata;float halo=2*shadow->blur;
+    nk_set_user_data(ctx,nk_handle_ptr((void*)shadow));nk_push_scissor(canvas,clip);
+    nk_fill_rect(canvas,nk_rect(floorf(shadow->x+shadow->offset_x-halo),floorf(shadow->y+shadow->offset_y-halo),
+        ceilf(shadow->w+2*halo+1),ceilf(shadow->h+2*halo+1)),0,nk_rgba(shadow->red,shadow->green,shadow->blue,shadow->alpha));
+    nk_set_user_data(ctx,userdata);nk_push_scissor(canvas,clip);
+}
 void ps_ui_set_focus_color(struct nk_context *ctx,struct nk_color color) {
     if(!ctx || !ctx->userdata.ptr)return;
     ps_ui_font_layout *layout=ctx->userdata.ptr;if(layout->magic==PS_UI_LAYOUT_MAGIC)layout->focus_color=color;

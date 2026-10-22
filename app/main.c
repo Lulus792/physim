@@ -5280,6 +5280,13 @@ int main(int argc, char **argv) {
         if (capture && !doc_capture) {
             char path[4096];
             join(path, sizeof path, workspace_state_test ? argv[2] : a->project, capture);
+            if(plot_test && SDL_getenv("PHYSIM_TEST_GRAPHIC_DIALOG")) {
+                /* One paired BMP/PNG proves identical readback; the remaining
+                 * dialog captures are lossless PNG from creation, not deleted
+                 * or transformed old evidence. Ordinary fixture paths stay BMP. */
+                if(!strcmp(capture,"plot-export-dialog.bmp") && !ps_graphics_capture(graphics,path))exit_code=1;
+                char *suffix=strrchr(path,'.');if(suffix && !strcmp(suffix,".bmp"))memcpy(suffix,".png",5);
+            }
             if (!ps_graphics_capture(graphics, path))
                 exit_code = 1;
         }

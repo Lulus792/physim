@@ -5,6 +5,7 @@
 #include <math.h>
 #define CHECK(x) do {if(!(x)){fprintf(stderr,"Backdrop line %d: %s (%s)\n",__LINE__,#x,SDL_GetError());return 1;}}while(0)
 static void draw(struct nk_context *ui,ps_graphics *g,ps_ui_backdrop *material,bool visible) {
+    ps_graphics_shadows(g,NULL,0);
     nk_input_begin(ui);nk_input_end(ui);
     ps_graphics_backdrop(g,visible?material:NULL);
     if(nk_begin(ui,"backdrop probe",nk_rect(0,0,320,200),NK_WINDOW_NO_SCROLLBAR)) {
@@ -20,6 +21,7 @@ static void draw(struct nk_context *ui,ps_graphics *g,ps_ui_backdrop *material,b
     nk_end(ui);
 }
 static void draw_plain(struct nk_context *ui,ps_graphics *g,ps_ui_backdrop *material) {
+    ps_graphics_shadows(g,NULL,0);
     nk_input_begin(ui);nk_input_end(ui);ps_graphics_backdrop(g,material);
     if(nk_begin(ui,"backdrop probe",nk_rect(0,0,320,200),NK_WINDOW_NO_SCROLLBAR)) {
         struct nk_command_buffer *c=nk_window_get_canvas(ui);nk_push_scissor(c,nk_rect(0,0,320,200));
@@ -38,6 +40,37 @@ static double gaussian_step(int offset) {
         double weight=exp(-i*i/(2.*3*3));total+=weight;if(offset+i>=0)white+=weight;
     }
     return white/total;
+}
+static double shadow_coverage(const ps_ui_shadow *s,double x,double y) {
+    double r=s->radius,cx=s->x+s->w*.5,cy=s->y+s->h*.5;
+    double dx=fabs(x-cx),dy=fabs(y-cy);
+    if(dx<s->w*.5 && dy<s->h*.5 && (r==0 || dx<s->w*.5-r || dy<s->h*.5-r ||
+       hypot(dx-(s->w*.5-r),dy-(s->h*.5-r))<r))return 0;
+    x-=s->offset_x;y-=s->offset_y;
+    double sigma=s->blur*.5,root=sqrt(2.)*sigma;
+    if(!r)return .25*(erf((x-s->x)/root)-erf((x-s->x-s->w)/root))*
+        (erf((y-s->y)/root)-erf((y-s->y-s->h)/root));
+    /* Integrate the actual rounded mask, independently of the shader's
+     * rectangle-minus-corner-moments approximation. */
+    double result=0,step=s->h/2000.;
+    for(unsigned i=0;i<2000;i++) {
+        double at=(i+.5)*step,edge=0;
+        if(at<r)edge=r-sqrt(fmax(0,r*r-(r-at)*(r-at)));
+        else if(at>s->h-r)edge=r-sqrt(fmax(0,r*r-(at-s->h+r)*(at-s->h+r)));
+        double horizontal=.5*(erf((x-s->x-edge)/root)-erf((x-s->x-s->w+edge)/root));
+        result+=horizontal*exp(-pow(s->y+at-y,2)/(2*sigma*sigma))*step/(sqrt(2*3.141592653589793)*sigma);
+    }
+    return result;
+}
+static void draw_shadows(struct nk_context *ui,ps_graphics *g,const ps_ui_shadow *shadows,unsigned count) {
+    nk_input_begin(ui);nk_input_end(ui);ps_graphics_backdrop(g,NULL);ps_graphics_shadows(g,shadows,count);
+    if(nk_begin(ui,"backdrop probe",nk_rect(0,0,320,200),NK_WINDOW_NO_SCROLLBAR)) {
+        struct nk_command_buffer *c=nk_window_get_canvas(ui);nk_push_scissor(c,nk_rect(0,0,320,200));
+        nk_fill_rect(c,nk_rect(0,0,320,200),0,nk_rgb(255,255,255));
+        for(unsigned i=0;i<count;i++)ps_ui_draw_shadow(ui,&shadows[i]);
+        nk_fill_rect(c,nk_rect(100,70,10,10),0,nk_rgb(240,20,30));
+    }
+    nk_end(ui);
 }
 int main(int argc,char **argv) {
     CHECK(argc==2 && SDL_Init(SDL_INIT_VIDEO));
@@ -99,6 +132,27 @@ int main(int argc,char **argv) {
         CHECK(front[0]==240 && front[1]==20 && front[2]==30);
         char path[4096];snprintf(path,sizeof path,"%s/pure-blur-%u.bmp",argv[1],pass);CHECK(ps_graphics_capture(g,path));
     }
+    const ps_ui_shadow shadows[]={
+        {.x=40,.y=40,.w=90,.h=70,.radius=14,.offset_y=28,.blur=100,.alpha=119},
+        {.x=200,.y=50,.w=60,.h=60,.offset_y=8,.blur=28,.alpha=34}};
+    const int xs[]={1,25,39,41,65,85,129,130,150,180,199,201,230,259,260,290,318};
+    const int ys[]={1,20,39,41,60,100,110,130,160,198};
+    double maximum_error=0;
+    for(unsigned pass=0;pass<3;pass++) {
+        unsigned count=pass==2?0:pass+1;draw_shadows(ui,g,shadows,count);CHECK(nk_sdl_render(ui));
+        ps_ui_render_stats stats;CHECK(ps_graphics_ui_stats(g,&stats));CHECK(stats.shadow_draws==count && stats.backdrop_passes==0);
+        for(unsigned ix=0;ix<sizeof xs/sizeof *xs;ix++)for(unsigned iy=0;iy<sizeof ys/sizeof *ys;iy++) {
+            int px=(int)((xs[ix]+.5f)*sx),py=(int)((ys[iy]+.5f)*sy);unsigned char pixel[4];
+            read_pixels(px,ph-1-py,1,1,GL_RGBA,GL_UNSIGNED_BYTE,pixel);double expected=255;
+            for(unsigned i=0;i<count;i++)expected*=1-shadows[i].alpha/255.*shadow_coverage(&shadows[i],(px+.5)/sx,(py+.5)/sy);
+            maximum_error=fmax(maximum_error,fabs(pixel[0]-expected));
+            CHECK(fabs(pixel[0]-expected)<=1.1 && pixel[0]==pixel[1] && pixel[1]==pixel[2]);
+        }
+        unsigned char front[4];read_pixels((int)(105.5f*sx),ph-1-(int)(75.5f*sy),1,1,GL_RGBA,GL_UNSIGNED_BYTE,front);
+        CHECK(front[0]==240 && front[1]==20 && front[2]==30);
+        char path[4096];snprintf(path,sizeof path,"%s/outer-shadows-%u.png",argv[1],pass);CHECK(ps_graphics_capture(g,path));
+    }
+    printf("GPU SHADOW ORACLE: samples=510 max_channel_error=%.9f\n",maximum_error);
     nk_sdl_shutdown(ui);ps_graphics_destroy(g);SDL_DestroyWindow(window);SDL_Quit();
-    puts("GPU backdrop: glass and pure sigma3 Gaussian pixels, fallback, order, close and reopen passed");return 0;
+    puts("GPU backdrop: glass, pure sigma3, independent rounded shadows, fallback and ordering passed");return 0;
 }
