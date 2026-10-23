@@ -129,13 +129,16 @@ static const char *workspace_name(const char *path) {
 }
 static void workbench_file_icon(app *a,struct nk_command_buffer *canvas,const char *path,struct nk_rect r,struct nk_color color) {
     const char *ext=strrchr(path,'.');
+    float f=a->preferences.ui_size/16.f;
     if(ext && (!strcmp(ext,".c") || !strcmp(ext,".h") || !strcmp(ext,".phys"))) {
-        const struct nk_user_font *font=&a->workbench_fonts[3];
-        nk_draw_text(canvas,nk_rect(r.x+(r.w-8)/2,r.y+(r.h-font->height)/2,10,font->height),!strcmp(ext,".phys")?"P":"C",1,font,nk_rgba(0,0,0,0),color);
+        const struct nk_user_font *font=&a->workbench_marker_font;
+        const char *label=!strcmp(ext,".phys")?"P":"C";
+        float width=font->width(font->userdata,font->height,label,1);
+        nk_draw_text(canvas,nk_rect(r.x+(r.w-width)/2,r.y+(r.h-font->height)/2,width+1,font->height),label,1,font,nk_rgba(0,0,0,0),color);
     } else if(ext && !strcmp(ext,".project")) {
         float x=r.x+r.w/2,y=r.y+r.h/2;
-        nk_stroke_line(canvas,x-1,y-3,x-5,y,1.2f,color);nk_stroke_line(canvas,x-5,y,x-1,y+3,1.2f,color);
-        nk_stroke_line(canvas,x+1,y-3,x+5,y,1.2f,color);nk_stroke_line(canvas,x+5,y,x+1,y+3,1.2f,color);
+        nk_stroke_line(canvas,x,y-3*f,x-4*f,y,1.2f*f,color);nk_stroke_line(canvas,x-4*f,y,x,y+3*f,1.2f*f,color);
+        nk_stroke_line(canvas,x,y+3*f,x+4*f,y,1.2f*f,color);nk_stroke_line(canvas,x+4*f,y,x,y-3*f,1.2f*f,color);
     } else ps_ui_draw_icon(canvas,PS_ICON_FILE,r,color);
 }
 static float workbench_card_text_height(const struct nk_user_font *font,const char *text,float width) {
@@ -1000,12 +1003,28 @@ static void workbench_log_panel(app *a) {
     }
     nk_end(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
 }
+static bool compact_log_diagnostic_button(app *a,const char *text) {
+    struct nk_context *ui=a->ui;struct nk_rect r;nk_widget(&r,ui);
+    struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+    bool hover=!(ui->current->layout->flags&NK_WINDOW_ROM) && nk_input_is_mouse_hovering_rect(&ui->input,r);
+    nk_fill_rect(canvas,r,ui->style.button.rounding,hover?UI_COLOR(button_hover):UI_COLOR(button));
+    if(ui->style.button.border>0)nk_stroke_rect(canvas,r,ui->style.button.rounding,ui->style.button.border,ui->style.button.border_color);
+    const struct nk_user_font *font=ui->style.font;
+    float inset=ui->style.button.padding.x+ui->style.button.border+ui->style.button.rounding;
+    /* A partly clipped row can still contain visible glyphs. Submit their full
+     * height; the stock button's tiny content rectangle can be culled first. */
+    nk_draw_text(canvas,nk_rect(r.x+inset,r.y+(r.h-font->height)/2,fmaxf(1,r.w-2*inset),font->height),
+        text,(int)strlen(text),font,nk_rgba(0,0,0,0),UI_COLOR(text));
+    return ps_ui_button_at(ui,r,text,false);
+}
 static void log_panel(app *a) {
     if(workbench_visible(a)){workbench_log_panel(a);return;}
     struct nk_context *ui=a->ui;
     bool expanded_log=a->show_log && a->tab!=6;
+    bool compact=laboratory_visible(a) && a->dock_panels[PS_DOCK_LOG].h-dock_panel_header_height(a,PS_DOCK_LOG)<126;
     float footer=fmaxf(68,a->dock_panels[PS_DOCK_LOG].h-16);
-    nk_style_push_vec2(ui, &ui->style.window.padding, nk_vec2(16, 8));
+    nk_style_push_vec2(ui, &ui->style.window.padding, nk_vec2(16, compact?0:8));
+    if(compact)nk_style_push_vec2(ui,&ui->style.window.scrollbar_size,nk_vec2(ui->style.window.scrollbar_size.x,0));
     if (dock_begin(a, PS_DOCK_LOG)) {
         nk_layout_row_begin(ui, NK_DYNAMIC, 28, 4);
         nk_layout_row_push(ui, .42f);
@@ -1030,16 +1049,18 @@ static void log_panel(app *a) {
         }
         nk_layout_row_end(ui);
         if (expanded_log) {
-            nk_layout_row_dynamic(ui, footer - 66, 1);
+            nk_layout_row_dynamic(ui, compact?90:footer - 66, 1);
             if (a->diagnostic_count && !a->diagnostic_raw) {
-                if (nk_group_begin(ui, "Compilerdiagnosen", 0)) {
+                /* In a short simulation log the panel itself scrolls. A
+                 * clipped nested scroll group would trap its diagnostic rows. */
+                if (compact || nk_group_begin(ui, "Compilerdiagnosen", 0)) {
                     nk_layout_row_dynamic(ui, 30, 1);
                     for (int i = 0; i < a->diagnostic_count; i++) {
                         a->diagnostic_bounds[i]=nk_widget_bounds(ui);
-                        if (nk_button_label(ui, a->diagnostics[i].text))
+                        if (compact?compact_log_diagnostic_button(a,a->diagnostics[i].text):nk_button_label(ui, a->diagnostics[i].text))
                             jump_to_diagnostic(a, &a->diagnostics[i]);
                     }
-                    nk_group_end(ui);
+                    if(!compact)nk_group_end(ui);
                 }
             } else {
                 nk_style_push_font(ui, a->font_code);
@@ -1051,6 +1072,7 @@ static void log_panel(app *a) {
         }
     }
     nk_end(ui);
+    if(compact)nk_style_pop_vec2(ui);
     nk_style_pop_vec2(ui);
 }
 static void workbench_status_view(app *a,float w,float h) {
@@ -1223,6 +1245,10 @@ static void workspace_draw_ui(app *a, int width, int height) {
         float em=mono?a->workbench_code_em:bold?a->workbench_bold_em:a->workbench_regular_em;
         a->workbench_fonts[i].height=sizes[i]*em*a->preferences.ui_size/16.f;
     }
+    a->workbench_marker_font=*a->workbench_marker_source;
+    a->workbench_marker_font.height=12*a->workbench_marker_em*a->preferences.ui_size/16.f;
+    a->workbench_tab_dot_font=*a->font_ui;
+    a->workbench_tab_dot_font.height=8*a->workbench_regular_em*a->preferences.ui_size/16.f;
     if(workspace_shell && !laboratory) {
         ui_palette=ps_workbench_palette(ui_palette);style(ui);
         nk_style_set_font(ui,&a->workbench_fonts[0]);

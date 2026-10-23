@@ -1,0 +1,21 @@
+{
+  "checker": "tests/check_display_workflow.py:compact_log_ink",
+  "positive_source": 6,
+  "negative_source": 5,
+  "clip": [
+    0.0,
+    581.0,
+    1080.0,
+    30.0
+  ],
+  "row": [
+    16.0,
+    573.0,
+    1041.0,
+    30.0
+  ],
+  "positive_ink": 937,
+  "negative_rejected": true,
+  "negative_reason": "Compact log has no readable diagnostic ink: 0, build\\native\\Release\\test-results\\run-4q6f0dzs\\inspector_workflow\\files ä\\workflow ä\\c-contrast-large-narrow\\panel-compact-log-end.png",
+  "scope": "Same warning count and layout; source6 changes text submission, not diagnostic row placement"
+}

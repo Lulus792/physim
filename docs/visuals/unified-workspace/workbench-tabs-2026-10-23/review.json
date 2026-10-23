@@ -1,0 +1,28 @@
+{
+  "final_source": 6,
+  "source_files_checked": 237,
+  "font_files_checked": 17,
+  "foreign_files_preserved": 12,
+  "artifact_files": 218,
+  "pictures": 33,
+  "negative_pixel_check": "source5 rejected with 0 ink; source6 accepted with 937 ink",
+  "canonical_exports": 16,
+  "code_review": [
+    "Main marker and dot nk_user_font values have app lifetime; queued draw commands do not retain stack font addresses",
+    "Natural tab widths retain real filename bytes; visible hit regions and close targets are clipped to the actual strip",
+    "Recursive workspace Y minimum and timeline presentation reserve visible log; no automatic assignment to stored wishes",
+    "Compact diagnostic submits full font height; native pointer/keyboard role remains separate from bounded drawing",
+    "Synthetic warning is inside fixed-panels self-test only, with explicit trace; product compiler/runtime flow unchanged",
+    "No renderer or graphic output algorithm change; 16 canonical outputs match prior bytes"
+  ],
+  "limits": [
+    "Full UI design acceptance remains open, especially actual Linux UI22 transport/speed screenshot",
+    "Legacy analysis editor still uses old tab presentation",
+    "No new physical DPI/monitor, macOS or complete external screenreader claim"
+  ],
+  "staged_blob_audit": "passed",
+  "staged_files": 241,
+  "staged_artifact_hashes": 218,
+  "public_source_hashes": 234,
+  "staged_font_hashes": 17
+}

@@ -214,9 +214,10 @@ static bool panel_windows_render(app *a) {
             a->dock_panels[i]=nk_rect(0,0,(float)w,(float)h);a->dock_visible[i]=true;
             if(i==PS_DOCK_WORKSPACE && workbench_visible(a)) {
                 file_tabs_prepare(a);
-                if(nk_begin(p->ui,"panel-file-tabs",nk_rect(0,0,(float)w,40),NK_WINDOW_NO_SCROLLBAR))
+                float heading=file_tabs_height(a);
+                if(nk_begin(p->ui,"panel-file-tabs",nk_rect(0,0,(float)w,heading),NK_WINDOW_NO_SCROLLBAR))
                     file_tabs_view(a,nk_window_get_content_region(p->ui));
-                nk_end(p->ui);a->dock_panels[i].y+=40;a->dock_panels[i].h-=40;
+                nk_end(p->ui);a->dock_panels[i].y+=heading;a->dock_panels[i].h-=heading;
             }
             if(i==PS_DOCK_WORKSPACE && p->restore_editor_focus && nk_window_find(p->ui,"workspace")) {
                 nk_window_set_focus(p->ui,"workspace");a->completion_focus_edit=editor_search_target(a);p->restore_editor_focus=false;

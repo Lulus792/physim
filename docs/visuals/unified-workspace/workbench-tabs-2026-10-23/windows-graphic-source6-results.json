@@ -1,0 +1,47 @@
+[
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+        "sha256": "13f507145eb679ec51ac8551f92310b286dd969af427313120cb6c6a1052dba1"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_graphic_dialog.py",
+          "--app",
+          "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+          "--root",
+          "D:\\Physim",
+          "--work",
+          "D:\\Physim\\build\\native\\Release\\test-results\\run-ru6qn4bs\\graphic_dialog\\files ä"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "graphic_dialog: native UI, frozen preview, save/cancel/error and independent clipboard RGB passed\n",
+        "stderr": "",
+        "seconds": 6.265,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "D:\\Physim\\build\\native\\Release\\test-results\\run-ru6qn4bs\\graphic_dialog\\files ä\\app-steps.json",
+            "bytes": 24055,
+            "sha256": "b74b6169e40c1fce0553506145528287dd99697137a8abc3cf7ebbe60e843409"
+          }
+        ]
+      }
+    ],
+    "seconds": 6.297,
+    "reason": "",
+    "name": "graphic_dialog"
+  }
+]

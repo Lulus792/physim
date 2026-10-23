@@ -87,8 +87,8 @@ static void workspace_tree_view(app *a) {
             selected=workbench_path_equal(entry->path,active);
             nk_widget(&bounds,ui);struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
             struct nk_rect row=nk_rect(bounds.x-indent,bounds.y,nk_window_get_bounds(ui).w-16,bounds.h);
-            if(selected || nk_input_is_mouse_hovering_rect(&ui->input,row))nk_fill_rect(canvas,row,selected?0:4,selected?UI_COLOR(selection_active):UI_COLOR(button_hover));
-            float inset=entry->directory?(entry->depth?32:18):25;
+            if(selected || (!entry->directory && nk_input_is_mouse_hovering_rect(&ui->input,row)))nk_fill_rect(canvas,row,selected?0:4,selected?UI_COLOR(selection_active):UI_COLOR(button_hover));
+            float inset=entry->directory?(entry->depth?30:18):25;
             const char *name=workspace_name(entry->path);
             const struct nk_user_font *font=entry->depth?ui->style.font:&a->workbench_fonts[3];
             nk_draw_text(canvas,nk_rect(bounds.x+inset,bounds.y+(bounds.h-font->height)/2,fmaxf(1,bounds.w-inset-3),font->height),name,(int)strlen(name),font,nk_rgba(0,0,0,0),selected || !entry->depth?UI_COLOR(text):UI_COLOR(muted));
@@ -102,13 +102,19 @@ static void workspace_tree_view(app *a) {
             nk_stroke_line(guides,gx,bounds.y,gx,bounds.y+bounds.h,1,UI_COLOR(divider));
         }
         if(compact && !entry->directory && !entry->missing)workbench_file_icon(a,guides,entry->path,nk_rect(bounds.x+7,bounds.y,14,bounds.h),UI_COLOR(accent));
-        else if(compact && entry->directory && entry->depth && !entry->missing)workbench_icon(guides,PS_ICON_FOLDER,nk_rect(bounds.x+14,bounds.y,14,bounds.h),UI_COLOR(muted));
+        else if(compact && entry->directory && entry->depth && !entry->missing)workbench_icon(guides,PS_ICON_FOLDER,nk_rect(bounds.x+9,bounds.y,14,bounds.h),UI_COLOR(muted));
         else if(!compact || entry->depth || entry->missing)ps_ui_draw_icon(nk_window_get_canvas(ui),entry->missing?PS_ICON_ERROR:entry->directory?PS_ICON_FOLDER:PS_ICON_FILE,
                         nk_rect(bounds.x+(entry->directory?14:4),bounds.y,compact?14:20,bounds.h),entry->missing?UI_COLOR(error):UI_COLOR(muted));
         if (entry->directory) {
             struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
             float x = bounds.x + 8, y = bounds.y + bounds.h * .5f;
             struct nk_color color=UI_COLOR(muted);
+            if(compact && entry->depth) {
+                x=bounds.x-4;
+                /* CSS puts the disclosure on the path guide, with its own
+                 * window-colored backing so the guide cannot cross it. */
+                nk_fill_rect(canvas,nk_rect(x-5.5f,y-8,11,16),0,UI_COLOR(window));
+            }
             if (entry->expanded) {
                 nk_stroke_line(canvas,x-2,y-2,x+1,y+1,1,color);
                 nk_stroke_line(canvas,x+1,y+1,x+4,y-2,1,color);

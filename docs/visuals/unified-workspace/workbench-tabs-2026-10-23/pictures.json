@@ -1,0 +1,202 @@
+[
+  {
+    "artifact": "windows-dark-normal.png",
+    "source": "build/native/Release/test-results/run-q_yp7lsj/file_tabs_design/files ä/system/tabs-dark-normal.png",
+    "sha256": "400adc4dc4dbf47bc6ba53337d2eb72645418a1f704898d66f04737472d18cdb",
+    "bytes": 183252
+  },
+  {
+    "artifact": "windows-light-normal.png",
+    "source": "build/native/Release/test-results/run-q_yp7lsj/file_tabs_design/files ä/system/tabs-light-normal.png",
+    "sha256": "d64738d09d800e6a4ff4f1cf2732ef297cdfd2ed79f71bf5cbe49c7b49650cdc",
+    "bytes": 185206
+  },
+  {
+    "artifact": "windows-large-normal.png",
+    "source": "build/native/Release/test-results/run-q_yp7lsj/file_tabs_design/files ä/system/tabs-large-normal.png",
+    "sha256": "936a1dc843b995c7ee76964587659678cab5dd4a5eef4e6737b20c63431441cd",
+    "bytes": 139892
+  },
+  {
+    "artifact": "windows-contrast-normal.png",
+    "source": "build/native/Release/test-results/run-q_yp7lsj/file_tabs_design/files ä/system/tabs-contrast-normal.png",
+    "sha256": "d3f0a8df004fcdc828289409d65f3f78a781f265e858c13b6a3b5d73d704af68",
+    "bytes": 138013
+  },
+  {
+    "artifact": "windows-long-end.png",
+    "source": "build/native/Release/test-results/run-q_yp7lsj/file_tabs_design/files ä/system/tabs-long-end.png",
+    "sha256": "9b972d8ac56b0b98c228edba97fedbec3b61cf7c1bb3d1b926b404e5df185bea",
+    "bytes": 99309
+  },
+  {
+    "artifact": "windows-dirty.png",
+    "source": "build/native/Release/test-results/run-q_yp7lsj/file_tabs_design/files ä/system/tabs-dirty.png",
+    "sha256": "0887e1c69eedf1e6dcda8f6a0e91e9ff37c1ede65bdaeb720682b9216d18d793",
+    "bytes": 138962
+  },
+  {
+    "artifact": "windows-dark-hover.png",
+    "source": "build/native/Release/test-results/run-q_yp7lsj/file_tabs_design/files ä/system/tabs-dark-hover.png",
+    "sha256": "b2b556d269ec5c0ba10a0fe1d39b4d84ae8c12400764cc62e280c444c4ee3af6",
+    "bytes": 183976
+  },
+  {
+    "artifact": "windows-dark-focus.png",
+    "source": "build/native/Release/test-results/run-q_yp7lsj/file_tabs_design/files ä/system/tabs-dark-focus.png",
+    "sha256": "b2b556d269ec5c0ba10a0fe1d39b4d84ae8c12400764cc62e280c444c4ee3af6",
+    "bytes": 183976
+  },
+  {
+    "artifact": "windows-dark-close-focus.png",
+    "source": "build/native/Release/test-results/run-q_yp7lsj/file_tabs_design/files ä/system/tabs-dark-close-focus.png",
+    "sha256": "f61e3ed3d5703f28731aff9da419393087a223de3a68ee44efaada3f4cc27b87",
+    "bytes": 121179
+  },
+  {
+    "artifact": "windows-long-start.png",
+    "source": "build/native/Release/test-results/run-q_yp7lsj/file_tabs_design/files ä/system/tabs-long-start.png",
+    "sha256": "af23058f5481d1c06bcf971b9295d2c41d726d4ab15e55099b1c30ea3aa90bd2",
+    "bytes": 99393
+  },
+  {
+    "artifact": "windows-bundled-dark-normal.png",
+    "source": "build/native/Release/test-results/run-q_yp7lsj/file_tabs_design/files ä/bundled/tabs-dark-normal.png",
+    "sha256": "d513fb953358cb5371a2ee17a57fa27c65b8f17920fb356ea3057a3985fc2163",
+    "bytes": 167023
+  },
+  {
+    "artifact": "windows-bundled-large-normal.png",
+    "source": "build/native/Release/test-results/run-q_yp7lsj/file_tabs_design/files ä/bundled/tabs-large-normal.png",
+    "sha256": "9dfb39acc8e9dce90b54a58122bb322da071eeb86e9169c4e78c29f213e8dcbe",
+    "bytes": 137065
+  },
+  {
+    "artifact": "windows-c-contrast-large-narrow-log-start.png",
+    "source": "build/native/Release/test-results/run-q_yp7lsj/inspector_workflow/files ä/workflow ä/c-contrast-large-narrow/panel-compact-log-start.png",
+    "sha256": "77a473a4e6b01617d2d5ab324acd348c12caf09cb2fcedc5f289373155511ce6",
+    "bytes": 127962
+  },
+  {
+    "artifact": "windows-c-contrast-large-narrow-log-end.png",
+    "source": "build/native/Release/test-results/run-q_yp7lsj/inspector_workflow/files ä/workflow ä/c-contrast-large-narrow/panel-compact-log-end.png",
+    "sha256": "47d8e3a56371a69e094415ed812f6c834085938c829f20c34995760ca08727c8",
+    "bytes": 126938
+  },
+  {
+    "artifact": "windows-panels-returned.png",
+    "source": "build/native/Release/test-results/run-q_yp7lsj/inspector_workflow/files ä/workflow ä/c-contrast-large-narrow/panels-reattached.bmp",
+    "source_sha256": "b221ae33d3dc93aa6456577cbf55266ad4748af966a037bce7523d5710bfc437",
+    "sha256": "0f5306c001739ec0537cc5650d39c36dff07679e67de4f533c05274f4b0e41e2",
+    "conversion": "RGB bytes and dimensions equal"
+  },
+  {
+    "artifact": "windows-phys-light-large-narrow-log-start.png",
+    "source": "build/native/Release/test-results/run-q_yp7lsj/inspector_workflow/files ä/workflow ä/phys-light-large-narrow/panel-compact-log-start.png",
+    "sha256": "281ffe7c125a16be8ba40fbe8df373e6af7428445525e3fe0da5d313cdb64e29",
+    "bytes": 129596
+  },
+  {
+    "artifact": "windows-phys-light-large-narrow-log-end.png",
+    "source": "build/native/Release/test-results/run-q_yp7lsj/inspector_workflow/files ä/workflow ä/phys-light-large-narrow/panel-compact-log-end.png",
+    "sha256": "73d7004061b4a7257752efeb64297553b08f06d322007d648d5330a3b90eb6c5",
+    "bytes": 126593
+  },
+  {
+    "artifact": "linux-dark-normal.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-7ty2nn33/file_tabs_design/files ä/system/tabs-dark-normal.png",
+    "sha256": "36b5774170f21d2041047f0ad322be3fa953747db98a7fc123da7e184530ee96",
+    "bytes": 187364
+  },
+  {
+    "artifact": "linux-light-normal.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-7ty2nn33/file_tabs_design/files ä/system/tabs-light-normal.png",
+    "sha256": "0b7ef2606ca5d321608da8010eb5bc580363ce23013d258f7e6783423c462dca",
+    "bytes": 187939
+  },
+  {
+    "artifact": "linux-large-normal.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-7ty2nn33/file_tabs_design/files ä/system/tabs-large-normal.png",
+    "sha256": "f3b85c91781062a19d07dbeef59a894636758e4f122c79088a6a2142ab067d08",
+    "bytes": 143814
+  },
+  {
+    "artifact": "linux-contrast-normal.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-7ty2nn33/file_tabs_design/files ä/system/tabs-contrast-normal.png",
+    "sha256": "b12ef9c24e821414676cf80099f39cbffa1f57119d2c274040211ea767603acc",
+    "bytes": 140976
+  },
+  {
+    "artifact": "linux-long-end.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-7ty2nn33/file_tabs_design/files ä/system/tabs-long-end.png",
+    "sha256": "37e25e6c9a313e0b396503c3d731e1668eb19d0cb2c8875adfd2a7397cab3356",
+    "bytes": 103222
+  },
+  {
+    "artifact": "linux-dirty.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-7ty2nn33/file_tabs_design/files ä/system/tabs-dirty.png",
+    "sha256": "6a0743704ee04f2c0671f5d674778cb5b2527e8b68b380b5f33bcc2c217284b9",
+    "bytes": 144532
+  },
+  {
+    "artifact": "linux-bundled-dark-normal.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-7ty2nn33/file_tabs_design/files ä/bundled/tabs-dark-normal.png",
+    "sha256": "ceb9d844f51b01f35b11ff0ffb0d70fb3306a73d7eb710061761982545cdc900",
+    "bytes": 169224
+  },
+  {
+    "artifact": "linux-bundled-large-normal.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-7ty2nn33/file_tabs_design/files ä/bundled/tabs-large-normal.png",
+    "sha256": "20b1eefc3961b4c1638847e9242d4116f991621e7736b3031ce76e6814c51c73",
+    "bytes": 137540
+  },
+  {
+    "artifact": "linux-c-contrast-large-narrow-log-start.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-7ty2nn33/inspector_workflow/files ä/workflow ä/c-contrast-large-narrow/panel-compact-log-start.png",
+    "sha256": "89d4888ea03ce45556a4fd2fc748761617f2a736444fbb58beb6d91eefde3eb6",
+    "bytes": 133828
+  },
+  {
+    "artifact": "linux-c-contrast-large-narrow-log-end.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-7ty2nn33/inspector_workflow/files ä/workflow ä/c-contrast-large-narrow/panel-compact-log-end.png",
+    "sha256": "4e56a5754301f796f94de78236a360ab363481c896500c22699c63c46e18dd9a",
+    "bytes": 133626
+  },
+  {
+    "artifact": "linux-panels-returned.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-7ty2nn33/inspector_workflow/files ä/workflow ä/c-contrast-large-narrow/panels-reattached.bmp",
+    "source_sha256": "4ecc042926c859370325e2417c811416177359d5b710486d39e0211111ff2b9a",
+    "sha256": "884f812552cb92e634d7f92e80fb131bb2e7971e7803dcd0791d324c7176289f",
+    "conversion": "RGB bytes and dimensions equal"
+  },
+  {
+    "artifact": "linux-phys-light-large-narrow-log-start.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-7ty2nn33/inspector_workflow/files ä/workflow ä/phys-light-large-narrow/panel-compact-log-start.png",
+    "sha256": "25bf876e5feec31dc2458b24e5dc427b6a3066033457d09117af287fa4084c65",
+    "bytes": 133354
+  },
+  {
+    "artifact": "linux-phys-light-large-narrow-log-end.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-7ty2nn33/inspector_workflow/files ä/workflow ä/phys-light-large-narrow/panel-compact-log-end.png",
+    "sha256": "9761ee846ce47fe73038a4194b43c11d5c3c628a50bae814d8e49fc415b2be1b",
+    "bytes": 133084
+  },
+  {
+    "artifact": "negative-source1-large.png",
+    "source": "build/native/Design-analysis/test-results/run-sc_5_5kv/file_tabs_design/files ä/system/tabs-large-normal.png",
+    "sha256": "1ba26b8669485edc1fe93ede1c23faa4f9372e20879c882dc5003cea7f18d865",
+    "bytes": 140509
+  },
+  {
+    "artifact": "negative-source3-measure.png",
+    "source": "build/native/Release/test-results/run-bak85zqx/inspector_workflow/files ä/workflow ä/c-contrast-large-narrow/panel-before-measure-pull.png",
+    "sha256": "9e8aa9d694a007b70d63819751ecc0f3c8ba3e8e2674183a4bc80f5b97ab933a",
+    "bytes": 63398
+  },
+  {
+    "artifact": "negative-source5-log-text.png",
+    "source": "build/native/Release/test-results/run-4q6f0dzs/inspector_workflow/files ä/workflow ä/c-contrast-large-narrow/panel-compact-log-end.png",
+    "sha256": "90aa03e53cf3b00617a03e69c29506eaac33aad2225d844d6a36c64212e81f47",
+    "bytes": 119217
+  }
+]

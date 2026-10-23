@@ -13,7 +13,7 @@ static void workspace_rule(struct nk_command_buffer *canvas,struct nk_rect line)
 #include "laboratory_layout.inc"
 #include "analysis_layout.inc"
 #include "analysis_resize.inc"
-static float dock_header_height(const app *a) {return workbench_visible(a)?40:DOCK_HEADER_HEIGHT;}
+static float dock_header_height(const app *a) {return workbench_visible(a)?file_tabs_height(a):DOCK_HEADER_HEIGHT;}
 static float dock_panel_header_height(const app *a,unsigned panel) {
     if(a->panel_render)return 0;
     if(analysis_visible(a))return 0;
@@ -57,9 +57,14 @@ static bool dock_context_split(const ps_dock_layout *d,const ps_dock_node *n) {
 static float dock_minimum(const app *a,uint32_t id,bool x) {
     const ps_dock_layout *d=&a->preferences.dock;const ps_dock_node *n=&d->nodes[id];
     if(n->kind==PS_DOCK_GROUP) {
-        if(laboratory_visible(a) && x) {
-            if(n->panels&(1u<<PS_DOCK_WORKSPACE))return 440;
-            if(n->panels&((1u<<PS_DOCK_SIDEBAR)|(1u<<PS_DOCK_INSPECTOR)))return 208;
+        if(laboratory_visible(a)) {
+            if(x) {
+                if(n->panels&(1u<<PS_DOCK_WORKSPACE))return 440;
+                if(n->panels&((1u<<PS_DOCK_SIDEBAR)|(1u<<PS_DOCK_INSPECTOR)))return 208;
+            } else {
+                if(n->panels&(1u<<PS_DOCK_WORKSPACE))return LABORATORY_SCENE_MIN+1+LABORATORY_MEASURE_MIN;
+                if(n->panels&(1u<<PS_DOCK_LOG))return LABORATORY_LOG_MIN;
+            }
         }
         if(workbench_visible(a)) {
             if(x) {
@@ -95,7 +100,7 @@ static float dock_resize_value(app *a,unsigned id,float *minimum,float *maximum,
     *reverse=false;
     if(dock_sidebar_split(d,n)) {*minimum=workbench_visible(a)?140:208;*maximum=fminf(workbench_visible(a) || analysis_visible(a)?480:360,extent-min_second);*standard=analysis_visible(a)?232:workbench_visible(a)?218:248;return a->dock_rects[n->first].w;}
     if(dock_context_split(d,n)) {*reverse=true;*minimum=workbench_visible(a)?180:208;*maximum=fminf(480,extent-min_first);*standard=analysis_visible(a)?242:workbench_visible(a)?255:280;return a->dock_rects[n->second].w;}
-    if(dock_log_split(d,n)) {*reverse=true;*minimum=workbench_visible(a)?126:150;*maximum=fminf(workbench_visible(a)?366:340,extent-min_first);*standard=workbench_visible(a)?152:178;return a->dock_rects[n->second].h+dock_gap(a);}
+    if(dock_log_split(d,n)) {*reverse=true;*minimum=workbench_visible(a)?126:laboratory_visible(a)?LABORATORY_LOG_MIN:150;*maximum=fminf(workbench_visible(a)?366:340,extent-min_first);*standard=workbench_visible(a)?152:178;return a->dock_rects[n->second].h+dock_gap(a);}
     *minimum=fmaxf(min_first,extent/16);*maximum=fminf(extent-min_second,extent*15/16);*standard=extent*.5f;
     return extent*n->ratio/1024.f;
 }

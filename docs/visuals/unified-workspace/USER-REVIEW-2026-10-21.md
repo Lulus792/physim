@@ -57,3 +57,11 @@ vollständige, im Fenster begrenzte Workspace-Pfade. Für sehr lange Tooltip-Inh
 sind Scrollzugriff, sichtbares Pfadende und unveränderter Editor getrennt geprüft.
 Diese Fortschritte ersetzen weiterhin keine vollständige Abnahme der sieben
 Nutzerbefunde oder der gesamten Oberfläche.
+
+Der [Dateitab-/Dateizeichen-Abgleich](WORKBENCH-TABS-NATIVE.md) ergänzt natürliche
+Tabbreiten, echte starke C-/P-Zeichen, Projektraute und Ordnerabstände. Die
+Teilfensterprüfung findet und korrigiert außerdem eine verdrängte Messfläche
+und eine trotz erreichbarer Zeile leere Protokollbeschriftung. Die negativen
+Originalbilder bleiben erhalten. Die aktuelle große Linux-Schrift zeigt weiter
+Fehler an Tempoauswahl und Laufsteuerung; diese und die übrige Oberfläche sind
+noch nicht vollständig abgenommen.

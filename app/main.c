@@ -144,6 +144,8 @@ typedef struct {
     struct nk_context *ui;
     const struct nk_user_font *font_ui, *font_code, *font_title;
     struct nk_user_font workbench_fonts[12]; /* UI 0–6, API 7–10, outline code 11. */
+    struct nk_user_font workbench_marker_font,workbench_tab_dot_font;
+    const struct nk_user_font *workbench_marker_source;
     struct nk_user_font laboratory_title_font;
     struct nk_user_font laboratory_measurement_font;
     struct nk_user_font workspace_status_font;
@@ -151,6 +153,7 @@ typedef struct {
     unsigned workbench_sidebar_focus;
     struct nk_rect workbench_environment_bounds;
     float workbench_regular_em,workbench_bold_em,workbench_code_em;
+    float workbench_marker_em;
     struct nk_rect diagnostic_view_bounds;
     uint16_t workbench_tree_order[PS_WORKSPACE_TREE_LIMIT];
     const struct nk_user_font *ui_fonts[4], *title_fonts[4];
@@ -3124,9 +3127,9 @@ static void channel_units_start(app *a);
 static struct nk_font *system_font_sampling_demand(struct nk_font_atlas *atlas,const char *root,float size,bool code,bool title,
     unsigned char horizontal,unsigned char vertical,const nk_rune *demand,char family[96]) {
     static const nk_rune ui_ranges[] = {0x20,0x17f,0x192,0x192,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
-                                      0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x2c7c,0x2c7c,0};
+                                      0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x25cf,0x25cf,0x2c7c,0x2c7c,0};
     static const nk_rune code_ranges[] = {0x20,0x17f,0x192,0x192,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
-                                        0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x2c7c,0x2c7c,0};
+                                        0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x25cf,0x25cf,0x2c7c,0x2c7c,0};
     struct nk_font_config config = nk_font_config(size);
     config.range = demand?demand:code?code_ranges:ui_ranges;
     config.oversample_h = horizontal;
@@ -3136,7 +3139,7 @@ static struct nk_font *system_font_sampling_demand(struct nk_font_atlas *atlas,c
     const char *platform_family=code?"Consolas":"Segoe UI";
     const char *windows = SDL_getenv("WINDIR");
     snprintf(path, sizeof path, "%s/Fonts/%s", windows ? windows : "C:/Windows",
-             code    ? "consola.ttf"
+             code    ? (title?"consolab.ttf":"consola.ttf")
              : title ? "seguisb.ttf"
                      : "segoeui.ttf");
 #elif defined(__APPLE__)
@@ -3145,7 +3148,7 @@ static struct nk_font *system_font_sampling_demand(struct nk_font_atlas *atlas,c
 #else
     const char *platform_family=code?"DejaVu Sans Mono":"DejaVu Sans";
     snprintf(path, sizeof path, "/usr/share/fonts/truetype/dejavu/%s",
-             code    ? "DejaVuSansMono.ttf"
+             code    ? (title?"DejaVuSansMono-Bold.ttf":"DejaVuSansMono.ttf")
              : title ? "DejaVuSans-Bold.ttf"
                      : "DejaVuSans.ttf");
 #endif
@@ -3162,16 +3165,17 @@ static struct nk_font *system_font_sampling_demand(struct nk_font_atlas *atlas,c
     }
     if(!font) {
         int n=snprintf(path,sizeof path,"%s/third_party/fonts/%s",root,
-                       code?"NotoSansMono.ttf":title?"NotoSans-Bold.ttf":"NotoSans.ttf");
+                       code?(title?"NotoSansMono-SemiBold.ttf":"NotoSansMono.ttf"):title?"NotoSans-Bold.ttf":"NotoSans.ttf");
         if(n>=0 && (size_t)n<sizeof path)font=nk_font_atlas_add_from_file(atlas,path,size,&config);
         if(force_bundled && font)printf("Bundled primary font: %s\n",path);
         if(font && family)snprintf(family,96,"%s",code?"Noto Sans Mono":"Noto Sans");
     } else if(family)snprintf(family,96,"%s",platform_family);
     if(!font)return NULL;
+    if(code && title)printf("Workspace marker font: %s\n",path);
     /* Offline fallback covers our text ranges, phonetic modifiers, diagrams and
      * emoji. Add only glyphs absent from earlier sources, keeping the atlas small. */
     static const nk_rune fallback_ranges[]={0x20,0x17f,0x192,0x192,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
-        0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x2603,0x2603,0x2c7c,0x2c7c,0x1f30d,0x1f30d,0x1f600,0x1f600,0};
+        0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x25cf,0x25cf,0x2603,0x2603,0x2c7c,0x2c7c,0x1f30d,0x1f30d,0x1f600,0x1f600,0};
     static const char *const files[]={"NotoSans-Bold.ttf","NotoSans.ttf","NotoSansMono.ttf","NotoSansMath-Regular.ttf","NotoSansSymbols2-Regular.ttf","NotoEmoji.ttf"};
     for(size_t i=0;i<sizeof files/sizeof files[0];i++) {
         if(i==0 && !title)continue;
@@ -3463,6 +3467,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "source_outline_tests.inc"
 #include "file_tabs_tests.inc"
 #include "workbench_tests.inc"
+#include "file_tabs_design_tests.inc"
 #include "laboratory_tests.inc"
 #include "panel_window_tests.inc"
 #include "model_edit_tests.inc"
@@ -3816,6 +3821,10 @@ int main(int argc, char **argv) {
         code_fonts_ok &= code_fonts[i] != NULL;
     }
     struct nk_font *title_font = title_fonts[0];
+    static const nk_rune marker_ranges[]={0x20,0x7e,0};
+    struct nk_font *marker_font=system_font_sampling_demand(atlas,a->root,16,true,true,3,2,marker_ranges,NULL);
+    ui_fonts_ok &= marker_font!=NULL;
+    a->workbench_marker_em=ps_ui_font_em_ratio(marker_font);
     a->workbench_regular_em=ps_ui_font_em_ratio(font);
     a->workbench_bold_em=ps_ui_font_em_ratio(title_font);
     a->workbench_code_em=ps_ui_font_em_ratio(code_fonts[0]);
@@ -3837,6 +3846,7 @@ int main(int argc, char **argv) {
         a->code_fonts[i] = &code_fonts[i]->handle;
     a->font_code = a->code_fonts[0];
     a->font_title = &title_font->handle;
+    a->workbench_marker_source=&marker_font->handle;
     nk_style_set_font(a->ui, &font->handle);
     nk_textedit_init_default(&a->experiment);
     nk_textedit_init_default(&a->analysis);
@@ -4239,7 +4249,7 @@ int main(int argc, char **argv) {
             /* The deliberate 80 ms frame delay also runs on hosted software GL.
              * Keep its bounded keyboard assertions; allow their extra wall time. */
             if (ps_clock() - test_started >
-                (!strncmp(argv[3],"component-",10)?60:!strncmp(argv[3],"comparison-",11)?120:!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
+                (!strncmp(argv[3],"file-tabs-design",16)?60:!strncmp(argv[3],"component-",10)?60:!strncmp(argv[3],"comparison-",11)?120:!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
                   !strncmp(argv[3], "isolation-", 10) || !strncmp(argv[3], "breakpoints-", 12) || !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || (!strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"pendulum-medium-",16)) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strncmp(argv[3],"logging-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15))) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
@@ -5315,6 +5325,7 @@ int main(int argc, char **argv) {
         int w, h;
         SDL_GetWindowSize(window, &w, &h);
         draw_ui(a, w, h);
+        if(workspace_state_test && !strncmp(argv[3],"file-tabs-design",16))tab_design_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"component-",10)) {
             component_details_draw(a,argv[3]);if(component_details.failed){exit_code=1;a->quitting=true;}
         }

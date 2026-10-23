@@ -153,8 +153,8 @@ static void laboratory_workspace(app *a) {
     struct nk_context *ui=a->ui;
     float available=nk_window_get_content_region(ui).h-2*ui->style.window.padding.y;
     if(a->panel_render==PS_DOCK_WORKSPACE+1){viewport(a,fmaxf(64,available));return;}
-    float measure=fminf(laboratory_dimension_value(a,0),available-181);
-    float scene=fmaxf(180,available-measure-1);
+    float measure=fminf(laboratory_dimension_value(a,0),available-LABORATORY_SCENE_MIN-1);
+    float scene=fmaxf(LABORATORY_SCENE_MIN,available-measure-1);
     if(panel_is_detached(a,PS_DOCK_WORKSPACE)) {
         nk_layout_row_dynamic(ui,scene,1);struct nk_rect slot=nk_widget_bounds(ui);
         nk_spacer(ui);

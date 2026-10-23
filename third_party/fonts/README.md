@@ -13,6 +13,7 @@ No font download occurs during a build or at runtime.
 | NotoSans-Bold.ttf | hinted/ttf/NotoSans/NotoSans-Bold.ttf (Noto distribution) | notosansbold-OFL.txt |
 | NotoSerif-Italic.ttf | hinted/ttf/NotoSerif/NotoSerif-Italic.ttf (Noto distribution) | notoserifitalic-OFL.txt |
 | NotoSansMono.ttf | ofl/notosansmono/NotoSansMono[wdth,wght].ttf | notosansmono-OFL.txt |
+| NotoSansMono-SemiBold.ttf | hinted/ttf/NotoSansMono/NotoSansMono-SemiBold.ttf (Noto distribution) | notosansbold-OFL.txt (shared Noto license) |
 | NotoSansMath-Regular.ttf | ofl/notosansmath/NotoSansMath-Regular.ttf | notosansmath-OFL.txt |
 | NotoSansSymbols2-Regular.ttf | ofl/notosanssymbols2/NotoSansSymbols2-Regular.ttf | notosanssymbols2-OFL.txt |
 | NotoEmoji.ttf | ofl/notoemoji/NotoEmoji[wght].ttf | notoemoji-OFL.txt |
@@ -28,13 +29,18 @@ this directory; the package manifest also hashes its files.
 
 Physim uses the default outlines of variable fonts, without variation-axis
 selection, and the actual static bold face for strong roles when needed.
+Workspace C/P markers have a separate 12-CSS-pixel strong monospace role. It uses
+Consolas Bold or the available platform mono bold face, with the pinned static
+Noto Sans Mono SemiBold (weight 600) as its offline fallback. The unchanged Noto
+license above applies to that additional unmodified face too. This bounded
+ASCII role is independent of editor font-size preferences.
 Emoji use monochrome outlines supported by the existing rasterizer.
 Fallback ranges cover the application's Latin/Greek text, its phonetic modifiers,
-mathematics, box drawing, U+2603, U+1F30D and U+1F600. This is a
+mathematics, box drawing, U+25CF, U+2603, U+1F30D and U+1F600. This is a
 bounded character repertoire, not a claim of universal Unicode or shaping support.
 Only codepoints absent from earlier declared source ranges are merged, so the
-platform font retains its existing metrics and glyphs. The 183-page inventory
-checks every printable source character across all 38 F1 handles; U+0378 remains
+platform font retains its existing metrics and glyphs. The current 185-page inventory
+checks 183 distinct printable source/reading characters across all 42 F1 text handles; U+0378 remains
 a negative missing-source case. Further scripts and shaping require their own
 fonts, layout implementation and actual render checks.
 
@@ -45,8 +51,8 @@ monospaced box glyphs. The page inventory detects new characters outside this
 repertoire; its limits must be expanded with source, raster and image proof.
 
 The diagnostic environment `PHYSIM_TEST_BUNDLED_FONTS=1` bypasses platform fonts
-in the real app. The character workflow runs both modes and checks all 50 primary
-handles (12 main-window and 38 F1), including the actual code diagram advances.
+in the real app. The character workflow runs both modes and checks all 57 primary
+text handles (15 main-window and 42 F1), including the actual code diagram advances.
 
 The separate F1 SVG-label role uses installed Georgia Italic when available,
 then the platform's italic serif fallback and finally `NotoSerif-Italic.ttf`.

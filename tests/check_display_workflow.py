@@ -193,10 +193,10 @@ def documentation_math(flow, directory):
         flow.run('--workspace-state-test',bundled,'docs-keyboard-math',timeout=45,marker='DOCUMENTATION MATH SELF-TEST: PASSED')
         output=flow.steps[-1]['stdout']
         primaries=[line for line in output.splitlines() if line.startswith('Bundled primary font: ')]
-        # Main bank: 4 regular + 4 title + 6 code (including editor 12/14).
+        # Main bank: 4 regular + 4 title + 6 code plus one ASCII marker face.
         # F1 inventory: 9 regular + 9 title + 11 strong + 9 code + 4 chrome.
         # Require every primary and its real face, not merely a minimum count.
-        expected_primaries={'NotoSans.ttf':17,'NotoSans-Bold.ttf':24,'NotoSansMono.ttf':15}
+        expected_primaries={'NotoSans.ttf':17,'NotoSans-Bold.ttf':24,'NotoSansMono.ttf':15,'NotoSansMono-SemiBold.ttf':1}
         require(len(primaries)==sum(expected_primaries.values()),'Incomplete bypass of main/F1 platform font handles')
         for name,count in expected_primaries.items():
             require(sum(line.endswith('/'+name) for line in primaries)==count,'Main/F1 primary face coverage differs: '+name)
@@ -1460,6 +1460,21 @@ def hierarchy(flow, directory):
                 "Replaying legacy scenes changed the original or version-1 file")
 
 
+def compact_log_ink(path, clip, row, light):
+    from check_graphic_raster import png
+    width,height,rgb,_=png(path)
+    cx,cy,cw,ch=clip;rx,ry,rw,rh=row
+    left=max(0,math.ceil(cx+30),math.ceil(rx+30));right=min(width,math.floor(cx+cw-30),math.floor(rx+rw-30))
+    top=max(0,math.ceil(cy+2),math.ceil(ry+3));bottom=min(height,math.floor(cy+ch-2),math.floor(ry+rh-3))
+    ink=0
+    for y in range(top,bottom):
+        for x in range(left,right):
+            color=rgb[(y*width+x)*3:(y*width+x)*3+3]
+            ink+=max(color)<100 if light else min(color)>200
+    require(ink>=20, f'Compact log has no readable diagnostic ink: {ink}, {path}')
+    return ink
+
+
 def fixed_panels(flow, directory, variants=('c-dark', 'phys-light')):
     flow.env.pop('PHYSIM_TEST_SMALL', None)
     for variant in variants:
@@ -1468,6 +1483,11 @@ def fixed_panels(flow, directory, variants=('c-dark', 'phys-light')):
         flow.run('--workspace-state-test', root, 'fixed-panels-' + variant, timeout=190,
                  marker='FIXED PANELS fixed-panels-' + variant + ' SELF-TEST: PASSED')
         output = flow.steps[-1]['stdout']
+        text=re.findall(r'PANEL COMPACT TEXT: clip=([\d.,-]+) row=([\d.,-]+) bytes=(\d+)',output)
+        require(len(text)==output.count('PANEL COMPACT LOG:'),'Missing compact log raster geometry')
+        for clip,row,bytes_ in text:
+            require(int(bytes_)>0,'Empty compact diagnostic')
+            compact_log_ink(root/'panel-compact-log-end.png',tuple(map(float,clip.split(','))),tuple(map(float,row.split(','))),'light' in variant)
         windows = re.findall(r'PANEL (\d+): window=(\d+) bounds=(-?\d+),(-?\d+),(\d+),(\d+) outside=(\d+)', output)
         require([int(w[0]) for w in windows] == list(range(6)), 'Not all six native windows were tested')
         require(len({w[1] for w in windows}) == 6 and all(w[6] == '1' for w in windows),

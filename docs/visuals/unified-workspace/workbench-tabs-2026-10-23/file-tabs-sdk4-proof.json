@@ -1,0 +1,32 @@
+{
+  "source": 4,
+  "command": [
+    "D:\\Physim\\build\\native\\Workbench-tabs-sdk4\\bin\\physim.exe",
+    "--smoke"
+  ],
+  "exit_code": 0,
+  "seconds": 1.1410000000614673,
+  "binary_sha256": "4bd4bcd07f18046fadc8e852fb35dd095212345b51b0bf530e8563c3a743c8ee",
+  "font_license_files": {
+    "third_party/fonts/NotoSansMono-SemiBold.ttf": {
+      "bytes": 519292,
+      "sha256": "0834f967d236257be3d9ce44e88e7a9936a0dacd38ae26b4a6838dcb1c99bc3e"
+    },
+    "third_party/fonts/notosansbold-OFL.txt": {
+      "bytes": 4377,
+      "sha256": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb"
+    },
+    "third_party/fonts/manifest.json": {
+      "bytes": 3871,
+      "sha256": "dc88a6daba0021851013fb9b3542f1b87a5fab1caa24e4e31b7376fb891d60fd"
+    },
+    "third_party/fonts/README.md": {
+      "bytes": 4603,
+      "sha256": "72a5a0533091c83fe3909273a2d12c5db7aa7852690e586f6846f80f1e6e8f53"
+    }
+  },
+  "primary_font_count": 15,
+  "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nBundled primary font: D:\\Physim\\build\\native\\Workbench-tabs-sdk4\\bin/../third_party/fonts/NotoSans.ttf\nBundled primary font: D:\\Physim\\build\\native\\Workbench-tabs-sdk4\\bin/../third_party/fonts/NotoSans-Bold.ttf\nBundled primary font: D:\\Physim\\build\\native\\Workbench-tabs-sdk4\\bin/../third_party/fonts/NotoSans.ttf\nBundled primary font: D:\\Physim\\build\\native\\Workbench-tabs-sdk4\\bin/../third_party/fonts/NotoSans-Bold.ttf\nBundled primary font: D:\\Physim\\build\\native\\Workbench-tabs-sdk4\\bin/../third_party/fonts/NotoSans.ttf\nBundled primary font: D:\\Physim\\build\\native\\Workbench-tabs-sdk4\\bin/../third_party/fonts/NotoSans-Bold.ttf\nBundled primary font: D:\\Physim\\build\\native\\Workbench-tabs-sdk4\\bin/../third_party/fonts/NotoSans.ttf\nBundled primary font: D:\\Physim\\build\\native\\Workbench-tabs-sdk4\\bin/../third_party/fonts/NotoSans-Bold.ttf\nBundled primary font: D:\\Physim\\build\\native\\Workbench-tabs-sdk4\\bin/../third_party/fonts/NotoSansMono.ttf\nBundled primary font: D:\\Physim\\build\\native\\Workbench-tabs-sdk4\\bin/../third_party/fonts/NotoSansMono.ttf\nBundled primary font: D:\\Physim\\build\\native\\Workbench-tabs-sdk4\\bin/../third_party/fonts/NotoSansMono.ttf\nBundled primary font: D:\\Physim\\build\\native\\Workbench-tabs-sdk4\\bin/../third_party/fonts/NotoSansMono.ttf\nBundled primary font: D:\\Physim\\build\\native\\Workbench-tabs-sdk4\\bin/../third_party/fonts/NotoSansMono.ttf\nBundled primary font: D:\\Physim\\build\\native\\Workbench-tabs-sdk4\\bin/../third_party/fonts/NotoSansMono.ttf\nBundled primary font: D:\\Physim\\build\\native\\Workbench-tabs-sdk4\\bin/../third_party/fonts/NotoSansMono-SemiBold.ttf\nWorkspace marker font: D:\\Physim\\build\\native\\Workbench-tabs-sdk4\\bin/../third_party/fonts/NotoSansMono-SemiBold.ttf\nFont atlas: 1024x32768, 75 fonts, GPU limit 32768\n",
+  "stderr": "",
+  "scope": "New font and shared license plus actual forced-bundled installed startup; not an audit of every installed file"
+}

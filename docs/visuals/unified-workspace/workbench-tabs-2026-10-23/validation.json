@@ -1,0 +1,416 @@
+{
+  "base": "6d8c3b28692e7e9e57a04b048f15b80238789fc1",
+  "final_source": 6,
+  "runs": [
+    {
+      "label": "windows-debug-source1",
+      "source_version": 1,
+      "directory": "build/native/Design-analysis/test-results/run-sc_5_5kv",
+      "binary_sha256": [
+        "6f3990524a478da3c10d4986050338935247d86bc0ecd61a48a44b803cec18b8"
+      ],
+      "groups": [
+        {
+          "name": "file_tabs_workflow",
+          "status": "passed",
+          "seconds": 5.328
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "passed",
+          "seconds": 33.875
+        },
+        {
+          "name": "file_tabs_design",
+          "status": "failed",
+          "seconds": 5.766
+        }
+      ]
+    },
+    {
+      "label": "linux-source1",
+      "source_version": 1,
+      "directory": "build/native/Design-analysis-linux/test-results/run-wkr7rnne",
+      "binary_sha256": [
+        "7951aa7a6064c2d609297c971ce583c42a0cf8e26836469db3908ff2e5bbc873"
+      ],
+      "groups": [
+        {
+          "name": "file_tabs_workflow",
+          "status": "passed",
+          "seconds": 15.186
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "passed",
+          "seconds": 99.154
+        },
+        {
+          "name": "file_tabs_design",
+          "status": "passed",
+          "seconds": 30.537
+        }
+      ]
+    },
+    {
+      "label": "windows-debug-source2",
+      "source_version": 2,
+      "directory": "build/native/Design-analysis/test-results/run-fxv8q6pp",
+      "binary_sha256": [
+        "39f29b207e8f9146bb980180b5d655af120e85ce3ca122054236ac7ac02f9287"
+      ],
+      "groups": [
+        {
+          "name": "file_tabs_workflow",
+          "status": "passed",
+          "seconds": 5.047
+        },
+        {
+          "name": "workspace_tree_workflow",
+          "status": "passed",
+          "seconds": 3.437
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "passed",
+          "seconds": 34.782
+        },
+        {
+          "name": "file_tabs_design",
+          "status": "passed",
+          "seconds": 16.578
+        }
+      ]
+    },
+    {
+      "label": "windows-release-source2",
+      "source_version": 2,
+      "directory": "build/native/Release/test-results/run-c1wi518v",
+      "binary_sha256": [
+        "6e4c17a893ac093e1d16a65fe23db479b7cdcf2da66aa6ff611c1a0b032c3b65"
+      ],
+      "groups": [
+        {
+          "name": "docking_workflow",
+          "status": "passed",
+          "seconds": 61.75
+        },
+        {
+          "name": "inspector_workflow",
+          "status": "failed",
+          "seconds": 22.234
+        },
+        {
+          "name": "documentation_math",
+          "status": "passed",
+          "seconds": 11.406
+        },
+        {
+          "name": "file_tabs_design",
+          "status": "passed",
+          "seconds": 6.375
+        }
+      ]
+    },
+    {
+      "label": "linux-source2",
+      "source_version": 2,
+      "directory": "build/native/Design-analysis-linux/test-results/run-pr7cfkub",
+      "binary_sha256": [
+        "f523ad5e5cb17333b348e9bddb93556d7468d5fc07e3af3a9b181da193ff2461"
+      ],
+      "groups": [
+        {
+          "name": "file_tabs_workflow",
+          "status": "passed",
+          "seconds": 15.175
+        },
+        {
+          "name": "workspace_tree_workflow",
+          "status": "passed",
+          "seconds": 8.492
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "passed",
+          "seconds": 122.53
+        },
+        {
+          "name": "file_tabs_design",
+          "status": "passed",
+          "seconds": 33.776
+        }
+      ]
+    },
+    {
+      "label": "linux-context-source2",
+      "source_version": 2,
+      "directory": "build/native/Design-analysis-linux/test-results/run-muya7y8w",
+      "binary_sha256": [
+        "f523ad5e5cb17333b348e9bddb93556d7468d5fc07e3af3a9b181da193ff2461"
+      ],
+      "groups": [
+        {
+          "name": "docking_workflow",
+          "status": "passed",
+          "seconds": 177.709
+        },
+        {
+          "name": "inspector_workflow",
+          "status": "passed",
+          "seconds": 170.297
+        },
+        {
+          "name": "documentation_math",
+          "status": "failed",
+          "seconds": 75.531
+        }
+      ]
+    },
+    {
+      "label": "windows-panel-source3",
+      "source_version": 3,
+      "directory": "build/native/Release/test-results/run-bak85zqx",
+      "binary_sha256": [
+        "a889d0bacd2c636268e3373599e37ea42ad5c37d242f215278c94235e3c547d2"
+      ],
+      "groups": [
+        {
+          "name": "inspector_workflow",
+          "status": "failed",
+          "seconds": 20.0
+        }
+      ]
+    },
+    {
+      "label": "windows-release-source4",
+      "source_version": 4,
+      "directory": "build/native/Release/test-results/run-f7zxjnyi",
+      "binary_sha256": [
+        "4bd4bcd07f18046fadc8e852fb35dd095212345b51b0bf530e8563c3a743c8ee"
+      ],
+      "groups": [
+        {
+          "name": "inspector_workflow",
+          "status": "passed",
+          "seconds": 50.485
+        },
+        {
+          "name": "file_tabs_design",
+          "status": "passed",
+          "seconds": 7.64
+        }
+      ]
+    },
+    {
+      "label": "windows-debug-source4",
+      "source_version": 4,
+      "directory": "build/native/Design-analysis/test-results/run-wxsar678",
+      "binary_sha256": [
+        "5157a87171e7ac679847fb0f72455d15ec558378513a4c4c61f70885181ca064"
+      ],
+      "groups": [
+        {
+          "name": "file_tabs_workflow",
+          "status": "passed",
+          "seconds": 4.375
+        },
+        {
+          "name": "workspace_tree_workflow",
+          "status": "passed",
+          "seconds": 2.859
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "passed",
+          "seconds": 33.984
+        },
+        {
+          "name": "documentation_math",
+          "status": "passed",
+          "seconds": 19.453
+        },
+        {
+          "name": "file_tabs_design",
+          "status": "passed",
+          "seconds": 12.578
+        }
+      ]
+    },
+    {
+      "label": "linux-source4",
+      "source_version": 4,
+      "directory": "build/native/Design-analysis-linux/test-results/run-ru9pvxnn",
+      "binary_sha256": [
+        "317802afe25217adf284f94296d5f8542dc662d9b07e5ea53a95024691152813"
+      ],
+      "groups": [
+        {
+          "name": "file_tabs_workflow",
+          "status": "failed",
+          "seconds": 21.602
+        },
+        {
+          "name": "workspace_tree_workflow",
+          "status": "passed",
+          "seconds": 8.932
+        },
+        {
+          "name": "docking_workflow",
+          "status": "passed",
+          "seconds": 183.105
+        },
+        {
+          "name": "inspector_workflow",
+          "status": "passed",
+          "seconds": 150.095
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "passed",
+          "seconds": 87.405
+        },
+        {
+          "name": "file_tabs_design",
+          "status": "passed",
+          "seconds": 24.03
+        }
+      ]
+    },
+    {
+      "label": "windows-release-source5",
+      "source_version": 5,
+      "directory": "build/native/Release/test-results/run-4q6f0dzs",
+      "binary_sha256": [
+        "581e754e4860e5d165da9d7a6a2c9af0d595738a287fb6ca22019a9def560537"
+      ],
+      "groups": [
+        {
+          "name": "inspector_workflow",
+          "status": "passed",
+          "seconds": 45.5
+        },
+        {
+          "name": "file_tabs_design",
+          "status": "passed",
+          "seconds": 7.015
+        }
+      ]
+    },
+    {
+      "label": "linux-source5",
+      "source_version": 5,
+      "directory": "build/native/Design-analysis-linux/test-results/run-lp7ceql1",
+      "binary_sha256": [
+        "b9cb311b07b7027ddfdf5388d19df7089af5025f5bc4346808f2f06b3cbb0ee2"
+      ],
+      "groups": [
+        {
+          "name": "inspector_workflow",
+          "status": "passed",
+          "seconds": 87.006
+        },
+        {
+          "name": "file_tabs_design",
+          "status": "passed",
+          "seconds": 18.869
+        }
+      ]
+    },
+    {
+      "label": "windows-release-source6",
+      "source_version": 6,
+      "directory": "build/native/Release/test-results/run-q_yp7lsj",
+      "binary_sha256": [
+        "13f507145eb679ec51ac8551f92310b286dd969af427313120cb6c6a1052dba1"
+      ],
+      "groups": [
+        {
+          "name": "inspector_workflow",
+          "status": "passed",
+          "seconds": 42.5
+        },
+        {
+          "name": "file_tabs_design",
+          "status": "passed",
+          "seconds": 5.219
+        }
+      ]
+    },
+    {
+      "label": "linux-source6",
+      "source_version": 6,
+      "directory": "build/native/Design-analysis-linux/test-results/run-7ty2nn33",
+      "binary_sha256": [
+        "d81b2ce30f108f0e3ff5fc8165ec25d7efd2feb92ee19cfb8254cede8849052f"
+      ],
+      "groups": [
+        {
+          "name": "inspector_workflow",
+          "status": "passed",
+          "seconds": 73.948
+        },
+        {
+          "name": "file_tabs_design",
+          "status": "passed",
+          "seconds": 18.431
+        }
+      ]
+    },
+    {
+      "label": "windows-graphic-source6",
+      "source_version": 6,
+      "directory": "build/native/Release/test-results/run-ru6qn4bs",
+      "binary_sha256": [
+        "13f507145eb679ec51ac8551f92310b286dd969af427313120cb6c6a1052dba1"
+      ],
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 6.297
+        }
+      ]
+    },
+    {
+      "label": "linux-graphic-source6",
+      "source_version": 6,
+      "directory": "build/native/Design-analysis-linux/test-results/run-8647ib26",
+      "binary_sha256": [
+        "d81b2ce30f108f0e3ff5fc8165ec25d7efd2feb92ee19cfb8254cede8849052f"
+      ],
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 42.365
+        }
+      ]
+    },
+    {
+      "label": "linux-source4-ext4-documentation_math",
+      "source_version": 4,
+      "status": "passed",
+      "seconds": 48.08977096800004,
+      "binary_sha256": "317802afe25217adf284f94296d5f8542dc662d9b07e5ea53a95024691152813"
+    },
+    {
+      "label": "linux-source4-ext4-file_tabs_workflow",
+      "source_version": 4,
+      "status": "passed",
+      "seconds": 9.98532210299993,
+      "binary_sha256": "317802afe25217adf284f94296d5f8542dc662d9b07e5ea53a95024691152813"
+    }
+  ],
+  "limits": [
+    "Only Windows original first-pill geometry is compared to browser PNGs; no full glyph/raster identity claim",
+    "System and bundled text roles and actual focus tasks are native; no physical monitor or external screenreader proof",
+    "Source4 ext4 checks keep original 75/65-second outer and 45/15-second inner deadlines; only working data moved",
+    "Source5 old checker passed despite blank compact diagnostic; independent final raster check rejects that image",
+    "SDK source4 validates the new font/license and installed bundled startup; it is not the final source6 application",
+    "Tested native binaries include preserved preexisting local accessibility work; its 12 raw hashes are recorded, and those changes are excluded from this commit"
+  ],
+  "sdk_proof": "file-tabs-sdk4-proof.json",
+  "raster_counterexample": "file-tabs-compact-counterexample.json",
+  "canonical_exports": "exports.json"
+}

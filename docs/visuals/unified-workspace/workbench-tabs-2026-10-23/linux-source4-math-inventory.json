@@ -1,0 +1,1106 @@
+{
+  "pages": [
+    "README.md",
+    "docs/guide.md",
+    "docs/numerics.md",
+    "docs/series.md",
+    "docs/build.md",
+    "docs/data-format.md",
+    "docs/design-direction.md",
+    "Physim_Projektplan.md",
+    "docs/reports.md",
+    "docs/runs.md",
+    "docs/mechanics.md",
+    "include/physim/core.h",
+    "include/physim/experiment.h",
+    "include/physim/numerics.h",
+    "include/physim/units.h",
+    "include/physim/series.h",
+    "include/physim/data.h",
+    "include/physim/analysis.h",
+    "include/physim/report.h",
+    "include/physim/mechanics.h",
+    "docs/status.md",
+    "docs/decisions/001-foundation.md",
+    "docs/decisions/002-opengl-renderer.md",
+    "LICENSE",
+    "docs/autosave.md",
+    "docs/spring.md",
+    "docs/monte-carlo.md",
+    "include/physim/measurement.h",
+    "docs/measurement.md",
+    "docs/settings.md",
+    "docs/math.md",
+    "include/physim/math.h",
+    "docs/memory.md",
+    "include/physim/memory.h",
+    "docs/buoyancy.md",
+    "docs/array.md",
+    "include/physim/array.h",
+    "docs/string-view.md",
+    "include/physim/string_view.h",
+    "docs/hashmap.md",
+    "include/physim/hashmap.h",
+    "include/physim/collision.h",
+    "docs/language.md",
+    "docs/workspace.md",
+    "docs/experiment-tutorial.md",
+    "docs/api.md",
+    "docs/troubleshooting.md",
+    "docs/language-values.md",
+    "docs/reference/language-library.md",
+    "docs/reference/core.md",
+    "docs/reference/experiment.md",
+    "docs/reference/numerics.md",
+    "docs/reference/units.md",
+    "docs/units.md",
+    "docs/reference/series.md",
+    "docs/reference/data.md",
+    "docs/reference/analysis.md",
+    "docs/reference/report.md",
+    "docs/reference/mechanics.md",
+    "docs/reference/collision.md",
+    "docs/reference/measurement.md",
+    "docs/reference/math.md",
+    "docs/reference/memory.md",
+    "docs/reference/array.md",
+    "docs/reference/string_view.md",
+    "docs/reference/hashmap.md",
+    "docs/performance.md",
+    "docs/ui-rendering.md",
+    "docs/fuzzing.md",
+    "docs/crc.md",
+    "docs/ui-states.md",
+    "docs/language-tutorial.md",
+    "docs/projectile-tutorial.md",
+    "docs/projectile-drag-tutorial.md",
+    "docs/language-analysis-tutorial.md",
+    "docs/platform-validation.md",
+    "include/physim/snapshot.h",
+    "docs/reference/snapshot.md",
+    "docs/status-history.md",
+    "docs/logging.md",
+    "include/physim/log.h",
+    "docs/reference/log.md",
+    "docs/scene-frames.md",
+    "docs/diagnostics.md",
+    "include/physim/diagnostic.h",
+    "docs/reference/diagnostic.md",
+    "docs/run-index.md",
+    "docs/run-streams.md",
+    "include/physim/run_index.h",
+    "docs/reference/run_index.md",
+    "docs/reference/run_stream.md",
+    "docs/contact-world.md",
+    "include/physim/contact_world.h",
+    "docs/reference/contact_world.md",
+    "docs/material-tutorial.md",
+    "docs/pendulum-tutorial.md",
+    "docs/collision-tutorial.md",
+    "docs/monte-carlo-tutorial.md",
+    "docs/saved-run-tutorial.md",
+    "docs/project-audit.md",
+    "docs/batch-language.md",
+    "include/physim/batch.h",
+    "docs/reference/batch.md",
+    "docs/fluid.md",
+    "include/physim/fluid.h",
+    "docs/reference/fluid.md",
+    "docs/waves-optics.md",
+    "include/physim/waves.h",
+    "include/physim/optics.h",
+    "docs/reference/waves.md",
+    "docs/reference/optics.md",
+    "docs/electromagnetism.md",
+    "include/physim/electromagnetism.h",
+    "docs/reference/electromagnetism.md",
+    "docs/thermodynamics.md",
+    "include/physim/thermodynamics.h",
+    "docs/reference/thermodynamics.md",
+    "docs/c-guide.md",
+    "docs/physim-guide.md",
+    "docs/c-workflow.md",
+    "docs/physim-workflow.md",
+    "docs/properties.md",
+    "include/physim/properties.h",
+    "docs/reference/properties.md",
+    "docs/real-gas.md",
+    "docs/accessibility.md",
+    "docs/platform-validation-history.md",
+    "docs/cfd-project-plan.md",
+    "docs/fem-project-plan.md",
+    "docs/scene-rendering.md",
+    "docs/app-profiling.md",
+    "docs/platform-validation-history-2.md",
+    "docs/secondbrain.md",
+    "brains/physim/AGENTS.md",
+    "brains/physim/DECISIONS.md",
+    "brains/physim/PROJECT.md",
+    "brains/physim/QUESTIONS.md",
+    "brains/physim/SOURCES.md",
+    "brains/physim/START.md",
+    "brains/physim/STATE.md",
+    "brains/physim/archive/README.md",
+    "brains/physim/inbox/INBOX.md",
+    "brains/physim/journal/2026-10-12.md",
+    "brains/physim/knowledge/dokumentation.md",
+    "AGENTS.md",
+    "brains/physim/brain.json",
+    "tests/tutorial_sources.json",
+    "docs/user-guide.md",
+    "docs/examples.md",
+    "docs/documentation-research.md",
+    "docs/spatial-explanations.md",
+    "docs/readme-history.md",
+    "docs/benchmarks/2026-09-19/baseline/summary.json",
+    "docs/benchmarks/2026-09-19/crc/crc-summary.json",
+    "docs/benchmarks/2026-09-19/report-view/summary.json",
+    "docs/benchmarks/2026-09-19/ui-buffers/summary.json",
+    "docs/project-audit.json",
+    "examples/ccd_events/main.c",
+    "examples/contact_stack/main.c",
+    "examples/convex_contacts/main.c",
+    "examples/diagnostics/analysis.c",
+    "examples/diagnostics/main.c",
+    "examples/language/ccd_events.phys",
+    "examples/language/contact_stack.phys",
+    "examples/language/contact_world.phys",
+    "examples/language/convex_contacts.phys",
+    "examples/language/diagnostic_analysis.phys",
+    "examples/language/diagnostic_experiment.phys",
+    "examples/language/diagnostic_values.phys",
+    "examples/language/generics/main.phys",
+    "examples/language/logging.phys",
+    "examples/language/modules/main.phys",
+    "examples/language/run_index_analysis.phys",
+    "examples/language/run_index_values.phys",
+    "examples/language/scene_frames.phys",
+    "examples/logging/main.c",
+    "examples/pendulum/main.c",
+    "examples/scene_frames/main.c",
+    "third_party/README.md",
+    "tools/SDK-README.md",
+    "docs/decisions/003-command-menus.md",
+    "docs/decisions/004-f1-handbook.md",
+    "docs/platform-validation-history-3.md",
+    "docs/decisions/005-f1-font-demand.md",
+    "docs/decisions/006-f1-table-semantics.md"
+  ],
+  "characters": [
+    {
+      "codepoint": "U+0020",
+      "char": " ",
+      "name": "SPACE"
+    },
+    {
+      "codepoint": "U+0021",
+      "char": "!",
+      "name": "EXCLAMATION MARK"
+    },
+    {
+      "codepoint": "U+0022",
+      "char": "\"",
+      "name": "QUOTATION MARK"
+    },
+    {
+      "codepoint": "U+0023",
+      "char": "#",
+      "name": "NUMBER SIGN"
+    },
+    {
+      "codepoint": "U+0024",
+      "char": "$",
+      "name": "DOLLAR SIGN"
+    },
+    {
+      "codepoint": "U+0025",
+      "char": "%",
+      "name": "PERCENT SIGN"
+    },
+    {
+      "codepoint": "U+0026",
+      "char": "&",
+      "name": "AMPERSAND"
+    },
+    {
+      "codepoint": "U+0027",
+      "char": "'",
+      "name": "APOSTROPHE"
+    },
+    {
+      "codepoint": "U+0028",
+      "char": "(",
+      "name": "LEFT PARENTHESIS"
+    },
+    {
+      "codepoint": "U+0029",
+      "char": ")",
+      "name": "RIGHT PARENTHESIS"
+    },
+    {
+      "codepoint": "U+002A",
+      "char": "*",
+      "name": "ASTERISK"
+    },
+    {
+      "codepoint": "U+002B",
+      "char": "+",
+      "name": "PLUS SIGN"
+    },
+    {
+      "codepoint": "U+002C",
+      "char": ",",
+      "name": "COMMA"
+    },
+    {
+      "codepoint": "U+002D",
+      "char": "-",
+      "name": "HYPHEN-MINUS"
+    },
+    {
+      "codepoint": "U+002E",
+      "char": ".",
+      "name": "FULL STOP"
+    },
+    {
+      "codepoint": "U+002F",
+      "char": "/",
+      "name": "SOLIDUS"
+    },
+    {
+      "codepoint": "U+0030",
+      "char": "0",
+      "name": "DIGIT ZERO"
+    },
+    {
+      "codepoint": "U+0031",
+      "char": "1",
+      "name": "DIGIT ONE"
+    },
+    {
+      "codepoint": "U+0032",
+      "char": "2",
+      "name": "DIGIT TWO"
+    },
+    {
+      "codepoint": "U+0033",
+      "char": "3",
+      "name": "DIGIT THREE"
+    },
+    {
+      "codepoint": "U+0034",
+      "char": "4",
+      "name": "DIGIT FOUR"
+    },
+    {
+      "codepoint": "U+0035",
+      "char": "5",
+      "name": "DIGIT FIVE"
+    },
+    {
+      "codepoint": "U+0036",
+      "char": "6",
+      "name": "DIGIT SIX"
+    },
+    {
+      "codepoint": "U+0037",
+      "char": "7",
+      "name": "DIGIT SEVEN"
+    },
+    {
+      "codepoint": "U+0038",
+      "char": "8",
+      "name": "DIGIT EIGHT"
+    },
+    {
+      "codepoint": "U+0039",
+      "char": "9",
+      "name": "DIGIT NINE"
+    },
+    {
+      "codepoint": "U+003A",
+      "char": ":",
+      "name": "COLON"
+    },
+    {
+      "codepoint": "U+003B",
+      "char": ";",
+      "name": "SEMICOLON"
+    },
+    {
+      "codepoint": "U+003C",
+      "char": "<",
+      "name": "LESS-THAN SIGN"
+    },
+    {
+      "codepoint": "U+003D",
+      "char": "=",
+      "name": "EQUALS SIGN"
+    },
+    {
+      "codepoint": "U+003E",
+      "char": ">",
+      "name": "GREATER-THAN SIGN"
+    },
+    {
+      "codepoint": "U+003F",
+      "char": "?",
+      "name": "QUESTION MARK"
+    },
+    {
+      "codepoint": "U+0040",
+      "char": "@",
+      "name": "COMMERCIAL AT"
+    },
+    {
+      "codepoint": "U+0041",
+      "char": "A",
+      "name": "LATIN CAPITAL LETTER A"
+    },
+    {
+      "codepoint": "U+0042",
+      "char": "B",
+      "name": "LATIN CAPITAL LETTER B"
+    },
+    {
+      "codepoint": "U+0043",
+      "char": "C",
+      "name": "LATIN CAPITAL LETTER C"
+    },
+    {
+      "codepoint": "U+0044",
+      "char": "D",
+      "name": "LATIN CAPITAL LETTER D"
+    },
+    {
+      "codepoint": "U+0045",
+      "char": "E",
+      "name": "LATIN CAPITAL LETTER E"
+    },
+    {
+      "codepoint": "U+0046",
+      "char": "F",
+      "name": "LATIN CAPITAL LETTER F"
+    },
+    {
+      "codepoint": "U+0047",
+      "char": "G",
+      "name": "LATIN CAPITAL LETTER G"
+    },
+    {
+      "codepoint": "U+0048",
+      "char": "H",
+      "name": "LATIN CAPITAL LETTER H"
+    },
+    {
+      "codepoint": "U+0049",
+      "char": "I",
+      "name": "LATIN CAPITAL LETTER I"
+    },
+    {
+      "codepoint": "U+004A",
+      "char": "J",
+      "name": "LATIN CAPITAL LETTER J"
+    },
+    {
+      "codepoint": "U+004B",
+      "char": "K",
+      "name": "LATIN CAPITAL LETTER K"
+    },
+    {
+      "codepoint": "U+004C",
+      "char": "L",
+      "name": "LATIN CAPITAL LETTER L"
+    },
+    {
+      "codepoint": "U+004D",
+      "char": "M",
+      "name": "LATIN CAPITAL LETTER M"
+    },
+    {
+      "codepoint": "U+004E",
+      "char": "N",
+      "name": "LATIN CAPITAL LETTER N"
+    },
+    {
+      "codepoint": "U+004F",
+      "char": "O",
+      "name": "LATIN CAPITAL LETTER O"
+    },
+    {
+      "codepoint": "U+0050",
+      "char": "P",
+      "name": "LATIN CAPITAL LETTER P"
+    },
+    {
+      "codepoint": "U+0051",
+      "char": "Q",
+      "name": "LATIN CAPITAL LETTER Q"
+    },
+    {
+      "codepoint": "U+0052",
+      "char": "R",
+      "name": "LATIN CAPITAL LETTER R"
+    },
+    {
+      "codepoint": "U+0053",
+      "char": "S",
+      "name": "LATIN CAPITAL LETTER S"
+    },
+    {
+      "codepoint": "U+0054",
+      "char": "T",
+      "name": "LATIN CAPITAL LETTER T"
+    },
+    {
+      "codepoint": "U+0055",
+      "char": "U",
+      "name": "LATIN CAPITAL LETTER U"
+    },
+    {
+      "codepoint": "U+0056",
+      "char": "V",
+      "name": "LATIN CAPITAL LETTER V"
+    },
+    {
+      "codepoint": "U+0057",
+      "char": "W",
+      "name": "LATIN CAPITAL LETTER W"
+    },
+    {
+      "codepoint": "U+0058",
+      "char": "X",
+      "name": "LATIN CAPITAL LETTER X"
+    },
+    {
+      "codepoint": "U+0059",
+      "char": "Y",
+      "name": "LATIN CAPITAL LETTER Y"
+    },
+    {
+      "codepoint": "U+005A",
+      "char": "Z",
+      "name": "LATIN CAPITAL LETTER Z"
+    },
+    {
+      "codepoint": "U+005B",
+      "char": "[",
+      "name": "LEFT SQUARE BRACKET"
+    },
+    {
+      "codepoint": "U+005C",
+      "char": "\\",
+      "name": "REVERSE SOLIDUS"
+    },
+    {
+      "codepoint": "U+005D",
+      "char": "]",
+      "name": "RIGHT SQUARE BRACKET"
+    },
+    {
+      "codepoint": "U+005E",
+      "char": "^",
+      "name": "CIRCUMFLEX ACCENT"
+    },
+    {
+      "codepoint": "U+005F",
+      "char": "_",
+      "name": "LOW LINE"
+    },
+    {
+      "codepoint": "U+0060",
+      "char": "`",
+      "name": "GRAVE ACCENT"
+    },
+    {
+      "codepoint": "U+0061",
+      "char": "a",
+      "name": "LATIN SMALL LETTER A"
+    },
+    {
+      "codepoint": "U+0062",
+      "char": "b",
+      "name": "LATIN SMALL LETTER B"
+    },
+    {
+      "codepoint": "U+0063",
+      "char": "c",
+      "name": "LATIN SMALL LETTER C"
+    },
+    {
+      "codepoint": "U+0064",
+      "char": "d",
+      "name": "LATIN SMALL LETTER D"
+    },
+    {
+      "codepoint": "U+0065",
+      "char": "e",
+      "name": "LATIN SMALL LETTER E"
+    },
+    {
+      "codepoint": "U+0066",
+      "char": "f",
+      "name": "LATIN SMALL LETTER F"
+    },
+    {
+      "codepoint": "U+0067",
+      "char": "g",
+      "name": "LATIN SMALL LETTER G"
+    },
+    {
+      "codepoint": "U+0068",
+      "char": "h",
+      "name": "LATIN SMALL LETTER H"
+    },
+    {
+      "codepoint": "U+0069",
+      "char": "i",
+      "name": "LATIN SMALL LETTER I"
+    },
+    {
+      "codepoint": "U+006A",
+      "char": "j",
+      "name": "LATIN SMALL LETTER J"
+    },
+    {
+      "codepoint": "U+006B",
+      "char": "k",
+      "name": "LATIN SMALL LETTER K"
+    },
+    {
+      "codepoint": "U+006C",
+      "char": "l",
+      "name": "LATIN SMALL LETTER L"
+    },
+    {
+      "codepoint": "U+006D",
+      "char": "m",
+      "name": "LATIN SMALL LETTER M"
+    },
+    {
+      "codepoint": "U+006E",
+      "char": "n",
+      "name": "LATIN SMALL LETTER N"
+    },
+    {
+      "codepoint": "U+006F",
+      "char": "o",
+      "name": "LATIN SMALL LETTER O"
+    },
+    {
+      "codepoint": "U+0070",
+      "char": "p",
+      "name": "LATIN SMALL LETTER P"
+    },
+    {
+      "codepoint": "U+0071",
+      "char": "q",
+      "name": "LATIN SMALL LETTER Q"
+    },
+    {
+      "codepoint": "U+0072",
+      "char": "r",
+      "name": "LATIN SMALL LETTER R"
+    },
+    {
+      "codepoint": "U+0073",
+      "char": "s",
+      "name": "LATIN SMALL LETTER S"
+    },
+    {
+      "codepoint": "U+0074",
+      "char": "t",
+      "name": "LATIN SMALL LETTER T"
+    },
+    {
+      "codepoint": "U+0075",
+      "char": "u",
+      "name": "LATIN SMALL LETTER U"
+    },
+    {
+      "codepoint": "U+0076",
+      "char": "v",
+      "name": "LATIN SMALL LETTER V"
+    },
+    {
+      "codepoint": "U+0077",
+      "char": "w",
+      "name": "LATIN SMALL LETTER W"
+    },
+    {
+      "codepoint": "U+0078",
+      "char": "x",
+      "name": "LATIN SMALL LETTER X"
+    },
+    {
+      "codepoint": "U+0079",
+      "char": "y",
+      "name": "LATIN SMALL LETTER Y"
+    },
+    {
+      "codepoint": "U+007A",
+      "char": "z",
+      "name": "LATIN SMALL LETTER Z"
+    },
+    {
+      "codepoint": "U+007B",
+      "char": "{",
+      "name": "LEFT CURLY BRACKET"
+    },
+    {
+      "codepoint": "U+007C",
+      "char": "|",
+      "name": "VERTICAL LINE"
+    },
+    {
+      "codepoint": "U+007D",
+      "char": "}",
+      "name": "RIGHT CURLY BRACKET"
+    },
+    {
+      "codepoint": "U+007E",
+      "char": "~",
+      "name": "TILDE"
+    },
+    {
+      "codepoint": "U+00A7",
+      "char": "§",
+      "name": "SECTION SIGN"
+    },
+    {
+      "codepoint": "U+00B0",
+      "char": "°",
+      "name": "DEGREE SIGN"
+    },
+    {
+      "codepoint": "U+00B1",
+      "char": "±",
+      "name": "PLUS-MINUS SIGN"
+    },
+    {
+      "codepoint": "U+00B2",
+      "char": "²",
+      "name": "SUPERSCRIPT TWO"
+    },
+    {
+      "codepoint": "U+00B3",
+      "char": "³",
+      "name": "SUPERSCRIPT THREE"
+    },
+    {
+      "codepoint": "U+00B5",
+      "char": "µ",
+      "name": "MICRO SIGN"
+    },
+    {
+      "codepoint": "U+00B7",
+      "char": "·",
+      "name": "MIDDLE DOT"
+    },
+    {
+      "codepoint": "U+00B9",
+      "char": "¹",
+      "name": "SUPERSCRIPT ONE"
+    },
+    {
+      "codepoint": "U+00BD",
+      "char": "½",
+      "name": "VULGAR FRACTION ONE HALF"
+    },
+    {
+      "codepoint": "U+00C4",
+      "char": "Ä",
+      "name": "LATIN CAPITAL LETTER A WITH DIAERESIS"
+    },
+    {
+      "codepoint": "U+00D6",
+      "char": "Ö",
+      "name": "LATIN CAPITAL LETTER O WITH DIAERESIS"
+    },
+    {
+      "codepoint": "U+00D7",
+      "char": "×",
+      "name": "MULTIPLICATION SIGN"
+    },
+    {
+      "codepoint": "U+00DC",
+      "char": "Ü",
+      "name": "LATIN CAPITAL LETTER U WITH DIAERESIS"
+    },
+    {
+      "codepoint": "U+00DF",
+      "char": "ß",
+      "name": "LATIN SMALL LETTER SHARP S"
+    },
+    {
+      "codepoint": "U+00E1",
+      "char": "á",
+      "name": "LATIN SMALL LETTER A WITH ACUTE"
+    },
+    {
+      "codepoint": "U+00E4",
+      "char": "ä",
+      "name": "LATIN SMALL LETTER A WITH DIAERESIS"
+    },
+    {
+      "codepoint": "U+00E9",
+      "char": "é",
+      "name": "LATIN SMALL LETTER E WITH ACUTE"
+    },
+    {
+      "codepoint": "U+00F6",
+      "char": "ö",
+      "name": "LATIN SMALL LETTER O WITH DIAERESIS"
+    },
+    {
+      "codepoint": "U+00FC",
+      "char": "ü",
+      "name": "LATIN SMALL LETTER U WITH DIAERESIS"
+    },
+    {
+      "codepoint": "U+0301",
+      "char": "́",
+      "name": "COMBINING ACUTE ACCENT"
+    },
+    {
+      "codepoint": "U+0394",
+      "char": "Δ",
+      "name": "GREEK CAPITAL LETTER DELTA"
+    },
+    {
+      "codepoint": "U+03A3",
+      "char": "Σ",
+      "name": "GREEK CAPITAL LETTER SIGMA"
+    },
+    {
+      "codepoint": "U+03B1",
+      "char": "α",
+      "name": "GREEK SMALL LETTER ALPHA"
+    },
+    {
+      "codepoint": "U+03B2",
+      "char": "β",
+      "name": "GREEK SMALL LETTER BETA"
+    },
+    {
+      "codepoint": "U+03B3",
+      "char": "γ",
+      "name": "GREEK SMALL LETTER GAMMA"
+    },
+    {
+      "codepoint": "U+03B4",
+      "char": "δ",
+      "name": "GREEK SMALL LETTER DELTA"
+    },
+    {
+      "codepoint": "U+03B5",
+      "char": "ε",
+      "name": "GREEK SMALL LETTER EPSILON"
+    },
+    {
+      "codepoint": "U+03B7",
+      "char": "η",
+      "name": "GREEK SMALL LETTER ETA"
+    },
+    {
+      "codepoint": "U+03B8",
+      "char": "θ",
+      "name": "GREEK SMALL LETTER THETA"
+    },
+    {
+      "codepoint": "U+03BB",
+      "char": "λ",
+      "name": "GREEK SMALL LETTER LAMDA"
+    },
+    {
+      "codepoint": "U+03BC",
+      "char": "μ",
+      "name": "GREEK SMALL LETTER MU"
+    },
+    {
+      "codepoint": "U+03BD",
+      "char": "ν",
+      "name": "GREEK SMALL LETTER NU"
+    },
+    {
+      "codepoint": "U+03C0",
+      "char": "π",
+      "name": "GREEK SMALL LETTER PI"
+    },
+    {
+      "codepoint": "U+03C1",
+      "char": "ρ",
+      "name": "GREEK SMALL LETTER RHO"
+    },
+    {
+      "codepoint": "U+03C3",
+      "char": "σ",
+      "name": "GREEK SMALL LETTER SIGMA"
+    },
+    {
+      "codepoint": "U+03C4",
+      "char": "τ",
+      "name": "GREEK SMALL LETTER TAU"
+    },
+    {
+      "codepoint": "U+03C6",
+      "char": "φ",
+      "name": "GREEK SMALL LETTER PHI"
+    },
+    {
+      "codepoint": "U+03C9",
+      "char": "ω",
+      "name": "GREEK SMALL LETTER OMEGA"
+    },
+    {
+      "codepoint": "U+1D40",
+      "char": "ᵀ",
+      "name": "MODIFIER LETTER CAPITAL T"
+    },
+    {
+      "codepoint": "U+1D63",
+      "char": "ᵣ",
+      "name": "LATIN SUBSCRIPT SMALL LETTER R"
+    },
+    {
+      "codepoint": "U+1D65",
+      "char": "ᵥ",
+      "name": "LATIN SUBSCRIPT SMALL LETTER V"
+    },
+    {
+      "codepoint": "U+2013",
+      "char": "–",
+      "name": "EN DASH"
+    },
+    {
+      "codepoint": "U+2014",
+      "char": "—",
+      "name": "EM DASH"
+    },
+    {
+      "codepoint": "U+2019",
+      "char": "’",
+      "name": "RIGHT SINGLE QUOTATION MARK"
+    },
+    {
+      "codepoint": "U+201C",
+      "char": "“",
+      "name": "LEFT DOUBLE QUOTATION MARK"
+    },
+    {
+      "codepoint": "U+201E",
+      "char": "„",
+      "name": "DOUBLE LOW-9 QUOTATION MARK"
+    },
+    {
+      "codepoint": "U+2026",
+      "char": "…",
+      "name": "HORIZONTAL ELLIPSIS"
+    },
+    {
+      "codepoint": "U+2032",
+      "char": "′",
+      "name": "PRIME"
+    },
+    {
+      "codepoint": "U+2033",
+      "char": "″",
+      "name": "DOUBLE PRIME"
+    },
+    {
+      "codepoint": "U+2070",
+      "char": "⁰",
+      "name": "SUPERSCRIPT ZERO"
+    },
+    {
+      "codepoint": "U+2074",
+      "char": "⁴",
+      "name": "SUPERSCRIPT FOUR"
+    },
+    {
+      "codepoint": "U+2076",
+      "char": "⁶",
+      "name": "SUPERSCRIPT SIX"
+    },
+    {
+      "codepoint": "U+2078",
+      "char": "⁸",
+      "name": "SUPERSCRIPT EIGHT"
+    },
+    {
+      "codepoint": "U+2079",
+      "char": "⁹",
+      "name": "SUPERSCRIPT NINE"
+    },
+    {
+      "codepoint": "U+207A",
+      "char": "⁺",
+      "name": "SUPERSCRIPT PLUS SIGN"
+    },
+    {
+      "codepoint": "U+207B",
+      "char": "⁻",
+      "name": "SUPERSCRIPT MINUS"
+    },
+    {
+      "codepoint": "U+207F",
+      "char": "ⁿ",
+      "name": "SUPERSCRIPT LATIN SMALL LETTER N"
+    },
+    {
+      "codepoint": "U+2080",
+      "char": "₀",
+      "name": "SUBSCRIPT ZERO"
+    },
+    {
+      "codepoint": "U+2081",
+      "char": "₁",
+      "name": "SUBSCRIPT ONE"
+    },
+    {
+      "codepoint": "U+2082",
+      "char": "₂",
+      "name": "SUBSCRIPT TWO"
+    },
+    {
+      "codepoint": "U+208A",
+      "char": "₊",
+      "name": "SUBSCRIPT PLUS SIGN"
+    },
+    {
+      "codepoint": "U+208B",
+      "char": "₋",
+      "name": "SUBSCRIPT MINUS"
+    },
+    {
+      "codepoint": "U+2090",
+      "char": "ₐ",
+      "name": "LATIN SUBSCRIPT SMALL LETTER A"
+    },
+    {
+      "codepoint": "U+2093",
+      "char": "ₓ",
+      "name": "LATIN SUBSCRIPT SMALL LETTER X"
+    },
+    {
+      "codepoint": "U+209B",
+      "char": "ₛ",
+      "name": "LATIN SUBSCRIPT SMALL LETTER S"
+    },
+    {
+      "codepoint": "U+2113",
+      "char": "ℓ",
+      "name": "SCRIPT SMALL L"
+    },
+    {
+      "codepoint": "U+2192",
+      "char": "→",
+      "name": "RIGHTWARDS ARROW"
+    },
+    {
+      "codepoint": "U+2202",
+      "char": "∂",
+      "name": "PARTIAL DIFFERENTIAL"
+    },
+    {
+      "codepoint": "U+2212",
+      "char": "−",
+      "name": "MINUS SIGN"
+    },
+    {
+      "codepoint": "U+221A",
+      "char": "√",
+      "name": "SQUARE ROOT"
+    },
+    {
+      "codepoint": "U+221E",
+      "char": "∞",
+      "name": "INFINITY"
+    },
+    {
+      "codepoint": "U+222B",
+      "char": "∫",
+      "name": "INTEGRAL"
+    },
+    {
+      "codepoint": "U+2248",
+      "char": "≈",
+      "name": "ALMOST EQUAL TO"
+    },
+    {
+      "codepoint": "U+2264",
+      "char": "≤",
+      "name": "LESS-THAN OR EQUAL TO"
+    },
+    {
+      "codepoint": "U+2265",
+      "char": "≥",
+      "name": "GREATER-THAN OR EQUAL TO"
+    },
+    {
+      "codepoint": "U+2500",
+      "char": "─",
+      "name": "BOX DRAWINGS LIGHT HORIZONTAL"
+    },
+    {
+      "codepoint": "U+2502",
+      "char": "│",
+      "name": "BOX DRAWINGS LIGHT VERTICAL"
+    },
+    {
+      "codepoint": "U+250C",
+      "char": "┌",
+      "name": "BOX DRAWINGS LIGHT DOWN AND RIGHT"
+    },
+    {
+      "codepoint": "U+2510",
+      "char": "┐",
+      "name": "BOX DRAWINGS LIGHT DOWN AND LEFT"
+    },
+    {
+      "codepoint": "U+2514",
+      "char": "└",
+      "name": "BOX DRAWINGS LIGHT UP AND RIGHT"
+    },
+    {
+      "codepoint": "U+2518",
+      "char": "┘",
+      "name": "BOX DRAWINGS LIGHT UP AND LEFT"
+    },
+    {
+      "codepoint": "U+251C",
+      "char": "├",
+      "name": "BOX DRAWINGS LIGHT VERTICAL AND RIGHT"
+    },
+    {
+      "codepoint": "U+252C",
+      "char": "┬",
+      "name": "BOX DRAWINGS LIGHT DOWN AND HORIZONTAL"
+    },
+    {
+      "codepoint": "U+2534",
+      "char": "┴",
+      "name": "BOX DRAWINGS LIGHT UP AND HORIZONTAL"
+    },
+    {
+      "codepoint": "U+2603",
+      "char": "☃",
+      "name": "SNOWMAN"
+    },
+    {
+      "codepoint": "U+2C7C",
+      "char": "ⱼ",
+      "name": "LATIN SUBSCRIPT SMALL LETTER J"
+    },
+    {
+      "codepoint": "U+1F30D",
+      "char": "🌍",
+      "name": "EARTH GLOBE EUROPE-AFRICA"
+    },
+    {
+      "codepoint": "U+1F600",
+      "char": "😀",
+      "name": "GRINNING FACE"
+    }
+  ]
+}

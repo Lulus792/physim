@@ -17,15 +17,54 @@ static bool panel_test_start(app *a,const char *root,const char *mode) {
     return true;
 }
 static void panel_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
-    static unsigned panel,phase,settle;static struct nk_rect drop;static ps_dock_layout layout;static struct nk_rect slot;
+    static unsigned panel,phase,settle,minimum_phase;static struct nk_rect drop;static ps_dock_layout layout;static struct nk_rect slot;
+    static float timeline_wish;static uint32_t log_wish;static nk_uint compact_scroll;
     static double time;static float yaw,curve_before,curve_width,curve_pixels_before;static double curve_focus_retry;static uint32_t selection,source;static int source_bytes,main_width,main_height;static SDL_WindowID ids[PS_PANEL_COUNT];
     bool ok=true;
     switch(*stage) {
     case 0:if(settle++<3)return;build_project(a);break;
     case 1:if(!idle(a) || a->library_thread)return;ok=a->built;start_run(a);break;
-    case 2:if(!a->hello || a->simulation_time<.2)return;command(a,PS_MSG_PAUSE);break;
+    case 2:if(!a->hello || a->simulation_time<.2)return;command(a,PS_MSG_PAUSE);a->show_log=true;
+        if(!a->diagnostic_count) {
+            parse_diagnostic(a,"native-compact-log-sentinel.c:17:1: warning: Native compact log display probe");
+            puts("PANEL SYNTHETIC DIAGNOSTIC: warning-free compiler; explicit display fixture only");
+        }
+        timeline_wish=a->laboratory_timeline_height;log_wish=a->preferences.log_height;break;
     case 3:
         if(!a->paused)return;
+        ok=a->dock_panels[PS_DOCK_WORKSPACE].h>=LABORATORY_SCENE_MIN+1+LABORATORY_MEASURE_MIN &&
+            a->scene_viewport_bounds.h>=LABORATORY_SCENE_MIN &&
+            a->dock_panels[PS_DOCK_WORKSPACE].h-a->scene_viewport_bounds.h-1>=LABORATORY_MEASURE_MIN &&
+            a->dock_panels[PS_DOCK_LOG].h>=LABORATORY_LOG_MIN &&
+            a->laboratory_timeline_height==timeline_wish && a->preferences.log_height==log_wish;
+        if(!ok)break;
+        if(a->diagnostic_count && a->dock_panels[PS_DOCK_LOG].h<=LABORATORY_LOG_MIN+1) {
+            struct nk_rect r=a->dock_panels[PS_DOCK_LOG];float top=r.y+dock_panel_header_height(a,PS_DOCK_LOG);
+            if(!minimum_phase) {
+                *capture="panel-compact-log-start.png";settle=0;minimum_phase=1;
+                test_plot_wheel(a,r.x+50,r.y+r.h-10,-1000);return;
+            }
+            if(settle++<2)return;
+            if(minimum_phase==1) {
+                struct nk_window *log=nk_window_find(a->ui,"log");
+                nk_uint y=log?log->scrollbar.y:0;compact_scroll=y;
+                struct nk_rect last=a->diagnostic_bounds[a->diagnostic_count-1];
+                ok=y>0 && last.y+last.h/2>=top && last.y+last.h/2<r.y+r.h;
+                if(!ok){fprintf(stderr,"PANEL COMPACT LOG END: scroll=%u last=%.3f,%.3f clip=%.3f,%.3f\n",y,last.y,last.h,top,r.y+r.h);break;}
+                printf("PANEL COMPACT TEXT: clip=%.3f,%.3f,%.3f,%.3f row=%.3f,%.3f,%.3f,%.3f bytes=%zu\n",r.x,top,r.w,r.y+r.h-top,last.x,last.y,last.w,last.h,strlen(a->diagnostics[a->diagnostic_count-1].text));
+                *capture="panel-compact-log-end.png";settle=0;minimum_phase=2;
+                test_plot_wheel(a,r.x+50,r.y+r.h-10,1000);return;
+            }
+            if(minimum_phase==2) {
+                struct nk_window *log=nk_window_find(a->ui,"log");
+                ok=log && !log->scrollbar.y && a->diagnostic_mode_bounds.y>=top &&
+                    a->diagnostic_mode_bounds.y+a->diagnostic_mode_bounds.h<=r.y+r.h;
+                if(!ok)break;
+                printf("PANEL COMPACT LOG: last-diagnostic-visible=1 end-scroll=%u returned=0 diagnostics=%d\n",compact_scroll,a->diagnostic_count);
+                minimum_phase=3;
+            }
+        }
+        printf("PANEL MINIMUM: scene=%.3f measure=%.3f log=%.3f timeline=%.3f wishes=%.3f,%u\n",a->scene_viewport_bounds.h,a->laboratory_measure_bounds.h+48,a->dock_panels[PS_DOCK_LOG].h,laboratory_dimension_value(a,1),a->laboratory_timeline_height,a->preferences.log_height);
         time=display_time(a);yaw=a->yaw;selection=a->scene_selected_id;
         layout=a->preferences.dock;slot=a->dock_panels[PS_DOCK_INSPECTOR];
         test_mouse(a,a->dock_headers[PS_DOCK_INSPECTOR],true);break;
@@ -38,6 +77,20 @@ static void panel_test_frame(app *a,const char *mode,int *stage,int *code,const 
         if(panel==PS_PANEL_COUNT){*capture="panels-all-detached.bmp";break;}
         if(phase==0){
             ok=a->panels[panel].action.w>0;if(!ok)break;
+            if(panel==PS_PANEL_MEASURE) {
+                struct nk_rect r=a->panels[panel].action,s=a->dock_panels[PS_DOCK_WORKSPACE];
+                struct nk_vec2 center=nk_vec2(r.x+r.w/2,r.y+r.h/2);
+                ok=r.y>=s.y && r.y+r.h<=s.y+s.h;
+                for(unsigned i=0;i<PS_DOCK_NODES;i++)if(a->dock_splitters[i].w>0)
+                    ok=ok && !nk_input_is_mouse_hovering_rect(&(struct nk_input){.mouse.pos=center},a->dock_splitters[i]);
+                if(!ok)break;
+            }
+            if(panel==PS_PANEL_MEASURE && SDL_getenv("PHYSIM_TEST_TRACE")) {
+                struct nk_rect r=a->panels[panel].action,s=a->dock_panels[PS_DOCK_WORKSPACE];
+                printf("PANEL MEASURE INPUT: log=%d diagnostics=%d action=%.3f,%.3f,%.3f,%.3f workspace=%.3f,%.3f,%.3f,%.3f\n",a->show_log,a->diagnostic_count,r.x,r.y,r.w,r.h,s.x,s.y,s.w,s.h);
+                for(unsigned i=0;i<PS_DOCK_NODES;i++)if(a->dock_splitters[i].w>0){r=a->dock_splitters[i];printf("PANEL MEASURE DOCK %u: %.3f,%.3f,%.3f,%.3f\n",i,r.x,r.y,r.w,r.h);}
+                *capture="panel-before-measure-pull.png";
+            }
             int w,h;SDL_GetWindowSize(a->window,&w,&h);drop=nk_rect((float)w+100,220,1,1);
             test_mouse(a,a->panels[panel].action,true);phase++;return;
         }
@@ -46,7 +99,7 @@ static void panel_test_frame(app *a,const char *mode,int *stage,int *code,const 
         if(phase==3){phase++;return;}
         if(phase==4) {
             ps_panel_window *p=&a->panels[panel];ok=p->detached && p->window && p->ui && p->graphics && p->window!=a->window;
-            if(!ok)break;
+            if(!ok){fprintf(stderr,"PANEL PULL STATE: detached=%d pull=%u dragging=%d dock-resize=%u lab-resize=%d request=%u log=%d diagnostics=%d\n",p->detached,a->panel_pull,a->panel_pull_dragging,a->dock_resize,a->laboratory_resize,a->panel_open_request,a->show_log,a->diagnostic_count);break;}
             ids[panel]=SDL_GetWindowID(p->window);
             for(unsigned j=0;j<panel;j++)ok=ok && ids[j]!=ids[panel];
             int x=0,y=0,w=0,h=0;SDL_GetWindowPosition(a->window,&x,&y);SDL_GetWindowSize(a->window,&w,&h);
@@ -159,7 +212,8 @@ static void panel_test_frame(app *a,const char *mode,int *stage,int *code,const 
         if(!ok)break;panel++;phase=0;return;
     case 12:
         ok=display_time(a)==time && a->yaw==yaw && a->scene_selected_id==selection && !memcmp(&layout,&a->preferences.dock,sizeof layout) &&
-            a->dock_panels[PS_DOCK_INSPECTOR].x==slot.x && a->dock_panels[PS_DOCK_INSPECTOR].w==slot.w;
+            a->dock_panels[PS_DOCK_INSPECTOR].x==slot.x && a->dock_panels[PS_DOCK_INSPECTOR].w==slot.w &&
+            a->laboratory_timeline_height==timeline_wish && a->preferences.log_height==log_wish;
         *capture="panels-reattached.bmp";test_mouse(a,a->panels[PS_DOCK_INSPECTOR].action,true);break;
     case 13:test_plot_motion(a,drop.x,drop.y);*stage=130;return;
     case 130:test_mouse(a,drop,false);*stage=14;return;

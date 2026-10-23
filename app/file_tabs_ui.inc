@@ -75,7 +75,9 @@ static void file_tab_close(app *a,unsigned key) {
     for(unsigned i=0;i<FILE_TABS;i++)if(file_tab_visible(a,a->file_tab_order[i])){file_tab_select(a,a->file_tab_order[i]);return;}
     a->tab=2;a->analysis_tab=0;
 }
+#include "file_tabs_compact.inc"
 static void file_tabs_view(app *a,struct nk_rect bounds) {
+    if(workbench_visible(a)){file_tabs_compact_view(a,bounds);return;}
     struct nk_context *ui=a->ui;struct nk_input *in=&ui->input;
     struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
     unsigned active=file_tab_active(a),chosen=FILE_TABS,close=FILE_TABS;

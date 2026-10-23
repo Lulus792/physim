@@ -1,0 +1,20 @@
+{
+  "entry": {
+    "file": "NotoSansMono-SemiBold.ttf",
+    "source": "hinted/ttf/NotoSansMono/NotoSansMono-SemiBold.ttf",
+    "repository": "https://github.com/notofonts/noto-fonts",
+    "revision": "ffebf8c1ee449e544955a7e813c54f9b73848eac",
+    "bytes": 519292,
+    "sha256": "0834f967d236257be3d9ce44e88e7a9936a0dacd38ae26b4a6838dcb1c99bc3e"
+  },
+  "url": "https://raw.githubusercontent.com/notofonts/noto-fonts/ffebf8c1ee449e544955a7e813c54f9b73848eac/hinted/ttf/NotoSansMono/NotoSansMono-SemiBold.ttf",
+  "license_url": "https://raw.githubusercontent.com/notofonts/noto-fonts/ffebf8c1ee449e544955a7e813c54f9b73848eac/LICENSE",
+  "license_sha256": "0dab92d0544f7b233403f14b84a663bdbfa746982eda629e7f4f9ffe1b036feb",
+  "weight": 600,
+  "post_isFixedPitch": 0,
+  "ascii_advance_range_at100": [
+    60.0,
+    60.0
+  ],
+  "scope": "Pillow preflight only; native atlas/raster remains to be tested"
+}
