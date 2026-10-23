@@ -1,0 +1,787 @@
+{
+  "date": "2026-10-23T02:00:00.346245+02:00",
+  "base": "56c2dca7efe6a3b8f101e1451ad7439ecf882c19",
+  "final_source_version": 5,
+  "source_normalization": "CRLF -> LF",
+  "foreign_preserved": {
+    ".github/workflows/linux-ui-sanitizers.yml": "517c7d628b9d496a0422d145f747a0427da24a4a304a218294f857ac9f6aaa24",
+    ".github/workflows/macos-f1-accessibility.yml": "54c64dc5b9a5ddc478d704fbd6eccae4548155216130c25778466ab60a48a9af",
+    "app/accessibility_atspi.c": "cb7570a937751358f3de0c1c9c18df15c6f00680843a58d1ed05a8ef6cd13ff0",
+    "app/accessibility_text.h": "e71dfda2fdf38f6bfa39da5fddd4f3507a423a3b9d08ee2aca91942726965372",
+    "tests/check_documentation_orca.py": "ef3298800cfa8032cf6333b6b7ee902fc75d17fc3200b0f5ec6e801b2eba37ac",
+    "tests/test_accessibility_tables_atspi.py": "ef47a57f9c6a5d2073d19b22807aa5998bb7c0401ee0189504152cf62a900a53",
+    "tests/test_accessibility_text_index.c": "29dd4051d759400f82092b8537aafe2ae3013c1ce46085ed5a74b692d65b95f9",
+    "app/accessibility_atspi_collection.inc": "4e6b21d0fde308d041edb49307598a6f11eae86ec68486a62b5cd4b714b8c3ad",
+    "tests/orca_reading_proof.py": "7738237a3aabb188af8ea223fdc42874e56ec196ca3621a8d4eb19ad3afa5d67",
+    "tests/test_orca_reading_proof.py": "2ba475ee25185e9e228444534a041179e38a4a66bd6072b3cbd0e947b2119c08",
+    "docs/status.md": "4159a86157c20dec896f13f6d950cfdbd85cdb56ee50fd4b8f510f140542ed09",
+    "docs/storage-cleanup-2026-10-22.md": "5bbc8778efe4da1236883d3affc8a41d07a983ceb0e804a0bbfe3cb02ce72d88"
+  },
+  "source4_to5_only_test_changes": [
+    "app/component_details_tests.inc",
+    "tests/check_component_details.py"
+  ],
+  "final_runs": [
+    {
+      "label": "windows-debug",
+      "source_version": 5,
+      "directory": "build/native/Design-analysis/test-results/run-8qxe1oqg",
+      "binary_sha256": "d8cf0280c7170a2d8b4d5197cb34e13dbd35d691f54b547f1ba88959b97515c9",
+      "groups": [
+        {
+          "name": "component_details_dark",
+          "status": "passed",
+          "seconds": 9.922
+        },
+        {
+          "name": "component_details_light_large_narrow",
+          "status": "passed",
+          "seconds": 11.281
+        }
+      ]
+    },
+    {
+      "label": "windows-release",
+      "source_version": 5,
+      "directory": "build/native/Release/test-results/run-b1np585p",
+      "binary_sha256": "7b307b77acf897a767cc77a5f000787b7741778d09fb32bec3a1c0e3974b2235",
+      "groups": [
+        {
+          "name": "component_details_light",
+          "status": "passed",
+          "seconds": 7.985
+        },
+        {
+          "name": "component_details_contrast",
+          "status": "passed",
+          "seconds": 7.484
+        }
+      ]
+    },
+    {
+      "label": "linux-debug",
+      "source_version": 5,
+      "directory": "build/native/Design-analysis-linux/test-results/run-2zyhy892",
+      "binary_sha256": "eb60c2d27cc6e2f0244df7c3e28a66c1ff003890fe0260c4f6446822c5c91ce8",
+      "groups": [
+        {
+          "name": "workspace_tree_workflow",
+          "status": "passed",
+          "seconds": 16.725
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "passed",
+          "seconds": 119.655
+        },
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 90.994
+        },
+        {
+          "name": "comparison_light_large_narrow",
+          "status": "passed",
+          "seconds": 40.015
+        },
+        {
+          "name": "component_details_dark",
+          "status": "passed",
+          "seconds": 25.464
+        },
+        {
+          "name": "component_details_light_large_narrow",
+          "status": "passed",
+          "seconds": 25.232
+        }
+      ]
+    },
+    {
+      "label": "windows-release-regression",
+      "source_version": 4,
+      "directory": "build/native/Release/test-results/run-qe0gynrf",
+      "binary_sha256": null,
+      "groups": [
+        {
+          "name": "accessibility_ui",
+          "status": "passed",
+          "seconds": 2.469
+        },
+        {
+          "name": "workspace_tree_workflow",
+          "status": "passed",
+          "seconds": 3.719
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "passed",
+          "seconds": 31.89
+        },
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 9.969
+        },
+        {
+          "name": "comparison_light_large_narrow",
+          "status": "passed",
+          "seconds": 8.281
+        },
+        {
+          "name": "component_details_light",
+          "status": "passed",
+          "seconds": 7.109
+        },
+        {
+          "name": "component_details_contrast",
+          "status": "passed",
+          "seconds": 5.407
+        }
+      ]
+    },
+    {
+      "label": "windows-debug-unit",
+      "source_version": 4,
+      "directory": "build/native/Design-analysis/test-results/run-1wyqaxnh",
+      "binary_sha256": null,
+      "groups": [
+        {
+          "name": "ui_text_flow",
+          "status": "passed",
+          "seconds": 0.078
+        }
+      ]
+    },
+    {
+      "label": "windows-release-unit",
+      "source_version": 5,
+      "directory": "build/native/Release/test-results/run-lh_y8adb",
+      "binary_sha256": null,
+      "groups": [
+        {
+          "name": "ui_text_flow",
+          "status": "passed",
+          "seconds": 0.125
+        }
+      ]
+    },
+    {
+      "label": "linux-debug-unit",
+      "source_version": 4,
+      "directory": "build/native/Design-analysis-linux/test-results/run-hndyiysi",
+      "binary_sha256": null,
+      "groups": [
+        {
+          "name": "ui_text_flow",
+          "status": "passed",
+          "seconds": 0.093
+        }
+      ]
+    }
+  ],
+  "pictures": [
+    {
+      "artifact": "windows-debug-dark-tools-disabled.png",
+      "source": "build/native/Design-analysis/test-results/run-8qxe1oqg/component_details_dark/files ä/chart/tools-disabled.png",
+      "bytes": 117359,
+      "sha256": "de8b70cd4528a715f3f755cb8ea4b8d56285350243cea674d77be0c36eabc4a3",
+      "rgb_sha256": "50fe38f6709b39065a4299206c5402383c583a7094ababa2ce22459995b6f93f",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-debug-dark-tools-focus.png",
+      "source": "build/native/Design-analysis/test-results/run-8qxe1oqg/component_details_dark/files ä/chart/tools-focus.png",
+      "bytes": 148363,
+      "sha256": "6765118b235d8316a070fa540899417aae790566369f18c228c59b87c6168df4",
+      "rgb_sha256": "39b24c831b013798e2df4c7d22cee456926ac945d0b2c3c92778584d232d7dcb",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-debug-dark-tools-hover.png",
+      "source": "build/native/Design-analysis/test-results/run-8qxe1oqg/component_details_dark/files ä/chart/tools-hover.png",
+      "bytes": 147909,
+      "sha256": "7ac356ddc9efd9fdc56d5592879fc1343a45f1955409771effcbfc7b09873c0e",
+      "rgb_sha256": "e58c2fc777ae4df4384a623ad6695813fbfe6beadb0b96c8bb07e81ed1e50f0d",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-debug-dark-tools-normal.png",
+      "source": "build/native/Design-analysis/test-results/run-8qxe1oqg/component_details_dark/files ä/chart/tools-normal.png",
+      "bytes": 147709,
+      "sha256": "28464e43b9dc7dbde0c37390ec0c9702c55046b30981c73981bc8bebabb4ebc5",
+      "rgb_sha256": "be933f712c32ed7c02bbf5a6348134dfe49d1e745b249cf2f1b77b8afecd9505",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-debug-dark-tools-report.png",
+      "source": "build/native/Design-analysis/test-results/run-8qxe1oqg/component_details_dark/files ä/chart/tools-report.png",
+      "bytes": 134270,
+      "sha256": "30f3348786c7e660052f869f0cbaf0193cd5b0f5124758499aa29d9384fab8ed",
+      "rgb_sha256": "82a074dcf29371890184d466d5ad017b4babc2021bcd6e6d4c258fd178d58592",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-debug-dark-tools-wrapped.png",
+      "source": "build/native/Design-analysis/test-results/run-8qxe1oqg/component_details_dark/files ä/chart/tools-wrapped.png",
+      "bytes": 117359,
+      "sha256": "de8b70cd4528a715f3f755cb8ea4b8d56285350243cea674d77be0c36eabc4a3",
+      "rgb_sha256": "50fe38f6709b39065a4299206c5402383c583a7094ababa2ce22459995b6f93f",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-debug-dark-tip-bottom.png",
+      "source": "build/native/Design-analysis/test-results/run-8qxe1oqg/component_details_dark/files ä/tip/tip-bottom.png",
+      "bytes": 422207,
+      "sha256": "87ea317353c29bb1434c9b98c4f3131b44b497740e22538514847d939f1254dc",
+      "rgb_sha256": "8981cc307ae7813391cf9ce5b194ce7063f4718971f48c1414e278f90fe8f914",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-debug-dark-tip-dismissed.png",
+      "source": "build/native/Design-analysis/test-results/run-8qxe1oqg/component_details_dark/files ä/tip/tip-dismissed.png",
+      "bytes": 137715,
+      "sha256": "b7674980a306e1eea1dd45b06efadb87257afa595c47f89212241b56e344c711",
+      "rgb_sha256": "a02dfd38f27777b72e115a770506c94d1961ef3f1f3a76b8e5ae138f01c3344e",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-debug-dark-tip-maximum.png",
+      "source": "build/native/Design-analysis/test-results/run-8qxe1oqg/component_details_dark/files ä/tip/tip-maximum.png",
+      "bytes": 410429,
+      "sha256": "92afd305d24af0b435bba7db765b63a5567ae58f64873ef99050734463593bc5",
+      "rgb_sha256": "7cb0a6a2403f9b3770849e0c7957eee8e564c45fb9354637a5a88a1f0ecd078e",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-debug-dark-tip-real.png",
+      "source": "build/native/Design-analysis/test-results/run-8qxe1oqg/component_details_dark/files ä/tip/tip-real.png",
+      "bytes": 183995,
+      "sha256": "a350ef975b274fc9dbea548c06f836e199c9b9bfb5e753e46d309ec21a3caf38",
+      "rgb_sha256": "1949cec27705570cb15ce6d66f7b2926176ecb22db102afad039c9376b9327a9",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-debug-light-large-narrow-tools-disabled.png",
+      "source": "build/native/Design-analysis/test-results/run-8qxe1oqg/component_details_light_large_narrow/files ä/chart/tools-disabled.png",
+      "bytes": 127534,
+      "sha256": "c876b1c6adeb5cf5a49369b12184deb4c82a8e2dc5c84eb0378436bf2904f00d",
+      "rgb_sha256": "9dfebb51e388c78ee4f75b4da6a72333ccf1f0231100c27340a30de41088fdb6",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-debug-light-large-narrow-tools-focus.png",
+      "source": "build/native/Design-analysis/test-results/run-8qxe1oqg/component_details_light_large_narrow/files ä/chart/tools-focus.png",
+      "bytes": 132430,
+      "sha256": "d2894fbc5c626141658cdcd044328383485f0d9d79e274ca417a972ba37c47c0",
+      "rgb_sha256": "9f32361e6404ee19cb4a23e647d28dbd9524fc7b4c5a255735e0992dcba7662e",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-debug-light-large-narrow-tools-hover.png",
+      "source": "build/native/Design-analysis/test-results/run-8qxe1oqg/component_details_light_large_narrow/files ä/chart/tools-hover.png",
+      "bytes": 131695,
+      "sha256": "03db5b4b0cf899b4a9d0710ba85bfa278c7f4c32e2b22742962f5021a917e22b",
+      "rgb_sha256": "7c3efe234d9aaf9227b03c2f9e6a6fb74356daafb04508419049986142fc9cd8",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-debug-light-large-narrow-tools-normal.png",
+      "source": "build/native/Design-analysis/test-results/run-8qxe1oqg/component_details_light_large_narrow/files ä/chart/tools-normal.png",
+      "bytes": 131364,
+      "sha256": "10524b94fa76c723da45b131104474a40e0bc116ec9f1c305edfca5d98ec552c",
+      "rgb_sha256": "81c08e43f44b306af096b37007dbacf6db3c859605557349a6c429ff187c51f4",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-debug-light-large-narrow-tools-report.png",
+      "source": "build/native/Design-analysis/test-results/run-8qxe1oqg/component_details_light_large_narrow/files ä/chart/tools-report.png",
+      "bytes": 133243,
+      "sha256": "ede1e2ab90f9dbd25ef02e52c2656e9043d6b478b78c804144b345bd0f46cb9b",
+      "rgb_sha256": "34e7e4642f626940edac346a4ef44cf4a2309b98af7514cdabf65dbfe848f756",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-debug-light-large-narrow-tools-wrapped.png",
+      "source": "build/native/Design-analysis/test-results/run-8qxe1oqg/component_details_light_large_narrow/files ä/chart/tools-wrapped.png",
+      "bytes": 127534,
+      "sha256": "c876b1c6adeb5cf5a49369b12184deb4c82a8e2dc5c84eb0378436bf2904f00d",
+      "rgb_sha256": "9dfebb51e388c78ee4f75b4da6a72333ccf1f0231100c27340a30de41088fdb6",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-debug-light-large-narrow-tip-bottom.png",
+      "source": "build/native/Design-analysis/test-results/run-8qxe1oqg/component_details_light_large_narrow/files ä/tip/tip-bottom.png",
+      "bytes": 454583,
+      "sha256": "86e574d959810163925dceaf3674ccc9607df2d2b2e40e6a4c9a3aa7f32307a8",
+      "rgb_sha256": "2eeebc08f2ab62cc7814dadd971423e4e679e8865a06b5b092584d282719fbb4",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-debug-light-large-narrow-tip-dismissed.png",
+      "source": "build/native/Design-analysis/test-results/run-8qxe1oqg/component_details_light_large_narrow/files ä/tip/tip-dismissed.png",
+      "bytes": 147123,
+      "sha256": "cecc36876ca724e73fe6a8761c33e43de4bf59ce53defce63a0ad3d88be86e25",
+      "rgb_sha256": "4214690ff1027f58c737f6e5790d59ebae2b89bb672d6363b1870a2e2752cea6",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-debug-light-large-narrow-tip-maximum.png",
+      "source": "build/native/Design-analysis/test-results/run-8qxe1oqg/component_details_light_large_narrow/files ä/tip/tip-maximum.png",
+      "bytes": 441819,
+      "sha256": "1fce4e57f6939f428669527eee0aeb6b9901aef6dabc3acab4ec5d6ca5cc2e7c",
+      "rgb_sha256": "4e867cd505a17bcefa5d7c3ecb229bcc664d3f8779c3f44b6c7e3d863f246ccb",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-debug-light-large-narrow-tip-real.png",
+      "source": "build/native/Design-analysis/test-results/run-8qxe1oqg/component_details_light_large_narrow/files ä/tip/tip-real.png",
+      "bytes": 156027,
+      "sha256": "bcd5f8b3b5904a12acad25862c33153c7663501e0d6f8f6249e39633f9f27152",
+      "rgb_sha256": "aaf6391b3798930ef5ecb11fef7ff8c506bcbd5475c7593b741650d684344e2c",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-release-light-tools-disabled.png",
+      "source": "build/native/Release/test-results/run-b1np585p/component_details_light/files ä/chart/tools-disabled.png",
+      "bytes": 119350,
+      "sha256": "996d00f8708d675bedcce61cd37e38b978ad391e496c9e2ca513bde2858bb15a",
+      "rgb_sha256": "c6b539085ed621cfcf0366047a0dba5ad318a08091ab638ab364063ed19ae2e9",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-release-light-tools-focus.png",
+      "source": "build/native/Release/test-results/run-b1np585p/component_details_light/files ä/chart/tools-focus.png",
+      "bytes": 150811,
+      "sha256": "51fbaed082284c06cfe520cd2e4187a71e2cc6ba03427d15528fa33a7de93c77",
+      "rgb_sha256": "ecdc288e8d83a2bc660ce6d815784d782e91eaec532518f5e2cc828fbeb51a8c",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-release-light-tools-hover.png",
+      "source": "build/native/Release/test-results/run-b1np585p/component_details_light/files ä/chart/tools-hover.png",
+      "bytes": 150362,
+      "sha256": "1589af66466b3c74e631e02751b4e94c542f4f44c2c8e08d1cd1419a2a5bb657",
+      "rgb_sha256": "c99a64901a903d84429ab96e5cc8583ebcf7b0adc0097caec2c22c2b65f4f9c0",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-release-light-tools-normal.png",
+      "source": "build/native/Release/test-results/run-b1np585p/component_details_light/files ä/chart/tools-normal.png",
+      "bytes": 150155,
+      "sha256": "8184e71fd460fc507f80c5480e9a57e9ad71099664454be4b5d71290fdfb1b1d",
+      "rgb_sha256": "f6a0ae2f3d0fbafac4439058a11ea8ab9901ccc6fc495f576687c0dcb529f58d",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-release-light-tools-report.png",
+      "source": "build/native/Release/test-results/run-b1np585p/component_details_light/files ä/chart/tools-report.png",
+      "bytes": 136503,
+      "sha256": "3bf2b61b4aee2ca3ce87d6af316e131bc1b178e1e2e33f2099f60923c9068e7d",
+      "rgb_sha256": "2d39bceb08f0f010b900be26894192e7fc8498c80c09b5c4cf3dffba6a2bec15",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-release-light-tools-wrapped.png",
+      "source": "build/native/Release/test-results/run-b1np585p/component_details_light/files ä/chart/tools-wrapped.png",
+      "bytes": 119350,
+      "sha256": "996d00f8708d675bedcce61cd37e38b978ad391e496c9e2ca513bde2858bb15a",
+      "rgb_sha256": "c6b539085ed621cfcf0366047a0dba5ad318a08091ab638ab364063ed19ae2e9",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-release-light-tip-bottom.png",
+      "source": "build/native/Release/test-results/run-b1np585p/component_details_light/files ä/tip/tip-bottom.png",
+      "bytes": 454583,
+      "sha256": "86e574d959810163925dceaf3674ccc9607df2d2b2e40e6a4c9a3aa7f32307a8",
+      "rgb_sha256": "2eeebc08f2ab62cc7814dadd971423e4e679e8865a06b5b092584d282719fbb4",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-release-light-tip-dismissed.png",
+      "source": "build/native/Release/test-results/run-b1np585p/component_details_light/files ä/tip/tip-dismissed.png",
+      "bytes": 139971,
+      "sha256": "5498f8f7767b9994a3cda2b38a31baa3534eda1409c659887736fc8704cbb5dd",
+      "rgb_sha256": "6a01404579d972051cf88fdd8424b12c63adfbbbd937bf19e20ea6c886fd6e66",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-release-light-tip-maximum.png",
+      "source": "build/native/Release/test-results/run-b1np585p/component_details_light/files ä/tip/tip-maximum.png",
+      "bytes": 441819,
+      "sha256": "1fce4e57f6939f428669527eee0aeb6b9901aef6dabc3acab4ec5d6ca5cc2e7c",
+      "rgb_sha256": "4e867cd505a17bcefa5d7c3ecb229bcc664d3f8779c3f44b6c7e3d863f246ccb",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-release-light-tip-real.png",
+      "source": "build/native/Release/test-results/run-b1np585p/component_details_light/files ä/tip/tip-real.png",
+      "bytes": 186098,
+      "sha256": "5d71075e16fe6562b0521fe8760aa1832f49b9073ee069be08b6eafbe61c396f",
+      "rgb_sha256": "15b52262cbb96d55cc4a5d449bdb68f608e388a6be69969e10bb6bd769247f5e",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-release-contrast-tools-disabled.png",
+      "source": "build/native/Release/test-results/run-b1np585p/component_details_contrast/files ä/chart/tools-disabled.png",
+      "bytes": 114833,
+      "sha256": "09ec13e4ae2f548e22ab55aef9ea3a3481f78c215e987266f9eb5460ea840162",
+      "rgb_sha256": "cfb350661a505dbfc1ed03e4561122bd995ab04dfb60c8b613b78171dcfbf878",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-release-contrast-tools-focus.png",
+      "source": "build/native/Release/test-results/run-b1np585p/component_details_contrast/files ä/chart/tools-focus.png",
+      "bytes": 144986,
+      "sha256": "245ee59114964759b62babb367b660e8cb510536bbc29d7fc004b3e8369f7388",
+      "rgb_sha256": "7030144d16b8c871a76b8253b13dd233fe0154b81f8c06cf76491c82e2f40c47",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-release-contrast-tools-hover.png",
+      "source": "build/native/Release/test-results/run-b1np585p/component_details_contrast/files ä/chart/tools-hover.png",
+      "bytes": 144614,
+      "sha256": "2726cb7d96a8a6dd09454ed9492d7490a5432f56ac265591eb83137ba8682801",
+      "rgb_sha256": "c945a6e8d56a5f01650b291eca7e8688d44458c0007034a33614613f9f1a36ea",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-release-contrast-tools-normal.png",
+      "source": "build/native/Release/test-results/run-b1np585p/component_details_contrast/files ä/chart/tools-normal.png",
+      "bytes": 144394,
+      "sha256": "1315571fa6da876979821da8f83b3d0fd8bdd4ee228b441bade0ae03a636aa29",
+      "rgb_sha256": "672cd3db6d49d9c9bdcc5202a89962047a20d83f3e62d9104d1b656db846f895",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-release-contrast-tools-report.png",
+      "source": "build/native/Release/test-results/run-b1np585p/component_details_contrast/files ä/chart/tools-report.png",
+      "bytes": 132019,
+      "sha256": "6392bec6b78a96571186dc8b44ca21505d975735f1b77fbca8c46e9d47c34f5e",
+      "rgb_sha256": "e771e28ec1f26e1c7f40f2f1089aca4de082db01b8b0d7be0aa46329cb68eafe",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-release-contrast-tools-wrapped.png",
+      "source": "build/native/Release/test-results/run-b1np585p/component_details_contrast/files ä/chart/tools-wrapped.png",
+      "bytes": 114833,
+      "sha256": "09ec13e4ae2f548e22ab55aef9ea3a3481f78c215e987266f9eb5460ea840162",
+      "rgb_sha256": "cfb350661a505dbfc1ed03e4561122bd995ab04dfb60c8b613b78171dcfbf878",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-release-contrast-tip-bottom.png",
+      "source": "build/native/Release/test-results/run-b1np585p/component_details_contrast/files ä/tip/tip-bottom.png",
+      "bytes": 444283,
+      "sha256": "efda116dd28778164c9755526ad1d71caec9bdb8caa4a8738fd6b79a84afee3a",
+      "rgb_sha256": "9c19bd7c8a4126bf74d84f9d18dd47297279427b6b725fada7499b39e62bc2ec",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-release-contrast-tip-dismissed.png",
+      "source": "build/native/Release/test-results/run-b1np585p/component_details_contrast/files ä/tip/tip-dismissed.png",
+      "bytes": 138406,
+      "sha256": "24920a0a722f72c609626afa051c854bc9d236fb41cd1944b2e70c1d26c5663a",
+      "rgb_sha256": "4a55e7188ccc3c3e4867c93a23101e4f30635060206885144c0ed6bdb04c94ae",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-release-contrast-tip-maximum.png",
+      "source": "build/native/Release/test-results/run-b1np585p/component_details_contrast/files ä/tip/tip-maximum.png",
+      "bytes": 433058,
+      "sha256": "5683b7a24239072540481e4094302e2737d4662a4d5f3cf523bdd6331c613838",
+      "rgb_sha256": "0c877ed23e001b4fcab0a640366297377c4465f48201004cfbae167e87131352",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "windows-release-contrast-tip-real.png",
+      "source": "build/native/Release/test-results/run-b1np585p/component_details_contrast/files ä/tip/tip-real.png",
+      "bytes": 186452,
+      "sha256": "af80e6a3a8838289973de9bfaf1ce7fac737bc3e78180482dd11f97579c21f21",
+      "rgb_sha256": "ce0db201dd3cb0e6e94ca1f30ee6d7246b72bcd8e46892c890c51d3e37631e5d",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-debug-dark-tools-disabled.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-2zyhy892/component_details_dark/files ä/chart/tools-disabled.png",
+      "bytes": 126445,
+      "sha256": "4b290c045a373795a2277eed1c95a7a417a99c65c11f6de485021c893caf4900",
+      "rgb_sha256": "6619674171ee14c3d821e55a65523cc4a7a093e443f92b5769d026d63a7ffffc",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-debug-dark-tools-focus.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-2zyhy892/component_details_dark/files ä/chart/tools-focus.png",
+      "bytes": 158205,
+      "sha256": "6a11772be6cc10330f4a1667df67f08e754ca488a56249f52b490661eed7468b",
+      "rgb_sha256": "bffb956d3eccb18cf135c03389f945db1834f93edfa3bb0f6f69e26a4275d9e9",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-debug-dark-tools-hover.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-2zyhy892/component_details_dark/files ä/chart/tools-hover.png",
+      "bytes": 157758,
+      "sha256": "e0672145c7113b13b42fcb6e38727deea6c63c278d642ba2f789b6531f651398",
+      "rgb_sha256": "5194e3c9966bbce739b355c358cc12e0159035ebc882c0796c13c5df60aa2566",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-debug-dark-tools-normal.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-2zyhy892/component_details_dark/files ä/chart/tools-normal.png",
+      "bytes": 157555,
+      "sha256": "b83bc3bf2b2fa454433a40df2b64091817143ac264b9208f51710f25c6a16729",
+      "rgb_sha256": "f6aa75da171d730eada3ebd7fc628e29ce20e87918c08d5fa0facd8d273fcaf9",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-debug-dark-tools-report.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-2zyhy892/component_details_dark/files ä/chart/tools-report.png",
+      "bytes": 143322,
+      "sha256": "6f8b8c694350ddf587fb0c9daf8f2d5700647da3a85c200321c8d71405000c25",
+      "rgb_sha256": "fcbe03816681b811a70b9cc774e51d0fe7f3b46aef823382761421a2e6a1ec18",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-debug-dark-tools-wrapped.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-2zyhy892/component_details_dark/files ä/chart/tools-wrapped.png",
+      "bytes": 126445,
+      "sha256": "4b290c045a373795a2277eed1c95a7a417a99c65c11f6de485021c893caf4900",
+      "rgb_sha256": "6619674171ee14c3d821e55a65523cc4a7a093e443f92b5769d026d63a7ffffc",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-debug-dark-tip-bottom.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-2zyhy892/component_details_dark/files ä/tip/tip-bottom.png",
+      "bytes": 434662,
+      "sha256": "de03733b1915ac7a95c26c56e669ef26d25683e77179a1031769997092bc2c6d",
+      "rgb_sha256": "170aaba633712f0d09aaa3b2cca0999c9e29bc0f9e90268f8fc72fd7270959c3",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-debug-dark-tip-dismissed.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-2zyhy892/component_details_dark/files ä/tip/tip-dismissed.png",
+      "bytes": 141928,
+      "sha256": "7d7947c15e727de9f6fd4ead2b12a84461258659698171771c975c8c3926c3e7",
+      "rgb_sha256": "01a4abe95b1efc144d3856004448f051ebf25f1905e42787eb15f993207f7982",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-debug-dark-tip-maximum.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-2zyhy892/component_details_dark/files ä/tip/tip-maximum.png",
+      "bytes": 430669,
+      "sha256": "7f673ac886babc2feb8a22564ff330f87f6843001fc16ff13ec5c55c03326426",
+      "rgb_sha256": "5adf1684492067f0774dd47aac4de25e66c6375aa5eb86aa6261256f37f8b674",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-debug-dark-tip-real.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-2zyhy892/component_details_dark/files ä/tip/tip-real.png",
+      "bytes": 189586,
+      "sha256": "249ae620c5ceb98aa37b6b89c7e84ddc1510bde50801f4fac33c9cdfe1cf4d77",
+      "rgb_sha256": "436aa53f06f0dfe2f53b5643d05382ff1aed386e5cbcf4e38b26575908731536",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-debug-light-large-narrow-tools-disabled.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-2zyhy892/component_details_light_large_narrow/files ä/chart/tools-disabled.png",
+      "bytes": 133842,
+      "sha256": "39089367df2d82caac315777f4be2f8992c5e33deb539998cbfdb00757478470",
+      "rgb_sha256": "93be2f00b8f1978973b357d45dfa333d644e2ad548f988ac139f631fa708b659",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-debug-light-large-narrow-tools-focus.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-2zyhy892/component_details_light_large_narrow/files ä/chart/tools-focus.png",
+      "bytes": 136396,
+      "sha256": "909a9336dd3e33716ccdf41c6fbf34fd5b08bc8d29bda9f55abfdb6a5c3eeea9",
+      "rgb_sha256": "21a9a3ecbe727f093331b4e07b307a2b76b6982b6aa6463dbca9bb9617f73a7f",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-debug-light-large-narrow-tools-hover.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-2zyhy892/component_details_light_large_narrow/files ä/chart/tools-hover.png",
+      "bytes": 135668,
+      "sha256": "a47aa8b41cc1e477683a7071664eb5a6878ea164153a863df4a18d16a82d617c",
+      "rgb_sha256": "8e6b1c44fb6a848aaa66d1d4c08307500d3f41e96e5846e18b055b598bd31b3b",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-debug-light-large-narrow-tools-normal.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-2zyhy892/component_details_light_large_narrow/files ä/chart/tools-normal.png",
+      "bytes": 135353,
+      "sha256": "d6811b3fa56df7b11dc372fb092ca98e52d20cc1886871175bfe9864ccc84c7c",
+      "rgb_sha256": "e59f398d824752aa194516b79c08eee961b438a7a426e1acdbcf34f9e5e772fa",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-debug-light-large-narrow-tools-report.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-2zyhy892/component_details_light_large_narrow/files ä/chart/tools-report.png",
+      "bytes": 136511,
+      "sha256": "a1aa36a94f3685650fc18b5413b001f51aed5790d7c1cd6260bc2be8501f24e8",
+      "rgb_sha256": "3c36801820ef717035b246ef2ad8ee14010efbd49e49b40b5d3ee602dc7b58f6",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-debug-light-large-narrow-tools-wrapped.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-2zyhy892/component_details_light_large_narrow/files ä/chart/tools-wrapped.png",
+      "bytes": 133842,
+      "sha256": "39089367df2d82caac315777f4be2f8992c5e33deb539998cbfdb00757478470",
+      "rgb_sha256": "93be2f00b8f1978973b357d45dfa333d644e2ad548f988ac139f631fa708b659",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-debug-light-large-narrow-tip-bottom.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-2zyhy892/component_details_light_large_narrow/files ä/tip/tip-bottom.png",
+      "bytes": 435293,
+      "sha256": "33dff9adef116d0ed88f6640eeb9ab16657009812816629792945e6d70c6321b",
+      "rgb_sha256": "2725fd93edffef84535dc7715b52fe9ee0c32e44198c175618eb78aed4e402b8",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-debug-light-large-narrow-tip-dismissed.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-2zyhy892/component_details_light_large_narrow/files ä/tip/tip-dismissed.png",
+      "bytes": 146494,
+      "sha256": "189923fabc846fe4d3d0df42931f9c8f7355258e885d1b77e00d8aea0c4460f0",
+      "rgb_sha256": "65c669c12193646daf05ffec0c9653a12cf4f9bfa3a91fdbcd7a6ab754162822",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-debug-light-large-narrow-tip-maximum.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-2zyhy892/component_details_light_large_narrow/files ä/tip/tip-maximum.png",
+      "bytes": 430892,
+      "sha256": "4b7d8bfa5f9449f4efb1a23dbb54839298033bbfc753f0ad5b6ea818edf8cb2c",
+      "rgb_sha256": "d6d8dbc64c83ede218030a932068c974ba58e970996ffc2c5b545a669ca38c47",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "linux-debug-light-large-narrow-tip-real.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-2zyhy892/component_details_light_large_narrow/files ä/tip/tip-real.png",
+      "bytes": 156702,
+      "sha256": "6cf1481b38e8bd7a8b653294e6aca90d2bb9330d4ba95da3b67b89763fdb04fc",
+      "rgb_sha256": "2c0f4dac761a75be8576fb942cbae1da17c360ea7e08420f4bd5620ee4ad988b",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "negative-disabled-by-dock.png",
+      "source": "build/native/Design-analysis/test-results/run-kffpbmic/component_details_dark/files ä/chart/tools-normal.png",
+      "bytes": 147615,
+      "sha256": "348784cf24b679d769126a19e012c99e2ab382adff1fbe01496ee56348f47159",
+      "rgb_sha256": "5da75e3d4671db4f0342ecf6caf452546ea4bd0cdd8acbeb6f24c052f33c6726",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "negative-tip-scroll-zero.png",
+      "source": "build/native/Design-analysis/test-results/run-sjyn5ksb/component_details_dark/files ä/tip/tip-maximum.png",
+      "bytes": 523390,
+      "sha256": "c7b40262b7abc16764e7887454d27af90e94279811052298743ab51862011a35",
+      "rgb_sha256": "d894ae6bb49c88610e8b329b6b33c166355d858574626da83d20eeb1f6a55006",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    },
+    {
+      "artifact": "negative-transparent-probe.png",
+      "source": "build/native/Design-analysis/test-results/run-yqry_hlk/component_details_dark/files ä/tip/tip-bottom.png",
+      "bytes": 534815,
+      "sha256": "15b8e07e4b62c8c67197b971440c1ddcf36d9f2114e78f9074338a899e4a0a39",
+      "rgb_sha256": "e14f12f56f3b52a289a54ce90bb8619b148c8b21ab3125e4b3582809a8798f70",
+      "encoding": "Original native PNG bytes; complete RGB equality verified"
+    }
+  ],
+  "canonical_exports": {
+    "linux-debug": {
+      "native-export.png": {
+        "prior": "docs/visuals/unified-workspace/graphic-dialog-2026-10-22/linux-debug-native-export.png",
+        "sha256": "ec92b40bc2a35d29d328778c1130ebec85b7bb2df11bf3f83dd7b1479cb66685",
+        "byte_equal": true
+      },
+      "native-scale1.png": {
+        "prior": "docs/visuals/unified-workspace/graphic-dialog-2026-10-22/linux-debug-native-scale1.png",
+        "sha256": "7cf3f5dab314338d0b46b9be0d9195dd74f513f3f4271c325927f28a0ca3dc1e",
+        "byte_equal": true
+      },
+      "native-scale3.png": {
+        "prior": "docs/visuals/unified-workspace/graphic-dialog-2026-10-22/linux-debug-native-scale3.png",
+        "sha256": "106426dfecaeaa37f34ddec16c11b4ae750e513f41c86aa24e9799c42a8d4213",
+        "byte_equal": true
+      },
+      "native-scale4.png": {
+        "prior": "docs/visuals/unified-workspace/graphic-dialog-2026-10-22/linux-debug-native-scale4.png",
+        "sha256": "27bbf7095b28a24bc32b270e9cc5bb5d7bca42c0465fb2e1bbbaca79d7ecf46e",
+        "byte_equal": true
+      },
+      "native-ausschnitt.png": {
+        "prior": "docs/visuals/unified-workspace/graphic-dialog-2026-10-22/linux-debug-native-ausschnitt.png",
+        "sha256": "1c6ddfa8fb33a8d2f27271b5461895ab3831233bf3e6e98440eefecbd6b3772c",
+        "byte_equal": true
+      },
+      "native-ausschnitt.svg": {
+        "prior": "docs/visuals/unified-workspace/graphic-dialog-2026-10-22/linux-debug-native-ausschnitt.svg",
+        "sha256": "0ee3c6538ac34f443e9fcd69dbfd760a5a2359814dc582f9a5a89c1d767ea15b",
+        "byte_equal": true
+      },
+      "clipboard-reference.png": {
+        "prior": "docs/visuals/unified-workspace/graphic-dialog-2026-10-22/linux-debug-clipboard-reference.png",
+        "sha256": "ec92b40bc2a35d29d328778c1130ebec85b7bb2df11bf3f83dd7b1479cb66685",
+        "byte_equal": true
+      },
+      "contrast-paper.png": {
+        "prior": "docs/visuals/unified-workspace/graphic-dialog-2026-10-22/linux-debug-contrast-paper.png",
+        "sha256": "a61340560fabedb4aa66c9bc262d9a44fe1eebadc083c0ac4705b0219060301c",
+        "byte_equal": true
+      }
+    },
+    "windows-release-regression": {
+      "native-export.png": {
+        "prior": "docs/visuals/unified-workspace/graphic-dialog-2026-10-22/windows-release-native-export.png",
+        "sha256": "3d6d9cbc571f8847317a21c84ad733f9df31254d8afe2bbf162d3fdb6dc66898",
+        "byte_equal": true
+      },
+      "native-scale1.png": {
+        "prior": "docs/visuals/unified-workspace/graphic-dialog-2026-10-22/windows-release-native-scale1.png",
+        "sha256": "29dc5fcb8420f4ae4ea86018b9479acabbbe19d35678cbfba799c91b6d67e2ae",
+        "byte_equal": true
+      },
+      "native-scale3.png": {
+        "prior": "docs/visuals/unified-workspace/graphic-dialog-2026-10-22/windows-release-native-scale3.png",
+        "sha256": "ec42249f66edea5915c058ba2fcdc96ea6184e2fa4d132ac6b3cf2ccc0c1ff12",
+        "byte_equal": true
+      },
+      "native-scale4.png": {
+        "prior": "docs/visuals/unified-workspace/graphic-dialog-2026-10-22/windows-release-native-scale4.png",
+        "sha256": "de5bb14cb68522d489d47209814972f20c980874a75e55aea107a9dbd6eeae3c",
+        "byte_equal": true
+      },
+      "native-ausschnitt.png": {
+        "prior": "docs/visuals/unified-workspace/graphic-dialog-2026-10-22/windows-release-native-ausschnitt.png",
+        "sha256": "e1d73b343b99a306720748357d190256ebf312532df5ba8a9cfeb92a07527422",
+        "byte_equal": true
+      },
+      "native-ausschnitt.svg": {
+        "prior": "docs/visuals/unified-workspace/graphic-dialog-2026-10-22/windows-release-native-ausschnitt.svg",
+        "sha256": "74bbc37b28acca463fc17a8460e55a6c4361bdd1030e3daeac2ac22ed37469b9",
+        "byte_equal": true
+      },
+      "clipboard-reference.png": {
+        "prior": "docs/visuals/unified-workspace/graphic-dialog-2026-10-22/windows-release-clipboard-reference.png",
+        "sha256": "3d6d9cbc571f8847317a21c84ad733f9df31254d8afe2bbf162d3fdb6dc66898",
+        "byte_equal": true
+      },
+      "contrast-paper.png": {
+        "prior": "docs/visuals/unified-workspace/graphic-dialog-2026-10-22/windows-release-contrast-paper.png",
+        "sha256": "b15743a7a3570992ed9d2fcaeace0a6b356f5de578802b979184e4950b8773c2",
+        "byte_equal": true
+      }
+    }
+  },
+  "reference_sha256": {
+    "docs/visuals/analysis-workspace/analysis.css": "7a697a70a835ea4b9e16ffa171ef1e7da1aae9ff4dbb53fbe94b51ea1d0948cb",
+    "docs/visuals/analysis-workspace/graphic-export.css": "ac23662545872c7d7522179bfa5eda63cb0416c0283a50037f65bcd56517d7e6",
+    "docs/visuals/analysis-workspace/index.html": "294b0c27d7619dddb32f76da7e33a4219252d83a694e36e359c69aacebb5efa2",
+    "docs/visuals/unified-workspace/bridge.js": "4e1ffb37ee7c41928a13e5ebd30738f3f882e2e000469616dd105eedd91deb76"
+  },
+  "limits": [
+    "Scoped native component proof; full UI acceptance remains open",
+    "180px component and 4095-byte layout stresses are not window-minimum or filesystem-long-path proofs",
+    "No physical DPI/monitor switch, macOS, external screenreader or direct detached tooltip acceptance",
+    "Preserved foreign accessibility work is present in tested binaries and excluded from this commit",
+    "Source4 functional/pixel successes precede the visual rejection of its transparent stress fixture"
+  ]
+}

@@ -15,29 +15,12 @@ static void report_plot(app *a, uint32_t index, float height) {
     ps_plot_view *view = &a->report_views[index];
     ps_result bounds_result = ps_report_plot_bounds(a->analysis_report, index, b);
     if(!view->initialized)ps_plot_view_reset(view);
-    nk_layout_row_dynamic(ui,34*a->preferences.ui_size/16.f,1);
+    analysis_tools_layout controls=analysis_tools_measure(a,nk_window_get_content_region(ui).w,4);
+    nk_layout_row_dynamic(ui,controls.height+5*a->preferences.ui_size/16.f,1);
     struct nk_rect tools;nk_widget(&tools,ui);
-    float f=a->preferences.ui_size/16.f,x=tools.x;
-    const char *labels[]={"+","−","Alles zeigen","Grafik exportieren…"};
-    const char *actions[]={"Zoom +","Zoom -","Alles zeigen","Grafik exportieren…"};
-    const float widths[]={28,28,82,157};
-    const struct nk_user_font *font=&a->workbench_fonts[0];
-    for(unsigned i=0;i<4;i++) {
-        struct nk_rect button=nk_rect(x,tools.y,widths[i]*f,29*f);x+=button.w+4*f;
-        if(i<3)a->plot_buttons[i]=button;else a->result_export_bounds[2]=button;
-        struct nk_command_buffer *c=nk_window_get_canvas(ui);
-        bool focus=nk_sdl_accessibility_is_focused(ui,NULL,actions[i]);
-        nk_stroke_rect(c,button,5*f,focus?2:1,focus?UI_COLOR(accent):UI_COLOR(border));
-        float tw=font->width(font->userdata,font->height,labels[i],(int)strlen(labels[i]));
-        nk_draw_text(c,nk_rect(button.x+(button.w-tw)/2,button.y+(button.h-font->height)/2,tw+1,font->height),
-                     labels[i],(int)strlen(labels[i]),font,nk_rgba(0,0,0,0),i==3?UI_COLOR(accent):UI_COLOR(text));
-        nk_begin_disabled(ui,bounds_result!=PS_OK);
-        if(ps_ui_button_at(ui,button,actions[i],false)) {
-            if(i==3)graphic_export_report(a,index);
-            else {if(i==2)ps_plot_view_reset(view);else ps_plot_view_zoom(view,i==0?2:.5,.5,.5);a->plot_drag=NULL;}
-        }
-        nk_end_disabled(ui);
-    }
+    int action=analysis_tools_draw(a,&controls,tools.x,tools.y,bounds_result==PS_OK);
+    if(action==3)graphic_export_report(a,index);
+    else if(action>=0){if(action==2)ps_plot_view_reset(view);else ps_plot_view_zoom(view,action==0?2:.5,.5,.5);a->plot_drag=NULL;}
     nk_layout_row_dynamic(ui, 24, 1);
     char label[256];
     snprintf(label, sizeof label, "%s%s%s%s", p.y_label,p.y_unit.symbol[0]?" [":"",

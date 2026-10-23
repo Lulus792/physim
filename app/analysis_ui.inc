@@ -386,7 +386,9 @@ static void analysis_workspace_view(app *a,float content) {
         if(nk_sdl_accessibility_is_focused(ui,NULL,tabs[i]))nk_stroke_rect(nk_window_get_canvas(ui),tab,3,2,UI_COLOR(accent));
     }
     nk_layout_row_push(ui,fmaxf(20,nk_window_get_content_region(ui).w-tab_widths[0]-tab_widths[1]-2*ui->style.window.spacing.x));
-    char total[100];snprintf(total,sizeof total,a->show_report?"Analysebericht · eigene Eingaben":"%u Läufe ausgewählt",a->selected_count);
+    char total[100];
+    if(a->show_report)snprintf(total,sizeof total,"Analysebericht · eigene Eingaben");
+    else snprintf(total,sizeof total,"%u %s ausgewählt",a->selected_count,a->selected_count==1?"Lauf":"Läufe");
     nk_label_colored(ui,total,NK_TEXT_RIGHT,muted());nk_layout_row_end(ui);nk_style_pop_vec2(ui);
     analysis_rule(a);
     /* The active rule shares the bottom pixel of the full-width border. */

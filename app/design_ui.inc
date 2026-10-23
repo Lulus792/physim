@@ -1295,7 +1295,9 @@ static void workspace_draw_ui(app *a, int width, int height) {
  * rest of the scene still renders, but has no active controls behind the sheet. */
 static void draw_ui(app *a,int width,int height) {
     graphic_input_guard guard=graphic_export_guard(a);
+    workspace_tip_frame_begin(a);
     workspace_draw_ui(a,width,height);
+    workspace_tip_frame_end(a);
     graphic_export_unguard(a,guard);
     graphic_export_view(a,width,height);
 }

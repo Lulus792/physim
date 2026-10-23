@@ -1,0 +1,7 @@
+[
+  {
+    "status": "build_failed",
+    "reason": "Command failed (1): /usr/bin/cc -c -std=c17 -fPIC -g -O0 -D_POSIX_C_SOURCE=200809L -fno-fast-math -ffp-contract=off -Wall -Wextra -Wpedantic -Wshadow -I/mnt/d/Physim/include -I/mnt/d/Physim/src -I/mnt/d/Physim/app -I/mnt/d/Physim/third_party/zlib-1.3.2 -I/mnt/d/Physim/third_party -I/mnt/d/Physim/build/native/F1-linux/sdl-install/include -fsanitize=address,undefined -fno-sanitize-recover=all -fno-omit-frame-pointer /mnt/d/Physim/tests/test_ui_text_flow.c -o /mnt/d/Physim/build/native/Design-analysis-linux/obj/dac633dd99/tests/test_ui_text_flow.pending.o",
+    "name": "ui_text_flow"
+  }
+]

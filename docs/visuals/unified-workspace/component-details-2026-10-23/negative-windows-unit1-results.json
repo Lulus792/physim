@@ -1,0 +1,7 @@
+[
+  {
+    "status": "build_failed",
+    "reason": "Command failed (2): \"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE\" D:\\Physim\\build\\native\\Design-analysis\\obj\\dac633dd99\\tests\\test_ui_text_flow.obj D:\\Physim\\build\\native\\Design-analysis\\obj\\dac633dd99\\app\\ui_backend.obj D:\\Physim\\build\\native\\Design-analysis\\lib\\physim-platform.lib D:\\Physim\\build\\native\\Design-analysis\\lib\\physim-core.lib D:\\Physim\\third_party\\SDL3-3.2.30\\lib\\x64\\SDL3.lib /MD /fsanitize=address /nologo /Fe:D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-ui_text_flow.pending.exe /link /INCREMENTAL:NO /DEBUG /PDB:D:\\Physim\\build\\native\\Design-analysis\\bin\\physim-test-ui_text_flow.pending.pdb /MANIFEST:EMBED /MANIFESTINPUT:D:\\Physim\\app\\utf8.manifest /PDBALTPATH:physim-test-ui_text_flow.pdb user32.lib shell32.lib advapi32.lib",
+    "name": "ui_text_flow"
+  }
+]

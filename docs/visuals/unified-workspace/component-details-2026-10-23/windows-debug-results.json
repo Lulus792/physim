@@ -1,0 +1,106 @@
+[
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "d8cf0280c7170a2d8b4d5197cb34e13dbd35d691f54b547f1ba88959b97515c9"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_component_details.py",
+          "--app",
+          "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+          "--root",
+          "D:\\Physim",
+          "--work",
+          "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-8qxe1oqg\\component_details_dark\\files \u00e4",
+          "--mode",
+          "dark"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nCOMPONENT TOOLS raw size=16 viewport=1440,1000 rect0=867.8887,287.0000,28.2090,28.0000 rect1=900.0977,287.0000,28.2090,28.0000 rect2=932.3066,287.0000,82.9473,28.0000 rect3=1027.2539,287.0000,146.7461,28.0000\nCOMPONENT TOOLS report size=16 viewport=1440,1000 rect0=860.8887,339.0000,28.2090,28.0000 rect1=893.0977,339.0000,28.2090,28.0000 rect2=925.3066,339.0000,82.9473,28.0000 rect3=1020.2539,339.0000,146.7461,28.0000\nCOMPONENT TOOLS disabled size=16 viewport=1440,1000 rect0=860.8887,339.0000,28.2090,28.0000 rect1=893.0977,339.0000,28.2090,28.0000 rect2=925.3066,339.0000,82.9473,28.0000 rect3=1020.2539,339.0000,146.7461,28.0000\nCOMPONENT WRAPPED size=16 rows=2 height=60.0000 geometry=1 mode=component-chart-dark\nCOMPONENT WRAPPED TEXT complete=1\nCOMPONENT WRAPPED size=16 rows=2 height=60.0000 geometry=1 mode=component-chart-dark\nCOMPONENT WRAPPED TEXT complete=1\nCOMPONENT CHART SELF-TEST: PASSED\nBereit. Ordner \ufffdffnen oder ein neues Projekt anlegen.\nProjekt geladen. Build kompiliert die lokalen Quelldateien.\n301 Messpunkte geladen.\n\nAPP TEST EXIT: 0\nOpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nCOMPONENT TIP real bytes=123 lines=2 scroll=0 scrollable=0 content=29.2617 rect=52.0000,285.0000,520.0000,39.2617 viewport=1440,1000\nCOMPONENT TIP maximum-layout-stress bytes=4095 lines=62 scroll=0 scrollable=1 content=1612.0000 rect=8.0000,8.0000,1064.0000,724.0000 viewport=1080,740\nCOMPONENT TIP scrolled bytes=4095 lines=62 scroll=624 scrollable=1 content=1612.0000 rect=8.0000,8.0000,1064.0000,724.0000 viewport=1080,740\nCOMPONENT TIP bottom-end-visible bytes=4095 lines=62 scroll=894 scrollable=1 content=1612.0000 rect=8.0000,8.0000,1064.0000,724.0000 viewport=1080,740\nCOMPONENT TOOLTIP SELF-TEST: PASSED\nBereit. Ordner \ufffdffnen oder ein neues Projekt anlegen.\nProjekt geladen. Build kompiliert die lokalen Quelldateien.\n\nAPP TEST EXIT: 0\nCOMPONENT DETAILS: PASSED dark\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 662818.351945\nAPP TEST TRACE: main font sources ready 662818.502109\nAPP TEST TRACE: main atlas bake seconds=1.359775\nAPP TEST TRACE: main atlas validation/upload seconds=0.015126\nAPP TEST TRACE: main fonts ready 662819.900764\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 2 -> 3, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 3 -> 4, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 4 -> 5, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 5 -> 6, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 6 -> 7, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 7 -> 8, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 8 -> 9, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 9 -> 10, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=73 pending=0 window=2 keyboard=2 ticks=3104502200\nAPP TEST TRACE: stage 10 -> 11, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 11 -> 12, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 12 -> 13, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 13 -> 14, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 14 -> 15, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 15 -> 16, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 16 -> 17, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=3360395100\nAPP TEST TRACE: stage 17 -> 18, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 18 -> 19, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 19 -> 20, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 20 -> 21, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 21 -> 22, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=3502937400\nAPP TEST TRACE: stage 22 -> 23, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 23 -> 24, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 24 -> 25, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 25 -> 26, status 301 Messpunkte geladen.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 662822.496049\nAPP TEST TRACE: main font sources ready 662822.622426\nAPP TEST TRACE: main atlas bake seconds=1.352050\nAPP TEST TRACE: main atlas validation/upload seconds=0.012762\nAPP TEST TRACE: main fonts ready 662824.010334\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 1 -> 2, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 2 -> 3, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 3 -> 4, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 4 -> 5, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 5 -> 6, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 6 -> 7, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 7 -> 8, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 8 -> 9, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 9 -> 10, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 10 -> 11, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 11 -> 12, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 12 -> 13, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 13 -> 14, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 14 -> 15, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 15 -> 16, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\n",
+        "seconds": 9.875,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-8qxe1oqg\\component_details_dark\\files \u00e4\\app-steps.json",
+            "bytes": 7494,
+            "sha256": "1a1eba52bae5234bb0104fb4b75c54f392f1e918c9b5eea5b9d520cfc84aaef7"
+          },
+          {
+            "path": "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-8qxe1oqg\\component_details_dark\\files \u00e4\\validation.json",
+            "bytes": 2556,
+            "sha256": "d751dac92b3015d809530453009e09894d44a268f288c0a85aa8681ce8b0e1f1"
+          }
+        ]
+      }
+    ],
+    "seconds": 9.922,
+    "reason": "",
+    "name": "component_details_dark"
+  },
+  {
+    "status": "passed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "d8cf0280c7170a2d8b4d5197cb34e13dbd35d691f54b547f1ba88959b97515c9"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_component_details.py",
+          "--app",
+          "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+          "--root",
+          "D:\\Physim",
+          "--work",
+          "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-8qxe1oqg\\component_details_light_large_narrow\\files \u00e4",
+          "--mode",
+          "light_large_narrow"
+        ],
+        "status": "passed",
+        "exit_code": 0,
+        "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nCOMPONENT TOOLS raw size=22 viewport=1080,740 rect0=399.1716,345.5771,38.5000,38.5000 rect1=443.1716,345.5771,38.5000,38.5000 rect2=487.1716,345.5771,107.8025,38.5000 rect3=611.4741,345.5771,195.5259,38.5000\nCOMPONENT TOOLS report size=22 viewport=1080,740 rect0=399.1716,391.3523,38.5000,38.5000 rect1=443.1716,391.3523,38.5000,38.5000 rect2=487.1716,391.3523,107.8025,38.5000 rect3=611.4741,391.3523,195.5259,38.5000\nCOMPONENT TOOLS disabled size=22 viewport=1080,740 rect0=399.1716,391.3523,38.5000,38.5000 rect1=443.1716,391.3523,38.5000,38.5000 rect2=487.1716,391.3523,107.8025,38.5000 rect3=611.4741,391.3523,195.5259,38.5000\nCOMPONENT WRAPPED size=22 rows=3 height=148.5000 geometry=1 mode=component-chart-light-large-narrow\nCOMPONENT WRAPPED TEXT complete=1\nCOMPONENT WRAPPED size=22 rows=3 height=148.5000 geometry=1 mode=component-chart-light-large-narrow\nCOMPONENT WRAPPED TEXT complete=1\nCOMPONENT CHART SELF-TEST: PASSED\nBereit. Ordner \ufffdffnen oder ein neues Projekt anlegen.\nProjekt geladen. Build kompiliert die lokalen Quelldateien.\n301 Messpunkte geladen.\n\nAPP TEST EXIT: 0\nOpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nCOMPONENT TIP real bytes=137 lines=2 scroll=0 scrollable=0 content=52.0000 rect=56.5000,292.5000,715.0000,62.0000 viewport=1080,740\nCOMPONENT TIP maximum-layout-stress bytes=4095 lines=62 scroll=0 scrollable=1 content=1612.0000 rect=8.0000,8.0000,1064.0000,724.0000 viewport=1080,740\nCOMPONENT TIP scrolled bytes=4095 lines=62 scroll=624 scrollable=1 content=1612.0000 rect=8.0000,8.0000,1064.0000,724.0000 viewport=1080,740\nCOMPONENT TIP bottom-end-visible bytes=4095 lines=62 scroll=894 scrollable=1 content=1612.0000 rect=8.0000,8.0000,1064.0000,724.0000 viewport=1080,740\nCOMPONENT TOOLTIP SELF-TEST: PASSED\nBereit. Ordner \ufffdffnen oder ein neues Projekt anlegen.\nProjekt geladen. Build kompiliert die lokalen Quelldateien.\n\nAPP TEST EXIT: 0\nCOMPONENT DETAILS: PASSED light-large-narrow\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 662829.464979\nAPP TEST TRACE: main font sources ready 662829.609522\nAPP TEST TRACE: main atlas bake seconds=1.393965\nAPP TEST TRACE: main atlas validation/upload seconds=0.028101\nAPP TEST TRACE: main fonts ready 662831.061985\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 2 -> 3, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 3 -> 4, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 4 -> 5, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 5 -> 6, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 6 -> 7, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 7 -> 8, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 8 -> 9, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 9 -> 10, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=69 pending=0 window=2 keyboard=2 ticks=3480952900\nAPP TEST TRACE: stage 10 -> 11, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 11 -> 12, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 12 -> 13, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 13 -> 14, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 14 -> 15, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 15 -> 16, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 16 -> 17, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=3669122500\nAPP TEST TRACE: stage 17 -> 18, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 18 -> 19, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 19 -> 20, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 20 -> 21, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 21 -> 22, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=3777657600\nAPP TEST TRACE: stage 22 -> 23, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 23 -> 24, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 24 -> 25, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 25 -> 26, status 301 Messpunkte geladen.\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 662835.054961\nAPP TEST TRACE: main font sources ready 662835.236790\nAPP TEST TRACE: main atlas bake seconds=1.421503\nAPP TEST TRACE: main atlas validation/upload seconds=0.027371\nAPP TEST TRACE: main fonts ready 662836.720566\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 1 -> 2, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 2 -> 3, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 3 -> 4, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 4 -> 5, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 5 -> 6, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 6 -> 7, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 7 -> 8, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 8 -> 9, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 9 -> 10, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 10 -> 11, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 11 -> 12, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 12 -> 13, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 13 -> 14, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 14 -> 15, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 15 -> 16, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\n",
+        "seconds": 11.235,
+        "reason": "",
+        "artifacts": [
+          {
+            "path": "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-8qxe1oqg\\component_details_light_large_narrow\\files \u00e4\\app-steps.json",
+            "bytes": 7576,
+            "sha256": "ad8e117ac8f74bb315150eced082b52fa911557acc23ab1a33918f0162793555"
+          },
+          {
+            "path": "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-8qxe1oqg\\component_details_light_large_narrow\\files \u00e4\\validation.json",
+            "bytes": 2593,
+            "sha256": "518ee1dbb81c3af0cf3c41689df658d2a274d872f94e1e3adf75a3e83727c828"
+          }
+        ]
+      }
+    ],
+    "seconds": 11.281,
+    "reason": "",
+    "name": "component_details_light_large_narrow"
+  }
+]

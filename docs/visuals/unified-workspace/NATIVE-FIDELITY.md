@@ -27,6 +27,12 @@ Widget- und Zeichenmaße bis zur Rasterung. Die Exportkonturen werden gezielt
 am tatsächlichen Pixelraster ausgerichtet. Die GPU-Gegenproben und die
 begrenzten Referenzprüfungen belegen weiterhin keine vollständige Designgleichheit.
 
+Der folgende [Abgleich der Diagrammwerkzeuge und Workspace-Pfade](CHART-TOOLS-PATHS-NATIVE.md)
+vereinheitlicht Zoom-/Exportkontrollen nach den ursprünglichen CSS-/SVG-Maßen.
+Vollständige Pfade umbrechen innerhalb des Fensters; außergewöhnlich lange
+Tooltip-Inhalte lassen sich ohne Bewegung des Editors scrollen. Die dort
+getrennten nativen Verhaltens-, Farb- und Bildbelege sind ebenfalls Teilnachweise.
+
 ## Verbindlicher Umfang
 
 Für die drei Hauptbereiche gelten die sechs Bilder und die interaktive Vorlage

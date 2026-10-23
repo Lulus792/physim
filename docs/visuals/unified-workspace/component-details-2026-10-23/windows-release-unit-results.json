@@ -1,0 +1,13 @@
+[
+  {
+    "command": [
+      "D:\\Physim\\build\\native\\Release\\bin\\physim-test-ui_text_flow.exe"
+    ],
+    "status": "passed",
+    "exit_code": 0,
+    "stdout": "UTF-8 flow: kerning, preserved path bytes, long tokens and custom focus passed\n",
+    "stderr": "",
+    "seconds": 0.125,
+    "name": "ui_text_flow"
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "command": [
+    "D:\\Physim\\build\\native\\Release\\bin\\physim-test-accessibility_ui.exe"
+  ],
+  "status": "passed",
+  "exit_code": 0,
+  "stdout": "OpenGL 4.1.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 512x64, 1 fonts, GPU limit 32768\nNative UI accessibility: actual rendered Nuklear labels/buttons, native press delivery once, disabled/removed controls and teardown passed\n",
+  "stderr": "",
+  "seconds": 2.469,
+  "name": "accessibility_ui"
+}

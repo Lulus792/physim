@@ -192,6 +192,11 @@ typedef enum {
 void ps_ui_draw_icon(struct nk_command_buffer *canvas,ps_ui_icon icon,struct nk_rect bounds,struct nk_color color);
 nk_bool ps_ui_icon_button(struct nk_context *ctx,ps_ui_icon icon,const char *name);
 nk_bool ps_ui_button_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,bool selected);
+/* Same native action/target, with focus painting owned by the component. */
+nk_bool ps_ui_button_at_custom_focus(struct nk_context *ctx,struct nk_rect bounds,const char *name,bool selected,bool *focused);
+/* Largest measured UTF-8 prefix fitting width, preferring spaces and optionally
+ * path separators. All returned bytes are consumed; no whitespace is dropped. */
+int ps_ui_text_line(const struct nk_user_font *font,const char *text,int length,float width,bool path);
 /* Custom painted switch, using the shared native checkbox/check-state contract. */
 nk_bool ps_ui_switch_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,nk_bool *checked);
 /* Input and native radio semantics for custom painted segmented controls/tabs. */

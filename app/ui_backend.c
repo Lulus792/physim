@@ -317,7 +317,8 @@ struct nk_color ps_ui_focus_color(const struct nk_context *ctx) {
     }
     return ctx?ctx->style.button.text_normal:nk_rgb(255,255,255);
 }
-static bool accessibility_emit(struct nk_context *ctx,const char *text,int role,struct nk_rect bounds,bool checked,const char *group,bool activated,double *range) {
+static bool accessibility_emit(struct nk_context *ctx,const char *text,int role,struct nk_rect bounds,bool checked,const char *group,bool activated,double *range,bool *focused) {
+    if(focused)*focused=false;
     if(!ctx || !ctx->userdata.ptr || !ctx->current || !ctx->current->layout || !text)return false;
     const ps_ui_font_layout *layout=ctx->userdata.ptr;
     if(layout->magic!=PS_UI_LAYOUT_MAGIC || !layout->accessibility)return false;
@@ -344,24 +345,25 @@ static bool accessibility_emit(struct nk_context *ctx,const char *text,int role,
          * set_focus for their name would clear ctx->active instead. */
         nk_window_set_focus(ctx,owner->name_string);
     }
-    if((result&4u) && right-left>3 && bottom-top>3)nk_stroke_rect(nk_window_get_canvas(ctx),nk_rect(left+1,top+1,right-left-2,bottom-top-2),3,2,ps_ui_focus_color(ctx));
+    if(focused)*focused=(result&4u)!=0;
+    else if((result&4u) && right-left>3 && bottom-top>3)nk_stroke_rect(nk_window_get_canvas(ctx),nk_rect(left+1,top+1,right-left-2,bottom-top-2),3,2,ps_ui_focus_color(ctx));
     return (result&1u)!=0;
 }
 static bool accessibility_widget(struct nk_context *ctx,const char *text,int role,struct nk_rect bounds,bool checked,const char *group,bool activated) {
-    return accessibility_emit(ctx,text,role,bounds,checked,group,activated,NULL);
+    return accessibility_emit(ctx,text,role,bounds,checked,group,activated,NULL,NULL);
 }
 nk_bool ps_ui_slider_named(struct nk_context *ctx,const char *name,float minimum,float *value,float maximum,float increment) {
     if(!ctx || !value)return nk_false;
     struct nk_rect bounds=nk_widget_bounds(ctx);
     nk_bool changed=nk_slider_float(ctx,minimum,value,maximum,increment);
     double range[]={*value,minimum,maximum,increment};
-    if(accessibility_emit(ctx,name,5,bounds,false,NULL,false,range)){*value=(float)range[0];changed=nk_true;}
+    if(accessibility_emit(ctx,name,5,bounds,false,NULL,false,range,NULL)){*value=(float)range[0];changed=nk_true;}
     return changed;
 }
 nk_bool ps_ui_range_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,float *value,float maximum,float increment) {
     if(!ctx || !value || !isfinite(*value) || !isfinite(maximum) || maximum<=0 || !isfinite(increment) || increment<=0)return nk_false;
     double range[]={*value,0,maximum,increment};
-    if(accessibility_emit(ctx,name,5,bounds,false,NULL,false,range)){*value=(float)range[0];return nk_true;}
+    if(accessibility_emit(ctx,name,5,bounds,false,NULL,false,range,NULL)){*value=(float)range[0];return nk_true;}
     return nk_false;
 }
 nk_bool ps_ui_horizontal_scrollbar_at(struct nk_context *ctx,struct nk_rect r,float *value,float maximum,float page,ps_ui_scrollbar_drag *drag,bool input_enabled) {
@@ -402,7 +404,7 @@ nk_bool ps_ui_separator_at(struct nk_context *ctx,struct nk_rect bounds,const ch
 }
 nk_bool ps_ui_separator_step_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,float minimum,float *value,float maximum,float step) {
     double range[]={*value,minimum,maximum,step};
-    if(accessibility_emit(ctx,name,8,bounds,false,NULL,false,range)){*value=(float)range[0];return nk_true;}
+    if(accessibility_emit(ctx,name,8,bounds,false,NULL,false,range,NULL)){*value=(float)range[0];return nk_true;}
     return nk_false;
 }
 nk_bool ps_ui_checkbox_named(struct nk_context *ctx,const char *text,const char *name,nk_bool *active) {
@@ -436,6 +438,27 @@ nk_bool ps_ui_button_at(struct nk_context *ctx,struct nk_rect bounds,const char 
     nk_bool pressed=accessibility_widget(ctx,name,1,bounds,selected,NULL,false);
     bool enabled=!(ctx->current->layout->flags&NK_WINDOW_ROM) && !ctx->current->widgets_disabled;
     return pressed || (enabled && nk_input_is_mouse_pressed(&ctx->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ctx->input,ctx->current->layout->clip) && nk_input_is_mouse_hovering_rect(&ctx->input,bounds));
+}
+nk_bool ps_ui_button_at_custom_focus(struct nk_context *ctx,struct nk_rect bounds,const char *name,bool selected,bool *focused) {
+    if(focused)*focused=false;
+    if(!ctx || !ctx->current || bounds.w<=0 || bounds.h<=0)return nk_false;
+    nk_bool pressed=accessibility_emit(ctx,name,1,bounds,selected,NULL,false,NULL,focused);
+    bool enabled=!(ctx->current->layout->flags&NK_WINDOW_ROM) && !ctx->current->widgets_disabled;
+    return pressed || (enabled && nk_input_is_mouse_pressed(&ctx->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ctx->input,ctx->current->layout->clip) && nk_input_is_mouse_hovering_rect(&ctx->input,bounds));
+}
+int ps_ui_text_line(const struct nk_user_font *font,const char *text,int length,float space,bool path) {
+    if(!font || !font->width || !text || length<=0 || !isfinite(space) || space<=0)return 0;
+    int bytes=0,separator=0;
+    while(bytes<length) {
+        nk_rune rune;int count=nk_utf_decode(text+bytes,&rune,length-bytes);
+        if(count<=0)return 0;
+        float width=font->width(font->userdata,font->height,text,bytes+count);
+        if(!isfinite(width))return 0;
+        if(width>space)return separator?separator:bytes;
+        bytes+=count;
+        if(rune==' ' || (path && (rune=='/' || rune=='\\')))separator=bytes;
+    }
+    return bytes;
 }
 nk_bool ps_ui_combo_begin_named(struct nk_context *ctx,const char *name,const char *label,struct nk_vec2 size) {
     return ps_ui_combo_begin_named_scaled(ctx,name,label,size,1);

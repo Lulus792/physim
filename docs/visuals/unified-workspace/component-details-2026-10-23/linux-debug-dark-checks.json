@@ -1,0 +1,136 @@
+{
+  "mode": "dark",
+  "checks": [
+    "CSS border, transparent interior, hover surface and outer focus color",
+    "export SVG arrow tip in raw and report toolbar",
+    "opaque native tooltip material in maximum-storage probe",
+    "real path, retained hover, complete maximum-storage bytes, visible final suffix, scroll isolation and Escape"
+  ],
+  "tools": {
+    "raw": [
+      [
+        837.3145,
+        287.0,
+        30.0547,
+        28.0
+      ],
+      [
+        871.3691,
+        287.0,
+        30.0547,
+        28.0
+      ],
+      [
+        905.4238,
+        287.0,
+        91.9473,
+        28.0
+      ],
+      [
+        1009.3711,
+        287.0,
+        164.6289,
+        28.0
+      ]
+    ],
+    "report": [
+      [
+        830.3145,
+        339.0,
+        30.0547,
+        28.0
+      ],
+      [
+        864.3691,
+        339.0,
+        30.0547,
+        28.0
+      ],
+      [
+        898.4238,
+        339.0,
+        91.9473,
+        28.0
+      ],
+      [
+        1002.3711,
+        339.0,
+        164.6289,
+        28.0
+      ]
+    ],
+    "disabled": [
+      [
+        830.3145,
+        339.0,
+        30.0547,
+        28.0
+      ],
+      [
+        864.3691,
+        339.0,
+        30.0547,
+        28.0
+      ],
+      [
+        898.4238,
+        339.0,
+        91.9473,
+        28.0
+      ],
+      [
+        1002.3711,
+        339.0,
+        164.6289,
+        28.0
+      ]
+    ]
+  },
+  "tip": [
+    [
+      "real",
+      "133",
+      "2",
+      "0",
+      "0",
+      "25.6094",
+      "52.0000,285.0000,520.0000,35.6094",
+      "1440",
+      "1000"
+    ],
+    [
+      "maximum-layout-stress",
+      "4095",
+      "65",
+      "0",
+      "1",
+      "1690.0000",
+      "8.0000,8.0000,1064.0000,724.0000",
+      "1080",
+      "740"
+    ],
+    [
+      "scrolled",
+      "4095",
+      "65",
+      "624",
+      "1",
+      "1690.0000",
+      "8.0000,8.0000,1064.0000,724.0000",
+      "1080",
+      "740"
+    ],
+    [
+      "bottom-end-visible",
+      "4095",
+      "65",
+      "972",
+      "1",
+      "1690.0000",
+      "8.0000,8.0000,1064.0000,724.0000",
+      "1080",
+      "740"
+    ]
+  ],
+  "scope": "Native chart tools and path tooltip tasks, with scoped CSS pixel probes.\n\nThe 4095-byte path is explicitly a native layout stress, not a claim that a file\nwith that path was opened on Windows. The first path comes from a real project.\nNo browser or physical DPI acceptance is inferred from these 1x captures.\n"
+}

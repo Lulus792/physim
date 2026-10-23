@@ -56,6 +56,7 @@ static void panel_pull_input(app *a,float width,float height) {
 }
 static void panel_window_return(app *a,unsigned panel) {
     ps_panel_window *p=&a->panels[panel];if(!p->detached)return;
+    if(a->workspace_tip.owner==p->ui){a->workspace_tip.visible=false;a->workspace_tip.input_held=false;}
     if(panel==PS_DOCK_WORKSPACE && editor_search_target(a)) {
         a->completion_focus_edit=editor_search_target(a);nk_window_set_focus(a->ui,"workspace");
     }
@@ -208,6 +209,7 @@ static bool panel_windows_render(app *a) {
             nk_style_push_vec2(p->ui,&p->ui->style.window.padding,i==PS_PANEL_MEASURE?nk_vec2(0,0):nk_vec2(18,6));
             nk_style_push_vec2(p->ui,&p->ui->style.window.spacing,nk_vec2(6,4));
         }
+        workspace_tip_frame_begin(a);
         if(i<PS_DOCK_PANELS) {
             a->dock_panels[i]=nk_rect(0,0,(float)w,(float)h);a->dock_visible[i]=true;
             if(i==PS_DOCK_WORKSPACE && workbench_visible(a)) {
@@ -241,6 +243,7 @@ static bool panel_windows_render(app *a) {
             laboratory_separators(a);
             p->resize=a->laboratory_resize;p->resize_original=a->laboratory_resize_original;p->resize_cancelled=a->laboratory_resize_cancelled;
         }
+        workspace_tip_frame_end(a);
         graphic_export_unguard(a,export_guard);
         graphic_export_view(a,w,h);
         nk_sdl_update_TextInput(p->ui);

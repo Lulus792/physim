@@ -1,3 +1,4 @@
+#include "analysis_plot_tools.inc"
 static struct nk_rect plot_intersection(struct nk_rect a, struct nk_rect b) {
     float x = fmaxf(a.x, b.x), y = fmaxf(a.y, b.y);
     return nk_rect(x, y, fmaxf(0, fminf(a.x + a.w, b.x + b.w) - x),
@@ -169,41 +170,21 @@ static void analysis_plot_legend(app *a,const ps_graphic_snapshot *snapshot) {
 }
 static void analysis_plot_heading(app *a,ps_plot_view *view,const double full[4],const ps_graphic_snapshot *snapshot) {
     struct nk_context *ui=a->ui;struct nk_rect r;
-    const struct nk_user_font *small=&a->workspace_status_font,*title=&a->analysis_chart_font,*font=&a->workbench_fonts[0];
-    float scale=a->preferences.ui_size/16.f;
-    const char *labels[]={"+","−","Alles zeigen","Grafik exportieren…"},*names[]={"Zoom +","Zoom -","Alles zeigen","Grafik exportieren…"};
-    float widths[]={28*scale,28*scale,0,0};
-    for(unsigned i=2;i<4;i++)widths[i]=fmaxf((i==2?82:157)*scale,ceilf(font->width(font->userdata,font->height,labels[i],(int)strlen(labels[i]))+18*scale));
-    unsigned actions=snapshot?4:3;float controls=4*scale*(actions-1);
-    for(unsigned i=0;i<actions;i++)controls+=widths[i];
+    const struct nk_user_font *small=&a->workspace_status_font,*title=&a->analysis_chart_font;
+    float available=nk_window_get_content_region(ui).w;
+    analysis_tools_layout tools=analysis_tools_measure(a,available,snapshot?4:3);
     const char *name=a->data.channels[a->plot_channel].name;
     float title_width=title->width(title->userdata,title->height,name,(int)strlen(name));
-    float button_height=fmaxf(28*scale,font->height+12*scale),available=nk_window_get_content_region(ui).w;
-    bool wrap=title_width+controls+14>available;unsigned tool_rows=1;float used=0;
-    for(unsigned i=0;i<actions;i++){if(used && used+widths[i]>available){tool_rows++;used=0;}used+=widths[i]+4*scale;}
+    bool wrap=title_width+tools.preferred+14>available;
     float tool_top=wrap?44+title->height+12:34;
-    float height=wrap?tool_top+button_height+12:76;
-    height+=(tool_rows-1)*(button_height+8*scale);
+    float height=wrap?tool_top+tools.height+12:fmaxf(76,tool_top+tools.height+12);
     nk_layout_row_dynamic(ui,height,1);nk_widget(&r,ui);struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
     nk_draw_text(canvas,nk_rect(r.x,r.y+22,r.w,small->height),"MESSKURVE",9,small,nk_rgba(0,0,0,0),UI_COLOR(muted));
-    analysis_text(a,nk_rect(r.x,r.y+44,wrap?r.w:fmaxf(1,r.w-controls-14),title->height),name,title,UI_COLOR(text));
-    float x=wrap?r.x:r.x+r.w-controls,y=r.y+tool_top;
+    analysis_text(a,nk_rect(r.x,r.y+44,wrap?r.w:fmaxf(1,r.w-tools.preferred-14),title->height),name,title,UI_COLOR(text));
     ps_plot_view before=*view;if(!view->initialized)ps_plot_view_reset(view);
-    for(unsigned i=0;i<actions;i++) {
-        if(x>r.x && x+widths[i]>r.x+r.w){x=r.x;y+=button_height+8*scale;}
-        struct nk_rect button=nk_rect(x,y,fminf(widths[i],r.w),button_height);x+=button.w+4*scale;
-        if(i<3)a->plot_buttons[i]=button;else a->result_export_bounds[2]=button;
-        bool focused=nk_sdl_accessibility_is_focused(ui,NULL,names[i]);
-        nk_stroke_rect(canvas,button,5*scale,focused?2.f:1.f,focused?UI_COLOR(accent):UI_COLOR(border));
-        float text_width=font->width(font->userdata,font->height,labels[i],(int)strlen(labels[i]));
-        nk_draw_text(canvas,nk_rect(button.x+(button.w-text_width)/2,button.y+(button.h-font->height)/2,text_width+1,font->height),labels[i],(int)strlen(labels[i]),font,nk_rgba(0,0,0,0),i==3?UI_COLOR(accent):UI_COLOR(text));
-        nk_begin_disabled(ui,!full);
-        if(ps_ui_button_at(ui,button,names[i],false)) {
-            if(i==3)graphic_export_comparison(a);
-            else {if(i==2)ps_plot_view_reset(view);else ps_plot_view_zoom(view,i==0?2:.5,.5,.5);a->plot_drag=NULL;}
-        }
-        nk_end_disabled(ui);
-    }
+    int action=analysis_tools_draw(a,&tools,r.x,r.y+tool_top,full!=NULL);
+    if(action==3)graphic_export_comparison(a);
+    else if(action>=0){if(action==2)ps_plot_view_reset(view);else ps_plot_view_zoom(view,action==0?2:.5,.5,.5);a->plot_drag=NULL;}
     if(full){double shown[4];plot_display_bounds(view,full,shown);if(!(shown[0]<shown[1] && shown[2]<shown[3]))*view=before;}
     if(snapshot)analysis_plot_legend(a,snapshot);
 }

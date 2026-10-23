@@ -1,0 +1,82 @@
+[
+  {
+    "status": "failed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "6a02b19dabdfd0f85d39a6130799159d020d9708d95378c5fce4f6ea1caa2f38"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_component_details.py",
+          "--app",
+          "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+          "--root",
+          "D:\\Physim",
+          "--work",
+          "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-kffpbmic\\component_details_dark\\files \u00e4",
+          "--mode",
+          "dark"
+        ],
+        "status": "failed",
+        "exit_code": 1,
+        "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nCOMPONENT TOOLS raw size=16 viewport=1440,1000 rect0=867.8887,287.0000,28.2090,28.0000 rect1=900.0977,287.0000,28.2090,28.0000 rect2=932.3066,287.0000,82.9473,28.0000 rect3=1027.2539,287.0000,146.7461,28.0000\nBereit. Ordner \ufffdffnen oder ein neues Projekt anlegen.\nProjekt geladen. Build kompiliert die lokalen Quelldateien.\n301 Messpunkte geladen.\n\nAPP TEST EXIT: 1\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 661413.508459\nAPP TEST TRACE: main font sources ready 661413.665274\nAPP TEST TRACE: main atlas bake seconds=5.646861\nAPP TEST TRACE: main atlas validation/upload seconds=0.009902\nAPP TEST TRACE: main fonts ready 661419.332991\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=7349646600\nAPP TEST TRACE: stage 0 -> 1, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 2 -> 3, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 3 -> 4, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 4 -> 5, status 301 Messpunkte geladen.\nWorkspace self-test timeout: component-chart-dark after 60.006 wall seconds\nFirst workflow failure at stage 5 (next 5): 301 Messpunkte geladen. (tab=2, selected=1, samples=301, report=0, query=)\nWorkflow failed at stage 5: 301 Messpunkte geladen. (tab=2, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_component_details.py\", line 67, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"D:\\Physim/tests/check_component_details.py\", line 17, in main\n    folder=args.work/kind;folder.mkdir();flow.run('--workspace-state-test',folder,'component-'+kind+'-'+mode,timeout=75,marker=marker)\n                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Physim\\tests\\check_display_workflow.py\", line 596, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim\\tests\\check_display_workflow.py\", line 533, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--workspace-state-test', 'D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\test-results\\\\run-kffpbmic\\\\component_details_dark\\\\files \ufffd\\\\chart', 'component-chart-dark']\n",
+        "reason": "Exit code 1; expected 0",
+        "seconds": 68.141
+      }
+    ],
+    "seconds": 68.187,
+    "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 661413.508459\nAPP TEST TRACE: main font sources ready 661413.665274\nAPP TEST TRACE: main atlas bake seconds=5.646861\nAPP TEST TRACE: main atlas validation/upload seconds=0.009902\nAPP TEST TRACE: main fonts ready 661419.332991\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=7349646600\nAPP TEST TRACE: stage 0 -> 1, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 2 -> 3, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 3 -> 4, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 4 -> 5, status 301 Messpunkte geladen.\nWorkspace self-test timeout: component-chart-dark after 60.006 wall seconds\nFirst workflow failure at stage 5 (next 5): 301 Messpunkte geladen. (tab=2, selected=1, samples=301, report=0, query=)\nWorkflow failed at stage 5: 301 Messpunkte geladen. (tab=2, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_component_details.py\", line 67, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"D:\\Physim/tests/check_component_details.py\", line 17, in main\n    folder=args.work/kind;folder.mkdir();flow.run('--workspace-state-test',folder,'component-'+kind+'-'+mode,timeout=75,marker=marker)\n                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Physim\\tests\\check_display_workflow.py\", line 596, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim\\tests\\check_display_workflow.py\", line 533, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--workspace-state-test', 'D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\test-results\\\\run-kffpbmic\\\\component_details_dark\\\\files \ufffd\\\\chart', 'component-chart-dark']\n",
+    "name": "component_details_dark"
+  },
+  {
+    "status": "failed",
+    "steps": [
+      {
+        "status": "passed",
+        "target": "python",
+        "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+      },
+      {
+        "status": "passed",
+        "target": "physim",
+        "artifact": "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+        "sha256": "6a02b19dabdfd0f85d39a6130799159d020d9708d95378c5fce4f6ea1caa2f38"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim/tests/check_component_details.py",
+          "--app",
+          "D:\\Physim\\build\\native\\Design-analysis\\bin\\physim.exe",
+          "--root",
+          "D:\\Physim",
+          "--work",
+          "D:\\Physim\\build\\native\\Design-analysis\\test-results\\run-kffpbmic\\component_details_light_large_narrow\\files \u00e4",
+          "--mode",
+          "light_large_narrow"
+        ],
+        "status": "failed",
+        "exit_code": 1,
+        "stdout": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2\nFont atlas: 1024x32768, 84 fonts, GPU limit 32768\nCOMPONENT TOOLS raw size=22 viewport=1080,740 rect0=399.1716,345.5771,38.5000,38.5000 rect1=443.1716,345.5771,38.5000,38.5000 rect2=487.1716,345.5771,107.8025,38.5000 rect3=611.4741,345.5771,195.5259,38.5000\nBereit. Ordner \ufffdffnen oder ein neues Projekt anlegen.\nProjekt geladen. Build kompiliert die lokalen Quelldateien.\n301 Messpunkte geladen.\n\nAPP TEST EXIT: 1\n",
+        "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 661480.943253\nAPP TEST TRACE: main font sources ready 661481.074971\nAPP TEST TRACE: main atlas bake seconds=2.894923\nAPP TEST TRACE: main atlas validation/upload seconds=0.009514\nAPP TEST TRACE: main fonts ready 661483.987261\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 2 -> 3, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 3 -> 4, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 4 -> 5, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 5 -> 6, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 6 -> 7, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 7 -> 8, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 8 -> 9, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 9 -> 10, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=69 pending=0 window=2 keyboard=2 ticks=4898841200\nAPP TEST TRACE: stage 10 -> 11, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 11 -> 12, status 301 Messpunkte geladen.\nWorkspace self-test timeout: component-chart-light-large-narrow after 60.013 wall seconds\nFirst workflow failure at stage 12 (next 12): 301 Messpunkte geladen. (tab=2, selected=1, samples=301, report=1, query=)\nWorkflow failed at stage 12: 301 Messpunkte geladen. (tab=2, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_component_details.py\", line 67, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"D:\\Physim/tests/check_component_details.py\", line 17, in main\n    folder=args.work/kind;folder.mkdir();flow.run('--workspace-state-test',folder,'component-'+kind+'-'+mode,timeout=75,marker=marker)\n                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Physim\\tests\\check_display_workflow.py\", line 596, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim\\tests\\check_display_workflow.py\", line 533, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--workspace-state-test', 'D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\test-results\\\\run-kffpbmic\\\\component_details_light_large_narrow\\\\files \ufffd\\\\chart', 'component-chart-light-large-narrow']\n",
+        "reason": "Exit code 1; expected 0",
+        "seconds": 64.672
+      }
+    ],
+    "seconds": 64.687,
+    "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 661480.943253\nAPP TEST TRACE: main font sources ready 661481.074971\nAPP TEST TRACE: main atlas bake seconds=2.894923\nAPP TEST TRACE: main atlas validation/upload seconds=0.009514\nAPP TEST TRACE: main fonts ready 661483.987261\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 1 -> 2, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 2 -> 3, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 3 -> 4, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 4 -> 5, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 5 -> 6, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 6 -> 7, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 7 -> 8, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 8 -> 9, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 9 -> 10, status 301 Messpunkte geladen.\nAPP TEST TRACE: accessibility blur event=1025 focused=69 pending=0 window=2 keyboard=2 ticks=4898841200\nAPP TEST TRACE: stage 10 -> 11, status 301 Messpunkte geladen.\nAPP TEST TRACE: stage 11 -> 12, status 301 Messpunkte geladen.\nWorkspace self-test timeout: component-chart-light-large-narrow after 60.013 wall seconds\nFirst workflow failure at stage 12 (next 12): 301 Messpunkte geladen. (tab=2, selected=1, samples=301, report=1, query=)\nWorkflow failed at stage 12: 301 Messpunkte geladen. (tab=2, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_component_details.py\", line 67, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"D:\\Physim/tests/check_component_details.py\", line 17, in main\n    folder=args.work/kind;folder.mkdir();flow.run('--workspace-state-test',folder,'component-'+kind+'-'+mode,timeout=75,marker=marker)\n                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Physim\\tests\\check_display_workflow.py\", line 596, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim\\tests\\check_display_workflow.py\", line 533, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\bin\\\\physim.exe', '--workspace-state-test', 'D:\\\\Physim\\\\build\\\\native\\\\Design-analysis\\\\test-results\\\\run-kffpbmic\\\\component_details_light_large_narrow\\\\files \ufffd\\\\chart', 'component-chart-light-large-narrow']\n",
+    "name": "component_details_light_large_narrow"
+  }
+]

@@ -1,0 +1,48 @@
+{
+  "status": "passed",
+  "steps": [
+    {
+      "status": "passed",
+      "target": "python",
+      "artifact": "/usr/bin/python3",
+      "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+    },
+    {
+      "status": "passed",
+      "target": "physim",
+      "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+      "sha256": "eb60c2d27cc6e2f0244df7c3e28a66c1ff003890fe0260c4f6446822c5c91ce8"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/tests/check_display_workflow.py",
+        "workspace_tree_workflow",
+        "--app",
+        "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+        "--work",
+        "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-2zyhy892/workspace_tree_workflow/files \u00e4",
+        "--root",
+        "/mnt/d/Physim",
+        "--cc",
+        "/usr/bin/cc"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "stdout": "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)\nFont atlas: 2048x16384, 80 fonts, GPU limit 16384\nWORKSPACE TREE UI: PASSED (stage 23)\nBereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen.\nOrdner ge\u00f6ffnet. Kein Physim-Projekt erkannt; Dateien k\u00f6nnen angesehen werden.\nDatei oder Ordner zum Workspace hinzugef\u00fcgt.\n\nAPP TEST EXIT: 0\nworkspace_tree_workflow: app workflow and persisted files passed\n",
+      "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 2567.530024\nAPP TEST TRACE: main font sources ready 2569.090399\nAPP TEST TRACE: main atlas bake seconds=8.288170\nAPP TEST TRACE: main atlas validation/upload seconds=0.054111\nAPP TEST TRACE: main fonts ready 2577.544999\nAPP TEST TRACE: initial stage 0, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: stage 0 -> 1, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: stage 1 -> 2, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=11617043939\nAPP TEST TRACE: stage 2 -> 3, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: stage 3 -> 4, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: stage 4 -> 5, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: stage 5 -> 6, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=11917696742\nAPP TEST TRACE: stage 6 -> 7, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: stage 7 -> 8, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: stage 8 -> 9, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: stage 9 -> 10, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=12150451410\nAPP TEST TRACE: stage 10 -> 11, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: stage 11 -> 12, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: stage 12 -> 13, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: stage 13 -> 14, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: stage 14 -> 15, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=13163362257\nAPP TEST TRACE: stage 15 -> 16, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: stage 16 -> 17, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: stage 17 -> 18, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: stage 18 -> 19, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=13322469351\nAPP TEST TRACE: stage 19 -> 20, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: stage 20 -> 21, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: stage 21 -> 22, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\nAPP TEST TRACE: stage 22 -> 23, status Datei oder Ordner zum Workspace hinzugef\u00fcgt.\n",
+      "seconds": 15.917,
+      "reason": "",
+      "artifacts": [
+        {
+          "path": "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-2zyhy892/workspace_tree_workflow/files \u00e4/app-steps.json",
+          "bytes": 3867,
+          "sha256": "f9e35050dd4b89f23120114ec3142ceb2ea49eea9d9c4300a2daa479613f1f5a"
+        }
+      ]
+    }
+  ],
+  "seconds": 16.725,
+  "reason": "",
+  "name": "workspace_tree_workflow"
+}

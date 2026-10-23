@@ -1,3 +1,4 @@
+#include "workspace_path_tooltip.inc"
 static bool workbench_path_equal(const char *left,const char *right) {
     while(*left && *right) {
         unsigned char a=(unsigned char)*left++,b=(unsigned char)*right++;
@@ -56,6 +57,7 @@ static void workspace_tree_view(app *a) {
         nk_label_wrap(ui, a->workspace_tree_error);
     }
     a->workspace_tree_test_bounds = nk_rect(0, 0, 0, 0);
+    const char *tip_path=NULL;
     size_t clicked_index = SIZE_MAX;
     for (size_t display=0;display<a->workspace_tree.count;display++) {
         size_t i=compact?a->workbench_tree_order[display]:display;
@@ -115,8 +117,8 @@ static void workspace_tree_view(app *a) {
                 nk_stroke_line(canvas,x+2,y,x-1,y+3,1,color);
             }
         }
-        if (nk_input_is_mouse_hovering_rect(&ui->input, bounds))
-            nk_tooltip(ui, entry->path);
+        struct nk_rect tip_visible=plot_intersection(bounds,ui->current->layout->clip);
+        if(tip_visible.w>0 && tip_visible.h>0 && nk_input_is_mouse_hovering_rect(&ui->input,tip_visible))tip_path=entry->path;
         if (clicked)
             clicked_index = i;
         if(compact && !entry->depth && entry->expanded){nk_layout_row_dynamic(ui,6,1);nk_spacer(ui);}
@@ -135,6 +137,7 @@ static void workspace_tree_view(app *a) {
             nk_label_colored(ui, "Ordner ist leer", NK_TEXT_LEFT, muted());
         }
     }
+    workspace_tip_draw(a,tip_path);
     /* Finish this frame's layout before a mutation replaces paths and indices. */
     if (clicked_index != SIZE_MAX) {
         const ps_workspace_entry *entry = &a->workspace_tree.entries[clicked_index];

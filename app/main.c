@@ -275,6 +275,14 @@ typedef struct {
     char workspace_tree_error[192];
     char workspace_tree_test_path[4096];
     struct nk_rect workspace_tree_test_bounds;
+    struct {
+        char text[4096];uint16_t offsets[4096];unsigned lines,scroll,sequence;
+        struct nk_context *owner;struct nk_rect bounds;
+        const struct nk_user_font *font;nk_handle font_user;
+        float font_height,space,line_height,content_height,padding_x,padding_y;
+        int viewport_width,viewport_height;struct nk_mouse mouse;
+        bool visible,scrollable,input_held,dismissed;
+    } workspace_tip;
     bool workspace_open, project_manager, dialog_pending;
     ps_workspace_state last_workspace;
     char workspace_state_path[4096], workspace_state_error[192];
@@ -2680,7 +2688,7 @@ static void plot_draw(app *a, const double *times, const double *values, int cou
     if(analysis) {
         nk_draw_text(canvas,nk_rect(area.x+area.w-70,area.y+area.h+40,70,22),"Zeit [s]",8,ui->style.font,UI_COLOR(edit),UI_COLOR(muted));
         char range[160],preview[160];snprintf(range,sizeof range,"Zeitachse %.6g–%.6g s",displayed[0],displayed[1]);
-        if(compared)snprintf(preview,sizeof preview,"%u Läufe%s",description.plot.curves,description.reduced?" · reduzierte Vorschau, Spitzen bleiben erhalten":" · alle Messpunkte");
+        if(compared)snprintf(preview,sizeof preview,"%u %s%s",description.plot.curves,description.plot.curves==1?"Lauf":"Läufe",description.reduced?" · reduzierte Vorschau, Spitzen bleiben erhalten":" · alle Messpunkte");
         else snprintf(preview,sizeof preview,"Vorschau %d / %llu Messpunkte",count,(unsigned long long)a->data.total);
         float available=nk_window_get_content_region(ui).w,half=(available-ui->style.window.spacing.x)/2;
         bool stack=ui->style.font->width(ui->style.font->userdata,ui->style.font->height,range,(int)strlen(range))>half ||
@@ -3466,6 +3474,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "monte_carlo_tutorial_tests.inc"
 #include "saved_run_tutorial_tests.inc"
 #include "native_dialog_tests.inc"
+#include "component_details_tests.inc"
 #include "workspace_tests.inc"
 // clang-format on
 /* Independent archive check for the optional tutorial energy-ledger report. */
@@ -4031,12 +4040,16 @@ int main(int argc, char **argv) {
         preferences_theme_tick(a);
         api_reference_insert_tick(a);
         documentation_actions_tick(a);
+        a->workspace_tip.dismissed=false;
         nk_input_begin(a->ui);
         if (a->doc_ui)
             nk_input_begin(a->doc_ui);
         for(unsigned i=0;i<PS_PANEL_COUNT;i++)if(a->panels[i].ui)nk_input_begin(a->panels[i].ui);
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
+            if(e.type==SDL_EVENT_KEY_DOWN || e.type==SDL_EVENT_TEXT_INPUT || e.type==SDL_EVENT_WINDOW_FOCUS_LOST) {
+                a->workspace_tip.dismissed=true;a->workspace_tip.visible=false;
+            }
             if (e.type == workspace_dialog_event) {
                 a->dialog_pending = false;
                 const char *path = (const char *)e.user.data1;
@@ -4226,7 +4239,7 @@ int main(int argc, char **argv) {
             /* The deliberate 80 ms frame delay also runs on hosted software GL.
              * Keep its bounded keyboard assertions; allow their extra wall time. */
             if (ps_clock() - test_started >
-                (!strncmp(argv[3],"comparison-",11)?120:!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
+                (!strncmp(argv[3],"component-",10)?60:!strncmp(argv[3],"comparison-",11)?120:!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
                   !strncmp(argv[3], "isolation-", 10) || !strncmp(argv[3], "breakpoints-", 12) || !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || (!strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"pendulum-medium-",16)) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strncmp(argv[3],"logging-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15))) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
@@ -5302,6 +5315,9 @@ int main(int argc, char **argv) {
         int w, h;
         SDL_GetWindowSize(window, &w, &h);
         draw_ui(a, w, h);
+        if(workspace_state_test && !strncmp(argv[3],"component-",10)) {
+            component_details_draw(a,argv[3]);if(component_details.failed){exit_code=1;a->quitting=true;}
+        }
         preferences_capture(a);
         nk_sdl_update_TextInput(a->ui);
         if (a->profiler) {

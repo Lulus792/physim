@@ -13832,6 +13832,142 @@
           "timeout": 165
         }
       ]
+    },
+    {
+      "name": "component_details_dark",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_component_details.py",
+            "--app",
+            "{physim}",
+            "--root",
+            "{root}",
+            "--work",
+            "{work}",
+            "--mode",
+            "dark"
+          ],
+          "timeout": 165,
+          "files": [
+            "app-steps.json",
+            "validation.json"
+          ]
+        }
+      ],
+      "platforms": [
+        "win32",
+        "linux"
+      ]
+    },
+    {
+      "name": "component_details_light",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_component_details.py",
+            "--app",
+            "{physim}",
+            "--root",
+            "{root}",
+            "--work",
+            "{work}",
+            "--mode",
+            "light"
+          ],
+          "timeout": 165,
+          "files": [
+            "app-steps.json",
+            "validation.json"
+          ]
+        }
+      ],
+      "platforms": [
+        "win32",
+        "linux"
+      ]
+    },
+    {
+      "name": "component_details_light_large_narrow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_component_details.py",
+            "--app",
+            "{physim}",
+            "--root",
+            "{root}",
+            "--work",
+            "{work}",
+            "--mode",
+            "light_large_narrow"
+          ],
+          "timeout": 165,
+          "files": [
+            "app-steps.json",
+            "validation.json"
+          ]
+        }
+      ],
+      "platforms": [
+        "win32",
+        "linux"
+      ]
+    },
+    {
+      "name": "component_details_contrast",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_component_details.py",
+            "--app",
+            "{physim}",
+            "--root",
+            "{root}",
+            "--work",
+            "{work}",
+            "--mode",
+            "contrast"
+          ],
+          "timeout": 165,
+          "files": [
+            "app-steps.json",
+            "validation.json"
+          ]
+        }
+      ],
+      "platforms": [
+        "win32",
+        "linux"
+      ]
     }
   ]
 }

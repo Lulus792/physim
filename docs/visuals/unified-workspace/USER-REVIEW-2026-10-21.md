@@ -49,3 +49,11 @@ gebrochene Widgetmaße, Symbolpositionen und Strichbreiten. Die erste native
 Gegenprobe belegt deren vorherige Kürzung. Die scharfen Exportfeldkonturen
 werden anschließend direkt gegen beide Originalreferenzen geprüft. Die
 Zoom-/Tooltipdetails und die Gesamtabnahme dieser Befunde bleiben offen.
+
+Der spätere [Abgleich von Diagrammwerkzeugen und Pfad-Tooltips](CHART-TOOLS-PATHS-NATIVE.md)
+bearbeitet jetzt genau diese beiden Detailbereiche: gemeinsame 12-px-Kontrollen
+mit Original-Export-SVG, äußeren Fokusringen und vollständigem Textumbruch sowie
+vollständige, im Fenster begrenzte Workspace-Pfade. Für sehr lange Tooltip-Inhalte
+sind Scrollzugriff, sichtbares Pfadende und unveränderter Editor getrennt geprüft.
+Diese Fortschritte ersetzen weiterhin keine vollständige Abnahme der sieben
+Nutzerbefunde oder der gesamten Oberfläche.

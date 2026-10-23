@@ -1,0 +1,11 @@
+{
+  "staged_files_including_this_review": 207,
+  "artifact_hashes_match_git_blobs": 185,
+  "frozen_source_files": 235,
+  "foreign_files_byte_equal": 12,
+  "utf8_and_markdown_links": "passed",
+  "native_pngs": 63,
+  "canonical_exports_byte_equal": 16,
+  "source4_to5": "Only component fixture and its checker changed; product source identical",
+  "scope": "Shared chart tools, native focus contract, full UTF-8 path flow, transient popup lifetime and whole-frame pointer isolation reviewed. Full UI, physical DPI, detached tooltip, macOS and external assistive acceptance remain open."
+}

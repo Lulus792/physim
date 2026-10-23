@@ -1,0 +1,45 @@
+{
+  "status": "passed",
+  "steps": [
+    {
+      "status": "passed",
+      "target": "python",
+      "artifact": "/usr/bin/python3",
+      "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+    },
+    {
+      "status": "passed",
+      "target": "physim",
+      "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+      "sha256": "eb60c2d27cc6e2f0244df7c3e28a66c1ff003890fe0260c4f6446822c5c91ce8"
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/tests/check_graphic_dialog.py",
+        "--app",
+        "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+        "--root",
+        "/mnt/d/Physim",
+        "--work",
+        "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-2zyhy892/graphic_dialog/files \u00e4"
+      ],
+      "status": "passed",
+      "exit_code": 0,
+      "stdout": "graphic_dialog: native UI, frozen preview, save/cancel/error and independent clipboard RGB passed\n",
+      "stderr": "",
+      "seconds": 90.435,
+      "reason": "",
+      "artifacts": [
+        {
+          "path": "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-2zyhy892/graphic_dialog/files \u00e4/app-steps.json",
+          "bytes": 24120,
+          "sha256": "5585e913a9d6989ab3b3dc6ddddaea89a3b7ab24602087a3508901d6cd7faf11"
+        }
+      ]
+    }
+  ],
+  "seconds": 90.994,
+  "reason": "",
+  "name": "graphic_dialog"
+}
