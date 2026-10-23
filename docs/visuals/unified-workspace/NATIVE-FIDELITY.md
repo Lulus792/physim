@@ -205,3 +205,11 @@ B-Abschnittsköpfe, Modellwertkarten, Inhaltsbreite und innere Fußzeile. Er hä
 auch die trotz bestandener Funktionssuiten gefundenen nativen Überdeckungs- und
 Wortumbruchfehler fest. Vollständiger Inspektorinhalt, Szenenbaum, F1 und die
 übrigen offenen Bereiche bleiben weiter abzugleichen.
+
+Der folgende [Objektabgleich](OBJECT-PROPERTIES-NATIVE.md) ergänzt den fehlenden
+Auswahlkopf und die B-Eigenschaften mit tatsächlichen Radius-/Positionswerten,
+getrennten Koordinaten und den beiden vorgegebenen Aktionsformen. Die native
+Zeiger-/Tastaturprobe erhält Quelle und Lauf und prüft auch schmale lange Namen.
+Fehlende allgemeine Modellnamen-/Massenbindungen und die verbleibende native
+Windows-/Assistive-/DPI-Abnahme sind dort ausdrücklich begrenzt; die übrige
+Oberfläche und der Szenenbaum bleiben offen.

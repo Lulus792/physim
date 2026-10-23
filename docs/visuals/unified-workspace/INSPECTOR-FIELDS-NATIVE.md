@@ -110,8 +110,9 @@ sichtbare Wertglyphen werden aus den nativen Bildern geprüft.
 ## Noch erforderlicher Abgleich
 
 Die Modellwertkarten und Köpfe ersetzen keine vollständige Umsetzung aller
-neun Gruppen. Insbesondere ausgewählter Objektkopf/Avatar, weitere Wertefelder,
-Szenenbaum-Inhalt, Kamera-/Darstellungscontrols und zusätzliche Zustände sind
+neun Gruppen. Der folgende [Objektabgleich](OBJECT-PROPERTIES-NATIVE.md)
+ergänzt Auswahlkopf, Eigenschaftsraster und Objektaktionen mit eigener, begrenzter
+Abnahme. Weitere Wertefelder, Szenenbaum-Inhalt, Kamera-/Darstellungscontrols und zusätzliche Zustände sind
 weiter gegen die Vorlage abzugleichen. Die echten zusätzlichen Bereichs- und
 Kompilierungsinformationen sind keine festen Demowerte. Masse und RK4 werden
 keinen beliebigen Objekten ohne entsprechende Metadaten zugeschrieben.

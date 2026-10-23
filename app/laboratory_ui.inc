@@ -30,36 +30,7 @@ static void laboratory_value(app *a,const char *label,const char *value,bool mea
     struct nk_rect visible=plot_intersection(r,ui->current->layout->clip);
     if(visible.w>0 && visible.h>0 && nk_input_is_mouse_hovering_rect(&ui->input,visible))nk_tooltip(ui,accessible);
 }
-static void laboratory_object(app *a) {
-    struct nk_context *ui=a->ui;scene_selection_sync(a);
-    if(!workspace_section_begin(a,"Objekt",&a->laboratory_groups[0]))return;
-    const ps_scene *scene=display_scene(a);
-    if(!a->scene_selected || a->scene_selected_slot>=scene->count)laboratory_note(a,"Wähle ein Objekt in der Szene oder im Szenenbaum.");
-    else {
-        const ps_object *o=&scene->objects[a->scene_selected_slot];char value[128];
-        static const char *shapes[]={"Kugel","Linie","Box","Vektor","Punkt","Ebene","Pfad","Beschriftung","Gruppe","Koordinatenrahmen"};
-        if(*o->text)laboratory_note(a,o->text);
-        snprintf(value,sizeof value,"%s · ID %u",o->shape<10?shapes[o->shape]:"Objekt",o->id);laboratory_note(a,value);
-        if(o->shape==PS_SPHERE){nk_layout_row_dynamic(ui,70,1);snprintf(value,sizeof value,"%.4g m",o->radius);laboratory_value(a,"Radius / m",value,false,0);}
-        if(o->shape!=PS_GROUP) {
-            ps_vec3 world,local=o->shape==PS_FRAME?ps_v3(0,0,0):o->a;
-            if(ps_scene_world_point(scene,a->scene_selected_slot,local,&world)==PS_OK) {
-                const double v[]={world.x,world.y,world.z};const char *names[]={"Position x / m","Position y / m","Position z / m"};
-                int columns=nk_window_get_content_region(ui).w>=260*a->preferences.ui_size/16.f?2:1;
-                nk_layout_row_dynamic(ui,76*a->preferences.ui_size/16.f,columns);
-                for(unsigned i=0;i<3;i++){snprintf(value,sizeof value,"%.4g m",v[i]);laboratory_value(a,names[i],value,false,0);}
-                if(columns==2)nk_spacer(ui);
-                snprintf(value,sizeof value,"Lokal / m: %.6g / %.6g / %.6g",o->a.x,o->a.y,o->a.z);laboratory_note(a,value);
-                if(o->shape==PS_FRAME){snprintf(value,sizeof value,"Skalierung: %.6g / %.6g / %.6g",o->b.x,o->b.y,o->b.z);laboratory_note(a,value);}
-            }
-        }
-        nk_layout_row_dynamic(ui,34,1);a->scene_hide_selection_bounds=nk_widget_bounds(ui);
-        if(nk_button_label(ui,"Auswahl ausblenden")){a->scene_view.hidden|=UINT32_C(1)<<a->scene_selected_slot;a->scene_selected=false;}
-    }
-    nk_layout_row_dynamic(ui,30,1);a->display_all_bounds=nk_widget_bounds(ui);
-    if(nk_button_label(ui,"Alle Objekte einblenden"))a->scene_view.hidden=0;
-    workspace_section_end(a);
-}
+#include "laboratory_object.inc"
 static const ps_channel *laboratory_channels(app *a,uint32_t *count) {
     if(a->analysis_only){*count=a->data.channel_count;return a->data.channels;}
     *count=a->channel_count;return a->live_channels;

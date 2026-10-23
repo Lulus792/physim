@@ -1,0 +1,7 @@
+{
+  "source": "build/native/Design-analysis-linux/test-results/run-atvh9gvq/laboratory_workflow/files \u00e4/workflow \u00e4/dark/laboratory-state-2.bmp",
+  "rgb_sha256": "11721d3d0a71d136223e3178655e60a77dfcc77c3186b081ea9fede35fda8e4f",
+  "png_sha256": "13aaf3e668508d6bbb093993b900af40ed47e7df3cdbedb396e4bbe1f4555ecf",
+  "conversion": "Lossless RGB-identical BMP to PNG; no scaling or retouch",
+  "missing": "Selected-object avatar/header absent; radius consumes full width before the two-column positions"
+}

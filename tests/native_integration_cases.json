@@ -14128,6 +14128,38 @@
           ]
         }
       ]
+    },
+    {
+      "name": "object_design",
+      "app": true,
+      "display": true,
+      "platforms": [
+        "win32",
+        "linux"
+      ],
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_object_design.py",
+            "--app",
+            "{physim}",
+            "--root",
+            "{root}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 280,
+          "files": [
+            "app-steps.json",
+            "validation.json"
+          ]
+        }
+      ]
     }
   ]
 }

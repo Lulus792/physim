@@ -29,3 +29,8 @@ docs/visuals/unified-workspace/timeline-2026-10-23/*.gz binary
 docs/visuals/unified-workspace/inspector-tree-2026-10-23/* text eol=lf
 docs/visuals/unified-workspace/inspector-tree-2026-10-23/*.png binary
 docs/visuals/unified-workspace/inspector-tree-2026-10-23/*.gz binary
+
+# Frozen selected-object proofs retain the same bytes across platforms.
+docs/visuals/unified-workspace/object-properties-2026-10-23/* text eol=lf
+docs/visuals/unified-workspace/object-properties-2026-10-23/*.png binary
+docs/visuals/unified-workspace/object-properties-2026-10-23/*.gz binary

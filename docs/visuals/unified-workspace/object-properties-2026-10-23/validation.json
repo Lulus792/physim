@@ -1,0 +1,152 @@
+{
+  "base": "a23ed541612e89900798a9ea2edf1fee60c6df34",
+  "final_source": 2,
+  "goal_complete": false,
+  "scope": "Native selected-object header and B read-only properties, coordinate readouts, hide/show actions; whole UI remains incomplete",
+  "linux": {
+    "directory": "build/native/Design-analysis-linux/test-results/run-0st2qcci",
+    "groups": [
+      {
+        "name": "scene_visibility_16",
+        "status": "passed",
+        "seconds": 11.965,
+        "binaries": [
+          {
+            "status": "passed",
+            "target": "python",
+            "artifact": "/usr/bin/python3",
+            "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+          },
+          {
+            "status": "passed",
+            "target": "physim",
+            "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "sha256": "9caefb9ffefc190daa52ba9f9e2a5462e80e07696cb9910f7c9c2edc9a177d87"
+          }
+        ]
+      },
+      {
+        "name": "scene_visibility_22",
+        "status": "passed",
+        "seconds": 14.355,
+        "binaries": [
+          {
+            "status": "passed",
+            "target": "python",
+            "artifact": "/usr/bin/python3",
+            "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+          },
+          {
+            "status": "passed",
+            "target": "physim",
+            "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "sha256": "9caefb9ffefc190daa52ba9f9e2a5462e80e07696cb9910f7c9c2edc9a177d87"
+          }
+        ]
+      },
+      {
+        "name": "laboratory_workflow",
+        "status": "passed",
+        "seconds": 204.947,
+        "binaries": [
+          {
+            "status": "passed",
+            "target": "python",
+            "artifact": "/usr/bin/python3",
+            "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+          },
+          {
+            "status": "passed",
+            "target": "physim",
+            "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "sha256": "9caefb9ffefc190daa52ba9f9e2a5462e80e07696cb9910f7c9c2edc9a177d87"
+          }
+        ]
+      },
+      {
+        "name": "object_design",
+        "status": "passed",
+        "seconds": 104.722,
+        "binaries": [
+          {
+            "status": "passed",
+            "target": "python",
+            "artifact": "/usr/bin/python3",
+            "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+          },
+          {
+            "status": "passed",
+            "target": "physim",
+            "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "sha256": "9caefb9ffefc190daa52ba9f9e2a5462e80e07696cb9910f7c9c2edc9a177d87"
+          }
+        ]
+      }
+    ]
+  },
+  "windows": {
+    "build_only": true,
+    "display_test": false,
+    "configuration": "MSVC Release",
+    "binary_sha256": "ce0f27d115092c590e46ae1dbd9f2284e1fdbf4f5220570b8ad1602cc93ea7df"
+  },
+  "source_graph_files": 249,
+  "public_source_files": 246,
+  "fonts": 18,
+  "foreign_preserved": 12,
+  "selected_images": [
+    {
+      "file": "linux2-system-dark-3-header.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-0st2qcci/object_design/files ä/system/object-dark-3-header.png",
+      "sha256": "2c18db1343ac3acb7051b85e5981ec9f3f0c37d4accc21c249ba3204247cfd17"
+    },
+    {
+      "file": "linux2-system-dark-3-last.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-0st2qcci/object_design/files ä/system/object-dark-3-last.png",
+      "sha256": "2c18db1343ac3acb7051b85e5981ec9f3f0c37d4accc21c249ba3204247cfd17"
+    },
+    {
+      "file": "linux2-system-dark-3-collapsed.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-0st2qcci/object_design/files ä/system/object-dark-3-collapsed.png",
+      "sha256": "73cf14294aab29d5606704ac3471e7b6b6cfbd285610607a2aad87772b1afa9f"
+    },
+    {
+      "file": "linux2-system-light-3-header.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-0st2qcci/object_design/files ä/system/object-light-3-header.png",
+      "sha256": "0d324342f5856fc7db03b9c51a1fe41bfc5c50c8b1f066eece50044dafe1159d"
+    },
+    {
+      "file": "linux2-system-large-11-header.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-0st2qcci/object_design/files ä/system/object-large-11-header.png",
+      "sha256": "d07a53d082d7cdbbf9052ea8864b0d6ebbdb9da3b60b368f5527e9339d739642"
+    },
+    {
+      "file": "linux2-system-contrast-3-last.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-0st2qcci/object_design/files ä/system/object-contrast-3-last.png",
+      "sha256": "03ce8997c83707e524299125589d978e2a9c9c32753b9824c600469ce1f424c8"
+    },
+    {
+      "file": "linux2-system-medium-101-header.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-0st2qcci/object_design/files ä/system/object-medium-101-header.png",
+      "sha256": "71be529b3a5fee27ad13c9deb6662111bf05732f7e313c6e6e37187c5c1d7295"
+    },
+    {
+      "file": "linux2-bundled-dark-3-header.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-0st2qcci/object_design/files ä/bundled/object-dark-3-header.png",
+      "sha256": "21e9080ba68113a4ecc014935f404e6f6c9fea280899b1351eb7000fa62edf93"
+    },
+    {
+      "file": "linux2-bundled-large-11-header.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-0st2qcci/object_design/files ä/bundled/object-large-11-header.png",
+      "sha256": "079aa67c050e64f679b68c76baa08a6a62c6c44aef4e3a68b54f609cc2652df9"
+    }
+  ],
+  "limitations": [
+    "No current Windows object GUI proof",
+    "No macOS execution",
+    "No practical screenreader tasks",
+    "No physical DPI/monitor transition",
+    "No frame object in pendulum probe",
+    "Three foreign files are part of the actual local compile graph; not a clean-checkout proof"
+  ]
+}

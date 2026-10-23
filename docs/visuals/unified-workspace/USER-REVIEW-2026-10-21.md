@@ -89,3 +89,10 @@ Er korrigiert den tatsächlich überdeckten Objekttitel sowie die halb
 abgeschnittene Kartenkontur. Die neue Mindestbreitenprüfung ergänzt außerdem
 vollständige Kopftexte bei großer Schrift. Das ist keine Abnahme des gesamten
 Szenenbaums, aller Inspektorgruppen oder der gesamten Oberfläche.
+
+Der folgende [Objektabgleich](OBJECT-PROPERTIES-NATIVE.md) übernimmt danach den
+fehlenden Auswahlkopf sowie B-Eigenschaften, Koordinaten und Objektaktionen.
+Eine echte Kugel, Organisationsgruppe und Beschriftung werden per Tastatur
+ausgewählt; Ausblenden/Einblenden und der unveränderte pausierte Lauf sind
+separat geprüft. Die Daten werden dem tatsächlichen Modell entnommen. Die
+Gesamtgestaltung, der vollständige Szenenbaum und weitere Gruppen bleiben offen.
