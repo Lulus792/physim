@@ -1,0 +1,29 @@
+{
+  "final_source": 4,
+  "code_review": [
+    "Natural single-line control widths and explicit layout slots avoid the shared row-height mutation in generic wrapped buttons",
+    "All queued font handles have application lifetime; painter userdata is consumed synchronously",
+    "Caption strings keep original glyphs; stable native names omit decoration; full German labels and comma tempo are retained",
+    "Published occlusion follows nk_build normal-window pass followed by popup pass, preserving later-window coverage rather than globally removing it",
+    "Focus return after menu selection and Escape uses optional semantic group NULL, not a window name",
+    "F1/export/mono original ranges and fallback order are unchanged; only four main regular banks opt into bounded symbols",
+    "No compiler/physics/run persistence behavior changed; actual saved source and single run checked in each transport process",
+    "Existing Windows rendered overlay/disabled/removed-target negative tasks pass1/1; common text flow passes on both platforms1/1 each"
+  ],
+  "limits": [
+    "Only the Windows first-ready primary rectangle is directly compared to original PNG, tolerance1px; remaining controls have original CSS geometry and native raster/state checks",
+    "OS font outlines and antialiasing differ; fallback glyphs can alter natural width. At narrow UI22 the project title column may consume remaining space down to96*f while all actions retain full text",
+    "Scene header, inspector fields and timeline still visibly differ and remain correctable work",
+    "Old lifecycle test never opens H find overlay: initial independent named query returns not found in both current and older Debug binaries. No actual hide/reopen/minimize assertions were reached",
+    "No new macOS, external screenreader, physical DPI/multi-monitor or full installed SDK acceptance"
+  ],
+  "canonical_exports": 16,
+  "foreign_files_preserved": 12,
+  "pictures": 33,
+  "staged_blob_audit": "passed",
+  "staged_files": 144,
+  "public_source_blobs": 237,
+  "font_blobs": 18,
+  "proof_blobs": 125,
+  "utf8_json_python_links": "passed"
+}

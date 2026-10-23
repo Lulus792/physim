@@ -174,6 +174,7 @@ static bool laboratory_begin(app *a,const char *name,struct nk_rect bounds,nk_fl
     if(open)dock_input(a,PS_DOCK_WORKSPACE,bounds,previous,true);
     return open;
 }
+#include "laboratory_transport.inc"
 static void laboratory_chrome(app *a,float w,float h) {
     struct nk_context *ui=a->ui;bool visible=laboratory_visible(a);
     const char *windows[]={"laboratory-transport","laboratory-sections","laboratory-timeline","laboratory-status"};
@@ -182,58 +183,7 @@ static void laboratory_chrome(app *a,float w,float h) {
     nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(18,6));
     nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(6,4));
     nk_style_push_float(ui,&ui->style.window.rounding,0);
-    nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(18,22));
-    if(laboratory_begin(a,windows[0],nk_rect(0,WORKSPACE_CONTENT_TOP,w,77),NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BACKGROUND)) {
-        float factor=a->preferences.ui_size/16.f;
-        nk_layout_row_begin(ui,NK_STATIC,32,9);
-        float project_width=fminf(208*factor,w*.18f);
-        nk_layout_row_push(ui,project_width);
-        struct nk_rect title;nk_widget(&title,ui);struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
-        struct nk_rect icon=nk_rect(title.x,title.y-2,34,36);
-        nk_fill_rect(canvas,icon,8,UI_COLOR(surface));
-        float cx=icon.x+17,cy=icon.y+18;
-        nk_stroke_line(canvas,cx,cy-7,cx+7,cy,1.5f,UI_COLOR(accent));nk_stroke_line(canvas,cx+7,cy,cx,cy+7,1.5f,UI_COLOR(accent));
-        nk_stroke_line(canvas,cx,cy+7,cx-7,cy,1.5f,UI_COLOR(accent));nk_stroke_line(canvas,cx-7,cy,cx,cy-7,1.5f,UI_COLOR(accent));
-        nk_fill_circle(canvas,nk_rect(cx-2,cy-2,4,4),UI_COLOR(accent));
-        const char *name=a->loaded?project_name(a):"Simulation";
-        nk_draw_text(canvas,nk_rect(title.x+45,title.y-3,title.w-45,a->laboratory_title_font.height),name,(int)strlen(name),&a->laboratory_title_font,nk_rgba(0,0,0,0),UI_COLOR(text));
-        const struct nk_user_font *small=&a->workbench_fonts[0];
-        const char *context=a->analysis_only?"Aufgezeichnete Szene":a->runner.running?"Aktueller Messlauf":"Experiment";
-        nk_draw_text(canvas,nk_rect(title.x+45,title.y+20,title.w-45,small->height),context,(int)strlen(context),small,nk_rgba(0,0,0,0),muted());
-        ps_ui_accessibility_label(ui,title,name);
-        nk_layout_row_push(ui,90*factor);a->run_control_bounds[0]=a->run_control_bounds[1]=nk_widget_bounds(ui);
-        bool ready=runner_control_ready(a);
-        nk_begin_disabled(ui,!a->loaded || a->analysis_only || (a->runner.running?!ready:!idle(a)));
-        const char *main_action=a->runner.running?(a->paused?"Fortsetzen":"Pause"):a->built?"Neuer Lauf":"Build";
-        if(action_button(ui,main_action,true)){if(a->runner.running)command(a,a->paused?PS_MSG_RUN:PS_MSG_PAUSE);else if(a->built)start_run(a);else build_project(a);}nk_end_disabled(ui);
-        nk_layout_row_push(ui,74*factor);a->run_control_bounds[2]=nk_widget_bounds(ui);nk_begin_disabled(ui,!ready || !a->paused);
-        if(nk_button_label(ui,"Schritt"))command(a,PS_MSG_STEP);nk_end_disabled(ui);
-        nk_layout_row_push(ui,60*factor);a->run_control_bounds[4]=nk_widget_bounds(ui);nk_begin_disabled(ui,!a->runner.running || a->stop_at!=0);
-        if(nk_button_label(ui,"Stop")){command(a,PS_MSG_STOP);a->stop_at=ps_clock();}nk_end_disabled(ui);
-        nk_layout_row_push(ui,100*factor);a->run_control_bounds[3]=nk_widget_bounds(ui);nk_begin_disabled(ui,!reset_available(a));
-        if(nk_button_label(ui,a->reset_pending?"Zurücksetzen …":"Zurücksetzen"))reset_run(a);nk_end_disabled(ui);
-        nk_layout_row_push(ui,38*factor);nk_label_colored(ui,"Tempo",NK_TEXT_RIGHT,muted());
-        float speed_width=70*factor;
-        nk_layout_row_push(ui,speed_width);a->speed_bounds=nk_widget_bounds(ui);
-        char speed[80];snprintf(speed,sizeof speed,a->simulation_speed?"%.3g×":"Offline",a->simulation_speed);
-        nk_begin_disabled(ui,a->reset_pending || a->reset_starting || (a->runner.running && (!a->hello || a->stop_at)));
-        if(nk_combo_begin_label(ui,speed,nk_vec2(260,290))) {
-            const double speeds[]={.25,.5,1,2,4,8,16,0};nk_layout_row_dynamic(ui,28,1);
-            for(unsigned i=0;i<8;i++){char text[64];snprintf(text,sizeof text,speeds[i]?"%.3g× Echtzeit":"Offline · maximal",speeds[i]);a->speed_choices[i]=nk_widget_bounds(ui);if(nk_button_label(ui,text)){select_simulation_speed(a,speeds[i]);nk_combo_close(ui);}}
-            nk_combo_end(ui);
-        }nk_end_disabled(ui);
-        nk_layout_row_push(ui,fmaxf(0,w-36-project_width-48-512*factor));nk_spacer(ui);
-        nk_layout_row_push(ui,80*factor);struct nk_rect pill;nk_widget(&pill,ui);
-        const char *state=a->analysis_only?"Wiedergabe":a->runner.running?(!a->hello?"Startet …":a->paused?"Pausiert":"Läuft"):a->job.running?"Build …":a->built?"Bereit":"Ungebaut";
-        struct nk_rect outline=nk_rect(pill.x,pill.y+3,pill.w,pill.h-6);
-        nk_stroke_rect(canvas,outline,13,1,UI_COLOR(border));
-        float text_width=small->width(small->userdata,small->height,state,(int)strlen(state));
-        nk_draw_text(canvas,nk_rect(pill.x+(pill.w-text_width)/2,pill.y+(pill.h-small->height)/2,text_width+1,small->height),state,(int)strlen(state),small,nk_rgba(0,0,0,0),muted());
-        ps_ui_accessibility_label(ui,pill,state);
-        nk_layout_row_end(ui);
-        workspace_rule(canvas,nk_rect(0,194,w,1));
-    }nk_end(ui);
-    nk_style_pop_vec2(ui); /* Transport padding; the other rows stay compact. */
+    laboratory_transport(a,w);
     if(laboratory_begin(a,windows[1],nk_rect(0,195,w,37),NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BACKGROUND)) {
         nk_style_push_style_item(ui,&ui->style.button.normal,nk_style_item_color(UI_COLOR(window)));
         nk_style_push_flags(ui,&ui->style.button.text_alignment,NK_TEXT_LEFT);

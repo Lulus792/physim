@@ -485,6 +485,20 @@ nk_bool ps_ui_combo_begin_named_scaled(struct nk_context *ctx,const char *name,c
     }
     return open;
 }
+nk_bool ps_ui_combo_begin_named_painted(struct nk_context *ctx,const char *name,const char *label,struct nk_vec2 size,ps_ui_combo_painter paint,void *user) {
+    if(!ctx || !ctx->current || !name || !label || !paint)return nk_false;
+    struct nk_window *window=ctx->current;struct nk_rect bounds;
+    if(nk_widget(&bounds,ctx)==NK_WIDGET_INVALID)return nk_false;
+    bool expanded=window->popup.win && window->popup.type==NK_PANEL_COMBO && window->popup.name==window->popup.combo_count,focused=false;
+    bool activated=accessibility_emit(ctx,name,1,bounds,expanded,NULL,false,NULL,&focused);
+    bool enabled=!window->widgets_disabled && !(window->layout->flags&NK_WINDOW_ROM);
+    bool clicked=enabled && nk_input_is_mouse_pressed(&ctx->input,NK_BUTTON_LEFT) &&
+        nk_input_is_mouse_hovering_rect(&ctx->input,window->layout->clip) && nk_input_is_mouse_hovering_rect(&ctx->input,bounds);
+    paint(ctx,bounds,focused,user);ps_ui_accessibility_label(ctx,bounds,label);
+    nk_bool open=nk_combo_begin(ctx,window,size,activated || clicked,bounds);
+    if(open)snprintf(ctx->current->name_string,sizeof ctx->current->name_string,"%.32s/menu/%08x",window->name_string,(unsigned)nk_murmur_hash(name,nk_strlen(name),0));
+    return open;
+}
 nk_bool ps_ui_switch_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,nk_bool *checked) {
     if(!ctx || !checked || bounds.w<=0 || bounds.h<=0)return nk_false;
     bool enabled=!(ctx->current->layout->flags&NK_WINDOW_ROM) && !ctx->current->widgets_disabled;

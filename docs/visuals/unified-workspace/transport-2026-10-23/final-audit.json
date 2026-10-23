@@ -1,0 +1,11 @@
+{
+  "staged_files": 144,
+  "public_source_blobs": 237,
+  "font_blobs": 18,
+  "proof_blobs": 125,
+  "audited_blobs": 380,
+  "foreign_files": 12,
+  "staged_blob_audit": "passed",
+  "utf8_json_python_links": "passed",
+  "native_source3_equals4": true
+}

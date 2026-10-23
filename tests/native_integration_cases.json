@@ -14000,6 +14000,38 @@
           ]
         }
       ]
+    },
+    {
+      "name": "transport_design",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "platforms": [
+        "win32",
+        "linux"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_transport_design.py",
+            "--app",
+            "{physim}",
+            "--root",
+            "{root}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 400,
+          "files": [
+            "app-steps.json",
+            "validation.json"
+          ]
+        }
+      ]
     }
   ]
 }

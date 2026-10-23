@@ -14,3 +14,8 @@ docs/formulas/*.math binary
 docs/formulas/*LICENSE*.txt -text
 docs/formulas/NOTICE.txt text eol=lf
 app/documentation_math_catalog.inc text eol=lf
+
+# Frozen transport proofs keep their audited blob bytes on every checkout.
+docs/visuals/unified-workspace/transport-2026-10-23/* text eol=lf
+docs/visuals/unified-workspace/transport-2026-10-23/*.png binary
+docs/visuals/unified-workspace/transport-2026-10-23/*.gz binary

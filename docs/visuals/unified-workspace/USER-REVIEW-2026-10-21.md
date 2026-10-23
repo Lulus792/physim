@@ -65,3 +65,12 @@ und eine trotz erreichbarer Zeile leere Protokollbeschriftung. Die negativen
 Originalbilder bleiben erhalten. Die aktuelle große Linux-Schrift zeigt weiter
 Fehler an Tempoauswahl und Laufsteuerung; diese und die übrige Oberfläche sind
 noch nicht vollständig abgenommen.
+
+Der folgende [Simulationsleisten-Abgleich](SIMULATION-TRANSPORT-NATIVE.md)
+bearbeitet Tempoaufnahme und große Laufaktionen: Originalmaße, 8-px-Chevron,
+einzeilige volle Beschriftungen und native Fokusführung. Windows und Linux
+bestehen beide Schriftpfade mit sechs Schrift-/Themezuständen. Der dabei
+gefundene Fehler der semantischen Popup-Verdeckung ist korrigiert. Ein
+zusätzlicher alter F1-Lifecycle-Test setzt dagegen ein bereits sichtbares
+Suchfeld voraus und bleibt getrennt offen; die Probe scheitert gleichartig
+im aktuellen und im älteren Build. Die übrige Oberfläche ist weiter abzugleichen.

@@ -102,6 +102,14 @@
       "revision": "ffebf8c1ee449e544955a7e813c54f9b73848eac",
       "bytes": 519292,
       "sha256": "0834f967d236257be3d9ce44e88e7a9936a0dacd38ae26b4a6838dcb1c99bc3e"
+    },
+    {
+      "file": "NotoSansSymbols-Regular.ttf",
+      "source": "hinted/ttf/NotoSansSymbols/NotoSansSymbols-Regular.ttf",
+      "repository": "https://github.com/notofonts/noto-fonts",
+      "revision": "ffebf8c1ee449e544955a7e813c54f9b73848eac",
+      "bytes": 258156,
+      "sha256": "8f02f31959bbdf6061547a188248e13f84dc5fdd940326ec494675f453f072bb"
     }
   ]
 }

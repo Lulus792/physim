@@ -16,6 +16,7 @@ No font download occurs during a build or at runtime.
 | NotoSansMono-SemiBold.ttf | hinted/ttf/NotoSansMono/NotoSansMono-SemiBold.ttf (Noto distribution) | notosansbold-OFL.txt (shared Noto license) |
 | NotoSansMath-Regular.ttf | ofl/notosansmath/NotoSansMath-Regular.ttf | notosansmath-OFL.txt |
 | NotoSansSymbols2-Regular.ttf | ofl/notosanssymbols2/NotoSansSymbols2-Regular.ttf | notosanssymbols2-OFL.txt |
+| NotoSansSymbols-Regular.ttf | hinted/ttf/NotoSansSymbols/NotoSansSymbols-Regular.ttf (Noto distribution) | notosansbold-OFL.txt (shared Noto license) |
 | NotoEmoji.ttf | ofl/notoemoji/NotoEmoji[wght].ttf | notoemoji-OFL.txt |
 
 Source: [Google Fonts snapshot](https://github.com/google/fonts/tree/66928797f271fed5ee428544e7229685e2d90127/ofl).
@@ -34,6 +35,12 @@ Consolas Bold or the available platform mono bold face, with the pinned static
 Noto Sans Mono SemiBold (weight 600) as its offline fallback. The unchanged Noto
 license above applies to that additional unmodified face too. This bounded
 ASCII role is independent of editor font-size preferences.
+The main UI bank additionally covers the original transport symbols with a
+bounded fallback: Roman II, reset, step separator, squares, triangles and circles.
+Windows first uses its installed Segoe UI Symbol when available. The pinned
+Noto Sans Symbols regular face supplies the offline Roman numeral missing from
+the previous fallback chain. These are merged symbol glyphs, not additional
+primary text handles. The separately inventoried F1 font bank is unchanged.
 Emoji use monochrome outlines supported by the existing rasterizer.
 Fallback ranges cover the application's Latin/Greek text, its phonetic modifiers,
 mathematics, box drawing, U+25CF, U+2603, U+1F30D and U+1F600. This is a

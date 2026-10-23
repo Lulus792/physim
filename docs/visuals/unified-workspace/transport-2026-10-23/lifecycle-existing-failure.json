@@ -1,0 +1,17 @@
+{
+  "current_binary": {
+    "path": "build/native/Release/bin/physim.exe",
+    "sha256": "eeb43a33166e7b132f54b0adf6e41886261d3bf7e57c3f91509df08df5a6e11a"
+  },
+  "older_debug_binary": {
+    "path": "build/native/Design-analysis/bin/physim.exe",
+    "sha256": "5157a87171e7ac679847fb0f72455d15ec558378513a4c4c61f70885181ca064"
+  },
+  "probe": {
+    "path": "build/native/transport-lifecycle-probe/probe.exe",
+    "sha256": "38599aa94ec559304a2053f9520b6a13d72bba3e0ea2a029a5e47e63b24df785"
+  },
+  "scope": "Diagnostic clone only logs named-element query result; unchanged lifecycle assertions",
+  "observed": "Both binaries: first named query Aktuelles Dokument durchsuchen role50004 found0 hrS_OK; no lifecycle hide/reopen/minimize checks reached",
+  "cause": "F1 H intentionally starts with find overlay closed; lifecycle fixture never opens it. Independent test assumes the previous always-visible field. Test adaptation remains open; not repaired by changing product design."
+}

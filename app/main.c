@@ -206,6 +206,8 @@ typedef struct {
     bool laboratory_resize_cancelled;
     int laboratory_channels[2], laboratory_resize;
     struct nk_rect laboratory_switch, laboratory_sides[2], laboratory_splitters[3], laboratory_plots[2];
+    struct nk_rect laboratory_transport_status,laboratory_speed_chevron;
+    bool laboratory_speed_focus_return;
     struct nk_rect laboratory_measure_bounds;
     float laboratory_measure_width;
     nk_uint laboratory_measure_scroll_x,laboratory_measure_scroll_y;
@@ -3125,13 +3127,15 @@ static void channel_units_start(app *a);
 #include "panel_windows.inc"
 // clang-format on
 static struct nk_font *system_font_sampling_demand(struct nk_font_atlas *atlas,const char *root,float size,bool code,bool title,
-    unsigned char horizontal,unsigned char vertical,const nk_rune *demand,char family[96]) {
+    unsigned char horizontal,unsigned char vertical,const nk_rune *demand,char family[96],bool transport_symbols) {
     static const nk_rune ui_ranges[] = {0x20,0x17f,0x192,0x192,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
                                       0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x25cf,0x25cf,0x2c7c,0x2c7c,0};
     static const nk_rune code_ranges[] = {0x20,0x17f,0x192,0x192,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
                                         0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x25cf,0x25cf,0x2c7c,0x2c7c,0};
+    static const nk_rune transport_ranges[]={0x20,0x17f,0x192,0x192,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
+        0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x25a0,0x25a0,0x25b6,0x25b8,0x25cb,0x25cb,0x25cf,0x25cf,0x2c7c,0x2c7c,0};
     struct nk_font_config config = nk_font_config(size);
-    config.range = demand?demand:code?code_ranges:ui_ranges;
+    config.range = demand?demand:transport_symbols?transport_ranges:code?code_ranges:ui_ranges;
     config.oversample_h = horizontal;
     config.oversample_v = vertical;
     char path[4096];
@@ -3171,16 +3175,35 @@ static struct nk_font *system_font_sampling_demand(struct nk_font_atlas *atlas,c
         if(font && family)snprintf(family,96,"%s",code?"Noto Sans Mono":"Noto Sans");
     } else if(family)snprintf(family,96,"%s",platform_family);
     if(!font)return NULL;
+    if(transport_symbols && size==16)printf("UI primary font: %s\n",path);
+    if(transport_symbols) {
+        /* The transport keeps the original CSS symbols. Their bounded fallback
+         * belongs to the main UI bank, not the separately inventoried F1 roles. */
+        static const nk_rune symbols[]={0x2161,0x2161,0x21ba,0x21ba,0x2502,0x2502,
+            0x25a0,0x25a0,0x25b6,0x25b8,0x25cb,0x25cb,0x25cf,0x25cf,0};
+#ifdef _WIN32
+        int symbol_n=snprintf(path,sizeof path,"%s/Fonts/seguisym.ttf",windows?windows:"C:/Windows");
+        if(!force_bundled && symbol_n>=0 && (size_t)symbol_n<sizeof path && exists(path)) {
+            if(!ps_ui_font_add_fallback(atlas,font,path,symbols))return NULL;
+            if(size==16)printf("UI symbol fallback: %s\n",path);
+        }
+#endif
+        int symbol_noto=snprintf(path,sizeof path,"%s/third_party/fonts/NotoSansSymbols-Regular.ttf",root);
+        if(symbol_noto<0 || (size_t)symbol_noto>=sizeof path || !ps_ui_font_add_fallback(atlas,font,path,symbols))return NULL;
+        if(size==16)printf("UI symbol fallback: %s\n",path);
+    }
     if(code && title)printf("Workspace marker font: %s\n",path);
     /* Offline fallback covers our text ranges, phonetic modifiers, diagrams and
      * emoji. Add only glyphs absent from earlier sources, keeping the atlas small. */
     static const nk_rune fallback_ranges[]={0x20,0x17f,0x192,0x192,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
         0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x25cf,0x25cf,0x2603,0x2603,0x2c7c,0x2c7c,0x1f30d,0x1f30d,0x1f600,0x1f600,0};
+    static const nk_rune transport_fallback_ranges[]={0x20,0x17f,0x192,0x192,0x300,0x4ff,0x1d40,0x1d40,0x1d63,0x1d63,0x1d65,0x1d65,
+        0x1e00,0x1eff,0x2000,0x22ff,0x2500,0x257f,0x25a0,0x25a0,0x25b6,0x25b8,0x25cb,0x25cb,0x25cf,0x25cf,0x2603,0x2603,0x2c7c,0x2c7c,0x1f30d,0x1f30d,0x1f600,0x1f600,0};
     static const char *const files[]={"NotoSans-Bold.ttf","NotoSans.ttf","NotoSansMono.ttf","NotoSansMath-Regular.ttf","NotoSansSymbols2-Regular.ttf","NotoEmoji.ttf"};
     for(size_t i=0;i<sizeof files/sizeof files[0];i++) {
         if(i==0 && !title)continue;
         int n=snprintf(path,sizeof path,"%s/third_party/fonts/%s",root,files[i]);
-        if(n<0 || (size_t)n>=sizeof path || !ps_ui_font_add_fallback(atlas,font,path,demand?demand:fallback_ranges)) {
+        if(n<0 || (size_t)n>=sizeof path || !ps_ui_font_add_fallback(atlas,font,path,demand?demand:transport_symbols?transport_fallback_ranges:fallback_ranges)) {
             SDL_SetError("Offline fallback font unavailable: %s",files[i]);return NULL;
         }
     }
@@ -3188,11 +3211,11 @@ static struct nk_font *system_font_sampling_demand(struct nk_font_atlas *atlas,c
 }
 static struct nk_font *system_font_sampling(struct nk_font_atlas *atlas,const char *root,float size,bool code,bool title,
     unsigned char horizontal,unsigned char vertical) {
-    return system_font_sampling_demand(atlas,root,size,code,title,horizontal,vertical,NULL,NULL);
+    return system_font_sampling_demand(atlas,root,size,code,title,horizontal,vertical,NULL,NULL,false);
 }
 static struct nk_font *graphic_font_load(void *user,struct nk_font_atlas *atlas,float height,bool strong,
     const unsigned *ranges,char family[96]) {
-    return system_font_sampling_demand(atlas,user,height,false,strong,2,1,ranges,family);
+    return system_font_sampling_demand(atlas,user,height,false,strong,2,1,ranges,family,false);
 }
 static struct nk_font *system_font(struct nk_font_atlas *atlas,const char *root,float size,bool code,bool title) {
     return system_font_sampling(atlas,root,size,code,title,3,2);
@@ -3469,6 +3492,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "workbench_tests.inc"
 #include "file_tabs_design_tests.inc"
 #include "laboratory_tests.inc"
+#include "transport_design_tests.inc"
 #include "panel_window_tests.inc"
 #include "model_edit_tests.inc"
 #include "api_reference_tests.inc"
@@ -3809,7 +3833,7 @@ int main(int argc, char **argv) {
     struct nk_font *ui_fonts[4], *title_fonts[4];
     bool ui_fonts_ok=true;
     for(int i=0;i<4;i++) {
-        ui_fonts[i]=system_font(atlas,a->root,(float)(16+i*2),false,false);
+        ui_fonts[i]=system_font_sampling_demand(atlas,a->root,(float)(16+i*2),false,false,3,2,NULL,NULL,true);
         title_fonts[i]=system_font(atlas,a->root,(float)(23+i*2),false,true);
         ui_fonts_ok &= ui_fonts[i]!=NULL && title_fonts[i]!=NULL;
     }
@@ -3822,7 +3846,7 @@ int main(int argc, char **argv) {
     }
     struct nk_font *title_font = title_fonts[0];
     static const nk_rune marker_ranges[]={0x20,0x7e,0};
-    struct nk_font *marker_font=system_font_sampling_demand(atlas,a->root,16,true,true,3,2,marker_ranges,NULL);
+    struct nk_font *marker_font=system_font_sampling_demand(atlas,a->root,16,true,true,3,2,marker_ranges,NULL,false);
     ui_fonts_ok &= marker_font!=NULL;
     a->workbench_marker_em=ps_ui_font_em_ratio(marker_font);
     a->workbench_regular_em=ps_ui_font_em_ratio(font);
@@ -4249,7 +4273,7 @@ int main(int argc, char **argv) {
             /* The deliberate 80 ms frame delay also runs on hosted software GL.
              * Keep its bounded keyboard assertions; allow their extra wall time. */
             if (ps_clock() - test_started >
-                (!strncmp(argv[3],"file-tabs-design",16)?60:!strncmp(argv[3],"component-",10)?60:!strncmp(argv[3],"comparison-",11)?120:!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
+                (!strcmp(argv[3],"transport-design")?180:!strncmp(argv[3],"file-tabs-design",16)?60:!strncmp(argv[3],"component-",10)?60:!strncmp(argv[3],"comparison-",11)?120:!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
                   !strncmp(argv[3], "isolation-", 10) || !strncmp(argv[3], "breakpoints-", 12) || !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || (!strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"pendulum-medium-",16)) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strncmp(argv[3],"logging-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15))) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
@@ -5326,6 +5350,7 @@ int main(int argc, char **argv) {
         SDL_GetWindowSize(window, &w, &h);
         draw_ui(a, w, h);
         if(workspace_state_test && !strncmp(argv[3],"file-tabs-design",16))tab_design_draw(a);
+        if(workspace_state_test && !strcmp(argv[3],"transport-design"))transport_design_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"component-",10)) {
             component_details_draw(a,argv[3]);if(component_details.failed){exit_code=1;a->quitting=true;}
         }

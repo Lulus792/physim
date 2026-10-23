@@ -1,0 +1,167 @@
+[
+  {
+    "file": "windows-release-system-ready.png",
+    "source": "build/native/Release/test-results/run-c71k463v/transport_design/files ä/system/transport-ready.png",
+    "sha256": "423eb7d15207b0dbb0027d1f62b83004050cc8fd35289e34bc7552702659ab54"
+  },
+  {
+    "file": "windows-release-system-dark-normal.png",
+    "source": "build/native/Release/test-results/run-c71k463v/transport_design/files ä/system/transport-dark-normal.png",
+    "sha256": "30283b0a90e4190bc7bb0ef9993cb558c203e2316357542de3f1e6aae413e59f"
+  },
+  {
+    "file": "windows-release-system-dark-hover.png",
+    "source": "build/native/Release/test-results/run-c71k463v/transport_design/files ä/system/transport-dark-hover.png",
+    "sha256": "de2f96336082257c291d0e5c7687aae708733e70f75c1e15958652add1b11036"
+  },
+  {
+    "file": "windows-release-system-dark-focus.png",
+    "source": "build/native/Release/test-results/run-c71k463v/transport_design/files ä/system/transport-dark-focus.png",
+    "sha256": "de2f96336082257c291d0e5c7687aae708733e70f75c1e15958652add1b11036"
+  },
+  {
+    "file": "windows-release-system-dark-menu.png",
+    "source": "build/native/Release/test-results/run-c71k463v/transport_design/files ä/system/transport-dark-menu.png",
+    "sha256": "a04ad2c5c90dc3018e41c179e3dd80085c5e8178e2e0c6b59e9df53a4cecac4e"
+  },
+  {
+    "file": "windows-release-system-dark-offline.png",
+    "source": "build/native/Release/test-results/run-c71k463v/transport_design/files ä/system/transport-dark-offline.png",
+    "sha256": "177b4e1efec65d84474491aab92ac6219021ab72e8e81ccb38ad9965905f97d7"
+  },
+  {
+    "file": "windows-release-system-medium-normal.png",
+    "source": "build/native/Release/test-results/run-c71k463v/transport_design/files ä/system/transport-medium-normal.png",
+    "sha256": "18ebf13f0d0806c8546ca66b985d5bea73299e6bc46d77ee94782bc1c674fda3"
+  },
+  {
+    "file": "windows-release-system-larger-normal.png",
+    "source": "build/native/Release/test-results/run-c71k463v/transport_design/files ä/system/transport-larger-normal.png",
+    "sha256": "b9cfda807c521ecfc7286ed29a400521820a1a392063bbf520c9c82a591f0cc9"
+  },
+  {
+    "file": "windows-release-system-large-normal.png",
+    "source": "build/native/Release/test-results/run-c71k463v/transport_design/files ä/system/transport-large-normal.png",
+    "sha256": "5567e17e5dd6eaa31babd66ddf0aa959b4303c2bc7af56b624a27d2388f90419"
+  },
+  {
+    "file": "windows-release-system-contrast-normal.png",
+    "source": "build/native/Release/test-results/run-c71k463v/transport_design/files ä/system/transport-contrast-normal.png",
+    "sha256": "d88bd51e85da6cb2869c2406e66b1586b147742fe57b3ecfd0cde736e761ee0d"
+  },
+  {
+    "file": "windows-release-bundled-ready.png",
+    "source": "build/native/Release/test-results/run-c71k463v/transport_design/files ä/bundled/transport-ready.png",
+    "sha256": "f280acfb8a71920d4e0acc8d3e008e40d17ea6e1f415efcf6360eb1e1aca972c"
+  },
+  {
+    "file": "windows-release-bundled-dark-normal.png",
+    "source": "build/native/Release/test-results/run-c71k463v/transport_design/files ä/bundled/transport-dark-normal.png",
+    "sha256": "fd979c37437bd02c5aeb0c2206713fcfe835d826b56234a316103aad10f03142"
+  },
+  {
+    "file": "windows-release-bundled-large-normal.png",
+    "source": "build/native/Release/test-results/run-c71k463v/transport_design/files ä/bundled/transport-large-normal.png",
+    "sha256": "6de590013cafc3f0995b1d2598afb4c9f5a9976cfb77e8413f2cc8bbdc1c6784"
+  },
+  {
+    "file": "windows-release-bundled-contrast-normal.png",
+    "source": "build/native/Release/test-results/run-c71k463v/transport_design/files ä/bundled/transport-contrast-normal.png",
+    "sha256": "7f72a334801d2d1146bc9901df95b5b155e54d9fedc135e24ceff614e7b53ea3"
+  },
+  {
+    "file": "windows-release-bundled-large-menu.png",
+    "source": "build/native/Release/test-results/run-c71k463v/transport_design/files ä/bundled/transport-large-menu.png",
+    "sha256": "3e7d38c711db36e1c270616bea85dfb29139f4361b5a84eb2a6b5006b5852d55"
+  },
+  {
+    "file": "windows-release-bundled-large-focus.png",
+    "source": "build/native/Release/test-results/run-c71k463v/transport_design/files ä/bundled/transport-large-focus.png",
+    "sha256": "3506af5393c07f54c40672e99300310c3a0c0db2d2d0c1f4c051b43bb6ae1e0b"
+  },
+  {
+    "file": "linux-sanitized-system-ready.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-sjl8on4m/transport_design/files ä/system/transport-ready.png",
+    "sha256": "93d7e055cc2e9a08e4cc1a70d879f6ec666c28456f9a93b86fce18d6d715eae2"
+  },
+  {
+    "file": "linux-sanitized-system-dark-normal.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-sjl8on4m/transport_design/files ä/system/transport-dark-normal.png",
+    "sha256": "be625589121b2f343636dd477a76c29e29ea6823d63e62a0577def903f85a647"
+  },
+  {
+    "file": "linux-sanitized-system-dark-hover.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-sjl8on4m/transport_design/files ä/system/transport-dark-hover.png",
+    "sha256": "874008c46289116fd5efc27454e2517a75b48821344ea0a1d4d7bd705ce9e374"
+  },
+  {
+    "file": "linux-sanitized-system-dark-focus.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-sjl8on4m/transport_design/files ä/system/transport-dark-focus.png",
+    "sha256": "874008c46289116fd5efc27454e2517a75b48821344ea0a1d4d7bd705ce9e374"
+  },
+  {
+    "file": "linux-sanitized-system-dark-menu.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-sjl8on4m/transport_design/files ä/system/transport-dark-menu.png",
+    "sha256": "088612e52d42553ee3cc36691138ec657c9c9c72737c5c193e957414ddd88717"
+  },
+  {
+    "file": "linux-sanitized-system-dark-offline.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-sjl8on4m/transport_design/files ä/system/transport-dark-offline.png",
+    "sha256": "64354c5b92d81956ea5eb648e81d8a2ad0de88947cc341f6ba64a7e6775d3501"
+  },
+  {
+    "file": "linux-sanitized-system-medium-normal.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-sjl8on4m/transport_design/files ä/system/transport-medium-normal.png",
+    "sha256": "50504849ce443d2e4bac5ad0462889b90a69a54ad69f7d7a10b831fdb99ec132"
+  },
+  {
+    "file": "linux-sanitized-system-larger-normal.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-sjl8on4m/transport_design/files ä/system/transport-larger-normal.png",
+    "sha256": "ce8a506d94de616ac6863bc3ef2b81e59ef0772e0e518b5103c5c697d709936f"
+  },
+  {
+    "file": "linux-sanitized-system-large-normal.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-sjl8on4m/transport_design/files ä/system/transport-large-normal.png",
+    "sha256": "4f455c7f0cda74ba68f0f7d4ba65513a67eac2270416664bfef120215546f24a"
+  },
+  {
+    "file": "linux-sanitized-system-contrast-normal.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-sjl8on4m/transport_design/files ä/system/transport-contrast-normal.png",
+    "sha256": "64d5c3e39c54719a692b002f82187e4dbb4becfc1f5a269bfaac967d02ea0d6d"
+  },
+  {
+    "file": "linux-sanitized-bundled-ready.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-sjl8on4m/transport_design/files ä/bundled/transport-ready.png",
+    "sha256": "79c02cf123a0702ed9419efe6794e1e523c938a213dfd1e917592e98315f121e"
+  },
+  {
+    "file": "linux-sanitized-bundled-dark-normal.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-sjl8on4m/transport_design/files ä/bundled/transport-dark-normal.png",
+    "sha256": "d0cddf5ea24f5948a2c269ea999c1f42e5e56c865904d059fb929c4dd64fde8f"
+  },
+  {
+    "file": "linux-sanitized-bundled-large-normal.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-sjl8on4m/transport_design/files ä/bundled/transport-large-normal.png",
+    "sha256": "9d127ac91cccab44fc55895ebbf4eaac3cd71987e040b0b2f429a736dfced1df"
+  },
+  {
+    "file": "linux-sanitized-bundled-contrast-normal.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-sjl8on4m/transport_design/files ä/bundled/transport-contrast-normal.png",
+    "sha256": "268198671bae34a3798bea73519f242cbd7bf65016a5dd51ee5c1657f8c2483c"
+  },
+  {
+    "file": "linux-sanitized-bundled-large-menu.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-sjl8on4m/transport_design/files ä/bundled/transport-large-menu.png",
+    "sha256": "dc289fa5d1aa4d3e7f8f019ec27da5da9db5ecbdbfb7eb400d14f8a9c56f355a"
+  },
+  {
+    "file": "linux-sanitized-bundled-large-focus.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-sjl8on4m/transport_design/files ä/bundled/transport-large-focus.png",
+    "sha256": "ab8cee958ae1b33e31b6f0f28bf2a5cf959be20716d192dee89810dc791bdf6e"
+  },
+  {
+    "file": "windows-source1-ready.png",
+    "source": "build/native/Release/test-results/run-93nlqmcn/transport_design/files ä/system/transport-ready.png",
+    "sha256": "65d0d83b4259f8372f78e8538b43cb44f58a0c8cd824fee177a1b24ffed540cf"
+  }
+]

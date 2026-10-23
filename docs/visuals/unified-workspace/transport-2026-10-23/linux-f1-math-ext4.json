@@ -1,0 +1,28 @@
+{
+  "source": 4,
+  "name": "documentation_math",
+  "status": "passed",
+  "seconds": 30.941469090000005,
+  "command": [
+    "/usr/bin/python3",
+    "/mnt/d/Physim/tests/check_display_workflow.py",
+    "documentation_math",
+    "--app",
+    "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+    "--work",
+    "/tmp/physim-transport-final-documentation_math-2c6krlp4",
+    "--root",
+    "/mnt/d/Physim",
+    "--cc",
+    "/usr/bin/cc"
+  ],
+  "exit_code": 0,
+  "binary": {
+    "path": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+    "sha256": "a5a703a1fb072106306b694a93c7c02f7c1e7d2448a5aaadbbecd01dbf9c1025"
+  },
+  "original_work": "/tmp/physim-transport-final-documentation_math-2c6krlp4",
+  "outer_deadline_seconds": 75,
+  "inner_app_deadline_seconds": 45,
+  "scope": "Only working data and captures moved to ext4; application and repository remain on /mnt/d"
+}

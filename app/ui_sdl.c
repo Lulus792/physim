@@ -661,7 +661,7 @@ static struct nk_window *accessibility_stack_owner(struct nk_context *ctx,const 
             struct nk_window *popup=parent->popup.win;
             if(!popup || popup->parent!=parent || popup->seq!=ctx->seq ||
                popup->flags&(NK_WINDOW_HIDDEN|NK_WINDOW_MINIMIZED|NK_WINDOW_CLOSED))break;
-            if(!strcmp(popup->name_string,name))return root;
+            if(!strcmp(popup->name_string,name))return popup;
             parent=popup;
         }
     }
@@ -684,15 +684,30 @@ bool nk_sdl_render(struct nk_context *ctx) {
             const float *target=node->bounds;
             const ps_a11y_document *document=sdl->accessibility->document_draft;
             if(node->offscreen && document && document->active && document->version==node->document_version)target=document->viewport;
-            for(struct nk_window *above=window->next;above;above=above->next) {
-                if(above->flags&(NK_WINDOW_HIDDEN|NK_WINDOW_MINIMIZED|NK_WINDOW_CLOSED))continue;
-                if(node->role==PS_A11Y_SEPARATOR && !strncmp(above->name_string,"dock-splitter-",14))continue;
-                struct nk_rect cover=above->bounds;
-                if(cover.x<target[0]+target[2] && cover.x+cover.w>target[0] &&
-                   cover.y<target[1]+target[3] && cover.y+cover.h>target[1]) {
-                    node->enabled=false;node->focusable=false;break;
+            /* nk_build appends every popup after all ordinary windows, in
+             * root order. A popup therefore cannot be covered by an ordinary
+             * sibling of its owner; later popups can still cover it. */
+            bool above_target=false,covered=false;
+            for(unsigned pass=0;pass<2 && !covered;pass++)for(struct nk_window *root=ctx->begin;root && !covered;root=root->next) {
+                if(root->seq!=ctx->seq || root->flags&(NK_WINDOW_HIDDEN|NK_WINDOW_MINIMIZED|NK_WINDOW_CLOSED))continue;
+                struct nk_window *above=root;
+                for(unsigned depth=0;depth<32;depth++) {
+                    if(pass) {
+                        struct nk_window *popup=above->popup.active?above->popup.win:NULL;
+                        if(!popup || popup->parent!=above || popup->seq!=ctx->seq ||
+                           popup->flags&(NK_WINDOW_HIDDEN|NK_WINDOW_MINIMIZED|NK_WINDOW_CLOSED))break;
+                        above=popup;
+                    }
+                    if(above==window)above_target=true;
+                    else if(above_target && !(node->role==PS_A11Y_SEPARATOR && !strncmp(above->name_string,"dock-splitter-",14))) {
+                        struct nk_rect cover=above->bounds;
+                        if(cover.x<target[0]+target[2] && cover.x+cover.w>target[0] &&
+                           cover.y<target[1]+target[3] && cover.y+cover.h>target[1]) {covered=true;break;}
+                    }
+                    if(!pass)break;
                 }
             }
+            if(covered){node->enabled=false;node->focusable=false;}
         }
         bool keyboard=SDL_GetKeyboardFocus()==sdl->win;
         uint64_t prior_focus=sdl->accessibility->focused_id;

@@ -1,0 +1,400 @@
+{
+  "base": "cdec662a57149fb80eac34c8a821e4ad63dcc32a",
+  "final_source": 4,
+  "runs": [
+    {
+      "label": "windows-source1",
+      "source": 1,
+      "directory": "build/native/Release/test-results/run-93nlqmcn",
+      "groups": [
+        {
+          "name": "transport_design",
+          "status": "failed",
+          "seconds": 59.719,
+          "reason": "Exit code 1; expected 0\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_transport_design.py\", line 83, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"D:\\Physim/tests/check_transport_design.py\", line 28, in main\n    flow.run('--workspace-state-test',folder,'transport-design',timeout=190,marker='TRANSPORT DESIGN SELF-TEST: PASSED')\n  File \"D:\\Physim\\tests\\check_display_workflow.py\", line 594, in run\n    print(result.stdout, end=\"\", flush=True)\n  File \"C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\ufffd' in position 5088: character maps to <undefined>\n",
+          "binaries": [
+            {
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "5938004ac09c2683e64826d6b4e6f570d4d790aee1a03abef58259876c4f7dfb"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "linux-source1",
+      "source": 1,
+      "directory": "build/native/Design-analysis-linux/test-results/run-9tbbutzz",
+      "groups": [
+        {
+          "name": "transport_design",
+          "status": "failed",
+          "seconds": 184.638,
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 274.177356\nAPP TEST TRACE: main font sources ready 275.009487\nAPP TEST TRACE: main atlas bake seconds=2.336795\nAPP TEST TRACE: main atlas validation/upload seconds=0.044111\nAPP TEST TRACE: main fonts ready 277.422635\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status Physim baut Experiment und Analyse ...\nAPP TEST TRACE: stage 1 -> 100, status Build und Parameterabfrage erfolgreich. Experiment bereit.\nAPP TEST TRACE: stage 100 -> 101, status Build und Parameterabfrage erfolgreich. Experiment bereit.\nAPP TEST TRACE: stage 101 -> 3, status Runner gestartet; Versionsabgleich ...\nAPP TEST TRACE: stage 3 -> 4, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 4 -> 10, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 10 -> 11, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=26498289205\nAPP TEST TRACE: stage 11 -> 12, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 12 -> 13, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 13 -> 14, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 14 -> 15, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 15 -> 16, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=91 window=2 ticks=27443709741\nAPP TEST TRACE: stage 16 -> 17, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 17 -> 18, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 18 -> 19, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: publication cleared focus id=99 window=2 ticks=28079327374\nAPP TEST TRACE: stage 19 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=28180661358\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 23, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=28315998138\nAPP TEST TRACE: stage 23 -> 24, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 24 -> 25, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=28583737943\nAPP TEST TRACE: stage 25 -> 26, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 26 -> 27, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nWorkspace self-test timeout: transport-design after 180.016 wall seconds\nFirst workflow failure at stage 27 (next 27): Simulation pausiert. Einzelschritt oder Fortsetzen wählen. (tab=1, selected=1, samples=0, report=0, query=)\nWorkflow failed at stage 27: Projekt gespeichert. (tab=1, sweep=0, ready=0, built=1, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_transport_design.py\", line 83, in <module>\n    if __name__=='__main__':main()\n                            ~~~~^^\n  File \"/mnt/d/Physim/tests/check_transport_design.py\", line 28, in main\n    flow.run('--workspace-state-test',folder,'transport-design',timeout=190,marker='TRANSPORT DESIGN SELF-TEST: PASSED')\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 596, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 533, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--workspace-state-test', '/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-9tbbutzz/transport_design/files ä/system', 'transport-design']\n",
+          "binaries": [
+            {
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "adb2bb4f2d7262179b0610537a36976c2d7cf668f651ee00b76384d9bc4bfc3e"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "windows-source2",
+      "source": 2,
+      "directory": "build/native/Release/test-results/run-vsjg0b5_",
+      "groups": [
+        {
+          "name": "transport_design",
+          "status": "failed",
+          "seconds": 182.391,
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 673565.432222\nAPP TEST TRACE: main font sources ready 673565.634072\nAPP TEST TRACE: main atlas bake seconds=0.428716\nAPP TEST TRACE: main atlas validation/upload seconds=0.013221\nAPP TEST TRACE: main fonts ready 673566.092375\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status Physim baut Experiment und Analyse ...\nAPP TEST TRACE: stage 1 -> 100, status Build und Parameterabfrage erfolgreich. Experiment bereit.\nAPP TEST TRACE: stage 100 -> 101, status Build und Parameterabfrage erfolgreich. Experiment bereit.\nAPP TEST TRACE: stage 101 -> 3, status Runner gestartet; Versionsabgleich ...\nAPP TEST TRACE: stage 3 -> 4, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 4 -> 10, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 10 -> 11, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=47752890000\nAPP TEST TRACE: stage 11 -> 12, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 12 -> 13, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 13 -> 14, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 14 -> 15, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 15 -> 16, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=101 window=2 ticks=47898757300\nAPP TEST TRACE: stage 16 -> 17, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 17 -> 18, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 18 -> 19, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: publication cleared focus id=109 window=2 ticks=47975405800\nAPP TEST TRACE: stage 19 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=47994916800\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 23, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=48016134400\nAPP TEST TRACE: stage 23 -> 24, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 24 -> 25, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=48056782100\nAPP TEST TRACE: stage 25 -> 26, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 26 -> 27, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 27 -> 28, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nWorkspace self-test timeout: transport-design after 180.010 wall seconds\nFirst workflow failure at stage 28 (next 28): Simulation pausiert. Einzelschritt oder Fortsetzen wählen. (tab=1, selected=1, samples=0, report=0, query=)\nWorkflow failed at stage 28: Projekt gespeichert. (tab=1, sweep=0, ready=0, built=1, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_transport_design.py\", line 87, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"D:\\Physim/tests/check_transport_design.py\", line 32, in main\n    flow.run('--workspace-state-test',folder,'transport-design',timeout=190,marker='TRANSPORT DESIGN SELF-TEST: PASSED')\n  File \"D:\\Physim\\tests\\check_display_workflow.py\", line 596, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim\\tests\\check_display_workflow.py\", line 533, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\native\\\\Release\\\\bin\\\\physim.exe', '--workspace-state-test', 'D:\\\\Physim\\\\build\\\\native\\\\Release\\\\test-results\\\\run-vsjg0b5_\\\\transport_design\\\\files ä\\\\system', 'transport-design']\n",
+          "binaries": [
+            {
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "491956a15b4b6ad1de0fc1714e5cea358825284afd0d2816429759d7f0d485d1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "linux-source2",
+      "source": 2,
+      "directory": "build/native/Design-analysis-linux/test-results/run-ufftg4d9",
+      "groups": [
+        {
+          "name": "transport_design",
+          "status": "failed",
+          "seconds": 185.357,
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver x11\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 152.995923\nAPP TEST TRACE: main font sources ready 153.806777\nAPP TEST TRACE: main atlas bake seconds=2.915614\nAPP TEST TRACE: main atlas validation/upload seconds=0.178034\nAPP TEST TRACE: main fonts ready 157.003751\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status Physim baut Experiment und Analyse ...\nAPP TEST TRACE: stage 1 -> 100, status Build und Parameterabfrage erfolgreich. Experiment bereit.\nAPP TEST TRACE: stage 100 -> 101, status Build und Parameterabfrage erfolgreich. Experiment bereit.\nAPP TEST TRACE: stage 101 -> 3, status Runner gestartet; Versionsabgleich ...\nAPP TEST TRACE: stage 3 -> 4, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 4 -> 10, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 10 -> 11, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=39138313437\nAPP TEST TRACE: stage 11 -> 12, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 12 -> 13, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 13 -> 14, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 14 -> 15, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 15 -> 16, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=95 window=2 ticks=40401252521\nAPP TEST TRACE: stage 16 -> 17, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 17 -> 18, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 18 -> 19, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: publication cleared focus id=103 window=2 ticks=41070948339\nAPP TEST TRACE: stage 19 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=41187191328\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 23, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=41334584238\nAPP TEST TRACE: stage 23 -> 24, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 24 -> 25, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=41660870186\nAPP TEST TRACE: stage 25 -> 26, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 26 -> 27, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 27 -> 28, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nWorkspace self-test timeout: transport-design after 180.012 wall seconds\nFirst workflow failure at stage 28 (next 28): Simulation pausiert. Einzelschritt oder Fortsetzen wählen. (tab=1, selected=1, samples=0, report=0, query=)\nWorkflow failed at stage 28: Projekt gespeichert. (tab=1, sweep=0, ready=0, built=1, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/tests/check_transport_design.py\", line 87, in <module>\n    if __name__=='__main__':main()\n                            ~~~~^^\n  File \"/mnt/d/Physim/tests/check_transport_design.py\", line 32, in main\n    flow.run('--workspace-state-test',folder,'transport-design',timeout=190,marker='TRANSPORT DESIGN SELF-TEST: PASSED')\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 596, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/tests/check_display_workflow.py\", line 533, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim', '--workspace-state-test', '/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-ufftg4d9/transport_design/files ä/system', 'transport-design']\n",
+          "binaries": [
+            {
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "6aa121cdc27bd72492d1741e0374e04130fe7f3162c0e97a0a75da3959c4e714"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "windows-source3",
+      "source": 3,
+      "directory": "build/native/Release/test-results/run-7f_glg1w",
+      "groups": [
+        {
+          "name": "transport_design",
+          "status": "failed",
+          "seconds": 46.797,
+          "reason": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver windows\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 675380.413979\nAPP TEST TRACE: main font sources ready 675380.492363\nAPP TEST TRACE: main atlas bake seconds=0.276664\nAPP TEST TRACE: main atlas validation/upload seconds=0.011435\nAPP TEST TRACE: main fonts ready 675380.794147\nAPP TEST TRACE: initial stage 0, status Projekt geladen. Build kompiliert die lokalen Quelldateien.\nAPP TEST TRACE: stage 0 -> 1, status Physim baut Experiment und Analyse ...\nAPP TEST TRACE: stage 1 -> 100, status Build und Parameterabfrage erfolgreich. Experiment bereit.\nAPP TEST TRACE: stage 100 -> 101, status Build und Parameterabfrage erfolgreich. Experiment bereit.\nAPP TEST TRACE: stage 101 -> 3, status Runner gestartet; Versionsabgleich ...\nAPP TEST TRACE: stage 3 -> 4, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 4 -> 10, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 10 -> 11, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=43166670100\nAPP TEST TRACE: stage 11 -> 12, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 12 -> 13, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 13 -> 14, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 14 -> 15, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 15 -> 16, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=101 window=2 ticks=43323047500\nAPP TEST TRACE: stage 16 -> 17, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 17 -> 18, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 18 -> 19, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: publication cleared focus id=109 window=2 ticks=43398793200\nAPP TEST TRACE: stage 19 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=43419579200\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 23, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=43447676400\nAPP TEST TRACE: stage 23 -> 24, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 24 -> 25, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=43487428000\nAPP TEST TRACE: stage 25 -> 26, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 26 -> 27, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 27 -> 28, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=14 window=2 ticks=43558166700\nAPP TEST TRACE: stage 28 -> 29, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 29 -> 30, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=143 window=2 ticks=43583168400\nAPP TEST TRACE: stage 30 -> 31, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 31 -> 32, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=14 window=2 ticks=43627447000\nAPP TEST TRACE: stage 32 -> 33, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 33 -> 34, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 34 -> 35, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 35 -> 10, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 10 -> 11, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=14 pending=0 window=2 keyboard=2 ticks=43711341500\nAPP TEST TRACE: stage 11 -> 12, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 12 -> 13, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 13 -> 14, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 14 -> 15, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 15 -> 16, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=121 window=2 ticks=43867342100\nAPP TEST TRACE: stage 16 -> 17, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 17 -> 18, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 18 -> 19, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: publication cleared focus id=160 window=2 ticks=43965789700\nAPP TEST TRACE: stage 19 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=43985090500\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 23, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=44006017100\nAPP TEST TRACE: stage 23 -> 24, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 24 -> 25, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=44046528800\nAPP TEST TRACE: stage 25 -> 26, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 26 -> 27, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 27 -> 28, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=14 window=2 ticks=44114154800\nAPP TEST TRACE: stage 28 -> 29, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 29 -> 30, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=190 window=2 ticks=44140424600\nAPP TEST TRACE: stage 30 -> 31, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 31 -> 32, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=14 window=2 ticks=44183257100\nAPP TEST TRACE: stage 32 -> 33, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 33 -> 34, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 34 -> 35, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 35 -> 10, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 10 -> 11, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=14 pending=0 window=2 keyboard=2 ticks=44269992700\nAPP TEST TRACE: stage 11 -> 12, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 12 -> 13, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 13 -> 14, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 14 -> 15, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 15 -> 16, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=168 window=2 ticks=44397865000\nAPP TEST TRACE: stage 16 -> 17, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 17 -> 18, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 18 -> 19, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: publication cleared focus id=207 window=2 ticks=44460451900\nAPP TEST TRACE: stage 19 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=44479879900\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 23, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=44500691700\nAPP TEST TRACE: stage 23 -> 24, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 24 -> 25, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=44530219200\nAPP TEST TRACE: stage 25 -> 26, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 26 -> 27, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 27 -> 28, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=14 window=2 ticks=44588653400\nAPP TEST TRACE: stage 28 -> 29, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 29 -> 30, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=237 window=2 ticks=44615064200\nAPP TEST TRACE: stage 30 -> 31, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 31 -> 32, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=14 window=2 ticks=44661108600\nAPP TEST TRACE: stage 32 -> 33, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 33 -> 34, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 34 -> 35, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 35 -> 10, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 10 -> 11, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=14 pending=0 window=2 keyboard=2 ticks=44741926100\nAPP TEST TRACE: stage 11 -> 12, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 12 -> 13, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 13 -> 14, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 14 -> 15, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 15 -> 16, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=215 window=2 ticks=44868111800\nAPP TEST TRACE: stage 16 -> 17, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 17 -> 18, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 18 -> 19, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: publication cleared focus id=254 window=2 ticks=44932334800\nAPP TEST TRACE: stage 19 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=44952075600\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 23, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=44972899300\nAPP TEST TRACE: stage 23 -> 24, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 24 -> 25, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=45001823500\nAPP TEST TRACE: stage 25 -> 26, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 26 -> 27, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 27 -> 28, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=14 window=2 ticks=45057439700\nAPP TEST TRACE: stage 28 -> 29, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 29 -> 30, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=284 window=2 ticks=45083083500\nAPP TEST TRACE: stage 30 -> 31, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 31 -> 32, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=14 window=2 ticks=45126129800\nAPP TEST TRACE: stage 32 -> 33, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 33 -> 34, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 34 -> 35, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 35 -> 10, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 10 -> 11, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=14 pending=0 window=2 keyboard=2 ticks=45204869400\nAPP TEST TRACE: stage 11 -> 12, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 12 -> 13, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 13 -> 14, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 14 -> 15, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 15 -> 16, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=262 window=2 ticks=45324464200\nAPP TEST TRACE: stage 16 -> 17, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 17 -> 18, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 18 -> 19, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: publication cleared focus id=300 window=2 ticks=45386968500\nAPP TEST TRACE: stage 19 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=45405996100\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 23, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=45426107500\nAPP TEST TRACE: stage 23 -> 24, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 24 -> 25, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=45455189100\nAPP TEST TRACE: stage 25 -> 26, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 26 -> 27, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 27 -> 28, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=14 window=2 ticks=45517937300\nAPP TEST TRACE: stage 28 -> 29, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 29 -> 30, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=332 window=2 ticks=45545577800\nAPP TEST TRACE: stage 30 -> 31, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 31 -> 32, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=14 window=2 ticks=45591959000\nAPP TEST TRACE: stage 32 -> 33, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 33 -> 34, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 34 -> 35, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 35 -> 10, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 10 -> 11, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=14 pending=0 window=2 keyboard=2 ticks=45675644900\nAPP TEST TRACE: stage 11 -> 12, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 12 -> 13, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 13 -> 14, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 14 -> 15, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 15 -> 16, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=308 window=2 ticks=45808499300\nAPP TEST TRACE: stage 16 -> 17, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 17 -> 18, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: stage 18 -> 19, status Simulation läuft. Messwerte werden gespeichert.\nAPP TEST TRACE: publication cleared focus id=349 window=2 ticks=45873869500\nAPP TEST TRACE: stage 19 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=45894002000\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 23, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=45916608000\nAPP TEST TRACE: stage 23 -> 24, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 24 -> 25, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=0 pending=0 window=2 keyboard=2 ticks=45946682000\nAPP TEST TRACE: stage 25 -> 26, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 26 -> 27, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 27 -> 28, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=14 window=2 ticks=46002560600\nAPP TEST TRACE: stage 28 -> 29, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 29 -> 30, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=383 window=2 ticks=46027340600\nAPP TEST TRACE: stage 30 -> 31, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 31 -> 32, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=14 window=2 ticks=46069905400\nAPP TEST TRACE: stage 32 -> 33, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 33 -> 34, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 34 -> 35, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 35 -> 36, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 36 -> 37, status 113 Messpunkte geladen.\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/check_transport_design.py\", line 87, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"D:\\Physim/tests/check_transport_design.py\", line 61, in main\n    points=pixels(image,box,primary_text if i==0 else text,55);assert len(points)>=2,('no original transport symbol ink',mode,r['variant'],i,box);ink.append(len(points))\n                                                                      ^^^^^^^^^^^^^^\nAssertionError: ('no original transport symbol ink', 'system', 'dark', 3, (498.9213, 154.8823, 7.6202, 6.8582))\n",
+          "binaries": [
+            {
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "eeb43a33166e7b132f54b0adf6e41886261d3bf7e57c3f91509df08df5a6e11a"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "linux-source3",
+      "source": 3,
+      "directory": "build/native/Design-analysis-linux/test-results/run-o7suf3he",
+      "groups": [
+        {
+          "name": "transport_design",
+          "status": "passed",
+          "seconds": 81.844,
+          "reason": "",
+          "binaries": [
+            {
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "a5a703a1fb072106306b694a93c7c02f7c1e7d2448a5aaadbbecd01dbf9c1025"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "windows-release",
+      "source": 4,
+      "directory": "build/native/Release/test-results/run-c71k463v",
+      "groups": [
+        {
+          "name": "reset_workflow",
+          "status": "passed",
+          "seconds": 103.547,
+          "reason": "",
+          "binaries": [
+            {
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "eeb43a33166e7b132f54b0adf6e41886261d3bf7e57c3f91509df08df5a6e11a"
+            }
+          ]
+        },
+        {
+          "name": "speed_workflow",
+          "status": "passed",
+          "seconds": 113.75,
+          "reason": "",
+          "binaries": [
+            {
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "eeb43a33166e7b132f54b0adf6e41886261d3bf7e57c3f91509df08df5a6e11a"
+            }
+          ]
+        },
+        {
+          "name": "accessibility_lifecycle_windows",
+          "status": "failed",
+          "seconds": 4.422,
+          "reason": "Exit code 1; expected 0\nTraceback (most recent call last):\n  File \"D:\\Physim/tests/test_accessibility_lifecycle_app.py\", line 27, in <module>\n    assert result.returncode==0,(result.returncode,result.stdout,result.stderr)\n           ^^^^^^^^^^^^^^^^^^^^\nAssertionError: (1, b'', b'Independent Windows UIA failed: pid=31692 action=0x80004005 role=50030 enabled=1 found=1\\r\\n')\n",
+          "binaries": [
+            {
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "eeb43a33166e7b132f54b0adf6e41886261d3bf7e57c3f91509df08df5a6e11a"
+            },
+            {
+              "target": "accessibility-windows-probe",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\integration-accessibility-windows-probe.exe",
+              "sha256": "01bf54a224082561884292b25880c54ee530b0a7b2b99b6670b5fc3f21deef2e"
+            }
+          ]
+        },
+        {
+          "name": "documentation_math",
+          "status": "passed",
+          "seconds": 9.0,
+          "reason": "",
+          "binaries": [
+            {
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "eeb43a33166e7b132f54b0adf6e41886261d3bf7e57c3f91509df08df5a6e11a"
+            }
+          ]
+        },
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 8.016,
+          "reason": "",
+          "binaries": [
+            {
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "eeb43a33166e7b132f54b0adf6e41886261d3bf7e57c3f91509df08df5a6e11a"
+            }
+          ]
+        },
+        {
+          "name": "transport_design",
+          "status": "passed",
+          "seconds": 106.734,
+          "reason": "",
+          "binaries": [
+            {
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "eeb43a33166e7b132f54b0adf6e41886261d3bf7e57c3f91509df08df5a6e11a"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "linux-sanitized",
+      "source": 4,
+      "directory": "build/native/Design-analysis-linux/test-results/run-sjl8on4m",
+      "groups": [
+        {
+          "name": "reset_workflow",
+          "status": "passed",
+          "seconds": 181.328,
+          "reason": "",
+          "binaries": [
+            {
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "a5a703a1fb072106306b694a93c7c02f7c1e7d2448a5aaadbbecd01dbf9c1025"
+            }
+          ]
+        },
+        {
+          "name": "speed_workflow",
+          "status": "passed",
+          "seconds": 200.923,
+          "reason": "",
+          "binaries": [
+            {
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "a5a703a1fb072106306b694a93c7c02f7c1e7d2448a5aaadbbecd01dbf9c1025"
+            }
+          ]
+        },
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 43.198,
+          "reason": "",
+          "binaries": [
+            {
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "a5a703a1fb072106306b694a93c7c02f7c1e7d2448a5aaadbbecd01dbf9c1025"
+            }
+          ]
+        },
+        {
+          "name": "transport_design",
+          "status": "passed",
+          "seconds": 78.925,
+          "reason": "",
+          "binaries": [
+            {
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "a5a703a1fb072106306b694a93c7c02f7c1e7d2448a5aaadbbecd01dbf9c1025"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "windows-occlusion",
+      "source": 4,
+      "directory": "build/native/Release/test-results/run-7ny3ctp_",
+      "groups": [
+        {
+          "name": "accessibility_ui",
+          "status": "passed",
+          "seconds": 0.86
+        }
+      ]
+    },
+    {
+      "label": "windows-text-flow",
+      "source": 4,
+      "directory": "build/native/Release/test-results/run-k21cfidc",
+      "groups": [
+        {
+          "name": "ui_text_flow",
+          "status": "passed",
+          "seconds": 0.079
+        }
+      ]
+    },
+    {
+      "label": "linux-text-flow",
+      "source": 4,
+      "directory": "build/native/Design-analysis-linux/test-results/run-r06_kdcw",
+      "groups": [
+        {
+          "name": "ui_text_flow",
+          "status": "passed",
+          "seconds": 0.066
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Windows final registry run5/6: transport,reset,speed,F1math,graphic pass; separate old lifecycle fixture fails before its intended actions",
+    "Linux GCC ASan/UBSan4/4, text flow1/1 and F1math ext4 passed; Windows ordinary rendered overlay rejection1/1 and text flow1/1 passed",
+    "No complete UI, macOS, physical DPI/monitor or external screenreader acceptance",
+    "Native tested graph includes12 preserved unrelated local files, excluded from this commit",
+    "Source4 native application equals source3; only antialias coverage assertion changed from55 to90 RGB levels",
+    "Source1/2 are true negative native runs; GDB uses intentional quit with leak checking disabled under ptrace, not sanitizer passes"
+  ],
+  "ext4_f1_math": "linux-f1-math-ext4.json"
+}

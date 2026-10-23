@@ -139,3 +139,8 @@ die restliche Oberfläche bleiben gemäß [Gesamtliste](NATIVE-FIDELITY.md) offe
 Es gibt hier keine ausgeführte macOS-Umgebung und keinen neuen physischen
 DPI-/Monitor- oder vollständigen externen Screenreader-Nachweis. Vollständige
 1:1-Übereinstimmung oder volle Punktzahl wird damit nicht behauptet.
+
+Der spätere [Simulationsleisten-Abgleich](SIMULATION-TRANSPORT-NATIVE.md)
+bearbeitet die hier festgehaltenen offenen Tempo-/Laufsteuerungsbefunde mit
+eigenen Quellständen, negativen Menüspuren und nativen Schrift-/Fokusprüfungen.
+Die ursprünglichen Aufnahmen dieses Dokuments bleiben historische Befunde.
