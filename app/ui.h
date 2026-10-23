@@ -176,6 +176,7 @@ nk_bool ps_ui_combo_begin_named_scaled(struct nk_context *ctx,const char *name,c
 typedef void (*ps_ui_combo_painter)(struct nk_context *ctx,struct nk_rect bounds,bool focused,void *user);
 nk_bool ps_ui_combo_begin_named_painted(struct nk_context *ctx,const char *name,const char *label,struct nk_vec2 size,ps_ui_combo_painter paint,void *user);
 nk_bool ps_ui_slider_named(struct nk_context *ctx,const char *name,float minimum,float *value,float maximum,float increment);
+nk_bool ps_ui_slider_named_custom_focus(struct nk_context *ctx,const char *name,float minimum,float *value,float maximum,float increment,bool *focused);
 typedef struct {bool active;float pointer,value;} ps_ui_scrollbar_drag;
 /* Same scrollbar material as Nuklear, with a minimum usable thumb. Numeric
  * position is published separately through the existing native range adapter. */
@@ -204,6 +205,7 @@ nk_bool ps_ui_button_at_custom_focus(struct nk_context *ctx,struct nk_rect bound
 int ps_ui_text_line(const struct nk_user_font *font,const char *text,int length,float width,bool path);
 /* Custom painted switch, using the shared native checkbox/check-state contract. */
 nk_bool ps_ui_switch_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,nk_bool *checked);
+nk_bool ps_ui_switch_at_custom_focus(struct nk_context *ctx,struct nk_rect bounds,const char *name,nk_bool *checked,bool *focused);
 /* Input and native radio semantics for custom painted segmented controls/tabs. */
 nk_bool ps_ui_option_at(struct nk_context *ctx,struct nk_rect bounds,const char *group,const char *name,bool selected);
 /* Publish a single semantic button for a control drawn from multiple fragments.

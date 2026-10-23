@@ -44,7 +44,7 @@ static void project_display_test_frame(app *a,const char *mode,int *stage,int *c
         break;
     case 1:test_mouse(a,camera_test_pressed,false);break;
     case 2:ok=a->camera_2d;
-        if(!camera_test_click(a,a->camera_preset_bounds[2]))return;
+        if(!camera_test_preset_click(a,2))return;
         break;
     case 3:test_mouse(a,camera_test_pressed,false);break;
     case 4:ok=a->camera_plane==1;

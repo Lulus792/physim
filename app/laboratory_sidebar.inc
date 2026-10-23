@@ -38,13 +38,13 @@ static void laboratory_scene_sidebar(app *a) {
     }
     laboratory_tree_checkbox(a,"Bahnkurve",&a->show_paths,0);laboratory_tree_checkbox(a,"Vektoren",&a->show_vectors,1);laboratory_tree_checkbox(a,"Raster",&a->show_grid,2);
     if(a->scene_view.hidden || advanced) {
-        struct nk_rect before=layout->bounds;layout->bounds.x+=7;layout->bounds.w=fmaxf(1,layout->bounds.w-14);
+        struct nk_rect before=layout->bounds;float before_x=layout->at_x;layout->at_x+=7;layout->bounds.x+=7;layout->bounds.w=fmaxf(1,layout->bounds.w-14);
         if(laboratory_object_action(a,"Alle Objekte einblenden",true,&a->display_all_bounds))a->scene_view.hidden=0;
-        layout->bounds=before;
+        layout->bounds=before;layout->at_x=before_x;
     }
     if(advanced) {
-        struct nk_rect before=layout->bounds;layout->bounds.x+=7;layout->bounds.w=fmaxf(1,layout->bounds.w-14);
-        scene_camera_controls_view(a,true);a->laboratory_tree_camera_mode=a->camera_mode_bounds;layout->bounds=before;
+        struct nk_rect before=layout->bounds;float before_x=layout->at_x;layout->at_x+=7;layout->bounds.x+=7;layout->bounds.w=fmaxf(1,layout->bounds.w-14);
+        scene_camera_controls_view(a,true);a->laboratory_tree_camera_mode=a->camera_mode_bounds;layout->bounds=before;layout->at_x=before_x;
     }
     ps_ui_row_exact_dynamic(ui,11*f,1);nk_spacer(ui);
     for(unsigned i=0;i<2;i++) {

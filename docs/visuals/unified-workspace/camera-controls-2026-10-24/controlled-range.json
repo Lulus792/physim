@@ -1,0 +1,16 @@
+{
+  "source_stage": 2,
+  "scope": "Controlled geometry image only; debugger set zoom=12 at stage20 after unsupported End. Home still fails with application exit1. No keyboard or sanitizer pass claimed.",
+  "binary_sha256": "befc5bbf9b728ded1d62ec9d57ecbc9ec306cd3fe047d679605de50dec9c8e7f",
+  "image_sha256": "b4d83d9d6536bd5b27b8fe114febaf60879f562ba89dd5e8276c5eb10b52b8ca",
+  "range_rect": [
+    1137.0,
+    778.5001,
+    287.0,
+    16.0
+  ],
+  "zoom": 12,
+  "source": "build/native/camera-source2-range-edge/camera-dark-zoom-max.png",
+  "gdb_exit_code": 0,
+  "application_exit_code": 1
+}

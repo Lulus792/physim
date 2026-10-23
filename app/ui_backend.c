@@ -355,11 +355,15 @@ static bool accessibility_widget(struct nk_context *ctx,const char *text,int rol
     return accessibility_emit(ctx,text,role,bounds,checked,group,activated,NULL,NULL);
 }
 nk_bool ps_ui_slider_named(struct nk_context *ctx,const char *name,float minimum,float *value,float maximum,float increment) {
+    return ps_ui_slider_named_custom_focus(ctx,name,minimum,value,maximum,increment,NULL);
+}
+nk_bool ps_ui_slider_named_custom_focus(struct nk_context *ctx,const char *name,float minimum,float *value,float maximum,float increment,bool *focused) {
+    if(focused)*focused=false;
     if(!ctx || !value)return nk_false;
     struct nk_rect bounds=nk_widget_bounds(ctx);
     nk_bool changed=nk_slider_float(ctx,minimum,value,maximum,increment);
     double range[]={*value,minimum,maximum,increment};
-    if(accessibility_emit(ctx,name,5,bounds,false,NULL,false,range,NULL)){*value=(float)range[0];changed=nk_true;}
+    if(accessibility_emit(ctx,name,5,bounds,false,NULL,false,range,focused)){*value=(float)range[0];changed=nk_true;}
     return changed;
 }
 nk_bool ps_ui_range_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,float *value,float maximum,float increment) {
@@ -508,10 +512,14 @@ nk_bool ps_ui_combo_begin_named_painted(struct nk_context *ctx,const char *name,
     return open;
 }
 nk_bool ps_ui_switch_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,nk_bool *checked) {
+    return ps_ui_switch_at_custom_focus(ctx,bounds,name,checked,NULL);
+}
+nk_bool ps_ui_switch_at_custom_focus(struct nk_context *ctx,struct nk_rect bounds,const char *name,nk_bool *checked,bool *focused) {
+    if(focused)*focused=false;
     if(!ctx || !checked || bounds.w<=0 || bounds.h<=0)return nk_false;
     bool enabled=!(ctx->current->layout->flags&NK_WINDOW_ROM) && !ctx->current->widgets_disabled;
     bool clicked=enabled && nk_input_is_mouse_pressed(&ctx->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ctx->input,ctx->current->layout->clip) && nk_input_is_mouse_hovering_rect(&ctx->input,bounds);
-    if(accessibility_widget(ctx,name,2,bounds,*checked,NULL,false) || clicked){*checked=!*checked;return nk_true;}
+    if(accessibility_emit(ctx,name,2,bounds,*checked,NULL,false,NULL,focused) || clicked){*checked=!*checked;return nk_true;}
     return nk_false;
 }
 nk_bool ps_ui_option_at(struct nk_context *ctx,struct nk_rect bounds,const char *group,const char *name,bool selected) {

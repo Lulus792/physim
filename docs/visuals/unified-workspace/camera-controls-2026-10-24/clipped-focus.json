@@ -1,0 +1,11 @@
+{
+  "source_stage": 4,
+  "range_rect": [
+    1137.0,
+    778.5001,
+    287.0,
+    16.0
+  ],
+  "source": "build/native/Design-analysis-linux/test-results/run-_o7o7laq/camera_design",
+  "scope": "Native source4 frame; range thumb already corrected, outer focus still horizontally clipped; run later times out on oversized combined top probe."
+}

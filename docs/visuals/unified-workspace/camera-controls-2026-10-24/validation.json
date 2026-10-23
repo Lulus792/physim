@@ -1,0 +1,359 @@
+{
+  "base": "8910ac03bfe4152a04fd6c5b6984da4d928c2ace",
+  "final_source": 8,
+  "goal_complete": false,
+  "scope": "Native Messlabor camera fields, menus, ranges, shared state and actual keyboard endpoint input; full UI remains open",
+  "linux": {
+    "directory": "build/native/Design-analysis-linux/test-results/run-q810whwr",
+    "groups": [
+      {
+        "name": "camera_design",
+        "status": "passed",
+        "seconds": 151.213,
+        "binaries": [
+          {
+            "status": "passed",
+            "target": "python",
+            "artifact": "/usr/bin/python3",
+            "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+          },
+          {
+            "status": "passed",
+            "target": "physim",
+            "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "sha256": "29251e926de46fa338ed62c26e4ac669aea9e335528a023735478afee623b107"
+          }
+        ]
+      }
+    ]
+  },
+  "windows": {
+    "build_only": true,
+    "display_test": false,
+    "binary_sha256": "8c6010b02fb378899d5afd9437c019aebc7323a646912c2c465ba36331701880",
+    "historical_inspector_source5": "Separate Windows proof passed, not this camera source"
+  },
+  "source_graph_files": 255,
+  "public_source_files": 252,
+  "fonts": 18,
+  "foreign_preserved": 12,
+  "selected_images": [
+    {
+      "file": "linux8-system-dark-top.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-q810whwr/camera_design/files ä/system/camera-dark-top.png",
+      "sha256": "0f1acdcbe7952cf9f2f8e93c373501f7d1685a840110ca151fcc165e43c34674"
+    },
+    {
+      "file": "linux8-system-dark-menu.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-q810whwr/camera_design/files ä/system/camera-dark-menu.png",
+      "sha256": "0ea5fb4e7a9687052de165d5cc4c770f35d11c25f3bf3a6581289883e52f07f4"
+    },
+    {
+      "file": "linux8-system-dark-plane.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-q810whwr/camera_design/files ä/system/camera-dark-plane.png",
+      "sha256": "85b96a180a3b53379bf530f8f5b001d7f3985849ee879ce76e77a71e06d296b7"
+    },
+    {
+      "file": "linux8-system-dark-check-focus.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-q810whwr/camera_design/files ä/system/camera-dark-check-focus.png",
+      "sha256": "81cd0dd36ee7d163bbf1374157bdc365c692251ed7061dfc1c97ccfdad765a64"
+    },
+    {
+      "file": "linux8-system-dark-zoom-max.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-q810whwr/camera_design/files ä/system/camera-dark-zoom-max.png",
+      "sha256": "b3fe121b8961a3f36080ed185dbe775710d90f6b418fe2b3cec145abb4811fa1"
+    },
+    {
+      "file": "linux8-system-dark-zoom-min.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-q810whwr/camera_design/files ä/system/camera-dark-zoom-min.png",
+      "sha256": "547753964c3395b3d67cebd41d4611c67650faeac867269cff820598ff53d841"
+    },
+    {
+      "file": "linux8-system-dark-orbit-min.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-q810whwr/camera_design/files ä/system/camera-dark-orbit-min.png",
+      "sha256": "e617a5ca337c7d740acbecaa85177be52c180268e0820ab97bb7e66f0b744d9c"
+    },
+    {
+      "file": "linux8-system-dark-orbit-drag.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-q810whwr/camera_design/files ä/system/camera-dark-orbit-drag.png",
+      "sha256": "73af663438512affcc8f440c576507ecca9b85d2facf3f44c25dd031c72b320e"
+    },
+    {
+      "file": "linux8-system-dark-save.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-q810whwr/camera_design/files ä/system/camera-dark-save.png",
+      "sha256": "06c7930107958147f5f9e35fd9f6af2eb647c0ae29caf8950e41c42f99f60bfa"
+    },
+    {
+      "file": "linux8-system-light-top.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-q810whwr/camera_design/files ä/system/camera-light-top.png",
+      "sha256": "d665865448dacbd9cddc0eaa138ea9879e708eb0bce9f149f4456e3b813479d7"
+    },
+    {
+      "file": "linux8-system-large-top.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-q810whwr/camera_design/files ä/system/camera-large-top.png",
+      "sha256": "cc4d3a1a25f727d8676ca722fcfc1fa863db084860bfafbf0fc58e4b2ff48524"
+    },
+    {
+      "file": "linux8-system-large-zoom-max.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-q810whwr/camera_design/files ä/system/camera-large-zoom-max.png",
+      "sha256": "1e574f05a6334f6ad0eeede8902a52b7344726f1e08c357477f3a20f2621804b"
+    },
+    {
+      "file": "linux8-system-large-save.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-q810whwr/camera_design/files ä/system/camera-large-save.png",
+      "sha256": "e794452f6b26857f884abe0cc94ecdf082c76ebdbd0409cf8f0864c8ccc3dd65"
+    },
+    {
+      "file": "linux8-system-contrast-zoom-max.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-q810whwr/camera_design/files ä/system/camera-contrast-zoom-max.png",
+      "sha256": "72162be8c193e5a203569cf26ff324c5500b2540961d003dd5c4073d08bd83ce"
+    },
+    {
+      "file": "linux8-bundled-dark-top.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-q810whwr/camera_design/files ä/bundled/camera-dark-top.png",
+      "sha256": "3f5954a164b0236c9900e0777097218bba3aaad72021bb1b9d7e59f31ad551cd"
+    },
+    {
+      "file": "linux8-bundled-large-save.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-q810whwr/camera_design/files ä/bundled/camera-large-save.png",
+      "sha256": "f8004ef85f367275ef5cb46eff6e25f01e0675a9538ab1dbd6f8a8c5db88b0ea"
+    }
+  ],
+  "limitations": [
+    "No current Windows camera GUI proof",
+    "No macOS execution",
+    "No practical screenreader tasks",
+    "No physical DPI/monitor transition",
+    "Scene top/bottom framing and remaining inspector groups not yet matched",
+    "Three foreign AT-SPI files in actual local compile graph; not a clean-checkout proof"
+  ],
+  "regression_source7": {
+    "directory": "build/native/Design-analysis-linux/test-results/run-rq1245g6",
+    "groups": [
+      {
+        "name": "camera_plane_16",
+        "status": "passed",
+        "seconds": 11.497,
+        "binaries": [
+          {
+            "status": "passed",
+            "target": "python",
+            "artifact": "/usr/bin/python3",
+            "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+          },
+          {
+            "status": "passed",
+            "target": "physim",
+            "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "sha256": "689b49ca19494ef4863ec5923b2f9b1065085938aeadf0ee1609ecb92289286b"
+          }
+        ]
+      },
+      {
+        "name": "camera_plane_22",
+        "status": "passed",
+        "seconds": 13.505,
+        "binaries": [
+          {
+            "status": "passed",
+            "target": "python",
+            "artifact": "/usr/bin/python3",
+            "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+          },
+          {
+            "status": "passed",
+            "target": "physim",
+            "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "sha256": "689b49ca19494ef4863ec5923b2f9b1065085938aeadf0ee1609ecb92289286b"
+          }
+        ]
+      },
+      {
+        "name": "project_display_16",
+        "status": "passed",
+        "seconds": 16.345,
+        "binaries": [
+          {
+            "status": "passed",
+            "target": "python",
+            "artifact": "/usr/bin/python3",
+            "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+          },
+          {
+            "status": "passed",
+            "target": "physim",
+            "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "sha256": "689b49ca19494ef4863ec5923b2f9b1065085938aeadf0ee1609ecb92289286b"
+          }
+        ]
+      },
+      {
+        "name": "project_display_22",
+        "status": "passed",
+        "seconds": 18.156,
+        "binaries": [
+          {
+            "status": "passed",
+            "target": "python",
+            "artifact": "/usr/bin/python3",
+            "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+          },
+          {
+            "status": "passed",
+            "target": "physim",
+            "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "sha256": "689b49ca19494ef4863ec5923b2f9b1065085938aeadf0ee1609ecb92289286b"
+          }
+        ]
+      },
+      {
+        "name": "scene_visibility_16",
+        "status": "passed",
+        "seconds": 11.839,
+        "binaries": [
+          {
+            "status": "passed",
+            "target": "python",
+            "artifact": "/usr/bin/python3",
+            "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+          },
+          {
+            "status": "passed",
+            "target": "physim",
+            "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "sha256": "689b49ca19494ef4863ec5923b2f9b1065085938aeadf0ee1609ecb92289286b"
+          }
+        ]
+      },
+      {
+        "name": "scene_visibility_22",
+        "status": "passed",
+        "seconds": 14.83,
+        "binaries": [
+          {
+            "status": "passed",
+            "target": "python",
+            "artifact": "/usr/bin/python3",
+            "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+          },
+          {
+            "status": "passed",
+            "target": "physim",
+            "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "sha256": "689b49ca19494ef4863ec5923b2f9b1065085938aeadf0ee1609ecb92289286b"
+          }
+        ]
+      },
+      {
+        "name": "tree_design",
+        "status": "passed",
+        "seconds": 127.33,
+        "binaries": [
+          {
+            "status": "passed",
+            "target": "python",
+            "artifact": "/usr/bin/python3",
+            "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+          },
+          {
+            "status": "passed",
+            "target": "physim",
+            "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "sha256": "689b49ca19494ef4863ec5923b2f9b1065085938aeadf0ee1609ecb92289286b"
+          }
+        ]
+      }
+    ],
+    "failed_probe": "camera_design checked before the native drawing cycle consumed the first motion",
+    "changes_to_final": [
+      "app/camera_design_tests.inc"
+    ],
+    "scope": "Only camera-test wait sequencing changed after source7. Product, stable field heights, shared focus drawing and all seven regression fixtures are identical."
+  },
+  "product_groups": [
+    {
+      "name": "camera_design",
+      "source": 8,
+      "status": "passed"
+    },
+    {
+      "name": "camera_plane_16",
+      "source": 7,
+      "status": "passed"
+    },
+    {
+      "name": "camera_plane_22",
+      "source": 7,
+      "status": "passed"
+    },
+    {
+      "name": "project_display_16",
+      "source": 7,
+      "status": "passed"
+    },
+    {
+      "name": "project_display_22",
+      "source": 7,
+      "status": "passed"
+    },
+    {
+      "name": "scene_visibility_16",
+      "source": 7,
+      "status": "passed"
+    },
+    {
+      "name": "scene_visibility_22",
+      "source": 7,
+      "status": "passed"
+    },
+    {
+      "name": "tree_design",
+      "source": 7,
+      "status": "passed"
+    }
+  ],
+  "history": [
+    {
+      "source": 1,
+      "passed": 7,
+      "total": 7,
+      "directory": "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-owtcw559"
+    },
+    {
+      "source": 2,
+      "passed": 7,
+      "total": 8,
+      "directory": "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-e3wcs5b0"
+    },
+    {
+      "source": 3,
+      "passed": 7,
+      "total": 8,
+      "directory": "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-8yxmtitr"
+    },
+    {
+      "source": 4,
+      "passed": 0,
+      "total": 1,
+      "directory": "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-_o7o7laq"
+    },
+    {
+      "source": 5,
+      "passed": 1,
+      "total": 2,
+      "directory": "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-wqn77zp6"
+    },
+    {
+      "source": 6,
+      "passed": 7,
+      "total": 7,
+      "directory": "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-13e80k4y"
+    },
+    {
+      "source": 7,
+      "passed": 7,
+      "total": 8,
+      "directory": "/mnt/d/Physim/build/native/Design-analysis-linux/test-results/run-rq1245g6"
+    }
+  ]
+}

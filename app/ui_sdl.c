@@ -532,6 +532,9 @@ bool nk_sdl_accessibility_event(struct nk_context *ctx,const SDL_Event *event) {
    else {handled=true;if(down)ps_a11y_focus_move(m,event->key.mod&SDL_KMOD_SHIFT?-1:1,false);}
   }
   else if(key==SDLK_ESCAPE)ps_a11y_blur(m,0);
+  else if(current && current->role==PS_A11Y_SLIDER && (key==SDLK_HOME || key==SDLK_END)) {
+   handled=true;if(down)ps_a11y_set_value(m,current->id,key==SDLK_HOME?current->minimum:current->maximum);
+  }
   else if(key==SDLK_LEFT || key==SDLK_RIGHT || key==SDLK_UP || key==SDLK_DOWN) {
    const ps_a11y_node *node=ps_a11y_find(m,m->focused_id);
    if(node && node->role==PS_A11Y_RADIO){handled=true;if(down)ps_a11y_focus_move(m,key==SDLK_LEFT || key==SDLK_UP?-1:1,true);}

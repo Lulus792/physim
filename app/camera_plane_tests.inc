@@ -25,6 +25,16 @@ static bool camera_test_click(app *a,struct nk_rect r) {
     }
     camera_test_pressed=r;test_mouse(a,r,true);return true;
 }
+static bool camera_test_preset_click(app *a,unsigned choice) {
+    if(!laboratory_visible(a))return camera_test_click(a,a->camera_preset_bounds[choice]);
+    static unsigned phase,settle;
+    if(!phase){if(!camera_test_click(a,a->camera_view_bounds))return false;phase=1;return false;}
+    if(phase==1){test_mouse(a,camera_test_pressed,false);phase=2;settle=0;return false;}
+    if(settle++<3 || !a->laboratory_camera_open[a->laboratory_camera_side][0])return false;
+    struct nk_rect r=a->laboratory_camera_choices[a->laboratory_camera_side][0][choice];
+    if(r.w<=0 || r.h<=0)return false;
+    camera_test_pressed=r;test_mouse(a,r,true);phase=0;return true;
+}
 static bool camera_test_depth(app *a,bool equal) {
     ps_camera camera={a->yaw,a->pitch,a->zoom,a->camera_target,a->orthographic,a->show_vectors,a->show_grid};
     ps_vec3 first=ps_v3(1,0,0),second=ps_v3(1,0,.5);
@@ -80,13 +90,13 @@ static void camera_plane_test_frame(app *a,int *stage,int *code,const char **cap
                                          a->scene_viewport_bounds.y+a->scene_viewport_bounds.h/2,2);break;
     case 13: break; /* Let viewport consume the queued wheel event. */
     case 14:ok=a->zoom<zoom && a->yaw==0 && a->pitch==0;
-        if(!camera_test_click(a,a->camera_preset_bounds[2])) return;
+        if(!camera_test_preset_click(a,2)) return;
         break;
     case 15:test_mouse(a,camera_test_pressed,false);break;
     case 16:ok=a->camera_2d && a->camera_plane==1 && a->yaw==(float)PS_PI/2 && a->pitch==0 && a->orthographic && camera_test_depth(a,true);
         *capture="camera-2d-yz.bmp";target=a->camera_target;test_scene_key(a,SDLK_RIGHT,SDL_KMOD_ALT,false);break;
     case 17:ok=a->camera_target.z<target.z && a->camera_target.x==target.x && a->camera_target.y==target.y;
-        if(!camera_test_click(a,a->camera_preset_bounds[3])) return;
+        if(!camera_test_preset_click(a,3)) return;
         break;
     case 18:test_mouse(a,camera_test_pressed,false);break;
     case 19:ok=a->camera_2d && a->camera_plane==2 && a->yaw==0 && a->pitch==(float)PS_PI/2 && camera_test_depth(a,true);
@@ -101,7 +111,7 @@ static void camera_plane_test_frame(app *a,int *stage,int *code,const char **cap
         a->tab=0;test_scene_key(a,SDLK_2,SDL_KMOD_ALT,false);break;
     case 26:ok=!a->camera_2d;a->tab=2;test_scene_key(a,SDLK_2,SDL_KMOD_ALT,false);break;
     case 27:ok=!a->camera_2d;a->tab=1;test_scene_key(a,SDLK_2,SDL_KMOD_ALT,false);break;
-    case 28:ok=a->camera_2d;if(!camera_test_click(a,a->camera_preset_bounds[0]))return;break;
+    case 28:ok=a->camera_2d;if(!camera_test_preset_click(a,0))return;break;
     case 29:test_mouse(a,camera_test_pressed,false);break;
     case 30:break; /* Let the Standard button consume its release. */
     case 31:

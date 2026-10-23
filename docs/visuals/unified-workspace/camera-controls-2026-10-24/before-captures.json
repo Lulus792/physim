@@ -1,0 +1,20 @@
+[
+  {
+    "file": "before-presets.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-4xa_qt6d/camera_plane_16/files ä/workflow ä/camera-3d-controls.bmp",
+    "source_stage": "tree3",
+    "bmp_sha256": "ef4a0b553f91fab9f4fa9ed47d3998476c3290a5ef99ed3fd4695ba0b8fd331d",
+    "png_sha256": "9e2830f8b86d497868b08831d09caf2ea3f588a28f312ae1557bafdaf20c4dd3",
+    "rgb_sha256": "7a02ca25f971abc0a00999904d753ac40f8e33ccf9d1ce038cb33c84761b9279",
+    "conversion": "RGB-identical BMP to PNG; no scaling or retouch"
+  },
+  {
+    "file": "source1-inset.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-owtcw559/camera_plane_16/files ä/workflow ä/camera-3d-controls.bmp",
+    "source_stage": "camera1",
+    "bmp_sha256": "fd76ee1cd40c33f29773a56739fb3e11af43033ffb0663bbc0025628c72bedb0",
+    "png_sha256": "22cb8648da47d6ccb47c62dbfaee2cec2a850310aebea8efdfbccd30e62632b9",
+    "rgb_sha256": "89c0e00aea4384095b1bbcb8fb3c0236e245ce21a6407d9a791141669d5d8b31",
+    "conversion": "RGB-identical BMP to PNG; no scaling or retouch"
+  }
+]

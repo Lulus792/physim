@@ -222,3 +222,12 @@ Der dabei gefundene Fokusfehler überkreuzender Separatoren und die falsche
 gespeicherte Startgröße sind mit eigenen Vorher-/Nachher-Belegen erfasst.
 Die Kamera-Presetgestaltung und weitere Gesamtzustände bleiben offen; dies
 ist kein vollständiger Szenen-, Inspektor- oder Drei-Plattform-Abschluss.
+
+Der folgende [Kamera-Abgleich](CAMERA-CONTROLS-NATIVE.md) übernimmt die flachen
+B-Auswahlfelder, Zahlenwerte, Regler und Speicheraktion. Er korrigiert echten
+Tastatureingang für Pos1/Ende, Spurklick und abgeschnittene Fokuslinien. Bei
+schmaler Spalte und großer Schrift bleibt die Höhe beim Wechsel zur freien
+Ansicht stabil, damit der gezogene Regler nicht verrutscht. Die native Probe
+prüft beide Schriftquellen und erhält den realen pausierten Versuch. Die
+zugeordneten acht Produktgruppen und der Windows-Build schließen die übrige
+Szenengestaltung, den gesamten Inspektor, F1 oder andere Plattformen nicht ab.

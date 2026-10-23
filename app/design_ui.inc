@@ -357,20 +357,11 @@ static void live_events_view(app *a) {
 }
 static bool laboratory_object_action(app *a,const char *label,bool secondary,struct nk_rect *bounds);
 static void laboratory_note(app *a,const char *text);
+#include "laboratory_camera.inc"
 static void scene_camera_controls_view(app *a,bool compact) {
     struct nk_context *ui=a->ui;
+    if(laboratory_visible(a)){laboratory_camera(a,compact);return;}
     if (nk_tree_state_push(ui, NK_TREE_TAB, "Darstellung", &a->view_disclosure)) {
-        if(laboratory_visible(a)) {
-            bool planar=a->camera_2d;
-            if(laboratory_checkbox(a,"2D-Modus",&planar,0,&a->camera_mode_bounds))scene_camera_2d(a,planar);
-            laboratory_checkbox(a,"Orthografische Ansicht",&a->orthographic,0,&a->camera_projection_bounds);
-            if(!compact){laboratory_checkbox(a,"Vektoren",&a->show_vectors,0,&a->display_vector_bounds);laboratory_checkbox(a,"Flugbahnen",&a->show_paths,0,&a->display_path_bounds);}
-            laboratory_checkbox(a,"Punkte",&a->show_points,0,&a->display_points_bounds);laboratory_checkbox(a,"Beschriftungen",&a->show_labels,0,&a->display_labels_bounds);
-            if(!compact)laboratory_checkbox(a,"Raster und Achsen",&a->show_grid,0,NULL);
-            nk_begin_disabled(ui,!a->loaded || a->display_save_thread || a->recovery);
-            if(laboratory_object_action(a,"Als Projektvorgabe speichern",false,&a->display_save_bounds))project_display_save(a);
-            nk_end_disabled(ui);
-        } else {
         nk_layout_row_dynamic(ui, 28, 1);
         bool planar=a->camera_2d;
         a->camera_mode_bounds=nk_widget_bounds(ui);
@@ -393,15 +384,12 @@ static void scene_camera_controls_view(app *a,bool compact) {
         nk_begin_disabled(ui,!a->loaded || a->display_save_thread || a->recovery);
         if(nk_button_label(ui,"Als Projektvorgabe speichern")) project_display_save(a);
         nk_end_disabled(ui);
-        }
         nk_tree_state_pop(ui);
     }
     if (nk_tree_state_push(ui, NK_TREE_TAB, "Kamera", &a->camera_disclosure)) {
         nk_layout_row_dynamic(ui, 22, 1);
         nk_label_colored(ui, "Blickrichtung", NK_TEXT_LEFT, muted());
-        float scale=laboratory_visible(a)?a->preferences.ui_size/16.f:1;
-        int columns=laboratory_visible(a) && nk_window_get_content_region(ui).w<220*scale?1:2;
-        nk_layout_row_dynamic(ui,32*scale,columns);
+        nk_layout_row_dynamic(ui, 32, 2);
         a->camera_preset_bounds[0]=nk_widget_bounds(ui);
         if (nk_button_label(ui, "Standard")) {
             a->camera_2d = false;
@@ -438,15 +426,10 @@ static void scene_camera_controls_view(app *a,bool compact) {
         }
         nk_label(ui, "Zoom", NK_TEXT_LEFT);
         ps_ui_slider_named(ui,"Kameraabstand (m)",1.5f,&a->zoom,12,.1f);
-        if(laboratory_visible(a)) {
-            laboratory_note(a,a->camera_2d?"Rechts/Mitte ziehen: verschieben · Mausrad: zoomen":"Rechts ziehen: drehen · Mitte ziehen: verschieben · Mausrad: zoomen");
-            laboratory_note(a,a->camera_2d?"Alt + Pfeile: verschieben. Alt + 2: 2D/3D. Alt + Bild auf/ab: zoomen. Alt + Pos1: Standard.":"Alt + Pfeile: drehen. Alt + Shift + Pfeile: verschieben. Alt + 2: 2D/3D. Alt + Bild auf/ab: zoomen. Alt + Pos1: Standard.");
-        } else {
         nk_layout_row_dynamic(ui, 60, 1);
         nk_label_wrap(ui,a->camera_2d?"Rechts/Mitte ziehen: verschieben\nMausrad: zoomen":"Rechts ziehen: drehen\nMitte ziehen: verschieben\nMausrad: zoomen");
         nk_layout_row_dynamic(ui, 112, 1);
         nk_label_wrap(ui,a->camera_2d?"Alt + Pfeile: verschieben. Alt + 2: 2D/3D. Alt + Bild auf/ab: zoomen. Alt + Pos1: Standard.":"Alt + Pfeile: drehen. Alt + Shift + Pfeile: verschieben. Alt + 2: 2D/3D. Alt + Bild auf/ab: zoomen. Alt + Pos1: Standard.");
-        }
         nk_tree_state_pop(ui);
     }
 }
@@ -1307,6 +1290,7 @@ static void workspace_draw_ui(app *a, int width, int height) {
     a->laboratory_section_font=*a->font_title;a->laboratory_section_font.height=13*a->workbench_bold_em*a->preferences.ui_size/16.f;
     a->laboratory_caption_font=*a->font_ui;a->laboratory_caption_font.height=11*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->laboratory_model_font=*a->font_ui;a->laboratory_model_font.height=19*a->workbench_regular_em*a->preferences.ui_size/16.f;
+    a->laboratory_control_font=*a->font_ui;a->laboratory_control_font.height=13*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->laboratory_coordinate_font=*a->font_ui;a->laboratory_coordinate_font.height=14*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->workspace_status_font=*a->font_ui;a->workspace_status_font.height=10*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->analysis_title_font=*a->font_title;a->analysis_title_font.height=18*a->workbench_bold_em*a->preferences.ui_size/16.f;

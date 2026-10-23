@@ -1,0 +1,8 @@
+{
+  "date": "2026-10-24",
+  "status": "not_performed",
+  "target": "build/native/Design-analysis-linux/test-results/run-owtcw559",
+  "candidate_file_bytes": 111607339,
+  "preflight": "Seven archived results matched; protected PNG has RGB bytes identical to the raw reference BMP.",
+  "reason": "Execution automatically rejected before process creation: blocked by policy. No more specific reason supplied. Raw run retained; no alternative deletion route attempted."
+}

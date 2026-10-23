@@ -104,3 +104,11 @@ Die tatsächlichen Objekte und die Kameraoptionen bleiben erhalten. Gefundene
 native Fokus-/Startgrößenfehler und fehlgeschlagene Prüferstände werden separat
 belegt. Dieser Schritt erklärt die verbleibenden Kamera-/Metadatenunterschiede
 und ersetzt weiterhin keine vollständige Abnahme aller Nutzerbefunde.
+
+Der anschließende [Kamera-Abgleich](CAMERA-CONTROLS-NATIVE.md) ersetzt die alten
+Preset-Knöpfe und verschachtelten Kameraabschnitte durch die flachen B-Felder.
+Native Werte, vollständige Beschriftungen, Pos1/Ende, Spurklick und fortgesetztes
+Ziehen sind getrennt geprüft. Die große Schrift erhält bei schmaler Spalte
+die nötige konstante Feldhöhe. Aktuelle Kameraaufnahmen und frühere Gegenbelege
+sind gemeinsam archiviert. Die verbleibenden Bereiche und die praktische
+Windows-/Assistive-/DPI-Abnahme bleiben offen.

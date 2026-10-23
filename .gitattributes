@@ -39,3 +39,8 @@ docs/visuals/unified-workspace/object-properties-2026-10-23/*.gz binary
 docs/visuals/unified-workspace/scene-tree-2026-10-23/* text eol=lf
 docs/visuals/unified-workspace/scene-tree-2026-10-23/*.png binary
 docs/visuals/unified-workspace/scene-tree-2026-10-23/*.gz binary
+
+# Native camera evidence retains verified bytes across checkout platforms.
+docs/visuals/unified-workspace/camera-controls-2026-10-24/* text eol=lf
+docs/visuals/unified-workspace/camera-controls-2026-10-24/*.png binary
+docs/visuals/unified-workspace/camera-controls-2026-10-24/*.gz binary

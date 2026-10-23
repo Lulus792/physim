@@ -1,0 +1,8 @@
+{
+  "source_stage": 7,
+  "source": "build/native/Design-analysis-linux/test-results/run-rq1245g6/camera_plane_16/files ä/workflow ä/camera-3d-controls.bmp",
+  "bmp_sha256": "3716553cc5d5984d156c43be1e75c35a1704c0820a4dfd1079244a3c994271e8",
+  "png_sha256": "1af0609c52f4748648b635b07cb37a2e968c7eb1256f0eb6d741ec3efc7103e3",
+  "rgb_sha256": "cec4fdf6a7309c65e13fd3b9ffd50d05a6c9eb91896a65ed6ebd920a7092ea18",
+  "scope": "RGB-identical conversion of actual native left camera capture; local inset comparison only, not an identical full-window pose/frame match to old captures."
+}

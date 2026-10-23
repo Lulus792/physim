@@ -1,0 +1,674 @@
+{
+  "before-captures.json": {
+    "bytes": 1076,
+    "sha256": "7c7a4488d02dcacd44106efa5f662c30696dd418e21dd6ebb8f3b2a61156ad44"
+  },
+  "before-presets.png": {
+    "bytes": 105687,
+    "sha256": "9e2830f8b86d497868b08831d09caf2ea3f588a28f312ae1557bafdaf20c4dd3"
+  },
+  "camera-linux-1.log.gz": {
+    "bytes": 15723,
+    "sha256": "289214335d5c56d3b095dd6d1ff129cb9ee7af49448e3d627acdc0793371738d"
+  },
+  "camera-linux-2.log.gz": {
+    "bytes": 16969,
+    "sha256": "10680c44b44117e7cf9d58653d151e1f271308fec61255e30017c5efdd039926"
+  },
+  "camera-linux-3.log.gz": {
+    "bytes": 17082,
+    "sha256": "042ad03caa7ddf71de526a1c481eda22a608f48206073445587b9a0355088e22"
+  },
+  "camera-linux-4.log.gz": {
+    "bytes": 17584,
+    "sha256": "98a5fe86e123a3a72fa6af43c7e22bcccc7344b20da08b7c89987b3d9ada9df9"
+  },
+  "camera-linux-5.log.gz": {
+    "bytes": 17916,
+    "sha256": "60b38d11b7c57f2d1862a74eeb372c019af0d344d63c348773018fff6d23b47f"
+  },
+  "camera-linux-6.log.gz": {
+    "bytes": 15713,
+    "sha256": "368059a2060bf24d91691acdbca489e48ea7b42afc3dce294b42b3a89ade9bf5"
+  },
+  "camera-linux-7.log.gz": {
+    "bytes": 17099,
+    "sha256": "618b9b892cfb62a001dc27fbb12710483c381e21a273ef68933db70cf7541755"
+  },
+  "camera-linux-8.log.gz": {
+    "bytes": 15673,
+    "sha256": "99a42f5cca10745489a8d401f83005a33aaf77f091ade3695b8fa06415ce114c"
+  },
+  "camera-source2-range-edge.gdb.gz": {
+    "bytes": 364,
+    "sha256": "6c3995c352983af3df5740cce2cc2e815aa976db70c8564781c8dafb90f873c4"
+  },
+  "camera-source2-range-edge.log.gz": {
+    "bytes": 2690,
+    "sha256": "e21bf08d06a9a7f3399bc6e14baa217b6d793f692e597f2415941023893c0ba4"
+  },
+  "camera-windows-build-1.log.gz": {
+    "bytes": 2735,
+    "sha256": "1b5c7a8ab5cab2973f39414c5fbe10a7889fefde3e83e9f03ad057a2aa97ac1b"
+  },
+  "camera-windows-build-2.log.gz": {
+    "bytes": 2758,
+    "sha256": "d157a3f92c1813de3c9935cc301d7283a5ff89340d0337e1b324dc0d524c6d97"
+  },
+  "camera-windows-build-3.log.gz": {
+    "bytes": 2743,
+    "sha256": "d6715490fc250d07039171b9ab63710addde9c77ad893b1db61caf4d744273c7"
+  },
+  "camera-windows-build-4.log.gz": {
+    "bytes": 2745,
+    "sha256": "7ce983f1d9f4071af531cb02899e09a00d360efae86aeb5aa2b018a963a7b218"
+  },
+  "camera-windows-build-5.log.gz": {
+    "bytes": 2756,
+    "sha256": "c49784c4351750d42a5a265588bcd37340fc4e75fd29ed1f57abb8dcc01d1fad"
+  },
+  "camera-windows-build-6.log.gz": {
+    "bytes": 2750,
+    "sha256": "e4ff36ed0cf96d61c601b60ce363b18c99ffe6b6a5cb2afc4a33430539f99a89"
+  },
+  "camera-windows-build-7.log.gz": {
+    "bytes": 2756,
+    "sha256": "fc47b2cf1d0ebf7a9722fae9c895bfe27f26db6fa5d55729d19b11ca73df4c14"
+  },
+  "camera-windows-build-8.log.gz": {
+    "bytes": 2751,
+    "sha256": "7013548be36d3c30005e021e76272b1c96760edaf123d7197f2c8a36d3aea7df"
+  },
+  "check_frozen_camera.py": {
+    "bytes": 3124,
+    "sha256": "3082aa3931f3e138c4cf3b0d887ff7512105f57630fc06032b99f11f4b477f46"
+  },
+  "cleanup-deferred.json": {
+    "bytes": 468,
+    "sha256": "323a39e8eba9c56014e269008987ace6c4077194b39eb54c8a913dee9343441a"
+  },
+  "clipped-focus.json": {
+    "bytes": 343,
+    "sha256": "b8718f8d2824ca66e35b2f4397b5821cd6922d1fc6264389eb23d6536d7e4929"
+  },
+  "controlled-range.json": {
+    "bytes": 592,
+    "sha256": "fa5adee068379b6320b4706ca0ec97f4d12ebf04b49d8516a2d1bbc7f927cba6"
+  },
+  "corrected-left-capture.json": {
+    "bytes": 581,
+    "sha256": "d95536bc9814f5e61925adfea15adc23db1fe120e20009f49345d0ab3955012e"
+  },
+  "linux1-camera_plane_16-result.json.gz": {
+    "bytes": 1456,
+    "sha256": "2ce9d9717a970dde504ce133d8e1ccd6c55bea5968fd661031a7c84cb1f81c8d"
+  },
+  "linux1-camera_plane_16-steps.json.gz": {
+    "bytes": 1197,
+    "sha256": "cf287a5e89da1190ef6a051d08b02dd20572d40196156414b733bd09f3763d9f"
+  },
+  "linux1-camera_plane_22-result.json.gz": {
+    "bytes": 1451,
+    "sha256": "71e2a19937e9cdc75b63bed6e2c29abd2deaddf64e8832887578b665e79a85b6"
+  },
+  "linux1-camera_plane_22-steps.json.gz": {
+    "bytes": 1191,
+    "sha256": "c9045c7f8d7b270811066f861cbffce39bce8024b676f4610b876f63ea97cf12"
+  },
+  "linux1-project_display_16-result.json.gz": {
+    "bytes": 1453,
+    "sha256": "0a0376bfaa0f70daa84b3e5a543f53ce7081a4de66443897e3c4321bd9216e87"
+  },
+  "linux1-project_display_16-steps.json.gz": {
+    "bytes": 1241,
+    "sha256": "e42e4af944d40d19eba471100b705b63170a4be0218d6c56df72092fd9183d46"
+  },
+  "linux1-project_display_22-result.json.gz": {
+    "bytes": 1451,
+    "sha256": "480330caac54997983d3b47790dbebd92c5cdcdd69b74a3a08fc332beb91a873"
+  },
+  "linux1-project_display_22-steps.json.gz": {
+    "bytes": 1237,
+    "sha256": "bd3845961d466a9f50889dc1c8b85007658bba6602d4a99c34e3adea829719e6"
+  },
+  "linux1-scene_visibility_16-result.json.gz": {
+    "bytes": 1401,
+    "sha256": "69c11dcd2dd7ce98c1bbdc205c9416ccd2be8db42bf6c456d48bfffb8b9ce9a7"
+  },
+  "linux1-scene_visibility_16-steps.json.gz": {
+    "bytes": 1140,
+    "sha256": "e03e79081f56ad85e1fefce88f10efed3839790462930caa14b1f9758ceec4c3"
+  },
+  "linux1-scene_visibility_22-result.json.gz": {
+    "bytes": 1407,
+    "sha256": "47272287c812713400ca31e164655d7ae2052a9fb113564fd59c477b159db1a5"
+  },
+  "linux1-scene_visibility_22-steps.json.gz": {
+    "bytes": 1141,
+    "sha256": "e093bffbd4a8a5291c4e97a40e4d679ac71dfcba5ec70f02ca21ac949fc74a46"
+  },
+  "linux1-tree_design-result.json.gz": {
+    "bytes": 11888,
+    "sha256": "2d77a70a1a0e68fa8efc73be494319066b7c30f80267dfad89cde6a5b018fa2d"
+  },
+  "linux1-tree_design-steps.json.gz": {
+    "bytes": 12122,
+    "sha256": "49749528d70c3fec2a9f13fc39a09a7ebda962421b44d7527177c6cb466fe7a4"
+  },
+  "linux1-tree_design-validation.json.gz": {
+    "bytes": 9924,
+    "sha256": "e2ce3c6ded7d001d149284f76962156f322e18c3a8ab3d678aca4790df13f8aa"
+  },
+  "linux2-camera_design-result.json.gz": {
+    "bytes": 3171,
+    "sha256": "8e4c29215058131aecdc7e9930ce2ab1e597f4e3e52f02a79cece08cd3811bda"
+  },
+  "linux2-camera_design-steps.json.gz": {
+    "bytes": 2474,
+    "sha256": "f97fdaa83ff7fbccc92c32de8cb0e49434cae905b51de0b9487669fe410eaf99"
+  },
+  "linux2-camera_plane_16-result.json.gz": {
+    "bytes": 1451,
+    "sha256": "833f5e4fc45288bd388819e89ff3aae4e146a5a8ea88b7e4fd7a9504f10629c5"
+  },
+  "linux2-camera_plane_16-steps.json.gz": {
+    "bytes": 1192,
+    "sha256": "131aff278e53ddd9d66f4631ffe7e091eb439a53fd182dbdea59d1efca03fd20"
+  },
+  "linux2-camera_plane_22-result.json.gz": {
+    "bytes": 1455,
+    "sha256": "016eb2ecef4a563f50c25d79ef356009d2331f6f865bd6f2f62e4d0e8efa6545"
+  },
+  "linux2-camera_plane_22-steps.json.gz": {
+    "bytes": 1195,
+    "sha256": "dde2c12aac5b8676111a8d8220dd57e8ac002c20dc6c7d5f943c25aa66b50e81"
+  },
+  "linux2-project_display_16-result.json.gz": {
+    "bytes": 1451,
+    "sha256": "4dcafde04cfad5f8a3e8b88e3222983adb84b74e67fb6ce72f468f7bd7cbf57b"
+  },
+  "linux2-project_display_16-steps.json.gz": {
+    "bytes": 1243,
+    "sha256": "fd0ed396af08ff70e5abba669c49552e009f4f261944f41e8329b9fba56fe181"
+  },
+  "linux2-project_display_22-result.json.gz": {
+    "bytes": 1451,
+    "sha256": "e413aa0cb689f2923da879c0d266def247faa0ef40af8fb6ad3df20b8d9976e6"
+  },
+  "linux2-project_display_22-steps.json.gz": {
+    "bytes": 1239,
+    "sha256": "572b3d294b8796704c0dc6063a55782d525c4463db69f161aadf3956c1eeeee7"
+  },
+  "linux2-scene_visibility_16-result.json.gz": {
+    "bytes": 1400,
+    "sha256": "b777efc29251527a0f3c31adc805e7cee9529a8d8f931b51f66803aa393a803e"
+  },
+  "linux2-scene_visibility_16-steps.json.gz": {
+    "bytes": 1138,
+    "sha256": "a113cb7c536dee31f7044556c972a941565097888d56e6290b0cdbfb8d1a277a"
+  },
+  "linux2-scene_visibility_22-result.json.gz": {
+    "bytes": 1402,
+    "sha256": "7f989f2210912b99aa1eda4ab0806655b1ff97cdebc8e210c7bb4070155c666b"
+  },
+  "linux2-scene_visibility_22-steps.json.gz": {
+    "bytes": 1137,
+    "sha256": "b8c755f794b4379c9efe044e3f8690818f876f0d605157c6224a9204bd411bed"
+  },
+  "linux2-tree_design-result.json.gz": {
+    "bytes": 11887,
+    "sha256": "663aace44041f553fdcaa8d2c484ba58b929b307cb14db47ec5068008984a418"
+  },
+  "linux2-tree_design-steps.json.gz": {
+    "bytes": 12116,
+    "sha256": "33e267088f5aeabd1b80f47d142d045426d262612412f097d1ddd9aef6be6519"
+  },
+  "linux2-tree_design-validation.json.gz": {
+    "bytes": 9914,
+    "sha256": "4e92932d92a241f9d26c55fe07d67f4eea26482315058bc2ab7fa1c336a30d5f"
+  },
+  "linux3-camera_design-result.json.gz": {
+    "bytes": 3406,
+    "sha256": "bda5136c622e632a4ca9aee369e6cb14968dca2e4337d75317ed489a21743d60"
+  },
+  "linux3-camera_design-steps.json.gz": {
+    "bytes": 2693,
+    "sha256": "e63b28a11e011d62956b456b27448296608f0cccf6c9b9dcd6a88b3344bd898b"
+  },
+  "linux3-camera_plane_16-result.json.gz": {
+    "bytes": 1454,
+    "sha256": "042b0c30a0d74c16886a12921564ea8a10d17fe6e01963c2db9489f2f1a4a98a"
+  },
+  "linux3-camera_plane_16-steps.json.gz": {
+    "bytes": 1194,
+    "sha256": "27446518b528c4dceb18b1ecbab0e092fc8d81046dccd777517be109ca7b1419"
+  },
+  "linux3-camera_plane_22-result.json.gz": {
+    "bytes": 1454,
+    "sha256": "04f951a374d0911f979582fe9444b48580dd2982cd214883c268d355ea463e93"
+  },
+  "linux3-camera_plane_22-steps.json.gz": {
+    "bytes": 1196,
+    "sha256": "da97e401142293e564850b6c5a1e816d958161c514b8856c5f6c4e2b0d69eece"
+  },
+  "linux3-project_display_16-result.json.gz": {
+    "bytes": 1449,
+    "sha256": "05072a04aacf054eca31cad9e4546f009c777d5c96bee1f5e3f1871e57d3b05b"
+  },
+  "linux3-project_display_16-steps.json.gz": {
+    "bytes": 1238,
+    "sha256": "1bb408adef1b80e4260dd2298a8632af348d29c8baa69b81d3967dabe441a581"
+  },
+  "linux3-project_display_22-result.json.gz": {
+    "bytes": 1452,
+    "sha256": "30de70438d6f57c83bbfef74c8e1e32cfa82fc28b6f02b8adecf0d9004bc4ce1"
+  },
+  "linux3-project_display_22-steps.json.gz": {
+    "bytes": 1237,
+    "sha256": "8d21f19a7ef5a0bc0c592006be03681d2ff93d65636428ef034ea1b1d0e4482b"
+  },
+  "linux3-scene_visibility_16-result.json.gz": {
+    "bytes": 1400,
+    "sha256": "e336602b08b7d1b4d31fff86217da1eec0c3184505c04d74cb017a70554767d6"
+  },
+  "linux3-scene_visibility_16-steps.json.gz": {
+    "bytes": 1136,
+    "sha256": "7c3057446662c85871a1f45b625dc104cd7a5295bf6a31c8aa0e3e0ce4d052b2"
+  },
+  "linux3-scene_visibility_22-result.json.gz": {
+    "bytes": 1403,
+    "sha256": "fe8abfdbe56f0d2913e9a4c370d7931876c5e553dd3100cdb93e7d5c1da900c2"
+  },
+  "linux3-scene_visibility_22-steps.json.gz": {
+    "bytes": 1138,
+    "sha256": "598b9c2bf5c703a3228cc80562758c457ef1437a993519d82e5c3ec77d159c69"
+  },
+  "linux3-tree_design-result.json.gz": {
+    "bytes": 11882,
+    "sha256": "3d83f324c290a932ea34c001702179953c40f77a711b1a3b71d73cf289459856"
+  },
+  "linux3-tree_design-steps.json.gz": {
+    "bytes": 12127,
+    "sha256": "59795609eae1977b53ba6c5e03c70690088774f078a0a814bd120c4daef1723c"
+  },
+  "linux3-tree_design-validation.json.gz": {
+    "bytes": 9914,
+    "sha256": "4e92932d92a241f9d26c55fe07d67f4eea26482315058bc2ab7fa1c336a30d5f"
+  },
+  "linux4-camera_design-result.json.gz": {
+    "bytes": 5504,
+    "sha256": "b05ae6ed05c36570cde680012cc544023994b54d2c9b92ea703b0cb332455540"
+  },
+  "linux4-camera_design-steps.json.gz": {
+    "bytes": 4597,
+    "sha256": "a9956a8970bc396a3ec5097df6f40be24b6ac849fb874038aeefa75a5044dd67"
+  },
+  "linux5-camera_design-result.json.gz": {
+    "bytes": 6908,
+    "sha256": "14e122b93d5b7073d11291641dfa23a569bdda1a88c7621d8cb7c7aab43c4a2a"
+  },
+  "linux5-camera_design-steps.json.gz": {
+    "bytes": 5862,
+    "sha256": "8245bbaf4bef04bb028c95b7d530f22f412c9962adf5d421f6139d2522de560d"
+  },
+  "linux5-tree_design-result.json.gz": {
+    "bytes": 11878,
+    "sha256": "6c2e17e5eb241c6d170e14e385af4cd743cce1a673b4e61d059f34fc5b1a7861"
+  },
+  "linux5-tree_design-steps.json.gz": {
+    "bytes": 12125,
+    "sha256": "10ae3b956a6571d2897b0941bc0464ca0db12d33822c3ddfcd140c079b72065f"
+  },
+  "linux5-tree_design-validation.json.gz": {
+    "bytes": 9914,
+    "sha256": "4e92932d92a241f9d26c55fe07d67f4eea26482315058bc2ab7fa1c336a30d5f"
+  },
+  "linux6-camera_design-result.json.gz": {
+    "bytes": 11041,
+    "sha256": "badb88487eb144832661c4786ec94bcace9fceac3307855da55bee50f5588f5d"
+  },
+  "linux6-camera_design-steps.json.gz": {
+    "bytes": 11476,
+    "sha256": "36e78719dcaa9c1d874734c784cc8b305be7a412c8ac876b9123c8a8c96bb823"
+  },
+  "linux6-camera_design-validation.json.gz": {
+    "bytes": 6329,
+    "sha256": "3625fe0f46dd721b3f4965c3f6d7b13d518493854a35b197885beed24dd6298e"
+  },
+  "linux6-camera_plane_16-result.json.gz": {
+    "bytes": 1453,
+    "sha256": "fd240eb6229286de107bef0c9c193abe1c406966ff71016dfba10807584f7c3a"
+  },
+  "linux6-camera_plane_16-steps.json.gz": {
+    "bytes": 1193,
+    "sha256": "bed94f3aea9372ce1acd35db2bb9dd24df34d5dd4c741d21de182eb827e7ee91"
+  },
+  "linux6-camera_plane_22-result.json.gz": {
+    "bytes": 1452,
+    "sha256": "dc5ea89890a199ff3730a3f8e8a85d929881920ef4536ace643dc2140ed1846a"
+  },
+  "linux6-camera_plane_22-steps.json.gz": {
+    "bytes": 1194,
+    "sha256": "f9ca9467118206376c5337c17baf426ee41218ebd17a31a01f5ddfa1d7a0d64a"
+  },
+  "linux6-project_display_16-result.json.gz": {
+    "bytes": 1453,
+    "sha256": "db2db707ee5f54b56faf1e4962f4df169d541427760449cfa067e3218c86582a"
+  },
+  "linux6-project_display_16-steps.json.gz": {
+    "bytes": 1240,
+    "sha256": "14ddf42a188988be705f95d40c0a1ce7dd95854a416ba87857c731cd03513fa1"
+  },
+  "linux6-project_display_22-result.json.gz": {
+    "bytes": 1454,
+    "sha256": "fcb36e6bea633b71e02f60c34936b5097ad16aa41eb107707da9af184bbfe931"
+  },
+  "linux6-project_display_22-steps.json.gz": {
+    "bytes": 1241,
+    "sha256": "999f329a7b3086eb79079fe891add64dbfa0fe0406d6c65d950a35ef75253127"
+  },
+  "linux6-scene_visibility_16-result.json.gz": {
+    "bytes": 1402,
+    "sha256": "b78cac469329ceffe62070c60fedf5b7818594529a0a6a720a81e7edda56c6f1"
+  },
+  "linux6-scene_visibility_16-steps.json.gz": {
+    "bytes": 1139,
+    "sha256": "cd800fa8c6179758ddfec0bef8a3b4b72c87f5c5ea2bda7e5eecf3cdd8d8ebcb"
+  },
+  "linux6-scene_visibility_22-result.json.gz": {
+    "bytes": 1403,
+    "sha256": "05eac9ca44e1355c15874aff6cdd4107d42f2b8986392da7e66ca8fdf17220cf"
+  },
+  "linux6-scene_visibility_22-steps.json.gz": {
+    "bytes": 1140,
+    "sha256": "2254064ca1f7913228a1a9590ac65d483cae24394aae327d2a92b364f9210b48"
+  },
+  "linux7-camera_design-result.json.gz": {
+    "bytes": 3451,
+    "sha256": "4e38b0375333a34154af5329cbb07cb52e490837c62bf9b38d7b15b059934921"
+  },
+  "linux7-camera_design-steps.json.gz": {
+    "bytes": 2737,
+    "sha256": "e3a52914d936c86f5562f77cbf007b31c63bf61acce23a691c35c998601828f3"
+  },
+  "linux7-camera_plane_16-result.json.gz": {
+    "bytes": 1454,
+    "sha256": "ab4187c800e5127c7d64fc87f5e3c1e70c2a2e1475c8c78a1129dc9484370ff0"
+  },
+  "linux7-camera_plane_16-steps.json.gz": {
+    "bytes": 1195,
+    "sha256": "a268c3b7a38244daaafdd1ff8c1d86a114719c856add93a18b460c229ca01c2b"
+  },
+  "linux7-camera_plane_22-result.json.gz": {
+    "bytes": 1453,
+    "sha256": "92eed0cbbe8209477230d77f3399dc3a3d470318890eec579ea1573339a5cf80"
+  },
+  "linux7-camera_plane_22-steps.json.gz": {
+    "bytes": 1195,
+    "sha256": "6282ae869ea9aeaac18c54898f70de0f061ed568e6851319a50fa274f68939b8"
+  },
+  "linux7-project_display_16-result.json.gz": {
+    "bytes": 1448,
+    "sha256": "7477d35fb12f77c7e720a78cf3d9765483cd81112c23eafb04c1c91e6e70a83c"
+  },
+  "linux7-project_display_16-steps.json.gz": {
+    "bytes": 1239,
+    "sha256": "19486f0b1107af66a766263ec8d86fad1f0dfe6904ad60bcccf952bd27e9c3ab"
+  },
+  "linux7-project_display_22-result.json.gz": {
+    "bytes": 1455,
+    "sha256": "384efbbde32c09419b436846f92c91c8371f9e490d7cec67cbfddd1cf1f380e5"
+  },
+  "linux7-project_display_22-steps.json.gz": {
+    "bytes": 1240,
+    "sha256": "2ef042984140fab74ff5e2f1ec7020ae893a8cb2843446bf912b739f654dd628"
+  },
+  "linux7-scene_visibility_16-result.json.gz": {
+    "bytes": 1401,
+    "sha256": "676ae403e44454f76bb2beea0928745ef950d18bc38eda1fd45938d4aae69fd0"
+  },
+  "linux7-scene_visibility_16-steps.json.gz": {
+    "bytes": 1140,
+    "sha256": "73353553f65ed96d254ddc47d6e675f112d4294497c28db0855783de577d8b35"
+  },
+  "linux7-scene_visibility_22-result.json.gz": {
+    "bytes": 1400,
+    "sha256": "2fb4be68a6a08889bc458fd64c03fb404894076994d896db8a88d66ce84d4fc9"
+  },
+  "linux7-scene_visibility_22-steps.json.gz": {
+    "bytes": 1138,
+    "sha256": "96f5f0cd98c0e36ee074c75ae2ee59465bd2d8b7d1e29d0442bbe0e91da2d825"
+  },
+  "linux7-tree_design-result.json.gz": {
+    "bytes": 11877,
+    "sha256": "345027d6369b1f7a144dc85734bc05004bc6f073d02f3a831f19addbf28d855f"
+  },
+  "linux7-tree_design-steps.json.gz": {
+    "bytes": 12134,
+    "sha256": "e7c4745997863efb07718c75a7963e882c026184bc8003240dab880f2b956dbe"
+  },
+  "linux7-tree_design-validation.json.gz": {
+    "bytes": 9945,
+    "sha256": "ae9e903c8664432e24fadbecc446c052db9004e15f9ca08a601238489f1fb6cc"
+  },
+  "linux8-bundled-dark-top.png": {
+    "bytes": 114417,
+    "sha256": "3f5954a164b0236c9900e0777097218bba3aaad72021bb1b9d7e59f31ad551cd"
+  },
+  "linux8-bundled-large-save.png": {
+    "bytes": 136628,
+    "sha256": "f8004ef85f367275ef5cb46eff6e25f01e0675a9538ab1dbd6f8a8c5db88b0ea"
+  },
+  "linux8-camera_design-result.json.gz": {
+    "bytes": 10882,
+    "sha256": "e8e17122a16c4e48a67fd769aca85e59886db8ca82dbf85e5b5edc85fa883d58"
+  },
+  "linux8-camera_design-steps.json.gz": {
+    "bytes": 11357,
+    "sha256": "af9c6cedffe6787d0619357e5f78cd7837a05ee067e19df1c99437774df2aebe"
+  },
+  "linux8-camera_design-validation.json.gz": {
+    "bytes": 6138,
+    "sha256": "c6d612af56de70800009234f43e301cbe5cc4d0d28e8e3de2395663e0aaf0702"
+  },
+  "linux8-system-contrast-zoom-max.png": {
+    "bytes": 107343,
+    "sha256": "72162be8c193e5a203569cf26ff324c5500b2540961d003dd5c4073d08bd83ce"
+  },
+  "linux8-system-dark-check-focus.png": {
+    "bytes": 124814,
+    "sha256": "81cd0dd36ee7d163bbf1374157bdc365c692251ed7061dfc1c97ccfdad765a64"
+  },
+  "linux8-system-dark-menu.png": {
+    "bytes": 114194,
+    "sha256": "0ea5fb4e7a9687052de165d5cc4c770f35d11c25f3bf3a6581289883e52f07f4"
+  },
+  "linux8-system-dark-orbit-drag.png": {
+    "bytes": 155388,
+    "sha256": "73af663438512affcc8f440c576507ecca9b85d2facf3f44c25dd031c72b320e"
+  },
+  "linux8-system-dark-orbit-min.png": {
+    "bytes": 134752,
+    "sha256": "e617a5ca337c7d740acbecaa85177be52c180268e0820ab97bb7e66f0b744d9c"
+  },
+  "linux8-system-dark-plane.png": {
+    "bytes": 125112,
+    "sha256": "85b96a180a3b53379bf530f8f5b001d7f3985849ee879ce76e77a71e06d296b7"
+  },
+  "linux8-system-dark-save.png": {
+    "bytes": 156583,
+    "sha256": "06c7930107958147f5f9e35fd9f6af2eb647c0ae29caf8950e41c42f99f60bfa"
+  },
+  "linux8-system-dark-top.png": {
+    "bytes": 114821,
+    "sha256": "0f1acdcbe7952cf9f2f8e93c373501f7d1685a840110ca151fcc165e43c34674"
+  },
+  "linux8-system-dark-zoom-max.png": {
+    "bytes": 122922,
+    "sha256": "b3fe121b8961a3f36080ed185dbe775710d90f6b418fe2b3cec145abb4811fa1"
+  },
+  "linux8-system-dark-zoom-min.png": {
+    "bytes": 130955,
+    "sha256": "547753964c3395b3d67cebd41d4611c67650faeac867269cff820598ff53d841"
+  },
+  "linux8-system-large-save.png": {
+    "bytes": 133921,
+    "sha256": "e794452f6b26857f884abe0cc94ecdf082c76ebdbd0409cf8f0864c8ccc3dd65"
+  },
+  "linux8-system-large-top.png": {
+    "bytes": 111182,
+    "sha256": "cc4d3a1a25f727d8676ca722fcfc1fa863db084860bfafbf0fc58e4b2ff48524"
+  },
+  "linux8-system-large-zoom-max.png": {
+    "bytes": 111502,
+    "sha256": "1e574f05a6334f6ad0eeede8902a52b7344726f1e08c357477f3a20f2621804b"
+  },
+  "linux8-system-light-top.png": {
+    "bytes": 115516,
+    "sha256": "d665865448dacbd9cddc0eaa138ea9879e708eb0bce9f149f4456e3b813479d7"
+  },
+  "public-source.json": {
+    "bytes": 27870,
+    "sha256": "e65bcbe836b71b7b2dcb36c6f0b2205b2712734ffef2bf629bca578d452f3922"
+  },
+  "README.md": {
+    "bytes": 7568,
+    "sha256": "49ce842e49263b312d42299ae0a6c5a063f13681f5a255cd76ff7174c3882a1d"
+  },
+  "reference-file-bytes.json": {
+    "bytes": 3621,
+    "sha256": "993244813676b5b11a7f7f9a1878a46feb811215b42c51f3f1d89c8113763cca"
+  },
+  "references.json": {
+    "bytes": 1528,
+    "sha256": "3a51b9ed9bd6e89cb215e618f24450f476e8b415db65033213b302ae4609cbb5"
+  },
+  "run-camera-source2-range-edge.sh.gz": {
+    "bytes": 275,
+    "sha256": "95103dae9e4639c2891abfc23a903c71d6cbc615d8833f5b78fe75e886c288d0"
+  },
+  "source0.json.gz": {
+    "bytes": 13231,
+    "sha256": "8f9eb384d42e063e882fb04da15e2960df40b54a5b5535e941c5d7d362c7672c"
+  },
+  "source1-inset.png": {
+    "bytes": 103868,
+    "sha256": "22cb8648da47d6ccb47c62dbfaee2cec2a850310aebea8efdfbccd30e62632b9"
+  },
+  "source1-public-delta.json.gz": {
+    "bytes": 102302,
+    "sha256": "8f056d735bb48243660aeecb3f46a68d8465132193b730c7a2af6d960c98667c"
+  },
+  "source1.json.gz": {
+    "bytes": 13272,
+    "sha256": "4234a6ca3344146734abf2e8f34d6168afcfd56d24f7db6e5a78f00534436f9a"
+  },
+  "source2-controlled-zoom-max.png": {
+    "bytes": 122513,
+    "sha256": "b4d83d9d6536bd5b27b8fe114febaf60879f562ba89dd5e8276c5eb10b52b8ca"
+  },
+  "source2-public-delta.json.gz": {
+    "bytes": 132345,
+    "sha256": "94dc36edfd5ae0ee786f1edade2e05b6d8d2b5024dca54778d70a7c628f3f9da"
+  },
+  "source2-system-dark-menu.png": {
+    "bytes": 113919,
+    "sha256": "04e5062a0986bb4825e25c32fd565f1a082fb6210a1605af41c3e4450eb30829"
+  },
+  "source2-system-dark-plane.png": {
+    "bytes": 124071,
+    "sha256": "cf487b98a9a2439d91619e1bea1b690b2e84b609e9f63794e76c67d346cca2ba"
+  },
+  "source2-system-dark-top.png": {
+    "bytes": 114581,
+    "sha256": "2c0776d29f153e2bedd76bd339a4135e3e9bdfa0edb324328fefbe65c085ab84"
+  },
+  "source2-system-dark-zoom-max.png": {
+    "bytes": 121531,
+    "sha256": "126572faba59438888e7b548893c2c6487471991866dbc24714609b03c44b6c9"
+  },
+  "source2.json.gz": {
+    "bytes": 13368,
+    "sha256": "708d2624d74cdad80686baad72fcb72766e6767f3cbead6a3dc992e293bd44be"
+  },
+  "source3-public-delta.json.gz": {
+    "bytes": 149854,
+    "sha256": "b4369ddf822e3dc5ddcc7a8323d61bf57764eaab74f75d46195a0c1ac92665c6"
+  },
+  "source3-system-dark-orbit.png": {
+    "bytes": 131055,
+    "sha256": "16ad8454fff88d93d43e8d3a77bb766fe6f587cb693987c2c3e5b9411b10ea47"
+  },
+  "source3-system-dark-zoom-max.png": {
+    "bytes": 123173,
+    "sha256": "8dcc5494c7a3205fb1783704147f79b26e8b298f9dadfad845b34bea08999834"
+  },
+  "source3-system-dark-zoom-min.png": {
+    "bytes": 131293,
+    "sha256": "517afcbec81700a050f7fc738ca65641da1279f248ab496f96b6e1362d55aa50"
+  },
+  "source3.json.gz": {
+    "bytes": 13365,
+    "sha256": "51789122cb3c3405e4113d7d025251d253f05d479d593d81d55d70975c27ef4c"
+  },
+  "source4-clipped-focus.png": {
+    "bytes": 123173,
+    "sha256": "8dcc5494c7a3205fb1783704147f79b26e8b298f9dadfad845b34bea08999834"
+  },
+  "source4-public-delta.json.gz": {
+    "bytes": 150202,
+    "sha256": "7c5fd0574d4ae02e987a896a5c3b814f1b88bfaf692850b5b726d84a82793ee9"
+  },
+  "source4.json.gz": {
+    "bytes": 13366,
+    "sha256": "8c6b21969ccd51ec9fc232295cca1a3a3f06029d2098f7491f374fa460c8337c"
+  },
+  "source5-public-delta.json.gz": {
+    "bytes": 150570,
+    "sha256": "7e10d4cbb52111da37811fadc08259bdb813361cdee21140928a0eb5aa7a8dd4"
+  },
+  "source5.json.gz": {
+    "bytes": 13374,
+    "sha256": "9090e1c696b377a1c6e2a71264aae86694efa48147db137648ce6c90cb01b4f6"
+  },
+  "source6-public-delta.json.gz": {
+    "bytes": 150576,
+    "sha256": "4bd0b30e372e994eff52abbcd45bec555e7a77d69a46b402c4cfb43f19f38547"
+  },
+  "source6-variable-field-plane.png": {
+    "bytes": 118093,
+    "sha256": "033b87e1eaaf3633f3c898fe4a8800beb9f57cd1a2b31663bb381f2850dcba70"
+  },
+  "source6-variable-field-top.png": {
+    "bytes": 110383,
+    "sha256": "39cc9517912ede59f978af0b8687b9ce5bec7e1d0f0b2e63341a2f81cec5cf22"
+  },
+  "source6.json.gz": {
+    "bytes": 13370,
+    "sha256": "f0a4dfde1b2b031337c31244efcb0bfaa50aa9e738ee3a27699b372e6c494209"
+  },
+  "source7-corrected-left-inset.png": {
+    "bytes": 103881,
+    "sha256": "1af0609c52f4748648b635b07cb37a2e968c7eb1256f0eb6d741ec3efc7103e3"
+  },
+  "source7-public-delta.json.gz": {
+    "bytes": 150893,
+    "sha256": "93b0cdd861860b914ae237fcf1c53a04c6d45adaf94bf884cd1dfe07e606cfd2"
+  },
+  "source7.json.gz": {
+    "bytes": 13370,
+    "sha256": "b78af3b42273cddcc3b0084a2c9ebfe56c35937d7802e7530acb901decb03624"
+  },
+  "source8-public-delta.json.gz": {
+    "bytes": 150902,
+    "sha256": "54ab77a884d456c87a70e7396b6755773c7cdd9b5f5f220cd5791326dc8d02e2"
+  },
+  "source8.json.gz": {
+    "bytes": 13369,
+    "sha256": "e08bd2f03a6f7aa1539e94b008bbcdbef4768092ddd8fda75c1fe4c13f101135"
+  },
+  "validation.json": {
+    "bytes": 12929,
+    "sha256": "d87ca7ab6aee1d433748269f392097aa9f41e112d509e52bd569c29017372d1c"
+  }
+}

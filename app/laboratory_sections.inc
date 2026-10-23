@@ -110,15 +110,26 @@ static void laboratory_inspector_footer(app *a,struct nk_rect r) {
     laboratory_wrapped_text(canvas,font,text,nk_rect(r.x+16,r.y+(r.h-lines*16*f)/2,fmaxf(1,r.w-32),r.h),16*f,muted());
     ps_ui_accessibility_label(ui,r,text);
 }
+static void laboratory_focus_outline(app *a,struct nk_rect r,float radius) {
+    struct nk_command_buffer *canvas=nk_window_get_canvas(a->ui);float f=a->preferences.ui_size/16.f;
+    struct nk_rect clip=canvas->clip,window=nk_window_get_bounds(a->ui);
+    /* The content scissor excludes its horizontal padding. The CSS outline
+     * belongs in that padding, while the panel's vertical viewport still clips. */
+    float left=fmaxf(window.x,clip.x-8*f),right=fminf(window.x+window.w,clip.x+clip.w+8*f);
+    nk_push_scissor(canvas,nk_rect(left,clip.y,fmaxf(0,right-left),clip.h));
+    nk_stroke_rect(canvas,nk_rect(r.x-4*f,r.y-4*f,r.w+8*f,r.h+8*f),radius*f,2*f,accent());
+    nk_push_scissor(canvas,clip);
+}
 static bool laboratory_checkbox(app *a,const char *label,bool *value,float inset,struct nk_rect *bounds) {
     struct nk_context *ui=a->ui;float f=a->preferences.ui_size/16.f;const struct nk_user_font *font=&a->laboratory_caption_font;
     float width=fmaxf(1,nk_window_get_content_region(ui).w-2*inset-21*f),line=15.95f*f;
     unsigned lines=laboratory_wrapped_lines(font,label,width);nk_layout_row_dynamic(ui,lines*line+9*f,1);struct nk_rect r;
     enum nk_widget_layout_states visible=nk_widget(&r,ui);r.x+=inset;r.w=fmaxf(1,r.w-2*inset);if(bounds)*bounds=r;
     if(visible==NK_WIDGET_INVALID)return false;
-    bool changed=ps_ui_switch_at(ui,plot_intersection(r,ui->current->layout->clip),label,value);
+    bool focused=false;bool changed=ps_ui_switch_at_custom_focus(ui,plot_intersection(r,ui->current->layout->clip),label,value,&focused);
     struct nk_command_buffer *canvas=nk_window_get_canvas(ui);struct nk_rect box=nk_rect(r.x,r.y+(line-13*f)/2,13*f,13*f);
     nk_fill_rect(canvas,box,2*f,*value?accent():UI_COLOR(window));nk_stroke_rect(canvas,nk_rect(box.x+f/2,box.y+f/2,box.w-f,box.h-f),1.5f*f,f,*value?accent():UI_COLOR(border));
     if(*value){struct nk_color ink=UI_COLOR(primary_text);nk_stroke_line(canvas,box.x+3*f,box.y+6*f,box.x+5.5f*f,box.y+9*f,1.4f*f,ink);nk_stroke_line(canvas,box.x+5.5f*f,box.y+9*f,box.x+10*f,box.y+3.5f*f,1.4f*f,ink);}
+    if(focused)laboratory_focus_outline(a,box,6);
     laboratory_wrapped_text(canvas,font,label,nk_rect(r.x+21*f,r.y,width,lines*line),line,UI_COLOR(text));return changed;
 }
