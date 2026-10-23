@@ -94,7 +94,12 @@ Bild entdeckt. Stand 5 besteht den erweiterten Prüfer unter Linux mit beiden
 Schriftquellen. Der erste Windows-Nachlauf von Stand 5 erhält in Phase 0
 keinen tatsächlichen SDL-Tastaturfokus und läuft nach 120 Sekunden vor
 Compiler-/Runnerstart aus. Das ist kein bestandener Geometrienachweis.
-Der begleitete Windows-Abschluss der Kopfkorrektur ist noch offen.
+Der begleitete Windows-Nachlauf besteht anschließend beide Schriftpfade in
+120,687 Sekunden. Er verwendet den unveränderten Prüfstand
+`F:/Physim/Pruefstaende/Inspektor-5`; 243 öffentliche Quellen und 18 Fontressourcen
+sind gegen Commit `a23ed54` geprüft. Die SDK-, Font- und Prüferabhängigkeiten
+sowie zwölf fremde Arbeitsdateien bleiben unverändert. Dieser Nachweis gilt
+für Stand 5 und ersetzt keinen Windows-Lauf der späteren Objekt-/Baumänderungen.
 
 Der neue Prüfweg verwendet je Schriftquelle einen tatsächlich kompilierten
 C-Pendelversuch und einen echten pausierten Runner. Er prüft sechs Varianten:

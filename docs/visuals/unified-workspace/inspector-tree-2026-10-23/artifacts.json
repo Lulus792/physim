@@ -39,6 +39,10 @@
     "bytes": 1048,
     "sha256": "65d5d72367c594ab98072fc97f61a4fe2018822575d588bf0071aa9da197ff12"
   },
+  "inspector-windows-6.log.gz": {
+    "bytes": 182,
+    "sha256": "f00be549fb137e161b5ba207c871ad6518b662c28613e25f7e656f66c0d06c6e"
+  },
   "linux1-docking_workflow-result.json.gz": {
     "bytes": 4223,
     "sha256": "e0d6b3e10783dcca3c0bc933d8dd27cf9e47728e908ca760cfc922b84d12f1d2"
@@ -232,8 +236,8 @@
     "sha256": "5ae02beb1929aebf1500c74ee23f56a57f248074113f93e1e17bc088ae28209c"
   },
   "README.md": {
-    "bytes": 3196,
-    "sha256": "08f0498b34cfae14b1a35c104916d618ff4206bc6a18190fef280772342b9635"
+    "bytes": 3751,
+    "sha256": "06aae0696233d997450a22d41be28405a10e394759112d7b3b4918bde6c452e4"
   },
   "references.json": {
     "bytes": 873,
@@ -264,8 +268,8 @@
     "sha256": "30a3cb28c14101272c3e878dbc878838fb875b3f37b91a2cb4d1b0d0cf3bf1fb"
   },
   "validation.json": {
-    "bytes": 4462,
-    "sha256": "27cf4c894e0feb1fbcc6813952f8a7712d42ccf60486e60ce1b54fc07fb1a41a"
+    "bytes": 7023,
+    "sha256": "bf95eaa3a20555d71a688263354dc498f31455c60168061710668010eb8333da"
   },
   "verify-negative.py": {
     "bytes": 3309,
@@ -346,5 +350,41 @@
   "windows5-inspector_design-steps.json.gz": {
     "bytes": 872,
     "sha256": "24b07043455b6d0467d1dd72a90a7a184655bed1afb39eea9153700e212c6355"
+  },
+  "windows6-bundled-contrast-card-0.png": {
+    "bytes": 126356,
+    "sha256": "39837834fecabfa7c02d3819070f8f733d2afd868d976f8e27b816b51f72d956"
+  },
+  "windows6-inspector_design-result.json.gz": {
+    "bytes": 6648,
+    "sha256": "3f01a55bdc1e7a6aa22f58f4d37cb7432b4c301a4a73dbb87ea906034e6973b6"
+  },
+  "windows6-inspector_design-steps.json.gz": {
+    "bytes": 8692,
+    "sha256": "538dd15e926f5c373b7bdfb931fe2eb99c7235c357876af61f52551ef1927082"
+  },
+  "windows6-inspector_design-validation.json.gz": {
+    "bytes": 4141,
+    "sha256": "5c17922c0d1d58319bca3b91542bba71a0ed9a9459429a9f4f38b390e72a69a7"
+  },
+  "windows6-snapshot.json.gz": {
+    "bytes": 2057,
+    "sha256": "60d5337d71d0689f9d9a4a70a51bb14117d34c666a76cacab7d98c949b0cf611"
+  },
+  "windows6-system-contrast-card-0.png": {
+    "bytes": 119231,
+    "sha256": "f4e27585539bee2d1df4e94979ff6d85fed0674d82124e0387388e274e65fa7a"
+  },
+  "windows6-system-dark-focus.png": {
+    "bytes": 138093,
+    "sha256": "533c3918839434a6e6b24a5fdf547ddf6796756eae97dfd82158707a4e4a84f5"
+  },
+  "windows6-system-large-card-1.png": {
+    "bytes": 116219,
+    "sha256": "8731fd2ebff86864ad2fa2c7893fee42f36ad9458d04d56a3353c4019c388ac4"
+  },
+  "windows6-system-light-card-0.png": {
+    "bytes": 151230,
+    "sha256": "32290b6b11d85e77eea95bba92cd7b7d9cf0d03f9a16ab4eb7540173aac756f0"
   }
 }

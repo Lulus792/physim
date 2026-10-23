@@ -29,6 +29,14 @@ Prozessspuren und strukturierte Geometrie werden verlustfrei komprimiert.
   vergeblich auf tatsächlichen Tastaturfokus; weitere Ergebnisse sind im
   aktuellen Manifest aufgeführt.
 
+Der begleitete Nachlauf `windows6` besteht Stand 5 mit beiden Schriftpfaden
+in 120,687 Sekunden. Die App stammt aus dem unveränderten Prüfstand
+`F:/Physim/Pruefstaende/Inspektor-5`. `windows6-snapshot.json.gz` hält dessen
+Binär-/Prüferhashes und die verwendeten D:-Abhängigkeiten fest. Die 243 öffentlichen
+Quellen und 18 Fontressourcen wurden zusätzlich gegen Commit `a23ed54` geprüft.
+Die Windows-Bilder sind tatsächliche unveränderte Readbacks. Dieser historische
+Nachlauf belegt keine späteren Änderungen an Objektkarten und Szenenbaum.
+
 `source*.json.gz` hält den tatsächlichen lokalen Quellgraphen einschließlich
 separat erfasster fremder Änderungen fest. `public-source.json` enthält 243
 zugehörige Quellen und 18 Fontressourcen, ohne die zwölf fremden Arbeitsdateien

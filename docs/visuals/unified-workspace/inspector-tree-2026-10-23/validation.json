@@ -3,7 +3,7 @@
   "final_source": 5,
   "scope": "Native simulation inspector headings and model value cards only; complete UI and inspector remain open",
   "goal_complete": false,
-  "windows_final_pending": true,
+  "windows_final_pending": false,
   "source_graph_files": 246,
   "public_source_files": 243,
   "font_resources": 18,
@@ -29,6 +29,32 @@
               "target": "physim",
               "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
               "sha256": "4fec2c3a9d71ca16197376b6259425f9a1681f7552b48421ac0afc957fbca120"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "windows6",
+      "directory": "F:/Physim/Pruefstaende/Inspektor-5/test-results/run-8s665x9z",
+      "historical_source_commit": "a23ed541612e89900798a9ea2edf1fee60c6df34",
+      "groups": [
+        {
+          "name": "inspector_design",
+          "status": "passed",
+          "seconds": 120.687,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "F:\\Physim\\Pruefstaende\\Inspektor-5\\bin\\physim.exe",
+              "sha256": "74a0df53fd9e7a0ae9e05e533c99cf2592762665ceb786c6952cb1a6a6d99f71"
             }
           ]
         }
@@ -86,6 +112,31 @@
       "file": "linux5-bundled-large-card-1.png",
       "source": "build/native/Design-analysis-linux/test-results/run-3k4lal6p/inspector_design/files ä/bundled/inspector-large-card-1.png",
       "sha256": "0c1c79b27a29e34529d0d8fdeb34ecaa2ed6379a4d72df9c87d5d842fe23ded7"
+    },
+    {
+      "file": "windows6-system-dark-focus.png",
+      "source": "F:/Physim/Pruefstaende/Inspektor-5/test-results/run-8s665x9z/inspector_design/files ä/system/inspector-dark-focus.png",
+      "sha256": "533c3918839434a6e6b24a5fdf547ddf6796756eae97dfd82158707a4e4a84f5"
+    },
+    {
+      "file": "windows6-system-light-card-0.png",
+      "source": "F:/Physim/Pruefstaende/Inspektor-5/test-results/run-8s665x9z/inspector_design/files ä/system/inspector-light-card-0.png",
+      "sha256": "32290b6b11d85e77eea95bba92cd7b7d9cf0d03f9a16ab4eb7540173aac756f0"
+    },
+    {
+      "file": "windows6-system-large-card-1.png",
+      "source": "F:/Physim/Pruefstaende/Inspektor-5/test-results/run-8s665x9z/inspector_design/files ä/system/inspector-large-card-1.png",
+      "sha256": "8731fd2ebff86864ad2fa2c7893fee42f36ad9458d04d56a3353c4019c388ac4"
+    },
+    {
+      "file": "windows6-system-contrast-card-0.png",
+      "source": "F:/Physim/Pruefstaende/Inspektor-5/test-results/run-8s665x9z/inspector_design/files ä/system/inspector-contrast-card-0.png",
+      "sha256": "f4e27585539bee2d1df4e94979ff6d85fed0674d82124e0387388e274e65fa7a"
+    },
+    {
+      "file": "windows6-bundled-contrast-card-0.png",
+      "source": "F:/Physim/Pruefstaende/Inspektor-5/test-results/run-8s665x9z/inspector_design/files ä/bundled/inspector-contrast-card-0.png",
+      "sha256": "39837834fecabfa7c02d3819070f8f733d2afd868d976f8e27b816b51f72d956"
     }
   ],
   "limitations": [
@@ -93,5 +144,6 @@
     "No practical screenreader tasks",
     "No physical monitor/DPI transition",
     "Current Windows five older regression groups last ran on source1; current Linux source4 covered all five before the local source5 heading correction"
-  ]
+  ],
+  "windows6_scope": "Immutable source5 binaries from F:, historical source verified against a23ed54; not a Windows proof of later object/tree changes."
 }

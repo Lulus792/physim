@@ -91,8 +91,8 @@ unverändert bleiben. Koordinatenrahmen sind in dieser Pendelprobe nicht enthalt
 ihre neuen Karten benötigen einen eigenen Laufnachweis.
 
 Der vollständige Szenenbaum und weitere Inspektorgruppen sind weiterhin
-abzugleichen. Der vorangehende Windows-Nachtest der Kopfkorrektur ist über
-einen separaten unveränderten Prüfstand unter `F:/Physim/Pruefstaende/Inspektor-5`
-vorbereitet und wartet auf tatsächlichen Hostfokus. Die hiesige Fortsetzung
-ersetzt diesen noch fehlenden Nachweis nicht. macOS, praktische Screenreader-
+abzugleichen. Der vorangehende Windows-Nachtest der Kopfkorrektur besteht
+anschließend über den separaten unveränderten Prüfstand unter
+`F:/Physim/Pruefstaende/Inspektor-5`. Er gilt für Inspektor-Stand 5 und ist kein
+Windows-Nachweis der späteren Objektänderungen. macOS, praktische Screenreader-
 Aufgaben und physische DPI-/Monitorwechsel sind ebenfalls nicht nachgewiesen.
