@@ -28,18 +28,38 @@ static float model_edit_banner(app *a) {
 }
 static void model_edit_fields(app *a) {
     struct nk_context *ui=a->ui;ps_model_edit *m=&a->model_edit;
+    memset(a->model_card_bounds,0,sizeof a->model_card_bounds);
     if(!workspace_section_begin(a,"Modellwerte",&a->model_disclosure))return;
     if(*m->bindings.error)laboratory_note(a,m->bindings.error);
     else if(!m->bindings.count)laboratory_note(a,"Keine buildgebundenen Modellwerte deklariert. Freigegebene Laufparameter stehen separat darunter.");
     else {
         laboratory_note(a,"Quellwerte vormerken und neu kompilieren. Eingestellte Laufparameter bleiben erhalten und können Quellstandards übersteuern; dort bei Bedarf Standard wählen.");
         for(unsigned i=0;i<m->bindings.count;i++) {
-            const ps_model_value *v=&m->bindings.entries[i];char label[192];snprintf(label,sizeof label,"%s / %s",v->label,v->unit);
-            nk_layout_row_dynamic(ui,24,1);nk_label_colored(ui,label,NK_TEXT_LEFT,muted());
+            const ps_model_value *v=&m->bindings.entries[i];char label[192];snprintf(label,sizeof label,"%s%s%s",v->label,*v->unit?" ":"",v->unit);
             char previous[64];memcpy(previous,m->text[i],sizeof previous);
-            nk_layout_row_dynamic(ui,46*a->preferences.ui_size/16.f,1);a->model_input_bounds[i]=nk_widget_bounds(ui);
-            nk_style_push_font(ui,&a->laboratory_value_font);
-            nk_edit_string_zero_terminated(ui,NK_EDIT_FIELD,m->text[i],sizeof m->text[i],nk_filter_default);nk_style_pop_font(ui);
+            float f=a->preferences.ui_size/16.f,width=nk_window_get_content_region(ui).w;
+            const struct nk_user_font *caption=&a->laboratory_caption_font;
+            float label_height=15.95f*f*laboratory_wrapped_lines(caption,label,fmaxf(1,width-24*f));
+            float card_height=24*f+label_height+5*f+35*f;
+            nk_layout_space_begin(ui,NK_STATIC,card_height,1);
+            struct nk_vec2 origin=nk_layout_space_to_screen(ui,nk_vec2(0,0));
+            struct nk_rect card=nk_rect(origin.x,origin.y,width,card_height);
+            a->model_card_bounds[i]=card;
+            struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+            nk_fill_rect(canvas,card,8*f,UI_COLOR(window));
+            nk_stroke_rect(canvas,nk_rect(card.x+f/2,card.y+f/2,fmaxf(0,card.w-f),fmaxf(0,card.h-f)),7.5f*f,f,UI_COLOR(border));
+            laboratory_wrapped_text(canvas,caption,label,nk_rect(card.x+12*f,card.y+12*f,fmaxf(1,card.w-24*f),label_height),15.95f*f,muted());
+            ps_ui_accessibility_label(ui,nk_rect(card.x+12*f,card.y+12*f,fmaxf(1,card.w-24*f),label_height),label);
+            nk_layout_space_push(ui,nk_rect(12*f,12*f+label_height+5*f,fmaxf(1,card.w-24*f),35*f));
+            a->model_input_bounds[i]=nk_widget_bounds(ui);
+            nk_style_push_font(ui,&a->laboratory_model_font);
+            nk_style_push_float(ui,&ui->style.edit.border,0);nk_style_push_vec2(ui,&ui->style.edit.padding,nk_vec2(0,3*f));
+            nk_style_push_style_item(ui,&ui->style.edit.normal,nk_style_item_color(nk_rgba(0,0,0,0)));
+            nk_style_push_style_item(ui,&ui->style.edit.hover,nk_style_item_color(nk_rgba(0,0,0,0)));
+            nk_style_push_style_item(ui,&ui->style.edit.active,nk_style_item_color(nk_rgba(0,0,0,0)));
+            nk_edit_string_zero_terminated(ui,NK_EDIT_FIELD,m->text[i],sizeof m->text[i],nk_filter_default);
+            nk_style_pop_style_item(ui);nk_style_pop_style_item(ui);nk_style_pop_style_item(ui);nk_style_pop_vec2(ui);nk_style_pop_float(ui);nk_style_pop_font(ui);
+            nk_layout_space_end(ui);ps_ui_row_exact_dynamic(ui,10*f,1);nk_spacer(ui);
             if(strcmp(previous,m->text[i])){m->revision++;m->error[0]=0;}
             double value;char hint[256];
             bool valid=ps_model_value_parse(v,m->text[i],&value);
@@ -48,5 +68,5 @@ static void model_edit_fields(app *a) {
             if(!valid){nk_style_push_color(ui,&ui->style.text.color,UI_COLOR(error));laboratory_note(a,"Endliche Zahl innerhalb des Bereichs eingeben (Komma oder Punkt).");nk_style_pop_color(ui);}
         }
     }
-    nk_tree_state_pop(ui);
+    workspace_section_end(a);
 }

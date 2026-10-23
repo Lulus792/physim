@@ -24,3 +24,8 @@ docs/visuals/unified-workspace/transport-2026-10-23/*.gz binary
 docs/visuals/unified-workspace/timeline-2026-10-23/* text eol=lf
 docs/visuals/unified-workspace/timeline-2026-10-23/*.png binary
 docs/visuals/unified-workspace/timeline-2026-10-23/*.gz binary
+
+# Inspector native captures and execution records keep their verified bytes.
+docs/visuals/unified-workspace/inspector-tree-2026-10-23/* text eol=lf
+docs/visuals/unified-workspace/inspector-tree-2026-10-23/*.png binary
+docs/visuals/unified-workspace/inspector-tree-2026-10-23/*.gz binary

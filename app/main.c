@@ -149,6 +149,8 @@ typedef struct {
     struct nk_user_font laboratory_title_font;
     struct nk_user_font laboratory_measurement_font;
     struct nk_user_font laboratory_timeline_font;
+    struct nk_user_font laboratory_section_font,laboratory_caption_font,laboratory_model_font;
+    struct nk_rect laboratory_section_bounds[9],laboratory_footer_bounds;
     struct nk_user_font workspace_status_font;
     struct nk_user_font analysis_title_font, analysis_chart_font;
     unsigned workbench_sidebar_focus;
@@ -222,6 +224,7 @@ typedef struct {
     ps_model_edit model_edit;
     enum nk_collapse_states model_disclosure;
     struct nk_rect model_input_bounds[PS_MODEL_VALUES_MAX],model_build_bounds,model_discard_bounds;
+    struct nk_rect model_card_bounds[PS_MODEL_VALUES_MAX];
     struct nk_rect dock_menu_bounds[5];
     ps_layout_catalog layouts;
     char layouts_path[4096], layouts_error[192], layout_name[PS_LAYOUT_NAME_BYTES];
@@ -3514,6 +3517,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "laboratory_tests.inc"
 #include "transport_design_tests.inc"
 #include "timeline_design_tests.inc"
+#include "inspector_design_tests.inc"
 #include "panel_window_tests.inc"
 #include "model_edit_tests.inc"
 #include "api_reference_tests.inc"
@@ -5376,6 +5380,7 @@ int main(int argc, char **argv) {
         if(workspace_state_test && !strncmp(argv[3],"file-tabs-design",16))tab_design_draw(a);
         if(workspace_state_test && !strcmp(argv[3],"transport-design"))transport_design_draw(a);
         if(a->timeline_design_active && !panel_is_detached(a,PS_PANEL_TIMELINE))timeline_design_draw(a);
+        if(workspace_state_test && !strcmp(argv[3],"inspector-design"))inspector_design_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"component-",10)) {
             component_details_draw(a,argv[3]);if(component_details.failed){exit_code=1;a->quitting=true;}
         }

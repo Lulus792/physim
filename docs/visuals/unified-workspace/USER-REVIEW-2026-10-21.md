@@ -81,3 +81,11 @@ kompakte Aktionen, große Zeitangabe und lesbare Skala. Zusätzliche Rahmen und
 überdeckende Hinweise sind entfernt. Echte Zeitnavigation, Tastaturbedienung,
 Abbruch und Projektwechsel werden separat geprüft. Die übrigen Nutzerbefunde
 und die vollständige Gestaltung bleiben weiterhin offen.
+
+Der [Inspektor-Teilabgleich](INSPECTOR-FIELDS-NATIVE.md) ersetzt danach die
+generischen Abschnittsköpfe und Modellwerte durch die gewählte B-Gestaltung:
+13-px-Köpfe, einzelne Trennlinien und Wertefelder mit großen Zahlen.
+Er korrigiert den tatsächlich überdeckten Objekttitel sowie die halb
+abgeschnittene Kartenkontur. Die neue Mindestbreitenprüfung ergänzt außerdem
+vollständige Kopftexte bei großer Schrift. Das ist keine Abnahme des gesamten
+Szenenbaums, aller Inspektorgruppen oder der gesamten Oberfläche.

@@ -1,0 +1,17 @@
+{
+  "source_manifest": 1,
+  "source": "build/native/Release/test-results/run-nsbzwb1k/laboratory_workflow/files ä/workflow ä/dark/laboratory-initial.bmp",
+  "source_sha256": "cc9f724f5e40fc502023e76c8af98d96291c2057cae784a28292cb9b733072fb",
+  "converted_png": "negative-card-clip-origin.png",
+  "rgb_identical": true,
+  "header_region": [
+    1156,
+    294,
+    40,
+    20
+  ],
+  "header_ink_pixels": 0,
+  "observed": "Model-card labels paint at layout clip origin and cover the object summary; input remains at its actual layout row",
+  "cause": "nk_layout_space_bounds returns layout.clip.x/y; use nk_layout_space_to_screen for the row origin",
+  "primary_source": "third_party/nuklear.h:nk_layout_space_bounds / nk_layout_space_to_screen"
+}

@@ -1,0 +1,6 @@
+{
+  "source": 4,
+  "file": "build/native/Design-analysis-linux/test-results/run-atvh9gvq/inspector_design/files \u00e4/system/inspector-contrast-card-0.png",
+  "sha256": "a27a3a45cc54e164113ccdc7004e6b54e0a68ce2b3a5d769b4d806d9a550699e",
+  "cause": "At 208px pane and native UI22, title and metadata split inside words; source4 suite passed without checking complete heading commands"
+}

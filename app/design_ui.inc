@@ -158,20 +158,7 @@ static void workbench_card_text(struct nk_command_buffer *canvas,const struct nk
         at+=used;y+=font->height+5;
     }
 }
-static bool workspace_section_begin(app *a,const char *label,enum nk_collapse_states *state) {
-    struct nk_context *ui=a->ui;
-    if(!laboratory_visible(a))return nk_tree_state_push(ui,NK_TREE_TAB,label,state)!=0;
-    struct nk_rect content=nk_window_get_content_region(ui);
-    /* inspector.css: 43px summaries and a single rule. Preserve the native
-     * content push/pop; enlarged text can grow the summary. */
-    float height=fmaxf(43,ui->style.font->height+20)-ui->style.window.spacing.y;
-    nk_style_push_vec2(ui,&ui->style.tab.padding,nk_vec2(0,fmaxf(0,(height-ui->style.font->height)/2)));
-    bool open=nk_tree_state_push(ui,NK_TREE_TAB,label,state)!=0;
-    nk_style_pop_vec2(ui);
-    float y=ui->current->layout->at_y-(float)*ui->current->layout->offset_y;
-    nk_fill_rect(nk_window_get_canvas(ui),nk_rect(content.x,y,content.w,1),0,UI_COLOR(border));
-    return open;
-}
+#include "laboratory_sections.inc"
 static void workbench_icon_line(struct nk_command_buffer *canvas,float x,float y,float scale,float ax,float ay,float bx,float by,struct nk_color color) {
     float t=1.2f*scale;ax=x+ax*scale;ay=y+ay*scale;bx=x+bx*scale;by=y+by*scale;
     nk_stroke_line(canvas,ax,ay,bx,by,t,color);nk_fill_circle(canvas,nk_rect(ax-t/2,ay-t/2,t,t),color);nk_fill_circle(canvas,nk_rect(bx-t/2,by-t/2,t,t),color);
@@ -225,6 +212,7 @@ static void parameter_form_view(app *a) {
     struct nk_panel *layout=ui->current->layout;
     a->parameter_header_bounds=nk_rect(content.x,layout->at_y-(float)*layout->offset_y,content.w,
                                       ui->style.font->height+2*ui->style.tab.padding.y);
+    if(laboratory_visible(a))a->parameter_header_bounds=a->laboratory_section_bounds[2];
     if (expanded) {
         nk_begin_disabled(ui, a->runner.running || a->reset_pending);
         for (uint32_t i = 0; i < a->parameters.count; i++) {
@@ -267,7 +255,7 @@ static void parameter_form_view(app *a) {
             }
         }
         nk_end_disabled(ui);
-        nk_tree_pop(ui);
+        workspace_section_end(a);
     }
 }
 static ps_display_unit channel_display_unit(app *a,const ps_channel *ch);
@@ -593,7 +581,7 @@ static void sidebar_panel(app *a) {
                     nk_layout_row_dynamic(ui, 45, 1);
                     nk_label_wrap(ui, "Öffne einen Ordner, um seine Dateien hier zu sehen.");
                 }
-                nk_tree_state_pop(ui);
+                workspace_section_end(a);
             }
             document_list_view(a);
             if (a->loaded) {
@@ -723,7 +711,7 @@ static void run_limits_view(app *a) {
                 nk_layout_row_dynamic(ui, 98, 1);
                 nk_label_wrap(ui, "0 = ohne Grenze. Für neue Simulationen und Auswertungen; "
                                   "Zeit zählt inklusive Pausen. Serien haben ein eigenes Zeitlimit.");
-                nk_tree_state_pop(ui);
+                workspace_section_end(a);
             }
 }
 static void inspector_panel(app *a) {
@@ -735,6 +723,8 @@ static void inspector_panel(app *a) {
         if(dock_begin(a,PS_DOCK_INSPECTOR))analysis_details_view(a);
         nk_end(ui);nk_style_pop_style_item(ui);nk_style_pop_vec2(ui);return;
     }
+    bool laboratory=laboratory_visible(a);
+    if(laboratory){nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(0,0));nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(16,4));nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(0,0));}
     bool compact=workbench_visible(a);
     if(compact){nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(16,4));nk_style_push_vec2(ui,&ui->style.window.scrollbar_size,nk_vec2(ui->style.window.scrollbar_size.x,0));}
     if(dock_begin(a,PS_DOCK_INSPECTOR)) {
@@ -744,10 +734,22 @@ static void inspector_panel(app *a) {
             workbench_context_view(a);
         } else if(a->loaded) {
             if(laboratory_visible(a)) {
-                float body=fmaxf(40,nk_window_get_content_region(ui).h-20);
+                struct nk_rect inspector=nk_window_get_content_region(ui);
+                float footer_height=laboratory_inspector_footer_height(a,inspector.w);
+                float body=fmaxf(40,inspector.h-footer_height);
+                memset(a->laboratory_section_bounds,0,sizeof a->laboratory_section_bounds);
                 nk_layout_row_dynamic(ui,body,1);
                 a->laboratory_inspector_body=nk_widget_bounds(ui);
                 if(nk_group_scrolled_offset_begin(ui,&a->laboratory_scroll_x,&a->laboratory_scroll_y,"Messlabor-Inspektor",0)) {
+                    /* The native bar overlays the reference's right padding.
+                     * Retain Nuklear's scroll/capture behavior; only grant the
+                     * reserved bar width to content, with horizontal overflow hidden. */
+                    struct nk_panel *inspector_layout=ui->current->layout;
+                    struct nk_rect saved_bounds=inspector_layout->bounds,saved_clip=inspector_layout->clip;
+                    float overlay=ui->style.window.scrollbar_size.x;
+                    inspector_layout->bounds.w+=overlay;inspector_layout->clip.w+=overlay;
+                    nk_push_scissor(nk_window_get_canvas(ui),inspector_layout->clip);
+                    a->laboratory_scroll_x=0;
                     /* The reference has one scrollable inspector body. A model
                      * error/build banner must not pin away all camera/settings
                      * space in a small window. Its actions scroll with the fields. */
@@ -766,16 +768,21 @@ static void inspector_panel(app *a) {
                         int channel=laboratory_channel_picker(a,0);uint32_t count;const ps_channel *channels=laboratory_channels(a,&count);
                         if(channel>=0){nk_layout_row_dynamic(ui,32,1);a->channel_unit_buttons[0]=nk_widget_bounds(ui);if(nk_button_label(ui,"Anzeigeeinheit …"))channel_unit_open(a,&channels[channel]);}
                         else laboratory_note(a,"Noch keine Messkanäle verfügbar.");
-                        nk_tree_state_pop(ui);
+                        workspace_section_end(a);
                     }
-                    if(workspace_section_begin(a,"Ereignisse",&a->laboratory_groups[2])){live_events_view(a);nk_tree_state_pop(ui);}
-                    if(workspace_section_begin(a,"Kamera und Darstellung",&a->laboratory_groups[3])){scene_controls_view(a);nk_tree_state_pop(ui);}
+                    if(workspace_section_begin(a,"Ereignisse",&a->laboratory_groups[2])){live_events_view(a);workspace_section_end(a);}
+                    if(workspace_section_begin(a,"Kamera und Darstellung",&a->laboratory_groups[3])){scene_controls_view(a);workspace_section_end(a);}
                     if(workspace_section_begin(a,"Aufzeichnung",&a->laboratory_groups[4])){
                         laboratory_note(a,*a->last_run?a->last_run:"Noch kein aufgezeichneter Lauf.");
-                        laboratory_note(a,a->timeline_scenes?"Messwerte und Szenenzustände":"Messwerte; keine aufgezeichnete Szene verfügbar");nk_tree_state_pop(ui);
+                        laboratory_note(a,a->timeline_scenes?"Messwerte und Szenenzustände":"Messwerte; keine aufgezeichnete Szene verfügbar");workspace_section_end(a);
                     }
-                    nk_group_end(ui);
+                    inspector_layout->bounds=saved_bounds;inspector_layout->clip=saved_clip;
+                    inspector_layout->max_x=fminf(inspector_layout->max_x,saved_bounds.x+saved_bounds.w);
+                    nk_push_scissor(nk_window_get_canvas(ui),saved_clip);
+                    nk_group_end(ui);a->laboratory_scroll_x=0;
                 }
+                a->laboratory_footer_bounds=nk_rect(inspector.x,inspector.y+body,inspector.w,footer_height);
+                laboratory_inspector_footer(a,a->laboratory_footer_bounds);
             } else camera_inspector(a);
             if(!laboratory_visible(a))run_limits_view(a);
         } else {
@@ -785,6 +792,7 @@ static void inspector_panel(app *a) {
     }
     nk_end(ui);
     if(compact){nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}
+    if(laboratory){nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}
 }
 #include "analysis_ui.inc"
 static void workspace_panel(app *a) {
@@ -1264,6 +1272,9 @@ static void workspace_draw_ui(app *a, int width, int height) {
     a->laboratory_title_font=*a->font_title;a->laboratory_title_font.height=14*a->workbench_bold_em*a->preferences.ui_size/16.f;
     a->laboratory_measurement_font=*a->font_ui;a->laboratory_measurement_font.height=23*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->laboratory_timeline_font=*a->font_ui;a->laboratory_timeline_font.height=18*a->workbench_regular_em*a->preferences.ui_size/16.f;
+    a->laboratory_section_font=*a->font_title;a->laboratory_section_font.height=13*a->workbench_bold_em*a->preferences.ui_size/16.f;
+    a->laboratory_caption_font=*a->font_ui;a->laboratory_caption_font.height=11*a->workbench_regular_em*a->preferences.ui_size/16.f;
+    a->laboratory_model_font=*a->font_ui;a->laboratory_model_font.height=19*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->workspace_status_font=*a->font_ui;a->workspace_status_font.height=10*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->analysis_title_font=*a->font_title;a->analysis_title_font.height=18*a->workbench_bold_em*a->preferences.ui_size/16.f;
     a->analysis_chart_font=*a->font_title;a->analysis_chart_font.height=20*a->workbench_bold_em*a->preferences.ui_size/16.f;

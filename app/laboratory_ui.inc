@@ -1,8 +1,14 @@
 /* Messlabor: all numbers, scenes and commands come from the native experiment. */
 static void laboratory_note(app *a,const char *text) {
-    float width=fmaxf(40,nk_window_get_content_region(a->ui).w-16);
-    nk_layout_row_dynamic(a->ui,fmaxf(26,documentation_height(a->ui->style.font,text,strlen(text),width)+8),1);
-    nk_label_wrap(a->ui,text);
+    struct nk_context *ui=a->ui;float f=a->preferences.ui_size/16.f;
+    const struct nk_user_font *font=&a->laboratory_caption_font;
+    float width=fmaxf(1,nk_window_get_content_region(ui).w),line_height=17.05f*f;
+    unsigned lines=laboratory_wrapped_lines(font,text,width);
+    nk_layout_row_dynamic(ui,16*f+lines*line_height,1);struct nk_rect r;
+    if(nk_widget(&r,ui)==NK_WIDGET_INVALID)return;
+    struct nk_color color=ui->style.text.color,normal=UI_COLOR(text);if(!memcmp(&color,&normal,sizeof color))color=muted();
+    laboratory_wrapped_text(nk_window_get_canvas(ui),font,text,nk_rect(r.x,r.y+6*f,r.w,r.h-16*f),line_height,color);
+    ps_ui_accessibility_label(ui,r,text);
 }
 static void laboratory_value(app *a,const char *label,const char *value,bool measurement,unsigned slot) {
     struct nk_context *ui=a->ui;struct nk_rect r;nk_widget(&r,ui);
@@ -52,7 +58,7 @@ static void laboratory_object(app *a) {
     }
     nk_layout_row_dynamic(ui,30,1);a->display_all_bounds=nk_widget_bounds(ui);
     if(nk_button_label(ui,"Alle Objekte einblenden"))a->scene_view.hidden=0;
-    nk_tree_state_pop(ui);
+    workspace_section_end(a);
 }
 static const ps_channel *laboratory_channels(app *a,uint32_t *count) {
     if(a->analysis_only){*count=a->data.channel_count;return a->data.channels;}

@@ -20,6 +20,8 @@ static float dock_panel_header_height(const app *a,unsigned panel) {
     if(laboratory_visible(a)) {
         if(panel==PS_DOCK_WORKSPACE){uint32_t group=ps_dock_group(&a->preferences.dock,panel);
             return group!=PS_DOCK_NONE && a->preferences.dock.nodes[group].panels!=(1u<<panel)?38:0;}
+        if(panel==PS_DOCK_SIDEBAR)return 45.4f*a->preferences.ui_size/16.f;
+        if(panel==PS_DOCK_INSPECTOR)return 46.85f*a->preferences.ui_size/16.f;
         return 38;
     }
     return workbench_visible(a) && panel==PS_DOCK_LOG?42:dock_header_height(a);
@@ -294,7 +296,7 @@ static void dock_input(app *a,unsigned panel,struct nk_rect r,struct nk_window *
 }
 static bool dock_begin(app *a,unsigned panel) {
     struct nk_rect r=a->dock_panels[panel];float heading=dock_panel_header_height(a,panel);r.y+=heading;r.h=fmaxf(1,r.h-heading);
-    if(workbench_visible(a) && panel==PS_DOCK_INSPECTOR){r.x+=1;r.w=fmaxf(1,r.w-1);}
+    if((workbench_visible(a) || laboratory_visible(a)) && panel==PS_DOCK_INSPECTOR){r.x+=1;r.w=fmaxf(1,r.w-1);}
     nk_window_show(a->ui,dock_windows[panel],a->dock_visible[panel]?NK_SHOWN:NK_HIDDEN);
     struct nk_window *previous=a->ui->active;
     nk_style_push_float(a->ui,&a->ui->style.window.rounding,0);
@@ -346,6 +348,8 @@ static void dock_headers(app *a) {
             unsigned count=0;for(unsigned j=0;j<PS_DOCK_PANELS;j++) if(mask&(1u<<j)) count++;
             float close_size=workbench_visible(a) && (floating?p:d->nodes[i].active)==PS_DOCK_SIDEBAR?40:28;
             float close_fraction=workbench_visible(a) && count==1 && (mask&((1u<<PS_DOCK_WORKSPACE)|(1u<<PS_DOCK_LOG)))?0:fminf(.25f,close_size/fmaxf(1,r.w));
+            bool laboratory_heading=laboratory_visible(a) && count==1 && (mask&((1u<<PS_DOCK_SIDEBAR)|(1u<<PS_DOCK_INSPECTOR)));
+            if(laboratory_heading)close_fraction=0;
             nk_layout_row_begin(ui,NK_DYNAMIC,r.h,(int)count+1);
             for(unsigned j=0;j<PS_DOCK_PANELS;j++) if(mask&(1u<<j)) {
                 bool files=!panel_is_detached(a,PS_DOCK_WORKSPACE) && !laboratory_visible(a) && j==PS_DOCK_WORKSPACE && (floating || d->nodes[i].active==j) && !a->project_manager && (a->loaded || a->document_count);
@@ -405,6 +409,8 @@ static void dock_headers(app *a) {
                         nk_draw_text(canvas,nk_rect(summary_x,cy-small->height/2,fmaxf(1,b.x+b.w-26-profile_width-summary_x),small->height),summary,(int)strlen(summary),small,nk_rgba(0,0,0,0),UI_COLOR(muted));
                         nk_draw_text(canvas,nk_rect(b.x+b.w-13-profile_width,cy-small->height/2,profile_width+1,small->height),profile,(int)strlen(profile),small,nk_rgba(0,0,0,0),UI_COLOR(muted));
                         if(ps_ui_button_at(ui,nk_rect(b.x+6,b.y+6,23+title_width,b.h-12),"Protokoll ein-/ausklappen",a->show_log))a->show_log=!a->show_log;
+                    } else if(laboratory_heading) {
+                        struct nk_rect header;nk_widget(&header,ui);laboratory_panel_heading(a,j,header);
                     } else {
                         bool heading=workbench_visible(a) && (j==PS_DOCK_SIDEBAR || j==PS_DOCK_INSPECTOR);
                         if(heading)nk_style_push_font(ui,&a->workbench_fonts[3]);
@@ -424,6 +430,7 @@ static void dock_headers(app *a) {
             bool context=workbench_visible(a) && (active==PS_DOCK_INSPECTOR || active==PS_DOCK_WORKSPACE);
             if(workbench_visible(a) && active==PS_DOCK_LOG){nk_spacer(ui);a->dock_closes[active]=nk_rect(0,0,0,0);}
             else if(context)nk_spacer(ui);
+            else if(laboratory_heading) {nk_spacer(ui);a->dock_closes[active]=a->laboratory_sides[active==PS_DOCK_SIDEBAR?0:1];}
             else if(workbench_visible(a) && active==PS_DOCK_SIDEBAR) {
                 struct nk_rect cell;nk_widget(&cell,ui);a->workbench_sidebar_bounds=nk_rect(cell.x+4,cell.y+6,24,28);
                 a->dock_closes[active]=a->workbench_sidebar_bounds;

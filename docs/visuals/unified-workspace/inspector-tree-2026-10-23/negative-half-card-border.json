@@ -1,0 +1,62 @@
+{
+  "source": 2,
+  "source_file": "build/native/Release/test-results/run-hkzydpjl/inspector_design/files \u00e4/system/inspector-dark-card-0.png",
+  "card": [
+    1137.0,
+    451.05,
+    287.0,
+    79.95
+  ],
+  "row": 491.02500000000003,
+  "pixels": [
+    [
+      1135,
+      [
+        30,
+        31,
+        35
+      ]
+    ],
+    [
+      1136,
+      [
+        30,
+        31,
+        35
+      ]
+    ],
+    [
+      1137,
+      [
+        44,
+        46,
+        52
+      ]
+    ],
+    [
+      1138,
+      [
+        30,
+        31,
+        35
+      ]
+    ],
+    [
+      1139,
+      [
+        30,
+        31,
+        35
+      ]
+    ],
+    [
+      1140,
+      [
+        30,
+        31,
+        35
+      ]
+    ]
+  ],
+  "cause": "Centered stroke on card.x lies half outside the content clip; CSS border belongs inside the card"
+}

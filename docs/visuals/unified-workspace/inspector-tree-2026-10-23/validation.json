@@ -1,0 +1,97 @@
+{
+  "base": "207ce2d0c2868cf8ceae4b386c4c61a19583059f",
+  "final_source": 5,
+  "scope": "Native simulation inspector headings and model value cards only; complete UI and inspector remain open",
+  "goal_complete": false,
+  "windows_final_pending": true,
+  "source_graph_files": 246,
+  "public_source_files": 243,
+  "font_resources": 18,
+  "foreign_files_preserved": 12,
+  "runs": [
+    {
+      "label": "linux5",
+      "directory": "build/native/Design-analysis-linux/test-results/run-3k4lal6p",
+      "groups": [
+        {
+          "name": "inspector_design",
+          "status": "passed",
+          "seconds": 86.58,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "4fec2c3a9d71ca16197376b6259425f9a1681f7552b48421ac0afc957fbca120"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "regression_source4": "linux4: 6/6; windows4: inspector_design 1/1, followed by manual discovery of word-split header",
+  "selected_images": [
+    {
+      "file": "linux5-system-dark-closed.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-3k4lal6p/inspector_design/files ä/system/inspector-dark-closed.png",
+      "sha256": "325e691427074e1b626c1ab37d030937a6aeae585821d84288e89a6788f8e062"
+    },
+    {
+      "file": "linux5-system-dark-focus.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-3k4lal6p/inspector_design/files ä/system/inspector-dark-focus.png",
+      "sha256": "75090160059ffcef7e7d525e75a00896f7710d15da318c987a9fffd4b9cb1026"
+    },
+    {
+      "file": "linux5-system-dark-opened.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-3k4lal6p/inspector_design/files ä/system/inspector-dark-opened.png",
+      "sha256": "4759d649dbdccf57d17ae2ee27c7bf3106e84e08923156c4477712a3a5523a98"
+    },
+    {
+      "file": "linux5-system-dark-card-0.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-3k4lal6p/inspector_design/files ä/system/inspector-dark-card-0.png",
+      "sha256": "54abb1bd98d793649893793595f8c58e7f9eaca6efd9ebf832ab44b8d3101c8f"
+    },
+    {
+      "file": "linux5-system-light-closed.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-3k4lal6p/inspector_design/files ä/system/inspector-light-closed.png",
+      "sha256": "72fbb59694f6683011be145d8e913ac54b41ce7974b2abef63647a9a2ff008d2"
+    },
+    {
+      "file": "linux5-system-light-card-0.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-3k4lal6p/inspector_design/files ä/system/inspector-light-card-0.png",
+      "sha256": "c106641df57b330bb7be4572bdb147f7386f47f0ff91c465ed7c18afdc596895"
+    },
+    {
+      "file": "linux5-system-large-card-1.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-3k4lal6p/inspector_design/files ä/system/inspector-large-card-1.png",
+      "sha256": "42a22a9cc73d8f02800c8c78262cceeca6ffa228cc24df89a2d8571cac9bd1e4"
+    },
+    {
+      "file": "linux5-system-contrast-card-0.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-3k4lal6p/inspector_design/files ä/system/inspector-contrast-card-0.png",
+      "sha256": "8cb67be67eda2f5d48542f5efc1579848b0041a364011a94cc7a3ef1e6454611"
+    },
+    {
+      "file": "linux5-bundled-dark-card-0.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-3k4lal6p/inspector_design/files ä/bundled/inspector-dark-card-0.png",
+      "sha256": "8f3c349ea157d8443e222f7641d5c418423774d92b507fe5d4f91ca9e1f818f6"
+    },
+    {
+      "file": "linux5-bundled-large-card-1.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-3k4lal6p/inspector_design/files ä/bundled/inspector-large-card-1.png",
+      "sha256": "0c1c79b27a29e34529d0d8fdeb34ecaa2ed6379a4d72df9c87d5d842fe23ded7"
+    }
+  ],
+  "limitations": [
+    "No macOS run",
+    "No practical screenreader tasks",
+    "No physical monitor/DPI transition",
+    "Current Windows five older regression groups last ran on source1; current Linux source4 covered all five before the local source5 heading correction"
+  ]
+}

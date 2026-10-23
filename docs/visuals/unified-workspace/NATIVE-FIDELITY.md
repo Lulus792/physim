@@ -199,3 +199,9 @@ die ursprüngliche Kopf-/Zeit-/Spuraufteilung und ergänzt tatsächliche Zeitnav
 bei adaptiven Schritten. Er behandelt außerdem Abbruch, Projektwechsel und
 denselben Inhalt im herausgezogenen nativen Fenster. Die dort begrenzten
 Nachweise ersetzen weiterhin keine Gesamtabnahme.
+
+Der [Inspektor-Teilabgleich](INSPECTOR-FIELDS-NATIVE.md) übernimmt die endgültigen
+B-Abschnittsköpfe, Modellwertkarten, Inhaltsbreite und innere Fußzeile. Er hält
+auch die trotz bestandener Funktionssuiten gefundenen nativen Überdeckungs- und
+Wortumbruchfehler fest. Vollständiger Inspektorinhalt, Szenenbaum, F1 und die
+übrigen offenen Bereiche bleiben weiter abzugleichen.
