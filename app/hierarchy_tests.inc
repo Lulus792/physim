@@ -16,6 +16,8 @@ static bool hierarchy_test_click(app *a,struct nk_rect r) {
     struct nk_rect panel=a->dock_panels[PS_DOCK_INSPECTOR],sidebar=a->dock_panels[PS_DOCK_SIDEBAR];
     if(r.x>=sidebar.x && r.x+r.w<=sidebar.x+sidebar.w)panel=sidebar;
     float top=32;
+    /* The first tree row starts at the content clip; no unreachable inset. */
+    if(r.x>=sidebar.x && r.x+r.w<=sidebar.x+sidebar.w && laboratory_visible(a) && a->laboratory_tree_body.h>0){panel=a->laboratory_tree_body;top=0;}
     if(r.x>=a->dock_panels[PS_DOCK_INSPECTOR].x && laboratory_visible(a)){panel=a->laboratory_inspector_body;top=8;}
     if(r.y<panel.y+top || r.y+r.h>panel.y+panel.h-12) {
         test_plot_wheel(a,panel.x+panel.w/2,panel.y+panel.h/2,r.y<panel.y+top?1:-1);settle=2;return false;

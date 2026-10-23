@@ -1,0 +1,14 @@
+{
+  "scope": "Frozen native before/after counterexample; no full-UI similarity score.",
+  "passed": true,
+  "checks": {
+    "root": {
+      "positive_glyph_pixels": 49,
+      "old_matching_pixels": 0
+    },
+    "footer": {
+      "positive_glyph_pixels": 74,
+      "old_matching_pixels": 0
+    }
+  }
+}

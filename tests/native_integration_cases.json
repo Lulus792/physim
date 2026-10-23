@@ -14160,6 +14160,38 @@
           ]
         }
       ]
+    },
+    {
+      "name": "tree_design",
+      "app": true,
+      "display": true,
+      "platforms": [
+        "win32",
+        "linux"
+      ],
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_tree_design.py",
+            "--app",
+            "{physim}",
+            "--root",
+            "{root}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 280,
+          "files": [
+            "app-steps.json",
+            "validation.json"
+          ]
+        }
+      ]
     }
   ]
 }

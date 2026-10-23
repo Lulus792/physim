@@ -295,7 +295,7 @@ static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
         bool log_default=a->laboratory_active?a->laboratory_previous.show_log:a->show_log;
         uint32_t flags=a->laboratory_active?31u:95u;
         ok = a->preferences.editor_size == PS_PREFERENCES_DEFAULT.editor_size && a->preferences.autosave_seconds == 30 &&
-             a->preferences.sidebar_width == 218 && a->preferences.log_height == 152 &&
+             a->preferences.sidebar_width == (a->laboratory_active?190u:218u) && a->preferences.log_height == 152 &&
              a->preferences.view_flags == flags && log_default &&
              ps_preferences_read(a->preferences_path,&persisted)==PS_OK && persisted.view_flags==95 &&
              persisted.sidebar_width==218 && persisted.inspector_width==255 && persisted.log_height==152;

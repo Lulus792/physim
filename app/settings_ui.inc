@@ -123,7 +123,9 @@ static void preferences_start(app *a, const char *override_path) {
         width = (int)fmax(1080, fmin(width, bounds.w));
         height = (int)fmax(740, fmin(height, bounds.h));
     }
-    SDL_SetWindowSize(a->window, width, height);
+    /* Capture the restored size after the asynchronous window request settles,
+     * before an immediate maximize can retain the old startup dimensions. */
+    if(SDL_SetWindowSize(a->window,width,height))SDL_SyncWindow(a->window);
     if (p.maximized)
         SDL_MaximizeWindow(a->window);
     layouts_start(a);

@@ -62,7 +62,8 @@ static float dock_minimum(const app *a,uint32_t id,bool x) {
         if(laboratory_visible(a)) {
             if(x) {
                 if(n->panels&(1u<<PS_DOCK_WORKSPACE))return 440;
-                if(n->panels&((1u<<PS_DOCK_SIDEBAR)|(1u<<PS_DOCK_INSPECTOR)))return 208;
+                if(n->panels&(1u<<PS_DOCK_SIDEBAR))return 150;
+                if(n->panels&(1u<<PS_DOCK_INSPECTOR))return 208;
             } else {
                 if(n->panels&(1u<<PS_DOCK_WORKSPACE))return LABORATORY_SCENE_MIN+1+LABORATORY_MEASURE_MIN;
                 if(n->panels&(1u<<PS_DOCK_LOG))return LABORATORY_LOG_MIN;
@@ -100,7 +101,7 @@ static float dock_resize_value(app *a,unsigned id,float *minimum,float *maximum,
     struct nk_rect r=a->dock_rects[id];bool x=n->kind==PS_DOCK_X;
     float extent=fmaxf(1,(x?r.w:r.h)-dock_gap(a)),min_first=dock_minimum(a,n->first,x),min_second=dock_minimum(a,n->second,x);
     *reverse=false;
-    if(dock_sidebar_split(d,n)) {*minimum=workbench_visible(a)?140:208;*maximum=fminf(workbench_visible(a) || analysis_visible(a)?480:360,extent-min_second);*standard=analysis_visible(a)?232:workbench_visible(a)?218:248;return a->dock_rects[n->first].w;}
+    if(dock_sidebar_split(d,n)) {*minimum=laboratory_visible(a)?150:workbench_visible(a)?140:208;*maximum=fminf(laboratory_visible(a)?420:workbench_visible(a) || analysis_visible(a)?480:360,extent-min_second);*standard=laboratory_visible(a)?190:analysis_visible(a)?232:workbench_visible(a)?218:248;return a->dock_rects[n->first].w;}
     if(dock_context_split(d,n)) {*reverse=true;*minimum=workbench_visible(a)?180:208;*maximum=fminf(480,extent-min_first);*standard=analysis_visible(a)?242:workbench_visible(a)?255:280;return a->dock_rects[n->second].w;}
     if(dock_log_split(d,n)) {*reverse=true;*minimum=workbench_visible(a)?126:laboratory_visible(a)?LABORATORY_LOG_MIN:150;*maximum=fminf(workbench_visible(a)?366:340,extent-min_first);*standard=workbench_visible(a)?152:178;return a->dock_rects[n->second].h+dock_gap(a);}
     *minimum=fmaxf(min_first,extent/16);*maximum=fminf(extent-min_second,extent*15/16);*standard=extent*.5f;

@@ -332,7 +332,9 @@ static bool accessibility_emit(struct nk_context *ctx,const char *text,int role,
     /* A native target must not activate a control underneath a higher window. */
     for(const struct nk_window *above=ctx->current->next;above && enabled;above=above->next) {
         if(above->flags&(NK_WINDOW_HIDDEN|NK_WINDOW_MINIMIZED|NK_WINDOW_CLOSED))continue;
-        if(role==8 && !strncmp(above->name_string,"dock-splitter-",14))continue;
+        /* Crossing nine-pixel separator targets remain independent controls.
+         * Ordinary windows and popups still block the separator beneath them. */
+        if(role==8 && (!strncmp(above->name_string,"dock-splitter-",14) || !strncmp(above->name_string,"laboratory-separator-",21)))continue;
         struct nk_rect cover=above->bounds;
         if(cover.x<right && cover.x+cover.w>left && cover.y<bottom && cover.y+cover.h>top)enabled=false;
     }

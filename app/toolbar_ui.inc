@@ -130,7 +130,12 @@ static bool toolbar_keyboard_key(app *a, const SDL_KeyboardEvent *key) {
     if(key->key==SDLK_F10 && plain && !(key->mod&SDL_KMOD_SHIFT)) {
         if(!key->repeat) {
             if(a->toolbar_keyboard)toolbar_keyboard_close(a);
-            else {a->toolbar_keyboard=true;a->toolbar_keyboard_top=0;a->toolbar_keyboard_item=-1;a->toolbar_menu=0;}
+            else {
+                /* F10 explicitly transfers input from a native control to the
+                 * custom menu, like outline/document keyboard navigation. */
+                nk_sdl_accessibility_keyboard_begin(a->ui);
+                a->toolbar_keyboard=true;a->toolbar_keyboard_top=0;a->toolbar_keyboard_item=-1;a->toolbar_menu=0;
+            }
         }
         return true;
     }

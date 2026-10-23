@@ -1,0 +1,193 @@
+{
+  "base": "163ed89f1b2e05c0c4db15f42f4eef167148aef7",
+  "final_source": 4,
+  "goal_complete": false,
+  "scope": "Native Messlabor tree, left display controls, shared camera state, separator focus and restored startup size; full UI remains open",
+  "linux": {
+    "directory": "build/native/Design-analysis-linux/test-results/run-mcjyjdfd",
+    "groups": [
+      {
+        "name": "toolbar_input_isolation",
+        "status": "passed",
+        "seconds": 20.285,
+        "binaries": [
+          {
+            "status": "passed",
+            "target": "python",
+            "artifact": "/usr/bin/python3",
+            "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+          },
+          {
+            "status": "passed",
+            "target": "physim",
+            "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "sha256": "7ab861a294685752087d6dd8a22b720829b1243b53eb0999cce517b41d22a3d7"
+          }
+        ]
+      },
+      {
+        "name": "keyboard_menu_small",
+        "status": "passed",
+        "seconds": 7.974,
+        "binaries": [
+          {
+            "status": "passed",
+            "target": "python",
+            "artifact": "/usr/bin/python3",
+            "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+          },
+          {
+            "status": "passed",
+            "target": "physim",
+            "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "sha256": "7ab861a294685752087d6dd8a22b720829b1243b53eb0999cce517b41d22a3d7"
+          }
+        ]
+      },
+      {
+        "name": "keyboard_menu_large",
+        "status": "passed",
+        "seconds": 7.124,
+        "binaries": [
+          {
+            "status": "passed",
+            "target": "python",
+            "artifact": "/usr/bin/python3",
+            "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+          },
+          {
+            "status": "passed",
+            "target": "physim",
+            "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "sha256": "7ab861a294685752087d6dd8a22b720829b1243b53eb0999cce517b41d22a3d7"
+          }
+        ]
+      },
+      {
+        "name": "tree_design",
+        "status": "passed",
+        "seconds": 133.459,
+        "binaries": [
+          {
+            "status": "passed",
+            "target": "python",
+            "artifact": "/usr/bin/python3",
+            "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+          },
+          {
+            "status": "passed",
+            "target": "physim",
+            "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+            "sha256": "7ab861a294685752087d6dd8a22b720829b1243b53eb0999cce517b41d22a3d7"
+          }
+        ]
+      }
+    ]
+  },
+  "windows": {
+    "build_only": true,
+    "display_test": false,
+    "binary_sha256": "24fa059882b8e2eb3539287cad7d05c87b5202a5760398079a9aa714b93dafb4",
+    "historical_inspector_source5": "Separate Windows proof passed, not this tree source"
+  },
+  "source_graph_files": 252,
+  "public_source_files": 249,
+  "fonts": 18,
+  "foreign_preserved": 12,
+  "selected_images": [
+    {
+      "file": "linux4-system-dark-expanded.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-mcjyjdfd/tree_design/files ä/system/tree-dark-expanded.png",
+      "sha256": "f8b0042d1b4e2e020c4f8d169b09ab7e9e12f74bb75bb949b5b273fcd3bb0560"
+    },
+    {
+      "file": "linux4-system-dark-keyboard.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-mcjyjdfd/tree_design/files ä/system/tree-dark-keyboard.png",
+      "sha256": "14eff56f09ebb2dfb8ba27b80d6f81dbdecca86531127b3747c072068f5e028f"
+    },
+    {
+      "file": "linux4-system-dark-collapsed.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-mcjyjdfd/tree_design/files ä/system/tree-dark-collapsed.png",
+      "sha256": "12967812d78ec131824025f2176a9e1469cefde8e3cd8fa8a6900a98642fc52a"
+    },
+    {
+      "file": "linux4-system-dark-focus.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-mcjyjdfd/tree_design/files ä/system/tree-dark-focus.png",
+      "sha256": "138597abbfa82e6ab6eb9379b556de577e61554635167e34d92dd584c28fa88c"
+    },
+    {
+      "file": "linux4-system-dark-camera.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-mcjyjdfd/tree_design/files ä/system/tree-dark-camera.png",
+      "sha256": "717167a32603d4d09f5261ed7d6f0cb20c8e0b945f6c1676a93869538d03a1b5"
+    },
+    {
+      "file": "linux4-system-light-expanded.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-mcjyjdfd/tree_design/files ä/system/tree-light-expanded.png",
+      "sha256": "bd85aafca673d7976e0fc6c8c7b02edf1cba1848122df3cccfcf77abe00407cf"
+    },
+    {
+      "file": "linux4-system-large-keyboard.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-mcjyjdfd/tree_design/files ä/system/tree-large-keyboard.png",
+      "sha256": "795aa51c79dfbbbc9abf0bb6a225233333bb3424c9dd2c3c6eefd75bf7e97425"
+    },
+    {
+      "file": "linux4-system-large-camera.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-mcjyjdfd/tree_design/files ä/system/tree-large-camera.png",
+      "sha256": "b4577b231132ef14bd4ae18861c29a8f37faa41998d3b44c4ad2c2770a9dd2af"
+    },
+    {
+      "file": "linux4-system-contrast-focus.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-mcjyjdfd/tree_design/files ä/system/tree-contrast-focus.png",
+      "sha256": "dfbcedf9c397cebe5d436f58dada0c02bb8711c5296c05b7076d908d37743584"
+    },
+    {
+      "file": "linux4-bundled-dark-expanded.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-mcjyjdfd/tree_design/files ä/bundled/tree-dark-expanded.png",
+      "sha256": "02374830540b81a54c8d62b2a5993e76c36e3866cb744fbd4858bca0597b5baa"
+    },
+    {
+      "file": "linux4-bundled-large-keyboard.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-mcjyjdfd/tree_design/files ä/bundled/tree-large-keyboard.png",
+      "sha256": "eda4fbeddd5f2eb95be871ade13a413ee5f9717383f4e2858610060675108daa"
+    },
+    {
+      "file": "linux4-system-separator-menu.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-mcjyjdfd/tree_design/files ä/system/tree-separator-menu.png",
+      "sha256": "609f89d8aca9663e13a0b37dec1d6da712ffc10a51b82789f6048360ea6ea827"
+    },
+    {
+      "file": "linux4-bundled-separator-menu.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-mcjyjdfd/tree_design/files ä/bundled/tree-separator-menu.png",
+      "sha256": "c5301d7dc8ffbfd8ec522d6e66ef79d2c7e8e9f3d68231b2051561c9423b27f9"
+    }
+  ],
+  "limitations": [
+    "No current Windows tree GUI proof",
+    "No macOS execution",
+    "No practical screenreader tasks",
+    "No physical DPI/monitor transition",
+    "Camera preset dropdown and remaining inspector groups not yet matched",
+    "Three foreign AT-SPI files in actual local compile graph; not a clean-checkout proof"
+  ],
+  "regression_source3": {
+    "directory": "build/native/Design-analysis-linux/test-results/run-4xa_qt6d",
+    "passed": [
+      "settings_workflow",
+      "docking_workflow",
+      "hierarchy_workflow",
+      "camera_plane_16",
+      "camera_plane_22",
+      "project_display_16",
+      "project_display_22",
+      "scene_visibility_16",
+      "scene_visibility_22"
+    ],
+    "failed": [
+      "tree_design"
+    ],
+    "changes_to_final": [
+      "app/toolbar_ui.inc"
+    ],
+    "scope": "Earlier nine regression groups are historical source3, not re-labelled as the final menu source."
+  }
+}

@@ -15,6 +15,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
     if(!strcmp(mode,"timeline-context"))return timeline_context_start(a,root);
     if(!strcmp(mode,"inspector-design"))return inspector_design_start(a,root);
     if(!strcmp(mode,"object-design"))return object_design_start(a,root);
+    if(!strcmp(mode,"tree-design"))return tree_design_start(a,root);
     if(!strncmp(mode,"component-",10))return component_details_start(a,root,mode);
     if(!strncmp(mode,"workbench-",10))return workbench_test_start(a,root,mode);
     if(!strncmp(mode,"laboratory-",11))return laboratory_test_start(a,root,mode);
@@ -160,6 +161,7 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
     if(!strcmp(mode,"timeline-context")){timeline_context_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"inspector-design")){inspector_design_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"object-design")){object_design_frame(a,stage,code,capture);return;}
+    if(!strcmp(mode,"tree-design")){tree_design_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"component-chart-",16)){component_chart_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"component-tip-",14)){component_tip_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"workbench-",10)){workbench_test_frame(a,mode,stage,code,capture);return;}

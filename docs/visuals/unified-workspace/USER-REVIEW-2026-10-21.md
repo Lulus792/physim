@@ -96,3 +96,11 @@ Eine echte Kugel, Organisationsgruppe und Beschriftung werden per Tastatur
 ausgewählt; Ausblenden/Einblenden und der unveränderte pausierte Lauf sind
 separat geprüft. Die Daten werden dem tatsächlichen Modell entnommen. Die
 Gesamtgestaltung, der vollständige Szenenbaum und weitere Gruppen bleiben offen.
+
+Der anschließende [Baumabgleich](SCENE-TREE-NATIVE.md) bearbeitet die linke
+Szenenleiste direkt: Hierarchie unmittelbar unter dem Kopf, schlanke Zeichen,
+vollständige Beschriftungen, getrennte Sichtbarkeit und ruhige Grundfilter.
+Die tatsächlichen Objekte und die Kameraoptionen bleiben erhalten. Gefundene
+native Fokus-/Startgrößenfehler und fehlgeschlagene Prüferstände werden separat
+belegt. Dieser Schritt erklärt die verbleibenden Kamera-/Metadatenunterschiede
+und ersetzt weiterhin keine vollständige Abnahme aller Nutzerbefunde.

@@ -213,3 +213,12 @@ Zeiger-/Tastaturprobe erhält Quelle und Lauf und prüft auch schmale lange Name
 Fehlende allgemeine Modellnamen-/Massenbindungen und die verbleibende native
 Windows-/Assistive-/DPI-Abnahme sind dort ausdrücklich begrenzt; die übrige
 Oberfläche und der Szenenbaum bleiben offen.
+
+Der folgende [Szenenbaumabgleich](SCENE-TREE-NATIVE.md) entfernt die vorgeschalteten
+Altabschnitte links und übernimmt Baumzeilen, leise Sichtbarkeit, unteren
+Darstellungsbereich und den linken Resizebereich 150–420 px. Reale Hierarchie,
+Tastaturauswahl und gemeinsam gebundene linke/rechte Kamera bleiben erhalten.
+Der dabei gefundene Fokusfehler überkreuzender Separatoren und die falsche
+gespeicherte Startgröße sind mit eigenen Vorher-/Nachher-Belegen erfasst.
+Die Kamera-Presetgestaltung und weitere Gesamtzustände bleiben offen; dies
+ist kein vollständiger Szenen-, Inspektor- oder Drei-Plattform-Abschluss.

@@ -110,3 +110,15 @@ static void laboratory_inspector_footer(app *a,struct nk_rect r) {
     laboratory_wrapped_text(canvas,font,text,nk_rect(r.x+16,r.y+(r.h-lines*16*f)/2,fmaxf(1,r.w-32),r.h),16*f,muted());
     ps_ui_accessibility_label(ui,r,text);
 }
+static bool laboratory_checkbox(app *a,const char *label,bool *value,float inset,struct nk_rect *bounds) {
+    struct nk_context *ui=a->ui;float f=a->preferences.ui_size/16.f;const struct nk_user_font *font=&a->laboratory_caption_font;
+    float width=fmaxf(1,nk_window_get_content_region(ui).w-2*inset-21*f),line=15.95f*f;
+    unsigned lines=laboratory_wrapped_lines(font,label,width);nk_layout_row_dynamic(ui,lines*line+9*f,1);struct nk_rect r;
+    enum nk_widget_layout_states visible=nk_widget(&r,ui);r.x+=inset;r.w=fmaxf(1,r.w-2*inset);if(bounds)*bounds=r;
+    if(visible==NK_WIDGET_INVALID)return false;
+    bool changed=ps_ui_switch_at(ui,plot_intersection(r,ui->current->layout->clip),label,value);
+    struct nk_command_buffer *canvas=nk_window_get_canvas(ui);struct nk_rect box=nk_rect(r.x,r.y+(line-13*f)/2,13*f,13*f);
+    nk_fill_rect(canvas,box,2*f,*value?accent():UI_COLOR(window));nk_stroke_rect(canvas,nk_rect(box.x+f/2,box.y+f/2,box.w-f,box.h-f),1.5f*f,f,*value?accent():UI_COLOR(border));
+    if(*value){struct nk_color ink=UI_COLOR(primary_text);nk_stroke_line(canvas,box.x+3*f,box.y+6*f,box.x+5.5f*f,box.y+9*f,1.4f*f,ink);nk_stroke_line(canvas,box.x+5.5f*f,box.y+9*f,box.x+10*f,box.y+3.5f*f,1.4f*f,ink);}
+    laboratory_wrapped_text(canvas,font,label,nk_rect(r.x+21*f,r.y,width,lines*line),line,UI_COLOR(text));return changed;
+}

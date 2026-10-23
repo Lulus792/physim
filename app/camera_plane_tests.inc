@@ -16,6 +16,8 @@ static bool camera_test_click(app *a,struct nk_rect r) {
     struct nk_rect panel=a->dock_panels[PS_DOCK_INSPECTOR],sidebar=a->dock_panels[PS_DOCK_SIDEBAR];
     if(r.x>=sidebar.x && r.x+r.w<=sidebar.x+sidebar.w)panel=sidebar;
     float top=32;
+    /* The first tree row starts at the content clip; no unreachable inset. */
+    if(r.x>=sidebar.x && r.x+r.w<=sidebar.x+sidebar.w && laboratory_visible(a) && a->laboratory_tree_body.h>0){panel=a->laboratory_tree_body;top=0;}
     if(r.x>=a->dock_panels[PS_DOCK_INSPECTOR].x && laboratory_visible(a)){panel=a->laboratory_inspector_body;top=8;}
     if(r.h<=0) return false;
     if(r.y<panel.y+top || r.y+r.h>panel.y+panel.h-12) {
@@ -40,7 +42,8 @@ static void camera_plane_test_frame(app *a,int *stage,int *code,const char **cap
     switch(*stage) {
     case 0:
         if(a->data.thread || a->library_thread) return;
-        a->tab=1;a->scene_disclosure=NK_MINIMIZED;a->view_disclosure=NK_MAXIMIZED;a->camera_disclosure=NK_MAXIMIZED;
+        a->tab=1;laboratory_context(a);ps_dock_reveal_outer(&a->preferences.dock,PS_DOCK_SIDEBAR,PS_DOCK_LEFT);
+        a->scene_disclosure=NK_MINIMIZED;a->view_disclosure=NK_MAXIMIZED;a->camera_disclosure=NK_MAXIMIZED;
         a->preferences.sidebar_width=360;ps_dock_hide(&a->preferences.dock,PS_DOCK_LOG);
         a->scene=(ps_scene){0};
         ps_scene_add_id(&a->scene,1,PS_SPHERE,ps_v3(-.5,0,0),ps_v3(0,0,0),.2,0x53dec2ff);

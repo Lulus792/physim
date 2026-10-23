@@ -699,7 +699,7 @@ bool nk_sdl_render(struct nk_context *ctx) {
                         above=popup;
                     }
                     if(above==window)above_target=true;
-                    else if(above_target && !(node->role==PS_A11Y_SEPARATOR && !strncmp(above->name_string,"dock-splitter-",14))) {
+                    else if(above_target && !(node->role==PS_A11Y_SEPARATOR && (!strncmp(above->name_string,"dock-splitter-",14) || !strncmp(above->name_string,"laboratory-separator-",21)))) {
                         struct nk_rect cover=above->bounds;
                         if(cover.x<target[0]+target[2] && cover.x+cover.w>target[0] &&
                            cover.y<target[1]+target[3] && cover.y+cover.h>target[1]) {covered=true;break;}

@@ -127,18 +127,21 @@ static bool laboratory_object_action(app *a,const char *label,bool secondary,str
     if(visible==NK_WIDGET_INVALID)return false;
     struct nk_rect target=plot_intersection(r,ui->current->layout->clip);bool focused=false;
     bool pressed=ps_ui_button_at_custom_focus(ui,target,label,false,&focused);
-    struct nk_command_buffer *canvas=nk_window_get_canvas(ui);bool hover=nk_input_is_mouse_hovering_rect(&ui->input,target);
-    if(!secondary || hover)nk_fill_rect(canvas,r,6*f,hover?UI_COLOR(button_hover):UI_COLOR(button));
+    struct nk_command_buffer *canvas=nk_window_get_canvas(ui);bool disabled=ui->current->widgets_disabled;
+    bool hover=!disabled && !(ui->current->layout->flags&NK_WINDOW_ROM) && nk_input_is_mouse_hovering_rect(&ui->input,target);
+    struct nk_color background=hover?UI_COLOR(button_hover):UI_COLOR(button),label_color=secondary?muted():UI_COLOR(text);
+    if(disabled){background.a/=2;label_color.a/=2;}
+    if(!secondary || hover)nk_fill_rect(canvas,r,6*f,background);
     if(a->preferences.theme==PS_THEME_HIGH_CONTRAST)nk_stroke_rect(canvas,nk_rect(r.x+f/2,r.y+f/2,r.w-f,r.h-f),5.5f*f,f,UI_COLOR(border));
     int at=0,length=(int)strlen(label);float y=r.y+(r.h-lines*line)/2;
     while(at<length) {
         int count=ps_ui_text_line(font,label+at,length-at,fmaxf(1,width-2*padding),false);
         if(count<=0){nk_rune rune;count=nk_utf_decode(label+at,&rune,length-at);}if(count<=0)break;
         float w=font->width(font->userdata,font->height,label+at,count);
-        nk_draw_text(canvas,nk_rect(r.x+(r.w-w)/2,y+(line-font->height)/2,w+1,font->height),label+at,count,font,nk_rgba(0,0,0,0),secondary?muted():UI_COLOR(text));
+        nk_draw_text(canvas,nk_rect(r.x+(r.w-w)/2,y+(line-font->height)/2,w+1,font->height),label+at,count,font,nk_rgba(0,0,0,0),label_color);
         at+=count;while(at<length && label[at]==' ')at++;y+=line;
     }
-    if(focused)nk_stroke_rect(canvas,nk_rect(target.x+2*f,target.y+2*f,fmaxf(0,target.w-4*f),fmaxf(0,target.h-4*f)),4*f,2*f,accent());
+    if(focused && !disabled)nk_stroke_rect(canvas,nk_rect(target.x+2*f,target.y+2*f,fmaxf(0,target.w-4*f),fmaxf(0,target.h-4*f)),4*f,2*f,accent());
     return pressed;
 }
 static void laboratory_object(app *a) {

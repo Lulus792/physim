@@ -23,6 +23,7 @@ static void laboratory_context(app *a) {
                 ps_dock_hide(&a->laboratory_layout.dock,PS_DOCK_SIDEBAR);
                 ps_dock_hide(&a->laboratory_layout.dock,PS_DOCK_LOG);
                 a->laboratory_layout.show_log=false;a->laboratory_layout.inspector_width=320;
+                if(a->laboratory_layout.sidebar_width==218)a->laboratory_layout.sidebar_width=190;
             }
             a->laboratory_measure_height=330;a->laboratory_closed_height=150;a->laboratory_timeline_height=120;
             a->laboratory_curve_ratio=.5f;a->laboratory_channels[0]=0;a->laboratory_channels[1]=1;

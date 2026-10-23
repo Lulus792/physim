@@ -1,0 +1,8 @@
+{
+  "source": "build/native/Design-analysis-linux/test-results/run-bat235gm/hierarchy_workflow/files \u00e4/workflow \u00e4/c/hierarchy-expanded.bmp",
+  "bmp_sha256": "4425ef8353da97e5f8848dc1be69a3bea588079f1d8b7d5a1f3d5e558a7f96be",
+  "png_sha256": "bf5aaeada8ab625d0e93451929fa3d5d09c63f84827d35d7b669d0bdd78cb216",
+  "rgb_sha256": "4f3047b0da43a119fff19663f1a9763522d2bab4137e9d2a20be005fa756f329",
+  "conversion": "RGB-identical BMP to PNG, no scaling or retouch",
+  "finding": "Native first row at body clip; test helper incorrectly required additional 8px above it"
+}

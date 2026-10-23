@@ -355,6 +355,101 @@ static void live_events_view(app *a) {
         nk_layout_row_dynamic(ui,48,1);nk_label_wrap(ui,note);
     }
 }
+static bool laboratory_object_action(app *a,const char *label,bool secondary,struct nk_rect *bounds);
+static void laboratory_note(app *a,const char *text);
+static void scene_camera_controls_view(app *a,bool compact) {
+    struct nk_context *ui=a->ui;
+    if (nk_tree_state_push(ui, NK_TREE_TAB, "Darstellung", &a->view_disclosure)) {
+        if(laboratory_visible(a)) {
+            bool planar=a->camera_2d;
+            if(laboratory_checkbox(a,"2D-Modus",&planar,0,&a->camera_mode_bounds))scene_camera_2d(a,planar);
+            laboratory_checkbox(a,"Orthografische Ansicht",&a->orthographic,0,&a->camera_projection_bounds);
+            if(!compact){laboratory_checkbox(a,"Vektoren",&a->show_vectors,0,&a->display_vector_bounds);laboratory_checkbox(a,"Flugbahnen",&a->show_paths,0,&a->display_path_bounds);}
+            laboratory_checkbox(a,"Punkte",&a->show_points,0,&a->display_points_bounds);laboratory_checkbox(a,"Beschriftungen",&a->show_labels,0,&a->display_labels_bounds);
+            if(!compact)laboratory_checkbox(a,"Raster und Achsen",&a->show_grid,0,NULL);
+            nk_begin_disabled(ui,!a->loaded || a->display_save_thread || a->recovery);
+            if(laboratory_object_action(a,"Als Projektvorgabe speichern",false,&a->display_save_bounds))project_display_save(a);
+            nk_end_disabled(ui);
+        } else {
+        nk_layout_row_dynamic(ui, 28, 1);
+        bool planar=a->camera_2d;
+        a->camera_mode_bounds=nk_widget_bounds(ui);
+        if(nk_checkbox_label(ui,"2D-Modus",&planar)) scene_camera_2d(a,planar);
+        a->camera_projection_bounds=nk_widget_bounds(ui);
+        nk_checkbox_label(ui, "Orthografische Ansicht", &a->orthographic);
+        if(!compact) {
+        a->display_vector_bounds=nk_widget_bounds(ui);
+        nk_checkbox_label(ui, "Vektoren", &a->show_vectors);
+        a->display_path_bounds=nk_widget_bounds(ui);
+        nk_checkbox_label(ui, "Flugbahnen", &a->show_paths);
+        }
+        a->display_points_bounds=nk_widget_bounds(ui);
+        nk_checkbox_label(ui, "Punkte", &a->show_points);
+        a->display_labels_bounds=nk_widget_bounds(ui);
+        nk_checkbox_label(ui, "Beschriftungen", &a->show_labels);
+        if(!compact)nk_checkbox_label(ui, "Raster und Achsen", &a->show_grid);
+        nk_layout_row_dynamic(ui,a->preferences.ui_size>=20?60:32,1);
+        a->display_save_bounds=nk_widget_bounds(ui);
+        nk_begin_disabled(ui,!a->loaded || a->display_save_thread || a->recovery);
+        if(nk_button_label(ui,"Als Projektvorgabe speichern")) project_display_save(a);
+        nk_end_disabled(ui);
+        }
+        nk_tree_state_pop(ui);
+    }
+    if (nk_tree_state_push(ui, NK_TREE_TAB, "Kamera", &a->camera_disclosure)) {
+        nk_layout_row_dynamic(ui, 22, 1);
+        nk_label_colored(ui, "Blickrichtung", NK_TEXT_LEFT, muted());
+        float scale=laboratory_visible(a)?a->preferences.ui_size/16.f:1;
+        int columns=laboratory_visible(a) && nk_window_get_content_region(ui).w<220*scale?1:2;
+        nk_layout_row_dynamic(ui,32*scale,columns);
+        a->camera_preset_bounds[0]=nk_widget_bounds(ui);
+        if (nk_button_label(ui, "Standard")) {
+            a->camera_2d = false;
+            a->yaw = PS_CAMERA_DEFAULT.yaw;
+            a->pitch = PS_CAMERA_DEFAULT.pitch;
+            a->zoom = PS_CAMERA_DEFAULT.distance;
+            a->camera_target = PS_CAMERA_DEFAULT.target;
+            a->orthographic = PS_CAMERA_DEFAULT.orthographic;
+        }
+        a->camera_preset_bounds[1]=nk_widget_bounds(ui);
+        if (nk_button_label(ui, "Vorne")) {
+            scene_camera_plane(a,0);
+            a->orthographic = true;
+        }
+        a->camera_preset_bounds[2]=nk_widget_bounds(ui);
+        if (nk_button_label(ui, "Seite")) {
+            scene_camera_plane(a,1);
+            a->orthographic = true;
+        }
+        a->camera_preset_bounds[3]=nk_widget_bounds(ui);
+        if (nk_button_label(ui, "Oben")) {
+            scene_camera_plane(a,2);
+            a->orthographic = true;
+        }
+        nk_layout_row_dynamic(ui, 26, 1);
+        if(a->camera_2d) {
+            const char *planes[]={"2D-Ebene: XY","2D-Ebene: YZ","2D-Ebene: XZ"};
+            nk_label(ui,planes[a->camera_plane],NK_TEXT_LEFT);
+        } else {
+            nk_label(ui, "Orbit", NK_TEXT_LEFT);
+            ps_ui_slider_named(ui,"Kamera seitlich (rad)",-3.14f,&a->yaw,3.14f,.02f);
+            nk_label(ui, "Neigung", NK_TEXT_LEFT);
+            ps_ui_slider_named(ui,"Kamera hoch (rad)",-(float)PS_PI/2,&a->pitch,(float)PS_PI/2,.02f);
+        }
+        nk_label(ui, "Zoom", NK_TEXT_LEFT);
+        ps_ui_slider_named(ui,"Kameraabstand (m)",1.5f,&a->zoom,12,.1f);
+        if(laboratory_visible(a)) {
+            laboratory_note(a,a->camera_2d?"Rechts/Mitte ziehen: verschieben · Mausrad: zoomen":"Rechts ziehen: drehen · Mitte ziehen: verschieben · Mausrad: zoomen");
+            laboratory_note(a,a->camera_2d?"Alt + Pfeile: verschieben. Alt + 2: 2D/3D. Alt + Bild auf/ab: zoomen. Alt + Pos1: Standard.":"Alt + Pfeile: drehen. Alt + Shift + Pfeile: verschieben. Alt + 2: 2D/3D. Alt + Bild auf/ab: zoomen. Alt + Pos1: Standard.");
+        } else {
+        nk_layout_row_dynamic(ui, 60, 1);
+        nk_label_wrap(ui,a->camera_2d?"Rechts/Mitte ziehen: verschieben\nMausrad: zoomen":"Rechts ziehen: drehen\nMitte ziehen: verschieben\nMausrad: zoomen");
+        nk_layout_row_dynamic(ui, 112, 1);
+        nk_label_wrap(ui,a->camera_2d?"Alt + Pfeile: verschieben. Alt + 2: 2D/3D. Alt + Bild auf/ab: zoomen. Alt + Pos1: Standard.":"Alt + Pfeile: drehen. Alt + Shift + Pfeile: verschieben. Alt + 2: 2D/3D. Alt + Bild auf/ab: zoomen. Alt + Pos1: Standard.");
+        }
+        nk_tree_state_pop(ui);
+    }
+}
 static void scene_controls_view(app *a) {
     struct nk_context *ui=a->ui;
     scene_selection_sync(a);
@@ -396,75 +491,7 @@ static void scene_controls_view(app *a) {
         scene_tree_view(a);
         nk_tree_state_pop(ui);
     }
-    if (nk_tree_state_push(ui, NK_TREE_TAB, "Darstellung", &a->view_disclosure)) {
-        nk_layout_row_dynamic(ui, 28, 1);
-        bool planar=a->camera_2d;
-        a->camera_mode_bounds=nk_widget_bounds(ui);
-        if(nk_checkbox_label(ui,"2D-Modus",&planar)) scene_camera_2d(a,planar);
-        a->camera_projection_bounds=nk_widget_bounds(ui);
-        nk_checkbox_label(ui, "Orthografische Ansicht", &a->orthographic);
-        a->display_vector_bounds=nk_widget_bounds(ui);
-        nk_checkbox_label(ui, "Vektoren", &a->show_vectors);
-        a->display_path_bounds=nk_widget_bounds(ui);
-        nk_checkbox_label(ui, "Flugbahnen", &a->show_paths);
-        a->display_points_bounds=nk_widget_bounds(ui);
-        nk_checkbox_label(ui, "Punkte", &a->show_points);
-        a->display_labels_bounds=nk_widget_bounds(ui);
-        nk_checkbox_label(ui, "Beschriftungen", &a->show_labels);
-        nk_checkbox_label(ui, "Raster und Achsen", &a->show_grid);
-        nk_layout_row_dynamic(ui,a->preferences.ui_size>=20?60:32,1);
-        a->display_save_bounds=nk_widget_bounds(ui);
-        nk_begin_disabled(ui,!a->loaded || a->display_save_thread || a->recovery);
-        if(nk_button_label(ui,"Als Projektvorgabe speichern")) project_display_save(a);
-        nk_end_disabled(ui);
-        nk_tree_state_pop(ui);
-    }
-    if (nk_tree_state_push(ui, NK_TREE_TAB, "Kamera", &a->camera_disclosure)) {
-        nk_layout_row_dynamic(ui, 22, 1);
-        nk_label_colored(ui, "Blickrichtung", NK_TEXT_LEFT, muted());
-        nk_layout_row_dynamic(ui, 32, 2);
-        a->camera_preset_bounds[0]=nk_widget_bounds(ui);
-        if (nk_button_label(ui, "Standard")) {
-            a->camera_2d = false;
-            a->yaw = PS_CAMERA_DEFAULT.yaw;
-            a->pitch = PS_CAMERA_DEFAULT.pitch;
-            a->zoom = PS_CAMERA_DEFAULT.distance;
-            a->camera_target = PS_CAMERA_DEFAULT.target;
-            a->orthographic = PS_CAMERA_DEFAULT.orthographic;
-        }
-        a->camera_preset_bounds[1]=nk_widget_bounds(ui);
-        if (nk_button_label(ui, "Vorne")) {
-            scene_camera_plane(a,0);
-            a->orthographic = true;
-        }
-        a->camera_preset_bounds[2]=nk_widget_bounds(ui);
-        if (nk_button_label(ui, "Seite")) {
-            scene_camera_plane(a,1);
-            a->orthographic = true;
-        }
-        a->camera_preset_bounds[3]=nk_widget_bounds(ui);
-        if (nk_button_label(ui, "Oben")) {
-            scene_camera_plane(a,2);
-            a->orthographic = true;
-        }
-        nk_layout_row_dynamic(ui, 26, 1);
-        if(a->camera_2d) {
-            const char *planes[]={"2D-Ebene: XY","2D-Ebene: YZ","2D-Ebene: XZ"};
-            nk_label(ui,planes[a->camera_plane],NK_TEXT_LEFT);
-        } else {
-            nk_label(ui, "Orbit", NK_TEXT_LEFT);
-            ps_ui_slider_named(ui,"Kamera seitlich (rad)",-3.14f,&a->yaw,3.14f,.02f);
-            nk_label(ui, "Neigung", NK_TEXT_LEFT);
-            ps_ui_slider_named(ui,"Kamera hoch (rad)",-(float)PS_PI/2,&a->pitch,(float)PS_PI/2,.02f);
-        }
-        nk_label(ui, "Zoom", NK_TEXT_LEFT);
-        ps_ui_slider_named(ui,"Kameraabstand (m)",1.5f,&a->zoom,12,.1f);
-        nk_layout_row_dynamic(ui, 60, 1);
-        nk_label_wrap(ui,a->camera_2d?"Rechts/Mitte ziehen: verschieben\nMausrad: zoomen":"Rechts ziehen: drehen\nMitte ziehen: verschieben\nMausrad: zoomen");
-        nk_layout_row_dynamic(ui, 112, 1);
-        nk_label_wrap(ui,a->camera_2d?"Alt + Pfeile: verschieben. Alt + 2: 2D/3D. Alt + Bild auf/ab: zoomen. Alt + Pos1: Standard.":"Alt + Pfeile: drehen. Alt + Shift + Pfeile: verschieben. Alt + 2: 2D/3D. Alt + Bild auf/ab: zoomen. Alt + Pos1: Standard.");
-        nk_tree_state_pop(ui);
-    }
+    scene_camera_controls_view(a,false);
 }
 static void camera_inspector(app *a) {
     struct nk_context *ui=a->ui;
@@ -553,9 +580,11 @@ static void camera_inspector(app *a) {
 #include "toolbar_ui.inc"
 static void analysis_runs_view(app *a);
 static void analysis_details_view(app *a);
+static void laboratory_scene_sidebar(app *a);
 static void sidebar_panel(app *a) {
     struct nk_context *ui=a->ui;
-    bool compact=workbench_visible(a);
+    bool compact=workbench_visible(a),laboratory=laboratory_visible(a);
+    if(laboratory){nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(8,0));nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(0,0));nk_style_push_vec2(ui,&ui->style.window.scrollbar_size,nk_vec2(ui->style.window.scrollbar_size.x,0));}
     if(analysis_visible(a)) {
         nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(12,18));
         nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(header)));
@@ -570,7 +599,8 @@ static void sidebar_panel(app *a) {
             nk_end(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);return;
         }
         if(a->loaded && a->tab==1 && !a->project_manager) {
-            scene_controls_view(a);nk_end(ui);
+            if(laboratory)laboratory_scene_sidebar(a);else scene_controls_view(a);nk_end(ui);
+            if(laboratory){nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}
             if(compact){nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}return;
         }
         {
@@ -682,12 +712,14 @@ static void sidebar_panel(app *a) {
     }
     nk_end(ui);
     if(compact){nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}
+    if(laboratory){nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}
 }
 #include "workbench_text_ui.inc"
 #include "source_outline_ui.inc"
 #include "workbench_api_ui.inc"
 #include "workbench_context_ui.inc"
 #include "laboratory_ui.inc"
+#include "laboratory_sidebar.inc"
 #include "model_edit_ui.inc"
 static void run_limits_view(app *a) {
     struct nk_context *ui=a->ui;
@@ -771,7 +803,7 @@ static void inspector_panel(app *a) {
                         workspace_section_end(a);
                     }
                     if(workspace_section_begin(a,"Ereignisse",&a->laboratory_groups[2])){live_events_view(a);workspace_section_end(a);}
-                    if(workspace_section_begin(a,"Kamera und Darstellung",&a->laboratory_groups[3])){scene_controls_view(a);workspace_section_end(a);}
+                    if(workspace_section_begin(a,"Kamera und Darstellung",&a->laboratory_groups[3])){scene_camera_controls_view(a,false);workspace_section_end(a);}
                     if(workspace_section_begin(a,"Aufzeichnung",&a->laboratory_groups[4])){
                         laboratory_note(a,*a->last_run?a->last_run:"Noch kein aufgezeichneter Lauf.");
                         laboratory_note(a,a->timeline_scenes?"Messwerte und Szenenzustände":"Messwerte; keine aufgezeichnete Szene verfügbar");workspace_section_end(a);
