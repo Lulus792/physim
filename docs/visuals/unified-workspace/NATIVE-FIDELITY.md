@@ -193,3 +193,9 @@ Browserprüfung abgeleitet. PNGs sowie HTML-/CSS-Quellen waren lokal lesbar.
 Die oben aufgelisteten offenen Bereiche bleiben offen. Insbesondere ist die
 erfolgreiche F1-Funktionsgruppe noch kein neuer vollständiger Bildabgleich mit H,
 Die danach nativ aufgebaute Auswertung ist getrennt in [ANALYSIS-NATIVE.md](ANALYSIS-NATIVE.md) dokumentiert; sie ist weiterhin keine vollständige Designabnahme.
+
+Der folgende [native Zeitleistenabgleich](SIMULATION-TIMELINE-NATIVE.md) übernimmt
+die ursprüngliche Kopf-/Zeit-/Spuraufteilung und ergänzt tatsächliche Zeitnavigation
+bei adaptiven Schritten. Er behandelt außerdem Abbruch, Projektwechsel und
+denselben Inhalt im herausgezogenen nativen Fenster. Die dort begrenzten
+Nachweise ersetzen weiterhin keine Gesamtabnahme.

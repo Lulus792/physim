@@ -1263,6 +1263,7 @@ static void workspace_draw_ui(app *a, int width, int height) {
     a->laboratory_value_font=*a->ui_fonts[3];a->laboratory_value_font.height=21*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->laboratory_title_font=*a->font_title;a->laboratory_title_font.height=14*a->workbench_bold_em*a->preferences.ui_size/16.f;
     a->laboratory_measurement_font=*a->font_ui;a->laboratory_measurement_font.height=23*a->workbench_regular_em*a->preferences.ui_size/16.f;
+    a->laboratory_timeline_font=*a->font_ui;a->laboratory_timeline_font.height=18*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->workspace_status_font=*a->font_ui;a->workspace_status_font.height=10*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->analysis_title_font=*a->font_title;a->analysis_title_font.height=18*a->workbench_bold_em*a->preferences.ui_size/16.f;
     a->analysis_chart_font=*a->font_title;a->analysis_chart_font.height=20*a->workbench_bold_em*a->preferences.ui_size/16.f;

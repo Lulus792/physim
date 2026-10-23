@@ -361,9 +361,13 @@ nk_bool ps_ui_slider_named(struct nk_context *ctx,const char *name,float minimum
     return changed;
 }
 nk_bool ps_ui_range_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,float *value,float maximum,float increment) {
+    return ps_ui_range_at_custom_focus(ctx,bounds,name,value,maximum,increment,NULL);
+}
+nk_bool ps_ui_range_at_custom_focus(struct nk_context *ctx,struct nk_rect bounds,const char *name,float *value,float maximum,float increment,bool *focused) {
+    if(focused)*focused=false;
     if(!ctx || !value || !isfinite(*value) || !isfinite(maximum) || maximum<=0 || !isfinite(increment) || increment<=0)return nk_false;
     double range[]={*value,0,maximum,increment};
-    if(accessibility_emit(ctx,name,5,bounds,false,NULL,false,range,NULL)){*value=(float)range[0];return nk_true;}
+    if(accessibility_emit(ctx,name,5,bounds,false,NULL,false,range,focused)){*value=(float)range[0];return nk_true;}
     return nk_false;
 }
 nk_bool ps_ui_horizontal_scrollbar_at(struct nk_context *ctx,struct nk_rect r,float *value,float maximum,float page,ps_ui_scrollbar_drag *drag,bool input_enabled) {
@@ -403,8 +407,10 @@ nk_bool ps_ui_separator_at(struct nk_context *ctx,struct nk_rect bounds,const ch
     return ps_ui_separator_step_at(ctx,bounds,name,minimum,value,maximum,10);
 }
 nk_bool ps_ui_separator_step_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,float minimum,float *value,float maximum,float step) {
-    double range[]={*value,minimum,maximum,step};
-    if(accessibility_emit(ctx,name,8,bounds,false,NULL,false,range,NULL)){*value=(float)range[0];return nk_true;}
+    double range[]={*value,minimum,maximum,step};bool focused=false;
+    /* Every separator paints its own one-pixel focused line. Suppress the
+     * generic inset rectangle around its nine-pixel input target. */
+    if(accessibility_emit(ctx,name,8,bounds,false,NULL,false,range,&focused)){*value=(float)range[0];return nk_true;}
     return nk_false;
 }
 nk_bool ps_ui_checkbox_named(struct nk_context *ctx,const char *text,const char *name,nk_bool *active) {

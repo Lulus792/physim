@@ -14032,6 +14032,70 @@
           ]
         }
       ]
+    },
+    {
+      "name": "timeline_context",
+      "app": true,
+      "display": true,
+      "platforms": [
+        "win32",
+        "linux"
+      ],
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_timeline_context.py",
+            "--app",
+            "{physim}",
+            "--root",
+            "{root}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 60,
+          "files": [
+            "app-steps.json",
+            "validation.json"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "timeline_design",
+      "app": true,
+      "display": true,
+      "platforms": [
+        "win32",
+        "linux"
+      ],
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_timeline_design.py",
+            "--app",
+            "{physim}",
+            "--root",
+            "{root}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 400,
+          "files": [
+            "app-steps.json",
+            "validation.json"
+          ]
+        }
+      ]
     }
   ]
 }

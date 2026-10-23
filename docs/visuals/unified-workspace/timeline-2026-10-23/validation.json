@@ -1,0 +1,921 @@
+{
+  "base": "ca16fc4a95fb1854d315df90f6ae37c0106f918f",
+  "final_source": 7,
+  "goal_complete": false,
+  "scope": "Approved native simulation timeline; existing full-interface goal remains open",
+  "source_graph_files": 243,
+  "public_source_files": 240,
+  "font_resources": 18,
+  "foreign_files_preserved": 12,
+  "runs": [
+    {
+      "label": "windows0",
+      "directory": "build/native/Release/test-results/run-n60_e77g",
+      "groups": [
+        {
+          "name": "timeline_workflow",
+          "status": "passed",
+          "seconds": 68.453,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "eeb43a33166e7b132f54b0adf6e41886261d3bf7e57c3f91509df08df5a6e11a"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "linux0",
+      "directory": "build/native/Design-analysis-linux/test-results/run-_lbk0r50",
+      "groups": [
+        {
+          "name": "timeline_workflow",
+          "status": "passed",
+          "seconds": 139.023,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "a5a703a1fb072106306b694a93c7c02f7c1e7d2448a5aaadbbecd01dbf9c1025"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "windows1",
+      "directory": "build/native/Release/test-results/run-b34p_45f",
+      "groups": [
+        {
+          "name": "timeline_workflow",
+          "status": "passed",
+          "seconds": 72.25,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "b88227a3d3d415b8a76bef1af1da5481165fcd8be3f79cc15908a4390121b002"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "linux1",
+      "directory": "build/native/Design-analysis-linux/test-results/run-9abfn_du",
+      "groups": [
+        {
+          "name": "timeline_workflow",
+          "status": "passed",
+          "seconds": 166.564,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "34b677136115beebc0f07101a199eb1f4b17df0bd8be261d693eaca557780efd"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "windows2",
+      "directory": "build/native/Release/test-results/run-6tpsv0w3",
+      "groups": [
+        {
+          "name": "timeline_design",
+          "status": "failed",
+          "seconds": 75.312,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "cca048ecdd85dd6ae29d20617bc867b9099e08945535334193475a67048b81ec"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "linux2",
+      "directory": "build/native/Design-analysis-linux/test-results/run-q1b_vba5",
+      "groups": [
+        {
+          "name": "timeline_design",
+          "status": "failed",
+          "seconds": 50.015,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "d6613c69bb32f405d58b749657d2d824bb4f6baaec505f7d3961467bce97b966"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "windows3",
+      "directory": "build/native/Release/test-results/run-mhbdswt3",
+      "groups": [
+        {
+          "name": "timeline_design",
+          "status": "failed",
+          "seconds": 63.219,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "8b2f3883395c22c78e25375ae53e0bde8fde039300f30e042e121faf359ddd3f"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "linux3",
+      "directory": "build/native/Design-analysis-linux/test-results/run-adusjj9c",
+      "groups": [
+        {
+          "name": "timeline_design",
+          "status": "failed",
+          "seconds": 38.24,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "6fd64199698565c2a5b4c874f8bb74c1d4f1273f25279dfe56ddbe416fa2980d"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "windows4",
+      "directory": "build/native/Release/test-results/run-f829r2zk",
+      "groups": [
+        {
+          "name": "timeline_context",
+          "status": "failed",
+          "seconds": 45.406,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "7cea24f922071a671ec72cf6f0e27b331414a0242c4219bf26819109787db885"
+            }
+          ]
+        },
+        {
+          "name": "timeline_design",
+          "status": "failed",
+          "seconds": 181.812,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "7cea24f922071a671ec72cf6f0e27b331414a0242c4219bf26819109787db885"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "linux4",
+      "directory": "build/native/Design-analysis-linux/test-results/run-kx_ih5ct",
+      "groups": [
+        {
+          "name": "timeline_context",
+          "status": "failed",
+          "seconds": 5.274,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "3342aefce373525afccbfdffef3ef4915dcef71cc23455131d156c2d27f5abd7"
+            }
+          ]
+        },
+        {
+          "name": "timeline_design",
+          "status": "failed",
+          "seconds": 58.171,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "3342aefce373525afccbfdffef3ef4915dcef71cc23455131d156c2d27f5abd7"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "windows5",
+      "directory": "build/native/Release/test-results/run-f8m268z4",
+      "groups": [
+        {
+          "name": "timeline_context",
+          "status": "failed",
+          "seconds": 3.453,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "df74973606fcd1926082c0f049be1f3a6d591c4bf6150a05d2d075262cd5c6f7"
+            }
+          ]
+        },
+        {
+          "name": "timeline_design",
+          "status": "failed",
+          "seconds": 52.453,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "df74973606fcd1926082c0f049be1f3a6d591c4bf6150a05d2d075262cd5c6f7"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "linux5",
+      "directory": "build/native/Design-analysis-linux/test-results/run-bzb_4emj",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 45.883,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "e2ff3da2d425267844b10873ec36de15113275749e6517b3fc4eba8f4e572527"
+            }
+          ]
+        },
+        {
+          "name": "inspector_workflow",
+          "status": "passed",
+          "seconds": 98.879,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "e2ff3da2d425267844b10873ec36de15113275749e6517b3fc4eba8f4e572527"
+            }
+          ]
+        },
+        {
+          "name": "timeline_context",
+          "status": "failed",
+          "seconds": 5.149,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "e2ff3da2d425267844b10873ec36de15113275749e6517b3fc4eba8f4e572527"
+            }
+          ]
+        },
+        {
+          "name": "timeline_design",
+          "status": "passed",
+          "seconds": 115.071,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "e2ff3da2d425267844b10873ec36de15113275749e6517b3fc4eba8f4e572527"
+            }
+          ]
+        },
+        {
+          "name": "timeline_workflow",
+          "status": "passed",
+          "seconds": 130.737,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "e2ff3da2d425267844b10873ec36de15113275749e6517b3fc4eba8f4e572527"
+            }
+          ]
+        },
+        {
+          "name": "transport_design",
+          "status": "passed",
+          "seconds": 86.407,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "e2ff3da2d425267844b10873ec36de15113275749e6517b3fc4eba8f4e572527"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "windows6",
+      "directory": "build/native/Release/test-results/run-tnlwy7em",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 19.953,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "4f1c5cae1e4dc91aa43908ca46a6b67081bf89a741d8213160bb033aba228ba3"
+            }
+          ]
+        },
+        {
+          "name": "inspector_workflow",
+          "status": "passed",
+          "seconds": 56.109,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "4f1c5cae1e4dc91aa43908ca46a6b67081bf89a741d8213160bb033aba228ba3"
+            }
+          ]
+        },
+        {
+          "name": "timeline_context",
+          "status": "passed",
+          "seconds": 1.625,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "4f1c5cae1e4dc91aa43908ca46a6b67081bf89a741d8213160bb033aba228ba3"
+            }
+          ]
+        },
+        {
+          "name": "timeline_design",
+          "status": "passed",
+          "seconds": 88.485,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "4f1c5cae1e4dc91aa43908ca46a6b67081bf89a741d8213160bb033aba228ba3"
+            }
+          ]
+        },
+        {
+          "name": "timeline_workflow",
+          "status": "failed",
+          "seconds": 123.297,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "4f1c5cae1e4dc91aa43908ca46a6b67081bf89a741d8213160bb033aba228ba3"
+            }
+          ]
+        },
+        {
+          "name": "transport_design",
+          "status": "passed",
+          "seconds": 62.953,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "4f1c5cae1e4dc91aa43908ca46a6b67081bf89a741d8213160bb033aba228ba3"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "linux6",
+      "directory": "build/native/Design-analysis-linux/test-results/run-0k16s11j",
+      "groups": [
+        {
+          "name": "graphic_dialog",
+          "status": "passed",
+          "seconds": 49.005,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "2572f208b759e6c1ed5e3bfcc4615ae34913c70e865af12158ba66892b77930a"
+            }
+          ]
+        },
+        {
+          "name": "inspector_workflow",
+          "status": "passed",
+          "seconds": 92.183,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "2572f208b759e6c1ed5e3bfcc4615ae34913c70e865af12158ba66892b77930a"
+            }
+          ]
+        },
+        {
+          "name": "timeline_context",
+          "status": "passed",
+          "seconds": 5.552,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "2572f208b759e6c1ed5e3bfcc4615ae34913c70e865af12158ba66892b77930a"
+            }
+          ]
+        },
+        {
+          "name": "timeline_design",
+          "status": "passed",
+          "seconds": 118.943,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "2572f208b759e6c1ed5e3bfcc4615ae34913c70e865af12158ba66892b77930a"
+            }
+          ]
+        },
+        {
+          "name": "timeline_workflow",
+          "status": "passed",
+          "seconds": 184.452,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "2572f208b759e6c1ed5e3bfcc4615ae34913c70e865af12158ba66892b77930a"
+            }
+          ]
+        },
+        {
+          "name": "transport_design",
+          "status": "passed",
+          "seconds": 89.398,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "2572f208b759e6c1ed5e3bfcc4615ae34913c70e865af12158ba66892b77930a"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "windows7",
+      "directory": "build/native/Release/test-results/run-f332npm8",
+      "groups": [
+        {
+          "name": "docking_workflow",
+          "status": "passed",
+          "seconds": 48.422,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "a0e24e6d970618215c459125969db3ceb589795da508613daab6cae21d55d36e"
+            }
+          ]
+        },
+        {
+          "name": "timeline_context",
+          "status": "passed",
+          "seconds": 1.984,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "a0e24e6d970618215c459125969db3ceb589795da508613daab6cae21d55d36e"
+            }
+          ]
+        },
+        {
+          "name": "timeline_design",
+          "status": "passed",
+          "seconds": 80.89,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "a0e24e6d970618215c459125969db3ceb589795da508613daab6cae21d55d36e"
+            }
+          ]
+        },
+        {
+          "name": "timeline_workflow",
+          "status": "passed",
+          "seconds": 75.172,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "sha256": "ceabb31054d429f57cb3825775677eeaf0db35fdabbc5ff6aef661c037154b00"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+              "sha256": "a0e24e6d970618215c459125969db3ceb589795da508613daab6cae21d55d36e"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "windows7-text",
+      "directory": "build/native/Release/test-results/run-h87ivo_2",
+      "groups": [
+        {
+          "name": "ui_text_flow",
+          "status": "passed",
+          "seconds": 0,
+          "binaries": []
+        }
+      ]
+    },
+    {
+      "label": "linux7",
+      "directory": "build/native/Design-analysis-linux/test-results/run-t70qgrtp",
+      "groups": [
+        {
+          "name": "docking_workflow",
+          "status": "passed",
+          "seconds": 90.352,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "fb44aeac15491f41691bc6fedd8fe8cf5fa9dcadfb83d4ac01c70c52c4d2273a"
+            }
+          ]
+        },
+        {
+          "name": "timeline_context",
+          "status": "passed",
+          "seconds": 5.591,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "fb44aeac15491f41691bc6fedd8fe8cf5fa9dcadfb83d4ac01c70c52c4d2273a"
+            }
+          ]
+        },
+        {
+          "name": "timeline_design",
+          "status": "passed",
+          "seconds": 124.951,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "fb44aeac15491f41691bc6fedd8fe8cf5fa9dcadfb83d4ac01c70c52c4d2273a"
+            }
+          ]
+        },
+        {
+          "name": "timeline_workflow",
+          "status": "passed",
+          "seconds": 197.534,
+          "binaries": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/bin/python3",
+              "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+              "sha256": "fb44aeac15491f41691bc6fedd8fe8cf5fa9dcadfb83d4ac01c70c52c4d2273a"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "linux7-text",
+      "directory": "build/native/Design-analysis-linux/test-results/run-ri3mtk2k",
+      "groups": [
+        {
+          "name": "ui_text_flow",
+          "status": "passed",
+          "seconds": 0,
+          "binaries": []
+        }
+      ]
+    }
+  ],
+  "final_ui_groups_per_platform": 4,
+  "final_text_groups_per_platform": 1,
+  "canonical_exports_unchanged": 16,
+  "style_font_platform_tasks": 24,
+  "source6_regression_groups": [
+    "timeline_workflow",
+    "inspector_workflow",
+    "graphic_dialog",
+    "transport_design",
+    "timeline_context",
+    "timeline_design"
+  ],
+  "limits": {
+    "design_app_seconds": 180,
+    "design_process_seconds": 190,
+    "legacy_timeline_app_seconds": 120,
+    "context_process_seconds": 45,
+    "context_registry_seconds": 60,
+    "original_rectangle_tolerance_px": 1
+  },
+  "limitations": [
+    "Not a complete UI acceptance",
+    "macOS not executed",
+    "No physical DPI/second-monitor proof",
+    "No practical screenreader proof",
+    "Foreign worktree files retained separately",
+    "Older F1 lifecycle fixture remains open"
+  ],
+  "verified_learning": "D:/Skills/skills/ui-implementation/knowledge/drag-abort-versus-context-disposal.md"
+}

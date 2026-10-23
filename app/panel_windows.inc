@@ -206,7 +206,7 @@ static bool panel_windows_render(app *a) {
         ps_graphics_shadows(p->graphics,NULL,0);
         bool auxiliary=i>=PS_DOCK_PANELS;
         if(auxiliary) {
-            nk_style_push_vec2(p->ui,&p->ui->style.window.padding,i==PS_PANEL_MEASURE?nk_vec2(0,0):nk_vec2(18,6));
+            nk_style_push_vec2(p->ui,&p->ui->style.window.padding,nk_vec2(0,0));
             nk_style_push_vec2(p->ui,&p->ui->style.window.spacing,nk_vec2(6,4));
         }
         workspace_tip_frame_begin(a);
@@ -234,7 +234,7 @@ static bool panel_windows_render(app *a) {
                 laboratory_resize_input(a);
                 laboratory_measurements(a,fmaxf(100,nk_window_get_content_region(p->ui).h));
             }
-            else {nk_layout_row_dynamic(p->ui,28,1);nk_label(p->ui,"Zeitleiste",NK_TEXT_LEFT);timeline_controls(a);}
+            else timeline_controls(a);
             nk_end(p->ui);
         } else nk_end(p->ui);
         if(auxiliary){nk_style_pop_vec2(p->ui);nk_style_pop_vec2(p->ui);}
@@ -247,6 +247,7 @@ static bool panel_windows_render(app *a) {
         workspace_tip_frame_end(a);
         graphic_export_unguard(a,export_guard);
         graphic_export_view(a,w,h);
+        if(a->timeline_design_active && i==PS_PANEL_TIMELINE)timeline_design_draw(a);
         nk_sdl_update_TextInput(p->ui);
         memcpy(p->splitters,a->laboratory_splitters,sizeof p->splitters);
         if(i==PS_PANEL_MEASURE){p->measure_bounds=a->laboratory_measure_bounds;p->measure_width=a->laboratory_measure_width;}

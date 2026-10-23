@@ -175,8 +175,8 @@ static void panel_test_frame(app *a,const char *mode,int *stage,int *code,const 
         {SDL_Event close={0};close.type=SDL_EVENT_WINDOW_CLOSE_REQUESTED;close.window.windowID=SDL_GetWindowID(a->doc_window);SDL_PushEvent(&close);}
         break;
     case 93:ok=!a->doc_visible && display_time(a)==time;*stage=100;if(ok)return;break;
-    case 100:test_window_mouse(a->panels[PS_PANEL_TIMELINE].window,a->timeline_bounds[0],true);break;
-    case 101:test_window_mouse(a->panels[PS_PANEL_TIMELINE].window,a->timeline_bounds[0],false);break;
+    case 100:if(!timeline_test_key(a,a->panels[PS_PANEL_TIMELINE].window,a->panels[PS_PANEL_TIMELINE].ui,SDLK_LEFT))return;break;
+    case 101:break;
     case 102:break;
     case 103:
         ok=a->timeline_browsing && display_time(a)<=time && a->runner.running && a->paused;

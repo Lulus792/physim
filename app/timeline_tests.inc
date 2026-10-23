@@ -1,3 +1,11 @@
+/* Use the real discrete native range action rather than removed arrow chrome. */
+static bool timeline_test_key(app *a,SDL_Window *window,struct nk_context *ui,SDL_Keycode key) {
+    (void)a;
+    if(SDL_GetKeyboardFocus()!=window || !nk_sdl_accessibility_is_focused(ui,NULL,"Position im gespeicherten Lauf")) {
+        SDL_RaiseWindow(window);nk_sdl_accessibility_request_focus(ui,NULL,"Position im gespeicherten Lauf");return false;
+    }
+    test_window_key_mod(window,key,0);return true;
+}
 static uint32_t timeline_test_crc(const ps_snapshot *s) {
     ps_context context = {.time_s = s->time, .channel_count = s->count};
     memcpy(context.values, s->values, sizeof context.values);
@@ -6,6 +14,7 @@ static uint32_t timeline_test_crc(const ps_snapshot *s) {
     return size ? ps_crc32(bytes, size) : 0;
 }
 static bool timeline_test_start(app *a, const char *root, const char *mode) {
+    SDL_SetHint(SDL_HINT_FORCE_RAISEWINDOW,"1");
     join(a->project_input, sizeof a->project_input, root, "project");
     bool create = !strcmp(mode, "timeline-c") || !strcmp(mode, "timeline-phys");
     if (create) {
@@ -45,6 +54,7 @@ static void timeline_test_frame(app *a, const char *mode, int *stage, int *code,
     case 1:
         if (!idle(a) || a->library_thread) return;
         if (create) {
+            if(SDL_GetKeyboardFocus()!=a->window){SDL_RaiseWindow(a->window);return;}
             ok = a->built;
             start_run(a);
             snprintf(original, sizeof original, "%s", a->last_run);
@@ -63,8 +73,8 @@ static void timeline_test_frame(app *a, const char *mode, int *stage, int *code,
     case 2:
         if (!a->hello || a->simulation_time < .2 || ps_timeline_count(&a->timeline) < 4) return;
         held_time = a->simulation_time;
-        test_mouse(a, a->timeline_bounds[0], true); break;
-    case 3: test_mouse(a, a->timeline_bounds[0], false); break;
+        if(!timeline_test_key(a,a->window,a->ui,SDLK_LEFT))return;break;
+    case 3: break;
     case 4:
         ok = a->timeline_browsing && !a->paused && display_time(a) < a->simulation_time &&
              display_scene(a) == &a->timeline_view.scene;
@@ -105,15 +115,15 @@ static void timeline_test_frame(app *a, const char *mode, int *stage, int *code,
         ok = a->timeline_browsing && display_time(a) == ps_timeline_get(&a->timeline, 0)->time &&
              a->simulation_time == held_time;
         *capture = "timeline-initial.bmp";
-        test_mouse(a, a->timeline_bounds[1], true); break;
-    case 14: test_mouse(a, a->timeline_bounds[1], false); break;
+        if(!timeline_test_key(a,a->window,a->ui,SDLK_RIGHT))return;break;
+    case 14: break;
     case 15: {
         const ps_snapshot *expected = ps_timeline_get(&a->timeline, 1);
         ok = expected && timeline_test_crc(&a->timeline_view) == timeline_test_crc(expected) &&
              a->simulation_time == held_time && !a->timeline_playing;
-        test_mouse(a, a->timeline_bounds[0], true); break;
+        if(!timeline_test_key(a,a->window,a->ui,SDLK_LEFT))return;break;
     }
-    case 16: test_mouse(a, a->timeline_bounds[0], false); break;
+    case 16: break;
     case 17:
         ok = display_time(a) == ps_timeline_get(&a->timeline, 0)->time && a->simulation_time == held_time;
         if (!strcmp(mode, "timeline-phys")) test_window_key_mod(a->window, SDLK_SPACE, SDL_KMOD_NONE);
@@ -136,9 +146,9 @@ static void timeline_test_frame(app *a, const char *mode, int *stage, int *code,
             uint32_t after;
             ok &= reset_test_crc(target, &after) && after == file_crc && !a->built;
             a->quitting = true;
-        } else test_mouse(a, a->timeline_bounds[0], true);
+        } else if(!timeline_test_key(a,a->window,a->ui,SDLK_LEFT))return;
         break;
-    case 22: test_mouse(a, a->timeline_bounds[0], false); break;
+    case 22: break;
     case 23:
         ok = a->timeline_browsing;
         test_mouse(a, a->run_control_bounds[3], true); break;

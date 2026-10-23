@@ -201,15 +201,10 @@ static void laboratory_chrome(app *a,float w,float h) {
     float timeline_height=laboratory_dimension_value(a,1);
     struct nk_rect timeline=nk_rect(0,h-WORKSPACE_STATUS_HEIGHT-timeline_height,w,timeline_height);
     a->laboratory_splitters[1]=nk_rect(0,timeline.y-4,w,9);
-    if(laboratory_begin(a,windows[2],timeline,NK_WINDOW_BACKGROUND)) {
-        if(panel_is_detached(a,PS_PANEL_TIMELINE)){}
-        else {
-        char text[160];snprintf(text,sizeof text,"Zeitleiste · %.6g s · %s%s",display_time(a),a->timeline_browsing?"Aufzeichnung":"Aktuelle Szene",a->timeline_scenes?"":" · Messwerte ohne Szene");
-        nk_layout_row_dynamic(ui,24,1);struct nk_rect title=nk_widget_bounds(ui);nk_label(ui,text,NK_TEXT_LEFT);
-        panel_pull_handle(a,PS_PANEL_TIMELINE,title);timeline_controls(a);
-        if(a->history_stride>1 || a->data.total>(uint64_t)a->history_count){nk_layout_row_dynamic(ui,24,1);nk_label_colored(ui,"Begrenzte, ausgedünnte Vorschau · vollständige Daten in der Messdatei",NK_TEXT_LEFT,muted());}
-        }
-    }nk_end(ui);
+    nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(0,0));
+    if(laboratory_begin(a,windows[2],timeline,NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BACKGROUND)) {
+        if(!panel_is_detached(a,PS_PANEL_TIMELINE))timeline_controls(a);
+    }nk_end(ui);nk_style_pop_vec2(ui);
     nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(header)));
     nk_style_push_font(ui,&a->workspace_status_font);
     nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(12,5));

@@ -74,3 +74,10 @@ gefundene Fehler der semantischen Popup-Verdeckung ist korrigiert. Ein
 zusätzlicher alter F1-Lifecycle-Test setzt dagegen ein bereits sichtbares
 Suchfeld voraus und bleibt getrennt offen; die Probe scheitert gleichartig
 im aktuellen und im älteren Build. Die übrige Oberfläche ist weiter abzugleichen.
+
+Der folgende [Zeitleistenabgleich](SIMULATION-TIMELINE-NATIVE.md) bearbeitet einen
+weiteren sichtbaren Bereich der gemeinsamen Oberfläche: ursprüngliche Aufteilung,
+kompakte Aktionen, große Zeitangabe und lesbare Skala. Zusätzliche Rahmen und
+überdeckende Hinweise sind entfernt. Echte Zeitnavigation, Tastaturbedienung,
+Abbruch und Projektwechsel werden separat geprüft. Die übrigen Nutzerbefunde
+und die vollständige Gestaltung bleiben weiterhin offen.

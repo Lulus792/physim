@@ -145,3 +145,10 @@ Die getesteten Binärdateien enthalten zwölf unveränderte vorbestehende lokale
 Accessibility-/Dokumentationsdateien. Deren Rohhashes sind eingefroren, ihre
 Änderungen sind vom Transport-Commit ausgenommen. Die Quellgraphen unterscheiden
 normalisierte Textdateien und rohe Fontdateien.
+
+## Folgearbeit: Zeitleiste
+
+Der [anschließende Zeitleistenabgleich](SIMULATION-TIMELINE-NATIVE.md) verwendet
+dieselben vorhandenen Schriftbanken und Symbolbereiche. Er ergänzt die
+ursprüngliche Zeitanzeige und Skala sowie denselben Inhalt im nativen Zusatzfenster.
+Die hier eingefrorenen historischen Transportnachweise bleiben unverändert.

@@ -1,0 +1,8 @@
+{
+  "source": "build/native/Release/test-results/run-n60_e77g/timeline_workflow/files \u00e4/workflow \u00e4/c/timeline-playback-end.bmp",
+  "source_sha256": "dca1477c55d103fcab2c7e4af47a78c504ab59632c842f02603ac07690e862cd",
+  "png": "before-timeline.png",
+  "sha256": "1931ad657eee2d74fbf63158009e53fb28e7b9e72371a6933bf40caa2e85e25d",
+  "decoded_rgb_identical": true,
+  "scope": "Lossless format conversion of the original native source0 screenshot; no crop, resize, recoloring or retouch."
+}

@@ -181,6 +181,7 @@ typedef struct {bool active;float pointer,value;} ps_ui_scrollbar_drag;
  * position is published separately through the existing native range adapter. */
 nk_bool ps_ui_horizontal_scrollbar_at(struct nk_context *ctx,struct nk_rect bounds,float *value,float maximum,float page,ps_ui_scrollbar_drag *drag,bool input_enabled);
 nk_bool ps_ui_range_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,float *value,float maximum,float increment);
+nk_bool ps_ui_range_at_custom_focus(struct nk_context *ctx,struct nk_rect bounds,const char *name,float *value,float maximum,float increment,bool *focused);
 nk_bool ps_ui_separator_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,float minimum,float *value,float maximum);
 nk_bool ps_ui_separator_step_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,float minimum,float *value,float maximum,float step);
 void ps_ui_label(struct nk_context *ctx,const char *text,nk_flags alignment);

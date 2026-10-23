@@ -1,0 +1,102 @@
+{
+  "windows-release": {
+    "native-export.png": {
+      "source": "build/native/Release/test-results/run-tnlwy7em/graphic_dialog/files \u00e4/dialog \u00e4/native-export.png",
+      "prior_sha256": "3d6d9cbc571f8847317a21c84ad733f9df31254d8afe2bbf162d3fdb6dc66898",
+      "sha256": "3d6d9cbc571f8847317a21c84ad733f9df31254d8afe2bbf162d3fdb6dc66898",
+      "byte_equal": true
+    },
+    "native-scale1.png": {
+      "source": "build/native/Release/test-results/run-tnlwy7em/graphic_dialog/files \u00e4/dialog \u00e4/native-scale1.png",
+      "prior_sha256": "29dc5fcb8420f4ae4ea86018b9479acabbbe19d35678cbfba799c91b6d67e2ae",
+      "sha256": "29dc5fcb8420f4ae4ea86018b9479acabbbe19d35678cbfba799c91b6d67e2ae",
+      "byte_equal": true
+    },
+    "native-scale3.png": {
+      "source": "build/native/Release/test-results/run-tnlwy7em/graphic_dialog/files \u00e4/dialog \u00e4/native-scale3.png",
+      "prior_sha256": "ec42249f66edea5915c058ba2fcdc96ea6184e2fa4d132ac6b3cf2ccc0c1ff12",
+      "sha256": "ec42249f66edea5915c058ba2fcdc96ea6184e2fa4d132ac6b3cf2ccc0c1ff12",
+      "byte_equal": true
+    },
+    "native-scale4.png": {
+      "source": "build/native/Release/test-results/run-tnlwy7em/graphic_dialog/files \u00e4/dialog \u00e4/native-scale4.png",
+      "prior_sha256": "de5bb14cb68522d489d47209814972f20c980874a75e55aea107a9dbd6eeae3c",
+      "sha256": "de5bb14cb68522d489d47209814972f20c980874a75e55aea107a9dbd6eeae3c",
+      "byte_equal": true
+    },
+    "native-ausschnitt.png": {
+      "source": "build/native/Release/test-results/run-tnlwy7em/graphic_dialog/files \u00e4/dialog \u00e4/native-ausschnitt.png",
+      "prior_sha256": "e1d73b343b99a306720748357d190256ebf312532df5ba8a9cfeb92a07527422",
+      "sha256": "e1d73b343b99a306720748357d190256ebf312532df5ba8a9cfeb92a07527422",
+      "byte_equal": true
+    },
+    "native-ausschnitt.svg": {
+      "source": "build/native/Release/test-results/run-tnlwy7em/graphic_dialog/files \u00e4/dialog \u00e4/native-ausschnitt.svg",
+      "prior_sha256": "74bbc37b28acca463fc17a8460e55a6c4361bdd1030e3daeac2ac22ed37469b9",
+      "sha256": "74bbc37b28acca463fc17a8460e55a6c4361bdd1030e3daeac2ac22ed37469b9",
+      "byte_equal": true
+    },
+    "clipboard-reference.png": {
+      "source": "build/native/Release/test-results/run-tnlwy7em/graphic_dialog/files \u00e4/dialog \u00e4/clipboard-reference.png",
+      "prior_sha256": "3d6d9cbc571f8847317a21c84ad733f9df31254d8afe2bbf162d3fdb6dc66898",
+      "sha256": "3d6d9cbc571f8847317a21c84ad733f9df31254d8afe2bbf162d3fdb6dc66898",
+      "byte_equal": true
+    },
+    "contrast-paper.png": {
+      "source": "build/native/Release/test-results/run-tnlwy7em/graphic_dialog/files \u00e4/dialog \u00e4/contrast-paper.png",
+      "prior_sha256": "b15743a7a3570992ed9d2fcaeace0a6b356f5de578802b979184e4950b8773c2",
+      "sha256": "b15743a7a3570992ed9d2fcaeace0a6b356f5de578802b979184e4950b8773c2",
+      "byte_equal": true
+    }
+  },
+  "linux-sanitized": {
+    "native-export.png": {
+      "source": "build/native/Design-analysis-linux/test-results/run-0k16s11j/graphic_dialog/files \u00e4/dialog \u00e4/native-export.png",
+      "prior_sha256": "ec92b40bc2a35d29d328778c1130ebec85b7bb2df11bf3f83dd7b1479cb66685",
+      "sha256": "ec92b40bc2a35d29d328778c1130ebec85b7bb2df11bf3f83dd7b1479cb66685",
+      "byte_equal": true
+    },
+    "native-scale1.png": {
+      "source": "build/native/Design-analysis-linux/test-results/run-0k16s11j/graphic_dialog/files \u00e4/dialog \u00e4/native-scale1.png",
+      "prior_sha256": "7cf3f5dab314338d0b46b9be0d9195dd74f513f3f4271c325927f28a0ca3dc1e",
+      "sha256": "7cf3f5dab314338d0b46b9be0d9195dd74f513f3f4271c325927f28a0ca3dc1e",
+      "byte_equal": true
+    },
+    "native-scale3.png": {
+      "source": "build/native/Design-analysis-linux/test-results/run-0k16s11j/graphic_dialog/files \u00e4/dialog \u00e4/native-scale3.png",
+      "prior_sha256": "106426dfecaeaa37f34ddec16c11b4ae750e513f41c86aa24e9799c42a8d4213",
+      "sha256": "106426dfecaeaa37f34ddec16c11b4ae750e513f41c86aa24e9799c42a8d4213",
+      "byte_equal": true
+    },
+    "native-scale4.png": {
+      "source": "build/native/Design-analysis-linux/test-results/run-0k16s11j/graphic_dialog/files \u00e4/dialog \u00e4/native-scale4.png",
+      "prior_sha256": "27bbf7095b28a24bc32b270e9cc5bb5d7bca42c0465fb2e1bbbaca79d7ecf46e",
+      "sha256": "27bbf7095b28a24bc32b270e9cc5bb5d7bca42c0465fb2e1bbbaca79d7ecf46e",
+      "byte_equal": true
+    },
+    "native-ausschnitt.png": {
+      "source": "build/native/Design-analysis-linux/test-results/run-0k16s11j/graphic_dialog/files \u00e4/dialog \u00e4/native-ausschnitt.png",
+      "prior_sha256": "1c6ddfa8fb33a8d2f27271b5461895ab3831233bf3e6e98440eefecbd6b3772c",
+      "sha256": "1c6ddfa8fb33a8d2f27271b5461895ab3831233bf3e6e98440eefecbd6b3772c",
+      "byte_equal": true
+    },
+    "native-ausschnitt.svg": {
+      "source": "build/native/Design-analysis-linux/test-results/run-0k16s11j/graphic_dialog/files \u00e4/dialog \u00e4/native-ausschnitt.svg",
+      "prior_sha256": "0ee3c6538ac34f443e9fcd69dbfd760a5a2359814dc582f9a5a89c1d767ea15b",
+      "sha256": "0ee3c6538ac34f443e9fcd69dbfd760a5a2359814dc582f9a5a89c1d767ea15b",
+      "byte_equal": true
+    },
+    "clipboard-reference.png": {
+      "source": "build/native/Design-analysis-linux/test-results/run-0k16s11j/graphic_dialog/files \u00e4/dialog \u00e4/clipboard-reference.png",
+      "prior_sha256": "ec92b40bc2a35d29d328778c1130ebec85b7bb2df11bf3f83dd7b1479cb66685",
+      "sha256": "ec92b40bc2a35d29d328778c1130ebec85b7bb2df11bf3f83dd7b1479cb66685",
+      "byte_equal": true
+    },
+    "contrast-paper.png": {
+      "source": "build/native/Design-analysis-linux/test-results/run-0k16s11j/graphic_dialog/files \u00e4/dialog \u00e4/contrast-paper.png",
+      "prior_sha256": "a61340560fabedb4aa66c9bc262d9a44fe1eebadc083c0ac4705b0219060301c",
+      "sha256": "a61340560fabedb4aa66c9bc262d9a44fe1eebadc083c0ac4705b0219060301c",
+      "byte_equal": true
+    }
+  }
+}
