@@ -90,6 +90,11 @@ Die Kurven-/Unterstrichfarben verwenden noch die native Kanalpalette. Der nächs
 Abgleich muss die Akzent-/Vektorfarbrollen der gemeinsamen Referenz ausdrücklich
 prüfen und den Kanalkopf mit links/rechts verteiltem Text weiter angleichen.
 
+Diese beiden offenen Punkte werden im anschließenden
+[Kanalkopf-/Kurvenabgleich](CURVES-NATIVE.md) bearbeitet. Dessen finaler Stand
+belegt zusätzliche Randfälle und erhält Subpixel-Strichstärken; die oben
+beschriebenen historischen Stände bleiben unverändert eingegrenzt.
+
 Stand 4 besteht alle fünf übrigen Gruppen am unveränderten Stand-3-Programm:
 normale und große externe Fenster, Anzeigeeinheiten, Messlabor und Szenenrahmen.
 Zusammen mit der neuen Messbereichgruppe sind dies sechs aktuelle Gruppen.

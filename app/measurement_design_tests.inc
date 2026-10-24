@@ -1,5 +1,5 @@
 /* Real paused samples, unit conversion, native switch and channel-menu input. */
-static struct {unsigned settle;char paint[2][3][240];ps_channel_units units;int channels[2];} measurement_design;
+static struct {unsigned settle;char paint[2][3][240],head[2][2][240];ps_channel_units units;int channels[2];bool atomic_failed;} measurement_design;
 static bool measurement_design_start(app *a,const char *root) {
     memset(&measurement_design,0,sizeof measurement_design);
     const double input[]={0,-0.,1e-8,1e9,-.03};const char *expected[]={"0,00","0,00","1,00e-08","1,00e+09","-0,03"};
@@ -8,13 +8,21 @@ static bool measurement_design_start(app *a,const char *root) {
     return inspector_design_start(a,root);
 }
 static void measurement_design_draw(app *a) {
-    memset(measurement_design.paint,0,sizeof measurement_design.paint);const struct nk_command *cmd;
+    memset(measurement_design.paint,0,sizeof measurement_design.paint);memset(measurement_design.head,0,sizeof measurement_design.head);const struct nk_command *cmd;
     nk_foreach(cmd,a->ui)if(cmd->type==NK_COMMAND_TEXT) {
         const struct nk_command_text *t=(const struct nk_command_text*)cmd;
         for(unsigned i=0;i<2;i++) {
             struct nk_rect r[]={a->laboratory_metric_labels[i],a->laboratory_metric_numbers[i],a->laboratory_metric_units[i]};
             for(unsigned j=0;j<3;j++)if(r[j].w>0 && camera_design_contains(r[j],t))camera_design_append(measurement_design.paint[i][j],240,t);
+            if(t->font==&a->workspace_status_font) {
+                struct nk_rect h[]={a->laboratory_channel_names[i],a->laboratory_channel_units[i]};
+                for(unsigned j=0;j<2;j++)if(a->laboratory_channel_fields[i].w>0 && camera_design_contains(h[j],t))camera_design_append(measurement_design.head[i][j],240,t);
+            }
         }
+    }
+    for(unsigned i=0;i<2;i++)if(a->laboratory_curve_channel[i]>=0 && a->laboratory_channel_fields[i].w>0) {
+        const char *name=a->live_channels[a->laboratory_curve_channel[i]].name;
+        if(strcmp(name,a->laboratory_channel_name_text[i])){measurement_design.atomic_failed=true;fprintf(stderr,"MEASUREMENT ATOMIC FAILED slot=%u rendered=%d caption=%s\n",i,a->laboratory_curve_channel[i],a->laboratory_channel_name_text[i]);}
     }
 }
 static void measurement_design_record(app *a,const char *kind,const char **capture) {
@@ -27,6 +35,9 @@ static void measurement_design_record(app *a,const char *kind,const char **captu
         camera_design_rect("card",a->laboratory_metric_cards[i]);camera_design_rect("label",a->laboratory_metric_labels[i]);camera_design_rect("value",a->laboratory_metric_numbers[i]);camera_design_rect("unit-rect",a->laboratory_metric_units[i]);camera_design_rect("rule",a->laboratory_metric_lines[i]);
         printf(" value-font=%.4f unit-font=%.4f",a->laboratory_measurement_font.height,a->laboratory_caption_font.height);
         for(unsigned j=0;j<3;j++){printf(" paint%u=",j);camera_design_hex(measurement_design.paint[i][j]);}puts("");
+        printf("CHANNEL HEAD slot=%u rendered=%d",i,a->laboratory_curve_channel[i]);camera_design_rect("field",a->laboratory_channel_fields[i]);camera_design_rect("visible",a->laboratory_channel_visible[i]);camera_design_rect("name",a->laboratory_channel_names[i]);camera_design_rect("unit",a->laboratory_channel_units[i]);
+        printf(" name-text=");camera_design_hex(a->laboratory_channel_name_text[i]);printf(" unit-text=");camera_design_hex(a->laboratory_channel_unit_text[i]);
+        for(unsigned j=0;j<2;j++){printf(" paint%u=",j);camera_design_hex(measurement_design.head[i][j]);}puts("");
     }
 }
 static void measurement_design_step(app *a,int *stage,int *code,const char **capture) {
@@ -84,6 +95,6 @@ static void measurement_design_step(app *a,int *stage,int *code,const char **cap
     case 11:{uint32_t crc;ok=timeline_design_run_crc(a->last_run,&crc) && crc==inspector_design.run_crc;command(a,PS_MSG_STOP);a->stop_at=ps_clock();break;}
     case 12:if(!idle(a) || a->library_thread)return;puts("MEASUREMENT DESIGN SELF-TEST: PASSED");a->quitting=true;break;
     }
-    if(!inspector_design_same(a))ok=false;
+    if(!inspector_design_same(a) || measurement_design.atomic_failed)ok=false;
     if(!ok){fprintf(stderr,"MEASUREMENT DESIGN FAILED stage=%d variant=%u\n",*stage,inspector_design.variant);*code=1;a->quitting=true;}else (*stage)++;
 }

@@ -1,0 +1,28 @@
+{
+  "base_commit": "9704967366e2b44b8d03c0aa3d08356bc813e4bc",
+  "old_rule": [
+    17.0,
+    727.85,
+    533.0,
+    2.0
+  ],
+  "expected_accent": [
+    106,
+    140,
+    189
+  ],
+  "old_accent_pixels": 0,
+  "old_rejection": "('legacy channel palette', 'system', 'dark', 'normal')",
+  "hidden_probe": {
+    "source": "build/native/Design-analysis-linux/test-results/run-p0zkj_7q/curve_design/files ä/system/curve-dark-empty.png",
+    "unit": [
+      437.6797,
+      261.0,
+      18.3203,
+      14.5
+    ],
+    "unit_pixels": 0,
+    "sha256": "7c7e7a415cd1580efddd9846e5db098b3c77b82eebc9f63a1313c6b82228b2cd"
+  },
+  "scope": "Unmodified actual native predecessor PNGs; local palette gate and hidden source1 fixture. Not an identical full-frame simulation pose/time comparison."
+}

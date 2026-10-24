@@ -244,3 +244,10 @@ Die native Probe erhält reale Daten und prüft Kanalwahl, Anzeigeumrechnung und
 Rückkehr. Ein sichtbarer Unterstrichfehler und falsche Aufnahmezeitpunkte sind
 mit Gegenbelegen erfasst. Weitere Kanalkopf-/Status-/Langtextzustände und die
 praktische Plattformabnahme bleiben offen.
+
+Der folgende [Kanalkopf-/Kurvenabgleich](CURVES-NATIVE.md) verteilt echte Namen
+und Einheiten links/rechts, übernimmt die gemeinsamen Farbrollen und richtet
+Mindesthöhen an Schrift, Metadaten und Offsettext aus. 144 finale Bildprüfungen
+und acht aktuelle Gruppen sind auf denselben Binärstand bezogen. Die bestehende
+Float-Erweiterung erhält auch gebrochene Strichstärken. Weitere Oberflächen,
+Langzeitverdünnung und praktische Plattform-/Assistive-Prüfungen bleiben offen.

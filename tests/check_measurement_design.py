@@ -12,12 +12,16 @@ def inspect(folder,out,mode):
             r={k:re.search(r'\b'+k+r'=([^ ]+)',line)[1] for k in ('kind','variant','size','preserved','curves','scroll')}
             for k in ('size','preserved','curves','scroll'):r[k]=int(r[k])
             for k in ('title','time','switch'):r[k]=rect(line,k)
-            r['metrics']=[];records.append(r)
+            r['metrics']=[];r['heads']=[];records.append(r)
         elif line.startswith('METRIC slot='):
             m={k:float(re.search(r'\b'+k+r'=([^ ]+)',line)[1]) for k in ('slot','channel','raw','scale','value-font','unit-font')}
             for k in ('number','unit','paint0','paint1','paint2'):m[k]=bytes.fromhex(re.search(r'\b'+k+r'=([0-9a-f]*)',line)[1]).decode('utf-8')
             for k in ('card','label','value','unit-rect','rule'):m[k]=rect(line,k)
             records[-1]['metrics'].append(m)
+        elif line.startswith('CHANNEL HEAD '):
+            h={k:rect(line,k) for k in ('field','visible','name','unit')};h['rendered']=int(re.search(r'\brendered=(-?\d+)',line)[1])
+            for k in ('name-text','unit-text','paint0','paint1'):h[k]=bytes.fromhex(re.search(r'\b'+k+r'=([0-9a-f]*)',line)[1]).decode('utf-8')
+            records[-1]['heads'].append(h)
     assert len(records)==30,(mode,len(records))
     for r in records:
         assert r['preserved'] and len(r['metrics'])==2
@@ -48,6 +52,20 @@ def inspect(folder,out,mode):
                     ys=[yy for yy in range(max(0,int(y)-6),min(im[1],int(y+h)+7)) if any(abs(im[2][(yy*im[0]+xx)*3+i]-background[i])>35 for i in range(3))]
                     bands.append(len(ys))
                 assert all(1<=n<=int(h)+3 for n in bands),('nonflat metric rule',r['variant'],r['kind'],m['slot'],bands,h)
+                if m['slot']==0 and not contrast:
+                    # Common shell accent, alpha .7 over the native window.
+                    target=(23,86,158) if light else (138,186,255)
+                    expected_color=tuple(round(background[i]*(1-179/255)+target[i]*179/255) for i in range(3))
+                    assert pixels(im,m['rule'],expected_color,2),('legacy channel palette',mode,r['variant'],r['kind'])
+        if r['curves']:
+            for h in r['heads']:
+                if not h['field'][2]:continue
+                fully_visible=h['visible'][2]>=h['field'][2]-.03 and h['visible'][3]>=h['field'][3]-.03
+                if r['kind'] in ('curves','channel'):assert fully_visible,('focused channel clipped',mode,r['variant'],h)
+                if fully_visible:assert ''.join(h['paint0'].split())==''.join(h['name-text'].split()) and ''.join(h['paint1'].split())==''.join(h['unit-text'].split())
+                if r['kind'] in ('curves','channel'):
+                    assert pixels(im,h['name'],ink,45) and pixels(im,h['unit'],muted,45)
+                assert h['name'][0]==h['field'][0] and abs(h['unit'][0]+h['unit'][2]-h['field'][0]-h['field'][2])<.03
         if r['kind']=='channel':assert r['metrics'][0]['channel']==1
         if r['kind']=='converted':assert all(m['unit']=='mrad/s' for m in r['metrics'])
         if r['kind'] in ('normal','restored'):assert not r['curves']

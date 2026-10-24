@@ -1,0 +1,86 @@
+[
+  {
+    "file": "linux6-docking_workflow-workflow ä-c-dark-legacy-project-panel-4-detached.bmp.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-nckh7met/docking_workflow/files ä/workflow ä/c-dark-legacy/project/panel-4-detached.bmp",
+    "bmp_sha256": "e8516a157334ad3ef64bc9da21b0a567680a389bf7db3e7e32f8a5382730be78",
+    "png_sha256": "afe49ac0bd3c68cec9b7bc50623ecfc3e9b15de9ca370af037d83f3904697b08",
+    "rgb_sha256": "e276b8c25c6e18e6c06aee45017400c1428f2a3e1955da8fd014677bbc7d0c6e"
+  },
+  {
+    "file": "linux6-docking_workflow-workflow ä-c-dark-legacy-project-panel-measure-curve-keyboard.bmp.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-nckh7met/docking_workflow/files ä/workflow ä/c-dark-legacy/project/panel-measure-curve-keyboard.bmp",
+    "bmp_sha256": "40f1b3be3a952dd1031c11a39306ab6cf9275fb1a0c41adc6cfd27e7eb69a083",
+    "png_sha256": "0136c66e310fe50fe2a0f64974887fe8d500de0b491a4d55011c9e331392cfa7",
+    "rgb_sha256": "b9798a137bdfb320cd9eaedb07ba6eb7e1c484a6c83e02da9a835d835266863e"
+  },
+  {
+    "file": "linux6-docking_workflow-workflow ä-c-dark-legacy-project-panel-measure-curves.bmp.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-nckh7met/docking_workflow/files ä/workflow ä/c-dark-legacy/project/panel-measure-curves.bmp",
+    "bmp_sha256": "14e41dc65a7972f5fd0ffdeba03bae36903b7fe8401b99ad7c66a532d541fa9c",
+    "png_sha256": "4b3435f2375f993a10921e4bf94e40134ef5d9481d088bc23bf955fe2c841a9c",
+    "rgb_sha256": "3a4fb9d852813b0ec7a3672321085b0d2a3f6ea3f9edd1a9cb789ea8d46fb9ae"
+  },
+  {
+    "file": "linux6-docking_workflow-workflow ä-phys-light-project-panel-4-detached.bmp.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-nckh7met/docking_workflow/files ä/workflow ä/phys-light/project/panel-4-detached.bmp",
+    "bmp_sha256": "84cbde2b91ff0101f41a8ddd62633fcacaa7c299129f5cb167949674e0c4687d",
+    "png_sha256": "e58f294c8975149f8ae7755104412a9749376ea5c14e702fef0aebf9d0621a55",
+    "rgb_sha256": "e9447cc7d42589e17d9400f9ce794fab49f52314013a0d211108eb1f8e8c0b8e"
+  },
+  {
+    "file": "linux6-docking_workflow-workflow ä-phys-light-project-panel-measure-curve-keyboard.bmp.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-nckh7met/docking_workflow/files ä/workflow ä/phys-light/project/panel-measure-curve-keyboard.bmp",
+    "bmp_sha256": "3cbeef89d35055d028e0784ff9d7df7385020e1b47ad1e471ed4f16175b4b214",
+    "png_sha256": "8afa82318a57ad6d5782d3521f0c63b36c2322b79a308b1939224f9555f15a37",
+    "rgb_sha256": "eb764ea95782ba232955bef2b9ff1e277941ac7b5e957652f64c0026f571574a"
+  },
+  {
+    "file": "linux6-docking_workflow-workflow ä-phys-light-project-panel-measure-curves.bmp.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-nckh7met/docking_workflow/files ä/workflow ä/phys-light/project/panel-measure-curves.bmp",
+    "bmp_sha256": "d724909ed42e0258a0e425bf71058d806c63958a95b38652791290e19524497d",
+    "png_sha256": "373eeed28e650f59f8d69775308598899e96bb94be9f48062e72eafe077a0bcb",
+    "rgb_sha256": "832a910155a7427ed569df215838a2ba875f930032599231cc2a462f7eba8875"
+  },
+  {
+    "file": "linux6-inspector_workflow-workflow ä-c-contrast-large-narrow-project-panel-4-detached.bmp.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-nckh7met/inspector_workflow/files ä/workflow ä/c-contrast-large-narrow/project/panel-4-detached.bmp",
+    "bmp_sha256": "99e114020884f7dca108a695945319806da9f71c9cbe35dd0f2c4b2982a2d377",
+    "png_sha256": "e806793966a148ed88a1330e0733dfc63257bfc734b4ab5c12d337afdff39e09",
+    "rgb_sha256": "cdea88261a65d2dd06a60071efaeace2c9e91aa0303937497f94dcb659fb0f0e"
+  },
+  {
+    "file": "linux6-inspector_workflow-workflow ä-c-contrast-large-narrow-project-panel-measure-curve-keyboard.bmp.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-nckh7met/inspector_workflow/files ä/workflow ä/c-contrast-large-narrow/project/panel-measure-curve-keyboard.bmp",
+    "bmp_sha256": "d8a5568ae04f7cdeb1f2976985d9fb883e758f26db7c68115e1f39182e2809bd",
+    "png_sha256": "cf1dcb53c633c3ce4ceda71b57b269aa259bb1bf0b25aec7f693b50036bc59db",
+    "rgb_sha256": "3a6cf9527c981842dd8f3a2e86515e2190afd0337ee811f354d6a9c4e4c52096"
+  },
+  {
+    "file": "linux6-inspector_workflow-workflow ä-c-contrast-large-narrow-project-panel-measure-curves.bmp.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-nckh7met/inspector_workflow/files ä/workflow ä/c-contrast-large-narrow/project/panel-measure-curves.bmp",
+    "bmp_sha256": "98e0a20b26eff13bb7bac5ed056a41e7fcd66d2ffa5815125463d3f649185ed3",
+    "png_sha256": "4845caafc5eb4b0e7b843e93ad599919101311b7f772fe00f45a83b28566512d",
+    "rgb_sha256": "96ff3e3da8c765afd61f8b6aad122ff1eb3933453ee70aa5edc2e0f8fc4fb0ba"
+  },
+  {
+    "file": "linux6-inspector_workflow-workflow ä-phys-light-large-narrow-project-panel-4-detached.bmp.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-nckh7met/inspector_workflow/files ä/workflow ä/phys-light-large-narrow/project/panel-4-detached.bmp",
+    "bmp_sha256": "761392f20b861dd83d374217e99b06e2bee6cc40d9720353ff551d8a96947073",
+    "png_sha256": "cfe61716db3a2807fa2c60ecac882613fb3914fa7a0c9ee8a7888532f95d1358",
+    "rgb_sha256": "6e4ccf1db5a06407cf1dc067c3357893c6eb57c3e254172f23929b9da88fa597"
+  },
+  {
+    "file": "linux6-inspector_workflow-workflow ä-phys-light-large-narrow-project-panel-measure-curve-keyboard.bmp.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-nckh7met/inspector_workflow/files ä/workflow ä/phys-light-large-narrow/project/panel-measure-curve-keyboard.bmp",
+    "bmp_sha256": "0cb825c1ff4dc4cbfdbc3d6bb6c98cee75ca19f70ab4ed76a29e1af72bca93e8",
+    "png_sha256": "cfade85eb77b1ed5f67e8606fa9c8287af0b23b0ca5366e21722a7acbdda1d53",
+    "rgb_sha256": "e3767625d1c6967ed8e951eb316f0196bd0120efa175b5752e65ca79e3fb6ac1"
+  },
+  {
+    "file": "linux6-inspector_workflow-workflow ä-phys-light-large-narrow-project-panel-measure-curves.bmp.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-nckh7met/inspector_workflow/files ä/workflow ä/phys-light-large-narrow/project/panel-measure-curves.bmp",
+    "bmp_sha256": "1582297c1b2e423c844e7b29f60797031086fdb830385b231e3d747b20d8cfa2",
+    "png_sha256": "7149227405f5c99dea8a032cf908cb0c1c5a128f47a40d7c356de10b6ef8a882",
+    "rgb_sha256": "e053d5b0509c8308d0e2281ecfbe4be2a38e6d47facf3338cfa4c8555c115c3b"
+  }
+]

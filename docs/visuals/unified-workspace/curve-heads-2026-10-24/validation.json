@@ -1,0 +1,296 @@
+{
+  "base": "9704967366e2b44b8d03c0aa3d08356bc813e4bc",
+  "final_source": 5,
+  "identical_regression_sources": [
+    6,
+    7
+  ],
+  "whole_ui_complete": false,
+  "product_groups": [
+    {
+      "name": "measurement_design",
+      "source": 5,
+      "status": "passed",
+      "seconds": 72.195,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "a0492ae3dfe63be8cf8dc78149afdd2e6b6a224c3cdde7eb5f355d0b94c6f5dc"
+        }
+      ]
+    },
+    {
+      "name": "curve_design",
+      "source": 5,
+      "status": "passed",
+      "seconds": 72.88,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "a0492ae3dfe63be8cf8dc78149afdd2e6b6a224c3cdde7eb5f355d0b94c6f5dc"
+        }
+      ]
+    },
+    {
+      "name": "docking_workflow",
+      "source": 6,
+      "status": "passed",
+      "seconds": 96.704,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "a0492ae3dfe63be8cf8dc78149afdd2e6b6a224c3cdde7eb5f355d0b94c6f5dc"
+        }
+      ]
+    },
+    {
+      "name": "inspector_workflow",
+      "source": 6,
+      "status": "passed",
+      "seconds": 87.212,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "a0492ae3dfe63be8cf8dc78149afdd2e6b6a224c3cdde7eb5f355d0b94c6f5dc"
+        }
+      ]
+    },
+    {
+      "name": "laboratory_workflow",
+      "source": 6,
+      "status": "passed",
+      "seconds": 235.242,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "a0492ae3dfe63be8cf8dc78149afdd2e6b6a224c3cdde7eb5f355d0b94c6f5dc"
+        }
+      ]
+    },
+    {
+      "name": "channel_units_workflow",
+      "source": 7,
+      "status": "passed",
+      "seconds": 136.188,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "a0492ae3dfe63be8cf8dc78149afdd2e6b6a224c3cdde7eb5f355d0b94c6f5dc"
+        }
+      ]
+    },
+    {
+      "name": "series_mask_workflow",
+      "source": 7,
+      "status": "passed",
+      "seconds": 93.25,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "a0492ae3dfe63be8cf8dc78149afdd2e6b6a224c3cdde7eb5f355d0b94c6f5dc"
+        }
+      ]
+    },
+    {
+      "name": "scene_frame_design",
+      "source": 7,
+      "status": "passed",
+      "seconds": 116.766,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "a0492ae3dfe63be8cf8dc78149afdd2e6b6a224c3cdde7eb5f355d0b94c6f5dc"
+        }
+      ]
+    }
+  ],
+  "linux_directories": {
+    "5": "build/native/Design-analysis-linux/test-results/run-crpxs20y",
+    "6": "build/native/Design-analysis-linux/test-results/run-nckh7met",
+    "7": "build/native/Design-analysis-linux/test-results/run-7n6swyhd"
+  },
+  "windows": {
+    "build_only": true,
+    "display_test": false,
+    "binary_sha256": "ca49284a2c15892cc325384281ed241e28c08e57681c0e70710e2bb283e3a5a4"
+  },
+  "public_source_files": 260,
+  "fonts": 18,
+  "foreign_preserved": 12,
+  "selected_images": [
+    {
+      "file": "linux5-curve-system-dark-empty.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-crpxs20y/curve_design/files ä/system/curve-dark-empty.png",
+      "sha256": "e929ce3ffe66ab6f41c8fd805b7fff0926e76e28e3f4e66d708511b2c6270cd6"
+    },
+    {
+      "file": "linux5-curve-system-dark-one.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-crpxs20y/curve_design/files ä/system/curve-dark-one.png",
+      "sha256": "e929ce3ffe66ab6f41c8fd805b7fff0926e76e28e3f4e66d708511b2c6270cd6"
+    },
+    {
+      "file": "linux5-curve-system-dark-missing.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-crpxs20y/curve_design/files ä/system/curve-dark-missing.png",
+      "sha256": "c9bd73cd2900586d98b369d8d3b2f4bcb778e8235fef57b0b2a83785f0f64cb4"
+    },
+    {
+      "file": "linux5-curve-system-dark-gaps.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-crpxs20y/curve_design/files ä/system/curve-dark-gaps.png",
+      "sha256": "f6ae834f16b8e79302dd23acda12eb28c55f0c78e0389a6a3b2eb4955acae3e7"
+    },
+    {
+      "file": "linux5-curve-system-dark-offset.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-crpxs20y/curve_design/files ä/system/curve-dark-offset.png",
+      "sha256": "bfa7d84e7211ed1aebfa350e709d07d819f82586f51cc02349c9125861e77233"
+    },
+    {
+      "file": "linux5-curve-system-dark-long.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-crpxs20y/curve_design/files ä/system/curve-dark-long.png",
+      "sha256": "813495f3dcd115500bc379bc04b3147e4ff9e43f4559e8c7c1b23472cd4e0f5c"
+    },
+    {
+      "file": "linux5-curve-system-dark-unrepresentable.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-crpxs20y/curve_design/files ä/system/curve-dark-unrepresentable.png",
+      "sha256": "dc6331858f1caec9c90827ed3b24f68b1f3b9908d219d6ae752bb4f16bd21770"
+    },
+    {
+      "file": "linux5-curve-system-light-gaps.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-crpxs20y/curve_design/files ä/system/curve-light-gaps.png",
+      "sha256": "2a62cbe3a7510e6010646befb7fa7b918050f3ce2d9bee88e9a560f487146310"
+    },
+    {
+      "file": "linux5-curve-system-large-long.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-crpxs20y/curve_design/files ä/system/curve-large-long.png",
+      "sha256": "067102edccbef024467aa5ae856c679ff2f8eb6e192c68754c3828d1be5523e9"
+    },
+    {
+      "file": "linux5-curve-system-large-offset.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-crpxs20y/curve_design/files ä/system/curve-large-offset.png",
+      "sha256": "ff53fba0b9b46403fc3be2fe5dff26831ce60238bf9d81be544e0c681a148c93"
+    },
+    {
+      "file": "linux5-curve-system-contrast-gaps.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-crpxs20y/curve_design/files ä/system/curve-contrast-gaps.png",
+      "sha256": "38860af4b3f42a086c6be24451b216245dd3ee9e5fe543517a787b74dba12fe5"
+    },
+    {
+      "file": "linux5-curve-bundled-large-long.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-crpxs20y/curve_design/files ä/bundled/curve-large-long.png",
+      "sha256": "0d0b6a1f89eb2600a7700253c3b4ac5e8d3d25fe0cc503ab557efbd339765ba0"
+    },
+    {
+      "file": "linux5-measurement-system-dark-normal.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-crpxs20y/measurement_design/files ä/system/measurement-dark-normal.png",
+      "sha256": "59c9c8c088a1f8e00880954b5a79ac92a413563bc0af212c1d8d154dd27c3ded"
+    },
+    {
+      "file": "linux5-measurement-system-dark-curves.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-crpxs20y/measurement_design/files ä/system/measurement-dark-curves.png",
+      "sha256": "dbb9ca8db1d1a63685edff32a027d3cfd80a222e2af3f2df7d8eb307819fa3a7"
+    },
+    {
+      "file": "linux5-measurement-system-dark-channel.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-crpxs20y/measurement_design/files ä/system/measurement-dark-channel.png",
+      "sha256": "bbbb35479f07d4ab1aea40b31d470386944565ce985a690afcccf253ec93bebb"
+    },
+    {
+      "file": "linux5-measurement-system-dark-converted.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-crpxs20y/measurement_design/files ä/system/measurement-dark-converted.png",
+      "sha256": "a3dd6ab2a5e5ee72da33e04fb59f0910bf0f517fca017d0329ddf8696ae260ab"
+    },
+    {
+      "file": "linux5-measurement-system-dark-restored.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-crpxs20y/measurement_design/files ä/system/measurement-dark-restored.png",
+      "sha256": "59c9c8c088a1f8e00880954b5a79ac92a413563bc0af212c1d8d154dd27c3ded"
+    },
+    {
+      "file": "linux5-measurement-system-light-curves.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-crpxs20y/measurement_design/files ä/system/measurement-light-curves.png",
+      "sha256": "d2893bb9606ab13491e75ad2b19cb7701325f1716295aa80ddf4d298d855ec1d"
+    },
+    {
+      "file": "linux5-measurement-system-large-curves.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-crpxs20y/measurement_design/files ä/system/measurement-large-curves.png",
+      "sha256": "85969cf3e1a07d667c1f977b4f963d69f5074b3153c8946f4fc96a9a622ff2d9"
+    },
+    {
+      "file": "linux5-measurement-bundled-large-converted.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-crpxs20y/measurement_design/files ä/bundled/measurement-large-converted.png",
+      "sha256": "b0b277a3f595782cfb916a9d54d677f5c268b8d8aa52d5f17a7718bf1c53657d"
+    }
+  ],
+  "panel_captures": 12,
+  "native_frames": 144,
+  "limitations": [
+    "No current Windows GUI proof",
+    "No macOS execution",
+    "No practical screenreader tasks",
+    "No physical DPI or second-monitor transition",
+    "Three foreign AT-SPI files in local compile graph; not a clean-checkout proof",
+    "Interactive chevron differs from static reference captions; remaining UI still open"
+  ]
+}

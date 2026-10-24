@@ -781,7 +781,7 @@ static void inspector_panel(app *a) {
                     camera_inspector(a);
                     run_limits_view(a);
                     if(workspace_section_begin(a,"Messkanal und Einheit",&a->laboratory_groups[1])) {
-                        int channel=laboratory_channel_picker(a,0);uint32_t count;const ps_channel *channels=laboratory_channels(a,&count);
+                        int channel=laboratory_channel_picker(a,0,false);uint32_t count;const ps_channel *channels=laboratory_channels(a,&count);
                         if(channel>=0){nk_layout_row_dynamic(ui,32,1);a->channel_unit_buttons[0]=nk_widget_bounds(ui);if(nk_button_label(ui,"Anzeigeeinheit …"))channel_unit_open(a,&channels[channel]);}
                         else laboratory_note(a,"Noch keine Messkanäle verfügbar.");
                         workspace_section_end(a);

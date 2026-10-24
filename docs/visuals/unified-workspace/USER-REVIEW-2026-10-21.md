@@ -124,3 +124,9 @@ Einheiten neben den Zahlen, Kanaltypografie, Abstände, Kurvenschalter und
 Diagrammflächen. Echte Daten, Kanalwahl, Einheiten und Zeigerzeit bleiben
 gebunden. Bild- und Bedienbelege einschließlich verworfener Prüferstände sind
 gesondert archiviert; die vollständige Liste sichtbarer Befunde bleibt offen.
+
+Der folgende [Kanalkopf-/Kurvenabgleich](CURVES-NATIVE.md) korrigiert die
+Textverteilung und Kurvenfarben weiter. Lange Metadaten, Offsethinweise,
+leere/ungültige Vorschauen und vorhandene Datenlücken werden nativ gerendert
+und geprüft. Zeichenbefehle behalten ihre gebrochenen Strichstärken. Eine
+vollständige Abnahme aller Nutzerbefunde wird damit weiterhin nicht behauptet.

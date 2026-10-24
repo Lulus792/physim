@@ -1,0 +1,12 @@
+{
+  "source": 2,
+  "area": [
+    59.9033,
+    292.5,
+    392.0967,
+    85.5
+  ],
+  "base_accent_pixels": 178,
+  "required_accent_pixels": 0,
+  "scope": "Actual source2 controlled fixture used the generic app theme after the workspace. The strict reference palette gate rejects this image."
+}

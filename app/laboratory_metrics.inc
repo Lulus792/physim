@@ -1,4 +1,9 @@
 /* Measurement typography follows metric-grid; data and conversion stay native. */
+static struct nk_color laboratory_curve_color(unsigned slot) {
+    /* Shared bridge.js accent for blue; simulation.css --vector for amber. */
+    if(ui_palette==&PS_UI_HIGH_CONTRAST)return ui_palette->curves[slot?1:0];
+    return slot?ui_palette->curves[1]:UI_COLOR(accent);
+}
 static void laboratory_metric_number(double value,char number[96]) {
     double magnitude=fabs(value);
     snprintf(number,96,magnitude>=1e6 || (magnitude>0 && magnitude<.005)?"%.2e":"%.2f",value==0?0:value);
@@ -57,53 +62,104 @@ static void laboratory_metric_draw(app *a,unsigned slot,struct nk_rect card,cons
         value.h=15.95f*f*laboratory_wrapped_lines(units,number,card.w);
         laboratory_wrapped_text(canvas,units,number,value,15.95f*f,UI_COLOR(muted));
     }
-    struct nk_rect rule=nk_rect(card.x,card.y+card.h-2*f,card.w,2*f);struct nk_color color=ui_palette->curves[slot%8];color.a=179;
+    struct nk_rect rule=nk_rect(card.x,card.y+card.h-2*f,card.w,2*f);struct nk_color color=laboratory_curve_color(slot);color.a=179;
     /* CSS clamps a capsule radius to half its height. This Nuklear snapshot
      * only clamps to the full height, which makes a nonconvex thin rectangle. */
-    nk_fill_rect(canvas,rule,floorf(rule.h*.5f),color);
+    nk_fill_rect(canvas,rule,rule.h*.5f,color);
     a->laboratory_metric_cards[slot]=card;a->laboratory_metric_labels[slot]=name;a->laboratory_metric_numbers[slot]=value;a->laboratory_metric_units[slot]=suffix;a->laboratory_metric_lines[slot]=rule;
     snprintf(a->laboratory_metric_number_text[slot],96,"%s",number);snprintf(a->laboratory_metric_unit_text[slot],96,"%s",unit);
     ps_ui_accessibility_label(ui,card,exact);
     struct nk_rect visible=plot_intersection(card,canvas->clip);if(visible.w>0 && visible.h>0 && nk_input_is_mouse_hovering_rect(&ui->input,visible))nk_tooltip(ui,exact);
 }
+typedef struct {app *a;unsigned slot;bool chart;const char *name,*unit,*caption;} laboratory_channel_paint;
+typedef struct {struct nk_rect name,unit;float height,arrow_x,arrow_y;} laboratory_channel_layout;
+static laboratory_channel_layout laboratory_channel_measure(app *a,const char *name,const char *unit,struct nk_rect r) {
+    float f=a->preferences.ui_size/16.f,line=14.5f*f;const struct nk_user_font *font=&a->workspace_status_font;
+    float n=timeline_text_width(font,name),u=timeline_text_width(font,unit);bool stacked=n+u+20*f>r.w;
+    float nw=stacked?fmaxf(1,r.w-16*f):n,uw=fminf(u,r.w);
+    float nh=line*laboratory_wrapped_lines(font,name,nw),uh=line*laboratory_wrapped_lines(font,unit,fmaxf(1,uw));
+    laboratory_channel_layout m={.name=nk_rect(r.x,r.y,nw,nh),.unit=nk_rect(r.x+r.w-uw,r.y+(stacked?nh+2*f:0),uw,uh)};
+    m.height=(stacked?nh+2*f+uh:fmaxf(nh,uh))+9*f;
+    m.arrow_x=stacked?r.x+r.w-5*f:r.x+n+8*f;m.arrow_y=r.y+line/2;return m;
+}
 static void laboratory_channel_field(struct nk_context *ui,struct nk_rect r,bool focused,void *user) {
-    app *a=user;float f=a->preferences.ui_size/16.f;struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
-    const char *name=a->laboratory_channel_caption;
+    laboratory_channel_paint *p=user;app *a=p->a;float f=a->preferences.ui_size/16.f;struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
     if(nk_input_is_mouse_hovering_rect(&ui->input,r))nk_fill_rect(canvas,r,5*f,UI_COLOR(surface));
-    laboratory_wrapped_text(canvas,&a->workspace_status_font,name,nk_rect(r.x+4*f,r.y+4*f,r.w-24*f,r.h-8*f),14.5f*f,UI_COLOR(text));
-    float x=r.x+r.w-10*f,y=r.y+r.h/2;nk_stroke_line(canvas,x-3*f,y-2*f,x,y+1*f,f,UI_COLOR(muted));nk_stroke_line(canvas,x,y+1*f,x+3*f,y-2*f,f,UI_COLOR(muted));
+    float x=r.x+r.w-10*f,y=r.y+r.h/2;
+    if(p->chart) {
+        laboratory_channel_layout m=laboratory_channel_measure(a,p->name,p->unit,r);x=m.arrow_x;y=m.arrow_y;
+        laboratory_wrapped_text(canvas,&a->workspace_status_font,p->name,m.name,14.5f*f,UI_COLOR(text));
+        laboratory_wrapped_text(canvas,&a->workspace_status_font,p->unit,m.unit,14.5f*f,UI_COLOR(muted));
+        a->laboratory_channel_fields[p->slot]=r;a->laboratory_channel_visible[p->slot]=plot_intersection(r,canvas->clip);a->laboratory_channel_names[p->slot]=m.name;a->laboratory_channel_units[p->slot]=m.unit;
+        snprintf(a->laboratory_channel_name_text[p->slot],48,"%s",p->name);snprintf(a->laboratory_channel_unit_text[p->slot],64,"%s",p->unit);
+    } else laboratory_wrapped_text(canvas,&a->workspace_status_font,p->caption,nk_rect(r.x+4*f,r.y+4*f,r.w-24*f,r.h-8*f),14.5f*f,UI_COLOR(text));
+    nk_stroke_line(canvas,x-3*f,y-2*f,x,y+1*f,f,UI_COLOR(muted));nk_stroke_line(canvas,x,y+1*f,x+3*f,y-2*f,f,UI_COLOR(muted));
     if(focused)laboratory_focus_outline(a,r,10);
 }
-static void laboratory_curve(app *a,const double *times,const double *values,int count,float height,unsigned slot) {
+static float laboratory_curve_note(app *a,const double *times,const double *values,int count,bool represented,float width,char note[180]) {
+    char offsets[120]="";
+    if(count>=2 && times[count-1]>times[0]) {
+        double low=INFINITY,high=-INFINITY;for(int i=0;i<count;i++)if(isfinite(values[i])){low=fmin(low,values[i]);high=fmax(high,values[i]);}
+        if(isfinite(low)){plot_expand_range(&low,&high,true);double offset=ps_plot_axis_offset(low,high),toffset=ps_plot_axis_offset(times[0],times[count-1]);
+            if(offset || toffset)snprintf(offsets,120,"Offset: Zeit %.17g s · Wert %.17g · addieren",toffset,offset);}
+    }
+    snprintf(note,180,"%s%s%s",represented?"":"Anzeigeeinheit nicht darstellbar.",!represented && *offsets?" ":"",offsets);
+    if(!*note)return 0;
+    float f=a->preferences.ui_size/16.f;return 14.5f*f*laboratory_wrapped_lines(&a->workspace_status_font,note,width)+8*f;
+}
+static float laboratory_curve_minimum(app *a,const char *name,const char *unit,const double *times,const double *values,int count,bool represented,float width) {
+    char note[180];float f=a->preferences.ui_size/16.f;
+    float header=laboratory_channel_measure(a,name,unit,nk_rect(0,0,width,0)).height;
+    return fmaxf(156*f,header+96*f+laboratory_curve_note(a,times,values,count,represented,width,note));
+}
+typedef struct {ps_display_unit unit;double values[PREVIEW];int selected;bool represented;} laboratory_curve_data;
+static void laboratory_curve_prepare(app *a,const ps_channel *channels,uint32_t count,unsigned slot,laboratory_curve_data *data) {
+    data->selected=-1;data->represented=true;data->unit=(ps_display_unit){.scale=1,.symbol="SI"};
+    if(!count)return;
+    int selected=a->laboratory_channels[slot];if(selected<0 || (unsigned)selected>=count)selected=slot<count?(int)slot:0;
+    data->selected=selected;data->unit=channel_display_unit(a,&channels[selected]);
+    data->represented=channel_display_values(&data->unit,a->history_v[selected],a->history_count,data->values);
+    int mask=a->channel_status[selected];if(mask>=0)for(int i=0;i<a->history_count;i++)if(a->history_v[mask][i]!=1)data->values[i]=NAN;
+}
+static void laboratory_curve(app *a,const double *times,const double *values,int count,bool represented,float height,unsigned slot) {
     struct nk_context *ui=a->ui;float f=a->preferences.ui_size/16.f;const struct nk_user_font *font=&a->workspace_status_font;
-    nk_layout_row_dynamic(ui,height,1);struct nk_rect r;nk_widget(&r,ui);struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+    ps_ui_row_exact_dynamic(ui,height,1);struct nk_rect r;nk_widget(&r,ui);struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+    a->laboratory_curve_frames[slot]=r;a->laboratory_curve_notes[slot]=a->laboratory_curve_messages[slot]=a->laboratory_curve_areas[slot]=nk_rect(0,0,0,0);a->laboratory_curve_message_text[slot][0]=0;
     double low=INFINITY,high=-INFINITY;for(int i=0;i<count;i++)if(isfinite(values[i])){low=fmin(low,values[i]);high=fmax(high,values[i]);}
     if(count<2 || !isfinite(low) || !(times[count-1]>times[0])) {
-        const char *message=count<2?"Messkurven erscheinen nach dem ersten Messpunkt.":"Keine gültigen Messwerte in dieser Vorschau.";
-        laboratory_wrapped_text(canvas,font,message,r,14.5f*f,UI_COLOR(muted));ps_ui_accessibility_label(ui,r,message);return;
+        const char *message=!represented?"Anzeigeeinheit nicht darstellbar.":count<2?"Für eine Kurve sind mindestens zwei gültige Messpunkte nötig.":!isfinite(low)?"Keine gültigen Messwerte in dieser Vorschau.":"Die Vorschau enthält keine wachsende Zeitspanne.";
+        struct nk_rect text=nk_rect(r.x,r.y,r.w,14.5f*f*laboratory_wrapped_lines(font,message,r.w));
+        laboratory_wrapped_text(canvas,font,message,text,14.5f*f,UI_COLOR(muted));ps_ui_accessibility_label(ui,text,message);
+        a->laboratory_curve_messages[slot]=text;snprintf(a->laboratory_curve_message_text[slot],160,"%s",message);return;
     }
     plot_expand_range(&low,&high,true);double bounds[]={times[0],times[count-1],low,high};
     double offset=ps_plot_axis_offset(low,high),toffset=ps_plot_axis_offset(times[0],times[count-1]);
     char ticks[3][80];float left=0;
     for(unsigned i=0;i<3;i++) {plot_axis_label(ticks[i],80,plot_tick(low-offset,high-offset,1-i*.5),low-offset,high-offset);timeline_decimal(ticks[i]);left=fmaxf(left,timeline_text_width(font,ticks[i]));}
-    float note=(offset || toffset)?29*f:0;
-    if(note){char text[180];snprintf(text,sizeof text,"Offset: Zeit %.17g s · Wert %.17g · addieren",toffset,offset);laboratory_wrapped_text(canvas,font,text,nk_rect(r.x,r.y,r.w,note),14.5f*f,UI_COLOR(muted));}
+    char note_text[180];float note=laboratory_curve_note(a,times,values,count,represented,r.w,note_text);
+    if(note){a->laboratory_curve_notes[slot]=nk_rect(r.x,r.y,r.w,note-8*f);laboratory_wrapped_text(canvas,font,note_text,a->laboratory_curve_notes[slot],14.5f*f,UI_COLOR(muted));}
     struct nk_rect area=nk_rect(r.x+left+8*f,r.y+note+8*f,fmaxf(1,r.w-left-12*f),fmaxf(1,r.h-note-47*f));
     a->laboratory_curve_areas[slot]=area;
     for(unsigned i=0;i<3;i++) {
-        float y=area.y+area.h*i/2;nk_stroke_line(canvas,area.x,y,area.x+area.w,y,f,UI_COLOR(plot_grid));
+        float y=area.y+area.h*i/2;nk_stroke_line(canvas,area.x,y,area.x+area.w,y,f,UI_COLOR(border));
         timeline_text(canvas,font,nk_rect(r.x,y-7.25f*f,left,14.5f*f),ticks[i],UI_COLOR(muted));
     }
     struct nk_rect clip=canvas->clip;nk_push_scissor(canvas,plot_intersection(clip,area));
     ps_plot_view fit;ps_plot_view_reset(&fit);
-    for(int i=1;i<count;i++)if(isfinite(values[i-1]) && isfinite(values[i]))plot_segment(canvas,area,plot_fraction(&fit,bounds,0,times[i-1]),plot_fraction(&fit,bounds,1,values[i-1]),plot_fraction(&fit,bounds,0,times[i]),plot_fraction(&fit,bounds,1,values[i]),ui_palette->curves[slot]);
+    for(int i=1;i<count;i++)if(isfinite(values[i-1]) && isfinite(values[i])) {
+        double x=plot_fraction(&fit,bounds,0,times[i-1]),y=plot_fraction(&fit,bounds,1,values[i-1]),xx=plot_fraction(&fit,bounds,0,times[i]),yy=plot_fraction(&fit,bounds,1,values[i]);
+        if(ps_plot_clip_line(&x,&y,&xx,&yy))nk_stroke_line(canvas,area.x+(float)x*area.w,area.y+(1-(float)y)*area.h,area.x+(float)xx*area.w,area.y+(1-(float)yy)*area.h,2*f,laboratory_curve_color(slot));
+    }
     double t=ps_report_axis_fraction(display_time(a),times[0],times[count-1]);
     if(t>=0 && t<=1)for(float y=area.y;y<area.y+area.h;y+=6*f)nk_stroke_line(canvas,area.x+(float)t*area.w,y,area.x+(float)t*area.w,fminf(y+3*f,area.y+area.h),f,UI_COLOR(muted));
     nk_push_scissor(canvas,clip);
+    char xticks[3][80];float widths[3];
+    for(unsigned i=0;i<3;i++){snprintf(xticks[i],80,i==2?"%.4g s":"%.4g",plot_tick(times[0]-toffset,times[count-1]-toffset,i*.5));timeline_decimal(xticks[i]);widths[i]=timeline_text_width(font,xticks[i]);}
+    bool middle=widths[0]+widths[1]/2+4*f<=area.w/2 && widths[2]+widths[1]/2+4*f<=area.w/2;
     for(unsigned i=0;i<3;i++) {
-        char text[80];snprintf(text,80,i==2?"%.4g s":"%.4g",plot_tick(times[0]-toffset,times[count-1]-toffset,i*.5));timeline_decimal(text);
-        float width=timeline_text_width(font,text),x=i==0?area.x:i==2?area.x+area.w-width:area.x+area.w/2-width/2;
-        timeline_text(canvas,font,nk_rect(x,area.y+area.h+6*f,width,14.5f*f),text,UI_COLOR(muted));
+        if(i==1 && !middle)continue;
+        float x=i==0?area.x:i==2?area.x+area.w-widths[i]:area.x+area.w/2-widths[i]/2;
+        timeline_text(canvas,font,nk_rect(x,area.y+area.h+6*f,widths[i],14.5f*f),xticks[i],UI_COLOR(muted));
     }
     char preview[96];snprintf(preview,sizeof preview,"Vorschau · %d Punkte%s",count,a->history_stride>1?" · ausgedünnt":"");
     timeline_text(canvas,&a->laboratory_scene_font,nk_rect(r.x,r.y+r.h-13.05f*f,r.w,13.05f*f),preview,UI_COLOR(muted));

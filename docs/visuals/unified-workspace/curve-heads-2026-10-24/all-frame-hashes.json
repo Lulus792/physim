@@ -1,0 +1,578 @@
+{
+  "measurement_design/bundled/measurement-contrast-channel.png": {
+    "bytes": 106424,
+    "sha256": "8ed94c2b4a5dc79b1eb885797af0bb8baaabc92fca678653c4221318eb91548a"
+  },
+  "measurement_design/bundled/measurement-contrast-converted.png": {
+    "bytes": 113117,
+    "sha256": "ceadf1d327e98454271eb5340c9babdd8027da656824da71c41bdfb728b2564f"
+  },
+  "measurement_design/bundled/measurement-contrast-curves.png": {
+    "bytes": 107512,
+    "sha256": "291b571a41ba49602f701b3553761bfd79390fc411fc68a7be29564ef8045bea"
+  },
+  "measurement_design/bundled/measurement-contrast-normal.png": {
+    "bytes": 111276,
+    "sha256": "19d68c8cfcb517dd1213845b9dfe7ab07e40992de83db9b5c4688df86b43021a"
+  },
+  "measurement_design/bundled/measurement-contrast-restored.png": {
+    "bytes": 111276,
+    "sha256": "19d68c8cfcb517dd1213845b9dfe7ab07e40992de83db9b5c4688df86b43021a"
+  },
+  "measurement_design/bundled/measurement-dark-channel.png": {
+    "bytes": 131230,
+    "sha256": "0aa452b8a0a01f4f82d76f0188077abb25fe877fc45c6689d93dff2e6b0581e9"
+  },
+  "measurement_design/bundled/measurement-dark-converted.png": {
+    "bytes": 132489,
+    "sha256": "d213a93c8f1a20b84b949338d781c45c819a4e45a9ec6d2a6aa7d0a2e53cc146"
+  },
+  "measurement_design/bundled/measurement-dark-curves.png": {
+    "bytes": 134962,
+    "sha256": "2e4340b24b78421818b754c14612fbff0c6f8bf13c92fda9a403a1abd9ceb6b7"
+  },
+  "measurement_design/bundled/measurement-dark-normal.png": {
+    "bytes": 134822,
+    "sha256": "fe27a2b26b883ef195212676ca2b81070f272805979ab77ed9935039aab57d05"
+  },
+  "measurement_design/bundled/measurement-dark-restored.png": {
+    "bytes": 134822,
+    "sha256": "fe27a2b26b883ef195212676ca2b81070f272805979ab77ed9935039aab57d05"
+  },
+  "measurement_design/bundled/measurement-large-channel.png": {
+    "bytes": 111516,
+    "sha256": "8aa2226ce267fa9bfd096e747100add34ec08309765ffff30ede5ebf4b44c9f9"
+  },
+  "measurement_design/bundled/measurement-large-converted.png": {
+    "bytes": 118553,
+    "sha256": "b0b277a3f595782cfb916a9d54d677f5c268b8d8aa52d5f17a7718bf1c53657d"
+  },
+  "measurement_design/bundled/measurement-large-curves.png": {
+    "bytes": 112573,
+    "sha256": "cd0cf24286610f8c35c0e5aa03bcfe0607d7f98422962de8a68a3228cbd3024e"
+  },
+  "measurement_design/bundled/measurement-large-normal.png": {
+    "bytes": 116579,
+    "sha256": "c9e40ffbe477354e84e628ddfe5736858068118099a9729afdc5365eeca85e9a"
+  },
+  "measurement_design/bundled/measurement-large-restored.png": {
+    "bytes": 116579,
+    "sha256": "c9e40ffbe477354e84e628ddfe5736858068118099a9729afdc5365eeca85e9a"
+  },
+  "measurement_design/bundled/measurement-larger-channel.png": {
+    "bytes": 111866,
+    "sha256": "6301f22c8297ecd37eaa40af2a10c3c6a2d301756ad62daa45e7c5817344ddc9"
+  },
+  "measurement_design/bundled/measurement-larger-converted.png": {
+    "bytes": 111681,
+    "sha256": "3a2ff7d56af83f17035bba50df78aa8948c5cfda18628fe69a775b8797098fca"
+  },
+  "measurement_design/bundled/measurement-larger-curves.png": {
+    "bytes": 112335,
+    "sha256": "5511904b796bee5b0ce4aa65ee7761526677745bdd2fcad730b1eaf793d9c862"
+  },
+  "measurement_design/bundled/measurement-larger-normal.png": {
+    "bytes": 109833,
+    "sha256": "757de6a4877ba9378a20df508f747fd35bf7db290163171cb4716a22ddeb0ffb"
+  },
+  "measurement_design/bundled/measurement-larger-restored.png": {
+    "bytes": 109833,
+    "sha256": "757de6a4877ba9378a20df508f747fd35bf7db290163171cb4716a22ddeb0ffb"
+  },
+  "measurement_design/bundled/measurement-light-channel.png": {
+    "bytes": 133189,
+    "sha256": "711c47902892637c3035dde91552bdfb5cd488a66ac45b4d580cdf9bc9a0a4f3"
+  },
+  "measurement_design/bundled/measurement-light-converted.png": {
+    "bytes": 134368,
+    "sha256": "48ddc540f81873c11bb3712c4d06bde58fe7810548b9f4e003333c9f53c17f96"
+  },
+  "measurement_design/bundled/measurement-light-curves.png": {
+    "bytes": 136804,
+    "sha256": "026d90dfb22bd6eecbf724fda8338b6d3d37a230915e18f5e7165aca732aff90"
+  },
+  "measurement_design/bundled/measurement-light-normal.png": {
+    "bytes": 136663,
+    "sha256": "5256699c74cb1ce492386d86222c3dc8d3060a2cdb9f981e4858d10a94709fba"
+  },
+  "measurement_design/bundled/measurement-light-restored.png": {
+    "bytes": 136663,
+    "sha256": "5256699c74cb1ce492386d86222c3dc8d3060a2cdb9f981e4858d10a94709fba"
+  },
+  "measurement_design/bundled/measurement-medium-channel.png": {
+    "bytes": 103261,
+    "sha256": "07a574694a61e60340379b0b657cce862f211dd2d0050147295385b2f83e6c8f"
+  },
+  "measurement_design/bundled/measurement-medium-converted.png": {
+    "bytes": 103644,
+    "sha256": "b0120656ca4af45471ab4512daa57de4da7b08db2f6e92462731b2533f6b0759"
+  },
+  "measurement_design/bundled/measurement-medium-curves.png": {
+    "bytes": 105532,
+    "sha256": "64f2868d2acad91a4841384f7794f0333bb45ca52d915bbae9661f3f07961dec"
+  },
+  "measurement_design/bundled/measurement-medium-normal.png": {
+    "bytes": 100149,
+    "sha256": "5ec9c80b9b7ab681fc4b538b0279a8445a0556ed08c3bce4c5e632eac3d8ce04"
+  },
+  "measurement_design/bundled/measurement-medium-restored.png": {
+    "bytes": 100149,
+    "sha256": "5ec9c80b9b7ab681fc4b538b0279a8445a0556ed08c3bce4c5e632eac3d8ce04"
+  },
+  "measurement_design/system/measurement-contrast-channel.png": {
+    "bytes": 103777,
+    "sha256": "72cf3d0cdea9e088535aff28634401aad51ff6fd037b8f40deecae39fb7e2a1d"
+  },
+  "measurement_design/system/measurement-contrast-converted.png": {
+    "bytes": 110417,
+    "sha256": "fb11543dddbc0fb54e4962d6fc700be068302ec51c9d93f65113cc7fcb70c049"
+  },
+  "measurement_design/system/measurement-contrast-curves.png": {
+    "bytes": 104801,
+    "sha256": "15ffc30d1aebc09a93597c161d766a9c3ce44c26cc1252fb60ce19467a24b5d4"
+  },
+  "measurement_design/system/measurement-contrast-normal.png": {
+    "bytes": 108488,
+    "sha256": "4452c35948cc71d773e42c8c5f071257d3ee865b988cd5fb9b8d837ed5787e87"
+  },
+  "measurement_design/system/measurement-contrast-restored.png": {
+    "bytes": 108488,
+    "sha256": "4452c35948cc71d773e42c8c5f071257d3ee865b988cd5fb9b8d837ed5787e87"
+  },
+  "measurement_design/system/measurement-dark-channel.png": {
+    "bytes": 132592,
+    "sha256": "bbbb35479f07d4ab1aea40b31d470386944565ce985a690afcccf253ec93bebb"
+  },
+  "measurement_design/system/measurement-dark-converted.png": {
+    "bytes": 133794,
+    "sha256": "a3dd6ab2a5e5ee72da33e04fb59f0910bf0f517fca017d0329ddf8696ae260ab"
+  },
+  "measurement_design/system/measurement-dark-curves.png": {
+    "bytes": 136626,
+    "sha256": "dbb9ca8db1d1a63685edff32a027d3cfd80a222e2af3f2df7d8eb307819fa3a7"
+  },
+  "measurement_design/system/measurement-dark-normal.png": {
+    "bytes": 135821,
+    "sha256": "59c9c8c088a1f8e00880954b5a79ac92a413563bc0af212c1d8d154dd27c3ded"
+  },
+  "measurement_design/system/measurement-dark-restored.png": {
+    "bytes": 135821,
+    "sha256": "59c9c8c088a1f8e00880954b5a79ac92a413563bc0af212c1d8d154dd27c3ded"
+  },
+  "measurement_design/system/measurement-large-channel.png": {
+    "bytes": 108566,
+    "sha256": "89e1d13461b8b45dd78bf5e1dcef485d313bf280b2d883b673d0379411f8cc79"
+  },
+  "measurement_design/system/measurement-large-converted.png": {
+    "bytes": 115383,
+    "sha256": "9970735d35ac432a04dde4824d0b41fde20b6e4fd29acfa26cf290756fcdbc07"
+  },
+  "measurement_design/system/measurement-large-curves.png": {
+    "bytes": 109643,
+    "sha256": "85969cf3e1a07d667c1f977b4f963d69f5074b3153c8946f4fc96a9a622ff2d9"
+  },
+  "measurement_design/system/measurement-large-normal.png": {
+    "bytes": 113451,
+    "sha256": "42cbc309c38708dbb8ae28b879a7fb66d45a28ab953c535b7db18e4702a517c6"
+  },
+  "measurement_design/system/measurement-large-restored.png": {
+    "bytes": 113451,
+    "sha256": "42cbc309c38708dbb8ae28b879a7fb66d45a28ab953c535b7db18e4702a517c6"
+  },
+  "measurement_design/system/measurement-larger-channel.png": {
+    "bytes": 110431,
+    "sha256": "f9c4421783bed2588d7d562ff1feff06dc815b5d4a66e5e0087215a072cca85e"
+  },
+  "measurement_design/system/measurement-larger-converted.png": {
+    "bytes": 109673,
+    "sha256": "d803130f9bab422ea7e0f8921103a6bd770f2d8b91c248993edf85683bb448a2"
+  },
+  "measurement_design/system/measurement-larger-curves.png": {
+    "bytes": 110808,
+    "sha256": "c47556d26be90e10fce1bf55518f63a6bb83b68357bf9240d5dda5980364dfa0"
+  },
+  "measurement_design/system/measurement-larger-normal.png": {
+    "bytes": 107943,
+    "sha256": "855ca5eb368dbccc289a9b5dbb3074c52a1dd60203997d9548befc91360b2292"
+  },
+  "measurement_design/system/measurement-larger-restored.png": {
+    "bytes": 107943,
+    "sha256": "855ca5eb368dbccc289a9b5dbb3074c52a1dd60203997d9548befc91360b2292"
+  },
+  "measurement_design/system/measurement-light-channel.png": {
+    "bytes": 134102,
+    "sha256": "ca8df8d0b36baf97eeb77db293fcd656831364456b4acf1bfe03459ad371698e"
+  },
+  "measurement_design/system/measurement-light-converted.png": {
+    "bytes": 135224,
+    "sha256": "cca93a964bd948be2cc907e273e9fd5366ccd5efe0f14a99af0eed92b4bc796c"
+  },
+  "measurement_design/system/measurement-light-curves.png": {
+    "bytes": 138089,
+    "sha256": "d2893bb9606ab13491e75ad2b19cb7701325f1716295aa80ddf4d298d855ec1d"
+  },
+  "measurement_design/system/measurement-light-normal.png": {
+    "bytes": 137547,
+    "sha256": "78423198570c460d3c9b805cf336840ab30df71445efccf11ea1beced5078aea"
+  },
+  "measurement_design/system/measurement-light-restored.png": {
+    "bytes": 137547,
+    "sha256": "78423198570c460d3c9b805cf336840ab30df71445efccf11ea1beced5078aea"
+  },
+  "measurement_design/system/measurement-medium-channel.png": {
+    "bytes": 105203,
+    "sha256": "76f97787a11b588b1908cd526008137a7d906dcda3e589249599cb09ff32ca07"
+  },
+  "measurement_design/system/measurement-medium-converted.png": {
+    "bytes": 105605,
+    "sha256": "d0e7fc15ac8a97be321fc6ba0771946582c8508686b62352f99d9c4427d98f8e"
+  },
+  "measurement_design/system/measurement-medium-curves.png": {
+    "bytes": 107466,
+    "sha256": "282b3db5e59d2928551f698fff587692ffa1d35c457a1a31ef5625bacfdca4d4"
+  },
+  "measurement_design/system/measurement-medium-normal.png": {
+    "bytes": 101986,
+    "sha256": "fc66f155870a947dbf6ebd865a8a5fe74fc8ae094d91f944b11f22b6653becb2"
+  },
+  "measurement_design/system/measurement-medium-restored.png": {
+    "bytes": 101986,
+    "sha256": "fc66f155870a947dbf6ebd865a8a5fe74fc8ae094d91f944b11f22b6653becb2"
+  },
+  "curve_design/bundled/curve-contrast-empty.png": {
+    "bytes": 113534,
+    "sha256": "97b67c79ed95352331bdf04633349700700e348171411a77fbe30830848b1433"
+  },
+  "curve_design/bundled/curve-contrast-gaps.png": {
+    "bytes": 112821,
+    "sha256": "5418e8a9368f40bdef6b2a27180ab552e946b9455b76a5f664ab805ea7c454a9"
+  },
+  "curve_design/bundled/curve-contrast-long.png": {
+    "bytes": 119211,
+    "sha256": "90aff8aab315afa3fa13e04a49691e94d63338ecbf2c8c89cf03d5afd2ea8919"
+  },
+  "curve_design/bundled/curve-contrast-missing.png": {
+    "bytes": 112087,
+    "sha256": "e707f2083d4828a994ef02874e8ea1e31455ae1350bfaabe6207c2c91d6ce50e"
+  },
+  "curve_design/bundled/curve-contrast-offset.png": {
+    "bytes": 119486,
+    "sha256": "16ea24f07ee8f93d2a9ba7724d656c79fd3cfb2cd3185fd5b3431328fda82897"
+  },
+  "curve_design/bundled/curve-contrast-one.png": {
+    "bytes": 113534,
+    "sha256": "97b67c79ed95352331bdf04633349700700e348171411a77fbe30830848b1433"
+  },
+  "curve_design/bundled/curve-contrast-unrepresentable.png": {
+    "bytes": 111182,
+    "sha256": "19cba447ae413245565ef97f15e179c7b893e8de2e2257b8c2de93e13171a6a6"
+  },
+  "curve_design/bundled/curve-dark-empty.png": {
+    "bytes": 147239,
+    "sha256": "e6bfbdab623b3a095d61474f3dc1aab7496dd4d7eb72c2b47ecc0c12fefc0648"
+  },
+  "curve_design/bundled/curve-dark-gaps.png": {
+    "bytes": 147660,
+    "sha256": "306f37ee7a8c62fe1b9fadb471ad25d614ec3253e8d0db187e5c08ec0c6edaa7"
+  },
+  "curve_design/bundled/curve-dark-long.png": {
+    "bytes": 153552,
+    "sha256": "f0d76c5d96d9e463efa2aa10a8e5ec3d417a29915e6544e304f97e67aa270a84"
+  },
+  "curve_design/bundled/curve-dark-missing.png": {
+    "bytes": 146431,
+    "sha256": "d86f395155548c8e003ea34d14a3267752516b74a9406ea2c352dc9961de659d"
+  },
+  "curve_design/bundled/curve-dark-offset.png": {
+    "bytes": 154677,
+    "sha256": "3a02c2de0ae783a2e65759fc14ea82eb7b05749b78d6e262d261ba02e29d2be0"
+  },
+  "curve_design/bundled/curve-dark-one.png": {
+    "bytes": 147239,
+    "sha256": "e6bfbdab623b3a095d61474f3dc1aab7496dd4d7eb72c2b47ecc0c12fefc0648"
+  },
+  "curve_design/bundled/curve-dark-unrepresentable.png": {
+    "bytes": 145832,
+    "sha256": "5719ae9964754be20b4bfc247bcb657e13f5a05db6e3bd0b00e1ce2c036181cf"
+  },
+  "curve_design/bundled/curve-large-empty.png": {
+    "bytes": 119161,
+    "sha256": "1bf2500b2f2fe5c4a21ff0798eea0077dbd1951629537d0466dd7956349b922c"
+  },
+  "curve_design/bundled/curve-large-gaps.png": {
+    "bytes": 118449,
+    "sha256": "15e3df06c19d53345de0329389289d469d45588173ab78d7203efaeb1f955d2f"
+  },
+  "curve_design/bundled/curve-large-long.png": {
+    "bytes": 125202,
+    "sha256": "0d0b6a1f89eb2600a7700253c3b4ac5e8d3d25fe0cc503ab557efbd339765ba0"
+  },
+  "curve_design/bundled/curve-large-missing.png": {
+    "bytes": 117672,
+    "sha256": "8a13fd3a4932d31c7d7db36e7598dd60bacfa318e8e6419ee562122427ca43dc"
+  },
+  "curve_design/bundled/curve-large-offset.png": {
+    "bytes": 125966,
+    "sha256": "d3a7c7dd5e8e317e29dd1a70ae37f9a4893b400c74c86921fc81fec51ae14794"
+  },
+  "curve_design/bundled/curve-large-one.png": {
+    "bytes": 119161,
+    "sha256": "1bf2500b2f2fe5c4a21ff0798eea0077dbd1951629537d0466dd7956349b922c"
+  },
+  "curve_design/bundled/curve-large-unrepresentable.png": {
+    "bytes": 116672,
+    "sha256": "0842fafc2e8f17b5b26f8c3e662c1847e1dbbef29a07d5f0fde408ec08f9d3f7"
+  },
+  "curve_design/bundled/curve-larger-empty.png": {
+    "bytes": 113884,
+    "sha256": "ed75dd7eec79c640c5118c706b3f15f1d0851760e0abaeceec9d74c22ce06b20"
+  },
+  "curve_design/bundled/curve-larger-gaps.png": {
+    "bytes": 113804,
+    "sha256": "f8d85bbeda5dbe13c88603bcc413abafd2cbf2a61ed093cb9d3c2e5ffa0ecee4"
+  },
+  "curve_design/bundled/curve-larger-long.png": {
+    "bytes": 119111,
+    "sha256": "d6cb89481dc0fe000efed591a6b5f1cbab83b95c62e957eaa655c17d8325d311"
+  },
+  "curve_design/bundled/curve-larger-missing.png": {
+    "bytes": 112949,
+    "sha256": "3f2e65b4dd06c9536d1fd7b0731027c228eff051b071800e62ea5219c98b7ef5"
+  },
+  "curve_design/bundled/curve-larger-offset.png": {
+    "bytes": 119685,
+    "sha256": "9a425f59192a7538481152e940d3b9e69f5c8139f1b3dedb8b97ca9be804daa8"
+  },
+  "curve_design/bundled/curve-larger-one.png": {
+    "bytes": 113884,
+    "sha256": "ed75dd7eec79c640c5118c706b3f15f1d0851760e0abaeceec9d74c22ce06b20"
+  },
+  "curve_design/bundled/curve-larger-unrepresentable.png": {
+    "bytes": 112190,
+    "sha256": "a897c3a23d1e6fccfbf045faadf91cf2a2f19660d73f08d91fdd2b10a78df754"
+  },
+  "curve_design/bundled/curve-light-empty.png": {
+    "bytes": 149294,
+    "sha256": "f8556415e20bde15a4a0d2774ebb64ab4c07467a6f25d90d50dc3234fe32ba88"
+  },
+  "curve_design/bundled/curve-light-gaps.png": {
+    "bytes": 149913,
+    "sha256": "9e95ba83b48db5a7af3a2afaa977e5982e3534fea0b9a3c6da198ac21b971dfb"
+  },
+  "curve_design/bundled/curve-light-long.png": {
+    "bytes": 155522,
+    "sha256": "18a708ca59dcce3404ab784f2a14f7cea7924b726c7043312318bd7ee04c8715"
+  },
+  "curve_design/bundled/curve-light-missing.png": {
+    "bytes": 148450,
+    "sha256": "65daa3ff14ffffc7dd4fba40360c5c5c5b391768779c59efc765cbab23c9e9a2"
+  },
+  "curve_design/bundled/curve-light-offset.png": {
+    "bytes": 156522,
+    "sha256": "f9abe193819c8a0c2933ec5d8b70a7c70b8eefea777bc41246e3fdfdb2099a51"
+  },
+  "curve_design/bundled/curve-light-one.png": {
+    "bytes": 149294,
+    "sha256": "f8556415e20bde15a4a0d2774ebb64ab4c07467a6f25d90d50dc3234fe32ba88"
+  },
+  "curve_design/bundled/curve-light-unrepresentable.png": {
+    "bytes": 147810,
+    "sha256": "6373e9513adb39d439687615c207c564c08d329126de53cd7e13106df63667e9"
+  },
+  "curve_design/bundled/curve-medium-empty.png": {
+    "bytes": 107539,
+    "sha256": "efc31fa6780cc417439f54b1da57c94df69b2acedef700d791e57674442a591c"
+  },
+  "curve_design/bundled/curve-medium-gaps.png": {
+    "bytes": 107226,
+    "sha256": "af314bf829a627e97209ca6b3c49cc5085897dd6cb9b7178a428d4f338918506"
+  },
+  "curve_design/bundled/curve-medium-long.png": {
+    "bytes": 112363,
+    "sha256": "7ee25d0a466ab40508bbbdac7880528d37be918c9056ff486d6043703ab0872e"
+  },
+  "curve_design/bundled/curve-medium-missing.png": {
+    "bytes": 106530,
+    "sha256": "9fcbec6aa10959a21525c241d9224f1377e6bcd58723aa9aa5601804302ee676"
+  },
+  "curve_design/bundled/curve-medium-offset.png": {
+    "bytes": 112738,
+    "sha256": "5fa48ef679d418eb5a0bc0092c73932a1802c47102f43c1013b31c32bb689295"
+  },
+  "curve_design/bundled/curve-medium-one.png": {
+    "bytes": 107539,
+    "sha256": "efc31fa6780cc417439f54b1da57c94df69b2acedef700d791e57674442a591c"
+  },
+  "curve_design/bundled/curve-medium-unrepresentable.png": {
+    "bytes": 105705,
+    "sha256": "e2bb8a814efc6de9000412ada45e183143e41f46b176a4602d346b8f67732854"
+  },
+  "curve_design/system/curve-contrast-empty.png": {
+    "bytes": 111253,
+    "sha256": "89703e446b84019f24ff32461c865c45e2a42f26f597c2b74fb9d61b1f60e3cc"
+  },
+  "curve_design/system/curve-contrast-gaps.png": {
+    "bytes": 110645,
+    "sha256": "38860af4b3f42a086c6be24451b216245dd3ee9e5fe543517a787b74dba12fe5"
+  },
+  "curve_design/system/curve-contrast-long.png": {
+    "bytes": 116951,
+    "sha256": "cdd125b8e4b60025b78e1b084391ae533e327eab12802febb533090a3d788110"
+  },
+  "curve_design/system/curve-contrast-missing.png": {
+    "bytes": 109900,
+    "sha256": "aaf204785f17e84d3c8dee7ea89471bdae078215499d79aca66a92ff9c79110d"
+  },
+  "curve_design/system/curve-contrast-offset.png": {
+    "bytes": 117487,
+    "sha256": "071ab75a5da933d46c0d0a34cfb84aea0d976488b48ed6162972268ab39921fa"
+  },
+  "curve_design/system/curve-contrast-one.png": {
+    "bytes": 111253,
+    "sha256": "89703e446b84019f24ff32461c865c45e2a42f26f597c2b74fb9d61b1f60e3cc"
+  },
+  "curve_design/system/curve-contrast-unrepresentable.png": {
+    "bytes": 108928,
+    "sha256": "d3da2c532cef8442d99833aa3d20875ca547c35716a2787e057a89ebd5bc856c"
+  },
+  "curve_design/system/curve-dark-empty.png": {
+    "bytes": 148426,
+    "sha256": "e929ce3ffe66ab6f41c8fd805b7fff0926e76e28e3f4e66d708511b2c6270cd6"
+  },
+  "curve_design/system/curve-dark-gaps.png": {
+    "bytes": 148695,
+    "sha256": "f6ae834f16b8e79302dd23acda12eb28c55f0c78e0389a6a3b2eb4955acae3e7"
+  },
+  "curve_design/system/curve-dark-long.png": {
+    "bytes": 154794,
+    "sha256": "813495f3dcd115500bc379bc04b3147e4ff9e43f4559e8c7c1b23472cd4e0f5c"
+  },
+  "curve_design/system/curve-dark-missing.png": {
+    "bytes": 147597,
+    "sha256": "c9bd73cd2900586d98b369d8d3b2f4bcb778e8235fef57b0b2a83785f0f64cb4"
+  },
+  "curve_design/system/curve-dark-offset.png": {
+    "bytes": 155802,
+    "sha256": "bfa7d84e7211ed1aebfa350e709d07d819f82586f51cc02349c9125861e77233"
+  },
+  "curve_design/system/curve-dark-one.png": {
+    "bytes": 148426,
+    "sha256": "e929ce3ffe66ab6f41c8fd805b7fff0926e76e28e3f4e66d708511b2c6270cd6"
+  },
+  "curve_design/system/curve-dark-unrepresentable.png": {
+    "bytes": 146971,
+    "sha256": "dc6331858f1caec9c90827ed3b24f68b1f3b9908d219d6ae752bb4f16bd21770"
+  },
+  "curve_design/system/curve-large-empty.png": {
+    "bytes": 116549,
+    "sha256": "2aa9bb1d0e7e597104070f142ed0d4fcb43925830dcaefdab920b3e12289055c"
+  },
+  "curve_design/system/curve-large-gaps.png": {
+    "bytes": 115800,
+    "sha256": "7fa4bb6d02374e00494dbf1f452b4e0a6831e646dc31aedac8cffd43e201a1e7"
+  },
+  "curve_design/system/curve-large-long.png": {
+    "bytes": 122505,
+    "sha256": "067102edccbef024467aa5ae856c679ff2f8eb6e192c68754c3828d1be5523e9"
+  },
+  "curve_design/system/curve-large-missing.png": {
+    "bytes": 115116,
+    "sha256": "42564506c3052f666d6be6e3907135059b8c2f4d832abe8046cadf9e112502eb"
+  },
+  "curve_design/system/curve-large-offset.png": {
+    "bytes": 123424,
+    "sha256": "ff53fba0b9b46403fc3be2fe5dff26831ce60238bf9d81be544e0c681a148c93"
+  },
+  "curve_design/system/curve-large-one.png": {
+    "bytes": 116549,
+    "sha256": "2aa9bb1d0e7e597104070f142ed0d4fcb43925830dcaefdab920b3e12289055c"
+  },
+  "curve_design/system/curve-large-unrepresentable.png": {
+    "bytes": 114137,
+    "sha256": "d6bd03ea9d6bc5534f47bd9b123d9649410f8f44ce6cd11aea3fe00f6df39266"
+  },
+  "curve_design/system/curve-larger-empty.png": {
+    "bytes": 114666,
+    "sha256": "8e7de0cd0071bf5bdd6e44f95470b137b037eb2c16f97d5af3987265e53605f3"
+  },
+  "curve_design/system/curve-larger-gaps.png": {
+    "bytes": 114035,
+    "sha256": "53bbba7fa76dfa3cd790de0555cf1d874d7b0e90ee3c58c739b08793ff4cb641"
+  },
+  "curve_design/system/curve-larger-long.png": {
+    "bytes": 119391,
+    "sha256": "e74cdd29087f8450688b5a41b7446e4f78336372a4322fa53abcf6f29c845cf6"
+  },
+  "curve_design/system/curve-larger-missing.png": {
+    "bytes": 113261,
+    "sha256": "cb4dbd9abad5f4524226e2c27b2ffbc1906a3a1c9035e448c42db4da3f6defd9"
+  },
+  "curve_design/system/curve-larger-offset.png": {
+    "bytes": 120448,
+    "sha256": "dcaa883425e1e237017c6f10f0768de803cfcb69cb4b5ec130ae84df33cf05c4"
+  },
+  "curve_design/system/curve-larger-one.png": {
+    "bytes": 114666,
+    "sha256": "8e7de0cd0071bf5bdd6e44f95470b137b037eb2c16f97d5af3987265e53605f3"
+  },
+  "curve_design/system/curve-larger-unrepresentable.png": {
+    "bytes": 112303,
+    "sha256": "7940ba2543548232bf3f9e348ef9f990190d0bce25aa779d3d08368ee00b89f3"
+  },
+  "curve_design/system/curve-light-empty.png": {
+    "bytes": 150463,
+    "sha256": "beb57a68925cbcf7bae2123eb5c5d4ade8520aa85fa9caab2c53c798278e89f3"
+  },
+  "curve_design/system/curve-light-gaps.png": {
+    "bytes": 150915,
+    "sha256": "2a62cbe3a7510e6010646befb7fa7b918050f3ce2d9bee88e9a560f487146310"
+  },
+  "curve_design/system/curve-light-long.png": {
+    "bytes": 156672,
+    "sha256": "96945866635f6fa3e182349dcf14ccf1f5a465d6aff3f7ec410c206e9b3d8dab"
+  },
+  "curve_design/system/curve-light-missing.png": {
+    "bytes": 149634,
+    "sha256": "f76da19fc26ca4f9ff6dde2d33477025180dc8d36de384894bee106a3a142b80"
+  },
+  "curve_design/system/curve-light-offset.png": {
+    "bytes": 157710,
+    "sha256": "375276518696acc3afe41b6659a572e5398f6215eb897fdea1518bb163336392"
+  },
+  "curve_design/system/curve-light-one.png": {
+    "bytes": 150463,
+    "sha256": "beb57a68925cbcf7bae2123eb5c5d4ade8520aa85fa9caab2c53c798278e89f3"
+  },
+  "curve_design/system/curve-light-unrepresentable.png": {
+    "bytes": 148990,
+    "sha256": "64155a905cbda5692d6b38a0ad745eed0dc339eacf70a8f035f01d6341ecb562"
+  },
+  "curve_design/system/curve-medium-empty.png": {
+    "bytes": 106622,
+    "sha256": "6b6e88bf5b3b52d60d4c0ea7605519048185841732dfab2c7a838f51ad5aeae4"
+  },
+  "curve_design/system/curve-medium-gaps.png": {
+    "bytes": 106415,
+    "sha256": "65ed2bfa3e635dd2cd55c87b09d65e5dcf04da6b89e18315f322e58b3359d00e"
+  },
+  "curve_design/system/curve-medium-long.png": {
+    "bytes": 111620,
+    "sha256": "9301872a3585d8d8640bb594f208a5df38ed22ebcc2d132e51ef6368932d8cdb"
+  },
+  "curve_design/system/curve-medium-missing.png": {
+    "bytes": 105781,
+    "sha256": "7207b5ddad9d779e320d7d9b61f5383ae877935bfe64d7b853db493950decfa8"
+  },
+  "curve_design/system/curve-medium-offset.png": {
+    "bytes": 111807,
+    "sha256": "891720918e5faf4d5952b220ea57d40c7c7e5e9f81db41a17431b70e1dd65360"
+  },
+  "curve_design/system/curve-medium-one.png": {
+    "bytes": 106622,
+    "sha256": "6b6e88bf5b3b52d60d4c0ea7605519048185841732dfab2c7a838f51ad5aeae4"
+  },
+  "curve_design/system/curve-medium-unrepresentable.png": {
+    "bytes": 104962,
+    "sha256": "c2fb5f3ffd1e83620c4c730e0b44553d729002b8bb53f42b4c608644ff6a0b32"
+  }
+}
