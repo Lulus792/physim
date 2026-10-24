@@ -1,0 +1,14 @@
+[
+  {
+    "Path": "D:\\Physim\\build\\native\\Design-analysis-linux\\test-results\\run-hn9m655z",
+    "Images": 108,
+    "BytesFreed": 13307480.0,
+    "Scope": "Only superseded successful generated raw images. Frozen scene-frame proof and all source/data/log files retained."
+  },
+  {
+    "Path": "D:\\Physim\\build\\native\\Design-analysis-linux\\test-results\\run-vjl13vbv",
+    "Images": 332,
+    "BytesFreed": 588501266.0,
+    "Scope": "Only superseded successful generated raw images. Frozen scene-frame proof and all source/data/log files retained."
+  }
+]

@@ -1,0 +1,55 @@
+{
+  "source": 1,
+  "native_bmp": "build/native/Design-analysis-linux/test-results/run-sl3l5fxn/docking_workflow/files \u00e4/workflow \u00e4/c-dark-legacy/project/panel-4-detached.bmp",
+  "bmp_sha256": "3ce22559fd202e27e9e6b11235dc8f2a9983538f5ec81a74cb31b3c54262eae5",
+  "png_sha256": "9d8d5efe98323102cfb229108a347a17b84980fcb5f0db0c1c241b48d1b7dc1a",
+  "rgb_sha256": "cb315375dcb689b2416e2ca069f7cfe97c5f676ae554925f54d5e23d58976447",
+  "columns": {
+    "25": [
+      116,
+      117,
+      118,
+      119,
+      120,
+      121
+    ],
+    "100": [
+      116,
+      117,
+      118,
+      119,
+      120,
+      121
+    ],
+    "200": [
+      116,
+      117,
+      118,
+      119,
+      120,
+      121
+    ],
+    "300": [
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121
+    ],
+    "430": [
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121
+    ]
+  },
+  "scope": "Actual completed native C external measurement-window framebuffer; current 2px rule violates flat line thickness. Not a full HTML/native pixel comparison."
+}

@@ -14256,6 +14256,38 @@
           ]
         }
       ]
+    },
+    {
+      "name": "measurement_design",
+      "app": true,
+      "display": true,
+      "platforms": [
+        "win32",
+        "linux"
+      ],
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_measurement_design.py",
+            "--app",
+            "{physim}",
+            "--root",
+            "{root}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 400,
+          "files": [
+            "app-steps.json",
+            "validation.json"
+          ]
+        }
+      ]
     }
   ]
 }

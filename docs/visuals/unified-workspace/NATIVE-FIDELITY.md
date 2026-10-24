@@ -237,3 +237,10 @@ Kameraüberzug und die untere Ansichtsleiste. Reale Kameraeingabe, Tabfolge,
 Beschriftungsabstand und unveränderte Versuchsdaten werden nativ geprüft.
 Herausgezogene Bereiche behalten bei gleicher Inhaltsbreite ihre Designvariante.
 Der Gesamtauftrag und praktische Windows-/Assistive-/Monitorprüfungen bleiben offen.
+
+Der folgende [Messbereich-Abgleich](MEASUREMENTS-NATIVE.md) bearbeitet die
+Zahlen-/Einheitenhierarchie, Karte und Schalter sowie die flache Kurvenzeichnung.
+Die native Probe erhält reale Daten und prüft Kanalwahl, Anzeigeumrechnung und
+Rückkehr. Ein sichtbarer Unterstrichfehler und falsche Aufnahmezeitpunkte sind
+mit Gegenbelegen erfasst. Weitere Kanalkopf-/Status-/Langtextzustände und die
+praktische Plattformabnahme bleiben offen.

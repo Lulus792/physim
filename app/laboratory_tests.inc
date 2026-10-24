@@ -117,7 +117,14 @@ static void laboratory_test_frame(app *a,const char *mode,int *stage,int *code,c
         if(!nk_sdl_accessibility_is_focused(a->ui,NULL,laboratory_separator_name(0))){if(ps_clock()>=focus_retry){SDL_RaiseWindow(a->window);nk_sdl_accessibility_request_focus(a->ui,NULL,laboratory_separator_name(0));focus_retry=ps_clock()+.25;}return;}
         test_window_key_mod(a->window,SDLK_DOWN,0);break;
     case 14:ok=laboratory_dimension_value(a,0)==dimension-10;test_window_key_mod(a->window,SDLK_RETURN,0);break;
-    case 15:grip=laboratory_handle_bounds(a,2);ok=grip.w>0 && grip.h>0;test_mouse(a,grip,true);break;
+    case 15:
+        grip=laboratory_handle_bounds(a,2);
+        if(grip.h<=0 && measurement_scroll_before++<6) {
+            struct nk_rect body=a->laboratory_measure_bounds;
+            test_plot_wheel(a,body.x+body.w*.25f,body.y+body.h*.5f,-2);return;
+        }
+        printf("LABORATORY CURVE REVEAL: wheel-events=%u scroll=%u visible-height=%.3f\n",measurement_scroll_before,a->laboratory_measure_scroll_y,grip.h);
+        ok=grip.w>0 && grip.h>0;test_mouse(a,grip,true);break;
     case 16:test_plot_motion(a,grip.x+40,grip.y+grip.h/2);break;
     case 17:test_mouse(a,nk_rect(grip.x+40,grip.y,1,1),false);break;
     case 18:

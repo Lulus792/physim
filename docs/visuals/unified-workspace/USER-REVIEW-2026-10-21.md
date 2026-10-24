@@ -118,3 +118,9 @@ und untere Ansichtsleiste aus der Vorlage. Echte Kamerasteuerung, Tastaturfolge
 und Modellbeschriftungen bleiben nutzbar. Die Szenengestaltung wechselt beim
 Herausziehen bei gleicher Inhaltsbreite nicht mehr auf andere Abstände/Hinweise.
 Die vollständige Oberfläche ist damit weiterhin nicht abgenommen.
+
+Der folgende [Messbereich-Abgleich](MEASUREMENTS-NATIVE.md) korrigiert große
+Einheiten neben den Zahlen, Kanaltypografie, Abstände, Kurvenschalter und
+Diagrammflächen. Echte Daten, Kanalwahl, Einheiten und Zeigerzeit bleiben
+gebunden. Bild- und Bedienbelege einschließlich verworfener Prüferstände sind
+gesondert archiviert; die vollständige Liste sichtbarer Befunde bleibt offen.

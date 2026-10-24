@@ -49,3 +49,8 @@ docs/visuals/unified-workspace/camera-controls-2026-10-24/*.gz binary
 docs/visuals/unified-workspace/scene-frame-2026-10-24/* text eol=lf
 docs/visuals/unified-workspace/scene-frame-2026-10-24/*.png binary
 docs/visuals/unified-workspace/scene-frame-2026-10-24/*.gz binary
+
+# Keep native measurement captures and proof records byte-identical.
+docs/visuals/unified-workspace/measurements-2026-10-24/* text eol=lf
+docs/visuals/unified-workspace/measurements-2026-10-24/*.png binary
+docs/visuals/unified-workspace/measurements-2026-10-24/*.gz binary

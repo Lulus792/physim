@@ -1,0 +1,211 @@
+{
+  "base": "8d483ab63fa8ece4e203a5c5f6b5efa46a4039f8",
+  "final_source": 3,
+  "identical_regression_source": 4,
+  "whole_ui_complete": false,
+  "product_groups": [
+    {
+      "name": "measurement_design",
+      "source": 3,
+      "status": "passed",
+      "seconds": 71.693,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "c413e1b69b17feef0a8ca88643f76d761ddb1c2f1483558358a40dcd20b81dc2"
+        }
+      ]
+    },
+    {
+      "name": "docking_workflow",
+      "source": 4,
+      "status": "passed",
+      "seconds": 80.797,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "c413e1b69b17feef0a8ca88643f76d761ddb1c2f1483558358a40dcd20b81dc2"
+        }
+      ]
+    },
+    {
+      "name": "inspector_workflow",
+      "source": 4,
+      "status": "passed",
+      "seconds": 70.208,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "c413e1b69b17feef0a8ca88643f76d761ddb1c2f1483558358a40dcd20b81dc2"
+        }
+      ]
+    },
+    {
+      "name": "channel_units_workflow",
+      "source": 4,
+      "status": "passed",
+      "seconds": 96.869,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "c413e1b69b17feef0a8ca88643f76d761ddb1c2f1483558358a40dcd20b81dc2"
+        }
+      ]
+    },
+    {
+      "name": "laboratory_workflow",
+      "source": 4,
+      "status": "passed",
+      "seconds": 197.423,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "c413e1b69b17feef0a8ca88643f76d761ddb1c2f1483558358a40dcd20b81dc2"
+        }
+      ]
+    },
+    {
+      "name": "scene_frame_design",
+      "source": 4,
+      "status": "passed",
+      "seconds": 93.647,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "c413e1b69b17feef0a8ca88643f76d761ddb1c2f1483558358a40dcd20b81dc2"
+        }
+      ]
+    }
+  ],
+  "linux_directories": {
+    "3": "build/native/Design-analysis-linux/test-results/run-4910gcc_",
+    "4": "build/native/Design-analysis-linux/test-results/run-egt4z71n"
+  },
+  "windows": {
+    "build_only": true,
+    "display_test": false,
+    "binary_sha256": "697db49108bb9a6b1fa8bf26b8e451400ce0c5ae14c5326a9de8bc4541207da9"
+  },
+  "public_source_files": 258,
+  "fonts": 18,
+  "foreign_preserved": 12,
+  "selected_images": [
+    {
+      "file": "linux3-system-dark-normal.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-4910gcc_/measurement_design/files ä/system/measurement-dark-normal.png",
+      "sha256": "f66e727ac31977e018682311a3ecdda55936d4beb48f4ea9ffc9d6aa6e58673d"
+    },
+    {
+      "file": "linux3-system-dark-curves.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-4910gcc_/measurement_design/files ä/system/measurement-dark-curves.png",
+      "sha256": "d31b6dcc7ead27d6bd24d11429fbd1182c0278d1505ce5d4a9c2ddb9e682b174"
+    },
+    {
+      "file": "linux3-system-dark-channel.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-4910gcc_/measurement_design/files ä/system/measurement-dark-channel.png",
+      "sha256": "fb126c30d67622620e5360580d60f1e89d434f4e82fcfa75e0d96310150fbaa2"
+    },
+    {
+      "file": "linux3-system-dark-converted.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-4910gcc_/measurement_design/files ä/system/measurement-dark-converted.png",
+      "sha256": "f5fffafafd487ac3902a53351a5583162184b241e7368821efe27bee52e75f18"
+    },
+    {
+      "file": "linux3-system-dark-restored.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-4910gcc_/measurement_design/files ä/system/measurement-dark-restored.png",
+      "sha256": "f66e727ac31977e018682311a3ecdda55936d4beb48f4ea9ffc9d6aa6e58673d"
+    },
+    {
+      "file": "linux3-system-light-normal.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-4910gcc_/measurement_design/files ä/system/measurement-light-normal.png",
+      "sha256": "f18e7f222ffe9f583a6ba9fc6508e9566a43bb4fd85aef16127c292ff43bdb84"
+    },
+    {
+      "file": "linux3-system-medium-normal.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-4910gcc_/measurement_design/files ä/system/measurement-medium-normal.png",
+      "sha256": "5b893689a8b00b4a060b4a152aa860ddcec73c4df22d52520c52dfdb886cd9b0"
+    },
+    {
+      "file": "linux3-system-larger-normal.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-4910gcc_/measurement_design/files ä/system/measurement-larger-normal.png",
+      "sha256": "c7905e9c9f3ddf2b4726e97a5c149af9635447018f01b7ddb44f6e159118cfef"
+    },
+    {
+      "file": "linux3-system-large-normal.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-4910gcc_/measurement_design/files ä/system/measurement-large-normal.png",
+      "sha256": "f82f132477c6dab3c25b26a1bee1c8ac96138d6f6bf76b3cb28fa0bed8cc645f"
+    },
+    {
+      "file": "linux3-system-contrast-normal.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-4910gcc_/measurement_design/files ä/system/measurement-contrast-normal.png",
+      "sha256": "ec243696fe3d84087c64a7cba3384ec44494c90cbe3791155be15300d70c6767"
+    },
+    {
+      "file": "linux3-bundled-dark-normal.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-4910gcc_/measurement_design/files ä/bundled/measurement-dark-normal.png",
+      "sha256": "920d21ebc28740ff522a9f3304f03183ed81598d6e26c3e5c9491258eb91135f"
+    },
+    {
+      "file": "linux3-bundled-large-converted.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-4910gcc_/measurement_design/files ä/bundled/measurement-large-converted.png",
+      "sha256": "c890c03682dc067703bba6e20b18881f5c77e80471a7789148240d9291b2d849"
+    }
+  ],
+  "panel_captures": 12,
+  "limitations": [
+    "No current Windows GUI proof",
+    "No macOS execution",
+    "No practical screenreader tasks",
+    "No physical DPI or second-monitor transition",
+    "Three foreign AT-SPI files in local compile graph; not a clean-checkout proof",
+    "Channel-heading alignment, additional empty/error/mask/narrow cases and remaining UI still open"
+  ]
+}

@@ -45,8 +45,10 @@ static float *laboratory_dimension(app *a,unsigned i) {
     return i==0?(a->laboratory_curves?&a->laboratory_measure_height:&a->laboratory_closed_height):i==1?&a->laboratory_timeline_height:&a->laboratory_curve_ratio;
 }
 static float laboratory_curve_width(const app *a) {
-    return a->laboratory_measure_width>0?a->laboratory_measure_width:a->dock_panels[PS_DOCK_WORKSPACE].w;
+    float width=a->laboratory_measure_width>0?a->laboratory_measure_width:a->dock_panels[PS_DOCK_WORKSPACE].w;
+    return fmaxf(1,width-34*a->preferences.ui_size/16.f);
 }
+static float laboratory_curve_gap(const app *a) {return (a->laboratory_scene_host_width<=850?14:26)*a->preferences.ui_size/16.f;}
 enum { LABORATORY_SCENE_MIN=180, LABORATORY_MEASURE_MIN=130, LABORATORY_LOG_MIN=68 };
 static struct nk_rect laboratory_handle_bounds(const app *a,unsigned i) {
     return i==2?plot_intersection(a->laboratory_splitters[i],a->laboratory_measure_bounds):a->laboratory_splitters[i];
@@ -60,7 +62,7 @@ static void laboratory_dimension_limits(app *a,unsigned i,float *minimum,float *
      * the optional log open. Clamp presentation, never the stored wishes. */
     *maximum=i==2?.75f:i==0?fmaxf(LABORATORY_MEASURE_MIN,a->dock_panels[PS_DOCK_WORKSPACE].h-scene_minimum-1):
         fmaxf(95,fminf(280,(float)h-232-28-scene_minimum-LABORATORY_MEASURE_MIN-1-log_minimum));
-    if(i==2){float width=laboratory_curve_width(a);*minimum=fminf(.5f,fmaxf(.25f,180/fmaxf(1,width-9)));*maximum=1-*minimum;}
+    if(i==2){float width=laboratory_curve_width(a);*minimum=fminf(.5f,fmaxf(.25f,180/fmaxf(1,width-laboratory_curve_gap(a))));*maximum=1-*minimum;}
     *standard=i==2?.5f:i==0?(a->laboratory_curves?330:150):120;
 }
 static void laboratory_dimension_set(app *a,unsigned i,float value) {
@@ -95,7 +97,7 @@ static bool laboratory_resize_key(app *a,const SDL_KeyboardEvent *key) {
         int dir=i==2?(key->key==SDLK_LEFT?-1:key->key==SDLK_RIGHT?1:0):(key->key==SDLK_UP?-1:key->key==SDLK_DOWN?1:0);
         float lo,hi,standard;laboratory_dimension_limits(a,i,&lo,&hi,&standard);
         float step=key->mod&SDL_KMOD_SHIFT?40:10;
-        if(dir)laboratory_dimension_set(a,i,laboratory_dimension_value(a,i)+(i==2?dir*step/fmaxf(1,laboratory_curve_width(a)-9):-dir*step));
+        if(dir)laboratory_dimension_set(a,i,laboratory_dimension_value(a,i)+(i==2?dir*step/fmaxf(1,laboratory_curve_width(a)-laboratory_curve_gap(a)):-dir*step));
         else if(key->key==SDLK_HOME)laboratory_dimension_set(a,i,lo);
         else if(key->key==SDLK_END)laboratory_dimension_set(a,i,hi);
         else if(key->key==SDLK_RETURN || key->key==SDLK_KP_ENTER)laboratory_dimension_reset(a,i);
@@ -119,7 +121,7 @@ static void laboratory_resize_input(app *a) {
     }
     if(a->laboratory_resize) {
         unsigned i=(unsigned)a->laboratory_resize-1;struct nk_rect r=a->laboratory_splitters[i];
-        float value=i==2?(in->mouse.pos.x-a->laboratory_measure_bounds.x)/fmaxf(1,laboratory_curve_width(a)):
+        float value=i==2?(in->mouse.pos.x-a->laboratory_measure_bounds.x-17*a->preferences.ui_size/16.f-laboratory_curve_gap(a)/2)/fmaxf(1,laboratory_curve_width(a)-laboratory_curve_gap(a)):
             laboratory_dimension_value(a,i)+r.y-in->mouse.pos.y;
         laboratory_dimension_set(a,i,value);
     }

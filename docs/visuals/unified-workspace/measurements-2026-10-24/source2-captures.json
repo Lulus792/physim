@@ -1,0 +1,15 @@
+{
+  "scope": "Actual native source2 PNGs; normal unit baseline and rejected converted capture with prematurely restored units/channels. Not final acceptance.",
+  "images": [
+    {
+      "source": "build/native/Design-analysis-linux/test-results/run-uvor556z/measurement_design/files \u00e4/system/measurement-dark-normal.png",
+      "file": "source2-measurement-dark-normal.png",
+      "sha256": "c185d46874f259c46672f81823d9c4c89c9ab429954fc7df6d238fa7d62e3240"
+    },
+    {
+      "source": "build/native/Design-analysis-linux/test-results/run-uvor556z/measurement_design/files \u00e4/system/measurement-dark-converted.png",
+      "file": "source2-measurement-dark-converted.png",
+      "sha256": "de1831d569acf1fe7e0c9a6006a0208f73f48e5a6ed0299518be39d79be0c236"
+    }
+  ]
+}

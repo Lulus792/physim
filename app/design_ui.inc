@@ -1287,7 +1287,9 @@ static void workspace_draw_ui(app *a, int width, int height) {
     }
     a->laboratory_value_font=*a->ui_fonts[3];a->laboratory_value_font.height=21*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->laboratory_title_font=*a->font_title;a->laboratory_title_font.height=14*a->workbench_bold_em*a->preferences.ui_size/16.f;
-    a->laboratory_measurement_font=*a->font_ui;a->laboratory_measurement_font.height=23*a->workbench_regular_em*a->preferences.ui_size/16.f;
+    int metric_width=a->laboratory_scene_host_width;
+    float metric_size=metric_width<=650?22:metric_width<=850?18:metric_width<=1150?21:23;
+    a->laboratory_measurement_font=*a->font_ui;a->laboratory_measurement_font.height=metric_size*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->laboratory_timeline_font=*a->font_ui;a->laboratory_timeline_font.height=18*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->laboratory_section_font=*a->font_title;a->laboratory_section_font.height=13*a->workbench_bold_em*a->preferences.ui_size/16.f;
     a->laboratory_caption_font=*a->font_ui;a->laboratory_caption_font.height=11*a->workbench_regular_em*a->preferences.ui_size/16.f;

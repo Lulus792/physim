@@ -10,26 +10,7 @@ static void laboratory_note(app *a,const char *text) {
     laboratory_wrapped_text(nk_window_get_canvas(ui),font,text,nk_rect(r.x,r.y+6*f,r.w,r.h-16*f),line_height,color);
     ps_ui_accessibility_label(ui,r,text);
 }
-static void laboratory_value(app *a,const char *label,const char *value,bool measurement,unsigned slot) {
-    struct nk_context *ui=a->ui;struct nk_rect r;nk_widget(&r,ui);
-    struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
-    if(!measurement)nk_fill_rect(canvas,r,7,UI_COLOR(edit));
-    if(!measurement && a->preferences.theme==PS_THEME_HIGH_CONTRAST)nk_stroke_rect(canvas,r,7,1,UI_COLOR(border));
-    float inset=measurement?17:10;
-    const struct nk_user_font *small=&a->workbench_fonts[0],*number=measurement?&a->laboratory_measurement_font:&a->laboratory_value_font;
-    nk_draw_text(canvas,nk_rect(r.x+inset,r.y+8,r.w-2*inset,small->height),label,(int)strlen(label),small,nk_rgba(0,0,0,0),muted());
-    float width=number->width(number->userdata,number->height,value,(int)strlen(value));
-    const struct nk_user_font *font=number;
-    if(width>r.w-2*inset && a->laboratory_card_font_count<8) {
-        struct nk_user_font *fit=&a->laboratory_card_fonts[a->laboratory_card_font_count++];*fit=*number;
-        fit->height=fmaxf(ui->style.font->height,number->height*(r.w-2*inset)/fmaxf(1,width));font=fit;
-    }
-    nk_draw_text(canvas,nk_rect(r.x+inset,r.y+28,r.w-2*inset,font->height+4),value,(int)strlen(value),font,nk_rgba(0,0,0,0),UI_COLOR(text));
-    if(measurement){struct nk_color line=ui_palette->curves[slot%8];line.a=179;nk_fill_rect(canvas,nk_rect(r.x+inset,r.y+r.h-2,r.w-2*inset,2),1,line);}
-    char accessible[320];snprintf(accessible,sizeof accessible,"%s: %s",label,value);ps_ui_accessibility_label(ui,r,accessible);
-    struct nk_rect visible=plot_intersection(r,ui->current->layout->clip);
-    if(visible.w>0 && visible.h>0 && nk_input_is_mouse_hovering_rect(&ui->input,visible))nk_tooltip(ui,accessible);
-}
+#include "laboratory_metrics.inc"
 #include "laboratory_object.inc"
 static const ps_channel *laboratory_channels(app *a,uint32_t *count) {
     if(a->analysis_only){*count=a->data.channel_count;return a->data.channels;}
@@ -42,65 +23,101 @@ static int laboratory_channel_picker(app *a,unsigned slot) {
     if(*chosen<0 || (unsigned)*chosen>=count)*chosen=slot<count?(int)slot:0;
     const char *names[PS_MAX_CHANNELS];char labels[PS_MAX_CHANNELS][160];
     for(unsigned i=0;i<count;i++){ps_display_unit u=channel_display_unit(a,&channels[i]);snprintf(labels[i],sizeof labels[i],"%s [%s]",channels[i].name,u.symbol);names[i]=labels[i];}
-    nk_layout_row_dynamic(a->ui,30,1);
-    *chosen=nk_combo(a->ui,names,(int)count,*chosen,28,nk_vec2(300,240));return *chosen;
+    struct nk_context *ui=a->ui;float f=a->preferences.ui_size/16.f;
+    snprintf(a->laboratory_channel_caption,sizeof a->laboratory_channel_caption,"%s",labels[*chosen]);
+    float width=nk_window_get_content_region(ui).w;
+    unsigned lines=laboratory_wrapped_lines(&a->workspace_status_font,labels[*chosen],fmaxf(1,width-24*f));
+    nk_layout_row_dynamic(ui,(8+14.5f*lines)*f,1);
+    char control[64];snprintf(control,sizeof control,"Messkurve %u: Kanal",slot+1);
+    nk_style_push_font(ui,&a->workspace_status_font);
+    if(ps_ui_combo_begin_named_painted(ui,control,labels[*chosen],nk_vec2(fmaxf(width,240*f),240*f),laboratory_channel_field,a)) {
+        ps_ui_row_exact_dynamic(ui,28*f,1);
+        for(unsigned i=0;i<count;i++)if(ps_ui_fixed_button_label(ui,names[i])){*chosen=(int)i;nk_combo_close(ui);}
+        nk_combo_end(ui);
+    }
+    nk_style_pop_font(ui);return *chosen;
 }
 static void laboratory_measurements(app *a,float height) {
     struct nk_context *ui=a->ui;uint32_t count;const ps_channel *channels=laboratory_channels(a,&count);
-    float scale=a->preferences.ui_size/16.f;
+    float scale=a->preferences.ui_size/16.f,inset=17*scale;
     nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(0,0));
-    nk_layout_row_dynamic(ui,12,1);nk_spacer(ui);
-    nk_layout_row_dynamic(ui,36,2);char heading[96];snprintf(heading,sizeof heading,"Messwerte · %.6g s%s",display_time(a),a->timeline_browsing?" · Rückblick":"");
-    a->live_measurement_bounds=nk_widget_bounds(ui);
-    struct nk_rect title;nk_widget(&title,ui);title.x+=17;title.w=fmaxf(1,title.w-17);
-    const struct nk_user_font *label_font=&a->workbench_fonts[0];
-    nk_draw_text(nk_window_get_canvas(ui),nk_rect(title.x,title.y+(title.h-label_font->height)/2,title.w,label_font->height),heading,(int)strlen(heading),label_font,nk_rgba(0,0,0,0),UI_COLOR(text));
-    ps_ui_accessibility_label(ui,title,heading);
+    float width=nk_window_get_content_region(ui).w,inner=fmaxf(1,width-2*inset);
+    const struct nk_user_font *label_font=&a->laboratory_caption_font,*time_font=&a->workspace_status_font;
+    char time[80],heading[160];timeline_time_text(display_time(a),time);snprintf(heading,sizeof heading,"bei t = %s s%s",time,a->timeline_browsing?" · Rückblick":"");
+    float title_width=timeline_text_width(label_font,"Messwerte"),time_width=timeline_text_width(time_font,heading),toggle_width=timeline_text_width(label_font,"Kurven anzeigen")+54*scale;
+    bool wrap=title_width+time_width+toggle_width+24*scale>inner;
+    float header_height=(wrap?64:32)*scale,header_total=12*scale+header_height+14*scale;
+    nk_layout_row_dynamic(ui,12*scale,1);nk_spacer(ui);
+    nk_layout_row_dynamic(ui,header_height,1);struct nk_rect header;nk_widget(&header,ui);
+    a->live_measurement_bounds=nk_rect(header.x,header.y,wrap?header.w:fmaxf(1,header.w-toggle_width-inset),32*scale);
+    a->laboratory_measure_title=nk_rect(header.x+inset,header.y,title_width,32*scale);
+    a->laboratory_measure_time=nk_rect(header.x+inset+title_width+12*scale,header.y,fmaxf(1,inner-title_width-12*scale-(wrap?0:toggle_width+12*scale)),32*scale);
+    struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+    timeline_text(canvas,label_font,a->laboratory_measure_title,"Messwerte",UI_COLOR(text));
+    struct nk_rect time_rect=a->laboratory_measure_time;
+    float time_height=14.5f*scale*laboratory_wrapped_lines(time_font,heading,time_rect.w);time_rect.y+=(time_rect.h-time_height)/2;time_rect.h=time_height;
+    laboratory_wrapped_text(canvas,time_font,heading,time_rect,14.5f*scale,UI_COLOR(muted));
+    ps_ui_accessibility_label(ui,a->laboratory_measure_title,"Messwerte");ps_ui_accessibility_label(ui,a->laboratory_measure_time,heading);
     if(!a->panel_render)panel_pull_handle(a,PS_PANEL_MEASURE,a->live_measurement_bounds);
-    struct nk_rect cell;nk_widget(&cell,ui);float sw=40,sh=22;
-    /* Keep the target clear of the adjacent dock separator's pointer margin. */
-    a->laboratory_switch=nk_rect(cell.x+fmaxf(0,cell.w-170*scale-12),cell.y, fminf(cell.w-12,170*scale),cell.h);
-    struct nk_command_buffer *canvas=nk_window_get_canvas(ui);struct nk_rect r=a->laboratory_switch;
-    nk_draw_text(canvas,nk_rect(r.x+4,r.y+(r.h-ui->style.font->height)/2,r.w-sw-12,ui->style.font->height),"Kurven anzeigen",15,ui->style.font,nk_rgba(0,0,0,0),UI_COLOR(text));
-    struct nk_rect track=nk_rect(r.x+r.w-sw-4,r.y+(r.h-sh)/2,sw,sh);
-    nk_fill_rect(canvas,track,sh/2,a->laboratory_curves?UI_COLOR(primary):UI_COLOR(surface));nk_stroke_rect(canvas,track,sh/2,1,UI_COLOR(muted));
-    nk_fill_circle(canvas,nk_rect(track.x+(a->laboratory_curves?sw-sh+3:3),track.y+3,sh-6,sh-6),a->laboratory_curves?UI_COLOR(primary_text):UI_COLOR(muted));
-    ps_ui_switch_at(ui,r,"Kurven anzeigen",&a->laboratory_curves);
-    float cards=fmaxf(74,a->laboratory_value_font.height+40);
-    float content_minimum=cards+(a->laboratory_curves?(count>1 && nk_window_get_content_region(ui).w<430?312:156)+8:0);
-    bool scrollable=content_minimum>fmaxf(32,height-48);
+    float sw=36*scale,sh=22*scale;
+    a->laboratory_switch=nk_rect(header.x+header.w-inset-toggle_width,header.y+(wrap?32*scale:0),toggle_width,32*scale);
+    struct nk_rect r=a->laboratory_switch;
+    bool focused=false;bool activated=ps_ui_switch_at_custom_focus(ui,r,"Kurven anzeigen",&a->laboratory_curves,&focused);
+    (void)activated;
+    if(nk_input_is_mouse_hovering_rect(&ui->input,r))nk_fill_rect(canvas,r,5*scale,UI_COLOR(surface));
+    timeline_text(canvas,label_font,nk_rect(r.x+4*scale,r.y,r.w-sw-18*scale,r.h),"Kurven anzeigen",UI_COLOR(text));
+    struct nk_rect track=nk_rect(r.x+r.w-sw-4*scale,r.y+(r.h-sh)/2,sw,sh);
+    /* simulation.css --axis; the border is quieter than text, stronger than a divider. */
+    struct nk_color axis=a->preferences.theme==PS_THEME_HIGH_CONTRAST?UI_COLOR(border):a->preferences.theme==PS_THEME_LIGHT?nk_rgb(107,119,136):nk_rgb(115,122,134);
+    nk_fill_rect(canvas,track,12*scale,a->laboratory_curves?UI_COLOR(primary):UI_COLOR(surface));nk_stroke_rect(canvas,track,12*scale,scale,a->laboratory_curves?UI_COLOR(primary):axis);
+    nk_fill_circle(canvas,nk_rect(track.x+(a->laboratory_curves?18:4)*scale,track.y+4*scale,14*scale,14*scale),a->laboratory_curves?UI_COLOR(primary_text):UI_COLOR(muted));
+    if(focused)laboratory_focus_outline(a,r,10);
+    nk_layout_row_dynamic(ui,14*scale,1);nk_spacer(ui);
+    unsigned slots=count>1?2:1;float gap=(a->laboratory_scene_host_width<=1150?12:20)*scale;
+    bool stacked=slots>1 && (inner-gap)/2<140*scale;float card_width=stacked?inner:(inner-gap*(slots-1))/slots;
+    char names[2][96],numbers[2][96],units[2][96],exact[2][240];float cards=0;
+    for(unsigned slot=0;slot<slots;slot++) {
+        if(!count){snprintf(names[slot],96,"Messkanäle");snprintf(numbers[slot],96,"Noch keine Messwerte");units[slot][0]=0;snprintf(exact[slot],240,"Messkanäle: Noch keine Messwerte");}
+        else {int selected=a->laboratory_channels[slot];if(selected<0 || (unsigned)selected>=count)selected=slot<count?(int)slot:0;
+            snprintf(names[slot],96,"%s",channels[selected].name);laboratory_metric_text(a,&channels[selected],(unsigned)selected,numbers[slot],units[slot],exact[slot]);}
+        cards=fmaxf(cards,laboratory_metric_height(a,names[slot],numbers[slot],units[slot],card_width));
+    }
+    float card_total=stacked?cards*slots+gap*(slots-1):cards;
+    float content_minimum=card_total+14*scale+(a->laboratory_curves?(count>1 && width-2*inset<430?312:156)+22*scale:0);
+    bool scrollable=content_minimum>fmaxf(32,height-header_total);
     if(!scrollable)a->laboratory_measure_scroll_x=a->laboratory_measure_scroll_y=0;
-    nk_layout_row_dynamic(ui,fmaxf(32,height-48),1);
+    nk_layout_row_dynamic(ui,fmaxf(32,height-header_total),1);
     nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(0,0));
     if(!nk_group_scrolled_offset_begin(ui,&a->laboratory_measure_scroll_x,&a->laboratory_measure_scroll_y,"Messwerte und Kurven",scrollable?0:NK_WINDOW_NO_SCROLLBAR)) {
         nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);return;
     }
     a->laboratory_measure_bounds=nk_window_get_content_region(ui);
     a->laboratory_measure_width=a->laboratory_measure_bounds.w;
-    nk_layout_row_dynamic(ui,cards,count>1?2:1);
-    if(!count)laboratory_value(a,"Messkanäle","Noch keine Messwerte",true,0);
-    else for(unsigned slot=0;slot<(count>1?2u:1u);slot++) {
-        int selected=a->laboratory_channels[slot];if(selected<0 || (unsigned)selected>=count)selected=slot<count?(int)slot:0;
-        const ps_channel *ch=&channels[selected];ps_display_unit u=channel_display_unit(a,ch);char value[96];
-        channel_display_text(&u,display_values(a)[selected],value,sizeof value);
-        int mask=a->channel_status[selected];
-        if(mask>=0 && display_values(a)[mask]!=1)snprintf(value,sizeof value,"%s",display_values(a)[mask]==2?"Messung ausgefallen":"Keine neue Messung");
-        laboratory_value(a,ch->name,value,true,slot);
+    width=nk_window_get_content_region(ui).w;inner=fmaxf(1,width-2*inset);stacked=slots>1 && (inner-gap)/2<140*scale;card_width=stacked?inner:(inner-gap*(slots-1))/slots;
+    cards=0;for(unsigned slot=0;slot<slots;slot++)cards=fmaxf(cards,laboratory_metric_height(a,names[slot],numbers[slot],units[slot],card_width));
+    card_total=stacked?cards*slots+gap*(slots-1):cards;
+    memset(a->laboratory_metric_cards,0,sizeof a->laboratory_metric_cards);
+    nk_layout_space_begin(ui,NK_STATIC,card_total+(a->laboratory_curves?0:14*scale),(int)slots);
+    for(unsigned slot=0;slot<slots;slot++) {
+        nk_layout_space_push(ui,nk_rect(inset+(stacked?0:slot*(card_width+gap)),stacked?slot*(cards+gap):0,card_width,cards));
+        struct nk_rect card;nk_widget(&card,ui);laboratory_metric_draw(a,slot,card,names[slot],numbers[slot],units[slot],exact[slot]);
     }
+    nk_layout_space_end(ui);
     if(!a->laboratory_curves){nk_group_end(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);return;}
-    float width=nk_window_get_content_region(ui).w;
-    bool pair=count>1 && width>=430;
+    nk_layout_row_dynamic(ui,22*scale,1);nk_spacer(ui);
+    width=nk_window_get_content_region(ui).w;
+    float chart_width=fmaxf(1,width-2*inset),chart_gap=laboratory_curve_gap(a);
+    bool pair=count>1 && chart_width>=430;
     float ratio=laboratory_dimension_value(a,2);
-    float plots=fmaxf(156,height-12-36-cards-8);
+    float plots=fmaxf(156,height-header_total-card_total-22*scale-14*scale);
     if(!pair && count>1)plots=fmaxf(312,plots);
-    if(pair)nk_layout_row_begin(ui,NK_DYNAMIC,plots,3);
-    else nk_layout_row_dynamic(ui,plots/(count>1?2:1),1);
-    nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(8,2));
+    if(pair){nk_layout_row_begin(ui,NK_DYNAMIC,plots,5);nk_layout_row_push(ui,inset/width);nk_spacer(ui);}
+    nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(0,0));
     for(unsigned slot=0;slot<(count>1?2u:1u);slot++) {
         if(pair) {
-            if(slot){nk_layout_row_push(ui,9/width);nk_widget(&a->laboratory_splitters[2],ui);}
-            nk_layout_row_push(ui,(width-9)/width*(slot?1-ratio:ratio));
-        }
+            if(slot){nk_layout_row_push(ui,chart_gap/width);struct nk_rect gap_rect;nk_widget(&gap_rect,ui);a->laboratory_splitters[2]=nk_rect(gap_rect.x+(gap_rect.w-9)/2,gap_rect.y,9,gap_rect.h);}
+            nk_layout_row_push(ui,(chart_width-chart_gap)/width*(slot?1-ratio:ratio));
+        } else {nk_layout_row_begin(ui,NK_DYNAMIC,plots/(count>1?2:1),3);nk_layout_row_push(ui,inset/width);nk_spacer(ui);nk_layout_row_push(ui,chart_width/width);}
         char group[40];snprintf(group,sizeof group,"laboratory-curve-%u",slot);a->laboratory_plots[slot]=nk_widget_bounds(ui);
         if(nk_group_begin(ui,group,NK_WINDOW_NO_SCROLLBAR)) {
             nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(8,2));
@@ -111,19 +128,16 @@ static void laboratory_measurements(app *a,float height) {
                 bool represented=channel_display_values(&unit,a->history_v[selected],a->history_count,values);
                 int mask=a->channel_status[selected];
                 if(mask>=0)for(int i=0;i<a->history_count;i++)if(a->history_v[mask][i]!=1)values[i]=NAN;
-                char title[240];snprintf(title,sizeof title,"%s [%s]%s",channels[selected].name,unit.symbol,represented?"":" · nicht darstellbar");
-                const ps_ui_palette *previous=ui_palette;ps_ui_palette curve=*ui_palette;curve.accent=curve.curves[slot];ui_palette=&curve;
-                nk_style_push_font(ui,&a->workbench_fonts[0]);
-                plot(a,a->history_t,values,a->history_count,fmaxf(96,nk_window_get_content_region(ui).h-62),title,false,NULL);
-                nk_style_pop_font(ui);
-                ui_palette=previous;
+                if(!represented)laboratory_note(a,"Anzeigeeinheit nicht darstellbar.");
+                laboratory_curve(a,a->history_t,values,a->history_count,fmaxf(96,nk_window_get_content_region(ui).h-48*scale),slot);
             }
             nk_group_end(ui);
             nk_style_pop_vec2(ui);
         }
+        if(!pair){nk_layout_row_push(ui,inset/width);nk_spacer(ui);nk_layout_row_end(ui);}
     }
     nk_style_pop_vec2(ui);
-    if(pair)nk_layout_row_end(ui);
+    if(pair){nk_layout_row_push(ui,inset/width);nk_spacer(ui);nk_layout_row_end(ui);}
     nk_group_end(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
 }
 static void laboratory_workspace(app *a) {
@@ -209,7 +223,7 @@ static void laboratory_separators(app *a) {
             bool blocked=a->toolbar_menu || a->toolbar_pointer_consumed;
             ps_ui_accessibility_route(ui,!blocked);ui->active=previous;
             float lo,hi,standard,value=laboratory_dimension_value(a,i);laboratory_dimension_limits(a,i,&lo,&hi,&standard);
-            if(ps_ui_separator_step_at(ui,r,laboratory_separator_name(i),lo,&value,hi,i==2?10/fmaxf(1,laboratory_curve_width(a)-9):10))laboratory_dimension_set(a,i,value);
+            if(ps_ui_separator_step_at(ui,r,laboratory_separator_name(i),lo,&value,hi,i==2?10/fmaxf(1,laboratory_curve_width(a)-laboratory_curve_gap(a)):10))laboratory_dimension_set(a,i,value);
             if(!blocked && nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ui->input,r))nk_sdl_accessibility_request_focus(ui,NULL,laboratory_separator_name(i));
             bool focused=nk_sdl_accessibility_is_focused(ui,NULL,laboratory_separator_name(i));
             bool hover=nk_input_is_mouse_hovering_rect(&ui->input,r);
