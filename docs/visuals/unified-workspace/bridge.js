@@ -17,6 +17,12 @@
     if(m.type==='theme')document.documentElement.dataset.theme=m.theme==='light'?'light':'dark';
     if(m.type==='visible')command(m);
     if(m.type==='resize')window.dispatchEvent(new Event('resize'));
+    if(m.type==='protocol-visible')document.body.classList.toggle('global-protocol-open',!!m.value);
+    if(m.type==='diagnostic-source'&&area==='develop'){
+      if(!Object.hasOwn(files,m.file))return;
+      openFile(m.file,true);const at=editor.value.indexOf(m.token);
+      if(at>=0){editor.setSelectionRange(at,at+m.token.length);editor.scrollTop=Math.max(0,(editor.value.slice(0,at).split('\n').length-4)*parseFloat(getComputedStyle(editor).lineHeight));syncScroll();cursor();}
+    }
     if(m.type==='availability')available=!!m.ready;
     if(m.type==='opaque'&&area==='develop'){$('reduce-transparency').checked=m.value;$('reduce-transparency').dispatchEvent(new Event('change'));}
     if(area==='develop'){
@@ -72,6 +78,7 @@
     document.querySelector('.experiment-name small').textContent='Pendelstudie / Vorschau-Lauf';
     const button=document.createElement('button');button.id='shared-export';button.className='shared-export';button.textContent='Messlauf auswerten →';button.onclick=()=>command({type:'export'});document.querySelector('.panel-toolbar').append(button);
     document.addEventListener('click',e=>{
+      if(e.target.closest('#open-log')){e.preventDefault();e.stopImmediatePropagation();emit('action',{action:'protocol'});return;}
       if(e.target.closest('#run-button,#step-button')&&app.dataset.state==='ready'&&!available){e.preventDefault();e.stopImmediatePropagation();emit('status',{message:'Zuerst die geänderte Vorschau in Entwickeln bauen.'});}
       if(e.target.closest('#compile-model')){
         e.preventDefault();e.stopImmediatePropagation();

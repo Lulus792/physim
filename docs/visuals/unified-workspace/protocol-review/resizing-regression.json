@@ -1,0 +1,230 @@
+{
+  "date": "2026-10-24T07:58:11.969Z",
+  "platform": "win32",
+  "browser": "156.0.4314.42",
+  "handles": [
+    {
+      "area": "develop",
+      "id": "resize-tree",
+      "orientation": "vertical",
+      "baseline": 218,
+      "reset": 218,
+      "keyboard": "10/40, Home/End, Enter",
+      "pointer": "drag, Escape rollback, double-click reset"
+    },
+    {
+      "area": "develop",
+      "id": "resize-api",
+      "orientation": "vertical",
+      "baseline": 255,
+      "reset": 255,
+      "keyboard": "10/40, Home/End, Enter",
+      "pointer": "drag, Escape rollback, double-click reset"
+    },
+    {
+      "area": "develop",
+      "id": "resize-log",
+      "orientation": "horizontal",
+      "baseline": 86,
+      "reset": 86,
+      "keyboard": "10/40, Home/End, Enter",
+      "pointer": "drag, Escape rollback, double-click reset"
+    },
+    {
+      "area": "simulate",
+      "id": "tree-resize",
+      "orientation": "vertical",
+      "baseline": 190,
+      "reset": 190,
+      "keyboard": "10/40, Home/End, Enter",
+      "pointer": "drag, Escape rollback, double-click reset"
+    },
+    {
+      "area": "simulate",
+      "id": "inspector-resize",
+      "orientation": "vertical",
+      "baseline": 320,
+      "reset": 320,
+      "keyboard": "10/40, Home/End, Enter",
+      "pointer": "drag, Escape rollback, double-click reset"
+    },
+    {
+      "area": "simulate",
+      "id": "measure-resize",
+      "orientation": "horizontal",
+      "baseline": 330,
+      "reset": 330,
+      "keyboard": "10/40, Home/End, Enter",
+      "pointer": "drag, Escape rollback, double-click reset"
+    },
+    {
+      "area": "simulate",
+      "id": "timeline-resize",
+      "orientation": "horizontal",
+      "baseline": 120,
+      "reset": 120,
+      "keyboard": "10/40, Home/End, Enter",
+      "pointer": "drag, Escape rollback, double-click reset"
+    },
+    {
+      "area": "simulate",
+      "id": "plot-resize",
+      "orientation": "vertical",
+      "baseline": 435,
+      "reset": 435,
+      "keyboard": "10/40, Home/End, Enter",
+      "pointer": "drag, Escape rollback, double-click reset"
+    },
+    {
+      "area": "analyze",
+      "id": "resize-analysis-left",
+      "orientation": "vertical",
+      "baseline": 232,
+      "reset": 232,
+      "keyboard": "10/40, Home/End, Enter",
+      "pointer": "drag, Escape rollback, double-click reset"
+    },
+    {
+      "area": "analyze",
+      "id": "resize-analysis-right",
+      "orientation": "vertical",
+      "baseline": 242,
+      "reset": 242,
+      "keyboard": "10/40, Home/End, Enter",
+      "pointer": "drag, Escape rollback, double-click reset"
+    },
+    {
+      "area": "analyze",
+      "id": "resize-analysis-chart",
+      "orientation": "horizontal",
+      "baseline": 374,
+      "reset": 374,
+      "keyboard": "10/40, Home/End, Enter",
+      "pointer": "drag, Escape rollback, double-click reset"
+    }
+  ],
+  "layouts": [
+    {
+      "area": "develop",
+      "width": 1440,
+      "theme": "dark"
+    },
+    {
+      "area": "simulate",
+      "width": 1440,
+      "theme": "dark"
+    },
+    {
+      "area": "analyze",
+      "width": 1440,
+      "theme": "dark"
+    },
+    {
+      "area": "develop",
+      "width": 1080,
+      "theme": "dark"
+    },
+    {
+      "area": "simulate",
+      "width": 1080,
+      "theme": "dark"
+    },
+    {
+      "area": "analyze",
+      "width": 1080,
+      "theme": "dark"
+    },
+    {
+      "area": "develop",
+      "width": 760,
+      "theme": "dark"
+    },
+    {
+      "area": "simulate",
+      "width": 760,
+      "theme": "dark"
+    },
+    {
+      "area": "analyze",
+      "width": 760,
+      "theme": "dark"
+    },
+    {
+      "area": "develop",
+      "width": 500,
+      "theme": "dark"
+    },
+    {
+      "area": "simulate",
+      "width": 500,
+      "theme": "dark"
+    },
+    {
+      "area": "analyze",
+      "width": 500,
+      "theme": "dark"
+    },
+    {
+      "area": "develop",
+      "width": 1440,
+      "theme": "light"
+    },
+    {
+      "area": "simulate",
+      "width": 1440,
+      "theme": "light"
+    },
+    {
+      "area": "analyze",
+      "width": 1440,
+      "theme": "light"
+    },
+    {
+      "area": "develop",
+      "width": 1080,
+      "theme": "light"
+    },
+    {
+      "area": "simulate",
+      "width": 1080,
+      "theme": "light"
+    },
+    {
+      "area": "analyze",
+      "width": 1080,
+      "theme": "light"
+    },
+    {
+      "area": "develop",
+      "width": 760,
+      "theme": "light"
+    },
+    {
+      "area": "simulate",
+      "width": 760,
+      "theme": "light"
+    },
+    {
+      "area": "analyze",
+      "width": 760,
+      "theme": "light"
+    },
+    {
+      "area": "develop",
+      "width": 500,
+      "theme": "light"
+    },
+    {
+      "area": "simulate",
+      "width": 500,
+      "theme": "light"
+    },
+    {
+      "area": "analyze",
+      "width": 500,
+      "theme": "light"
+    }
+  ],
+  "errors": [],
+  "passed": true
+}

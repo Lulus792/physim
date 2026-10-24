@@ -3,7 +3,9 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Physim · Gemeinsame Werkbank</title>
-  <link rel="stylesheet" href="workspace.css"><script src="workspace.js" defer></script>
+  <link rel="stylesheet" href="workspace.css">
+  <link rel="stylesheet" href="../shared/resize.css"><script src="../shared/resize.js" defer></script>
+  <link rel="stylesheet" href="protocol.css"><script src="protocol.js" defer></script><script src="workspace.js" defer></script>
 </head>
 <body>
   <header class="menubar">
@@ -29,7 +31,7 @@
     <section id="panel-simulate" role="tabpanel" aria-labelledby="tab-simulate" hidden><iframe id="frame-simulate" title="Simulieren · Messlabor" src="../simulation-designs/index.html?unified=simulate"></iframe></section>
     <section id="panel-analyze" role="tabpanel" aria-labelledby="tab-analyze" hidden><iframe id="frame-analyze" title="Auswerten · Messdaten und Berichte" src="../analysis-workspace/index.html?unified=analyze"></iframe></section>
   </main>
-  <footer class="statusbar"><span id="global-status" role="status" aria-live="polite">Gemeinsame Designvorschau</span><span>Lokale Demo · kein nativer Compiler/Runner</span></footer>
+  <footer class="statusbar"><span id="global-status" role="status" aria-live="polite">Gemeinsame Designvorschau</span><button id="protocol-toggle" aria-expanded="false" aria-controls="protocol-panel">Protokoll <span id="protocol-count"></span></button><span>Lokale Demo · kein nativer Compiler/Runner</span></footer>
   <dialog id="help" aria-labelledby="help-title"><h1 id="help-title">Ein Arbeitsraum. Drei Perspektiven.</h1><p>Bearbeite main.c, speichere und baue die Vorschau. Starte in Simulieren einen Lauf und übernimm die Messdaten mit „Messlauf auswerten“. Dort kannst du Läufe vergleichen, Einheiten wechseln, Statistik und Berichte ansehen und CSV exportieren.</p><p>Die bekannten Konstanten length_m, gravity_m_s2 und initial_angle_rad steuern das Pendelbeispiel. Modellwerte im Inspektor werden in denselben Quelltext übernommen. Die Bewegung nutzt eine Kleinwinkelnäherung. C- und Analysecode werden hier nicht ausgeführt.</p><p>Änderungen und bis zu acht Messläufe bleiben während dieser Sitzung erhalten. Beim Bereichswechsel pausiert die Simulation. Eine Projektkopie kann als JSON heruntergeladen werden; die Vorschau verändert keine lokalen Projektdateien. Neuladen setzt die Sitzung zurück.</p><div class="help-options"><label><input type="checkbox" id="opaque"> Transparenz reduzieren</label></div><p>Tastatur: Strg/⌘ S speichern · F5 Vorschau bauen · Strg/⌘ F suchen · Alt 1/2/3 Bereich wechseln. Tab-Reihe: Pfeile, Pos1, Ende.</p><button id="help-close">Schließen</button></dialog>
   <noscript>Diese interaktive Designvorschau benötigt JavaScript.</noscript>
 </body>

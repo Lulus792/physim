@@ -23,6 +23,7 @@
   }
   function build(){send('develop','build');announce('Vorschau-Build angefordert · bekannte Modellkonstanten werden geprüft');}
   function action(name){
+    if(name==='protocol'){window.PhysimProtocol.open();return;}
     if(name==='help'){$('help').showModal();return;}
     if(name==='save'){send('develop','save');announce('Demodateien für diese Sitzung gespeichert');return;}
     if(name==='build'){build();return;}
@@ -41,12 +42,14 @@
     if(!area||!m||m.protocol!=='physim-preview-v1')return;
     if(m.type==='ready'){
       state.ready.add(area);send(area,'theme',{theme:state.theme});send(area,'visible',{visible:state.area===area});
+      send(area,'protocol-visible',{value:window.PhysimProtocol.isOpen()});
       if(area==='simulate'&&state.model)send(area,'model',{model:state.model});
       if(area==='analyze')send(area,'runs',{runs:state.runs,select:null});
       if(area==='develop')send(area,'runs',{runs:state.runs});
       render();return;
     }
     if(m.type==='develop-state'&&area==='develop'){
+      window.PhysimProtocol.recordBuild(m);
       const previous=state.build;state.build=m.scenario;state.dirty=m.dirty;state.files=m.files;
       if(m.scenario==='ready'&&m.model){
         const changed=JSON.stringify(state.model)!==JSON.stringify(m.model);state.model=m.model;
@@ -63,6 +66,7 @@
       const run=m.run;if(!run||!Array.isArray(run.data)||run.data.length<2||run.data.length>1001)return;
       if(state.runs.length>=8){announce('Acht Messläufe gespeichert. Projektkopie herunterladen; Neuladen beginnt eine neue Sitzung.');return;}
       run.id=String(++state.runId).padStart(3,'0');state.runs.push(run);
+      window.PhysimProtocol.recordRun(run);
       send('develop','runs',{runs:state.runs});
       send('analyze','runs',{runs:state.runs,select:run.id});navigate('analyze');announce(`Lauf ${run.id} übernommen · ${run.data.length} Messpunkte aus der Simulation`);return;
     }

@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-24T07:58:32.714Z",
+  "platform": "win32",
+  "browser": "156.0.4314.42",
+  "checks": [
+    "Real PNG downloads at 1200x850, 2400x1700 and 4800x3400; default white background",
+    "SVG preserves units, comparison legend, explicit full/crop range; open export snapshot survives source changes",
+    "Clipboard receives generated PNG / denial fallback tested with isolated adapter; actual OS clipboard untouched; empty state disabled; Escape focus return and four widths",
+    "Export dialog integrated with actual transferred simulation samples in unified workspace"
+  ],
+  "layouts": [
+    {
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "width": 900,
+      "height": 1000
+    },
+    {
+      "width": 500,
+      "height": 1000
+    },
+    {
+      "width": 390,
+      "height": 1000
+    }
+  ],
+  "errors": [],
+  "passed": true
+}

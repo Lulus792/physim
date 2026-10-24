@@ -1,0 +1,158 @@
+{
+  "date": "2026-10-24T07:50:26.730Z",
+  "platform": "win32",
+  "browser": "156.0.4314.42",
+  "checks": [
+    "Edited/saved source → build → simulation → exact observed samples → CSV with matching model",
+    "Analysis code opens editor; pane/search state retained; inspector uses same source; historical snapshots and stale report provenance preserved",
+    "24 layouts, shared palette, 8 simulation/4 analysis panel states, short-run zoom/ticks, 2x density, forced colors, reduced motion/transparency, keyboard tabs/menus, dialog focus return"
+  ],
+  "layouts": [
+    {
+      "area": "develop",
+      "width": 1440,
+      "height": 1000,
+      "theme": "dark"
+    },
+    {
+      "area": "simulate",
+      "width": 1440,
+      "height": 1000,
+      "theme": "dark"
+    },
+    {
+      "area": "analyze",
+      "width": 1440,
+      "height": 1000,
+      "theme": "dark"
+    },
+    {
+      "area": "develop",
+      "width": 1440,
+      "height": 1000,
+      "theme": "light"
+    },
+    {
+      "area": "simulate",
+      "width": 1440,
+      "height": 1000,
+      "theme": "light"
+    },
+    {
+      "area": "analyze",
+      "width": 1440,
+      "height": 1000,
+      "theme": "light"
+    },
+    {
+      "area": "develop",
+      "width": 1080,
+      "height": 1000,
+      "theme": "dark"
+    },
+    {
+      "area": "simulate",
+      "width": 1080,
+      "height": 1000,
+      "theme": "dark"
+    },
+    {
+      "area": "analyze",
+      "width": 1080,
+      "height": 1000,
+      "theme": "dark"
+    },
+    {
+      "area": "develop",
+      "width": 1080,
+      "height": 1000,
+      "theme": "light"
+    },
+    {
+      "area": "simulate",
+      "width": 1080,
+      "height": 1000,
+      "theme": "light"
+    },
+    {
+      "area": "analyze",
+      "width": 1080,
+      "height": 1000,
+      "theme": "light"
+    },
+    {
+      "area": "develop",
+      "width": 760,
+      "height": 1000,
+      "theme": "dark"
+    },
+    {
+      "area": "simulate",
+      "width": 760,
+      "height": 1000,
+      "theme": "dark"
+    },
+    {
+      "area": "analyze",
+      "width": 760,
+      "height": 1000,
+      "theme": "dark"
+    },
+    {
+      "area": "develop",
+      "width": 760,
+      "height": 1000,
+      "theme": "light"
+    },
+    {
+      "area": "simulate",
+      "width": 760,
+      "height": 1000,
+      "theme": "light"
+    },
+    {
+      "area": "analyze",
+      "width": 760,
+      "height": 1000,
+      "theme": "light"
+    },
+    {
+      "area": "develop",
+      "width": 500,
+      "height": 1000,
+      "theme": "dark"
+    },
+    {
+      "area": "simulate",
+      "width": 500,
+      "height": 1000,
+      "theme": "dark"
+    },
+    {
+      "area": "analyze",
+      "width": 500,
+      "height": 1000,
+      "theme": "dark"
+    },
+    {
+      "area": "develop",
+      "width": 500,
+      "height": 1000,
+      "theme": "light"
+    },
+    {
+      "area": "simulate",
+      "width": 500,
+      "height": 1000,
+      "theme": "light"
+    },
+    {
+      "area": "analyze",
+      "width": 500,
+      "height": 1000,
+      "theme": "light"
+    }
+  ],
+  "errors": [],
+  "passed": true
+}

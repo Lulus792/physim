@@ -1,5 +1,11 @@
 # Physim · Gemeinsame Designvorschau
 
+Neu am 24. Oktober: [Protokoll mit Fehlern, Warnungen, Info und Debug](index.html?example=protocol#develop),
+[Gestaltungsvertrag](PROTOCOL-DESIGN.md) und [Liste fehlender Demo-Inhalte](CONTENT-INVENTORY.md).
+Die interaktiven Beispiele sind von aktuellen Sitzungsvorgängen getrennt.
+Kräfte, Szenentexte und weitere echte Modellinhalte sind im Inventar erfasst;
+die neue Protokollreferenz ist noch keine native Umsetzung oder Nutzerabnahme.
+
 Stand: 20. Oktober 2026. [Vorschau öffnen](index.html).
 Die Datei lässt sich direkt lokal im Browser öffnen, ohne Installation, Server
 oder externe Ressourcen.

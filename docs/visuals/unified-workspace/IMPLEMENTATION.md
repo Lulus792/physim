@@ -13,6 +13,8 @@ auflösen. Nicht auf einen historischen nativen Zwischenstand zurücksetzen.
 
 | Thema | Maßgebliche Quelle |
 | --- | --- |
+| Neuer Protokollentwurf | [PROTOCOL-DESIGN.md](PROTOCOL-DESIGN.md), [bedienbare Beispiele](index.html?example=protocol#develop); noch keine ausdrückliche Designabnahme |
+| Fehlende Demo-Inhalte | [CONTENT-INVENTORY.md](CONTENT-INVENTORY.md): belegte native Inhalte, Layoutfolgen und ausdrücklich neue Vorschläge |
 | Zusammenhängende Oberfläche | [index.html](index.html), [README.md](README.md), sechs PNGs im selben Ordner |
 | Gemeinsame Trenner | [RESIZING.md](RESIZING.md), [gemeinsamer Interaktionskern](../shared/resize.js), [Darstellung](../shared/resize.css) |
 | Freigegebener Grafikexport | [Verbindliche Spezifikation](EXPORT-EXAMPLE.md), [ADR 010](../../decisions/010-analysis-graphic-export.md), [bedienbare Referenz](../analysis-workspace/index.html?example=export); native Umsetzung beauftragt |

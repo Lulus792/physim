@@ -10,3 +10,4 @@ main>.gallery-heading,main>.gallery-head,main>.presentation,main>.variants,main>
 @media(min-width:651px){body[data-unified=simulate] .app-window{display:flex;flex-direction:column;min-height:680px;height:100dvh}body[data-unified=simulate] .workspace{flex:1;min-height:360px;height:auto!important}body[data-unified=simulate] .timeline{flex-shrink:0}body[data-unified=simulate] .experiment-bar,body[data-unified=simulate] .panel-toolbar{flex-shrink:0}}
 @media(max-width:950px){.app-window.workbench>.workspace{height:auto;min-height:100dvh}.app-window.workbench .editor-pane{height:650px}}
 @media(max-width:650px){body[data-unified=simulate] .shared-export{font-size:10px}.app-window.workbench .editor-pane{height:560px}.editor-tools{padding-right:40px!important}}
+body[data-unified=develop].global-protocol-open #diagnostics{display:none}

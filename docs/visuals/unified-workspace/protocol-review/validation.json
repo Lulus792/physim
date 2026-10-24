@@ -1,0 +1,123 @@
+{
+  "date": "2026-10-24T08:00:31.020Z",
+  "platform": "win32",
+  "browser": "156.0.4314.42",
+  "checks": [
+    "Eight labelled independent examples; severity + origin + full-text intersection, empty state, filtered real TXT download, Unicode/raw detail, clipboard success/denial via local stub, source jump preserves source",
+    "Shared splitter keyboard limits/reset, pointer + Escape rollback; close/restore legacy log; inspector opens same shared dock",
+    "18 workspace/theme/width layouts with compact master/detail keyboard return, plus 200% component text, short window, forced colors/reduced motion and 2x browser density",
+    "Current session: real demo build failure auto-opens with honest source location, no duplicate on navigation, successful recovery, actual run transfer creates message"
+  ],
+  "layouts": [
+    {
+      "theme": "dark",
+      "area": "develop",
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "theme": "dark",
+      "area": "develop",
+      "width": 760,
+      "height": 1000
+    },
+    {
+      "theme": "dark",
+      "area": "develop",
+      "width": 500,
+      "height": 1000
+    },
+    {
+      "theme": "dark",
+      "area": "simulate",
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "theme": "dark",
+      "area": "simulate",
+      "width": 760,
+      "height": 1000
+    },
+    {
+      "theme": "dark",
+      "area": "simulate",
+      "width": 500,
+      "height": 1000
+    },
+    {
+      "theme": "dark",
+      "area": "analyze",
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "theme": "dark",
+      "area": "analyze",
+      "width": 760,
+      "height": 1000
+    },
+    {
+      "theme": "dark",
+      "area": "analyze",
+      "width": 500,
+      "height": 1000
+    },
+    {
+      "theme": "light",
+      "area": "develop",
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "theme": "light",
+      "area": "develop",
+      "width": 760,
+      "height": 1000
+    },
+    {
+      "theme": "light",
+      "area": "develop",
+      "width": 500,
+      "height": 1000
+    },
+    {
+      "theme": "light",
+      "area": "simulate",
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "theme": "light",
+      "area": "simulate",
+      "width": 760,
+      "height": 1000
+    },
+    {
+      "theme": "light",
+      "area": "simulate",
+      "width": 500,
+      "height": 1000
+    },
+    {
+      "theme": "light",
+      "area": "analyze",
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "theme": "light",
+      "area": "analyze",
+      "width": 760,
+      "height": 1000
+    },
+    {
+      "theme": "light",
+      "area": "analyze",
+      "width": 500,
+      "height": 1000
+    }
+  ],
+  "errors": [],
+  "passed": true
+}

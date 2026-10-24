@@ -1,5 +1,18 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
+**Ergänzung vom 24. Oktober 2026:** Der Nutzer hat zusätzlich ein Design für
+Fehler/Warnungen/Protokoll und eine Liste fehlender gestaltungsrelevanter Inhalte
+beauftragt. Die neue [bedienbare Protokollreferenz](index.html?example=protocol#develop)
+und [Spezifikation](PROTOCOL-DESIGN.md) ergänzen den Entwurf; eine ausdrückliche
+Abnahme dieses neuen Entwurfs ist noch nicht erfolgt. Das
+[Inhaltsinventar](CONTENT-INVENTORY.md) ist beim Fortsetzen mitzuprüfen: besonders
+echte Kraftpfeile und Szenentexte, weitere Objekttypen/Hierarchien, Parameter,
+Messkanäle, Modellmeldungen und variable Analyseausgaben. Vorhandene native
+Funktionen übernehmen; fehlende Demoabdeckung nicht mit fehlender nativer
+Implementierung verwechseln. Kräfte sind nicht automatisch als Newtonwerte aus
+beliebigen `PS_ARROW`-Geometrien ableitbar. Der neue Protokollentwurf bündelt
+Meldungen bereichsübergreifend im vorhandenen Log-Dock mit gemeinsamem Resizing.
+
 **Verbindliche Nutzerfreigabe vom 20. Oktober 2026:** Der Grafikexport aus
 [EXPORT-EXAMPLE.md](EXPORT-EXAMPLE.md) gehört jetzt zum fertigen Design und ist
 nativ mit umzusetzen. Er ist kein optionaler zusätzlicher Entwurf mehr.
