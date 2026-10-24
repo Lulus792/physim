@@ -717,6 +717,7 @@ static void sidebar_panel(app *a) {
 #include "workbench_api_ui.inc"
 #include "workbench_context_ui.inc"
 #include "laboratory_ui.inc"
+static void laboratory_channel_inspector(app *a);
 #include "laboratory_sidebar.inc"
 #include "model_edit_ui.inc"
 static void run_limits_view(app *a) { laboratory_limits(a); }
@@ -767,10 +768,8 @@ static void inspector_panel(app *a) {
                     parameter_form_view(a);
                     camera_inspector(a);
                     run_limits_view(a);
-                    if(workspace_section_begin(a,"Messkanal und Einheit",&a->laboratory_groups[1])) {
-                        int channel=laboratory_channel_picker(a,0,false);uint32_t count;const ps_channel *channels=laboratory_channels(a,&count);
-                        if(channel>=0){nk_layout_row_dynamic(ui,32,1);a->channel_unit_buttons[0]=nk_widget_bounds(ui);if(nk_button_label(ui,"Anzeigeeinheit …"))channel_unit_open(a,&channels[channel]);}
-                        else laboratory_note(a,"Noch keine Messkanäle verfügbar.");
+                    if(workspace_section_begin(a,"Messkanal & Einheit",&a->laboratory_groups[1])) {
+                        laboratory_channel_inspector(a);
                         workspace_section_end(a);
                     }
                     if(workspace_section_begin(a,"Ereignisse",&a->laboratory_groups[2])){live_events_view(a);workspace_section_end(a);}
@@ -797,6 +796,7 @@ static void inspector_panel(app *a) {
     if(laboratory){nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}
 }
 #include "analysis_ui.inc"
+#include "laboratory_channel.inc"
 static void workspace_panel(app *a) {
     struct nk_context *ui=a->ui;
     bool compact=editor_search_target(a)!=NULL;
@@ -1282,6 +1282,7 @@ static void workspace_draw_ui(app *a, int width, int height) {
     a->laboratory_model_font=*a->font_ui;a->laboratory_model_font.height=19*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->laboratory_control_font=*a->font_ui;a->laboratory_control_font.height=13*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->laboratory_coordinate_font=*a->font_ui;a->laboratory_coordinate_font.height=14*a->workbench_regular_em*a->preferences.ui_size/16.f;
+    a->laboratory_inspector_value_font=*a->font_ui;a->laboratory_inspector_value_font.height=24*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->laboratory_scene_font=*a->font_ui;a->laboratory_scene_font.height=9*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->workspace_status_font=*a->font_ui;a->workspace_status_font.height=10*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->analysis_title_font=*a->font_title;a->analysis_title_font.height=18*a->workbench_bold_em*a->preferences.ui_size/16.f;

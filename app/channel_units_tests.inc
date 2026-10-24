@@ -41,7 +41,11 @@ static void channel_units_test_frame(app *a,const char *mode,int *stage,int *cod
         source=ps_crc32((const unsigned char*)nk_str_get_const(&a->experiment.string),(size_t)nk_str_len_char(&a->experiment.string));break;
     case 3:if(!hierarchy_test_click(a,a->channel_unit_buttons[0]))return;break;
     case 4:test_mouse(a,a->channel_unit_buttons[0],false);break;
-    case 5:ok=a->channel_unit_manager;test_mouse(a,a->channel_unit_bounds[1],true);break;
+    case 5:
+        if(laboratory_visible(a) && !a->channel_unit_manager){ok=a->inspector_channel_custom.w>0;if(ok){test_mouse(a,a->inspector_channel_custom,true);*stage=50;return;}break;}
+        ok=a->channel_unit_manager;test_mouse(a,a->channel_unit_bounds[1],true);break;
+    case 50:test_mouse(a,a->inspector_channel_custom,false);*stage=51;return;
+    case 51:ok=a->channel_unit_manager;if(ok){*stage=5;return;}break;
     case 6:test_mouse(a,a->channel_unit_bounds[1],false);break;
     case 7:test_key(a,SDLK_A);break;
     case 8:layout_test_text(a,"cm");break;

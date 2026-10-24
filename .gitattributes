@@ -82,3 +82,8 @@ docs/visuals/unified-workspace/inspector-tail-2026-10-24/** text eol=lf
 docs/visuals/unified-workspace/inspector-tail-2026-10-24/*.png binary
 docs/visuals/unified-workspace/inspector-tail-2026-10-24/*.gz binary
 docs/visuals/unified-workspace/inspector-tail-cleanup-2026-10-24.json.gz binary
+
+# Frozen native channel/unit cards and viewed-time evidence.
+docs/visuals/unified-workspace/inspector-channel-2026-10-24/** text eol=lf
+docs/visuals/unified-workspace/inspector-channel-2026-10-24/*.png binary
+docs/visuals/unified-workspace/inspector-channel-2026-10-24/*.gz binary

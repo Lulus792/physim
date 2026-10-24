@@ -14374,6 +14374,33 @@
           ]
         }
       ]
+    },
+    {
+      "name": "inspector_channel",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_inspector_channel.py",
+            "--app",
+            "{physim}",
+            "--root",
+            "{root}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 420,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
     }
   ]
 }

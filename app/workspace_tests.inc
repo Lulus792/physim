@@ -22,6 +22,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
     if(!strcmp(mode,"curve-design"))return curve_design_start(a,root);
     if(!strcmp(mode,"run-fields-design"))return run_fields_start(a,root);
     if(!strncmp(mode,"inspector-tail-",15))return inspector_tail_start(a,root);
+    if(!strcmp(mode,"inspector-channel"))return inspector_channel_start(a,root);
     if(!strncmp(mode,"component-",10))return component_details_start(a,root,mode);
     if(!strncmp(mode,"workbench-",10))return workbench_test_start(a,root,mode);
     if(!strncmp(mode,"laboratory-",11))return laboratory_test_start(a,root,mode);
@@ -174,6 +175,7 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
     if(!strcmp(mode,"curve-design")){curve_design_step(a,stage,code,capture);return;}
     if(!strcmp(mode,"run-fields-design")){run_fields_step(a,stage,code,capture);return;}
     if(!strncmp(mode,"inspector-tail-",15)){inspector_tail_step(a,mode,stage,code,capture);return;}
+    if(!strcmp(mode,"inspector-channel")){inspector_channel_step(a,stage,code,capture);return;}
     if(!strncmp(mode,"component-chart-",16)){component_chart_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"component-tip-",14)){component_tip_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"workbench-",10)){workbench_test_frame(a,mode,stage,code,capture);return;}

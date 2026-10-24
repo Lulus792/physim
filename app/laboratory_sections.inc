@@ -10,7 +10,7 @@ static unsigned laboratory_section_slot(app *a,const enum nk_collapse_states *st
     return 9;
 }
 static void laboratory_section_metadata(app *a,unsigned slot,char text[64]) {
-    const char *fixed[]={"Auswahl","Quellcode","","","Optional","Anzeige","","Ansicht",""};
+    const char *fixed[]={"Auswahl","Quellcode","","","Optional","Live","","Ansicht",""};
     snprintf(text,64,"%s",slot<9?fixed[slot]:"");
     if(slot==2)snprintf(text,64,"%u",a->parameters.count);
     if(slot==3 && a->adaptive_steps)snprintf(text,64,"Adaptiv");
@@ -37,7 +37,7 @@ static void laboratory_wrapped_text(struct nk_command_buffer *canvas,const struc
         at+=count;while(at<length && text[at]==' ')at++;y+=line_height;
     }
 }
-static const char *const laboratory_section_labels[]={"Objekt","Modellwerte","Laufparameter","Laufeinstellungen","Laufgrenzen","Messkanal und Einheit","Ereignisse","Kamera und Darstellung","Aufzeichnung"};
+static const char *const laboratory_section_labels[]={"Objekt","Modellwerte","Laufparameter","Laufeinstellungen","Laufgrenzen","Messkanal & Einheit","Ereignisse","Kamera und Darstellung","Aufzeichnung"};
 static float laboratory_section_word_width(const struct nk_user_font *font,const char *text) {
     float width=0;const char *word=text;
     for(const char *p=text;;p++)if(!*p || *p==' ') {

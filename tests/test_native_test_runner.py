@@ -168,6 +168,7 @@ def main():
         ("curve_design","check_curve_design.py"),
         ("run_fields_design","check_run_fields_design.py"),
         ("inspector_tail","check_inspector_tail.py"),
+        ("inspector_channel","check_inspector_channel.py"),
     )})
     if sys.platform in ("win32","linux"):
         specialized_display["graphic_dialog"]=("tests/check_graphic_dialog.py",("--root",))

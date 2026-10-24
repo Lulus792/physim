@@ -277,3 +277,9 @@ Warnungsfenster und verwendet einen gemeinsamen Grenzeditor auch beim
 Ansichtswechsel. Leerzustände und reale Prozess-/Dateibindungen sind nativ
 geprüft. Die Messkanal-/Einheitenansicht und die vollständige Oberfläche
 einschließlich F1 bleiben weiter offen.
+
+Der folgende [Messkanal-/Einheitenabgleich](INSPECTOR-CHANNEL-NATIVE.md)
+übernimmt die beiden B-Auswahlkarten, den 24-px-Messwert und den Referenzhinweis.
+Direkte Einheitenwahl, Zeitrückblick, benutzerdefinierte Auswahl, Leerzustand
+und unveränderte Rohdateien sind auf Windows/Linux geprüft. Die vollständige
+Oberfläche einschließlich F1 und die praktischen Plattformabnahmen bleiben offen.

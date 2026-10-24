@@ -47,7 +47,7 @@ def inspect_native_case(root,folder,out,mode):
             h=r[key];assert h[0]>=header[0] and h[1]>=header[1] and h[0]+h[2]<=header[0]+header[2]+1 and h[1]+h[3]<=header[1]+header[3]+1
             assert len(pixels(im,h,color,45))>=3,('heading text missing',mode,r['variant'],key)
         if r['title_present']:assert len(pixels(im,r['title'],text,35))>=3,('summary covered or blank',mode,r)
-        labels=['Objekt','Modellwerte','Laufparameter','Laufeinstellungen','Laufgrenzen','Messkanal und Einheit','Ereignisse','Kamera und Darstellung','Aufzeichnung']
+        labels=['Objekt','Modellwerte','Laufparameter','Laufeinstellungen','Laufgrenzen','Messkanal & Einheit','Ereignisse','Kamera und Darstellung','Aufzeichnung']
         assert len(r['titles'])==9
         for title in r['titles']:
             row=r['sections'][title['slot']]['rect']
