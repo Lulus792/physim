@@ -1,0 +1,39 @@
+{
+  "base": "bdd1ac2e22748b0f466db8623bae7aee3638ce05",
+  "run": "build/native/Design-analysis-linux/test-results/run-7_9voktn",
+  "groups": [
+    {
+      "name": "inspector_workflow",
+      "status": "passed",
+      "seconds": 70.471
+    },
+    {
+      "name": "measurement_design",
+      "status": "passed",
+      "seconds": 72.554
+    },
+    {
+      "name": "curve_design",
+      "status": "passed",
+      "seconds": 77.896
+    }
+  ],
+  "native_frames": 162,
+  "selected_images": [
+    "curve-system-dark-empty.png",
+    "curve-system-dark-hover.png",
+    "curve-system-light-hover.png",
+    "curve-system-large-long.png",
+    "curve-system-contrast-hover.png",
+    "curve-bundled-large-hover.png",
+    "measurement-system-dark-curves.png",
+    "measurement-system-light-curves.png"
+  ],
+  "windows": {
+    "build_only": true,
+    "binary_sha256": "532f0229da46c05a82d0f4f25a8b75140d097bd70875c61ef42e5b5d98dab53e"
+  },
+  "whole_ui_complete": false,
+  "public_source_files": 260,
+  "foreign_preserved": 12
+}

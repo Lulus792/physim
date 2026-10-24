@@ -251,3 +251,9 @@ Mindesthöhen an Schrift, Metadaten und Offsettext aus. 144 finale Bildprüfunge
 und acht aktuelle Gruppen sind auf denselben Binärstand bezogen. Die bestehende
 Float-Erweiterung erhält auch gebrochene Strichstärken. Weitere Oberflächen,
 Langzeitverdünnung und praktische Plattform-/Assistive-Prüfungen bleiben offen.
+
+Der folgende [Abgleich ruhiger Diagrammköpfe](chart-captions-2026-10-24/README.md)
+entfernt den zusätzlichen Auswahlpfeil und die Hoverfüllung aus den Kurvenköpfen.
+Der native Kanalwechsel und sichtbarer Tastaturfokus bleiben erhalten; das
+Inspektorfeld behält seine Auswahlgestaltung. Die Gesamtoberfläche und praktische
+Plattform-/Assistive-Nachweise bleiben weiter offen.

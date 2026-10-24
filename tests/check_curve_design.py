@@ -11,15 +11,15 @@ def inspect(folder,out,mode):
     compact=lambda x:''.join(x.split())
     for line in out.splitlines():
         if not line.startswith('CURVE CASE '):continue
-        r={k:re.search(r'\b'+k+r'=([^ ]+)',line)[1] for k in ('variant','kind','size','preserved','segments','stroke','header')}
-        for k in ('size','preserved','segments'):r[k]=int(r[k])
+        r={k:re.search(r'\b'+k+r'=([^ ]+)',line)[1] for k in ('variant','kind','size','preserved','segments','stroke','header','hover')}
+        for k in ('size','preserved','segments','hover'):r[k]=int(r[k])
         r['header']=float(r['header']);r['stroke']=float(r['stroke'])
         for k in ('head','name','unit','frame','area','note','message'):r[k]=rect(line,k)
         for i in range(3):r[f'paint{i}']=bytes.fromhex(re.search(r'\bpaint'+str(i)+r'=([0-9a-f]*)',line)[1]).decode('utf-8')
         records.append(r)
-    assert len(records)==42,(mode,len(records))
+    assert len(records)==48,(mode,len(records))
     for r in records:
-        assert r['preserved'];f=r['size']/16
+        assert r['preserved'] and r['hover']==(r['kind']=='hover');f=r['size']/16
         image=png(folder/f"curve-{r['variant']}-{r['kind']}.png")
         light=r['variant'] in ('light','larger','large');contrast=r['variant']=='contrast'
         ink=(255,255,255) if contrast else (32,36,44) if light else (237,238,242)
@@ -31,6 +31,14 @@ def inspect(folder,out,mode):
         assert abs(r['unit'][0]+r['unit'][2]-r['head'][0]-r['head'][2])<.03
         for key in ('name','unit'):
             b=r[key];h=r['head'];assert b[0]>=h[0]-.03 and b[0]+b[2]<=h[0]+h[2]+.03 and b[1]+b[3]<=h[1]+h[3]+.03
+        if r['kind']!='long':
+            # Static reference captions have no chevron or filled hover surface.
+            x,y,w,h=r['name'];right=r['unit'][0]
+            gap=(x+w+2*f,y,min(16*f,right-x-w-4*f),h)
+            assert gap[2]>0 and not pixels(image,gap,muted,35),('extra header chrome',mode,r)
+            bg=(0,0,0) if contrast else (246,247,249) if light else (30,31,35)
+            hx,hy,hw,hh=r['head'];probe=(hx+hw/2,hy+f,1,1)
+            assert pixels(image,probe,bg,0),('filled chart hover',mode,r)
         if r['kind'] in messages:
             assert r['segments']==0 and compact(r['paint2'])==compact(messages[r['kind']]),(mode,r)
             assert pixels(image,r['message'],muted,40)

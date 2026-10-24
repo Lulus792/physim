@@ -1,5 +1,7 @@
 # Nativer Kanalkopf und Kurvendarstellung
 
+Folgestand: Der [Abgleich der ruhigen Diagrammköpfe](chart-captions-2026-10-24/README.md) entfernt den unten noch beschriebenen zusätzlichen Chevron und die Hoverfläche. Der folgende Bericht dokumentiert seinen ursprünglichen Quellenstand.
+
 Fortsetzung nach `9704967366e2b44b8d03c0aa3d08356bc813e4bc`. Der gesamte
 Oberflächenauftrag bleibt offen. Dieser Schritt behandelt den Kanalkopf,
 Farben, Strichstärke und den Platzbedarf der kompakten Messkurven.

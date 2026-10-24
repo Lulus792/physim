@@ -72,28 +72,30 @@ static void laboratory_metric_draw(app *a,unsigned slot,struct nk_rect card,cons
     struct nk_rect visible=plot_intersection(card,canvas->clip);if(visible.w>0 && visible.h>0 && nk_input_is_mouse_hovering_rect(&ui->input,visible))nk_tooltip(ui,exact);
 }
 typedef struct {app *a;unsigned slot;bool chart;const char *name,*unit,*caption;} laboratory_channel_paint;
-typedef struct {struct nk_rect name,unit;float height,arrow_x,arrow_y;} laboratory_channel_layout;
+typedef struct {struct nk_rect name,unit;float height;} laboratory_channel_layout;
 static laboratory_channel_layout laboratory_channel_measure(app *a,const char *name,const char *unit,struct nk_rect r) {
     float f=a->preferences.ui_size/16.f,line=14.5f*f;const struct nk_user_font *font=&a->workspace_status_font;
     float n=timeline_text_width(font,name),u=timeline_text_width(font,unit);bool stacked=n+u+20*f>r.w;
-    float nw=stacked?fmaxf(1,r.w-16*f):n,uw=fminf(u,r.w);
+    float nw=stacked?fmaxf(1,r.w):n,uw=fminf(u,r.w);
     float nh=line*laboratory_wrapped_lines(font,name,nw),uh=line*laboratory_wrapped_lines(font,unit,fmaxf(1,uw));
     laboratory_channel_layout m={.name=nk_rect(r.x,r.y,nw,nh),.unit=nk_rect(r.x+r.w-uw,r.y+(stacked?nh+2*f:0),uw,uh)};
     m.height=(stacked?nh+2*f+uh:fmaxf(nh,uh))+9*f;
-    m.arrow_x=stacked?r.x+r.w-5*f:r.x+n+8*f;m.arrow_y=r.y+line/2;return m;
+    return m;
 }
 static void laboratory_channel_field(struct nk_context *ui,struct nk_rect r,bool focused,void *user) {
     laboratory_channel_paint *p=user;app *a=p->a;float f=a->preferences.ui_size/16.f;struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
-    if(nk_input_is_mouse_hovering_rect(&ui->input,r))nk_fill_rect(canvas,r,5*f,UI_COLOR(surface));
-    float x=r.x+r.w-10*f,y=r.y+r.h/2;
+    if(!p->chart && nk_input_is_mouse_hovering_rect(&ui->input,r))nk_fill_rect(canvas,r,5*f,UI_COLOR(surface));
     if(p->chart) {
-        laboratory_channel_layout m=laboratory_channel_measure(a,p->name,p->unit,r);x=m.arrow_x;y=m.arrow_y;
+        laboratory_channel_layout m=laboratory_channel_measure(a,p->name,p->unit,r);
         laboratory_wrapped_text(canvas,&a->workspace_status_font,p->name,m.name,14.5f*f,UI_COLOR(text));
         laboratory_wrapped_text(canvas,&a->workspace_status_font,p->unit,m.unit,14.5f*f,UI_COLOR(muted));
         a->laboratory_channel_fields[p->slot]=r;a->laboratory_channel_visible[p->slot]=plot_intersection(r,canvas->clip);a->laboratory_channel_names[p->slot]=m.name;a->laboratory_channel_units[p->slot]=m.unit;
         snprintf(a->laboratory_channel_name_text[p->slot],48,"%s",p->name);snprintf(a->laboratory_channel_unit_text[p->slot],64,"%s",p->unit);
-    } else laboratory_wrapped_text(canvas,&a->workspace_status_font,p->caption,nk_rect(r.x+4*f,r.y+4*f,r.w-24*f,r.h-8*f),14.5f*f,UI_COLOR(text));
-    nk_stroke_line(canvas,x-3*f,y-2*f,x,y+1*f,f,UI_COLOR(muted));nk_stroke_line(canvas,x,y+1*f,x+3*f,y-2*f,f,UI_COLOR(muted));
+    } else {
+        laboratory_wrapped_text(canvas,&a->workspace_status_font,p->caption,nk_rect(r.x+4*f,r.y+4*f,r.w-24*f,r.h-8*f),14.5f*f,UI_COLOR(text));
+        float x=r.x+r.w-10*f,y=r.y+r.h/2;
+        nk_stroke_line(canvas,x-3*f,y-2*f,x,y+1*f,f,UI_COLOR(muted));nk_stroke_line(canvas,x,y+1*f,x+3*f,y-2*f,f,UI_COLOR(muted));
+    }
     if(focused)laboratory_focus_outline(a,r,10);
 }
 static float laboratory_curve_note(app *a,const double *times,const double *values,int count,bool represented,float width,char note[180]) {

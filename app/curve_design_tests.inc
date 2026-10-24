@@ -1,6 +1,10 @@
 /* Controlled rendering cases over an unchanged real paused pendulum project. */
 static struct {unsigned kind,settle;bool active;float header;struct nk_rect head;unsigned segments;float stroke;char text[3][512];} curve_design;
-static const char *curve_design_kind(void){const char *k[]={"empty","one","missing","gaps","offset","long","unrepresentable"};return k[curve_design.kind<7?curve_design.kind:0];}
+static const char *curve_design_kind(void){const char *k[]={"empty","one","missing","gaps","offset","long","unrepresentable","hover"};return k[curve_design.kind<8?curve_design.kind:0];}
+static void curve_design_motion(app *a,bool hover) {
+    struct nk_rect r=curve_design.head;SDL_Event e={0};e.type=SDL_EVENT_MOUSE_MOTION;e.motion.windowID=SDL_GetWindowID(a->window);e.motion.which=PS_TEST_MOUSE_ID;
+    e.motion.x=hover?r.x+r.w/2:0;e.motion.y=hover?r.y+7*a->preferences.ui_size/16.f:0;SDL_PushEvent(&e);
+}
 static bool curve_design_start(app *a,const char *root){memset(&curve_design,0,sizeof curve_design);return inspector_design_start(a,root);}
 static void curve_design_draw(app *a) {
     if(!curve_design.active){nk_window_show(a->ui,"curve-probe",NK_HIDDEN);return;}
@@ -45,15 +49,15 @@ static void curve_design_step(app *a,int *stage,int *code,const char **capture) 
     if(*stage<4){inspector_design_frame(a,stage,code,capture);return;}
     bool ok=inspector_design_same(a);
     switch(*stage) {
-    case 4:inspector_design_frame(a,stage,code,capture);curve_design.active=true;curve_design.settle=0;return;
+    case 4:inspector_design_frame(a,stage,code,capture);curve_design.active=true;curve_design.settle=0;curve_design_motion(a,false);return;
     case 5:
         if(curve_design.settle++<3)return;
         {static char path[100];snprintf(path,sizeof path,"curve-%s-%s.png",inspector_design_variant(),curve_design_kind());*capture=path;}
         printf("CURVE CASE variant=%s kind=%s size=%u preserved=%d segments=%u stroke=%.4f header=%.4f",inspector_design_variant(),curve_design_kind(),a->preferences.ui_size,ok,curve_design.segments,curve_design.stroke,curve_design.header);
-        camera_design_rect("head",curve_design.head);camera_design_rect("name",a->laboratory_channel_names[0]);camera_design_rect("unit",a->laboratory_channel_units[0]);camera_design_rect("frame",a->laboratory_curve_frames[0]);camera_design_rect("area",a->laboratory_curve_areas[0]);camera_design_rect("note",a->laboratory_curve_notes[0]);camera_design_rect("message",a->laboratory_curve_messages[0]);
+        printf(" hover=%d",nk_input_is_mouse_hovering_rect(&a->ui->input,curve_design.head));camera_design_rect("head",curve_design.head);camera_design_rect("name",a->laboratory_channel_names[0]);camera_design_rect("unit",a->laboratory_channel_units[0]);camera_design_rect("frame",a->laboratory_curve_frames[0]);camera_design_rect("area",a->laboratory_curve_areas[0]);camera_design_rect("note",a->laboratory_curve_notes[0]);camera_design_rect("message",a->laboratory_curve_messages[0]);
         for(unsigned i=0;i<3;i++){printf(" paint%u=",i);camera_design_hex(curve_design.text[i]);}puts("");break;
     case 6:
-        curve_design.settle=0;if(++curve_design.kind<7){*stage=5;return;}
+        curve_design.settle=0;if(++curve_design.kind<8){curve_design_motion(a,curve_design.kind==7);*stage=5;return;}
         curve_design.kind=0;if(++inspector_design.variant<6){*stage=4;return;}curve_design.active=false;*stage=30;return;
     case 30:{uint32_t crc=0;ok=ok && timeline_design_run_crc(a->last_run,&crc) && crc==inspector_design.run_crc;command(a,PS_MSG_STOP);a->stop_at=ps_clock();break;}
     case 31:if(!idle(a) || a->library_thread)return;puts("CURVE DESIGN SELF-TEST: PASSED");a->quitting=true;break;

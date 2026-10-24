@@ -1,0 +1,17 @@
+{
+  "image": "docs/visuals/unified-workspace/curve-heads-2026-10-24/linux5-curve-system-dark-empty.png",
+  "gap": [
+    90.36330000000001,
+    261.0,
+    16,
+    14.5
+  ],
+  "color": [
+    166,
+    169,
+    177
+  ],
+  "tolerance": 35,
+  "pixels": 3,
+  "sha256": "e929ce3ffe66ab6f41c8fd805b7fff0926e76e28e3f4e66d708511b2c6270cd6"
+}

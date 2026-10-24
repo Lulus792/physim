@@ -130,3 +130,9 @@ Textverteilung und Kurvenfarben weiter. Lange Metadaten, Offsethinweise,
 leere/ungültige Vorschauen und vorhandene Datenlücken werden nativ gerendert
 und geprüft. Zeichenbefehle behalten ihre gebrochenen Strichstärken. Eine
 vollständige Abnahme aller Nutzerbefunde wird damit weiterhin nicht behauptet.
+
+Der folgende [Abgleich ruhiger Diagrammköpfe](chart-captions-2026-10-24/README.md)
+entfernt den zusätzlichen Auswahlpfeil und die Hoverfüllung aus den Kurvenköpfen.
+Der native Kanalwechsel und sichtbarer Tastaturfokus bleiben erhalten; das
+Inspektorfeld behält seine Auswahlgestaltung. Die Gesamtoberfläche und praktische
+Plattform-/Assistive-Nachweise bleiben weiter offen.

@@ -1,0 +1,102 @@
+{
+  "all-frame-hashes.json": {
+    "bytes": 26661,
+    "sha256": "3bb330b7518daf6b924e77dd83dace4ddbe70a73c2404de28699baebf116e855"
+  },
+  "before.json": {
+    "bytes": 331,
+    "sha256": "a2ab00829d63e339717d3bae1f93fe747707cdddc3b775c15a25c360d558579d"
+  },
+  "check_frozen_captions.py": {
+    "bytes": 2187,
+    "sha256": "6ef0a61ac53332d47b31601f2b73f6962f1269fcea1ef388c9def742c581b541"
+  },
+  "curve-bundled-large-hover.png": {
+    "bytes": 119222,
+    "sha256": "364cc3d1eade8a1ce36d42a0e154803332d6cd04d4e60ed0ac3937ec366678d3"
+  },
+  "curve-system-contrast-hover.png": {
+    "bytes": 111859,
+    "sha256": "afa2b3c43c8d9f99293f126eb9e2a6d40f5fe8e26333761f100dbc7be2e8f1f2"
+  },
+  "curve-system-dark-empty.png": {
+    "bytes": 148304,
+    "sha256": "f03e7471aa815ffe33a1182d3526059b4c63d08d157e6ab51598340e78b9ea9d"
+  },
+  "curve-system-dark-hover.png": {
+    "bytes": 150648,
+    "sha256": "bf92f35cefcc9d5197db0e8a0128149bd0ccb7b2f92cf100e74c3822c83633e8"
+  },
+  "curve-system-large-long.png": {
+    "bytes": 122620,
+    "sha256": "43951e5004365c7f795334361a37a0c9317938cd4d48cfd0a8002d54f24ed381"
+  },
+  "curve-system-light-hover.png": {
+    "bytes": 152792,
+    "sha256": "ccddd6318dfc8b8d1eedae0840ffa4dec3d1982f16a33e2a26b036903bd264a3"
+  },
+  "curve_design-result.json.gz": {
+    "bytes": 4631,
+    "sha256": "b56aee56c5ca4278e44229623f56d78fcbcb953dbd0a02504b90aff07991e6dc"
+  },
+  "curve_design-validation.json.gz": {
+    "bytes": 3338,
+    "sha256": "8d78c614aa9d78710f7e8eff83d1293dbac27e6aec5d4824336200276f39cb57"
+  },
+  "inspector_workflow-result.json.gz": {
+    "bytes": 4379,
+    "sha256": "8d0c06923d5b2cf684fd0613a1e1f6fe9c28f59c9e4287a9a162864678946d1a"
+  },
+  "linux.log.gz": {
+    "bytes": 15648,
+    "sha256": "3867dec97ed85cd8358e10f6135116c69d3c71b46327f71d40739448cd15a25b"
+  },
+  "measurement-system-dark-curves.png": {
+    "bytes": 136698,
+    "sha256": "76449b85f284a1471b95310ce1bea8fa84f5ab50a24839d4305ab3b51f0579a3"
+  },
+  "measurement-system-light-curves.png": {
+    "bytes": 138222,
+    "sha256": "73fdd2821daec0f0717ebb720bb98ff64f3135e48562e6bf51c0e4fb355f176e"
+  },
+  "measurement_design-result.json.gz": {
+    "bytes": 9595,
+    "sha256": "53517d15b1547bd8fa5b38d02fc282ba67705ff0f1e85f31b58d9d83fba63a47"
+  },
+  "measurement_design-validation.json.gz": {
+    "bytes": 7018,
+    "sha256": "18f105a10750622d40adfb29744319d1839125e2826a43937cd617757fb44264"
+  },
+  "product-and-test.patch.gz": {
+    "bytes": 3290,
+    "sha256": "61b9dbad12d903792482f9e97f72473c5333714e48ef29847ec18e448d30c4f6"
+  },
+  "public-source.json": {
+    "bytes": 28697,
+    "sha256": "aaa105f87e276733c4209a316b331b364040c1bef225deb1bbc454d310fc25b3"
+  },
+  "README.md": {
+    "bytes": 4204,
+    "sha256": "f60553b0298353079b389b69f54c0828f4819f4b3513ea01d0801359488a279b"
+  },
+  "references.json": {
+    "bytes": 469,
+    "sha256": "dc5c69c3013c7ffd6e26e75d783d089ddc941bece42059ae5eb1a9fe5ac34ac8"
+  },
+  "results.json.gz": {
+    "bytes": 17836,
+    "sha256": "6abee8500aa8c3510bf66cd0445f5ae455a3bd29da3847b44b4080553b3cf5f7"
+  },
+  "source.json.gz": {
+    "bytes": 13749,
+    "sha256": "54b32c3fb485922e59d5417dae67769b7bf40c6acb5239ff3f343bdfc5783423"
+  },
+  "validation.json": {
+    "bytes": 1011,
+    "sha256": "29c356be0cbc7d35aec369e810dd9232930d39e3d1afcdd3d863e20f542702b3"
+  },
+  "windows-build.log.gz": {
+    "bytes": 2753,
+    "sha256": "40c6f82ffef086682eed060eb077e0a26f3ce119b2969ab077362d8947c55ec0"
+  }
+}
