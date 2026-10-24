@@ -14320,6 +14320,33 @@
           ]
         }
       ]
+    },
+    {
+      "name": "run_fields_design",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_run_fields_design.py",
+            "--app",
+            "{physim}",
+            "--root",
+            "{root}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 420,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
     }
   ]
 }

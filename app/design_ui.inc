@@ -159,6 +159,7 @@ static void workbench_card_text(struct nk_command_buffer *canvas,const struct nk
     }
 }
 #include "laboratory_sections.inc"
+#include "laboratory_fields.inc"
 static void workbench_icon_line(struct nk_command_buffer *canvas,float x,float y,float scale,float ax,float ay,float bx,float by,struct nk_color color) {
     float t=1.2f*scale;ax=x+ax*scale;ay=y+ay*scale;bx=x+bx*scale;by=y+by*scale;
     nk_stroke_line(canvas,ax,ay,bx,by,t,color);nk_fill_circle(canvas,nk_rect(ax-t/2,ay-t/2,t,t),color);nk_fill_circle(canvas,nk_rect(bx-t/2,by-t/2,t,t),color);
@@ -219,6 +220,16 @@ static void parameter_form_view(app *a) {
             const ps_parameter *parameter = &a->parameters.entries[i];
             const ps_parameter_unit *unit=&a->parameters.units[i];
             double scale=unit->declared?unit->scale:1;
+            if(laboratory_visible(a)) {
+                char low[64],high[64],standard[64],hint[320];snprintf(low,64,"%.6g",parameter->minimum/scale);snprintf(high,64,"%.6g",parameter->maximum/scale);snprintf(standard,64,"%.6g",parameter->default_value/scale);laboratory_decimal(low);laboratory_decimal(high);laboratory_decimal(standard);
+                snprintf(hint,sizeof hint,"%s%sBereich %s bis %s · Standard %s",parameter->description,*parameter->description?" · ":"",low,high,standard);
+                laboratory_field field=laboratory_edit_field(a,parameter->name,unit->declared?unit->symbol:"",hint,a->parameters.selected[i],sizeof a->parameters.selected[i],nk_filter_default,true,true);
+                a->parameter_card_bounds[i]=field.card;a->parameter_label_bounds[i]=field.label;a->parameter_hint_bounds[i]=field.hint;a->parameter_input_bounds[i]=field.input;a->parameter_default_bounds[i]=field.action;
+                if(field.changed)a->project_settings_dirty=true;
+                if(field.clicked){snprintf(a->parameters.selected[i],sizeof a->parameters.selected[i],"%.17g",parameter->default_value/scale);a->project_settings_dirty=true;}
+                double selected;if(ps_parameter_catalog_value(&a->parameters,i,&selected)!=PS_OK)laboratory_field_message(a,"Endlichen Wert innerhalb des gültigen Bereichs eingeben (Komma oder Punkt).",true);
+                continue;
+            }
             char detail[256];
             snprintf(detail,sizeof detail,"%s%s%s%s",parameter->name,
                      unit->declared?" [":"",unit->symbol,unit->declared?"]":"");
@@ -479,6 +490,7 @@ static void scene_controls_view(app *a) {
 }
 static void camera_inspector(app *a) {
     struct nk_context *ui=a->ui;
+    if(laboratory_visible(a)){laboratory_run_settings(a);return;}
     if(!laboratory_visible(a)) {
         parameter_form_view(a);
         if(a->tab==1){if(!a->analysis_only){live_measurements_view(a);live_events_view(a);}}

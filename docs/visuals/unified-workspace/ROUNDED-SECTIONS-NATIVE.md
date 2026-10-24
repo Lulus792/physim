@@ -84,3 +84,12 @@ identische Archiv bleibt unter `build/native/rounded-sections-h-ext4` erhalten,
 ebenso alle ausgewählten und eingefrorenen Nachweise. Der WSL-Datenträger bleibt
 erhalten; er wurde nicht kompaktiert. Die Zahl beschreibt entfernte
 Dateibytes im Linux-Dateisystem, keine behauptete Verkleinerung der VHDX unter Windows.
+
+## Nachfolgende Windows-Kopfprüfung
+
+Der [B-Wertefelder-Nachlauf](run-fields-2026-10-24/README.md) ergänzt die zuvor
+ausstehende automatisierte Windows-Prüfung der Inspektorüberschriften. Der
+ursprüngliche `inspector_design`-Fall besteht mit System- und gebündelter Schrift
+einschließlich aller Titelwörter, großer Schrift, schmaler Breiten und
+Tastatur-/Mausbedienung. Dies ist kein zusätzlicher F1-, Screenreader- oder
+physischer Monitor-/DPI-Nachweis.

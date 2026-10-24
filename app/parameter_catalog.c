@@ -1,5 +1,6 @@
 #include "parameter_catalog.h"
 #include "number_parse.h"
+#include "number_input.h"
 #include <errno.h>
 #include <float.h>
 #include <math.h>
@@ -68,7 +69,7 @@ ps_result ps_parameter_catalog_input(const ps_parameter_catalog *catalog,uint32_
     if (!catalog || !value || index >= catalog->count || index >= PS_MAX_PARAMETERS)
         return PS_INVALID;
     double selected;
-    if (!number(text, &selected)) return PS_INVALID;
+    if (!ps_parse_input_number(text, &selected)) return PS_INVALID;
     double scale=catalog->units[index].declared?catalog->units[index].scale:1;
     if(!isfinite(scale) || scale<=0) return PS_INVALID;
     /* Preserve unchanged selections, defaults and boundaries exactly in SI:

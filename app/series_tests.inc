@@ -5,7 +5,7 @@ static bool series_test_start(app *a,const char *root,const char *mode) {
     a->example=language?8:0;new_project(a);if(!a->loaded)return false;
     if(strstr(mode,"-cm-")) {
         char *source=copy_editor_text(&a->experiment);if(!source)return false;
-        const char *needle=language?"parameterWithUnit(\"length\", metres, 1.5":"PS_METRE,length_m";
+        const char *needle=language?"parameterWithUnit(\"length\", metres, lengthDefault":"PS_METRE,length_m";
         const char *replacement=language?"parameterWithUnit(\"length\", Unit(1,0,0,0,0,0,0,0.01,\"cm\"), 0.29":"((ps_unit){{1,0,0,0,0,0,0},.01,\"cm\"}),.29";
         char *at=strstr(source,needle);if(!at){free(source);return false;}
         size_t capacity=strlen(source)+strlen(replacement)+1;char *edited=malloc(capacity);
@@ -68,8 +68,14 @@ static void series_test_frame(app *a,const char *mode,int *stage,int *code,const
             save_project(a);
             ok &= test_source_has(a,"physim.project","parameter.length=0.28999999999999998");
         }
-        if(!hierarchy_test_click(a,a->batch_navigation_bounds))return;
-        break;
+        /* The workbench exposes studies in the existing menu; its former
+         * workspace shortcut is no longer part of the fixed layout. */
+        if(!ok)break;
+        test_mouse(a,a->toolbar_bounds[1],true);*stage=160;return;
+    case 160:test_mouse(a,a->toolbar_bounds[1],false);*stage=161;return;
+    case 161:
+        ok=a->toolbar_menu==2 && a->batch_navigation_bounds.w>0;
+        if(ok){test_mouse(a,a->batch_navigation_bounds,true);*stage=2;return;}break;
     case 2:test_mouse(a,a->batch_navigation_bounds,false);break;
     case 3:
         ok=a->tab==5 && !a->batch_adaptive;

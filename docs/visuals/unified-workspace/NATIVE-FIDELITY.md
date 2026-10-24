@@ -263,3 +263,10 @@ korrigiert nichtkonvexe Kapseln im zentralen Zeichenpfad und Wortteilungen in
 den Inspektorköpfen. Tatsächliche Mindestbreiten erhalten die gewählte Schrift
 und gespeicherte Wünsche. Die breiten nativen Nachläufe und der getrennte
 F1-Zeitüberschreitungsbefund bleiben in den zugeordneten Belegen nachvollziehbar.
+
+Der folgende [Abgleich nativer B-Wertefelder](RUN-FIELDS-NATIVE.md) ersetzt die
+generischen Laufparameter- und Einstellungsfelder, korrigiert deren falschen
+Baumabschluss und erhält reale Modell-/Laufbindungen. 302 native Aufnahmen
+einschließlich der zusätzlichen Windows-Kopfprüfung sind nachvollziehbar
+eingefroren. Verbleibende Inspektorbereiche und die vollständige Oberfläche
+einschließlich F1 bleiben offen.

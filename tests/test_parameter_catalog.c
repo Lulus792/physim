@@ -17,6 +17,10 @@ int main(void) {
     CHECK(catalog.count == 2 && !strcmp(catalog.entries[0].name, "speed"));
     double value = 0;
     CHECK(ps_parameter_catalog_value(&catalog, 0, &value) == PS_OK && value == 2);
+    CHECK(ps_parameter_catalog_input(&catalog,0,"4,5",&value)==PS_OK && value==4.5);
+    const char *invalid_input[]={"4,5.0","4,,5","nan","inf","1e-9999","99"};
+    for(unsigned i=0;i<sizeof invalid_input/sizeof *invalid_input;i++){value=123;CHECK(ps_parameter_catalog_input(&catalog,0,invalid_input[i],&value)==PS_INVALID && value==123);}
+    CHECK(!ps_parameter_catalog_parse(&catalog,"PHYSIM_PARAMETERS_1\n1\nspeed\t4,5\t-10\t10\tNoncanonical wire value\n"));
     snprintf(catalog.selected[0], sizeof catalog.selected[0], "4.5");
     CHECK(ps_parameter_catalog_value(&catalog, 0, &value) == PS_OK && value == 4.5);
     CHECK(!ps_parameter_catalog_parse(&catalog, "PHYSIM_PARAMETERS_1\n1\n"
@@ -54,6 +58,7 @@ int main(void) {
     CHECK(scaled.units[0].declared && !scaled.units[1].declared && !strcmp(scaled.selected[0],"50"));
     CHECK(ps_parameter_catalog_value(&scaled,0,&value)==PS_OK && value==.5);
     CHECK(ps_parameter_catalog_input(&scaled,0,"10",&value)==PS_OK && value==.1);
+    CHECK(ps_parameter_catalog_input(&scaled,0,"12,5",&value)==PS_OK && value==.125);
     CHECK(ps_parameter_catalog_input(&scaled,0,"1000",&value)==PS_OK && value==10);
     CHECK(ps_parameter_catalog_input(&scaled,0,"9",&value)==PS_INVALID);
     CHECK(ps_parameter_catalog_input(&scaled,0,"nan",&value)==PS_INVALID);

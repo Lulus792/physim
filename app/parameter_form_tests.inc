@@ -58,7 +58,7 @@ static void parameter_form_test_frame(app *a,const char *mode,int *stage,int *co
     case 4:
         ok=a->parameter_disclosure==NK_MAXIMIZED && a->parameter_input_bounds[0].w>0 && a->parameter_input_bounds[1].w>0;
         *capture=read?"parameters-restored.bmp":"parameters-default.bmp";
-        if(read){ok &= !strcmp(a->parameters.selected[0],"75") && !strcmp(a->parameters.selected[1],"3.5");a->quitting=true;}
+        if(read){ok &= !strcmp(a->parameters.selected[0],"75") && !strcmp(a->parameters.selected[1],"3,5");a->quitting=true;}
         break;
     case 5:if(!hierarchy_test_click(a,a->parameter_input_bounds[0]))return;break;
     case 6:test_mouse(a,a->parameter_input_bounds[0],false);break;
