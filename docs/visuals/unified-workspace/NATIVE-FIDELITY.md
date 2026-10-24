@@ -231,3 +231,9 @@ Ansicht stabil, damit der gezogene Regler nicht verrutscht. Die native Probe
 prüft beide Schriftquellen und erhält den realen pausierten Versuch. Die
 zugeordneten acht Produktgruppen und der Windows-Build schließen die übrige
 Szenengestaltung, den gesamten Inspektor, F1 oder andere Plattformen nicht ab.
+
+Der folgende [Szenenrahmen-Abgleich](SCENE-FRAME-NATIVE.md) ergänzt den oberen
+Kameraüberzug und die untere Ansichtsleiste. Reale Kameraeingabe, Tabfolge,
+Beschriftungsabstand und unveränderte Versuchsdaten werden nativ geprüft.
+Herausgezogene Bereiche behalten bei gleicher Inhaltsbreite ihre Designvariante.
+Der Gesamtauftrag und praktische Windows-/Assistive-/Monitorprüfungen bleiben offen.

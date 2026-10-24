@@ -358,6 +358,7 @@ static void live_events_view(app *a) {
 static bool laboratory_object_action(app *a,const char *label,bool secondary,struct nk_rect *bounds);
 static void laboratory_note(app *a,const char *text);
 #include "laboratory_camera.inc"
+#include "laboratory_scene.inc"
 static void scene_camera_controls_view(app *a,bool compact) {
     struct nk_context *ui=a->ui;
     if(laboratory_visible(a)){laboratory_camera(a,compact);return;}
@@ -1188,6 +1189,7 @@ static void workbench_editor_status(app *a) {
     nk_end(ui);nk_style_pop_float(ui);nk_style_pop_vec2(ui);
 }
 static void workspace_draw_ui(app *a, int width, int height) {
+    a->laboratory_scene_host_width=width;
     struct nk_context *ui = a->ui;
     /* Modal views also cross workspace boundaries (for example Settings with
      * the layout manager open); finish the session transition before returning. */
@@ -1292,6 +1294,7 @@ static void workspace_draw_ui(app *a, int width, int height) {
     a->laboratory_model_font=*a->font_ui;a->laboratory_model_font.height=19*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->laboratory_control_font=*a->font_ui;a->laboratory_control_font.height=13*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->laboratory_coordinate_font=*a->font_ui;a->laboratory_coordinate_font.height=14*a->workbench_regular_em*a->preferences.ui_size/16.f;
+    a->laboratory_scene_font=*a->font_ui;a->laboratory_scene_font.height=9*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->workspace_status_font=*a->font_ui;a->workspace_status_font.height=10*a->workbench_regular_em*a->preferences.ui_size/16.f;
     a->analysis_title_font=*a->font_title;a->analysis_title_font.height=18*a->workbench_bold_em*a->preferences.ui_size/16.f;
     a->analysis_chart_font=*a->font_title;a->analysis_chart_font.height=20*a->workbench_bold_em*a->preferences.ui_size/16.f;

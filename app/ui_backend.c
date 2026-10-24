@@ -499,8 +499,13 @@ nk_bool ps_ui_combo_begin_named_scaled(struct nk_context *ctx,const char *name,c
 }
 nk_bool ps_ui_combo_begin_named_painted(struct nk_context *ctx,const char *name,const char *label,struct nk_vec2 size,ps_ui_combo_painter paint,void *user) {
     if(!ctx || !ctx->current || !name || !label || !paint)return nk_false;
-    struct nk_window *window=ctx->current;struct nk_rect bounds;
+    struct nk_rect bounds;
     if(nk_widget(&bounds,ctx)==NK_WIDGET_INVALID)return nk_false;
+    return ps_ui_combo_at_named_painted(ctx,name,label,bounds,size,paint,user);
+}
+nk_bool ps_ui_combo_at_named_painted(struct nk_context *ctx,const char *name,const char *label,struct nk_rect bounds,struct nk_vec2 size,ps_ui_combo_painter paint,void *user) {
+    if(!ctx || !ctx->current || !name || !label || !paint || bounds.w<=0 || bounds.h<=0)return nk_false;
+    struct nk_window *window=ctx->current;
     bool expanded=window->popup.win && window->popup.type==NK_PANEL_COMBO && window->popup.name==window->popup.combo_count,focused=false;
     bool activated=accessibility_emit(ctx,name,1,bounds,expanded,NULL,false,NULL,&focused);
     bool enabled=!window->widgets_disabled && !(window->layout->flags&NK_WINDOW_ROM);

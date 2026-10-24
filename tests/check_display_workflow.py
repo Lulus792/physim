@@ -1483,6 +1483,7 @@ def fixed_panels(flow, directory, variants=('c-dark', 'phys-light')):
         flow.run('--workspace-state-test', root, 'fixed-panels-' + variant, timeout=190,
                  marker='FIXED PANELS fixed-panels-' + variant + ' SELF-TEST: PASSED')
         output = flow.steps[-1]['stdout']
+        require(len(re.findall(r'PANEL SCENE STYLE: .* retained=1', output)) == 1, 'Scene camera/header/footer style changed after detaching')
         text=re.findall(r'PANEL COMPACT TEXT: clip=([\d.,-]+) row=([\d.,-]+) bytes=(\d+)',output)
         require(len(text)==output.count('PANEL COMPACT LOG:'),'Missing compact log raster geometry')
         for clip,row,bytes_ in text:

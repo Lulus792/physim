@@ -1,0 +1,6 @@
+{
+  "scope": "Compilation failed before native test execution; no runtime pass claimed",
+  "cause": "Wrong guessed member timeline_offline; authoritative app uses timeline_browsing.",
+  "linux_exit": 1,
+  "windows_exit": 1
+}

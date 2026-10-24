@@ -19,6 +19,8 @@ static bool panel_test_start(app *a,const char *root,const char *mode) {
 static void panel_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
     static unsigned panel,phase,settle,minimum_phase;static struct nk_rect drop;static ps_dock_layout layout;static struct nk_rect slot;
     static float timeline_wish;static uint32_t log_wish;static nk_uint compact_scroll;
+    static struct nk_rect scene_style_frame,scene_style_select,scene_style_footer,scene_style_view,scene_style_reset;
+    static bool scene_style_badge,scene_style_hint;
     static double time;static float yaw,curve_before,curve_width,curve_pixels_before;static double curve_focus_retry;static uint32_t selection,source;static int source_bytes,main_width,main_height;static SDL_WindowID ids[PS_PANEL_COUNT];
     bool ok=true;
     switch(*stage) {
@@ -33,8 +35,9 @@ static void panel_test_frame(app *a,const char *mode,int *stage,int *code,const 
     case 3:
         if(!a->paused)return;
         ok=a->dock_panels[PS_DOCK_WORKSPACE].h>=LABORATORY_SCENE_MIN+1+LABORATORY_MEASURE_MIN &&
-            a->scene_viewport_bounds.h>=LABORATORY_SCENE_MIN &&
-            a->dock_panels[PS_DOCK_WORKSPACE].h-a->scene_viewport_bounds.h-1>=LABORATORY_MEASURE_MIN &&
+            a->laboratory_scene_frame.h>=LABORATORY_SCENE_MIN && a->scene_viewport_bounds.h>=64 &&
+            fabsf(a->scene_viewport_bounds.h+a->laboratory_scene_footer.h-a->laboratory_scene_frame.h)<.01f &&
+            a->dock_panels[PS_DOCK_WORKSPACE].h-a->laboratory_scene_frame.h-1>=LABORATORY_MEASURE_MIN &&
             a->dock_panels[PS_DOCK_LOG].h>=LABORATORY_LOG_MIN &&
             a->laboratory_timeline_height==timeline_wish && a->preferences.log_height==log_wish;
         if(!ok)break;
@@ -77,6 +80,11 @@ static void panel_test_frame(app *a,const char *mode,int *stage,int *code,const 
         if(panel==PS_PANEL_COUNT){*capture="panels-all-detached.bmp";break;}
         if(phase==0){
             ok=a->panels[panel].action.w>0;if(!ok)break;
+            if(panel==PS_DOCK_WORKSPACE) {
+                scene_style_frame=a->laboratory_scene_frame;scene_style_select=a->laboratory_scene_select;
+                scene_style_footer=a->laboratory_scene_footer;scene_style_view=a->laboratory_scene_view;scene_style_reset=a->laboratory_scene_reset;
+                scene_style_badge=a->laboratory_scene_status.w>0;scene_style_hint=a->laboratory_scene_hint.w>0;
+            }
             if(panel==PS_PANEL_MEASURE) {
                 struct nk_rect r=a->panels[panel].action,s=a->dock_panels[PS_DOCK_WORKSPACE];
                 struct nk_vec2 center=nk_vec2(r.x+r.w/2,r.y+r.h/2);
@@ -110,7 +118,7 @@ static void panel_test_frame(app *a,const char *mode,int *stage,int *code,const 
                 break;
             }
             SDL_free(displays);
-            SDL_SetWindowSize(p->window,panel==PS_DOCK_INSPECTOR?460:900,panel==PS_PANEL_TIMELINE?250:650);
+            SDL_SetWindowSize(p->window,panel==PS_DOCK_INSPECTOR?460:panel==PS_DOCK_WORKSPACE?(int)ceilf(scene_style_frame.w):900,panel==PS_PANEL_TIMELINE?250:650);
             phase++;return;
         }
         if(phase++<10)return;
@@ -118,6 +126,17 @@ static void panel_test_frame(app *a,const char *mode,int *stage,int *code,const 
             SDL_GetWindowPosition(p->window,&x,&y);SDL_GetWindowSize(p->window,&w,&h);
             SDL_GetWindowPosition(a->window,&mx,&my);SDL_GetWindowSize(a->window,&mw,&mh);
             ok=x<mx || y<my || x+w>mx+mw || y+h>my+mh;
+            if(panel==PS_DOCK_WORKSPACE) {
+                struct nk_rect f=a->laboratory_scene_frame,s=a->laboratory_scene_select,b=a->laboratory_scene_footer,v=a->laboratory_scene_view,r=a->laboratory_scene_reset;
+                bool retained=a->laboratory_scene_owner==ids[panel] && fabsf(f.w-scene_style_frame.w)<2 &&
+                    fabsf((s.x+s.w-f.x-f.w)-(scene_style_select.x+scene_style_select.w-scene_style_frame.x-scene_style_frame.w))<.01f &&
+                    fabsf(s.y-f.y-scene_style_select.y+scene_style_frame.y)<.01f && fabsf(s.w-scene_style_select.w)<.01f && fabsf(s.h-scene_style_select.h)<.01f &&
+                    fabsf(b.h-scene_style_footer.h)<.01f && fabsf(v.x-f.x-scene_style_view.x+scene_style_frame.x)<.01f &&
+                    fabsf((r.x+r.w-f.x-f.w)-(scene_style_reset.x+scene_style_reset.w-scene_style_frame.x-scene_style_frame.w))<.01f &&
+                    scene_style_badge==(a->laboratory_scene_status.w>0) && scene_style_hint==(a->laboratory_scene_hint.w>0);
+                printf("PANEL SCENE STYLE: owner=%u main-width=%d field=%.4f,%.4f footer=%.4f badge=%d hint=%d retained=%d\n",a->laboratory_scene_owner,a->laboratory_scene_host_width,s.w,s.h,b.h,a->laboratory_scene_status.w>0,a->laboratory_scene_hint.w>0,retained);
+                ok=ok && retained;
+            }
             printf("PANEL %u: window=%u bounds=%d,%d,%d,%d outside=%d display=%u main-display=%u density=%.3f\n",panel,ids[panel],x,y,w,h,ok,SDL_GetDisplayForWindow(p->window),SDL_GetDisplayForWindow(a->window),SDL_GetWindowPixelDensity(p->window));
             char file[80];snprintf(file,sizeof file,"panel-%u-detached.bmp",panel);join(p->capture,sizeof p->capture,a->project,file);}
         if(!ok)break;panel++;phase=0;return;

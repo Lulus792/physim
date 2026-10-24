@@ -1,0 +1,366 @@
+{
+  "base": "90f69f1f55099c15690cd45b3739c88635f7a346",
+  "final_source": 5,
+  "identical_regression_source": 6,
+  "whole_ui_complete": false,
+  "product_groups": [
+    {
+      "name": "docking_workflow",
+      "source": 5,
+      "status": "passed",
+      "seconds": 76.531,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "9b6ce20395d8621e6fcbae4f27d79d6101085642643689d2c9bf555fdfe2f41f"
+        }
+      ]
+    },
+    {
+      "name": "inspector_workflow",
+      "source": 5,
+      "status": "passed",
+      "seconds": 71.934,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "9b6ce20395d8621e6fcbae4f27d79d6101085642643689d2c9bf555fdfe2f41f"
+        }
+      ]
+    },
+    {
+      "name": "scene_frame_design",
+      "source": 5,
+      "status": "passed",
+      "seconds": 90.867,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "9b6ce20395d8621e6fcbae4f27d79d6101085642643689d2c9bf555fdfe2f41f"
+        }
+      ]
+    },
+    {
+      "name": "timeline_workflow",
+      "source": 6,
+      "status": "passed",
+      "seconds": 120.193,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "9b6ce20395d8621e6fcbae4f27d79d6101085642643689d2c9bf555fdfe2f41f"
+        }
+      ]
+    },
+    {
+      "name": "camera_plane_16",
+      "source": 6,
+      "status": "passed",
+      "seconds": 11.553,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "9b6ce20395d8621e6fcbae4f27d79d6101085642643689d2c9bf555fdfe2f41f"
+        }
+      ]
+    },
+    {
+      "name": "camera_plane_22",
+      "source": 6,
+      "status": "passed",
+      "seconds": 13.814,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "9b6ce20395d8621e6fcbae4f27d79d6101085642643689d2c9bf555fdfe2f41f"
+        }
+      ]
+    },
+    {
+      "name": "project_display_16",
+      "source": 6,
+      "status": "passed",
+      "seconds": 16.231,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "9b6ce20395d8621e6fcbae4f27d79d6101085642643689d2c9bf555fdfe2f41f"
+        }
+      ]
+    },
+    {
+      "name": "project_display_22",
+      "source": 6,
+      "status": "passed",
+      "seconds": 18.616,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "9b6ce20395d8621e6fcbae4f27d79d6101085642643689d2c9bf555fdfe2f41f"
+        }
+      ]
+    },
+    {
+      "name": "scene_visibility_16",
+      "source": 6,
+      "status": "passed",
+      "seconds": 12.352,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "9b6ce20395d8621e6fcbae4f27d79d6101085642643689d2c9bf555fdfe2f41f"
+        }
+      ]
+    },
+    {
+      "name": "scene_visibility_22",
+      "source": 6,
+      "status": "passed",
+      "seconds": 15.586,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "9b6ce20395d8621e6fcbae4f27d79d6101085642643689d2c9bf555fdfe2f41f"
+        }
+      ]
+    },
+    {
+      "name": "laboratory_workflow",
+      "source": 6,
+      "status": "passed",
+      "seconds": 201.952,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "9b6ce20395d8621e6fcbae4f27d79d6101085642643689d2c9bf555fdfe2f41f"
+        }
+      ]
+    },
+    {
+      "name": "tree_design",
+      "source": 6,
+      "status": "passed",
+      "seconds": 126.385,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "9b6ce20395d8621e6fcbae4f27d79d6101085642643689d2c9bf555fdfe2f41f"
+        }
+      ]
+    },
+    {
+      "name": "camera_design",
+      "source": 6,
+      "status": "passed",
+      "seconds": 158.098,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "9b6ce20395d8621e6fcbae4f27d79d6101085642643689d2c9bf555fdfe2f41f"
+        }
+      ]
+    }
+  ],
+  "linux_directories": {
+    "5": "build/native/Design-analysis-linux/test-results/run-j6td0ed_",
+    "6": "build/native/Design-analysis-linux/test-results/run-xi5w_ssb"
+  },
+  "windows": {
+    "build_only": true,
+    "display_test": false,
+    "binary_sha256": "4bb609ea9a4c82718b8cb9751abd2ba44c145f87a49aeeb270eb76b3c363f6f1"
+  },
+  "public_source_files": 255,
+  "fonts": 18,
+  "foreign_preserved": 12,
+  "selected_images": [
+    {
+      "file": "linux5-system-dark-normal.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/scene_frame_design/files ä/system/scene-dark-normal.png",
+      "sha256": "d67dbda81c7f06c32175fd7c76cae5ce0850010bb031f68953c366eb6d41bf6c"
+    },
+    {
+      "file": "linux5-system-dark-menu.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/scene_frame_design/files ä/system/scene-dark-menu.png",
+      "sha256": "a6aa3914ca87742a80d8f732732e2e617211e0b0bab87de4cc82087c97d50b87"
+    },
+    {
+      "file": "linux5-system-dark-preset.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/scene_frame_design/files ä/system/scene-dark-preset.png",
+      "sha256": "16fbbfdd84d80fd9fd233b88671c173f443e9c1cff2000cd300967ffc3fad677"
+    },
+    {
+      "file": "linux5-system-dark-reset.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/scene_frame_design/files ä/system/scene-dark-reset.png",
+      "sha256": "40256859eeadfc7961b84172e46ac310cb0ce002eec54863d8912ed337f21853"
+    },
+    {
+      "file": "linux5-system-dark-orbit.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/scene_frame_design/files ä/system/scene-dark-orbit.png",
+      "sha256": "de77e401957b084d546558f01ccdd860019d5f92adf5f8b054af7c87b5e695ee"
+    },
+    {
+      "file": "linux5-system-dark-2d.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/scene_frame_design/files ä/system/scene-dark-2d.png",
+      "sha256": "0dec218d537c495c9e59968346d053f3f67926b65cf707b9831b30d13bc44224"
+    },
+    {
+      "file": "linux5-system-dark-label-edge.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/scene_frame_design/files ä/system/scene-dark-label-edge.png",
+      "sha256": "3f663de3ead487ef73ec0f28e09c9c8395b971d091d56928eb8d5375160fce9f"
+    },
+    {
+      "file": "linux5-system-light-normal.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/scene_frame_design/files ä/system/scene-light-normal.png",
+      "sha256": "0c1b97e5a094bedbe167c1c2f92ef351a6900d769f2589b9ca6924b36216704c"
+    },
+    {
+      "file": "linux5-system-medium-normal.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/scene_frame_design/files ä/system/scene-medium-normal.png",
+      "sha256": "eda8caaa6883415ce9c8d27f05a340198ed48590271c2b27a4edf3a951d4692e"
+    },
+    {
+      "file": "linux5-system-larger-normal.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/scene_frame_design/files ä/system/scene-larger-normal.png",
+      "sha256": "7c3a856e562abf135733cfab164c46c760c646412635af2062bb48be8fe3fba3"
+    },
+    {
+      "file": "linux5-system-large-normal.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/scene_frame_design/files ä/system/scene-large-normal.png",
+      "sha256": "aca3ac723b8fe8c73789e7a5e25a8c4483794940e30074c7c2f18405fb365692"
+    },
+    {
+      "file": "linux5-system-large-label-edge.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/scene_frame_design/files ä/system/scene-large-label-edge.png",
+      "sha256": "5650cd29b36ff5568959e80ffd183ecf237da31dcb9492d20bdbb9ee37c0f38a"
+    },
+    {
+      "file": "linux5-system-contrast-normal.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/scene_frame_design/files ä/system/scene-contrast-normal.png",
+      "sha256": "9e92bc3e388ad9a168b3d50b22f93e0cbc47694e2eb531070095c472026c2a0c"
+    },
+    {
+      "file": "linux5-bundled-dark-normal.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/scene_frame_design/files ä/bundled/scene-dark-normal.png",
+      "sha256": "235c68d4e99b67ad57f697f4c42459a37f88f3d4829b18525f968e884b76bfc3"
+    },
+    {
+      "file": "linux5-bundled-large-label-edge.png",
+      "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/scene_frame_design/files ä/bundled/scene-large-label-edge.png",
+      "sha256": "5d4a39f32eec10c7662a1074ad5a003e2540ed0df8c86ae8b253f24c2ba9c635"
+    }
+  ],
+  "panel_captures": 8,
+  "limitations": [
+    "No current Windows GUI proof",
+    "No macOS execution",
+    "No practical screenreader tasks",
+    "No physical DPI or second-monitor transition",
+    "Three foreign AT-SPI files in local compile graph; not a clean-checkout proof",
+    "Remaining UI and inspector groups remain open"
+  ]
+}

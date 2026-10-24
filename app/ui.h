@@ -175,6 +175,8 @@ nk_bool ps_ui_combo_begin_named_scaled(struct nk_context *ctx,const char *name,c
  * begins. It owns field/focus drawing; the adapter owns input and semantics. */
 typedef void (*ps_ui_combo_painter)(struct nk_context *ctx,struct nk_rect bounds,bool focused,void *user);
 nk_bool ps_ui_combo_begin_named_painted(struct nk_context *ctx,const char *name,const char *label,struct nk_vec2 size,ps_ui_combo_painter paint,void *user);
+/* Same contract for an overlay field with an already allocated rectangle. */
+nk_bool ps_ui_combo_at_named_painted(struct nk_context *ctx,const char *name,const char *label,struct nk_rect bounds,struct nk_vec2 size,ps_ui_combo_painter paint,void *user);
 nk_bool ps_ui_slider_named(struct nk_context *ctx,const char *name,float minimum,float *value,float maximum,float increment);
 nk_bool ps_ui_slider_named_custom_focus(struct nk_context *ctx,const char *name,float minimum,float *value,float maximum,float increment,bool *focused);
 typedef struct {bool active;float pointer,value;} ps_ui_scrollbar_drag;

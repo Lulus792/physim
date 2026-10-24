@@ -1,0 +1,19 @@
+{
+  "scope": "Actual ordinary-width C panel run, existing tests passed but did not compare scene style. Different client sizes; compare UI spacing/hint presence, not full-frame pixel identity.",
+  "captures": [
+    {
+      "file": "old4-detached-style.png",
+      "source": "build/native/scene-old-docking4/c-dark/project/panel-1-detached.bmp",
+      "bmp_sha256": "00ef7f54a6d4513d021ba5a20033c2d49b3815bce519aead3a92e6da4ea5d60d",
+      "png_sha256": "55829931864cb18c5aaa5a67602dfbae2cf3fc212b2980b05a59b100072f8756",
+      "rgb_sha256": "56234880891b9938c18139cf6d339edb526b49255757e95afbad32397af9442e"
+    },
+    {
+      "file": "old4-attached-style.png",
+      "source": "build/native/scene-old-docking4/c-dark/panels-reattached.bmp",
+      "bmp_sha256": "b35efd508a531c3003ee55c1cfdad5cec97252ded748c6c1ae87ce4e1830df0a",
+      "png_sha256": "a58a58871894358f8a8cda300bb347f025c53152290ce3e93b67a897a74416de",
+      "rgb_sha256": "6f14db025429e4b71497a9649973095261c927ee1ef825277b7c5a2fd7a220aa"
+    }
+  ]
+}

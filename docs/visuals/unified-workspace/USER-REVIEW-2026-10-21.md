@@ -112,3 +112,9 @@ Ziehen sind getrennt geprüft. Die große Schrift erhält bei schmaler Spalte
 die nötige konstante Feldhöhe. Aktuelle Kameraaufnahmen und frühere Gegenbelege
 sind gemeinsam archiviert. Die verbleibenden Bereiche und die praktische
 Windows-/Assistive-/DPI-Abnahme bleiben offen.
+
+Der folgende [Szenenrahmen-Abgleich](SCENE-FRAME-NATIVE.md) übernimmt Kameraüberzug
+und untere Ansichtsleiste aus der Vorlage. Echte Kamerasteuerung, Tastaturfolge
+und Modellbeschriftungen bleiben nutzbar. Die Szenengestaltung wechselt beim
+Herausziehen bei gleicher Inhaltsbreite nicht mehr auf andere Abstände/Hinweise.
+Die vollständige Oberfläche ist damit weiterhin nicht abgenommen.

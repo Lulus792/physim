@@ -146,7 +146,7 @@ static void laboratory_test_frame(app *a,const char *mode,int *stage,int *code,c
         ok=a->laboratory_plots[0].w>=179 && a->laboratory_plots[1].w>=179 && display_time(a)==time && a->yaw==yaw;
         *capture="laboratory-curve-limit.bmp";
         if(strstr(mode,"large-narrow")) {
-            ok=ok && a->scene_viewport_bounds.h>=179 && nk_sdl_accessibility_request_focus(a->ui,NULL,"Kurven anzeigen");
+            ok=ok && a->laboratory_scene_frame.h>=179 && a->scene_viewport_bounds.h>=64 && fabsf(a->scene_viewport_bounds.h+a->laboratory_scene_footer.h-a->laboratory_scene_frame.h)<.01f && nk_sdl_accessibility_request_focus(a->ui,NULL,"Kurven anzeigen");
             measurement_scroll_before=a->laboratory_measure_scroll_y;
         } else a->quitting=true;
         break;
@@ -155,7 +155,7 @@ static void laboratory_test_frame(app *a,const char *mode,int *stage,int *code,c
         test_window_key_mod(a->window,SDLK_PAGEDOWN,0);break;
     case 30:
         measurement_scroll_after=a->laboratory_measure_scroll_y;
-        ok=measurement_scroll_after>measurement_scroll_before && display_time(a)==time && a->yaw==yaw && a->scene_viewport_bounds.h>=179;
+        ok=measurement_scroll_after>measurement_scroll_before && display_time(a)==time && a->yaw==yaw && a->laboratory_scene_frame.h>=179 && a->scene_viewport_bounds.h>=64 && fabsf(a->scene_viewport_bounds.h+a->laboratory_scene_footer.h-a->laboratory_scene_frame.h)<.01f;
         printf("LABORATORY MEASUREMENT SCROLL: before=%u after=%u scene=%.1f clip=%.1f/%.1f\n",measurement_scroll_before,measurement_scroll_after,a->scene_viewport_bounds.h,a->laboratory_measure_bounds.y,a->laboratory_measure_bounds.h);
         *capture="laboratory-measurement-scrolled.bmp";test_window_key_mod(a->window,SDLK_PAGEUP,0);break;
     case 31:

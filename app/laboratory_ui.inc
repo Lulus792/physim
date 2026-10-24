@@ -130,16 +130,18 @@ static void laboratory_workspace(app *a) {
     struct nk_context *ui=a->ui;
     float available=nk_window_get_content_region(ui).h-2*ui->style.window.padding.y;
     if(a->panel_render==PS_DOCK_WORKSPACE+1){viewport(a,fmaxf(64,available));return;}
-    float measure=fminf(laboratory_dimension_value(a,0),available-LABORATORY_SCENE_MIN-1);
-    float scene=fmaxf(LABORATORY_SCENE_MIN,available-measure-1);
+    float minimum=laboratory_scene_minimum(a,nk_window_get_content_region(ui).w);
+    float measure=fmaxf(LABORATORY_MEASURE_MIN,fminf(laboratory_dimension_value(a,0),available-minimum-1));
+    float scene=fmaxf(minimum,available-measure-1);
     if(panel_is_detached(a,PS_DOCK_WORKSPACE)) {
         nk_layout_row_dynamic(ui,scene,1);struct nk_rect slot=nk_widget_bounds(ui);
         nk_spacer(ui);
         a->scene_viewport_bounds=slot;
+        a->laboratory_scene_frame=slot;
     } else {
         viewport(a,scene);
     }
-    a->laboratory_splitters[0]=nk_rect(a->scene_viewport_bounds.x,a->scene_viewport_bounds.y+a->scene_viewport_bounds.h-4,a->scene_viewport_bounds.w,9);
+    a->laboratory_splitters[0]=nk_rect(a->laboratory_scene_frame.x,a->laboratory_scene_frame.y+a->laboratory_scene_frame.h-4,a->laboratory_scene_frame.w,9);
     nk_layout_row_dynamic(ui,1,1);nk_spacer(ui);
     if(panel_is_detached(a,PS_PANEL_MEASURE)) {
         nk_layout_row_dynamic(ui,measure,1);nk_spacer(ui);

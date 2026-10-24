@@ -151,6 +151,13 @@ typedef struct {
     struct nk_user_font laboratory_timeline_font;
     struct nk_user_font laboratory_section_font,laboratory_caption_font,laboratory_model_font,laboratory_control_font;
     struct nk_user_font laboratory_coordinate_font;
+    struct nk_user_font laboratory_scene_font;
+    int laboratory_scene_host_width;
+    SDL_WindowID laboratory_scene_owner;
+    struct nk_rect laboratory_scene_frame,laboratory_scene_footer,laboratory_scene_label,laboratory_scene_status;
+    struct nk_rect laboratory_scene_select,laboratory_scene_choices[4],laboratory_scene_view,laboratory_scene_hint,laboratory_scene_reset;
+    bool laboratory_scene_menu,laboratory_scene_return;
+    char laboratory_scene_view_text[80];
     struct nk_rect laboratory_section_bounds[9],laboratory_footer_bounds;
     struct nk_rect laboratory_object_heading_bounds,laboratory_object_title_bounds,laboratory_object_avatar_bounds;
     struct nk_rect laboratory_property_bounds[7],laboratory_property_value_bounds[7];
@@ -703,6 +710,9 @@ static float documentation_height(const struct nk_user_font *font,const char *te
 static void dock_show(app *a,unsigned panel);
 static bool laboratory_resize_key(app *a,const SDL_KeyboardEvent *key);
 static bool laboratory_visible(const app *a);
+static struct nk_rect laboratory_scene_prepare(app *a,struct nk_rect frame);
+static void laboratory_scene_chrome(app *a);
+static float laboratory_scene_minimum(app *a,float width);
 static void laboratory_context(app *a);
 static void workspace_context(app *a);
 static void dock_resize_abort(app *a);
@@ -2499,9 +2509,13 @@ static void viewport(app *a, float height) {
     struct nk_rect r;
     enum nk_widget_layout_states widget_state = nk_widget(&r, ui);
     if(ui->current->layout->flags & NK_WINDOW_ROM) widget_state=NK_WIDGET_ROM;
+    bool framed=laboratory_visible(a);
+    if(framed)r=laboratory_scene_prepare(a,r);
     a->scene_viewport_bounds = r;
     struct nk_input *input = &ui->input;
-    if (widget_state == NK_WIDGET_VALID && nk_input_is_mouse_hovering_rect(input, r)) {
+    bool camera_input=widget_state==NK_WIDGET_VALID && nk_input_is_mouse_hovering_rect(input,r) &&
+        (!framed || !nk_input_is_mouse_hovering_rect(input,a->laboratory_scene_select));
+    if (camera_input) {
         if (!a->camera_2d && nk_input_is_mouse_down(input, NK_BUTTON_RIGHT)) {
             a->yaw -= input->mouse.delta.x * .008f;
             a->pitch += input->mouse.delta.y * .008f;
@@ -2544,7 +2558,7 @@ static void viewport(app *a, float height) {
     unsigned texture = ps_graphics_scene(a->graphics, &visible, &camera, width, pixels);
     if (texture) {
         if (a->profiler) a->profile_frame.has_scene = ps_graphics_scene_stats(a->graphics, &a->profile_frame.scene);
-        bool picking = widget_state == NK_WIDGET_VALID && nk_input_is_mouse_hovering_rect(input, r) &&
+        bool picking = camera_input &&
                        nk_input_is_mouse_pressed(input, NK_BUTTON_LEFT);
         scene_selection_sync(a);
         if (picking) {
@@ -2564,8 +2578,15 @@ static void viewport(app *a, float height) {
               bottom = fminf(previous.y + previous.h, r.y + r.h);
         nk_push_scissor(canvas, nk_rect(left, top, fmaxf(0, right - left), fmaxf(0, bottom - top)));
         const struct nk_user_font *font = ui->style.font;
-        struct nk_rect placed[PS_MAX_OBJECTS];
+        struct nk_rect placed[PS_MAX_OBJECTS+3];
         unsigned placed_count = 0;
+        if(framed) {
+            struct nk_rect controls[]={a->laboratory_scene_label,a->laboratory_scene_status,a->laboratory_scene_select};
+            float padding=4*a->preferences.ui_size/16.f;
+            for(unsigned i=0;i<3;i++)if(controls[i].w>0) {
+                struct nk_rect c=controls[i];placed[placed_count++]=nk_rect(c.x-padding,c.y-padding,c.w+2*padding,c.h+2*padding);
+            }
+        }
         for (uint32_t i = 0; i < visible.count; i++) {
             const ps_object *o = &visible.objects[i];
             float x, y;ps_vec3 anchor;
@@ -2610,6 +2631,7 @@ static void viewport(app *a, float height) {
         nk_fill_rect(nk_window_get_canvas(ui), r, 0, nk_rgb(70, 20, 25));
         status(a, SDL_GetError());
     }
+    if(framed)laboratory_scene_chrome(a);
 }
 // clang-format off
 #include "plot_ui.inc"
@@ -3535,6 +3557,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "object_design_tests.inc"
 #include "tree_design_tests.inc"
 #include "camera_design_tests.inc"
+#include "scene_frame_tests.inc"
 #include "panel_window_tests.inc"
 #include "model_edit_tests.inc"
 #include "api_reference_tests.inc"
@@ -4318,7 +4341,7 @@ int main(int argc, char **argv) {
             /* The deliberate 80 ms frame delay also runs on hosted software GL.
              * Keep its bounded keyboard assertions; allow their extra wall time. */
             if (ps_clock() - test_started >
-                ((!strcmp(argv[3],"transport-design") || !strcmp(argv[3],"timeline-design") || !strcmp(argv[3],"camera-design"))?180:!strncmp(argv[3],"file-tabs-design",16)?60:!strncmp(argv[3],"component-",10)?60:!strncmp(argv[3],"comparison-",11)?120:!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
+                ((!strcmp(argv[3],"transport-design") || !strcmp(argv[3],"timeline-design") || !strcmp(argv[3],"camera-design") || !strcmp(argv[3],"scene-frame-design"))?180:!strncmp(argv[3],"file-tabs-design",16)?60:!strncmp(argv[3],"component-",10)?60:!strncmp(argv[3],"comparison-",11)?120:!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
                   !strncmp(argv[3], "isolation-", 10) || !strncmp(argv[3], "breakpoints-", 12) || !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"object-design",13) || !strcmp(argv[3],"tree-design") || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || (!strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"pendulum-medium-",16)) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strncmp(argv[3],"logging-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15))) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
@@ -5401,6 +5424,7 @@ int main(int argc, char **argv) {
         if(workspace_state_test && !strcmp(argv[3],"object-design"))object_design_draw(a);
         if(workspace_state_test && !strcmp(argv[3],"tree-design"))tree_design_draw(a);
         if(workspace_state_test && !strcmp(argv[3],"camera-design"))camera_design_draw(a);
+        if(workspace_state_test && !strcmp(argv[3],"scene-frame-design"))scene_frame_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"component-",10)) {
             component_details_draw(a,argv[3]);if(component_details.failed){exit_code=1;a->quitting=true;}
         }

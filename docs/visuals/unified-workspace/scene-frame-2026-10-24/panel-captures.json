@@ -1,0 +1,58 @@
+[
+  {
+    "file": "linux5-docking_workflow-workflow ä-c-dark-legacy-panels-reattached.bmp.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/docking_workflow/files ä/workflow ä/c-dark-legacy/panels-reattached.bmp",
+    "bmp_sha256": "7ed4ae102e0404dfd2424ca43c9e82b783303843b2fecf68547283fb6e9f4b03",
+    "png_sha256": "d7d25a92c9c25bce3106b417b50c0e7e3347abd83eccdaed0b69108cdff56ac5",
+    "rgb_sha256": "a613f3ad8420b2390df2db5b169506ef4dfbe5d792cd7b78a33128b3f72fd9d1"
+  },
+  {
+    "file": "linux5-docking_workflow-workflow ä-c-dark-legacy-project-panel-1-detached.bmp.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/docking_workflow/files ä/workflow ä/c-dark-legacy/project/panel-1-detached.bmp",
+    "bmp_sha256": "53f9bb1f41f1cad869071eb1001adb68f32b1cbb7004df48a3b1cd0107d7c5fe",
+    "png_sha256": "9c5f0d18423213adf7d517f8f1f08e633dc5967c4b90e1d27e6d42a1c2d2d2b0",
+    "rgb_sha256": "52c6523eee10a5e64c4ab98fae65612b5c0665cdd7811249d1343038ca8b049a"
+  },
+  {
+    "file": "linux5-docking_workflow-workflow ä-phys-light-panels-reattached.bmp.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/docking_workflow/files ä/workflow ä/phys-light/panels-reattached.bmp",
+    "bmp_sha256": "55161d0a4cfd8664dd795b2497c6fc5115050b5130eb00cd2c2282b77f6117c8",
+    "png_sha256": "d407e8bde33c582f197d0c015132a3fb6b036bfef961c430bd1b54c0fadb44e5",
+    "rgb_sha256": "2e339845a9d2cfa58495a4dc234eae4a31d9c82da09318f097e0eb086001664f"
+  },
+  {
+    "file": "linux5-docking_workflow-workflow ä-phys-light-project-panel-1-detached.bmp.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/docking_workflow/files ä/workflow ä/phys-light/project/panel-1-detached.bmp",
+    "bmp_sha256": "a7fd9f5a216296c9da6a6371b1b1c2f84f02cb899ef5894d32de37f3d1de716a",
+    "png_sha256": "365802df2fde73c1149f74ee90a60838a7c3aab0c80cdc05b60d03fb9890273c",
+    "rgb_sha256": "ef30691fbcfea03587832bc317e3f7501bcf1ed937a8116f05ab3e2bdc704283"
+  },
+  {
+    "file": "linux5-inspector_workflow-workflow ä-c-contrast-large-narrow-panels-reattached.bmp.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/inspector_workflow/files ä/workflow ä/c-contrast-large-narrow/panels-reattached.bmp",
+    "bmp_sha256": "b69527f9ee0e983549acb8c47a0b5913c6200fdb642fb406e8b86123afca48c0",
+    "png_sha256": "c496f760fe749ecda5f45047935609d035cc8fb8b4a4acdc89f620b955e30c70",
+    "rgb_sha256": "3c523c12ac24fcf0ae872ab366861d63ff3e8bee4eafb37bfa9f9dcb0e417eee"
+  },
+  {
+    "file": "linux5-inspector_workflow-workflow ä-c-contrast-large-narrow-project-panel-1-detached.bmp.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/inspector_workflow/files ä/workflow ä/c-contrast-large-narrow/project/panel-1-detached.bmp",
+    "bmp_sha256": "4638ecbf171724df5b8cc95d0c601c296b73f55f624ce182437fb2c520230a0c",
+    "png_sha256": "d8d12b992fe9c59e6a550b9b376f69869da505e8e2ebff008e3511ebc8b1370d",
+    "rgb_sha256": "21f7064d23d25f411fbdc06d596514834a4d51757547a115018f9e195e01f897"
+  },
+  {
+    "file": "linux5-inspector_workflow-workflow ä-phys-light-large-narrow-panels-reattached.bmp.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/inspector_workflow/files ä/workflow ä/phys-light-large-narrow/panels-reattached.bmp",
+    "bmp_sha256": "45f4aecd75b19ca4e0a147dbc25d076275d68ed5b84051329d1deb4f8035b776",
+    "png_sha256": "7a8dae61de2c7bf864ef161463abdd008b0819fdc831da48730998232e68cfe9",
+    "rgb_sha256": "00c48eb1c60bd0b594eec70f17a8484cdb39f3b0bf46ccdf2b0eeae89213ea0a"
+  },
+  {
+    "file": "linux5-inspector_workflow-workflow ä-phys-light-large-narrow-project-panel-1-detached.bmp.png",
+    "source": "build/native/Design-analysis-linux/test-results/run-j6td0ed_/inspector_workflow/files ä/workflow ä/phys-light-large-narrow/project/panel-1-detached.bmp",
+    "bmp_sha256": "49f70878f4c4aa721b21ef42f5be55439cc946cc26c567ce930f71afc918e3c7",
+    "png_sha256": "36606c5231222b39023f5a62b10c803aa7ba3487eefdc72e92115348cae0679a",
+    "rgb_sha256": "4004615d605541cdc8f365e9492aa44a506d1b759ea464c9e0c8a4cf5433de5b"
+  }
+]

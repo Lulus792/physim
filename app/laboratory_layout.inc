@@ -54,11 +54,12 @@ static struct nk_rect laboratory_handle_bounds(const app *a,unsigned i) {
 static void laboratory_dimension_limits(app *a,unsigned i,float *minimum,float *maximum,float *standard) {
     int w,h;SDL_GetWindowSize(a->window,&w,&h);
     float log_minimum=(a->preferences.dock.hidden&(1u<<PS_DOCK_LOG))?0:LABORATORY_LOG_MIN;
+    float scene_minimum=laboratory_scene_minimum(a,a->dock_panels[PS_DOCK_WORKSPACE].w);
     *minimum=i==2?.25f:i==0?LABORATORY_MEASURE_MIN:95;
     /* Reserve both real workspace parts even when compiler diagnostics keep
      * the optional log open. Clamp presentation, never the stored wishes. */
-    *maximum=i==2?.75f:i==0?fmaxf(LABORATORY_MEASURE_MIN,a->dock_panels[PS_DOCK_WORKSPACE].h-LABORATORY_SCENE_MIN-1):
-        fmaxf(95,fminf(280,(float)h-232-28-LABORATORY_SCENE_MIN-LABORATORY_MEASURE_MIN-1-log_minimum));
+    *maximum=i==2?.75f:i==0?fmaxf(LABORATORY_MEASURE_MIN,a->dock_panels[PS_DOCK_WORKSPACE].h-scene_minimum-1):
+        fmaxf(95,fminf(280,(float)h-232-28-scene_minimum-LABORATORY_MEASURE_MIN-1-log_minimum));
     if(i==2){float width=laboratory_curve_width(a);*minimum=fminf(.5f,fmaxf(.25f,180/fmaxf(1,width-9)));*maximum=1-*minimum;}
     *standard=i==2?.5f:i==0?(a->laboratory_curves?330:150):120;
 }
