@@ -9,9 +9,9 @@ def inspect(folder,out,mode):
     records=[]
     for line in out.splitlines():
         if line.startswith('CAMERA DESIGN kind='):
-            r={k:re.search(r'\b'+k+r'=([^ ]+)',line)[1] for k in ('kind','variant','size','preserved','mode','plane','projection','yaw','pitch','zoom')}
+            r={k:re.search(r'\b'+k+r'=([^ ]+)',line)[1] for k in ('kind','variant','size','preserved','mode','plane','projection','yaw','pitch','zoom','minimum','wish')}
             for k in ('size','preserved','mode','plane','projection'):r[k]=int(r[k])
-            for k in ('yaw','pitch','zoom'):r[k]=float(r[k])
+            for k in ('yaw','pitch','zoom','minimum','wish'):r[k]=float(r[k])
             for k in ('header','body','save','mode-rect'):r[k]=rect(line,k)
             r['save_paint']=bytes.fromhex(re.search(r'save-paint=([0-9a-f]*)',line)[1]).decode('utf-8')
             r['fields']=[];r['ranges']=[];records.append(r)
@@ -23,7 +23,7 @@ def inspect(folder,out,mode):
     field_heights={}
     for r in records:
         f=r['size']/16;header,body=r['header'],r['body'];assert r['preserved']==1 and len(r['fields'])==2 and len(r['ranges'])==3
-        assert abs(header[2]-(320 if r['variant'] in ('dark','light') else 208))<.02
+        assert r['wish']==(320 if r['variant'] in ('dark','light') else 208) and abs(header[2]-max(r['wish'],r['minimum']))<.02
         im=png(folder/f"camera-{r['variant']}-{r['kind']}.png");light=r['variant'] in ('light','larger','large');contrast=r['variant']=='contrast'
         text=(255,255,255) if contrast else (32,36,44) if light else (237,238,242);muted=(221,221,221) if contrast else (96,103,115) if light else (155,158,168);accent=(255,225,0) if contrast else (23,86,158) if light else (138,186,255)
         def visible(b):return b[1]>=body[1] and b[1]+b[3]<=body[1]+body[3]
@@ -45,7 +45,7 @@ def inspect(folder,out,mode):
             for i,axis in enumerate(r['ranges']):
                 b,o=axis['rect'],axis['output'];assert visible(b) and visible(o),('range not fully visible',mode,r['variant'],axis,body)
                 assert abs(b[3]-16*f)<.02 and o[0]>=b[0]-.02 and o[0]+o[2]<=b[0]+b[2]+.02
-                value=r[('yaw','pitch','zoom')[i]];expected=(f'{value:.1f} m' if i==2 else f'{value:.2f} rad').replace('.',',')
+                value=r[('yaw','pitch','zoom','minimum','wish')[i]];expected=(f'{value:.1f} m' if i==2 else f'{value:.2f} rad').replace('.',',')
                 assert axis['paint']==expected,('numeric output commands',mode,r['variant'],r['kind'],axis,expected)
                 assert pixels(im,o,muted,55),('numeric output blank',mode,r['variant'],axis)
             if r['kind'] in ('zoom-max','zoom-min'):

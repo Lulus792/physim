@@ -1,0 +1,7 @@
+{
+  "removed_path": "/tmp/physim-rounding-h-4-4qfuu36g",
+  "preserved_archive": "/mnt/d/Physim/build/native/rounded-sections-h-ext4",
+  "files": 72,
+  "duplicate_bytes_removed": 176448473,
+  "scope": "Only the byte-identical extra ext4 fixture copy; complete archive remains on D. VHDX retained, no compaction or claimed reduction of its Windows file size."
+}

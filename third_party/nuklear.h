@@ -10748,9 +10748,11 @@ nk_draw_list_path_rect_to(struct nk_draw_list *list, struct nk_vec2 a,
     float r;
     NK_ASSERT(list);
     if (!list) return;
-    r = rounding;
-    r = NK_MIN(r, ((b.x-a.x) < 0) ? -(b.x-a.x): (b.x-a.x));
-    r = NK_MIN(r, ((b.y-a.y) < 0) ? -(b.y-a.y): (b.y-a.y));
+    /* Physim: a rounded box needs disjoint corner centers. Full-edge
+     * clamping made oversized CSS-like radii produce nonconvex paths. */
+    r = NK_MAX(0.0f, rounding);
+    r = NK_MIN(r, 0.5f * (((b.x-a.x) < 0) ? -(b.x-a.x): (b.x-a.x)));
+    r = NK_MIN(r, 0.5f * (((b.y-a.y) < 0) ? -(b.y-a.y): (b.y-a.y)));
 
     if (r == 0.0f) {
         nk_draw_list_path_line_to(list, a);
@@ -10758,10 +10760,41 @@ nk_draw_list_path_rect_to(struct nk_draw_list *list, struct nk_vec2 a,
         nk_draw_list_path_line_to(list, b);
         nk_draw_list_path_line_to(list, nk_vec2(a.x,b.y));
     } else {
-        nk_draw_list_path_arc_to_fast(list, nk_vec2(a.x + r, a.y + r), r, 6, 9);
-        nk_draw_list_path_arc_to_fast(list, nk_vec2(b.x - r, a.y + r), r, 9, 12);
-        nk_draw_list_path_arc_to_fast(list, nk_vec2(b.x - r, b.y - r), r, 0, 3);
-        nk_draw_list_path_arc_to_fast(list, nk_vec2(a.x + r, b.y - r), r, 3, 6);
+        /* Sagitta <= r*pi^2/(32*n^2). n^2 >= 2.5*r keeps the chord
+         * error below 0.125 logical pixels for ordinary desktop radii.
+         * Bound the work even for extreme caller-provided geometry. */
+        unsigned int segments = 3;
+        while (segments < 128 && (float)(segments*segments) < 2.5f*r)
+            ++segments;
+        /* Rotate one quadrant, with exact cardinal endpoints. Separate
+         * approximations at 0 and 2*pi otherwise leave tiny reversed edges
+         * where capsule corners meet. Omit coincident junction vertices. */
+        {unsigned int corner, i;
+        const float delta = NK_PI_HALF / (float)segments;
+        const float sine = (float)NK_SIN(delta), cosine = (float)NK_COS(delta);
+        const int horizontal_caps = b.x-a.x == 2*r;
+        const int vertical_caps = b.y-a.y == 2*r;
+        for (corner = 0; corner < 4; ++corner) {
+            float cx = r, cy = 0;
+            for (i = 0; i <= segments; ++i) {
+                const float u = i == segments ? 0 : cx;
+                const float v = i == segments ? r : cy;
+                struct nk_vec2 point;
+                const int duplicate_start = i == 0 && corner > 0 &&
+                    ((corner == 2 && vertical_caps) || (corner != 2 && horizontal_caps));
+                const int duplicate_end = corner == 3 && i == segments && vertical_caps;
+                switch (corner) {
+                default: point = nk_vec2(a.x+r-u, a.y+r-v); break;
+                case 1: point = nk_vec2(b.x-r+v, a.y+r-u); break;
+                case 2: point = nk_vec2(b.x-r+u, b.y-r+v); break;
+                case 3: point = nk_vec2(a.x+r-v, b.y-r+u); break;
+                }
+                if (!duplicate_start && !duplicate_end)
+                    nk_draw_list_path_line_to(list, point);
+                {const float next = cx*cosine - cy*sine;
+                cy = cy*cosine + cx*sine; cx = next;}
+            }
+        }}
     }
 }
 NK_API void

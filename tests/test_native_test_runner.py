@@ -140,7 +140,7 @@ def main():
     actual_display = {case.name for case in runner.catalog()
                       if case.display and case.integration and not case.integration.get("benchmark")}
     native_display = {case.name for case in runner.catalog() if case.display and not case.integration}
-    assert native_display <= {"accessibility_native", "accessibility_ui", "font_bank_ui", "backdrop_ui"}, native_display
+    assert native_display <= {"accessibility_native", "accessibility_ui", "font_bank_ui", "backdrop_ui", "ui_subpixel_gpu"}, native_display
     provider_display = {"accessibility_atspi", "accessibility_tables_atspi"} if sys.platform == "linux" else set()
     specialized_display = {
         "project_migration_app": ("tests/test_project_migration_app.py", ()),
@@ -148,6 +148,25 @@ def main():
         "app_profiling_workflow": ("tests/test_app_profiling_workflow.py", ()),
         "graphic_raster": ("tests/check_graphic_raster.py", ("--root",)),
     }
+    # These native design probes have their own pixel/geometry checkers.
+    # Keep the mapping explicit: an unknown integration must still fail below.
+    specialized_display.update({
+        "component_details_"+mode: ("tests/check_component_details.py", ("--root", "--mode"))
+        for mode in ("dark", "light", "light_large_narrow", "contrast")
+    })
+    specialized_display.update({name: ("tests/"+script, ("--root", "--work")) for name,script in (
+        ("file_tabs_design","check_file_tabs_design.py"),
+        ("transport_design","check_transport_design.py"),
+        ("timeline_context","check_timeline_context.py"),
+        ("timeline_design","check_timeline_design.py"),
+        ("inspector_design","check_inspector_design.py"),
+        ("object_design","check_object_design.py"),
+        ("tree_design","check_tree_design.py"),
+        ("camera_design","check_camera_design.py"),
+        ("scene_frame_design","check_scene_frame.py"),
+        ("measurement_design","check_measurement_design.py"),
+        ("curve_design","check_curve_design.py"),
+    )})
     if sys.platform in ("win32","linux"):
         specialized_display["graphic_dialog"]=("tests/check_graphic_dialog.py",("--root",))
     if sys.platform == "linux":

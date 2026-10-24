@@ -34,7 +34,7 @@ static void camera_design_record(app *a,const char *kind,unsigned bit,const char
     if(camera_design.recorded&bit)return;
     camera_design.recorded|=bit;
     printf("CAMERA DESIGN kind=%s variant=%s size=%u preserved=%d mode=%d plane=%u projection=%d yaw=%.9g pitch=%.9g zoom=%.9g",kind,inspector_design_variant(),a->preferences.ui_size,inspector_design_same(a),a->camera_2d,a->camera_plane,a->orthographic,a->yaw,a->pitch,a->zoom);
-    camera_design_rect("header",a->dock_headers[PS_DOCK_INSPECTOR]);camera_design_rect("body",a->laboratory_inspector_body);camera_design_rect("mode-rect",a->camera_mode_bounds);camera_design_rect("save",a->display_save_bounds);printf(" save-paint=");camera_design_hex(camera_design.save);puts("");
+    printf(" minimum=%.4f wish=%u",laboratory_inspector_minimum(a),a->preferences.inspector_width);camera_design_rect("header",a->dock_headers[PS_DOCK_INSPECTOR]);camera_design_rect("body",a->laboratory_inspector_body);camera_design_rect("mode-rect",a->camera_mode_bounds);camera_design_rect("save",a->display_save_bounds);printf(" save-paint=");camera_design_hex(camera_design.save);puts("");
     for(unsigned i=0;i<2;i++){printf("CAMERA FIELD index=%u",i);camera_design_rect("rect",a->laboratory_camera_fields[1][i]);printf(" paint=");camera_design_hex(camera_design.fields[i]);puts("");}
     for(unsigned i=0;i<3;i++){printf("CAMERA RANGE index=%u",i);camera_design_rect("rect",a->laboratory_camera_sliders[1][i]);camera_design_rect("output",a->laboratory_camera_outputs[1][i]);printf(" paint=");camera_design_hex(camera_design.outputs[i]);puts("");}
     static char file[96];snprintf(file,sizeof file,"camera-%s-%s.png",inspector_design_variant(),kind);*capture=file;

@@ -1,0 +1,17 @@
+[
+  {
+    "file": "h-docs-h-00.png",
+    "source_bmp_sha256": "7aad47ccefebc00f2249f9f183dbe5e1614b7be4f9cb97c13b6db13f562e1086",
+    "rgb_sha256": "f0e220457919db975399be4d2a7cdace0685ed95e06cb161c7e5787d31532065"
+  },
+  {
+    "file": "h-docs-h-04.png",
+    "source_bmp_sha256": "d61a10e9c1e002ef52f2263d31fb056c715049debba0dfbc6b352485ea4be5aa",
+    "rgb_sha256": "952a60ff62695d99caacf737be0cf2a81da88252a28c1af8515fc28d143830cc"
+  },
+  {
+    "file": "h-docs-h-actions-keyboard.png",
+    "source_bmp_sha256": "86b178a8317bb17f8ecf5a831fc6c9095894fc83608589012ea486889078405e",
+    "rgb_sha256": "5a7d6cf2b85cfbbaeccafe5394b0a62fcdb704296452b401b542b8607e424a5e"
+  }
+]

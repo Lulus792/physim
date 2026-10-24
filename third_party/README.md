@@ -23,6 +23,14 @@ included as `licenses/zlib-LICENSE.txt` in the portable package.
 
 ## Nuklear snapshot
 
+Local patch (2026-10-24): rounded-box paths clamp radii to half the shorter
+edge, including oversized capsule radii and nonnegative normalization. Their
+quarter arcs use bounded radius-dependent subdivision instead of the fixed
+three-segment corner. Analytic path-distance/convexity tests and actual 1x/2x
+GPU interior/exterior probes retain the original negative images and results.
+This changes rounded UI geometry; it does not change command coordinates,
+font metrics, clip semantics, or the font renderer.
+
 Local patch (2026-10-21): the embedded stb pair-kerning reader follows a format-1
 ExtensionPos lookup (type 9) when it wraps PairPos (type 2). Other extension
 types remain ignored. `font_faces` compares identical direct/extended class-pair

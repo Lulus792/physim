@@ -136,3 +136,9 @@ entfernt den zusätzlichen Auswahlpfeil und die Hoverfüllung aus den Kurvenköp
 Der native Kanalwechsel und sichtbarer Tastaturfokus bleiben erhalten; das
 Inspektorfeld behält seine Auswahlgestaltung. Die Gesamtoberfläche und praktische
 Plattform-/Assistive-Nachweise bleiben weiter offen.
+
+Der folgende [Abgleich gemeinsamer Rundungen und vollständiger Titel](ROUNDED-SECTIONS-NATIVE.md)
+korrigiert nichtkonvexe Kapseln im zentralen Zeichenpfad und Wortteilungen in
+den Inspektorköpfen. Tatsächliche Mindestbreiten erhalten die gewählte Schrift
+und gespeicherte Wünsche. Die breiten nativen Nachläufe und der getrennte
+F1-Zeitüberschreitungsbefund bleiben in den zugeordneten Belegen nachvollziehbar.

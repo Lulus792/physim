@@ -64,3 +64,8 @@ docs/visuals/unified-workspace/curve-heads-2026-10-24/*.gz binary
 docs/visuals/unified-workspace/chart-captions-2026-10-24/** text eol=lf
 docs/visuals/unified-workspace/chart-captions-2026-10-24/*.png binary
 docs/visuals/unified-workspace/chart-captions-2026-10-24/*.gz binary
+
+# Frozen native rounded-path and inspector-heading evidence.
+docs/visuals/unified-workspace/rounding-headings-2026-10-24/** text eol=lf
+docs/visuals/unified-workspace/rounding-headings-2026-10-24/*.png binary
+docs/visuals/unified-workspace/rounding-headings-2026-10-24/*.gz binary

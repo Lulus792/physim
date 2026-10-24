@@ -1,0 +1,379 @@
+{
+  "base": "a46f301fe8b45a06b427741fda02870c000457dc",
+  "final_source": 4,
+  "groups": [
+    {
+      "platform": "linux",
+      "name": "ui_rounded",
+      "status": "passed",
+      "seconds": 0.054,
+      "binaries": [
+        {
+          "program": "D:\\Physim\\build\\native\\Design-analysis-linux\\bin\\physim-test-ui_rounded",
+          "sha256": "6fac138cf47e4d2ccd9513c0f4e2bec7acea24b70d4471f7840799a799a8d096",
+          "scope": "Recorded after completed run; source unchanged"
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "name": "ui_geometry",
+      "status": "passed",
+      "seconds": 12.469,
+      "binaries": [
+        {
+          "program": "D:\\Physim\\build\\native\\Design-analysis-linux\\bin\\physim-test-ui_geometry",
+          "sha256": "e02f40c59754804781ae7a5dce0146ee42b54231cb6193527f14f9c7464cb987",
+          "scope": "Recorded after completed run; source unchanged"
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "name": "ui_subpixel",
+      "status": "passed",
+      "seconds": 0.058,
+      "binaries": [
+        {
+          "program": "D:\\Physim\\build\\native\\Design-analysis-linux\\bin\\physim-test-ui_subpixel",
+          "sha256": "75d593d9d7808539d40851f9c823277e1ffc296de6008e6ddc86436091bbc8de",
+          "scope": "Recorded after completed run; source unchanged"
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "name": "ui_subpixel_gpu",
+      "status": "passed",
+      "seconds": 0.481,
+      "binaries": [
+        {
+          "program": "D:\\Physim\\build\\native\\Design-analysis-linux\\bin\\physim-test-ui_subpixel_gpu",
+          "sha256": "d35c172754c389ab7006fea0895e333f051f0720c321dfcffe4deea2fb3aa698",
+          "scope": "Recorded after completed run; source unchanged"
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "name": "timeline_design",
+      "status": "passed",
+      "seconds": 101.692,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "f12b411260e625eee955a07c498d1ecf6eee7ab9cf83399f0e69ff254588c398"
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "name": "inspector_design",
+      "status": "passed",
+      "seconds": 122.18,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "f12b411260e625eee955a07c498d1ecf6eee7ab9cf83399f0e69ff254588c398"
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "name": "camera_design",
+      "status": "passed",
+      "seconds": 171.904,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "f12b411260e625eee955a07c498d1ecf6eee7ab9cf83399f0e69ff254588c398"
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "name": "measurement_design",
+      "status": "passed",
+      "seconds": 85.478,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "f12b411260e625eee955a07c498d1ecf6eee7ab9cf83399f0e69ff254588c398"
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "name": "workbench_workflow",
+      "status": "passed",
+      "seconds": 80.61,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "f12b411260e625eee955a07c498d1ecf6eee7ab9cf83399f0e69ff254588c398"
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "name": "graphic_dialog",
+      "status": "passed",
+      "seconds": 58.347,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "f12b411260e625eee955a07c498d1ecf6eee7ab9cf83399f0e69ff254588c398"
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "name": "documentation_h",
+      "status": "passed",
+      "seconds": 49.699,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "f12b411260e625eee955a07c498d1ecf6eee7ab9cf83399f0e69ff254588c398"
+        }
+      ]
+    },
+    {
+      "platform": "windows",
+      "name": "ui_rounded",
+      "status": "passed",
+      "seconds": 0.047,
+      "binaries": [
+        {
+          "program": "D:\\Physim\\build\\native\\Release\\bin\\physim-test-ui_rounded.exe",
+          "sha256": "fb57d02a1c3fe9063a2e16c53635ef6f3db9d3e94ca6be1dec8620ca71ef0d92",
+          "scope": "Recorded after completed run; source unchanged"
+        }
+      ]
+    },
+    {
+      "platform": "windows",
+      "name": "ui_geometry",
+      "status": "passed",
+      "seconds": 1.078,
+      "binaries": [
+        {
+          "program": "D:\\Physim\\build\\native\\Release\\bin\\physim-test-ui_geometry.exe",
+          "sha256": "645fe5970b6212cb1df32f94934a7965cd062409d3c4cad467153b3cedba3fcf",
+          "scope": "Recorded after completed run; source unchanged"
+        }
+      ]
+    },
+    {
+      "platform": "windows",
+      "name": "ui_subpixel",
+      "status": "passed",
+      "seconds": 0.063,
+      "binaries": [
+        {
+          "program": "D:\\Physim\\build\\native\\Release\\bin\\physim-test-ui_subpixel.exe",
+          "sha256": "55719e97fe58be6dc1ccb391f35abdb6995d247875722f27408a9db2a95815f8",
+          "scope": "Recorded after completed run; source unchanged"
+        }
+      ]
+    },
+    {
+      "platform": "windows",
+      "name": "ui_subpixel_gpu",
+      "status": "passed",
+      "seconds": 0.922,
+      "binaries": [
+        {
+          "program": "D:\\Physim\\build\\native\\Release\\bin\\physim-test-ui_subpixel_gpu.exe",
+          "sha256": "10d9ec372f007a414bc073288922c0d0b8f1d7b6a5baab846ad61228f2858f6c",
+          "scope": "Recorded after completed run; source unchanged"
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "name": "docking_workflow",
+      "status": "passed",
+      "seconds": 77.047,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "f12b411260e625eee955a07c498d1ecf6eee7ab9cf83399f0e69ff254588c398"
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "name": "inspector_workflow",
+      "status": "passed",
+      "seconds": 69.916,
+      "binaries": [
+        {
+          "status": "passed",
+          "target": "python",
+          "artifact": "/usr/bin/python3",
+          "sha256": "994dd208d5739f182434c9ffc8b486c9edcf725aa009088fa2ed5305ba22ae92"
+        },
+        {
+          "status": "passed",
+          "target": "physim",
+          "artifact": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+          "sha256": "f12b411260e625eee955a07c498d1ecf6eee7ab9cf83399f0e69ff254588c398"
+        }
+      ]
+    }
+  ],
+  "runs": [
+    {
+      "label": "linux4",
+      "directory": "build/native/Design-analysis-linux/test-results/run-v8e0238n",
+      "groups": [
+        "ui_rounded",
+        "ui_geometry",
+        "ui_subpixel"
+      ]
+    },
+    {
+      "label": "linux4",
+      "directory": "build/native/Design-analysis-linux/test-results/run-ydre6wep",
+      "groups": [
+        "ui_subpixel_gpu",
+        "timeline_design",
+        "inspector_design",
+        "camera_design",
+        "measurement_design"
+      ]
+    },
+    {
+      "label": "broad4",
+      "directory": "build/native/Design-analysis-linux/test-results/run-infqubr7",
+      "groups": [
+        "workbench_workflow",
+        "documentation_h",
+        "graphic_dialog"
+      ]
+    },
+    {
+      "label": "h-ext4",
+      "directory": "build/native/rounded-sections-h-ext4",
+      "groups": [
+        "documentation_h"
+      ]
+    },
+    {
+      "label": "windows4",
+      "directory": "build/native/Release/test-results/run-ptwg6xu4",
+      "groups": [
+        "ui_rounded",
+        "ui_geometry",
+        "ui_subpixel"
+      ]
+    },
+    {
+      "label": "windows-gpu4",
+      "directory": "build/native/Release/test-results/run-bxnra3wj",
+      "groups": [
+        "ui_subpixel_gpu"
+      ]
+    },
+    {
+      "label": "panels4",
+      "directory": "build/native/Design-analysis-linux/test-results/run-i791yqrs",
+      "groups": [
+        "docking_workflow",
+        "inspector_workflow"
+      ]
+    }
+  ],
+  "public_source_files": 263,
+  "fonts": 18,
+  "foreign_preserved": 12,
+  "native_capture_hashes": 569,
+  "selected_images": [
+    "gpu-rounded-1.png",
+    "gpu-rounded-2.png",
+    "system-inspector-dark-closed.png",
+    "system-inspector-large-closed.png",
+    "bundled-inspector-large-closed.png",
+    "system-measurement-dark-curves.png",
+    "system-measurement-light-curves.png",
+    "system-inspector-large-closed-reveal-3.png",
+    "system-inspector-large-closed-reveal-4.png",
+    "system-inspector-large-closed-reveal-5.png",
+    "system-inspector-large-closed-reveal-6.png",
+    "system-inspector-large-closed-reveal-7.png",
+    "system-inspector-large-closed-reveal-8.png",
+    "h-docs-h-00.png",
+    "h-docs-h-04.png",
+    "h-docs-h-actions-keyboard.png",
+    "windows-rounded-1.png",
+    "windows-rounded-2.png"
+  ],
+  "whole_ui_complete": false,
+  "windows_gui": false,
+  "scope": "Global rounded paths and inspector whole-word layout; native Linux display tasks and Windows native C tests. Physical DPI, monitor transition, macOS and practical screenreader tasks remain open."
+}

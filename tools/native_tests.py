@@ -164,6 +164,7 @@ def catalog():
              app=True,arguments=("{work}",)),
         Case("project_migration", ("tests/test_project_migration.c",), ("project", "core"),
              app=True,arguments=("{work}",)),
+        Case("ui_rounded", ("tests/test_ui_rounded.c", "app/ui_geometry.c", "app/ui_backend.c"), app=True),
         Case("ui_geometry", ("tests/test_ui_geometry.c", "app/ui_geometry.c", "app/ui_backend.c"), app=True),
         Case("ui_subpixel", ("tests/test_ui_subpixel.c", "app/ui_geometry.c", "app/ui_backend.c"), app=True),
         Case("ui_text_flow", ("tests/test_ui_text_flow.c", "app/ui_backend.c"), app=True),

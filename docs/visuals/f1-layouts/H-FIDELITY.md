@@ -459,3 +459,12 @@ Die neue Gestaltung behauptet deshalb keine vollständige Pixelidentität des ge
 Vollständige Screenreader-Aufgaben und echte Monitor-/DPI-Wechsel bleiben
 gesonderte offene Prüfpunkte. Die anschließend geprüfte Erweiterung für
 Dokumentfokus und deren Mac-Abnahme sind im eigenen Bericht oben abgegrenzt.
+
+## Gemeinsame Rundungen, 24. Oktober 2026
+
+Der [gemeinsame Zeichenpfad-Abgleich](../unified-workspace/ROUNDED-SECTIONS-NATIVE.md)
+korrigiert gerundete Flächen und Konturen auch im Handbuch. Die ursprüngliche
+H-Gruppe besteht vollständig mit unverändertem SDK und ext4-Arbeitsdaten; der
+vorherige Lauf auf `/mnt/d` überschreitet nach den 56 Layoutzuständen die App-
+Zeitgrenze und bleibt getrennt als fehlgeschlagen erfasst. Dies ist keine
+vollständige H-, Windows-Bedienungs- oder Assistive-Abnahme.

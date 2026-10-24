@@ -48,6 +48,30 @@ int main(int argc,char **argv) {
         CHECK(p[0]==expected && p[1]==expected && p[2]==expected);
     }
     snprintf(path,sizeof path,"%s/float-scissor.png",argv[1]);CHECK(ps_graphics_image_png(image,path)==PS_OK);ps_graphics_image_destroy(image);
+    /* Compare actual offscreen pixels with an analytic rounded box. This
+     * catches nonconvex paths, rather than comparing two copies of the renderer. */
+    unsigned rounded_errors=0;
+    for(unsigned density=1;density<=2;density++) {
+        nk_clear(&ui);CHECK(nk_begin(&ui,"float GPU",nk_rect(0,0,160*density,160*density),NK_WINDOW_NO_SCROLLBAR));
+        c=nk_window_get_canvas(&ui);nk_push_scissor(c,nk_rect(0,0,160*density,160*density));
+        const double shapes[][5]={{20,15,80,12,30},{20,47,80,12,6},{20,79,12,22,12},{20,115,80,12,0}};
+        for(unsigned i=0;i<4;i++)nk_fill_rect(c,nk_rect((float)shapes[i][0]*density,(float)shapes[i][1]*density,(float)shapes[i][2]*density,(float)shapes[i][3]*density),(float)shapes[i][4]*density,nk_rgb(255,255,255));
+        nk_end(&ui);image=NULL;CHECK(ps_graphics_ui_image(g,&ui,&null_texture,160*density,160*density,ps_allocator_default(),&image)==PS_OK);
+        CHECK(ps_graphics_image_read(image,&w,&h,&stride,&pixels)==PS_OK && w==160*density && h==160*density);
+        snprintf(path,sizeof path,"%s/rounded-%u.png",argv[1],density);CHECK(ps_graphics_image_png(image,path)==PS_OK);
+        unsigned inside=0,outside=0;
+        for(unsigned i=0;i<4;i++) {
+            double x=shapes[i][0]*density,y=shapes[i][1]*density,ww=shapes[i][2]*density,hh=shapes[i][3]*density,r=fmin(shapes[i][4]*density,fmin(ww,hh)/2);
+            for(int py=(int)y-3;py<(int)(y+hh)+3;py++)for(int px=(int)x-3;px<(int)(x+ww)+3;px++) {
+                double qx=fabs(px+.5-x-ww/2)-(ww/2-r),qy=fabs(py+.5-y-hh/2)-(hh/2-r);
+                double distance=hypot(fmax(qx,0),fmax(qy,0))+fmin(fmax(qx,qy),0)-r;
+                const unsigned char *p=pixels+(size_t)py*stride+px*3;
+                if(distance<-1.5){inside++;if(p[0]<250)fprintf(stderr,"Rounded GPU missing interior density=%u shape=%u pixel=%d,%d distance=%g value=%u\n",density,i,px,py,distance,p[0]);if(p[0]<250 || p[1]<250 || p[2]<250)rounded_errors++;}
+                if(distance>1.5){outside++;if(p[0]>5 || p[1]>5 || p[2]>5)rounded_errors++;}
+            }
+        }
+        CHECK(inside>200 && outside>100);printf("ROUNDED GPU density=%u inside=%u outside=%u errors=%u\n",density,inside,outside,rounded_errors);ps_graphics_image_destroy(image);
+    }
     printf("FLOAT GPU: %u stroke samples, max channel error %.6f; fractional clip enclosed at 12x21\n",samples,maximum);
-    nk_free(&ui);ps_graphics_delete_texture(g,texture);ps_graphics_destroy(g);SDL_DestroyWindow(window);SDL_Quit();return 0;
+    nk_free(&ui);ps_graphics_delete_texture(g,texture);ps_graphics_destroy(g);SDL_DestroyWindow(window);SDL_Quit();return rounded_errors?1:0;
 }

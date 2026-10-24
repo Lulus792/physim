@@ -1,6 +1,7 @@
 /* Actual pendulum runner plus native inspector input and independent raster logs. */
 static struct {
-    unsigned variant,settle,card;uint32_t source,scene,run_crc;double held;
+    char parts[9][8][96];unsigned part_count[9];
+    unsigned variant,settle,card,summary_seen;uint32_t source,scene,run_crc;double held;
     struct nk_rect title,heading_title,heading_meta;bool title_present,heading_present[2],value_present[PS_MODEL_VALUES_MAX];
 } inspector_design;
 static const char *inspector_design_variant(void) {
@@ -19,11 +20,18 @@ static bool inspector_design_start(app *a,const char *root) {
     bool ok=laboratory_test_start(a,root,"laboratory-dark");if(ok)join(a->preferences_path,sizeof a->preferences_path,root,"preferences.bin");return ok;
 }
 static void inspector_design_draw(app *a) {
+    memset(inspector_design.parts,0,sizeof inspector_design.parts);memset(inspector_design.part_count,0,sizeof inspector_design.part_count);
     inspector_design.title_present=false;inspector_design.title=nk_rect(0,0,0,0);memset(inspector_design.value_present,0,sizeof inspector_design.value_present);
     memset(inspector_design.heading_present,0,sizeof inspector_design.heading_present);
     const struct nk_command *command;
     nk_foreach(command,a->ui)if(command->type==NK_COMMAND_TEXT) {
         const struct nk_command_text *text=(const struct nk_command_text*)command;
+        if(text->font==&a->laboratory_section_font)for(unsigned i=0;i<9;i++) {
+            struct nk_rect r=a->laboratory_section_bounds[i];
+            if(r.w>0 && text->x>=r.x && text->x<r.x+r.w && text->y>=r.y && text->y+text->height<=r.y+r.h+1) {
+                unsigned j=inspector_design.part_count[i]++;if(j<8)snprintf(inspector_design.parts[i][j],96,"%.*s",text->length,text->string);
+            }
+        }
         struct nk_rect header=a->dock_headers[PS_DOCK_INSPECTOR];
         if(text->x>=header.x && text->y>=header.y && text->y+text->height<=header.y+header.h+1) {
             if(text->font==&a->laboratory_section_font && text->length==9 && !memcmp(text->string,"Inspektor",9)) {
@@ -53,8 +61,15 @@ static void inspector_design_log(app *a,const char *kind) {
     printf("INSPECTOR DESIGN %s variant=%s size=%u source=%d title-present=%d heading-present=%d time=%.17g",kind,inspector_design_variant(),a->preferences.ui_size,inspector_design_same(a),inspector_design.title_present,inspector_design.heading_present[0] && inspector_design.heading_present[1],display_time(a));
     const struct nk_rect r[]={a->dock_headers[PS_DOCK_INSPECTOR],a->laboratory_inspector_body,a->laboratory_footer_bounds,inspector_design.title,inspector_design.heading_title,inspector_design.heading_meta};const char *names[]={"header","body","footer","title","heading-title","heading-meta"};
     for(unsigned i=0;i<6;i++)printf(" %s=%.4f,%.4f,%.4f,%.4f",names[i],r[i].x,r[i].y,r[i].w,r[i].h);
-    puts("");
+    printf(" minimum=%.4f wish=%u",laboratory_inspector_minimum(a),a->preferences.inspector_width);puts("");
     for(unsigned i=0;i<9;i++){struct nk_rect b=a->laboratory_section_bounds[i];printf("INSPECTOR SECTION slot=%u rect=%.4f,%.4f,%.4f,%.4f\n",i,b.x,b.y,b.w,b.h);}
+    for(unsigned i=0;i<9;i++) {
+        struct nk_rect row=a->laboratory_section_bounds[i],body=a->laboratory_inspector_body;
+        if(!strncmp(kind,"closed",6) && row.y>=body.y-.03f && row.y+row.h<=body.y+body.h+.03f)inspector_design.summary_seen|=1u<<i;
+        printf("INSPECTOR TITLE slot=%u parts=",i);
+        for(unsigned j=0;j<inspector_design.part_count[i] && j<8;j++) {if(j)putchar(',');for(const unsigned char *p=(const unsigned char*)inspector_design.parts[i][j];*p;p++)printf("%02x",*p);}
+        puts("");
+    }
     if(a->model_disclosure==NK_MAXIMIZED)for(unsigned i=0;i<a->model_edit.bindings.count;i++) {
         struct nk_rect card=a->model_card_bounds[i],input=a->model_input_bounds[i];
         printf("INSPECTOR CARD index=%u value-present=%d card=%.4f,%.4f,%.4f,%.4f input=%.4f,%.4f,%.4f,%.4f\n",i,inspector_design.value_present[i],card.x,card.y,card.w,card.h,input.x,input.y,input.w,input.h);
@@ -74,9 +89,20 @@ static void inspector_design_frame(app *a,int *stage,int *code,const char **capt
         const unsigned sizes[]={16,16,18,20,22,22};ps_preferences p=a->preferences;p.ui_size=sizes[inspector_design.variant];p.theme=inspector_design.variant==0 || inspector_design.variant==2?PS_THEME_DARK:inspector_design.variant==5?PS_THEME_HIGH_CONTRAST:PS_THEME_LIGHT;p.inspector_width=inspector_design.variant<2?320:208;preferences_apply(a,&p);
         SDL_SetWindowSize(a->window,inspector_design.variant<2?1440:1080,inspector_design.variant<2?1000:740);
         for(unsigned i=0;i<5;i++)a->laboratory_groups[i]=NK_MINIMIZED;
-        a->model_disclosure=a->parameter_disclosure=a->steps_disclosure=a->limits_disclosure=NK_MINIMIZED;a->laboratory_scroll_x=a->laboratory_scroll_y=0;inspector_design.settle=0;break;
+        a->model_disclosure=a->parameter_disclosure=a->steps_disclosure=a->limits_disclosure=NK_MINIMIZED;a->laboratory_scroll_x=a->laboratory_scroll_y=0;inspector_design.summary_seen=0;inspector_design.settle=0;break;
     }
-    case 5:if(inspector_design.settle++<3)return;ok=inspector_design_same(a) && inspector_design.title_present;inspector_design_log(a,"closed");*capture=inspector_design_capture("closed");break;
+    case 5:if(inspector_design.settle++<3)return;ok=inspector_design_same(a) && inspector_design.title_present;inspector_design_log(a,"closed");*capture=inspector_design_capture("closed");inspector_design.settle=0;*stage=16;return;
+    case 16:
+        if(inspector_design.settle++<2)return;
+        if(inspector_design.summary_seen==511){*stage=17;return;}
+        {unsigned slot=0;while(inspector_design.summary_seen&(1u<<slot))slot++;
+        struct nk_rect r=a->laboratory_section_bounds[slot],body=a->laboratory_inspector_body;
+        if(r.y<body.y || r.y+r.h>body.y+body.h){test_plot_wheel(a,body.x+body.w/2,body.y+body.h/2,r.y<body.y?1:-1);inspector_design.settle=0;return;}
+        char kind[40];snprintf(kind,sizeof kind,"closed-reveal-%u",slot);inspector_design_log(a,kind);*capture=inspector_design_capture(kind);inspector_design.settle=0;return;}
+    case 17:
+        if(inspector_design.settle++<2)return;
+        if(a->laboratory_scroll_y){struct nk_rect r=a->laboratory_inspector_body;test_plot_wheel(a,r.x+r.w/2,r.y+r.h/2,1);inspector_design.settle=0;return;}
+        *stage=6;return;
     case 6:if(!inspector_design_focus(a,object))return;*capture=inspector_design_capture("focus");test_window_key_mod(a->window,SDLK_RETURN,0);break;
     case 7:if(a->laboratory_groups[0]!=NK_MAXIMIZED)return;ok=inspector_design_same(a) && inspector_design_focus(a,object);*capture=inspector_design_capture("opened");test_window_key_mod(a->window,SDLK_RETURN,0);break;
     case 8:if(a->laboratory_groups[0]!=NK_MINIMIZED)return;ok=nk_sdl_accessibility_is_focused(a->ui,NULL,object) && inspector_design_same(a);test_mouse(a,a->laboratory_section_bounds[1],true);break;

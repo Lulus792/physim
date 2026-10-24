@@ -37,6 +37,24 @@ static void laboratory_wrapped_text(struct nk_command_buffer *canvas,const struc
         at+=count;while(at<length && text[at]==' ')at++;y+=line_height;
     }
 }
+static const char *const laboratory_section_labels[]={"Objekt","Modellwerte","Laufparameter","Laufeinstellungen","Laufgrenzen","Messkanal und Einheit","Ereignisse","Kamera und Darstellung","Aufzeichnung"};
+static float laboratory_section_word_width(const struct nk_user_font *font,const char *text) {
+    float width=0;const char *word=text;
+    for(const char *p=text;;p++)if(!*p || *p==' ') {
+        if(p>word)width=fmaxf(width,font->width(font->userdata,font->height,word,(int)(p-word)));
+        if(!*p)break;
+        word=p+1;
+    }
+    return width;
+}
+static float laboratory_inspector_minimum(const app *a) {
+    const struct nk_user_font *font=&a->laboratory_section_font;float word=0,f=a->preferences.ui_size/16.f;
+    if(!font->width)return 208;
+    for(unsigned i=0;i<9;i++)word=fmaxf(word,laboratory_section_word_width(font,laboratory_section_labels[i]));
+    /* Existing unscaled panel insets, scaled disclosure column, whole word
+     * plus a small glyph-bearing allowance. Stored wish widths stay intact. */
+    return fmaxf(208,ceilf(33+22*f+word));
+}
 static bool workspace_section_begin(app *a,const char *label,enum nk_collapse_states *state) {
     struct nk_context *ui=a->ui;
     if(!laboratory_visible(a))return nk_tree_state_push(ui,NK_TREE_TAB,label,state)!=0;
@@ -46,8 +64,11 @@ static bool workspace_section_begin(app *a,const char *label,enum nk_collapse_st
     float width=nk_window_get_content_region(ui).w;
     float meta_width=small->width(small->userdata,small->height,metadata,(int)strlen(metadata));
     float title_width=fmaxf(1,width-20*f-(meta_width?meta_width+8*f:0));
+    bool stacked=meta_width>0 && laboratory_section_word_width(font,label)>title_width;
+    if(stacked)title_width=fmaxf(1,width-20*f);
     float line_height=18.85f*f;unsigned lines=laboratory_wrapped_lines(font,label,title_width);
-    float height=fmaxf(42*f,20*f+lines*line_height);
+    float content_height=lines*line_height+(stacked?18.5f*f:0);
+    float height=fmaxf(42*f,20*f+content_height);
     nk_layout_row_dynamic(ui,height,1);struct nk_rect row;
     enum nk_widget_layout_states visible=nk_widget(&row,ui);
     if(slot<9)a->laboratory_section_bounds[slot]=row;
@@ -58,11 +79,12 @@ static bool workspace_section_begin(app *a,const char *label,enum nk_collapse_st
         if(ps_ui_button_at_custom_focus(ui,target,name,*state==NK_MAXIMIZED,&focused))*state=*state==NK_MAXIMIZED?NK_MINIMIZED:NK_MAXIMIZED;
         bool hover=!(ui->current->layout->flags&NK_WINDOW_ROM) && nk_input_is_mouse_hovering_rect(&ui->input,target);
         nk_fill_rect(canvas,nk_rect(row.x,row.y,row.w,1),0,UI_COLOR(border));
-        float x=row.x+6*f,y=row.y+row.h/2;
+        float title_y=row.y+(row.h-content_height)/2;
+        float x=row.x+6*f,y=stacked?title_y+line_height/2:row.y+row.h/2;
         nk_stroke_line(canvas,x-4*f,y,x+4*f,y,f,muted());
         if(*state!=NK_MAXIMIZED)nk_stroke_line(canvas,x,y-4*f,x,y+4*f,f,muted());
-        laboratory_wrapped_text(canvas,font,label,nk_rect(row.x+20*f,row.y+(row.h-lines*line_height)/2,title_width,lines*line_height),line_height,hover?accent():UI_COLOR(text));
-        nk_draw_text(canvas,nk_rect(row.x+row.w-meta_width,row.y+(row.h-small->height)/2,meta_width+1,small->height),metadata,(int)strlen(metadata),small,nk_rgba(0,0,0,0),muted());
+        laboratory_wrapped_text(canvas,font,label,nk_rect(row.x+20*f,title_y,title_width,lines*line_height),line_height,hover?accent():UI_COLOR(text));
+        nk_draw_text(canvas,nk_rect(row.x+row.w-meta_width,(stacked?title_y+lines*line_height+4*f+(14.5f*f-small->height)/2:row.y+(row.h-small->height)/2),meta_width+1,small->height),metadata,(int)strlen(metadata),small,nk_rgba(0,0,0,0),muted());
         if(focused)nk_stroke_rect(canvas,nk_rect(target.x+2*f,target.y+2*f,fmaxf(0,target.w-4*f),fmaxf(0,target.h-4*f)),4*f,2*f,accent());
         snprintf(description,sizeof description,"%s: %s%s%s",label,*state==NK_MAXIMIZED?"ausgeklappt":"eingeklappt",*metadata?" · ":"",metadata);
         ps_ui_accessibility_label(ui,target,description);
