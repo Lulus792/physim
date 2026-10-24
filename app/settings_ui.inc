@@ -61,7 +61,7 @@ static void preferences_capture(app *a) {
                     (a->orthographic ? PS_VIEW_ORTHOGRAPHIC : 0) | (a->show_log ? PS_VIEW_LOG : 0);
     p->inspector_open = a->view_disclosure == NK_MAXIMIZED;
     if (a->tab >= 0 && a->tab <= 2)
-        p->workspace = (uint32_t)a->tab;
+        p->workspace = a->tab==2 && a->analysis_tab==1?0:(uint32_t)a->tab;
 }
 static void preferences_theme_tick(app *a) {
     if(!a->theme_request)return;

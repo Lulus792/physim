@@ -819,6 +819,12 @@ static void workspace_panel(app *a) {
         nk_window_set_focus(ui,"workspace");
     if(a->project_manager && a->manager_keyboard && !a->toolbar_keyboard && !a->toolbar_menu)
         nk_window_set_focus(ui,"workspace");
+    /* A header's native focus request can be granted after the frame's initial
+     * ownership check. Respect it before enabling the background editor. */
+    if(a->file_tab_keyboard_edit && nk_sdl_accessibility_has_focus(ui) && !nk_sdl_accessibility_keyboard_owned(ui))
+        a->file_tab_keyboard_edit=NULL;
+    if(a->file_tab_keyboard_edit && editor_search_target(a)==a->file_tab_keyboard_edit)
+        nk_window_set_focus(ui,"workspace");
     if (dock_begin(a, PS_DOCK_WORKSPACE)) {
         if (a->project_manager) {
             nk_layout_row_dynamic(ui, 42, 1);
@@ -1163,7 +1169,7 @@ static void workbench_editor_status(app *a) {
         for(size_t i=0;i<cursor;i++)if(text[i]=='\n'){line++;start=i+1;}
         unsigned column=text?(unsigned)nk_utf_len(text+start,(int)(cursor-start))+1:1;
         workspace_document *doc=active_document(a);
-        const char *name=a->tab==8 && doc?workspace_name(doc->path):a->analysis_only?analysis_source(a):experiment_source(a);
+        const char *name=a->tab==8 && doc?workspace_name(doc->path):edit==&a->analysis?analysis_source(a):experiment_source(a);
         char location[512];snprintf(location,sizeof location,"%s    Zeile %u, Spalte %u    UTF-8",name,line,column);
         const struct nk_user_font *small=&a->workbench_fonts[1];float y=bar.y+(bar.h-small->height)/2;
         const char *saved=a->dirty || a->analysis_dirty || documents_dirty(a)?"Ungespeicherte Änderungen":"Alle Änderungen gespeichert";
@@ -1249,6 +1255,10 @@ static void workspace_draw_ui(app *a, int width, int height) {
     bool workspace_shell=workspace_shell_visible(a);
     if(a->outline_keyboard && (editor_search_target(a)!=a->outline_editor || a->toolbar_menu || a->search_keyboard ||
        nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT)))a->outline_keyboard=false;
+    if(a->file_tab_keyboard_edit && (editor_search_target(a)!=a->file_tab_keyboard_edit || a->toolbar_menu || a->toolbar_keyboard ||
+       a->search_keyboard || a->search_focus || (a->preferences.dock.hidden&(1u<<PS_DOCK_WORKSPACE)) ||
+       nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) ||
+       (nk_sdl_accessibility_has_focus(ui) && !nk_sdl_accessibility_keyboard_owned(ui))))a->file_tab_keyboard_edit=NULL;
     const float sizes[]={11,9,12,11,23,16,10,10,8,10,12,11};
     for(unsigned i=0;i<SDL_arraysize(a->workbench_fonts);i++) {
         bool mono=i==7 || i==10 || i==11,bold=(i>=3 && i<=6) || i==8;
@@ -1333,7 +1343,7 @@ static void workspace_draw_ui(app *a, int width, int height) {
     /* Docking temporarily routes hover/wheel to the panel under the pointer.
      * A declaration activation returns keyboard ownership to its source until
      * the user explicitly clicks, tabs, opens a menu or enters another field. */
-    if(a->outline_keyboard)ui->active=nk_window_find(ui,"workspace");
+    if(a->outline_keyboard || a->file_tab_keyboard_edit)ui->active=nk_window_find(ui,"workspace");
     if(workspace_shell){ui_palette=previous_palette;style(ui);}
     if(workspace_shell)nk_style_set_font(ui,previous_font);
 }

@@ -603,7 +603,7 @@ typedef struct {
     struct nk_rect diagnostic_mode_bounds;
     struct nk_rect search_bounds,replace_bounds,source_editor_bounds;
     struct nk_rect source_editor_frame;
-    struct nk_text_edit *completion_edit,*completion_focus_edit;
+    struct nk_text_edit *completion_edit,*completion_focus_edit,*file_tab_keyboard_edit;
     ps_completion_query completion_query;
     size_t *completion_indices,completion_count,completion_selected;
     bool completion_active,completion_accept_pending;
@@ -1258,6 +1258,7 @@ static void clear_project(app *a) {
     model_edit_clear(a);
     completion_close(a);
     a->source_tab_closed[0]=a->source_tab_closed[1]=false;
+    a->file_tab_keyboard_edit=NULL;
     a->caret_edit=NULL;
     ps_text_document_destroy(&a->project_manifest_snapshot);a->project_format_version=0;
     a->project_id[0]=a->experiment_id[0]=0;
@@ -3600,6 +3601,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "saved_run_tutorial_tests.inc"
 #include "native_dialog_tests.inc"
 #include "component_details_tests.inc"
+#include "analysis_editor_tests.inc"
 #include "workspace_tests.inc"
 // clang-format on
 /* Independent archive check for the optional tutorial energy-ledger report. */
@@ -4372,7 +4374,7 @@ int main(int argc, char **argv) {
             /* The deliberate 80 ms frame delay also runs on hosted software GL.
              * Keep its bounded keyboard assertions; allow their extra wall time. */
             if (ps_clock() - test_started >
-                ((!strcmp(argv[3],"transport-design") || !strcmp(argv[3],"timeline-design") || !strcmp(argv[3],"camera-design") || !strcmp(argv[3],"scene-frame-design") || !strcmp(argv[3],"measurement-design") || !strcmp(argv[3],"curve-design") || !strcmp(argv[3],"inspector-channel") || !strcmp(argv[3],"run-fields-design") || !strncmp(argv[3],"inspector-tail-",15))?180:!strncmp(argv[3],"file-tabs-design",16)?60:!strncmp(argv[3],"component-",10)?60:!strncmp(argv[3],"comparison-",11)?120:!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
+                ((!strcmp(argv[3],"transport-design") || !strcmp(argv[3],"timeline-design") || !strcmp(argv[3],"camera-design") || !strcmp(argv[3],"scene-frame-design") || !strcmp(argv[3],"measurement-design") || !strcmp(argv[3],"curve-design") || !strncmp(argv[3],"analysis-editor-",16) || !strcmp(argv[3],"inspector-channel") || !strcmp(argv[3],"run-fields-design") || !strncmp(argv[3],"inspector-tail-",15))?180:!strncmp(argv[3],"file-tabs-design",16)?60:!strncmp(argv[3],"component-",10)?60:!strncmp(argv[3],"comparison-",11)?120:!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
                   !strncmp(argv[3], "isolation-", 10) || !strncmp(argv[3], "breakpoints-", 12) || !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"object-design",13) || !strcmp(argv[3],"tree-design") || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || (!strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"pendulum-medium-",16)) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strncmp(argv[3],"logging-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15))) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
@@ -5461,6 +5463,7 @@ int main(int argc, char **argv) {
         if(workspace_state_test && !strcmp(argv[3],"run-fields-design"))run_fields_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"inspector-tail-",15))inspector_tail_draw(a);
         if(workspace_state_test && !strcmp(argv[3],"inspector-channel"))inspector_channel_draw(a);
+        if(workspace_state_test && !strncmp(argv[3],"analysis-editor-",16))analysis_editor_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"component-",10)) {
             component_details_draw(a,argv[3]);if(component_details.failed){exit_code=1;a->quitting=true;}
         }

@@ -45,7 +45,8 @@ static void workspace_tree_view(app *a) {
     if(compact) {
         workspace_document *doc=active_document(a);
         if(a->tab==8 && doc)snprintf(active,sizeof active,"%s",doc->path);
-        else if(a->loaded && a->tab==0)join(active,sizeof active,a->project,a->analysis_only?analysis_source(a):experiment_source(a));
+        else if(a->loaded && (a->tab==0 || (a->tab==2 && a->analysis_tab==1)))
+            join(active,sizeof active,a->project,a->tab==2 || a->analysis_only?analysis_source(a):experiment_source(a));
     }
     if(!workbench_visible(a)) {
     nk_layout_row_dynamic(ui, 28, 1);

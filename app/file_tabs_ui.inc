@@ -10,12 +10,22 @@ static unsigned file_tab_active(const app *a) {
 }
 static void file_tab_select(app *a,unsigned key) {
     completion_close(a);a->project_manager=false;
-    dock_show(a,PS_DOCK_WORKSPACE);
     if(key>=2)document_select(a,key-2);
     else {
         a->source_tab_closed[key]=false;a->tab=key==0?0:2;if(key==1)a->analysis_tab=1;
         a->completion_focus_edit=key==0?&a->experiment:&a->analysis;
+        join(a->workspace_preview_path,sizeof a->workspace_preview_path,a->project,key?analysis_source(a):experiment_source(a));
     }
+    /* An analysis-header action runs after the frame's initial context pass.
+     * Restore the workbench before any editor panel measures or paints. */
+    workspace_context(a);
+    dock_show(a,PS_DOCK_WORKSPACE);
+    /* A marked edit alone does not transfer keyboard ownership from the
+     * header/search control. Match declaration navigation's window handoff. */
+    a->search_keyboard=false;a->search_focus=false;a->search_icon_focus=false;
+    nk_sdl_accessibility_keyboard_begin(a->ui);
+    a->file_tab_keyboard_edit=a->completion_focus_edit;
+    nk_window_set_focus(a->ui,"workspace");
 }
 static bool file_tabs_keyboard(app *a,const SDL_KeyboardEvent *key) {
     if(a->project_manager || a->document_pending || a->recovery || a->toolbar_menu)return false;

@@ -29,7 +29,7 @@ static void analysis_context(app *a) {
 static void workspace_context(app *a) {
     /* A context or modal transition ends the pointer transaction before its
      * intermediate dimensions can be captured as that workspace's wish. */
-    if(a->dock_resize_transaction && (a->tab!=a->dock_last_tab || a->project_manager ||
+    if(a->dock_resize_transaction && (a->tab!=a->dock_last_tab || analysis_visible(a)!=a->analysis_layout_active || laboratory_visible(a)!=a->laboratory_active || a->project_manager ||
        a->recovery || a->layout_manager || a->channel_unit_manager || a->workspace_manager ||
        a->run_details_manager || a->dialog_pending))dock_resize_abort(a);
     /* Leave a context before entering its neighbour: neither may capture the

@@ -1,6 +1,6 @@
 static const char *dock_names[] = {"Seitenleiste", "Arbeitsbereich", "Protokoll", "Inspektor"};
 static const char *dock_windows[] = {"sidebar", "workspace", "log", "inspector"};
-static bool workbench_visible(const app *a) {return !a->project_manager && (a->tab==0 || a->tab==8);}
+static bool workbench_visible(const app *a) {return !a->project_manager && (a->tab==0 || a->tab==8 || (a->tab==2 && a->analysis_tab==1));}
 static bool workspace_shell_visible(const app *a) {
     return !a->project_manager && (a->tab==0 || a->tab==1 || a->tab==2 || a->tab==8);
 }

@@ -6,7 +6,16 @@ static size_t workspace_run_count(const app *a) {
 static void select_workspace_tab(app *a, int tab) {
     dock_show(a,PS_DOCK_WORKSPACE);
     a->project_manager = false;
+    if(tab==0 && a->file_tabs_initialized && file_tab_visible(a,a->file_tab_last_active)){
+        file_tab_select(a,a->file_tab_last_active);return;
+    }
+    if(tab==2)a->analysis_tab=0;
     a->tab = tab == 0 && !a->loaded && a->document_count ? 8 : tab;
+}
+static int workspace_active_area(const app *a){
+    if(a->project_manager)return -1;
+    if(workbench_visible(a))return 0;
+    return a->tab==1?1:a->tab==2?2:-1;
 }
 typedef enum {
     TOOLBAR_OPEN, TOOLBAR_ADD_FILE, TOOLBAR_ADD_FOLDER, TOOLBAR_NEW, TOOLBAR_SAVE,
@@ -438,7 +447,7 @@ static void toolbar_view(app *a) {
     nk_layout_row_dynamic(ui, compact?40:30, 3);
     const char *tabs[] = {"Entwickeln", "Simulieren", "Auswerten"};
     for (int i = 0; i < 3; i++) {
-        bool selected = !a->project_manager && (a->tab == i || (a->tab == 8 && i == 0));
+        bool selected = workspace_active_area(a)==i;
         struct nk_rect bounds;
         enum nk_widget_layout_states state = nk_widget(&bounds, ui);
         if(compact) {
@@ -506,7 +515,8 @@ static void workspace_path_view(app *a,float w) {
         dock_input(a,PS_DOCK_WORKSPACE,bounds,previous,true);
         const struct nk_user_font *font=ui->style.font;
         const char *name=a->loaded?project_name(a):a->workspace_open?workspace_name(a->workspace):"Workspace";
-        const char *area=a->tab==1?"Messlabor":a->tab==2?"Auswertung":"Werkbank";
+        int active_area=workspace_active_area(a);
+        const char *area=active_area==1?"Messlabor":active_area==2?"Auswertung":"Werkbank";
         float name_width=fminf(w*.34f,font->width(font->userdata,font->height,name,(int)strlen(name)));
         const struct nk_user_font *area_font=&a->workbench_fonts[3];
         float area_width=ceilf(area_font->width(area_font->userdata,area_font->height,area,(int)strlen(area)))+1;
@@ -526,7 +536,7 @@ static void workspace_path_view(app *a,float w) {
         nk_style_push_flags(ui,&ui->style.button.text_alignment,NK_TEXT_RIGHT);
         nk_style_push_color(ui,&ui->style.button.text_normal,UI_COLOR(accent));
         nk_begin_disabled(ui,!a->loaded);
-        if(nk_button_label(ui,a->tab==1?"Messlauf auswerten →":a->tab==2?"Zum Modell →":"Zur Simulation →"))select_workspace_tab(a,a->tab==1?2:a->tab==2?0:1);
+        if(nk_button_label(ui,active_area==1?"Messlauf auswerten →":active_area==2?"Zum Modell →":"Zur Simulation →"))select_workspace_tab(a,active_area==1?2:active_area==2?0:1);
         nk_end_disabled(ui);nk_style_pop_color(ui);nk_style_pop_flags(ui);nk_style_pop_style_item(ui);
         nk_layout_row_end(ui);
         struct nk_command_buffer *canvas=nk_window_get_canvas(ui);

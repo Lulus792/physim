@@ -28423,7 +28423,9 @@ nk_textedit_undo(struct nk_text_edit *state)
             &s->undo_char[u.char_storage], u.insert_length);
         s->undo_char_point = (short)(s->undo_char_point - u.insert_length);
     }
-    state->cursor = (short)(u.where + u.insert_length);
+    /* Physim sources may exceed 32767 runes. Positions and cursor are ints;
+     * only bounded undo-storage offsets use short. */
+    state->cursor = u.where + u.insert_length;
     /* Physim: a selection can refer to text removed by undo. Collapse it
      * before the widget calculates selection geometry and draws the frame. */
     state->select_start = state->select_end = state->cursor;

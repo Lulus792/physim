@@ -87,3 +87,8 @@ docs/visuals/unified-workspace/inspector-tail-cleanup-2026-10-24.json.gz binary
 docs/visuals/unified-workspace/inspector-channel-2026-10-24/** text eol=lf
 docs/visuals/unified-workspace/inspector-channel-2026-10-24/*.png binary
 docs/visuals/unified-workspace/inspector-channel-2026-10-24/*.gz binary
+
+# Native analysis-editor workbench and large-source undo evidence.
+docs/visuals/unified-workspace/analysis-editor-2026-10-24/** text eol=lf
+docs/visuals/unified-workspace/analysis-editor-2026-10-24/*.png binary
+docs/visuals/unified-workspace/analysis-editor-2026-10-24/*.gz binary

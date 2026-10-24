@@ -23,6 +23,15 @@ included as `licenses/zlib-LICENSE.txt` in the portable package.
 
 ## Nuklear snapshot
 
+Local patch (2026-10-24): undo retains the full integer cursor position instead
+of narrowing it to `short`. A real analysis source exceeds 32767 runes; the
+former narrowing produces a negative cursor and a debug-renderer assertion.
+The extended `editor_typing_undo` test covers ASCII and multibyte buffers at
+32766, 32767, 32768, 34869 and 65535 runes, with a four-byte insertion and
+undo/redo. Bounded undo-storage offsets retain their existing representation.
+Native `analysis_editor` also types and undoes a Unicode character at the end
+of the actual project analysis source, then saves and returns to the report.
+
 Local patch (2026-10-24): rounded-box paths clamp radii to half the shorter
 edge, including oversized capsule radii and nonnegative normalization. Their
 quarter arcs use bounded radius-dependent subdivision instead of the fixed

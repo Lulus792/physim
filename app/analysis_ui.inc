@@ -180,7 +180,7 @@ static void analysis_chrome(app *a,float w,float h) {
         ps_ui_accessibility_label(ui,title,description);
         nk_layout_row_push(ui,code_width);
         nk_begin_disabled(ui,!a->loaded);
-        if(nk_button_label(ui,"Analysecode"))a->analysis_tab=1;
+        if(nk_button_label(ui,"Analysecode"))file_tab_select(a,1);
         nk_end_disabled(ui);
         nk_layout_row_push(ui,action_width);
         char label[64];snprintf(label,sizeof label,a->selected_count>1?"%u Läufe vergleichen":"Analyse starten",a->selected_count);

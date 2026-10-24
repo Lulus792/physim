@@ -14401,6 +14401,33 @@
           ]
         }
       ]
+    },
+    {
+      "name": "analysis_editor",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_analysis_editor.py",
+            "--app",
+            "{physim}",
+            "--root",
+            "{root}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 1200,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
     }
   ]
 }
