@@ -10,12 +10,12 @@ static unsigned laboratory_section_slot(app *a,const enum nk_collapse_states *st
     return 9;
 }
 static void laboratory_section_metadata(app *a,unsigned slot,char text[64]) {
-    const char *fixed[]={"Auswahl","Quellcode","","","Job","Anzeige","","Ansicht",""};
+    const char *fixed[]={"Auswahl","Quellcode","","","Optional","Anzeige","","Ansicht",""};
     snprintf(text,64,"%s",slot<9?fixed[slot]:"");
     if(slot==2)snprintf(text,64,"%u",a->parameters.count);
     if(slot==3 && a->adaptive_steps)snprintf(text,64,"Adaptiv");
     if(slot==6)snprintf(text,64,"%u",a->live_event_count);
-    if(slot==8)snprintf(text,64,"%s",*a->last_run?"Messlauf":"Kein Lauf");
+    if(slot==8)snprintf(text,64,"%s",*a->last_run?".psrun":"Kein Lauf");
 }
 static unsigned laboratory_wrapped_lines(const struct nk_user_font *font,const char *text,float width) {
     int at=0,length=(int)strlen(text);unsigned lines=0;

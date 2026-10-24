@@ -76,3 +76,9 @@ docs/visuals/unified-workspace/run-fields-2026-10-24/*.png binary
 docs/visuals/unified-workspace/run-fields-2026-10-24/*.gz binary
 docs/visuals/unified-workspace/run-fields-2026-10-24/runner-windows.log -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 docs/visuals/unified-workspace/run-fields-cleanup-2026-10-24.json.gz binary
+
+# Frozen native inspector-tail evidence.
+docs/visuals/unified-workspace/inspector-tail-2026-10-24/** text eol=lf
+docs/visuals/unified-workspace/inspector-tail-2026-10-24/*.png binary
+docs/visuals/unified-workspace/inspector-tail-2026-10-24/*.gz binary
+docs/visuals/unified-workspace/inspector-tail-cleanup-2026-10-24.json.gz binary

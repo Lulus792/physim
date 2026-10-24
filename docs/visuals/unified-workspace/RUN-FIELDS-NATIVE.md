@@ -75,3 +75,9 @@ PNG-Rohbilder aus drei früheren erfolgreichen Feldprüfungen entfernt:
 36.621.422 Bytes. Die [Bereinigungsaufzeichnung](run-fields-cleanup-2026-10-24.json.gz)
 enthält Pfade, Größen und Hashes. Fehlgeschlagene Läufe, Original-Gegenfälle,
 alle 302 letzten Aufnahmen, Laufdaten, SDKs und Debug-Symbole bleiben erhalten.
+
+## Nachfolgender Inspektorabgleich
+
+Der anschließende [Abgleich von Laufgrenzen, Ereignissen und Aufzeichnung](INSPECTOR-TAIL-NATIVE.md)
+setzt die in diesem Bericht noch offenen drei Bereiche mit gesonderten nativen
+Belegen fort. Die vollständige Oberfläche einschließlich F1 bleibt weiterhin offen.

@@ -270,3 +270,10 @@ Baumabschluss und erhält reale Modell-/Laufbindungen. 302 native Aufnahmen
 einschließlich der zusätzlichen Windows-Kopfprüfung sind nachvollziehbar
 eingefroren. Verbleibende Inspektorbereiche und die vollständige Oberfläche
 einschließlich F1 bleiben offen.
+
+Der folgende [Abgleich der übrigen Inspektorinhalte](INSPECTOR-TAIL-NATIVE.md)
+übernimmt Laufgrenzen, Ereignisse und Aufzeichnung. Er beseitigt verschachtelte
+Warnungsfenster und verwendet einen gemeinsamen Grenzeditor auch beim
+Ansichtswechsel. Leerzustände und reale Prozess-/Dateibindungen sind nativ
+geprüft. Die Messkanal-/Einheitenansicht und die vollständige Oberfläche
+einschließlich F1 bleiben weiter offen.

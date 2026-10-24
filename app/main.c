@@ -565,6 +565,10 @@ typedef struct {
     double runner_wall_seconds, batch_timeout;
     enum nk_collapse_states limits_disclosure;
     struct nk_rect limit_bounds[2];
+    char runner_limit_text[2][64];double runner_limit_shown[2];bool runner_limit_ready[2],runner_limit_invalid[2];
+    struct nk_rect laboratory_limit_cards[2],laboratory_limit_labels[2];
+    struct nk_rect laboratory_event_cards[8],laboratory_event_headings[8],laboratory_event_messages[8],laboratory_log_button;
+    struct nk_rect laboratory_recording_bounds,laboratory_recording_name,laboratory_recording_meta,laboratory_recording_dot;
     SDL_Thread *batch_thread;
     SDL_AtomicInt batch_done, batch_cancel, batch_completed, batch_active;
     ps_batch_options batch_options;
@@ -1087,6 +1091,11 @@ static bool save_project_settings(app *a) {
     a->project_format_version=verified.format_version;
     memcpy(a->project_id,verified.project_id,33);memcpy(a->experiment_id,verified.experiment_id,33);return true;
 }
+static bool process_settings_valid(app *a){
+    if(a->runner_limit_invalid[0] || a->runner_memory_mib<0 || a->runner_memory_mib>16384){a->limits_disclosure=NK_MAXIMIZED;status(a,"Speicherlimit: ganze Zahl von 0 bis 16384 MiB eingeben.");return false;}
+    if(a->runner_limit_invalid[1] || !isfinite(a->runner_wall_seconds) || a->runner_wall_seconds<0 || a->runner_wall_seconds>86400){a->limits_disclosure=NK_MAXIMIZED;status(a,"Zeitlimit: endliche Zahl von 0 bis 86400 s eingeben.");return false;}
+    return true;
+}
 static bool simulation_settings_valid(app *a) {
     uint64_t seed;
     ps_step_breakpoints breakpoints;
@@ -1561,6 +1570,7 @@ static void build_project(app *a) {
         return;
     if (!a->loaded || !idle(a))
         return;
+    if(!process_settings_valid(a))return;
     if (!documents_save_all(a)) return;
     save_project(a);
     if (a->dirty || a->analysis_dirty || a->project_settings_dirty || a->project_definitions_dirty)
@@ -1681,6 +1691,7 @@ static bool start_run_mode(app *a, bool paused) {
     if(a->analysis_only){status(a,"Analyseprojekte werten gespeicherte Messläufe aus. Zur Auswertung wechseln.");return false;}
     if (a->recovery)
         return false;
+    if(!process_settings_valid(a))return false;
     if (!simulation_settings_valid(a)) return false;
     if (a->project_settings_dirty || a->project_definitions_dirty)
         save_project(a);
@@ -1950,6 +1961,7 @@ static void request_report(app *a) {
 static void analyze(app *a, bool csv) {
     if (a->recovery)
         return;
+    if(!process_settings_valid(a))return;
     if (!csv && (!a->built || a->analysis_dirty)) {
         status(a, "Analysecode zuerst speichern und bauen.");
         return;
@@ -3572,6 +3584,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "measurement_design_tests.inc"
 #include "curve_design_tests.inc"
 #include "run_fields_tests.inc"
+#include "inspector_tail_tests.inc"
 #include "panel_window_tests.inc"
 #include "model_edit_tests.inc"
 #include "api_reference_tests.inc"
@@ -4355,7 +4368,7 @@ int main(int argc, char **argv) {
             /* The deliberate 80 ms frame delay also runs on hosted software GL.
              * Keep its bounded keyboard assertions; allow their extra wall time. */
             if (ps_clock() - test_started >
-                ((!strcmp(argv[3],"transport-design") || !strcmp(argv[3],"timeline-design") || !strcmp(argv[3],"camera-design") || !strcmp(argv[3],"scene-frame-design") || !strcmp(argv[3],"measurement-design") || !strcmp(argv[3],"curve-design") || !strcmp(argv[3],"run-fields-design"))?180:!strncmp(argv[3],"file-tabs-design",16)?60:!strncmp(argv[3],"component-",10)?60:!strncmp(argv[3],"comparison-",11)?120:!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
+                ((!strcmp(argv[3],"transport-design") || !strcmp(argv[3],"timeline-design") || !strcmp(argv[3],"camera-design") || !strcmp(argv[3],"scene-frame-design") || !strcmp(argv[3],"measurement-design") || !strcmp(argv[3],"curve-design") || !strcmp(argv[3],"run-fields-design") || !strncmp(argv[3],"inspector-tail-",15))?180:!strncmp(argv[3],"file-tabs-design",16)?60:!strncmp(argv[3],"component-",10)?60:!strncmp(argv[3],"comparison-",11)?120:!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
                   !strncmp(argv[3], "isolation-", 10) || !strncmp(argv[3], "breakpoints-", 12) || !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"object-design",13) || !strcmp(argv[3],"tree-design") || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || (!strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"pendulum-medium-",16)) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strncmp(argv[3],"logging-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15))) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
@@ -5442,6 +5455,7 @@ int main(int argc, char **argv) {
         if(workspace_state_test && !strcmp(argv[3],"measurement-design"))measurement_design_draw(a);
         if(workspace_state_test && !strcmp(argv[3],"curve-design"))curve_design_draw(a);
         if(workspace_state_test && !strcmp(argv[3],"run-fields-design"))run_fields_draw(a);
+        if(workspace_state_test && !strncmp(argv[3],"inspector-tail-",15))inspector_tail_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"component-",10)) {
             component_details_draw(a,argv[3]);if(component_details.failed){exit_code=1;a->quitting=true;}
         }

@@ -14347,6 +14347,33 @@
           ]
         }
       ]
+    },
+    {
+      "name": "inspector_tail",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_inspector_tail.py",
+            "--app",
+            "{physim}",
+            "--root",
+            "{root}",
+            "--work",
+            "{work}"
+          ],
+          "timeout": 420,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
     }
   ]
 }

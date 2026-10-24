@@ -344,8 +344,10 @@ static void live_event_text(app *a,const ps_log_record *record) {
         }while(at<used);
     }
 }
+#include "laboratory_tail.inc"
 static void live_events_view(app *a) {
     struct nk_context *ui=a->ui;
+    if(laboratory_visible(a)){laboratory_events(a);return;}
     a->live_warning_bounds=nk_rect(0,0,0,0);
     if(a->live_warning_valid) {
         nk_layout_row_dynamic(ui,100,1);a->live_warning_bounds=nk_widget_bounds(ui);
@@ -717,31 +719,7 @@ static void sidebar_panel(app *a) {
 #include "laboratory_ui.inc"
 #include "laboratory_sidebar.inc"
 #include "model_edit_ui.inc"
-static void run_limits_view(app *a) {
-    struct nk_context *ui=a->ui;
-            if (workspace_section_begin(a,"Laufgrenzen",&a->limits_disclosure)) {
-                nk_begin_disabled(ui, !idle(a));
-                nk_layout_row_dynamic(ui, 26, 1);
-                nk_label(ui, "Speicherlimit in MiB", NK_TEXT_LEFT);
-                nk_layout_row_dynamic(ui,laboratory_visible(a)?46*a->preferences.ui_size/16.f:32,1);
-                a->limit_bounds[0] = nk_widget_bounds(ui);
-                if(laboratory_visible(a))nk_style_push_font(ui,&a->laboratory_value_font);
-                nk_property_int(ui, "#Speicher", 0, &a->runner_memory_mib, 16384, 128, 16);
-                if(laboratory_visible(a))nk_style_pop_font(ui);
-                nk_layout_row_dynamic(ui, 26, 1);
-                nk_label(ui, "Zeitlimit in Sekunden", NK_TEXT_LEFT);
-                nk_layout_row_dynamic(ui,laboratory_visible(a)?46*a->preferences.ui_size/16.f:32,1);
-                a->limit_bounds[1] = nk_widget_bounds(ui);
-                if(laboratory_visible(a))nk_style_push_font(ui,&a->laboratory_value_font);
-                nk_property_double(ui, "#Zeit", 0, &a->runner_wall_seconds, 86400, 30, 1);
-                if(laboratory_visible(a))nk_style_pop_font(ui);
-                nk_end_disabled(ui);
-                nk_layout_row_dynamic(ui, 98, 1);
-                nk_label_wrap(ui, "0 = ohne Grenze. Für neue Simulationen und Auswertungen; "
-                                  "Zeit zählt inklusive Pausen. Serien haben ein eigenes Zeitlimit.");
-                workspace_section_end(a);
-            }
-}
+static void run_limits_view(app *a) { laboratory_limits(a); }
 static void inspector_panel(app *a) {
     struct nk_context *ui=a->ui;
     memset(a->workbench_api_text_bounds,0,sizeof a->workbench_api_text_bounds);
@@ -782,10 +760,7 @@ static void inspector_panel(app *a) {
                      * error/build banner must not pin away all camera/settings
                      * space in a small window. Its actions scroll with the fields. */
                     model_edit_banner(a);
-                    if(a->live_warning_valid){
-                        nk_layout_row_dynamic(ui,fminf(100,fmaxf(32,body*.35f)),1);a->live_warning_bounds=nk_widget_bounds(ui);
-                        if(nk_group_begin(ui,"laboratory-warning",NK_WINDOW_BORDER)){live_event_text(a,&a->live_warning);nk_group_end(ui);}
-                    }
+                    laboratory_tail_begin(a);laboratory_warning(a);
                     if(a->runner.running && ps_clock()-a->heartbeat>3)laboratory_note(a,"Keine Runner-Antwort. Stoppen bleibt oben erreichbar.");
                     laboratory_object(a);
                     model_edit_fields(a);
@@ -801,8 +776,7 @@ static void inspector_panel(app *a) {
                     if(workspace_section_begin(a,"Ereignisse",&a->laboratory_groups[2])){live_events_view(a);workspace_section_end(a);}
                     if(workspace_section_begin(a,"Kamera und Darstellung",&a->laboratory_groups[3])){scene_camera_controls_view(a,false);workspace_section_end(a);}
                     if(workspace_section_begin(a,"Aufzeichnung",&a->laboratory_groups[4])){
-                        laboratory_note(a,*a->last_run?a->last_run:"Noch kein aufgezeichneter Lauf.");
-                        laboratory_note(a,a->timeline_scenes?"Messwerte und Szenenzustände":"Messwerte; keine aufgezeichnete Szene verfügbar");workspace_section_end(a);
+                        laboratory_recording(a);workspace_section_end(a);
                     }
                     inspector_layout->bounds=saved_bounds;inspector_layout->clip=saved_clip;
                     inspector_layout->max_x=fminf(inspector_layout->max_x,saved_bounds.x+saved_bounds.w);

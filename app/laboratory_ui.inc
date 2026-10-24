@@ -221,7 +221,9 @@ static void laboratory_chrome(app *a,float w,float h) {
     nk_style_push_font(ui,&a->workspace_status_font);
     nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(12,5));
     if(laboratory_begin(a,windows[3],nk_rect(0,h-WORKSPACE_STATUS_HEIGHT,w,WORKSPACE_STATUS_HEIGHT),NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BACKGROUND)) {
-        nk_layout_row_dynamic(ui,18,1);nk_label_colored(ui,a->status,NK_TEXT_LEFT,a->live_warning_valid?UI_COLOR(error):muted());
+        char status_text[sizeof a->status+32];
+        if(a->live_warning_valid)snprintf(status_text,sizeof status_text,"%s · %s",live_event_level(a->live_warning.level),a->status);else snprintf(status_text,sizeof status_text,"%s",a->status);
+        nk_layout_row_dynamic(ui,18,1);nk_label_colored(ui,status_text,NK_TEXT_LEFT,a->live_warning_valid?UI_COLOR(error):muted());
         workspace_rule(nk_window_get_canvas(ui),nk_rect(0,h-WORKSPACE_STATUS_HEIGHT,w,1));
     }nk_end(ui);
     nk_style_pop_vec2(ui);nk_style_pop_font(ui);nk_style_pop_style_item(ui);

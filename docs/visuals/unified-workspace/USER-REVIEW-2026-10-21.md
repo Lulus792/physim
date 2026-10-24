@@ -148,3 +148,9 @@ Laufparameter und Laufeinstellungen einschließlich Standardknöpfen, Einheiten,
 Zahlendarstellung und Scrollfluss. Native Bedien- und Datenprüfungen sowie die
 zusätzliche Windows-Kopfprüfung bestehen. Weitere sichtbare Altbedienelemente
 in Laufgrenzen, Ereignissen, Aufzeichnung und anderen Bereichen bleiben offen.
+
+Der anschließende [Abgleich von Laufgrenzen, Ereignissen und Aufzeichnung](INSPECTOR-TAIL-NATIVE.md)
+korrigiert diese drei Inspektorbereiche einschließlich ihrer Leerzustände,
+Warnungserkennbarkeit, Grenzvalidierung und Tastaturbedienung. Ursprüngliche
+Gegenbilder und 128 geprüfte native Aufnahmen bleiben nachvollziehbar erhalten.
+Die übrigen Nutzerbefunde und der Gesamtauftrag sind damit nicht abgeschlossen.
