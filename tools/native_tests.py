@@ -185,8 +185,9 @@ def catalog():
         Case("preferences", ("tests/test_preferences.c", "app/preferences.c", "app/docking.c"),
              arguments=("{work}",), app=True),
         Case("channel_units", ("tests/test_channel_units.c", "app/channel_units.c"), arguments=("{work}",), app=True),
+        # Over 4,500 file-mutation cycles also run on external WSL/NTFS mounts.
         Case("layout_catalog", ("tests/test_layout_catalog.c", "app/layout_catalog.c", "app/docking.c"),
-             arguments=("{work}",), app=True),
+             arguments=("{work}",), app=True, timeout=180),
         Case("workspace_state", ("tests/test_workspace_state.c", "app/workspace_state.c", "app/autosave.c"),
              arguments=("{work}",), app=True),
         Case("workspace_catalog", ("tests/test_workspace_catalog.c", "app/workspace_catalog.c", "app/workspace_state.c", "app/autosave.c"),
