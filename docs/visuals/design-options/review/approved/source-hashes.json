@@ -1,0 +1,22 @@
+[
+  {
+    "path": "docs/visuals/design-options/index.html",
+    "sha256": "6481cd7f4ed6727525978351c498cac12d9f7e838c1dbae0fab7c63de16a034f"
+  },
+  {
+    "path": "docs/visuals/design-options/selection.js",
+    "sha256": "8cd2abf1f6315ad2059ed33fec417ded7c6b1689dd841a8995d36329a2505fb0"
+  },
+  {
+    "path": "docs/visuals/design-options/options.js",
+    "sha256": "5a88b8f78b814f0f90d7c213de016c22efcab4deae1bd87d580b9ca2505475a8"
+  },
+  {
+    "path": "docs/visuals/design-options/dialogs.js",
+    "sha256": "df7958846adf0f1c751c3481106eaed56af7f38e3129025e7284834ed53554b6"
+  },
+  {
+    "path": "tools/check_approved_design.cjs",
+    "sha256": "db51b522586f70e57c616da4b0dc6a6ec764b3ea04b1ca046a032f31bf968abe"
+  }
+]

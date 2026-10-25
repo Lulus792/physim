@@ -13,7 +13,8 @@ auflösen. Nicht auf einen historischen nativen Zwischenstand zurücksetzen.
 
 | Thema | Maßgebliche Quelle |
 | --- | --- |
-| Neuer Protokollentwurf | [PROTOCOL-DESIGN.md](PROTOCOL-DESIGN.md), [bedienbare Beispiele](index.html?example=protocol#develop); noch keine ausdrückliche Designabnahme |
+| Freigegebene Ergänzungen / Leeransicht | [APPROVED.md](../design-options/APPROVED.md), [ADR 011](../../decisions/011-selected-workspace-additions.md): Protokoll C, Szene/Auswertung/Läufe A, Projekt B, Explorer A, Leeransicht bestätigt |
+| Protokoll | [C als maßgebliche Anordnung](../design-options/index.html?approved=1&topic=protocol), [gemeinsamer Verhaltensvertrag](PROTOCOL-DESIGN.md) |
 | Fehlende Demo-Inhalte | [CONTENT-INVENTORY.md](CONTENT-INVENTORY.md): belegte native Inhalte, Layoutfolgen und ausdrücklich neue Vorschläge |
 | Zusammenhängende Oberfläche | [index.html](index.html), [README.md](README.md), sechs PNGs im selben Ordner |
 | Gemeinsame Trenner | [RESIZING.md](RESIZING.md), [gemeinsamer Interaktionskern](../shared/resize.js), [Darstellung](../shared/resize.css) |

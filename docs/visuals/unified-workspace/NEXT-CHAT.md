@@ -1,32 +1,25 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
-**Neue Auswahlphase vom 25. Oktober 2026:** Der Nutzer verlangt mehrere
-**getrennte** Entwürfe für Protokoll/Fehler, die fehlenden Inhalte, einen
-„Neues Projekt“-Dialog und einen eigenen Datei-Explorer. Die
-[separate Galerie](../design-options/index.html) und ihr
-[Entscheidungsvertrag](../design-options/README.md) sind ausschließlich zum
-Vergleichen da. **Vor einer ausdrücklichen Auswahl keine dieser Varianten in
-das aktuelle Design oder die native Anwendung übernehmen.** Auch der
-Protokollentwurf vom 24. Oktober ist keine erteilte Designfreigabe. Vorhandene
-Browser-/native Arbeit bleibt erhalten. Die frühere Grafikexport-Freigabe gilt
-weiter; sie ist keine pauschale Freigabe der neuen Dialoge oder des Explorers.
-Zusätzlich ist die [vollständige Leeransicht](../design-options/index.html?topic=empty&standalone=1)
-des aktuellen Layouts vorbereitet: alle drei Arbeitsbereiche, kein geladenes
-Projekt und entsprechend deaktivierte Aktionen. Auch sie ist eine getrennte
-Browserreferenz zur Beurteilung, keine native Abnahme.
+**Verbindliche Auswahl vom 25. Oktober 2026:** Der Nutzer hat entschieden:
+**Leeransicht bestätigt; Protokoll C; Szene & Werte A; Auswertung A;
+Läufe/Serien A; Neues Projekt B; Datei-Explorer A.** Die Auswahlphase ist beendet;
+die vorherige Übernahmesperre gilt für diese Teile nicht mehr. Mit der bestehenden
+nativen Arbeit fortfahren und diese konkrete Kombination umsetzen.
+[ADR 011](../../decisions/011-selected-workspace-additions.md),
+[APPROVED.md](../design-options/APPROVED.md) und die
+[gemeinsame ausgewählte Referenz](../design-options/index.html?approved=1&topic=empty)
+sind maßgeblich. Keine neue Variantenentscheidung vorschalten.
 
-**Ergänzung vom 24. Oktober 2026:** Der Nutzer hat zusätzlich ein Design für
-Fehler/Warnungen/Protokoll und eine Liste fehlender gestaltungsrelevanter Inhalte
-beauftragt. Die neue [bedienbare Protokollreferenz](index.html?example=protocol#develop)
-und [Spezifikation](PROTOCOL-DESIGN.md) ergänzen den Entwurf; eine ausdrückliche
-Abnahme dieses neuen Entwurfs ist noch nicht erfolgt. Das
-[Inhaltsinventar](CONTENT-INVENTORY.md) ist beim Fortsetzen mitzuprüfen: besonders
-echte Kraftpfeile und Szenentexte, weitere Objekttypen/Hierarchien, Parameter,
-Messkanäle, Modellmeldungen und variable Analyseausgaben. Vorhandene native
-Funktionen übernehmen; fehlende Demoabdeckung nicht mit fehlender nativer
-Implementierung verwechseln. Kräfte sind nicht automatisch als Newtonwerte aus
-beliebigen `PS_ARROW`-Geometrien ableitbar. Der neue Protokollentwurf bündelt
-Meldungen bereichsübergreifend im vorhandenen Log-Dock mit gemeinsamem Resizing.
+Unteraufrufe behalten ihre eigene Auswahl: **Protokoll C → Projektdialog B →
+Explorer A**. Die [vollständige Leeransicht](../design-options/index.html?approved=1&topic=empty&standalone=1)
+zeigt alle drei Bereiche ohne Projekt mit passenden deaktivierten Aktionen;
+kein Demoexperiment automatisch laden. Designfreigabe und native Abnahme trennen.
+
+Das [Inhaltsinventar](CONTENT-INVENTORY.md) bleibt mitzuprüfen: Kräfte, Texte,
+Objekttypen/Hierarchie, Parameter, Messkanäle, Modellmeldungen und variable
+Analyseausgaben. Bestehende native Funktionen übernehmen. Keine Newtonwerte aus
+beliebigen Pfeilgeometrien erfinden. Für das Protokoll ersetzt C die Anordnung
+des Entwurfs vom 24. Oktober; dessen gemeinsamer Verhaltensvertrag bleibt erhalten.
 
 **Verbindliche Nutzerfreigabe vom 20. Oktober 2026:** Der Grafikexport aus
 [EXPORT-EXAMPLE.md](EXPORT-EXAMPLE.md) gehört jetzt zum fertigen Design und ist

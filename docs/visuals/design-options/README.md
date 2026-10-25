@@ -1,14 +1,18 @@
 # Physim – getrennte Designvarianten
 
-Stand: **25. Oktober 2026. Status: Auswahl offen.**
+Stand: **25. Oktober 2026. Status: Auswahl vom Nutzer freigegeben.**
 
 Der Nutzer hat mehrere voneinander getrennte Designs für Protokoll und fehlende
 Inhalte, einen Dialog zum Erstellen eines Projekts und einen eigenen Datei-Explorer
 beauftragt. Zusätzlich soll eine vollständige Leeransicht des derzeit umgesetzten
-Layouts entstehen. **Keine dieser neuen Varianten ist zur Übernahme freigegeben.**
+Layouts entstehen. Anschließend hat er die konkrete Kombination ausgewählt:
+**Leeransicht bestätigt; Protokoll C; Szene & Werte A; Auswertung A;
+Läufe/Serien A; Neues Projekt B; Datei-Explorer A.**
+[Verbindliche Spezifikation](APPROVED.md) · [ADR 011](../../decisions/011-selected-workspace-additions.md).
 
-[Galerie öffnen](index.html) ·
-[Vollständige Leeransicht ohne Galerie](index.html?topic=empty&standalone=1)
+[Gemeinsame freigegebene Referenz](index.html?approved=1&topic=empty) ·
+[Vollständige freigegebene Leeransicht](index.html?approved=1&topic=empty&standalone=1) ·
+[Alle Varianten vergleichen](index.html)
 
 Die Dateien funktionieren direkt lokal ohne Server, Installation, externe Fonts
 oder Netzwerkressourcen. Der lokale Vorschau-Server kann dieselbe Galerie unter
@@ -35,9 +39,11 @@ Es gibt **18 neue Varianten**, jeweils drei für diese sechs Themen:
 | Neues Projekt als Popup | [Vorschau + Formular](index.html?topic=project&variant=a) | [Drei Schritte](index.html?topic=project&variant=b) | [Vorlagen + Konfiguration](index.html?topic=project&variant=c) |
 | Eigener Datei-Explorer | [Liste + Vorschau](index.html?topic=files&variant=a) | [Kacheln + Detail](index.html?topic=files&variant=b) | [Spaltennavigation](index.html?topic=files&variant=c) |
 
-Eine spätere Auswahl kann pro Thema unterschiedlich ausfallen, etwa Protokoll C,
-Projektdialog A und Explorer B. Die Galerie hat bewusst keine Aktion zum
-„Übernehmen“ und schreibt keine Freigabe, Konfiguration oder Auswahl in die App.
+Die ausgewählte Kombination ist jetzt in [selection.js](selection.js) festgehalten.
+Die Referenz mit `approved=1` verwendet pro Thema automatisch die freigegebene
+Richtung. Sie öffnet den Projektdialog stets als B und den darin verwendeten
+Explorer stets als A. Die Vergleichsgalerie bleibt erhalten; ihre Bedienelemente
+ändern die dokumentierte Freigabe nicht.
 
 ## Vollständiger Arbeitsraum ohne Projekt
 
@@ -56,7 +62,8 @@ bisherige gemeinsame Designsprache für den leeren Start zusammengeführt.
   letzten Workspace. Der letzte Workspace ist ausdrücklich ein Beispielort.
 - Bereichsreiter unterstützen Pfeiltasten/Pos1/Ende. Seitenbereiche lassen sich
   umschalten. Menüs sind tastaturbedienbar; es gibt keine aktive Buildaktion.
-- „Neues Projekt“ und „Ordner öffnen“ zeigen die **neuen separaten Kandidaten**.
+- „Neues Projekt“ und „Ordner öffnen“ zeigen in der freigegebenen Referenz
+  **Projekt B und Explorer A**.
   Auch nach einer Projektvorschau bleibt die Leeransicht leer.
 
 Die Palette und Grundmaße stammen aus `unified-workspace/workspace.css`, die
@@ -91,21 +98,22 @@ kein Screenshot einer abgenommenen nativen Leeransicht und kein Pixelgleichheits
 
 ## Isolation und Freigabe
 
-Diese Galerie lädt ausschließlich `options.css`, `data.js`, `options.js` und
+Diese Referenz lädt ausschließlich `options.css`, `data.js`, `selection.js`, `options.js` und
 `dialogs.js` aus ihrem eigenen Ordner. Sie importiert keine Bridge, keinen
 Iframe und keinen Zustand der aktuellen gemeinsamen Vorschau. Native Quellen
 werden durch diese Designarbeit nicht verändert. Keine echten Datei-, Build-,
 Simulations-, Import- oder Erstellungsaufträge; Daten verschwinden beim Neuladen.
 
-Die aktuelle Browseroberfläche wurde nicht umgebaut. In den bestehenden
-Übergabedokumenten steht nur ein Hinweis auf die getrennte Auswahlphase.
-Der bisherige Protokollentwurf vom 24. Oktober bleibt ein unfreigegebener
-Vergleichsstand. Der am 20. Oktober bereits freigegebene Grafikexport bleibt
-verbindlich; der Link im Beispielbericht öffnet seine vorhandene Referenz separat.
+Die bestehende gemeinsame Vorschau bleibt als bisheriger Stand erhalten.
+Die neue kombinierte Referenz und [APPROVED.md](APPROVED.md) sind für die
+ausgewählten Ergänzungen maßgeblich. Der frühere Protokollentwurf vom
+24. Oktober wird bei der Anordnung durch **C** ersetzt. Seine gemeinsamen
+Verhaltensanforderungen gelten weiter. Der bereits freigegebene Grafikexport
+bleibt verbindlich und wird separat geöffnet.
 
-Der nächste umsetzende Chat muss zuerst die **ausdrückliche Auswahl des Nutzers**
-lesen. Dieses Dokument oder ein bestandener Browsertest erteilen keine Designfreigabe.
-Die bestehende native Umsetzung anderer freigegebener Teile darf weitergehen.
+Die direkte Nutzerauswahl ist die Grundlage für die weitere native Umsetzung.
+Eine erneute Variantenfreigabe ist für die ausgewählten Teile nicht nötig.
+Browserprüfungen bleiben von nativer Funktions- und Plattformabnahme getrennt.
 
 ## Inhaltsabgleich und Grenzen
 

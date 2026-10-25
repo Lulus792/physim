@@ -1,0 +1,182 @@
+{
+  "date": "2026-10-25T13:13:35.496Z",
+  "platform": "win32",
+  "browser": "156.0.4314.42",
+  "layouts": [
+    {
+      "topic": "empty",
+      "variant": "a",
+      "width": 1440,
+      "theme": "dark"
+    },
+    {
+      "topic": "empty",
+      "variant": "a",
+      "width": 1440,
+      "theme": "light"
+    },
+    {
+      "topic": "empty",
+      "variant": "a",
+      "width": 500,
+      "theme": "dark"
+    },
+    {
+      "topic": "empty",
+      "variant": "a",
+      "width": 500,
+      "theme": "light"
+    },
+    {
+      "topic": "protocol",
+      "variant": "c",
+      "width": 1440,
+      "theme": "dark"
+    },
+    {
+      "topic": "protocol",
+      "variant": "c",
+      "width": 1440,
+      "theme": "light"
+    },
+    {
+      "topic": "protocol",
+      "variant": "c",
+      "width": 500,
+      "theme": "dark"
+    },
+    {
+      "topic": "protocol",
+      "variant": "c",
+      "width": 500,
+      "theme": "light"
+    },
+    {
+      "topic": "simulation",
+      "variant": "a",
+      "width": 1440,
+      "theme": "dark"
+    },
+    {
+      "topic": "simulation",
+      "variant": "a",
+      "width": 1440,
+      "theme": "light"
+    },
+    {
+      "topic": "simulation",
+      "variant": "a",
+      "width": 500,
+      "theme": "dark"
+    },
+    {
+      "topic": "simulation",
+      "variant": "a",
+      "width": 500,
+      "theme": "light"
+    },
+    {
+      "topic": "analysis",
+      "variant": "a",
+      "width": 1440,
+      "theme": "dark"
+    },
+    {
+      "topic": "analysis",
+      "variant": "a",
+      "width": 1440,
+      "theme": "light"
+    },
+    {
+      "topic": "analysis",
+      "variant": "a",
+      "width": 500,
+      "theme": "dark"
+    },
+    {
+      "topic": "analysis",
+      "variant": "a",
+      "width": 500,
+      "theme": "light"
+    },
+    {
+      "topic": "runs",
+      "variant": "a",
+      "width": 1440,
+      "theme": "dark"
+    },
+    {
+      "topic": "runs",
+      "variant": "a",
+      "width": 1440,
+      "theme": "light"
+    },
+    {
+      "topic": "runs",
+      "variant": "a",
+      "width": 500,
+      "theme": "dark"
+    },
+    {
+      "topic": "runs",
+      "variant": "a",
+      "width": 500,
+      "theme": "light"
+    },
+    {
+      "topic": "project",
+      "variant": "b",
+      "width": 1440,
+      "theme": "dark"
+    },
+    {
+      "topic": "project",
+      "variant": "b",
+      "width": 1440,
+      "theme": "light"
+    },
+    {
+      "topic": "project",
+      "variant": "b",
+      "width": 500,
+      "theme": "dark"
+    },
+    {
+      "topic": "project",
+      "variant": "b",
+      "width": 500,
+      "theme": "light"
+    },
+    {
+      "topic": "files",
+      "variant": "a",
+      "width": 1440,
+      "theme": "dark"
+    },
+    {
+      "topic": "files",
+      "variant": "a",
+      "width": 1440,
+      "theme": "light"
+    },
+    {
+      "topic": "files",
+      "variant": "a",
+      "width": 500,
+      "theme": "dark"
+    },
+    {
+      "topic": "files",
+      "variant": "a",
+      "width": 500,
+      "theme": "light"
+    }
+  ],
+  "checks": [
+    "28 selected topic/theme/width layouts, contradictory variant URL ignored, selected geometry, preserved URL and reload",
+    "Protocol C / scene A / empty → project B → explorer A, folder choice, preserved inputs/back/submit and unchanged parent layout",
+    "Historical comparison cannot overwrite the frozen decision; approved standalone remains empty"
+  ],
+  "errors": [],
+  "passed": true
+}

@@ -1,6 +1,6 @@
 # Abdeckung der fehlenden Inhalte
 
-25. Oktober 2026 · getrennte Entwürfe, keine Designfreigabe.
+25. Oktober 2026 · [konkrete Auswahl freigegeben](APPROVED.md), native Abnahme offen.
 Grundlage ist das [Inhaltsinventar vom 24. Oktober](../unified-workspace/CONTENT-INVENTORY.md).
 Die Varianten stellen Inhalt und Interaktion dar; sie implementieren keine
 fehlenden nativen Fachfunktionen neu.
@@ -43,17 +43,18 @@ fehlenden nativen Fachfunktionen neu.
   ohne geladenes Projekt; eigener Standalone-Zugang, kein automatisch erzeugtes
   Demoexperiment. Ein leerer Start bleibt auch nach dem Schließen der Kandidaten leer.
 
-## Offene Auswahl – keine automatische Umsetzung
+## Freigegebene Auswahl
 
 | Thema | Freigegebene neue Variante |
 | --- | --- |
-| Protokoll | Noch keine |
-| Szenen-/Wertedarstellung | Noch keine |
-| Variable Auswertungsinhalte | Noch keine |
-| Läufe und Serien | Noch keine |
-| Projekt-Popup | Noch keine |
-| Custom Explorer | Noch keine |
-| Vollständige Leeransicht | Zur Beurteilung vorbereitet; keine neue native Abnahme |
+| Protokoll | C · Navigator |
+| Szenen-/Wertedarstellung | A · Werkbank |
+| Variable Auswertungsinhalte | A · Werkbank |
+| Läufe und Serien | A · Werkbank |
+| Projekt-Popup | B · Fokus / drei Schritte |
+| Custom Explorer | A · Werkbank |
+| Vollständige Leeransicht | Vom Nutzer bestätigt; native Abnahme offen |
 
-Die Einzelthemen dürfen unterschiedlich ausgewählt werden. Erst eine konkrete
-Nutzerentscheidung ist die Grundlage für Änderungen am aktuellen Design.
+Diese direkte Nutzerentscheidung ist die Grundlage für die weitere Umsetzung.
+Die getrennten Varianten bleiben Vergleichsquellen; die ausgewählte Kombination
+ist [gemeinsam aufrufbar](index.html?approved=1&topic=empty).

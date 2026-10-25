@@ -1,9 +1,12 @@
 # Entwurf: ein gemeinsames Protokoll
 
-**25. Oktober 2026 – Auswahl offen:** Es gibt jetzt mehrere
-[getrennte neue Designvarianten](../design-options/index.html?topic=protocol).
-Der Nutzer möchte zuerst vergleichen. Weder diesen bisherigen Entwurf noch
-eine neue Variante ohne seine ausdrückliche Auswahl nativ übernehmen.
+**25. Oktober 2026 – Protokoll C freigegeben:** Der Nutzer hat aus den neuen
+Varianten ausdrücklich **C · Navigator** ausgewählt.
+[Verbindliche Auswahl](../design-options/APPROVED.md) ·
+[ausgewählte Referenz](../design-options/index.html?approved=1&topic=protocol).
+Die Anordnung dieses älteren Entwurfs wird durch C ersetzt; die folgenden
+gemeinsamen Anforderungen an Meldungen, Filter, Originaltexte und Daten gelten
+weiter. Keine erneute Variantenfreigabe vor der nativen Umsetzung erforderlich.
 
 Stand: 24. Oktober 2026. Neuer Nutzerauftrag: Fehler, Warnungen und weitere
 Protokollzustände gestalten. **Interaktive Designreferenz; noch keine native

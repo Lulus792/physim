@@ -1,0 +1,607 @@
+{
+  "date": "2026-10-25T13:12:06.849Z",
+  "platform": "win32",
+  "browser": "156.0.4314.42",
+  "checks": [
+    "72 layouts: six topics × three structural variants × two themes × 1440/500 px; all three project dialogs and their variants render separately",
+    "Each protocol variant: intersected filters/search, honest missing/source context, Unicode/raw data, filtered actual TXT download, empty search, clipboard denial and 68-row flood sample",
+    "Three simulation variants: explicit force scales/selection, label visibility, parameter bounds, Verlet/drag dependency, adaptive bounds, 11 channel layouts, vanished selection recovery",
+    "Variable reports: stable source snapshot/staleness, missing channels, recovered runs, two figures; series partial failure, cancellation, long timeline and startup/timeout/limit/recovery states",
+    "Three custom explorers: actual button/double-click folder navigation, preview/code, recovered-run metadata, search, hidden entries, in-memory folder creation and denied state",
+    "Three project popups: Escape, duplicate-name error, nested custom folder picker/cancel/selection, separate language choices, wizard back state and success without disk writes; variant switch preserves inputs, analysis-only fields, modal keyboard containment and denied location",
+    "Complete current-language empty workspace: 12 area/theme/width states, standalone chrome, keyboard area navigation, zero scene/data and disabled unavailable actions; new-project popup does not load a fake project",
+    "200% root text in short project dialog with reachable submit, forced colors/reduced-motion keyboard focus and separate 2x-density empty-workspace capture"
+  ],
+  "layouts": [
+    {
+      "topic": "protocol",
+      "variant": "a",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "protocol",
+      "variant": "a",
+      "theme": "dark",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "protocol",
+      "variant": "a",
+      "theme": "light",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "protocol",
+      "variant": "a",
+      "theme": "light",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "protocol",
+      "variant": "b",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "protocol",
+      "variant": "b",
+      "theme": "dark",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "protocol",
+      "variant": "b",
+      "theme": "light",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "protocol",
+      "variant": "b",
+      "theme": "light",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "protocol",
+      "variant": "c",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "protocol",
+      "variant": "c",
+      "theme": "dark",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "protocol",
+      "variant": "c",
+      "theme": "light",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "protocol",
+      "variant": "c",
+      "theme": "light",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "simulation",
+      "variant": "a",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "simulation",
+      "variant": "a",
+      "theme": "dark",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "simulation",
+      "variant": "a",
+      "theme": "light",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "simulation",
+      "variant": "a",
+      "theme": "light",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "simulation",
+      "variant": "b",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "simulation",
+      "variant": "b",
+      "theme": "dark",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "simulation",
+      "variant": "b",
+      "theme": "light",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "simulation",
+      "variant": "b",
+      "theme": "light",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "simulation",
+      "variant": "c",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "simulation",
+      "variant": "c",
+      "theme": "dark",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "simulation",
+      "variant": "c",
+      "theme": "light",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "simulation",
+      "variant": "c",
+      "theme": "light",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "analysis",
+      "variant": "a",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "analysis",
+      "variant": "a",
+      "theme": "dark",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "analysis",
+      "variant": "a",
+      "theme": "light",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "analysis",
+      "variant": "a",
+      "theme": "light",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "analysis",
+      "variant": "b",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "analysis",
+      "variant": "b",
+      "theme": "dark",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "analysis",
+      "variant": "b",
+      "theme": "light",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "analysis",
+      "variant": "b",
+      "theme": "light",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "analysis",
+      "variant": "c",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "analysis",
+      "variant": "c",
+      "theme": "dark",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "analysis",
+      "variant": "c",
+      "theme": "light",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "analysis",
+      "variant": "c",
+      "theme": "light",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "runs",
+      "variant": "a",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "runs",
+      "variant": "a",
+      "theme": "dark",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "runs",
+      "variant": "a",
+      "theme": "light",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "runs",
+      "variant": "a",
+      "theme": "light",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "runs",
+      "variant": "b",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "runs",
+      "variant": "b",
+      "theme": "dark",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "runs",
+      "variant": "b",
+      "theme": "light",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "runs",
+      "variant": "b",
+      "theme": "light",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "runs",
+      "variant": "c",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "runs",
+      "variant": "c",
+      "theme": "dark",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "runs",
+      "variant": "c",
+      "theme": "light",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "runs",
+      "variant": "c",
+      "theme": "light",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "project",
+      "variant": "a",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "project",
+      "variant": "a",
+      "theme": "dark",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "project",
+      "variant": "a",
+      "theme": "light",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "project",
+      "variant": "a",
+      "theme": "light",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "project",
+      "variant": "b",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "project",
+      "variant": "b",
+      "theme": "dark",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "project",
+      "variant": "b",
+      "theme": "light",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "project",
+      "variant": "b",
+      "theme": "light",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "project",
+      "variant": "c",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "project",
+      "variant": "c",
+      "theme": "dark",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "project",
+      "variant": "c",
+      "theme": "light",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "project",
+      "variant": "c",
+      "theme": "light",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "files",
+      "variant": "a",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "files",
+      "variant": "a",
+      "theme": "dark",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "files",
+      "variant": "a",
+      "theme": "light",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "files",
+      "variant": "a",
+      "theme": "light",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "files",
+      "variant": "b",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "files",
+      "variant": "b",
+      "theme": "dark",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "files",
+      "variant": "b",
+      "theme": "light",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "files",
+      "variant": "b",
+      "theme": "light",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "files",
+      "variant": "c",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "files",
+      "variant": "c",
+      "theme": "dark",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "files",
+      "variant": "c",
+      "theme": "light",
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "topic": "files",
+      "variant": "c",
+      "theme": "light",
+      "width": 500,
+      "height": 1100
+    },
+    {
+      "topic": "empty",
+      "area": "develop",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "topic": "empty",
+      "area": "develop",
+      "theme": "dark",
+      "width": 500,
+      "height": 1000
+    },
+    {
+      "topic": "empty",
+      "area": "develop",
+      "theme": "light",
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "topic": "empty",
+      "area": "develop",
+      "theme": "light",
+      "width": 500,
+      "height": 1000
+    },
+    {
+      "topic": "empty",
+      "area": "simulate",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "topic": "empty",
+      "area": "simulate",
+      "theme": "dark",
+      "width": 500,
+      "height": 1000
+    },
+    {
+      "topic": "empty",
+      "area": "simulate",
+      "theme": "light",
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "topic": "empty",
+      "area": "simulate",
+      "theme": "light",
+      "width": 500,
+      "height": 1000
+    },
+    {
+      "topic": "empty",
+      "area": "analyze",
+      "theme": "dark",
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "topic": "empty",
+      "area": "analyze",
+      "theme": "dark",
+      "width": 500,
+      "height": 1000
+    },
+    {
+      "topic": "empty",
+      "area": "analyze",
+      "theme": "light",
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "topic": "empty",
+      "area": "analyze",
+      "theme": "light",
+      "width": 500,
+      "height": 1000
+    }
+  ],
+  "errors": [],
+  "passed": true
+}

@@ -1,7 +1,9 @@
 # Prüfung der getrennten Designgalerie
 
 **25. Oktober 2026 · Windows · Edge 156.0.4314.42 · Playwright, headless.**
-Status: Browserprüfung bestanden, **keine Nutzerfreigabe und keine native Abnahme**.
+Historischer Prüfstand der getrennten Entwürfe: Browserprüfung bestanden,
+keine native Abnahme. Die **anschließende direkte Nutzerfreigabe** der konkreten
+Kombination ist in [APPROVED.md](../APPROVED.md) festgehalten.
 
 ## Tatsächlich ausgeführt
 
