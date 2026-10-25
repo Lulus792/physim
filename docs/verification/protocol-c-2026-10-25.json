@@ -1,0 +1,225 @@
+{
+  "format": 1,
+  "date": "2026-10-25",
+  "status": "local-uncommitted-native-candidate",
+  "base_commit": "db5570f18ad3d757eb243c74ad910caaadd6c071",
+  "source_manifest": {
+    "path": "build/validation/protocol-ui-2026-10-25/15-native/source.json",
+    "sha256": "86800bd5f3b0995eaf62d963fdebb7cebee0603e2edc524296a917def37ff62f",
+    "files": 324,
+    "includes_other_local_changes": true
+  },
+  "source_archive": {
+    "path": "build/validation/protocol-ui-2026-10-25/15-native/source-files.zip",
+    "sha256": "3f4762a87f6b96024eb3dc74db0d506663abdc3611e86babed4b168c76b3537d"
+  },
+  "runtime_manifest": {
+    "path": "build/validation/protocol-ui-2026-10-25/15-native/runtime-archives.json",
+    "sha256": "41b664202e0737c5728da8f65bbc4067a552a82ac00541a88ca56a821db66250"
+  },
+  "runs": [
+    {
+      "platform": "windows",
+      "group": "units",
+      "run": "run-oqzilk74",
+      "results": "build/validation/protocol-ui-2026-10-25/4-native/windows-build/test-results/run-oqzilk74/results.json",
+      "sha256": "cbcedf692469551b7d478cdfbaa4cd3fe56d056fce84569697be0c475e4b8e00",
+      "tests": [
+        {
+          "name": "protocol_store",
+          "status": "passed"
+        },
+        {
+          "name": "protocol_text",
+          "status": "passed"
+        },
+        {
+          "name": "preferences",
+          "status": "passed"
+        },
+        {
+          "name": "layout_catalog",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "platform": "windows",
+      "group": "docking_workflow",
+      "run": "run-gf0if9nx",
+      "results": "build/validation/protocol-ui-2026-10-25/4-native/windows-build/test-results/run-gf0if9nx/results.json",
+      "sha256": "0ec6be87b61ee39734130ed0904ff2ce9879a75909a9891c6083433a93332a0f",
+      "tests": [
+        {
+          "name": "docking_workflow",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "platform": "windows",
+      "group": "protocol_navigator",
+      "run": "run-d1dabwlf",
+      "results": "build/validation/protocol-ui-2026-10-25/4-native/windows-build/test-results/run-d1dabwlf/results.json",
+      "sha256": "a2167306585d3d8ef95f00f6a13c2552dea0a9850ad16b265b176242e997d6e8",
+      "tests": [
+        {
+          "name": "protocol_navigator",
+          "status": "failed"
+        }
+      ],
+      "binary_sha256": "644a208414c49ed95bc1879ef9b6afe88edf65a384d6c50ae2e263280480d29d",
+      "verification": "build/validation/protocol-ui-2026-10-25/4-native/windows-build/test-results/run-d1dabwlf/protocol_navigator/files ä/verification.json",
+      "verification_sha256": "8014f69901ea4a19a49950819c46588d7acdd2c869554666cd2dbc44c9b83e59",
+      "cases": [
+        {
+          "exitcode": 1,
+          "passed": false,
+          "timed_out": false,
+          "error": "Native app exited 1: protocol-ui-dark"
+        }
+      ],
+      "first_command": [
+        "D:\\Physim\\build\\validation\\protocol-ui-2026-10-25\\4-native\\windows-build\\bin\\physim.exe",
+        "--workspace-state-test",
+        "D:\\Physim\\build\\validation\\protocol-ui-2026-10-25\\4-native\\windows-build\\test-results\\run-d1dabwlf\\protocol_navigator\\files ä\\protocol-ui-dark\\workflow ä",
+        "protocol-ui-dark"
+      ]
+    },
+    {
+      "platform": "linux",
+      "group": "units",
+      "run": "run-cjstcd6w",
+      "results": "build/validation/protocol-ui-2026-10-25/4-native/linux-build/test-results/run-cjstcd6w/results.json",
+      "sha256": "d20eac2b5f0947c6d88769c023cadf18be9d4b9d59e0b839379d3f7c3538cce4",
+      "tests": [
+        {
+          "name": "protocol_store",
+          "status": "passed"
+        },
+        {
+          "name": "protocol_text",
+          "status": "passed"
+        },
+        {
+          "name": "preferences",
+          "status": "passed"
+        },
+        {
+          "name": "layout_catalog",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "group": "docking_workflow",
+      "run": "run-k_rjrhrd",
+      "results": "build/validation/protocol-ui-2026-10-25/4-native/linux-build/test-results/run-k_rjrhrd/results.json",
+      "sha256": "cff745f42e3a3b9c46af80b43448c42da60e46b494b96cd4d82c316ac88851b8",
+      "tests": [
+        {
+          "name": "docking_workflow",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "group": "protocol_navigator",
+      "run": "run-q0t3ywjv",
+      "results": "build/validation/protocol-ui-2026-10-25/4-native/linux-build/test-results/run-q0t3ywjv/results.json",
+      "sha256": "7f772878fd251eb67e60b3e6a2f0e970a07816a5ceac042371709afcb79f4596",
+      "tests": [
+        {
+          "name": "protocol_navigator",
+          "status": "passed"
+        }
+      ],
+      "binary_sha256": "a6816cdf396a118730c3b3ea685538f7eb6d67f9304e34f3712f62e5a30a12d2",
+      "verification": "build/validation/protocol-ui-2026-10-25/4-native/linux-build/test-results/run-q0t3ywjv/protocol_navigator/files ä/verification.json",
+      "verification_sha256": "0d2049f90f92a821205c5e99f1b159cdd970c43d08b27347379ef79c332ee80a",
+      "cases": [
+        {
+          "mode": "protocol-ui-dark",
+          "unfocused": false,
+          "steps": 70,
+          "exitcode": 0,
+          "passed": true,
+          "timed_out": false
+        },
+        {
+          "mode": "protocol-ui-light",
+          "unfocused": false,
+          "steps": 1,
+          "exitcode": 0,
+          "passed": true,
+          "timed_out": false
+        },
+        {
+          "mode": "protocol-ui-contrast",
+          "unfocused": false,
+          "steps": 1,
+          "exitcode": 0,
+          "passed": true,
+          "timed_out": false
+        },
+        {
+          "mode": "protocol-ui-large",
+          "unfocused": false,
+          "steps": 1,
+          "exitcode": 0,
+          "passed": true,
+          "timed_out": false
+        },
+        {
+          "mode": "protocol-ui-narrow",
+          "unfocused": false,
+          "steps": 1,
+          "exitcode": 0,
+          "passed": true,
+          "timed_out": false
+        },
+        {
+          "mode": "protocol-ui-boundary",
+          "unfocused": false,
+          "steps": 1,
+          "exitcode": 0,
+          "passed": true,
+          "timed_out": false
+        },
+        {
+          "mode": "protocol-ui-empty",
+          "unfocused": false,
+          "steps": 1,
+          "exitcode": 0,
+          "passed": true,
+          "timed_out": false
+        },
+        {
+          "mode": "protocol-ui-dark",
+          "unfocused": true,
+          "steps": 38,
+          "exitcode": 0,
+          "passed": true,
+          "timed_out": false
+        }
+      ],
+      "first_command": [
+        "/mnt/d/Physim/build/validation/protocol-ui-2026-10-25/4-native/linux-build/bin/physim",
+        "--workspace-state-test",
+        "/mnt/d/Physim/build/validation/protocol-ui-2026-10-25/4-native/linux-build/test-results/run-q0t3ywjv/protocol_navigator/files ä/protocol-ui-dark/workflow ä",
+        "protocol-ui-dark"
+      ]
+    }
+  ],
+  "limits": [
+    "Windows formal navigator stops at stage 45: expected height 370 and active resize; observed height 340 and resize 0; cause not established",
+    "Earlier focused runs passing do not supersede this failure",
+    "Synthetic tests do not prove physical keyboard, pointer or screenreader use",
+    "Linux Debug ASan/UBSan used detect_leaks=0; no leak check claim",
+    "No macOS run; no full UI fidelity acceptance",
+    "Legacy diagnostic/logging and real protocol_sources workflow need regression execution for the new navigator",
+    "Source archive includes unrelated local changes; it is local provenance, not a published Git revision"
+  ]
+}

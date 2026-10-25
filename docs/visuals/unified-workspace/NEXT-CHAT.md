@@ -16,10 +16,11 @@ zeigt alle drei Bereiche ohne Projekt mit passenden deaktivierten Aktionen;
 kein Demoexperiment automatisch laden. Designfreigabe und native Abnahme trennen.
 
 Der [native Anschluss der gemeinsamen Protokoll-Datenquellen](PROTOCOL-SOURCES-NATIVE.md)
-ist inzwischen geprüft. Die ausgewählte sichtbare Navigator-Anordnung C bleibt
-als nächster zusammenhängender Umsetzungsschritt offen; die bisherige Anzeige
-ist noch kein Protokoll C. Der Bericht trennt bestandene Daten-/Diagnoseprüfungen
-vom noch offenen Windows-Fokusnachweis und von der allgemeinen Designabnahme.
+ist inzwischen geprüft. Die sichtbare Navigator-Anordnung C ist inzwischen
+im lokalen, noch unveröffentlichten Arbeitsstand begonnen. Der
+[aktuelle Teilnachweis](PROTOCOL-C-NATIVE.md) hält die Linux-Ergebnisse und
+den offenen Windows-Mausbefund fest. C ist weiterhin nicht abgenommen;
+insbesondere die bestehenden Daten-/Diagnoseabläufe erneut damit prüfen.
 
 Das [Inhaltsinventar](CONTENT-INVENTORY.md) bleibt mitzuprüfen: Kräfte, Texte,
 Objekttypen/Hierarchie, Parameter, Messkanäle, Modellmeldungen und variable

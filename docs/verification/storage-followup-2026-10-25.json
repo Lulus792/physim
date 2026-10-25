@@ -1,0 +1,22 @@
+{
+  "format": 1,
+  "date": "2026-10-25",
+  "scope": "Closed protocol QA compiler intermediates only",
+  "removed_files": 236,
+  "removed_logical_bytes": 90374607,
+  "physical_disk_bytes_freed": null,
+  "physical_measurement_note": "NTFS compression and concurrent work prevent attributing volume free-space changes",
+  "receipt": {
+    "path": "build/maintenance/2026-10-25-return/protocol-intermediates.json",
+    "sha256": "b88eabeb73c67ab42b4aa68e57ab46c58f63ba724ba424de7c570366105dc535"
+  },
+  "retained": [
+    "Programs and debug symbols",
+    "Verified runtime/source ZIPs",
+    "Raw test results including open failures",
+    "Design references and screenshots",
+    "Foreign work and VM disk"
+  ],
+  "new_screenshots_for_documentation": 0,
+  "blocked_drive_accessed": false
+}

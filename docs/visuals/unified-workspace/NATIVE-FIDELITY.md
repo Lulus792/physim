@@ -48,8 +48,10 @@ bleibt weiterhin offen.
 Der [native Anschluss der Protokoll-Datenquellen](PROTOCOL-SOURCES-NATIVE.md)
 ergänzt eine begrenzte gemeinsame Historie mit unveränderten Originalbytes,
 Herkunft, Severity und tatsächlichen Jobausgängen. Die sichtbare Navigator-
-Anordnung C ist noch umzusetzen. Die getrennten Windows-/Linux-Nachweise
-einschließlich des offenen Windows-Fokusfalls sind keine vollständige Designabnahme.
+Anordnung C ist inzwischen im lokalen Arbeitsstand begonnen; der
+[aktuelle Teilnachweis](PROTOCOL-C-NATIVE.md) nennt bestandene Linux-Prüfungen
+und den offenen Windows-Mausbefund. Diese noch unveröffentlichte Implementierung
+und die getrennten Datenquellen-Nachweise sind keine vollständige Designabnahme.
 
 Für die drei Hauptbereiche gelten die sechs Bilder und die interaktive Vorlage
 in diesem Verzeichnis. Die Einzelverträge ergänzen Zustände und Fachfunktionen:

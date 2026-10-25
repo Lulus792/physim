@@ -172,14 +172,44 @@ Windows-Compilerstand. Ergebnis-JSON und rohe Logs bleiben direkt lesbar.
 
 ## Verbleibende Arbeit und Grenzen
 
+### Anschließende Bereinigung der abgeschlossenen Protokoll-Prüfbuilds
+
+Weitere 236 Compilerobjekte (`.obj`/`.o`, zusammen 90.374.607 Byte Dateigröße)
+aus `build/validation/protocol-ui-2026-10-25/4-native/{windows,linux}-build/obj`
+wurden entfernt. Davor wurden die erhaltenen Programme und Debug-Symbole mit
+den vollständig nachgelesenen Laufzeitarchiven der Phase 15 abgeglichen.
+Quellarchive, Bibliotheken, Testberichte, Referenzbilder und Belege offener
+Fehler bleiben erhalten. Die betreffenden Builds und Tests waren beendet;
+die laufende NexaCloud-Arbeit wurde nicht verändert.
+
+Der [kompakte Bereinigungsnachweis](verification/storage-followup-2026-10-25.json)
+nennt Umfang und Hash der dateigenauen lokalen Löschquittung. Die Dateigröße
+ist keine Messung freigegebener physischer Laufwerksbytes: NTFS-Kompression
+und parallele Arbeiten beeinflussen diesen Wert. Für diese Dokumentation
+wurden keine neuen Bildschirmbilder erzeugt. Der
+[native Protokoll-Teilbericht](visuals/unified-workspace/PROTOCOL-C-NATIVE.md)
+führt Ergebnisse und offene Befunde als Tabelle mit verknüpften JSON-Belegen.
+F: wurde dabei weder abgefragt noch beschrieben.
+
+Der erneute Nachlauf von `test_artifact_paths.py` besteht unter Windows und
+`Alpine-Dev`; `with-artifacts.py --check` bestätigt auf beiden Plattformen
+D:-Pfade für Ausgaben, temporäre Dateien und Caches. 99 lokale Dokumentationslinks,
+die 324 Dateien der Quellsicherung, sechs Ergebnisgruppen und die Löschquittung
+wurden zusätzlich geprüft. Die vorhandenen eingefrorenen Nachweise bleiben
+unverändert.
+
+### Weiter geltende Grenzen
+
 Neue Builds und Nachweise bleiben auf D:. Alte Programme und Steuerdateien mit
 eingebauten F:-Pfaden bleiben historische Belege; für weitere native Prüfungen
 neue D:-Steuerdateien und auf D: gebaute Programme verwenden. Die Rückführung
 ist keine erneute native UI-, Fokus- oder Screenreader-Abnahme.
 
-Unix-Laufzeitverzeichnisse bleiben kurzzeitig im Linux-Dateisystem: Der lokale
-F:-Mount meldet bei `AF_UNIX.bind` Fehler 95 (`Not supported`) und behält trotz
-`chmod 0700` den Modus `0777`. Große Testdaten liegen dort nicht mehr.
+Unix-Laufzeitverzeichnisse bleiben kurzzeitig im Linux-Dateisystem: Der vor der
+Rückführung geprüfte F:-Mount meldete bei `AF_UNIX.bind` Fehler 95
+(`Not supported`) und behielt trotz `chmod 0700` den Modus `0777`.
+Das ist ein historischer Befund, keine erneute Abfrage von F:.
+Große Testdaten liegen unter D:/Physim/build.
 25 vorhandene Orca-Laufzeitverzeichnisse mit Socketdateien wurden aus der
 Verlagerung ausgenommen.
 
