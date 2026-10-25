@@ -575,6 +575,9 @@ def main() -> int:
     args.build_dir = args.build_dir or build_root / "native" / (args.config + ("-fuzzer" if args.fuzzer else "-sanitized" if args.sanitizers else ""))
     if args.build_dir.resolve() == ROOT or args.build_dir.resolve() in ROOT.parents:
         parser.error("Use a separate build directory, not the source root or its parents")
+    for directory in (args.build_dir.resolve(), *args.build_dir.resolve().parents):
+        if (directory / ".physim-storage-migration").exists():
+            parser.error("This build tree is being moved. Use a separate artifact root until the storage migration finishes.")
     try:
         if not args.no_app:
             subprocess.run([sys.executable,str(ROOT / "tools/generate-completions.py"),"--check"],check=True)

@@ -29,6 +29,11 @@ Andere Werkzeuge mit eigenen Ausgabeoptionen müssen ebenfalls einen Pfad unter
 F: erhalten. Beliebige Programme, die feste Pfade verwenden, werden durch
 Umgebungsvariablen allein nicht umgeleitet.
 
+Während eines Umzugs sperrt eine Datei `.physim-storage-migration` den betroffenen
+Buildbaum für den direkten Builder. Neue Prüfungen können einen getrennten
+Artefaktstamm unter `F:/Physim/validation` verwenden. Die Sperre erst nach
+vollständigem Umzug und Integritätsprüfung entfernen.
+
 Unix-Laufzeitverzeichnisse mit Sockets bleiben kurzzeitig im nativen
 Linux-Dateisystem und werden nach dem Lauf entfernt. `XDG_RUNTIME_DIR` wird
 deshalb nicht auf das Windows-Laufwerk gesetzt. Große Bild-, Log- oder
