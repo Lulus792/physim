@@ -20,6 +20,19 @@
 - Der [Gesamtauftrag für den umsetzenden Chat](docs/visuals/unified-workspace/NEXT-CHAT.md)
   enthält diese Freigabe. Vorhandene Browsernachweise sind keine native Abnahme.
 
+## Getrennte Designauswahl vom 25. Oktober 2026
+
+- Die [neue Designgalerie](docs/visuals/design-options/README.md) enthält getrennte
+  Varianten für Protokoll, fehlende Inhalte, Projekt-Popup und eigenen Explorer
+  sowie die vollständige Leeransicht. Der Nutzer möchte **zuerst entscheiden**.
+  Diese Kandidaten vor seiner ausdrücklichen Auswahl weder in das aktuelle
+  Design noch in die native Anwendung übernehmen. Der Protokollentwurf vom
+  24. Oktober ist ebenfalls keine erteilte Designfreigabe.
+- Bereits freigegebene Teile und die bestehende native Arbeit fortführen; die
+  verbindliche Grafikexport-Freigabe bleibt erhalten. Ein Browsertest oder die
+  Galerie selbst ist keine Nutzerentscheidung. Details und Umfang stehen im
+  [Übergabeauftrag](docs/visuals/unified-workspace/NEXT-CHAT.md).
+
 ## Speicherpflege
 
 - Regelmäßiges Aufräumen gehört zur Projektarbeit. Nach abgeschlossener Arbeit

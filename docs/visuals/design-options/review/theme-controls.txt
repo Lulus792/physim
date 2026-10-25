@@ -1,0 +1,1 @@
+Empty workspace theme controls synchronized: PASS

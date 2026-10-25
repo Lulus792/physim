@@ -1,5 +1,20 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
+**Neue Auswahlphase vom 25. Oktober 2026:** Der Nutzer verlangt mehrere
+**getrennte** Entwürfe für Protokoll/Fehler, die fehlenden Inhalte, einen
+„Neues Projekt“-Dialog und einen eigenen Datei-Explorer. Die
+[separate Galerie](../design-options/index.html) und ihr
+[Entscheidungsvertrag](../design-options/README.md) sind ausschließlich zum
+Vergleichen da. **Vor einer ausdrücklichen Auswahl keine dieser Varianten in
+das aktuelle Design oder die native Anwendung übernehmen.** Auch der
+Protokollentwurf vom 24. Oktober ist keine erteilte Designfreigabe. Vorhandene
+Browser-/native Arbeit bleibt erhalten. Die frühere Grafikexport-Freigabe gilt
+weiter; sie ist keine pauschale Freigabe der neuen Dialoge oder des Explorers.
+Zusätzlich ist die [vollständige Leeransicht](../design-options/index.html?topic=empty&standalone=1)
+des aktuellen Layouts vorbereitet: alle drei Arbeitsbereiche, kein geladenes
+Projekt und entsprechend deaktivierte Aktionen. Auch sie ist eine getrennte
+Browserreferenz zur Beurteilung, keine native Abnahme.
+
 **Ergänzung vom 24. Oktober 2026:** Der Nutzer hat zusätzlich ein Design für
 Fehler/Warnungen/Protokoll und eine Liste fehlender gestaltungsrelevanter Inhalte
 beauftragt. Die neue [bedienbare Protokollreferenz](index.html?example=protocol#develop)

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Physim · Getrennte Designvarianten</title>
+  <link rel="stylesheet" href="options.css"><script src="data.js" defer></script><script src="options.js" defer></script><script src="dialogs.js" defer></script>
+</head>
+<body>
+  <header class="gallery-header"><a class="wordmark" href="?topic=protocol">p<span>·</span><span>Physim / Designlabor</span></a><div class="header-right"><span class="draft-label">Entwürfe · noch keine Auswahl</span><button id="theme-button" aria-label="Helle Darstellung aktivieren">Hell</button></div></header>
+  <main>
+    <section class="introduction"><div><p class="eyebrow">ERGÄNZUNGEN / 25. OKTOBER 2026</p><h1>Mehr Inhalt. Drei Richtungen.</h1><p>Protokoll, Simulation, Auswertung und neue Dialoge – getrennt zum Vergleichen.</p></div><div class="isolation-note"><span class="isolation-dot"></span><div><strong>Eigenständige Designvorschau</strong><p>Die aktuelle Oberfläche bleibt unverändert.<br>Erst nach deiner Entscheidung wird etwas übernommen.</p></div></div></section>
+    <nav id="topic-nav" class="topic-nav" aria-label="Designthemen"></nav>
+    <div id="variant-nav" class="variant-nav" role="group" aria-label="Designrichtung"></div>
+    <section class="study-heading"><div><p id="study-kicker" class="eyebrow"></p><h2 id="study-title"></h2><p id="study-description"></p></div><div class="study-controls"><label>Beispielzustand <select id="scenario-select" aria-label="Beispielzustand"></select></label><button id="notes-open">Unterschiede &amp; Abdeckung</button></div></section>
+    <section id="design-stage" class="design-stage" aria-label="Interaktive Designvorschau"></section>
+    <aside class="comparison-note"><span id="comparison-letter">A</span><p id="comparison-text"></p><span class="sample-mark">Beispieldaten · keine Dateioperationen</span></aside>
+    <footer class="gallery-footer"><span id="gallery-status" role="status" aria-live="polite">Bereit zum Vergleichen.</span><a href="README.md">Dokumentation &amp; offene Entscheidungen ↗</a></footer>
+  </main>
+  <dialog id="project-dialog" class="project-dialog" aria-labelledby="project-title"></dialog>
+  <dialog id="folder-dialog" class="folder-dialog" aria-labelledby="folder-title"></dialog>
+  <dialog id="notes-dialog" class="notes-dialog" aria-labelledby="notes-title"><header class="dialog-header"><div><p class="eyebrow">ENTSCHEIDUNGSGRUNDLAGE</p><h2 id="notes-title">Was du hier vergleichen kannst</h2></div><button data-close="notes-dialog" aria-label="Hinweise schließen">✕</button></header><div id="notes-content" class="notes-content"></div><footer class="dialog-footer"><p>Keine Variante wurde freigegeben oder in das aktuelle Design eingebaut.</p><button data-close="notes-dialog">Schließen</button></footer></dialog>
+  <noscript>Diese lokale Designgalerie benötigt JavaScript.</noscript>
+</body>
+</html>

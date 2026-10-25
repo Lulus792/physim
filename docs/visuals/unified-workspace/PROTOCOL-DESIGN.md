@@ -1,5 +1,10 @@
 # Entwurf: ein gemeinsames Protokoll
 
+**25. Oktober 2026 – Auswahl offen:** Es gibt jetzt mehrere
+[getrennte neue Designvarianten](../design-options/index.html?topic=protocol).
+Der Nutzer möchte zuerst vergleichen. Weder diesen bisherigen Entwurf noch
+eine neue Variante ohne seine ausdrückliche Auswahl nativ übernehmen.
+
 Stand: 24. Oktober 2026. Neuer Nutzerauftrag: Fehler, Warnungen und weitere
 Protokollzustände gestalten. **Interaktive Designreferenz; noch keine native
 Umsetzung oder ausdrückliche Designabnahme dieses neuen Entwurfs.** Die frühere

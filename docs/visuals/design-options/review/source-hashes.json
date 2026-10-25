@@ -1,0 +1,26 @@
+[
+  {
+    "path": "docs/visuals/design-options/index.html",
+    "sha256": "794e29433a58cdfe1fb1952434ab6963f875e7ccfe7ba3a8d6b28bdb88072456"
+  },
+  {
+    "path": "docs/visuals/design-options/options.css",
+    "sha256": "79500e3638b63af8b0ac9d1d64c562742236cad38f950773659a7b1b031a889f"
+  },
+  {
+    "path": "docs/visuals/design-options/data.js",
+    "sha256": "e54f6ce9a249b36317ea6e850292512d2800083108985aea35214089a664c2dc"
+  },
+  {
+    "path": "docs/visuals/design-options/options.js",
+    "sha256": "64479ee3b40373549f451686de9ff13917b29599abcbe54f5061e8e6564336ad"
+  },
+  {
+    "path": "docs/visuals/design-options/dialogs.js",
+    "sha256": "0095f276743119379fd2a6c108e9bb33677635453e52cb70489e80d8c45f4b39"
+  },
+  {
+    "path": "tools/check_design_options.cjs",
+    "sha256": "02ff408a5a775a6f5b3dc17b823a363a9d9e67cebaeb1be6dea4776c894ca559"
+  }
+]
