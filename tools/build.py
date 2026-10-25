@@ -18,6 +18,13 @@ import shutil
 import subprocess
 import sys
 import tempfile
+try:
+    import artifact_paths
+except ModuleNotFoundError:
+    # SDK verifiers and tests also load this driver directly from its file path.
+    storage_spec = importlib.util.spec_from_file_location("physim_artifact_paths", Path(__file__).with_name("artifact_paths.py"))
+    artifact_paths = importlib.util.module_from_spec(storage_spec)
+    storage_spec.loader.exec_module(artifact_paths)
 
 ROOT = Path(__file__).resolve().parent.parent
 WINDOWS = sys.platform == "win32"
@@ -570,9 +577,23 @@ def main() -> int:
         parser.error("Sanitizer builds are for validation; use a separate build without --sanitizers to install a portable SDK")
     if args.jobs < 1 or args.jobs > 64:
         parser.error("--jobs must be between 1 and 64")
+    for option in ("sdl", "install"):
+        value = getattr(args, option)
+        if value:
+            try:
+                setattr(args, option, artifact_paths.checked(value))
+            except (OSError, ValueError) as error:
+                parser.error(str(error))
     artifact_root = os.environ.get("PHYSIM_ARTIFACT_ROOT")
-    build_root = Path(artifact_root) / "build" if artifact_root else ROOT / "build"
+    try:
+        build_root = artifact_paths.checked(artifact_root) if artifact_root else artifact_paths.default_root()
+    except (OSError, ValueError) as error:
+        parser.error(str(error))
     args.build_dir = args.build_dir or build_root / "native" / (args.config + ("-fuzzer" if args.fuzzer else "-sanitized" if args.sanitizers else ""))
+    try:
+        args.build_dir = artifact_paths.checked(args.build_dir)
+    except (OSError, ValueError) as error:
+        parser.error(str(error))
     if args.build_dir.resolve() == ROOT or args.build_dir.resolve() in ROOT.parents:
         parser.error("Use a separate build directory, not the source root or its parents")
     for directory in (args.build_dir.resolve(), *args.build_dir.resolve().parents):

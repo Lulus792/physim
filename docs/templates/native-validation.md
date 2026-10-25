@@ -7,10 +7,10 @@ Umgebung: <Betriebssystem, Compiler/SDK, Buildvariante, Skalierung und Theme>.
 ## Reproduzieren
 
 ```text
-<exakte Befehle mit Ausgabe- und Temporärpfaden auf F:>
+<exakte Befehle mit Ausgabe- und Temporärpfaden unter D:/Physim/build>
 ```
 
-Binärhash: `<SHA-256>`. Vollständige lokale Logs: `<F:/Physim/validation/...>`.
+Binärhash: `<SHA-256>`. Vollständige lokale Logs: `<D:/Physim/build/validation/...>`.
 
 ## Ergebnisse
 
@@ -33,7 +33,7 @@ Zustandswerte. Gegenproben und Fehlerbilder bis zur Befundklärung erhalten.>
 <Offene Befunde mit Reproduktion, Ursache soweit belegt, Abweichung von der
 Vorlage und nächstem prüfbarem Schritt. Ausgeführtes von Geplantem trennen.>
 
-Aufbewahrung: <ausgewählte versionierte Nachweise, rohe Fehlerbelege auf F:,
+Aufbewahrung: <ausgewählte versionierte Nachweise, rohe Fehlerbelege auf D:,
 nach Abnahme entbehrliche Rohbilder>. Bestehende eingefrorene Manifeste und
 Referenzen unverändert lassen. Nachfolgende Quelländerungen benötigen einen
 neuen Nachweis; alte Ergebnisse behalten ihren ursprünglichen Geltungsbereich.

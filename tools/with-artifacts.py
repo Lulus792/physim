@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import artifact_paths
 
 
 def main():
@@ -12,12 +13,15 @@ def main():
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8", errors="replace")
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--root", required=True, type=Path,
-                        help="Explicit artifact directory, e.g. F:/Physim or /mnt/f/Physim")
+    parser.add_argument("--root", type=Path,
+                        help="Artifact directory; defaults to this project's build directory")
     parser.add_argument("--check", action="store_true", help="Print the child environment without running a command")
     parser.add_argument("command", nargs=argparse.REMAINDER)
     args = parser.parse_args()
-    root = args.root.expanduser().resolve()
+    try:
+        root = artifact_paths.checked(args.root) if args.root else artifact_paths.default_root()
+    except (OSError, ValueError) as error:
+        parser.error(str(error))
     source = Path(__file__).resolve().parent.parent
     if not Path(root.anchor).is_dir():
         parser.error("The artifact drive is unavailable")

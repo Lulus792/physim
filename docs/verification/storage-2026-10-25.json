@@ -1,0 +1,122 @@
+{
+  "format": 1,
+  "date": "2026-10-25",
+  "scope": "Return Physim artifacts to D and retain compact verification",
+  "return_audit": {
+    "planned_files": 52271,
+    "planned_bytes": 36594682655,
+    "regular_files": 52259,
+    "regular_bytes": 36585973582,
+    "interrupted_copies": 12,
+    "interrupted_copy_bytes": 8709073,
+    "conflicting_versions": [],
+    "verified_receipts": 52271,
+    "source_removed": true,
+    "build_is_physical_directory": true,
+    "index_sha256": "518eb7e61c7c56024587b699f25423b034344af85e1bc02906088ee48723867f",
+    "plan_sha256": "04d96e90e75b9987126c01579b294c9c8e5ad2a9a1ea709a054fad2d997f6001",
+    "seconds": 216
+  },
+  "linux_links": {
+    "retargeted": 189,
+    "old_targets_read_as_text_only": true,
+    "socket_directories_untouched": true,
+    "new_root": "/mnt/d/Physim/build/archive/linux-test-runs-2026-10-25/runs"
+  },
+  "sdl": {
+    "manifest_files": 87,
+    "sdk_bytes": 7459194,
+    "links": [
+      {
+        "path": "/mnt/d/Physim/build/native/F1-linux/sdl-install/lib/libSDL3.so",
+        "target": "libSDL3.so.0",
+        "resolved": "/mnt/d/Physim/build/native/F1-linux/sdl-install/lib/libSDL3.so.0.2.30"
+      },
+      {
+        "path": "/mnt/d/Physim/build/native/F1-linux/sdl-install/lib/libSDL3.so.0",
+        "target": "libSDL3.so.0.2.30",
+        "resolved": "/mnt/d/Physim/build/native/F1-linux/sdl-install/lib/libSDL3.so.0.2.30"
+      }
+    ],
+    "git_fsck_exitcode": 0
+  },
+  "marker": {
+    "original_path": "D:\\Physim\\build\\.physim-storage-migration",
+    "archived_path": "D:\\Physim\\build\\maintenance\\2026-10-25-return\\retired-migration-marker.txt",
+    "sha256": "6e11c5a4adee6b7394fdd6f3be21c6f78633452af4c73b3c82d05c4964f9d10a",
+    "reason": "Return and D integrity checks complete; release the build tree"
+  },
+  "free_d_bytes_at_report": 71943938048,
+  "source_sha256": {
+    "tools/artifact_paths.py": "35b8e8ff72b29fd79db001b5d4d37b5ddf6bf7275e308d1f0360c3caeda7bbb0",
+    "tools/build.py": "86bb049b8961876e142f67783e034eeb7ee270e97b56026d452419cfbced6e7e",
+    "tools/with-artifacts.py": "fd370768118941d3b1a13c2e9c78ebf33bf0efe357694b72446cb8c444c3f6f6",
+    "tools/restore-test-archive.py": "10a9f8276758577b6bd843efbffaca2b3435e30bda19d3fcfcc3190b7db3aed0",
+    "tests/test_artifact_paths.py": "b9b55de980f068e73671c9b4435d2857d9ba3b462afd4a05a0b713115cfc1ccc",
+    "tests/native_integration_cases.json": "1e44bd61832fd631e884c0c127ab5ad57b0266d80fae02f8cc3dbeae42db23f4"
+  },
+  "storage_policy_tests": {
+    "windows": "passed",
+    "linux": "passed",
+    "lexical_exclusions": 8,
+    "wrapper_child_exitcode": 7,
+    "blocked_cli_exitcode": 2
+  },
+  "real_compiler": {
+    "windows": "passed on unchanged retry; initial WinError 5 preserved",
+    "linux": "passed"
+  },
+  "archive_restore": {
+    "windows": {
+      "platform": "win32",
+      "archive": "D:\\Physim\\build\\archive\\completed-tests-2026-10-25\\Release",
+      "path": "run-0wg0igey/inspector_channel/files ä/app-steps.json",
+      "bytes": 71904,
+      "sha256": "4e9a5daa5e0f27d4d3b3797032b0fe07b88c6f7fc1566255c7625d600361c0fa",
+      "first": {
+        "restored": 1,
+        "already_identical": 0
+      },
+      "repeat": {
+        "restored": 0,
+        "already_identical": 1
+      }
+    },
+    "linux": {
+      "platform": "linux",
+      "archive": "/mnt/d/Physim/build/archive/completed-tests-2026-10-25/Release",
+      "path": "run-0wg0igey/inspector_channel/files ä/app-steps.json",
+      "bytes": 71904,
+      "sha256": "4e9a5daa5e0f27d4d3b3797032b0fe07b88c6f7fc1566255c7625d600361c0fa",
+      "first": {
+        "restored": 1,
+        "already_identical": 0
+      },
+      "repeat": {
+        "restored": 0,
+        "already_identical": 1
+      }
+    }
+  },
+  "runner_regression": {
+    "windows_exitcode": 0,
+    "linux_exitcode": 0,
+    "initial_issue": "Existing protocol_sources workflow missing from integration catalog",
+    "correction": "Registered the existing workflow; full runner regression passed on both hosts",
+    "limitation": "This is not a new execution of the native display workflow"
+  },
+  "linux_directory_recovery": {
+    "created_count": 578,
+    "original_file_hashes_verified": 4839,
+    "archive_sha256": "40f82b3a3ff8b5cd4145cb2a6a34040c091f920c43f5adb109a8f8b19e286c95"
+  },
+  "generated_fixture_archive": {
+    "original_bytes": 4095585,
+    "archive_bytes": 727964,
+    "archive_sha256": "5b67177cda2bd86521a15b730a946e1066811a07dfa081d192b472a80ed4ef2a",
+    "purpose": "Synthetic verification fixtures; raw logs and result JSON remain outside archive"
+  },
+  "raw_evidence": "D:\\Physim\\build\\maintenance\\2026-10-25-return",
+  "screenshots_created": 0,
+  "historical_paths": "Frozen F paths retain provenance; map to D according to development-storage.md"
+}

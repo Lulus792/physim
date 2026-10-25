@@ -36,12 +36,15 @@
 
 ## Speicherpflege
 
-- Auf diesem Rechner neue generierte Builds, Testläufe, Rohbilder, Logs und
-  Compiler-Temporärdateien unter `F:\Physim` ablegen. Versionierte Quellen,
-  Tests und kompakte Dokumentationsbelege bleiben im Repository auf D:.
-  Entwicklungsbefehle mit `tools/with-artifacts.py --root F:/Physim -- ...`
-  beziehungsweise unter WSL `--root /mnt/f/Physim` starten; explizite
-  Ausgabeoptionen ebenfalls nach F: setzen. Die lokale Anleitung steht in
+- Der Nutzer hat die F:-Nutzung am 25. Oktober 2026 widerrufen: Physim bleibt
+  vollständig auf D:. Die Rückführung ist abgeschlossen. F: weder für Builds,
+  Tests, Archive, Caches noch temporäre Daten verwenden oder darauf zugreifen.
+  Generierte Daten unter `D:\Physim\build` ablegen; Quellen, Testprogramme
+  und kompakte Nachweise bleiben versioniert im Repository.
+  `tools/with-artifacts.py -- ...` verwendet den lokalen Buildordner automatisch;
+  unter WSL entspricht er `/mnt/d/Physim/build`. Explizite Ausgabeoptionen
+  ebenfalls auf D: setzen. Alte eingefrorene Nachweise mit F:-Pfaden sind
+  historische Daten und keine aktuellen Ausführungsanweisungen. Die Anleitung steht in
   [docs/development-storage.md](docs/development-storage.md).
 - Prüfnachweise zuerst als kompakten Text-/JSON-Bericht mit Quellstand,
   Kommandos, Soll/Ist-Ergebnis und offenen Befunden dokumentieren. Bilder

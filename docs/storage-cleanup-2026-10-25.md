@@ -1,26 +1,32 @@
 # Speicherpflege und kompakte Nachweise – 25. Oktober 2026
 
-Nutzerauftrag: sauberere Dokumentation mit weniger Bildern, veraltete Daten
-aufräumen und neue generierte Entwicklungsdaten auf F: ablegen.
+Nutzerauftrag: sauberere Dokumentation mit weniger Bildern und veraltete Daten
+aufräumen. Der zunächst gewünschte Wechsel auf F: wurde am selben Tag widerrufen:
+**Alle Physim-Daten bleiben auf D:. F: wird nach der Rückführung nicht mehr
+verwendet oder für Physim abgefragt.**
 
-**Zwischenstand: Die 13 Testarchive sind vollständig geprüft und bereinigt;
-der restliche Buildbaum wird noch verlagert.** Währenddessen die markierten Bäume `D:/Physim/build` und
-`F:/Physim/build` für neue Builds freihalten. Der Builder erkennt die
-Umzugssperre. Getrennte neue Artefaktstämme unter `F:/Physim/validation`
-funktionieren bereits.
+**Abgeschlossen: Alle 52.259 vollständigen Dateien mit 36.585.973.582 Byte sind
+geprüft zurück auf D:.** Zwölf abgebrochene Kopien mit 8.709.073 Byte wurden
+nach Nachweis ihrer vollständigen D:-Originale entfernt. Der unabhängige
+Abschlussabgleich erfasst alle 52.271 Inventareinträge; keine abweichenden
+Dateiversionen. `F:/Physim` wurde nach Entfernung aller Dateien als leeres
+Verzeichnis entfernt. Seitdem finden die Physim-Prüfschritte ausschließlich auf
+D: statt. `D:/Physim/build` bleibt ein echtes, transparent NTFS-komprimiertes
+Verzeichnis. Die Umzugssperre ist nach den Prüfungen aufgehoben.
 
 ## Umgesetzt und geprüft
 
 - [Speicheranleitung](development-storage.md),
   [Berichtsvorlage](templates/native-validation.md) und AGENTS-Regeln führen
-  neue Builds, Testausgaben, Logs, Caches und Temporärdateien nach `F:/Physim`.
+  neue Builds, Testausgaben, Logs, Caches und Temporärdateien nach `D:/Physim/build`.
   Quellen und Testprogramme bleiben versioniert im Repository auf D:.
 - Der Wrapper wurde unter Windows und WSL mit echten temporären Dateien,
   unverändert weitergegebenem Fehlercode und abgewiesenem Quellwurzelpfad geprüft.
 - Zwei native Gruppen (`protocol_store`, `protocol_text`) wurden je Plattform
   gebaut und bestanden: Windows Release und Linux Debug. Beide Builds und ihre
   Testergebnisse liegen vollständig unter
-  `F:/Physim/validation/storage-build-2026-10-25`. Sie verwenden den damaligen
+  `D:/Physim/build/validation/storage-build-2026-10-25` nach der Rückführung.
+  Ausgeführt wurden sie noch am damaligen F:-Ort. Sie verwenden den damaligen
   lokalen Arbeitsstand mit den noch offenen UI-Änderungen.
 - Die gezielte Archivwiederherstellung wurde auf beiden Plattformen mit einer
   echten 498.605-Byte-Datei und Umlauten geprüft: Erstherstellung, wiederholte
@@ -46,7 +52,7 @@ Die Prüfungen benötigen keine neuen Bildschirmbilder.
 | Bestand | Umfang | Sicherung und Ergebnis |
 | --- | ---: | --- |
 | Veraltete Compilerobjekte, älter als 48 Stunden | 1.399 Dateien, 327.718.154 Byte | Dateiliste, Größe, Änderungszeit und SHA-256 erfasst; 287.643.780 Byte auf D: und 40.074.374 Byte auf F: entfernt. Programme, Bibliotheken und Debug-Symbole erhalten. |
-| Alte Linux-Testläufe aus `/tmp/physim-*` | 189 Verzeichnisse, 4.839 Dateien, 3.338.556.533 Byte | Archiv und direkte F:-Kopien vollständig per SHA-256 geprüft; historische Pfade zeigen über Symlinks auf die Kopien. Archiv: 197.175.338 Byte. |
+| Alte Linux-Testläufe aus `/tmp/physim-*` | 189 Verzeichnisse, 4.839 Dateien, 3.338.556.533 Byte | Archiv und direkte D:-Kopien vollständig per SHA-256 geprüft; historische Symlinks auf D: umgestellt. Archiv: 197.175.338 Byte. |
 | Testläufe aus 13 Buildvarianten | 85.328 Dateien, 48.907.120.511 Byte | 4.487.854.239 Byte geprüfte ZIP-Archive mit Wiederherstellungsindizes. 44.241.174.841 Byte Originale auf D: und 4.684.004.788 Byte vorherige lose Kopien auf F: entfernt. |
 
 Das besonders große Archiv `Design-analysis-linux` enthält davon 48.320
@@ -54,33 +60,122 @@ Dateien mit 26.967.948.923 Originalbytes in 2.614.260.840 Archivbytes. Sämtlich
 Dateien wurden vor dem Entfernen nochmals mit ihren Archivhashes verglichen.
 
 Der vollständige dateigenaue Wartungsbestand liegt unter
-`F:/Physim/maintenance/2026-10-25`, die Testarchive unter
-`F:/Physim/archive/completed-tests-2026-10-25` und die alten Linux-Läufe unter
-`F:/Physim/archive/linux-test-runs-2026-10-25`. Wiederherstellung und Format sind
+`D:/Physim/build/maintenance/2026-10-25`, die Testarchive unter
+`D:/Physim/build/archive/completed-tests-2026-10-25` und die alten Linux-Läufe unter
+`D:/Physim/build/archive/linux-test-runs-2026-10-25` nach der Rückführung.
+Wiederherstellung und Format sind
 in der Speicheranleitung beschrieben. Archivierte Fehlerbelege behalten ihren
 ursprünglichen Inhalt und Geltungsbereich.
 
-Beim Beginn der restlichen Verlagerung waren auf D: 102.673.428.480 Byte frei.
-Dieser Freiplatz enthält auch die gleichzeitig abgeschlossene Bereinigung
-eines anderen Projekts. Die noch auf D: verbliebenen 94.581 regulären
-Builddateien einschließlich der neuen Umzugs-Steuerdatei belegen
-35.526.930.640 Byte; sie werden jetzt ebenfalls nach F: verlagert.
-Der endgültige Freiplatz und die dateigenau abgeglichene Gesamtbilanz folgen
-nach Abschluss dieses Schritts.
+Vor der Rückführung wurden 52.271 reguläre Dateien mit 36.594.682.655 Byte unter
+`F:/Physim` inventarisiert, darunter zwölf abgebrochene Kopierdateien des zuvor
+gestoppten Hinwegs. Es gab dort keine Verzeichnisverknüpfungen oder VM-Datenträger.
+Auf D: waren zu diesem Zeitpunkt 127.182.774.272 Byte frei; parallele Arbeiten
+anderer Projekte beeinflussen den freien Laufwerksplatz ebenfalls.
 
 Ein kleiner, unabhängiger SDL-Linux-SDK-Stand liegt zusätzlich unter
-`F:/Physim/dependencies/SDL3-linux-3.2.30`: 85 Originalheader, die bereits nativ
+`D:/Physim/build/dependencies/SDL3-linux-3.2.30` nach der Rückführung:
+85 Originalheader, die bereits nativ
 verwendete Bibliothek und die Lizenz, zusammen 7.459.194 Byte. Alle 87 Dateien
 wurden hashgleich kopiert und in `manifest.json` erfasst. Dadurch brauchen
-weitere isolierte Builds nicht den gerade verlagerten SDK-Pfad.
+weitere isolierte Builds einen festen D:-SDK-Pfad.
+
+## Rückführung nach D:
+
+Das lokale Inventar, der wiederaufnehmbare Rückführer und die dateigenauen
+SHA-256-Belege liegen unter `D:/Physim/build/maintenance/2026-10-25-return`.
+Jede Zielkopie wird geprüft und ihre Quittung auf D: geschrieben, bevor das
+F:-Original entfernt wird. Bei abweichenden bestehenden D:-Dateien bleiben beide
+Versionen erhalten; die zurückgeholte Version liegt dann unter
+`build/recovered-from-F`. Ein Wiederanlauf prüft auch die Zielkopien bereits
+abgeschlossener Schritte erneut. Verzeichnisse auf F: werden nur entfernt, wenn
+sie leer sind.
+
+Zuordnung für historische Pfadangaben:
+
+| Früherer Ort | Heutiger Ort nach Rückführung |
+| --- | --- |
+| `F:/Physim/build/<Pfad>` | `D:/Physim/build/<Pfad>` |
+| `F:/Physim/archive/<Pfad>` | `D:/Physim/build/archive/<Pfad>` |
+| `F:/Physim/validation/<Pfad>` | `D:/Physim/build/validation/<Pfad>` |
+| `F:/Physim/dependencies/<Pfad>` | `D:/Physim/build/dependencies/<Pfad>` |
+| `F:/Physim/maintenance/<Pfad>` | `D:/Physim/build/maintenance/<Pfad>` |
+| `F:/Physim/cache/<Pfad>`, `tmp/<Pfad>` | entsprechende Gruppe unter `D:/Physim/build` |
+
+Eingefrorene Manifeste werden nicht umgeschrieben. Die alten F:-Pfade sind
+historische Daten, keine aktuellen Kommandos. Auch damalige Hilfsskripte und
+Programme können feste F:-Pfade enthalten; weitere Prüfungen verwenden neue
+D:-Steuerdateien und frisch auf D: gebaute Programme.
+
+Der erste Rücklauf hat 768 Dateien mit 6.112.054.188 Byte überprüft zurückgeführt.
+Eine Pfad-Assertion stoppte danach vor dem Entfernen weiterer Originale.
+Eine vollständige Nachprüfung der geplanten Zielpfade fand keinen Pfadausbruch.
+Der Wiederanlauf vergleicht kanonische Windows-Pfade ohne optionales
+Extended-Length-Präfix und protokolliert bei einer Ablehnung den genauen Pfad.
+Die Ursache des ersten Assertion-Fehlers ist damit noch nicht abschließend belegt.
+
+Der unabhängige Abschlusslauf hat anschließend alle 52.271 Quittungen erfolgreich
+mit den D:-Dateien verglichen. Dabei wurde F: nicht mehr angesprochen. Die
+Dateihashes des Inventars und der Quittungen stehen im
+[kompakten maschinenlesbaren Abschluss](verification/storage-2026-10-25.json).
+
+Beim Umstellen der Linux-Links fiel ein fehlendes leeres Zielverzeichnis auf.
+Der dateibasierte Kopierer hatte leere Verzeichnisse nicht mit angelegt.
+Aus dem hashgeprüften ursprünglichen Linux-Archiv wurden deshalb 578 leere
+Verzeichnisse auf D: wiederhergestellt; alle 4.839 Dateien wurden zusätzlich
+mit dem ursprünglichen Archivindex abgeglichen. Danach ließen sich alle
+189 Links atomar auf D: umstellen. Die 25 Orca-Socketverzeichnisse blieben erhalten.
+
+Die 87 Dateien des eigenständigen SDL-SDKs stimmen mit dessen Manifest überein.
+Beide SDL-Bibliothekslinks im bisherigen SDK lösen auf D: auf; `git fsck --full`
+für den erhaltenen SDL-Quellstand endet mit Exitcode 0. Die alte Umzugssperre ist
+als `retired-migration-marker.txt` mit Hashquittung im Wartungsordner erhalten,
+anstatt den Buildbaum weiter zu blockieren.
+
+## Prüfung der D:-Speicherregeln
+
+Die lokalen Logs liegen im Rückführungsordner; für diese Prüfung wurden keine
+Bildschirmbilder erzeugt. Unter Windows und `Alpine-Dev` ausgeführt:
+
+- `tests/test_artifact_paths.py --work <D:-Prüfordner>`: bestanden. Standardpfad,
+  acht verbotene Pfadschreibweisen vor jeder Pfadauflösung, verbotene aufgelöste
+  Ziele, Archiv-Ein-/Ausgabepfade und unbekannte Konfigurationsversion geprüft.
+- `tools/with-artifacts.py --check`: Stamm, Temporär- und Cachepfade liegen
+  unter `D:/Physim/build` beziehungsweise `/mnt/d/Physim/build`. Ein Kindprozess
+  erzeugt dort eine echte temporäre Datei und gibt seinen Fehlercode 7 korrekt
+  an den Aufrufer zurück.
+- F:-Argumente für Wrapper und Builder (`--build-dir`, `--sdl`, `--install`):
+  mit Exitcode 2 vor der Pfadverwendung abgewiesen, auf beiden Plattformen.
+- `tests/test_bootstrap_build.py --work <D:-Prüfordner>`: mit echtem Compiler
+  unter WSL bestanden. Unter Windows scheiterte der erste Lauf beim atomaren
+  Ersetzen von `test-header-probe.exe` mit WinError 5; der unveränderte Nachlauf
+  bestand. Ursache der einmaligen Sperre nicht belegt; beide Logs erhalten.
+- Aus einem zurückgeholten Release-Archiv dieselbe 71.904-Byte-JSON-Datei mit
+  Umlaut im Pfad unter Windows und WSL wiederhergestellt und per SHA-256 geprüft.
+  Wiederholung erkennt die vorhandenen Bytes als identisch. Die temporären
+  Wiederherstellungskopien wurden danach entfernt.
+
+Die vollständige `test_native_test_runner.py`-Regression stoppte zunächst auf
+beiden Plattformen am bereits bestehenden Katalogabgleich: `protocol_sources`
+war im Workflow-Prüfer bekannt, fehlte aber im Integrationskatalog. Der vorhandene
+Workflow ist jetzt mit seinen tatsächlichen Argumenten und Ausgabeprüfungen
+registriert. Der unveränderte Testläufer besteht danach vollständig unter
+Windows und WSL (Exitcode 0). Das prüft den Katalog sowie Fehlerbehandlung und
+Berichte des Testläufers; es ist keine neue Ausführung des nativen Bildschirmablaufs.
+
+Die ausschließlich für diese Speicherprüfung erzeugten synthetischen Quellen,
+Compilerprodukte und Testläufer-Fixtures sind nach Abschluss ihrer Prozesse in
+`synthetic-fixtures.zip` gesichert: 4.095.585 Originalbytes in 727.964 Archivbytes.
+Jede Archivdatei und jede lose Ursprungskopie wurde vor dem Entfernen erneut per
+SHA-256 verglichen. Das Archiv mit Dateiverzeichnis erhält auch den fehlgeschlagenen
+Windows-Compilerstand. Ergebnis-JSON und rohe Logs bleiben direkt lesbar.
 
 ## Verbleibende Arbeit und Grenzen
 
-Den restlichen Buildbaum nach F: verlagern und dessen Integrität einschließlich
-der SDL-Symlinks und der eingebetteten SDL-Git-Historie kontrollieren.
-Anschließend soll eine Verzeichnisverknüpfung von `D:/Physim/build` nach
-`F:/Physim/build` die bisherigen Startpfade erhalten. Erst danach die
-Umzugssperren entfernen und die Startpfade prüfen. Diese Schritte sind noch offen.
+Neue Builds und Nachweise bleiben auf D:. Alte Programme und Steuerdateien mit
+eingebauten F:-Pfaden bleiben historische Belege; für weitere native Prüfungen
+neue D:-Steuerdateien und auf D: gebaute Programme verwenden. Die Rückführung
+ist keine erneute native UI-, Fokus- oder Screenreader-Abnahme.
 
 Unix-Laufzeitverzeichnisse bleiben kurzzeitig im Linux-Dateisystem: Der lokale
 F:-Mount meldet bei `AF_UNIX.bind` Fehler 95 (`Not supported`) und behält trotz

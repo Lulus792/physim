@@ -1,6 +1,7 @@
 """Restore selected original test files from a verified local storage archive."""
 import argparse
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path, PurePosixPath
@@ -8,6 +9,12 @@ import shutil
 import sys
 import tempfile
 import zipfile
+try:
+    import artifact_paths
+except ModuleNotFoundError:
+    storage_spec = importlib.util.spec_from_file_location("physim_artifact_paths", Path(__file__).with_name("artifact_paths.py"))
+    artifact_paths = importlib.util.module_from_spec(storage_spec)
+    storage_spec.loader.exec_module(artifact_paths)
 
 
 def digest(path):
@@ -26,6 +33,8 @@ def relative_name(value):
 
 
 def restore(archive_folder, destination, prefix):
+    archive_folder = artifact_paths.checked(archive_folder)
+    destination = artifact_paths.checked(destination)
     archive = archive_folder / "files.zip"
     index = archive_folder / "index.jsonl"
     receipt = json.loads((archive_folder / "verified.json").read_text(encoding="utf-8"))

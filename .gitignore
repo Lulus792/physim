@@ -1,4 +1,5 @@
 /build*/
+/.physim-storage.json
 /build*-configure.log
 /runs/
 /projects/
