@@ -114,12 +114,20 @@ static void editor_search_view(app *a) {
     nk_style_push_color(ui,&ui->style.edit.text_normal,text);
     nk_style_push_color(ui,&ui->style.edit.text_hover,text);
     nk_style_push_color(ui,&ui->style.edit.text_active,text);
+    struct nk_mouse saved_mouse=ui->input.mouse;
+    bool opening_click=a->search_focus && nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) &&
+        !nk_input_is_mouse_hovering_rect(&ui->input,island);
+    /* nk_do_edit would treat that same header press as a click outside the
+     * newly focused field. Mask it only for the new island, then restore it. */
+    if(opening_click){ui->input.mouse.buttons[NK_BUTTON_LEFT].clicked=0;ui->input.mouse.buttons[NK_BUTTON_LEFT].down=0;}
     struct nk_window *previous=ui->active;
     if(nk_begin(ui,"editor-search",island,NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BACKGROUND)) {
         nk_sdl_window_raise(ui,"editor-search");
         struct nk_command_buffer *c=nk_window_get_canvas(ui);
         bool pointer=nk_input_is_mouse_hovering_rect(&ui->input,island);
-        if(nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) && !pointer) {
+        /* The opening header click is outside the new island. It grants
+         * focus; only a later outside click may hand input back to the code. */
+        if(nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) && !pointer && !a->search_focus) {
             a->search_keyboard=false;nk_edit_unfocus(ui);
         }
         bool blocked=a->toolbar_menu || a->toolbar_pointer_consumed || a->completion_active;
@@ -216,6 +224,7 @@ static void editor_search_view(app *a) {
         ps_ui_accessibility_label(ui,status_rect,count);
     }
     nk_end(ui);
+    if(opening_click)ui->input.mouse=saved_mouse;
     for(int i=0;i<3;i++)nk_style_pop_color(ui);
     for(int i=0;i<4;i++)nk_style_pop_style_item(ui);
     for(int i=0;i<2;i++)nk_style_pop_float(ui);

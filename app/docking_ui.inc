@@ -10,6 +10,7 @@ static void workspace_rule(struct nk_command_buffer *canvas,struct nk_rect line)
     struct nk_rect clip=canvas->clip;
     nk_push_scissor(canvas,line);nk_fill_rect(canvas,line,0,UI_COLOR(border));nk_push_scissor(canvas,clip);
 }
+#include "workbench_header_ui.inc"
 #include "laboratory_layout.inc"
 #include "analysis_layout.inc"
 #include "analysis_resize.inc"
@@ -363,31 +364,18 @@ static void dock_headers(app *a) {
                     a->dock_headers[j]=nk_rect(strip.x,strip.y,workbench_visible(a)?6:24,strip.h);
                     if(!workbench_visible(a)) {ps_ui_draw_icon(nk_window_get_canvas(ui),PS_ICON_DRAG,a->dock_headers[j],UI_COLOR(muted));strip.x+=24;strip.w=fmaxf(1,strip.w-24);}
                     if(editor_search_target(a)) {
-                        if(workbench_visible(a) && (d->hidden&(1u<<PS_DOCK_SIDEBAR))) {
-                            a->workbench_sidebar_bounds=nk_rect(strip.x+5,strip.y+6,24,28);
-                            if(workbench_side_button(a,a->workbench_sidebar_bounds,false,false,"Workspace ein-/ausblenden")) {
-                                ps_dock_reveal_outer(d,PS_DOCK_SIDEBAR,PS_DOCK_LEFT);a->workbench_sidebar_focus=3;
-                            }
-                            strip.x+=32;strip.w-=32;
-                        }
-                        bool context_hidden=workbench_visible(a) && (d->hidden&(1u<<PS_DOCK_INSPECTOR))!=0;
-                        float reserved=context_hidden?96:64;
-                        a->workbench_search_bounds=nk_rect(strip.x+strip.w-reserved,strip.y,32,strip.h);
-                        a->workbench_save_bounds=nk_rect(strip.x+strip.w-reserved+32,strip.y,32,strip.h);
-                        if(workbench_visible(a)) {
-                            workbench_icon(nk_window_get_canvas(ui),PS_ICON_SEARCH,a->workbench_search_bounds,UI_COLOR(muted));
-                            workbench_icon(nk_window_get_canvas(ui),PS_ICON_SAVE,a->workbench_save_bounds,UI_COLOR(muted));
-                        } else {
+                        if(workbench_visible(a))strip=workbench_editor_tools(a,strip,
+                            (d->hidden&(1u<<PS_DOCK_INSPECTOR))!=0,(d->hidden&(1u<<PS_DOCK_SIDEBAR))!=0);
+                        else {
+                            a->workbench_search_bounds=nk_rect(strip.x+strip.w-64,strip.y,32,strip.h);
+                            a->workbench_save_bounds=nk_rect(strip.x+strip.w-32,strip.y,32,strip.h);
                             ps_ui_draw_icon(nk_window_get_canvas(ui),PS_ICON_SEARCH,a->workbench_search_bounds,UI_COLOR(muted));
                             ps_ui_draw_icon(nk_window_get_canvas(ui),PS_ICON_SAVE,a->workbench_save_bounds,UI_COLOR(muted));
+                            if(ps_ui_button_at(ui,a->workbench_search_bounds,"Dokumentsuche öffnen",false))editor_search_open(a);
+                            nk_begin_disabled(ui,!idle(a));
+                            if(ps_ui_button_at(ui,a->workbench_save_bounds,"Aktive Datei speichern",false))save_active_document(a);
+                            nk_end_disabled(ui);strip.w=fmaxf(1,strip.w-64);
                         }
-                        if(ps_ui_button_at(ui,a->workbench_search_bounds,"Dokumentsuche öffnen",false))editor_search_open(a);
-                        nk_begin_disabled(ui,!idle(a));
-                        if(ps_ui_button_at(ui,a->workbench_save_bounds,"Aktive Datei speichern",false))save_active_document(a);
-                        nk_end_disabled(ui);
-                        if(a->search_icon_focus && nk_sdl_accessibility_request_focus(ui,NULL,"Dokumentsuche öffnen"))a->search_icon_focus=false;
-                        if(nk_sdl_accessibility_is_focused(ui,NULL,"Dokumentsuche öffnen"))nk_stroke_rect(nk_window_get_canvas(ui),a->workbench_search_bounds,5,2,UI_COLOR(accent));
-                        strip.w=fmaxf(1,strip.w-reserved);
                     }
                     struct nk_rect pull=strip;
                     if(!workbench_visible(a)){pull.x=a->dock_headers[j].x;pull.w=strip.x+strip.w-pull.x;}

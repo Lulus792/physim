@@ -7,6 +7,42 @@ import argparse,json,math,os,pathlib,re,sys
 from check_display_workflow import Workflow
 from check_graphic_raster import png
 
+def header_records(output,folder):
+    records=[]
+    for line in output.splitlines():
+        if not line.startswith('HEADER DESIGN '):continue
+        state=re.search(r'state=([\w-]+)',line)[1];variant=re.search(r'variant=(\w+)',line)[1]
+        size=int(re.search(r'size=(\d+)',line)[1]);f=size/16
+        boxes=[tuple(map(float,v.split(','))) for v in re.findall(r'box\d=([\d.,-]+)',line)]
+        tools,search,save,tabs,sidebar=boxes
+        assert abs(tools[2]-(1+(105 if state=='closed' else 71)*f))<.001
+        assert search[2:]==save[2:]==(28*f,28*f)
+        assert abs(search[0]-tools[0]-1-6*f)<.001 and abs(save[0]-search[0]-31*f)<.001
+        assert abs(tabs[0]+tabs[2]-tools[0])<.001
+        path=folder/'project/header-detached.png' if state=='detached' else folder/(f'header-{state}.png' if state in ('before-detach','returned') else f'header-{variant}-{state}.png')
+        image=png(path);w,h,rgb,_=image
+        assert all(0<=x and 0<=y and x+bw<=w+.01 and y+bh<=h+.01 for x,y,bw,bh in (tools,search,save,tabs))
+        border=(59,61,69) if variant=='dark' else (255,255,255) if variant=='contrast' else (190,195,206)
+        def count(box,color,tolerance=4):
+            x,y,bw,bh=box
+            return sum(max(abs(a-b) for a,b in zip(rgb[(yy*w+xx)*3:(yy*w+xx)*3+3],color))<=tolerance
+                       for yy in range(max(0,math.ceil(y)),min(h,math.floor(y+bh))) for xx in range(max(0,math.ceil(x)),min(w,math.floor(x+bw))))
+        rule=max(count((x,tools[1]+2,1,tools[3]-4),border) for x in (math.floor(tools[0]),math.ceil(tools[0])))
+        assert rule>=math.floor(tools[3]-4)*.9,('missing editor tools rule',state,variant,tools,rule)
+        if state=='normal':
+            hover=png(folder/f'header-{variant}-hover.png');focus=png(folder/f'header-{variant}-focus.png')
+            for other in (hover,focus):assert other[:2]==image[:2]
+            old_rgb=rgb
+            rgb=hover[2];color=(66,68,78) if variant=='dark' else (213,218,228) if variant!='contrast' else None
+            if color:assert count((search[0]+4,search[1]+4,search[2]-8,search[3]-8),color)>100*f*f,('search hover',variant)
+            rgb=focus[2];accent=(138,186,255) if variant=='dark' else (255,225,0) if variant=='contrast' else (23,86,158)
+            assert count((search[0]-2,search[1]-2,search[2]+4,search[3]+4),accent,12)>40,('search focus',variant)
+            rgb=old_rgb
+            assert (folder/f'header-{variant}-search.png').is_file()
+        records.append(dict(state=state,variant=variant,size=size,boxes=boxes,rule_pixels=rule))
+    assert [(r['state'],r['variant']) for r in records]==[(state,variant) for variant in ('dark','light','large','contrast') for state in ('normal','closed','restored')]+[('before-detach','dark'),('detached','dark'),('returned','dark')]
+    return records
+
 def main():
     p=argparse.ArgumentParser();p.add_argument('--app',type=pathlib.Path,required=True);p.add_argument('--root',type=pathlib.Path,required=True);p.add_argument('--work',type=pathlib.Path,required=True);args=p.parse_args()
     args.work.mkdir(parents=True,exist_ok=True);flow=Workflow(args.app,args.work,args.root,False);flow.env['SDL_FORCE_RAISEWINDOW']='1';checks=[]
@@ -62,6 +98,8 @@ def main():
                 image=Image.open(args.root/f'docs/visuals/unified-workspace/develop-{theme}.png').convert('RGB')
                 native=box(png(folder/f'tabs-{theme}-normal.png'));reference=box((image.width,image.height,image.tobytes(),None))
                 assert max(abs(a-b) for a,b in zip(native,reference))<=1,(theme,'original pill geometry',native,reference)
-        checks.append({'font_mode':kind,'marker_source':sources[0],'records':records})
+        headers=header_records(output,folder)
+        assert (folder/'project/header-detached-search.png').is_file()
+        checks.append({'font_mode':kind,'marker_source':sources[0],'records':records,'headers':headers})
     (args.work/'validation.json').write_text(json.dumps({'checks':checks,'scope':__doc__},indent=2)+'\n',encoding='utf-8');print('FILE TABS DESIGN: PASSED')
 if __name__=='__main__':main()

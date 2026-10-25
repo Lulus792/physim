@@ -215,9 +215,14 @@ static bool panel_windows_render(app *a) {
             if(i==PS_DOCK_WORKSPACE && workbench_visible(a)) {
                 file_tabs_prepare(a);
                 float heading=file_tabs_height(a);
-                if(nk_begin(p->ui,"panel-file-tabs",nk_rect(0,0,(float)w,heading),NK_WINDOW_NO_SCROLLBAR))
-                    file_tabs_view(a,nk_window_get_content_region(p->ui));
-                nk_end(p->ui);a->dock_panels[i].y+=heading;a->dock_panels[i].h-=heading;
+                nk_style_push_vec2(p->ui,&p->ui->style.window.padding,nk_vec2(0,0));
+                nk_style_push_float(p->ui,&p->ui->style.window.rounding,0);
+                if(nk_begin(p->ui,"panel-file-tabs",nk_rect(0,0,(float)w,heading),NK_WINDOW_NO_SCROLLBAR)) {
+                    struct nk_rect strip=workbench_editor_tools(a,nk_rect(0,0,(float)w,heading),false,false);
+                    file_tabs_view(a,strip);workspace_rule(nk_window_get_canvas(p->ui),nk_rect(0,heading-1,(float)w,1));
+                }
+                nk_end(p->ui);nk_style_pop_float(p->ui);nk_style_pop_vec2(p->ui);
+                a->dock_panels[i].y+=heading;a->dock_panels[i].h-=heading;
             }
             if(i==PS_DOCK_WORKSPACE && p->restore_editor_focus && nk_window_find(p->ui,"workspace")) {
                 nk_window_set_focus(p->ui,"workspace");a->completion_focus_edit=editor_search_target(a);p->restore_editor_focus=false;

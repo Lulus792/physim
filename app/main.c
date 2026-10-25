@@ -354,7 +354,7 @@ typedef struct {
     struct nk_rect search_island_bounds, search_query_bounds, search_previous_bounds, search_expand_bounds, search_close_bounds;
     struct nk_text_edit *search_edit;
     ps_ui_backdrop search_material;
-    struct nk_rect workbench_search_bounds,workbench_save_bounds,workbench_context_bounds,workbench_sidebar_bounds;
+    struct nk_rect workbench_tools_bounds,workbench_search_bounds,workbench_save_bounds,workbench_context_bounds,workbench_sidebar_bounds;
     char *saved_source[2];
     ps_autosave *recovery;
     bool recovery_conflict, autosave_blocked, autosave_current;

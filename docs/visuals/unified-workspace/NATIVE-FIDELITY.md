@@ -285,3 +285,10 @@ und unveränderte Rohdateien sind auf Windows/Linux geprüft. Die vollständige
 Oberfläche einschließlich F1 und die praktischen Plattformabnahmen bleiben offen.
 
 Der [native Analyseeditor-Abgleich](ANALYSIS-EDITOR-NATIVE.md) verbindet Analysecode mit der Werkbank, erhält Daten-/Berichtszustände und korrigiert die Tastaturübergabe sowie Undo in großen Quellen. Windows/Linux bestehen die gezielten UI- und Kerntests. Die vollständige Gestaltung und die praktischen Plattformabnahmen bleiben weiter offen.
+
+Der [gemeinsame native Editorkopf](WORKBENCH-HEADER-NATIVE.md) übernimmt die
+kompakten Such-/Speicherflächen und ihre Trennlinien auch im herausgezogenen
+Editor. Der Öffnungsklick erhält jetzt den Suchfokus und echte Texteingaben.
+Windows und Linux bestehen je fünf Gruppen. Der zusätzliche strenge native
+Pixelvergleich hält kleine Rasterabweichungen ausdrücklich offen; er ersetzt
+keine vollständige Browser-, Design- oder Plattformabnahme.
