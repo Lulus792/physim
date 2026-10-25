@@ -1,0 +1,18 @@
+{
+  "platform": "linux",
+  "font_mode": "bundled",
+  "binary": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+  "sha256": "10de75142187678eb40f5013c69e1bb0863688ca5af1d0cffc51d31b6d6069fc",
+  "cases": [
+    {
+      "name": "analysis_layout_dark",
+      "exit_code": 0,
+      "seconds": 17.53912725100008
+    },
+    {
+      "name": "analysis_layout_light_large_narrow",
+      "exit_code": 0,
+      "seconds": 14.653437510999993
+    }
+  ]
+}

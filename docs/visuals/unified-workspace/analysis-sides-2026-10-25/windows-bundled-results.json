@@ -1,0 +1,18 @@
+{
+  "platform": "windows",
+  "font_mode": "bundled",
+  "binary": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+  "sha256": "d3dd5752249d7fcb9334da93def6cc30733143612b88134a98cd60228d7cc5f5",
+  "cases": [
+    {
+      "name": "analysis_layout_dark",
+      "exit_code": 0,
+      "seconds": 7.437000000005355
+    },
+    {
+      "name": "analysis_layout_light_large_narrow",
+      "exit_code": 0,
+      "seconds": 7.35899999999674
+    }
+  ]
+}

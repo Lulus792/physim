@@ -1,0 +1,57 @@
+{
+  "platform": "linux",
+  "binary": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+  "sha256": "10de75142187678eb40f5013c69e1bb0863688ca5af1d0cffc51d31b6d6069fc",
+  "source_snapshot": "analysis-sides-after10-source.json",
+  "cases": [
+    {
+      "name": "analysis_layout_dark",
+      "exit_code": 0,
+      "seconds": 20.233181203000072
+    },
+    {
+      "name": "analysis_layout_light",
+      "exit_code": 0,
+      "seconds": 20.64248420900003
+    },
+    {
+      "name": "analysis_layout_contrast",
+      "exit_code": 0,
+      "seconds": 21.459014255000056
+    },
+    {
+      "name": "analysis_layout_dark_large_narrow",
+      "exit_code": 0,
+      "seconds": 17.13905154600002
+    },
+    {
+      "name": "analysis_layout_light_large_narrow",
+      "exit_code": 0,
+      "seconds": 15.729975695999997
+    },
+    {
+      "name": "analysis_units_dark",
+      "exit_code": 0,
+      "seconds": 9.075202811000054
+    },
+    {
+      "name": "analysis_units_light_large_narrow",
+      "exit_code": 0,
+      "seconds": 8.826118118000068
+    },
+    {
+      "name": "workbench_workflow",
+      "exit_code": 0,
+      "seconds": 59.927439609999965
+    },
+    {
+      "name": "docking_workflow",
+      "exit_code": 0,
+      "seconds": 67.34328043999994
+    }
+  ],
+  "default_view_strict_comparison": {
+    "different_pixels": 0,
+    "max_rgb_delta": 0
+  }
+}

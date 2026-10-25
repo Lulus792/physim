@@ -1,5 +1,22 @@
 /* Real run files and native pointer routing; this is a layout regression, not
  * evidence of multi-run rendering or full reference fidelity. */
+static bool analysis_import_text_visible;
+static bool analysis_action_text_fits(app *a,struct nk_rect bounds,const char *label) {
+    const struct nk_command *command;size_t bytes=0,length=strlen(label);unsigned lines=0;bool fits=true;
+    nk_foreach(command,a->ui)if(command->type==NK_COMMAND_TEXT) {
+        const struct nk_command_text *text=(const struct nk_command_text*)command;
+        if(text->length<=0 || text->x<bounds.x || text->x>=bounds.x+bounds.w || text->y<bounds.y || text->y>=bounds.y+bounds.h)continue;
+        float width=text->font->width(text->font->userdata,text->height,text->string,text->length);
+        fits=fits && text->x+width<=bounds.x+bounds.w+1 && text->y+text->height<=bounds.y+bounds.h+.01f;
+        fits=fits && bytes+(size_t)text->length<=length && !memcmp(label+bytes,text->string,(size_t)text->length);
+        bytes+=(size_t)text->length;lines++;
+    }
+    printf("ANALYSIS ACTION TEXT: bytes=%zu/%zu lines=%u fits=%d bounds=%.1f,%.1f,%.1f,%.1f\n",bytes,length,lines,fits,bounds.x,bounds.y,bounds.w,bounds.h);
+    return fits && bytes==length;
+}
+static void analysis_workspace_test_draw(app *a,int stage) {
+    if(stage==76)analysis_import_text_visible=analysis_action_text_fits(a,a->import_bounds,"Messlauf importieren …");
+}
 static bool analysis_workspace_test_start(app *a,const char *root,const char *mode) {
     char path[4096];join(path,sizeof path,root,"preferences.bin");preferences_start(a,path);
     join(a->project_input,sizeof a->project_input,root,"project");a->example=0;new_project(a);
@@ -25,7 +42,7 @@ static bool analysis_workspace_test_start(app *a,const char *root,const char *mo
     return true;
 }
 static void analysis_workspace_test_frame(app *a,int *stage,int *code,const char **capture) {
-    static unsigned settle;static ps_layout_state original;static struct nk_rect center;static double focus_retry;
+    static unsigned settle,reveal_attempts;static ps_layout_state original;static struct nk_rect center;static double focus_retry;
     static ps_statistics statistics;static ps_plot_view scroll_view;static int viewport_width,viewport_height;static float curve_height,automatic_height,initial_curve_height;static double probe_at;static unsigned external;static struct nk_rect slot;bool ok=true;
     const unsigned external_panels[]={PS_DOCK_SIDEBAR,PS_DOCK_WORKSPACE,PS_DOCK_INSPECTOR};
     if(*stage==0 && SDL_getenv("PHYSIM_TEST_TRACE") && ps_clock()>=probe_at) {
@@ -39,12 +56,13 @@ static void analysis_workspace_test_frame(app *a,int *stage,int *code,const char
         original=laboratory_capture(a);statistics=a->data.stats[0];a->tab=2;a->analysis_tab=0;break;
     case 1:
         center=a->dock_panels[PS_DOCK_WORKSPACE];initial_curve_height=a->plot_area.h;
-        ok=a->analysis_layout_active && center.y==198 && a->dock_panels[PS_DOCK_SIDEBAR].w==232 && a->dock_panels[PS_DOCK_INSPECTOR].w==242 && a->data.total==301 && a->selected_count==1;
+        ok=a->analysis_layout_active && center.y==198 && a->dock_panels[PS_DOCK_SIDEBAR].w==fmaxf(232,ceilf(140.f*a->preferences.ui_size/16.f)) && a->dock_panels[PS_DOCK_INSPECTOR].w==fmaxf(242,ceilf(180.f*a->preferences.ui_size/16.f)) && a->data.total==301 && a->selected_count==1;
         {int w,h;SDL_GetWindowSize(a->window,&w,&h);ok=ok && a->import_bounds.h>0 && a->import_bounds.y+a->import_bounds.h<=h-28;
         printf("ANALYSIS LAYOUT: client=%dx%d middle=%.1f,%.1f,%.1f,%.1f import-bottom=%.1f\n",w,h,center.x,center.y,center.w,center.h,a->import_bounds.y+a->import_bounds.h);}
         printf("ANALYSIS TAB FIT: width=%.2f text=%.2f\n",a->analysis_tabs[0].w,a->workbench_fonts[2].width(a->workbench_fonts[2].userdata,a->workbench_fonts[2].height,"Messdaten",9));
         ok=ok && a->analysis_tabs[0].w>=a->workbench_fonts[2].width(a->workbench_fonts[2].userdata,a->workbench_fonts[2].height,"Messdaten",9);
         ok=ok && a->plot_buttons[2].w>=a->workbench_fonts[0].width(a->workbench_fonts[0].userdata,a->workbench_fonts[0].height,"Alles zeigen",12);
+        if(a->preferences.ui_size==16)ok=ok && a->import_bounds.h==30 && a->run_details_button.h==32;
         *capture="analysis-both.bmp";test_mouse(a,a->analysis_side_buttons[0],true);break;
     case 2:test_mouse(a,a->analysis_side_buttons[0],false);break;
     case 3:
@@ -75,14 +93,14 @@ static void analysis_workspace_test_frame(app *a,int *stage,int *code,const char
     case 13:
         slot=a->dock_panels[external_panels[external]];
         ok=a->panels[external_panels[external]].action.w>0;
-        test_mouse(a,a->panels[external_panels[external]].action,true);break;
+        test_mouse(a,external_panels[external]==PS_DOCK_WORKSPACE?a->analysis_tabs[1]:a->panels[external_panels[external]].action,true);break;
     case 14:test_mouse(a,nk_rect(-32,250,0,0),true);break;
     case 15:test_mouse(a,nk_rect(-32,250,0,0),false);break;
     case 16: {
         ps_panel_window *p=&a->panels[external_panels[external]];
         struct nk_rect current=a->dock_panels[external_panels[external]];
         ok=p->detached && p->window && !(SDL_GetWindowFlags(p->window)&SDL_WINDOW_HIDDEN);
-        ok=ok && current.x==slot.x && current.y==slot.y && current.w==slot.w && current.h==slot.h && a->data.total==301 && a->selected_count==1;
+        ok=ok && current.x==slot.x && current.y==slot.y && current.w==slot.w && current.h==slot.h && a->data.total==301 && a->selected_count==1 && !a->show_report;
         char name[64];snprintf(name,sizeof name,"analysis-external-%u.bmp",external);
         join(p->capture,sizeof p->capture,a->project,name);break;
     }
@@ -140,7 +158,14 @@ static void analysis_workspace_test_frame(app *a,int *stage,int *code,const char
         a->tab=2;a->analysis_tab=0;break;
     }
     case 35:
-        automatic_height=a->plot_area.h;ok=nk_sdl_accessibility_request_focus(a->ui,NULL,analysis_plot_separator_name());break;
+        automatic_height=a->plot_area.h;ok=nk_sdl_accessibility_request_focus(a->ui,NULL,analysis_plot_separator_name());
+        if(!ok && reveal_attempts++<4) {
+            struct nk_rect area=a->dock_panels[PS_DOCK_WORKSPACE];
+            test_mouse(a,nk_rect(area.x+30,area.y+area.h*.5f,0,0),false);
+            SDL_Event wheel={0};wheel.type=SDL_EVENT_MOUSE_WHEEL;wheel.wheel.windowID=SDL_GetWindowID(a->window);wheel.wheel.which=PS_TEST_MOUSE_ID;wheel.wheel.y=-4;SDL_PushEvent(&wheel);
+            printf("ANALYSIS SEEK SEPARATOR: scroll attempt=%u\n",reveal_attempts);return;
+        }
+        break;
     case 36:
         if(!nk_sdl_accessibility_is_focused(a->ui,NULL,analysis_plot_separator_name()))return;
         test_window_key_mod(a->window,SDLK_HOME,0);break;
@@ -150,7 +175,9 @@ static void analysis_workspace_test_frame(app *a,int *stage,int *code,const char
     case 38:
         ok=fabsf(a->plot_area.h-curve_height-10)<.01f;test_window_key_mod(a->window,SDLK_DOWN,SDL_KMOD_SHIFT);break;
     case 39:
-        ok=fabsf(a->plot_area.h-curve_height-50)<.01f;test_mouse(a,a->analysis_plot_splitter,true);break;
+        ok=fabsf(a->plot_area.h-curve_height-50)<.01f && a->analysis_plot_splitter.h>=8.99f;
+        printf("ANALYSIS KEYBOARD REVEAL: separator-height=%.2f focused=%d\n",a->analysis_plot_splitter.h,nk_sdl_accessibility_is_focused(a->ui,NULL,analysis_plot_separator_name()));
+        ok=ok && nk_sdl_accessibility_is_focused(a->ui,NULL,analysis_plot_separator_name());test_mouse(a,a->analysis_plot_splitter,true);break;
     case 40:
         ok=a->analysis_plot_resizing;test_mouse(a,nk_rect(a->analysis_plot_splitter.x+a->analysis_plot_splitter.w/2,a->analysis_plot_splitter.y+24,0,0),true);break;
     case 41:
@@ -236,10 +263,12 @@ static void analysis_workspace_test_frame(app *a,int *stage,int *code,const char
         test_window_key_mod(a->window,SDLK_END,0);break;
     case 69: {
         scroll_view=a->data_views[a->plot_channel];struct nk_rect area=a->dock_panels[PS_DOCK_WORKSPACE];
-        test_mouse(a,nk_rect(area.x+30,area.y+area.h-14,0,0),true);break;
+        /* End now reveals the focused separator at the lower edge. Move into
+         * the body without starting another drag on that visible target. */
+        test_mouse(a,nk_rect(area.x+30,area.y+area.h*.5f,0,0),false);break;
     }
     case 70: {
-        struct nk_rect area=a->dock_panels[PS_DOCK_WORKSPACE];test_mouse(a,nk_rect(area.x+30,area.y+area.h-14,0,0),false);
+        struct nk_rect area=a->dock_panels[PS_DOCK_WORKSPACE];test_mouse(a,nk_rect(area.x+30,area.y+area.h*.5f,0,0),false);
         SDL_Event wheel={0};wheel.type=SDL_EVENT_MOUSE_WHEEL;wheel.wheel.windowID=SDL_GetWindowID(a->window);wheel.wheel.which=PS_TEST_MOUSE_ID;wheel.wheel.y=-12;SDL_PushEvent(&wheel);break;
     }
     case 71: {
@@ -248,8 +277,48 @@ static void analysis_workspace_test_frame(app *a,int *stage,int *code,const char
         bool reachable=nk_sdl_accessibility_request_focus(a->ui,NULL,"CSV · Alle Rohdaten ↗");
         struct nk_window *workspace=nk_window_find(a->ui,"workspace");
         printf("ANALYSIS STATISTICS SCROLL: offset=%u button-bottom=%.1f viewport-bottom=%.1f reachable=%d unchanged-view-and-statistics=%d\n",workspace?workspace->scrollbar.y:0,a->raw_export_bounds.y+a->raw_export_bounds.h,area.y+area.h,reachable,ok);
-        ok=ok && reachable;*capture="analysis-statistics-scrolled.bmp";a->quitting=true;break;
+        ok=ok && reachable;*capture="analysis-statistics-scrolled.bmp";break;
     }
+    case 72:ok=nk_sdl_accessibility_request_focus(a->ui,NULL,"Messlauflisten-Breite");break;
+    case 73:
+        if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"Messlauflisten-Breite"))return;
+        test_window_key_mod(a->window,SDLK_HOME,0);break;
+    case 74:
+        printf("ANALYSIS LEFT MINIMUM: desired=%u actual=%.1f expected=%.1f\n",a->preferences.sidebar_width,a->dock_panels[PS_DOCK_SIDEBAR].w,ceilf(140.f*a->preferences.ui_size/16.f));
+        ok=a->preferences.sidebar_width==ceilf(140.f*a->preferences.ui_size/16.f) && a->dock_panels[PS_DOCK_SIDEBAR].w==a->preferences.sidebar_width;
+        ok=ok && nk_sdl_accessibility_request_focus(a->ui,NULL,"Laufdetails-Breite");break;
+    case 75:
+        if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"Laufdetails-Breite"))return;
+        test_window_key_mod(a->window,SDLK_HOME,0);break;
+    case 76:
+        printf("ANALYSIS RIGHT MINIMUM: desired=%u actual=%.1f expected=%.1f\n",a->preferences.inspector_width,a->dock_panels[PS_DOCK_INSPECTOR].w,ceilf(180.f*a->preferences.ui_size/16.f));
+        ok=a->preferences.inspector_width==ceilf(180.f*a->preferences.ui_size/16.f) && a->dock_panels[PS_DOCK_INSPECTOR].w==a->preferences.inspector_width && a->dock_panels[PS_DOCK_WORKSPACE].w>=300;
+        ok=ok && a->import_bounds.h>0 && a->import_bounds.y+a->import_bounds.h<=a->dock_panels[PS_DOCK_SIDEBAR].y+a->dock_panels[PS_DOCK_SIDEBAR].h;
+        ok=ok && analysis_import_text_visible;
+        ok=ok && a->data.total==301 && a->selected_count==1 && !memcmp(&statistics,&a->data.stats[0],sizeof statistics);
+        *capture="analysis-minimum-sides.bmp";break;
+    case 77: {
+        /* Independent click regression: start at the top. Actual scrolling and
+         * unchanged data/view were already checked at stage 71. */
+        struct nk_window *workspace=nk_window_find(a->ui,"workspace");
+        if(workspace && workspace->scrollbar.y){workspace->scrollbar.y=0;return;}
+        if(a->analysis_tabs[1].y<a->dock_panels[PS_DOCK_WORKSPACE].y)return;
+        test_mouse(a,a->analysis_tabs[1],true);break;
+    }
+    case 78:ok=!a->show_report;test_mouse(a,a->analysis_tabs[1],false);break;
+    case 79:ok=a->show_report;test_mouse(a,a->analysis_tabs[0],true);break;
+    case 80:ok=a->show_report;test_mouse(a,a->analysis_tabs[0],false);break;
+    case 81:ok=!a->show_report && nk_sdl_accessibility_request_focus(a->ui,NULL,"Analyseergebnis");break;
+    case 82:
+        if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"Analyseergebnis"))return;
+        test_window_key_mod(a->window,SDLK_SPACE,0);break;
+    case 83:ok=a->show_report && nk_sdl_accessibility_request_focus(a->ui,NULL,"Messdaten");break;
+    case 84:
+        if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"Messdaten"))return;
+        test_window_key_mod(a->window,SDLK_SPACE,0);break;
+    case 85:
+        ok=!a->show_report && a->selected_count==1 && a->data.total==301 && !memcmp(&statistics,&a->data.stats[0],sizeof statistics);
+        printf("ANALYSIS TABS: drag preserved view, pointer release and keyboard activation passed=%d\n",ok);a->quitting=true;break;
     }
     if(!ok){*capture="analysis-failed.bmp";fprintf(stderr,"Analysis workspace stage %d failed: %s\n",*stage,a->status);*code=1;a->quitting=true;}
     if(a->quitting)printf("ANALYSIS WORKSPACE LAYOUT SELF-TEST: %s\n",*code?"FAILED":"PASSED");

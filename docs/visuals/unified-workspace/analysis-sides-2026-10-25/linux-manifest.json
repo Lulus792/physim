@@ -1,0 +1,432 @@
+{
+  "result": {
+    "platform": "linux",
+    "binary": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+    "sha256": "10de75142187678eb40f5013c69e1bb0863688ca5af1d0cffc51d31b6d6069fc",
+    "source_snapshot": "analysis-sides-after10-source.json",
+    "cases": [
+      {
+        "name": "analysis_layout_dark",
+        "exit_code": 0,
+        "seconds": 20.233181203000072
+      },
+      {
+        "name": "analysis_layout_light",
+        "exit_code": 0,
+        "seconds": 20.64248420900003
+      },
+      {
+        "name": "analysis_layout_contrast",
+        "exit_code": 0,
+        "seconds": 21.459014255000056
+      },
+      {
+        "name": "analysis_layout_dark_large_narrow",
+        "exit_code": 0,
+        "seconds": 17.13905154600002
+      },
+      {
+        "name": "analysis_layout_light_large_narrow",
+        "exit_code": 0,
+        "seconds": 15.729975695999997
+      },
+      {
+        "name": "analysis_units_dark",
+        "exit_code": 0,
+        "seconds": 9.075202811000054
+      },
+      {
+        "name": "analysis_units_light_large_narrow",
+        "exit_code": 0,
+        "seconds": 8.826118118000068
+      },
+      {
+        "name": "workbench_workflow",
+        "exit_code": 0,
+        "seconds": 59.927439609999965
+      },
+      {
+        "name": "docking_workflow",
+        "exit_code": 0,
+        "seconds": 67.34328043999994
+      }
+    ],
+    "default_view_strict_comparison": {
+      "different_pixels": 0,
+      "max_rgb_delta": 0
+    }
+  },
+  "files": [
+    {
+      "path": "linux-analysis_layout_dark-checker.log.gz",
+      "sha256": "859885e6f5943be004fd1a3805987d1c5e2ed3da371a681ecc722ba98bf7678a",
+      "bytes": 2423,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_layout_dark/checker.log"
+    },
+    {
+      "path": "linux-analysis_layout_dark-steps.json.gz",
+      "sha256": "f4d67a3b11a13b1062196277d242f42485254cd46d56ae9022e3ae3839bbcc27",
+      "bytes": 2556,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_layout_dark/app-steps.json"
+    },
+    {
+      "path": "linux-analysis_layout_dark-analysis-both.png",
+      "sha256": "327891a1258a20a3912c86987cba33fe8744d504d6d4b42ef5b585d11da98cba",
+      "bytes": 130661,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_layout_dark/workflow \u00e4/analysis-both.bmp"
+    },
+    {
+      "path": "linux-analysis_layout_dark-analysis-minimum-sides.png",
+      "sha256": "ba52e37629f01c0834f12c6345d5d9e40e9f522f05d00eb462f0867e3760eac7",
+      "bytes": 119804,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_layout_dark/workflow \u00e4/analysis-minimum-sides.bmp"
+    },
+    {
+      "path": "linux-analysis_layout_light-checker.log.gz",
+      "sha256": "d5f0927d7e9b8effa6966b3db39181a8c1f0f718d4c7e1b6893eed9d34d681d5",
+      "bytes": 2423,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_layout_light/checker.log"
+    },
+    {
+      "path": "linux-analysis_layout_light-steps.json.gz",
+      "sha256": "df2c14de33a6ea3db5482a1120cf852b2a357ff13c4d94b049ef45fee4086a28",
+      "bytes": 2555,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_layout_light/app-steps.json"
+    },
+    {
+      "path": "linux-analysis_layout_light-analysis-both.png",
+      "sha256": "a2a0ac1d08d9cee16fa5b6fcd371f3ed89883df94ee82408f3ca39f257c8790d",
+      "bytes": 133311,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_layout_light/workflow \u00e4/analysis-both.bmp"
+    },
+    {
+      "path": "linux-analysis_layout_light-analysis-minimum-sides.png",
+      "sha256": "9b8a658f60b8391bcea67106d3f42f1bd9d4c0a5a1a67e83bad4b3e08c36620c",
+      "bytes": 122101,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_layout_light/workflow \u00e4/analysis-minimum-sides.bmp"
+    },
+    {
+      "path": "linux-analysis_layout_contrast-checker.log.gz",
+      "sha256": "33f4e3546fb5bf97f84fb5e882a4c7388cfc58e09872aea5936736a0f36162b0",
+      "bytes": 2432,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_layout_contrast/checker.log"
+    },
+    {
+      "path": "linux-analysis_layout_contrast-steps.json.gz",
+      "sha256": "149ddbbc20da34e56550c44299958377c04c8a5b410505b05d75330d9583be0a",
+      "bytes": 2559,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_layout_contrast/app-steps.json"
+    },
+    {
+      "path": "linux-analysis_layout_contrast-analysis-both.png",
+      "sha256": "b3b03dfa309c449530d72de54725f37a8a386fc1c628ae97fad7d6eeea08d5f1",
+      "bytes": 130598,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_layout_contrast/workflow \u00e4/analysis-both.bmp"
+    },
+    {
+      "path": "linux-analysis_layout_contrast-analysis-minimum-sides.png",
+      "sha256": "4aab4b9f4f9e3a49532e1098b19300565b9c27417391a1a8ae50f0d61fc0e9e6",
+      "bytes": 123102,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_layout_contrast/workflow \u00e4/analysis-minimum-sides.bmp"
+    },
+    {
+      "path": "linux-analysis_layout_dark_large_narrow-checker.log.gz",
+      "sha256": "09fb61bcf543e79a0c9ae888902793037302c8ce98dcae029a0bad8805bf33e4",
+      "bytes": 2436,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_layout_dark_large_narrow/checker.log"
+    },
+    {
+      "path": "linux-analysis_layout_dark_large_narrow-steps.json.gz",
+      "sha256": "21ff85f2aaa3c33a15a1c673bf3eec350fcbc6e70687ddf48be095028480690e",
+      "bytes": 2571,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_layout_dark_large_narrow/app-steps.json"
+    },
+    {
+      "path": "linux-analysis_layout_dark_large_narrow-analysis-both.png",
+      "sha256": "1e0ba468c9dde4cbefc665c004767cae11051bf59e076f2e2c8e66bbca090156",
+      "bytes": 113555,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_layout_dark_large_narrow/workflow \u00e4/analysis-both.bmp"
+    },
+    {
+      "path": "linux-analysis_layout_dark_large_narrow-analysis-minimum-sides.png",
+      "sha256": "64f28c96b73a80b1c78cd7e30e015aad638b11206f1c18f03066e8de560b1d26",
+      "bytes": 122458,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_layout_dark_large_narrow/workflow \u00e4/analysis-minimum-sides.bmp"
+    },
+    {
+      "path": "linux-analysis_layout_light_large_narrow-checker.log.gz",
+      "sha256": "e45392b97343c2f997bb19690ad0b55078fed089339c3143036f6c99d0d0d9d2",
+      "bytes": 2436,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_layout_light_large_narrow/checker.log"
+    },
+    {
+      "path": "linux-analysis_layout_light_large_narrow-steps.json.gz",
+      "sha256": "5c2b554d7c8331a8e4c4bb413e20b6c8bf40a60c030a755575759775b8107ce6",
+      "bytes": 2572,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_layout_light_large_narrow/app-steps.json"
+    },
+    {
+      "path": "linux-analysis_layout_light_large_narrow-analysis-both.png",
+      "sha256": "b0f95bba3d347bb4b995faa976a0494ae7b63b6ec70a722962e34f312b6552c7",
+      "bytes": 115594,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_layout_light_large_narrow/workflow \u00e4/analysis-both.bmp"
+    },
+    {
+      "path": "linux-analysis_layout_light_large_narrow-analysis-minimum-sides.png",
+      "sha256": "1ee26351d39bdf60baced96ab7ff367403cbd7a1f34a06ea0975ce6d452cd6cd",
+      "bytes": 124613,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_layout_light_large_narrow/workflow \u00e4/analysis-minimum-sides.bmp"
+    },
+    {
+      "path": "linux-analysis_units_dark-checker.log.gz",
+      "sha256": "28c162c306a8cf1cb1571aa7cec94adfbee345e09b600999c703674a2378394f",
+      "bytes": 1080,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_units_dark/checker.log"
+    },
+    {
+      "path": "linux-analysis_units_dark-steps.json.gz",
+      "sha256": "58ffd341965d3681193292c6f977ae892b381915451b13170f807a6fa7608446",
+      "bytes": 1206,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_units_dark/app-steps.json"
+    },
+    {
+      "path": "linux-analysis_units_light_large_narrow-checker.log.gz",
+      "sha256": "a1ef30b00ecc77bb9ef295c861171fa616d92567f7bc22253950221bf14b0026",
+      "bytes": 1089,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_units_light_large_narrow/checker.log"
+    },
+    {
+      "path": "linux-analysis_units_light_large_narrow-steps.json.gz",
+      "sha256": "8d61b51539c8fddd9562ed37d73830dc0aaf99cd2f23ce839cbf37d18f1e40da",
+      "bytes": 1217,
+      "source": "/tmp/physim-analysis-sides-final10/analysis_units_light_large_narrow/app-steps.json"
+    },
+    {
+      "path": "linux-workbench_workflow-checker.log.gz",
+      "sha256": "83c1447405a4eff4c0ba8fbccdf82bb20425e0ac27879c2ec2fad7047adb7806",
+      "bytes": 2232,
+      "source": "/tmp/physim-analysis-sides-final10/workbench_workflow/checker.log"
+    },
+    {
+      "path": "linux-workbench_workflow-steps.json.gz",
+      "sha256": "bd00d4dd6b93d0e1c09a6ad2dd9fa7f84f863fd255898af0984ea97ece1c88e8",
+      "bytes": 2486,
+      "source": "/tmp/physim-analysis-sides-final10/workbench_workflow/app-steps.json"
+    },
+    {
+      "path": "linux-docking_workflow-checker.log.gz",
+      "sha256": "b516dbe83ca60e44179583b358ccaa5966d70f11508f71866f5afcd31f2d5eab",
+      "bytes": 3778,
+      "source": "/tmp/physim-analysis-sides-final10/docking_workflow/checker.log"
+    },
+    {
+      "path": "linux-docking_workflow-steps.json.gz",
+      "sha256": "0fee25452387f107bbc25baa558d18bbe2d31b90c06888d80f02c523f9df241d",
+      "bytes": 3914,
+      "source": "/tmp/physim-analysis-sides-final10/docking_workflow/app-steps.json"
+    },
+    {
+      "path": "linux-bundled-results.json",
+      "sha256": "c81f7516da08e440b9c917a2f39bcd9542a4acc50e9ee253beba2142fa9c5d06",
+      "bytes": 455,
+      "source": null
+    },
+    {
+      "path": "linux-bundled-analysis_layout_dark-checker.log.gz",
+      "sha256": "bb2b4774f0f7a8ea69e709b2f7060be843b380e4f36aa44e8666cfde3fc95bfc",
+      "bytes": 2424,
+      "source": "/tmp/physim-analysis-sides-final10-bundled/analysis_layout_dark/checker.log"
+    },
+    {
+      "path": "linux-bundled-analysis_layout_dark-steps.json.gz",
+      "sha256": "c8c362f1f90339e37ac1ba8f014a4154307fa1507e8d4b391e304b265b14d2fd",
+      "bytes": 2564,
+      "source": "/tmp/physim-analysis-sides-final10-bundled/analysis_layout_dark/app-steps.json"
+    },
+    {
+      "path": "linux-bundled-analysis_layout_dark-minimum.png",
+      "sha256": "7d58219da8b8255337f56e61c26442a3465f35280ca858f427e19f162d3846c5",
+      "bytes": 122741,
+      "source": "/tmp/physim-analysis-sides-final10-bundled/analysis_layout_dark/workflow \u00e4/analysis-minimum-sides.bmp"
+    },
+    {
+      "path": "linux-bundled-analysis_layout_light_large_narrow-checker.log.gz",
+      "sha256": "5a3b16b28565c6c795b7388a180a0ec16c85f584daa127270079aae0419c5444",
+      "bytes": 2429,
+      "source": "/tmp/physim-analysis-sides-final10-bundled/analysis_layout_light_large_narrow/checker.log"
+    },
+    {
+      "path": "linux-bundled-analysis_layout_light_large_narrow-steps.json.gz",
+      "sha256": "3dc879ef25a467603a34dcad3d607f25923cdd9bd28c2918813bcb979fd81abb",
+      "bytes": 2572,
+      "source": "/tmp/physim-analysis-sides-final10-bundled/analysis_layout_light_large_narrow/app-steps.json"
+    },
+    {
+      "path": "linux-bundled-analysis_layout_light_large_narrow-minimum.png",
+      "sha256": "4e025ea2de47349670e7f437526ecfa2bb620ce1e3595ee4e808c95cc7f1d5b4",
+      "bytes": 129927,
+      "source": "/tmp/physim-analysis-sides-final10-bundled/analysis_layout_light_large_narrow/workflow \u00e4/analysis-minimum-sides.bmp"
+    },
+    {
+      "path": "counterexample-before3-checker.log.gz",
+      "sha256": "a283b8593387900cf3017739d6f865b7b089d50a2599814b5fd6762323b2084c",
+      "bytes": 18484,
+      "source": "/mnt/d/Physim/build/native/analysis-sides-before3.log"
+    },
+    {
+      "path": "counterexample-before3-steps.json.gz",
+      "sha256": "f0934c7514d4cae8fd513d9bf23f28aeb95b13afee39de876e202773f07b3684",
+      "bytes": 2488,
+      "source": "/tmp/physim-analysis-sides-before3/analysis_layout_dark/app-steps.json"
+    },
+    {
+      "path": "counterexample-left-208.png",
+      "sha256": "3ab60cbbc3e39b657cf42a8af8dd30290d8446713d6ad09913f34063d0487b45",
+      "bytes": 123233,
+      "source": "/tmp/physim-analysis-sides-before3/analysis_layout_dark/workflow \u00e4/analysis-failed.bmp"
+    },
+    {
+      "path": "linux-before-default.png",
+      "sha256": "327891a1258a20a3912c86987cba33fe8744d504d6d4b42ef5b585d11da98cba",
+      "bytes": 130661,
+      "source": "/tmp/physim-analysis-sides-before3/analysis_layout_dark/workflow \u00e4/analysis-both.bmp"
+    },
+    {
+      "path": "linux-build-final10.log.gz",
+      "sha256": "1af2e94348a55e09d76d94a21bb24d1fa6403901b795ff3812b81afc1fca6e1e",
+      "bytes": 18538,
+      "source": "/mnt/d/Physim/build/native/analysis-sides-linux-final10.log"
+    },
+    {
+      "path": "counterexample-linux-source8-results.json",
+      "sha256": "1b078e660ff196025786af954a037baafcb81e0bab9ea9f3c5bcb4559a69e0bc",
+      "bytes": 710,
+      "source": null
+    },
+    {
+      "path": "counterexample-linux-source8-steps.json.gz",
+      "sha256": "36fbfe01e433ec8e5ed43da81c8436653889d8202ddc38c0a7adcad1e8a9cb51",
+      "bytes": 1714,
+      "source": "/tmp/physim-analysis-sides-final8/analysis_layout_dark_large_narrow/app-steps.json"
+    },
+    {
+      "path": "counterexample-drag-changed-view.png",
+      "sha256": "9956232803fb9a2cfe5c185e626d996afe936d0257785906e6f99c4f15386c99",
+      "bytes": 102844,
+      "source": "/tmp/physim-analysis-sides-final8/analysis_layout_dark_large_narrow/workflow \u00e4/analysis-failed.bmp"
+    },
+    {
+      "path": "linux-results.json",
+      "sha256": "7cc957cd0e2d34eb7202fbc69b3d4584ac369744eacc18e7411a4c6a101d29b7",
+      "bytes": 1364,
+      "source": null
+    }
+  ],
+  "images": [
+    {
+      "path": "linux-analysis_layout_dark-analysis-both.png",
+      "width": 1440,
+      "height": 1000,
+      "rgb_sha256": "405d13de73a700f9f69e60c268a3bebd2e64e48ca93ec09dcb2d7b2dbd678912",
+      "source_sha256": "e9d0b5727afb0b51f8eabd15da75d49e778c38e6320e70469aa223950aeb6268"
+    },
+    {
+      "path": "linux-analysis_layout_dark-analysis-minimum-sides.png",
+      "width": 1440,
+      "height": 1000,
+      "rgb_sha256": "68bbc905d282c67624dfa5e8d11f8967ad1db7ddca8348637b32e7ff2eb86f01",
+      "source_sha256": "395b010b0d7f4ec665f18303af4d52b6a9a7835e356e35af74fa76bd06754fed"
+    },
+    {
+      "path": "linux-analysis_layout_light-analysis-both.png",
+      "width": 1440,
+      "height": 1000,
+      "rgb_sha256": "7f228e30b3121539ad689fdd3040a40d41e1cb203fb3b0acb585bb2c99e879f2",
+      "source_sha256": "a509b9bb3da407c3f8a885dbad6da0ef8ed465c311e5b454815484e78a7188d5"
+    },
+    {
+      "path": "linux-analysis_layout_light-analysis-minimum-sides.png",
+      "width": 1440,
+      "height": 1000,
+      "rgb_sha256": "f0f184b2370e28cc4291b3d7bfdd743d738bd657a11dda9469f4185837597733",
+      "source_sha256": "45cdbc142ebc6561c11efd3618d99baa5f36bcdd0bd34422a7c9f32ec0c3c2be"
+    },
+    {
+      "path": "linux-analysis_layout_contrast-analysis-both.png",
+      "width": 1440,
+      "height": 1000,
+      "rgb_sha256": "b9ac17f389a6a305c264cf9cf4e965eeff2b9deeb0bdeb1489e5c390b15cce87",
+      "source_sha256": "75c1a5dd4999106c6a014c5526acc271c67cc422334a787ef8a5a7c3458d2032"
+    },
+    {
+      "path": "linux-analysis_layout_contrast-analysis-minimum-sides.png",
+      "width": 1440,
+      "height": 1000,
+      "rgb_sha256": "ebfb4b7071f129c024e2f3a87b90f8445772000a705cb397ea1bc64c905a3789",
+      "source_sha256": "a4c3f76fa0fdbd476edbbcc1813b62dc90b3ccb799d06cb066f3011a9ceff323"
+    },
+    {
+      "path": "linux-analysis_layout_dark_large_narrow-analysis-both.png",
+      "width": 1080,
+      "height": 740,
+      "rgb_sha256": "cb90467f2407496fae48c40a192895b3350254b4ca9ea0cf73c47b955851212e",
+      "source_sha256": "2c03187147a47fcf60f860ee6826a49a2b5cb034fa09686c2d4cfd4ed868bfe1"
+    },
+    {
+      "path": "linux-analysis_layout_dark_large_narrow-analysis-minimum-sides.png",
+      "width": 1080,
+      "height": 740,
+      "rgb_sha256": "23c1a8194001fd2040f8e20321ea1e3383edeabbfd3a8b0cdca2e2c69e3e45bc",
+      "source_sha256": "7e46212272ee7021d5e70c6e120d35eb10763cf777a192e2e9b26701256af5e4"
+    },
+    {
+      "path": "linux-analysis_layout_light_large_narrow-analysis-both.png",
+      "width": 1080,
+      "height": 740,
+      "rgb_sha256": "3d1cc2541f8a134884d0422d5ec07badc29753df44a843baffb3d0b3f33d504b",
+      "source_sha256": "98098a3df9c1ef9b103296929f260bb523f39f49f9a61dd19a646eb5f7a4c1ec"
+    },
+    {
+      "path": "linux-analysis_layout_light_large_narrow-analysis-minimum-sides.png",
+      "width": 1080,
+      "height": 740,
+      "rgb_sha256": "5be4be4a1e5744285ca3da8299ff1c6f9d52863d241cb819a6609acf22c1ea1f",
+      "source_sha256": "89ba416c81417ae4d3530463b8c1a5cd662e4467a82dc65cb36dedf7a263286c"
+    },
+    {
+      "path": "linux-bundled-analysis_layout_dark-minimum.png",
+      "width": 1440,
+      "height": 1000,
+      "rgb_sha256": "9a46e233bb415f5a0ccffd6d56fa7035eed0d907c6bdb55f692be93b36d1574c",
+      "source_sha256": "a7d5e37f07729469ad3ca33240a80b9b593b231edcb57724c15b2d0bdd2aaaca"
+    },
+    {
+      "path": "linux-bundled-analysis_layout_light_large_narrow-minimum.png",
+      "width": 1080,
+      "height": 740,
+      "rgb_sha256": "2ae47a9a24ae6f615b60d444df7351bc3abf8771e159efd7ad148108e202ff46",
+      "source_sha256": "f34877731ea552713e21ab4645d51710561f8ee09ba5306272c9eb1cb36835ad"
+    },
+    {
+      "path": "counterexample-left-208.png",
+      "width": 1440,
+      "height": 1000,
+      "rgb_sha256": "4f70730a9e0ba2595238b47b7f633a3beabe8eb7d2c0238b1d12b2ea1e619008",
+      "source_sha256": "1d207dae24a7bbfbb02ca1b992a7107ced83e71967215110d31a5b5ab9a4492c"
+    },
+    {
+      "path": "linux-before-default.png",
+      "width": 1440,
+      "height": 1000,
+      "rgb_sha256": "405d13de73a700f9f69e60c268a3bebd2e64e48ca93ec09dcb2d7b2dbd678912",
+      "source_sha256": "e9d0b5727afb0b51f8eabd15da75d49e778c38e6320e70469aa223950aeb6268"
+    },
+    {
+      "path": "counterexample-drag-changed-view.png",
+      "width": 1080,
+      "height": 740,
+      "rgb_sha256": "831aa0e7f10ad0eeaba39d47cc68877356eb1a593ca09bb6ebe49cb878127a28",
+      "source_sha256": "06100d686ebbdf7376af5f313c75995ab1b4b274319e87466d8ee3b925f1d884"
+    }
+  ]
+}

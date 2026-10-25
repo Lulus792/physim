@@ -163,6 +163,9 @@ nk_bool ps_ui_option_label(struct nk_context *ctx,const char *group,const char *
 nk_bool ps_ui_checkbox_named(struct nk_context *ctx,const char *text,const char *name,nk_bool *active);
 nk_bool ps_ui_checkbox_label(struct nk_context *ctx,const char *text,nk_bool *active);
 nk_bool ps_ui_button_label(struct nk_context *ctx,const char *text);
+/* Flow labels may also wrap at the normal UI size in narrow sidebars. */
+float ps_ui_wrapped_button_height(const struct nk_context *ctx,const char *text,float width);
+nk_bool ps_ui_wrapped_button_label(struct nk_context *ctx,const char *text);
 /* Measured absolute slots: ordinary Nuklear button plus native semantics,
  * without the flow-row adapter's automatic large-text height changes. */
 nk_bool ps_ui_fixed_button_label(struct nk_context *ctx,const char *text);

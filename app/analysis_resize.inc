@@ -23,25 +23,36 @@ static void analysis_plot_resize_abort(app *a) {
     }
     a->analysis_plot_resizing=false;a->analysis_plot_cancelled=true;SDL_CaptureMouse(false);
 }
+static void analysis_plot_reveal_key(app *a,float before,float after) {
+    struct nk_window *owner=nk_window_find(a->ui,"workspace");
+    struct nk_rect target=a->analysis_plot_separator_bounds,clip=a->analysis_plot_viewport;
+    if(!owner || target.h<=0 || clip.h<=0)return;
+    target.y+=after-before;
+    float delta=target.y<clip.y?target.y-clip.y:target.y+target.h>clip.y+clip.h?target.y+target.h-clip.y-clip.h:0;
+    owner->scrollbar.y=(nk_uint)fmaxf(0,(float)owner->scrollbar.y+(delta>0?ceilf(delta):floorf(delta)));
+}
 static bool analysis_plot_resize_key(app *a,const SDL_KeyboardEvent *key) {
     if(!analysis_visible(a) || a->show_report || a->toolbar_menu ||
        key->mod&(SDL_KMOD_CTRL|SDL_KMOD_ALT|SDL_KMOD_GUI))return false;
     if(key->key==SDLK_ESCAPE && a->analysis_plot_resizing){analysis_plot_resize_abort(a);return true;}
     if(!nk_sdl_accessibility_is_focused(a->ui,NULL,analysis_plot_separator_name()))return false;
-    float value=analysis_plot_dimension(a,a->analysis_plot_content),step=key->mod&SDL_KMOD_SHIFT?40:10;
+    float before=analysis_plot_dimension(a,a->analysis_plot_content),value=before,step=key->mod&SDL_KMOD_SHIFT?40:10;
     if(key->key==SDLK_UP)value-=step;
     else if(key->key==SDLK_DOWN)value+=step;
     else if(key->key==SDLK_HOME)value=180;
     else if(key->key==SDLK_END)value=analysis_plot_maximum(a);
-    else if(key->key==SDLK_RETURN || key->key==SDLK_KP_ENTER){a->analysis_plot_manual=false;return true;}
+    else if(key->key==SDLK_RETURN || key->key==SDLK_KP_ENTER){a->analysis_plot_manual=false;analysis_plot_reveal_key(a,before,analysis_plot_dimension(a,a->analysis_plot_content));return true;}
     else return false;
     a->analysis_plot_height=fmaxf(180,fminf(analysis_plot_maximum(a),value));a->analysis_plot_manual=true;
+    analysis_plot_reveal_key(a,before,a->analysis_plot_height);
     return true;
 }
 static void analysis_plot_separator(app *a) {
     struct nk_context *ui=a->ui;struct nk_input *in=&ui->input;
     nk_layout_row_dynamic(ui,1,1);struct nk_rect line;nk_widget(&line,ui);
-    struct nk_rect handle=plot_intersection(nk_rect(line.x,line.y-4,line.w,9),nk_window_get_canvas(ui)->clip);
+    a->analysis_plot_separator_bounds=nk_rect(line.x,line.y-4,line.w,9);
+    a->analysis_plot_viewport=nk_window_get_canvas(ui)->clip;
+    struct nk_rect handle=plot_intersection(a->analysis_plot_separator_bounds,a->analysis_plot_viewport);
     a->analysis_plot_splitter=handle;
     bool blocked=a->toolbar_menu || a->toolbar_pointer_consumed || (ui->current->flags&NK_WINDOW_ROM) ||
         (ui->current->popup.active && ui->current->popup.type!=NK_PANEL_TOOLTIP);

@@ -1,0 +1,28 @@
+{
+  "platform": "linux",
+  "binary": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+  "sha256": "7a19a11c8f7885f5caba073f763182e3a697a736b82a080617bfc1f97000fff1",
+  "source_snapshot": "analysis-sides-after8-source.json",
+  "cases": [
+    {
+      "name": "analysis_layout_dark",
+      "exit_code": 0,
+      "seconds": 18.689260100999945
+    },
+    {
+      "name": "analysis_layout_light",
+      "exit_code": 0,
+      "seconds": 19.085813374000054
+    },
+    {
+      "name": "analysis_layout_contrast",
+      "exit_code": 0,
+      "seconds": 16.312692137000113
+    },
+    {
+      "name": "analysis_layout_dark_large_narrow",
+      "exit_code": 1,
+      "seconds": 12.759798144000115
+    }
+  ]
+}

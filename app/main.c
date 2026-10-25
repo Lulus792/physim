@@ -221,11 +221,13 @@ typedef struct {
     unsigned analysis_focus_return;
     float analysis_plot_height,analysis_plot_content,analysis_plot_original,analysis_plot_auto_height;
     bool analysis_plot_manual,analysis_plot_resizing,analysis_plot_was_manual,analysis_plot_cancelled,analysis_plot_hover,analysis_plot_moved;
-    struct nk_rect analysis_plot_splitter;
+    struct nk_rect analysis_plot_splitter,analysis_plot_separator_bounds,analysis_plot_viewport;
     struct nk_vec2 analysis_plot_grab;
     enum nk_collapse_states analysis_source_disclosure;
     char analysis_query[128];
     struct nk_rect analysis_side_buttons[2], analysis_tabs[2], analysis_run_bounds[8];
+    unsigned analysis_tab_pointer;
+    struct nk_vec2 analysis_tab_pointer_origin;
     struct nk_rect analysis_unit_custom;
     bool analysis_unit_focus_return;
     float laboratory_measure_height,laboratory_closed_height,laboratory_timeline_height,laboratory_curve_ratio;
@@ -5450,6 +5452,7 @@ int main(int argc, char **argv) {
         int w, h;
         SDL_GetWindowSize(window, &w, &h);
         draw_ui(a, w, h);
+        if(workspace_state_test && !strncmp(argv[3],"analysis-layout-",16))analysis_workspace_test_draw(a,test_stage);
         if(workspace_state_test && !strncmp(argv[3],"file-tabs-design",16))tab_design_draw(a);
         if(workspace_state_test && !strcmp(argv[3],"transport-design"))transport_design_draw(a);
         if(a->timeline_design_active && !panel_is_detached(a,PS_PANEL_TIMELINE))timeline_design_draw(a);

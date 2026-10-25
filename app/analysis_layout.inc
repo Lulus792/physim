@@ -3,6 +3,9 @@
 static bool analysis_visible(const app *a) {
     return a->tab==2 && a->analysis_tab==0 && !a->project_manager;
 }
+static float analysis_side_minimum(const app *a,unsigned panel) {
+    return ceilf((panel==PS_DOCK_SIDEBAR?140.f:180.f)*a->preferences.ui_size/16.f);
+}
 static void analysis_context(app *a) {
     bool active=analysis_visible(a);
     if(active==a->analysis_layout_active)return;
@@ -19,6 +22,7 @@ static void analysis_context(app *a) {
         laboratory_apply(a,&a->analysis_layout);
         if(a->loaded)refresh_library(a);
     } else {
+        a->analysis_tab_pointer=0;
         if(a->analysis_plot_resizing)analysis_plot_resize_abort(a);
         a->analysis_plot_hover=false;
         a->analysis_layout=laboratory_capture(a);

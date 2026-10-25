@@ -1,0 +1,53 @@
+{
+  "platform": "windows",
+  "binary": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+  "sha256": "d3dd5752249d7fcb9334da93def6cc30733143612b88134a98cd60228d7cc5f5",
+  "source_snapshot": "analysis-sides-after10-source.json",
+  "cases": [
+    {
+      "name": "analysis_layout_dark",
+      "exit_code": 0,
+      "seconds": 7.625
+    },
+    {
+      "name": "analysis_layout_light",
+      "exit_code": 0,
+      "seconds": 7.35899999999674
+    },
+    {
+      "name": "analysis_layout_contrast",
+      "exit_code": 0,
+      "seconds": 8.062999999994645
+    },
+    {
+      "name": "analysis_layout_dark_large_narrow",
+      "exit_code": 0,
+      "seconds": 7.264999999999418
+    },
+    {
+      "name": "analysis_layout_light_large_narrow",
+      "exit_code": 0,
+      "seconds": 7.219000000011874
+    },
+    {
+      "name": "analysis_units_dark",
+      "exit_code": 0,
+      "seconds": 2.6719999999913853
+    },
+    {
+      "name": "analysis_units_light_large_narrow",
+      "exit_code": 0,
+      "seconds": 2.7030000000086147
+    },
+    {
+      "name": "workbench_workflow",
+      "exit_code": 0,
+      "seconds": 16.718999999997322
+    },
+    {
+      "name": "docking_workflow",
+      "exit_code": 0,
+      "seconds": 113.84399999999732
+    }
+  ]
+}

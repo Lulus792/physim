@@ -292,3 +292,11 @@ Editor. Der Öffnungsklick erhält jetzt den Suchfokus und echte Texteingaben.
 Windows und Linux bestehen je fünf Gruppen. Der zusätzliche strenge native
 Pixelvergleich hält kleine Rasterabweichungen ausdrücklich offen; er ersetzt
 keine vollständige Browser-, Design- oder Plattformabnahme.
+
+Der [Abgleich schmaler Auswertungsseiten](ANALYSIS-SIDES-NATIVE.md) übernimmt
+140/180 px bei normaler Schrift und erhält breite einzeilige Buttons. Er
+korrigiert außerdem den unsichtbaren Tastaturtrenner, verlorene Drag-Eingabe
+außerhalb des Panels und einen unbeabsichtigten Ansichtswechsel beim Herausziehen.
+Windows/Linux bestehen jeweils neun Gruppen und zwei Offline-Schriftproben.
+Die normale Linux-Ansicht bleibt dabei im strengen RGB-Vergleich unverändert.
+Die vollständige Oberfläche und die praktischen Plattformnachweise bleiben offen.

@@ -1,0 +1,626 @@
+{
+  "result": {
+    "platform": "windows",
+    "binary": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+    "sha256": "d3dd5752249d7fcb9334da93def6cc30733143612b88134a98cd60228d7cc5f5",
+    "source_snapshot": "analysis-sides-after10-source.json",
+    "cases": [
+      {
+        "name": "analysis_layout_dark",
+        "exit_code": 0,
+        "seconds": 7.625
+      },
+      {
+        "name": "analysis_layout_light",
+        "exit_code": 0,
+        "seconds": 7.35899999999674
+      },
+      {
+        "name": "analysis_layout_contrast",
+        "exit_code": 0,
+        "seconds": 8.062999999994645
+      },
+      {
+        "name": "analysis_layout_dark_large_narrow",
+        "exit_code": 0,
+        "seconds": 7.264999999999418
+      },
+      {
+        "name": "analysis_layout_light_large_narrow",
+        "exit_code": 0,
+        "seconds": 7.219000000011874
+      },
+      {
+        "name": "analysis_units_dark",
+        "exit_code": 0,
+        "seconds": 2.6719999999913853
+      },
+      {
+        "name": "analysis_units_light_large_narrow",
+        "exit_code": 0,
+        "seconds": 2.7030000000086147
+      },
+      {
+        "name": "workbench_workflow",
+        "exit_code": 0,
+        "seconds": 16.718999999997322
+      },
+      {
+        "name": "docking_workflow",
+        "exit_code": 0,
+        "seconds": 113.84399999999732
+      }
+    ]
+  },
+  "files": [
+    {
+      "path": "windows-analysis_layout_dark-checker.log.gz",
+      "sha256": "fe62fe3c298c375ee3491600d14965f3c4f492d74fb00f4be4ae333ba62199fa",
+      "bytes": 2371,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_layout_dark\\checker.log"
+    },
+    {
+      "path": "windows-analysis_layout_dark-steps.json.gz",
+      "sha256": "cd2a8bb3862d6236831060bbc2c8254bc0effe4dd952645809e1294234773bf6",
+      "bytes": 2515,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_layout_dark\\app-steps.json"
+    },
+    {
+      "path": "windows-analysis_layout_dark-analysis-both.png",
+      "sha256": "fc2dafd75c0e1eaf08fd16ab9e4bf1cef3151dec27eb3b37ee81530c519666db",
+      "bytes": 122141,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_layout_dark\\workflow \u00e4\\analysis-both.bmp"
+    },
+    {
+      "path": "windows-analysis_layout_dark-analysis-minimum-sides.png",
+      "sha256": "af69b4632f3af21894e92b3188eb87d3271a29837b57fb7b9167c45b53d73720",
+      "bytes": 114310,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_layout_dark\\workflow \u00e4\\analysis-minimum-sides.bmp"
+    },
+    {
+      "path": "windows-analysis_layout_light-checker.log.gz",
+      "sha256": "8c9de4073f27521fbde896e37f4095033bdfdf7a595dc1d3e26d98745e24c2ac",
+      "bytes": 2363,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_layout_light\\checker.log"
+    },
+    {
+      "path": "windows-analysis_layout_light-steps.json.gz",
+      "sha256": "22575c4068332f5b01f8ea01995d553f747e2e2658c4f7f0f01a9d601fcf99ec",
+      "bytes": 2507,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_layout_light\\app-steps.json"
+    },
+    {
+      "path": "windows-analysis_layout_light-analysis-both.png",
+      "sha256": "2b4544eeb08742447d8e66bfeb445a7c33286abf22f86ef2785e47595b969262",
+      "bytes": 125680,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_layout_light\\workflow \u00e4\\analysis-both.bmp"
+    },
+    {
+      "path": "windows-analysis_layout_light-analysis-minimum-sides.png",
+      "sha256": "58d0fc8778076e49ca1600801d572146e149712d607c36c535eec5887b2b9ede",
+      "bytes": 117391,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_layout_light\\workflow \u00e4\\analysis-minimum-sides.bmp"
+    },
+    {
+      "path": "windows-analysis_layout_contrast-checker.log.gz",
+      "sha256": "f28591558c24ef72cdaae5086a6aa3c2635e478b44a7754f15b4c28ca6f4fcb6",
+      "bytes": 2373,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_layout_contrast\\checker.log"
+    },
+    {
+      "path": "windows-analysis_layout_contrast-steps.json.gz",
+      "sha256": "560ea097534fef26e75ce91193a0e6b5e20e872812fd23fe3efa5ea4ed6b0031",
+      "bytes": 2514,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_layout_contrast\\app-steps.json"
+    },
+    {
+      "path": "windows-analysis_layout_contrast-analysis-both.png",
+      "sha256": "b900879658ebf3fddb45aa835573d9560d833bf3ebdb60ca9a67e8e296bb3380",
+      "bytes": 124130,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_layout_contrast\\workflow \u00e4\\analysis-both.bmp"
+    },
+    {
+      "path": "windows-analysis_layout_contrast-analysis-minimum-sides.png",
+      "sha256": "27dae84810d7557f0f58c09db412603b5045eede38e1c3854da6e7d428b41642",
+      "bytes": 119084,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_layout_contrast\\workflow \u00e4\\analysis-minimum-sides.bmp"
+    },
+    {
+      "path": "windows-analysis_layout_dark_large_narrow-checker.log.gz",
+      "sha256": "254182153d5d6ac2cc2fc788a90bce9862178623749c9aca79a2c789046d4c89",
+      "bytes": 2376,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_layout_dark_large_narrow\\checker.log"
+    },
+    {
+      "path": "windows-analysis_layout_dark_large_narrow-steps.json.gz",
+      "sha256": "cc41fe0903cc8d8d7d4764bbf94a3918a45463020b75acba39403ff3c5c29b4f",
+      "bytes": 2525,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_layout_dark_large_narrow\\app-steps.json"
+    },
+    {
+      "path": "windows-analysis_layout_dark_large_narrow-analysis-both.png",
+      "sha256": "fdfd3273634d0019e77a6214dca0278ac81a27b746fb1ed9871b95c196537496",
+      "bytes": 110256,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_layout_dark_large_narrow\\workflow \u00e4\\analysis-both.bmp"
+    },
+    {
+      "path": "windows-analysis_layout_dark_large_narrow-analysis-minimum-sides.png",
+      "sha256": "4e6322aa27d5344fd0d22cb633447bb5a5b5f992079d0a66f267a2fad1c934b6",
+      "bytes": 117123,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_layout_dark_large_narrow\\workflow \u00e4\\analysis-minimum-sides.bmp"
+    },
+    {
+      "path": "windows-analysis_layout_light_large_narrow-checker.log.gz",
+      "sha256": "9152d7a88b3246faeff53b4ffe3864ab868d1745678f201ee0ad970dca6dc704",
+      "bytes": 2384,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_layout_light_large_narrow\\checker.log"
+    },
+    {
+      "path": "windows-analysis_layout_light_large_narrow-steps.json.gz",
+      "sha256": "e2e2e5b15c644df36891b130d507cd5f7692b3a620d3d25dcc91e1d3af0be099",
+      "bytes": 2531,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_layout_light_large_narrow\\app-steps.json"
+    },
+    {
+      "path": "windows-analysis_layout_light_large_narrow-analysis-both.png",
+      "sha256": "050d6353bbf29e3a1ea9f3ae9f29ccb133717657e103017a72851fd10ed5e4f6",
+      "bytes": 113885,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_layout_light_large_narrow\\workflow \u00e4\\analysis-both.bmp"
+    },
+    {
+      "path": "windows-analysis_layout_light_large_narrow-analysis-minimum-sides.png",
+      "sha256": "515e77b0bf3e31341b5bb04e7e7bbba3fcefd66575d6ec8a493bfc59ec333461",
+      "bytes": 121089,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_layout_light_large_narrow\\workflow \u00e4\\analysis-minimum-sides.bmp"
+    },
+    {
+      "path": "windows-analysis_units_dark-checker.log.gz",
+      "sha256": "8d61c709e809b0b8f4676f6a322ebf8601eb5672c022667d523bc0da11e50993",
+      "bytes": 1061,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_units_dark\\checker.log"
+    },
+    {
+      "path": "windows-analysis_units_dark-steps.json.gz",
+      "sha256": "84d6fca698602970009015bd2e29f251560bb58620aabeeefbfc956eace3c532",
+      "bytes": 1198,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_units_dark\\app-steps.json"
+    },
+    {
+      "path": "windows-analysis_units_light_large_narrow-checker.log.gz",
+      "sha256": "4efa2b6b6de607d401f8de7a777db458ad4f3c7bbcceae61a2c301d373f681b3",
+      "bytes": 1066,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_units_light_large_narrow\\checker.log"
+    },
+    {
+      "path": "windows-analysis_units_light_large_narrow-steps.json.gz",
+      "sha256": "996ceb3cc5d75d450c6d6aa9ee4da15109d205a87b594efd3c99ba0040550261",
+      "bytes": 1205,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\analysis_units_light_large_narrow\\app-steps.json"
+    },
+    {
+      "path": "windows-workbench_workflow-checker.log.gz",
+      "sha256": "f85105abfb7267a4f2b50b509106f9c4815743d6a8d18d98718bdec2f65a2b1a",
+      "bytes": 2154,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\workbench_workflow\\checker.log"
+    },
+    {
+      "path": "windows-workbench_workflow-steps.json.gz",
+      "sha256": "8015d42bbf13a6b33937370276681732b5faed3c20dad5cb2c357ec61b1f268e",
+      "bytes": 2429,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\workbench_workflow\\app-steps.json"
+    },
+    {
+      "path": "windows-docking_workflow-checker.log.gz",
+      "sha256": "20d1cc64b4b073d07f233580ba1a4261bf8236bf32e0f56d3f52a1e73068feab",
+      "bytes": 4503,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\docking_workflow\\checker.log"
+    },
+    {
+      "path": "windows-docking_workflow-steps.json.gz",
+      "sha256": "36c34990500b52a2001208bcf34468f2214bfbeb176405f4dbd1de7548f62c37",
+      "bytes": 4617,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-windows\\docking_workflow\\app-steps.json"
+    },
+    {
+      "path": "windows-bundled-results.json",
+      "sha256": "49a13b4e8b12e65dc41f7bf438af5fdd1e0b648c381f4870c41d74dae1b9fce0",
+      "bytes": 447,
+      "source": null
+    },
+    {
+      "path": "windows-bundled-analysis_layout_dark-checker.log.gz",
+      "sha256": "d4d6bbcdf534dfd29660d81b3294d13c5cf13a4738a997de173c39ec98aebcc2",
+      "bytes": 2368,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-bundled-windows\\analysis_layout_dark\\checker.log"
+    },
+    {
+      "path": "windows-bundled-analysis_layout_dark-steps.json.gz",
+      "sha256": "69f3ee2d3ce6fdd934c7a417dbace53c8456be0f71845771bcca955fd3e9cbc3",
+      "bytes": 2523,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-bundled-windows\\analysis_layout_dark\\app-steps.json"
+    },
+    {
+      "path": "windows-bundled-analysis_layout_dark-minimum.png",
+      "sha256": "3f09566d961c0f0cae759c51953a08447e64641ccf9c9901b5691b84ddbb8ddd",
+      "bytes": 120986,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-bundled-windows\\analysis_layout_dark\\workflow \u00e4\\analysis-minimum-sides.bmp"
+    },
+    {
+      "path": "windows-bundled-analysis_layout_light_large_narrow-checker.log.gz",
+      "sha256": "568617e08c332b5d6200561b6a6d53ecb6c1783c0d6bbc67540967da0e072909",
+      "bytes": 2380,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-bundled-windows\\analysis_layout_light_large_narrow\\checker.log"
+    },
+    {
+      "path": "windows-bundled-analysis_layout_light_large_narrow-steps.json.gz",
+      "sha256": "276bb9a32017942676cbefd6d6efae98b64744731d187ad9cefcd0905b97d2b4",
+      "bytes": 2539,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-bundled-windows\\analysis_layout_light_large_narrow\\app-steps.json"
+    },
+    {
+      "path": "windows-bundled-analysis_layout_light_large_narrow-minimum.png",
+      "sha256": "a5cce77e6af2e168249c86cffa974590735a42ca6a0fdcb5183c913753f53de3",
+      "bytes": 129391,
+      "source": "F:\\Physim\\validation\\analysis-sides-2026-10-25\\final10-bundled-windows\\analysis_layout_light_large_narrow\\workflow \u00e4\\analysis-minimum-sides.bmp"
+    },
+    {
+      "path": "windows-attempt-1.log.gz",
+      "sha256": "6f36076a136b66e292b4dab803913cadc9c1168a26d8e425f5bcd0313e783eb3",
+      "bytes": 194,
+      "source": "D:\\Physim\\build\\native\\analysis-sides-windows-final1.log"
+    },
+    {
+      "path": "windows-attempt-3.log.gz",
+      "sha256": "0c90111c78aff759ab97cb2ace19f41fcaf5b93b22607a1af54777ce1bd78829",
+      "bytes": 104,
+      "source": "D:\\Physim\\build\\native\\analysis-sides-windows-final3.log"
+    },
+    {
+      "path": "windows-attempt-4.log.gz",
+      "sha256": "b4d7fcc074c6acec01e9718c9eb538d1694cbb5d4f3bfc3ad51b525db3c4c0bd",
+      "bytes": 183,
+      "source": "D:\\Physim\\build\\native\\analysis-sides-windows-final4.log"
+    },
+    {
+      "path": "windows-attempt-5.log.gz",
+      "sha256": "76422ab90de36720996d57c28261a97861d411c849843440571754e7860cd497",
+      "bytes": 187,
+      "source": "D:\\Physim\\build\\native\\analysis-sides-windows-final5.log"
+    },
+    {
+      "path": "windows-attempt-6.log.gz",
+      "sha256": "39f9c1f093fc5bc4a352eeb01fb3d70fe17b269c3122d8f80d6616bc644b6afa",
+      "bytes": 183,
+      "source": "D:\\Physim\\build\\native\\analysis-sides-windows-final6.log"
+    },
+    {
+      "path": "counterexample-stage4-steps.json.gz",
+      "sha256": "0728893ba165e3c6248f59ac46fdb68ffbf806d382238ea042d14f0791061376",
+      "bytes": 1687,
+      "source": "D:\\Physim\\build\\native\\analysis-sides-final4-windows\\analysis_layout_dark_large_narrow\\app-steps.json"
+    },
+    {
+      "path": "counterexample-large-stage4.png",
+      "sha256": "387879ab9108ab99e2f831edf8af22aadaed28ab6196ace0e0e4cd13e6901084",
+      "bytes": 110521,
+      "source": "D:\\Physim\\build\\native\\analysis-sides-final4-windows\\analysis_layout_dark_large_narrow\\workflow \u00e4\\analysis-failed.bmp"
+    },
+    {
+      "path": "counterexample-stage5-steps.json.gz",
+      "sha256": "1c8266db2fd51865565dea709b1c50b49922009e923cc59b6ce0cf2d7d44181e",
+      "bytes": 1774,
+      "source": "D:\\Physim\\build\\native\\analysis-sides-final5-windows\\analysis_layout_dark_large_narrow\\app-steps.json"
+    },
+    {
+      "path": "counterexample-large-stage5.png",
+      "sha256": "f6b90a10309ae9647699ec882c3271bffad101a4e91025d81718fdaf5f4dad3c",
+      "bytes": 110359,
+      "source": "D:\\Physim\\build\\native\\analysis-sides-final5-windows\\analysis_layout_dark_large_narrow\\workflow \u00e4\\analysis-failed.bmp"
+    },
+    {
+      "path": "counterexample-wide-height.png",
+      "sha256": "57c4a0928b316cbf0f0697c724258ed7099033b04ef7682b3989e79adad79bb0",
+      "bytes": 122044,
+      "source": "D:\\Physim\\build\\native\\analysis-sides-final1-windows\\analysis_layout_dark\\workflow \u00e4\\analysis-both.bmp"
+    },
+    {
+      "path": "windows-build-final10.log.gz",
+      "sha256": "33a7d1d8dfe8d6b4ea3fa809d4a22b41cc27a266a3785724caf3851b601780a5",
+      "bytes": 2746,
+      "source": "D:\\Physim\\build\\native\\analysis-sides-windows-build10.log"
+    },
+    {
+      "path": "counterexample-drag-watch.log.gz",
+      "sha256": "56073018e4ac2d2e978116949d101947ee04ef0c5c8688e3c56dd05e462dc313",
+      "bytes": 805,
+      "source": "D:\\Physim\\build\\native\\analysis-sides-tab-watch.log"
+    },
+    {
+      "path": "counterexample-click-observe.log.gz",
+      "sha256": "fbb19e77cd88c5249385bf24f23ac9ae00b7e47d6da897618be6f282ae8d8875",
+      "bytes": 1193,
+      "source": "D:\\Physim\\build\\native\\analysis-sides-tab-click.log"
+    },
+    {
+      "path": "source1-inputs.json",
+      "sha256": "e751843a8755a194b8687d72e8bb37e4aaacc5f555b8e3ecb2912d7087d112b4",
+      "bytes": 31656,
+      "source": null
+    },
+    {
+      "path": "source2-inputs.json",
+      "sha256": "d35f1f317d86bf1ed4c00531e213df10f90c512289811315351a887c6dbf03ed",
+      "bytes": 31656,
+      "source": null
+    },
+    {
+      "path": "source3-inputs.json",
+      "sha256": "21a45a97eb541d5dceed32f27c78bde3179c2061d072847f27c447781b515180",
+      "bytes": 31656,
+      "source": null
+    },
+    {
+      "path": "source4-inputs.json",
+      "sha256": "5f1b9ab3f2a29f0f5c0fc028075bd9d8e8b42b8b4c62c280faa09ed6d550a3ed",
+      "bytes": 31656,
+      "source": null
+    },
+    {
+      "path": "source5-inputs.json",
+      "sha256": "1c90c82af8156742e3dd0406250ddee00b037d43f95e3044dd8187b4cdea704e",
+      "bytes": 31656,
+      "source": null
+    },
+    {
+      "path": "source6-inputs.json",
+      "sha256": "467c1519d8114c8f12ef50b1f22bc9fc0d0a16128b47a6507ea961b54dc1e4a7",
+      "bytes": 31656,
+      "source": null
+    },
+    {
+      "path": "source7-inputs.json",
+      "sha256": "b209d48d4f4e6fe84071329257bad2086a8f179f52021ca48b95861a987dff3c",
+      "bytes": 31656,
+      "source": null
+    },
+    {
+      "path": "source8-inputs.json",
+      "sha256": "5b972f0fb5834c54e051bbf80f4da123fa19b35348d7b0ec80efaa7bcac824b2",
+      "bytes": 31656,
+      "source": null
+    },
+    {
+      "path": "source9-inputs.json",
+      "sha256": "b150f565a04693a3c4a42a2ccf9fb92d7a0131c038f605b35a4699a326400be7",
+      "bytes": 31656,
+      "source": null
+    },
+    {
+      "path": "source10-inputs.json",
+      "sha256": "a042dcb2f8592970b57393b45ca8d7a247b7c0bbfffac81dbbf5420790ec1f48",
+      "bytes": 31656,
+      "source": null
+    },
+    {
+      "path": "source-app-analysis_layout.inc.gz",
+      "sha256": "f28e46d7b3767d261f89c36c9e09fdeba05e7b6462551ef885ede22d1412c8d9",
+      "bytes": 839,
+      "source": "D:\\Physim\\app\\analysis_layout.inc"
+    },
+    {
+      "path": "source-app-analysis_resize.inc.gz",
+      "sha256": "ac12ac3382716eca2e58a68de50e42084e031b45b08767bab71b5f01b941e58f",
+      "bytes": 1860,
+      "source": "D:\\Physim\\app\\analysis_resize.inc"
+    },
+    {
+      "path": "source-app-analysis_ui.inc.gz",
+      "sha256": "b4c141fec27376ba4c192ae40b2359bd14cb8af4750212a787df16c20b0d5dbb",
+      "bytes": 10277,
+      "source": "D:\\Physim\\app\\analysis_ui.inc"
+    },
+    {
+      "path": "source-app-analysis_workspace_tests.inc.gz",
+      "sha256": "937cf9f5903eef51b9e231f8950a730756a368c3920ed7b989a3228c1bfa4d1c",
+      "bytes": 5871,
+      "source": "D:\\Physim\\app\\analysis_workspace_tests.inc"
+    },
+    {
+      "path": "source-app-docking_ui.inc.gz",
+      "sha256": "5a76214d2111c8794318cb5f464efcbab14d88790b47476ade64329099c3e4c9",
+      "bytes": 8884,
+      "source": "D:\\Physim\\app\\docking_ui.inc"
+    },
+    {
+      "path": "source-app-main.c.gz",
+      "sha256": "c86c58d80993f3c0929cef9f3920c2be27f215fa372a01e777497a8417882c48",
+      "bytes": 62799,
+      "source": "D:\\Physim\\app\\main.c"
+    },
+    {
+      "path": "source-app-ui.h.gz",
+      "sha256": "08d2332fc709f200b11e69c3382117abf2a1216236b798b4a1e8e5e8834f20e9",
+      "bytes": 4896,
+      "source": "D:\\Physim\\app\\ui.h"
+    },
+    {
+      "path": "source-app-ui_backend.c.gz",
+      "sha256": "ad120dd5772e529bc657370be026f303bd4d2bcb9fd77219a33ab3eb63588fcb",
+      "bytes": 9443,
+      "source": "D:\\Physim\\app\\ui_backend.c"
+    },
+    {
+      "path": "harness-analysis-side-probe.sh.gz",
+      "sha256": "a5fccbbb5d38ed823d893a721399a99f8ef679f97825e4f4b010a3fc3bfdf93a",
+      "bytes": 510,
+      "source": "D:\\Physim\\build\\native\\analysis-side-probe.sh"
+    },
+    {
+      "path": "harness-analysis-sides-matrix.py.gz",
+      "sha256": "978bc8ae6b23319db3a15e40c326d7017c57c9d5cb60ae09403c26ebded93f97",
+      "bytes": 1021,
+      "source": "D:\\Physim\\build\\native\\analysis-sides-matrix.py"
+    },
+    {
+      "path": "harness-analysis-sides-bundled.py.gz",
+      "sha256": "174af845296e974811d13be8d84808ee3ed8b993a6aa76f6a6f1c512a2b6417f",
+      "bytes": 908,
+      "source": "D:\\Physim\\build\\native\\analysis-sides-bundled.py"
+    },
+    {
+      "path": "harness-analysis-sides-bundled.sh.gz",
+      "sha256": "7cdea98bc04c4615fda357aaf0bbdf282ad029f59d36ee3b92bf27b0dbc42f1e",
+      "bytes": 334,
+      "source": "D:\\Physim\\build\\native\\analysis-sides-bundled.sh"
+    },
+    {
+      "path": "harness-freeze-analysis-sides.py.gz",
+      "sha256": "5913ff45c39cc2af0e4f0be507eff7b3f1df7a2367532959c86200704e361b1c",
+      "bytes": 2223,
+      "source": "D:\\Physim\\build\\native\\freeze-analysis-sides.py"
+    },
+    {
+      "path": "harness-analysis-sides-tab-watch.gdb.gz",
+      "sha256": "7ed0a4f6a5f7be281fa7d5e41f37109a1146f2c59060d4953a4028e9fda53709",
+      "bytes": 443,
+      "source": "D:\\Physim\\build\\native\\analysis-sides-tab-watch.gdb"
+    },
+    {
+      "path": "harness-analysis-sides-tab-watch.sh.gz",
+      "sha256": "5e1e45e08bfb0551f5c57e42cb1ac24732f0442442590b0147aef3652b90fe64",
+      "bytes": 412,
+      "source": "D:\\Physim\\build\\native\\analysis-sides-tab-watch.sh"
+    },
+    {
+      "path": "harness-analysis-sides-tab-click.gdb.gz",
+      "sha256": "95042ee9d6d131944b60bc2fbfae66054dba51ddd8295d3c2050ecbd02a1b80a",
+      "bytes": 443,
+      "source": "D:\\Physim\\build\\native\\analysis-sides-tab-click.gdb"
+    },
+    {
+      "path": "harness-analysis-sides-tab-click.sh.gz",
+      "sha256": "3ed47a82dda131e69488ca7bcff53395724c01f285f7b43a28bebba02abf8761",
+      "bytes": 403,
+      "source": "D:\\Physim\\build\\native\\analysis-sides-tab-click.sh"
+    },
+    {
+      "path": "cleanup.json",
+      "sha256": "6d9ab59630e35e60cf1ccc39206cb36e264972019ce8d11054df984df2892cc4",
+      "bytes": 40651,
+      "source": null
+    },
+    {
+      "path": "windows-results.json",
+      "sha256": "e6ca600199d42e432025df2e638be9d005c0df89be486dfd40425277e7aaa497",
+      "bytes": 1252,
+      "source": null
+    }
+  ],
+  "images": [
+    {
+      "path": "windows-analysis_layout_dark-analysis-both.png",
+      "width": 1440,
+      "height": 1000,
+      "rgb_sha256": "0845f2163726b3263af23acea585a4f82612844766c632b20e4d747221ac7df7",
+      "source_sha256": "b1452656913a904e9c5f8e62fe45489fa365c2d1e838d8581969ae04de458da9"
+    },
+    {
+      "path": "windows-analysis_layout_dark-analysis-minimum-sides.png",
+      "width": 1440,
+      "height": 1000,
+      "rgb_sha256": "8df52dcdb32704c8c5aab95e9565bdb696826ad937f93f187fa1177b09558f5d",
+      "source_sha256": "6edd4ed4a822aeaae5041ab72d8505a224f55ae2f525096e4969ecc2a7fa5a65"
+    },
+    {
+      "path": "windows-analysis_layout_light-analysis-both.png",
+      "width": 1440,
+      "height": 1000,
+      "rgb_sha256": "ba9a48060b74912c4a3d4f2ab92ce47541732e3834cf2d96e38b376d8d364311",
+      "source_sha256": "25cd5e0ebc477689b530ff7028054d9d176e197bade75f38c757ccc8c7b9de87"
+    },
+    {
+      "path": "windows-analysis_layout_light-analysis-minimum-sides.png",
+      "width": 1440,
+      "height": 1000,
+      "rgb_sha256": "7a18d303d59d0a8da173050bb26c43b54978a6f540fbec452ad087a16174b7c5",
+      "source_sha256": "1aa095f0d7aa8cb77065a9548fe570ec47b4673d89050108d6ebf1e517d96512"
+    },
+    {
+      "path": "windows-analysis_layout_contrast-analysis-both.png",
+      "width": 1440,
+      "height": 1000,
+      "rgb_sha256": "104784fe3d67989430548433a30e77c7c13460dfc7beac016cd77813ad5e2309",
+      "source_sha256": "f104dc43987b5f567f9a1644b7760dab2f22f9916c844db89c22c7cbd1586e3a"
+    },
+    {
+      "path": "windows-analysis_layout_contrast-analysis-minimum-sides.png",
+      "width": 1440,
+      "height": 1000,
+      "rgb_sha256": "678d5de2bfddd536099986a905311cdf047b93c533f015d499d2b999f8e1c52d",
+      "source_sha256": "ddf0b64c6e8b640237ae8775124dec331c4da51f4101a0bdb60b9fe3cfba50fb"
+    },
+    {
+      "path": "windows-analysis_layout_dark_large_narrow-analysis-both.png",
+      "width": 1080,
+      "height": 740,
+      "rgb_sha256": "2821d8b64acfd4a2bedb4f5d343a349ed2086de2308a11417ba74257f51dd44e",
+      "source_sha256": "537f53f1f2600484934154f1017553a69dd6eab9aeb7323f4892858f90c39fc2"
+    },
+    {
+      "path": "windows-analysis_layout_dark_large_narrow-analysis-minimum-sides.png",
+      "width": 1080,
+      "height": 740,
+      "rgb_sha256": "20637405ef10e19b89e0a18f194ad97ac35470dd8a30374f96e1786d87e4b88e",
+      "source_sha256": "25affe06975009d41a02d1ab80e03d178356b8bb3c961eeec884f41044a85294"
+    },
+    {
+      "path": "windows-analysis_layout_light_large_narrow-analysis-both.png",
+      "width": 1080,
+      "height": 740,
+      "rgb_sha256": "e6056ca3de5fc2a56c6125e6b1a39babf1a011b9de25610c9131d6bc34f9875a",
+      "source_sha256": "dcbec277827fcc91e583dd695a117542bd660f12144bc27c678137d9f29c3f3e"
+    },
+    {
+      "path": "windows-analysis_layout_light_large_narrow-analysis-minimum-sides.png",
+      "width": 1080,
+      "height": 740,
+      "rgb_sha256": "84f1f45b1a5797ffdff35ad8aaece554d07409c5521387925b538af80d9560ab",
+      "source_sha256": "a568534555acf60ece8caa52de03543f33416a08945af50f80e6696dd1fabf37"
+    },
+    {
+      "path": "windows-bundled-analysis_layout_dark-minimum.png",
+      "width": 1440,
+      "height": 1000,
+      "rgb_sha256": "d3b826f55d340ddd96360a2b3958582557795eb578672d38c67acdfb514b0373",
+      "source_sha256": "d691aa3fa7743ff9aaac240dc87f2b59184c0c8761ba94cd60ae9f9658d8ac74"
+    },
+    {
+      "path": "windows-bundled-analysis_layout_light_large_narrow-minimum.png",
+      "width": 1080,
+      "height": 740,
+      "rgb_sha256": "c48da45f9d241f61097823d36bb23907454e13c1790f73deae3edfc254ab0a8a",
+      "source_sha256": "15dbeac45a536d98a75964245e989cb7901b9b36e3703437f6c41fa4dd5cf0f5"
+    },
+    {
+      "path": "counterexample-large-stage4.png",
+      "width": 1080,
+      "height": 740,
+      "rgb_sha256": "765aba40a2170607fa344689d116164f662b084df6613f0e202e642046c9e49f",
+      "source_sha256": "b669dbaf16a4ef8ad5e039bfdce890bedb94e533a61af7da8815bb642f909a14"
+    },
+    {
+      "path": "counterexample-large-stage5.png",
+      "width": 1080,
+      "height": 740,
+      "rgb_sha256": "175b8b1456df2303cf352cd3f77c9ae4ee096ffda7795578bbf74b000f179431",
+      "source_sha256": "79f0ed3d2f81882f04a3a47e09f1fc5000c429c4bf205d240d46267ec7854261"
+    },
+    {
+      "path": "counterexample-wide-height.png",
+      "width": 1440,
+      "height": 1000,
+      "rgb_sha256": "4f6f689587a9d51cbd8212126fb8bca435dbb02a6788e2267aa58690a4dd1d60",
+      "source_sha256": "54d1ad8febe5b85a9bab9c41dc25fa7e8b79b1aeac470b6c8a11208f0e09d925"
+    }
+  ]
+}

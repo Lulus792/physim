@@ -82,7 +82,8 @@ static float dock_minimum(const app *a,uint32_t id,bool x) {
         }
         if(analysis_visible(a) && x) {
             if(n->panels&(1u<<PS_DOCK_WORKSPACE))return 300;
-            if(n->panels&((1u<<PS_DOCK_SIDEBAR)|(1u<<PS_DOCK_INSPECTOR)))return 208;
+            if(n->panels&(1u<<PS_DOCK_INSPECTOR))return analysis_side_minimum(a,PS_DOCK_INSPECTOR);
+            if(n->panels&(1u<<PS_DOCK_SIDEBAR))return analysis_side_minimum(a,PS_DOCK_SIDEBAR);
         }
         return 64;
     }
@@ -102,7 +103,7 @@ static float dock_resize_value(app *a,unsigned id,float *minimum,float *maximum,
     struct nk_rect r=a->dock_rects[id];bool x=n->kind==PS_DOCK_X;
     float extent=fmaxf(1,(x?r.w:r.h)-dock_gap(a)),min_first=dock_minimum(a,n->first,x),min_second=dock_minimum(a,n->second,x);
     *reverse=false;
-    if(dock_sidebar_split(d,n)) {*minimum=laboratory_visible(a)?150:workbench_visible(a)?140:208;*maximum=fminf(laboratory_visible(a)?420:workbench_visible(a) || analysis_visible(a)?480:360,extent-min_second);*standard=laboratory_visible(a)?190:analysis_visible(a)?232:workbench_visible(a)?218:248;return a->dock_rects[n->first].w;}
+    if(dock_sidebar_split(d,n)) {*minimum=analysis_visible(a)?min_first:laboratory_visible(a)?150:workbench_visible(a)?140:208;*maximum=fminf(laboratory_visible(a)?420:workbench_visible(a) || analysis_visible(a)?480:360,extent-min_second);*standard=laboratory_visible(a)?190:analysis_visible(a)?232:workbench_visible(a)?218:248;return a->dock_rects[n->first].w;}
     if(dock_context_split(d,n)) {*reverse=true;*minimum=min_second;*maximum=fminf(480,extent-min_first);*standard=analysis_visible(a)?242:workbench_visible(a)?255:280;return a->dock_rects[n->second].w;}
     if(dock_log_split(d,n)) {*reverse=true;*minimum=workbench_visible(a)?126:laboratory_visible(a)?LABORATORY_LOG_MIN:150;*maximum=fminf(workbench_visible(a)?366:340,extent-min_first);*standard=workbench_visible(a)?152:178;return a->dock_rects[n->second].h+dock_gap(a);}
     *minimum=fmaxf(min_first,extent/16);*maximum=fminf(extent-min_second,extent*15/16);*standard=extent*.5f;
@@ -285,14 +286,16 @@ static void dock_input(app *a,unsigned panel,struct nk_rect r,struct nk_window *
     bool search_pointer=panel==PS_DOCK_WORKSPACE && a->show_search && editor_search_target(a) && nk_input_is_mouse_hovering_rect(&ui->input,a->search_island_bounds);
     bool mouse=!covered && !popup && !completion_pointer && !search_pointer && nk_input_is_mouse_hovering_rect(&ui->input,r);
     bool enabled=mouse || (body && previous==window && !covered && !popup);
+    bool plot_capture=analysis_visible(a) && a->analysis_plot_resizing;
+    if(plot_capture)enabled=body && panel==PS_DOCK_WORKSPACE && (!panel_is_detached(a,panel) || a->panel_render) && !covered && !popup;
     if(a->panel_render && (a->recovery || a->dialog_pending || a->layout_manager || a->channel_unit_manager || a->workspace_manager || a->run_details_manager))enabled=false;
     if(a->panel_pull_dragging || a->dock_dragging || a->file_tab_dragging || a->dock_resize || a->dock_float_resize)enabled=false;
     /* Background windows otherwise activate even outside their bounds and consume
      * the wheel in nk_end. Keep keyboard focus and route mouse input by stacking. */
-    ui->active=body && mouse?window:previous;
+    ui->active=body && (mouse || (plot_capture && enabled))?window:previous;
     if(enabled) { window->flags &= ~(nk_flags)NK_WINDOW_ROM;window->layout->flags &= ~(nk_flags)NK_WINDOW_ROM; }
     else { window->flags |= NK_WINDOW_ROM;window->layout->flags |= NK_WINDOW_ROM; }
-    window->layout->has_scrolling=mouse && !a->dock_resize && !a->dock_float_resize;
+    window->layout->has_scrolling=mouse && !plot_capture && !a->dock_resize && !a->dock_float_resize;
     ps_ui_accessibility_route(ui,!covered && !popup && !a->dock_resize && !a->dock_float_resize &&
         (!a->panel_render || !(a->recovery || a->dialog_pending || a->layout_manager || a->channel_unit_manager || a->workspace_manager || a->run_details_manager)));
 }

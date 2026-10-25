@@ -549,6 +549,26 @@ nk_bool ps_ui_button_label(struct nk_context *ctx,const char *text) {
         bool pressed=accessibility_widget(ctx,text,1,bounds,false,NULL,false);
         return clicked || pressed;
     }
+    return ps_ui_wrapped_button_label(ctx,text);
+}
+float ps_ui_wrapped_button_height(const struct nk_context *ctx,const char *text,float width) {
+    if(!ctx || !text)return 0;
+    const struct nk_user_font *font=ctx->style.font;const struct nk_style_button *style=&ctx->style.button;
+    int length=nk_strlen(text),done=0,lines=0,glyphs;float measured;nk_rune separator=' ';
+    bool symbol=nk_utf_len(text,length)==1;
+    float space=width-2*(symbol?style->border:style->padding.x+style->border+style->rounding);
+    /* A fitting label retains its caller's original single-line height. */
+    if(space<=0 || font->width(font->userdata,font->height,text,length)<=space)return 0;
+    while(done<length && space>0) {
+        int fitting=nk_text_clamp(font,text+done,length-done,space,&glyphs,&measured,&separator,1);
+        if(fitting<=0)fitting=nk_text_clamp(font,text+done,length-done,space,&glyphs,&measured,0,0);
+        if(fitting<=0)break;
+        done+=fitting;lines++;
+    }
+    return fmaxf(1,(float)lines)*font->height+2*(symbol?style->border:style->padding.y+style->border+style->rounding);
+}
+nk_bool ps_ui_wrapped_button_label(struct nk_context *ctx,const char *text) {
+    if(!ctx || !ctx->current || !text)return nk_false;
     const struct nk_user_font *font=ctx->style.font;
     const struct nk_style_button *style=&ctx->style.button;
     int length=nk_strlen(text);
