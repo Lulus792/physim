@@ -570,7 +570,9 @@ def main() -> int:
         parser.error("Sanitizer builds are for validation; use a separate build without --sanitizers to install a portable SDK")
     if args.jobs < 1 or args.jobs > 64:
         parser.error("--jobs must be between 1 and 64")
-    args.build_dir = args.build_dir or ROOT / "build" / "native" / (args.config + ("-fuzzer" if args.fuzzer else "-sanitized" if args.sanitizers else ""))
+    artifact_root = os.environ.get("PHYSIM_ARTIFACT_ROOT")
+    build_root = Path(artifact_root) / "build" if artifact_root else ROOT / "build"
+    args.build_dir = args.build_dir or build_root / "native" / (args.config + ("-fuzzer" if args.fuzzer else "-sanitized" if args.sanitizers else ""))
     if args.build_dir.resolve() == ROOT or args.build_dir.resolve() in ROOT.parents:
         parser.error("Use a separate build directory, not the source root or its parents")
     try:

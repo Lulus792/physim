@@ -481,6 +481,10 @@ Nach der Installation der Werkzeuge und SDL aus der jeweiligen Plattformanleitun
 im Physim-Repository ausführen. Zusätzlich ist Python ab 3.10 erforderlich;
 die obigen Linux- und macOS-Befehle installieren es bereits.
 
+Für Builds, Prüfläufe und Temporärdateien auf einem getrennten Laufwerk gibt es
+die [Speicher- und Nachweisanleitung](docs/development-storage.md).
+`tools/with-artifacts.py` richtet dafür die Umgebung eines Entwicklungsbefehls ein.
+
 **Linux und macOS, einschließlich Oberfläche:**
 
 ```sh

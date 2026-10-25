@@ -36,6 +36,19 @@
 
 ## Speicherpflege
 
+- Auf diesem Rechner neue generierte Builds, Testläufe, Rohbilder, Logs und
+  Compiler-Temporärdateien unter `F:\Physim` ablegen. Versionierte Quellen,
+  Tests und kompakte Dokumentationsbelege bleiben im Repository auf D:.
+  Entwicklungsbefehle mit `tools/with-artifacts.py --root F:/Physim -- ...`
+  beziehungsweise unter WSL `--root /mnt/f/Physim` starten; explizite
+  Ausgabeoptionen ebenfalls nach F: setzen. Die lokale Anleitung steht in
+  [docs/development-storage.md](docs/development-storage.md).
+- Prüfnachweise zuerst als kompakten Text-/JSON-Bericht mit Quellstand,
+  Kommandos, Soll/Ist-Ergebnis und offenen Befunden dokumentieren. Bilder
+  gezielt für visuelle Eigenschaften und Fehlerbelege aufnehmen; gleiche
+  Zustände nicht bei jedem Eingabeschritt erneut als Vollbild speichern.
+  Bestehende eingefrorene Nachweise nicht nachträglich verändern.
+
 - Regelmäßiges Aufräumen gehört zur Projektarbeit. Nach abgeschlossener Arbeit
   veraltete, ersetzte und nachweislich nicht mehr benötigte Build-Ausgaben,
   Compiler-/Linker-Caches, temporäre Hilfsdateien und automatisch erzeugte
