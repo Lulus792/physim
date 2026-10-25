@@ -1,0 +1,488 @@
+{
+  "format": 1,
+  "date": "2026-10-26",
+  "status": "local-uncommitted-native-candidate",
+  "source": {
+    "path": "build/validation/protocol-ui-2026-10-25/19-native/source.json",
+    "sha256": "3a6ce11364bb97707ab44c3e793c8326941c929f7d462dd9b621706bcb0c47ca"
+  },
+  "source_archive": {
+    "path": "build/validation/protocol-ui-2026-10-25/19-native/source-files.zip",
+    "sha256": "309f63abd6edb3eb773c45c164fa2ef2245adc2e5186769c6916209c9509a7b2"
+  },
+  "runtime_manifest": {
+    "path": "build/validation/protocol-ui-2026-10-25/19-native/runtime-archives.json",
+    "sha256": "c58b9fbb97054ffb19dd771b8603dc2c00f2593d67ffb8876b4c9e5fe7be06a9"
+  },
+  "runs": [
+    {
+      "platform": "windows",
+      "group": "protocol_navigator",
+      "phase": 16,
+      "run": "run-cl7ped5s",
+      "results": {
+        "path": "build/validation/protocol-ui-2026-10-25/4-native/windows-build/test-results/run-cl7ped5s/results.json",
+        "sha256": "cd37b04ae6b60c7f80b1833b21aef2960c4f448ebf119db7c1e6bce5f03d7725"
+      },
+      "statuses": [
+        {
+          "name": "protocol_navigator",
+          "status": "passed"
+        }
+      ],
+      "verification": {
+        "path": "build/validation/protocol-ui-2026-10-25/4-native/windows-build/test-results/run-cl7ped5s/protocol_navigator/files ä/verification.json",
+        "sha256": "84d468041897e4418f58e8b62e1fd0a8b1c7785ee9b9a80acdc9a80c846b2e74"
+      },
+      "binary_sha256": "5309338ae28104cd3a67083dd4347e07fbe9ebf140e037f799978bf7f675d922",
+      "cases": 8,
+      "passed": 8
+    },
+    {
+      "platform": "linux",
+      "group": "protocol_navigator",
+      "phase": 16,
+      "run": "run-kke7sipv",
+      "results": {
+        "path": "build/validation/protocol-ui-2026-10-25/4-native/linux-build/test-results/run-kke7sipv/results.json",
+        "sha256": "d2be60251de5c1dbbb50fb491c80fb5b9c7eacf394fc9e49451c313c9aa6cd56"
+      },
+      "statuses": [
+        {
+          "name": "protocol_navigator",
+          "status": "passed"
+        }
+      ],
+      "verification": {
+        "path": "build/validation/protocol-ui-2026-10-25/4-native/linux-build/test-results/run-kke7sipv/protocol_navigator/files ä/verification.json",
+        "sha256": "e53c1a9fd6a4f1c29faacb0754e654b06bfb0473b9a7449cbe51df7b2ed107d2"
+      },
+      "binary_sha256": "eaa9a9e74083d55a82223b930a02243657ea36131ae7724b96ac514f6a6beec0",
+      "cases": 8,
+      "passed": 8
+    },
+    {
+      "platform": "windows",
+      "group": "protocol_sources",
+      "phase": 16,
+      "run": "run-1otd0nhd",
+      "results": {
+        "path": "build/validation/protocol-ui-2026-10-25/4-native/windows-build/test-results/run-1otd0nhd/results.json",
+        "sha256": "5567df9259ad44c28c88f56ecb655191898d530f3f9eb34ac47fbb62a6c367f1"
+      },
+      "statuses": [
+        {
+          "name": "protocol_sources",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "platform": "windows",
+      "group": "protocol_navigator",
+      "phase": 17,
+      "run": "run-x_mu1imn",
+      "results": {
+        "path": "build/validation/protocol-ui-2026-10-25/4-native/windows-build/test-results/run-x_mu1imn/results.json",
+        "sha256": "a8934028870067c26c4447abd691e1aff17cb91edc6e0062c95c5ffa382ad9ca"
+      },
+      "statuses": [
+        {
+          "name": "protocol_navigator",
+          "status": "failed"
+        }
+      ],
+      "verification": {
+        "path": "build/validation/protocol-ui-2026-10-25/4-native/windows-build/test-results/run-x_mu1imn/protocol_navigator/files ä/verification.json",
+        "sha256": "5649bc9170e65b33632db6bf49ad91fd624d381eb2f27788f067965ca03fcea1"
+      },
+      "binary_sha256": "f7aa0bbe0cf9d47f071dc71d8ae525a883bafdd0dd68aee522bc024d82ef0187",
+      "cases": 1,
+      "passed": 0
+    },
+    {
+      "platform": "windows",
+      "group": "protocol_navigator",
+      "phase": 18,
+      "run": "run-j6maicd5",
+      "results": {
+        "path": "build/validation/protocol-ui-2026-10-25/4-native/windows-build/test-results/run-j6maicd5/results.json",
+        "sha256": "5b36824d1e57d27304b1d7ab85dd3e2367ff4f18770b5a1e4d59093801ff9d58"
+      },
+      "statuses": [
+        {
+          "name": "protocol_navigator",
+          "status": "passed"
+        }
+      ],
+      "verification": {
+        "path": "build/validation/protocol-ui-2026-10-25/4-native/windows-build/test-results/run-j6maicd5/protocol_navigator/files ä/verification.json",
+        "sha256": "6ef84edb6ffe7beb76b9a02ed7a7ae7495c4c8cf7db18657b6d6c77d456fc9be"
+      },
+      "binary_sha256": "777d98b315bf79fde21afe887cd3eec81b011f73b0e47fba1b4809f8582bdee1",
+      "cases": 8,
+      "passed": 8
+    },
+    {
+      "platform": "windows",
+      "group": "protocol_navigator",
+      "phase": 19,
+      "run": "run-rl_se7ho",
+      "results": {
+        "path": "build/validation/protocol-ui-2026-10-25/4-native/windows-build/test-results/run-rl_se7ho/results.json",
+        "sha256": "f4cb83e8308c830102a4546ac354ceb027fa39e9f2641e78558e55cb78ab5346"
+      },
+      "statuses": [
+        {
+          "name": "protocol_navigator",
+          "status": "passed"
+        }
+      ],
+      "verification": {
+        "path": "build/validation/protocol-ui-2026-10-25/4-native/windows-build/test-results/run-rl_se7ho/protocol_navigator/files ä/verification.json",
+        "sha256": "ebd6187e20befa0221243b38e2ae6f0482bd97e6b52e2b5155f9cae3fdc2e767"
+      },
+      "binary_sha256": "98c52a6623457f2675b7a7c07c63de7ef3f24fca488d452a0a339c5f857a1b3e",
+      "cases": 8,
+      "passed": 8
+    },
+    {
+      "platform": "linux",
+      "group": "protocol_navigator",
+      "phase": 19,
+      "run": "run-67eokjk7",
+      "results": {
+        "path": "build/validation/protocol-ui-2026-10-25/4-native/linux-build/test-results/run-67eokjk7/results.json",
+        "sha256": "eb347a9a1dfd7a98c4c787ebb45637a2a772d70acf44c72d626a8cba57f8ea8f"
+      },
+      "statuses": [
+        {
+          "name": "protocol_navigator",
+          "status": "passed"
+        }
+      ],
+      "verification": {
+        "path": "build/validation/protocol-ui-2026-10-25/4-native/linux-build/test-results/run-67eokjk7/protocol_navigator/files ä/verification.json",
+        "sha256": "42fd3e3a895098968fdc22e749afe272b42af5397a7639cb4fd3b896fa6d9c9c"
+      },
+      "binary_sha256": "5ce57e568b367ffb3806ec786142aaefa5efee0a03820b97f597a2466b982e0d",
+      "cases": 8,
+      "passed": 8
+    },
+    {
+      "platform": "windows",
+      "group": "diagnostic_workflow",
+      "phase": 19,
+      "run": "run-qyqak6f4",
+      "results": {
+        "path": "build/validation/protocol-ui-2026-10-25/4-native/windows-build/test-results/run-qyqak6f4/results.json",
+        "sha256": "aaea9b7e0513fd0750e8aeba8be78f5c35678d256d1864b94310ba97e4fadde0"
+      },
+      "statuses": [
+        {
+          "name": "diagnostic_workflow",
+          "status": "failed"
+        }
+      ],
+      "observations": [
+        "Compiler helper stage 0: Projekt geladen. Build kompiliert die lokalen Quelldateien.",
+        "Compiler helper stage 1: Physim baut Experiment und Analyse ...",
+        "Compiler helper stage 2: Zuerst das gespeicherte Projekt erfolgreich bauen.",
+        "Compiler helper stage 2: diagnostics=3 selected=2 Zuerst das gespeicherte Projekt erfolgreich bauen.",
+        "First workflow failure at stage 2 (next 3): Zuerst das gespeicherte Projekt erfolgreich bauen. (tab=0, selected=0, samples=0, report=0, query=)"
+      ]
+    }
+  ],
+  "manual": [
+    {
+      "phase": 16,
+      "process": {
+        "path": "build/validation/protocol-ui-2026-10-25/16-native/manual-windows/process.json",
+        "sha256": "65a41ce15666b74731e71f7bdcba17cd9b84b258adeca847e443b1e449e1fd5d"
+      },
+      "exitcode": 0,
+      "binary_sha256": "5309338ae28104cd3a67083dd4347e07fbe9ebf140e037f799978bf7f675d922",
+      "stdout": {
+        "path": "build/validation/protocol-ui-2026-10-25/16-native/manual-windows/stdout.log",
+        "sha256": "fef3a345d81c31cfbf8cc5939e0059ea02f808147d364f6f0293396c90ae3643"
+      },
+      "stderr": {
+        "path": "build/validation/protocol-ui-2026-10-25/16-native/manual-windows/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "native_states": [
+        {
+          "kind": "protocol_manual_state",
+          "height": 340,
+          "resizing": false,
+          "keyboard_focus": true,
+          "separator": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "kind": "protocol_manual_state",
+          "height": 340,
+          "resizing": true,
+          "keyboard_focus": true,
+          "separator": [
+            0.0,
+            628.0,
+            1440.0,
+            9.0
+          ]
+        },
+        {
+          "kind": "protocol_manual_state",
+          "height": 340,
+          "resizing": false,
+          "keyboard_focus": true,
+          "separator": [
+            0.0,
+            628.0,
+            1440.0,
+            9.0
+          ]
+        },
+        {
+          "kind": "protocol_manual_state",
+          "height": 340,
+          "resizing": true,
+          "keyboard_focus": true,
+          "separator": [
+            0.0,
+            628.0,
+            1440.0,
+            9.0
+          ]
+        },
+        {
+          "kind": "protocol_manual_state",
+          "height": 370,
+          "resizing": true,
+          "keyboard_focus": true,
+          "separator": [
+            0.0,
+            598.0,
+            1440.0,
+            9.0
+          ]
+        },
+        {
+          "kind": "protocol_manual_state",
+          "height": 370,
+          "resizing": false,
+          "keyboard_focus": true,
+          "separator": [
+            0.0,
+            598.0,
+            1440.0,
+            9.0
+          ]
+        }
+      ],
+      "computer_use_observation": "Clicking the range left the observed accessible focus on the search field; not accepted",
+      "computer_use_drag_observation": {
+        "from_xy": [
+          720,
+          632
+        ],
+        "to_xy": [
+          720,
+          602
+        ],
+        "before_height": 340,
+        "after_height": 370,
+        "accessible_height": 370
+      }
+    },
+    {
+      "phase": 17,
+      "process": {
+        "path": "build/validation/protocol-ui-2026-10-25/17-native/manual-windows/process.json",
+        "sha256": "59a1be0c77b2d6740885f09b5d6998326825568de1b66a8f4c0562c0d4900871"
+      },
+      "exitcode": 0,
+      "binary_sha256": "f7aa0bbe0cf9d47f071dc71d8ae525a883bafdd0dd68aee522bc024d82ef0187",
+      "stdout": {
+        "path": "build/validation/protocol-ui-2026-10-25/17-native/manual-windows/stdout.log",
+        "sha256": "8c0618aeb954b61baf9771b9dbab87b24032951c691ecf462f6664f34622c88b"
+      },
+      "stderr": {
+        "path": "build/validation/protocol-ui-2026-10-25/17-native/manual-windows/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "native_states": [
+        {
+          "kind": "protocol_manual_state",
+          "height": 340,
+          "resizing": false,
+          "keyboard_focus": true,
+          "separator": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "kind": "protocol_manual_state",
+          "height": 340,
+          "resizing": true,
+          "keyboard_focus": true,
+          "separator": [
+            0.0,
+            628.0,
+            1440.0,
+            9.0
+          ]
+        },
+        {
+          "kind": "protocol_manual_state",
+          "height": 340,
+          "resizing": false,
+          "keyboard_focus": true,
+          "separator": [
+            0.0,
+            628.0,
+            1440.0,
+            9.0
+          ]
+        }
+      ],
+      "computer_use_observation": "Clicking the range left the observed accessible focus on the search field; not accepted"
+    },
+    {
+      "phase": 18,
+      "process": {
+        "path": "build/validation/protocol-ui-2026-10-25/18-native/manual-windows/process.json",
+        "sha256": "3940ef3d053376b1e3ac919ff45cf5fa6a23f50406a80bb769a7d0e3dfb6ea3c"
+      },
+      "exitcode": 0,
+      "binary_sha256": "777d98b315bf79fde21afe887cd3eec81b011f73b0e47fba1b4809f8582bdee1",
+      "stdout": {
+        "path": "build/validation/protocol-ui-2026-10-25/18-native/manual-windows/stdout.log",
+        "sha256": "8c0618aeb954b61baf9771b9dbab87b24032951c691ecf462f6664f34622c88b"
+      },
+      "stderr": {
+        "path": "build/validation/protocol-ui-2026-10-25/18-native/manual-windows/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "native_states": [
+        {
+          "kind": "protocol_manual_state",
+          "height": 340,
+          "resizing": false,
+          "keyboard_focus": true,
+          "separator": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "kind": "protocol_manual_state",
+          "height": 340,
+          "resizing": true,
+          "keyboard_focus": true,
+          "separator": [
+            0.0,
+            628.0,
+            1440.0,
+            9.0
+          ]
+        },
+        {
+          "kind": "protocol_manual_state",
+          "height": 340,
+          "resizing": false,
+          "keyboard_focus": true,
+          "separator": [
+            0.0,
+            628.0,
+            1440.0,
+            9.0
+          ]
+        }
+      ],
+      "computer_use_observation": "Clicking the range left the observed accessible focus on the search field; not accepted"
+    },
+    {
+      "phase": 19,
+      "process": {
+        "path": "build/validation/protocol-ui-2026-10-25/19-native/manual-windows/process.json",
+        "sha256": "d4caba8c7174511cffedf2f800f5668acd94a70e49dffb660981ee5b70244391"
+      },
+      "exitcode": 0,
+      "binary_sha256": "98c52a6623457f2675b7a7c07c63de7ef3f24fca488d452a0a339c5f857a1b3e",
+      "stdout": {
+        "path": "build/validation/protocol-ui-2026-10-25/19-native/manual-windows/stdout.log",
+        "sha256": "8c0618aeb954b61baf9771b9dbab87b24032951c691ecf462f6664f34622c88b"
+      },
+      "stderr": {
+        "path": "build/validation/protocol-ui-2026-10-25/19-native/manual-windows/stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "native_states": [
+        {
+          "kind": "protocol_manual_state",
+          "height": 340,
+          "resizing": false,
+          "keyboard_focus": true,
+          "separator": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "kind": "protocol_manual_state",
+          "height": 340,
+          "resizing": true,
+          "keyboard_focus": true,
+          "separator": [
+            0.0,
+            628.0,
+            1440.0,
+            9.0
+          ]
+        },
+        {
+          "kind": "protocol_manual_state",
+          "height": 340,
+          "resizing": false,
+          "keyboard_focus": true,
+          "separator": [
+            0.0,
+            628.0,
+            1440.0,
+            9.0
+          ]
+        }
+      ],
+      "computer_use_observation": "Clicking the range left the observed accessible focus on the search field; not accepted",
+      "computer_use_key_observation": {
+        "key": "Shift_L+Up",
+        "expected_height": 380,
+        "observed_height": 340,
+        "passed": false
+      }
+    }
+  ],
+  "limits": [
+    "Manual observations are transcribed from Computer Use; native height/resize changes are independently recorded in stdout",
+    "No new screenshot files saved for this report; tool-returned screenshots were inspected",
+    "Phase 18 has no separate retained runtime archive: initial helper read UTF-8 source as default encoding, then new build replaced binary; corrected guard rejected mismatched binary",
+    "Phase 17 active-search regression is a negative counterexample; phase 19 passes the same strengthened path",
+    "Direct pointer-to-keyboard focus remains open despite synthetic passes; measure request result and model IDs before another correction",
+    "Legacy diagnostic workflow still fails; do not claim real compiler navigation accepted",
+    "Linux Debug ASan/UBSan disables leak detection; macOS and screenreader remain unverified",
+    "Source snapshot includes unrelated local changes and is not a published Git revision",
+    "Full UI design equality and overall goal remain unachieved"
+  ]
+}

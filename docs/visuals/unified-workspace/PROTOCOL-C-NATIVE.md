@@ -1,5 +1,9 @@
 # Protokoll C – nativer Arbeitsstand vom 25. Oktober 2026
 
+**Nachlauf vom 26. Oktober:** Der [Fokusbericht](PROTOCOL-FOCUS-NATIVE.md)
+ergänzt verschärfte Gegenproben, die Adapterkorrektur und den weiterhin offenen
+direkten Mausfokus. Der folgende Text dokumentiert den Prüfstand vom 25. Oktober.
+
 Die ausgewählte Navigator-Anordnung C ist im lokalen Arbeitsstand begonnen.
 Sie ist **noch nicht abgenommen und noch nicht als Quelländerung veröffentlicht**.
 Der letzte reguläre Windows-Lauf scheitert bei der Mausziehung der Höhenleiste.
