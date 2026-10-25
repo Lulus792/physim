@@ -1,0 +1,71 @@
+[
+  {
+    "name": "protocol_store",
+    "exit_code": 0,
+    "binary_sha256": "1115fd66518ca8360a4b0af5471aec7ea85ccb7744ccc793302617a1d3a81212",
+    "command": [
+      "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE",
+      "/nologo",
+      "/std:c17",
+      "/W4",
+      "/MD",
+      "/Zi",
+      "/Od",
+      "/fsanitize=address",
+      "/ID:\\Physim\\include",
+      "/ID:\\Physim\\app",
+      "/ID:\\Physim\\src",
+      "D:\\Physim\\app\\protocol_store.c",
+      "D:\\Physim\\tests\\test_protocol.c",
+      "/FeF:\\Physim\\validation\\protocol-c-2026-10-25\\unit-windows\\protocol_store.exe",
+      "/FoF:\\Physim\\validation\\protocol-c-2026-10-25\\unit-windows/",
+      "/FdF:\\Physim\\validation\\protocol-c-2026-10-25\\unit-windows\\protocol_store.pdb"
+    ]
+  },
+  {
+    "name": "compiler_diagnostic",
+    "exit_code": 0,
+    "binary_sha256": "0f0c88c57777ea2e26ff530142a800c2fc1cf027ca99111547e3a705ccf8e3dc",
+    "command": [
+      "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE",
+      "/nologo",
+      "/std:c17",
+      "/W4",
+      "/MD",
+      "/Zi",
+      "/Od",
+      "/fsanitize=address",
+      "/ID:\\Physim\\include",
+      "/ID:\\Physim\\app",
+      "/ID:\\Physim\\src",
+      "D:\\Physim\\app\\compiler_diagnostic.c",
+      "D:\\Physim\\tests\\test_compiler_diagnostic.c",
+      "/FeF:\\Physim\\validation\\protocol-c-2026-10-25\\unit-windows\\compiler_diagnostic.exe",
+      "/FoF:\\Physim\\validation\\protocol-c-2026-10-25\\unit-windows/",
+      "/FdF:\\Physim\\validation\\protocol-c-2026-10-25\\unit-windows\\compiler_diagnostic.pdb"
+    ]
+  },
+  {
+    "name": "protocol_text",
+    "exit_code": 0,
+    "binary_sha256": "c87df4419ce870c9fd852d203bae57f2242b25bd19e91d1c44c1dce40bbddc70",
+    "command": [
+      "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE",
+      "/nologo",
+      "/std:c17",
+      "/W4",
+      "/MD",
+      "/Zi",
+      "/Od",
+      "/fsanitize=address",
+      "/ID:\\Physim\\include",
+      "/ID:\\Physim\\app",
+      "/ID:\\Physim\\src",
+      "D:\\Physim\\app\\protocol_text.c",
+      "D:\\Physim\\tests\\test_protocol_text.c",
+      "/FeF:\\Physim\\validation\\protocol-c-2026-10-25\\unit-windows\\protocol_text.exe",
+      "/FoF:\\Physim\\validation\\protocol-c-2026-10-25\\unit-windows/",
+      "/FdF:\\Physim\\validation\\protocol-c-2026-10-25\\unit-windows\\protocol_text.pdb"
+    ]
+  }
+]

@@ -202,7 +202,7 @@ static void analysis_chrome(app *a,float w,float h) {
     nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(header)));
     if(laboratory_begin(a,"analysis-status",nk_rect(0,h-28,w,28),NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BACKGROUND)) {
         nk_layout_row_dynamic(ui,18,a->job.running?2:1);nk_label_colored(ui,a->status,NK_TEXT_LEFT,muted());
-        if(a->job.running && nk_button_label(ui,"Abbrechen")){ps_process_kill(&a->job);ps_process_close(&a->job);status(a,"Auswertung abgebrochen.");}
+        if(a->job.running && nk_button_label(ui,"Abbrechen")){ps_process_kill(&a->job);protocol_job_cancel(a);ps_process_close(&a->job);status(a,"Auswertung abgebrochen.");}
         workspace_rule(nk_window_get_canvas(ui),nk_rect(0,h-28,w,1));
     }nk_end(ui);
     nk_style_pop_style_item(ui);nk_style_pop_font(ui);nk_style_pop_float(ui);nk_style_pop_vec2(ui);

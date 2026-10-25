@@ -69,7 +69,7 @@ static void model_edit_test_frame(app *a,int *stage,int *code,const char **captu
         file=fopen(m->source.path,"wb");ok=ok && file && fwrite(m->source.saved,1,m->source.length,file)==m->source.length;if(file && fclose(file))ok=false;
         break;
     }
-    case 21:model_edit_request(a);ok=a->job.running;if(a->job.running){ps_process_kill(&a->job);ps_process_close(&a->job);}break;
+    case 21:model_edit_request(a);ok=a->job.running;if(a->job.running){ps_process_kill(&a->job);protocol_job_cancel(a);ps_process_close(&a->job);}break;
     case 22:
         ok=*m->error && model_edit_dirty(m) && fabs(m->compiled[0]-1.9)<1e-12;
         model_edit_request(a);break;

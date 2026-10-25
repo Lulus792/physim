@@ -1,0 +1,8 @@
+BEGIN protocol_sources
+END {'name': 'protocol_sources', 'exit_code': 0, 'seconds': 110.10900000001129}
+BEGIN logging_workflow
+END {'name': 'logging_workflow', 'exit_code': 0, 'seconds': 167.25}
+BEGIN diagnostic_workflow
+END {'name': 'diagnostic_workflow', 'exit_code': 0, 'seconds': 323.5309999999881}
+BEGIN workbench_workflow
+END {'name': 'workbench_workflow', 'exit_code': 1, 'seconds': 45.375}

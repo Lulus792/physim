@@ -1,0 +1,21 @@
+from pathlib import Path
+import hashlib,json,os,subprocess,sys,time
+r=Path.cwd();linux=sys.platform=='linux';stage=sys.argv[1];platform='linux' if linux else 'windows'
+out=Path('/tmp')/('physim-protocol-native-'+stage) if linux else Path('F:/Physim/validation/protocol-c-2026-10-25')/(stage+'-windows')
+out.mkdir(parents=True)
+app=r/('build/native/Design-analysis-linux/bin/physim' if linux else 'build/native/Release/bin/physim.exe')
+expected=json.loads((r/f'build/native/protocol-source{stage}.json').read_text(encoding='utf-8'))['inputs']
+def guard():assert all(hashlib.sha256((r/p).read_bytes()).hexdigest()==h for p,h in expected.items())
+guard();sha=hashlib.sha256(app.read_bytes()).hexdigest();env=dict(os.environ,PYTHONUTF8='1')
+if not linux:
+    sys.path.insert(0,str(r/'tools'));from build import compiler_environment
+    env=compiler_environment();env.update(PYTHONUTF8='1',SDL_FORCE_RAISEWINDOW='1')
+results=[]
+for case in ['protocol_sources','logging_workflow','diagnostic_workflow','workbench_workflow']:
+    work=out/case;work.mkdir();start=time.monotonic();print('BEGIN',case,flush=True)
+    command=[sys.executable,'tests/check_display_workflow.py',case,'--app',str(app),'--work',str(work),'--root',str(r)]
+    with (work/'checker.log').open('w',encoding='utf-8') as log:done=subprocess.run(command,env=env,stdout=log,stderr=subprocess.STDOUT)
+    guard();assert hashlib.sha256(app.read_bytes()).hexdigest()==sha
+    row=dict(name=case,exit_code=done.returncode,seconds=time.monotonic()-start);print('END',row,flush=True);results.append(row)
+    (out/'results.json').write_text(json.dumps(dict(platform=platform,sha256=sha,binary=str(app),cases=results),indent=2)+'\n',encoding='utf-8',newline='\n')
+    if done.returncode:sys.exit(done.returncode)

@@ -1132,11 +1132,11 @@ def scene_frames(flow,directory):
         require(before==fingerprint(raw),"Replaying frame scene changed raw data")
 
 
-def logging(flow,directory,large=False):
-    for language in ("c","phys","flood"):
+def logging(flow,directory,large=False,protocol=False):
+    for language in (("c","phys") if protocol else ("c","phys","flood")):
         root=directory/language
         root.mkdir(parents=True)
-        mode="logging-"+language+("-22" if large else "")
+        mode="logging-"+language+("-22" if large else "")+("-protocol" if protocol else "")
         flow.run("--workspace-state-test",root,mode,timeout=130,
                  marker="LOGGING "+mode+" SELF-TEST: PASSED")
         logs=list((root/"project").rglob("*.pslog"))
@@ -1149,8 +1149,19 @@ def logging(flow,directory,large=False):
         rows=[json.loads(line) for line in read(logs[0]).splitlines()]
         require(rows[0]["message"]=="Created: α","App lost initial log")
         require(any(r["message"]=="Step\nnext line" and r["time_s"]==0 for r in rows),"App lost step log")
+        if protocol:
+            require(any(r["message"]=="Nonfatal error: α\n\toriginal text" and r["level"]==4 for r in rows),"Nonfatal error was not retained in the real saved log")
+            require('PROTOCOL NONFATAL: original=1 running=1 value=142.25' in flow.steps[-1]['stdout'],'Protocol changed model outcome or original text')
         if language=="flood":
             require(len(rows)==4097 and "suppressed 908 messages" in rows[-1]["message"],"App lost bounded logging summary")
+    if protocol:
+        payload="Protocol stream α\n".encode()+bytes(range(256))*600+b"\nProtocol stream complete\n"
+        expected=f'PROTOCOL STREAM ORIGINAL: bytes={len(payload)} crc32={zlib.crc32(payload):08x}'
+        for outcome in ("complete","cancel"):
+            root=directory/("stream-"+outcome);root.mkdir(parents=True)
+            flow.run("--workspace-state-test",root,"logging-stream-"+outcome,timeout=45,
+                     marker="PROTOCOL STREAM "+outcome+" SELF-TEST: PASSED")
+            require(expected in flow.steps[-1]["stdout"],"Process transcript bytes differ from independent expected payload")
 
 
 def series_masks(flow,directory):
@@ -1909,6 +1920,7 @@ SPECIAL["documentation_sidebar"]=documentation_sidebar
 SPECIAL["documentation_h"]=documentation_h
 SPECIAL["api_card_workflow"]=api_card
 SPECIAL["workbench_workflow"]=workbench
+SPECIAL["protocol_sources"]=lambda flow,directory: logging(flow,directory,protocol=True)
 SPECIAL["source_outline_workflow"]=source_outline
 SPECIAL["laboratory_workflow"]=laboratory
 SPECIAL["model_values_workflow"]=model_values

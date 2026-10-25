@@ -1,0 +1,50 @@
+=================================================================
+==196==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x7168722ee763 at pc 0x7568764eb840 bp 0x7fffce77fc00 sp 0x7fffce77f3a8
+WRITE of size 3145728 at 0x7168722ee763 thread T0
+    #0 0x7568764eb83f in memcpy (/usr/lib/libasan.so.8+0xeb83f) (BuildId: 49cdec61ea4a7e68d1b3321b11e733d1f2124ac9)
+    #1 0x562f9b22a75f in copy_entry /tmp/physim-protocol-quota-negative4/protocol_store.c:37
+    #2 0x562f9b22ca5a in ps_protocol_append /tmp/physim-protocol-quota-negative4/protocol_store.c:87
+    #3 0x562f9b23471c in main /mnt/d/Physim/tests/test_protocol.c:90
+    #4 0x756876c72193 in libc_start_main_stage2 src/env/__libc_start_main.c:95
+
+0x7168722ee763 is located 0 bytes after 3145571-byte region [0x716871fee800,0x7168722ee763)
+allocated by thread T0 here:
+    #0 0x7568764eda1d in malloc (/usr/lib/libasan.so.8+0xeda1d) (BuildId: 49cdec61ea4a7e68d1b3321b11e733d1f2124ac9)
+    #1 0x562f9b22960e in copy_entry /tmp/physim-protocol-quota-negative4/protocol_store.c:29
+    #2 0x562f9b22ca5a in ps_protocol_append /tmp/physim-protocol-quota-negative4/protocol_store.c:87
+    #3 0x562f9b23471c in main /mnt/d/Physim/tests/test_protocol.c:90
+    #4 0x756876c72193 in libc_start_main_stage2 src/env/__libc_start_main.c:95
+
+SUMMARY: AddressSanitizer: heap-buffer-overflow /tmp/physim-protocol-quota-negative4/protocol_store.c:37 in copy_entry
+Shadow bytes around the buggy address:
+  0x7168722ee480: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x7168722ee500: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x7168722ee580: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x7168722ee600: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  0x7168722ee680: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+=>0x7168722ee700: 00 00 00 00 00 00 00 00 00 00 00 00[03]fa fa fa
+  0x7168722ee780: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x7168722ee800: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x7168722ee880: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x7168722ee900: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+  0x7168722ee980: fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa fa
+Shadow byte legend (one shadow byte represents 8 application bytes):
+  Addressable:           00
+  Partially addressable: 01 02 03 04 05 06 07 
+  Heap left redzone:       fa
+  Freed heap region:       fd
+  Stack left redzone:      f1
+  Stack mid redzone:       f2
+  Stack right redzone:     f3
+  Stack after return:      f5
+  Stack use after scope:   f8
+  Global redzone:          f9
+  Global init order:       f6
+  Poisoned by user:        f7
+  Container overflow:      fc
+  Array cookie:            ac
+  Intra object redzone:    bb
+  ASan internal:           fe
+  Left alloca redzone:     ca
+  Right alloca redzone:    cb
+==196==ABORTING

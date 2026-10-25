@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+cd /mnt/d/Physim
+export ASAN_OPTIONS=detect_leaks=0
+export UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+export LIBGL_ALWAYS_SOFTWARE=1
+export XDG_RUNTIME_DIR="$(mktemp -d /tmp/physim-protocol-native-XXXXXX)"
+openbox --sm-disable > "build/native/protocol-wm-$1.log" 2>&1 &
+task_wm_pid=$!
+trap 'kill "$task_wm_pid" 2>/dev/null || true; rmdir "$XDG_RUNTIME_DIR" 2>/dev/null || true' EXIT
+python3 tools/wait-window-manager.py
+python3 tools/build.py --compiler gcc --sanitizers --sdl build/native/F1-linux/sdl-install --build-dir build/native/Design-analysis-linux
+python3 build/native/protocol-native-matrix.py "$1"

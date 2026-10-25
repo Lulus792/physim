@@ -1,0 +1,71 @@
+[
+  {
+    "name": "protocol_store",
+    "exit_code": 0,
+    "binary_sha256": "59fb3f1ee7dc548cb29e7c2045d8bdcdcd31dd8ff96392b91d77d34b9977657d",
+    "command": [
+      "gcc",
+      "-std=c17",
+      "-g",
+      "-O0",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-I/mnt/d/Physim/include",
+      "-I/mnt/d/Physim/app",
+      "-I/mnt/d/Physim/src",
+      "/mnt/d/Physim/app/protocol_store.c",
+      "/mnt/d/Physim/tests/test_protocol.c",
+      "-o",
+      "/tmp/physim-protocol-c-unit-linux/protocol_store"
+    ]
+  },
+  {
+    "name": "compiler_diagnostic",
+    "exit_code": 0,
+    "binary_sha256": "950a8deb51e682199dbbc85122200251c7897e0ecb2bd6e74c3db2c6951148e6",
+    "command": [
+      "gcc",
+      "-std=c17",
+      "-g",
+      "-O0",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-I/mnt/d/Physim/include",
+      "-I/mnt/d/Physim/app",
+      "-I/mnt/d/Physim/src",
+      "/mnt/d/Physim/app/compiler_diagnostic.c",
+      "/mnt/d/Physim/tests/test_compiler_diagnostic.c",
+      "-o",
+      "/tmp/physim-protocol-c-unit-linux/compiler_diagnostic"
+    ]
+  },
+  {
+    "name": "protocol_text",
+    "exit_code": 0,
+    "binary_sha256": "bdb33ca9e1e2b57e3b5a1dab55e681a9a938c8d9abc01f57a84d8d0bf28efe1d",
+    "command": [
+      "gcc",
+      "-std=c17",
+      "-g",
+      "-O0",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-fsanitize=address,undefined",
+      "-fno-omit-frame-pointer",
+      "-I/mnt/d/Physim/include",
+      "-I/mnt/d/Physim/app",
+      "-I/mnt/d/Physim/src",
+      "/mnt/d/Physim/app/protocol_text.c",
+      "/mnt/d/Physim/tests/test_protocol_text.c",
+      "-o",
+      "/tmp/physim-protocol-c-unit-linux/protocol_text"
+    ]
+  }
+]

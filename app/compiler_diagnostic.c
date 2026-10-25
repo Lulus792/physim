@@ -57,7 +57,7 @@ bool ps_compiler_diagnostic_parse(const char *text, ps_compiler_diagnostic *out)
         bool valid=true;
         for(size_t i=0;i<length;i++)valid=valid && (unsigned char)begin[i]>=32 && begin[i]!=127;
         if(!valid)continue;
-        ps_compiler_diagnostic value={.line=line,.column=column};
+        ps_compiler_diagnostic value={.line=line,.column=column,.level=severity==7?PS_LOG_WARNING:PS_LOG_ERROR};
         memcpy(value.source,begin,length);value.source[length]=0;
         snprintf(value.message,sizeof value.message,"%s",message);
         *out=value;return true;

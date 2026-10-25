@@ -15,6 +15,8 @@
 #include "number_input.h"
 #include "project_file.h"
 #include "compiler_diagnostic.h"
+#include "protocol_store.h"
+#include "protocol_text.h"
 #include "physim/detail/run_identity.h"
 #include "completion.h"
 #include "editor_search.h"
@@ -133,6 +135,7 @@ typedef struct {
     char text[2048],source[4096];
     ps_result code;
     bool foreign,structured;
+    uint64_t protocol_id;
 } diagnostic;
 typedef struct {
     /* Native metadata stays first for the existing baseline/glyph helpers. */
@@ -338,6 +341,10 @@ typedef struct {
     struct nk_rect workspace_catalog_bounds[6], workspace_catalog_entries[PS_WORKSPACE_MAX], workspace_menu_bounds;
     enum nk_collapse_states workspace_disclosure;
     char log[65536], status[256], find[128], replace[128];
+    ps_protocol protocol;
+    ps_protocol_text protocol_job_text;
+    uint64_t protocol_job_id;
+    int protocol_job_pid;
     int tab, analysis_tab, example, profile, plot_channel;
     char step_breakpoints[PS_STEP_BREAKPOINT_TEXT];
     enum nk_collapse_states breakpoint_disclosure;
@@ -788,15 +795,46 @@ static bool diagnostic_same_source(const app *a,const char *left,const char *rig
     }
     return !strcmp(paths[0],paths[1]) || ps_text_document_same_file(paths[0],paths[1]);
 }
+static void log_job_bytes(app *a,const void *bytes,size_t size,bool final);
+static void job_output(app *a,bool drain);
+static void protocol_job_cancel(app *a) {
+    job_output(a,true);
+    log_job_bytes(a,NULL,0,true);
+    (void)ps_protocol_set_outcome(&a->protocol,a->protocol_job_id,PS_PROTOCOL_CANCELLED);
+    const char *text="Prozess abgebrochen.";
+    ps_protocol_message event={.level=PS_LOG_INFO,.origin=a->job_kind==3 || a->job_kind==4?PS_PROTOCOL_ANALYSIS:PS_PROTOCOL_BUILD,
+        .outcome=PS_PROTOCOL_CANCELLED,.title=text,.context=a->project,.raw=text,.raw_size=strlen(text)};
+    (void)ps_protocol_push(&a->protocol,&event,NULL);
+    a->protocol_job_id=0;a->protocol_job_pid=0;
+}
+static void protocol_job_bytes(app *a,const char *bytes,size_t size) {
+    if(a->protocol_job_pid!=a->job.pid){a->protocol_job_id=0;a->protocol_job_pid=a->job.pid;}
+    if(a->protocol_job_id && ps_protocol_find(&a->protocol,a->protocol_job_id)) {
+        (void)ps_protocol_append(&a->protocol,a->protocol_job_id,bytes,size);return;
+    }
+    bool analysis=a->job_kind==3 || a->job_kind==4;
+    ps_protocol_message message={.level=PS_LOG_DEBUG,.origin=analysis?PS_PROTOCOL_ANALYSIS:PS_PROTOCOL_BUILD,
+        .outcome=PS_PROTOCOL_RUNNING,.title=analysis?"Ausgabe der Auswertung":a->job_kind==5?"Parameterabfrage":"Build-Ausgabe",
+        .context=a->project,.raw=bytes,.raw_size=size};
+    (void)ps_protocol_push(&a->protocol,&message,&a->protocol_job_id);
+}
 static void structured_diagnostic(app *a,const ps_diagnostic *record,bool analysis) {
-    if(!ps_diagnostic_valid(record) || record->code==PS_OK || a->diagnostic_count>=64)return;
+    if(!ps_diagnostic_valid(record) || record->code==PS_OK)return;
     /* Prefer a typed record over a legacy line already received from stderr. */
     for(int i=0;i<a->diagnostic_count;i++)if(a->diagnostics[i].analysis==analysis &&
         diagnostic_same_source(a,a->diagnostics[i].source,record->source) &&
         (a->diagnostics[i].line==(int)record->line || (!a->diagnostics[i].structured && strstr(a->diagnostics[i].text,"runtime error")))) {
+        (void)ps_protocol_remove(&a->protocol,a->diagnostics[i].protocol_id);
         memmove(a->diagnostics+i,a->diagnostics+i+1,(size_t)(a->diagnostic_count-i-1)*sizeof a->diagnostics[0]);a->diagnostic_count--;break;
     }
+    ps_protocol_message message={.level=PS_LOG_ERROR,.origin=analysis?PS_PROTOCOL_ANALYSIS:PS_PROTOCOL_SIMULATION,
+        .title=record->message,.context=analysis?a->report:a->last_run,.source=record->source,
+        .operation=record->operation,.argument=record->argument,.has_code=true,.code=record->code,
+        .line=record->line,.column=record->column,.raw=record->message,.raw_size=strlen(record->message)};
+    uint64_t protocol_id=0;(void)ps_protocol_push(&a->protocol,&message,&protocol_id);
+    if(a->diagnostic_count>=64)return;
     diagnostic *d=&a->diagnostics[a->diagnostic_count++];memset(d,0,sizeof *d);
+    d->protocol_id=protocol_id;
     d->analysis=analysis;d->structured=true;d->code=record->code;d->line=record->line<=INT_MAX?(int)record->line:0;
     d->column=record->column<=INT_MAX?(int)record->column:1;
     snprintf(d->source,sizeof d->source,"%s",record->source);
@@ -812,9 +850,14 @@ static void structured_diagnostic(app *a,const ps_diagnostic *record,bool analys
     for(char *p=display.message;*p;p++)if(*p=='\n' || *p=='\r' || *p=='\t')*p=' ';
     (void)ps_diagnostic_format(&display,d->text,sizeof d->text);a->show_log=true;
 }
-static void parse_diagnostic(app *a, const char *line) {
+static void parse_diagnostic(app *a, const char *line,ps_protocol_origin origin) {
     ps_compiler_diagnostic record;
-    if(a->diagnostic_count>=64 || !ps_compiler_diagnostic_parse(line,&record))return;
+    if(!ps_compiler_diagnostic_parse(line,&record))return;
+    ps_protocol_message message={.level=record.level,.origin=origin,.title=record.message,.context=a->project,
+        .transcript_id=origin==PS_PROTOCOL_SIMULATION?0:a->protocol_job_id,
+        .source=record.source,.line=(uint32_t)record.line,.column=(uint32_t)record.column,.raw=line,.raw_size=strlen(line)};
+    uint64_t protocol_id=0;(void)ps_protocol_push(&a->protocol,&message,&protocol_id);
+    if(a->diagnostic_count>=64)return;
     char actual[4096],experiment[4096],analysis[4096];
     int length;
     if(record.source[0]=='/' || record.source[0]=='\\' || record.source[1]==':')
@@ -827,6 +870,7 @@ static void parse_diagnostic(app *a, const char *line) {
     bool analysis_source_file=!strcmp(actual,analysis) || ps_text_document_same_file(actual,analysis);
     diagnostic *d = &a->diagnostics[a->diagnostic_count++];
     memset(d,0,sizeof *d);
+    d->protocol_id=protocol_id;
     a->show_log = true;
     d->line=record.line;d->column=record.column;
     d->analysis=analysis_source_file;d->foreign=!main_source && !analysis_source_file;d->code=PS_INVALID;
@@ -837,7 +881,7 @@ static void diagnostic_bytes(app *a, const char *text, size_t size) {
     for (size_t i = 0; i < size; i++) {
         if (text[i] == '\n') {
             a->diagnostic_line[a->diagnostic_used] = 0;
-            parse_diagnostic(a, a->diagnostic_line);
+            parse_diagnostic(a, a->diagnostic_line,a->job_kind==3 || a->job_kind==4?PS_PROTOCOL_ANALYSIS:PS_PROTOCOL_BUILD);
             a->diagnostic_used = 0;
         } else if (text[i] != '\r' && a->diagnostic_used + 1 < sizeof a->diagnostic_line)
             a->diagnostic_line[a->diagnostic_used++] = text[i];
@@ -874,13 +918,8 @@ static void jump_to_diagnostic(app *a, const diagnostic *d) {
     if (d->analysis)
         a->analysis_tab = 1;
 }
-static void log_line(app *a, const char *format, ...) {
-    char text[4096];
-    va_list args;
-    va_start(args, format);
-    vsnprintf(text, sizeof text, format, args);
-    va_end(args);
-    size_t n = strlen(a->log), m = strlen(text);
+static void log_append(app *a,const char *text,size_t m) {
+    size_t n = strlen(a->log);
     if (n + m + 2 >= sizeof a->log) {
         size_t drop = sizeof a->log / 2;
         while(drop<n && a->log[drop]!='\n')drop++;
@@ -889,12 +928,44 @@ static void log_line(app *a, const char *format, ...) {
         n -= drop;
     }
     memcpy(a->log + n, text, m);
-    a->log[n + m] = '\n';
-    a->log[n + m + 1] = 0;
+    a->log[n + m] = 0;
+}
+static void log_job_bytes(app *a,const void *bytes,size_t size,bool final) {
+    char display[4*(4096+3)+1];size_t written=0;
+    if(ps_protocol_text_feed(&a->protocol_job_text,bytes,size,final,display,sizeof display,&written) && written)log_append(a,display,written);
+    if(final){size_t n=strlen(a->log);if(n && a->log[n-1]!='\n')log_append(a,"\n",1);}
+}
+static void log_line(app *a, const char *format, ...) {
+    char text[4096],display[4*(4096+3)+1];
+    va_list args;
+    va_start(args, format);
+    vsnprintf(text, sizeof text, format, args);
+    va_end(args);
+    ps_protocol_text state={0};size_t written=0;
+    if(ps_protocol_text_feed(&state,text,strlen(text),true,display,sizeof display,&written))log_append(a,display,written);
+    log_append(a,"\n",1);
+}
+static void job_output(app *a,bool drain) {
+    char buf[4096];int n;
+    for(int i=0;(drain || i<16) && (n=ps_process_read(&a->job,buf,sizeof buf-1))>0;i++) {
+        if(a->profiler)a->profile_frame.job_bytes+=(uint64_t)n;
+        buf[n]=0;
+        if(a->job_kind==5) {
+            if((size_t)n<sizeof a->parameter_output-a->parameter_output_used) {
+                memcpy(a->parameter_output+a->parameter_output_used,buf,(size_t)n+1);
+                a->parameter_output_used+=(size_t)n;
+            } else a->parameter_output_overflow=true;
+        }
+        protocol_job_bytes(a,buf,(size_t)n);
+        if(a->job_kind==1 || a->job_kind==2 || a->job_kind==3)diagnostic_bytes(a,buf,(size_t)n);
+        log_job_bytes(a,buf,(size_t)n,false);
+    }
 }
 static void status(app *a, const char *s) {
     snprintf(a->status, sizeof a->status, "%s", s);
     log_line(a, "%s", s);
+    ps_protocol_message message={.level=PS_LOG_INFO,.origin=PS_PROTOCOL_APP,.title=s,.context=a->loaded?a->project:"",.raw=s,.raw_size=strlen(s)};
+    (void)ps_protocol_push(&a->protocol,&message,NULL);
 }
 static void join(char *out, size_t n, const char *base, const char *leaf) {
     snprintf(out, n, "%s/%s", base, leaf);
@@ -1600,6 +1671,7 @@ static void build_project(app *a) {
     a->diagnostic_used = 0;
     a->build_revision = a->source_revision;
     if (ps_process_start(&a->job, args, a->project)) {
+        a->protocol_job_id=0;a->protocol_job_pid=0;
         model_edit_submitted(a);
         a->profile_job_recorded = false;
         a->job_kind = 2;
@@ -1675,6 +1747,7 @@ static bool discover_parameters(app *a) {
         return false;
     a->profile_job_recorded = false;
     a->job_kind = 5;
+    a->protocol_job_id=0;a->protocol_job_pid=0;
     status(a, "Build erfolgreich. Experimentparameter werden gelesen ...");
     return true;
 }
@@ -2015,6 +2088,7 @@ static void analyze(app *a, bool csv) {
         return;
     }
     if (ps_process_start_limited(&a->job, args, a->project, &limits)) {
+        a->protocol_job_id=0;a->protocol_job_pid=0;
         a->profile_job_recorded = false;
         if (!csv && strcmp(input, a->last_run)) {
             snprintf(a->last_run, sizeof a->last_run, "%s", input);
@@ -2111,25 +2185,20 @@ static void pump(app *a) {
         }
     }
     if (a->job.running) {
-        char buf[4096];
-        int n;
-        for (int i = 0; i < 16 && (n = ps_process_read(&a->job, buf, sizeof buf - 1)) > 0; i++) {
-            if (a->profiler) a->profile_frame.job_bytes += (uint64_t)n;
-            buf[n] = 0;
-            if (a->job_kind == 5) {
-                if ((size_t)n < sizeof a->parameter_output - a->parameter_output_used) {
-                    memcpy(a->parameter_output + a->parameter_output_used, buf, (size_t)n + 1);
-                    a->parameter_output_used += (size_t)n;
-                } else
-                    a->parameter_output_overflow = true;
-            }
-            if (a->job_kind == 1 || a->job_kind == 2 || a->job_kind == 3)
-                diagnostic_bytes(a, buf, (size_t)n);
-            log_line(a, "%s", buf);
-        }
+        job_output(a,false);
         if (!ps_process_poll(&a->job)) {
+            job_output(a,true);
+            log_job_bytes(a,NULL,0,true);
             profile_process_finished(a, &a->job, a->job_kind, &a->profile_job_recorded);
             int code = a->job.exit_code;
+            bool failed=code || a->job.timed_out;
+            (void)ps_protocol_set_outcome(&a->protocol,a->protocol_job_id,failed?PS_PROTOCOL_FAILED:PS_PROTOCOL_SUCCEEDED);
+            char outcome[128];snprintf(outcome,sizeof outcome,"Prozess beendet (Exit %d)%s",code,a->job.timed_out?" nach Zeitlimit.":".");
+            ps_protocol_message completion={.level=failed?PS_LOG_ERROR:PS_LOG_INFO,
+                .origin=a->job_kind==3 || a->job_kind==4?PS_PROTOCOL_ANALYSIS:PS_PROTOCOL_BUILD,.outcome=failed?PS_PROTOCOL_FAILED:PS_PROTOCOL_SUCCEEDED,
+                .title=outcome,.context=a->project,.raw=outcome,.raw_size=strlen(outcome)};
+            (void)ps_protocol_push(&a->protocol,&completion,NULL);
+            a->protocol_job_id=0;a->protocol_job_pid=0;
             ps_process_close(&a->job);
             if(code && (a->job_kind==3 || a->job_kind==4)) {
                 char path[4096];snprintf(path,sizeof path,"%s.psdiag",a->report);ps_diagnostic record;
@@ -2277,6 +2346,9 @@ static void pump(app *a) {
                     a->live_event_count--;a->live_event_omitted++;
                 }
                 a->live_events[a->live_event_count++]=record;
+                ps_protocol_message event={.level=record.level,.origin=PS_PROTOCOL_SIMULATION,.title=record.message,.context=a->last_run,
+                    .has_time=true,.time_s=record.time_s,.raw=record.message,.raw_size=strlen(record.message)};
+                (void)ps_protocol_push(&a->protocol,&event,NULL);
                 if(record.level>=PS_LOG_WARNING){a->live_warning=record;a->live_warning_valid=true;}
                 log_line(a,"Experiment [%s, t=%.17g s]: %s",ps_log_level_name(record.level),record.time_s,record.message);
             } else if(type==PS_MSG_DIAGNOSTIC) {
@@ -2287,7 +2359,7 @@ static void pump(app *a) {
                 char error[8193];
                 memcpy(error, p, n);
                 error[n] = 0;
-                parse_diagnostic(a, error);
+                parse_diagnostic(a, error,PS_PROTOCOL_SIMULATION);
                 log_line(a, "Runner: %s", error);
             } else if (type != PS_MSG_HEARTBEAT && type != PS_MSG_BYE) {
                 r = -1;
@@ -3682,6 +3754,8 @@ static bool test_general_balance_report(const app *a) {
     ps_run_reader_close(&reader);return ok;
 }
 int main(int argc, char **argv) {
+    if(argc==3 && !strcmp(argv[1],"--protocol-output-fixture") &&
+       (!strcmp(argv[2],"complete") || !strcmp(argv[2],"cancel")))return protocol_output_fixture(!strcmp(argv[2],"cancel"));
     double profile_app_started = ps_clock();
     bool graphic_raster_test=argc>1 && !strcmp(argv[1],"--graphic-raster-test");
     if(graphic_raster_test && argc!=4)return 2;
@@ -3902,7 +3976,7 @@ int main(int argc, char **argv) {
     a->png_scale = 2;
     a->ui = nk_sdl_init(window, graphics);
     if (!a->ui) {
-        free(a);
+        ps_protocol_clear(&a->protocol);free(a);
         ps_graphics_destroy(graphics);
         SDL_DestroyWindow(window);
         SDL_Quit();
@@ -3956,7 +4030,7 @@ int main(int argc, char **argv) {
     if (!ui_fonts_ok || !code_fonts_ok || !title_font || !nk_sdl_font_stash_end(a->ui)) {
         fprintf(stderr, "Font initialization: %s\n", SDL_GetError());
         nk_sdl_shutdown(a->ui);
-        free(a);
+        ps_protocol_clear(&a->protocol);free(a);
         ps_graphics_destroy(graphics);
         SDL_DestroyWindow(window);
         SDL_Quit();
@@ -5653,7 +5727,7 @@ int main(int argc, char **argv) {
     for(unsigned i=0;i<2;i++)if(a->laboratory_cursors[i])SDL_DestroyCursor(a->laboratory_cursors[i]);
     nk_sdl_shutdown(a->ui);
     SDL_SetWindowHitTest(window, NULL, NULL);
-    free(a);
+    ps_protocol_clear(&a->protocol);free(a);
     ps_graphics_destroy(graphics);
     SDL_DestroyWindow(window);
     SDL_Quit();

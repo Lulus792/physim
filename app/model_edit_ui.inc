@@ -14,7 +14,7 @@ static float model_edit_banner(app *a) {
     }
     if(m->building) {
         nk_layout_row_dynamic(ui,34,1);
-        if(nk_button_label(ui,"Build abbrechen")){ps_process_kill(&a->job);ps_process_close(&a->job);a->built=false;model_edit_finish(a,false);status(a,"Build abgebrochen. Vorgemerkte Modellwerte bleiben erhalten.");}
+        if(nk_button_label(ui,"Build abbrechen")){ps_process_kill(&a->job);protocol_job_cancel(a);ps_process_close(&a->job);a->built=false;model_edit_finish(a,false);status(a,"Build abgebrochen. Vorgemerkte Modellwerte bleiben erhalten.");}
     }
     nk_layout_row_dynamic(ui,36,1);a->model_build_bounds=nk_widget_bounds(ui);
     nk_begin_disabled(ui,!dirty || !model_edit_valid(m) || m->building || m->stop_build || a->reset_pending || (!a->runner.running && !idle(a)));

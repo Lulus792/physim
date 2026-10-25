@@ -1,0 +1,29 @@
+{
+  "exit_code": 1,
+  "expected": "AddressSanitizer: heap-buffer-overflow",
+  "command": [
+    "gcc",
+    "-std=c17",
+    "-g",
+    "-O0",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-fsanitize=address,undefined",
+    "-fno-omit-frame-pointer",
+    "-I/mnt/d/Physim/include",
+    "-I/mnt/d/Physim/app",
+    "/tmp/physim-protocol-quota-negative4/protocol_store.c",
+    "/mnt/d/Physim/tests/test_protocol.c",
+    "-o",
+    "/tmp/physim-protocol-quota-negative4/quota-negative"
+  ],
+  "inputs": {
+    "/tmp/physim-protocol-quota-negative4/protocol_store.c": "160338b8bd9d8bb0d3a8c3a86affdfbd9f68d2746621910d7fc390905ab168de",
+    "/mnt/d/Physim/tests/test_protocol.c": "976f387136f15b521f8f413cac26275f66dba863bd6a178e88ca075c2cabb761",
+    "/mnt/d/Physim/app/protocol_store.h": "cbc3d41237e1355871df35ac30d2294d88e89bd68d41964883aec334a863cc8a",
+    "/mnt/d/Physim/include/physim/log.h": "a57b6e2550184f9e9fb99da726b0d047248aa57b486b7ac20c5ca31a83043139",
+    "/mnt/d/Physim/include/physim/core.h": "159d63a460334a0ea27dc7645a5f2b5de30666bfbc6840492b843e2c0f3be7d2"
+  },
+  "binary_sha256": "63e864e55921e01c605b8cddc606f3b6e205f260658a45ffead728d143010883"
+}

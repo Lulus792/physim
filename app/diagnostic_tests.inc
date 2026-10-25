@@ -34,6 +34,17 @@ static void diagnostic_test_frame(app *a,const char *mode,int *stage,int *code,c
             for(int i=0;i<a->diagnostic_count;i++)
                 if(a->diagnostics[i].foreign && a->diagnostics[i].line==2 && strstr(a->diagnostics[i].text,"compiler navigation sentinel"))selected=i;
             ok &= selected>=0;
+            if(selected>=0) {
+                const ps_protocol_record *event=ps_protocol_find(&a->protocol,a->diagnostics[selected].protocol_id);
+                ok &= event && event->message.origin==PS_PROTOCOL_BUILD && event->message.level==PS_LOG_ERROR &&
+                    event->message.line==2 && strstr(event->message.source,"helper α.h") &&
+                    strstr(event->message.raw,"compiler navigation sentinel");
+                if(event) {
+                    const ps_protocol_record *output=ps_protocol_find(&a->protocol,event->message.transcript_id);
+                    ok &= output && output->message.raw_size>event->message.raw_size &&
+                        strstr(output->message.raw,"compiler navigation sentinel");
+                }
+            }
             test_window_key_mod(a->window,SDLK_F6,0);break;
         case 2:
             if(scroll_settle){--scroll_settle;return;}
@@ -105,8 +116,11 @@ static void diagnostic_test_frame(app *a,const char *mode,int *stage,int *code,c
                 char nested[4096];join(nested,sizeof nested,a->project,"nested");ok=ps_make_directory(nested);
                 join(nested,sizeof nested,a->project,"nested/main.c");FILE *file=fopen(nested,"wb");ok &= file!=NULL;
                 if(file){ok &= fputs("// nested\n// diagnostic source\n",file)>=0;ok &= fclose(file)==0;}
-                parse_diagnostic(a,"nested/main.c:2:4: warning: nested source");
+                parse_diagnostic(a,"nested/main.c:2:4: warning: nested source",PS_PROTOCOL_BUILD);
                 ok &= a->diagnostic_count==2 && a->diagnostics[1].foreign;
+                const ps_protocol_record *warning=ps_protocol_find(&a->protocol,a->diagnostics[1].protocol_id);
+                ok &= warning && warning->message.level==PS_LOG_WARNING && warning->message.origin==PS_PROTOCOL_BUILD &&
+                    !strcmp(warning->message.raw,"nested/main.c:2:4: warning: nested source");
                 ok &= ps_diagnostic_set(&record,PS_INVALID,"step","value","main.c",2,4,"Different main source") == PS_OK;
                 if(ok)structured_diagnostic(a,&record,false);
                 ok &= a->diagnostic_count==3 && a->diagnostics[1].foreign && !a->diagnostics[2].foreign;
@@ -136,8 +150,16 @@ static void diagnostic_test_frame(app *a,const char *mode,int *stage,int *code,c
         ok=structured==1 && selected>=0;
         diagnostic *item=ok?&a->diagnostics[selected]:NULL;
         ok=ok && item->code==(analysis?PS_INVALID:PS_SINGULAR) && item->line>0 && !item->foreign && strstr(item->text,"α");
-        char path[4096];snprintf(path,sizeof path,"%s.psdiag",analysis?a->report:a->last_run);ps_diagnostic record;
+        char path[4096];snprintf(path,sizeof path,"%s.psdiag",analysis?a->report:a->last_run);ps_diagnostic record={0};
         ok=ok && ps_diagnostic_load(path,&record)==PS_OK && record.line==(uint32_t)item->line;
+        if(ok) {
+            const ps_protocol_record *event=ps_protocol_find(&a->protocol,item->protocol_id);
+            ok=event && event->message.origin==(analysis?PS_PROTOCOL_ANALYSIS:PS_PROTOCOL_SIMULATION) &&
+                event->message.has_code && event->message.code==record.code && !event->message.has_time &&
+                !strcmp(event->message.operation,record.operation) && !strcmp(event->message.argument,record.argument) &&
+                !strcmp(event->message.source,record.source) && event->message.line==record.line && event->message.column==record.column &&
+                event->message.raw_size==strlen(record.message) && !memcmp(event->message.raw,record.message,strlen(record.message));
+        }
         if(ok)jump_to_diagnostic(a,item);break;
     }
     case 4: {

@@ -102,3 +102,9 @@ docs/visuals/unified-workspace/workbench-header-2026-10-25/*.gz binary
 docs/visuals/unified-workspace/analysis-sides-2026-10-25/** text eol=lf
 docs/visuals/unified-workspace/analysis-sides-2026-10-25/*.png binary
 docs/visuals/unified-workspace/analysis-sides-2026-10-25/*.gz binary
+
+# Frozen protocol originals, sanitizer counterexamples and actual native outcomes.
+docs/visuals/unified-workspace/protocol-sources-2026-10-25/** -text
+docs/visuals/unified-workspace/protocol-sources-2026-10-25/*.gz binary
+# Original tool logs retain CRLF and diagnostic alignment whitespace.
+docs/visuals/unified-workspace/protocol-sources-2026-10-25/*.log -whitespace

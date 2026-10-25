@@ -28,7 +28,7 @@ static void panel_test_frame(app *a,const char *mode,int *stage,int *code,const 
     case 1:if(!idle(a) || a->library_thread)return;ok=a->built;start_run(a);break;
     case 2:if(!a->hello || a->simulation_time<.2)return;command(a,PS_MSG_PAUSE);a->show_log=true;
         if(!a->diagnostic_count) {
-            parse_diagnostic(a,"native-compact-log-sentinel.c:17:1: warning: Native compact log display probe");
+            parse_diagnostic(a,"native-compact-log-sentinel.c:17:1: warning: Native compact log display probe",PS_PROTOCOL_BUILD);
             puts("PANEL SYNTHETIC DIAGNOSTIC: warning-free compiler; explicit display fixture only");
         }
         timeline_wish=a->laboratory_timeline_height;log_wish=a->preferences.log_height;break;

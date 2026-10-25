@@ -1,0 +1,18 @@
+from pathlib import Path
+import hashlib,json,os,subprocess
+r=Path.cwd();out=Path('/tmp/physim-protocol-quota-negative4');out.mkdir(exist_ok=False)
+source=(r/'app/protocol_store.c').read_text(encoding='utf-8')
+good='if(size>available || used>available-size)'
+bad='if(size>PS_PROTOCOL_BYTE_BUDGET || used>available-size)'
+assert source.count(good)==1
+mutant=out/'protocol_store.c';mutant.write_text(source.replace(good,bad),encoding='utf-8')
+cmd=['gcc','-std=c17','-g','-O0','-Wall','-Wextra','-Werror','-fsanitize=address,undefined','-fno-omit-frame-pointer','-I'+str(r/'include'),'-I'+str(r/'app'),str(mutant),str(r/'tests/test_protocol.c'),'-o',str(out/'quota-negative')]
+build=subprocess.run(cmd,capture_output=True);(out/'build.log').write_bytes(build.stdout+build.stderr);assert build.returncode==0
+env=dict(os.environ,ASAN_OPTIONS='detect_leaks=1',UBSAN_OPTIONS='halt_on_error=1:print_stacktrace=1')
+run=subprocess.run([str(out/'quota-negative')],env=env,capture_output=True)
+(out/'run.log').write_bytes(run.stdout+run.stderr)
+assert run.returncode!=0 and b'AddressSanitizer: heap-buffer-overflow' in run.stderr
+files=[mutant,r/'tests/test_protocol.c',r/'app/protocol_store.h',r/'include/physim/log.h',r/'include/physim/core.h']
+inputs={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
+(out/'results.json').write_text(json.dumps(dict(exit_code=run.returncode,expected='AddressSanitizer: heap-buffer-overflow',command=cmd,inputs=inputs,binary_sha256=hashlib.sha256((out/'quota-negative').read_bytes()).hexdigest()),indent=2)+'\n',encoding='utf-8')
+print('Counterexample rejected by ASan:',run.returncode)

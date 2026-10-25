@@ -1,0 +1,27 @@
+{
+  "platform": "windows",
+  "sha256": "ebf6d3713bf404f3b3180eb9860d79fcc022867abc45d1d515d0d309c338820c",
+  "binary": "D:\\Physim\\build\\native\\Release\\bin\\physim.exe",
+  "cases": [
+    {
+      "name": "protocol_sources",
+      "exit_code": 0,
+      "seconds": 110.10900000001129
+    },
+    {
+      "name": "logging_workflow",
+      "exit_code": 0,
+      "seconds": 167.25
+    },
+    {
+      "name": "diagnostic_workflow",
+      "exit_code": 0,
+      "seconds": 323.5309999999881
+    },
+    {
+      "name": "workbench_workflow",
+      "exit_code": 1,
+      "seconds": 45.375
+    }
+  ]
+}

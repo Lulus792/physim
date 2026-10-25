@@ -15,6 +15,12 @@ Explorer A**. Die [vollständige Leeransicht](../design-options/index.html?appro
 zeigt alle drei Bereiche ohne Projekt mit passenden deaktivierten Aktionen;
 kein Demoexperiment automatisch laden. Designfreigabe und native Abnahme trennen.
 
+Der [native Anschluss der gemeinsamen Protokoll-Datenquellen](PROTOCOL-SOURCES-NATIVE.md)
+ist inzwischen geprüft. Die ausgewählte sichtbare Navigator-Anordnung C bleibt
+als nächster zusammenhängender Umsetzungsschritt offen; die bisherige Anzeige
+ist noch kein Protokoll C. Der Bericht trennt bestandene Daten-/Diagnoseprüfungen
+vom noch offenen Windows-Fokusnachweis und von der allgemeinen Designabnahme.
+
 Das [Inhaltsinventar](CONTENT-INVENTORY.md) bleibt mitzuprüfen: Kräfte, Texte,
 Objekttypen/Hierarchie, Parameter, Messkanäle, Modellmeldungen und variable
 Analyseausgaben. Bestehende native Funktionen übernehmen. Keine Newtonwerte aus

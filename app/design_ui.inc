@@ -1049,6 +1049,7 @@ static void log_panel(app *a) {
         if (a->job.running) {
             if (nk_button_label(ui, "Abbrechen")) {
                 ps_process_kill(&a->job);
+                protocol_job_cancel(a);
                 ps_process_close(&a->job);
                 status(a, "Hintergrundjob abgebrochen.");
             }
@@ -1143,7 +1144,7 @@ static void workbench_status_view(app *a,float w,float h) {
         nk_layout_row_push(ui,location_width);nk_spacer(ui);
         nk_layout_row_push(ui,action_width);
         if(a->job.running) {
-            if(nk_button_label(ui,"Abbrechen")){ps_process_kill(&a->job);ps_process_close(&a->job);status(a,"Hintergrundjob abgebrochen.");}
+            if(nk_button_label(ui,"Abbrechen")){ps_process_kill(&a->job);protocol_job_cancel(a);ps_process_close(&a->job);status(a,"Hintergrundjob abgebrochen.");}
         } else nk_spacer(ui);
         nk_layout_row_end(ui);
     }

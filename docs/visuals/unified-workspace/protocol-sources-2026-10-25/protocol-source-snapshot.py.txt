@@ -1,0 +1,7 @@
+from pathlib import Path
+import hashlib,json,subprocess,sys
+r=Path.cwd();old=json.loads((r/'build/native/analysis-sides-after10-source.json').read_text(encoding='utf-8'))
+paths={p for p in old['inputs'] if not p.startswith(('.github/','docs/'))}
+paths.update(['app/protocol_text.c','app/protocol_text.h','tests/test_protocol_text.c','app/protocol_store.c','app/protocol_store.h','tests/test_protocol.c','tests/fixtures/protocol_nonfatal.c','tests/fixtures/protocol_nonfatal.phys'])
+data=dict(base=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),inputs={p:hashlib.sha256((r/p).read_bytes()).hexdigest() for p in sorted(paths)})
+(r/f'build/native/protocol-source{sys.argv[1]}.json').write_text(json.dumps(data,indent=2)+'\n',encoding='utf-8',newline='\n');print(data['base'],len(paths))

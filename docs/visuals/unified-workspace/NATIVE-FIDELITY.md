@@ -45,6 +45,12 @@ bleibt weiterhin offen.
 
 ## Verbindlicher Umfang
 
+Der [native Anschluss der Protokoll-Datenquellen](PROTOCOL-SOURCES-NATIVE.md)
+ergänzt eine begrenzte gemeinsame Historie mit unveränderten Originalbytes,
+Herkunft, Severity und tatsächlichen Jobausgängen. Die sichtbare Navigator-
+Anordnung C ist noch umzusetzen. Die getrennten Windows-/Linux-Nachweise
+einschließlich des offenen Windows-Fokusfalls sind keine vollständige Designabnahme.
+
 Für die drei Hauptbereiche gelten die sechs Bilder und die interaktive Vorlage
 in diesem Verzeichnis. Die Einzelverträge ergänzen Zustände und Fachfunktionen:
 

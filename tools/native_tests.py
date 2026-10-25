@@ -46,6 +46,8 @@ class Case:
 
 def catalog():
     cases = []
+    cases.append(Case("protocol_store",("tests/test_protocol.c","app/protocol_store.c"),libraries=()))
+    cases.append(Case("protocol_text",("tests/test_protocol_text.c","app/protocol_text.c"),libraries=()))
     cases.append(Case("graphic_figure",("tests/test_graphic_figure.c","app/graphic_figure.c","app/graphic_snapshot.c","app/plot_view.c"),arguments=("{work}",)))
     cases.append(Case("graphic_snapshot",("tests/test_graphic_snapshot.c","app/graphic_snapshot.c"),arguments=("{work}",)))
     cases.append(Case("analysis_comparison",("tests/test_analysis_comparison.c","app/analysis_comparison.c","app/graphic_snapshot.c"),app=True,arguments=("{work}",)))

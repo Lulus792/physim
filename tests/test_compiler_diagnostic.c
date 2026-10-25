@@ -20,6 +20,7 @@ int main(void) {
         CHECK(ps_compiler_diagnostic_parse(cases[i].text,&value));
         CHECK(!strcmp(value.source,cases[i].source) && value.line==cases[i].line && value.column==cases[i].column);
         CHECK(strstr(value.message,"error") || strstr(value.message,"warning"));
+        CHECK(value.level==(strstr(value.message,"warning")==value.message?PS_LOG_WARNING:PS_LOG_ERROR));
     }
     const char *invalid[]={"", "error: compiler unavailable", "a.h:2:3: note: previous declaration",
         "a.h:0:3: error: zero", "a.h:2:0: error: zero", "a.h:-1:3: error: negative",

@@ -1,0 +1,1760 @@
+X11 window manager is ready
+649 C and 615 Physim completion symbols verified
+Compiled src/memory.c
+Compiled src/string_view.c
+Compiled src/array.c
+Compiled src/run_stream.c
+Compiled src/hashmap.c
+Compiled src/snapshot.c
+Compiled src/run_index.c
+/mnt/d/Physim/src/data.c: In function 'ps_run_identity_read':
+/mnt/d/Physim/src/data.c:180:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  180 |             if(seen&field)return PS_CORRUPT;seen|=field;
+      |             ^~
+/mnt/d/Physim/src/data.c:180:45: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  180 |             if(seen&field)return PS_CORRUPT;seen|=field;
+      |                                             ^~~~
+/mnt/d/Physim/src/data.c:186:17: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  186 |                 if(!ps_run_identity_valid(target))return PS_CORRUPT;available|=field;
+      |                 ^~
+/mnt/d/Physim/src/data.c:186:69: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  186 |                 if(!ps_run_identity_valid(target))return PS_CORRUPT;available|=field;
+      |                                                                     ^~~~~~~~~
+/mnt/d/Physim/src/data.c: In function 'ps_run_start_time_read':
+/mnt/d/Physim/src/data.c:223:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  223 |             if(seen&field)return PS_CORRUPT;seen|=field;
+      |             ^~
+/mnt/d/Physim/src/data.c:223:45: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  223 |             if(seen&field)return PS_CORRUPT;seen|=field;
+      |                                             ^~~~
+/mnt/d/Physim/src/data.c: In function 'ps_run_create_with_identity':
+/mnt/d/Physim/src/data.c:332:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  332 |     if(r==PS_OK)*w=draft;return r;
+      |     ^~
+/mnt/d/Physim/src/data.c:332:26: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  332 |     if(r==PS_OK)*w=draft;return r;
+      |                          ^~~~~~
+/mnt/d/Physim/src/data.c: At top level:
+/mnt/d/Physim/src/data.c:504:60: warning: argument 3 of type 'double *' declared as a pointer [-Warray-parameter=]
+  504 | ps_result ps_run_next(ps_run_reader *r, double *t, double *v) {
+      |                                                    ~~~~~~~~^
+In file included from /mnt/d/Physim/src/data.c:1:
+/mnt/d/Physim/include/physim/data.h:58:69: note: previously declared as an array 'double[16]'
+   58 | ps_result ps_run_next(ps_run_reader *reader, double *time_s, double values[PS_MAX_CHANNELS]);
+      |                                                              ~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+Compiled src/data.c
+Compiled src/scene.c
+Compiled src/analysis.c
+Compiled src/units.c
+Compiled src/math.c
+Compiled src/core.c
+Compiled src/numerics.c
+Compiled src/report_export.c
+Compiled src/measurement.c
+Compiled src/thermodynamics.c
+Compiled src/box_contacts.c
+Compiled src/report.c
+/mnt/d/Physim/src/electromagnetism.c: In function 'ps_lorentz_force':
+/mnt/d/Physim/src/electromagnetism.c:77:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   77 |     if(!finite3(result))return PS_NUMERIC;*out=result;return PS_OK;
+      |     ^~
+/mnt/d/Physim/src/electromagnetism.c:77:43: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   77 |     if(!finite3(result))return PS_NUMERIC;*out=result;return PS_OK;
+      |                                           ^
+Compiled src/electromagnetism.c
+/mnt/d/Physim/src/optics.c: In function 'ps_ray_reflect':
+/mnt/d/Physim/src/optics.c:23:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   23 |     if(!out)return PS_INVALID;double cosine;
+      |     ^~
+/mnt/d/Physim/src/optics.c:23:31: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   23 |     if(!out)return PS_INVALID;double cosine;
+      |                               ^~~~~~
+/mnt/d/Physim/src/optics.c: In function 'ps_ray_refract':
+/mnt/d/Physim/src/optics.c:29:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   29 |     if(!out || !positive(n1) || !positive(n2))return PS_INVALID;double cosine;
+      |     ^~
+/mnt/d/Physim/src/optics.c:29:65: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   29 |     if(!out || !positive(n1) || !positive(n2))return PS_INVALID;double cosine;
+      |                                                                 ^~~~~~
+Compiled src/optics.c
+Compiled src/waves.c
+/mnt/d/Physim/src/properties.c: In function 'blend':
+/mnt/d/Physim/src/properties.c:33:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   33 |     if(t==0)return a;if(t==1)return b;
+      |     ^~
+/mnt/d/Physim/src/properties.c:33:22: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   33 |     if(t==0)return a;if(t==1)return b;
+      |                      ^~
+Compiled src/properties.c
+Compiled src/contact_world.c
+Compiled src/mechanics.c
+Compiled src/fluid.c
+Compiled src/series.c
+Compiled src/collision.c
+Compiled src/protocol.c
+/mnt/d/Physim/src/runner_output.c: In function 'ps_runner_output_send':
+/mnt/d/Physim/src/runner_output.c:130:17: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  130 |                 if(o->tail==at)o->tail=previous;o->queued-=sizeof *at+at->bytes;free(at);break;
+      |                 ^~
+/mnt/d/Physim/src/runner_output.c:130:49: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  130 |                 if(o->tail==at)o->tail=previous;o->queued-=sizeof *at+at->bytes;free(at);break;
+      |                                                 ^
+/mnt/d/Physim/src/runner_output.c: In function 'ps_runner_output_healthy':
+/mnt/d/Physim/src/runner_output.c:140:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  140 |     if(!o)return false;lock_output(o);bool ok=!o->failed && !o->overflow && !o->closing;unlock_output(o);return ok;
+      |     ^~
+/mnt/d/Physim/src/runner_output.c:140:24: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  140 |     if(!o)return false;lock_output(o);bool ok=!o->failed && !o->overflow && !o->closing;unlock_output(o);return ok;
+      |                        ^~~~~~~~~~~
+Compiled src/runner_output.c
+Compiled src/platform.c
+Compiled src/language/lexer.c
+Compiled src/language/builtins.c
+Compiled src/language/parser.c
+Compiled src/language/emitter.c
+Compiled src/language/checker.c
+In file included from /mnt/d/Physim/src/batch.c:5:
+/mnt/d/Physim/src/run_series.h: In function 'ps_series_uint':
+/mnt/d/Physim/src/run_series.h:10:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   10 |     if(!text || !*text)return false;uint64_t value=0;
+      |     ^~
+/mnt/d/Physim/src/run_series.h:10:37: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   10 |     if(!text || !*text)return false;uint64_t value=0;
+      |                                     ^~~~~~~~
+/mnt/d/Physim/src/run_series.h: In function 'ps_series_parse':
+/mnt/d/Physim/src/run_series.h:15:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   15 |     if(!text || !out)return false;size_t length=0;while(length<512 && text[length])length++;if(length==512)return false;
+      |     ^~
+/mnt/d/Physim/src/run_series.h:15:35: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   15 |     if(!text || !out)return false;size_t length=0;while(length<512 && text[length])length++;if(length==512)return false;
+      |                                   ^~~~~~
+/mnt/d/Physim/src/run_series.h: In function 'ps_series_value':
+/mnt/d/Physim/src/run_series.h:35:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   35 |     if(series->index==1)return series->start;if(series->index==series->count)return series->end;
+      |     ^~
+/mnt/d/Physim/src/run_series.h:35:46: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   35 |     if(series->index==1)return series->start;if(series->index==series->count)return series->end;
+      |                                              ^~
+In file included from /mnt/d/Physim/src/batch.c:84:
+/mnt/d/Physim/src/batch_checkpoint.inc: In function 'batch_checkpoint_write':
+/mnt/d/Physim/src/batch_checkpoint.inc:39:90: warning: '/resume.bin' directive output may be truncated writing 11 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+   39 |     ps_put_u32(bytes+at,ps_crc32(bytes,at));char path[4096];snprintf(path,sizeof path,"%s/resume.bin",o->directory);
+      |                                                                                          ^~~~~~~~~~~
+/mnt/d/Physim/src/batch_checkpoint.inc:39:61: note: 'snprintf' output between 12 and 4107 bytes into a destination of size 4096
+   39 |     ps_put_u32(bytes+at,ps_crc32(bytes,at));char path[4096];snprintf(path,sizeof path,"%s/resume.bin",o->directory);
+      |                                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c: In function 'batch_reuse':
+/mnt/d/Physim/src/batch.c:452:60: warning: '/completed.csv' directive output may be truncated writing 14 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  452 |     char path[4096],line[512];snprintf(path,sizeof path,"%s/completed.csv",o->resume_from);
+      |                                                            ^~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:452:31: note: 'snprintf' output between 15 and 4110 bytes into a destination of size 4096
+  452 |     char path[4096],line[512];snprintf(path,sizeof path,"%s/completed.csv",o->resume_from);
+      |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:475:82: warning: '%s' directive output may be truncated writing up to 63 bytes into a region of size between 0 and 4095 [-Wformat-truncation=]
+  475 |         batch_slot slot={.index=index-1};snprintf(slot.path,sizeof slot.path,"%s/%s",o->resume_from,name);
+      |                                                                                  ^~                 ~~~~
+/mnt/d/Physim/src/batch.c:475:42: note: 'snprintf' output between 2 and 4160 bytes into a destination of size 4096
+  475 |         batch_slot slot={.index=index-1};snprintf(slot.path,sizeof slot.path,"%s/%s",o->resume_from,name);
+      |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:490:39: warning: '%s' directive output may be truncated writing up to 63 bytes into a region of size between 0 and 4095 [-Wformat-truncation=]
+  490 |         snprintf(path,sizeof path,"%s/%s",o->directory,name);
+      |                                       ^~               ~~~~
+/mnt/d/Physim/src/batch.c:490:9: note: 'snprintf' output between 2 and 4160 bytes into a destination of size 4096
+  490 |         snprintf(path,sizeof path,"%s/%s",o->directory,name);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c: In function 'run_pool':
+/mnt/d/Physim/src/batch.c:616:44: warning: '/work-' directive output may be truncated writing 6 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  616 |             snprintf(work, sizeof work, "%s/work-%04u", o->directory, next + 1);
+      |                                            ^~~~~~
+/mnt/d/Physim/src/batch.c:616:13: note: 'snprintf' output between 11 and 4112 bytes into a destination of size 4096
+  616 |             snprintf(work, sizeof work, "%s/work-%04u", o->directory, next + 1);
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:621:56: warning: '/run-' directive output may be truncated writing 5 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  621 |             snprintf(slot->path, sizeof slot->path, "%s/run-%04u.psrun", o->directory, next + 1);
+      |                                                        ^~~~~
+/mnt/d/Physim/src/batch.c:621:13: note: 'snprintf' output between 16 and 4117 bytes into a destination of size 4096
+  621 |             snprintf(slot->path, sizeof slot->path, "%s/run-%04u.psrun", o->directory, next + 1);
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c: In function 'ordered_endpoints':
+/mnt/d/Physim/src/batch.c:682:36: warning: '/endpoints.csv' directive output may be truncated writing 14 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  682 |     snprintf(path, sizeof path, "%s/endpoints.csv", o->directory);
+      |                                    ^~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:682:5: note: 'snprintf' output between 15 and 4110 bytes into a destination of size 4096
+  682 |     snprintf(path, sizeof path, "%s/endpoints.csv", o->directory);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c: In function 'ps_batch_run':
+/mnt/d/Physim/src/batch.c:724:40: warning: '/experiment.so' directive output may be truncated writing 14 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  724 |     snprintf(module, sizeof module, "%s/experiment.so", o->directory);
+      |                                        ^~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:724:5: note: 'snprintf' output between 15 and 4110 bytes into a destination of size 4096
+  724 |     snprintf(module, sizeof module, "%s/experiment.so", o->directory);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:736:40: warning: '/experiment.' directive output may be truncated writing 12 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  736 |         snprintf(path, sizeof path, "%s/experiment.%s", o->directory, extension);
+      |                                        ^~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:736:9: note: 'snprintf' output 14 or more bytes (assuming 4109) into a destination of size 4096
+  736 |         snprintf(path, sizeof path, "%s/experiment.%s", o->directory, extension);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:755:36: warning: '/series.txt' directive output may be truncated writing 11 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  755 |     snprintf(path, sizeof path, "%s/series.txt", o->directory);
+      |                                    ^~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:755:5: note: 'snprintf' output between 12 and 4107 bytes into a destination of size 4096
+  755 |     snprintf(path, sizeof path, "%s/series.txt", o->directory);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:794:36: warning: '/completed.csv' directive output may be truncated writing 14 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  794 |     snprintf(path, sizeof path, "%s/completed.csv", o->directory);
+      |                                    ^~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:794:5: note: 'snprintf' output between 15 and 4110 bytes into a destination of size 4096
+  794 |     snprintf(path, sizeof path, "%s/completed.csv", o->directory);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:808:38: warning: '/series.txt' directive output may be truncated writing 11 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  808 |         snprintf(path,sizeof path,"%s/series.txt",o->directory);
+      |                                      ^~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:808:9: note: 'snprintf' output between 12 and 4107 bytes into a destination of size 4096
+  808 |         snprintf(path,sizeof path,"%s/series.txt",o->directory);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:870:44: warning: '/summary.psreport' directive output may be truncated writing 17 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  870 |             snprintf(path, sizeof path, "%s/summary.psreport", o->directory);
+      |                                            ^~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:870:13: note: 'snprintf' output between 18 and 4113 bytes into a destination of size 4096
+  870 |             snprintf(path, sizeof path, "%s/summary.psreport", o->directory);
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:884:36: warning: '/status.txt' directive output may be truncated writing 11 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  884 |     snprintf(path, sizeof path, "%s/status.txt", o->directory);
+      |                                    ^~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:884:5: note: 'snprintf' output between 12 and 4107 bytes into a destination of size 4096
+  884 |     snprintf(path, sizeof path, "%s/status.txt", o->directory);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:899:40: warning: '/summary.psreport' directive output may be truncated writing 17 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  899 |         snprintf(path, sizeof path, "%s/summary.psreport", o->directory);
+      |                                        ^~~~~~~~~~~~~~~~~
+/mnt/d/Physim/src/batch.c:899:9: note: 'snprintf' output between 18 and 4113 bytes into a destination of size 4096
+  899 |         snprintf(path, sizeof path, "%s/summary.psreport", o->directory);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Compiled src/batch.c
+Compiled third_party/zlib-1.3.2/uncompr.c
+Compiled third_party/zlib-1.3.2/zutil.c
+Compiled third_party/zlib-1.3.2/adler32.c
+Compiled third_party/zlib-1.3.2/inftrees.c
+Compiled third_party/zlib-1.3.2/crc32.c
+Compiled third_party/zlib-1.3.2/inffast.c
+Compiled third_party/zlib-1.3.2/inflate.c
+Compiled third_party/zlib-1.3.2/trees.c
+Compiled third_party/zlib-1.3.2/deflate.c
+Compiled src/language/main.c
+Compiled src/language/loader.c
+In file included from /mnt/d/Physim/runners/experiment.c:8:
+/mnt/d/Physim/src/run_series.h: In function 'ps_series_uint':
+/mnt/d/Physim/src/run_series.h:10:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   10 |     if(!text || !*text)return false;uint64_t value=0;
+      |     ^~
+/mnt/d/Physim/src/run_series.h:10:37: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   10 |     if(!text || !*text)return false;uint64_t value=0;
+      |                                     ^~~~~~~~
+/mnt/d/Physim/src/run_series.h: In function 'ps_series_parse':
+/mnt/d/Physim/src/run_series.h:15:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   15 |     if(!text || !out)return false;size_t length=0;while(length<512 && text[length])length++;if(length==512)return false;
+      |     ^~
+/mnt/d/Physim/src/run_series.h:15:35: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   15 |     if(!text || !out)return false;size_t length=0;while(length<512 && text[length])length++;if(length==512)return false;
+      |                                   ^~~~~~
+/mnt/d/Physim/src/run_series.h: In function 'ps_series_value':
+/mnt/d/Physim/src/run_series.h:35:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   35 |     if(series->index==1)return series->start;if(series->index==series->count)return series->end;
+      |     ^~
+/mnt/d/Physim/src/run_series.h:35:46: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   35 |     if(series->index==1)return series->start;if(series->index==series->count)return series->end;
+      |                                              ^~
+Compiled runners/experiment.c
+Linked physim-runner
+Compiled runners/analysis.c
+Linked physim-analysis-runner
+Compiled runners/batch.c
+Linked physim-batch
+Compiled examples/pendulum/main.c
+Linked pendulum.so
+Compiled examples/projectile/main.c
+Linked projectile.so
+Compiled examples/collision/main.c
+Linked collision.so
+Compiled examples/box_floor/main.c
+Linked box_floor.so
+Compiled examples/spring/main.c
+Linked spring.so
+Compiled examples/uncertain_projectile/main.c
+Linked uncertain_projectile.so
+Compiled examples/box_collision/main.c
+Linked box_collision.so
+Compiled examples/buoyancy/main.c
+Linked buoyancy.so
+Compiled examples/ccd_events/main.c
+Linked ccd_events.so
+/mnt/d/Physim/examples/pendulum/analysis.c: In function 'ps_get_analysis':
+/mnt/d/Physim/examples/pendulum/analysis.c:726:41: warning: missing initializer for field 'run_diagnostic' of 'ps_analysis_api' [-Wmissing-field-initializers]
+  726 |                                         "Energy, period and run comparison", analyze, analyze_many};
+      |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /mnt/d/Physim/examples/pendulum/analysis.c:1:
+/mnt/d/Physim/include/physim/analysis.h:33:17: note: 'run_diagnostic' declared here
+   33 |     ps_result (*run_diagnostic)(const char *const *input_runs, size_t count,
+      |                 ^~~~~~~~~~~~~~
+Compiled examples/pendulum/analysis.c
+Linked pendulum_analysis.so
+Compiled examples/documentation/batch_analysis.c
+Linked batch_analysis.so
+Compiled app/text_document.c
+Compiled app/autosave.c
+Compiled app/parameter_catalog.c
+Compiled app/project_file.c
+/mnt/d/Physim/app/build_main.c: In function 'compile':
+/mnt/d/Physim/app/build_main.c:466:45: warning: '%s' directive output may be truncated writing up to 4095 bytes into a region of size 4093 [-Wformat-truncation=]
+  466 |         snprintf(output, sizeof output, "/Fi%s", preprocessed);
+      |                                             ^~   ~~~~~~~~~~~~
+/mnt/d/Physim/app/build_main.c:466:9: note: 'snprintf' output between 4 and 4099 bytes into a destination of size 4096
+  466 |         snprintf(output, sizeof output, "/Fi%s", preprocessed);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/build_main.c:506:45: warning: '%s' directive output may be truncated writing up to 4095 bytes into a region of size 4093 [-Wformat-truncation=]
+  506 |         snprintf(output, sizeof output, "/Fi%s", compile_input);
+      |                                             ^~   ~~~~~~~~~~~~~
+/mnt/d/Physim/app/build_main.c:506:9: note: 'snprintf' output between 4 and 4099 bytes into a destination of size 4096
+  506 |         snprintf(output, sizeof output, "/Fi%s", compile_input);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/build_main.c:527:45: warning: '%s' directive output may be truncated writing up to 4095 bytes into a region of size 4093 [-Wformat-truncation=]
+  527 |         snprintf(output, sizeof output, "/Fo%s", next_object);
+      |                                             ^~   ~~~~~~~~~~~
+/mnt/d/Physim/app/build_main.c:527:9: note: 'snprintf' output between 4 and 4099 bytes into a destination of size 4096
+  527 |         snprintf(output, sizeof output, "/Fo%s", next_object);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/build_main.c: In function 'link_module':
+/mnt/d/Physim/app/build_main.c:571:57: warning: '%s' directive output may be truncated writing up to 4095 bytes into a region of size 4087 [-Wformat-truncation=]
+  571 |             snprintf(libs[i], sizeof libs[i], "/LIBPATH:%s", tc->libraries[i]);
+      |                                                         ^~
+/mnt/d/Physim/app/build_main.c:571:13: note: 'snprintf' output between 10 and 4105 bytes into a destination of size 4096
+  571 |             snprintf(libs[i], sizeof libs[i], "/LIBPATH:%s", tc->libraries[i]);
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/build_main.c: In function 'main':
+/mnt/d/Physim/app/build_main.c:822:55: warning: '%s' directive output may be truncated writing 8 or more bytes into a region of size between 0 and 4095 [-Wformat-truncation=]
+  822 |             snprintf(generated, sizeof generated, "%s/%s.physim.c", directory, name);
+      |                                                       ^~
+/mnt/d/Physim/app/build_main.c:822:13: note: 'snprintf' output 19 or more bytes (assuming 4114) into a destination of size 4096
+  822 |             snprintf(generated, sizeof generated, "%s/%s.physim.c", directory, name);
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/build_main.c:827:50: warning: '%s' directive output may be truncated writing 8 or more bytes into a region of size between 0 and 4095 [-Wformat-truncation=]
+  827 |         snprintf(user_objects[i], PATH_SIZE, "%s/%s.obj", directory, name);
+      |                                                  ^~
+/mnt/d/Physim/app/build_main.c:827:9: note: 'snprintf' output 14 or more bytes (assuming 4109) into a destination of size 4096
+  827 |         snprintf(user_objects[i], PATH_SIZE, "%s/%s.obj", directory, name);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/build_main.c:837:45: warning: '%s' directive output may be truncated writing 8 or more bytes into a region of size between 0 and 4095 [-Wformat-truncation=]
+  837 |         snprintf(modules[i], PATH_SIZE, "%s/%s.%s", directory, name, extension);
+      |                                             ^~
+/mnt/d/Physim/app/build_main.c:837:9: note: 'snprintf' output 13 or more bytes (assuming 4108) into a destination of size 4096
+  837 |         snprintf(modules[i], PATH_SIZE, "%s/%s.%s", directory, name, extension);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/build_main.c:838:44: warning: '%s' directive output may be truncated writing 8 or more bytes into a region of size between 0 and 4095 [-Wformat-truncation=]
+  838 |         snprintf(staged[i], PATH_SIZE, "%s/%s.next.%s", directory, name, extension);
+      |                                            ^~
+/mnt/d/Physim/app/build_main.c:838:9: note: 'snprintf' output 18 or more bytes (assuming 4113) into a destination of size 4096
+  838 |         snprintf(staged[i], PATH_SIZE, "%s/%s.next.%s", directory, name, extension);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/build_main.c:804:44: warning: '/src/' directive output may be truncated writing 5 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  804 |         snprintf(source, sizeof source, "%s/src/%s.c", sdk, SDK_MODULES[i]);
+      |                                            ^~~~~
+/mnt/d/Physim/app/build_main.c:804:9: note: 'snprintf' output 8 or more bytes (assuming 4103) into a destination of size 4096
+  804 |         snprintf(source, sizeof source, "%s/src/%s.c", sdk, SDK_MODULES[i]);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/build_main.c:805:44: warning: '/sdk-' directive output may be truncated writing 5 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  805 |         snprintf(objects[i], PATH_SIZE, "%s/sdk-%s.obj", directory, SDK_MODULES[i]);
+      |                                            ^~~~~
+/mnt/d/Physim/app/build_main.c:805:9: note: 'snprintf' output 10 or more bytes (assuming 4105) into a destination of size 4096
+  805 |         snprintf(objects[i], PATH_SIZE, "%s/sdk-%s.obj", directory, SDK_MODULES[i]);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Compiled app/build_main.c
+Linked physim-build
+Compiled app/protocol_text.c
+Compiled app/code_preview.c
+/mnt/d/Physim/app/source_outline.c: In function 'next':
+/mnt/d/Physim/app/source_outline.c:29:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   29 |             if(!closed)p->incomplete=true;continue;
+      |             ^~
+/mnt/d/Physim/app/source_outline.c:29:43: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   29 |             if(!closed)p->incomplete=true;continue;
+      |                                           ^~~~~~~~
+/mnt/d/Physim/app/source_outline.c:36:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   36 |             if(!closed)p->incomplete=true;t.kind=LITERAL;
+      |             ^~
+/mnt/d/Physim/app/source_outline.c:36:43: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   36 |             if(!closed)p->incomplete=true;t.kind=LITERAL;
+      |                                           ^
+Compiled app/source_outline.c
+/mnt/d/Physim/app/model_values.c: In function 'number':
+/mnt/d/Physim/app/model_values.c:26:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   26 |     if(errno || end==normalized || *end || !isfinite(x))return false;*value=x;return true;
+      |     ^~
+/mnt/d/Physim/app/model_values.c:26:70: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   26 |     if(errno || end==normalized || *end || !isfinite(x))return false;*value=x;return true;
+      |                                                                      ^
+/mnt/d/Physim/app/model_values.c: In function 'declaration':
+/mnt/d/Physim/app/model_values.c:46:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   46 |     if(!exact(&p,end,"="))return false;space(&p,end);const char *literal=p;
+      |     ^~
+/mnt/d/Physim/app/model_values.c:46:40: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   46 |     if(!exact(&p,end,"="))return false;space(&p,end);const char *literal=p;
+      |                                        ^~~~~
+/mnt/d/Physim/app/model_values.c: In function 'ps_model_values_parse':
+/mnt/d/Physim/app/model_values.c:57:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   57 |     if(!out)return false;memset(out,0,sizeof *out);
+      |     ^~
+/mnt/d/Physim/app/model_values.c:57:26: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   57 |     if(!out)return false;memset(out,0,sizeof *out);
+      |                          ^~~~~~
+/mnt/d/Physim/app/model_values.c:81:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   81 |             if(!label || label>=sizeof v.label)goto invalid;memcpy(v.label,p,label);v.label[label]=0;
+      |             ^~
+/mnt/d/Physim/app/model_values.c:81:61: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   81 |             if(!label || label>=sizeof v.label)goto invalid;memcpy(v.label,p,label);v.label[label]=0;
+      |                                                             ^~~~~~
+/mnt/d/Physim/app/model_values.c: In function 'ps_model_values_rewrite':
+/mnt/d/Physim/app/model_values.c:120:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  120 |     if(size>PS_MODEL_SOURCE_MAX)return NULL;char *result=malloc(size+1);if(!result)return NULL;
+      |     ^~
+/mnt/d/Physim/app/model_values.c:120:45: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  120 |     if(size>PS_MODEL_SOURCE_MAX)return NULL;char *result=malloc(size+1);if(!result)return NULL;
+      |                                             ^~~~
+Compiled app/protocol_store.c
+Compiled app/model_values.c
+/mnt/d/Physim/app/graphic_snapshot.c: In function 'status_domain':
+/mnt/d/Physim/app/graphic_snapshot.c:108:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  108 |         if(result!=PS_OK)return result;if(!count)return PS_CORRUPT;
+      |         ^~
+/mnt/d/Physim/app/graphic_snapshot.c:108:40: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  108 |         if(result!=PS_OK)return result;if(!count)return PS_CORRUPT;
+      |                                        ^~
+Compiled app/graphic_figure.c
+Compiled app/graphic_snapshot.c
+Compiled app/compiler_diagnostic.c
+Compiled app/completion.c
+Compiled app/analysis_comparison.c
+Compiled app/graphic_output.c
+Compiled app/timeline.c
+Compiled app/profiling.c
+Compiled app/accessibility_native.c
+Compiled app/graphic_raster.c
+Compiled app/docking.c
+Compiled app/layout_catalog.c
+Compiled app/run_import.c
+Compiled app/channel_units.c
+/mnt/d/Physim/app/accessibility.c: In function 'ps_a11y_suspend':
+/mnt/d/Physim/app/accessibility.c:23:2: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   23 |  if(!m)return;m->suspended=true;m->keyboard_focus=false;m->focused_id=0;
+      |  ^~
+/mnt/d/Physim/app/accessibility.c:23:15: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   23 |  if(!m)return;m->suspended=true;m->keyboard_focus=false;m->focused_id=0;
+      |               ^
+In file included from /mnt/d/Physim/app/accessibility.c:32:
+/mnt/d/Physim/app/accessibility_tables.inc: In function 'ps_a11y_table_at':
+/mnt/d/Physim/app/accessibility_tables.inc:103:2: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  103 |  if(!t || !out)return false;*out=*t;return true;
+      |  ^~
+/mnt/d/Physim/app/accessibility_tables.inc:103:29: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  103 |  if(!t || !out)return false;*out=*t;return true;
+      |                             ^
+/mnt/d/Physim/app/accessibility_tables.inc: In function 'ps_a11y_table_get':
+/mnt/d/Physim/app/accessibility_tables.inc:107:2: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  107 |  if(!t || !out)return false;*out=*t;return true;
+      |  ^~
+/mnt/d/Physim/app/accessibility_tables.inc:107:29: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  107 |  if(!t || !out)return false;*out=*t;return true;
+      |                             ^
+/mnt/d/Physim/app/accessibility.c: In function 'ps_a11y_document_scroll_align':
+/mnt/d/Physim/app/accessibility.c:95:2: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   95 |  if(!ps_a11y_document_scroll(m,version,byte))return false;m->document_scroll_top=top;return true;
+      |  ^~
+/mnt/d/Physim/app/accessibility.c:95:59: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   95 |  if(!ps_a11y_document_scroll(m,version,byte))return false;m->document_scroll_top=top;return true;
+      |                                                           ^
+/mnt/d/Physim/app/accessibility.c: In function 'ps_a11y_record_edit':
+/mnt/d/Physim/app/accessibility.c:262:2: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  262 |  if(m->draft_count==before)return false;ps_a11y_node *node=&m->draft[before];bool changed=false,has_caret=false;size_t caret=0;
+      |  ^~
+/mnt/d/Physim/app/accessibility.c:262:41: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  262 |  if(m->draft_count==before)return false;ps_a11y_node *node=&m->draft[before];bool changed=false,has_caret=false;size_t caret=0;
+      |                                         ^~~~~~~~~~~~
+/mnt/d/Physim/app/accessibility.c: In function 'ps_a11y_edit_update':
+/mnt/d/Physim/app/accessibility.c:298:2: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  298 |  if(!m || !m->building || index>=m->draft_count)return false;ps_a11y_node *node=&m->draft[index];
+      |  ^~
+/mnt/d/Physim/app/accessibility.c:298:62: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  298 |  if(!m || !m->building || index>=m->draft_count)return false;ps_a11y_node *node=&m->draft[index];
+      |                                                              ^~~~~~~~~~~~
+/mnt/d/Physim/app/accessibility.c: In function 'ps_a11y_edit_box':
+/mnt/d/Physim/app/accessibility.c:321:2: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  321 |  if(!m || !m->building || index>=m->draft_count || !bounds)return false;ps_a11y_node *node=&m->draft[index];
+      |  ^~
+/mnt/d/Physim/app/accessibility.c:321:73: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  321 |  if(!m || !m->building || index>=m->draft_count || !bounds)return false;ps_a11y_node *node=&m->draft[index];
+      |                                                                         ^~~~~~~~~~~~
+Compiled app/accessibility.c
+Compiled app/library.c
+/mnt/d/Physim/app/run_details.c: In function 'ps_run_details_format':
+/mnt/d/Physim/app/run_details.c:29:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   29 |     if(length)memcpy(source,metadata,length);source[length]=0;
+      |     ^~
+/mnt/d/Physim/app/run_details.c:29:46: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   29 |     if(length)memcpy(source,metadata,length);source[length]=0;
+      |                                              ^~~~~~
+Compiled app/run_details.c
+Compiled app/ui_geometry.c
+/mnt/d/Physim/app/documentation.c: In function 'ps_document_parse':
+/mnt/d/Physim/app/documentation.c:411:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  411 |             if(span->text<first)first=span->text;if(span->text+span->length>last)last=span->text+span->length;
+      |             ^~
+/mnt/d/Physim/app/documentation.c:411:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  411 |             if(span->text<first)first=span->text;if(span->text+span->length>last)last=span->text+span->length;
+      |                                                  ^~
+Compiled app/documentation.c
+Compiled app/preferences.c
+Compiled app/workspace_state.c
+Compiled app/workspace_catalog.c
+Compiled app/workspace_tree.c
+Compiled app/plot_view.c
+Compiled app/png.c
+Compiled third_party/libunibreak-8.0/linebreak.c
+Compiled app/accessibility_atspi.c
+Compiled third_party/libunibreak-8.0/linebreakdata.c
+Compiled third_party/libunibreak-8.0/linebreakdef.c
+/mnt/d/Physim/app/ui_sdl.c: In function 'nk_sdl_accessibility_document':
+/mnt/d/Physim/app/ui_sdl.c:271:2: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  271 |  if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
+      |  ^~
+/mnt/d/Physim/app/ui_sdl.c:271:45: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  271 |  if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
+      |                                             ^~~~~~
+/mnt/d/Physim/app/ui_sdl.c: In function 'nk_sdl_accessibility_text_box':
+/mnt/d/Physim/app/ui_sdl.c:276:2: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  276 |  if(!ctx || !ctx->userdata.ptr)return;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return;
+      |  ^~
+/mnt/d/Physim/app/ui_sdl.c:276:39: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  276 |  if(!ctx || !ctx->userdata.ptr)return;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return;
+      |                                       ^~~~~~
+/mnt/d/Physim/app/ui_sdl.c: In function 'nk_sdl_accessibility_document_scroll':
+/mnt/d/Physim/app/ui_sdl.c:318:2: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  318 |  if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
+      |  ^~
+/mnt/d/Physim/app/ui_sdl.c:318:45: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  318 |  if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
+      |                                             ^~~~~~
+/mnt/d/Physim/app/ui_sdl.c: In function 'nk_sdl_accessibility_document_visible':
+/mnt/d/Physim/app/ui_sdl.c:324:2: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  324 |  if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
+      |  ^~
+/mnt/d/Physim/app/ui_sdl.c:324:45: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  324 |  if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
+      |                                             ^~~~~~
+/mnt/d/Physim/app/ui_sdl.c: In function 'nk_sdl_accessibility_document_preserve_position':
+/mnt/d/Physim/app/ui_sdl.c:331:2: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  331 |  if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
+      |  ^~
+/mnt/d/Physim/app/ui_sdl.c:331:45: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  331 |  if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
+      |                                             ^~~~~~
+/mnt/d/Physim/app/ui_sdl.c: In function 'nk_sdl_accessibility_document_native_read_test':
+/mnt/d/Physim/app/ui_sdl.c:337:2: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  337 |  if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;
+      |  ^~
+/mnt/d/Physim/app/ui_sdl.c:337:45: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  337 |  if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;
+      |                                             ^~~~~~
+/mnt/d/Physim/app/ui_sdl.c: In function 'nk_sdl_accessibility_native_edit_test_step':
+/mnt/d/Physim/app/ui_sdl.c:341:2: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  341 |  if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;
+      |  ^~
+/mnt/d/Physim/app/ui_sdl.c:341:45: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  341 |  if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;
+      |                                             ^~~~~~
+/mnt/d/Physim/app/ui_sdl.c: In function 'nk_sdl_accessibility_native_links_test_step':
+/mnt/d/Physim/app/ui_sdl.c:345:2: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  345 |  if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;
+      |  ^~
+/mnt/d/Physim/app/ui_sdl.c:345:45: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  345 |  if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;
+      |                                             ^~~~~~
+/mnt/d/Physim/app/ui_sdl.c: In function 'nk_sdl_accessibility_document_link_invoked':
+/mnt/d/Physim/app/ui_sdl.c:388:2: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  388 |  if(!ctx || !ctx->userdata.ptr)return;struct nk_sdl *sdl=ctx->userdata.ptr;
+      |  ^~
+/mnt/d/Physim/app/ui_sdl.c:388:39: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  388 |  if(!ctx || !ctx->userdata.ptr)return;struct nk_sdl *sdl=ctx->userdata.ptr;
+      |                                       ^~~~~~
+/mnt/d/Physim/app/ui_sdl.c: In function 'nk_sdl_accessibility_suspend':
+/mnt/d/Physim/app/ui_sdl.c:392:2: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  392 |  if(!ctx || !ctx->userdata.ptr)return;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return;
+      |  ^~
+/mnt/d/Physim/app/ui_sdl.c:392:39: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  392 |  if(!ctx || !ctx->userdata.ptr)return;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return;
+      |                                       ^~~~~~
+Compiled third_party/libunibreak-8.0/eastasianwidthdef.c
+Compiled app/ui_sdl.c
+Compiled third_party/libunibreak-8.0/unibreakbase.c
+Compiled third_party/libunibreak-8.0/unibreakdef.c
+Compiled app/graphics.c
+Compiled app/report_image.c
+/mnt/d/Physim/app/ui_backend.c: In function 'ps_ui_font_add_file_face':
+/mnt/d/Physim/app/ui_backend.c:19:40: warning: pointer targets in initialization of 'unsigned char *' from 'char *' differ in signedness [-Wpointer-sign]
+   19 |  nk_size length=0;unsigned char *bytes=nk_file_load(path,&length,&atlas->permanent);
+      |                                        ^~~~~~~~~~~~
+/mnt/d/Physim/app/ui_backend.c: In function 'ps_ui_font_add_fallback':
+/mnt/d/Physim/app/ui_backend.c:122:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  122 |   if(n>SIZE_MAX-count)return false;count+=n;
+      |   ^~
+/mnt/d/Physim/app/ui_backend.c:122:36: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  122 |   if(n>SIZE_MAX-count)return false;count+=n;
+      |                                    ^~~~~
+/mnt/d/Physim/app/ui_backend.c: In function 'ps_ui_draw_icon':
+/mnt/d/Physim/app/ui_backend.c:191:9: warning: this 'for' clause does not guard... [-Wmisleading-indentation]
+  191 |         for(int row=0;row<3;row++)for(int col=0;col<2;col++)nk_fill_circle(c,nk_rect(x+4+col*4,y+2+row*4,2,2),color);break;
+      |         ^~~
+/mnt/d/Physim/app/ui_backend.c:191:118: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'for'
+  191 |         for(int row=0;row<3;row++)for(int col=0;col<2;col++)nk_fill_circle(c,nk_rect(x+4+col*4,y+2+row*4,2,2),color);break;
+      |                                                                                                                      ^~~~~
+/mnt/d/Physim/app/ui_backend.c:226:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  226 |         if(icon!=PS_ICON_WINDOW)nk_stroke_line(c,x+(icon==PS_ICON_SIDEBAR?5:9),y+5,x+(icon==PS_ICON_SIDEBAR?5:9),y+12,t,color);break;
+      |         ^~
+/mnt/d/Physim/app/ui_backend.c:226:128: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  226 |         if(icon!=PS_ICON_WINDOW)nk_stroke_line(c,x+(icon==PS_ICON_SIDEBAR?5:9),y+5,x+(icon==PS_ICON_SIDEBAR?5:9),y+12,t,color);break;
+      |                                                                                                                                ^~~~~
+/mnt/d/Physim/app/ui_backend.c:243:9: warning: this 'for' clause does not guard... [-Wmisleading-indentation]
+  243 |         for(int i=0;i<3;i++)nk_fill_circle(c,nk_rect(x+3+i*3,y+3+i*3,2,2),color);break;
+      |         ^~~
+/mnt/d/Physim/app/ui_backend.c:243:82: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'for'
+  243 |         for(int i=0;i<3;i++)nk_fill_circle(c,nk_rect(x+3+i*3,y+3+i*3,2,2),color);break;
+      |                                                                                  ^~~~~
+Compiled app/ui_backend.c
+In file included from /mnt/d/Physim/app/main.c:1711:
+/mnt/d/Physim/app/model_edit.inc: In function 'model_edit_discard':
+/mnt/d/Physim/app/model_edit.inc:49:96: warning: invalid use of pointers to arrays with different qualifiers in ISO C before C23 [-Wpedantic]
+   49 |     bool restored_source=!source_changed || m->building || m->stop_build || model_edit_write(a,restored);
+      |                                                                                                ^~~~~~~~
+/mnt/d/Physim/app/model_edit.inc: In function 'model_edit_apply_requested':
+/mnt/d/Physim/app/model_edit.inc:111:61: warning: invalid use of pointers to arrays with different qualifiers in ISO C before C23 [-Wpedantic]
+  111 |     ps_model_edit *m=&a->model_edit;if(!model_edit_write(a,m->requested))return;
+      |                                                            ~^~~~~~~~~~~
+In file included from /mnt/d/Physim/app/main.c:2038:
+/mnt/d/Physim/app/batch_actions.inc: In function 'start_batch':
+/mnt/d/Physim/app/batch_actions.inc:81:16: warning: declaration of 'selected' shadows a previous local [-Wshadow]
+   81 |         double selected;
+      |                ^~~~~~~~
+/mnt/d/Physim/app/batch_actions.inc:35:22: note: shadowed declaration is here
+   35 |     ps_batch_options selected={0};
+      |                      ^~~~~~~~
+In file included from /mnt/d/Physim/app/main.c:3126:
+/mnt/d/Physim/app/completion_ui.inc: In function 'completion_keyboard_key':
+/mnt/d/Physim/app/completion_ui.inc:65:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   65 |         if(!key->repeat)completion_open(a,edit);return true;
+      |         ^~
+/mnt/d/Physim/app/completion_ui.inc:65:49: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   65 |         if(!key->repeat)completion_open(a,edit);return true;
+      |                                                 ^~~~~~
+/mnt/d/Physim/app/completion_ui.inc:76:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   76 |         if(!key->repeat)a->completion_accept_pending=true;return true;
+      |         ^~
+/mnt/d/Physim/app/completion_ui.inc:76:59: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   76 |         if(!key->repeat)a->completion_accept_pending=true;return true;
+      |                                                           ^~~~~~
+In file included from /mnt/d/Physim/app/documentation_ui.inc:413,
+                 from /mnt/d/Physim/app/main.c:3275:
+/mnt/d/Physim/app/documentation_typography.inc: In function 'documentation_typography_probe':
+/mnt/d/Physim/app/documentation_typography.inc:115:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  115 |     if(slash)name=slash+1;if(backslash && backslash+1>name)name=backslash+1;
+      |     ^~
+/mnt/d/Physim/app/documentation_typography.inc:115:27: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  115 |     if(slash)name=slash+1;if(backslash && backslash+1>name)name=backslash+1;
+      |                           ^~
+In file included from /mnt/d/Physim/app/documentation_ui.inc:742:
+/mnt/d/Physim/app/documentation_tables.inc: In function 'documentation_publish_tables':
+/mnt/d/Physim/app/documentation_tables.inc:30:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   30 |   if(rows!=row_stack)free(rows);if(ranges!=cell_stack)free(ranges);
+      |   ^~
+/mnt/d/Physim/app/documentation_tables.inc:30:33: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   30 |   if(rows!=row_stack)free(rows);if(ranges!=cell_stack)free(ranges);
+      |                                 ^~
+/mnt/d/Physim/app/documentation_ui.inc: In function 'documentation_keyboard_key':
+/mnt/d/Physim/app/documentation_ui.inc:1009:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+ 1009 |         if(!key->repeat)documentation_context_toggle(a);return true;
+      |         ^~
+/mnt/d/Physim/app/documentation_ui.inc:1009:57: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+ 1009 |         if(!key->repeat)documentation_context_toggle(a);return true;
+      |                                                         ^~~~~~
+/mnt/d/Physim/app/documentation_ui.inc:1012:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+ 1012 |         if(!key->repeat)documentation_navigation_toggle(a);return true;
+      |         ^~
+/mnt/d/Physim/app/documentation_ui.inc:1012:60: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+ 1012 |         if(!key->repeat)documentation_navigation_toggle(a);return true;
+      |                                                            ^~~~~~
+/mnt/d/Physim/app/documentation_ui.inc:1021:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+ 1021 |         if(!key->repeat)documentation_history_go(a,key->key==SDLK_LEFT?-1:1);return true;
+      |         ^~
+/mnt/d/Physim/app/documentation_ui.inc:1021:78: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+ 1021 |         if(!key->repeat)documentation_history_go(a,key->key==SDLK_LEFT?-1:1);return true;
+      |                                                                              ^~~~~~
+In file included from /mnt/d/Physim/app/documentation_ui.inc:1279:
+/mnt/d/Physim/app/documentation_h.inc: In function 'documentation_sections':
+/mnt/d/Physim/app/documentation_h.inc:186:21: warning: declaration of 'label' shadows a previous local [-Wshadow]
+  186 |         const char *label=a->documentation->text+b->text;
+      |                     ^~~~~
+/mnt/d/Physim/app/documentation_h.inc:178:20: note: shadowed declaration is here
+  178 |     struct nk_rect label=nk_rect(caption.x+indent+7,caption.y,caption.w-indent-14,caption_height);
+      |                    ^~~~~
+In file included from /mnt/d/Physim/app/documentation_h.inc:333:
+/mnt/d/Physim/app/documentation_code_preview.inc: In function 'documentation_code_label':
+/mnt/d/Physim/app/documentation_code_preview.inc:12:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   12 |         if(!n)break;memcpy(text,source,n);text[n]=0;
+      |         ^~
+/mnt/d/Physim/app/documentation_code_preview.inc:12:21: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   12 |         if(!n)break;memcpy(text,source,n);text[n]=0;
+      |                     ^~~~~~
+/mnt/d/Physim/app/documentation_code_preview.inc: In function 'documentation_context_code_view':
+/mnt/d/Physim/app/documentation_code_preview.inc:60:61: warning: increment of a boolean expression [-Wbool-operation]
+   60 |         if(a->doc_actions_open)ui->current->widgets_disabled++;
+      |                                                             ^~
+/mnt/d/Physim/app/documentation_code_preview.inc:62:61: warning: decrement of a boolean expression [-Wbool-operation]
+   62 |         if(a->doc_actions_open)ui->current->widgets_disabled--;
+      |                                                             ^~
+/mnt/d/Physim/app/documentation_h.inc: In function 'documentation_context_figure':
+/mnt/d/Physim/app/documentation_h.inc:371:19: warning: declaration of 'a' shadows a parameter [-Wshadow]
+  371 |             float a=i*.43f/12,b=(i+1)*.43f/12;
+      |                   ^
+/mnt/d/Physim/app/documentation_h.inc:341:47: note: shadowed declaration is here
+  341 | static void documentation_context_figure(app *a,int kind,struct nk_rect r) {
+      |                                          ~~~~~^
+/mnt/d/Physim/app/documentation_h.inc: In function 'documentation_context_content':
+/mnt/d/Physim/app/documentation_h.inc:555:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  555 |             if(n>=sizeof text[0])n=sizeof text[0]-1;if(v>=sizeof text[1])v=sizeof text[1]-1;
+      |             ^~
+/mnt/d/Physim/app/documentation_h.inc:555:53: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  555 |             if(n>=sizeof text[0])n=sizeof text[0]-1;if(v>=sizeof text[1])v=sizeof text[1]-1;
+      |                                                     ^~
+/mnt/d/Physim/app/documentation_ui.inc: In function 'documentation_article_probe':
+/mnt/d/Physim/app/documentation_ui.inc:1337:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+ 1337 |     if(slash)name=slash+1;if(backslash && backslash+1>name)name=backslash+1;
+      |     ^~
+/mnt/d/Physim/app/documentation_ui.inc:1337:27: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+ 1337 |     if(slash)name=slash+1;if(backslash && backslash+1>name)name=backslash+1;
+      |                           ^~
+/mnt/d/Physim/app/documentation_ui.inc:1361:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+ 1361 |         if(expected>=used || actual[expected]!=source[i])bytes=false;++expected;
+      |         ^~
+/mnt/d/Physim/app/documentation_ui.inc:1361:70: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+ 1361 |         if(expected>=used || actual[expected]!=source[i])bytes=false;++expected;
+      |                                                                      ^~
+In file included from /mnt/d/Physim/app/main.c:3276:
+/mnt/d/Physim/app/api_reference_ui.inc: In function 'api_reference_open':
+/mnt/d/Physim/app/api_reference_ui.inc:7:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+    7 |     if(source)result=ps_document_parse(source,bytes,false,&document);free(source);
+      |     ^~
+/mnt/d/Physim/app/api_reference_ui.inc:7:70: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+    7 |     if(source)result=ps_document_parse(source,bytes,false,&document);free(source);
+      |                                                                      ^~~~
+/mnt/d/Physim/app/api_reference_ui.inc:13:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   13 |         if(source)result=ps_document_parse(source,bytes,false,&document);free(source);
+      |         ^~
+/mnt/d/Physim/app/api_reference_ui.inc:13:74: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   13 |         if(source)result=ps_document_parse(source,bytes,false,&document);free(source);
+      |                                                                          ^~~~
+In file included from /mnt/d/Physim/app/main.c:3286:
+/mnt/d/Physim/app/design_ui.inc: In function 'workbench_card_text_height':
+/mnt/d/Physim/app/design_ui.inc:148:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  148 |         if(!used)break;at+=used;lines++;
+      |         ^~
+/mnt/d/Physim/app/design_ui.inc:148:24: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  148 |         if(!used)break;at+=used;lines++;
+      |                        ^~
+In file included from /mnt/d/Physim/app/file_tabs_ui.inc:88,
+                 from /mnt/d/Physim/app/design_ui.inc:204:
+/mnt/d/Physim/app/file_tabs_compact.inc: In function 'file_tabs_compact_view':
+/mnt/d/Physim/app/file_tabs_compact.inc:78:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   78 |     if(chosen<FILE_TABS)file_tab_select(a,chosen);if(close<FILE_TABS)file_tab_close(a,close);
+      |     ^~
+/mnt/d/Physim/app/file_tabs_compact.inc:78:51: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   78 |     if(chosen<FILE_TABS)file_tab_select(a,chosen);if(close<FILE_TABS)file_tab_close(a,close);
+      |                                                   ^~
+In file included from /mnt/d/Physim/app/workspace_tree_ui.inc:1,
+                 from /mnt/d/Physim/app/design_ui.inc:572:
+/mnt/d/Physim/app/workspace_path_tooltip.inc: In function 'workspace_tip_content':
+/mnt/d/Physim/app/workspace_path_tooltip.inc:103:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  103 |             if(!n)break;memcpy(label,a->workspace_tip.text+begin+at,(size_t)n);label[n]=0;
+      |             ^~
+/mnt/d/Physim/app/workspace_path_tooltip.inc:103:25: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  103 |             if(!n)break;memcpy(label,a->workspace_tip.text+begin+at,(size_t)n);label[n]=0;
+      |                         ^~~~~~
+In file included from /mnt/d/Physim/app/design_ui.inc:578:
+/mnt/d/Physim/app/toolbar_ui.inc: In function 'toolbar_dispatch':
+/mnt/d/Physim/app/toolbar_ui.inc:106:9: warning: this 'else' clause does not guard... [-Wmisleading-indentation]
+  106 |         else ps_dock_hide(&a->preferences.dock,PS_DOCK_SIDEBAR);break;
+      |         ^~~~
+/mnt/d/Physim/app/toolbar_ui.inc:106:65: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'else'
+  106 |         else ps_dock_hide(&a->preferences.dock,PS_DOCK_SIDEBAR);break;
+      |                                                                 ^~~~~
+/mnt/d/Physim/app/toolbar_ui.inc:111:9: warning: this 'else' clause does not guard... [-Wmisleading-indentation]
+  111 |         else ps_dock_hide(&a->preferences.dock,PS_DOCK_INSPECTOR);break;
+      |         ^~~~
+/mnt/d/Physim/app/toolbar_ui.inc:111:67: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'else'
+  111 |         else ps_dock_hide(&a->preferences.dock,PS_DOCK_INSPECTOR);break;
+      |                                                                   ^~~~~
+/mnt/d/Physim/app/toolbar_ui.inc: In function 'toolbar_action_icon':
+/mnt/d/Physim/app/toolbar_ui.inc:191:5: warning: enumeration value 'TOOLBAR_BUILD_SETTINGS' not handled in switch [-Wswitch]
+  191 |     switch(action) {
+      |     ^~~~~~
+In file included from /mnt/d/Physim/app/design_ui.inc:716:
+/mnt/d/Physim/app/source_outline_ui.inc: In function 'workbench_outline_refresh':
+/mnt/d/Physim/app/source_outline_ui.inc:18:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   18 |     if(bytes)memcpy(snapshot,source,bytes);snapshot[bytes]=0;
+      |     ^~
+/mnt/d/Physim/app/source_outline_ui.inc:18:44: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   18 |     if(bytes)memcpy(snapshot,source,bytes);snapshot[bytes]=0;
+      |                                            ^~~~~~~~
+In file included from /mnt/d/Physim/app/design_ui.inc:719:
+/mnt/d/Physim/app/laboratory_ui.inc: In function 'laboratory_measurements':
+/mnt/d/Physim/app/laboratory_ui.inc:149:23: warning: declaration of 'header' shadows a previous local [-Wshadow]
+  149 |                 float header=a->laboratory_channel_fields[slot].h;
+      |                       ^~~~~~
+/mnt/d/Physim/app/laboratory_ui.inc:55:62: note: shadowed declaration is here
+   55 |     nk_layout_row_dynamic(ui,header_height,1);struct nk_rect header;nk_widget(&header,ui);
+      |                                                              ^~~~~~
+In file included from /mnt/d/Physim/app/laboratory_ui.inc:189:
+/mnt/d/Physim/app/laboratory_transport.inc: In function 'laboratory_transport':
+/mnt/d/Physim/app/laboratory_transport.inc:99:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   99 |         if(laboratory_transport_button(a,button,"Schritt",captions[1],false))command(a,PS_MSG_STEP);nk_end_disabled(ui);x+=widths[1]+gap;
+      |         ^~
+/mnt/d/Physim/app/laboratory_transport.inc:99:101: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   99 |         if(laboratory_transport_button(a,button,"Schritt",captions[1],false))command(a,PS_MSG_STEP);nk_end_disabled(ui);x+=widths[1]+gap;
+      |                                                                                                     ^~~~~~~~~~~~~~~
+/mnt/d/Physim/app/laboratory_transport.inc:105:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  105 |         if(laboratory_transport_button(a,button,reset,reset_caption,false))reset_run(a);nk_end_disabled(ui);x+=widths[3]+gap+8*f;
+      |         ^~
+/mnt/d/Physim/app/laboratory_transport.inc:105:89: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  105 |         if(laboratory_transport_button(a,button,reset,reset_caption,false))reset_run(a);nk_end_disabled(ui);x+=widths[3]+gap+8*f;
+      |                                                                                         ^~~~~~~~~~~~~~~
+In file included from /mnt/d/Physim/app/design_ui.inc:722:
+/mnt/d/Physim/app/model_edit_ui.inc: In function 'model_edit_banner':
+/mnt/d/Physim/app/model_edit_ui.inc:25:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   25 |     if(nk_button_label(ui,"Verwerfen"))model_edit_discard(a);nk_end_disabled(ui);
+      |     ^~
+/mnt/d/Physim/app/model_edit_ui.inc:25:62: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   25 |     if(nk_button_label(ui,"Verwerfen"))model_edit_discard(a);nk_end_disabled(ui);
+      |                                                              ^~~~~~~~~~~~~~~
+In file included from /mnt/d/Physim/app/design_ui.inc:799:
+/mnt/d/Physim/app/laboratory_channel.inc: In function 'laboratory_choice_begin':
+/mnt/d/Physim/app/laboratory_channel.inc:26:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   26 |     if(open)ps_ui_row_exact_dynamic(ui,30*f,1);return open;
+      |     ^~
+/mnt/d/Physim/app/laboratory_channel.inc:26:48: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   26 |     if(open)ps_ui_row_exact_dynamic(ui,30*f,1);return open;
+      |                                                ^~~~~~
+/mnt/d/Physim/app/design_ui.inc: In function 'workspace_panel':
+/mnt/d/Physim/app/design_ui.inc:955:18: warning: declaration of 'analysis' shadows a previous local [-Wshadow]
+  955 |             bool analysis = a->tab == 2 || a->analysis_only;
+      |                  ^~~~~~~~
+/mnt/d/Physim/app/design_ui.inc:803:43: note: shadowed declaration is here
+  803 |     bool laboratory=laboratory_visible(a),analysis=analysis_visible(a);
+      |                                           ^~~~~~~~
+In file included from /mnt/d/Physim/app/main.c:3287:
+/mnt/d/Physim/app/panel_windows.inc: In function 'panel_window_event':
+/mnt/d/Physim/app/panel_windows.inc:162:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  162 |             if(!handled)a->tab=tab;a->ui=ui;if(handled)return true;
+      |             ^~
+/mnt/d/Physim/app/panel_windows.inc:162:36: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  162 |             if(!handled)a->tab=tab;a->ui=ui;if(handled)return true;
+      |                                    ^
+/mnt/d/Physim/app/panel_windows.inc: In function 'panel_windows_destroy':
+/mnt/d/Physim/app/panel_windows.inc:279:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  279 |         if(p->window)SDL_DestroyWindow(p->window);*p=(ps_panel_window){0};
+      |         ^~
+/mnt/d/Physim/app/panel_windows.inc:279:51: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  279 |         if(p->window)SDL_DestroyWindow(p->window);*p=(ps_panel_window){0};
+      |                                                   ^
+In file included from /mnt/d/Physim/app/main.c:3384:
+/mnt/d/Physim/app/documentation_window.inc: In function 'documentation_window_render':
+/mnt/d/Physim/app/documentation_window.inc:330:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  330 |         if(slash)name=slash+1;if(backslash && backslash+1>name)name=backslash+1;
+      |         ^~
+/mnt/d/Physim/app/documentation_window.inc:330:31: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  330 |         if(slash)name=slash+1;if(backslash && backslash+1>name)name=backslash+1;
+      |                               ^~
+In file included from /mnt/d/Physim/app/main.c:3602:
+/mnt/d/Physim/app/plot_tests.inc: In function 'test_plot_frame':
+/mnt/d/Physim/app/plot_tests.inc:471:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  471 |         if(!test_graphic_reveal(a,a->graphic_export->fields[2]))return;test_mouse(a,a->graphic_export->fields[2],true);break;
+      |         ^~
+/mnt/d/Physim/app/plot_tests.inc:471:72: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  471 |         if(!test_graphic_reveal(a,a->graphic_export->fields[2]))return;test_mouse(a,a->graphic_export->fields[2],true);break;
+      |                                                                        ^~~~~~~~~~
+In file included from /mnt/d/Physim/app/main.c:3604:
+/mnt/d/Physim/app/scene_visibility_tests.inc: In function 'scene_visibility_test_frame':
+/mnt/d/Physim/app/scene_visibility_tests.inc:61:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   61 |         if(!camera_test_click(a,a->scene_visibility_bounds[0]))return;break;
+      |         ^~
+/mnt/d/Physim/app/scene_visibility_tests.inc:61:71: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   61 |         if(!camera_test_click(a,a->scene_visibility_bounds[0]))return;break;
+      |                                                                       ^~~~~
+/mnt/d/Physim/app/scene_visibility_tests.inc:75:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   75 |         if(!camera_test_click(a,a->display_all_bounds))return;break;
+      |         ^~
+/mnt/d/Physim/app/scene_visibility_tests.inc:75:63: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   75 |         if(!camera_test_click(a,a->display_all_bounds))return;break;
+      |                                                               ^~~~~
+/mnt/d/Physim/app/scene_visibility_tests.inc:83:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   83 |         if(!camera_test_click(a,a->display_all_bounds))return;break;
+      |         ^~
+/mnt/d/Physim/app/scene_visibility_tests.inc:83:63: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   83 |         if(!camera_test_click(a,a->display_all_bounds))return;break;
+      |                                                               ^~~~~
+In file included from /mnt/d/Physim/app/main.c:3606:
+/mnt/d/Physim/app/settings_tests.inc: In function 'test_settings_keyboard_frame':
+/mnt/d/Physim/app/settings_tests.inc:142:9: warning: this 'for' clause does not guard... [-Wmisleading-indentation]
+  142 |         for(int i=0;i<4;i++)SETTINGS_KEY(SDLK_TAB);SETTINGS_KEY(SDLK_SPACE);*stage=23;break;
+      |         ^~~
+/mnt/d/Physim/app/settings_tests.inc:118:27: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'for'
+  118 | #define SETTINGS_KEY(key) test_window_key_mod(a->window,key,0)
+      |                           ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/settings_tests.inc:142:52: note: in expansion of macro 'SETTINGS_KEY'
+  142 |         for(int i=0;i<4;i++)SETTINGS_KEY(SDLK_TAB);SETTINGS_KEY(SDLK_SPACE);*stage=23;break;
+      |                                                    ^~~~~~~~~~~~
+/mnt/d/Physim/app/settings_tests.inc: In function 'test_settings_focus_frame':
+/mnt/d/Physim/app/settings_tests.inc:243:3: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  243 |   if(ok)puts("SETTINGS FOCUS SELF-TEST: PASSED");a->quitting=true;break;
+      |   ^~
+/mnt/d/Physim/app/settings_tests.inc:243:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  243 |   if(ok)puts("SETTINGS FOCUS SELF-TEST: PASSED");a->quitting=true;break;
+      |                                                  ^
+In file included from /mnt/d/Physim/app/main.c:3612:
+/mnt/d/Physim/app/documentation_keyboard_tests.inc: In function 'documentation_api_test_frame':
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:100:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  100 |         if(!documentation_test_seek(a,DOC_HEADING+type,stage,code))return;API_KEY(SDLK_RETURN);break;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:75:22: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   75 | #define API_KEY(key) test_window_key_mod(a->doc_window,key,0)
+      |                      ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:100:75: note: in expansion of macro 'API_KEY'
+  100 |         if(!documentation_test_seek(a,DOC_HEADING+type,stage,code))return;API_KEY(SDLK_RETURN);break;
+      |                                                                           ^~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:105:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  105 |         if(!documentation_test_seek(a,DOC_HEADING+function,stage,code))return;API_KEY(SDLK_RETURN);break;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:75:22: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   75 | #define API_KEY(key) test_window_key_mod(a->doc_window,key,0)
+      |                      ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:105:79: note: in expansion of macro 'API_KEY'
+  105 |         if(!documentation_test_seek(a,DOC_HEADING+function,stage,code))return;API_KEY(SDLK_RETURN);break;
+      |                                                                               ^~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:112:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  112 |         if(!documentation_test_seek(a,DOC_TOPIC+units,stage,code))return;API_KEY(SDLK_RETURN);break;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:75:22: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   75 | #define API_KEY(key) test_window_key_mod(a->doc_window,key,0)
+      |                      ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:112:74: note: in expansion of macro 'API_KEY'
+  112 |         if(!documentation_test_seek(a,DOC_TOPIC+units,stage,code))return;API_KEY(SDLK_RETURN);break;
+      |                                                                          ^~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:123:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  123 |         if(!documentation_test_seek(a,DOC_HEADING+unit_type,stage,code))return;API_KEY(SDLK_RETURN);break;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:75:22: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   75 | #define API_KEY(key) test_window_key_mod(a->doc_window,key,0)
+      |                      ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:123:80: note: in expansion of macro 'API_KEY'
+  123 |         if(!documentation_test_seek(a,DOC_HEADING+unit_type,stage,code))return;API_KEY(SDLK_RETURN);break;
+      |                                                                                ^~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:128:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  128 |         if(!documentation_test_seek(a,DOC_LINK+example,stage,code))return;API_KEY(SDLK_RETURN);break;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:75:22: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   75 | #define API_KEY(key) test_window_key_mod(a->doc_window,key,0)
+      |                      ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:128:75: note: in expansion of macro 'API_KEY'
+  128 |         if(!documentation_test_seek(a,DOC_LINK+example,stage,code))return;API_KEY(SDLK_RETURN);break;
+      |                                                                           ^~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc: In function 'documentation_media_test_frame':
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:173:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  173 |         if(!documentation_test_seek(a,DOC_VISUAL+block*16+6,stage,code))return;MEDIA_KEY(SDLK_RETURN);break;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:151:24: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  151 | #define MEDIA_KEY(key) test_window_key_mod(a->doc_window,key,0)
+      |                        ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:173:80: note: in expansion of macro 'MEDIA_KEY'
+  173 |         if(!documentation_test_seek(a,DOC_VISUAL+block*16+6,stage,code))return;MEDIA_KEY(SDLK_RETURN);break;
+      |                                                                                ^~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:176:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  176 |         if(!documentation_test_seek(a,DOC_VISUAL+block*16+9,stage,code))return;MEDIA_KEY(SDLK_SPACE);break;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:151:24: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  151 | #define MEDIA_KEY(key) test_window_key_mod(a->doc_window,key,0)
+      |                        ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:176:80: note: in expansion of macro 'MEDIA_KEY'
+  176 |         if(!documentation_test_seek(a,DOC_VISUAL+block*16+9,stage,code))return;MEDIA_KEY(SDLK_SPACE);break;
+      |                                                                                ^~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:192:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  192 |         if(!documentation_test_seek(a,DOC_VISUAL+block*16+8,stage,code))return;MEDIA_KEY(SDLK_RETURN);break;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:151:24: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  151 | #define MEDIA_KEY(key) test_window_key_mod(a->doc_window,key,0)
+      |                        ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:192:80: note: in expansion of macro 'MEDIA_KEY'
+  192 |         if(!documentation_test_seek(a,DOC_VISUAL+block*16+8,stage,code))return;MEDIA_KEY(SDLK_RETURN);break;
+      |                                                                                ^~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:196:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  196 |         if(!documentation_test_seek(a,DOC_VISUAL+block*16+10,stage,code))return;MEDIA_KEY(SDLK_HOME);break;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:151:24: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  151 | #define MEDIA_KEY(key) test_window_key_mod(a->doc_window,key,0)
+      |                        ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:196:81: note: in expansion of macro 'MEDIA_KEY'
+  196 |         if(!documentation_test_seek(a,DOC_VISUAL+block*16+10,stage,code))return;MEDIA_KEY(SDLK_HOME);break;
+      |                                                                                 ^~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc: In function 'documentation_anchor_test_frame':
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:257:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  257 |         if(!documentation_test_seek(a,DOC_LINK+link,stage,code))return;ANCHOR_KEY(SDLK_RETURN);break;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:221:25: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  221 | #define ANCHOR_KEY(key) test_window_key_mod(a->doc_window,key,0)
+      |                         ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:257:72: note: in expansion of macro 'ANCHOR_KEY'
+  257 |         if(!documentation_test_seek(a,DOC_LINK+link,stage,code))return;ANCHOR_KEY(SDLK_RETURN);break;
+      |                                                                        ^~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:273:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  273 |         if(!documentation_test_seek(a,DOC_COPY,stage,code))return;ANCHOR_KEY(SDLK_RETURN);break;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:221:25: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  221 | #define ANCHOR_KEY(key) test_window_key_mod(a->doc_window,key,0)
+      |                         ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:273:67: note: in expansion of macro 'ANCHOR_KEY'
+  273 |         if(!documentation_test_seek(a,DOC_COPY,stage,code))return;ANCHOR_KEY(SDLK_RETURN);break;
+      |                                                                   ^~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:276:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  276 |         if(!documentation_test_seek(a,DOC_BODY,stage,code))return;ANCHOR_KEY(SDLK_PAGEDOWN);break;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:221:25: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  221 | #define ANCHOR_KEY(key) test_window_key_mod(a->doc_window,key,0)
+      |                         ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:276:67: note: in expansion of macro 'ANCHOR_KEY'
+  276 |         if(!documentation_test_seek(a,DOC_BODY,stage,code))return;ANCHOR_KEY(SDLK_PAGEDOWN);break;
+      |                                                                   ^~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc: In function 'documentation_history_test_frame':
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:326:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  326 |         if(!documentation_test_seek(a,DOC_HOME,stage,code))return;HISTORY_KEY(SDLK_RETURN);break;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:287:26: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  287 | #define HISTORY_KEY(key) test_window_key_mod(a->doc_window,key,0)
+      |                          ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:326:67: note: in expansion of macro 'HISTORY_KEY'
+  326 |         if(!documentation_test_seek(a,DOC_HOME,stage,code))return;HISTORY_KEY(SDLK_RETURN);break;
+      |                                                                   ^~~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:336:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  336 |         if(!documentation_test_seek(a,DOC_TOPIC+header,stage,code))return;HISTORY_KEY(SDLK_RETURN);break;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:287:26: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  287 | #define HISTORY_KEY(key) test_window_key_mod(a->doc_window,key,0)
+      |                          ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:336:75: note: in expansion of macro 'HISTORY_KEY'
+  336 |         if(!documentation_test_seek(a,DOC_TOPIC+header,stage,code))return;HISTORY_KEY(SDLK_RETURN);break;
+      |                                                                           ^~~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc: In function 'documentation_inline_test_frame':
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:508:9: warning: this 'for' clause does not guard... [-Wmisleading-indentation]
+  508 |         for(int i=0;i<8;i++)test_window_key_mod(a->doc_window,SDLK_PLUS,PS_UI_COMMAND_MOD);break;
+      |         ^~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:508:92: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'for'
+  508 |         for(int i=0;i<8;i++)test_window_key_mod(a->doc_window,SDLK_PLUS,PS_UI_COMMAND_MOD);break;
+      |                                                                                            ^~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:543:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  543 |         if(!documentation_test_seek(a,DOC_COPY+copy,stage,code))return;INLINE_KEY(SDLK_RETURN);break;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:436:25: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  436 | #define INLINE_KEY(key) test_window_key_mod(a->doc_window,key,0)
+      |                         ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:543:72: note: in expansion of macro 'INLINE_KEY'
+  543 |         if(!documentation_test_seek(a,DOC_COPY+copy,stage,code))return;INLINE_KEY(SDLK_RETURN);break;
+      |                                                                        ^~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc: In function 'documentation_math_fonts':
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:623:2: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  623 |  if(!feof(input) || count<1)ok=false;fclose(input);
+      |  ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:623:38: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  623 |  if(!feof(input) || count<1)ok=false;fclose(input);
+      |                                      ^~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc: In function 'documentation_font_variants':
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:850:5: warning: this 'for' clause does not guard... [-Wmisleading-indentation]
+  850 |     for(unsigned i=0;i<4;i++)count+=(a->doc_chrome_fonts[i]!=NULL)+(a->doc_figure_fonts[i]!=NULL);return count;
+      |     ^~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:850:99: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'for'
+  850 |     for(unsigned i=0;i<4;i++)count+=(a->doc_chrome_fonts[i]!=NULL)+(a->doc_figure_fonts[i]!=NULL);return count;
+      |                                                                                                   ^~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc: In function 'documentation_keyboard_test_frame':
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:1168:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+ 1168 |         if(a->quitting)printf("DOCUMENTATION SIDEBAR SELF-TEST: %s\n",*code?"FAILED":"PASSED");return;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:1168:96: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+ 1168 |         if(a->quitting)printf("DOCUMENTATION SIDEBAR SELF-TEST: %s\n",*code?"FAILED":"PASSED");return;
+      |                                                                                                ^~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:1215:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+ 1215 |         if(a->quitting)printf("DOCUMENTATION DENSITY SELF-TEST: %s\n",*code?"FAILED":"PASSED");return;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:1215:96: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+ 1215 |         if(a->quitting)printf("DOCUMENTATION DENSITY SELF-TEST: %s\n",*code?"FAILED":"PASSED");return;
+      |                                                                                                ^~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:1253:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+ 1253 |         if(a->quitting)printf("DOCUMENTATION LIFECYCLE SELF-TEST: %s\n",*code?"FAILED":"PASSED");return;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:1253:98: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+ 1253 |         if(a->quitting)printf("DOCUMENTATION LIFECYCLE SELF-TEST: %s\n",*code?"FAILED":"PASSED");return;
+      |                                                                                                  ^~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:1267:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+ 1267 |             if(settle++<2)return;ok=nk_sdl_accessibility_native_links_test_step(a->doc_ui,1);
+      |             ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:1267:34: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+ 1267 |             if(settle++<2)return;ok=nk_sdl_accessibility_native_links_test_step(a->doc_ui,1);
+      |                                  ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:1284:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+ 1284 |         if(a->quitting)printf("DOCUMENTATION LINKS SELF-TEST: %s\n",*code?"FAILED":"PASSED");return;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:1284:94: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+ 1284 |         if(a->quitting)printf("DOCUMENTATION LINKS SELF-TEST: %s\n",*code?"FAILED":"PASSED");return;
+      |                                                                                              ^~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:1315:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+ 1315 |         if(a->quitting)printf("DOCUMENTATION LINKS SELF-TEST: %s\n",*code?"FAILED":"PASSED");return;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:1315:94: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+ 1315 |         if(a->quitting)printf("DOCUMENTATION LINKS SELF-TEST: %s\n",*code?"FAILED":"PASSED");return;
+      |                                                                                              ^~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:1371:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+ 1371 |             if(settle++<2)return;puts("EDIT READY GLOBAL");fflush(stdout);++*stage;break;
+      |             ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:1371:34: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+ 1371 |             if(settle++<2)return;puts("EDIT READY GLOBAL");fflush(stdout);++*stage;break;
+      |                                  ^~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:1484:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+ 1484 |         if(!documentation_test_seek(a,!strcmp(mode,"docs-keyboard-unreachable")?99999:DOC_TOPIC+tutorial_topic,stage,code))return;DOC_KEY(SDLK_RETURN);*stage=25;break;
+      |         ^~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:1469:22: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+ 1469 | #define DOC_KEY(key) test_window_key_mod(a->doc_window,key,0)
+      |                      ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/documentation_keyboard_tests.inc:1484:131: note: in expansion of macro 'DOC_KEY'
+ 1484 |         if(!documentation_test_seek(a,!strcmp(mode,"docs-keyboard-unreachable")?99999:DOC_TOPIC+tutorial_topic,stage,code))return;DOC_KEY(SDLK_RETURN);*stage=25;break;
+      |                                                                                                                                   ^~~~~~~
+In file included from /mnt/d/Physim/app/main.c:3613:
+/mnt/d/Physim/app/project_manager_keyboard_tests.inc: In function 'project_manager_keyboard_test_frame':
+/mnt/d/Physim/app/project_manager_keyboard_tests.inc:27:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   27 |         if(a->manager_analysis_only!=only)MANAGER_KEY(SDLK_RIGHT);MANAGER_KEY(SDLK_TAB);break;
+      |         ^~
+/mnt/d/Physim/app/project_manager_keyboard_tests.inc:8:26: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+    8 | #define MANAGER_KEY(key) test_window_key_mod(a->window,key,0)
+      |                          ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/project_manager_keyboard_tests.inc:27:67: note: in expansion of macro 'MANAGER_KEY'
+   27 |         if(a->manager_analysis_only!=only)MANAGER_KEY(SDLK_RIGHT);MANAGER_KEY(SDLK_TAB);break;
+      |                                                                   ^~~~~~~~~~~
+/mnt/d/Physim/app/project_manager_keyboard_tests.inc:35:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   35 |         if(a->manager_experiment_language!=(int)experiment)MANAGER_KEY(SDLK_RIGHT);MANAGER_KEY(SDLK_TAB);break;
+      |         ^~
+/mnt/d/Physim/app/project_manager_keyboard_tests.inc:8:26: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+    8 | #define MANAGER_KEY(key) test_window_key_mod(a->window,key,0)
+      |                          ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/project_manager_keyboard_tests.inc:35:84: note: in expansion of macro 'MANAGER_KEY'
+   35 |         if(a->manager_experiment_language!=(int)experiment)MANAGER_KEY(SDLK_RIGHT);MANAGER_KEY(SDLK_TAB);break;
+      |                                                                                    ^~~~~~~~~~~
+/mnt/d/Physim/app/project_manager_keyboard_tests.inc:37:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   37 |         if(a->template_analysis_language!=(int)analysis)MANAGER_KEY(SDLK_RIGHT);MANAGER_KEY(SDLK_TAB);break;
+      |         ^~
+/mnt/d/Physim/app/project_manager_keyboard_tests.inc:8:26: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+    8 | #define MANAGER_KEY(key) test_window_key_mod(a->window,key,0)
+      |                          ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/project_manager_keyboard_tests.inc:37:81: note: in expansion of macro 'MANAGER_KEY'
+   37 |         if(a->template_analysis_language!=(int)analysis)MANAGER_KEY(SDLK_RIGHT);MANAGER_KEY(SDLK_TAB);break;
+      |                                                                                 ^~~~~~~~~~~
+/mnt/d/Physim/app/project_manager_keyboard_tests.inc:46:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   46 |         if(ok)MANAGER_KEY(SDLK_F5);break;
+      |         ^~
+/mnt/d/Physim/app/project_manager_keyboard_tests.inc:46:36: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   46 |         if(ok)MANAGER_KEY(SDLK_F5);break;
+      |                                    ^~~~~
+In file included from /mnt/d/Physim/app/main.c:3617:
+/mnt/d/Physim/app/isolation_tests.inc: In function 'isolation_test_frame':
+/mnt/d/Physim/app/isolation_tests.inc:92:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   92 |         if(ok)puts("RUNNER ISOLATION UI SELF-TEST: PASSED");a->quitting=true;break;
+      |         ^~
+/mnt/d/Physim/app/isolation_tests.inc:92:61: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   92 |         if(ok)puts("RUNNER ISOLATION UI SELF-TEST: PASSED");a->quitting=true;break;
+      |                                                             ^
+In file included from /mnt/d/Physim/app/main.c:3619:
+/mnt/d/Physim/app/timeline_tests.inc: In function 'timeline_test_frame':
+/mnt/d/Physim/app/timeline_tests.inc:76:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   76 |         if(!timeline_test_key(a,a->window,a->ui,SDLK_LEFT))return;break;
+      |         ^~
+/mnt/d/Physim/app/timeline_tests.inc:76:67: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   76 |         if(!timeline_test_key(a,a->window,a->ui,SDLK_LEFT))return;break;
+      |                                                                   ^~~~~
+/mnt/d/Physim/app/timeline_tests.inc:118:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  118 |         if(!timeline_test_key(a,a->window,a->ui,SDLK_RIGHT))return;break;
+      |         ^~
+/mnt/d/Physim/app/timeline_tests.inc:118:68: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  118 |         if(!timeline_test_key(a,a->window,a->ui,SDLK_RIGHT))return;break;
+      |                                                                    ^~~~~
+/mnt/d/Physim/app/timeline_tests.inc:124:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  124 |         if(!timeline_test_key(a,a->window,a->ui,SDLK_LEFT))return;break;
+      |         ^~
+/mnt/d/Physim/app/timeline_tests.inc:124:67: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  124 |         if(!timeline_test_key(a,a->window,a->ui,SDLK_LEFT))return;break;
+      |                                                                   ^~~~~
+In file included from /mnt/d/Physim/app/main.c:3621:
+/mnt/d/Physim/app/hierarchy_tests.inc: In function 'hierarchy_test_frame':
+/mnt/d/Physim/app/hierarchy_tests.inc:67:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   67 |         if(!hierarchy_test_click(a,a->scene_visibility_bounds[root])) return;break;
+      |         ^~
+/mnt/d/Physim/app/hierarchy_tests.inc:67:78: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   67 |         if(!hierarchy_test_click(a,a->scene_visibility_bounds[root])) return;break;
+      |                                                                              ^~~~~
+/mnt/d/Physim/app/hierarchy_tests.inc:71:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   71 |         if(!hierarchy_test_click(a,a->scene_visibility_bounds[root])) return;break;
+      |         ^~
+/mnt/d/Physim/app/hierarchy_tests.inc:71:78: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   71 |         if(!hierarchy_test_click(a,a->scene_visibility_bounds[root])) return;break;
+      |                                                                              ^~~~~
+/mnt/d/Physim/app/hierarchy_tests.inc:75:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   75 |         if(!hierarchy_test_click(a,a->scene_expand_bounds[root])) return;break;
+      |         ^~
+/mnt/d/Physim/app/hierarchy_tests.inc:75:74: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   75 |         if(!hierarchy_test_click(a,a->scene_expand_bounds[root])) return;break;
+      |                                                                          ^~~~~
+/mnt/d/Physim/app/hierarchy_tests.inc:79:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   79 |         if(!hierarchy_test_click(a,a->scene_expand_bounds[sub])) return;break;
+      |         ^~
+/mnt/d/Physim/app/hierarchy_tests.inc:79:73: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   79 |         if(!hierarchy_test_click(a,a->scene_expand_bounds[sub])) return;break;
+      |                                                                         ^~~~~
+/mnt/d/Physim/app/hierarchy_tests.inc:86:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   86 |         if(!hierarchy_test_click(a,a->scene_visibility_bounds[sub])) return;break;
+      |         ^~
+/mnt/d/Physim/app/hierarchy_tests.inc:86:77: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   86 |         if(!hierarchy_test_click(a,a->scene_visibility_bounds[sub])) return;break;
+      |                                                                             ^~~~~
+/mnt/d/Physim/app/hierarchy_tests.inc:91:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   91 |         if(!hierarchy_test_click(a,a->scene_visibility_bounds[sub])) return;break;
+      |         ^~
+/mnt/d/Physim/app/hierarchy_tests.inc:91:77: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   91 |         if(!hierarchy_test_click(a,a->scene_visibility_bounds[sub])) return;break;
+      |                                                                             ^~~~~
+In file included from /mnt/d/Physim/app/main.c:3625:
+/mnt/d/Physim/app/workspace_catalog_tests.inc: In function 'workspace_catalog_test_frame':
+/mnt/d/Physim/app/workspace_catalog_tests.inc:57:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   57 |         if(!a->hello || a->simulation_time<.2)return;started=a->simulation_time;
+      |         ^~
+/mnt/d/Physim/app/workspace_catalog_tests.inc:57:54: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   57 |         if(!a->hello || a->simulation_time<.2)return;started=a->simulation_time;
+      |                                                      ^~~~~~~
+/mnt/d/Physim/app/workspace_catalog_tests.inc:125:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  125 |     if(a->quitting)printf("NAMED WORKSPACES %s SELF-TEST: %s\n",mode,*code?"FAILED":"PASSED");(*stage)++;
+      |     ^~
+/mnt/d/Physim/app/workspace_catalog_tests.inc:125:95: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  125 |     if(a->quitting)printf("NAMED WORKSPACES %s SELF-TEST: %s\n",mode,*code?"FAILED":"PASSED");(*stage)++;
+      |                                                                                               ^
+In file included from /mnt/d/Physim/app/main.c:3626:
+/mnt/d/Physim/app/pchip_tests.inc: In function 'pchip_test_frame':
+/mnt/d/Physim/app/pchip_tests.inc:50:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   50 |     if(a->quitting)printf("PCHIP %s SELF-TEST: %s\n",mode,*code?"FAILED":"PASSED");(*stage)++;
+      |     ^~
+/mnt/d/Physim/app/pchip_tests.inc:50:84: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   50 |     if(a->quitting)printf("PCHIP %s SELF-TEST: %s\n",mode,*code?"FAILED":"PASSED");(*stage)++;
+      |                                                                                    ^
+In file included from /mnt/d/Physim/app/main.c:3628:
+/mnt/d/Physim/app/analysis_project_tests.inc: In function 'analysis_project_test_frame':
+/mnt/d/Physim/app/analysis_project_tests.inc:81:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   81 |     if(a->quitting)printf("ANALYSIS PROJECT %s SELF-TEST: %s\n",mode,*code?"FAILED":"PASSED");(*stage)++;
+      |     ^~
+/mnt/d/Physim/app/analysis_project_tests.inc:81:95: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   81 |     if(a->quitting)printf("ANALYSIS PROJECT %s SELF-TEST: %s\n",mode,*code?"FAILED":"PASSED");(*stage)++;
+      |                                                                                               ^
+In file included from /mnt/d/Physim/app/main.c:3629:
+/mnt/d/Physim/app/analysis_workspace_tests.inc: In function 'analysis_workspace_test_frame':
+/mnt/d/Physim/app/analysis_workspace_tests.inc:51:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   51 |     if(settle++<2)return;settle=0;
+      |     ^~
+/mnt/d/Physim/app/analysis_workspace_tests.inc:51:26: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   51 |     if(settle++<2)return;settle=0;
+      |                          ^~~~~~
+/mnt/d/Physim/app/analysis_workspace_tests.inc:86:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   86 |         if(ok)ok=nk_sdl_accessibility_request_focus(a->ui,NULL,"Laufdetails ein-/ausblenden");break;
+      |         ^~
+/mnt/d/Physim/app/analysis_workspace_tests.inc:86:95: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   86 |         if(ok)ok=nk_sdl_accessibility_request_focus(a->ui,NULL,"Laufdetails ein-/ausblenden");break;
+      |                                                                                               ^~~~~
+/mnt/d/Physim/app/analysis_workspace_tests.inc:140:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  140 |         if(ok)ok=nk_sdl_accessibility_request_focus(a->ui,NULL,"Messlauflisten-Breite");break;
+      |         ^~
+/mnt/d/Physim/app/analysis_workspace_tests.inc:140:89: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  140 |         if(ok)ok=nk_sdl_accessibility_request_focus(a->ui,NULL,"Messlauflisten-Breite");break;
+      |                                                                                         ^~~~~
+/mnt/d/Physim/app/analysis_workspace_tests.inc:234:9: warning: this 'for' clause does not guard... [-Wmisleading-indentation]
+  234 |         for(unsigned id=0;id<PS_DOCK_NODES;id++)if(dock_context_split(&a->preferences.dock,&a->preferences.dock.nodes[id]))test_mouse(a,a->dock_splitters[id],false);break;
+      |         ^~~
+/mnt/d/Physim/app/analysis_workspace_tests.inc:234:166: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'for'
+  234 |         for(unsigned id=0;id<PS_DOCK_NODES;id++)if(dock_context_split(&a->preferences.dock,&a->preferences.dock.nodes[id]))test_mouse(a,a->dock_splitters[id],false);break;
+      |                                                                                                                                                                      ^~~~~
+/mnt/d/Physim/app/analysis_workspace_tests.inc:241:9: warning: this 'for' clause does not guard... [-Wmisleading-indentation]
+  241 |         for(unsigned id=0;id<PS_DOCK_NODES;id++)if(dock_sidebar_split(&a->preferences.dock,&a->preferences.dock.nodes[id]))test_mouse(a,a->dock_splitters[id],true);break;
+      |         ^~~
+/mnt/d/Physim/app/analysis_workspace_tests.inc:241:165: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'for'
+  241 |         for(unsigned id=0;id<PS_DOCK_NODES;id++)if(dock_sidebar_split(&a->preferences.dock,&a->preferences.dock.nodes[id]))test_mouse(a,a->dock_splitters[id],true);break;
+      |                                                                                                                                                                     ^~~~~
+In file included from /mnt/d/Physim/app/main.c:3631:
+/mnt/d/Physim/app/analysis_comparison_tests.inc: In function 'comparison_test_start':
+/mnt/d/Physim/app/analysis_comparison_tests.inc:15:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   15 |             if(!run && i==125)v=2;if(!run && i==127)v=-2;
+      |             ^~
+/mnt/d/Physim/app/analysis_comparison_tests.inc:15:35: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   15 |             if(!run && i==125)v=2;if(!run && i==127)v=-2;
+      |                                   ^~
+/mnt/d/Physim/app/analysis_comparison_tests.inc:25:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   25 |     if(strstr(mode,"large"))preferences.ui_size=22;preferences_apply(a,&preferences);
+      |     ^~
+/mnt/d/Physim/app/analysis_comparison_tests.inc:25:52: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   25 |     if(strstr(mode,"large"))preferences.ui_size=22;preferences_apply(a,&preferences);
+      |                                                    ^~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/analysis_comparison_tests.inc: In function 'comparison_test_frame':
+/mnt/d/Physim/app/analysis_comparison_tests.inc:30:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   30 |     if(settle++<2)return;settle=0;
+      |     ^~
+/mnt/d/Physim/app/analysis_comparison_tests.inc:30:26: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   30 |     if(settle++<2)return;settle=0;
+      |                          ^~~~~~
+/mnt/d/Physim/app/analysis_comparison_tests.inc:72:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   72 |         if(!ok)break;frozen_axes=dialog->description.axes;
+      |         ^~
+/mnt/d/Physim/app/analysis_comparison_tests.inc:72:22: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   72 |         if(!ok)break;frozen_axes=dialog->description.axes;
+      |                      ^~~~~~~~~~~
+In file included from /mnt/d/Physim/app/main.c:3639:
+/mnt/d/Physim/app/logging_tests.inc: In function 'logging_test_frame':
+/mnt/d/Physim/app/logging_tests.inc:152:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  152 |         if(!idle(a))return;uint32_t current=0;
+      |         ^~
+/mnt/d/Physim/app/logging_tests.inc:152:28: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  152 |         if(!idle(a))return;uint32_t current=0;
+      |                            ^~~~~~~~
+In file included from /mnt/d/Physim/app/main.c:3640:
+/mnt/d/Physim/app/frame_tests.inc: In function 'frame_test_frame':
+/mnt/d/Physim/app/frame_tests.inc:18:9: warning: this 'else' clause does not guard... [-Wmisleading-indentation]
+   18 |         else build_project(a);break;
+      |         ^~~~
+/mnt/d/Physim/app/frame_tests.inc:18:31: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'else'
+   18 |         else build_project(a);break;
+      |                               ^~~~~
+In file included from /mnt/d/Physim/app/main.c:3642:
+/mnt/d/Physim/app/material_tutorial_tests.inc: In function 'material_test_frame':
+/mnt/d/Physim/app/material_tutorial_tests.inc:46:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   46 |         if(ok)analyze(a,false);break;
+      |         ^~
+/mnt/d/Physim/app/material_tutorial_tests.inc:46:32: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   46 |         if(ok)analyze(a,false);break;
+      |                                ^~~~~
+In file included from /mnt/d/Physim/app/main.c:3645:
+/mnt/d/Physim/app/pendulum_medium_tests.inc: In function 'pendulum_medium_frame':
+/mnt/d/Physim/app/pendulum_medium_tests.inc:53:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   53 |         if(ok)analyze(a,false);break;
+      |         ^~
+/mnt/d/Physim/app/pendulum_medium_tests.inc:53:32: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   53 |         if(ok)analyze(a,false);break;
+      |                                ^~~~~
+In file included from /mnt/d/Physim/app/main.c:3647:
+/mnt/d/Physim/app/diagnostic_tests.inc: In function 'diagnostic_test_frame':
+/mnt/d/Physim/app/diagnostic_tests.inc:59:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   59 |             if(ok)test_mouse(a,a->diagnostic_bounds[selected],true);break;
+      |             ^~
+/mnt/d/Physim/app/diagnostic_tests.inc:59:69: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   59 |             if(ok)test_mouse(a,a->diagnostic_bounds[selected],true);break;
+      |                                                                     ^~~~~
+/mnt/d/Physim/app/diagnostic_tests.inc:88:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   88 |             if(ok)test_window_key_mod(a->window,SDLK_F6,0);break;
+      |             ^~
+/mnt/d/Physim/app/diagnostic_tests.inc:88:60: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   88 |             if(ok)test_window_key_mod(a->window,SDLK_F6,0);break;
+      |                                                            ^~~~~
+/mnt/d/Physim/app/diagnostic_tests.inc:117:77: warning: declaration of 'file' shadows a previous local [-Wshadow]
+  117 |                 join(nested,sizeof nested,a->project,"nested/main.c");FILE *file=fopen(nested,"wb");ok &= file!=NULL;
+      |                                                                             ^~~~
+/mnt/d/Physim/app/diagnostic_tests.inc:111:19: note: shadowed declaration is here
+  111 |             FILE *file=fopen(path,"wb");ok=file!=NULL;
+      |                   ^~~~
+/mnt/d/Physim/app/diagnostic_tests.inc:163:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  163 |         if(ok)jump_to_diagnostic(a,item);break;
+      |         ^~
+/mnt/d/Physim/app/diagnostic_tests.inc:163:42: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  163 |         if(ok)jump_to_diagnostic(a,item);break;
+      |                                          ^~~~~
+In file included from /mnt/d/Physim/app/main.c:3648:
+/mnt/d/Physim/app/editor_replace_tests.inc: In function 'editor_replace_start':
+/mnt/d/Physim/app/editor_replace_tests.inc:11:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   11 |         if(!file)return false;bool ok=fputs(editor_replace_original,file)>=0;ok &= fclose(file)==0;if(!ok)return false;
+      |         ^~
+In file included from /mnt/d/Physim/include/physim/core.h:3,
+                 from /mnt/d/Physim/include/physim/math.h:3,
+                 from /mnt/d/Physim/app/main.c:1:
+/mnt/d/Physim/app/editor_replace_tests.inc:11:31: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   11 |         if(!file)return false;bool ok=fputs(editor_replace_original,file)>=0;ok &= fclose(file)==0;if(!ok)return false;
+      |                               ^~~~
+In file included from /mnt/d/Physim/app/main.c:3649:
+/mnt/d/Physim/app/completion_tests.inc: In function 'completion_test_start':
+/mnt/d/Physim/app/completion_tests.inc:11:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   11 |         if(!file)return false;bool ok=fputs(language?completion_ph_original[i]:completion_c_original[i],file)>=0;ok &= fclose(file)==0;if(!ok)return false;}
+      |         ^~
+/mnt/d/Physim/app/completion_tests.inc:11:31: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   11 |         if(!file)return false;bool ok=fputs(language?completion_ph_original[i]:completion_c_original[i],file)>=0;ok &= fclose(file)==0;if(!ok)return false;}
+      |                               ^~~~
+In file included from /mnt/d/Physim/app/main.c:3652:
+/mnt/d/Physim/app/workbench_tests.inc: In function 'workbench_test_frame':
+/mnt/d/Physim/app/workbench_tests.inc:190:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  190 |         if(!ok)break;*stage=60;return;
+      |         ^~
+/mnt/d/Physim/app/workbench_tests.inc:190:22: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  190 |         if(!ok)break;*stage=60;return;
+      |                      ^
+In file included from /mnt/d/Physim/app/main.c:3653:
+/mnt/d/Physim/app/file_tabs_design_tests.inc: In function 'tab_header_log':
+/mnt/d/Physim/app/file_tabs_design_tests.inc:50:5: warning: this 'for' clause does not guard... [-Wmisleading-indentation]
+   50 |     for(unsigned i=0;i<SDL_arraysize(boxes);i++)printf(" box%u=%.4f,%.4f,%.4f,%.4f",i,boxes[i].x,boxes[i].y,boxes[i].w,boxes[i].h);puts("");
+      |     ^~~
+/mnt/d/Physim/app/file_tabs_design_tests.inc:50:132: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'for'
+   50 |     for(unsigned i=0;i<SDL_arraysize(boxes);i++)printf(" box%u=%.4f,%.4f,%.4f,%.4f",i,boxes[i].x,boxes[i].y,boxes[i].w,boxes[i].h);puts("");
+      |                                                                                                                                    ^~~~
+/mnt/d/Physim/app/file_tabs_design_tests.inc: In function 'tab_design_frame':
+/mnt/d/Physim/app/file_tabs_design_tests.inc:77:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   77 |         if(a->document_count)return;ok=tab_design_source_same(a) && file_tab_active(a)==0;if(!ok)break;
+      |         ^~
+/mnt/d/Physim/app/file_tabs_design_tests.inc:77:37: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   77 |         if(a->document_count)return;ok=tab_design_source_same(a) && file_tab_active(a)==0;if(!ok)break;
+      |                                     ^~
+In file included from /mnt/d/Physim/app/main.c:3664:
+/mnt/d/Physim/app/run_fields_tests.inc: In function 'run_fields_step':
+/mnt/d/Physim/app/run_fields_tests.inc:34:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   34 |         if(run_fields.settle++<3)return;ok=inspector_design_same(a);run_fields_record(a,"locked-settings",capture);command(a,PS_MSG_STOP);a->stop_at=ps_clock();break;
+      |         ^~
+/mnt/d/Physim/app/run_fields_tests.inc:34:41: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   34 |         if(run_fields.settle++<3)return;ok=inspector_design_same(a);run_fields_record(a,"locked-settings",capture);command(a,PS_MSG_STOP);a->stop_at=ps_clock();break;
+      |                                         ^~
+In file included from /mnt/d/Physim/app/main.c:3667:
+/mnt/d/Physim/app/panel_window_tests.inc: In function 'panel_test_frame':
+/mnt/d/Physim/app/panel_window_tests.inc:142:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  142 |         if(!ok)break;panel++;phase=0;return;
+      |         ^~
+/mnt/d/Physim/app/panel_window_tests.inc:142:22: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  142 |         if(!ok)break;panel++;phase=0;return;
+      |                      ^~~~~
+/mnt/d/Physim/app/panel_window_tests.inc:208:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  208 |         if(!a->paused)return;time=display_time(a);
+      |         ^~
+/mnt/d/Physim/app/panel_window_tests.inc:208:30: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  208 |         if(!a->paused)return;time=display_time(a);
+      |                              ^~~~
+/mnt/d/Physim/app/panel_window_tests.inc:231:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+  231 |         if(!ok)break;panel++;phase=0;return;
+      |         ^~
+/mnt/d/Physim/app/panel_window_tests.inc:231:22: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+  231 |         if(!ok)break;panel++;phase=0;return;
+      |                      ^~~~~
+In file included from /mnt/d/Physim/app/main.c:3668:
+/mnt/d/Physim/app/model_edit_tests.inc: In function 'model_edit_test_frame':
+/mnt/d/Physim/app/model_edit_tests.inc:15:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   15 |         if(!a->paused)return;held=display_time(a);snprintf(previous_run,sizeof previous_run,"%s",a->last_run);
+      |         ^~
+/mnt/d/Physim/app/model_edit_tests.inc:15:30: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   15 |         if(!a->paused)return;held=display_time(a);snprintf(previous_run,sizeof previous_run,"%s",a->last_run);
+      |                              ^~~~
+In file included from /mnt/d/Physim/app/main.c:3669:
+/mnt/d/Physim/app/api_reference_tests.inc: In function 'api_reference_test_start':
+/mnt/d/Physim/app/api_reference_tests.inc:8:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+    8 |         if(!file)return false;bool ok=fputs(language?api_reference_ph_original[i]:api_reference_c_original[i],file)>=0;ok &= fclose(file)==0;if(!ok)return false;}
+      |         ^~
+/mnt/d/Physim/app/api_reference_tests.inc:8:31: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+    8 |         if(!file)return false;bool ok=fputs(language?api_reference_ph_original[i]:api_reference_c_original[i],file)>=0;ok &= fclose(file)==0;if(!ok)return false;}
+      |                               ^~~~
+In file included from /mnt/d/Physim/app/main.c:3670:
+/mnt/d/Physim/app/api_card_tests.inc: In function 'api_card_test_frame':
+/mnt/d/Physim/app/api_card_tests.inc:43:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   43 |     if(settle++<2)return;settle=0;
+      |     ^~
+/mnt/d/Physim/app/api_card_tests.inc:43:26: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   43 |     if(settle++<2)return;settle=0;
+      |                          ^~~~~~
+In file included from /mnt/d/Physim/app/main.c:3671:
+/mnt/d/Physim/app/parameter_form_tests.inc: In function 'parameter_form_test_start':
+/mnt/d/Physim/app/parameter_form_tests.inc:15:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   15 |         if(!load_editor(&a->experiment,path))return false;a->dirty=true;
+      |         ^~
+/mnt/d/Physim/app/parameter_form_tests.inc:15:59: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   15 |         if(!load_editor(&a->experiment,path))return false;a->dirty=true;
+      |                                                           ^
+/mnt/d/Physim/app/parameter_form_tests.inc: In function 'parameter_form_test_frame':
+/mnt/d/Physim/app/parameter_form_tests.inc:56:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   56 |         if(!hierarchy_test_click(a,a->parameter_header_bounds))return;break;
+      |         ^~
+/mnt/d/Physim/app/parameter_form_tests.inc:56:71: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   56 |         if(!hierarchy_test_click(a,a->parameter_header_bounds))return;break;
+      |                                                                       ^~~~~
+/mnt/d/Physim/app/parameter_form_tests.inc:89:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   89 |         if(!hierarchy_test_click(a,a->parameter_default_bounds[0]))return;break;
+      |         ^~
+/mnt/d/Physim/app/parameter_form_tests.inc:89:75: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   89 |         if(!hierarchy_test_click(a,a->parameter_default_bounds[0]))return;break;
+      |                                                                           ^~~~~
+/mnt/d/Physim/app/parameter_form_tests.inc:95:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   95 |         if(!idle(a))return;ok=!a->runner.running && parameter_form_run_valid(a);break;
+      |         ^~
+/mnt/d/Physim/app/parameter_form_tests.inc:95:28: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   95 |         if(!idle(a))return;ok=!a->runner.running && parameter_form_run_valid(a);break;
+      |                            ^~
+In file included from /mnt/d/Physim/app/main.c:3672:
+/mnt/d/Physim/app/adaptive_tests.inc: In function 'adaptive_test_frame':
+/mnt/d/Physim/app/adaptive_tests.inc:32:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   32 |         if(!hierarchy_test_click(a,a->adaptive_limit_bounds[0]))return;break;
+      |         ^~
+/mnt/d/Physim/app/adaptive_tests.inc:32:72: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   32 |         if(!hierarchy_test_click(a,a->adaptive_limit_bounds[0]))return;break;
+      |                                                                        ^~~~~
+/mnt/d/Physim/app/adaptive_tests.inc:65:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   65 |         if(!a->paused)return;held=a->simulation_time;
+      |         ^~
+/mnt/d/Physim/app/adaptive_tests.inc:65:30: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   65 |         if(!a->paused)return;held=a->simulation_time;
+      |                              ^~~~
+In file included from /mnt/d/Physim/app/main.c:3674:
+/mnt/d/Physim/app/monte_carlo_tutorial_tests.inc: In function 'monte_carlo_tutorial_frame':
+/mnt/d/Physim/app/monte_carlo_tutorial_tests.inc:40:9: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   40 |         if(ok)start_batch(a);break;
+      |         ^~
+/mnt/d/Physim/app/monte_carlo_tutorial_tests.inc:40:30: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   40 |         if(ok)start_batch(a);break;
+      |                              ^~~~~
+In file included from /mnt/d/Physim/app/main.c:3677:
+/mnt/d/Physim/app/component_details_tests.inc: In function 'component_details_draw':
+/mnt/d/Physim/app/component_details_tests.inc:99:5: warning: this 'if' clause does not guard... [-Wmisleading-indentation]
+   99 |     if(component_details.stress)workspace_tip_frame_end(a);ui_palette=previous;
+      |     ^~
+/mnt/d/Physim/app/component_details_tests.inc:99:60: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'
+   99 |     if(component_details.stress)workspace_tip_frame_end(a);ui_palette=previous;
+      |                                                            ^~~~~~~~~~
+/mnt/d/Physim/app/documentation_ui.inc: At top level:
+/mnt/d/Physim/app/documentation_ui.inc:410:14: warning: 'documentation_control_height' defined but not used [-Wunused-function]
+  410 | static float documentation_control_height(const app *a) {
+      |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/main.c: In function 'structured_diagnostic':
+/mnt/d/Physim/app/main.c:844:48: warning: '%s' directive output may be truncated writing up to 4095 bytes into a region of size between 0 and 4095 [-Wformat-truncation=]
+  844 |         else snprintf(actual,sizeof actual,"%s/%s",a->project,d->source);
+      |                                                ^~
+/mnt/d/Physim/app/main.c:844:14: note: 'snprintf' output between 2 and 8192 bytes into a destination of size 4096
+  844 |         else snprintf(actual,sizeof actual,"%s/%s",a->project,d->source);
+      |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/main.c:845:49: warning: 'snprintf' output may be truncated before the last format character [-Wformat-truncation=]
+  845 |         snprintf(expected,sizeof expected,"%s/%s",a->project,analysis?analysis_source(a):experiment_source(a));
+      |                                                 ^
+/mnt/d/Physim/app/main.c:845:9: note: 'snprintf' output 2 or more bytes (assuming 4097) into a destination of size 4096
+  845 |         snprintf(expected,sizeof expected,"%s/%s",a->project,analysis?analysis_source(a):experiment_source(a));
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/main.c: In function 'parse_diagnostic':
+/mnt/d/Physim/app/main.c:878:47: warning: '%s' directive output may be truncated writing up to 2047 bytes into a region of size 2043 [-Wformat-truncation=]
+  878 |     snprintf(d->text,sizeof d->text,"%s:%d:%d %s",diagnostic_basename(record.source),record.line,record.column,record.message);
+      |                                               ^~                                                               ~~~~~~~~~~~~~~
+/mnt/d/Physim/app/main.c:878:5: note: 'snprintf' output 6 or more bytes (assuming 2053) into a destination of size 2048
+  878 |     snprintf(d->text,sizeof d->text,"%s:%d:%d %s",diagnostic_basename(record.source),record.line,record.column,record.message);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/main.c: In function 'start_run_mode':
+/mnt/d/Physim/app/main.c:1828:36: warning: '.experiment.' directive output may be truncated writing 12 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+ 1828 |     snprintf(copy, sizeof copy, "%s.experiment.%s", next_run,
+      |                                    ^~~~~~~~~~~~
+/mnt/d/Physim/app/main.c:1828:5: note: 'snprintf' output 14 or more bytes (assuming 4109) into a destination of size 4096
+ 1828 |     snprintf(copy, sizeof copy, "%s.experiment.%s", next_run,
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 1829 |              a->language_experiment ? "phys" : "c");
+      |              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/main.c: In function 'analyze':
+/mnt/d/Physim/app/main.c:2077:58: warning: '.source.' directive output may be truncated writing 8 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+ 2077 |         snprintf(snapshot_path, sizeof snapshot_path, "%s.source.%s", a->report,
+      |                                                          ^~~~~~~~
+/mnt/d/Physim/app/main.c:2077:9: note: 'snprintf' output 10 or more bytes (assuming 4105) into a destination of size 4096
+ 2077 |         snprintf(snapshot_path, sizeof snapshot_path, "%s.source.%s", a->report,
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 2078 |                  a->language_analysis ? "phys" : "c");
+      |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/main.c: In function 'pump':
+/mnt/d/Physim/app/main.c:2204:62: warning: '.psdiag' directive output may be truncated writing 7 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+ 2204 |                 char path[4096];snprintf(path,sizeof path,"%s.psdiag",a->report);ps_diagnostic record;
+      |                                                              ^~~~~~~
+/mnt/d/Physim/app/main.c:2204:33: note: 'snprintf' output between 8 and 4103 bytes into a destination of size 4096
+ 2204 |                 char path[4096];snprintf(path,sizeof path,"%s.psdiag",a->report);ps_diagnostic record;
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/main.c: In function 'new_project':
+/mnt/d/Physim/app/main.c:1568:38: warning: '/examples/' directive output may be truncated writing 10 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+ 1568 |         snprintf(src, sizeof src, "%s/examples/%s/main.c", a->root, examples[a->example]);
+      |                                      ^~~~~~~~~~
+/mnt/d/Physim/app/main.c:1568:9: note: 'snprintf' output 18 or more bytes (assuming 4113) into a destination of size 4096
+ 1568 |         snprintf(src, sizeof src, "%s/examples/%s/main.c", a->root, examples[a->example]);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/main.c:1560:38: warning: '/examples/language/' directive output may be truncated writing 19 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+ 1560 |         snprintf(src, sizeof src, "%s/examples/language/%s.phys", a->root,
+      |                                      ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/main.c:1560:9: note: 'snprintf' output 31 or more bytes (assuming 4126) into a destination of size 4096
+ 1560 |         snprintf(src, sizeof src, "%s/examples/language/%s.phys", a->root,
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 1561 |                  a->example == 8 ? "pendulum" : a->example == 9 ? "projectile_drag"
+      |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 1562 |                  : a->example == 10 ? "uncertain_projectile" : a->example == 11 ? "spinning_body"
+      |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 1563 |                  : a->example == 12 ? "box_contacts" : a->example == 13 ? "joint_pendulum"
+      |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 1564 |                  : a->example == 14 ? "coupled_bodies" : a->example == 15 ? "fast_sphere"
+      |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 1565 |                  : a->example == 16 ? "spring" : a->example == 17 ? "buoyancy"
+      |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 1566 |                  : a->example == 18 ? "collision" : "box_collision");
+      |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/main.c: In function 'jump_to_diagnostic':
+/mnt/d/Physim/app/main.c:896:44: warning: '%s' directive output may be truncated writing up to 4095 bytes into a region of size between 0 and 4095 [-Wformat-truncation=]
+  896 |         else snprintf(path,sizeof path,"%s/%s",a->project,d->source);
+      |                                            ^~
+/mnt/d/Physim/app/main.c:896:14: note: 'snprintf' output between 2 and 8192 bytes into a destination of size 4096
+  896 |         else snprintf(path,sizeof path,"%s/%s",a->project,d->source);
+      |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /mnt/d/Physim/app/main.c:3486:
+/mnt/d/Physim/app/workspace_catalog_actions.inc: In function 'workspace_catalog_open':
+/mnt/d/Physim/app/workspace_catalog_actions.inc:37:69: warning: '%s' directive output may be truncated writing up to 255 bytes into a region of size 192 [-Wformat-truncation=]
+   37 |     } else snprintf(a->workspaces_error,sizeof a->workspaces_error,"%s",a->status);
+      |                                                                     ^~
+/mnt/d/Physim/app/workspace_catalog_actions.inc:37:12: note: 'snprintf' output between 1 and 256 bytes into a destination of size 192
+   37 |     } else snprintf(a->workspaces_error,sizeof a->workspaces_error,"%s",a->status);
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /mnt/d/Physim/app/main.c:3614:
+/mnt/d/Physim/app/project_settings_tests.inc: In function 'project_display_test_frame':
+/mnt/d/Physim/app/project_settings_tests.inc:25:64: warning: '-legacy' directive output may be truncated writing 7 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+   25 |             char legacy[4096];snprintf(legacy,sizeof legacy,"%s-legacy",a->project);
+      |                                                                ^~~~~~~
+/mnt/d/Physim/app/project_settings_tests.inc:25:31: note: 'snprintf' output between 8 and 4103 bytes into a destination of size 4096
+   25 |             char legacy[4096];snprintf(legacy,sizeof legacy,"%s-legacy",a->project);
+      |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/workspace_catalog_tests.inc: In function 'workspace_catalog_test_frame':
+/mnt/d/Physim/app/workspace_catalog_tests.inc:103:101: warning: '.hidden' directive output may be truncated writing 7 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  103 |         join(path,sizeof path,named_test_root,"Pendel ä/analysis.c");snprintf(other,sizeof other,"%s.hidden",path);
+      |                                                                                                     ^~~~~~~
+/mnt/d/Physim/app/workspace_catalog_tests.inc:103:70: note: 'snprintf' output between 8 and 4103 bytes into a destination of size 4096
+  103 |         join(path,sizeof path,named_test_root,"Pendel ä/analysis.c");snprintf(other,sizeof other,"%s.hidden",path);
+      |                                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /mnt/d/Physim/app/main.c:3636:
+/mnt/d/Physim/app/batch_resume_tests.inc: In function 'batch_resume_test_frame':
+/mnt/d/Physim/app/batch_resume_tests.inc:43:81: warning: '/run-' directive output may be truncated writing 5 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+   43 |         for(unsigned i=0;i<64;i++){char path[4096];snprintf(path,sizeof path,"%s/run-%04u.psrun",a->batch_resume_test_path,i+1);ok &= old_hashes[i]==batch_resume_file_hash(path);}
+      |                                                                                 ^~~~~
+/mnt/d/Physim/app/batch_resume_tests.inc:43:78: note: directive argument in the range [1, 64]
+   43 |         for(unsigned i=0;i<64;i++){char path[4096];snprintf(path,sizeof path,"%s/run-%04u.psrun",a->batch_resume_test_path,i+1);ok &= old_hashes[i]==batch_resume_file_hash(path);}
+      |                                                                              ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/batch_resume_tests.inc:43:52: note: 'snprintf' output between 16 and 4111 bytes into a destination of size 4096
+   43 |         for(unsigned i=0;i<64;i++){char path[4096];snprintf(path,sizeof path,"%s/run-%04u.psrun",a->batch_resume_test_path,i+1);ok &= old_hashes[i]==batch_resume_file_hash(path);}
+      |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/batch_resume_tests.inc:32:81: warning: '/run-' directive output may be truncated writing 5 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+   32 |         for(unsigned i=0;i<64;i++){char path[4096];snprintf(path,sizeof path,"%s/run-%04u.psrun",a->batch_resume_test_path,i+1);old_hashes[i]=batch_resume_file_hash(path);}
+      |                                                                                 ^~~~~
+/mnt/d/Physim/app/batch_resume_tests.inc:32:78: note: directive argument in the range [1, 64]
+   32 |         for(unsigned i=0;i<64;i++){char path[4096];snprintf(path,sizeof path,"%s/run-%04u.psrun",a->batch_resume_test_path,i+1);old_hashes[i]=batch_resume_file_hash(path);}
+      |                                                                              ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/batch_resume_tests.inc:32:52: note: 'snprintf' output between 16 and 4111 bytes into a destination of size 4096
+   32 |         for(unsigned i=0;i<64;i++){char path[4096];snprintf(path,sizeof path,"%s/run-%04u.psrun",a->batch_resume_test_path,i+1);old_hashes[i]=batch_resume_file_hash(path);}
+      |                                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/logging_tests.inc: In function 'logging_test_frame':
+/mnt/d/Physim/app/logging_tests.inc:133:54: warning: '.pslog' directive output may be truncated writing 6 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  133 |         char path[4096];snprintf(path,sizeof path,"%s.pslog",a->last_run);
+      |                                                      ^~~~~~
+/mnt/d/Physim/app/logging_tests.inc:133:25: note: 'snprintf' output between 7 and 4102 bytes into a destination of size 4096
+  133 |         char path[4096];snprintf(path,sizeof path,"%s.pslog",a->last_run);
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/diagnostic_tests.inc: In function 'diagnostic_test_frame':
+/mnt/d/Physim/app/diagnostic_tests.inc:153:54: warning: '.psdiag' directive output may be truncated writing 7 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  153 |         char path[4096];snprintf(path,sizeof path,"%s.psdiag",analysis?a->report:a->last_run);ps_diagnostic record={0};
+      |                                                      ^~~~~~~
+/mnt/d/Physim/app/diagnostic_tests.inc:153:25: note: 'snprintf' output between 8 and 4103 bytes into a destination of size 4096
+  153 |         char path[4096];snprintf(path,sizeof path,"%s.psdiag",analysis?a->report:a->last_run);ps_diagnostic record={0};
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/panel_window_tests.inc: In function 'panel_test_start':
+/mnt/d/Physim/app/panel_window_tests.inc:11:42: warning: '.before-fixed-panels' directive output may be truncated writing 20 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+   11 |         snprintf(backup,sizeof backup,"%s.before-fixed-panels",path);ps_preferences preserved;
+      |                                          ^~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/panel_window_tests.inc:11:9: note: 'snprintf' output between 21 and 4116 bytes into a destination of size 4096
+   11 |         snprintf(backup,sizeof backup,"%s.before-fixed-panels",path);ps_preferences preserved;
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /mnt/d/Physim/app/main.c:3673:
+/mnt/d/Physim/app/series_tests.inc: In function 'series_test_frame':
+/mnt/d/Physim/app/series_tests.inc:149:58: warning: '/study.png' directive output may be truncated writing 10 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  149 |             char path[4096];snprintf(path,sizeof path,"%s/study.png",a->batch_options.directory);
+      |                                                          ^~~~~~~~~~
+/mnt/d/Physim/app/series_tests.inc:149:29: note: 'snprintf' output between 11 and 4106 bytes into a destination of size 4096
+  149 |             char path[4096];snprintf(path,sizeof path,"%s/study.png",a->batch_options.directory);
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/series_tests.inc:151:42: warning: '/study.svg' directive output may be truncated writing 10 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  151 |             snprintf(path,sizeof path,"%s/study.svg",a->batch_options.directory);
+      |                                          ^~~~~~~~~~
+/mnt/d/Physim/app/series_tests.inc:151:13: note: 'snprintf' output between 11 and 4106 bytes into a destination of size 4096
+  151 |             snprintf(path,sizeof path,"%s/study.svg",a->batch_options.directory);
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/series_tests.inc:137:58: warning: '/run-' directive output may be truncated writing 5 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+  137 |             char path[4096];snprintf(path,sizeof path,"%s/run-%04u.psrun",a->batch_options.directory,i+1);
+      |                                                          ^~~~~
+/mnt/d/Physim/app/series_tests.inc:137:55: note: directive argument in the range [1, 3]
+  137 |             char path[4096];snprintf(path,sizeof path,"%s/run-%04u.psrun",a->batch_options.directory,i+1);
+      |                                                       ^~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/series_tests.inc:137:29: note: 'snprintf' output between 16 and 4111 bytes into a destination of size 4096
+  137 |             char path[4096];snprintf(path,sizeof path,"%s/run-%04u.psrun",a->batch_options.directory,i+1);
+      |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from /mnt/d/Physim/app/main.c:3675:
+/mnt/d/Physim/app/saved_run_tutorial_tests.inc: In function 'saved_run_tutorial_frame':
+/mnt/d/Physim/app/saved_run_tutorial_tests.inc:56:42: warning: '.psreport' directive output may be truncated writing 9 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+   56 |         snprintf(report,sizeof report,"%s.psreport",a->report);a->result_view=0;break;
+      |                                          ^~~~~~~~~
+/mnt/d/Physim/app/saved_run_tutorial_tests.inc:56:9: note: 'snprintf' output between 10 and 4105 bytes into a destination of size 4096
+   56 |         snprintf(report,sizeof report,"%s.psreport",a->report);a->result_view=0;break;
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/main.c: In function 'main':
+/mnt/d/Physim/app/main.c:3994:42: warning: '/..' directive output may be truncated writing 3 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+ 3994 |     snprintf(a->root, sizeof a->root, "%s/..", a->bin);
+      |                                          ^~~
+/mnt/d/Physim/app/main.c:3994:5: note: 'snprintf' output between 4 and 4099 bytes into a destination of size 4096
+ 3994 |     snprintf(a->root, sizeof a->root, "%s/..", a->bin);
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/main.c:4990:52: warning: '-plot.svg' directive output may be truncated writing 9 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+ 4990 |                 snprintf(report, sizeof report, "%s-plot.svg", a->report);
+      |                                                    ^~~~~~~~~
+/mnt/d/Physim/app/main.c:4990:17: note: 'snprintf' output between 10 and 4105 bytes into a destination of size 4096
+ 4990 |                 snprintf(report, sizeof report, "%s-plot.svg", a->report);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/main.c:4993:52: warning: '-derived.csv' directive output may be truncated writing 12 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+ 4993 |                 snprintf(report, sizeof report, "%s-derived.csv", a->report);
+      |                                                    ^~~~~~~~~~~~
+/mnt/d/Physim/app/main.c:4993:17: note: 'snprintf' output between 13 and 4108 bytes into a destination of size 4096
+ 4993 |                 snprintf(report, sizeof report, "%s-derived.csv", a->report);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/main.c:5003:54: warning: '-balance.csv' directive output may be truncated writing 12 bytes into a region of size between 1 and 4096 [-Wformat-truncation=]
+ 5003 |                     snprintf(report,sizeof report,"%s-balance.csv",a->report);
+      |                                                      ^~~~~~~~~~~~
+/mnt/d/Physim/app/main.c:5003:21: note: 'snprintf' output between 13 and 4108 bytes into a destination of size 4096
+ 5003 |                     snprintf(report,sizeof report,"%s-balance.csv",a->report);
+      |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/d/Physim/app/main.c:4629:55: warning: '.bak' directive output may be truncated writing 4 bytes into a region of size between 0 and 4095 [-Wformat-truncation=]
+ 4629 |                 snprintf(backup, sizeof backup, "%s/%s.bak", a->project,
+      |                                                       ^~~~
+/mnt/d/Physim/app/main.c:4629:17: note: 'snprintf' output 6 or more bytes (assuming 4101) into a destination of size 4096
+ 4629 |                 snprintf(backup, sizeof backup, "%s/%s.bak", a->project,
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 4630 |                          test_language_analysis ? analysis_source(a) : experiment_source(a));
+      |                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Compiled app/main.c
+Linked physim
+Build complete: /mnt/d/Physim/build/native/Design-analysis-linux/bin
+BEGIN protocol_sources
+END {'name': 'protocol_sources', 'exit_code': 0, 'seconds': 90.172805633}
+BEGIN logging_workflow
+END {'name': 'logging_workflow', 'exit_code': 0, 'seconds': 105.87865796900002}
+BEGIN diagnostic_workflow
+END {'name': 'diagnostic_workflow', 'exit_code': 0, 'seconds': 213.42565323100007}
+BEGIN workbench_workflow
+END {'name': 'workbench_workflow', 'exit_code': 0, 'seconds': 68.10666472700007}

@@ -1,0 +1,27 @@
+{
+  "platform": "linux",
+  "sha256": "4dfd3a0b29d857c00eb02629289e35043da46629955b137cd5b38cdbc1158d96",
+  "binary": "/mnt/d/Physim/build/native/Design-analysis-linux/bin/physim",
+  "cases": [
+    {
+      "name": "protocol_sources",
+      "exit_code": 0,
+      "seconds": 90.172805633
+    },
+    {
+      "name": "logging_workflow",
+      "exit_code": 0,
+      "seconds": 105.87865796900002
+    },
+    {
+      "name": "diagnostic_workflow",
+      "exit_code": 0,
+      "seconds": 213.42565323100007
+    },
+    {
+      "name": "workbench_workflow",
+      "exit_code": 0,
+      "seconds": 68.10666472700007
+    }
+  ]
+}

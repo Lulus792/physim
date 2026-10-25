@@ -1,0 +1,26 @@
+from pathlib import Path
+import hashlib,json,os,shutil,subprocess,sys
+r=Path.cwd();win=sys.platform=='win32'
+out=Path('F:/Physim/validation/protocol-c-2026-10-25/unit-windows') if win else Path('/tmp/physim-protocol-c-unit-linux')
+out.mkdir(parents=True,exist_ok=True);env=dict(os.environ);env['ASAN_OPTIONS']='detect_leaks=0' if win else 'detect_leaks=1'
+env['UBSAN_OPTIONS']='halt_on_error=1:print_stacktrace=1'
+if win:
+    sys.path.insert(0,str(r/'tools'));from build import compiler_environment
+    env.update(compiler_environment());cc=shutil.which('cl',path=env['PATH'])
+    runtime=Path(cc).parent/'clang_rt.asan_dynamic-x86_64.dll'
+    shutil.copy2(runtime,out/runtime.name)
+else:cc='gcc'
+results=[]
+for name,sources in [('protocol_store',['app/protocol_store.c','tests/test_protocol.c']),('compiler_diagnostic',['app/compiler_diagnostic.c','tests/test_compiler_diagnostic.c']),('protocol_text',['app/protocol_text.c','tests/test_protocol_text.c'])]:
+    program=out/(name+('.exe' if win else ''))
+    if win:cmd=[cc,'/nologo','/std:c17','/W4','/MD','/Zi','/Od','/fsanitize=address','/I'+str(r/'include'),'/I'+str(r/'app'),'/I'+str(r/'src'),*[str(r/p) for p in sources],'/Fe'+str(program),'/Fo'+str(out)+'/', '/Fd'+str(out/(name+'.pdb'))]
+    else:cmd=[cc,'-std=c17','-g','-O0','-Wall','-Wextra','-Werror','-fsanitize=address,undefined','-fno-omit-frame-pointer','-I'+str(r/'include'),'-I'+str(r/'app'),'-I'+str(r/'src'),*[str(r/p) for p in sources],'-o',str(program)]
+    build=subprocess.run(cmd,cwd=out,env=env,capture_output=True)
+    (out/(name+'-build.log')).write_bytes(build.stdout+build.stderr)
+    if build.returncode:print((build.stdout+build.stderr).decode('utf-8','replace'));sys.exit(build.returncode)
+    run=subprocess.run([str(program)],cwd=out,env=env,capture_output=True)
+    (out/(name+'-run.log')).write_bytes(run.stdout+run.stderr)
+    results.append(dict(name=name,exit_code=run.returncode,binary_sha256=hashlib.sha256(program.read_bytes()).hexdigest(),command=cmd))
+    print(name,run.returncode,(run.stdout+run.stderr).decode('utf-8','replace'))
+    (out/'results.json').write_text(json.dumps(results,indent=2)+'\n',encoding='utf-8',newline='\n')
+    if run.returncode:sys.exit(run.returncode)
