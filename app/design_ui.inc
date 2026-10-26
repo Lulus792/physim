@@ -356,7 +356,7 @@ static void live_events_view(app *a) {
     bool large=a->preferences.ui_size>=20;
     nk_layout_row_dynamic(ui,28,large?1:2);nk_label(ui,"Ereignisse",NK_TEXT_LEFT);
     if(large)nk_layout_row_dynamic(ui,28,1);
-    if(nk_button_label(ui,"Protokoll")){a->show_log=true;dock_show(a,PS_DOCK_LOG);}
+    if(nk_button_label(ui,"Protokoll"))protocol_open_from(a,"Protokoll");
     if(!a->live_event_count){nk_layout_row_dynamic(ui,38,1);nk_label_wrap(ui,"Noch keine Experimentmeldungen.");return;}
     nk_layout_row_dynamic(ui,140,1);a->live_event_bounds=nk_widget_bounds(ui);
     if(nk_group_scrolled_offset_begin(ui,&a->live_event_scroll_x,&a->live_event_scroll_y,"live-events",NK_WINDOW_BORDER)) {
@@ -1033,7 +1033,9 @@ static bool compact_log_diagnostic_button(app *a,const char *text) {
         text,(int)strlen(text),font,nk_rgba(0,0,0,0),UI_COLOR(text));
     return ps_ui_button_at(ui,r,text,false);
 }
+#include "protocol_ui.inc"
 static void log_panel(app *a) {
+    if(protocol_visible(a) || a->panel_render==PS_DOCK_LOG+1){protocol_panel(a);return;}
     if(workbench_visible(a)){workbench_log_panel(a);return;}
     struct nk_context *ui=a->ui;
     bool expanded_log=a->show_log && a->tab!=6;
@@ -1062,7 +1064,7 @@ static void log_panel(app *a) {
         } else nk_spacer(ui);
         nk_layout_row_push(ui, .24f);
         if (nk_button_label(ui, expanded_log ? "Weniger" : "Protokoll")) {
-            a->show_log = !expanded_log;
+            protocol_toggle(a,"Protokoll");
         }
         nk_layout_row_end(ui);
         if (expanded_log) {
@@ -1340,6 +1342,8 @@ static void workspace_draw_ui(app *a, int width, int height) {
     dock_order(a);
     dock_separator_views(a);
     laboratory_separators(a);
+    protocol_separator_view(a);
+    protocol_return_focus(a);
     if(!panel_is_detached(a,PS_DOCK_WORKSPACE)){editor_search_view(a);completion_view(a,width,height);}
     /* Docking temporarily routes hover/wheel to the panel under the pointer.
      * A declaration activation returns keyboard ownership to its source until

@@ -85,6 +85,12 @@ void ps_graphic_save_show(ps_graphic_save *s,SDL_Window *parent,const char *path
     static const SDL_DialogFileFilter png_filter={"PNG-Grafik","png"},svg_filter={"SVG-Grafik","svg"};
     SDL_ShowSaveFileDialog(save_callback,s,parent,svg?&svg_filter:&png_filter,1,path);
 }
+void ps_graphic_save_show_text(ps_graphic_save *s,SDL_Window *parent,const char *path) {
+    if(!s || s->shown || s->ready)return;
+    s->shown=true;SDL_AtomicIncRef(&s->references);
+    static const SDL_DialogFileFilter filter={"Textdatei","txt"};
+    SDL_ShowSaveFileDialog(save_callback,s,parent,&filter,1,path);
+}
 static FILE *exclusive(const char *path) {
 #ifdef _WIN32
     int count=MultiByteToWideChar(CP_UTF8,MB_ERR_INVALID_CHARS,path,-1,NULL,0);if(!count)return NULL;

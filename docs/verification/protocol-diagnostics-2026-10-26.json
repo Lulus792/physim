@@ -1,0 +1,501 @@
+{
+  "format": 1,
+  "date": "2026-10-26",
+  "scope": "Native protocol implementation; partial UI acceptance only",
+  "owned_source_files": {
+    "app/design_ui.inc": "5a4f6a9a510239b5e90d262c0ccfc074125db16a2ca8b4068418ec4f44db1229",
+    "app/diagnostic_tests.inc": "671d3cd27c2de4668101b4b00e067c9504c3e813c6cb1a3a3ddc884428aa540d",
+    "app/docking_ui.inc": "fc2fefc6d7d35d73d4eca7df130d33cce8d9d2c68d5f1edc818d2a9ad4563145",
+    "app/graphic_output.c": "6bba697f49c1e03ad62d0c76a97d3bd5e1106f30923783982378cfd54c0497fd",
+    "app/graphic_output.h": "6597fded6d58cd5db7bc42f4bd745096ea92442075c219dcad8324a46bc5bbf7",
+    "app/laboratory_layout.inc": "6c59b9aaae8bf1a26528a544e4f7ec766e1eb3ab72440d231210a0becbd7dfb7",
+    "app/laboratory_scene.inc": "9f6151e9233272e42e53f2aebf70ea14e1cf4fe50f9807fc5697e61105d919d1",
+    "app/laboratory_tail.inc": "490f6e565ce0f3632de909052ccc6a6ff10c8014f1b06bea7de1bd3aded7bde1",
+    "app/laboratory_ui.inc": "ad66e7ef3d8a1eaae191dec1b5ba08e0232071d9bdc47ea665cfe6820f3e2e64",
+    "app/layout_catalog.c": "9999527c45f656f1a94c3efbdc2f46714b6b8ababe43fa5a861bb927bf7d9fb3",
+    "app/main.c": "891bca232292813e960c4ebe5fb4bf970ba67c926b2c57241d9265c74c085cde",
+    "app/panel_window_tests.inc": "c772d28ed2e8376a4666a3ed07b02e7d1a97f7ba59380c76abe3f410248afee9",
+    "app/panel_windows.inc": "6502296c456bcbf9500c2a9a5b64a09b3105f89466cec5731ef6b6500149f904",
+    "app/preferences.c": "af812d2bda843cd299311410951740fc9a5c1ab31da0e1242275b26321a321ff",
+    "app/protocol_store.c": "47bb68e5a67b7e8dbfc3ff5f9c1aea0c76c7114cc11b68ff53ca5a262e40a880",
+    "app/protocol_store.h": "9c1b07fa606047c3b196cc6dbc91af886049527f274a2197ac0bc230b8ce74c5",
+    "app/toolbar_ui.inc": "2eb29bf78824db2b6287250530a3a24b69965424058e3537aa0f29c8675a07b5",
+    "app/ui_backend.c": "3bf7fcf52101721a5f110c48c4791daab3462fd5ce551bd9a71387316e409f03",
+    "app/ui_sdl.c": "2ce0dc9a08fd85ea9c02c3ef4f1e9d7f6f57d0d9d63e8eb571098de9691ef49d",
+    "app/workspace_tests.inc": "67dcfec307140b9a6de05f93f63e751e56bde7c57116e2f7434d5d002ed40a2e",
+    "tests/check_display_workflow.py": "ef34d46f11df3e39f0da7aa6a5f0b4b6227cd4536267145e96f4a2461157c474",
+    "tests/native_integration_cases.json": "f09670094fd07935882335fccecc5cd3990cb865b05d429bc5f65aa2f5436221",
+    "tests/test_layout_catalog.c": "ecf3f88872b4e7ff048aa4b552edbe275e77b76e1fda39463bf14edf04eed044",
+    "tests/test_native_test_runner.py": "356679600b7732c7a06117d97ef5b7ea45916bcfef3abe9cc234e51d52abffa1",
+    "tests/test_preferences.c": "cb81488dc696702ba879c436d0bb82ac228701713ea7e8dfc633ef249d25d142",
+    "tests/test_protocol.c": "89a874d590737ead85dc42359b075b5d1b1c7c4b71b4e5c98b3d7527999b8c44",
+    "app/protocol_layout.inc": "79feb5dfe4acdc6e0d62d0b648ca05697edd23ef974a535a9c19c476d07895f7",
+    "app/protocol_tests.inc": "cc23ea1d8ab593dc2b15404faba7fa03733b9b64052a6cc6778d37ab7dff491e",
+    "app/protocol_ui.h": "71ea71a118ac0322b1db4db0375c03f6f42617dc34f4426dc55e3de672e61384",
+    "app/protocol_ui.inc": "35e96469a9a4a9c3144f4d6bd38aafbb37f0bef264eeaffa940ae64faab74abd",
+    "tests/check_protocol_navigator.py": "3a93bdcdb8aad72a8f0fba3391475da23ce8f071face4117b668d2d8cea0c170"
+  },
+  "isolated_source": {
+    "path": "build/validation/protocol-ui-2026-10-25/21-isolated/source.json",
+    "sha256": "d873957eb04249d970ec8a8615bb9c9d38cdca66fb687b537866454832dbe547"
+  },
+  "isolated_base_commit": "b558878361978f206f0fe9fb59a1e9060992e512",
+  "base_archive_sha256": "803b22dbba983af9bb98e75320f3280f97b400e6629da78753e18f7e5925ddb7",
+  "owned_source_archive": {
+    "path": "build/validation/protocol-ui-2026-10-25/21-isolated/owned-source.zip",
+    "sha256": "01f5d40fde13cbec35ba5f59185ec83cb98b6c3e3ba89fed9c51b6dac96e19c9"
+  },
+  "unrelated_uncommitted_changes_excluded": true,
+  "source_files_in_isolation": 7581,
+  "phase20_source": {
+    "path": "build/validation/protocol-ui-2026-10-25/20-native/source.json",
+    "sha256": "2c0e83df74d5003ecde06cea16443c1b480f8a01f29c49327ce5226918dd6b6f"
+  },
+  "phase20_source_includes_other_local_changes": true,
+  "phase20_runtime_manifest": {
+    "path": "build/validation/protocol-ui-2026-10-25/20-native/runtime-archives.json",
+    "sha256": "9020009a27fde63e6b5d4266155446ee190d1bef2b43a853567f1f6afebd6d6f"
+  },
+  "isolated_runtime_manifest": {
+    "path": "build/validation/protocol-ui-2026-10-25/21-isolated/runtime-archives.json",
+    "sha256": "2ffbca6662e2dfb16720a4e119971f1c89b6f154ea566ccac4284c50abec67cb"
+  },
+  "runs": [
+    {
+      "phase": "20-native",
+      "platform": "windows",
+      "group": "diagnostics",
+      "results": {
+        "path": "build/validation/protocol-ui-2026-10-25/4-native/windows-build/test-results/run-pgm1gl27/results.json",
+        "sha256": "32d17ca6a7881d58a35a06def8060c02395e3a9fa8d6254088af657a058a1e22"
+      },
+      "cases": [
+        {
+          "name": "diagnostic_workflow",
+          "status": "passed"
+        }
+      ],
+      "native_diagnostic_steps": {
+        "path": "build/validation/protocol-ui-2026-10-25/4-native/windows-build/test-results/run-pgm1gl27/diagnostic_workflow/files ä/app-steps.json",
+        "sha256": "97c1dc375004b10f1ddf1ce88c7b90a28be6834cb1d3eb15907f64dbe669697e"
+      },
+      "diagnostic_modes": [
+        {
+          "mode": "diagnostic-build-helper",
+          "exitcode": 0
+        },
+        {
+          "mode": "diagnostic-foreign",
+          "exitcode": 0
+        },
+        {
+          "mode": "diagnostic-c",
+          "exitcode": 0
+        },
+        {
+          "mode": "diagnostic-phys",
+          "exitcode": 0
+        },
+        {
+          "mode": "diagnostic-analysis-c",
+          "exitcode": 0
+        },
+        {
+          "mode": "diagnostic-analysis-phys",
+          "exitcode": 0
+        }
+      ],
+      "compiler_navigation": [
+        {
+          "kind": "diagnostic_c_navigation",
+          "action": "selected-without-jump",
+          "id": 8,
+          "tab": 0
+        },
+        {
+          "kind": "diagnostic_c_navigation",
+          "action": "source-action-released",
+          "id": 8,
+          "tab": 8
+        },
+        {
+          "kind": "diagnostic_c_original",
+          "transcript": false,
+          "bytes": 244,
+          "crc32": 3785368815,
+          "selected": 8
+        },
+        {
+          "kind": "diagnostic_c_original",
+          "transcript": true,
+          "bytes": 2996,
+          "crc32": 2566192912,
+          "selected": 8
+        },
+        {
+          "kind": "diagnostic_c_original",
+          "transcript": false,
+          "bytes": 244,
+          "crc32": 3785368815,
+          "selected": 8
+        }
+      ]
+    },
+    {
+      "phase": "20-native",
+      "platform": "linux",
+      "group": "diagnostics",
+      "results": {
+        "path": "build/validation/protocol-ui-2026-10-25/4-native/linux-build/test-results/run-42dx073h/results.json",
+        "sha256": "2105214d7dbfb69e847b85be7afda0decfc08cbf137bde0e5df9e973d5b049f0"
+      },
+      "cases": [
+        {
+          "name": "diagnostic_workflow",
+          "status": "passed"
+        }
+      ],
+      "native_diagnostic_steps": {
+        "path": "build/validation/protocol-ui-2026-10-25/4-native/linux-build/test-results/run-42dx073h/diagnostic_workflow/files ä/app-steps.json",
+        "sha256": "05b7a8367015ecc54da6d3049a70e88a406cda450255b6cdcecb3715b93c8e71"
+      },
+      "diagnostic_modes": [
+        {
+          "mode": "diagnostic-build-helper",
+          "exitcode": 0
+        },
+        {
+          "mode": "diagnostic-foreign",
+          "exitcode": 0
+        },
+        {
+          "mode": "diagnostic-c",
+          "exitcode": 0
+        },
+        {
+          "mode": "diagnostic-phys",
+          "exitcode": 0
+        },
+        {
+          "mode": "diagnostic-analysis-c",
+          "exitcode": 0
+        },
+        {
+          "mode": "diagnostic-analysis-phys",
+          "exitcode": 0
+        }
+      ],
+      "compiler_navigation": [
+        {
+          "kind": "diagnostic_c_navigation",
+          "action": "selected-without-jump",
+          "id": 6,
+          "tab": 0
+        },
+        {
+          "kind": "diagnostic_c_navigation",
+          "action": "source-action-released",
+          "id": 6,
+          "tab": 8
+        },
+        {
+          "kind": "diagnostic_c_original",
+          "transcript": false,
+          "bytes": 233,
+          "crc32": 2313444763,
+          "selected": 6
+        },
+        {
+          "kind": "diagnostic_c_original",
+          "transcript": true,
+          "bytes": 1602,
+          "crc32": 1476645019,
+          "selected": 6
+        },
+        {
+          "kind": "diagnostic_c_original",
+          "transcript": false,
+          "bytes": 233,
+          "crc32": 2313444763,
+          "selected": 6
+        }
+      ]
+    },
+    {
+      "phase": "21-isolated",
+      "platform": "windows",
+      "group": "units",
+      "results": {
+        "path": "build/validation/protocol-ui-2026-10-25/21-isolated/windows-build/test-results/run-lhltoyyn/results.json",
+        "sha256": "d4b41c2bc0c551d85f619b0a05c7df89ff80e03dafd3266723cb6a781fb85cb7"
+      },
+      "cases": [
+        {
+          "name": "protocol_store",
+          "status": "passed"
+        },
+        {
+          "name": "protocol_text",
+          "status": "passed"
+        },
+        {
+          "name": "preferences",
+          "status": "passed"
+        },
+        {
+          "name": "layout_catalog",
+          "status": "passed"
+        }
+      ],
+      "command_and_exitcode": {
+        "path": "build/validation/protocol-ui-2026-10-25/21-isolated/build-windows.json",
+        "sha256": "e5eb26ebcef30c58f2299fd07c6eac026131fb3a8532ef87dfd67867675f4149"
+      }
+    },
+    {
+      "phase": "21-isolated",
+      "platform": "linux",
+      "group": "units",
+      "results": {
+        "path": "build/validation/protocol-ui-2026-10-25/21-isolated/linux-build/test-results/run-nwkm95_g/results.json",
+        "sha256": "f66867867a2a5d4e3d49319d7599b97bd30ec566c2fb3e3e17b71061ebc94b33"
+      },
+      "cases": [
+        {
+          "name": "protocol_store",
+          "status": "passed"
+        },
+        {
+          "name": "protocol_text",
+          "status": "passed"
+        },
+        {
+          "name": "preferences",
+          "status": "passed"
+        },
+        {
+          "name": "layout_catalog",
+          "status": "passed"
+        }
+      ],
+      "command_and_exitcode": {
+        "path": "build/validation/protocol-ui-2026-10-25/21-isolated/build-linux.json",
+        "sha256": "12ab04b84be92816e6fcdbeaaed50962b9ad028fbd3f1ef39cad7dd26d531088"
+      }
+    },
+    {
+      "phase": "21-isolated",
+      "platform": "windows",
+      "group": "display",
+      "results": {
+        "path": "build/validation/protocol-ui-2026-10-25/21-isolated/windows-build/test-results/run-3o5bb_in/results.json",
+        "sha256": "87c6d4995af7675eeae9c7ed5b67823d2bec9f2c0dc3c1201ea050b335b9dace"
+      },
+      "cases": [
+        {
+          "name": "docking_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "protocol_navigator",
+          "status": "passed"
+        },
+        {
+          "name": "protocol_sources",
+          "status": "passed"
+        },
+        {
+          "name": "diagnostic_workflow",
+          "status": "passed"
+        }
+      ],
+      "command_and_exitcode": {
+        "path": "build/validation/protocol-ui-2026-10-25/21-isolated/display-windows.json",
+        "sha256": "6ad6c929d03602be73132226453323d32c4069400a4969c32dbec5bd2bd9bd00"
+      },
+      "native_diagnostic_steps": {
+        "path": "build/validation/protocol-ui-2026-10-25/21-isolated/windows-build/test-results/run-3o5bb_in/diagnostic_workflow/files ä/app-steps.json",
+        "sha256": "d97de77e2e58054b82eb957392df38c4c997933779ef4e13be4499ceba05d73c"
+      },
+      "diagnostic_modes": [
+        {
+          "mode": "diagnostic-build-helper",
+          "exitcode": 0
+        },
+        {
+          "mode": "diagnostic-foreign",
+          "exitcode": 0
+        },
+        {
+          "mode": "diagnostic-c",
+          "exitcode": 0
+        },
+        {
+          "mode": "diagnostic-phys",
+          "exitcode": 0
+        },
+        {
+          "mode": "diagnostic-analysis-c",
+          "exitcode": 0
+        },
+        {
+          "mode": "diagnostic-analysis-phys",
+          "exitcode": 0
+        }
+      ],
+      "compiler_navigation": [
+        {
+          "kind": "diagnostic_c_navigation",
+          "action": "selected-without-jump",
+          "id": 8,
+          "tab": 0
+        },
+        {
+          "kind": "diagnostic_c_navigation",
+          "action": "source-action-released",
+          "id": 8,
+          "tab": 8
+        },
+        {
+          "kind": "diagnostic_c_original",
+          "transcript": false,
+          "bytes": 247,
+          "crc32": 2556346310,
+          "selected": 8
+        },
+        {
+          "kind": "diagnostic_c_original",
+          "transcript": true,
+          "bytes": 4679,
+          "crc32": 2688920002,
+          "selected": 8
+        },
+        {
+          "kind": "diagnostic_c_original",
+          "transcript": false,
+          "bytes": 247,
+          "crc32": 2556346310,
+          "selected": 8
+        }
+      ]
+    },
+    {
+      "phase": "21-isolated",
+      "platform": "linux",
+      "group": "display",
+      "results": {
+        "path": "build/validation/protocol-ui-2026-10-25/21-isolated/linux-build/test-results/run-ftz1xkku/results.json",
+        "sha256": "e1e4bbfd42f2b0690f4568fa0b7e7e4658353c4e8e6e235029ab4e491b8e37bf"
+      },
+      "cases": [
+        {
+          "name": "docking_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "protocol_navigator",
+          "status": "passed"
+        },
+        {
+          "name": "protocol_sources",
+          "status": "passed"
+        },
+        {
+          "name": "diagnostic_workflow",
+          "status": "passed"
+        }
+      ],
+      "command_and_exitcode": {
+        "path": "build/validation/protocol-ui-2026-10-25/21-isolated/display-linux.json",
+        "sha256": "00ef2d6765654b5f87e2a775866835d28dd74571ccd3f7d3f5733e2060011ed4"
+      },
+      "native_diagnostic_steps": {
+        "path": "build/validation/protocol-ui-2026-10-25/21-isolated/linux-build/test-results/run-ftz1xkku/diagnostic_workflow/files ä/app-steps.json",
+        "sha256": "b573f6f1c38431c8c1a3d922145b3be24d3e5bd9d14f8045475d330a089c5194"
+      },
+      "diagnostic_modes": [
+        {
+          "mode": "diagnostic-build-helper",
+          "exitcode": 0
+        },
+        {
+          "mode": "diagnostic-foreign",
+          "exitcode": 0
+        },
+        {
+          "mode": "diagnostic-c",
+          "exitcode": 0
+        },
+        {
+          "mode": "diagnostic-phys",
+          "exitcode": 0
+        },
+        {
+          "mode": "diagnostic-analysis-c",
+          "exitcode": 0
+        },
+        {
+          "mode": "diagnostic-analysis-phys",
+          "exitcode": 0
+        }
+      ],
+      "compiler_navigation": [
+        {
+          "kind": "diagnostic_c_navigation",
+          "action": "selected-without-jump",
+          "id": 6,
+          "tab": 0
+        },
+        {
+          "kind": "diagnostic_c_navigation",
+          "action": "source-action-released",
+          "id": 6,
+          "tab": 8
+        },
+        {
+          "kind": "diagnostic_c_original",
+          "transcript": false,
+          "bytes": 236,
+          "crc32": 579881553,
+          "selected": 6
+        },
+        {
+          "kind": "diagnostic_c_original",
+          "transcript": true,
+          "bytes": 3176,
+          "crc32": 2916513596,
+          "selected": 6
+        },
+        {
+          "kind": "diagnostic_c_original",
+          "transcript": false,
+          "bytes": 236,
+          "crc32": 579881553,
+          "selected": 6
+        }
+      ]
+    }
+  ],
+  "checker_counterexamples": {
+    "path": "build/validation/protocol-ui-2026-10-25/20-native/checker-counterexamples.json",
+    "sha256": "4336aab86e04a979a508d300c737130678ca13d078b6784f8ea5c2e381e5a896"
+  },
+  "selected_native_image": {
+    "path": "docs/visuals/unified-workspace/protocol-native-2026-10-26/compiler-source.png",
+    "sha256": "23ff05d6ad500b9e969c0140fffbd3a496b17456e364c2076031a7ab436a95e0"
+  },
+  "limits": [
+    "Direct physical pointer-to-keyboard focus remains open",
+    "Long original lines are visibly clipped; no proven normal-user route to their end; native soft wrapping remains required",
+    "Clipboard/save-file chooser interaction and screenreader remain unverified",
+    "macOS, complete DPI coverage and full UI design equality remain unverified",
+    "Linux ASan/UBSan has detect_leaks=0; no leak-detection claim",
+    "One selected native PNG is versioned; raw failures, images and immutable evidence stay on D",
+    "No claim that all approved workspaces/dialogs or the overall goal are complete"
+  ],
+  "approved_original_rules": {
+    "path": "docs/visuals/design-options/options.css",
+    "sha256": "79500e3638b63af8b0ac9d1d64c562742236cad38f950773659a7b1b031a889f",
+    "rule": "pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:.8rem;line-height:1.85}"
+  }
+}

@@ -170,6 +170,7 @@ def main():
         ("inspector_tail","check_inspector_tail.py"),
         ("inspector_channel","check_inspector_channel.py"),
         ("analysis_editor","check_analysis_editor.py"),
+        ("protocol_navigator","check_protocol_navigator.py"),
     )})
     if sys.platform in ("win32","linux"):
         specialized_display["graphic_dialog"]=("tests/check_graphic_dialog.py",("--root",))

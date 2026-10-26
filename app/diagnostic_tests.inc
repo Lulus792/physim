@@ -1,3 +1,80 @@
+/* Drive the visible navigator, including nested and outer scrolling. Data-only
+ * source/path tests below deliberately remain separate from this UI proof. */
+static struct nk_rect diagnostic_test_intersection(struct nk_rect a,struct nk_rect b) {
+    float x=fmaxf(a.x,b.x),y=fmaxf(a.y,b.y);
+    return nk_rect(x,y,fmaxf(0,fminf(a.x+a.w,b.x+b.w)-x),fmaxf(0,fminf(a.y+a.h,b.y+b.h)-y));
+}
+static bool diagnostic_test_contains(struct nk_rect outer,struct nk_rect inner) {
+    return inner.w>0 && inner.h>0 && inner.x>=outer.x && inner.y>=outer.y &&
+        inner.x+inner.w<=outer.x+outer.w && inner.y+inner.h<=outer.y+outer.h;
+}
+/* 1 = fully reachable, 0 = wheel sent, -1 = bounded reachability failure. */
+static int diagnostic_test_reveal(app *a,struct nk_rect target,struct nk_rect pane,unsigned *attempts) {
+    ps_protocol_ui *p=&a->protocol_view;struct nk_rect visible=diagnostic_test_intersection(pane,p->bounds);
+    if(diagnostic_test_contains(visible,target)){*attempts=0;return 1;}
+    if(++*attempts<=80 && visible.h<60) {
+        test_plot_wheel(a,p->bounds.x+8,p->bounds.y+p->bounds.h*.5f,pane.y<p->bounds.y?3:-3);return 0;
+    }
+    if(*attempts>80 || target.w<=0 || target.h<=0) {
+        fprintf(stderr,"DIAGNOSTIC C REACH: target=%.1f,%.1f,%.1f,%.1f pane=%.1f,%.1f,%.1f,%.1f log=%.1f,%.1f,%.1f,%.1f\n",
+            target.x,target.y,target.w,target.h,pane.x,pane.y,pane.w,pane.h,p->bounds.x,p->bounds.y,p->bounds.w,p->bounds.h);return -1;
+    }
+    if(diagnostic_test_contains(pane,target)) {
+        /* The eight-pixel margin belongs to the outer log, not a text box. */
+        float direction=target.y<p->bounds.y?3:-3;
+        test_plot_wheel(a,p->bounds.x+8,p->bounds.y+p->bounds.h*.5f,direction);
+    } else {
+        /* Stay in group padding so a read-only original does not eat the wheel. */
+        test_plot_wheel(a,visible.x+2,visible.y+visible.h*.5f,target.y<pane.y?3:-3);
+    }
+    return 0;
+}
+static int diagnostic_test_navigate(app *a,uint64_t id) {
+    static unsigned phase,settle,attempts;static int initial_tab;static uint32_t source_crc;
+    ps_protocol_ui *p=&a->protocol_view;
+    if(settle){--settle;return 0;}
+    if(!phase) {
+        initial_tab=a->tab;source_crc=ps_crc32((const unsigned char*)nk_str_get_const(&a->experiment.string),(size_t)nk_str_len_char(&a->experiment.string));
+        protocol_open_from(a,NULL);phase=1;settle=2;return 0;
+    }
+    if(!ps_protocol_find(&a->protocol,id) || source_crc!=ps_crc32((const unsigned char*)nk_str_get_const(&a->experiment.string),(size_t)nk_str_len_char(&a->experiment.string)))return -1;
+    switch(phase) {
+    case 1:test_mouse(a,p->levels[1],true);break;
+    case 2:test_mouse(a,p->levels[1],false);break;
+    case 3: {
+        if(p->level!=PS_LOG_ERROR || *p->query || p->origin!=-1)return -1;
+        size_t row=0;while(row<p->row_count && p->row_ids[row]!=id)row++;
+        if(row==p->row_count)return -1;
+        int reachable=diagnostic_test_reveal(a,p->rows[row],p->panes[1],&attempts);
+        if(reachable<=0){settle=2;return reachable;}
+        test_mouse(a,p->rows[row],true);break;
+    }
+    case 4: {
+        size_t row=0;while(row<p->row_count && p->row_ids[row]!=id)row++;
+        if(row==p->row_count)return -1;test_mouse(a,p->rows[row],false);break;
+    }
+    case 5: {
+        if(p->selected!=id || a->tab!=initial_tab)return -1;
+        int reachable=diagnostic_test_reveal(a,p->source,p->panes[2],&attempts);
+        if(reachable<=0){settle=2;return reachable;}
+        printf("{\"kind\":\"diagnostic_c_navigation\",\"action\":\"selected-without-jump\",\"id\":%llu,\"tab\":%d}\n",(unsigned long long)id,a->tab);
+        test_mouse(a,p->source,true);break;
+    }
+    case 6:test_mouse(a,p->source,false);break;
+    case 7:
+        printf("{\"kind\":\"diagnostic_c_navigation\",\"action\":\"source-action-released\",\"id\":%llu,\"tab\":%d}\n",(unsigned long long)id,a->tab);return 1;
+    }
+    phase++;settle=2;return 0;
+}
+static bool diagnostic_test_original(app *a,uint64_t id,bool transcript,uint32_t original_crc,uint32_t transcript_crc) {
+    ps_protocol_ui *p=&a->protocol_view;const ps_protocol_record *selected=ps_protocol_find(&a->protocol,id);
+    const ps_protocol_record *record=selected && transcript?ps_protocol_find(&a->protocol,selected->message.transcript_id):selected;
+    if(!record || p->selected!=id || p->transcript!=transcript || p->original_closed || !p->original ||
+       p->original_id!=record->id || p->original_size!=record->message.raw_size || !strstr(p->original,"compiler navigation sentinel"))return false;
+    uint32_t crc=ps_crc32(record->message.raw,record->message.raw_size);
+    if(crc!=(transcript?transcript_crc:original_crc))return false;
+    printf("{\"kind\":\"diagnostic_c_original\",\"transcript\":%s,\"bytes\":%zu,\"crc32\":%u,\"selected\":%llu}\n",transcript?"true":"false",record->message.raw_size,crc,(unsigned long long)id);return true;
+}
 static bool diagnostic_test_start(app *a,const char *root,const char *mode) {
     char path[4096];join(path,sizeof path,root,"preferences.bin");preferences_start(a,path);
     join(a->project_input,sizeof a->project_input,root,"project");
@@ -23,7 +100,8 @@ static bool diagnostic_test_start(app *a,const char *root,const char *mode) {
 static void diagnostic_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
     bool analysis=strstr(mode,"analysis")!=NULL,ok=true;
     if(!strcmp(mode,"diagnostic-build-helper")) {
-        static int selected=-1,reported=-1;static unsigned scroll_settle;
+        static int selected=-1,reported=-1;static unsigned scroll_settle,reveal_attempts;
+        static uint32_t original_crc,transcript_crc;
         if(reported!=*stage){fprintf(stderr,"Compiler helper stage %d: %s\n",*stage,a->status);reported=*stage;}
         char path[4096];join(path,sizeof path,a->project,"include/helper α.h");
         switch(*stage) {
@@ -40,40 +118,48 @@ static void diagnostic_test_frame(app *a,const char *mode,int *stage,int *code,c
                     event->message.line==2 && strstr(event->message.source,"helper α.h") &&
                     strstr(event->message.raw,"compiler navigation sentinel");
                 if(event) {
+                    original_crc=ps_crc32(event->message.raw,event->message.raw_size);
                     const ps_protocol_record *output=ps_protocol_find(&a->protocol,event->message.transcript_id);
                     ok &= output && output->message.raw_size>event->message.raw_size &&
                         strstr(output->message.raw,"compiler navigation sentinel");
+                    if(output)transcript_crc=ps_crc32(output->message.raw,output->message.raw_size);
                 }
             }
             test_window_key_mod(a->window,SDLK_F6,0);break;
         case 2:
-            if(scroll_settle){--scroll_settle;return;}
-            ok=!a->runner.running && !a->last_run[0] && selected>=0 && a->diagnostic_bounds[selected].w>0;
+            ok=!a->runner.running && !a->last_run[0] && selected>=0;
             if(ok) {
-                struct nk_rect view=workbench_visible(a)?a->diagnostic_view_bounds:a->dock_panels[PS_DOCK_LOG],row=a->diagnostic_bounds[selected];
-                if(row.y+row.h>view.y+view.h || row.y<view.y) {
-                    test_plot_wheel(a,view.x+view.w*.5f,view.y+view.h*.5f,row.y+row.h>view.y+view.h?-1:1);
-                    scroll_settle=2;return;
-                }
+                int result=diagnostic_test_navigate(a,a->diagnostics[selected].protocol_id);
+                if(!result)return;ok=result>0;
             }
-            if(ok)test_mouse(a,a->diagnostic_bounds[selected],true);break;
-        case 3:test_mouse(a,a->diagnostic_bounds[selected],false);break;
+            break;
+        case 3:break;
         case 4: {
             workspace_document *document=active_document(a);
             ok=a->tab==8 && document && ps_text_document_same_file(path,document->file.path) &&
                 document->edit.select_end>document->edit.select_start && strstr(document->file.saved,"#error compiler navigation sentinel");
-            *capture="compiler-helper-jump.bmp";break;
+            ok &= diagnostic_test_original(a,a->diagnostics[selected].protocol_id,false,original_crc,transcript_crc);
+            *capture="compiler-helper-jump.png";break;
         }
-        case 5:test_mouse(a,a->diagnostic_mode_bounds,true);break;
-        case 6:test_mouse(a,a->diagnostic_mode_bounds,false);break;
-        case 7:
-            ok=a->diagnostic_raw && strstr(a->log,"compiler navigation sentinel") && a->diagnostic_count>0;
-            *capture="compiler-helper-output.bmp";
-            test_mouse(a,a->diagnostic_mode_bounds,true);break;
-        case 8:test_mouse(a,a->diagnostic_mode_bounds,false);break;
+        case 5: {
+            if(scroll_settle){--scroll_settle;return;}
+            int result=diagnostic_test_reveal(a,a->protocol_view.transcript_toggle,a->protocol_view.panes[2],&reveal_attempts);
+            if(!result){scroll_settle=2;return;}ok=result>0;if(ok)test_mouse(a,a->protocol_view.transcript_toggle,true);break;
+        }
+        case 6:test_mouse(a,a->protocol_view.transcript_toggle,false);scroll_settle=2;break;
+        case 7: {
+            if(scroll_settle){--scroll_settle;return;}
+            int result=diagnostic_test_reveal(a,a->protocol_view.transcript_toggle,a->protocol_view.panes[2],&reveal_attempts);
+            if(!result){scroll_settle=2;return;}ok=result>0;
+            ok &= diagnostic_test_original(a,a->diagnostics[selected].protocol_id,true,original_crc,transcript_crc);
+            if(SDL_getenv("PHYSIM_TEST_ALL_CAPTURES"))*capture="compiler-helper-output.png";
+            if(ok)test_mouse(a,a->protocol_view.transcript_toggle,true);break;
+        }
+        case 8:test_mouse(a,a->protocol_view.transcript_toggle,false);scroll_settle=2;break;
         case 9: {
+            if(scroll_settle){--scroll_settle;return;}
             workspace_document *document=active_document(a);
-            ok=document!=NULL && !a->diagnostic_raw;
+            ok=document!=NULL && diagnostic_test_original(a,a->diagnostics[selected].protocol_id,false,original_crc,transcript_crc);
             if(ok) {
                 document->edit.mode=NK_TEXT_EDIT_MODE_INSERT;
                 nk_textedit_delete_selection(&document->edit);
@@ -98,7 +184,7 @@ static void diagnostic_test_frame(app *a,const char *mode,int *stage,int *code,c
                 while((result=ps_run_next(&run,&time,values))==PS_OK)rows++;
                 ok=result==PS_EOF && rows>=3;ps_run_reader_close(&run);
             }
-            *capture="compiler-helper-repaired.bmp";a->quitting=true;break;
+            if(SDL_getenv("PHYSIM_TEST_ALL_CAPTURES"))*capture="compiler-helper-repaired.png";a->quitting=true;break;
         }
         }
         if(!ok){fprintf(stderr,"Compiler helper stage %d: diagnostics=%d selected=%d %s\n",*stage,a->diagnostic_count,selected,a->status);*code=1;a->quitting=true;}
@@ -160,7 +246,7 @@ static void diagnostic_test_frame(app *a,const char *mode,int *stage,int *code,c
                 !strcmp(event->message.source,record.source) && event->message.line==record.line && event->message.column==record.column &&
                 event->message.raw_size==strlen(record.message) && !memcmp(event->message.raw,record.message,strlen(record.message));
         }
-        if(ok)jump_to_diagnostic(a,item);break;
+        if(ok){int result=diagnostic_test_navigate(a,item->protocol_id);if(!result)return;ok=result>0;}break;
     }
     case 4: {
         struct nk_text_edit *edit=analysis?&a->analysis:&a->experiment;

@@ -1,5 +1,5 @@
 /* simulation.css scene-top overlay and scene-bottom flow, using live camera data. */
-static int laboratory_scene_style_width(app *a) {
+static int laboratory_scene_style_width(const app *a) {
     /* Detaching changes the surface, not the shared application design variant.
      * Actual frame width still controls wrapping and whether content fits. */
     if(a->laboratory_scene_host_width>0)return a->laboratory_scene_host_width;
@@ -26,7 +26,7 @@ static const char *laboratory_scene_hint_text(const app *a) {
     return a->camera_2d?"Verschieben: rechte/Mitteltaste · Zoom: Mausrad":"Orbit: rechte Maustaste · Zoom: Mausrad";
 }
 typedef struct {float f,padding,button_width,button_height,view_width,view_height,height;bool stacked;} laboratory_scene_footer_metrics;
-static laboratory_scene_footer_metrics laboratory_scene_metrics(app *a,float width) {
+static laboratory_scene_footer_metrics laboratory_scene_metrics(const app *a,float width) {
     int window_width=laboratory_scene_style_width(a);
     float f=a->preferences.ui_size/16.f;const struct nk_user_font *font=&a->laboratory_scene_font;
     const char *views[]={"Perspektive · Meter","Orthografisch · Meter","Vorne · Meter","Seite · Meter","Oben · Meter","2D · XY · Meter","2D · YZ · Meter","2D · XZ · Meter"};
@@ -40,7 +40,7 @@ static laboratory_scene_footer_metrics laboratory_scene_metrics(app *a,float wid
     m.height=fmaxf(32*f,8*f+(m.stacked?m.view_height+6*f+m.button_height:fmaxf(m.view_height,m.button_height)));
     return m;
 }
-static struct nk_vec2 laboratory_scene_select_size(app *a,float width) {
+static struct nk_vec2 laboratory_scene_select_size(const app *a,float width) {
     float f=a->preferences.ui_size/16.f;const struct nk_user_font *font=&a->workspace_status_font;
     const char *names[]={"Perspektive","Vorne","Seite","Oben","Eigene Ansicht","Orthografisch"};float text=0;unsigned lines=1;
     for(unsigned i=0;i<6;i++)text=fmaxf(text,laboratory_scene_text_width(font,names[i]));
@@ -48,7 +48,7 @@ static struct nk_vec2 laboratory_scene_select_size(app *a,float width) {
     for(unsigned i=0;i<6;i++)lines=NK_MAX(lines,laboratory_wrapped_lines(font,names[i],fmaxf(1,w-32*f)));
     return nk_vec2(w,(12+14.5f*lines)*f);
 }
-static float laboratory_scene_minimum(app *a,float width) {
+static float laboratory_scene_minimum(const app *a,float width) {
     if(width<80 || !a->laboratory_scene_font.width || !a->workspace_status_font.width)return LABORATORY_SCENE_MIN;
     float f=a->preferences.ui_size/16.f;int w=laboratory_scene_style_width(a);
     float inset=(w<=1150?12:17)*f;struct nk_vec2 select=laboratory_scene_select_size(a,width-2*inset);

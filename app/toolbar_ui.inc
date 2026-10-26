@@ -97,7 +97,7 @@ static void toolbar_dispatch(app *a, toolbar_action action) {
     case TOOLBAR_NEW: open_project_manager(a);break;
     case TOOLBAR_SAVE: save_active_document(a);break;
     case TOOLBAR_WORKSPACES: a->workspace_manager=true;break;
-    case TOOLBAR_LOG: a->show_log=!a->show_log;if(a->show_log)dock_show(a,PS_DOCK_LOG);break;
+    case TOOLBAR_LOG: protocol_toggle(a,"Ansicht");break;
     case TOOLBAR_REFRESH: refresh_workspace_entries(a);break;
     case TOOLBAR_LIBRARY: a->project_manager=false;open_library(a);break;
     case TOOLBAR_BATCH: a->project_manager=false;a->tab=5;break;

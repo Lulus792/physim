@@ -53,6 +53,7 @@ static void laboratory_measurements(app *a,float height) {
     float header_height=(wrap?64:32)*scale,header_total=12*scale+header_height+14*scale;
     nk_layout_row_dynamic(ui,12*scale,1);nk_spacer(ui);
     nk_layout_row_dynamic(ui,header_height,1);struct nk_rect header;nk_widget(&header,ui);
+    if(!a->panel_render)a->panels[PS_PANEL_MEASURE].home=nk_rect(header.x,header.y-12*scale,width,height);
     a->live_measurement_bounds=nk_rect(header.x,header.y,wrap?header.w:fmaxf(1,header.w-toggle_width-inset),32*scale);
     a->laboratory_measure_title=nk_rect(header.x+inset,header.y,title_width,32*scale);
     a->laboratory_measure_time=nk_rect(header.x+inset+title_width+12*scale,header.y,fmaxf(1,inner-title_width-12*scale-(wrap?0:toggle_width+12*scale)),32*scale);
@@ -211,7 +212,8 @@ static void laboratory_chrome(app *a,float w,float h) {
         workspace_rule(nk_window_get_canvas(ui),nk_rect(0,231,w,1));
     }nk_end(ui);
     float timeline_height=laboratory_dimension_value(a,1);
-    struct nk_rect timeline=nk_rect(0,h-WORKSPACE_STATUS_HEIGHT-timeline_height,w,timeline_height);
+    struct nk_rect timeline=nk_rect(0,h-protocol_reserved(a,h)-WORKSPACE_STATUS_HEIGHT-timeline_height,w,timeline_height);
+    a->panels[PS_PANEL_TIMELINE].home=timeline;
     a->laboratory_splitters[1]=nk_rect(0,timeline.y-4,w,9);
     nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(0,0));
     if(laboratory_begin(a,windows[2],timeline,NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BACKGROUND)) {

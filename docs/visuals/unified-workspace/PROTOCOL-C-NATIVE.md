@@ -2,7 +2,10 @@
 
 **Nachlauf vom 26. Oktober:** Der [Fokusbericht](PROTOCOL-FOCUS-NATIVE.md)
 ergänzt verschärfte Gegenproben, die Adapterkorrektur und den weiterhin offenen
-direkten Mausfokus. Der folgende Text dokumentiert den Prüfstand vom 25. Oktober.
+direkten Mausfokus. Der spätere
+[Diagnose- und Integrationsbericht](PROTOCOL-DIAGNOSTICS-NATIVE.md) prüft die
+versionierte Umsetzung auch ohne fremde lokale Änderungen. Der folgende Text
+dokumentiert den Prüfstand vom 25. Oktober.
 
 Die ausgewählte Navigator-Anordnung C ist im lokalen Arbeitsstand begonnen.
 Sie ist **noch nicht abgenommen und noch nicht als Quelländerung veröffentlicht**.

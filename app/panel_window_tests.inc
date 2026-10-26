@@ -40,7 +40,7 @@ static void panel_test_frame(app *a,const char *mode,int *stage,int *code,const 
             a->dock_panels[PS_DOCK_WORKSPACE].h-a->laboratory_scene_frame.h-1>=LABORATORY_MEASURE_MIN &&
             a->dock_panels[PS_DOCK_LOG].h>=LABORATORY_LOG_MIN &&
             a->laboratory_timeline_height==timeline_wish && a->preferences.log_height==log_wish;
-        if(!ok)break;
+        if(!ok){fprintf(stderr,"PANEL MINIMUM FAILURE: workspace=%.3f scene=%.3f viewport=%.3f footer=%.3f log=%.3f timeline=%.3f wishes=%.3f,%u\n",a->dock_panels[PS_DOCK_WORKSPACE].h,a->laboratory_scene_frame.h,a->scene_viewport_bounds.h,a->laboratory_scene_footer.h,a->dock_panels[PS_DOCK_LOG].h,laboratory_dimension_value(a,1),a->laboratory_timeline_height,a->preferences.log_height);break;}
         if(a->diagnostic_count && a->dock_panels[PS_DOCK_LOG].h<=LABORATORY_LOG_MIN+1) {
             struct nk_rect r=a->dock_panels[PS_DOCK_LOG];float top=r.y+dock_panel_header_height(a,PS_DOCK_LOG);
             if(!minimum_phase) {
@@ -109,6 +109,10 @@ static void panel_test_frame(app *a,const char *mode,int *stage,int *code,const 
             ps_panel_window *p=&a->panels[panel];ok=p->detached && p->window && p->ui && p->graphics && p->window!=a->window;
             if(!ok){fprintf(stderr,"PANEL PULL STATE: detached=%d pull=%u dragging=%d dock-resize=%u lab-resize=%d request=%u log=%d diagnostics=%d\n",p->detached,a->panel_pull,a->panel_pull_dragging,a->dock_resize,a->laboratory_resize,a->panel_open_request,a->show_log,a->diagnostic_count);break;}
             ids[panel]=SDL_GetWindowID(p->window);
+            int initial_w=0,initial_h=0;SDL_GetWindowSize(p->window,&initial_w,&initial_h);
+            ok=initial_w==(int)lroundf(p->home.w) && initial_h==(int)lroundf(p->home.h);
+            printf("PANEL INITIAL CLIENT: panel=%u actual=%d,%d source=%.4f,%.4f retained=%d\n",panel,initial_w,initial_h,p->home.w,p->home.h,ok);
+            if(!ok)break;
             for(unsigned j=0;j<panel;j++)ok=ok && ids[j]!=ids[panel];
             int x=0,y=0,w=0,h=0;SDL_GetWindowPosition(a->window,&x,&y);SDL_GetWindowSize(a->window,&w,&h);
             SDL_SetWindowPosition(p->window,x+w-80,y+40);

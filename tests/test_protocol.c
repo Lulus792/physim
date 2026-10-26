@@ -7,16 +7,17 @@
 int main(void) {
     ps_protocol store={0};uint64_t id=999;
     const unsigned char original[]={'A',0,'B','\n','\r','\t',0xce,0xb1,0xe4};
-    char title[]="Warnung",context[]="Lauf 004",source[]="src/model.c",operation[]="step",argument[]="dt";
+    char title[]="Warnung",context[]="Lauf 004",source[]="src/model.c",operation[]="step",argument[]="dt",project[]="Project α";
     ps_protocol_message m={.level=PS_LOG_WARNING,.origin=PS_PROTOCOL_SIMULATION,.title=title,.context=context,.source=source,
-        .operation=operation,.argument=argument,.has_code=true,.code=PS_NUMERIC,.transcript_id=777,
+        .operation=operation,.argument=argument,.project=project,.has_code=true,.code=PS_NUMERIC,.transcript_id=777,
         .line=12,.column=4,.has_time=true,.time_s=2.5,.raw=original,.raw_size=sizeof original};
     CHECK(ps_protocol_push(&store,&m,&id)==PS_OK && id!=999 && id);
     memset(title,'x',strlen(title));memset(context,'y',strlen(context));memset(source,'z',strlen(source));
-    memset(operation,'x',strlen(operation));memset(argument,'x',strlen(argument));
+    memset(operation,'x',strlen(operation));memset(argument,'x',strlen(argument));memset(project,'p',strlen(project));
     const ps_protocol_record *r=ps_protocol_find(&store,id);
     CHECK(r && !strcmp(r->message.title,"Warnung") && !strcmp(r->message.context,"Lauf 004") && !strcmp(r->message.source,"src/model.c"));
     CHECK(!strcmp(r->message.operation,"step") && !strcmp(r->message.argument,"dt") && r->message.has_code && r->message.code==PS_NUMERIC && r->message.transcript_id==777);
+    CHECK(!strcmp(r->message.project,"Project α"));
     CHECK(r->message.raw_size==sizeof original && !memcmp(r->message.raw,original,sizeof original));
     CHECK(r->message.has_time && r->message.time_s==2.5 && r->message.line==12 && r->message.column==4 && r->message.outcome==PS_PROTOCOL_NO_OUTCOME);
     /* Alias-safe append, including bytes after an embedded NUL. */

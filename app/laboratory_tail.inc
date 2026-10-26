@@ -74,7 +74,7 @@ static void laboratory_events(app *a){
     if(a->live_event_omitted){char note[128];snprintf(note,sizeof note,"%llu ältere Meldungen in der Protokolldatei.",(unsigned long long)a->live_event_omitted);laboratory_tail_note(a,note,false);}
     float f=a->preferences.ui_size/16.f,w=nk_window_get_content_region(a->ui).w,line=17.4f*f,height=18*f+line*laboratory_wrapped_lines(&a->workbench_fonts[2],"Protokoll öffnen",fmaxf(1,w-18*f));
     ps_ui_row_exact_dynamic(a->ui,10*f,1);nk_spacer(a->ui);ps_ui_row_exact_dynamic(a->ui,height,1);struct nk_rect r;nk_widget(&r,a->ui);a->laboratory_log_button=r;bool focus=false;
-    if(ps_ui_button_at_custom_focus(a->ui,r,"Protokoll öffnen",false,&focus)){a->show_log=true;dock_show(a,PS_DOCK_LOG);}
+    if(ps_ui_button_at_custom_focus(a->ui,r,"Protokoll öffnen",false,&focus))protocol_open_from(a,"Protokoll öffnen");
     bool hover=nk_input_is_mouse_hovering_rect(&a->ui->input,r);struct nk_command_buffer *canvas=nk_window_get_canvas(a->ui);nk_fill_rect(canvas,r,6*f,hover?UI_COLOR(selection_active):UI_COLOR(surface));
     const char *label="Protokoll öffnen";int at=0,length=(int)strlen(label);float y=r.y+9*f;
     while(at<length){int count=ps_ui_text_line(&a->workbench_fonts[2],label+at,length-at,fmaxf(1,r.w-18*f),false);if(count<=0)break;float width=a->workbench_fonts[2].width(a->workbench_fonts[2].userdata,a->workbench_fonts[2].height,label+at,count);

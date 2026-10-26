@@ -16,12 +16,15 @@ zeigt alle drei Bereiche ohne Projekt mit passenden deaktivierten Aktionen;
 kein Demoexperiment automatisch laden. Designfreigabe und native Abnahme trennen.
 
 Der [native Anschluss der gemeinsamen Protokoll-Datenquellen](PROTOCOL-SOURCES-NATIVE.md)
-ist inzwischen geprüft. Die sichtbare Navigator-Anordnung C ist inzwischen
-im lokalen, noch unveröffentlichten Arbeitsstand begonnen. Der
-[Teilnachweis](PROTOCOL-C-NATIVE.md) und der anschließende
-[Fokusnachlauf](PROTOCOL-FOCUS-NATIVE.md) halten Ergebnisse und offene Befunde
-getrennt fest. C ist weiterhin nicht abgenommen;
-insbesondere die bestehenden Daten-/Diagnoseabläufe erneut damit prüfen.
+ist inzwischen geprüft. Ein nativer Teilstand von Navigator C ist jetzt mit
+Quellen und Tests versioniert. Der aktuelle
+[Diagnose- und Integrationsnachweis](PROTOCOL-DIAGNOSTICS-NATIVE.md) prüft echte
+Compiler-/Laufmeldungen, explizite Quellsprünge und herausgelöste Bereiche auch
+ohne fremde lokale Änderungen. Die früheren
+[Teilprüfungen](PROTOCOL-C-NATIVE.md) und der
+[Fokusnachlauf](PROTOCOL-FOCUS-NATIVE.md) behalten ihren datierten Geltungsbereich.
+C ist weiterhin nicht vollständig abgenommen: den weichen Umbruch langer
+Originalzeilen und den direkten Maus-/Tastaturfokus als Nächstes schließen.
 
 Das [Inhaltsinventar](CONTENT-INVENTORY.md) bleibt mitzuprüfen: Kräfte, Texte,
 Objekttypen/Hierarchie, Parameter, Messkanäle, Modellmeldungen und variable

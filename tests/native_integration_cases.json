@@ -6982,6 +6982,33 @@
       ]
     },
     {
+      "name": "protocol_navigator",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_protocol_navigator.py",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}"
+          ],
+          "timeout": 560,
+          "files": [
+            "verification.json"
+          ]
+        }
+      ]
+    },
+    {
       "name": "protocol_sources",
       "app": true,
       "display": true,

@@ -1102,8 +1102,15 @@ def diagnostics(flow,directory):
     root.mkdir(parents=True)
     flow.run("--workspace-state-test",root,"diagnostic-build-helper",timeout=160,
              marker="COMPILER HELPER SELF-TEST: PASSED")
-    require((root/"compiler-helper-jump.bmp").is_file(),"Missing actual compiler diagnostic click")
-    require((root/"compiler-helper-output.bmp").is_file(),"Missing actual raw compiler output toggle")
+    require((root/"compiler-helper-jump.png").is_file(),"Missing actual compiler diagnostic source action")
+    output=flow.steps[-1]['stdout']
+    actions=[json.loads(line) for line in output.splitlines() if line.startswith('{"kind":"diagnostic_c_navigation"')]
+    require([row['action'] for row in actions]==['selected-without-jump','source-action-released'] and actions[0]['tab']==0 and actions[1]['tab']==8,
+            'Compiler navigation bypassed selection or the explicit source action')
+    originals=[json.loads(line) for line in output.splitlines() if line.startswith('{"kind":"diagnostic_c_original"')]
+    require([row['transcript'] for row in originals]==[False,True,False] and originals[0]==originals[2],
+            'Original/transcript/return sequence lost the original diagnostic')
+    require(originals[1]['bytes']>originals[0]['bytes'] and originals[0]['bytes']>0,'Compiler transcript is missing its actual complete output')
     require("/* repaired helper */" in read(root/"project/include/helper α.h"),"Helper repair was not saved")
     require(len(list((root/"project/runs").glob("*.psrun")))==1,"Failed build started a run or repaired build did not run")
     root=directory/"foreign"

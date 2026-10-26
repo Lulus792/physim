@@ -16,8 +16,8 @@ static bool valid(const ps_protocol_message *m) {
 }
 static bool allocation_size(const ps_protocol_message *m,size_t *bytes) {
     size_t total=sizeof(ps_protocol_entry);
-    const char *strings[]={optional(m->title),optional(m->context),optional(m->source),optional(m->operation),optional(m->argument)};
-    for(unsigned i=0;i<5;i++) {
+    const char *strings[]={optional(m->title),optional(m->context),optional(m->source),optional(m->operation),optional(m->argument),optional(m->project)};
+    for(unsigned i=0;i<6;i++) {
         size_t n=strlen(strings[i]);
         if(n>=PS_PROTOCOL_BYTE_BUDGET || total>PS_PROTOCOL_BYTE_BUDGET-n-1)return false;
         total+=n+1;
@@ -28,10 +28,10 @@ static bool allocation_size(const ps_protocol_message *m,size_t *bytes) {
 static ps_protocol_entry *copy_entry(const ps_protocol_message *m,size_t bytes,const void *extra,size_t extra_size) {
     ps_protocol_entry *entry=malloc(bytes);if(!entry)return NULL;
     memset(entry,0,sizeof *entry);entry->bytes=bytes;entry->record.message=*m;
-    const char *strings[]={optional(m->title),optional(m->context),optional(m->source),optional(m->operation),optional(m->argument)};
-    const char **dest[]={&entry->record.message.title,&entry->record.message.context,&entry->record.message.source,&entry->record.message.operation,&entry->record.message.argument};
+    const char *strings[]={optional(m->title),optional(m->context),optional(m->source),optional(m->operation),optional(m->argument),optional(m->project)};
+    const char **dest[]={&entry->record.message.title,&entry->record.message.context,&entry->record.message.source,&entry->record.message.operation,&entry->record.message.argument,&entry->record.message.project};
     char *cursor=entry->data;
-    for(unsigned i=0;i<5;i++){size_t n=strlen(strings[i])+1;memcpy(cursor,strings[i],n);*dest[i]=cursor;cursor+=n;}
+    for(unsigned i=0;i<6;i++){size_t n=strlen(strings[i])+1;memcpy(cursor,strings[i],n);*dest[i]=cursor;cursor+=n;}
     entry->record.message.raw=cursor;
     if(m->raw_size)memcpy(cursor,m->raw,m->raw_size);
     if(extra_size)memcpy(cursor+m->raw_size,extra,extra_size);

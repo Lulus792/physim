@@ -5,13 +5,13 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
-/* Log size includes the 42 px heading and 24 px editor status around its body. */
-const ps_preferences PS_PREFERENCES_DEFAULT = {1440, 940, 0, 218, 152, 12, 30, 95, 0, 0,
+/* Shared protocol C starts closed; the compact workbench summary stays visible. */
+const ps_preferences PS_PREFERENCES_DEFAULT = {1440, 940, 0, 218, 340, 12, 30, 31, 0, 0,
                                                PS_THEME_DARK, 255, PS_DOCK_DEFAULT_INITIALIZER, 16};
 bool ps_preferences_valid(const ps_preferences *p) {
     return p && p->width >= 1080 && p->width <= 8192 && p->height >= 740 && p->height <= 8192 &&
            p->maximized <= 1 && p->sidebar_width >= 140 && p->sidebar_width <= 480 &&
-           p->log_height >= 126 && p->log_height <= 366 && p->editor_size >= 12 &&
+           p->log_height >= 126 && p->log_height <= 500 && p->editor_size >= 12 &&
            p->editor_size <= 22 && p->editor_size % 2 == 0 &&
            (p->autosave_seconds == 10 || p->autosave_seconds == 30 || p->autosave_seconds == 60 ||
             p->autosave_seconds == 120) &&

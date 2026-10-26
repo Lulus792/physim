@@ -14,6 +14,8 @@ typedef enum {PS_GRAPHIC_SAVE_WAITING,PS_GRAPHIC_SAVE_WRITING,PS_GRAPHIC_SAVE_OK
  * a later callback frees its CPU owner. Started writes finish before destruction. */
 ps_graphic_save *ps_graphic_save_create(ps_graphic_bytes *bytes);
 void ps_graphic_save_show(ps_graphic_save *save,SDL_Window *parent,const char *path,bool svg);
+/* Same immutable byte owner and atomic writer, with a text-file chooser. */
+void ps_graphic_save_show_text(ps_graphic_save *save,SDL_Window *parent,const char *path);
 /* Shared OS-reply path for deterministic tests: once, only without show(). */
 void ps_graphic_save_resolve(ps_graphic_save *save,const char *path,bool error);
 ps_graphic_save_state ps_graphic_save_poll(ps_graphic_save *save);

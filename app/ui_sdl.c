@@ -101,7 +101,13 @@ static unsigned accessibility_range_widget(void *user,const char *window,const c
     bool granted=recorded && pending && !model->pending_focus && model->focused_id==pending && model->draft[before].id==pending;
     bool focused=recorded && model->draft[before].id==model->focused_id && model->draft[before].focusable && model->keyboard_focus;
     SDL_UnlockMutex(sdl->accessibility_mutex);
-    if(granted){sdl->accessibility_custom_keyboard=false;SDL_RaiseWindow(sdl->win);nk_edit_unfocus(&sdl->ctx);}
+    if(granted){
+        /* A range may live in a separate separator window. Ending only that
+         * window's edit leaves the previous search able to reclaim focus. */
+        sdl->accessibility_custom_keyboard=false;SDL_RaiseWindow(sdl->win);
+        for(struct nk_window *edit_window=sdl->ctx.begin;edit_window;edit_window=edit_window->next){edit_window->edit.active=nk_false;edit_window->edit.name=0;}
+        sdl->ctx.text_edit.active=nk_false;
+    }
     return (changed?1u:0u)|(granted?2u:0u)|(focused && !sdl->accessibility_custom_keyboard?4u:0u);
 }
 static void *ui_alloc(nk_handle user, void *old, nk_size size) {
@@ -538,7 +544,10 @@ bool nk_sdl_accessibility_event(struct nk_context *ctx,const SDL_Event *event) {
   else if(key==SDLK_LEFT || key==SDLK_RIGHT || key==SDLK_UP || key==SDLK_DOWN) {
    const ps_a11y_node *node=ps_a11y_find(m,m->focused_id);
    if(node && node->role==PS_A11Y_RADIO){handled=true;if(down)ps_a11y_focus_move(m,key==SDLK_LEFT || key==SDLK_UP?-1:1,true);}
-   if(node && ps_a11y_range_role(node->role)){handled=true;if(down)ps_a11y_adjust(m,node->id,key==SDLK_LEFT || key==SDLK_DOWN?-1:1);}
+   if(node && ps_a11y_range_role(node->role)){
+    if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"A11Y RANGE KEY: down=%d keyboard=%d focused=%d mod=%u label=%s value=%.3f\n",down,m->keyboard_focus,node->focused,(unsigned)event->key.mod,node->label,node->value);
+    handled=true;if(down)ps_a11y_adjust(m,node->id,key==SDLK_LEFT || key==SDLK_DOWN?-1:1);
+   }
   }
  }
  SDL_UnlockMutex(sdl->accessibility_mutex);return handled;
@@ -702,7 +711,7 @@ bool nk_sdl_render(struct nk_context *ctx) {
                         above=popup;
                     }
                     if(above==window)above_target=true;
-                    else if(above_target && !(node->role==PS_A11Y_SEPARATOR && (!strncmp(above->name_string,"dock-splitter-",14) || !strncmp(above->name_string,"laboratory-separator-",21)))) {
+                    else if(above_target && !(node->role==PS_A11Y_SEPARATOR && (!strncmp(above->name_string,"dock-splitter-",14) || !strncmp(above->name_string,"laboratory-separator-",21) || !strcmp(above->name_string,"protocol-separator")))) {
                         struct nk_rect cover=above->bounds;
                         if(cover.x<target[0]+target[2] && cover.x+cover.w>target[0] &&
                            cover.y<target[1]+target[3] && cover.y+cover.h>target[1]) {covered=true;break;}

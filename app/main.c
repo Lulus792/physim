@@ -17,6 +17,7 @@
 #include "compiler_diagnostic.h"
 #include "protocol_store.h"
 #include "protocol_text.h"
+#include "protocol_ui.h"
 #include "physim/detail/run_identity.h"
 #include "completion.h"
 #include "editor_search.h"
@@ -342,6 +343,7 @@ typedef struct {
     enum nk_collapse_states workspace_disclosure;
     char log[65536], status[256], find[128], replace[128];
     ps_protocol protocol;
+    ps_protocol_ui protocol_view;
     ps_protocol_text protocol_job_text;
     uint64_t protocol_job_id;
     int protocol_job_pid;
@@ -739,7 +741,7 @@ static bool laboratory_resize_key(app *a,const SDL_KeyboardEvent *key);
 static bool laboratory_visible(const app *a);
 static struct nk_rect laboratory_scene_prepare(app *a,struct nk_rect frame);
 static void laboratory_scene_chrome(app *a);
-static float laboratory_scene_minimum(app *a,float width);
+static float laboratory_scene_minimum(const app *a,float width);
 static void laboratory_context(app *a);
 static void workspace_context(app *a);
 static void dock_resize_abort(app *a);
@@ -796,6 +798,9 @@ static bool diagnostic_same_source(const app *a,const char *left,const char *rig
     return !strcmp(paths[0],paths[1]) || ps_text_document_same_file(paths[0],paths[1]);
 }
 static void log_job_bytes(app *a,const void *bytes,size_t size,bool final);
+static void protocol_tick(app *a);
+static void protocol_open_from(app *a,const char *opener);
+static void protocol_toggle(app *a,const char *opener);
 static void job_output(app *a,bool drain);
 static void protocol_job_cancel(app *a) {
     job_output(a,true);
@@ -803,7 +808,7 @@ static void protocol_job_cancel(app *a) {
     (void)ps_protocol_set_outcome(&a->protocol,a->protocol_job_id,PS_PROTOCOL_CANCELLED);
     const char *text="Prozess abgebrochen.";
     ps_protocol_message event={.level=PS_LOG_INFO,.origin=a->job_kind==3 || a->job_kind==4?PS_PROTOCOL_ANALYSIS:PS_PROTOCOL_BUILD,
-        .outcome=PS_PROTOCOL_CANCELLED,.title=text,.context=a->project,.raw=text,.raw_size=strlen(text)};
+        .outcome=PS_PROTOCOL_CANCELLED,.title=text,.context=a->project,.project=a->project,.raw=text,.raw_size=strlen(text)};
     (void)ps_protocol_push(&a->protocol,&event,NULL);
     a->protocol_job_id=0;a->protocol_job_pid=0;
 }
@@ -815,7 +820,7 @@ static void protocol_job_bytes(app *a,const char *bytes,size_t size) {
     bool analysis=a->job_kind==3 || a->job_kind==4;
     ps_protocol_message message={.level=PS_LOG_DEBUG,.origin=analysis?PS_PROTOCOL_ANALYSIS:PS_PROTOCOL_BUILD,
         .outcome=PS_PROTOCOL_RUNNING,.title=analysis?"Ausgabe der Auswertung":a->job_kind==5?"Parameterabfrage":"Build-Ausgabe",
-        .context=a->project,.raw=bytes,.raw_size=size};
+        .context=a->project,.project=a->project,.raw=bytes,.raw_size=size};
     (void)ps_protocol_push(&a->protocol,&message,&a->protocol_job_id);
 }
 static void structured_diagnostic(app *a,const ps_diagnostic *record,bool analysis) {
@@ -828,7 +833,7 @@ static void structured_diagnostic(app *a,const ps_diagnostic *record,bool analys
         memmove(a->diagnostics+i,a->diagnostics+i+1,(size_t)(a->diagnostic_count-i-1)*sizeof a->diagnostics[0]);a->diagnostic_count--;break;
     }
     ps_protocol_message message={.level=PS_LOG_ERROR,.origin=analysis?PS_PROTOCOL_ANALYSIS:PS_PROTOCOL_SIMULATION,
-        .title=record->message,.context=analysis?a->report:a->last_run,.source=record->source,
+        .title=record->message,.context=analysis?a->report:a->last_run,.project=a->project,.source=record->source,
         .operation=record->operation,.argument=record->argument,.has_code=true,.code=record->code,
         .line=record->line,.column=record->column,.raw=record->message,.raw_size=strlen(record->message)};
     uint64_t protocol_id=0;(void)ps_protocol_push(&a->protocol,&message,&protocol_id);
@@ -848,12 +853,12 @@ static void structured_diagnostic(app *a,const ps_diagnostic *record,bool analys
     ps_diagnostic display=*record;
     snprintf(display.source,sizeof display.source,"%s",diagnostic_basename(record->source));
     for(char *p=display.message;*p;p++)if(*p=='\n' || *p=='\r' || *p=='\t')*p=' ';
-    (void)ps_diagnostic_format(&display,d->text,sizeof d->text);a->show_log=true;
+    (void)ps_diagnostic_format(&display,d->text,sizeof d->text);protocol_open_from(a,NULL);
 }
 static void parse_diagnostic(app *a, const char *line,ps_protocol_origin origin) {
     ps_compiler_diagnostic record;
     if(!ps_compiler_diagnostic_parse(line,&record))return;
-    ps_protocol_message message={.level=record.level,.origin=origin,.title=record.message,.context=a->project,
+    ps_protocol_message message={.level=record.level,.origin=origin,.title=record.message,.context=a->project,.project=a->project,
         .transcript_id=origin==PS_PROTOCOL_SIMULATION?0:a->protocol_job_id,
         .source=record.source,.line=(uint32_t)record.line,.column=(uint32_t)record.column,.raw=line,.raw_size=strlen(line)};
     uint64_t protocol_id=0;(void)ps_protocol_push(&a->protocol,&message,&protocol_id);
@@ -871,7 +876,7 @@ static void parse_diagnostic(app *a, const char *line,ps_protocol_origin origin)
     diagnostic *d = &a->diagnostics[a->diagnostic_count++];
     memset(d,0,sizeof *d);
     d->protocol_id=protocol_id;
-    a->show_log = true;
+    protocol_open_from(a,NULL);
     d->line=record.line;d->column=record.column;
     d->analysis=analysis_source_file;d->foreign=!main_source && !analysis_source_file;d->code=PS_INVALID;
     snprintf(d->source,sizeof d->source,"%s",record.source);
@@ -964,7 +969,7 @@ static void job_output(app *a,bool drain) {
 static void status(app *a, const char *s) {
     snprintf(a->status, sizeof a->status, "%s", s);
     log_line(a, "%s", s);
-    ps_protocol_message message={.level=PS_LOG_INFO,.origin=PS_PROTOCOL_APP,.title=s,.context=a->loaded?a->project:"",.raw=s,.raw_size=strlen(s)};
+    ps_protocol_message message={.level=PS_LOG_INFO,.origin=PS_PROTOCOL_APP,.title=s,.context=a->loaded?a->project:"",.project=a->loaded?a->project:"",.raw=s,.raw_size=strlen(s)};
     (void)ps_protocol_push(&a->protocol,&message,NULL);
 }
 static void join(char *out, size_t n, const char *base, const char *leaf) {
@@ -2196,7 +2201,7 @@ static void pump(app *a) {
             char outcome[128];snprintf(outcome,sizeof outcome,"Prozess beendet (Exit %d)%s",code,a->job.timed_out?" nach Zeitlimit.":".");
             ps_protocol_message completion={.level=failed?PS_LOG_ERROR:PS_LOG_INFO,
                 .origin=a->job_kind==3 || a->job_kind==4?PS_PROTOCOL_ANALYSIS:PS_PROTOCOL_BUILD,.outcome=failed?PS_PROTOCOL_FAILED:PS_PROTOCOL_SUCCEEDED,
-                .title=outcome,.context=a->project,.raw=outcome,.raw_size=strlen(outcome)};
+                .title=outcome,.context=a->project,.project=a->project,.raw=outcome,.raw_size=strlen(outcome)};
             (void)ps_protocol_push(&a->protocol,&completion,NULL);
             a->protocol_job_id=0;a->protocol_job_pid=0;
             ps_process_close(&a->job);
@@ -2208,8 +2213,6 @@ static void pump(app *a) {
                 char configuration[4096];
                 join(configuration, sizeof configuration, a->build_directory, "build.config");
                 a->build_info_valid = ps_project_build_info_read(configuration, &a->build_info);
-                if (!a->diagnostic_count)
-                    a->show_log = false;
                 if (!build_inputs_current(a))
                     status(a, "Build fertig; Editor wurde waehrenddessen geaendert. Erneut bauen.");
                 else if(a->analysis_only) {
@@ -2346,7 +2349,7 @@ static void pump(app *a) {
                     a->live_event_count--;a->live_event_omitted++;
                 }
                 a->live_events[a->live_event_count++]=record;
-                ps_protocol_message event={.level=record.level,.origin=PS_PROTOCOL_SIMULATION,.title=record.message,.context=a->last_run,
+                ps_protocol_message event={.level=record.level,.origin=PS_PROTOCOL_SIMULATION,.title=record.message,.context=a->last_run,.project=a->project,
                     .has_time=true,.time_s=record.time_s,.raw=record.message,.raw_size=strlen(record.message)};
                 (void)ps_protocol_push(&a->protocol,&event,NULL);
                 if(record.level>=PS_LOG_WARNING){a->live_warning=record;a->live_warning_valid=true;}
@@ -3637,6 +3640,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "batch_missing_tests.inc"
 #include "series_mask_tests.inc"
 #include "logging_tests.inc"
+#include "protocol_tests.inc"
 #include "frame_tests.inc"
 #include "contact_world_tests.inc"
 #include "material_tutorial_tests.inc"
@@ -3976,7 +3980,7 @@ int main(int argc, char **argv) {
     a->png_scale = 2;
     a->ui = nk_sdl_init(window, graphics);
     if (!a->ui) {
-        ps_protocol_clear(&a->protocol);free(a);
+        protocol_shutdown(a);ps_protocol_clear(&a->protocol);free(a);
         ps_graphics_destroy(graphics);
         SDL_DestroyWindow(window);
         SDL_Quit();
@@ -4030,7 +4034,7 @@ int main(int argc, char **argv) {
     if (!ui_fonts_ok || !code_fonts_ok || !title_font || !nk_sdl_font_stash_end(a->ui)) {
         fprintf(stderr, "Font initialization: %s\n", SDL_GetError());
         nk_sdl_shutdown(a->ui);
-        ps_protocol_clear(&a->protocol);free(a);
+        protocol_shutdown(a);ps_protocol_clear(&a->protocol);free(a);
         ps_graphics_destroy(graphics);
         SDL_DestroyWindow(window);
         SDL_Quit();
@@ -4278,7 +4282,7 @@ int main(int argc, char **argv) {
             }
             if ((workflow_test || migration_test || plot_test || toolbar_test || settings_test || docs_test ||
                  (workspace_state_test && strncmp(argv[3],"native-dialog",13) &&
-                  strcmp(argv[3],"documents-unfiltered"))) && test_scripted_external_input(&e) &&
+                  strcmp(argv[3],"documents-unfiltered") && strcmp(argv[3],"protocol-ui-interactive"))) && test_scripted_external_input(&e) &&
                 !(workspace_state_test && !strcmp(argv[3],"timeline-design") && timeline_design.sink &&
                   e.type==SDL_EVENT_WINDOW_FOCUS_LOST && e.window.windowID==SDL_GetWindowID(a->window))) continue;
             if (self_test && e.type == SDL_EVENT_TEXT_INPUT) {
@@ -4296,7 +4300,7 @@ int main(int argc, char **argv) {
             }
             if(event_window==a->window && e.type==SDL_EVENT_TEXT_INPUT)a->completion_typed=true;
             if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && e.key.key==SDLK_TAB)a->outline_keyboard=false;
-            if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && (analysis_plot_resize_key(a,&e.key) || laboratory_resize_key(a,&e.key) || dock_resize_key(a,&e.key)))continue;
+            if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && (protocol_navigation_key(a,&e.key) || protocol_resize_key(a,&e.key) || analysis_plot_resize_key(a,&e.key) || laboratory_resize_key(a,&e.key) || dock_resize_key(a,&e.key)))continue;
             if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && workbench_context_key(a,a->ui,&e.key,false))continue;
             if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && editor_search_key(a,&e.key))continue;
             if(event_window==a->window && (e.type==SDL_EVENT_WINDOW_FOCUS_LOST || e.type==SDL_EVENT_WINDOW_RESIZED)) {
@@ -4304,6 +4308,7 @@ int main(int argc, char **argv) {
                 if(a->laboratory_resize)laboratory_resize_abort(a);
                 if(a->analysis_plot_resizing)analysis_plot_resize_abort(a);
                 if(a->dock_resize || a->dock_float_resize)dock_resize_abort(a);
+                if(a->protocol_view.resize)protocol_resize_abort(a);
             }
             if(event_window==a->window && nk_sdl_accessibility_event(a->ui,&e))continue;
             if(event_window==a->doc_window && a->doc_ui && documentation_actions_event(a,&e))continue;
@@ -4390,8 +4395,7 @@ int main(int argc, char **argv) {
                             editor_search_open(a);
                     }
                     if (e.key.key == SDLK_L) {
-                        a->show_log = !a->show_log;
-                        if(a->show_log) dock_show(a,PS_DOCK_LOG);
+                        protocol_toggle(a,NULL);
                     }
                     if (e.key.key == SDLK_COMMA)
                         open_settings(a);
@@ -4429,6 +4433,7 @@ int main(int argc, char **argv) {
             profile_phase = now;
         }
         pump(a);
+        protocol_tick(a);
         analysis_comparison_sync(a);
         model_edit_tick(a);
         autosave_tick(a, ps_clock());
@@ -4446,11 +4451,18 @@ int main(int argc, char **argv) {
                 printf("UNICODE EDITOR PREVIEW: %s\n", exit_code ? "FAILED" : "PASSED");
                 a->quitting = true;
             }
+        } else if (workspace_state_test && !strcmp(argv[3],"protocol-ui-interactive")) {
+            /* Isolated manual QA: normal input, no scripted clicks or captures. */
+            protocol_ui_interactive_frame(a);
+            if(ps_clock()-test_started>900) {
+                fprintf(stderr,"Manual protocol QA timeout after 900 seconds\n");
+                exit_code=1;a->quitting=true;
+            }
         } else if (workspace_state_test) {
             /* The deliberate 80 ms frame delay also runs on hosted software GL.
              * Keep its bounded keyboard assertions; allow their extra wall time. */
             if (ps_clock() - test_started >
-                ((!strcmp(argv[3],"transport-design") || !strcmp(argv[3],"timeline-design") || !strcmp(argv[3],"camera-design") || !strcmp(argv[3],"scene-frame-design") || !strcmp(argv[3],"measurement-design") || !strcmp(argv[3],"curve-design") || !strncmp(argv[3],"analysis-editor-",16) || !strcmp(argv[3],"inspector-channel") || !strcmp(argv[3],"run-fields-design") || !strncmp(argv[3],"inspector-tail-",15))?180:!strncmp(argv[3],"file-tabs-design",16)?60:!strncmp(argv[3],"component-",10)?60:!strncmp(argv[3],"comparison-",11)?120:!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:!strncmp(argv[3],"workbench-",10)?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
+                ((!strcmp(argv[3],"transport-design") || !strcmp(argv[3],"timeline-design") || !strcmp(argv[3],"camera-design") || !strcmp(argv[3],"scene-frame-design") || !strcmp(argv[3],"measurement-design") || !strcmp(argv[3],"curve-design") || !strncmp(argv[3],"analysis-editor-",16) || !strcmp(argv[3],"inspector-channel") || !strcmp(argv[3],"run-fields-design") || !strncmp(argv[3],"inspector-tail-",15))?180:!strncmp(argv[3],"file-tabs-design",16)?60:!strncmp(argv[3],"component-",10)?60:!strncmp(argv[3],"comparison-",11)?120:!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:(!strncmp(argv[3],"workbench-",10) || !strncmp(argv[3],"protocol-ui-",12))?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?900:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
                   !strncmp(argv[3], "isolation-", 10) || !strncmp(argv[3], "breakpoints-", 12) || !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"object-design",13) || !strcmp(argv[3],"tree-design") || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || (!strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"pendulum-medium-",16)) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strncmp(argv[3],"logging-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15))) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
@@ -5633,7 +5645,7 @@ int main(int argc, char **argv) {
     if (a->preferences_writable && a->preferences_path[0]) {
         preferences_capture(a);
         ps_preferences persisted=a->preferences;
-        if(a->laboratory_active || a->analysis_layout_active){const ps_layout_state *regular=a->analysis_layout_active?&a->analysis_previous:&a->laboratory_previous;persisted.dock=regular->dock;persisted.sidebar_width=regular->sidebar_width;persisted.inspector_width=regular->inspector_width;persisted.log_height=regular->log_height;persisted.view_flags=(persisted.view_flags&~PS_VIEW_LOG)|(regular->show_log?PS_VIEW_LOG:0);}
+        if(a->laboratory_active || a->analysis_layout_active){const ps_layout_state *regular=a->analysis_layout_active?&a->analysis_previous:&a->laboratory_previous;persisted.dock=regular->dock;persisted.sidebar_width=regular->sidebar_width;persisted.inspector_width=regular->inspector_width;}
         ps_result saved = ps_preferences_write(a->preferences_path, &persisted);
         if (saved != PS_OK) {
             fprintf(stderr, "Einstellungen nicht gespeichert: %s\n", ps_result_string(saved));
@@ -5727,7 +5739,7 @@ int main(int argc, char **argv) {
     for(unsigned i=0;i<2;i++)if(a->laboratory_cursors[i])SDL_DestroyCursor(a->laboratory_cursors[i]);
     nk_sdl_shutdown(a->ui);
     SDL_SetWindowHitTest(window, NULL, NULL);
-    ps_protocol_clear(&a->protocol);free(a);
+    protocol_shutdown(a);ps_protocol_clear(&a->protocol);free(a);
     ps_graphics_destroy(graphics);
     SDL_DestroyWindow(window);
     SDL_Quit();

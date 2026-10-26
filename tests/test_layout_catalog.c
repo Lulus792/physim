@@ -20,7 +20,11 @@ int main(int argc,char **argv) {
     ps_layout_catalog limits={0},limits_out={0};
     CHECK(ps_layout_catalog_put(&limits,"Minimum",&boundary)==PS_OK);
     boundary.sidebar_width=480;boundary.inspector_width=480;boundary.log_height=366;
+    CHECK(ps_layout_catalog_put(&limits,"Legacy maximum",&boundary)==PS_OK);
+    boundary.log_height=500;
     CHECK(ps_layout_catalog_put(&limits,"Maximum",&boundary)==PS_OK);
+    ps_layout_catalog before_invalid_height=limits;boundary.log_height=501;
+    CHECK(ps_layout_catalog_put(&limits,"Too tall",&boundary)==PS_INVALID && !memcmp(&limits,&before_invalid_height,sizeof limits));
     CHECK(ps_layout_catalog_write(bad,&limits)==PS_OK && ps_layout_catalog_read(bad,&limits_out)==PS_OK && !memcmp(&limits,&limits_out,sizeof limits));
     CHECK(ps_layout_catalog_read(path,&out)==PS_EOF && !memcmp(&c,&out,sizeof c));
     CHECK(ps_layout_catalog_write(path,&c)==PS_OK && ps_layout_catalog_read(path,&out)==PS_OK && !memcmp(&c,&out,sizeof c));

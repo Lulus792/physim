@@ -8,6 +8,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
     document_drafts_start(a, path);
     if (a->workspace_open || a->loaded || a->project_input[0])
         return false;
+    if(!strncmp(mode,"protocol-ui-",12))return protocol_ui_test_start(a,root,mode);
     if(!strcmp(mode,"file-tabs"))return file_tabs_test_start(a,root);
     if(!strncmp(mode,"file-tabs-design",16))return tab_design_start(a,root);
     if(!strcmp(mode,"transport-design"))return transport_design_start(a,root);
@@ -205,6 +206,7 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
     if(!strncmp(mode,"shell-theme-",12)){shell_theme_test_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"units-",6)){channel_units_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"logging-",8)){logging_test_frame(a,mode,stage,code,capture);return;}
+    if(!strncmp(mode,"protocol-ui-",12)){protocol_ui_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"diagnostic-",11)){diagnostic_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"frames-",7)){frame_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"saved-run-tutorial-",19)){saved_run_tutorial_frame(a,a->manager_parent,mode,stage,code,capture);return;}

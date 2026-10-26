@@ -14,7 +14,7 @@ typedef struct {
     ps_protocol_origin origin;
     ps_protocol_outcome outcome;
     uint64_t transcript_id; /* Optional complete process output; may be evicted. */
-    const char *title, *context, *source;
+    const char *title, *context, *source, *project;
     const char *operation, *argument;
     bool has_code;
     ps_result code;

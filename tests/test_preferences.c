@@ -70,19 +70,21 @@ int main(int argc, char **argv) {
     remove(path);
     remove(bad);
     ps_preferences p = PS_PREFERENCES_DEFAULT, out = p;
-    CHECK(p.sidebar_width==218 && p.inspector_width==255 && p.log_height==152 && (p.view_flags&PS_VIEW_LOG));
+    CHECK(p.sidebar_width==218 && p.inspector_width==255 && p.log_height==340 && !(p.view_flags&PS_VIEW_LOG));
     CHECK(ps_preferences_valid(&p) && ps_preferences_read(path, &out) == PS_EOF);
     ps_preferences boundary=p;
     boundary.sidebar_width=140;boundary.inspector_width=180;boundary.log_height=126;
     CHECK(ps_preferences_write(path,&boundary)==PS_OK && ps_preferences_read(path,&out)==PS_OK && !memcmp(&boundary,&out,sizeof out));
     boundary.sidebar_width=480;boundary.inspector_width=480;boundary.log_height=366;
     CHECK(ps_preferences_write(path,&boundary)==PS_OK && ps_preferences_read(path,&out)==PS_OK && !memcmp(&boundary,&out,sizeof out));
+    boundary.log_height=500;
+    CHECK(ps_preferences_write(path,&boundary)==PS_OK && ps_preferences_read(path,&out)==PS_OK && !memcmp(&boundary,&out,sizeof out));
     boundary.sidebar_width=248;boundary.inspector_width=280;boundary.log_height=178;boundary.view_flags=31;
     CHECK(ps_preferences_write(path,&boundary)==PS_OK && ps_preferences_read(path,&out)==PS_OK && !memcmp(&boundary,&out,sizeof out));
     boundary.sidebar_width=139;CHECK(!ps_preferences_valid(&boundary));
     boundary=p;boundary.inspector_width=179;CHECK(!ps_preferences_valid(&boundary));
     boundary=p;boundary.log_height=125;CHECK(!ps_preferences_valid(&boundary));
-    boundary=p;boundary.log_height=367;CHECK(!ps_preferences_valid(&boundary));
+    boundary=p;boundary.log_height=501;CHECK(!ps_preferences_valid(&boundary));
     CHECK(ps_preferences_write(path, &p) == PS_OK);
     for (unsigned theme = 0; theme < PS_THEME_COUNT; theme++) {
         p.theme = theme;

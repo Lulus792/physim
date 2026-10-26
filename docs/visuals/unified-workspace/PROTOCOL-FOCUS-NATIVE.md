@@ -1,5 +1,9 @@
 # Protokoll C – Fokusnachlauf vom 26. Oktober 2026
 
+Prüfstand dieses Berichts: Phasen 16–19. Den späteren Anschluss echter Diagnosen
+und die isolierte Prüfung der versionierten Umsetzung dokumentiert der
+[Diagnose- und Integrationsbericht](PROTOCOL-DIAGNOSTICS-NATIVE.md).
+
 Die verschärfte native Tastaturprüfung verlangt jetzt eine Fokusübergabe aus
 einem tatsächlich aktivierten Suchfeld zur Höhenleiste. Der alte Eingabeweg
 verliert diesen Fokus; die Korrektur im SDL-Adapter besteht die Windows-Prüfung.

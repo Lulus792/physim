@@ -31,7 +31,7 @@ static void panel_pull_input(app *a,float width,float height) {
         for(unsigned i=0;i<PS_DOCK_NODES;i++)if(a->dock_splitters[i].w>0 && nk_input_is_mouse_hovering_rect(in,a->dock_splitters[i]))return;
         for(unsigned i=0;i<3;i++)if(a->laboratory_splitters[i].w>0 && nk_input_is_mouse_hovering_rect(in,a->laboratory_splitters[i]))return;
         for(unsigned i=0;i<PS_PANEL_COUNT;i++) {
-            if(panel_is_detached(a,i) || (i<PS_DOCK_PANELS && (a->preferences.dock.hidden&(1u<<i))) || (i>=PS_PANEL_MEASURE && !laboratory_visible(a)))continue;
+            if(panel_is_detached(a,i) || (i<PS_DOCK_PANELS && (a->preferences.dock.hidden&(1u<<i)) && !(i==PS_DOCK_LOG && protocol_visible(a))) || (i>=PS_PANEL_MEASURE && !laboratory_visible(a)))continue;
             struct nk_rect r=a->panels[i].action;
             if(r.w>0 && r.h>0 && nk_input_is_mouse_hovering_rect(in,r)) {
                 a->panel_pull=i+1;a->panel_pull_origin=in->mouse.pos;
@@ -66,7 +66,7 @@ static void panel_window_return(app *a,unsigned panel) {
         if(body){p->scroll_x=body->scrollbar.x;p->scroll_y=body->scrollbar.y;}
     }
     p->restore_scroll=true;p->detached=false;
-    if(panel<PS_DOCK_PANELS) {
+    if(panel<PS_DOCK_PANELS && !(panel==PS_DOCK_LOG && a->show_log)) {
         a->preferences.dock.hidden&=~(1u<<panel);
     }
     SDL_StopTextInput(p->window);SDL_HideWindow(p->window);nk_sdl_accessibility_suspend(p->ui);
@@ -80,11 +80,14 @@ static bool panel_window_open(app *a,unsigned panel) {
     if(p->detached){SDL_ShowWindow(p->window);SDL_RaiseWindow(p->window);return true;}
     p->tab=a->tab;
     p->restore_editor_focus=panel==PS_DOCK_WORKSPACE && editor_search_target(a) && editor_search_target(a)->active;
+    if(panel<PS_DOCK_PANELS)p->home=laboratory_visible(a) && panel==PS_DOCK_WORKSPACE?a->laboratory_scene_frame:a->dock_panels[panel];
+    int width=(int)lroundf(p->home.w),height=(int)lroundf(p->home.h);
+    if(width<1 || height<1){SDL_SetError("Der Bereich hat noch keine sichtbaren Inhaltsmaße.");return false;}
     if(!p->window) {
         if(!ps_graphics_make_current(a->graphics))return false;
         if(!SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT,1))return false;
         char title[128];snprintf(title,sizeof title,"Physim | %s",panel_name(panel));
-        p->window=SDL_CreateWindow(title,panel==PS_DOCK_INSPECTOR?460:880,panel==PS_PANEL_TIMELINE?240:640,
+        p->window=SDL_CreateWindow(title,width,height,
             SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE|SDL_WINDOW_HIGH_PIXEL_DENSITY|SDL_WINDOW_HIDDEN);
         if(p->window)p->graphics=ps_graphics_create(p->window);
         SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT,0);
@@ -92,9 +95,14 @@ static bool panel_window_open(app *a,unsigned panel) {
         SDL_GL_SetSwapInterval(0);
         p->ui=nk_sdl_init(p->window,p->graphics);if(!p->ui)goto fail;
         nk_sdl_borrow_fonts(p->ui,a->ui);
-        SDL_SetWindowMinimumSize(p->window,panel==PS_DOCK_INSPECTOR || panel==PS_DOCK_SIDEBAR?280:480,panel==PS_PANEL_TIMELINE?160:300);
         int x=0,y=0;SDL_GetWindowPosition(a->window,&x,&y);SDL_SetWindowPosition(p->window,x+64,y+64);
     }
+    /* Each extraction starts with the source's client size, including reuse of
+     * an existing SDL window. Old minimums must not force a different layout. */
+    SDL_SetWindowMinimumSize(p->window,(int)fminf((float)width,panel==PS_DOCK_INSPECTOR || panel==PS_DOCK_SIDEBAR?280.f:480.f),
+        (int)fminf((float)height,panel==PS_PANEL_TIMELINE?160.f:300.f));
+    if(SDL_GetWindowFlags(p->window)&SDL_WINDOW_MAXIMIZED)SDL_RestoreWindow(p->window);
+    SDL_SetWindowSize(p->window,width,height);
     if(panel<PS_DOCK_PANELS) {
         struct nk_window *body=nk_window_find(a->ui,dock_windows[panel]);
         if(body){p->scroll_x=body->scrollbar.x;p->scroll_y=body->scrollbar.y;}
@@ -154,6 +162,9 @@ static bool panel_window_event(app *a,SDL_Event *event,SDL_Window *window) {
         /* Component keys include Shift=40 px and Enter=reset. The generic
          * range handler would otherwise consume them as a one-step adjustment. */
         if(i==PS_DOCK_INSPECTOR && event->type==SDL_EVENT_KEY_DOWN && workbench_context_key(a,p->ui,&event->key,true))return true;
+        if(i==PS_DOCK_LOG && event->type==SDL_EVENT_KEY_DOWN) {
+            struct nk_context *ui=a->ui;a->ui=p->ui;bool handled=protocol_navigation_key(a,&event->key);a->ui=ui;if(handled)return true;
+        }
         if(nk_sdl_accessibility_event(p->ui,event))return true;
         if(i==PS_DOCK_WORKSPACE) {
             int tab=a->tab;struct nk_context *ui=a->ui;a->tab=p->tab;a->ui=p->ui;
@@ -185,6 +196,7 @@ static bool panel_windows_render(app *a) {
     SDL_Window *main_window=a->window;ps_graphics *main_graphics=a->graphics;struct nk_context *main_ui=a->ui;
     int main_tab=a->tab;bool ok=true;
     struct nk_rect saved[PS_DOCK_PANELS];bool visible[PS_DOCK_PANELS];
+    float header_heights[PS_DOCK_PANELS];for(unsigned i=0;i<PS_DOCK_PANELS;i++)header_heights[i]=dock_panel_header_height(a,i);
     struct nk_rect splitters[3];memcpy(splitters,a->laboratory_splitters,sizeof splitters);
     struct nk_rect measure_bounds=a->laboratory_measure_bounds;float measure_width=a->laboratory_measure_width;
     struct nk_rect dock_splitters[PS_DOCK_NODES];memcpy(dock_splitters,a->dock_splitters,sizeof dock_splitters);
@@ -212,6 +224,18 @@ static bool panel_windows_render(app *a) {
         workspace_tip_frame_begin(a);
         if(i<PS_DOCK_PANELS) {
             a->dock_panels[i]=nk_rect(0,0,(float)w,(float)h);a->dock_visible[i]=true;
+            bool laboratory_heading=laboratory_visible(a) && (i==PS_DOCK_SIDEBAR || i==PS_DOCK_INSPECTOR);
+            nk_window_show(p->ui,"panel-existing-heading",laboratory_heading?NK_SHOWN:NK_HIDDEN);
+            if(laboratory_heading) {
+                float heading=header_heights[i];
+                nk_style_push_vec2(p->ui,&p->ui->style.window.padding,nk_vec2(0,0));
+                nk_style_push_float(p->ui,&p->ui->style.window.rounding,0);
+                nk_style_push_style_item(p->ui,&p->ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(header)));
+                if(nk_begin(p->ui,"panel-existing-heading",nk_rect(0,0,(float)w,heading),NK_WINDOW_BACKGROUND|NK_WINDOW_NO_SCROLLBAR))
+                    laboratory_panel_heading(a,i,nk_rect(0,0,(float)w,heading));
+                nk_end(p->ui);nk_style_pop_style_item(p->ui);nk_style_pop_float(p->ui);nk_style_pop_vec2(p->ui);
+                a->dock_panels[i].y+=heading;a->dock_panels[i].h=fmaxf(1,a->dock_panels[i].h-heading);
+            }
             if(i==PS_DOCK_WORKSPACE && workbench_visible(a)) {
                 file_tabs_prepare(a);
                 float heading=file_tabs_height(a);

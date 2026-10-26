@@ -6,7 +6,7 @@ static ps_layout_state laboratory_capture(const app *a) {
 }
 static void laboratory_apply(app *a,const ps_layout_state *s) {
     a->preferences.dock=s->dock;a->preferences.sidebar_width=s->sidebar_width;
-    a->preferences.inspector_width=s->inspector_width;a->preferences.log_height=s->log_height;a->show_log=s->show_log;
+    a->preferences.inspector_width=s->inspector_width;
     a->dock_resize=a->dock_float_resize=a->dock_drag=0;a->dock_dragging=false;
 }
 static void laboratory_context(app *a) {
@@ -49,19 +49,19 @@ static float laboratory_curve_width(const app *a) {
     return fmaxf(1,width-34*a->preferences.ui_size/16.f);
 }
 static float laboratory_curve_gap(const app *a) {return (a->laboratory_scene_host_width<=850?14:26)*a->preferences.ui_size/16.f;}
-enum { LABORATORY_SCENE_MIN=180, LABORATORY_MEASURE_MIN=130, LABORATORY_LOG_MIN=68 };
 static struct nk_rect laboratory_handle_bounds(const app *a,unsigned i) {
     return i==2?plot_intersection(a->laboratory_splitters[i],a->laboratory_measure_bounds):a->laboratory_splitters[i];
 }
 static void laboratory_dimension_limits(app *a,unsigned i,float *minimum,float *maximum,float *standard) {
     int w,h;SDL_GetWindowSize(a->window,&w,&h);
-    float log_minimum=(a->preferences.dock.hidden&(1u<<PS_DOCK_LOG))?0:LABORATORY_LOG_MIN;
+    h-=(int)protocol_reserved(a,(float)h);
+    float log_minimum=protocol_visible(a) || (a->preferences.dock.hidden&(1u<<PS_DOCK_LOG))?0:LABORATORY_LOG_MIN;
     float scene_minimum=laboratory_scene_minimum(a,a->dock_panels[PS_DOCK_WORKSPACE].w);
-    *minimum=i==2?.25f:i==0?LABORATORY_MEASURE_MIN:95;
+    *minimum=i==2?.25f:i==0?LABORATORY_MEASURE_MIN:LABORATORY_TIMELINE_MIN;
     /* Reserve both real workspace parts even when compiler diagnostics keep
      * the optional log open. Clamp presentation, never the stored wishes. */
     *maximum=i==2?.75f:i==0?fmaxf(LABORATORY_MEASURE_MIN,a->dock_panels[PS_DOCK_WORKSPACE].h-scene_minimum-1):
-        fmaxf(95,fminf(280,(float)h-232-28-scene_minimum-LABORATORY_MEASURE_MIN-1-log_minimum));
+        fmaxf(LABORATORY_TIMELINE_MIN,fminf(280,(float)h-LABORATORY_CONTENT_TOP-WORKSPACE_STATUS_HEIGHT-scene_minimum-LABORATORY_MEASURE_MIN-1-log_minimum));
     if(i==2){float width=laboratory_curve_width(a);*minimum=fminf(.5f,fmaxf(.25f,180/fmaxf(1,width-laboratory_curve_gap(a))));*maximum=1-*minimum;}
     *standard=i==2?.5f:i==0?(a->laboratory_curves?330:150):120;
 }
