@@ -160,7 +160,10 @@ static bool protocol_original(app *a,const ps_protocol_record *selected) {
     if(p->original && p->original_id==record->id && p->original_size==record->message.raw_size)return true;
     size_t length=0;char *text=protocol_text_copy(record->message.raw,record->message.raw_size,&length);
     if(!text){snprintf(p->feedback,sizeof p->feedback,"Originaltext konnte nicht dargestellt werden: nicht genügend Speicher.");return false;}
-    free(p->original);p->original=text;p->original_id=record->id;p->original_size=record->message.raw_size;p->original_length=length;p->page=0;return true;
+    free(p->original);p->original=text;p->original_id=record->id;p->original_size=record->message.raw_size;p->original_length=length;p->page=0;
+    ps_text_wrap_destroy(p->original_layout);p->original_layout=NULL;
+    p->original_edit.cursor=p->original_edit.select_start=p->original_edit.select_end=0;
+    p->original_edit.scrollbar=nk_vec2(0,0);p->original_edit.visual=NULL;return true;
 }
 typedef struct {char *data;size_t size,capacity;bool failed;} protocol_buffer;
 static void protocol_buffer_add(protocol_buffer *b,const char *text,size_t size) {
@@ -204,6 +207,11 @@ static void protocol_tick(app *a) {
 }
 static void protocol_shutdown(app *a) {
     ps_graphic_save_destroy(a->protocol_view.save);free(a->protocol_view.original);
+    ps_text_wrap_destroy(a->protocol_view.original_layout);
+}
+static float protocol_original_measure(void *user,const char *text,size_t bytes) {
+    const struct nk_user_font *font=user;
+    return font->width(font->userdata,font->height,text,(int)bytes);
 }
 static bool protocol_source_path(const ps_protocol_message *m,char path[4096]) {
     if(!m->source[0] || !m->line)return false;
@@ -262,7 +270,27 @@ static void protocol_detail(app *a,const ps_protocol_record *record,float scale,
         if(n<remaining)while(n && ((unsigned char)p->original[p->page+n]&0xc0)==0x80)n--;
         memcpy(p->original_page,p->original+p->page,n);p->original_page[n]=0;
         nk_layout_row_dynamic(ui,fmaxf(110*scale,fminf(200*scale,body*.5f)),1);nk_style_push_font(ui,&a->protocol_view.fonts[6]);
-        nk_sdl_edit_named(ui,"Originalmeldung",NK_EDIT_BOX|NK_EDIT_READ_ONLY|NK_EDIT_NO_HORIZONTAL_SCROLL,p->original_page,sizeof p->original_page,nk_filter_default);nk_style_pop_font(ui);
+        p->original_bounds=nk_widget_bounds(ui);
+        const struct nk_user_font *font=ui->style.font;
+        float width=fmaxf(1,p->original_bounds.w-2*ui->style.edit.padding.x-2*ui->style.edit.border-ui->style.edit.scrollbar_size.x-ui->style.edit.cursor_size);
+        float line_height=11.2f*1.85f*scale; /* Approved .8rem at a 14px root. */
+        bool same=p->original_layout && p->original_layout->bytes==n && !memcmp(p->original_layout->source,p->original_page,n);
+        const struct nk_user_font *cached=&p->original_layout_font;
+        bool metrics=same && p->original_layout->width==width && p->original_layout->visual.row_height==line_height &&
+            cached->height==font->height && cached->width==font->width && cached->userdata.ptr==font->userdata.ptr;
+        if(!metrics) {
+            ps_text_wrap *layout=NULL;
+            if(ps_text_wrap_build(p->original_page,n,width,line_height,protocol_original_measure,(void*)font,&layout)) {
+                ps_text_wrap_destroy(p->original_layout);p->original_layout=layout;p->original_layout_font=*font;
+                if(!same){p->original_edit.cursor=p->original_edit.select_start=p->original_edit.select_end=0;p->original_edit.scrollbar=nk_vec2(0,0);}
+            } else {
+                ps_text_wrap_destroy(p->original_layout);p->original_layout=NULL;p->original_edit.visual=NULL;
+            }
+        }
+        if(p->original_layout)nk_sdl_edit_named_visual(ui,"Originalmeldung",p->original_page,sizeof p->original_page,
+                                                        &p->original_edit,&p->original_layout->visual);
+        else nk_label_wrap(ui,"Originaltext kann nicht dargestellt werden. Meldung kopieren oder TXT speichern.");
+        nk_style_pop_font(ui);
         if(p->original_length>n) {
             nk_layout_row_dynamic(ui,28*scale,2);nk_begin_disabled(ui,!p->page);
             if(nk_button_label(ui,"Vorheriger Textabschnitt")){p->page=p->page>12288?p->page-12288:0;while(p->page && ((unsigned char)p->original[p->page]&0xc0)==0x80)p->page--;}
@@ -331,6 +359,10 @@ static void protocol_panel(app *a) {
     nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(window)));nk_style_push_font(ui,&a->protocol_view.fonts[0]);
     struct nk_window *previous=ui->active;nk_window_show(ui,"log",NK_SHOWN);
     if(nk_begin(ui,"log",bounds,NK_WINDOW_BACKGROUND|(content<=bounds.h+1?NK_WINDOW_NO_SCROLLBAR:0))) {
+        /* A stacked layout can have an outer offset larger than this entire
+         * panel. Once all three columns fit, no outer scrollbar can recover
+         * that offset. Inner text/list scroll positions remain independent. */
+        if(content<=bounds.h+1)nk_window_set_scroll(ui,0,0);
         dock_input(a,PS_DOCK_LOG,bounds,previous,true);
         a->panels[PS_DOCK_LOG].restore_scroll=false; /* Each responsive window retains its own outer scroll. */
         if(!a->panel_render && panel_is_detached(a,PS_DOCK_LOG))goto end;

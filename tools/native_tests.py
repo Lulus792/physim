@@ -53,7 +53,12 @@ def catalog():
     cases.append(Case("analysis_comparison",("tests/test_analysis_comparison.c","app/analysis_comparison.c","app/graphic_snapshot.c"),app=True,arguments=("{work}",)))
     cases.append(Case("nuklear_command_legacy",("tests/test_nuklear_command_legacy.c",),libraries=()))
     linebreak=tuple(f"third_party/libunibreak-8.0/{name}.c" for name in "linebreak linebreakdata linebreakdef eastasianwidthdef unibreakbase unibreakdef".split())
-    cases.append(Case("code_preview",("tests/test_code_preview.c","app/code_preview.c",*linebreak),libraries=()))
+    grapheme=tuple(f"third_party/libunibreak-8.0/{name}.c" for name in "graphemebreak emojidef".split())
+    cases.append(Case("code_preview",("tests/test_code_preview.c","app/code_preview.c",*linebreak,*grapheme),libraries=()))
+    cases.append(Case("code_wrap",("tests/test_code_wrap.c","app/code_preview.c",*linebreak,*grapheme),libraries=()))
+    cases.append(Case("text_wrap",("tests/test_text_wrap.c","app/text_wrap.c","app/code_preview.c",*linebreak,*grapheme),libraries=()))
+    cases.append(Case("editor_wrapped",("tests/test_editor_wrapped.c","app/text_wrap.c","app/code_preview.c","app/ui_backend.c",*linebreak,*grapheme),app=True,libraries=()))
+    cases.append(Case("code_grapheme",("tests/test_code_grapheme.c",*grapheme,"third_party/libunibreak-8.0/unibreakbase.c","third_party/libunibreak-8.0/unibreakdef.c"),libraries=("zlib",),defines=("Z_PREFIX",),arguments=("{source}/third_party/libunibreak-8.0/GraphemeBreakTest.txt.gz",)))
     cases.append(Case("code_linebreak",("tests/test_code_linebreak.c",*linebreak),libraries=("zlib",),defines=("Z_PREFIX",),arguments=("{source}/third_party/libunibreak-8.0/LineBreakTest.txt.gz",)))
     for name,page in (("array","array"),("string_view","string-view"),("hashmap","hashmap"),("report","reports")):
         cases.append(Case("documentation_"+name+"_example",(f"tests/documentation_{name}_example.c",),

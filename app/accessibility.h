@@ -5,6 +5,7 @@
 #include <stdint.h>
 #define PS_A11Y_MAX_NODES 256u
 #define PS_A11Y_LABEL_BYTES 1024u
+#define PS_A11Y_EDIT_BYTES (12u*1024u+1u)
 #define PS_A11Y_WINDOW_BYTES 96u
 #define PS_A11Y_DOCUMENT_BYTES (512u*1024u+8192u)
 #define PS_A11Y_TEXT_BOXES 8192u
@@ -38,9 +39,9 @@ typedef struct {
  char window[PS_A11Y_WINDOW_BYTES],label[PS_A11Y_LABEL_BYTES];
  float bounds[4];bool enabled,checked,focusable,focused;
  double value,minimum,maximum,increment;
- char text_value[PS_A11Y_LABEL_BYTES];size_t text_capacity;
+ char text_value[PS_A11Y_EDIT_BYTES];size_t text_capacity;
  uint64_t text_version;size_t text_start,text_end,text_caret,box_offset,box_count;
- float caret_bounds[4];bool text_active;
+ float caret_bounds[4];bool text_active,text_read_only,text_multiline;
  float text_scroll;
  uint64_t document_version;size_t document_begin,document_end;bool offscreen;
  char document_target[PS_A11Y_LABEL_BYTES];
@@ -146,10 +147,13 @@ bool ps_a11y_record_separator(ps_a11y_model *model,const char *window,const char
                          double increment,double *value);
 bool ps_a11y_set_value(ps_a11y_model *model,uint64_t id,double value);
 bool ps_a11y_adjust(ps_a11y_model *model,uint64_t id,int direction);
-/* Single-line editable UTF-8 values; no truncation. Names and IDs remain stable
+/* Single-line editable UTF-8 values; readonly mode also accepts a multiline
+ * original page up to PS_A11Y_EDIT_BYTES. No truncation. Names and IDs remain stable
  * while values change. Accepted writes apply only on the next matching UI visit. */
 bool ps_a11y_record_edit(ps_a11y_model *model,const char *window,const char *name,
                        const float bounds[4],bool enabled,char *text,size_t capacity);
+bool ps_a11y_record_edit_mode(ps_a11y_model *model,const char *window,const char *name,
+                            const float bounds[4],bool enabled,bool read_only,bool multiline,char *text,size_t capacity);
 bool ps_a11y_set_text(ps_a11y_model *model,uint64_t id,const char *text);
 /* Replace the current version's selection and deliver its collapsed caret
  * atomically with the new value, including an identical-text replacement. */

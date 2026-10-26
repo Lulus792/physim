@@ -65,5 +65,16 @@ int main(void) {
  CHECK(!ps_a11y_record_edit(m,"help","Suche",bounds,true,text,sizeof text));ps_a11y_publish(m);CHECK(!strcmp(text,"user change") && !m->pending_text_id);
  version=m->nodes[0].text_version;CHECK(ps_a11y_edit_replace(m,id,version,"x"));ps_a11y_suspend(m);
  CHECK(!m->pending_text_has_caret && !m->pending_text_id && !ps_a11y_edit_replace(m,id,version,"x"));
- ps_a11y_destroy(m);free(m);puts("Editable accessibility: Unicode value, selection replacement caret, immutable snapshot, delivery once, no truncation, disabled/stale targets and capacity changes passed");return 0;
+ char original[PS_A11Y_EDIT_BYTES];memset(original,'x',sizeof original-1);original[sizeof original-1]=0;
+ memcpy(original,"α\r\n\t",5);
+ ps_a11y_begin(m);CHECK(!ps_a11y_record_edit_mode(m,"log","Originalmeldung",bounds,true,true,true,original,sizeof original));CHECK(ps_a11y_publish(m));
+ CHECK(m->count==1 && m->nodes[0].text_read_only && m->nodes[0].text_multiline && m->nodes[0].enabled && m->nodes[0].focusable);
+ CHECK(!strcmp(m->nodes[0].text_value,original));id=m->nodes[0].id;version=m->nodes[0].text_version;
+ CHECK(!ps_a11y_set_text(m,id,"replace") && !ps_a11y_edit_replace(m,id,version,"replace"));
+ CHECK(ps_a11y_edit_select(m,id,version,2,strlen(original)));
+ ps_a11y_begin(m);CHECK(!ps_a11y_record_edit_mode(m,"log","Originalmeldung",bounds,true,true,true,original,sizeof original));
+ size_t first=0,last=0;CHECK(ps_a11y_edit_take_selection(m,0,&first,&last) && first==2 && last==strlen(original));
+ CHECK(ps_a11y_edit_update(m,0,original,first,last));CHECK(ps_a11y_publish(m));
+ CHECK(m->nodes[0].text_start==2 && m->nodes[0].text_end==strlen(original));
+ ps_a11y_destroy(m);free(m);puts("Editable accessibility and readonly 12KiB original: Unicode value, exact multiline snapshot, selection, rejected mutation, delivery once and capacity changes passed");return 0;
 }

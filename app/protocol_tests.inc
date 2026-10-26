@@ -1,6 +1,8 @@
 /* Deliberate UI fixtures; never injected by the product's startup path. */
 static uint32_t protocol_test_source_crc;
 static char protocol_test_root[4096];
+static char protocol_wrap_test_text[12289];
+_Static_assert(sizeof protocol_wrap_test_text==sizeof(((ps_protocol_ui *)0)->original_page),"Test the complete original page capacity");
 static bool protocol_ui_test_start(app *a,const char *root,const char *mode) {
     snprintf(protocol_test_root,sizeof protocol_test_root,"%s",root);
     char path[4096];join(path,sizeof path,root,"preferences.bin");preferences_start(a,path);
@@ -18,10 +20,17 @@ static bool protocol_ui_test_start(app *a,const char *root,const char *mode) {
             {PS_LOG_INFO,PS_PROTOCOL_APP,"Prüfmeldung: Sitzung bereit","Native UI fixture; no measured data."},
             {PS_LOG_DEBUG,PS_PROTOCOL_ANALYSIS,"Prüfmeldung: Mehrzeiliger Originaltext","Reset „Prüfung“\nSeed: 42\tdt: 0.01 s"}
         };
+        if(strstr(mode,"wrap")) {
+            const char suffix[]="\r\n\tOriginal α e\xcc\x81 🌍\r\nHIER IST DAS ECHTE ENDE!";
+            size_t prefix=sizeof protocol_wrap_test_text-sizeof suffix;
+            for(size_t i=0;i<prefix;i++)protocol_wrap_test_text[i]=(char)('A'+i%26);
+            memcpy(protocol_wrap_test_text+prefix,suffix,sizeof suffix);
+        }
         for(unsigned i=0;i<6;i++) {
             ps_protocol_message m={.level=rows[i].level,.origin=rows[i].origin,.title=rows[i].title,.raw=rows[i].raw,.raw_size=strlen(rows[i].raw),
                 .context=a->project,.project=a->project,.source=i==0?"main.c":"",.line=i==0?13:0,.column=i==0?14:0,
                 .has_time=i==2 || i==3,.time_s=2.4};
+            if(!i && strstr(mode,"wrap")){m.raw=protocol_wrap_test_text;m.raw_size=strlen(protocol_wrap_test_text);}
             if(ps_protocol_push(&a->protocol,&m,NULL)!=PS_OK)return false;
         }
     }
@@ -37,7 +46,9 @@ static void protocol_ui_interactive_frame(app *a) {
                p->separator.x,p->separator.y,p->separator.w,p->separator.h);fflush(stdout);
     }
 }
+#include "protocol_original_tests.inc"
 static void protocol_ui_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(strstr(mode,"wrap")){protocol_original_test_frame(a,mode,stage,code,capture);return;}
     if(*stage<3){(*stage)++;return;}
     /* Inputs and filter derivation are committed in successive full renders. */
     static unsigned rendered;if(*stage>3 && rendered++<2)return;rendered=0;

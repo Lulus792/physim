@@ -31,8 +31,9 @@ WINDOWS = sys.platform == "win32"
 MAC = sys.platform == "darwin"
 CORE = "core memory array string_view hashmap math data run_stream run_index snapshot analysis scene numerics units series report report_export mechanics contact_world box_contacts collision measurement thermodynamics electromagnetism waves optics fluid properties".split()
 LANGUAGE = "lexer parser checker emitter builtins".split()
-APP = "model_values source_outline code_preview protocol_store protocol_text analysis_comparison graphic_snapshot graphic_figure graphic_raster graphic_output completion compiler_diagnostic profiling accessibility accessibility_native accessibility_atspi main timeline docking layout_catalog channel_units run_import ui_backend ui_sdl ui_geometry graphics documentation library run_details preferences workspace_state workspace_catalog workspace_tree plot_view report_image png".split()
+APP = "model_values source_outline code_preview text_wrap protocol_store protocol_text analysis_comparison graphic_snapshot graphic_figure graphic_raster graphic_output completion compiler_diagnostic profiling accessibility accessibility_native accessibility_atspi main timeline docking layout_catalog channel_units run_import ui_backend ui_sdl ui_geometry graphics documentation library run_details preferences workspace_state workspace_catalog workspace_tree plot_view report_image png".split()
 LINEBREAK = [f"third_party/libunibreak-8.0/{name}.c" for name in "linebreak linebreakdata linebreakdef eastasianwidthdef unibreakbase unibreakdef".split()]
+GRAPHEME = [f"third_party/libunibreak-8.0/{name}.c" for name in "graphemebreak emojidef".split()]
 PROJECT = "project_file text_document autosave parameter_catalog".split()
 ZLIB = "adler32 crc32 deflate trees zutil uncompr inflate inftrees inffast".split()
 EXAMPLES = "pendulum projectile collision box_floor spring uncertain_projectile box_collision buoyancy ccd_events".split()
@@ -440,7 +441,7 @@ class Builder:
             project = self.archive("physim-project", [f"app/{name}.c" for name in PROJECT])
             libraries["project"] = project
             products.append(self.executable("physim-build", ["app/build_main.c"], [project, platform, core], sdl=True))
-            products.append(self.executable("physim", [f"app/{name}.c" for name in APP]+LINEBREAK,
+            products.append(self.executable("physim", [f"app/{name}.c" for name in APP]+LINEBREAK+GRAPHEME,
                             [project, batch, platform, language, zlib, core], sdl=True,
                             defines=("Z_PREFIX", f'PS_SOURCE_DIR="{ROOT.as_posix()}"')))
             products.append(self.runtime)

@@ -35,14 +35,14 @@ static const char *editable_text_xml =
     "<method name='PasteText'><arg type='i' direction='in'/><arg type='b' direction='out'/></method></interface>";
 static bool edit_replace(ps_a11y_native *w,const ps_a11y_node *edit,size_t begin,size_t end,const char *insert,size_t bytes) {
     size_t length=strlen(edit->text_value);
-    if(begin>end || end>length || bytes>PS_A11Y_LABEL_BYTES || length-(end-begin)+bytes>=edit->text_capacity)return false;
+    if(edit->text_read_only || begin>end || end>length || bytes>PS_A11Y_LABEL_BYTES || length-(end-begin)+bytes>=edit->text_capacity)return false;
     char next[PS_A11Y_LABEL_BYTES];memcpy(next,edit->text_value,begin);memcpy(next+begin,insert,bytes);
     memcpy(next+begin+bytes,edit->text_value+end,length-end+1);
     return ps_a11y_set_text(w->model,edit->id,next);
 }
 static bool clipboard_queue(ps_a11y_native *w,const ps_a11y_node *edit,unsigned action,size_t begin,size_t end) {
     ps_a11y_model *m=w->model;
-    if(w->clipboard_action || !w->visible || m->suspended || !edit->enabled || m->pending_text_id ||
+    if(w->clipboard_action || !w->visible || m->suspended || !edit->enabled || (edit->text_read_only && action!=1) || m->pending_text_id ||
        m->pending_selection_id || m->pending_press || m->pending_value_id || (m->pending_focus && m->pending_focus!=edit->id))return false;
     w->clipboard_action=action;w->clipboard_id=edit->id;w->clipboard_version=edit->text_version;
     w->clipboard_begin=begin;w->clipboard_end=end;return true;
@@ -86,9 +86,9 @@ static void clipboard_deliver(ps_a11y_native *w) {
     if(!w->clipboard_action)return;
     unsigned action=w->clipboard_action;uint64_t id=w->clipboard_id,version=w->clipboard_version;
     size_t begin=w->clipboard_begin,end=w->clipboard_end;w->clipboard_action=0;
-    char selected[PS_A11Y_LABEL_BYTES];bool available=false;
+    char selected[PS_A11Y_EDIT_BYTES];bool available=false;
     SDL_LockMutex(w->mutex);const ps_a11y_node *edit=ps_a11y_find(w->model,id);
-    if(edit && edit->role==PS_A11Y_EDIT && edit->text_version==version && edit->enabled && w->visible &&
+    if(edit && edit->role==PS_A11Y_EDIT && edit->text_version==version && edit->enabled && (!edit->text_read_only || action==1) && w->visible &&
        !w->model->suspended && !w->model->pending_text_id && !w->model->pending_selection_id && end<=strlen(edit->text_value)) {
         memcpy(selected,edit->text_value+begin,end-begin);selected[end-begin]=0;available=true;
     }

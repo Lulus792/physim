@@ -50,8 +50,11 @@ ergänzt eine begrenzte gemeinsame Historie mit unveränderten Originalbytes,
 Herkunft, Severity und tatsächlichen Jobausgängen. Die sichtbare Navigator-
 Anordnung C liegt jetzt als versionierter nativer Teilstand vor. Der
 [aktuelle Diagnose- und Integrationsnachweis](PROTOCOL-DIAGNOSTICS-NATIVE.md)
-nennt auf beiden Plattformen bestandene isolierte Prüfungen und den neuen
-Originaltextbefund; der [direkte Mausfokus](PROTOCOL-FOCUS-NATIVE.md) bleibt offen.
+nennt auf beiden Plattformen bestandene isolierte Prüfungen und den damaligen
+Originaltextbefund. Der folgende [Originaltext-Nachlauf](PROTOCOL-ORIGINAL-NATIVE.md)
+ergänzt weichen Umbruch mit unveränderten Bytes, gemeinsamer Zeichen-/Cursorgeometrie
+und Größenwechsel. Die dort genannten Höhen-/Tooltip-Abweichungen sowie der
+[direkte Mausfokus](PROTOCOL-FOCUS-NATIVE.md) bleiben offen.
 Diese Teilprüfungen und die getrennten Datenquellen-Nachweise sind keine
 vollständige Designabnahme.
 

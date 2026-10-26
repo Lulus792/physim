@@ -130,6 +130,9 @@ bool nk_sdl_accessibility_document_native_read_test(struct nk_context *ctx);
 bool nk_sdl_accessibility_native_edit_test_step(struct nk_context *ctx,int step);
 bool nk_sdl_accessibility_native_links_test_step(struct nk_context *ctx,int step);
 nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flags,char *text,int capacity,nk_plugin_filter filter);
+/* Persistent readonly editor; visual positions refer to the exact text bytes. */
+nk_flags nk_sdl_edit_named_visual(struct nk_context *ctx,const char *name,char *text,int capacity,
+                                 struct nk_text_edit *edit,const struct nk_text_visual *visual);
 enum {PS_UI_EDIT_NATIVE_FOCUS=1u<<24};
 void nk_sdl_set_ui_size(struct nk_context *ctx, unsigned size);
 bool nk_sdl_reduce_transparency(struct nk_context *ctx);

@@ -172,6 +172,106 @@
       "bytes": 2745,
       "sha256": "2cffd22ab7ed6a69f819905e30b2214891518c2b601d566e75186a0047095b40",
       "gzip": false
+    },
+    {
+      "file": "graphemebreak.c",
+      "source": "src/graphemebreak.c",
+      "source_bytes": 12586,
+      "source_sha256": "5f56dbc388ddff595dfff70b898a02eee9cecfaa4496f21927fdc6f92c411977",
+      "git_blob_sha1": "394faab2b76203d88addd8b92da76906f8b94821",
+      "bytes": 12586,
+      "sha256": "5f56dbc388ddff595dfff70b898a02eee9cecfaa4496f21927fdc6f92c411977",
+      "gzip": false
+    },
+    {
+      "file": "graphemebreak.h",
+      "source": "src/graphemebreak.h",
+      "source_bytes": 2482,
+      "source_sha256": "1709206d2834b738adea536d09c89860f94fb9c448fcc02492a1adcd07c13421",
+      "git_blob_sha1": "a5304127e96d6fdb1b0a99a0545193c4b4bfff55",
+      "bytes": 2482,
+      "sha256": "1709206d2834b738adea536d09c89860f94fb9c448fcc02492a1adcd07c13421",
+      "gzip": false
+    },
+    {
+      "file": "graphemebreakdata.c",
+      "source": "src/graphemebreakdata.c",
+      "source_bytes": 41679,
+      "source_sha256": "fbab281189b6a8a50d96c3361f2b9f22a37c92624ca6f4060edff7d169a20979",
+      "git_blob_sha1": "6d52472dd700d6305fe775fe7cbdfadd3bea8c44",
+      "bytes": 41679,
+      "sha256": "fbab281189b6a8a50d96c3361f2b9f22a37c92624ca6f4060edff7d169a20979",
+      "gzip": false
+    },
+    {
+      "file": "graphemebreakdef.h",
+      "source": "src/graphemebreakdef.h",
+      "source_bytes": 2638,
+      "source_sha256": "315874919d7d9bf3729871c0be1b5550d7ff18cc12d3b5d0c1fb626e8c4be246",
+      "git_blob_sha1": "ac7c9962ac5f385779b64420b685b69051c63b28",
+      "bytes": 2638,
+      "sha256": "315874919d7d9bf3729871c0be1b5550d7ff18cc12d3b5d0c1fb626e8c4be246",
+      "gzip": false
+    },
+    {
+      "file": "indicconjunctbreakdata.c",
+      "source": "src/indicconjunctbreakdata.c",
+      "source_bytes": 18524,
+      "source_sha256": "c69d1b5119fe53323e36913534378ea2ef91e0aa7839719cb5cf1c18e4c5250d",
+      "git_blob_sha1": "ab2ef9c8ae7e87cbd1ea4751daf03930c7e8dceb",
+      "bytes": 18524,
+      "sha256": "c69d1b5119fe53323e36913534378ea2ef91e0aa7839719cb5cf1c18e4c5250d",
+      "gzip": false
+    },
+    {
+      "file": "indicconjunctbreakdef.h",
+      "source": "src/indicconjunctbreakdef.h",
+      "source_bytes": 1699,
+      "source_sha256": "a0259a06431c3446ee48ab0c69afd1ede71643a28963169d5cde9ff782e75b97",
+      "git_blob_sha1": "e561a3b05f951ed671aa81437cec06a80b5d1e75",
+      "bytes": 1699,
+      "sha256": "a0259a06431c3446ee48ab0c69afd1ede71643a28963169d5cde9ff782e75b97",
+      "gzip": false
+    },
+    {
+      "file": "emojidef.c",
+      "source": "src/emojidef.c",
+      "source_bytes": 1563,
+      "source_sha256": "4baf8f003201d49cbf78d58c0938eb28e19121095314724e8dedbb610bae327f",
+      "git_blob_sha1": "6928094dc00394e01afbd1cd04eaf9c7327e0918",
+      "bytes": 1563,
+      "sha256": "4baf8f003201d49cbf78d58c0938eb28e19121095314724e8dedbb610bae327f",
+      "gzip": false
+    },
+    {
+      "file": "emojidef.h",
+      "source": "src/emojidef.h",
+      "source_bytes": 1632,
+      "source_sha256": "d14675c270334b046288f647a060186066b4d6d1905a457459d58388879efabe",
+      "git_blob_sha1": "ff7bb616d1c7da92c46f3c80d9ee01156c0cb5e3",
+      "bytes": 1632,
+      "sha256": "d14675c270334b046288f647a060186066b4d6d1905a457459d58388879efabe",
+      "gzip": false
+    },
+    {
+      "file": "emojidata.c",
+      "source": "src/emojidata.c",
+      "source_bytes": 3283,
+      "source_sha256": "b33ed203eb6bacfc7c9598a726a41c64ab67032b767bc676aecc430a207faeb6",
+      "git_blob_sha1": "eed69016e56a8e6730c5b843424473c9a4f0334a",
+      "bytes": 3283,
+      "sha256": "b33ed203eb6bacfc7c9598a726a41c64ab67032b767bc676aecc430a207faeb6",
+      "gzip": false
+    },
+    {
+      "file": "GraphemeBreakTest.txt.gz",
+      "source": "src/GraphemeBreakTest.txt",
+      "source_bytes": 126570,
+      "source_sha256": "e2d134d2c52919bace503ebb6a551c1855fe1a1faec18478c78fff254a1793ec",
+      "git_blob_sha1": "e1215547c58f959a0eec9928e1915901c168f6a9",
+      "bytes": 7836,
+      "sha256": "9c51734193c00e2934cf6067d9f5e842b4f324f6863f8a90444d8298333b1472",
+      "gzip": true
     }
   ],
   "unicode_license": {

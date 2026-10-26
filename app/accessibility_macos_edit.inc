@@ -16,7 +16,7 @@ static const char *edit_string_bytes(id value) {
  unsigned long length=((unsigned long(*)(id,SEL,unsigned long))objc_msgSend)(value,sel_registerName("lengthOfBytesUsingEncoding:"),4);
  return bytes && strlen(bytes)==length?bytes:NULL;
 }
-static id edit_role(id object,SEL selector) {(void)selector;ps_a11y_node n;return node_copy(object,&n)?string("AXTextField"):nil;}
+static id edit_role(id object,SEL selector) {(void)selector;ps_a11y_node n;return node_copy(object,&n)?string(n.text_multiline?"AXTextArea":"AXTextField"):nil;}
 static BOOL edit_enabled(id object,SEL selector) {
  (void)selector;ps_a11y_native *b=owner(object);if(!b)return NO;
  SDL_LockMutex(b->mutex);bool ok=edit_available_locked(b,edit_live_locked(object,b));SDL_UnlockMutex(b->mutex);return ok;
@@ -53,7 +53,7 @@ static id edit_string_range(id object,SEL selector,ax_range range) {
 static id edit_selected_text(id object,SEL selector) {
  (void)selector;ps_a11y_native *b=owner(object);if(!b)return nil;id value=nil;
  SDL_LockMutex(b->mutex);const ps_a11y_node *n=edit_live_locked(object,b);
- if(edit_available_locked(b,n)) {char bytes[PS_A11Y_LABEL_BYTES];size_t count=n->text_end-n->text_start;
+ if(edit_available_locked(b,n)) {char bytes[PS_A11Y_EDIT_BYTES];size_t count=n->text_end-n->text_start;
   memcpy(bytes,n->text_value+n->text_start,count);bytes[count]=0;value=string(bytes);
  }SDL_UnlockMutex(b->mutex);return value;
 }
@@ -136,8 +136,10 @@ static CGRect edit_range_frame(id object,SEL selector,ax_range range) {
  relative.origin.x+=frame.origin.x;relative.origin.y+=frame.origin.y;return relative;
 }
 static BOOL edit_allowed(id object,SEL selector,SEL requested) {
- if(requested==sel_registerName("setAccessibilityValue:") || requested==sel_registerName("setAccessibilitySelectedText:") ||
-    requested==sel_registerName("setAccessibilitySelectedTextRange:") || requested==sel_registerName("setAccessibilitySelectedTextRanges:") || requested==sel_registerName("setAccessibilityVisibleCharacterRange:") ||
+ if(requested==sel_registerName("setAccessibilityValue:") || requested==sel_registerName("setAccessibilitySelectedText:")) {
+  ps_a11y_node node;return node_copy(object,&node) && !node.text_read_only && edit_enabled(object,selector);
+ }
+ if(requested==sel_registerName("setAccessibilitySelectedTextRange:") || requested==sel_registerName("setAccessibilitySelectedTextRanges:") || requested==sel_registerName("setAccessibilityVisibleCharacterRange:") ||
     requested==sel_registerName("setAccessibilityFocused:"))return edit_enabled(object,selector);
  return element_allowed(object,selector,requested);
 }

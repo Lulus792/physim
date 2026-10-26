@@ -178,7 +178,10 @@ static float nk_sdl_edit_extent(const struct nk_user_font *font,const char *text
   x+=font->width(font->userdata,font->height,text+at,n);at+=(size_t)n;}return x;
 }
 #endif
-nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flags,char *text,int capacity,nk_plugin_filter filter) {
+static nk_flags nk_sdl_edit_named_common(struct nk_context *ctx,const char *name,nk_flags flags,char *text,int capacity,
+                                       nk_plugin_filter filter,struct nk_text_edit *custom,const struct nk_text_visual *visual) {
+ struct nk_text_edit *actual=custom?custom:&ctx->text_edit;
+ if(custom && !custom->initialized)nk_textedit_init_fixed(custom,text,(nk_size)capacity);
 #if defined(_WIN32) || defined(__linux__) || defined(__APPLE__)
  struct nk_sdl *sdl=ctx && ctx->userdata.ptr?ctx->userdata.ptr:NULL;size_t index=SIZE_MAX;uint64_t id=0;bool selected=false;size_t select_start=0,select_end=0;
  bool scrolled=false,scroll_top=true;size_t scroll_start=0,scroll_end=0;float text_scroll=0;
@@ -197,7 +200,7 @@ nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flag
       above->bounds.y<bottom && above->bounds.y+above->bounds.h>top)enabled=false;
   SDL_LockMutex(sdl->accessibility_mutex);ps_a11y_model *m=sdl->accessibility;
   uint64_t pending=m->pending_focus;size_t before=m->draft_count;
-  bool changed=ps_a11y_record_edit(m,ctx->current->name_string,name,box,enabled,text,(size_t)capacity);
+  bool changed=ps_a11y_record_edit_mode(m,ctx->current->name_string,name,box,enabled,(flags&NK_EDIT_READ_ONLY)!=0,(flags&NK_EDIT_MULTILINE)!=0,text,(size_t)capacity);
   bool granted=m->draft_count>before && pending && !m->pending_focus && m->focused_id==pending && m->draft[before].id==pending;
   if(m->draft_count>before){index=before;id=m->draft[before].id;text_scroll=m->draft[before].text_scroll;
    selected=ps_a11y_edit_take_selection(m,index,&select_start,&select_end);
@@ -211,14 +214,15 @@ nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flag
   if(selected){
    ctx->current->edit.sel_start=nk_utf_len(text,(int)select_start);ctx->current->edit.sel_end=nk_utf_len(text,(int)select_end);
    ctx->current->edit.cursor=ctx->current->edit.sel_end;
+   if(custom){custom->select_start=ctx->current->edit.sel_start;custom->select_end=custom->cursor=ctx->current->edit.sel_end;custom->cursor_at_end_of_line=0;}
    /* A native selection follows the same horizontal text origin as Nuklear. */
-   const struct nk_user_font *font=ctx->style.font;float x=nk_sdl_edit_extent(font,text,select_end);
+   const struct nk_user_font *font=ctx->style.font;float x=visual?0:nk_sdl_edit_extent(font,text,select_end);
    float width=edit_bounds.w-2*ctx->style.edit.padding.x-2*ctx->style.edit.border;
    float scroll=(float)ctx->current->edit.scrollbar.x;
    if(x<scroll || x>=scroll+width)ctx->current->edit.scrollbar.x=(nk_uint)fmaxf(0,x-width*.75f);
    text_scroll=(float)ctx->current->edit.scrollbar.x;
   }
-  if(index!=SIZE_MAX) {
+  if(index!=SIZE_MAX && !visual) {
    const struct nk_user_font *font=ctx->style.font;
    float width=fmaxf(1,edit_bounds.w-2*ctx->style.edit.padding.x-2*ctx->style.edit.border);
    if(scrolled){
@@ -230,41 +234,81 @@ nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flag
    float maximum=fmaxf(0,nk_sdl_edit_extent(font,text,strlen(text))+ctx->style.edit.cursor_size+2-width);
    text_scroll=fminf(fmaxf(0,text_scroll),maximum);
   }
+  if(visual && custom && (selected || scrolled)) {
+   int scalar=nk_utf_len(text,(int)(scrolled?(scroll_top?scroll_start:scroll_end):select_end));
+   int row=nk_text_visual_row_at(visual,scalar,0);
+   float y=row*visual->row_height;
+   float height=fmaxf(1,edit_bounds.h-2*ctx->style.edit.padding.y-2*ctx->style.edit.border);
+   if(scrolled)custom->scrollbar.y=scroll_top?y:fmaxf(0,y+visual->row_height-height);
+   else {if(y<custom->scrollbar.y)custom->scrollbar.y=y;if(y+visual->row_height>custom->scrollbar.y+height)custom->scrollbar.y=fmaxf(0,y+visual->row_height-height);}
+  }
  }
 #else
  (void)name;
 #endif
  nk_flags state;
+ if(custom) {
+  nk_str_init_fixed(&custom->string,text,(nk_size)capacity);
+  custom->string.buffer.allocated=strlen(text);custom->string.len=nk_utf_len(text,(int)strlen(text));
+  custom->cursor=custom->cursor<0?0:custom->cursor>custom->string.len?custom->string.len:custom->cursor;
+  custom->select_start=custom->select_start<0?0:custom->select_start>custom->string.len?custom->string.len:custom->select_start;
+  custom->select_end=custom->select_end<0?0:custom->select_end>custom->string.len?custom->string.len:custom->select_end;
+  custom->visual=visual;custom->clip=ctx->clip;
+  state=nk_edit_buffer(ctx,flags,custom,filter);
+ } else {
 #if defined(_WIN32) || defined(__linux__) || defined(__APPLE__)
  if(index!=SIZE_MAX){int length=(int)strlen(text);state=nk_edit_string_scrolled(ctx,flags,text,&length,capacity,filter,&text_scroll);text[length]=0;}
  else state=nk_edit_string_zero_terminated(ctx,flags,text,capacity,filter);
 #else
  state=nk_edit_string_zero_terminated(ctx,flags,text,capacity,filter);
 #endif
+ }
 #if defined(_WIN32) || defined(__linux__) || defined(__APPLE__)
  if(index!=SIZE_MAX) {
   SDL_LockMutex(sdl->accessibility_mutex);ps_a11y_model *m=sdl->accessibility;
   if(index<m->draft_count && m->draft[index].id==id) {
    size_t start=m->draft[index].text_start,end=m->draft[index].text_end;
-   if(state&NK_EDIT_ACTIVE){start=nk_sdl_edit_byte(text,ctx->text_edit.select_start);end=nk_sdl_edit_byte(text,ctx->text_edit.select_end);}
+   if(custom || (state&NK_EDIT_ACTIVE)){start=nk_sdl_edit_byte(text,actual->select_start);end=nk_sdl_edit_byte(text,actual->select_end);}
    if(ps_a11y_edit_update(m,index,text,start,end)) {
     ps_a11y_node *node=&m->draft[index];node->text_active=(state&NK_EDIT_ACTIVE)!=0;node->text_scroll=text_scroll;
-    if(node->text_active){node->text_caret=nk_sdl_edit_byte(text,ctx->text_edit.cursor);if(ctx->current==ctx->active)m->focused_id=id;}
+    if(custom)node->text_caret=nk_sdl_edit_byte(text,actual->cursor);
+    if(node->text_active){node->text_caret=nk_sdl_edit_byte(text,actual->cursor);if(ctx->current==ctx->active)m->focused_id=id;}
     else if(m->focused_id==id)m->focused_id=0;
     const struct nk_style_edit *style=&ctx->style.edit;const struct nk_user_font *font=ctx->style.font;
     struct nk_rect area={edit_bounds.x+style->padding.x+style->border,edit_bounds.y+style->padding.y+style->border,
      edit_bounds.w-2*style->padding.x-2*style->border,edit_bounds.h-2*style->padding.y-2*style->border};
-    float x=area.x-ctx->text_edit.scrollbar.x,y=area.y+(area.h-font->height)/2;size_t length=strlen(text);
+    if(visual) {
+     area.w=fmaxf(0,area.w-style->scrollbar_size.x-style->cursor_size);
+     for(int row=0;row<visual->row_count;row++) {
+      float y=area.y+row*visual->row_height-actual->scrollbar.y+(visual->row_height-font->height)/2;
+      if(y+font->height<=area.y || y>=area.y+area.h)continue;
+      const struct nk_text_visual_row *r=&visual->rows[row];
+      for(int i=r->first;i<r->limit;i++) {
+       const struct nk_text_visual_glyph *g=&visual->glyphs[i];
+       float left=fmaxf(area.x,area.x+g->x),right=fminf(area.x+area.w,area.x+g->x+fmaxf(g->advance,style->cursor_size));
+       float box[]={left,fmaxf(y,area.y),fmaxf(0,right-left),fmaxf(0,fminf(y+font->height,area.y+area.h)-fmaxf(y,area.y))};
+       ps_a11y_edit_box(m,index,(size_t)g->byte,(size_t)visual->glyphs[i+1].byte,box);
+      }
+     }
+     int row=nk_text_visual_row_at(visual,actual->cursor,actual->cursor_at_end_of_line);
+     float x=area.x+nk_text_visual_x(visual,actual->cursor,row);
+     float y=area.y+row*visual->row_height-actual->scrollbar.y+(visual->row_height-font->height)/2;
+     float left=fmaxf(x,fmaxf(area.x,node->bounds[0])),right=fminf(x+style->cursor_size,fminf(area.x+area.w,node->bounds[0]+node->bounds[2]));
+     float top=fmaxf(y,fmaxf(area.y,node->bounds[1])),bottom=fminf(y+font->height,fminf(area.y+area.h,node->bounds[1]+node->bounds[3]));
+     node->caret_bounds[0]=left;node->caret_bounds[1]=top;node->caret_bounds[2]=fmaxf(0,right-left);node->caret_bounds[3]=fmaxf(0,bottom-top);
+    } else {
+    float x=area.x-actual->scrollbar.x,y=area.y+(area.h-font->height)/2;size_t length=strlen(text);
     for(size_t at=0;at<length;){nk_rune rune;int n=nk_utf_decode(text+at,&rune,(int)(length-at));if(n<=0)break;
      float width=font->width(font->userdata,font->height,text+at,n),left=fmaxf(x,area.x),right=fminf(x+width,area.x+area.w);
      float box[]={left,fmaxf(y,area.y),right-left,fminf(y+font->height,area.y+area.h)-fmaxf(y,area.y)};
      ps_a11y_edit_box(m,index,at,at+(size_t)n,box);x+=width;at+=(size_t)n;
     }
-    float caret_x=area.x-ctx->text_edit.scrollbar.x;
+    float caret_x=area.x-actual->scrollbar.x;
     for(size_t at=0;at<node->text_caret && at<length;){nk_rune rune;int n=nk_utf_decode(text+at,&rune,(int)(length-at));if(n<=0)break;caret_x+=font->width(font->userdata,font->height,text+at,n);at+=(size_t)n;}
     float left=fmaxf(caret_x,fmaxf(area.x,node->bounds[0])),right=fminf(caret_x+style->cursor_size,fminf(area.x+area.w,node->bounds[0]+node->bounds[2]));
     float top=fmaxf(y,fmaxf(area.y,node->bounds[1])),bottom=fminf(y+font->height,fminf(area.y+area.h,node->bounds[1]+node->bounds[3]));
     node->caret_bounds[0]=left;node->caret_bounds[1]=top;node->caret_bounds[2]=fmaxf(0,right-left);node->caret_bounds[3]=fmaxf(0,bottom-top);
+    }
    }
   }
   if(m->focused_id==id && id)state|=PS_UI_EDIT_NATIVE_FOCUS;
@@ -272,6 +316,14 @@ nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flag
  }
 #endif
  return state;
+}
+nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flags,char *text,int capacity,nk_plugin_filter filter) {
+ return nk_sdl_edit_named_common(ctx,name,flags,text,capacity,filter,NULL,NULL);
+}
+nk_flags nk_sdl_edit_named_visual(struct nk_context *ctx,const char *name,char *text,int capacity,
+                                 struct nk_text_edit *edit,const struct nk_text_visual *visual) {
+ return nk_sdl_edit_named_common(ctx,name,NK_EDIT_BOX|NK_EDIT_READ_ONLY|NK_EDIT_NO_HORIZONTAL_SCROLL,
+                                  text,capacity,nk_filter_default,edit,visual);
 }
 bool nk_sdl_accessibility_document(struct nk_context *ctx,uint64_t version,const char *name,const char *text,struct nk_rect viewport) {
  if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;

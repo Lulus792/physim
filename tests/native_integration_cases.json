@@ -7009,6 +7009,20 @@
       ]
     },
     {
+      "name": "protocol_original",
+      "app": true,
+      "display": true,
+      "targets": ["python", "physim"],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": ["{root}/tests/check_protocol_original.py", "--app", "{physim}", "--work", "{work}", "--root", "{root}"],
+          "timeout": 480,
+          "files": ["verification.json"]
+        }
+      ]
+    },
+    {
       "name": "protocol_sources",
       "app": true,
       "display": true,

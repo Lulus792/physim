@@ -126,7 +126,7 @@ static HRESULT STDMETHODCALLTYPE uia_tr_expand(ITextRangeProvider *p,enum TextUn
 static HRESULT STDMETHODCALLTYPE uia_tr_get_attribute(ITextRangeProvider *p,TEXTATTRIBUTEID id,VARIANT *out) {
  if(!out)return E_POINTER;VariantInit(out);uia_text_range *r=uia_range_owner(p);ps_a11y_native *b=r->owner->bridge;
  SDL_LockMutex(b->mutex);HRESULT result=uia_text_range_live_locked(r);
- const ps_a11y_node *node=b->model?ps_a11y_find(b->model,r->owner->id):NULL;bool readonly=!node || !node->enabled;
+ const ps_a11y_node *node=b->model?ps_a11y_find(b->model,r->owner->id):NULL;bool readonly=!node || !node->enabled || node->text_read_only;
  SDL_UnlockMutex(b->mutex);if(FAILED(result))return result;
  if(id==UIA_IsReadOnlyAttributeId){out->vt=VT_BOOL;out->boolVal=readonly?VARIANT_TRUE:VARIANT_FALSE;return S_OK;}
  IUnknown *unsupported=NULL;result=UiaGetReservedNotSupportedValue(&unsupported);

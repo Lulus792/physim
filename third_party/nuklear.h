@@ -4611,6 +4611,7 @@ enum nk_text_edit_mode {
     NK_TEXT_EDIT_MODE_REPLACE
 };
 
+#include "nuklear_text_layout.h"
 struct nk_text_edit {
     struct nk_clipboard clip;
     struct nk_str string;
@@ -4628,6 +4629,9 @@ struct nk_text_edit {
     unsigned char active;
     unsigned char padding1;
     float preferred_x;
+    const struct nk_text_visual *visual; /* Physim: readonly original-byte layout. */
+    int visual_row_count;
+    float visual_row_height, visual_width;
     struct nk_text_undo_state undo;
 };
 
@@ -27556,6 +27560,12 @@ NK_INTERN int
 nk_textedit_locate_coord(struct nk_text_edit *edit, float x, float y,
     const struct nk_user_font *font, float row_height)
 {
+    if (edit->visual) {
+        int affinity = 0;
+        int scalar = nk_text_visual_hit(edit->visual, x, y, &affinity);
+        edit->cursor_at_end_of_line = (unsigned char)affinity;
+        return scalar;
+    }
     struct nk_text_edit_row r;
     int n = edit->string.len;
     float base_y = 0, prev_x;
@@ -27949,10 +27959,68 @@ nk_textedit_text(struct nk_text_edit *state, const char *text, int total_len)
         glyph_len = nk_utf_decode(text + text_len, &unicode, total_len-text_len);
     }
 }
+/* Physim: visual navigation over the immutable source. Soft line ends retain
+ * caret affinity; horizontal navigation and hit testing use grapheme stops. */
+NK_INTERN nk_bool
+nk_textedit_visual_key(struct nk_text_edit *s, enum nk_keys key, int shift)
+{
+    const struct nk_text_visual *v=s->visual;
+    int row, target=s->cursor, affinity=0;
+    float x;
+    switch(key) {
+    case NK_KEY_LEFT: case NK_KEY_RIGHT:
+        if (!shift && NK_TEXT_HAS_SELECTION(s)) {
+            target=key==NK_KEY_LEFT?NK_MIN(s->select_start,s->select_end):NK_MAX(s->select_start,s->select_end);
+        } else if(key==NK_KEY_RIGHT && s->cursor_at_end_of_line) {
+            /* Same byte boundary, next visual line's start. */
+        } else if(key==NK_KEY_LEFT && !s->cursor_at_end_of_line &&
+            nk_text_visual_row_at(v,target,0)!=nk_text_visual_row_at(v,target,1)) {
+            affinity=1;
+        } else if (key==NK_KEY_LEFT) {
+            if(target>0)do {--target;} while(target>0 && !v->glyphs[target].boundary);
+        } else if(target<v->glyph_count) {
+            do {++target;} while(target<v->glyph_count && !v->glyphs[target].boundary);
+        }
+        s->has_preferred_x=0;
+        break;
+    case NK_KEY_UP: case NK_KEY_DOWN:
+        if(!shift && NK_TEXT_HAS_SELECTION(s))target=key==NK_KEY_UP?NK_MIN(s->select_start,s->select_end):NK_MAX(s->select_start,s->select_end);
+        row=nk_text_visual_row_at(v,target,target==s->cursor?s->cursor_at_end_of_line:0);
+        x=s->has_preferred_x?s->preferred_x:nk_text_visual_x(v,target,row);
+        row=NK_CLAMP(0,row+(key==NK_KEY_UP?-1:1),v->row_count-1);
+        target=nk_text_visual_hit(v,x,((float)row+.5f)*v->row_height,&affinity);
+        s->preferred_x=x;s->has_preferred_x=1;
+        break;
+    case NK_KEY_TEXT_LINE_START: case NK_KEY_TEXT_LINE_END:
+        row=nk_text_visual_row_at(v,s->cursor,s->cursor_at_end_of_line);
+        target=key==NK_KEY_TEXT_LINE_START?v->rows[row].first:v->rows[row].end;
+        affinity=key==NK_KEY_TEXT_LINE_END && v->rows[row].end==v->rows[row].limit && row+1<v->row_count;
+        s->has_preferred_x=0;
+        break;
+    case NK_KEY_TEXT_START: case NK_KEY_TEXT_END:
+        target=key==NK_KEY_TEXT_START?0:v->glyph_count;s->has_preferred_x=0;
+        break;
+    case NK_KEY_TEXT_WORD_LEFT: case NK_KEY_TEXT_WORD_RIGHT:
+        if(!shift && NK_TEXT_HAS_SELECTION(s))target=key==NK_KEY_TEXT_WORD_LEFT?NK_MIN(s->select_start,s->select_end):NK_MAX(s->select_start,s->select_end);
+        else target=key==NK_KEY_TEXT_WORD_LEFT?nk_textedit_move_to_word_previous(s):nk_textedit_move_to_word_next(s);
+        while(target>0 && target<v->glyph_count && !v->glyphs[target].boundary)
+            target+=key==NK_KEY_TEXT_WORD_LEFT?-1:1;
+        s->has_preferred_x=0;
+        break;
+    default:return nk_false;
+    }
+    if(shift) {
+        if(!NK_TEXT_HAS_SELECTION(s))s->select_start=s->cursor;
+        s->select_end=target;
+    } else s->select_start=s->select_end=target;
+    s->cursor=target;s->cursor_at_end_of_line=(unsigned char)affinity;
+    return nk_true;
+}
 NK_LIB void
 nk_textedit_key(struct nk_text_edit *state, enum nk_keys key, int shift_mod,
     const struct nk_user_font *font, float row_height)
 {
+    if(state->visual && nk_textedit_visual_key(state,key,shift_mod))return;
 retry:
     switch (key)
     {
@@ -28528,6 +28596,8 @@ nk_textedit_clear_state(struct nk_text_edit *state, enum nk_text_edit_type type,
    state->mode = NK_TEXT_EDIT_MODE_VIEW;
    state->filter = filter;
    state->scrollbar = nk_vec2(0,0);
+   state->visual = 0;
+   state->visual_row_count=0;state->visual_row_height=state->visual_width=0;
 }
 NK_API void
 nk_textedit_init_fixed(struct nk_text_edit *state, void *memory, nk_size size)
@@ -28729,6 +28799,105 @@ nk_edit_draw_text(struct nk_command_buffer *out,
             &txt, NK_TEXT_LEFT, font);
     }}
 }
+/* Physim's readonly visual path uses precisely the same positions for drawing,
+ * pointer navigation and native accessibility. Original UTF-8 stays untouched. */
+NK_INTERN void
+nk_edit_draw_visual(struct nk_command_buffer *out, struct nk_text_edit *edit,
+    const struct nk_style_edit *style, const struct nk_user_font *font,
+    struct nk_input *in, struct nk_rect bounds, struct nk_rect area,
+    struct nk_rect clip, nk_flags state, nk_flags flags, nk_bool follow)
+{
+    const struct nk_text_visual *v=edit->visual;
+    const char *source=nk_str_get_const(&edit->string);
+    const float height=v->row_height;
+    if(edit->visual_row_count!=v->row_count || edit->visual_row_height!=height || edit->visual_width!=v->width)
+        follow=edit->active;
+    edit->visual_row_count=v->row_count;edit->visual_row_height=height;edit->visual_width=v->width;
+    int caret_row=nk_text_visual_row_at(v,edit->cursor,edit->cursor_at_end_of_line);
+    float caret_x=nk_text_visual_x(v,edit->cursor,caret_row),caret_y=(float)caret_row*height;
+    float maximum=NK_MAX(0,(float)v->row_count*height-area.h);
+    nk_bool hovered=in && nk_input_is_mouse_hovering_rect(in,area);
+    const struct nk_style_item *background;
+    struct nk_color color, selected, selected_text, cursor;
+    if(state&NK_WIDGET_STATE_ACTIVED) {
+        background=&style->active;color=style->text_active;selected=style->selected_hover;
+        selected_text=style->selected_text_hover;cursor=style->cursor_hover;
+    } else if(state&NK_WIDGET_STATE_HOVER) {
+        background=&style->hover;color=style->text_hover;selected=style->selected_hover;
+        selected_text=style->selected_text_hover;cursor=style->cursor_hover;
+    } else {
+        background=&style->normal;color=style->text_normal;selected=style->selected_normal;
+        selected_text=style->selected_text_normal;cursor=style->cursor_normal;
+    }
+    color=nk_rgb_factor(color,style->color_factor);
+    selected=nk_rgb_factor(selected,style->color_factor);
+    selected_text=nk_rgb_factor(selected_text,style->color_factor);
+    cursor=nk_rgb_factor(cursor,style->color_factor);
+    if(edit->active && follow) {
+        if(caret_y<edit->scrollbar.y)edit->scrollbar.y=caret_y;
+        if(caret_y+height>edit->scrollbar.y+area.h)edit->scrollbar.y=caret_y+height-area.h;
+    }
+    edit->scrollbar.x=0;edit->scrollbar.y=NK_CLAMP(0,edit->scrollbar.y,maximum);
+    if(maximum>0) {
+        nk_flags scrollbar_state=0;
+        struct nk_input scroll_input;
+        struct nk_input *scroll_in=0;
+        if(in) {
+            scroll_input=*in;scroll_in=&scroll_input;
+            if(!hovered)scroll_input.mouse.scroll_delta=nk_vec2(0,0);
+            if(!edit->active) {
+                nk_zero(&scroll_input.keyboard.keys[NK_KEY_SCROLL_START],sizeof(struct nk_key));
+                nk_zero(&scroll_input.keyboard.keys[NK_KEY_SCROLL_END],sizeof(struct nk_key));
+                nk_zero(&scroll_input.keyboard.keys[NK_KEY_SCROLL_UP],sizeof(struct nk_key));
+                nk_zero(&scroll_input.keyboard.keys[NK_KEY_SCROLL_DOWN],sizeof(struct nk_key));
+            }
+        }
+        struct nk_rect scroll=area;
+        scroll.x=bounds.x+bounds.w-style->border-style->scrollbar_size.x;
+        scroll.w=style->scrollbar_size.x;
+        edit->scrollbar.y=nk_do_scrollbarv(&scrollbar_state,out,scroll,hovered || edit->active,
+            edit->scrollbar.y,(float)v->row_count*height,scroll.h*.10f,scroll.h*.01f,
+            &style->scrollbar,scroll_in,font);
+        if(in)in->mouse.buttons[NK_BUTTON_LEFT].clicked_pos=scroll_input.mouse.buttons[NK_BUTTON_LEFT].clicked_pos;
+        if(hovered && in)in->mouse.scroll_delta.y=0;
+    }
+    nk_push_scissor(out,clip);
+    {
+        int selection_begin=NK_MIN(edit->select_start,edit->select_end);
+        int selection_end=NK_MAX(edit->select_start,edit->select_end);
+        int first=NK_CLAMP(0,(int)((clip.y-area.y+edit->scrollbar.y)/height),v->row_count-1);
+        int last=NK_CLAMP(first,(int)((clip.y+clip.h-area.y+edit->scrollbar.y)/height),v->row_count-1);
+        struct nk_color clear=nk_rgba(0,0,0,0);
+        (void)background;
+        for(int line=first;line<=last;line++) {
+            const struct nk_text_visual_row *row=&v->rows[line];
+            float y=area.y+(float)line*height-edit->scrollbar.y;
+            for(int i=row->first;i<row->end;i++) {
+                const struct nk_text_visual_glyph *g=&v->glyphs[i];
+                nk_bool picked=edit->active && i>=selection_begin && i<selection_end;
+                struct nk_rect cell=nk_rect(area.x+g->x,y,g->advance,height);
+                if(picked && g->advance>0)nk_fill_rect(out,cell,0,selected);
+                if(g->draw) {
+                    cell.y+=(height-font->height)*.5f;cell.h=font->height;
+                    cell.w=NK_MAX(g->advance,1)+1;
+                    nk_draw_text(out,cell,source+g->byte,v->glyphs[i+1].byte-g->byte,
+                        font,clear,picked?selected_text:color);
+                }
+            }
+            if(row->hyphen) {
+                nk_bool picked=edit->active && row->end>selection_begin && row->end<=selection_end;
+                float dash=font->width(font->userdata,font->height,"-",1);
+                struct nk_rect cell=nk_rect(area.x+row->hyphen_x,y,dash,height);
+                if(picked)nk_fill_rect(out,cell,0,selected);
+                cell.y+=(height-font->height)*.5f;cell.h=font->height;
+                nk_draw_text(out,cell,"-",1,font,clear,picked?selected_text:color);
+            }
+        }
+        if(edit->active && selection_begin==selection_end && !(flags&NK_EDIT_NO_CURSOR))
+            nk_fill_rect(out,nk_rect(area.x+caret_x,area.y+caret_y-edit->scrollbar.y+
+                (height-font->height)*.5f,style->cursor_size,font->height),0,cursor);
+    }
+}
 NK_LIB nk_flags
 nk_do_edit(nk_flags *state, struct nk_command_buffer *out,
     struct nk_rect bounds, nk_flags flags, nk_plugin_filter filter,
@@ -28759,6 +28928,7 @@ nk_do_edit(nk_flags *state, struct nk_command_buffer *out,
     if (flags & NK_EDIT_MULTILINE)
         area.w = NK_MAX(0, area.w - style->scrollbar_size.x);
     row_height = (flags & NK_EDIT_MULTILINE)? font->height + style->row_padding: area.h;
+    if(edit->visual)row_height=edit->visual->row_height;
 
     /* calculate clipping rectangle */
     old_clip = out->clip;
@@ -28777,12 +28947,14 @@ nk_do_edit(nk_flags *state, struct nk_command_buffer *out,
             NK_TEXT_EDIT_MULTI_LINE: NK_TEXT_EDIT_SINGLE_LINE;
         /* keep scroll position when re-activating edit widget */
         struct nk_vec2 oldscrollbar = edit->scrollbar;
+        const struct nk_text_visual *visual=edit->visual;
         if (flags & NK_EDIT_PRESERVE_UNDO) {
             struct nk_text_undo_state history = edit->undo;
             nk_textedit_clear_state(edit, type, filter);
             edit->undo = history;
         } else nk_textedit_clear_state(edit, type, filter);
         edit->scrollbar = oldscrollbar;
+        edit->visual=visual;
         if (flags & NK_EDIT_AUTO_SELECT)
             select_all = nk_true;
         if (flags & NK_EDIT_GOTO_END_ON_ACTIVATE) {
@@ -28929,7 +29101,9 @@ nk_do_edit(nk_flags *state, struct nk_command_buffer *out,
 
 
     area.w = NK_MAX(0, area.w - style->cursor_size);
-    if (edit->active)
+    if(edit->visual) {
+        nk_edit_draw_visual(out,edit,style,font,in,bounds,area,clip,*state,flags,cursor_follow);
+    } else if (edit->active)
     {
         int total_lines = 1;
         struct nk_vec2 text_size = nk_vec2(0,0);
@@ -29378,6 +29552,10 @@ nk_edit_buffer(struct nk_context *ctx, nk_flags flags,
 
     win = ctx->current;
     style = &ctx->style;
+    if(edit->visual && (!(flags&NK_EDIT_READ_ONLY) || !(flags&NK_EDIT_MULTILINE) ||
+        edit->visual->glyph_count!=edit->string.len || edit->visual->row_count<1 ||
+        edit->visual->glyphs[edit->visual->glyph_count].byte!=nk_str_len_char(&edit->string)))
+        edit->visual=0;
     state = nk_widget(&bounds, ctx);
     if (!state) return state;
     else if (state == NK_WIDGET_DISABLED)
@@ -29429,6 +29607,7 @@ nk_edit_buffer(struct nk_context *ctx, nk_flags flags,
                     filter, edit, &style->edit, in, style->font);
     if (readonly_original) {
         readonly_original->mouse.scroll_delta = readonly_input.mouse.scroll_delta;
+        if(edit->visual)readonly_original->mouse.buttons[NK_BUTTON_LEFT].clicked_pos=readonly_input.mouse.buttons[NK_BUTTON_LEFT].clicked_pos;
         if (edit->active) {
             nk_zero(&readonly_original->keyboard.keys[NK_KEY_SCROLL_START], sizeof(struct nk_key));
             nk_zero(&readonly_original->keyboard.keys[NK_KEY_SCROLL_END], sizeof(struct nk_key));

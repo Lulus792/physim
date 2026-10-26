@@ -1,0 +1,889 @@
+{
+  "format": 1,
+  "date": "2026-10-26",
+  "scope": "Native readonly protocol wrapping; partial design acceptance",
+  "base_commit": "41cf92f47df5a01088fd9cd4289806654f6f39a6",
+  "own_source_sha256": {
+    "app/accessibility.c": "55f30f7e377e26008a1df1b20a4dc5e5638538d40d9f22e1aba41a3bd2eae6eb",
+    "app/accessibility.h": "9e04c3ff1a8567b09265b3e42eab03b7e6e12f43bf5f8664e0031e168e8429ff",
+    "app/accessibility_atspi_text.inc": "fdbf1689f9b550e2a69aab9cedad8fc18facb6a328061e51395494e36fc4974e",
+    "app/accessibility_macos_edit.inc": "2c8f325d3cebdf44582251763ba9a68958ded81d1485077aad55bd75d0994068",
+    "app/accessibility_windows.inc": "aff451e92656f70718df0b5113971ad13218dc73e6b42d8e0fcadddf99df2dc2",
+    "app/accessibility_windows_text.inc": "2f6b44b788274971bdb2bccc5c8e02fdabfc1503dd07fec918ac164add688d83",
+    "app/code_preview.c": "47ca6b0cf89d5a893d5fdfb36b20f4d205120721ab10ed3381ff691f59adb46b",
+    "app/code_preview.h": "e5c5061017dc0efc951d985dd20fbf39ebddec07840b9213f20c804a75e8d70a",
+    "app/protocol_original_tests.inc": "23ce4b9d58359a0439cb0b22e74368e226f43d6c5644eff5971356f9682db40a",
+    "app/protocol_tests.inc": "99941c5fcd884448e13d14e5895a5225169f65d55421c99ab4c317e6d3306f5d",
+    "app/protocol_ui.h": "d29448d93727b4aeb26a8a718c80d2b56f27245b35c256346e4b75fd16d5b186",
+    "app/protocol_ui.inc": "97ad8b7abba708aeadd7426d6e72a00730cc9bdeb96414e81e5e8bc4e7bd0643",
+    "app/text_wrap.c": "d57329515728caeaadd301618521f9c8abcd8025871f2058aa32cd8f095e7793",
+    "app/text_wrap.h": "88e3647ad6a23db84c3d4aee9ab66774d8b6bdeb2323e829a06f224839c1491d",
+    "app/ui.h": "22200ddbe5c8637c6dc139126a60da46c96eb564aab3e3ce580511b3523ed360",
+    "app/ui_sdl.c": "07159965ed9bfaca258e2be5ec961910e16d26b5b6fbfbb66e36f67e6dcc4117",
+    "tests/check_protocol_original.py": "834f8c1cc0202dcd2b70d33ba89c0cdb088b8847e8091bbef57f6ba7f1eb25d4",
+    "tests/native_integration_cases.json": "27bfafe9425feae92a5679c6d14b6b0dbf79f9f40e7849e389b23c93abeb10f3",
+    "tests/test_accessibility_edit.c": "5a35fafd4a196b0f4ff07b9b48ce7ebdd65f69cb3e58aa05e18434edebfc7bcd",
+    "tests/test_code_grapheme.c": "2715a7b74adf4cc8711a7467b162b2fd8cc647ea47d39b32e19b55212b4a6589",
+    "tests/test_code_wrap.c": "27785285e8aff62ae9a4cd51c84a26be77e6b3109e47c2280269eeb738cd2f95",
+    "tests/test_editor_wrapped.c": "a5d05c2c583b259f8af287a07cc7ebb6e5812018e44c61032629af055b16dff8",
+    "tests/test_text_wrap.c": "35b1fb33fb2c9b6c59c14d25326bd6b96c25c16b15f6a5712a9d0821f11d78a2",
+    "third_party/libunibreak-8.0/README.md": "b72fa30f58d22611b5257c28d8d13cecf1be3a80619224919f65597b3dfa2d94",
+    "third_party/libunibreak-8.0/manifest.json": "f56b7a115f368231c188b1c5bbad6f93d6625ba709c4b94ed0cae800584c4d34",
+    "third_party/libunibreak-8.0/GraphemeBreakTest.txt.gz": "9c51734193c00e2934cf6067d9f5e842b4f324f6863f8a90444d8298333b1472",
+    "third_party/libunibreak-8.0/emojidata.c": "b33ed203eb6bacfc7c9598a726a41c64ab67032b767bc676aecc430a207faeb6",
+    "third_party/libunibreak-8.0/emojidef.c": "4baf8f003201d49cbf78d58c0938eb28e19121095314724e8dedbb610bae327f",
+    "third_party/libunibreak-8.0/emojidef.h": "d14675c270334b046288f647a060186066b4d6d1905a457459d58388879efabe",
+    "third_party/libunibreak-8.0/graphemebreak.c": "5f56dbc388ddff595dfff70b898a02eee9cecfaa4496f21927fdc6f92c411977",
+    "third_party/libunibreak-8.0/graphemebreak.h": "1709206d2834b738adea536d09c89860f94fb9c448fcc02492a1adcd07c13421",
+    "third_party/libunibreak-8.0/graphemebreakdata.c": "fbab281189b6a8a50d96c3361f2b9f22a37c92624ca6f4060edff7d169a20979",
+    "third_party/libunibreak-8.0/graphemebreakdef.h": "315874919d7d9bf3729871c0be1b5550d7ff18cc12d3b5d0c1fb626e8c4be246",
+    "third_party/libunibreak-8.0/indicconjunctbreakdata.c": "c69d1b5119fe53323e36913534378ea2ef91e0aa7839719cb5cf1c18e4c5250d",
+    "third_party/libunibreak-8.0/indicconjunctbreakdef.h": "a0259a06431c3446ee48ab0c69afd1ede71643a28963169d5cde9ff782e75b97",
+    "third_party/nuklear.h": "ced7e132bd01897942fc9a4942cce14fa10fa055108585fbab6f0e9267bafa0f",
+    "third_party/nuklear_text_layout.h": "17f6150ec7582622d72591f5bc5465de59804ba0b614bfb57dd668ab3c6399c1",
+    "tools/build.py": "e865e97fc447047a0d2eec0ab60c4c821551076421bf28bd05ffa676e4fdb383",
+    "tools/native_tests.py": "870393ea5ac3753cb8c29c13071304c6f04adcdb095d19e6239aac73d885674c",
+    "app/accessibility_atspi.c": "4a97a7a42472e6af24d0d5b31b74b4e6945266d2208ac8c850359b80790e46fa"
+  },
+  "foreign_changes_excluded": true,
+  "source": {
+    "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/source.json",
+    "sha256": "bad0f8a2349db2e7c80f7e73f34f0c6fd1f506245a1990e51414187eb7a06261"
+  },
+  "archives": {
+    "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/final-clean-hover-archives.json",
+    "sha256": "bf176b398632b66c0f63f39298560b07a06f7faf3aa934910d114a7e95476bd3"
+  },
+  "own_overlay_archive": {
+    "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/final-owned-inputs.zip",
+    "sha256": "ac02868ebadc84379ef413d920cb85121ba589d38d54271f2841a5d05a86c64b"
+  },
+  "unit_tests": {
+    "windows": {
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test",
+        "--test-filter",
+        "code_preview",
+        "--test-filter",
+        "code_wrap",
+        "--test-filter",
+        "code_grapheme",
+        "--test-filter",
+        "code_linebreak",
+        "--test-filter",
+        "text_wrap",
+        "--test-filter",
+        "editor_wrapped",
+        "--test-filter",
+        "editor_readonly",
+        "--test-filter",
+        "editor_clipboard",
+        "--test-filter",
+        "editor_scroll",
+        "--test-filter",
+        "ui_text_flow",
+        "--test-filter",
+        "accessibility_edit",
+        "--test-filter",
+        "accessibility"
+      ],
+      "exit_code": 0,
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-z5zozyuc/results.json",
+        "sha256": "f296b0b5e8200b4f02a4e2495e9f9a2628b943b70c5d7ad5d452d9f1fc39839e"
+      },
+      "groups": [
+        {
+          "name": "code_preview",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Code preview: Unicode opportunities, intact long tokens/UTF8, whitespace, tabs, forced breaks, soft hyphen, ZWSP, byte spans and failure preservation passed\n"
+        },
+        {
+          "name": "code_wrap",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Anywhere wrap: long tokens, UTF-8/graphemes, preferred opportunities, tabs, CRLF/trailing caret row and failure preservation passed\n"
+        },
+        {
+          "name": "text_wrap",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Visual map: exact bytes, soft/hard rows, CRLF/combining caret stops, hit affinity, tabs and failed replacement passed\n"
+        },
+        {
+          "name": "editor_wrapped",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Wrapped readonly editor: real draw commands, pointer/vertical navigation, soft End/Home, original UTF8+CRLF copy, reflow selection and visible final glyph passed\n"
+        },
+        {
+          "name": "code_grapheme",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Unicode grapheme conformance: 766 complete upstream cases passed\n"
+        },
+        {
+          "name": "code_linebreak",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Unicode17 UAX14 conformance: 19338 complete cases, zero skipped\n"
+        },
+        {
+          "name": "accessibility",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Accessibility model: immutable publication, stable/expired IDs, disabled/stale activation, duplicate scoping, UTF-8, separator range and capacity passed\n"
+        },
+        {
+          "name": "accessibility_edit",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Editable accessibility and readonly 12KiB original: Unicode value, exact multiline snapshot, selection, rejected mutation, delivery once and capacity changes passed\n"
+        },
+        {
+          "name": "ui_text_flow",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "UTF-8 flow: kerning, preserved path bytes, long tokens and custom focus passed\n"
+        },
+        {
+          "name": "editor_clipboard",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Editor clipboard: UTF-8, cursor, undo/redo, replacement and allocation failure passed\n"
+        },
+        {
+          "name": "editor_readonly",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Readonly editor: focus, selection/copy, rejected mutations, target-row scrolling and disabled input passed\n"
+        },
+        {
+          "name": "editor_scroll",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Unfocused field scroll: actual draw offset persists, other field focus/cursor/selection and values unchanged\n"
+        }
+      ],
+      "subsequent_source_difference": {
+        "files": [
+          "app/protocol_original_tests.inc"
+        ],
+        "reason": "Native app capture-only pointer motion; unit inputs unchanged"
+      }
+    },
+    "linux": {
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test",
+        "--sanitizers",
+        "--test-filter",
+        "code_preview",
+        "--test-filter",
+        "code_wrap",
+        "--test-filter",
+        "code_grapheme",
+        "--test-filter",
+        "code_linebreak",
+        "--test-filter",
+        "text_wrap",
+        "--test-filter",
+        "editor_wrapped",
+        "--test-filter",
+        "editor_readonly",
+        "--test-filter",
+        "editor_clipboard",
+        "--test-filter",
+        "editor_scroll",
+        "--test-filter",
+        "ui_text_flow",
+        "--test-filter",
+        "accessibility_edit",
+        "--test-filter",
+        "accessibility"
+      ],
+      "exit_code": 0,
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-okh5zq_t/results.json",
+        "sha256": "0e89d9702a078810a93e959c7a466f16247dd2424b48356a11a449fdf308180a"
+      },
+      "groups": [
+        {
+          "name": "code_preview",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Code preview: Unicode opportunities, intact long tokens/UTF8, whitespace, tabs, forced breaks, soft hyphen, ZWSP, byte spans and failure preservation passed\n"
+        },
+        {
+          "name": "code_wrap",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Anywhere wrap: long tokens, UTF-8/graphemes, preferred opportunities, tabs, CRLF/trailing caret row and failure preservation passed\n"
+        },
+        {
+          "name": "text_wrap",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Visual map: exact bytes, soft/hard rows, CRLF/combining caret stops, hit affinity, tabs and failed replacement passed\n"
+        },
+        {
+          "name": "editor_wrapped",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Wrapped readonly editor: real draw commands, pointer/vertical navigation, soft End/Home, original UTF8+CRLF copy, reflow selection and visible final glyph passed\n"
+        },
+        {
+          "name": "code_grapheme",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Unicode grapheme conformance: 766 complete upstream cases passed\n"
+        },
+        {
+          "name": "code_linebreak",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Unicode17 UAX14 conformance: 19338 complete cases, zero skipped\n"
+        },
+        {
+          "name": "accessibility",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Accessibility model: immutable publication, stable/expired IDs, disabled/stale activation, duplicate scoping, UTF-8, separator range and capacity passed\n"
+        },
+        {
+          "name": "accessibility_edit",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Editable accessibility and readonly 12KiB original: Unicode value, exact multiline snapshot, selection, rejected mutation, delivery once and capacity changes passed\n"
+        },
+        {
+          "name": "ui_text_flow",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "UTF-8 flow: kerning, preserved path bytes, long tokens and custom focus passed\n"
+        },
+        {
+          "name": "editor_clipboard",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Editor clipboard: UTF-8, cursor, undo/redo, replacement and allocation failure passed\n"
+        },
+        {
+          "name": "editor_readonly",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Readonly editor: focus, selection/copy, rejected mutations, target-row scrolling and disabled input passed\n"
+        },
+        {
+          "name": "editor_scroll",
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Unfocused field scroll: actual draw offset persists, other field focus/cursor/selection and values unchanged\n"
+        }
+      ],
+      "subsequent_source_difference": {
+        "files": [
+          "app/protocol_original_tests.inc"
+        ],
+        "reason": "Native app capture-only pointer motion; unit inputs unchanged"
+      }
+    }
+  },
+  "native_tests": {
+    "windows": {
+      "app_sha256": "c26a9184422d70b6f08dad54407b56b1764e76583dc55654eb8c7601e63b4d4d",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "protocol_original",
+        "--test-filter",
+        "protocol_navigator"
+      ],
+      "builder_exit_code": 0,
+      "log": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/display-windows.log",
+        "sha256": "0bbd35df3ce2e2e196b4c598569bd74ee3f8e0274783c4bc98ffb2eaf773049b"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-z2bz8e2s/results.json",
+        "sha256": "89f710b8d05a132cc2cf15c33523e3fff0f421e6507f898f0ebf510f439402cc"
+      },
+      "groups": {
+        "protocol_navigator": {
+          "proof": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-z2bz8e2s/protocol_navigator/files ä/verification.json",
+            "sha256": "fbabec971ba86b0297a144df0016313e4b2237d4986fb23cdd284986cb0f26d4"
+          },
+          "cases": [
+            {
+              "mode": "protocol-ui-dark",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 70
+            },
+            {
+              "mode": "protocol-ui-light",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 1
+            },
+            {
+              "mode": "protocol-ui-contrast",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 1
+            },
+            {
+              "mode": "protocol-ui-large",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 1
+            },
+            {
+              "mode": "protocol-ui-narrow",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 1
+            },
+            {
+              "mode": "protocol-ui-boundary",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 1
+            },
+            {
+              "mode": "protocol-ui-empty",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 1
+            },
+            {
+              "mode": "protocol-ui-dark",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 38
+            }
+          ]
+        },
+        "protocol_original": {
+          "proof": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-z2bz8e2s/protocol_original/files ä/verification.json",
+            "sha256": "ebeea061e22e228b1104edcbaf07b3d4fc0a01b1b318714f5361beb2f0f3eabb"
+          },
+          "cases": [
+            {
+              "mode": "protocol-ui-wrap-dark",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 11,
+              "original_bytes": 12288,
+              "scalars": 12283,
+              "rows": 325,
+              "end_pixels": {
+                "density": 1.0,
+                "crop": [
+                  1299,
+                  915,
+                  1306,
+                  927
+                ],
+                "ink_pixels": 22,
+                "channel_spread": 186
+              },
+              "image_sha256": "4bc32c838977a88e87a50bcb4d931fdf479c5fa8d38aa0a3fdac328c125b29a2"
+            },
+            {
+              "mode": "protocol-ui-wrap-light",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 11,
+              "original_bytes": 12288,
+              "scalars": 12283,
+              "rows": 325,
+              "end_pixels": {
+                "density": 1.0,
+                "crop": [
+                  1299,
+                  915,
+                  1306,
+                  927
+                ],
+                "ink_pixels": 23,
+                "channel_spread": 192
+              },
+              "image_sha256": "3a254e29e2f11cedb87aa240fc50a346d2558bf04daefc2fd02b5bb238a01b43"
+            },
+            {
+              "mode": "protocol-ui-wrap-contrast",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 11,
+              "original_bytes": 12288,
+              "scalars": 12283,
+              "rows": 325,
+              "end_pixels": {
+                "density": 1.0,
+                "crop": [
+                  1300,
+                  914,
+                  1307,
+                  926
+                ],
+                "ink_pixels": 24,
+                "channel_spread": 220
+              },
+              "image_sha256": "0812a6df64b27553ad70a03ac4a1acf1fa760517b996dbe74dfd0732f2f564fb"
+            },
+            {
+              "mode": "protocol-ui-wrap-large",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 11,
+              "original_bytes": 12288,
+              "scalars": 12283,
+              "rows": 80,
+              "end_pixels": {
+                "density": 1.0,
+                "crop": [
+                  229,
+                  897,
+                  238,
+                  913
+                ],
+                "ink_pixels": 23,
+                "channel_spread": 198
+              },
+              "image_sha256": "41e1e9493c06eff40d1a19f03f1c95da06f563a38065e6454507bd5faadeae0f"
+            },
+            {
+              "mode": "protocol-ui-wrap-narrow",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 11,
+              "original_bytes": 12288,
+              "scalars": 12283,
+              "rows": 78,
+              "end_pixels": {
+                "density": 1.0,
+                "crop": [
+                  169,
+                  567,
+                  176,
+                  579
+                ],
+                "ink_pixels": 22,
+                "channel_spread": 186
+              },
+              "image_sha256": "bc6c9d77e5eb1e40af5aefc38274385ba04e864dbdda70fb08c652a5772e23a2"
+            }
+          ]
+        }
+      },
+      "outer_driver_exit_code": 1,
+      "outer_driver_note": "Driver assumed a prebuilt unchanged binary; this call rebuilt after capture-only fixture change. Post-run assertion rejected the expected old/new difference. Builder exit 0, both native verifiers exit 0, their recorded per-run binary hashes match the final archived program."
+    },
+    "linux": {
+      "app_sha256": "7d6f95a6c0633353130fb0c279461753ba92861af154679ba15328459c8167f9",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "protocol_original",
+        "--test-filter",
+        "protocol_navigator"
+      ],
+      "builder_exit_code": 0,
+      "log": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/display-linux.log",
+        "sha256": "704c79e351d0102043c1d037db78adc9f33ec3f89b4ccff6b68cbe4aea0c6731"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-6gh6fq9h/results.json",
+        "sha256": "ce157c5c41f577c78e37e7918e0f5a26dbf76893245e49d450401310780c92bd"
+      },
+      "groups": {
+        "protocol_navigator": {
+          "proof": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-6gh6fq9h/protocol_navigator/files ä/verification.json",
+            "sha256": "def8b4a7c95bd4995376e44fd7cd8d71a5c77bc619594dba1bf063323058b604"
+          },
+          "cases": [
+            {
+              "mode": "protocol-ui-dark",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 70
+            },
+            {
+              "mode": "protocol-ui-light",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 1
+            },
+            {
+              "mode": "protocol-ui-contrast",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 1
+            },
+            {
+              "mode": "protocol-ui-large",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 1
+            },
+            {
+              "mode": "protocol-ui-narrow",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 1
+            },
+            {
+              "mode": "protocol-ui-boundary",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 1
+            },
+            {
+              "mode": "protocol-ui-empty",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 1
+            },
+            {
+              "mode": "protocol-ui-dark",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 38
+            }
+          ]
+        },
+        "protocol_original": {
+          "proof": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-6gh6fq9h/protocol_original/files ä/verification.json",
+            "sha256": "92147c878846590280efd54cb7f9db2c6ff8d116694c7229c159d1da2010cd6c"
+          },
+          "cases": [
+            {
+              "mode": "protocol-ui-wrap-dark",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 11,
+              "original_bytes": 12288,
+              "scalars": 12283,
+              "rows": 362,
+              "end_pixels": {
+                "density": 1.0,
+                "crop": [
+                  1313,
+                  869,
+                  1320,
+                  883
+                ],
+                "ink_pixels": 8,
+                "channel_spread": 203
+              },
+              "image_sha256": "4b6c337198e36cf748d70e6a985bf25aaef9f072b9787ed0db0b8097d41a3aa2"
+            },
+            {
+              "mode": "protocol-ui-wrap-light",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 11,
+              "original_bytes": 12288,
+              "scalars": 12283,
+              "rows": 362,
+              "end_pixels": {
+                "density": 1.0,
+                "crop": [
+                  1313,
+                  869,
+                  1320,
+                  883
+                ],
+                "ink_pixels": 8,
+                "channel_spread": 209
+              },
+              "image_sha256": "4c7e5e18797c50bf127d889424a5062303ab0cf7d522e0950c4f7d65416deb85"
+            },
+            {
+              "mode": "protocol-ui-wrap-contrast",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 11,
+              "original_bytes": 12288,
+              "scalars": 12283,
+              "rows": 362,
+              "end_pixels": {
+                "density": 1.0,
+                "crop": [
+                  1314,
+                  868,
+                  1321,
+                  882
+                ],
+                "ink_pixels": 8,
+                "channel_spread": 239
+              },
+              "image_sha256": "47953e0e3109275038f9d12137e10cab1b8bee0b7c895511753fb8344cac679d"
+            },
+            {
+              "mode": "protocol-ui-wrap-large",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 11,
+              "original_bytes": 12288,
+              "scalars": 12283,
+              "rows": 87,
+              "end_pixels": {
+                "density": 1.0,
+                "crop": [
+                  247,
+                  896,
+                  258,
+                  915
+                ],
+                "ink_pixels": 44,
+                "channel_spread": 184
+              },
+              "image_sha256": "0fb254c4593f6f0dbbc98ca9041062ae197a00ece501b75ae4c9708c7d4f7168"
+            },
+            {
+              "mode": "protocol-ui-wrap-narrow",
+              "exitcode": 0,
+              "passed": true,
+              "steps": 11,
+              "original_bytes": 12288,
+              "scalars": 12283,
+              "rows": 85,
+              "end_pixels": {
+                "density": 1.0,
+                "crop": [
+                  183,
+                  566,
+                  190,
+                  580
+                ],
+                "ink_pixels": 8,
+                "channel_spread": 203
+              },
+              "image_sha256": "f7ac5034828bd3e5a1ea4797075e88600305e99d9d10e59ab107d3c92c922827"
+            }
+          ]
+        }
+      },
+      "outer_driver_exit_code": 1,
+      "outer_driver_note": "Driver assumed a prebuilt unchanged binary; this call rebuilt after capture-only fixture change. Post-run assertion rejected the expected old/new difference. Builder exit 0, both native verifiers exit 0, their recorded per-run binary hashes match the final archived program."
+    }
+  },
+  "vendor": {
+    "manifest": {
+      "path": "third_party/libunibreak-8.0/manifest.json",
+      "sha256": "f56b7a115f368231c188b1c5bbad6f93d6625ba709c4b94ed0cae800584c4d34"
+    },
+    "all_files_checked": 27,
+    "revision": "28a2756b864c343f438cd22537d49d394d4666a5"
+  },
+  "counterexamples": {
+    "verifier": {
+      "path": "build/validation/protocol-wrap-2026-10-26/counterexamples/verifier-original-final.json",
+      "sha256": "eb014fdeb3d933321eb98687b6570ae1447ed4941159d435be3fbe9855a15fa2"
+    },
+    "results": [
+      {
+        "mutation": "missing_copy_step",
+        "rejected": true,
+        "reason": "Incomplete native action sequence"
+      },
+      {
+        "mutation": "changed_original_crc",
+        "rejected": true,
+        "reason": "Original bytes changed"
+      },
+      {
+        "mutation": "clipboard_mismatch",
+        "rejected": true,
+        "reason": "Native SDL clipboard did not contain exact original"
+      },
+      {
+        "mutation": "blank_final_glyph",
+        "rejected": true,
+        "reason": "Final glyph region has no visible ink"
+      }
+    ],
+    "versioned_checker": {
+      "path": "tests/check_protocol_original_counterexamples.py",
+      "sha256": "a18ab69e2770c083d5d2f679777cbc48ecfe8d80b9674143f2adfb8fbe1a9ce0"
+    },
+    "versioned_checker_result": {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-z2bz8e2s/protocol_original/files ä/protocol-ui-wrap-dark/workflow ä/counterexamples.json",
+      "sha256": "1aab6d16640c97ae5b7e356beed853198bb6793ee3eff774b2fa24064e25db26"
+    },
+    "versioned_checker_command": [
+      "C:/Users/angel/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+      "-B",
+      "tests/check_protocol_original_counterexamples.py",
+      "--root",
+      "D:/Physim",
+      "--work",
+      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-z2bz8e2s\\protocol_original\\files ä\\protocol-ui-wrap-dark\\workflow ä"
+    ],
+    "versioned_checker_exit_code": 0,
+    "wrap_mutations": {
+      "path": "build/validation/protocol-wrap-2026-10-26/counterexamples/results.json",
+      "sha256": "d30bd567c630648e4fe5a2dc3dc645e6bde720d2d7bbb2a87760b69c4bdcd400"
+    },
+    "soft_hyphen_before": {
+      "path": "build/validation/protocol-wrap-2026-10-26/counterexamples/soft-hyphen-before.json",
+      "sha256": "f110f471f1024013b665f3a948ff1174509f8ae03a27b10740ee364af79352b3"
+    }
+  },
+  "native_edit_followup": {
+    "cases": {
+      "windows": {
+        "command_and_exit": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/edit-windows.json",
+          "sha256": "13985c939dd6aa2824e4c513f3fe35325f39a94446cbdab67009c99069429b1e"
+        },
+        "log": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/edit-windows.log",
+          "sha256": "67fea6b2aa331d8ce61263e4a0151e4917167ae9b8dedd931e89daec8b8a0d4c"
+        },
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-sahozz2e/results.json",
+          "sha256": "b78c7983c38be56f9be63bd5e24dc9a7aa417f67276bfb34842192fff377dcac"
+        },
+        "failed_groups": [
+          "accessibility_edit_scroll_windows",
+          "accessibility_edit_windows"
+        ],
+        "baseline_command_and_exit": {
+          "path": "build/validation/protocol-wrap-2026-10-26/5-baseline/windows.json",
+          "sha256": "2432a951692feff998823211f93dba74f6d1a65c4840dcc09f319013dbc8166d"
+        },
+        "baseline_log": {
+          "path": "build/validation/protocol-wrap-2026-10-26/5-baseline/windows.log",
+          "sha256": "40e6657b2bbea8b1e2d3bb34408f35395571f9a0cb27c0a626bc997b673642cd"
+        },
+        "conclusion": "Actual F1 edit entry missing in current and pre-change baseline; broader native edit regression suite remains failed, not a new proven wrap regression"
+      },
+      "linux": {
+        "command_and_exit": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/edit-linux.json",
+          "sha256": "ffe226296aa5ae76d2c62aec687cbf26645e6e48b0248a50629a67b79ea918cb"
+        },
+        "log": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/edit-linux.log",
+          "sha256": "6ee605548829aecc2e303b7e79f81c56b25cc2d3bd915e33361200e6b7054826"
+        },
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-hozvknem/results.json",
+          "sha256": "7a17a1b8845a23d53e2790360f4dd0fae557663aaf77b2c358b28c1a2757824b"
+        },
+        "failed_groups": [
+          "accessibility_edit_atspi"
+        ],
+        "baseline_command_and_exit": {
+          "path": "build/validation/protocol-wrap-2026-10-26/5-baseline/linux.json",
+          "sha256": "04e78ad67a6922071efd2a7ea7d4e1372ece768be80c81866f9a2d1c932607f4"
+        },
+        "baseline_log": {
+          "path": "build/validation/protocol-wrap-2026-10-26/5-baseline/linux.log",
+          "sha256": "45596785c7f0a860f963c1d13b2684fac140f50ab1720794daf15613e08c56db"
+        },
+        "conclusion": "Actual F1 edit entry missing in current and pre-change baseline; broader native edit regression suite remains failed, not a new proven wrap regression"
+      }
+    },
+    "baseline_source_and_archives": {
+      "path": "build/validation/protocol-wrap-2026-10-26/5-baseline/baseline.json",
+      "sha256": "9d5554e5b628ce4b9de9413aadc2c7e4fb6ef7dddeb066a5a04a0bed09ecd185"
+    },
+    "all_checked_sources_equal": 390,
+    "temporary_restore_cleanup": {
+      "path": "build/validation/protocol-wrap-2026-10-26/5-baseline/restore-cleanup.json",
+      "sha256": "8228fb61d64112a886ebc123318f022f72830437d696ddd5995a40316f8f1ca2"
+    }
+  },
+  "crash_evidence": {
+    "windows_before": {
+      "path": "build/validation/protocol-wrap-2026-10-26/4-crash/windows-asan.json",
+      "sha256": "f4e24d6344bcc0c6be91b29052bbfa3e4cf6de453a506a31f04d335cd64ef214"
+    },
+    "windows_after": {
+      "path": "build/validation/protocol-wrap-2026-10-26/4-crash/windows-asan-fixed.json",
+      "sha256": "95c9c4b06ceb19603f880c2a71e3966e338aefaa61cea9f8b7cfd21366a1a87d"
+    },
+    "windows_fixed_source_note": "Raw source_manifest points to older checkpoint; do not treat it as complete fixed whole-tree source provenance. Fixed binary and raw logs retained. Latest isolated source/runtime archives cover the current validated implementation.",
+    "linux_stack": {
+      "path": "build/validation/protocol-wrap-2026-10-26/4-crash/linux-stack/measurement.json",
+      "sha256": "66792c6b1fca2c4bc5622af733987356f9ef1e67896134f1e87a0c002fe630cf"
+    }
+  },
+  "selected_image": {
+    "path": "docs/visuals/unified-workspace/protocol-original-native-2026-10-26/original-end-windows.png",
+    "sha256": "4bc32c838977a88e87a50bcb4d931fdf479c5fa8d38aa0a3fdac328c125b29a2"
+  },
+  "retention": "Raw distinct themes, failure evidence and frozen archives retained on D; 11 actions per original case are JSON, one PNG per mode. Only one original image versioned. Superseded own phase 2 object cleanup documented separately.",
+  "limitations": [
+    "Native original retains bounded inner scroll height versus natural CSS pre height; open design gap",
+    "Independent F1 editable-field clients fail in new and baseline Windows/Linux builds; remains open",
+    "Earlier context tooltip overlaps protocol; capture pointer moved, product hover issue remains",
+    "No macOS build or native screenreader reading proof in this run",
+    "Synthetic focus does not close physical separator focus issue",
+    "GUI Linux leak detection disabled; only Xvfb/Openbox/software OpenGL tested",
+    "No full shaping/emoji, multi-DPI or whole-UI fidelity acceptance",
+    "Edit node 14640 bytes; model 7628040 bytes; no broad memory/performance acceptance"
+  ]
+}

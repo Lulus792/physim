@@ -282,7 +282,7 @@ static void states(ax_reply *r, DBusMessageIter *iter, ps_a11y_native *w,
     if(available && w && !node->id && w->active)first |= 1u << 1;
     if(node->focusable)first |= 1u << 11;
     if(available && node->focused)first |= 1u << 12;
-    if(node->role==PS_A11Y_EDIT){first|=1u<<26;if(available && node->enabled)first|=1u<<7;}
+    if(node->role==PS_A11Y_EDIT){first|=1u<<(node->text_multiline?17:26);if(available && node->enabled && !node->text_read_only)first|=1u<<7;}
     if(ps_a11y_range_role(node->role) && node->enabled)first |= 1u << 7;
     if(node->role==PS_A11Y_SEPARATOR)first|=1u<<(node->bounds[2]<node->bounds[3]?29:14);
     if (!w || w->visible)
@@ -1245,7 +1245,24 @@ static ax_server *server_create(void) {
     static const DBusObjectPathVTable vtable = {.message_function = message_handler};
     if (!dbus_connection_register_fallback(s->connection, "/org/a11y/atspi", &vtable, s))
         goto fail;
-    s->thread = SDL_CreateThread(dispatcher, "Physim AT-SPI", s);
+    /* Immutable edit snapshots cross several D-Bus callback frames by value.
+     * A measured ASan handler needs 156 KiB; musl's default is about 134 KiB.
+     * Give this dispatcher an explicit stack without changing process defaults. */
+    SDL_PropertiesID thread_properties = SDL_CreateProperties();
+    if (thread_properties) {
+        SDL_ThreadFunction thread_function = dispatcher;
+        void *thread_entry = NULL;
+        _Static_assert(sizeof(thread_entry) == sizeof(thread_function), "SDL entry property pointer size");
+        memcpy(&thread_entry, &thread_function, sizeof(thread_entry));
+        bool configured =
+            SDL_SetPointerProperty(thread_properties, SDL_PROP_THREAD_CREATE_ENTRY_FUNCTION_POINTER, thread_entry) &&
+            SDL_SetStringProperty(thread_properties, SDL_PROP_THREAD_CREATE_NAME_STRING, "Physim AT-SPI") &&
+            SDL_SetPointerProperty(thread_properties, SDL_PROP_THREAD_CREATE_USERDATA_POINTER, s) &&
+            SDL_SetNumberProperty(thread_properties, SDL_PROP_THREAD_CREATE_STACKSIZE_NUMBER, 1024 * 1024);
+        if (configured)
+            s->thread = SDL_CreateThreadWithProperties(thread_properties);
+        SDL_DestroyProperties(thread_properties);
+    }
     if (!s->thread)
         goto fail;
     request = dbus_message_new_method_call("org.a11y.atspi.Registry", AX_ROOT, AX_PREFIX "Socket",

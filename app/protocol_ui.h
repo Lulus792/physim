@@ -3,6 +3,7 @@
 #include "ui.h"
 #include "protocol_store.h"
 #include "graphic_output.h"
+#include "text_wrap.h"
 typedef struct {
     uint64_t selected,original_id,last_seen;
     size_t original_size,original_length,page;
@@ -13,6 +14,10 @@ typedef struct {
     struct nk_context *navigation_ui;
     unsigned return_frames;
     char original_page[12289];
+    ps_text_wrap *original_layout;
+    struct nk_text_edit original_edit;
+    struct nk_user_font original_layout_font;
+    struct nk_rect original_bounds;
     int origin,level;bool initialized,transcript,follow,resize,resize_cancelled,focus_return,details_more,original_closed,cursor_owned;
     float resize_original,resize_effective,resize_y;
     nk_uint scroll_x,scroll_y,rendered_scroll_y;

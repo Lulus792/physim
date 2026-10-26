@@ -30,7 +30,7 @@ struct uia_element {
  ITextProvider2 text2;
  IValueProvider value;
  LONG references;ps_a11y_native *bridge;uint64_t id;ps_a11y_role role;
- char previous_text[PS_A11Y_LABEL_BYTES];
+ char previous_text[sizeof(((ps_a11y_node *)0)->text_value)];
  size_t previous_start,previous_end,previous_caret;
  uia_link_state previous_link;bool has_link_state;
 };
@@ -355,7 +355,7 @@ static HRESULT STDMETHODCALLTYPE uia_edit_value(IValueProvider *p,BSTR *out) {
  VARIANT text;VariantInit(&text);HRESULT result=uia_string(node.text_value,&text);if(SUCCEEDED(result))*out=text.bstrVal;return result;
 }
 static HRESULT STDMETHODCALLTYPE uia_edit_readonly(IValueProvider *p,BOOL *out) {
- if(!out)return E_POINTER;ps_a11y_node node;if(!uia_node(UIA_OWNER(IValueProvider,value,p),&node))return UIA_E_ELEMENTNOTAVAILABLE;*out=!node.enabled;return S_OK;
+ if(!out)return E_POINTER;ps_a11y_node node;if(!uia_node(UIA_OWNER(IValueProvider,value,p),&node))return UIA_E_ELEMENTNOTAVAILABLE;*out=!node.enabled || node.text_read_only;return S_OK;
 }
 static const IValueProviderVtbl uia_edit_vtable={uia_edit_query,uia_edit_addref,uia_edit_release,uia_edit_set,uia_edit_value,uia_edit_readonly};
 #include "accessibility_windows_text.inc"

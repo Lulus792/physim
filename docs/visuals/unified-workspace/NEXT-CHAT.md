@@ -23,8 +23,13 @@ Compiler-/Laufmeldungen, explizite Quellsprünge und herausgelöste Bereiche auc
 ohne fremde lokale Änderungen. Die früheren
 [Teilprüfungen](PROTOCOL-C-NATIVE.md) und der
 [Fokusnachlauf](PROTOCOL-FOCUS-NATIVE.md) behalten ihren datierten Geltungsbereich.
-C ist weiterhin nicht vollständig abgenommen: den weichen Umbruch langer
-Originalzeilen und den direkten Maus-/Tastaturfokus als Nächstes schließen.
+Der folgende [Originaltext-Nachweis](PROTOCOL-ORIGINAL-NATIVE.md) ergänzt den
+nativen weichen Umbruch langer Zeilen, unveränderte Auswahl/Kopie und den
+Layoutwechsel ohne verlorenen äußeren Scrolloffset. C ist weiterhin nicht
+vollständig abgenommen: natürliche Originaltexthöhe und Abstände gegen die
+Vorlage angleichen, Tooltip-Überlagerung prüfen und den direkten
+Maus-/Tastaturfokus schließen. macOS, Screenreader und vollständige
+Designgleichheit bleiben eigene offene Nachweise.
 
 Das [Inhaltsinventar](CONTENT-INVENTORY.md) bleibt mitzuprüfen: Kräfte, Texte,
 Objekttypen/Hierarchie, Parameter, Messkanäle, Modellmeldungen und variable
