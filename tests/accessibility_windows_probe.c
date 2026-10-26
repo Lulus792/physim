@@ -256,6 +256,11 @@ static HRESULT find_edit(IUIAutomation *a,IUIAutomationElement *desktop,LONG pid
  }
  if(windows)IUIAutomationElementArray_Release(windows);if(condition)IUIAutomationCondition_Release(condition);return result;
 }
+static void trace_edit_order(const char *step) {
+ if(!getenv("PHYSIM_UIA_SCROLL_TRACE"))return;
+ FILETIME time;GetSystemTimePreciseAsFileTime(&time);ULARGE_INTEGER value;value.LowPart=time.dwLowDateTime;value.HighPart=time.dwHighDateTime;
+ fprintf(stderr,"UIA EDIT ORDER: step=%s utc-ns=%llu\n",step,(unsigned long long)((value.QuadPart-116444736000000000ULL)*100));
+}
 /* Query desktop focus independently of the expected field's own property. */
 static void trace_field_host(IUIAutomationElement *expected,const char *phase) {
  if(!getenv("PHYSIM_UIA_FOCUS_TRACE"))return;
@@ -428,8 +433,8 @@ int wmain(int argc,wchar_t **argv) {
   ok=role==UIA_EditControlTypeId && SUCCEEDED(IUIAutomationElement_GetCurrentPattern(control,UIA_ValuePatternId,&unknown)) && unknown &&
    SUCCEEDED(IUnknown_QueryInterface(unknown,&IID_IUIAutomationValuePattern,(void**)&pattern)) &&
    SUCCEEDED(IUIAutomationValuePattern_get_CurrentIsReadOnly(pattern,&readonly)) && !readonly;
-  if(ok)action=IUIAutomationValuePattern_SetValue(pattern,argv[4]);
-  if(ok && SUCCEEDED(action))action=IUIAutomationElement_SetFocus(control);
+  if(ok){trace_edit_order("value-begin");action=IUIAutomationValuePattern_SetValue(pattern,argv[4]);trace_edit_order("value-end");}
+  if(ok && SUCCEEDED(action)){trace_edit_order("focus-begin");action=IUIAutomationElement_SetFocus(control);trace_edit_order("focus-end");}
   if(pattern)IUIAutomationValuePattern_Release(pattern);
  } else if(ok && (scroll_start || scroll_end))action=scroll_text(control,argv[4],scroll_start);
  else if(ok && text_select)action=select_text(control,argv[4]);

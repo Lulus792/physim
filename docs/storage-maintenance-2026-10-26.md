@@ -108,3 +108,11 @@ Zwei abgeschlossene, nur für eine Gegenprobe wiederhergestellte Kopien mit
 nachgelesenen, hashgeprüften Archiven erhalten; Fehlerlogs, Quellen und aktuelle
 Builds bleiben unverändert. Diese zusätzliche Zahl gehört nicht zur obigen
 Objektdatei-Zwischensumme und ist keine physische Freispeichermessung.
+
+Der folgende [F1-Reihenfolgenachlauf](visuals/f1-layouts/UIA-SCROLL-ORDER.md)
+benötigt ebenfalls keine Bilder. Nach Abschluss seiner gezielten Gegenprobe
+wurden nochmals zwei nur dafür wiederhergestellte Programmkopien mit
+5.650.944 Byte entfernt. Ihre Bytes sind in nachgelesenen Archiven erhalten;
+die aktuelle Laufzeit mit 206 Dateien hat einen eigenen flachen Archivindex.
+Quellen, Symbole, aktuelle Builds, VM und Rohspuren des ursprünglichen Fehlers
+bleiben erhalten. Der neue Bericht nennt die genauen Wiederherstellungspositionen.

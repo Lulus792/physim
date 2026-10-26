@@ -38,8 +38,10 @@ Maus-/Tastaturfokus schließen. Der folgende
 vollständige Klicks innerhalb eines Frames und den ursprünglichen Druckpunkt;
 Linux prüft den schnellen Suche-/Trenner-Fokuswechsel mit anschließendem
 40-Pixel-Schritt. Der direkte Windows-Desktopnachweis bleibt offen. Die zusätzliche
-F1-UIA-Scrollprüfung scheitert auch im gesicherten Vorzustand an einem noch
-aktiven Suchfeld; diesen getrennten Fokusbefund weiter untersuchen.
+F1-UIA-Scrollprüfung ist im folgenden
+[Reihenfolgenachlauf](../f1-layouts/UIA-SCROLL-ORDER.md) geschlossen: Der Test
+wartet nun auf den vollständigen externen Edit-/Fokusabschluss, bevor er Tab
+erzeugt. Die Gegenprobe mit altem Programm bleibt gezielt negativ.
 macOS, Screenreader und vollständige
 Designgleichheit bleiben eigene offene Nachweise.
 Der [Gliederungs-Hovernachlauf](OUTLINE-HOVER-NATIVE.md) schließt die

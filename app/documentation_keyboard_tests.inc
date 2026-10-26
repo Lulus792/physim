@@ -1324,14 +1324,23 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
             ok=a->doc_find_open && a->doc_search_bounds.w>0 && a->doc_search_bounds.h>0;
             if(ok){puts("EDIT SCROLL READY VALUE");fflush(stdout);}++*stage;break;
         case 2:
+            /* SetValue also requests focus. Wait for the independent client to
+             * finish its following SetFocus call before generating Tab. */
+            join(path,sizeof path,a->project,"edit-focus-applied");ready=fopen(path,"rb");if(!ready)return;fclose(ready);
             if(strlen(a->doc_query)<90 || !strstr(a->doc_query,"Anfang θ") || !strstr(a->doc_query,"Ziel ᵣ") ||
                !a->doc_search_active || !nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Aktuelles Dokument durchsuchen"))return;
+            if(SDL_getenv("PHYSIM_UIA_SCROLL_TRACE")){SDL_Time utc=0;SDL_GetCurrentTime(&utc);fprintf(stderr,"F1 SCROLL ORDER: step=tab-enqueued utc-ns=%lld active=%d\n",(long long)utc,a->doc_search_active);}
             test_window_key_mod(a->doc_window,SDLK_TAB,0);++*stage;break;
         case 3:
             if(settle++<3)return;
             ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active && nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Vorheriger Treffer");
+            if(SDL_getenv("PHYSIM_UIA_SCROLL_TRACE")){SDL_Time utc=0;SDL_GetCurrentTime(&utc);fprintf(stderr,"F1 SCROLL ORDER: step=ready-end utc-ns=%lld active=%d previous=%d\n",(long long)utc,a->doc_search_active,ok);}
             puts("EDIT SCROLL READY END");fflush(stdout);++*stage;break;
         case 4:
+            if(SDL_getenv("PHYSIM_UIA_SCROLL_TRACE")){
+                static bool logged,prior_active,prior_focus;bool focused=nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Aktuelles Dokument durchsuchen");
+                if(!logged || prior_active!=a->doc_search_active || prior_focus!=focused){SDL_Time utc=0;SDL_GetCurrentTime(&utc);fprintf(stderr,"F1 SCROLL ORDER: step=await-scroll utc-ns=%lld active=%d search-focus=%d\n",(long long)utc,a->doc_search_active,focused);logged=true;prior_active=a->doc_search_active;prior_focus=focused;}
+            }
             join(path,sizeof path,a->project,"scroll-end-applied");ready=fopen(path,"rb");if(!ready)return;fclose(ready);
             ok=a->doc_focus==DOC_PREVIOUS && !a->doc_search_active && nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Vorheriger Treffer");
             *capture="docs-native-edit-scroll-end.bmp";++*stage;break;

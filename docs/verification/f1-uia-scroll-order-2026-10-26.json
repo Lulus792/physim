@@ -1,0 +1,252 @@
+{
+  "date": "2026-10-26",
+  "scope": "Synchronize only the remote F1 scroll test; keep scroll, focus, caret, selection and value invariants",
+  "base_commit": "07dd810",
+  "source": {
+    "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/final-source.json",
+    "sha256": "58ac43f1c212fda5866498877550d75ef28458ab863b543f4eed2fcebfd8e13b"
+  },
+  "source_files": {
+    "app/documentation_keyboard_tests.inc": "eaf70202f4cfdacd061355e1374da3857e53e1f441149b59c00bd120393d0d68",
+    "tests/accessibility_windows_probe.c": "c2f4b03d47f7a4c290cbf5812d2e60db9e99b8d9a9d9541f989fd603a300123d",
+    "tests/test_accessibility_edit_scroll_app.py": "a9f89f5b83cef8fd48f0a753a191da1555d87d26e0ef49453a8a3340079ecb9f"
+  },
+  "unchanged_c_inputs_checked": 809,
+  "foreign_changes_excluded": true,
+  "artifact_root": "D:/Physim/build",
+  "f_drive_accessed": false,
+  "images_created": 0,
+  "cause": {
+    "before_ready_end_ms": 201.1071,
+    "before_focus_call_end_ms": 387.7119,
+    "observed": "Native Tab and inactive-field readiness precede external SetFocus completion; search later reactivates",
+    "after_focus_call_end_precedes_native_tab": true,
+    "timeline_before": {
+      "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/order-timeline.json",
+      "sha256": "1aad2c559d9c444627515bdad35aa94c447e6b9c2ab8b1d46e7ca939562abcfd"
+    },
+    "timeline_after": {
+      "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/handshake-timeline.json",
+      "sha256": "1c8632becbcb8090f4a37dcb52244c805cfa3aa74d8e09a737952f635b6bfcdb"
+    }
+  },
+  "passed": [
+    {
+      "platform": "windows",
+      "case": "accessibility_edit_scroll_windows",
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-uu_t2iqz/results.json",
+        "sha256": "c46075283eca334b2edb9e9cce6468c51d33fd19ce19d9f3c409f0fec88d373d"
+      }
+    },
+    {
+      "platform": "windows",
+      "case": "accessibility_edit_windows",
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-p1gzi5ab/results.json",
+        "sha256": "3837c7c51b27b75d491772088052104fe9e2546b90b736088d4f2e99dca1320f"
+      }
+    },
+    {
+      "platform": "linux",
+      "case": "accessibility_edit_atspi",
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ui4et264/results.json",
+        "sha256": "2dfc8e93f63902be3297a5c3824718dd92eaea45bcca6f45c4fc6874ffc72593"
+      }
+    }
+  ],
+  "scroll_results": {
+    "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-uu_t2iqz/accessibility_edit_scroll_windows/files \u00e4/results.json",
+    "sha256": "c30b682607682765cd9ca88a834aca299fc270e7495e60716acf0df1f8dce94e"
+  },
+  "counter": {
+    "results": {
+      "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/counter/result.json",
+      "sha256": "10673c581388ab8b4d8e879d1622298403b1268e217b95d5a3b7942b562f3cef"
+    },
+    "expected_failure": "visible=0 focus=1 active=1 before ScrollIntoView",
+    "old_app_sha256": "2d949e137d50c21e34f0f126e0514b9224c3a671ae2807d7ef5684c03a4f0c27",
+    "new_driver_unchanged": true
+  },
+  "commands": [
+    {
+      "name": "order",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "accessibility_edit_scroll_windows"
+      ],
+      "exit_code": 1
+    },
+    {
+      "name": "handshake",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "accessibility_edit_scroll_windows"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "windows-edit",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "accessibility_edit_windows"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "linux-edit",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "accessibility_edit_atspi"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "runtime": {
+    "manifest": {
+      "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/final-runtime.json",
+      "sha256": "58d7ca2f28f280a07ff13cfbba4e6adaef525695d79a9b4956ee33f5f91f5926"
+    },
+    "byte_index": {
+      "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/runtime-byte-index.json",
+      "sha256": "5012d01e69f7541a3b3a85d3a61056c55fa66d5d7e5b0d7f715a68e484fc2b7a"
+    },
+    "app_sha256": {
+      "windows": "d66e9fa710dda12ba063fba5a3910cd1f5f71225402351b1bd8ae8af182da810",
+      "linux": "5573ec3573b71709e26e4fb2339138b2d186d366803bf5a5258ed3e12c1603ec"
+    },
+    "files_indexed": 206
+  },
+  "cleanup": {
+    "removed_duplicate_files": 2,
+    "logical_bytes": 5650944,
+    "historical_runtime_preserved_in_verified_archives": true,
+    "raw_failure_evidence_retained": true,
+    "physical_free_space_measured": false
+  },
+  "local_evidence": [
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/order-source.json",
+      "sha256": "5d72f9034cb4f1b2e0bf203471ef6ce52de9bad3b1304c0eeef2b4d84ee9eaa2"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/order-source.zip",
+      "sha256": "c7515f0d0b302b6b8a2f979c251eec66a0b56b187c972c13da35cf8dddee6b89"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/order-runtime.json",
+      "sha256": "8339e563968291e0980b29664ca6ebfaf133679981c85026ae2820732c3c7815"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/order-runtime.zip",
+      "sha256": "4cbd936a754063f0c7ce65d10a8bbaf16cbbcd3532a84d51b8d561bae25fec2a"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/order-timeline.json",
+      "sha256": "1aad2c559d9c444627515bdad35aa94c447e6b9c2ab8b1d46e7ca939562abcfd"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/handshake-source.json",
+      "sha256": "9d440f8b4a8a3aa69ba799a4058d643309fe1abbaaa3b14fd04543a29f5a0f24"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/final-source.json",
+      "sha256": "58ac43f1c212fda5866498877550d75ef28458ab863b543f4eed2fcebfd8e13b"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/final-source.zip",
+      "sha256": "78535860e358b355329d4ffaa3a93cadc302fa40ef3469f6951b932ddd5d5e27"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/final-runtime.json",
+      "sha256": "58d7ca2f28f280a07ff13cfbba4e6adaef525695d79a9b4956ee33f5f91f5926"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/runtime-byte-index.json",
+      "sha256": "5012d01e69f7541a3b3a85d3a61056c55fa66d5d7e5b0d7f715a68e484fc2b7a"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/handshake-timeline.json",
+      "sha256": "1c8632becbcb8090f4a37dcb52244c805cfa3aa74d8e09a737952f635b6bfcdb"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/counter/result.json",
+      "sha256": "10673c581388ab8b4d8e879d1622298403b1268e217b95d5a3b7942b562f3cef"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/counter/run.log",
+      "sha256": "0e48a4d236ac2a474ecb614ade9c18c56342e06036abbf416ebfb51a69bdf69e"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/counter-copy-plan.json",
+      "sha256": "36ae4f8068c6adf69e82bf0abbeb8db6b98db1ec7c979f12a93521f3558eecde"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/11-f1-scroll-order/counter-copy-cleanup.json",
+      "sha256": "856e958d416a5ba7a8150064ea2d6198472a0357ba0e07215040bbb46b273557"
+    }
+  ],
+  "limits": [
+    "Linux verifies build and normal F1 AT-SPI edit, not Windows UIA scroll or physical output",
+    "Xvfb/Openbox/software OpenGL and ASan/UBSan detect_leaks=0; not a leak proof",
+    "Direct Windows desktop focus, actual screenreaders, macOS, DPI/monitor cases and full H/unified design fidelity remain open"
+  ]
+}

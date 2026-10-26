@@ -64,8 +64,9 @@ Klickübernahme. Der [Detail- und Aktionsabgleich](PROTOCOL-ACTIONS-NATIVE.md)
 [Zeiger-Nachlauf](PROTOCOL-POINTER-NATIVE.md) schließt verlorene schnelle Klicks
 in den gemeinsamen Aktionen/Editfeldern und am Protokolltrenner. Linux prüft
 den schnellen Suche-/Trennerwechsel mit 40-Pixel-Tastaturschritt. Direkter
-Windows-Desktopfokus und der zusätzlich vor und nach der Korrektur gescheiterte
-F1-UIA-Scrollnachweis bleiben gesondert offen.
+Windows-Desktopfokus bleibt offen. Der zusätzlich gescheiterte F1-UIA-Scrollnachweis
+ist im folgenden [Reihenfolgenachlauf](../f1-layouts/UIA-SCROLL-ORDER.md) mit
+unveränderten Scroll-/Fokuserwartungen und gezielter alter Gegenprobe geschlossen.
 Diese Teilprüfungen und die getrennten Datenquellen-Nachweise sind keine
 vollständige Designabnahme.
 

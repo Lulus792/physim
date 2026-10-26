@@ -27,6 +27,7 @@ with (args.work/'app.stdout').open('wb') as out,(args.work/'app.stderr').open('w
         assert result.returncode==0,probes[-1]
     try:
         wait('EDIT SCROLL READY VALUE');probe('edit',value)
+        (args.work/'reader'/'edit-focus-applied').write_text('ready',encoding='utf-8')
         wait('EDIT SCROLL READY END');probe('scroll-text-start','Ziel ᵣ')
         (args.work/'reader'/'scroll-end-applied').write_text('ready',encoding='utf-8')
         wait('EDIT SCROLL READY START');probe('scroll-text-end','Anfang θ')
