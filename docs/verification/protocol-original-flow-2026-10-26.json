@@ -1,0 +1,389 @@
+{
+  "format": 1,
+  "date": "2026-10-26",
+  "scope": "Natural-height readonly original text in Protocol C; parent scrolling and clipped pointer activation",
+  "base_commit": "a9c1af482f22f9af9dd5cd0ff643350b91329e5f",
+  "own_source_sha256": {
+    "app/accessibility.h": "5d780a6fe31f2809b7bca92135b356240445c072c53631eeaec37de84bdaf637",
+    "app/protocol_original_tests.inc": "f102afc8ceb341e9899c3466b8171ee307067fc441f2b7c0f9976e7acca00c1d",
+    "app/protocol_tests.inc": "50e092304f45f7b8bb695d960ca62b24f775c1d55d077fee470f28ee12359268",
+    "app/protocol_ui.h": "2a4f7ee9e2f5f76240f359b2c9a3870b7b6f695412243e189d80ae2fc2c51c76",
+    "app/protocol_ui.inc": "011327185b5ff81094587d2c60c7c9c25f5a99ed79b439d7609a074b5cec37c0",
+    "app/ui.h": "9529ae834dc84180bf296ce7074782f51feadb3b86d1909479393b7f9917cd95",
+    "app/ui_sdl.c": "9694c6239092fc39b395882d39ca7fd0ed120f53e9f946ea88b913a907d59620",
+    "tests/check_protocol_original.py": "602811d978d279dd3be62deadba6ca35d7baf5e850ceb5f30e5c335196ad32b4",
+    "tests/test_accessibility_edit.c": "42f42adf084dd5c91f636bab9a141d107f29fed40abc16b078acfee6998753c6",
+    "tests/test_editor_clip.c": "ab9a9d2ef4c1d250817a5f50accb22d5eefa29e9b8c89101632a96a0ea6f1acb",
+    "tools/native_tests.py": "376f987e44f7a1e8bb9b2364b3741d4fecc208eeee302879b89120fadd4a0c9a",
+    "third_party/nuklear.h": "57f1ce1b5f9bf98849ec43fa97f0bc3f49ec294dc10f458d8a56559f7506cba3"
+  },
+  "final_source": {
+    "path": "build/validation/protocol-wrap-2026-10-26/8-original-flow/final-source.json",
+    "sha256": "5ff8e349994203a502809b8c6e8766351e6c7f4de93cd8ff697e9b85d42aa7c0"
+  },
+  "source_chain": [
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/final-clean-hover-source-inputs.zip",
+      "sha256": "57dd0fabb4c91bc89dd687946e4538a9feabd4a3a54225a893e78b508fc5a0b6"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/6-f1-edit/source-changes.zip",
+      "sha256": "35fe0e4d2bd16e5b8b45e06bdddbeddf42da6d8f77a6ae50dc2edbc31ae6d907"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/7-outline-hover/after-source-changes.zip",
+      "sha256": "817984ba95082f5e05af455f73e1d3ed75dd1d1aa60bfd153071ca384d0d7350"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/8-original-flow/final-source-changes.zip",
+      "sha256": "11449a47863b6420b56837b4922298478f871607f57bbd7fa6e70a151a37c189"
+    }
+  ],
+  "runtime_manifest": {
+    "path": "build/validation/protocol-wrap-2026-10-26/8-original-flow/final-runtime-manifest.json",
+    "sha256": "870bae54089768bbe0aedd6ad09bae8022c7f9e0118fe88b7603323233ed2e1a"
+  },
+  "native_units": {
+    "windows": {
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-a8le1g9f/results.json",
+        "sha256": "b54cddd990d532dc3f9650848811196c71052448b06649fbf0fc65265ec36369"
+      },
+      "groups": [
+        {
+          "name": "text_wrap",
+          "status": "passed"
+        },
+        {
+          "name": "editor_wrapped",
+          "status": "passed"
+        },
+        {
+          "name": "editor_clip",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_edit",
+          "status": "passed"
+        },
+        {
+          "name": "editor_clipboard",
+          "status": "passed"
+        },
+        {
+          "name": "editor_readonly",
+          "status": "passed"
+        },
+        {
+          "name": "editor_scroll",
+          "status": "passed"
+        }
+      ]
+    },
+    "linux_asan_ubsan": {
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2dmoat1q/results.json",
+        "sha256": "86f3e6754a20f378a53527617a0561c5106cd8db9dc6bb320de464184d80b799"
+      },
+      "groups": [
+        {
+          "name": "code_wrap",
+          "status": "passed"
+        },
+        {
+          "name": "text_wrap",
+          "status": "passed"
+        },
+        {
+          "name": "editor_wrapped",
+          "status": "passed"
+        },
+        {
+          "name": "editor_clip",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_edit",
+          "status": "passed"
+        },
+        {
+          "name": "editor_clipboard",
+          "status": "passed"
+        },
+        {
+          "name": "editor_readonly",
+          "status": "passed"
+        },
+        {
+          "name": "editor_scroll",
+          "status": "passed"
+        }
+      ]
+    }
+  },
+  "native_display": {
+    "windows": {
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-4buel_go/results.json",
+        "sha256": "d8e6d76b59a30e6c93265032b61bb9c43892edd3a4d0492aa45577b34df9a14d"
+      },
+      "groups": [
+        {
+          "name": "protocol_navigator",
+          "status": "failed"
+        },
+        {
+          "name": "protocol_original",
+          "status": "passed"
+        },
+        {
+          "name": "diagnostic_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_edit_scroll_windows",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_edit_windows",
+          "status": "passed"
+        }
+      ]
+    },
+    "linux_asan_ubsan": {
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-fyq9et0v/results.json",
+        "sha256": "10db55537faaf2c2b17f949bc6421243426d23001b48f32beca614be10a09505"
+      },
+      "groups": [
+        {
+          "name": "protocol_navigator",
+          "status": "passed"
+        },
+        {
+          "name": "protocol_original",
+          "status": "passed"
+        },
+        {
+          "name": "diagnostic_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_edit_atspi",
+          "status": "passed"
+        }
+      ]
+    }
+  },
+  "commands_and_logs": [
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/8-original-flow/after-clip-unit-linux.json",
+      "sha256": "5fea3405013935fee526e78c076aa346fdaab0b3797d7f0f264f4d8f2eba420d"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/8-original-flow/clip-after-unit-windows.log",
+      "sha256": "ef8aa4cb46268bac31014783a7105f6f812cf41ec4f747c7337b52c66dac7e15"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/8-original-flow/after-clip-display-windows.json",
+      "sha256": "b95359866c47e6f6c6e2304731b4daeb00d667914ebe78da3cff42385e1e885a"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/8-original-flow/after-clip-display-linux.json",
+      "sha256": "ba8c04ae4a861df989788aeddfa2e0b71fab6cfea4e45b44449acd56c348d286"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/8-original-flow/cua-host-navigator-corrected.json",
+      "sha256": "36f2830f805a502be3268a474231bd3f687e525533964ab4187840b2c08cebd9"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/8-original-flow/focus-trace-windows.log",
+      "sha256": "172420b14b4ba91ce05c8e6c544a9303dab1a4978986b4898b0f5fba1cd66628"
+    }
+  ],
+  "original_text": {
+    "windows": {
+      "proof": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-4buel_go/protocol_original/files ä/verification.json",
+        "sha256": "44b1f73dd67448a2f025dd45650421036732fa3d18ca820d387548b5c581f8d8"
+      },
+      "binary_sha256": "f0799a76b592446e68688601c67a9eb667da7bb0ec81931da739ee63ad9c923a",
+      "cases": [
+        {
+          "mode": "protocol-ui-wrap-dark",
+          "rows": 287,
+          "row_height": 20.72,
+          "natural_height": 5946.6396,
+          "inner_scroll_y": 0.0,
+          "parent_scroll_y": 5980,
+          "passed": true
+        },
+        {
+          "mode": "protocol-ui-wrap-light",
+          "rows": 287,
+          "row_height": 20.72,
+          "natural_height": 5946.6396,
+          "inner_scroll_y": 0.0,
+          "parent_scroll_y": 5980,
+          "passed": true
+        },
+        {
+          "mode": "protocol-ui-wrap-contrast",
+          "rows": 287,
+          "row_height": 20.72,
+          "natural_height": 5946.6396,
+          "inner_scroll_y": 0.0,
+          "parent_scroll_y": 5980,
+          "passed": true
+        },
+        {
+          "mode": "protocol-ui-wrap-large",
+          "rows": 78,
+          "row_height": 28.49,
+          "natural_height": 2222.22,
+          "inner_scroll_y": 0.0,
+          "parent_scroll_y": 2114,
+          "passed": true
+        },
+        {
+          "mode": "protocol-ui-wrap-narrow",
+          "rows": 76,
+          "row_height": 20.72,
+          "natural_height": 1574.72,
+          "inner_scroll_y": 0.0,
+          "parent_scroll_y": 1490,
+          "passed": true
+        }
+      ]
+    },
+    "linux": {
+      "proof": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-fyq9et0v/protocol_original/files ä/verification.json",
+        "sha256": "6387a3c0642c1fd1c8801eab30bb629dd1dc5b5664c05b9f6b2a71ddee1e0a96"
+      },
+      "binary_sha256": "e8e5a5fd0f68ec82cd745f90475ac7120f9fcfb1e9599aa6c8d57c41b7732dc1",
+      "cases": [
+        {
+          "mode": "protocol-ui-wrap-dark",
+          "rows": 316,
+          "row_height": 20.72,
+          "natural_height": 6547.52,
+          "inner_scroll_y": 0.0,
+          "parent_scroll_y": 6607,
+          "passed": true
+        },
+        {
+          "mode": "protocol-ui-wrap-light",
+          "rows": 316,
+          "row_height": 20.72,
+          "natural_height": 6547.52,
+          "inner_scroll_y": 0.0,
+          "parent_scroll_y": 6607,
+          "passed": true
+        },
+        {
+          "mode": "protocol-ui-wrap-contrast",
+          "rows": 316,
+          "row_height": 20.72,
+          "natural_height": 6547.52,
+          "inner_scroll_y": 0.0,
+          "parent_scroll_y": 6607,
+          "passed": true
+        },
+        {
+          "mode": "protocol-ui-wrap-large",
+          "rows": 85,
+          "row_height": 28.49,
+          "natural_height": 2421.6499,
+          "inner_scroll_y": 0.0,
+          "parent_scroll_y": 2314,
+          "passed": true
+        },
+        {
+          "mode": "protocol-ui-wrap-narrow",
+          "rows": 83,
+          "row_height": 20.72,
+          "natural_height": 1719.7599,
+          "inner_scroll_y": 0.0,
+          "parent_scroll_y": 1635,
+          "passed": true
+        }
+      ]
+    }
+  },
+  "counterexamples": {
+    "old_bounded_height_replay": {
+      "path": "build/validation/protocol-wrap-2026-10-26/8-original-flow/legacy-height-counter.json",
+      "sha256": "851ade7137ed9387abb1fe11a12dbb399fdf869059d18c13f58bba64657c8a25"
+    },
+    "old_geometry_budget_native_control_and_negative": {
+      "path": "build/validation/protocol-wrap-2026-10-26/8-original-flow/capacity-counter.json",
+      "sha256": "0996e88ace0be00905980eb5860ca3e4cf210719d7ba884045b05c9500258f33"
+    },
+    "clipped_pointer_before_log": {
+      "path": "build/validation/protocol-wrap-2026-10-26/8-original-flow/clip-before-windows.log",
+      "sha256": "fb53286a89f392863645fb4c280f6baa2f061def6b6af6f2447c4f03cc9f26cd"
+    },
+    "clipped_pointer_before_runtime_and_source": {
+      "path": "build/validation/protocol-wrap-2026-10-26/8-original-flow/clip-counter-before.json",
+      "sha256": "38a5894eae8d5bc4429e928003399ee1da1c72248d10c9ba1a2cb346edf0478b"
+    },
+    "verifier_mutations": {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-4buel_go/protocol_original/files ä/protocol-ui-wrap-dark/workflow ä/counterexamples.json",
+      "sha256": "d5292701c0e048acd0393a6d595101aaf25a496a8769ea763bfa9c69e1ab9086"
+    }
+  },
+  "model_size": {
+    "path": "build/validation/protocol-wrap-2026-10-26/8-original-flow/model-size.json",
+    "sha256": "31e90f64b7a51dfc71b0cdcc747a6a94db7269d5bd7048c288cba2f20e613da7"
+  },
+  "windows_focus": {
+    "first_runs": "Failed navigator stage 38: host=0, query-cache=1, original-active=0; expectations retained",
+    "fresh_run": {
+      "path": "build/validation/protocol-wrap-2026-10-26/8-original-flow/cua-host-navigator/verification.json",
+      "sha256": "89daddc272c715fc36fc42abdf6d4769cc4b599895e1a63db00c0a1b5c7104d8"
+    },
+    "fresh_exit_code": 0,
+    "fresh_cases": 8,
+    "fresh_trace": "search=1 host=1 original=0 query-cache=1 original-active=0 active-window=log detail-scroll=213",
+    "computer_use_actions": 0,
+    "metadata_correction": {
+      "path": "build/validation/protocol-wrap-2026-10-26/8-original-flow/cua-host-navigator-corrected.json",
+      "sha256": "36f2830f805a502be3268a474231bd3f687e525533964ab4187840b2c08cebd9"
+    },
+    "binary_difference": "Only test printf in app/protocol_tests.inc added after Windows original/diagnostic/client run; source trace checkpoint preserved",
+    "trace_source": {
+      "path": "build/validation/protocol-wrap-2026-10-26/8-original-flow/focus-trace-source.json",
+      "sha256": "98ac5d93707476d01df4dda36a94078409bd43e414c133dc1062082eda2cf538"
+    },
+    "pre_trace_apps": {
+      "path": "build/validation/protocol-wrap-2026-10-26/8-original-flow/after-clip-before-focus-trace.json",
+      "sha256": "7e7b06ea7e2231d7d926b2d51c457c04097b04ce7965b7c126a33a888cd0849c"
+    }
+  },
+  "images": [
+    {
+      "path": "docs/visuals/unified-workspace/protocol-original-flow-2026-10-26/windows-dark.png",
+      "sha256": "a480eeff82dbcbe295173dc92a6b3cd0a1f96b9ea4137cc410fd9fdacdfbc4a5"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/protocol-original-flow-2026-10-26/linux-light.png",
+      "sha256": "3337bf578531f8f0cac31e1579bcb402caea8ffc1ff4256e3982e03625aa6b24"
+    }
+  ],
+  "retention": "Two unchanged native PNGs selected for documentation; per-step text geometry and hashes retained. No additional captures for verifier mutations or model size. Existing failed/frozen evidence preserved. Runtime delta reuses hash-matching base files.",
+  "limits": [
+    "No full Protocol C, H or whole-application visual acceptance",
+    "12KiB pagination, 18px detail padding versus 20px CSS and full-width action rows remain implementation gaps",
+    "1px native caret reserve can change edge wraps relative to CSS pre",
+    "Fixed native dock uses parent scrolling instead of increasing page height",
+    "No physical separator-focus closure, actual screenreader reading or macOS proof",
+    "Independent native clients exercise F1 edit fields, not the long original text ScrollIntoView path",
+    "Linux GUI ASan/UBSan uses detect_leaks=0 under Xvfb/Openbox with software OpenGL",
+    "Local browser template was not newly opened; source CSS and native images are the comparison basis"
+  ]
+}

@@ -28936,9 +28936,13 @@ nk_do_edit(nk_flags *state, struct nk_command_buffer *out,
 
     /* update edit state */
     prev_state = (char)edit->active;
+    /* Physim: a tall field can extend behind controls outside its parent's
+     * viewport. Its unclipped bounds alone must not take their pointer input. */
     if (in && in->mouse.buttons[NK_BUTTON_LEFT].clicked && in->mouse.buttons[NK_BUTTON_LEFT].down) {
         edit->active = NK_INBOX(in->mouse.pos.x, in->mouse.pos.y,
-                                bounds.x, bounds.y, bounds.w, bounds.h);
+                                bounds.x, bounds.y, bounds.w, bounds.h) &&
+                       NK_INBOX(in->mouse.pos.x, in->mouse.pos.y,
+                                old_clip.x, old_clip.y, old_clip.w, old_clip.h);
     }
 
     /* (de)activate text editor */

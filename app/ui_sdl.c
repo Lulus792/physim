@@ -179,7 +179,7 @@ static float nk_sdl_edit_extent(const struct nk_user_font *font,const char *text
 }
 #endif
 static nk_flags nk_sdl_edit_named_common(struct nk_context *ctx,const char *name,nk_flags flags,char *text,int capacity,
-                                       nk_plugin_filter filter,struct nk_text_edit *custom,const struct nk_text_visual *visual) {
+                                       nk_plugin_filter filter,struct nk_text_edit *custom,const struct nk_text_visual *visual,ps_ui_text_reveal *reveal) {
  struct nk_text_edit *actual=custom?custom:&ctx->text_edit;
  if(custom && !custom->initialized)nk_textedit_init_fixed(custom,text,(nk_size)capacity);
 #if defined(_WIN32) || defined(__linux__) || defined(__APPLE__)
@@ -236,11 +236,15 @@ static nk_flags nk_sdl_edit_named_common(struct nk_context *ctx,const char *name
   }
   if(visual && custom && (selected || scrolled)) {
    int scalar=nk_utf_len(text,(int)(scrolled?(scroll_top?scroll_start:scroll_end):select_end));
+   if(reveal) {
+    if(scrolled)*reveal=(ps_ui_text_reveal){true,scalar,scroll_top?PS_UI_TEXT_TOP:PS_UI_TEXT_BOTTOM};
+   } else {
    int row=nk_text_visual_row_at(visual,scalar,0);
    float y=row*visual->row_height;
    float height=fmaxf(1,edit_bounds.h-2*ctx->style.edit.padding.y-2*ctx->style.edit.border);
    if(scrolled)custom->scrollbar.y=scroll_top?y:fmaxf(0,y+visual->row_height-height);
    else {if(y<custom->scrollbar.y)custom->scrollbar.y=y;if(y+visual->row_height>custom->scrollbar.y+height)custom->scrollbar.y=fmaxf(0,y+visual->row_height-height);}
+   }
   }
  }
 #else
@@ -279,9 +283,12 @@ static nk_flags nk_sdl_edit_named_common(struct nk_context *ctx,const char *name
      edit_bounds.w-2*style->padding.x-2*style->border,edit_bounds.h-2*style->padding.y-2*style->border};
     if(visual) {
      area.w=fmaxf(0,area.w-style->scrollbar_size.x-style->cursor_size);
-     for(int row=0;row<visual->row_count;row++) {
+     float visible_top=fmaxf(area.y,node->bounds[1]),visible_bottom=fminf(area.y+area.h,node->bounds[1]+node->bounds[3]);
+     int first=(int)fmaxf(0,floorf((visible_top-area.y+actual->scrollbar.y)/visual->row_height)-1);
+     int limit=(int)fminf((float)visual->row_count,ceilf((visible_bottom-area.y+actual->scrollbar.y)/visual->row_height)+1);
+     for(int row=first;row<limit;row++) {
       float y=area.y+row*visual->row_height-actual->scrollbar.y+(visual->row_height-font->height)/2;
-      if(y+font->height<=area.y || y>=area.y+area.h)continue;
+      if(y+font->height<=visible_top || y>=visible_bottom)continue;
       const struct nk_text_visual_row *r=&visual->rows[row];
       for(int i=r->first;i<r->limit;i++) {
        const struct nk_text_visual_glyph *g=&visual->glyphs[i];
@@ -318,12 +325,32 @@ static nk_flags nk_sdl_edit_named_common(struct nk_context *ctx,const char *name
  return state;
 }
 nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flags,char *text,int capacity,nk_plugin_filter filter) {
- return nk_sdl_edit_named_common(ctx,name,flags,text,capacity,filter,NULL,NULL);
+ return nk_sdl_edit_named_common(ctx,name,flags,text,capacity,filter,NULL,NULL,NULL);
 }
 nk_flags nk_sdl_edit_named_visual(struct nk_context *ctx,const char *name,char *text,int capacity,
                                  struct nk_text_edit *edit,const struct nk_text_visual *visual) {
  return nk_sdl_edit_named_common(ctx,name,NK_EDIT_BOX|NK_EDIT_READ_ONLY|NK_EDIT_NO_HORIZONTAL_SCROLL,
-                                  text,capacity,nk_filter_default,edit,visual);
+                                  text,capacity,nk_filter_default,edit,visual,NULL);
+}
+nk_flags nk_sdl_edit_named_visual_flow(struct nk_context *ctx,const char *name,char *text,int capacity,
+                                      struct nk_text_edit *edit,const struct nk_text_visual *visual,ps_ui_text_reveal *reveal) {
+ if(!ctx || !edit || !visual || !reveal)return 0;
+ *reveal=(ps_ui_text_reveal){0};int cursor=edit->cursor,start=edit->select_start,end=edit->select_end;
+ bool active=edit->active;
+ bool reflow=edit->visual_width!=visual->width || edit->visual_row_count!=visual->row_count || edit->visual_row_height!=visual->row_height;
+ struct nk_style_edit *style=&ctx->style.edit;
+ nk_style_push_vec2(ctx,&style->padding,nk_vec2(0,0));nk_style_push_vec2(ctx,&style->scrollbar_size,nk_vec2(0,0));
+ nk_style_push_float(ctx,&style->border,0);
+ nk_style_push_style_item(ctx,&style->normal,nk_style_item_color(nk_rgba(0,0,0,0)));
+ nk_style_push_style_item(ctx,&style->hover,nk_style_item_color(nk_rgba(0,0,0,0)));
+ nk_style_push_style_item(ctx,&style->active,nk_style_item_color(nk_rgba(0,0,0,0)));
+ nk_flags result=nk_sdl_edit_named_common(ctx,name,NK_EDIT_BOX|NK_EDIT_READ_ONLY|NK_EDIT_NO_HORIZONTAL_SCROLL,
+                                        text,capacity,nk_filter_default,edit,visual,reveal);
+ nk_style_pop_style_item(ctx);nk_style_pop_style_item(ctx);nk_style_pop_style_item(ctx);
+ nk_style_pop_float(ctx);nk_style_pop_vec2(ctx);nk_style_pop_vec2(ctx);
+ if(!reveal->requested && (result&NK_EDIT_ACTIVE) && (!active || reflow || cursor!=edit->cursor || start!=edit->select_start || end!=edit->select_end))
+  *reveal=(ps_ui_text_reveal){true,edit->cursor,PS_UI_TEXT_NEAREST};
+ return result;
 }
 bool nk_sdl_accessibility_document(struct nk_context *ctx,uint64_t version,const char *name,const char *text,struct nk_rect viewport) {
  if(!ctx || !ctx->userdata.ptr)return false;struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;

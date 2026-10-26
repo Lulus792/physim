@@ -58,7 +58,9 @@ def verify(work,mode,code,stdout,root):
     require(len({s['source_crc'] for s in states})==1,'Source editor changed')
     require(all(s['original_bytes']==len(ORIGINAL) and s['original_crc']==zlib.crc32(ORIGINAL) for s in states),'Original bytes changed')
     steps={s['stage']:s for s in states};scalars=len(ORIGINAL.decode('utf-8'))
-    require(steps[6]['cursor']==scalars and steps[6]['rows']>10 and steps[6]['scroll_y']>0,'End navigation did not reach wrapped end')
+    require(all('field' in s and 'row_height' in s and 'detail_scroll_y' in s for s in states),'Missing natural-flow geometry')
+    require(all(math.isclose(s['field'][3],s['rows']*s['row_height'],abs_tol=.02) for s in states),'Original does not use natural text height')
+    require(steps[6]['cursor']==scalars and steps[6]['rows']>10 and steps[6]['scroll_y']==0 and steps[6]['detail_scroll_y']>0,'End navigation did not reveal the wrapped end through its parent')
     require(steps[9]['copy_equal'],'Native SDL clipboard did not contain exact original')
     require(steps[11]['selection']==[0,scalars],'Resize lost original selection')
     original_width=steps[6]['window'][0]

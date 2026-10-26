@@ -163,7 +163,8 @@ static bool protocol_original(app *a,const ps_protocol_record *selected) {
     free(p->original);p->original=text;p->original_id=record->id;p->original_size=record->message.raw_size;p->original_length=length;p->page=0;
     ps_text_wrap_destroy(p->original_layout);p->original_layout=NULL;
     p->original_edit.cursor=p->original_edit.select_start=p->original_edit.select_end=0;
-    p->original_edit.scrollbar=nk_vec2(0,0);p->original_edit.visual=NULL;return true;
+    p->original_edit.scrollbar=nk_vec2(0,0);p->original_edit.visual=NULL;
+    p->original_edit.active=false;nk_edit_unfocus(a->ui);return true;
 }
 typedef struct {char *data;size_t size,capacity;bool failed;} protocol_buffer;
 static void protocol_buffer_add(protocol_buffer *b,const char *text,size_t size) {
@@ -228,7 +229,20 @@ static void protocol_jump(app *a,uint64_t id) {
     join(current,sizeof current,a->project,analysis_source(a));d.analysis=ps_text_document_same_file(path,current);d.foreign=!experiment && !d.analysis;
     jump_to_diagnostic(a,&d);
 }
-static void protocol_detail(app *a,const ps_protocol_record *record,float scale,float body) {
+static void protocol_original_reveal(ps_protocol_ui *p,struct nk_rect clip,ps_ui_text_reveal request) {
+    if(!request.requested || !p->original_layout || clip.h<=0)return;
+    const struct nk_text_visual *v=&p->original_layout->visual;
+    int row=nk_text_visual_row_at(v,request.scalar,p->original_edit.cursor_at_end_of_line);
+    float top=p->original_bounds.y+row*v->row_height,bottom=top+v->row_height,delta=0;
+    if(request.alignment==PS_UI_TEXT_TOP)delta=top-clip.y;
+    else if(request.alignment==PS_UI_TEXT_BOTTOM)delta=bottom-clip.y-clip.h;
+    else if(top<clip.y)delta=top-clip.y;
+    else if(bottom>clip.y+clip.h)delta=bottom-clip.y-clip.h;
+    double target=fmax(0,(double)p->detail_scroll_y+(delta<0?floorf(delta):ceilf(delta)));
+    nk_uint next=(nk_uint)fmin(target,(double)UINT_MAX);
+    if(next!=p->detail_scroll_y){p->detail_scroll_target=next;p->detail_reveal_pending=true;}
+}
+static void protocol_detail(app *a,const ps_protocol_record *record,float scale) {
     struct nk_context *ui=a->ui;ps_protocol_ui *p=&a->protocol_view;
     if(!record){protocol_wrap(a,"Keine Meldung ausgewählt. Wähle eine Meldung aus der Liste.",&a->protocol_view.fonts[0],20*scale,muted());return;}
     const ps_protocol_message *m=&record->message;char text[2064];
@@ -269,10 +283,9 @@ static void protocol_detail(app *a,const ps_protocol_record *record,float scale,
         size_t remaining=p->original_length-p->page,n=remaining>12288?12288:remaining;
         if(n<remaining)while(n && ((unsigned char)p->original[p->page+n]&0xc0)==0x80)n--;
         memcpy(p->original_page,p->original+p->page,n);p->original_page[n]=0;
-        nk_layout_row_dynamic(ui,fmaxf(110*scale,fminf(200*scale,body*.5f)),1);nk_style_push_font(ui,&a->protocol_view.fonts[6]);
-        p->original_bounds=nk_widget_bounds(ui);
+        nk_style_push_font(ui,&a->protocol_view.fonts[6]);
         const struct nk_user_font *font=ui->style.font;
-        float width=fmaxf(1,p->original_bounds.w-2*ui->style.edit.padding.x-2*ui->style.edit.border-ui->style.edit.scrollbar_size.x-ui->style.edit.cursor_size);
+        float width=fmaxf(1,nk_window_get_content_region(ui).w-ui->style.edit.cursor_size);
         float line_height=11.2f*1.85f*scale; /* Approved .8rem at a 14px root. */
         bool same=p->original_layout && p->original_layout->bytes==n && !memcmp(p->original_layout->source,p->original_page,n);
         const struct nk_user_font *cached=&p->original_layout_font;
@@ -287,9 +300,22 @@ static void protocol_detail(app *a,const ps_protocol_record *record,float scale,
                 ps_text_wrap_destroy(p->original_layout);p->original_layout=NULL;p->original_edit.visual=NULL;
             }
         }
-        if(p->original_layout)nk_sdl_edit_named_visual(ui,"Originalmeldung",p->original_page,sizeof p->original_page,
-                                                        &p->original_edit,&p->original_layout->visual);
-        else nk_label_wrap(ui,"Originaltext kann nicht dargestellt werden. Meldung kopieren oder TXT speichern.");
+        nk_layout_row_dynamic(ui,11.2f*scale,1);nk_spacer(ui); /* pre's 1em block margin */
+        if(p->original_layout) {
+            const struct nk_text_visual *v=&p->original_layout->visual;
+            nk_layout_row_dynamic(ui,v->row_count*v->row_height,1);p->original_bounds=nk_widget_bounds(ui);
+            struct nk_rect clip=ui->current->layout->clip,r=p->original_bounds;
+            float x=fmaxf(r.x,clip.x),y=fmaxf(r.y,clip.y);
+            p->original_viewport=nk_rect(x,y,fmaxf(0,fminf(r.x+r.w,clip.x+clip.w)-x),fmaxf(0,fminf(r.y+r.h,clip.y+clip.h)-y));
+            ps_ui_text_reveal request;
+            nk_sdl_edit_named_visual_flow(ui,"Originalmeldung",p->original_page,sizeof p->original_page,&p->original_edit,v,&request);
+            /* Apply at the next group begin: changing its offset while the
+             * current frame is being laid out would split text/action geometry. */
+            protocol_original_reveal(p,clip,request);
+        } else {
+            nk_layout_row_dynamic(ui,40*scale,1);nk_label_wrap(ui,"Originaltext kann nicht dargestellt werden. Meldung kopieren oder TXT speichern.");
+        }
+        nk_layout_row_dynamic(ui,11.2f*scale,1);nk_spacer(ui);
         nk_style_pop_font(ui);
         if(p->original_length>n) {
             nk_layout_row_dynamic(ui,28*scale,2);nk_begin_disabled(ui,!p->page);
@@ -454,7 +480,13 @@ static void protocol_panel(app *a) {
         else {if(!vertical)nk_layout_row_end(ui);nk_layout_row_dynamic(ui,420*f,1);}
         nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(edit)));
         p->panes[2]=nk_widget_bounds(ui);nk_fill_rect(nk_window_get_canvas(ui),p->panes[2],0,UI_COLOR(edit));
-        if(nk_group_begin(ui,"Protokolldetails",0)){protocol_detail(a,selected,f,body);nk_group_end(ui);}
+        p->original_viewport=nk_rect(0,0,0,0);
+        uint64_t detail_record=selected?selected->id:0;
+        if(p->detail_record!=detail_record || p->detail_page!=p->page || p->detail_transcript!=p->transcript) {
+            p->detail_record=detail_record;p->detail_page=p->page;p->detail_transcript=p->transcript;
+            p->detail_scroll_y=0;p->detail_reveal_pending=false;
+        } else if(p->detail_reveal_pending){p->detail_scroll_y=p->detail_scroll_target;p->detail_reveal_pending=false;}
+        if(nk_group_scrolled_offset_begin(ui,&p->detail_scroll_x,&p->detail_scroll_y,"Protokolldetails",0)){protocol_detail(a,selected,f);nk_group_end(ui);}
         nk_style_pop_style_item(ui);if(wide)nk_layout_row_end(ui);
         if(!vertical)workspace_rule(nk_window_get_canvas(ui),nk_rect(p->panes[1].x,p->panes[1].y,1,p->panes[1].h));
         if(wide)workspace_rule(nk_window_get_canvas(ui),nk_rect(p->panes[2].x,p->panes[2].y,1,p->panes[2].h));

@@ -55,7 +55,9 @@ Originaltextbefund. Der folgende [Originaltext-Nachlauf](PROTOCOL-ORIGINAL-NATIV
 ergänzt weichen Umbruch mit unveränderten Bytes, gemeinsamer Zeichen-/Cursorgeometrie
 und Größenwechsel. Der [Gliederungs-Hovernachlauf](OUTLINE-HOVER-NATIVE.md)
 schließt anschließend den Tooltip aus ausgeclippten Zeilen über dem Protokoll.
-Die natürliche Originaltexthöhe und der
+Der [Nachlauf zur natürlichen Originaltexthöhe](PROTOCOL-ORIGINAL-FLOW-NATIVE.md)
+übernimmt das Scrollen im Detailbereich und schließt unsichtbare
+Klickübernahme. 12-KiB-Abschnitte, Detailabstände, Aktionsformen und der
 [direkte Mausfokus](PROTOCOL-FOCUS-NATIVE.md) bleiben offen.
 Diese Teilprüfungen und die getrennten Datenquellen-Nachweise sind keine
 vollständige Designabnahme.

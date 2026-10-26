@@ -25,9 +25,12 @@ ohne fremde lokale Änderungen. Die früheren
 [Fokusnachlauf](PROTOCOL-FOCUS-NATIVE.md) behalten ihren datierten Geltungsbereich.
 Der folgende [Originaltext-Nachweis](PROTOCOL-ORIGINAL-NATIVE.md) ergänzt den
 nativen weichen Umbruch langer Zeilen, unveränderte Auswahl/Kopie und den
-Layoutwechsel ohne verlorenen äußeren Scrolloffset. C ist weiterhin nicht
-vollständig abgenommen: natürliche Originaltexthöhe und Abstände gegen die
-Vorlage angleichen und den direkten
+Layoutwechsel ohne verlorenen äußeren Scrolloffset. Der folgende
+[Nachlauf zur natürlichen Originaltexthöhe](PROTOCOL-ORIGINAL-FLOW-NATIVE.md)
+verlagert das Scrollen in den Detailbereich und schließt die Klickübernahme
+durch ausgeclippte Feldteile. C ist weiterhin nicht vollständig abgenommen:
+12-KiB-Abschnitte, Detailabstände und Aktionsformen gegen die Vorlage angleichen
+und den direkten
 Maus-/Tastaturfokus schließen. macOS, Screenreader und vollständige
 Designgleichheit bleiben eigene offene Nachweise.
 Der [Gliederungs-Hovernachlauf](OUTLINE-HOVER-NATIVE.md) schließt die

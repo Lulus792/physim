@@ -119,7 +119,10 @@ static void protocol_ui_test_frame(app *a,const char *mode,int *stage,int *code,
             if(resize_focus_setup==0){test_mouse(a,p->search,true);resize_focus_setup++;return;}
             if(resize_focus_setup==1){test_mouse(a,p->search,false);resize_focus_setup++;return;}
             ok=nk_sdl_accessibility_is_focused(a->ui,NULL,"Meldung oder Quelle");
-            fprintf(stderr,"PROTOCOL RANGE FOCUS ORIGIN: search=%d\n",ok);
+            struct nk_window *log_window=nk_window_find(a->ui,"log");
+            fprintf(stderr,"PROTOCOL RANGE FOCUS ORIGIN: search=%d host=%d original=%d query-cache=%d original-active=%d active-window=%s detail-scroll=%u\n",
+                ok,SDL_GetKeyboardFocus()==a->window,nk_sdl_accessibility_is_focused(a->ui,NULL,"Originalmeldung"),
+                log_window?log_window->edit.active:0,p->original_edit.active,a->ui->active?a->ui->active->name_string:"none",(unsigned)p->detail_scroll_y);
         }
         if(SDL_getenv("PHYSIM_TEST_PROTOCOL_UNFOCUSED"))SDL_HideWindow(a->window);
         focus_wait_started=SDL_GetTicks();ok &= nk_sdl_accessibility_request_focus(a->ui,NULL,"Protokoll-Höhe");break;

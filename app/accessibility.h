@@ -9,7 +9,8 @@
 #define PS_A11Y_WINDOW_BYTES 96u
 #define PS_A11Y_DOCUMENT_BYTES (512u*1024u+8192u)
 #define PS_A11Y_TEXT_BOXES 8192u
-#define PS_A11Y_EDIT_BOXES 2048u
+/* A whole readonly 12KiB page can be visible in a naturally sized text area. */
+#define PS_A11Y_EDIT_BOXES (16u*1024u)
 #define PS_A11Y_TABLE_LIMIT 4096u
 #define PS_A11Y_TABLE_ROWS 4096u
 #define PS_A11Y_TABLE_CELLS 16384u

@@ -17,7 +17,11 @@ typedef struct {
     ps_text_wrap *original_layout;
     struct nk_text_edit original_edit;
     struct nk_user_font original_layout_font;
-    struct nk_rect original_bounds;
+    struct nk_rect original_bounds,original_viewport;
+    nk_uint detail_scroll_x,detail_scroll_y,detail_scroll_target;
+    uint64_t detail_record;
+    size_t detail_page;
+    bool detail_reveal_pending,detail_transcript;
     int origin,level;bool initialized,transcript,follow,resize,resize_cancelled,focus_return,details_more,original_closed,cursor_owned;
     float resize_original,resize_effective,resize_y;
     nk_uint scroll_x,scroll_y,rendered_scroll_y;

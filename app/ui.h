@@ -133,6 +133,12 @@ nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flag
 /* Persistent readonly editor; visual positions refer to the exact text bytes. */
 nk_flags nk_sdl_edit_named_visual(struct nk_context *ctx,const char *name,char *text,int capacity,
                                  struct nk_text_edit *edit,const struct nk_text_visual *visual);
+typedef enum {PS_UI_TEXT_NEAREST,PS_UI_TEXT_TOP,PS_UI_TEXT_BOTTOM} ps_ui_text_alignment;
+typedef struct {bool requested;int scalar;ps_ui_text_alignment alignment;} ps_ui_text_reveal;
+/* Natural-height readonly text: the owner scrolls its containing panel on a
+ * returned reveal request; the field adds no padding, border or inner scrollbar. */
+nk_flags nk_sdl_edit_named_visual_flow(struct nk_context *ctx,const char *name,char *text,int capacity,
+                                      struct nk_text_edit *edit,const struct nk_text_visual *visual,ps_ui_text_reveal *reveal);
 enum {PS_UI_EDIT_NATIVE_FOCUS=1u<<24};
 void nk_sdl_set_ui_size(struct nk_context *ctx, unsigned size);
 bool nk_sdl_reduce_transparency(struct nk_context *ctx);

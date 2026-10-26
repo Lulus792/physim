@@ -76,5 +76,17 @@ int main(void) {
  size_t first=0,last=0;CHECK(ps_a11y_edit_take_selection(m,0,&first,&last) && first==2 && last==strlen(original));
  CHECK(ps_a11y_edit_update(m,0,original,first,last));CHECK(ps_a11y_publish(m));
  CHECK(m->nodes[0].text_start==2 && m->nodes[0].text_end==strlen(original));
+ /* A natural-height readonly page must not lose its last character geometry
+  * to the former 2048-box budget. Use an actual bounded UTF-8 snapshot. */
+ memset(original,'x',sizeof original-1);original[sizeof original-2]='!';
+ float page_bounds[]={0,0,900,2000};ps_a11y_begin(m);
+ CHECK(!ps_a11y_record_edit_mode(m,"log","Originalmeldung",page_bounds,true,true,true,original,sizeof original));
+ for(size_t i=0;i<sizeof original-1;i++) {
+  float box[]={(float)(i%128)*7,(float)(i/128)*20,7,20};
+  CHECK(ps_a11y_edit_box(m,0,i,i+1,box));
+ }
+ CHECK(ps_a11y_publish(m));CHECK(!m->dropped && m->nodes[0].box_count==sizeof original-1);
+ size_t final=m->nodes[0].box_offset+m->nodes[0].box_count-1;
+ CHECK(m->edit_boxes[final].begin==sizeof original-2 && m->edit_boxes[final].end==sizeof original-1);
  ps_a11y_destroy(m);free(m);puts("Editable accessibility and readonly 12KiB original: Unicode value, exact multiline snapshot, selection, rejected mutation, delivery once and capacity changes passed");return 0;
 }
