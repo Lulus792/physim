@@ -72,3 +72,30 @@ Schließen des Handles besteht derselbe Test; Erstlog und Nachlauf sind
 erhalten. Ein Bereinigungsvorlauf stoppte vor jeder Löschung an einem
 WSL-Bibliothekslink. Die Dateierhebung überspringt jetzt sämtliche Links und
 Reparse-Punkte ohne Auflösung; der Link und sein Ziel blieben erhalten.
+
+## Weiterer gezielter Nachlauf
+
+Die erneute Speicherprüfung unter Windows und `Alpine-Dev` besteht mit je
+drei ausgeführten Befehlen: D:-Standard, Abweisung der gesperrten Orte vor
+Zugriff und eine echte Temporärdatei unter dem Artefaktstamm einschließlich
+unverändertem Kindprozess-Exitcode. F: wurde dabei nicht angesprochen.
+Die bereits abgeschlossene Rückführung wurde nicht nochmals ausgeführt.
+
+Aus dem ersetzten Protokoll-Buildstand
+`build/validation/protocol-ui-2026-10-25/4-native/{windows,linux}-build/obj`
+wurden ausschließlich 218 `.obj`-/`.o`-Dateien mit 89.076.918 Byte entfernt.
+Die aufgelösten Ziele lagen innerhalb des Physim-Buildbaums; die ausgewählten
+Verzeichnisse enthielten keine Links. Es liefen keine Prozesse dieses alten
+Prüfstands, und es gab keine ausdrücklichen versionierten Verweise auf seine
+Objektverzeichnisse. Alle 3.147 übrigen Dateien des Prüfstands wurden vorher
+und nachher per SHA-256 verglichen und blieben unverändert. Dazu gehören
+Programme, Symbole, Quellen und vorhandene Erfolgs- und Fehlernachweise.
+Die aktuelle Buildkopie und fremde aktive Arbeiten blieben unberührt.
+
+Die [kompakte Quittung](verification/storage-protocol-objects-2026-10-26.json) nennt
+Befehle, Quellhashes, Prüfergebnisse und den Hash der lokalen Dateiliste.
+Zusammen mit den drei oben dokumentierten Objektbereinigungen sind
+2.571 ersetzte Objekte mit 902.059.591 Byte Dateigröße entfernt; eine physische
+Freispeichermessung ist damit nicht verbunden. Neue Bilder: **0**.
+Ein erster PowerShell-Aufruf scheiterte an der Aufrufsyntax vor dem Start
+des Bereinigungsprogramms; der korrigierte Aufruf wurde mit Exitcode 0 beendet.

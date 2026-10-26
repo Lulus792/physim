@@ -46,3 +46,18 @@ Für eine reine Speicher-, Text- oder CLI-Prüfung ohne visuelle Aussage sind
 keine Bildschirmbilder nötig. Bei identischem Laufzeitstand ein vorhandenes
 hashgeprüftes Archiv referenzieren; zusätzliche Bilder und Archive nur mit
 eigenem Zweck erzeugen.
+
+## Kompakte Übergabe
+
+Einen aktuellen Einstiegspunkt pflegen, der den letzten gültigen Bericht und
+die offenen Befunde verlinkt. Neue Ergebnisse als eigenen Nachlauf anlegen;
+eingefrorene Berichte nicht überschreiben. Ein noch ungeprüfter lokaler Patch
+gehört nicht zum zuletzt bestandenen Quellstand.
+
+Für längere Bedienfolgen genügt eine kleine JSON-Datei mit Quellstand,
+Laufzeitreferenz und Fällen. Pro Fall Aktion, Soll, Ist, Ergebnis und den
+passenden Log-/Zustandspfad nennen. Gemeinsame Umgebungs- und Binärdaten einmal
+auf Laufebene festhalten. Bei identischem Programm auf denselben geprüften
+Laufzeitstand verweisen. Bilder nur ergänzen, wenn sie eine zusätzliche
+visuelle Aussage belegen; dafür einen Zweck und eine Aufbewahrungsentscheidung
+eintragen. Ein Bildverzicht ist kein Nachweis für ungeprüfte visuelle Kriterien.

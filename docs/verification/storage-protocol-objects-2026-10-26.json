@@ -1,0 +1,234 @@
+{
+  "date": "2026-10-26",
+  "source_head": "ac2001c496a79546c0f577a4c80e99a7afc46bc7",
+  "scope": "Storage policy, superseded phase-4 object caches and compact documentation; no UI acceptance",
+  "artifact_root": "D:/Physim/build",
+  "f_drive_accessed": false,
+  "screenshots_created": 0,
+  "policy_checks": [
+    {
+      "platform": "win32",
+      "report": {
+        "path": "build/maintenance/2026-10-26-followup/win32/policy-check.json",
+        "sha256": "f49baf6ff3b3945a16f9e7d271032d30be53600146a61fce369ff2f73ffb9ed2"
+      },
+      "checks": [
+        {
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "-B",
+            "tools/with-artifacts.py",
+            "--check"
+          ],
+          "exit_code": 0,
+          "expected_exit_code": 0,
+          "passed": true
+        },
+        {
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "-B",
+            "tools/with-artifacts.py",
+            "--",
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "-B",
+            "tests/test_artifact_paths.py",
+            "--work",
+            "D:\\Physim\\build\\maintenance\\2026-10-26-followup\\win32\\policy"
+          ],
+          "exit_code": 0,
+          "expected_exit_code": 0,
+          "passed": true
+        },
+        {
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "-B",
+            "tools/with-artifacts.py",
+            "--",
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "-B",
+            "-c",
+            "import os,tempfile; from pathlib import Path; fd,name=tempfile.mkstemp(); os.close(fd); p=Path(name); print(p); assert p.is_relative_to(Path(os.environ['PHYSIM_ARTIFACT_ROOT'])); p.unlink(); raise SystemExit(7)"
+          ],
+          "exit_code": 7,
+          "expected_exit_code": 7,
+          "passed": true
+        }
+      ],
+      "source_sha256": {
+        "tools/artifact_paths.py": "35b8e8ff72b29fd79db001b5d4d37b5ddf6bf7275e308d1f0360c3caeda7bbb0",
+        "tools/with-artifacts.py": "fd370768118941d3b1a13c2e9c78ebf33bf0efe357694b72446cb8c444c3f6f6",
+        "tests/test_artifact_paths.py": "b9b55de980f068e73671c9b4435d2857d9ba3b462afd4a05a0b713115cfc1ccc",
+        ".physim-storage.json": "43a93601447db47bf6567ac004477011105b1464ea3baa4126e7ecdfd5db298f"
+      },
+      "outputs": [
+        {
+          "path": "build/maintenance/2026-10-26-followup/win32/0-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-followup/win32/0-stdout.txt",
+          "sha256": "094a5a95124346e1d106c0430ea88807a8bfd08713e55c2448ef8795225bf1af"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-followup/win32/1-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-followup/win32/1-stdout.txt",
+          "sha256": "5d960d000a44da60068aafcde699c8486fc33e28fcaacc17aa67bb0cd454e439"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-followup/win32/2-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-followup/win32/2-stdout.txt",
+          "sha256": "154a059a362953ab4b11b19973b5ef48fba612b0e15bc4149e14a6f126bee867"
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "report": {
+        "path": "build/maintenance/2026-10-26-followup/linux/policy-check.json",
+        "sha256": "3f411b33f42fc798f48f6479ee7eda607e3302eda9cb30d3e5d5d4aeb4bf5348"
+      },
+      "checks": [
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "tools/with-artifacts.py",
+            "--check"
+          ],
+          "exit_code": 0,
+          "expected_exit_code": 0,
+          "passed": true
+        },
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "tools/with-artifacts.py",
+            "--",
+            "/usr/bin/python3",
+            "-B",
+            "tests/test_artifact_paths.py",
+            "--work",
+            "/mnt/d/Physim/build/maintenance/2026-10-26-followup/linux/policy"
+          ],
+          "exit_code": 0,
+          "expected_exit_code": 0,
+          "passed": true
+        },
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "tools/with-artifacts.py",
+            "--",
+            "/usr/bin/python3",
+            "-B",
+            "-c",
+            "import os,tempfile; from pathlib import Path; fd,name=tempfile.mkstemp(); os.close(fd); p=Path(name); print(p); assert p.is_relative_to(Path(os.environ['PHYSIM_ARTIFACT_ROOT'])); p.unlink(); raise SystemExit(7)"
+          ],
+          "exit_code": 7,
+          "expected_exit_code": 7,
+          "passed": true
+        }
+      ],
+      "source_sha256": {
+        "tools/artifact_paths.py": "35b8e8ff72b29fd79db001b5d4d37b5ddf6bf7275e308d1f0360c3caeda7bbb0",
+        "tools/with-artifacts.py": "fd370768118941d3b1a13c2e9c78ebf33bf0efe357694b72446cb8c444c3f6f6",
+        "tests/test_artifact_paths.py": "b9b55de980f068e73671c9b4435d2857d9ba3b462afd4a05a0b713115cfc1ccc",
+        ".physim-storage.json": "43a93601447db47bf6567ac004477011105b1464ea3baa4126e7ecdfd5db298f"
+      },
+      "outputs": [
+        {
+          "path": "build/maintenance/2026-10-26-followup/linux/0-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-followup/linux/0-stdout.txt",
+          "sha256": "ed9db9b8d653eb344fb0eed1f866fce43ea2f4994b5f020dbb0f36ee192d79b7"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-followup/linux/1-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-followup/linux/1-stdout.txt",
+          "sha256": "20281a7739709937f5190342ba7517a885bf1ac314239d7232e751898cab9df4"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-followup/linux/2-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-followup/linux/2-stdout.txt",
+          "sha256": "21c804a394fc869776cb74a941c97f6d9185ad0c10fd24df4588e4c30c02bd12"
+        }
+      ]
+    }
+  ],
+  "cleanup": {
+    "status": "completed",
+    "deleted_objects": 218,
+    "logical_bytes": 89076918,
+    "preserved_files": 3147,
+    "preserved_hashes_unchanged": true,
+    "object_plan_sha256": "42fdaabc6ae122c8ac8272171513a0418a49085fd0134159a253fa31c5e42ca1",
+    "scope": "Superseded phase-4 Windows/Linux object caches; every other phase-4 file retained",
+    "screenshots_created": 0,
+    "physical_free_space_measured": false,
+    "f_drive_accessed": false
+  },
+  "cleanup_receipt": {
+    "path": "build/maintenance/2026-10-26-followup/object-cleanup.json",
+    "sha256": "171a642e3fd7ad8ead86d7259a93a7b3411f9571d54e28420f578593e764d8ca"
+  },
+  "file_plan": {
+    "path": "build/maintenance/2026-10-26-followup/object-plan.json",
+    "sha256": "42fdaabc6ae122c8ac8272171513a0418a49085fd0134159a253fa31c5e42ca1"
+  },
+  "helpers": [
+    {
+      "path": "build/maintenance/2026-10-26-followup/check-policy.py",
+      "sha256": "cb1463a74d45829ab409f0704f2a1fe95f2865e3cd0696219effffa012afd183"
+    },
+    {
+      "path": "build/maintenance/2026-10-26-followup/clean-objects.py",
+      "sha256": "672cea007782e6ffc8d7663bdacff502fdb8d508abb4d0b26d8ec6eb00a97b54"
+    },
+    {
+      "path": "build/maintenance/2026-10-26-followup/write-report.py",
+      "sha256": "3e09b7d8aee352424331d8b074035f7db6863547dcd1ad521337be8788e609e1"
+    }
+  ],
+  "cleanup_command": [
+    "C:/Users/angel/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+    "-B",
+    "tools/with-artifacts.py",
+    "--",
+    "C:/Users/angel/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+    "-B",
+    "build/maintenance/2026-10-26-followup/clean-objects.py"
+  ],
+  "cleanup_exit_code": 0,
+  "execution_note": "Initial PowerShell invocation failed to parse before starting cleanup; corrected invocation exited 0.",
+  "retention": {
+    "all_other_phase4_files": "3147 hashes unchanged: sources, programs, symbols and evidence retained",
+    "current_build": "untouched",
+    "uncommitted_sources": "untouched; excluded from validation claims",
+    "reference_and_error_images": "unchanged",
+    "shared_wsl_vm": "untouched",
+    "other_active_projects": "untouched"
+  },
+  "documented_four_cleanup_subtotal": {
+    "files": 2571,
+    "logical_bytes": 902059591,
+    "physical_free_space_measured": false
+  }
+}
