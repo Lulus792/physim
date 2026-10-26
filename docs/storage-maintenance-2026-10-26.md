@@ -27,6 +27,17 @@ entfernen 2.187 Objekte mit 784.988.855 Byte Dateigröße; dies ist weiterhin
 keine Messung physisch freigegebener Laufwerksbytes. Für diesen Nachlauf wurden
 ebenfalls keine Bilder erzeugt.
 
+Der dritte Nachlauf entfernt die inzwischen ersetzten Objekt-Caches aus
+`build/validation/protocol-wrap-2026-10-26/1-layout/{windows,linux}-build/obj`:
+166 Dateien mit 27.993.818 Byte. Diese ersten Unit-Builds sind beendet; ihre
+damals fehlgeschlagenen Gegenproben bleiben mit Programmen, Symbolen, Quellen
+und Logs erhalten. Vorherige Prozess- und Verweisprüfung sowie 137 hashgleich
+erhaltene Programm-, Bibliotheks-, Symbol- und Metadatendateien sind in der
+[dritten Quittung](verification/storage-layout-objects-2026-10-26.json)
+verknüpft. Zusammen sind damit 2.353 ersetzte Objekte mit 812.982.673 Byte
+Dateigröße entfernt. Die aktuelle isolierte Buildkopie bleibt für weitere
+Prüfungen verwendbar; F: wurde auch für diesen Nachlauf nicht angesprochen.
+
 Die vollständige lokale Dateiquittung und rohen Prüfausgaben liegen unter
 `D:/Physim/build/maintenance/2026-10-26-storage`. Der
 [kompakte maschinenlesbare Nachweis](verification/storage-objects-2026-10-26.json)
@@ -43,6 +54,12 @@ Bedienfolgen werden als Soll/Ist-Zustände dokumentiert. Bereits hashgeprüfte
 Laufzeitarchive können bei unverändertem Programm von mehreren Berichten
 referenziert werden. Archiv und vollständige lose Wiederherstellung nicht
 dauerhaft doppelt aufbewahren.
+
+Der [Originaltext-Nachlauf](visuals/unified-workspace/PROTOCOL-ORIGINAL-FLOW-NATIVE.md)
+zeigt die Anwendung dieser Regel: Zustandsfolgen und Gegenproben als JSON,
+zwei ausgewählte unveränderte native Bilder für die Dokumentation und
+Laufzeitarchive nur für gegenüber dem bisherigen Manifest geänderte Dateien.
+Die erfolgreichen und fehlgeschlagenen Ergebnisse bleiben getrennt erkennbar.
 
 Referenzbilder, offene Fehlerbelege, eingefrorene Nachweise, Quellen,
 Abhängigkeiten, Nutzdaten und fremde Arbeiten bleiben geschützt. Die gemeinsame

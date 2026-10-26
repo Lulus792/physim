@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-26",
+  "scope": "Initial layout unit-build object caches only",
+  "receipt": {
+    "path": "build/maintenance/2026-10-26-storage/layout-object-cleanup.json",
+    "sha256": "2e70ca29ee1e370d1d02d072ddd0169f8fbe0dce84166e82ed1551858863ba76"
+  },
+  "deleted_objects": 166,
+  "logical_bytes": 27993818,
+  "preserved_files": 137,
+  "preserved_hashes_unchanged": true,
+  "source_test_logs_and_failing_binaries_retained": true,
+  "screenshots_created": 0,
+  "command": [
+    "python",
+    "tools/with-artifacts.py",
+    "--",
+    "python",
+    "-B",
+    "D:\\Physim\\build\\maintenance\\2026-10-26-storage\\clean-layout-objects.py"
+  ],
+  "helper_sha256": "5b48dd125b0b6511b606b95dca001929cab4152426e8cfa63bdc7a78b712cb1f",
+  "exit_code": 0,
+  "not_a_physical_disk_space_measurement": true
+}
