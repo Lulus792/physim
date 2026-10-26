@@ -4259,6 +4259,7 @@ int main(int argc, char **argv) {
         for(unsigned i=0;i<PS_PANEL_COUNT;i++)if(a->panels[i].ui)nk_input_begin(a->panels[i].ui);
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
+            if(workspace_state_test && !strcmp(argv[3],"protocol-ui-interactive"))protocol_ui_interactive_event(a,&e);
             if(e.type==SDL_EVENT_KEY_DOWN || e.type==SDL_EVENT_TEXT_INPUT || e.type==SDL_EVENT_WINDOW_FOCUS_LOST) {
                 a->workspace_tip.dismissed=true;a->workspace_tip.visible=false;
             }

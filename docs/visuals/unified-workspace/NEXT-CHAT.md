@@ -33,7 +33,14 @@ Der [Detail- und Aktionsabgleich](PROTOCOL-ACTIONS-NATIVE.md) übernimmt 20 px
 Innenabstand und inhaltsbreite Aktionen mit automatischem Zeilenwechsel.
 12-KiB-Abschnitte, weitere Detailtypografie und Blockabstände gegen die Vorlage
 angleichen und den direkten
-Maus-/Tastaturfokus schließen. macOS, Screenreader und vollständige
+Maus-/Tastaturfokus schließen. Der folgende
+[Nachlauf für schnelle Zeigerereignisse](PROTOCOL-POINTER-NATIVE.md) erhält
+vollständige Klicks innerhalb eines Frames und den ursprünglichen Druckpunkt;
+Linux prüft den schnellen Suche-/Trenner-Fokuswechsel mit anschließendem
+40-Pixel-Schritt. Der direkte Windows-Desktopnachweis bleibt offen. Die zusätzliche
+F1-UIA-Scrollprüfung scheitert auch im gesicherten Vorzustand an einem noch
+aktiven Suchfeld; diesen getrennten Fokusbefund weiter untersuchen.
+macOS, Screenreader und vollständige
 Designgleichheit bleiben eigene offene Nachweise.
 Der [Gliederungs-Hovernachlauf](OUTLINE-HOVER-NATIVE.md) schließt die
 Tooltip-Überlagerung aus unsichtbaren Deklarationszeilen über dem Protokoll.

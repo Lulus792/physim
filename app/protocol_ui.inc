@@ -547,7 +547,6 @@ static void protocol_separator_view(app *a) {
             if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"PROTOCOL RANGE APPLY: previous=%u value=%.3f\n",a->preferences.log_height,value);
             a->preferences.log_height=(uint32_t)lroundf(value);
         }
-        if(!blocked && nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ui->input,r))nk_sdl_accessibility_request_focus(ui,NULL,"Protokoll-Höhe");
         bool hover=nk_input_is_mouse_hovering_rect(&ui->input,r);if(hover || nk_sdl_accessibility_is_focused(ui,NULL,"Protokoll-Höhe"))nk_fill_rect(nk_window_get_canvas(ui),nk_rect(r.x,r.y+4,r.w,1),0,UI_COLOR(accent));
         if(hover || a->protocol_view.resize){if(!a->laboratory_cursors[1])a->laboratory_cursors[1]=SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_NS_RESIZE);if(a->laboratory_cursors[1]){SDL_SetCursor(a->laboratory_cursors[1]);a->protocol_view.cursor_owned=true;}}
     }nk_end(ui);nk_style_pop_style_item(ui);nk_style_pop_float(ui);nk_style_pop_vec2(ui);nk_sdl_window_raise(ui,"protocol-separator");

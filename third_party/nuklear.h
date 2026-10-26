@@ -4957,6 +4957,9 @@ struct nk_mouse_button {
     nk_bool down;
     unsigned int clicked;
     struct nk_vec2 clicked_pos;
+    /* Physim: retain edges/origins when a whole gesture arrives in one frame. */
+    unsigned int presses, releases;
+    struct nk_vec2 press_pos, release_pos;
 };
 struct nk_mouse {
     struct nk_mouse_button buttons[NK_BUTTON_MAX];
@@ -18420,8 +18423,10 @@ nk_input_begin(struct nk_context *ctx)
     NK_ASSERT(ctx);
     if (!ctx) return;
     in = &ctx->input;
-    for (i = 0; i < NK_BUTTON_MAX; ++i)
+    for (i = 0; i < NK_BUTTON_MAX; ++i) {
         in->mouse.buttons[i].clicked = 0;
+        in->mouse.buttons[i].presses = in->mouse.buttons[i].releases = 0;
+    }
 
     in->keyboard.text_len = 0;
     in->mouse.scroll_delta = nk_vec2(0,0);
@@ -18489,6 +18494,8 @@ nk_input_button(struct nk_context *ctx, enum nk_buttons id, int x, int y, nk_boo
     btn->clicked_pos.y = (float)y;
     btn->down = down;
     btn->clicked++;
+    if (down) {btn->presses++;btn->press_pos=btn->clicked_pos;}
+    else {btn->releases++;btn->release_pos=btn->clicked_pos;}
 
     /* Fix Click-Drag for touch events. */
     in->mouse.delta.x = 0;
@@ -21121,9 +21128,12 @@ nk_begin_titled(struct nk_context *ctx, const char *name, const char *title,
             (2.0f * style->window.header.label_padding.y);
         struct nk_rect win_bounds = (!(win->flags & NK_WINDOW_MINIMIZED))?
             win->bounds: nk_rect(win->bounds.x, win->bounds.y, win->bounds.w, h);
+        const struct nk_mouse_button *press_button=&ctx->input.mouse.buttons[NK_BUTTON_LEFT];
+        struct nk_vec2 press_point=press_button->presses?press_button->press_pos:ctx->input.mouse.pos;
 
         /* activate window if hovered and no other window is overlapping this window */
         inpanel = nk_input_has_mouse_click_down_in_rect(&ctx->input, NK_BUTTON_LEFT, win_bounds, nk_true);
+        if(press_button->presses)inpanel=NK_INBOX(press_point.x,press_point.y,win_bounds.x,win_bounds.y,win_bounds.w,win_bounds.h);
         inpanel = inpanel && ctx->input.mouse.buttons[NK_BUTTON_LEFT].clicked;
         ishovered = nk_input_is_mouse_hovering_rect(&ctx->input, win_bounds);
         if ((win != ctx->active) && ishovered && !ctx->input.mouse.buttons[NK_BUTTON_LEFT].down) {
@@ -21152,7 +21162,7 @@ nk_begin_titled(struct nk_context *ctx, const char *name, const char *title,
                 /* try to find a panel with higher priority in the same position */
                 struct nk_rect iter_bounds = (!(iter->flags & NK_WINDOW_MINIMIZED))?
                 iter->bounds: nk_rect(iter->bounds.x, iter->bounds.y, iter->bounds.w, h);
-                if (NK_INBOX(ctx->input.mouse.pos.x, ctx->input.mouse.pos.y,
+                if (NK_INBOX(press_point.x, press_point.y,
                     iter_bounds.x, iter_bounds.y, iter_bounds.w, iter_bounds.h) &&
                     !(iter->flags & NK_WINDOW_HIDDEN))
                     break;
@@ -28938,10 +28948,13 @@ nk_do_edit(nk_flags *state, struct nk_command_buffer *out,
     prev_state = (char)edit->active;
     /* Physim: a tall field can extend behind controls outside its parent's
      * viewport. Its unclipped bounds alone must not take their pointer input. */
-    if (in && in->mouse.buttons[NK_BUTTON_LEFT].clicked && in->mouse.buttons[NK_BUTTON_LEFT].down) {
-        edit->active = NK_INBOX(in->mouse.pos.x, in->mouse.pos.y,
+    if (in && in->mouse.buttons[NK_BUTTON_LEFT].clicked &&
+        (in->mouse.buttons[NK_BUTTON_LEFT].presses || in->mouse.buttons[NK_BUTTON_LEFT].down)) {
+        const struct nk_mouse_button *button=&in->mouse.buttons[NK_BUTTON_LEFT];
+        struct nk_vec2 point=button->presses?button->press_pos:in->mouse.pos;
+        edit->active = NK_INBOX(point.x, point.y,
                                 bounds.x, bounds.y, bounds.w, bounds.h) &&
-                       NK_INBOX(in->mouse.pos.x, in->mouse.pos.y,
+                       NK_INBOX(point.x, point.y,
                                 old_clip.x, old_clip.y, old_clip.w, old_clip.h);
     }
 
@@ -28986,9 +28999,14 @@ nk_do_edit(nk_flags *state, struct nk_command_buffer *out,
         is_hovered = (char)nk_input_is_mouse_hovering_rect(in, area);
         if (select_all) {
             nk_textedit_select_all(edit);
-        } else if (is_hovered && in->mouse.buttons[NK_BUTTON_LEFT].down &&
-            in->mouse.buttons[NK_BUTTON_LEFT].clicked) {
-            nk_textedit_click(edit, mouse_x, mouse_y, font, row_height);
+        } else if (in->mouse.buttons[NK_BUTTON_LEFT].clicked &&
+            (in->mouse.buttons[NK_BUTTON_LEFT].presses || (is_hovered && in->mouse.buttons[NK_BUTTON_LEFT].down))) {
+            const struct nk_mouse_button *button=&in->mouse.buttons[NK_BUTTON_LEFT];
+            struct nk_vec2 point=button->presses?button->press_pos:in->mouse.pos;
+            if(NK_INBOX(point.x,point.y,area.x,area.y,area.w,area.h) && NK_INBOX(point.x,point.y,old_clip.x,old_clip.y,old_clip.w,old_clip.h)) {
+                nk_textedit_click(edit,point.x-area.x+edit->scrollbar.x,point.y-area.y+edit->scrollbar.y,font,row_height);
+                if(button->releases && !button->down)nk_textedit_drag(edit,button->release_pos.x-area.x+edit->scrollbar.x,button->release_pos.y-area.y+edit->scrollbar.y,font,row_height);
+            }
         } else if (is_hovered && in->mouse.buttons[NK_BUTTON_LEFT].down &&
             nk_input_is_mouse_moved(in)) {
             nk_textedit_drag(edit, mouse_x, mouse_y, font, row_height);

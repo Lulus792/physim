@@ -49,14 +49,29 @@ static void protocol_resize_input(app *a,float w,float h) {
             nk_input_is_mouse_down(in,NK_BUTTON_LEFT),nk_input_is_mouse_pressed(in,NK_BUTTON_LEFT),nk_input_is_mouse_hovering_rect(in,p->separator),
             p->resize_cancelled,a->toolbar_menu,a->toolbar_pointer_consumed,p->resize,in->mouse.pos.x,in->mouse.pos.y,
             p->separator.x,p->separator.y,p->separator.w,p->separator.h,SDL_GetKeyboardFocus()==a->window,SDL_GetMouseFocus()==a->window);
-    if(!nk_input_is_mouse_down(in,NK_BUTTON_LEFT)) {if(p->resize)SDL_CaptureMouse(false);p->resize=false;p->resize_cancelled=false;return;}
+    bool down=nk_input_is_mouse_down(in,NK_BUTTON_LEFT);
+    bool pressed=ps_ui_mouse_pressed_in_rect(in,NK_BUTTON_LEFT,p->separator);
+    const struct nk_mouse_button *button=&in->mouse.buttons[NK_BUTTON_LEFT];
+    if(!down && !pressed) {
+        if(p->resize) {
+            if(button->clicked && button->releases)a->preferences.log_height=(uint32_t)lroundf(fmaxf(150,fminf(protocol_max_height(a,h),p->resize_effective+p->resize_y-button->release_pos.y)));
+            SDL_CaptureMouse(false);
+        }
+        p->resize=false;p->resize_cancelled=false;return;
+    }
     if(p->resize_cancelled)return;
-    if(!p->resize && !a->toolbar_menu && !a->toolbar_pointer_consumed && nk_input_is_mouse_pressed(in,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(in,p->separator)) {
+    if(!p->resize && !a->toolbar_menu && !a->toolbar_pointer_consumed && pressed) {
         /* Claim keyboard ownership with the press, before rendering other
          * windows can change the active widget or the pointer's hover area. */
-        nk_sdl_accessibility_request_focus(a->ui,NULL,"Protokoll-Höhe");
-        p->resize=true;p->resize_original=(float)a->preferences.log_height;p->resize_effective=protocol_height_value(a,h);p->resize_y=in->mouse.pos.y;SDL_CaptureMouse(true);
-        if(nk_input_is_mouse_pressed(in,NK_BUTTON_DOUBLE)){a->preferences.log_height=340;p->resize=false;SDL_CaptureMouse(false);return;}
+        bool focus_requested=nk_sdl_accessibility_request_focus(a->ui,NULL,"Protokoll-Höhe");
+        if(SDL_getenv("PHYSIM_TEST_FOCUS_TRACE"))fprintf(stderr,"FOCUS POINTER REQUEST: accepted=%d keyboard=%d\n",focus_requested,SDL_GetKeyboardFocus()==a->window);
+        p->resize=true;p->resize_original=(float)a->preferences.log_height;p->resize_effective=protocol_height_value(a,h);p->resize_y=ps_ui_mouse_press_position(in,NK_BUTTON_LEFT).y;
+        if(down)SDL_CaptureMouse(true);
+        if(ps_ui_mouse_pressed(in,NK_BUTTON_DOUBLE)){a->preferences.log_height=340;p->resize=false;SDL_CaptureMouse(false);return;}
     }
-    if(p->resize)a->preferences.log_height=(uint32_t)lroundf(fmaxf(150,fminf(protocol_max_height(a,h),p->resize_effective+p->resize_y-in->mouse.pos.y)));
+    if(p->resize) {
+        float position=!down && button->releases?button->release_pos.y:in->mouse.pos.y;
+        a->preferences.log_height=(uint32_t)lroundf(fmaxf(150,fminf(protocol_max_height(a,h),p->resize_effective+p->resize_y-position)));
+        if(!down){p->resize=false;SDL_CaptureMouse(false);}
+    }
 }

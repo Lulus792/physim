@@ -1,0 +1,298 @@
+{
+  "date": "2026-10-26",
+  "scope": "Native rapid pointer edges, press origins, protocol focus routing and regression evidence",
+  "storage": {
+    "root": "D:/Physim/build",
+    "f_drive_accessed": false,
+    "desktop_screenshots_saved": 0,
+    "new_versioned_images": 0
+  },
+  "source": {
+    "manifest": {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/accepted-source.json",
+      "sha256": "557264df7f52b1a9e14f76ff7b4a3cd93c7ec8b47aa80a62200013f56e7e0240"
+    },
+    "files": {
+      "app/main.c": "22ad62b56bdfd6949db8cfde5558c482baf37c421d58ee89109e5b1077d01573",
+      "app/protocol_layout.inc": "b49facef464c721fc1466dca0fedf6d4ec7dfe2931ec2ff55c839abe69d1e1f8",
+      "app/protocol_tests.inc": "ad8f6efbee0d7f89daeb01d82c99a629e179f1e056c6ee0d1eb71dc6617bcb2f",
+      "app/protocol_ui.inc": "53e91c2492b645a9a08c4b3cb3485e60d643a7ff2ea3bb783edf6b6dc40bb5bc",
+      "app/ui_sdl.c": "161eebae4544132621b87f6fd148a56ed9954d29d28955afbb79ac13ee5bef15",
+      "app/ui_backend.c": "e6a39d88dfea1a6e393392ecbfc792c8f710185b184e0d9fcb7a06366074dd5b",
+      "app/ui.h": "e5437971d82f886433fe91dd12d1fca3f20977ca7d0d312270ed775f712a8fed",
+      "third_party/nuklear.h": "11e5ed38f52bde5c293b6ff70b45065d6c8d489f7a05027e547f0af95eb5de32",
+      "tests/accessibility_windows_probe.c": "4a59e4455b6b5316fbe6ce14546e94fde2a2b1d865c12462ba1ccc61a34127b5",
+      "tests/test_pointer_click.c": "dcde9e23cd173df8f8fa0cfc5eb8bd23bb328ed3b9534b44125361dfd05605ce",
+      "tools/native_tests.py": "0649570ecd0c7d49ad9cd829eff0fa250e4a83dfdfa6b7f73ad908fd96dbcd5b",
+      "tests/test_accessibility_edit_app.py": "c63b4925796dc23cf4a87b4ce5b235f8ead21f02a638ecec233b1d29d31f24b7"
+    },
+    "unchanged_c_inputs_checked": 801,
+    "foreign_changes_excluded": true
+  },
+  "runtime": {
+    "manifest": {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/accepted-runtime.json",
+      "sha256": "2b8c9da41898abe35b9115a9975583b2ddfd2f72fb19406450563a4aa9269138"
+    },
+    "byte_index": {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/runtime-byte-index.json",
+      "sha256": "c846bb71d81a2cff3d5b1a12b3d5a908ee08727d3ae88af1ba2ed0465485ccfd"
+    },
+    "files_indexed": 206,
+    "app_sha256": {
+      "windows": "e6a5ec9686dc521e19a8f8f908199950ecf051f14111391f47c197f67ccdd4ab",
+      "linux": "5069c18adf3befd504ce24c04f4ad9c161e01e139567f9d12135d175f5c45119"
+    }
+  },
+  "passing_groups": [
+    {
+      "platform": "windows",
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-t64vkqnf/results.json",
+        "sha256": "b2aacc9d502f803bd465db7da547eed27022ad24063733a1098098c7044d49e5"
+      },
+      "passed_groups": [
+        "editor_wrapped",
+        "editor_clip",
+        "pointer_click",
+        "accessibility",
+        "accessibility_edit",
+        "editor_clipboard",
+        "editor_readonly",
+        "editor_scroll"
+      ]
+    },
+    {
+      "platform": "linux",
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-wiagamjy/results.json",
+        "sha256": "5834dd42eef20461c485d4763004360b18448f5042ca5187432d5505ee04a922"
+      },
+      "passed_groups": [
+        "editor_wrapped",
+        "editor_clip",
+        "pointer_click",
+        "accessibility",
+        "accessibility_edit",
+        "editor_clipboard",
+        "editor_readonly",
+        "editor_scroll"
+      ]
+    },
+    {
+      "platform": "windows",
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-791qt30k/results.json",
+        "sha256": "8a0c7dbe896ed742cbdea5dd2c8c1f0417c4699533ec053cdcc3388c1c96c0ff"
+      },
+      "passed_groups": [
+        "protocol_actions",
+        "protocol_original",
+        "accessibility_edit_windows"
+      ]
+    },
+    {
+      "platform": "linux",
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5ov27gzs/results.json",
+        "sha256": "a403ba6cee67e7af165fe8d1ca7467fdb3ae7d1a831b096a4bb798372caeaef7"
+      },
+      "passed_groups": [
+        "protocol_navigator",
+        "protocol_actions",
+        "protocol_original",
+        "accessibility_edit_atspi"
+      ]
+    },
+    {
+      "platform": "windows",
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-ovhtavon/results.json",
+        "sha256": "7b84e5eac8104febddf7cd635eb6b03b97ef3dd32024b5bbc0fa61b0ee59984f"
+      },
+      "passed_groups": [
+        "pointer_click"
+      ]
+    },
+    {
+      "platform": "linux",
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-mk44zewx/results.json",
+        "sha256": "b9ee386d8aaf68d758f6bb146fd7437df47662fd38f148dfa70da37d568a0d99"
+      },
+      "passed_groups": [
+        "pointer_click"
+      ]
+    },
+    {
+      "platform": "windows",
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-l_gg4obx/results.json",
+        "sha256": "a5467594ed8a0c366df26663bc01c75c26af54b532b87b199660b9c5c3ffa273"
+      },
+      "passed_groups": [
+        "accessibility_edit_windows"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/after-pointer-windows.json",
+      "sha256": "44a0ca767edac6d5ce2ebb9d07ff6ac3e2aad034c6d0eff7993196f1b60bc96a"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/after-pointer-linux.json",
+      "sha256": "eb36bda36fa5d7f5aa52c7914abbb381c883f3fe1cb25375aa1bafaff4de8306"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/combo-windows.json",
+      "sha256": "365c6d7cf1c9a02de53ddab95df83310bbf17b0094aac9b759e1808c5badaac7"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/combo-linux.json",
+      "sha256": "30afd6ea741dd38fbd82f28ace97717e2969ee9b2ad2f867276dd003dc42c721"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/final-display-windows.json",
+      "sha256": "6549f6e948530f8450b6e319f335d22239bc3c47cdc24a9cd134a8ea0f476b1f"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/final-display-linux.json",
+      "sha256": "17f170bdf28144c27d96040c65d1adce8f1f8df9abd5d5465e04f5ba5cffcd7a"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/focused-control-display-windows.json",
+      "sha256": "9d9c8ee0aa8af79490db023abe4e9410e8b6acc7660bac8cf3dd9b1924352a5b"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/input-display-windows.json",
+      "sha256": "bde159361d4f9f20ec3122ada53e7f55311472c197a3175854a6598f6768407e"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/scroll-trace-display-windows.json",
+      "sha256": "4673584a85c2629dbc494883a894d51473e55636a02d475d25760905faa2c235"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/scroll-before/result.json",
+      "sha256": "cecdf2e75b49f807705b71d83db725c41397ed266aafac5666a1793e71294b39"
+    }
+  ],
+  "batched_sdl_clicks": {
+    "platform": "linux",
+    "navigator_cases": 8,
+    "dark_steps": 70,
+    "search_then_separator_press_release_in_one_poll_batch": true,
+    "initial_search_focus": "PROTOCOL RANGE FOCUS ORIGIN: search=1 host=1 original=0 query-cache=1 original-active=0 active-window=log detail-scroll=213",
+    "stage_38_passed": true,
+    "stage_40_height": 380,
+    "source_crc_unchanged": true,
+    "physical_input": false,
+    "verification": {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5ov27gzs/protocol_navigator/files \u00e4/verification.json",
+      "sha256": "393655a37187e6e5a00a4578dc593cba2bcb7aa01ea702b2459941e32cdc2cca"
+    }
+  },
+  "negative_control": {
+    "results": {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-3zkgfx2k/results.json",
+      "sha256": "a6ed121858ece68b61d0c24c29c90829e2ba752c5109312f2daf57d493b9f944"
+    },
+    "observed": "transitions=2 down=0 activated=0",
+    "expectation": "The first rapid shared-button tap must activate",
+    "boundary": "Later caret, selection and combo cases were added after this original failing run"
+  },
+  "desktop": {
+    "result": "not verified",
+    "observations": {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/final-desktop-observation.json",
+      "sha256": "4ef008e682e67fce3a13170bc089e7474c55210b4a51c228b4d8c73813a5fde2"
+    },
+    "fixture_exit": {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/final-desktop-exit.json",
+      "sha256": "1e0e088356e43c2cba3dc4c650cd04c9d8639477237811bff657f2170fcc6528"
+    },
+    "termination": "Own fixture deliberately stopped after black captures; not an app crash proof",
+    "earlier_shift_up": "SDL scancode 96/key 1073741920/mod 4097, not SDL Up scancode 82"
+  },
+  "f1_scroll": {
+    "status": "open",
+    "current_initial": {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/input-display-windows.json",
+      "sha256": "bde159361d4f9f20ec3122ada53e7f55311472c197a3175854a6598f6768407e"
+    },
+    "current_trace": {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/scroll-trace-display-windows.json",
+      "sha256": "4673584a85c2629dbc494883a894d51473e55636a02d475d25760905faa2c235"
+    },
+    "before": {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/scroll-before/result.json",
+      "sha256": "cecdf2e75b49f807705b71d83db725c41397ed266aafac5666a1793e71294b39"
+    },
+    "observed": "Before ScrollIntoView, visible=0 focus=1 active=1; guard fails in both current and archived pre-fix app",
+    "expectation": "A hidden range in an inactive field must be revealed without altering focus, selection, caret or value",
+    "regression_causality": "Not established; same prerequisite failure predates pointer fix"
+  },
+  "cleanup": {
+    "removed_duplicate_files": 2,
+    "logical_bytes": 5647872,
+    "historical_program_and_runtime_preserved_in_verified_archives": true,
+    "raw_failure_evidence_retained": true,
+    "physical_free_space_measured": false
+  },
+  "local_evidence": [
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/accepted-source.json",
+      "sha256": "557264df7f52b1a9e14f76ff7b4a3cd93c7ec8b47aa80a62200013f56e7e0240"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/accepted-source-overlay.zip",
+      "sha256": "9f30d8d9ec0078c5a814931029def71059e6896ab8df2df7fb76ad61aaa79512"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/accepted-runtime.json",
+      "sha256": "2b8c9da41898abe35b9115a9975583b2ddfd2f72fb19406450563a4aa9269138"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/runtime-byte-index.json",
+      "sha256": "c846bb71d81a2cff3d5b1a12b3d5a908ee08727d3ae88af1ba2ed0465485ccfd"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/pointer-before-archive.json",
+      "sha256": "7d42516b541b85f260ed8eaa9c01b44460459f53bbabc509f89730ebfee13de3"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/desktop-before.json",
+      "sha256": "91e878bcbc045da2c5aba52f00bbd2b9027409e709c1f1aeaf45886dd5a43f8b"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/desktop-trace.json",
+      "sha256": "1d2c856cac8f53c7ef76d3c8e635e949fe4550c0bfe2d298bd44039ba2a2fb36"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/final-desktop-start.json",
+      "sha256": "94573b6bf274015048342ebf3b5a85409f6867cacd2768e21c3331e87f65ecbb"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/final-desktop-exit.json",
+      "sha256": "1e0e088356e43c2cba3dc4c650cd04c9d8639477237811bff657f2170fcc6528"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/final-desktop-observation.json",
+      "sha256": "4ef008e682e67fce3a13170bc089e7474c55210b4a51c228b4d8c73813a5fde2"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/replay-copy-plan.json",
+      "sha256": "2ad94d236c42b801fa23a8b693e6919d3cafade4030aa4c45e50f747cca6d07f"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/10-desktop-focus/replay-copy-cleanup.json",
+      "sha256": "eba2186af356315e358d3ee04ac8411fec6b13a551728cb101a6530e7f62486c"
+    }
+  ],
+  "limits": [
+    "Direct Windows desktop focus and arrow-key proof still open",
+    "F1 Windows UIA scroll prerequisite failure still open",
+    "Linux uses Xvfb/Openbox/software OpenGL and ASan/UBSan with detect_leaks=0; not a physical Linux monitor or leak proof",
+    "Other legacy pointer paths, full C/H fidelity, 12-KiB original sections, detail typography, actual screenreaders, DPI/monitor cases and macOS remain open"
+  ]
+}

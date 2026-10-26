@@ -212,6 +212,11 @@ typedef enum {
 void ps_ui_draw_icon(struct nk_command_buffer *canvas,ps_ui_icon icon,struct nk_rect bounds,struct nk_color color);
 nk_bool ps_ui_icon_button(struct nk_context *ctx,ps_ui_icon icon,const char *name);
 nk_bool ps_ui_button_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,bool selected);
+/* Press edges survive a same-frame release and use the actual press origin.
+ * Clearing Nuklear's clicked count still consumes the complete gesture. */
+nk_bool ps_ui_mouse_pressed(const struct nk_input *input,enum nk_buttons button);
+struct nk_vec2 ps_ui_mouse_press_position(const struct nk_input *input,enum nk_buttons button);
+nk_bool ps_ui_mouse_pressed_in_rect(const struct nk_input *input,enum nk_buttons button,struct nk_rect bounds);
 /* Same native action/target, with focus painting owned by the component. */
 nk_bool ps_ui_button_at_custom_focus(struct nk_context *ctx,struct nk_rect bounds,const char *name,bool selected,bool *focused);
 /* Largest measured UTF-8 prefix fitting width, preferring spaces and optionally

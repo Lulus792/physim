@@ -363,15 +363,18 @@ static HRESULT scroll_text(IUIAutomationElement *control,const wchar_t *query,BO
  if(SUCCEEDED(result))result=text?IUIAutomationTextRange_FindText(whole,text,FALSE,FALSE,&match):E_OUTOFMEMORY;
  if(SUCCEEDED(result) && !match)result=E_FAIL;
  if(SUCCEEDED(result))result=text_visible(base,match,&visible);
+ if(getenv("PHYSIM_UIA_SCROLL_TRACE"))fprintf(stderr,"UIA SCROLL BEFORE: result=0x%08lx visible=%d focus=%d active=%d top=%d\n",(unsigned long)result,visible,old_focus,old_active,top);
  if(SUCCEEDED(result) && (visible || old_focus || old_active))result=E_FAIL;
  if(SUCCEEDED(result))result=IUIAutomationTextRange_ScrollIntoView(match,top);
  ULONGLONG deadline=GetTickCount64()+4000;
  while(SUCCEEDED(result) && !visible && GetTickCount64()<deadline){result=text_visible(base,match,&visible);if(!visible)Sleep(10);}
+ if(getenv("PHYSIM_UIA_SCROLL_TRACE"))fprintf(stderr,"UIA SCROLL VISIBLE: result=0x%08lx visible=%d\n",(unsigned long)result,visible);
  if(SUCCEEDED(result) && !visible)result=E_FAIL;
  if(SUCCEEDED(result))result=IUIAutomationValuePattern_get_CurrentValue(value,&new_value);
  if(SUCCEEDED(result))result=IUIAutomationElement_get_CurrentHasKeyboardFocus(control,&new_focus);
  if(SUCCEEDED(result))result=text_selection(base,&after);
  if(SUCCEEDED(result))result=IUIAutomationTextPattern2_GetCaretRange(pattern,&new_active,&caret_after);
+ if(getenv("PHYSIM_UIA_SCROLL_TRACE"))fprintf(stderr,"UIA SCROLL AFTER: result=0x%08lx focus=%d active=%d value-equal=%d\n",(unsigned long)result,new_focus,new_active,old_value && new_value && !wcscmp(old_value,new_value));
  if(SUCCEEDED(result) && (wcscmp(old_value,new_value) || old_focus!=new_focus || old_active!=new_active))result=E_FAIL;
  IUIAutomationTextRange *left[]={before,caret_before},*right[]={after,caret_after};
  for(int i=0;SUCCEEDED(result) && i<2;i++)for(int end=0;SUCCEEDED(result) && end<2;end++) {
@@ -395,8 +398,8 @@ int wmain(int argc,wchar_t **argv) {
  bool links=!wcscmp(argv[2],L"links") || stress_links,invoke_link=!wcscmp(argv[2],L"invoke-link");
  bool invalid_link=!wcscmp(argv[2],L"invoke-link-invalid");
  bool lifecycle=!wcscmp(argv[2],L"lifecycle");
- bool focused_field=!wcscmp(argv[2],L"focused-field"),focused_button=!wcscmp(argv[2],L"focused-button");
- if(!focus && !toggle && !select && !read && !edit && !text_select && !scroll_start && !scroll_end && !links && !invoke_link && !invalid_link && !lifecycle && !focused_field && !focused_button)return 2;
+ bool focused_field=!wcscmp(argv[2],L"focused-field"),focused_button=!wcscmp(argv[2],L"focused-button"),focused_control=!wcscmp(argv[2],L"focused-control");
+ if(!focus && !toggle && !select && !read && !edit && !text_select && !scroll_start && !scroll_end && !links && !invoke_link && !invalid_link && !lifecycle && !focused_field && !focused_button && !focused_control)return 2;
  if((read || edit || text_select || scroll_start || scroll_end || links || invoke_link || invalid_link || lifecycle) && argc!=5)return 2;
  HRESULT initialized=CoInitializeEx(NULL,COINIT_MULTITHREADED);if(FAILED(initialized))return 1;
  IUIAutomation *automation=NULL;IUIAutomationElement *desktop=NULL,*window=NULL,*group=NULL,*control=NULL;
@@ -404,7 +407,7 @@ int wmain(int argc,wchar_t **argv) {
  if(ok)ok=SUCCEEDED(IUIAutomation_GetRootElement(automation,&desktop));
  VARIANT process;VariantInit(&process);process.vt=VT_I4;process.lVal=(LONG)pid;
  if(ok)ok=SUCCEEDED(find(automation,desktop,TreeScope_Children,UIA_ProcessIdPropertyId,process,&window)) && window;
- if(ok && (edit || focused_field || focused_button || text_select || scroll_start || scroll_end))ok=SUCCEEDED(find_edit(automation,desktop,(LONG)pid,argv[3],focused_button?UIA_ButtonControlTypeId:UIA_EditControlTypeId,&control)) && control;
+ if(ok && (edit || focused_field || focused_button || focused_control || text_select || scroll_start || scroll_end))ok=SUCCEEDED(find_edit(automation,desktop,(LONG)pid,argv[3],focused_control?0:focused_button?UIA_ButtonControlTypeId:UIA_EditControlTypeId,&control)) && control;
  else if(ok && (read || links || invoke_link || invalid_link || lifecycle)) {
   IUIAutomationCondition *pid_condition=NULL,*title_condition=NULL,*both=NULL;VARIANT title;VariantInit(&title);title.vt=VT_BSTR;title.bstrVal=SysAllocString(argv[3]);
   ok=title.bstrVal && SUCCEEDED(IUIAutomation_CreatePropertyCondition(automation,UIA_ProcessIdPropertyId,process,&pid_condition)) &&
@@ -419,7 +422,7 @@ int wmain(int argc,wchar_t **argv) {
  CONTROLTYPEID role=0;BOOL enabled=FALSE,focusable=FALSE;HRESULT action=E_FAIL;
  if(ok)ok=SUCCEEDED(IUIAutomationElement_get_CurrentControlType(control,&role)) &&
   SUCCEEDED(IUIAutomationElement_get_CurrentIsEnabled(control,&enabled)) && enabled;
- if(ok && (focused_field || focused_button))action=current_field_focus(automation,control);
+ if(ok && (focused_field || focused_button || focused_control))action=current_field_focus(automation,control);
  else if(ok && edit) {
   IUIAutomationValuePattern *pattern=NULL;BOOL readonly=TRUE;
   ok=role==UIA_EditControlTypeId && SUCCEEDED(IUIAutomationElement_GetCurrentPattern(control,UIA_ValuePatternId,&unknown)) && unknown &&

@@ -30,6 +30,11 @@ try:
         probes.append(dict(action='focused-field',field=name,exit_code=result.returncode,stdout=result.stdout.decode('utf-8'),stderr=result.stderr.decode('utf-8')))
         assert result.returncode==0,probes[-1]
         if phase=='SEARCH':
+            # Generic read-only focus queries must also find owned F1 windows.
+            result=subprocess.run([str(args.probe),str(process.pid),'focused-control',name],capture_output=True,timeout=10)
+            probes.append(dict(action='focused-control',field=name,exit_code=result.returncode,stdout=result.stdout.decode('utf-8'),stderr=result.stderr.decode('utf-8')))
+            assert result.returncode==0,probes[-1]
+        if phase=='SEARCH':
             result=subprocess.run([str(args.probe),str(process.pid),'select-text',name,'θ🌍'],capture_output=True,timeout=15)
             probes.append(dict(action='select-text',field=name,exit_code=result.returncode,stdout=result.stdout.decode('utf-8'),stderr=result.stderr.decode('utf-8')))
             assert result.returncode==0,probes[-1]

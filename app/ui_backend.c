@@ -445,18 +445,33 @@ nk_bool ps_ui_icon_button(struct nk_context *ctx,ps_ui_icon icon,const char *nam
     ps_ui_draw_icon(nk_window_get_canvas(ctx),icon,bounds,ctx->style.button.text_normal);
     return pressed || clicked;
 }
+nk_bool ps_ui_mouse_pressed(const struct nk_input *input,enum nk_buttons button) {
+    if(!input || (unsigned)button>=NK_BUTTON_MAX)return nk_false;
+    const struct nk_mouse_button *b=&input->mouse.buttons[button];
+    return b->clicked && (b->presses || b->down);
+}
+struct nk_vec2 ps_ui_mouse_press_position(const struct nk_input *input,enum nk_buttons button) {
+    if(!input || (unsigned)button>=NK_BUTTON_MAX)return nk_vec2(0,0);
+    const struct nk_mouse_button *b=&input->mouse.buttons[button];
+    return b->presses?b->press_pos:input->mouse.pos;
+}
+nk_bool ps_ui_mouse_pressed_in_rect(const struct nk_input *input,enum nk_buttons button,struct nk_rect bounds) {
+    if(!ps_ui_mouse_pressed(input,button))return nk_false;
+    struct nk_vec2 point=ps_ui_mouse_press_position(input,button);
+    return point.x>=bounds.x && point.y>=bounds.y && point.x<bounds.x+bounds.w && point.y<bounds.y+bounds.h;
+}
 nk_bool ps_ui_button_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,bool selected) {
     if(bounds.w<=0 || bounds.h<=0)return nk_false;
     nk_bool pressed=accessibility_widget(ctx,name,1,bounds,selected,NULL,false);
     bool enabled=!(ctx->current->layout->flags&NK_WINDOW_ROM) && !ctx->current->widgets_disabled;
-    return pressed || (enabled && nk_input_is_mouse_pressed(&ctx->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ctx->input,ctx->current->layout->clip) && nk_input_is_mouse_hovering_rect(&ctx->input,bounds));
+    return pressed || (enabled && ps_ui_mouse_pressed_in_rect(&ctx->input,NK_BUTTON_LEFT,ctx->current->layout->clip) && ps_ui_mouse_pressed_in_rect(&ctx->input,NK_BUTTON_LEFT,bounds));
 }
 nk_bool ps_ui_button_at_custom_focus(struct nk_context *ctx,struct nk_rect bounds,const char *name,bool selected,bool *focused) {
     if(focused)*focused=false;
     if(!ctx || !ctx->current || bounds.w<=0 || bounds.h<=0)return nk_false;
     nk_bool pressed=accessibility_emit(ctx,name,1,bounds,selected,NULL,false,NULL,focused);
     bool enabled=!(ctx->current->layout->flags&NK_WINDOW_ROM) && !ctx->current->widgets_disabled;
-    return pressed || (enabled && nk_input_is_mouse_pressed(&ctx->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ctx->input,ctx->current->layout->clip) && nk_input_is_mouse_hovering_rect(&ctx->input,bounds));
+    return pressed || (enabled && ps_ui_mouse_pressed_in_rect(&ctx->input,NK_BUTTON_LEFT,ctx->current->layout->clip) && ps_ui_mouse_pressed_in_rect(&ctx->input,NK_BUTTON_LEFT,bounds));
 }
 int ps_ui_text_line(const struct nk_user_font *font,const char *text,int length,float space,bool path) {
     if(!font || !font->width || !text || length<=0 || !isfinite(space) || space<=0)return 0;
@@ -483,7 +498,7 @@ nk_bool ps_ui_combo_begin_named_scaled(struct nk_context *ctx,const char *name,c
     bool expanded=window->popup.win && window->popup.type==NK_PANEL_COMBO && window->popup.name==window->popup.combo_count;
     nk_bool activated=accessibility_widget(ctx,name,1,bounds,expanded,NULL,false);
     bool enabled=!window->widgets_disabled && !(window->layout->flags&NK_WINDOW_ROM);
-    bool clicked=enabled && nk_input_is_mouse_pressed(&ctx->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ctx->input,ctx->current->layout->clip) && nk_input_is_mouse_hovering_rect(&ctx->input,bounds);
+    bool clicked=enabled && ps_ui_mouse_pressed_in_rect(&ctx->input,NK_BUTTON_LEFT,ctx->current->layout->clip) && ps_ui_mouse_pressed_in_rect(&ctx->input,NK_BUTTON_LEFT,bounds);
     const struct nk_user_font *font=ctx->style.font;struct nk_color color=ctx->style.combo.label_normal;
     nk_draw_text(&window->buffer,nk_rect(bounds.x+9*scale,bounds.y+(bounds.h-font->height)/2,fmaxf(1,bounds.w-42*scale),font->height),label,(int)strlen(label),font,nk_rgba(0,0,0,0),color);
     nk_draw_symbol(&window->buffer,NK_SYMBOL_CHEVRON_DOWN,nk_rect(bounds.x+bounds.w-25*scale,bounds.y+(bounds.h-8*scale)/2,8*scale,8*scale),nk_rgba(0,0,0,0),color,scale,font);
@@ -509,8 +524,7 @@ nk_bool ps_ui_combo_at_named_painted(struct nk_context *ctx,const char *name,con
     bool expanded=window->popup.win && window->popup.type==NK_PANEL_COMBO && window->popup.name==window->popup.combo_count,focused=false;
     bool activated=accessibility_emit(ctx,name,1,bounds,expanded,NULL,false,NULL,&focused);
     bool enabled=!window->widgets_disabled && !(window->layout->flags&NK_WINDOW_ROM);
-    bool clicked=enabled && nk_input_is_mouse_pressed(&ctx->input,NK_BUTTON_LEFT) &&
-        nk_input_is_mouse_hovering_rect(&ctx->input,window->layout->clip) && nk_input_is_mouse_hovering_rect(&ctx->input,bounds);
+    bool clicked=enabled && ps_ui_mouse_pressed_in_rect(&ctx->input,NK_BUTTON_LEFT,window->layout->clip) && ps_ui_mouse_pressed_in_rect(&ctx->input,NK_BUTTON_LEFT,bounds);
     paint(ctx,bounds,focused,user);ps_ui_accessibility_label(ctx,bounds,label);
     nk_bool open=nk_combo_begin(ctx,window,size,activated || clicked,bounds);
     if(open)snprintf(ctx->current->name_string,sizeof ctx->current->name_string,"%.32s/menu/%08x",window->name_string,(unsigned)nk_murmur_hash(name,nk_strlen(name),0));
@@ -523,14 +537,14 @@ nk_bool ps_ui_switch_at_custom_focus(struct nk_context *ctx,struct nk_rect bound
     if(focused)*focused=false;
     if(!ctx || !checked || bounds.w<=0 || bounds.h<=0)return nk_false;
     bool enabled=!(ctx->current->layout->flags&NK_WINDOW_ROM) && !ctx->current->widgets_disabled;
-    bool clicked=enabled && nk_input_is_mouse_pressed(&ctx->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ctx->input,ctx->current->layout->clip) && nk_input_is_mouse_hovering_rect(&ctx->input,bounds);
+    bool clicked=enabled && ps_ui_mouse_pressed_in_rect(&ctx->input,NK_BUTTON_LEFT,ctx->current->layout->clip) && ps_ui_mouse_pressed_in_rect(&ctx->input,NK_BUTTON_LEFT,bounds);
     if(accessibility_emit(ctx,name,2,bounds,*checked,NULL,false,NULL,focused) || clicked){*checked=!*checked;return nk_true;}
     return nk_false;
 }
 nk_bool ps_ui_option_at(struct nk_context *ctx,struct nk_rect bounds,const char *group,const char *name,bool selected) {
     if(!ctx || !ctx->current || bounds.w<=0 || bounds.h<=0)return nk_false;
     bool enabled=!(ctx->current->layout->flags&NK_WINDOW_ROM) && !ctx->current->widgets_disabled;
-    bool clicked=enabled && nk_input_is_mouse_pressed(&ctx->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ctx->input,ctx->current->layout->clip) && nk_input_is_mouse_hovering_rect(&ctx->input,bounds);
+    bool clicked=enabled && ps_ui_mouse_pressed_in_rect(&ctx->input,NK_BUTTON_LEFT,ctx->current->layout->clip) && ps_ui_mouse_pressed_in_rect(&ctx->input,NK_BUTTON_LEFT,bounds);
     return accessibility_widget(ctx,name,3,bounds,selected || clicked,group,clicked) || clicked;
 }
 nk_bool ps_ui_accessibility_button(struct nk_context *ctx,struct nk_rect bounds,const char *name) {

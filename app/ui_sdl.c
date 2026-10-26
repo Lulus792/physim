@@ -92,6 +92,7 @@ static unsigned accessibility_range_widget(void *user,const char *window,const c
     struct nk_sdl *sdl=user;SDL_LockMutex(sdl->accessibility_mutex);
     enabled=enabled && accessibility_window_enabled(sdl->win);
     ps_a11y_model *model=sdl->accessibility;uint64_t pending=model->pending_focus;size_t before=model->draft_count;
+    uint64_t focus_before=model->focused_id;
     bool changed=role==PS_A11Y_SEPARATOR?
         ps_a11y_record_separator(model,window,label,bounds,enabled,values[1],values[2],values[3],&values[0]):
         ps_a11y_record_range(model,window,label,bounds,enabled,values[1],values[2],values[3],&values[0]);
@@ -100,6 +101,8 @@ static unsigned accessibility_range_widget(void *user,const char *window,const c
     values[0]=(double)(float)values[0];if(recorded)model->draft[before].value=values[0];
     bool granted=recorded && pending && !model->pending_focus && model->focused_id==pending && model->draft[before].id==pending;
     bool focused=recorded && model->draft[before].id==model->focused_id && model->draft[before].focusable && model->keyboard_focus;
+    if(pending && SDL_getenv("PHYSIM_TEST_FOCUS_TRACE") && !strcmp(label,"Protokoll-Höhe"))
+        fprintf(stderr,"FOCUS RANGE RECORD: pending=%llu focus-before=%llu focus-after=%llu pending-after=%llu granted=%d recorded=%d enabled=%d\n",(unsigned long long)pending,(unsigned long long)focus_before,(unsigned long long)model->focused_id,(unsigned long long)model->pending_focus,granted,recorded,enabled);
     SDL_UnlockMutex(sdl->accessibility_mutex);
     if(granted){
         /* A range may live in a separate separator window. Ending only that
@@ -276,7 +279,12 @@ static nk_flags nk_sdl_edit_named_common(struct nk_context *ctx,const char *name
    if(ps_a11y_edit_update(m,index,text,start,end)) {
     ps_a11y_node *node=&m->draft[index];node->text_active=(state&NK_EDIT_ACTIVE)!=0;node->text_scroll=text_scroll;
     if(custom)node->text_caret=nk_sdl_edit_byte(text,actual->cursor);
-    if(node->text_active){node->text_caret=nk_sdl_edit_byte(text,actual->cursor);if(ctx->current==ctx->active)m->focused_id=id;}
+    if(node->text_active){node->text_caret=nk_sdl_edit_byte(text,actual->cursor);if(ctx->current==ctx->active){
+     if(m->focused_id!=id && SDL_getenv("PHYSIM_TEST_FOCUS_TRACE") && !strcmp(name,"Meldung oder Quelle")){
+      static unsigned observations;if(observations++<64)fprintf(stderr,"FOCUS EDIT CLAIM: previous=%llu id=%llu pending=%llu state=%u\n",(unsigned long long)m->focused_id,(unsigned long long)id,(unsigned long long)m->pending_focus,(unsigned)state);
+     }
+     m->focused_id=id;
+    }}
     else if(m->focused_id==id)m->focused_id=0;
     const struct nk_style_edit *style=&ctx->style.edit;const struct nk_user_font *font=ctx->style.font;
     struct nk_rect area={edit_bounds.x+style->padding.x+style->border,edit_bounds.y+style->padding.y+style->border,
@@ -505,6 +513,7 @@ bool nk_sdl_accessibility_request_focus(struct nk_context *ctx,const char *group
     if(!ctx || !ctx->userdata.ptr || !label)return false;
     struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
     bool requested=false;SDL_LockMutex(sdl->accessibility_mutex);ps_a11y_model *model=sdl->accessibility;
+    uint64_t focus_before=model->focused_id,pending_before=model->pending_focus;
     for(size_t i=0;i<model->count;i++) {
         const ps_a11y_node *node=&model->nodes[i],*parent=ps_a11y_find(model,node->parent);
         /* A visible field label and its button may share a name. Continue to
@@ -514,6 +523,7 @@ bool nk_sdl_accessibility_request_focus(struct nk_context *ctx,const char *group
             requested=ps_a11y_focus(model,node->id);break;
         }
     }
+    if(SDL_getenv("PHYSIM_TEST_FOCUS_TRACE") && !strcmp(label,"Protokoll-Höhe"))fprintf(stderr,"FOCUS REQUEST: accepted=%d focus-before=%llu pending-before=%llu focus-after=%llu pending-after=%llu suspended=%d\n",requested,(unsigned long long)focus_before,(unsigned long long)pending_before,(unsigned long long)model->focused_id,(unsigned long long)model->pending_focus,model->suspended);
     SDL_UnlockMutex(sdl->accessibility_mutex);return requested;
 }
 bool nk_sdl_accessibility_is_focused(struct nk_context *ctx,const char *group,const char *label) {
@@ -805,6 +815,10 @@ bool nk_sdl_render(struct nk_context *ctx) {
         if(sdl->accessibility->keyboard_focus!=keyboard && SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: keyboard focus changed window=%u keyboard=%d id=%llu ticks=%llu\n",SDL_GetWindowID(sdl->win),keyboard,(unsigned long long)prior_focus,(unsigned long long)SDL_GetTicksNS());
         sdl->accessibility->keyboard_focus=keyboard;
         bool changed=ps_a11y_publish(sdl->accessibility);
+        if(SDL_getenv("PHYSIM_TEST_FOCUS_TRACE") && ctx->input.mouse.buttons[NK_BUTTON_LEFT].clicked) {
+            const ps_a11y_model *model=sdl->accessibility;const ps_a11y_node *node=ps_a11y_find(model,model->focused_id);
+            fprintf(stderr,"FOCUS PUBLISH: focus=%llu pending=%llu node-focused=%d node=%s keyboard=%d\n",(unsigned long long)model->focused_id,(unsigned long long)model->pending_focus,node?node->focused:0,node?node->label:"none",model->keyboard_focus);
+        }
         if(prior_focus && !sdl->accessibility->focused_id && SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: publication cleared focus id=%llu window=%u ticks=%llu\n",(unsigned long long)prior_focus,SDL_GetWindowID(sdl->win),(unsigned long long)SDL_GetTicksNS());
         SDL_UnlockMutex(sdl->accessibility_mutex);
         ps_a11y_native_publish(sdl->accessibility_native,changed);

@@ -60,7 +60,12 @@ Der [Nachlauf zur natürlichen Originaltexthöhe](PROTOCOL-ORIGINAL-FLOW-NATIVE.
 Klickübernahme. Der [Detail- und Aktionsabgleich](PROTOCOL-ACTIONS-NATIVE.md)
 übernimmt 20 px Innenabstand und inhaltsbreite, umbrechende Aktionen.
 12-KiB-Abschnitte, weitere Detailtypografie und Blockabstände sowie der
-[direkte Mausfokus](PROTOCOL-FOCUS-NATIVE.md) bleiben offen.
+[direkte Mausfokus](PROTOCOL-FOCUS-NATIVE.md) bleiben offen. Der folgende
+[Zeiger-Nachlauf](PROTOCOL-POINTER-NATIVE.md) schließt verlorene schnelle Klicks
+in den gemeinsamen Aktionen/Editfeldern und am Protokolltrenner. Linux prüft
+den schnellen Suche-/Trennerwechsel mit 40-Pixel-Tastaturschritt. Direkter
+Windows-Desktopfokus und der zusätzlich vor und nach der Korrektur gescheiterte
+F1-UIA-Scrollnachweis bleiben gesondert offen.
 Diese Teilprüfungen und die getrennten Datenquellen-Nachweise sind keine
 vollständige Designabnahme.
 

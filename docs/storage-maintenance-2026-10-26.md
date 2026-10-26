@@ -99,3 +99,12 @@ Zusammen mit den drei oben dokumentierten Objektbereinigungen sind
 Freispeichermessung ist damit nicht verbunden. Neue Bilder: **0**.
 Ein erster PowerShell-Aufruf scheiterte an der Aufrufsyntax vor dem Start
 des Bereinigungsprogramms; der korrigierte Aufruf wurde mit Exitcode 0 beendet.
+
+Im anschließenden [Zeiger-/Fokusnachlauf](visuals/unified-workspace/PROTOCOL-POINTER-NATIVE.md)
+verknüpft ein flacher Archivindex alle 206 aktuellen Laufzeitdateien mit ihren
+geprüften Originalbytes. Die Prüfung entpackt keine weiteren Programmkopien.
+Zwei abgeschlossene, nur für eine Gegenprobe wiederhergestellte Kopien mit
+5.647.872 Byte wurden anschließend gezielt entfernt. Die Programme bleiben in
+nachgelesenen, hashgeprüften Archiven erhalten; Fehlerlogs, Quellen und aktuelle
+Builds bleiben unverändert. Diese zusätzliche Zahl gehört nicht zur obigen
+Objektdatei-Zwischensumme und ist keine physische Freispeichermessung.

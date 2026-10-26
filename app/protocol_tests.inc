@@ -39,13 +39,21 @@ static bool protocol_ui_test_start(app *a,const char *root,const char *mode) {
     protocol_test_source_crc=ps_crc32((const unsigned char*)nk_str_get_const(&a->experiment.string),(size_t)nk_str_len_char(&a->experiment.string));return true;
 }
 static void protocol_ui_interactive_frame(app *a) {
-    static uint32_t height;static bool initialized,resizing;ps_protocol_ui *p=&a->protocol_view;
-    if(!initialized || height!=a->preferences.log_height || resizing!=p->resize) {
-        height=a->preferences.log_height;resizing=p->resize;initialized=true;
-        printf("{\"kind\":\"protocol_manual_state\",\"height\":%u,\"resizing\":%s,\"keyboard_focus\":%s,\"separator\":[%.2f,%.2f,%.2f,%.2f]}\n",
-               height,resizing?"true":"false",SDL_GetKeyboardFocus()==a->window?"true":"false",
+    static uint32_t height;static bool initialized,resizing,keyboard,range,search;static struct nk_rect separator;
+    ps_protocol_ui *p=&a->protocol_view;bool host=SDL_GetKeyboardFocus()==a->window;
+    bool range_now=nk_sdl_accessibility_is_focused(a->ui,NULL,"Protokoll-Höhe"),search_now=nk_sdl_accessibility_is_focused(a->ui,NULL,"Meldung oder Quelle");
+    if(!initialized || height!=a->preferences.log_height || resizing!=p->resize || keyboard!=host || range!=range_now || search!=search_now || memcmp(&separator,&p->separator,sizeof separator)) {
+        height=a->preferences.log_height;resizing=p->resize;keyboard=host;range=range_now;search=search_now;separator=p->separator;initialized=true;
+        printf("{\"kind\":\"protocol_manual_state\",\"height\":%u,\"resizing\":%s,\"keyboard_focus\":%s,\"range_focus\":%s,\"search_focus\":%s,\"separator\":[%.2f,%.2f,%.2f,%.2f]}\n",
+               height,resizing?"true":"false",host?"true":"false",range?"true":"false",search?"true":"false",
                p->separator.x,p->separator.y,p->separator.w,p->separator.h);fflush(stdout);
     }
+}
+static void protocol_ui_interactive_event(app *a,const SDL_Event *event) {
+    if(!SDL_getenv("PHYSIM_TEST_FOCUS_TRACE"))return;
+    if(event->type==SDL_EVENT_KEY_DOWN || event->type==SDL_EVENT_KEY_UP)fprintf(stderr,"FOCUS DESKTOP KEY: type=%u window=%u key=%u scancode=%u raw=%u mod=%u host=%d\n",(unsigned)event->type,event->key.windowID,(unsigned)event->key.key,(unsigned)event->key.scancode,(unsigned)event->key.raw,(unsigned)event->key.mod,SDL_GetKeyboardFocus()==a->window);
+    else if(event->type==SDL_EVENT_MOUSE_BUTTON_DOWN || event->type==SDL_EVENT_MOUSE_BUTTON_UP)fprintf(stderr,"FOCUS DESKTOP MOUSE: type=%u window=%u down=%d point=%.2f,%.2f host=%d\n",(unsigned)event->type,event->button.windowID,event->button.down,event->button.x,event->button.y,SDL_GetKeyboardFocus()==a->window);
+    else if(event->type==SDL_EVENT_TEXT_INPUT)fprintf(stderr,"FOCUS DESKTOP TEXT: window=%u bytes=%zu host=%d\n",event->text.windowID,strlen(event->text.text),SDL_GetKeyboardFocus()==a->window);
 }
 #include "protocol_original_tests.inc"
 #include "protocol_actions_tests.inc"
@@ -126,16 +134,23 @@ static void protocol_ui_test_frame(app *a,const char *mode,int *stage,int *code,
         if(!SDL_getenv("PHYSIM_TEST_PROTOCOL_UNFOCUSED")) {
             /* Real search activation must relinquish ownership to the range,
              * including after its first pending-focus frame. */
-            if(resize_focus_setup==0){test_mouse(a,p->search,true);resize_focus_setup++;return;}
-            if(resize_focus_setup==1){test_mouse(a,p->search,false);resize_focus_setup++;return;}
+            if(resize_focus_setup==0){
+                /* Both SDL edges must survive one event-poll/render batch. */
+                test_mouse(a,p->search,true);test_mouse(a,p->search,false);resize_focus_setup=2;return;
+            }
             ok=nk_sdl_accessibility_is_focused(a->ui,NULL,"Meldung oder Quelle");
             struct nk_window *log_window=nk_window_find(a->ui,"log");
             fprintf(stderr,"PROTOCOL RANGE FOCUS ORIGIN: search=%d host=%d original=%d query-cache=%d original-active=%d active-window=%s detail-scroll=%u\n",
                 ok,SDL_GetKeyboardFocus()==a->window,nk_sdl_accessibility_is_focused(a->ui,NULL,"Originalmeldung"),
                 log_window?log_window->edit.active:0,p->original_edit.active,a->ui->active?a->ui->active->name_string:"none",(unsigned)p->detail_scroll_y);
         }
-        if(SDL_getenv("PHYSIM_TEST_PROTOCOL_UNFOCUSED"))SDL_HideWindow(a->window);
-        focus_wait_started=SDL_GetTicks();ok &= nk_sdl_accessibility_request_focus(a->ui,NULL,"Protokoll-Höhe");break;
+        focus_wait_started=SDL_GetTicks();
+        if(SDL_getenv("PHYSIM_TEST_PROTOCOL_UNFOCUSED")) {
+            SDL_HideWindow(a->window);ok &= nk_sdl_accessibility_request_focus(a->ui,NULL,"Protokoll-Höhe");
+        } else {
+            test_mouse(a,p->separator,true);test_mouse(a,p->separator,false);
+        }
+        break;
     case 39:
         if(SDL_getenv("PHYSIM_TEST_PROTOCOL_UNFOCUSED"))ok=SDL_GetKeyboardFocus()!=a->window;
         else if(SDL_GetKeyboardFocus()!=a->window || !nk_sdl_accessibility_is_focused(a->ui,NULL,"Protokoll-Höhe")) {
