@@ -9,6 +9,10 @@ Dateien, `cache` für Caches, `archive` für alte geprüfte Läufe und `maintena
 für Bereinigungsprotokolle. F: wird nach der Rückführung nicht mehr für Physim
 verwendet. Das ist eine lokale Speicherregel, keine Voraussetzung für andere Rechner.
 
+Aktueller [Wartungsnachlauf vom 26. Oktober](storage-maintenance-2026-10-26.md):
+erneute Windows-/WSL-Pfadprüfung, gezielte Objektbereinigung und Aufbewahrung
+kompakter Nachweise. Der historische Rückführungsbericht bleibt unverändert gültig.
+
 Entwicklungsbefehle erhalten die Umgebung nur für ihren eigenen Prozessbaum:
 
 ```powershell
@@ -68,6 +72,30 @@ Filteraktionen werden als Zustandsfolge dokumentiert. Fehlerbelege und
 Vergleichsreferenzen bleiben erhalten, bis der Befund geprüft geschlossen ist.
 Alte erfolgreiche Rohbilder dürfen nach Abnahme entfernt werden, wenn ihre
 Aussage bereits im kompakten Bericht und den ausgewählten Referenzen steckt.
+
+Vor einem neuen Prüflauf für jedes geplante Bild einen eigenen Prüfzweck
+festlegen: Designzustand, sichtbare Abweichung oder Gegenprobe. Wiederholte
+Filter-, Auswahl- und Tastaturaktionen ohne neue visuelle Aussage als JSON-
+Zustandsfolge erfassen. Ein Bildverzeichnis mit vielen erfolgreichen Schritten
+ersetzt keinen Soll/Ist-Bericht. Vorhandene Rohbilder erst nach Prüfung ihrer
+weiteren Verwendung entfernen; keine pauschale Löschung nach Dateialter.
+
+Die Aufbewahrungsentscheidung im Bericht festhalten:
+
+| Bestand | Weiteres Vorgehen |
+| --- | --- |
+| Referenz, offener Fehler, ausdrücklich eingefrorener Nachweis | Unverändert erhalten. |
+| Erfolgreicher, noch nicht abgenommener visueller Lauf | Bis zur Abnahme erhalten. |
+| Abgenommener Lauf mit ausgewähltem Bild und kompakten Messwerten | Redundante Rohbilder nach Referenzprüfung entfernen und Umfang quittieren. |
+| Ersetzter Compilerobjekt-Cache ohne laufenden Nutzer | Nach Pfad-, Verwendungs- und Prozessprüfung entfernen; Programme, Bibliotheken und Debug-Symbole erhalten. |
+| Quellen, Abhängigkeiten, Experimente, VM oder fremde Arbeit | Von der Artefaktbereinigung ausnehmen. |
+
+Gleiche Programme nicht bei jedem Testschritt erneut archivieren. Ein
+hashgeprüfter Laufzeitstand kann mehrere Prüfläufe bedienen; jeder Bericht
+nennt dessen Hash und den passenden Quellstand. Vor dem Ersetzen eines für
+offene Befunde benötigten Programms zuerst den bisherigen Stand sichern.
+Komprimierte Archive nur gezielt wiederherstellen, damit nicht dauerhaft
+Archiv und vollständige lose Kopie nebeneinander liegen.
 
 ## Archivierte alte Prüfläufe wiederherstellen
 

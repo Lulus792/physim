@@ -37,3 +37,12 @@ Aufbewahrung: <ausgewählte versionierte Nachweise, rohe Fehlerbelege auf D:,
 nach Abnahme entbehrliche Rohbilder>. Bestehende eingefrorene Manifeste und
 Referenzen unverändert lassen. Nachfolgende Quelländerungen benötigen einen
 neuen Nachweis; alte Ergebnisse behalten ihren ursprünglichen Geltungsbereich.
+
+| Datei oder Gruppe | Eigenständiger Prüfzweck | Entscheidung / Voraussetzung für Entfernung |
+| --- | --- | --- |
+| <Bild, Zustandsfolge oder Laufzeitarchiv> | <welches Kriterium wird damit belegt?> | <erhalten / nach Abnahme entbehrlich / entfernt mit Quittung> |
+
+Für eine reine Speicher-, Text- oder CLI-Prüfung ohne visuelle Aussage sind
+keine Bildschirmbilder nötig. Bei identischem Laufzeitstand ein vorhandenes
+hashgeprüftes Archiv referenzieren; zusätzliche Bilder und Archive nur mit
+eigenem Zweck erzeugen.

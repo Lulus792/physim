@@ -1,0 +1,258 @@
+{
+  "format": 1,
+  "date": "2026-10-26",
+  "scope": "D-only storage policy and legacy native compiler-object cleanup",
+  "base_commit": "9abed8960d07a3d8855838b3fd0bb271e789fc85",
+  "blocked_drive_accessed": false,
+  "new_images": 0,
+  "checks": [
+    {
+      "platform": "win32",
+      "checks": [
+        {
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "tools/with-artifacts.py",
+            "--check"
+          ],
+          "exit_code": 0,
+          "expected_exit_code": 0,
+          "seconds": 0.09400000001187436,
+          "passed": true
+        },
+        {
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "tools/with-artifacts.py",
+            "--",
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "tests/test_artifact_paths.py",
+            "--work",
+            "D:\\Physim\\build\\maintenance\\2026-10-26-storage\\win32\\policy"
+          ],
+          "exit_code": 0,
+          "expected_exit_code": 0,
+          "seconds": 0.35999999998603016,
+          "passed": true
+        },
+        {
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "tools/with-artifacts.py",
+            "--",
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "-c",
+            "import os,tempfile; from pathlib import Path; fd,name=tempfile.mkstemp(); os.close(fd); p=Path(name); print(p); assert p.is_relative_to(Path(os.environ['PHYSIM_ARTIFACT_ROOT'])); p.unlink(); raise SystemExit(7)"
+          ],
+          "exit_code": 7,
+          "expected_exit_code": 7,
+          "seconds": 0.17100000000209548,
+          "passed": true
+        }
+      ],
+      "source_sha256": {
+        "tools/artifact_paths.py": "35b8e8ff72b29fd79db001b5d4d37b5ddf6bf7275e308d1f0360c3caeda7bbb0",
+        "tools/with-artifacts.py": "fd370768118941d3b1a13c2e9c78ebf33bf0efe357694b72446cb8c444c3f6f6",
+        "tests/test_artifact_paths.py": "b9b55de980f068e73671c9b4435d2857d9ba3b462afd4a05a0b713115cfc1ccc",
+        ".physim-storage.json": "43a93601447db47bf6567ac004477011105b1464ea3baa4126e7ecdfd5db298f"
+      },
+      "evidence": [
+        {
+          "path": "build/maintenance/2026-10-26-storage/win32/0-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage/win32/0-stdout.txt",
+          "sha256": "094a5a95124346e1d106c0430ea88807a8bfd08713e55c2448ef8795225bf1af"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage/win32/1-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage/win32/1-stdout.txt",
+          "sha256": "5d960d000a44da60068aafcde699c8486fc33e28fcaacc17aa67bb0cd454e439"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage/win32/2-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage/win32/2-stdout.txt",
+          "sha256": "c655171ef94de42c0e20a8ef7c3a8e25b3d90f5df9805fc578820b7eed3bc559"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage/win32/policy-check.json",
+          "sha256": "4af60168aca5a17977a46caffedc018a42bfcb01ad07fd84ab38fdf551c77c3f"
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "checks": [
+        {
+          "command": [
+            "/usr/bin/python3",
+            "tools/with-artifacts.py",
+            "--check"
+          ],
+          "exit_code": 0,
+          "expected_exit_code": 0,
+          "seconds": 0.22581387599998948,
+          "passed": true
+        },
+        {
+          "command": [
+            "/usr/bin/python3",
+            "tools/with-artifacts.py",
+            "--",
+            "/usr/bin/python3",
+            "tests/test_artifact_paths.py",
+            "--work",
+            "/mnt/d/Physim/build/maintenance/2026-10-26-storage/linux/policy"
+          ],
+          "exit_code": 0,
+          "expected_exit_code": 0,
+          "seconds": 1.4630259430000052,
+          "passed": true
+        },
+        {
+          "command": [
+            "/usr/bin/python3",
+            "tools/with-artifacts.py",
+            "--",
+            "/usr/bin/python3",
+            "-c",
+            "import os,tempfile; from pathlib import Path; fd,name=tempfile.mkstemp(); os.close(fd); p=Path(name); print(p); assert p.is_relative_to(Path(os.environ['PHYSIM_ARTIFACT_ROOT'])); p.unlink(); raise SystemExit(7)"
+          ],
+          "exit_code": 7,
+          "expected_exit_code": 7,
+          "seconds": 0.4489542599999936,
+          "passed": true
+        }
+      ],
+      "source_sha256": {
+        "tools/artifact_paths.py": "35b8e8ff72b29fd79db001b5d4d37b5ddf6bf7275e308d1f0360c3caeda7bbb0",
+        "tools/with-artifacts.py": "fd370768118941d3b1a13c2e9c78ebf33bf0efe357694b72446cb8c444c3f6f6",
+        "tests/test_artifact_paths.py": "b9b55de980f068e73671c9b4435d2857d9ba3b462afd4a05a0b713115cfc1ccc",
+        ".physim-storage.json": "43a93601447db47bf6567ac004477011105b1464ea3baa4126e7ecdfd5db298f"
+      },
+      "evidence": [
+        {
+          "path": "build/maintenance/2026-10-26-storage/linux/0-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage/linux/0-stdout.txt",
+          "sha256": "ed9db9b8d653eb344fb0eed1f866fce43ea2f4994b5f020dbb0f36ee192d79b7"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage/linux/1-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage/linux/1-stdout.txt",
+          "sha256": "20281a7739709937f5190342ba7517a885bf1ac314239d7232e751898cab9df4"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage/linux/2-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage/linux/2-stdout.txt",
+          "sha256": "413fbe74dc22e60db01f0120f3d3bc58e4637d58ff6365d588869c370f813e3b"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage/linux/policy-check.json",
+          "sha256": "84a61862b23bcfa7a82a4d64a6c7eafd204305c83fa9f27c587755d6cf4aa346"
+        }
+      ]
+    }
+  ],
+  "cleanup": {
+    "removed_files": 1899,
+    "removed_logical_bytes": 678375480,
+    "physical_bytes_freed": null,
+    "preserved_runtime_files": 4796,
+    "preserved_runtime_verified_after": true,
+    "fixture_objects_retained": 42,
+    "evidence": [
+      {
+        "path": "build/maintenance/2026-10-26-storage/inventory.json",
+        "sha256": "60a87e16d02b31abad23976817ab9a00b28398a3f23083ad20237821f958ef7d"
+      },
+      {
+        "path": "build/maintenance/2026-10-26-storage/object-plan.json",
+        "sha256": "68363636b4ecfe7eb9e27eb0211d8b5abc7cc973563a51e6aa37d6d26684bdfd"
+      },
+      {
+        "path": "build/maintenance/2026-10-26-storage/object-removals.jsonl",
+        "sha256": "cde2620b0ab79b738ed2561be0d3042282c86a4b2a5a09125ff5351fd1b6b984"
+      },
+      {
+        "path": "build/maintenance/2026-10-26-storage/object-cleanup.json",
+        "sha256": "b9fb0503b3c85ccf591d63741148ae0408e12332190095559360fcbb613b0285"
+      },
+      {
+        "path": "build/maintenance/2026-10-26-storage/processes-before.json",
+        "sha256": "9054a9df6142c73ae66992c69a2284ee7c7ffcaacaaa8ab50ec33d899d09e0ea"
+      }
+    ]
+  },
+  "helpers": [
+    {
+      "path": "build/maintenance/2026-10-26-storage/check-policy.py",
+      "sha256": "f586f8760041cc8b6107ae317098fe20fbd91822a491cca3e1204f5c68e9de0c"
+    },
+    {
+      "path": "build/maintenance/2026-10-26-storage/clean-old-objects.py",
+      "sha256": "e04d963def8ea57b7b6bc0e0ed786e82e2b60dfa1e110af15a5f0e60c8a992fa"
+    },
+    {
+      "path": "build/maintenance/2026-10-26-storage/apply-object-plan.py",
+      "sha256": "d5fa09b8e09f4c73d1cbe01a6b3127d580da86131dd201ecaa379c74c42529d1"
+    }
+  ],
+  "initial_attempt": {
+    "result": "Additional helper failed to unlink its own open temp file on Windows; closed fd before unlink and reran successfully",
+    "evidence": [
+      {
+        "path": "build/maintenance/2026-10-26-storage/win32-first-attempt/0-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "build/maintenance/2026-10-26-storage/win32-first-attempt/0-stdout.txt",
+        "sha256": "094a5a95124346e1d106c0430ea88807a8bfd08713e55c2448ef8795225bf1af"
+      },
+      {
+        "path": "build/maintenance/2026-10-26-storage/win32-first-attempt/1-stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "build/maintenance/2026-10-26-storage/win32-first-attempt/1-stdout.txt",
+        "sha256": "5d960d000a44da60068aafcde699c8486fc33e28fcaacc17aa67bb0cd454e439"
+      },
+      {
+        "path": "build/maintenance/2026-10-26-storage/win32-first-attempt/2-stderr.txt",
+        "sha256": "6cdfb15ad83a9919369fb52d2a98ef548df5d1e95ef6638be218d535112a2ce1"
+      },
+      {
+        "path": "build/maintenance/2026-10-26-storage/win32-first-attempt/2-stdout.txt",
+        "sha256": "e7d39cf43b4954f68d895914a433034aceebfe30e89efeb4ed32f9a6dfb3ab52"
+      },
+      {
+        "path": "build/maintenance/2026-10-26-storage/win32-first-attempt/policy-check.json",
+        "sha256": "fb527c4aa09e5a6fd4304a1e2833c0be391f2a09d4763cd5da66b7d2643c8055"
+      }
+    ]
+  },
+  "preflight_stop": {
+    "removed_files": 0,
+    "reason": "WSL SDL library link could not be stat-ed on Windows; switched to lstat and skipped all reparse points before file access"
+  },
+  "limits": [
+    "Logical file bytes, not measured physical NTFS space freed",
+    "No new native UI, screenreader or macOS acceptance",
+    "VM, references, open-failure evidence and foreign work preserved"
+  ]
+}
