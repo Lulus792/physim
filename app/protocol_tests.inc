@@ -34,6 +34,7 @@ static bool protocol_ui_test_start(app *a,const char *root,const char *mode) {
             if(ps_protocol_push(&a->protocol,&m,NULL)!=PS_OK)return false;
         }
     }
+    if(strstr(mode,"actions")){a->protocol_view.original_closed=true;if(strstr(mode,"nosource"))a->protocol_view.selected=ps_protocol_at(&a->protocol,2)->id;}
     a->project_manager=false;a->tab=0;a->show_log=true;a->preferences.log_height=340;
     protocol_test_source_crc=ps_crc32((const unsigned char*)nk_str_get_const(&a->experiment.string),(size_t)nk_str_len_char(&a->experiment.string));return true;
 }
@@ -47,9 +48,18 @@ static void protocol_ui_interactive_frame(app *a) {
     }
 }
 #include "protocol_original_tests.inc"
+#include "protocol_actions_tests.inc"
 static void protocol_ui_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
     if(strstr(mode,"wrap")){protocol_original_test_frame(a,mode,stage,code,capture);return;}
+    if(strstr(mode,"actions")){protocol_actions_test_frame(a,mode,stage,code,capture);return;}
     if(*stage<3){(*stage)++;return;}
+    if(*stage==3 && SDL_getenv("PHYSIM_TEST_WAIT_FOR_HOST_FOCUS") &&
+       !SDL_getenv("PHYSIM_TEST_PROTOCOL_UNFOCUSED") && SDL_GetKeyboardFocus()!=a->window) {
+        static Uint64 start;
+        if(!start){start=SDL_GetTicks()+1;fprintf(stderr,"PROTOCOL HOST FOCUS: waiting for actual foreground window before input\n");fflush(stderr);}
+        if(SDL_GetTicks()+1-start<30000){SDL_RaiseWindow(a->window);return;}
+        fprintf(stderr,"PROTOCOL HOST FOCUS: prerequisite timed out\n");*code=1;a->quitting=true;return;
+    }
     /* Inputs and filter derivation are committed in successive full renders. */
     static unsigned rendered;if(*stage>3 && rendered++<2)return;rendered=0;
     ps_protocol_ui *p=&a->protocol_view;int w,h;SDL_GetWindowSize(a->window,&w,&h);

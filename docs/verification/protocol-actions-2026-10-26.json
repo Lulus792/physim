@@ -1,0 +1,463 @@
+{
+  "format": 1,
+  "date": "2026-10-26",
+  "scope": "Protocol C detail padding and intrinsic wrapping actions; not whole UI acceptance",
+  "base_commit": "97ddb2ac7627cc3ce800a0a6c5475aba0e52658d",
+  "own_source_sha256": {
+    "app/protocol_ui.h": "1e213c88ca8589b7fe983e8d31c064468d78489476655aa6a4dd9da95a6afbb6",
+    "app/protocol_ui.inc": "39780caaf517599a12dfeaf19223e0932b847efab636f2f7bf99f41430aba519",
+    "app/protocol_tests.inc": "f5ef16b284411224a7f787fadc1c9468fe4887adcdad79ae9bd503e64019c523",
+    "app/protocol_actions_tests.inc": "604a109bcbada304148efedae1bd48dd1b23cdb7a045b15d5112c3e66fd5afb3",
+    "tests/check_protocol_actions.py": "c09546d1dbbf523df154dabefdbec09f6ed591d3bfd05f8ba0361625224e23ef",
+    "tests/check_protocol_actions_counterexamples.py": "81e920b4d5b42521ee8430be8f724bd1098e2488daac6afdbd5f41f513720bda",
+    "tests/native_integration_cases.json": "919d97c33578e9914a250b3e92ddcbb592279a34b1bd139efbd5f57592ca1cfb"
+  },
+  "final_source": {
+    "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/final-source.json",
+    "sha256": "fe9d9404de1a4580f6f50e60a86eb8b6736d10a86abf34e05b6185e8c189a2bd"
+  },
+  "runtime_manifest": {
+    "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/final-runtime-manifest.json",
+    "sha256": "5221efe81a791314426846fc2791e3a7ee7a8de9d0fe4f3c0e24f196a452198e"
+  },
+  "source_chain": [
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/final-clean-hover-source-inputs.zip",
+      "sha256": "57dd0fabb4c91bc89dd687946e4538a9feabd4a3a54225a893e78b508fc5a0b6"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/6-f1-edit/source-changes.zip",
+      "sha256": "35fe0e4d2bd16e5b8b45e06bdddbeddf42da6d8f77a6ae50dc2edbc31ae6d907"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/7-outline-hover/after-source-changes.zip",
+      "sha256": "817984ba95082f5e05af455f73e1d3ed75dd1d1aa60bfd153071ca384d0d7350"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/8-original-flow/final-source-changes.zip",
+      "sha256": "11449a47863b6420b56837b4922298478f871607f57bbd7fa6e70a151a37c189"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/final-source-overlay.zip",
+      "sha256": "5facf36a8eeca2851a765686b49730c3a83bee795179d73e85ffbced504d9374"
+    }
+  ],
+  "approved_css": {
+    "path": "docs/visuals/design-options/options.css",
+    "sha256": "79500e3638b63af8b0ac9d1d64c562742236cad38f950773659a7b1b031a889f"
+  },
+  "contract": {
+    "detail_padding": 20,
+    "font_css_px": 14,
+    "line_height_factor": 1.55,
+    "padding_xy": [
+      11.2,
+      6.72
+    ],
+    "border": 1,
+    "rounding": 7,
+    "height": 37.14,
+    "gap": 10,
+    "source_label": "Quellstelle ansehen →: actual file, not gallery demo",
+    "unavailable_source": "No jump control"
+  },
+  "before": {
+    "command_and_exit": {
+      "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/before2-windows.json",
+      "sha256": "8dd322035c64fcdb6a4318242ee7411c4f85312389ec2af2a594e4cd2d8b6875"
+    },
+    "states": {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-qnl8wuov/protocol_actions/files ä/protocol-ui-actions-dark/stdout.bin",
+      "sha256": "25c0c9793730b7bf6843af89e70331c75b3affac9bc779496d15bbddeb541e8f"
+    },
+    "copy_size": [
+      267.0,
+      32.0
+    ],
+    "expected_sizes": [
+      160.3121,
+      138.068,
+      37.14
+    ],
+    "source_runtime_archive": {
+      "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/before2-archive.json",
+      "sha256": "f93126df60609375440bc7874363a308451aaa6cc9a49a0a0cbbdab976a4aedd"
+    }
+  },
+  "final_actions": {
+    "windows": {
+      "command_and_exit": {
+        "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/after3-windows.json",
+        "sha256": "087543642a6dbebb15dc204334146311f5cdea574b478bd27cb4c2f287ba6135"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-32kjt5gl/results.json",
+        "sha256": "2352789d2987384ae33875701f241a78ca4c63c24f5a9f2cf1b310fcbb483073"
+      },
+      "native_startup": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-32kjt5gl/protocol_actions/files ä/protocol-ui-actions-dark/stdout.bin",
+        "sha256": "08bff7f6bf4b8acdfe6703c833c07a7787c9f95c32c7c4097bb5d823d1a80c8f"
+      },
+      "renderer": "OpenGL 3.3.0 NVIDIA 610.88 | NVIDIA GeForce RTX 2080 Ti/PCIe/SSE2",
+      "font": "UI primary font: C:\\WINDOWS/Fonts/segoeui.ttf",
+      "proof": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-32kjt5gl/protocol_actions/files ä/verification.json",
+        "sha256": "4a9200b594ea3b503b8ae62c735b97a16a98dafe6dd993b0723fbcff639c42a3"
+      },
+      "cases": [
+        {
+          "mode": "protocol-ui-actions-dark",
+          "scale": 1.0,
+          "arrow_ink_pixels": 21,
+          "source_size": [
+            160.3121,
+            37.14
+          ],
+          "copy_size": [
+            138.068,
+            37.14
+          ],
+          "placement": "wrapped",
+          "passed": true
+        },
+        {
+          "mode": "protocol-ui-actions-light",
+          "scale": 1.0,
+          "arrow_ink_pixels": 21,
+          "source_size": [
+            160.3121,
+            37.14
+          ],
+          "copy_size": [
+            138.068,
+            37.14
+          ],
+          "placement": "wrapped",
+          "passed": true
+        },
+        {
+          "mode": "protocol-ui-actions-contrast",
+          "scale": 1.0,
+          "arrow_ink_pixels": 21,
+          "source_size": [
+            160.3121,
+            37.14
+          ],
+          "copy_size": [
+            138.068,
+            37.14
+          ],
+          "placement": "wrapped",
+          "passed": true
+        },
+        {
+          "mode": "protocol-ui-actions-large",
+          "scale": 1.375,
+          "arrow_ink_pixels": 33,
+          "source_size": [
+            220.4292,
+            51.0675
+          ],
+          "copy_size": [
+            189.8435,
+            51.0675
+          ],
+          "placement": "same row",
+          "passed": true
+        },
+        {
+          "mode": "protocol-ui-actions-narrow",
+          "scale": 1.0,
+          "arrow_ink_pixels": 21,
+          "source_size": [
+            160.3121,
+            37.14
+          ],
+          "copy_size": [
+            138.068,
+            37.14
+          ],
+          "placement": "same row",
+          "passed": true
+        },
+        {
+          "mode": "protocol-ui-actions-nosource",
+          "scale": 1.0,
+          "arrow_ink_pixels": null,
+          "source_size": [
+            0.0,
+            0.0
+          ],
+          "copy_size": [
+            138.068,
+            37.14
+          ],
+          "placement": "copy only",
+          "passed": true
+        }
+      ]
+    },
+    "linux": {
+      "command_and_exit": {
+        "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/after3-linux.json",
+        "sha256": "d823fa044753a429ef61b61ac02ac59598c2f704ecea9231e64d0cbdc11b6fe9"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-nhm50_0n/results.json",
+        "sha256": "9b2010fd3d174d4a2135153c4e475b400b82d3cbf11f85d1b49ddd3675999052"
+      },
+      "native_startup": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-nhm50_0n/protocol_actions/files ä/protocol-ui-actions-dark/stdout.bin",
+        "sha256": "aa8c1c04f7cca840846a98728ef64853fd0287aa30a4f91341f169369c05cbf9"
+      },
+      "renderer": "OpenGL 4.6 (Core Profile) Mesa 26.1.6 | llvmpipe (LLVM 22.1.3, 256 bits)",
+      "font": "UI primary font: /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+      "proof": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-nhm50_0n/protocol_actions/files ä/verification.json",
+        "sha256": "afdccf9891d6daa0bf300d5ec76093d8a5e0cd34f3b169b168af95860a6b8942"
+      },
+      "cases": [
+        {
+          "mode": "protocol-ui-actions-dark",
+          "scale": 1.0,
+          "arrow_ink_pixels": 25,
+          "source_size": [
+            178.8238,
+            37.14
+          ],
+          "copy_size": [
+            150.2564,
+            37.14
+          ],
+          "placement": "wrapped",
+          "passed": true
+        },
+        {
+          "mode": "protocol-ui-actions-light",
+          "scale": 1.0,
+          "arrow_ink_pixels": 25,
+          "source_size": [
+            178.8238,
+            37.14
+          ],
+          "copy_size": [
+            150.2564,
+            37.14
+          ],
+          "placement": "wrapped",
+          "passed": true
+        },
+        {
+          "mode": "protocol-ui-actions-contrast",
+          "scale": 1.0,
+          "arrow_ink_pixels": 32,
+          "source_size": [
+            178.8238,
+            37.14
+          ],
+          "copy_size": [
+            150.2564,
+            37.14
+          ],
+          "placement": "wrapped",
+          "passed": true
+        },
+        {
+          "mode": "protocol-ui-actions-large",
+          "scale": 1.375,
+          "arrow_ink_pixels": 46,
+          "source_size": [
+            245.8828,
+            51.0675
+          ],
+          "copy_size": [
+            206.6026,
+            51.0675
+          ],
+          "placement": "same row",
+          "passed": true
+        },
+        {
+          "mode": "protocol-ui-actions-narrow",
+          "scale": 1.0,
+          "arrow_ink_pixels": 25,
+          "source_size": [
+            178.8238,
+            37.14
+          ],
+          "copy_size": [
+            150.2564,
+            37.14
+          ],
+          "placement": "same row",
+          "passed": true
+        },
+        {
+          "mode": "protocol-ui-actions-nosource",
+          "scale": 1.0,
+          "arrow_ink_pixels": null,
+          "source_size": [
+            0.0,
+            0.0
+          ],
+          "copy_size": [
+            150.2564,
+            37.14
+          ],
+          "placement": "copy only",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "regressions_same_product_sources": {
+    "windows": {
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-9f_dauqi/results.json",
+        "sha256": "a5433691e9250d28f70ae95b12deeedd26dfac3b73da43d33a01e6b40ae6eddc"
+      },
+      "command_and_exit": {
+        "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/after2-windows.json",
+        "sha256": "73197fd131b33271dd473cd6c70cf21dc93c5db416863da819e42387019e85b2"
+      },
+      "groups": [
+        {
+          "name": "protocol_navigator",
+          "status": "failed"
+        },
+        {
+          "name": "protocol_actions",
+          "status": "failed"
+        },
+        {
+          "name": "protocol_original",
+          "status": "passed"
+        }
+      ],
+      "product_sources_same_as_final": true,
+      "test_only_differences": "Final test revision uses stdlib PNG reader, exact native clipboard convention and opt-in actual host-focus prerequisite wait"
+    },
+    "linux": {
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2z28czr3/results.json",
+        "sha256": "3a1d8855b280aebe2e3f496b7aadd16094b45bcd5b197e501dae181a46522a9d"
+      },
+      "command_and_exit": {
+        "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/after2-linux.json",
+        "sha256": "ef38db680b96defb4f9a49e622b13c81559939f53d968d791e210a29ff246732"
+      },
+      "groups": [
+        {
+          "name": "protocol_navigator",
+          "status": "passed"
+        },
+        {
+          "name": "protocol_actions",
+          "status": "failed"
+        },
+        {
+          "name": "protocol_original",
+          "status": "passed"
+        }
+      ],
+      "product_sources_same_as_final": true,
+      "test_only_differences": "Final test revision uses stdlib PNG reader, exact native clipboard convention and opt-in actual host-focus prerequisite wait"
+    }
+  },
+  "counterexamples": {
+    "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-32kjt5gl/protocol_actions/files ä/protocol-ui-actions-dark/counterexamples.json",
+    "sha256": "fb56c59dd34bcf8cc83914d530a73e91055982151b1e50cc18dddc69a4453b09"
+  },
+  "selected_images": [
+    {
+      "path": "docs/visuals/unified-workspace/protocol-actions-2026-10-26/before.png",
+      "sha256": "2e8830d6d682169f51ddc442ed0ca8a2adb67673eeb15242c44e2a051af51209"
+    },
+    {
+      "path": "docs/visuals/unified-workspace/protocol-actions-2026-10-26/after.png",
+      "sha256": "fbb8703f722c23ff24fad8ad53a9f1dded0141f1f2c86aa759486625e723eded"
+    }
+  ],
+  "clipboard": {
+    "windows": "SDL 3.2.30 inserts CR before bare LF. Test requires exactly this output; arbitrary CR or whitespace stripping is forbidden. Raw original/source stay unchanged. Existing CRLF original regression still passes.",
+    "linux": "Verbatim UTF-8 clipboard text",
+    "source": "https://raw.githubusercontent.com/libsdl-org/SDL/release-3.2.30/src/video/windows/SDL_windowsclipboard.c",
+    "raw_byte_limit": "Windows standard plain-text clipboard is not byte-identical for LF-only inputs; TXT/original bytes remain separate invariants"
+  },
+  "failed_and_interim_runs": {
+    "initial_helper": {
+      "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/before-windows.json",
+      "sha256": "914562ccfbb6b343a786d1c6a4ea8d8ba5d9046cfc8fc83bf30fa26f372ee418"
+    },
+    "corrected_helper": {
+      "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/test-revision.json",
+      "sha256": "f4e1797f3823b9232de5827620c7c53f6e59481195a1aa4bc8de276503cef73d"
+    },
+    "first_implementation": [
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/after-windows.json",
+        "sha256": "91fa957352c7ece695369a8148c05b799e23c4dd52018e3f7d702d3ef323f688"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/after-linux.json",
+        "sha256": "e7e920fc711049e7dd60feb04a25663803f60e02486fbcc8ba260e06cc31b92b"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/first-after-archive.json",
+        "sha256": "a9452bc7138d8681796837ec92f10b0971c9606bcf56c546f0d1945b8b961a8f"
+      }
+    ],
+    "second_implementation": [
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/after2-windows.json",
+        "sha256": "73197fd131b33271dd473cd6c70cf21dc93c5db416863da819e42387019e85b2"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/after2-linux.json",
+        "sha256": "ef38db680b96defb4f9a49e622b13c81559939f53d968d791e210a29ff246732"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/second-after-archive.json",
+        "sha256": "db81e0d74064336d6d34fad49e4a050aaf44f4fa1d590f3c4d531ecc9a3f828e"
+      }
+    ],
+    "causes": [
+      "Initial draw-command inspection happened after buffer clear; removed unsupported observation while retaining geometry gates",
+      "Nuklear rounding subtracted from label area clipped final arrow; native semantic hit controls now paint full text bounds",
+      "Large-font reveal needed outer scroll when action already fitted its own parent",
+      "LF-only Windows clipboard test initially required a non-native serialization; exact CF_UNICODETEXT convention now explicit",
+      "Linux lacked Pillow; existing strict stdlib native PNG verifier reused"
+    ],
+    "interim_diagnostics": "Both first-implementation diagnostic groups passed, but are not final implementation acceptance. App/source frozen; no new full transitive SDK runtime archive was made for that interim cohort."
+  },
+  "windows_focus": {
+    "computer_use": {
+      "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/computer-use.json",
+      "sha256": "138c496ee59b20e8695bb924891ca9d981d3c65eec2fec4368440d75c9358bc4"
+    },
+    "host_wait_runs": [
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/host-navigator.json",
+        "sha256": "28026c2f5762911e9cffea301e7d2a5c20dfa39517b75ea439a70c33e4dff676"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/host-navigator-2.json",
+        "sha256": "869b0ce83111e9ba47955ca3e0eb911194ec3815b97cfa8e43bd75214c953e05"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/9-detail-actions/host-navigator-3.json",
+        "sha256": "0e36bd1b6bcab99bc6bb8bbcf1bd5ef34b5245e07ecf8f89175fbe640d796476"
+      }
+    ],
+    "result": "All three opt-in prerequisite waits timed out; no new Windows navigator or physical separator acceptance. Earlier stage-38 host=0 failures retained."
+  },
+  "retention": "Only two unchanged selected images versioned; one purposeful endpoint per native action mode. Geometry/copy steps and four verifier mutations create no extra images. Hash-verified runtime deltas reuse existing base files; frozen failure evidence retained. All outputs on D; no access to F.",
+  "limits": [
+    "No full C/H or entire UI visual acceptance; local interactive browser not newly opened",
+    "12KiB original pagination and remaining detail typography/margins/content still open",
+    "Windows whole navigator/physical range focus, screenreader reading and macOS remain open",
+    "Current text scale cases are 16/22 UI size; no new 200% text, monitor transition or HiDPI acceptance",
+    "Linux uses Xvfb/Openbox software OpenGL, ASan/UBSan, detect_leaks=0",
+    "Independent original-text native ScrollIntoView and full hover/pressed/focus/disabled matrix remain open"
+  ]
+}

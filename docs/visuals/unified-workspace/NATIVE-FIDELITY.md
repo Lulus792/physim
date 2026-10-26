@@ -57,7 +57,9 @@ und Größenwechsel. Der [Gliederungs-Hovernachlauf](OUTLINE-HOVER-NATIVE.md)
 schließt anschließend den Tooltip aus ausgeclippten Zeilen über dem Protokoll.
 Der [Nachlauf zur natürlichen Originaltexthöhe](PROTOCOL-ORIGINAL-FLOW-NATIVE.md)
 übernimmt das Scrollen im Detailbereich und schließt unsichtbare
-Klickübernahme. 12-KiB-Abschnitte, Detailabstände, Aktionsformen und der
+Klickübernahme. Der [Detail- und Aktionsabgleich](PROTOCOL-ACTIONS-NATIVE.md)
+übernimmt 20 px Innenabstand und inhaltsbreite, umbrechende Aktionen.
+12-KiB-Abschnitte, weitere Detailtypografie und Blockabstände sowie der
 [direkte Mausfokus](PROTOCOL-FOCUS-NATIVE.md) bleiben offen.
 Diese Teilprüfungen und die getrennten Datenquellen-Nachweise sind keine
 vollständige Designabnahme.

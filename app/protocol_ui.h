@@ -31,6 +31,6 @@ typedef struct {
     struct nk_rect transcript_toggle,original_toggle;
     uint64_t row_ids[PS_PROTOCOL_CAPACITY];size_t row_count;
     struct nk_user_font title_font;
-    struct nk_user_font fonts[10];
+    struct nk_user_font fonts[11];
 } ps_protocol_ui;
 #endif

@@ -28,9 +28,11 @@ nativen weichen Umbruch langer Zeilen, unveränderte Auswahl/Kopie und den
 Layoutwechsel ohne verlorenen äußeren Scrolloffset. Der folgende
 [Nachlauf zur natürlichen Originaltexthöhe](PROTOCOL-ORIGINAL-FLOW-NATIVE.md)
 verlagert das Scrollen in den Detailbereich und schließt die Klickübernahme
-durch ausgeclippte Feldteile. C ist weiterhin nicht vollständig abgenommen:
-12-KiB-Abschnitte, Detailabstände und Aktionsformen gegen die Vorlage angleichen
-und den direkten
+durch ausgeclippte Feldteile. C ist weiterhin nicht vollständig abgenommen.
+Der [Detail- und Aktionsabgleich](PROTOCOL-ACTIONS-NATIVE.md) übernimmt 20 px
+Innenabstand und inhaltsbreite Aktionen mit automatischem Zeilenwechsel.
+12-KiB-Abschnitte, weitere Detailtypografie und Blockabstände gegen die Vorlage
+angleichen und den direkten
 Maus-/Tastaturfokus schließen. macOS, Screenreader und vollständige
 Designgleichheit bleiben eigene offene Nachweise.
 Der [Gliederungs-Hovernachlauf](OUTLINE-HOVER-NATIVE.md) schließt die

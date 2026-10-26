@@ -242,6 +242,38 @@ static void protocol_original_reveal(ps_protocol_ui *p,struct nk_rect clip,ps_ui
     nk_uint next=(nk_uint)fmin(target,(double)UINT_MAX);
     if(next!=p->detail_scroll_y){p->detail_scroll_target=next;p->detail_reveal_pending=true;}
 }
+static bool protocol_action(app *a,struct nk_rect box,const char *label,bool link,bool enabled,float f) {
+    struct nk_context *ui=a->ui;struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+    const struct nk_user_font *font=&a->protocol_view.fonts[10];
+    bool hover=enabled && nk_input_is_mouse_hovering_rect(&ui->input,ui->current->layout->clip) && nk_input_is_mouse_hovering_rect(&ui->input,box);
+    struct nk_color fill=hover?UI_COLOR(selection_active):UI_COLOR(header),text=link?UI_COLOR(accent):UI_COLOR(text),border=UI_COLOR(border);
+    if(!enabled){fill.a=text.a=border.a=(nk_byte)(255*.45f);}
+    if(!link || hover)nk_fill_rect(canvas,box,7*f,fill);
+    if(!link)nk_stroke_rect(canvas,nk_rect(box.x+.5f*f,box.y+.5f*f,box.w-f,box.h-f),6.5f*f,f,border);
+    /* Nuklear's standard text button subtracts rounding from content space.
+     * CSS rounding does not add padding; keep the full glyph-height rectangle. */
+    float width=font->width(font->userdata,font->height,label,(int)strlen(label));
+    protocol_text_at(a,font,nk_rect(box.x+(box.w-width)/2,box.y+(box.h-font->height)/2,width+1,font->height),label,text);
+    nk_begin_disabled(ui,!enabled);bool pressed=ps_ui_button_at(ui,box,label,false);nk_end_disabled(ui);return pressed;
+}
+static void protocol_actions(app *a,const ps_protocol_record *record,bool original_ready,float f) {
+    struct nk_context *ui=a->ui;ps_protocol_ui *p=&a->protocol_view;
+    const char *labels[]={"Quellstelle ansehen →","Meldung kopieren"};char path[4096];
+    bool source=protocol_source_path(&record->message,path);
+    const struct nk_user_font *font=&p->fonts[10];float width[2],available=nk_window_get_content_region(ui).w;
+    /* CSS: 14px font / 1.55 line-height, .48rem .8rem padding, 1px border.
+     * The row wraps at intrinsic widths with a 10px gap. */
+    for(unsigned i=0;i<2;i++)width[i]=font->width(font->userdata,font->height,labels[i],(int)strlen(labels[i]))+24.4f*f;
+    float height=37.14f*f,gap=10*f;bool wrap=source && width[0]+gap+width[1]>available;
+    nk_layout_space_begin(ui,NK_STATIC,wrap?2*height+gap:height,source?2:1);
+    if(source) {
+        p->source=protocol_space(ui,nk_rect(0,0,width[0],height));
+        if(protocol_action(a,p->source,labels[0],true,true,f))p->source_request=record->id;
+    }
+    p->copy=protocol_space(ui,nk_rect(source && !wrap?width[0]+gap:0,wrap?height+gap:0,width[1],height));
+    if(protocol_action(a,p->copy,labels[1],false,original_ready,f))snprintf(p->feedback,sizeof p->feedback,"%s",SDL_SetClipboardText(p->original)?"Meldung kopiert.":"Zwischenablage nicht verfügbar. Originaltext auswählen oder TXT speichern.");
+    nk_layout_space_end(ui);
+}
 static void protocol_detail(app *a,const ps_protocol_record *record,float scale) {
     struct nk_context *ui=a->ui;ps_protocol_ui *p=&a->protocol_view;
     if(!record){protocol_wrap(a,"Keine Meldung ausgewählt. Wähle eine Meldung aus der Liste.",&a->protocol_view.fonts[0],20*scale,muted());return;}
@@ -326,10 +358,7 @@ static void protocol_detail(app *a,const ps_protocol_record *record,float scale)
         }
         if(p->original_length!=p->original_size)protocol_wrap(a,"Nicht darstellbare Bytes werden als \\xHH angezeigt.",&a->protocol_view.fonts[1],18*scale,muted());
     }
-    char path[4096];bool source=protocol_source_path(m,path);nk_layout_row_dynamic(ui,32*scale,1);p->source=nk_widget_bounds(ui);nk_begin_disabled(ui,!source);
-    if(nk_button_label(ui,"Quellstelle ansehen →"))p->source_request=record->id;nk_end_disabled(ui);
-    nk_layout_row_dynamic(ui,32*scale,1);p->copy=nk_widget_bounds(ui);nk_begin_disabled(ui,!original_ready);
-    if(nk_button_label(ui,"Meldung kopieren"))snprintf(p->feedback,sizeof p->feedback,"%s",SDL_SetClipboardText(p->original)?"Meldung kopiert.":"Zwischenablage nicht verfügbar. Originaltext auswählen oder TXT speichern.");nk_end_disabled(ui);
+    protocol_actions(a,record,original_ready,scale);
     if(protocol_disclosure(a,"Weitere Angaben",p->details_more,scale,NULL))p->details_more=!p->details_more;
     if(p->details_more) {
         const char *labels[]={"Vollständiger Kontext","Projekt","Übermittelte Quelle"},*values[]={m->context,m->project,m->source};
@@ -352,8 +381,8 @@ static void protocol_panel(app *a) {
         palette.selection_active=palette.button_hover=light?nk_rgb(220,233,250):nk_rgb(41,62,91);
         ui_palette=&palette;style(ui);
     }
-    const float sizes[]={11.2f,9.8f,11.62f,17.5f,13.3f,10.92f,11.2f,9.8f,10.5f,9.52f};
-    for(unsigned i=0;i<10;i++){bool bold=(i>=2 && i<=4) || i==7;p->fonts[i]=*(i==6?a->font_code:bold?a->font_title:a->font_ui);p->fonts[i].height=sizes[i]*(i==6?a->workbench_code_em:bold?a->workbench_bold_em:a->workbench_regular_em)*f;}
+    const float sizes[]={11.2f,9.8f,11.62f,17.5f,13.3f,10.92f,11.2f,9.8f,10.5f,9.52f,14};
+    for(unsigned i=0;i<11;i++){bool bold=(i>=2 && i<=4) || i==7;p->fonts[i]=*(i==6?a->font_code:bold?a->font_title:a->font_ui);p->fonts[i].height=sizes[i]*(i==6?a->workbench_code_em:bold?a->workbench_bold_em:a->workbench_regular_em)*f;}
     ps_protocol_summary summary=ps_protocol_describe(&a->protocol);
     if(!p->initialized){p->initialized=true;p->origin=-1;p->follow=false;if(summary.count)p->last_seen=ps_protocol_at(&a->protocol,summary.count-1)->id;}
     p->title_font=p->fonts[3];
@@ -486,7 +515,9 @@ static void protocol_panel(app *a) {
             p->detail_record=detail_record;p->detail_page=p->page;p->detail_transcript=p->transcript;
             p->detail_scroll_y=0;p->detail_reveal_pending=false;
         } else if(p->detail_reveal_pending){p->detail_scroll_y=p->detail_scroll_target;p->detail_reveal_pending=false;}
+        nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(20*f,20*f));
         if(nk_group_scrolled_offset_begin(ui,&p->detail_scroll_x,&p->detail_scroll_y,"Protokolldetails",0)){protocol_detail(a,selected,f);nk_group_end(ui);}
+        nk_style_pop_vec2(ui);
         nk_style_pop_style_item(ui);if(wide)nk_layout_row_end(ui);
         if(!vertical)workspace_rule(nk_window_get_canvas(ui),nk_rect(p->panes[1].x,p->panes[1].y,1,p->panes[1].h));
         if(wide)workspace_rule(nk_window_get_canvas(ui),nk_rect(p->panes[2].x,p->panes[2].y,1,p->panes[2].h));
