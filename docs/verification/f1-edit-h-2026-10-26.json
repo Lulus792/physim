@@ -1,0 +1,132 @@
+{
+  "format": 1,
+  "date": "2026-10-26",
+  "scope": "Repair independent F1 edit test setup for H; no product design change",
+  "base_commit": "07d76d438d385ad94f5d9bb55bca921c5af656f3",
+  "own_source_sha256": {
+    "app/documentation_keyboard_tests.inc": "e062d7d1fea7b032dbc745f2cbbfb71bb7dd37b8f11a4bf6381cabd79004d14a",
+    "tests/test_accessibility_edit_atspi.py": "f1e7d66f2cbea609c49bcb69f0daa4e477538ff7628c128817b1fa3b23450652"
+  },
+  "source_checkpoint": {
+    "path": "build/validation/protocol-wrap-2026-10-26/6-f1-edit/source.json",
+    "sha256": "60305c944c6e74c3efae43cbfa6a00267b1055f3e1718eb9550ff7d7abf70237"
+  },
+  "checker_change": {
+    "path": "build/validation/protocol-wrap-2026-10-26/6-f1-edit/checker-change.json",
+    "sha256": "df1bbbcf6668a2e628c338b736927633eeae930fd9693de8b2961c80c72edbfa"
+  },
+  "source_overlay": {
+    "path": "build/validation/protocol-wrap-2026-10-26/6-f1-edit/source-changes.zip",
+    "sha256": "35fe0e4d2bd16e5b8b45e06bdddbeddf42da6d8f77a6ae50dc2edbc31ae6d907"
+  },
+  "unchanged_source_files_checked": 490,
+  "previous_source_archive": {
+    "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/final-clean-hover-source-inputs.zip",
+    "sha256": "57dd0fabb4c91bc89dd687946e4538a9feabd4a3a54225a893e78b508fc5a0b6"
+  },
+  "runtime": {
+    "windows": {
+      "base_archive": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/final-clean-hover-runtime-windows.zip",
+        "sha256": "7436c7ef8eafb3a9d07e9320af33f816d07ef4b97b177fd7c85acde83cd6fc7c"
+      },
+      "delta_archive": {
+        "path": "build/validation/protocol-wrap-2026-10-26/6-f1-edit/windows-runtime-delta.zip",
+        "sha256": "2a161be4f1eab75bf435d70b135ad72dcb6d7c258157079403860ad43c3dd467"
+      },
+      "app_sha256": "2ef7f2b430754dd7bfa6e4a8eaaec2f16c3137d7abbf6149f734a436abefea87",
+      "changed_files": 66,
+      "runtime_files": 125
+    },
+    "linux": {
+      "base_archive": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/final-clean-hover-runtime-linux.zip",
+        "sha256": "b95b9a11a9d22ed4ad899dc0c9152805b93fe88d2cf4317da2d656b726374ee7"
+      },
+      "delta_archive": {
+        "path": "build/validation/protocol-wrap-2026-10-26/6-f1-edit/linux-runtime-delta.zip",
+        "sha256": "af00b8d978fe9e16954db8df8c8daea00f7276012405fc1f8faefb9d042cc3fe"
+      },
+      "app_sha256": "8d509f9a032f8f94798e7f4c8d5baff02b441428a2186971d8e269a9a376eaea",
+      "changed_files": 34,
+      "runtime_files": 71
+    }
+  },
+  "tests": {
+    "windows": {
+      "command_and_exit": {
+        "path": "build/validation/protocol-wrap-2026-10-26/6-f1-edit/windows.json",
+        "sha256": "5d7ebf5331532a1e99d0341bd1233a3e5c480bae1c6851890cd1be6199e93d17"
+      },
+      "log": {
+        "path": "build/validation/protocol-wrap-2026-10-26/6-f1-edit/windows.log",
+        "sha256": "11dc79fc75af2c4de55a80631e1717e10c17d89d492358c116b314dda9c2dcc3"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-lyjvn595/results.json",
+        "sha256": "0734c61408ba7ab6bb3c6d22ca5efbfa1b55977ddd4b29d5ac3cf994ed18ba68"
+      },
+      "groups": {
+        "accessibility_edit_scroll_windows": {
+          "proof": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-lyjvn595/accessibility_edit_scroll_windows/files \u00e4/results.json",
+            "sha256": "26ff3c5a4e2f44f437c7ee83e140fe59b1c5bd4f97cfbce002b45805fae51b23"
+          },
+          "native_client_probes": 3
+        },
+        "accessibility_edit_windows": {
+          "proof": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-lyjvn595/accessibility_edit_windows/files \u00e4/results.json",
+            "sha256": "b3fde78f9f6113a4921ecfa7cbdfc34ffb4e71f6a37fba964e4c4dafd625e80a"
+          },
+          "native_client_probes": 9
+        }
+      },
+      "screenshots": 0
+    },
+    "linux": {
+      "command_and_exit": {
+        "path": "build/validation/protocol-wrap-2026-10-26/6-f1-edit/linux-final.json",
+        "sha256": "bcf920a1c95feee9c4b0be27df2fcc2415fe884f0895e965ab65474b5ec44420"
+      },
+      "log": {
+        "path": "build/validation/protocol-wrap-2026-10-26/6-f1-edit/linux-final.log",
+        "sha256": "a4848939b0cab48d959b535c7995877acce4f5fb2af2e498a5c25eee194a61d3"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/6-f1-edit/linux-final-work/results.json",
+        "sha256": "001db16f6ba617d2aaa5f0961878fed3d955213ab2c8c3f8b56dacceef5b6efd"
+      },
+      "native_events": 32,
+      "screenshots": 0,
+      "first_attempt": {
+        "command_and_exit": {
+          "path": "build/validation/protocol-wrap-2026-10-26/6-f1-edit/linux.json",
+          "sha256": "17ddf6995e9235f01210838f67756968496fe8cedc7ef05aa3440d03bdf9a6a3"
+        },
+        "log": {
+          "path": "build/validation/protocol-wrap-2026-10-26/6-f1-edit/linux.log",
+          "sha256": "e3ca12e446650225cbaad54c812794803e07223d282ada6679b2941cab8eab36"
+        },
+        "result": "Native app passed, Python checker failed obsolete BMP-presence assertion"
+      }
+    }
+  },
+  "before_and_baseline_evidence": {
+    "path": "docs/verification/protocol-original-2026-10-26.json",
+    "sha256": "1284c33946580913c7101a992c8266c10792de8ef2d682c8fe6d056e38cfd179"
+  },
+  "limits": [
+    "No macOS build, physical keyboard or actual screenreader reading acceptance",
+    "No full H or whole-application design acceptance",
+    "Other F1 lifecycle tests remain separate; only listed native edit groups closed",
+    "Linux GUI ASan/UBSan with leak detection disabled under Xvfb/Openbox software OpenGL",
+    "Explicit PHYSIM_TEST_ALL_CAPTURES branch retained but not run in this follow-up",
+    "Earlier failed independent-client helper binary has no separate frozen archive; its source, command and raw hash remain, prior app archives are preserved"
+  ],
+  "retention": "No new screenshots; previous immutable evidence preserved, runtime delta archives contain only changed bytes/files relative to referenced base archives; active object cache kept",
+  "runtime_manifest": {
+    "path": "build/validation/protocol-wrap-2026-10-26/6-f1-edit/runtime-archives.json",
+    "sha256": "b9877f854bde7baf5d785248472ff326252ef61a4b7927d06953e3c4f5a9dbc5"
+  }
+}

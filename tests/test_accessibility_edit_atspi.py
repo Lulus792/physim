@@ -70,11 +70,15 @@ try:
     assert process.wait(timeout=20)==0
     output=(a.work/'app.stdout').read_text()
     assert 'DOCUMENTATION EDIT SELF-TEST: PASSED' in output
-    assert all((a.work/'reader'/name).is_file() for name in ('docs-native-search.bmp','docs-native-selection.bmp','docs-native-global-search.bmp'))
+    capture_names=('docs-native-search.bmp','docs-native-selection.bmp','docs-native-global-search.bmp')
+    captures_requested=bool(os.environ.get('PHYSIM_TEST_ALL_CAPTURES'))
+    captures_present=[name for name in capture_names if (a.work/'reader'/name).is_file()]
+    assert len(captures_present)==(len(capture_names) if captures_requested else 0),captures_present
     assert any(e['type'].startswith('object:text-changed:insert') for e in events)
     assert any(e['type'].startswith('object:text-selection-changed') for e in events)
     (a.work/'results.json').write_text(json.dumps(dict(independent_client=True,actual_fields=True,unicode_selection=True,
-        actual_replacement=True,tab_exit=True,keyboard_return_focus=True,events=events),ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+        actual_replacement=True,tab_exit=True,keyboard_return_focus=True,
+        captures_requested=captures_requested,captures_present=captures_present,events=events),ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 finally:
     if process.poll() is None:process.kill();process.wait()
     out.close();err.close()

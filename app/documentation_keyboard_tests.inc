@@ -1315,10 +1315,14 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
         if(a->quitting)printf("DOCUMENTATION LINKS SELF-TEST: %s\n",*code?"FAILED":"PASSED");return;
     }
     if(!strcmp(mode,"docs-keyboard-edit-scroll-remote")) {
-        static unsigned settle;bool ok=true;char path[4096];FILE *ready;
+        static unsigned settle,open_frames;bool ok=true;char path[4096];FILE *ready;
         switch(*stage) {
         case 0:test_window_key_mod(a->window,SDLK_F1,0);++*stage;break;
-        case 1:SDL_SetWindowSize(a->doc_window,760,540);puts("EDIT SCROLL READY VALUE");fflush(stdout);++*stage;break;
+        case 1:
+            if(!open_frames){SDL_SetWindowSize(a->doc_window,760,540);test_window_key_mod(a->doc_window,SDLK_F,PS_UI_COMMAND_MOD);}
+            if(open_frames++<3)return;
+            ok=a->doc_find_open && a->doc_search_bounds.w>0 && a->doc_search_bounds.h>0;
+            if(ok){puts("EDIT SCROLL READY VALUE");fflush(stdout);}++*stage;break;
         case 2:
             if(strlen(a->doc_query)<90 || !strstr(a->doc_query,"Anfang θ") || !strstr(a->doc_query,"Ziel ᵣ") ||
                !a->doc_search_active || !nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Aktuelles Dokument durchsuchen"))return;
@@ -1338,12 +1342,13 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
             *capture="docs-native-edit-scroll-start.bmp";++*stage;break;
         case 7:puts("DOCUMENTATION EDIT SCROLL SELF-TEST: PASSED");a->quitting=true;break;
         }
+        if(!SDL_getenv("PHYSIM_TEST_ALL_CAPTURES"))*capture=NULL;
         if(!ok){fprintf(stderr,"Native edit scroll stage %d changed keyboard focus\n",*stage);*code=1;a->quitting=true;}
         return;
     }
     if(!strcmp(mode,"docs-keyboard-math")){documentation_math_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"docs-keyboard-edit-remote")) {
-        static int header;static int settle,experiment_length,analysis_length;static double simulation_time;bool ok=true;
+        static int header;static int settle,experiment_length,analysis_length;static unsigned open_frames;static double simulation_time;bool ok=true;
         switch(*stage) {
         case 0:
             experiment_length=a->experiment.string.len;analysis_length=a->analysis.string.len;simulation_time=a->simulation_time;
@@ -1351,7 +1356,14 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
         case 1:
             header=-1;for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(!strcmp(documentation_topics[i].path,"include/physim/core.h"))header=i;
             ok=header>=0;open_documentation(a,header);SDL_SetWindowSize(a->doc_window,760,540);++*stage;break;
-        case 2:puts("EDIT READY SEARCH");fflush(stdout);++*stage;break;
+        case 2:
+            /* Design H opens the article search explicitly; an article alone
+             * does not publish this field. Exercise the same Ctrl+F route as
+             * the user, then let independent native clients own the edits. */
+            if(!open_frames)test_window_key_mod(a->doc_window,SDLK_F,PS_UI_COMMAND_MOD);
+            if(open_frames++<3)return;
+            ok=a->doc_find_open && a->doc_search_bounds.w>0 && a->doc_search_bounds.h>0;
+            if(ok){puts("EDIT READY SEARCH");fflush(stdout);}++*stage;break;
         case 3:
             if(strcmp(a->doc_query,"ps_rng_seed θ🌍") || !a->doc_search_active || !nk_sdl_accessibility_is_focused(a->doc_ui,NULL,"Aktuelles Dokument durchsuchen"))return;
             *capture="docs-native-search.bmp";puts("EDIT APPLIED SEARCH");fflush(stdout);
@@ -1405,6 +1417,7 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
             ok=a->experiment.string.len==experiment_length && a->analysis.string.len==analysis_length && a->simulation_time==simulation_time;
             a->quitting=true;puts("DOCUMENTATION EDIT SELF-TEST: PASSED");break;
         }
+        if(!SDL_getenv("PHYSIM_TEST_ALL_CAPTURES"))*capture=NULL;
         if(!ok){fprintf(stderr,"Native documentation edit stage %d failed: focus=%d query=%s filter=%s\n",*stage,a->doc_focus,a->doc_query,a->doc_filter);*code=1;a->quitting=true;}
         return;
     }

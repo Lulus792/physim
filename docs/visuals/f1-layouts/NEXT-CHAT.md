@@ -1,4 +1,13 @@
 Stand: Der native F1-Artikel wird weiter mit der gewählten H-Vorlage abgeglichen.
+Der [Eingabenachlauf vom 26. Oktober](H-EDIT-NATIVE-2026-10-26.md) korrigiert
+den veralteten Prüfaufbau, der die H-Artikelsuche vor dem Clientzugriff nicht
+geöffnet hatte. Zwei unabhängige Windows-UIA-Gruppen und die Linux-AT-SPI-
+Eingabeprüfung bestehen ohne neue Bildschirmbilder. Dies ist ein begrenzter
+Eingabenachweis; Lifecycle-, Screenreader-, macOS- und vollständige H-Abnahme
+bleiben offen. Neue generierte Daten ausschließlich unter `D:/Physim/build`
+ablegen; die aktuelle [Speicherregel](../../development-storage.md) hat Vorrang
+vor historischen Speicherorten in alten Berichten.
+
 Der [aktuelle Kontextdetail-Abgleich](CONTEXT-DETAILS.md) korrigiert Codekopfkontur
 und SVG-Bildunterschrift. Sechs native Gruppen je Windows/Linux bestehen;
 Modelle sind mit System-/Offline-Schriften bei Atlas-/Exportraster 1×/2× geprüft.
