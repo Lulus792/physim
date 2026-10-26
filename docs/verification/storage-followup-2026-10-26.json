@@ -1,0 +1,25 @@
+{
+  "format": 1,
+  "date": "2026-10-26",
+  "scope": "Compiler objects of the closed isolated native validation only",
+  "removed_files": 236,
+  "removed_logical_bytes": 90606133,
+  "physical_bytes_freed": null,
+  "receipt": {
+    "path": "build/validation/protocol-ui-2026-10-25/21-isolated/object-cleanup.json",
+    "sha256": "9d0ff9b5ee7dbec2f359f2a23d899250115f22e7d48e695d86d1163813e2fac6"
+  },
+  "runtime_manifest": {
+    "path": "build/validation/protocol-ui-2026-10-25/21-isolated/runtime-archives.json",
+    "sha256": "2ffbca6662e2dfb16720a4e119971f1c89b6f154ea566ccac4284c50abec67cb"
+  },
+  "preserved": [
+    "Sources",
+    "Libraries",
+    "Programs and debug symbols",
+    "Raw tests and open defects",
+    "Design references",
+    "VM and foreign work"
+  ],
+  "blocked_drive_accessed": false
+}

@@ -217,3 +217,20 @@ Die 3,34 GB aus `/tmp` sind innerhalb von WSL freigegeben. Die gemeinsame
 `D:/WSL/Alpine-Dev/ext4.vhdx` wurde weder verschoben noch verkleinert.
 Quellen, lokale Änderungen, Nutzdaten, Git-Historien, eingefrorene Nachweise
 im Repository und die laufenden Arbeiten anderer Projekte bleiben erhalten.
+
+## Nachlauf vom 26. Oktober: abgeschlossene isolierte Prüfung
+
+Nach dem [nativen Diagnose- und Integrationsnachweis](visuals/unified-workspace/PROTOCOL-DIAGNOSTICS-NATIVE.md)
+wurden ausschließlich die Compilerobjekte der abgeschlossenen isolierten
+Prüfkopie unter `build/validation/protocol-ui-2026-10-25/21-isolated` entfernt:
+236 `.obj`-/`.o`-Dateien mit zusammen 90.606.133 Byte Dateigröße.
+Die betreffenden Prozesse waren beendet; die erhaltenen Programme wurden vor
+dem Entfernen vollständig mit ihren hashgeprüften Laufzeitarchiven verglichen.
+
+Quellen, Bibliotheken, Programme, Debug-Symbole, rohe Testergebnisse und Bilder
+offener Befunde bleiben erhalten. Die aktuellen Arbeitsbuilds unter `4-native`
+wurden dabei nicht geleert. Der
+[kompakte Nachlaufbeleg](verification/storage-followup-2026-10-26.json) verweist
+auf die dateigenaue lokale Löschquittung. Die Dateigröße ist wegen
+NTFS-Kompression und paralleler Arbeiten keine Messung freigegebener physischer
+Laufwerksbytes. F: wurde nicht angesprochen; der VM-Datenträger blieb unverändert.
