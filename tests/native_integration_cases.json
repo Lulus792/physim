@@ -10648,6 +10648,22 @@
       ]
     },
     {
+      "name": "source_outline_hover",
+      "app": true,
+      "display": true,
+      "targets": ["python", "physim"],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_outline_hover.py", "--app", "{physim}", "--work", "{work}"
+          ],
+          "timeout": 180,
+          "files": ["verification.json"]
+        }
+      ]
+    },
+    {
       "name": "source_outline_workflow",
       "app": true,
       "display": true,

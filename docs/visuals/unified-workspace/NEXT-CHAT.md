@@ -27,9 +27,13 @@ Der folgende [Originaltext-Nachweis](PROTOCOL-ORIGINAL-NATIVE.md) ergänzt den
 nativen weichen Umbruch langer Zeilen, unveränderte Auswahl/Kopie und den
 Layoutwechsel ohne verlorenen äußeren Scrolloffset. C ist weiterhin nicht
 vollständig abgenommen: natürliche Originaltexthöhe und Abstände gegen die
-Vorlage angleichen, Tooltip-Überlagerung prüfen und den direkten
+Vorlage angleichen und den direkten
 Maus-/Tastaturfokus schließen. macOS, Screenreader und vollständige
 Designgleichheit bleiben eigene offene Nachweise.
+Der [Gliederungs-Hovernachlauf](OUTLINE-HOVER-NATIVE.md) schließt die
+Tooltip-Überlagerung aus unsichtbaren Deklarationszeilen über dem Protokoll.
+Native Gegenprobe, drei Hoverzustände und die bestehenden C-/Physim-
+Gliederungsabläufe bestehen auf Windows und Linux.
 
 Das [Inhaltsinventar](CONTENT-INVENTORY.md) bleibt mitzuprüfen: Kräfte, Texte,
 Objekttypen/Hierarchie, Parameter, Messkanäle, Modellmeldungen und variable

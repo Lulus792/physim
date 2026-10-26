@@ -65,9 +65,15 @@ static void workbench_outline_view(app *a,struct nk_text_edit *edit,int language
             float name_height=workbench_text_height(font,a->outline_source+symbol.offset,symbol.length,text_width,13*scale,0);
             char detail[96];snprintf(detail,sizeof detail,"%s · Zeile %zu",symbol.kind==PS_OUTLINE_FUNCTION?"Funktion":symbol.kind==PS_OUTLINE_TYPE?"Typ":"Bindung",symbol.line);
             float detail_height=workbench_text_height(small,detail,strlen(detail),text_width,12*scale,0);
-            ps_ui_row_exact_dynamic(ui,10*scale+name_height+8*scale+detail_height,1);struct nk_rect bounds;nk_widget(&bounds,ui);a->outline_bounds[i]=bounds;
+            ps_ui_row_exact_dynamic(ui,10*scale+name_height+8*scale+detail_height,1);struct nk_rect bounds;
+            enum nk_widget_layout_states state=nk_widget(&bounds,ui);a->outline_bounds[i]=bounds;
+            /* Offscreen rows retain layout bounds for navigation. They must
+             * not publish a tooltip over another panel; partial rows also
+             * require the pointer itself to be inside the current clip. */
+            bool hovered=state!=NK_WIDGET_INVALID && nk_input_is_mouse_hovering_rect(&ui->input,ui->current->layout->clip) &&
+                nk_input_is_mouse_hovering_rect(&ui->input,bounds);
             struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
-            if(nk_input_is_mouse_hovering_rect(&ui->input,bounds))nk_fill_rect(canvas,bounds,4,UI_COLOR(button_hover));
+            if(hovered)nk_fill_rect(canvas,bounds,4,UI_COLOR(button_hover));
             const char *icon=symbol.kind==PS_OUTLINE_FUNCTION?"ƒ":symbol.kind==PS_OUTLINE_TYPE?"T":"≡";
             workbench_text_draw(a,font,nk_rect(bounds.x,bounds.y+5*scale,12*scale,13*scale),icon,strlen(icon),13*scale,0,UI_COLOR(accent));
             workbench_text_draw(a,font,nk_rect(bounds.x+20*scale,bounds.y+5*scale,text_width,name_height),a->outline_source+symbol.offset,symbol.length,13*scale,0,UI_COLOR(text));
@@ -75,7 +81,7 @@ static void workbench_outline_view(app *a,struct nk_text_edit *edit,int language
             ps_ui_accessibility_label(ui,nk_rect(bounds.x+20*scale,bounds.y+5*scale+name_height+8*scale,text_width,detail_height),detail);
             char *end=a->outline_source+symbol.offset+symbol.length,saved=*end;*end=0;
             if(ps_ui_button_at(ui,bounds,a->outline_source+symbol.offset,false))selected=i;
-            if(nk_input_is_mouse_hovering_rect(&ui->input,bounds)) {
+            if(hovered) {
                 char location[96];snprintf(location,sizeof location,"%s · Zeile %zu",symbol.kind==PS_OUTLINE_FUNCTION?"Funktion":symbol.kind==PS_OUTLINE_TYPE?"Typ":"Bindung",symbol.line);
                 nk_tooltip(ui,location);
             }

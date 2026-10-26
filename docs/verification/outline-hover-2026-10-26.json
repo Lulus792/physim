@@ -1,0 +1,364 @@
+{
+  "format": 1,
+  "date": "2026-10-26",
+  "scope": "Clipped source-outline rows do not publish tooltips over other panels",
+  "base_commit": "064917becf65d98bcf3e2a822527a1741c9583bc",
+  "own_source_sha256": {
+    "app/main.c": "1bac425c1fed404f993061254f4f5beab8d7958766330f41b6c0040d98546406",
+    "app/source_outline_tests.inc": "584416b3622649cc98b8246ac76c3aff1bca0d353f62ee1493942d47bef26fa5",
+    "app/source_outline_ui.inc": "ed056a8d4ceccac13e7bf4067c055b46204ec381e143d3d0584631e05dc65870",
+    "tests/check_outline_hover.py": "3c5927536bd1e97d25f57d1cfc41a9e2fb022a5ba5dc95d92e4a2821f9d5a69e",
+    "tests/native_integration_cases.json": "a80c813bac3836d4febe99f23999b70c2d6488e159dbb66a2c1e59b7b58a7171"
+  },
+  "source_checkpoint": {
+    "path": "build/validation/protocol-wrap-2026-10-26/7-outline-hover/before-source.json",
+    "sha256": "8d658e9eceed7ddea3e1a7e8248ac6a2e911024742efd0ccfd4ce6db14a62b2f"
+  },
+  "product_change": {
+    "path": "build/validation/protocol-wrap-2026-10-26/7-outline-hover/after-source.json",
+    "sha256": "05ba1c9816d9bfc7ef47731f40e0bcfbb9e7f2dbf6013b6c9565bf4b856e6bcc"
+  },
+  "source_overlay": {
+    "path": "build/validation/protocol-wrap-2026-10-26/7-outline-hover/after-source-changes.zip",
+    "sha256": "817984ba95082f5e05af455f73e1d3ed75dd1d1aa60bfd153071ca384d0d7350"
+  },
+  "base_source_overlay": {
+    "path": "build/validation/protocol-wrap-2026-10-26/6-f1-edit/source-changes.zip",
+    "sha256": "35fe0e4d2bd16e5b8b45e06bdddbeddf42da6d8f77a6ae50dc2edbc31ae6d907"
+  },
+  "base_source_archive": {
+    "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/final-clean-hover-source-inputs.zip",
+    "sha256": "57dd0fabb4c91bc89dd687946e4538a9feabd4a3a54225a893e78b508fc5a0b6"
+  },
+  "base_runtime_manifest": {
+    "path": "build/validation/protocol-wrap-2026-10-26/6-f1-edit/runtime-archives.json",
+    "sha256": "b9877f854bde7baf5d785248472ff326252ef61a4b7927d06953e3c4f5a9dbc5"
+  },
+  "before": {
+    "command_and_exit": {
+      "path": "build/validation/protocol-wrap-2026-10-26/7-outline-hover/before-windows.json",
+      "sha256": "b37c04304177c417aab06f9208df134a3cadf133f013cc7cc32379d52291872f"
+    },
+    "proof": {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-0dckb55q/source_outline_hover/files \u00e4/verification.json",
+      "sha256": "10212e2feb8b1a64d5e44a6f900cf5439aa4d89ab51d8e526f6562c8f9fda7a3"
+    },
+    "archives": {
+      "path": "build/validation/protocol-wrap-2026-10-26/7-outline-hover/before-archives.json",
+      "sha256": "56db15afe2b145a03d7a423a6e1217b3795b9a0e1ec4c20e7d61666d0bee372c"
+    },
+    "observed": "Visible row adds tooltip command; clipped row also incorrectly adds one over protocol"
+  },
+  "after": {
+    "windows": {
+      "command_and_exit": {
+        "path": "build/validation/protocol-wrap-2026-10-26/7-outline-hover/after-windows.json",
+        "sha256": "8bb48b28f5674762794f0d1cb6c863277cc0d08021e250be3279ae28d20f49f3"
+      },
+      "log": {
+        "path": "build/validation/protocol-wrap-2026-10-26/7-outline-hover/after-windows.log",
+        "sha256": "84dfff36e8c99a619a78bc593d8fb830e20e372f83bd5e795541ddd3d665a9bc"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-htjux467/results.json",
+        "sha256": "f4bfbd507d94840313be22680c856e4d13c17d3f9b9da35f03bbff04aad7c054"
+      },
+      "hover_proof": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-htjux467/source_outline_hover/files \u00e4/verification.json",
+        "sha256": "6c0373294d566edd4229140b6857af606063e62acc4398d3ccb372b37ede6a6a"
+      },
+      "modes": [
+        {
+          "mode": "outline-hover-dark",
+          "states": [
+            {
+              "kind": "outline_hover",
+              "stage": 1,
+              "passed": true,
+              "visible_base": 1,
+              "visible_commands": 1,
+              "hidden_target": 9,
+              "hidden_commands": 0,
+              "source_crc": 3822039918
+            },
+            {
+              "kind": "outline_hover",
+              "stage": 2,
+              "passed": true,
+              "visible_base": 1,
+              "visible_commands": 2,
+              "hidden_target": 9,
+              "hidden_commands": 0,
+              "source_crc": 3822039918
+            },
+            {
+              "kind": "outline_hover",
+              "stage": 3,
+              "passed": true,
+              "visible_base": 1,
+              "visible_commands": 1,
+              "hidden_target": 9,
+              "hidden_commands": 0,
+              "source_crc": 3822039918
+            }
+          ]
+        },
+        {
+          "mode": "outline-hover-light",
+          "states": [
+            {
+              "kind": "outline_hover",
+              "stage": 1,
+              "passed": true,
+              "visible_base": 1,
+              "visible_commands": 1,
+              "hidden_target": 9,
+              "hidden_commands": 0,
+              "source_crc": 3822039918
+            },
+            {
+              "kind": "outline_hover",
+              "stage": 2,
+              "passed": true,
+              "visible_base": 1,
+              "visible_commands": 2,
+              "hidden_target": 9,
+              "hidden_commands": 0,
+              "source_crc": 3822039918
+            },
+            {
+              "kind": "outline_hover",
+              "stage": 3,
+              "passed": true,
+              "visible_base": 1,
+              "visible_commands": 1,
+              "hidden_target": 9,
+              "hidden_commands": 0,
+              "source_crc": 3822039918
+            }
+          ]
+        },
+        {
+          "mode": "outline-hover-large",
+          "states": [
+            {
+              "kind": "outline_hover",
+              "stage": 1,
+              "passed": true,
+              "visible_base": 1,
+              "visible_commands": 1,
+              "hidden_target": 8,
+              "hidden_commands": 0,
+              "source_crc": 3822039918
+            },
+            {
+              "kind": "outline_hover",
+              "stage": 2,
+              "passed": true,
+              "visible_base": 1,
+              "visible_commands": 2,
+              "hidden_target": 8,
+              "hidden_commands": 0,
+              "source_crc": 3822039918
+            },
+            {
+              "kind": "outline_hover",
+              "stage": 3,
+              "passed": true,
+              "visible_base": 1,
+              "visible_commands": 1,
+              "hidden_target": 8,
+              "hidden_commands": 0,
+              "source_crc": 3822039918
+            }
+          ]
+        }
+      ],
+      "runtime": {
+        "archive": {
+          "path": "build/validation/protocol-wrap-2026-10-26/7-outline-hover/after-runtime-windows.zip",
+          "sha256": "6bdd044f2d3014ab94d6890c18e81bde25be8c9ae75d764896deb71116f7562c"
+        },
+        "files": {
+          "bin/physim.exe": "25e25784ed797a9c5bf935bc45b9e9e35e7f77109b6cf8f1542bd360ccf0d2ee",
+          "bin/physim.exe.json": "6d6c99d9a51964ec948cb60558666d7b602a4350fb8512f524a7de6afc885d15",
+          "bin/physim.pdb": "df036d20c1f64e2c108176de75056b721afda817f31b711fda43c7225473a1a3"
+        },
+        "sdl_sha256": "b110bb37842216818ffe49f35cdf72d68bb5d0f26ca5fd963dbf5c7c3e6bcdd9"
+      }
+    },
+    "linux": {
+      "command_and_exit": {
+        "path": "build/validation/protocol-wrap-2026-10-26/7-outline-hover/after-linux.json",
+        "sha256": "39d4b228c5374580e8839e024dab4425c08954d45cf0455725d11cd62e645b72"
+      },
+      "log": {
+        "path": "build/validation/protocol-wrap-2026-10-26/7-outline-hover/after-linux.log",
+        "sha256": "3b6047747b8a09f2282a441120bad207172eb5f7130598b8c643ab37a2134ebe"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-i81xpo35/results.json",
+        "sha256": "b96211256e0c19c65f80940a64ed133dea17163332f8d8445343bbcf6bb9474e"
+      },
+      "hover_proof": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-i81xpo35/source_outline_hover/files \u00e4/verification.json",
+        "sha256": "9c2bb2e209e472a5d06a7b2187214de2bb5d70a620ed02ee92e1732fd0367819"
+      },
+      "modes": [
+        {
+          "mode": "outline-hover-dark",
+          "states": [
+            {
+              "kind": "outline_hover",
+              "stage": 1,
+              "passed": true,
+              "visible_base": 1,
+              "visible_commands": 1,
+              "hidden_target": 9,
+              "hidden_commands": 0,
+              "source_crc": 3822039918
+            },
+            {
+              "kind": "outline_hover",
+              "stage": 2,
+              "passed": true,
+              "visible_base": 1,
+              "visible_commands": 2,
+              "hidden_target": 9,
+              "hidden_commands": 0,
+              "source_crc": 3822039918
+            },
+            {
+              "kind": "outline_hover",
+              "stage": 3,
+              "passed": true,
+              "visible_base": 1,
+              "visible_commands": 1,
+              "hidden_target": 9,
+              "hidden_commands": 0,
+              "source_crc": 3822039918
+            }
+          ]
+        },
+        {
+          "mode": "outline-hover-light",
+          "states": [
+            {
+              "kind": "outline_hover",
+              "stage": 1,
+              "passed": true,
+              "visible_base": 1,
+              "visible_commands": 1,
+              "hidden_target": 9,
+              "hidden_commands": 0,
+              "source_crc": 3822039918
+            },
+            {
+              "kind": "outline_hover",
+              "stage": 2,
+              "passed": true,
+              "visible_base": 1,
+              "visible_commands": 2,
+              "hidden_target": 9,
+              "hidden_commands": 0,
+              "source_crc": 3822039918
+            },
+            {
+              "kind": "outline_hover",
+              "stage": 3,
+              "passed": true,
+              "visible_base": 1,
+              "visible_commands": 1,
+              "hidden_target": 9,
+              "hidden_commands": 0,
+              "source_crc": 3822039918
+            }
+          ]
+        },
+        {
+          "mode": "outline-hover-large",
+          "states": [
+            {
+              "kind": "outline_hover",
+              "stage": 1,
+              "passed": true,
+              "visible_base": 1,
+              "visible_commands": 1,
+              "hidden_target": 8,
+              "hidden_commands": 0,
+              "source_crc": 3822039918
+            },
+            {
+              "kind": "outline_hover",
+              "stage": 2,
+              "passed": true,
+              "visible_base": 1,
+              "visible_commands": 2,
+              "hidden_target": 8,
+              "hidden_commands": 0,
+              "source_crc": 3822039918
+            },
+            {
+              "kind": "outline_hover",
+              "stage": 3,
+              "passed": true,
+              "visible_base": 1,
+              "visible_commands": 1,
+              "hidden_target": 8,
+              "hidden_commands": 0,
+              "source_crc": 3822039918
+            }
+          ]
+        }
+      ],
+      "runtime": {
+        "archive": {
+          "path": "build/validation/protocol-wrap-2026-10-26/7-outline-hover/after-runtime-linux.zip",
+          "sha256": "816566821b31525081ed04a5d6b75c542818d00ddd375686d3eca71f67e624a3"
+        },
+        "files": {
+          "bin/physim": "23e63222e438023edc91a37382c98947269047148cafc11e2d8a5f31b9491e7d",
+          "bin/physim.json": "27079ad22a7cc1e07aa51e6c2c008568e7e8d6643208d209c8b68ae746e8a3d0"
+        },
+        "sdl_sha256": "74ecd0f7d2ea012c57ee91e705da528e1cd25ff698f88072404191a4ec0c8c89"
+      }
+    }
+  },
+  "visual_pair": {
+    "before": {
+      "path": "docs/visuals/unified-workspace/outline-hover-native-2026-10-26/before.png",
+      "sha256": "c6b1502b63666c70e056e738d48d9786c7a9bea40f6ec3bf3ae22a0e636b2b32"
+    },
+    "after": {
+      "path": "docs/visuals/unified-workspace/outline-hover-native-2026-10-26/after.png",
+      "sha256": "af13b690e1611f830b17f880fccfaa515d4050b0f68c4e871114bfd3b818aaca"
+    },
+    "image_size": [
+      1204,
+      866
+    ],
+    "difference_bounds": [
+      1082,
+      707,
+      1181,
+      740
+    ],
+    "changed_pixels": 3193,
+    "all_other_pixels_equal": true
+  },
+  "retention": {
+    "selected_images": 2,
+    "new_hover_images_per_platform": 1,
+    "legacy_images_archive_receipt": {
+      "path": "build/validation/protocol-wrap-2026-10-26/7-outline-hover/legacy-images.json",
+      "sha256": "0ff840c2e06b41131beac89a43eabdbd4bf791fa4ce580ab0456fc5ed8bef125"
+    },
+    "note": "18 successful legacy BMP images compressed and read-back verified before removing loose copies; negative evidence and previous immutable files preserved"
+  },
+  "limits": [
+    "Only this clipped-row hover defect is closed; full workspace/F1 fidelity remains open",
+    "No macOS build, physical monitor/DPI sweep or screenreader proof",
+    "Linux GUI uses Xvfb/Openbox/software OpenGL, ASan/UBSan with leak detection disabled",
+    "Partly clipped rows use pointer-in-clip guard but have no separately varied native fixture here"
+  ]
+}

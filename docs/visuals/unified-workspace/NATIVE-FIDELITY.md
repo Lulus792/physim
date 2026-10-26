@@ -53,7 +53,9 @@ Anordnung C liegt jetzt als versionierter nativer Teilstand vor. Der
 nennt auf beiden Plattformen bestandene isolierte Prüfungen und den damaligen
 Originaltextbefund. Der folgende [Originaltext-Nachlauf](PROTOCOL-ORIGINAL-NATIVE.md)
 ergänzt weichen Umbruch mit unveränderten Bytes, gemeinsamer Zeichen-/Cursorgeometrie
-und Größenwechsel. Die dort genannten Höhen-/Tooltip-Abweichungen sowie der
+und Größenwechsel. Der [Gliederungs-Hovernachlauf](OUTLINE-HOVER-NATIVE.md)
+schließt anschließend den Tooltip aus ausgeclippten Zeilen über dem Protokoll.
+Die natürliche Originaltexthöhe und der
 [direkte Mausfokus](PROTOCOL-FOCUS-NATIVE.md) bleiben offen.
 Diese Teilprüfungen und die getrennten Datenquellen-Nachweise sind keine
 vollständige Designabnahme.
