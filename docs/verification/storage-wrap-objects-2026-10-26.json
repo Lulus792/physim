@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-26",
+  "base_commit": "41cf92f47df5a01088fd9cd4289806654f6f39a6",
+  "scope": "Superseded own phase 2 compiler objects only",
+  "deleted_files": 288,
+  "deleted_logical_bytes": 106613375,
+  "preserved_runtime_files": 193,
+  "runtime_before_after_sha256_equal": true,
+  "archives_verified": {
+    "windows": {
+      "path": "build/validation/protocol-wrap-2026-10-26/2-editor/reveal-crash-runtime-windows.zip",
+      "sha256": "2d9f444454545946df677b2eb83200f550234a29c55bc56a033846230973fbed"
+    },
+    "linux": {
+      "path": "build/validation/protocol-wrap-2026-10-26/2-editor/before-reveal-runtime-linux.zip",
+      "sha256": "9f06beae8233b0066095e68a4e832a813550cf60c499dc5108db90f081e96479"
+    }
+  },
+  "receipt": {
+    "path": "build/maintenance/2026-10-26-wrap-objects.json",
+    "sha256": "bbfea1a53759b0d1e260e33fa064fd68483be40f2f76818afc54f57ef1bf66ba"
+  },
+  "command": [
+    "C:/Users/angel/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+    "-B",
+    "build/maintenance/cleanup-wrap-objects-2026-10-26.py"
+  ],
+  "exit_code": 0,
+  "active_builds_and_foreign_work_excluded": true,
+  "image_count": 0,
+  "physical_free_space_measurement": false,
+  "retention": "Keep source, runtime archives, bin/lib/symbols, logs and frozen failure evidence; only regenerable obj/o cache files removed",
+  "combined_with_previous_cleanup": {
+    "deleted_files": 2187,
+    "deleted_logical_bytes": 784988855
+  }
+}

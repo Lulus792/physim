@@ -15,6 +15,18 @@ abgefragt noch beschrieben. Neue Ausgaben liegen unter `D:/Physim/build`.
 | Erhaltene Programme, Bibliotheken und Symbole | 4.796 Dateien vor der Bereinigung per SHA-256 erfasst und danach erneut hashgleich geprüft. 42 Fixture-Objekte vorsorglich erhalten. |
 | Neue Bildschirmbilder | Keine: Alle Aussagen dieses Nachlaufs lassen sich mit Text, Pfaden und Prüfsummen belegen. |
 
+Ein weiterer eigener Nachlauf entfernt nur die ersetzten Objekt-Caches aus
+`build/validation/protocol-wrap-2026-10-26/2-editor/{windows,linux}-build/obj`:
+288 `.obj`-/`.o`-Dateien mit 106.613.375 Byte. Zugehörige Laufzeitarchive wurden
+vollständig nachgelesen, die verbleibenden Programme, Bibliotheken und Symbole
+vorher und nachher hashgleich geprüft. Quellen, Fehlerbilder, eingefrorene
+Nachweise, der aktive Folgebuild und fremde Arbeiten bleiben erhalten.
+Die [zweite kompakte Quittung](verification/storage-wrap-objects-2026-10-26.json)
+nennt Befehle, Archivhashes und die lokale Dateiliste. Beide Nachläufe zusammen
+entfernen 2.187 Objekte mit 784.988.855 Byte Dateigröße; dies ist weiterhin
+keine Messung physisch freigegebener Laufwerksbytes. Für diesen Nachlauf wurden
+ebenfalls keine Bilder erzeugt.
+
 Die vollständige lokale Dateiquittung und rohen Prüfausgaben liegen unter
 `D:/Physim/build/maintenance/2026-10-26-storage`. Der
 [kompakte maschinenlesbare Nachweis](verification/storage-objects-2026-10-26.json)
