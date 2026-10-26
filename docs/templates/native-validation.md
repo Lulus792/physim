@@ -61,3 +61,9 @@ auf Laufebene festhalten. Bei identischem Programm auf denselben geprüften
 Laufzeitstand verweisen. Bilder nur ergänzen, wenn sie eine zusätzliche
 visuelle Aussage belegen; dafür einen Zweck und eine Aufbewahrungsentscheidung
 eintragen. Ein Bildverzicht ist kein Nachweis für ungeprüfte visuelle Kriterien.
+
+Die [JSON-Vorlage](native-validation.json) enthält dafür ein kleines Grundgerüst.
+Platzhalter ersetzen, unbenötigte Felder entfernen und den Status erst nach
+Ausführung ändern. `null` beim Exitcode bedeutet ungeprüft. Ein kompakter
+Markdown-Bericht nennt Ergebnis, Grenzen und den Link zur JSON-Datei; dieselben
+Zustandsfolgen dort nicht nochmals vollständig abschreiben.

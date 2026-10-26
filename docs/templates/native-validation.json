@@ -1,0 +1,38 @@
+{
+  "format": 1,
+  "scope": "<Auftrag und Akzeptanzkriterien>",
+  "source": {
+    "commit": "<geprüfter Commit>",
+    "local_changes_manifest": "<Pfad und SHA-256 oder null>"
+  },
+  "runtime": {
+    "executable_sha256": "<SHA-256>",
+    "existing_archive_index": "<vorhandener Archivindex oder null>",
+    "environment": "<Plattform, Werkzeuge, Buildvariante; bei UI auch Skalierung und Theme>"
+  },
+  "commands": [
+    {
+      "argv": ["<Programm>", "<Argumente einschließlich D:-Ausgabepfad>"],
+      "expected_exit_code": 0,
+      "exit_code": null,
+      "log": "<Pfad zum vollständigen Log>"
+    }
+  ],
+  "cases": [
+    {
+      "id": "<Kriterium>",
+      "action": "<Aktion>",
+      "expected": "<Soll>",
+      "actual": null,
+      "result": "ungeprüft",
+      "evidence": "<JSON-Zustandspfad oder Logzeile>"
+    }
+  ],
+  "images": [],
+  "open_findings": [],
+  "retention": {
+    "preserve": ["<Referenzen, offene Fehlerbelege und benötigte Originalbytes>"],
+    "removable_after_acceptance": [],
+    "removed_receipt": null
+  }
+}

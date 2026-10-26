@@ -1,0 +1,258 @@
+{
+  "format": 1,
+  "date": "2026-10-26",
+  "source_head": "af7769298528acd3883e823957784cf8d19061d5",
+  "scope": "D-only storage verification and superseded crash-build compiler objects; no UI acceptance",
+  "artifact_root": "D:/Physim/build",
+  "f_drive_accessed": false,
+  "screenshots_created": 0,
+  "return_status": "Previously completed; not repeated and no F access",
+  "historical_return_report": {
+    "path": "docs/verification/storage-2026-10-25.json",
+    "sha256": "ab383e2e7805bede053ee2a2985fb1e93e83a7a0853d4c1510180beeaf85990a"
+  },
+  "policy_checks": [
+    {
+      "platform": "win32",
+      "report": {
+        "path": "build/maintenance/2026-10-26-storage-next/win32/policy-check.json",
+        "sha256": "8a1cec45a58172bd364278763eaab63180e5874553c496e6c3a6a2da6a3e8845"
+      },
+      "checks": [
+        {
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "-B",
+            "tools/with-artifacts.py",
+            "--check"
+          ],
+          "exit_code": 0,
+          "expected_exit_code": 0,
+          "passed": true
+        },
+        {
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "-B",
+            "tools/with-artifacts.py",
+            "--",
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "-B",
+            "tests/test_artifact_paths.py",
+            "--work",
+            "D:\\Physim\\build\\maintenance\\2026-10-26-storage-next\\win32\\policy"
+          ],
+          "exit_code": 0,
+          "expected_exit_code": 0,
+          "passed": true
+        },
+        {
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "-B",
+            "tools/with-artifacts.py",
+            "--",
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "-B",
+            "-c",
+            "import os,tempfile; from pathlib import Path; fd,name=tempfile.mkstemp(); os.close(fd); p=Path(name); print(p); assert p.is_relative_to(Path(os.environ['PHYSIM_ARTIFACT_ROOT'])); p.unlink(); raise SystemExit(7)"
+          ],
+          "exit_code": 7,
+          "expected_exit_code": 7,
+          "passed": true
+        }
+      ],
+      "logs": [
+        {
+          "path": "build/maintenance/2026-10-26-storage-next/win32/0-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage-next/win32/0-stdout.txt",
+          "sha256": "094a5a95124346e1d106c0430ea88807a8bfd08713e55c2448ef8795225bf1af"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage-next/win32/1-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage-next/win32/1-stdout.txt",
+          "sha256": "5d960d000a44da60068aafcde699c8486fc33e28fcaacc17aa67bb0cd454e439"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage-next/win32/2-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage-next/win32/2-stdout.txt",
+          "sha256": "5aeb42264f71d6f9a33039ec4388daeea15a230205a746909a7cf1177792ab7a"
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "report": {
+        "path": "build/maintenance/2026-10-26-storage-next/linux/policy-check.json",
+        "sha256": "d43a44b347ba3c167e61091217eeec7918e89f6627c227cff6ab3f3a3ba6bcb1"
+      },
+      "checks": [
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "tools/with-artifacts.py",
+            "--check"
+          ],
+          "exit_code": 0,
+          "expected_exit_code": 0,
+          "passed": true
+        },
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "tools/with-artifacts.py",
+            "--",
+            "/usr/bin/python3",
+            "-B",
+            "tests/test_artifact_paths.py",
+            "--work",
+            "/mnt/d/Physim/build/maintenance/2026-10-26-storage-next/linux/policy"
+          ],
+          "exit_code": 0,
+          "expected_exit_code": 0,
+          "passed": true
+        },
+        {
+          "command": [
+            "/usr/bin/python3",
+            "-B",
+            "tools/with-artifacts.py",
+            "--",
+            "/usr/bin/python3",
+            "-B",
+            "-c",
+            "import os,tempfile; from pathlib import Path; fd,name=tempfile.mkstemp(); os.close(fd); p=Path(name); print(p); assert p.is_relative_to(Path(os.environ['PHYSIM_ARTIFACT_ROOT'])); p.unlink(); raise SystemExit(7)"
+          ],
+          "exit_code": 7,
+          "expected_exit_code": 7,
+          "passed": true
+        }
+      ],
+      "logs": [
+        {
+          "path": "build/maintenance/2026-10-26-storage-next/linux/0-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage-next/linux/0-stdout.txt",
+          "sha256": "ed9db9b8d653eb344fb0eed1f866fce43ea2f4994b5f020dbb0f36ee192d79b7"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage-next/linux/1-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage-next/linux/1-stdout.txt",
+          "sha256": "20281a7739709937f5190342ba7517a885bf1ac314239d7232e751898cab9df4"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage-next/linux/2-stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "build/maintenance/2026-10-26-storage-next/linux/2-stdout.txt",
+          "sha256": "92f51f9c0afc4672f129cbeca373c9e03163e44236c9f6d5c154972683bb63a2"
+        }
+      ]
+    }
+  ],
+  "cleanup": {
+    "status": "completed",
+    "deleted_objects": 224,
+    "logical_bytes": 52237964,
+    "preserved_files": 433,
+    "preserved_hashes_unchanged": true,
+    "preserved_source_files": 7641,
+    "worktree_hashes_unchanged": true,
+    "git_index_unchanged": true,
+    "object_plan_sha256": "a114711d2892772b5d494fe514b6200439ee56b39e4a0584a05ef6e470eb11c1",
+    "f_drive_accessed": false,
+    "screenshots_created": 0,
+    "physical_free_space_measured": false
+  },
+  "cleanup_targets": [
+    "build/validation/protocol-wrap-2026-10-26/4-crash/windows-asan-build/obj",
+    "build/validation/protocol-wrap-2026-10-26/4-crash/windows-asan-build-fixed/obj"
+  ],
+  "cleanup_commands": [
+    {
+      "argv": [
+        "C:/Users/angel/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+        "-B",
+        "tools/with-artifacts.py",
+        "--",
+        "C:/Users/angel/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+        "-B",
+        "build/maintenance/2026-10-26-storage-next/clean-crash-objects.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "argv": [
+        "C:/Users/angel/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+        "-B",
+        "tools/with-artifacts.py",
+        "--",
+        "C:/Users/angel/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+        "-B",
+        "build/maintenance/2026-10-26-storage-next/clean-crash-objects.py",
+        "--apply"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "cleanup_receipt": {
+    "path": "build/maintenance/2026-10-26-storage-next/crash-object-cleanup.json",
+    "sha256": "e2f1d51b46719b2863cb69541c5b9f1d93516a13adcaf14a74b5d2db2b10f874"
+  },
+  "file_plan": {
+    "path": "build/maintenance/2026-10-26-storage-next/crash-object-plan.json",
+    "sha256": "a114711d2892772b5d494fe514b6200439ee56b39e4a0584a05ef6e470eb11c1"
+  },
+  "file_removals": {
+    "path": "build/maintenance/2026-10-26-storage-next/crash-object-removals.jsonl",
+    "sha256": "c6008d7599b80c4a19437b04fc6193d2572b17f5ea0dfd8d74470f1ca36ac3bf"
+  },
+  "helpers": [
+    {
+      "path": "build/maintenance/2026-10-26-storage-next/check-policy.py",
+      "sha256": "cb1463a74d45829ab409f0704f2a1fe95f2865e3cd0696219effffa012afd183"
+    },
+    {
+      "path": "build/maintenance/2026-10-26-storage-next/clean-crash-objects.py",
+      "sha256": "2a5d7e4f1740308f7f0a3c6e53bb7e1a47aa06452b3db74997971dd5a932ec7b"
+    },
+    {
+      "path": "build/maintenance/2026-10-26-storage-next/write-report.py",
+      "sha256": "ad2700edaf79abff5027cb7a7ecdccad3b198479e799b5bebb13e04727d0d651"
+    }
+  ],
+  "planning_failure": {
+    "deleted_files": 0,
+    "cause": "Windows text-mode CRLF input to git check-ignore",
+    "correction": "NUL-delimited binary input and output; exact 224-path equality passed"
+  },
+  "retention": {
+    "diagnostic_other_files": "All 433 hashes unchanged",
+    "worktree": "7641 files plus Git index unchanged at cleanup completion",
+    "current_isolated_build": "untouched",
+    "reference_and_error_images": "retained unchanged",
+    "shared_vm_and_other_projects": "untouched"
+  },
+  "limits": [
+    "Logical file sizes, not measured physical free bytes",
+    "No GUI, focus, screenreader or macOS acceptance from storage checks",
+    "Existing uncommitted application changes excluded from validation claims"
+  ]
+}

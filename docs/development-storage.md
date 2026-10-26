@@ -12,6 +12,10 @@ verwendet. Das ist eine lokale Speicherregel, keine Voraussetzung für andere Re
 Aktueller [Wartungsnachlauf vom 26. Oktober](storage-maintenance-2026-10-26.md):
 erneute Windows-/WSL-Pfadprüfung, gezielte Objektbereinigung und Aufbewahrung
 kompakter Nachweise. Der historische Rückführungsbericht bleibt unverändert gültig.
+Der [anschließende Bereinigungsbericht](storage-maintenance-followup-2026-10-26.md)
+bestätigt erneut die D:-Regeln und quittiert die Entfernung ersetzter
+Diagnose-Compilerobjekte. Die abgeschlossene Rückführung nicht erneut ausführen;
+alte Umzugsskripte sind historische Belege.
 
 Entwicklungsbefehle erhalten die Umgebung nur für ihren eigenen Prozessbaum:
 
@@ -57,7 +61,10 @@ Compilerdateien gehören nicht in diese Laufzeitverzeichnisse.
 ## Nachweise mit weniger Bildern
 
 Für neue native Prüfungen die [Berichtsvorlage](templates/native-validation.md)
-verwenden und nur die tatsächlich benötigten Abschnitte ausfüllen.
+und bei längeren Zustandsfolgen die [JSON-Vorlage](templates/native-validation.json)
+verwenden. Nur die tatsächlich benötigten Abschnitte ausfüllen. Gemeinsame
+Quell-, Laufzeit- und Umgebungsdaten einmal pro Lauf erfassen; die Anleitung
+verlinkt den Ergebnisbericht, statt seine vollständigen Messwerte zu wiederholen.
 
 Ein Prüfbericht enthält Auftrag und Akzeptanzkriterien, Quell-/Binärhash,
 Plattform und Werkzeuge, genaue Befehle, Exitcode sowie Soll und Ist je
