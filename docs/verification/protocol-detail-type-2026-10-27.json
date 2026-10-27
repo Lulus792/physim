@@ -1,0 +1,1364 @@
+{
+  "format": 1,
+  "date": "2026-10-27",
+  "source_base": "90032e88166391c95972c0e3f0d893558a17ef58",
+  "scope": "Selected C detail typography and block spacing; full native C/H/overall acceptance remains open",
+  "source": {
+    "path": "build/validation/protocol-wrap-2026-10-26/13-detail-type/exact-compiler-source.json",
+    "sha256": "338166bfde1d4f61ca692f0409024dd382aa538508725a125bd831d4f86e1d12"
+  },
+  "runtime": {
+    "path": "build/validation/protocol-wrap-2026-10-26/13-detail-type/final-runtime.json",
+    "sha256": "5af4b8868c11a506092e4fbb819d9ebc4a9a6f8b7d3c3959c7c1e77e2bbfde56"
+  },
+  "runtime_byte_index": {
+    "path": "build/validation/protocol-wrap-2026-10-26/13-detail-type/final-byte-index.json",
+    "sha256": "b8298c083a9f5ed71976a2a1daecbf7873460d70a97fbaf0c5d3e2db31ca5704"
+  },
+  "all_runtime_archive_bytes_read_back": true,
+  "owned_inputs": {
+    "app/protocol_ui.h": "e1177bd968fbbc42abfb0707cd3e78d6eae8289cc09f84fc350c5caf6fb071ba",
+    "app/protocol_ui.inc": "fab9e6d5ae2f1489a3e478cf3b9591fce6463840359590da183b2902ae90eeb3",
+    "app/protocol_tests.inc": "47937e6bcacf9aa0e008433c0b720880591bca641942bc30f7c31198dc0968c9",
+    "app/protocol_typography_tests.inc": "07bca3ae7dbd62151bfe1b35d094ea83a2ec3b7a5fa6febc03db413cc5efba38",
+    "tests/check_protocol_typography.py": "4b4dafd047c7347bc37be7685c1e741e8b6bd871a0265cb127711aab8208540b",
+    "tests/native_integration_cases.json": "4409496fa69fb3cc9476153515608ebe19b6ec163de1a8eb7aae4e46b0d4e0a2",
+    "tests/test_native_test_runner.py": "801f72cf58d82c140142f163949784008127caa316d0a61ab6618c3a1c13e7e2"
+  },
+  "foreign_changes_excluded": true,
+  "reference_css": {
+    "path": "docs/visuals/design-options/options.css",
+    "sha256": "79500e3638b63af8b0ac9d1d64c562742236cad38f950773659a7b1b031a889f"
+  },
+  "expected_css": {
+    "meta_font": 10.92,
+    "title_line": 27.125,
+    "impact_line": 17.360000000000003,
+    "property_line": 17.360000000000003,
+    "badge_height": 19.919999999999998,
+    "title_margin": 10.0,
+    "impact_margin": 17.0,
+    "detail_margin": 18.0,
+    "property_gap": 10.0,
+    "column_gap": 14.0,
+    "summary_height": 27.360000000000003
+  },
+  "measurements": {
+    "windows": {
+      "verification": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mjoqm3e1/protocol_typography/files ä/verification.json",
+        "sha256": "51084821091fce19871f6a14541436b0d871c6bd99eb90f77676b3568fa0df59"
+      },
+      "app_sha256": "14b13e2d6c0e45b3dae70b7fb08922f5a664ff05aa875e34ca5165805c7d119d",
+      "cases": [
+        {
+          "mode": "dark",
+          "state": {
+            "kind": "protocol_typography",
+            "passed": true,
+            "source_crc": 882026269,
+            "scale": 1.0,
+            "meta_font": 10.92,
+            "title_line": 27.125,
+            "impact_line": 17.36,
+            "property_line": 17.36,
+            "header": [
+              1150.0,
+              560.0,
+              263.0,
+              19.92
+            ],
+            "badge_height": 19.92,
+            "meta": [
+              1228.9614,
+              561.497,
+              184.0386,
+              16.926
+            ],
+            "title": [
+              1150.0,
+              589.92,
+              263.0,
+              54.25
+            ],
+            "impact": [
+              1150.0,
+              661.17,
+              263.0,
+              56.72
+            ],
+            "summary": [
+              1150.0,
+              797.6099,
+              263.0,
+              27.36
+            ],
+            "properties": [
+              {
+                "row": [
+                  1150.0,
+                  734.89,
+                  263.0,
+                  17.36
+                ],
+                "label": [
+                  1150.0,
+                  734.89,
+                  124.5,
+                  17.36
+                ],
+                "value": [
+                  1288.5,
+                  734.89,
+                  124.5,
+                  17.36
+                ]
+              },
+              {
+                "row": [
+                  1150.0,
+                  762.2499,
+                  263.0,
+                  17.36
+                ],
+                "label": [
+                  1150.0,
+                  762.2499,
+                  124.5,
+                  17.36
+                ],
+                "value": [
+                  1288.5,
+                  762.2499,
+                  124.5,
+                  17.36
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "mode": "light",
+          "state": {
+            "kind": "protocol_typography",
+            "passed": true,
+            "source_crc": 882026269,
+            "scale": 1.0,
+            "meta_font": 10.92,
+            "title_line": 27.125,
+            "impact_line": 17.36,
+            "property_line": 17.36,
+            "header": [
+              1150.0,
+              560.0,
+              263.0,
+              19.92
+            ],
+            "badge_height": 19.92,
+            "meta": [
+              1228.9614,
+              561.497,
+              184.0386,
+              16.926
+            ],
+            "title": [
+              1150.0,
+              589.92,
+              263.0,
+              54.25
+            ],
+            "impact": [
+              1150.0,
+              661.17,
+              263.0,
+              56.72
+            ],
+            "summary": [
+              1150.0,
+              797.6099,
+              263.0,
+              27.36
+            ],
+            "properties": [
+              {
+                "row": [
+                  1150.0,
+                  734.89,
+                  263.0,
+                  17.36
+                ],
+                "label": [
+                  1150.0,
+                  734.89,
+                  124.5,
+                  17.36
+                ],
+                "value": [
+                  1288.5,
+                  734.89,
+                  124.5,
+                  17.36
+                ]
+              },
+              {
+                "row": [
+                  1150.0,
+                  762.2499,
+                  263.0,
+                  17.36
+                ],
+                "label": [
+                  1150.0,
+                  762.2499,
+                  124.5,
+                  17.36
+                ],
+                "value": [
+                  1288.5,
+                  762.2499,
+                  124.5,
+                  17.36
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "mode": "contrast",
+          "state": {
+            "kind": "protocol_typography",
+            "passed": true,
+            "source_crc": 882026269,
+            "scale": 1.0,
+            "meta_font": 10.92,
+            "title_line": 27.125,
+            "impact_line": 17.36,
+            "property_line": 17.36,
+            "header": [
+              1150.0,
+              560.0,
+              263.0,
+              19.92
+            ],
+            "badge_height": 19.92,
+            "meta": [
+              1228.9614,
+              561.497,
+              184.0386,
+              16.926
+            ],
+            "title": [
+              1150.0,
+              589.92,
+              263.0,
+              54.25
+            ],
+            "impact": [
+              1150.0,
+              661.17,
+              263.0,
+              56.72
+            ],
+            "summary": [
+              1150.0,
+              797.6099,
+              263.0,
+              27.36
+            ],
+            "properties": [
+              {
+                "row": [
+                  1150.0,
+                  734.89,
+                  263.0,
+                  17.36
+                ],
+                "label": [
+                  1150.0,
+                  734.89,
+                  124.5,
+                  17.36
+                ],
+                "value": [
+                  1288.5,
+                  734.89,
+                  124.5,
+                  17.36
+                ]
+              },
+              {
+                "row": [
+                  1150.0,
+                  762.2499,
+                  263.0,
+                  17.36
+                ],
+                "label": [
+                  1150.0,
+                  762.2499,
+                  124.5,
+                  17.36
+                ],
+                "value": [
+                  1288.5,
+                  762.2499,
+                  124.5,
+                  17.36
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "mode": "large",
+          "state": {
+            "kind": "protocol_typography",
+            "passed": true,
+            "source_crc": 882026269,
+            "scale": 1.375,
+            "meta_font": 10.92,
+            "title_line": 37.2969,
+            "impact_line": 23.87,
+            "property_line": 23.87,
+            "header": [
+              27.5,
+              869.5,
+              1371.0,
+              27.39
+            ],
+            "badge_height": 27.39,
+            "meta": [
+              136.072,
+              871.5583,
+              1262.428,
+              23.2732
+            ],
+            "title": [
+              27.5,
+              910.64,
+              1371.0,
+              37.2969
+            ],
+            "impact": [
+              27.5,
+              971.3119,
+              1371.0,
+              54.12
+            ],
+            "summary": [
+              27.5,
+              1135.0469,
+              1371.0,
+              37.62
+            ],
+            "properties": [
+              {
+                "row": [
+                  27.5,
+                  1048.8069,
+                  1371.0,
+                  23.87
+                ],
+                "label": [
+                  27.5,
+                  1048.8069,
+                  675.875,
+                  23.87
+                ],
+                "value": [
+                  722.625,
+                  1048.8069,
+                  675.875,
+                  23.87
+                ]
+              },
+              {
+                "row": [
+                  27.5,
+                  1086.4269,
+                  1371.0,
+                  23.87
+                ],
+                "label": [
+                  27.5,
+                  1086.4269,
+                  675.875,
+                  23.87
+                ],
+                "value": [
+                  722.625,
+                  1086.4269,
+                  675.875,
+                  23.87
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "mode": "narrow",
+          "state": {
+            "kind": "protocol_typography",
+            "passed": true,
+            "source_crc": 882026269,
+            "scale": 1.0,
+            "meta_font": 10.92,
+            "title_line": 27.125,
+            "impact_line": 17.36,
+            "property_line": 17.36,
+            "header": [
+              20.0,
+              584.0,
+              1026.0,
+              19.92
+            ],
+            "badge_height": 19.92,
+            "meta": [
+              98.9614,
+              585.497,
+              947.0386,
+              16.926
+            ],
+            "title": [
+              20.0,
+              613.92,
+              1026.0,
+              27.125
+            ],
+            "impact": [
+              20.0,
+              658.045,
+              1026.0,
+              39.36
+            ],
+            "summary": [
+              20.0,
+              777.1249,
+              1026.0,
+              27.36
+            ],
+            "properties": [
+              {
+                "row": [
+                  20.0,
+                  714.405,
+                  1026.0,
+                  17.36
+                ],
+                "label": [
+                  20.0,
+                  714.405,
+                  506.0,
+                  17.36
+                ],
+                "value": [
+                  540.0,
+                  714.405,
+                  506.0,
+                  17.36
+                ]
+              },
+              {
+                "row": [
+                  20.0,
+                  741.765,
+                  1026.0,
+                  17.36
+                ],
+                "label": [
+                  20.0,
+                  741.765,
+                  506.0,
+                  17.36
+                ],
+                "value": [
+                  540.0,
+                  741.765,
+                  506.0,
+                  17.36
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "mode": "long",
+          "state": {
+            "kind": "protocol_typography",
+            "passed": true,
+            "source_crc": 882026269,
+            "scale": 1.0,
+            "meta_font": 10.92,
+            "title_line": 27.125,
+            "impact_line": 17.36,
+            "property_line": 17.36,
+            "header": [
+              1150.0,
+              560.0,
+              263.0,
+              80.698
+            ],
+            "badge_height": 19.92,
+            "meta": [
+              1150.0,
+              589.92,
+              263.0,
+              50.778
+            ],
+            "title": [
+              1150.0,
+              650.698,
+              263.0,
+              108.5
+            ],
+            "impact": [
+              1150.0,
+              776.198,
+              263.0,
+              56.72
+            ],
+            "summary": [
+              1150.0,
+              1026.7979,
+              263.0,
+              27.36
+            ],
+            "properties": [
+              {
+                "row": [
+                  1150.0,
+                  849.918,
+                  263.0,
+                  104.16
+                ],
+                "label": [
+                  1150.0,
+                  849.918,
+                  124.5,
+                  104.16
+                ],
+                "value": [
+                  1288.5,
+                  849.918,
+                  124.5,
+                  104.16
+                ]
+              },
+              {
+                "row": [
+                  1150.0,
+                  964.0779,
+                  263.0,
+                  17.36
+                ],
+                "label": [
+                  1150.0,
+                  964.0779,
+                  124.5,
+                  17.36
+                ],
+                "value": [
+                  1288.5,
+                  964.0779,
+                  124.5,
+                  17.36
+                ]
+              },
+              {
+                "row": [
+                  1150.0,
+                  991.4379,
+                  263.0,
+                  17.36
+                ],
+                "label": [
+                  1150.0,
+                  991.4379,
+                  124.5,
+                  17.36
+                ],
+                "value": [
+                  1288.5,
+                  991.4379,
+                  124.5,
+                  17.36
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "linux": {
+      "verification": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ssndvu7u/protocol_typography/files ä/verification.json",
+        "sha256": "839673e2f039253065d83e334aa05b8c00b739a6c0462a6a52a01896ca0be028"
+      },
+      "app_sha256": "6700a93bddf4f5fb14fc2c0e9b90cafa896dec37bb717c99d70edbfa4c52f48e",
+      "cases": [
+        {
+          "mode": "dark",
+          "state": {
+            "kind": "protocol_typography",
+            "passed": true,
+            "source_crc": 882026269,
+            "scale": 1.0,
+            "meta_font": 10.92,
+            "title_line": 27.125,
+            "impact_line": 17.36,
+            "property_line": 17.36,
+            "header": [
+              1150.0,
+              560.0,
+              263.0,
+              19.92
+            ],
+            "badge_height": 19.92,
+            "meta": [
+              1233.2585,
+              561.497,
+              179.7415,
+              16.926
+            ],
+            "title": [
+              1150.0,
+              589.92,
+              263.0,
+              81.375
+            ],
+            "impact": [
+              1150.0,
+              688.295,
+              263.0,
+              56.72
+            ],
+            "summary": [
+              1150.0,
+              824.7349,
+              263.0,
+              27.36
+            ],
+            "properties": [
+              {
+                "row": [
+                  1150.0,
+                  762.015,
+                  263.0,
+                  17.36
+                ],
+                "label": [
+                  1150.0,
+                  762.015,
+                  124.5,
+                  17.36
+                ],
+                "value": [
+                  1288.5,
+                  762.015,
+                  124.5,
+                  17.36
+                ]
+              },
+              {
+                "row": [
+                  1150.0,
+                  789.3749,
+                  263.0,
+                  17.36
+                ],
+                "label": [
+                  1150.0,
+                  789.3749,
+                  124.5,
+                  17.36
+                ],
+                "value": [
+                  1288.5,
+                  789.3749,
+                  124.5,
+                  17.36
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "mode": "light",
+          "state": {
+            "kind": "protocol_typography",
+            "passed": true,
+            "source_crc": 882026269,
+            "scale": 1.0,
+            "meta_font": 10.92,
+            "title_line": 27.125,
+            "impact_line": 17.36,
+            "property_line": 17.36,
+            "header": [
+              1150.0,
+              560.0,
+              263.0,
+              19.92
+            ],
+            "badge_height": 19.92,
+            "meta": [
+              1233.2585,
+              561.497,
+              179.7415,
+              16.926
+            ],
+            "title": [
+              1150.0,
+              589.92,
+              263.0,
+              81.375
+            ],
+            "impact": [
+              1150.0,
+              688.295,
+              263.0,
+              56.72
+            ],
+            "summary": [
+              1150.0,
+              824.7349,
+              263.0,
+              27.36
+            ],
+            "properties": [
+              {
+                "row": [
+                  1150.0,
+                  762.015,
+                  263.0,
+                  17.36
+                ],
+                "label": [
+                  1150.0,
+                  762.015,
+                  124.5,
+                  17.36
+                ],
+                "value": [
+                  1288.5,
+                  762.015,
+                  124.5,
+                  17.36
+                ]
+              },
+              {
+                "row": [
+                  1150.0,
+                  789.3749,
+                  263.0,
+                  17.36
+                ],
+                "label": [
+                  1150.0,
+                  789.3749,
+                  124.5,
+                  17.36
+                ],
+                "value": [
+                  1288.5,
+                  789.3749,
+                  124.5,
+                  17.36
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "mode": "contrast",
+          "state": {
+            "kind": "protocol_typography",
+            "passed": true,
+            "source_crc": 882026269,
+            "scale": 1.0,
+            "meta_font": 10.92,
+            "title_line": 27.125,
+            "impact_line": 17.36,
+            "property_line": 17.36,
+            "header": [
+              1150.0,
+              560.0,
+              263.0,
+              19.92
+            ],
+            "badge_height": 19.92,
+            "meta": [
+              1233.2585,
+              561.497,
+              179.7415,
+              16.926
+            ],
+            "title": [
+              1150.0,
+              589.92,
+              263.0,
+              81.375
+            ],
+            "impact": [
+              1150.0,
+              688.295,
+              263.0,
+              56.72
+            ],
+            "summary": [
+              1150.0,
+              824.7349,
+              263.0,
+              27.36
+            ],
+            "properties": [
+              {
+                "row": [
+                  1150.0,
+                  762.015,
+                  263.0,
+                  17.36
+                ],
+                "label": [
+                  1150.0,
+                  762.015,
+                  124.5,
+                  17.36
+                ],
+                "value": [
+                  1288.5,
+                  762.015,
+                  124.5,
+                  17.36
+                ]
+              },
+              {
+                "row": [
+                  1150.0,
+                  789.3749,
+                  263.0,
+                  17.36
+                ],
+                "label": [
+                  1150.0,
+                  789.3749,
+                  124.5,
+                  17.36
+                ],
+                "value": [
+                  1288.5,
+                  789.3749,
+                  124.5,
+                  17.36
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "mode": "large",
+          "state": {
+            "kind": "protocol_typography",
+            "passed": true,
+            "source_crc": 882026269,
+            "scale": 1.375,
+            "meta_font": 10.92,
+            "title_line": 37.2969,
+            "impact_line": 23.87,
+            "property_line": 23.87,
+            "header": [
+              27.5,
+              869.5,
+              1371.0,
+              27.39
+            ],
+            "badge_height": 27.39,
+            "meta": [
+              141.9804,
+              871.5583,
+              1256.5195,
+              23.2732
+            ],
+            "title": [
+              27.5,
+              910.64,
+              1371.0,
+              37.2969
+            ],
+            "impact": [
+              27.5,
+              971.3119,
+              1371.0,
+              54.12
+            ],
+            "summary": [
+              27.5,
+              1135.0469,
+              1371.0,
+              37.62
+            ],
+            "properties": [
+              {
+                "row": [
+                  27.5,
+                  1048.8069,
+                  1371.0,
+                  23.87
+                ],
+                "label": [
+                  27.5,
+                  1048.8069,
+                  675.875,
+                  23.87
+                ],
+                "value": [
+                  722.625,
+                  1048.8069,
+                  675.875,
+                  23.87
+                ]
+              },
+              {
+                "row": [
+                  27.5,
+                  1086.4269,
+                  1371.0,
+                  23.87
+                ],
+                "label": [
+                  27.5,
+                  1086.4269,
+                  675.875,
+                  23.87
+                ],
+                "value": [
+                  722.625,
+                  1086.4269,
+                  675.875,
+                  23.87
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "mode": "narrow",
+          "state": {
+            "kind": "protocol_typography",
+            "passed": true,
+            "source_crc": 882026269,
+            "scale": 1.0,
+            "meta_font": 10.92,
+            "title_line": 27.125,
+            "impact_line": 17.36,
+            "property_line": 17.36,
+            "header": [
+              20.0,
+              584.0,
+              1026.0,
+              19.92
+            ],
+            "badge_height": 19.92,
+            "meta": [
+              103.2585,
+              585.497,
+              942.7415,
+              16.926
+            ],
+            "title": [
+              20.0,
+              613.92,
+              1026.0,
+              27.125
+            ],
+            "impact": [
+              20.0,
+              658.045,
+              1026.0,
+              39.36
+            ],
+            "summary": [
+              20.0,
+              777.1249,
+              1026.0,
+              27.36
+            ],
+            "properties": [
+              {
+                "row": [
+                  20.0,
+                  714.405,
+                  1026.0,
+                  17.36
+                ],
+                "label": [
+                  20.0,
+                  714.405,
+                  506.0,
+                  17.36
+                ],
+                "value": [
+                  540.0,
+                  714.405,
+                  506.0,
+                  17.36
+                ]
+              },
+              {
+                "row": [
+                  20.0,
+                  741.765,
+                  1026.0,
+                  17.36
+                ],
+                "label": [
+                  20.0,
+                  741.765,
+                  506.0,
+                  17.36
+                ],
+                "value": [
+                  540.0,
+                  741.765,
+                  506.0,
+                  17.36
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "mode": "long",
+          "state": {
+            "kind": "protocol_typography",
+            "passed": true,
+            "source_crc": 882026269,
+            "scale": 1.0,
+            "meta_font": 10.92,
+            "title_line": 27.125,
+            "impact_line": 17.36,
+            "property_line": 17.36,
+            "header": [
+              1150.0,
+              560.0,
+              263.0,
+              97.624
+            ],
+            "badge_height": 19.92,
+            "meta": [
+              1150.0,
+              589.92,
+              263.0,
+              67.704
+            ],
+            "title": [
+              1150.0,
+              667.624,
+              263.0,
+              162.75
+            ],
+            "impact": [
+              1150.0,
+              847.374,
+              263.0,
+              56.72
+            ],
+            "summary": [
+              1150.0,
+              1150.054,
+              263.0,
+              27.36
+            ],
+            "properties": [
+              {
+                "row": [
+                  1150.0,
+                  921.094,
+                  263.0,
+                  138.88
+                ],
+                "label": [
+                  1150.0,
+                  921.094,
+                  124.5,
+                  138.88
+                ],
+                "value": [
+                  1288.5,
+                  921.094,
+                  124.5,
+                  138.88
+                ]
+              },
+              {
+                "row": [
+                  1150.0,
+                  1069.974,
+                  263.0,
+                  17.36
+                ],
+                "label": [
+                  1150.0,
+                  1069.974,
+                  124.5,
+                  17.36
+                ],
+                "value": [
+                  1288.5,
+                  1069.974,
+                  124.5,
+                  17.36
+                ]
+              },
+              {
+                "row": [
+                  1150.0,
+                  1097.334,
+                  263.0,
+                  34.72
+                ],
+                "label": [
+                  1150.0,
+                  1097.334,
+                  124.5,
+                  34.72
+                ],
+                "value": [
+                  1288.5,
+                  1097.334,
+                  124.5,
+                  34.72
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "groups": {
+    "windows": {
+      "typography": {
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mjoqm3e1/results.json",
+          "sha256": "7517ab92e54b1cebb24faab1580280cbce6af3b4a4862edbebd28fda042bdc40"
+        },
+        "command": {
+          "path": "build/validation/protocol-wrap-2026-10-26/13-detail-type/exact-windows.json",
+          "sha256": "a2d9b5119558b81d0048ad077a4a155806ad60b2976557a4b1e1424b9c150a71"
+        }
+      },
+      "regression": {
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-q6j8wbfq/results.json",
+          "sha256": "20f30bef4bcea5fdd8fd04f568c25519d895672167b070cecea0f08ca5fc03c4"
+        },
+        "command": {
+          "path": "build/validation/protocol-wrap-2026-10-26/13-detail-type/regression-windows.json",
+          "sha256": "9ee2ae097a44d3e4d66b42323f2a7496e084b547414a1bb064e03790d7f5e184"
+        },
+        "cases": [
+          {
+            "name": "protocol_navigator",
+            "status": "passed",
+            "reason": ""
+          },
+          {
+            "name": "protocol_actions",
+            "status": "passed",
+            "reason": ""
+          },
+          {
+            "name": "protocol_original",
+            "status": "passed",
+            "reason": ""
+          },
+          {
+            "name": "protocol_original_windows",
+            "status": "passed",
+            "reason": ""
+          }
+        ]
+      }
+    },
+    "linux": {
+      "typography": {
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ssndvu7u/results.json",
+          "sha256": "f1f6aea260711f77128a158fcaa6c6df82438cb2b7e537dc690f74bae2e64da6"
+        },
+        "command": {
+          "path": "build/validation/protocol-wrap-2026-10-26/13-detail-type/exact-linux.json",
+          "sha256": "113db7ef0fa17ad65a3c037771c0c3555fe2dfe6f0e6aa9f28d8521054e42a06"
+        }
+      },
+      "regression": {
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-nkebr9as/results.json",
+          "sha256": "15b02018f5bc6ec10a4a292576ccad692dc67615b73f35de4df2186ece48a1d5"
+        },
+        "command": {
+          "path": "build/validation/protocol-wrap-2026-10-26/13-detail-type/regression-linux.json",
+          "sha256": "af2ccd123714fed2ac0620d326e8835d3d2f0e396ff9761bd2a7b874db58fe7f"
+        },
+        "cases": [
+          {
+            "name": "protocol_navigator",
+            "status": "failed",
+            "reason": "Exit code 1; expected 0\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_protocol_navigator.py\", line 117, in <module>\n    main()\n    ~~~~^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_protocol_navigator.py\", line 111, in main\n    require(record['passed'], record.get('error', 'Native protocol verification failed'))\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_protocol_navigator.py\", line 17, in require\n    raise RuntimeError(message)\nRuntimeError: Native app exited 1: protocol-ui-dark\n"
+          },
+          {
+            "name": "protocol_actions",
+            "status": "passed",
+            "reason": ""
+          },
+          {
+            "name": "protocol_original",
+            "status": "passed",
+            "reason": ""
+          },
+          {
+            "name": "protocol_original_atspi",
+            "status": "passed",
+            "reason": ""
+          }
+        ]
+      }
+    }
+  },
+  "checker_counterexamples": [
+    {
+      "mutation": "meta_font",
+      "rejected": true,
+      "reason": "metadata font: (12.92, 10.92)"
+    },
+    {
+      "mutation": "title_line",
+      "rejected": true,
+      "reason": "title_line: (29.125, 27.125)"
+    },
+    {
+      "mutation": "property_gap",
+      "rejected": true,
+      "reason": "property row gap: (11.99990000000004, 10.0)"
+    },
+    {
+      "mutation": "summary_height",
+      "rejected": true,
+      "reason": "summary height: (29.36, 27.360000000000003)"
+    },
+    {
+      "mutation": "native_failure",
+      "rejected": true,
+      "reason": "Native detail contract failed"
+    }
+  ],
+  "images": [
+    {
+      "source": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mjoqm3e1/protocol_typography/files ä/dark/protocol-detail-type.png",
+        "sha256": "102b918a52e9c58adb059a54b744968e0a7907af8ec81aa61ca5b9c0ef7caf04"
+      },
+      "versioned": {
+        "path": "docs/visuals/unified-workspace/protocol-detail-type-2026-10-27/windows-dark.png",
+        "sha256": "102b918a52e9c58adb059a54b744968e0a7907af8ec81aa61ca5b9c0ef7caf04"
+      },
+      "bytes": 173330
+    },
+    {
+      "source": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mjoqm3e1/protocol_typography/files ä/long/protocol-detail-type.png",
+        "sha256": "39433e87c11dc13be44b7380c27bfefdd4671143ad13cff951eed28469a9667e"
+      },
+      "versioned": {
+        "path": "docs/visuals/unified-workspace/protocol-detail-type-2026-10-27/windows-long.png",
+        "sha256": "39433e87c11dc13be44b7380c27bfefdd4671143ad13cff951eed28469a9667e"
+      },
+      "bytes": 193016
+    }
+  ],
+  "catalog_contracts": {
+    "windows": {
+      "path": "build/validation/protocol-wrap-2026-10-26/13-detail-type/catalog-windows.log",
+      "sha256": "55c3e8744bb615d07917584315881e385fd1adeb393e9280b8f4b5a20fcf5470"
+    },
+    "linux": {
+      "path": "build/validation/protocol-wrap-2026-10-26/13-detail-type/catalog-linux.log",
+      "sha256": "960a655e5dbe2793b8aebdedbc3ed5000de28c29c1864b943130ef605d2eca94"
+    }
+  },
+  "macos_catalog_failure": {
+    "commit": "90032e88166391c95972c0e3f0d893558a17ef58",
+    "repo": "Lulus792/physim",
+    "run_id": 40473955569,
+    "job_id": 122087478358,
+    "url": "https://github.com/Lulus792/physim/actions/runs/40473955569",
+    "failed_gate": "Platform catalog and failure reporting",
+    "native_app_tests": "skipped after catalog failure",
+    "excerpt": [
+      "2026-10-27T08:34:21.4722560Z ##[group]Run python3 tests/test_native_test_runner.py --work build/native",
+      "2026-10-27T08:34:24.9873800Z   File \"/Users/runner/work/physim/physim/tests/test_native_test_runner.py\", line 652, in <module>",
+      "2026-10-27T08:34:24.9876210Z   File \"/Users/runner/work/physim/physim/tests/test_native_test_runner.py\", line 208, in main",
+      "2026-10-27T08:34:24.9881550Z AssertionError: {'missing': ['camera_design', 'component_details_contrast', 'component_details_dark', 'component_details_light', 'component_details_light_large_narrow', 'curve_design', 'file_tabs_design', 'inspector_design', 'measurement_design', 'object_design', 'scene_frame_design', 'timeline_context', 'timeline_design', 'transport_design', 'tree_design'], 'extra': []}",
+      "2026-10-27T08:34:25.0191840Z ##[error]Process completed with exit code 1."
+    ]
+  },
+  "negative_cohorts": [
+    {
+      "tag": "before-style",
+      "finding": "Old geometry: metadata 9.8; title line 26; impact line 19; properties 18 with no 10px gap; summary 28. Native passed=false. Fixture log_height 680 also made exit negative, so exit is not attributed solely to geometry.",
+      "source": {
+        "path": "build/validation/protocol-wrap-2026-10-26/13-detail-type/before-style-compiler-source.json",
+        "sha256": "647043a78cd1a068c8a85ff7523cd0a5f98ae2c26d721627bc23fcb7006131f5"
+      },
+      "runtime": {
+        "path": "build/validation/protocol-wrap-2026-10-26/13-detail-type/before-style-runtime.json",
+        "sha256": "b44e0cecdd1f813054b92cd6c31307b6648095b84e823e16b8c60f9194fac588"
+      }
+    },
+    {
+      "tag": "styled",
+      "finding": "New dark metrics pass, but illegal fixture height680 prevents preferences save. Corrected to legal500.",
+      "windows": {
+        "path": "build/validation/protocol-wrap-2026-10-26/13-detail-type/styled-windows.json",
+        "sha256": "e210759ecc1b7ee9c57834270770851e9a266b6387f13c40c52a0abf0b84420c"
+      },
+      "linux": {
+        "path": "build/validation/protocol-wrap-2026-10-26/13-detail-type/styled-linux.json",
+        "sha256": "90208664e9005d4159b58a50955382da5f937815f7457f83076ae108141b0f15"
+      }
+    },
+    {
+      "tag": "corrected",
+      "finding": "Dark/light/contrast pass. Large-font row adapter inflates small exact line boxes and gaps to26px; test also used stale clipped header geometry. Existing exact-row helper plus current pane geometry resolves both.",
+      "windows": {
+        "path": "build/validation/protocol-wrap-2026-10-26/13-detail-type/corrected-windows.json",
+        "sha256": "5a6d3b390927c6f614f772ae173286b6d199a68df6e7cc0969da94424af0c864"
+      },
+      "linux": {
+        "path": "build/validation/protocol-wrap-2026-10-26/13-detail-type/corrected-linux.json",
+        "sha256": "f591c54b8b8b6a5d8884f7a397b86a51c5cefc374a8ce9aff9dcdee49c4079cc"
+      }
+    }
+  ],
+  "limitations": [
+    "Manual Windows physical arrow-key test deferred at explicit user request; no new manual fixture started.",
+    "Linux GUI uses WSLg and ASan/UBSan detect_leaks=0; not a GUI leak or physical multi-monitor proof.",
+    "Reference demo includes explanatory paragraph and wall-clock times absent from actual message schema; no invented demo content or process outcomes.",
+    "No complete pixel equality claim: native font rasterization, scrollbar allocation and browser rendering still differ.",
+    "Cross-platform catalog mocking is not macOS runtime proof. The15 pre-existing design probes remain explicitly Windows/Linux only.",
+    "Current typography source was built in isolated tree without unrelated local AT-SPI/Orca/workflow edits."
+  ],
+  "sequential_linux_navigator": {
+    "command": {
+      "path": "build/validation/protocol-wrap-2026-10-26/13-detail-type/navigator-sequential-linux.json",
+      "sha256": "56879e09af1f2aeb223c0d343811d0c21a6df02218f5237ec7fc0ad63f75e161"
+    },
+    "results": {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-9qudvbfy/results.json",
+      "sha256": "6a7cc726065050f7c7b602566a7a87e18298e13f7eb7402e3d184004284155f9"
+    },
+    "exit_code": 0,
+    "reason": "Prior simultaneous Windows/Linux run lost actual host focus at search activation (stage38). This check runs after all Windows fixtures exited; original checks unchanged.",
+    "app_sha256": "6700a93bddf4f5fb14fc2c0e9b90cafa896dec37bb717c99d70edbfa4c52f48e"
+  }
+}

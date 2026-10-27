@@ -34,8 +34,12 @@ Innenabstand und inhaltsbreite Aktionen mit automatischem Zeilenwechsel.
 Der [Nachlauf zum durchgehenden Originaltext](PROTOCOL-CONTINUOUS-ORIGINAL-NATIVE.md)
 entfernt anschließend die 12-KiB-Abschnitte und prüft vollständige native
 64-KiB-Werte, Auswahl und Kopie mit unabhängigen UIA-/AT-SPI-Clients.
-Weitere Detailtypografie und Blockabstände gegen die Vorlage angleichen und
-den noch offenen direkten Pfeiltastennachweis schließen. Der folgende
+Der [Detailtypografie-Abgleich](PROTOCOL-DETAIL-TYPE-NATIVE.md) übernimmt danach
+Schriftrollen, Zeilenhöhen, Badge-, Eigenschafts- und Blockabstände mit je sechs
+nativen Windows-/Linux-Zuständen. Zusätzliche Dateninhalte der Browserdemo,
+weitere C-Zustände und die vollständige Gestaltung bleiben offen.
+Den noch offenen direkten Pfeiltastennachweis erst nach erneuter Rückmeldung
+des Nutzers schließen. Der folgende
 [Nachlauf für schnelle Zeigerereignisse](PROTOCOL-POINTER-NATIVE.md) erhält
 vollständige Klicks innerhalb eines Frames und den ursprünglichen Druckpunkt;
 Linux prüft den schnellen Suche-/Trenner-Fokuswechsel mit anschließendem

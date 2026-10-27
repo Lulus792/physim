@@ -14,6 +14,130 @@ from types import SimpleNamespace
 from unittest.mock import patch
 
 
+# These design probes intentionally have no recorded Darwin runtime contract.
+# Keep their declared platform set explicit rather than inferring the expected
+# catalog from the filtered catalog itself.
+WINDOWS_LINUX_DESIGN_PROBES = {
+    'camera_design', 'component_details_contrast', 'component_details_dark',
+    'component_details_light', 'component_details_light_large_narrow',
+    'curve_design', 'file_tabs_design', 'inspector_design', 'measurement_design',
+    'object_design', 'scene_frame_design', 'timeline_context', 'timeline_design',
+    'transport_design', 'tree_design',
+}
+
+
+def verify_declared_design_platforms(source, runner):
+    records = json.loads((source / 'tests/native_integration_cases.json').read_text(encoding='utf8'))['tests']
+    indexed = {record['name']: record for record in records}
+    assert all(indexed[name]['platforms'] == ['win32', 'linux'] for name in WINDOWS_LINUX_DESIGN_PROBES)
+    for platform in ('win32', 'linux', 'darwin'):
+        with patch.object(sys, 'platform', platform):
+            actual = {case.name for case in runner.catalog() if case.display and case.integration}
+        expected = WINDOWS_LINUX_DESIGN_PROBES if platform != 'darwin' else set()
+        assert actual & WINDOWS_LINUX_DESIGN_PROBES == expected, (platform, actual & WINDOWS_LINUX_DESIGN_PROBES)
+
+
+def verify_display_catalog(runner, display_checker):
+    display_names = {*display_checker.SIMPLE, *display_checker.SPECIAL,
+                     *(f"language_{mode}_workflow" for mode in display_checker.LANGUAGE_MODES)}
+    # AppKit-only workflow wrappers exist on every host, but their integration
+    # entries must be selected only when an actual Darwin runtime is available.
+    macos_display = {"accessibility_document_macos", "accessibility_edit_macos", "accessibility_links_macos"}
+    assert macos_display <= display_names
+    if sys.platform != "darwin":
+        display_names -= macos_display
+    # This negative case invokes the app directly; it deliberately expects a
+    # failed focus lookup instead of using the success-only workflow wrapper.
+    direct_display = {"documentation_keyboard_unreachable"}
+    actual_display = {case.name for case in runner.catalog()
+                      if case.display and case.integration and not case.integration.get("benchmark")}
+    native_display = {case.name for case in runner.catalog() if case.display and not case.integration}
+    assert native_display <= {"accessibility_native", "accessibility_ui", "font_bank_ui", "backdrop_ui", "ui_subpixel_gpu"}, native_display
+    provider_display = {"accessibility_atspi", "accessibility_tables_atspi"} if sys.platform == "linux" else set()
+    specialized_display = {
+        "project_migration_app": ("tests/test_project_migration_app.py", ()),
+        "project_identity_app": ("tests/test_project_migration_app.py", ("--identities",)),
+        "app_profiling_workflow": ("tests/test_app_profiling_workflow.py", ()),
+        "graphic_raster": ("tests/check_graphic_raster.py", ("--root",)),
+    }
+    # These native design probes have their own pixel/geometry checkers.
+    # Keep the mapping explicit: an unknown integration must still fail below.
+    specialized_display.update({
+        "component_details_"+mode: ("tests/check_component_details.py", ("--root", "--mode"))
+        for mode in ("dark", "light", "light_large_narrow", "contrast")
+    })
+    specialized_display.update({name: ("tests/"+script, ("--root", "--work")) for name,script in (
+        ("file_tabs_design","check_file_tabs_design.py"),
+        ("transport_design","check_transport_design.py"),
+        ("timeline_context","check_timeline_context.py"),
+        ("timeline_design","check_timeline_design.py"),
+        ("inspector_design","check_inspector_design.py"),
+        ("object_design","check_object_design.py"),
+        ("tree_design","check_tree_design.py"),
+        ("camera_design","check_camera_design.py"),
+        ("scene_frame_design","check_scene_frame.py"),
+        ("measurement_design","check_measurement_design.py"),
+        ("curve_design","check_curve_design.py"),
+        ("run_fields_design","check_run_fields_design.py"),
+        ("inspector_tail","check_inspector_tail.py"),
+        ("inspector_channel","check_inspector_channel.py"),
+        ("analysis_editor","check_analysis_editor.py"),
+        ("protocol_navigator","check_protocol_navigator.py"),
+        ("protocol_actions","check_protocol_actions.py"),
+        ("protocol_original","check_protocol_original.py"),
+        ("protocol_typography","check_protocol_typography.py"),
+    )})
+    specialized_display["source_outline_hover"]=("tests/check_outline_hover.py",())
+    if sys.platform in ("win32","linux"):
+        specialized_display["graphic_dialog"]=("tests/check_graphic_dialog.py",("--root",))
+    if sys.platform == "linux":
+        specialized_display.update({
+            "accessibility_document_atspi": ("tests/test_accessibility_document_atspi.py", ("--root",)),
+            "accessibility_edit_atspi": ("tests/test_accessibility_edit_atspi.py", ()),
+            "accessibility_links_atspi": ("tests/test_accessibility_links_atspi.py", ()),
+            "protocol_original_atspi": ("tests/test_protocol_original_atspi.py", ()),
+        })
+    if sys.platform in ("darwin", "linux"):
+        specialized_display.update({
+            "accessibility_checkbox_app": ("tests/test_accessibility_checkbox_app.py", ()),
+            "accessibility_options_app": ("tests/test_accessibility_checkbox_app.py", ("--options",)),
+            "accessibility_focus_app": ("tests/test_accessibility_checkbox_app.py", ("--focus",)),
+        })
+    if sys.platform == "win32":
+        specialized_display.update({
+            "documentation_panes_windows_host": ("tests/check_documentation_windows_host.py", ()),
+            "accessibility_checkbox_windows": ("tests/test_accessibility_checkbox_app.py", ("--probe",)),
+            "accessibility_options_windows": ("tests/test_accessibility_checkbox_app.py", ("--probe", "--options")),
+            "accessibility_focus_windows": ("tests/test_accessibility_checkbox_app.py", ("--probe", "--focus")),
+            "accessibility_document_windows": ("tests/test_accessibility_document_app.py", ("--probe", "--root")),
+              "accessibility_links_windows": ("tests/test_accessibility_links_app.py", ("--probe",)),
+              "accessibility_links_stress_windows": ("tests/test_accessibility_links_app.py", ("--probe", "--stress-focus")),
+              "accessibility_lifecycle_windows": ("tests/test_accessibility_lifecycle_app.py", ("--probe",)),
+            "accessibility_edit_windows": ("tests/test_accessibility_edit_app.py", ("--probe",)),
+            "accessibility_edit_scroll_windows": ("tests/test_accessibility_edit_scroll_app.py", ("--probe",)),
+            "protocol_original_windows": ("tests/check_protocol_original_windows.py", ("--probe",)),
+        })
+    if sys.platform == 'darwin':
+        for name in WINDOWS_LINUX_DESIGN_PROBES:
+            del specialized_display[name]
+        display_names -= WINDOWS_LINUX_DESIGN_PROBES
+    expected_display = display_names | direct_display | provider_display | specialized_display.keys()
+    assert actual_display == expected_display, {
+        "missing": sorted(expected_display - actual_display),
+        "extra": sorted(actual_display - expected_display)}
+    for case in runner.catalog():
+        if case.name in specialized_display:
+            script, flags = specialized_display[case.name]
+            step = case.integration["steps"][0]
+            assert step["program"] == "python" and step["arguments"][0] == "{root}/" + script
+            assert "--app" in step["arguments"] and "{physim}" in step["arguments"]
+            assert all(flag in step["arguments"] for flag in flags)
+        if case.name in direct_display:
+            step = case.integration["steps"][0]
+            assert step["program"] == "physim" and step["exit_code"] == 1
+            assert step.get("stderr_pattern")
+    assert all(case.app for case in runner.catalog() if case.display)
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--work", type=Path, required=True)
@@ -26,6 +150,7 @@ def main():
     sys.modules[spec.name] = runner
     sys.dont_write_bytecode = True
     spec.loader.exec_module(runner)
+    verify_declared_design_platforms(source, runner)
 
     # A missing or additional published example must never silently pass.
     snippets=directory / "snippet source"
@@ -126,100 +251,10 @@ def main():
     display_spec = importlib.util.spec_from_file_location("display_workflow", source / "tests/check_display_workflow.py")
     display_checker = importlib.util.module_from_spec(display_spec)
     display_spec.loader.exec_module(display_checker)
-    display_names = {*display_checker.SIMPLE, *display_checker.SPECIAL,
-                     *(f"language_{mode}_workflow" for mode in display_checker.LANGUAGE_MODES)}
-    # AppKit-only workflow wrappers exist on every host, but their integration
-    # entries must be selected only when an actual Darwin runtime is available.
-    macos_display = {"accessibility_document_macos", "accessibility_edit_macos", "accessibility_links_macos"}
-    assert macos_display <= display_names
-    if sys.platform != "darwin":
-        display_names -= macos_display
-    # This negative case invokes the app directly; it deliberately expects a
-    # failed focus lookup instead of using the success-only workflow wrapper.
-    direct_display = {"documentation_keyboard_unreachable"}
-    actual_display = {case.name for case in runner.catalog()
-                      if case.display and case.integration and not case.integration.get("benchmark")}
-    native_display = {case.name for case in runner.catalog() if case.display and not case.integration}
-    assert native_display <= {"accessibility_native", "accessibility_ui", "font_bank_ui", "backdrop_ui", "ui_subpixel_gpu"}, native_display
-    provider_display = {"accessibility_atspi", "accessibility_tables_atspi"} if sys.platform == "linux" else set()
-    specialized_display = {
-        "project_migration_app": ("tests/test_project_migration_app.py", ()),
-        "project_identity_app": ("tests/test_project_migration_app.py", ("--identities",)),
-        "app_profiling_workflow": ("tests/test_app_profiling_workflow.py", ()),
-        "graphic_raster": ("tests/check_graphic_raster.py", ("--root",)),
-    }
-    # These native design probes have their own pixel/geometry checkers.
-    # Keep the mapping explicit: an unknown integration must still fail below.
-    specialized_display.update({
-        "component_details_"+mode: ("tests/check_component_details.py", ("--root", "--mode"))
-        for mode in ("dark", "light", "light_large_narrow", "contrast")
-    })
-    specialized_display.update({name: ("tests/"+script, ("--root", "--work")) for name,script in (
-        ("file_tabs_design","check_file_tabs_design.py"),
-        ("transport_design","check_transport_design.py"),
-        ("timeline_context","check_timeline_context.py"),
-        ("timeline_design","check_timeline_design.py"),
-        ("inspector_design","check_inspector_design.py"),
-        ("object_design","check_object_design.py"),
-        ("tree_design","check_tree_design.py"),
-        ("camera_design","check_camera_design.py"),
-        ("scene_frame_design","check_scene_frame.py"),
-        ("measurement_design","check_measurement_design.py"),
-        ("curve_design","check_curve_design.py"),
-        ("run_fields_design","check_run_fields_design.py"),
-        ("inspector_tail","check_inspector_tail.py"),
-        ("inspector_channel","check_inspector_channel.py"),
-        ("analysis_editor","check_analysis_editor.py"),
-        ("protocol_navigator","check_protocol_navigator.py"),
-        ("protocol_actions","check_protocol_actions.py"),
-        ("protocol_original","check_protocol_original.py"),
-    )})
-    specialized_display["source_outline_hover"]=("tests/check_outline_hover.py",())
-    if sys.platform in ("win32","linux"):
-        specialized_display["graphic_dialog"]=("tests/check_graphic_dialog.py",("--root",))
-    if sys.platform == "linux":
-        specialized_display.update({
-            "accessibility_document_atspi": ("tests/test_accessibility_document_atspi.py", ("--root",)),
-            "accessibility_edit_atspi": ("tests/test_accessibility_edit_atspi.py", ()),
-            "accessibility_links_atspi": ("tests/test_accessibility_links_atspi.py", ()),
-            "protocol_original_atspi": ("tests/test_protocol_original_atspi.py", ()),
-        })
-    if sys.platform in ("darwin", "linux"):
-        specialized_display.update({
-            "accessibility_checkbox_app": ("tests/test_accessibility_checkbox_app.py", ()),
-            "accessibility_options_app": ("tests/test_accessibility_checkbox_app.py", ("--options",)),
-            "accessibility_focus_app": ("tests/test_accessibility_checkbox_app.py", ("--focus",)),
-        })
-    if sys.platform == "win32":
-        specialized_display.update({
-            "documentation_panes_windows_host": ("tests/check_documentation_windows_host.py", ()),
-            "accessibility_checkbox_windows": ("tests/test_accessibility_checkbox_app.py", ("--probe",)),
-            "accessibility_options_windows": ("tests/test_accessibility_checkbox_app.py", ("--probe", "--options")),
-            "accessibility_focus_windows": ("tests/test_accessibility_checkbox_app.py", ("--probe", "--focus")),
-            "accessibility_document_windows": ("tests/test_accessibility_document_app.py", ("--probe", "--root")),
-              "accessibility_links_windows": ("tests/test_accessibility_links_app.py", ("--probe",)),
-              "accessibility_links_stress_windows": ("tests/test_accessibility_links_app.py", ("--probe", "--stress-focus")),
-              "accessibility_lifecycle_windows": ("tests/test_accessibility_lifecycle_app.py", ("--probe",)),
-            "accessibility_edit_windows": ("tests/test_accessibility_edit_app.py", ("--probe",)),
-            "accessibility_edit_scroll_windows": ("tests/test_accessibility_edit_scroll_app.py", ("--probe",)),
-            "protocol_original_windows": ("tests/check_protocol_original_windows.py", ("--probe",)),
-        })
-    expected_display = display_names | direct_display | provider_display | specialized_display.keys()
-    assert actual_display == expected_display, {
-        "missing": sorted(expected_display - actual_display),
-        "extra": sorted(actual_display - expected_display)}
-    for case in runner.catalog():
-        if case.name in specialized_display:
-            script, flags = specialized_display[case.name]
-            step = case.integration["steps"][0]
-            assert step["program"] == "python" and step["arguments"][0] == "{root}/" + script
-            assert "--app" in step["arguments"] and "{physim}" in step["arguments"]
-            assert all(flag in step["arguments"] for flag in flags)
-        if case.name in direct_display:
-            step = case.integration["steps"][0]
-            assert step["program"] == "physim" and step["exit_code"] == 1
-            assert step.get("stderr_pattern")
-    assert all(case.app for case in runner.catalog() if case.display)
+    for platform in ('win32', 'linux', 'darwin'):
+        with patch.object(sys, 'platform', platform):
+            verify_display_catalog(runner, display_checker)
+    print('Display catalog contracts verified for win32, linux and darwin; runtime checks remain platform-specific')
     flow = display_checker.Workflow(Path(sys.executable), directory, source, False)
     flow.env["PYTHONIOENCODING"] = "utf-8"
     captured = io.StringIO()

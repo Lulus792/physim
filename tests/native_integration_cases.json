@@ -7037,6 +7037,20 @@
       ]
     },
     {
+      "name": "protocol_typography",
+      "app": true,
+      "display": true,
+      "targets": ["python", "physim"],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": ["{root}/tests/check_protocol_typography.py", "--app", "{physim}", "--work", "{work}", "--root", "{root}"],
+          "timeout": 600,
+          "files": ["verification.json"]
+        }
+      ]
+    },
+    {
       "name": "protocol_original_windows",
       "app": true,
       "display": true,

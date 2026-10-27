@@ -4,6 +4,12 @@
 #include "protocol_store.h"
 #include "graphic_output.h"
 #include "text_wrap.h"
+enum {
+    PS_PROTOCOL_FONT_BODY,PS_PROTOCOL_FONT_SMALL,PS_PROTOCOL_FONT_ROW_TITLE,
+    PS_PROTOCOL_FONT_DETAIL_TITLE,PS_PROTOCOL_FONT_HEADING,PS_PROTOCOL_FONT_CAPTION,
+    PS_PROTOCOL_FONT_ORIGINAL,PS_PROTOCOL_FONT_NAVIGATION,PS_PROTOCOL_FONT_FILTER,
+    PS_PROTOCOL_FONT_COUNT_LABEL,PS_PROTOCOL_FONT_ACTION,PS_PROTOCOL_FONT_COUNT
+};
 typedef struct {
     uint64_t selected,original_id,last_seen;
     size_t original_size,original_length;
@@ -26,9 +32,14 @@ typedef struct {
     float list_width;
     struct nk_rect bounds,origins[5],levels[5],rows[PS_PROTOCOL_CAPACITY],search,source,copy,store,close,separator;
     struct nk_rect panes[3];
+    struct nk_rect detail_header,detail_badge,detail_meta,detail_title,detail_impact;
+    struct nk_rect detail_properties[3],detail_labels[3],detail_values[3];
+    unsigned detail_property_count;
+    float detail_meta_font,detail_title_line,detail_impact_line,detail_property_line;
+    char detail_meta_text[2300];
     struct nk_rect transcript_toggle,original_toggle;
     uint64_t row_ids[PS_PROTOCOL_CAPACITY];size_t row_count;
     struct nk_user_font title_font;
-    struct nk_user_font fonts[11];
+    struct nk_user_font fonts[PS_PROTOCOL_FONT_COUNT];
 } ps_protocol_ui;
 #endif

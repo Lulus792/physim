@@ -127,28 +127,38 @@ static struct nk_rect protocol_space(struct nk_context *ui,struct nk_rect r) {st
 static void protocol_text_at(app *a,const struct nk_user_font *font,struct nk_rect r,const char *text,struct nk_color color) {
     nk_draw_text(nk_window_get_canvas(a->ui),r,text,(int)strlen(text),font,nk_rgba(0,0,0,0),color);
 }
-static void protocol_wrap(app *a,const char *text,const struct nk_user_font *font,float line,struct nk_color color) {
+static struct nk_rect protocol_wrap_leading(app *a,const char *text,const struct nk_user_font *font,float line,struct nk_color color,float leading) {
     float width=fmaxf(1,nk_window_get_content_region(a->ui).w);int at=0,n=(int)strlen(text),lines=0;
     while(at<n){int used=ps_ui_text_line(font,text+at,n-at,width,false);if(used<=0)used=1;at+=used;lines++;}
-    nk_layout_row_dynamic(a->ui,fmaxf(line,line*lines),1);struct nk_rect r;nk_widget(&r,a->ui);
-    ps_ui_accessibility_label(a->ui,r,text);at=0;
+    ps_ui_row_exact_dynamic(a->ui,fmaxf(line,line*lines),1);struct nk_rect r;nk_widget(&r,a->ui);
+    struct nk_rect bounds=r;ps_ui_accessibility_label(a->ui,r,text);at=0;r.y+=leading;
     while(at<n){int used=ps_ui_text_line(font,text+at,n-at,width,false);if(used<=0)used=1;nk_draw_text(nk_window_get_canvas(a->ui),nk_rect(r.x,r.y,width,font->height),text+at,used,font,nk_rgba(0,0,0,0),color);at+=used;r.y+=line;}
+    return bounds;
+}
+static struct nk_rect protocol_wrap(app *a,const char *text,const struct nk_user_font *font,float line,struct nk_color color) {
+    return protocol_wrap_leading(a,text,font,line,color,0);
 }
 static void protocol_property(app *a,const char *label,const char *value,float f) {
-    const struct nk_user_font *font=&a->protocol_view.fonts[0];float w=fmaxf(1,nk_window_get_content_region(a->ui).w),right=w*.5f;
+    ps_protocol_ui *p=&a->protocol_view;
+    const struct nk_user_font *font=&p->fonts[PS_PROTOCOL_FONT_BODY];
+    /* .property-list: equal columns, 14px column gap, 10px row gap. */
+    float line=11.2f*1.55f*f,w=fmaxf(1,nk_window_get_content_region(a->ui).w),right=fmaxf(1,(w-14*f)*.5f);
+    if(p->detail_property_count){ps_ui_row_exact_dynamic(a->ui,10*f,1);nk_spacer(a->ui);}
     int length=(int)strlen(value),at=0,lines=0;
     while(at<length){int n=ps_ui_text_line(font,value+at,length-at,right,false);at+=n>0?n:1;lines++;}
-    nk_layout_row_dynamic(a->ui,fmaxf(20*f,18*f*lines),1);struct nk_rect r;nk_widget(&r,a->ui);struct nk_rect label_bounds=r;
-    protocol_text_at(a,font,nk_rect(r.x,r.y,right-10*f,font->height),label,muted());at=0;
-    while(at<length){int n=ps_ui_text_line(font,value+at,length-at,right,false);if(n<=0)n=1;nk_draw_text(nk_window_get_canvas(a->ui),nk_rect(r.x+r.w-right,r.y,right,font->height),value+at,n,font,nk_rgba(0,0,0,0),UI_COLOR(text));at+=n;r.y+=18*f;}
+    ps_ui_row_exact_dynamic(a->ui,fmaxf(line,line*lines),1);struct nk_rect r;nk_widget(&r,a->ui);struct nk_rect label_bounds=r;
+    if(p->detail_property_count<3){unsigned i=p->detail_property_count++;p->detail_properties[i]=r;p->detail_labels[i]=nk_rect(r.x,r.y,right,r.h);p->detail_values[i]=nk_rect(r.x+r.w-right,r.y,right,r.h);p->detail_property_line=line;}
+    r.y+=(line-font->height)/2;protocol_text_at(a,font,nk_rect(r.x,r.y,right,font->height),label,muted());at=0;
+    while(at<length){int n=ps_ui_text_line(font,value+at,length-at,right,false);if(n<=0)n=1;nk_draw_text(nk_window_get_canvas(a->ui),nk_rect(r.x+r.w-right,r.y,right,font->height),value+at,n,font,nk_rgba(0,0,0,0),UI_COLOR(text));at+=n;r.y+=line;}
     char text[2300];snprintf(text,sizeof text,"%s: %s",label,value);ps_ui_accessibility_label(a->ui,label_bounds,text);
 }
 static bool protocol_disclosure(app *a,const char *text,bool open,float f,struct nk_rect *bounds) {
-    nk_layout_row_dynamic(a->ui,28*f,1);struct nk_rect r;nk_widget(&r,a->ui);struct nk_command_buffer *c=nk_window_get_canvas(a->ui);float x=r.x+5*f,y=r.y+12*f;
+    const struct nk_user_font *font=&a->protocol_view.fonts[PS_PROTOCOL_FONT_BODY];float line=11.2f*1.55f*f;
+    ps_ui_row_exact_dynamic(a->ui,line+10*f,1);struct nk_rect r;nk_widget(&r,a->ui);struct nk_command_buffer *c=nk_window_get_canvas(a->ui);float x=r.x+5*f,y=r.y+r.h/2;
     if(bounds)*bounds=r;
     if(open){nk_stroke_line(c,x-3*f,y-2*f,x,y+2*f,1,muted());nk_stroke_line(c,x,y+2*f,x+3*f,y-2*f,1,muted());}
     else {nk_stroke_line(c,x-2*f,y-3*f,x+2*f,y,1,muted());nk_stroke_line(c,x+2*f,y,x-2*f,y+3*f,1,muted());}
-    protocol_text_at(a,&a->protocol_view.fonts[0],nk_rect(r.x+14*f,r.y+6*f,r.w-14*f,20*f),text,muted());
+    protocol_text_at(a,font,nk_rect(r.x+14*f,r.y+5*f+(line-font->height)/2,r.w-14*f,font->height),text,muted());
     char name[128];snprintf(name,sizeof name,"%s %s",text,open?"ausblenden":"anzeigen");return ps_ui_button_at(a->ui,r,name,open);
 }
 static bool protocol_original(app *a,const ps_protocol_record *selected) {
@@ -276,29 +286,54 @@ static void protocol_actions(app *a,const ps_protocol_record *record,bool origin
 }
 static void protocol_detail(app *a,const ps_protocol_record *record,float scale) {
     struct nk_context *ui=a->ui;ps_protocol_ui *p=&a->protocol_view;
+    p->detail_property_count=0;
     if(!record){protocol_wrap(a,"Keine Meldung ausgewählt. Wähle eine Meldung aus der Liste.",&a->protocol_view.fonts[0],20*scale,muted());return;}
     const ps_protocol_message *m=&record->message;char text[2064];
-    const struct nk_user_font *small=&p->fonts[1];const char *level=protocol_level_name(m->level);
-    float badge=small->width(small->userdata,small->height,level,(int)strlen(level))+14*scale;
-    nk_layout_space_begin(ui,NK_STATIC,22*scale,1);struct nk_rect header=protocol_space(ui,nk_rect(0,0,nk_window_get_content_region(ui).w,22*scale));
-    protocol_symbol(nk_window_get_canvas(ui),nk_rect(header.x,header.y+1*scale,20*scale,20*scale),m->level,protocol_level_color(m->level));
-    struct nk_rect tag=nk_rect(header.x+28*scale,header.y+2*scale,badge,18*scale);nk_stroke_rect(nk_window_get_canvas(ui),tag,5,1,UI_COLOR(border));
-    protocol_text_at(a,small,nk_rect(tag.x+7*scale,tag.y+3*scale,badge-10*scale,small->height),level,protocol_level_color(m->level));
-    snprintf(text,sizeof text,"%s",protocol_origins[m->origin]);protocol_text_at(a,small,nk_rect(tag.x+tag.w+10*scale,tag.y+3*scale,fmaxf(1,header.w-tag.w-38*scale),small->height),text,muted());
-    ps_ui_accessibility_label(ui,header,level);nk_layout_space_end(ui);nk_layout_row_dynamic(ui,10*scale,1);nk_spacer(ui);
+    const struct nk_user_font *small=&p->fonts[PS_PROTOCOL_FONT_SMALL],*meta=&p->fonts[PS_PROTOCOL_FONT_CAPTION];
+    const char *level=protocol_level_name(m->level);char context[2064];
+    protocol_preview(diagnostic_basename(*m->source?m->source:m->context),context);
+    if(*m->source)snprintf(p->detail_meta_text,sizeof p->detail_meta_text,"%s · %s:%u:%u",protocol_origins[m->origin],context,m->line,m->column);
+    else if(m->has_time)snprintf(p->detail_meta_text,sizeof p->detail_meta_text,"%s · %s · t = %.4g s",protocol_origins[m->origin],context,m->time_s);
+    else snprintf(p->detail_meta_text,sizeof p->detail_meta_text,"%s%s%s",protocol_origins[m->origin],*context?" · ":"",context);
+    /* .badge: .7rem/1.4, .15rem .45rem padding and a 1px border.
+     * The adjacent .small is .78rem/1.55; flex wrapping keeps its own row. */
+    float badge=small->width(small->userdata,small->height,level,(int)strlen(level))+14.6f*scale;
+    float first_height=19.92f*scale,meta_line=10.92f*1.55f*scale,width=nk_window_get_content_region(ui).w;
+    float meta_x=28*scale+badge+10*scale,meta_width=fmaxf(1,width-meta_x);
+    bool meta_wrap=meta->width(meta->userdata,meta->height,p->detail_meta_text,(int)strlen(p->detail_meta_text))>meta_width;
+    if(meta_wrap){meta_x=0;meta_width=width;}
+    int meta_at=0,meta_lines=0,meta_length=(int)strlen(p->detail_meta_text);
+    while(meta_at<meta_length){int used=ps_ui_text_line(meta,p->detail_meta_text+meta_at,meta_length-meta_at,meta_width,false);meta_at+=used>0?used:1;meta_lines++;}
+    float meta_height=fmaxf(meta_line,meta_lines*meta_line),meta_y=meta_wrap?first_height+10*scale:(first_height-meta_height)/2;
+    float header_height=meta_wrap?meta_y+meta_height:first_height;
+    nk_layout_space_begin(ui,NK_STATIC,header_height,1);struct nk_rect header=protocol_space(ui,nk_rect(0,0,width,header_height));
+    p->detail_header=header;
+    protocol_symbol(nk_window_get_canvas(ui),nk_rect(header.x,header.y+(first_height-18*scale)/2,18*scale,18*scale),m->level,protocol_level_color(m->level));
+    struct nk_rect tag=nk_rect(header.x+28*scale,header.y,badge,first_height);p->detail_badge=tag;
+    nk_stroke_rect(nk_window_get_canvas(ui),tag,5*scale,scale,UI_COLOR(border));
+    protocol_text_at(a,small,nk_rect(tag.x+7.3f*scale,tag.y+(tag.h-small->height)/2,badge-14.6f*scale,small->height),level,protocol_level_color(m->level));
+    p->detail_meta=nk_rect(header.x+meta_x,header.y+meta_y,meta_width,meta_height);p->detail_meta_font=meta->height;
+    meta_at=0;float meta_top=p->detail_meta.y+(meta_line-meta->height)/2;
+    while(meta_at<meta_length){int used=ps_ui_text_line(meta,p->detail_meta_text+meta_at,meta_length-meta_at,meta_width,false);if(used<=0)used=1;
+        nk_draw_text(nk_window_get_canvas(ui),nk_rect(p->detail_meta.x,meta_top,meta_width,meta->height),p->detail_meta_text+meta_at,used,meta,nk_rgba(0,0,0,0),muted());meta_at+=used;meta_top+=meta_line;}
+    char header_name[2400];snprintf(header_name,sizeof header_name,"%s · %s",level,p->detail_meta_text);
+    ps_ui_accessibility_label(ui,header,header_name);nk_layout_space_end(ui);ps_ui_row_exact_dynamic(ui,10*scale,1);nk_spacer(ui);
     size_t title_length=0;char *title=protocol_text_copy(m->title,strlen(m->title),&title_length);
-    if(title){protocol_wrap(a,title,&p->title_font,26*scale,UI_COLOR(text));free(title);}
+    float title_line=17.5f*1.55f*scale;
+    if(title){p->detail_title=protocol_wrap_leading(a,title,&p->title_font,title_line,UI_COLOR(text),(title_line-p->title_font.height)/2);p->detail_title_line=title_line;free(title);}
     const char *outcomes[]={"Die Meldung allein verändert den Laufzustand nicht.","Dieser Prozess läuft.","Dieser Prozess wurde erfolgreich beendet.","Dieser Prozess ist fehlgeschlagen.","Dieser Prozess wurde abgebrochen."};
     ps_protocol_outcome outcome=m->outcome;
     if(outcome==PS_PROTOCOL_NO_OUTCOME && m->transcript_id){const ps_protocol_record *parent=ps_protocol_find(&a->protocol,m->transcript_id);if(parent)outcome=parent->message.outcome;}
-    nk_layout_row_dynamic(ui,12*scale,1);nk_spacer(ui);
-    float impact_width=fmaxf(1,nk_window_get_content_region(ui).w-26*scale);int at=0,impact_lines=0,len=(int)strlen(outcomes[outcome]);
+    ps_ui_row_exact_dynamic(ui,17*scale,1);nk_spacer(ui);
+    float body_line=11.2f*1.55f*scale;
+    float impact_width=fmaxf(1,nk_window_get_content_region(ui).w-28*scale);int at=0,impact_lines=0,len=(int)strlen(outcomes[outcome]);
     while(at<len){int n=ps_ui_text_line(&p->fonts[0],outcomes[outcome]+at,len-at,impact_width,false);at+=n>0?n:1;impact_lines++;}
-    nk_layout_row_dynamic(ui,(22+19*impact_lines)*scale,1);struct nk_rect impact;nk_widget(&impact,ui);
+    ps_ui_row_exact_dynamic(ui,22*scale+body_line*impact_lines,1);struct nk_rect impact;nk_widget(&impact,ui);
+    p->detail_impact=impact;p->detail_impact_line=body_line;
     struct nk_color surface=UI_COLOR(header);if(a->preferences.theme!=PS_THEME_HIGH_CONTRAST)surface=m->level==PS_LOG_ERROR?(a->preferences.theme==PS_THEME_LIGHT?nk_rgb(251,238,240):nk_rgb(58,40,45)):m->level==PS_LOG_WARNING?(a->preferences.theme==PS_THEME_LIGHT?nk_rgb(250,242,223):nk_rgb(53,47,36)):surface;
-    nk_fill_rect(nk_window_get_canvas(ui),impact,0,surface);nk_fill_rect(nk_window_get_canvas(ui),nk_rect(impact.x,impact.y,2,impact.h),0,protocol_level_color(m->level));at=0;float y=impact.y+11*scale;
-    while(at<len){int n=ps_ui_text_line(&p->fonts[0],outcomes[outcome]+at,len-at,impact_width,false);if(n<=0)n=1;nk_draw_text(nk_window_get_canvas(ui),nk_rect(impact.x+13*scale,y,impact_width,p->fonts[0].height),outcomes[outcome]+at,n,&p->fonts[0],nk_rgba(0,0,0,0),UI_COLOR(text));at+=n;y+=19*scale;}
-    ps_ui_accessibility_label(ui,impact,outcomes[outcome]);nk_layout_row_dynamic(ui,17*scale,1);nk_spacer(ui);
+    nk_fill_rect(nk_window_get_canvas(ui),impact,0,surface);nk_fill_rect(nk_window_get_canvas(ui),nk_rect(impact.x,impact.y,2*scale,impact.h),0,protocol_level_color(m->level));at=0;float y=impact.y+11*scale+(body_line-p->fonts[PS_PROTOCOL_FONT_BODY].height)/2;
+    while(at<len){int n=ps_ui_text_line(&p->fonts[PS_PROTOCOL_FONT_BODY],outcomes[outcome]+at,len-at,impact_width,false);if(n<=0)n=1;nk_draw_text(nk_window_get_canvas(ui),nk_rect(impact.x+15*scale,y,impact_width,p->fonts[PS_PROTOCOL_FONT_BODY].height),outcomes[outcome]+at,n,&p->fonts[PS_PROTOCOL_FONT_BODY],nk_rgba(0,0,0,0),UI_COLOR(text));at+=n;y+=body_line;}
+    ps_ui_accessibility_label(ui,impact,outcomes[outcome]);ps_ui_row_exact_dynamic(ui,17*scale,1);nk_spacer(ui);
     if(*m->source){char base[2064];protocol_preview(diagnostic_basename(m->source),base);snprintf(text,sizeof text,"%.2000s:%u:%u",base,m->line,m->column);}
     else protocol_preview(*m->context?diagnostic_basename(m->context):"Nicht übermittelt",text);
     protocol_property(a,"Kontext",text,scale);
@@ -308,7 +343,8 @@ static void protocol_detail(app *a,const ps_protocol_record *record,float scale)
     if(*m->operation){protocol_preview(m->operation,text);protocol_wrap(a,text,&a->protocol_view.fonts[1],18*scale,muted());}
     if(*m->argument){protocol_preview(m->argument,text);protocol_wrap(a,text,&a->protocol_view.fonts[1],18*scale,muted());}
     if(record->omitted_bytes){snprintf(text,sizeof text,"Unvollständig: %llu Originalbytes ausgelassen.",(unsigned long long)record->omitted_bytes);protocol_wrap(a,text,&a->protocol_view.fonts[0],19*scale,UI_COLOR(error));}
-    if(m->transcript_id){nk_layout_row_dynamic(ui,30*scale,1);p->transcript_toggle=nk_widget_bounds(ui);if(nk_button_label(ui,p->transcript?"Einzelne Diagnose":"Vollständige Prozessausgabe")){p->transcript=!p->transcript;p->original_id=0;}}
+    if(m->transcript_id){ps_ui_row_exact_dynamic(ui,30*scale,1);p->transcript_toggle=nk_widget_bounds(ui);if(nk_button_label(ui,p->transcript?"Einzelne Diagnose":"Vollständige Prozessausgabe")){p->transcript=!p->transcript;p->original_id=0;}}
+    ps_ui_row_exact_dynamic(ui,18*scale,1);nk_spacer(ui);
     if(protocol_disclosure(a,"Originalmeldung",!p->original_closed,scale,&p->original_toggle))p->original_closed=!p->original_closed;
     bool original_ready=protocol_original(a,record);
     if(original_ready && !p->original_closed) {
@@ -330,10 +366,10 @@ static void protocol_detail(app *a,const ps_protocol_record *record,float scale)
                 ps_text_wrap_destroy(p->original_layout);p->original_layout=NULL;p->original_edit.visual=NULL;
             }
         }
-        nk_layout_row_dynamic(ui,11.2f*scale,1);nk_spacer(ui); /* pre's 1em block margin */
+        ps_ui_row_exact_dynamic(ui,11.2f*scale,1);nk_spacer(ui); /* pre's 1em block margin */
         if(p->original_layout) {
             const struct nk_text_visual *v=&p->original_layout->visual;
-            nk_layout_row_dynamic(ui,v->row_count*v->row_height,1);p->original_bounds=nk_widget_bounds(ui);
+            ps_ui_row_exact_dynamic(ui,v->row_count*v->row_height,1);p->original_bounds=nk_widget_bounds(ui);
             struct nk_rect clip=ui->current->layout->clip,r=p->original_bounds;
             float x=fmaxf(r.x,clip.x),y=fmaxf(r.y,clip.y);
             p->original_viewport=nk_rect(x,y,fmaxf(0,fminf(r.x+r.w,clip.x+clip.w)-x),fmaxf(0,fminf(r.y+r.h,clip.y+clip.h)-y));
@@ -343,18 +379,21 @@ static void protocol_detail(app *a,const ps_protocol_record *record,float scale)
              * current frame is being laid out would split text/action geometry. */
             protocol_original_reveal(p,clip,request);
         } else {
-            nk_layout_row_dynamic(ui,40*scale,1);nk_label_wrap(ui,"Originaltext kann nicht dargestellt werden. Meldung kopieren oder TXT speichern.");
+            ps_ui_row_exact_dynamic(ui,40*scale,1);nk_label_wrap(ui,"Originaltext kann nicht dargestellt werden. Meldung kopieren oder TXT speichern.");
         }
-        nk_layout_row_dynamic(ui,11.2f*scale,1);nk_spacer(ui);
+        ps_ui_row_exact_dynamic(ui,11.2f*scale,1);nk_spacer(ui);
         nk_style_pop_font(ui);
         if(p->original_length!=p->original_size)protocol_wrap(a,"Nicht darstellbare Bytes werden als \\xHH angezeigt.",&a->protocol_view.fonts[1],18*scale,muted());
     }
+    ps_ui_row_exact_dynamic(ui,18*scale,1);nk_spacer(ui);
     protocol_actions(a,record,original_ready,scale);
+    ps_ui_row_exact_dynamic(ui,18*scale,1);nk_spacer(ui);
     if(protocol_disclosure(a,"Weitere Angaben",p->details_more,scale,NULL))p->details_more=!p->details_more;
     if(p->details_more) {
         const char *labels[]={"Vollständiger Kontext","Projekt","Übermittelte Quelle"},*values[]={m->context,m->project,m->source};
         for(unsigned i=0;i<3;i++)if(*values[i]){size_t length=0;char *full=protocol_text_copy(values[i],strlen(values[i]),&length);protocol_wrap(a,labels[i],&p->fonts[1],18*scale,muted());if(full){protocol_wrap(a,full,&p->fonts[0],19*scale,UI_COLOR(text));free(full);}}
     }
+    ps_ui_row_exact_dynamic(ui,18*scale,1);nk_spacer(ui);
 }
 static void protocol_panel(app *a) {
     struct nk_context *ui=a->ui;ps_protocol_ui *p=&a->protocol_view;float f=a->preferences.ui_size/16.f;
@@ -373,7 +412,7 @@ static void protocol_panel(app *a) {
         ui_palette=&palette;style(ui);
     }
     const float sizes[]={11.2f,9.8f,11.62f,17.5f,13.3f,10.92f,11.2f,9.8f,10.5f,9.52f,14};
-    for(unsigned i=0;i<11;i++){bool bold=(i>=2 && i<=4) || i==7;p->fonts[i]=*(i==6?a->font_code:bold?a->font_title:a->font_ui);p->fonts[i].height=sizes[i]*(i==6?a->workbench_code_em:bold?a->workbench_bold_em:a->workbench_regular_em)*f;}
+    for(unsigned i=0;i<PS_PROTOCOL_FONT_COUNT;i++){bool bold=(i>=PS_PROTOCOL_FONT_ROW_TITLE && i<=PS_PROTOCOL_FONT_HEADING) || i==PS_PROTOCOL_FONT_NAVIGATION;p->fonts[i]=*(i==PS_PROTOCOL_FONT_ORIGINAL?a->font_code:bold?a->font_title:a->font_ui);p->fonts[i].height=sizes[i]*(i==PS_PROTOCOL_FONT_ORIGINAL?a->workbench_code_em:bold?a->workbench_bold_em:a->workbench_regular_em)*f;}
     ps_protocol_summary summary=ps_protocol_describe(&a->protocol);
     if(!p->initialized){p->initialized=true;p->origin=-1;p->follow=false;if(summary.count)p->last_seen=ps_protocol_at(&a->protocol,summary.count-1)->id;}
     p->title_font=p->fonts[3];

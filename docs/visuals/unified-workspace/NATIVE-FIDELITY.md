@@ -61,8 +61,10 @@ Klickübernahme. Der [Detail- und Aktionsabgleich](PROTOCOL-ACTIONS-NATIVE.md)
 übernimmt 20 px Innenabstand und inhaltsbreite, umbrechende Aktionen.
 Der [Nachlauf zum durchgehenden Originaltext](PROTOCOL-CONTINUOUS-ORIGINAL-NATIVE.md)
 entfernt die 12-KiB-Abschnitte mit vollständiger nativer Auswahl/Kopie und
-unabhängigen UIA-/AT-SPI-Nachweisen. Weitere Detailtypografie und Blockabstände
-bleiben offen. Der folgende
+unabhängigen UIA-/AT-SPI-Nachweisen. Der [Detailtypografie-Abgleich](PROTOCOL-DETAIL-TYPE-NATIVE.md)
+übernimmt anschließend Schriftrollen, Zeilenhöhen und Block-/Spaltenabstände
+mit je sechs nativen Zuständen auf Windows/Linux. Die vollständige C-Abnahme
+und zusätzliche Dateninhalte der Browserdemo bleiben offen. Der folgende
 [Zeiger-Nachlauf](PROTOCOL-POINTER-NATIVE.md) schließt verlorene schnelle Klicks
 in den gemeinsamen Aktionen/Editfeldern und am Protokolltrenner. Linux prüft
 den schnellen Suche-/Trennerwechsel mit 40-Pixel-Tastaturschritt. Direkter
