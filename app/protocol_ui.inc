@@ -160,7 +160,7 @@ static bool protocol_original(app *a,const ps_protocol_record *selected) {
     if(p->original && p->original_id==record->id && p->original_size==record->message.raw_size)return true;
     size_t length=0;char *text=protocol_text_copy(record->message.raw,record->message.raw_size,&length);
     if(!text){snprintf(p->feedback,sizeof p->feedback,"Originaltext konnte nicht dargestellt werden: nicht genügend Speicher.");return false;}
-    free(p->original);p->original=text;p->original_id=record->id;p->original_size=record->message.raw_size;p->original_length=length;p->page=0;
+    free(p->original);p->original=text;p->original_id=record->id;p->original_size=record->message.raw_size;p->original_length=length;
     ps_text_wrap_destroy(p->original_layout);p->original_layout=NULL;
     p->original_edit.cursor=p->original_edit.select_start=p->original_edit.select_end=0;
     p->original_edit.scrollbar=nk_vec2(0,0);p->original_edit.visual=NULL;
@@ -312,20 +312,18 @@ static void protocol_detail(app *a,const ps_protocol_record *record,float scale)
     if(protocol_disclosure(a,"Originalmeldung",!p->original_closed,scale,&p->original_toggle))p->original_closed=!p->original_closed;
     bool original_ready=protocol_original(a,record);
     if(original_ready && !p->original_closed) {
-        size_t remaining=p->original_length-p->page,n=remaining>12288?12288:remaining;
-        if(n<remaining)while(n && ((unsigned char)p->original[p->page+n]&0xc0)==0x80)n--;
-        memcpy(p->original_page,p->original+p->page,n);p->original_page[n]=0;
+        size_t n=p->original_length;
         nk_style_push_font(ui,&a->protocol_view.fonts[6]);
         const struct nk_user_font *font=ui->style.font;
         float width=fmaxf(1,nk_window_get_content_region(ui).w-ui->style.edit.cursor_size);
         float line_height=11.2f*1.85f*scale; /* Approved .8rem at a 14px root. */
-        bool same=p->original_layout && p->original_layout->bytes==n && !memcmp(p->original_layout->source,p->original_page,n);
+        bool same=p->original_layout && p->original_layout->bytes==n && !memcmp(p->original_layout->source,p->original,n);
         const struct nk_user_font *cached=&p->original_layout_font;
         bool metrics=same && p->original_layout->width==width && p->original_layout->visual.row_height==line_height &&
             cached->height==font->height && cached->width==font->width && cached->userdata.ptr==font->userdata.ptr;
         if(!metrics) {
             ps_text_wrap *layout=NULL;
-            if(ps_text_wrap_build(p->original_page,n,width,line_height,protocol_original_measure,(void*)font,&layout)) {
+            if(ps_text_wrap_build(p->original,n,width,line_height,protocol_original_measure,(void*)font,&layout)) {
                 ps_text_wrap_destroy(p->original_layout);p->original_layout=layout;p->original_layout_font=*font;
                 if(!same){p->original_edit.cursor=p->original_edit.select_start=p->original_edit.select_end=0;p->original_edit.scrollbar=nk_vec2(0,0);}
             } else {
@@ -340,7 +338,7 @@ static void protocol_detail(app *a,const ps_protocol_record *record,float scale)
             float x=fmaxf(r.x,clip.x),y=fmaxf(r.y,clip.y);
             p->original_viewport=nk_rect(x,y,fmaxf(0,fminf(r.x+r.w,clip.x+clip.w)-x),fmaxf(0,fminf(r.y+r.h,clip.y+clip.h)-y));
             ps_ui_text_reveal request;
-            nk_sdl_edit_named_visual_flow(ui,"Originalmeldung",p->original_page,sizeof p->original_page,&p->original_edit,v,&request);
+            nk_sdl_edit_named_visual_flow(ui,"Originalmeldung",p->original,(int)(n?n+1:2),&p->original_edit,v,&request);
             /* Apply at the next group begin: changing its offset while the
              * current frame is being laid out would split text/action geometry. */
             protocol_original_reveal(p,clip,request);
@@ -349,13 +347,6 @@ static void protocol_detail(app *a,const ps_protocol_record *record,float scale)
         }
         nk_layout_row_dynamic(ui,11.2f*scale,1);nk_spacer(ui);
         nk_style_pop_font(ui);
-        if(p->original_length>n) {
-            nk_layout_row_dynamic(ui,28*scale,2);nk_begin_disabled(ui,!p->page);
-            if(nk_button_label(ui,"Vorheriger Textabschnitt")){p->page=p->page>12288?p->page-12288:0;while(p->page && ((unsigned char)p->original[p->page]&0xc0)==0x80)p->page--;}
-            nk_end_disabled(ui);nk_begin_disabled(ui,p->page+n==p->original_length);
-            if(nk_button_label(ui,"Nächster Textabschnitt"))p->page+=n;nk_end_disabled(ui);
-            snprintf(text,sizeof text,"Textbytes %zu–%zu von %zu; Kopieren und TXT umfassen den ganzen Text.",p->page,p->page+n,p->original_length);protocol_wrap(a,text,&a->protocol_view.fonts[1],18*scale,muted());
-        }
         if(p->original_length!=p->original_size)protocol_wrap(a,"Nicht darstellbare Bytes werden als \\xHH angezeigt.",&a->protocol_view.fonts[1],18*scale,muted());
     }
     protocol_actions(a,record,original_ready,scale);
@@ -511,8 +502,8 @@ static void protocol_panel(app *a) {
         p->panes[2]=nk_widget_bounds(ui);nk_fill_rect(nk_window_get_canvas(ui),p->panes[2],0,UI_COLOR(edit));
         p->original_viewport=nk_rect(0,0,0,0);
         uint64_t detail_record=selected?selected->id:0;
-        if(p->detail_record!=detail_record || p->detail_page!=p->page || p->detail_transcript!=p->transcript) {
-            p->detail_record=detail_record;p->detail_page=p->page;p->detail_transcript=p->transcript;
+        if(p->detail_record!=detail_record || p->detail_transcript!=p->transcript) {
+            p->detail_record=detail_record;p->detail_transcript=p->transcript;
             p->detail_scroll_y=0;p->detail_reveal_pending=false;
         } else if(p->detail_reveal_pending){p->detail_scroll_y=p->detail_scroll_target;p->detail_reveal_pending=false;}
         nk_style_push_vec2(ui,&ui->style.window.group_padding,nk_vec2(20*f,20*f));

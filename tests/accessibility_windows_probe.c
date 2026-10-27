@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <wchar.h>
+#include <string.h>
 static HRESULT find(IUIAutomation *a,IUIAutomationElement *root,enum TreeScope scope,
                     PROPERTYID property,VARIANT value,IUIAutomationElement **out) {
  IUIAutomationCondition *condition=NULL;
@@ -393,26 +394,70 @@ static HRESULT scroll_text(IUIAutomationElement *control,const wchar_t *query,BO
  return result;
 }
 #include "accessibility_windows_lifecycle_probe.inc"
+static bool matches_utf8(BSTR text,const char *expected,size_t bytes) {
+ if(!text)return false;UINT units=SysStringLen(text);
+ int length=WideCharToMultiByte(CP_UTF8,WC_ERR_INVALID_CHARS,text,(int)units,NULL,0,NULL,NULL);
+ if((!length && units) || length<0 || (size_t)length!=bytes)return false;
+ char *copy=malloc(bytes+1);if(!copy)return false;
+ bool okay=!bytes || (WideCharToMultiByte(CP_UTF8,WC_ERR_INVALID_CHARS,text,(int)units,copy,length,NULL,NULL)==length && !memcmp(copy,expected,bytes));
+ free(copy);return okay;
+}
+static HRESULT readonly_file(IUIAutomationElement *control,const wchar_t *path,bool selected) {
+ FILE *file=_wfopen(path,L"rb");if(!file)return E_FAIL;
+ if(fseek(file,0,SEEK_END)){fclose(file);return E_FAIL;}long size=ftell(file);
+ if(size<0 || size>16*1024*1024 || fseek(file,0,SEEK_SET)){fclose(file);return E_INVALIDARG;}
+ char *expected=malloc((size_t)size+1);if(!expected){fclose(file);return E_OUTOFMEMORY;}
+ bool loaded=fread(expected,1,(size_t)size,file)==(size_t)size;fclose(file);if(!loaded){free(expected);return E_FAIL;}
+ IUnknown *unknown=NULL;IUIAutomationValuePattern *value=NULL;IUIAutomationTextPattern *text=NULL;
+ IUIAutomationTextRange *whole=NULL,*selection=NULL;IUIAutomationTextRangeArray *selections=NULL;BSTR contents=NULL;BOOL read_only=FALSE;
+ HRESULT result=IUIAutomationElement_GetCurrentPattern(control,UIA_ValuePatternId,&unknown);
+ if(SUCCEEDED(result))result=unknown?IUnknown_QueryInterface(unknown,&IID_IUIAutomationValuePattern,(void**)&value):E_FAIL;
+ if(unknown){IUnknown_Release(unknown);unknown=NULL;}
+ if(SUCCEEDED(result))result=IUIAutomationValuePattern_get_CurrentIsReadOnly(value,&read_only);
+ if(SUCCEEDED(result) && !read_only)result=E_FAIL;
+ if(SUCCEEDED(result))result=IUIAutomationValuePattern_get_CurrentValue(value,&contents);
+ if(SUCCEEDED(result) && !matches_utf8(contents,expected,(size_t)size))result=E_FAIL;SysFreeString(contents);contents=NULL;
+ if(SUCCEEDED(result) && SUCCEEDED(IUIAutomationValuePattern_SetValue(value,L"must remain readonly")))result=E_FAIL;
+ if(SUCCEEDED(result))result=IUIAutomationValuePattern_get_CurrentValue(value,&contents);
+ if(SUCCEEDED(result) && !matches_utf8(contents,expected,(size_t)size))result=E_FAIL;SysFreeString(contents);contents=NULL;
+ if(SUCCEEDED(result))result=IUIAutomationElement_GetCurrentPattern(control,UIA_TextPatternId,&unknown);
+ if(SUCCEEDED(result))result=unknown?IUnknown_QueryInterface(unknown,&IID_IUIAutomationTextPattern,(void**)&text):E_FAIL;
+ if(SUCCEEDED(result))result=IUIAutomationTextPattern_get_DocumentRange(text,&whole);
+ if(SUCCEEDED(result))result=IUIAutomationTextRange_GetText(whole,-1,&contents);
+ if(SUCCEEDED(result) && !matches_utf8(contents,expected,(size_t)size))result=E_FAIL;SysFreeString(contents);contents=NULL;
+ if(SUCCEEDED(result) && selected){
+  int count=0;result=IUIAutomationTextPattern_GetSelection(text,&selections);
+  if(SUCCEEDED(result))result=IUIAutomationTextRangeArray_get_Length(selections,&count);
+  if(SUCCEEDED(result))result=count==1?IUIAutomationTextRangeArray_GetElement(selections,0,&selection):E_FAIL;
+  if(SUCCEEDED(result))result=IUIAutomationTextRange_GetText(selection,-1,&contents);
+  if(SUCCEEDED(result) && !matches_utf8(contents,expected,(size_t)size))result=E_FAIL;
+ }
+ if(SUCCEEDED(result))printf("WINDOWS READONLY FILE: bytes=%ld full-value=1 full-text=1 selected=%d replacement-rejected=1\n",size,selected);
+ SysFreeString(contents);if(selection)IUIAutomationTextRange_Release(selection);if(selections)IUIAutomationTextRangeArray_Release(selections);
+ if(whole)IUIAutomationTextRange_Release(whole);if(text)IUIAutomationTextPattern_Release(text);if(value)IUIAutomationValuePattern_Release(value);
+ if(unknown)IUnknown_Release(unknown);free(expected);return result;
+}
 int wmain(int argc,wchar_t **argv) {
  setvbuf(stdout,NULL,_IONBF,0);setvbuf(stderr,NULL,_IONBF,0);
  if(argc!=4 && argc!=5)return 2;
  wchar_t *end=NULL;unsigned long pid=wcstoul(argv[1],&end,10);if(!pid || *end)return 2;
  bool focus=!wcscmp(argv[2],L"focus"),toggle=!wcscmp(argv[2],L"toggle"),select=!wcscmp(argv[2],L"select"),read=!wcscmp(argv[2],L"read"),edit=!wcscmp(argv[2],L"edit"),text_select=!wcscmp(argv[2],L"select-text");
  bool scroll_start=!wcscmp(argv[2],L"scroll-text-start"),scroll_end=!wcscmp(argv[2],L"scroll-text-end");
+ bool read_only_file=!wcscmp(argv[2],L"readonly-file"),read_only_selected=!wcscmp(argv[2],L"readonly-selected-file");
  bool stress_links=!wcscmp(argv[2],L"links-stress");
  bool links=!wcscmp(argv[2],L"links") || stress_links,invoke_link=!wcscmp(argv[2],L"invoke-link");
  bool invalid_link=!wcscmp(argv[2],L"invoke-link-invalid");
  bool lifecycle=!wcscmp(argv[2],L"lifecycle");
  bool focused_field=!wcscmp(argv[2],L"focused-field"),focused_button=!wcscmp(argv[2],L"focused-button"),focused_control=!wcscmp(argv[2],L"focused-control");
- if(!focus && !toggle && !select && !read && !edit && !text_select && !scroll_start && !scroll_end && !links && !invoke_link && !invalid_link && !lifecycle && !focused_field && !focused_button && !focused_control)return 2;
- if((read || edit || text_select || scroll_start || scroll_end || links || invoke_link || invalid_link || lifecycle) && argc!=5)return 2;
+ if(!focus && !toggle && !select && !read && !edit && !text_select && !scroll_start && !scroll_end && !links && !invoke_link && !invalid_link && !lifecycle && !focused_field && !focused_button && !focused_control && !read_only_file && !read_only_selected)return 2;
+ if((read || edit || text_select || scroll_start || scroll_end || links || invoke_link || invalid_link || lifecycle || read_only_file || read_only_selected) && argc!=5)return 2;
  HRESULT initialized=CoInitializeEx(NULL,COINIT_MULTITHREADED);if(FAILED(initialized))return 1;
  IUIAutomation *automation=NULL;IUIAutomationElement *desktop=NULL,*window=NULL,*group=NULL,*control=NULL;
  IUnknown *unknown=NULL;bool ok=SUCCEEDED(CoCreateInstance(&CLSID_CUIAutomation,NULL,CLSCTX_INPROC_SERVER,&IID_IUIAutomation,(void**)&automation));
  if(ok)ok=SUCCEEDED(IUIAutomation_GetRootElement(automation,&desktop));
  VARIANT process;VariantInit(&process);process.vt=VT_I4;process.lVal=(LONG)pid;
  if(ok)ok=SUCCEEDED(find(automation,desktop,TreeScope_Children,UIA_ProcessIdPropertyId,process,&window)) && window;
- if(ok && (edit || focused_field || focused_button || focused_control || text_select || scroll_start || scroll_end))ok=SUCCEEDED(find_edit(automation,desktop,(LONG)pid,argv[3],focused_control?0:focused_button?UIA_ButtonControlTypeId:UIA_EditControlTypeId,&control)) && control;
+ if(ok && (edit || focused_field || focused_button || focused_control || text_select || scroll_start || scroll_end || read_only_file || read_only_selected))ok=SUCCEEDED(find_edit(automation,desktop,(LONG)pid,argv[3],focused_control?0:focused_button?UIA_ButtonControlTypeId:UIA_EditControlTypeId,&control)) && control;
  else if(ok && (read || links || invoke_link || invalid_link || lifecycle)) {
   IUIAutomationCondition *pid_condition=NULL,*title_condition=NULL,*both=NULL;VARIANT title;VariantInit(&title);title.vt=VT_BSTR;title.bstrVal=SysAllocString(argv[3]);
   ok=title.bstrVal && SUCCEEDED(IUIAutomation_CreatePropertyCondition(automation,UIA_ProcessIdPropertyId,process,&pid_condition)) &&
@@ -427,7 +472,8 @@ int wmain(int argc,wchar_t **argv) {
  CONTROLTYPEID role=0;BOOL enabled=FALSE,focusable=FALSE;HRESULT action=E_FAIL;
  if(ok)ok=SUCCEEDED(IUIAutomationElement_get_CurrentControlType(control,&role)) &&
   SUCCEEDED(IUIAutomationElement_get_CurrentIsEnabled(control,&enabled)) && enabled;
- if(ok && (focused_field || focused_button || focused_control))action=current_field_focus(automation,control);
+ if(ok && (read_only_file || read_only_selected))action=readonly_file(control,argv[4],read_only_selected);
+ else if(ok && (focused_field || focused_button || focused_control))action=current_field_focus(automation,control);
  else if(ok && edit) {
   IUIAutomationValuePattern *pattern=NULL;BOOL readonly=TRUE;
   ok=role==UIA_EditControlTypeId && SUCCEEDED(IUIAutomationElement_GetCurrentPattern(control,UIA_ValuePatternId,&unknown)) && unknown &&

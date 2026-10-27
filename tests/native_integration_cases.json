@@ -7037,6 +7037,36 @@
       ]
     },
     {
+      "name": "protocol_original_windows",
+      "app": true,
+      "display": true,
+      "platforms": ["win32"],
+      "targets": ["python", "physim", "accessibility-windows-probe"],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": ["{root}/tests/check_protocol_original_windows.py", "--app", "{physim}", "--probe", "{accessibility-windows-probe}", "--work", "{work}"],
+          "timeout": 180,
+          "files": ["verification.json"]
+        }
+      ]
+    },
+    {
+      "name": "protocol_original_atspi",
+      "app": true,
+      "display": true,
+      "platforms": ["linux"],
+      "targets": ["python", "physim"],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": ["{root}/tests/test_protocol_original_atspi.py", "--app", "{physim}", "--work", "{work}"],
+          "timeout": 180,
+          "files": ["verification.json"]
+        }
+      ]
+    },
+    {
       "name": "protocol_sources",
       "app": true,
       "display": true,

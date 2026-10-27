@@ -30,7 +30,7 @@ struct uia_element {
  ITextProvider2 text2;
  IValueProvider value;
  LONG references;ps_a11y_native *bridge;uint64_t id;ps_a11y_role role;
- char previous_text[sizeof(((ps_a11y_node *)0)->text_value)];
+ char *previous_text;uint64_t previous_text_version;
  size_t previous_start,previous_end,previous_caret;
  uia_link_state previous_link;bool has_link_state;
 };
@@ -51,7 +51,7 @@ static void uia_bridge_release(ps_a11y_native *b) {
 static ULONG uia_addref(uia_element *e){return (ULONG)InterlockedIncrement(&e->references);}
 static ULONG uia_release(uia_element *e) {
  LONG refs=InterlockedDecrement(&e->references);
- if(!refs){ps_a11y_native *b=e->bridge;free(e);uia_bridge_release(b);}return (ULONG)refs;
+ if(!refs){ps_a11y_native *b=e->bridge;free(e->previous_text);free(e);uia_bridge_release(b);}return (ULONG)refs;
 }
 static HRESULT uia_query(uia_element *e,REFIID iid,void **out) {
  if(!out)return E_POINTER;*out=NULL;
@@ -351,14 +351,21 @@ static HRESULT STDMETHODCALLTYPE uia_edit_set(IValueProvider *p,LPCWSTR value) {
  SDL_UnlockMutex(b->mutex);return result;
 }
 static HRESULT STDMETHODCALLTYPE uia_edit_value(IValueProvider *p,BSTR *out) {
- if(!out)return E_POINTER;*out=NULL;ps_a11y_node node;if(!uia_node(UIA_OWNER(IValueProvider,value,p),&node))return UIA_E_ELEMENTNOTAVAILABLE;
- VARIANT text;VariantInit(&text);HRESULT result=uia_string(node.text_value,&text);if(SUCCEEDED(result))*out=text.bstrVal;return result;
+ if(!out)return E_POINTER;*out=NULL;uia_element *e=UIA_OWNER(IValueProvider,value,p);ps_a11y_native *b=e->bridge;
+ VARIANT text;VariantInit(&text);SDL_LockMutex(b->mutex);
+ const ps_a11y_node *node=b->model?ps_a11y_find(b->model,e->id):NULL;
+ HRESULT result=node && node->role==PS_A11Y_EDIT?uia_string(ps_a11y_node_text(node),&text):UIA_E_ELEMENTNOTAVAILABLE;
+ SDL_UnlockMutex(b->mutex);if(SUCCEEDED(result))*out=text.bstrVal;return result;
 }
 static HRESULT STDMETHODCALLTYPE uia_edit_readonly(IValueProvider *p,BOOL *out) {
  if(!out)return E_POINTER;ps_a11y_node node;if(!uia_node(UIA_OWNER(IValueProvider,value,p),&node))return UIA_E_ELEMENTNOTAVAILABLE;*out=!node.enabled || node.text_read_only;return S_OK;
 }
 static const IValueProviderVtbl uia_edit_vtable={uia_edit_query,uia_edit_addref,uia_edit_release,uia_edit_set,uia_edit_value,uia_edit_readonly};
 #include "accessibility_windows_text.inc"
+static char *uia_text_copy(const ps_a11y_node *node) {
+ size_t size=ps_a11y_node_text_size(node);char *copy=malloc(size+1);
+ if(copy)memcpy(copy,ps_a11y_node_text(node),size+1);return copy;
+}
 static uia_element *uia_new(ps_a11y_native *b,uint64_t id,ps_a11y_role role) {
  uia_element *e=calloc(1,sizeof *e);if(!e)return NULL;
  e->simple.lpVtbl=&uia_simple_vtable;e->fragment.lpVtbl=&uia_fragment_vtable;e->root.lpVtbl=&uia_root_vtable;
@@ -367,7 +374,10 @@ static uia_element *uia_new(ps_a11y_native *b,uint64_t id,ps_a11y_role role) {
  e->text.lpVtbl=&uia_text_vtable;
  e->text2.lpVtbl=&uia_text2_vtable;
  e->value.lpVtbl=&uia_edit_vtable;
- if(role==PS_A11Y_EDIT){const ps_a11y_node *node=ps_a11y_find(b->model,id);if(node){strcpy(e->previous_text,node->text_value);e->previous_start=node->text_start;e->previous_end=node->text_end;e->previous_caret=node->text_caret;}}
+ if(role==PS_A11Y_EDIT){const ps_a11y_node *node=ps_a11y_find(b->model,id);if(node){
+  e->previous_text=uia_text_copy(node);if(!e->previous_text){free(e);return NULL;}
+  e->previous_text_version=node->text_version;e->previous_start=node->text_start;e->previous_end=node->text_end;e->previous_caret=node->text_caret;
+ }}
  e->references=1;e->bridge=b;e->id=id;e->role=role;InterlockedIncrement(&b->references);
  if(role==PS_A11Y_LINK)e->has_link_state=uia_link_state_locked(e,&e->previous_link);return e;
 }
@@ -421,11 +431,12 @@ void ps_a11y_native_publish(ps_a11y_native *b,bool changed) {
   if(node && (edit->previous_start!=node->text_start || edit->previous_end!=node->text_end || edit->previous_caret!=node->text_caret)) {
    uia_addref(edit);selections[selection_count++]=edit;edit->previous_start=node->text_start;edit->previous_end=node->text_end;edit->previous_caret=node->text_caret;
   }
-  if(node && strcmp(edit->previous_text,node->text_value)) {
+  if(node && edit->previous_text_version!=node->text_version) {
    VariantInit(&old_text[edit_count]);VariantInit(&new_text[edit_count]);
-   if(SUCCEEDED(uia_string(edit->previous_text,&old_text[edit_count])) && SUCCEEDED(uia_string(node->text_value,&new_text[edit_count]))) {
-    uia_addref(edit);edits[edit_count++]=edit;strcpy(edit->previous_text,node->text_value);
-   } else {VariantClear(&old_text[edit_count]);VariantClear(&new_text[edit_count]);}
+   char *copy=uia_text_copy(node);
+   if(copy && SUCCEEDED(uia_string(edit->previous_text?edit->previous_text:"",&old_text[edit_count])) && SUCCEEDED(uia_string(ps_a11y_node_text(node),&new_text[edit_count]))) {
+    uia_addref(edit);edits[edit_count++]=edit;free(edit->previous_text);edit->previous_text=copy;edit->previous_text_version=node->text_version;
+   } else {free(copy);VariantClear(&old_text[edit_count]);VariantClear(&new_text[edit_count]);}
   }
  }
  for(size_t i=0;i<PS_A11Y_MAX_NODES;i++)if(b->elements[i] && b->elements[i]->role==PS_A11Y_LINK) {

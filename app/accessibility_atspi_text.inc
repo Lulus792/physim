@@ -34,10 +34,10 @@ static const char *editable_text_xml =
     "<method name='CutText'><arg type='i' direction='in'/><arg type='i' direction='in'/><arg type='b' direction='out'/></method>"
     "<method name='PasteText'><arg type='i' direction='in'/><arg type='b' direction='out'/></method></interface>";
 static bool edit_replace(ps_a11y_native *w,const ps_a11y_node *edit,size_t begin,size_t end,const char *insert,size_t bytes) {
-    size_t length=strlen(edit->text_value);
+    size_t length=ps_a11y_node_text_size(edit);
     if(edit->text_read_only || begin>end || end>length || bytes>PS_A11Y_LABEL_BYTES || length-(end-begin)+bytes>=edit->text_capacity)return false;
-    char next[PS_A11Y_LABEL_BYTES];memcpy(next,edit->text_value,begin);memcpy(next+begin,insert,bytes);
-    memcpy(next+begin+bytes,edit->text_value+end,length-end+1);
+    char next[PS_A11Y_LABEL_BYTES];memcpy(next,ps_a11y_node_text(edit),begin);memcpy(next+begin,insert,bytes);
+    memcpy(next+begin+bytes,ps_a11y_node_text(edit)+end,length-end+1);
     return ps_a11y_set_text(w->model,edit->id,next);
 }
 static bool clipboard_queue(ps_a11y_native *w,const ps_a11y_node *edit,unsigned action,size_t begin,size_t end) {
@@ -51,7 +51,7 @@ static const char *editable_text_method(ps_a11y_native *w,const ps_a11y_node *no
     const char *failure=NULL,*value=NULL;dbus_int32_t first=0,last=0,amount=0;bool accepted=false,copy=false;
     SDL_LockMutex(w->mutex);const ps_a11y_node *edit=ps_a11y_find(w->model,node->id);ps_a11y_text_index index={0};
     if(!edit || edit->role!=PS_A11Y_EDIT){SDL_UnlockMutex(w->mutex);return "org.a11y.atspi.Error.Defunct";}
-    if(!ps_a11y_text_index_build(&index,edit->text_value,strlen(edit->text_value),edit->text_version)){SDL_UnlockMutex(w->mutex);return DBUS_ERROR_NO_MEMORY;}
+    if(!ps_a11y_text_index_build(&index,ps_a11y_node_text(edit),ps_a11y_node_text_size(edit),edit->text_version)){SDL_UnlockMutex(w->mutex);return DBUS_ERROR_NO_MEMORY;}
     size_t begin=0,end=0;
     bool available=w->visible && !w->model->suspended && edit->enabled && !w->clipboard_action;
     if(!strcmp(method,"SetTextContents") && dbus_message_has_signature(message,"s")) {
@@ -86,11 +86,12 @@ static void clipboard_deliver(ps_a11y_native *w) {
     if(!w->clipboard_action)return;
     unsigned action=w->clipboard_action;uint64_t id=w->clipboard_id,version=w->clipboard_version;
     size_t begin=w->clipboard_begin,end=w->clipboard_end;w->clipboard_action=0;
-    char selected[PS_A11Y_EDIT_BYTES];bool available=false;
+    char *selected=NULL;bool available=false;
     SDL_LockMutex(w->mutex);const ps_a11y_node *edit=ps_a11y_find(w->model,id);
     if(edit && edit->role==PS_A11Y_EDIT && edit->text_version==version && edit->enabled && (!edit->text_read_only || action==1) && w->visible &&
-       !w->model->suspended && !w->model->pending_text_id && !w->model->pending_selection_id && end<=strlen(edit->text_value)) {
-        memcpy(selected,edit->text_value+begin,end-begin);selected[end-begin]=0;available=true;
+       !w->model->suspended && !w->model->pending_text_id && !w->model->pending_selection_id && begin<=end && end<=ps_a11y_node_text_size(edit)) {
+        selected=malloc(end-begin+1);
+        if(selected){memcpy(selected,ps_a11y_node_text(edit)+begin,end-begin);selected[end-begin]=0;available=true;}
     }
     SDL_UnlockMutex(w->mutex);if(!available)return;
     SDL_UnlockMutex(w->server->mutex);
@@ -102,7 +103,7 @@ static void clipboard_deliver(ps_a11y_native *w) {
         if(action==2)edit_replace(w,edit,begin,end,"",0);
         if(action==3 && paste && ps_text_valid(paste,PS_A11Y_LABEL_BYTES,false))edit_replace(w,edit,begin,end,paste,strlen(paste));
     }
-    SDL_UnlockMutex(w->mutex);SDL_free(paste);
+    SDL_UnlockMutex(w->mutex);SDL_free(paste);free(selected);
 }
 static void text_slice(ax_reply *r,const ps_a11y_text_index *index,int start,int end) {
     size_t begin,finish;
@@ -146,7 +147,7 @@ static const char *native_text_method(ps_a11y_native *w,const ps_a11y_node *node
     if(node->role==PS_A11Y_EDIT) {
         edit=ps_a11y_find(w->model,node->id);
         if(!edit){SDL_UnlockMutex(w->mutex);return "org.a11y.atspi.Error.Defunct";}
-        if(!ps_a11y_text_index_build(&local,edit->text_value,strlen(edit->text_value),edit->text_version))failure=DBUS_ERROR_NO_MEMORY;
+        if(!ps_a11y_text_index_build(&local,ps_a11y_node_text(edit),ps_a11y_node_text_size(edit),edit->text_version))failure=DBUS_ERROR_NO_MEMORY;
         index=&local;
     } else if(!document_index(w))failure=DBUS_ERROR_NO_MEMORY;
     if(failure){SDL_UnlockMutex(w->mutex);return failure;}

@@ -173,8 +173,9 @@ void nk_sdl_borrow_fonts(struct nk_context *ctx,const struct nk_context *owner) 
     nk_sdl_set_ui_size(ctx,source->font_layout.ui_size);
 }
 #if defined(_WIN32) || defined(__linux__) || defined(__APPLE__)
-static size_t nk_sdl_edit_byte(const char *text,int scalar) {
- size_t at=0;while(scalar>0 && text[at]){nk_rune rune;int n=nk_utf_decode(text+at,&rune,(int)strlen(text+at));if(n<=0)break;at+=(size_t)n;--scalar;}return at;
+static size_t nk_sdl_edit_byte(const char *text,int scalar,const struct nk_text_visual *visual) {
+ if(visual && scalar>=0 && scalar<=visual->glyph_count)return (size_t)visual->glyphs[scalar].byte;
+ size_t at=0,length=strlen(text);while(scalar>0 && at<length){nk_rune rune;int n=nk_utf_decode(text+at,&rune,(int)(length-at));if(n<=0)break;at+=(size_t)n;--scalar;}return at;
 }
 static float nk_sdl_edit_extent(const struct nk_user_font *font,const char *text,size_t end) {
  float x=0;for(size_t at=0;at<end;){nk_rune rune;int n=nk_utf_decode(text+at,&rune,(int)(end-at));if(n<=0)break;
@@ -275,11 +276,11 @@ static nk_flags nk_sdl_edit_named_common(struct nk_context *ctx,const char *name
   SDL_LockMutex(sdl->accessibility_mutex);ps_a11y_model *m=sdl->accessibility;
   if(index<m->draft_count && m->draft[index].id==id) {
    size_t start=m->draft[index].text_start,end=m->draft[index].text_end;
-   if(custom || (state&NK_EDIT_ACTIVE)){start=nk_sdl_edit_byte(text,actual->select_start);end=nk_sdl_edit_byte(text,actual->select_end);}
+   if(custom || (state&NK_EDIT_ACTIVE)){start=nk_sdl_edit_byte(text,actual->select_start,visual);end=nk_sdl_edit_byte(text,actual->select_end,visual);}
    if(ps_a11y_edit_update(m,index,text,start,end)) {
     ps_a11y_node *node=&m->draft[index];node->text_active=(state&NK_EDIT_ACTIVE)!=0;node->text_scroll=text_scroll;
-    if(custom)node->text_caret=nk_sdl_edit_byte(text,actual->cursor);
-    if(node->text_active){node->text_caret=nk_sdl_edit_byte(text,actual->cursor);if(ctx->current==ctx->active){
+    if(custom)node->text_caret=nk_sdl_edit_byte(text,actual->cursor,visual);
+    if(node->text_active){node->text_caret=nk_sdl_edit_byte(text,actual->cursor,visual);if(ctx->current==ctx->active){
      if(m->focused_id!=id && SDL_getenv("PHYSIM_TEST_FOCUS_TRACE") && !strcmp(name,"Meldung oder Quelle")){
       static unsigned observations;if(observations++<64)fprintf(stderr,"FOCUS EDIT CLAIM: previous=%llu id=%llu pending=%llu state=%u\n",(unsigned long long)m->focused_id,(unsigned long long)id,(unsigned long long)m->pending_focus,(unsigned)state);
      }

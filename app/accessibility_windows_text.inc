@@ -1,4 +1,4 @@
-/* Document and single-line edit TextPattern. UTF-8 geometry uses the same glyph advances
+/* Document, editable field and multiline readonly TextPattern. UTF-8 geometry uses the same glyph advances
  * as the renderer; UTF-16 offsets are translated only at the Windows boundary. */
 typedef struct {
  ITextRangeProvider range_iface;LONG references;uia_element *owner;
@@ -10,7 +10,7 @@ static HRESULT uia_reading_locked(uia_element *owner) {
  const ps_a11y_document *d=b->model?b->model->document:NULL;
  const ps_a11y_node *node=b->model && owner->id?ps_a11y_find(b->model,owner->id):NULL;
  if(owner->id?(!node || node->role!=PS_A11Y_EDIT):(!d || !d->active))return UIA_E_ELEMENTNOTAVAILABLE;
- const char *source=node?node->text_value:d->text;size_t length=node?strlen(source):d->length;uint64_t version=node?node->text_version:d->version;
+ const char *source=node?ps_a11y_node_text(node):d->text;size_t length=node?ps_a11y_node_text_size(node):d->length;uint64_t version=node?node->text_version:d->version;
  if(b->reading_text && b->reading_owner==owner->id && b->reading_version==version)return S_OK;
  int n=MultiByteToWideChar(CP_UTF8,MB_ERR_INVALID_CHARS,source,-1,NULL,0);if(!n)return E_INVALIDARG;
  BSTR text=SysAllocStringLen(NULL,(UINT)(n-1));size_t *bytes=malloc((size_t)n*sizeof *bytes);

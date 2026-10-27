@@ -485,7 +485,7 @@ static void property_value(ax_reply *r, DBusMessageIter *iter, ax_server *s, ps_
         SDL_LockMutex(w->mutex);
         if(node->role==PS_A11Y_EDIT) {
             const ps_a11y_node *live=ps_a11y_find(w->model,node->id);ps_a11y_text_index index={0};int caret=-1;
-            if(!live || !ps_a11y_text_index_build(&index,live->text_value,strlen(live->text_value),live->text_version))r->okay=false;
+            if(!live || !ps_a11y_text_index_build(&index,ps_a11y_node_text(live),ps_a11y_node_text_size(live),live->text_version))r->okay=false;
             else {ps_a11y_text_byte_offset(&index,live->text_caret,&caret);number(r,iter,!strcmp(name,"CaretOffset")?caret:(int)index.count);}
             ps_a11y_text_index_clear(&index);
         } else if(!document_index(w))r->okay=false;
@@ -1462,14 +1462,15 @@ void ps_a11y_native_publish(ps_a11y_native *b, bool changed) {
             if(old && ps_a11y_range_role(node->role) && old->value!=node->value)event_value(s,node_path,node->value);
             if(old && node->role==PS_A11Y_EDIT) {
                 ps_a11y_text_index prior={0},current={0};
-                bool indexed=ps_a11y_text_index_build(&current,node->text_value,strlen(node->text_value),node->text_version);
-                if(indexed && strcmp(old->text_value,node->text_value) &&
-                   ps_a11y_text_index_build(&prior,old->text_value,strlen(old->text_value),old->text_version)) {
+                bool text_changed=old->text_version!=node->text_version,caret_changed=old->text_caret!=node->text_caret;
+                bool indexed=(text_changed || caret_changed) && ps_a11y_text_index_build(&current,ps_a11y_node_text(node),ps_a11y_node_text_size(node),node->text_version);
+                if(indexed && text_changed &&
+                   ps_a11y_text_index_build(&prior,ps_a11y_node_text(old),ps_a11y_node_text_size(old),old->text_version)) {
                     event_document_text(s,node_path,"delete",&prior);event_document_text(s,node_path,"insert",&current);
                 }
                 if(old->text_start!=node->text_start || old->text_end!=node->text_end)
                     event_text_position(s,node_path,"TextSelectionChanged",0);
-                if(indexed && old->text_caret!=node->text_caret) {
+                if(indexed && caret_changed) {
                     int caret;if(ps_a11y_text_byte_offset(&current,node->text_caret,&caret))
                         event_text_position(s,node_path,"TextCaretMoved",caret);
                 }
@@ -1490,7 +1491,10 @@ void ps_a11y_native_publish(ps_a11y_native *b, bool changed) {
             event_state(s, window_path, "visible", b->visible);
         }
         ax_table_events(b,false,moved);
-        for(size_t i=0;i<b->model->count;i++)b->previous[i]=ax_semantic_node(b,&b->model->nodes[i]);
+        for(size_t i=0;i<b->previous_count;i++)ps_a11y_node_text_release(&b->previous[i]);
+        for(size_t i=0;i<b->model->count;i++){
+            b->previous[i]=ax_semantic_node(b,&b->model->nodes[i]);ps_a11y_node_text_retain(&b->previous[i]);
+        }
         b->previous_count = b->model->count;
         SDL_UnlockMutex(b->mutex);
     }
@@ -1522,6 +1526,9 @@ void ps_a11y_native_destroy(ps_a11y_native *b) {
                 (s->count - index - 1) * sizeof *s->windows);
         s->count--;
     }
+    SDL_LockMutex(b->mutex);
+    for(size_t i=0;i<b->previous_count;i++)ps_a11y_node_text_release(&b->previous[i]);
+    SDL_UnlockMutex(b->mutex);
     SDL_UnlockMutex(s->mutex);
     SDL_DestroyMutex(b->mutex);
     ps_a11y_text_index_clear(&b->document_index);

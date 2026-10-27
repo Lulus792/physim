@@ -1,8 +1,7 @@
 /* Deliberate UI fixtures; never injected by the product's startup path. */
 static uint32_t protocol_test_source_crc;
 static char protocol_test_root[4096];
-static char protocol_wrap_test_text[12289];
-_Static_assert(sizeof protocol_wrap_test_text==sizeof(((ps_protocol_ui *)0)->original_page),"Test the complete original page capacity");
+static char protocol_wrap_test_text[65537];
 static bool protocol_ui_test_start(app *a,const char *root,const char *mode) {
     snprintf(protocol_test_root,sizeof protocol_test_root,"%s",root);
     char path[4096];join(path,sizeof path,root,"preferences.bin");preferences_start(a,path);

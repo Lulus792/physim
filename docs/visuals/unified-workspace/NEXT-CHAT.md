@@ -31,13 +31,19 @@ verlagert das Scrollen in den Detailbereich und schließt die Klickübernahme
 durch ausgeclippte Feldteile. C ist weiterhin nicht vollständig abgenommen.
 Der [Detail- und Aktionsabgleich](PROTOCOL-ACTIONS-NATIVE.md) übernimmt 20 px
 Innenabstand und inhaltsbreite Aktionen mit automatischem Zeilenwechsel.
-12-KiB-Abschnitte, weitere Detailtypografie und Blockabstände gegen die Vorlage
-angleichen und den direkten
-Maus-/Tastaturfokus schließen. Der folgende
+Der [Nachlauf zum durchgehenden Originaltext](PROTOCOL-CONTINUOUS-ORIGINAL-NATIVE.md)
+entfernt anschließend die 12-KiB-Abschnitte und prüft vollständige native
+64-KiB-Werte, Auswahl und Kopie mit unabhängigen UIA-/AT-SPI-Clients.
+Weitere Detailtypografie und Blockabstände gegen die Vorlage angleichen und
+den noch offenen direkten Pfeiltastennachweis schließen. Der folgende
 [Nachlauf für schnelle Zeigerereignisse](PROTOCOL-POINTER-NATIVE.md) erhält
 vollständige Klicks innerhalb eines Frames und den ursprünglichen Druckpunkt;
 Linux prüft den schnellen Suche-/Trenner-Fokuswechsel mit anschließendem
-40-Pixel-Schritt. Der direkte Windows-Desktopnachweis bleibt offen. Die zusätzliche
+40-Pixel-Schritt. Der spätere Originaltext-Nachlauf bestätigt den sichtbaren
+Windows-Mausfokus und die 40-Pixel-Ziehung; dessen Pfeiltastennachweis bleibt
+wegen der protokollierten Nummernblock-Eingabe offen. Der Nutzer hat die manuelle
+Prüfung auf später verschoben und meldet sich bei verfügbarer Zeit; bis dahin
+dafür keine Testfenster starten oder erneut um Mitwirkung bitten. Die zusätzliche
 F1-UIA-Scrollprüfung ist im folgenden
 [Reihenfolgenachlauf](../f1-layouts/UIA-SCROLL-ORDER.md) geschlossen: Der Test
 wartet nun auf den vollständigen externen Edit-/Fokusabschluss, bevor er Tab

@@ -6,10 +6,13 @@
 #define PS_A11Y_MAX_NODES 256u
 #define PS_A11Y_LABEL_BYTES 1024u
 #define PS_A11Y_EDIT_BYTES (12u*1024u+1u)
+/* Long readonly content is owned once per distinct text, not inline per node.
+ * The combined external payload of one publication has the same 16 MiB limit. */
+#define PS_A11Y_READONLY_BYTES (16u*1024u*1024u+1u)
 #define PS_A11Y_WINDOW_BYTES 96u
 #define PS_A11Y_DOCUMENT_BYTES (512u*1024u+8192u)
 #define PS_A11Y_TEXT_BOXES 8192u
-/* A whole readonly 12KiB page can be visible in a naturally sized text area. */
+/* Bound visible glyph geometry independently of the complete readonly text. */
 #define PS_A11Y_EDIT_BOXES (16u*1024u)
 #define PS_A11Y_TABLE_LIMIT 4096u
 #define PS_A11Y_TABLE_ROWS 4096u
@@ -34,6 +37,7 @@ typedef struct {
  ps_a11y_table_inventory *tables;
 } ps_a11y_document;
 typedef enum {PS_A11Y_TEXT,PS_A11Y_BUTTON,PS_A11Y_CHECKBOX,PS_A11Y_RADIO,PS_A11Y_RADIO_GROUP,PS_A11Y_SLIDER,PS_A11Y_EDIT,PS_A11Y_LINK,PS_A11Y_SEPARATOR} ps_a11y_role;
+typedef struct ps_a11y_text_snapshot ps_a11y_text_snapshot;
 static inline bool ps_a11y_range_role(ps_a11y_role role) {return role==PS_A11Y_SLIDER || role==PS_A11Y_SEPARATOR;}
 typedef struct {
  uint64_t id,key,parent;unsigned occurrence;ps_a11y_role role;
@@ -41,6 +45,7 @@ typedef struct {
  float bounds[4];bool enabled,checked,focusable,focused;
  double value,minimum,maximum,increment;
  char text_value[PS_A11Y_EDIT_BYTES];size_t text_capacity;
+ ps_a11y_text_snapshot *text_snapshot;
  uint64_t text_version;size_t text_start,text_end,text_caret,box_offset,box_count;
  float caret_bounds[4];bool text_active,text_read_only,text_multiline;
  float text_scroll;
@@ -53,7 +58,7 @@ typedef struct {
 typedef struct {
  ps_a11y_node nodes[PS_A11Y_MAX_NODES],draft[PS_A11Y_MAX_NODES];
  size_t count,draft_count;uint64_t next_id,pending_press,selection_parent,selection_id,pending_focus,focused_id;unsigned dropped;
- bool building,keyboard_focus,suspended;
+ bool building,keyboard_focus,suspended,edit_complete;
  uint64_t pending_value_id;double pending_value;
  uint64_t pending_text_id;char pending_text[PS_A11Y_LABEL_BYTES];
  size_t pending_text_caret;uint64_t pending_text_version;bool pending_text_has_caret;
@@ -73,6 +78,13 @@ static inline bool ps_a11y_actionable(ps_a11y_role role) {
 }
 void ps_a11y_init(ps_a11y_model *model);
 void ps_a11y_destroy(ps_a11y_model *model);
+/* Borrowed until the next model mutation. Access under the model's lock.
+ * A provider keeping a node copy across publications retains/releases its
+ * immutable text under the same lock. Inline field text stays in the copy. */
+const char *ps_a11y_node_text(const ps_a11y_node *node);
+size_t ps_a11y_node_text_size(const ps_a11y_node *node);
+void ps_a11y_node_text_retain(ps_a11y_node *node);
+void ps_a11y_node_text_release(ps_a11y_node *node);
 /* Full UTF-8 reading snapshot, separate from the bounded control labels. The
  * caller uses a new nonzero version whenever the document content changes.
  * Only the UI draft is writable; publication swaps immutable snapshots. */
@@ -148,8 +160,8 @@ bool ps_a11y_record_separator(ps_a11y_model *model,const char *window,const char
                          double increment,double *value);
 bool ps_a11y_set_value(ps_a11y_model *model,uint64_t id,double value);
 bool ps_a11y_adjust(ps_a11y_model *model,uint64_t id,int direction);
-/* Single-line editable UTF-8 values; readonly mode also accepts a multiline
- * original page up to PS_A11Y_EDIT_BYTES. No truncation. Names and IDs remain stable
+/* Single-line editable UTF-8 values; readonly mode also accepts complete multiline
+ * originals up to PS_A11Y_READONLY_BYTES including NUL. No truncation. Names and IDs remain stable
  * while values change. Accepted writes apply only on the next matching UI visit. */
 bool ps_a11y_record_edit(ps_a11y_model *model,const char *window,const char *name,
                        const float bounds[4],bool enabled,char *text,size_t capacity);

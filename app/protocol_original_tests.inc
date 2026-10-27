@@ -26,7 +26,61 @@ static bool protocol_original_test_reveal(app *a,unsigned *attempts) {
         *attempts,x,y,box.y,pane.y,a->ui->active?a->ui->active->name_string:"");
     test_plot_wheel(a,x,y,delta);return false;
 }
+static bool protocol_original_remote_ack(const char *name) {
+    char path[4096];join(path,sizeof path,protocol_test_root,name);FILE *file=fopen(path,"rb");
+    if(!file)return false;fclose(file);return true;
+}
+static void protocol_original_remote_frame(app *a,int *stage,int *code,const char **capture) {
+    static unsigned rendered,attempts;static Uint64 wait_started;
+    if(*stage<3){(*stage)++;return;}if(rendered++<2)return;rendered=0;
+    ps_protocol_ui *p=&a->protocol_view;bool ok=true;
+    if(*stage==3 && !protocol_original_test_reveal(a,&attempts)) {
+        if(attempts<=100)return;ok=false;
+    }
+    if(ok)switch(*stage) {
+    case 3:
+        ok=p->original_layout && p->original_layout->bytes==sizeof protocol_wrap_test_text-1;
+        SDL_SetClipboardText("original remote sentinel");puts("PROTOCOL ORIGINAL REMOTE READY");break;
+    case 4:
+        if(!protocol_original_remote_ack("scroll-checked"))return;
+        ok=!p->original_edit.active && p->detail_scroll_y>0;
+        puts("PROTOCOL ORIGINAL REMOTE END");break;
+    case 5:
+        if(!protocol_original_remote_ack("focus-applied"))return;
+        if(!p->original_edit.active || !nk_sdl_accessibility_is_focused(a->ui,NULL,"Originalmeldung")) {
+            if(!wait_started)wait_started=SDL_GetTicks()+1;
+            if(SDL_GetTicks()+1-wait_started<10000)return;
+            ok=false;break;
+        }
+        wait_started=0;test_window_key_mod(a->window,SDLK_END,PS_UI_COMMAND_MOD);break;
+    case 6:
+        ok=p->original_edit.cursor==p->original_edit.string.len && p->original_edit.scrollbar.y==0;
+        test_window_key_mod(a->window,SDLK_A,PS_UI_COMMAND_MOD);break;
+    case 7:
+        ok=p->original_edit.select_start==0 && p->original_edit.select_end==p->original_edit.string.len;
+        puts("PROTOCOL ORIGINAL REMOTE SELECTED");break;
+    case 8:
+        if(!protocol_original_remote_ack("selected-checked"))return;
+        if(!protocol_original_remote_ack("native-copy-requested"))test_window_key_mod(a->window,SDLK_C,PS_UI_COMMAND_MOD);
+        break;
+    case 9:{
+        char *copy=SDL_GetClipboardText();bool copied=copy && !strcmp(copy,protocol_wrap_test_text);SDL_free(copy);
+        if(!copied){if(!wait_started)wait_started=SDL_GetTicks()+1;if(SDL_GetTicks()+1-wait_started<10000)return;}
+        ok=copied && !strcmp(p->original,protocol_wrap_test_text);
+        a->quitting=true;break;
+    }
+    }
+    uint32_t source=ps_crc32((const unsigned char*)nk_str_get_const(&a->experiment.string),(size_t)nk_str_len_char(&a->experiment.string));
+    ok &= source==protocol_test_source_crc;
+    printf("{\"kind\":\"protocol_original_remote\",\"stage\":%d,\"passed\":%s,\"bytes\":%zu,\"cursor\":%d,\"selection\":[%d,%d],\"detail_scroll\":%u,\"native_copy\":%s}\n",
+        *stage,ok?"true":"false",p->original_length,p->original_edit.cursor,p->original_edit.select_start,p->original_edit.select_end,
+        (unsigned)p->detail_scroll_y,protocol_original_remote_ack("native-copy-requested")?"true":"false");fflush(stdout);
+    if(!ok){*code=1;a->quitting=true;*capture="protocol-original-remote-failure.png";fprintf(stderr,"Original remote stage %d failed\n",*stage);}
+    if(a->quitting)printf("PROTOCOL ORIGINAL REMOTE SELF-TEST: %s\n",*code?"FAILED":"PASSED");
+    (*stage)++;
+}
 static void protocol_original_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(strstr(mode,"remote")){protocol_original_remote_frame(a,stage,code,capture);return;}
     static unsigned rendered,attempts;
     if(*stage<3){(*stage)++;return;}
     if(rendered++<2)return;rendered=0;
@@ -58,7 +112,7 @@ static void protocol_original_test_frame(app *a,const char *mode,int *stage,int 
         ok=p->original_edit.select_start==0 && p->original_edit.select_end==p->original_edit.string.len;
         ok &= nk_sdl_accessibility_request_focus(a->ui,NULL,"Originalmeldung");break;
     case 12:ok=p->original_edit.active;test_window_key_mod(a->window,SDLK_DELETE,0);break;
-    case 13:ok=!strcmp(p->original_page,protocol_wrap_test_text) && !strcmp(p->original,protocol_wrap_test_text);a->quitting=true;break;
+    case 13:ok=p->original_layout && !strcmp(p->original_layout->source,protocol_wrap_test_text) && !strcmp(p->original,protocol_wrap_test_text);a->quitting=true;break;
     }
     uint32_t source_crc=ps_crc32((const unsigned char*)nk_str_get_const(&a->experiment.string),(size_t)nk_str_len_char(&a->experiment.string));
     ok &= source_crc==protocol_test_source_crc;
@@ -71,7 +125,7 @@ static void protocol_original_test_frame(app *a,const char *mode,int *stage,int 
         end_box[2]=v->glyphs[last].advance;end_box[3]=p->fonts[6].height;
     }
     printf("{\"kind\":\"protocol_original_step\",\"stage\":%d,\"passed\":%s,\"source_crc\":%u,\"original_crc\":%u,\"original_bytes\":%zu,\"rows\":%d,\"cursor\":%d,\"selection\":[%d,%d],\"scroll_y\":%.4f,\"copy_equal\":%s,\"window\":[%d,%d],\"viewport\":[%.4f,%.4f,%.4f,%.4f],\"end_box\":[%.4f,%.4f,%.4f,%.4f],\"field\":[%.4f,%.4f,%.4f,%.4f],\"row_height\":%.4f,\"detail_scroll_y\":%u}\n",
-        *stage,ok?"true":"false",(unsigned)source_crc,(unsigned)ps_crc32((const unsigned char*)p->original_page,strlen(p->original_page)),strlen(p->original_page),
+        *stage,ok?"true":"false",(unsigned)source_crc,(unsigned)ps_crc32((const unsigned char*)p->original,strlen(p->original)),strlen(p->original),
         p->original_layout?p->original_layout->visual.row_count:0,p->original_edit.cursor,p->original_edit.select_start,p->original_edit.select_end,p->original_edit.scrollbar.y,
         copy_equal?"true":"false",w,h,p->original_viewport.x,p->original_viewport.y,p->original_viewport.w,p->original_viewport.h,end_box[0],end_box[1],end_box[2],end_box[3],
         p->original_bounds.x,p->original_bounds.y,p->original_bounds.w,p->original_bounds.h,p->original_layout?p->original_layout->visual.row_height:0,(unsigned)p->detail_scroll_y);fflush(stdout);

@@ -171,7 +171,10 @@ def main():
         ("inspector_channel","check_inspector_channel.py"),
         ("analysis_editor","check_analysis_editor.py"),
         ("protocol_navigator","check_protocol_navigator.py"),
+        ("protocol_actions","check_protocol_actions.py"),
+        ("protocol_original","check_protocol_original.py"),
     )})
+    specialized_display["source_outline_hover"]=("tests/check_outline_hover.py",())
     if sys.platform in ("win32","linux"):
         specialized_display["graphic_dialog"]=("tests/check_graphic_dialog.py",("--root",))
     if sys.platform == "linux":
@@ -179,6 +182,7 @@ def main():
             "accessibility_document_atspi": ("tests/test_accessibility_document_atspi.py", ("--root",)),
             "accessibility_edit_atspi": ("tests/test_accessibility_edit_atspi.py", ()),
             "accessibility_links_atspi": ("tests/test_accessibility_links_atspi.py", ()),
+            "protocol_original_atspi": ("tests/test_protocol_original_atspi.py", ()),
         })
     if sys.platform in ("darwin", "linux"):
         specialized_display.update({
@@ -198,6 +202,7 @@ def main():
               "accessibility_lifecycle_windows": ("tests/test_accessibility_lifecycle_app.py", ("--probe",)),
             "accessibility_edit_windows": ("tests/test_accessibility_edit_app.py", ("--probe",)),
             "accessibility_edit_scroll_windows": ("tests/test_accessibility_edit_scroll_app.py", ("--probe",)),
+            "protocol_original_windows": ("tests/check_protocol_original_windows.py", ("--probe",)),
         })
     expected_display = display_names | direct_display | provider_display | specialized_display.keys()
     assert actual_display == expected_display, {

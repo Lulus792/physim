@@ -8,7 +8,12 @@ static bool edit_available_locked(ps_a11y_native *b,const ps_a11y_node *n) {
  return n && n->enabled && document_viewable_locked(b);
 }
 static bool edit_index(const ps_a11y_node *n,ps_a11y_utf16_index *index) {
- return n && ps_a11y_utf16_build(index,n->text_value,strlen(n->text_value),n->text_version);
+ return n && ps_a11y_utf16_build(index,ps_a11y_node_text(n),ps_a11y_node_text_size(n),n->text_version);
+}
+/* The index owns its text; finish copying while the live node is protected. */
+static bool edit_copy_index(id object,ps_a11y_utf16_index *index) {
+ ps_a11y_native *b=owner(object);if(!b)return false;
+ SDL_LockMutex(b->mutex);bool ok=edit_index(edit_live_locked(object,b),index);SDL_UnlockMutex(b->mutex);return ok;
 }
 static const char *edit_string_bytes(id value) {
  if(!value || !((BOOL(*)(id,SEL,Class))objc_msgSend)(value,sel_registerName("isKindOfClass:"),objc_getClass("NSString")))return NULL;
@@ -28,14 +33,18 @@ static void edit_set_focused(id object,SEL selector,BOOL focused) {
   if(focused)ps_a11y_focus(b->model,identifier(object));else ps_a11y_blur(b->model,identifier(object));
  }SDL_UnlockMutex(b->mutex);
 }
-static id edit_value(id object,SEL selector) {(void)selector;ps_a11y_node n;return node_copy(object,&n)?string(n.text_value):nil;}
+static id edit_value(id object,SEL selector) {
+ (void)selector;ps_a11y_native *b=owner(object);if(!b)return nil;
+ SDL_LockMutex(b->mutex);const ps_a11y_node *n=edit_live_locked(object,b);id value=n?string(ps_a11y_node_text(n)):nil;
+ SDL_UnlockMutex(b->mutex);return value;
+}
 static void edit_set_value(id object,SEL selector,id value) {
  (void)selector;const char *bytes=edit_string_bytes(value);ps_a11y_native *b=owner(object);if(!b || !bytes)return;
  SDL_LockMutex(b->mutex);if(edit_available_locked(b,edit_live_locked(object,b)))ps_a11y_set_text(b->model,identifier(object),bytes);SDL_UnlockMutex(b->mutex);
 }
 static long edit_count(id object,SEL selector) {
- (void)selector;ps_a11y_node n;ps_a11y_utf16_index index={0};long count=0;
- if(node_copy(object,&n) && edit_index(&n,&index))count=(long)index.count;ps_a11y_utf16_clear(&index);return count;
+ (void)selector;ps_a11y_utf16_index index={0};long count=0;
+ if(edit_copy_index(object,&index))count=(long)index.count;ps_a11y_utf16_clear(&index);return count;
 }
 static ax_range edit_selection(id object,SEL selector) {
  (void)selector;ps_a11y_native *b=owner(object);ax_range range={AX_NOT_FOUND,0};if(!b)return range;
@@ -45,16 +54,17 @@ static ax_range edit_selection(id object,SEL selector) {
  SDL_UnlockMutex(b->mutex);ps_a11y_utf16_clear(&index);return range;
 }
 static id edit_string_range(id object,SEL selector,ax_range range) {
- (void)selector;ps_a11y_node n;ps_a11y_utf16_index index={0};size_t begin,end;id value=nil;
- if(node_copy(object,&n) && edit_index(&n,&index) && ps_a11y_utf16_range(&index,range.location,range.length,&begin,&end))
+ (void)selector;ps_a11y_utf16_index index={0};size_t begin,end;id value=nil;
+ if(edit_copy_index(object,&index) && ps_a11y_utf16_range(&index,range.location,range.length,&begin,&end))
   value=((id(*)(id,SEL,ax_range))objc_msgSend)(string(index.text),sel_registerName("substringWithRange:"),range);
  ps_a11y_utf16_clear(&index);return value;
 }
 static id edit_selected_text(id object,SEL selector) {
  (void)selector;ps_a11y_native *b=owner(object);if(!b)return nil;id value=nil;
  SDL_LockMutex(b->mutex);const ps_a11y_node *n=edit_live_locked(object,b);
- if(edit_available_locked(b,n)) {char bytes[PS_A11Y_EDIT_BYTES];size_t count=n->text_end-n->text_start;
-  memcpy(bytes,n->text_value+n->text_start,count);bytes[count]=0;value=string(bytes);
+ if(edit_available_locked(b,n) && n->text_start<=n->text_end && n->text_end<=ps_a11y_node_text_size(n)) {
+  size_t count=n->text_end-n->text_start;char *bytes=malloc(count+1);
+  if(bytes){memcpy(bytes,ps_a11y_node_text(n)+n->text_start,count);bytes[count]=0;value=string(bytes);free(bytes);}
  }SDL_UnlockMutex(b->mutex);return value;
 }
 static id edit_selection_ranges(id object,SEL selector) {
@@ -80,13 +90,13 @@ static void edit_set_selection_ranges(id object,SEL selector,id ranges) {
  if(type && !strcmp(type,AX_RANGE))edit_set_selection(object,selector,((ax_range(*)(id,SEL))objc_msgSend)(value,sel_registerName("rangeValue")));
 }
 static ax_range edit_line_range(id object,SEL selector,long line) {
- (void)selector;ps_a11y_node n;ps_a11y_utf16_index index={0};ax_range range={AX_NOT_FOUND,0};
- if(line==0 && node_copy(object,&n) && edit_index(&n,&index))range=(ax_range){0,index.count};
+ (void)selector;ps_a11y_utf16_index index={0};ax_range range={AX_NOT_FOUND,0};
+ if(line==0 && edit_copy_index(object,&index))range=(ax_range){0,index.count};
  ps_a11y_utf16_clear(&index);return range;
 }
 static long edit_line_index(id object,SEL selector,long unit) {
- (void)selector;ps_a11y_node n;ps_a11y_utf16_index index={0};long line=(long)AX_NOT_FOUND;
- if(unit>=0 && node_copy(object,&n) && edit_index(&n,&index) && (unsigned long)unit<=index.count)line=0;
+ (void)selector;ps_a11y_utf16_index index={0};long line=(long)AX_NOT_FOUND;
+ if(unit>=0 && edit_copy_index(object,&index) && (unsigned long)unit<=index.count)line=0;
  ps_a11y_utf16_clear(&index);return line;
 }
 static long edit_caret_line(id object,SEL selector) {
@@ -114,7 +124,7 @@ static ax_range edit_visible_range(id object,SEL selector) {
  (void)selector;ps_a11y_native *b=owner(object);ax_range range={0};if(!b)return range;
  ps_a11y_utf16_index index={0};SDL_LockMutex(b->mutex);const ps_a11y_node *n=edit_live_locked(object,b);
  if(edit_available_locked(b,n) && n->box_count && edit_index(n,&index)) {
-  size_t begin=strlen(n->text_value),end=0,start,finish;
+  size_t begin=ps_a11y_node_text_size(n),end=0,start,finish;
   for(size_t i=0;i<n->box_count;i++){const ps_a11y_text_box *box=&b->model->edit_boxes[n->box_offset+i];if(box->begin<begin)begin=box->begin;if(box->end>end)end=box->end;}
   if(ps_a11y_utf16_offset(&index,begin,&start) && ps_a11y_utf16_offset(&index,end,&finish))range=(ax_range){start,finish-start};
  }SDL_UnlockMutex(b->mutex);ps_a11y_utf16_clear(&index);return range;

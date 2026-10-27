@@ -14,7 +14,7 @@ import zlib
 MODES=('protocol-ui-wrap-dark','protocol-ui-wrap-light','protocol-ui-wrap-contrast',
        'protocol-ui-wrap-large','protocol-ui-wrap-narrow')
 SUFFIX="\r\n\tOriginal α e\u0301 🌍\r\nHIER IST DAS ECHTE ENDE!".encode('utf-8')
-ORIGINAL=bytes(ord('A')+i%26 for i in range(12*1024-len(SUFFIX)))+SUFFIX
+ORIGINAL=bytes(ord('A')+i%26 for i in range(64*1024-len(SUFFIX)))+SUFFIX
 def require(ok,message):
     if not ok:raise RuntimeError(message)
 

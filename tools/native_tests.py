@@ -120,6 +120,7 @@ def catalog():
         Case("accessibility_tables", ("tests/test_accessibility_tables.c", "app/accessibility.c")),
         Case("accessibility_suspend", ("tests/test_accessibility_suspend.c", "app/accessibility.c")),
         Case("accessibility_edit", ("tests/test_accessibility_edit.c", "app/accessibility.c")),
+        Case("accessibility_readonly_large", ("tests/test_accessibility_readonly_large.c",)),
         Case("accessibility_options", ("tests/test_accessibility_options.c", "app/accessibility.c")),
         Case("accessibility_focus", ("tests/test_accessibility_focus.c", "app/accessibility.c")),
         Case("series_si", ("tests/test_series_si.c",),arguments=("{work}",)),

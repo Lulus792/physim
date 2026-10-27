@@ -1,0 +1,527 @@
+{
+  "format": 1,
+  "date": "2026-10-26",
+  "source_base": "21c15bc",
+  "scope": "Complete native original text in selected Protocol C; broader C/H/UI objective remains open",
+  "artifacts_root": "D:/Physim/build",
+  "f_drive_accessed": false,
+  "source": {
+    "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/final-compiler-source.json",
+    "sha256": "6fc6638a77dfc33851ec09712af1ad3533367de88b60df3e0b4d6509f4625ac3"
+  },
+  "runtime": {
+    "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/final-runtime.json",
+    "sha256": "cf6e7211754b814b43a20e172832c386f80353f233f56f4fcb60e022b39aa7e0"
+  },
+  "runtime_byte_index": {
+    "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/final-byte-index.json",
+    "sha256": "c7908cfd96f3f3127df4f7e7ac872118ad3272655ea28170a358e71cb369fa3b"
+  },
+  "source_and_runtime_archives_fully_read_back": true,
+  "foreign_atspi_verification": {
+    "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/owned-atspi-verification.json",
+    "sha256": "d32fb6ed615683bec06df0797f05132a92bbea625d94e24db4b306cc1e83c2dd"
+  },
+  "counterexamples": {
+    "old_fixed_model": {
+      "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/before-unit-archive.json",
+      "sha256": "6c78dd2b4b86e94f14695cb5393aa8b4e59fce620c25218f22e22627b10583a0"
+    },
+    "old_fixed_model_command": {
+      "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/before-windows.json",
+      "sha256": "8a62d40437199e6de76f35354b43347935a8a1a554b8339eb6d07f991dbb5efd"
+    },
+    "old_fixed_model_log": {
+      "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/before-windows.log",
+      "sha256": "2ddf81c656b886ae9ad289c969f40fe79d817743e7adcbd355d1de8c985cdb13"
+    },
+    "old_fixed_model_bytes": {
+      "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/before-unit-source-runtime.zip",
+      "sha256": "d9239bd3f69ae7150ab7ab56a881503b7d8d01f7de2b95015f5332e93f959291"
+    },
+    "old_paginated_app": {
+      "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/before-flow/result.json",
+      "sha256": "3acafb09f0e308b004104531c7538db5faefb7ab5226eba946e554314c24779f"
+    },
+    "old_paginated_source": {
+      "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/before-flow-compiler-source.json",
+      "sha256": "5adde0c8e4a650e180ac8c02003ef58be1247c6b54ae2c51b005e3d5f4f1421b"
+    },
+    "old_paginated_runtime": {
+      "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/before-flow-byte-index.json",
+      "sha256": "8287ef7086685c9f514196a5241a654287879bf9257b0ae2384f028b8a650494"
+    },
+    "declared_bytes": 65536,
+    "displayed_bytes": 12288,
+    "expected_exit_code": 1
+  },
+  "final_groups": {
+    "windows": {
+      "units": {
+        "log": {
+          "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/final-units-windows.log",
+          "sha256": "aef63555ab1ebbdb42c94626290e939b58267909caa5c3ff953e5f8ebd942097"
+        },
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-srq7o3ry/results.json",
+          "sha256": "c4e2f9dc8587b30b76f01f9a4355bbabc428a6c231919f104296725c0c94047c"
+        },
+        "passed": 10,
+        "total": 10,
+        "cases": [
+          {
+            "name": "editor_wrapped",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_document",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_tables",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_suspend",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_edit",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_readonly_large",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_options",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_focus",
+            "status": "passed"
+          },
+          {
+            "name": "ui_text_flow",
+            "status": "passed"
+          }
+        ]
+      },
+      "display": {
+        "log": {
+          "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/final-display-windows.log",
+          "sha256": "ea92c23311aec610f9f1d9857da3fac6101eebb78363c74a64f4b3c3ab29a5e4"
+        },
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bz08luo3/results.json",
+          "sha256": "3cf333f79c3f6cfe730ec5a77866e31f4bcfedf58ef352e00c841eea659d305b"
+        },
+        "passed": 3,
+        "total": 3,
+        "cases": [
+          {
+            "name": "protocol_original",
+            "status": "passed"
+          },
+          {
+            "name": "protocol_original_windows",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_edit_windows",
+            "status": "passed"
+          }
+        ]
+      },
+      "boundaries": {
+        "log": {
+          "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/final-boundaries-windows.log",
+          "sha256": "1c60e04cc40b97b370b7998869f1a6a3b883a21382d780028ad85bea2bb5faee"
+        },
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-9hh6fzu3/results.json",
+          "sha256": "d7fc027f3717ac7e2f559ad359ec8397af83ee286e0cd2a0b43fb766bd0d1613"
+        },
+        "passed": 1,
+        "total": 1,
+        "cases": [
+          {
+            "name": "accessibility_readonly_large",
+            "status": "passed"
+          }
+        ]
+      },
+      "commands": {
+        "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/final-windows.json",
+        "sha256": "04f8f64fd4de17e6d84623062fb4407702fdc402bb75cd0c7ecf34918f6523bd"
+      },
+      "boundary_command": {
+        "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/final-boundaries-windows.json",
+        "sha256": "057676a0c416c9b4934b9cfb15868705acbcd3949b4d3ef20f62aa165f78685b"
+      }
+    },
+    "linux": {
+      "units": {
+        "log": {
+          "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/final-units-linux.log",
+          "sha256": "1b11b7e4688de4945b03927367d9ba097c687b8936a9fba807cbeca30e34d508"
+        },
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-46wc7cv_/results.json",
+          "sha256": "b0498975691539e48abe209e28013623df1277951048ff0f5b0c1e8fabe8d939"
+        },
+        "passed": 10,
+        "total": 10,
+        "cases": [
+          {
+            "name": "editor_wrapped",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_document",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_tables",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_suspend",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_edit",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_readonly_large",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_options",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_focus",
+            "status": "passed"
+          },
+          {
+            "name": "ui_text_flow",
+            "status": "passed"
+          }
+        ]
+      },
+      "display": {
+        "log": {
+          "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/final-display-linux.log",
+          "sha256": "f66b75e46b10d25d0b2cfc60408199fb9d9353c5914babb5b1e9b4d243824a91"
+        },
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-w32z9e9o/results.json",
+          "sha256": "78d3ee6cb342ea1d1445e9057d1edda82619fc8c7a6ce4fcc247b960ac2dba6d"
+        },
+        "passed": 3,
+        "total": 3,
+        "cases": [
+          {
+            "name": "protocol_original",
+            "status": "passed"
+          },
+          {
+            "name": "protocol_original_atspi",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_edit_atspi",
+            "status": "passed"
+          }
+        ]
+      },
+      "boundaries": {
+        "log": {
+          "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/final-boundaries-linux.log",
+          "sha256": "49db27eb01e68af613f1cdef07a8638adec1a8818199e427a2ca7e5ba25bb596"
+        },
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-9d1jv67k/results.json",
+          "sha256": "248e37449ceaaf84d3446a1dce9a65c6646b6d5a3e2b07eea9d66b770fd4e06e"
+        },
+        "passed": 1,
+        "total": 1,
+        "cases": [
+          {
+            "name": "accessibility_readonly_large",
+            "status": "passed"
+          }
+        ]
+      },
+      "commands": {
+        "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/final-linux.json",
+        "sha256": "2a551db41e8522b5f72491b57db61bf5a4b9a90a96f9ebd5d41e8409e2bae342"
+      },
+      "boundary_command": {
+        "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/final-boundaries-linux.json",
+        "sha256": "508c1f9f1dbb6f8bc24ad2ce59cd28f7307ade37d50d639d033097fb67e37209"
+      }
+    }
+  },
+  "independent_reader_reports": {
+    "windows": {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bz08luo3/protocol_original_windows/files \u00e4/verification.json",
+      "sha256": "2a9633a4143b12f091f8f8227da9abf3b7baaf04d4de978ec88bafbc58861a94"
+    },
+    "linux": {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-w32z9e9o/protocol_original_atspi/files \u00e4/verification.json",
+      "sha256": "c785c012bfdab452003e85352b4be5028c65ed8b47682020b5bd2179fe72674e"
+    }
+  },
+  "memory": {
+    "windows": {
+      "snapshot_peak_bytes": 16859177,
+      "model_bytes": 8549640,
+      "all_owned_allocations_released": true,
+      "individual_over_limit_rejected": true,
+      "aggregate_over_limit_rejected": true,
+      "maximum_payload_published": 16777216,
+      "long_to_inline_transition": true,
+      "linux_detect_leaks": false
+    },
+    "linux": {
+      "snapshot_peak_bytes": 16859177,
+      "model_bytes": 8549640,
+      "all_owned_allocations_released": true,
+      "individual_over_limit_rejected": true,
+      "aggregate_over_limit_rejected": true,
+      "maximum_payload_published": 16777216,
+      "long_to_inline_transition": true,
+      "linux_detect_leaks": true
+    }
+  },
+  "earlier_regressions": {
+    "native_windows": {
+      "log": {
+        "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/native-original-windows.log",
+        "sha256": "7b50efcc518f6764bc6193804fbd93d2718bc9d3a26c06059b601c40653ddd1f"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-r1i68obm/results.json",
+        "sha256": "e6780dcc07bedf4b192f2f8a29b90f77c67eddd966a5a7a06ba3ecfda763d20f"
+      },
+      "passed": 5,
+      "total": 5,
+      "cases": [
+        {
+          "name": "protocol_actions",
+          "status": "passed"
+        },
+        {
+          "name": "protocol_original",
+          "status": "passed"
+        },
+        {
+          "name": "protocol_original_windows",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_edit_scroll_windows",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_edit_windows",
+          "status": "passed"
+        }
+      ]
+    },
+    "native_linux": {
+      "log": {
+        "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/native-original-linux.log",
+        "sha256": "9ff2161d98b257bfa75e7f98a41cc55d3059987093ab229ce3cfb2a70a9e3a64"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-rbmm1pmb/results.json",
+        "sha256": "96e3979f53af28b572e2eb1cb4aae5b1b9462cb9ccfc4adfc7c7a193c32c87ff"
+      },
+      "passed": 4,
+      "total": 4,
+      "cases": [
+        {
+          "name": "protocol_actions",
+          "status": "passed"
+        },
+        {
+          "name": "protocol_original",
+          "status": "passed"
+        },
+        {
+          "name": "protocol_original_atspi",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_edit_atspi",
+          "status": "passed"
+        }
+      ]
+    },
+    "linux_editors": {
+      "log": {
+        "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/shared-editors-linux.log",
+        "sha256": "28a1d862269c53041741c372f3db02ef162503852401abf91ca876cf9a038fd7"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-wv9dryzu/results.json",
+        "sha256": "52c6c075510e05cbc548d78b334981a78c0325ea8e1c8e40aae6754ef9735d20"
+      },
+      "passed": 3,
+      "total": 3,
+      "cases": [
+        {
+          "name": "protocol_navigator",
+          "status": "passed"
+        },
+        {
+          "name": "editor_replace_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "analysis_editor",
+          "status": "passed"
+        }
+      ]
+    },
+    "windows_text": {
+      "log": {
+        "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/shared-text-windows.log",
+        "sha256": "53177c28517ca96e8f8c93462252027eedfc4d77102f579517c9956af3137079"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-oay70a3g/results.json",
+        "sha256": "1e252a30e5fbba6c8c72e18f4d2d1a79d87d32ac1667f740553145656008e302"
+      },
+      "passed": 2,
+      "total": 2,
+      "cases": [
+        {
+          "name": "code_wrap",
+          "status": "passed"
+        },
+        {
+          "name": "code_grapheme",
+          "status": "passed"
+        }
+      ]
+    },
+    "earlier_source": {
+      "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/native-original-compiler-source.json",
+      "sha256": "06d8d63863c784b88248911bfec23fea09199730f325b26dcdcb984a6c6d80f2"
+    },
+    "earlier_runtime": {
+      "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/native-original-byte-index.json",
+      "sha256": "4dba44afb6f415ef7112fc5657e452a991308ed4f89c51e84f2920230c75d3ad"
+    }
+  },
+  "runner_regression": {
+    "windows": {
+      "first_attempt": {
+        "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/runner-windows.log",
+        "sha256": "66dd2369f65163da8d9eb8aba74fc80d633027709d1f65cd81e8140734715e1c"
+      },
+      "passed_attempt": {
+        "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/runner-fixed-windows.log",
+        "sha256": "f0a2b10b8acba72e0f98197033ff8c7955adfeb2a68bd8995f3b88f62510d7ef"
+      },
+      "exit_code": 0,
+      "repair": "Register existing protocol_actions, protocol_original, source_outline_hover and new platform reader in the unchanged exhaustive display catalog assertion"
+    },
+    "linux": {
+      "first_attempt": {
+        "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/runner-linux.log",
+        "sha256": "147096e7d559ee7406703a3d5b9c1814c38cc9b4cee2b374db41ee22b325462a"
+      },
+      "passed_attempt": {
+        "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/runner-fixed-linux.log",
+        "sha256": "fd408a6262bc084f29c8ceabd041c72f4d67209dac788ff692aadab34817fc2e"
+      },
+      "exit_code": 0,
+      "repair": "Register existing protocol_actions, protocol_original, source_outline_hover and new platform reader in the unchanged exhaustive display catalog assertion"
+    }
+  },
+  "desktop": {
+    "app_sha256": "0072acf99f357aa58075d3095ea1e36f3a555c4e67ce1778e9ba1bc230d4ce33",
+    "source": {
+      "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/native-original-compiler-source.json",
+      "sha256": "06d8d63863c784b88248911bfec23fea09199730f325b26dcdcb984a6c6d80f2"
+    },
+    "commands": {
+      "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/desktop-restart-start.json",
+      "sha256": "0f2094ed7d20b7f7630494af8d56f8004434eaaaf042690dd6d49e9671714efb"
+    },
+    "stdout": {
+      "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/desktop-restart.stdout",
+      "sha256": "54624e5f07b490583009e072c876a8816d7069ed0c6ab5f119e38ba19612766e"
+    },
+    "stderr": {
+      "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/desktop-restart.stderr",
+      "sha256": "27ecdd2d57f54091704ae976a1d1fbb020983436cf1cae75b3762f2c63bae359"
+    },
+    "exit": {
+      "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/desktop-restart-exit.json",
+      "sha256": "0c9a66310a0d293c253cb0be9b3b75a316b5598d241b160d525771acc70bf4a7"
+    },
+    "independent_focus": {
+      "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/desktop-native-focus.log",
+      "sha256": "508cf6ee531873bc96a6aa78917ca3d8fc8777e60b7aebfea390b11790ffc6a0"
+    },
+    "real_mouse_focus_transfer": true,
+    "drag_height": [
+      340,
+      380
+    ],
+    "computer_use_focus_text_stale": true,
+    "requested_key": "Shift_L+Up",
+    "received_sdl_keycode": 1073741920,
+    "received_sdl_scancode": 96,
+    "received_key": "KP_8",
+    "direct_arrow_step": "unverified",
+    "termination": "Fixed 900-second manual harness timeout, not a passing full manual run or proven crash"
+  },
+  "visuals": {
+    "versioned_images": [
+      {
+        "path": "docs/visuals/unified-workspace/protocol-continuous-2026-10-26/windows-dark-end.png",
+        "sha256": "7ed4d8987d622c1c55698a2092d605f26fd46d4543a2c7c098b5f04d03579f4d",
+        "purpose": "Actual full 64-KiB text end in one native detail area"
+      }
+    ],
+    "reader_screenshots": 0,
+    "raw_theme_and_size_images": "Five purposeful native original states per final platform run; input sequences are JSON"
+  },
+  "environment": {
+    "windows": "MSVC Release, native SDL/OpenGL",
+    "linux": "Alpine-Dev GCC Debug ASan/UBSan, inherited WSLg DISPLAY=:0, original cases report Mesa26.1.6 llvmpipe",
+    "unit_asan_options": "detect_leaks=1:halt_on_error=1",
+    "gui_asan_options": "detect_leaks=0:halt_on_error=1"
+  },
+  "open_findings": [
+    "Direct Windows arrow input: Computer Use supplied KP_8; physical key not verified",
+    "macOS adapter changed, but no actual macOS build/run in this evidence",
+    "macOS AX line methods still need multiline behavior and platform acceptance",
+    "Actual screenreader reading, DPI/monitor coverage, full C/H/overall fidelity",
+    "16-MiB native layout performance and total process memory not measured",
+    "Remaining C detail typography and block spacing against approved reference"
+  ],
+  "retention": {
+    "sources_and_original_bytes": "Retained in Git and read-back-verified source/runtime archives",
+    "old_failures": "Preserved with their original result and cohort",
+    "current_runtime_files": 236,
+    "historical_evidence": "unchanged",
+    "shared_vm_and_other_projects": "untouched"
+  }
+}

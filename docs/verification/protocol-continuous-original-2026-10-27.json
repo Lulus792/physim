@@ -1,0 +1,245 @@
+{
+  "format": 1,
+  "date": "2026-10-27",
+  "source_base": "21c15bc",
+  "scope": "Final continuous original text, including borrowed-source lifetime fix; full C/H/overall goal remains open",
+  "previous_partial_report": {
+    "path": "docs/verification/protocol-continuous-original-2026-10-26.json",
+    "sha256": "cea75cbc3c820760238991af9b6986c08d15e2095adb6fe0f6dda29c562e5ff1"
+  },
+  "source": {
+    "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/ready-compiler-source.json",
+    "sha256": "aff8858da80e473d736dd39ea3d68e759471fe36d45a36b61ab8278e9d4622ca"
+  },
+  "runtime": {
+    "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/ready-runtime.json",
+    "sha256": "bea3a464de423238752a67bf4e2f0ecceea1e40c1f6fa7924d111c42e4a63021"
+  },
+  "runtime_byte_index": {
+    "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/ready-byte-index.json",
+    "sha256": "58cdbeac4d2d17c743f171748cbd0921941b257f1bcabe87e9875938e55a2b19"
+  },
+  "all_source_and_runtime_archive_bytes_read_back": true,
+  "owned_input_files_compared": 20,
+  "foreign_atspi_changes_preserved_and_excluded": {
+    "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/owned-atspi-verification.json",
+    "sha256": "d32fb6ed615683bec06df0797f05132a92bbea625d94e24db4b306cc1e83c2dd"
+  },
+  "final_groups": {
+    "windows": {
+      "units": {
+        "log": {
+          "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/ready-units-windows.log",
+          "sha256": "a86ab884d83c6f13fdea254b93eab6ac2042c1ceb56707665b4c3035c86c1e15"
+        },
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-r9weci1e/results.json",
+          "sha256": "b1c3e68e277629e9d8ec2bd9e5ce2ba652ce9294b6833f325e0e9259fd36ae2c"
+        },
+        "passed": 10,
+        "total": 10,
+        "cases": [
+          "editor_wrapped",
+          "accessibility",
+          "accessibility_document",
+          "accessibility_tables",
+          "accessibility_suspend",
+          "accessibility_edit",
+          "accessibility_readonly_large",
+          "accessibility_options",
+          "accessibility_focus",
+          "ui_text_flow"
+        ]
+      },
+      "display": {
+        "log": {
+          "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/ready-display-windows.log",
+          "sha256": "3b6df0f7c1b0de809cadded46518bbd7fe44617433d5752b33c87e74e094e68c"
+        },
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-q1mbsu38/results.json",
+          "sha256": "b1b8ca15fa69a471ab89db4cc5bb6062d204800bc9c894bdb6a85a276d2ee95d"
+        },
+        "passed": 3,
+        "total": 3,
+        "cases": [
+          "protocol_original",
+          "protocol_original_windows",
+          "accessibility_edit_windows"
+        ]
+      },
+      "commands": {
+        "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/ready-windows.json",
+        "sha256": "04f8f64fd4de17e6d84623062fb4407702fdc402bb75cd0c7ecf34918f6523bd"
+      }
+    },
+    "linux": {
+      "units": {
+        "log": {
+          "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/ready-units-linux.log",
+          "sha256": "3ab26842068c1eacbc39e69693a3c59374daab7db5c0bb5a23e3b949d2e25abf"
+        },
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-p75cywt7/results.json",
+          "sha256": "f67c656a5b678e3fac9f37d74accafac7106341b4ea97eae1b64b7645329bf6c"
+        },
+        "passed": 10,
+        "total": 10,
+        "cases": [
+          "editor_wrapped",
+          "accessibility",
+          "accessibility_document",
+          "accessibility_tables",
+          "accessibility_suspend",
+          "accessibility_edit",
+          "accessibility_readonly_large",
+          "accessibility_options",
+          "accessibility_focus",
+          "ui_text_flow"
+        ]
+      },
+      "display": {
+        "log": {
+          "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/ready-display-linux.log",
+          "sha256": "a14aa6e1c41adc6d5bc1a071ea69c7a8246c37bb6ff00b6ca7b0ce703c05e759"
+        },
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-6c8u2rry/results.json",
+          "sha256": "e12345fa8821c7c4b738921d24ae4e31edce0ed7b7b81c6092155183ed85a1f2"
+        },
+        "passed": 3,
+        "total": 3,
+        "cases": [
+          "protocol_original",
+          "protocol_original_atspi",
+          "accessibility_edit_atspi"
+        ]
+      },
+      "commands": {
+        "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/ready-linux.json",
+        "sha256": "2a551db41e8522b5f72491b57db61bf5a4b9a90a96f9ebd5d41e8409e2bae342"
+      }
+    }
+  },
+  "independent_reader_reports": {
+    "windows": {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-q1mbsu38/protocol_original_windows/files \u00e4/verification.json",
+      "sha256": "a65cb30f285fc5534740977b505f84651cba954324e12c2bc2f51be847f8f2f7"
+    },
+    "linux": {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-6c8u2rry/protocol_original_atspi/files \u00e4/verification.json",
+      "sha256": "f95046d4d59d7da7cc500553956bea6b2cb8b7d826ec4879910b11e2d8137699"
+    }
+  },
+  "memory": {
+    "windows": {
+      "snapshot_peak_bytes": 16859177,
+      "model_bytes": 8549640,
+      "all_owned_allocations_released": true,
+      "full_original_and_16MiB_limits": true,
+      "own_snapshot_slice_replacement": true,
+      "overlapping_inline_slice": true,
+      "stale_requests_and_allocation_failure": true,
+      "detect_leaks": false
+    },
+    "linux": {
+      "snapshot_peak_bytes": 16859177,
+      "model_bytes": 8549640,
+      "all_owned_allocations_released": true,
+      "full_original_and_16MiB_limits": true,
+      "own_snapshot_slice_replacement": true,
+      "overlapping_inline_slice": true,
+      "stale_requests_and_allocation_failure": true,
+      "detect_leaks": true
+    }
+  },
+  "review_counterexamples": {
+    "before": {
+      "windows": {
+        "command": {
+          "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/alias-before-windows.json",
+          "sha256": "8a62d40437199e6de76f35354b43347935a8a1a554b8339eb6d07f991dbb5efd"
+        },
+        "log": {
+          "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/alias-before-windows.log",
+          "sha256": "190e7d2bf0951499cf235300559d92b3033a0b202e787ee018b01bd27b3dfb7d"
+        },
+        "expected_exit_code": 1
+      },
+      "linux": {
+        "command": {
+          "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/alias-before-linux.json",
+          "sha256": "0b9a08b9c4ba6e4f0481e0e382dd8b565018cd9d31c1c113629183ec2964179a"
+        },
+        "log": {
+          "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/alias-before-linux.log",
+          "sha256": "086f2fb557fcd70017ff822737e11f145901436f35c86583c37464a7128efe79"
+        },
+        "expected_exit_code": 1
+      }
+    },
+    "source": {
+      "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/alias-counter-compiler-source.json",
+      "sha256": "5abf576504a49eb35e703fae69196f2091ce6b37e012ba926c3a994929627d7a"
+    },
+    "runtime": {
+      "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/alias-counter-byte-index.json",
+      "sha256": "2ac8d9acb3fdd223c70510de3346384b9e173bf5efb134fc613965d13422b7fd"
+    },
+    "incomplete_first_fix": {
+      "log": {
+        "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/alias-final-units-linux.log",
+        "sha256": "69a39feb996c1de42220cde092042c99ba1b84e521925ccb0585607f532f5293"
+      },
+      "source": {
+        "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/alias-partial-compiler-source.json",
+        "sha256": "77520cf8c8452a3d245d42f5129d22eb91a34b68bb33877ac868744733e3c8ca"
+      },
+      "runtime": {
+        "path": "build/validation/protocol-wrap-2026-10-26/12-continuous-original/alias-partial-byte-index.json",
+        "sha256": "a5623da497740380206c8126522612521d97b3ad5c8c600b23148d161b0a7b13"
+      },
+      "actual": "ASan heap-use-after-free in post-copy text boundary validation"
+    },
+    "correction": "Copy borrowed slices before releasing the old snapshot; validate against the newly owned value; memmove supports overlapping inline slices"
+  },
+  "desktop": {
+    "previous_trace_in_partial_report": true,
+    "manual_arrow_proof": "unverified; explicitly deferred by user until they report available time",
+    "no_new_manual_fixture_or_assistance_request_until_user_resumes": true
+  },
+  "visuals": {
+    "versioned_images": [
+      {
+        "path": "docs/visuals/unified-workspace/protocol-continuous-2026-10-26/windows-dark-end.png",
+        "sha256": "7ed4d8987d622c1c55698a2092d605f26fd46d4543a2c7c098b5f04d03579f4d",
+        "purpose": "Actual full 64-KiB text end in one native detail area"
+      }
+    ],
+    "selected_image_byte_equal_to_final_windows_case": true,
+    "new_versioned_images_for_lifetime_fix": 0,
+    "reader_screenshots": 0
+  },
+  "environment": {
+    "windows": "MSVC Release, native SDL/OpenGL",
+    "linux": "Alpine-Dev GCC Debug ASan/UBSan, inherited WSLg DISPLAY=:0, original cases report Mesa26.1.6 llvmpipe",
+    "unit_asan_options": "detect_leaks=1:halt_on_error=1",
+    "gui_asan_options": "detect_leaks=0:halt_on_error=1"
+  },
+  "open_findings": [
+    "Direct Windows arrow input: Computer Use supplied KP_8; physical key not verified",
+    "macOS adapter changed, but no actual macOS build/run in this evidence",
+    "macOS AX line methods still need multiline behavior and platform acceptance",
+    "Actual screenreader reading, DPI/monitor coverage, full C/H/overall fidelity",
+    "16-MiB native layout performance and total process memory not measured",
+    "Remaining C detail typography and block spacing against approved reference"
+  ],
+  "storage": {
+    "root": "D:/Physim/build",
+    "f_drive_accessed": false,
+    "current_runtime_files": 236,
+    "archive_policy": "Only changed files relative to the previous hash index",
+    "old_failures_and_frozen_reports": "retained unchanged",
+    "shared_vm_and_other_projects": "untouched"
+  }
+}

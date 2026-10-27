@@ -59,12 +59,15 @@ Der [Nachlauf zur natürlichen Originaltexthöhe](PROTOCOL-ORIGINAL-FLOW-NATIVE.
 übernimmt das Scrollen im Detailbereich und schließt unsichtbare
 Klickübernahme. Der [Detail- und Aktionsabgleich](PROTOCOL-ACTIONS-NATIVE.md)
 übernimmt 20 px Innenabstand und inhaltsbreite, umbrechende Aktionen.
-12-KiB-Abschnitte, weitere Detailtypografie und Blockabstände sowie der
-[direkte Mausfokus](PROTOCOL-FOCUS-NATIVE.md) bleiben offen. Der folgende
+Der [Nachlauf zum durchgehenden Originaltext](PROTOCOL-CONTINUOUS-ORIGINAL-NATIVE.md)
+entfernt die 12-KiB-Abschnitte mit vollständiger nativer Auswahl/Kopie und
+unabhängigen UIA-/AT-SPI-Nachweisen. Weitere Detailtypografie und Blockabstände
+bleiben offen. Der folgende
 [Zeiger-Nachlauf](PROTOCOL-POINTER-NATIVE.md) schließt verlorene schnelle Klicks
 in den gemeinsamen Aktionen/Editfeldern und am Protokolltrenner. Linux prüft
 den schnellen Suche-/Trennerwechsel mit 40-Pixel-Tastaturschritt. Direkter
-Windows-Desktopfokus bleibt offen. Der zusätzlich gescheiterte F1-UIA-Scrollnachweis
+Windows-Mausfokus und 40-Pixel-Ziehung sind im späteren Originaltext-Nachlauf
+belegt; der direkte Pfeiltastennachweis bleibt offen. Der zusätzlich gescheiterte F1-UIA-Scrollnachweis
 ist im folgenden [Reihenfolgenachlauf](../f1-layouts/UIA-SCROLL-ORDER.md) mit
 unveränderten Scroll-/Fokuserwartungen und gezielter alter Gegenprobe geschlossen.
 Diese Teilprüfungen und die getrennten Datenquellen-Nachweise sind keine
