@@ -69,6 +69,10 @@ Der [native Projektdialog B](PROJECT-WIZARD-B-NATIVE.md) übernimmt anschließen
 den Dreischritt, das Kartenraster, Schriftrollen und Fußaktionen mit echter
 Projektanlage. Je 68 Windows-/Linux-Projektabläufe und unabhängige native
 Kartenauswahl bestehen. Der darin aufgerufene Explorer A bleibt umzusetzen.
+Seine [Dateisystemgrundlage](EXPLORER-A-NATIVE.md) ist anschließend mit echten
+Windows-/Linux-Dateien geprüft: Metadaten, Filter, lange Pfade, Abbruch und
+Ordneranlage. Ein verschwundenes Windows-Junction-Ziel wird korrekt abgewiesen.
+Der Controller und die sichtbare A-Oberfläche sind damit noch nicht angebunden.
 Der folgende
 [Zeiger-Nachlauf](PROTOCOL-POINTER-NATIVE.md) schließt verlorene schnelle Klicks
 in den gemeinsamen Aktionen/Editfeldern und am Protokolltrenner. Linux prüft

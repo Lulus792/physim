@@ -43,6 +43,12 @@ Dreischritt, acht zugängliche Vorlagenkarten und überprüfbare Projektanlage.
 Windows und Linux bestehen je 68 vollständige Projektabläufe sowie die
 Dialog-, Fehler- und nativen Accessibility-Prüfungen. Der eingebettete
 Explorer A und die vollständige Oberflächenabnahme bleiben offen.
+Die [geprüfte Dateisystemgrundlage für Explorer A](EXPLORER-A-NATIVE.md)
+ergänzt danach echte Ordnerlisten, Metadaten, Filter, Abbruch und exklusive
+Ordneranlage. Windows und Linux bestehen die Modellprüfungen samt langen Pfaden;
+die native Junction-Gegenprobe bestätigt die korrigierte Zielprüfung. Controller,
+A-Oberfläche, Vorschau und bereichsübergreifende Einbindung sind als Nächstes
+umzusetzen; Modellprüfungen sind keine GUI- oder Accessibility-Abnahme.
 Den noch offenen direkten Pfeiltastennachweis erst nach erneuter Rückmeldung
 des Nutzers schließen. Der folgende
 [Nachlauf für schnelle Zeigerereignisse](PROTOCOL-POINTER-NATIVE.md) erhält

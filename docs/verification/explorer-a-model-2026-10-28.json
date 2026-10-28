@@ -1,0 +1,148 @@
+{
+  "format": 1,
+  "date": "2026-10-28",
+  "source_base": "623566df48eba104f2887ae40f44ca8e277968af",
+  "scope": "Native Explorer A filesystem foundation; production controller/view/preview not integrated yet",
+  "owned_inputs": {
+    "app/file_browser.h": "82c3da5f5155bb8015f66cd1dd221d5c55a2043fee5212badcac289932324707",
+    "app/file_browser.c": "f5514ffe515a1791ab324fbef606b66262f5292ddceb59a7494187e9511c9505",
+    "tests/test_file_browser.c": "7f44cf010bc710de2a169a5fc2be5ae5ca690323f03d17fa770b422f58739d93",
+    "tests/file_browser_junction.ps1": "6e1100a0604959e46c494f04c952a85824eec263ed44b3802a2ac088bbe07321",
+    "tools/native_tests.py": "b3b2bca7924728844b7b8f7d16e6206d2a35a9a3763938ed64f95009a7392881"
+  },
+  "source_overlay": {
+    "path": "build/validation/explorer-a-2026-10-28/model-final-inputs.zip",
+    "sha256": "f0332435ef4451f9e8fa4c0962be64af95fe9a712b86d9f1b46eca7221fcf566"
+  },
+  "compiler_manifest": {
+    "path": "build/validation/explorer-a-2026-10-28/model-final-compiler-source.json",
+    "sha256": "1bc1fa79c479e38235d6937c226115c4f5fac4d93aac7d920e53d5dc0e181111"
+  },
+  "runtime": {
+    "path": "build/validation/explorer-a-2026-10-28/model-final-runtime.json",
+    "sha256": "1160149feb7c67cf0d97de8e7dd931a5c821376045c152f00e8baac393d72bc7"
+  },
+  "runtime_byte_index": {
+    "path": "build/validation/explorer-a-2026-10-28/model-final-byte-index.json",
+    "sha256": "c1554c52baf0c4224b3af068138d5388514f65deb743151e79311c86ffe04594"
+  },
+  "all_input_archive_bytes_read_back": true,
+  "all_runtime_archive_bytes_read_back": true,
+  "platforms": {
+    "windows": {
+      "command": {
+        "path": "build/validation/explorer-a-2026-10-28/model-final-windows.json",
+        "sha256": "0e8c721b70d52f8c785778accf656d9fb7ad28052bccfd651afab248af5c373d"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-jjspgwv1/results.json",
+        "sha256": "53cd823d09f2cb9bf7c8c7b83fa08f9972ba2aa2426fbfb618a602e73f0e5a01"
+      },
+      "binary": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/bin/physim-test-file_browser.exe",
+        "sha256": "52958336647561c9367c3706b2bc3b3f09780cd43d434686959ca65336a41795"
+      },
+      "measurements": {
+        "kind": "file_browser_model",
+        "entries": 200,
+        "bounded_entries": 127,
+        "real_long_path_bytes": 605,
+        "listing_nanoseconds": 4224300,
+        "windows_link_cases": 1
+      },
+      "environment": "Windows/MSVC Release; native NTFS junction fallback; no security-policy changes"
+    },
+    "linux": {
+      "command": {
+        "path": "build/validation/explorer-a-2026-10-28/model-final-linux.json",
+        "sha256": "d39da843c7902d11dbb4f67c968d5605b147f874daa5eab33b9d5cc11c612835"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gfonw5g2/results.json",
+        "sha256": "6cc1fab803ebe51750bcfc956954c73358ff409cd4056fc8cbf4c13b21ecc0e9"
+      },
+      "binary": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-file_browser",
+        "sha256": "47e5ecfcc8eb2b4ee51261ba1564fe1df4c0da0e30affc4e51e482ca5988b510"
+      },
+      "measurements": {
+        "kind": "file_browser_model",
+        "entries": 200,
+        "bounded_entries": 127,
+        "real_long_path_bytes": 606,
+        "listing_nanoseconds": 109610936,
+        "windows_link_cases": 0
+      },
+      "environment": "WSL Alpine-Dev GCC15.2, SDL3.2.30, ASan/UBSan detect_leaks=1, native symlink plus dot-dot target test"
+    }
+  },
+  "counterexamples": [
+    {
+      "kind": "actual dangling directory junction",
+      "product_source_unchanged": true,
+      "inputs": {
+        "path": "build/validation/explorer-a-2026-10-28/model-junction-counter-inputs.json",
+        "sha256": "e33c1aad0d525d59507ecfd521042eb64959d7808059912008ef4f478bbd71a8"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-jnjqkj68/results.json",
+        "sha256": "7b1c48d085a404e59862c7c9f77f3f6cb44a978eb95ef54c541cf0eba9f9eb00"
+      },
+      "finding": "Native junction created inside owned fixture; deleted target; old attribute-only selection incorrectly accepts the dangling link. Final handle-based selection rejects it."
+    },
+    {
+      "kind": "native symbolic-link privilege observation",
+      "command": {
+        "path": "build/validation/explorer-a-2026-10-28/model-link-counter-windows.json",
+        "sha256": "0e8c721b70d52f8c785778accf656d9fb7ad28052bccfd651afab248af5c373d"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-q_j_38g3/results.json",
+        "sha256": "a14ff0facee8e82e57943eab1900d55616d4cac8f2a179c03bc44a30564a9d5d"
+      },
+      "finding": "Direct Windows symlink creation returns1314; this passed basic run did not prove link semantics. Later junction fixture proves directory reparse behavior without enabling Developer Mode or bypassing PowerShell policy."
+    }
+  ],
+  "images": 0,
+  "earlier_cohorts": [
+    {
+      "phase": "model-first",
+      "windows": {
+        "path": "build/validation/explorer-a-2026-10-28/model-first-windows.json",
+        "sha256": "1e5d99211ecc061bd3a63af1113a0373640a208b1774961667be839eb5a81c06"
+      },
+      "linux": {
+        "path": "build/validation/explorer-a-2026-10-28/model-first-linux.json",
+        "sha256": "d39da843c7902d11dbb4f67c968d5605b147f874daa5eab33b9d5cc11c612835"
+      },
+      "finding": "Windows forward-slash UNC path rejected by existing resolver; translate separator spelling before applying shared absolute-path rules. Linux original model passes."
+    },
+    {
+      "phase": "model-corrected",
+      "windows": {
+        "path": "build/validation/explorer-a-2026-10-28/model-corrected-windows.json",
+        "sha256": "0e8c721b70d52f8c785778accf656d9fb7ad28052bccfd651afab248af5c373d"
+      },
+      "linux": {
+        "path": "build/validation/explorer-a-2026-10-28/model-corrected-linux.json",
+        "sha256": "d39da843c7902d11dbb4f67c968d5605b147f874daa5eab33b9d5cc11c612835"
+      },
+      "finding": "Both pass200-entry growth,127-entry limit, real long directories and native POSIX link/.. counterexample."
+    }
+  ],
+  "catalog": {
+    "path": "build/validation/explorer-a-2026-10-28/catalog.json",
+    "sha256": "9d7ec82511a48e8cca34d5bc7cc3044a90b215688873c705087975af4bcef30b"
+  },
+  "limitations": [
+    "Explorer A view, controller, history, asynchronous generation ownership and file/run preview still to implement; production app continues to use its previous dialogs.",
+    "Model is compiled by its native test case; not added to the production APP source list until integration.",
+    "Actual SMB share/root access, ACL-denied listings, allocation fault injection and macOS runtime not exercised.",
+    "Windows directory junction is proven; a file symbolic-link fixture requires privileges unavailable here and is not claimed.",
+    "Default name order is deterministic Unicode casefold, not proven equivalent to German browser locale collation.",
+    "Paths bounded at4096UTF8bytes and listings8192entries; early omitted count is a lower bound. Cancellation does not interrupt an active kernel filesystem call.",
+    "No GUI, screenreader, contrast, DPI or complete native design acceptance follows from these model tests.",
+    "Manual Windows physical key proof remains deferred at user request; no manual test window started.",
+    "All new fixture data and output remain on D; F not accessed, existing frozen evidence and unrelated local changes retained."
+  ]
+}

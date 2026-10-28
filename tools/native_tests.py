@@ -202,6 +202,8 @@ def catalog():
              arguments=("{work}",), app=True),
         Case("workspace_tree", ("tests/test_workspace_tree.c", "app/workspace_tree.c", "app/autosave.c"),
              arguments=("{work}",), app=True),
+        Case("file_browser", ("tests/test_file_browser.c", "app/file_browser.c", "app/workspace_state.c", "app/autosave.c"),
+             arguments=("{work}","{source}/tests/file_browser_junction.ps1"), app=True),
         Case("text_document", ("tests/test_text_document.c",), ("project", "core"),
              arguments=("{work}",), app=True),
     ])
