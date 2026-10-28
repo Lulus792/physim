@@ -437,6 +437,32 @@ static HRESULT readonly_file(IUIAutomationElement *control,const wchar_t *path,b
  if(whole)IUIAutomationTextRange_Release(whole);if(text)IUIAutomationTextPattern_Release(text);if(value)IUIAutomationValuePattern_Release(value);
  if(unknown)IUnknown_Release(unknown);free(expected);return result;
 }
+static HRESULT control_state(IUIAutomation *automation,IUIAutomationElement *control,IUIAutomationElement *group,bool require_radio) {
+ CONTROLTYPEID role=0;BOOL offscreen=TRUE,focused=FALSE,selected=FALSE,multiple=TRUE;int members=-1,selections=-1;
+ IUnknown *item_unknown=NULL,*group_unknown=NULL;IUIAutomationSelectionItemPattern *item=NULL;IUIAutomationSelectionPattern *selection=NULL;
+ IUIAutomationCondition *condition=NULL;IUIAutomationElementArray *children=NULL,*chosen=NULL;
+ bool ok=SUCCEEDED(IUIAutomationElement_get_CurrentControlType(control,&role)) &&
+  SUCCEEDED(IUIAutomationElement_get_CurrentIsOffscreen(control,&offscreen)) && SUCCEEDED(IUIAutomationElement_get_CurrentHasKeyboardFocus(control,&focused));
+ if(ok && role==UIA_RadioButtonControlTypeId) {
+  ok=SUCCEEDED(IUIAutomationElement_GetCurrentPattern(control,UIA_SelectionItemPatternId,&item_unknown)) && item_unknown &&
+   SUCCEEDED(IUnknown_QueryInterface(item_unknown,&IID_IUIAutomationSelectionItemPattern,(void**)&item)) && SUCCEEDED(IUIAutomationSelectionItemPattern_get_CurrentIsSelected(item,&selected));
+ }
+ if(ok && group) {
+  VARIANT type;VariantInit(&type);type.vt=VT_I4;type.lVal=UIA_RadioButtonControlTypeId;
+  ok=SUCCEEDED(IUIAutomation_CreatePropertyCondition(automation,UIA_ControlTypePropertyId,type,&condition)) &&
+   SUCCEEDED(IUIAutomationElement_FindAll(group,TreeScope_Children,condition,&children)) && children && SUCCEEDED(IUIAutomationElementArray_get_Length(children,&members)) &&
+   SUCCEEDED(IUIAutomationElement_GetCurrentPattern(group,UIA_SelectionPatternId,&group_unknown)) && group_unknown &&
+   SUCCEEDED(IUnknown_QueryInterface(group_unknown,&IID_IUIAutomationSelectionPattern,(void**)&selection)) &&
+   SUCCEEDED(IUIAutomationSelectionPattern_get_CurrentCanSelectMultiple(selection,&multiple)) && !multiple &&
+   SUCCEEDED(IUIAutomationSelectionPattern_GetCurrentSelection(selection,&chosen)) && chosen && SUCCEEDED(IUIAutomationElementArray_get_Length(chosen,&selections));
+ }
+ if(require_radio)ok=ok && role==UIA_RadioButtonControlTypeId && selected && members==8 && selections==1;
+ printf("{\"kind\":\"native_control_state\",\"role\":%d,\"selected\":%s,\"offscreen\":%s,\"focused\":%s,\"members\":%d,\"selected_count\":%d}\n",role,selected?"true":"false",offscreen?"true":"false",focused?"true":"false",members,selections);
+ if(chosen)IUIAutomationElementArray_Release(chosen);if(children)IUIAutomationElementArray_Release(children);if(condition)IUIAutomationCondition_Release(condition);
+ if(selection)IUIAutomationSelectionPattern_Release(selection);if(group_unknown)IUnknown_Release(group_unknown);
+ if(item)IUIAutomationSelectionItemPattern_Release(item);if(item_unknown)IUnknown_Release(item_unknown);
+ return ok?S_OK:E_FAIL;
+}
 int wmain(int argc,wchar_t **argv) {
  setvbuf(stdout,NULL,_IONBF,0);setvbuf(stderr,NULL,_IONBF,0);
  if(argc!=4 && argc!=5)return 2;
@@ -449,7 +475,9 @@ int wmain(int argc,wchar_t **argv) {
  bool invalid_link=!wcscmp(argv[2],L"invoke-link-invalid");
  bool lifecycle=!wcscmp(argv[2],L"lifecycle");
  bool focused_field=!wcscmp(argv[2],L"focused-field"),focused_button=!wcscmp(argv[2],L"focused-button"),focused_control=!wcscmp(argv[2],L"focused-control");
- if(!focus && !toggle && !select && !read && !edit && !text_select && !scroll_start && !scroll_end && !links && !invoke_link && !invalid_link && !lifecycle && !focused_field && !focused_button && !focused_control && !read_only_file && !read_only_selected)return 2;
+ bool invoke=!wcscmp(argv[2],L"invoke"),state=!wcscmp(argv[2],L"control-state"),radio_state=!wcscmp(argv[2],L"radio-state"),absent=!wcscmp(argv[2],L"absent");
+ if(!focus && !toggle && !select && !read && !edit && !text_select && !scroll_start && !scroll_end && !links && !invoke_link && !invalid_link && !lifecycle && !focused_field && !focused_button && !focused_control && !read_only_file && !read_only_selected && !invoke && !state && !radio_state && !absent)return 2;
+ if(radio_state && argc!=5)return 2;
  if((read || edit || text_select || scroll_start || scroll_end || links || invoke_link || invalid_link || lifecycle || read_only_file || read_only_selected) && argc!=5)return 2;
  HRESULT initialized=CoInitializeEx(NULL,COINIT_MULTITHREADED);if(FAILED(initialized))return 1;
  IUIAutomation *automation=NULL;IUIAutomationElement *desktop=NULL,*window=NULL,*group=NULL,*control=NULL;
@@ -467,12 +495,20 @@ int wmain(int argc,wchar_t **argv) {
   if(both)IUIAutomationCondition_Release(both);if(title_condition)IUIAutomationCondition_Release(title_condition);if(pid_condition)IUIAutomationCondition_Release(pid_condition);VariantClear(&title);
  } else {
   if(ok && argc==5)ok=SUCCEEDED(named(automation,window,argv[4],UIA_GroupControlTypeId,&group)) && group;
-  if(ok)ok=SUCCEEDED(named(automation,group?group:window,argv[3],0,&control)) && control;
+  if(ok){HRESULT found=named(automation,group?group:window,argv[3],0,&control);ok=SUCCEEDED(found) && (absent?control==NULL:control!=NULL);}
  }
  CONTROLTYPEID role=0;BOOL enabled=FALSE,focusable=FALSE;HRESULT action=E_FAIL;
- if(ok)ok=SUCCEEDED(IUIAutomationElement_get_CurrentControlType(control,&role)) &&
+ if(ok && !absent)ok=SUCCEEDED(IUIAutomationElement_get_CurrentControlType(control,&role)) &&
   SUCCEEDED(IUIAutomationElement_get_CurrentIsEnabled(control,&enabled)) && enabled;
- if(ok && (read_only_file || read_only_selected))action=readonly_file(control,argv[4],read_only_selected);
+ if(ok && absent)action=S_OK;
+ else if(ok && (state || radio_state))action=control_state(automation,control,group,radio_state);
+ else if(ok && invoke) {
+  IUIAutomationInvokePattern *pattern=NULL;
+  ok=role==UIA_ButtonControlTypeId && SUCCEEDED(IUIAutomationElement_GetCurrentPattern(control,UIA_InvokePatternId,&unknown)) && unknown &&
+   SUCCEEDED(IUnknown_QueryInterface(unknown,&IID_IUIAutomationInvokePattern,(void**)&pattern));
+  if(ok)action=IUIAutomationInvokePattern_Invoke(pattern);if(pattern)IUIAutomationInvokePattern_Release(pattern);
+ }
+ else if(ok && (read_only_file || read_only_selected))action=readonly_file(control,argv[4],read_only_selected);
  else if(ok && (focused_field || focused_button || focused_control))action=current_field_focus(automation,control);
  else if(ok && edit) {
   IUIAutomationValuePattern *pattern=NULL;BOOL readonly=TRUE;

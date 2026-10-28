@@ -86,12 +86,15 @@ def verify_display_catalog(runner, display_checker):
         ("protocol_actions","check_protocol_actions.py"),
         ("protocol_original","check_protocol_original.py"),
         ("protocol_typography","check_protocol_typography.py"),
+        ("project_wizard","check_project_wizard.py"),
     )})
     specialized_display["source_outline_hover"]=("tests/check_outline_hover.py",())
+    specialized_display["project_wizard_help"]=("tests/check_project_wizard_help.py",("--work",))
     if sys.platform in ("win32","linux"):
         specialized_display["graphic_dialog"]=("tests/check_graphic_dialog.py",("--root",))
     if sys.platform == "linux":
         specialized_display.update({
+            "project_wizard_atspi": ("tests/check_project_wizard_native.py", ("--work",)),
             "accessibility_document_atspi": ("tests/test_accessibility_document_atspi.py", ("--root",)),
             "accessibility_edit_atspi": ("tests/test_accessibility_edit_atspi.py", ()),
             "accessibility_links_atspi": ("tests/test_accessibility_links_atspi.py", ()),
@@ -105,6 +108,7 @@ def verify_display_catalog(runner, display_checker):
         })
     if sys.platform == "win32":
         specialized_display.update({
+            "project_wizard_windows": ("tests/check_project_wizard_native.py", ("--probe", "--work")),
             "documentation_panes_windows_host": ("tests/check_documentation_windows_host.py", ()),
             "accessibility_checkbox_windows": ("tests/test_accessibility_checkbox_app.py", ("--probe",)),
             "accessibility_options_windows": ("tests/test_accessibility_checkbox_app.py", ("--probe", "--options")),

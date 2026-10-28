@@ -12,7 +12,7 @@ typedef struct graphic_dialog {
 } graphic_dialog;
 typedef struct {struct nk_input input;ps_ui_a11y_hook hook;bool held;} graphic_input_guard;
 static graphic_input_guard graphic_export_guard(app *a) {
-    graphic_input_guard guard={0};if(!a->graphic_export)return guard;
+    graphic_input_guard guard={0};if(!a->graphic_export && !a->project_manager)return guard;
     guard.held=true;guard.input=a->ui->input;
     ps_ui_font_layout *layout=a->ui->userdata.ptr;guard.hook=layout->accessibility;layout->accessibility=NULL;
     memset(&a->ui->input,0,sizeof a->ui->input);a->ui->input.mouse.pos=nk_vec2(-10000,-10000);

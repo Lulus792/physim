@@ -64,7 +64,12 @@ entfernt die 12-KiB-Abschnitte mit vollständiger nativer Auswahl/Kopie und
 unabhängigen UIA-/AT-SPI-Nachweisen. Der [Detailtypografie-Abgleich](PROTOCOL-DETAIL-TYPE-NATIVE.md)
 übernimmt anschließend Schriftrollen, Zeilenhöhen und Block-/Spaltenabstände
 mit je sechs nativen Zuständen auf Windows/Linux. Die vollständige C-Abnahme
-und zusätzliche Dateninhalte der Browserdemo bleiben offen. Der folgende
+und zusätzliche Dateninhalte der Browserdemo bleiben offen.
+Der [native Projektdialog B](PROJECT-WIZARD-B-NATIVE.md) übernimmt anschließend
+den Dreischritt, das Kartenraster, Schriftrollen und Fußaktionen mit echter
+Projektanlage. Je 68 Windows-/Linux-Projektabläufe und unabhängige native
+Kartenauswahl bestehen. Der darin aufgerufene Explorer A bleibt umzusetzen.
+Der folgende
 [Zeiger-Nachlauf](PROTOCOL-POINTER-NATIVE.md) schließt verlorene schnelle Klicks
 in den gemeinsamen Aktionen/Editfeldern und am Protokolltrenner. Linux prüft
 den schnellen Suche-/Trennerwechsel mit 40-Pixel-Tastaturschritt. Direkter

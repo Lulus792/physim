@@ -17,6 +17,11 @@ bestätigt erneut die D:-Regeln und quittiert die Entfernung ersetzter
 Diagnose-Compilerobjekte. Die abgeschlossene Rückführung nicht erneut ausführen;
 alte Umzugsskripte sind historische Belege.
 
+Der [Nachlauf vom 28. Oktober](storage-maintenance-2026-10-28.md) entfernt
+3.808 ersetzte SDK-Cachedateien eines erfolgreich abgeschlossenen Testlaufs
+(589.485.744 Bytes). Programme, PDB-Symbole, Messläufe und eingefrorene Nachweise
+bleiben erhalten; die aktuelle Projektprüfung ist kompakt dokumentiert.
+
 Entwicklungsbefehle erhalten die Umgebung nur für ihren eigenen Prozessbaum:
 
 ```powershell

@@ -10,7 +10,7 @@ static bool analysis_project_test_start(app *a,const char *root,const char *mode
     a->dt=.01;a->project_settings_dirty=true;return a->loaded;
 }
 static void analysis_project_test_frame(app *a,const char *root,const char *mode,int *stage,int *code,const char **capture) {
-    static bool settle;static char original[4096];static uint64_t total;
+    static bool settle;static char original[4096];static uint64_t total;static unsigned import_reveals;
     if(settle){settle=false;return;}settle=true;bool ok=true;
     bool read=!strcmp(mode,"analysis-project-read");
     switch(*stage) {
@@ -22,54 +22,63 @@ static void analysis_project_test_frame(app *a,const char *root,const char *mode
     case 3:
         if(!idle(a) || a->library_thread)return;
         ok=a->data.total>2;total=a->data.total;snprintf(original,sizeof original,"%s",a->last_run);
-        a->project_manager=true;(void)root;
+        open_project_manager(a,"Datei");(void)root;
         strcpy(a->manager_name,"Independent analysis");a->template_analysis_language=!strcmp(mode,"analysis-project-phys");break;
     case 4:test_mouse(a,a->project_kind_bounds,true);break;
     case 5:test_mouse(a,a->project_kind_bounds,false);break;
-    case 6:test_mouse(a,a->project_kind_choices[1],true);break;
-    case 7:test_mouse(a,a->project_kind_choices[1],false);break;
-    case 8:ok=a->manager_analysis_only;*capture="analysis-only-manager.bmp";test_mouse(a,a->project_create_bounds,true);break;
+    case 6:ok=a->manager_analysis_only;test_mouse(a,a->project_create_bounds,true);break;
+    case 7:test_mouse(a,a->project_create_bounds,false);break;
+    case 8:ok=a->manager_step==1;test_mouse(a,a->project_create_bounds,true);break;
     case 9:test_mouse(a,a->project_create_bounds,false);break;
-    case 10: {
+    case 10:ok=a->manager_step==2;*capture="analysis-only-manager.bmp";test_mouse(a,a->project_create_bounds,true);break;
+    case 11:test_mouse(a,a->project_create_bounds,false);break;
+    case 12: {
         if(a->library_thread)return;
         ok=a->loaded && a->analysis_only && !a->project_manager && !nk_str_len_char(&a->experiment.string);
         char path[4096];join(path,sizeof path,a->project,"main.c");ok &= !exists(path);join(path,sizeof path,a->project,"main.phys");ok &= !exists(path);
         *capture="analysis-only-editor.bmp";build_project(a);break;
     }
-    case 11:if(!idle(a) || a->library_thread)return;
+    case 13:if(!idle(a) || a->library_thread)return;
         {char module[4096];join(module,sizeof module,a->build_directory,"experiment" MODULE_EXT);ok=!exists(module);}
         ok &= a->built;ok &= !start_run_mode(a,false) && !reset_available(a);a->tab=2;a->analysis_tab=0;snprintf(a->import_test_path,sizeof a->import_test_path,"%s",original);break;
-    case 12:test_mouse(a,a->import_bounds,true);break;
-    case 13:test_mouse(a,a->import_bounds,false);break;
-    case 14:
+    case 14: {
+        struct nk_rect pane=a->dock_panels[PS_DOCK_SIDEBAR],button=a->import_bounds,clip=a->analysis_import_clip;
+        bool visible=button.y>=clip.y && button.y+button.h<=clip.y+clip.h;
+        if(!visible && import_reveals++<100){test_plot_wheel(a,pane.x+6,pane.y+pane.h*.5f,button.y<pane.y?3:-3);return;}
+        printf("{\"kind\":\"analysis_import_reveal\",\"passed\":%s,\"wheel_steps\":%u,\"button\":[%.4f,%.4f,%.4f,%.4f],\"pane\":[%.4f,%.4f,%.4f,%.4f],\"clip\":[%.4f,%.4f,%.4f,%.4f]}\n",visible?"true":"false",import_reveals,button.x,button.y,button.w,button.h,pane.x,pane.y,pane.w,pane.h,clip.x,clip.y,clip.w,clip.h);
+        if(!visible)*capture="analysis-import-unreachable.png";
+        ok=visible;test_mouse(a,button,true);break;
+    }
+    case 15:test_mouse(a,a->import_bounds,false);break;
+    case 16:
         if(!idle(a) || a->library_thread)return;
         ok=a->data.total==total && a->selected_count==1 && strcmp(a->last_run,original);
         *capture="analysis-only-imported.bmp";analyze(a,false);break;
-    case 15:
+    case 17:
         if(!idle(a) || a->library_thread)return;
         ok=a->analysis_report && a->show_report;
         if(ok){uint32_t plots=0,tables=0;ok=ps_report_describe(a->analysis_report,NULL,NULL,&plots,&tables)==PS_OK && plots==2;}
         if(ok && !a->report_details_bounds.w)return;
         *capture="analysis-only-report.bmp";test_mouse(a,a->report_details_bounds,true);break;
-    case 16:test_mouse(a,a->report_details_bounds,false);break;
-    case 17:
+    case 18:test_mouse(a,a->report_details_bounds,false);break;
+    case 19:
         ok=a->report_details_text && a->report_details_length>0;
         test_mouse(a,a->report_details_tabs[1],true);break;
-    case 18:test_mouse(a,a->report_details_tabs[1],false);break;
-    case 19: {
+    case 20:test_mouse(a,a->report_details_tabs[1],false);break;
+    case 21: {
         char path[4096];size_t length=0;join(path,sizeof path,a->project,analysis_source(a));
         char *source=load_utf8_text(path,&length);
         ok=source && a->report_details_text && length==a->report_details_length &&
             !memcmp(source,a->report_details_text,length);free(source);
         *capture="analysis-only-source-copy.bmp";test_mouse(a,a->report_details_tabs[2],true);break;
     }
-    case 20:test_mouse(a,a->report_details_tabs[2],false);break;
-    case 21:
+    case 22:test_mouse(a,a->report_details_tabs[2],false);break;
+    case 23:
         ok=a->report_details_text && strstr(a->report_details_text,"role,index,path,bytes,fnv1a64\n")==a->report_details_text &&
             strstr(a->report_details_text,a->last_run);
         *capture="analysis-only-inputs.bmp";test_mouse(a,a->report_details_tabs[3],true);break;
-    case 22:test_mouse(a,a->report_details_tabs[3],false);break;
-    case 23: {
+    case 24:test_mouse(a,a->report_details_tabs[3],false);break;
+    case 25: {
         char path[4096];size_t length=0;join(path,sizeof path,a->build_directory,"build.config");
         char *build=load_utf8_text(path,&length);
         ok=build && a->report_details_text && length==a->report_details_length &&

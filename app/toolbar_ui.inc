@@ -94,7 +94,7 @@ static void toolbar_dispatch(app *a, toolbar_action action) {
     case TOOLBAR_OPEN: choose_workspace_path(a,PS_DIALOG_OPEN_FOLDER);break;
     case TOOLBAR_ADD_FILE: choose_workspace_path(a,PS_DIALOG_ADD_FILE);break;
     case TOOLBAR_ADD_FOLDER: choose_workspace_path(a,PS_DIALOG_ADD_FOLDER);break;
-    case TOOLBAR_NEW: open_project_manager(a);break;
+    case TOOLBAR_NEW: open_project_manager(a,"Datei");break;
     case TOOLBAR_SAVE: save_active_document(a);break;
     case TOOLBAR_WORKSPACES: a->workspace_manager=true;break;
     case TOOLBAR_LOG: protocol_toggle(a,"Ansicht");break;
@@ -394,6 +394,12 @@ static void toolbar_view(app *a) {
         struct nk_rect bounds;
         nk_widget(&bounds, ui);
         a->toolbar_bounds[i] = bounds;
+        /* This caption is painted manually; publish its existing menu action
+         * as well so a modal can return native focus to its actual opener. */
+        if(ps_ui_accessibility_button(ui,bounds,menus[i])) {
+            a->toolbar_keyboard=false;
+            a->toolbar_menu=a->toolbar_menu==i+1?0:i+1;
+        }
         bool selected = a->toolbar_menu == i + 1 || (!a->toolbar_menu && i == 3 && a->tab == 6);
         bool hover = nk_input_is_mouse_hovering_rect(&ui->input, bounds);
         struct nk_command_buffer *canvas = nk_window_get_canvas(ui);

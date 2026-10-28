@@ -88,6 +88,24 @@ static unsigned accessibility_widget(void *user,const char *window,const char *l
     if(granted){sdl->accessibility_custom_keyboard=false;SDL_RaiseWindow(sdl->win);nk_edit_unfocus(&sdl->ctx);}
     return (pressed?1u:0u)|(granted?2u:0u)|(focused && !sdl->accessibility_custom_keyboard?4u:0u);
 }
+static unsigned accessibility_full_widget(void *user,const char *window,const char *label,int role,
+                                        const float bounds[4],const float viewport[4],bool enabled,bool checked,const char *group,bool activated) {
+    struct nk_sdl *sdl=user;if(!sdl->accessibility)return 0;
+    enabled &= accessibility_window_enabled(sdl->win);
+    SDL_LockMutex(sdl->accessibility_mutex);ps_a11y_model *model=sdl->accessibility;
+    uint64_t pending=model->pending_focus;size_t before=model->draft_count;
+    bool pressed=group?ps_a11y_record_option(model,window,group,label,bounds,enabled,checked,activated):ps_a11y_record_state(model,window,label,(ps_a11y_role)role,bounds,enabled,checked);
+    bool granted=false,focused=false;
+    if(model->draft_count>before) {
+        ps_a11y_clip_node(model,model->draft_count-1,viewport);
+        const ps_a11y_node *node=&model->draft[model->draft_count-1];
+        granted=pending && !model->pending_focus && model->focused_id==pending && node->id==pending;
+        focused=node->id==model->focused_id && model->keyboard_focus && (!pending || pending==model->focused_id);
+    }
+    SDL_UnlockMutex(sdl->accessibility_mutex);
+    if(granted){sdl->accessibility_custom_keyboard=false;SDL_RaiseWindow(sdl->win);nk_edit_unfocus(&sdl->ctx);}
+    return (pressed?1u:0u)|(granted?2u:0u)|(focused && !sdl->accessibility_custom_keyboard?4u:0u);
+}
 static unsigned accessibility_range_widget(void *user,const char *window,const char *label,int role,const float bounds[4],bool enabled,double values[4]) {
     struct nk_sdl *sdl=user;SDL_LockMutex(sdl->accessibility_mutex);
     enabled=enabled && accessibility_window_enabled(sdl->win);
@@ -153,6 +171,7 @@ struct nk_context *nk_sdl_init(SDL_Window *window, ps_graphics *graphics) {
     if(sdl->accessibility_native) {
         sdl->font_layout.accessibility=accessibility_widget;
         sdl->font_layout.accessibility_range=accessibility_range_widget;
+        sdl->font_layout.accessibility_full=accessibility_full_widget;
         sdl->font_layout.accessibility_user=sdl;
     } else {
         free(sdl->accessibility);sdl->accessibility=NULL;
@@ -190,11 +209,12 @@ static nk_flags nk_sdl_edit_named_common(struct nk_context *ctx,const char *name
  struct nk_sdl *sdl=ctx && ctx->userdata.ptr?ctx->userdata.ptr:NULL;size_t index=SIZE_MAX;uint64_t id=0;bool selected=false;size_t select_start=0,select_end=0;
  bool scrolled=false,scroll_top=true;size_t scroll_start=0,scroll_end=0;float text_scroll=0;
  struct nk_rect edit_bounds=nk_widget_bounds(ctx);
- if(sdl && sdl->accessibility && ctx->current && name && text && capacity>=2) {
+ if(sdl && sdl->accessibility && sdl->font_layout.accessibility && ctx->current && name && text && capacity>=2) {
   struct nk_rect bounds=nk_widget_bounds(ctx),clip=ctx->current->layout->clip;
   float left=fmaxf(bounds.x,clip.x),top=fmaxf(bounds.y,clip.y);
   float right=fminf(bounds.x+bounds.w,clip.x+clip.w),bottom=fminf(bounds.y+bounds.h,clip.y+clip.h);
-  float box[]={left,top,right-left,bottom-top};
+  float box[]={left,top,right-left,bottom-top},viewport[]={clip.x,clip.y,clip.w,clip.h};
+  if(sdl->font_layout.accessibility_full_controls){box[0]=bounds.x;box[1]=bounds.y;box[2]=bounds.w;box[3]=bounds.h;}
   bool routed=sdl->font_layout.accessibility_route_window==ctx->current;
   bool enabled=!ctx->current->widgets_disabled && (routed?sdl->font_layout.accessibility_route_allowed:!(ctx->current->flags&NK_WINDOW_ROM)) &&
    accessibility_window_enabled(sdl->win);
@@ -205,6 +225,7 @@ static nk_flags nk_sdl_edit_named_common(struct nk_context *ctx,const char *name
   SDL_LockMutex(sdl->accessibility_mutex);ps_a11y_model *m=sdl->accessibility;
   uint64_t pending=m->pending_focus;size_t before=m->draft_count;
   bool changed=ps_a11y_record_edit_mode(m,ctx->current->name_string,name,box,enabled,(flags&NK_EDIT_READ_ONLY)!=0,(flags&NK_EDIT_MULTILINE)!=0,text,(size_t)capacity);
+  if(sdl->font_layout.accessibility_full_controls && m->draft_count>before)ps_a11y_clip_node(m,before,viewport);
   bool granted=m->draft_count>before && pending && !m->pending_focus && m->focused_id==pending && m->draft[before].id==pending;
   if(m->draft_count>before){index=before;id=m->draft[before].id;text_scroll=m->draft[before].text_scroll;
    selected=ps_a11y_edit_take_selection(m,index,&select_start,&select_end);
@@ -536,6 +557,14 @@ bool nk_sdl_accessibility_is_focused(struct nk_context *ctx,const char *group,co
  const ps_a11y_node *parent=node?ps_a11y_find(sdl->accessibility,node->parent):NULL;
  bool focused=node && node->focused && !strcmp(node->label,label) && (!group || (parent && !strcmp(parent->label,group)));
  SDL_UnlockMutex(sdl->accessibility_mutex);return focused;
+}
+bool nk_sdl_accessibility_is_focus_target(struct nk_context *ctx,const char *group,const char *label) {
+ if(!ctx || !ctx->userdata.ptr || !label)return false;
+ struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return false;
+ SDL_LockMutex(sdl->accessibility_mutex);const ps_a11y_model *model=sdl->accessibility;
+ const ps_a11y_node *node=ps_a11y_find(model,model->focused_id),*parent=node?ps_a11y_find(model,node->parent):NULL;
+ bool target=node && !model->suspended && node->focusable && node->enabled && !strcmp(node->label,label) && (!group || (parent && !strcmp(parent->label,group)));
+ SDL_UnlockMutex(sdl->accessibility_mutex);return target;
 }
 bool nk_sdl_accessibility_choice_state(struct nk_context *ctx,const char *group,const char *label,bool *selected) {
  if(!ctx || !ctx->userdata.ptr || !group || !label || !selected)return false;

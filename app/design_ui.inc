@@ -817,8 +817,6 @@ static void workspace_panel(app *a) {
         (a->preferences.dock.floating&((1u<<PS_DOCK_LOG)|(1u<<PS_DOCK_WORKSPACE))))?24:0;
     if (a->dock_visible[PS_DOCK_WORKSPACE] && a->tab==4 && (a->library_search_focus || a->library_search_active))
         nk_window_set_focus(ui,"workspace");
-    if(a->project_manager && a->manager_keyboard && !a->toolbar_keyboard && !a->toolbar_menu)
-        nk_window_set_focus(ui,"workspace");
     /* A header's native focus request can be granted after the frame's initial
      * ownership check. Respect it before enabling the background editor. */
     if(a->file_tab_keyboard_edit && nk_sdl_accessibility_has_focus(ui) && !nk_sdl_accessibility_keyboard_owned(ui))
@@ -826,88 +824,7 @@ static void workspace_panel(app *a) {
     if(a->file_tab_keyboard_edit && editor_search_target(a)==a->file_tab_keyboard_edit)
         nk_window_set_focus(ui,"workspace");
     if (dock_begin(a, PS_DOCK_WORKSPACE)) {
-        if (a->project_manager) {
-            nk_layout_row_dynamic(ui, 42, 1);
-            nk_style_push_font(ui, a->font_title);
-            nk_label(ui, "Neues Physim-Projekt", NK_TEXT_LEFT);
-            nk_style_pop_font(ui);
-            nk_layout_row_dynamic(ui, 42, 1);
-            nk_label_wrap(ui, "Wähle Zielordner, Namen, Vorlage und Sprachen. Vorhandene Dateien werden nicht überschrieben.");
-            nk_layout_row_dynamic(ui, 22, 1);
-            nk_label(ui, "Zielordner", NK_TEXT_LEFT);
-            nk_layout_row_dynamic(ui, 34, 2);
-            project_manager_field(a,0,a->manager_parent,sizeof a->manager_parent);
-            struct nk_rect browse_bounds=nk_widget_bounds(ui);
-            if (nk_button_label(ui, "Ordner wählen"))
-                choose_workspace_path(a, PS_DIALOG_MANAGER_PARENT);
-            project_manager_focus_draw(a,1,browse_bounds);
-            nk_layout_row_dynamic(ui, 22, 1);
-            nk_label(ui, "Projektname", NK_TEXT_LEFT);
-            nk_layout_row_dynamic(ui, 34, 1);
-            project_manager_field(a,2,a->manager_name,sizeof a->manager_name);
-            static const char *c_templates[] = {
-                "Pendel", "Wurf mit Luftwiderstand", "Kugelstoß & Medien", "Box auf Ebene",
-                "Feder–Masse–Dämpfer", "Wurf mit Unsicherheit", "Boxstoß", "Auftrieb"};
-            static const char *language_templates[] = {
-                "Pendel", "Wurf mit Luftwiderstand", "Kugelstoß & Medien", "Box auf Ebene",
-                "Feder–Masse–Dämpfer", "Wurf mit Unsicherheit", "Boxstoß", "Auftrieb"};
-            static const char *languages[] = {"C", "Physim"};
-            nk_layout_row_dynamic(ui,22,1);nk_label(ui,"Projekttyp",NK_TEXT_LEFT);
-            nk_layout_row_dynamic(ui,34,1);const char *kinds[]={"Experiment und Auswertung","Nur Auswertung gespeicherter Läufe"};
-            a->project_kind_bounds=nk_widget_bounds(ui);
-            if(nk_combo_begin_label(ui,kinds[a->manager_analysis_only],nk_vec2(360,120))) {
-                nk_layout_row_dynamic(ui,30,1);
-                for(unsigned kind=0;kind<2;kind++) {
-                    a->project_kind_choices[kind]=nk_widget_bounds(ui);
-                    if(nk_button_label(ui,kinds[kind])){a->manager_analysis_only=kind!=0;nk_combo_close(ui);}
-                }nk_combo_end(ui);
-            }
-            project_manager_focus_draw(a,3,a->project_kind_bounds);
-            if(!a->manager_analysis_only) {
-            nk_layout_row_dynamic(ui, 22, 1);
-            nk_label(ui, "Vorlage", NK_TEXT_LEFT);
-            nk_layout_row_dynamic(ui, 34, 1);
-            struct nk_rect template_bounds=nk_widget_bounds(ui);
-            a->manager_template = nk_combo(ui, a->manager_experiment_language
-                                            ? language_templates : c_templates,
-                                            8, a->manager_template, 30,
-                                            nk_vec2(320, 300));
-            project_manager_focus_draw(a,4,template_bounds);
-            nk_layout_row_dynamic(ui, 22, 1);
-            nk_label(ui, "Sprache des Experiments", NK_TEXT_LEFT);
-            nk_layout_row_dynamic(ui, 34, 1);
-            struct nk_rect experiment_bounds=nk_widget_bounds(ui);
-            a->manager_experiment_language = nk_combo(ui, languages, 2,
-                a->manager_experiment_language, 30, nk_vec2(240, 100));
-            project_manager_focus_draw(a,5,experiment_bounds);
-            }
-            nk_layout_row_dynamic(ui, 22, 1);
-            nk_label(ui, "Sprache der Auswertung", NK_TEXT_LEFT);
-            nk_layout_row_dynamic(ui, 34, 1);
-            struct nk_rect analysis_bounds=nk_widget_bounds(ui);
-            a->template_analysis_language = nk_combo(ui, languages, 2,
-                a->template_analysis_language, 30, nk_vec2(240, 100));
-            project_manager_focus_draw(a,6,analysis_bounds);
-            nk_layout_row_dynamic(ui, 36, 2);
-            a->project_create_bounds=nk_widget_bounds(ui);
-            if (action_button(ui, "Projekt anlegen", true))
-                create_managed_project(a);
-            project_manager_focus_draw(a,7,a->project_create_bounds);
-            struct nk_rect cancel_bounds=nk_widget_bounds(ui);
-            if (nk_button_label(ui, "Abbrechen"))
-                a->project_manager = false;
-            project_manager_focus_draw(a,8,cancel_bounds);
-            if(a->manager_error[0]) {
-                nk_layout_row_dynamic(ui,56,1);struct nk_rect error_bounds=nk_widget_bounds(ui);
-                nk_label_wrap(ui,a->manager_error);
-                error_bounds.h=fmaxf(error_bounds.h,ui->current->layout->row.height-ui->style.window.spacing.y);
-                if(a->manager_error_reveal) {
-                    struct nk_rect clip=nk_window_get_content_region(ui);nk_uint x,y;nk_window_get_scroll(ui,&x,&y);
-                    float delta=fmaxf(0,error_bounds.y+error_bounds.h-clip.y-clip.h);
-                    if(delta)nk_window_set_scroll(ui,x,y+(nk_uint)ceilf(delta));else a->manager_error_reveal=false;
-                }
-            }
-        } else if (a->tab == 8 && active_document(a)) {
+        if (a->tab == 8 && active_document(a)) {
             document_view(a, content-status_space);
         } else if (a->tab == 6)
             settings_view(a);
@@ -929,7 +846,7 @@ static void workspace_panel(app *a) {
                 if (action_button(ui, "Ordner öffnen", true))
                     choose_workspace_path(a, PS_DIALOG_OPEN_FOLDER);
                 if (nk_button_label(ui, "Neues Projekt"))
-                    open_project_manager(a);
+                    open_project_manager(a,"Neues Projekt");
                 if (a->last_workspace.root[0]) {
                     nk_layout_row_dynamic(ui, 32, 1);
                     nk_label_colored(ui, a->last_workspace.root, NK_TEXT_LEFT, muted());
@@ -1357,9 +1274,12 @@ static void workspace_draw_ui(app *a, int width, int height) {
  * rest of the scene still renders, but has no active controls behind the sheet. */
 static void draw_ui(app *a,int width,int height) {
     graphic_input_guard guard=graphic_export_guard(a);
+    bool manager=a->project_manager;if(manager)a->project_manager=false;
     workspace_tip_frame_begin(a);
     workspace_draw_ui(a,width,height);
     workspace_tip_frame_end(a);
+    if(manager)a->project_manager=true;
     graphic_export_unguard(a,guard);
     graphic_export_view(a,width,height);
+    project_manager_view(a,width,height);
 }

@@ -97,6 +97,18 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
         if(!strcmp(mode,"manager-errors-22")){ps_preferences p=a->preferences;p.ui_size=22;preferences_apply(a,&p);}
         return true;
     }
+    if(!strncmp(mode,"manager-design",14)) {
+        snprintf(a->manager_parent,sizeof a->manager_parent,"%s",root);SDL_SetWindowSize(a->window,1440,1000);
+        if(strstr(mode,"light")){ps_preferences p=a->preferences;p.theme=PS_THEME_LIGHT;preferences_apply(a,&p);}
+        if(strstr(mode,"contrast")){ps_preferences p=a->preferences;p.theme=PS_THEME_HIGH_CONTRAST;preferences_apply(a,&p);}
+        if(strstr(mode,"large")){ps_preferences p=a->preferences;p.ui_size=22;preferences_apply(a,&p);}
+        if(strstr(mode,"narrow"))SDL_SetWindowSize(a->window,1080,740);
+        if(strstr(mode,"remote")) {
+            join(a->project_input,sizeof a->project_input,root,"existing-project");a->example=0;new_project(a);
+            if(!a->loaded)return false;a->tab=2;a->analysis_tab=0;
+        }
+        return true;
+    }
     if(!strncmp(mode,"manager-keyboard",16)){snprintf(a->manager_parent,sizeof a->manager_parent,"%s",root);if(!strcmp(mode,"manager-keyboard-22")){ps_preferences p=a->preferences;p.ui_size=22;preferences_apply(a,&p);}return true;}
     if (!strncmp(mode,"docs-keyboard",13)){snprintf(a->project,sizeof a->project,"%s",root);if(!strcmp(mode,"docs-keyboard-22") || !strcmp(mode,"docs-keyboard-media-22") || !strcmp(mode,"docs-keyboard-anchors-22")){ps_preferences p=a->preferences;p.ui_size=22;preferences_apply(a,&p);}return true;}
     if (!strcmp(mode,"toolbar-keyboard")) {
@@ -269,6 +281,9 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
     }
     if(!strcmp(mode,"project-tree")){project_tree_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"manager-errors") || !strcmp(mode,"manager-errors-22")){project_manager_error_test_frame(a,a->manager_parent,stage,code,capture);return;}
+    if(!strncmp(mode,"manager-design-help",19)){project_wizard_help_frame(a,stage,code);return;}
+    if(!strncmp(mode,"manager-design-remote",21)){project_wizard_remote_frame(a,a->manager_parent,stage,code);return;}
+    if(!strncmp(mode,"manager-design",14)){project_wizard_test_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"manager-keyboard",16)){project_manager_keyboard_test_frame(a,a->manager_parent,stage,code,capture);return;}
     if (!strncmp(mode,"docs-keyboard",13)) {documentation_keyboard_test_frame(a,mode,stage,code,capture);return;}
     if (!strcmp(mode,"toolbar-keyboard")) {

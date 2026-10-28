@@ -91,6 +91,9 @@ bool nk_sdl_accessibility_focus(struct nk_context *ctx,const char *group,const c
 bool nk_sdl_accessibility_request_focus(struct nk_context *ctx,const char *group,const char *label);
 bool nk_sdl_accessibility_event(struct nk_context *ctx,const SDL_Event *event);
 bool nk_sdl_accessibility_is_focused(struct nk_context *ctx,const char *group,const char *label);
+/* Logical target for revealing a requested control, even if the OS has not
+ * granted foreground keyboard focus. Never use this as a native focus proof. */
+bool nk_sdl_accessibility_is_focus_target(struct nk_context *ctx,const char *group,const char *label);
 /* Read the published focused target inside logical bounds, without changing it. */
 bool nk_sdl_accessibility_focus_in(struct nk_context *ctx,struct nk_rect bounds);
 /* Read the published, grouped choice state without scheduling an action. */
@@ -151,10 +154,14 @@ typedef unsigned (*ps_ui_a11y_hook)(void *user,const char *window,const char *la
                                 int role,const float bounds[4],bool enabled,bool checked,const char *group,bool activated);
 typedef unsigned (*ps_ui_a11y_range_hook)(void *user,const char *window,const char *label,
                                 int role,const float bounds[4],bool enabled,double values[4]);
+typedef unsigned (*ps_ui_a11y_full_hook)(void *user,const char *window,const char *label,int role,
+                                const float bounds[4],const float viewport[4],bool enabled,bool checked,const char *group,bool activated);
 typedef struct {
     unsigned magic,ui_size;
     ps_ui_a11y_hook accessibility;
     ps_ui_a11y_range_hook accessibility_range;
+    ps_ui_a11y_full_hook accessibility_full;
+    bool accessibility_full_controls;
     void *accessibility_user;
     const struct nk_window *accessibility_route_window;
     bool accessibility_route_allowed;
@@ -212,6 +219,9 @@ typedef enum {
 void ps_ui_draw_icon(struct nk_command_buffer *canvas,ps_ui_icon icon,struct nk_rect bounds,struct nk_color color);
 nk_bool ps_ui_icon_button(struct nk_context *ctx,ps_ui_icon icon,const char *name);
 nk_bool ps_ui_button_at(struct nk_context *ctx,struct nk_rect bounds,const char *name,bool selected);
+/* Absolute radio card, with a native single-selection group and no implicit
+ * painting; callers own selected/keyboard/assistive focus appearance. */
+nk_bool ps_ui_option_at_custom_focus(struct nk_context *ctx,struct nk_rect bounds,const char *group,const char *name,bool selected,bool *focused);
 /* Press edges survive a same-frame release and use the actual press origin.
  * Clearing Nuklear's clicked count still consumes the complete gesture. */
 nk_bool ps_ui_mouse_pressed(const struct nk_input *input,enum nk_buttons button);

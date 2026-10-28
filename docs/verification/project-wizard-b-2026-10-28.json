@@ -1,0 +1,369 @@
+{
+  "format": 1,
+  "date": "2026-10-28",
+  "source_base": "2f9b318ac8487a49165283484c4f6613c60b5485",
+  "scope": "Selected native New Project B three-step wizard, real creation, native cards and modal behavior; Explorer A and full UI acceptance remain open",
+  "owned_inputs": {
+    "app/main.c": "cf8280c33d516c94aef714e47c9e606c6fad40eccc6ea2c9d7aedb634756e3dc",
+    "app/workspace_tests.inc": "482d707f5b146097a16cb615cf87f0569764d3150de82b2b276fea384e846ff6",
+    "app/project_manager_keyboard_tests.inc": "cc19a00026b09eb09b74df45d22fd8b977ad19a26915b9b81bb50f55cda8f389",
+    "app/project_wizard_tests.inc": "eee5728e96d2eeadb54ece388dee057e173a78ce4596be0eaadd430ae9f8495a",
+    "app/project_manager_ui.inc": "85c497a80caf9cdcad4a0e1a28c2826fb669e0623f181f0913b0c87084c36290",
+    "app/project_wizard_ui.inc": "52516e24653d96e4a8227587c1c76a5b4aebdaf703d9da352dd9e3fb33fe5f40",
+    "app/design_ui.inc": "9e8d1724928c3852e07676236b79ab6a63bf7edd0ea527f03abbbef3948a24b0",
+    "app/graphic_export_ui.inc": "f01ef737e1f63d35e7079ed31857bdea2e7fcc21dcc99a39e9747795228b1b3f",
+    "app/panel_windows.inc": "df708c3ee41e82524ac0ad5d412abc803a37618cef562715177878d6a9c26cdf",
+    "tests/check_project_wizard.py": "dce03807a03229f7cafa502caf60038a089a6ef78d7a346d08d1722842f1383c",
+    "tests/native_integration_cases.json": "805a913b3d77df5bcfac85bd9ab92d004acda626f718338da675fe75cf465f06",
+    "tests/test_native_test_runner.py": "83ddcbdba995d96467ef3e24cd7fa5dedd6d07918c83c29d1f3ad61509a31b6f",
+    "app/analysis_project_tests.inc": "7eed5cfa423c3e4b183c6aed190ba8594faf2c97a4248e943b19cc40bc26fc48",
+    "app/analysis_ui.inc": "4daf644a983d09750adc2cc2d79dd1ff494c32da0d2eed352b7ee549ad5cb726",
+    "app/accessibility.c": "d97690383aba865ad8a563f042a867930d55bb96ecaaa6a7a565682834d3e650",
+    "app/accessibility.h": "0cd86f39a31c3e28881578b7ad91fb42a511e801dc275dec8301dc604429d6b3",
+    "app/ui.h": "eab522162d1de592abd8c0d5927d177322b19a3a5872e9647b7a46ef4b977072",
+    "app/ui_backend.c": "689f7a615a633954752847cf40f345087a949c577066653a410de80d42655215",
+    "app/ui_sdl.c": "79af0831997d05c7e9a7fc438c4ccf62941e610224b365323c0d194a399999f9",
+    "app/toolbar_ui.inc": "e0a05c6e5b9cec5ef3f1d09c08d41d90b79e89ce0ba68c51d0c7d73547d99c70",
+    "app/project_wizard_remote_tests.inc": "4b863807084482cd8917cddebdbd00c660fe2355bf4464b777f613dde2e94518",
+    "app/project_wizard_help_tests.inc": "12e7497eeacf1bfa5e1761eed7804db65a9e9cb188aa6434506e58606aee1f61",
+    "tests/check_project_wizard_native.py": "d7167469b64bd8c0c474d1374355946aa6fe3fb38db5d2f4cb2a63b079e60aff",
+    "tests/check_project_wizard_help.py": "e6c6de465d792ec96939e293b28550e862b6c26e845067442d25e876e2c543a5",
+    "tests/accessibility_windows_probe.c": "62f27b9951b63ae7a6a283f74f5564f9aeed36f70abe2264503050af994fdd53",
+    "tests/test_accessibility_options.c": "dbbc8047fe39c4dcb03549d7568797ae44075b4f126edc409b80bdefce9c6211",
+    "tests/check_display_workflow.py": "2787c0035e9233a2f0d8c841474c4ca63008adc4568ac618689bf2829515eef8",
+    "docs/workspace.md": "d79e6e4a620a07d5f71328ecf719d369a21a4777369622674ef22fd735f6a959"
+  },
+  "compiler_source": {
+    "path": "build/validation/protocol-wrap-2026-10-26/14-project-wizard/semantic6-compiler-source.json",
+    "sha256": "a893eb618471ad758e4e8cedb98344ed720ead00b776a99b96d89f629fd0732f"
+  },
+  "runtime": {
+    "path": "build/validation/protocol-wrap-2026-10-26/14-project-wizard/semantic6-runtime.json",
+    "sha256": "9d5a24300f1e269478c18bc64010a567f23f85fa249a4de9b350006a10057459"
+  },
+  "runtime_byte_index": {
+    "path": "build/validation/protocol-wrap-2026-10-26/14-project-wizard/semantic6-byte-index.json",
+    "sha256": "528d91da70ab0e9280b17448ff6316521eda2115cebf170ce9523b16eef99675"
+  },
+  "all_runtime_archive_bytes_read_back": true,
+  "foreign_provider_changes_excluded": true,
+  "reference_css": {
+    "path": "docs/visuals/design-options/options.css",
+    "sha256": "79500e3638b63af8b0ac9d1d64c562742236cad38f950773659a7b1b031a889f"
+  },
+  "platforms": {
+    "windows": {
+      "app_sha256": "6c309991b4f503a9b05cb6d016b053700abd5761113461bd31f98c0206c8f704",
+      "gui_command": {
+        "path": "build/validation/protocol-wrap-2026-10-26/14-project-wizard/semantic6-windows.json",
+        "sha256": "5f12f5fbd7e1a7da5920c4445735c6a5ae5699ae3d374841f8af25e94b77c924"
+      },
+      "gui": {
+        "report": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-2g2kn2z2/results.json",
+          "sha256": "f3a2c2bad498511b2abc4bee95ff3df63efb09b357fa33934b38f8c6af929377"
+        },
+        "cases": [
+          {
+            "name": "project_wizard_windows",
+            "status": "passed"
+          },
+          {
+            "name": "project_wizard_help",
+            "status": "passed"
+          },
+          {
+            "name": "project_wizard",
+            "status": "passed"
+          },
+          {
+            "name": "project_manager_keyboard_errors",
+            "status": "passed"
+          }
+        ]
+      },
+      "native_reader": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-2g2kn2z2/project_wizard_windows/files ä/verification.json",
+        "sha256": "363603e3c95c5c5ec51da662bb4f4af3b0b37e62db3854430c745b06d73fff5b"
+      },
+      "matrix_command": {
+        "path": "build/validation/protocol-wrap-2026-10-26/14-project-wizard/matrix-final-windows.json",
+        "sha256": "70a929a3f227f02a55ec4bf8cf1fd03859237ad3fe86a10f64361a5cf094be1c"
+      },
+      "matrix": {
+        "report": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-fuxpbxhn/results.json",
+          "sha256": "2b6e014fb97821e4571898a4a7e05b343b88d26e5fa318cb53b9b8419a885bec"
+        },
+        "cases": [
+          {
+            "name": "project_manager_keyboard_workflow",
+            "status": "passed"
+          }
+        ]
+      },
+      "actual_projects": {
+        "16": {
+          "projects": 34,
+          "progress": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-fuxpbxhn/project_manager_keyboard_workflow/files ä/workflow ä/Projects UI 16/keyboard-progress.txt",
+            "sha256": "c2c6c4932505fe2e769e64c04d696d267424ae988da3d7f4c8604658abc08a7d"
+          }
+        },
+        "22": {
+          "projects": 34,
+          "progress": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-fuxpbxhn/project_manager_keyboard_workflow/files ä/workflow ä/Projects UI 22/keyboard-progress.txt",
+            "sha256": "c2c6c4932505fe2e769e64c04d696d267424ae988da3d7f4c8604658abc08a7d"
+          }
+        }
+      },
+      "units_command": {
+        "path": "build/validation/protocol-wrap-2026-10-26/14-project-wizard/semantic2-units-windows.json",
+        "sha256": "71024d869923cf7c58ef1366575a1fee9eaa2832e8e375855b9d3ed305d4401c"
+      },
+      "units": {
+        "report": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-vcz56i3h/results.json",
+          "sha256": "2bfd240dfbfe908118d372edc2c417fc62ed332155a64c9af3c416a95f9f2a8f"
+        },
+        "cases": [
+          {
+            "name": "accessibility",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_suspend",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_edit",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_readonly_large",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_options",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_focus",
+            "status": "passed"
+          },
+          {
+            "name": "ui_text_flow",
+            "status": "passed"
+          }
+        ]
+      },
+      "environment": "Windows native SDL/OpenGL Release"
+    },
+    "linux": {
+      "app_sha256": "6c78053d739d35336dd0081a8e49642988ba1019161872ac49ca034bc85353ba",
+      "gui_command": {
+        "path": "build/validation/protocol-wrap-2026-10-26/14-project-wizard/semantic6-linux.json",
+        "sha256": "fd11326f5b0b46ca40b81d1f6d60a0292c559610fcb63a3c694e24f258072a62"
+      },
+      "gui": {
+        "report": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-idad8snv/results.json",
+          "sha256": "47755deb2a16e0bdd0b6fca8cf6003e31b530170fb51c2dccaaf04c2aee1931e"
+        },
+        "cases": [
+          {
+            "name": "project_wizard_atspi",
+            "status": "passed"
+          },
+          {
+            "name": "project_wizard_help",
+            "status": "passed"
+          },
+          {
+            "name": "project_wizard",
+            "status": "passed"
+          },
+          {
+            "name": "project_manager_keyboard_errors",
+            "status": "passed"
+          }
+        ]
+      },
+      "native_reader": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-idad8snv/project_wizard_atspi/files ä/verification.json",
+        "sha256": "90afd9363033cf9ace86f0235277988e84956808b557c3144b28d73ba4057e36"
+      },
+      "matrix_command": {
+        "path": "build/validation/protocol-wrap-2026-10-26/14-project-wizard/matrix-final-linux.json",
+        "sha256": "95100097dcc391fccb1b3fc26beda62849241b321656401359491ed4a65ca1e1"
+      },
+      "matrix": {
+        "report": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2nijcqy0/results.json",
+          "sha256": "0b96e5a013d4bf106aca08d73259cdc7ad165932d66a71815956e86581713890"
+        },
+        "cases": [
+          {
+            "name": "project_manager_keyboard_workflow",
+            "status": "passed"
+          }
+        ]
+      },
+      "actual_projects": {
+        "16": {
+          "projects": 34,
+          "progress": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2nijcqy0/project_manager_keyboard_workflow/files ä/workflow ä/Projects UI 16/keyboard-progress.txt",
+            "sha256": "95d4ad37db4abeaf9edbc5cbb4a5d622881de8fa4b5fdf93deb1761e57cc94d2"
+          }
+        },
+        "22": {
+          "projects": 34,
+          "progress": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2nijcqy0/project_manager_keyboard_workflow/files ä/workflow ä/Projects UI 22/keyboard-progress.txt",
+            "sha256": "95d4ad37db4abeaf9edbc5cbb4a5d622881de8fa4b5fdf93deb1761e57cc94d2"
+          }
+        }
+      },
+      "units_command": {
+        "path": "build/validation/protocol-wrap-2026-10-26/14-project-wizard/semantic2-units-linux.json",
+        "sha256": "d2fb6474d6098830b7b29e0a392fa94eef6116c14d25ca4da2f2dfe3baad8303"
+      },
+      "units": {
+        "report": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-sf_dzo3i/results.json",
+          "sha256": "cb8ad401f79613714db13db8397836e64112561532f3d2db8f2b01bfa66b081f"
+        },
+        "cases": [
+          {
+            "name": "accessibility",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_suspend",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_edit",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_readonly_large",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_options",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_focus",
+            "status": "passed"
+          },
+          {
+            "name": "ui_text_flow",
+            "status": "passed"
+          }
+        ]
+      },
+      "environment": "WSL Alpine-Dev, private Xvfb/Openbox, SDL X11/software GL, ASan/UBSan; units detect_leaks=1, GUI detect_leaks=0. AT-SPI uses runtime-dir service, not a physical desktop proof."
+    }
+  },
+  "unit_inputs_unchanged_since_passing_units": [
+    "app/accessibility.c",
+    "app/accessibility.h",
+    "app/ui.h",
+    "app/ui_backend.c",
+    "app/ui_sdl.c",
+    "tests/test_accessibility_options.c"
+  ],
+  "catalog": {
+    "path": "build/validation/protocol-wrap-2026-10-26/14-project-wizard/catalog-final.json",
+    "sha256": "9c25f55f6899f7bf8c883b8953e6b08bd6976e8758366ec65cb7e32045bc3539"
+  },
+  "catalog_log": {
+    "path": "build/validation/protocol-wrap-2026-10-26/14-project-wizard/catalog-final.log",
+    "sha256": "5d6f63c90f10fffe1b35761965a5b8886233107bdfe2005160065e2651214398"
+  },
+  "counterexample": {
+    "path": "build/validation/protocol-wrap-2026-10-26/14-project-wizard/provider-counter-reaudit.json",
+    "sha256": "1790f6afafd01a702962d1ab78b8f584de07245994264dd8369dee631c96fd55"
+  },
+  "counterexample_original_result": {
+    "path": "build/validation/protocol-wrap-2026-10-26/14-project-wizard/provider-counter-result.json",
+    "sha256": "34b122e3363b7f5d44355c7420df657a7decb1122f141a41733eef067b1f6607"
+  },
+  "invalid_dispatch": {
+    "path": "build/validation/protocol-wrap-2026-10-26/14-project-wizard/semantic3-invalid.json",
+    "sha256": "349d371d69f7e0a65e7cde71e3fbfd12df88fa688a88b9d6c07b12d04890a873"
+  },
+  "images": [
+    {
+      "path": "docs/verification/project-wizard-b-2026-10-28/windows-dark.png",
+      "sha256": "93607575666a969837004ff0981938fe7fbe4d21c1003861956447c95061e7b5",
+      "source": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-2g2kn2z2/project_wizard/files ä/dark/project-wizard.png",
+      "bytes": 181092
+    },
+    {
+      "path": "docs/verification/project-wizard-b-2026-10-28/linux-large.png",
+      "sha256": "2309c560b34f7273d9e1894f7e4bdf35c269e6b3c2441ff12956bf3e3c15fcb1",
+      "source": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-idad8snv/project_wizard/files ä/large/project-wizard.png",
+      "bytes": 145323
+    }
+  ],
+  "repair_findings": [
+    {
+      "cohort": "before",
+      "finding": "Old one-page form rejected by native B geometry counterexample."
+    },
+    {
+      "cohort": "first",
+      "finding": "Fractional scroll floor stalled large-font reveal; ceil to the actual edge fixes it."
+    },
+    {
+      "cohort": "corrected",
+      "finding": "Collision fixture used Windows text newline conversion; binary wbx preserves exact expected bytes."
+    },
+    {
+      "cohort": "native/precise",
+      "finding": "Analysis import fixture used guessed viewport; record actual clip and scroll to the button. Earlier wide Windows run intentionally interrupted, not reported as product failure."
+    },
+    {
+      "cohort": "clip/x11",
+      "finding": "Windows all68 passed; Linux28 successful projects reached old900s overall limit. Final matrix has observed timing,60s UI/180s processing stall guards and1800s per matrix; both final68 pass."
+    },
+    {
+      "cohort": "provider-counter",
+      "finding": "AT-SPI reader rejects legacy push-button cards by numeric role. Initial meta-audit incorrectly demanded the display text push button; re-audit preserves original rejection and corrects audit only."
+    },
+    {
+      "cohort": "semantic-compile",
+      "finding": "New helper collided with existing ps_ui_option_at; custom-focus extension retains existing API."
+    },
+    {
+      "cohort": "semantic2",
+      "finding": "Escape popup reopening and missing accessible toolbar opener; close popup through its normal end path and publish real menu actions."
+    },
+    {
+      "cohort": "semantic3",
+      "finding": "Dispatch occurred before source sync completed; all runtime bytes match semantic2, so exclude this cohort from corrected-source acceptance."
+    },
+    {
+      "cohort": "semantic4",
+      "finding": "AT-SPI test required wrong Selection interface and used nonexistent SCREEN_COORDS; use radio CHECKABLE/CHECKED and actual DESKTOP_COORDS. Establish1080x740 fixture for hidden-card precondition. New input cancels delayed modal return."
+    },
+    {
+      "cohort": "semantic5",
+      "finding": "Debug assertion when native cancel closed current Nuklear window inside draw; retire dialog in next frame. Final semantic6 and full matrices pass."
+    }
+  ],
+  "limitations": [
+    "Explorer A still missing: location chooser uses the existing system folder dialog; implementation work, not a technical impossibility.",
+    "Preview follows actual builder files/runs directory; no invented assets directory from browser demonstration.",
+    "Manual Windows physical arrow-key proof deferred at user request; UIA/AT-SPI checks do not replace it.",
+    "No macOS runtime, NVDA/VoiceOver/Orca reading, arbitrary DPI,560px or200percent proof.",
+    "Six CSS-derived states per platform verify measured roles/geometry; no complete browser/native pixel equality claim.",
+    "Only D storage used; F was not accessed. Frozen prior evidence and foreign local changes preserved.",
+    "Current macOS2f9 CI catalog gate passes, but existing seven unreachable F1 links block rendered-F1 gate; separate work remains."
+  ]
+}

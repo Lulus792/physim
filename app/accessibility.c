@@ -234,6 +234,28 @@ bool ps_a11y_record_option(ps_a11y_model *m,const char *window,const char *group
      if(m->draft[i].parent==parent)m->draft[i].checked=false;
  return pressed;
 }
+bool ps_a11y_clip_node(ps_a11y_model *m,size_t index,const float viewport[4]) {
+ if(!m || !m->building || index>=m->draft_count || !viewport || m->draft[index].role==PS_A11Y_RADIO_GROUP)return false;
+ for(size_t i=0;i<4;i++)if(!isfinite(viewport[i]))return false;
+ if(viewport[2]<0 || viewport[3]<0)return false;
+ ps_a11y_node *node=&m->draft[index];
+ double left=fmax(node->bounds[0],viewport[0]),top=fmax(node->bounds[1],viewport[1]);
+ double right=fmin((double)node->bounds[0]+node->bounds[2],(double)viewport[0]+viewport[2]);
+ double bottom=fmin((double)node->bounds[1]+node->bounds[3],(double)viewport[1]+viewport[3]);
+ node->offscreen=right<=left || bottom<=top;
+ if(node->offscreen)memset(node->bounds,0,sizeof node->bounds);
+ else {node->bounds[0]=(float)left;node->bounds[1]=(float)top;node->bounds[2]=(float)(right-left);node->bounds[3]=(float)(bottom-top);}
+ if(node->parent)for(size_t i=0;i<m->draft_count;i++)if(m->draft[i].id==node->parent) {
+  ps_a11y_node *group=&m->draft[i];bool visible=false;left=top=right=bottom=0;
+  for(size_t j=0;j<m->draft_count;j++) {
+   const ps_a11y_node *child=&m->draft[j];if(child->parent!=group->id || child->offscreen)continue;
+   if(!visible){left=child->bounds[0];top=child->bounds[1];right=left+child->bounds[2];bottom=top+child->bounds[3];visible=true;}
+   else {left=fmin(left,child->bounds[0]);top=fmin(top,child->bounds[1]);right=fmax(right,(double)child->bounds[0]+child->bounds[2]);bottom=fmax(bottom,(double)child->bounds[1]+child->bounds[3]);}
+  }
+  group->offscreen=!visible;group->bounds[0]=(float)left;group->bounds[1]=(float)top;group->bounds[2]=(float)(right-left);group->bounds[3]=(float)(bottom-top);break;
+ }
+ return true;
+}
 static bool record_range(ps_a11y_model *m,const char *window,const char *label,
                          const float bounds[4],bool enabled,double minimum,double maximum,
                          double increment,double *value,ps_a11y_role role) {

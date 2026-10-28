@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-28",
+  "root": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-49y85y9c",
+  "reason": "Superseded successful synthetic Windows matrix SDK object/preprocessor cache; final semantic6 and matrix-final passed on both platforms",
+  "files": 3808,
+  "bytes": 589485744.0,
+  "inventory_sha256": "d04c473a5d55702324587c39917c1607fb1a636ad5646df2cd0c52298aa0805d",
+  "protected_runtime_symbols_and_runs": 332,
+  "all_protected_hashes_unchanged": true,
+  "source_manifests_results_images_and_archives_preserved": true,
+  "evidence": {
+    "old-sdk-cache-inventory.json": {
+      "path": "build/validation/protocol-wrap-2026-10-26/14-project-wizard/old-sdk-cache-inventory.json",
+      "sha256": "d04c473a5d55702324587c39917c1607fb1a636ad5646df2cd0c52298aa0805d"
+    },
+    "cleanup-old-sdk.ps1": {
+      "path": "build/validation/protocol-wrap-2026-10-26/14-project-wizard/cleanup-old-sdk.ps1",
+      "sha256": "30046c3494f384e1225a715c4a10fde4c9a3ed6296b49b9f0fb5d30da0fb5392"
+    },
+    "old-sdk-cache-cleanup.json": {
+      "path": "build/validation/protocol-wrap-2026-10-26/14-project-wizard/old-sdk-cache-cleanup.json",
+      "sha256": "d657d9be82c6a044dc5ac7d7f702df73d65c69d9f11d130e54a9fdcf951f578e"
+    }
+  }
+}

@@ -1627,7 +1627,7 @@ def project_manager_keyboard(flow, directory):
     for size in (16,22):
         root=directory / ("Projects UI "+str(size));root.mkdir()
         mode="manager-keyboard"+("-22" if size==22 else "")
-        flow.run("--workspace-state-test",root,mode,timeout=910,marker="PROJECT MANAGER KEYBOARD SELF-TEST: PASSED")
+        flow.run("--workspace-state-test",root,mode,timeout=1810,marker="PROJECT MANAGER KEYBOARD SELF-TEST: PASSED")
         for index in range(34):
             project=root / ("keyboard-%02d ä" % index)
             manifest=(project / "physim.project").read_text()

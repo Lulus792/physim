@@ -325,7 +325,8 @@ static bool accessibility_emit(struct nk_context *ctx,const char *text,int role,
     struct nk_rect clip=ctx->current->layout->clip;
     float left=fmaxf(bounds.x,clip.x),top=fmaxf(bounds.y,clip.y);
     float right=fminf(bounds.x+bounds.w,clip.x+clip.w),bottom=fminf(bounds.y+bounds.h,clip.y+clip.h);
-    if(right<=left || bottom<=top)return false;
+    bool full=layout->accessibility_full_controls && layout->accessibility_full && !range;
+    if((right<=left || bottom<=top) && !full)return false;
     float visible[]={left,top,right-left,bottom-top};
     bool routed=layout->accessibility_route_window==ctx->current;
     bool enabled=!ctx->current->widgets_disabled && (routed?layout->accessibility_route_allowed:!(ctx->current->flags&NK_WINDOW_ROM));
@@ -338,7 +339,9 @@ static bool accessibility_emit(struct nk_context *ctx,const char *text,int role,
         struct nk_rect cover=above->bounds;
         if(cover.x<right && cover.x+cover.w>left && cover.y<bottom && cover.y+cover.h>top)enabled=false;
     }
-    unsigned result=range?(layout->accessibility_range?layout->accessibility_range(layout->accessibility_user,ctx->current->name_string,text,role,visible,enabled,range):0)
+    float box[]={bounds.x,bounds.y,bounds.w,bounds.h},viewport[]={clip.x,clip.y,clip.w,clip.h};
+    unsigned result=full?layout->accessibility_full(layout->accessibility_user,ctx->current->name_string,text,role,box,viewport,enabled,checked,group,activated)
+        :range?(layout->accessibility_range?layout->accessibility_range(layout->accessibility_user,ctx->current->name_string,text,role,visible,enabled,range):0)
         :layout->accessibility(layout->accessibility_user,ctx->current->name_string,text,role,visible,enabled,checked,group,activated);
     if(result&2u) {
         struct nk_window *owner=ctx->current;
@@ -472,6 +475,15 @@ nk_bool ps_ui_button_at_custom_focus(struct nk_context *ctx,struct nk_rect bound
     nk_bool pressed=accessibility_emit(ctx,name,1,bounds,selected,NULL,false,NULL,focused);
     bool enabled=!(ctx->current->layout->flags&NK_WINDOW_ROM) && !ctx->current->widgets_disabled;
     return pressed || (enabled && ps_ui_mouse_pressed_in_rect(&ctx->input,NK_BUTTON_LEFT,ctx->current->layout->clip) && ps_ui_mouse_pressed_in_rect(&ctx->input,NK_BUTTON_LEFT,bounds));
+}
+nk_bool ps_ui_option_at_custom_focus(struct nk_context *ctx,struct nk_rect bounds,const char *group,const char *name,bool selected,bool *focused) {
+    if(focused)*focused=false;
+    if(!ctx || !ctx->current || !group || !name || bounds.w<=0 || bounds.h<=0)return nk_false;
+    bool enabled=!(ctx->current->layout->flags&NK_WINDOW_ROM) && !ctx->current->widgets_disabled;
+    bool clicked=enabled && ps_ui_mouse_pressed_in_rect(&ctx->input,NK_BUTTON_LEFT,ctx->current->layout->clip) && ps_ui_mouse_pressed_in_rect(&ctx->input,NK_BUTTON_LEFT,bounds);
+    /* A pointer selection changes the group value without inventing keyboard
+     * focus. Native SetFocus and the custom keyboard route publish it separately. */
+    return accessibility_emit(ctx,name,3,bounds,selected || clicked,group,clicked,NULL,focused) || clicked;
 }
 int ps_ui_text_line(const struct nk_user_font *font,const char *text,int length,float space,bool path) {
     if(!font || !font->width || !text || length<=0 || !isfinite(space) || space<=0)return 0;

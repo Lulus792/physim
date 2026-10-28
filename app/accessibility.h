@@ -149,6 +149,11 @@ bool ps_a11y_record_state(ps_a11y_model *model,const char *window,const char *la
                      ps_a11y_role role,const float bounds[4],bool enabled,bool checked);
 bool ps_a11y_record_option(ps_a11y_model *model,const char *window,const char *group,
                      const char *label,const float bounds[4],bool enabled,bool selected,bool activated);
+/* After recording a node at its full layout bounds, clip this draft geometry
+ * to the viewport. Hidden controls retain identity, selection and focusability;
+ * their empty bounds and offscreen flag prevent phantom hit targets. Record
+ * fresh bounds on the next frame before clipping again. */
+bool ps_a11y_clip_node(ps_a11y_model *model,size_t index,const float viewport[4]);
 /* Finite bounded scalar controls; names stay stable while values change.
  * Queued changes are applied only when the same visible enabled control is
  * recorded again. Invalid declarations preserve model and caller value. */

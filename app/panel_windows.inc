@@ -210,6 +210,7 @@ static bool panel_windows_render(app *a) {
         a->window=p->window;a->graphics=p->graphics;a->ui=p->ui;a->tab=p->tab;a->panel_render=(int)i+1;
         int w,h;SDL_GetWindowSize(p->window,&w,&h);
         graphic_input_guard export_guard=graphic_export_guard(a);
+        bool manager=a->project_manager;if(manager)a->project_manager=false;
         ui_palette=workbench_visible(a) || analysis_visible(a)?ps_workbench_palette(palette):laboratory_visible(a)?ps_laboratory_palette(palette):palette;
         style(p->ui);nk_style_set_font(p->ui,workbench_visible(a) || analysis_visible(a)?&a->workbench_fonts[0]:laboratory_visible(a)?&a->workbench_fonts[2]:a->font_ui);
         nk_sdl_set_ui_size(p->ui,a->preferences.ui_size);
@@ -275,6 +276,7 @@ static bool panel_windows_render(app *a) {
         }
         workspace_tip_frame_end(a);
         graphic_export_unguard(a,export_guard);
+        if(manager)a->project_manager=true;
         graphic_export_view(a,w,h);
         if(a->timeline_design_active && i==PS_PANEL_TIMELINE)timeline_design_draw(a);
         nk_sdl_update_TextInput(p->ui);

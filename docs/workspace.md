@@ -43,8 +43,21 @@ auf 8192 Einträge und 64 Unterordnerebenen begrenzt; beim Erreichen der Grenze
 erscheint ein Hinweis. Zuklappen gibt Platz für andere Zweige frei. Hinzugefügte
 Wurzeleinträge bleiben auch bei einem großen Hauptordner sichtbar.
 
-**Datei → Neues Projekt** öffnet den Projektmanager. Dort wählst du Zielordner, Namen,
-Vorlage sowie Experiment- und Analysesprache. **Projekt anlegen** erzeugt das Projekt.
+**Datei → Neues Projekt** führt durch drei Schritte:
+
+1. **Startpunkt:** Wähle eine der acht Modellvorlagen oder aktiviere
+   **Nur Auswertung gespeicherter Läufe**.
+2. **Projektangaben:** Gib Projektname und Speicherort an. Experiment- und
+   Analysesprache lassen sich unabhängig auf C oder Physim stellen.
+3. **Prüfen:** Kontrolliere Zielordner, Sprachen und die tatsächlich vorgesehenen
+   Projektdateien. Erst **Projekt anlegen** erzeugt das Projekt.
+
+**Zurück** erhält deine Eingaben. **Abbrechen** oder Escape schließt den Dialog;
+ein bereits geöffnetes Projekt bleibt erhalten. Ist eine Sprachauswahl aufgeklappt,
+schließt das erste Escape diese Auswahl. F1 öffnet die Dokumentation, ohne den
+Projektdialog zu verwerfen. Vorhandene Projektdateien werden nicht überschrieben;
+Erstellungsfehler erscheinen im Dialog und können dort korrigiert werden.
+
 C-Vorlagen verwenden `main.c`; Sprachvorlagen verwenden `main.phys`.
 Die Auswertung liegt in `analysis.c` oder `analysis.phys`. Die App erzeugt und pflegt
 `physim.project`. Der eigene Buildprozess liest diese Datei und ruft den Compiler

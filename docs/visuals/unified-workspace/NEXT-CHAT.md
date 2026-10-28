@@ -38,6 +38,11 @@ Der [Detailtypografie-Abgleich](PROTOCOL-DETAIL-TYPE-NATIVE.md) übernimmt danac
 Schriftrollen, Zeilenhöhen, Badge-, Eigenschafts- und Blockabstände mit je sechs
 nativen Windows-/Linux-Zuständen. Zusätzliche Dateninhalte der Browserdemo,
 weitere C-Zustände und die vollständige Gestaltung bleiben offen.
+Der [native Projektdialog B](PROJECT-WIZARD-B-NATIVE.md) ergänzt den echten
+Dreischritt, acht zugängliche Vorlagenkarten und überprüfbare Projektanlage.
+Windows und Linux bestehen je 68 vollständige Projektabläufe sowie die
+Dialog-, Fehler- und nativen Accessibility-Prüfungen. Der eingebettete
+Explorer A und die vollständige Oberflächenabnahme bleiben offen.
 Den noch offenen direkten Pfeiltastennachweis erst nach erneuter Rückmeldung
 des Nutzers schließen. Der folgende
 [Nachlauf für schnelle Zeigerereignisse](PROTOCOL-POINTER-NATIVE.md) erhält
