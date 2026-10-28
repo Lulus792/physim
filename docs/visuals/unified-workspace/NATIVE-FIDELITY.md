@@ -72,7 +72,9 @@ Kartenauswahl bestehen. Der darin aufgerufene Explorer A bleibt umzusetzen.
 Seine [Dateisystemgrundlage](EXPLORER-A-NATIVE.md) ist anschließend mit echten
 Windows-/Linux-Dateien geprüft: Metadaten, Filter, lange Pfade, Abbruch und
 Ordneranlage. Ein verschwundenes Windows-Junction-Ziel wird korrekt abgewiesen.
-Der Controller und die sichtbare A-Oberfläche sind damit noch nicht angebunden.
+Der anschließende IO-Arbeiter prüft asynchrone Aufträge, begrenzte Textvorschau
+und die Abweisung veralteter Ergebnisse mit nativer negativer Gegenprobe.
+Navigationscontroller und sichtbare A-Oberfläche sind noch nicht angebunden.
 Der folgende
 [Zeiger-Nachlauf](PROTOCOL-POINTER-NATIVE.md) schließt verlorene schnelle Klicks
 in den gemeinsamen Aktionen/Editfeldern und am Protokolltrenner. Linux prüft

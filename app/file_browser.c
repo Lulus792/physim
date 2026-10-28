@@ -16,8 +16,12 @@
 #define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
+#include <io.h>
+#include <fcntl.h>
 #else
 #include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 #endif
 
 static size_t root_length(const char *path) {
@@ -270,6 +274,34 @@ bool ps_browser_selectable(const char *path,ps_browser_mode mode) {
     if(mode==PS_BROWSER_FOLDERS)return info.type==SDL_PATHTYPE_DIRECTORY;
     if(info.type!=SDL_PATHTYPE_FILE)return false;
     return mode!=PS_BROWSER_RUNS || file_kind(absolute)==PS_BROWSER_RUN;
+}
+ps_result ps_browser_open_file(const char *path,FILE **out,uint64_t *size) {
+    if(!out || !size)return PS_INVALID;
+    char absolute[PS_BROWSER_PATH];int descriptor;uint64_t bytes;
+#ifdef _WIN32
+    ps_result result=ps_browser_path(path,absolute);if(result!=PS_OK)return result;
+    wchar_t wide[PS_BROWSER_PATH+8];if(!wide_path(absolute,wide))return PS_INVALID;
+    HANDLE handle=CreateFileW(wide,GENERIC_READ,FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,NULL,
+                              OPEN_EXISTING,FILE_FLAG_SEQUENTIAL_SCAN,NULL);
+    if(handle==INVALID_HANDLE_VALUE)return PS_IO;
+    BY_HANDLE_FILE_INFORMATION info;
+    if(GetFileType(handle)!=FILE_TYPE_DISK || !GetFileInformationByHandle(handle,&info) ||
+       (info.dwFileAttributes&FILE_ATTRIBUTE_DIRECTORY)){CloseHandle(handle);return PS_INVALID;}
+    bytes=((uint64_t)info.nFileSizeHigh<<32)|info.nFileSizeLow;
+    descriptor=_open_osfhandle((intptr_t)handle,_O_RDONLY|_O_BINARY);
+    if(descriptor<0){CloseHandle(handle);return PS_IO;}
+    FILE *stream=_fdopen(descriptor,"rb");
+    if(!stream){_close(descriptor);return PS_IO;}
+#else
+    ps_result result=ps_workspace_absolute(path,absolute);if(result!=PS_OK)return result;
+    descriptor=open(absolute,O_RDONLY|O_NONBLOCK|O_CLOEXEC);
+    if(descriptor<0)return PS_IO;
+    struct stat info;
+    if(fstat(descriptor,&info) || !S_ISREG(info.st_mode)){close(descriptor);return PS_INVALID;}
+    bytes=(uint64_t)info.st_size;FILE *stream=fdopen(descriptor,"rb");
+    if(!stream){close(descriptor);return PS_IO;}
+#endif
+    *out=stream;*size=bytes;return PS_OK;
 }
 ps_browser_create_result ps_browser_create_directory(const char *parent,const char *name,char out[PS_BROWSER_PATH]) {
     if(!out || !component_valid(name))return PS_BROWSER_NAME_INVALID;

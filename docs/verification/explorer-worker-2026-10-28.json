@@ -1,0 +1,176 @@
+{
+  "format": 1,
+  "date": "2026-10-28",
+  "source_base": "9e8ea638767f6c5c81aed040850a96ee5fd9d60e",
+  "scope": "Explorer A asynchronous filesystem operations and bounded UTF-8 text preview; production view/navigation/dialog routing still pending",
+  "owned_inputs": {
+    "app/file_browser.h": "7e866435fa9c00eb535ea873e6b88e5c6e22b1371bd14fa9a172d3fc75111189",
+    "app/file_browser.c": "47311e08d37e4e95f22de0343654a5e119366a813548fd54f2f3b63d7b5bdbef",
+    "app/file_browser_worker.h": "7df11350454923da871c0be1ab7decbfd5dca009a0f44eca05ce89485a7ed403",
+    "app/file_browser_worker.c": "32936dda1bbde4f37649f517c598dd5f132dd58fef04aabf6c8555e7ca13a3ad",
+    "tests/test_file_browser_worker.c": "f98dfa76509f506e293f8ed6e04d932624ad0412fbc7e4e64c30c6f0320f3b92",
+    "tools/native_tests.py": "bf4985cec0ff94e22a71014b5502b76d2aefd701b5104e53d9cbf1d49d0a2aca"
+  },
+  "source_overlay": {
+    "path": "build/validation/explorer-worker-2026-10-28/worker-final-inputs.zip",
+    "sha256": "65b90669f4d19ebcf89e74c3cef044a65c70afea042c65e291ced10f56ecfd11"
+  },
+  "compiler_manifest": {
+    "path": "build/validation/explorer-worker-2026-10-28/worker-final-compiler-source.json",
+    "sha256": "ddd5a1ffa0ae5aa52b5abe78a4781076dd450b6deee5bddc944e822516e4ca1b"
+  },
+  "runtime": {
+    "path": "build/validation/explorer-worker-2026-10-28/worker-final-runtime.json",
+    "sha256": "19342cd0b21755b8ac07ed31c9641742dfc02d86d0f0b179224d9120eba23ee6"
+  },
+  "runtime_byte_index": {
+    "path": "build/validation/explorer-worker-2026-10-28/worker-final-byte-index.json",
+    "sha256": "4716dea97a7ada014ee7005d5a3d1c71cf07456b471cf381c01f77de489537ee"
+  },
+  "restored_final": {
+    "path": "build/validation/explorer-worker-2026-10-28/final-restored.json",
+    "sha256": "bc71aa3da955dda899828fca5f4442c9e80abf3cfdb41cf337add6e9661d58ee"
+  },
+  "all_input_archive_bytes_read_back": true,
+  "all_runtime_archive_bytes_read_back": true,
+  "prior_runtime_and_compiler_verified_before_overwrite": {
+    "path": "build/validation/explorer-worker-2026-10-28/worker-first-inputs.json",
+    "sha256": "518410706847a9d065887c1cf45ca4a260958b89dc94eb05928aeab97c5e1b5b"
+  },
+  "platforms": {
+    "windows": {
+      "command": {
+        "path": "build/validation/explorer-worker-2026-10-28/worker-final-windows.json",
+        "sha256": "066073c9c2319666abf08dc8635d41e2686f1baee27ae473520917815417ed0d"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-lgd8yaw0/results.json",
+        "sha256": "47d60c57b45040b63c3a6959bdc8d18b88d1ad37a1f074de8c90865820172e9c"
+      },
+      "passed": 2,
+      "measurements": {
+        "kind": "browser_worker",
+        "preview_limit": 65536,
+        "long_file_bytes": 591,
+        "stale_completion_gated": true,
+        "mid_read_cancel_gated": true
+      },
+      "binaries": [
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/bin/physim-test-file_browser.exe",
+          "sha256": "950f6fc14c1c1d285a839d19760663637bc04a07aeb000d1548b713d53d4a25f"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/bin/physim-test-file_browser_worker.exe",
+          "sha256": "f62abec2ad04957ac72082a7eb814e99f956387a3aea362360de7373ba340c24"
+        }
+      ],
+      "environment": "Windows/MSVC Release, SDL3.2.30"
+    },
+    "linux": {
+      "command": {
+        "path": "build/validation/explorer-worker-2026-10-28/worker-final-linux.json",
+        "sha256": "5fbfe98e0563fea90610174b0b88261d8c982ce8ab2a6a08dd9909959c2ea4b9"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-dmokomoz/results.json",
+        "sha256": "138b506624322c0af6512871cd175de079890175a984a12aefe7bdc65f48d32d"
+      },
+      "passed": 2,
+      "measurements": {
+        "kind": "browser_worker",
+        "preview_limit": 65536,
+        "long_file_bytes": 593,
+        "stale_completion_gated": true,
+        "mid_read_cancel_gated": true
+      },
+      "binaries": [
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-file_browser",
+          "sha256": "a0a53620da2cfce61cd56a7902626ab08d48d2102bff31e3daebc1949d081487"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-file_browser_worker",
+          "sha256": "743d2c09924b33ecc4d9cb2ab0b0410a06770108139bc80d9389405c76693a92"
+        }
+      ],
+      "environment": "WSL Alpine-Dev GCC15.2, SDL3.2.30, ASan/UBSan detect_leaks=1:halt_on_error=1"
+    }
+  },
+  "images": 0,
+  "counterexample": {
+    "change": "Only request-version comparison removed from result publication in isolated fixture; worktree product source unchanged",
+    "inputs": {
+      "path": "build/validation/explorer-worker-2026-10-28/worker-stale-counter-inputs.json",
+      "sha256": "b573a4830e200e8e53318e561323ecf3bf3a71c70649149bedda7e962569dd58"
+    },
+    "source": {
+      "path": "build/validation/explorer-worker-2026-10-28/worker-stale-counter-inputs.zip",
+      "sha256": "f61302297dd5ab75964179ce97bd9ff350ce0f2c42d42e4b2fa7dc445448bcbf"
+    },
+    "command": {
+      "path": "build/validation/explorer-worker-2026-10-28/worker-stale-counter-windows.json",
+      "sha256": "8922fb00d1f81ad5d3d7461082e2a1d64dd0ef3b9795c0a935e49f6cfa23238a"
+    },
+    "results": {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-0ucrqn30/results.json",
+      "sha256": "48ba84ff11f997253af62a4b0b8844b317674a63e309708a842dadec98ba4df2"
+    },
+    "compiler_manifest": {
+      "path": "build/validation/explorer-worker-2026-10-28/worker-stale-counter-compiler-source.json",
+      "sha256": "126317e42b0f37c87492bb9e7b8319cf493e2a175219a19a45b20c5a32efed1b"
+    },
+    "runtime_index": {
+      "path": "build/validation/explorer-worker-2026-10-28/worker-stale-counter-byte-index.json",
+      "sha256": "37d3c44ec8ae2c6c165a8882246a6a1a0094c8293cd18113ae0482c9aac8ef47"
+    },
+    "expected_actual_failure": "The completed old A listing is published while a newer B request is pending; result version assertion rejects it"
+  },
+  "earlier_cohort": {
+    "inputs": {
+      "path": "build/validation/explorer-worker-2026-10-28/worker-first-inputs.json",
+      "sha256": "518410706847a9d065887c1cf45ca4a260958b89dc94eb05928aeab97c5e1b5b"
+    },
+    "results": {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gwaotr3s/results.json",
+      "sha256": "a01f7bc6f69a83163b9fe627c8891eb316e97fb96e1c23f174c470c5e91e9159"
+    },
+    "compiler_manifest": {
+      "path": "build/validation/explorer-worker-2026-10-28/worker-first-compiler-source.json",
+      "sha256": "ee9e3a9ee076a9483d54b52a2967b0c1d4bc41829aa92b2f0129d19e371d06d1"
+    },
+    "runtime_index": {
+      "path": "build/validation/explorer-worker-2026-10-28/worker-first-byte-index.json",
+      "sha256": "db45765bae241de556ee5ddd7cedd8402c60ce873d965ac1214fdbdb4a6c02aa"
+    },
+    "finding": "Windows passed2/2. Linux model passed, worker fixture could not create a named FIFO on D DrvFS. Separate actual probe confirms errno95 Not supported.",
+    "probe": {
+      "path": "build/validation/explorer-worker-2026-10-28/fifo-platform-probe.json",
+      "sha256": "6c73106d3a837a079ef62e611947132698dcd02e3c85b3b75bd46bfa4a23fbb3"
+    },
+    "correction": "Use an actual anonymous pipe descriptor through /proc/self/fd; no temporary fixture files outside D. Also remove an intentional signed-char constant-cast compiler warning."
+  },
+  "catalog": {
+    "path": "build/validation/explorer-worker-2026-10-28/catalog.json",
+    "sha256": "f25bf5a6a513a5240d1a823703d9e78b347396eedbf5f7706d2e00c7488285f6"
+  },
+  "verified_behaviors": [
+    "One active SDL thread plus latest pending request; request/result ownership survives caller buffer overwrite.",
+    "Semaphore-gated actual stale completion is rejected; intermediate request coalesced; negative compiled version guard fixture fails.",
+    "Mid-text-read cancellation, re-request while cancelled work unwinds, published list ownership, shutdown join and fresh worker reopen.",
+    "Empty text, optional UTF8 BOM, exact65536-byte boundary, six internal cut positions of2/3/4-byte codepoints, malformed/surrogate/out-of-range/control rejection and lookahead validation.",
+    "Stale deleted file confirmation; invalid request leaves previous pending request intact; exclusive mkdir, collision and cancellation after real mutation without false rollback promise.",
+    "Real regular-file preview beyond Windows MAX_PATH, actual POSIX link/dotdot target, special-file rejection through an anonymous pipe with no writer."
+  ],
+  "limitations": [
+    "Production APP list still lacks browser modules; existing system dialogs remain. Navigation/history/selection, native A view and all caller routing still need integration.",
+    "Only bounded regular UTF8 text preview implemented; run/image previews and C API context remain outstanding. No fake scene or demonstration data substituted.",
+    "Worker tests enable only additional semaphore gates via PS_BROWSER_WORKER_TESTING; no general race-freedom or ThreadSanitizer proof. No macOS runtime proof.",
+    "Cancel cannot interrupt an already active kernel/filesystem call, and destruction joins that call. A completed exclusive mkdir is not undone by cancellation.",
+    "Opened-handle size can differ from contents under external concurrent writing; preview is not an atomic file snapshot.",
+    "An anonymous pipe is proven on Linux; named FIFO unsupported on required D fixture filesystem and not claimed. Existing SMB/ACL/allocation-injection/locale-sort gaps remain.",
+    "No UI, screenreader, theme, DPI, native long-path open/import end-to-end or complete design acceptance follows from these units.",
+    "Manual Windows physical arrow/focus proof remains deferred at user request. No manual test window launched.",
+    "All new persistent data on D; F not accessed; frozen artifacts and unrelated working-tree edits retained."
+  ]
+}

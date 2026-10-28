@@ -25,11 +25,17 @@ bleiben die gemeinsame Betriebssystemgrundlage. Gewählt ist die zweite Struktur
 - `file_browser.h/.c` besitzt Dateisystemeinträge, begrenzte Auflistung,
   Pfadauflösung, Filter, Sortierung, Typprüfung und exklusives Anlegen eines
   einzelnen Unterordners. Es zeichnet keine Widgets und öffnet keine Nutzerdaten.
-- Der noch zu ergänzende Controller besitzt Anfragegeneration, Navigation,
-  Verlauf, Auswahl und Vorschau. Blockierende Dateisystemarbeit läuft außerhalb
-  der Zeichnung. Alte Ergebnisse dürfen keinen neueren Ort überschreiben;
-  Abbruch/Schließen muss ausstehende Ergebnisse entwerten und Speicher erhalten,
-  bis der zugehörige Arbeiter beendet ist.
+- `file_browser_worker.h/.c` besitzt einen laufenden und den jüngsten wartenden
+  IO-Auftrag. Eigene Pfad-/Namenskopien, atomare Abbruch-/Endsignale und ein
+  Versionsvergleich schützen die Übernahme. Ordnerlesen, begrenzte Textvorschau,
+  erneute Auswahlprüfung und exklusive Anlage laufen außerhalb der Zeichnung.
+  Abbruch wartet nicht auf einen laufenden OS-Aufruf; endgültiges Zerstören
+  verbindet den Arbeiter vor der Speicherfreigabe. Eine bereits ausgeführte
+  Ordneranlage wird durch Abbruch nicht rückgängig gemacht.
+- Der noch zu ergänzende Navigationscontroller besitzt Verlauf, Auswahl und
+  den Bezug der Vorschau zum aktuellen Ort. Ein gescheiterter Ortswechsel darf
+  die übertragene alte Liste nicht als Inhalt des neuen Orts ausgeben.
+  Messlauf-/Bildvorschau bleiben zusätzlich zur UTF-8-Textvorschau offen.
 - Die native A-Oberfläche zeichnet Orte, Werkzeugleiste/Pfad, Liste und Vorschau
   samt Fußzeile. Dieselbe Oberfläche dient der freien Datei-/Ordnernavigation,
   Messlaufauswahl, Serienfortsetzung und Ordnerwahl innerhalb von Projektdialog B.

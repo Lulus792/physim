@@ -46,9 +46,11 @@ Explorer A und die vollständige Oberflächenabnahme bleiben offen.
 Die [geprüfte Dateisystemgrundlage für Explorer A](EXPLORER-A-NATIVE.md)
 ergänzt danach echte Ordnerlisten, Metadaten, Filter, Abbruch und exklusive
 Ordneranlage. Windows und Linux bestehen die Modellprüfungen samt langen Pfaden;
-die native Junction-Gegenprobe bestätigt die korrigierte Zielprüfung. Controller,
-A-Oberfläche, Vorschau und bereichsübergreifende Einbindung sind als Nächstes
-umzusetzen; Modellprüfungen sind keine GUI- oder Accessibility-Abnahme.
+die native Junction-Gegenprobe bestätigt die korrigierte Zielprüfung. Der folgende
+IO-Arbeiter prüft asynchrone Aufträge, Textvorschau und veraltete Ergebnisse mit
+einer negativen Versionsgegenprobe. Navigationscontroller, A-Oberfläche,
+Messlauf-/Bildvorschau und bereichsübergreifende Einbindung sind als Nächstes
+umzusetzen; diese Grundlagen sind keine GUI- oder Accessibility-Abnahme.
 Den noch offenen direkten Pfeiltastennachweis erst nach erneuter Rückmeldung
 des Nutzers schließen. Der folgende
 [Nachlauf für schnelle Zeigerereignisse](PROTOCOL-POINTER-NATIVE.md) erhält

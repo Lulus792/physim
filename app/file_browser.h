@@ -1,6 +1,7 @@
 #ifndef PHYSIM_FILE_BROWSER_H
 #define PHYSIM_FILE_BROWSER_H
 #include "physim/core.h"
+#include <stdio.h>
 
 enum { PS_BROWSER_PATH = 4096, PS_BROWSER_ENTRY_LIMIT = 8192 };
 typedef enum {
@@ -56,6 +57,11 @@ bool ps_browser_entry_matches(const ps_browser_entry *entry, ps_browser_mode mod
  * content validation remains with the existing importer. Cached metadata is
  * not authority and no object is opened/activated by this query. */
 bool ps_browser_selectable(const char *path, ps_browser_mode mode);
+/* Open one existing regular file for read-only preview. Uses the native path
+ * spelling (including POSIX link/.. semantics and Windows extended paths).
+ * Rejects directories and special files without blocking on a FIFO open.
+ * Caller closes the stream. Outputs change only on success. */
+ps_result ps_browser_open_file(const char *path, FILE **out, uint64_t *size);
 
 typedef enum {
     PS_BROWSER_CREATED, PS_BROWSER_NAME_INVALID, PS_BROWSER_COLLISION,
