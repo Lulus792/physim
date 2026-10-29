@@ -1,26 +1,33 @@
 /* Selected Explorer A. UI owns navigation and transferred snapshots; all file
  * operations are submitted to file_browser_worker, never executed in paint. */
 typedef struct {ps_text_wrap *layout;struct nk_user_font font;float width;bool scroll;} browser_preview_layout;
+typedef struct {float *columns,width;size_t count;struct nk_user_font font;} browser_api_table_layout;
 typedef struct browser_dialog {
     ps_browser_worker *worker;ps_browser_listing listing;ps_browser_result preview;
     ps_browser_operation operation;ps_browser_mode filter;int mode,selected,focus,focused_row;
-    bool visible,embedded,failed,grid,hidden,create,path_edit,path_dirty,keyboard,reveal,initial,popup_close,cache_dirty,list_reset,preview_reset;
+    bool visible,embedded,failed,grid,hidden,create,path_edit,path_dirty,keyboard,reveal,initial,popup_close,cache_dirty,list_reset,preview_reset,api_expanded;
     int return_tab;
     char location[4096],path_input[4096],query[256],new_name[4096],message[512];
+    char reference_root[4096];
     char history[32][4096],places[3][4096],place_names[3][256],opener[96],return_label[128];
     unsigned history_count,return_frames,grid_columns;ps_browser_sort sort;
     size_t filtered[PS_BROWSER_ENTRY_LIMIT],count;float tops[PS_BROWSER_ENTRY_LIMIT+1],cache_width,cache_scale;
-    struct nk_user_font fonts[8];struct nk_rect bounds,list_bounds,preview_bounds,controls[32],selected_bounds;
+    struct nk_user_font fonts[12];struct nk_rect bounds,list_bounds,preview_bounds,controls[32],selected_bounds;
     struct {int index;struct nk_rect bounds;} rows[64];unsigned row_count;
     ps_ui_backdrop backdrop;ps_ui_shadow shadow;
-    struct nk_text_edit edits[4]; /* Location, search, new name, readonly preview. */
+    struct nk_text_edit edits[5]; /* Location, search, new name, source, API signature. */
     browser_preview_layout text_layouts[2];unsigned text_layout_next;
+    browser_preview_layout api_layouts[2];unsigned api_layout_next;
+    browser_api_table_layout api_tables[2];unsigned api_table_next;
     struct nk_rect preview_text_bounds,place_ink[3];size_t place_bytes[3];float preview_text_height;char empty_preview[2];
 } browser_dialog;
 static void browser_preview_clear(browser_dialog *d) {
     d->edits[3].visual=NULL;
+    d->edits[4].visual=NULL;d->api_expanded=false;
     for(unsigned k=0;k<2;k++){ps_text_wrap_destroy(d->text_layouts[k].layout);memset(&d->text_layouts[k],0,sizeof d->text_layouts[k]);}
-    ps_browser_result_destroy(&d->preview);memset(&d->edits[3],0,sizeof d->edits[3]);d->preview_reset=true;
+    for(unsigned k=0;k<2;k++){ps_text_wrap_destroy(d->api_layouts[k].layout);memset(&d->api_layouts[k],0,sizeof d->api_layouts[k]);}
+    for(unsigned k=0;k<2;k++){free(d->api_tables[k].columns);memset(&d->api_tables[k],0,sizeof d->api_tables[k]);}
+    ps_browser_result_destroy(&d->preview);memset(&d->edits[3],0,2*sizeof d->edits[3]);d->preview_reset=true;
 }
 static const char *browser_names[]={"Dateiauswahl schließen","Zurück","Übergeordneter Ordner","Ort","Suche im Ordner","Sortieren","Listenansicht","Rasteransicht","Projekte","Geöffnetes Projekt","Messläufe","Dateiliste","Dateivorschau","Ordner öffnen","Versteckte Einträge","Neuer Ordner","Ordnername","Ordner anlegen","Ordneranlage abbrechen","Dateiauswahl abbrechen","Auswahl bestätigen"};
 static const char *browser_kind_name(ps_browser_kind kind) {
@@ -37,6 +44,8 @@ static bool browser_request(browser_dialog *d,ps_browser_operation operation,con
     ps_browser_request request={.operation=operation,.mode=d->filter};
     if(SDL_strlcpy(request.path,path,sizeof request.path)>=sizeof request.path ||
        (name && SDL_strlcpy(request.name,name,sizeof request.name)>=sizeof request.name))return false;
+    if(operation==PS_BROWSER_READ_TEXT && d->selected>=0 && d->listing.entries[d->selected].kind==PS_BROWSER_C_SOURCE)
+        SDL_strlcpy(request.reference_root,d->reference_root,sizeof request.reference_root);
     ps_result result=ps_browser_worker_request(d->worker,&request);
     if(result!=PS_OK){snprintf(d->message,sizeof d->message,"Anfrage fehlgeschlagen: %s",ps_result_string(result));return false;}
     d->operation=operation;d->message[0]=0;return true;
@@ -90,6 +99,7 @@ static bool browser_context_open(app *a,browser_dialog **owner,int mode,bool emb
     ps_browser_worker_cancel(d->worker);ps_browser_listing_destroy(&d->listing);browser_preview_clear(d);
     d->mode=mode;d->embedded=embedded;d->filter=mode==PS_DIALOG_IMPORT_RUN?PS_BROWSER_RUNS:
         mode==PS_DIALOG_ADD_FILE || mode==PS_DIALOG_BROWSE?PS_BROWSER_FILES:PS_BROWSER_FOLDERS;
+    SDL_strlcpy(d->reference_root,a->root,sizeof d->reference_root);
     d->visible=true;d->failed=d->grid=d->hidden=d->create=d->path_edit=false;
     d->query[0]=d->new_name[0]=d->message[0]=0;d->sort=PS_BROWSER_SORT_NAME;d->history_count=0;d->return_frames=0;
     memset(d->edits,0,sizeof d->edits);
@@ -173,6 +183,12 @@ static void browser_action(app *a,browser_dialog *d,int id) {
     else if(id==15 && !d->failed && !browser_busy(d)){d->create=true;d->new_name[0]=0;memset(&d->edits[2],0,sizeof d->edits[2]);browser_focus_set(a,d,16);}
     else if(id==17){if(!browser_mutating(d))browser_request(d,PS_BROWSER_MAKE_DIRECTORY,d->location,d->new_name);}
     else if(id==18){d->create=false;browser_focus_set(a,d,15);}
+    else if(id==21){d->api_expanded=!d->api_expanded;d->reveal=true;}
+    else if(id==22 && d->preview.api.status==PS_OK && d->preview.api.symbol){
+        char relative[256];snprintf(relative,sizeof relative,"docs/reference/%s.md",d->preview.api.symbol->module);
+        for(int topic=0;topic<DOCUMENTATION_TOPIC_COUNT;topic++)if(!strcmp(documentation_topics[topic].path,relative)){
+            open_documentation(a,topic);if(a->documentation && a->doc_topic==topic)a->doc_jump_block=(int)d->preview.api.first;break;}
+    }
 }
 static int browser_order(browser_dialog *d,int ids[24]) {
     if(browser_mutating(d)){if(d->embedded){ids[0]=d->focus;return 1;}ids[0]=0;ids[1]=19;return 2;}
@@ -180,6 +196,8 @@ static int browser_order(browser_dialog *d,int ids[24]) {
     for(int i=0;i<3;i++)if(*d->places[i])ids[n++]=8+i;
     if(d->count && !d->failed)ids[n++]=11;
     if(d->preview.text)ids[n++]=12;
+    if(d->preview.api.symbol){ids[n++]=21;if(d->api_expanded && d->preview.api.status==PS_OK){
+        if(d->preview.api.preview.signature!=SIZE_MAX)ids[n++]=23;ids[n++]=22;}}
     if(d->selected>=0 && d->listing.entries[d->selected].kind==PS_BROWSER_DIRECTORY)ids[n++]=13;
     ids[n++]=14;if(!d->failed && !browser_busy(d))ids[n++]=15;if(d->create){ids[n++]=16;ids[n++]=17;ids[n++]=18;}if(!d->embedded)ids[n++]=19;
     if(!d->failed && !d->path_dirty && !(browser_busy(d) && d->operation==PS_BROWSER_READ_DIRECTORY) && (d->filter==PS_BROWSER_FOLDERS || d->selected>=0))ids[n++]=20;return n;
@@ -213,7 +231,7 @@ static bool browser_event(app *a,const SDL_Event *event,SDL_Window *window) {
             float x=event->type==SDL_EVENT_MOUSE_MOTION?event->motion.x:event->type==SDL_EVENT_MOUSE_WHEEL?event->wheel.mouse_x:event->button.x;
             float y=event->type==SDL_EVENT_MOUSE_MOTION?event->motion.y:event->type==SDL_EVENT_MOUSE_WHEEL?event->wheel.mouse_y:event->button.y;
             if((x<d->bounds.x || x>d->bounds.x+d->bounds.w || y<d->bounds.y || y>d->bounds.y+d->bounds.h) &&
-               !(d->edits[3].active && event->type==SDL_EVENT_MOUSE_MOTION)){
+               !((d->edits[3].active || d->edits[4].active) && event->type==SDL_EVENT_MOUSE_MOTION)){
                 if(event->type==SDL_EVENT_MOUSE_BUTTON_DOWN)d->keyboard=d->initial=false;return false;}
         }
         bool local_shortcut=(event->type==SDL_EVENT_KEY_DOWN || event->type==SDL_EVENT_KEY_UP) &&
@@ -244,12 +262,12 @@ static bool browser_event(app *a,const SDL_Event *event,SDL_Window *window) {
             if(at<0)at=direction>0?-1:0;
             browser_focus_set(a,d,ids[(at+direction+n)%n]);return true;
         }
-        bool field=d->focus==4 || d->focus==16 || (d->focus==3 && browser_path_field(d)) || d->focus==12;
+        bool field=d->focus==4 || d->focus==16 || (d->focus==3 && browser_path_field(d)) || d->focus==12 || d->focus==23;
         if(!field && (k==SDLK_UP || k==SDLK_DOWN || k==SDLK_LEFT || k==SDLK_RIGHT || k==SDLK_HOME || k==SDLK_END) && d->focus==11){browser_move(a,d,k==SDLK_UP || k==SDLK_LEFT || k==SDLK_HOME?-1:1,k==SDLK_HOME || k==SDLK_END);return true;}
         if((k==SDLK_RETURN || k==SDLK_KP_ENTER || (k==SDLK_SPACE && !field)) && !key->repeat) {
             browser_flush_field(a,d);
             if(d->focus==4){d->cache_dirty=true;browser_focus_set(a,d,11);}
-            else if(d->focus==16)browser_action(a,d,17);else if(d->focus!=12)browser_action(a,d,d->focus);
+            else if(d->focus==16)browser_action(a,d,17);else if(d->focus!=12 && d->focus!=23)browser_action(a,d,d->focus);
             return true;
         }
     }
@@ -477,6 +495,7 @@ static float browser_preview_extent(app *a,browser_dialog *d,float width,float f
     return cached?fminf(240*f,cached->layout->visual.row_count*cached->layout->visual.row_height):
         browser_text_height(d,"Textvorschau kann nicht dargestellt werden.",2,width,16.8f*f);
 }
+#include "file_browser_api_ui.inc"
 static float browser_preview_content(app *a,browser_dialog *d,float width,float f,float *action_y) {
     const ps_browser_entry *entry=d->selected>=0?&d->listing.entries[d->selected]:NULL;
     const char *name=entry?ps_browser_entry_name(entry):d->filter==PS_BROWSER_FOLDERS?"Zielordner wählen":"Datei auswählen";
@@ -488,6 +507,7 @@ static float browser_preview_content(app *a,browser_dialog *d,float width,float 
         if(entry->kind==PS_BROWSER_DIRECTORY)y+=32*f;
         else if(d->preview.text)y+=8*f+browser_preview_extent(a,d,width,f)+(d->preview.truncated?21.232f*f:0);
         else y+=8*f+browser_text_height(d,browser_busy(d) && d->operation==PS_BROWSER_READ_TEXT?"Vorschau wird geladen …":"Für diese Datei ist keine Textvorschau verfügbar.",2,width,16.8f*f);
+        if(entry->kind!=PS_BROWSER_DIRECTORY)y=browser_api_content(a,d,width,y,f,false);
         if(d->embedded && entry->kind!=PS_BROWSER_DIRECTORY)y+=50*f;
     } else {const char *description=d->filter==PS_BROWSER_FOLDERS?"Wähle einen vorhandenen Ordner als Speicherort.":"Ein Klick zeigt die Vorschau. Ordner öffnen sich per Doppelklick oder über die Aktion unten.";
         y+=browser_text_height(d,description,2,width,16.8f*f);*action_y=0;}
@@ -504,10 +524,11 @@ static void browser_preview(app *a,browser_dialog *d,float x,float y,float width
     float target_y=0,content=browser_preview_content(a,d,width-36*f,f,&target_y);nk_flags flags=NK_WINDOW_NO_SCROLLBAR;
     if(content>height){flags=0;content=browser_preview_content(a,d,width-36*f-ui->style.window.scrollbar_size.x,f,&target_y);}
     float text_width=width-36*f-(flags==0?ui->style.window.scrollbar_size.x:0);
-    if(d->keyboard && d->reveal && (d->focus==12 || d->focus==13 || (d->embedded && d->focus==20))) {
-        if(d->focus==20)target_y=content-53*f;
+    if(d->keyboard && d->reveal && (d->focus==12 || d->focus==13 || d->focus>=21 || (d->embedded && d->focus==20))) {
+        float focus_y=d->focus==20?content-53*f:d->focus>=21?d->controls[d->focus].y:target_y;
         nk_uint sx,sy;nk_group_get_scroll(ui,"Explorer Vorschau",&sx,&sy);float target_h=d->focus==12?browser_preview_extent(a,d,text_width,f):32*f;
-        if(target_y<sy)sy=(nk_uint)target_y;else if(target_y+target_h>sy+height)sy=(nk_uint)fmaxf(0,target_y+target_h-height+21*f);
+        if(d->focus>=21)target_h=fminf(height,d->controls[d->focus].h);
+        if(focus_y<sy)sy=(nk_uint)focus_y;else if(focus_y+target_h>sy+height)sy=(nk_uint)fmaxf(0,focus_y+target_h-height+21*f);
         nk_group_set_scroll(ui,"Explorer Vorschau",0,sy);
     }
     /* Publish fresh target geometry even when the whole preview group is
@@ -518,13 +539,14 @@ static void browser_preview(app *a,browser_dialog *d,float x,float y,float width
         if(entry->kind==PS_BROWSER_DIRECTORY)d->controls[13]=nk_rect(d->preview_bounds.x+18*f,d->preview_bounds.y+target_y-sy,text_width,32*f);
         else if(d->preview.text)d->controls[12]=nk_rect(d->preview_bounds.x+18*f,d->preview_bounds.y+target_y-sy,text_width,browser_preview_extent(a,d,text_width,f));
         if(d->embedded && entry->kind!=PS_BROWSER_DIRECTORY)d->controls[20]=nk_rect(d->preview_bounds.x+18*f,d->preview_bounds.y+content-53*f-sy,text_width,32*f);
+        if(d->preview.api.symbol)for(unsigned k=21;k<=23;k++)d->controls[k]=nk_rect(d->preview_bounds.x+18*f,d->preview_bounds.y+d->controls[k].y-sy,d->controls[k].w,d->controls[k].h);
     }
     nk_layout_space_push(ui,nk_rect(x,y,width,height));
     if(nk_group_begin(ui,"Explorer Vorschau",flags)) {
         float w=nk_window_get_content_region(ui).w-36*f,top=21*f;
         const ps_browser_entry *entry=d->selected>=0?&d->listing.entries[d->selected]:NULL;
         const char *name=entry?ps_browser_entry_name(entry):d->filter==PS_BROWSER_FOLDERS?"Zielordner wählen":"Datei auswählen";
-        nk_layout_space_begin(ui,NK_STATIC,fmaxf(height-4*f,content),30);
+        nk_layout_space_begin(ui,NK_STATIC,fmaxf(height-4*f,content),INT_MAX);
         float badge_height=19.92f*f;struct nk_rect icon=browser_slot(a,18*f,top,(entry?18:40)*f,(entry?18:40)*f);
         if(entry){browser_icon(nk_window_get_canvas(ui),entry->kind==PS_BROWSER_DIRECTORY?PS_ICON_FOLDER:entry->kind==PS_BROWSER_RUN?PS_ICON_CHART:entry->kind==PS_BROWSER_C_SOURCE || entry->kind==PS_BROWSER_PHYS_SOURCE?-5:PS_ICON_FILE,icon,UI_COLOR(accent));
             const char *label=browser_kind_name(entry->kind);float bw=d->fonts[0].width(d->fonts[0].userdata,d->fonts[0].height,label,(int)strlen(label))+14.6f*f;
@@ -553,6 +575,9 @@ static void browser_preview(app *a,browser_dialog *d,float x,float y,float width
                 }else browser_text(a,d,18*f,top+8*f,w,"Textvorschau kann nicht dargestellt werden.",2,16.8f*f,UI_COLOR(error),true);
                 if(d->preview.truncated)browser_text(a,d,18*f,top+text_height+14*f,w,"Vorschau gekürzt · erste 64 KiB",4,15.232f*f,UI_COLOR(muted),true);
             } else browser_text(a,d,18*f,top+8*f,w,browser_busy(d) && d->operation==PS_BROWSER_READ_TEXT?"Vorschau wird geladen …":"Für diese Datei ist keine Textvorschau verfügbar.",2,16.8f*f,UI_COLOR(muted),true);
+            if(entry->kind!=PS_BROWSER_DIRECTORY){float source_end=top+8*f+(d->preview.text?browser_preview_extent(a,d,w,f)+(d->preview.truncated?21.232f*f:0):
+                browser_text_height(d,browser_busy(d) && d->operation==PS_BROWSER_READ_TEXT?"Vorschau wird geladen …":"Für diese Datei ist keine Textvorschau verfügbar.",2,w,16.8f*f));
+                browser_api_content(a,d,w,source_end,f,true);}
             if(d->embedded && entry->kind!=PS_BROWSER_DIRECTORY){
                 float action_width=fminf(w,d->fonts[2].width(d->fonts[2].userdata,d->fonts[2].height,"Datei öffnen →",(int)strlen("Datei öffnen →"))+24.4f*f);
                 if(browser_button(a,d,20,18*f,content-53*f,action_width,32*f,"Datei öffnen →",-99,!browser_mutating(d) && !d->failed && !d->path_dirty,false,false,true))browser_action(a,d,20);
@@ -575,8 +600,8 @@ static void browser_view(app *a,browser_dialog *d,int width,int height,struct nk
         palette.accent=light?nk_rgb(32,92,170):nk_rgb(154,195,255);palette.selection_active=palette.button_hover=light?nk_rgb(220,233,250):nk_rgb(41,62,91);
         palette.primary=light?nk_rgb(32,93,172):nk_rgb(35,102,196);palette.primary_text=nk_rgb(255,255,255);}
     ui_palette=&palette;style(ui);
-    const float sizes[]={9.8f,24.5f,10.5f,11.2f,9.52f,14.7f,10.5f,11.9f};
-    for(unsigned k=0;k<8;k++){bool strong=k==1 || k==5,code=k==6;d->fonts[k]=*(code?a->font_code:strong?a->font_title:a->font_ui);d->fonts[k].height=sizes[k]*(code?a->workbench_code_em:strong?a->workbench_bold_em:a->workbench_regular_em)*f;}
+    const float sizes[]={9.8f,24.5f,10.5f,11.2f,9.52f,14.7f,10.5f,11.9f,10.08f,10.08f,11.9f,10.92f};
+    for(unsigned k=0;k<12;k++){bool strong=k==1 || k==5 || k==10,code=k==6 || k==8;d->fonts[k]=*(code?a->font_code:strong?a->font_title:a->font_ui);d->fonts[k].height=sizes[k]*(code?a->workbench_code_em:strong?a->workbench_bold_em:a->workbench_regular_em)*f;}
     nk_style_set_font(ui,&d->fonts[2]);ui->style.window.padding=ui->style.window.spacing=ui->style.window.group_padding=nk_vec2(0,0);ui->style.window.group_border=0;
     float outer=d->embedded?frame.w:fminf(1180*f,width-30*f),w=outer-(d->embedded?0:2),header=d->embedded?0:123.525f*f,tools=0,body=440*f,places=width<1150*f?150*f:170*f;
     float available=d->embedded?frame.h:height-30*f;

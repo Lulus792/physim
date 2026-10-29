@@ -205,7 +205,7 @@ def catalog():
              arguments=("{work}",), app=True),
         Case("file_browser", ("tests/test_file_browser.c", "app/file_browser.c", "app/workspace_state.c", "app/autosave.c"),
              arguments=("{work}","{source}/tests/file_browser_junction.ps1"), app=True),
-        Case("file_browser_worker", ("tests/test_file_browser_worker.c", "app/file_browser_worker.c", "app/file_browser.c", "app/workspace_state.c", "app/autosave.c"),
+        Case("file_browser_worker", ("tests/test_file_browser_worker.c", "app/file_browser_worker.c", "app/file_browser.c", "app/workspace_state.c", "app/autosave.c", "app/completion.c", "app/documentation.c"),
              arguments=("{work}",), defines=("PS_BROWSER_WORKER_TESTING",), app=True),
         Case("text_document", ("tests/test_text_document.c",), ("project", "core"),
              arguments=("{work}",), app=True),

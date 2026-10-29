@@ -90,8 +90,10 @@ Navigation, Vorschau und ungespeicherte Editorinhalte über Unteraufrufe. Der
 Umbruch und vollständige Orte-Beschriftungen. Er prüft Originaltext und native
 Auswahl sowie die beiden korrigierten Fokusfälle. Die vom Nutzer verlangten
 [schmalen Einfügemarken](TEXT-CARET-NATIVE.md) gelten im gemeinsamen Textfeldrenderer.
-Messlauf-/Bildvorschau, API-Kontext, große native Listen und vollständige praktische
-Aufgaben bleiben offen.
+Der folgende [C-API-Kontext](EXPLORER-API-NATIVE.md) verbindet tatsächliche
+Quellsymbole mit dem passenden Handbuchabschnitt, eigener Signaturauswahl und
+F1-Sprung. Messlauf-/Bildvorschau, große native Listen und vollständige praktische
+Aufgaben bleiben offen; die dort genannten zusätzlichen API-Abnahmen ebenfalls.
 Der folgende
 [Zeiger-Nachlauf](PROTOCOL-POINTER-NATIVE.md) schließt verlorene schnelle Klicks
 in den gemeinsamen Aktionen/Editfeldern und am Protokolltrenner. Linux prüft

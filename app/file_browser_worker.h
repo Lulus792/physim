@@ -1,6 +1,8 @@
 #ifndef PHYSIM_FILE_BROWSER_WORKER_H
 #define PHYSIM_FILE_BROWSER_WORKER_H
 #include "file_browser.h"
+#include "completion.h"
+#include "documentation.h"
 
 enum { PS_BROWSER_PREVIEW_BYTES = 65536 };
 typedef enum {
@@ -12,6 +14,7 @@ typedef struct {
     ps_browser_mode mode;
     char path[PS_BROWSER_PATH];
     char name[PS_BROWSER_PATH]; /* Only used for MAKE_DIRECTORY. */
+    char reference_root[PS_BROWSER_PATH]; /* Optional bundled C-reference root for READ_TEXT. */
     size_t limit; /* Directory entries; zero selects the model default. */
 } ps_browser_request;
 typedef struct {
@@ -25,6 +28,13 @@ typedef struct {
     uint64_t size; /* Size observed through the opened handle, not a promise. */
     bool truncated, selectable;
     ps_browser_create_result created;
+    struct {
+        ps_result status; /* Independent of source status; PS_EOF means no context. */
+        const ps_completion_symbol *symbol; /* Static catalog; never owned. */
+        size_t offset, first, end;
+        ps_document *document; /* Owned parsed module, only on success. */
+        ps_doc_api_preview preview;
+    } api;
 } ps_browser_result;
 typedef struct ps_browser_worker ps_browser_worker;
 typedef struct {
@@ -34,7 +44,7 @@ typedef struct {
 
 /* All functions except the private worker run on one owner thread. Exactly
  * one active job and the latest pending request are retained. Requests own
- * their path/name; neither an app pointer nor an SDL/GL/UI object crosses in.
+ * their path/name/reference root; neither an app pointer nor an SDL/GL/UI object crosses in.
  * poll never waits for unfinished I/O; it transfers an owned result only if
  * its version is still current. Initialize result to zero before first poll.
  * request/cancel retire pending results immediately, without joining a live

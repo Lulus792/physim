@@ -49,6 +49,42 @@ int main(void) {
     ps_completion_query before=q;
     CHECK(ps_completion_prepare(long_word,sizeof long_word,sizeof long_word,false,&q)==PS_LIMIT && !memcmp(&q,&before,sizeof q));
     CHECK(ps_completion_prepare("",0,0,false,&q)==PS_OK && ps_completion_matches(&q,NULL,0)>600);
+    /* The source preview uses the generated catalog ordering for binary lookup. */
+    for(size_t i=1;i<ps_completion_count();i++){
+        const ps_completion_symbol *a=ps_completion_at(i-1),*b=ps_completion_at(i);
+        CHECK(a->language<=b->language);
+        if(a->language==b->language)CHECK(strcmp(a->name,b->name)<0);
+    }
+    for(size_t i=0;i<ps_completion_count();i++){
+        const ps_completion_symbol *s=ps_completion_at(i);if(s->language)continue;size_t offset=987;
+        CHECK(ps_completion_c_reference(s->name,strlen(s->name),&offset)==s && offset==0);
+    }
+    const struct {const char *source,*symbol;} references[]={
+        {"// ps_vlength(x)\nps_scene_add_id(scene,1,shape,a,b,1,0);","ps_scene_add_id"},
+        {"/* ps_vlength(x) */ ps_scene_add_id /* real call */ (scene);","ps_scene_add_id"},
+        {"const char *s=\"ps_vlength(x)\"; ps_scene_add_id(scene);","ps_scene_add_id"},
+        {"'\\\''; 'ps_vlength'; ps_scene_add_id(scene);","ps_scene_add_id"},
+        {"// hidden \\\nps_vlength(x)\nps_scene_add_id(scene);","ps_scene_add_id"},
+        {"// hidden \\\r\nps_vlength(x)\r\nps_scene_add_id(scene);","ps_scene_add_id"},
+        {"ps_result result; ps_scene_add_id(scene);","ps_scene_add_id"},
+        {"value . /* member */ ps_vlength(x); ps_scene_add_id(scene);","ps_scene_add_id"},
+        {"value->ps_vlength(x); ps_scene_add_id(scene);","ps_scene_add_id"},
+        {"αps_vlength(x); ps_scene_add_id(scene);","ps_scene_add_id"},
+        {"ps_vlengthα(x); ps_scene_add_id(scene);","ps_scene_add_id"},
+        {"123ps_vlength(x); ps_scene_add_id(scene);","ps_scene_add_id"},
+        {"ps_result result;","ps_result"},
+        {"ps_vlength /* incomplete", "ps_vlength"}
+    };
+    for(size_t i=0;i<sizeof references/sizeof *references;i++){
+        size_t offset=123;const ps_completion_symbol *s=ps_completion_c_reference(references[i].source,strlen(references[i].source),&offset);
+        if(!s || strcmp(s->name,references[i].symbol))fprintf(stderr,"C reference case%zu: expected %s, got %s\n",i,references[i].symbol,s?s->name:"none");
+        CHECK(s && !s->language && !strcmp(s->name,references[i].symbol));
+        CHECK(!memcmp(references[i].source+offset,s->name,strlen(s->name)));
+    }
+    const char *no_reference[]={"","int local=1;","// ps_vlength(x)","/* ps_vlength(x)","\"ps_vlength(x)\"","ps_vlength_suffix(x)","ctx.ps_vlength(x)"};
+    for(size_t i=0;i<sizeof no_reference/sizeof *no_reference;i++){size_t offset=876;CHECK(!ps_completion_c_reference(no_reference[i],strlen(no_reference[i]),&offset) && offset==876);}
+    size_t offset=876;CHECK(!ps_completion_c_reference(NULL,0,&offset) && offset==876);
+    const char bounded[]="ps_scene_add_id(x)";CHECK(!ps_completion_c_reference(bounded,5,&offset) && offset==876);
     puts("API completion: C/Physim symbols, members, UTF-8 boundaries, comments, literals, limits and failure preservation passed");
     return 0;
 }

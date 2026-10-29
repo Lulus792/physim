@@ -21,4 +21,10 @@ const ps_completion_symbol *ps_completion_at(size_t index);
 size_t ps_completion_matches(const ps_completion_query *query,size_t *indices,size_t capacity);
 /* Member completion inserts the leaf name, preserving an existing receiver. */
 const char *ps_completion_insertion(const ps_completion_query *query,const ps_completion_symbol *symbol);
+/* Lexical C-source context for readonly previews. Prefer the first documented
+ * function followed by '('; otherwise return the first documented identifier.
+ * Ignore comments, string/character literals and member names. No preprocessing
+ * or semantic execution claim. The returned catalog item has static lifetime;
+ * offset is its byte position and is unchanged when no symbol is found. */
+const ps_completion_symbol *ps_completion_c_reference(const char *source,size_t bytes,size_t *offset);
 #endif

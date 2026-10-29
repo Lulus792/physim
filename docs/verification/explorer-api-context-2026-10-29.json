@@ -1,0 +1,762 @@
+{
+  "format": 1,
+  "date": "2026-10-29",
+  "base_commit": "3cc0d181b1d32e6184defcfc27cbfcf120c59c6a",
+  "scope": "Native Explorer A C context; separate task windows are a subsequent unverified worktree change, excluded from this evidence.",
+  "cohorts": [
+    {
+      "tag": "context-fourth",
+      "platforms": [
+        {
+          "platform": "windows",
+          "record": {
+            "path": "build/validation/explorer-inline-2026-10-29/context-fourth-windows.json",
+            "sha256": "5254cecf0212f2e81c4940ba4f0a2d20a1bfe45e890ccafba9db0a153682662f"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/context-fourth-windows.log",
+            "sha256": "30a2234c5d039ea762a6f68912aa632b5630b4bd8e200d8327e352d106a3a508"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bedewsla/results.json",
+            "sha256": "878db97985657549db94b02ac085c5d25e73dfe2453d0fa2a6f460cfcbad12a6"
+          },
+          "app_sha256": "0733efcb146445370b795f461873c15a9b9c6257e199b7dfd74ac2dfa097bac0",
+          "exit_code": 1,
+          "passed": 1,
+          "total": 2,
+          "cases": [
+            {
+              "name": "explorer_a_api_context",
+              "status": "failed"
+            },
+            {
+              "name": "explorer_a_preview_flow",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "record": {
+            "path": "build/validation/explorer-inline-2026-10-29/context-fourth-linux.json",
+            "sha256": "6e3e9b1356ccab4f08cc6c111880eace400f93a7a3acd0d7ea5db9287059b278"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/context-fourth-linux.log",
+            "sha256": "ed2c9e9505c287dd744b5b3b382894e37ec511b05bc62219d35f4fd840f4cc6f"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xu3qkiyi/results.json",
+            "sha256": "1eb9a0779706ec691fbafd7e6cd52415650d983f3e87b0d269a66eca2face603"
+          },
+          "app_sha256": "764717d5f1eb2b19300d6b91bb3d166cff448345b2649948e2e55fe1a74a2633",
+          "exit_code": 1,
+          "passed": 1,
+          "total": 2,
+          "cases": [
+            {
+              "name": "explorer_a_api_context",
+              "status": "failed"
+            },
+            {
+              "name": "explorer_a_preview_flow",
+              "status": "passed"
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-fourth-inputs.json",
+        "sha256": "226708fdee30ae23b7f0a862b31500e3a24c444ed42be48bfe1ac58a4b6a629f"
+      },
+      "input_archive": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-fourth-inputs.zip",
+        "sha256": "72606109ef82cbb8c39cada9983fbdb45a38a50142f34f60d92a9e956747f648"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-fourth-compiler-source.json",
+        "sha256": "def039e08c2a405be13b12f4c13407977c0d858382c9380ae299b07d3a24cf5b"
+      },
+      "compiler_overlay": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-fourth-compiler-source.zip",
+        "sha256": "8aaa101725203bfb5e9e5af39c785a36e7f7bb90e477b14dec680e56247b88a0"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-fourth-runtime.json",
+        "sha256": "4d05b0a9648c4d2c381679956ad499d72b18e9b586b1dea7a395c762f17a32e7"
+      },
+      "runtime_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-fourth-byte-index.json",
+        "sha256": "f220c72a402bdbd3aa47c497e01f0a8b47478aa533b7e46e8a926975047fb012"
+      }
+    },
+    {
+      "tag": "context-fifth",
+      "platforms": [
+        {
+          "platform": "windows",
+          "record": {
+            "path": "build/validation/explorer-inline-2026-10-29/context-fifth-windows.json",
+            "sha256": "883a7562f9c4681ccb45bfdc7a7758e841c564097c125b1f634431b275be5860"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/context-fifth-windows.log",
+            "sha256": "c3bf0f0434f088caaab1119c4d333aa06b8a028410cd00c90ceb92e7f70676c6"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-3f40uxhw/results.json",
+            "sha256": "06db01572eee9ad8702fc44931c0785c4206c25195b1c9651a062cecac37516f"
+          },
+          "app_sha256": "90ddaa841e6fd3934f39c64ed796d8c7e87c0baa6889138f95058d4a2b74490a",
+          "exit_code": 0,
+          "passed": 8,
+          "total": 8,
+          "cases": [
+            {
+              "name": "explorer_a_native_windows",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_preview_windows",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_api_context",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_preview_flow",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_inline_windows",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_inline",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a",
+              "status": "passed"
+            },
+            {
+              "name": "project_wizard",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "record": {
+            "path": "build/validation/explorer-inline-2026-10-29/context-fifth-linux.json",
+            "sha256": "c2c4724305abc7f1e896ffd62b56b3913cce35fbe3061bc0feeb25701f0b83a6"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/context-fifth-linux.log",
+            "sha256": "980534d06af0293e1f18c6b8e2beef561532f787ac806a9a3b95d205c3d88350"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-aux9dok6/results.json",
+            "sha256": "3313531a4995cf83a687daf052747e6e47d9f2b6e54e4bfddc6817f7d0cbaec5"
+          },
+          "app_sha256": "efd2dec450579278e8bd50bd4959dadc986f77a294dfca72f239a75f51b13e0e",
+          "exit_code": 0,
+          "passed": 8,
+          "total": 8,
+          "cases": [
+            {
+              "name": "explorer_a_native_atspi",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_preview_atspi",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_api_context",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_preview_flow",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_inline_atspi",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_inline",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a",
+              "status": "passed"
+            },
+            {
+              "name": "project_wizard",
+              "status": "passed"
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-fifth-inputs.json",
+        "sha256": "1fef63651e98ef1752456c3a03f59ba453ff3e43479d2ead337ee39d923704ff"
+      },
+      "input_archive": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-fifth-inputs.zip",
+        "sha256": "1bdc27006e97947ba644f3f302846d3a9667e01b2e603a02268b12b6a5540956"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-fifth-compiler-source.json",
+        "sha256": "8dbbe147e67d93c19b3238083017bd9e3e1761cdec544bf3edf0e5a4fe9a99c0"
+      },
+      "compiler_overlay": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-fifth-compiler-source.zip",
+        "sha256": "81c58e0d43b05b347b63f6c45b6981c5d582be44d960d88b38ebd25ab5a3f910"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-fifth-runtime.json",
+        "sha256": "7d4df74192ccbdebfdc22ee69ff1c98321946714909e948c72c282ee8f4b9ae1"
+      },
+      "runtime_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-fifth-byte-index.json",
+        "sha256": "0993e6ab1da66ec8d44ce0decb924588568fe94167ca00a2b511f1a1de86a675"
+      }
+    },
+    {
+      "tag": "context-sixth",
+      "platforms": [
+        {
+          "platform": "windows",
+          "record": {
+            "path": "build/validation/explorer-inline-2026-10-29/context-sixth-windows.json",
+            "sha256": "b6b999f206701cc61aa1c140d9e80c4c5bee46d9db6358704b2dd1fc770dfb76"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/context-sixth-windows.log",
+            "sha256": "80e2d9a2c287de365085a64211a215b1adf930945dbd0384b25fb54b9bfc6f48"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-q62l2rzj/results.json",
+            "sha256": "ee70df9bd4092835f77da3000f53ee14a5ed5c6c5dc150c78c7e16f911de8f76"
+          },
+          "app_sha256": "7836c5e396648a2eb53a352131b220ad98aae49ac6f083fc8e3b0b0888707269",
+          "exit_code": 0,
+          "passed": 8,
+          "total": 8,
+          "cases": [
+            {
+              "name": "explorer_a_native_windows",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_preview_windows",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_api_context",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_preview_flow",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_inline_windows",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_inline",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a",
+              "status": "passed"
+            },
+            {
+              "name": "project_wizard",
+              "status": "passed"
+            }
+          ],
+          "context_cases": [
+            {
+              "mode": "dark",
+              "command": [
+                "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-q62l2rzj\\explorer_a_api_context\\files ä\\dark",
+                "explorer-a-api-context-dark"
+              ],
+              "exit_code": 0,
+              "measurements": [
+                {
+                  "kind": "explorer_api_context",
+                  "scale": 1.0,
+                  "symbol": "ps_channel_add",
+                  "signature_rows": 6,
+                  "pitch": 18.648,
+                  "parameter_rows": 3,
+                  "source_bytes": 119,
+                  "signature_selection": [
+                    0,
+                    115
+                  ]
+                }
+              ]
+            },
+            {
+              "mode": "light",
+              "command": [
+                "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-q62l2rzj\\explorer_a_api_context\\files ä\\light",
+                "explorer-a-api-context-light"
+              ],
+              "exit_code": 0,
+              "measurements": [
+                {
+                  "kind": "explorer_api_context",
+                  "scale": 1.0,
+                  "symbol": "ps_channel_add",
+                  "signature_rows": 6,
+                  "pitch": 18.648,
+                  "parameter_rows": 3,
+                  "source_bytes": 119,
+                  "signature_selection": [
+                    0,
+                    115
+                  ]
+                }
+              ]
+            },
+            {
+              "mode": "contrast",
+              "command": [
+                "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-q62l2rzj\\explorer_a_api_context\\files ä\\contrast",
+                "explorer-a-api-context-contrast"
+              ],
+              "exit_code": 0,
+              "measurements": [
+                {
+                  "kind": "explorer_api_context",
+                  "scale": 1.0,
+                  "symbol": "ps_channel_add",
+                  "signature_rows": 6,
+                  "pitch": 18.648,
+                  "parameter_rows": 3,
+                  "source_bytes": 119,
+                  "signature_selection": [
+                    0,
+                    115
+                  ]
+                }
+              ]
+            },
+            {
+              "mode": "large",
+              "command": [
+                "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                "--workspace-state-test",
+                "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-q62l2rzj\\explorer_a_api_context\\files ä\\large",
+                "explorer-a-api-context-large"
+              ],
+              "exit_code": 0,
+              "measurements": [
+                {
+                  "kind": "explorer_api_context",
+                  "scale": 1.375,
+                  "symbol": "ps_channel_add",
+                  "signature_rows": 6,
+                  "pitch": 25.641,
+                  "parameter_rows": 3,
+                  "source_bytes": 119,
+                  "signature_selection": [
+                    0,
+                    115
+                  ]
+                }
+              ]
+            }
+          ],
+          "context_verification": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-q62l2rzj/explorer_a_api_context/files ä/verification.json",
+            "sha256": "492d492d144b9be6c0b8ccf13abbed85792e56652499146de00866fe3f0d20d4"
+          },
+          "visual": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-q62l2rzj/explorer_a_api_context/files ä/dark/explorer-api-context.png",
+            "sha256": "b731e9795950c6da5d3e7c3b963b03d2f47db332670464e2f15d5a6139c5422e"
+          }
+        },
+        {
+          "platform": "linux",
+          "record": {
+            "path": "build/validation/explorer-inline-2026-10-29/context-sixth-linux.json",
+            "sha256": "ed55ac2a3513796dc92af2998f9603a44d44a99b02bf9da6b147b14622a0ce33"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/context-sixth-linux.log",
+            "sha256": "65b079d71c41b3d145bb005737589bf4e6156acc4529bac6cd4c8c6ea41792ff"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-if7vxwkl/results.json",
+            "sha256": "f505d261edf41ca1b6a13a2ed5d4237aef443e23a6dfbdd9073711f715ef55d5"
+          },
+          "app_sha256": "0bb8c572ba7cd25f724fb48fe05712902cd79a43815eab934cf0ea6bc9171fc4",
+          "exit_code": 0,
+          "passed": 8,
+          "total": 8,
+          "cases": [
+            {
+              "name": "explorer_a_native_atspi",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_preview_atspi",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_api_context",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_preview_flow",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_inline_atspi",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_inline",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a",
+              "status": "passed"
+            },
+            {
+              "name": "project_wizard",
+              "status": "passed"
+            }
+          ],
+          "context_cases": [
+            {
+              "mode": "dark",
+              "command": [
+                "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-if7vxwkl/explorer_a_api_context/files ä/dark",
+                "explorer-a-api-context-dark"
+              ],
+              "exit_code": 0,
+              "measurements": [
+                {
+                  "kind": "explorer_api_context",
+                  "scale": 1.0,
+                  "symbol": "ps_channel_add",
+                  "signature_rows": 6,
+                  "pitch": 18.648,
+                  "parameter_rows": 3,
+                  "source_bytes": 119,
+                  "signature_selection": [
+                    0,
+                    115
+                  ]
+                }
+              ]
+            },
+            {
+              "mode": "light",
+              "command": [
+                "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-if7vxwkl/explorer_a_api_context/files ä/light",
+                "explorer-a-api-context-light"
+              ],
+              "exit_code": 0,
+              "measurements": [
+                {
+                  "kind": "explorer_api_context",
+                  "scale": 1.0,
+                  "symbol": "ps_channel_add",
+                  "signature_rows": 6,
+                  "pitch": 18.648,
+                  "parameter_rows": 3,
+                  "source_bytes": 119,
+                  "signature_selection": [
+                    0,
+                    115
+                  ]
+                }
+              ]
+            },
+            {
+              "mode": "contrast",
+              "command": [
+                "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-if7vxwkl/explorer_a_api_context/files ä/contrast",
+                "explorer-a-api-context-contrast"
+              ],
+              "exit_code": 0,
+              "measurements": [
+                {
+                  "kind": "explorer_api_context",
+                  "scale": 1.0,
+                  "symbol": "ps_channel_add",
+                  "signature_rows": 6,
+                  "pitch": 18.648,
+                  "parameter_rows": 3,
+                  "source_bytes": 119,
+                  "signature_selection": [
+                    0,
+                    115
+                  ]
+                }
+              ]
+            },
+            {
+              "mode": "large",
+              "command": [
+                "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                "--workspace-state-test",
+                "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-if7vxwkl/explorer_a_api_context/files ä/large",
+                "explorer-a-api-context-large"
+              ],
+              "exit_code": 0,
+              "measurements": [
+                {
+                  "kind": "explorer_api_context",
+                  "scale": 1.375,
+                  "symbol": "ps_channel_add",
+                  "signature_rows": 6,
+                  "pitch": 25.641,
+                  "parameter_rows": 3,
+                  "source_bytes": 119,
+                  "signature_selection": [
+                    0,
+                    115
+                  ]
+                }
+              ]
+            }
+          ],
+          "context_verification": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-if7vxwkl/explorer_a_api_context/files ä/verification.json",
+            "sha256": "73a18ff4eb53e729a4510623071668864c93d6f4a5eb1430cb7a45fa323e2fce"
+          },
+          "visual": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-if7vxwkl/explorer_a_api_context/files ä/dark/explorer-api-context.png",
+            "sha256": "570a6006f7431b56e59f21296da516ecdb8f6044efe509900260e40e9c93e606"
+          }
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-sixth-inputs.json",
+        "sha256": "75f3a2b9e0244770c1d831eee9e286b570326d1353980ac0380fb31dfe4284f0"
+      },
+      "input_archive": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-sixth-inputs.zip",
+        "sha256": "240c431227de655391815dbe7c39ad820c999583e091585b16d2278d00096928"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-sixth-compiler-source.json",
+        "sha256": "7afbcdd7cd8cb3a0f383417fb366fac9e5390a0ca48b410c43a26c640999f104"
+      },
+      "compiler_overlay": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-sixth-compiler-source.zip",
+        "sha256": "340c63e8318353258006d065527b76c7de62692c4f147ba455de365af8e925f7"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-sixth-runtime.json",
+        "sha256": "a1b80874fead5125932fa140657e642ffd4bee43d8b8125821bd7cb9e45bcea0"
+      },
+      "runtime_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-sixth-byte-index.json",
+        "sha256": "e324dd1327156bb1b8939493149dcf8bd788243271da727d51de9feda7d28319"
+      }
+    }
+  ],
+  "worker_units": [
+    {
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-worker2-windows.json",
+        "sha256": "dd48c73765557bbf2aecfeb6e4d5f277a43d61f08f7e3bea944841de89954e28"
+      },
+      "archive": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-worker2-windows.zip",
+        "sha256": "87364702c4513249109de95058dca1312551cca64911ea1ce1fd48b439a0cec4"
+      },
+      "archive_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-worker2-archive-windows.json",
+        "sha256": "9f1061dd96584bb302e12fe1a5a7cb39e46cbef5365750828fe160bfd36a0091"
+      },
+      "counter": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-worker2-counter-windows.zip",
+        "sha256": "b9f758355b411db07a37c0daddb85d461986160b24bb4224d4d7a3236c564735"
+      },
+      "cases": [
+        {
+          "name": "completion",
+          "variant": "positive",
+          "command": [
+            "D:\\Physim\\build\\validation\\explorer-inline-2026-10-29\\context-worker2-windows\\bin\\completion-positive.exe"
+          ],
+          "exit_code": 0,
+          "binary": "build\\validation\\explorer-inline-2026-10-29\\context-worker2-windows\\bin\\completion-positive.exe",
+          "sha256": "92bfec161712170a3e83f369d30fc292830cb3edaeb0efac6a880187bc61c2ba",
+          "log": "build\\validation\\explorer-inline-2026-10-29\\context-worker2-windows\\completion-positive.log"
+        },
+        {
+          "name": "api_reference",
+          "variant": "positive",
+          "command": [
+            "D:\\Physim\\build\\validation\\explorer-inline-2026-10-29\\context-worker2-windows\\bin\\api_reference-positive.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src"
+          ],
+          "exit_code": 0,
+          "binary": "build\\validation\\explorer-inline-2026-10-29\\context-worker2-windows\\bin\\api_reference-positive.exe",
+          "sha256": "7305cb2d74e0377f4fcfa09a28f491783e55be6140912ab9a8d0606295e660b2",
+          "log": "build\\validation\\explorer-inline-2026-10-29\\context-worker2-windows\\api_reference-positive.log"
+        },
+        {
+          "name": "file_browser_worker",
+          "variant": "positive",
+          "command": [
+            "D:\\Physim\\build\\validation\\explorer-inline-2026-10-29\\context-worker2-windows\\bin\\file_browser_worker-positive.exe",
+            "D:\\Physim\\build\\validation\\explorer-inline-2026-10-29\\context-worker2-windows\\file_browser_worker-positive-work"
+          ],
+          "exit_code": 0,
+          "binary": "build\\validation\\explorer-inline-2026-10-29\\context-worker2-windows\\bin\\file_browser_worker-positive.exe",
+          "sha256": "b86c436d5f6ea39c97f953ee94f8718ccc6dbe3a095094490e90337ad5fb9334",
+          "log": "build\\validation\\explorer-inline-2026-10-29\\context-worker2-windows\\file_browser_worker-positive.log"
+        },
+        {
+          "name": "file_browser_worker",
+          "variant": "counter",
+          "command": [
+            "D:\\Physim\\build\\validation\\explorer-inline-2026-10-29\\context-worker2-windows\\bin\\file_browser_worker-counter.exe",
+            "D:\\Physim\\build\\validation\\explorer-inline-2026-10-29\\context-worker2-windows\\file_browser_worker-counter-work"
+          ],
+          "exit_code": 1,
+          "binary": "build\\validation\\explorer-inline-2026-10-29\\context-worker2-windows\\bin\\file_browser_worker-counter.exe",
+          "sha256": "9c7e8bb4ddd9c220d501ca537a5354b020d96b721689784d6b40c4def928979d",
+          "log": "build\\validation\\explorer-inline-2026-10-29\\context-worker2-windows\\file_browser_worker-counter.log"
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-worker2-linux.json",
+        "sha256": "9bb15e96e28e58d195fc58876be139c76dd2edf95dfd67608aa3508c7e336b4a"
+      },
+      "archive": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-worker2-linux.zip",
+        "sha256": "68d8b2b0954d9f6b8d86ea1c1b5525e51353442fdb2fbc7f9c30be565b86a7d0"
+      },
+      "archive_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-worker2-archive-linux.json",
+        "sha256": "b387d80920418711e45bd3023f788ab21655aa4248e2b7fb39e7bc1c7c8ee91f"
+      },
+      "counter": {
+        "path": "build/validation/explorer-inline-2026-10-29/context-worker2-counter-linux.zip",
+        "sha256": "f2bb2ddbcea67f712370aa818b282f52c0e395b2351af73cb1cf6cb186c81b81"
+      },
+      "cases": [
+        {
+          "name": "completion",
+          "variant": "positive",
+          "command": [
+            "/mnt/d/Physim/build/validation/explorer-inline-2026-10-29/context-worker2-linux/bin/completion-positive"
+          ],
+          "exit_code": 0,
+          "binary": "build/validation/explorer-inline-2026-10-29/context-worker2-linux/bin/completion-positive",
+          "sha256": "fb09530dfe19d23116feecf9560d15c62edd299070020e06e195fde01fdc8b52",
+          "log": "build/validation/explorer-inline-2026-10-29/context-worker2-linux/completion-positive.log"
+        },
+        {
+          "name": "api_reference",
+          "variant": "positive",
+          "command": [
+            "/mnt/d/Physim/build/validation/explorer-inline-2026-10-29/context-worker2-linux/bin/api_reference-positive",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src"
+          ],
+          "exit_code": 0,
+          "binary": "build/validation/explorer-inline-2026-10-29/context-worker2-linux/bin/api_reference-positive",
+          "sha256": "417d85c0496b12f2baa09abc06cb785d8bd253b5ba8e76532f27898fa9c4d547",
+          "log": "build/validation/explorer-inline-2026-10-29/context-worker2-linux/api_reference-positive.log"
+        },
+        {
+          "name": "file_browser_worker",
+          "variant": "positive",
+          "command": [
+            "/mnt/d/Physim/build/validation/explorer-inline-2026-10-29/context-worker2-linux/bin/file_browser_worker-positive",
+            "/mnt/d/Physim/build/validation/explorer-inline-2026-10-29/context-worker2-linux/file_browser_worker-positive-work"
+          ],
+          "exit_code": 0,
+          "binary": "build/validation/explorer-inline-2026-10-29/context-worker2-linux/bin/file_browser_worker-positive",
+          "sha256": "293a3629d3b8abe1770a08d18a12847c23bd7888b2914e67c58cadbd1c88e22c",
+          "log": "build/validation/explorer-inline-2026-10-29/context-worker2-linux/file_browser_worker-positive.log"
+        },
+        {
+          "name": "file_browser_worker",
+          "variant": "counter",
+          "command": [
+            "/mnt/d/Physim/build/validation/explorer-inline-2026-10-29/context-worker2-linux/bin/file_browser_worker-counter",
+            "/mnt/d/Physim/build/validation/explorer-inline-2026-10-29/context-worker2-linux/file_browser_worker-counter-work"
+          ],
+          "exit_code": 1,
+          "binary": "build/validation/explorer-inline-2026-10-29/context-worker2-linux/bin/file_browser_worker-counter",
+          "sha256": "76ade41e92b7ad6c031681551cb973de2f2634185279d26609b2143c603fbd76",
+          "log": "build/validation/explorer-inline-2026-10-29/context-worker2-linux/file_browser_worker-counter.log"
+        }
+      ]
+    }
+  ],
+  "first_worker_failure": {
+    "record": {
+      "path": "build/validation/explorer-inline-2026-10-29/context-worker-first-failure.json",
+      "sha256": "64801cbfaba9d0d7f0c225ba3fdcdd65085ea4efc8004e195d07e79ed1165ede"
+    },
+    "archive": {
+      "path": "build/validation/explorer-inline-2026-10-29/context-worker-first-failure.zip",
+      "sha256": "db32ca84b94aa7ce3df0802c5d3ef1232d55f421fe0c828f76b89e1a4bc555bf"
+    },
+    "cause": "Fixture counted Markdown separator as data row; parser correctly yields header plus two rows."
+  },
+  "catalog": {
+    "exit_code": 0,
+    "log": {
+      "path": "build/validation/explorer-inline-2026-10-29/catalog-context2.log",
+      "sha256": "89a7c657605eee32d22358acac4905f97819ec9799919da7f13ee57d68c4992a"
+    },
+    "command": [
+      "tools/with-artifacts.py",
+      "--",
+      "python",
+      "-X",
+      "utf8",
+      "-B",
+      "tests/test_native_test_runner.py",
+      "--work",
+      "build/validation/explorer-inline-2026-10-29/catalog-context2"
+    ]
+  },
+  "known_open": [
+    "Whole UI fidelity",
+    "CSS table header weight 500 font matching",
+    "Independent screenreader tasks for API context",
+    "Native table Collection semantics",
+    "200 percent text/DPI/monitor matrix",
+    "macOS runtime",
+    "Real image/run previews",
+    "Native nonmodal task windows, requested subsequently"
+  ]
+}

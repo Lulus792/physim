@@ -48,6 +48,74 @@ static void expect_text(ps_browser_worker *worker,const char *path,const char *t
     CHECK(!memcmp(result.text,text,n) && result.text[n]==0);ps_browser_result_destroy(&result);
 }
 static int unblock(void *unused) {(void)unused;SDL_Delay(20);SDL_SignalSemaphore(release);return 0;}
+static void api_context(ps_browser_worker *worker,const char *parent) {
+    char root[PS_BROWSER_PATH],docs[PS_BROWSER_PATH],reference[PS_BROWSER_PATH],module[PS_BROWSER_PATH],path[PS_BROWSER_PATH];
+    CHECK(ps_browser_create_directory(parent,"reference-root",root)==PS_BROWSER_CREATED);
+    CHECK(ps_browser_create_directory(root,"docs",docs)==PS_BROWSER_CREATED);
+    CHECK(ps_browser_create_directory(docs,"reference",reference)==PS_BROWSER_CREATED);
+    CHECK(ps_browser_child(reference,"experiment.md",module)==PS_OK);
+    CHECK(ps_browser_child(root,"Quelle λ.c",path)==PS_OK);
+    const char *source="// ps_vlength(v)\nconst char *s = \"ps_vlength(v)\";\nps_result r = ps_scene_add_id(scene, 1, PS_SPHERE, a, b, 1, 0);\n";
+    const char *manual="# Experiment\n\n## ps_scene_add_id\n\nEchte Beschreibung λ.\n\n```c\nps_result ps_scene_add_id(ps_scene *scene, uint32_t id);\n```\n\n| Argument | Bedeutung |\n| --- | --- |\n| scene | Zielszene |\n| id | Objektkennung |\n\n## Andere Funktion\n\nNicht Teil der Vorschau.\n";
+    write_bytes(path,source,strlen(source));write_bytes(module,manual,strlen(manual));
+    ps_browser_request r=request(PS_BROWSER_READ_TEXT,path);strcpy(r.reference_root,root);
+    ps_browser_result result={0};CHECK(ps_browser_worker_request(worker,&r)==PS_OK);
+    memset(&r,0xdd,sizeof r); /* Both file and documentation root are job-owned. */
+    wait_result(worker,&result);
+    CHECK(result.status==PS_OK && result.length==strlen(source) && !memcmp(result.text,source,result.length));
+    CHECK(result.api.status==PS_OK && result.api.document && result.api.symbol);
+    CHECK(!strcmp(result.api.symbol->name,"ps_scene_add_id") && !strcmp(result.api.symbol->module,"experiment"));
+    CHECK(result.api.offset==(size_t)(strstr(source,"ps_scene_add_id")-source));
+    ps_document *document=result.api.document;ps_doc_api_preview preview=result.api.preview;
+    CHECK(preview.summary!=SIZE_MAX && preview.signature!=SIZE_MAX && preview.arguments!=SIZE_MAX && preview.example==SIZE_MAX);
+    CHECK(!strcmp(document->text+document->blocks[preview.summary].text,"Echte Beschreibung λ."));
+    CHECK(!strcmp(document->text+document->blocks[preview.signature].text,"ps_result ps_scene_add_id(ps_scene *scene, uint32_t id);\n"));
+    CHECK(document->blocks[preview.arguments].table_rows==3 && result.api.end>result.api.first);
+    /* A new request must neither mutate nor free the already published doc. */
+    result.api.document=NULL;ps_browser_result_destroy(&result);
+    r=request(PS_BROWSER_READ_TEXT,path);strcpy(r.reference_root,root);
+    CHECK(ps_browser_worker_request(worker,&r)==PS_OK);uint64_t version=ps_browser_worker_read(worker).requested;
+    ps_browser_request invalid=r;memset(invalid.reference_root,'x',sizeof invalid.reference_root);
+    CHECK(ps_browser_worker_request(worker,&invalid)==PS_INVALID && ps_browser_worker_read(worker).requested==version);
+    strcpy(invalid.reference_root,"\xc0\xaf");
+    CHECK(ps_browser_worker_request(worker,&invalid)==PS_INVALID && ps_browser_worker_read(worker).requested==version);
+    /* Retire a fully parsed document immediately before worker publication. */
+    gate(version,1);CHECK(!ps_browser_worker_poll(worker,&result));CHECK(SDL_WaitSemaphoreTimeout(entered,5000));
+    CHECK(!strcmp(document->text+document->blocks[preview.summary].text,"Echte Beschreibung λ."));free(document);
+    ps_browser_worker_cancel(worker);SDL_SignalSemaphore(release);
+    CHECK(ps_browser_worker_request(worker,&r)==PS_OK);wait_result(worker,&result);
+    CHECK(result.status==PS_OK && result.api.status==PS_OK && result.api.document);ps_browser_result_destroy(&result);
+    /* A missing, unrelated, invalid or oversized manual never hides the source. */
+    CHECK(SDL_RemovePath(module));
+    const char *bad[]={NULL,"# Unrelated\n\nNo matching section.\n","\xef\xbb\xbf\xed\xa0\x80"};
+    const ps_result statuses[]={PS_IO,PS_INVALID,PS_CORRUPT};
+    for(size_t k=0;k<3;k++) {
+        if(bad[k])write_bytes(module,bad[k],strlen(bad[k]));
+        CHECK(ps_browser_worker_request(worker,&r)==PS_OK);wait_result(worker,&result);
+        CHECK(result.status==PS_OK && result.api.status==statuses[k] && !result.api.document && result.api.symbol);
+        CHECK(result.length==strlen(source) && !memcmp(result.text,source,result.length));ps_browser_result_destroy(&result);
+    }
+    char *large=malloc(PS_DOC_MAX_BYTES+8);CHECK(large);memset(large,' ',PS_DOC_MAX_BYTES+8);memcpy(large,manual,strlen(manual));
+    write_bytes(module,large,PS_DOC_MAX_BYTES+1);
+    CHECK(ps_browser_worker_request(worker,&r)==PS_OK);wait_result(worker,&result);
+    CHECK(result.status==PS_OK && result.api.status==PS_LIMIT && !result.api.document);ps_browser_result_destroy(&result);
+    write_bytes(module,large,PS_DOC_MAX_BYTES);free(large);
+    CHECK(ps_browser_worker_request(worker,&r)==PS_OK);wait_result(worker,&result);
+    CHECK(result.status==PS_OK && result.api.status==PS_OK && result.api.document);ps_browser_result_destroy(&result);
+    const char *bom="\xef\xbb\xbf";
+    size_t bytes=strlen(manual);char *with_bom=malloc(bytes+3);CHECK(with_bom);memcpy(with_bom,bom,3);memcpy(with_bom+3,manual,bytes);
+    write_bytes(module,with_bom,bytes+3);free(with_bom);
+    CHECK(ps_browser_worker_request(worker,&r)==PS_OK);wait_result(worker,&result);
+    CHECK(result.status==PS_OK && result.api.status==PS_OK && result.api.document);ps_browser_result_destroy(&result);
+    r.reference_root[0]=0; /* Explicit opt-in, even when the source contains API calls. */
+    CHECK(ps_browser_worker_request(worker,&r)==PS_OK);wait_result(worker,&result);
+    CHECK(result.status==PS_OK && result.api.status==PS_EOF && !result.api.symbol && !result.api.document);ps_browser_result_destroy(&result);
+    const char *plain="int main(void) {return 0;}\n";
+    strcpy(r.reference_root,root);write_bytes(path,plain,strlen(plain));
+    CHECK(ps_browser_worker_request(worker,&r)==PS_OK);wait_result(worker,&result);
+    CHECK(result.status==PS_OK && result.api.status==PS_EOF && !result.api.symbol && !result.api.document);ps_browser_result_destroy(&result);
+    puts("Browser C context: real symbol/module, owned parsed docs, stale completion, bounded UTF-8 and independent source errors passed");
+}
 int main(int argc,char **argv) {
     CHECK(argc==2 && SDL_Init(0));entered=SDL_CreateSemaphore(0);release=SDL_CreateSemaphore(0);CHECK(entered && release);
     char root[PS_BROWSER_PATH],a[PS_BROWSER_PATH],b[PS_BROWSER_PATH],path[PS_BROWSER_PATH],missing[PS_BROWSER_PATH];
@@ -133,6 +201,7 @@ int main(int argc,char **argv) {
     CHECK(ps_browser_child(root,r.name,path)==PS_OK && ps_browser_selectable(path,PS_BROWSER_FOLDERS));
     r=request(PS_BROWSER_READ_DIRECTORY,root);CHECK(ps_browser_worker_request(worker,&r)==PS_OK);wait_result(worker,&result);
     CHECK(result.status==PS_OK && result.listing.count==4);ps_browser_result_destroy(&result);
+    api_context(worker,b);
 #ifndef _WIN32
     /* DrvFS on the required D: build directory cannot create named FIFOs.
      * An actual anonymous pipe exercises special-file rejection without any
