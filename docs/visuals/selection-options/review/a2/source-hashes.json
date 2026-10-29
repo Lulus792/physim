@@ -1,0 +1,13 @@
+{
+  "sources": {
+    "docs/visuals/selection-options/index.html": "4b31259225b9f91358e2d9f1f6dc054f55d7de523e53be1028dedecd66b6cbd6",
+    "docs/visuals/selection-options/selection.css": "ae348b849569787312ddaccf3fb0186de7353c1cd0a27cd465cc1d48e19dc1bd",
+    "docs/visuals/selection-options/selection.js": "16a5e34bc0bcad613977d9fc67688b49feb12e878fe28b73bd1358d9d586c945",
+    "tools/check_selection_options.cjs": "fa169ab3fa32fa416ab8e368fcebd51019daf453c2988f355400e91be3110262"
+  },
+  "crop": "1440x1257 full page, x55 y620 width1065 height455",
+  "images": {
+    "text-a2-dark.png": "c835fbbb93d6ab9ff9a421e2be8c502bd2fbaa63c8862e92dcf9d62c04395252",
+    "text-a2-light.png": "bca90544dd572fbd33a1cb93b7e0ee042f09b7a4cfc18903a8845d499ee6824f"
+  }
+}

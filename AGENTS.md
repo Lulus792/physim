@@ -34,6 +34,16 @@
 - Die Grafikexport-Freigabe bleibt erhalten. Die Designfreigabe bestätigt keine
   fertige native Umsetzung oder Plattformabnahme; bestehende Funktionen erhalten.
 
+## Markierungen und Kontextmenüs
+
+- Markierungen: Der Nutzer hat am 29. Oktober 2026 **A · Sanfte Fläche als
+  Grundlage ausgewählt** und zusätzlich eine transparentere, weniger blaue
+  Alternative beauftragt. [Auswahlvertrag](docs/visuals/selection-options/README.md)
+  und [Gesamtübergabe](docs/visuals/unified-workspace/NEXT-CHAT.md) beachten.
+  **A2 · Dezenter Schleier ist ein neuer Vergleich, noch keine Ersatzfreigabe.**
+  Linksauswahl zeigt keine automatische Aktionsleiste; Aktionen über Rechtsklick,
+  Menütaste oder Umschalt+F10. Bestehende Designfreigaben bleiben erhalten.
+
 ## Speicherpflege
 
 - Der Nutzer hat die F:-Nutzung am 25. Oktober 2026 widerrufen: Physim bleibt

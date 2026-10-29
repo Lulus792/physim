@@ -1,0 +1,692 @@
+{
+  "date": "2026-10-29T18:59:10.063Z",
+  "platform": "win32",
+  "browser": "156.0.4314.50",
+  "sourceCommit": "210e42ea32691d467c8d29c090a798a4a2ac94e5",
+  "layouts": [
+    {
+      "variant": "a",
+      "context": "code",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "context": "code",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "context": "code",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "context": "code",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "context": "protocol",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "context": "protocol",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "context": "protocol",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "context": "protocol",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "context": "files",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "context": "files",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "context": "files",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "context": "files",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "context": "scene",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "context": "scene",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "context": "scene",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "context": "scene",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "a2",
+      "context": "code",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "a2",
+      "context": "code",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "a2",
+      "context": "code",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "a2",
+      "context": "code",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "a2",
+      "context": "protocol",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "a2",
+      "context": "protocol",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "a2",
+      "context": "protocol",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "a2",
+      "context": "protocol",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "a2",
+      "context": "files",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "a2",
+      "context": "files",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "a2",
+      "context": "files",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "a2",
+      "context": "files",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "a2",
+      "context": "scene",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "a2",
+      "context": "scene",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "a2",
+      "context": "scene",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "a2",
+      "context": "scene",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "context": "code",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "context": "code",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "context": "code",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "context": "code",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "context": "protocol",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "context": "protocol",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "context": "protocol",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "context": "protocol",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "context": "files",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "context": "files",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "context": "files",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "context": "files",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "context": "scene",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "context": "scene",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "context": "scene",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "context": "scene",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "context": "code",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "context": "code",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "context": "code",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "context": "code",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "context": "protocol",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "context": "protocol",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "context": "protocol",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "context": "protocol",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "context": "files",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "context": "files",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "context": "files",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "context": "files",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "context": "scene",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "context": "scene",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "context": "scene",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "context": "scene",
+      "theme": "light",
+      "width": 500
+    }
+  ],
+  "checks": [
+    "64 layouts: 4 variants × 4 contexts × 2 themes × 2 widths; no actions on left selection, keyboard menu, bounds, Escape focus return and no horizontal overflow",
+    "A ↔ A2 preserves the exact text selection; A2 has lower opacity and a more neutral tint in both themes; A remains unchanged",
+    "Actual mouse drag selects exact text; right click preserves it; menu arrow/Home/End navigation; search consumes selection; clipboard-denial message; Ctrl+A stays in the editor and Menu key opens actions",
+    "Real row clicks: Ctrl/Shift multi-selection; right-click preserves selected set or replaces it for a new target; select-all works for protocol and files",
+    "Actual marquee selects three objects; right-click preserves set; isolation action; Escape rolls back in-progress drag",
+    "200% root text size, forced colors, reduced motion and separate 2× browser pixel density; native OS DPI and screenreader acceptance remain open"
+  ],
+  "contrasts": [
+    {
+      "variant": "a",
+      "theme": "dark",
+      "colors": [
+        {
+          "role": "code-editor",
+          "foreground": "rgb(237, 238, 242)",
+          "background": "rgba(95, 155, 237, 0.26)",
+          "ratio": 9.697513254841017
+        },
+        {
+          "role": "kw",
+          "foreground": "rgb(198, 165, 239)",
+          "background": "rgba(95, 155, 237, 0.26)",
+          "ratio": 5.369782907489066
+        },
+        {
+          "role": "num",
+          "foreground": "rgb(231, 191, 133)",
+          "background": "rgba(95, 155, 237, 0.26)",
+          "ratio": 6.525799029351762
+        },
+        {
+          "role": "call",
+          "foreground": "rgb(150, 207, 196)",
+          "background": "rgba(95, 155, 237, 0.26)",
+          "ratio": 6.43491249890515
+        },
+        {
+          "role": "code-line comment",
+          "foreground": "rgb(161, 173, 155)",
+          "background": "rgba(95, 155, 237, 0.26)",
+          "ratio": 4.800417539849681
+        }
+      ]
+    },
+    {
+      "variant": "a",
+      "theme": "light",
+      "colors": [
+        {
+          "role": "code-editor",
+          "foreground": "rgb(32, 36, 44)",
+          "background": "rgba(46, 116, 206, 0.18)",
+          "ratio": 12.303563471813035
+        },
+        {
+          "role": "kw",
+          "foreground": "rgb(108, 51, 148)",
+          "background": "rgba(46, 116, 206, 0.18)",
+          "ratio": 6.543086531642869
+        },
+        {
+          "role": "num",
+          "foreground": "rgb(131, 80, 21)",
+          "background": "rgba(46, 116, 206, 0.18)",
+          "ratio": 5.31847824182297
+        },
+        {
+          "role": "call",
+          "foreground": "rgb(23, 99, 91)",
+          "background": "rgba(46, 116, 206, 0.18)",
+          "ratio": 5.588886640049541
+        },
+        {
+          "role": "code-line comment",
+          "foreground": "rgb(82, 100, 72)",
+          "background": "rgba(46, 116, 206, 0.18)",
+          "ratio": 5.071878664479516
+        }
+      ]
+    },
+    {
+      "variant": "a2",
+      "theme": "dark",
+      "colors": [
+        {
+          "role": "code-editor",
+          "foreground": "rgb(237, 238, 242)",
+          "background": "rgba(170, 184, 202, 0.15)",
+          "ratio": 11.129104285597188
+        },
+        {
+          "role": "kw",
+          "foreground": "rgb(198, 165, 239)",
+          "background": "rgba(170, 184, 202, 0.15)",
+          "ratio": 6.162494693021467
+        },
+        {
+          "role": "num",
+          "foreground": "rgb(231, 191, 133)",
+          "background": "rgba(170, 184, 202, 0.15)",
+          "ratio": 7.489167174713527
+        },
+        {
+          "role": "call",
+          "foreground": "rgb(150, 207, 196)",
+          "background": "rgba(170, 184, 202, 0.15)",
+          "ratio": 7.384863561105005
+        },
+        {
+          "role": "code-line comment",
+          "foreground": "rgb(161, 173, 155)",
+          "background": "rgba(170, 184, 202, 0.15)",
+          "ratio": 5.509077019175764
+        }
+      ]
+    },
+    {
+      "variant": "a2",
+      "theme": "light",
+      "colors": [
+        {
+          "role": "code-editor",
+          "foreground": "rgb(32, 36, 44)",
+          "background": "rgba(90, 108, 130, 0.11)",
+          "ratio": 13.47687596022166
+        },
+        {
+          "role": "kw",
+          "foreground": "rgb(108, 51, 148)",
+          "background": "rgba(90, 108, 130, 0.11)",
+          "ratio": 7.167059022043942
+        },
+        {
+          "role": "num",
+          "foreground": "rgb(131, 80, 21)",
+          "background": "rgba(90, 108, 130, 0.11)",
+          "ratio": 5.82566763900506
+        },
+        {
+          "role": "call",
+          "foreground": "rgb(23, 99, 91)",
+          "background": "rgba(90, 108, 130, 0.11)",
+          "ratio": 6.121863163972324
+        },
+        {
+          "role": "code-line comment",
+          "foreground": "rgb(82, 100, 72)",
+          "background": "rgba(90, 108, 130, 0.11)",
+          "ratio": 5.555551430533052
+        }
+      ]
+    },
+    {
+      "variant": "b",
+      "theme": "dark",
+      "colors": [
+        {
+          "role": "code-editor",
+          "foreground": "rgb(237, 238, 242)",
+          "background": "rgba(95, 155, 237, 0.1)",
+          "ratio": 12.960111899413823
+        },
+        {
+          "role": "kw",
+          "foreground": "rgb(198, 165, 239)",
+          "background": "rgba(95, 155, 237, 0.1)",
+          "ratio": 7.17637455374212
+        },
+        {
+          "role": "num",
+          "foreground": "rgb(231, 191, 133)",
+          "background": "rgba(95, 155, 237, 0.1)",
+          "ratio": 8.72131683978518
+        },
+        {
+          "role": "call",
+          "foreground": "rgb(150, 207, 196)",
+          "background": "rgba(95, 155, 237, 0.1)",
+          "ratio": 8.599852751643864
+        },
+        {
+          "role": "code-line comment",
+          "foreground": "rgb(161, 173, 155)",
+          "background": "rgba(95, 155, 237, 0.1)",
+          "ratio": 6.415453822587287
+        }
+      ]
+    },
+    {
+      "variant": "b",
+      "theme": "light",
+      "colors": [
+        {
+          "role": "code-editor",
+          "foreground": "rgb(32, 36, 44)",
+          "background": "rgba(46, 116, 206, 0.07)",
+          "ratio": 14.229598942914295
+        },
+        {
+          "role": "kw",
+          "foreground": "rgb(108, 51, 148)",
+          "background": "rgba(46, 116, 206, 0.07)",
+          "ratio": 7.567360253585317
+        },
+        {
+          "role": "num",
+          "foreground": "rgb(131, 80, 21)",
+          "background": "rgba(46, 116, 206, 0.07)",
+          "ratio": 6.151048234207609
+        },
+        {
+          "role": "call",
+          "foreground": "rgb(23, 99, 91)",
+          "background": "rgba(46, 116, 206, 0.07)",
+          "ratio": 6.463787146505264
+        },
+        {
+          "role": "code-line comment",
+          "foreground": "rgb(82, 100, 72)",
+          "background": "rgba(46, 116, 206, 0.07)",
+          "ratio": 5.865845244591752
+        }
+      ]
+    },
+    {
+      "variant": "c",
+      "theme": "dark",
+      "colors": [
+        {
+          "role": "code-editor",
+          "foreground": "rgb(21, 42, 69)",
+          "background": "rgb(184, 213, 255)",
+          "ratio": 9.661637472033068
+        },
+        {
+          "role": "kw",
+          "foreground": "rgb(21, 42, 69)",
+          "background": "rgb(184, 213, 255)",
+          "ratio": 9.661637472033068
+        },
+        {
+          "role": "num",
+          "foreground": "rgb(21, 42, 69)",
+          "background": "rgb(184, 213, 255)",
+          "ratio": 9.661637472033068
+        },
+        {
+          "role": "call",
+          "foreground": "rgb(21, 42, 69)",
+          "background": "rgb(184, 213, 255)",
+          "ratio": 9.661637472033068
+        },
+        {
+          "role": "code-line comment",
+          "foreground": "rgb(21, 42, 69)",
+          "background": "rgb(184, 213, 255)",
+          "ratio": 9.661637472033068
+        }
+      ]
+    },
+    {
+      "variant": "c",
+      "theme": "light",
+      "colors": [
+        {
+          "role": "code-editor",
+          "foreground": "rgb(255, 255, 255)",
+          "background": "rgb(32, 93, 168)",
+          "ratio": 6.577739405703598
+        },
+        {
+          "role": "kw",
+          "foreground": "rgb(255, 255, 255)",
+          "background": "rgb(32, 93, 168)",
+          "ratio": 6.577739405703598
+        },
+        {
+          "role": "num",
+          "foreground": "rgb(255, 255, 255)",
+          "background": "rgb(32, 93, 168)",
+          "ratio": 6.577739405703598
+        },
+        {
+          "role": "call",
+          "foreground": "rgb(255, 255, 255)",
+          "background": "rgb(32, 93, 168)",
+          "ratio": 6.577739405703598
+        },
+        {
+          "role": "code-line comment",
+          "foreground": "rgb(255, 255, 255)",
+          "background": "rgb(32, 93, 168)",
+          "ratio": 6.577739405703598
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "passed": true
+}

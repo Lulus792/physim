@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "browser": "156.0.4314.50",
+  "before": 0,
+  "after": 40,
+  "check": "Actual page scroll closes menu; queued completed focus-scroll does not"
+}

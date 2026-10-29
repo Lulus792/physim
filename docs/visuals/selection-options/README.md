@@ -1,7 +1,9 @@
 # Markierung und Kontextmenü – getrennte Designstudie
 
-Stand: **29. Oktober 2026.** Neue Markierungsvarianten, noch keine Auswahl einer
-Gestaltung durch den Nutzer. Die freigegebene Kombination aus
+Stand: **29. Oktober 2026. A ist vom Nutzer als Grundlage ausgewählt.** Zusätzlich
+wünscht er ein transparenteres Design mit weniger Blau. **A2 · Dezenter Schleier**
+ist dafür neu als Vergleich ergänzt, noch nicht anstelle von A freigegeben.
+Die freigegebene Kombination aus
 [ADR 011](../../decisions/011-selected-workspace-additions.md) und der
 [Grafikexport aus ADR 010](../../decisions/010-analysis-graphic-export.md) bleiben
 erhalten. Diese Dateien verändern weder die bestehenden Vorschauen noch die
@@ -9,7 +11,7 @@ native Anwendung.
 
 [Interaktive Vorschau öffnen](index.html?variant=a&context=code) ·
 [A](index.html?variant=a&context=code) · [B](index.html?variant=b&context=code) ·
-[C](index.html?variant=c&context=code)
+[C](index.html?variant=c&context=code) · **[Neue Variante A2](index.html?variant=a2&context=code)**
 
 Lokal auch unter `http://127.0.0.1:8791/selection-options/` erreichbar, wenn der
 Vorschau-Server läuft. Keine Installation oder externen Ressourcen nötig;
@@ -20,14 +22,17 @@ Vorschau-Server läuft. Keine Installation oder externen Ressourcen nötig;
 Der Nutzer beanstandet, dass der Inhalt unter der bisherigen Textmarkierung
 nicht erkennbar ist, und wünscht Beispiele für Markierungen mit passenden
 Aktionen. Anschließend konkretisiert er: **Auswahloptionen nur bei Rechtsklick**.
-Diese Bedienregel ist ausdrücklich vorgegeben; nur die Gestaltung A/B/C ist offen.
-Eine automatisch erscheinende Aktionsleiste gehört zu keiner der drei Varianten.
+Diese Bedienregel ist ausdrücklich vorgegeben. Anschließend wählt er **A** und
+bittet um eine zusätzliche, transparentere und weniger blaue Alternative. A bleibt
+die ausgewählte Grundlage; A2 dient dem direkten Vergleich. Eine automatisch
+erscheinende Aktionsleiste gehört zu keiner Variante.
 
-## Drei Gestaltungen mit identischer Bedienung
+## Gestaltungen mit identischer Bedienung
 
 | Variante | Text | Zeilen | Szenenobjekte |
 | --- | --- | --- | --- |
-| **A · Sanfte Fläche**, Empfehlung | Transparente Akzentfläche hinter der Schrift; Syntaxfarben bleiben erhalten | Tönung, Akzent links, Häkchen | Dünner Rahmen, Griffe, dezente Fläche hinter Objekt und Beschriftung |
+| **A · Sanfte Fläche**, ausgewählte Grundlage | Transparente Akzentfläche hinter der Schrift; Syntaxfarben bleiben erhalten | Tönung, Akzent links, Häkchen | Dünner Rahmen, Griffe, dezente Fläche hinter Objekt und Beschriftung |
+| **A2 · Dezenter Schleier**, neuer Vergleich | Transparenteres, nahezu neutrales Blaugrau; Syntaxfarben bleiben erhalten | Schwächere Fläche, graublauer Akzent, Häkchen | Dieselben Rahmen und Griffe wie A, neutraler und mit transparenterer Fläche |
 | **B · Feine Kontur** | Sehr schwache Tönung und feine Unterstreichung; Syntax bleibt erhalten | Kontur, sehr schwache Fläche, Häkchen | Kontur und Griffe ohne zusätzliche Fläche |
 | **C · Klarer Kontrast** | Eigene deckende Auswahlfläche mit ausdrücklich zugeordneter Textfarbe; Syntaxfarben werden vereinheitlicht | Kontrastfläche und passende Schrift, Häkchen | Kräftiger Rahmen und gefüllte Griffe; Beschriftungen erhalten ihre Farbe |
 
@@ -37,9 +42,17 @@ entworfen; die Studie zeigt nur die betroffenen Auswahlkomponenten.
 
 Die Auswahl liegt in der Zeichenreihenfolge **hinter** dem Inhalt. Die Textfarbe
 wird separat bestimmt, statt ein halbtransparentes Rechteck über fertige Glyphen
-zu zeichnen. A/B definieren auch für Schlüsselwörter, Zahlen, Aufrufe und Kommentare
+zu zeichnen. A/A2/B definieren auch für Schlüsselwörter, Zahlen, Aufrufe und Kommentare
 eigene Auswahl-Schriftrollen. C verwendet bewusst ein einheitliches Paar:
 dunkles Theme `#b8d5ff` / `#152a45`, helles Theme `#205da8` / Weiß.
+
+A2 verwendet im dunklen Theme `rgba(170,184,202,.15)` statt As
+`rgba(95,155,237,.26)`, im hellen Theme `rgba(90,108,130,.11)` statt
+`rgba(46,116,206,.18)`. Graublaue Objekt-/Zeilenkonturen ergänzen die weniger
+auffällige Fläche. Die eigentlichen Textfarben und die sichtbare Tastaturfokuslinie
+bleiben erhalten. Es wird nur die Auswahlfläche transparenter, nicht der Inhalt.
+A bleibt unverändert daneben sichtbar. Beim Umschalten bleibt derselbe
+Textbereich ausgewählt, damit der Vergleich direkt möglich ist.
 
 ## Interaktionen in der Vorschau
 
@@ -94,8 +107,9 @@ sichtbare Zugang am Diagramm und derselbe Exportdialog bleiben bestehen.
 
 1. Nutzerregel „Linksauswahl ohne automatische Aktionen, Kontextmenü auf
    Rechtsklick / Tastaturmenü“ erhalten. Die konkrete Markierungsvariante erst
-   nach Auswahl dieser neuen Studie übertragen. Keine bestehende Designfreigabe
-   erneut aufmachen.
+   als **A** übertragen; diese Grundlage ist ausgewählt. Die neue Abwandlung
+   **A2** erst nach eigener Bestätigung anstelle der A-Farben verwenden. Keine
+   bestehende Designfreigabe erneut aufmachen.
 2. Gemeinsame Auswahl-Hintergrund- und Schriftrollen im vorhandenen Renderer
    verwenden. Glyphen nach der Auswahlfläche zeichnen und getrennt clippen;
    keine pauschale UI-Opacity, kein dunkler Schleier über Text, Icons oder Labels.
@@ -118,3 +132,4 @@ sichtbare Zugang am Diagramm und derselbe Exportdialog bleiben bestehen.
 Quellen: `index.html`, `selection.css`, `selection.js` in diesem Verzeichnis.
 Prüfer: [check_selection_options.cjs](../../../tools/check_selection_options.cjs).
 Ausgeführte Prüfungen und Bildreferenzen: [review/VALIDATION.md](review/VALIDATION.md).
+Der zusätzliche A2-Nachweis steht in [review/a2/VALIDATION.md](review/a2/VALIDATION.md).

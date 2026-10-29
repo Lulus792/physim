@@ -1,8 +1,9 @@
 # Physim – getrennte Designvarianten
 
 Zusätzliche, eigenständige [Studie zu Markierung und Rechtsklick-Menüs](../selection-options/index.html)
-vom 29. Oktober 2026: drei neue Markierungsstile zum Vergleichen. Deren
-Gestaltung ist noch nicht ausgewählt und ändert die unten freigegebene Kombination nicht.
+vom 29. Oktober 2026: **A als Grundlage ausgewählt**, die transparentere und weniger
+blaue **A2** ist zusätzlich zum Vergleichen ergänzt. A2 ist noch nicht freigegeben;
+die unten freigegebene Kombination bleibt erhalten.
 
 Stand: **25. Oktober 2026. Status: Auswahl vom Nutzer freigegeben.**
 

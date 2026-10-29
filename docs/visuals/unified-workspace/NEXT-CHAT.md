@@ -3,12 +3,15 @@
 **Ergänzung vom 29. Oktober 2026 – Auswahl/Markierung:** Der Nutzer wünscht
 lesbare Markierungen und legt fest: **Linksauswahl öffnet keine automatischen
 Aktionsleisten; Auswahlaktionen erscheinen erst per Rechtsklick**, zusätzlich
-über Menütaste/Umschalt+F10. Drei neue Gestaltungen sind dafür in einer
+über Menütaste/Umschalt+F10. Die Gestaltungen sind dafür in einer
 [getrennten interaktiven Studie](../selection-options/index.html) vorbereitet.
 Die [Übergabe und Zustandsregeln](../selection-options/README.md) dokumentieren
-Text-, Zeilen- und Objektauswahl samt Menüerhalt und Abbruch. Die konkrete
-Markierungsgestaltung A/B/C ist noch nicht ausgewählt; diese Studie nicht als
-zusätzliche Designfreigabe behandeln. Die folgende Auswahl bleibt verbindlich.
+Text-, Zeilen- und Objektauswahl samt Menüerhalt und Abbruch. **Der Nutzer hat
+anschließend A als Grundlage ausgewählt** und zusätzlich eine transparentere,
+weniger blaue Alternative gewünscht. **A2 · Dezenter Schleier** ist dafür als
+Vergleich ergänzt, noch nicht anstelle von A freigegeben. A bleibt die Grundlage;
+A2-Farben nicht ohne deren Bestätigung übernehmen. Die folgende Auswahl bleibt
+ebenfalls verbindlich.
 
 **Verbindliche Auswahl vom 25. Oktober 2026:** Der Nutzer hat entschieden:
 **Leeransicht bestätigt; Protokoll C; Szene & Werte A; Auswertung A;

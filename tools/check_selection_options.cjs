@@ -10,7 +10,7 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'build/selection-opti
  const hidden=async()=>assert(await page.locator('#context-menu').isHidden(),'Left selection must not open actions');
  const bounds=async()=>{const b=await page.locator('#context-menu').boundingBox(),v=page.viewportSize();assert(b&&b.x>=0&&b.y>=0&&b.x+b.width<=v.width+1&&b.y+b.height<=v.height+1,'Context menu must fit viewport');};
  try{
-  for(const v of ['a','b','c'])for(const c of ['code','protocol','files','scene'])for(const t of ['dark','light'])for(const width of [1440,500]){
+  for(const v of ['a','a2','b','c'])for(const c of ['code','protocol','files','scene'])for(const t of ['dark','light'])for(const width of [1440,500]){
    await page.setViewportSize({width,height:1100});await go(v,c,t);await hidden();
    assert.match(await page.locator('#selection-status').innerText(),/ausgewählt/);assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'No page overflow');
    const target=page.locator(c==='code'?'.code-editor':c==='scene'?'[data-object=mass]':'[data-row="0"]');await target.focus();await page.keyboard.press('Shift+F10');assert(await page.getByRole('menu').isVisible());await bounds();await page.keyboard.press('Escape');assert(await target.evaluate(e=>e===document.activeElement));
@@ -21,7 +21,16 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'build/selection-opti
    }
    report.layouts.push({variant:v,context:c,theme:t,width});
   }
-  report.checks.push('48 layouts: 3 variants × 4 contexts × 2 themes × 2 widths; no actions on left selection, keyboard menu, bounds, Escape focus return and no horizontal overflow');
+  report.checks.push('64 layouts: 4 variants × 4 contexts × 2 themes × 2 widths; no actions on left selection, keyboard menu, bounds, Escape focus return and no horizontal overflow');
+  for(const theme of ['dark','light']){
+   await go('a','code',theme);const chosen=await page.evaluate(()=>getSelection().toString());
+   const aColor=await page.locator('.code-editor').evaluate(el=>getComputedStyle(el,'::selection').backgroundColor.match(/[\d.]+/g).map(Number));
+   await page.locator('button[data-variant=a2]').click();assert.equal(await page.evaluate(()=>getSelection().toString()),chosen);await hidden();
+   const a2Color=await page.locator('.code-editor').evaluate(el=>getComputedStyle(el,'::selection').backgroundColor.match(/[\d.]+/g).map(Number));
+   assert(a2Color[3]<aColor[3],'A2 must be more transparent');assert(Math.max(...a2Color.slice(0,3))-Math.min(...a2Color.slice(0,3))<Math.max(...aColor.slice(0,3))-Math.min(...aColor.slice(0,3)),'A2 must have a more neutral color');
+   await page.locator('button[data-variant=a]').click();assert.equal(await page.evaluate(()=>getSelection().toString()),chosen);assert.deepEqual(await page.locator('.code-editor').evaluate(el=>getComputedStyle(el,'::selection').backgroundColor.match(/[\d.]+/g).map(Number)),aColor);
+  }
+  report.checks.push('A ↔ A2 preserves the exact text selection; A2 has lower opacity and a more neutral tint in both themes; A remains unchanged');
   await page.setViewportSize({width:1440,height:1100});await go();
   await page.locator('.code-editor').focus();await page.keyboard.press('Escape');const lines=page.locator('.code-line'),a=await lines.nth(6).boundingBox(),b=await lines.nth(8).boundingBox();
   await page.mouse.move(a.x+15,a.y+a.height/2);await page.mouse.down();await page.mouse.move(b.x+280,b.y+b.height/2,{steps:12});await page.mouse.up();await hidden();
