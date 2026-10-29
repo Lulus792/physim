@@ -56,20 +56,16 @@ Schnittstellen, keine Screenreader-Sprachausgabe oder real existierenden
 4095-Byte-Dateipfade. Der Katalogtest deckt auch das Darwin-Auswahlmodell ab;
 ein macOS-Build wurde hierfür nicht ausgeführt.
 
-## Noch offene Vorlagenabweichungen
+## Folgender Abgleich und Restarbeit
 
-Die Textvorschau hat noch eine feste Höhe von 240 px und horizontales Scrollen.
-Die Vorlage verlangt natürliche Höhe bis höchstens 240 px und weichen Umbruch.
-Im geprüften dunklen Windows-Bild mit langem Ort rutscht die Öffnen-Aktion dadurch
-unter den sichtbaren Vorschauausschnitt; sie bleibt per Scrollen/Tab erreichbar.
-Die nächste Korrektur muss Textgeometrie, Auswahl, Kopie und native Textbereiche
-gemeinsam umstellen. Ein bloß abgeschnittener oder anders veröffentlichter Text
-wäre keine gleichwertige Umsetzung.
-
-Das große Linux-Bild zeigt außerdem einen abgeschnittenen langen Namen in der
-Orte-Spalte („Geöffnetes Projekt“). Auch diese Beschriftungen brauchen einen
-Umbruch-/Höhenabgleich; die bestandenen Geometrie- und Navigationstests prüfen
-noch nicht sämtliche Glyphengrenzen dieser Orte-Buttons.
+Die bei dieser Einbindung beobachtete feste Textvorschauhöhe und der im großen
+Linux-Bild abgeschnittene Name „Geöffnetes Projekt“ sind im folgenden
+[Vorschau- und Fokusabgleich](EXPLORER-PREVIEW-NATIVE.md) korrigiert. Natürliche
+Höhe, weicher Umbruch, unveränderte Textbytes und tatsächliche Orte-Glyphengrenzen
+werden nun zusätzlich geprüft. Im folgenden dunklen Windows-Bild ist die
+Öffnen-Aktion mit derselben langen Ortsangabe direkt im Vorschauausschnitt
+sichtbar. Das ist keine Zusage, dass beliebig große Metadaten ohne Scrollen
+in die feste Vorschaufläche passen.
 
 Weitere offene Punkte aus dem [Explorer-Gesamtnachweis](EXPLORER-A-NATIVE.md)
 bleiben: echte Bild-/Messlaufvorschau, C-API-Kontext, große native Collections,

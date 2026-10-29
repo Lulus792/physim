@@ -65,6 +65,7 @@ static bool browser_clipboard_text_equal(const char *source,const char *copy) {
 }
 #include "file_browser_inline_tests.inc"
 static void browser_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(strstr(mode,"preview-")){browser_preview_test_frame(a,mode,stage,code,capture);return;}
     if(strstr(mode,"reader")){browser_reader_frame(a,strstr(mode,"inline")!=NULL,stage,code);return;}
     if(strstr(mode,"inline")){browser_inline_test_frame(a,mode,stage,code,capture);return;}
     static unsigned settle;if(settle++<2)return;settle=0;bool ok=true;browser_dialog *d=a->browser;float f=a->preferences.ui_size/16.f;
@@ -77,6 +78,9 @@ static void browser_test_frame(app *a,const char *mode,int *stage,int *code,cons
         printf("{\"kind\":\"explorer_a\",\"passed\":%s,\"scale\":%.4f,\"modal\":[%.4f,%.4f,%.4f,%.4f],\"list\":[%.4f,%.4f,%.4f,%.4f],\"preview\":[%.4f,%.4f,%.4f,%.4f],\"row_pitch\":%.4f,\"fonts\":[",
             ok?"true":"false",f,d->bounds.x,d->bounds.y,d->bounds.w,d->bounds.h,d->list_bounds.x,d->list_bounds.y,d->list_bounds.w,d->list_bounds.h,d->preview_bounds.x,d->preview_bounds.y,d->preview_bounds.w,d->preview_bounds.h,d->tops[1]);
         for(unsigned k=0;k<8;k++){bool strong=k==1 || k==5,mono=k==6;float em=mono?a->workbench_code_em:strong?a->workbench_bold_em:a->workbench_regular_em;printf("%s%.4f",k?",":"",d->fonts[k].height/(em*f));}printf("]}\n");
+        for(unsigned k=0;k<3;k++){struct nk_rect ink=d->place_ink[k],r=d->controls[8+k];
+            ok &= d->place_bytes[k]==strlen(d->place_names[k]) && ink.x>=r.x && ink.x+ink.w<=r.x+r.w+.05f && ink.y>=r.y && ink.y+ink.h<=r.y+r.h+.05f;
+            if(k)ok &= r.y>=d->controls[7+k].y+d->controls[7+k].h;}
         ok &= browser_test_row(a,"main.c").h>0;test_mouse(a,browser_test_row(a,"main.c"),true);break;
     case 2:test_mouse(a,browser_test_row(a,"main.c"),false);break;
     case 3:{static unsigned copy_stage;static char *clipboard;static Uint64 copy_started;

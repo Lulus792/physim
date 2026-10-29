@@ -12,7 +12,7 @@ def rem(selector):return float(declaration(selector,'font-size')[:-3])*14
 columns=declaration('.browser-body','grid-template-columns').split()
 places=float(columns[0][:-2]);preview=float(columns[-1][:-2])
 body_height=float(re.search(r'\.browser-main,\.file-preview\{height:(\d+)px',css)[1])
-fonts=[rem('.eyebrow'),rem('.dialog-header h2'),10.5,11.2,rem('.file-list-header'),14.7,rem('pre'),rem('.dialog-footer button')]
+fonts=[rem('.eyebrow'),rem('.dialog-header h2'),10.5,11.2,rem('.file-list-header'),14.7,rem('.file-preview pre'),rem('.dialog-footer button')]
 binary=hashlib.sha256(args.app.read_bytes()).hexdigest();cases=[]
 for mode in ('dark','light','contrast','large','narrow','large-narrow'):
     work=args.work/mode;work.mkdir();command=[str(args.app),'--workspace-state-test',str(work),'explorer-a-'+mode]

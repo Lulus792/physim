@@ -85,9 +85,13 @@ und die Abweisung veralteter Ergebnisse mit nativer negativer Gegenprobe.
 Navigationscontroller und sichtbare A-Oberfläche sind danach angeschlossen.
 Die [freie Exploreransicht](EXPLORER-INLINE-NATIVE.md) liegt nun im Arbeitsbereich,
 während Ordner-/Messlaufauswahl eigene Picker bleiben. Getrennte Kontexte erhalten
-Navigation, Vorschau und ungespeicherte Editorinhalte über Unteraufrufe. Natürliche
-Höhe und Umbruch der Textvorschau, Messlauf-/Bildvorschau, API-Kontext, große native
-Listen und vollständige praktische Aufgaben bleiben offen.
+Navigation, Vorschau und ungespeicherte Editorinhalte über Unteraufrufe. Der
+[Vorschau-/Fokusabgleich](EXPLORER-PREVIEW-NATIVE.md) ergänzt natürliche Texthöhe,
+Umbruch und vollständige Orte-Beschriftungen. Er prüft Originaltext und native
+Auswahl sowie die beiden korrigierten Fokusfälle. Die vom Nutzer verlangten
+[schmalen Einfügemarken](TEXT-CARET-NATIVE.md) gelten im gemeinsamen Textfeldrenderer.
+Messlauf-/Bildvorschau, API-Kontext, große native Listen und vollständige praktische
+Aufgaben bleiben offen.
 Der folgende
 [Zeiger-Nachlauf](PROTOCOL-POINTER-NATIVE.md) schließt verlorene schnelle Klicks
 in den gemeinsamen Aktionen/Editfeldern und am Protokolltrenner. Linux prüft

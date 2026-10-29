@@ -1,0 +1,1121 @@
+{
+  "date": "2026-10-29",
+  "scope": "Requested slim app text carets and native Explorer natural preview/max240, soft wrap, effective10.5px font, multiline places and focus/reflow regression; partial overall design implementation",
+  "source_parent_commit": "8536c4c14dcf97ca6fdbd0f6f3632ec822c7ab90",
+  "source_inputs": {
+    "path": "build/validation/explorer-inline-2026-10-29/flow-fourth-inputs.zip",
+    "sha256": "b591a5d4716dbbfc7037454337d1d0717d6e487af9fa223dc7e2f158630a828a"
+  },
+  "owned_input_hashes": {
+    "app/main.c": "7b5a5d0a002e30224c4b15c3425176e23ad168250175c24e60fb23798855d842",
+    "app/toolbar_ui.inc": "2e321c7c4cec43a5a871dd932e7dbac67f5943c677297ab33d4e4a2065f418e2",
+    "app/docking_ui.inc": "30d3719d2471ee1384ee04f17a27b6fe971d902cbfbd956fb35bcc1fe2308153",
+    "app/design_ui.inc": "efb3e8a2d99cd57de8843bc46360f97bcafdc96f6ac6792741da60e1763cd932",
+    "app/file_browser_ui.inc": "52646657f67b4d2f8e4362801963cbefee04347b2a0d1f1251899257511cdd16",
+    "app/file_browser_tests.inc": "9620ccb327b705e56fcd3fdc5af451d353821ad1cbf55b989515469d882e317d",
+    "app/file_browser_inline_tests.inc": "8e29aff73e3538bf983f7d9f0c4203f99e9c6ba4e77b8e607cda1c8fd0b137cc",
+    "tests/check_explorer_inline.py": "248600de0d1d4966710fc742139bec295219039cb3fd530b977e666997be4450",
+    "tests/native_integration_cases.json": "67fb2e304da275b236d031d22da90385cb316f4093470ce604906f613d9583d3",
+    "tests/test_native_test_runner.py": "6f5bf590b1ae45aa6232ff771f4599e617007c99497346c432a88414b0c41b28",
+    "tests/check_explorer_native.py": "571790c822313f23c45fc2533582e830238e9dbe1f89a3c0ba52b112ecf4862c",
+    "tests/check_explorer_a.py": "73fa8f81cda9047da798002d53cea8e2cbd899c89eab04a1a9a940c0d2344024",
+    "tests/check_explorer_preview.py": "f79ac98a63ce5a08c37bc8334aa02112a3c21286a46dea524206fa43a9164956",
+    "third_party/nuklear.h": "06ea5f18be97c5d13486f915fa55cebdc3b05b9dccde1c3f4a4a0dd0b45334ca",
+    "third_party/README.md": "ff2d375da6407f480c18255e9967048b28d0fa233d0bfd5327b583078312f4c3",
+    "tools/native_tests.py": "1cf78d825ae1c5c8ffb93ccb521ffdea766645725a0d0a96e262b273db79d125",
+    "tests/test_text_cursor.c": "184558ca50fb2ba05cbf2ad868f3990124d63d3aa6e244c47ed14685c79695f1"
+  },
+  "cohorts": [
+    {
+      "tag": "flow-first",
+      "platforms": [
+        {
+          "platform": "windows",
+          "phase": {
+            "path": "build/validation/explorer-inline-2026-10-29/flow-first-windows.json",
+            "sha256": "d4fb4deb1b407faeeb2f9356a936c93ab1a21f5772a0a3733c630012c53a2220"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/flow-first-windows.log",
+            "sha256": "62001bac76246c1776c132c87248e6bff3cc736f3e761678400df480b52f7f1b"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-q1cptouo/results.json",
+            "sha256": "65f1a2d03425549e78025a6e81b782782a38e6665b9a85c57b08be212fe7d2da"
+          },
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+            "--",
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+            "--build-dir",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+            "--config",
+            "Release",
+            "--jobs",
+            "4",
+            "--sdl",
+            "D:\\Physim\\third_party\\SDL3-3.2.30",
+            "--test-display",
+            "--test-filter",
+            "explorer_a_preview*",
+            "--test-filter",
+            "explorer_a"
+          ],
+          "exit_code": 1,
+          "app_sha256": "728071436e3921e8253b31442b44851100391cd4046fef8ac7b2084c5b076349",
+          "cases": [
+            {
+              "name": "explorer_a_preview_windows",
+              "status": "failed"
+            },
+            {
+              "name": "explorer_a_preview_flow",
+              "status": "failed"
+            },
+            {
+              "name": "explorer_a",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "phase": {
+            "path": "build/validation/explorer-inline-2026-10-29/flow-first-linux.json",
+            "sha256": "16b8c3e8b4a21110583307cc3faefb4b41cfe8b824c4bdf7dad91e16a273c7eb"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/flow-first-linux.log",
+            "sha256": "5810bf161569355b83df98f1929a433409a2fdc4dcdc241e54fbcbbccefaf7ae"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-k0tn1pe4/results.json",
+            "sha256": "8392ffcf19361dca6682c0b7f9437dadc0dd17890203d507c29423f95c8706fc"
+          },
+          "command": [
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+            "--",
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+            "--build-dir",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+            "--config",
+            "Debug",
+            "--jobs",
+            "4",
+            "--sdl",
+            "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+            "--test-display",
+            "--sanitizers",
+            "--test-filter",
+            "explorer_a_preview*",
+            "--test-filter",
+            "explorer_a"
+          ],
+          "exit_code": 1,
+          "app_sha256": "29e369afc6f4a6eee2035e9cb2a128ad62cd33318a4b3127fa250d47af57a193",
+          "cases": [
+            {
+              "name": "explorer_a_preview_atspi",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_preview_flow",
+              "status": "failed"
+            },
+            {
+              "name": "explorer_a",
+              "status": "passed"
+            }
+          ]
+        }
+      ],
+      "source_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/flow-first-compiler-source.json",
+        "sha256": "e297d2305b8d3b13b14fe2be249cee4708fdebf529faa9854b950b14951e1d4e"
+      },
+      "runtime_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/flow-first-byte-index.json",
+        "sha256": "9e9d1e6a800f8a8cebd042a225eba6e14575d93d3d784dd4d668c1ee0b2bd6de"
+      },
+      "runtime_readback": {
+        "path": "build/validation/explorer-inline-2026-10-29/flow-first-runtime.json",
+        "sha256": "49e9e601319c38de3170db8498f39fdf9e567624867c3ed51b0403f919649e9f"
+      }
+    },
+    {
+      "tag": "flow-second",
+      "platforms": [
+        {
+          "platform": "windows",
+          "phase": {
+            "path": "build/validation/explorer-inline-2026-10-29/flow-second-windows.json",
+            "sha256": "d7489323109368d3b140fa8af3b6eb33c99102f973ffd95b69e01ed7258e6f3e"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/flow-second-windows.log",
+            "sha256": "6d16e626d1797595927416a030dd80f6b406e06a774ce2517a5fa69c090dc990"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-hezy73jv/results.json",
+            "sha256": "3dc2c7e36fc0816268e8c0363198a6b47372c36a039debf44b290e1470919739"
+          },
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+            "--",
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+            "--build-dir",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+            "--config",
+            "Release",
+            "--jobs",
+            "4",
+            "--sdl",
+            "D:\\Physim\\third_party\\SDL3-3.2.30",
+            "--test-display",
+            "--test-filter",
+            "explorer_a_preview*"
+          ],
+          "exit_code": 1,
+          "app_sha256": "f20d96df84dd439e26a8afb4932186f2bd4bed2c2ba3df0f3143279110855a3f",
+          "cases": [
+            {
+              "name": "explorer_a_preview_windows",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_preview_flow",
+              "status": "failed"
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "phase": {
+            "path": "build/validation/explorer-inline-2026-10-29/flow-second-linux.json",
+            "sha256": "eab9df8967a61de59c7b103dfbea5dc93807195cc5bdaf8c86e47afcf7334c19"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/flow-second-linux.log",
+            "sha256": "2a47d922394e5988d867cb625be23f59825df595725cbe4a95486d8dfbafee09"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-djagj2l8/results.json",
+            "sha256": "8f674c80e2df608df3960b519e227224544930f3f6c0c2e5f01632bef078d750"
+          },
+          "command": [
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+            "--",
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+            "--build-dir",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+            "--config",
+            "Debug",
+            "--jobs",
+            "4",
+            "--sdl",
+            "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+            "--test-display",
+            "--sanitizers",
+            "--test-filter",
+            "explorer_a_preview*"
+          ],
+          "exit_code": 1,
+          "app_sha256": "d3708a0364899c502c3919b4f17781408d5f954f463622900f673975f36a1607",
+          "cases": [
+            {
+              "name": "explorer_a_preview_atspi",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_preview_flow",
+              "status": "failed"
+            }
+          ]
+        }
+      ],
+      "source_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/flow-second-compiler-source.json",
+        "sha256": "60b447328d7c8892bb3073cbb98f0e1e13f4479125d469d5bf40d53a47ae82bb"
+      },
+      "runtime_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/flow-second-byte-index.json",
+        "sha256": "e63fca4c12deb7cc0e515636403c6fbfbb62d7182000b66c33bc88eec149dc00"
+      },
+      "runtime_readback": {
+        "path": "build/validation/explorer-inline-2026-10-29/flow-second-runtime.json",
+        "sha256": "1b2f05cd032568475278e80520c5ae39ed275454300beeb334bd77e223ad9fd3"
+      }
+    },
+    {
+      "tag": "flow-third",
+      "platforms": [
+        {
+          "platform": "windows",
+          "phase": {
+            "path": "build/validation/explorer-inline-2026-10-29/flow-third-windows.json",
+            "sha256": "bb53042b8f6a808f250f4247417ffc1da6ab03e41a8df38066d738c15577100c"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/flow-third-windows.log",
+            "sha256": "b4a8e62b9aebf78845dc4009eb06f6b2ef80493f9d2bcc6ad2ab52625cc7d1d5"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-rgdfshyi/results.json",
+            "sha256": "ff0d75a0a23b4834dbce67b341ee6bbd74b78b036de49e2fba589bc98289259c"
+          },
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+            "--",
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+            "--build-dir",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+            "--config",
+            "Release",
+            "--jobs",
+            "4",
+            "--sdl",
+            "D:\\Physim\\third_party\\SDL3-3.2.30",
+            "--test-display",
+            "--test-filter",
+            "explorer_a*",
+            "--test-filter",
+            "project_wizard"
+          ],
+          "exit_code": 1,
+          "app_sha256": "a9e944e2f7ac1479c897f26962e2b1f856bb03061d3261a7bc6e0e0cec111888",
+          "cases": [
+            {
+              "name": "explorer_a_native_windows",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_preview_windows",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_preview_flow",
+              "status": "failed"
+            },
+            {
+              "name": "explorer_a_inline_windows",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_inline",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a",
+              "status": "failed"
+            },
+            {
+              "name": "project_wizard",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "phase": {
+            "path": "build/validation/explorer-inline-2026-10-29/flow-third-linux.json",
+            "sha256": "17fd784ea9082e0fb965c6a969adcbb12c9c0ac766602aa2828cbc7e56c063e8"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/flow-third-linux.log",
+            "sha256": "b30d721eb4871d6e35eac85c840cbbfeaf98175224d7fd8b9ef5a77e4be7189c"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-t78pdgsd/results.json",
+            "sha256": "8ca3f67b67688fdf681865cef85f821696ac0e026dda3d510de57986be834708"
+          },
+          "command": [
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+            "--",
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+            "--build-dir",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+            "--config",
+            "Debug",
+            "--jobs",
+            "4",
+            "--sdl",
+            "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+            "--test-display",
+            "--sanitizers",
+            "--test-filter",
+            "explorer_a*",
+            "--test-filter",
+            "project_wizard"
+          ],
+          "exit_code": 1,
+          "app_sha256": "37236308c733355cd0f57830a5236adc9527c25079513df3ab0772072eafb147",
+          "cases": [
+            {
+              "name": "explorer_a_native_atspi",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_preview_atspi",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_preview_flow",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_inline_atspi",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_inline",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a",
+              "status": "failed"
+            },
+            {
+              "name": "project_wizard",
+              "status": "passed"
+            }
+          ]
+        }
+      ],
+      "source_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/flow-third-compiler-source.json",
+        "sha256": "5f10688fa3d38825da70a41390b15beb065ceedf6483356e97de07be07ac3e48"
+      },
+      "runtime_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/flow-third-byte-index.json",
+        "sha256": "0ae03e25daf78accb3a36a13f65fa7022e791c9c931416da4f51c1dbff917e77"
+      },
+      "runtime_readback": {
+        "path": "build/validation/explorer-inline-2026-10-29/flow-third-runtime.json",
+        "sha256": "e6957b88dc1e203209fad3df8114df138ef9afbd78cf8104ea3c3a6cf346e211"
+      }
+    },
+    {
+      "tag": "flow-fourth",
+      "platforms": [
+        {
+          "platform": "windows",
+          "phase": {
+            "path": "build/validation/explorer-inline-2026-10-29/flow-fourth-windows.json",
+            "sha256": "67781fa3f5cc0774936629bc04f29c3966a75012e3f22aeaec2625cf6b58e5d6"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/flow-fourth-windows.log",
+            "sha256": "e246277452b261a147f3edb057562dd07e977eac1e78ca2698417ec7463bf53c"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-30_8w01s/results.json",
+            "sha256": "6788cc0faed729880c2bd5910db61f18534688f60de9d8cad6bb2d212bb060de"
+          },
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+            "--",
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+            "--build-dir",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+            "--config",
+            "Release",
+            "--jobs",
+            "4",
+            "--sdl",
+            "D:\\Physim\\third_party\\SDL3-3.2.30",
+            "--test-display",
+            "--test-filter",
+            "explorer_a*",
+            "--test-filter",
+            "project_wizard"
+          ],
+          "exit_code": 0,
+          "app_sha256": "f4206bf5a4126542efd3ba070c7dfe0779c1bad23a793b50318da907eba632d7",
+          "cases": [
+            {
+              "name": "explorer_a_native_windows",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_preview_windows",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_preview_flow",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_inline_windows",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_inline",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a",
+              "status": "passed"
+            },
+            {
+              "name": "project_wizard",
+              "status": "passed"
+            }
+          ],
+          "fixture_reports": [
+            {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-30_8w01s/explorer_a/files ä/verification.json",
+              "sha256": "6ae658502299310067c3a073a80622fe0d20ce544aa6b58793d9ca42de154545"
+            },
+            {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-30_8w01s/explorer_a_inline/files ä/verification.json",
+              "sha256": "faf089e372f95aac8bd4dd6fb3fb3cba51c8c331eed88a505c2639f32913da90"
+            },
+            {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-30_8w01s/explorer_a_inline_windows/files ä/verification.json",
+              "sha256": "37db5457d3113eb49935395c10fac23d78912783c11f3a148f97bf5a1efeaae9"
+            },
+            {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-30_8w01s/explorer_a_native_windows/files ä/verification.json",
+              "sha256": "66ff228ff6e827771782de1a9a6dc093c4c474b2133df4f96abce08c509abfe8"
+            },
+            {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-30_8w01s/explorer_a_preview_flow/files ä/verification.json",
+              "sha256": "047c1eba57a40155564fdc32e08c0ba6e28ebd8695ab561ee44588590d8b738a"
+            },
+            {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-30_8w01s/explorer_a_preview_windows/files ä/verification.json",
+              "sha256": "0cafbdec7a86d36e5abdddcca64d9f37359276572019d6e477f7ba502d2272c0"
+            },
+            {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-30_8w01s/project_wizard/files ä/verification.json",
+              "sha256": "329c0c940f04e548f22ae514986a38c8ab19360baf8421ad08c2ed14736752c0"
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "phase": {
+            "path": "build/validation/explorer-inline-2026-10-29/flow-fourth-linux.json",
+            "sha256": "878add65d4d97affd3f36a0caff31c577cb542f2f690c2733bfea35a762944df"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/flow-fourth-linux.log",
+            "sha256": "dbba7749b713c80e4ecd7709dc067c2653ef93624aa11e4e01527e12bad6dd34"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qpybdkk5/results.json",
+            "sha256": "7cbb7424fd735de7070485c66864d7520c7bc872f225d2677923b84949066bd5"
+          },
+          "command": [
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+            "--",
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+            "--build-dir",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+            "--config",
+            "Debug",
+            "--jobs",
+            "4",
+            "--sdl",
+            "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+            "--test-display",
+            "--sanitizers",
+            "--test-filter",
+            "explorer_a*",
+            "--test-filter",
+            "project_wizard"
+          ],
+          "exit_code": 0,
+          "app_sha256": "2a7d578828453606fc4ff2b7abd2cbd16210c8d9f75af310a5caf49dbdaffccb",
+          "cases": [
+            {
+              "name": "explorer_a_native_atspi",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_preview_atspi",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_preview_flow",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_inline_atspi",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a_inline",
+              "status": "passed"
+            },
+            {
+              "name": "explorer_a",
+              "status": "passed"
+            },
+            {
+              "name": "project_wizard",
+              "status": "passed"
+            }
+          ],
+          "fixture_reports": [
+            {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qpybdkk5/explorer_a/files ä/verification.json",
+              "sha256": "c8c12b041cf5bed08590f4fb9c0eb55b7671c79e91c51caf71dbfb1edf4edd8c"
+            },
+            {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qpybdkk5/explorer_a_inline/files ä/verification.json",
+              "sha256": "668a56a31a727b59e1664b09eb33028d3f8ae47474f24bfe279593d64afa0779"
+            },
+            {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qpybdkk5/explorer_a_inline_atspi/files ä/verification.json",
+              "sha256": "04a6366dab348b116b94610d7d876572af4887f843603fbb3478636f86f7eb73"
+            },
+            {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qpybdkk5/explorer_a_native_atspi/files ä/verification.json",
+              "sha256": "66b4bf683fa1ecf9b974090205c628300e21da05113e642ae9f53349f1a504e7"
+            },
+            {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qpybdkk5/explorer_a_preview_atspi/files ä/verification.json",
+              "sha256": "41c0433238e55f5ab007c0951ec8d285f629acd72be751edafeabea59e328b13"
+            },
+            {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qpybdkk5/explorer_a_preview_flow/files ä/verification.json",
+              "sha256": "479b61da0d71b8ebb5eef22546fb5f78e7f07f595ae474a0990e3e79da517360"
+            },
+            {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qpybdkk5/project_wizard/files ä/verification.json",
+              "sha256": "107f0446c4308ed47bb3321587e2ead1b56b9ba6c4d04a61f866be0daa3dd076"
+            }
+          ]
+        }
+      ],
+      "source_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/flow-fourth-compiler-source.json",
+        "sha256": "2a6b5e63967ab7e678806443188c0867918352315e65c47423eed7afe75cf04c"
+      },
+      "runtime_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/flow-fourth-byte-index.json",
+        "sha256": "1bb9748fd9eaac5172b662c80bf58e60afc134a5734587f9b8517cf2e3da526d"
+      },
+      "runtime_readback": {
+        "path": "build/validation/explorer-inline-2026-10-29/flow-fourth-runtime.json",
+        "sha256": "922b017f9d00d6f578f5309336f98c5f9ff48363d53013c9e71e3fb9b04bca5d"
+      }
+    }
+  ],
+  "diagnostics": [
+    {
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/negative-preview-font.json",
+        "sha256": "c71d375e77dceada5d305011120536c0217ea465eead3f70e102e0be8b9726b2"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/negative-preview-font.log",
+        "sha256": "6d286406263c1de732e247eb3f9ddf68998b32f328e500c985a0bd9003571e31"
+      },
+      "observation": {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\tests\\check_explorer_a.py",
+          "--app",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+          "--root",
+          "D:\\Physim",
+          "--work",
+          "D:\\Physim\\build\\validation\\explorer-inline-2026-10-29\\negative-preview-font"
+        ],
+        "app_sha256": "d84f898444dd836f0448e87f16c17ef14d87259890f7c841625777e8d1ff0aa7",
+        "exit_code": 1,
+        "expected_rejection": "Native font role differs from reference",
+        "unchanged_binary": true
+      }
+    },
+    {
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/preview-scroll-diagnostic.json",
+        "sha256": "635f6d27265ae668d216169cb3d9dabb9acd1db1da1abfa24d70ab53350bb8d6"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/preview-scroll-diagnostic.log",
+        "sha256": "11147f2d21de425b42410a9025af24da0aff4fcf7ad67641aa0b320501fd1086"
+      },
+      "observation": {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tests\\check_explorer_native.py",
+          "--preview",
+          "--app",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+          "--probe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\integration-accessibility-windows-probe.exe",
+          "--work",
+          "D:\\Physim\\build\\validation\\explorer-inline-2026-10-29\\preview-scroll-diagnostic"
+        ],
+        "environment": {
+          "PHYSIM_UIA_SCROLL_TRACE": "1"
+        },
+        "app_sha256": "728071436e3921e8253b31442b44851100391cd4046fef8ac7b2084c5b076349",
+        "exit_code": 1,
+        "observation": {
+          "action": "scroll-text-end",
+          "label": "Dateivorschau",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "UIA SCROLL BEFORE: result=0x00000000 visible=1 focus=1 active=1 top=0\r\nUIA SCROLL VISIBLE: result=0x80004005 visible=1\r\nUIA SCROLL AFTER: result=0x80004005 focus=1 active=1 value-equal=0\r\nIndependent Windows UIA failed: pid=20064 action=0x80004005 role=50004 enabled=1 found=1\r\n",
+          "argument_bytes": 11,
+          "argument_sha256": "cb09200699a25489ae96e5532248dd00a5845be0e4ac3b3c27fff0bbed69dcbd"
+        },
+        "scope": "Unchanged first-flow app and probe; inactive-only helper rejects active fixture before ScrollIntoView"
+      }
+    },
+    {
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/preview-focus-diagnostic.json",
+        "sha256": "46bc194f9e9888c82c71faecd0b29dda6ec7780f3f1ad6a9a12a9c9410584182"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/preview-focus-diagnostic.log",
+        "sha256": "b138349b5f08b29024463f0b2fc865d112664ed85dd62bf74226e7f388fed6eb"
+      },
+      "observation": {
+        "command": [
+          "gdb",
+          "--batch",
+          "-x",
+          "/mnt/d/Physim/build/validation/explorer-inline-2026-10-29/preview-focus.gdb",
+          "--args",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim"
+        ],
+        "binary_sha256": "d3708a0364899c502c3919b4f17781408d5f954f463622900f673975f36a1607",
+        "gdb_exit": 0,
+        "observations": [
+          "OVERSIZED LIST FOCUS: frame_h=594 list_h=605 list_y=277 selected_y=503.864 selected_h=57.64 scroll_y=17 reveal=1",
+          "OVERSIZED LIST FOCUS: frame_h=594 list_h=605 list_y=277 selected_y=322.694 selected_h=57.64 scroll_y=194 reveal=1",
+          "OVERSIZED LIST FOCUS: frame_h=594 list_h=605 list_y=100 selected_y=145.694 selected_h=57.64 scroll_y=176 reveal=1",
+          "OVERSIZED LIST FOCUS: frame_h=594 list_h=605 list_y=277 selected_y=322.694 selected_h=57.64 scroll_y=17 reveal=1",
+          "OVERSIZED LIST FOCUS: frame_h=594 list_h=605 list_y=277 selected_y=322.694 selected_h=57.64 scroll_y=194 reveal=1",
+          "OVERSIZED LIST FOCUS: frame_h=594 list_h=605 list_y=100 selected_y=145.694 selected_h=57.64 scroll_y=176 reveal=1"
+        ],
+        "script": "set pagination off\nset confirm off\nset $seen=0\nbreak browser_preview_test_frame if *stage==6\ncommands\nsilent\nif a->browser_workspace->focus==11 && a->browser_workspace->reveal\nset $d=a->browser_workspace\nset $w=nk_window_find(a->ui,\"Dateien\")\nprintf \"OVERSIZED LIST FOCUS: frame_h=%g list_h=%g list_y=%g selected_y=%g selected_h=%g scroll_y=%u reveal=%d\\n\",$d->bounds.h,$d->list_bounds.h,$d->list_bounds.y,$d->selected_bounds.y,$d->selected_bounds.h,$w->scrollbar.y,$d->reveal\nset $seen=$seen+1\nif $seen==6\necho OBSERVER: six focus samples captured; terminating diagnostic inferior, not claiming workflow pass.\\n\nkill\nquit\nend\nend\ncontinue\nend\nrun --workspace-state-test /mnt/d/Physim/build/validation/explorer-inline-2026-10-29/preview-focus-diagnostic explorer-a-preview-flow-large\n",
+        "scope": "Unchanged second-flow debug binary; read-only focus observations, then explicit debugger kill; not a passed or naturally terminated GUI test"
+      }
+    },
+    {
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/preview-target-diagnostic.json",
+        "sha256": "7f7d1d54ee916f9e0cff1d92126ebcbcb3b4c834a2c04b84227deadf32e81d6e"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/preview-target-diagnostic.log",
+        "sha256": "1b73cb6d73acb7bee1a6b84fd2a8e3e53469403082282fe1ce3654dbeaa260a7"
+      },
+      "observation": {
+        "command": [
+          "gdb",
+          "--batch",
+          "-x",
+          "/mnt/d/Physim/build/validation/explorer-inline-2026-10-29/preview-target.gdb",
+          "--args",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim"
+        ],
+        "binary_sha256": "37236308c733355cd0f57830a5236adc9527c25079513df3ab0772072eafb147",
+        "gdb_exit": 0,
+        "observations": [
+          "PREVIEW TARGET: frame_y=20.625 frame_h=698.75 preview_y=895.472 text_y=0 text_h=0 control_y=339.69 control_h=80.1281 edit_active=0 visual=0x7c6ff67dd598 scroll_y=33 reveal=0",
+          "PREVIEW TARGET: frame_y=20.625 frame_h=698.75 preview_y=895.472 text_y=0 text_h=0 control_y=339.69 control_h=80.1281 edit_active=0 visual=0x7c6ff67dd598 scroll_y=33 reveal=0",
+          "PREVIEW TARGET: frame_y=20.625 frame_h=698.75 preview_y=895.472 text_y=0 text_h=0 control_y=339.69 control_h=80.1281 edit_active=0 visual=0x7c6ff67dd598 scroll_y=33 reveal=0"
+        ],
+        "script": "set pagination off\nset confirm off\nset $seen=0\nbreak browser_test_frame if *stage==3\ncommands\nsilent\nif a->browser && a->browser->focus==12 && a->browser->keyboard && !a->browser->reveal\nset $d=a->browser\nset $w=nk_window_find(a->ui,\"Dateiauswahl\")\nprintf \"PREVIEW TARGET: frame_y=%g frame_h=%g preview_y=%g text_y=%g text_h=%g control_y=%g control_h=%g edit_active=%d visual=%p scroll_y=%u reveal=%d\\n\",$d->bounds.y,$d->bounds.h,$d->preview_bounds.y,$d->preview_text_bounds.y,$d->preview_text_bounds.h,$d->controls[12].y,$d->controls[12].h,$d->edits[3].active,$d->edits[3].visual,$w->scrollbar.y,$d->reveal\nset $seen=$seen+1\nif $seen==3\necho OBSERVER: target samples captured; killing diagnostic inferior, not a workflow pass.\\n\nkill\nquit\nend\nend\ncontinue\nend\nrun --workspace-state-test /mnt/d/Physim/build/validation/explorer-inline-2026-10-29/preview-target-diagnostic explorer-a-large-narrow\n",
+        "scope": "Unchanged third-flow binary; read-only geometry observation then explicit debugger kill, not a passed GUI test"
+      }
+    },
+    {
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/negative-caret3.json",
+        "sha256": "caacafcd5dcc7d5932a5a0e8684f5bdc128cbb68235be4a066ac53f4c9d7ba9c"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/negative-caret3.log",
+        "sha256": "3c27c1ad9c6e0f637edfca0784ebfa7e59ad4abe95fafb44c75607d48be75f94"
+      },
+      "observation": {
+        "command": [
+          "cc",
+          "-std=c17",
+          "-D_POSIX_C_SOURCE=200809L",
+          "-I/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/app",
+          "-I/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/include",
+          "-I/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/third_party",
+          "-I/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30/include",
+          "/mnt/d/Physim/tests/test_text_cursor.c",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/app/ui_backend.c",
+          "-lm",
+          "-o",
+          "/mnt/d/Physim/build/validation/explorer-inline-2026-10-29/negative-text-cursor3"
+        ],
+        "build_exit": 0,
+        "test_exit": 1,
+        "test_sha256": "184558ca50fb2ba05cbf2ad868f3990124d63d3aa6e244c47ed14685c79695f1",
+        "subject_header_sha256": "11e5ed38f52bde5c293b6ff70b45065d6c8d489f7a05027e547f0af95eb5de32",
+        "subject_source": "Frozen third-flow Nuklear/UI backend, unchanged",
+        "actual_caret_width": 6.0,
+        "actual_caret_height": 110.0,
+        "binary_sha256": "ca4c195b5d809baa289c635c3615b4a7def523fb20af8a2847db835d69ede9fc"
+      }
+    },
+    {
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/positive-caret2.json",
+        "sha256": "8f70c089901d3f670ba2188301cfda538917ed73428b124e26c6172fdcc7b253"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/positive-caret2.log",
+        "sha256": "12a6c6f5d5bd40ead9c62ef0c2941091deec80ff1d2b28461d8c8568e4ef9eeb"
+      },
+      "observation": {
+        "command": [
+          "cc",
+          "-std=c17",
+          "-D_POSIX_C_SOURCE=200809L",
+          "-fsanitize=address,undefined",
+          "-g",
+          "-I/mnt/d/Physim/third_party",
+          "-I/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/app",
+          "-I/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/include",
+          "-I/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/third_party",
+          "-I/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30/include",
+          "/mnt/d/Physim/tests/test_text_cursor.c",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/app/ui_backend.c",
+          "-lm",
+          "-o",
+          "/mnt/d/Physim/build/validation/explorer-inline-2026-10-29/positive-text-cursor2"
+        ],
+        "build_exit": 0,
+        "test_exit": 0,
+        "environment": {
+          "ASAN_OPTIONS": "detect_leaks=1:halt_on_error=1",
+          "UBSAN_OPTIONS": "halt_on_error=1"
+        },
+        "test_sha256": "184558ca50fb2ba05cbf2ad868f3990124d63d3aa6e244c47ed14685c79695f1",
+        "subject_header_sha256": "06ea5f18be97c5d13486f915fa55cebdc3b05b9dccde1c3f4a4a0dd0b45334ca",
+        "subject_source": "Root patched Nuklear header plus frozen third-flow ui_backend/include sources; no foreign changes",
+        "binary_sha256": "93571946f381ff7c9486892e1b6882feff3ec772ed338ba33fc25617728638c4"
+      }
+    }
+  ],
+  "catalog": {
+    "record": {
+      "path": "build/validation/explorer-inline-2026-10-29/catalog-cursor.json",
+      "sha256": "40982696fa99a99bd4f954b03365a03b9f8a647aabbe55eb5dabe8b97c077546"
+    },
+    "log": {
+      "path": "build/validation/explorer-inline-2026-10-29/catalog-cursor.log",
+      "sha256": "d570b43ae14ace9e1e59de2272bd106be28b380dcefcd06096e37ef6041457ac"
+    },
+    "scope": "Final catalog/runner sources; includes Darwin selection model, no macOS runtime"
+  },
+  "cursor_units": [
+    {
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-windows.json",
+        "sha256": "be4fe4e3181c8582827f1dd467908a74d5782d2190afecc5d7b0b62d6caf0261"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-windows.log",
+        "sha256": "e9dd1bb9ee2e6af3d647ace02f662e93624cd75a360df5521b21729fa8bdb346"
+      },
+      "archive": {
+        "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-windows.zip",
+        "sha256": "b5170e9f079221caacf0147444fc80c2d19e4e502e3710398979bf5d72e95a36"
+      },
+      "readback": {
+        "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-windows-archive.json",
+        "sha256": "b6a0ba674accad7d4696bde281c52e57f2b6a7c24e91067cf680f895f8f16290"
+      },
+      "case_logs": [
+        {
+          "name": "editor_wrapped",
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-windows/editor_wrapped.log",
+            "sha256": "a81acd267bededf944e6ddc1b5fb6a7fcc848d86d70ef518a08c5f659efedb35"
+          }
+        },
+        {
+          "name": "editor_clip",
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-windows/editor_clip.log",
+            "sha256": "1ab1733bbeb0f684cd6a2ea0122d18159d59ab7788bfcecf781dc90cb8cc644f"
+          }
+        },
+        {
+          "name": "editor_search",
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-windows/editor_search.log",
+            "sha256": "f4f47c6aa56d5ca8319d08f4c6beb5c46b278ef7f34342df845cebebdbbf44d7"
+          }
+        },
+        {
+          "name": "editor_typing_undo",
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-windows/editor_typing_undo.log",
+            "sha256": "fb1387a7ab254c1f62f052f7eb6cf418b536c5847b64b03df2af683093d206c1"
+          }
+        },
+        {
+          "name": "ui_text_flow",
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-windows/ui_text_flow.log",
+            "sha256": "b19570e01f506844b41b22cb1f10087c63285310844d2fb86c944603b3c60673"
+          }
+        },
+        {
+          "name": "ui_text_tail",
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-windows/ui_text_tail.log",
+            "sha256": "adc7005293775cec65775dd9f0f31487035311d67a25be54e00991ade05f2887"
+          }
+        },
+        {
+          "name": "editor_clipboard",
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-windows/editor_clipboard.log",
+            "sha256": "ba9852ce1f19b16369986a6c99edaf16019f4f5e7e7176e7b9db0f0261342819"
+          }
+        },
+        {
+          "name": "editor_readonly",
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-windows/editor_readonly.log",
+            "sha256": "602ffae5d73291cd87277f9d5dd34ed6a0331ea7b6fd0d9accfa12d4a160698b"
+          }
+        },
+        {
+          "name": "text_cursor",
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-windows/text_cursor.log",
+            "sha256": "ef18f49b4a0a9e1673606a752f6ed521294aee6d8812013e6da65944f0bbe3d6"
+          }
+        },
+        {
+          "name": "editor_scroll",
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-windows/editor_scroll.log",
+            "sha256": "7485dde5e7bd3fff2685eedee67bab40a6887a87e3ba6cbe6dda507fbae7064e"
+          }
+        }
+      ]
+    },
+    {
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-linux.json",
+        "sha256": "2685387cba9f26943973ff29b62f9bdb632ea71e481e2c8d0c3e9e143e934dc3"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-linux.log",
+        "sha256": "adc4244a38f9641d65fbf2192cfe2333caa96c16a581789b88535b5ebdd84324"
+      },
+      "archive": {
+        "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-linux.zip",
+        "sha256": "229a8a7cd434d5a03297c516206a5a726e1b7bd4599369a4547d41456686fe21"
+      },
+      "readback": {
+        "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-linux-archive.json",
+        "sha256": "eb8d2b4a8e9451b1470cb103cc90ab13b17dc889d65bc4c233aadbda8f8b7f5d"
+      },
+      "case_logs": [
+        {
+          "name": "editor_wrapped",
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-linux/editor_wrapped.log",
+            "sha256": "2712a7c8b9c90c6ea32ea7031db423b7d18efd442e6dc4479f70a85a586d4f92"
+          }
+        },
+        {
+          "name": "editor_clip",
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-linux/editor_clip.log",
+            "sha256": "0394e83342da108dc214f73daefab7117c5d3059fe2f17af34fa01238fe28a9e"
+          }
+        },
+        {
+          "name": "editor_search",
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-linux/editor_search.log",
+            "sha256": "91bdbd974be927a042ec6eb7f1430b5baa73627daef9595bd6f78c9460d1550f"
+          }
+        },
+        {
+          "name": "editor_typing_undo",
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-linux/editor_typing_undo.log",
+            "sha256": "9b023fc97fa25b87392f0d6a123a52a13ca2284267ac7c293e79959c933d97c5"
+          }
+        },
+        {
+          "name": "ui_text_flow",
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-linux/ui_text_flow.log",
+            "sha256": "772346f8b0fcabb0c0be101432ad7d3b1c8d84a7e4ebafa43289320d7d34fb47"
+          }
+        },
+        {
+          "name": "ui_text_tail",
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-linux/ui_text_tail.log",
+            "sha256": "066ea7948957e586e65d8def0c75a5f0615b7b42fb6cd7a005667fedd3e3db00"
+          }
+        },
+        {
+          "name": "editor_clipboard",
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-linux/editor_clipboard.log",
+            "sha256": "4daabcb1dd110d4376381f9696c023aa7b818c22eb6000304f02c51cc23cbe31"
+          }
+        },
+        {
+          "name": "editor_readonly",
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-linux/editor_readonly.log",
+            "sha256": "84c7f5cfd1c64dc1efd14c2fa2764e3e20ff7e5b93c8ef6d63d02fdb56b03dc1"
+          }
+        },
+        {
+          "name": "text_cursor",
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-linux/text_cursor.log",
+            "sha256": "12a6c6f5d5bd40ead9c62ef0c2941091deec80ff1d2b28461d8c8568e4ef9eeb"
+          }
+        },
+        {
+          "name": "editor_scroll",
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/cursor-units2-linux/editor_scroll.log",
+            "sha256": "c12b08346cc40a7631377c3eed97568e06c4fe08845719c19051a98dee9437ff"
+          }
+        }
+      ]
+    }
+  ],
+  "cursor_unit_program": "import argparse,hashlib,json,os,subprocess,sys,zipfile\nfrom pathlib import Path\nout=Path(__file__).resolve().parent;root=out.parents[2];source=root/'build/validation/protocol-wrap-2026-10-26/3-isolated/src'\nsys.path.insert(0,str(source/'tools'));import build,native_tests\nplatform='windows' if sys.platform=='win32' else 'linux';prefix='cursor-units2-';work=out/(prefix+platform);work.mkdir()\nenvironment=build.compiler_environment();environment.update(ASAN_OPTIONS='detect_leaks=1:halt_on_error=1',UBSAN_OPTIONS='halt_on_error=1')\noptions=argparse.Namespace(build_dir=work,config='Release' if platform=='windows' else 'Debug',compiler=None,no_app=False,\n sdl=root/('third_party/SDL3-3.2.30' if platform=='windows' else 'build/dependencies/SDL3-linux-3.2.30'),sanitizers=platform=='linux',jobs=2,rebuild=False)\ncommands=[]\nclass RecordedBuilder(build.Builder):\n def execute(self,output,command,inputs,extra='',*,sign=False):\n  commands.append(command);return super().execute(output,command,inputs,extra,sign=sign)\nbuilder=RecordedBuilder(options,environment);cases=[];hashes={}\nselected=[c for c in native_tests.catalog() if not c.display and (c.name.startswith('editor_') or c.name in ('text_cursor','ui_text_flow','ui_text_tail'))]\nassert len(selected)==10\nfor case in selected:\n assert not case.arguments and not case.defines\n for name in case.sources:hashes[name]=hashlib.sha256((source/name).read_bytes()).hexdigest()\n executable=builder.executable('test-'+case.name,list(case.sources),[])\n command=[str(executable)];result=subprocess.run(command,env=builder.env,capture_output=True,timeout=case.timeout)\n log=work/(case.name+'.log');log.write_bytes(result.stdout+result.stderr)\n cases.append(dict(name=case.name,command=command,exit_code=result.returncode,binary_sha256=hashlib.sha256(executable.read_bytes()).hexdigest(),log=log.relative_to(root).as_posix()))\n record=dict(platform=platform,config=options.config,sanitizers=options.sanitizers,environment={key:environment[key] for key in ('ASAN_OPTIONS','UBSAN_OPTIONS')},\n  compiler=builder.cc,commands=commands,source_hashes=hashes,header_sha256=hashlib.sha256((source/'third_party/nuklear.h').read_bytes()).hexdigest(),cases=cases,\n  scope='Existing native test source/flags via canonical Builder in separate outputs; renderer-only units link no unused core/platform libraries; no GUI runtime replaced')\n (out/(prefix+platform+'.json')).write_text(json.dumps(record,indent=2)+'\\n')\n assert result.returncode==case.exit_code,(case.name,result.returncode,result.stderr.decode('utf8',errors='replace'))\nfor name,digest in hashes.items():assert hashlib.sha256((source/name).read_bytes()).hexdigest()==digest\narchive=out/(prefix+platform+'.zip');members={}\nwith zipfile.ZipFile(archive,'x',compression=zipfile.ZIP_DEFLATED) as z:\n for directory in ('bin','lib'):\n  for path in (work/directory).rglob('*'):\n   if path.is_file() and path.suffix in ('.exe','.pdb','.lib','.so','.dll',''):\n    name=path.relative_to(work).as_posix();members[name]=hashlib.sha256(path.read_bytes()).hexdigest();z.write(path,name)\nwith zipfile.ZipFile(archive) as z:\n for name,digest in members.items():assert hashlib.sha256(z.read(name)).hexdigest()==digest\n(out/(prefix+platform+'-archive.json')).write_text(json.dumps(dict(archive=archive.relative_to(root).as_posix(),sha256=hashlib.sha256(archive.read_bytes()).hexdigest(),members=members,all_member_bytes_read_back=True),indent=2))\nprint(platform+': 10/10 cursor/editor units passed; symbols and executables archived/read back')\n",
+  "cursor_counterproof_archive": {
+    "path": "build/validation/explorer-inline-2026-10-29/caret-counterproofs.json",
+    "sha256": "036512f2892aab4ac8e207aafdb173d57a3a1232564c5bfed91f3328f8246b2d"
+  },
+  "cursor_counterproof_bytes": {
+    "path": "build/validation/explorer-inline-2026-10-29/caret-counterproofs.zip",
+    "sha256": "764ad199bbf9d177112ec90ab3f39230d5f96cbfec24a4a494b4c7c4332086e6"
+  },
+  "storage_cleanup": {
+    "date": "2026-10-29",
+    "reason": "Discarded two duplicated SDL runtime copies from unit-helper setups that failed before any test compilation. Offline dependencies and all successful unit/source/runtime proofs remain retained.",
+    "files": [
+      {
+        "former_path": "build/validation/explorer-inline-2026-10-29/cursor-units-windows/bin/SDL3.dll",
+        "bytes": 2521600,
+        "former_sha256": "b110bb37842216818ffe49f35cdf72d68bb5d0f26ca5fd963dbf5c7c3e6bcdd9"
+      },
+      {
+        "former_path": "build/validation/explorer-inline-2026-10-29/cursor-units-linux/bin/libSDL3.so.0",
+        "bytes": 3983128,
+        "former_sha256": "74ecd0f7d2ea012c57ee91e705da528e1cd25ff698f88072404191a4ec0c8c89"
+      }
+    ],
+    "bytes_removed": 6504728,
+    "policy_note": "Recursive removal of the two setup folders was automatically rejected without a detailed reason. After explicit read-only verification, only the two literal file paths were removed nonrecursively; the empty folders remain. Both Test-Path checks returned false."
+  },
+  "runner": {
+    "program": "import hashlib,json,os,subprocess,sys\nfrom pathlib import Path\nout=Path(__file__).resolve().parent;root=out.parents[2];base=root/'build/validation/protocol-wrap-2026-10-26/3-isolated';source=base/'src';phase=sys.argv[1]\nplatform='windows' if sys.platform=='win32' else 'linux';build=base/(platform+'-build')\ncommand=[sys.executable,str(source/'tools/with-artifacts.py'),'--',sys.executable,str(source/'tools/build.py'),\n '--build-dir',str(build),'--config','Release' if platform=='windows' else 'Debug','--jobs','4',\n '--sdl',str(root/('third_party/SDL3-3.2.30' if platform=='windows' else 'build/dependencies/SDL3-linux-3.2.30')),'--test-display']\nif platform=='linux':command+=['--sanitizers']\nfor pattern in sys.argv[2:] or ['explorer_a']:command+=['--test-filter',pattern]\nenvironment=dict(os.environ,ASAN_OPTIONS='detect_leaks=0:halt_on_error=1')\nwm=None\nwith (out/(phase+'-'+platform+'.log')).open('xb') as log:\n try:\n  if platform=='linux':\n   environment.update(SDL_VIDEODRIVER='x11',LIBGL_ALWAYS_SOFTWARE='1')\n   wm=subprocess.Popen(['openbox','--sm-disable'],env=environment,stdout=log,stderr=subprocess.STDOUT)\n   ready=subprocess.run([sys.executable,str(source/'tools/wait-window-manager.py')],cwd=source,env=environment,stdout=log,stderr=subprocess.STDOUT)\n   if ready.returncode:raise RuntimeError('Window manager readiness failed')\n  result=subprocess.run(command,cwd=source,env=environment,stdout=log,stderr=subprocess.STDOUT)\n finally:\n  if wm:\n   wm.terminate()\n   try:wm.wait(timeout=5)\n   except subprocess.TimeoutExpired:wm.kill();wm.wait()\nwith (out/(phase+'-'+platform+'.json')).open('x',encoding='utf8') as stream:\n app=build/'bin'/('physim.exe' if platform=='windows' else 'physim')\n json.dump(dict(command=command,exit_code=result.returncode,app_sha256=hashlib.sha256(app.read_bytes()).hexdigest()),stream,indent=2)\nprint(json.dumps(dict(phase=phase,platform=platform,exit_code=result.returncode)));raise SystemExit(result.returncode)\n",
+    "freeze_program": "import hashlib,json,subprocess,sys,zipfile\nfrom pathlib import Path\nroot=Path('D:/Physim');out=Path(__file__).resolve().parent;base=root/'build/validation/protocol-wrap-2026-10-26/3-isolated';source=base/'src'\ntag=sys.argv[1];assert tag.replace('-','').isalnum()\nprevious=(out/(sys.argv[2] if len(sys.argv)>2 else 'before-flow-byte-index.json')).resolve()\ndef sha(data):return hashlib.sha256(data).hexdigest()\ndef save(name,value):\n with (out/name).open('x',encoding='utf8') as stream:json.dump(value,stream,indent=2)\nold=json.loads(previous.read_text(encoding='utf8'));index={};runtime={};archives={}\nprior_source=previous.with_name(previous.name.replace('-byte-index.json','-compiler-source.json'))\nprior_files=json.loads(prior_source.read_text(encoding='utf8'))['files'] if prior_source.is_file() else None\nfor platform in ('windows','linux'):\n build=base/(platform+'-build');index[platform]={};runtime[platform]={};changed=[]\n for folder in ('bin','lib'):\n  for path in (build/folder).rglob('*'):\n   if not path.is_file() or path.is_symlink():continue\n   name=path.relative_to(build).as_posix();digest=sha(path.read_bytes());runtime[platform][name]=digest\n   prior=old[platform].get(name)\n   if prior and prior['sha256']==digest:index[platform][name]=prior\n   else:changed.append((path,name,digest))\n archive=out/(tag+'-runtime-'+platform+'.zip')\n with zipfile.ZipFile(archive,'x',compression=zipfile.ZIP_DEFLATED,compresslevel=6) as z:\n  for path,name,digest in changed:\n   z.write(path,name);index[platform][name]=dict(archive=archive.relative_to(root).as_posix(),entry=name,sha256=digest)\n archives[archive.relative_to(root).as_posix()]=sha(archive.read_bytes())\nopened={}\ntry:\n for values in index.values():\n  for row in values.values():\n   if row['archive'] not in opened:opened[row['archive']]=zipfile.ZipFile(root/row['archive'])\n   assert sha(opened[row['archive']].read(row['entry']))==row['sha256']\nfinally:\n for z in opened.values():z.close()\nsave(tag+'-runtime.json',dict(files=runtime,new_archives_sha256=archives,all_referenced_bytes_read_back=True))\nsave(tag+'-byte-index.json',index)\ntree=subprocess.check_output(['git','ls-tree','-r','2f9b318a','--','app','include','src','examples','runners','third_party','tests','tools','docs'],cwd=root).decode('utf8')\nobjects={line.split('\\t',1)[1]:line.split()[2] for line in tree.splitlines()};manifest={};changed=[];unchanged_c=0\nfor directory in ('app','include','src','examples','runners','third_party','tests','tools'):\n for path in (source/directory).rglob('*'):\n  if not path.is_file() or path.is_symlink() or path.suffix not in ('.c','.h','.inc','.py','.json'):continue\n  if any(p in path.parts for p in ('node_modules','__pycache__')):continue\n  name=path.relative_to(source).as_posix();data=path.read_bytes();manifest[name]=sha(data)\n  normalized=data.replace(b'\\r\\n',b'\\n');blob=hashlib.sha1(b'blob '+str(len(normalized)).encode()+b'\\0'+normalized).hexdigest()\n  if (prior_files.get(name)!=manifest[name] if prior_files is not None else objects.get(name)!=blob):changed.append((path,name))\n  if objects.get(name)==blob and path.suffix in ('.c','.h','.inc'):unchanged_c+=1\n# workspace.md is a changed compiler input to the bundled F1 manual.\npath=source/'docs/workspace.md';name='docs/workspace.md';data=path.read_bytes();manifest[name]=sha(data)\nnormalized=data.replace(b'\\r\\n',b'\\n');blob=hashlib.sha1(b'blob '+str(len(normalized)).encode()+b'\\0'+normalized).hexdigest()\ndifferent=prior_files[name]!=manifest[name] if prior_files and name in prior_files else objects.get(name)!=blob\nif different:changed.append((path,name))\narchive=out/(tag+'-compiler-source.zip')\nwith zipfile.ZipFile(archive,'x',compression=zipfile.ZIP_DEFLATED,compresslevel=6) as z:\n for path,name in changed:z.write(path,name)\nwith zipfile.ZipFile(archive) as z:\n for _,name in changed:assert sha(z.read(name))==manifest[name]\nsave(tag+'-compiler-source.json',dict(base_commit='2f9b318a',files=manifest,\n overlay_base_source_manifest=prior_source.relative_to(root).as_posix() if prior_files is not None else None,\n unchanged_c_inputs_compared_to_git=unchanged_c,overlay_files=[name for _,name in changed],\n archive_sha256=sha(archive.read_bytes()),runtime_index=tag+'-byte-index.json'))\nprint(json.dumps(dict(tag=tag,source_overlay=len(changed),unchanged_c_inputs=unchanged_c,\n runtime_files={k:len(v) for k,v in runtime.items()},all_archive_bytes_verified=True)))\n\n",
+    "linux_outer_command": "wsl -d Alpine-Dev --exec python3 /mnt/d/Physim/tools/with-artifacts.py --root /mnt/d/Physim/build -- xvfb-run -a -s '-screen 0 1600x1100x24' python3 /mnt/d/Physim/build/validation/explorer-inline-2026-10-29/run.py flow-fourth 'explorer_a*' project_wizard",
+    "configurations": {
+      "windows": "Release",
+      "linux": "Debug ASan/UBSan; detect_leaks=0:halt_on_error=1, X11, software GL, Openbox"
+    }
+  },
+  "visual_inspection": [
+    {
+      "platform": "windows",
+      "mode": "dark",
+      "image": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-30_8w01s/explorer_a_inline/files ä/dark/explorer-inline.png",
+        "sha256": "1a7a8cb7c5736663e967b3e6155ae2248d7661be25c06683438f807ddd94250d"
+      }
+    },
+    {
+      "platform": "linux",
+      "mode": "large",
+      "image": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qpybdkk5/explorer_a_inline/files ä/large/explorer-inline.png",
+        "sha256": "0adf69db5b8b386ea6b95c27febc2ed9d296296081784e64127f4cc699119779"
+      }
+    }
+  ],
+  "changes": [
+    "Preview uses original-byte row/glyph layout shared by render, hit testing, selection and native boxes; source bytes not rewritten for soft wrap",
+    "Short preview uses actual row height, long preview max240 scaled; only vertical inner scrolling; font matches effective .file-preview pre override10.5 and line-height1.85",
+    "Two bounded cached geometries avoid rebuilding for alternating outer-scrollbar widths; all cache layouts retired with source result or context",
+    "Places wrap at actual label width, grow naturally and use4px gap; measured draw bytes and ink rectangles checked against button bounds",
+    "Focus follows selected file row rather than oversized full list; focused oversized targets capped to viewport"
+  ],
+  "cursor_change": "Ordinary fields use configured slim caret width/font height at start, inside text and end; no inverted full-character block. Native shared renderer; original text, selection and editing logic preserved",
+  "test_scope": [
+    "Final seven groups/platform: existing modal and free native clients, modal six states, free seven states, projectB six states, preview workflow and native preview each normal/large",
+    "Preview real files:53-byte short source and2731-byte Unicode long source incl tabs, combining mark, emoji and long unbroken lines; no mock preview contents",
+    "Exact original clipboard copy before/after resize, selection preservation, no horizontal scroll, rejected text input; independent native full text, readonly rejection, selection and last-glyph scroll",
+    "Windows scroll proof uses unchanged inactive-only helper after real fixture mouse click outside field; native focus then selection; this is not physical keyboard proof"
+  ],
+  "history": [
+    "Initial preview-flow fixture skipped actual Tab traversal from search to list; corrected without removing invariants",
+    "Initial Windows native preview invoked inactive-only scroll probe after activating/selecting field; diagnostic confirms precondition rejection before ScrollIntoView, not a failed product scroll",
+    "Second workflow normal passes; large times out; unchanged debug binary shows605px list in594px frame and oscillating outer offsets. Third uses actual selected row and unchanged fixture assertions",
+    "Further geometry diagnostics and any remaining failed cohorts are retained in the referenced records"
+  ],
+  "additional_diagnostics": [
+    "Third-flow modal large/narrow copied no text: preview group outside outer viewport, old controls[12] rectangle still inside it. Unchanged third binary confirms text_h0/active0 while reveal0 and stale control_y339.69; fresh logical targets now published before clipped group drawing",
+    "First caret compile probe omitted project include path; corrected setup retained original log. Initial positive fixture assumed dynamic nk_str NUL termination, then failed early and leaked its own test allocations; final source uses byte length/memcmp and passes explicit LSan1",
+    "First separate unit helper accidentally selected an existing display workflow too; failed count check before compiling/running any unit. Final helper uses canonical non-display selection"
+  ],
+  "limits": [
+    "Not full design acceptance or full score; image/run previews and C-API context still missing",
+    "Native interfaces and injected SDL gestures, no speech/physical keyboard claim; logical focus does not establish Windows host keyboard focus",
+    "Large size22/16=137.5%, no200%/DPI/monitor matrix or macOS runtime for this change",
+    "GUI uses ASan/UBSan with leak detection disabled; no new leak-proof claim; unchanged core text-wrap/model/worker suites retain previous dated scope",
+    "Preview GUI/native proof2731bytes does not establish full64KiB GUI selection; worker limits retain separate proof",
+    "All breadcrumb keys, full collection semantics, equivalent sort popup keyboard flow and cross-workspace longpath/ACL/SMB/import tasks remain open",
+    "Earlier initial ui-seventh UIA timeout remains unexplained; newer passing runs do not prove its cause",
+    "Foreign local changes excluded from isolated source; root working-tree build and detached-editor combinations not validated",
+    "Compiler warnings remain visible in logs"
+  ],
+  "previous_integration": {
+    "path": "docs/verification/explorer-inline-2026-10-29.json",
+    "sha256": "37844bd5d44e71d32d50cceb5ca5b9dd92767f78c0d0eafad89c49e8162f8d85"
+  },
+  "staged_source_audit": {
+    "owned_inputs": 17,
+    "staged_compiler_inputs_compared": 1061,
+    "mismatches": [],
+    "verified_reference_hashes": 78,
+    "final_app_groups_per_platform": 7,
+    "final_editor_units_per_platform": 10,
+    "caret_negative_and_positive_same_fixture": true,
+    "changed_doc_links_exist": true,
+    "foreign_changes_not_staged": true,
+    "program": "import hashlib,json,re,subprocess,sys\nfrom pathlib import Path\nroot=Path('D:/Physim');out=Path(__file__).resolve().parent;source=root/'build/validation/protocol-wrap-2026-10-26/3-isolated/src'\ndef sha(data):return hashlib.sha256(data).hexdigest()\ninputs=json.loads((out/'flow-fourth-inputs.json').read_text())\nfor name,digest in inputs.items():assert sha((root/name).read_bytes())==digest,('owned input changed',name)\nmanifest=json.loads((out/'flow-fourth-compiler-source.json').read_text())['files']\nindex={line.split('\\t',1)[1]:line.split()[1] for line in subprocess.check_output(['git','ls-files','--stage'],cwd=root).decode('utf8').splitlines()}\nmismatch=[]\nfor name,digest in manifest.items():\n data=(source/name).read_bytes();assert sha(data)==digest,name;assert name in index,('untracked compiler input',name)\n if not any(hashlib.sha1(b'blob '+str(len(blob)).encode()+b'\\0'+blob).hexdigest()==index[name] for blob in (data,data.replace(b'\\r\\n',b'\\n'))):mismatch.append(name)\nassert not mismatch,mismatch\nreport=json.loads((root/'docs/verification/explorer-preview-2026-10-29.json').read_text(encoding='utf8'));references=0\ndef check_refs(value):\n global references\n if isinstance(value,dict):\n  if 'path' in value and 'sha256' in value:\n   path=(root/value['path']).resolve();assert path.is_relative_to(root);assert sha(path.read_bytes())==value['sha256'],str(path);references+=1\n  for child in value.values():check_refs(child)\n elif isinstance(value,list):\n  for child in value:check_refs(child)\ncheck_refs(report)\nfinal=report['cohorts'][-1];assert final['tag']=='flow-fourth'\nfor platform in final['platforms']:\n assert platform['exit_code']==0 and len(platform['cases'])==7 and all(case['status']=='passed' for case in platform['cases'])\nfor unit in report['cursor_units']:\n record=json.loads((root/unit['record']['path']).read_text());assert len(record['cases'])==10 and all(case['exit_code']==0 for case in record['cases'])\n assert record['header_sha256']==inputs['third_party/nuklear.h']\n for name,digest in record['source_hashes'].items():assert sha((source/name).read_bytes())==digest,name\n for case in record['cases']:assert (root/case['log']).is_file()\nnegative=json.loads((out/'negative-caret3.json').read_text());positive=json.loads((out/'positive-caret2.json').read_text())\nassert negative['test_sha256']==positive['test_sha256']==inputs['tests/test_text_cursor.c']\nassert positive['subject_header_sha256']==inputs['third_party/nuklear.h'] and positive['test_exit']==0 and negative['test_exit']==1\ndocs=['docs/visuals/unified-workspace/'+name for name in ('EXPLORER-A-NATIVE.md','EXPLORER-INLINE-NATIVE.md','EXPLORER-PREVIEW-NATIVE.md','TEXT-CARET-NATIVE.md','NEXT-CHAT.md','NATIVE-FIDELITY.md')]+['third_party/README.md']\nfor name in docs:\n path=root/name\n for target in re.findall(r'\\]\\(([^)]+)\\)',path.read_text(encoding='utf8')):\n  if not target.startswith(('https:','http:','#')):assert (path.parent/target.split('#')[0].split('?')[0]).resolve().exists(),(name,target)\nstaged=subprocess.check_output(['git','diff','--cached','--name-only'],cwd=root).decode().splitlines()\nallowed=set(inputs)|set(docs)|{'docs/verification/explorer-preview-2026-10-29.json'};assert set(staged)<=allowed,('foreign staged files',set(staged)-allowed)\nresult=dict(owned_inputs=len(inputs),staged_compiler_inputs_compared=len(manifest),mismatches=mismatch,verified_reference_hashes=references,\n final_app_groups_per_platform=7,final_editor_units_per_platform=10,caret_negative_and_positive_same_fixture=True,changed_doc_links_exist=True,foreign_changes_not_staged=True)\nwith (out/(sys.argv[1] if len(sys.argv)>1 else 'audit-preview.json')).open('x',encoding='utf8') as stream:json.dump(result,stream,indent=2)\nprint(json.dumps(result))\n"
+  }
+}

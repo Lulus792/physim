@@ -57,9 +57,13 @@ bereichsübergreifende Aufgaben und die im Einbindungsnachweis genannte
 anfängliche UIA-Zeitüberschreitung. Die folgende
 [freie Exploreransicht](EXPLORER-INLINE-NATIVE.md) ist nun in den Arbeitsbereich
 eingebettet. Sie erhält ihren Zustand über Bereichswechsel, Projekt B und dessen
-unabhängigen Picker. Die native Textvorschau muss noch natürliche Höhe und
-Umbruch erhalten; bei langen Ortsangaben liegt die Öffnen-Aktion sonst zunächst
-unter dem sichtbaren Ausschnitt.
+unabhängigen Picker. Der folgende [Vorschau-/Fokusabgleich](EXPLORER-PREVIEW-NATIVE.md)
+übernimmt natürliche Höhe, Umbruch und vollständig lesbare Orte-Buttons. Er
+schließt die pendelnde Fokusnachführung einer übergroßen Dateiliste und veraltete
+Vorschauziele außerhalb des sichtbaren Ausschnitts. Der Nutzerauftrag für
+[schmale Einfügemarken](TEXT-CARET-NATIVE.md) ist im gemeinsamen Textfeldrenderer
+umgesetzt; zehn Cursor-/Editorfälle je Plattform und die gemeinsamen sieben
+App-Gruppen je Plattform bestehen. Eine vollständige Designabnahme folgt daraus nicht.
 Der folgende
 [Nachlauf für schnelle Zeigerereignisse](PROTOCOL-POINTER-NATIVE.md) erhält
 vollständige Klicks innerhalb eines Frames und den ursprünglichen Druckpunkt;

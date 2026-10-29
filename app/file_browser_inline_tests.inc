@@ -71,3 +71,47 @@ static void browser_inline_test_frame(app *a,const char *mode,int *stage,int *co
     (*stage)++;
 #undef INLINE_FOCUS
 }
+
+/* Source bytes remain unchanged across soft wrap, copy, resize and readonly
+ * input. Native reader mode waits for the independent process to complete. */
+static void browser_preview_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    static unsigned settle;static char *clipboard;static int copy_step;static Uint64 copied_at;
+    static int start,end;static uint32_t checksum;bool reader=strstr(mode,"reader")!=NULL,okay=true;
+    if(settle++<2)return;settle=0;browser_dialog *d=a->browser_workspace;
+    if(d && (browser_busy(d) || d->cache_dirty))return;
+    if(*stage==0){char text[8192]="";for(unsigned i=0;i<20;i++)strcat(text,"Zeile λ Á 🌍\t123456789_abcdefghijklmnopqrstuvwxyz_ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz_ABCDEFGHIJKLMNOPQRSTUVWXYZ\n");strcat(text,"ENDE λ🌍");
+        okay=browser_fixture_write("lang.txt",text) && (!reader || browser_fixture_write("main.c",text));toolbar_dispatch(a,TOOLBAR_BROWSE);
+    }else if(*stage==1 || *stage==2){struct nk_rect row={0};for(unsigned k=0;k<d->row_count;k++)if(!strcmp(ps_browser_entry_name(&d->listing.entries[d->rows[k].index]),"main.c"))row=d->rows[k].bounds;okay=row.h>0;test_mouse(a,row,*stage==1);
+    }else if(reader){
+        if(*stage==3){if(d->focus!=12 || !d->keyboard || d->reveal){test_window_key_mod(a->window,SDLK_TAB,0);return;}
+            test_mouse(a,nk_rect(d->preview_bounds.x+3,d->preview_text_bounds.y+3,6,6),true);}
+        else if(*stage==4)test_mouse(a,nk_rect(d->preview_bounds.x+3,d->preview_text_bounds.y+3,6,6),false);
+        else if(*stage==5){okay=!d->edits[3].active;puts("EXPLORER PREVIEW READER READY");fflush(stdout);}
+        else {char marker[4096];join(marker,sizeof marker,browser_test_root,"../explorer-reader-complete");if(!exists(marker))return;
+            okay=!browser_active(a) && !browser_workspace_visible(a) && !a->document_count && !a->workspace_open;
+            puts(okay?"EXPLORER PREVIEW READER SELF-TEST: PASSED":"EXPLORER PREVIEW READER SELF-TEST: FAILED");a->quitting=true;}
+    }else if(*stage==3 || *stage==9){
+        if(d->focus!=12 || !d->keyboard || d->reveal){test_window_key_mod(a->window,SDLK_TAB,0);return;}
+        okay=d->preview.text && d->edits[3].visual && d->preview_text_bounds.h>0;
+        if(okay){const struct nk_text_visual *v=d->edits[3].visual;float f=a->preferences.ui_size/16.f;bool long_text=*stage==9;
+            okay &= long_text?fabsf(d->preview_text_bounds.h-240*f)<.05f:d->preview_text_bounds.h<100*f;
+            for(int k=0;k<v->row_count;k++)okay &= v->rows[k].width<=v->width+.05f;
+            printf("{\"kind\":\"explorer_preview_flow\",\"long\":%s,\"scale\":%.4f,\"height\":%.4f,\"rows\":%d,\"pitch\":%.4f,\"horizontal_scroll\":%.4f,\"source_bytes\":%zu}\n",long_text?"true":"false",f,d->preview_text_bounds.h,v->row_count,v->row_height,d->edits[3].scrollbar.x,d->preview.length);
+            checksum=ps_crc32((const unsigned char*)d->preview.text,d->preview.length);
+            if(!copy_step){clipboard=SDL_GetClipboardText();test_window_key_mod(a->window,SDLK_A,PS_UI_COMMAND_MOD);copy_step++;return;}
+            if(copy_step==1){test_window_key_mod(a->window,SDLK_C,PS_UI_COMMAND_MOD);copied_at=SDL_GetTicks();copy_step++;return;}
+            char *actual=SDL_GetClipboardText();bool equal=browser_clipboard_text_equal(d->preview.text,actual);SDL_free(actual);
+            if(!equal && SDL_GetTicks()-copied_at<1500)return;okay &= equal && d->edits[3].scrollbar.x==0;
+            if(clipboard){SDL_SetClipboardText(clipboard);SDL_free(clipboard);clipboard=NULL;}copy_step=0;
+            if(!long_text){start=d->edits[3].select_start;end=d->edits[3].select_end;SDL_SetWindowSize(a->window,1080,740);browser_focus_set(a,d,12);}
+            else {SDL_Event event={0};event.type=SDL_EVENT_TEXT_INPUT;event.text.windowID=SDL_GetWindowID(a->window);event.text.text="must remain readonly";SDL_PushEvent(&event);}
+        }
+    }else if(*stage==4){if(d->reveal)return;okay=d->edits[3].select_start==start && d->edits[3].select_end==end && ps_crc32((const unsigned char*)d->preview.text,d->preview.length)==checksum;test_window_key_mod(a->window,SDLK_F,PS_UI_COMMAND_MOD);
+    }else if(*stage==5)browser_test_type(a,"lang");
+    else if(*stage==6){if(d->focus!=11 || !d->keyboard || d->reveal){test_window_key_mod(a->window,SDLK_TAB,0);return;}}
+    else if(*stage==7){okay=d->selected>=0 && d->preview.text && strstr(d->preview.text,"ENDE λ🌍");browser_focus_set(a,d,12);}
+    else if(*stage==8){if(d->reveal)return;}
+    else if(*stage==10){okay=ps_crc32((const unsigned char*)d->preview.text,d->preview.length)==checksum && !a->document_count;
+        if(!strstr(mode,"large"))*capture="explorer-preview-flow.png";puts(okay?"EXPLORER PREVIEW FLOW SELF-TEST: PASSED":"EXPLORER PREVIEW FLOW SELF-TEST: FAILED");a->quitting=true;}
+    if(!okay){fprintf(stderr,"Explorer preview stage%d failed\n",*stage);*code=1;a->quitting=true;}(*stage)++;
+}

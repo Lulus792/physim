@@ -23,6 +23,14 @@ included as `licenses/zlib-LICENSE.txt` in the portable package.
 
 ## Nuklear snapshot
 
+Local patch (2026-10-29): ordinary text fields draw the configured `cursor_size`
+caret inside words as well as at line ends. The old inside-word path painted
+a glyph-width inverted block regardless of the configured thin cursor.
+Selection, editing modes and original text remain governed by the existing
+editor; the patch changes drawing only. `text_cursor` inspects actual draw
+commands for single-line, multiline and readonly fields at two sizes,
+including Unicode, beginning/middle/end positions and selections.
+
 Local patch (2026-10-24): undo retains the full integer cursor position instead
 of narrowing it to `short`. A real analysis source exceeds 32767 runes; the
 former narrowing produces a negative cursor and a debug-renderer assertion.

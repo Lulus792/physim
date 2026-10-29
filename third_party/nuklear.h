@@ -29302,7 +29302,6 @@ nk_do_edit(nk_flags *state, struct nk_command_buffer *out,
         struct nk_color sel_background_color;
         struct nk_color sel_text_color;
         struct nk_color cursor_color;
-        struct nk_color cursor_text_color;
         const struct nk_style_item *background;
         nk_push_scissor(out, clip);
 
@@ -29313,13 +29312,11 @@ nk_do_edit(nk_flags *state, struct nk_command_buffer *out,
             sel_text_color = style->selected_text_hover;
             sel_background_color = style->selected_hover;
             cursor_color = style->cursor_hover;
-            cursor_text_color = style->cursor_text_hover;
         } else if (*state & NK_WIDGET_STATE_HOVER) {
             background = &style->hover;
             text_color = style->text_hover;
             sel_text_color = style->selected_text_hover;
             sel_background_color = style->selected_hover;
-            cursor_text_color = style->cursor_text_hover;
             cursor_color = style->cursor_hover;
         } else {
             background = &style->normal;
@@ -29327,7 +29324,6 @@ nk_do_edit(nk_flags *state, struct nk_command_buffer *out,
             sel_text_color = style->selected_text_normal;
             sel_background_color = style->selected_normal;
             cursor_color = style->cursor_normal;
-            cursor_text_color = style->cursor_text_normal;
         }
         if (background->type == NK_STYLE_ITEM_IMAGE)
             background_color = nk_rgba(0,0,0,0);
@@ -29335,7 +29331,6 @@ nk_do_edit(nk_flags *state, struct nk_command_buffer *out,
             background_color = background->data.color;
 
         cursor_color = nk_rgb_factor(cursor_color, style->color_factor);
-        cursor_text_color = nk_rgb_factor(cursor_text_color, style->color_factor);
 
         if (edit->select_start == edit->select_end) {
             /* no selection so just draw the complete text */
@@ -29388,37 +29383,16 @@ nk_do_edit(nk_flags *state, struct nk_command_buffer *out,
         /* cursor */
         if (edit->select_start == edit->select_end)
         {
-            if (edit->cursor >= nk_str_len(&edit->string) ||
-                (cursor_ptr && *cursor_ptr == '\n')) {
-                /* draw cursor at end of line */
-                struct nk_rect cursor;
-                cursor.w = style->cursor_size;
-                cursor.h = font->height;
-                cursor.x = area.x + cursor_pos.x - edit->scrollbar.x;
-                cursor.y = area.y + cursor_pos.y + row_height/2.0f - cursor.h/2.0f;
-                cursor.y -= edit->scrollbar.y;
-                nk_fill_rect(out, cursor, 0, cursor_color);
-            } else {
-                /* draw cursor inside text */
-                int glyph_len;
-                struct nk_rect label;
-                struct nk_text txt;
-
-                nk_rune unicode;
-                NK_ASSERT(cursor_ptr);
-                glyph_len = nk_utf_decode(cursor_ptr, &unicode, 4);
-
-                label.x = area.x + cursor_pos.x - edit->scrollbar.x;
-                label.y = area.y + cursor_pos.y - edit->scrollbar.y;
-                label.w = font->width(font->userdata, font->height, cursor_ptr, glyph_len);
-                label.h = row_height;
-
-                txt.padding = nk_vec2(0,0);
-                txt.background = cursor_color;;
-                txt.text = cursor_text_color;
-                nk_fill_rect(out, label, 0, cursor_color);
-                nk_widget_text(out, label, cursor_ptr, glyph_len, &txt, NK_TEXT_LEFT, font);
-            }
+            /* Physim: use the same slim caret inside a word and at line ends.
+             * A character-wide inverted block obscures the original glyph and
+             * ignores cursor_size in ordinary single/multiline fields. */
+            struct nk_rect cursor;
+            cursor.w = style->cursor_size;
+            cursor.h = font->height;
+            cursor.x = area.x + cursor_pos.x - edit->scrollbar.x;
+            cursor.y = area.y + cursor_pos.y + row_height/2.0f - cursor.h/2.0f;
+            cursor.y -= edit->scrollbar.y;
+            nk_fill_rect(out, cursor, 0, cursor_color);
         }}
     } else {
         /* not active so just draw text */

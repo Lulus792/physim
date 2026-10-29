@@ -164,11 +164,14 @@ Messlaufauswahl bleiben eigene Dialoge derselben A-Komponente. Beide Kontexte
 behalten unabhängige Arbeiter, Navigation und Editierzustände; ein Unteraufruf
 aus B ersetzt die freie Auswahl und Vorschau nicht.
 
-Die Textvorschau verwendet noch eine feste Höhe mit horizontalem Scrollen statt
-der natürlichen, auf 240 px begrenzten Höhe mit Umbruch aus der Vorlage. Bei
-langen Ortsangaben kann deshalb die Öffnen-Aktion zunächst unter dem sichtbaren
-Ausschnitt liegen. Das ist offene Layoutarbeit, keine technische Unmöglichkeit;
-Umbruch, native Textbereiche und Textauswahl müssen dieselbe Geometrie verwenden.
+Der folgende [Vorschau- und Fokusabgleich](EXPLORER-PREVIEW-NATIVE.md) übernimmt
+natürliche Texthöhe bis 240 px, weichen Umbruch und die wirksame Vorschauschrift
+von 10,5 px. Zeichnung, Auswahl und native Zeichenbereiche nutzen dieselbe
+Abbildung auf die Originalbytes. Lange Orte-Buttons brechen vollständig um.
+Die neue Fokusnachführung erreicht die ausgewählte Zeile und aktualisiert
+Vorschauziele auch außerhalb des sichtbaren Ausschnitts. Unabhängige Clients
+prüfen Originaltext, Readonly, Auswahl und Scrollen; beide Plattformen bestehen
+den abschließenden gemeinsamen Lauf mit je sieben Gruppen.
 
 Das Listenmodell hält bis zu 8192 Einträge; gezeichnet und als native Zeilen
 veröffentlicht wird der sichtbare Ausschnitt. Durchgängige Tastatur- und

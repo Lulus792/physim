@@ -7097,6 +7097,30 @@
       "steps": [{"program":"python","arguments":["{root}/tests/check_explorer_native.py","--app","{physim}","--work","{work}"],"timeout":300,"files":["verification.json"]}]
     },
     {
+      "name": "explorer_a_preview_windows",
+      "app": true,
+      "display": true,
+      "platforms": ["win32"],
+      "targets": ["python", "physim", "accessibility-windows-probe"],
+      "steps": [{"program":"python","arguments":["{root}/tests/check_explorer_native.py","--preview","--app","{physim}","--probe","{accessibility-windows-probe}","--work","{work}"],"timeout":300,"files":["verification.json"]}]
+    },
+    {
+      "name": "explorer_a_preview_atspi",
+      "app": true,
+      "display": true,
+      "platforms": ["linux"],
+      "targets": ["python", "physim"],
+      "steps": [{"program":"python","arguments":["{root}/tests/check_explorer_native.py","--preview","--app","{physim}","--work","{work}"],"timeout":300,"files":["verification.json"]}]
+    },
+    {
+      "name": "explorer_a_preview_flow",
+      "app": true,
+      "display": true,
+      "platforms": ["win32", "linux"],
+      "targets": ["python", "physim"],
+      "steps": [{"program":"python","arguments":["{root}/tests/check_explorer_preview.py","--app","{physim}","--work","{work}"],"timeout":300,"files":["verification.json"]}]
+    },
+    {
       "name": "explorer_a_inline_windows",
       "app": true,
       "display": true,
