@@ -3,10 +3,10 @@ import argparse,hashlib,json,os,subprocess,sys,time
 from pathlib import Path
 parser=argparse.ArgumentParser(description=__doc__)
 for name in ('app','work'):parser.add_argument('--'+name,type=Path,required=True)
-parser.add_argument('--probe',type=Path);parser.add_argument('--inner',action='store_true');args=parser.parse_args()
+parser.add_argument('--probe',type=Path);parser.add_argument('--inner',action='store_true');parser.add_argument('--inline',action='store_true');args=parser.parse_args()
 args.app=args.app.resolve();args.work=args.work.resolve();args.work.mkdir(parents=True,exist_ok=True)
 if sys.platform=='linux' and not args.inner:
-    raise SystemExit(subprocess.call(['dbus-run-session','--',sys.executable,str(Path(__file__).resolve()),'--app',str(args.app),'--work',str(args.work),'--inner'],env=dict(os.environ,GSETTINGS_BACKEND='memory')))
+    raise SystemExit(subprocess.call(['dbus-run-session','--',sys.executable,str(Path(__file__).resolve()),'--app',str(args.app),'--work',str(args.work),'--inner',*(['--inline'] if args.inline else [])],env=dict(os.environ,GSETTINGS_BACKEND='memory')))
 if sys.platform=='linux':
     import dbus
     from gi.repository import GLib
@@ -19,7 +19,7 @@ def digest(value):return hashlib.sha256(value.encode('utf8')).hexdigest()
 binary=hashlib.sha256(args.app.read_bytes()).hexdigest();cases=[]
 for size in ('normal','large'):
     work=args.work/size;work.mkdir();app_work=work/'reader'
-    command=[str(args.app),'--workspace-state-test',str(app_work),'explorer-a-reader'+('-large' if size=='large' else '')]
+    command=[str(args.app),'--workspace-state-test',str(app_work),'explorer-a-reader'+('-inline' if args.inline else '')+('-large' if size=='large' else '')]
     stdout=(work/'app.stdout').open('wb');stderr=(work/'app.stderr').open('wb')
     process=subprocess.Popen(command,stdout=stdout,stderr=stderr,env=dict(os.environ,PHYSIM_TEST_TRACE='1',NO_AT_BRIDGE='0'))
     record=dict(size=size,command=command,passed=False,observations=[]);cases.append(record)
@@ -85,12 +85,13 @@ for size in ('normal','large'):
             set_value(value)
         set_value(value+'p',False);wait(lambda:read_value(value),'rejected value preserves current text')
         set_value(initial)
+        close_name='Zur Werkbank →' if args.inline else 'Dateiauswahl schließen'
         if sys.platform=='linux':
-            assert named('Dateiauswahl schließen').queryAction().doAction(0)
-            wait(lambda:named('Dateiauswahl schließen') is None,'picker closed through native action')
+            assert named(close_name).queryAction().doAction(0)
+            wait(lambda:named(close_name) is None,'browser left through native action')
         else:
-            assert probe('invoke','Dateiauswahl schließen')[0]
-            wait(lambda:probe('absent','Dateiauswahl schließen',keep=False)[0],'picker closed through native action')
+            assert probe('invoke',close_name)[0]
+            wait(lambda:probe('absent',close_name,keep=False)[0],'browser left through native action')
         (app_work/'explorer-reader-complete').write_text('native clients completed\n',encoding='utf8')
         code=process.wait(timeout=20)
         assert code==0 and 'EXPLORER READER SELF-TEST: PASSED' in output()
@@ -103,6 +104,6 @@ for size in ('normal','large'):
             try:process.wait(timeout=5)
             except subprocess.TimeoutExpired:process.kill();process.wait()
         stdout.close();stderr.close()
-        (args.work/'verification.json').write_text(json.dumps(dict(binary_sha256=binary,platform=sys.platform,physical_keyboard_focus_proven=False,cases=cases),ensure_ascii=False,indent=2)+'\n',encoding='utf8')
+        (args.work/'verification.json').write_text(json.dumps(dict(binary_sha256=binary,platform=sys.platform,embedded=args.inline,physical_keyboard_focus_proven=False,cases=cases),ensure_ascii=False,indent=2)+'\n',encoding='utf8')
     assert hashlib.sha256(args.app.read_bytes()).hexdigest()==binary
 print('Explorer native clients: normal/large path field, full4095-byte Unicode value,4096-byte rejection and native close passed')

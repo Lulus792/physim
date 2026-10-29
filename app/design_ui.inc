@@ -1013,7 +1013,7 @@ static void log_panel(app *a) {
     nk_style_pop_vec2(ui);
 }
 static void workbench_status_view(app *a,float w,float h) {
-    struct nk_context *ui=a->ui;bool visible=workbench_visible(a);
+    struct nk_context *ui=a->ui;bool visible=workbench_visible(a) || browser_workspace_visible(a);
     nk_window_show(ui,"workbench-status",visible?NK_SHOWN:NK_HIDDEN);if(!visible)return;
     nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(8,2));
     nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(8,0));
@@ -1222,7 +1222,13 @@ static void workspace_draw_ui(app *a, int width, int height) {
     float w=(float)width,h=(float)height;
     a->search_edit=NULL;
     a->toolbar_pointer_consumed=false;
-    dock_prepare(a,w,h);
+    bool files=browser_workspace_visible(a);
+    if(!files)dock_prepare(a,w,h);
+    else {
+        protocol_resize_input(a,w,h);
+        memset(a->dock_visible,0,sizeof a->dock_visible);memset(a->dock_splitters,0,sizeof a->dock_splitters);
+        if(protocol_visible(a)){a->dock_panels[PS_DOCK_LOG]=protocol_bounds(a,w,h);a->dock_visible[PS_DOCK_LOG]=true;}
+    }
     dock_order(a);
     nk_style_push_vec2(ui, &ui->style.window.padding, nk_vec2(0, 0));
     nk_style_push_vec2(ui, &ui->style.window.spacing, nk_vec2(0, 0));
@@ -1235,8 +1241,17 @@ static void workspace_draw_ui(app *a, int width, int height) {
     nk_style_pop_float(ui);
     nk_style_pop_vec2(ui);
     nk_style_pop_vec2(ui);
-    if(a->tab!=a->dock_last_tab) { dock_show(a,PS_DOCK_WORKSPACE);a->dock_last_tab=a->tab; }
+    if(a->tab!=a->dock_last_tab) { if(!files)dock_show(a,PS_DOCK_WORKSPACE);a->dock_last_tab=a->tab; }
     workspace_path_view(a,w);
+    nk_window_show(ui,"Dateien",files?NK_SHOWN:NK_HIDDEN);
+    if(files){
+        nk_window_show(ui,"sidebar",NK_HIDDEN);nk_window_show(ui,"workspace",NK_HIDDEN);nk_window_show(ui,"inspector",NK_HIDDEN);
+        nk_window_show(ui,"workbench-editor-status",NK_HIDDEN);
+        float bottom=protocol_visible(a)?a->dock_panels[PS_DOCK_LOG].y:h-WORKSPACE_STATUS_HEIGHT;
+        browser_view(a,a->browser_workspace,width,height,nk_rect(0,WORKSPACE_CONTENT_TOP,w,fmaxf(1,bottom-WORKSPACE_CONTENT_TOP)));
+        log_panel(a);protocol_separator_view(a);workbench_status_view(a,w,h);
+        ui_palette=previous_palette;style(ui);nk_style_set_font(ui,previous_font);return;
+    }
     workspace_context(a);
     laboratory_chrome(a,w,h);
     analysis_chrome(a,w,h);
@@ -1286,5 +1301,5 @@ static void draw_ui(app *a,int width,int height) {
     if(browser_active(a))browser_guard=graphic_export_guard(a);
     project_manager_view(a,width,height);
     graphic_export_unguard(a,browser_guard);
-    browser_view(a,width,height);
+    browser_view(a,a->browser,width,height,nk_rect(0,0,0,0));
 }

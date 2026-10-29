@@ -158,10 +158,17 @@ Darwin-Modells; das ist kein auf macOS ausgeführter Build.
 ## Verbleibende Umsetzung und Abnahme
 
 Messlauf-/Bildvorschau und passender C-API-Kontext fehlen noch; die Oberfläche
-zeigt dafür keinen erfundenen Demo-Inhalt. Die freie Dateinavigation ist derzeit
-modal, während die freie Referenzansicht in den Arbeitsbereich eingebettet ist.
-Das ist offene Implementierung, keine technische Unmöglichkeit des nativen
-Renderers. Die vorhandene Textvorschau und Ordnerwahl bleiben nutzbar.
+zeigt dafür keinen erfundenen Demo-Inhalt. Die freie Dateinavigation ist inzwischen
+[in den Arbeitsbereich eingebettet](EXPLORER-INLINE-NATIVE.md). Ordner- und
+Messlaufauswahl bleiben eigene Dialoge derselben A-Komponente. Beide Kontexte
+behalten unabhängige Arbeiter, Navigation und Editierzustände; ein Unteraufruf
+aus B ersetzt die freie Auswahl und Vorschau nicht.
+
+Die Textvorschau verwendet noch eine feste Höhe mit horizontalem Scrollen statt
+der natürlichen, auf 240 px begrenzten Höhe mit Umbruch aus der Vorlage. Bei
+langen Ortsangaben kann deshalb die Öffnen-Aktion zunächst unter dem sichtbaren
+Ausschnitt liegen. Das ist offene Layoutarbeit, keine technische Unmöglichkeit;
+Umbruch, native Textbereiche und Textauswahl müssen dieselbe Geometrie verwenden.
 
 Das Listenmodell hält bis zu 8192 Einträge; gezeichnet und als native Zeilen
 veröffentlicht wird der sichtbare Ausschnitt. Durchgängige Tastatur- und
@@ -185,5 +192,6 @@ pauschale Behauptung, das freigegebene Design sei technisch unmöglich.
 
 Der [physische Windows-Pfeiltastennachweis für die Protokollhöhe](PROTOCOL-PHYSICAL-KEYS-NATIVE.md)
 ist am 29. Oktober bestanden; er ist keine Abnahme der Explorer-Tastaturbedienung.
-Das Gesamtziel einschließlich Explorer A, F1-Linkkorrekturen und vollständiger
-nativer Oberflächenabnahme bleibt offen.
+Das Gesamtziel einschließlich Explorer A und vollständiger nativer
+Oberflächenabnahme bleibt offen. Der frühere F1-UIA-Scrollbefund ist im
+[Reihenfolgenachlauf](../f1-layouts/UIA-SCROLL-ORDER.md) separat geschlossen.

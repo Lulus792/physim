@@ -2,7 +2,7 @@ static const char *dock_names[] = {"Seitenleiste", "Arbeitsbereich", "Protokoll"
 static const char *dock_windows[] = {"sidebar", "workspace", "log", "inspector"};
 static bool workbench_visible(const app *a) {return !a->project_manager && (a->tab==0 || a->tab==8 || (a->tab==2 && a->analysis_tab==1));}
 static bool workspace_shell_visible(const app *a) {
-    return !a->project_manager && (a->tab==0 || a->tab==1 || a->tab==2 || a->tab==8);
+    return !a->project_manager && (a->tab==0 || a->tab==1 || a->tab==2 || a->tab==8 || browser_workspace_visible(a));
 }
 enum { WORKSPACE_HEADER_HEIGHT=79, WORKSPACE_PATH_HEIGHT=39,
        WORKSPACE_CONTENT_TOP=118, WORKSPACE_STATUS_HEIGHT=28 };

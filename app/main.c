@@ -338,7 +338,7 @@ typedef struct {
         bool visible,scrollable,input_held,dismissed;
     } workspace_tip;
     bool workspace_open, project_manager, dialog_pending, native_dialog_legacy_test;
-    struct browser_dialog *browser;
+    struct browser_dialog *browser,*browser_workspace;
     ps_workspace_state last_workspace;
     char workspace_state_path[4096], workspace_state_error[192];
     bool workspace_state_writable;
@@ -770,6 +770,8 @@ enum { PS_DIALOG_OPEN_FOLDER = 1, PS_DIALOG_ADD_FILE, PS_DIALOG_ADD_FOLDER,
 static void choose_workspace_path(app *a, int mode);
 static void choose_workspace_path_from(app *a,int mode,const char *opener);
 static bool browser_active(const app *a);
+static bool browser_workspace_visible(const app *a);
+static bool browser_workspace_open(app *a);
 static bool browser_open(app *a,int mode);
 static void browser_complete(app *a,int mode,const char *path);
 static void browser_tick(app *a);

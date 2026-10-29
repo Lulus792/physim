@@ -75,19 +75,26 @@ und zusätzliche Dateninhalte der Browserdemo bleiben offen.
 Der [native Projektdialog B](PROJECT-WIZARD-B-NATIVE.md) übernimmt anschließend
 den Dreischritt, das Kartenraster, Schriftrollen und Fußaktionen mit echter
 Projektanlage. Je 68 Windows-/Linux-Projektabläufe und unabhängige native
-Kartenauswahl bestehen. Der darin aufgerufene Explorer A bleibt umzusetzen.
+Kartenauswahl bestehen. Der darin aufgerufene Explorer A ist inzwischen nativ
+angeschlossen; der datierte B-Nachweis allein belegt diese spätere Einbindung nicht.
 Seine [Dateisystemgrundlage](EXPLORER-A-NATIVE.md) ist anschließend mit echten
 Windows-/Linux-Dateien geprüft: Metadaten, Filter, lange Pfade, Abbruch und
 Ordneranlage. Ein verschwundenes Windows-Junction-Ziel wird korrekt abgewiesen.
 Der anschließende IO-Arbeiter prüft asynchrone Aufträge, begrenzte Textvorschau
 und die Abweisung veralteter Ergebnisse mit nativer negativer Gegenprobe.
-Navigationscontroller und sichtbare A-Oberfläche sind noch nicht angebunden.
+Navigationscontroller und sichtbare A-Oberfläche sind danach angeschlossen.
+Die [freie Exploreransicht](EXPLORER-INLINE-NATIVE.md) liegt nun im Arbeitsbereich,
+während Ordner-/Messlaufauswahl eigene Picker bleiben. Getrennte Kontexte erhalten
+Navigation, Vorschau und ungespeicherte Editorinhalte über Unteraufrufe. Natürliche
+Höhe und Umbruch der Textvorschau, Messlauf-/Bildvorschau, API-Kontext, große native
+Listen und vollständige praktische Aufgaben bleiben offen.
 Der folgende
 [Zeiger-Nachlauf](PROTOCOL-POINTER-NATIVE.md) schließt verlorene schnelle Klicks
 in den gemeinsamen Aktionen/Editfeldern und am Protokolltrenner. Linux prüft
 den schnellen Suche-/Trennerwechsel mit 40-Pixel-Tastaturschritt. Direkter
 Windows-Mausfokus und 40-Pixel-Ziehung sind im späteren Originaltext-Nachlauf
-belegt; der direkte Pfeiltastennachweis bleibt offen. Der zusätzlich gescheiterte F1-UIA-Scrollnachweis
+belegt; der spätere [physische Tastaturnachweis](PROTOCOL-PHYSICAL-KEYS-NATIVE.md)
+ergänzt sechs echte Schritte von jeweils 40 px. Der zusätzlich gescheiterte F1-UIA-Scrollnachweis
 ist im folgenden [Reihenfolgenachlauf](../f1-layouts/UIA-SCROLL-ORDER.md) mit
 unveränderten Scroll-/Fokuserwartungen und gezielter alter Gegenprobe geschlossen.
 Diese Teilprüfungen und die getrennten Datenquellen-Nachweise sind keine

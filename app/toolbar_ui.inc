@@ -14,6 +14,7 @@ static void select_workspace_tab(app *a, int tab) {
 }
 static int workspace_active_area(const app *a){
     if(a->project_manager)return -1;
+    if(browser_workspace_visible(a))return 0;
     if(workbench_visible(a))return 0;
     return a->tab==1?1:a->tab==2?2:-1;
 }
@@ -93,7 +94,7 @@ static unsigned toolbar_entries(app *a, int menu, toolbar_entry entries[9]) {
 static void toolbar_dispatch(app *a, toolbar_action action) {
     switch(action) {
     case TOOLBAR_OPEN: choose_workspace_path(a,PS_DIALOG_OPEN_FOLDER);break;
-    case TOOLBAR_BROWSE: choose_workspace_path(a,PS_DIALOG_BROWSE);break;
+    case TOOLBAR_BROWSE: if(!browser_workspace_open(a))status(a,"Dateiansicht konnte nicht geöffnet werden.");break;
     case TOOLBAR_ADD_FILE: choose_workspace_path(a,PS_DIALOG_ADD_FILE);break;
     case TOOLBAR_ADD_FOLDER: choose_workspace_path(a,PS_DIALOG_ADD_FOLDER);break;
     case TOOLBAR_NEW: open_project_manager(a,"Datei");break;
@@ -524,7 +525,7 @@ static void workspace_path_view(app *a,float w) {
         const struct nk_user_font *font=ui->style.font;
         const char *name=a->loaded?project_name(a):a->workspace_open?workspace_name(a->workspace):"Workspace";
         int active_area=workspace_active_area(a);
-        const char *area=active_area==1?"Messlabor":active_area==2?"Auswertung":"Werkbank";
+        const char *area=browser_workspace_visible(a)?"Datei-Explorer":active_area==1?"Messlabor":active_area==2?"Auswertung":"Werkbank";
         float name_width=fminf(w*.34f,font->width(font->userdata,font->height,name,(int)strlen(name)));
         const struct nk_user_font *area_font=&a->workbench_fonts[3];
         float area_width=ceilf(area_font->width(area_font->userdata,area_font->height,area,(int)strlen(area)))+1;
@@ -543,8 +544,8 @@ static void workspace_path_view(app *a,float w) {
         nk_style_push_style_item(ui,&ui->style.button.normal,nk_style_item_color(UI_COLOR(window)));
         nk_style_push_flags(ui,&ui->style.button.text_alignment,NK_TEXT_RIGHT);
         nk_style_push_color(ui,&ui->style.button.text_normal,UI_COLOR(accent));
-        nk_begin_disabled(ui,!a->loaded);
-        if(nk_button_label(ui,active_area==1?"Messlauf auswerten →":active_area==2?"Zum Modell →":"Zur Simulation →"))select_workspace_tab(a,active_area==1?2:active_area==2?0:1);
+        nk_begin_disabled(ui,!a->loaded && !browser_workspace_visible(a));
+        if(nk_button_label(ui,browser_workspace_visible(a)?"Zur Werkbank →":active_area==1?"Messlauf auswerten →":active_area==2?"Zum Modell →":"Zur Simulation →"))select_workspace_tab(a,browser_workspace_visible(a)?0:active_area==1?2:active_area==2?0:1);
         nk_end_disabled(ui);nk_style_pop_color(ui);nk_style_pop_flags(ui);nk_style_pop_style_item(ui);
         nk_layout_row_end(ui);
         struct nk_command_buffer *canvas=nk_window_get_canvas(ui);

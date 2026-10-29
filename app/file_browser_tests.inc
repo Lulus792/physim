@@ -40,14 +40,14 @@ static void browser_test_type(app *a,const char *text) {
     test_window_key_mod(a->window,SDLK_A,PS_UI_COMMAND_MOD);SDL_Event event={0};event.type=SDL_EVENT_TEXT_INPUT;
     event.text.windowID=SDL_GetWindowID(a->window);event.text.text=text;SDL_PushEvent(&event);
 }
-static void browser_reader_frame(app *a,int *stage,int *code) {
-    if(*stage==0){SDL_SetWindowSize(a->window,1080,740);toolbar_dispatch(a,TOOLBAR_BROWSE);(*stage)++;return;}
-    browser_dialog *d=a->browser;if(!d || browser_busy(d) || d->cache_dirty)return;
+static void browser_reader_frame(app *a,bool embedded,int *stage,int *code) {
+    if(*stage==0){SDL_SetWindowSize(a->window,1080,740);if(embedded)toolbar_dispatch(a,TOOLBAR_BROWSE);else choose_workspace_path(a,PS_DIALOG_BROWSE);(*stage)++;return;}
+    browser_dialog *d=embedded?a->browser_workspace:a->browser;if(!d || browser_busy(d) || d->cache_dirty)return;
     if(*stage==1){test_window_key_mod(a->window,SDLK_L,PS_UI_COMMAND_MOD);(*stage)++;return;}
     if(*stage==2){if(!d->path_edit || d->reveal)return;puts("EXPLORER READER READY");fflush(stdout);(*stage)++;return;}
     char marker[4096];join(marker,sizeof marker,browser_test_root,"../explorer-reader-complete");
     if(!exists(marker))return;
-    bool okay=!browser_active(a) && !a->dialog_pending && !a->workspace_open && !a->loaded && !a->document_count;
+    bool okay=!browser_active(a) && !browser_workspace_visible(a) && !a->dialog_pending && !a->workspace_open && !a->loaded && !a->document_count;
     printf("EXPLORER READER SELF-TEST: %s\n",okay?"PASSED":"FAILED");fflush(stdout);*code=okay?0:1;a->quitting=true;
 }
 static bool browser_clipboard_text_equal(const char *source,const char *copy) {
@@ -63,13 +63,15 @@ static bool browser_clipboard_text_equal(const char *source,const char *copy) {
     return !strcmp(source,copy);
 #endif
 }
+#include "file_browser_inline_tests.inc"
 static void browser_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
-    if(strstr(mode,"reader")){browser_reader_frame(a,stage,code);return;}
+    if(strstr(mode,"reader")){browser_reader_frame(a,strstr(mode,"inline")!=NULL,stage,code);return;}
+    if(strstr(mode,"inline")){browser_inline_test_frame(a,mode,stage,code,capture);return;}
     static unsigned settle;if(settle++<2)return;settle=0;bool ok=true;browser_dialog *d=a->browser;float f=a->preferences.ui_size/16.f;
     if(d && (browser_busy(d) || (d->visible && !d->failed && d->cache_dirty)))return;
 #define BROWSER_FOCUS(id) do{if(!browser_test_focus(a,id))return;}while(0)
     switch(*stage) {
-    case 0:toolbar_dispatch(a,TOOLBAR_BROWSE);break;
+    case 0:choose_workspace_path(a,PS_DIALOG_BROWSE);break;
     case 1:
         ok=browser_active(a) && a->dialog_pending && !a->workspace_open && !a->document_count && d->count==6;
         printf("{\"kind\":\"explorer_a\",\"passed\":%s,\"scale\":%.4f,\"modal\":[%.4f,%.4f,%.4f,%.4f],\"list\":[%.4f,%.4f,%.4f,%.4f],\"preview\":[%.4f,%.4f,%.4f,%.4f],\"row_pitch\":%.4f,\"fonts\":[",
@@ -113,7 +115,7 @@ static void browser_test_frame(app *a,const char *mode,int *stage,int *code,cons
     case 21:test_mouse(a,browser_test_row(a,"runs"),false);break;
     case 22:BROWSER_FOCUS(20);test_window_key_mod(a->window,SDLK_RETURN,0);break;
     case 23:{char path[4096];ps_browser_child(browser_test_root,"runs",path);ok=!browser_active(a) && !a->dialog_pending && a->project_manager && a->manager_step==1 && !strcmp(a->manager_parent,path) && !strcmp(a->manager_name,browser_test_name);test_window_key_mod(a->window,SDLK_ESCAPE,0);break;}
-    case 24:ok=!a->project_manager;toolbar_dispatch(a,TOOLBAR_BROWSE);break;
+    case 24:ok=!a->project_manager;choose_workspace_path(a,PS_DIALOG_BROWSE);break;
     case 25:test_window_key_mod(a->window,SDLK_UP,SDL_KMOD_ALT);break;
     case 26:ok=d->count==7 && browser_test_row(a,"main.c").h>0;test_mouse(a,browser_test_row(a,"main.c"),true);break;
     case 27:test_mouse(a,browser_test_row(a,"main.c"),false);break;

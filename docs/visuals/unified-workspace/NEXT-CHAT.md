@@ -52,9 +52,14 @@ IO-Arbeiter prüft asynchrone Aufträge, Textvorschau und veraltete Ergebnisse m
 einer negativen Versionsgegenprobe. Controller und A-Oberfläche übernehmen jetzt
 Orte/Liste/Vorschau, echte Textvorschau und den Unteraufruf aus B; Windows/Linux
 prüfen Widgets und unabhängige lange Pfadwerte. Offen bleiben insbesondere
-Messlauf-/Bildvorschau, C-API-Kontext, die freie eingebettete Exploreransicht,
-große native Listen, vollständige bereichsübergreifende Aufgaben und die im
-Einbindungsnachweis genannte anfängliche UIA-Zeitüberschreitung.
+Messlauf-/Bildvorschau, C-API-Kontext, große native Listen, vollständige
+bereichsübergreifende Aufgaben und die im Einbindungsnachweis genannte
+anfängliche UIA-Zeitüberschreitung. Die folgende
+[freie Exploreransicht](EXPLORER-INLINE-NATIVE.md) ist nun in den Arbeitsbereich
+eingebettet. Sie erhält ihren Zustand über Bereichswechsel, Projekt B und dessen
+unabhängigen Picker. Die native Textvorschau muss noch natürliche Höhe und
+Umbruch erhalten; bei langen Ortsangaben liegt die Öffnen-Aktion sonst zunächst
+unter dem sichtbaren Ausschnitt.
 Der folgende
 [Nachlauf für schnelle Zeigerereignisse](PROTOCOL-POINTER-NATIVE.md) erhält
 vollständige Klicks innerhalb eines Frames und den ursprünglichen Druckpunkt;
