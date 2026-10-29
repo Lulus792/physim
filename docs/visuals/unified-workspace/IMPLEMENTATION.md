@@ -13,6 +13,7 @@ auflösen. Nicht auf einen historischen nativen Zwischenstand zurücksetzen.
 
 | Thema | Maßgebliche Quelle |
 | --- | --- |
+| Freigegebene Dateisicherheit B2 | [Spezifikation](../file-safety-options/APPROVED.md), [ADR 017](../../decisions/017-selected-file-safety-b2.md); Speichern/Konflikte/Wiederherstellung mit gemeinsamem Diff nativ umsetzen |
 | Freigegebene Markierung A2 / Kontextmenüs | [A2-Spezifikation](../selection-options/APPROVED.md), [ADR 016](../../decisions/016-selected-marking-a2.md); ersetzt A, nativ mit umsetzen |
 | Offene und künftige UI-Entwürfe | [UI-DESIGN-BACKLOG.md](UI-DESIGN-BACKLOG.md); Detailentwurf, bestehende Freigabe und spätere Idee getrennt |
 | Freigegebene Ergänzungen / Leeransicht | [APPROVED.md](../design-options/APPROVED.md), [ADR 011](../../decisions/011-selected-workspace-additions.md): Protokoll C, Szene/Auswertung/Läufe A, Projekt B, Explorer A, Leeransicht bestätigt |

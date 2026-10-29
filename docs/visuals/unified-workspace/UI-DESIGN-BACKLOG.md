@@ -27,6 +27,7 @@ Diese Teile brauchen **keine erneute Variantenentscheidung**:
 | Neues Projekt / Explorer | B · Dreischritt / A · Orte–Liste–Vorschau | Zusammenspiel und Fehler mit echten Daten; B ruft weiterhin Explorer A auf. |
 | Grafikexport | Freigegebener Dialog mit Vorschau, PNG/SVG, Bildkopie | Reale Ausgabe-/Fehler-/Plattformabnahme; keine neue Exportrichtung. |
 | Markierung / Rechtsklick | **A2 · Dezenter Schleier**, jetzt final freigegeben | Exakte Farbrollen und Auswahlverhalten nativ übernehmen, einschließlich Kamera-Konfliktprüfung. |
+| Speichern / Dateikonflikte / Wiederherstellung | **B2 · gemeinsamer Git-Diff**, final freigegeben | Native Abläufe und echte Dateioperationen gemäß Spezifikation umsetzen; keine neue Variantenwahl. |
 | F1 / Hilfe | Bestehendes Design H und dessen Folgeverträge | Reale Inhalte, Tastatur, Screenreader und verbleibende Abweichungen weiter prüfen. |
 
 Verträge: [Bereichsauswahl](../design-options/APPROVED.md),
@@ -35,19 +36,18 @@ Verträge: [Bereichsauswahl](../design-options/APPROVED.md),
 
 ## Als Nächstes: konkrete Detailentwürfe
 
-**D01–D03: Erste Vergleichsentwürfe liegen jetzt vor.**
-[Drei interaktive Richtungen](../file-safety-options/index.html) für Speichern,
-Dateikonflikte und Wiederherstellung. **Auswahl offen; nicht vorab übernehmen.**
-Die folgenden Zustände sind Anforderungen für Vergleich und weitere Ausarbeitung,
-keine Behauptung einer fehlenden oder bereits abgeschlossenen nativen Funktion.
-Der Nutzer bevorzugt B. Die neue [Abwandlung B2 mit gemeinsamer Git-Diff-Ansicht](../file-safety-options/index.html?variant=b2&topic=save)
-ist auf seinen Wunsch **weiterhin ein Entwurf**, keine finale Freigabe.
+**D01–D03 sind gestalterisch entschieden:** Der Nutzer hat
+**[B2 mit gemeinsamer Git-Diff-Ansicht](../file-safety-options/APPROVED.md)**
+ausdrücklich ins fertige Design übernommen. Die folgenden Zustände bleiben
+Umsetzungs-/Abnahmeanforderungen; keine erneute Entwurfswahl. Das bestätigt
+keine bereits abgeschlossene native Funktion. Die nächste offene Runde beginnt
+bei D04–D07.
 
 | ID / Prio | Was gestalten? | Benötigte Zustände und Ergebnis |
 | --- | --- | --- |
-| D01 · P1 | **Speichern, Schließen und Projektwechsel** | Ungespeicherte einzelne/mehrere Dateien, Speichern/Verwerfen/Abbrechen, fehlgeschlagenes Speichern. Kompakter Dialog mit eindeutigem Dateibezug; Inhalt bei Abbruch erhalten. |
-| D02 · P1 | **Externe Dateiänderung und Konflikt** | Datei außerhalb der App geändert, gelöscht, verschoben oder schreibgeschützt; lokaler Entwurf vorhanden. Warnung und Vergleich der Versionen, verständliche Wahl ohne stilles Überschreiben. Tatsächlich verfügbare Funktionen vor einem Diff-Editor-Entwurf prüfen. |
-| D03 · P1 | **Autosave und Wiederherstellung** | Sicherung gefunden, mehrere betroffene Quellen, Original und Sicherung unterscheiden, Wiederherstellung/Abbruch/Fehler. Vorhandene [Autosave-Funktion](../../autosave.md) gestalten, kein neues Sicherungssystem voraussetzen. |
+| D01 · P1 | **Speichern, Schließen und Projektwechsel · B2 gewählt** | Ungespeicherte einzelne/mehrere Dateien, Speichern/Verwerfen/Abbrechen, fehlgeschlagenes Speichern. B2-Aufgabenfenster mit eindeutigem Dateibezug; Inhalt bei Abbruch erhalten. |
+| D02 · P1 | **Externe Dateiänderung und Konflikt · B2 gewählt** | Datei außerhalb der App geändert, gelöscht, verschoben oder schreibgeschützt; lokaler Entwurf vorhanden. Gemeinsamer B2-Diff, verständliche Wahl ohne stilles Überschreiben. Lesbare Vergleichsansicht, kein automatischer Merge-Editor. |
+| D03 · P1 | **Autosave und Wiederherstellung · B2 gewählt** | Sicherung gefunden, mehrere betroffene Quellen, Original und Sicherung unterscheiden, Wiederherstellung/Abbruch/Fehler. B2 mit vorhandener [Autosave-Funktion](../../autosave.md) verbinden, kein neues Sicherungssystem voraussetzen. |
 | D04 · P1 | **Einstellungen als vollständige Oberfläche** | Theme, UI-/Codeschrift, Autosave, Einheiten und Panelgrößen; Entwurf geändert, Übernehmen/Abbrechen/Standardwerte. Bestehende Einstellungsfunktionen und Tastaturpfade erhalten, Gruppen und Vorschau konsistent ausarbeiten. |
 | D05 · P1 | **Hinweise und Rückmeldungen außerhalb des Protokolls** | Gespeichert, Kopie fehlgeschlagen, Pfad ungültig, Ergebnis veraltet, Hintergrundaktion beendet. Festlegen, was inline, dauerhaft in der Statuszeile, vorübergehend als Hinweis oder als Dialog erscheint; keine mehrfachen störenden Meldungen. |
 | D06 · P1 | **Fortschritt und Abbruch über alle Bereiche** | Bauen, Projekt laden, Datei-/Laufvorschau, Analyse, Export; Fortschritt unbekannt, Abbrechen angefordert, fertig oder fehlgeschlagen. Vorhandene Läufe-A-Start-/Limitzustände erhalten und die übrigen Abläufe ergänzen. |
@@ -100,8 +100,8 @@ und verteilte Simulation für die erste Version aus.
 
 ## Empfohlene nächste Entwurfsrunde
 
-Zuerst **D01–D03** gemeinsam entwerfen: Speichern, Konflikte und Wiederherstellung
-bilden einen zusammenhängenden Ablauf. Danach **D04–D07**: Einstellungen,
+**D01–D03 sind mit B2 freigegeben** und gehören jetzt in die native Umsetzung.
+Als nächste Entwurfsrunde **D04–D07**: Einstellungen,
 Rückmeldungen, Fortschritt und die vollständige Kontextmenümatrix. Anschließend
 Explorer-/Szenen- und Auswertungsdetails anhand realer Inhalte ausarbeiten.
 

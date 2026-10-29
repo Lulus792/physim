@@ -45,15 +45,17 @@
   Linksauswahl zeigt keine automatische Aktionsleiste; Aktionen über Rechtsklick,
   Menütaste oder Umschalt+F10. Bestehende Designfreigaben bleiben erhalten.
 
-## Getrennte Entwürfe: Speichern und Wiederherstellung
+## Verbindliche Designfreigabe: Dateisicherheit B2
 
-- Die neue [Entwurfsrunde für Speichern, Dateikonflikte und Wiederherstellung](docs/visuals/file-safety-options/README.md)
-  vom 29. Oktober 2026 ist ausdrücklich **getrennt und noch nicht final freigegeben**.
-  B ist inzwischen als bevorzugte Richtung benannt; die zusätzliche gemeinsame
-  Git-Diff-Ansicht **B2** ist ausdrücklich nur ein Entwurf. A/B/B2/C dieser Runde
-  nicht als finales Design übernehmen. Bestehende Freigaben
-  und laufende native Arbeit bleiben erhalten; diese Vergleichsentwürfe brauchen
-  erst die Nutzerentscheidung.
+- Der Nutzer hat am 29. Oktober 2026 **B2 mit einer gemeinsamen Git-Diff-Ansicht
+  für Speichern, Dateikonflikte und Wiederherstellung ausdrücklich freigegeben**.
+  [ADR 017](docs/decisions/017-selected-file-safety-b2.md),
+  [verbindliche Spezifikation](docs/visuals/file-safety-options/APPROVED.md) und
+  [Gesamtübergabe](docs/visuals/unified-workspace/NEXT-CHAT.md) beachten.
+  Die vorherige Übernahmesperre dieser Runde ist aufgehoben; B2 nativ mit umsetzen,
+  keine neue Variantenentscheidung vorschalten. A/B/C bleiben Vergleichsmaterial.
+  Eigenständige Aufgabenfenster, Markierung A2, Projekt B, Explorer A und der
+  freigegebene Grafikexport bleiben erhalten. Browsernachweise sind keine native Abnahme.
 
 ## Speicherpflege
 

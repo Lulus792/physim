@@ -1,17 +1,17 @@
-# Speichern, Dateikonflikte und Wiederherstellung – Entwürfe A/B/B2/C
+# Speichern, Dateikonflikte und Wiederherstellung – B2 freigegeben
 
-**29. Oktober 2026 · Auswahl offen.** Auf ausdrücklichen Nutzerauftrag neu
-erstellte, getrennte Vorschauen. Keine dieser Varianten ist für das fertige
-Design freigegeben. Bestehende Bereichs-, Export- und A2-Freigaben gelten weiter.
-Hierfür weder native Funktionen ersetzen noch einen Entwurf vorab übernehmen.
+**29. Oktober 2026 · B2 ausdrücklich für das fertige Design freigegeben.**
+Die bisherige Einstufung als getrennter, noch nicht übernehmbarer Entwurf ist
+aufgehoben. [Verbindliche Spezifikation](APPROVED.md) und
+[ADR 017](../../decisions/017-selected-file-safety-b2.md) gelten für die native
+Fortsetzung. Bestehende Bereichs-, Export-, Fenster- und A2-Freigaben bleiben erhalten.
 
-**Nutzerpräferenz: B gefällt ihm.** Gewünschte Weiterentwicklung ausdrücklich
-**als Entwurf**: Unterschiede in einer gemeinsamen Datei wie bei Git.
-**[B2 · Git-Diff öffnen](index.html?topic=save&variant=b2)**. Die vorherige B-Ansicht
-mit zwei Spalten bleibt erhalten. Diese Präferenz ist noch keine Übernahmefreigabe
-der Dateisicherheitsrunde.
+Der Nutzer hat zunächst B bevorzugt, dann B2 mit gemeinsamer Änderungsansicht
+vergleichen lassen und anschließend **B2 ausdrücklich angenommen**. A/B/C bleiben
+Vergleichsmaterial. Die Browserdaten sind weiterhin nur Beispieldaten;
+die Designfreigabe bestätigt keine fertige native Funktion oder Plattformabnahme.
 
-[Vorschau öffnen](index.html?topic=save&variant=a) ·
+[Freigegebene Referenz öffnen](index.html?approved=1&topic=save) ·
 [A](index.html?topic=save&variant=a) · [B](index.html?topic=save&variant=b) ·
 [B2 · Git-Diff](index.html?topic=save&variant=b2) ·
 [C](index.html?topic=save&variant=c)
@@ -21,20 +21,20 @@ Lokal direkt per `index.html` oder über den bestehenden Vorschau-Server unter
 externen Schriften, Dienste oder echten Dateioperationen in der Vorschau.
 Zeitstempel, Pfade und Inhalte sind festgelegte Beispieldaten.
 
-## Drei Grundrichtungen und die neue Abwandlung B2
+## Freigegebenes B2 und die Vergleichshistorie
 
 | Richtung | Speichern | Dateikonflikt | Wiederherstellung |
 | --- | --- | --- | --- |
 | **A · Kompakt** | Dateiliste, klare Abschlussaktionen; Inhalte ausklappbar | Warnung und Wahl; Versionsvergleich bei Bedarf | Gemeinsame Sicherung mit kurzer Entscheidung; Inhalt bei Bedarf |
 | **B · Vergleichen** | Dateinavigation links, Entwurf und gespeicherter Inhalt rechts | Entwurf und externer Stand direkt nebeneinander | Sicherungsinhalt links, Sicherung und gespeicherte Fassung rechts |
-| **B2 · Git-Diff**, neuer Entwurf auf Basis von B | Ein Dateivergleich von gespeichertem Stand zu Editorentwurf | Aktuelle externe Fassung und Entwurf in einer gemeinsamen Änderungsansicht | Aktuelle Datei und automatische Sicherung in einer gemeinsamen Änderungsansicht |
+| **B2 · Git-Diff**, final freigegeben | Ein Dateivergleich von gespeichertem Stand zu Editorentwurf | Aktuelle externe Fassung und Entwurf in einer gemeinsamen Änderungsansicht | Aktuelle Datei und automatische Sicherung in einer gemeinsamen Änderungsansicht |
 | **C · Schritt für Schritt** | Bestand prüfen → Entscheidung und Wirkung | Erst Fassungen betrachten, danach Umgang wählen | Erst Sicherung prüfen, danach bewusst laden oder verwerfen |
 
 Farben, A2-Markierung und Datengrundlage sind absichtlich gemeinsam. Die
 Unterschiede betreffen Informationsmenge, Anordnung und Ablauf. Die drei Themen
-lassen sich später auch getrennt auswählen; dieser Entwurf trifft diese Wahl nicht.
+verwenden jetzt verbindlich B2; eine neue getrennte Variantenwahl ist nicht nötig.
 
-### Neuer Entwurf B2
+### Ausgewählte Darstellung B2
 
 - Dieselbe Dateinavigation und dieselben Entscheidungen wie B; rechts **eine**
   gemeinsame Datei mit Kontextzeilen, entfernten Zeilen mit Minus/Rot und neuen
@@ -65,7 +65,7 @@ Physim-Dialogrenderer ist dadurch nicht implementiert oder abgenommen.
 Die HTML-Modalsperre ist nur eine Prüfhülle dieser Browsergalerie. Für die spätere
 native Umsetzung gilt bereits [ADR 015](../../decisions/015-independent-task-windows.md):
 eigene OS-Aufgabenfenster, während Hauptfenster und herausgelöste Bereiche
-bedienbar bleiben. Die Wahl A/B/C entscheidet deren Inhalt und Ablauf, nicht über
+bedienbar bleiben. Die Freigabe B2 entscheidet Inhalt und Ablauf, nicht über
 eine neue globale Modalsperre. Nur den betroffenen Speichern-/Wechselauftrag
 anhalten, fremde Eingaben erhalten, den Dateistand vor einer Änderung erneut
 prüfen und Fokus nicht aus einem inzwischen anderen aktiven Fenster stehlen.
@@ -135,22 +135,22 @@ ist keine abgeschlossene Gestaltungsauswahl dieser Entwürfe.
 | Externe Änderungen blockieren das Speichern; kein automatischer Merge | Versionsbezug sichtbar, Entscheidung erneut prüfen, keine stille Überschreibaktion |
 | Beschädigte Sicherung wird nicht automatisch geladen oder überschrieben | Unlesbare Sicherung erhalten; mit gespeicherten Dateien weiterarbeiten |
 
-**Zusätzliche UI-Vorschläge, keine bereits vorhandenen Fachfunktionen:**
-Die zusammenhängende Projektwechsel-Nachfrage, nebeneinander angezeigte Fassungen,
-einheitliche geführte Entscheidungen und insbesondere **Entwurf als Kopie vormerken**
-sind neue Gestaltungsvorschläge. Die Kopie existiert nur im Arbeitsspeicher dieser
-Demo. Es wird keine Datei geschrieben, heruntergeladen oder in Explorer A angelegt.
+**Browsergrenze gegenüber dem nun beauftragten nativen Umfang:**
+Die Nachfrage vor dem Projektwechsel, die gemeinsame Änderungsansicht und die
+Konfliktentscheidungen sind mit B2 angenommen. Die Aktion **Entwurf als Kopie
+vormerken** existiert in der Demo nur im Arbeitsspeicher. Es wird keine Datei
+geschrieben, heruntergeladen oder in Explorer A angelegt.
 Eine native Kopienfunktion braucht echte Zielwahl über den vorhandenen Explorer A,
 Namens-/Rechte-/Existenzprüfung sowie Fehler- und Abbruchbehandlung. Es wird kein
 Diff-/Merge-Editor und kein Durchsuchen unbekannter Sicherungspfade implementiert.
 
 Das bisherige automatische Speichern bei normalem Projektwechsel/Beenden ist
-belegt. Eine zusätzliche Nachfrage davor ist ein Vorschlag dieser Runde; sie ist
-ohne Auswahl nicht als neue verbindliche Produktregel einzubauen.
+belegt. Die Nachfrage bei betroffenen ungespeicherten Quellen ist jetzt mit B2
+angenommen; vorhandene Autosave-/Backup- und Speicherschutzregeln dabei erhalten.
 
-## Nach einer Auswahl
+## Verbindliche native Fortsetzung
 
-Gewählte Varianten und genaue Referenzen dokumentieren, dann im vorhandenen
+**B2 gemäß [APPROVED.md](APPROVED.md) übernehmen**, im vorhandenen
 nativen Dialog-/Datei-/Autosave-Vertrag umsetzen. Datenverlustfragen, Dateirechte,
 weitere externe Änderungen während eines Dialogs und echter Teilfehler brauchen
 native Prüfungen. Ein Browsererfolg belegt weder reale Dateioperationen noch
@@ -159,3 +159,5 @@ Windows-/Linux-/macOS-Funktionsgleichheit.
 Die Runde bearbeitet D01–D03 der [UI-Designliste](../unified-workspace/UI-DESIGN-BACKLOG.md).
 Prüfer: [check_file_safety_options.cjs](../../../tools/check_file_safety_options.cjs).
 Ausgeführte Nachweise und Referenzbilder: [review/VALIDATION.md](review/VALIDATION.md).
+Die [Prüfung der verbindlichen B2-Referenz](review/approved/VALIDATION.md) ergänzt
+den historischen Vergleichsstand nach der Nutzerfreigabe.

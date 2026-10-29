@@ -1,5 +1,11 @@
 # Verbindlich ausgewähltes Design
 
+**Zusätzliche Freigabe vom 29. Oktober 2026:** Speichern, Dateikonflikte und
+Wiederherstellung verwenden **B2 mit gemeinsamer Git-Diff-Ansicht** gemäß
+[ADR 017](../../decisions/017-selected-file-safety-b2.md) und
+[genauer Spezifikation](../file-safety-options/APPROVED.md).
+Das ergänzt die Bereichsauswahl; Projektdialog B und Explorer A bleiben erhalten.
+
 **Zusätzliche Freigabe vom 29. Oktober 2026:** Markierungen verwenden
 **A2 · Dezenter Schleier**, mit Rechtsklick-Menüs gemäß
 [ADR 016](../../decisions/016-selected-marking-a2.md) und

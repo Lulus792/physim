@@ -1,14 +1,20 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
-**Neue getrennte Entwurfsrunde vom 29. Oktober 2026:** Für D01–D03 sind
-[Speichern, Dateikonflikte und Wiederherstellung in A/B/C](../file-safety-options/index.html)
-als Vergleich vorbereitet. **Finale Freigabe offen, keine Übernahme ins fertige
-Design.** [Abläufe, bestehende Datenverträge und neue Vorschläge](../file-safety-options/README.md)
-sind getrennt dokumentiert. Die folgenden bisherigen Freigaben bleiben gültig.
-Der Nutzer bevorzugt inzwischen **B** und hat **B2 als Entwurf** beauftragt:
-[eine gemeinsame Git-Diff-Ansicht](../file-safety-options/index.html?variant=b2&topic=save)
-mit Minus-/Pluszeilen und Kontext. B bleibt zum Vergleich erhalten; die endgültige
-Übernahme dieser Runde ist weiter offen.
+**Verbindliche Freigabe vom 29. Oktober 2026 – Dateisicherheit B2:** Der Nutzer
+hat **B2 für Speichern, Dateikonflikte und Wiederherstellung ins fertige Design
+übernommen**. Die vorherige Übernahmesperre ist aufgehoben. Im bestehenden
+nativen Auftrag mit umsetzen, keine erneute Auswahl vorschalten.
+[ADR 017](../../decisions/017-selected-file-safety-b2.md),
+[genaue B2-Spezifikation](../file-safety-options/APPROVED.md) und
+[festgelegte Referenz](../file-safety-options/index.html?approved=1&topic=save)
+lesen: links Dateinavigation, rechts **eine gemeinsame Git-Diff-Ansicht** mit
+Minus-/Pluszeilen, Kontext, Alt-/Neu-Zeilennummern und echten Änderungszählern.
+Speichern/Teilfehler/Abbruch, Konfliktentscheidungen, echte Kopie über Explorer A
+und Wiederherstellung mit späterem bewusstem Speichern gehören zum Auftrag.
+Ein erneuter externer Stand braucht erneute Prüfung; keine automatische Zusammenführung.
+Die [UI-Designliste](UI-DESIGN-BACKLOG.md) führt D01–D03 jetzt als gestalterisch
+entschieden; native Umsetzung und Abnahme bleiben offen. Die übrigen Freigaben
+und der folgende Vertrag eigenständiger Aufgabenfenster bleiben erhalten.
 
 **Ergänzung vom 29. Oktober 2026 – eigenständige Aufgabenfenster:** Der Nutzer
 verlangt tatsächliche Fenster für Dialoge wie Projektanlage und Grafikexport,

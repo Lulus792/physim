@@ -1,5 +1,10 @@
 # Physim · Gemeinsame Designvorschau
 
+**Freigegebene Dateisicherheit vom 29. Oktober:** **B2** für Speichern,
+Dateikonflikte und Wiederherstellung mit einer gemeinsamen Git-Diff-Ansicht.
+[Verbindliche Spezifikation](../file-safety-options/APPROVED.md) ·
+[ausgewählte Referenz](../file-safety-options/index.html?approved=1&topic=save).
+
 **Freigegebene Markierung vom 29. Oktober:** **A2 · Dezenter Schleier** ersetzt
 die frühere Markierung A und gehört zum fertigen Design.
 [Spezifikation](../selection-options/APPROVED.md) ·

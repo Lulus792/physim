@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-29T21:38:51.708Z",
+  "browser": "156.0.4314.50",
+  "checks": [
+    "One common diff in all topics/themes; exact saved/editor texts reconstruct from DOM rows; line changes follow selected C/Physim/Markdown file; original B stays side-by-side and switching retains selection",
+    "Deleted original has only added lines; new external revision updates the exact comparison and blocks completion; recovery compares correct document; missing/corrupt backup never invents a diff",
+    "Small 500px / 200% UI, actual popup and forced colors retain readable common view and explicit plus/minus distinction",
+    "Default B2 and approved mode: hidden variant chooser, conflicting variant ignored, all topics/themes/scenario/reload retain B2; history comparison does not alter approval"
+  ],
+  "errors": [],
+  "passed": true
+}

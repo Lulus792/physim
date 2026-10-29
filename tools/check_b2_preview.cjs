@@ -25,6 +25,15 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'build/file-safety-op
   report.checks.push('Deleted original has only added lines; new external revision updates the exact comparison and blocks completion; recovery compares correct document; missing/corrupt backup never invents a diff');
   await go('save');await page.setViewportSize({width:500,height:850});await page.evaluate(()=>document.documentElement.style.fontSize='28px');assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await page.locator('#popup-open').click();assert(await page.locator('#live-dialog .unified-diff').isVisible());assert(await page.locator('#live-dialog .sheet').evaluate(e=>e.scrollWidth<=e.clientWidth+1));await page.keyboard.press('Escape');
   await page.emulateMedia({forcedColors:'active'});await go();assert(await page.locator('.diff-sign').first().isVisible());assert((await rows()).some(r=>r.kind==='delete'));assert((await rows()).some(r=>r.kind==='add'));report.checks.push('Small 500px / 200% UI, actual popup and forced colors retain readable common view and explicit plus/minus distinction');
+  await page.emulateMedia({forcedColors:'none'});await page.setViewportSize({width:1440,height:1100});
+  await page.goto(base);assert.equal(await page.locator('body').getAttribute('data-variant'),'b2');
+  for(const theme of ['dark','light']){
+   await page.goto(base+`?approved=1&variant=a&theme=${theme}`);assert(await page.locator('.variants').isHidden());assert.equal(await page.locator('body').getAttribute('data-variant'),'b2');assert.match(page.url(),/variant=b2/);
+   for(const topic of ['conflict','recovery','save']){await page.locator(`[data-topic=${topic}]`).click();assert.equal(await page.locator('body').getAttribute('data-variant'),'b2');assert.equal(await page.locator('#preview-host .unified-diff').count(),1);assert.match(page.url(),/approved=1/);}
+   await page.locator('#scenario').selectOption('partial');assert.match(page.url(),/approved=1/);await page.reload();assert.equal(await page.locator('body').getAttribute('data-variant'),'b2');assert(await page.locator('.variants').isHidden());
+  }
+  await page.locator('#reference-mode').click();assert(await page.locator('.variants').isVisible());await page.locator('[data-variant=c]').click();assert.equal(await page.locator('body').getAttribute('data-variant'),'c');await page.locator('#reference-mode').click();assert.equal(await page.locator('body').getAttribute('data-variant'),'b2');
+  await page.locator('#preview-host .sheet').screenshot({path:path.join(out,'b2-approved.png')});report.checks.push('Default B2 and approved mode: hidden variant chooser, conflicting variant ignored, all topics/themes/scenario/reload retain B2; history comparison does not alter approval');
   assert.deepEqual(report.errors,[]);report.passed=true;
  }catch(e){report.failure=e.stack;await page.screenshot({path:path.join(out,'b2-failure.png'),fullPage:true});throw e;}
  finally{fs.writeFileSync(path.join(out,'b2-validation.json'),JSON.stringify(report,null,2)+'\n');await browser.close();}

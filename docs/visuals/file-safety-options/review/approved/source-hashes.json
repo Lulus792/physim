@@ -1,0 +1,12 @@
+{
+  "docs/visuals/file-safety-options/index.html": "40f6f0b217fdf3f8770b89de8296762a1eaddb1f19b6166750ad9485480b0115",
+  "docs/visuals/file-safety-options/safety.css": "b80d3dc4c44cb77981de4dfe9291127e052662f0c2e8c330f4c208198f0c3335",
+  "docs/visuals/file-safety-options/diff.css": "b7b095b1000b77bffc043edb03905419065e1af88324a7a2a4e063f720a3c382",
+  "docs/visuals/file-safety-options/safety.js": "cfc5cd9f9268a9e76dbb263025b17499db0f1897e69f50b54b49185b865b3781",
+  "docs/visuals/file-safety-options/unified-diff.js": "648923c9144afd98f4c9da91c4f97bff0a7fffbdda4ce6b1d164593b6e4d5abc",
+  "tools/check_file_safety_options.cjs": "a42ad47cd81880a2a000870648a6985f2464b82c912c379b9860fe9c3af13ace",
+  "tools/check_b2_preview.cjs": "a2d2f3d1af289820d34323d5dfcd6231612ff5fd4a7465e07c96e5c5fc3c17fe",
+  "tools/check_unified_diff.cjs": "dbd65e77d4c14aa653fdeac0975ec25572c9bb07f67ec6e5ceebe376787d3419",
+  "docs/visuals/file-safety-options/APPROVED.md": "06fb78123eb3e5f2de8f590454345b07061da0955efa7df23b2e881b96ce6e56",
+  "docs/decisions/017-selected-file-safety-b2.md": "adafe5781e79fa0f6fbb5c746c52bb8ff46561cdc1a514221167846398496fac"
+}
