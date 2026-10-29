@@ -13,6 +13,8 @@ auflösen. Nicht auf einen historischen nativen Zwischenstand zurücksetzen.
 
 | Thema | Maßgebliche Quelle |
 | --- | --- |
+| Freigegebene Markierung A2 / Kontextmenüs | [A2-Spezifikation](../selection-options/APPROVED.md), [ADR 016](../../decisions/016-selected-marking-a2.md); ersetzt A, nativ mit umsetzen |
+| Offene und künftige UI-Entwürfe | [UI-DESIGN-BACKLOG.md](UI-DESIGN-BACKLOG.md); Detailentwurf, bestehende Freigabe und spätere Idee getrennt |
 | Freigegebene Ergänzungen / Leeransicht | [APPROVED.md](../design-options/APPROVED.md), [ADR 011](../../decisions/011-selected-workspace-additions.md): Protokoll C, Szene/Auswertung/Läufe A, Projekt B, Explorer A, Leeransicht bestätigt |
 | Protokoll | [C als maßgebliche Anordnung](../design-options/index.html?approved=1&topic=protocol), [gemeinsamer Verhaltensvertrag](PROTOCOL-DESIGN.md) |
 | Fehlende Demo-Inhalte | [CONTENT-INVENTORY.md](CONTENT-INVENTORY.md): belegte native Inhalte, Layoutfolgen und ausdrücklich neue Vorschläge |

@@ -3,15 +3,17 @@
 **Ergänzung vom 29. Oktober 2026 – Auswahl/Markierung:** Der Nutzer wünscht
 lesbare Markierungen und legt fest: **Linksauswahl öffnet keine automatischen
 Aktionsleisten; Auswahlaktionen erscheinen erst per Rechtsklick**, zusätzlich
-über Menütaste/Umschalt+F10. Die Gestaltungen sind dafür in einer
-[getrennten interaktiven Studie](../selection-options/index.html) vorbereitet.
-Die [Übergabe und Zustandsregeln](../selection-options/README.md) dokumentieren
-Text-, Zeilen- und Objektauswahl samt Menüerhalt und Abbruch. **Der Nutzer hat
-anschließend A als Grundlage ausgewählt** und zusätzlich eine transparentere,
-weniger blaue Alternative gewünscht. **A2 · Dezenter Schleier** ist dafür als
-Vergleich ergänzt, noch nicht anstelle von A freigegeben. A bleibt die Grundlage;
-A2-Farben nicht ohne deren Bestätigung übernehmen. Die folgende Auswahl bleibt
-ebenfalls verbindlich.
+über Menütaste/Umschalt+F10. **A2 · Dezenter Schleier ist jetzt ausdrücklich als
+Teil des fertigen Designs freigegeben und ersetzt die frühere Grundlage A.**
+[ADR 016](../../decisions/016-selected-marking-a2.md),
+[verbindliche A2-Spezifikation](../selection-options/APPROVED.md) und
+[festgelegte Referenz](../selection-options/index.html?approved=1&context=code)
+lesen und im bestehenden nativen Auftrag mit umsetzen. Farb-/Deckkraftwerte,
+Text hinterlegende Zeichenreihenfolge, Zeilen-/Objektmarkierungen, Rechtsklick,
+Mehrfachauswahl und Tastaturmenü daraus übernehmen. Keine erneute Variantenwahl.
+Die [UI-Designliste](UI-DESIGN-BACKLOG.md) trennt offene Detailentwürfe,
+Abgleich bereits freigegebener Teile und spätere Optionen; sie ist keine
+zusätzliche Funktionsfreigabe. Die folgende Bereichsauswahl bleibt verbindlich.
 
 **Verbindliche Auswahl vom 25. Oktober 2026:** Der Nutzer hat entschieden:
 **Leeransicht bestätigt; Protokoll C; Szene & Werte A; Auswertung A;

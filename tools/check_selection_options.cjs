@@ -31,6 +31,16 @@ const root=path.resolve(__dirname,'..'),out=path.join(root,'build/selection-opti
    await page.locator('button[data-variant=a]').click();assert.equal(await page.evaluate(()=>getSelection().toString()),chosen);assert.deepEqual(await page.locator('.code-editor').evaluate(el=>getComputedStyle(el,'::selection').backgroundColor.match(/[\d.]+/g).map(Number)),aColor);
   }
   report.checks.push('A ↔ A2 preserves the exact text selection; A2 has lower opacity and a more neutral tint in both themes; A remains unchanged');
+  await page.setViewportSize({width:1440,height:1100});await page.goto(base);assert.equal(await page.locator('html').getAttribute('data-variant'),'a2');
+  for(const theme of ['dark','light']){
+   await page.goto(base+`?approved=1&variant=c&context=code&theme=${theme}`);
+   assert(await page.locator('.variants').isHidden());assert.equal(await page.locator('html').getAttribute('data-variant'),'a2');assert.match(page.url(),/variant=a2/);
+   for(const context of ['protocol','files','scene','code']){await page.locator(`[data-context=${context}]`).click();await page.locator('#sample').click();assert.equal(await page.locator('html').getAttribute('data-variant'),'a2');assert.match(page.url(),/approved=1/);await hidden();}
+   await page.reload();assert.equal(await page.locator('html').getAttribute('data-variant'),'a2');assert(await page.locator('.variants').isHidden());
+  }
+  await page.locator('#reference-mode').click();assert(await page.locator('.variants').isVisible());await page.locator('button[data-variant=b]').click();assert.equal(await page.locator('html').getAttribute('data-variant'),'b');await page.locator('#reference-mode').click();assert.equal(await page.locator('html').getAttribute('data-variant'),'a2');
+  await page.locator('.workspace').screenshot({path:path.join(out,'approved-a2.png')});
+  report.checks.push('A2 is the default; approved reference pins A2 despite conflicting URL and hides comparison cards; context/theme/reload preserve approval; history comparison cannot change the decision');
   await page.setViewportSize({width:1440,height:1100});await go();
   await page.locator('.code-editor').focus();await page.keyboard.press('Escape');const lines=page.locator('.code-line'),a=await lines.nth(6).boundingBox(),b=await lines.nth(8).boundingBox();
   await page.mouse.move(a.x+15,a.y+a.height/2);await page.mouse.down();await page.mouse.move(b.x+280,b.y+b.height/2,{steps:12});await page.mouse.up();await hidden();

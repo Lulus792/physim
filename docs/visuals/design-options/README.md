@@ -1,9 +1,9 @@
 # Physim – getrennte Designvarianten
 
 Zusätzliche, eigenständige [Studie zu Markierung und Rechtsklick-Menüs](../selection-options/index.html)
-vom 29. Oktober 2026: **A als Grundlage ausgewählt**, die transparentere und weniger
-blaue **A2** ist zusätzlich zum Vergleichen ergänzt. A2 ist noch nicht freigegeben;
-die unten freigegebene Kombination bleibt erhalten.
+vom 29. Oktober 2026: **A2 · Dezenter Schleier ist als finales Markierungsdesign
+freigegeben** und ersetzt A. [Verbindliche Spezifikation](../selection-options/APPROVED.md).
+Die unten freigegebene Bereichskombination bleibt erhalten.
 
 Stand: **25. Oktober 2026. Status: Auswahl vom Nutzer freigegeben.**
 

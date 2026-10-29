@@ -1,17 +1,17 @@
-# Markierung und Kontextmenü – getrennte Designstudie
+# Markierung und Kontextmenü – A2 freigegeben
 
-Stand: **29. Oktober 2026. A ist vom Nutzer als Grundlage ausgewählt.** Zusätzlich
-wünscht er ein transparenteres Design mit weniger Blau. **A2 · Dezenter Schleier**
-ist dafür neu als Vergleich ergänzt, noch nicht anstelle von A freigegeben.
+Stand: **29. Oktober 2026. A2 · Dezenter Schleier ist vom Nutzer als finales
+Markierungsdesign freigegeben und ersetzt die frühere Grundlage A.**
+[Verbindliche Spezifikation](APPROVED.md) · [ADR 016](../../decisions/016-selected-marking-a2.md).
 Die freigegebene Kombination aus
 [ADR 011](../../decisions/011-selected-workspace-additions.md) und der
 [Grafikexport aus ADR 010](../../decisions/010-analysis-graphic-export.md) bleiben
 erhalten. Diese Dateien verändern weder die bestehenden Vorschauen noch die
 native Anwendung.
 
-[Interaktive Vorschau öffnen](index.html?variant=a&context=code) ·
+[Freigegebene A2-Referenz öffnen](index.html?approved=1&context=code) ·
 [A](index.html?variant=a&context=code) · [B](index.html?variant=b&context=code) ·
-[C](index.html?variant=c&context=code) · **[Neue Variante A2](index.html?variant=a2&context=code)**
+[C](index.html?variant=c&context=code) · **[A2 im Vergleich](index.html?variant=a2&context=code)**
 
 Lokal auch unter `http://127.0.0.1:8791/selection-options/` erreichbar, wenn der
 Vorschau-Server läuft. Keine Installation oder externen Ressourcen nötig;
@@ -23,16 +23,17 @@ Der Nutzer beanstandet, dass der Inhalt unter der bisherigen Textmarkierung
 nicht erkennbar ist, und wünscht Beispiele für Markierungen mit passenden
 Aktionen. Anschließend konkretisiert er: **Auswahloptionen nur bei Rechtsklick**.
 Diese Bedienregel ist ausdrücklich vorgegeben. Anschließend wählt er **A** und
-bittet um eine zusätzliche, transparentere und weniger blaue Alternative. A bleibt
-die ausgewählte Grundlage; A2 dient dem direkten Vergleich. Eine automatisch
+bittet um eine zusätzliche, transparentere und weniger blaue Alternative.
+Anschließend gibt er **A2 ausdrücklich für das fertige Design und die Umsetzung
+im anderen Chat frei**. Diese Entscheidung ersetzt A. Eine automatisch
 erscheinende Aktionsleiste gehört zu keiner Variante.
 
 ## Gestaltungen mit identischer Bedienung
 
 | Variante | Text | Zeilen | Szenenobjekte |
 | --- | --- | --- | --- |
-| **A · Sanfte Fläche**, ausgewählte Grundlage | Transparente Akzentfläche hinter der Schrift; Syntaxfarben bleiben erhalten | Tönung, Akzent links, Häkchen | Dünner Rahmen, Griffe, dezente Fläche hinter Objekt und Beschriftung |
-| **A2 · Dezenter Schleier**, neuer Vergleich | Transparenteres, nahezu neutrales Blaugrau; Syntaxfarben bleiben erhalten | Schwächere Fläche, graublauer Akzent, Häkchen | Dieselben Rahmen und Griffe wie A, neutraler und mit transparenterer Fläche |
+| **A · Sanfte Fläche**, historischer Vergleich | Transparente Akzentfläche hinter der Schrift; Syntaxfarben bleiben erhalten | Tönung, Akzent links, Häkchen | Dünner Rahmen, Griffe, dezente Fläche hinter Objekt und Beschriftung |
+| **A2 · Dezenter Schleier**, final freigegeben | Transparenteres, nahezu neutrales Blaugrau; Syntaxfarben bleiben erhalten | Schwächere Fläche, graublauer Akzent, Häkchen | Dieselben Rahmen und Griffe wie A, neutraler und mit transparenterer Fläche |
 | **B · Feine Kontur** | Sehr schwache Tönung und feine Unterstreichung; Syntax bleibt erhalten | Kontur, sehr schwache Fläche, Häkchen | Kontur und Griffe ohne zusätzliche Fläche |
 | **C · Klarer Kontrast** | Eigene deckende Auswahlfläche mit ausdrücklich zugeordneter Textfarbe; Syntaxfarben werden vereinheitlicht | Kontrastfläche und passende Schrift, Häkchen | Kräftiger Rahmen und gefüllte Griffe; Beschriftungen erhalten ihre Farbe |
 
@@ -106,10 +107,9 @@ sichtbare Zugang am Diagramm und derselbe Exportdialog bleiben bestehen.
 ## Übergabe für die native Umsetzung
 
 1. Nutzerregel „Linksauswahl ohne automatische Aktionen, Kontextmenü auf
-   Rechtsklick / Tastaturmenü“ erhalten. Die konkrete Markierungsvariante erst
-   als **A** übertragen; diese Grundlage ist ausgewählt. Die neue Abwandlung
-   **A2** erst nach eigener Bestätigung anstelle der A-Farben verwenden. Keine
-   bestehende Designfreigabe erneut aufmachen.
+   Rechtsklick / Tastaturmenü“ erhalten. **A2 ist final freigegeben** und anhand
+   von [APPROVED.md](APPROVED.md) nativ übertragen. Die frühere Grundlage A ist
+   ersetzt; keine neue Bestätigung oder Variantenentscheidung vorschalten.
 2. Gemeinsame Auswahl-Hintergrund- und Schriftrollen im vorhandenen Renderer
    verwenden. Glyphen nach der Auswahlfläche zeichnen und getrennt clippen;
    keine pauschale UI-Opacity, kein dunkler Schleier über Text, Icons oder Labels.

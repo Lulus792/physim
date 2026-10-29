@@ -1,5 +1,11 @@
 # Verbindlich ausgewähltes Design
 
+**Zusätzliche Freigabe vom 29. Oktober 2026:** Markierungen verwenden
+**A2 · Dezenter Schleier**, mit Rechtsklick-Menüs gemäß
+[ADR 016](../../decisions/016-selected-marking-a2.md) und
+[verbindlicher Spezifikation](../selection-options/APPROVED.md).
+Das ergänzt die folgende Bereichsauswahl; es ist kein optionaler Vergleich mehr.
+
 **Nutzerfreigabe: 25. Oktober 2026.** Der Nutzer hat die Leeransicht bestätigt
 und pro Thema die folgenden Varianten aus der getrennten Galerie ausgewählt.
 Diese Entscheidung ersetzt „Auswahl offen“ und die frühere Übernahmesperre.

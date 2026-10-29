@@ -34,13 +34,14 @@
 - Die Grafikexport-Freigabe bleibt erhalten. Die Designfreigabe bestätigt keine
   fertige native Umsetzung oder Plattformabnahme; bestehende Funktionen erhalten.
 
-## Markierungen und Kontextmenüs
+## Verbindliche Designfreigabe: Markierung A2
 
-- Markierungen: Der Nutzer hat am 29. Oktober 2026 **A · Sanfte Fläche als
-  Grundlage ausgewählt** und zusätzlich eine transparentere, weniger blaue
-  Alternative beauftragt. [Auswahlvertrag](docs/visuals/selection-options/README.md)
-  und [Gesamtübergabe](docs/visuals/unified-workspace/NEXT-CHAT.md) beachten.
-  **A2 · Dezenter Schleier ist ein neuer Vergleich, noch keine Ersatzfreigabe.**
+- Der Nutzer hat am 29. Oktober 2026 **A2 · Dezenter Schleier ausdrücklich als
+  finales Markierungsdesign freigegeben**. A2 ersetzt die frühere Grundlage A.
+  [ADR 016](docs/decisions/016-selected-marking-a2.md),
+  [verbindliche Spezifikation](docs/visuals/selection-options/APPROVED.md) und
+  [Gesamtübergabe](docs/visuals/unified-workspace/NEXT-CHAT.md) beachten.
+  A2 nativ mit umsetzen; keine erneute Variantenentscheidung vorschalten.
   Linksauswahl zeigt keine automatische Aktionsleiste; Aktionen über Rechtsklick,
   Menütaste oder Umschalt+F10. Bestehende Designfreigaben bleiben erhalten.
 

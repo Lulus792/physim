@@ -1,5 +1,11 @@
 # Physim · Gemeinsame Designvorschau
 
+**Freigegebene Markierung vom 29. Oktober:** **A2 · Dezenter Schleier** ersetzt
+die frühere Markierung A und gehört zum fertigen Design.
+[Spezifikation](../selection-options/APPROVED.md) ·
+[ausgewählte Referenz](../selection-options/index.html?approved=1&context=code) ·
+[offene UI-Designliste](UI-DESIGN-BACKLOG.md).
+
 **Freigegebene Ergänzungen vom 25. Oktober:** Leeransicht bestätigt,
 Protokoll C, Szene/Auswertung/Läufe A, Projektdialog B und Datei-Explorer A.
 [Verbindliche Auswahl](../design-options/APPROVED.md) ·

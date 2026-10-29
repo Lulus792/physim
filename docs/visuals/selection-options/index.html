@@ -1,21 +1,21 @@
 <!doctype html>
-<html lang="de" data-theme="dark" data-variant="a">
+<html lang="de" data-theme="dark" data-variant="a2">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Physim · Auswahl & Markierung</title>
   <link rel="stylesheet" href="selection.css"><script src="selection.js" defer></script>
 </head>
 <body>
-  <header class="page-header"><a class="brand" href="../design-options/?approved=1&topic=empty">p<span>·</span><small>Physim / Designstudie</small></a><div><span class="draft">A ausgewählt · A2 als neuer Vergleich</span><button id="theme">Hell</button></div></header>
+  <header class="page-header"><a class="brand" href="../design-options/?approved=1&topic=empty">p<span>·</span><small>Physim / Designreferenz</small></a><div><a id="reference-mode" href="?approved=1&context=code">Freigegebene Referenz</a><span class="draft">A2 freigegeben · 29.10.2026</span><button id="theme">Hell</button></div></header>
   <main>
     <section class="intro"><p class="eyebrow">AUSWAHL & KONTEXTMENÜ / 29. OKTOBER 2026</p><h1>Markiert. Und trotzdem lesbar.</h1><p>Links auswählen. Rechts die passenden Aktionen öffnen.<br>Die Markierung zeigt den Bereich, ohne seinen Inhalt zu verdecken.</p></section>
     <nav class="variants" aria-label="Markierungsvarianten">
-      <button data-variant="a" aria-pressed="true"><span class="letter">A</span><span><strong>Sanfte Fläche</strong><small>Transparenter Akzent, ursprüngliche Textfarben.</small><code class="mini mini-a">return <span>energy</span>;</code></span><em>Ausgewählt</em></button>
-      <button data-variant="a2" aria-pressed="false"><span class="letter">A2</span><span><strong>Dezenter Schleier</strong><small>Transparenter, neutraler und deutlich weniger Blau.</small><code class="mini mini-a2">return <span>energy</span>;</code></span><em>Neu · zum Vergleich</em></button>
+      <button data-variant="a" aria-pressed="false"><span class="letter">A</span><span><strong>Sanfte Fläche</strong><small>Transparenter Akzent, ursprüngliche Textfarben.</small><code class="mini mini-a">return <span>energy</span>;</code></span></button>
+      <button data-variant="a2" aria-pressed="true"><span class="letter">A2</span><span><strong>Dezenter Schleier</strong><small>Transparenter, neutraler und deutlich weniger Blau.</small><code class="mini mini-a2">return <span>energy</span>;</code></span><em>Freigegeben</em></button>
       <button data-variant="b" aria-pressed="false"><span class="letter">B</span><span><strong>Feine Kontur</strong><small>Sehr wenig Fläche, deutliche Begrenzungen.</small><code class="mini mini-b">return <span>energy</span>;</code></span></button>
       <button data-variant="c" aria-pressed="false"><span class="letter">C</span><span><strong>Klarer Kontrast</strong><small>Kräftige Fläche mit eigener, kontrastreicher Schrift.</small><code class="mini mini-c">return <span>energy</span>;</code></span></button>
     </nav>
-    <section class="study-heading"><div><p class="eyebrow" id="variant-label">A · SANFTE FLÄCHE</p><h2>Eine Auswahl, vertraute Bedienung.</h2></div><p id="variant-description">Die Tönung liegt hinter den Zeichen. Syntaxfarben und Warnhinweise bleiben erkennbar.</p></section>
+    <section class="study-heading"><div><p class="eyebrow" id="variant-label">A2 · DEZENTER SCHLEIER</p><h2>Eine Auswahl, vertraute Bedienung.</h2></div><p id="variant-description">Freigegeben: transparente, fast neutrale Fläche und zurückhaltende Konturen. Syntaxfarben bleiben erhalten.</p></section>
     <section class="workspace" aria-label="Interaktive Auswahlvorschau">
       <header class="window-header"><span class="window-mark">p<span>·</span></span><strong>Pendelstudie</strong><span class="window-subtitle">Auswahlvorschau · Beispieldaten</span><span class="saved">Gespeichert</span></header>
       <nav class="contexts" aria-label="Beispielbereich"><button data-context="code" aria-pressed="true">Text & Code</button><button data-context="protocol" aria-pressed="false">Protokoll</button><button data-context="files" aria-pressed="false">Dateien</button><button data-context="scene" aria-pressed="false">Szene & Grafik</button></nav>
@@ -29,7 +29,7 @@
       </div>
     </section>
     <section class="notes"><div><h3>Inhalt bleibt sichtbar</h3><p>Kein dunkles Rechteck über dem Text. Flächen liegen hinter der Schrift; Konturen umschließen Objekte. Ein Häkchen ergänzt ausgewählte Zeilen.</p></div><div><h3>Aktionen erst auf Anfrage</h3><p>Linksklick und Ziehen öffnen keine Leiste. Das Menü erscheint nur über Rechtsklick, die Menütaste oder Umschalt+F10.</p></div><div><h3>Auswahl ist kein Fokus</h3><p>Eine gestrichelte Fokuslinie zeigt die Tastaturposition. Mehrfachauswahl bleibt sichtbar, wenn das Kontextmenü geöffnet wird.</p></div></section>
-    <footer class="page-footer"><span id="feedback" role="status" aria-live="polite">Eigenständige Vorschau. Das freigegebene Design bleibt unverändert.</span><a href="README.md">Gestaltung & Übergabe ↗</a></footer>
+    <footer class="page-footer"><span id="feedback" role="status" aria-live="polite">A2 ist Teil des fertigen Designs. Native Umsetzung gemäß Übergabe.</span><a href="APPROVED.md">Freigegebene Gestaltung & Übergabe ↗</a></footer>
   </main>
   <div id="context-menu" role="menu" aria-label="Aktionen zur Auswahl" hidden><div id="menu-caption" role="presentation"></div><div id="menu-items" role="presentation"></div></div>
 </body>
