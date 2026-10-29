@@ -7113,6 +7113,14 @@
       "steps": [{"program":"python","arguments":["{root}/tests/check_explorer_native.py","--preview","--app","{physim}","--work","{work}"],"timeout":300,"files":["verification.json"]}]
     },
     {
+      "name": "protocol_separator",
+      "app": true,
+      "display": true,
+      "platforms": ["win32", "linux"],
+      "targets": ["python", "physim"],
+      "steps": [{"program":"python","arguments":["{root}/tests/check_protocol_separator.py","--app","{physim}","--work","{work}"],"timeout":300,"files":["verification.json"]}]
+    },
+    {
       "name": "explorer_a_api_context",
       "app": true,
       "display": true,

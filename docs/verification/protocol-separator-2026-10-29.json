@@ -1,0 +1,379 @@
+{
+  "format": 1,
+  "date": "2026-10-29",
+  "base_commit": "c0acd46a8fd0d44a579835d0c7e4f39d35715919",
+  "request": "Always-visible visual divider above the protocol, consistent with other workspace boundaries.",
+  "cause": "protocol_separator_view only emitted the 1px stroke while hovered or keyboard-focused.",
+  "change": "Always emit the existing 1px rectangle; use shared border token at rest and the existing accent token for hover/focus. No geometry, input, resize or focus routing change.",
+  "environment": {
+    "windows": "Windows 11 Pro 10.0.26200 / Release",
+    "linux": "Alpine-Dev 3.24.2 / Linux 6.18.33.2-microsoft-standard-WSL2 x86_64 / X11 Xvfb Openbox / Debug ASan UBSan / GUI detect_leaks=0"
+  },
+  "source_audit": {
+    "tracked_compiler_and_test_inputs_matched_git_index": 1067,
+    "compiler_manifest": {
+      "path": "build/validation/explorer-inline-2026-10-29/separator-final-compiler-source.json",
+      "sha256": "96ede3ad17332f262cab895be3d1f8551074bb1cdbb6b2222a2449dfd25367a3"
+    },
+    "source_overlay": {
+      "path": "build/validation/explorer-inline-2026-10-29/separator-final-compiler-source.zip",
+      "sha256": "8519683dec46cbc5883fcb359d3997303e9f928f4b77ada8354dcfd13fd14e8f"
+    },
+    "runtime_manifest": {
+      "path": "build/validation/explorer-inline-2026-10-29/separator-final-runtime.json",
+      "sha256": "41253d65045ea315a22fcaee8e862c95a31a99573440db8e79bce74fc6ee73cc"
+    },
+    "runtime_byte_index": {
+      "path": "build/validation/explorer-inline-2026-10-29/separator-final-byte-index.json",
+      "sha256": "15148985275be4c76cb66d50025d4ac509ab256c6205d09bfe43a9a5b97210d3"
+    },
+    "all_archives_read_back": true
+  },
+  "cohorts": [
+    {
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/separator-final-windows.json",
+        "sha256": "59cc5867d9c315fe0d77064864fd28b6f34a98746b8ef7a44f96a08a5f513175"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "protocol_separator"
+      ],
+      "exit_code": 0,
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/separator-final-windows.log",
+        "sha256": "1f36282d223e3f9b6fd7baca90828a03e2e412ef982c290659a61ccae6c2081c"
+      },
+      "result": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-uh1gzvl6/protocol_separator/result.json",
+        "sha256": "d959155a08c7b6065ab8edc1f8933139fc6381daef2ca2d70e0ee0e951754f10"
+      },
+      "pixels": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-uh1gzvl6/protocol_separator/files ä/verification.json",
+        "sha256": "4286e7920e40ec6d1eb7c0abec5d4b5254f04a78405654ec39fbf561f2fbd467"
+      },
+      "verification": {
+        "binary_sha256": "1e6113e86868680b6f49ef1ef33eb057fdded742df1515766a6d3cb5d0fbac51",
+        "cases": [
+          {
+            "mode": "dark",
+            "command": [
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+              "--workspace-state-test",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-uh1gzvl6\\protocol_separator\\files ä\\dark",
+              "protocol-ui-border-dark"
+            ],
+            "exit_code": 0,
+            "image_sha256": "93c6aff3c798d4f7a8576f0ba0683c3eeb8b39973f2f549537c4acd2c3aee56a",
+            "width": 1440,
+            "height": 1000,
+            "separator_y": 632,
+            "border_rgb": [
+              59,
+              61,
+              69
+            ],
+            "matching_pixels": {
+              "631": 6,
+              "632": 1438,
+              "633": 0
+            },
+            "checked_pixels": 1438
+          },
+          {
+            "mode": "light",
+            "command": [
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+              "--workspace-state-test",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-uh1gzvl6\\protocol_separator\\files ä\\light",
+              "protocol-ui-border-light"
+            ],
+            "exit_code": 0,
+            "image_sha256": "6267982865a900c35346fb589fcc4ac16d15269dfb94a61676d2dc7b50b40321",
+            "width": 1440,
+            "height": 1000,
+            "separator_y": 632,
+            "border_rgb": [
+              190,
+              195,
+              206
+            ],
+            "matching_pixels": {
+              "631": 6,
+              "632": 1438,
+              "633": 0
+            },
+            "checked_pixels": 1438
+          },
+          {
+            "mode": "contrast",
+            "command": [
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+              "--workspace-state-test",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-uh1gzvl6\\protocol_separator\\files ä\\contrast",
+              "protocol-ui-border-contrast"
+            ],
+            "exit_code": 0,
+            "image_sha256": "14942c11a1b8437f21550db6bb95f02496e2b01e80aad0ec5be3157327487a21",
+            "width": 1440,
+            "height": 1000,
+            "separator_y": 632,
+            "border_rgb": [
+              255,
+              255,
+              255
+            ],
+            "matching_pixels": {
+              "631": 4,
+              "632": 1438,
+              "633": 0
+            },
+            "checked_pixels": 1438
+          },
+          {
+            "mode": "large",
+            "command": [
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+              "--workspace-state-test",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-uh1gzvl6\\protocol_separator\\files ä\\large",
+              "protocol-ui-border-large"
+            ],
+            "exit_code": 0,
+            "image_sha256": "6beef7aa47d29fc07eaff28f204702fc93dd944a40d111ea03fb2b5748f351ee",
+            "width": 1440,
+            "height": 1000,
+            "separator_y": 632,
+            "border_rgb": [
+              59,
+              61,
+              69
+            ],
+            "matching_pixels": {
+              "631": 4,
+              "632": 1438,
+              "633": 0
+            },
+            "checked_pixels": 1438
+          }
+        ]
+      }
+    },
+    {
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/separator-final-linux.json",
+        "sha256": "03f5ef611a38ce675390ca4d81c03f4db568c5b99d743ef798921a6b14a91c29"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "protocol_separator"
+      ],
+      "exit_code": 0,
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/separator-final-linux.log",
+        "sha256": "621b4bf99610868332ee94e997791d0c87e4e38a4c8a574def598097552a5559"
+      },
+      "result": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ckcqp0rn/protocol_separator/result.json",
+        "sha256": "8cfd13d3a1015af89558c57bbd985dfc2872fc6240d1c9bdf1423f21ea08f54b"
+      },
+      "pixels": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ckcqp0rn/protocol_separator/files ä/verification.json",
+        "sha256": "e2ca75a5e2e9a674df244369bfb5d1c43fdb6a88f9e1b9a5f6a806fdd866ad0c"
+      },
+      "verification": {
+        "binary_sha256": "02c0a77b381ea736d33b9ccc612e333219239f2bcd8614d8ea03c679193b3326",
+        "cases": [
+          {
+            "mode": "dark",
+            "command": [
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+              "--workspace-state-test",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ckcqp0rn/protocol_separator/files ä/dark",
+              "protocol-ui-border-dark"
+            ],
+            "exit_code": 0,
+            "image_sha256": "72e091474148dfef6246b49fa4bda0e1ef16d9276cb5d0fdc1d8889b6fe900d6",
+            "width": 1440,
+            "height": 1000,
+            "separator_y": 632,
+            "border_rgb": [
+              59,
+              61,
+              69
+            ],
+            "matching_pixels": {
+              "631": 6,
+              "632": 1438,
+              "633": 0
+            },
+            "checked_pixels": 1438
+          },
+          {
+            "mode": "light",
+            "command": [
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+              "--workspace-state-test",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ckcqp0rn/protocol_separator/files ä/light",
+              "protocol-ui-border-light"
+            ],
+            "exit_code": 0,
+            "image_sha256": "55418a102b91144030eb2997757abd96ea0a76c72e8fb7e5678f339c2847faa4",
+            "width": 1440,
+            "height": 1000,
+            "separator_y": 632,
+            "border_rgb": [
+              190,
+              195,
+              206
+            ],
+            "matching_pixels": {
+              "631": 6,
+              "632": 1438,
+              "633": 0
+            },
+            "checked_pixels": 1438
+          },
+          {
+            "mode": "contrast",
+            "command": [
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+              "--workspace-state-test",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ckcqp0rn/protocol_separator/files ä/contrast",
+              "protocol-ui-border-contrast"
+            ],
+            "exit_code": 0,
+            "image_sha256": "cced35c3ef25847ea051ca4374551ce48d99016686d5df7cc6707ba687d4e8b8",
+            "width": 1440,
+            "height": 1000,
+            "separator_y": 632,
+            "border_rgb": [
+              255,
+              255,
+              255
+            ],
+            "matching_pixels": {
+              "631": 4,
+              "632": 1438,
+              "633": 0
+            },
+            "checked_pixels": 1438
+          },
+          {
+            "mode": "large",
+            "command": [
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+              "--workspace-state-test",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ckcqp0rn/protocol_separator/files ä/large",
+              "protocol-ui-border-large"
+            ],
+            "exit_code": 0,
+            "image_sha256": "793d29296426f81b46031125046ad130eedc5eb01650b5e7c3646251c1e5945b",
+            "width": 1440,
+            "height": 1000,
+            "separator_y": 632,
+            "border_rgb": [
+              59,
+              61,
+              69
+            ],
+            "matching_pixels": {
+              "631": 4,
+              "632": 1438,
+              "633": 0
+            },
+            "checked_pixels": 1438
+          }
+        ]
+      }
+    }
+  ],
+  "negative_control": {
+    "type": "Same pixel test against the preserved pre-fix Windows executable",
+    "test_exit_code": 1,
+    "app_exit_code": 0,
+    "expected_checked_pixels": 1438,
+    "actual_border_pixels": 0,
+    "record": {
+      "path": "build/validation/explorer-inline-2026-10-29/separator-before/verification.json",
+      "sha256": "6ab7bb10a4910295f6370a1be1bd412a683e97c2aad4c84505f4b1a184e6c282"
+    },
+    "log": {
+      "path": "build/validation/explorer-inline-2026-10-29/separator-before.log",
+      "sha256": "fbcafff35a771fcd35203f40c97a245d0301581895c99b90d1df1c6cb1e04682"
+    },
+    "verification": {
+      "binary_sha256": "0b0ac17a60411f464817da7559539c817c4ca8f7750bc062d4c15abe17a66770",
+      "cases": [
+        {
+          "mode": "dark",
+          "command": [
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+            "--workspace-state-test",
+            "D:\\Physim\\build\\validation\\explorer-inline-2026-10-29\\separator-before\\dark",
+            "protocol-ui-border-dark"
+          ],
+          "exit_code": 0,
+          "image_sha256": "aba1d5ab90a0680c93605f7abb549dc5f5e1888c409d797b962faaf383141bae",
+          "width": 1440,
+          "height": 1000,
+          "separator_y": 632,
+          "border_rgb": [
+            59,
+            61,
+            69
+          ],
+          "matching_pixels": {
+            "631": 6,
+            "632": 0,
+            "633": 0
+          },
+          "checked_pixels": 1438
+        }
+      ]
+    }
+  },
+  "catalog_check": {
+    "command": "python -X utf8 -B tools/with-artifacts.py -- python -X utf8 -B build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/test_native_test_runner.py --work D:/Physim/build/validation/explorer-inline-2026-10-29/separator-runner-final",
+    "exit_code": 0,
+    "result": "Catalog and expected failure/timeout reporting tests passed; synthetic failed cases are intentional."
+  },
+  "review": {
+    "visual": "Inspected actual Windows native dark capture. Full boundary at y632, shared contour color; both platforms and all four themes/text cases checked from native RGB pixels.",
+    "comparison": "Final Windows images have the same image hashes as the positive divider probes before isolating the unfinished dialog work.",
+    "limitations": [
+      "No macOS runtime, physical keyboard or screen-reader claim from this color-only change.",
+      "Earlier requests-second exploratory routing cohort had unrelated failures: Windows 1/5, Linux 2/5. Its sources and runtimes were archived before the final divider-only build; those unfinished routing edits are excluded from this commit and final build."
+    ]
+  }
+}

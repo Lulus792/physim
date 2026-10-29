@@ -52,6 +52,9 @@ Vorschau auch über **Ansicht → Protokoll anzeigen**, die Statusleiste und
   mindestens 150 px. Derselbe [Resizing-Kern](../shared/resize.js): volle dünne
   Trennkante, Pfeile 10 px, Umschalt 40 px, Pos1/Ende Grenzen, Enter/Doppelklick
   Standard, Escape/Pointerabbruch/Fokusverlust/Resize verwirft laufendes Ziehen.
+  Die obere Trennkante bleibt auch ohne Zeigerkontakt in der gemeinsamen
+  Konturfarbe sichtbar; Zeigerkontakt oder Tastaturfokus hebt sie mit der
+  gemeinsamen Akzentfarbe hervor.
   Kopf, Filter und Fuß bleiben stehen; Inhalt scrollt. Bei großer Schrift oder
   sehr niedriger Höhe scrollt der ganze Protokollinhalt, damit Meldungen und
   Aktionen erreichbar bleiben. Schließen gibt Fokus zurück.
