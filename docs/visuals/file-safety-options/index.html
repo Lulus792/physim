@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Physim · Speichern, Konflikte & Wiederherstellung</title>
+  <link rel="stylesheet" href="safety.css"><script src="safety.js" defer></script>
+</head>
+<body>
+  <header class="gallery-header"><a href="../design-options/?approved=1&topic=empty" class="brand">p<span>·</span><small>Physim / Designatelier</small></a><div><span>Noch keine Variante ausgewählt</span><button id="theme">Hell</button></div></header>
+  <main>
+    <section class="intro"><p class="eyebrow">DATEIEN & ENTWÜRFE / 29. OKTOBER 2026</p><h1>Deine Arbeit bleibt im Blick.</h1><p>Speichern, unterschiedliche Dateistände und Sicherungen.<br>Drei eigenständige Richtungen für denselben zusammenhängenden Ablauf.</p><div class="isolation"><span></span>Separate Vorschau · keine echten Dateioperationen · noch nicht übernommen</div></section>
+    <nav id="topics" class="topics" aria-label="Beispielablauf"><button data-topic="save" aria-pressed="true">01 <span>Speichern</span></button><button data-topic="conflict" aria-pressed="false">02 <span>Dateikonflikt</span></button><button data-topic="recovery" aria-pressed="false">03 <span>Wiederherstellung</span></button></nav>
+    <nav class="variants" aria-label="Designrichtung"><button data-variant="a" aria-pressed="true"><b>A</b><span><strong>Kompakt</strong><small>Eine klare Entscheidung.<br>Details nur bei Bedarf.</small></span></button><button data-variant="b" aria-pressed="false"><b>B</b><span><strong>Vergleichen</strong><small>Dateien links, Inhalt rechts.<br>Versionen direkt nebeneinander.</small></span></button><button data-variant="c" aria-pressed="false"><b>C</b><span><strong>Schritt für Schritt</strong><small>Erst prüfen, dann entscheiden.<br>Die Wirkung vorher sehen.</small></span></button></nav>
+    <section class="study-heading"><div><p id="study-kicker" class="eyebrow">A · KOMPAKT</p><h2 id="study-title">Vor dem nächsten Schritt.</h2></div><div class="controls"><label>Beispielzustand<select id="scenario"></select></label><label id="scope-label" hidden>Sicherung für<select id="scope"><option value="project">Projektquellen · zusammen</option><option value="document">Zusätzliches Dokument</option></select></label><button id="popup-open">Als Popup testen ↗</button></div></section>
+    <section class="stage" aria-label="Interaktive Dialogvorschau"><header class="window-bar"><strong>p<span>·</span></strong><span>Pendelstudie</span><span class="window-path">D:/Experimente/Pendelstudie</span><span class="demo-tag">Beispieldaten</span></header><div class="stage-context"><span>Entwickeln</span><span>main.c <i>●</i> &nbsp; analysis.phys <i>●</i></span><span>Editorinhalt bleibt erhalten</span></div><div id="preview-host"></div><footer class="window-status"><span id="workspace-status">Projektwechsel noch nicht ausgeführt.</span><span>Keine Änderung an echten Dateien</span></footer></section>
+    <section class="explanation"><div><p class="eyebrow">DIESE RICHTUNG</p><h3 id="direction-title">Kompakt entscheiden</h3><p id="direction-description"></p></div><div><p class="eyebrow">GEMEINSAME GRUNDLAGE</p><h3>Lesbare Auswahl, eindeutige Folgen</h3><p>A2-Markierung und gemeinsame Physim-Farben. Eine Sicherung laden bedeutet noch nicht speichern. Abbrechen beendet den angefragten Vorgang und erhält die Entwürfe.</p></div><div><p class="eyebrow">AUSPROBIEREN</p><h3>Auch wenn etwas schiefgeht</h3><p>Wechsle oben zu Schreibfehlern, einer erneut geänderten Datei oder einer beschädigten Sicherung. Entscheidungen und ihre Folgen lassen sich direkt durchspielen.</p></div></section>
+    <footer class="gallery-footer"><span id="feedback" role="status" aria-live="polite">A/B/C sind Vorschläge. Die bestehenden Designfreigaben bleiben erhalten.</span><a href="README.md">Unterschiede, Zustände & Übergabe ↗</a></footer>
+  </main>
+  <dialog id="live-dialog" aria-label="Dialogvorschau"><div id="modal-host"></div></dialog>
+</body>
+</html>

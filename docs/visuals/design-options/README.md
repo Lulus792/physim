@@ -1,5 +1,10 @@
 # Physim – getrennte Designvarianten
 
+**Neue, noch nicht ausgewählte Runde:**
+[Speichern, Dateikonflikte und Wiederherstellung in drei Richtungen](../file-safety-options/index.html).
+Diese Vergleichsentwürfe vom 29. Oktober 2026 bleiben vorerst getrennt vom
+fertigen Design und den folgenden Freigaben.
+
 Zusätzliche, eigenständige [Studie zu Markierung und Rechtsklick-Menüs](../selection-options/index.html)
 vom 29. Oktober 2026: **A2 · Dezenter Schleier ist als finales Markierungsdesign
 freigegeben** und ersetzt A. [Verbindliche Spezifikation](../selection-options/APPROVED.md).

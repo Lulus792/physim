@@ -1,5 +1,11 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
+**Neue getrennte Entwurfsrunde vom 29. Oktober 2026:** Für D01–D03 sind
+[Speichern, Dateikonflikte und Wiederherstellung in A/B/C](../file-safety-options/index.html)
+als Vergleich vorbereitet. **Noch keine Auswahl, keine Übernahme ins fertige
+Design.** [Abläufe, bestehende Datenverträge und neue Vorschläge](../file-safety-options/README.md)
+sind getrennt dokumentiert. Die folgenden bisherigen Freigaben bleiben gültig.
+
 **Ergänzung vom 29. Oktober 2026 – eigenständige Aufgabenfenster:** Der Nutzer
 verlangt tatsächliche Fenster für Dialoge wie Projektanlage und Grafikexport,
 während Hauptfenster und herausgelöste Bereiche bedienbar bleiben. [ADR 015](../../decisions/015-independent-task-windows.md)

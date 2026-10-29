@@ -1,0 +1,19 @@
+{
+  "sources": {
+    "docs/visuals/file-safety-options/index.html": "ea1bb06d3d75fe523d13c5dcd625b27d3848ada5de9385599134ac2fe5cdfb8f",
+    "docs/visuals/file-safety-options/safety.css": "b80d3dc4c44cb77981de4dfe9291127e052662f0c2e8c330f4c208198f0c3335",
+    "docs/visuals/file-safety-options/safety.js": "e7c50b755f7472a9caa9baaeba8a45399a62111352ef775a1aca7b878ecc464e",
+    "tools/check_file_safety_options.cjs": "a964eb6c908a0149fe3a4130ea79967442d20ad4cc3e6dcc7fe2b2310829f629"
+  },
+  "images": {
+    "save-a.png": "bff742bc1ddfb53cc037b3ef92261dd5f8dc468e4e6e3eb6f5c3c07ad3258d92",
+    "save-b.png": "f5c6fb9db6ed028d87a24f7f0ec42d0d191c28137c4f786ddba3af77bcfe9344",
+    "save-c.png": "ff6e7a387d967c75cc4a0a9839448a451f731696e818980c4ef2d5e92be59a82",
+    "conflict-a.png": "3ffb20578caa6ef355a41f881d7db18aae31275dfe51ee4a9484b57aefc6fd3a",
+    "conflict-b.png": "1a5a3517281b4f58d2b35c04c792e28f9fd3a5d221fcf0da03e94a7b6e702c86",
+    "conflict-c.png": "8e1046697353cb2a6190bb8941d919f14ffd99afa1c30996b63bf5f60e833ad7",
+    "recovery-a.png": "0f1fea6489d93354537932c93815835891f5066f4f089870156a0605744bef73",
+    "recovery-b.png": "7e08bc67fa24287fe2d279a32ce77cbf10cb5c1519c9dc0059137687f1315109",
+    "recovery-c.png": "543a5540b92ec42580a2169a16116060b6a655cc22d42e692cd7eb05f7a62f5d"
+  }
+}

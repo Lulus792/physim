@@ -45,6 +45,14 @@
   Linksauswahl zeigt keine automatische Aktionsleiste; Aktionen über Rechtsklick,
   Menütaste oder Umschalt+F10. Bestehende Designfreigaben bleiben erhalten.
 
+## Getrennte Entwürfe: Speichern und Wiederherstellung
+
+- Die neue [Entwurfsrunde für Speichern, Dateikonflikte und Wiederherstellung](docs/visuals/file-safety-options/README.md)
+  vom 29. Oktober 2026 ist ausdrücklich **getrennt und noch nicht ausgewählt**.
+  A/B/C dieser Runde nicht als finales Design übernehmen. Bestehende Freigaben
+  und laufende native Arbeit bleiben erhalten; diese Vergleichsentwürfe brauchen
+  erst die Nutzerentscheidung.
+
 ## Speicherpflege
 
 - Der Nutzer hat die F:-Nutzung am 25. Oktober 2026 widerrufen: Physim bleibt

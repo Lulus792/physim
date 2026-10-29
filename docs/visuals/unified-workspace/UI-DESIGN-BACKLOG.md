@@ -35,6 +35,12 @@ Verträge: [Bereichsauswahl](../design-options/APPROVED.md),
 
 ## Als Nächstes: konkrete Detailentwürfe
 
+**D01–D03: Erste Vergleichsentwürfe liegen jetzt vor.**
+[Drei interaktive Richtungen](../file-safety-options/index.html) für Speichern,
+Dateikonflikte und Wiederherstellung. **Auswahl offen; nicht vorab übernehmen.**
+Die folgenden Zustände sind Anforderungen für Vergleich und weitere Ausarbeitung,
+keine Behauptung einer fehlenden oder bereits abgeschlossenen nativen Funktion.
+
 | ID / Prio | Was gestalten? | Benötigte Zustände und Ergebnis |
 | --- | --- | --- |
 | D01 · P1 | **Speichern, Schließen und Projektwechsel** | Ungespeicherte einzelne/mehrere Dateien, Speichern/Verwerfen/Abbrechen, fehlgeschlagenes Speichern. Kompakter Dialog mit eindeutigem Dateibezug; Inhalt bei Abbruch erhalten. |

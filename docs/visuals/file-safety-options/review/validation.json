@@ -1,0 +1,942 @@
+{
+  "date": "2026-10-29T20:37:14.246Z",
+  "platform": "win32",
+  "browser": "156.0.4314.50",
+  "sourceCommit": "036431413f2fb983407fb6b5684f30b860debe66",
+  "layouts": [
+    {
+      "variant": "a",
+      "topic": "save",
+      "scenario": "changes",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "save",
+      "scenario": "changes",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "save",
+      "scenario": "changes",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "save",
+      "scenario": "changes",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "save",
+      "scenario": "readonly",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "save",
+      "scenario": "readonly",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "save",
+      "scenario": "readonly",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "save",
+      "scenario": "readonly",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "save",
+      "scenario": "partial",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "save",
+      "scenario": "partial",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "save",
+      "scenario": "partial",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "save",
+      "scenario": "partial",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "conflict",
+      "scenario": "external",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "conflict",
+      "scenario": "external",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "conflict",
+      "scenario": "external",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "conflict",
+      "scenario": "external",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "conflict",
+      "scenario": "deleted",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "conflict",
+      "scenario": "deleted",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "conflict",
+      "scenario": "deleted",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "conflict",
+      "scenario": "deleted",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "conflict",
+      "scenario": "readonly",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "conflict",
+      "scenario": "readonly",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "conflict",
+      "scenario": "readonly",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "conflict",
+      "scenario": "readonly",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "conflict",
+      "scenario": "changedagain",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "conflict",
+      "scenario": "changedagain",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "conflict",
+      "scenario": "changedagain",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "conflict",
+      "scenario": "changedagain",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "recovery",
+      "scenario": "available",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "recovery",
+      "scenario": "available",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "recovery",
+      "scenario": "available",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "recovery",
+      "scenario": "available",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "recovery",
+      "scenario": "conflict",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "recovery",
+      "scenario": "conflict",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "recovery",
+      "scenario": "conflict",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "recovery",
+      "scenario": "conflict",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "recovery",
+      "scenario": "corrupt",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "recovery",
+      "scenario": "corrupt",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "recovery",
+      "scenario": "corrupt",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "recovery",
+      "scenario": "corrupt",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "recovery",
+      "scenario": "none",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "recovery",
+      "scenario": "none",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "a",
+      "topic": "recovery",
+      "scenario": "none",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "a",
+      "topic": "recovery",
+      "scenario": "none",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "save",
+      "scenario": "changes",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "save",
+      "scenario": "changes",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "save",
+      "scenario": "changes",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "save",
+      "scenario": "changes",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "save",
+      "scenario": "readonly",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "save",
+      "scenario": "readonly",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "save",
+      "scenario": "readonly",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "save",
+      "scenario": "readonly",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "save",
+      "scenario": "partial",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "save",
+      "scenario": "partial",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "save",
+      "scenario": "partial",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "save",
+      "scenario": "partial",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "conflict",
+      "scenario": "external",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "conflict",
+      "scenario": "external",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "conflict",
+      "scenario": "external",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "conflict",
+      "scenario": "external",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "conflict",
+      "scenario": "deleted",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "conflict",
+      "scenario": "deleted",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "conflict",
+      "scenario": "deleted",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "conflict",
+      "scenario": "deleted",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "conflict",
+      "scenario": "readonly",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "conflict",
+      "scenario": "readonly",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "conflict",
+      "scenario": "readonly",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "conflict",
+      "scenario": "readonly",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "conflict",
+      "scenario": "changedagain",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "conflict",
+      "scenario": "changedagain",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "conflict",
+      "scenario": "changedagain",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "conflict",
+      "scenario": "changedagain",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "recovery",
+      "scenario": "available",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "recovery",
+      "scenario": "available",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "recovery",
+      "scenario": "available",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "recovery",
+      "scenario": "available",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "recovery",
+      "scenario": "conflict",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "recovery",
+      "scenario": "conflict",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "recovery",
+      "scenario": "conflict",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "recovery",
+      "scenario": "conflict",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "recovery",
+      "scenario": "corrupt",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "recovery",
+      "scenario": "corrupt",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "recovery",
+      "scenario": "corrupt",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "recovery",
+      "scenario": "corrupt",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "recovery",
+      "scenario": "none",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "recovery",
+      "scenario": "none",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "b",
+      "topic": "recovery",
+      "scenario": "none",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "b",
+      "topic": "recovery",
+      "scenario": "none",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "save",
+      "scenario": "changes",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "save",
+      "scenario": "changes",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "save",
+      "scenario": "changes",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "save",
+      "scenario": "changes",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "save",
+      "scenario": "readonly",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "save",
+      "scenario": "readonly",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "save",
+      "scenario": "readonly",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "save",
+      "scenario": "readonly",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "save",
+      "scenario": "partial",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "save",
+      "scenario": "partial",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "save",
+      "scenario": "partial",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "save",
+      "scenario": "partial",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "conflict",
+      "scenario": "external",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "conflict",
+      "scenario": "external",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "conflict",
+      "scenario": "external",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "conflict",
+      "scenario": "external",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "conflict",
+      "scenario": "deleted",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "conflict",
+      "scenario": "deleted",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "conflict",
+      "scenario": "deleted",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "conflict",
+      "scenario": "deleted",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "conflict",
+      "scenario": "readonly",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "conflict",
+      "scenario": "readonly",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "conflict",
+      "scenario": "readonly",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "conflict",
+      "scenario": "readonly",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "conflict",
+      "scenario": "changedagain",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "conflict",
+      "scenario": "changedagain",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "conflict",
+      "scenario": "changedagain",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "conflict",
+      "scenario": "changedagain",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "recovery",
+      "scenario": "available",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "recovery",
+      "scenario": "available",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "recovery",
+      "scenario": "available",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "recovery",
+      "scenario": "available",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "recovery",
+      "scenario": "conflict",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "recovery",
+      "scenario": "conflict",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "recovery",
+      "scenario": "conflict",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "recovery",
+      "scenario": "conflict",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "recovery",
+      "scenario": "corrupt",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "recovery",
+      "scenario": "corrupt",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "recovery",
+      "scenario": "corrupt",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "recovery",
+      "scenario": "corrupt",
+      "theme": "light",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "recovery",
+      "scenario": "none",
+      "theme": "dark",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "recovery",
+      "scenario": "none",
+      "theme": "dark",
+      "width": 500
+    },
+    {
+      "variant": "c",
+      "topic": "recovery",
+      "scenario": "none",
+      "theme": "light",
+      "width": 1440
+    },
+    {
+      "variant": "c",
+      "topic": "recovery",
+      "scenario": "none",
+      "theme": "light",
+      "width": 500
+    }
+  ],
+  "checks": [
+    "132 layouts: 3 directions × 11 topic/scenario states × 2 themes × 1440/500 widths; no horizontal page/sheet overflow",
+    "All directions: successful save, blocked read-only save, partial sequential save, repeated failure until explicit fixture permission repair, confirmed discard/back, canceled save rejects late callbacks",
+    "All directions: copy-name protection and wizard back retains input; missing file disables reload; radio keyboard focus retained; new external revision requires fresh confirmation; keep-editing preserves conflict",
+    "Project pair and independent document in all directions: correct restoration scope, load ≠ save, explicit later save, confirmed discard/back, corrupt data never loaded/deleted",
+    "Connected recovery → save → conflict route blocks each externally changed project source and preserves all other drafts; resolving one never authorizes the other",
+    "Actual modals in all directions: contained Tab path, Escape returns from confirmation then cancels, focus returns to launcher; 500px / 200% text, high contrast, reduced motion and 2× browser density"
+  ],
+  "errors": [],
+  "passed": true
+}
