@@ -36,6 +36,7 @@
 #include "workspace_catalog.h"
 #include "workspace_tree.h"
 #include "file_browser_worker.h"
+#include "dialog_request.h"
 #include "text_document.h"
 #include "protocol.h"
 #include "pacing.h"
@@ -312,6 +313,7 @@ typedef struct {
     int document_pending; /* 1: close, 2: reload; discard requires an explicit choice. */
     struct nk_rect document_bounds[10], document_list_bounds[WORKSPACE_DOCUMENTS];
     char manager_parent[4096], manager_name[256],manager_error[256];
+    ps_dialog_requests dialog_requests;
     bool manager_error_reveal;
     int manager_template, manager_experiment_language;
     int manager_focus,manager_step;
@@ -773,13 +775,18 @@ static void choose_workspace_path_from(app *a,int mode,const char *opener);
 static bool browser_active(const app *a);
 static bool browser_workspace_visible(const app *a);
 static bool browser_workspace_open(app *a);
-static bool browser_open(app *a,int mode);
-static void browser_complete(app *a,int mode,const char *path);
+static bool browser_open(app *a,int mode,ps_dialog_ticket ticket);
+static void browser_complete(app *a,ps_dialog_ticket ticket,const char *path);
 static void browser_tick(app *a);
 static bool browser_event(app *a,const SDL_Event *event,SDL_Window *window);
 static void browser_destroy(app *a);
 static void import_run(app *a,const char *path);
 static void resume_batch(app *a,const char *path);
+static void workspace_dialog_project_changed(app *a) {
+    const unsigned routes[]={PS_DIALOG_ADD_FILE,PS_DIALOG_ADD_FOLDER,PS_DIALOG_IMPORT_RUN,PS_DIALOG_RESUME_BATCH};
+    for(size_t i=0;i<sizeof routes/sizeof *routes;i++)ps_dialog_request_cancel_route(&a->dialog_requests,routes[i]);
+    a->dialog_pending=ps_dialog_requests_pending(&a->dialog_requests);
+}
 static void analyze(app *a,bool csv);
 static void create_managed_project(app *a);
 static bool open_workspace_path(app *a, const char *path);
@@ -1501,6 +1508,7 @@ static bool open_project(app *a) {
     snprintf(a->workspace, sizeof a->workspace, "%s", a->project_input);
     a->workspace_open = true;
     a->workspace_disclosure = NK_MINIMIZED;
+    workspace_dialog_project_changed(a);
     a->workspace_addition_count = 0;
     refresh_workspace_entries(a);
     a->project_manager = false;
@@ -3490,6 +3498,7 @@ static bool open_workspace_path(app *a, const char *path) {
     }
     documents_clear(a);
     clear_project(a);
+    workspace_dialog_project_changed(a);
     snprintf(a->workspace, sizeof a->workspace, "%s", path);
     snprintf(a->project_input, sizeof a->project_input, "%s", path);
     a->workspace_open = true;
@@ -3506,58 +3515,46 @@ static bool open_workspace_path(app *a, const char *path) {
 #include "workspace_actions.inc"
 #include "workspace_catalog_actions.inc"
 
-static Uint32 workspace_dialog_event;
-static const int dialog_open_folder = PS_DIALOG_OPEN_FOLDER;
-static const int dialog_add_file = PS_DIALOG_ADD_FILE;
-static const int dialog_add_folder = PS_DIALOG_ADD_FOLDER;
-static const int dialog_manager_parent = PS_DIALOG_MANAGER_PARENT;
-static const int dialog_import_run=PS_DIALOG_IMPORT_RUN;
-static const int dialog_resume_batch=PS_DIALOG_RESUME_BATCH;
 static void SDLCALL workspace_dialog_callback(void *userdata, const char *const *filelist,
                                                int filter) {
     (void)filter;
-    SDL_Event event = {0};
-    event.type = workspace_dialog_event;
-    event.user.code = *(const int *)userdata;
     /* Zenity in SDL 3.2.30 can report cancellation as an empty first string. */
-    event.user.data1 = filelist && filelist[0] && filelist[0][0] ? SDL_strdup(filelist[0]) : NULL;
-    event.user.data2 = filelist ? NULL : (void *)1;
-    if (!SDL_PushEvent(&event))
-        SDL_free(event.user.data1);
+    ps_dialog_request *request=userdata;
+    ps_dialog_request_complete(request,filelist && filelist[0]?filelist[0]:NULL,filelist==NULL);
+    ps_dialog_request_release(request);
 }
-static void browser_complete(app *a,int mode,const char *path) {
-    SDL_Event event={0};event.type=workspace_dialog_event;event.user.code=mode;
-    event.user.data1=path?SDL_strdup(path):NULL;event.user.data2=path && !event.user.data1?(void *)1:NULL;
-    if(!SDL_PushEvent(&event)){SDL_free(event.user.data1);a->dialog_pending=false;status(a,"Dateiauswahl konnte nicht übergeben werden.");}
+static void browser_complete(app *a,ps_dialog_ticket ticket,const char *path) {
+    ps_dialog_request *request=ps_dialog_request_find(&a->dialog_requests,ticket);
+    if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"DIALOG COMPLETE: route=%u version=%llu found=%d path=%s\n",ticket.route,(unsigned long long)ticket.version,request!=NULL,path?path:"(cancel)");
+    if(request)ps_dialog_request_complete(request,path,false);
 }
 static void choose_workspace_path(app *a, int mode) {
-    if (a->dialog_pending || workspace_dialog_event == (Uint32)-1)
-        return;
+    if(a->dialog_pending || mode<PS_DIALOG_OPEN_FOLDER || mode>PS_DIALOG_BROWSE)return;
+    ps_dialog_request *request=NULL;
+    if(ps_dialog_request_begin(&a->dialog_requests,(unsigned)mode,&request)!=PS_OK){status(a,"Dateiauswahl konnte nicht vorbereitet werden.");return;}
+    if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"DIALOG BEGIN: route=%u version=%llu\n",(unsigned)mode,(unsigned long long)ps_dialog_request_ticket(request).version);
     a->dialog_pending = true;
     if(mode==PS_DIALOG_RESUME_BATCH && *a->batch_resume_test_path) {
-        const char *files[]={a->batch_resume_test_path,NULL};workspace_dialog_callback((void *)&dialog_resume_batch,files,0);
+        const char *files[]={a->batch_resume_test_path,NULL};workspace_dialog_callback(ps_dialog_request_retain(request),files,0);
     }
     else if(mode==PS_DIALOG_IMPORT_RUN && *a->import_test_path) {
-        const char *files[]={a->import_test_path,NULL};workspace_dialog_callback((void *)&dialog_import_run,files,0);
+        const char *files[]={a->import_test_path,NULL};workspace_dialog_callback(ps_dialog_request_retain(request),files,0);
     }
     else if(!a->native_dialog_legacy_test) {
-        if(!browser_open(a,mode)){a->dialog_pending=false;status(a,"Dateiauswahl konnte nicht geöffnet werden.");}
+        ps_dialog_ticket ticket=ps_dialog_request_ticket(request);
+        if(!browser_open(a,mode,ticket)){ps_dialog_request_cancel(&a->dialog_requests,ticket);a->dialog_pending=ps_dialog_requests_pending(&a->dialog_requests);status(a,"Dateiauswahl konnte nicht geöffnet werden.");}
     }
     else if(mode==PS_DIALOG_IMPORT_RUN) {
         static const SDL_DialogFileFilter filters[]={{"Physim-Messlauf","psrun"}};
-        SDL_ShowOpenFileDialog(workspace_dialog_callback,(void *)&dialog_import_run,a->window,filters,1,NULL,false);
+        SDL_ShowOpenFileDialog(workspace_dialog_callback,ps_dialog_request_retain(request),a->window,filters,1,NULL,false);
     }
     else if (mode == PS_DIALOG_ADD_FILE)
-        SDL_ShowOpenFileDialog(workspace_dialog_callback, (void *)&dialog_add_file, a->window,
+        SDL_ShowOpenFileDialog(workspace_dialog_callback,ps_dialog_request_retain(request),a->window,
                                NULL, 0, a->workspace_open ? a->workspace : NULL, false);
     else {
-        const int *dialog_mode = mode == PS_DIALOG_OPEN_FOLDER ? &dialog_open_folder
-                                 : mode == PS_DIALOG_RESUME_BATCH ? &dialog_resume_batch
-                                 : mode == PS_DIALOG_MANAGER_PARENT ? &dialog_manager_parent
-                                                                    : &dialog_add_folder;
         const char *location = mode == PS_DIALOG_MANAGER_PARENT ? a->manager_parent
                                : a->workspace_open ? a->workspace : NULL;
-        SDL_ShowOpenFolderDialog(workspace_dialog_callback, (void *)dialog_mode, a->window,
+        SDL_ShowOpenFolderDialog(workspace_dialog_callback,ps_dialog_request_retain(request),a->window,
                                  location, false);
     }
 }
@@ -3586,6 +3583,26 @@ static void add_workspace_path(app *a, const char *path) {
              sizeof a->workspace_additions[0], "%s", path);
     refresh_workspace_entries(a);
     status(a, "Datei oder Ordner zum Workspace hinzugefügt.");
+}
+static void workspace_dialog_tick(app *a) {
+    ps_dialog_result result={0};
+    for(unsigned route=1;route<PS_DIALOG_REQUEST_ROUTES;route++){
+        if(!ps_dialog_request_poll(&a->dialog_requests,route,&result))continue;
+        a->dialog_pending=ps_dialog_requests_pending(&a->dialog_requests);
+        const char *path=result.path;
+        if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"DIALOG POLL: route=%u version=%llu status=%s manager=%d path=%s\n",route,(unsigned long long)result.ticket.version,ps_result_string(result.status),a->project_manager,path?path:"(none)");
+        if(result.status==PS_OK && path){
+            if(route==PS_DIALOG_OPEN_FOLDER)open_workspace_path(a,path);
+            else if(route==PS_DIALOG_IMPORT_RUN)import_run(a,path);
+            else if(route==PS_DIALOG_RESUME_BATCH)resume_batch(a,path);
+            else if(route==PS_DIALOG_MANAGER_PARENT){if(a->project_manager)snprintf(a->manager_parent,sizeof a->manager_parent,"%s",path);}
+            else if(route==PS_DIALOG_BROWSE)preview_workspace_path(a,path);
+            else if(route==PS_DIALOG_ADD_FILE || route==PS_DIALOG_ADD_FOLDER)add_workspace_path(a,path);
+            else status(a,"Dateiauswahl gehört zu keinem aktuellen Auftrag.");
+        }else if(result.status!=PS_EOF){char message[256];snprintf(message,sizeof message,"Dateiauswahl fehlgeschlagen: %s",ps_result_string(result.status));status(a,message);}
+        ps_dialog_result_destroy(&result);
+    }
+    a->dialog_pending=ps_dialog_requests_pending(&a->dialog_requests);
 }
 static void test_key(app *a, SDL_Keycode key) {
     test_window_key(a->window, key);
@@ -3940,12 +3957,6 @@ int main(int argc, char **argv) {
         const char *driver = SDL_GetCurrentVideoDriver();
         fprintf(stderr, "APP TEST TRACE: SDL initialized, video driver %s\n", driver ? driver : "unknown");
     }
-    workspace_dialog_event = SDL_RegisterEvents(1);
-    if (workspace_dialog_event == (Uint32)-1) {
-        fprintf(stderr, "Workspace dialog event: %s\n", SDL_GetError());
-        SDL_Quit();
-        return 1;
-    }
 #ifdef __APPLE__
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
@@ -4285,6 +4296,9 @@ int main(int argc, char **argv) {
         documentation_actions_tick(a);
         a->workspace_tip.dismissed=false;
         browser_tick(a);
+        /* Apply worker completions before publishing the next UI frame. The
+         * picker and its owner's fields must observe the same transaction. */
+        workspace_dialog_tick(a);
         nk_input_begin(a->ui);
         if(a->graphic_export)nk_input_begin(a->graphic_export->ui);
         if (a->doc_ui)
@@ -4295,25 +4309,6 @@ int main(int argc, char **argv) {
             if(workspace_state_test && !strcmp(argv[3],"protocol-ui-interactive"))protocol_ui_interactive_event(a,&e);
             if(e.type==SDL_EVENT_KEY_DOWN || e.type==SDL_EVENT_TEXT_INPUT || e.type==SDL_EVENT_WINDOW_FOCUS_LOST) {
                 a->workspace_tip.dismissed=true;a->workspace_tip.visible=false;
-            }
-            if (e.type == workspace_dialog_event) {
-                a->dialog_pending = false;
-                const char *path = (const char *)e.user.data1;
-                if (path) {
-                    if (e.user.code == PS_DIALOG_OPEN_FOLDER)
-                        open_workspace_path(a, path);
-                    else if(e.user.code==PS_DIALOG_IMPORT_RUN)import_run(a,path);
-                    else if(e.user.code==PS_DIALOG_RESUME_BATCH)resume_batch(a,path);
-                    else if (e.user.code == PS_DIALOG_MANAGER_PARENT)
-                        snprintf(a->manager_parent, sizeof a->manager_parent, "%s", path);
-                    else if(e.user.code==PS_DIALOG_BROWSE)preview_workspace_path(a,path);
-                    else
-                        add_workspace_path(a, path);
-                    SDL_free(e.user.data1);
-                } else if (e.user.data2) {
-                    status(a, "Dateiauswahl fehlgeschlagen.");
-                }
-                continue;
             }
             if ((workflow_test || migration_test || plot_test || toolbar_test || settings_test || docs_test ||
                  (workspace_state_test && strncmp(argv[3],"native-dialog",13) &&
@@ -5775,6 +5770,7 @@ int main(int argc, char **argv) {
     free(a->workspaces);
     ps_autosave_destroy(a->recovery);
     ps_workspace_tree_destroy(&a->workspace_tree);
+    ps_dialog_requests_cancel_all(&a->dialog_requests);
     browser_destroy(a);
     documents_clear(a);
     graphic_export_close(a);

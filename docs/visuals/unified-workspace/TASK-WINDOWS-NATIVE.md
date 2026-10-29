@@ -58,6 +58,28 @@ Readback erfolgt nach dessen eigenem Zeichnen. Neue Clientgrößen für erstmals
 geöffnete Fenster werden ausdrücklich geprüft. Die inneren CSS-Maße, Konturen,
 Originalausgaben und Clipboard-Erwartungen wurden erhalten.
 
+## Rückgaben an den richtigen Auftrag
+
+Die Datei-/Ordnerantworten verwenden jetzt einen CPU-Auftrag mit eigenem Ziel
+und monotoner Anfrageversion. Ein nativer Callback hält nur diesen Auftrag,
+keinen App-, Fenster- oder UI-Zeiger. Er kopiert seine Antwort, veröffentlicht
+sie atomar und gibt seinen eigenen Bezug frei. Schließen, Ersetzen und Shutdown
+entfernen den Besitzerbezug; auch ein später Callback bleibt dadurch gültig,
+ohne einen inzwischen neu geöffneten Dialog verändern zu können.
+
+Der UI-Thread übernimmt ausschließlich aktuelle Antworten. Dateiarbeiter werden
+vor der Übernahme abgefragt, damit Schließen der Auswahl und Übernahme im
+Auftraggeber vor demselben nächsten UI-Frame geschehen. Ein erfolgreicher
+Projekt-/Workspace-Wechsel verwirft die alten Aufträge zum Hinzufügen von
+Dateien/Ordnern, Importieren von Läufen und Fortsetzen einer Serie. Der unabhängige
+Zielordnerauftrag der Projektanlage bleibt erhalten.
+
+Die [Prüfaufzeichnung](../../verification/dialog-requests-2026-10-29.json)
+trennt Thread-/Lebenszeitprüfungen, tatsächliche B/A-Bedienabläufe und negative
+Gegenproben. Diese Zuordnung ist die Grundlage für mehrere unabhängige
+Auftraggeber. Sie stellt Projektanlage und Picker allein noch nicht auf eigene
+Betriebssystemfenster um; die globale Modalität unten bleibt offen.
+
 ## Noch umzusetzen und abzunehmen
 
 | Aufgabe | Stand |

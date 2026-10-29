@@ -1,0 +1,587 @@
+{
+  "format": 1,
+  "date": "2026-10-29",
+  "base_commit": "ef1f3321abb8138fd110848e063221ccdd6bc2f1",
+  "scope": "Owned versioned file-dialog replies and their UI-frame transaction, prerequisite for ADR015 independent B/A task windows; native B/A hosting remains open.",
+  "implementation": [
+    "Each route has an independent monotone generation. Replacement/cancel/shutdown retires the registry owner; callbacks retain CPU requests with no app/window/UI pointer.",
+    "One atomic completion owns copied bounded UTF-8 path/status; UI polls only the currently owned request and destroys transferred paths. No SDL user event allocation/post survives shutdown.",
+    "Poll the file worker before applying dialog results so closing a picker and updating its owner happen before one next UI frame.",
+    "Successful project/workspace changes retire add-file, add-folder, import and batch-resume requests; independent project-parent requests survive."
+  ],
+  "environment": {
+    "windows": "Windows 11 Pro 10.0.26200 / Release",
+    "linux": "Alpine-Dev 3.24.2 / X11 Xvfb Openbox / Debug ASan UBSan / GUI LSan=0; canonical dialog_request unit LSan=1"
+  },
+  "cohorts": [
+    {
+      "phase": "requests-third",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-third-windows.json",
+        "sha256": "cf3833ff2a357a4c85a8ba8d410fd5513e9ec889885a8814ab93bbfcb6f03410"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-third-windows.log",
+        "sha256": "12f1836cf37ae5bb26f26fca4eac8078db011cbd3f33b5bd7f86c3b4081b3889"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-p8lsu1c8/results.json",
+        "sha256": "a6c8834178a77b44d97a9a4c3d022c6397d0eb9765ce04cc1db171921707dc15"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "explorer_a_replies",
+        "--test-filter",
+        "explorer_a_inline",
+        "--test-filter",
+        "explorer_a",
+        "--test-filter",
+        "project_wizard",
+        "--test-filter",
+        "batch_resume_workflow"
+      ],
+      "passed": 5,
+      "total": 5,
+      "cases": [
+        {
+          "name": "batch_resume_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a_replies",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a_inline",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a",
+          "status": "passed"
+        },
+        {
+          "name": "project_wizard",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "phase": "requests-fourth",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-fourth-windows.json",
+        "sha256": "3cb82c0be2f8d4100d8258a814d73f7f67828694eef9a78d5cda3f1d9ebb92af"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-fourth-windows.log",
+        "sha256": "375203685742035ff5f1af2e74b3b9936c4d9dbb5ce0ad5677aa1e2356c4e59c"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wq4ch7v5/results.json",
+        "sha256": "4f63ebfec897da7fe96d1273c4dc47c355e8677578d2ab395c02c9978068aa53"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "saved_run_tutorial_workflow"
+      ],
+      "passed": 1,
+      "total": 1,
+      "cases": [
+        {
+          "name": "saved_run_tutorial_workflow",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "phase": "requests-units-final-v2",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-units-final-v2-windows.json",
+        "sha256": "151b7473d6f0bd4e4b23a1afff0a8c62368c8916d3dbd5510aca05d65334aff7"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-units-final-v2-windows.log",
+        "sha256": "b7bc163cc18273cc15bc5e08a87670ab94b98296b1aa096e953745b971758cf4"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-zj3trdqs/results.json",
+        "sha256": "1770c6076e2f7aa5f8d608d9c86ef4b99abfa31bc9a63b661fa9e83998668cc4"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test",
+        "--test-filter",
+        "dialog_request"
+      ],
+      "passed": 1,
+      "total": 1,
+      "cases": [
+        {
+          "name": "dialog_request",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "phase": "requests-third",
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-third-linux.json",
+        "sha256": "b7bd9141036cdd7d5be0258256b429918255d2a05996f99d5ffdee347d898786"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-third-linux.log",
+        "sha256": "05f857a73e33886b0d7097a3684d85d6bc8775afe8751960c98cc85a0d769648"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-6relnizj/results.json",
+        "sha256": "ce548a036fee63cec76a906b53be4e47c0832386503bc05e2ae220ae01b6354d"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "explorer_a_replies",
+        "--test-filter",
+        "explorer_a_inline",
+        "--test-filter",
+        "explorer_a",
+        "--test-filter",
+        "project_wizard",
+        "--test-filter",
+        "batch_resume_workflow"
+      ],
+      "passed": 5,
+      "total": 5,
+      "cases": [
+        {
+          "name": "batch_resume_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a_replies",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a_inline",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a",
+          "status": "passed"
+        },
+        {
+          "name": "project_wizard",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "phase": "requests-fourth",
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-fourth-linux.json",
+        "sha256": "9e0d07f9fca24948e49ef4682c0b9fd1c3e1f7dcd87180d158cfd6127a5abeaa"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-fourth-linux.log",
+        "sha256": "288adcf3593821924b3ec0f2393a9f69d44f879a44835a8255d6046ac8504691"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-d09lod9n/results.json",
+        "sha256": "3ed9259ced3b31819e373efd8cafbd5ed873b92dad651d46979143e8769560cb"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "saved_run_tutorial_workflow"
+      ],
+      "passed": 1,
+      "total": 1,
+      "cases": [
+        {
+          "name": "saved_run_tutorial_workflow",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "phase": "requests-units-final-v2",
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-units-final-v2-linux.json",
+        "sha256": "c77060925b407da027be67d042eff925e27083ce05d8d26452c1937623ccdd18"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-units-final-v2-linux.log",
+        "sha256": "4a8982f69510a2ecc98bcae21e755cc1acd4d17fc6aa64c6f79a39666283dc9b"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-9j0nndhy/results.json",
+        "sha256": "d3f90852c5d2195ad9d6a6a4676749a485ca758332c022fd47f63beca7c0e9b0"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test",
+        "--sanitizers",
+        "--test-filter",
+        "dialog_request"
+      ],
+      "passed": 1,
+      "total": 1,
+      "cases": [
+        {
+          "name": "dialog_request",
+          "status": "passed"
+        }
+      ]
+    }
+  ],
+  "application_reply_proofs": [
+    {
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-p8lsu1c8/explorer_a_replies/files ä/verification.json",
+        "sha256": "f34445e9eff08d3462fe884cd1e63031b922d8064945e22a4c22fd093e2a034b"
+      },
+      "measurements": [
+        {
+          "kind": "dialog_reply_ownership",
+          "route": 4,
+          "retired_version": 1,
+          "current_version": 3,
+          "stale_reply_ignored": true
+        }
+      ],
+      "project_changes": [
+        {
+          "kind": "dialog_project_change",
+          "retired_routes": 4,
+          "late_callbacks_ignored": true
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-6relnizj/explorer_a_replies/files ä/verification.json",
+        "sha256": "c54eef48be77c5df2282ad9ef22824985908cb07c7c908bba09b65d3712a2c82"
+      },
+      "measurements": [
+        {
+          "kind": "dialog_reply_ownership",
+          "route": 4,
+          "retired_version": 1,
+          "current_version": 3,
+          "stale_reply_ignored": true
+        }
+      ],
+      "project_changes": [
+        {
+          "kind": "dialog_project_change",
+          "retired_routes": 4,
+          "late_callbacks_ignored": true
+        }
+      ]
+    }
+  ],
+  "unit_and_counter_proofs": [
+    {
+      "platform": "windows",
+      "result": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-zj3trdqs/dialog_request/result.json",
+        "sha256": "d5c0f5c90682da646356b094502e2a6405dc1bf833d510729171f8b45426012b"
+      },
+      "negative_control": {
+        "path": "build/validation/explorer-inline-2026-10-29/request-units-windows.json",
+        "sha256": "dfef10dc488fc3caab2445470218e8c7a0db5e5ef9a0ecff150ffee5ddd57be4"
+      },
+      "source_archive": {
+        "path": "build/validation/explorer-inline-2026-10-29/request-unit-source-windows.zip",
+        "sha256": "c016ff48f8d9a3f9284969651ef2c8780ad33ef74a96bf50e1c2ee2a360d7365"
+      },
+      "runtime_archive": {
+        "path": "build/validation/explorer-inline-2026-10-29/request-unit-runtime-windows.zip",
+        "sha256": "38ca241b02af8374e65555c8fc5df7a7c8e19b36bfe04961f51a64892fa4af7a"
+      },
+      "counter_expected_exit": 1,
+      "positive_expected_exit": 0
+    },
+    {
+      "platform": "linux",
+      "result": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-9j0nndhy/dialog_request/result.json",
+        "sha256": "4f49dc505e8fa9361fab537b21957ff3ba116301139dec22cb534aa0d155be38"
+      },
+      "negative_control": {
+        "path": "build/validation/explorer-inline-2026-10-29/request-units-linux.json",
+        "sha256": "bb5cc25fcf89ad15d0029f01aef758a9f1c055679f11693ec633bf77d14b48a1"
+      },
+      "source_archive": {
+        "path": "build/validation/explorer-inline-2026-10-29/request-unit-source-linux.zip",
+        "sha256": "de4721b0834081b9686d243a1876834d0f8009b69dc5a6521f19df8551ea403f"
+      },
+      "runtime_archive": {
+        "path": "build/validation/explorer-inline-2026-10-29/request-unit-runtime-linux.zip",
+        "sha256": "1540b7a6a0632c5013e7b8e25bb946cde2918f3219b772320e8d35df53e20530"
+      },
+      "counter_expected_exit": 1,
+      "positive_expected_exit": 0
+    }
+  ],
+  "tutorial_visibility": [
+    {
+      "platform": "windows",
+      "language": "saved-run-tutorial-c",
+      "measurement": {
+        "kind": "tutorial_import_reveal",
+        "passed": true,
+        "wheel_steps": 3
+      }
+    },
+    {
+      "platform": "windows",
+      "language": "saved-run-tutorial-phys",
+      "measurement": {
+        "kind": "tutorial_import_reveal",
+        "passed": true,
+        "wheel_steps": 3
+      }
+    },
+    {
+      "platform": "linux",
+      "language": "saved-run-tutorial-c",
+      "measurement": {
+        "kind": "tutorial_import_reveal",
+        "passed": true,
+        "wheel_steps": 0
+      }
+    },
+    {
+      "platform": "linux",
+      "language": "saved-run-tutorial-phys",
+      "measurement": {
+        "kind": "tutorial_import_reveal",
+        "passed": true,
+        "wheel_steps": 0
+      }
+    }
+  ],
+  "tutorial_repair": "The existing analysis-only project fixture already scrolls the import action into the real clip. The saved-run tutorial now does the same when build diagnostics open the protocol. It checks visibility before clicking and retains exact 33 samples, analysis/report expectations and byte-identical imported archive checks.",
+  "retained_failures": [
+    {
+      "phase": "requests-first",
+      "platform": "windows",
+      "reason": "Initial application routing regression failures",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-first-windows.json",
+        "sha256": "a78f13771b94065ae40973de39ec2283fd2bdc3ac1a6b6475babb743186cf508"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-first-windows.log",
+        "sha256": "efc23583874540dd626730e5e8bec6771ee18fb7194c5f0bf2d0b2461676c411"
+      }
+    },
+    {
+      "phase": "requests-first",
+      "platform": "linux",
+      "reason": "Compile failed: status accepts one message, not a variadic format",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-first-linux.json",
+        "sha256": "a2b60cad468197b9a637951e895f0249de0fa8d6deb7c3593267457be75722af"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-first-linux.log",
+        "sha256": "dffc276cbf2bdb7bfe366b2744569e440a4487225e8c2be8b3cbc5af7f182522"
+      }
+    },
+    {
+      "phase": "requests-second",
+      "platform": "windows",
+      "reason": "Worker completion not yet applied when owner frame resumed; tutorial also failed",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-second-windows.json",
+        "sha256": "081c3339a4073dfa47e51c3b7bda9e6de1918f98da80ee2c63d38efcf2a72ee6"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-second-windows.log",
+        "sha256": "07f906e6a1227f37ad297eeeaf7e6badd54bcec7e29fac6d4a43357a83c1b2d9"
+      }
+    },
+    {
+      "phase": "requests-second",
+      "platform": "linux",
+      "reason": "Worker completion not yet applied when owner frame resumed",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-second-linux.json",
+        "sha256": "28222ea9a56c75b7bb04af8f33ce47778b2abc3798306f3e2eb884b99d6a67a2"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-second-linux.log",
+        "sha256": "57eb9543b4110da1173f902642fe5d799d1fa44edc558192689675a2de30e311"
+      }
+    },
+    {
+      "phase": "requests-saved-counter",
+      "platform": "windows",
+      "reason": "Tutorial clicks hidden import action on unchanged divider-only baseline",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-saved-counter-windows.json",
+        "sha256": "319e4515b24a75fe95f5b3a803dfbbc5f6438bd6b5840911518af0c82af4a58e"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/requests-saved-counter-windows.log",
+        "sha256": "c50bc8f402bc77825570e3f9af4dabc9412ff858d390ac91d35bcb09f84e37a6"
+      }
+    }
+  ],
+  "source_audit": {
+    "tracked_compiler_and_test_inputs_matched_git_index": 1072,
+    "compiler_manifest": {
+      "path": "build/validation/explorer-inline-2026-10-29/requests-final-compiler-source.json",
+      "sha256": "6e56e1b7bc2aada23f292aa50aa865a0d93f4848a33b6234fad93031ea00c19e"
+    },
+    "source_overlay": {
+      "path": "build/validation/explorer-inline-2026-10-29/requests-final-compiler-source.zip",
+      "sha256": "392b94a7d6d10b471719452454c58547b74c7f260807a80e6d384947a5c267cc"
+    },
+    "runtime_manifest": {
+      "path": "build/validation/explorer-inline-2026-10-29/requests-final-runtime.json",
+      "sha256": "0f0af8d5d1cdb6c4ea4e2d659cb9fe7e4d6f6a9e5753dd20d845690cf97a2f48"
+    },
+    "runtime_byte_index": {
+      "path": "build/validation/explorer-inline-2026-10-29/requests-final-byte-index.json",
+      "sha256": "784aa734eca7bd548718536e55c9189c04cf53cfc1023b505a8ccc05a5073c8d"
+    },
+    "all_archive_bytes_read_back": true
+  },
+  "review": {
+    "native_window_scope": "The graphical tests use real current B/A widgets in the existing modal host. They prove routing and preserved workflows, not independent native B/A windows.",
+    "limits": [
+      "Project B/picker A native resources, per-owner picker UI, global modal guards and remaining dialogs still need implementation.",
+      "No new physical input, external screenreader, HiDPI/monitor or macOS claim.",
+      "No ThreadSanitizer/general race-freedom claim; actual gated late callbacks and 32 pairs of racing producer threads are covered."
+    ]
+  },
+  "instrumentation_probe_correction": {
+    "record": {
+      "path": "build/validation/explorer-inline-2026-10-29/requests-units-final-linux.json",
+      "sha256": "79866fe2bafbdc841bb78aaa638ef632e56161e90141389e96acec8ed0058ebe"
+    },
+    "log": {
+      "path": "build/validation/explorer-inline-2026-10-29/requests-units-final-linux.log",
+      "sha256": "c949c97112b240864a718443a6f4148c997d259fc71cc64d475cd05abd1baa39"
+    },
+    "reason": "The first canonical unit wrapper truncated arguments after --test-display and accidentally omitted the later --sanitizers flag. Its successful non-instrumented unit result is not used as sanitizer evidence. v2 preserves all build flags and explicitly checks --sanitizers before invoking the Linux build.",
+    "intermediate_runtime": "requests-third runtime manifest was captured after this extra non-instrumented rebuild, so its Linux app hash differs from the preceding GUI result. The final runtime is captured after the corrected sanitizer build. The preceding GUI result and its source snapshot remain identified separately; no archive claim is made for that earlier GUI executable."
+  },
+  "catalog": {
+    "exit_code": 0,
+    "log": {
+      "path": "build/validation/explorer-inline-2026-10-29/requests-catalog-final.log",
+      "sha256": "42a1e66e5ae87cecabcfd35fd72039a67af7dad56e5dedd41dceb781a7abce54"
+    },
+    "scope": "Declared display contracts and intentional timeout/error handling fixtures; no Darwin runtime claim."
+  },
+  "linux_unit_binary_inspection": {
+    "command": [
+      "wsl",
+      "-d",
+      "Alpine-Dev",
+      "--exec",
+      "readelf",
+      "-d",
+      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-dialog_request"
+    ],
+    "exit_code": 0,
+    "observed_needed_libraries": [
+      "libasan.so.8",
+      "libubsan.so.1"
+    ],
+    "binary": {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-dialog_request",
+      "sha256": "ad59105aca69f107c623b054cea0e720861c18a46070ca4ec384afd25e97649a"
+    }
+  }
+}

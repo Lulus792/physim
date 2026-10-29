@@ -5,6 +5,7 @@ typedef struct {float *columns,width;size_t count;struct nk_user_font font;} bro
 typedef struct browser_dialog {
     ps_browser_worker *worker;ps_browser_listing listing;ps_browser_result preview;
     ps_browser_operation operation;ps_browser_mode filter;int mode,selected,focus,focused_row;
+    ps_dialog_ticket ticket;
     bool visible,embedded,failed,grid,hidden,create,path_edit,path_dirty,keyboard,reveal,initial,popup_close,cache_dirty,list_reset,preview_reset,api_expanded;
     int return_tab;
     char location[4096],path_input[4096],query[256],new_name[4096],message[512];
@@ -78,8 +79,9 @@ static void browser_close(app *a,browser_dialog *d,const char *path) {
     if(!d || !d->visible)return;
     char chosen[4096];if(path)snprintf(chosen,sizeof chosen,"%s",path);
     d->visible=false;d->return_frames=!path || d->mode==PS_DIALOG_MANAGER_PARENT?3:0;ps_browser_worker_cancel(d->worker);
-    if(d->embedded){a->tab=d->return_tab;if(path)browser_complete(a,d->mode,chosen);else a->dialog_pending=false;}
-    else browser_complete(a,d->mode,path?chosen:NULL);
+    if(d->embedded){a->tab=d->return_tab;if(path)browser_complete(a,d->ticket,chosen);else ps_dialog_request_cancel(&a->dialog_requests,d->ticket);}
+    else browser_complete(a,d->ticket,path?chosen:NULL);
+    a->dialog_pending=ps_dialog_requests_pending(&a->dialog_requests);
 }
 static void browser_context_destroy(browser_dialog *d) {
     if(!d)return;
@@ -113,7 +115,11 @@ static bool browser_context_open(app *a,browser_dialog **owner,int mode,bool emb
     const char *location=mode==PS_DIALOG_MANAGER_PARENT?a->manager_parent:a->workspace_open?a->workspace:a->manager_parent;
     if(!browser_navigate(d,*location?location:a->root,false)){d->visible=false;return false;}return true;
 }
-static bool browser_open(app *a,int mode){return browser_context_open(a,&a->browser,mode,false);}
+static bool browser_open(app *a,int mode,ps_dialog_ticket ticket){
+    if(a->browser)ps_dialog_request_cancel(&a->dialog_requests,a->browser->ticket);
+    if(!browser_context_open(a,&a->browser,mode,false))return false;
+    a->browser->ticket=ticket;return true;
+}
 static void browser_select(browser_dialog *d,int index);
 static bool browser_workspace_open(app *a) {
     if(a->dialog_pending || a->project_manager)return false;
@@ -141,10 +147,10 @@ static void browser_context_tick(app *a,browser_dialog *d) {
     } else if(result.operation==PS_BROWSER_READ_TEXT) {
         browser_preview_clear(d);d->preview=result;memset(&result,0,sizeof result);
     } else if(result.operation==PS_BROWSER_CONFIRM) {
-        if(d->embedded && !browser_workspace_visible(a)){a->dialog_pending=false;d->operation=PS_BROWSER_READ_DIRECTORY;}
+        if(d->embedded && !browser_workspace_visible(a)){ps_dialog_request_cancel(&a->dialog_requests,d->ticket);a->dialog_pending=ps_dialog_requests_pending(&a->dialog_requests);d->operation=PS_BROWSER_READ_DIRECTORY;}
         else if(result.status==PS_OK && result.selectable)browser_close(a,d,result.path);
         else snprintf(d->message,sizeof d->message,"Die Auswahl ist nicht mehr verfügbar oder passt nicht zum benötigten Dateityp.");
-        if(d->embedded && d->visible)a->dialog_pending=false;
+        if(d->embedded && d->visible){ps_dialog_request_cancel(&a->dialog_requests,d->ticket);a->dialog_pending=ps_dialog_requests_pending(&a->dialog_requests);}
     } else if(result.operation==PS_BROWSER_MAKE_DIRECTORY) {
         if(result.status==PS_OK){d->create=false;d->new_name[0]=0;browser_navigate(d,d->location,false);}
         else snprintf(d->message,sizeof d->message,"%s",result.created==PS_BROWSER_COLLISION?"Dieser Name ist bereits vergeben.":result.created==PS_BROWSER_NAME_INVALID?"Einen gültigen einzelnen Ordnernamen eingeben.":"Der Ordner konnte nicht angelegt werden. Prüfe den Speicherort und die Berechtigung.");
@@ -166,7 +172,11 @@ static void browser_confirm(app *a,browser_dialog *d) {
     const char *path=d->selected>=0?d->listing.entries[d->selected].path:d->location;
     if(d->filter!=PS_BROWSER_FOLDERS && d->selected<0)return;
     if(d->filter!=PS_BROWSER_FOLDERS && d->listing.entries[d->selected].kind==PS_BROWSER_DIRECTORY){browser_navigate(d,path,true);return;}
-    if(browser_request(d,PS_BROWSER_CONFIRM,path,NULL) && d->embedded)a->dialog_pending=true;
+    if(d->embedded){ps_dialog_request *request=NULL;
+        if(ps_dialog_request_begin(&a->dialog_requests,(unsigned)d->mode,&request)!=PS_OK){snprintf(d->message,sizeof d->message,"Auswahl konnte nicht vorbereitet werden.");return;}
+        d->ticket=ps_dialog_request_ticket(request);}
+    if(!browser_request(d,PS_BROWSER_CONFIRM,path,NULL) && d->embedded)ps_dialog_request_cancel(&a->dialog_requests,d->ticket);
+    a->dialog_pending=ps_dialog_requests_pending(&a->dialog_requests);
 }
 static void browser_focus_set(app *a,browser_dialog *d,int id);
 static void browser_action(app *a,browser_dialog *d,int id) {

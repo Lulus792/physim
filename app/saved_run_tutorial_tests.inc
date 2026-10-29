@@ -12,9 +12,9 @@ static bool saved_run_tutorial_start(app *a,const char *root,const char *mode) {
     return true;
 }
 static void saved_run_tutorial_frame(app *a,const char *root,const char *mode,int *stage,int *code,const char **capture) {
-    static unsigned steps;static double held;static char original[4096],report[4096];bool ok=true;
+    static unsigned steps,import_reveals;static double held;static char original[4096],report[4096];bool ok=true;
     switch(*stage) {
-    case 0:steps=0;build_project(a);break;
+    case 0:steps=import_reveals=0;build_project(a);break;
     case 1:
         if(!idle(a) || a->library_thread)return;
         ok=a->built && start_run_mode(a,true);break;
@@ -40,7 +40,15 @@ static void saved_run_tutorial_frame(app *a,const char *root,const char *mode,in
         ok=a->built && !exists(path) && !nk_str_len_char(&a->experiment.string) && !start_run_mode(a,false);
         a->tab=2;a->analysis_tab=0;snprintf(a->import_test_path,sizeof a->import_test_path,"%s",original);break;
     }
-    case 6:test_mouse(a,a->import_bounds,true);break;
+    case 6:{
+        /* Build diagnostics can open the protocol. Reveal the actual import
+         * action in the shorter pane before clicking, as a user would. */
+        struct nk_rect pane=a->dock_panels[PS_DOCK_SIDEBAR],button=a->import_bounds,clip=a->analysis_import_clip;
+        bool visible=button.y>=clip.y && button.y+button.h<=clip.y+clip.h;
+        if(!visible && import_reveals++<100){test_plot_wheel(a,pane.x+6,pane.y+pane.h*.5f,button.y<pane.y?3:-3);return;}
+        printf("{\"kind\":\"tutorial_import_reveal\",\"passed\":%s,\"wheel_steps\":%u}\n",visible?"true":"false",import_reveals);
+        ok=visible;if(visible)test_mouse(a,button,true);break;
+    }
     case 7:test_mouse(a,a->import_bounds,false);break;
     case 8:
         if(!idle(a) || a->library_thread)return;

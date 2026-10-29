@@ -773,6 +773,9 @@ def saved_run_tutorial(flow,directory):
         path=directory/language;path.mkdir(parents=True)
         flow.run("--workspace-state-test",path,"saved-run-tutorial-"+language,timeout=130,
                  marker="SAVED RUN TUTORIAL SELF-TEST: PASSED")
+        reveals = [json.loads(line) for line in flow.steps[-1]["stdout"].splitlines()
+                   if line.startswith('{"kind":"tutorial_import_reveal"')]
+        require(len(reveals) == 1 and reveals[0]["passed"], "Import action was not fully visible before clicking")
         sources=list((path/"Producer/runs").glob("*.psrun"))
         copies=list((path/"Consumer/runs").glob("*-import.psrun"))
         require(len(sources)==len(copies)==1,"Exactly one producer archive and imported copy required")

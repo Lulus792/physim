@@ -6,6 +6,8 @@ static const char *project_manager_name(app *a,int id) {
     return id>=11?manager_templates[id-11]:id==7 && a->manager_step==2?"Projekt anlegen":names[id];
 }
 static void project_manager_close(app *a) {
+    ps_dialog_request_cancel_route(&a->dialog_requests,PS_DIALOG_MANAGER_PARENT);
+    a->dialog_pending=ps_dialog_requests_pending(&a->dialog_requests);
     a->project_manager=false;a->manager_keyboard=a->manager_initial_focus=a->manager_popup_close=false;
     a->manager_return_frames=3;
     /* A native/pointer activation runs inside nk_begin/nk_end. Retire these
@@ -101,6 +103,7 @@ static void project_manager_field(app *a,int id,char *text,int capacity) {
     else if(nk_sdl_accessibility_is_focused(ui,NULL,project_manager_name(a,id)) && !ui->current->edit.active)nk_edit_focus(ui,NK_EDIT_ALWAYS_INSERT_MODE);
     char before[4096];snprintf(before,sizeof before,"%s",text);struct nk_rect bounds=nk_widget_bounds(ui);
     nk_sdl_edit_named(ui,project_manager_name(a,id),NK_EDIT_FIELD,text,capacity,nk_filter_default);
+    if(id==0 && strcmp(before,text) && SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"PROJECT LOCATION EDIT: before=%s after=%s\n",before,text);
     if(strcmp(before,text)){a->manager_error[0]=0;a->manager_error_reveal=false;}
     project_manager_focus_draw(a,id,bounds);
 }
