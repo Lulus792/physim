@@ -1,6 +1,8 @@
 # Eigenständige Fenster für Dialogaufgaben
 
-Status: vom Nutzer am 29. Oktober 2026 beauftragt; Umsetzung und Abnahme offen.
+Status: vom Nutzer am 29. Oktober 2026 beauftragt; Grafikexport als erster
+[nativer Teilstand](../visuals/unified-workspace/TASK-WINDOWS-NATIVE.md) geprüft.
+Weitere Dialoge und die vollständige Abnahme bleiben offen.
 
 ## Auftrag
 
@@ -57,6 +59,14 @@ verbraucht auch dessen andere Eingaben. Der Projektdialog hängt zusätzlich an
 globalen Layout-/Bediensperren; mehrere Toolbaraktionen setzen seinen Offenstatus
 direkt zurück. Diese Stellen gehören zur Umsetzung, nicht nur die Fensteranlage.
 
+Die Umstellung der Ordner-/Dateiauswahl benötigt außerdem eine Zuordnung aus
+Auftraggeber und Anfragegeneration. Eine verspätete Antwort darf nach Schließen,
+erneutem Öffnen oder Projektwechsel keinen anderen Dialog und kein neues Projekt
+verändern. Mehrere unabhängige Auftraggeber dürfen sich keinen Pickerzustand
+überschreiben. Das bestehende versionierte Dateiarbeitermodell ist dafür eine
+Grundlage; der bisherige globale Abschluss über `workspace_dialog_event` allein
+beweist diese Eigentümerschaft nicht.
+
 ## Abnahme
 
 Die erste Umsetzung führt einen gemeinsamen App-/Simulationszustand weiter und
@@ -75,4 +85,5 @@ OS-Schließen und App-Shutdown. Bestehende Exportdateien und Projektabläufe ble
 vollständig zu prüfen. Eigene macOS-Laufnachweise bleiben erforderlich; ein
 gemeinsamer Codepfad oder eine CI-Datei ersetzt sie nicht.
 
-Es liegen noch keine Abnahmeergebnisse für diesen neuen Fenstervertrag vor.
+Der Grafikexport besteht die im Teilnachweis genannten Windows-/Linux-Prüfungen.
+Diese Ergebnisse nehmen den gesamten Fenstervertrag nicht vorweg.

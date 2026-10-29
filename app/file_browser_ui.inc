@@ -220,7 +220,7 @@ static void browser_flush_field(app *a,browser_dialog *d) {
     if(d->focus==3 && strcmp(before,text))d->path_dirty=d->path_edit=true;
 }
 static bool browser_event(app *a,const SDL_Event *event,SDL_Window *window) {
-    browser_dialog *d=browser_active(a)?a->browser:browser_workspace_visible(a) && !a->graphic_export?a->browser_workspace:NULL;
+    browser_dialog *d=browser_active(a)?a->browser:browser_workspace_visible(a)?a->browser_workspace:NULL;
     if(!d || !d->visible || window!=a->window)return false;
     bool input=event->type==SDL_EVENT_KEY_DOWN || event->type==SDL_EVENT_KEY_UP || event->type==SDL_EVENT_TEXT_INPUT ||
         event->type==SDL_EVENT_MOUSE_BUTTON_DOWN || event->type==SDL_EVENT_MOUSE_BUTTON_UP || event->type==SDL_EVENT_MOUSE_MOTION || event->type==SDL_EVENT_MOUSE_WHEEL;

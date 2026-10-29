@@ -1,0 +1,387 @@
+{
+  "format": 1,
+  "date": "2026-10-29",
+  "base_commit": "083fd74633efb59d955a7c17e22fc9640c85c09d",
+  "scope": "Independent native graphic-export window, first part of ADR015; other task windows remain open.",
+  "environment": {
+    "windows": "Windows 11 Pro 10.0.26200 / Release",
+    "linux": "Alpine-Dev 3.24.2 / Linux 6.18.33.2-microsoft-standard-WSL2 x86_64 / X11 Xvfb Openbox / Debug ASan UBSan / GUI detect_leaks=0"
+  },
+  "cohorts": [
+    {
+      "tag": "task-first",
+      "platforms": [
+        {
+          "platform": "windows",
+          "record": {
+            "path": "build/validation/explorer-inline-2026-10-29/task-first-windows.json",
+            "sha256": "863c5733d31981db5f9a44b21e7fece0bcc5ff5b0365a30a5cc8c2912d9ea595"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/task-first-windows.log",
+            "sha256": "eec9c7c20d1c90ac37da3ef521341dc2572f0a55b60038b9d3c643970cbdfc2e"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-d00u9rll/results.json",
+            "sha256": "6a7e7d8365f0f7f3d1dc9965e011c3ca2b87b5d8048bab64f9cb3ef5dde577c9"
+          },
+          "exit_code": 0,
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "independent_graphic_window",
+              "status": "passed"
+            }
+          ],
+          "binary_sha256": "7e794ab947bb1db02fd0ad24c5fb704340a34fe16c6fc4a0ebcab8204f2e02ec",
+          "native_window_proof": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-d00u9rll/independent_graphic_window/files ä/verification.json",
+            "sha256": "43d64a163adc6e144119697c454cdb5da4cb371c7b07281326b6eef2c95f2bcc"
+          },
+          "measurements": [
+            {
+              "kind": "independent_graphic_window",
+              "main_window_id": 3,
+              "export_window_id": 4,
+              "native_handles_distinct": true,
+              "output_crc": 2681622414,
+              "output_bytes": 259448
+            }
+          ],
+          "visual": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-d00u9rll/independent_graphic_window/files ä/export window ä/independent-export.png",
+            "sha256": "206b75b2cf564809cc9948e039fabf9080e540528becc8d4d06e06e62e43acae"
+          }
+        },
+        {
+          "platform": "linux",
+          "record": {
+            "path": "build/validation/explorer-inline-2026-10-29/task-first-linux.json",
+            "sha256": "38c8d2cfa7373b0b8858c2731cee1e53a4ed04fc03286fdae2e7c88fb53fb17c"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/task-first-linux.log",
+            "sha256": "8732e7d021ba35fddb2b48fc38a79e86e04fc8e3f085b8d44eb1ff2cf1ff6cc5"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-t6r87xmp/results.json",
+            "sha256": "8ab623b37e9a274dda8fcb7894058c7bc0d264e6fe4321c66eadbae9f94ddc8a"
+          },
+          "exit_code": 0,
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "independent_graphic_window",
+              "status": "passed"
+            }
+          ],
+          "binary_sha256": "2a215181ba132d33748d719f79792fbed84e3e6562bdf068b444d5c1e84c4027",
+          "native_window_proof": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-t6r87xmp/independent_graphic_window/files ä/verification.json",
+            "sha256": "307f673ac80bd39894fc0f47094aab43c149b26f7e7b1adff30ec1b02a35ad27"
+          },
+          "measurements": [
+            {
+              "kind": "independent_graphic_window",
+              "main_window_id": 2,
+              "export_window_id": 3,
+              "native_handles_distinct": true,
+              "output_crc": 2273823212,
+              "output_bytes": 270928
+            }
+          ],
+          "visual": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-t6r87xmp/independent_graphic_window/files ä/export window ä/independent-export.png",
+            "sha256": "d541e710b3574c3c9bc1999d9d77158021b8eae57c98dd421cc524886b1ba466"
+          }
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/task-first-inputs.json",
+        "sha256": "07527eba186cda93fd1b17a1a568c86d8102c48064f928078f7bd7b82a30d69f"
+      },
+      "input_archive": {
+        "path": "build/validation/explorer-inline-2026-10-29/task-first-inputs.zip",
+        "sha256": "ebf46e5b533135da8313f068a5f6f5c5d9f7646ad6c05c566e715d961742d415"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/task-first-compiler-source.json",
+        "sha256": "ac983a154107f594963fc34587e6fda7208c8c3c265c47e49fa8036191c027ee"
+      },
+      "compiler_overlay": {
+        "path": "build/validation/explorer-inline-2026-10-29/task-first-compiler-source.zip",
+        "sha256": "5078a0bbef4adbc4f794645753ce8608295610b2983fae4e922eecb71325e835"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/task-first-runtime.json",
+        "sha256": "3f4068d2f16ef05d88ff807f4eac980562bebcf2bc7a56d0b5240fe26c01016f"
+      },
+      "runtime_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/task-first-byte-index.json",
+        "sha256": "cb9eda6b1cf52fbe7a0eed6468dd4c589e3dbc01e9b082f5f0b244a66b1be6e0"
+      }
+    },
+    {
+      "tag": "task-second",
+      "platforms": [
+        {
+          "platform": "windows",
+          "record": {
+            "path": "build/validation/explorer-inline-2026-10-29/task-second-windows.json",
+            "sha256": "c4cceae46763d74ba8b9b643f4dd8b82b9f589daf716b7d4e9d3c6f6d3839c98"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/task-second-windows.log",
+            "sha256": "62108f54a9a24eea4ae3ed36a5a382b3efc3c85fb7fa799605bf0fea64b59870"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-qu8nbj1i/results.json",
+            "sha256": "7d692d4682e972cf2609fa9386711c020c7e7ceff72568eacc76afc20a459d5d"
+          },
+          "exit_code": 0,
+          "passed": 6,
+          "total": 6,
+          "cases": [
+            {
+              "name": "independent_graphic_window",
+              "status": "passed"
+            },
+            {
+              "name": "graphic_dialog",
+              "status": "passed"
+            },
+            {
+              "name": "comparison_dark",
+              "status": "passed"
+            },
+            {
+              "name": "comparison_light",
+              "status": "passed"
+            },
+            {
+              "name": "comparison_light_large_narrow",
+              "status": "passed"
+            },
+            {
+              "name": "comparison_contrast",
+              "status": "passed"
+            }
+          ],
+          "binary_sha256": "cc371f0b221219521811ed862f42a9bdd719d96b91064de2753b44c819ddafe6",
+          "native_window_proof": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-qu8nbj1i/independent_graphic_window/files ä/verification.json",
+            "sha256": "d70c384bea1d293b9d3efd5ee376853ca0ecdd454dfdf6b3b6a6ebe12e1f0fd9"
+          },
+          "measurements": [
+            {
+              "kind": "independent_graphic_window",
+              "main_window_id": 3,
+              "export_window_id": 4,
+              "native_handles_distinct": true,
+              "output_crc": 2681622414,
+              "output_bytes": 259448
+            }
+          ],
+          "visual": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-qu8nbj1i/independent_graphic_window/files ä/export window ä/independent-export.png",
+            "sha256": "05607b6da9e6f4a9dcc04c1145cb3aa189112af0e2629fdaf34bca0e0ee1af5e"
+          },
+          "graphic_detail": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-qu8nbj1i/graphic_dialog/files ä/app-steps.json",
+            "sha256": "1c12fbd109d2888ea59873508bb5d19c0151a97d38c6d34a5a636b6ce2113b40"
+          },
+          "clipboard": [
+            {
+              "transport": "Win32 CF_DIB",
+              "width": 2400,
+              "height": 1700,
+              "rgb_sha256": "e58f1de2b7c54040af3e3e89b6b614c026e33a6fbb2728fed09f56f206832255",
+              "source_destroyed_before_request": true
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "record": {
+            "path": "build/validation/explorer-inline-2026-10-29/task-second-linux.json",
+            "sha256": "ecba556f9c035f1e3634004588e6efc94cfcd6c4eef7a0c57acccd0c35be890c"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/task-second-linux.log",
+            "sha256": "ee2eacc5758a3b26c660bba9c7dfd7d1d024cee3e0e3917b55c4fe2643e0ae94"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-4uf3s5g2/results.json",
+            "sha256": "639097c10bbb8919dff861264414f981e7185e2904b09b77f04d1a76f6060279"
+          },
+          "exit_code": 0,
+          "passed": 6,
+          "total": 6,
+          "cases": [
+            {
+              "name": "independent_graphic_window",
+              "status": "passed"
+            },
+            {
+              "name": "graphic_dialog",
+              "status": "passed"
+            },
+            {
+              "name": "comparison_dark",
+              "status": "passed"
+            },
+            {
+              "name": "comparison_light",
+              "status": "passed"
+            },
+            {
+              "name": "comparison_light_large_narrow",
+              "status": "passed"
+            },
+            {
+              "name": "comparison_contrast",
+              "status": "passed"
+            }
+          ],
+          "binary_sha256": "a50d299773843d47c5fad69bc0e6e13e77f23e1b14dd675ff5ed0963befdcb5f",
+          "native_window_proof": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-4uf3s5g2/independent_graphic_window/files ä/verification.json",
+            "sha256": "773b7cbfcce336dab5c153ad0a5c3de03378928438c41b2ea13b6d1e188ca484"
+          },
+          "measurements": [
+            {
+              "kind": "independent_graphic_window",
+              "main_window_id": 2,
+              "export_window_id": 3,
+              "native_handles_distinct": true,
+              "output_crc": 2273823212,
+              "output_bytes": 270928
+            }
+          ],
+          "visual": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-4uf3s5g2/independent_graphic_window/files ä/export window ä/independent-export.png",
+            "sha256": "f1a604de21fb3e5af43a81c9b1338e3e33bc5ec743739bb7b7c152828d8a42b1"
+          },
+          "graphic_detail": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-4uf3s5g2/graphic_dialog/files ä/app-steps.json",
+            "sha256": "a5e18394da8ef3793184c0e6b7396f88334595f9c4443619e40886dbfd5ada88"
+          },
+          "clipboard": [
+            {
+              "transport": "X11 image/bmp, independent SDL client",
+              "width": 2400,
+              "height": 1700,
+              "rgb_sha256": "53a68d53bea749629eaf841cad6786aeed4374ee91fe33e485d35cc15513e2de",
+              "source_destroyed_before_request": true
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/task-second-inputs.json",
+        "sha256": "1e8aa2d6d7faa13263e4db4f12ecd4932c7bd14eb89f3a894665e163428048f0"
+      },
+      "input_archive": {
+        "path": "build/validation/explorer-inline-2026-10-29/task-second-inputs.zip",
+        "sha256": "0c0a439543fd77416d8e248b00f9c4bd3bf62794478d6ecc866fb1731e1e9411"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/task-second-compiler-source.json",
+        "sha256": "d917b3f3135a854a83a6f9fcf9897f15a8be0491dfbdaf4f217383fbdb4f8055"
+      },
+      "compiler_overlay": {
+        "path": "build/validation/explorer-inline-2026-10-29/task-second-compiler-source.zip",
+        "sha256": "f4d1b722e879557c8044c3704cff6d971ededc79b0ced2baf098b9b9add0091e"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/task-second-runtime.json",
+        "sha256": "cca6bcb7207c40248a7bd36427e2c3f7a54ee9e6d7279d7400b7aeb7a56977af"
+      },
+      "runtime_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/task-second-byte-index.json",
+        "sha256": "5b6c53465b38c699c83bd01e41117ee24f22d9b78349455c87045e393cf7bad7"
+      }
+    }
+  ],
+  "counter": {
+    "record": {
+      "path": "build/validation/explorer-inline-2026-10-29/task-counter2.json",
+      "sha256": "69284bfc0a7dc2eb6824316c0fbad8a6d879a26a62b509c15ecabf531825670b"
+    },
+    "source": {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/counter-window2/source.zip",
+      "sha256": "62510245e23120b2b5719e9cf88e3a6bf8ffcc5dcd89fccf205069e6adc9c685"
+    },
+    "runtime": {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/counter-window2/runtime.zip",
+      "sha256": "5ae6057fdf82d69aef25e67bac2fa72cfc3c981eca25a76c3e8a79e833e27d64"
+    },
+    "cases": [
+      {
+        "variant": "counter",
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tests\\check_independent_graphic_window.py",
+          "--app",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim-native-window-counter.exe",
+          "--work",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\counter-window2\\counter"
+        ],
+        "exit_code": 1,
+        "binary": "build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim-native-window-counter.exe",
+        "binary_sha256": "ca0ead5ac2865f04e1bedfb937ea3d474a56a852f388bafc6440a9ef70724e3d",
+        "log": "build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\counter-window2\\counter.log",
+        "log_sha256": "2635cd4af6c038f50f439332f2c8aafb7394a8ba157ebc3ce76b1be38fa34487"
+      },
+      {
+        "variant": "positive",
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tests\\check_independent_graphic_window.py",
+          "--app",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+          "--work",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\counter-window2\\positive"
+        ],
+        "exit_code": 0,
+        "binary": "build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+        "binary_sha256": "cc371f0b221219521811ed862f42a9bdd719d96b91064de2753b44c819ddafe6",
+        "log": "build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\counter-window2\\positive.log",
+        "log_sha256": "fbeb1de78dcfe0d2a611e73a29bc19af54c989901c111c5b447c3b9424f0af58"
+      }
+    ],
+    "first_setup_failure": {
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/task-counter-build.log",
+        "sha256": "fd1fccfe03cd7e1782044ebf6c70be9cd1331c3ccf3a4cbd8d26aa525dabdd93"
+      },
+      "source": {
+        "path": "build/validation/explorer-inline-2026-10-29/task-counter/source.zip",
+        "sha256": "a423f70d86a7e35848288a60b019684fc2a0deddd599b907766d9573e2cb718f"
+      }
+    },
+    "final_archive_index": {
+      "path": "build/validation/explorer-inline-2026-10-29/task-counter-byte-index.json",
+      "sha256": "94fb9cdfcad6229e5cdf3c355ef049b0cda274a835755a4e4da8b5dcbfa7bf91"
+    }
+  },
+  "catalog": {
+    "exit_code": 0,
+    "log": {
+      "path": "build/validation/explorer-inline-2026-10-29/catalog-task.log",
+      "sha256": "0041b8a96f3740bb3ec8739912dc926db923bb279fec6bf4e0c31878d0e46435"
+    }
+  },
+  "known_open": [
+    "Project B native window",
+    "Independent picker A per owner/generation",
+    "Other task dialogs and confirmations",
+    "Independent native UIA/AT-SPI tasks for export window",
+    "Physical input/screenreaders and extra DPI/monitor states",
+    "macOS runtime",
+    "A2 selection integration",
+    "Whole UI fidelity"
+  ]
+}

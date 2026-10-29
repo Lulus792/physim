@@ -274,12 +274,25 @@ static bool test_graphic_reveal(app *a,struct nk_rect target) {
     graphic_dialog *d=a->graphic_export;if(!d || target.w<=0 || target.h<=0)return false;
     struct nk_rect viewport=d->bounds;
     if(target.y<viewport.y+8 || target.y+target.h>viewport.y+viewport.h-14) {
-        test_plot_wheel(a,viewport.x+viewport.w*.5f,viewport.y+viewport.h*.5f,target.y<viewport.y+8?6:-6);
+        SDL_Window *owner=a->window;a->window=d->window;
+        test_plot_wheel(a,viewport.x+viewport.w*.5f,viewport.y+viewport.h*.5f,target.y<viewport.y+8?6:-6);a->window=owner;
         settling=2;return false;
     }
     return true;
 }
+static void test_graphic_mouse(app *a,struct nk_rect target,bool down) {
+    test_window_mouse(a->graphic_export?a->graphic_export->window:a->window,target,down);
+}
+static void test_graphic_key(app *a,SDL_Keycode key,SDL_Keymod mod,bool repeat) {
+    SDL_Window *owner=a->window;if(a->graphic_export)a->window=a->graphic_export->window;
+    test_scene_key(a,key,mod,repeat);a->window=owner;
+}
+#include "graphic_export_window_tests.inc"
 static void test_plot_frame(app *a, int *stage, int *code, const char **capture) {
+    if(SDL_getenv("PHYSIM_TEST_GRAPHIC_WINDOW")){
+        if(*stage==36)*stage=4000;
+        if(*stage>=4000){test_graphic_window_frame(a,stage,code);return;}
+    }
     static ps_plot_view panned, raw;
     static struct nk_rect pick_target;
     bool ok = true;
@@ -450,8 +463,8 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
         if(!ok)break;
         *capture="plot-export-dialog.bmp";
         join(a->graphic_export_test_path,sizeof a->graphic_export_test_path,a->project,"native-export.png");
-        test_mouse(a,a->graphic_export->store,true);break;
-    case 37: test_mouse(a,a->graphic_export->store,false);break;
+        test_graphic_mouse(a,a->graphic_export->store,true);break;
+    case 37: test_graphic_mouse(a,a->graphic_export->store,false);break;
     case 38: {
         if(a->graphic_export->save)return;
         ok=test_plot_png_size(a->result_export,2400,1700);
@@ -468,51 +481,51 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
         *capture="plot-after-png.bmp";break;
     }
     case 39:
-        if(!test_graphic_reveal(a,a->graphic_export->fields[2]))return;test_mouse(a,a->graphic_export->fields[2],true);break;
-    case 40:test_mouse(a,a->graphic_export->fields[2],false);break;
-    case 41:test_mouse(a,a->graphic_export->choices[2][0],true);break;
-    case 42:test_mouse(a,a->graphic_export->choices[2][0],false);break;
+        if(!test_graphic_reveal(a,a->graphic_export->fields[2]))return;test_graphic_mouse(a,a->graphic_export->fields[2],true);break;
+    case 40:test_graphic_mouse(a,a->graphic_export->fields[2],false);break;
+    case 41:test_graphic_mouse(a,a->graphic_export->choices[2][0],true);break;
+    case 42:test_graphic_mouse(a,a->graphic_export->choices[2][0],false);break;
     case 43:
         if(!test_graphic_reveal(a,a->graphic_export->store))return;
         ok=a->graphic_export->scale==1;
         join(a->graphic_export_test_path,sizeof a->graphic_export_test_path,a->project,"native-scale1.png");
-        test_mouse(a,a->graphic_export->store,true);break;
-    case 44:test_mouse(a,a->graphic_export->store,false);break;
+        test_graphic_mouse(a,a->graphic_export->store,true);break;
+    case 44:test_graphic_mouse(a,a->graphic_export->store,false);break;
     case 45:
         if(!test_graphic_reveal(a,a->graphic_export->fields[2]))return;
         if(a->graphic_export->save)return;
-        ok=test_plot_png_size(a->result_export,1200,850);test_mouse(a,a->graphic_export->fields[2],true);break;
-    case 46:test_mouse(a,a->graphic_export->fields[2],false);break;
-    case 47:test_mouse(a,a->graphic_export->choices[2][3],true);break;
-    case 48:test_mouse(a,a->graphic_export->choices[2][3],false);break;
+        ok=test_plot_png_size(a->result_export,1200,850);test_graphic_mouse(a,a->graphic_export->fields[2],true);break;
+    case 46:test_graphic_mouse(a,a->graphic_export->fields[2],false);break;
+    case 47:test_graphic_mouse(a,a->graphic_export->choices[2][3],true);break;
+    case 48:test_graphic_mouse(a,a->graphic_export->choices[2][3],false);break;
     case 49:
         if(!test_graphic_reveal(a,a->graphic_export->store))return;
         ok=a->graphic_export->scale==4;*capture="plot-png-size.bmp";
         join(a->graphic_export_test_path,sizeof a->graphic_export_test_path,a->project,"native-scale4.png");
-        test_mouse(a,a->graphic_export->store,true);break;
-    case 50:test_mouse(a,a->graphic_export->store,false);break;
+        test_graphic_mouse(a,a->graphic_export->store,true);break;
+    case 50:test_graphic_mouse(a,a->graphic_export->store,false);break;
     case 51:
         if(a->graphic_export->save)return;
         if(!test_plot_png_size(a->result_export,4800,3400)){ok=false;break;}
         if(!test_graphic_reveal(a,a->graphic_export->fields[2]))return;
-        test_mouse(a,a->graphic_export->fields[2],true);*stage=300;return;
-    case 300:test_mouse(a,a->graphic_export->fields[2],false);*stage=301;return;
-    case 301:test_mouse(a,a->graphic_export->choices[2][2],true);*stage=302;return;
-    case 302:test_mouse(a,a->graphic_export->choices[2][2],false);*stage=303;return;
+        test_graphic_mouse(a,a->graphic_export->fields[2],true);*stage=300;return;
+    case 300:test_graphic_mouse(a,a->graphic_export->fields[2],false);*stage=301;return;
+    case 301:test_graphic_mouse(a,a->graphic_export->choices[2][2],true);*stage=302;return;
+    case 302:test_graphic_mouse(a,a->graphic_export->choices[2][2],false);*stage=303;return;
     case 303:
         if(a->graphic_export->scale!=3){ok=false;break;}
         if(!test_graphic_reveal(a,a->graphic_export->store))return;
         join(a->graphic_export_test_path,sizeof a->graphic_export_test_path,a->project,"native-scale3.png");
-        test_mouse(a,a->graphic_export->store,true);*stage=304;return;
-    case 304:test_mouse(a,a->graphic_export->store,false);*stage=305;return;
+        test_graphic_mouse(a,a->graphic_export->store,true);*stage=304;return;
+    case 304:test_graphic_mouse(a,a->graphic_export->store,false);*stage=305;return;
     case 305:
         if(a->graphic_export->save)return;
         if(!test_plot_png_size(a->result_export,3600,2550)){ok=false;break;}
         if(!test_graphic_reveal(a,a->graphic_export->fields[0]))return;
-        test_mouse(a,a->graphic_export->fields[0],true);*stage=204;return;
-    case 204:test_mouse(a,a->graphic_export->fields[0],false);*stage=205;return;
-    case 205:test_mouse(a,a->graphic_export->choices[0][1],true);*stage=206;return;
-    case 206:test_mouse(a,a->graphic_export->choices[0][1],false);*stage=207;return;
+        test_graphic_mouse(a,a->graphic_export->fields[0],true);*stage=204;return;
+    case 204:test_graphic_mouse(a,a->graphic_export->fields[0],false);*stage=205;return;
+    case 205:test_graphic_mouse(a,a->graphic_export->choices[0][1],true);*stage=206;return;
+    case 206:test_graphic_mouse(a,a->graphic_export->choices[0][1],false);*stage=207;return;
     case 207:
         if(!a->graphic_export->visible){*code=1;a->quitting=true;return;}
         a->graphic_export->scale=1;a->graphic_export->dirty=true;
@@ -521,26 +534,26 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
     case 52:
         if(!test_graphic_reveal(a,a->graphic_export->store))return;
         if(a->graphic_export->dirty)return;
-        test_mouse(a,a->graphic_export->store,true);break;
-    case 53:test_mouse(a,a->graphic_export->store,false);break;
+        test_graphic_mouse(a,a->graphic_export->store,true);break;
+    case 53:test_graphic_mouse(a,a->graphic_export->store,false);break;
     case 54:
         if(!test_graphic_reveal(a,a->graphic_export->formats[1]))return;
         if(a->graphic_export->save)return;
         ok=strstr(a->result_export,"-ausschnitt.png") && test_plot_png_size(a->result_export,1200,850) && test_plot_region_images(a);
         if(!ok){*code=1;a->quitting=true;return;}
         *capture="plot-region-export.bmp";
-        test_mouse(a,a->graphic_export->formats[1],true);*stage=200;return;
-    case 200:test_mouse(a,a->graphic_export->formats[1],false);*stage=201;return;
+        test_graphic_mouse(a,a->graphic_export->formats[1],true);*stage=200;return;
+    case 200:test_graphic_mouse(a,a->graphic_export->formats[1],false);*stage=201;return;
     case 201:
         if(!test_graphic_reveal(a,a->graphic_export->store))return;
         if(!a->graphic_export->svg){*code=1;a->quitting=true;return;}
         join(a->graphic_export_test_path,sizeof a->graphic_export_test_path,a->project,"native-ausschnitt.svg");
-        test_mouse(a,a->graphic_export->store,true);*stage=202;return;
-    case 202:test_mouse(a,a->graphic_export->store,false);*stage=203;return;
+        test_graphic_mouse(a,a->graphic_export->store,true);*stage=202;return;
+    case 202:test_graphic_mouse(a,a->graphic_export->store,false);*stage=203;return;
     case 203:
         if(a->graphic_export->save)return;
         if(!strstr(a->result_export,"-ausschnitt.svg") || !exists(a->result_export)){*code=1;a->quitting=true;return;}
-        test_scene_key(a,SDLK_ESCAPE,0,false);*stage=208;return;
+        test_graphic_key(a,SDLK_ESCAPE,0,false);*stage=208;return;
     case 208:
         if(a->graphic_export || a->graphic_return_ui)return;
         a->graphic_export_test_path[0]=0;
@@ -553,7 +566,7 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
     }
     case 211:
         if(!a->graphic_export || !a->graphic_export->raster || strcmp(a->graphic_export->description.plot.title,"Kleine Abweichungen mit großem Offset")) {ok=false;break;}
-        {ps_ui_render_stats stats;if(!ps_graphics_ui_stats(a->graphics,&stats) || stats.backdrop_passes!=2 || stats.shadow_draws!=2){ok=false;break;}}
+        {ps_ui_render_stats stats;if(!ps_graphics_ui_stats(a->graphic_export->graphics,&stats) || stats.backdrop_passes || stats.shadow_draws!=1){ok=false;break;}}
         /* Independent CSS target: 1080 border-box, 2px outer borders, 285px
          * settings, 28px preview insets, 24:17 paper, measured line boxes. */
         if(fabsf(a->graphic_export->bounds.w-1080)>.1f || fabsf(a->graphic_export->bounds.h-848.642f)>.1f ||
@@ -565,7 +578,7 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
             a->graphic_export->fields[0].y,a->graphic_export->fields[0].w,a->graphic_export->fields[0].h);
         *capture="graphic-dialog-light.bmp";*stage=234;return;
     case 234:
-        if(!SDL_SetWindowSize(a->window,1440,1100) || !SDL_SyncWindow(a->window)){ok=false;break;}
+        if(!SDL_SetWindowSize(a->graphic_export->window,1440,1100) || !SDL_SyncWindow(a->graphic_export->window)){ok=false;break;}
         *stage=235;return;
     case 235:*capture="graphic-dialog-reference-light.bmp";*stage=236;return;
     case 236: {
@@ -574,7 +587,7 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
     }
     case 237:*capture="graphic-dialog-reference-dark.bmp";*stage=238;return;
     case 238:
-        if(!SDL_SetWindowSize(a->window,1440,940) || !SDL_SyncWindow(a->window)){ok=false;break;}
+        if(!SDL_SetWindowSize(a->graphic_export->window,1440,940) || !SDL_SyncWindow(a->graphic_export->window)){ok=false;break;}
         *stage=212;return;
     case 212: {
         ps_preferences preferences=a->preferences;preferences.theme=PS_THEME_HIGH_CONTRAST;preferences_apply(a,&preferences);
@@ -582,31 +595,31 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
     }
     case 213: {
         ps_ui_render_stats stats;
-        if(!ps_graphics_ui_stats(a->graphics,&stats) || stats.backdrop_passes || stats.shadow_draws){ok=false;break;}
+        if(!ps_graphics_ui_stats(a->graphic_export->graphics,&stats) || stats.backdrop_passes || stats.shadow_draws){ok=false;break;}
         ps_preferences preferences=a->preferences;preferences.theme=PS_THEME_DARK;preferences.ui_size=22;preferences_apply(a,&preferences);
-        SDL_SetWindowMinimumSize(a->window,640,480); /* Exercise the size allowed by detached workspaces. */
-        if(!SDL_SetWindowSize(a->window,680,740) || !SDL_SyncWindow(a->window)){ok=false;break;}
+        SDL_SetWindowMinimumSize(a->graphic_export->window,640,480); /* Exercise the size allowed by detached workspaces. */
+        if(!SDL_SetWindowSize(a->graphic_export->window,680,740) || !SDL_SyncWindow(a->graphic_export->window)){ok=false;break;}
         *capture="graphic-dialog-large-narrow.bmp";*stage=214;return;
     }
     case 214: {
         static unsigned tab_steps;
         if(a->graphic_export->focus_target)return;
-        if(tab_steps<6){test_scene_key(a,SDLK_TAB,0,false);tab_steps++;return;}
-        if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"PNG speichern…")){ok=false;break;}
+        if(tab_steps<6){test_graphic_key(a,SDLK_TAB,0,false);tab_steps++;return;}
+        if(!nk_sdl_accessibility_is_focused(a->graphic_export->ui,NULL,"PNG speichern…")){ok=false;break;}
         *capture="graphic-dialog-narrow-footer.bmp";
         *stage=228;return;
     }
     case 228: {
         ps_preferences preferences=a->preferences;preferences.ui_size=16;preferences_apply(a,&preferences);
-        if(!SDL_SetWindowSize(a->window,1440,940) || !SDL_SyncWindow(a->window)){ok=false;break;}
+        if(!SDL_SetWindowSize(a->graphic_export->window,1440,940) || !SDL_SyncWindow(a->graphic_export->window)){ok=false;break;}
         *stage=215;return;
     }
     case 215:
         if(!test_graphic_reveal(a,a->graphic_export->fields[1]))return;
-        test_mouse(a,a->graphic_export->fields[1],true);*stage=216;return;
-    case 216:test_mouse(a,a->graphic_export->fields[1],false);*stage=217;return;
-    case 217:test_mouse(a,a->graphic_export->choices[1][1],true);*stage=218;return;
-    case 218:test_mouse(a,a->graphic_export->choices[1][1],false);*stage=219;return;
+        test_graphic_mouse(a,a->graphic_export->fields[1],true);*stage=216;return;
+    case 216:test_graphic_mouse(a,a->graphic_export->fields[1],false);*stage=217;return;
+    case 217:test_graphic_mouse(a,a->graphic_export->choices[1][1],true);*stage=218;return;
+    case 218:test_graphic_mouse(a,a->graphic_export->choices[1][1],false);*stage=219;return;
     case 219: {
         graphic_dialog *d=a->graphic_export;ps_figure_command first;
         if(!d->appearance || d->dark || ps_graphic_figure_command(ps_graphic_raster_figure(d->raster),0,&first)!=PS_OK || first.color!=0xffffff){ok=false;break;}
@@ -614,14 +627,14 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
     }
     case 220:
         if(!test_graphic_reveal(a,a->graphic_export->copy))return;
-        test_mouse(a,a->graphic_export->copy,true);*stage=221;return;
-    case 221:test_mouse(a,a->graphic_export->copy,false);*stage=222;return;
+        test_graphic_mouse(a,a->graphic_export->copy,true);*stage=221;return;
+    case 221:test_graphic_mouse(a,a->graphic_export->copy,false);*stage=222;return;
     case 222: {
         graphic_dialog *d=a->graphic_export;
         if(strcmp(d->message,"Bild in die Zwischenablage kopiert.")){ok=false;break;}
         char path[4096];join(path,sizeof path,a->project,"clipboard-reference.png");
         if(ps_graphics_image_png(ps_graphic_raster_image(d->raster),path)!=PS_OK){ok=false;break;}
-        test_scene_key(a,SDLK_ESCAPE,0,false);*stage=223;return;
+        test_graphic_key(a,SDLK_ESCAPE,0,false);*stage=223;return;
     }
     case 223:
         if(a->graphic_export || a->graphic_return_ui)return;
@@ -636,7 +649,7 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
     case 226:
         *capture="graphic-dialog-dark-paper.bmp";
         if(!test_graphic_jobs(a)){ok=false;break;}
-        test_scene_key(a,SDLK_ESCAPE,0,false);*stage=227;return;
+        test_graphic_key(a,SDLK_ESCAPE,0,false);*stage=227;return;
     case 227:
         if(a->graphic_export || a->graphic_return_ui)return;
         {ps_preferences preferences=a->preferences;preferences.theme=PS_THEME_HIGH_CONTRAST;preferences_apply(a,&preferences);}
@@ -658,9 +671,9 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
          * supported main-UI font banks (16..22). This is a layout stress case,
          * not evidence that a global 32-pixel UI setting exists. */
         a->graphic_export->scale_override=2;
-        if(!SDL_SetWindowSize(a->window,680,740) || !SDL_SyncWindow(a->window)){ok=false;break;}
+        if(!SDL_SetWindowSize(a->graphic_export->window,680,740) || !SDL_SyncWindow(a->graphic_export->window)){ok=false;break;}
         a->graphic_export->focus_target=0;
-        struct nk_window *window=nk_window_find(a->ui,"graphic-export");if(window)window->scrollbar.y=0;
+        struct nk_window *window=nk_window_find(a->graphic_export->ui,"graphic-export");if(window)window->scrollbar.y=0;
         *stage=232;return;
     }
     case 232: {
@@ -671,15 +684,15 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
     case 233: {
         static unsigned large_tabs;
         if(a->graphic_export->focus_target)return;
-        if(large_tabs<6){test_scene_key(a,SDLK_TAB,0,false);large_tabs++;return;}
-        if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"PNG speichern…")){ok=false;break;}
+        if(large_tabs<6){test_graphic_key(a,SDLK_TAB,0,false);large_tabs++;return;}
+        if(!nk_sdl_accessibility_is_focused(a->graphic_export->ui,NULL,"PNG speichern…")){ok=false;break;}
         *capture="graphic-dialog-200pct-footer.bmp";*stage=239;return;
     }
     case 239: {
-        SDL_SetWindowMinimumSize(a->window,480,480); /* Detached-panel component scope. */
-        if(!SDL_SetWindowSize(a->window,480,740) || !SDL_SyncWindow(a->window)){ok=false;break;}
+        SDL_SetWindowMinimumSize(a->graphic_export->window,480,480); /* Detached-panel component scope. */
+        if(!SDL_SetWindowSize(a->graphic_export->window,480,740) || !SDL_SyncWindow(a->graphic_export->window)){ok=false;break;}
         a->graphic_export->focus_target=2;
-        struct nk_window *window=nk_window_find(a->ui,"graphic-export");if(window)window->scrollbar.y=0;
+        struct nk_window *window=nk_window_find(a->graphic_export->ui,"graphic-export");if(window)window->scrollbar.y=0;
         *stage=240;return;
     }
     case 240:
@@ -688,9 +701,9 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
     case 241: {
         static unsigned tiny_tabs;
         if(a->graphic_export->focus_target)return;
-        if(tiny_tabs<6){test_scene_key(a,SDLK_TAB,0,false);tiny_tabs++;return;}
+        if(tiny_tabs<6){test_graphic_key(a,SDLK_TAB,0,false);tiny_tabs++;return;}
         graphic_dialog *d=a->graphic_export;
-        if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"PNG speichern…") || d->copy.w<300 ||
+        if(!nk_sdl_accessibility_is_focused(a->graphic_export->ui,NULL,"PNG speichern…") || d->copy.w<300 ||
            fabsf(d->copy.w-d->store.w)>1 || fabsf(d->copy.x-d->store.x)>1 ||
            d->store.y<d->copy.y+d->copy.h || d->store.x<d->bounds.x ||
            d->store.x+d->store.w>d->bounds.x+d->bounds.w){ok=false;break;}
@@ -699,8 +712,8 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
     case 242: {
         ps_preferences preferences=a->preferences;preferences.ui_size=16;preferences_apply(a,&preferences);
         a->graphic_export->scale_override=0;a->graphic_export->focus_target=0;
-        if(!SDL_SetWindowSize(a->window,680,740) || !SDL_SyncWindow(a->window)){ok=false;break;}
-        struct nk_window *window=nk_window_find(a->ui,"graphic-export");if(window)window->scrollbar.y=0;
+        if(!SDL_SetWindowSize(a->graphic_export->window,680,740) || !SDL_SyncWindow(a->graphic_export->window)){ok=false;break;}
+        struct nk_window *window=nk_window_find(a->graphic_export->ui,"graphic-export");if(window)window->scrollbar.y=0;
         *stage=243;return;
     }
     case 243: {
@@ -710,13 +723,13 @@ static void test_plot_frame(app *a, int *stage, int *code, const char **capture)
         *capture="graphic-dialog-680-default.bmp";*stage=244;return;
     }
     case 244: {
-        if(!SDL_SetWindowSize(a->window,800,740) || !SDL_SyncWindow(a->window)){ok=false;break;}
-        struct nk_window *window=nk_window_find(a->ui,"graphic-export");if(window)window->scrollbar.y=0;
+        if(!SDL_SetWindowSize(a->graphic_export->window,800,740) || !SDL_SyncWindow(a->graphic_export->window)){ok=false;break;}
+        struct nk_window *window=nk_window_find(a->graphic_export->ui,"graphic-export");if(window)window->scrollbar.y=0;
         *stage=245;return;
     }
     case 245:
         if(a->graphic_export->paper.y-a->graphic_export->bounds.y<230){ok=false;break;}
-        *capture="graphic-dialog-800-centered.bmp";test_scene_key(a,SDLK_ESCAPE,0,false);*stage=230;return;
+        *capture="graphic-dialog-800-centered.bmp";test_graphic_key(a,SDLK_ESCAPE,0,false);*stage=230;return;
     case 230:
         if(a->graphic_export || a->graphic_return_ui)return;
         {ps_preferences preferences=a->preferences;preferences.theme=PS_THEME_DARK;preferences.ui_size=16;preferences_apply(a,&preferences);}

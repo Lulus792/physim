@@ -1296,7 +1296,6 @@ static void draw_ui(app *a,int width,int height) {
     workspace_tip_frame_end(a);
     if(manager)a->project_manager=true;
     graphic_export_unguard(a,guard);
-    graphic_export_view(a,width,height);
     graphic_input_guard browser_guard={0};
     if(browser_active(a))browser_guard=graphic_export_guard(a);
     project_manager_view(a,width,height);

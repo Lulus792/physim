@@ -13993,6 +13993,14 @@
       ]
     },
     {
+      "name": "independent_graphic_window",
+      "app": true,
+      "display": true,
+      "platforms": ["win32", "linux"],
+      "targets": ["python", "physim"],
+      "steps": [{"program":"python","arguments":["{root}/tests/check_independent_graphic_window.py","--app","{physim}","--work","{work}"],"timeout":180,"files":["verification.json"]}]
+    },
+    {
       "name": "graphic_dialog",
       "app": true,
       "display": true,

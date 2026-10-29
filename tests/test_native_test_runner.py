@@ -96,6 +96,7 @@ def verify_display_catalog(runner, display_checker):
         specialized_display["explorer_a_inline"]=("tests/check_explorer_inline.py",("--work",))
         specialized_display["explorer_a_preview_flow"]=("tests/check_explorer_preview.py",("--work",))
         specialized_display["explorer_a_api_context"]=("tests/check_explorer_api_context.py",("--work",))
+        specialized_display["independent_graphic_window"]=("tests/check_independent_graphic_window.py",("--work",))
     if sys.platform == "linux":
         specialized_display.update({
             "explorer_a_native_atspi": ("tests/check_explorer_native.py", ("--work",)),

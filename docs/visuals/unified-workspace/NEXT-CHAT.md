@@ -1,5 +1,13 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
+**Ergänzung vom 29. Oktober 2026 – eigenständige Aufgabenfenster:** Der Nutzer
+verlangt tatsächliche Fenster für Dialoge wie Projektanlage und Grafikexport,
+während Hauptfenster und herausgelöste Bereiche bedienbar bleiben. [ADR 015](../../decisions/015-independent-task-windows.md)
+und der [native Teilnachweis](TASK-WINDOWS-NATIVE.md) gelten zusätzlich. Grafikexport
+ist umgestellt und auf Windows/Linux geprüft; Projektdialog B, dessen Picker A
+und weitere Aufgabenfenster sind noch umzusetzen. Die bestehenden Gestaltungen
+und die Freigaben unten bleiben erhalten.
+
 **Ergänzung vom 29. Oktober 2026 – Auswahl/Markierung:** Der Nutzer wünscht
 lesbare Markierungen und legt fest: **Linksauswahl öffnet keine automatischen
 Aktionsleisten; Auswahlaktionen erscheinen erst per Rechtsklick**, zusätzlich

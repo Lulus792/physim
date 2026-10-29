@@ -79,7 +79,7 @@ static bool timeline_controls_event(app *a,const SDL_Event *event,SDL_Window *wi
             timeline_seek_pointer(a,event->button.x);timeline_release_drag(a);return true;
         }
     }
-    if(a->tab!=1 || !id || id!=a->timeline_control_window || a->reset_pending || a->reset_starting || a->graphic_export || a->toolbar_menu || a->dialog_pending || a->recovery)return false;
+    if(a->tab!=1 || !id || id!=a->timeline_control_window || a->reset_pending || a->reset_starting || a->toolbar_menu || a->dialog_pending || a->recovery)return false;
     struct nk_context *ui=window==a->window && !panel_is_detached(a,PS_PANEL_TIMELINE)?a->ui:
         window==a->panels[PS_PANEL_TIMELINE].window && panel_is_detached(a,PS_PANEL_TIMELINE)?a->panels[PS_PANEL_TIMELINE].ui:NULL;
     uint32_t count=ps_timeline_count(&a->timeline);if(!ui || count<2)return false;

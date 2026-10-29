@@ -519,6 +519,7 @@ typedef struct {
         report_details_text_bounds;
     int png_scale;
     struct graphic_dialog *graphic_export;
+    SDL_Window *graphic_return_window;
     struct nk_context *graphic_return_ui;unsigned graphic_return_frames;
     char graphic_export_test_path[4096];
     struct nk_rect png_region_bounds;
@@ -4285,6 +4286,7 @@ int main(int argc, char **argv) {
         a->workspace_tip.dismissed=false;
         browser_tick(a);
         nk_input_begin(a->ui);
+        if(a->graphic_export)nk_input_begin(a->graphic_export->ui);
         if (a->doc_ui)
             nk_input_begin(a->doc_ui);
         for(unsigned i=0;i<PS_PANEL_COUNT;i++)if(a->panels[i].ui)nk_input_begin(a->panels[i].ui);
@@ -4468,6 +4470,7 @@ int main(int argc, char **argv) {
             nk_sdl_handle_event(a->ui, &e);
         }
         nk_input_end(a->ui);
+        if(a->graphic_export)nk_input_end(a->graphic_export->ui);
         if (a->doc_ui)
             nk_input_end(a->doc_ui);
         for(unsigned i=0;i<PS_PANEL_COUNT;i++)if(a->panels[i].ui)nk_input_end(a->panels[i].ui);
@@ -5628,6 +5631,9 @@ int main(int argc, char **argv) {
         if (capture && !doc_capture) {
             char path[4096];
             join(path, sizeof path, workspace_state_test ? argv[2] : a->project, capture);
+            bool graphic_capture=a->graphic_export && (plot_test || !strcmp(capture,"comparison-export.png"));
+            if(graphic_capture)SDL_strlcpy(a->graphic_export->capture,path,sizeof a->graphic_export->capture);
+            else {
             if(plot_test && SDL_getenv("PHYSIM_TEST_GRAPHIC_DIALOG")) {
                 /* One paired BMP/PNG proves identical readback; the remaining
                  * dialog captures are lossless PNG from creation, not deleted
@@ -5637,6 +5643,7 @@ int main(int argc, char **argv) {
             }
             if (!ps_graphics_capture(graphics, path))
                 exit_code = 1;
+            }
         }
         if (a->profiler) {
             Uint64 now = SDL_GetTicksNS();
@@ -5656,6 +5663,7 @@ int main(int argc, char **argv) {
         char doc_capture_path[4096];
         if(!panel_windows_render(a)){fprintf(stderr,"Panel rendering: %s\n",SDL_GetError());exit_code=1;a->quitting=true;}
         panel_requests(a);
+        if(!graphic_export_window_render(a)){fprintf(stderr,"Graphic export window: %s\n",SDL_GetError());exit_code=1;a->quitting=true;}
         if (doc_capture)
             join(doc_capture_path, sizeof doc_capture_path, a->project, capture);
         if (!documentation_window_render(a, doc_capture ? doc_capture_path : NULL)) {

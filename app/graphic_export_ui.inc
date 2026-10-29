@@ -3,16 +3,18 @@
 typedef struct graphic_dialog {
     ps_graphic_snapshot *snapshot;ps_graphic_raster *raster;ps_graphic_save *save;
     SDL_Window *window;ps_graphics *graphics;struct nk_context *ui;
+    SDL_Window *source_window;struct nk_context *source_ui;
     ps_graphic_description description;struct nk_user_font fonts[10];
     ps_ui_backdrop backdrop;
     ps_ui_shadow shadows[2];
     char source[64],directory[4096],message[256],filename[192],saved_path[8192];
+    char capture[4096]; /* Native test evidence, consumed after drawing. */
     unsigned scale,focus_target,menu_field;float factor,content_height,scale_override;bool svg,visible,appearance,dark,contrast,dirty,close,first;
     struct nk_rect bounds,paper,formats[2],fields[3],choices[3][4],copy,store,exit;
 } graphic_dialog;
 typedef struct {struct nk_input input;ps_ui_a11y_hook hook;bool held;} graphic_input_guard;
 static graphic_input_guard graphic_export_guard(app *a) {
-    graphic_input_guard guard={0};if(!a->graphic_export && !a->project_manager && !browser_active(a))return guard;
+    graphic_input_guard guard={0};if(!a->project_manager && !browser_active(a))return guard;
     guard.held=true;guard.input=a->ui->input;
     ps_ui_font_layout *layout=a->ui->userdata.ptr;guard.hook=layout->accessibility;layout->accessibility=NULL;
     memset(&a->ui->input,0,sizeof a->ui->input);a->ui->input.mouse.pos=nk_vec2(-10000,-10000);
@@ -25,25 +27,47 @@ static void graphic_export_unguard(app *a,graphic_input_guard guard) {
 }
 static void graphic_export_close(app *a) {
     graphic_dialog *d=a->graphic_export;if(!d)return;
+    bool return_focus=(SDL_GetWindowFlags(d->window)&SDL_WINDOW_INPUT_FOCUS) &&
+        !(SDL_GetWindowFlags(d->source_window)&(SDL_WINDOW_HIDDEN|SDL_WINDOW_MINIMIZED));
     ps_graphics_make_current(d->graphics);ps_graphics_backdrop(d->graphics,NULL);ps_graphics_shadows(d->graphics,NULL,0);ps_graphic_raster_destroy(d->raster);
     ps_graphic_snapshot_destroy(d->snapshot);ps_graphic_save_destroy(d->save);
-    nk_window_close(d->ui,"graphic-export");nk_window_close(d->ui,"graphic-export-backdrop");
-    nk_window_set_focus(d->ui,d->source);
-    a->graphic_return_ui=d->ui;a->graphic_return_frames=3;
+    if(return_focus)nk_window_set_focus(d->source_ui,d->source);
+    a->graphic_return_ui=return_focus?d->source_ui:NULL;a->graphic_return_frames=return_focus?3:0;
+    a->graphic_return_window=return_focus?d->source_window:NULL;
+    nk_sdl_shutdown(d->ui);ps_graphics_destroy(d->graphics);SDL_DestroyWindow(d->window);
+    if(return_focus)SDL_RaiseWindow(d->source_window);
     a->graphic_export=NULL;free(d);ps_graphics_make_current(a->graphics);
 }
 static bool graphic_export_open(app *a,graphic_dialog *d) {
     ps_graphic_snapshot_describe(d->snapshot,&d->description);
-    d->window=a->window;d->graphics=a->graphics;d->ui=a->ui;d->dark=a->preferences.theme!=PS_THEME_LIGHT;
+    d->source_window=a->window;d->source_ui=a->ui;d->dark=a->preferences.theme!=PS_THEME_LIGHT;
     d->contrast=a->preferences.theme==PS_THEME_HIGH_CONTRAST;
     snprintf(d->source,sizeof d->source,"%s",a->ui->current?a->ui->current->name_string:"workspace");
+    int source_width,source_height;SDL_GetWindowSize(a->window,&source_width,&source_height);
+    float f=a->preferences.ui_size/16.f;
+    if(!ps_graphics_make_current(a->graphics) || !SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT,1))goto fail;
+    d->window=SDL_CreateWindow("Physim | Grafik exportieren",(int)fminf(1080*f,fmaxf(320,source_width-80)),
+        (int)fminf(880*f,fmaxf(320,source_height-80)),SDL_WINDOW_OPENGL|SDL_WINDOW_RESIZABLE|SDL_WINDOW_HIGH_PIXEL_DENSITY|SDL_WINDOW_HIDDEN);
+    if(d->window)d->graphics=ps_graphics_create(d->window);
+    SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT,0);
+    if(!d->graphics)goto fail;
+    SDL_GL_SetSwapInterval(0);d->ui=nk_sdl_init(d->window,d->graphics);if(!d->ui)goto fail;
+    nk_sdl_borrow_fonts(d->ui,a->ui);nk_input_begin(d->ui);nk_input_end(d->ui);
+    SDL_SetWindowMinimumSize(d->window,320,320);
+    int x,y;SDL_GetWindowPosition(a->window,&x,&y);SDL_SetWindowPosition(d->window,x+40,y+40);
     snprintf(d->directory,sizeof d->directory,"%s",a->project);d->scale=2;d->dirty=d->first=true;
     snprintf(d->message,sizeof d->message,"PNG oder SVG direkt aus dieser Vorschau speichern.");
     d->focus_target=2;a->graphic_export=d;a->plot_drag=NULL;completion_close(a);toolbar_keyboard_close(a);
+    SDL_ShowWindow(d->window);SDL_RaiseWindow(d->window);ps_graphics_make_current(a->graphics);
     return true;
+fail:
+    if(d->graphics){ps_graphics_make_current(d->graphics);if(d->ui)nk_sdl_shutdown(d->ui);ps_graphics_destroy(d->graphics);}
+    if(d->window)SDL_DestroyWindow(d->window);
+    ps_graphic_snapshot_destroy(d->snapshot);free(d);ps_graphics_make_current(a->graphics);
+    status(a,"Das Grafikexportfenster konnte nicht geöffnet werden.");return false;
 }
 static bool graphic_export_report(app *a,uint32_t index) {
-    if(a->graphic_export)return false;
+    if(a->graphic_export){SDL_ShowWindow(a->graphic_export->window);SDL_RaiseWindow(a->graphic_export->window);return true;}
     graphic_dialog *d=calloc(1,sizeof *d);if(!d){status(a,"Grafikvorschau: nicht genügend Speicher.");return false;}
     ps_graphic_axes axes={0};ps_result result=ps_report_plot_bounds(a->analysis_report,index,axes.full);
     if(result==PS_OK) {
@@ -56,6 +80,7 @@ static bool graphic_export_report(app *a,uint32_t index) {
     return graphic_export_open(a,d);
 }
 static bool graphic_export_comparison(app *a) {
+    if(a->graphic_export){SDL_ShowWindow(a->graphic_export->window);SDL_RaiseWindow(a->graphic_export->window);return true;}
     ps_comparison_state state=ps_comparison_read(a->comparison);
     if(a->graphic_export || state.loading || !state.snapshot || a->plot_channel<0 || a->plot_channel>=PS_MAX_CHANNELS)return false;
     graphic_dialog *d=calloc(1,sizeof *d);if(!d){status(a,"Grafikvorschau: nicht genügend Speicher.");return false;}
@@ -68,6 +93,7 @@ static bool graphic_export_comparison(app *a) {
     return graphic_export_open(a,d);
 }
 static void graphic_export_tick(app *a) {
+    if(a->graphic_return_ui && SDL_GetKeyboardFocus()!=a->graphic_return_window){a->graphic_return_ui=NULL;a->graphic_return_window=NULL;a->graphic_return_frames=0;}
     if(a->graphic_return_ui) {
         bool requested=nk_sdl_accessibility_request_focus(a->graphic_return_ui,NULL,"Grafik exportieren…");
         if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"GRAPHIC RETURN: requested=%d focused=%d remaining=%u\n",requested,nk_sdl_accessibility_is_focused(a->graphic_return_ui,NULL,"Grafik exportieren…"),a->graphic_return_frames);
@@ -93,11 +119,12 @@ static bool graphic_export_event(app *a,const SDL_Event *event,SDL_Window *windo
         graphic_export_close(a);return false;
     }
     if(window==d->window && event->type==SDL_EVENT_WINDOW_CLOSE_REQUESTED){d->close=true;return true;}
+    if(window!=d->window)return false;
     bool input=event->type==SDL_EVENT_KEY_DOWN || event->type==SDL_EVENT_KEY_UP ||
         event->type==SDL_EVENT_TEXT_INPUT || event->type==SDL_EVENT_TEXT_EDITING ||
         event->type==SDL_EVENT_MOUSE_MOTION || event->type==SDL_EVENT_MOUSE_BUTTON_DOWN ||
         event->type==SDL_EVENT_MOUSE_BUTTON_UP || event->type==SDL_EVENT_MOUSE_WHEEL;
-    if(!input)return false;
+    if(!input){SDL_Event copy=*event;nk_sdl_handle_event(d->ui,&copy);return true;}
     if(window==d->window) {
         struct nk_window *w=nk_window_find(d->ui,"graphic-export");
         if(event->type==SDL_EVENT_KEY_DOWN && event->key.key==SDLK_TAB) {
@@ -271,8 +298,7 @@ static bool graphic_export_combo(graphic_dialog *d,unsigned field,float x,float 
     }
     nk_end_disabled(ui);nk_style_pop_font(ui);return changed;
 }
-static void graphic_export_view(app *a,int width,int height) {
-    graphic_dialog *d=a->graphic_export;if(!d || d->ui!=a->ui)return;
+static void graphic_export_view(app *a,graphic_dialog *d,int width,int height) {
     if(d->dirty) {
         Uint64 render_started=SDL_GetTicksNS();
         ps_graphic_figure_options options={0};options.dark=d->appearance && d->dark;options.visible=d->visible;
@@ -299,7 +325,7 @@ static void graphic_export_view(app *a,int width,int height) {
     }
     ui->style.window.padding=nk_vec2(0,0);ui->style.window.spacing=nk_vec2(0,0);
     ui->style.window.border=0;ui->style.window.rounding=14*f;
-    float margin=width<=760*f?10:20,outer_w=fminf(1080*f,width-2*margin),w=outer_w-2;
+    float margin=0,outer_w=fminf(1080*f,(float)width),w=outer_w-2;
     bool narrow=width<=760*f,columns=narrow && width>420*f,tiny=width<=420*f;
     float footer_pad=(narrow?18:24)*f;
     const char *save_label=d->svg?"SVG speichern…":"PNG speichern…";
@@ -336,22 +362,12 @@ static void graphic_export_view(app *a,int width,int height) {
     d->bounds=nk_rect((width-outer_w)/2,(height-h)/2,outer_w,h);
     float preview_shift=narrow?0:(preview_h-preview_content)/2;
     d->content_height=total+2;
-    float corner=(narrow?10:14)*f;
+    float corner=0;
     bool effects=a->preferences.theme!=PS_THEME_HIGH_CONTRAST && !nk_sdl_reduce_transparency(ui);
     d->shadows[0]=(ps_ui_shadow){.x=d->bounds.x,.y=d->bounds.y,.w=d->bounds.w,.h=d->bounds.h,
-        .radius=corner,.offset_y=28*f,.blur=100*f,.alpha=119};
+        .radius=corner,.offset_y=0,.blur=0,.alpha=0};
     ps_graphics_shadows(d->graphics,d->shadows,effects?2:0);
-    ui->style.window.fixed_background=nk_style_item_hide();
-    ui->style.window.rounding=0;
-    if(nk_begin(ui,"graphic-export-backdrop",nk_rect(0,0,(float)width,(float)height),NK_WINDOW_NO_INPUT|NK_WINDOW_NO_SCROLLBAR)) {
-        struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
-        nk_push_scissor(canvas,nk_rect(0,0,(float)width,(float)height));
-        d->backdrop=(ps_ui_backdrop){.w=(float)width,.h=(float)height,.blur_only=true,.opaque=!effects};
-        ps_graphics_backdrop(d->graphics,&d->backdrop);ps_ui_draw_backdrop(ui,&d->backdrop);
-        nk_fill_rect(canvas,nk_rect(0,0,(float)width,(float)height),0,nk_rgba(8,12,20,125));
-        if(effects)ps_ui_draw_shadow(ui,&d->shadows[0]);
-    }
-    nk_end(ui);nk_sdl_window_raise(ui,"graphic-export-backdrop");
+    ps_graphics_backdrop(d->graphics,NULL);
     ui->style.window.fixed_background=nk_style_item_color(UI_COLOR(window));ui->style.window.rounding=corner;
     ui->style.window.border=1;ui->style.window.border_color=UI_COLOR(border);
     nk_window_show(ui,"graphic-export",NK_SHOWN);
@@ -477,4 +493,26 @@ static void graphic_export_view(app *a,int width,int height) {
         nk_layout_space_end(ui);
     }
     nk_end(ui);ui->style=saved_style;ui_palette=previous;
+}
+static bool graphic_export_window_render(app *a) {
+    graphic_dialog *d=a->graphic_export;
+    if(!d || d->close || SDL_GetWindowFlags(d->window)&(SDL_WINDOW_HIDDEN|SDL_WINDOW_MINIMIZED))return true;
+    if(!ps_graphics_make_current(d->graphics))return false;
+    ps_graphics *owner_graphics=a->graphics;
+    nk_style_set_font(d->ui,a->font_ui);nk_sdl_set_ui_size(d->ui,a->preferences.ui_size);
+    const ps_ui_palette *palette=a->preferences.theme==PS_THEME_LIGHT?&PS_UI_LIGHT:a->preferences.theme==PS_THEME_HIGH_CONTRAST?&PS_UI_HIGH_CONTRAST:&PS_UI_DARK;
+    ps_graphics_background(d->graphics,palette->window.r,palette->window.g,palette->window.b);
+    int width,height;SDL_GetWindowSize(d->window,&width,&height);graphic_export_view(a,d,width,height);
+    nk_sdl_update_TextInput(d->ui);bool okay=nk_sdl_render(d->ui);
+    if(d->capture[0]){
+        if(SDL_getenv("PHYSIM_TEST_GRAPHIC_DIALOG")){
+            const char *name=strrchr(d->capture,'/');if(!name)name=strrchr(d->capture,'\\');name=name?name+1:d->capture;
+            if(!strcmp(name,"plot-export-dialog.bmp") && !ps_graphics_capture(d->graphics,d->capture))okay=false;
+            char *suffix=strrchr(d->capture,'.');if(suffix && !strcmp(suffix,".bmp"))memcpy(suffix,".png",5);
+        }
+        if(!ps_graphics_capture(d->graphics,d->capture))okay=false;d->capture[0]=0;
+    }
+    if(!ps_graphics_present(d->graphics))okay=false;
+    if(!ps_graphics_make_current(owner_graphics))okay=false;
+    return okay;
 }

@@ -116,7 +116,6 @@ fail:
     *p=(ps_panel_window){0};ps_graphics_make_current(a->graphics);return false;
 }
 static void panel_requests(app *a) {
-    if(a->graphic_export)return;
     unsigned returns=a->panel_return_request,opens=a->panel_open_request;
     a->panel_return_request=a->panel_open_request=0;
     for(unsigned panel=0;panel<PS_PANEL_COUNT;panel++) {
@@ -277,7 +276,6 @@ static bool panel_windows_render(app *a) {
         workspace_tip_frame_end(a);
         graphic_export_unguard(a,export_guard);
         if(manager)a->project_manager=true;
-        graphic_export_view(a,w,h);
         if(a->timeline_design_active && i==PS_PANEL_TIMELINE)timeline_design_draw(a);
         nk_sdl_update_TextInput(p->ui);
         memcpy(p->splitters,a->laboratory_splitters,sizeof p->splitters);

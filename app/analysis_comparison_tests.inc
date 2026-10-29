@@ -80,23 +80,23 @@ static void comparison_test_frame(app *a,int *stage,int *code,const char **captu
         ok=dialog && dialog->description.plot.curves==8 && !strcmp(dialog->description.plot.y_unit.symbol,"m") && !memcmp(&dialog->description.axes,&frozen_axes,sizeof frozen_axes);
         ok=ok && state.snapshot && d.plot.curves==1 && !strcmp(d.plot.y_unit.symbol,"cm");
         join(path,sizeof path,a->project,"runs/Lauf 001.psrun");ok=ok && !remove(path);
-        ok=ok && nk_sdl_accessibility_request_focus(a->ui,"Dateiformat","SVG");break;
+        ok=ok && nk_sdl_accessibility_request_focus(a->graphic_export->ui,"Dateiformat","SVG");break;
     }
     case 12:
-        if(!nk_sdl_accessibility_is_focused(a->ui,"Dateiformat","SVG"))return;
-        test_window_key_mod(a->window,SDLK_SPACE,0);break;
+        if(!nk_sdl_accessibility_is_focused(a->graphic_export->ui,"Dateiformat","SVG"))return;
+        test_window_key_mod(a->graphic_export->window,SDLK_SPACE,0);break;
     case 13:
         ok=a->graphic_export && a->graphic_export->svg;
         join(a->graphic_export_test_path,sizeof a->graphic_export_test_path,a->project,"comparison-eight.svg");
-        if(ok && !nk_sdl_accessibility_is_focused(a->ui,NULL,"SVG speichern…")) {
+        if(ok && !nk_sdl_accessibility_is_focused(a->graphic_export->ui,NULL,"SVG speichern…")) {
             if(a->graphic_export->focus_target)return;
-            if(save_tabs++<6){test_window_key_mod(a->window,SDLK_TAB,0);return;}
+            if(save_tabs++<6){test_window_key_mod(a->graphic_export->window,SDLK_TAB,0);return;}
             ok=false;
         }
         break;
     case 14:
-        if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"SVG speichern…"))return;
-        test_window_key_mod(a->window,SDLK_SPACE,0);break;
+        if(!nk_sdl_accessibility_is_focused(a->graphic_export->ui,NULL,"SVG speichern…"))return;
+        test_window_key_mod(a->graphic_export->window,SDLK_SPACE,0);break;
     case 15:
         if(a->graphic_export->save)return;
         ok=strstr(a->graphic_export->message,"gespeichert")!=NULL;
@@ -114,7 +114,7 @@ static void comparison_test_frame(app *a,int *stage,int *code,const char **captu
             if(ok){size_t size;const char *text=ps_graphic_svg_bytes(svg,&size);join(path,sizeof path,a->project,"comparison-cropped.svg");FILE *f=fopen(path,"wb");ok=f && fwrite(text,1,size,f)==size;if(f && fclose(f))ok=false;}
             ps_graphic_svg_destroy(svg);
         }
-        test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
+        test_window_key_mod(a->graphic_export->window,SDLK_ESCAPE,0);break;
     }
     case 17:
         if(a->graphic_export || a->graphic_return_ui)return;
