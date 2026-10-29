@@ -1,5 +1,15 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
+**Ergänzung vom 29. Oktober 2026 – Auswahl/Markierung:** Der Nutzer wünscht
+lesbare Markierungen und legt fest: **Linksauswahl öffnet keine automatischen
+Aktionsleisten; Auswahlaktionen erscheinen erst per Rechtsklick**, zusätzlich
+über Menütaste/Umschalt+F10. Drei neue Gestaltungen sind dafür in einer
+[getrennten interaktiven Studie](../selection-options/index.html) vorbereitet.
+Die [Übergabe und Zustandsregeln](../selection-options/README.md) dokumentieren
+Text-, Zeilen- und Objektauswahl samt Menüerhalt und Abbruch. Die konkrete
+Markierungsgestaltung A/B/C ist noch nicht ausgewählt; diese Studie nicht als
+zusätzliche Designfreigabe behandeln. Die folgende Auswahl bleibt verbindlich.
+
 **Verbindliche Auswahl vom 25. Oktober 2026:** Der Nutzer hat entschieden:
 **Leeransicht bestätigt; Protokoll C; Szene & Werte A; Auswertung A;
 Läufe/Serien A; Neues Projekt B; Datei-Explorer A.** Die Auswahlphase ist beendet;

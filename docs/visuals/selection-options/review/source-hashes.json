@@ -1,0 +1,23 @@
+{
+  "sources": {
+    "docs/visuals/selection-options/index.html": "2666879cbba87898d80a00d8e479e7bcdbed65d2615c0a8375184ccbe2d3f05b",
+    "docs/visuals/selection-options/selection.css": "57291feddeb38ff3b5f75c998c4d9cd2159fc6113baafc045eab19a4aa6749a6",
+    "docs/visuals/selection-options/selection.js": "00e92eb7da16402e2b1e605898423820ab79561c4f1790565a23687c52505325",
+    "tools/check_selection_options.cjs": "f6d430f6ab5878dfb287cfa3819deec2237c45f4dcdeb50728235525a7197e2d"
+  },
+  "imageCrops": {
+    "text": "1440x1257 full-page capture, crop x55 y620 width1065 height425",
+    "scene": "1440px full-page capture, crop x55 y580 width1330 height500",
+    "protocol": "1440x1100 viewport capture with open menu"
+  },
+  "images": {
+    "protocol-menu.png": "81e6cc7b2d916886c488660f97a96cec63ed971ec833ea03b93c9d9aba56b415",
+    "scene-contours.png": "4c6a2d5e6fd2387ab2bf853497762f323c583a4d2ea400c976105d82e109e9fc",
+    "text-a-dark.png": "01e4a383752cdbd9058b54ef7a320b5c6784482b06a98053be8e515fea4315ef",
+    "text-a-light.png": "95be68e848ed79638b4bdb5ea72aad34d23055d9621b52866f5a7b3d38947caa",
+    "text-b-dark.png": "011771163207e67e96078c0f4b5d61f359b022731b67f3da3edc74bfa8a7f7e0",
+    "text-b-light.png": "b8852c05c9b231e85a6bbd108a4676e710afc63c2012177b42c35e7e2b503ba1",
+    "text-c-dark.png": "475896ea7b5b3b36c89faaf89a8e317b73d478de325c543a3b42d116f96baf26",
+    "text-c-light.png": "50e3e5bfc78896d11ea1fbcaddab2b082b027cc62046f9d321ec498c54ef766d"
+  }
+}

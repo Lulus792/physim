@@ -1,5 +1,9 @@
 # Physim – getrennte Designvarianten
 
+Zusätzliche, eigenständige [Studie zu Markierung und Rechtsklick-Menüs](../selection-options/index.html)
+vom 29. Oktober 2026: drei neue Markierungsstile zum Vergleichen. Deren
+Gestaltung ist noch nicht ausgewählt und ändert die unten freigegebene Kombination nicht.
+
 Stand: **25. Oktober 2026. Status: Auswahl vom Nutzer freigegeben.**
 
 Der Nutzer hat mehrere voneinander getrennte Designs für Protokoll und fehlende

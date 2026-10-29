@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="de" data-theme="dark" data-variant="a">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Physim · Auswahl & Markierung</title>
+  <link rel="stylesheet" href="selection.css"><script src="selection.js" defer></script>
+</head>
+<body>
+  <header class="page-header"><a class="brand" href="../design-options/?approved=1&topic=empty">p<span>·</span><small>Physim / Designstudie</small></a><div><span class="draft">Separater Entwurf · noch nicht freigegeben</span><button id="theme">Hell</button></div></header>
+  <main>
+    <section class="intro"><p class="eyebrow">AUSWAHL & KONTEXTMENÜ / 29. OKTOBER 2026</p><h1>Markiert. Und trotzdem lesbar.</h1><p>Links auswählen. Rechts die passenden Aktionen öffnen.<br>Die Markierung zeigt den Bereich, ohne seinen Inhalt zu verdecken.</p></section>
+    <nav class="variants" aria-label="Markierungsvarianten">
+      <button data-variant="a" aria-pressed="true"><span class="letter">A</span><span><strong>Sanfte Fläche</strong><small>Transparenter Akzent, ursprüngliche Textfarben.</small><code class="mini mini-a">return <span>energy</span>;</code></span><em>Empfehlung</em></button>
+      <button data-variant="b" aria-pressed="false"><span class="letter">B</span><span><strong>Feine Kontur</strong><small>Sehr wenig Fläche, deutliche Begrenzungen.</small><code class="mini mini-b">return <span>energy</span>;</code></span></button>
+      <button data-variant="c" aria-pressed="false"><span class="letter">C</span><span><strong>Klarer Kontrast</strong><small>Kräftige Fläche mit eigener, kontrastreicher Schrift.</small><code class="mini mini-c">return <span>energy</span>;</code></span></button>
+    </nav>
+    <section class="study-heading"><div><p class="eyebrow" id="variant-label">A · SANFTE FLÄCHE</p><h2>Eine Auswahl, vertraute Bedienung.</h2></div><p id="variant-description">Die Tönung liegt hinter den Zeichen. Syntaxfarben und Warnhinweise bleiben erkennbar.</p></section>
+    <section class="workspace" aria-label="Interaktive Auswahlvorschau">
+      <header class="window-header"><span class="window-mark">p<span>·</span></span><strong>Pendelstudie</strong><span class="window-subtitle">Auswahlvorschau · Beispieldaten</span><span class="saved">Gespeichert</span></header>
+      <nav class="contexts" aria-label="Beispielbereich"><button data-context="code" aria-pressed="true">Text & Code</button><button data-context="protocol" aria-pressed="false">Protokoll</button><button data-context="files" aria-pressed="false">Dateien</button><button data-context="scene" aria-pressed="false">Szene & Grafik</button></nav>
+      <div class="workbench">
+        <section class="content-pane">
+          <header class="pane-heading"><span id="document-name">main.c</span><span id="content-meta">C · UTF-8 · Nur Lesevorschau</span></header>
+          <div id="content"></div>
+          <footer class="selection-status"><span id="selection-status" role="status" aria-live="polite">Noch keine Auswahl.</span><span>Rechtsklick · Umschalt+F10</span></footer>
+        </section>
+        <aside class="inspector"><p class="eyebrow">SO FUNKTIONIERT’S</p><h3 id="context-title">Text markieren</h3><p id="context-help"></p><div class="gesture"><span>01</span><p>Mit der linken Maustaste auswählen.</p></div><div class="gesture"><span>02</span><p>Rechtsklick auf die Auswahl öffnet das Kontextmenü.</p></div><div class="gesture"><span>03</span><p>Aktion wählen oder mit Escape schließen.</p></div><hr><p class="eyebrow">BEISPIEL VORBEREITEN</p><button id="sample">Beispiel markieren</button><p class="quiet">Der Button zeigt nur eine Markierung. Es öffnet sich kein Aktionsmenü.</p><div id="details" class="details" hidden></div></aside>
+      </div>
+    </section>
+    <section class="notes"><div><h3>Inhalt bleibt sichtbar</h3><p>Kein dunkles Rechteck über dem Text. Flächen liegen hinter der Schrift; Konturen umschließen Objekte. Ein Häkchen ergänzt ausgewählte Zeilen.</p></div><div><h3>Aktionen erst auf Anfrage</h3><p>Linksklick und Ziehen öffnen keine Leiste. Das Menü erscheint nur über Rechtsklick, die Menütaste oder Umschalt+F10.</p></div><div><h3>Auswahl ist kein Fokus</h3><p>Eine gestrichelte Fokuslinie zeigt die Tastaturposition. Mehrfachauswahl bleibt sichtbar, wenn das Kontextmenü geöffnet wird.</p></div></section>
+    <footer class="page-footer"><span id="feedback" role="status" aria-live="polite">Eigenständige Vorschau. Das freigegebene Design bleibt unverändert.</span><a href="README.md">Gestaltung & Übergabe ↗</a></footer>
+  </main>
+  <div id="context-menu" role="menu" aria-label="Aktionen zur Auswahl" hidden><div id="menu-caption" role="presentation"></div><div id="menu-items" role="presentation"></div></div>
+</body>
+</html>
