@@ -1,0 +1,116 @@
+{
+  "date": "2026-10-29",
+  "scope": "Superseded first worker-test raw binaries/stamps, after final worker2 and native task-window validation. No active matching Windows/WSL process observed immediately before cleanup.",
+  "removed_files": [
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/context-worker-units-windows/bin/api_reference-positive.exe",
+      "archive_entry": "context-worker-units-windows/bin/api_reference-positive.exe",
+      "bytes": 328704,
+      "sha256": "5119a43aeedf1fb9bb42fcafcbbeca0616265c4bfdb0fd78ec9e14c779cad35f"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/context-worker-units-windows/bin/api_reference-positive.exe.json",
+      "archive_entry": "context-worker-units-windows/bin/api_reference-positive.exe.json",
+      "bytes": 155,
+      "sha256": "ccc996a090c1c50086cc07e1cf215d6628530b8082640982e2682eba1720e5b8"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/context-worker-units-windows/bin/api_reference-positive.pdb",
+      "archive_entry": "context-worker-units-windows/bin/api_reference-positive.pdb",
+      "bytes": 978944,
+      "sha256": "b05261e408724795d182c1a97ef0dc9aea483c8030176a474b566c4ae0525f42"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/context-worker-units-windows/bin/completion-positive.exe",
+      "archive_entry": "context-worker-units-windows/bin/completion-positive.exe",
+      "bytes": 195072,
+      "sha256": "f9e9b4df645a4888c9827f69293697f8d5471ed738cf81e05f746f891686d60d"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/context-worker-units-windows/bin/completion-positive.exe.json",
+      "archive_entry": "context-worker-units-windows/bin/completion-positive.exe.json",
+      "bytes": 155,
+      "sha256": "ea24dc6a83c58cd59e88637037a2d2fa2f58d78e4a4f01d43a9908744405a168"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/context-worker-units-windows/bin/completion-positive.pdb",
+      "archive_entry": "context-worker-units-windows/bin/completion-positive.pdb",
+      "bytes": 823296,
+      "sha256": "ccd1fef81db0af0d711fe95b23caf0808d374d2fbd066d4e1a5b73c859e67269"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/context-worker-units-windows/bin/file_browser_worker-positive.exe",
+      "archive_entry": "context-worker-units-windows/bin/file_browser_worker-positive.exe",
+      "bytes": 482816,
+      "sha256": "d2ff2fa88786b9e04892126c787783fc4643928c741237e2c490aaf972c06d43"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/context-worker-units-windows/bin/file_browser_worker-positive.exe.json",
+      "archive_entry": "context-worker-units-windows/bin/file_browser_worker-positive.exe.json",
+      "bytes": 155,
+      "sha256": "af9d8b422b538cfb8fe9d2064d32006b0f5cc1fa9205d5ea6ee82263480eef4b"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/context-worker-units-windows/bin/file_browser_worker-positive.pdb",
+      "archive_entry": "context-worker-units-windows/bin/file_browser_worker-positive.pdb",
+      "bytes": 1560576,
+      "sha256": "eef51e580b9729010343b19cb4ebd4d7901b6985e8df34abbc129758754b00b8"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/context-worker-units-windows/bin/SDL3.dll",
+      "archive_entry": "context-worker-units-windows/bin/SDL3.dll",
+      "bytes": 2521600,
+      "sha256": "b110bb37842216818ffe49f35cdf72d68bb5d0f26ca5fd963dbf5c7c3e6bcdd9"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/context-worker-units-linux/bin/api_reference-positive",
+      "archive_entry": "context-worker-units-linux/bin/api_reference-positive",
+      "bytes": 1537536,
+      "sha256": "63961f91e99aca7526bc5086309eead85272d75d8f6fb096b5bdaa0b3c338107"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/context-worker-units-linux/bin/api_reference-positive.json",
+      "archive_entry": "context-worker-units-linux/bin/api_reference-positive.json",
+      "bytes": 155,
+      "sha256": "af01e935e1a11ee3363f59ac43989a4c0e4908c3b4bf86aeb4ff8252f941eb09"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/context-worker-units-linux/bin/completion-positive",
+      "archive_entry": "context-worker-units-linux/bin/completion-positive",
+      "bytes": 862920,
+      "sha256": "e70047fa2b92828993ef4450fa7760050f2e836db4c521660b04bbc428f3eb01"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/context-worker-units-linux/bin/completion-positive.json",
+      "archive_entry": "context-worker-units-linux/bin/completion-positive.json",
+      "bytes": 155,
+      "sha256": "0df889cbe47536eefb4643330750c5e3c4b0333156602f4b0e74659f681a0a89"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/context-worker-units-linux/bin/file_browser_worker-positive",
+      "archive_entry": "context-worker-units-linux/bin/file_browser_worker-positive",
+      "bytes": 3457800,
+      "sha256": "34d9d2109604a1663998f849104b03590019f1d786a89af43b32599bea522990"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/context-worker-units-linux/bin/file_browser_worker-positive.json",
+      "archive_entry": "context-worker-units-linux/bin/file_browser_worker-positive.json",
+      "bytes": 155,
+      "sha256": "e8d0511447e4923947b6c9b4deafaaca5d38727673cfde89ac3f9ca27705f8c9"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/context-worker-units-linux/bin/libSDL3.so.0",
+      "archive_entry": "context-worker-units-linux/bin/libSDL3.so.0",
+      "bytes": 3983128,
+      "sha256": "74ecd0f7d2ea012c57ee91e705da528e1cd25ff698f88072404191a4ec0c8c89"
+    }
+  ],
+  "freed_bytes": 16733322,
+  "skipped_mapped_files": [],
+  "archive": {
+    "path": "build/validation/explorer-inline-2026-10-29/context-worker-first-failure.zip",
+    "sha256": "db32ca84b94aa7ce3df0802c5d3ef1232d55f421fe0c828f76b89e1a4bc555bf"
+  },
+  "archive_bytes_read_back_after_cleanup": true,
+  "preserved": "Source/logs/failure archive/final worker binaries, all frozen reports and current builds"
+}
