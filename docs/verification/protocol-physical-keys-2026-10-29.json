@@ -1,0 +1,121 @@
+{
+  "date": "2026-10-29",
+  "scope": "Physical Windows protocol height focus and Shift+Up/Down only",
+  "passed": true,
+  "source_base": "06289f6bf8ebb0d74b3b4ae4983ae4e0db890837",
+  "binary_sha256": "5198e2f9654abd02271b3a6e1116296d010f51404dad8b9112e1759ac6e11aa5",
+  "source_manifest": {
+    "path": "build/validation/explorer-ui-2026-10-28/ui-fifth-compiler-source.json",
+    "sha256": "ba5c92a2bf3735795decc13ac37eb933f704830a6b0815344cb72ec551e8f7cb"
+  },
+  "source_inputs": {
+    "path": "build/validation/explorer-ui-2026-10-28/ui-fifth-inputs.zip",
+    "sha256": "c4c79b14e9657474e35bc1e94a599d1710c3d2d6dd75f24ff1269fb47532512e"
+  },
+  "runtime_index": {
+    "path": "build/validation/explorer-ui-2026-10-28/ui-fifth-byte-index.json",
+    "sha256": "f4774d580c50fa7b2e3658c2e334dbc73db26996ab3b2f47c08b223f21f287ef"
+  },
+  "command": [
+    "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+    "--workspace-state-test",
+    "D:\\Physim\\build\\validation\\explorer-ui-2026-10-28\\manual-2026-10-29\\fixture",
+    "protocol-ui-interactive"
+  ],
+  "pid": 16924,
+  "fixture": "protocol-ui-interactive; no automatic pointer or keyboard injection",
+  "human_reply": "Tastendruck ausgeführt",
+  "computer_use": "list_apps timed out twice and once after reset; no app input issued",
+  "observations": [
+    {
+      "key": 1073741906,
+      "mod": 4097,
+      "range_focus": true,
+      "host_focus": true,
+      "before": 243,
+      "after": 283,
+      "handled_mod": 4097
+    },
+    {
+      "key": 1073741905,
+      "mod": 4097,
+      "range_focus": true,
+      "host_focus": true,
+      "before": 283,
+      "after": 243,
+      "handled_mod": 4097
+    },
+    {
+      "key": 1073741906,
+      "mod": 4097,
+      "range_focus": true,
+      "host_focus": true,
+      "before": 243,
+      "after": 283,
+      "handled_mod": 4097
+    },
+    {
+      "key": 1073741906,
+      "mod": 4097,
+      "range_focus": true,
+      "host_focus": true,
+      "before": 283,
+      "after": 323,
+      "handled_mod": 4097
+    },
+    {
+      "key": 1073741906,
+      "mod": 4097,
+      "range_focus": true,
+      "host_focus": true,
+      "before": 296,
+      "after": 336,
+      "handled_mod": 4097
+    },
+    {
+      "key": 1073741905,
+      "mod": 4097,
+      "range_focus": true,
+      "host_focus": true,
+      "before": 336,
+      "after": 296,
+      "handled_mod": 4097
+    }
+  ],
+  "physical_key": {
+    "sdl_up": 1073741906,
+    "scancode": 82,
+    "raw": 57416,
+    "shift_modifier": 4097,
+    "host": 1
+  },
+  "exit": {
+    "exit_code": 0,
+    "app_unchanged": true
+  },
+  "logs": [
+    {
+      "path": "build/validation/explorer-ui-2026-10-28/manual-2026-10-29/stdout.log",
+      "sha256": "8274004d8abcbebad212f1a19ae23af874601bd9224c462858e7d3e33c235149"
+    },
+    {
+      "path": "build/validation/explorer-ui-2026-10-28/manual-2026-10-29/stderr.log",
+      "sha256": "c2900d082526255dc174e0594a0d6e03d4067caaeabcb95a16090947eeee1858"
+    },
+    {
+      "path": "build/validation/explorer-ui-2026-10-28/manual-2026-10-29/start.json",
+      "sha256": "d36eab05ef2dd21ad712660c3455e4fbf5dd6e7a6df368740893b5373afee8b6"
+    },
+    {
+      "path": "build/validation/explorer-ui-2026-10-28/manual-2026-10-29/exit.json",
+      "sha256": "d54a9a5bcdae304545fd6e9f90d956d32c16bc6ae5319304453d997fd26472e5"
+    }
+  ],
+  "limits": [
+    "Manual pointer movement changed height before the key: use actual before/after, not original340.",
+    "No claim for other separators, Home/End, monitor/DPI, screenreader speech or complete UI acceptance.",
+    "Proof is for archived ui-fifth binary; subsequent protocol color edit is not part of this manual run."
+  ],
+  "new_images": 0,
+  "storage": "D:/Physim/build; F: not accessed"
+}
