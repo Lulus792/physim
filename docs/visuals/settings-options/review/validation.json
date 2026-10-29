@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-29T22:06:23.725Z",
+  "platform": "win32",
+  "browser": "156.0.4314.50",
+  "sourceCommit": "78ea9f0b5c28289201f2d97ff34b67b28b5d6778",
+  "checks": [
+    "144 layouts: all 5 groups in A/B/C and 3 themes at 1440/500px; load/write/font-error states; standalone window at 850px height; no horizontal page/body overflow",
+    "All directions: preview differs from active values until apply; review preserves six exact changes; apply closes and persists only virtual preferences; cancel after apply keeps accepted values; defaults are draft-only until explicit apply and use native flag defaults",
+    "All directions: failed write/font preparation keep current values and draft on repeated attempts; recovered access permits retry; unreadable original preserved until explicit apply; invalid geometry rejected; independent inspector changes survive theme apply and canceled defaults",
+    "Search across groups including no results preserves draft; selected control keeps keyboard focus; A/B/C switching keeps values; Escape first leaves review then cancels settings",
+    "Independent unit task: cm and km/h conversion, separate commit and focus, global cancel retains accepted units and open unit draft; custom preset, zero/underflow/UTF-8 validation; Escape cancels only unit task; fixture reset clears it",
+    "Native default values and view mask match; complete apply with 200% UI at 500px in all directions; forced colors/reduced motion and 2Ã— browser density"
+  ],
+  "errors": [],
+  "passed": true,
+  "layoutCount": 144,
+  "matrix": {
+    "normal": "A/B/C × 5 groups × 3 themes × 1440/500px = 90",
+    "faults": "A/B/C × 3 faults × 2 themes × 1440/500px = 36",
+    "standalone": "A/B/C × 3 themes × 1440/500px at 850px height = 18"
+  }
+}

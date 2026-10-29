@@ -57,6 +57,13 @@
   Eigenständige Aufgabenfenster, Markierung A2, Projekt B, Explorer A und der
   freigegebene Grafikexport bleiben erhalten. Browsernachweise sind keine native Abnahme.
 
+## Getrennte Entwürfe: Einstellungen
+
+- Die [Einstellungsvorschauen A/B/C](docs/visuals/settings-options/README.md)
+  vom 29. Oktober 2026 sind ausdrücklich getrennt und **noch nicht ausgewählt**.
+  Keine Variante als fertiges Design übernehmen, bevor der Nutzer entschieden
+  hat. Bestehende native Arbeit und alle bisherigen Freigaben bleiben erhalten.
+
 ## Speicherpflege
 
 - Der Nutzer hat die F:-Nutzung am 25. Oktober 2026 widerrufen: Physim bleibt

@@ -1,5 +1,9 @@
 # Physim – getrennte Designvarianten
 
+**Neue getrennte Runde vom 29. Oktober 2026:**
+[Einstellungen A/B/C vergleichen](../settings-options/index.html?variant=a).
+Auswahl offen; diese Vorschläge noch nicht ins fertige Design übernehmen.
+
 **Weitere Freigabe vom 29. Oktober 2026:** Speichern, Dateikonflikte und
 Wiederherstellung sind im **Design B2 mit gemeinsamer Git-Diff-Ansicht** gewählt.
 [Spezifikation](../file-safety-options/APPROVED.md) ·

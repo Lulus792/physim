@@ -1,5 +1,15 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
+**Getrennte Entwürfe vom 29. Oktober 2026 – Einstellungen:** Die neuen
+[A/B/C-Vorschauen](../settings-options/README.md) sind auf Nutzerauftrag separat
+erstellt; **noch keine Variante übernehmen**. A zeigt Kategorien, B eine
+Kartenübersicht, C eine einzelne Einstellung mit Wertvergleich. Suche, Vorschau,
+Übernehmen/Abbrechen/Standardwerte und Fehler sind interaktiv. Erst die
+Nutzerentscheidung macht daraus einen weiteren verbindlichen Designvertrag.
+Preferences, Workspace-Geometrie und eigene Einheitenaufgabe bleiben getrennt;
+ADR 015 und alle folgenden Freigaben gelten weiter. Browserbelege dieser Runde
+bestätigen keine native Umsetzung.
+
 **Verbindliche Freigabe vom 29. Oktober 2026 – Dateisicherheit B2:** Der Nutzer
 hat **B2 für Speichern, Dateikonflikte und Wiederherstellung ins fertige Design
 übernommen**. Die vorherige Übernahmesperre ist aufgehoben. Im bestehenden

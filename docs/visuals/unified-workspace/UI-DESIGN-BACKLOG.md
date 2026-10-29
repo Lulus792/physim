@@ -40,15 +40,16 @@ Verträge: [Bereichsauswahl](../design-options/APPROVED.md),
 **[B2 mit gemeinsamer Git-Diff-Ansicht](../file-safety-options/APPROVED.md)**
 ausdrücklich ins fertige Design übernommen. Die folgenden Zustände bleiben
 Umsetzungs-/Abnahmeanforderungen; keine erneute Entwurfswahl. Das bestätigt
-keine bereits abgeschlossene native Funktion. Die nächste offene Runde beginnt
-bei D04–D07.
+keine bereits abgeschlossene native Funktion. **D04 hat jetzt separate
+[Einstellungsvorschauen A/B/C](../settings-options/README.md); Auswahl offen.**
+D05–D07 bleiben noch zu entwerfen.
 
 | ID / Prio | Was gestalten? | Benötigte Zustände und Ergebnis |
 | --- | --- | --- |
 | D01 · P1 | **Speichern, Schließen und Projektwechsel · B2 gewählt** | Ungespeicherte einzelne/mehrere Dateien, Speichern/Verwerfen/Abbrechen, fehlgeschlagenes Speichern. B2-Aufgabenfenster mit eindeutigem Dateibezug; Inhalt bei Abbruch erhalten. |
 | D02 · P1 | **Externe Dateiänderung und Konflikt · B2 gewählt** | Datei außerhalb der App geändert, gelöscht, verschoben oder schreibgeschützt; lokaler Entwurf vorhanden. Gemeinsamer B2-Diff, verständliche Wahl ohne stilles Überschreiben. Lesbare Vergleichsansicht, kein automatischer Merge-Editor. |
 | D03 · P1 | **Autosave und Wiederherstellung · B2 gewählt** | Sicherung gefunden, mehrere betroffene Quellen, Original und Sicherung unterscheiden, Wiederherstellung/Abbruch/Fehler. B2 mit vorhandener [Autosave-Funktion](../../autosave.md) verbinden, kein neues Sicherungssystem voraussetzen. |
-| D04 · P1 | **Einstellungen als vollständige Oberfläche** | Theme, UI-/Codeschrift, Autosave, Einheiten und Panelgrößen; Entwurf geändert, Übernehmen/Abbrechen/Standardwerte. Bestehende Einstellungsfunktionen und Tastaturpfade erhalten, Gruppen und Vorschau konsistent ausarbeiten. |
+| D04 · P1 | **Einstellungen · A/B/C zur Auswahl bereit** | Separate Kategorien-, Karten- und Fokusvorschau mit Theme, UI-/Codeschrift, Autosave, Einheitenaufgabe und Panelgrößen; Suche, Entwurf, Übernehmen/Abbrechen/Standardwerte und Fehler interaktiv. Noch nicht ins fertige Design übernehmen. Bestehende Funktionen und unabhängige Transaktionen erhalten. |
 | D05 · P1 | **Hinweise und Rückmeldungen außerhalb des Protokolls** | Gespeichert, Kopie fehlgeschlagen, Pfad ungültig, Ergebnis veraltet, Hintergrundaktion beendet. Festlegen, was inline, dauerhaft in der Statuszeile, vorübergehend als Hinweis oder als Dialog erscheint; keine mehrfachen störenden Meldungen. |
 | D06 · P1 | **Fortschritt und Abbruch über alle Bereiche** | Bauen, Projekt laden, Datei-/Laufvorschau, Analyse, Export; Fortschritt unbekannt, Abbrechen angefordert, fertig oder fehlgeschlagen. Vorhandene Läufe-A-Start-/Limitzustände erhalten und die übrigen Abläufe ergänzen. |
 | D07 · P1 | **Vollständige Kontextmenüs je Ziel** | Text, Tab, Ordner, Datei, Meldung, Diagramm, Szenenobjekt, Mehrfachauswahl und leere Fläche. A2/Menu-Bedienung ist entschieden; offen ist die vollständige Befehlsmatrix mit Verfügbarkeit und sinnvollen Gruppen. Nur vorhandene/gezielt beauftragte Befehle zeigen. |
@@ -101,12 +102,13 @@ und verteilte Simulation für die erste Version aus.
 ## Empfohlene nächste Entwurfsrunde
 
 **D01–D03 sind mit B2 freigegeben** und gehören jetzt in die native Umsetzung.
-Als nächste Entwurfsrunde **D04–D07**: Einstellungen,
-Rückmeldungen, Fortschritt und die vollständige Kontextmenümatrix. Anschließend
+Für **D04** stehen die getrennten A/B/C-Einstellungsvorschauen zur Auswahl.
+Als nächste neue Entwurfsrunde **D05–D07**: Rückmeldungen, Fortschritt und die
+vollständige Kontextmenümatrix. Anschließend
 Explorer-/Szenen- und Auswertungsdetails anhand realer Inhalte ausarbeiten.
 
 Pro Thema liefern: Normalzustand, Leer-/Lade-/Fehler-/Abbruchzustand, Auswahl,
 Tastatur-/Fokusweg und eine kleine/helle/dunkle Darstellung. Neue Gestaltungs-
 richtungen zunächst getrennt vergleichen; bestehende Freigaben erhalten.
 Nach Auswahl Referenz, genaue Werte, Datenannahmen und Abnahme im Gesamtauftrag
-festhalten. Diese Liste erstellt selbst noch keine dieser zusätzlichen Vorschauen.
+festhalten. Weitere Vorschauen entstehen erst durch einen eigenen Entwurfsauftrag.
