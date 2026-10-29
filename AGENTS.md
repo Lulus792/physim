@@ -48,8 +48,10 @@
 ## Getrennte Entwürfe: Speichern und Wiederherstellung
 
 - Die neue [Entwurfsrunde für Speichern, Dateikonflikte und Wiederherstellung](docs/visuals/file-safety-options/README.md)
-  vom 29. Oktober 2026 ist ausdrücklich **getrennt und noch nicht ausgewählt**.
-  A/B/C dieser Runde nicht als finales Design übernehmen. Bestehende Freigaben
+  vom 29. Oktober 2026 ist ausdrücklich **getrennt und noch nicht final freigegeben**.
+  B ist inzwischen als bevorzugte Richtung benannt; die zusätzliche gemeinsame
+  Git-Diff-Ansicht **B2** ist ausdrücklich nur ein Entwurf. A/B/B2/C dieser Runde
+  nicht als finales Design übernehmen. Bestehende Freigaben
   und laufende native Arbeit bleiben erhalten; diese Vergleichsentwürfe brauchen
   erst die Nutzerentscheidung.
 

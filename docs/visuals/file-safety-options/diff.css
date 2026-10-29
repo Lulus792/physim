@@ -1,0 +1,30 @@
+/* Additional draft B2. Original A/B/C colors and side-by-side comparison remain. */
+.variants{grid-template-columns:repeat(4,minmax(0,1fr))}
+.sheet.variant-b2{max-width:1120px}
+dialog:has(.variant-b2){width:1120px}
+:root{--diff-add-bg:rgba(104,177,131,.12);--diff-del-bg:rgba(214,92,92,.12);--diff-add:#a9d6b5;--diff-del:#ffb2ac}
+:root[data-theme=light]{--diff-add-bg:rgba(54,135,81,.08);--diff-del-bg:rgba(181,69,62,.08);--diff-add:#286240;--diff-del:#a12e2a}
+.unified-diff{margin:12px 0 17px;border:1px solid var(--border);border-radius:7px;overflow:hidden;background:var(--field);min-width:0}
+.diff-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--header);padding:10px 13px;font-size:.8rem;border-bottom:1px solid var(--border)}
+.diff-heading>span:first-child{overflow-wrap:anywhere}
+.diff-counts{display:flex;gap:12px;font:12px Consolas,monospace}
+.diff-counts b{font-weight:500}
+.diff-added{color:var(--diff-add)}.diff-removed{color:var(--diff-del)}
+.diff-legend{display:flex;align-items:center;gap:9px 19px;flex-wrap:wrap;padding:9px 13px;border-bottom:1px solid var(--border);font-size:.68rem}
+.diff-legend>span:last-child{margin-left:auto;color:var(--muted)}
+.diff-scroll{padding:8px 0 13px;min-height:185px}
+.diff-scroll:focus-visible{outline-offset:-3px}
+.diff-hunk{font:11px/1.8 Consolas,monospace;color:var(--muted);background:var(--header);padding:4px 14px;margin-bottom:7px}
+.diff-line{display:grid;grid-template-columns:2.7em 2.7em 1.8em minmax(0,1fr);font:12px/1.95 Consolas,'Courier New',monospace;min-height:1.95em;padding:0 11px 0 4px;color:var(--text)}
+.diff-number{color:var(--muted);text-align:right;padding-right:.6em;user-select:none;font-size:.9em}
+.diff-sign{text-align:center;user-select:none}
+.diff-line code{font:inherit;white-space:pre-wrap;overflow-wrap:anywhere;min-width:0}
+.diff-delete{background:var(--diff-del-bg)}.diff-add{background:var(--diff-add-bg)}
+.diff-delete .diff-sign{color:var(--diff-del)}.diff-add .diff-sign{color:var(--diff-add)}
+.diff-note{padding:8px 13px;border-top:1px solid var(--border);font-size:.67rem;color:var(--muted)}
+.diff-empty{padding:12px 15px;font-size:.75rem;color:var(--muted)}
+.diff-line code::selection,.diff-line code *::selection{background:var(--select);color:inherit}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(min-width:701px) and (max-width:1150px){.variants{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.variants{grid-template-columns:repeat(2,minmax(0,1fr))}.variants>button{display:flex;gap:10px;padding:13px 11px}.variants>button>b{flex:none;width:27px;height:27px;margin:0}.diff-heading{font-size:.77rem}.diff-legend{gap:6px 12px}.diff-legend>span:last-child{margin-left:0;width:100%}.diff-line{font-size:11px;grid-template-columns:2.2em 2.2em 1.6em minmax(0,1fr);padding-right:8px}.diff-hunk{font-size:10px}}
+@media(forced-colors:active){.unified-diff{border:1px solid CanvasText}.diff-delete,.diff-add{background:Canvas;color:CanvasText}.diff-delete .diff-sign,.diff-add .diff-sign,.diff-added,.diff-removed{color:CanvasText}.diff-delete{border-left:2px dashed CanvasText}.diff-add{border-left:2px solid CanvasText}.diff-line code::selection,.diff-line code *::selection{background:Highlight;color:HighlightText}}

@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "samples": 8,
+  "pairs": 64,
+  "boundedFallback": true,
+  "checks": [
+    "Explicit unified row/number expectation",
+    "Both original texts reconstructed independently from rows",
+    "Empty/insert/delete/unchanged/Unicode/duplicate/trailing-newline cases",
+    "Bounded large-comparison fallback preserves both texts"
+  ]
+}

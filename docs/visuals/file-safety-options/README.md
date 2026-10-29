@@ -1,12 +1,19 @@
-# Speichern, Dateikonflikte und Wiederherstellung – Entwürfe A/B/C
+# Speichern, Dateikonflikte und Wiederherstellung – Entwürfe A/B/B2/C
 
 **29. Oktober 2026 · Auswahl offen.** Auf ausdrücklichen Nutzerauftrag neu
 erstellte, getrennte Vorschauen. Keine dieser Varianten ist für das fertige
 Design freigegeben. Bestehende Bereichs-, Export- und A2-Freigaben gelten weiter.
 Hierfür weder native Funktionen ersetzen noch einen Entwurf vorab übernehmen.
 
+**Nutzerpräferenz: B gefällt ihm.** Gewünschte Weiterentwicklung ausdrücklich
+**als Entwurf**: Unterschiede in einer gemeinsamen Datei wie bei Git.
+**[B2 · Git-Diff öffnen](index.html?topic=save&variant=b2)**. Die vorherige B-Ansicht
+mit zwei Spalten bleibt erhalten. Diese Präferenz ist noch keine Übernahmefreigabe
+der Dateisicherheitsrunde.
+
 [Vorschau öffnen](index.html?topic=save&variant=a) ·
 [A](index.html?topic=save&variant=a) · [B](index.html?topic=save&variant=b) ·
+[B2 · Git-Diff](index.html?topic=save&variant=b2) ·
 [C](index.html?topic=save&variant=c)
 
 Lokal direkt per `index.html` oder über den bestehenden Vorschau-Server unter
@@ -14,17 +21,41 @@ Lokal direkt per `index.html` oder über den bestehenden Vorschau-Server unter
 externen Schriften, Dienste oder echten Dateioperationen in der Vorschau.
 Zeitstempel, Pfade und Inhalte sind festgelegte Beispieldaten.
 
-## Drei Richtungen, neun Hauptansichten
+## Drei Grundrichtungen und die neue Abwandlung B2
 
 | Richtung | Speichern | Dateikonflikt | Wiederherstellung |
 | --- | --- | --- | --- |
 | **A · Kompakt** | Dateiliste, klare Abschlussaktionen; Inhalte ausklappbar | Warnung und Wahl; Versionsvergleich bei Bedarf | Gemeinsame Sicherung mit kurzer Entscheidung; Inhalt bei Bedarf |
 | **B · Vergleichen** | Dateinavigation links, Entwurf und gespeicherter Inhalt rechts | Entwurf und externer Stand direkt nebeneinander | Sicherungsinhalt links, Sicherung und gespeicherte Fassung rechts |
+| **B2 · Git-Diff**, neuer Entwurf auf Basis von B | Ein Dateivergleich von gespeichertem Stand zu Editorentwurf | Aktuelle externe Fassung und Entwurf in einer gemeinsamen Änderungsansicht | Aktuelle Datei und automatische Sicherung in einer gemeinsamen Änderungsansicht |
 | **C · Schritt für Schritt** | Bestand prüfen → Entscheidung und Wirkung | Erst Fassungen betrachten, danach Umgang wählen | Erst Sicherung prüfen, danach bewusst laden oder verwerfen |
 
 Farben, A2-Markierung und Datengrundlage sind absichtlich gemeinsam. Die
 Unterschiede betreffen Informationsmenge, Anordnung und Ablauf. Die drei Themen
 lassen sich später auch getrennt auswählen; dieser Entwurf trifft diese Wahl nicht.
+
+### Neuer Entwurf B2
+
+- Dieselbe Dateinavigation und dieselben Entscheidungen wie B; rechts **eine**
+  gemeinsame Datei mit Kontextzeilen, entfernten Zeilen mit Minus/Rot und neuen
+  Zeilen mit Plus/Grün. Alte und neue Zeilennummern stehen links. Zeichen ergänzen
+  die Farben; hoher Kontrast erhält die Unterscheidung ohne Farberkennung.
+- Zähler und Markierungen werden tatsächlich aus den beiden jeweiligen
+  Beispieltexten berechnet. Auswahl einer anderen Datei oder eine neue externe
+  Revision aktualisiert den Vergleich. Keine fest markierte dritte Zeile.
+- Die Legende benennt die Richtung: **− gespeicherte/aktuelle Datei**, **+ Entwurf**
+  beziehungsweise **+ automatische Sicherung**. „Neu“ ist die Vergleichsseite,
+  keine Behauptung eines späteren Zeitpunkts der Sicherung.
+- Fehlt die Datei, gibt es nur hinzugefügte Zeilen und den Hinweis „Datei fehlt“.
+  Fehlt eine lesbare Sicherung, wird kein Vergleich mit erfundenem Inhalt gezeigt.
+- Die gemeinsame Ansicht ist **keine zusammengeführte oder gespeicherte Datei**.
+  Es gibt keine Git-Anbindung, keinen Merge, keinen Patch-Export und keine
+  Übernahme einzelner Änderungen. Die vorhandenen Entscheidungen bleiben erhalten.
+- Der kleine Zeilenvergleich ist auf die Vorschau begrenzt. Bei mehr als 100.000
+  Vergleichszellen zeigt er ausdrücklich einen vollständigen Ersatz statt eines
+  feinen Abgleichs; native Großdatei-/Performanceverträge sind separat zu entwerfen.
+
+[B2-Prüfung und Referenzbilder](review/b2/VALIDATION.md).
 
 Die große Arbeitsfläche ist eine **eingebettete Dialogvorschau**, damit die
 Variantenumschaltung erreichbar bleibt. **Als Popup testen** öffnet dieselbe

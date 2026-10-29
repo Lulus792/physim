@@ -40,6 +40,8 @@ Verträge: [Bereichsauswahl](../design-options/APPROVED.md),
 Dateikonflikte und Wiederherstellung. **Auswahl offen; nicht vorab übernehmen.**
 Die folgenden Zustände sind Anforderungen für Vergleich und weitere Ausarbeitung,
 keine Behauptung einer fehlenden oder bereits abgeschlossenen nativen Funktion.
+Der Nutzer bevorzugt B. Die neue [Abwandlung B2 mit gemeinsamer Git-Diff-Ansicht](../file-safety-options/index.html?variant=b2&topic=save)
+ist auf seinen Wunsch **weiterhin ein Entwurf**, keine finale Freigabe.
 
 | ID / Prio | Was gestalten? | Benötigte Zustände und Ergebnis |
 | --- | --- | --- |
