@@ -299,7 +299,7 @@ bool ps_a11y_adjust(ps_a11y_model *m,uint64_t id,int direction) {
 }
 bool ps_a11y_record_edit_mode(ps_a11y_model *m,const char *window,const char *name,
                             const float bounds[4],bool enabled,bool read_only,bool multiline,char *text,size_t capacity) {
- if(!m || !text || capacity<2 || capacity>(read_only?PS_A11Y_READONLY_BYTES:PS_A11Y_LABEL_BYTES) || !ps_text_valid(text,capacity,read_only && multiline))return false;
+ if(!m || !text || capacity<2 || capacity>(read_only?PS_A11Y_READONLY_BYTES:PS_A11Y_EDIT_BYTES) || !ps_text_valid(text,capacity,read_only && multiline))return false;
  size_t before=m->draft_count;record(m,window,name,PS_A11Y_EDIT,bounds,enabled,false,0,0,0,0);
  if(m->draft_count==before)return false;ps_a11y_node *node=&m->draft[before];bool changed=false,has_caret=false;size_t caret=0;
  const ps_a11y_node *old=ps_a11y_find(m,node->id);
@@ -335,7 +335,7 @@ bool ps_a11y_edit_replace(ps_a11y_model *m,uint64_t id,uint64_t version,const ch
     !ps_text_valid(text,node->text_capacity,false))return false;
  size_t added=strlen(text),start=node->text_start,tail=strlen(node->text_value+node->text_end);
  if(added>=node->text_capacity || start+tail>=node->text_capacity-added)return false;
- char result[PS_A11Y_LABEL_BYTES];memcpy(result,node->text_value,start);memcpy(result+start,text,added);
+ char result[PS_A11Y_EDIT_BYTES];memcpy(result,node->text_value,start);memcpy(result+start,text,added);
  memcpy(result+start+added,node->text_value+node->text_end,tail+1);
  if(!ps_a11y_set_text(m,id,result))return false;
  m->pending_document_focus=0;m->pending_text_caret=start+added;m->pending_text_version=version;m->pending_text_has_caret=true;m->pending_focus=id;return true;

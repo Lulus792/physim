@@ -341,8 +341,8 @@ static const ISelectionItemProviderVtbl uia_item_vtable={uia_item_query,uia_item
 static const ISelectionProviderVtbl uia_selection_vtable={uia_selection_query,uia_selection_addref,uia_selection_release,uia_selection_array,uia_multiple,uia_required};
 static const IRangeValueProviderVtbl uia_range_vtable={uia_range_query,uia_range_addref,uia_range_release,uia_set_value,uia_value,uia_readonly,uia_maximum,uia_minimum,uia_change,uia_change};
 static HRESULT STDMETHODCALLTYPE uia_edit_set(IValueProvider *p,LPCWSTR value) {
- if(!value)return E_INVALIDARG;size_t units=wcsnlen(value,PS_A11Y_LABEL_BYTES);if(units>=PS_A11Y_LABEL_BYTES)return E_INVALIDARG;
- char text[PS_A11Y_LABEL_BYTES];int bytes=WideCharToMultiByte(CP_UTF8,WC_ERR_INVALID_CHARS,value,(int)units,text,sizeof text-1,NULL,NULL);
+ if(!value)return E_INVALIDARG;size_t units=wcsnlen(value,PS_A11Y_EDIT_BYTES);if(units>=PS_A11Y_EDIT_BYTES)return E_INVALIDARG;
+ char text[PS_A11Y_EDIT_BYTES];int bytes=WideCharToMultiByte(CP_UTF8,WC_ERR_INVALID_CHARS,value,(int)units,text,sizeof text-1,NULL,NULL);
  if(units && !bytes)return E_INVALIDARG;text[bytes]=0;
  uia_element *e=UIA_OWNER(IValueProvider,value,p);ps_a11y_native *b=e->bridge;SDL_LockMutex(b->mutex);
  const ps_a11y_node *node=b->model?ps_a11y_find(b->model,e->id):NULL;

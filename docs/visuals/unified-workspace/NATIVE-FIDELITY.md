@@ -45,6 +45,13 @@ bleibt weiterhin offen.
 
 ## Verbindlicher Umfang
 
+Die Nutzerpräzisierung vom 29. Oktober übernimmt für Navigator C die gemeinsamen
+Physim-Werkbankfarben. Der [native Farbabgleich](PROTOCOL-COLORS-NATIVE.md) belegt
+die tatsächliche Flächengleichheit auf Windows/Linux. Der
+[physische Windows-Tastennachweis](PROTOCOL-PHYSICAL-KEYS-NATIVE.md) schließt den
+zuvor vertagten Umschalt-Pfeil-Schritt an der Protokollhöhe. Beide Nachweise haben
+ihren konkreten Umfang; die gesamte Oberfläche bleibt offen.
+
 Der [native Anschluss der Protokoll-Datenquellen](PROTOCOL-SOURCES-NATIVE.md)
 ergänzt eine begrenzte gemeinsame Historie mit unveränderten Originalbytes,
 Herkunft, Severity und tatsächlichen Jobausgängen. Die sichtbare Navigator-

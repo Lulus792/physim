@@ -35,6 +35,7 @@
 #include "workspace_state.h"
 #include "workspace_catalog.h"
 #include "workspace_tree.h"
+#include "file_browser_worker.h"
 #include "text_document.h"
 #include "protocol.h"
 #include "pacing.h"
@@ -336,7 +337,8 @@ typedef struct {
         int viewport_width,viewport_height;struct nk_mouse mouse;
         bool visible,scrollable,input_held,dismissed;
     } workspace_tip;
-    bool workspace_open, project_manager, dialog_pending;
+    bool workspace_open, project_manager, dialog_pending, native_dialog_legacy_test;
+    struct browser_dialog *browser;
     ps_workspace_state last_workspace;
     char workspace_state_path[4096], workspace_state_error[192];
     bool workspace_state_writable;
@@ -764,8 +766,15 @@ static bool open_run_path(app *a,const char *path);
 static bool action_button(struct nk_context *ui, const char *label, bool primary);
 static void open_settings(app *a);
 enum { PS_DIALOG_OPEN_FOLDER = 1, PS_DIALOG_ADD_FILE, PS_DIALOG_ADD_FOLDER,
-       PS_DIALOG_MANAGER_PARENT, PS_DIALOG_IMPORT_RUN, PS_DIALOG_RESUME_BATCH };
+       PS_DIALOG_MANAGER_PARENT, PS_DIALOG_IMPORT_RUN, PS_DIALOG_RESUME_BATCH, PS_DIALOG_BROWSE };
 static void choose_workspace_path(app *a, int mode);
+static void choose_workspace_path_from(app *a,int mode,const char *opener);
+static bool browser_active(const app *a);
+static bool browser_open(app *a,int mode);
+static void browser_complete(app *a,int mode,const char *path);
+static void browser_tick(app *a);
+static bool browser_event(app *a,const SDL_Event *event,SDL_Window *window);
+static void browser_destroy(app *a);
 static void import_run(app *a,const char *path);
 static void resume_batch(app *a,const char *path);
 static void analyze(app *a,bool csv);
@@ -3513,6 +3522,11 @@ static void SDLCALL workspace_dialog_callback(void *userdata, const char *const 
     if (!SDL_PushEvent(&event))
         SDL_free(event.user.data1);
 }
+static void browser_complete(app *a,int mode,const char *path) {
+    SDL_Event event={0};event.type=workspace_dialog_event;event.user.code=mode;
+    event.user.data1=path?SDL_strdup(path):NULL;event.user.data2=path && !event.user.data1?(void *)1:NULL;
+    if(!SDL_PushEvent(&event)){SDL_free(event.user.data1);a->dialog_pending=false;status(a,"Dateiauswahl konnte nicht übergeben werden.");}
+}
 static void choose_workspace_path(app *a, int mode) {
     if (a->dialog_pending || workspace_dialog_event == (Uint32)-1)
         return;
@@ -3522,6 +3536,9 @@ static void choose_workspace_path(app *a, int mode) {
     }
     else if(mode==PS_DIALOG_IMPORT_RUN && *a->import_test_path) {
         const char *files[]={a->import_test_path,NULL};workspace_dialog_callback((void *)&dialog_import_run,files,0);
+    }
+    else if(!a->native_dialog_legacy_test) {
+        if(!browser_open(a,mode)){a->dialog_pending=false;status(a,"Dateiauswahl konnte nicht geöffnet werden.");}
     }
     else if(mode==PS_DIALOG_IMPORT_RUN) {
         static const SDL_DialogFileFilter filters[]={{"Physim-Messlauf","psrun"}};
@@ -3540,6 +3557,10 @@ static void choose_workspace_path(app *a, int mode) {
         SDL_ShowOpenFolderDialog(workspace_dialog_callback, (void *)dialog_mode, a->window,
                                  location, false);
     }
+}
+static void choose_workspace_path_from(app *a,int mode,const char *opener) {
+    bool pending=a->dialog_pending;choose_workspace_path(a,mode);
+    if(!pending && browser_active(a))snprintf(a->browser->return_label,sizeof a->browser->return_label,"%s",opener);
 }
 static void add_workspace_path(app *a, const char *path) {
     SDL_PathInfo info;
@@ -3686,6 +3707,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "native_dialog_tests.inc"
 #include "component_details_tests.inc"
 #include "analysis_editor_tests.inc"
+#include "file_browser_tests.inc"
 #include "workspace_tests.inc"
 // clang-format on
 /* Independent archive check for the optional tutorial energy-ledger report. */
@@ -4259,6 +4281,7 @@ int main(int argc, char **argv) {
         api_reference_insert_tick(a);
         documentation_actions_tick(a);
         a->workspace_tip.dismissed=false;
+        browser_tick(a);
         nk_input_begin(a->ui);
         if (a->doc_ui)
             nk_input_begin(a->doc_ui);
@@ -4279,6 +4302,7 @@ int main(int argc, char **argv) {
                     else if(e.user.code==PS_DIALOG_RESUME_BATCH)resume_batch(a,path);
                     else if (e.user.code == PS_DIALOG_MANAGER_PARENT)
                         snprintf(a->manager_parent, sizeof a->manager_parent, "%s", path);
+                    else if(e.user.code==PS_DIALOG_BROWSE)preview_workspace_path(a,path);
                     else
                         add_workspace_path(a, path);
                     SDL_free(e.user.data1);
@@ -4297,6 +4321,7 @@ int main(int argc, char **argv) {
                 doc_input_bytes += (unsigned)strlen(e.text.text);
             }
             SDL_Window *event_window = SDL_GetWindowFromEvent(&e);
+            if(browser_event(a,&e,event_window))continue;
             if(timeline_controls_event(a,&e,event_window))continue;
             if(graphic_export_event(a,&e,event_window))continue;
             if(panel_window_event(a,&e,event_window))continue;
@@ -4483,7 +4508,7 @@ int main(int argc, char **argv) {
             if (ps_clock() - test_started >
                 ((!strcmp(argv[3],"transport-design") || !strcmp(argv[3],"timeline-design") || !strcmp(argv[3],"camera-design") || !strcmp(argv[3],"scene-frame-design") || !strcmp(argv[3],"measurement-design") || !strcmp(argv[3],"curve-design") || !strncmp(argv[3],"analysis-editor-",16) || !strcmp(argv[3],"inspector-channel") || !strcmp(argv[3],"run-fields-design") || !strncmp(argv[3],"inspector-tail-",15))?180:!strncmp(argv[3],"file-tabs-design",16)?60:!strncmp(argv[3],"component-",10)?60:!strncmp(argv[3],"comparison-",11)?120:!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:(!strncmp(argv[3],"workbench-",10) || !strncmp(argv[3],"protocol-ui-",12))?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?1800:!strncmp(argv[3],"manager-design-remote",21)?120:!strncmp(argv[3],"manager-design-help",19)?90:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
                   !strncmp(argv[3], "isolation-", 10) || !strncmp(argv[3], "breakpoints-", 12) || !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"object-design",13) || !strcmp(argv[3],"tree-design") || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || (!strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"pendulum-medium-",16)) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strncmp(argv[3],"logging-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
-                     ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : 15))) {
+                     ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : !strncmp(argv[3],"explorer-a-",11)?90:15))) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
                         argv[3], ps_clock() - test_started);
                 exit_code = 1;
@@ -5740,6 +5765,7 @@ int main(int argc, char **argv) {
     free(a->workspaces);
     ps_autosave_destroy(a->recovery);
     ps_workspace_tree_destroy(&a->workspace_tree);
+    browser_destroy(a);
     documents_clear(a);
     graphic_export_close(a);
     panel_windows_destroy(a);

@@ -200,6 +200,7 @@ static bool workbench_context_needs_scrollbar(app *a,struct nk_rect bounds);
 #include "batch_ui.inc"
 #include "settings_ui.inc"
 #include "project_manager_ui.inc"
+#include "file_browser_ui.inc"
 #include "timeline_ui.inc"
 #include "file_tabs_ui.inc"
 #include "docking_ui.inc"
@@ -844,7 +845,7 @@ static void workspace_panel(app *a) {
                 nk_label_wrap(ui, "Öffne einen Ordner oder lege ein neues Physim-Projekt an. Dateien und weitere Ordner kannst du anschließend hinzufügen.");
                 nk_layout_row_static(ui, 36, 220, 2);
                 if (action_button(ui, "Ordner öffnen", true))
-                    choose_workspace_path(a, PS_DIALOG_OPEN_FOLDER);
+                    choose_workspace_path_from(a,PS_DIALOG_OPEN_FOLDER,"Ordner öffnen");
                 if (nk_button_label(ui, "Neues Projekt"))
                     open_project_manager(a,"Neues Projekt");
                 if (a->last_workspace.root[0]) {
@@ -1281,5 +1282,9 @@ static void draw_ui(app *a,int width,int height) {
     if(manager)a->project_manager=true;
     graphic_export_unguard(a,guard);
     graphic_export_view(a,width,height);
+    graphic_input_guard browser_guard={0};
+    if(browser_active(a))browser_guard=graphic_export_guard(a);
     project_manager_view(a,width,height);
+    graphic_export_unguard(a,browser_guard);
+    browser_view(a,width,height);
 }

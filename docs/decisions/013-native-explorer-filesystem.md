@@ -32,7 +32,7 @@ bleiben die gemeinsame Betriebssystemgrundlage. Gewählt ist die zweite Struktur
   Abbruch wartet nicht auf einen laufenden OS-Aufruf; endgültiges Zerstören
   verbindet den Arbeiter vor der Speicherfreigabe. Eine bereits ausgeführte
   Ordneranlage wird durch Abbruch nicht rückgängig gemacht.
-- Der noch zu ergänzende Navigationscontroller besitzt Verlauf, Auswahl und
+- Der Controller in `file_browser_ui.inc` besitzt Verlauf, Auswahl und
   den Bezug der Vorschau zum aktuellen Ort. Ein gescheiterter Ortswechsel darf
   die übertragene alte Liste nicht als Inhalt des neuen Orts ausgeben.
   Messlauf-/Bildvorschau bleiben zusätzlich zur UTF-8-Textvorschau offen.
@@ -88,7 +88,9 @@ Browserkollation; der endgültige native Abgleich muss diesen Unterschied
 entweder schließen oder konkret ausweisen. Modellprüfungen ersetzen keine
 visuelle, Tastatur-, Screenreader- oder Plattformabnahme der A-Oberfläche.
 
-Zuerst Modell und Fehlerpfade tatsächlich prüfen, dann Controller und native
-Oberfläche anbinden und schließlich die bereichsübergreifenden Nutzeraufgaben
-gegen die ausgewählte Referenz abnehmen. Bis dahin bleibt der Systemdialog der
-produktive Stand; Explorer A ist noch nicht als fertig umgesetzt ausgewiesen.
+Modell und Fehlerpfade sind geprüft; Controller und native Oberfläche sind seit
+29. Oktober produktiv angebunden. Die alten Systemdialogadapter dienen noch ihren
+ausdrücklich benannten Tests. Die [native Umsetzungsnotiz](../visuals/unified-workspace/EXPLORER-A-NATIVE.md)
+trennt die tatsächlichen Teilprüfungen von offenen Gestaltungs- und Plattformaufgaben.
+Insbesondere bleiben Bild-/Messlaufvorschau, freie eingebettete Exploreransicht,
+große native Listen und vollständige bereichsübergreifende Aufgaben offen.

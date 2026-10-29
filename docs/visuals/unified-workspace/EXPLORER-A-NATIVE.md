@@ -1,12 +1,14 @@
 # Explorer A: native Umsetzung
 
-Stand vom 28. Oktober 2026. Maßgeblich bleiben
+Stand vom 29. Oktober 2026. Maßgeblich bleiben
 [ADR 011](../../decisions/011-selected-workspace-additions.md) und die
 [freigegebene Auswahl](../design-options/APPROVED.md). Explorer A ist für freie
 Datei-/Ordnernavigation, Messlaufauswahl und den Unteraufruf aus Projektdialog B
-ausgewählt. Dateisystemmodell und asynchroner IO-Arbeiter samt Textvorschau sind
-implementiert und geprüft; der bisherige Systemdialog bleibt bis zur Einbindung
-der A-Oberfläche produktiv.
+ausgewählt. Dateisystemmodell, asynchroner IO-Arbeiter und native A-Oberfläche
+sind jetzt eingebunden. Die produktiven Öffnen-/Ordner-/Importaufrufe verwenden
+die gemeinsame Oberfläche. Die bisherige SDL-Systemdialoganbindung bleibt für
+ihre ausdrücklich benannten alten Adaptertests erhalten. Dies ist weiterhin
+ein Teilstand der freigegebenen Gestaltung.
 
 ## Geprüfte Grundlage
 
@@ -98,23 +100,81 @@ von D:. Eine benannte FIFO auf einem anderen Dateisystem und der macOS-Zweig
 sind damit nicht geprüft. Auch allgemeine Racefreiheit oder ThreadSanitizer
 werden nicht behauptet. Es wurden keine Bilder benötigt.
 
+## Native Einbindung
+
+`app/file_browser_ui.inc` besitzt Verlauf, aktuelle Auswahl, Such-/Sortierzustand
+und die übertragenen Listen/Vorschauen. Orte, Breadcrumbs beziehungsweise
+editierbarer Pfad, Dateiliste/Raster, feste Vorschau und Fußaktionen verwenden
+die Maße, Schriftrollen und Symbolpfade der ausgewählten A-Referenz. Bei schmalen
+Fenstern liegt die Vorschau unter der Liste; große Schrift erhält einen äußeren
+Scrollweg. Ein fehlgeschlagener Ortswechsel zeigt den fehlgeschlagenen Pfad und
+einen Fehler, keine alte Liste unter einem neuen Ortsnamen.
+
+Auswahl allein öffnet weder Dokument noch Workspace. Erst die bestätigte,
+erneut geprüfte Auswahl wird über das bestehende Workspace-Ereignis weitergegeben.
+Die Elternordnerwahl in Projektdialog B kehrt in dessen erhaltene Eingaben zurück.
+„Datei → Dateien …“ bietet die freie Navigation. Messlaufimport, Serienfortsetzung
+und die übrigen Ordneraufrufe sind an dieselbe Oberfläche angeschlossen; die
+vollständigen bereichsübergreifenden Import-/Serienaufgaben benötigen eigene
+abschließende Abnahme.
+
+Vier eigene Editierzustände erhalten Cursor, Auswahl und Undo getrennt für
+Pfad, Suche, neuen Ordnernamen und schreibgeschützte Vorschau. Ein gemeinsamer
+temporärer Nuklear-Zustand hatte beim Wechsel von ausgewähltem Vorschautext in
+die leere Suche eine Bereichsassertion ausgelöst. Die eigene Zustandsführung
+beseitigt diesen konkret reproduzierten Fehler. Pfadeingaben bleiben während
+eines laufenden Ortswechsels erhalten und werden erst mit Enter geöffnet.
+
+Native Windows-/Linux-Fixtures prüfen sechs Zustände je Oberfläche: dunkel,
+hell, hoher Kontrast, große Schrift, schmales Fenster und große Schrift im
+schmalen Fenster. Sie bedienen tatsächliche Widgets, kopieren echten
+Vorschautext über die Betriebssystem-Zwischenablage, suchen, wechseln Liste/Raster,
+legen exklusiv einen Ordner an, behandeln fehlende Pfade, kehren zurück, brechen
+ab, wählen den Elternordner in B und öffnen eine echte Datei. Die SDL-Eingaben
+dieser Fixtures sind injiziert und kein physischer Tastaturnachweis. Unter
+Windows wird ausschließlich die dokumentierte CRLF-Umwandlung von CF_UNICODETEXT
+akzeptiert; alle anderen UTF-8-Bytes müssen übereinstimmen.
+
+Die vergrößerten nativen Editierpuffer veröffentlichen auch Pfadfelder mit
+4096 Byte Kapazität. Unabhängige UIA-/AT-SPI-Clients lesen und ersetzen echte
+4095-Byte-Werte einschließlich Unicode und prüfen die unveränderte Rückgabe
+nach Ablehnung von 4096 Byte. AT-SPI prüft zusätzlich Einfügen und Löschen in
+3000-Byte-Texten. Die neue Kernregression weist den unveränderten alten
+Produktionscode wegen des fehlenden 4096-Byte-Feldes ab; die korrigierte Kontrolle
+besteht ASan/UBSan und Leak-Prüfung. Diese Clientprüfungen belegen keine
+Screenreader-Sprachausgabe und keinen auf dem Dateisystem existierenden
+4095-Byte-Pfad.
+
+Der [Einbindungsnachweis](../../verification/explorer-ui-2026-10-29.json) führt
+die Quell-/Laufzeitsicherungen, 15 unverändert gültige Kerntests je Plattform,
+die native Oberfläche und ihre unabhängigen Clients zusammen. Die abschließende
+Linux-Runde besteht 5/5 Gruppen. Windows besteht 4/5; ein erster UIA-Wertabruf
+hat einen Timeout. Wiederholungen mit unverändertem Programm einschließlich
+demselben Runner und dessen Umgebung bestehen, die ursprüngliche Ursache bleibt
+offen. Es wird deshalb kein vollständig grüner Windows-Gesamtlauf behauptet.
+Der Katalogtest prüft zusätzlich die Plattformzuordnung einschließlich des
+Darwin-Modells; das ist kein auf macOS ausgeführter Build.
+
 ## Verbleibende Umsetzung und Abnahme
 
-Die [Modulentscheidung](../../decisions/013-native-explorer-filesystem.md)
-legt die nächste Integration fest. Noch offen sind Navigationscontroller mit
-Verlauf und Auswahl-/Vorschaubezug, die native A-Anordnung mit Orten/Liste/Vorschau
-und die tatsächlichen Aufrufe aus allen Bereichen. Messlauf-/Bildvorschau und
-passender C-API-Kontext sind zusätzlich zur Textvorschau umzusetzen. Die Module
-sind über native Tests, noch nicht über die produktive APP-Quellliste gebaut.
-Die sichtbare Oberfläche wird dadurch nicht als ersetzt oder abgenommen bezeichnet.
-Auch lange Pfade bis in die vorhandenen Öffnen-/Importfunktionen sind separat
-zu prüfen; ein langer Vorschaupfad beweist diese durchgehende Unterstützung nicht.
+Messlauf-/Bildvorschau und passender C-API-Kontext fehlen noch; die Oberfläche
+zeigt dafür keinen erfundenen Demo-Inhalt. Die freie Dateinavigation ist derzeit
+modal, während die freie Referenzansicht in den Arbeitsbereich eingebettet ist.
+Das ist offene Implementierung, keine technische Unmöglichkeit des nativen
+Renderers. Die vorhandene Textvorschau und Ordnerwahl bleiben nutzbar.
 
-Der native Abgleich muss anschließend Tastatur, Fokuskehr, große Schrift,
-Fenstergrößen, Themes, Material-Fallback, Screenreader und die Auswahl echter
-Dateien/Ordner/Messläufe prüfen. Verdeckte beziehungsweise virtualisierte Zeilen
-müssen erreichbar bleiben; die bestehende Zahl an Accessibility-Knoten darf
-nicht unbemerkt die größere Dateiliste abschneiden.
+Das Listenmodell hält bis zu 8192 Einträge; gezeichnet und als native Zeilen
+veröffentlicht wird der sichtbare Ausschnitt. Durchgängige Tastatur- und
+Screenreader-Aufgaben für große Listen und deren vollständige native
+Collection-Semantik sind noch zu prüfen. Insbesondere sind nicht alle
+Breadcrumb-Vorfahren in die eigene Tabfolge aufgenommen; Alt + Aufwärts und
+Ctrl + L ersetzen die vollständige Tababnahme nicht. Die Sortierauswahl lässt
+sich per Tastatur umschalten, öffnet dabei aber noch nicht denselben Popupablauf
+wie der Mausklick.
+
+Lange Pfade bis in die vorhandenen Öffnen-/Importfunktionen bleiben separat zu
+prüfen; ein langer Vorschaupfad beweist keine durchgehende Unterstützung. Echte
+Screenreader-Aufgaben, zusätzliche DPI-/Monitorzustände und macOS sind offen.
 
 Zusätzlich offen: genaue deutsche Browserkollation statt der aktuellen
 SDL-Casefold-Reihenfolge, tatsächlich verweigerte ACL-Zugriffe, echte SMB-Freigaben,
@@ -123,6 +183,7 @@ Speicherfehler-Injektion und macOS-Laufnachweise. Das 4096-Byte-Pfadlimit und di
 keinen bereits laufenden Kernelaufruf unterbrechen. Diese Grenzen sind keine
 pauschale Behauptung, das freigegebene Design sei technisch unmöglich.
 
-Die manuelle Windows-Pfeiltastenprüfung bleibt auf Nutzerwunsch bis zu seiner
-erneuten Rückmeldung vertagt. Das Gesamtziel einschließlich Explorer A,
-F1-Linkkorrekturen und vollständiger nativer Oberflächenabnahme bleibt offen.
+Der [physische Windows-Pfeiltastennachweis für die Protokollhöhe](PROTOCOL-PHYSICAL-KEYS-NATIVE.md)
+ist am 29. Oktober bestanden; er ist keine Abnahme der Explorer-Tastaturbedienung.
+Das Gesamtziel einschließlich Explorer A, F1-Linkkorrekturen und vollständiger
+nativer Oberflächenabnahme bleibt offen.

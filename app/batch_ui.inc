@@ -23,7 +23,7 @@ static void batch_view(app *a) {
         open_documentation(a, DOCUMENTATION_MONTE_CARLO_TOPIC);
     nk_layout_row_dynamic(ui,32,1);nk_begin_disabled(ui,!idle(a) || a->dialog_pending);
     a->batch_resume_bounds=nk_widget_bounds(ui);
-    if(nk_button_label(ui,"Archivierte Serie fortsetzen …"))choose_workspace_path(a,PS_DIALOG_RESUME_BATCH);
+    if(nk_button_label(ui,"Archivierte Serie fortsetzen …"))choose_workspace_path_from(a,PS_DIALOG_RESUME_BATCH,"Archivierte Serie fortsetzen …");
     nk_end_disabled(ui);
     nk_layout_row_dynamic(ui,32,1);
     nk_begin_disabled(ui,!batch_analysis_ready(a));

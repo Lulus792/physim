@@ -316,7 +316,7 @@ static void analysis_runs_view(app *a) {
     nk_style_push_style_item(ui,&ui->style.button.normal,nk_style_item_color(nk_rgba(0,0,0,0)));
     nk_style_push_color(ui,&ui->style.button.text_normal,UI_COLOR(accent));
     nk_begin_disabled(ui,!a->loaded || !idle(a) || a->library_thread || a->dialog_pending);
-    if(ps_ui_wrapped_button_label(ui,"Messlauf importieren …"))choose_workspace_path(a,PS_DIALOG_IMPORT_RUN);
+    if(ps_ui_wrapped_button_label(ui,"Messlauf importieren …"))choose_workspace_path_from(a,PS_DIALOG_IMPORT_RUN,"Messlauf importieren …");
     nk_end_disabled(ui);
     nk_style_pop_color(ui);nk_style_pop_style_item(ui);
 }

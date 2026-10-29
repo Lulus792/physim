@@ -133,6 +133,9 @@ bool nk_sdl_accessibility_document_native_read_test(struct nk_context *ctx);
 bool nk_sdl_accessibility_native_edit_test_step(struct nk_context *ctx,int step);
 bool nk_sdl_accessibility_native_links_test_step(struct nk_context *ctx,int step);
 nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flags,char *text,int capacity,nk_plugin_filter filter);
+/* Component-owned selection/caret/undo state, independent of the scratch
+ * editor used by ordinary string fields elsewhere in the same window. */
+nk_flags nk_sdl_edit_named_buffer(struct nk_context *ctx,const char *name,nk_flags flags,char *text,int capacity,struct nk_text_edit *edit);
 /* Persistent readonly editor; visual positions refer to the exact text bytes. */
 nk_flags nk_sdl_edit_named_visual(struct nk_context *ctx,const char *name,char *text,int capacity,
                                  struct nk_text_edit *edit,const struct nk_text_visual *visual);
@@ -171,6 +174,7 @@ void ps_ui_set_focus_color(struct nk_context *ctx,struct nk_color color);
 struct nk_color ps_ui_focus_color(const struct nk_context *ctx);
 /* Finish queued field input before a semantic keyboard focus change. */
 void ps_ui_flush_edit(struct nk_context *ctx,const char *window,char *text,size_t capacity,struct nk_rect bounds);
+void ps_ui_flush_edit_buffer(struct nk_context *ctx,char *text,size_t capacity,struct nk_text_edit *edit,struct nk_rect bounds);
 float nk_sdl_row_height(const struct nk_context *ctx, float requested);
 /* Register a read-only label drawn by a component's own wrapping renderer. */
 void ps_ui_accessibility_label(struct nk_context *ctx,struct nk_rect bounds,const char *text);

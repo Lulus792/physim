@@ -8,6 +8,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
     document_drafts_start(a, path);
     if (a->workspace_open || a->loaded || a->project_input[0])
         return false;
+    if(!strncmp(mode,"explorer-a-",11))return browser_test_start(a,root,mode);
     if(!strncmp(mode,"protocol-ui-",12))return protocol_ui_test_start(a,root,mode);
     if(!strcmp(mode,"file-tabs"))return file_tabs_test_start(a,root);
     if(!strncmp(mode,"file-tabs-design",16))return tab_design_start(a,root);
@@ -38,8 +39,10 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
     if(!strncmp(mode,"library-selection-",18))return library_selection_test_start(a,root,mode);
     if(!strncmp(mode,"run-details-",12))return run_details_test_start(a,root,mode);
     if(!strncmp(mode,"report-details-",15))return report_details_test_start(a,root,mode);
-    if (!strcmp(mode, "native-dialogs") || !strcmp(mode, "native-dialog-error"))
+    if (!strcmp(mode, "native-dialogs") || !strcmp(mode, "native-dialog-error")) {
+        a->native_dialog_legacy_test=true; /* Explicit SDL adapter regression, not the product picker. */
         return native_dialog_test_start(root);
+    }
     if(!strncmp(mode,"inspector-",10))return inspector_test_start(a,root,mode);
     if(!strncmp(mode,"layouts-",8))return layout_test_start(a,root,mode);
     if(!strncmp(mode,"named-",6))return workspace_catalog_test_start(a,root,mode);
@@ -284,6 +287,7 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
     if(!strncmp(mode,"manager-design-help",19)){project_wizard_help_frame(a,stage,code);return;}
     if(!strncmp(mode,"manager-design-remote",21)){project_wizard_remote_frame(a,a->manager_parent,stage,code);return;}
     if(!strncmp(mode,"manager-design",14)){project_wizard_test_frame(a,stage,code,capture);return;}
+    if(!strncmp(mode,"explorer-a-",11)){browser_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"manager-keyboard",16)){project_manager_keyboard_test_frame(a,a->manager_parent,stage,code,capture);return;}
     if (!strncmp(mode,"docs-keyboard",13)) {documentation_keyboard_test_frame(a,mode,stage,code,capture);return;}
     if (!strcmp(mode,"toolbar-keyboard")) {

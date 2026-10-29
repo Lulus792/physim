@@ -21,7 +21,7 @@ typedef enum {
     TOOLBAR_OPEN, TOOLBAR_ADD_FILE, TOOLBAR_ADD_FOLDER, TOOLBAR_NEW, TOOLBAR_SAVE,
     TOOLBAR_WORKSPACES, TOOLBAR_LOG, TOOLBAR_REFRESH, TOOLBAR_LIBRARY, TOOLBAR_BATCH,
     TOOLBAR_SIDEBAR, TOOLBAR_WORKSPACE, TOOLBAR_RESET_LAYOUT, TOOLBAR_INSPECTOR, TOOLBAR_LAYOUTS,
-    TOOLBAR_RELOAD, TOOLBAR_SEARCH, TOOLBAR_BUILD, TOOLBAR_HELP, TOOLBAR_REFERENCE, TOOLBAR_COMPLETION, TOOLBAR_BUILD_SETTINGS,TOOLBAR_SETTINGS,TOOLBAR_REFERENCE_CLOSE
+    TOOLBAR_RELOAD, TOOLBAR_SEARCH, TOOLBAR_BUILD, TOOLBAR_HELP, TOOLBAR_REFERENCE, TOOLBAR_COMPLETION, TOOLBAR_BUILD_SETTINGS,TOOLBAR_SETTINGS,TOOLBAR_REFERENCE_CLOSE,TOOLBAR_BROWSE
 } toolbar_action;
 typedef struct { const char *text; toolbar_action action; bool enabled; } toolbar_entry;
 /* Bounds keep stable semantic slots; presentation follows the familiar IDE order. */
@@ -42,7 +42,8 @@ static unsigned toolbar_entries(app *a, int menu, toolbar_entry entries[9]) {
             {"Neues Projekt …",TOOLBAR_NEW,choose},
             {"Speichern\t" PS_UI_SHORTCUT "S",TOOLBAR_SAVE,(a->loaded || a->document_count) && idle(a)},
             {"Workspaces …",TOOLBAR_WORKSPACES,!a->dialog_pending},
-            {"Aktive Datei neu laden",TOOLBAR_RELOAD,a->tab==8 && active_document(a) && !active_document(a)->recovery}
+            {"Aktive Datei neu laden",TOOLBAR_RELOAD,a->tab==8 && active_document(a) && !active_document(a)->recovery},
+            {"Dateien …",TOOLBAR_BROWSE,choose}
         };
         memcpy(entries,file,sizeof file);return SDL_arraysize(file);
     }
@@ -92,6 +93,7 @@ static unsigned toolbar_entries(app *a, int menu, toolbar_entry entries[9]) {
 static void toolbar_dispatch(app *a, toolbar_action action) {
     switch(action) {
     case TOOLBAR_OPEN: choose_workspace_path(a,PS_DIALOG_OPEN_FOLDER);break;
+    case TOOLBAR_BROWSE: choose_workspace_path(a,PS_DIALOG_BROWSE);break;
     case TOOLBAR_ADD_FILE: choose_workspace_path(a,PS_DIALOG_ADD_FILE);break;
     case TOOLBAR_ADD_FOLDER: choose_workspace_path(a,PS_DIALOG_ADD_FOLDER);break;
     case TOOLBAR_NEW: open_project_manager(a,"Datei");break;

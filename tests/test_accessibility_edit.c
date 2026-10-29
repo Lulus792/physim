@@ -65,6 +65,31 @@ int main(void) {
  CHECK(!ps_a11y_record_edit(m,"help","Suche",bounds,true,text,sizeof text));ps_a11y_publish(m);CHECK(!strcmp(text,"user change") && !m->pending_text_id);
  version=m->nodes[0].text_version;CHECK(ps_a11y_edit_replace(m,id,version,"x"));ps_a11y_suspend(m);
  CHECK(!m->pending_text_has_caret && !m->pending_text_id && !ps_a11y_edit_replace(m,id,version,"x"));
+ /* Real path fields have a4096-byte capacity even when their current value
+  * is short. They must be published and accept a complete long native value,
+  * without weakening the independent1024-byte control-name bound. */
+ char path[4096]="D:/",long_value[4096],too_long[4097];
+ memset(long_value,'p',sizeof long_value-1);memcpy(long_value,"D:/λ/",6);long_value[sizeof long_value-1]=0;
+ ps_a11y_begin(m);CHECK(!ps_a11y_record_edit(m,"picker","Ort",bounds,true,path,sizeof path));CHECK(ps_a11y_publish(m));
+ CHECK(m->count==1 && m->nodes[0].role==PS_A11Y_EDIT && m->nodes[0].text_capacity==sizeof path);
+ id=m->nodes[0].id;CHECK(ps_a11y_set_text(m,id,long_value) && !strcmp(path,"D:/"));
+ ps_a11y_begin(m);CHECK(ps_a11y_record_edit(m,"picker","Ort",bounds,true,path,sizeof path));CHECK(ps_a11y_publish(m));
+ CHECK(!strcmp(path,long_value) && !strcmp(m->nodes[0].text_value,long_value) && !m->pending_text_id);
+ version=m->nodes[0].text_version;ps_a11y_begin(m);ps_a11y_record_edit(m,"picker","Ort",bounds,true,path,sizeof path);
+ CHECK(ps_a11y_edit_update(m,0,path,1020,1024));CHECK(ps_a11y_publish(m));
+ CHECK(ps_a11y_edit_replace(m,id,version,"Ω"));ps_a11y_begin(m);
+ CHECK(ps_a11y_record_edit(m,"picker","Ort",bounds,true,path,sizeof path));CHECK(ps_a11y_publish(m));
+ CHECK(strlen(path)==4093 && !memcmp(path,long_value,1020) && !memcmp(path+1020,"Ω",2) &&
+       !strcmp(path+1022,long_value+1024) && m->nodes[0].text_caret==1022);
+ memset(too_long,'q',sizeof too_long-1);too_long[sizeof too_long-1]=0;
+ CHECK(!ps_a11y_set_text(m,id,too_long) && !m->pending_text_id);
+ char maximum[PS_A11Y_EDIT_BYTES];memset(maximum,'x',sizeof maximum-1);maximum[sizeof maximum-1]=0;
+ ps_a11y_begin(m);CHECK(!ps_a11y_record_edit(m,"picker","Maximum",bounds,true,maximum,sizeof maximum));CHECK(ps_a11y_publish(m));
+ CHECK(m->count==1 && strlen(m->nodes[0].text_value)==sizeof maximum-1);
+ id=m->nodes[0].id;CHECK(ps_a11y_set_text(m,id,maximum));ps_a11y_begin(m);
+ CHECK(!ps_a11y_record_edit(m,"picker","Maximum",bounds,true,maximum,sizeof maximum));CHECK(!ps_a11y_publish(m) && !m->pending_text_id);
+ char beyond[PS_A11Y_EDIT_BYTES+1]="";ps_a11y_begin(m);
+ CHECK(!ps_a11y_record_edit(m,"picker","Too large",bounds,true,beyond,sizeof beyond));CHECK(ps_a11y_publish(m) && !m->count);
  char original[PS_A11Y_EDIT_BYTES];memset(original,'x',sizeof original-1);original[sizeof original-1]=0;
  memcpy(original,"α\r\n\t",5);
  ps_a11y_begin(m);CHECK(!ps_a11y_record_edit_mode(m,"log","Originalmeldung",bounds,true,true,true,original,sizeof original));CHECK(ps_a11y_publish(m));

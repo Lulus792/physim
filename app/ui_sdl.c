@@ -232,9 +232,13 @@ static nk_flags nk_sdl_edit_named_common(struct nk_context *ctx,const char *name
    scrolled=ps_a11y_edit_take_scroll(m,index,&scroll_start,&scroll_end,&scroll_top);}
   SDL_UnlockMutex(sdl->accessibility_mutex);
   if(granted){sdl->accessibility_custom_keyboard=false;SDL_RaiseWindow(sdl->win);nk_window_set_focus(ctx,ctx->current->name_string);nk_edit_unfocus(ctx);nk_edit_focus(ctx,NK_EDIT_ALWAYS_INSERT_MODE);}
+  /* A queued native value replacement did not pass through this owned undo
+   * history. Retire its old offsets before rebinding the new external text. */
+  if(changed && custom)nk_textedit_init_fixed(custom,text,(nk_size)capacity);
   if(changed && ctx->current->edit.active){
    SDL_LockMutex(sdl->accessibility_mutex);size_t caret=index!=SIZE_MAX?sdl->accessibility->draft[index].text_caret:strlen(text);SDL_UnlockMutex(sdl->accessibility_mutex);
    ctx->current->edit.cursor=nk_utf_len(text,(int)caret);ctx->current->edit.sel_start=ctx->current->edit.sel_end=ctx->current->edit.cursor;
+   if(custom)custom->cursor=custom->select_start=custom->select_end=ctx->current->edit.cursor;
   }
   if(selected){
    ctx->current->edit.sel_start=nk_utf_len(text,(int)select_start);ctx->current->edit.sel_end=nk_utf_len(text,(int)select_end);
@@ -356,6 +360,9 @@ static nk_flags nk_sdl_edit_named_common(struct nk_context *ctx,const char *name
 }
 nk_flags nk_sdl_edit_named(struct nk_context *ctx,const char *name,nk_flags flags,char *text,int capacity,nk_plugin_filter filter) {
  return nk_sdl_edit_named_common(ctx,name,flags,text,capacity,filter,NULL,NULL,NULL);
+}
+nk_flags nk_sdl_edit_named_buffer(struct nk_context *ctx,const char *name,nk_flags flags,char *text,int capacity,struct nk_text_edit *edit) {
+ return nk_sdl_edit_named_common(ctx,name,flags,text,capacity,nk_filter_default,edit,NULL,NULL);
 }
 nk_flags nk_sdl_edit_named_visual(struct nk_context *ctx,const char *name,char *text,int capacity,
                                  struct nk_text_edit *edit,const struct nk_text_visual *visual) {

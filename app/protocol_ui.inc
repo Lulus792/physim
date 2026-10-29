@@ -397,20 +397,12 @@ static void protocol_detail(app *a,const ps_protocol_record *record,float scale)
 }
 static void protocol_panel(app *a) {
     struct nk_context *ui=a->ui;ps_protocol_ui *p=&a->protocol_view;float f=a->preferences.ui_size/16.f;
-    const ps_ui_palette *previous_palette=ui_palette;ps_ui_palette palette=*ui_palette;
-    if(a->preferences.theme!=PS_THEME_HIGH_CONTRAST) {
-        bool light=a->preferences.theme==PS_THEME_LIGHT;
-        palette.window=light?nk_rgb(250,251,253):nk_rgb(32,35,42);
-        palette.header=palette.button=light?nk_rgb(240,243,247):nk_rgb(39,43,51);
-        palette.edit=light?nk_rgb(255,255,255):nk_rgb(24,27,33);
-        palette.border=light?nk_rgb(198,207,221):nk_rgb(60,65,76);
-        palette.text=light?nk_rgb(32,44,60):nk_rgb(240,242,247);
-        palette.muted=light?nk_rgb(88,104,124):nk_rgb(169,178,193);
-        palette.accent=light?nk_rgb(32,92,170):nk_rgb(154,195,255);
-        palette.error=light?nk_rgb(169,49,56):nk_rgb(255,170,165);
-        palette.selection_active=palette.button_hover=light?nk_rgb(220,233,250):nk_rgb(41,62,91);
-        ui_palette=&palette;style(ui);
-    }
+    /* Share the workspace's semantic colors, including detached protocol
+     * windows. The user selected this unification on 2026-10-29. */
+    const ps_ui_palette *previous_palette=ui_palette;
+    const ps_ui_palette *base=a->preferences.theme==PS_THEME_HIGH_CONTRAST?&PS_UI_HIGH_CONTRAST:
+        a->preferences.theme==PS_THEME_LIGHT?&PS_UI_LIGHT:&PS_UI_DARK;
+    ui_palette=ps_workbench_palette(base);style(ui);
     const float sizes[]={11.2f,9.8f,11.62f,17.5f,13.3f,10.92f,11.2f,9.8f,10.5f,9.52f,14};
     for(unsigned i=0;i<PS_PROTOCOL_FONT_COUNT;i++){bool bold=(i>=PS_PROTOCOL_FONT_ROW_TITLE && i<=PS_PROTOCOL_FONT_HEADING) || i==PS_PROTOCOL_FONT_NAVIGATION;p->fonts[i]=*(i==PS_PROTOCOL_FONT_ORIGINAL?a->font_code:bold?a->font_title:a->font_ui);p->fonts[i].height=sizes[i]*(i==PS_PROTOCOL_FONT_ORIGINAL?a->workbench_code_em:bold?a->workbench_bold_em:a->workbench_regular_em)*f;}
     ps_protocol_summary summary=ps_protocol_describe(&a->protocol);

@@ -35,8 +35,9 @@ static const char *editable_text_xml =
     "<method name='PasteText'><arg type='i' direction='in'/><arg type='b' direction='out'/></method></interface>";
 static bool edit_replace(ps_a11y_native *w,const ps_a11y_node *edit,size_t begin,size_t end,const char *insert,size_t bytes) {
     size_t length=ps_a11y_node_text_size(edit);
-    if(edit->text_read_only || begin>end || end>length || bytes>PS_A11Y_LABEL_BYTES || length-(end-begin)+bytes>=edit->text_capacity)return false;
-    char next[PS_A11Y_LABEL_BYTES];memcpy(next,ps_a11y_node_text(edit),begin);memcpy(next+begin,insert,bytes);
+    if(edit->text_read_only || begin>end || end>length || bytes>=PS_A11Y_EDIT_BYTES ||
+       length-(end-begin)+bytes>=edit->text_capacity || length-(end-begin)+bytes>=PS_A11Y_EDIT_BYTES)return false;
+    char next[PS_A11Y_EDIT_BYTES];memcpy(next,ps_a11y_node_text(edit),begin);memcpy(next+begin,insert,bytes);
     memcpy(next+begin+bytes,ps_a11y_node_text(edit)+end,length-end+1);
     return ps_a11y_set_text(w->model,edit->id,next);
 }
@@ -101,7 +102,7 @@ static void clipboard_deliver(ps_a11y_native *w) {
     if(copied && edit && edit->role==PS_A11Y_EDIT && edit->text_version==version && edit->enabled &&
        w->visible && !w->model->suspended) {
         if(action==2)edit_replace(w,edit,begin,end,"",0);
-        if(action==3 && paste && ps_text_valid(paste,PS_A11Y_LABEL_BYTES,false))edit_replace(w,edit,begin,end,paste,strlen(paste));
+        if(action==3 && paste && ps_text_valid(paste,PS_A11Y_EDIT_BYTES,false))edit_replace(w,edit,begin,end,paste,strlen(paste));
     }
     SDL_UnlockMutex(w->mutex);SDL_free(paste);free(selected);
 }

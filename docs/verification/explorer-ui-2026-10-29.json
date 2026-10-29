@@ -1,0 +1,656 @@
+{
+  "date": "2026-10-29",
+  "scope": "Native Explorer A integration, long editable fields and requested shared protocol colors; partial overall implementation",
+  "source_base": "06289f6bf8ebb0d74b3b4ae4983ae4e0db890837",
+  "source_manifest": {
+    "path": "build/validation/explorer-ui-2026-10-28/ui-seventh-compiler-source.json",
+    "sha256": "8d0a8a13ca93eb05fc2eafce79f3c8d225284fac224fb97298fa6855b61498fe"
+  },
+  "source_inputs": {
+    "path": "build/validation/explorer-ui-2026-10-28/ui-seventh-inputs.zip",
+    "sha256": "6492bf4a15ae2ff1afc19a192222a933a0ec1d68cd694d55529e69c85862b70e"
+  },
+  "runtime_index": {
+    "path": "build/validation/explorer-ui-2026-10-28/ui-seventh-byte-index.json",
+    "sha256": "7ea9379ebb0674ed9492a50b6b8be4b951eb33e344710652794b02427cdecd24"
+  },
+  "runtime": {
+    "path": "build/validation/explorer-ui-2026-10-28/ui-seventh-runtime.json",
+    "sha256": "49fccce4e25264706dea4af65975767f98b4bc1b3a2954996340e59b43c3d1cb"
+  },
+  "suites": [
+    {
+      "platform": "windows",
+      "phase": {
+        "path": "build/validation/explorer-ui-2026-10-28/ui-seventh-windows.json",
+        "sha256": "2ece5c3945ef63492d3fbcfdb56b27412dc93cee928065bdb8f81a2ca98c623a"
+      },
+      "log": {
+        "path": "build/validation/explorer-ui-2026-10-28/ui-seventh-windows.log",
+        "sha256": "08b5ef077d47f10f78aba35552c268378ed2974a4046ea19bd0e93b349be0542"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-yg8gj7np/results.json",
+        "sha256": "4dbb41a6c60285e95c6fb27f2e03b6fd87a422d30fbbc798a5a61ca2f91e846c"
+      },
+      "cases": [
+        {
+          "name": "protocol_navigator",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a_native_windows",
+          "status": "failed"
+        },
+        {
+          "name": "explorer_a",
+          "status": "passed"
+        },
+        {
+          "name": "project_wizard",
+          "status": "passed"
+        },
+        {
+          "name": "protocol_typography",
+          "status": "passed"
+        }
+      ],
+      "binary_sha256": "38c893ccf131f08d51228b8300693d58e40d885cfb0bfb48249772c42b3d6c49"
+    },
+    {
+      "platform": "linux",
+      "phase": {
+        "path": "build/validation/explorer-ui-2026-10-28/ui-seventh-linux.json",
+        "sha256": "53537899aada1368095fbf629cf6542f7a642733aa4ed0779f3f9d2eaf4b3e58"
+      },
+      "log": {
+        "path": "build/validation/explorer-ui-2026-10-28/ui-seventh-linux.log",
+        "sha256": "989cad72dc75e0ac532f52f917df3064434217c97ed5f8cd6e06aaf0f530062d"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5r031v7n/results.json",
+        "sha256": "acbcd76f852421f14cb30f33509ec2d050855a856233b7da3e0fe7ccc942b134"
+      },
+      "cases": [
+        {
+          "name": "protocol_navigator",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a_native_atspi",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a",
+          "status": "passed"
+        },
+        {
+          "name": "project_wizard",
+          "status": "passed"
+        },
+        {
+          "name": "protocol_typography",
+          "status": "passed"
+        }
+      ],
+      "binary_sha256": "fefa8b9151f615a660bdcb7bb82a490263ca81224a87982d307a7220b3f2f982"
+    }
+  ],
+  "protocol_color_pixel_proof": [
+    {
+      "platform": "windows",
+      "theme": "dark",
+      "image": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-yg8gj7np/protocol_navigator/files ä/protocol-ui-dark/workflow ä/protocol-navigator.png",
+        "sha256": "aba1d5ab90a0680c93605f7abb549dc5f5e1888c409d797b962faaf383141bae"
+      },
+      "size": [
+        1440,
+        1000
+      ],
+      "samples": [
+        {
+          "point": [
+            6,
+            500
+          ],
+          "rgb": [
+            30,
+            31,
+            35
+          ]
+        },
+        {
+          "point": [
+            6,
+            900
+          ],
+          "rgb": [
+            30,
+            31,
+            35
+          ]
+        },
+        {
+          "point": [
+            1000,
+            500
+          ],
+          "rgb": [
+            25,
+            26,
+            30
+          ]
+        },
+        {
+          "point": [
+            1142,
+            900
+          ],
+          "rgb": [
+            25,
+            26,
+            30
+          ]
+        },
+        {
+          "point": [
+            10,
+            640
+          ],
+          "rgb": [
+            30,
+            31,
+            35
+          ]
+        }
+      ],
+      "workspace_protocol_equal": true,
+      "editor_details_equal": true
+    },
+    {
+      "platform": "windows",
+      "theme": "light",
+      "image": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-yg8gj7np/protocol_navigator/files ä/protocol-ui-light/workflow ä/protocol-navigator.png",
+        "sha256": "72e296b840e1e21972b576ec27c4b9b411e9ef7c15b7b8cdb349f8bded7af68a"
+      },
+      "size": [
+        1440,
+        1000
+      ],
+      "samples": [
+        {
+          "point": [
+            6,
+            500
+          ],
+          "rgb": [
+            246,
+            247,
+            249
+          ]
+        },
+        {
+          "point": [
+            6,
+            900
+          ],
+          "rgb": [
+            246,
+            247,
+            249
+          ]
+        },
+        {
+          "point": [
+            1000,
+            500
+          ],
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "point": [
+            1142,
+            900
+          ],
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "point": [
+            10,
+            640
+          ],
+          "rgb": [
+            246,
+            247,
+            249
+          ]
+        }
+      ],
+      "workspace_protocol_equal": true,
+      "editor_details_equal": true
+    },
+    {
+      "platform": "windows",
+      "theme": "contrast",
+      "image": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-yg8gj7np/protocol_navigator/files ä/protocol-ui-contrast/workflow ä/protocol-navigator.png",
+        "sha256": "c761f4d63c7ccf7dfbfb101e9dedcdafa694b9ca19d4456a2c72a10a18b897a4"
+      },
+      "size": [
+        1440,
+        1000
+      ],
+      "samples": [
+        {
+          "point": [
+            6,
+            500
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "point": [
+            6,
+            900
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "point": [
+            1000,
+            500
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "point": [
+            1142,
+            900
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "point": [
+            10,
+            640
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "workspace_protocol_equal": true,
+      "editor_details_equal": true
+    },
+    {
+      "platform": "linux",
+      "theme": "dark",
+      "image": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5r031v7n/protocol_navigator/files ä/protocol-ui-dark/workflow ä/protocol-navigator.png",
+        "sha256": "90115a4cf8f5bd07aa08fa82956c7bd1e257720e76b27baffafbbcbcc6556a5b"
+      },
+      "size": [
+        1440,
+        1000
+      ],
+      "samples": [
+        {
+          "point": [
+            6,
+            500
+          ],
+          "rgb": [
+            30,
+            31,
+            35
+          ]
+        },
+        {
+          "point": [
+            6,
+            900
+          ],
+          "rgb": [
+            30,
+            31,
+            35
+          ]
+        },
+        {
+          "point": [
+            1000,
+            500
+          ],
+          "rgb": [
+            25,
+            26,
+            30
+          ]
+        },
+        {
+          "point": [
+            1142,
+            900
+          ],
+          "rgb": [
+            25,
+            26,
+            30
+          ]
+        },
+        {
+          "point": [
+            10,
+            640
+          ],
+          "rgb": [
+            30,
+            31,
+            35
+          ]
+        }
+      ],
+      "workspace_protocol_equal": true,
+      "editor_details_equal": true
+    },
+    {
+      "platform": "linux",
+      "theme": "light",
+      "image": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5r031v7n/protocol_navigator/files ä/protocol-ui-light/workflow ä/protocol-navigator.png",
+        "sha256": "cd056717446f74249577789652c58c1f834836ae4a6f94c7bf52132c6ffe6151"
+      },
+      "size": [
+        1440,
+        1000
+      ],
+      "samples": [
+        {
+          "point": [
+            6,
+            500
+          ],
+          "rgb": [
+            246,
+            247,
+            249
+          ]
+        },
+        {
+          "point": [
+            6,
+            900
+          ],
+          "rgb": [
+            246,
+            247,
+            249
+          ]
+        },
+        {
+          "point": [
+            1000,
+            500
+          ],
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "point": [
+            1142,
+            900
+          ],
+          "rgb": [
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "point": [
+            10,
+            640
+          ],
+          "rgb": [
+            246,
+            247,
+            249
+          ]
+        }
+      ],
+      "workspace_protocol_equal": true,
+      "editor_details_equal": true
+    },
+    {
+      "platform": "linux",
+      "theme": "contrast",
+      "image": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5r031v7n/protocol_navigator/files ä/protocol-ui-contrast/workflow ä/protocol-navigator.png",
+        "sha256": "137d937932a11f046dfd6588292def117595d58c12b0131575963f43f159f060"
+      },
+      "size": [
+        1440,
+        1000
+      ],
+      "samples": [
+        {
+          "point": [
+            6,
+            500
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "point": [
+            6,
+            900
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "point": [
+            1000,
+            500
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "point": [
+            1142,
+            900
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "point": [
+            10,
+            640
+          ],
+          "rgb": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "workspace_protocol_equal": true,
+      "editor_details_equal": true
+    }
+  ],
+  "native_clients": [
+    {
+      "report": {
+        "path": "build/validation/explorer-ui-2026-10-28/native-sixth-closed-linux/verification.json",
+        "sha256": "4a65ca553d8840ae372f504f619f2b496841a8074bf02fd50357b38e352e7e92"
+      },
+      "sizes": [
+        "normal",
+        "large"
+      ],
+      "binary_sha256": "c492cd4b4641522fe53ed1be3839614259a6a99fbe3babff9ff63e9616f3fe4e"
+    },
+    {
+      "report": {
+        "path": "build/validation/explorer-ui-2026-10-28/native-sixth-windows/cases/verification.json",
+        "sha256": "6ae267de8697e01d8d94274baf539b648b8513090f698c59860110875b8f25d9"
+      },
+      "sizes": [
+        "normal",
+        "large"
+      ],
+      "binary_sha256": "146e0d229330eb097b1af624d193fb635ad4073c5ef4c68025a013267c3f4a0b"
+    },
+    {
+      "report": {
+        "path": "build/validation/explorer-ui-2026-10-28/native-seventh-windows-repeat/verification.json",
+        "sha256": "73caf094d036ea112cb756907340fca99c8e5c76fe615fd554ebec9e6e21ae42"
+      },
+      "sizes": [
+        "normal",
+        "large"
+      ],
+      "binary_sha256": "38c893ccf131f08d51228b8300693d58e40d885cfb0bfb48249772c42b3d6c49"
+    },
+    {
+      "report": {
+        "path": "build/validation/explorer-ui-2026-10-28/native-seventh-runner/files ä/verification.json",
+        "sha256": "8b361da3176816944aa035de191e0c74dd9460eb83aa4b245ffd65e9fa8858fd"
+      },
+      "sizes": [
+        "normal",
+        "large"
+      ],
+      "binary_sha256": "38c893ccf131f08d51228b8300693d58e40d885cfb0bfb48249772c42b3d6c49"
+    },
+    {
+      "report": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-yg8gj7np/explorer_a_native_windows/files ä/repeat/verification.json",
+        "sha256": "c81fe97b6e65771b7702c1a986bd3a7e66f6d426cedb5e2928e65bd06fb3ab89"
+      },
+      "purpose": "Same seventh Windows probe/program with longer Unicode path"
+    }
+  ],
+  "native_runner_replay": {
+    "path": "build/validation/explorer-ui-2026-10-28/native-seventh-runner/result.json",
+    "sha256": "b52eec8a3b368ede208268d1d0efc21fe3f261c27d3a665ff5258ed567553112"
+  },
+  "unchanged_core_tests": {
+    "windows": {
+      "path": "build/validation/explorer-ui-2026-10-28/units-fifth-windows.json",
+      "sha256": "fd84d6d7e13ded4117170ad12bd10796cbc7c0da0c84f148f3d14c8d2f4535ec"
+    },
+    "linux": {
+      "path": "build/validation/explorer-ui-2026-10-28/units-fifth-linux.json",
+      "sha256": "d7aa07d789a3692288578b84feda0b799bf27c516ef9d41fff703a122b84f57d"
+    },
+    "passed_each": 15,
+    "changed_source_inputs_since_those_tests": [
+      "app/file_browser_tests.inc",
+      "app/protocol_ui.inc",
+      "tests/accessibility_windows_probe.c",
+      "tests/check_explorer_native.py",
+      "tests/native_integration_cases.json",
+      "tests/test_native_test_runner.py"
+    ],
+    "note": "Changes are main-app protocol color, reader fixture and Python/independent-probe tests; core model/edit/backend translation units unchanged."
+  },
+  "counterexample": {
+    "path": "build/validation/explorer-ui-2026-10-28/counter-edit-limit2/verification.json",
+    "sha256": "6b4f9a97f9d38f34e5fc378d0869db5923c19c3dba95efe7a4c02747f33d8eb1"
+  },
+  "catalog": {
+    "path": "build/validation/explorer-ui-2026-10-28/catalog-seventh.json",
+    "sha256": "1ba0289f266c0b26f46ac67ffe9befcaf9dc83002484796e5fdc8b67beb554ef"
+  },
+  "physical_keys": {
+    "path": "docs/verification/protocol-physical-keys-2026-10-29.json",
+    "sha256": "aa6456217da7fa8c3718538dc97f575cb9c728cecfabe98c0c0940dd04559f07"
+  },
+  "diagnoses": [
+    {
+      "cohort": "first-through-fifth",
+      "findings": [
+        "Search cache invalidation after queued field flush",
+        "Fixture search clearing must send Delete, not empty TextInput",
+        "Shared Nuklear edit selection caused actual select_begin_ptr assertion",
+        "Windows native clipboard inserts CR before lone LF",
+        "Fixture must await rebuilt list after asynchronous completion"
+      ],
+      "proof": "Original logs/source/runtime cohorts retained locally"
+    },
+    {
+      "cohort": "native-sixth-linux",
+      "finding": "All native value actions completed, but marker raced queued native Close action. Driver now waits for actual button removal before marker.",
+      "failed_report": {
+        "path": "build/validation/explorer-ui-2026-10-28/native-sixth-linux/verification.json",
+        "sha256": "94d3d7acce4b5d34629eebb7e40aef299de745b108e666d2a918f1704f1ab954"
+      }
+    },
+    {
+      "cohort": "ui-seventh-windows",
+      "finding": "First UIA value-file call timed out; source/binary unchanged targeted short-path, longer Unicode-path and same-runner/VS-environment replays passed. Cause unproven; batch remains4/5, not relabeled5/5."
+    }
+  ],
+  "limits": [
+    "No full Explorer A or whole-interface acceptance",
+    "Free browser remains modal; inline reference view, image/run previews and C API context remain to implement",
+    "Full large-list native collection/keyboard/screenreader tasks and breadcrumb Tab coverage remain open",
+    "UIA initial-call timeout has not been causally explained",
+    "German locale sorting, actual denied ACL/SMB, allocation fault injection, end-to-end long-path import,200% text, DPI/monitor and macOS remain open",
+    "UI fixtures inject SDL input; external clients prove APIs, not physical key focus or screenreader speech",
+    "Linux GUI uses Xvfb/Openbox/llvmpipe and ASan/UBSan detect_leaks=0; core tests/control use detect_leaks=1"
+  ],
+  "storage": {
+    "root": "D:/Physim/build",
+    "f_accessed": false,
+    "new_versioned_images": 0,
+    "images": "Existing targeted GUI captures referenced by hash; no per-action desktop screenshots"
+  }
+}

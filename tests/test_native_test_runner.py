@@ -92,8 +92,10 @@ def verify_display_catalog(runner, display_checker):
     specialized_display["project_wizard_help"]=("tests/check_project_wizard_help.py",("--work",))
     if sys.platform in ("win32","linux"):
         specialized_display["graphic_dialog"]=("tests/check_graphic_dialog.py",("--root",))
+        specialized_display["explorer_a"]=("tests/check_explorer_a.py",("--root","--work"))
     if sys.platform == "linux":
         specialized_display.update({
+            "explorer_a_native_atspi": ("tests/check_explorer_native.py", ("--work",)),
             "project_wizard_atspi": ("tests/check_project_wizard_native.py", ("--work",)),
             "accessibility_document_atspi": ("tests/test_accessibility_document_atspi.py", ("--root",)),
             "accessibility_edit_atspi": ("tests/test_accessibility_edit_atspi.py", ()),
@@ -108,6 +110,7 @@ def verify_display_catalog(runner, display_checker):
         })
     if sys.platform == "win32":
         specialized_display.update({
+            "explorer_a_native_windows": ("tests/check_explorer_native.py", ("--probe", "--work")),
             "project_wizard_windows": ("tests/check_project_wizard_native.py", ("--probe", "--work")),
             "documentation_panes_windows_host": ("tests/check_documentation_windows_host.py", ()),
             "accessibility_checkbox_windows": ("tests/test_accessibility_checkbox_app.py", ("--probe",)),

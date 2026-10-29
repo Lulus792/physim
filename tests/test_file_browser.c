@@ -70,8 +70,10 @@ int main(int argc,char **argv) {
     CHECK(SetFileAttributesW(wide,FILE_ATTRIBUTE_HIDDEN));
 #endif
     ps_browser_listing listing={0};CHECK(ps_browser_listing_read(root,0,NULL,NULL,&listing)==PS_OK);
-    CHECK(listing.count==8 && !listing.omitted && listing.entries[0].kind==PS_BROWSER_DIRECTORY);
-    CHECK(!strcmp(ps_browser_entry_name(&listing.entries[0]),"Ordner λ"));
+    CHECK(listing.count==8 && !listing.omitted);
+    CHECK(!strcmp(ps_browser_entry_name(&listing.entries[0]),".secret.txt"));
+    CHECK(!strcmp(ps_browser_entry_name(&listing.entries[1]),"Alpha.PSRUN"));
+    CHECK(!strcmp(ps_browser_entry_name(&listing.entries[3]),"Ordner λ"));
     const ps_browser_entry *entry=find(&listing,"straße.C");CHECK(entry && entry->kind==PS_BROWSER_C_SOURCE && entry->error==PS_OK);
     CHECK(entry->size==strlen("Daten λ\n") && entry->modified_ns>0);
     CHECK(ps_browser_entry_matches(entry,PS_BROWSER_FILES,"STRASSE",false));
@@ -85,11 +87,12 @@ int main(int argc,char **argv) {
     CHECK(find(&listing,"hidden.txt")->hidden);
 #endif
     CHECK(ps_browser_entry_matches(find(&listing,"Alpha.PSRUN"),PS_BROWSER_RUNS,"alpha",false));
-    CHECK(ps_browser_entry_matches(&listing.entries[0],PS_BROWSER_RUNS,"",false));
+    CHECK(ps_browser_entry_matches(find(&listing,"Ordner λ"),PS_BROWSER_RUNS,"",false));
     CHECK(!ps_browser_entry_matches(entry,PS_BROWSER_FOLDERS,"",true));
     CHECK(!ps_browser_entry_matches(entry,(ps_browser_mode)99,"",true));
     ps_browser_listing_sort(&listing,PS_BROWSER_SORT_TYPE);
-    for(size_t i=1;i<listing.count;i++)CHECK(listing.entries[i-1].kind<=listing.entries[i].kind);
+    const char *type_order[]={"straße.C","Äpfel.phys","physim.project","Ordner λ","Alpha.PSRUN",".secret.txt","hidden.txt","z.txt"};
+    for(size_t i=0;i<listing.count;i++)CHECK(!strcmp(ps_browser_entry_name(&listing.entries[i]),type_order[i]));
     CHECK(ps_browser_selectable(sub,PS_BROWSER_FOLDERS) && !ps_browser_selectable(sub,PS_BROWSER_FILES));
     CHECK(ps_browser_child(root,"Alpha.PSRUN",path)==PS_OK);
     CHECK(ps_browser_selectable(path,PS_BROWSER_RUNS) && ps_browser_selectable(path,PS_BROWSER_FILES));

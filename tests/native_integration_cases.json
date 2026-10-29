@@ -7081,6 +7081,37 @@
       ]
     },
     {
+      "name": "explorer_a_native_windows",
+      "app": true,
+      "display": true,
+      "platforms": ["win32"],
+      "targets": ["python", "physim", "accessibility-windows-probe"],
+      "steps": [{"program":"python","arguments":["{root}/tests/check_explorer_native.py","--app","{physim}","--probe","{accessibility-windows-probe}","--work","{work}"],"timeout":300,"files":["verification.json"]}]
+    },
+    {
+      "name": "explorer_a_native_atspi",
+      "app": true,
+      "display": true,
+      "platforms": ["linux"],
+      "targets": ["python", "physim"],
+      "steps": [{"program":"python","arguments":["{root}/tests/check_explorer_native.py","--app","{physim}","--work","{work}"],"timeout":300,"files":["verification.json"]}]
+    },
+    {
+      "name": "explorer_a",
+      "app": true,
+      "display": true,
+      "platforms": ["win32", "linux"],
+      "targets": ["python", "physim"],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": ["{root}/tests/check_explorer_a.py", "--app", "{physim}", "--work", "{work}", "--root", "{root}"],
+          "timeout": 600,
+          "files": ["verification.json"]
+        }
+      ]
+    },
+    {
       "name": "project_wizard",
       "app": true,
       "display": true,

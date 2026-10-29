@@ -214,13 +214,15 @@ static SDL_EnumerationResult SDLCALL enumerate(void *userdata,const char *direct
 }
 static int compare_name(const void *left,const void *right) {
     const ps_browser_entry *a=left,*b=right;
-    if ((a->kind==PS_BROWSER_DIRECTORY)!=(b->kind==PS_BROWSER_DIRECTORY))return a->kind==PS_BROWSER_DIRECTORY?-1:1;
     int order=SDL_strcasecmp(ps_browser_entry_name(a),ps_browser_entry_name(b));
     return order?order:strcmp(a->path,b->path);
 }
 static int compare_type(const void *left,const void *right) {
     const ps_browser_entry *a=left,*b=right;
-    if(a->kind!=b->kind)return a->kind<b->kind?-1:1;
+    /* The approved browser sorts by kind words (code, config, folder, image,
+     * run, text), not by a native folders-first convention or this enum. */
+    static const unsigned rank[]={2,0,0,4,3,1,5,6};
+    if(rank[a->kind]!=rank[b->kind])return rank[a->kind]<rank[b->kind]?-1:1;
     return compare_name(left,right);
 }
 void ps_browser_listing_sort(ps_browser_listing *listing,ps_browser_sort sort) {

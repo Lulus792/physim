@@ -42,25 +42,34 @@ Der [native Projektdialog B](PROJECT-WIZARD-B-NATIVE.md) ergänzt den echten
 Dreischritt, acht zugängliche Vorlagenkarten und überprüfbare Projektanlage.
 Windows und Linux bestehen je 68 vollständige Projektabläufe sowie die
 Dialog-, Fehler- und nativen Accessibility-Prüfungen. Der eingebettete
-Explorer A und die vollständige Oberflächenabnahme bleiben offen.
+Explorer A ist inzwischen als nativer Teilstand eingebunden; die vollständige
+Oberflächenabnahme bleibt offen.
 Die [geprüfte Dateisystemgrundlage für Explorer A](EXPLORER-A-NATIVE.md)
 ergänzt danach echte Ordnerlisten, Metadaten, Filter, Abbruch und exklusive
 Ordneranlage. Windows und Linux bestehen die Modellprüfungen samt langen Pfaden;
 die native Junction-Gegenprobe bestätigt die korrigierte Zielprüfung. Der folgende
 IO-Arbeiter prüft asynchrone Aufträge, Textvorschau und veraltete Ergebnisse mit
-einer negativen Versionsgegenprobe. Navigationscontroller, A-Oberfläche,
-Messlauf-/Bildvorschau und bereichsübergreifende Einbindung sind als Nächstes
-umzusetzen; diese Grundlagen sind keine GUI- oder Accessibility-Abnahme.
-Den noch offenen direkten Pfeiltastennachweis erst nach erneuter Rückmeldung
-des Nutzers schließen. Der folgende
+einer negativen Versionsgegenprobe. Controller und A-Oberfläche übernehmen jetzt
+Orte/Liste/Vorschau, echte Textvorschau und den Unteraufruf aus B; Windows/Linux
+prüfen Widgets und unabhängige lange Pfadwerte. Offen bleiben insbesondere
+Messlauf-/Bildvorschau, C-API-Kontext, die freie eingebettete Exploreransicht,
+große native Listen, vollständige bereichsübergreifende Aufgaben und die im
+Einbindungsnachweis genannte anfängliche UIA-Zeitüberschreitung.
+Der folgende
 [Nachlauf für schnelle Zeigerereignisse](PROTOCOL-POINTER-NATIVE.md) erhält
 vollständige Klicks innerhalb eines Frames und den ursprünglichen Druckpunkt;
 Linux prüft den schnellen Suche-/Trenner-Fokuswechsel mit anschließendem
 40-Pixel-Schritt. Der spätere Originaltext-Nachlauf bestätigt den sichtbaren
-Windows-Mausfokus und die 40-Pixel-Ziehung; dessen Pfeiltastennachweis bleibt
-wegen der protokollierten Nummernblock-Eingabe offen. Der Nutzer hat die manuelle
-Prüfung auf später verschoben und meldet sich bei verfügbarer Zeit; bis dahin
-dafür keine Testfenster starten oder erneut um Mitwirkung bitten. Die zusätzliche
+Windows-Mausfokus und die 40-Pixel-Ziehung. Am 29. Oktober hat der Nutzer die
+manuelle Prüfung wieder aufgenommen: Der [physische Tastaturnachweis](PROTOCOL-PHYSICAL-KEYS-NATIVE.md)
+belegt sechs echte Umschalt-Pfeil-Schritte von jeweils 40 Pixeln an der fokussierten
+Protokollhöhe. Andere Trenner und praktische Plattformprüfungen bleiben offen.
+Ebenfalls am 29. Oktober hat der Nutzer für den Protokollbereich ausdrücklich
+dieselben Farben wie für die übrige Physim-Oberfläche gewünscht. Diese Anpassung
+der gemeinsamen Werkbank-Farbrollen hat Vorrang vor der eigenen Farbpalette
+der älteren Navigator-C-Referenz; die Anordnung C bleibt ausgewählt. Der
+[native Farbabgleich](PROTOCOL-COLORS-NATIVE.md) belegt die gemeinsamen Flächen
+in beiden Themes und hohem Kontrast auf Windows und Linux. Die zusätzliche
 F1-UIA-Scrollprüfung ist im folgenden
 [Reihenfolgenachlauf](../f1-layouts/UIA-SCROLL-ORDER.md) geschlossen: Der Test
 wartet nun auf den vollständigen externen Edit-/Fokusabschluss, bevor er Tab

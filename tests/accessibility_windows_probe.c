@@ -402,6 +402,20 @@ static bool matches_utf8(BSTR text,const char *expected,size_t bytes) {
  bool okay=!bytes || (WideCharToMultiByte(CP_UTF8,WC_ERR_INVALID_CHARS,text,(int)units,copy,length,NULL,NULL)==length && !memcmp(copy,expected,bytes));
  free(copy);return okay;
 }
+static HRESULT value_file(IUIAutomationElement *control,const wchar_t *path) {
+ FILE *file=_wfopen(path,L"rb");if(!file)return E_FAIL;
+ if(fseek(file,0,SEEK_END)){fclose(file);return E_FAIL;}long size=ftell(file);
+ if(size<0 || size>65536 || fseek(file,0,SEEK_SET)){fclose(file);return E_INVALIDARG;}
+ char *expected=malloc((size_t)size+1);if(!expected){fclose(file);return E_OUTOFMEMORY;}
+ bool loaded=fread(expected,1,(size_t)size,file)==(size_t)size;if(fclose(file))loaded=false;
+ IUnknown *unknown=NULL;IUIAutomationValuePattern *pattern=NULL;BSTR value=NULL;
+ HRESULT result=loaded?IUIAutomationElement_GetCurrentPattern(control,UIA_ValuePatternId,&unknown):E_FAIL;
+ if(SUCCEEDED(result))result=unknown?IUnknown_QueryInterface(unknown,&IID_IUIAutomationValuePattern,(void**)&pattern):E_FAIL;
+ if(SUCCEEDED(result))result=IUIAutomationValuePattern_get_CurrentValue(pattern,&value);
+ if(SUCCEEDED(result) && !matches_utf8(value,expected,(size_t)size))result=E_FAIL;
+ if(SUCCEEDED(result))printf("{\"kind\":\"value_file\",\"utf8_bytes\":%ld,\"equal\":true}\n",size);
+ SysFreeString(value);if(pattern)IUIAutomationValuePattern_Release(pattern);if(unknown)IUnknown_Release(unknown);free(expected);return result;
+}
 static HRESULT readonly_file(IUIAutomationElement *control,const wchar_t *path,bool selected) {
  FILE *file=_wfopen(path,L"rb");if(!file)return E_FAIL;
  if(fseek(file,0,SEEK_END)){fclose(file);return E_FAIL;}long size=ftell(file);
@@ -468,6 +482,7 @@ int wmain(int argc,wchar_t **argv) {
  if(argc!=4 && argc!=5)return 2;
  wchar_t *end=NULL;unsigned long pid=wcstoul(argv[1],&end,10);if(!pid || *end)return 2;
  bool focus=!wcscmp(argv[2],L"focus"),toggle=!wcscmp(argv[2],L"toggle"),select=!wcscmp(argv[2],L"select"),read=!wcscmp(argv[2],L"read"),edit=!wcscmp(argv[2],L"edit"),text_select=!wcscmp(argv[2],L"select-text");
+ bool edit_value=!wcscmp(argv[2],L"edit-value"),read_value=!wcscmp(argv[2],L"value-file");
  bool scroll_start=!wcscmp(argv[2],L"scroll-text-start"),scroll_end=!wcscmp(argv[2],L"scroll-text-end");
  bool read_only_file=!wcscmp(argv[2],L"readonly-file"),read_only_selected=!wcscmp(argv[2],L"readonly-selected-file");
  bool stress_links=!wcscmp(argv[2],L"links-stress");
@@ -476,16 +491,16 @@ int wmain(int argc,wchar_t **argv) {
  bool lifecycle=!wcscmp(argv[2],L"lifecycle");
  bool focused_field=!wcscmp(argv[2],L"focused-field"),focused_button=!wcscmp(argv[2],L"focused-button"),focused_control=!wcscmp(argv[2],L"focused-control");
  bool invoke=!wcscmp(argv[2],L"invoke"),state=!wcscmp(argv[2],L"control-state"),radio_state=!wcscmp(argv[2],L"radio-state"),absent=!wcscmp(argv[2],L"absent");
- if(!focus && !toggle && !select && !read && !edit && !text_select && !scroll_start && !scroll_end && !links && !invoke_link && !invalid_link && !lifecycle && !focused_field && !focused_button && !focused_control && !read_only_file && !read_only_selected && !invoke && !state && !radio_state && !absent)return 2;
+ if(!focus && !toggle && !select && !read && !edit && !edit_value && !read_value && !text_select && !scroll_start && !scroll_end && !links && !invoke_link && !invalid_link && !lifecycle && !focused_field && !focused_button && !focused_control && !read_only_file && !read_only_selected && !invoke && !state && !radio_state && !absent)return 2;
  if(radio_state && argc!=5)return 2;
- if((read || edit || text_select || scroll_start || scroll_end || links || invoke_link || invalid_link || lifecycle || read_only_file || read_only_selected) && argc!=5)return 2;
+ if((read || edit || edit_value || read_value || text_select || scroll_start || scroll_end || links || invoke_link || invalid_link || lifecycle || read_only_file || read_only_selected) && argc!=5)return 2;
  HRESULT initialized=CoInitializeEx(NULL,COINIT_MULTITHREADED);if(FAILED(initialized))return 1;
  IUIAutomation *automation=NULL;IUIAutomationElement *desktop=NULL,*window=NULL,*group=NULL,*control=NULL;
  IUnknown *unknown=NULL;bool ok=SUCCEEDED(CoCreateInstance(&CLSID_CUIAutomation,NULL,CLSCTX_INPROC_SERVER,&IID_IUIAutomation,(void**)&automation));
  if(ok)ok=SUCCEEDED(IUIAutomation_GetRootElement(automation,&desktop));
  VARIANT process;VariantInit(&process);process.vt=VT_I4;process.lVal=(LONG)pid;
  if(ok)ok=SUCCEEDED(find(automation,desktop,TreeScope_Children,UIA_ProcessIdPropertyId,process,&window)) && window;
- if(ok && (edit || focused_field || focused_button || focused_control || text_select || scroll_start || scroll_end || read_only_file || read_only_selected))ok=SUCCEEDED(find_edit(automation,desktop,(LONG)pid,argv[3],focused_control?0:focused_button?UIA_ButtonControlTypeId:UIA_EditControlTypeId,&control)) && control;
+ if(ok && (edit || edit_value || read_value || focused_field || focused_button || focused_control || text_select || scroll_start || scroll_end || read_only_file || read_only_selected))ok=SUCCEEDED(find_edit(automation,desktop,(LONG)pid,argv[3],focused_control?0:focused_button?UIA_ButtonControlTypeId:UIA_EditControlTypeId,&control)) && control;
  else if(ok && (read || links || invoke_link || invalid_link || lifecycle)) {
   IUIAutomationCondition *pid_condition=NULL,*title_condition=NULL,*both=NULL;VARIANT title;VariantInit(&title);title.vt=VT_BSTR;title.bstrVal=SysAllocString(argv[3]);
   ok=title.bstrVal && SUCCEEDED(IUIAutomation_CreatePropertyCondition(automation,UIA_ProcessIdPropertyId,process,&pid_condition)) &&
@@ -510,13 +525,14 @@ int wmain(int argc,wchar_t **argv) {
  }
  else if(ok && (read_only_file || read_only_selected))action=readonly_file(control,argv[4],read_only_selected);
  else if(ok && (focused_field || focused_button || focused_control))action=current_field_focus(automation,control);
- else if(ok && edit) {
+ else if(ok && read_value)action=value_file(control,argv[4]);
+ else if(ok && (edit || edit_value)) {
   IUIAutomationValuePattern *pattern=NULL;BOOL readonly=TRUE;
   ok=role==UIA_EditControlTypeId && SUCCEEDED(IUIAutomationElement_GetCurrentPattern(control,UIA_ValuePatternId,&unknown)) && unknown &&
    SUCCEEDED(IUnknown_QueryInterface(unknown,&IID_IUIAutomationValuePattern,(void**)&pattern)) &&
    SUCCEEDED(IUIAutomationValuePattern_get_CurrentIsReadOnly(pattern,&readonly)) && !readonly;
   if(ok){trace_edit_order("value-begin");action=IUIAutomationValuePattern_SetValue(pattern,argv[4]);trace_edit_order("value-end");}
-  if(ok && SUCCEEDED(action)){trace_edit_order("focus-begin");action=IUIAutomationElement_SetFocus(control);trace_edit_order("focus-end");}
+  if(ok && edit && SUCCEEDED(action)){trace_edit_order("focus-begin");action=IUIAutomationElement_SetFocus(control);trace_edit_order("focus-end");}
   if(pattern)IUIAutomationValuePattern_Release(pattern);
  } else if(ok && (scroll_start || scroll_end))action=scroll_text(control,argv[4],scroll_start);
  else if(ok && text_select)action=select_text(control,argv[4]);

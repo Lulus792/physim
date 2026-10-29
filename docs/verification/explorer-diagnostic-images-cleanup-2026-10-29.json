@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-29",
+  "scope": "Six automatic duplicate debugger screenshots, replaced by successful Explorer UI proof and retained text traces",
+  "references_checked": "docs and local phase md/json/py/log; no image references",
+  "frozen_evidence_preserved": true,
+  "sources_logs_runtime_archives_preserved": true,
+  "deleted_files": [
+    {
+      "path": "build/validation/explorer-ui-2026-10-28/query-debug/explorer-a.png",
+      "bytes": 185851,
+      "sha256": "b04aa1d5eebdab1adbbf58a6d86d126e883d3ae7f739fa5bfd7123f096999012"
+    },
+    {
+      "path": "build/validation/explorer-ui-2026-10-28/query-debug2/explorer-a.png",
+      "bytes": 186087,
+      "sha256": "1b7da3b61dbf19ab4c4bb588a75ca1f56b5eedf519e3bb8b5fc8d05c2366bff2"
+    },
+    {
+      "path": "build/validation/explorer-ui-2026-10-28/query-debug-cache/explorer-a.png",
+      "bytes": 186627,
+      "sha256": "bc11306026615321db2c09147b02e5e449612f309949dbb570519c6081a801dd"
+    },
+    {
+      "path": "build/validation/explorer-ui-2026-10-28/query-debug-watch/explorer-a.png",
+      "bytes": 186483,
+      "sha256": "fd4ab067b2168a9c9502794f92bc84210c90c189412e9661d7cafa4e2f95f610"
+    },
+    {
+      "path": "build/validation/explorer-ui-2026-10-28/copy-debug/explorer-a.png",
+      "bytes": 183406,
+      "sha256": "2930ad27b86d941c1774ebfe4ab081671ff17b8795c360ab887f6d88048790ca"
+    },
+    {
+      "path": "build/validation/explorer-ui-2026-10-28/copy-value-debug/explorer-a.png",
+      "bytes": 184260,
+      "sha256": "bd5e27c63673862a6ef594d1d03143b2c67b151847f3dd66b6d682366154aa0a"
+    }
+  ],
+  "freed_bytes": 1112714.0,
+  "storage": "D:/Physim/build only",
+  "completed": true
+}

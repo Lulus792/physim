@@ -60,7 +60,7 @@ typedef struct {
  size_t count,draft_count;uint64_t next_id,pending_press,selection_parent,selection_id,pending_focus,focused_id;unsigned dropped;
  bool building,keyboard_focus,suspended,edit_complete;
  uint64_t pending_value_id;double pending_value;
- uint64_t pending_text_id;char pending_text[PS_A11Y_LABEL_BYTES];
+    uint64_t pending_text_id;char pending_text[PS_A11Y_EDIT_BYTES];
  size_t pending_text_caret;uint64_t pending_text_version;bool pending_text_has_caret;
  uint64_t next_text_version,pending_selection_id,pending_selection_version;
  size_t pending_selection_start,pending_selection_end;
