@@ -1,5 +1,9 @@
 # Physim · Gemeinsame Designvorschau
 
+**Freigegebene Einstellungen vom 29. Oktober:** **A · Kategorien** mit Suche,
+Optionen und Live-Vorschau. [Verbindliche Spezifikation](../settings-options/APPROVED.md) ·
+[ausgewählte Referenz](../settings-options/index.html?approved=1).
+
 **Freigegebene Dateisicherheit vom 29. Oktober:** **B2** für Speichern,
 Dateikonflikte und Wiederherstellung mit einer gemeinsamen Git-Diff-Ansicht.
 [Verbindliche Spezifikation](../file-safety-options/APPROVED.md) ·

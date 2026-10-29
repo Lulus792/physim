@@ -57,12 +57,19 @@
   Eigenständige Aufgabenfenster, Markierung A2, Projekt B, Explorer A und der
   freigegebene Grafikexport bleiben erhalten. Browsernachweise sind keine native Abnahme.
 
-## Getrennte Entwürfe: Einstellungen
+## Verbindliche Designfreigabe: Einstellungen A
 
-- Die [Einstellungsvorschauen A/B/C](docs/visuals/settings-options/README.md)
-  vom 29. Oktober 2026 sind ausdrücklich getrennt und **noch nicht ausgewählt**.
-  Keine Variante als fertiges Design übernehmen, bevor der Nutzer entschieden
-  hat. Bestehende native Arbeit und alle bisherigen Freigaben bleiben erhalten.
+- Der Nutzer hat am 29. Oktober 2026 **A · Kategorien als fertiges
+  Einstellungsdesign ausdrücklich freigegeben**. Die vorherige Übernahmesperre
+  ist aufgehoben; A im bestehenden nativen Auftrag mit umsetzen, keine neue
+  Variantenwahl vorschalten. B/C bleiben Vergleichshistorie.
+- [ADR 018](docs/decisions/018-selected-settings-a.md),
+  [verbindliche Spezifikation](docs/visuals/settings-options/APPROVED.md) und
+  [Gesamtübergabe](docs/visuals/unified-workspace/NEXT-CHAT.md) beachten:
+  Kategorien links, Optionen mittig, Live-Vorschau rechts; Suche, Änderungsprüfung,
+  Übernehmen/Abbrechen/Standardwerte und Fehlerzustände. Eigene Aufgabenfenster
+  nach ADR 015, Preferences/Geometrie/Einheiten unabhängig halten.
+  Bisherige Freigaben bleiben erhalten; Browserbelege sind keine native Abnahme.
 
 ## Speicherpflege
 

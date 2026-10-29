@@ -1,14 +1,20 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
-**Getrennte Entwürfe vom 29. Oktober 2026 – Einstellungen:** Die neuen
-[A/B/C-Vorschauen](../settings-options/README.md) sind auf Nutzerauftrag separat
-erstellt; **noch keine Variante übernehmen**. A zeigt Kategorien, B eine
-Kartenübersicht, C eine einzelne Einstellung mit Wertvergleich. Suche, Vorschau,
-Übernehmen/Abbrechen/Standardwerte und Fehler sind interaktiv. Erst die
-Nutzerentscheidung macht daraus einen weiteren verbindlichen Designvertrag.
-Preferences, Workspace-Geometrie und eigene Einheitenaufgabe bleiben getrennt;
-ADR 015 und alle folgenden Freigaben gelten weiter. Browserbelege dieser Runde
-bestätigen keine native Umsetzung.
+**Verbindliche Freigabe vom 29. Oktober 2026 – Einstellungen A:** Der Nutzer
+hat **A · Kategorien ins fertige Design übernommen**. Die vorherige
+Übernahmesperre ist aufgehoben; im bestehenden nativen Auftrag mit umsetzen,
+keine erneute Variantenwahl. [ADR 018](../../decisions/018-selected-settings-a.md),
+[genaue Spezifikation](../settings-options/APPROVED.md) und
+[festgelegte Referenz](../settings-options/index.html?approved=1&group=appearance)
+lesen. Links fünf Kategorien, mittig Optionen, rechts Entwurfsvorschau; Suche,
+Änderungsprüfung, Übernehmen/Abbrechen/Standardwerte, Schreib-/Lade-/Schriftfehler
+und eigene Anzeigeeinheitenaufgabe gehören dazu. Nativ tatsächliche OS-Fenster
+nach ADR 015 bauen, Hauptfenster bedienbar lassen; Preferences, unabhängige
+Workspace-Geometrie und Einheiten getrennt halten. Kein Zurücksetzen paralleler
+Änderungen durch einen alten Entwurf. Demo-Ausgangswerte sind keine neuen Defaults,
+Galerie-/Prüfknöpfe und Erfolgsseite keine Produktseiten. B/C sind Vergleichshistorie.
+Browserbelege bestätigen keine fertige native Umsetzung. Alle folgenden Freigaben
+bleiben erhalten; D04 ist gestalterisch entschieden.
 
 **Verbindliche Freigabe vom 29. Oktober 2026 – Dateisicherheit B2:** Der Nutzer
 hat **B2 für Speichern, Dateikonflikte und Wiederherstellung ins fertige Design

@@ -1,10 +1,13 @@
-# Einstellungen: drei getrennte Designvorschauen
+# Einstellungen: A · Kategorien ist freigegeben
 
-Stand: **29. Oktober 2026 · Auswahl offen.** Auf Nutzerauftrag sind A/B/C
-isolierte Entwürfe. Keine Variante ist ins fertige Design übernommen.
-Die native Umsetzung und sämtliche bisherigen Freigaben bleiben erhalten.
+Stand: **29. Oktober 2026 · A ausdrücklich ins fertige Design übernommen.**
+Die vorherige Übernahmesperre ist aufgehoben. A im bestehenden nativen Auftrag
+mit umsetzen; B/C bleiben Vergleichshistorie. Alle bisherigen Freigaben bleiben
+bestehen. [Verbindliche Spezifikation](APPROVED.md) ·
+[ADR 018](../../decisions/018-selected-settings-a.md).
 
-[Vorschau öffnen](index.html?variant=a&group=appearance&theme=dark).
+[Festgelegte Referenz öffnen](index.html?approved=1&group=appearance&theme=dark) ·
+[historischer A/B/C-Vergleich](index.html?approved=0&variant=a).
 Der lokale Vorschau-Server verwendet `http://127.0.0.1:8791/settings-options/`.
 Ohne Server funktioniert `index.html` auch als lokale Datei.
 
@@ -14,8 +17,9 @@ Ohne Server funktioniert `index.html` auch als lokale Datei.
 | **B · Übersicht** | Zusammengehörige Karten auf einer scrollbaren Seite, daneben Vorschau | Einstellungen im Zusammenhang sehen |
 | **C · Fokus** | Links einzelne Einstellungen, mittig eine Aufgabe mit aktuellem und geplantem Wert | Gezielt suchen und einzeln bearbeiten |
 
-Alle Richtungen haben dieselben Funktionen. Wechsel zwischen A/B/C erhält den
-Entwurf. Suchfeld, Hell/Dunkel/Hoher Kontrast, Fehlerbeispiele und „Nur
+Die freigegebene Referenz zeigt fest A, ohne Variantenwahl. Im ausdrücklich
+geöffneten historischen Vergleich haben alle Richtungen dieselben Funktionen;
+Wechsel zwischen A/B/C erhält den Entwurf. Suchfeld, Hell/Dunkel/Hoher Kontrast, Fehlerbeispiele und „Nur
 Fensterinhalt“ sind direkt bedienbar. Letzteres zeigt einen Browserrahmen und
 beweist kein eigenständiges Betriebssystemfenster.
 
@@ -76,11 +80,12 @@ müssen erhalten bleiben. Die zwei Fixture-Werte ersetzen sie nicht.
 
 ## Abgrenzung für den umsetzenden Chat
 
-**Erst Nutzerwahl abwarten.** Suche, Kategorien/Karten/Fokus, Miniatur,
-Änderungsprüfung, direkte Zahlenfelder für gespeicherte Panelgrößen sowie der
-Einheiten-Einstieg aus Einstellungen sind Gestaltungsvorschläge; die bestehende
-native Oberfläche besitzt diese Anordnung noch nicht. Die SI-Aktion als
-bestätigbarer Einheitenentwurf ist ebenfalls vorgeschlagenes Bedienverhalten.
+**A ist jetzt verbindlich.** Kategorien, Suche, Miniatur, Änderungsprüfung,
+direkte Zahlenfelder für gespeicherte Panelgrößen und Einheiten-Einstieg aus
+Einstellungen gemäß [APPROVED.md](APPROVED.md) nativ mit umsetzen. Auch die
+SI-Aktion als bestätigbarer Einheitenentwurf gehört zum ausgewählten Ablauf.
+Die Freigabe beschreibt das Ziel; sie behauptet keine bereits fertige native
+Anordnung. Karten B und Fokus C nicht übernehmen.
 
 Persönliche Preferences, unabhängige Workspace-/Fenstergeometrie, benannte
 Layouts und Einheitenkatalog nicht zu einer gemeinsamen Speichereinheit machen.
@@ -94,14 +99,16 @@ Alle Änderungen dieser Vorschau leben nur im JavaScript-Speicher der Seite;
 Neuladen setzt sie zurück. Kein Zugriff auf persönliche Einstellungen oder
 Projektdateien, keine Speicherung in Local Storage.
 
-Nach einer Auswahl genaue Variante und Referenz festschreiben, dann in den
-[Gesamtauftrag](../unified-workspace/NEXT-CHAT.md) aufnehmen. A2, B2,
-Grafikexport, Projekt B und Explorer A bleiben verbindlich. Diese Runde darf
-keine erneute Auswahl dieser bereits freigegebenen Teile auslösen.
+Variante A, genaue Referenz und Zustände sind in [APPROVED.md](APPROVED.md)
+und dem [Gesamtauftrag](../unified-workspace/NEXT-CHAT.md) festgeschrieben.
+A2, B2, Grafikexport, Projekt B und Explorer A bleiben verbindlich; keine
+erneute Auswahl bereits freigegebener Teile vorschalten.
 
 ## Prüfung
 
-[Prüfbericht](review/VALIDATION.md), [Maschinenbericht](review/validation.json).
+[Historischer Entwurfsprüfbericht](review/VALIDATION.md),
+[Maschinenbericht](review/validation.json),
+[aktuelle Freigabeprüfung](review/APPROVAL-VALIDATION.md).
 Browserprüfung: `node tools/check_settings_options.cjs` mit installiertem
 Playwright und Edge; Ausgaben ausschließlich unter `build/settings-options-review`.
 Dies ist eine Browserprüfung unter Windows, keine native Plattformabnahme.

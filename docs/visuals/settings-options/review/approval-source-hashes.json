@@ -1,0 +1,7 @@
+{
+  "docs/visuals/settings-options/index.html": "d5e33ed9a29bd75a7661baabe92645d227799af38caccd721e7a88298772535d",
+  "docs/visuals/settings-options/settings.css": "a001532eabd869903103de5d9cd4a6fe8d8f63dcc6887e7e54ca9272890ca914",
+  "docs/visuals/settings-options/settings.js": "8db92d989d3874120c1d4a4a6d81bf281ac593e72d94e8db316aefff636abc65",
+  "docs/visuals/settings-options/data.js": "e3a517bf83300dbe74d148d98486a4b08e38ee5be933b5fb45e22e1b51cfc125",
+  "tools/check_settings_options.cjs": "c31472090e1573a9f415dafcdd13d6df649f523a199a0b3f36a8a232d38d299a"
+}

@@ -28,6 +28,7 @@ Diese Teile brauchen **keine erneute Variantenentscheidung**:
 | Grafikexport | Freigegebener Dialog mit Vorschau, PNG/SVG, Bildkopie | Reale Ausgabe-/Fehler-/Plattformabnahme; keine neue Exportrichtung. |
 | Markierung / Rechtsklick | **A2 · Dezenter Schleier**, jetzt final freigegeben | Exakte Farbrollen und Auswahlverhalten nativ übernehmen, einschließlich Kamera-Konfliktprüfung. |
 | Speichern / Dateikonflikte / Wiederherstellung | **B2 · gemeinsamer Git-Diff**, final freigegeben | Native Abläufe und echte Dateioperationen gemäß Spezifikation umsetzen; keine neue Variantenwahl. |
+| Einstellungen | **A · Kategorien**, final freigegeben | Eigene Aufgabenfenster, echte Preferences/Einheiten und vollständige Zustandsabnahme gemäß Spezifikation. |
 | F1 / Hilfe | Bestehendes Design H und dessen Folgeverträge | Reale Inhalte, Tastatur, Screenreader und verbleibende Abweichungen weiter prüfen. |
 
 Verträge: [Bereichsauswahl](../design-options/APPROVED.md),
@@ -40,8 +41,8 @@ Verträge: [Bereichsauswahl](../design-options/APPROVED.md),
 **[B2 mit gemeinsamer Git-Diff-Ansicht](../file-safety-options/APPROVED.md)**
 ausdrücklich ins fertige Design übernommen. Die folgenden Zustände bleiben
 Umsetzungs-/Abnahmeanforderungen; keine erneute Entwurfswahl. Das bestätigt
-keine bereits abgeschlossene native Funktion. **D04 hat jetzt separate
-[Einstellungsvorschauen A/B/C](../settings-options/README.md); Auswahl offen.**
+keine bereits abgeschlossene native Funktion. **D04 ist jetzt ebenfalls
+entschieden: [Einstellungen A · Kategorien](../settings-options/APPROVED.md).**
 D05–D07 bleiben noch zu entwerfen.
 
 | ID / Prio | Was gestalten? | Benötigte Zustände und Ergebnis |
@@ -49,7 +50,7 @@ D05–D07 bleiben noch zu entwerfen.
 | D01 · P1 | **Speichern, Schließen und Projektwechsel · B2 gewählt** | Ungespeicherte einzelne/mehrere Dateien, Speichern/Verwerfen/Abbrechen, fehlgeschlagenes Speichern. B2-Aufgabenfenster mit eindeutigem Dateibezug; Inhalt bei Abbruch erhalten. |
 | D02 · P1 | **Externe Dateiänderung und Konflikt · B2 gewählt** | Datei außerhalb der App geändert, gelöscht, verschoben oder schreibgeschützt; lokaler Entwurf vorhanden. Gemeinsamer B2-Diff, verständliche Wahl ohne stilles Überschreiben. Lesbare Vergleichsansicht, kein automatischer Merge-Editor. |
 | D03 · P1 | **Autosave und Wiederherstellung · B2 gewählt** | Sicherung gefunden, mehrere betroffene Quellen, Original und Sicherung unterscheiden, Wiederherstellung/Abbruch/Fehler. B2 mit vorhandener [Autosave-Funktion](../../autosave.md) verbinden, kein neues Sicherungssystem voraussetzen. |
-| D04 · P1 | **Einstellungen · A/B/C zur Auswahl bereit** | Separate Kategorien-, Karten- und Fokusvorschau mit Theme, UI-/Codeschrift, Autosave, Einheitenaufgabe und Panelgrößen; Suche, Entwurf, Übernehmen/Abbrechen/Standardwerte und Fehler interaktiv. Noch nicht ins fertige Design übernehmen. Bestehende Funktionen und unabhängige Transaktionen erhalten. |
+| D04 · P1 | **Einstellungen · A gewählt** | Kategorien links, Optionen mittig, Live-Vorschau rechts; Suche, Vergleich, Übernehmen/Abbrechen/Standardwerte und Fehler. Theme, Schrift, Autosave, Sichtbarkeit, Größen und eigene Einheitenaufgabe nativ umsetzen; unabhängige Transaktionen und ADR-015-Fenster erhalten. Keine neue Variantenwahl. |
 | D05 · P1 | **Hinweise und Rückmeldungen außerhalb des Protokolls** | Gespeichert, Kopie fehlgeschlagen, Pfad ungültig, Ergebnis veraltet, Hintergrundaktion beendet. Festlegen, was inline, dauerhaft in der Statuszeile, vorübergehend als Hinweis oder als Dialog erscheint; keine mehrfachen störenden Meldungen. |
 | D06 · P1 | **Fortschritt und Abbruch über alle Bereiche** | Bauen, Projekt laden, Datei-/Laufvorschau, Analyse, Export; Fortschritt unbekannt, Abbrechen angefordert, fertig oder fehlgeschlagen. Vorhandene Läufe-A-Start-/Limitzustände erhalten und die übrigen Abläufe ergänzen. |
 | D07 · P1 | **Vollständige Kontextmenüs je Ziel** | Text, Tab, Ordner, Datei, Meldung, Diagramm, Szenenobjekt, Mehrfachauswahl und leere Fläche. A2/Menu-Bedienung ist entschieden; offen ist die vollständige Befehlsmatrix mit Verfügbarkeit und sinnvollen Gruppen. Nur vorhandene/gezielt beauftragte Befehle zeigen. |
@@ -102,7 +103,7 @@ und verteilte Simulation für die erste Version aus.
 ## Empfohlene nächste Entwurfsrunde
 
 **D01–D03 sind mit B2 freigegeben** und gehören jetzt in die native Umsetzung.
-Für **D04** stehen die getrennten A/B/C-Einstellungsvorschauen zur Auswahl.
+**D04 ist mit A freigegeben** und gehört ebenfalls in die native Umsetzung.
 Als nächste neue Entwurfsrunde **D05–D07**: Rückmeldungen, Fortschritt und die
 vollständige Kontextmenümatrix. Anschließend
 Explorer-/Szenen- und Auswertungsdetails anhand realer Inhalte ausarbeiten.

@@ -1,5 +1,13 @@
 # Einstellungen und Fensteraufteilung
 
+**Verbindliches Designziel vom 29. Oktober 2026:** Der Nutzer hat
+[A · Kategorien](visuals/settings-options/APPROVED.md) als fertiges Design
+freigegeben ([ADR 018](decisions/018-selected-settings-a.md)). Die folgende
+Beschreibung dokumentiert den bestehenden Funktionsvertrag und bisherige
+Bedienung; alte In-Workspace-/Fokus-Anordnung ist kein Ersatz für das neue
+Design und eigene Aufgabenfenster nach ADR 015. Die Freigabe bestätigt noch
+keine abgeschlossene native Umsetzung.
+
 **Einstellungen** in der oberen Menüzeile oder **Ctrl+,** öffnet die persönliche Darstellung.
 Ein Wechsel hierhin lässt Editorinhalte, Simulation und Analyse im Hintergrund bestehen.
 Das geöffnete Protokoll wird während der Einstellungsansicht vorübergehend eingeklappt,
