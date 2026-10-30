@@ -1,0 +1,307 @@
+{
+  "date": "2026-10-30",
+  "code_commit": "517021f0cd568047b05cfff98174c485a52f41fa",
+  "scope": "Existing Physim menus move to the macOS system menu bar; remaining UI and Windows/Linux presentation preserved",
+  "source_snapshot": "mac-menu-shell",
+  "source_index": {
+    "snapshot": "mac-menu-shell",
+    "inputs": 1096,
+    "compiler_sha256_verified": true,
+    "git_index_content_verified": true,
+    "explicit_line_ending_comparisons": 0
+  },
+  "local_results": [
+    {
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "native_menu",
+        "--test-filter",
+        "toolbar_small",
+        "--test-filter",
+        "toolbar_large",
+        "--test-filter",
+        "toolbar_input_isolation"
+      ],
+      "exit_code": 0,
+      "app_sha256": "9da9501ed3b9f63140b5bc7273adb427c12b11ac55ee4539413af9d2556732c5",
+      "platform": "windows",
+      "snapshot": "mac-menu-state",
+      "passed": 4
+    },
+    {
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "window_smoke"
+      ],
+      "exit_code": 0,
+      "app_sha256": "66f17f210f53644088d442744271d5625e768e4de20cd651dfed3fb5e7a89755",
+      "platform": "windows",
+      "snapshot": "mac-menu-shell",
+      "passed": 1
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "native_menu",
+        "--test-filter",
+        "toolbar_small",
+        "--test-filter",
+        "toolbar_large",
+        "--test-filter",
+        "toolbar_input_isolation"
+      ],
+      "exit_code": 0,
+      "app_sha256": "d5be6e7fb192aa22b83230871b29cea8344c24c45452a5a46898575fd95411a2",
+      "platform": "linux",
+      "snapshot": "mac-menu-state",
+      "passed": 4
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "window_smoke"
+      ],
+      "exit_code": 0,
+      "app_sha256": "0c65fddcfcfe55d8480ca37c80da87bc79d8b5683b413a517a13e52321d2dcf7",
+      "platform": "linux",
+      "snapshot": "mac-menu-shell",
+      "passed": 1
+    }
+  ],
+  "macos_results": [
+    {
+      "architecture": "arm64",
+      "status": "passed",
+      "passed": 2,
+      "source_commit": "517021f0cd568047b05cfff98174c485a52f41fa",
+      "job": 124329230830,
+      "artifact": 13014042529,
+      "zip_sha256": "9db6f81ae61bc1f49e0f10bbf629c65ac91677f0fb5210207ef586e67119ffa5",
+      "results": [
+        {
+          "command": [
+            "/Users/runner/work/physim/physim/build/native/Release/bin/physim-test-native_menu"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Native AppKit menu: structure, state, commands, keyboard ownership, tracking boundary, window switch and retirement passed\n",
+          "stderr": "",
+          "seconds": 1.929,
+          "name": "native_menu"
+        },
+        {
+          "status": "passed",
+          "steps": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/opt/homebrew/opt/python@3.15/bin/python3.15",
+              "sha256": "fe4fd6c475964c108a2f4b105dcb46f849f4fc2c84d1b46f37443b0eb492fc38"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+              "sha256": "782f44abc010bce3a04b94d29e19c8b2e4c79d45e4eb0beb93d6ab7d303365b3"
+            },
+            {
+              "command": [
+                "/opt/homebrew/opt/python@3.15/bin/python3.15",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "window_smoke",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-u23wgg79/window_smoke/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ],
+              "status": "passed",
+              "exit_code": 0,
+              "stdout": "OpenGL 4.1 APPLE-21.1.1 | Apple Software Renderer\nPlatform font face: /System/Library/Fonts/Helvetica.ttc index=0 bold=0\nUI primary font: /System/Library/Fonts/Helvetica.ttc\nUI symbol fallback: /Users/runner/work/physim/physim/third_party/fonts/NotoSansSymbols-Regular.ttf\nPlatform font face: /System/Library/Fonts/Helvetica.ttc index=1 bold=1\nPlatform font face: /System/Library/Fonts/Helvetica.ttc index=0 bold=0\nPlatform font face: /System/Library/Fonts/Helvetica.ttc index=1 bold=1\nPlatform font face: /System/Library/Fonts/Helvetica.ttc index=0 bold=0\nPlatform font face: /System/Library/Fonts/Helvetica.ttc index=1 bold=1\nPlatform font face: /System/Library/Fonts/Helvetica.ttc index=0 bold=0\nPlatform font face: /System/Library/Fonts/Helvetica.ttc index=1 bold=1\nPlatform font face: /System/Library/Fonts/Menlo.ttc index=0 bold=0\nPlatform font face: /System/Library/Fonts/Menlo.ttc index=0 bold=0\nPlatform font face: /System/Library/Fonts/Menlo.ttc index=0 bold=0\nPlatform font face: /System/Library/Fonts/Menlo.ttc index=0 bold=0\nPlatform font face: /System/Library/Fonts/Menlo.ttc index=0 bold=0\nPlatform font face: /System/Library/Fonts/Menlo.ttc index=0 bold=0\nPlatform font face: /System/Library/Fonts/Menlo.ttc index=1 bold=1\nWorkspace marker font: /System/Library/Fonts/Menlo.ttc\nFont atlas: 2048x16384, 89 fonts, GPU limit 16384\nNATIVE MACOS MENUBAR SHELL: PASSED\nwindow_smoke: app workflow and persisted files passed\n",
+              "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver cocoa\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 192.300830\nAPP TEST TRACE: main font sources ready 192.446850\nAPP TEST TRACE: main atlas bake seconds=0.228429\nAPP TEST TRACE: main atlas validation/upload seconds=0.017994\nAPP TEST TRACE: main fonts ready 192.701005\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=962353625\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=1 id=0 ticks=1055231875\n",
+              "seconds": 1.633,
+              "reason": "",
+              "artifacts": [
+                {
+                  "path": "/Users/runner/work/physim/physim/build/native/Release/test-results/run-u23wgg79/window_smoke/files ä/app-steps.json",
+                  "bytes": 2317,
+                  "sha256": "892ff1254037962f8ace833e1f4b188e4033d521fb9a9d85ac82e2fdb618fa45"
+                }
+              ]
+            }
+          ],
+          "seconds": 1.638,
+          "reason": "",
+          "name": "window_smoke"
+        }
+      ]
+    },
+    {
+      "architecture": "x86_64",
+      "status": "passed",
+      "passed": 2,
+      "source_commit": "517021f0cd568047b05cfff98174c485a52f41fa",
+      "job": 124329231276,
+      "artifact": 13013713414,
+      "zip_sha256": "2d1963ed89f71659471fe93339ff4cfe295e6d21809751dff8ea9ede16ee3134",
+      "results": [
+        {
+          "command": [
+            "/Users/runner/work/physim/physim/build/native/Release/bin/physim-test-native_menu"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "Native AppKit menu: structure, state, commands, keyboard ownership, tracking boundary, window switch and retirement passed\n",
+          "stderr": "",
+          "seconds": 2.214,
+          "name": "native_menu"
+        },
+        {
+          "status": "passed",
+          "steps": [
+            {
+              "status": "passed",
+              "target": "python",
+              "artifact": "/usr/local/opt/python@3.14/bin/python3.14",
+              "sha256": "b08b055365df6dcd3fff0b805b688428f0f6a01839303f22c0716780155c480d"
+            },
+            {
+              "status": "passed",
+              "target": "physim",
+              "artifact": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+              "sha256": "007132a565e07bfa423c88cb6c98388f4c9d5eabbb8e6168cea1685cfc3e1516"
+            },
+            {
+              "command": [
+                "/usr/local/opt/python@3.14/bin/python3.14",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "window_smoke",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-4y6lws60/window_smoke/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ],
+              "status": "passed",
+              "exit_code": 0,
+              "stdout": "OpenGL 4.1 APPLE-21.1.1 | Apple Software Renderer\nPlatform font face: /System/Library/Fonts/Helvetica.ttc index=0 bold=0\nUI primary font: /System/Library/Fonts/Helvetica.ttc\nUI symbol fallback: /Users/runner/work/physim/physim/third_party/fonts/NotoSansSymbols-Regular.ttf\nPlatform font face: /System/Library/Fonts/Helvetica.ttc index=1 bold=1\nPlatform font face: /System/Library/Fonts/Helvetica.ttc index=0 bold=0\nPlatform font face: /System/Library/Fonts/Helvetica.ttc index=1 bold=1\nPlatform font face: /System/Library/Fonts/Helvetica.ttc index=0 bold=0\nPlatform font face: /System/Library/Fonts/Helvetica.ttc index=1 bold=1\nPlatform font face: /System/Library/Fonts/Helvetica.ttc index=0 bold=0\nPlatform font face: /System/Library/Fonts/Helvetica.ttc index=1 bold=1\nPlatform font face: /System/Library/Fonts/Menlo.ttc index=0 bold=0\nPlatform font face: /System/Library/Fonts/Menlo.ttc index=0 bold=0\nPlatform font face: /System/Library/Fonts/Menlo.ttc index=0 bold=0\nPlatform font face: /System/Library/Fonts/Menlo.ttc index=0 bold=0\nPlatform font face: /System/Library/Fonts/Menlo.ttc index=0 bold=0\nPlatform font face: /System/Library/Fonts/Menlo.ttc index=0 bold=0\nPlatform font face: /System/Library/Fonts/Menlo.ttc index=1 bold=1\nWorkspace marker font: /System/Library/Fonts/Menlo.ttc\nFont atlas: 2048x16384, 89 fonts, GPU limit 16384\nNATIVE MACOS MENUBAR SHELL: PASSED\nwindow_smoke: app workflow and persisted files passed\n",
+              "stderr": "APP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver cocoa\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 614.019436\nAPP TEST TRACE: main font sources ready 614.209607\nAPP TEST TRACE: main atlas bake seconds=0.650755\nAPP TEST TRACE: main atlas validation/upload seconds=0.027874\nAPP TEST TRACE: main fonts ready 614.917680\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=2290186129\n",
+              "seconds": 3.6,
+              "reason": "",
+              "artifacts": [
+                {
+                  "path": "/Users/runner/work/physim/physim/build/native/Release/test-results/run-4y6lws60/window_smoke/files ä/app-steps.json",
+                  "bytes": 2236,
+                  "sha256": "9b3e15f37e1a2f363df21ad1c4c81c8578acc24910dd649b0a9a59e9c6dc8436"
+                }
+              ]
+            }
+          ],
+          "seconds": 3.618,
+          "reason": "",
+          "name": "window_smoke"
+        }
+      ]
+    }
+  ],
+  "test_catalog": "tests/test_native_test_runner.py passed; expected fake-case failures included",
+  "macos_run": "https://github.com/PhysicSimulator/physim/actions/runs/41133235526",
+  "backend_previous_run": "https://github.com/PhysicSimulator/physim/actions/runs/41132358198 (both architectures passed on d43dcd6c; superseded by the app-shell addition)",
+  "native_coverage": [
+    "Real NSMenu structure and original app/window menus",
+    "Disabled items and state/title updates",
+    "Native action exactly once, keyboard ownership and repeat",
+    "Real AppKit Command-S delivery during SDL text input",
+    "Stale/fresh window targets",
+    "Tracking-boundary input isolation using native notifications",
+    "Retained items disarmed at shutdown",
+    "Actual app installs native menus and removes old in-window buttons"
+  ],
+  "limits": [
+    "Manual physical menu navigation, fullscreen and VoiceOver not performed; local Mac remains offline",
+    "The tracking-boundary fixture posts native notifications; it is not a manual menu session",
+    "Existing documentation_anchors CI gate remains open",
+    "Historical full-app workflows that click in-window menu coordinates or expect custom F10 need a macOS input-path port; complete Mac GUI suite not accepted"
+  ],
+  "source_sha256": {
+    "app/native_menu.c": "41cdb3ce05825f39c5a00eb168c9450aadce6a239eb8e62b6610bea55a540367",
+    "app/native_menu.h": "e3a3471d2b7f006fbda1eca770ed1d1b44827c489e84ad7040a41dc266352543",
+    "app/native_menu_ui.inc": "3b77f6063d3ca0db6c17e77fd558e8a90e85cca95a35c135b5dacdbd4ea73a8c",
+    "app/main.c": "5902ca583098837789dbc4c1a9e2111d3745a619e52fb8cb496e67cda9dfc13e",
+    "app/toolbar_ui.inc": "4a81f2a1066ad2d9da02f7aa1cc46dc1ad9f3543a4fe3212fb72ddfd937cac48",
+    "tests/test_native_menu.c": "cb5e747a1236c8de9a7ceb0a8c89d5964c0502f25684f5d7b9287a613b38e2e3",
+    "tools/build.py": "5e984b7a17760f35ff858dc91238080f0bfc4aa40135d880cf7e647cebfa0e5d",
+    "tools/native_tests.py": "c748772e3f5f358c5a42c52bcb8eb278fd37e0809609a6a4d9990e98d68763fe",
+    "tests/test_native_test_runner.py": "0c567d1e894f35c91312050357c6260ac7c7e108655a41505601ab0d393f68ad"
+  },
+  "cleanup": {
+    "successful_fresh_bmp_removed": 112,
+    "bytes_freed": 507032416,
+    "preserved": "Compact run reports, source/runtime archives, previous references and open-failure evidence; no F: access"
+  },
+  "archives": "mac-menu-shell-{inputs,compiler-source,runtime,byte-index} manifests and associated ZIPs; all referenced bytes read back"
+}
