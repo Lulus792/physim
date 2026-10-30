@@ -1,6 +1,9 @@
 /* Exercise real SDL keyboard input and the same menu actions as the pointer. */
 static void keyboard_menu_test_frame(app *a, const char *root, int *stage, int *code,
                                      const char **capture) {
+#ifdef __APPLE__
+    native_keyboard_menu_test_frame(a,root,stage,code,capture);return;
+#else
     static double ready;
     static int original_length;
     bool ok=true;
@@ -110,4 +113,5 @@ static void keyboard_menu_test_frame(app *a, const char *root, int *stage, int *
         *code=1;a->quitting=true;
     }
 #undef MENU_KEY
+#endif
 }

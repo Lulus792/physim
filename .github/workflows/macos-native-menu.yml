@@ -6,6 +6,8 @@ on:
       - app/native_menu*
       - app/toolbar_ui.inc
       - app/main.c
+      - app/toolbar_tests.inc
+      - app/keyboard_menu_tests.inc
       - tests/test_native_menu.c
       - tools/build.py
       - tools/native_tests.py
@@ -30,7 +32,7 @@ jobs:
           cmake --build build/sdl-build --parallel 4
           cmake --install build/sdl-build
       - name: Actual AppKit menu and complete app build
-        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test-display --test-filter native_menu --test-filter window_smoke
+        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test-display --test-filter native_menu --test-filter window_smoke --test-filter toolbar_small --test-filter toolbar_large --test-filter toolbar_input_isolation --test-filter keyboard_menu_small --test-filter keyboard_menu_large
       - name: Compact native results
         if: always()
         uses: actions/upload-artifact@v4
@@ -40,3 +42,4 @@ jobs:
             build/native/**/test-results/**/results.json
             build/native/**/test-results/**/junit.xml
           if-no-files-found: warn
+          retention-days: 14

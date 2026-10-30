@@ -1,4 +1,7 @@
 static void toolbar_test_frame(app *a, int *stage, int *code, const char **capture) {
+#ifdef __APPLE__
+    native_toolbar_test_frame(a,stage,code,capture);return;
+#else
     static double focus_ready;
     bool ok = true;
     switch ((*stage)++) {
@@ -254,4 +257,5 @@ static void toolbar_test_frame(app *a, int *stage, int *code, const char **captu
         printf("TOOLBAR AND TABS: %s (stage %d, tab x/w %.1f/%.1f, drag %.1f/%.1f)\n",
                *code ? "FAILED" : "PASSED", *stage, a->navigation_bounds[0].x,
                a->navigation_bounds[0].w, a->window_drag_bounds.x, a->window_drag_bounds.w);
+#endif
 }

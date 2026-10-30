@@ -3682,6 +3682,7 @@ static void manager_test_key(app *a,SDL_Keycode key,SDL_Keymod mod) {
 #include "workspace_tree_tests.inc"
 #include "document_tests.inc"
 #include "document_recovery_tests.inc"
+#include "native_menu_app_tests.inc"
 #include "toolbar_tests.inc"
 #include "keyboard_menu_tests.inc"
 #include "documentation_keyboard_tests.inc"
