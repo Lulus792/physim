@@ -57,13 +57,16 @@ der reguläre unveränderte Build muss dieselben Prüfungen bestehen.
 
 ## Weiterer Auftrag
 
-Die zusätzlich ausgeführte F1-Kontextcodeprüfung ist weiterhin rot. Windows
+Die zusätzlich ausgeführte F1-Kontextcodeprüfung war beim A2-Nachweis rot. Windows
 scheitert im ersten Fall am veröffentlichten Fokuszustand, Linux meldet beim
 Shift-Ereignis einen ungültigen Bool-Wert in `SDL_KeyboardEvent.repeat`.
 Die unveränderte Prüfung reproduziert beide Befunde mit den archivierten
 Vor-A2-Programmen. Der Nachweis enthält auch den zunächst ungültigen
 Baseline-Aufruf ohne Ausgabeordner und die danach tatsächlich ausgeführten
-Vergleiche. Diese F1-Befunde bleiben offen; die A2-Farbprüfung ersetzt sie nicht.
+Vergleiche. Der folgende [F1-Ereignisnachlauf](F1-CONTEXT-EVENTS-NATIVE.md) klärt
+den Linux-Befund als unvollständig initialisierte künstliche Testereignisse
+und besteht die sieben Linux-Fälle. Der Windows-Fokusbefund bleibt offen;
+die A2-Farbprüfung ersetzt ihn nicht. Die eingefrorenen A2-Berichte bleiben erhalten.
 
 Dies ist keine vollständige A2- oder Oberflächenabnahme. Listen benötigen noch
 Kante/Häkchen, Mehrfachauswahl und die gemeinsame Kontextbedienung. Für die

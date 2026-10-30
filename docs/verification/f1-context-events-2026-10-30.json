@@ -1,0 +1,275 @@
+{
+  "format": 1,
+  "date": "2026-10-30",
+  "base_commit": "c12e2a10843953c0de12c06708298bc012dfb5d8",
+  "scope": "Complete initialization of synthetic F1 context-code test events; no production event-handler change or complete F1/platform acceptance.",
+  "source_audit": {
+    "inputs_match_git_index": 1085,
+    "manifest": {
+      "path": "build/validation/explorer-inline-2026-10-29/f1-event-final-compiler-source.json",
+      "sha256": "9db06489ed8e0fa8af43017f445e557babb8f47fa10e719b7347941d78b4b009"
+    },
+    "overlay": {
+      "path": "build/validation/explorer-inline-2026-10-29/f1-event-final-compiler-source.zip",
+      "sha256": "7f7784d8bb896ec162ad3f2e82b5a9721685fef9774578e27845cbf154de36d7"
+    },
+    "runtime": {
+      "path": "build/validation/explorer-inline-2026-10-29/f1-event-final-runtime.json",
+      "sha256": "18e92ee08a71e348053e44c5587e733dcd71f3420bb321b939244ae426a78078"
+    },
+    "runtime_index": {
+      "path": "build/validation/explorer-inline-2026-10-29/f1-event-final-byte-index.json",
+      "sha256": "2cfa8db9b82d1b19a57beef2bf77b803f0e256434d061177ff82b7eacbe51780"
+    },
+    "runtime_members_checked": {
+      "windows": 191,
+      "linux": 101
+    },
+    "all_source_runtime_archive_bytes_read_back": true
+  },
+  "cause": {
+    "before_trace": {
+      "path": "build/validation/f1-input-2026-10-30/trace-asan.log",
+      "sha256": "9934c265a0ae4bff829ed32e254eb7ffd4bc5c483d2603311184397db83031f3"
+    },
+    "before_command": [
+      "/usr/bin/python3",
+      "-B",
+      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+      "documentation_context_code",
+      "--app",
+      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+      "--root",
+      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src",
+      "--work",
+      "/mnt/d/Physim/build/validation/f1-input-2026-10-30/trace-asan-work"
+    ],
+    "before_checker_exit_code": 1,
+    "bad_shift_records": [
+      [
+        "push-before",
+        "768",
+        "1073742049",
+        "37",
+        "159",
+        "220",
+        "40",
+        "00030000000000000000000000000000030000000000000000000000e100004003000000dc9fefbd"
+      ],
+      [
+        "push-after",
+        "768",
+        "1073742049",
+        "37",
+        "159",
+        "220",
+        "40",
+        "0003000000000000a21813e203000000030000000000000000000000e100004003000000dc9fefbd"
+      ],
+      [
+        "polled",
+        "768",
+        "1073742049",
+        "37",
+        "159",
+        "220",
+        "40",
+        "0003000000000000a21813e203000000030000000000000000000000e100004003000000dc9fefbd"
+      ]
+    ],
+    "interpretation": "Invalid repeat/down bytes already exist before SDL_PushEvent; unchanged after enqueue and poll. The event constructor is in the test fixture.",
+    "sdl_header_runtime_version": "3.2.30",
+    "shift_repeat_offset": 37,
+    "keyboard_event_size": 40
+  },
+  "diagnostic": {
+    "source": {
+      "path": "tests/trace_sdl_shift_events.c",
+      "sha256": "e156faef5907336435d7b415630b42251d8e2e08bde3569cadf8655ae1a99c19"
+    },
+    "archive": {
+      "path": "build/validation/f1-input-2026-10-30/diagnostic-sources.zip",
+      "sha256": "df0d9329cedc28a6427c2ad6760431eb554052cf600ecc23ed34e21866fccc33"
+    },
+    "after_trace": {
+      "path": "build/validation/f1-input-2026-10-30/trace-fixed.log",
+      "sha256": "ffbd0fd28e1bdb89ac3382fe05a15d1adafc18af7582996dd9c59ec87266c982"
+    },
+    "after_command": [
+      "/usr/bin/python3",
+      "-B",
+      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+      "documentation_context_code",
+      "--app",
+      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+      "--root",
+      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src",
+      "--work",
+      "/mnt/d/Physim/build/validation/f1-input-2026-10-30/trace-fixed-work"
+    ],
+    "after_checker_exit_code": 0,
+    "raw_records": 42,
+    "shift_events": 14,
+    "all_repeat_bytes_zero": true,
+    "down_matches_event_type": true,
+    "queued_and_polled_bytes_identical": true,
+    "environment": {
+      "LD_PRELOAD": "/usr/lib/libasan.so.8:/mnt/d/Physim/build/validation/f1-input-2026-10-30/event_trace_fixed.so",
+      "ASAN_OPTIONS": "detect_leaks=0:halt_on_error=1",
+      "SDL_VIDEODRIVER": "x11",
+      "LIBGL_ALWAYS_SOFTWARE": "1"
+    },
+    "compile": [
+      "clang",
+      "-shared",
+      "-fPIC",
+      "-std=c17",
+      "-O0",
+      "-g",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-I",
+      "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30/include",
+      "/mnt/d/Physim/tests/trace_sdl_shift_events.c",
+      "-ldl",
+      "-o",
+      "/mnt/d/Physim/build/validation/f1-input-2026-10-30/event_trace_fixed.so"
+    ]
+  },
+  "cohorts": [
+    {
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/f1-event-first-linux.json",
+        "sha256": "be9f4f9b9ad9595c8f49be8da80ab216f03cbe096e961d47fe35f1134dcb5cf9"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "documentation_context_code",
+        "--test-filter",
+        "documentation_context_api",
+        "--test-filter",
+        "documentation_preview_flow"
+      ],
+      "exit_code": 0,
+      "result": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-tfb4hn6c/documentation_context_code/result.json",
+        "sha256": "a5f9f2481809c48c88796e85b98bed5e1f5a92f6077d158836b6db28d850052a"
+      },
+      "status": "passed",
+      "passed_case_numbers": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/f1-event-first-windows.json",
+        "sha256": "5506ad01897a2d2c85e2a3b77e4ee2df183e702d6932710d63f652a6304650e6"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "documentation_context_code",
+        "--test-filter",
+        "documentation_context_api",
+        "--test-filter",
+        "documentation_preview_flow"
+      ],
+      "exit_code": 1,
+      "result": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-2mzakg7p/documentation_context_code/result.json",
+        "sha256": "f17f4a0f65e20a3cc033a0ee3ee6695a72387f5a2e96267f4e03b21ec99a66ac"
+      },
+      "status": "failed",
+      "passed_case_numbers": []
+    }
+  ],
+  "setup_failures": [
+    {
+      "log": {
+        "path": "build/validation/f1-input-2026-10-30/trace.log",
+        "sha256": "de43876177fbc1a02787874ff67637a0fb615cc4c3f9fe104becbe5cf9e3dd55"
+      },
+      "reason": "Probe compilation failed after shell split a glued include argument; missing preload library. Not a raw-event observation."
+    },
+    {
+      "log": {
+        "path": "build/validation/f1-input-2026-10-30/trace-real.log",
+        "sha256": "92d18401e00bc4ea6ab27a3b8414c67f011cfacf13c188f214c1871bcec06d6f"
+      },
+      "reason": "ASan rejected preload order before app test ran. Not a raw-event observation."
+    }
+  ],
+  "visual": {
+    "inspected_actual_linux_cases": [
+      0,
+      3,
+      6
+    ],
+    "retained_lossless_pngs": [
+      {
+        "path": "build/validation/f1-input-2026-10-30/accepted-code-0.png",
+        "sha256": "bf98c0965d9299bfabdab4b30c7155f03dfc92321ecf5109cdc9f2b03969a7af"
+      },
+      {
+        "path": "build/validation/f1-input-2026-10-30/accepted-code-3.png",
+        "sha256": "bfe6d7db581f9efbe98c8ed1a978da66f63a3fd2c65b6fd6c964e826d382b1a5"
+      },
+      {
+        "path": "build/validation/f1-input-2026-10-30/accepted-code-6.png",
+        "sha256": "faeb7cf2d4fb854cbf8d3ef070478ba743ecb222033b8e7885d4871dd39a43ac"
+      }
+    ]
+  },
+  "cleanup": {
+    "successful_redundant_bmps_removed": 56,
+    "bytes_freed": 133409328,
+    "before_hashes": {
+      "path": "build/validation/f1-input-2026-10-30/accepted-image-hashes.json",
+      "sha256": "408135677bfb95046250f1a714a870c6c935edaf983b5e7eef1dddf982b3f660"
+    },
+    "protected": "Failed Windows captures, original failing trace captures, frozen proofs/source/runtime/PDB archives, normal binaries and dependencies preserved; D only."
+  },
+  "limitations": [
+    "Windows still lacks actual host keyboard focus and fails unchanged stage 6/case 0/focus 25.",
+    "Computer Use list_windows and one list_apps retry both timed out; no Windows input was issued.",
+    "Two additional requested filter patterns matched no catalog cases. Actual cohort is exactly one context-code group per platform, never 3/3.",
+    "No new screenreader, physical-input, monitor/DPI, macOS or full-UI acceptance."
+  ]
+}

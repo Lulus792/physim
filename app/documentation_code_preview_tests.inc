@@ -1,5 +1,5 @@
 static void documentation_code_test_motion(app *a,float x,float y,bool down) {
-    SDL_Event event={0};event.type=SDL_EVENT_MOUSE_MOTION;event.motion.windowID=SDL_GetWindowID(a->doc_window);
+    SDL_Event event;SDL_zero(event);event.type=SDL_EVENT_MOUSE_MOTION;event.motion.windowID=SDL_GetWindowID(a->doc_window);
     event.motion.which=PS_TEST_MOUSE_ID;
     event.motion.x=x;event.motion.y=y;event.motion.state=down?SDL_BUTTON_LMASK:0;SDL_PushEvent(&event);
 }
@@ -7,7 +7,7 @@ static void documentation_code_test_wheel(app *a,float x,float y) {
     struct nk_rect r=a->doc_context_code_bounds,clip=a->doc_context_content_bounds;
     float px=r.x+30,py=fmaxf(r.y+20,clip.y+20);py=fminf(py,clip.y+clip.h-20);
     documentation_code_test_motion(a,px,py,false);
-    SDL_Event event={0};event.type=SDL_EVENT_MOUSE_WHEEL;event.wheel.windowID=SDL_GetWindowID(a->doc_window);
+    SDL_Event event;SDL_zero(event);event.type=SDL_EVENT_MOUSE_WHEEL;event.wheel.windowID=SDL_GetWindowID(a->doc_window);
     event.wheel.which=PS_TEST_MOUSE_ID;
     event.wheel.x=x;event.wheel.y=y;event.wheel.mouse_x=px;event.wheel.mouse_y=py;SDL_PushEvent(&event);
 }
@@ -71,12 +71,14 @@ static void documentation_code_preview_test_frame(app *a,int *stage,int *code,co
         if(frames++<1){--*stage;return;}
         ok=a->doc_context_code_x[a->doc_track==2]>0 && a->doc_context_scroll_y[1]==scroll;
         test_window_key_mod(a->doc_window,SDLK_HOME,0);
-        {SDL_Event e={0};e.type=SDL_EVENT_KEY_DOWN;e.key.windowID=SDL_GetWindowID(a->doc_window);e.key.key=SDLK_LSHIFT;e.key.mod=SDL_KMOD_SHIFT;SDL_PushEvent(&e);}
+        /* SDL_Event is a union: initialize all bytes before selecting a member,
+         * including the keyboard down/repeat fields consumed by the UI. */
+        {SDL_Event e;SDL_zero(e);e.type=SDL_EVENT_KEY_DOWN;e.key.windowID=SDL_GetWindowID(a->doc_window);e.key.key=SDLK_LSHIFT;e.key.mod=SDL_KMOD_SHIFT;e.key.down=true;SDL_PushEvent(&e);}
         documentation_code_test_wheel(a,0,-2);frames=0;break;
     case 10:
         if(frames++<1){--*stage;return;}
         ok=a->doc_context_code_x[a->doc_track==2]>0 && a->doc_context_scroll_y[1]==scroll;
-        {SDL_Event e={0};e.type=SDL_EVENT_KEY_UP;e.key.windowID=SDL_GetWindowID(a->doc_window);e.key.key=SDLK_LSHIFT;SDL_PushEvent(&e);}
+        {SDL_Event e;SDL_zero(e);e.type=SDL_EVENT_KEY_UP;e.key.windowID=SDL_GetWindowID(a->doc_window);e.key.key=SDLK_LSHIFT;SDL_PushEvent(&e);}
         a->doc_context_scroll_y[1]=1000000;frames=0;break;
     case 11:
         if(frames++<2){--*stage;return;}

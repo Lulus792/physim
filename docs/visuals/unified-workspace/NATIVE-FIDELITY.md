@@ -95,6 +95,10 @@ transparente Auswahlfläche und erhält normale, dynamische und Syntaxfarben.
 Originalbytes und echte Zwischenablage werden an Codeeditor, Explorersuche und
 schreibgeschützter Vorschau geprüft. A2 für Listen/Szene, Mehrfachauswahl und
 die gemeinsame Kontextmenübindung bleiben weitere offene Teile.
+Der [F1-Ereignisnachlauf](F1-CONTEXT-EVENTS-NATIVE.md) korrigiert anschließend
+unvollständig initialisierte künstliche Ereignisse im Kontextcode-Test.
+Linux besteht die sieben Fälle mit ASan/UBSan; der Windows-Fokusbefund und
+die vollständige F1-/Plattformabnahme bleiben offen.
 Der folgende [C-API-Kontext](EXPLORER-API-NATIVE.md) verbindet tatsächliche
 Quellsymbole mit dem passenden Handbuchabschnitt, eigener Signaturauswahl und
 F1-Sprung. Messlauf-/Bildvorschau, große native Listen und vollständige praktische
