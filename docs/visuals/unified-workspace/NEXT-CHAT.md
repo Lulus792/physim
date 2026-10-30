@@ -18,6 +18,19 @@ Kurzinfo-Hintergrundton bleibt offen**: neutral/heller/kühl im selben D testen;
 keinen Ton bereits als final freigegeben behandeln. Die offene Farbe blockiert
 die übrigen Festlegungen nicht. API-Karte, F1, Suchinsel, A2 und Auto-Anzeige erhalten.
 
+**Präzisierung desselben Auftrags – erwartete Funktionsparameter:** Zusätzlich
+zur Variablen-Completion eine separate Aufrufsignatur wie in VS Code und Visual
+Studio 2022 anzeigen: Namen, Typen, Anzahl und hervorgehobener aktiver Parameter.
+Automatisch beim Aufruf/Argumentwechsel, manuell Strg+Umschalt+Leertaste; nach
+Übernahme eines Vorschlags sichtbar lassen. Verschachtelte Aufrufe und Kommata
+in Strings/Kommentaren/Indizes korrekt abgrenzen; keine unbekannten Signaturen
+oder falsche letzte Parameter erfinden. Tatsächliche sprachabhängige Signaturdaten
+verwenden, Browser-Katalogfixture ist kein vollständiger Parser. Die Liste bleibt
+normalerweise unten, mit Abstand zur Signatur. **Zusätzliches Oben-Beispiel wurde
+vom Nutzer zurückgenommen.** [Vertrag und Referenzen](../completion-typing-options/APPROVED.md#parameterhilfe-erwartete-argumente-sichtbar-machen),
+[zweites Argument](../completion-typing-options/index.html?approved=1&scenario=signature-second)
+und [Prüfbericht](../completion-typing-options/review/SIGNATURE-VALIDATION.md) lesen.
+
 **Aktualisierter Auftrag vom 30. Oktober 2026 – automatische Vorschläge D09:**
 Der Nutzer will **automatisches Anzeigen während des Tippens**. Bisherige Optik
 A/B/C wurde ausdrücklich verworfen. [ADR 022](../../decisions/022-automatic-completion.md)

@@ -43,7 +43,7 @@ void step(double dt) {
     ps_vec3 velocity = ps_v3(0.0, 1.0, 0.0);
     ps_vec3 gravity = ps_v3(0.0, -9.81, 0.0);
     double damping = 0.02;
-    double speed = ps_vlength(ve);
+    ps_vec3 result = ps_vadd(ve, gravity);
 }
 ```
 
@@ -66,6 +66,44 @@ Native Integration nutzt/revidiert die tatsächlichen sprachabhängigen
 Symbol-/Scope-Daten. Der Auftrag gilt für Variablenvorschläge im unterstützten
 Editor, nicht nur die handgeschriebene Fixture. Keine semantische Typkompatibilität,
 Präprozessoranalyse, Includes oder tatsächlichen Variablenwerte vortäuschen.
+
+## Parameterhilfe: erwartete Argumente sichtbar machen
+
+Neben der Liste sichtbarer Namen eine **eigene kompakte Aufrufsignatur** zeigen:
+Rückgabetyp, Funktionsname, vollständige Parameternamen und Typen. Den aktuellen
+Parameter fett mit dezenter A2-Fläche und Unterkante hervorheben; seine Syntaxfarben
+erhalten. Darunter beispielsweise „Parameter 2 von 2 · ps_vec3 b“. Die Hilfe
+beschreibt den bestehenden Aufruf, die Kandidaten-Kurzinfo den gewählten Vorschlag.
+
+[Erstes Argument](index.html?approved=1&scenario=arguments),
+[zweites Argument](index.html?approved=1&scenario=signature-second) und
+[verschachtelter Aufruf](index.html?approved=1&scenario=signature-nested) sind
+interaktive Referenzen. Die normale Completion-Liste bleibt **unten**, unter der
+Signatur mit kleinem Abstand; keine Überdeckung. Das zusätzlich gewünschte
+Oben-Beispiel wurde vom Nutzer zurückgenommen. Bestehendes Ausweichen bei echtem
+Platzmangel erhalten, keine neue Gestaltungsvariante daraus ableiten.
+
+Beim Öffnen eines bekannten Aufrufs automatisch zeigen, bei Komma/Cursorwechsel
+aktualisieren. **Strg+Umschalt+Leertaste** ruft die Parameterhilfe manuell auf;
+Strg+Leertaste bleibt Completion/Kandidaten-Kurzinfo. Übernahme eines Namens oder
+Schließen der Liste schließt nicht zugleich die Aufrufsignatur. Escape schließt
+zuerst die offene Liste, weiteres Escape die Parameterhilfe für diesen Aufruf;
+manueller Zugang öffnet sie erneut. Nach Verlassen/Schließen des Aufrufs, Datei-
+oder ungültigem Zielwechsel entfernen; Fokusverlust pausiert die Anzeige.
+
+Kommata in inneren Aufrufen, Zeichenketten, Kommentaren, Klammern und Indizes
+dürfen den äußeren Parameter nicht weiterschalten. Beim inneren Aufruf dessen
+Signatur, danach wieder die äußere anzeigen. Bei zu vielen Argumenten ehrlich
+„Argument 3 · erwartet 2 Parameter“ melden, keinen falschen letzten Parameter
+markieren. Keine unbekannte Signatur, Überladung oder Argumentbeschreibung erfinden.
+
+Vorbild sind [VS Code Signature Help](https://code.visualstudio.com/docs/languages/javascript#_signature-help)
+und [Visual Studio 2022 Parameter Info](https://learn.microsoft.com/en-us/visualstudio/ide/using-intellisense?view=vs-2022#parameter-info).
+Die Browserreferenz bindet nur echte Funktionssignaturen des eingefrorenen
+Katalogs. Nativ tatsächliche sprachabhängige Aufruf-/Signaturdaten verwenden,
+einschließlich verfügbarer benutzerdefinierter Funktionen; keine vollständige
+C-/Physim-Analyse aus dem begrenzten Browserhelfer ableiten. Bestehende
+Dokumentrevisionen, IME-, Fokus-, Escape- und Accessibility-Verträge einhalten.
 
 ## Ein Syntaxschema für Editor und Kurzinfo
 
@@ -110,3 +148,5 @@ Automatische Anzeige, bewusste Übernahme, Escape-/IME-/Timer-/Zielregeln und
 vorhandene API-/F1-Zugänge bleiben wie in [README](README.md) und ADR 022.
 [Freigabeprüfung](review/APPROVAL-VALIDATION.md) belegt nur die Browserreferenz;
 native Funktionen, echte Preferences, Screenreader und Plattformen separat abnehmen.
+Die ergänzte [Parameterhilfe-Prüfung](review/SIGNATURE-VALIDATION.md) hält den
+präzisierten Aufrufvertrag und die neuen Referenzbilder separat fest.

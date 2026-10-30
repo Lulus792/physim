@@ -29,3 +29,20 @@ semantischer Typinferenz oder automatisch passender Laufzeitwerte.
 
 Suchinsel, API-Karte, F1 H, A2 und alle anderen Freigaben erhalten. Browser-
 Nachweise bestätigen keine fertige native Umsetzung oder Plattformabnahme.
+
+## Nutzerpräzisierung: Parameterinfo am Aufruf
+
+Zusätzlich zu Variablennamen möchte der Nutzer sehen, **welche Parameter die
+aufgerufene Funktion erwartet**: vollständige Signatur, Namen, Typen und Anzahl;
+der aktuell einzugebende Parameter wird hervorgehoben. Vorbilder sind die
+[Signaturhilfe in VS Code](https://code.visualstudio.com/docs/languages/javascript#_signature-help)
+und [Parameter Info in Visual Studio 2022](https://learn.microsoft.com/en-us/visualstudio/ide/using-intellisense?view=vs-2022#parameter-info).
+Automatisch beim Aufruf und Argumentwechsel aktualisieren; Strg+Umschalt+Leertaste
+als manuellen Zugang erhalten. Kandidaten-Kurzinfo und Aufrufsignatur bleiben
+getrennte Hilfen. Die Signatur bleibt nach Übernahme eines Variablennamens sichtbar.
+
+Der Nutzer hat das kurz gewünschte zusätzliche Beispiel mit Completion oberhalb
+ausdrücklich zurückgenommen: **normale Liste unten beibehalten, keine zusätzliche
+Oben-Variante gestalten**. Vorhandener Platzmangel-Fallback bleibt erhalten.
+Die Browserreferenz zeigt erstes, zweites und verschachteltes Argument; genaue
+Verträge und native Grenzen stehen in APPROVED.md.

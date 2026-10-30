@@ -10,6 +10,8 @@ A/B/C wurden zuvor verworfen. Keine neue Grundlayoutwahl nötig.
 
 [D · Argument-Variablen](index.html?approved=1&scenario=arguments&theme=dark) ·
 [D · API-Namen](index.html?approved=1&scenario=normal) ·
+[D · Zweiter Parameter](index.html?approved=1&scenario=signature-second) ·
+[D · Verschachtelter Aufruf](index.html?approved=1&scenario=signature-nested) ·
 [historischer Vergleich E](index.html?approved=0&variant=e) ·
 [historischer Vergleich F](index.html?approved=0&variant=f).
 Server: `http://127.0.0.1:8791/completion-typing-options/`.
@@ -24,6 +26,8 @@ keine kopierten Marken-Assets oder Behauptung identischer IDE-Funktionen.
 | Quelle | Gelesenes Muster | Eigene Ableitung |
 | --- | --- | --- |
 | [VS Code IntelliSense](https://code.visualstudio.com/docs/editing/intellisense) | Symboltypen, automatische Vorschläge, seitliche Kurzinfo, Strg+Leertaste zum Umschalten | Flache Zeilen, Rollen-/Typ-Spalte und separates Dokumentationsfenster. Kein VS-Code-Language-Service übernommen. |
+| [VS Code Signature Help](https://code.visualstudio.com/docs/languages/javascript#_signature-help) | Automatisch bei `(`/`,`, aktueller Parameter, Strg+Umschalt+Leertaste | Separate Signatur des bestehenden Aufrufs, bleibt nach Namensübernahme sichtbar. |
+| [Visual Studio 2022 Parameter Info](https://learn.microsoft.com/en-us/visualstudio/ide/using-intellisense?view=vs-2022#parameter-info), [C++ Parameter Help](https://learn.microsoft.com/en-us/visualstudio/ide/visual-cpp-intellisense?view=vs-2022#parameter-help) | Erwartete Anzahl, Namen und Typen; aktueller Parameter fett, Parameterinfo getrennt von Liste und Quick Info | Originalsignatur mit aktiver Parameterfläche und Zähler; keine erfundenen Überladungen. Offizielle Dokumentation gelesen, keine lokale VS-2022-Instanz getestet. |
 | [blink.cmp · Completion, v1.10.2](https://cmp.saghen.dev/configuration/completion) | Keyword-/Triggerauslöser, konfigurierbares Preselect/Auto-Insert, Spalten, getrennte verzögerte Dokumentation | Dichte monospaced Liste, `[API]` als echte Quelle; bewusste Auswahl statt automatischem Code-Preview. 140/280 ms sind eigene Physim-Entwurfswerte. |
 | [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) | Konfigurierbare Quellen, getrennte Dokumentations-/Completion-Fenster, Key-Mappings | Kleine Rahmen, Tastaturzugang und ruhige Zeilen. Keine zusätzlichen Buffer-/LSP-/Snippetquellen vortäuschen. |
 | [IntelliJ IDEA · Code completion](https://www.jetbrains.com/help/idea/auto-completing-code.html) | Automatisches Popup, manueller Zugang und ausdrückliche Übernahme | Parameter-/Typangaben in der Zeile. Physims Bezeichnerersetzung bleibt erhalten; kein Import-/Klammer-/Smart-Completion-System übernommen. |
@@ -71,6 +75,12 @@ bleiben scrollbar. A2-Auswahlfläche/-Textfarben bleiben erhalten.
 8. „Tippbeispiel neu starten“ setzt ausdrücklich den Beispieltext zurück und
    spielt echte Eingabeereignisse ab. Danach selbst weitertippen. Der Galerie-
    Schalter deaktiviert Auto-Anzeige, manuelles Öffnen bleibt erreichbar.
+9. Die Argumentbeispiele zeigen zusätzlich die erwartete Aufrufsignatur. Mit
+   Komma bzw. Cursorwechsel wechselt der aktive Parameter; innere Kommata zählen
+   nicht für den äußeren Aufruf. Strg+Umschalt+Leertaste öffnet diese Hilfe manuell.
+   Liste schließen/Name übernehmen lässt die Signatur stehen; weiteres Escape
+   schließt sie. Die normale Liste bleibt unten. Das zusätzliche Oben-Beispiel
+   hat der Nutzer zurückgenommen; kein neuer Oben-Entwurf.
 
 Die genauen Schwellen/Verzögerungen und die initial nicht gewählte Zeile sind
 eigene Entwurfsentscheidungen. Die Nutzeranforderung **automatisch anzeigen**
@@ -125,3 +135,4 @@ Code-/Auswahllogik verwendet nur lokale Browser-Fixtures; kein Speichern,
 Kompilieren, Systemclipboard oder Local Storage.
 
 [Prüfbericht](review/VALIDATION.md) · [Maschinenbericht](review/validation.json).
+[Parameterhilfe: neuer Nachweis](review/SIGNATURE-VALIDATION.md).

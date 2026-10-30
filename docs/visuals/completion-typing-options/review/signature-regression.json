@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-30T18:56:34.023Z",
+  "sourceCommit": "d228b16e89148f3ffefe6886a797b3577bdcf18f",
+  "platform": "win32",
+  "browser": "156.0.4314.50",
+  "layouts": 150,
+  "checks": [
+    "150 layouts: three new styles, twelve contexts, dark/light at 1440/500px plus contrast; auto-open starts without selected option, separate documentation fits editor in each context",
+    "All styles: real typing triggers after threshold, typing keeps focus, filtering, no passive Enter/Tab acceptance, arrows/Ctrl-N select, explicit commit/undo, Escape same-word suppression/manual reopening, Physim dot trigger, disable/manual path, paste/IME suppression, stale menu/timer and document-switch cancellation, delayed docs and Shift-F1 identity",
+    "360px/200% root font with separate docs, forced colors/reduced motion acceptance and 2x browser density"
+  ],
+  "errors": [],
+  "passed": true
+}

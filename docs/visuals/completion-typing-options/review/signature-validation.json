@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-30T18:44:34.437Z",
+  "sourceCommit": "d228b16e89148f3ffefe6886a797b3577bdcf18f",
+  "browser": "156.0.4314.50",
+  "layouts": 18,
+  "checks": [
+    "18 layouts, three parameter states/themes at 1440/500; active parameter names/types, simultaneous non-overlapping list below, signature survives completion commit, Escape/manual Ctrl-Shift-Space, nested calls/string/comment/bracket commas, excessive args honest, call-close/file-switch dismissal and 360px/200% text"
+  ],
+  "errors": [],
+  "passed": true
+}

@@ -152,6 +152,10 @@
   [Spezifikation](docs/visuals/completion-typing-options/APPROVED.md) und
   [Gesamtübergabe](docs/visuals/unified-workspace/NEXT-CHAT.md) beachten.
   Code in Kurzinfo und Editor mit denselben aktiven Syntaxrollen zeichnen.
+  Zusätzlich separate Parameterhilfe wie VS Code/Visual Studio 2022: vollständige
+  erwartete Namen/Typen/Anzahl, aktiven Parameter hervorheben, automatisch beim
+  Aufruf/Komma und manuell per Strg+Umschalt+Leertaste. Liste im Normalfall unten;
+  das zusätzliche Oben-Beispiel hat der Nutzer ausdrücklich zurückgenommen.
   Zugängliche Variablen/Parameter aus tatsächlichen sprachabhängigen Scopes
   anbieten; der begrenzte Browser-C-Lexer ist keine vollständige native Lösung.
   **Der genaue Kurzinfo-Hintergrundton ist noch offen**; neutral/heller/kühl
