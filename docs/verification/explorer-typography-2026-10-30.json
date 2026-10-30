@@ -1,0 +1,293 @@
+{
+  "format": 1,
+  "date": "2026-10-30",
+  "base_commit": "55f17ecbfd264d16a83ebbd62cc5d330a1bce473",
+  "scope": "Native Explorer headings and preview information typography, including actual glyph tracking; not full UI or platform acceptance.",
+  "reference": {
+    "path": "docs/visuals/design-options/options.css",
+    "sha256": "79500e3638b63af8b0ac9d1d64c562742236cad38f950773659a7b1b031a889f"
+  },
+  "source_audit": {
+    "inputs_match_git_index": 1080,
+    "manifest": {
+      "path": "build/validation/explorer-inline-2026-10-29/typography-second-compiler-source.json",
+      "sha256": "7eaf470782c115939b5dfd1fa742d09b3ab83cc820fba4f3e8193d8ad55a0c8b"
+    },
+    "overlay": {
+      "path": "build/validation/explorer-inline-2026-10-29/typography-second-compiler-source.zip",
+      "sha256": "aa0ca076cb3fc94b3e842bc4b21e52de6624c469c7671957fd80af8c15d79910"
+    },
+    "runtime": {
+      "path": "build/validation/explorer-inline-2026-10-29/typography-second-runtime.json",
+      "sha256": "6f493f613e9f9b25f08fb4c8972e70bb199998901d99b73f280dbffeb4257826"
+    },
+    "byte_index": {
+      "path": "build/validation/explorer-inline-2026-10-29/typography-second-byte-index.json",
+      "sha256": "ff5ee7af21edeac9f6befe9033942af90a709c6cfe22367aaa360e5a6b0e66dd"
+    },
+    "all_archived_bytes_read_back": true
+  },
+  "environment": {
+    "windows": "Windows11 Pro26200 / Release / Segoe UI Semibold caption face",
+    "linux": "Alpine-Dev3.24.2 WSL2 / X11 Xvfb Openbox / Debug ASan UBSan / detect_leaks=0"
+  },
+  "implementation": [
+    "Separate persistent strong caption roles .7rem with 1.7px/1px letter spacing, scaled with preferences; ordinary badges remain regular and untracked.",
+    "Preview instruction/unavailable/failure/truncation information uses .78rem with inherited1.55 line pitch in both measurement and drawing.",
+    "Truncation notice extent includes every wrapped line instead of a fixed21.232px allowance."
+  ],
+  "cohorts": [
+    {
+      "tag": "typography-first",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/typography-first-windows.json",
+        "sha256": "8b926cf4607d2127c38d3a9505566a0c572b5c57519cba05857d5b03c2076ea3"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "explorer_a_layout",
+        "--test-filter",
+        "explorer_a_preview_flow",
+        "--test-filter",
+        "explorer_a_api_context"
+      ],
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/typography-first-windows.log",
+        "sha256": "688e17648eb15ad6bdb3fdfbc79d7c7fd85c284bff57094983b46546e7b69f64"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-_9ub1szz/results.json",
+        "sha256": "8c62a923b28c59c8c16730d0081a30f71bde7350e49aa7b0aa9a17d687f7faa0"
+      },
+      "exit_code": 1,
+      "binary_sha256": "dcca6b9a2b653bb18823a4224df9ff52f44e1326bab47f728af5454b749ea3b4",
+      "groups": {
+        "explorer_a_api_context": "passed",
+        "explorer_a_preview_flow": "passed",
+        "explorer_a_layout": "failed"
+      }
+    },
+    {
+      "tag": "typography-first",
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/typography-first-linux.json",
+        "sha256": "6aa7ab39f755098a008e1777393d89893a9bc21f96334f96c333e3646a3ac3e1"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "explorer_a_layout",
+        "--test-filter",
+        "explorer_a_preview_flow",
+        "--test-filter",
+        "explorer_a_api_context"
+      ],
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/typography-first-linux.log",
+        "sha256": "5b424418599ee884408318b8bc3bde52ad3dac4c685dc34d1a9bca941eea7ae6"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-j7z57_9u/results.json",
+        "sha256": "7ba76d633e956c011d71a04721f71967e693d36d8883cb22ece562a1d4272bc3"
+      },
+      "exit_code": 1,
+      "binary_sha256": "0a1c7d909f8ae10373d69093ae445906c1bdd2257781e45755c092e2f08c2e7f",
+      "groups": {
+        "explorer_a_api_context": "passed",
+        "explorer_a_preview_flow": "passed",
+        "explorer_a_layout": "failed"
+      }
+    },
+    {
+      "tag": "typography-second",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/typography-second-windows.json",
+        "sha256": "0cc1d964b264ba183f4da1cbf8115acb74e521a21113b21e8455cd91a04dc321"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "explorer_a_layout"
+      ],
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/typography-second-windows.log",
+        "sha256": "bd9991f5c0f25bf6df7cf68c95f498accb6822d88d08a407ee050181820195ba"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-9zapf3u9/results.json",
+        "sha256": "839a68a91e097638e78d279b44f50137c0673dd49869e6fb79b47cb3dce0dc3a"
+      },
+      "exit_code": 0,
+      "binary_sha256": "d3183dde69b23fdac0e3aa7a272098c8b90c0fb40b6f0fa39694069f1a95bca9",
+      "groups": {
+        "explorer_a_layout": "passed"
+      }
+    },
+    {
+      "tag": "typography-second",
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/typography-second-linux.json",
+        "sha256": "b2dde9579a303313785d157d73ebb29bbfc15b990de62c393d906c8ae48c9898"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "explorer_a_layout"
+      ],
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/typography-second-linux.log",
+        "sha256": "621b2cba0bfc73de2fe42d7d23f1e45b59c670c8039378aa9c949fe899f3f644"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2hf7kkvq/results.json",
+        "sha256": "338750463d364a4e3356a9c1e0082bda3d68b54d8dcea0ea60c996a891e77453"
+      },
+      "exit_code": 0,
+      "binary_sha256": "9c38ae25d41e90e6af9a27e34f713ea2b98c3b2cc16b396104417b08a4b18f08",
+      "groups": {
+        "explorer_a_layout": "passed"
+      }
+    }
+  ],
+  "final_metrics": [
+    {
+      "platform": "windows",
+      "cases": 6,
+      "minimum_width": 320,
+      "metrics": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-9zapf3u9/explorer_a_layout/files ä/verification.json",
+        "sha256": "166447a24c0f00eca0e1c5f7f2f373428af6b26f9c4c3da33afd5ee82d47750f"
+      }
+    },
+    {
+      "platform": "linux",
+      "cases": 6,
+      "minimum_width": 320,
+      "metrics": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2hf7kkvq/explorer_a_layout/files ä/verification.json",
+        "sha256": "6c345767ba250fb1c3045c0a9c7fed51cffdb2645b51d041e999c8d51ead9db7"
+      }
+    }
+  ],
+  "observed_failure": {
+    "phase": "typography-first",
+    "windows": "2/3 groups passed; API4 and preview2 native cases passed, new layout failed after native dark fixture succeeded.",
+    "linux": "2/3 groups passed; same observation capacity failure.",
+    "cause": "Real66kB file produces many single-glyph readonly edit commands and exhausted256-item observation before the footer.",
+    "repair": "Exclude only role6 code-ink commands from this bounded surrounding-typography observation. Separate readonly preview/copy/wrap suite remains; caption/information/metadata/footer assertions retained. New final six-mode runs both pass."
+  },
+  "counterexample": {
+    "report": {
+      "path": "build/validation/explorer-inline-2026-10-29/typography-caption-counter.json",
+      "sha256": "406e926439f3586c12cb8d2e8025b662e21d1cd2dbae938b087f0b5c05da2b88"
+    },
+    "actual_native_render_fault": "Only caption glyph query is untracked; native width measurement remains tracked. The independent raster check must reject the rendered negative.",
+    "negative_exit": 1,
+    "positive_exit": 0,
+    "positive_cases": 6,
+    "source_production_runtime_members_read_back": 20,
+    "production_unchanged": true
+  },
+  "visual_images": [
+    {
+      "platform": "windows",
+      "mode": "dark",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-9zapf3u9/explorer_a_layout/files ä/dark/explorer-layout-initial.png",
+      "sha256": "b250ed382cf56b1862010cac90889c117ac203773c31f4f48a9fe8c23aa4d024"
+    },
+    {
+      "platform": "windows",
+      "mode": "large-compact",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-9zapf3u9/explorer_a_layout/files ä/large-compact/explorer-layout-initial.png",
+      "sha256": "ce074b8af2b5aed9173deced93e03d1aa4a24e1a7624ecfb1c0117944bfb2414"
+    },
+    {
+      "platform": "linux",
+      "mode": "dark",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2hf7kkvq/explorer_a_layout/files ä/dark/explorer-layout-initial.png",
+      "sha256": "1665187638e78fe8f9308c0bd043e30001a4067a7f161b9d5d47d04801ef65bd"
+    },
+    {
+      "platform": "linux",
+      "mode": "large-compact",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2hf7kkvq/explorer_a_layout/files ä/large-compact/explorer-layout-initial.png",
+      "sha256": "dc9b471c5c5c3768413bbecd7020f82b190648727bc83cea8f5c2c01d8948937"
+    }
+  ],
+  "visual_review": "Final native dark and minimum320px/22px initial captures on Windows and Linux inspected; caption placement/spacing, preview information and compact layout examined.",
+  "limitations": [
+    "Injected SDL events; no new physical host keyboard/focus, reader, monitor/DPI or macOS proof.",
+    "Strong native faces follow current platform/offline policy. Exact cross-platform glyph pixels and a complete font-family/weight matrix are not established.",
+    "Other Explorer empty/error layouts, A2 selection/multi-selection, run/image preview, large lists, remaining task windows/B2/settingsA/feedbackA/progressB/context-menuA and whole Develop/Simulate/Analyze/F1 acceptance remain open.",
+    "Exact vertical title-to-place-navigation spacing, other toolbar roles and empty/error compositions remain to be compared separately; the caption proof establishes font sizes and tracking."
+  ],
+  "storage_cleanup": {
+    "record": {
+      "path": "build/validation/explorer-inline-2026-10-29/typography-positive-image-cleanup.json",
+      "sha256": "2b239d12768abb592366e0104759e81b9721932f574d680c09dd06ef9e141004"
+    },
+    "redundant_successful_images": 8,
+    "bytes": 760880,
+    "new_initial_references_retained": 4,
+    "negative_images_and_previous_references_retained": true
+  }
+}

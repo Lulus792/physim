@@ -15,7 +15,7 @@ typedef struct browser_dialog {
     char history[32][4096],places[3][4096],place_names[3][256],opener[96],return_label[128];
     unsigned history_count,return_frames,grid_columns;ps_browser_sort sort;
     size_t filtered[PS_BROWSER_ENTRY_LIMIT],count;float tops[PS_BROWSER_ENTRY_LIMIT+1],cache_width,cache_scale,content_height;
-    struct nk_user_font fonts[13];struct nk_rect bounds,list_bounds,preview_bounds,controls[32],selected_bounds;
+    struct nk_user_font fonts[15];documentation_spaced_font caption_fonts[2];struct nk_rect bounds,list_bounds,preview_bounds,controls[32],selected_bounds;
     struct {int index;struct nk_rect bounds;} rows[64];unsigned row_count;
     struct nk_text_edit edits[5]; /* Location, search, new name, source, API signature. */
     browser_preview_layout text_layouts[2];unsigned text_layout_next;
@@ -597,7 +597,7 @@ static browser_preview_layout *browser_preview_wrap(app *a,browser_dialog *d,flo
 static float browser_preview_extent(app *a,browser_dialog *d,float width,float f) {
     browser_preview_layout *cached=browser_preview_wrap(a,d,width,f);
     return cached?fminf(240*f,cached->layout->visual.row_count*cached->layout->visual.row_height):
-        browser_text_height(d,"Textvorschau kann nicht dargestellt werden.",2,width,16.8f*f);
+        browser_text_height(d,"Textvorschau kann nicht dargestellt werden.",11,width,16.926f*f);
 }
 #include "file_browser_api_ui.inc"
 static float browser_preview_content(app *a,browser_dialog *d,float width,float f,float *action_y) {
@@ -610,12 +610,12 @@ static float browser_preview_content(app *a,browser_dialog *d,float width,float 
         for(unsigned k=0;k<4;k++)y+=browser_text_height(d,labels[k],3,width,17.36f*f)+(2+10)*f+browser_text_height(d,values[k],3,width,17.36f*f);
         *action_y=y+(entry->kind==PS_BROWSER_DIRECTORY?0:8*f);
         if(entry->kind==PS_BROWSER_DIRECTORY)y+=32*f;
-        else if(d->preview.text)y+=8*f+browser_preview_extent(a,d,width,f)+(d->preview.truncated?21.232f*f:0);
-        else y+=8*f+browser_text_height(d,browser_busy(d) && d->operation==PS_BROWSER_READ_TEXT?"Vorschau wird geladen …":"Für diese Datei ist keine Textvorschau verfügbar.",2,width,16.8f*f);
+        else if(d->preview.text)y+=8*f+browser_preview_extent(a,d,width,f)+(d->preview.truncated?6*f+browser_text_height(d,"Vorschau gekürzt · erste 64 KiB",11,width,16.926f*f):0);
+        else y+=8*f+browser_text_height(d,browser_busy(d) && d->operation==PS_BROWSER_READ_TEXT?"Vorschau wird geladen …":"Für diese Datei ist keine Textvorschau verfügbar.",11,width,16.926f*f);
         if(entry->kind!=PS_BROWSER_DIRECTORY)y=browser_api_content(a,d,width,y,f,false);
         if(d->embedded && entry->kind!=PS_BROWSER_DIRECTORY)y+=50*f;
     } else {const char *description=d->filter==PS_BROWSER_FOLDERS?"Wähle einen vorhandenen Ordner als Speicherort.":"Ein Klick zeigt die Vorschau. Ordner öffnen sich per Doppelklick oder über die Aktion unten.";
-        y+=browser_text_height(d,description,2,width,16.8f*f);*action_y=0;}
+        y+=browser_text_height(d,description,11,width,16.926f*f);*action_y=0;}
     return y+21*f;
 }
 static void browser_preview(app *a,browser_dialog *d,float x,float y,float width,float height,float f) {
@@ -658,7 +658,7 @@ static void browser_preview(app *a,browser_dialog *d,float x,float y,float width
             struct nk_rect badge=browser_slot(d,42*f,top,bw,badge_height);nk_stroke_rect(nk_window_get_canvas(ui),badge,5*f,f,UI_COLOR(border));browser_text(a,d,49.3f*f,top+3.1f*f,bw-14.6f*f,label,0,13.72f*f,UI_COLOR(muted),false);}
         else browser_icon(nk_window_get_canvas(ui),-6,icon,UI_COLOR(accent));
         top+=(entry?33.7f*f:52*f);top+=browser_text(a,d,18*f,top,w,name,5,22.785f*f,UI_COLOR(text),true)+12*f;
-        if(!entry)browser_text(a,d,18*f,top,w,d->filter==PS_BROWSER_FOLDERS?"Wähle einen vorhandenen Ordner als Speicherort.":"Ein Klick zeigt die Vorschau. Ordner öffnen sich per Doppelklick oder über die Aktion unten.",2,16.8f*f,UI_COLOR(muted),true);
+        if(!entry)browser_text(a,d,18*f,top,w,d->filter==PS_BROWSER_FOLDERS?"Wähle einen vorhandenen Ordner als Speicherort.":"Ein Klick zeigt die Vorschau. Ordner öffnen sich per Doppelklick oder über die Aktion unten.",11,16.926f*f,UI_COLOR(muted),true);
         else {
             char size[64];browser_size(size,entry);
             const char *labels[]={"Typ","Größe","Ort","Status"};
@@ -677,11 +677,11 @@ static void browser_preview(app *a,browser_dialog *d,float x,float y,float width
                     ui->style.edit.normal=ui->style.edit.hover=ui->style.edit.active=nk_style_item_color(nk_rgba(0,0,0,0));
                     nk_style_push_font(ui,&d->fonts[6]);nk_sdl_edit_named_visual(ui,"Dateivorschau",d->preview.length?d->preview.text:d->empty_preview,(int)(d->preview.length?d->preview.length+1:2),&d->edits[3],&cached->layout->visual);nk_style_pop_font(ui);
                     ui->style.edit=saved_edit;browser_focus_draw(a,d,12,r,"Dateivorschau");
-                }else browser_text(a,d,18*f,top+8*f,w,"Textvorschau kann nicht dargestellt werden.",2,16.8f*f,UI_COLOR(error),true);
-                if(d->preview.truncated)browser_text(a,d,18*f,top+text_height+14*f,w,"Vorschau gekürzt · erste 64 KiB",4,15.232f*f,UI_COLOR(muted),true);
-            } else browser_text(a,d,18*f,top+8*f,w,browser_busy(d) && d->operation==PS_BROWSER_READ_TEXT?"Vorschau wird geladen …":"Für diese Datei ist keine Textvorschau verfügbar.",2,16.8f*f,UI_COLOR(muted),true);
-            if(entry->kind!=PS_BROWSER_DIRECTORY){float source_end=top+8*f+(d->preview.text?browser_preview_extent(a,d,w,f)+(d->preview.truncated?21.232f*f:0):
-                browser_text_height(d,browser_busy(d) && d->operation==PS_BROWSER_READ_TEXT?"Vorschau wird geladen …":"Für diese Datei ist keine Textvorschau verfügbar.",2,w,16.8f*f));
+                }else browser_text(a,d,18*f,top+8*f,w,"Textvorschau kann nicht dargestellt werden.",11,16.926f*f,UI_COLOR(error),true);
+                if(d->preview.truncated)browser_text(a,d,18*f,top+text_height+14*f,w,"Vorschau gekürzt · erste 64 KiB",11,16.926f*f,UI_COLOR(muted),true);
+            } else browser_text(a,d,18*f,top+8*f,w,browser_busy(d) && d->operation==PS_BROWSER_READ_TEXT?"Vorschau wird geladen …":"Für diese Datei ist keine Textvorschau verfügbar.",11,16.926f*f,UI_COLOR(muted),true);
+            if(entry->kind!=PS_BROWSER_DIRECTORY){float source_end=top+8*f+(d->preview.text?browser_preview_extent(a,d,w,f)+(d->preview.truncated?6*f+browser_text_height(d,"Vorschau gekürzt · erste 64 KiB",11,w,16.926f*f):0):
+                browser_text_height(d,browser_busy(d) && d->operation==PS_BROWSER_READ_TEXT?"Vorschau wird geladen …":"Für diese Datei ist keine Textvorschau verfügbar.",11,w,16.926f*f));
                 browser_api_content(a,d,w,source_end,f,true);}
             if(d->embedded && entry->kind!=PS_BROWSER_DIRECTORY){
                 float action_width=fminf(w,d->fonts[2].width(d->fonts[2].userdata,d->fonts[2].height,"Datei öffnen →",(int)strlen("Datei öffnen →"))+24.4f*f);
@@ -707,9 +707,18 @@ static void browser_view(app *a,browser_dialog *d,int width,int height,struct nk
         palette.accent=light?nk_rgb(32,92,170):nk_rgb(154,195,255);palette.selection_active=palette.button_hover=light?nk_rgb(220,233,250):nk_rgb(41,62,91);
         palette.primary=light?nk_rgb(32,93,172):nk_rgb(35,102,196);palette.primary_text=nk_rgb(255,255,255);}
     ui_palette=&palette;style(ui);
-    const float sizes[]={9.8f,24.5f,10.5f,11.2f,9.52f,14.7f,10.5f,11.9f,10.08f,10.08f,11.9f,10.92f,10.22f};
+    const float sizes[]={9.8f,24.5f,10.5f,11.2f,9.52f,14.7f,10.5f,11.9f,10.08f,10.08f,11.9f,10.92f,10.22f,9.8f,9.8f};
     float previous_height=d->fonts[2].height;
-    for(unsigned k=0;k<13;k++){bool strong=k==1 || k==5 || k==10,code=k==6 || k==8;d->fonts[k]=*(code?a->font_code:strong?a->font_title:a->font_ui);d->fonts[k].height=sizes[k]*(code?a->workbench_code_em:strong?a->workbench_bold_em:a->workbench_regular_em)*f;}
+    for(unsigned k=0;k<15;k++){bool strong=k==1 || k==5 || k==10 || k>=13,code=k==6 || k==8;d->fonts[k]=*(code?a->font_code:strong?a->font_title:a->font_ui);d->fonts[k].height=sizes[k]*(code?a->workbench_code_em:strong?a->workbench_bold_em:a->workbench_regular_em)*f;}
+    /* Separate tracked headings from ordinary untracked type badges. These
+     * persistent wrappers use the same native face for measuring and drawing. */
+    for(unsigned k=13;k<15;k++) {
+        documentation_spaced_font *caption=&d->caption_fonts[k-13];caption->base=a->font_title;
+        caption->native=*(const struct nk_font *)caption->base->userdata.ptr;
+        caption->spacing=(k==13?1.7f:1.f)*f;caption->reference_height=d->fonts[k].height;
+        d->fonts[k].userdata=nk_handle_ptr(caption);d->fonts[k].width=documentation_spaced_width;
+        d->fonts[k].query=documentation_spaced_query;
+    }
     if(previous_height && previous_height!=d->fonts[2].height && d->keyboard)d->reveal=true;
     if(compact)d->fonts[1].height=19.6f*a->workbench_bold_em*f;
     nk_style_set_font(ui,&d->fonts[2]);ui->style.window.padding=ui->style.window.spacing=ui->style.window.group_padding=nk_vec2(0,0);ui->style.window.group_border=0;
@@ -770,7 +779,7 @@ static void browser_view(app *a,browser_dialog *d,int width,int height,struct nk
         if(d->keyboard)nk_edit_unfocus(ui);
         if(!d->embedded)nk_sdl_window_raise(ui,window_name);w=nk_window_get_content_region(ui).w;
         nk_layout_space_begin(ui,NK_STATIC,total,100);struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
-        if(!d->embedded){browser_text(a,d,(compact?18:27)*f,(compact?18:23)*f,w-100*f,"DATEI-EXPLORER",0,15.19f*f,UI_COLOR(muted),true);
+        if(!d->embedded){browser_text(a,d,(compact?18:27)*f,(compact?18:23)*f,w-100*f,"DATEI-EXPLORER",13,15.19f*f,UI_COLOR(muted),true);
         browser_text(a,d,(compact?18:27)*f,(compact?37.19f:42.19f)*f,w-(compact?96:100)*f,title,1,(compact?30.38f:37.975f)*f,UI_COLOR(text),true);
         browser_text(a,d,(compact?18:27)*f,compact?subtitle_y:87.165f*f,w-(compact?36:100)*f,subtitle,3,17.36f*f,UI_COLOR(muted),true);
         if(browser_button(a,d,0,w-59*f,24*f,32*f,32*f,"",PS_ICON_CLOSE,true,false,false,false))browser_action(a,d,0);}
@@ -795,7 +804,7 @@ static void browser_view(app *a,browser_dialog *d,int width,int height,struct nk
         struct nk_rect side=browser_slot(d,0,by,compact?w:places,compact?places_h:body*(narrow?2:1));nk_fill_rect(canvas,side,0,UI_COLOR(surface));
         if(compact)nk_stroke_line(canvas,side.x,side.y+side.h,side.x+side.w,side.y+side.h,f,UI_COLOR(border));
         else {nk_stroke_line(canvas,side.x+side.w,side.y,side.x+side.w,side.y+side.h,f,UI_COLOR(border));
-            browser_text(a,d,12*f,by+20*f,places-24*f,"ORTE",0,15.19f*f,UI_COLOR(muted),true);}
+            browser_text(a,d,12*f,by+20*f,places-24*f,"ORTE",14,15.19f*f,UI_COLOR(muted),true);}
         float place_y=by+47*f;
         for(unsigned k=0;k<3;k++){float ph=fmaxf(18*f,browser_text_height(d,d->place_names[k],3,fmaxf(1,places-72.6f*f),17.36f*f))+20.2f*f;
             if(browser_button(a,d,8+(int)k,compact?10*f+k*(w-20*f+4*f)/3:12*f,compact?by+10*f:place_y,compact?(w-28*f)/3:places-24*f,compact?places_h-20*f:ph,d->place_names[k],k==2?PS_ICON_CHART:PS_ICON_FOLDER,*d->places[k] && !browser_mutating(d),false,!strcmp(d->location,d->places[k]),false))browser_action(a,d,8+(int)k);place_y+=ph+4*f;}

@@ -32,6 +32,28 @@ Rolle, damit lange Orte weder Aktionen überlagern noch einen falschen Scrollweg
 erzeugen. Die nichtmonospazierten API-Texte übernehmen ihre jeweiligen Rollen
 und 1,55; die Signatur behält unverändert 0,72 rem mit 1,85.
 
+## Überschriften und Vorschauhinweise
+
+Der folgende [Typografienachweis](../../verification/explorer-typography-2026-10-30.json)
+verwendet für den Explorerkopf und „ORTE“ getrennte persistente Schriftrollen.
+Beide übernehmen 0,7 rem und den vorhandenen kräftigen nativen Schriftschnitt;
+der Kopf erhält 1,7 px zusätzliche Laufweite, „ORTE“ 1 px. Breitenmessung und
+Glyphenausgabe verwenden dieselben Werte, einschließlich Präferenzskalierung.
+Die Typ-Badges behalten ihre normale, ungesperrte Schrift. Im kompakten Layout
+bleibt die Ortsüberschrift gemäß Vorlage ausgeblendet.
+
+Die Hinweise vor einer Auswahl, bei fehlender oder nicht darstellbarer
+Textvorschau und bei gekürzten Dateien verwenden 0,78 rem mit der geerbten
+Zeilenhöhe 1,55. Der Kürzungshinweis erhält seine vollständig umbrochene Höhe
+statt eines festen Zuschlags. Dadurch berechnen Vorschau und nachfolgender
+API-Bereich denselben Platz auch bei schmaler Darstellung und großer Schrift.
+
+Der lokale Windows-Adapter lädt Segoe UI Semibold für den kräftigen Schnitt.
+Der Linux-Adapter verwendet seine vorhandene System-/Offline-Schriftpolitik;
+daraus folgt keine Zusage identischer plattformübergreifender Glyphenpixel.
+Rasterung und installierter Schriftschnitt bleiben getrennt vom geprüften
+CSS-Abgleich der Größen und Abstände. Ein aktueller macOS-Nachweis fehlt.
+
 ## Aussagekraft der Prüfungen
 
 Der [kompakte Nachweis](../../verification/explorer-layout-2026-10-30.json)
@@ -69,9 +91,11 @@ Pfadumbrüche und Bildhashes erzeugen und muss dieselben CSS-/Inhaltsprüfungen 
 ## Verbleibende Grenzen
 
 Der Dateizeilen-/Kachelabgleich ersetzt weder A2 noch die vollständige visuelle
-Matrix. Unter anderem bleiben die genaue Laufweite und Schriftstärke der
-Kopf-/Orte-Beschriftungen sowie einzelne Informations- und Leertexte weiter
-abzugleichen. Der funktionale API-Nachweis und die betrachteten API-Bilder
+Matrix. Die Kopf-/Orte-Laufweiten und Vorschauhinweise sind im folgenden
+Typografienachweis geprüft; weitere Leer-/Fehlerzustände und die vollständige
+Schrift-/Plattformmatrix bleiben abzugleichen. Der genaue vertikale Abstand
+zwischen Ortsüberschrift und Navigation sowie weitere Toolbarrollen gehören
+zum folgenden Geometrieabgleich. Der funktionale API-Nachweis und die betrachteten API-Bilder
 beweisen noch keinen vollständigen unabhängigen Prosa-/Tabellentypografieabgleich.
 Messlauf-/Bildvorschau, sehr große Listen und praktische Gesamtaufgaben bleiben
 ebenfalls im bestehenden Auftrag.

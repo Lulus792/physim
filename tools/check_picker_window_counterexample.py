@@ -6,7 +6,7 @@ from check_project_window_counterexample import archive,digest,replace_once
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for name in ('source-root','build-dir','sdl','proof-dir'):p.add_argument('--'+name,type=Path,required=True)
-    p.add_argument('--fault',choices=('main-input','places-padding','grid-center'),default='main-input')
+    p.add_argument('--fault',choices=('main-input','places-padding','grid-center','caption-render'),default='main-input')
     p.add_argument('--report',type=Path);a=p.parse_args()
     if sys.platform!='win32':p.error('Requires a completed Windows Release build')
     source,directory,proof=(value.resolve() for value in (a.source_root,a.build_dir,a.proof_dir))
@@ -30,10 +30,15 @@ def main():
             browser=replace_once(originals[0].read_text(encoding='utf8'),
                 'inset=(d->compact?28.6f:37.8f)*f','inset=(d->compact?28.6f:35.f)*f')
             checker='tests/check_explorer_a.py';expected=b'Place text inset differs from approved CSS'
-        else:
+        elif a.fault=='grid-center':
             browser=replace_once(originals[0].read_text(encoding='utf8'),
                 'r.x+(width-advance)/2','r.x')
             checker='tests/check_explorer_layout.py';expected=b'Grid raster is not centered'
+        else:
+            browser=replace_once(originals[0].read_text(encoding='utf8'),
+                'd->fonts[k].query=documentation_spaced_query;',
+                'd->fonts[k].query=caption->base->query;')
+            checker='tests/check_explorer_layout.py';expected=b'Caption raster tracking differs from approved CSS'
         picker=proof/'counter_picker.inc';picker.write_text(browser,encoding='utf8')
         design=proof/'counter_design.inc';design.write_text(replace_once(originals[2].read_text(encoding='utf8'),
             '#include "file_browser_ui.inc"','#include "'+picker.as_posix()+'"'),encoding='utf8')

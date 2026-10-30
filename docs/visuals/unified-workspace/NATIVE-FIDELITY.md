@@ -97,8 +97,11 @@ Aufgaben bleiben offen; die dort genannten zusätzlichen API-Abnahmen ebenfalls.
 Der [Dateizeilen-/Kachelabgleich](EXPLORER-LAYOUT-NATIVE.md) übernimmt anschließend
 die CSS-Abstände, vollständige Kartenhöhen, zentrierte Textzeilen und mehrere
 Metadaten-/Fußschriftrollen. Native Zeichenbefehle und gezielte Rastergegenproben
-ergänzen die Bediennachweise. Weitere Typografiedetails und die vollständige
-Explorer-/Oberflächenabnahme bleiben offen.
+ergänzen die Bediennachweise. Der folgende
+[Typografienachweis](../../verification/explorer-typography-2026-10-30.json)
+ergänzt die getrennten kräftigen Kopf-/Orte-Schriften samt CSS-Laufweite sowie
+Vorschauhinweise und deren vollständige Umbruchhöhe. Weitere Leer-/Fehlerzustände
+und die vollständige Explorer-/Oberflächenabnahme bleiben offen.
 Der folgende
 [Zeiger-Nachlauf](PROTOCOL-POINTER-NATIVE.md) schließt verlorene schnelle Klicks
 in den gemeinsamen Aktionen/Editfeldern und am Protokolltrenner. Linux prüft

@@ -29,12 +29,44 @@ for mode in ([a.mode] if a.mode else ('dark','light','contrast','large','compact
     cases.append(dict(mode=mode,command=cmd,exit_code=result.returncode,frames=frames))
     (a.work/'verification.json').write_text(json.dumps(dict(binary_sha256=binary,cases=cases),indent=2)+'\n')
     assert result.returncode==0 and b'EXPLORER LAYOUT SELF-TEST: PASSED' in result.stdout,(mode,result.stderr.decode('utf8',errors='replace'))
-    assert [f['phase'] for f in frames]==['list','preview','grid','footer']
+    assert [f['phase'] for f in frames]==['initial','list','preview','grid','footer']
     for frame in frames:
         for t in frame['texts']:t['text']=bytes.fromhex(t['hex']).decode('utf8')
-    listing,preview,grid,footer=frames;f=grid['scale'];compact=grid['compact'];em=grid['regular_em']
+    initial,listing,preview,grid,footer=frames;f=grid['scale'];compact=grid['compact'];em=grid['regular_em']
     assert compact==('compact' in mode)
     if compact:assert grid['window'][0]==320,'Minimum native client width not exercised'
+    # Read native base glyph metrics independently of the tracking wrapper.
+    # A render-only counterexample keeps measured widths correct and removes
+    # tracking from the actual glyph queries; only raster evidence catches it.
+    initial_image=work/'explorer-layout-initial.png';initial_raster=png(initial_image) if initial_image.exists() else None
+    for index,(text,selector) in enumerate((('DATEI-EXPLORER','.eyebrow'),('ORTE','.pane-title'))):
+        captions=[t for t in initial['texts'] if t['text']==text]
+        assert len(captions)==(0 if index==1 and compact else 1),'Caption missing or duplicated'
+        for t in captions:
+            base_metrics=initial['caption_bases'][index];spacing=number(selector,'letter-spacing')*f
+            assert val(selector,'font-weight')=='600'
+            assert t['role']==13+index,'Caption shares the ordinary badge font role'
+            near(t['box'][3],rem(selector)*initial['bold_em']*f,'Caption font size/face')
+            if initial_raster:
+                iw,ih,irgb,_=initial_raster;box=t['box'];clip=t['clip'];points=[];pen=0;lefts=[];rights=[]
+                for offset,width,advance in base_metrics['glyphs']:
+                    lefts.append(box[0]+pen+offset);rights.append(box[0]+pen+offset+width);pen+=advance+spacing
+                assert box[1]>=max(0,clip[1]) and box[1]+box[3]<=min(ih,clip[1]+clip[3]),'Caption raster is clipped'
+                for y in range(max(0,int(box[1])),min(ih,int(box[1]+box[3])+1)):
+                    for x in range(max(0,int(box[0])),min(iw,int(box[0]+box[2]))):
+                        if not inside(clip,x+.5,y+.5):continue
+                        pixel=irgb[(y*iw+x)*3:(y*iw+x)*3+3]
+                        if max(abs(pixel[i]-t['color'][i]) for i in range(3))<50:points.append(x)
+                assert points,'No native caption pixels'
+                actual=(min(points),max(points)+1);expected=(min(lefts),max(rights))
+                assert max(abs(x-y) for x,y in zip(actual,expected))<=3*f,('Caption raster tracking differs from approved CSS',mode,text,actual,expected)
+            near(t['advance']-base_metrics['untracked_advance'],len(text)*spacing,'Caption measured letter spacing')
+    if initial_raster:cases[-1]['initial_raster_sha256']=hashlib.sha256(initial_image.read_bytes()).hexdigest()
+    hints=[t for t in initial['texts'] if t['role']==11 and inside(initial['preview'],t['box'][0],t['box'][1])]
+    if not compact:
+        assert ''.join(t['text'] for t in hints)=='Ein Klick zeigt die Vorschau. Ordner öffnen sich per Doppelklick oder über die Aktion unten.','Initial preview instruction missing'
+    for t in hints:near(t['box'][3],rem('small,.small')*em*f,'Information font')
+    for before,after in zip(hints,hints[1:]):near(after['box'][1]-before['box'][1],rem('small,.small')*line*f,'Information line pitch')
     for frame in (listing,grid):
         headers=[t for t in frame['texts'] if t['text']=='Name' and inside(frame['list'],t['box'][0],t['box'][1])]
         assert len(headers)==(0 if compact else 1),'Native grid/list header differs from CSS'
@@ -108,7 +140,7 @@ for mode in ([a.mode] if a.mode else ('dark','light','contrast','large','compact
     if mode!='contrast':
         color=val(':root[data-theme=light]' if mode=='light' else ':root','--muted').lstrip('#')
         expected=[int(color[i:i+2],16) for i in (0,2,4)]
-        assert all(t['color']==expected for t in footer['texts'] if t['role']==12),'Footer controls do not inherit the approved muted color'
+        assert all(t['color']==expected for frame in frames for t in frame['texts'] if t['role'] in (11,12,13,14)),'Captions, information or footer controls do not inherit the approved muted color'
     assert hashlib.sha256(a.app.read_bytes()).hexdigest()==binary
 (a.work/'verification.json').write_text(json.dumps(dict(binary_sha256=binary,cases=cases),indent=2)+'\n')
-print('Explorer layout: approved CSS rows/grid/metadata/fonts and actual centered native raster passed')
+print('Explorer layout: approved CSS rows/grid/metadata/captions/information and actual native grid/letter-spacing raster passed')
