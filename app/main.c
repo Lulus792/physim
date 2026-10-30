@@ -3674,6 +3674,7 @@ static void manager_test_key(app *a,SDL_Keycode key,SDL_Keymod mod) {
 // clang-format off
 #ifdef __APPLE__
 static bool native_test_command(app *a,toolbar_action action,int *stage,bool *okay);
+static bool native_test_keyboard_command(app *a,toolbar_action action,int *stage,bool *okay);
 #endif
 #include "autosave_tests.inc"
 #include "batch_tests.inc"

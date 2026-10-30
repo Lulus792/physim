@@ -2010,6 +2010,10 @@ def main():
             require(marker in flow.steps[-1]["stdout"],"Menu workflow quit before completing its assertions")
             if sys.platform=="darwin":
                 require("(native AppKit, stage" in flow.steps[-1]["stdout"],"Menu workflow did not use the native AppKit test path")
+        if args.case=="file_tabs_workflow":
+            require("FILE TABS SELF-TEST: PASSED" in flow.steps[-1]["stdout"],"File-tab workflow quit before completion")
+            if sys.platform=="darwin":
+                require("FILE TABS NATIVE MENU:" in flow.steps[-1]["stdout"],"File-tab workflow did not reach its native menu assertions")
         if args.case.startswith("comparison_"):
             from check_graphic_dialog import png
             output=flow.steps[-1]['stdout'];project=directory/'project'

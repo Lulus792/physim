@@ -15,6 +15,9 @@ static bool file_tabs_test_start(app *a,const char *root) {
 }
 static void file_tabs_test_frame(app *a,int *stage,int *code,const char **capture) {
     static double ready;static unsigned repeats;
+#ifdef __APPLE__
+    static uint32_t experiment_crc,analysis_crc;
+#endif
     bool ok=true;
     switch((*stage)++) {
     case 0:ready=ps_clock()+.2;break;
@@ -90,6 +93,46 @@ static void file_tabs_test_frame(app *a,int *stage,int *code,const char **captur
         size_t index=workspace_tree_test_find(a,"models",0);ok=index!=SIZE_MAX && a->workspace_tree.entries[index].expanded==(repeats%2==0);
         if(++repeats<6)*stage=31;else *stage=40;break;
     }
+#ifdef __APPLE__
+    case 40:
+        a->show_search=false;
+        if(!native_test_command(a,TOOLBAR_SEARCH,stage,&ok))return;
+        experiment_crc=ps_crc32((const unsigned char*)nk_str_get_const(&a->experiment.string),(size_t)nk_str_len_char(&a->experiment.string));
+        analysis_crc=ps_crc32((const unsigned char*)nk_str_get_const(&a->analysis.string),(size_t)nk_str_len_char(&a->analysis.string));
+        ready=ps_clock()+2;break;
+    case 41:
+        if(!native_test_model_wait(a->show_search,stage,ready))return;
+        ok=a->show_search && native_test_shell(a) && native_test_stroke(a->window,"f",3,((uintptr_t)1<<20));
+        ready=ps_clock()+2;break;
+    case 42:
+        if(!native_test_model_wait(a->show_search,stage,ready))return;
+        ok=a->show_search && !a->job.running && native_test_track_menu(a,TOOLBAR_BUILD,NULL,0,true);
+        *stage=49;break;
+    case 49:
+        ok=!a->job.running && native_test_shell(a);
+        if(!native_test_command(a,TOOLBAR_SAVE,stage,&ok))return;
+        *stage=52;break;
+    case 52: {
+        ok=native_test_shell(a) && !a->job.running;
+        ps_preferences p=a->preferences;p.theme=PS_THEME_LIGHT;preferences_apply(a,&p);ready=ps_clock()+2;break;
+    }
+    case 53:
+        if(!native_test_focus_wait(a,a->window,stage,ready))return;
+        ok=a->preferences.theme==PS_THEME_LIGHT && native_test_track_menu(a,TOOLBAR_SAVE,NULL,0,true);
+        *stage=55;break;
+    case 55: {
+        ps_preferences p=a->preferences;p.theme=PS_THEME_HIGH_CONTRAST;preferences_apply(a,&p);ready=ps_clock()+2;break;
+    }
+    case 56:
+        if(!native_test_focus_wait(a,a->window,stage,ready))return;
+        ok=a->preferences.theme==PS_THEME_HIGH_CONTRAST && native_test_track_menu(a,TOOLBAR_SAVE,NULL,0,true);break;
+    case 57:
+        ok=native_test_shell(a) && !a->job.running &&
+            experiment_crc==ps_crc32((const unsigned char*)nk_str_get_const(&a->experiment.string),(size_t)nk_str_len_char(&a->experiment.string)) &&
+            analysis_crc==ps_crc32((const unsigned char*)nk_str_get_const(&a->analysis.string),(size_t)nk_str_len_char(&a->analysis.string));
+        if(ok)puts("FILE TABS NATIVE MENU: search=1 command-f=1 build-cancel=1 save=1 light-contrast-cancel=1 sources-preserved=1");
+        break;
+#else
     case 40:a->show_search=false;test_mouse(a,a->toolbar_bounds[4],true);break;
     case 41:test_mouse(a,a->toolbar_bounds[4],false);break;
     case 42:
@@ -124,6 +167,7 @@ static void file_tabs_test_frame(app *a,int *stage,int *code,const char **captur
     }
     case 56:test_mouse(a,a->toolbar_bounds[0],false);break;
     case 57:ok=a->toolbar_menu==1;*capture="editor-file-menu-contrast.bmp";test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
+#endif
     case 58: {
         ps_preferences p=a->preferences;p.theme=PS_THEME_DARK;preferences_apply(a,&p);
         ok=!a->toolbar_menu;a->quitting=true;puts("FILE TABS SELF-TEST: PASSED");break;

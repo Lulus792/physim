@@ -10,10 +10,14 @@ static void manager_test_text(app *a,const char *text) {
     manager_test_key(a,SDLK_TAB,0);
 }
 static bool manager_test_open(app *a) {
+#ifdef __APPLE__
+    return a->project_manager;
+#else
     toolbar_entry entries[9];unsigned count=toolbar_entries(a,1,entries);int at=a->toolbar_keyboard_item;
     if(at<0 || (unsigned)at>=count)return false;
     test_window_key_mod(a->window,entries[at].action==TOOLBAR_NEW?SDLK_RETURN:SDLK_DOWN,0);
     return entries[at].action==TOOLBAR_NEW;
+#endif
 }
 /* All32 template/language pairs plus two analysis-only projects still build,
  * record/import and analyze. New review/back steps preserve every choice. */
@@ -30,7 +34,13 @@ static void project_manager_keyboard_test_frame(app *a,const char *root,int *sta
 #define MANAGER_FOCUS(id) if(!manager_test_focus(a,id)){--*stage;return;}
     switch((*stage)++) {
     case 0:project=0;matrix_started=now;snprintf(parent,sizeof parent,"%s",root);producer[0]=0;SDL_SetWindowSize(a->window,1080,740);break;
-    case 1:case 25:project_started=now;MANAGER_KEY(SDLK_F10);MANAGER_KEY(SDLK_DOWN);break;
+    case 1:case 25:project_started=now;
+#ifdef __APPLE__
+        if(!native_test_keyboard_command(a,TOOLBAR_NEW,stage,&ok))return;
+#else
+        MANAGER_KEY(SDLK_F10);MANAGER_KEY(SDLK_DOWN);
+#endif
+        break;
     case 2:case 26:if(!manager_test_open(a)){--*stage;return;}break;
     case 3:ok=a->project_manager && a->manager_step==0;MANAGER_FOCUS(3);if(a->manager_analysis_only!=only)MANAGER_KEY(SDLK_SPACE);break;
     case 4:if(!only){MANAGER_FOCUS(11+(int)template);MANAGER_KEY(SDLK_RETURN);}break;
@@ -77,7 +87,15 @@ static void project_manager_error_test_frame(app *a,const char *root,int *stage,
     case 0: {snprintf(parent,sizeof parent,"%s",root);char directory[4096];join(directory,sizeof directory,parent,"existing ä");ok=ps_make_directory_exclusive(directory);
         join(original,sizeof original,directory,"main.c");FILE *file=fopen(original,"wbx");ok=ok && file;if(file){ok=ok && fputs("keep this file ä\n",file)>=0;ok=ok && !fclose(file);}
         join(not_directory,sizeof not_directory,root,"not-directory");file=fopen(not_directory,"wx");ok=ok && file;if(file){fputs("not a directory",file);fclose(file);}
-        FORM_KEY(SDLK_F10);FORM_KEY(SDLK_DOWN);break;}
+#ifdef __APPLE__
+        *stage=100;
+#else
+        FORM_KEY(SDLK_F10);FORM_KEY(SDLK_DOWN);
+#endif
+        break;}
+#ifdef __APPLE__
+    case 100:if(!native_test_keyboard_command(a,TOOLBAR_NEW,stage,&ok))return;*stage=1;break;
+#endif
     case 1:if(!manager_test_open(a)){--*stage;return;}break;
     case 2:FORM_FOCUS(7);FORM_KEY(SDLK_RETURN);break;
     case 3:FORM_FOCUS(2);manager_test_text(a,"invalid/name");break;
@@ -92,7 +110,13 @@ static void project_manager_error_test_frame(app *a,const char *root,int *stage,
     case 12:FORM_FOCUS(7);FORM_KEY(SDLK_RETURN);break;
     case 13:ok=a->manager_step==2;FORM_FOCUS(7);FORM_KEY(SDLK_RETURN);break;
     case 14: {if(a->manager_error_reveal){--*stage;return;}size_t bytes=0;char *text=load_utf8_text(original,&bytes);ok=a->project_manager && strstr(a->status,"existieren bereits") && text && !strcmp(text,"keep this file ä\n");free(text);*capture="manager-keyboard-existing-error.bmp";FORM_KEY(SDLK_ESCAPE);break;}
-    case 15:ok=!a->project_manager;FORM_KEY(SDLK_F10);FORM_KEY(SDLK_DOWN);break;
+    case 15:ok=!a->project_manager;
+#ifdef __APPLE__
+        if(!native_test_keyboard_command(a,TOOLBAR_NEW,stage,&ok))return;
+#else
+        FORM_KEY(SDLK_F10);FORM_KEY(SDLK_DOWN);
+#endif
+        break;
     case 16:if(!manager_test_open(a)){--*stage;return;}break;
     case 17:ok=a->project_manager;if(!ok)break;FORM_FOCUS(8);*capture="manager-keyboard-cancel.bmp";FORM_KEY(SDLK_RETURN);break;
     case 18:ok=!a->project_manager;a->quitting=true;printf("PROJECT MANAGER ERRORS SELF-TEST: %s\n",*code?"FAILED":"PASSED");break;

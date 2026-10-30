@@ -68,21 +68,26 @@ static bool native_test_stroke(SDL_Window *window,const char *text,unsigned shor
     return native_test_key(window,12,"",55,modifiers,NO) && native_test_key(window,10,text,raw,modifiers,NO) &&
         native_test_key(window,11,text,raw,modifiers,NO) && native_test_key(window,12,"",55,0,NO);
 }
-/* A real published Edit menu (one Search item), including AppKit's nested
- * tracking loop. The timeout is only an escape hatch; selecting must succeed. */
-static bool native_test_track_search(app *a,bool cancel){
-    id menu;intptr_t index;if(!native_test_item(a,TOOLBAR_SEARCH,&menu,&index))return false;
+/* Track a published menu using native keyboard events. The selected item is
+ * still delivered by AppKit; the timer only bounds a failed tracking loop. */
+static bool native_test_track_menu(app *a,toolbar_action action,const char *text,unsigned short raw,bool cancel){
+    id menu;intptr_t index;if(!native_test_item(a,action,&menu,&index))return false;
     id item=MT1(id,menu,"itemAtIndex:",intptr_t,index);
-    if(MT0(intptr_t,menu,"numberOfItems")!=1 || !MT0(BOOL,item,"isEnabled"))return false;
+    if(!MT0(BOOL,item,"isEnabled"))return false;
     id pool=MT0(id,MT0(id,objc_getClass("NSAutoreleasePool"),"alloc"),"init");
     id modes=MT1(id,objc_getClass("NSArray"),"arrayWithObject:",id,NSEventTrackingRunLoopMode);
     ((void(*)(id,SEL,SEL,id,double,id))objc_msgSend)(menu,sel_registerName("performSelector:withObject:afterDelay:inModes:"),sel_registerName("cancelTracking"),NULL,2.,modes);
-    bool queued=native_test_stroke(a->window,cancel?"x":"\xef\x9c\x81",cancel?7:125,0) &&
+    bool queued=native_test_stroke(a->window,cancel?"\xef\x9c\x80":text,cancel?126:raw,0) &&
+        (!cancel || native_test_stroke(a->window,"\xef\x9c\x81",125,0)) &&
         native_test_stroke(a->window,cancel?"\x1b":"\r",cancel?53:36,0);
     id view=MT0(id,MT0(id,native_test_application(),"keyWindow"),"contentView");
     BOOL selected=queued?((BOOL(*)(id,SEL,id,menu_test_point,id))objc_msgSend)(menu,sel_registerName("popUpMenuPositioningItem:atLocation:inView:"),item,(menu_test_point){40,40},view):NO;
     ((void(*)(id,SEL,id,SEL,id))objc_msgSend)(objc_getClass("NSObject"),sel_registerName("cancelPreviousPerformRequestsWithTarget:selector:object:"),menu,sel_registerName("cancelTracking"),NULL);
     MT0(void,pool,"drain");return queued && (bool)selected==!cancel;
+}
+static bool native_test_track_search(app *a,bool cancel){
+    id menu;intptr_t index;if(!native_test_item(a,TOOLBAR_SEARCH,&menu,&index) || MT0(intptr_t,menu,"numberOfItems")!=1)return false;
+    return native_test_track_menu(a,TOOLBAR_SEARCH,"\xef\x9c\x81",125,cancel);
 }
 static bool native_test_shell(app *a){
     if(!a->native_menu_active || !a->native_menu || a->toolbar_menu || a->toolbar_keyboard)return false;
@@ -118,6 +123,20 @@ static bool native_test_command(app *a,toolbar_action action,int *stage,bool *ok
     if(!native_test_focus_wait(a,a->window,stage,deadline))return false;
     *okay &= SDL_GetKeyboardFocus()==a->window && native_test_shell(a) && native_test_invoke(a,action,true);
     fprintf(stderr,"Native workflow menu command: action=%d stage=%d dispatched=%d\n",action,*stage-1,*okay);
+    waiting=false;return true;
+}
+/* Keyboard-only entry for the wizard and settings transaction fixtures. */
+static bool native_test_keyboard_command(app *a,toolbar_action action,int *stage,bool *okay){
+    static bool waiting;static double deadline;
+    if(!waiting){waiting=true;deadline=ps_clock()+5;SDL_RaiseWindow(a->window);}
+    if(!native_test_focus_wait(a,a->window,stage,deadline))return false;
+    *okay &= SDL_GetKeyboardFocus()==a->window && native_test_shell(a);
+    if(*okay){
+        if(action==TOOLBAR_NEW)*okay=native_test_track_menu(a,action,"n",45,false);
+        else if(action==TOOLBAR_SETTINGS)*okay=native_test_stroke(a->window,",",43,MT_COMMAND);
+        else *okay=false;
+    }
+    fprintf(stderr,"Native workflow keyboard command: action=%d stage=%d queued=%d\n",action,*stage-1,*okay);
     waiting=false;return true;
 }
 static void native_toolbar_test_frame(app *a,int *stage,int *code,const char **capture){

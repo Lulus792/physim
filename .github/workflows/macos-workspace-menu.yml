@@ -1,0 +1,60 @@
+name: Native macOS workspace menu workflows
+on:
+  push:
+    branches: [main, codex/f1-design-h]
+    paths:
+      - app/native_menu*
+      - app/main.c
+      - app/file_tabs_tests.inc
+      - app/project_manager_keyboard_tests.inc
+      - app/settings_tests.inc
+      - tests/check_display_workflow.py
+      - tools/build.py
+      - .github/workflows/macos-workspace-menu.yml
+  workflow_dispatch:
+concurrency:
+  group: native-workspace-menu-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  editor:
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [macos-15, macos-15-intel]
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: SDL cache identity
+        id: sdl-identity
+        run: echo "key=${RUNNER_OS}-${RUNNER_ARCH}-${ImageOS:-macos}-${ImageVersion:-unknown}-sdl-3.2.30-v1" >> "$GITHUB_OUTPUT"
+      - name: Restore pinned SDL install
+        id: sdl-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: build/sdl-install
+          key: ${{ steps.sdl-identity.outputs.key }}
+      - name: Pinned SDL3
+        if: steps.sdl-cache.outputs.cache-hit != 'true'
+        run: |
+          git clone --depth 1 --branch release-3.2.30 https://github.com/libsdl-org/SDL.git build/sdl-source
+          cmake -S build/sdl-source -B build/sdl-build -G Ninja -DCMAKE_BUILD_TYPE=Release -DSDL_TESTS=OFF -DCMAKE_INSTALL_PREFIX="$PWD/build/sdl-install"
+          cmake --build build/sdl-build --parallel 4
+          cmake --install build/sdl-build
+      - name: Save pinned SDL install
+        if: steps.sdl-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: build/sdl-install
+          key: ${{ steps.sdl-identity.outputs.key }}
+      - name: Actual file tabs, project wizard and settings keyboard workflows
+        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test-display --test-filter file_tabs_workflow --test-filter settings_keyboard_workflow --test-filter project_manager_keyboard_errors --test-filter project_manager_keyboard_workflow
+      - name: Compact native results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-workspace-menu-${{ matrix.runner }}
+          path: |
+            build/native/**/test-results/**/results.json
+            build/native/**/test-results/**/junit.xml
+          if-no-files-found: warn
+          retention-days: 14

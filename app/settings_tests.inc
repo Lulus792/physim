@@ -115,9 +115,24 @@ static void test_theme_frame(app *a, const char *mode, int *stage, int *code,
 /* No pointer input: traverse every settings group and check the save transaction. */
 static void test_settings_keyboard_frame(app *a,bool reading,int *stage,int *code,const char **capture) {
     bool ok=true;
+#ifdef __APPLE__
+    static double native_deadline;
+#endif
 #define SETTINGS_KEY(key) test_window_key_mod(a->window,key,0)
     switch((*stage)++) {
-    case 0: SDL_SetWindowSize(a->window,1080,740);SETTINGS_KEY(SDLK_F10);SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_RETURN);SETTINGS_KEY(SDLK_DOWN);SETTINGS_KEY(SDLK_RETURN);break;
+    case 0: SDL_SetWindowSize(a->window,1080,740);
+#ifdef __APPLE__
+        if(!native_test_keyboard_command(a,TOOLBAR_SETTINGS,stage,&ok))return;
+        native_deadline=ps_clock()+2;*stage=100;
+#else
+        SETTINGS_KEY(SDLK_F10);SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_RETURN);SETTINGS_KEY(SDLK_DOWN);SETTINGS_KEY(SDLK_RETURN);
+#endif
+        break;
+#ifdef __APPLE__
+    case 100:
+        if(a->tab!=6 && ps_clock()<native_deadline){--*stage;return;}
+        ok=a->tab==6;*stage=1;break;
+#endif
     case 1: ok=a->tab==6;SETTINGS_KEY(SDLK_TAB);break;
     case 2: ok=a->settings_keyboard && a->settings_focus==0;
         if(reading) {
@@ -135,10 +150,29 @@ static void test_settings_keyboard_frame(app *a,bool reading,int *stage,int *cod
     case 15: ok=a->settings_focus==0;SETTINGS_KEY(SDLK_TAB);break;
     case 16: ok=a->settings_focus==1;*capture="keyboard-settings-focus.bmp";SETTINGS_KEY(SDLK_RETURN);break;
     case 17: ok=a->tab!=6 && a->preferences.ui_size==22 && a->preferences.editor_size==20 && a->preferences.theme==PS_THEME_LIGHT && a->preferences.autosave_seconds==120;
-        SETTINGS_KEY(SDLK_F10);SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_RETURN);SETTINGS_KEY(SDLK_DOWN);SETTINGS_KEY(SDLK_RETURN);break;
+#ifdef __APPLE__
+        if(!native_test_keyboard_command(a,TOOLBAR_SETTINGS,stage,&ok))return;
+        native_deadline=ps_clock()+2;*stage=117;
+#else
+        SETTINGS_KEY(SDLK_F10);SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_RETURN);SETTINGS_KEY(SDLK_DOWN);SETTINGS_KEY(SDLK_RETURN);
+#endif
+        break;
+#ifdef __APPLE__
+    case 117:
+        if(a->tab!=6 && ps_clock()<native_deadline){--*stage;return;}
+        ok=a->tab==6;*stage=18;break;
+#endif
     case 18: SETTINGS_KEY(SDLK_TAB);SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_TAB);SETTINGS_KEY(SDLK_TAB);SETTINGS_KEY(SDLK_RETURN);break;
     case 19: ok=a->tab!=6 && a->preferences.ui_size==22;
+#ifdef __APPLE__
+        if(!native_test_keyboard_command(a,TOOLBAR_SETTINGS,stage,&ok))return;
+        native_deadline=ps_clock()+2;*stage=119;break;
+    case 119:
+        if(a->tab!=6 && ps_clock()<native_deadline){--*stage;return;}
+        ok=a->tab==6;
+#else
         SETTINGS_KEY(SDLK_F10);SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_RETURN);SETTINGS_KEY(SDLK_DOWN);SETTINGS_KEY(SDLK_RETURN);
+#endif
         for(int i=0;i<4;i++)SETTINGS_KEY(SDLK_TAB);SETTINGS_KEY(SDLK_SPACE);*stage=23;break;
     case 23: ok=a->settings_draft.ui_size==16 && a->settings_draft.editor_size==PS_PREFERENCES_DEFAULT.editor_size && a->settings_draft.theme==PS_THEME_DARK && a->preferences.ui_size==22;
         test_window_key_mod(a->window,SDLK_TAB,SDL_KMOD_SHIFT);SETTINGS_KEY(SDLK_RETURN);*stage=20;break;
