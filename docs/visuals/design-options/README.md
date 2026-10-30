@@ -1,5 +1,10 @@
 # Physim – getrennte Designvarianten
 
+**Neue getrennte Runde vom 30. Oktober 2026:**
+[Fortschritt und Abbruch A/B/C](../progress-options/index.html?variant=a&task=series).
+Auswahl offen; noch nicht ins fertige Design übernehmen. Bestehende Freigaben
+einschließlich Rückmeldungen A bleiben erhalten.
+
 **Weitere Freigabe vom 30. Oktober 2026:** Hinweise und Rückmeldungen sind im
 Design **A · Leiser Hinweis** gewählt. [Spezifikation](../feedback-options/APPROVED.md) ·
 [festgelegte Referenz](../feedback-options/index.html?approved=1&scenario=burst).

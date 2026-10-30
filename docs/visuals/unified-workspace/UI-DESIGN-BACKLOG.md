@@ -45,7 +45,8 @@ Umsetzungs-/Abnahmeanforderungen; keine erneute Entwurfswahl. Das bestätigt
 keine bereits abgeschlossene native Funktion. **D04 ist jetzt ebenfalls
 entschieden: [Einstellungen A · Kategorien](../settings-options/APPROVED.md).**
 **D05 ist ebenfalls entschieden: [Rückmeldungen A · Leiser Hinweis](../feedback-options/APPROVED.md).**
-D06/D07 bleiben noch zu entwerfen.
+**D06 hat separate [Fortschritts-/Abbruchvorschauen A/B/C](../progress-options/README.md);
+Auswahl offen.** D07 bleibt die nächste neue Entwurfsrunde.
 
 | ID / Prio | Was gestalten? | Benötigte Zustände und Ergebnis |
 | --- | --- | --- |
@@ -54,7 +55,7 @@ D06/D07 bleiben noch zu entwerfen.
 | D03 · P1 | **Autosave und Wiederherstellung · B2 gewählt** | Sicherung gefunden, mehrere betroffene Quellen, Original und Sicherung unterscheiden, Wiederherstellung/Abbruch/Fehler. B2 mit vorhandener [Autosave-Funktion](../../autosave.md) verbinden, kein neues Sicherungssystem voraussetzen. |
 | D04 · P1 | **Einstellungen · A gewählt** | Kategorien links, Optionen mittig, Live-Vorschau rechts; Suche, Vergleich, Übernehmen/Abbrechen/Standardwerte und Fehler. Theme, Schrift, Autosave, Sichtbarkeit, Größen und eigene Einheitenaufgabe nativ umsetzen; unabhängige Transaktionen und ADR-015-Fenster erhalten. Keine neue Variantenwahl. |
 | D05 · P1 | **Hinweise/Rückmeldungen · A gewählt** | Höchstens zwei kurze Karten, erreichbarer Verlauf, lokale Kopier-/Pfadfehler und dauerhafte Veraltet-Kennzeichnung; Gruppierung, Fokus und optionales Ausblenden. Mit echten Ereignissen aus Protokoll C nativ umsetzen, keine neue Variantenwahl. |
-| D06 · P1 | **Fortschritt und Abbruch über alle Bereiche** | Bauen, Projekt laden, Datei-/Laufvorschau, Analyse, Export; Fortschritt unbekannt, Abbrechen angefordert, fertig oder fehlgeschlagen. Vorhandene Läufe-A-Start-/Limitzustände erhalten und die übrigen Abläufe ergänzen. |
+| D06 · P1 | **Fortschritt/Abbruch · A/B/C zur Auswahl bereit** | Separate Aufgabenkarte, Aufgabenleiste und Begleitfenster-Vorschau für Bauen, Projektladen, Datei-/Laufvorschau, Analyse, Export und Serie. Bekannte Zähler/unbekannter Umfang, Abbruchanforderung/Bestätigung, Teilresultate/Fehler und nicht unterbrechbarer Abschluss interaktiv. Noch nicht als finales Design übernehmen. |
 | D07 · P1 | **Vollständige Kontextmenüs je Ziel** | Text, Tab, Ordner, Datei, Meldung, Diagramm, Szenenobjekt, Mehrfachauswahl und leere Fläche. A2/Menu-Bedienung ist entschieden; offen ist die vollständige Befehlsmatrix mit Verfügbarkeit und sinnvollen Gruppen. Nur vorhandene/gezielt beauftragte Befehle zeigen. |
 | D08 · P1 | **Editor-Suche und Ersetzen** | Keine Treffer, mehrere Dateien, aktive Fundstelle vs. A2-Auswahl, Ersetzen einzelner/aller Treffer, ungespeicherte Änderungen. Bestehende Suchfunktion einpassen; projektweite Suche separat als mögliche Erweiterung behandeln. |
 | D09 · P2 | **Vervollständigung und Hilfe direkt am Code** | Vorschlagsliste, Signatur, Parameter, Dokumentation, abgeschnittener Name, keine Treffer und Ladezustand. Vorhandene API-Vervollständigung/F1 nicht neu erfinden; Popup, Kontext und Fokus gemeinsam abgleichen. |
@@ -107,8 +108,8 @@ und verteilte Simulation für die erste Version aus.
 **D01–D03 sind mit B2 freigegeben** und gehören jetzt in die native Umsetzung.
 **D04 ist mit A freigegeben** und gehört ebenfalls in die native Umsetzung.
 **D05 ist mit A freigegeben** und gehört ebenfalls in die native Umsetzung.
-Als nächste neue Entwurfsrunde **D06/D07**: Fortschritt/Abbruch und die
-vollständige Kontextmenümatrix. Anschließend
+Für **D06** stehen die getrennten Fortschritts-/Abbruchvorschauen A/B/C zur Auswahl.
+Als nächste neue Entwurfsrunde **D07**: vollständige Kontextmenümatrix. Anschließend
 Explorer-/Szenen- und Auswertungsdetails anhand realer Inhalte ausarbeiten.
 
 Pro Thema liefern: Normalzustand, Leer-/Lade-/Fehler-/Abbruchzustand, Auswahl,

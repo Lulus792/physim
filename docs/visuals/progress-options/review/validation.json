@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-30T12:12:02.444Z",
+  "sourceCommit": "0d7732c72c0bbf6b4fa73443c0559a20db0934da",
+  "platform": "win32",
+  "browser": "156.0.4314.50",
+  "layouts": 156,
+  "checks": [
+    "156 layouts: all six tasks in three directions/themes at 1440/500px; seven additional series states and noninterruptible export completion; no horizontal page/workbench overflow",
+    "Every direction: real-count semantics vs unknown progress without percentage; request/ack cancellation retains completed runs; retry resets only new attempt; stale-reply fixture leaves state; notes and task survive direction/context changes and hide/Escape; focus restored; success wins cancellation race; queued removal; export completion disables cancellation; D05-A success dismissal leaves result",
+    "200% root text at 500px including long target and details in all variants; forced colors/reduced motion cancellation flow; 2× browser density"
+  ],
+  "errors": [],
+  "passed": true
+}

@@ -86,6 +86,14 @@
   Alle bisherigen Freigaben und native Arbeiten bleiben bestehen. Browserbelege
   sind keine native Abnahme. D06/D07 bleiben eigene offene Entwurfsrunden.
 
+## Getrennte Entwürfe: Fortschritt und Abbruch D06
+
+- Die [Fortschrittsvorschauen A/B/C](docs/visuals/progress-options/README.md)
+  vom 30. Oktober 2026 sind ausdrücklich getrennt und **noch nicht ausgewählt**.
+  Keine Variante als fertiges Design übernehmen, bevor der Nutzer entscheidet.
+  Alle bisherigen Freigaben, besonders Rückmeldungen A und Läufe/Serien A,
+  sowie die laufende native Arbeit erhalten. D07 bleibt die nächste neue Runde.
+
 ## Speicherpflege
 
 - Der Nutzer hat die F:-Nutzung am 25. Oktober 2026 widerrufen: Physim bleibt

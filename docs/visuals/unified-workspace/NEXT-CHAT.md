@@ -1,5 +1,15 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
+**Getrennte Entwürfe vom 30. Oktober 2026 – Fortschritt/Abbruch D06:**
+[A/B/C vergleichen](../progress-options/README.md). A platziert die Aufgabe beim
+Inhalt, B in einer kompakten Aufgabenleiste, C in einer Begleitfenster-Vorschau.
+Bekannte Zähler, unbekannter Umfang, Abbruch angefordert/bestätigt, fertige
+Teilresultate und nicht unterbrechbarer Exportabschluss sind dargestellt.
+**Nutzerwahl offen: noch keine Variante übernehmen.** Adapterfähigkeiten und
+wirkliche Abbruch-/Versionsverträge vor nativer Umsetzung abgleichen; keine
+erfundenen Prozentwerte oder Abbruchgarantien. Bisherige Freigaben und Arbeit
+erhalten. C zeigt kein echtes OS-Fenster; D07 bleibt die nächste neue Runde.
+
 **Verbindliche Freigabe vom 30. Oktober 2026 – Rückmeldungen A / D05:**
 Der Nutzer hat **A · Leiser Hinweis ins fertige Design übernommen**. Die
 vorherige Übernahmesperre ist aufgehoben; nativ mit umsetzen, keine neue
