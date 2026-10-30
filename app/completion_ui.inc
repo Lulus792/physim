@@ -3,7 +3,7 @@ static void completion_close(app *a) {
     a->completion_active=a->completion_accept_pending=false;a->completion_count=a->completion_selected=0;
 }
 static struct nk_text_edit *completion_target(app *a) {
-    if(a->document_pending || a->recovery || a->toolbar_keyboard || a->toolbar_menu || a->dialog_pending)return NULL;
+    if(a->document_pending || a->recovery || a->toolbar_keyboard || a->toolbar_menu)return NULL;
     if(a->loaded && a->tab==0)return a->analysis_only?&a->analysis:&a->experiment;
     if(a->loaded && a->tab==2 && a->analysis_tab==1)return &a->analysis;
     workspace_document *doc=active_document(a);

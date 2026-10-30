@@ -186,7 +186,9 @@ static void timeline_context_frame(app *a,int *stage,int *code,const char **capt
     bool ok=true;
     switch(*stage) {
     case 0:if(timeline_context_settle++<3)return;if(SDL_GetKeyboardFocus()!=a->window){SDL_RaiseWindow(a->window);return;}timeline_design_mouse(a,.5,true);break;
-    case 1:ok=a->timeline_dragging && a->timeline_browsing;*capture="timeline-context-before.png";snprintf(a->project_input,sizeof a->project_input,"%s",a->project);open_project(a);break;
+    case 1:
+        printf("TIMELINE CONTEXT BEFORE OPEN: native=%d dragging=%d browsing=%d count=%u\n",nk_sdl_accessibility_available(a->ui),a->timeline_dragging,a->timeline_browsing,ps_timeline_count(&a->timeline));
+        ok=a->timeline_dragging && a->timeline_browsing;*capture="timeline-context-before.png";snprintf(a->project_input,sizeof a->project_input,"%s",a->project);open_project(a);break;
     case 2:printf("TIMELINE CONTEXT AFTER OPEN: dragging=%d browsing=%d count=%u\n",a->timeline_dragging,a->timeline_browsing,ps_timeline_count(&a->timeline));test_window_key_mod(a->window,SDLK_ESCAPE,0);timeline_design_mouse(a,.5,false);break;
     case 3:
         ok=!a->timeline_dragging && !a->timeline_browsing && !a->timeline_playing && !ps_timeline_count(&a->timeline) && display_time(a)==0 &&

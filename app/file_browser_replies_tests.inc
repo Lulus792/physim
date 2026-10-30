@@ -14,7 +14,7 @@ static void browser_replies_test_frame(app *a,int *stage,int *code) {
     case 2:okay=a->manager_step==1;REPLY_MANAGER(1);manager_test_key(a,SDLK_RETURN,0);break;
     case 3:
         okay=browser_active(a) && d->mode==PS_DIALOG_MANAGER_PARENT;
-        if(okay){old=d->ticket;okay=ps_dialog_request_find(&a->dialog_requests,old)!=NULL;test_window_key_mod(a->window,SDLK_ESCAPE,0);}break;
+        if(okay){old=d->ticket;okay=ps_dialog_request_find(&a->dialog_requests,old)!=NULL;test_window_key_mod(browser_test_window(a),SDLK_ESCAPE,0);}break;
     case 4:okay=!browser_active(a) && !a->dialog_pending;manager_test_key(a,SDLK_ESCAPE,0);break;
     case 5:okay=!a->project_manager;open_project_manager(a,"Datei");break;
     case 6:REPLY_MANAGER(7);manager_test_key(a,SDLK_RETURN,0);break;
@@ -28,7 +28,7 @@ static void browser_replies_test_frame(app *a,int *stage,int *code) {
     case 11:
         okay=browser_active(a) && a->dialog_pending && !strcmp(a->manager_parent,target) &&
             ps_dialog_request_find(&a->dialog_requests,current) && !ps_dialog_request_find(&a->dialog_requests,old);
-        if(okay){REPLY_BROWSER(20);test_window_key_mod(a->window,SDLK_RETURN,0);}break;
+        if(okay){REPLY_BROWSER(20);test_window_key_mod(browser_test_window(a),SDLK_RETURN,0);}break;
     case 12:
         okay=!browser_active(a) && !a->dialog_pending && !strcmp(a->manager_parent,target) && !ps_dialog_requests_pending(&a->dialog_requests);
         printf("{\"kind\":\"dialog_reply_ownership\",\"route\":%u,\"retired_version\":%llu,\"current_version\":%llu,\"stale_reply_ignored\":%s}\n",current.route,(unsigned long long)old.version,(unsigned long long)current.version,okay?"true":"false");

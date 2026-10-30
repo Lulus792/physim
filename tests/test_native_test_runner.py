@@ -30,6 +30,7 @@ def verify_declared_design_platforms(source, runner):
     records = json.loads((source / 'tests/native_integration_cases.json').read_text(encoding='utf8'))['tests']
     indexed = {record['name']: record for record in records}
     assert all(indexed[name]['platforms'] == ['win32', 'linux'] for name in WINDOWS_LINUX_DESIGN_PROBES)
+    assert indexed['timeline_context_no_native_bridge']['platforms'] == ['linux']
     for platform in ('win32', 'linux', 'darwin'):
         with patch.object(sys, 'platform', platform):
             actual = {case.name for case in runner.catalog() if case.display and case.integration}
@@ -99,9 +100,11 @@ def verify_display_catalog(runner, display_checker):
         specialized_display["explorer_a_replies"]=("tests/check_dialog_replies.py",("--work",))
         specialized_display["protocol_separator"]=("tests/check_protocol_separator.py",("--work",))
         specialized_display["independent_project_window"]=("tests/check_project_window.py",("--work",))
+        specialized_display["independent_picker_windows"]=("tests/check_independent_picker_windows.py",("--work",))
         specialized_display["independent_graphic_window"]=("tests/check_independent_graphic_window.py",("--work",))
     if sys.platform == "linux":
         specialized_display.update({
+            "timeline_context_no_native_bridge": ("tests/check_timeline_context.py", ("--root", "--work", "--without-native-bridge")),
             "explorer_a_native_atspi": ("tests/check_explorer_native.py", ("--work",)),
             "explorer_a_inline_atspi": ("tests/check_explorer_native.py", ("--inline", "--work")),
             "explorer_a_preview_atspi": ("tests/check_explorer_native.py", ("--preview", "--work")),

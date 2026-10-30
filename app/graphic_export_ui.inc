@@ -13,18 +13,6 @@ typedef struct graphic_dialog {
     struct nk_rect bounds,paper,formats[2],fields[3],choices[3][4],copy,store,exit;
 } graphic_dialog;
 typedef struct {struct nk_input input;ps_ui_a11y_hook hook;bool held;} graphic_input_guard;
-static graphic_input_guard graphic_export_guard(app *a) {
-    graphic_input_guard guard={0};if(!browser_active(a))return guard;
-    guard.held=true;guard.input=a->ui->input;
-    ps_ui_font_layout *layout=a->ui->userdata.ptr;guard.hook=layout->accessibility;layout->accessibility=NULL;
-    memset(&a->ui->input,0,sizeof a->ui->input);a->ui->input.mouse.pos=nk_vec2(-10000,-10000);
-    return guard;
-}
-static void graphic_export_unguard(app *a,graphic_input_guard guard) {
-    if(!guard.held)return;
-    a->ui->input=guard.input;
-    ((ps_ui_font_layout *)a->ui->userdata.ptr)->accessibility=guard.hook;
-}
 static void graphic_export_close(app *a) {
     graphic_dialog *d=a->graphic_export;if(!d)return;
     bool return_focus=(SDL_GetWindowFlags(d->window)&SDL_WINDOW_INPUT_FOCUS) &&

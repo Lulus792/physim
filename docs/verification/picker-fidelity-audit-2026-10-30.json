@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-30",
+  "scope": "Read native Explorer A layout against the approved CSS; source findings only, no visual acceptance.",
+  "reference": "docs/visuals/design-options/options.css",
+  "native": "app/file_browser_ui.inc",
+  "findings": [
+    {
+      "area": "File names",
+      "reference": ".file-entry .file-name explicitly sets line-height:1.6.",
+      "native": "17.92 at 11.2 is correct for filenames. The earlier blanket suggestion to use inherited1.55 here was wrong.",
+      "next": "Preserve filename pitch; calculate normal row height from max(icon18, name height), border1 and padding11, plus margin-bottom2. A single-line row pitch is44, not43.92."
+    },
+    {
+      "area": "Headers and small metadata",
+      "reference": ".file-list-header and .file-entry small use .68rem and inherit body line-height1.55.",
+      "native": "15.232 is1.6 instead of14.756; list has extra8px side inset. Compact two-row layout omits its9px grid row gap.",
+      "next": "Measure and draw using the same header/metadata metrics; verify normal/compact column starts and wrapped row heights against CSS."
+    },
+    {
+      "area": "Grid cards",
+      "reference": "The HTML keeps file-list-header before file-grid above560px. Cards use flex column, padding20x12 (compact15x9), icon35 with bottom margin8, gap9, min-height150 and bottom margin2; grid padding12/gap9 or compact8/gap6.",
+      "native": "Header is omitted whenever grid is active; filename height+85 is an approximation, compact grid still uses normal padding/gap, and text is not centered as specified.",
+      "next": "Use measured flex content heights and shared card geometry. Check long filenames, both responsive grids, actual ink and list/grid switching."
+    },
+    {
+      "area": "Preview properties",
+      "reference": ".property-list>div sets .8rem; both dt and dd inherit1.55, with gap2 and row gap10.",
+      "native": "Labels use .68rem and values .75rem with differing pitches.",
+      "next": "Use .8rem/1.55 in both measurement and painting; retain full paths, scrolling, readonly text and actual actions."
+    },
+    {
+      "area": "Footer and API context",
+      "reference": "browser-footer is.73rem; dialog-footer>p is.75rem; code-context is.78rem and body/table inherit1.55. Signature pre uses.72rem/1.85.",
+      "native": "Several prose/footer/table roles and pitches differ. Signature1.85 is already correct.",
+      "next": "Correct each scoped role rather than changing all small fonts or all line heights. Keep existing signature and native editing/clipboard checks."
+    }
+  ],
+  "acceptance": "Open. Independent OS hosting and passing functional tests do not prove complete1:1 fidelity."
+}

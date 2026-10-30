@@ -164,20 +164,22 @@ struct nk_context *nk_sdl_init(SDL_Window *window, ps_graphics *graphics) {
     nk_buffer_init_default(&sdl->commands);
     sdl->accessibility=malloc(sizeof *sdl->accessibility);
     sdl->accessibility_mutex=SDL_CreateMutex();
-    if(sdl->accessibility && sdl->accessibility_mutex) {
-        ps_a11y_init(sdl->accessibility);ps_a11y_begin(sdl->accessibility);
-        sdl->accessibility_native=ps_a11y_native_create(window,sdl->accessibility,sdl->accessibility_mutex);
-    }
-    if(sdl->accessibility_native) {
-        sdl->font_layout.accessibility=accessibility_widget;
-        sdl->font_layout.accessibility_range=accessibility_range_widget;
-        sdl->font_layout.accessibility_full=accessibility_full_widget;
-        sdl->font_layout.accessibility_user=sdl;
-    } else {
-        free(sdl->accessibility);sdl->accessibility=NULL;
+    if(!sdl->accessibility || !sdl->accessibility_mutex) {
+        free(sdl->accessibility);
         if(sdl->accessibility_mutex)SDL_DestroyMutex(sdl->accessibility_mutex);
-        sdl->accessibility_mutex=NULL;
+        nk_buffer_free(&sdl->commands);nk_free(&sdl->ctx);free(sdl);
+        SDL_SetError("Cannot allocate the UI focus model");
+        return NULL;
     }
+    /* Ordinary pointer/keyboard controls use this model even when the optional
+     * OS accessibility exporter cannot connect (for example NO_AT_BRIDGE=1).
+     * A successful native bridge owns the mutex; otherwise this UI retains it. */
+    ps_a11y_init(sdl->accessibility);ps_a11y_begin(sdl->accessibility);
+    sdl->font_layout.accessibility=accessibility_widget;
+    sdl->font_layout.accessibility_range=accessibility_range_widget;
+    sdl->font_layout.accessibility_full=accessibility_full_widget;
+    sdl->font_layout.accessibility_user=sdl;
+    sdl->accessibility_native=ps_a11y_native_create(window,sdl->accessibility,sdl->accessibility_mutex);
     return &sdl->ctx;
 }
 bool nk_sdl_accessibility_available(struct nk_context *ctx) {
@@ -892,6 +894,7 @@ void nk_sdl_shutdown(struct nk_context *ctx) {
         return;
     struct nk_sdl *sdl = ctx->userdata.ptr;
     ps_a11y_native_destroy(sdl->accessibility_native);
+    if(!sdl->accessibility_native)SDL_DestroyMutex(sdl->accessibility_mutex);
     ps_a11y_destroy(sdl->accessibility);
     free(sdl->accessibility);
     font_additions_clear(sdl);

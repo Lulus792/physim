@@ -101,7 +101,7 @@ static ps_result workspace_state_save(app *a) {
     return r;
 }
 static bool workspace_restore_state(app *a, const ps_workspace_state *state) {
-    if (!state->root[0] || a->dialog_pending)
+    if (!state->root[0])
         return false;
     if (!open_workspace_path(a, state->root))
         return false;

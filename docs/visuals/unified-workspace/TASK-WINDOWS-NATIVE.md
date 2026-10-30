@@ -1,10 +1,11 @@
 # Eigenständige Aufgabenfenster: native Teilstände
 
 Stand: 30. Oktober 2026. [Nutzerauftrag und Vertrag](../../decisions/015-independent-task-windows.md).
-Grafikexport und Projektanlage B besitzen eigene Betriebssystemfenster. Die gesamte
+Grafikexport, Projektanlage B und Datei-/Ordnerwahl A besitzen eigene Betriebssystemfenster. Die gesamte
 angeforderte Dialogumstellung ist noch nicht abgeschlossen. Nachweise:
 [Grafikexport](../../verification/task-windows-2026-10-29.json) und
-[Projektanlage B](../../verification/project-task-window-2026-10-30.json).
+[Projektanlage B](../../verification/project-task-window-2026-10-30.json) sowie
+[Datei-/Ordnerwahl A](../../verification/picker-task-window-2026-10-30.json).
 
 ## Grafikexport
 
@@ -80,7 +81,7 @@ Die [Prüfaufzeichnung](../../verification/dialog-requests-2026-10-29.json)
 trennt Thread-/Lebenszeitprüfungen, tatsächliche B/A-Bedienabläufe und negative
 Gegenproben. Diese Zuordnung ist die Grundlage für mehrere unabhängige
 Auftraggeber. Der damalige Teilnachweis stellt die Fenster allein noch nicht um;
-Projektanlage B ist inzwischen im folgenden Schritt umgesetzt. Picker A bleibt offen.
+Projektanlage B und anschließend Picker A sind inzwischen in den folgenden Schritten umgesetzt.
 
 ## Projektanlage B
 
@@ -134,23 +135,64 @@ Der neue Fehlerprüffall verglich zunächst ein frisch geöffnetes Standardfenst
 740 px; der gezielte Nachlauf setzt dessen beabsichtigte Größe ausdrücklich.
 Die ursprünglichen Inhalts-, Erhaltungs- und Geometrieprüfungen bleiben bestehen.
 
-**A ist noch ein Overlay im Hauptfenster.** Während dieser Ordnerwahl bleibt dessen
-globale Sperre erhalten. B verwirft sein Kind und dessen Anfrageversion beim
-Schließen; eine verspätete Antwort darf kein neues Formular verändern.
-Eigene A-Fenster pro Auftraggeber sind der nächste Schritt. Physische Eingabe,
-echte Screenreader, weitere DPI-/Monitorzustände und macOS bleiben gesonderte Abnahme.
+Dieser eingefrorene B-Nachweis entstand noch mit A als Overlay. Der folgende
+A-Teilstand ersetzt diese damalige Einschränkung; der historische Nachweis bleibt erhalten.
+
+## Datei-/Ordnerwahl A
+
+Jeder Auswahlauftrag besitzt ein eigenes SDL-/OS-Fenster, eigene UI-/Grafikressourcen
+und einen eigenen Dateiarbeiter mit Navigation, Suchtext, Vorschau und Editzuständen.
+Die freie Dateienansicht im Hauptfenster besitzt einen separaten Kontext. Die
+globale Hauptfenstersperre während einer Auswahl entfällt. Zwei unabhängige
+Auswahlfenster können gleichzeitig geöffnet bleiben, etwa Hauptfenster und
+Zielordnerwahl aus B. Nur B wartet während seiner eigenen Unterwahl auf deren Ergebnis.
+
+Die Zuordnung verwendet weiterhin Auftrag und Anfragegeneration. Ein erneuter
+Aufruf aktiviert das vorhandene Fenster und erhält die Eingaben. Ein Hauptprojektwechsel
+verwirft nur seine eigenen Auswahlaufträge; der Zielordnerauftrag aus B bleibt erhalten.
+Schließen von B beendet nur dessen Unterwahl. Verspätete Antworten und veraltete
+Bestätigungen der eingebetteten Ansicht ändern kein inzwischen anderes Ziel.
+
+Fensteranlage und Freigabe erfolgen außerhalb des Zeichnens. Die Rückgabe prüft
+die noch existierende Auftraggeber-ID und überschreibt keinen fremden Tastaturfokus.
+Die Standard-Titelleiste kommt als OS-Rahmen hinzu; die freigegebene Komponente
+bleibt in der Clientfläche, maximal 1180 logische Pixel breit und bei breiteren
+Fenstern zentriert. Bei 560 logischen Pixeln greifen die kompakten Umbrüche;
+Orte, Kopf und lange Ordner-Auswahlaktion bleiben bei 320 Pixeln und 22-Pixel-Schrift erreichbar.
+
+Die tatsächlichen Windows-/Linux-Abläufe prüfen sechs Theme-/Größenzustände,
+verschiedene HWND-/X11-Handles, Navigation und tatsächliches Bearbeiten/Speichern
+im Hauptfenster bei zwei geöffneten Auswahlen. Ein herausgelöstes Protokollfenster
+nimmt währenddessen eigene Texteingabe an und kehrt beim Schließen zurück.
+Geprüft werden außerdem echte Hauptordnerübernahme, getrennte B-Rückgabe,
+Wiederaufruf, Schriftwechsel, schmale/breite Fenster, Quellschließen und Shutdown.
+Externe UIA-/AT-SPI-Clients prüfen die eigenen Auswahlfenster und die freie Dateienansicht.
+Die genaue Quell-/Laufzuordnung, Fehlversuche und Gegenproben stehen im A-Nachweis.
+
+Eine kompilierte Windows-Gegenvariante, die wieder Eingaben des Hauptfensters
+verschluckt, scheitert an der tatsächlichen Bereichsumschaltung in Schritt 10.
+Eine zweite Gegenvariante verschiebt nur den Orte-Text um 2,8 Pixel; derselbe
+unabhängige CSS-Prüfer weist die falsche Einrückung zurück. Beide unveränderten
+Kontrollprogramme bestehen die jeweils gleichen sechs Zustände.
+
+Der vollständige visuelle Abgleich von A bleibt offen: Dateizeilen, Metadaten,
+Fußtexte, Kachelfluss und API-Prosa/-Tabellen müssen noch mit den passenden
+CSS-Regeln abgeglichen werden. Insbesondere besitzt der Dateiname ausdrücklich
+1,6 Zeilenhöhe; andere Texte erben 1,55. Ein pauschaler Austausch wäre falsch.
+Dieser Fensterteilstand bestätigt daher keine vollständige 1:1-Umsetzung.
+Physische Eingabe, echte Screenreader, weitere DPI-/Monitorzustände und macOS
+bleiben gesonderte Abnahme.
 
 ## Noch umzusetzen und abzunehmen
 
 | Aufgabe | Stand |
 | --- | --- |
-| Neues Projekt B | Eigenes OS-Fenster und Windows-/Linux-Teilabnahme umgesetzt; die Unterwahl A bleibt offen. |
-| Datei-/Ordnerwahl A | Eigene Fenster pro Auftraggeber und Anfragegeneration, einschließlich Unteraufruf aus B. Späte Antworten dürfen kein anderes Ziel verändern. |
+| Neues Projekt B | Eigenes OS-Fenster und Windows-/Linux-Teilabnahme umgesetzt; Unterwahl A ebenfalls unabhängig. |
+| Datei-/Ordnerwahl A | Eigene Fenster pro Auftraggeber und Anfragegeneration umgesetzt, einschließlich Unteraufruf aus B; vollständiger Vorlagenabgleich bleibt offen. |
 | Workspace, Layouts, Kanaleinheiten, Laufdetails | Aufgabenoberflächen inventarisieren und ebenfalls unabhängig hosten. |
 | Bestätigungen, Wiederherstellung und weitere Dialoge | Fachaktion schützen, Hauptfenster nicht pauschal sperren; Schließen und veraltete Ziele gesondert prüfen. |
 | Plattform-/Assistive-Abnahme | Unabhängige native UIA-/AT-SPI-Aufgaben für das neue Exportfenster, echte Screenreader, weitere DPI-/Monitorzustände und macOS bleiben offen. |
 
-Die globale Modalität der Ordnerwahl A bleibt ausdrücklich noch offen.
 Diese offenen Punkte sind keine Behauptung technischer Unmöglichkeit. Die
 [freigegebene Markierung A2](../selection-options/APPROVED.md) und die
 [gesamte Referenzmatrix](NATIVE-FIDELITY.md) bleiben zusätzliche offene native Arbeit.

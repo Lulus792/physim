@@ -401,17 +401,20 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
                     memcmp(nk_str_get_const(&doc->edit.string), "λ", 2))
                     *code = 1;
             }
-            /* A blocked restore must preserve the current additions. */
-            a->dialog_pending = true;
-            restore_workspace(a);
-            a->dialog_pending = false;
-            if (a->workspace_addition_count != 2)
-                *code = 1;
+            /* Only an actual running job blocks restoration. A pending
+             * selection alone no longer freezes the application. */
+            ps_dialog_request *pending=NULL;
+            if(ps_dialog_request_begin(&a->dialog_requests,PS_DIALOG_OPEN_FOLDER,&pending)!=PS_OK)*code=1;
+            ps_dialog_ticket ticket=ps_dialog_request_ticket(pending);
+            a->dialog_pending=ps_dialog_requests_pending(&a->dialog_requests);
             a->job.running = true;
             restore_workspace(a);
             a->job.running = false;
-            if (a->workspace_addition_count != 2 || strcmp(a->workspace, a->last_workspace.root))
+            if (a->workspace_addition_count != 2 || strcmp(a->workspace, a->last_workspace.root) ||
+                !pending || ps_dialog_request_find(&a->dialog_requests,ticket)!=pending)
                 *code = 1;
+            ps_dialog_request_cancel(&a->dialog_requests,ticket);
+            a->dialog_pending=ps_dialog_requests_pending(&a->dialog_requests);
         }
         printf("WORKSPACE RESTART %s: %s\n", mode, *code ? "FAILED" : "PASSED");
         a->quitting = true;

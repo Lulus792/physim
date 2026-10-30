@@ -26,7 +26,7 @@ static void panel_pull_input(app *a,float width,float height) {
     struct nk_input *in=&a->ui->input;
     bool down=nk_input_is_mouse_down(in,NK_BUTTON_LEFT);
     bool pressed=nk_input_is_mouse_pressed(in,NK_BUTTON_LEFT);
-    if(a->toolbar_menu || a->dialog_pending || a->recovery || (a->ui->active && a->ui->active->popup.active && a->ui->active->popup.type!=NK_PANEL_TOOLTIP))return;
+    if(a->toolbar_menu || a->recovery || (a->ui->active && a->ui->active->popup.active && a->ui->active->popup.type!=NK_PANEL_TOOLTIP))return;
     if(!a->panel_pull && pressed && !a->dock_resize && !a->laboratory_resize) {
         for(unsigned i=0;i<PS_DOCK_NODES;i++)if(a->dock_splitters[i].w>0 && nk_input_is_mouse_hovering_rect(in,a->dock_splitters[i]))return;
         for(unsigned i=0;i<3;i++)if(a->laboratory_splitters[i].w>0 && nk_input_is_mouse_hovering_rect(in,a->laboratory_splitters[i]))return;
@@ -208,7 +208,6 @@ static bool panel_windows_render(app *a) {
         if(i<PS_DOCK_PANELS)p->tab=main_tab;
         a->window=p->window;a->graphics=p->graphics;a->ui=p->ui;a->tab=p->tab;a->panel_render=(int)i+1;
         int w,h;SDL_GetWindowSize(p->window,&w,&h);
-        graphic_input_guard export_guard=graphic_export_guard(a);
         ui_palette=workbench_visible(a) || analysis_visible(a)?ps_workbench_palette(palette):laboratory_visible(a)?ps_laboratory_palette(palette):palette;
         style(p->ui);nk_style_set_font(p->ui,workbench_visible(a) || analysis_visible(a)?&a->workbench_fonts[0]:laboratory_visible(a)?&a->workbench_fonts[2]:a->font_ui);
         nk_sdl_set_ui_size(p->ui,a->preferences.ui_size);
@@ -273,7 +272,6 @@ static bool panel_windows_render(app *a) {
             p->resize=a->laboratory_resize;p->resize_original=a->laboratory_resize_original;p->resize_cancelled=a->laboratory_resize_cancelled;
         }
         workspace_tip_frame_end(a);
-        graphic_export_unguard(a,export_guard);
         if(a->timeline_design_active && i==PS_PANEL_TIMELINE)timeline_design_draw(a);
         nk_sdl_update_TextInput(p->ui);
         memcpy(p->splitters,a->laboratory_splitters,sizeof p->splitters);

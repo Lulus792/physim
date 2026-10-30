@@ -95,7 +95,7 @@ static void workbench_context_view(app *a) {
 static bool workbench_context_key(app *a,struct nk_context *ui,const SDL_KeyboardEvent *key,bool detached) {
     if(!workbench_visible(a) || (key->key!=SDLK_PAGEUP && key->key!=SDLK_PAGEDOWN) ||
        (key->mod&(SDL_KMOD_CTRL|SDL_KMOD_GUI|SDL_KMOD_ALT|SDL_KMOD_SHIFT)) || a->toolbar_menu || a->toolbar_keyboard ||
-       a->dialog_pending || a->recovery || a->layout_manager || a->workspace_manager || a->channel_unit_manager || a->run_details_manager)return false;
+       a->recovery || a->layout_manager || a->workspace_manager || a->channel_unit_manager || a->run_details_manager)return false;
     if(!detached && (panel_is_detached(a,PS_DOCK_INSPECTOR) ||
        (!nk_sdl_accessibility_is_focused(ui,NULL,"Codekontext ein-/ausblenden") && !nk_sdl_accessibility_focus_in(ui,a->dock_panels[PS_DOCK_INSPECTOR]))))return false;
     struct nk_window *owner=nk_window_find(ui,dock_windows[PS_DOCK_INSPECTOR]);if(!owner)return false;

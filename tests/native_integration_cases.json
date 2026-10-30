@@ -7129,6 +7129,14 @@
       "steps": [{"program":"python","arguments":["{root}/tests/check_protocol_separator.py","--app","{physim}","--work","{work}"],"timeout":300,"files":["verification.json"]}]
     },
     {
+      "name": "independent_picker_windows",
+      "app": true,
+      "display": true,
+      "platforms": ["win32", "linux"],
+      "targets": ["python", "physim"],
+      "steps": [{"program":"python","arguments":["{root}/tests/check_independent_picker_windows.py","--app","{physim}","--work","{work}"],"timeout":600,"files":["verification.json"]}]
+    },
+    {
       "name": "explorer_a_replies",
       "app": true,
       "display": true,
@@ -14384,6 +14392,27 @@
             "app-steps.json",
             "validation.json"
           ]
+        }
+      ]
+    },
+    {
+      "name": "timeline_context_no_native_bridge",
+      "app": true,
+      "display": true,
+      "platforms": ["linux"],
+      "targets": ["python", "physim"],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_timeline_context.py",
+            "--app", "{physim}",
+            "--root", "{root}",
+            "--work", "{work}",
+            "--without-native-bridge"
+          ],
+          "timeout": 60,
+          "files": ["app-steps.json", "validation.json"]
         }
       ]
     },

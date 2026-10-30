@@ -50,11 +50,29 @@ for size in ('normal','large'):
     def probe(action,label,value=None,keep=True):
         cmd=[str(args.probe.resolve()),str(process.pid),action,label]
         if value is not None:cmd.append(value)
-        result=subprocess.run(cmd,capture_output=True,timeout=15)
+        result=subprocess.run(cmd,capture_output=True,timeout=15,env=dict(os.environ,PHYSIM_UIA_WINDOW_TITLE='' if args.inline or args.preview else 'Physim | Dateiauswahl'))
         observation=dict(action=action,label=label,exit_code=result.returncode,stdout=result.stdout.decode('utf8',errors='replace'),stderr=result.stderr.decode('utf8',errors='replace'))
         if value is not None:observation.update(argument_bytes=len(value.encode('utf8')),argument_sha256=digest(value))
         if keep:record['observations'].append(observation)
         return result.returncode==0,observation
+    def native_popup_present():
+        # Query the process's actual top-level HWNDs; failure to find the old
+        # UIA root after close is not equivalent to an absent child control.
+        import ctypes
+        from ctypes import wintypes
+        api=ctypes.WinDLL('user32',use_last_error=True);titles=[]
+        callback=ctypes.WINFUNCTYPE(wintypes.BOOL,wintypes.HWND,wintypes.LPARAM)
+        api.GetWindowThreadProcessId.argtypes=[wintypes.HWND,ctypes.POINTER(wintypes.DWORD)]
+        api.GetWindowTextW.argtypes=[wintypes.HWND,wintypes.LPWSTR,ctypes.c_int]
+        api.EnumWindows.argtypes=[callback,wintypes.LPARAM]
+        @callback
+        def collect(handle,_):
+            pid=wintypes.DWORD();api.GetWindowThreadProcessId(handle,ctypes.byref(pid))
+            if pid.value==process.pid:
+                text=ctypes.create_unicode_buffer(512);api.GetWindowTextW(handle,text,len(text));titles.append(text.value)
+            return True
+        assert api.EnumWindows(collect,0),'Native window enumeration failed'
+        return 'Physim | Dateiauswahl' in titles
     def read_value(value):
         if sys.platform=='linux':return named('Ort').queryText().getText(0,-1)==value
         path=work/'expected.txt';path.write_text(value,encoding='utf8')
@@ -71,6 +89,8 @@ for size in ('normal','large'):
         if accepted:wait(lambda:read_value(value),'full native value')
     try:
         wait(lambda:('EXPLORER PREVIEW READER READY' if args.preview else 'EXPLORER READER READY') in output(),'reader ready')
+        if sys.platform=='win32' and not args.inline and not args.preview:
+            assert native_popup_present();record['native_popup_present_before_action']=True
         if args.preview:
             source=app_work/'files/main.c';expected=source.read_text(encoding='utf8');raw_hash=digest(expected)
             if sys.platform=='linux':
@@ -114,7 +134,10 @@ for size in ('normal','large'):
             wait(lambda:named(close_name) is None,'browser left through native action')
         else:
             assert probe('invoke',close_name)[0]
-            wait(lambda:probe('absent',close_name,keep=False)[0],'browser left through native action')
+            if args.inline or args.preview:wait(lambda:probe('absent',close_name,keep=False)[0],'browser left through native action')
+            else:
+                wait(lambda:not native_popup_present(),'native picker window destroyed after UIA action')
+                record['native_popup_absent_after_action']=True
         (app_work/'explorer-reader-complete').write_text('native clients completed\n',encoding='utf8')
         code=process.wait(timeout=20)
         assert code==0 and ('EXPLORER PREVIEW READER SELF-TEST: PASSED' if args.preview else 'EXPLORER READER SELF-TEST: PASSED') in output()

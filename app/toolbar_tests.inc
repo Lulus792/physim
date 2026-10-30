@@ -52,14 +52,15 @@ static void toolbar_test_frame(app *a, int *stage, int *code, const char **captu
         test_mouse(a, a->navigation_bounds[1], false);
         break;
     case 10:
-        ok = a->tab == 1 && !a->project_manager;
+        ok = a->tab == 1 && a->project_manager;
         test_mouse(a, a->navigation_bounds[2], true);
         break;
     case 11:
         test_mouse(a, a->navigation_bounds[2], false);
         break;
     case 13:
-        ok = a->tab == 2;
+        ok = a->tab == 2 && a->project_manager;
+        manager_test_key(a,SDLK_ESCAPE,0);
         *stage = 60;
         break;
     case 60:

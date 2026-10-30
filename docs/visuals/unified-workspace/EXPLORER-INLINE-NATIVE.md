@@ -12,7 +12,8 @@ gemeinsame A-Komponente; die vorhandene Protokollfläche begrenzt ihre Unterkant
 
 Die freie Ansicht und der Auswahlpicker besitzen ausdrücklich getrennte Kontexte,
 wie in [ADR 014](../../decisions/014-inline-explorer-contexts.md) beschrieben.
-Ordnerwahl, Messlaufauswahl und der Unteraufruf aus Projektdialog B bleiben modal.
+Ordnerwahl, Messlaufauswahl und der Unteraufruf aus Projektdialog B besitzen seit
+30. Oktober [eigene unabhängige Aufgabenfenster](TASK-WINDOWS-NATIVE.md#datei-ordnerwahl-a).
 Sie verändern weder Suche, Ort, Auswahl und Vorschau des freien Explorers noch
 Inhalt, Cursor, Auswahl und Undo eines offenen Dokuments. Bereichswechsel erhalten
 die freie Navigation innerhalb der Sitzung. Die Orte-Verknüpfungen werden beim

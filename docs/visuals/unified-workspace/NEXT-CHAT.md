@@ -64,9 +64,10 @@ und der folgende Vertrag eigenständiger Aufgabenfenster bleiben erhalten.
 verlangt tatsächliche Fenster für Dialoge wie Projektanlage und Grafikexport,
 während Hauptfenster und herausgelöste Bereiche bedienbar bleiben. [ADR 015](../../decisions/015-independent-task-windows.md)
 und der [native Teilnachweis](TASK-WINDOWS-NATIVE.md) gelten zusätzlich. Grafikexport
-und Projektanlage B sind umgestellt und auf Windows/Linux geprüft; Picker A
-und weitere Aufgabenfenster sind noch umzusetzen. Während A bleibt die globale
-Hauptfenstersperre erhalten. Die bestehenden Gestaltungen
+und Projektanlage B sowie Picker A sind umgestellt und auf Windows/Linux in den
+genannten Teilumfängen geprüft. A besitzt getrennte Fenster pro Auftrag; Hauptfenster
+und herausgelöste Bereiche bleiben bedienbar. Weitere Aufgabenfenster und der
+vollständige Vorlagenabgleich bleiben offen. Die bestehenden Gestaltungen
 und die Freigaben unten bleiben erhalten.
 
 **Ergänzung vom 29. Oktober 2026 – Auswahl/Markierung:** Der Nutzer wünscht

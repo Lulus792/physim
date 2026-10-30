@@ -27,6 +27,10 @@ static bool browser_test_start(app *a,const char *root,const char *mode) {
     if(strstr(mode,"narrow"))SDL_SetWindowSize(a->window,1080,740);
     snprintf(browser_test_name,sizeof browser_test_name,"%s",a->manager_name);return true;
 }
+static SDL_Window *browser_test_window(app *a) {
+    return a->browser && a->browser->visible && a->browser->window?a->browser->window:a->window;
+}
+static void browser_test_mouse(app *a,struct nk_rect rect,bool down) {test_window_mouse(browser_test_window(a),rect,down);}
 static struct nk_rect browser_test_row(app *a,const char *name) {
     browser_dialog *d=a->browser;if(d)for(unsigned k=0;k<d->row_count;k++)
         if(!strcmp(ps_browser_entry_name(&d->listing.entries[d->rows[k].index]),name))return d->rows[k].bounds;
@@ -34,16 +38,16 @@ static struct nk_rect browser_test_row(app *a,const char *name) {
 }
 static bool browser_test_focus(app *a,int id) {
     browser_dialog *d=a->browser;if(d && d->focus==id && d->keyboard && !d->reveal)return true;
-    test_window_key_mod(a->window,SDLK_TAB,0);return false;
+    test_window_key_mod(browser_test_window(a),SDLK_TAB,0);return false;
 }
 static void browser_test_type(app *a,const char *text) {
-    test_window_key_mod(a->window,SDLK_A,PS_UI_COMMAND_MOD);SDL_Event event={0};event.type=SDL_EVENT_TEXT_INPUT;
-    event.text.windowID=SDL_GetWindowID(a->window);event.text.text=text;SDL_PushEvent(&event);
+    test_window_key_mod(browser_test_window(a),SDLK_A,PS_UI_COMMAND_MOD);SDL_Event event={0};event.type=SDL_EVENT_TEXT_INPUT;
+    event.text.windowID=SDL_GetWindowID(browser_test_window(a));event.text.text=text;SDL_PushEvent(&event);
 }
 static void browser_reader_frame(app *a,bool embedded,int *stage,int *code) {
     if(*stage==0){SDL_SetWindowSize(a->window,1080,740);if(embedded)toolbar_dispatch(a,TOOLBAR_BROWSE);else choose_workspace_path(a,PS_DIALOG_BROWSE);(*stage)++;return;}
     browser_dialog *d=embedded?a->browser_workspace:a->browser;if(!d || browser_busy(d) || d->cache_dirty)return;
-    if(*stage==1){test_window_key_mod(a->window,SDLK_L,PS_UI_COMMAND_MOD);(*stage)++;return;}
+    if(*stage==1){test_window_key_mod(browser_test_window(a),SDLK_L,PS_UI_COMMAND_MOD);(*stage)++;return;}
     if(*stage==2){if(!d->path_edit || d->reveal)return;puts("EXPLORER READER READY");fflush(stdout);(*stage)++;return;}
     char marker[4096];join(marker,sizeof marker,browser_test_root,"../explorer-reader-complete");
     if(!exists(marker))return;
@@ -66,7 +70,9 @@ static bool browser_clipboard_text_equal(const char *source,const char *copy) {
 #include "file_browser_inline_tests.inc"
 #include "file_browser_api_tests.inc"
 #include "file_browser_replies_tests.inc"
+#include "file_browser_window_tests.inc"
 static void browser_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(strstr(mode,"windows")){browser_window_test_frame(a,mode,stage,code);return;}
     if(strstr(mode,"replies")){browser_replies_test_frame(a,stage,code);return;}
     if(strstr(mode,"api-context")){browser_api_test_frame(a,mode,stage,code,capture);return;}
     if(strstr(mode,"preview-")){browser_preview_test_frame(a,mode,stage,code,capture);return;}
@@ -79,18 +85,25 @@ static void browser_test_frame(app *a,const char *mode,int *stage,int *code,cons
     case 0:choose_workspace_path(a,PS_DIALOG_BROWSE);break;
     case 1:
         ok=browser_active(a) && a->dialog_pending && !a->workspace_open && !a->document_count && d->count==6;
+        int native_w,native_h;SDL_GetWindowSize(d->window,&native_w,&native_h);
+        ok &= browser_test_native_distinct(d->window,a->window) && d->ui!=a->ui && d->graphics!=a->graphics;
+        printf("{\"kind\":\"explorer_native_client\",\"window\":[%d,%d],\"distinct\":%s}\n",native_w,native_h,ok?"true":"false");
         printf("{\"kind\":\"explorer_a\",\"passed\":%s,\"scale\":%.4f,\"modal\":[%.4f,%.4f,%.4f,%.4f],\"list\":[%.4f,%.4f,%.4f,%.4f],\"preview\":[%.4f,%.4f,%.4f,%.4f],\"row_pitch\":%.4f,\"fonts\":[",
             ok?"true":"false",f,d->bounds.x,d->bounds.y,d->bounds.w,d->bounds.h,d->list_bounds.x,d->list_bounds.y,d->list_bounds.w,d->list_bounds.h,d->preview_bounds.x,d->preview_bounds.y,d->preview_bounds.w,d->preview_bounds.h,d->tops[1]);
         for(unsigned k=0;k<8;k++){bool strong=k==1 || k==5,mono=k==6;float em=mono?a->workbench_code_em:strong?a->workbench_bold_em:a->workbench_regular_em;printf("%s%.4f",k?",":"",d->fonts[k].height/(em*f));}printf("]}\n");
         for(unsigned k=0;k<3;k++){struct nk_rect ink=d->place_ink[k],r=d->controls[8+k];
             ok &= d->place_bytes[k]==strlen(d->place_names[k]) && ink.x>=r.x && ink.x+ink.w<=r.x+r.w+.05f && ink.y>=r.y && ink.y+ink.h<=r.y+r.h+.05f;
             if(k)ok &= r.y>=d->controls[7+k].y+d->controls[7+k].h;}
-        ok &= browser_test_row(a,"main.c").h>0;test_mouse(a,browser_test_row(a,"main.c"),true);break;
-    case 2:test_mouse(a,browser_test_row(a,"main.c"),false);break;
+        printf("{\"kind\":\"explorer_places\",\"font_height\":%.4f,\"items\":[",d->fonts[3].height);
+        for(unsigned k=0;k<3;k++){struct nk_rect b=d->controls[8+k],ink=d->place_ink[k];
+            printf("%s{\"button\":[%.4f,%.4f,%.4f,%.4f],\"ink\":[%.4f,%.4f,%.4f,%.4f]}",k?",":"",b.x,b.y,b.w,b.h,ink.x,ink.y,ink.w,ink.h);}
+        puts("]}");
+        ok &= browser_test_row(a,"main.c").h>0;browser_test_mouse(a,browser_test_row(a,"main.c"),true);break;
+    case 2:browser_test_mouse(a,browser_test_row(a,"main.c"),false);break;
     case 3:{static unsigned copy_stage;static char *clipboard;static Uint64 copy_started;
         ok=d->selected>=0 && d->preview.text && strstr(d->preview.text,"sample_value = 7") && !a->document_count && !a->workspace_open;
-        if(!copy_stage){BROWSER_FOCUS(12);clipboard=SDL_GetClipboardText();test_window_key_mod(a->window,SDLK_A,PS_UI_COMMAND_MOD);copy_stage++;return;}
-        if(copy_stage==1){test_window_key_mod(a->window,SDLK_C,PS_UI_COMMAND_MOD);copy_started=SDL_GetTicks();copy_stage++;return;}
+        if(!copy_stage){BROWSER_FOCUS(12);clipboard=SDL_GetClipboardText();test_window_key_mod(browser_test_window(a),SDLK_A,PS_UI_COMMAND_MOD);copy_stage++;return;}
+        if(copy_stage==1){test_window_key_mod(browser_test_window(a),SDLK_C,PS_UI_COMMAND_MOD);copy_started=SDL_GetTicks();copy_stage++;return;}
         char *copied=SDL_GetClipboardText();bool equal=browser_clipboard_text_equal(d->preview.text,copied);
         if(!equal && SDL_GetTicks()-copy_started<1500){SDL_free(copied);return;}
         fprintf(stderr,"EXPLORER COPY: equal=%d bytes=%zu expected=%zu active=%d selection=%d/%d host=%d\n",equal,copied?strlen(copied):0,d->preview.length,d->edits[3].active,d->edits[3].select_start,d->edits[3].select_end,SDL_GetKeyboardFocus()==a->window);
@@ -98,36 +111,36 @@ static void browser_test_frame(app *a,const char *mode,int *stage,int *code,cons
         if(clipboard){SDL_SetClipboardText(clipboard);SDL_free(clipboard);clipboard=NULL;}copy_stage=0;
         if(!strcmp(mode,"explorer-a-dark") || !strcmp(mode,"explorer-a-large"))*capture="explorer-a.png";
         break;}
-    case 4:BROWSER_FOCUS(7);test_window_key_mod(a->window,SDLK_SPACE,0);break;
-    case 5:ok=d->grid;BROWSER_FOCUS(6);test_window_key_mod(a->window,SDLK_SPACE,0);break;
-    case 6:ok=!d->grid;test_window_key_mod(a->window,SDLK_F,PS_UI_COMMAND_MOD);break;
-    case 7:browser_test_type(a,"main");test_window_key_mod(a->window,SDLK_TAB,0);break;
-    case 8:ok=!strcmp(d->query,"main") && d->count==1;test_window_key_mod(a->window,SDLK_F,PS_UI_COMMAND_MOD);break;
+    case 4:BROWSER_FOCUS(7);test_window_key_mod(browser_test_window(a),SDLK_SPACE,0);break;
+    case 5:ok=d->grid;BROWSER_FOCUS(6);test_window_key_mod(browser_test_window(a),SDLK_SPACE,0);break;
+    case 6:ok=!d->grid;test_window_key_mod(browser_test_window(a),SDLK_F,PS_UI_COMMAND_MOD);break;
+    case 7:browser_test_type(a,"main");test_window_key_mod(browser_test_window(a),SDLK_TAB,0);break;
+    case 8:ok=!strcmp(d->query,"main") && d->count==1;test_window_key_mod(browser_test_window(a),SDLK_F,PS_UI_COMMAND_MOD);break;
     case 9:{static bool selected_all;
         /* An empty text-input event does not delete a selection. Perform the
          * real select-all and Delete gestures in successive input frames. */
-        if(!selected_all){test_window_key_mod(a->window,SDLK_A,PS_UI_COMMAND_MOD);selected_all=true;return;}
-        test_window_key_mod(a->window,SDLK_DELETE,0);test_window_key_mod(a->window,SDLK_TAB,0);selected_all=false;break;}
-    case 10:ok=d->count==6;BROWSER_FOCUS(15);test_window_key_mod(a->window,SDLK_SPACE,0);break;
-    case 11:ok=d->create;BROWSER_FOCUS(16);browser_test_type(a,"Neu λ");test_window_key_mod(a->window,SDLK_TAB,0);break;
-    case 12:BROWSER_FOCUS(17);test_window_key_mod(a->window,SDLK_RETURN,0);break;
-    case 13:ok=!d->create && d->count==7;test_window_key_mod(a->window,SDLK_L,PS_UI_COMMAND_MOD);break;
-    case 14:{static char missing[4096];snprintf(missing,sizeof missing,"%s/missing",browser_test_root);browser_test_type(a,missing);test_window_key_mod(a->window,SDLK_RETURN,0);break;}
-    case 15:ok=d->failed && !a->workspace_open && !a->document_count;BROWSER_FOCUS(1);test_window_key_mod(a->window,SDLK_RETURN,0);break;
-    case 16:ok=!d->failed && d->count==7;test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
+        if(!selected_all){test_window_key_mod(browser_test_window(a),SDLK_A,PS_UI_COMMAND_MOD);selected_all=true;return;}
+        test_window_key_mod(browser_test_window(a),SDLK_DELETE,0);test_window_key_mod(browser_test_window(a),SDLK_TAB,0);selected_all=false;break;}
+    case 10:ok=d->count==6;BROWSER_FOCUS(15);test_window_key_mod(browser_test_window(a),SDLK_SPACE,0);break;
+    case 11:ok=d->create;BROWSER_FOCUS(16);browser_test_type(a,"Neu λ");test_window_key_mod(browser_test_window(a),SDLK_TAB,0);break;
+    case 12:BROWSER_FOCUS(17);test_window_key_mod(browser_test_window(a),SDLK_RETURN,0);break;
+    case 13:ok=!d->create && d->count==7;test_window_key_mod(browser_test_window(a),SDLK_L,PS_UI_COMMAND_MOD);break;
+    case 14:{static char missing[4096];snprintf(missing,sizeof missing,"%s/missing",browser_test_root);browser_test_type(a,missing);test_window_key_mod(browser_test_window(a),SDLK_RETURN,0);break;}
+    case 15:ok=d->failed && !a->workspace_open && !a->document_count;BROWSER_FOCUS(1);test_window_key_mod(browser_test_window(a),SDLK_RETURN,0);break;
+    case 16:ok=!d->failed && d->count==7;test_window_key_mod(browser_test_window(a),SDLK_ESCAPE,0);break;
     case 17:ok=!browser_active(a) && !a->dialog_pending;open_project_manager(a,"Datei");break;
     case 18:if(!manager_test_focus(a,7))return;manager_test_key(a,SDLK_RETURN,0);break;
     case 19:ok=a->manager_step==1;if(!manager_test_focus(a,1))return;manager_test_key(a,SDLK_RETURN,0);break;
     case 20:ok=browser_active(a) && a->project_manager && d->mode==PS_DIALOG_MANAGER_PARENT && d->filter==PS_BROWSER_FOLDERS && d->count==3;
-        ok &= browser_test_row(a,"runs").h>0;test_mouse(a,browser_test_row(a,"runs"),true);break;
-    case 21:test_mouse(a,browser_test_row(a,"runs"),false);break;
-    case 22:BROWSER_FOCUS(20);test_window_key_mod(a->window,SDLK_RETURN,0);break;
+        ok &= browser_test_row(a,"runs").h>0;browser_test_mouse(a,browser_test_row(a,"runs"),true);break;
+    case 21:browser_test_mouse(a,browser_test_row(a,"runs"),false);break;
+    case 22:BROWSER_FOCUS(20);test_window_key_mod(browser_test_window(a),SDLK_RETURN,0);break;
     case 23:{char path[4096];ps_browser_child(browser_test_root,"runs",path);ok=!browser_active(a) && !a->dialog_pending && a->project_manager && a->manager_step==1 && !strcmp(a->manager_parent,path) && !strcmp(a->manager_name,browser_test_name);manager_test_key(a,SDLK_ESCAPE,0);break;}
     case 24:ok=!a->project_manager;choose_workspace_path(a,PS_DIALOG_BROWSE);break;
-    case 25:test_window_key_mod(a->window,SDLK_UP,SDL_KMOD_ALT);break;
-    case 26:ok=d->count==7 && browser_test_row(a,"main.c").h>0;test_mouse(a,browser_test_row(a,"main.c"),true);break;
-    case 27:test_mouse(a,browser_test_row(a,"main.c"),false);break;
-    case 28:BROWSER_FOCUS(20);test_window_key_mod(a->window,SDLK_RETURN,0);break;
+    case 25:test_window_key_mod(browser_test_window(a),SDLK_UP,SDL_KMOD_ALT);break;
+    case 26:ok=d->count==7 && browser_test_row(a,"main.c").h>0;browser_test_mouse(a,browser_test_row(a,"main.c"),true);break;
+    case 27:browser_test_mouse(a,browser_test_row(a,"main.c"),false);break;
+    case 28:BROWSER_FOCUS(20);test_window_key_mod(browser_test_window(a),SDLK_RETURN,0);break;
     case 29:ok=!browser_active(a) && !a->dialog_pending && a->document_count==1 && !a->workspace_open && !a->loaded && active_document(a)!=NULL;
         printf("EXPLORER A SELF-TEST: %s\n",ok?"PASSED":"FAILED");a->quitting=true;break;
     }

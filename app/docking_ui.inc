@@ -148,7 +148,7 @@ static void dock_resize_abort(app *a) {
     a->dock_resize_transaction=false;a->dock_resize=a->dock_float_resize=0;SDL_CaptureMouse(false);
 }
 static bool dock_resize_key(app *a,const SDL_KeyboardEvent *key) {
-    if(key->mod&(SDL_KMOD_CTRL|SDL_KMOD_GUI|SDL_KMOD_ALT) || a->recovery || a->dialog_pending || a->toolbar_menu)return false;
+    if(key->mod&(SDL_KMOD_CTRL|SDL_KMOD_GUI|SDL_KMOD_ALT) || a->recovery || a->toolbar_menu)return false;
     if(key->key==SDLK_ESCAPE && (a->dock_resize || a->dock_float_resize || a->dock_resize_transaction)) {
         dock_resize_abort(a);return true;
     }
@@ -303,7 +303,7 @@ static void dock_input(app *a,unsigned panel,struct nk_rect r,struct nk_window *
     bool enabled=mouse || (body && previous==window && !covered && !popup);
     bool plot_capture=analysis_visible(a) && a->analysis_plot_resizing;
     if(plot_capture)enabled=body && panel==PS_DOCK_WORKSPACE && (!panel_is_detached(a,panel) || a->panel_render) && !covered && !popup;
-    if(a->panel_render && (a->recovery || a->dialog_pending || a->layout_manager || a->channel_unit_manager || a->workspace_manager || a->run_details_manager))enabled=false;
+    if(a->panel_render && (a->recovery || a->layout_manager || a->channel_unit_manager || a->workspace_manager || a->run_details_manager))enabled=false;
     if(a->panel_pull_dragging || a->dock_dragging || a->file_tab_dragging || a->dock_resize || a->dock_float_resize || a->protocol_view.resize)enabled=false;
     /* Background windows otherwise activate even outside their bounds and consume
      * the wheel in nk_end. Keep keyboard focus and route mouse input by stacking. */
@@ -312,7 +312,7 @@ static void dock_input(app *a,unsigned panel,struct nk_rect r,struct nk_window *
     else { window->flags |= NK_WINDOW_ROM;window->layout->flags |= NK_WINDOW_ROM; }
     window->layout->has_scrolling=mouse && !plot_capture && !a->dock_resize && !a->dock_float_resize;
     ps_ui_accessibility_route(ui,!covered && !popup && !a->dock_resize && !a->dock_float_resize &&
-        (!a->panel_render || !(a->recovery || a->dialog_pending || a->layout_manager || a->channel_unit_manager || a->workspace_manager || a->run_details_manager)));
+        (!a->panel_render || !(a->recovery || a->layout_manager || a->channel_unit_manager || a->workspace_manager || a->run_details_manager)));
 }
 static bool dock_begin(app *a,unsigned panel) {
     struct nk_rect r=a->dock_panels[panel];float heading=dock_panel_header_height(a,panel);r.y+=heading;r.h=fmaxf(1,r.h-heading);

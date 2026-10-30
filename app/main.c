@@ -346,7 +346,9 @@ typedef struct {
         bool visible,scrollable,input_held,dismissed;
     } workspace_tip;
     bool workspace_open, project_manager, dialog_pending, native_dialog_legacy_test;
-    struct browser_dialog *browser,*browser_workspace;
+    /* browser is the last-invoked alias for existing capture/gesture fixtures.
+     * Production ownership and event dispatch use the independent route slots. */
+    struct browser_dialog *browser,*browser_workspace,*browser_popups[PS_DIALOG_REQUEST_ROUTES];
     ps_workspace_state last_workspace;
     char workspace_state_path[4096], workspace_state_error[192];
     bool workspace_state_writable;
@@ -779,6 +781,7 @@ enum { PS_DIALOG_OPEN_FOLDER = 1, PS_DIALOG_ADD_FILE, PS_DIALOG_ADD_FOLDER,
 static void choose_workspace_path(app *a, int mode);
 static void choose_workspace_path_from(app *a,int mode,const char *opener);
 static bool browser_active(const app *a);
+static bool browser_raise(app *a,int mode);
 static bool browser_workspace_visible(const app *a);
 static bool browser_workspace_open(app *a);
 static bool browser_open(app *a,int mode,ps_dialog_ticket ticket);
@@ -2909,7 +2912,7 @@ static void plot(app *a,const double *times,const double *values,int count,float
     plot_draw(a,times,values,count,height,label,scatter,view,NULL);
 }
 static struct nk_text_edit *editor_search_target(app *a) {
-    if(a->recovery || a->document_pending || a->dialog_pending ||
+    if(a->recovery || a->document_pending ||
        a->layout_manager || a->workspace_manager || a->channel_unit_manager || a->run_details_manager) return NULL;
     workspace_document *doc=active_document(a);
     if(a->tab==8 && doc) return doc->recovery?NULL:&doc->edit;
@@ -3543,7 +3546,9 @@ static void browser_complete(app *a,ps_dialog_ticket ticket,const char *path) {
     if(request)ps_dialog_request_complete(request,path,false);
 }
 static void choose_workspace_path(app *a, int mode) {
-    if(a->dialog_pending || mode<PS_DIALOG_OPEN_FOLDER || mode>PS_DIALOG_BROWSE)return;
+    if(mode<PS_DIALOG_OPEN_FOLDER || mode>PS_DIALOG_BROWSE)return;
+    if(browser_raise(a,mode))return;
+    if(a->native_dialog_legacy_test && a->dialog_requests.pending[mode])return;
     ps_dialog_request *request=NULL;
     if(ps_dialog_request_begin(&a->dialog_requests,(unsigned)mode,&request)!=PS_OK){status(a,"Dateiauswahl konnte nicht vorbereitet werden.");return;}
     if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"DIALOG BEGIN: route=%u version=%llu\n",(unsigned)mode,(unsigned long long)ps_dialog_request_ticket(request).version);
@@ -3557,7 +3562,6 @@ static void choose_workspace_path(app *a, int mode) {
     else if(!a->native_dialog_legacy_test) {
         ps_dialog_ticket ticket=ps_dialog_request_ticket(request);
         if(!browser_open(a,mode,ticket)){ps_dialog_request_cancel(&a->dialog_requests,ticket);a->dialog_pending=ps_dialog_requests_pending(&a->dialog_requests);status(a,"Dateiauswahl konnte nicht geöffnet werden.");}
-        else if(mode==PS_DIALOG_MANAGER_PARENT)SDL_RaiseWindow(a->window);
     }
     else if(mode==PS_DIALOG_IMPORT_RUN) {
         static const SDL_DialogFileFilter filters[]={{"Physim-Messlauf","psrun"}};
@@ -3569,13 +3573,13 @@ static void choose_workspace_path(app *a, int mode) {
     else {
         const char *location = mode == PS_DIALOG_MANAGER_PARENT ? a->manager_parent
                                : a->workspace_open ? a->workspace : NULL;
-        SDL_ShowOpenFolderDialog(workspace_dialog_callback,ps_dialog_request_retain(request),a->window,
+        SDL_ShowOpenFolderDialog(workspace_dialog_callback,ps_dialog_request_retain(request),mode==PS_DIALOG_MANAGER_PARENT?a->manager_window:a->window,
                                  location, false);
     }
 }
 static void choose_workspace_path_from(app *a,int mode,const char *opener) {
-    bool pending=a->dialog_pending;choose_workspace_path(a,mode);
-    if(!pending && browser_active(a))snprintf(a->browser->return_label,sizeof a->browser->return_label,"%s",opener);
+    choose_workspace_path(a,mode);browser_dialog *d=mode>0 && mode<PS_DIALOG_REQUEST_ROUTES?a->browser_popups[mode]:NULL;
+    if(d && d->visible)snprintf(d->return_label,sizeof d->return_label,"%s",opener);
 }
 static void add_workspace_path(app *a, const char *path) {
     SDL_PathInfo info;
@@ -4320,6 +4324,7 @@ int main(int argc, char **argv) {
          * picker and its owner's fields must observe the same transaction. */
         workspace_dialog_tick(a);
         nk_input_begin(a->ui);
+        browser_input(a,true);
         if(a->manager_ui)nk_input_begin(a->manager_ui);
         if(a->graphic_export)nk_input_begin(a->graphic_export->ui);
         if (a->doc_ui)
@@ -4477,6 +4482,7 @@ int main(int argc, char **argv) {
             nk_sdl_handle_event(a->ui, &e);
         }
         nk_input_end(a->ui);
+        browser_input(a,false);
         if(a->manager_ui)nk_input_end(a->manager_ui);
         if(a->graphic_export)nk_input_end(a->graphic_export->ui);
         if (a->doc_ui)
@@ -5641,7 +5647,8 @@ int main(int argc, char **argv) {
             join(path, sizeof path, workspace_state_test ? argv[2] : a->project, capture);
             bool graphic_capture=a->graphic_export && (plot_test || !strcmp(capture,"comparison-export.png"));
             if(graphic_capture)SDL_strlcpy(a->graphic_export->capture,path,sizeof a->graphic_export->capture);
-            else if(a->project_manager && a->manager_ui && !browser_active(a))SDL_strlcpy(a->manager_capture,path,sizeof a->manager_capture);
+            else if(a->browser && a->browser->visible && a->browser->ui)SDL_strlcpy(a->browser->capture,path,sizeof a->browser->capture);
+            else if(a->project_manager && a->manager_ui)SDL_strlcpy(a->manager_capture,path,sizeof a->manager_capture);
             else {
             if(plot_test && SDL_getenv("PHYSIM_TEST_GRAPHIC_DIALOG")) {
                 /* One paired BMP/PNG proves identical readback; the remaining
@@ -5673,6 +5680,7 @@ int main(int argc, char **argv) {
         if(!panel_windows_render(a)){fprintf(stderr,"Panel rendering: %s\n",SDL_GetError());exit_code=1;a->quitting=true;}
         panel_requests(a);
         if(!project_manager_window_render(a)){fprintf(stderr,"Project window: %s\n",SDL_GetError());exit_code=1;a->quitting=true;}
+        if(!browser_windows_render(a)){fprintf(stderr,"File browser window: %s\n",SDL_GetError());exit_code=1;a->quitting=true;}
         if(!graphic_export_window_render(a)){fprintf(stderr,"Graphic export window: %s\n",SDL_GetError());exit_code=1;a->quitting=true;}
         if (doc_capture)
             join(doc_capture_path, sizeof doc_capture_path, a->project, capture);

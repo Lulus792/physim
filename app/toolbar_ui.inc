@@ -32,7 +32,7 @@ static int toolbar_next_top(int current,int direction) {
 }
 /* Shared action availability for mouse, keyboard and drawing. */
 static unsigned toolbar_entries(app *a, int menu, toolbar_entry entries[9]) {
-    bool choose = !a->dialog_pending && idle(a) && !a->library_thread && !a->recovery;
+    bool choose = idle(a) && !a->library_thread && !a->recovery;
     if(menu == 1) {
         toolbar_entry file[] = {
             {"Ordner öffnen …",TOOLBAR_OPEN,choose},
@@ -40,7 +40,7 @@ static unsigned toolbar_entries(app *a, int menu, toolbar_entry entries[9]) {
             {"Ordner hinzufügen …",TOOLBAR_ADD_FOLDER,choose && a->workspace_open},
             {"Neues Projekt …",TOOLBAR_NEW,choose},
             {"Speichern\t" PS_UI_SHORTCUT "S",TOOLBAR_SAVE,(a->loaded || a->document_count) && idle(a)},
-            {"Workspaces …",TOOLBAR_WORKSPACES,!a->dialog_pending},
+            {"Workspaces …",TOOLBAR_WORKSPACES,true},
             {"Aktive Datei neu laden",TOOLBAR_RELOAD,a->tab==8 && active_document(a) && !active_document(a)->recovery},
             {"Dateien …",TOOLBAR_BROWSE,choose}
         };

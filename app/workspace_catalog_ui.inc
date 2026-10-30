@@ -45,7 +45,7 @@ static void workspace_catalog_view(app *a,int width,int height) {
         nk_layout_row_dynamic(ui,34,3);a->workspace_catalog_bounds[1]=nk_widget_bounds(ui);
         if(action_button(ui,"Workspace speichern",a->workspaces_writable && a->workspace_open))workspace_catalog_store(a);
         a->workspace_catalog_bounds[2]=nk_widget_bounds(ui);
-        bool can_open=selected && idle(a) && !a->library_thread && !a->recovery && !a->dialog_pending && !a->document_pending;
+        bool can_open=selected && idle(a) && !a->library_thread && !a->recovery && !a->document_pending;
         for(unsigned i=0;i<a->document_count;i++)if(a->documents[i].recovery)can_open=false;
         if(action_button(ui,"Öffnen",can_open))workspace_catalog_open(a);
         a->workspace_catalog_bounds[3]=nk_widget_bounds(ui);if(action_button(ui,"Löschen",selected))workspace_catalog_delete(a);

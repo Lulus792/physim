@@ -1,0 +1,557 @@
+{
+  "format": 1,
+  "date": "2026-10-30",
+  "base_commit": "2fce5147e68f14353fbb6d0a5c9c8d7066c6600c",
+  "scope": "Native independent Explorer A task windows, per-owner input/results and minimum-width/live-font layout. This does not close full visual fidelity or the whole dialog conversion.",
+  "implementation": [
+    "Independent SDL/GL/Nuklear/worker state per request route, separate embedded files context, explicit picker UI in drawing/API helpers, immutable shared fonts.",
+    "Main and detached input/layout no longer globally blocked by an open selection; B only waits for its own child. Reinvoke preserves form; result/cancel/project changes remain generation and source scoped.",
+    "Frame-boundary creation/destruction; weak source window ID checked before focus return. Source close, late reply, main project change and shutdown checked.",
+    "Native component max1180 logical pixels, centered in wider client. Compact560 layout, min320 client, long folder-confirm action, live font cycles, real saved main document and detached protocol input while two pickers stay open.",
+    "Places label inset/border/padding/minimum/opacity and inherited1.55 pitch match the approved scoped CSS; independent measurements reject old inset.",
+    "Mandatory internal focus model survives optional native accessibility exporter failure; init fails cleanly on mandatory allocation failure and no-exporter shutdown frees the locally owned mutex. Actual native availability remains false when disabled."
+  ],
+  "environment": {
+    "windows": "Windows11 Pro26200 / Release",
+    "linux": "Alpine-Dev3.24.2 / WSL2 / X11 Xvfb Openbox / Debug ASan UBSan / GUI detect_leaks=0"
+  },
+  "source_audit": {
+    "compiled_inputs_match_git_index": 1078,
+    "manifest": {
+      "path": "build/validation/explorer-inline-2026-10-29/picker-seventh-compiler-source.json",
+      "sha256": "042f9a4f82fe6659248d18bbbd99ece9c7ed9453be8534d34e594c778b0388d2"
+    },
+    "source_overlay": {
+      "path": "build/validation/explorer-inline-2026-10-29/picker-seventh-compiler-source.zip",
+      "sha256": "a9101f05744be572fa4107deb2852ec8953d20383240245fa1fabf659194f3ad"
+    },
+    "runtime": {
+      "path": "build/validation/explorer-inline-2026-10-29/picker-seventh-runtime.json",
+      "sha256": "9ad490b57d88cb4b428f96ad493d412f83d559e1511077624efb18c1fa08541a"
+    },
+    "byte_index": {
+      "path": "build/validation/explorer-inline-2026-10-29/picker-seventh-byte-index.json",
+      "sha256": "624e0511d19fdc4e2ee9d691cbc94ecaa8221acea3332eca1ee4052ee41574fa"
+    },
+    "all_archived_bytes_read_back": true
+  },
+  "cohorts": [
+    {
+      "phase": "picker-first",
+      "platform": "windows",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-first-windows.json",
+        "sha256": "8757de23ce9b8f8496ba6ebcc79256046678fa7558c73f42b7a81f2ee0a9b7b0"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-first-windows.log",
+        "sha256": "53954147ce14bc658bcf993e503de7d85b3652a2a36cb834f70830a22a429607"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-114s1vdd/results.json",
+        "sha256": "477ddee02eb781fcb804eefc46f7613430096f9653f82484c033f88d252ce582"
+      },
+      "exit_code": 0,
+      "binary_sha256": "a9ee59785f08b1318190aabc142c3263bc4a3a257d5e1b62161e70fd9b7e5b8b",
+      "groups": {
+        "independent_project_window": "passed",
+        "explorer_a_replies": "passed",
+        "explorer_a_api_context": "passed",
+        "explorer_a_inline": "passed",
+        "explorer_a": "passed"
+      }
+    },
+    {
+      "phase": "picker-first",
+      "platform": "linux",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-first-linux.json",
+        "sha256": "00934cb512f0472b5db4d022f9bd898f9aeec40df3c13c148d13d3dea8b051b1"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-first-linux.log",
+        "sha256": "46c8abc93419fd9836d4564fbc1ce238204a2e456c025b65dcc658d6e10c027a"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-l3ifziba/results.json",
+        "sha256": "50a1b18fcd04a6345ededca0d08fb8379b9d05636bde680266d222125317ebac"
+      },
+      "exit_code": 0,
+      "binary_sha256": "de6890173cbc300b66bae64ee461462cef36aead89699dbedceda3a9889c6abc",
+      "groups": {
+        "independent_project_window": "passed",
+        "explorer_a_replies": "passed",
+        "explorer_a_api_context": "passed",
+        "explorer_a_inline": "passed",
+        "explorer_a": "passed"
+      }
+    },
+    {
+      "phase": "picker-second",
+      "platform": "windows",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-second-windows.json",
+        "sha256": "1f42581061a4527fc11df1a74e34d3252eb51012a363922c02db5d60c82a16b3"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-second-windows.log",
+        "sha256": "1d4798d0f605cac7b9f2b6ff50ada4b24be625773288ea3e247eb4551fe71c20"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-ygdy6m8g/results.json",
+        "sha256": "f18ec85c274d0b3d6e66e5c5f70008673ff04d9b04b90924372e9c81822c7ee4"
+      },
+      "exit_code": 1,
+      "binary_sha256": "0b7d4e0589a5d704e85d173ddb12323dcfd5e6f7fd4b6051c1cc109ab12b77f5",
+      "groups": {
+        "window_smoke": "passed",
+        "toolbar_input_isolation": "failed",
+        "workspace_state_workflow": "failed",
+        "timeline_workflow": "passed",
+        "explorer_a_native_windows": "passed",
+        "explorer_a_preview_windows": "passed",
+        "independent_picker_windows": "failed",
+        "explorer_a_replies": "passed",
+        "explorer_a_api_context": "passed",
+        "explorer_a_preview_flow": "passed",
+        "explorer_a_inline_windows": "passed",
+        "explorer_a_inline": "passed",
+        "explorer_a": "passed",
+        "independent_graphic_window": "passed",
+        "timeline_context": "passed"
+      }
+    },
+    {
+      "phase": "picker-second",
+      "platform": "linux",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-second-linux.json",
+        "sha256": "74dab12fd736404b63edda4eb701f9a0ae0dd2b1add584edd431c0ddefa97510"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-second-linux.log",
+        "sha256": "e3743681868910fb881239943e5c93a6e4536891e08801e57225f804ae0afa8d"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-vcaiil73/results.json",
+        "sha256": "162ebbdd582130772172c940f1c427caa6fefc8d56b16f1dfa6da465570edb75"
+      },
+      "exit_code": 1,
+      "binary_sha256": "65d354e569612fafb9eaeb07d1221563e2207600e87f3e09906069848e9c4f2f",
+      "groups": {
+        "window_smoke": "passed",
+        "toolbar_input_isolation": "failed",
+        "workspace_state_workflow": "failed",
+        "timeline_workflow": "passed",
+        "explorer_a_native_atspi": "passed",
+        "explorer_a_preview_atspi": "passed",
+        "independent_picker_windows": "failed",
+        "explorer_a_replies": "passed",
+        "explorer_a_api_context": "passed",
+        "explorer_a_preview_flow": "passed",
+        "explorer_a_inline_atspi": "passed",
+        "explorer_a_inline": "passed",
+        "explorer_a": "passed",
+        "independent_graphic_window": "passed",
+        "timeline_context": "failed"
+      }
+    },
+    {
+      "phase": "picker-third",
+      "platform": "windows",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-third-windows.json",
+        "sha256": "907606de4f34e30031b36fe6c12cb89a5243fd6610dd3d255690a2202c5ebe96"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-third-windows.log",
+        "sha256": "0d8a7f9960f7d5a25fb1ec48abe897a48fdd202db0e8c1f7f5e8c6b247535a71"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-4j3qnkre/results.json",
+        "sha256": "74e03231edb75cad300edd9072c9c01eb778d91393277670419361b5474a7a42"
+      },
+      "exit_code": 0,
+      "binary_sha256": "a9d6aa982438f268cffa23fcb5be1ca371122d39ca70e4b6a8f41e5a4e3bc0ef",
+      "groups": {
+        "toolbar_input_isolation": "passed",
+        "workspace_state_workflow": "passed",
+        "project_wizard_help": "passed",
+        "explorer_a_native_windows": "passed",
+        "independent_picker_windows": "passed",
+        "explorer_a_api_context": "passed",
+        "explorer_a_inline_windows": "passed",
+        "explorer_a_inline": "passed",
+        "explorer_a": "passed",
+        "timeline_context": "passed"
+      }
+    },
+    {
+      "phase": "picker-third",
+      "platform": "linux",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-third-linux.json",
+        "sha256": "8ead42d359c743b616dcbc0c786ee0f291783b640c5ed93e41852cc7feaf9e0b"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-third-linux.log",
+        "sha256": "0779048333417775c1dd9baac2b450b4c8533f8015a916e551415e932a2d7497"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-pa4ei8pn/results.json",
+        "sha256": "021ccd26396d4bcf43a53536427a06fbb653eaeec63a3ec9711a963c8e488cdc"
+      },
+      "exit_code": 1,
+      "binary_sha256": "df66971adb64cb31a085550c621168662fbb60c91d5742a113b89e07cb752510",
+      "groups": {
+        "toolbar_input_isolation": "passed",
+        "workspace_state_workflow": "passed",
+        "project_wizard_help": "passed",
+        "explorer_a_native_atspi": "passed",
+        "independent_picker_windows": "passed",
+        "explorer_a_api_context": "passed",
+        "explorer_a_inline_atspi": "passed",
+        "explorer_a_inline": "passed",
+        "explorer_a": "passed",
+        "timeline_context": "failed"
+      }
+    },
+    {
+      "phase": "picker-fourth",
+      "platform": "windows",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-fourth-windows.json",
+        "sha256": "df9dd38191bae7ca69420345682c0c1a537acae79987db7b0ab10b9999b0b84d"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-fourth-windows.log",
+        "sha256": "7d89d152c2cf8c7f55d325bc11d544333c144ae925cfdec59a6174e7220b0c5c"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-58g6rkpe/results.json",
+        "sha256": "d919328e541f0d9f49a15e409758eac25d70cd66c7288bc51ec4b095a54c9070"
+      },
+      "exit_code": 0,
+      "binary_sha256": "b994e62b1c65b23c95bdd61e8fc5db2ee9b5ef96110c2619fb83aa49332076eb",
+      "groups": {
+        "timeline_workflow": "passed",
+        "explorer_a_native_windows": "passed",
+        "independent_picker_windows": "passed",
+        "explorer_a_api_context": "passed",
+        "explorer_a_preview_flow": "passed",
+        "explorer_a_inline_windows": "passed",
+        "explorer_a_inline": "passed",
+        "explorer_a": "passed",
+        "timeline_context": "passed"
+      }
+    },
+    {
+      "phase": "picker-fourth",
+      "platform": "linux",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-fourth-linux.json",
+        "sha256": "03105bd42f1fd9f9fa01c6da3370dc592fb45fa2cd2fd94068b4858d25101d9c"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-fourth-linux.log",
+        "sha256": "98aede59280438d032bd534c778e92dac35e776f437e376fb122ccd2e03cc5b2"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-oud2l7yd/results.json",
+        "sha256": "1714a69b7061a05936aa72eb6e4863327a14340c7d47579b81cd201c212bdc60"
+      },
+      "exit_code": 1,
+      "binary_sha256": "addaf43f052d43dc09750ea7026e071ed835fe1e2ca30dab990507bb8a2b3c4e",
+      "groups": {
+        "timeline_workflow": "passed",
+        "explorer_a_native_atspi": "passed",
+        "independent_picker_windows": "passed",
+        "explorer_a_api_context": "passed",
+        "explorer_a_preview_flow": "passed",
+        "explorer_a_inline_atspi": "passed",
+        "explorer_a_inline": "passed",
+        "explorer_a": "passed",
+        "timeline_context": "failed"
+      }
+    },
+    {
+      "phase": "picker-fifth",
+      "platform": "windows",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-fifth-windows.json",
+        "sha256": "f767422f01eb1b6d0762e3c5f21e3f54edc4e630dd2f1fd31295badf8aa2960e"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-fifth-windows.log",
+        "sha256": "30b07895d91aae6541d3ffc9412d90d2453c0d9ed3c227f299057f168d9d604e"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-4rdjb6z3/results.json",
+        "sha256": "9fa6bad50f2b723a4ed595eab194449a59edebdf59ae430a2f9dde45db1fc55d"
+      },
+      "exit_code": 1,
+      "binary_sha256": "7f1bf957e627ee14007f768ea5b5c2aa7bfaa6eeba667f78b8c0191b97794e28",
+      "groups": {
+        "explorer_a_inline": "passed",
+        "explorer_a": "passed",
+        "timeline_context": "failed"
+      }
+    },
+    {
+      "phase": "picker-fifth",
+      "platform": "linux",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-fifth-linux.json",
+        "sha256": "10434eb937074f66f1813dcc7dc30d17da92f6153770485245dcf90b3bcd4dda"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-fifth-linux.log",
+        "sha256": "4b52bd952f0ad12696f181ecb6c42ab035aea1ffcbfff8cab085d47ca85f9013"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-dfcqy59z/results.json",
+        "sha256": "331cb154ba54ae8482fb0830e3095ea3c034b1263d5ff0ca86e2302f8821bf5b"
+      },
+      "exit_code": 0,
+      "binary_sha256": "2ac0ada1f534c226a3ca0db272ac2bbd40a2b8acc0ecf1717fb1633b9f7d9aed",
+      "groups": {
+        "explorer_a_inline": "passed",
+        "explorer_a": "passed",
+        "timeline_context": "passed"
+      }
+    },
+    {
+      "phase": "picker-sixth",
+      "platform": "windows",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-sixth-windows.json",
+        "sha256": "5f6c3962dd93e498f7ad417f45e5f9e9f0d862b8d5d5af6ac201fd7f9fbce7c6"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-sixth-windows.log",
+        "sha256": "e98385533e5b4f9d427c26689cedf0ecc475d8b5752a6b7e98a9ee54072b8361"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-1g6fosi9/results.json",
+        "sha256": "5f5551f397ebb815d8994f06a49a06ad983e594418557a5502d10c298a0d8991"
+      },
+      "exit_code": 1,
+      "binary_sha256": "4db395837f75e0ef809ef1437583a88db816dfb08016ab2b467d8195f4bbe6b1",
+      "groups": {
+        "explorer_a_native_windows": "passed",
+        "independent_picker_windows": "passed",
+        "explorer_a_inline": "passed",
+        "explorer_a": "passed",
+        "timeline_context": "failed"
+      }
+    },
+    {
+      "phase": "picker-sixth",
+      "platform": "linux",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-sixth-linux.json",
+        "sha256": "7166ec464b7a012b6f4601403ae983e14e4b19b8c8baf9d55a5b01d81f4646eb"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-sixth-linux.log",
+        "sha256": "da64507f17ac8719aba5b2b430dad63377bc86d97f1f4ff91dfb354eb8a15604"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-e41u8rfk/results.json",
+        "sha256": "7b8285a871c0712300d9652c91ad2bf7ab6bfe5a14239358a93635a1992b4308"
+      },
+      "exit_code": 0,
+      "binary_sha256": "ea52d7ba4868e7436d364b6844c8971772aa6678152a3d78f7ec3e4409716de4",
+      "groups": {
+        "explorer_a_native_atspi": "passed",
+        "independent_picker_windows": "passed",
+        "explorer_a_inline": "passed",
+        "explorer_a": "passed",
+        "timeline_context": "passed",
+        "timeline_context_no_native_bridge": "passed"
+      }
+    },
+    {
+      "phase": "picker-seventh",
+      "platform": "windows",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-seventh-windows.json",
+        "sha256": "a1de79f8e6dce30666dcc9c2f0c8227fac48a9fda3398c161b60f15a64cf2ed7"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-seventh-windows.log",
+        "sha256": "7d64d53b9b02d86fac70d6d4e7df972dff77bbed8901486039cd88cbd8975c8b"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-rt3z7_ya/results.json",
+        "sha256": "071dc934afe31e233f96f5266751c9b4f111f7a6766741b8a5ecc272ffe48081"
+      },
+      "exit_code": 0,
+      "binary_sha256": "d0ffb7865bc4ac2a52acb1d04e9c7da5c77e003f65faf7ffd329292e28b08976",
+      "groups": {
+        "explorer_a_native_windows": "passed",
+        "protocol_separator": "passed",
+        "independent_picker_windows": "passed"
+      }
+    },
+    {
+      "phase": "picker-seventh",
+      "platform": "linux",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-seventh-linux.json",
+        "sha256": "717b5a684db685726115b0671b166a79eb250c54adbf277ddf9cdfbd2868bf26"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-seventh-linux.log",
+        "sha256": "20fb1873ec706e4efe50443c4918dbb5524d31c4c9c819fa0946f7bf5d870caa"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-hkfe08m9/results.json",
+        "sha256": "92ac33d1f6149df3cd2ee9d34496a4739151ed877083b7969ce3caa342c6b699"
+      },
+      "exit_code": 0,
+      "binary_sha256": "5faca4d85e8e248b2f84de6b21bda3eca8e34e570199f86a060c4d1f3fc19034",
+      "groups": {
+        "explorer_a_native_atspi": "passed",
+        "timeline_context": "passed",
+        "timeline_context_no_native_bridge": "passed"
+      }
+    },
+    {
+      "phase": "picker-seventh-no-bridge",
+      "platform": "linux",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-seventh-no-bridge-linux.json",
+        "sha256": "ff79ea36d9f197763a901b659793dcc6c1ac70b9071b43a4fddcebfd94122cce"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-seventh-no-bridge-linux.log",
+        "sha256": "74e7c398ce0a0ef91824758af02dc90532e30f75e230654a2f1a8916cd139d34"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-btx58zyn/results.json",
+        "sha256": "a814687e913fafefe1d0360ae4e20bb2857b71bc3c3b6404a47f5c2f4c01e2a3"
+      },
+      "exit_code": 0,
+      "binary_sha256": "5faca4d85e8e248b2f84de6b21bda3eca8e34e570199f86a060c4d1f3fc19034",
+      "groups": {
+        "independent_picker_windows": "passed",
+        "explorer_a_inline": "passed"
+      }
+    }
+  ],
+  "controlled_counterexamples": {
+    "picker": {
+      "path": "build/validation/explorer-inline-2026-10-29/picker-counter-audit.json",
+      "sha256": "c07be79b1d2e439cd976b87ed12cef635e8b1cb0b75849b666cb8db31a27a2c2"
+    },
+    "main_input": {
+      "path": "build/validation/explorer-inline-2026-10-29/picker-input-counter.json",
+      "sha256": "5632d528b90158e5145fe1f96618056759d13a7b3f2c6b103daf8414013b1d0d"
+    },
+    "places_padding": {
+      "path": "build/validation/explorer-inline-2026-10-29/picker-padding-counter.json",
+      "sha256": "59d0d74f04736ad489f73f545f361228934baf5fefd9a4353de8b67fbe93bdb7"
+    },
+    "scope": "Both paired Windows mutations compiled/executed against frozen picker-fourth; each rejected its specific fault and the unchanged binary passed the same6 cases. Final source/runtime are separately identified above."
+  },
+  "adapter_counterprobe": {
+    "before": {
+      "phase": "picker-no-bridge-before",
+      "platform": "linux",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-no-bridge-before-linux.json",
+        "sha256": "9aa80a859d32572a4e962f9fcf14906a2695740af8cd9ea04c7c6ea49a6ef27f"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/picker-no-bridge-before-linux.log",
+        "sha256": "efcd479a074d0a571448021f8d7e23326712ef9b7c4aaa5666305e4fbfad6567"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-n023ib16/results.json",
+        "sha256": "2ec2ad37a576beee1d7d44bda3e6470fb36634235104c039a1e17c1260ef391c"
+      },
+      "exit_code": 1,
+      "binary_sha256": "2ac0ada1f534c226a3ca0db272ac2bbd40a2b8acc0ecf1717fb1633b9f7d9aed",
+      "groups": {
+        "timeline_context": "failed"
+      }
+    },
+    "baseline_phase": "picker-fifth",
+    "after_phase": "picker-seventh",
+    "disabled_after_phase": "picker-seventh-no-bridge",
+    "before_same_binary_verified": true,
+    "after_same_binary_verified": true,
+    "observations": {
+      "timeline_context": {
+        "observation": "TIMELINE CONTEXT BEFORE OPEN: native=1 dragging=1 browsing=1 count=4",
+        "steps": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-hkfe08m9/timeline_context/files ä/app-steps.json",
+          "sha256": "6623f6eb804353406c626117bbf262ad0c585411221071b38f2d0087fdd8df5a"
+        }
+      },
+      "timeline_context_no_native_bridge": {
+        "observation": "TIMELINE CONTEXT BEFORE OPEN: native=0 dragging=1 browsing=1 count=4",
+        "steps": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-hkfe08m9/timeline_context_no_native_bridge/files ä/app-steps.json",
+          "sha256": "23ae6af4cf483ad114f94840452d0f363e63f702f6d08caac4e9a198b2ccbf03"
+        }
+      }
+    },
+    "disabled_extra_invocation": [
+      "wsl",
+      "-d",
+      "Alpine-Dev",
+      "--exec",
+      "env",
+      "NO_AT_BRIDGE=1",
+      "xvfb-run",
+      "-a",
+      "-s",
+      "-screen 0 1800x1200x24",
+      "python3",
+      "/mnt/d/Physim/build/validation/explorer-inline-2026-10-29/run.py",
+      "picker-seventh-no-bridge",
+      "independent_picker_windows",
+      "explorer_a_inline"
+    ],
+    "scope": "Identical phase5 ELF passed ordinary Linux timeline_context and failed initial drag under NO_AT_BRIDGE=1. Repaired final ELF passes normal and disabled timeline plus six-mode independent picker and inline7 without AT-SPI."
+  },
+  "runner_contract": {
+    "path": "build/validation/explorer-inline-2026-10-29/picker-sixth-runner",
+    "exit_code": 0,
+    "scope": "Actually executed timeout/failure/report and win32/linux/darwin catalog checks, not a macOS runtime proof."
+  },
+  "visual_inspection": {
+    "reference": "docs/visuals/design-options/review/files-a.png",
+    "native_runs": [
+      "run-58g6rkpe",
+      "run-oud2l7yd"
+    ],
+    "states": [
+      "large-small header",
+      "large-small places body",
+      "large-small folder-confirm footer"
+    ],
+    "scope": "Native Windows and Linux captures were inspected. Extra per-key fullscreens were avoided."
+  },
+  "storage_cleanup": {
+    "record": {
+      "path": "build/validation/explorer-inline-2026-10-29/picker-positive-image-cleanup.json",
+      "sha256": "bdbde00600304f5965dcdb4a3559960ba642610066978d5d5323e22202a4470b"
+    },
+    "deleted_redundant_success_images": 7,
+    "freed_bytes": 409070,
+    "scope": "Only the completed extra disabled-adapter interaction run; original visual references and all failure evidence retained."
+  },
+  "failure_interpretation": [
+    "picker-second: old toolbar/workspace fixtures assumed global modality; new fixture attempted to open an invalid preview-only project. Fixtures corrected without weakening actual retained data/guard checks.",
+    "picker-third/fourth Linux timeline initial drag rejected; an unchanged phase2 serial control passed. These individual intermittent failures are preserved, not all attributed to the subsequently proven optional-adapter case.",
+    "picker-fifth/sixth Windows timeline_context waited45s for actual Windows keyboard focus; no pointer step reached. This focus limitation is open. Computer Use list_apps timed out on initial, retry and post-reset retry; no user permission or test timeout was fabricated."
+  ],
+  "open_work": [
+    "Full Explorer typography, file rows/header, preview properties, footer and grid/API content fidelity: see picker-fidelity-audit-2026-10-30.json. Passing hosting tests does not establish1:1 design.",
+    "Physical input/titlebar dragging, monitor/DPI, actual screenreader speech and macOS app execution remain open for this task.",
+    "Other independent task surfaces and confirmations/recovery, native A2/B2/settings A/feedback A and the full Develop/Simulate/Analyze/F1 reference matrix remain required."
+  ]
+}

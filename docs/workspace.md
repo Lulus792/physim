@@ -20,8 +20,12 @@ Menüzeile unter **Datei** lädt einen bestehenden Ordner. Enthält er ein Physi
 Quellen geöffnet; weitere Textdateien kannst du im Editor bearbeiten.
 **Datei → Datei hinzufügen** und **Datei → Ordner hinzufügen** ergänzen die Arbeitsumgebung um
 bis zu 32 weitere Pfade.
-Abbrechen im Systemdialog erhält den Workspace und seine Statusmeldung. Auch
-ein leerer Rückgabepfad des Linux-Zenity-Backends gilt als Abbruch.
+Datei- und Ordnerauswahlen öffnen ein eigenes Fenster. Im Hauptfenster kannst du
+weiterarbeiten. Ein erneuter Aufruf derselben Auswahl aktiviert ihr vorhandenes
+Fenster und erhält Ort, Suche und Auswahl. **Abbrechen**, Escape oder der
+Schließenknopf des Fensters verwirft die Auswahl und erhält den Workspace.
+Bei einer aufgeklappten Liste oder beim Bearbeiten eines Orts beziehungsweise
+neuen Ordnernamens beendet Escape zunächst diesen Bearbeitungsschritt.
 
 Der **Workspace** in der Seitenleiste zeigt einen aufklappbaren Dateibaum.
 Ein Klick auf einen Ordner öffnet oder schließt dessen Inhalt; ein Klick auf eine
@@ -46,7 +50,15 @@ Wurzeleinträge bleiben auch bei einem großen Hauptordner sichtbar.
 **Datei → Neues Projekt** öffnet ein eigenes Fenster und führt durch drei Schritte.
 Im Hauptfenster kannst du weiterarbeiten. Ein erneuter Aufruf aktiviert das
 vorhandene Projektfenster und erhält seine Eingaben.
-Die Ordnerwahl belegt das Hauptfenster bis zur Bestätigung oder zum Abbrechen.
+Die Ordnerwahl öffnet ein weiteres Fenster. Sie übernimmt den gewählten Speicherort
+in dieses Projektformular; eine gleichzeitig im Hauptfenster geöffnete Dateiauswahl
+bleibt unabhängig davon erhalten. Während der Ordnerwahl pausiert nur die Eingabe
+im zugehörigen Projektformular. Schließt du das Projektfenster, schließt sich auch
+dessen Ordnerwahl.
+
+Wechselst du im Hauptfenster das Projekt oder den Workspace, schließen sich die
+dazugehörigen offenen Auswahlen. Das eigenständige Projektformular und seine
+Ordnerwahl behalten ihren Zustand.
 
 1. **Startpunkt:** Wähle eine der acht Modellvorlagen oder aktiviere
    **Nur Auswertung gespeicherter Läufe**.

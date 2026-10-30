@@ -1286,13 +1286,9 @@ static void workspace_draw_ui(app *a, int width, int height) {
     if(workspace_shell)nk_style_set_font(ui,previous_font);
 }
 
-/* Modal input and semantic publication are scoped to the source window. The
- * rest of the scene still renders, but has no active controls behind the sheet. */
+/* Each native task window publishes and consumes its own controls. */
 static void draw_ui(app *a,int width,int height) {
-    graphic_input_guard guard=graphic_export_guard(a);
     workspace_tip_frame_begin(a);
     workspace_draw_ui(a,width,height);
     workspace_tip_frame_end(a);
-    graphic_export_unguard(a,guard);
-    browser_view(a,a->browser,width,height,nk_rect(0,0,0,0));
 }
