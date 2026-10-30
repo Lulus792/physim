@@ -1,14 +1,17 @@
 # Einstellungen und Fensteraufteilung
 
 **Verbindliches Designziel vom 29. Oktober 2026:** Der Nutzer hat
-[A · Kategorien](visuals/settings-options/APPROVED.md) als fertiges Design
-freigegeben ([ADR 018](decisions/018-selected-settings-a.md)). Die folgende
+[A · Kategorien](https://github.com/PhysicSimulator/physim/blob/0d7b088aeeda7d01610ebb20a4961b3c015fac7b/docs/visuals/settings-options/APPROVED.md) als fertiges Design
+freigegeben ([ADR 018](https://github.com/PhysicSimulator/physim/blob/0d7b088aeeda7d01610ebb20a4961b3c015fac7b/docs/decisions/018-selected-settings-a.md)). Diese Designunterlagen liegen im Repository;
+F1 kopiert ihre Quellenadresse. Die folgende
 Beschreibung dokumentiert den bestehenden Funktionsvertrag und bisherige
 Bedienung; alte In-Workspace-/Fokus-Anordnung ist kein Ersatz für das neue
 Design und eigene Aufgabenfenster nach ADR 015. Die Freigabe bestätigt noch
 keine abgeschlossene native Umsetzung.
 
-**Einstellungen** in der oberen Menüzeile oder **Ctrl+,** öffnet die persönliche Darstellung.
+**Bearbeiten → Einstellungen …** oder **Ctrl+,** öffnet unter Windows/Linux die
+persönliche Darstellung. Unter macOS liegt der Befehl im systemweiten
+**Physim → Einstellungen …**-Menü; das Kürzel ist **⌘,**.
 Ein Wechsel hierhin lässt Editorinhalte, Simulation und Analyse im Hintergrund bestehen.
 Das geöffnete Protokoll wird während der Einstellungsansicht vorübergehend eingeklappt,
 damit die Bedienelemente auch im kleinen Fenster Platz haben.

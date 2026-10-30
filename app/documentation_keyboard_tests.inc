@@ -216,7 +216,7 @@ static int documentation_test_link(const ps_document *d,const char *target) {
     return -1;
 }
 static void documentation_anchor_test_frame(app *a,int *stage,int *code,const char **capture) {
-    static int guide,workspace,collision,link,settle;static nk_uint scroll;static ps_document *previous;
+    static int guide,workspace,collision,link,settle;static nk_uint scroll;static ps_document *previous;static char source_url[4096];
     bool ok=true;
 #define ANCHOR_KEY(key) test_window_key_mod(a->doc_window,key,0)
     switch((*stage)++) {
@@ -275,7 +275,47 @@ static void documentation_anchor_test_frame(app *a,int *stage,int *code,const ch
         ok=documentation_test_clipboard(a->documentation->text+a->documentation->blocks[0].text);
         if(!documentation_test_seek(a,DOC_BODY,stage,code))return;ANCHOR_KEY(SDLK_PAGEDOWN);break;
     case 13:
-        ok=a->doc_scroll_y>0 && !a->doc_error[0];*capture="docs-large-source-scrolled.bmp";a->quitting=true;break;
+        ok=a->doc_scroll_y>0 && !a->doc_error[0];*capture="docs-large-source-scrolled.bmp";
+        {int dependencies=-1;for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(!strcmp(documentation_topics[i].path,"third_party/README.md"))dependencies=i;
+         ok &= dependencies>=0;open_documentation(a,dependencies);}break;
+    case 14:
+        link=documentation_test_link(a->documentation,"libunibreak-8.0/README.md");
+        if(link<0){ok=false;break;}
+        if(!documentation_test_seek(a,DOC_LINK+link,stage,code))return;ANCHOR_KEY(SDLK_RETURN);break;
+    case 15:
+        ok=!strcmp(documentation_topics[a->doc_topic].path,"third_party/libunibreak-8.0/README.md") && !a->doc_error[0];
+        ok &= documentation_link(a,"../README.md");break;
+    case 16:
+        link=documentation_test_link(a->documentation,"libunibreak-8.0/LICENCE");
+        if(link<0){ok=false;break;}
+        if(!documentation_test_seek(a,DOC_LINK+link,stage,code))return;ANCHOR_KEY(SDLK_RETURN);break;
+    case 17:
+        ok=!strcmp(documentation_topics[a->doc_topic].path,"third_party/libunibreak-8.0/LICENCE") &&
+            a->documentation->count==1 && a->documentation->blocks[0].kind==PS_DOC_CODE &&
+            strstr(a->documentation->text+a->documentation->blocks[0].text,"Copyright") && !a->doc_error[0];
+        ok &= documentation_link(a,"../README.md");break;
+    case 18:
+        link=documentation_test_link(a->documentation,"libunibreak-8.0/UNICODE-LICENSE.txt");
+        if(link<0){ok=false;break;}
+        if(!documentation_test_seek(a,DOC_LINK+link,stage,code))return;ANCHOR_KEY(SDLK_RETURN);break;
+    case 19:
+        ok=!strcmp(documentation_topics[a->doc_topic].path,"third_party/libunibreak-8.0/UNICODE-LICENSE.txt") &&
+            a->documentation->count==1 && a->documentation->blocks[0].kind==PS_DOC_CODE &&
+            strstr(a->documentation->text+a->documentation->blocks[0].text,"UNICODE LICENSE V3") && !a->doc_error[0];
+        {int settings=-1;for(int i=0;i<DOCUMENTATION_TOPIC_COUNT;i++)if(!strcmp(documentation_topics[i].path,"docs/settings.md"))settings=i;
+         ok &= settings>=0;open_documentation(a,settings);}break;
+    case 20:
+        link=-1;
+        for(size_t i=0;i<a->documentation->count;i++)if(a->documentation->blocks[i].kind==PS_DOC_LINK &&
+            strstr(a->documentation->text+a->documentation->blocks[i].target,"https://github.com/PhysicSimulator/physim/blob/")) {link=(int)i;break;}
+        if(link<0){ok=false;break;}
+        if(!documentation_test_seek(a,DOC_LINK+link,stage,code))return;
+        snprintf(source_url,sizeof source_url,"%s",a->documentation->text+a->documentation->blocks[link].target);
+        previous=a->documentation;ANCHOR_KEY(SDLK_RETURN);break;
+    case 21: {
+        char *copied=SDL_GetClipboardText();ok=copied && !strcmp(copied,source_url) && a->documentation==previous && !a->doc_error[0];SDL_free(copied);
+        puts("DOCUMENTATION OFFLINE NOTICES: provenance, both licenses and external source address checked");a->quitting=true;break;
+    }
     }
     if(!ok){fprintf(stderr,"Documentation anchor stage %d failed: topic=%d scroll=%u error=%s\n",*stage-1,a->doc_topic,a->doc_scroll_y,a->doc_error);*code=1;a->quitting=true;}
     if(a->quitting)printf("DOCUMENTATION ANCHOR SELF-TEST: %s\n",*code?"FAILED":"PASSED");

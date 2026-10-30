@@ -29,6 +29,7 @@ def main():
                                 capture_output=True, text=True, timeout=20)
         if result.returncode:
             failures.append(f"Native topic cannot be parsed: {name}: {result.stderr[:200]}")
+            continue
         if code or not name.endswith(".md"):
             continue
         body = re.sub(r"```[^\n]*\n.*?```", "", (root / name).read_text(encoding="utf-8"), flags=re.S)
@@ -42,6 +43,9 @@ def main():
     pages = sorted({root / "README.md", *root.glob("docs/**/*.md"), *root.glob("brains/physim/**/*.md"),
                     *(root / name for name in topics if name.endswith(".md"))})
     for page in pages:
+        if not page.is_file():
+            failures.append(f"Bundled page missing: {page.relative_to(root)}")
+            continue
         # Discard fenced code; example Markdown is not a navigable page link.
         source = re.sub(r"```[^\n]*\n.*?```", "", page.read_text(encoding="utf-8"), flags=re.S)
         for target in re.findall(r"(?<!!)\[[^\]]*\]\(([^\s)]+)(?:\s+[^)]*)?\)", source):

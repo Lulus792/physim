@@ -121,6 +121,15 @@ def digest_files(paths: list[Path]) -> str:
     return digest.hexdigest()
 
 
+def copy_documentation_topics(source: Path, staging: Path, topics):
+    """Keep native topic paths in SDKs without replacing adapted SDK pages."""
+    for relative, _ in topics:
+        destination = staging / relative
+        if not destination.is_file():
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source / relative, destination)
+
+
 @contextmanager
 def build_lock(directory: Path):
     directory.mkdir(parents=True, exist_ok=True)
@@ -534,6 +543,9 @@ class Builder:
             readme.write("\n\n---\n\n"+(ROOT / "README.md").read_text(encoding="utf-8"))
         for name in ("LICENSE", "Physim_Projektplan.md", "AGENTS.md"):
             shutil.copy2(ROOT / name, staging / name)
+        # The native handbook keeps repository-relative topic paths, including
+        # dependency notices outside docs/. Preserve those paths in moved SDKs.
+        copy_documentation_topics(ROOT, staging, topics)
         # Relative paths and content hashes make moved packages independently auditable.
         files = {p.relative_to(staging).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
                  for p in sorted(staging.rglob("*")) if p.is_file()}

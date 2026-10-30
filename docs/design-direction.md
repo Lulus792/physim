@@ -32,6 +32,12 @@ Der leere Workspace-Start und der getrennte Projektmanager bleiben bestehen.
 
 ### 2. Kompakte Menüzeile und Tabs
 
+**macOS-Ergänzung vom 30. Oktober 2026:** Datei, Bearbeiten, Ansicht, Build und
+Hilfe stehen dort in der systemweiten Menüleiste; Einstellungen liegt im
+Physim-Appmenü. Im App-Fenster entfallen nur diese Menüknöpfe. Bereichs-Tabs und
+übriger Fensterkopf bleiben bestehen; macOS verwaltet die Vollbildanzeige seiner
+Menüleiste. Die folgende In-Window-Beschreibung gilt für Windows und Linux.
+
 Oben im Fenster gibt es eine dauerhaft sichtbare, flache Menüzeile, die in allen
 Arbeitsbereichen verfügbar bleibt. Ihre Aktionen sind zusammengefasst:
 
@@ -113,7 +119,7 @@ Aktionen müssen in der oberen Leiste verständlich sichtbar sein.
 ## Finale Bereichsreferenz Entwickeln
 
 Ergänzende Nutzerentscheidung vom 2026-10-19: Für **Entwickeln** gilt die
-[Werkbank mit Klarglas Kühl](visuals/develop-designs/DESIGN.md). Panelköpfe,
+[Werkbank mit Klarglas Kühl](https://github.com/PhysicSimulator/physim/blob/0d7b088aeeda7d01610ebb20a4961b3c015fac7b/docs/visuals/develop-designs/DESIGN.md). Panelköpfe,
 kompakte Dateitabs, Workspace-Pfadlinien, verstellbare Panels und die schwebende
 Suchinsel sind entschieden. Der rechte Kontextschalter bleibt beim Ein-/Ausklappen
 an derselben äußersten rechten Position. Dokumentbezogene Suche und Speichern
@@ -124,15 +130,17 @@ Diese Bereichsentscheidung konkretisiert die oben beschriebene Rückmeldung:
 Datei-/Cursorstatus steht an der Editorstatuszeile, Build-/Profilstatus unten.
 Globale Menüs und der leere Workspace-Start bleiben erhalten. Die Browserreferenz
 ist fertig, ihre native Übertragung steht aus. Der kopierfertige Auftrag liegt in
-[NEXT-CHAT.md](visuals/develop-designs/NEXT-CHAT.md), die Codezuordnung und native
-Abnahme in [IMPLEMENTATION.md](visuals/develop-designs/IMPLEMENTATION.md).
+[NEXT-CHAT.md](https://github.com/PhysicSimulator/physim/blob/0d7b088aeeda7d01610ebb20a4961b3c015fac7b/docs/visuals/develop-designs/NEXT-CHAT.md), die Codezuordnung und native
+Abnahme in [IMPLEMENTATION.md](https://github.com/PhysicSimulator/physim/blob/0d7b088aeeda7d01610ebb20a4961b3c015fac7b/docs/visuals/develop-designs/IMPLEMENTATION.md).
+Diese Design- und Übergabeunterlagen sind Repository-Quellen außerhalb des
+F1-Handbuchs. F1 kopiert ihre Quellenadresse; das Handbuch bleibt geöffnet.
 
 ## Finaler Grafikexport in Auswerten
 
 Verbindliche Nutzerfreigabe vom 20. Oktober 2026: Der gezeigte Grafikexport ist
 Teil des fertigen Designs und wird im nativen Folgeauftrag mit umgesetzt.
-Maßgeblich sind [ADR 010](decisions/010-analysis-graphic-export.md), die
-[freigegebene Spezifikation](visuals/unified-workspace/EXPORT-EXAMPLE.md) und die
+Maßgeblich sind [ADR 010](https://github.com/PhysicSimulator/physim/blob/0d7b088aeeda7d01610ebb20a4961b3c015fac7b/docs/decisions/010-analysis-graphic-export.md), die
+[freigegebene Spezifikation im Repository](https://github.com/PhysicSimulator/physim/blob/0d7b088aeeda7d01610ebb20a4961b3c015fac7b/docs/visuals/unified-workspace/EXPORT-EXAMPLE.md) und die
 beiden dort verlinkten Dialogaufnahmen.
 
 Ein beschrifteter Exportbutton am Diagramm öffnet den Dialog mit Vorschau links

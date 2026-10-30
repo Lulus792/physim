@@ -12887,6 +12887,15 @@
       ]
     },
     {
+      "name": "documentation_topic_install",
+      "targets": ["python", "documentation-anchor-probe"],
+      "steps": [{
+        "program": "python",
+        "arguments": ["{root}/tests/test_documentation_topic_install.py", "--root", "{root}", "--probe", "{documentation-anchor-probe}", "--work", "{work}"],
+        "timeout": 90
+      }]
+    },
+    {
       "name": "documentation_density",
       "app": true,
       "display": true,

@@ -1,0 +1,47 @@
+name: macOS offline handbook links
+on:
+  push:
+    branches: [main, codex/f1-design-h]
+    paths:
+      - README.md
+      - docs/design-direction.md
+      - docs/settings.md
+      - third_party/README.md
+      - app/documentation_ui.inc
+      - app/documentation_keyboard_tests.inc
+      - tests/check_documentation_anchors.py
+      - tests/test_documentation_topic_install.py
+      - tests/native_integration_cases.json
+      - tools/build.py
+      - .github/workflows/macos-documentation-links.yml
+  workflow_dispatch:
+concurrency:
+  group: macos-offline-handbook-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  offline-links:
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [macos-15, macos-15-intel]
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pinned SDL3
+        run: |
+          git clone --depth 1 --branch release-3.2.30 https://github.com/libsdl-org/SDL.git build/sdl-source
+          cmake -S build/sdl-source -B build/sdl-build -G Ninja -DCMAKE_BUILD_TYPE=Release -DSDL_TESTS=OFF -DCMAKE_INSTALL_PREFIX="$PWD/build/sdl-install"
+          cmake --build build/sdl-build --parallel 4
+          cmake --install build/sdl-build
+      - name: Native pages and relocated SDK notices
+        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test --test-filter documentation_anchors --test-filter documentation_topic_install
+      - name: Actual F1 license links and copied developer sources
+        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test-display --test-filter documentation_anchors_16 --test-filter documentation_anchors_22
+      - name: Compact results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: offline-handbook-${{ matrix.runner }}
+          path: build/native/**/test-results/**/results.json
+          if-no-files-found: warn
+          retention-days: 14

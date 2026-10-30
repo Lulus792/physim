@@ -482,7 +482,9 @@ im Physim-Repository ausführen. Zusätzlich ist Python ab 3.10 erforderlich;
 die obigen Linux- und macOS-Befehle installieren es bereits.
 
 Für kompakte Prüfnachweise und lokale Build-, Cache- und Temporärpfade gibt es
-die [Speicher- und Nachweisanleitung](docs/development-storage.md).
+die [Speicher- und Nachweisanleitung im Repository](https://github.com/PhysicSimulator/physim/blob/0d7b088aeeda7d01610ebb20a4961b3c015fac7b/docs/development-storage.md).
+Diese Entwicklerunterlage gehört nicht zum F1-Handbuch; dort lässt sich ihre
+Quellenadresse kopieren.
 `tools/with-artifacts.py` richtet dafür die Umgebung eines Entwicklungsbefehls ein.
 
 **Linux und macOS, einschließlich Oberfläche:**

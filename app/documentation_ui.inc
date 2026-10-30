@@ -188,6 +188,9 @@ static const documentation_topic documentation_topics[] = {
     {"Historische Plattformnachweise: Band 3", "docs/platform-validation-history-3.md", false},
     {"F1-Schriften nach Bedarf", "docs/decisions/005-f1-font-demand.md", false},
     {"F1-Tabellen und native Semantik", "docs/decisions/006-f1-table-semantics.md", false},
+    {"libunibreak: Herkunft und Offlineumfang", "third_party/libunibreak-8.0/README.md", false},
+    {"libunibreak: Lizenz", "third_party/libunibreak-8.0/LICENCE", true},
+    {"libunibreak: Unicode-Datennotiz", "third_party/libunibreak-8.0/UNICODE-LICENSE.txt", true},
 };
 #define DOCUMENTATION_MONTE_CARLO_TOPIC 26
 #define DOCUMENTATION_MEASUREMENT_HEADER 27
