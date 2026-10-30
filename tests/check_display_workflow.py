@@ -2005,6 +2005,11 @@ def main():
         arguments, timeout, _ = SIMPLE[args.case]
         paths = dict(directory=str(directory), root=str(flow.root))
         flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)
+        if args.case in ("toolbar_small","toolbar_large","keyboard_menu_small","keyboard_menu_large"):
+            marker="KEYBOARD MENU SELF-TEST: PASSED" if args.case.startswith("keyboard_") else "TOOLBAR AND TABS: PASSED"
+            require(marker in flow.steps[-1]["stdout"],"Menu workflow quit before completing its assertions")
+            if sys.platform=="darwin":
+                require("(native AppKit, stage" in flow.steps[-1]["stdout"],"Menu workflow did not use the native AppKit test path")
         if args.case.startswith("comparison_"):
             from check_graphic_dialog import png
             output=flow.steps[-1]['stdout'];project=directory/'project'

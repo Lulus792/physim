@@ -120,9 +120,11 @@ static void native_toolbar_test_frame(app *a,int *stage,int *code,const char **c
         ok=SDL_GetKeyboardFocus()==a->window && !(SDL_GetWindowFlags(a->window)&SDL_WINDOW_MINIMIZED) && native_test_shell(a);
         test_mouse(a,a->window_control_bounds[2],true);break;
     case 23:test_mouse(a,a->window_control_bounds[2],false);break;
-    case 24:ok=false;break; /* The real close button must already have quit. */
+    case 24:break; /* Allow the close event posted by the release frame. */
+    case 25:ok=false;break; /* The real close button must already have quit. */
     }
     if(!ok){fprintf(stderr,"Native toolbar failure stage=%d tab=%d manager=%d\n",*stage-1,a->tab,a->project_manager);*code=1;a->quitting=true;}
+    if(a->quitting && *stage<24){*code=1;fprintf(stderr,"Native toolbar quit before the close-button stage\n");}
     if(a->quitting)printf("TOOLBAR AND TABS: %s (native AppKit, stage %d)\n",*code?"FAILED":"PASSED",*stage);
 }
 static void native_keyboard_menu_test_frame(app *a,const char *root,int *stage,int *code,const char **capture){
@@ -179,6 +181,7 @@ static void native_keyboard_menu_test_frame(app *a,const char *root,int *stage,i
         a->quitting=true;break;
     }
     if(!ok){fprintf(stderr,"Native keyboard menu failure stage=%d tab=%d search=%d doc=%d\n",*stage-1,a->tab,a->show_search,a->doc_visible);*code=1;a->quitting=true;}
+    if(a->quitting && *stage<26){*code=1;fprintf(stderr,"Native keyboard workflow quit before completion\n");}
     if(a->quitting)printf("KEYBOARD MENU SELF-TEST: %s (native AppKit, stage %d)\n",*code?"FAILED":"PASSED",*stage);
 }
 #undef MT_COMMAND
