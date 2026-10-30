@@ -1,11 +1,29 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
+**Nutzerwahl vom 30. Oktober 2026 – Vervollständigung D mit Ergänzungen:**
+[ADR 023](../../decisions/023-selected-completion-d.md),
+[verbindliche Spezifikation](../completion-typing-options/APPROVED.md) und
+[festgelegte Referenz](../completion-typing-options/index.html?approved=1&scenario=arguments)
+lesen. **D ist gewählt**, keine neue D/E/F-Wahl. Standardmäßig fünf sichtbare
+Zeilen, nicht nur fünf Ergebnisse; restlicher Bestand scrollbar und per Pfeil
+erreichbar. Horizontale Dicke der Scrollleiste klein/ruhig. Anzahl später in
+Einstellungen A / Editor einstellbar, Standard 5, bestehende Preferences-
+Transaktion verwenden. In Funktionsargumenten nach `(`/`,` sowie Präfixen
+zugängliche Variablen und Funktionsparameter anbieten, lokale Namen priorisieren,
+Scope/Revision/Rechte berücksichtigen. Kein fremder/geschlossener/nachträglicher
+Name; keine erfundenen Laufzeitwerte. Browser-C-Lexer ist nur begrenzte Studie,
+nativ tatsächliche sprachabhängige Symbol-/Scope-Daten verwenden. Code in
+Kurzinfo und Editor aus demselben aktiven Syntaxschema zeichnen. **Nur der genaue
+Kurzinfo-Hintergrundton bleibt offen**: neutral/heller/kühl im selben D testen;
+keinen Ton bereits als final freigegeben behandeln. Die offene Farbe blockiert
+die übrigen Festlegungen nicht. API-Karte, F1, Suchinsel, A2 und Auto-Anzeige erhalten.
+
 **Aktualisierter Auftrag vom 30. Oktober 2026 – automatische Vorschläge D09:**
 Der Nutzer will **automatisches Anzeigen während des Tippens**. Bisherige Optik
 A/B/C wurde ausdrücklich verworfen. [ADR 022](../../decisions/022-automatic-completion.md)
 und [neue Entwürfe D/E/F](../completion-typing-options/README.md) beachten:
 D Editor, E Neovim, F IDE; flache Zeilen und separate Dokumentation.
-**Funktion automatisch anzeigen ist beauftragt; Optik D/E/F noch offen.**
+**Funktion automatisch anzeigen ist beauftragt; D ist inzwischen mit Ergänzungen gewählt.**
 A/B/C nicht erneut vorlegen oder übernehmen. Manuelles Strg+Leertaste erhalten.
 Getestete Entwurfswerte: zwei Zeichen, 140 ms Eingabepause, Physim-Memberpunkt
 ohne Blattpräfix, 280 ms Zusatzinfo. Automatisch keine Übernahmeauswahl;

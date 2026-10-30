@@ -1,13 +1,17 @@
-# D09 · Neue Runde: automatische Vorschläge D/E/F
+# D09 · Automatische Vervollständigung D mit Ergänzungen
 
-Stand: **30. Oktober 2026**. Automatisches Anzeigen beim Tippen ist ausdrücklich
-beauftragt; die alte Optik A/B/C wurde verworfen. D/E/F sind neue, getrennte
-Entwürfe und **noch nicht ausgewählt**. [ADR 022](../../decisions/022-automatic-completion.md)
-und [Gesamtübergabe](../unified-workspace/NEXT-CHAT.md) beachten.
+Stand: **30. Oktober 2026 · D mit Ergänzungen gewählt.** Fünf sichtbare Einträge,
+schmale Scrollleiste, Variablen in Funktionsargumenten und dieselben Codefarben
+wie im Editor. **Nur der genaue Kurzinfo-Hintergrundton bleibt offen.**
+[APPROVED.md](APPROVED.md), [ADR 023](../../decisions/023-selected-completion-d.md),
+[Auto-Anzeige ADR 022](../../decisions/022-automatic-completion.md) und
+[Gesamtübergabe](../unified-workspace/NEXT-CHAT.md) beachten. E/F bleiben Historie;
+A/B/C wurden zuvor verworfen. Keine neue Grundlayoutwahl nötig.
 
-[Vorschau öffnen](index.html?variant=e&scenario=normal&theme=dark) ·
-[D · Editor](index.html?variant=d) · [E · Neovim](index.html?variant=e) ·
-[F · IDE](index.html?variant=f).
+[D · Argument-Variablen](index.html?approved=1&scenario=arguments&theme=dark) ·
+[D · API-Namen](index.html?approved=1&scenario=normal) ·
+[historischer Vergleich E](index.html?approved=0&variant=e) ·
+[historischer Vergleich F](index.html?approved=0&variant=f).
 Server: `http://127.0.0.1:8791/completion-typing-options/`.
 Auch lokal als Datei; keine Netz-/Font-Abhängigkeit und keine Plugininstallation.
 
@@ -70,7 +74,7 @@ bleiben scrollbar. A2-Auswahlfläche/-Textfarben bleiben erhalten.
 
 Die genauen Schwellen/Verzögerungen und die initial nicht gewählte Zeile sind
 eigene Entwurfsentscheidungen. Die Nutzeranforderung **automatisch anzeigen**
-ist bindend und unabhängig davon, welche Optik anschließend gewählt wird.
+ist bindend; die Optik wurde inzwischen als D mit Ergänzungen gewählt.
 
 ## Auslöser und Abbruch
 
@@ -110,8 +114,12 @@ Eine Option in die bestehende Editor-Kategorie von Einstellungen A einpassen;
 deren Transaktions-/Übernehmen-Vertrag erhalten. Galerie-Schalter ist kein
 persistentes Preferences-Backend.
 
-**Optik D/E/F noch nicht übernehmen**, A/B/C nicht erneut vorlegen. Native
-Integration und Betriebssystem-/Screenreader-/IME-Abnahme bleiben offen.
+**D gemäß Ergänzungen nativ umsetzen**, A/B/C oder E/F nicht erneut zur Wahl stellen.
+Fünf sichtbare Zeilen begrenzen die Höhe, nicht den Ergebnisbestand. Anzahl
+später in Einstellungen A / Editor; Scope-Helfer und gemeinsamer Syntaxrenderer
+der Browserstudie illustrieren die Ergänzungen. [Genaue Grenzen und Werte](APPROVED.md).
+Hintergrundton neutral/heller/kühl bleibt eine Farbprobe. Native Integration
+und Betriebssystem-/Screenreader-/IME-Abnahme bleiben offen.
 Suchinsel, API-Karte, F1 H, A2, Kontextmenüs A und alle bisherigen Freigaben erhalten.
 Code-/Auswahllogik verwendet nur lokale Browser-Fixtures; kein Speichern,
 Kompilieren, Systemclipboard oder Local Storage.

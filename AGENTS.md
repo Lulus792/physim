@@ -135,13 +135,29 @@
   [ADR 022](docs/decisions/022-automatic-completion.md) und
   [neue Entwürfe D/E/F](docs/visuals/completion-typing-options/README.md) lesen.
   Automatische Anzeige nativ mit ergänzen; manuelles Strg+Leertaste erhalten.
-  D/E/F sind noch nicht ausgewählt, keine Optik vor der Entscheidung übernehmen;
+  D ist inzwischen mit Ergänzungen gewählt (ADR 023); E/F bleiben Historie;
   A/B/C nicht erneut zur Wahl stellen. Vorhandenen Katalog/Sprach-/Memberregeln,
   Undo/Zielbindung, API-Karte, F1 H, Suchinsel und A2 erhalten. Automatische Anzeige
   ist keine automatische Einfügung. Vorschläge/Timer bei Eingabe-/Dokumentwechsel
   verwerfen, IME/Kommentare/Strings/Nur lesen berücksichtigen. Kein neuer KI-/
   LSP-Dienst oder Provider-Worker. Referenz-Ladefall bleibt ein Zustandsentwurf.
   D10 vor neuer Gestaltung am bereits vorhandenen Explorer-/API-Bestand prüfen.
+
+## Verbindliche Designauswahl: Vervollständigung D
+
+- Der Nutzer hat am 30. Oktober 2026 **D mit standardmäßig fünf sichtbaren
+  Einträgen, schmaler Scrollleiste und Variablenvorschlägen in Funktionsargumenten**
+  ausgewählt. Anzahl später in Einstellungen A / Editor einstellbar, Standard 5;
+  Ergebnisbestand nicht auf fünf kürzen. [ADR 023](docs/decisions/023-selected-completion-d.md),
+  [Spezifikation](docs/visuals/completion-typing-options/APPROVED.md) und
+  [Gesamtübergabe](docs/visuals/unified-workspace/NEXT-CHAT.md) beachten.
+  Code in Kurzinfo und Editor mit denselben aktiven Syntaxrollen zeichnen.
+  Zugängliche Variablen/Parameter aus tatsächlichen sprachabhängigen Scopes
+  anbieten; der begrenzte Browser-C-Lexer ist keine vollständige native Lösung.
+  **Der genaue Kurzinfo-Hintergrundton ist noch offen**; neutral/heller/kühl
+  sind nur Farbproben im gewählten D. Keine erneute Grundlayoutwahl vorschalten.
+  Automatische Anzeige und alle bisherigen Freigaben bleiben bestehen;
+  Browserbelege bestätigen keine native oder Plattformabnahme.
 
 ## Speicherpflege
 

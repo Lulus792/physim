@@ -1,0 +1,15 @@
+{
+  "normalization": "CRLF to LF before SHA-256",
+  "sourceCommit": "9151e5eb186f1ce73edee01db4957cc8ead2453b",
+  "sha256": {
+    "docs/visuals/completion-typing-options/index.html": "bb6d3826b23a8e8ce56eb49407753e8c6e411ba4c40228b973556b24dff213cd",
+    "docs/visuals/completion-typing-options/completion.js": "558ae4b88e7f223a122c1077314c69c551e0e4bf8b08155f15abb5434724bee1",
+    "docs/visuals/completion-typing-options/code-context.js": "051331772688d3d70a18c9bb8b5a7827b783dfbbdef92522044168887541a851",
+    "docs/visuals/completion-typing-options/completion.css": "93aa2408c9d96cf9b613cc360813cdbeca7442526e216b72e2d47855ade59996",
+    "docs/visuals/completion-options/completion.css": "4f1f954abdb9967c902085faf7da2bfad500d5abef29798ca65137939d8301e9",
+    "docs/visuals/context-menu-options/menus.css": "e6b3d205629b94a2a07e06ba81604056d6d24880743009dbccf3cda9b41339cd",
+    "docs/visuals/completion-options/catalog.js": "50bd8c70ca979ccc48900f0524b60a38138c7aef536853cdaf442c35c63e7707",
+    "tools/check_completion_d.cjs": "7e0fc429601b2a30c13371f210a4b148244c2f96a80a2f5290c0527a0cff801a",
+    "tools/check_completion_typing_options.cjs": "c22e3e7aa43b6a176e96db63be04c0152626a1da4b15dfbe03a3bbcbbca1e11f"
+  }
+}

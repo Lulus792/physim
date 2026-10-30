@@ -1,9 +1,10 @@
 # Physim · Gemeinsame Designvorschau
 
-**Neue Runde vom 30. Oktober: automatische Vervollständigung.**
-[D · Editor / E · Neovim / F · IDE](../completion-typing-options/index.html?variant=e).
-Auto-Anzeige beim Tippen ist beauftragt; Optik D/E/F offen. A/B/C sind verworfen.
-Bestehender Katalog, API-Karte, F1 H, Suchinsel und A2 bleiben erhalten.
+**Gewählt am 30. Oktober: automatische Vervollständigung D** mit fünf sichtbaren
+Zeilen, schmaler Scrollleiste, Argument-Variablen und gemeinsamen Syntaxfarben.
+[Spezifikation](../completion-typing-options/APPROVED.md) ·
+[festgelegte Referenz](../completion-typing-options/index.html?approved=1&scenario=arguments).
+Nur der genaue Kurzinfo-Hintergrundton bleibt offen. Bestehende Freigaben erhalten.
 
 **Bestandskorrektur vom 30. Oktober:** Die Suchinsel samt Ersetzung ist bereits
 gestaltet. Die [ergänzende Suchstudie](../search-options/README.md) ersetzt sie

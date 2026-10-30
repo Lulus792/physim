@@ -1,9 +1,10 @@
 # Physim – getrennte Designvarianten
 
-**Neue Runde vom 30. Oktober 2026:** automatische Vorschläge beim Tippen sind
-ausdrücklich beauftragt. [Neue Optik D/E/F](../completion-typing-options/index.html?variant=e)
-vergleicht Editor-/Neovim-/IDE-Muster. Noch nicht ausgewählt; A/B/C sind verworfen.
-Bestehenden Katalog, API-Karte, F1 und Suchinsel erhalten.
+**Auswahl vom 30. Oktober 2026:** automatische Vervollständigung **D mit fünf
+sichtbaren Zeilen**, schmaler Scrollleiste, Argument-Variablen und Syntaxfarben.
+[Spezifikation](../completion-typing-options/APPROVED.md) ·
+[Referenz](../completion-typing-options/index.html?approved=1&scenario=arguments).
+Nur Kurzinfo-Hintergrundton noch offen. Keine erneute Grundlayoutwahl.
 
 **Bestandsabgleich vom 30. Oktober 2026:** Die Suchinsel war bereits gestaltet.
 Die [ergänzende Suchstudie](../search-options/README.md) bleibt nicht freigegeben;

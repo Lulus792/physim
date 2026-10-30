@@ -1,5 +1,13 @@
 # Verbindliches Einstellungsdesign A · Kategorien
 
+**Ergänzung vom 30. Oktober 2026:** Für die gewählte
+[Vervollständigung D](../completion-typing-options/APPROVED.md) in der bestehenden
+Editor-Kategorie „Vorschläge beim Tippen“ und „Sichtbare Vervollständigungen“
+(Standard **5**) berücksichtigen. Die Anzahl begrenzt sichtbare Zeilen, nicht
+Treffer; bestehendes Übernehmen/Abbrechen/Standardwerte und Preferences-Modell
+verwenden. Dies ist ein nativer Folgeauftrag, kein bereits fertiges Backend
+durch den Galerie-Prüfschalter. Keine neue Einstellungsvariante nötig.
+
 **Freigegeben vom Nutzer am 29. Oktober 2026.** A gehört zum fertigen Design.
 Die Auswahlphase ist abgeschlossen; diese Spezifikation im bestehenden nativen
 Auftrag umsetzen. B/C sind ausschließlich Vergleichshistorie. Keine erneute
