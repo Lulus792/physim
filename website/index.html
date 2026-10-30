@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#141518">
+  <meta name="description" content="Physim ist eine native C17-Arbeitsumgebung für reproduzierbare Physikexperimente, Simulation, Messung und Auswertung.">
+  <title>Physim — Reproduzierbare Physikexperimente</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23141518'/%3E%3Cpath d='M16 44 31 15l17 29' fill='none' stroke='%238abaff' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='31' cy='15' r='5' fill='%2364aaff'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --ink: #edeef2;
+      --muted: #a6a9b1;
+      --faint: #9296a0;
+      --bg: #141518;
+      --panel: #1e1f23;
+      --panel-2: #25262b;
+      --line: rgba(166, 169, 177, .24);
+      --lime: #8abaff;
+      --blue: #64aaff;
+      --violet: #c586c0;
+      --orange: #e8ba91;
+      --max: 1180px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .33;
+      background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, #000 0%, transparent 76%);
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    .wrap { width: min(var(--max), calc(100% - 40px)); margin: 0 auto; }
+    .site-header { position: relative; z-index: 2; border-bottom: 1px solid var(--line); }
+    .nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: inline-flex; align-items: center; gap: 12px; font-weight: 750; letter-spacing: -.02em; }
+    .brand-mark { width: 34px; height: 34px; display: grid; place-items: center; color: var(--lime); border: 1px solid rgba(138,186,255,.45); border-radius: 10px; background: linear-gradient(145deg, rgba(138,186,255,.14), rgba(100,170,255,.08)); }
+    .brand-mark svg { width: 22px; height: 22px; }
+    .nav-links { display: flex; align-items: center; gap: 26px; color: var(--muted); font-size: 14px; }
+    .nav-links a:hover, .nav-links a:focus-visible { color: var(--ink); }
+    .nav-cta { display: inline-flex; align-items: center; gap: 8px; color: #fff; background: #1965ce; border-radius: 999px; padding: 10px 16px; font-size: 14px; font-weight: 750; }
+    .nav-cta:hover, .nav-cta:focus-visible { background: #3780e4; transform: translateY(-1px); }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--lime); font-size: 12px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 4px rgba(138,186,255,.12); }
+    .hero { position: relative; padding: 94px 0 84px; }
+    .hero-grid { display: grid; grid-template-columns: minmax(0, 1.02fr) minmax(400px, .98fr); gap: 72px; align-items: center; }
+    h1, h2, h3, p { margin: 0; }
+    h1 { max-width: 680px; margin-top: 22px; font-size: clamp(3.2rem, 7vw, 6.4rem); line-height: .95; letter-spacing: -.075em; font-weight: 760; }
+    h1 span { color: var(--lime); }
+    .hero-copy { max-width: 580px; margin-top: 28px; color: var(--muted); font-size: 19px; line-height: 1.65; }
+    .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 34px; }
+    .button { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 48px; border: 1px solid transparent; border-radius: 10px; padding: 0 18px; font-weight: 750; transition: .2s ease; }
+    .button-primary { background: #1965ce; color: #fff; }
+    .button-primary:hover, .button-primary:focus-visible { background: #3780e4; transform: translateY(-2px); }
+    .button-ghost { border-color: var(--line); color: var(--ink); background: rgba(255,255,255,.025); }
+    .button-ghost:hover, .button-ghost:focus-visible { border-color: rgba(138,186,255,.5); background: rgba(138,186,255,.06); }
+    .hero-note { margin-top: 20px; color: var(--faint); font-size: 13px; }
+    .lab-card { position: relative; min-height: 462px; overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: linear-gradient(140deg, rgba(37,38,43,.98), rgba(25,26,30,.98)); box-shadow: 0 24px 80px rgba(0,0,0,.35); }
+    .lab-card::after { content: ""; position: absolute; width: 300px; height: 300px; right: -130px; top: -150px; border-radius: 50%; background: rgba(100,170,255,.14); filter: blur(4px); }
+    .card-top { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid var(--line); color: var(--muted); font: 12px/1.2 ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .signal { display: inline-flex; align-items: center; gap: 8px; color: var(--lime); }
+    .signal::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--lime); }
+    .lab-visual { position: relative; height: 315px; padding: 28px 24px 0; }
+    .lab-visual svg { width: 100%; height: 100%; overflow: visible; }
+    .axis { stroke: rgba(166,169,177,.24); stroke-width: 1; }
+    .curve { fill: none; stroke: var(--lime); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 7px rgba(138,186,255,.34)); }
+    .curve-2 { fill: none; stroke: var(--blue); stroke-width: 2; stroke-dasharray: 5 7; opacity: .9; }
+    .plot-label { fill: var(--faint); font: 11px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .orb { fill: var(--lime); stroke: #0a0f14; stroke-width: 4; }
+    .card-bottom { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--line); border-top: 1px solid var(--line); }
+    .metric { padding: 15px 18px; background: rgba(30,31,35,.95); }
+    .metric-label { color: var(--faint); font-size: 11px; text-transform: uppercase; letter-spacing: .12em; }
+    .metric-value { margin-top: 3px; font: 700 16px/1.2 ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .section { position: relative; padding: 104px 0; border-top: 1px solid var(--line); }
+    .section-heading { max-width: 680px; }
+    h2 { margin-top: 15px; font-size: clamp(2.2rem, 4vw, 4rem); line-height: 1.02; letter-spacing: -.055em; }
+    .section-intro { margin-top: 18px; color: var(--muted); font-size: 17px; }
+    .flow-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 48px; }
+    .flow-card { min-height: 220px; padding: 22px; border: 1px solid var(--line); border-radius: 14px; background: rgba(30,31,35,.9); }
+    .flow-number { display: flex; align-items: center; justify-content: space-between; color: var(--lime); font: 700 13px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .flow-number span { color: var(--faint); font-weight: 400; }
+    .flow-card h3 { margin-top: 42px; font-size: 20px; letter-spacing: -.03em; }
+    .flow-card p { margin-top: 10px; color: var(--muted); font-size: 14px; line-height: 1.6; }
+    .experiment-layout { display: grid; grid-template-columns: .78fr 1.22fr; gap: 68px; align-items: start; margin-top: 48px; }
+    .experiment-list { display: grid; gap: 12px; }
+    .experiment { display: grid; grid-template-columns: 46px 1fr; gap: 15px; padding: 18px; border: 1px solid var(--line); border-radius: 13px; background: rgba(30,31,35,.9); }
+    .experiment-icon { display: grid; place-items: center; width: 42px; height: 42px; color: var(--blue); border: 1px solid rgba(100,170,255,.28); border-radius: 11px; background: rgba(100,170,255,.08); }
+    .experiment:nth-child(2) .experiment-icon { color: var(--orange); border-color: rgba(232,186,145,.28); background: rgba(232,186,145,.08); }
+    .experiment:nth-child(3) .experiment-icon { color: var(--violet); border-color: rgba(197,134,192,.28); background: rgba(197,134,192,.08); }
+    .experiment:nth-child(4) .experiment-icon { color: var(--lime); border-color: rgba(138,186,255,.28); background: rgba(138,186,255,.08); }
+    .experiment h3 { font-size: 16px; letter-spacing: -.02em; }
+    .experiment p { margin-top: 4px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .language-panel { position: relative; overflow: hidden; min-height: 390px; padding: 30px; border: 1px solid rgba(138,186,255,.2); border-radius: 18px; background: radial-gradient(circle at 100% 0%, rgba(138,186,255,.11), transparent 35%), #191a1e; }
+    .language-panel::before { content: "PHYSIM-LANGUAGE"; position: absolute; top: 20px; right: 24px; color: rgba(138,186,255,.35); font: 10px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .14em; }
+    .code-caption { color: var(--muted); font-size: 13px; }
+    pre { margin: 24px 0 0; overflow-x: auto; color: #edeef2; font: 14px/1.85 ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .kw { color: #569cd6; } .fn { color: #dcdcaa; } .num { color: #b5cea8; } .cm { color: #6a9955; } .prop { color: #9cdcfe; }
+    .start-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px; }
+    .start-card { padding: 28px; border: 1px solid var(--line); border-radius: 15px; background: var(--panel); }
+    .start-card h3 { font-size: 20px; letter-spacing: -.03em; }
+    .start-card p { margin-top: 10px; color: var(--muted); font-size: 15px; }
+    .command { display: flex; align-items: center; gap: 12px; margin-top: 24px; padding: 15px 16px; border: 1px solid var(--line); border-radius: 10px; background: #141518; color: var(--lime); font: 13px ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .command code { min-width: 0; overflow-x: auto; white-space: nowrap; }
+    .copy { margin-left: auto; flex: 0 0 auto; border: 1px solid var(--line); border-radius: 7px; padding: 6px 9px; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; }
+    .copy:hover, .copy:focus-visible { color: var(--ink); border-color: var(--lime); }
+    .requirements { display: grid; gap: 10px; margin-top: 20px; color: var(--muted); font-size: 14px; }
+    .requirements li::marker { color: var(--lime); }
+    .footer { padding: 36px 0 44px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .footer strong { color: var(--ink); }
+    :focus-visible { outline: 2px solid var(--lime); outline-offset: 4px; }
+    .gallery { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin-top:48px; }
+    .example-card { border:1px solid var(--line); border-radius:14px; overflow:hidden; background:var(--panel); }
+    .example-art { height:150px; display:grid; place-items:center; background:#191a1e; border-bottom:1px solid var(--line); }
+    .example-art svg { width:90%; height:90%; } .example-body { padding:22px; } .example-body h3 { margin-top:14px; font-size:20px; } .example-body p { margin-top:10px; color:var(--muted); font-size:14px; } .example-body a,.guide-note a { display:inline-block; margin-top:18px; color:var(--lime); font-weight:700; } .tag { color:var(--lime); font-size:11px; text-transform:uppercase; letter-spacing:.08em; }
+    .demo-grid,.status-grid { display:grid; grid-template-columns:1fr 1fr; gap:70px; align-items:center; } .demo-panel { padding:26px; border:1px solid var(--line); border-radius:16px; background:var(--panel); } .demo-top { display:flex; justify-content:space-between; color:var(--muted); font:12px ui-monospace,monospace; } .pendulum { height:190px; display:flex; justify-content:center; padding-top:15px; } .pendulum-arm { position:relative; height:140px; width:2px; background:#a6a9b1; transform:rotate(22deg); transform-origin:top; } .pendulum-bob { position:absolute; bottom:-12px; left:-13px; width:28px; height:28px; border-radius:50%; background:#8abaff; } .demo-panel label,.result { display:flex; justify-content:space-between; gap:15px; } .demo-panel input { width:100%; accent-color:#8abaff; margin:18px 0; } .result { padding-top:18px; border-top:1px solid var(--line); color:var(--muted); } .result strong { color:var(--ink); font-size:24px; } .disclaimer { color:var(--muted); font-size:14px; margin-top:20px; } .guide-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; margin-top:48px; } .guide-grid article { border-top:1px solid var(--line); padding-top:20px; } .guide-grid span { color:var(--lime); font:700 13px ui-monospace,monospace; } .guide-grid h3 { margin-top:18px; font-size:18px; } .guide-grid p,.guide-note p { margin-top:10px; color:var(--muted); font-size:14px; } .guide-note { margin-top:40px; padding:24px; border:1px solid var(--line); background:var(--panel); border-radius:12px; }
+    @media (max-width: 900px) { .gallery,.guide-grid { grid-template-columns:repeat(2,1fr); } .demo-grid,.status-grid { grid-template-columns:1fr; gap:32px; }
+
+      .hero-grid, .experiment-layout { grid-template-columns: 1fr; }
+      .hero-grid { gap: 48px; }
+      .flow-grid { grid-template-columns: repeat(2, 1fr); }
+      .experiment-layout { gap: 34px; }
+    }
+    @media (max-width: 640px) {
+      .wrap { width: min(100% - 28px, var(--max)); }
+      .nav { min-height: 66px; }
+      .nav-links { display: none; }
+      .nav-cta { padding: 9px 12px; }
+      .hero { padding: 70px 0 64px; }
+      h1 { font-size: clamp(3rem, 16vw, 4.5rem); }
+      .hero-copy { font-size: 17px; }
+      .lab-card { min-height: 400px; }
+      .lab-visual { height: 260px; padding-left: 14px; padding-right: 14px; }
+      .section { padding: 76px 0; }
+      .flow-grid, .start-grid, .gallery, .guide-grid { grid-template-columns: 1fr; }
+      .flow-card { min-height: 0; }
+      .flow-card h3 { margin-top: 26px; }
+      .language-panel { padding: 22px 18px; }
+      pre { font-size: 12px; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap nav">
+      <a class="brand" href="#top" aria-label="Physim Startseite">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 17 11.2 5l7.1 12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11.2" cy="5" r="2" fill="#64aaff"/></svg></span>
+        <span>physim</span>
+      </a>
+      <nav class="nav-links" aria-label="Hauptnavigation">
+        <a href="#ablauf">Ablauf</a>
+        <a href="#experimente">Beispiele</a>
+        <a href="#demo">Pendel entdecken</a>
+        <a href="#guide">User Guide</a>
+        <a href="#status">Version</a>
+      </nav>
+      <a class="nav-cta" href="#guide">User Guide <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow">Native Physik-Workbench</div>
+          <h1>Vom <span>Modell</span> zur Messkurve.</h1>
+          <p class="hero-copy">Physim verbindet Modelle, Simulation und Messdaten. Erkunde physikalische Fragen, vergleiche Läufe und halte deine Ergebnisse nachvollziehbar fest.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#experimente">Beispiele entdecken <span aria-hidden="true">↓</span></a>
+            <a class="button button-ghost" href="#ablauf">Arbeitsweise ansehen</a>
+          </div>
+          <p class="hero-note">In Entwicklung · Noch keine stabile Version veröffentlicht</p>
+        </div>
+        <div class="lab-card" aria-label="Schematische Darstellung einer Messkurve">
+          <div class="card-top"><span>runs/pendulum.psrun</span><span class="signal">SCHEMATISCHE ANSICHT</span></div>
+          <div class="lab-visual">
+            <svg viewBox="0 0 520 270" role="img" aria-label="Schwingende Messkurve und Modellkurve">
+              <line x1="36" y1="18" x2="36" y2="232" class="axis"/><line x1="36" y1="232" x2="500" y2="232" class="axis"/>
+              <line x1="36" y1="72" x2="500" y2="72" class="axis"/><line x1="36" y1="152" x2="500" y2="152" class="axis"/>
+              <path class="curve-2" d="M36 128 C68 56 95 61 126 133 S186 207 218 126 280 52 312 127 373 204 405 125 466 57 500 113"/>
+              <path class="curve" d="M36 130 C67 63 92 56 125 132 S186 213 217 122 280 47 314 123 369 208 404 127 467 50 500 110"/>
+              <circle class="orb" cx="314" cy="123" r="7"/><text class="plot-label" x="44" y="253">0.0 s</text><text class="plot-label" x="458" y="253">20.0 s</text><text class="plot-label" x="45" y="30">x / m</text>
+            </svg>
+          </div>
+          <div class="card-bottom">
+            <div class="metric"><div class="metric-label">Schritte</div><div class="metric-value">4 000</div></div>
+            <div class="metric"><div class="metric-label">dt</div><div class="metric-value">0.005 s</div></div>
+            <div class="metric"><div class="metric-label">Seed</div><div class="metric-value">42</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="ablauf">
+      <div class="wrap">
+        <div class="section-heading"><div class="eyebrow">Ein durchgängiger Ablauf</div><h2>Jeder Lauf bleibt erklärbar.</h2><p class="section-intro">Quellcode, Prozessgrenze, Messdaten und Analyse sind getrennt – und gehören trotzdem zu demselben reproduzierbaren Experiment.</p></div>
+        <div class="flow-grid">
+          <article class="flow-card"><div class="flow-number">01 <span>definition</span></div><h3>Experiment beschreiben</h3><p>Parameter, Anfangswerte, Sensoren und Integrator liegen direkt im Projektcode.</p></article>
+          <article class="flow-card"><div class="flow-number">02 <span>build</span></div><h3>Modul bauen</h3><p>Physim baut Experiment und Auswertung separat und zeigt Quelldiagnosen im Editor.</p></article>
+          <article class="flow-card"><div class="flow-number">03 <span>run</span></div><h3>Messung ausführen</h3><p>Der Runner speichert Messwerte und Laufmetadaten; adaptive Schritte halten ihre tatsächlichen Zeiten fest.</p></article>
+          <article class="flow-card"><div class="flow-number">04 <span>report</span></div><h3>Ergebnis prüfen</h3><p>Kurven, Statistik und eigene Berichte auswerten; Daten als CSV und Diagramme als SVG oder PNG exportieren.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="experimente">
+      <div class="wrap">
+        <div class="section-heading"><div class="eyebrow">Gallery of examples</div><h2>Fragen, die du untersuchen kannst.</h2><p class="section-intro">Eine Auswahl aus dem Entwicklungsstand. Die Darstellungen sind schematisch; eine stabile Version mit versionierten Beispielen ist noch nicht veröffentlicht.</p></div>
+        <div class="gallery">
+          <article class="example-card"><div class="example-art" aria-hidden="true"><svg viewBox="0 0 300 140"><path d="M30 70 H270 M150 15 V125" class="axis"/><path d="M32 72 C55 10 75 10 96 72 S136 133 158 72 198 10 220 72 250 128 270 72" class="curve"/></svg></div><div class="example-body"><span class="tag">Schwingung · Vergleich</span><h3>Pendel</h3><p>Wie beeinflussen Länge, Anfangswinkel und Zeitschritt die Schwingung? Vergleiche Perioden und Energiebilanzen.</p><a href="#demo">Pendelbeispiel ansehen →</a></div></article>
+          <article class="example-card"><div class="example-art" aria-hidden="true"><svg viewBox="0 0 300 140"><path d="M25 115 H275 M35 15 V115" class="axis"/><path d="M35 110 Q135 -55 265 110" class="curve"/><path d="M35 110 Q120 5 205 110" class="curve-2"/></svg></div><div class="example-body"><span class="tag">Bewegung · Modellvergleich</span><h3>Wurf mit und ohne Luft</h3><p>Vergleiche Flugbahnen bei gleichem Anfangszustand und untersuche den Einfluss des Mediums.</p></div></article>
+          <article class="example-card"><div class="example-art" aria-hidden="true"><svg viewBox="0 0 300 140"><path d="M25 112 H275" class="axis"/><circle cx="95" cy="81" r="30" fill="none" stroke="#8abaff" stroke-width="3"/><circle cx="200" cy="81" r="30" fill="none" stroke="#b5cea8" stroke-width="3"/><path d="M45 80 H62 M233 80 H258" stroke="#8abaff" stroke-width="3"/></svg></div><div class="example-body"><span class="tag">Kontakt · Erhaltung</span><h3>Kugelstoß</h3><p>Beobachte Impuls und Energie bei unterschiedlichen Massen und Stoßeigenschaften.</p></div></article>
+          <article class="example-card"><div class="example-art" aria-hidden="true"><svg viewBox="0 0 300 140"><path d="M20 70 H45 l10 -25 20 50 20 -50 20 50 20 -50 20 50 10 -25 H205" fill="none" stroke="#8abaff" stroke-width="3"/><rect x="205" y="40" width="55" height="60" rx="5" fill="#303136" stroke="#a6a9b1"/></svg></div><div class="example-body"><span class="tag">Dämpfung · Energie</span><h3>Feder und Dämpfer</h3><p>Unterscheide abnehmende Amplitude, dissipierte Arbeit und numerischen Bilanzfehler.</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="demo"><div class="wrap demo-grid"><div><div class="eyebrow">Ein konkretes Experiment</div><h2>Was passiert, wenn das Pendel länger wird?</h2><p class="section-intro">Ändere die Länge und beobachte die geschätzte Schwingungsdauer. Für kleine Winkel gilt näherungsweise T = 2π √(L / g): Vierfache Länge ergibt etwa die doppelte Periode.</p><p class="disclaimer">Diese interaktive Vorschau berechnet die Kleinwinkelnäherung im Browser. Sie ist keine Physim-Simulation und zeigt keine gemessenen Laufdaten.</p></div><div class="demo-panel"><div class="demo-top"><span>IDEALES PENDEL</span><span>g = 9,81 m/s²</span></div><div class="pendulum" aria-hidden="true"><div class="pendulum-arm"><div class="pendulum-bob"></div></div></div><label for="length">Pendellänge <strong id="length-value">1,0 m</strong></label><input id="length" type="range" min="0.25" max="4" step="0.05" value="1"><div class="result"><span>Geschätzte Periode</span><strong id="period" aria-live="polite">2,01 s</strong></div></div></div></section>
+
+    <section class="section" id="guide"><div class="wrap"><div class="section-heading"><div class="eyebrow">User Guide</div><h2>Vom ersten Modell zum Vergleich.</h2><p class="section-intro">Der vorgesehene Arbeitsweg im aktuellen Entwicklungsstand. Installations- und Referenzlinks werden an die erste stabile Version gebunden, sobald sie veröffentlicht ist.</p></div><div class="guide-grid">
+      <article><span>01</span><h3>Projekt anlegen</h3><p>Ein Experiment wählen, etwa das Pendel, und Projektordner sowie Sprache festlegen.</p></article>
+      <article><span>02</span><h3>Modell ausführen</h3><p>Das Projekt bauen, die Parameter prüfen und den Lauf in der Simulation beobachten.</p></article>
+      <article><span>03</span><h3>Messwerte auswerten</h3><p>Den Lauf speichern und Kurven, Tabellen sowie einen Bericht betrachten.</p></article>
+      <article><span>04</span><h3>Eine Größe ändern</h3><p>Eine Vorhersage formulieren, einen zweiten Lauf erzeugen und dieselbe Zielgröße vergleichen.</p></article>
+    </div><div class="guide-note"><strong>Für den Einstieg</strong><p>Beispielgalerie, Anleitung und API-Referenz werden mit der stabilen Veröffentlichung auf den passenden GitHub-Stand verlinkt. Bis dahin beschreibt diese Seite die Entwicklung und ersetzt keine veröffentlichte Versionsdokumentation.</p><a href="https://github.com/PhysicSimulator/physim/releases">GitHub-Releases ansehen ↗</a></div></div></section>
+
+    <section class="section" id="status"><div class="wrap status-grid"><div><div class="eyebrow">Version &amp; Verfügbarkeit</div><h2>Ein Projekt in Entwicklung.</h2></div><div><p class="section-intro">Für Physim ist derzeit keine stabile GitHub-Version veröffentlicht. Die Beispiele auf dieser Seite geben einen Einblick in den Entwicklungsstand; sie sind keine Zusage für eine bereits verfügbare Release-Version.</p><p class="section-intro">Sobald ein stabiles Release erscheint, sollen Downloads, User Guide, Beispielquellen und API-Referenz auf denselben versionierten Stand verweisen.</p><div class="hero-actions"><a class="button button-primary" href="https://github.com/PhysicSimulator/physim/releases">Stabile Releases auf GitHub ↗</a></div></div></div></section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner"><div><strong>physim</strong> · native Physikexperimente, nachvollziehbar gemacht.</div><div>In Entwicklung · <a href="https://github.com/PhysicSimulator/physim/releases">GitHub-Releases ↗</a></div></div>
+  </footer>
+  <script>
+    const length = document.getElementById('length');
+    const lengthValue = document.getElementById('length-value');
+    const period = document.getElementById('period');
+    function updatePendulum() {
+      const value = Number(length.value);
+      lengthValue.textContent = value.toLocaleString('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' m';
+      period.textContent = (2 * Math.PI * Math.sqrt(value / 9.81)).toLocaleString('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' s';
+    }
+    length.addEventListener('input', updatePendulum);
+    updatePendulum();
+  </script>
+</body>
+</html>
