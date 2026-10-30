@@ -10,6 +10,7 @@
 @media(forced-colors:active){.context-menu,.detail,.target-item[aria-pressed=true]{border:1px solid CanvasText}.target-item[aria-pressed=true]{outline:1px solid Highlight}.context-menu button:focus{outline:2px solid Highlight}.check{color:CanvasText!important}::selection{background:Highlight;color:HighlightText}}
 
 .scene.no-grid{background:var(--field)}.context-menu[data-style=a] .command-icon.checkbox{display:block}
+body[data-approved=true] .variants{display:none}
 
 .code-layer{position:relative}.code-mirror{position:absolute;inset:0;margin:0;padding:8px 0;font:14px/1.9 Consolas,monospace;white-space:pre-wrap;overflow-wrap:break-word;overflow:hidden;pointer-events:none;color:transparent}.code-editor{position:relative;z-index:1}.mirror-selection{background:transparent;color:transparent}body[data-menu-open=true] .mirror-selection{background:var(--selected)}
 

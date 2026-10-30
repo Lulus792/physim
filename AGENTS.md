@@ -84,7 +84,7 @@
   dauerhafte Veraltet-Kennzeichnung, Gruppierung und Fokus. Mit dem vorhandenen
   Protokoll-C-Ereignisbestand verbinden; echte Ziel-/Versionsidentitäten erhalten.
   Alle bisherigen Freigaben und native Arbeiten bleiben bestehen. Browserbelege
-  sind keine native Abnahme. D06/D07 bleiben eigene offene Entwurfsrunden.
+  sind keine native Abnahme. D06/D07 sind inzwischen ebenfalls gewählt.
 
 ## Verbindliche Designauswahl: Fortschritt B mit Pop-out
 
@@ -100,16 +100,22 @@
   und Fensterschließen ohne Abbruch/Neustart. Ein gemeinsamer Auftragszustand,
   keine doppelten Worker. Hauptfenster bleibt bedienbar. Browser-Pop-up ist
   keine native Abnahme. Bestehende Freigaben und native Arbeit erhalten;
-  D07 bleibt die nächste neue Entwurfsrunde.
+  D07 ist inzwischen als A gewählt; D08 bleibt die nächste neue Entwurfsrunde.
 
-## Getrennte Entwürfe: Kontextmenüs D07
+## Verbindliche Designauswahl: Kontextmenüs A
 
-- Die [Kontextmenüvorschauen A/B/C](docs/visuals/context-menu-options/README.md)
-  vom 30. Oktober 2026 sind ausdrücklich getrennt und **noch nicht ausgewählt**.
-  Keine Variante als fertiges Design übernehmen, bevor der Nutzer entscheidet.
-  A2-Markierung, Rechtsklick-/Tastaturbedienung und alle bisherigen Freigaben
-  bleiben erhalten. Die Runde gestaltet die Befehlsmatrix je Ziel; sie führt
-  keine unbelegten Datei-/Modellfunktionen ein. D08 bleibt die nächste neue Runde.
+- Der Nutzer hat am 30. Oktober 2026 **A · Kompakt für D07 ausgewählt**.
+  Die vorherige Übernahmesperre ist aufgehoben; A nativ mit umsetzen,
+  keine neue Variantenwahl. B/C bleiben Vergleichshistorie.
+- [ADR 021](docs/decisions/021-selected-context-menu-a.md),
+  [verbindliche Spezifikation](docs/visuals/context-menu-options/APPROVED.md) und
+  [Gesamtübergabe](docs/visuals/unified-workspace/NEXT-CHAT.md) beachten:
+  kompakte Liste mit Trennlinien, Tastaturhinweisen, Untermenüs und gesperrten
+  Befehlen mit Grund; keine B-Zielköpfe/C-Erklärzeilen. Neun Zielarten,
+  Mehrfachauswahl, A2, Rechtsklick/Menütaste/Umschalt+F10, Fokus und Kameradrag
+  erhalten. Echte native Verfügbarkeit, Ziel-/Versionsbindung und Ergebnisse
+  verwenden. Alle bisherigen Freigaben und native Arbeit bleiben erhalten;
+  Browserbelege sind keine native Abnahme. D08 ist die nächste neue Entwurfsrunde.
 
 ## Speicherpflege
 

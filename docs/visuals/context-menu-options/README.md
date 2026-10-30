@@ -1,25 +1,29 @@
-# D07: Kontextmenüs · getrennte Designvorschauen
+# D07: Kontextmenüs · A ist gewählt
 
-Stand: **30. Oktober 2026 · Auswahl offen.** Der Nutzer hat die nächste Runde
-aus der [UI-Liste](../unified-workspace/UI-DESIGN-BACKLOG.md) ausdrücklich wieder
-als getrennte Vorschauen beauftragt. A/B/C sind noch nicht ausgewählt und
-werden vor der Entscheidung nicht ins fertige Design übernommen.
+Stand: **30. Oktober 2026 · A · Kompakt verbindlich ausgewählt.** Die getrennte
+Auswahlphase ist abgeschlossen; A nativ mit umsetzen. Die vorherige Übernahmesperre
+ist aufgehoben. [Spezifikation](APPROVED.md) und
+[ADR 021](../../decisions/021-selected-context-menu-a.md) sind verbindlich.
+B/C bleiben Vergleichshistorie; die [UI-Liste](../unified-workspace/UI-DESIGN-BACKLOG.md)
+führt D08 als nächste neue Entwurfsrunde.
 
-[Vorschau öffnen](index.html?variant=a&context=text&theme=dark) ·
-[A · Kompakt](index.html?variant=a&context=text) ·
-[B · Mit Kontext](index.html?variant=b&context=message) ·
-[C · Mit Erklärung](index.html?variant=c&context=multi).
+[Freigegebene Vorschau öffnen](index.html?approved=1&context=text&theme=dark) ·
+[historischer Vergleich A](index.html?approved=0&variant=a&context=text) ·
+[historisch B · Mit Kontext](index.html?approved=0&variant=b&context=message) ·
+[historisch C · Mit Erklärung](index.html?approved=0&variant=c&context=multi).
 Lokaler Server: `http://127.0.0.1:8791/context-menu-options/`.
 Die Seite funktioniert auch als lokale Datei, ohne externe Fonts/Netzwerk.
 
-## Drei Richtungen, dieselben Befehle
+## Gewählte Richtung und Vergleichshistorie
 
 | Variante | Gestaltung | Zweck |
 | --- | --- | --- |
-| **A · Kompakt** | Ruhige Liste, Trennlinien, Tastaturhinweise | Wenig Fläche, vertraute Reihenfolge |
+| **A · Kompakt · gewählt** | Ruhige Liste, Trennlinien, Tastaturhinweise | Wenig Fläche, vertraute Reihenfolge |
 | **B · Mit Kontext** | Zielkopf, beschriftete Gruppen, kleine Symbole | Deutlich machen, worauf der Befehl wirkt |
 | **C · Mit Erklärung** | Zielkopf und kurze Erklärung je Befehl | Wirkung vor dem Ausführen verstehen |
 
+Standardaufrufe und `approved=1` verwenden fest A, selbst bei altem B/C-Parameter.
+Nur `approved=0` zeigt den historischen Variantenvergleich.
 Alle Richtungen verwenden identische Verfügbarkeit, Zielbindung und Aktionen.
 Die Variante ändert nicht die Befehlsmenge. Wechsel erhält bearbeiteten Text,
 Beispielpuffer und ausgewählte Elemente. Ziel-/Zustandswechsel in der Galerie
@@ -107,25 +111,25 @@ Gelesene Fundstellen (sie bestätigen die Funktion, nicht diese Menüanordnung):
   [Einstellungen A](../settings-options/APPROVED.md) für das vorhandene Rasterflag.
 
 Die native Neuverknüpfung der Menübefehle, Mehrfachauswahl und Objektmetadaten
-ist nach Wahl zu prüfen/umzusetzen. Namen-/Pfadkopie verwendet vorhandene Daten
+ist gemäß Auswahl A zu prüfen/umzusetzen. Namen-/Pfadkopie verwendet vorhandene Daten
 und Clipboard-Adapter, ist kein unbelegter Dateikopier-/Verschiebeauftrag.
 Umbenennen, Dateilöschen, Objekttransformation, Split-Editor und zusätzliche
 Exportformate sind nicht durch diese Studie eingeführt.
 
-## Übergabe nach Auswahl
+## Verbindliche native Übergabe
 
-**Noch keine Variante als fertiges Design übernehmen.** Nach Entscheidung
-Variante, genaue Werte aus `menus.css`, Befehlsmatrix und Referenzen im
-[Gesamtauftrag](../unified-workspace/NEXT-CHAT.md) festschreiben. Vorher native
-Arbeit und alle bestehenden Freigaben fortsetzen; keine erneute Wahl von A2,
-Export, B2, Rückmeldungen A oder Fortschritt B mit Pop-out.
+**A ist Teil des fertigen Designs.** Genaue Werte aus `menus.css`, Befehlsmatrix
+und Referenzen sind in [APPROVED.md](APPROVED.md) und im
+[Gesamtauftrag](../unified-workspace/NEXT-CHAT.md) festgeschrieben. Native Arbeit
+und alle bestehenden Freigaben fortsetzen; keine erneute Wahl von A2, Export,
+B2, Rückmeldungen A, Fortschritt B mit Icon-only-Pop-out oder Kontextmenüs A.
 
 - Ziel-/Projekt-/Dokument-/Lauf-/Fenster-/Versionsidentitäten beim Öffnen
   festhalten. Menü nach Zielwechsel/Entfernen verwerfen; Ausführung erneut gegen
   aktuelle Gültigkeit/Berechtigung prüfen. Nicht auf eine inzwischen andere
   aktive Datei oder Auswahl umbiegen.
 - Gleiche Befehlsverfügbarkeit für Maus, Tastatur und Accessibility. Nur vorhandene
-  bzw. nach Auswahl gezielt angebundene Befehle anbieten; keine Menüpunkte, die
+  bzw. gemäß Auswahl gezielt angebundene Befehle anbieten; keine Menüpunkte, die
   nur Erfolg behaupten. Fehler aus realem Ergebnis über Rückmeldungen A/Protokoll C.
 - Kopieren/UTF-8/Originalzeilen und bestehende Undo-/Clipboard-Verträge erhalten.
   Editoränderungen dürfen keine unsichtbare neu formatierte Kopie verwenden.
@@ -145,7 +149,8 @@ D08 „Editor-Suche und Ersetzen“ bleibt die nächste neue Entwurfsrunde.
 
 ## Prüfung
 
-[Prüfbericht](review/VALIDATION.md), [Maschinenbericht](review/validation.json).
+[Freigabeprüfung](review/APPROVAL-VALIDATION.md),
+[historischer Prüfbericht](review/VALIDATION.md), [historischer Maschinenbericht](review/validation.json).
 `node tools/check_context_menu_options.cjs` mit Playwright und Edge; alternativ
 `PHYSIM_BROWSER`. Ausgaben unter `build/context-menu-options-review`.
 Keine native Windows-/Linux-/macOS- oder reale Screenreaderabnahme behauptet.

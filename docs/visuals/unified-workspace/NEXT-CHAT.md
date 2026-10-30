@@ -1,13 +1,29 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
-**Getrennte Entwürfe vom 30. Oktober 2026 – Kontextmenüs D07:**
-[A/B/C vergleichen](../context-menu-options/README.md). A ist kompakt, B zeigt
-Zielkopf/Gruppen, C kurze Aktionserklärungen. Gleiche Befehle für Text, Tab,
-Datei, Ordner, Meldung, Diagramm, Szene, Mehrfachauswahl und freie Fläche.
-**Auswahl offen: noch keine Variante übernehmen.** A2 und Rechtsklick/Menütaste/
-Umschalt+F10 bleiben verbindlich; keine automatische Aktionsleiste. Ziel-/
-Versionsbindung, Untermenüs, gesperrte Befehle, Fokus und Kameradrag sind
-berücksichtigt. Native Arbeit und folgende Freigaben erhalten; D08 folgt danach.
+**Verbindliche Auswahl vom 30. Oktober 2026 – Kontextmenüs A / D07:**
+Der Nutzer hat **A · Kompakt** gewählt. Die vorherige Übernahmesperre ist
+aufgehoben; im bestehenden nativen Auftrag mit umsetzen, keine neue Variantenwahl.
+[ADR 021](../../decisions/021-selected-context-menu-a.md),
+[genaue Spezifikation](../context-menu-options/APPROVED.md),
+[Befehlsmatrix für neun Ziele](../context-menu-options/README.md#vollständige-befehlsmatrix-dieser-studie)
+und [festgelegte Referenz](../context-menu-options/index.html?approved=1&context=text)
+lesen. Kompakte Liste, Breite 260 logische Einheiten, Trennlinien, Tastaturhinweise,
+Untermenüs und Checkboxzustände; gesperrte Befehle nennen ihren Grund. Keine
+B-Zielköpfe/Gruppenbeschriftung oder C-Erklärung je Befehl. B/C bleiben Historie.
+Text, Tab, Datei, Ordner, Meldung, Diagramm, Szenenobjekt, Mehrfachauswahl und
+freie Fläche haben ihre festgelegten Befehle. A2 bleibt unverändert, Linksauswahl
+öffnet keine Aktionsleiste. Öffnen über Rechtsklick/Menütaste/Umschalt+F10;
+Rechtsklick innerhalb der Auswahl erhält die Menge, anderes Element wird zum Ziel.
+Fokus/Untermenü-Rückkehr, rechte Kamera-Ziehbewegung und stabile Ziel-/Versions-
+identitäten erhalten, ungültige Menüs verwerfen und vor Ausführung erneut prüfen.
+Echte native Funktionen/Clipboard/Undo verwenden; den angeklickten Tab statt
+einer inzwischen anderen aktiven Datei speichern/schließen. Ungespeicherte
+Inhalte gehen durch B2; Export erhält denselben Diagrammstand, Projekt B ruft
+Explorer A auf. Fehler aus realem Ergebnis über Rückmeldungen A/Protokoll C.
+Keine erfundenen Datei-/Objektfunktionen oder Fixture-Erfolgstexte übernehmen.
+Alle bisherigen Freigaben und die laufende native Arbeit bleiben erhalten.
+Browserreferenz ist keine native oder Screenreader-/Plattformabnahme.
+D08 „Editor-Suche und Ersetzen“ ist die nächste neue Entwurfsrunde.
 
 **Verbindliche Auswahl vom 30. Oktober 2026 – Fortschritt B mit Pop-out / D06:**
 Der Nutzer hat **B · Aufgabenleiste mit Herauslösen als eigenes Fenster** gewählt.
@@ -26,7 +42,7 @@ Hauptfenster bleibt bedienbar. Bekannte/unbekannte Mengen, bestätigter Abbruch,
 Teilresultate, Erfolg-Abbruch-Rennen und ehrliche Adapterfähigkeiten erhalten.
 Browser-Pop-up ist nur Referenz, keine native Physim- oder Plattformabnahme.
 A/C bleiben Historie. Rückmeldungen A, Läufe A und alle folgenden Freigaben
-sowie laufende native Arbeit erhalten; D07 bleibt die nächste neue Runde.
+sowie laufende native Arbeit erhalten; D07 ist inzwischen A, D08 folgt als neue Runde.
 
 **Verbindliche Freigabe vom 30. Oktober 2026 – Rückmeldungen A / D05:**
 Der Nutzer hat **A · Leiser Hinweis ins fertige Design übernommen**. Die
@@ -43,7 +59,7 @@ Rückgabe; Daten und Eingaben erhalten. Optionales Ausblenden mit Fokus-/Hover-
 Pause wie spezifiziert, keine zusätzliche Einstellung aus dem Prüfschalter
 ableiten. Lokale Meldungen in vorhandenen ADR-015-Aufgabenfenstern anzeigen.
 B/C bleiben Vergleichshistorie; Browserbelege bestätigen keine fertige native
-Umsetzung. D06/D07 bleiben eigene offene Entwurfsrunden. Alle folgenden
+Umsetzung. D06/D07 sind inzwischen ebenfalls gewählt. Alle folgenden
 Freigaben und die laufende native Arbeit bleiben erhalten.
 
 **Verbindliche Freigabe vom 29. Oktober 2026 – Einstellungen A:** Der Nutzer

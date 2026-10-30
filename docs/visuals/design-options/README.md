@@ -1,9 +1,10 @@
 # Physim – getrennte Designvarianten
 
-**Neue getrennte Runde vom 30. Oktober 2026:**
-[Kontextmenüs A/B/C](../context-menu-options/index.html?variant=a&context=text).
-Auswahl offen; A2 und die bisherigen Freigaben bleiben erhalten. Diese
-Menürichtungen noch nicht ins fertige Design übernehmen.
+**Weitere Auswahl vom 30. Oktober 2026:** Kontextmenüs sind im Design
+**A · Kompakt** gewählt. [Spezifikation](../context-menu-options/APPROVED.md) ·
+[festgelegte Referenz](../context-menu-options/index.html?approved=1&context=text).
+Die vorherige Übernahmesperre ist aufgehoben; B/C bleiben Vergleichshistorie.
+A2 und alle bisherigen Freigaben bleiben erhalten.
 
 **Weitere Auswahl vom 30. Oktober 2026:** Fortschritt ist im Design
 **B · Aufgabenleiste mit Pop-out als eigenes Fenster** gewählt.

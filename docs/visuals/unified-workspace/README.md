@@ -1,5 +1,10 @@
 # Physim · Gemeinsame Designvorschau
 
+**Gewählte Kontextmenüs vom 30. Oktober:** **A · Kompakt** mit Trennlinien,
+Tastaturhinweisen und unveränderter A2-Markierung.
+[Verbindliche Spezifikation](../context-menu-options/APPROVED.md) ·
+[ausgewählte Referenz](../context-menu-options/index.html?approved=1&context=text).
+
 **Gewählter Fortschritt vom 30. Oktober:** **B · Aufgabenleiste mit Pop-out**.
 [Spezifikation](../progress-options/APPROVED.md) ·
 [ausgewählte Referenz](../progress-options/index.html?approved=1&task=series).

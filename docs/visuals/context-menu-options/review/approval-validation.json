@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-30T14:33:26.723Z",
+  "sourceCommit": "9798acb285158b3b88acda3469f9d436aee2b69e",
+  "platform": "win32",
+  "browser": "156.0.4314.50",
+  "layouts": 186,
+  "checks": [
+    "186 opened layouts: nine targets, three directions/themes, 1440/500px plus read-only, empty-buffer, missing-source and dirty-tab cases; no page overflow and menu clamped to viewport",
+    "All directions: left selection opens no menu; exact text copy/cut/paste/undo; read-only/empty-buffer disabled commands; keyboard skips disabled entries; Tab/Escape and focus return; submenu Right/Left/Enter; multi-selection preserved on selected right click, retargeted on another item; original diagnostics copied verbatim; dirty tab uses B2 and unrelated tab save/close keeps dirty source; existing export/zoom; scene checkbox and camera drag suppression; stale target/action discarded",
+    "360px and 200% root text with scrollable menu and submenu back action; resize/outside scroll close; forced colors/reduced motion keyboard submenu; 2× browser density",
+    "Approved default and B/C links lock A, hide variant choice and context header, start closed, retain keyboard menu/Escape and approved URL"
+  ],
+  "errors": [],
+  "passed": true
+}

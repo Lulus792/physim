@@ -1,14 +1,15 @@
 'use strict';
 (()=>{
  const $=s=>document.querySelector(s),q=new URLSearchParams(location.search),surface=$('#surface'),menu=$('#menu'),sub=$('#submenu');
+ const approved=q.get('approved')!=='0';
  const variants={a:['A · KOMPAKT','Alles da, ohne Umwege.'],b:['B · MIT KONTEXT','Das Ziel bleibt eindeutig.'],c:['C · MIT ERKLÄRUNG','Die Wirkung vorher verstehen.']};
  const contexts={text:['pendel.c','Textauswahl im bearbeitbaren Beispielcode.','Code-Editor','Entwickeln'],tab:['pendel.c','Der Befehl gilt für den rechts angeklickten Tab.','Datei-Tabs','Entwickeln'],file:['Projektdateien','Strg/⌘ ergänzt, Umschalt wählt einen Bereich.','Dateiliste','Entwickeln'],folder:['Projektordner','Ordnerbefehle bleiben an ihren Pfad gebunden.','Ordnerliste','Entwickeln'],message:['Protokoll C','Fehlerfarbe, Originaltext und Quellstelle bleiben sichtbar.','Protokollmeldungen','Entwickeln'],chart:['Auslenkung','Derselbe freigegebene Grafikexport und bestehender Zoom.','Berichtsdiagramm','Auswerten'],object:['Pendelobjekte','Rechts ziehen demonstriert Kamerabewegung ohne Menü.','Szene','Simulieren'],multi:['Mehrfachauswahl','Gemeinsame Aktionen für mehrere Dateien und Ordner.','Dateiliste · gemeinsame Befehle','Entwickeln'],empty:['Leerer Projektordner','Rechtsklick auf die freie Fläche.','Leere Fläche','Entwickeln']};
  const originals={text:'// Pendelstudie · dekorativer Beispielcode\ndouble angle = 0.33;\ndouble velocity = 0.0;\n\n// θ · ω · Energie [J]\nreturn angle + velocity;\n',file:[['pendel.c','C-Quelldatei · 2,4 KB'],['auswertung.c','Analysemodul · 3,1 KB'],['runs','Ordner · Messläufe']],folder:[['experiments','Projektordner'],['runs','Messläufe'],['reports','Berichte']],message:[['Compiler: Ausdruck erwartet','pendel.c:18:5 · Build','error','pendel.c:18:5: error: expected expression\n'],['Zeitschritt nähert sich dem Limit','Lauf 04 · Simulation','warning','Simulation: step size is close to the configured limit.\n'],['Auswertung abgeschlossen','Lauf 03 · Bericht','info','Analysis completed.\n']],object:[['Pendelmasse','Objekt 17 · Kreis'],['Beschriftung','Objekt 18 · Text'],['Richtungspfeil','Objekt 19 · ohne Messwertzuordnung']],tab:[['pendel.c','Experiment'],['auswertung.c','Analyse'],['notizen.txt','Textdokument']]};
- const s={variant:variants[q.get('variant')]?q.get('variant'):'a',context:contexts[q.get('context')]?q.get('context'):'text',theme:['dark','light','contrast'].includes(q.get('theme'))?q.get('theme'):'dark',condition:['normal','readonly','empty-buffer','no-source','dirty'].includes(q.get('condition'))?q.get('condition'):'normal',selected:new Set(),anchor:0,code:originals.text,buffer:'/* Beispielpuffer */',undo:[],valid:true,version:1,open:null,subOwner:null,zoom:true,grid:true,closedTabs:new Set()};
+ const s={variant:approved?'a':variants[q.get('variant')]?q.get('variant'):'a',context:contexts[q.get('context')]?q.get('context'):'text',theme:['dark','light','contrast'].includes(q.get('theme'))?q.get('theme'):'dark',condition:['normal','readonly','empty-buffer','no-source','dirty'].includes(q.get('condition'))?q.get('condition'):'normal',selected:new Set(),anchor:0,code:originals.text,buffer:'/* Beispielpuffer */',undo:[],valid:true,version:1,open:null,subOwner:null,zoom:true,grid:true,closedTabs:new Set()};
  const esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const rows=()=>originals[s.context==='multi'?'file':s.context]||[];
  function say(text){$('#feedback').textContent=text;}
- function sync(){const u=new URL(location.href);for(const[k,v]of Object.entries({variant:s.variant,context:s.context,theme:s.theme,condition:s.condition}))u.searchParams.set(k,v);history.replaceState(null,'',u);}
+ function sync(){const u=new URL(location.href);for(const[k,v]of Object.entries({approved:approved?'1':'0',variant:s.variant,context:s.context,theme:s.theme,condition:s.condition}))u.searchParams.set(k,v);history.replaceState(null,'',u);}
  function mirrorSelection(start,end){const ed=$('.code-editor'),mirror=$('.code-mirror');if(!ed||!mirror)return;start=start??ed.selectionStart;end=end??ed.selectionEnd;mirror.innerHTML=esc(ed.value.slice(0,start))+'<span class="mirror-selection">'+esc(ed.value.slice(start,end))+'</span>'+esc(ed.value.slice(end));mirror.style.width=ed.clientWidth+'px';mirror.scrollTop=ed.scrollTop;mirror.scrollLeft=ed.scrollLeft;}
  function selectedText(){const ed=$('.code-editor');return ed?ed.value.slice(ed.selectionStart,ed.selectionEnd):'';}
  function updateSelection(){mirrorSelection();if(!s.valid){$('#selection-status').textContent='Ziel nicht mehr verfügbar';return;}document.querySelectorAll('button[data-item]').forEach(el=>{const yes=s.selected.has(Number(el.dataset.item));el.setAttribute('aria-pressed',String(yes));el.querySelector('.check').textContent=yes?'✓':'';});$('#selection-status').textContent=s.context==='text'?`${selectedText().length} Zeichen ausgewählt`:s.context==='empty'?'Keine Elemente':s.context==='chart'?'Lauf 04 · festes Diagrammziel':`${s.selected.size} Element(e) ausgewählt`;}
@@ -82,5 +83,19 @@
  document.addEventListener('pointerdown',e=>{if(!menu.hidden&&!menu.contains(e.target)&&!sub.contains(e.target)&&e.button!==2)closeMenu(false);},true);
  document.addEventListener('scroll',e=>{if(menu.hidden)return;if(e.target instanceof Element&&e.target.closest('.context-menu'))return;if((e.target===document||e.target===window)&&s.open?.viewX===scrollX&&s.open?.viewY===scrollY)return;closeMenu();},true);window.addEventListener('resize',()=>closeMenu());window.addEventListener('blur',()=>closeMenu(false));
  document.querySelectorAll('button[data-variant]').forEach(b=>b.addEventListener('click',()=>{const ed=$('.code-editor'),range=ed?[ed.selectionStart,ed.selectionEnd]:null;s.variant=b.dataset.variant;render();if(range)$('.code-editor').setSelectionRange(...range);}));$('#context').addEventListener('change',e=>{s.context=e.target.value;reset();});$('#condition').addEventListener('change',e=>{s.condition=e.target.value;reset();});$('#theme').addEventListener('click',()=>{s.theme={dark:'light',light:'contrast',contrast:'dark'}[s.theme];render();});$('#reset').addEventListener('click',reset);$('#invalidate').addEventListener('click',()=>{s.version++;s.valid=false;closeMenu(false);renderSurface();say('Zielstand geändert. Offenes Menü verworfen, keine Aktion ausgeführt.');});
+ if(approved){
+  document.body.dataset.approved='true';
+  document.title='Physim · Kontextmenüs A · Freigegeben';
+  $('.gallery>span').textContent='A · Kompakt · Freigegeben';
+  $('.intro>p:last-child').innerHTML='Das gewählte kompakte Kontextmenü für alle Ziele.<br>Rechtsklick, Menütaste oder Umschalt+F10 öffnen die Aktionen; A2 bleibt erhalten.';
+  $('.isolation').textContent='A ist Teil des fertigen Designs · Menübefehle verwenden hier nur den Beispielpuffer';
+  $('.gallery-footer>span').textContent='A ist freigegeben. D08 · Editor-Suche und Ersetzen bleibt die nächste neue Runde.';
+  $('.gallery-footer>a').href='APPROVED.md';
+  $('.gallery-footer>a').textContent='Verbindliche Spezifikation ↗';
+ }else{
+  document.body.dataset.approved='false';
+  $('.gallery>span').textContent='Historischer Vergleich · A ist freigegeben';
+  $('.gallery-footer>span').textContent='A ist freigegeben. B/C bleiben Vergleichshistorie.';
+ }
  reset();
 })();
