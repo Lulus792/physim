@@ -1,6 +1,6 @@
 # UI: Was noch gestaltet und ausgearbeitet werden kann
 
-Stand: **29. Oktober 2026.** Auf Nutzerauftrag erstellte Designliste für die
+Stand: **30. Oktober 2026.** Auf Nutzerauftrag erstellte Designliste für die
 Fortsetzung. Grundlage sind der lokale Stand, die freigegebenen Entwürfe,
 [Inhaltsinventar](CONTENT-INVENTORY.md), [Abdeckung](../design-options/COVERAGE.md),
 [nativer Referenzabgleich](NATIVE-FIDELITY.md), [Bedienung](../../workspace.md),
@@ -43,7 +43,8 @@ ausdrücklich ins fertige Design übernommen. Die folgenden Zustände bleiben
 Umsetzungs-/Abnahmeanforderungen; keine erneute Entwurfswahl. Das bestätigt
 keine bereits abgeschlossene native Funktion. **D04 ist jetzt ebenfalls
 entschieden: [Einstellungen A · Kategorien](../settings-options/APPROVED.md).**
-D05–D07 bleiben noch zu entwerfen.
+**D05 hat separate [Rückmeldungsvorschauen A/B/C](../feedback-options/README.md);
+Auswahl offen.** D06/D07 bleiben noch zu entwerfen.
 
 | ID / Prio | Was gestalten? | Benötigte Zustände und Ergebnis |
 | --- | --- | --- |
@@ -51,7 +52,7 @@ D05–D07 bleiben noch zu entwerfen.
 | D02 · P1 | **Externe Dateiänderung und Konflikt · B2 gewählt** | Datei außerhalb der App geändert, gelöscht, verschoben oder schreibgeschützt; lokaler Entwurf vorhanden. Gemeinsamer B2-Diff, verständliche Wahl ohne stilles Überschreiben. Lesbare Vergleichsansicht, kein automatischer Merge-Editor. |
 | D03 · P1 | **Autosave und Wiederherstellung · B2 gewählt** | Sicherung gefunden, mehrere betroffene Quellen, Original und Sicherung unterscheiden, Wiederherstellung/Abbruch/Fehler. B2 mit vorhandener [Autosave-Funktion](../../autosave.md) verbinden, kein neues Sicherungssystem voraussetzen. |
 | D04 · P1 | **Einstellungen · A gewählt** | Kategorien links, Optionen mittig, Live-Vorschau rechts; Suche, Vergleich, Übernehmen/Abbrechen/Standardwerte und Fehler. Theme, Schrift, Autosave, Sichtbarkeit, Größen und eigene Einheitenaufgabe nativ umsetzen; unabhängige Transaktionen und ADR-015-Fenster erhalten. Keine neue Variantenwahl. |
-| D05 · P1 | **Hinweise und Rückmeldungen außerhalb des Protokolls** | Gespeichert, Kopie fehlgeschlagen, Pfad ungültig, Ergebnis veraltet, Hintergrundaktion beendet. Festlegen, was inline, dauerhaft in der Statuszeile, vorübergehend als Hinweis oder als Dialog erscheint; keine mehrfachen störenden Meldungen. |
+| D05 · P1 | **Hinweise/Rückmeldungen · A/B/C zur Auswahl bereit** | Separate Karten-, Statusband- und Aktivitätenvorschau für gespeichert, Kopier-/Pfadfehler, veraltet, Abschluss, mehrere/keine Meldungen. Inline-Bezug, Gruppierung, Verlauf und optionales Ausblenden interaktiv. Noch nicht als finales Design übernehmen. |
 | D06 · P1 | **Fortschritt und Abbruch über alle Bereiche** | Bauen, Projekt laden, Datei-/Laufvorschau, Analyse, Export; Fortschritt unbekannt, Abbrechen angefordert, fertig oder fehlgeschlagen. Vorhandene Läufe-A-Start-/Limitzustände erhalten und die übrigen Abläufe ergänzen. |
 | D07 · P1 | **Vollständige Kontextmenüs je Ziel** | Text, Tab, Ordner, Datei, Meldung, Diagramm, Szenenobjekt, Mehrfachauswahl und leere Fläche. A2/Menu-Bedienung ist entschieden; offen ist die vollständige Befehlsmatrix mit Verfügbarkeit und sinnvollen Gruppen. Nur vorhandene/gezielt beauftragte Befehle zeigen. |
 | D08 · P1 | **Editor-Suche und Ersetzen** | Keine Treffer, mehrere Dateien, aktive Fundstelle vs. A2-Auswahl, Ersetzen einzelner/aller Treffer, ungespeicherte Änderungen. Bestehende Suchfunktion einpassen; projektweite Suche separat als mögliche Erweiterung behandeln. |
@@ -104,7 +105,8 @@ und verteilte Simulation für die erste Version aus.
 
 **D01–D03 sind mit B2 freigegeben** und gehören jetzt in die native Umsetzung.
 **D04 ist mit A freigegeben** und gehört ebenfalls in die native Umsetzung.
-Als nächste neue Entwurfsrunde **D05–D07**: Rückmeldungen, Fortschritt und die
+Für **D05** stehen die getrennten Rückmeldungsvorschauen A/B/C zur Auswahl.
+Als nächste neue Entwurfsrunde **D06/D07**: Fortschritt/Abbruch und die
 vollständige Kontextmenümatrix. Anschließend
 Explorer-/Szenen- und Auswertungsdetails anhand realer Inhalte ausarbeiten.
 

@@ -1,5 +1,10 @@
 # Physim – getrennte Designvarianten
 
+**Neue getrennte Runde vom 30. Oktober 2026:**
+[Hinweise und Rückmeldungen A/B/C](../feedback-options/index.html?variant=a&scenario=burst).
+Auswahl offen; noch nicht ins fertige Design übernehmen. Alle bisherigen
+Freigaben bleiben erhalten.
+
 **Weitere Freigabe vom 29. Oktober 2026:** Einstellungen sind im Design
 **A · Kategorien** gewählt. [Spezifikation](../settings-options/APPROVED.md) ·
 [festgelegte Referenz](../settings-options/index.html?approved=1).

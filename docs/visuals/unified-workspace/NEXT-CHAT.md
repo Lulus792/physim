@@ -1,5 +1,13 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
+**Getrennte Entwürfe vom 30. Oktober 2026 – Hinweise/Rückmeldungen D05:**
+[A/B/C vergleichen](../feedback-options/README.md). A zeigt kurze Karten,
+B ein Statusband, C einen Aktivitätenverlauf. Lokale Pfad-/Kopierfehler und
+Veraltet-Kennzeichnung behalten ihren Bezug; Wiederholungen werden gruppiert.
+**Noch keine Variante übernehmen: Nutzerwahl offen.** Bestehende Freigaben und
+native Arbeit fortsetzen. Diese Studie ist keine neue Protokollgestaltung und
+keine fertige native Funktion. D06/D07 bleiben weitere eigene Entwurfsrunden.
+
 **Verbindliche Freigabe vom 29. Oktober 2026 – Einstellungen A:** Der Nutzer
 hat **A · Kategorien ins fertige Design übernommen**. Die vorherige
 Übernahmesperre ist aufgehoben; im bestehenden nativen Auftrag mit umsetzen,

@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-30T11:40:17.999Z",
+  "sourceCommit": "fd015a3048fb24b5070044242ab5db1b901e41af",
+  "platform": "win32",
+  "browser": "156.0.4314.50",
+  "layouts": 126,
+  "checks": [
+    "126 layouts: A/B/C × 3 themes × 2 widths × 7 scenarios; no horizontal page/workbench overflow",
+    "Every variant: one local copy/path error with no error toast; failed retry retains inputs and groups repeats; explicit fixture fix permits simulated success; path validation preserves input/focus; stale persists after closing history and clears only on refresh; edited text survives directions/context changes and demo save",
+    "Burst groups 4 events into 3 records, A shows at most 2 cards; hiding cards preserves history and stale marker; history keyboard close restores focus; B empty state/theme cycle and C collapsible activity sidebar",
+    "Optional 6-second expiry hides only short successes; history retains them; keyboard focus pauses expiry; local error never expires",
+    "200% root text at 500px, reachable path validation in all directions; forced colors/reduced motion and 2× browser density"
+  ],
+  "errors": [],
+  "passed": true
+}

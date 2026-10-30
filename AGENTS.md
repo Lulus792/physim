@@ -71,6 +71,14 @@
   nach ADR 015, Preferences/Geometrie/Einheiten unabhängig halten.
   Bisherige Freigaben bleiben erhalten; Browserbelege sind keine native Abnahme.
 
+## Getrennte Entwürfe: Rückmeldungen D05
+
+- Die [Hinweis-/Rückmeldungsvorschauen A/B/C](docs/visuals/feedback-options/README.md)
+  vom 30. Oktober 2026 sind ausdrücklich getrennt und **noch nicht ausgewählt**.
+  Keine Variante als fertiges Design übernehmen, bevor der Nutzer entscheidet.
+  Protokoll C, Grafikexport, A2, B2, Einstellungen A und alle übrigen Freigaben
+  sowie laufende native Arbeiten bleiben erhalten. D06/D07 bleiben eigene Runden.
+
 ## Speicherpflege
 
 - Der Nutzer hat die F:-Nutzung am 25. Oktober 2026 widerrufen: Physim bleibt
