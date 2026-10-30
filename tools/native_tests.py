@@ -95,6 +95,7 @@ def catalog():
     if sys.platform in ("darwin", "win32"):
         cases.append(Case("accessibility_native", ("tests/test_accessibility_native.c", "app/accessibility.c", "app/accessibility_native.c"),app=True,display=True))
         cases.append(Case("accessibility_ui", ("tests/test_accessibility_ui.c", "app/accessibility.c", "app/accessibility_native.c", "app/ui_backend.c", "app/ui_sdl.c", "app/ui_geometry.c", "app/graphics.c", "app/png.c"),libraries=("platform","zlib","core"),defines=("Z_PREFIX",),app=True,display=True))
+    cases.append(Case("native_menu", ("tests/test_native_menu.c", "app/native_menu.c"),app=True,display=True))
     cases.append(Case("font_bank_ui", ("tests/test_font_bank_ui.c", "app/accessibility.c", "app/accessibility_native.c", "app/accessibility_atspi.c", "app/ui_backend.c", "app/ui_sdl.c", "app/ui_geometry.c", "app/graphics.c", "app/png.c"),libraries=("platform","zlib","core"),defines=("Z_PREFIX",),arguments=("{work}",),app=True,display=True))
     cases.append(Case("backdrop_ui", ("tests/test_backdrop_ui.c", "app/accessibility.c", "app/accessibility_native.c", "app/accessibility_atspi.c", "app/ui_backend.c", "app/ui_sdl.c", "app/ui_geometry.c", "app/graphics.c", "app/png.c"),libraries=("platform","zlib","core"),defines=("Z_PREFIX",),arguments=("{work}",),app=True,display=True))
     cases.append(Case("ui_subpixel_gpu", ("tests/test_ui_subpixel_gpu.c", "app/ui_backend.c", "app/ui_geometry.c", "app/graphics.c", "app/png.c"),libraries=("platform","zlib","core"),defines=("Z_PREFIX",),arguments=("{work}",),app=True,display=True))

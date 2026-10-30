@@ -122,6 +122,7 @@ static void toolbar_dispatch(app *a, toolbar_action action) {
     case TOOLBAR_REFERENCE_CLOSE:api_reference_close(a);break;
     }
 }
+#include "native_menu_ui.inc"
 static void toolbar_keyboard_close(app *a) {
     a->toolbar_keyboard=false;
     a->toolbar_keyboard_item=-1;a->toolbar_menu=0;
@@ -136,6 +137,7 @@ static void toolbar_keyboard_move(app *a, int direction, bool edge) {
     a->toolbar_keyboard_item=-1;
 }
 static bool toolbar_keyboard_key(app *a, const SDL_KeyboardEvent *key) {
+    if(a->native_menu_active)return false;
     bool plain=!(key->mod&(SDL_KMOD_CTRL|SDL_KMOD_GUI|SDL_KMOD_ALT));
     if(key->key==SDLK_F10 && plain && !(key->mod&SDL_KMOD_SHIFT)) {
         if(!key->repeat) {
@@ -334,6 +336,7 @@ static void toolbar_theme_view(app *a) {
 }
 static void toolbar_view(app *a) {
     struct nk_context *ui = a->ui;
+    native_menu_sync(a);
     /* Caption/header actions remain available when an editor or scene owns
      * Nuklear's widget focus; the completed stack still rejects covered nodes. */
     ps_ui_accessibility_route(ui,true);
@@ -360,7 +363,8 @@ static void toolbar_view(app *a) {
     for(unsigned i=0;i<SDL_arraysize(menu_width);i++) {
         if(compact)menu_width[i]=ui->style.font->width(ui->style.font->userdata,ui->style.font->height,menus[i],(int)strlen(menus[i]))+24;
     }
-    for(unsigned i=0;i<SDL_arraysize(toolbar_top_order);i++)menu_extent+=menu_width[toolbar_top_order[i]];
+    if(!a->native_menu_active)for(unsigned i=0;i<SDL_arraysize(toolbar_top_order);i++)menu_extent+=menu_width[toolbar_top_order[i]];
+    if(a->native_menu_active){memset(a->toolbar_bounds,0,sizeof a->toolbar_bounds);a->toolbar_menu=0;a->toolbar_keyboard=false;}
     a->toolbar_bounds[3]=nk_rect(0,0,0,0);a->toolbar_theme_bounds=nk_rect(0,0,0,0);
     int previous = a->toolbar_popup_menu;
     /* Header actions remain responsive while the popup makes its parent read-only. */
@@ -389,7 +393,7 @@ static void toolbar_view(app *a) {
                 a->toolbar_menu = i + 1;
         }
     }
-    for (unsigned column = 0; column < SDL_arraysize(toolbar_top_order); column++) {
+    for (unsigned column = 0; !a->native_menu_active && column < SDL_arraysize(toolbar_top_order); column++) {
         int i=(int)toolbar_top_order[column];
         nk_layout_row_push(ui, menu_width[i]);
         struct nk_rect bounds;

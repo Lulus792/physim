@@ -1,0 +1,42 @@
+name: Native macOS menu bar
+on:
+  push:
+    branches: [main, codex/f1-design-h]
+    paths:
+      - app/native_menu*
+      - app/toolbar_ui.inc
+      - app/main.c
+      - tests/test_native_menu.c
+      - tools/build.py
+      - tools/native_tests.py
+      - .github/workflows/macos-native-menu.yml
+  workflow_dispatch:
+concurrency:
+  group: native-menu-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  appkit:
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [macos-15, macos-15-intel]
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pinned SDL3
+        run: |
+          git clone --depth 1 --branch release-3.2.30 https://github.com/libsdl-org/SDL.git build/sdl-source
+          cmake -S build/sdl-source -B build/sdl-build -G Ninja -DCMAKE_BUILD_TYPE=Release -DSDL_TESTS=OFF -DCMAKE_INSTALL_PREFIX="$PWD/build/sdl-install"
+          cmake --build build/sdl-build --parallel 4
+          cmake --install build/sdl-build
+      - name: Actual AppKit menu and complete app build
+        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test-display --test-filter native_menu
+      - name: Compact native results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-menu-${{ matrix.runner }}
+          path: |
+            build/native/**/test-results/**/results.json
+            build/native/**/test-results/**/junit.xml
+          if-no-files-found: warn

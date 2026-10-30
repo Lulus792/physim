@@ -53,7 +53,7 @@ def verify_display_catalog(runner, display_checker):
     actual_display = {case.name for case in runner.catalog()
                       if case.display and case.integration and not case.integration.get("benchmark")}
     native_display = {case.name for case in runner.catalog() if case.display and not case.integration}
-    assert native_display <= {"accessibility_native", "accessibility_ui", "font_bank_ui", "backdrop_ui", "ui_subpixel_gpu"}, native_display
+    assert native_display <= {"native_menu", "accessibility_native", "accessibility_ui", "font_bank_ui", "backdrop_ui", "ui_subpixel_gpu"}, native_display
     provider_display = {"accessibility_atspi", "accessibility_tables_atspi"} if sys.platform == "linux" else set()
     specialized_display = {
         "project_migration_app": ("tests/test_project_migration_app.py", ()),

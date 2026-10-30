@@ -45,6 +45,7 @@
 #include "ui.h"
 #include "design_tokens.h"
 #include "selection_ui.h"
+#include "native_menu.h"
 static const ps_ui_palette *ui_palette = &PS_UI_DARK;
 #define UI_COLOR(field) (ui_palette->field)
 #include "language/lexer.h"
@@ -277,6 +278,7 @@ typedef struct {
     struct nk_rect settings_bounds[6], theme_bounds[PS_THEME_COUNT], panel_bounds[2];
     struct nk_rect ui_size_bounds[4];
     SDL_Window *window,*primary_window;
+    ps_native_menu *native_menu;bool native_menu_attempted,native_menu_active;
     ps_graphics *graphics;
     ps_vec3 camera_target;
     bool camera_2d;
@@ -4336,6 +4338,7 @@ int main(int argc, char **argv) {
         for(unsigned i=0;i<PS_PANEL_COUNT;i++)if(a->panels[i].ui)nk_input_begin(a->panels[i].ui);
         SDL_Event e;
         while (SDL_PollEvent(&e)) {
+            if(native_menu_input(a,&e))continue;
             if(workspace_state_test && !strcmp(argv[3],"protocol-ui-interactive"))protocol_ui_interactive_event(a,&e);
             if(e.type==SDL_EVENT_KEY_DOWN || e.type==SDL_EVENT_TEXT_INPUT || e.type==SDL_EVENT_WINDOW_FOCUS_LOST) {
                 a->workspace_tip.dismissed=true;a->workspace_tip.visible=false;
@@ -5800,6 +5803,7 @@ int main(int argc, char **argv) {
     free(a->workspaces);
     ps_autosave_destroy(a->recovery);
     ps_workspace_tree_destroy(&a->workspace_tree);
+    ps_native_menu_destroy(a->native_menu);a->native_menu=NULL;
     ps_dialog_requests_cancel_all(&a->dialog_requests);
     browser_destroy(a);
     project_manager_window_destroy(a);
