@@ -40,6 +40,8 @@ static bool protocol_ui_test_start(app *a,const char *root,const char *mode) {
     }
     if(strstr(mode,"actions")){a->protocol_view.original_closed=true;if(strstr(mode,"nosource"))a->protocol_view.selected=ps_protocol_at(&a->protocol,2)->id;}
     a->project_manager=false;a->tab=0;a->show_log=true;a->preferences.log_height=strstr(mode,"type-")?500:340;
+    if(strstr(mode,"border-simulate"))a->tab=1;
+    else if(strstr(mode,"border-analyze"))a->tab=2;
     protocol_test_source_crc=ps_crc32((const unsigned char*)nk_str_get_const(&a->experiment.string),(size_t)nk_str_len_char(&a->experiment.string));return true;
 }
 static void protocol_ui_interactive_frame(app *a) {
@@ -67,6 +69,15 @@ static void protocol_ui_test_frame(app *a,const char *mode,int *stage,int *code,
     if(strstr(mode,"actions")){protocol_actions_test_frame(a,mode,stage,code,capture);return;}
     if(strstr(mode,"type-")){protocol_typography_test_frame(a,mode,stage,code,capture);return;}
     if(*stage<3){(*stage)++;return;}
+    if(strstr(mode,"protocol-ui-border-")) {
+        ps_protocol_ui *p=&a->protocol_view;
+        bool ok=protocol_visible(a) && p->bounds.w>0 && p->bounds.h>0 &&
+            fabsf(p->separator.y+4-p->bounds.y)<.01f;
+        printf("{\"kind\":\"protocol_boundary\",\"tab\":%d,\"ui_size\":%u,\"bounds\":[%.3f,%.3f,%.3f,%.3f]}\n",
+            a->tab,(unsigned)a->preferences.ui_size,p->bounds.x,p->bounds.y,p->bounds.w,p->bounds.h);
+        printf("PROTOCOL BOUNDARY SELF-TEST: %s\n",ok?"PASSED":"FAILED");
+        *capture="protocol-navigator.png";*code=ok?0:1;a->quitting=true;return;
+    }
     if(*stage==3 && SDL_getenv("PHYSIM_TEST_WAIT_FOR_HOST_FOCUS") &&
        !SDL_getenv("PHYSIM_TEST_PROTOCOL_UNFOCUSED") && SDL_GetKeyboardFocus()!=a->window) {
         static Uint64 start;

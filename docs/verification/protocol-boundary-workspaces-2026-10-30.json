@@ -1,0 +1,122 @@
+{
+  "format": 1,
+  "date": "2026-10-30",
+  "request": "Check the apparently missing visual boundary above the protocol against other pane boundaries.",
+  "finding": "The earlier ef1f3321 correction is already present: the shared border is drawn at rest, accent on hover/focus. No additional product rendering change was needed in this follow-up.",
+  "changes": "Expand protocol_separator from four Develop states to twelve Develop/Simulate/Analyze states; observe actual native panel bounds, including the reduced height in Simulate.",
+  "source": {
+    "base_commit": "d228b16e89148f3ffefe6886a797b3577bdcf18f",
+    "verified_base_source_files": 1089,
+    "files": {
+      "app/protocol_tests.inc": "2f86105cdf16b235e9085ad50081ba32265aeb72f6aa6f24c3653eda38705a3d",
+      "tests/check_protocol_separator.py": "06f8f5bc72ed4489d0cf1185b6b1f9ee038866f436b28bace8b8e928dc410d91"
+    },
+    "compiler-source.json": {
+      "path": "build/validation/explorer-inline-2026-10-29/protocol-boundary-final-compiler-source.json",
+      "sha256": "4a522d848e2254bf5938be4dde1ee2ddc4855ee8f2605c8b36f34fdd16f7084f"
+    },
+    "runtime.json": {
+      "path": "build/validation/explorer-inline-2026-10-29/protocol-boundary-final-runtime.json",
+      "sha256": "1cdc1d2620fc74fbc41fe9eb8e796c72440f9e539efbf59e765537a243f2ac69"
+    },
+    "byte-index.json": {
+      "path": "build/validation/explorer-inline-2026-10-29/protocol-boundary-final-byte-index.json",
+      "sha256": "48be7b90f7db69d96a86d9f86b51e1ba3ee843ad05b2bfa28e64c0298ffaa787"
+    }
+  },
+  "cohorts": [
+    {
+      "platform": "windows",
+      "configuration": "Windows Release",
+      "exit_code": 0,
+      "command": ["C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe", "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py", "--", "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe", "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py", "--build-dir", "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build", "--config", "Release", "--jobs", "4", "--sdl", "D:\\Physim\\third_party\\SDL3-3.2.30", "--test-display", "--test-filter", "protocol_separator"],
+      "binary_sha256": "a1a1dae8766e9034cb09d308f4061179fa79b097c87d1661f206df1f08d5f281",
+      "result": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-1xtef0q0/protocol_separator/result.json",
+        "sha256": "96a5481774e6ff7915513b03f5c0099f566b45a525043c5ddeea66a80d5679cd"
+      },
+      "verification": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-1xtef0q0/protocol_separator/files ä/verification.json",
+        "sha256": "2f1ef2530e964003fbeb04c3273d31be817ad63a7e41652c0816d719ef612ead"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/protocol-boundary-first-windows.log",
+        "sha256": "4d74c1191610e3787def584babb0e178ff4e932e0a8d50aad34e60dbe825a183"
+      },
+      "cases": [
+        {"mode": "protocol-ui-border-develop-dark", "native_state": {"kind": "protocol_boundary", "tab": 0, "ui_size": 16, "bounds": [0.0, 632.0, 1440.0, 340.0]}, "border_rgb": [59, 61, 69], "matching_pixels": {"631": 6, "632": 1438, "633": 0}, "image_sha256": "81c59bf18999fcbfa8cc2b527fa19ce6130b03288cf7a130e9f859e5504cd678"},
+        {"mode": "protocol-ui-border-develop-light", "native_state": {"kind": "protocol_boundary", "tab": 0, "ui_size": 16, "bounds": [0.0, 632.0, 1440.0, 340.0]}, "border_rgb": [190, 195, 206], "matching_pixels": {"631": 6, "632": 1438, "633": 0}, "image_sha256": "8195678a681b960eef9ffbe0a732e3491534d081156354645971f39db10f3102"},
+        {"mode": "protocol-ui-border-develop-contrast", "native_state": {"kind": "protocol_boundary", "tab": 0, "ui_size": 16, "bounds": [0.0, 632.0, 1440.0, 340.0]}, "border_rgb": [255, 255, 255], "matching_pixels": {"631": 4, "632": 1438, "633": 0}, "image_sha256": "b7df4e8816317482db39b980c038cb12c86699526ace94b2d67eb57c2c590375"},
+        {"mode": "protocol-ui-border-develop-large", "native_state": {"kind": "protocol_boundary", "tab": 0, "ui_size": 22, "bounds": [0.0, 632.0, 1440.0, 340.0]}, "border_rgb": [59, 61, 69], "matching_pixels": {"631": 4, "632": 1438, "633": 0}, "image_sha256": "abc0b24a82641f71de2605606aedfcbf7fa995e1fd03fdc79cf285b318839b16"},
+        {"mode": "protocol-ui-border-simulate-dark", "native_state": {"kind": "protocol_boundary", "tab": 1, "ui_size": 16, "bounds": [0.0, 638.0, 1440.0, 334.0]}, "border_rgb": [59, 61, 69], "matching_pixels": {"637": 0, "638": 1438, "639": 0}, "image_sha256": "49520daf830fafe03eae2c847e12ff68d53c07a6c4951ee9f57fcf34fbd0ca54"},
+        {"mode": "protocol-ui-border-simulate-light", "native_state": {"kind": "protocol_boundary", "tab": 1, "ui_size": 16, "bounds": [0.0, 638.0, 1440.0, 334.0]}, "border_rgb": [190, 195, 206], "matching_pixels": {"637": 0, "638": 1438, "639": 0}, "image_sha256": "eca8de0a97f14d44bd9785cce116dd92a1a6e2f8c66d2415151a3bdba5b31275"},
+        {"mode": "protocol-ui-border-simulate-contrast", "native_state": {"kind": "protocol_boundary", "tab": 1, "ui_size": 16, "bounds": [0.0, 638.0, 1440.0, 334.0]}, "border_rgb": [255, 255, 255], "matching_pixels": {"637": 0, "638": 1438, "639": 0}, "image_sha256": "f116ecda77ec87136ea31088f153d47653aff27ea475fb88f3f70ee5877c1305"},
+        {"mode": "protocol-ui-border-simulate-large", "native_state": {"kind": "protocol_boundary", "tab": 1, "ui_size": 22, "bounds": [0.0, 638.0, 1440.0, 334.0]}, "border_rgb": [59, 61, 69], "matching_pixels": {"637": 0, "638": 1438, "639": 0}, "image_sha256": "02010d411eb97c7e044d80e3497629d36f1133dcee12b1cd0a5314df4ffdea9d"},
+        {"mode": "protocol-ui-border-analyze-dark", "native_state": {"kind": "protocol_boundary", "tab": 2, "ui_size": 16, "bounds": [0.0, 632.0, 1440.0, 340.0]}, "border_rgb": [59, 61, 69], "matching_pixels": {"631": 2, "632": 1438, "633": 0}, "image_sha256": "3ef2a7f37d8ce209211588bb30b5154a72df231e25108915183a19660ed8b4b2"},
+        {"mode": "protocol-ui-border-analyze-light", "native_state": {"kind": "protocol_boundary", "tab": 2, "ui_size": 16, "bounds": [0.0, 632.0, 1440.0, 340.0]}, "border_rgb": [190, 195, 206], "matching_pixels": {"631": 2, "632": 1438, "633": 0}, "image_sha256": "c529a2994433150374f7dad8cbea5283e37144b90511f45ce8f650ddbc7eaa90"},
+        {"mode": "protocol-ui-border-analyze-contrast", "native_state": {"kind": "protocol_boundary", "tab": 2, "ui_size": 16, "bounds": [0.0, 632.0, 1440.0, 340.0]}, "border_rgb": [255, 255, 255], "matching_pixels": {"631": 0, "632": 1438, "633": 0}, "image_sha256": "70b32c3407d9845262fa1a9a5a7b4a7a0e72b1dd88b465d574ad95f98e17bdc7"},
+        {"mode": "protocol-ui-border-analyze-large", "native_state": {"kind": "protocol_boundary", "tab": 2, "ui_size": 22, "bounds": [0.0, 632.0, 1440.0, 340.0]}, "border_rgb": [59, 61, 69], "matching_pixels": {"631": 2, "632": 1438, "633": 0}, "image_sha256": "2133295ebfef64a3762244e929cb0584a023d7f5295342765a93b0971d1275b1"}
+      ]
+    },
+    {
+      "platform": "linux",
+      "configuration": "Alpine-Dev X11 Xvfb/Openbox Debug ASan UBSan, GUI LSan disabled",
+      "exit_code": 0,
+      "command": ["/usr/bin/python3", "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py", "--", "/usr/bin/python3", "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py", "--build-dir", "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build", "--config", "Debug", "--jobs", "4", "--sdl", "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30", "--test-display", "--sanitizers", "--test-filter", "protocol_separator"],
+      "binary_sha256": "61d8596e8fef9c44ddd563cfc4160f7fca939a76859f579dac7ef484c4d46e31",
+      "result": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-39xn_jvj/protocol_separator/result.json",
+        "sha256": "0652be70a77795bde4aa4b1018d65ebab89cda5044d0979f13dd81eaedd11ab2"
+      },
+      "verification": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-39xn_jvj/protocol_separator/files ä/verification.json",
+        "sha256": "f4ea0bfd7f749af994efdc6b2015d8ca03b7242609317e46d4b5dde85104e5b7"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/protocol-boundary-first-linux.log",
+        "sha256": "275f254cd654ae817e97992575c9a7413cee6de7225c1f191fa11c7064111b7b"
+      },
+      "cases": [
+        {"mode": "protocol-ui-border-develop-dark", "native_state": {"kind": "protocol_boundary", "tab": 0, "ui_size": 16, "bounds": [0.0, 632.0, 1440.0, 340.0]}, "border_rgb": [59, 61, 69], "matching_pixels": {"631": 6, "632": 1438, "633": 0}, "image_sha256": "5774cc72a14d0fd2fa01d1b63cf3a28796a9a71e19b3d34f549f6bc2b1b53ec5"},
+        {"mode": "protocol-ui-border-develop-light", "native_state": {"kind": "protocol_boundary", "tab": 0, "ui_size": 16, "bounds": [0.0, 632.0, 1440.0, 340.0]}, "border_rgb": [190, 195, 206], "matching_pixels": {"631": 6, "632": 1438, "633": 0}, "image_sha256": "7bb26bc44741b5f9656d6cfab083dbfdd963086ca089cc4bbb6432ffb6df13f4"},
+        {"mode": "protocol-ui-border-develop-contrast", "native_state": {"kind": "protocol_boundary", "tab": 0, "ui_size": 16, "bounds": [0.0, 632.0, 1440.0, 340.0]}, "border_rgb": [255, 255, 255], "matching_pixels": {"631": 4, "632": 1438, "633": 0}, "image_sha256": "f8145eaab4310b105b623b4dc3b8c26321d3f9adbb3fcf8fd98e90731c0cb600"},
+        {"mode": "protocol-ui-border-develop-large", "native_state": {"kind": "protocol_boundary", "tab": 0, "ui_size": 22, "bounds": [0.0, 632.0, 1440.0, 340.0]}, "border_rgb": [59, 61, 69], "matching_pixels": {"631": 4, "632": 1438, "633": 0}, "image_sha256": "15cd429f047308dc1b034451ebb59ae539fdcbd45e238212a5639aecf496ac23"},
+        {"mode": "protocol-ui-border-simulate-dark", "native_state": {"kind": "protocol_boundary", "tab": 1, "ui_size": 16, "bounds": [0.0, 638.0, 1440.0, 334.0]}, "border_rgb": [59, 61, 69], "matching_pixels": {"637": 0, "638": 1438, "639": 0}, "image_sha256": "35949c652efbc69ca35ede0c981d58bfcfca7d55ac7ec57699bc8a8148cb344d"},
+        {"mode": "protocol-ui-border-simulate-light", "native_state": {"kind": "protocol_boundary", "tab": 1, "ui_size": 16, "bounds": [0.0, 638.0, 1440.0, 334.0]}, "border_rgb": [190, 195, 206], "matching_pixels": {"637": 0, "638": 1438, "639": 0}, "image_sha256": "26a473c53a032c4a437f36fd4e2ff9849af20f70556b5bba33c7ce73e37331cd"},
+        {"mode": "protocol-ui-border-simulate-contrast", "native_state": {"kind": "protocol_boundary", "tab": 1, "ui_size": 16, "bounds": [0.0, 638.0, 1440.0, 334.0]}, "border_rgb": [255, 255, 255], "matching_pixels": {"637": 0, "638": 1438, "639": 0}, "image_sha256": "7b1d2dd20c6306f8baa317c732de0d2ec2aa394c923dce42eee766cbdc9b9ddb"},
+        {"mode": "protocol-ui-border-simulate-large", "native_state": {"kind": "protocol_boundary", "tab": 1, "ui_size": 22, "bounds": [0.0, 638.0, 1440.0, 334.0]}, "border_rgb": [59, 61, 69], "matching_pixels": {"637": 0, "638": 1438, "639": 0}, "image_sha256": "d76d48dea4e16059ae5d6f695809b3b79f24a1a43a9f27c30db1a051d8728851"},
+        {"mode": "protocol-ui-border-analyze-dark", "native_state": {"kind": "protocol_boundary", "tab": 2, "ui_size": 16, "bounds": [0.0, 632.0, 1440.0, 340.0]}, "border_rgb": [59, 61, 69], "matching_pixels": {"631": 2, "632": 1438, "633": 0}, "image_sha256": "0fde93afca269201cc4f6bbc8d8d4668d9c8210d3c4a6027e2d62ed548010917"},
+        {"mode": "protocol-ui-border-analyze-light", "native_state": {"kind": "protocol_boundary", "tab": 2, "ui_size": 16, "bounds": [0.0, 632.0, 1440.0, 340.0]}, "border_rgb": [190, 195, 206], "matching_pixels": {"631": 2, "632": 1438, "633": 0}, "image_sha256": "8dcfbb68715ca8abf1958d1c1906578a774d784f5f022f611739dc78e780d393"},
+        {"mode": "protocol-ui-border-analyze-contrast", "native_state": {"kind": "protocol_boundary", "tab": 2, "ui_size": 16, "bounds": [0.0, 632.0, 1440.0, 340.0]}, "border_rgb": [255, 255, 255], "matching_pixels": {"631": 0, "632": 1438, "633": 0}, "image_sha256": "debecfc8f0fd7c174471ee502407ad8087c3fe8e80ad5263e002b1ad8199a4ab"},
+        {"mode": "protocol-ui-border-analyze-large", "native_state": {"kind": "protocol_boundary", "tab": 2, "ui_size": 22, "bounds": [0.0, 632.0, 1440.0, 340.0]}, "border_rgb": [59, 61, 69], "matching_pixels": {"631": 2, "632": 1438, "633": 0}, "image_sha256": "a79cb1cca708d138e9ac0c374f304cc1893c5bf55c788a05dc6725b64d210cc4"}
+      ]
+    }
+  ],
+  "limitations": ["Isolated application sources based on d228b16e plus the two listed test-file changes; concurrent unfinished Workspace/scene-tree and AT-SPI work excluded.", "Native seeded UI fixtures; no new simulation-runner, physical keyboard, screenreader, monitor/DPI or macOS acceptance.", "Large text is 22 px in the existing fixture; no claim of 200% text coverage."],
+  "previous_fix_and_negative_control": {
+    "path": "docs/verification/protocol-separator-2026-10-29.json",
+    "sha256": "45e227e39516581e09c635fba22635b082fe93c187ad8f054ff6d389991b8ecb"
+  },
+  "review": "Actual Windows Develop/dark and Simulate/dark frames inspected; Linux Analyze/light frame inspected. Border present at the native reported top edge.",
+  "storage_cleanup": {
+    "reason": "Successful native states accepted; preserve compact pixel reports and two actual visual references. Four baseline captures are byte-identical to the extended Develop captures.",
+    "removed_png_count": 26,
+    "freed_bytes": 4231452,
+    "retained_references": [
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-1xtef0q0/protocol_separator/files ä/simulate-dark/protocol-navigator.png",
+        "bytes": 145544,
+        "sha256": "49520daf830fafe03eae2c847e12ff68d53c07a6c4951ee9f57fcf34fbd0ca54"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-39xn_jvj/protocol_separator/files ä/analyze-light/protocol-navigator.png",
+        "bytes": 148181,
+        "sha256": "8dcfbb68715ca8abf1958d1c1906578a774d784f5f022f611739dc78e780d393"
+      }
+    ],
+    "record": {
+      "path": "build/validation/protocol-boundary-2026-10-30/cleanup.json",
+      "sha256": "1e68f5e5e3cef73c1a98f893ec06935e282c62bfb4f723e0b2738e47f1144488"
+    }
+  }
+}

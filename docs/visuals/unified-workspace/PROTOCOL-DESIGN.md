@@ -55,6 +55,11 @@ Vorschau auch über **Ansicht → Protokoll anzeigen**, die Statusleiste und
   Die obere Trennkante bleibt auch ohne Zeigerkontakt in der gemeinsamen
   Konturfarbe sichtbar; Zeigerkontakt oder Tastaturfokus hebt sie mit der
   gemeinsamen Akzentfarbe hervor.
+  **Abgeschlossen:** Die Korrektur ist seit Commit `ef1f3321` vorhanden.
+  Der [Nachlauf vom 30. Oktober](../../verification/protocol-boundary-workspaces-2026-10-30.json)
+  bestätigt die ruhende 1-px-Linie in Entwickeln, Simulieren und Auswerten auf
+  Windows und Linux, je vier Theme-/Schriftzustände. Nur bei relevantem Anlass
+  erneut prüfen; siehe [Wiedereinstieg](../../weiterarbeit.md).
   Kopf, Filter und Fuß bleiben stehen; Inhalt scrollt. Bei großer Schrift oder
   sehr niedriger Höhe scrollt der ganze Protokollinhalt, damit Meldungen und
   Aktionen erreichbar bleiben. Schließen gibt Fokus zurück.

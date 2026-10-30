@@ -10,6 +10,19 @@
 - Linux- und macOS-Unterstützung anhand tatsächlich ausgeführter Builds und Tests bewerten.
   Eine vorhandene CI-Konfiguration allein beweist keine Funktionsgleichheit.
 
+## Wiedereinstieg und abgeschlossene Arbeit
+
+- Bei nativer UI-Arbeit zuerst [den kurzen Arbeitsstand](docs/weiterarbeit.md)
+  lesen, besonders nach Kontextkompaktierung oder Chatwechsel; anschließend
+  `git status` und relevante Diffs abgleichen.
+- Abgeschlossene Befunde mit vorhandenem Nachweis nicht allein wegen eines
+  Kontextwechsels erneut untersuchen, bauen oder testen. Eine Wiederholung
+  braucht einen konkreten Anlass: relevante Code-/Abhängigkeitsänderung,
+  neue Fehlerbelege oder eine noch offene Prüfdimension. Anlass und Umfang
+  vor der Ausführung festhalten. Erforderliche Regressionsprüfungen bleiben bestehen.
+- Den kurzen Arbeitsstand beim Abschluss eines Schritts aktualisieren:
+  Ergebnis, Commit/Nachweis, offene Punkte und der nächste konkrete Schritt.
+
 ## Verbindliche Designfreigabe: Grafikexport
 
 - Der Nutzer hat den Grafikexport am 20. Oktober 2026 als Teil des fertigen Designs

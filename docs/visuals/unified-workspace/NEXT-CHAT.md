@@ -1,5 +1,9 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
+**Wiedereinstieg:** Zuerst [den kurzen Arbeitsstand](../../weiterarbeit.md) lesen.
+Er nennt abgeschlossene Prüfungen und den nächsten konkreten Umsetzungsschritt.
+Eine Kontextkompaktierung ist kein Anlass, erledigte Prüfungen neu zu starten.
+
 **Nutzerwahl vom 30. Oktober 2026 – Vervollständigung D mit Ergänzungen:**
 [ADR 023](../../decisions/023-selected-completion-d.md),
 [verbindliche Spezifikation](../completion-typing-options/APPROVED.md) und
