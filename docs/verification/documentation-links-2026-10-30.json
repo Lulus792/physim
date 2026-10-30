@@ -1,0 +1,252 @@
+{
+  "date": "2026-10-30",
+  "code_commit": "ed3866ed06cd0ddfb8d7a24d4b85ef34394ab175",
+  "scope": "Resolve nine committed native-handbook link failures; keep developer sources external and dependency provenance/licenses readable offline, including moved SDKs",
+  "baseline": {
+    "commit": "0d7b088aeeda7d01610ebb20a4961b3c015fac7b",
+    "native_topics": 185,
+    "unreachable_links": 9,
+    "log": "build/validation/documentation-links-2026-10-30/baseline-clean-windows.log"
+  },
+  "current": {
+    "native_topics": 188,
+    "section_links": 234,
+    "registered_dependency_pages": 3,
+    "external_developer_sources": 8
+  },
+  "local": {
+    "windows": {
+      "strict_gate": "passed: 188 pages, 234 section links",
+      "gui": "2/2 passed: actual provenance/license links, developer URL clipboard and reader preservation at 16/22 px",
+      "gui_command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "documentation_anchors_16",
+        "--test-filter",
+        "documentation_anchors_22"
+      ],
+      "app_sha256": "255f1bbe4c78149cb96b1ac202933e9aff64788c0d098fb0bde5bbcb848a1696",
+      "relocated_sdk_notices": "passed: missing-file negative control, actual SDK copier, adapted entry preservation, non-ASCII moved path, native parser",
+      "frozen_probe_sha256": "c58a60ba940d7e789303bf717f216e4a125115c525943da9e15fbf57fe330627",
+      "gate_command": [
+        "python",
+        "tests/check_documentation_anchors.py",
+        "--root",
+        "D:\\Physim\\build\\validation\\documentation-links-2026-10-30\\candidate-final",
+        "--probe",
+        "D:\\Physim\\build\\validation\\documentation-links-2026-10-30\\windows-probe.exe"
+      ],
+      "gate_environment": {},
+      "registered_package_case": "documentation_topic_install passed through tools/build.py --no-app --test"
+    },
+    "linux": {
+      "strict_gate": "passed: 188 pages, 234 section links",
+      "gui": "2/2 passed: actual provenance/license links, developer URL clipboard and reader preservation at 16/22 px",
+      "gui_command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "documentation_anchors_16",
+        "--test-filter",
+        "documentation_anchors_22"
+      ],
+      "app_sha256": "00f91dabf113398eb38bf360d0f782949859a69a3abdb6fabe68eaea3075ad11",
+      "relocated_sdk_notices": "passed: missing-file negative control, actual SDK copier, adapted entry preservation, non-ASCII moved path, native parser",
+      "frozen_probe_sha256": "638f41725b2d14dbe484efee04567d177e003442b7f7d8e4c6c5b6e2ab692823",
+      "gate_command": [
+        "python3",
+        "tests/check_documentation_anchors.py",
+        "--root",
+        "/mnt/d/Physim/build/validation/documentation-links-2026-10-30/candidate-final",
+        "--probe",
+        "/mnt/d/Physim/build/validation/documentation-links-2026-10-30/linux-probe"
+      ],
+      "gate_environment": {
+        "ASAN_OPTIONS": "detect_leaks=0:halt_on_error=1",
+        "UBSAN_OPTIONS": "halt_on_error=1"
+      },
+      "sanitizers": "GCC ASan/UBSan, fail on first issue; native GUI and parser"
+    }
+  },
+  "macos": [
+    {
+      "architecture": "x86_64",
+      "job": 124340167928,
+      "source_commit": "ed3866ed06cd0ddfb8d7a24d4b85ef34394ab175",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "documentation_anchors_16",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_anchors_22",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_anchors",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_topic_install",
+          "status": "passed"
+        }
+      ],
+      "artifact_id": 13017292988,
+      "zip_sha256": "dcc364361662eb5b098f7ca6480496b6c797a8723c0c5e04207b8a467aac22c1",
+      "archive_contents_verified": true
+    },
+    {
+      "architecture": "arm64",
+      "job": 124340168214,
+      "source_commit": "ed3866ed06cd0ddfb8d7a24d4b85ef34394ab175",
+      "status": "passed",
+      "tests": [
+        {
+          "name": "documentation_anchors_16",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_anchors_22",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_anchors",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_topic_install",
+          "status": "passed"
+        }
+      ],
+      "artifact_id": 13016613176,
+      "zip_sha256": "2c9959d6071511909bf79f8801c76324bd5b4b13def5cdb788325782aa133701",
+      "archive_contents_verified": true
+    }
+  ],
+  "macos_run": "https://github.com/PhysicSimulator/physim/actions/runs/41136506871",
+  "macos_environment": [
+    {
+      "job": 124340167928,
+      "lines": [
+        "2026-10-30T22:12:08.1164230Z Version: 20260819.586",
+        "2026-10-30T22:12:08.1175610Z macOS",
+        "2026-10-30T22:12:08.1176500Z 15.7.9",
+        "2026-10-30T22:12:08.1180230Z Image: macos-15",
+        "2026-10-30T22:12:08.1181350Z Version: 20260824.0482.1",
+        "2026-10-30T22:12:41.3914680Z -- The C compiler identification is AppleClang 17.0.0.17000013",
+        "2026-10-30T22:12:43.6681380Z -- The OBJC compiler identification is AppleClang 17.0.0.17000013",
+        "2026-10-30T22:13:15.3128820Z -- Looking for ceil - found",
+        "2026-10-30T22:13:15.3133620Z -- Looking for ceilf",
+        "2026-10-30T22:13:15.7004390Z -- Looking for ceilf - found",
+        "2026-10-30T22:13:15.7014690Z -- Looking for copysign",
+        "2026-10-30T22:14:15.0814230Z [64/251] Building C object CMakeFiles/SDL3-shared.dir/src/events/SDL_windowevents.c.o"
+      ]
+    },
+    {
+      "job": 124340168214,
+      "lines": [
+        "2026-10-30T22:15:20.9211630Z Version: 20261021.618",
+        "2026-10-30T22:15:20.9215810Z macOS",
+        "2026-10-30T22:15:20.9216130Z 15.8.2",
+        "2026-10-30T22:15:20.9217500Z Image: macos-15-arm64",
+        "2026-10-30T22:15:20.9217910Z Version: 20261028.0489.1",
+        "2026-10-30T22:15:44.4418850Z -- The C compiler identification is AppleClang 17.0.0.17000013",
+        "2026-10-30T22:15:45.8148550Z -- The OBJC compiler identification is AppleClang 17.0.0.17000013",
+        "2026-10-30T22:16:15.0320470Z -- Looking for strnlen - found",
+        "2026-10-30T22:16:15.0321580Z -- Looking for strpbrk",
+        "2026-10-30T22:16:15.2553130Z -- Looking for strpbrk - found",
+        "2026-10-30T22:16:15.2554410Z -- Looking for strrchr",
+        "2026-10-30T22:16:15.5009570Z -- Looking for strrchr - found"
+      ]
+    }
+  ],
+  "macos_commands": [
+    "python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl build/sdl-install --test --test-filter documentation_anchors --test-filter documentation_topic_install",
+    "python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl build/sdl-install --test-display --test-filter documentation_anchors_16 --test-filter documentation_anchors_22"
+  ],
+  "source_sha256": {
+    "README.md": "18f565682f45d1cc6bfe331970135e0ed63071b72d179b5e240e55d29ff6b3e1",
+    "app/documentation_ui.inc": "38904979a3da89b51d94eeebbfff15268599d36a2e549797b2fb509176254694",
+    "app/documentation_keyboard_tests.inc": "fd1d92efc550e03f53f547cf2acac4e3455829f5953dd3bdb6ab7c0d27653965",
+    "docs/design-direction.md": "795121e0d8ea4709e8c1c285ce1210c15ab86e0a210cd6b06e48661455b5f784",
+    "docs/settings.md": "83aed22925d70033faa536326fc98fd63d92d1cf60a3c394331063a3a2974069",
+    "third_party/README.md": "9aa7d79ef391125812288bdc691e682bfd8ab799ac11029fa84e4ff5d3932128",
+    "tools/build.py": "4a6ee4e24a48ff1d41a1883cfe52a8f9f8b8bc22b2d7f641cb274debfa501a65",
+    "tests/check_documentation_anchors.py": "a6a0330241a4af96a4e2abbba2d98c23b851a6308e7a3c97c0e9da70a4105cd6",
+    "tests/test_documentation_topic_install.py": "68f0d6c2431eeebf4df39cfa481aa39828f300eedbd9293af3ece1e9eb0c376f",
+    "tests/native_integration_cases.json": "cbeb71893ebeb66a65fdc9a4e343aa536cf0901f1b2c72906370d20532107485",
+    ".github/workflows/macos-documentation-links.yml": "b3d773cc0a60121bafe97b90271df5c8ae944f9f5de69f8eb586ea7597be1a86"
+  },
+  "native_page_data_sha256": {
+    "third_party/libunibreak-8.0/README.md": "b72fa30f58d22611b5257c28d8d13cecf1be3a80619224919f65597b3dfa2d94",
+    "third_party/libunibreak-8.0/LICENCE": "0c57e2ec42ece17791a75d2f9b2f8e0663181be008667a507f765b3ef22522db",
+    "third_party/libunibreak-8.0/UNICODE-LICENSE.txt": "e7a93b009565cfce55919a381437ac4db883e9da2126fa28b91d12732bc53d96"
+  },
+  "text_snapshot_manifest_sha256": "cbcc5a2b78ea373963abcb62600fbe3b9faa4f2862ac36ae9209eeaea2c22ea1",
+  "probe_source_sha256": {
+    "tests/documentation_anchor_probe.c": "d2dddc25411155d773871e98843ceb2fe84ebf35bd49776018b7bab134cad91a",
+    "app/documentation.c": "83a85a5b6d6d0a33a01540c96a120d7ff34a86227e0fbc76a725390788123783",
+    "app/documentation.h": "fee4cf8df9a8d28277b5981f65adece2313531712340559f97cd73ab902b7d36",
+    "app/documentation_math_catalog.inc": "886aa658577f23ed7593be0155f5e6db8db12a22f096e642e18f165db7b2b8f8"
+  },
+  "linux_probe_compile": "gcc -std=c17 -O1 -g -fsanitize=address,undefined -fno-sanitize-recover=all -fno-omit-frame-pointer -I /mnt/d/Physim/include -I /mnt/d/Physim/app -I /mnt/d/Physim/src /mnt/d/Physim/tests/documentation_anchor_probe.c /mnt/d/Physim/app/documentation.c /mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/lib/libphysim-core.a -lm -o /mnt/d/Physim/build/validation/documentation-links-2026-10-30/linux-build/documentation-anchor-probe",
+  "snapshot": {
+    "latest": "doc-links-final",
+    "owned_inputs": 112,
+    "compiler_and_test_inputs_matching_git": 1097,
+    "runtime_files": {
+      "windows": 200,
+      "linux": 103
+    },
+    "source_and_runtime_archive_readback": true,
+    "native_runs": "doc-links-first",
+    "final_overlay": "Only the added macOS paragraph in design-direction.md; compiled sources and GUI runtime unchanged"
+  },
+  "repair_history": [
+    "Initial root baseline had an additional unrelated uncommitted status-link failure; clean Git baseline isolates the nine committed failures. Foreign WIP was preserved.",
+    "SDK fixture r1 exposed Windows child-output encoding; child Python now explicitly UTF-8.",
+    "SDK fixture r2 exposed platform-dependent traceback path spelling; verifier now reports missing topics directly.",
+    "SDK fixture r3 exposed a second missing-page read in the anchor pass; both phases now report absence and remain failing.",
+    "Final missing-file negative and actual relocated-copy positive both pass on Windows/Linux/macOS.",
+    "A provisional final Windows text run overlapped probe rebuilding; authoritative final runs use separate frozen probes after all builders stopped."
+  ],
+  "cleanup": {
+    "successful_bmp_removed": 16,
+    "bytes_freed": 26267808,
+    "preserved": "source/runtime archives, frozen probes and debug symbols, earlier references and failure logs",
+    "compiler_objects": "Automatic execution policy rejected recursive cache cleanup and narrower per-file .obj cleanup (blocked by policy). No deletion occurred; 64 files / 6103831 bytes verified retained."
+  },
+  "limits": [
+    "This is a focused native-link/SDK acceptance, not full UI/content/accessibility acceptance.",
+    "Historical macOS workflows using in-window menu coordinates/custom F10 still need porting.",
+    "Local uncommitted foreign docs/status.md adds a separate unregistered cleanup-report link; it is excluded from the clean source evidence and not changed.",
+    "No manual screenreader, real monitor/DPI or local-user-Mac test was performed."
+  ]
+}

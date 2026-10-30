@@ -12,7 +12,8 @@ Mehrere Toolbar-/Tastatur-/Dokumentabläufe klicken bisher auf die alten
 In-Window-Menüflächen oder erwarten das eigene F10-Menü. Diese Erwartungen
 passen nach der ausdrücklich gewünschten Verschiebung nicht mehr zu macOS;
 keinen alten Menü-Fallback ausschließlich zum Bestehen dieser Tests aktivieren.
-Das bereits vorher fehlerhafte Dokumentationsanker-Gate bleibt gesondert offen.
+Das vorher fehlerhafte Dokumentationsanker-Gate ist inzwischen gezielt behoben
+und unten als eigener Teilabschluss belegt.
 
 Die Systemmenüleiste selbst nach [ADR 024](decisions/024-native-macos-menubar.md)
 ist implementiert und gezielt nativ geprüft: Datei/Bearbeiten/Ansicht/Build/Hilfe
@@ -35,20 +36,32 @@ enge Nutzerumfang sind in ADR 024 festgehalten. Vollbild-/Menüleistenverhalten
 macOS verwalten lassen. [Kompakter Nachweis](verification/macos-menubar-2026-10-30.json)
 nennt tatsächliche lokale/gehostete Prüfungen und verbleibende Prüflücken.
 
-Offenes CI-Gate nach Push `1aa591b2`: Der Linux-UI-Sanitizerlauf `41126070397`
-und der Mac-F1-Lauf `41126070358` scheitern im Schritt `documentation_anchors`.
-Im GCC- und Mac-ARM-Originalprotokoll sind neun nicht erreichbare native
-Dokumentationsziele genannt, darunter Speicher-/Design-/Einstellungsdokumente
-und die libunibreak-README. Diese Texte existieren lokal; die native
-Themen-Erreichbarkeit ist damit noch nicht bewiesen. Originalprotokolle unter
-`build/validation/tree-selection-a2-2026-10-30/ci-*.log` erhalten. Dieses Gate
-gesondert beheben; keine gesamte CI-/Mac-Abnahme aus den lokalen A2-Ergebnissen
-ableiten und keine unveränderten grünen A2-Kampagnen dafür wiederholen.
+**Dokumentationsanker-Gate behoben auf `ed3866ed`:** Die ursprünglichen Läufe
+`41126070397`/`41126070358` scheiterten an neun nicht erreichbaren Themenzielen.
+Die saubere Git-Gegenprobe bestätigt genau diese neun Fehler. Acht Entwickler-
+und Designverweise sind jetzt ausdrücklich externe, revisionsfeste Repository-
+Quellen; F1 kopiert ihre Adresse. libunibreak-Herkunft und beide Lizenztexte sind
+als native Offline-Themen registriert. Der SDK-Installer erhält ihre Pfade auch
+außerhalb von `docs/` und überschreibt seine angepasste Startseite nicht.
+Der Prüfer bleibt strikt; fehlende Dateien liefern nun gezielte Fehler statt
+Python-Tracebacks. Windows/Linux bestehen 188 Themen und 234 Abschnittslinks,
+Paket-Gegenprobe/Umzug und je zwei echte F1-Fälle (16/22 px). Der gehostete
+Mac-Lauf `41136506871` besteht auf Intel und Apple Silicon je **4/4**.
+[Nachweis und Grenzen](verification/documentation-links-2026-10-30.json).
+Diese gezielten Prüfungen ohne relevante Änderung nicht erneut beginnen.
+
+Die uncommittete fremde Ergänzung in `docs/status.md` besitzt separat einen
+relativen Link zum noch nicht registrierten Bereinigungsbericht vom 22.10.
+Sie bleibt unverändert. Deshalb wurde der Git-Quellstand mit ausschließlich
+eigenen Änderungen isoliert geprüft; kein pauschales Grün für fremdes WIP oder
+die gesamte CI ableiten. Die alten Fehlerprotokolle unter
+`build/validation/tree-selection-a2-2026-10-30/ci-*.log` bleiben erhalten.
 
 ## Abgeschlossen – nicht aus Kontextverlust wiederholen
 
 | Teil | Ergebnis und Nachweis | Verbleibende Grenze |
 | --- | --- | --- |
+| F1-Link-Gate und Offline-Lizenzen im SDK | `ed3866ed`: 188 Themen/234 Abschnittslinks unter Windows/Linux; Herkunft und beide Lizenzen tatsächlich per F1-Tastatur geöffnet, Quellenadresse kopiert; SDK-Umzug mit fehlenden Dateien als Gegenprobe. Intel/Apple Silicon je 4/4. [Nachweis](verification/documentation-links-2026-10-30.json). | Gesamte GUI-/Inhalts-/Screenreader-Abnahme bleibt offen; fremde Status-Ergänzung nicht mit geprüft. |
 | macOS-Systemmenüleiste | `d43dcd6c` + `517021f0`; je 2/2 native Fälle Intel/Apple Silicon, je 4/4 Menü-/Headerfälle plus Start unter Windows/Linux. [Kompakter Nachweis](verification/macos-menubar-2026-10-30.json). | Manuelle Vollbild-/VoiceOver-Prüfung und Portierung historischer kompletter Mac-GUI-Workflows offen. |
 | Trennlinie oberhalb des Protokolls | **Behoben seit `ef1f3321`.** Dauerhaft 1 px, gemeinsame Konturfarbe; Akzent bei Hover/Fokus. [Ursprüngliche Korrektur und negative Kontrolle](verification/protocol-separator-2026-10-29.json). [Nachlauf 30.10.](verification/protocol-boundary-workspaces-2026-10-30.json): Windows Release und Linux Debug ASan/UBSan, je 12/12 Zustände in Entwickeln, Simulieren, Auswerten. | Große Schrift im Nachlauf: 22 px; keine neue macOS-/DPI-/Screenreader-Abnahme. |
 | A2 für Textauswahl | Gemeinsamer Textfeldrenderer, Commit `c12e2a10`. [Umfang und native Belege](visuals/unified-workspace/TEXT-SELECTION-A2-NATIVE.md). | Belegt keine vollständige A2-Umsetzung aller Objektarten. |
@@ -89,9 +102,21 @@ Für dessen nächste Änderung das neue Manifest verwenden, nicht den älteren
 `list-a2-final`- oder `protocol-boundary-final`-Lauf. Der letzte Eingabebestand
 umfasst 101 Dateien. Der neue Menüstand `mac-menu-shell` erfasst 105 Eingaben
 einschließlich Adapter-/Testdateien. Seine Windows-/Linux-Läufe sind beendet;
-Manifest-/Archivnachweise liegen im gleichen Kampagnenordner. Bei weiterer
-Quelländerung dieses neue Manifest verwenden. A2-/Protokolltests ohne relevante
-Änderung weiterhin nicht wiederholen.
+Manifest-/Archivnachweise liegen im gleichen Kampagnenordner.
+**Neuester Anschluss ist `doc-links-final` mit 112 Eingaben und 1097 gegen Git
+abgeglichenen Compiler-/Testdateien**, aufgebaut auf `mac-menu-shell`.
+Die F1-Läufe `doc-links-first` sind Windows/Linux je 2/2 bestanden; danach änderte
+sich nur der Mac-Menüabsatz in `design-direction.md`, kein Compilerinput oder
+App-Runtime. Alle lokalen Builds, Textprüfungen und Archivläufe sind beendet.
+Für weitere Änderungen `doc-links-final` als vorheriges Manifest verwenden.
+A2-/Protokolltests ohne relevante Änderung weiterhin nicht wiederholen.
+
+Die 16 neuen erfolgreichen F1-Rohbilder wurden nach bestandener Zustandsprüfung
+entfernt (26.267.808 Bytes); Textberichte und Originalreferenzen bleiben erhalten.
+Eine zusätzliche Bereinigung von Compilerobjekten wurde automatisch mit
+`blocked by policy` abgelehnt, auch der engere Einzeldateiversuch. Es wurden
+keine Objekte entfernt: 64 `.obj`-Dateien / 6.103.831 Bytes sind bestätigt erhalten.
+Die Löschung nicht über eine andere Shell oder Kodierung umgehen.
 
 Parallele lokale AT-SPI-/Orca-, Workflow- und Statusänderungen getrennt erhalten;
 nur eigene geprüfte Dateien committen. Alles bleibt auf D:, F: nicht berühren.
