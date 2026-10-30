@@ -93,8 +93,11 @@ Auswahl sowie die beiden korrigierten Fokusfälle. Die vom Nutzer verlangten
 Die folgende [A2-Textauswahl](TEXT-SELECTION-A2-NATIVE.md) verwendet eine eigene
 transparente Auswahlfläche und erhält normale, dynamische und Syntaxfarben.
 Originalbytes und echte Zwischenablage werden an Codeeditor, Explorersuche und
-schreibgeschützter Vorschau geprüft. A2 für Listen/Szene, Mehrfachauswahl und
-die gemeinsame Kontextmenübindung bleiben weitere offene Teile.
+schreibgeschützter Vorschau geprüft. Der folgende
+[A2-Listenabgleich](LIST-SELECTION-A2-NATIVE.md) ergänzt Meldungen und
+Explorer-Dateizeilen/-Kacheln mit Auswahlfläche, Kante, Häkchen und getrenntem
+Fokus. Workspace-/Szenenmarkierung, Mehrfachauswahl und die gemeinsame
+Kontextmenübindung bleiben weitere offene Teile.
 Der [F1-Ereignisnachlauf](F1-CONTEXT-EVENTS-NATIVE.md) korrigiert anschließend
 unvollständig initialisierte künstliche Ereignisse im Kontextcode-Test.
 Linux besteht die sieben Fälle mit ASan/UBSan; der Windows-Fokusbefund und

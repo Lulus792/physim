@@ -90,7 +90,7 @@ static bool protocol_navigation_key(app *a,const SDL_KeyboardEvent *key) {
     if(page)delta=(key->key==SDLK_PAGEUP?-1:1)*(int)fmaxf(1,floorf(p->panes[1].h/(63*f)));
     int target=key->key==SDLK_HOME?0:key->key==SDLK_END?(int)count-1:(int)index+delta;
     if(target<0)target=0;if(target>=(int)count)target=(int)count-1;
-    float top=0,row=0,width=fmaxf(1,p->list_width-42*f);
+    float top=0,row=0,width=fmaxf(1,p->list_width-(42+PS_SELECTION_COLUMN)*f);
     if(p->row_count==count && p->row_ids[target]==records[target]->id) {
         top=p->rows[target].y-p->panes[1].y-8*f+p->rendered_scroll_y;row=p->rows[target].h;
     } else for(int i=0;i<=target;i++){char preview[2064];protocol_preview(records[i]->message.title,preview);row=(ps_ui_text_line(&p->fonts[2],preview,(int)strlen(preview),width,false)<(int)strlen(preview)?82:63)*f;if(i<target)top+=row;}
@@ -509,20 +509,24 @@ static void protocol_panel(app *a) {
             if(!count)protocol_wrap(a,summary.count?"Keine Meldungen entsprechen den Filtern.":"Noch keine Meldungen in dieser Sitzung.",&a->protocol_view.fonts[0],22*f,muted());
             for(size_t i=0;i<count;i++) {
                 const ps_protocol_record *r=records[i];char preview[2064],context[2064],name[2300];protocol_preview(r->message.title,preview);protocol_preview(r->message.context,context);
-                float rw=nk_window_get_content_region(ui).w;int first=ps_ui_text_line(&a->protocol_view.fonts[2],preview,(int)strlen(preview),fmaxf(1,rw-42*f),false);
+                float rw=nk_window_get_content_region(ui).w;int first=ps_ui_text_line(&a->protocol_view.fonts[2],preview,(int)strlen(preview),fmaxf(1,rw-(42+PS_SELECTION_COLUMN)*f),false);
                 bool two=first<(int)strlen(preview);float rh=(two?82:63)*f;
                 nk_layout_row_dynamic(ui,rh,1);struct nk_rect row;nk_widget(&row,ui);p->rows[i]=row;p->row_ids[i]=r->id;p->row_count++;
-                bool active=selected && r->id==selected->id;if(active){nk_fill_rect(nk_window_get_canvas(ui),row,6,protocol_selection());nk_stroke_rect(nk_window_get_canvas(ui),row,6,1,UI_COLOR(border));}
-                protocol_symbol(nk_window_get_canvas(ui),nk_rect(row.x+7*f,row.y+14*f,20*f,20*f),r->message.level,protocol_level_color(r->message.level));
-                protocol_text_at(a,&a->protocol_view.fonts[2],nk_rect(row.x+34*f,row.y+12*f,row.w-42*f,20*f),preview,UI_COLOR(text));
-                if(two && first>0)protocol_text_at(a,&a->protocol_view.fonts[2],nk_rect(row.x+34*f,row.y+31*f,row.w-42*f,20*f),preview+first,UI_COLOR(text));
+                bool active=selected && r->id==selected->id;struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+                if(active)ps_ui_selection_row(canvas,row,6*f,f,ui_palette);
+                ps_ui_selection_check(canvas,nk_rect(row.x+13*f,row.y+(row.h-15*f)/2,15*f,15*f),f,active,ui_palette);
+                protocol_symbol(canvas,nk_rect(row.x+(7+PS_SELECTION_COLUMN)*f,row.y+14*f,20*f,20*f),r->message.level,protocol_level_color(r->message.level));
+                protocol_text_at(a,&a->protocol_view.fonts[2],nk_rect(row.x+(34+PS_SELECTION_COLUMN)*f,row.y+12*f,row.w-(42+PS_SELECTION_COLUMN)*f,20*f),preview,UI_COLOR(text));
+                if(two && first>0)protocol_text_at(a,&a->protocol_view.fonts[2],nk_rect(row.x+(34+PS_SELECTION_COLUMN)*f,row.y+31*f,row.w-(42+PS_SELECTION_COLUMN)*f,20*f),preview+first,UI_COLOR(text));
                 char subtitle[2300];
                 if(*r->message.source){protocol_preview(diagnostic_basename(r->message.source),context);snprintf(subtitle,sizeof subtitle,"%s · %s:%u:%u",protocol_level_name(r->message.level),context,r->message.line,r->message.column);}
                 else if(r->message.has_time)snprintf(subtitle,sizeof subtitle,"%s · %s · t = %.4g s",protocol_level_name(r->message.level),*context?diagnostic_basename(context):protocol_origins[r->message.origin],r->message.time_s);
                 else snprintf(subtitle,sizeof subtitle,"%s · %s",protocol_level_name(r->message.level),*context?diagnostic_basename(context):protocol_origins[r->message.origin]);
-                protocol_text_at(a,&a->protocol_view.fonts[1],nk_rect(row.x+34*f,row.y+(two?56:37)*f,row.w-42*f,18*f),subtitle,muted());
+                protocol_text_at(a,&a->protocol_view.fonts[1],nk_rect(row.x+(34+PS_SELECTION_COLUMN)*f,row.y+(two?56:37)*f,row.w-(42+PS_SELECTION_COLUMN)*f,18*f),subtitle,muted());
                 protocol_row_name(r,name);
-                if(ps_ui_option_at(ui,row,"Protokollmeldungen",name,active)){p->selected=r->id;p->transcript=false;p->original_id=0;p->follow=false;selected=r;}
+                bool focused=false;
+                if(ps_ui_option_at_custom_focus(ui,row,"Protokollmeldungen",name,active,&focused)){p->selected=r->id;p->transcript=false;p->original_id=0;p->follow=false;selected=r;}
+                if(focused)ps_ui_selection_focus(canvas,row,f,ui_palette);
             }
             nk_group_end(ui);
         }

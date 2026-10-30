@@ -15,7 +15,7 @@ typedef struct {
     struct nk_color doc_header, doc_body, doc_text;
     struct nk_color curves[8];
     /* A2 selection wash. Independent of navigation/toggle highlights. */
-    struct nk_color text_selection;
+    struct nk_color text_selection, selection_accent, selection_focus, selection_border;
 } ps_ui_palette;
 
 enum {
@@ -47,7 +47,10 @@ static const ps_ui_palette PS_UI_DARK = {
     {PS_RGB(100, 170, 255), PS_RGB(245, 166, 87), PS_RGB(109, 207, 148),
      PS_RGB(193, 151, 240), PS_RGB(242, 140, 178), PS_RGB(89, 205, 220),
      PS_RGB(222, 204, 110), PS_RGB(188, 197, 212)},
-    .text_selection = {170, 184, 202, 38}
+    .text_selection = {170, 184, 202, 38},
+    .selection_accent = PS_RGB(171, 185, 202),
+    .selection_focus = PS_RGB(138, 186, 255),
+    .selection_border = PS_RGB(166, 169, 177)
 };
 static const ps_ui_palette PS_UI_LIGHT = {
     .text = PS_RGB(25, 30, 38),
@@ -61,6 +64,9 @@ static const ps_ui_palette PS_UI_LIGHT = {
     .button_active = PS_RGB(203, 210, 222),
     .selection_active = PS_RGB(192, 214, 247),
     .text_selection = {90, 108, 130, 28},
+    .selection_accent = PS_RGB(101, 120, 141),
+    .selection_focus = PS_RGB(23, 86, 158),
+    .selection_border = PS_RGB(85, 94, 108),
     .toggle = PS_RGB(198, 205, 215),
     .toggle_hover = PS_RGB(174, 187, 203),
     .accent = PS_RGB(0, 73, 163),
@@ -105,6 +111,9 @@ static const ps_ui_palette PS_UI_HIGH_CONTRAST = {
     .button_active = PS_RGB(56, 56, 56),
     .selection_active = PS_RGB(0, 0, 110),
     .text_selection = PS_RGB(0, 0, 110),
+    .selection_accent = PS_RGB(255, 225, 0),
+    .selection_focus = PS_RGB(255, 225, 0),
+    .selection_border = PS_RGB(212, 212, 212),
     .toggle = PS_RGB(90, 90, 90),
     .toggle_hover = PS_RGB(130, 130, 130),
     .accent = PS_RGB(255, 225, 0),

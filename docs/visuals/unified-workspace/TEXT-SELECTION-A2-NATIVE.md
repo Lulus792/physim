@@ -68,8 +68,10 @@ den Linux-Befund als unvollständig initialisierte künstliche Testereignisse
 und besteht die sieben Linux-Fälle. Der Windows-Fokusbefund bleibt offen;
 die A2-Farbprüfung ersetzt ihn nicht. Die eingefrorenen A2-Berichte bleiben erhalten.
 
-Dies ist keine vollständige A2- oder Oberflächenabnahme. Listen benötigen noch
-Kante/Häkchen, Mehrfachauswahl und die gemeinsame Kontextbedienung. Für die
+Dies ist keine vollständige A2- oder Oberflächenabnahme. Der anschließende
+[Listenabgleich](LIST-SELECTION-A2-NATIVE.md) ergänzt Kante/Häkchen und
+Auswahlfläche für Meldungen und Explorer-Einträge. Weitere Listen,
+Mehrfachauswahl und die gemeinsame Kontextbedienung bleiben offen. Für die
 Szene bleiben Kontur, Griffe, Auswahlrahmen und die Abgrenzung vom Kameradrag.
 Die neunteilige native Menübindung aus ADR 021 sowie sichtbare Auswahl beim
 geöffneten Menü sind gesondert umzusetzen und zu prüfen. Ebenso offen bleiben

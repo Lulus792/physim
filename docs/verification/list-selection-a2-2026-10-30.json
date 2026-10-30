@@ -1,0 +1,998 @@
+{
+  "format": 1,
+  "date": "2026-10-30",
+  "base_commit": "9151e5eb186f1ce73edee01db4957cc8ead2453b",
+  "scope": "Native A2 row rendering in protocol messages and Explorer list/grid; existing single selection. Not full A2, multiselection, menus, UI or platform acceptance.",
+  "references": [
+    {
+      "path": "docs/visuals/selection-options/APPROVED.md",
+      "sha256": "35195b4faad400e1b156486473f05a930794316129e710ced939564dc3f0e5a5"
+    },
+    {
+      "path": "docs/visuals/selection-options/selection.css",
+      "sha256": "ae348b849569787312ddaccf3fb0186de7353c1cd0a27cd465cc1d48e19dc1bd"
+    },
+    {
+      "path": "docs/visuals/design-options/options.css",
+      "sha256": "79500e3638b63af8b0ac9d1d64c562742236cad38f950773659a7b1b031a889f"
+    }
+  ],
+  "source_audit": {
+    "inputs_match_git_index": 1089,
+    "captured_inputs": 95,
+    "manifest": {
+      "path": "build/validation/explorer-inline-2026-10-29/list-a2-final-compiler-source.json",
+      "sha256": "2784428f03bdee384dbc51993d0e488545d660cd4e9c1e417ef845eca98becad"
+    },
+    "source_overlay": {
+      "path": "build/validation/explorer-inline-2026-10-29/list-a2-final-compiler-source.zip",
+      "sha256": "eeb686b0f3d5c6a4212aa8b33e2cdcd87b24f7212a96ba0817271c9af7ed9fac"
+    },
+    "runtime": {
+      "path": "build/validation/explorer-inline-2026-10-29/list-a2-final-runtime.json",
+      "sha256": "e37ed6d76e38f764de226e34dc3a76b5d8f46473348e32b5399265a4ffd1fe57"
+    },
+    "runtime_index": {
+      "path": "build/validation/explorer-inline-2026-10-29/list-a2-final-byte-index.json",
+      "sha256": "196238ddfd40da043839e520b46f1cae45eca1581caeb5786a1858141d2d22a1"
+    },
+    "input_capture": {
+      "path": "build/validation/explorer-inline-2026-10-29/list-a2-final-inputs.zip",
+      "sha256": "e15bd62b86a35421c7ca6a66f68c557d8e86f68eb24ee1a900960a5afdaf6a82"
+    },
+    "runtime_members": {
+      "windows": 194,
+      "linux": 101
+    },
+    "post_native_metadata_delta": [
+      "tools/check_list_selection_counterexample.py"
+    ],
+    "post_native_app_source_delta": [],
+    "native_runtime_bytes_unchanged": true,
+    "reference_normalization": {
+      "path": "build/validation/explorer-inline-2026-10-29/list-a2-reference-normalization.json",
+      "sha256": "9d05b375d511229cc95e95836211dd9b91340d75c91c21386f2b202412a39bab"
+    },
+    "all_archive_bytes_read_back": true
+  },
+  "cohorts": [
+    {
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/list-a2-fourth-windows.json",
+        "sha256": "b0195c528ad541f2fa13c9972865b8f512b4bff72b544c449dc0fc345dadad0b"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "list_selection_a2",
+        "--test-filter",
+        "explorer_a_layout",
+        "--test-filter",
+        "text_selection_a2"
+      ],
+      "exit_code": 0,
+      "binary_sha256": "dfe56e45cf50a53dd7a7627eb75c54ba4aa55117fb73047a885137f8cf21f930",
+      "groups": [
+        {
+          "name": "list_selection_a2",
+          "status": "passed",
+          "result": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-gcp_x20x/list_selection_a2/result.json",
+            "sha256": "965a9e93ae9289bbefc89b2b204730726af344e8fcbb2b3492edd021a892bd73"
+          },
+          "verification": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-gcp_x20x/list_selection_a2/files \u00e4/verification.json",
+            "sha256": "26e47e201f65291a55deeeec24cae674f3256a5af79fdda9c5812cad66cb0cfb"
+          },
+          "cases": 12,
+          "metrics": [
+            {
+              "mode": "protocol-dark",
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 42137,
+              "original_text_pixels": 1045,
+              "original_status_pixels": 64,
+              "edge_pixels": 94,
+              "check_pixels": 26,
+              "focus_segments": 0
+            },
+            {
+              "mode": "protocol-light",
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 42137,
+              "original_text_pixels": 1047,
+              "original_status_pixels": 64,
+              "edge_pixels": 94,
+              "check_pixels": 26,
+              "focus_segments": 0
+            },
+            {
+              "mode": "protocol-contrast",
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 42137,
+              "original_text_pixels": 1045,
+              "original_status_pixels": 64,
+              "edge_pixels": 94,
+              "check_pixels": 26,
+              "focus_segments": 0
+            },
+            {
+              "mode": "protocol-large",
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 72825,
+              "original_text_pixels": 1895,
+              "original_status_pixels": 92,
+              "edge_pixels": 195,
+              "check_pixels": 48,
+              "focus_segments": 0
+            },
+            {
+              "mode": "files-dark",
+              "keyboard_reveal_offset": [
+                0.0,
+                0.0
+              ],
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 19606,
+              "original_text_pixels": 130,
+              "original_status_pixels": 0,
+              "edge_pixels": 52,
+              "check_pixels": 27,
+              "focus_segments": 121
+            },
+            {
+              "mode": "files-light",
+              "keyboard_reveal_offset": [
+                0.0,
+                0.0
+              ],
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 19606,
+              "original_text_pixels": 130,
+              "original_status_pixels": 0,
+              "edge_pixels": 52,
+              "check_pixels": 27,
+              "focus_segments": 121
+            },
+            {
+              "mode": "files-contrast",
+              "keyboard_reveal_offset": [
+                0.0,
+                0.0
+              ],
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 19606,
+              "original_text_pixels": 130,
+              "original_status_pixels": 0,
+              "edge_pixels": 52,
+              "check_pixels": 27,
+              "focus_segments": 121
+            },
+            {
+              "mode": "files-large",
+              "keyboard_reveal_offset": [
+                0.0,
+                -33.0
+              ],
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 44680,
+              "original_text_pixels": 240,
+              "original_status_pixels": 0,
+              "edge_pixels": 108,
+              "check_pixels": 41,
+              "focus_segments": 147
+            },
+            {
+              "mode": "grid-dark",
+              "keyboard_reveal_offset": [
+                0.0,
+                0.0
+              ],
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 28990,
+              "original_text_pixels": 90,
+              "original_status_pixels": 0,
+              "edge_pixels": 268,
+              "check_pixels": 26,
+              "focus_segments": 37
+            },
+            {
+              "mode": "grid-light",
+              "keyboard_reveal_offset": [
+                0.0,
+                0.0
+              ],
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 28990,
+              "original_text_pixels": 90,
+              "original_status_pixels": 0,
+              "edge_pixels": 268,
+              "check_pixels": 26,
+              "focus_segments": 37
+            },
+            {
+              "mode": "grid-contrast",
+              "keyboard_reveal_offset": [
+                0.0,
+                0.0
+              ],
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 28990,
+              "original_text_pixels": 90,
+              "original_status_pixels": 0,
+              "edge_pixels": 268,
+              "check_pixels": 26,
+              "focus_segments": 37
+            },
+            {
+              "mode": "grid-large",
+              "keyboard_reveal_offset": [
+                0.0,
+                -33.0
+              ],
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 67842,
+              "original_text_pixels": 148,
+              "original_status_pixels": 0,
+              "edge_pixels": 552,
+              "check_pixels": 37,
+              "focus_segments": 45
+            }
+          ]
+        },
+        {
+          "name": "explorer_a_layout",
+          "status": "passed",
+          "result": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-gcp_x20x/explorer_a_layout/result.json",
+            "sha256": "f7c8e30e80d1dc0aed03be693cb9c84952fbec45be990704976ecde08cfd8e79"
+          },
+          "verification": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-gcp_x20x/explorer_a_layout/files \u00e4/verification.json",
+            "sha256": "f29d3ec23f08422229cdfb017c308a4ea4425d06026398c665b5a5792817aca2"
+          },
+          "cases": 6,
+          "metrics": [
+            {
+              "mode": "dark"
+            },
+            {
+              "mode": "light"
+            },
+            {
+              "mode": "contrast"
+            },
+            {
+              "mode": "large"
+            },
+            {
+              "mode": "compact"
+            },
+            {
+              "mode": "large-compact"
+            }
+          ]
+        },
+        {
+          "name": "text_selection_a2",
+          "status": "passed",
+          "result": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-gcp_x20x/text_selection_a2/result.json",
+            "sha256": "1e398598c0945bd764f5c0fb01c9abe48d821b96124a3f698026a035cfcb046c"
+          },
+          "verification": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-gcp_x20x/text_selection_a2/files \u00e4/verification.json",
+            "sha256": "7001b9441484b8951655329d0dee2e871e87ea3d299840ce472ad506ef3857e6"
+          },
+          "cases": 12,
+          "metrics": [
+            {
+              "mode": "code-dark",
+              "background_pixels": 9195,
+              "ink_pixels": 1239
+            },
+            {
+              "mode": "code-light",
+              "background_pixels": 9195,
+              "ink_pixels": 1239
+            },
+            {
+              "mode": "code-contrast",
+              "background_pixels": 9195,
+              "ink_pixels": 1238
+            },
+            {
+              "mode": "code-large",
+              "background_pixels": 26542,
+              "ink_pixels": 3745
+            },
+            {
+              "mode": "field-dark",
+              "background_pixels": 133,
+              "ink_pixels": 22
+            },
+            {
+              "mode": "field-light",
+              "background_pixels": 133,
+              "ink_pixels": 22
+            },
+            {
+              "mode": "field-contrast",
+              "background_pixels": 133,
+              "ink_pixels": 22
+            },
+            {
+              "mode": "field-large",
+              "background_pixels": 538,
+              "ink_pixels": 81
+            },
+            {
+              "mode": "readonly-dark",
+              "background_pixels": 2076,
+              "ink_pixels": 587
+            },
+            {
+              "mode": "readonly-light",
+              "background_pixels": 2076,
+              "ink_pixels": 587
+            },
+            {
+              "mode": "readonly-contrast",
+              "background_pixels": 2076,
+              "ink_pixels": 587
+            },
+            {
+              "mode": "readonly-large",
+              "background_pixels": 4896,
+              "ink_pixels": 1079
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/list-a2-fourth-linux.json",
+        "sha256": "83dbf33767a65aead51abb987177f3b77cf01812cef3e6bd25827619f350542f"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "list_selection_a2",
+        "--test-filter",
+        "explorer_a_layout",
+        "--test-filter",
+        "text_selection_a2"
+      ],
+      "exit_code": 0,
+      "binary_sha256": "e77d15de604a6b6890928c1d994862ddcc2b138d0be9f91089413c2aeeae94ff",
+      "groups": [
+        {
+          "name": "list_selection_a2",
+          "status": "passed",
+          "result": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-nnmzhfbb/list_selection_a2/result.json",
+            "sha256": "0d07ea2917fa5686c8122d22a09ac253400df52257ca572ba9cb19b6a2db06ee"
+          },
+          "verification": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-nnmzhfbb/list_selection_a2/files \u00e4/verification.json",
+            "sha256": "eb61f513b5d1c8b33e4e74f88fcd289f5a7d9e78cbaf06993f0386e81ef42454"
+          },
+          "cases": 12,
+          "metrics": [
+            {
+              "mode": "protocol-dark",
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 41518,
+              "original_text_pixels": 1492,
+              "original_status_pixels": 64,
+              "edge_pixels": 94,
+              "check_pixels": 26,
+              "focus_segments": 0
+            },
+            {
+              "mode": "protocol-light",
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 41518,
+              "original_text_pixels": 1491,
+              "original_status_pixels": 64,
+              "edge_pixels": 94,
+              "check_pixels": 26,
+              "focus_segments": 0
+            },
+            {
+              "mode": "protocol-contrast",
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 41518,
+              "original_text_pixels": 1491,
+              "original_status_pixels": 64,
+              "edge_pixels": 94,
+              "check_pixels": 26,
+              "focus_segments": 0
+            },
+            {
+              "mode": "protocol-large",
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 72013,
+              "original_text_pixels": 2926,
+              "original_status_pixels": 92,
+              "edge_pixels": 195,
+              "check_pixels": 48,
+              "focus_segments": 0
+            },
+            {
+              "mode": "files-dark",
+              "keyboard_reveal_offset": [
+                0.0,
+                0.0
+              ],
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 19601,
+              "original_text_pixels": 158,
+              "original_status_pixels": 0,
+              "edge_pixels": 52,
+              "check_pixels": 27,
+              "focus_segments": 121
+            },
+            {
+              "mode": "files-light",
+              "keyboard_reveal_offset": [
+                0.0,
+                0.0
+              ],
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 19601,
+              "original_text_pixels": 158,
+              "original_status_pixels": 0,
+              "edge_pixels": 52,
+              "check_pixels": 27,
+              "focus_segments": 121
+            },
+            {
+              "mode": "files-contrast",
+              "keyboard_reveal_offset": [
+                0.0,
+                0.0
+              ],
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 19601,
+              "original_text_pixels": 158,
+              "original_status_pixels": 0,
+              "edge_pixels": 52,
+              "check_pixels": 27,
+              "focus_segments": 121
+            },
+            {
+              "mode": "files-large",
+              "keyboard_reveal_offset": [
+                0.0,
+                -33.0
+              ],
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 45854,
+              "original_text_pixels": 292,
+              "original_status_pixels": 0,
+              "edge_pixels": 108,
+              "check_pixels": 46,
+              "focus_segments": 147
+            },
+            {
+              "mode": "grid-dark",
+              "keyboard_reveal_offset": [
+                0.0,
+                0.0
+              ],
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 28985,
+              "original_text_pixels": 105,
+              "original_status_pixels": 0,
+              "edge_pixels": 268,
+              "check_pixels": 26,
+              "focus_segments": 37
+            },
+            {
+              "mode": "grid-light",
+              "keyboard_reveal_offset": [
+                0.0,
+                0.0
+              ],
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 28985,
+              "original_text_pixels": 105,
+              "original_status_pixels": 0,
+              "edge_pixels": 268,
+              "check_pixels": 26,
+              "focus_segments": 37
+            },
+            {
+              "mode": "grid-contrast",
+              "keyboard_reveal_offset": [
+                0.0,
+                0.0
+              ],
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 28985,
+              "original_text_pixels": 105,
+              "original_status_pixels": 0,
+              "edge_pixels": 268,
+              "check_pixels": 26,
+              "focus_segments": 37
+            },
+            {
+              "mode": "grid-large",
+              "keyboard_reveal_offset": [
+                0.0,
+                -33.0
+              ],
+              "image_size": [
+                1440,
+                1000
+              ],
+              "flat_pixels": 67823,
+              "original_text_pixels": 205,
+              "original_status_pixels": 0,
+              "edge_pixels": 552,
+              "check_pixels": 37,
+              "focus_segments": 45
+            }
+          ]
+        },
+        {
+          "name": "explorer_a_layout",
+          "status": "passed",
+          "result": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-nnmzhfbb/explorer_a_layout/result.json",
+            "sha256": "f9406c204c98497e77953dcbfd93d2b39300d414892a224258334a793566d28f"
+          },
+          "verification": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-nnmzhfbb/explorer_a_layout/files \u00e4/verification.json",
+            "sha256": "c3d0853e157ab27b1ff3f9d0a458d3e41f9a982c7cbc830f044dea69fdc1fd1e"
+          },
+          "cases": 6,
+          "metrics": [
+            {
+              "mode": "dark"
+            },
+            {
+              "mode": "light"
+            },
+            {
+              "mode": "contrast"
+            },
+            {
+              "mode": "large"
+            },
+            {
+              "mode": "compact"
+            },
+            {
+              "mode": "large-compact"
+            }
+          ]
+        },
+        {
+          "name": "text_selection_a2",
+          "status": "passed",
+          "result": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-nnmzhfbb/text_selection_a2/result.json",
+            "sha256": "1c9de852e2db5e3c38959a78198de12be1afc8a7e29b6a8fd9ffb17d2fdf4f1f"
+          },
+          "verification": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-nnmzhfbb/text_selection_a2/files \u00e4/verification.json",
+            "sha256": "b4aa11c8b59642ea5374528ed8319d3c389c099229af2ae8df877e8becae82e6"
+          },
+          "cases": 12,
+          "metrics": [
+            {
+              "mode": "code-dark",
+              "background_pixels": 8605,
+              "ink_pixels": 1093
+            },
+            {
+              "mode": "code-light",
+              "background_pixels": 8605,
+              "ink_pixels": 1093
+            },
+            {
+              "mode": "code-contrast",
+              "background_pixels": 8604,
+              "ink_pixels": 1091
+            },
+            {
+              "mode": "code-large",
+              "background_pixels": 25436,
+              "ink_pixels": 3316
+            },
+            {
+              "mode": "field-dark",
+              "background_pixels": 169,
+              "ink_pixels": 49
+            },
+            {
+              "mode": "field-light",
+              "background_pixels": 169,
+              "ink_pixels": 49
+            },
+            {
+              "mode": "field-contrast",
+              "background_pixels": 169,
+              "ink_pixels": 49
+            },
+            {
+              "mode": "field-large",
+              "background_pixels": 626,
+              "ink_pixels": 135
+            },
+            {
+              "mode": "readonly-dark",
+              "background_pixels": 2236,
+              "ink_pixels": 673
+            },
+            {
+              "mode": "readonly-light",
+              "background_pixels": 2236,
+              "ink_pixels": 673
+            },
+            {
+              "mode": "readonly-contrast",
+              "background_pixels": 2236,
+              "ink_pixels": 673
+            },
+            {
+              "mode": "readonly-large",
+              "background_pixels": 5348,
+              "ink_pixels": 1231
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "counterexamples": {
+    "report": {
+      "path": "build/validation/explorer-inline-2026-10-29/list-a2-counter.json",
+      "sha256": "afcd3e66201970a4295e56ee37eb2770d1b4dc8c3d6377e4cdaef748cbad687f"
+    },
+    "source_archive": {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/list-a2-counter-20261030-r2/source.zip",
+      "sha256": "b088a35954e87d2760a71f942143443481f84d50afe5b67a95c962e4431ca05e"
+    },
+    "production_archive": {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/list-a2-counter-20261030-r2/production.zip",
+      "sha256": "fa3340491cb8aeb7fc485e1bb2085ebf44e57d7a272b9ce0da8e525c021d1a56"
+    },
+    "runtime_archive": {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/list-a2-counter-20261030-r2/runtime.zip",
+      "sha256": "ac221bd1ff5b4ad61336e6529c420c33e2fbdb956a7ecfd66581786517e4ca4c"
+    },
+    "archive_member_counts": {
+      "source_members": 14,
+      "production_members": 2,
+      "runtime_members": 2
+    },
+    "cases": [
+      {
+        "variant": "opaque",
+        "exit_code": 1,
+        "binary_sha256": "2c902113fb63abfac4c1d932ceebdd3e6f1358368a307b76d3a0cb749619f32c",
+        "log": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\list-a2-counter-20261030-r2\\opaque.log",
+        "log_sha256": "f4bfbc299039398d6e552208800472103fcfb3899f62a38081039cab7701d12c",
+        "expected_failure": "A2 row wash differs"
+      },
+      {
+        "variant": "edge",
+        "exit_code": 1,
+        "binary_sha256": "2c902113fb63abfac4c1d932ceebdd3e6f1358368a307b76d3a0cb749619f32c",
+        "log": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\list-a2-counter-20261030-r2\\edge.log",
+        "log_sha256": "1384ebc995e20c083d6db05ac80b36281ab07aaa6903e88cedf586ae12f58879",
+        "expected_failure": "A2 3px row accent missing"
+      },
+      {
+        "variant": "check",
+        "exit_code": 1,
+        "binary_sha256": "2c902113fb63abfac4c1d932ceebdd3e6f1358368a307b76d3a0cb749619f32c",
+        "log": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\list-a2-counter-20261030-r2\\check.log",
+        "log_sha256": "89110396d3ba2df72790c19ec82cc46dd5c5e94c0532f7ed4de086243d771ec4",
+        "expected_failure": "A2 selected check missing"
+      },
+      {
+        "variant": "status",
+        "exit_code": 1,
+        "binary_sha256": "2c902113fb63abfac4c1d932ceebdd3e6f1358368a307b76d3a0cb749619f32c",
+        "log": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\list-a2-counter-20261030-r2\\status.log",
+        "log_sha256": "60e947379dd9875907e630cec137b8e3e322d1c346528de7fcb078c6ff60f687",
+        "expected_failure": "A2 changes original row ink"
+      },
+      {
+        "variant": "ink",
+        "exit_code": 1,
+        "binary_sha256": "2c902113fb63abfac4c1d932ceebdd3e6f1358368a307b76d3a0cb749619f32c",
+        "log": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\list-a2-counter-20261030-r2\\ink.log",
+        "log_sha256": "3fb3abcf0b08cf6ef033ec15bdd53e05f56a4def39b34f5f249663ab57c8d6f1",
+        "expected_failure": "Selection changed original text"
+      },
+      {
+        "variant": "focus",
+        "exit_code": 1,
+        "binary_sha256": "2c902113fb63abfac4c1d932ceebdd3e6f1358368a307b76d3a0cb749619f32c",
+        "log": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\list-a2-counter-20261030-r2\\focus.log",
+        "log_sha256": "a72ada6df31eaac02178d33d85bc485e9bc01e7a4eff8d940a6ae071832340d7",
+        "expected_failure": "Missing native dashed focus commands"
+      },
+      {
+        "variant": "positive",
+        "exit_code": 0,
+        "binary_sha256": "dfe56e45cf50a53dd7a7627eb75c54ba4aa55117fb73047a885137f8cf21f930",
+        "log": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\list-a2-counter-20261030-r2\\positive.log",
+        "log_sha256": "3ad27c49bc510204a467e19271193587e3cb50342ae4f182c103e5c55e211665",
+        "expected_failure": null
+      }
+    ],
+    "normal_exe_pdb_unchanged": true
+  },
+  "runner_contract": {
+    "work": "build/validation/list-selection-a2-2026-10-30/runner",
+    "exit_code": 0,
+    "scope": "Actual win32/linux/darwin display catalog contracts and intentional timeout/launch/build/exit report cases; not macOS runtime"
+  },
+  "previous_cohorts": [
+    {
+      "phase": "first",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/list-a2-first-windows.json",
+        "sha256": "122a9102e4c5b831248b9931446efbbe39608f55b632039f27a44866ee031d21"
+      },
+      "exit_code": 1,
+      "run": "run-gtwvoalr"
+    },
+    {
+      "phase": "first",
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/list-a2-first-linux.json",
+        "sha256": "82a49493f6a60431c2e571bff1344cbb6883e25fc42b1e47f839909092800956"
+      },
+      "exit_code": 1,
+      "run": "run-2yojj3hk"
+    },
+    {
+      "phase": "second",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/list-a2-second-windows.json",
+        "sha256": "5cfcbb671ff26a88e2d654a429b6c086d74b9d228e750b4df84e620c05dea88d"
+      },
+      "exit_code": 1,
+      "run": "run-vxv3pm2o"
+    },
+    {
+      "phase": "second",
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/list-a2-second-linux.json",
+        "sha256": "5352e4db64f147bf2c24ca07ea23ec598592cc09357f35dd15a03d7bfeca5690"
+      },
+      "exit_code": 1,
+      "run": "run-4nxwn_3j"
+    },
+    {
+      "phase": "third",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/list-a2-third-windows.json",
+        "sha256": "b67f07211fb0b9a26e897e130f2da2dd712a626f57cc97a36e8f0b936adbfaab"
+      },
+      "exit_code": 1,
+      "run": "run-ydo9ry4f"
+    },
+    {
+      "phase": "third",
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/list-a2-third-linux.json",
+        "sha256": "9bd6c4273dec1c46ff7cd68b407aa4bf4e20ecd473bd7065041abcc4a76445f1"
+      },
+      "exit_code": 1,
+      "run": "run-qiddmg9_"
+    }
+  ],
+  "prior_navigator": [
+    {
+      "platform": "windows",
+      "status": "failed",
+      "result": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-gtwvoalr/protocol_navigator/result.json",
+        "sha256": "459d6a6e63b8f765f5ac1ff1a617f9d2547a142c14dd7c05b74d70eca51037ad"
+      }
+    },
+    {
+      "platform": "linux",
+      "status": "passed",
+      "result": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2yojj3hk/protocol_navigator/result.json",
+        "sha256": "d771d415e4f8673693f4c4db8cc81454a9544d49c717221daa76f1b346af2191"
+      }
+    }
+  ],
+  "repair_provenance": [
+    "First focus observation required fully opaque accent pixels and used the local Explorer accent. Shared focus role and exact native-command role checks plus AA-aware raster composition replaced this invalid peak-pixel assumption.",
+    "First Linux large-compact Explorer observation saw160/161 filename glyphs below the outer clip. The fixture now uses actual Tab/reveal before asserting full visible text at the unchanged320x1200 window size.",
+    "Second focus traversal legitimately shifted the outer viewport33px. Selection before/after geometry is still exact; the separate keyboard traversal now checks relative geometry/original ink and records its actual scroll offset.",
+    "Second Explorer fixture repeatedly re-entered focus11 while trying focus12 and timed out90s on both platforms. Gated the first reveal once; third and fourth full6-case layouts pass each platform.",
+    "Third grid tick had3 fully opaque pixels; AA-aware diagnostic found26 visible pixels. Final verifier requires the correct two native tick strokes and AA-composed visible pixels, retaining the minimum4 visible-pixel threshold.",
+    "Reviewed preservation of unselected grid hover. Shared checkbox border role also avoids the local Explorer metadata-color override.",
+    "Initial counter setup expected two identical text markers; actual preview and preview+first markers differ. It failed before any mutant build/run. Corrected guarded markers and a fresh-r2 run produced six actual failures and unchanged-normal12 success.",
+    "Initial reference byte check failed only for CRLF/LF. Both CSS references have identical normalized text as actually read by the checkers. Both raw hashes and normalized hash are retained; no semantic reference substitution."
+  ],
+  "counter_setup_error": {
+    "path": "build/validation/explorer-inline-2026-10-29/list-a2-counter.log",
+    "sha256": "36404e2762db3c806d40c9bbad5495c6d028344a0c092b79f7069470f841036d"
+  },
+  "visual": {
+    "inspected_native_cases": [
+      "windows/protocol-dark/after",
+      "windows/grid-light/after",
+      "windows/files-large/focus",
+      "linux/protocol-contrast/after"
+    ],
+    "retained_current_images": [
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-gcp_x20x/list_selection_a2/files \u00e4/protocol-dark/list-after.png",
+        "sha256": "d6f17e8485e1b7fed4c75f7bfff350268289fa34ba01c234499b1b1e8f378fc7",
+        "bytes": 172750
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-gcp_x20x/list_selection_a2/files \u00e4/files-large/list-focus.png",
+        "sha256": "73c1417efd25c016da3606fbb8abaf8b3fafd76b77c79367de090d271067bc98",
+        "bytes": 92875
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-gcp_x20x/list_selection_a2/files \u00e4/grid-light/list-after.png",
+        "sha256": "2d53cb72ad122c47ce29c1c1fab763c8b819f83c86fde460d2c7c0dd2b38fbc5",
+        "bytes": 109985
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-gcp_x20x/explorer_a_layout/files \u00e4/large-compact/explorer-layout-grid.png",
+        "sha256": "924221e47a4873013a2d01ff2629e7bdbbd118f4840d126379c40ec1c458aa6d",
+        "bytes": 61688
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-gcp_x20x/text_selection_a2/files \u00e4/code-dark/a2-after.png",
+        "sha256": "2a26f83eb36b6ea60ed66abe2e95bc7e4373d5a434cbd40321ea99b1cccccd1f",
+        "bytes": 100005
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-nnmzhfbb/list_selection_a2/files \u00e4/protocol-contrast/list-after.png",
+        "sha256": "f071d9454d8937fd44b846380be2c6414ed3806b3865cb0c2c634f99d6ed9d90",
+        "bytes": 180352
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-nnmzhfbb/explorer_a_layout/files \u00e4/dark/explorer-layout-initial.png",
+        "sha256": "21fd66ac6b04240ebcd840cebe2119dc6409c0f33242f0eaee7331144b857e5b",
+        "bytes": 103202
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-nnmzhfbb/text_selection_a2/files \u00e4/readonly-light/a2-after.png",
+        "sha256": "bc65ff23e91867a04b247c2a674ce9984040789236188db6d90b393dc0a4d523",
+        "bytes": 102723
+      }
+    ]
+  },
+  "cleanup": {
+    "successful_redundant_pngs_removed": 144,
+    "png_bytes_freed": 15737779,
+    "before_hashes": {
+      "path": "build/validation/list-selection-a2-2026-10-30/accepted-image-cleanup.json",
+      "sha256": "3b6f2a2f32c8ed13902698a1b636b68169694dccd6a40799d9adab7583071ae8"
+    },
+    "identical_obsolete_counter_setup_archive_removed": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/list-a2-counter-20261030/production.zip",
+    "obsolete_archive_bytes_freed": 4114952,
+    "protected": "All failed/negative images and logs, original frozen source/runtime/PDB archives, required binaries/dependencies, user data and WSL disk preserved. D only; no F access."
+  },
+  "limitations": [
+    "Workspace/scenetree/scene A2, multiselection and the nine compact context-menu targets remain unfinished.",
+    "Native A2 uses existing single-selection models; the check is a visual selection indicator, not a newly implemented multiselect command.",
+    "First Windows protocol navigator remains failed at stage38 with actual host keyboard focus0. No physical focus proof or Screenreader speech inferred from queued events.",
+    "Current native captures are1440x1000 for the new list matrix; additional monitor/DPI, physical input, macOS and full-UI acceptance remain open.",
+    "No typing-completion implementation or popup-style change in this row milestone; separate completion decisions remain part of the continuing project objective."
+  ]
+}

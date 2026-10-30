@@ -71,7 +71,10 @@ static void browser_layout_test_frame(app *a,const char *mode,int *stage,int *co
     case 3:browser_test_mouse(a,browser_test_row(a,browser_layout_long_name),false);break;
     case 4:
         okay=d->selected>=0 && !strcmp(ps_browser_entry_name(&d->listing.entries[d->selected]),browser_layout_long_name) && d->preview.text && d->preview.truncated;
-        if(!(observed&1)){browser_layout_print(a,d,"list");observed|=1;}
+        /* A long narrow-window row may extend below the outer viewport after
+         * a pointer selection. Reveal it through the real keyboard route before
+         * requiring every filename glyph to be visible in this observation. */
+        if(!(observed&1)){if(!browser_test_focus(a,11))return;browser_layout_print(a,d,"list");observed|=1;}
         if(!browser_test_focus(a,12))return;break;
     case 5:
         if(!(observed&2)){browser_layout_print(a,d,"preview");observed|=2;}

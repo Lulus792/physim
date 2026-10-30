@@ -457,7 +457,7 @@ static void browser_rebuild(browser_dialog *d,float width,float f) {
     d->tops[0]=0;
     if(!d->grid)for(size_t k=0;k<d->count;k++) {
         const char *name=ps_browser_entry_name(&d->listing.entries[d->filtered[k]]);
-        float text_width=width-(d->compact?51:229)*f;
+        float text_width=width-((d->compact?51:229)+PS_SELECTION_COLUMN)*f;
         float text_h=browser_text_height(d,name,3,fmaxf(30*f,text_width),17.92f*f);
         d->tops[k+1]=d->tops[k]+fmaxf(18*f,text_h)+(d->compact?9+14.756f+26:26)*f;
     }
@@ -539,21 +539,23 @@ static void browser_list(app *a,browser_dialog *d,float x,float y,float width,fl
                 struct nk_rect r=browser_slot(d,rx,top,rw,rh);struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
                 if(d->row_count<64){d->rows[d->row_count].index=(int)d->filtered[k];d->rows[d->row_count++].bounds=r;}
                 bool hover=nk_input_is_mouse_hovering_rect(&ui->input,r);
-                nk_fill_rect(canvas,r,6*f,selected?UI_COLOR(selection_active):hover?UI_COLOR(button_hover):d->grid?UI_COLOR(edit):nk_rgba(0,0,0,0));
-                if(selected || d->grid)nk_stroke_rect(canvas,r,6*f,f,selected?UI_COLOR(accent):UI_COLOR(border));
+                nk_fill_rect(canvas,r,6*f,!selected && hover?UI_COLOR(button_hover):d->grid?UI_COLOR(edit):nk_rgba(0,0,0,0));
+                if(d->grid)nk_stroke_rect(canvas,r,6*f,f,UI_COLOR(border));
+                if(selected)ps_ui_selection_row(canvas,r,6*f,f,ui_palette);
+                ps_ui_selection_check(canvas,nk_rect(r.x+13*f,d->grid?r.y+13*f:r.y+(r.h-15*f)/2,15*f,15*f),f,selected,ui_palette);
                 int icon=entry->kind==PS_BROWSER_DIRECTORY?PS_ICON_FOLDER:entry->kind==PS_BROWSER_RUN?PS_ICON_CHART:entry->kind==PS_BROWSER_C_SOURCE || entry->kind==PS_BROWSER_PHYS_SOURCE?-5:PS_ICON_FILE;
                 char size[64];browser_size(size,entry);const char *name=ps_browser_entry_name(entry);
-                float iw=(d->grid?35:18)*f,tw=fmaxf(1,rw-(d->grid?(d->compact?20:26):d->compact?51:229)*f);
+                float iw=(d->grid?35:18)*f,tw=fmaxf(1,rw-(d->grid?(d->compact?20:26):(d->compact?51:229)+PS_SELECTION_COLUMN)*f);
                 float th=browser_text_height(d,name,3,tw,17.92f*f),first=fmaxf(18*f,th);
                 float icon_y=d->grid?(d->compact?16:21)*f:d->compact?12*f+(first-iw)/2:(rh-iw)/2;
-                browser_icon(canvas,icon,nk_rect(r.x+(d->grid?(rw-iw)/2:(d->compact?10:11)*f),r.y+icon_y,iw,iw),UI_COLOR(accent));
+                browser_icon(canvas,icon,nk_rect(r.x+(d->grid?(rw-iw)/2:((d->compact?10:11)+PS_SELECTION_COLUMN)*f),r.y+icon_y,iw,iw),UI_COLOR(accent));
                 if(d->grid){float inset=(d->compact?10:13)*f,name_y=top+icon_y+iw+17*f;
                     browser_centered_text(d,rx+inset,name_y,tw,name,3,17.92f*f,UI_COLOR(text));
                     browser_centered_text(d,rx+inset,name_y+th+9*f,tw,browser_kind_name(entry->kind),4,14.756f*f,UI_COLOR(muted));}
-                else if(d->compact){browser_text(a,d,rx+41*f,top+12*f+(first-th)/2,tw,name,3,17.92f*f,UI_COLOR(text),false);
-                    browser_text(a,d,rx+41*f,top+12*f+first+9*f,tw,browser_kind_name(entry->kind),4,14.756f*f,UI_COLOR(muted),false);}
-                else {float tw=rw-229*f,th=browser_text_height(d,name,3,fmaxf(30*f,tw),17.92f*f);
-                    browser_text(a,d,rx+45*f,top+(rh-th)/2,fmaxf(30*f,tw),name,3,17.92f*f,UI_COLOR(text),false);
+                else if(d->compact){browser_text(a,d,rx+(41+PS_SELECTION_COLUMN)*f,top+12*f+(first-th)/2,tw,name,3,17.92f*f,UI_COLOR(text),false);
+                    browser_text(a,d,rx+(41+PS_SELECTION_COLUMN)*f,top+12*f+first+9*f,tw,browser_kind_name(entry->kind),4,14.756f*f,UI_COLOR(muted),false);}
+                else {float tw=rw-(229+PS_SELECTION_COLUMN)*f,th=browser_text_height(d,name,3,fmaxf(30*f,tw),17.92f*f);
+                    browser_text(a,d,rx+(45+PS_SELECTION_COLUMN)*f,top+(rh-th)/2,fmaxf(30*f,tw),name,3,17.92f*f,UI_COLOR(text),false);
                     browser_text(a,d,rx+rw-175*f,top+(rh-14.756f*f)/2,90*f,browser_kind_name(entry->kind),4,14.756f*f,UI_COLOR(muted),false);
                     browser_text(a,d,rx+rw-76*f,top+(rh-14.756f*f)/2,65*f,size,4,14.756f*f,UI_COLOR(muted),false);}
                 bool native=false;nk_begin_disabled(ui,browser_mutating(d));
@@ -562,7 +564,7 @@ static void browser_list(app *a,browser_dialog *d,float x,float y,float width,fl
                 if(ps_ui_mouse_pressed_in_rect(&ui->input,NK_BUTTON_LEFT,r)){d->focus=11;d->focused_row=(int)d->filtered[k];}
                 if(native || (d->keyboard && d->focus==11 && selected)) {
                     if(d->keyboard && selected)nk_sdl_accessibility_keyboard_target(ui,r);
-                    nk_stroke_rect(canvas,r,6*f,2*f,UI_COLOR(accent));d->controls[11]=r;
+                    ps_ui_selection_focus(canvas,r,f,ui_palette);d->controls[11]=r;
                 }
                 if(selected)d->selected_bounds=r;
                 if(entry->kind==PS_BROWSER_DIRECTORY && ps_ui_mouse_pressed_in_rect(&ui->input,NK_BUTTON_DOUBLE,r)){browser_navigate(d,entry->path,true);break;}

@@ -7,6 +7,9 @@ for key in ('app','root','work'):p.add_argument('--'+key,type=Path,required=True
 p.add_argument('--mode',choices=('dark','light','contrast','large','compact','large-compact'))
 a=p.parse_args();a.work.mkdir(parents=True,exist_ok=True);a.app=a.app.resolve()
 css=(a.root/'docs/visuals/design-options/options.css').read_text(encoding='utf8')
+selection_css=(a.root/'docs/visuals/selection-options/selection.css').read_text(encoding='utf8')
+selection_rule=re.search(r'\.selectable-row\{([^{}]+)\}',selection_css)[1]
+selection_column=float(re.search(r'grid-template-columns:([\d.]+)px',selection_rule)[1])+float(re.search(r'(?:^|;)gap:([\d.]+)px',selection_rule)[1])
 base={s.strip():b for s,b in re.findall(r'([^{}]+)\{([^{}]*)\}',css[:css.index('@media')])}
 compact_rules={s.strip():b for s,b in re.findall(r'([^{}]+)\{([^{}]*)\}',css[css.index('@media(max-width:560px)'):])}
 def val(selector,key):return re.search(r'(?:^|;)'+re.escape(key)+r':([^;]+)',base[selector])[1]
@@ -79,7 +82,7 @@ for mode in ([a.mode] if a.mode else ('dark','light','contrast','large','compact
         n=len(names);r=row['bounds'];near(r[0],listing['list'][0],'List has extra side inset')
         rule=compact_val if compact else val;pad_y,pad_x=[float(v[:-2]) for v in rule('.file-entry','padding').split()]
         icon_column=float(rule('.file-entry','grid-template-columns').split()[0][:-2])
-        near(names[0]['box'][0]-r[0],(border+pad_x+icon_column+gap)*f,'Filename column')
+        near(names[0]['box'][0]-r[0],(border+pad_x+icon_column+gap+selection_column)*f,'Filename column including A2 selection indicator')
         near(r[2],listing['content_width'],'File row width')
         height=max(icon,name_pitch*n)+(gap+small_pitch if compact else 0)+2*(pad_y+border)
         near(r[3],height*f,'File row content/padding')

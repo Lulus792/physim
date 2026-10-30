@@ -10,6 +10,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
         return false;
     if(!strncmp(mode,"explorer-a-",11))return browser_test_start(a,root,mode);
     if(!strncmp(mode,"selection-a2-",13))return selection_a2_start(a,root,mode);
+    if(!strncmp(mode,"list-a2-",8))return list_a2_start(a,root,mode);
     if(!strncmp(mode,"project-window",14))return project_window_test_start(a,root,mode);
     if(!strncmp(mode,"protocol-ui-",12))return protocol_ui_test_start(a,root,mode);
     if(!strcmp(mode,"file-tabs"))return file_tabs_test_start(a,root);
@@ -292,6 +293,7 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
     if(!strncmp(mode,"manager-design",14)){project_wizard_test_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"explorer-a-",11)){browser_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"selection-a2-",13)){selection_a2_frame(a,stage,code,capture);return;}
+    if(!strncmp(mode,"list-a2-",8)){list_a2_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"manager-keyboard",16)){project_manager_keyboard_test_frame(a,a->manager_parent,stage,code,capture);return;}
     if (!strncmp(mode,"docs-keyboard",13)) {documentation_keyboard_test_frame(a,mode,stage,code,capture);return;}
     if (!strcmp(mode,"toolbar-keyboard")) {
