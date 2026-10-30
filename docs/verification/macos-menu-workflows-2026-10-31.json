@@ -1,0 +1,568 @@
+{
+  "date": "2026-10-31",
+  "code_commit": "8d75cee73fe53d4af2104a18cb7ecd1f48b7b1cf",
+  "scope": "Port five historical toolbar/keyboard app tests to the native macOS menu; retain baseline adapter and app-start coverage",
+  "production_menu_behavior_changed": false,
+  "mac": {
+    "run_id": 41144579429,
+    "url": "https://github.com/PhysicSimulator/physim/actions/runs/41144579429",
+    "source_sha": "8d75cee73fe53d4af2104a18cb7ecd1f48b7b1cf",
+    "conclusion": "success",
+    "user_mac_used": false,
+    "results": {
+      "intel": {
+        "runner": "macos-15-intel",
+        "job_id": 124366558877,
+        "artifact_id": 13020159114,
+        "artifact_sha256": "9b7e31904e7bdf5d06eec68e33902c4141f43832e4f1e1c1c808373576ff1ea8",
+        "results_member": "Release/test-results/run-j923pmgz/results.json",
+        "app_sha256": "911ef8923bdb7db580e2c26b8eb8c68eba8274c6dcaa0e0c2361448dbded77e2",
+        "passed": 7,
+        "total": 7,
+        "cases": [
+          {
+            "name": "native_menu",
+            "status": "passed",
+            "commands": [
+              [
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim-test-native_menu"
+              ]
+            ],
+            "completion": [
+              "Native AppKit menu: structure, state, commands, keyboard ownership, tracking boundary, window switch and retirement passed"
+            ],
+            "caption_sizes": []
+          },
+          {
+            "name": "window_smoke",
+            "status": "passed",
+            "commands": [
+              [
+                "/usr/local/opt/python@3.14/bin/python3.14",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "window_smoke",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-j923pmgz/window_smoke/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ]
+            ],
+            "completion": [
+              "NATIVE MACOS MENUBAR SHELL: PASSED",
+              "window_smoke: app workflow and persisted files passed"
+            ],
+            "caption_sizes": []
+          },
+          {
+            "name": "toolbar_small",
+            "status": "passed",
+            "commands": [
+              [
+                "/usr/local/opt/python@3.14/bin/python3.14",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "toolbar_small",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-j923pmgz/toolbar_small/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ]
+            ],
+            "completion": [
+              "TOOLBAR AND TABS: PASSED (native AppKit, stage 25)",
+              "toolbar_small: app workflow and persisted files passed"
+            ],
+            "caption_sizes": [
+              "1080x740",
+              "1920x970"
+            ]
+          },
+          {
+            "name": "toolbar_large",
+            "status": "passed",
+            "commands": [
+              [
+                "/usr/local/opt/python@3.14/bin/python3.14",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "toolbar_large",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-j923pmgz/toolbar_large/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ]
+            ],
+            "completion": [
+              "TOOLBAR AND TABS: PASSED (native AppKit, stage 25)",
+              "toolbar_large: app workflow and persisted files passed"
+            ],
+            "caption_sizes": [
+              "1440x940",
+              "1920x970"
+            ]
+          },
+          {
+            "name": "toolbar_input_isolation",
+            "status": "passed",
+            "commands": [
+              [
+                "/usr/local/opt/python@3.14/bin/python3.14",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "toolbar_input_isolation",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-j923pmgz/toolbar_input_isolation/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ]
+            ],
+            "completion": [
+              "TOOLBAR AND TABS: PASSED (native AppKit, stage 25)",
+              "TOOLBAR AND TABS: PASSED (native AppKit, stage 25)",
+              "toolbar_input_isolation: app workflow and persisted files passed"
+            ],
+            "caption_sizes": [
+              "1080x740",
+              "1920x970",
+              "1440x940"
+            ]
+          },
+          {
+            "name": "keyboard_menu_small",
+            "status": "passed",
+            "commands": [
+              [
+                "/usr/local/opt/python@3.14/bin/python3.14",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "keyboard_menu_small",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-j923pmgz/keyboard_menu_small/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ]
+            ],
+            "completion": [
+              "KEYBOARD MENU SELF-TEST: PASSED (native AppKit, stage 26)",
+              "keyboard_menu_small: app workflow and persisted files passed"
+            ],
+            "caption_sizes": []
+          },
+          {
+            "name": "keyboard_menu_large",
+            "status": "passed",
+            "commands": [
+              [
+                "/usr/local/opt/python@3.14/bin/python3.14",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "keyboard_menu_large",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-j923pmgz/keyboard_menu_large/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ]
+            ],
+            "completion": [
+              "KEYBOARD MENU SELF-TEST: PASSED (native AppKit, stage 26)",
+              "keyboard_menu_large: app workflow and persisted files passed"
+            ],
+            "caption_sizes": []
+          }
+        ]
+      },
+      "arm": {
+        "runner": "macos-15",
+        "job_id": 124366559140,
+        "artifact_id": 13019904710,
+        "artifact_sha256": "3b14cdac78a3b83093a061f192e5d22dc4d20c3b56e646e315778830f4ec2faf",
+        "results_member": "Release/test-results/run-y9p8naxv/results.json",
+        "app_sha256": "eddf60821d0b2ead7df2fed103646ef370fb0a78a9aec3b736c0d41b58d4beeb",
+        "passed": 7,
+        "total": 7,
+        "cases": [
+          {
+            "name": "native_menu",
+            "status": "passed",
+            "commands": [
+              [
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim-test-native_menu"
+              ]
+            ],
+            "completion": [
+              "Native AppKit menu: structure, state, commands, keyboard ownership, tracking boundary, window switch and retirement passed"
+            ],
+            "caption_sizes": []
+          },
+          {
+            "name": "window_smoke",
+            "status": "passed",
+            "commands": [
+              [
+                "/opt/homebrew/opt/python@3.15/bin/python3.15",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "window_smoke",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-y9p8naxv/window_smoke/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ]
+            ],
+            "completion": [
+              "NATIVE MACOS MENUBAR SHELL: PASSED",
+              "window_smoke: app workflow and persisted files passed"
+            ],
+            "caption_sizes": []
+          },
+          {
+            "name": "toolbar_small",
+            "status": "passed",
+            "commands": [
+              [
+                "/opt/homebrew/opt/python@3.15/bin/python3.15",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "toolbar_small",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-y9p8naxv/toolbar_small/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ]
+            ],
+            "completion": [
+              "TOOLBAR AND TABS: PASSED (native AppKit, stage 25)",
+              "toolbar_small: app workflow and persisted files passed"
+            ],
+            "caption_sizes": [
+              "1080x740",
+              "1024x684"
+            ]
+          },
+          {
+            "name": "toolbar_large",
+            "status": "passed",
+            "commands": [
+              [
+                "/opt/homebrew/opt/python@3.15/bin/python3.15",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "toolbar_large",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-y9p8naxv/toolbar_large/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ]
+            ],
+            "completion": [
+              "TOOLBAR AND TABS: PASSED (native AppKit, stage 25)",
+              "toolbar_large: app workflow and persisted files passed"
+            ],
+            "caption_sizes": [
+              "1080x740",
+              "1024x684"
+            ]
+          },
+          {
+            "name": "toolbar_input_isolation",
+            "status": "passed",
+            "commands": [
+              [
+                "/opt/homebrew/opt/python@3.15/bin/python3.15",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "toolbar_input_isolation",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-y9p8naxv/toolbar_input_isolation/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ]
+            ],
+            "completion": [
+              "TOOLBAR AND TABS: PASSED (native AppKit, stage 25)",
+              "TOOLBAR AND TABS: PASSED (native AppKit, stage 25)",
+              "toolbar_input_isolation: app workflow and persisted files passed"
+            ],
+            "caption_sizes": [
+              "1080x740",
+              "1024x684"
+            ]
+          },
+          {
+            "name": "keyboard_menu_small",
+            "status": "passed",
+            "commands": [
+              [
+                "/opt/homebrew/opt/python@3.15/bin/python3.15",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "keyboard_menu_small",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-y9p8naxv/keyboard_menu_small/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ]
+            ],
+            "completion": [
+              "KEYBOARD MENU SELF-TEST: PASSED (native AppKit, stage 26)",
+              "keyboard_menu_small: app workflow and persisted files passed"
+            ],
+            "caption_sizes": []
+          },
+          {
+            "name": "keyboard_menu_large",
+            "status": "passed",
+            "commands": [
+              [
+                "/opt/homebrew/opt/python@3.15/bin/python3.15",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "keyboard_menu_large",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-y9p8naxv/keyboard_menu_large/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ]
+            ],
+            "completion": [
+              "KEYBOARD MENU SELF-TEST: PASSED (native AppKit, stage 26)",
+              "keyboard_menu_large: app workflow and persisted files passed"
+            ],
+            "caption_sizes": []
+          }
+        ]
+      }
+    },
+    "command": "python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl \"$PWD/build/sdl-install\" --test-display --test-filter native_menu --test-filter window_smoke --test-filter toolbar_small --test-filter toolbar_large --test-filter toolbar_input_isolation --test-filter keyboard_menu_small --test-filter keyboard_menu_large",
+    "sdl_cache": {
+      "release": "3.2.30",
+      "both_restored": true,
+      "identity": "runner OS + architecture + ImageOS + ImageVersion + SDL release",
+      "save": "Immediately after SDL build, before app tests",
+      "artifact_retention_days": 14
+    }
+  },
+  "coverage": [
+    "Actual NSMenu receiver and SDL command delivery/state validation",
+    "Native AppKit menu tracking: Return selection and Escape cancellation",
+    "CmdL exactly once and key repeat isolation; CmdComma/Cmd1/F1/CmdS",
+    "Search Escape restores search-icon focus per approved design; CtrlTab returns to editor",
+    "Editor typing/save; disabled Save in F1 preserves dirty document; save after main-window focus",
+    "Hide/show focus recovery and background tab input while New Project task window is open",
+    "Real caption clicks maximize/restore/minimize/close after painted geometry matches SDL size"
+  ],
+  "repaired_test_assumptions": [
+    "Classic Windows/Linux File menu already includes Dateien / TOOLBAR_BROWSE: assert semantic forward/back wrapping instead of stale numeric last-item expectation",
+    "Wait for published Cocoa/SDL focus and actual search-icon focus, not request acceptance",
+    "After maximize/restore, wait for SDL synchronization and last painted caption geometry before next click; prior ARM click hit Close and Intel click missed",
+    "Require completed native workflow markers so premature successful process exit cannot pass"
+  ],
+  "local": {
+    "windows": {
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "toolbar_small",
+        "--test-filter",
+        "keyboard_menu_small"
+      ],
+      "exit_code": 0,
+      "app_sha256": "b91d18cc9e23accc2bfedc3566b604243ed29ecffda7c9508ee8f8b73d3c98c7",
+      "run": "run-dddhtntd",
+      "cases": [
+        "toolbar_small",
+        "keyboard_menu_small"
+      ],
+      "passed": 2,
+      "total": 2
+    },
+    "linux": {
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "toolbar_small",
+        "--test-filter",
+        "keyboard_menu_small"
+      ],
+      "exit_code": 0,
+      "app_sha256": "00087f6919b0e9e46de67dfd5dc4b0cce20fafc604bed84ab5d1b78fafaef8fb",
+      "run": "run-zrmw1ro8",
+      "cases": [
+        "toolbar_small",
+        "keyboard_menu_small"
+      ],
+      "passed": 2,
+      "total": 2
+    }
+  },
+  "nonapple_delta_proof": {
+    "only_changed_input": "app/native_menu_app_tests.inc",
+    "actual_compilers": [
+      {
+        "platform": "windows",
+        "results": [
+          {
+            "label": "tested",
+            "source_sha256": "843e1d9a5b28c7fbe07a2cf41b4afec3a6cd5956fd7ac3105557b17a7c4681c4",
+            "output_sha256": "68a37c14a499d85c9b5b0538ed9f5820fe955930e84b182e228138bfc53df310",
+            "empty_translation": true,
+            "command": [
+              "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE",
+              "/nologo",
+              "/EP",
+              "/TC",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\app\\native_menu_app_tests.inc"
+            ]
+          },
+          {
+            "label": "current",
+            "source_sha256": "25d900771096e78d9db5593b8129399ad38e45bd1780d42034e8c61a90251fa6",
+            "output_sha256": "2082b012115b86d3b658a57038c75b95488a7ce081fbdbcf9a6af5eed2a2a6fe",
+            "empty_translation": true,
+            "command": [
+              "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE",
+              "/nologo",
+              "/EP",
+              "/TC",
+              "D:\\Physim\\app\\native_menu_app_tests.inc"
+            ]
+          }
+        ]
+      },
+      {
+        "platform": "linux",
+        "results": [
+          {
+            "label": "tested",
+            "source_sha256": "843e1d9a5b28c7fbe07a2cf41b4afec3a6cd5956fd7ac3105557b17a7c4681c4",
+            "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "empty_translation": true,
+            "command": [
+              "wsl",
+              "-d",
+              "Alpine-Dev",
+              "--exec",
+              "gcc",
+              "-E",
+              "-P",
+              "-x",
+              "c",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/app/native_menu_app_tests.inc"
+            ]
+          },
+          {
+            "label": "current",
+            "source_sha256": "25d900771096e78d9db5593b8129399ad38e45bd1780d42034e8c61a90251fa6",
+            "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "empty_translation": true,
+            "command": [
+              "wsl",
+              "-d",
+              "Alpine-Dev",
+              "--exec",
+              "gcc",
+              "-E",
+              "-P",
+              "-x",
+              "c",
+              "/mnt/d/Physim/app/native_menu_app_tests.inc"
+            ]
+          }
+        ]
+      }
+    ],
+    "reason": "Only the Apple-only test module changed; both actual non-Apple preprocessors exclude the entire module. Existing native Windows/Linux run results remain applicable."
+  },
+  "checkpoint": {
+    "tag": "mac-menu-workflows-accepted",
+    "owned_inputs": 114,
+    "compiler_and_test_files_compared_to_git": 1098,
+    "source_overlay": [
+      "app/native_menu_app_tests.inc"
+    ],
+    "runtime_files": {
+      "windows": 200,
+      "linux": 103
+    },
+    "archives_read_back": true,
+    "source_manifest": "build/validation/explorer-inline-2026-10-29/mac-menu-workflows-accepted-compiler-source.json"
+  },
+  "cleanup": {
+    "successful_images_removed": 32,
+    "bytes_freed": 116589376,
+    "failed_cases_and_references_preserved": true
+  },
+  "limits": [
+    "This is a seven-case subset, not the complete macOS GUI suite or overall design acceptance",
+    "ARM toolbar_large started at 1080x740 because of the hosted display/start policy; Intel toolbar_large at 1440x940. ARM variants do not establish distinct large-display coverage",
+    "Hosted software-rendered GUI tests do not establish physical monitor/DPI/fullscreen or manual VoiceOver acceptance",
+    "Other historical document/file-tab/API/completion/batch/docking workflows remain to be ported",
+    "Windows/Linux executed only toolbar_small and keyboard_menu_small in this campaign; subsequent delta is wholly Apple-only, confirmed with actual MSVC and GCC preprocessing",
+    "Foreign AT-SPI/Orca/status/website work excluded from this isolated checkpoint"
+  ],
+  "restart": "Do not repeat these seven cases merely because of compaction. Read docs/weiterarbeit.md and continue with the remaining historical Mac workflows. User explicitly reports Mac switched off on 2026-10-31; no local Mac access."
+}

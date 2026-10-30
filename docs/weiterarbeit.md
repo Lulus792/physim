@@ -1,14 +1,28 @@
 # Wiedereinstieg in die native UI-Arbeit
 
-Stand: 30. Oktober 2026. Diese kurze Übergabe vor neuen Untersuchungen lesen und
+Stand: 31. Oktober 2026. Diese kurze Übergabe vor neuen Untersuchungen lesen und
 mit `git status` sowie den relevanten Diffs abgleichen. Designverträge stehen in
 [AGENTS.md](../AGENTS.md) und der [Gesamtübergabe](visuals/unified-workspace/NEXT-CHAT.md).
 Bei Widersprüchen zuerst Quellstand, Datum und betroffenen Umfang abgleichen.
 
 ## Nächster konkreter Schritt
 
-**Historische Mac-GUI-Testeingaben auf die neue native Menüleiste portieren.**
-Mehrere Toolbar-/Tastatur-/Dokumentabläufe klicken bisher auf die alten
+**Übrige historische Mac-GUI-Testeingaben auf die native Menüleiste portieren.**
+Die fünf Toolbar-/Tastaturfälle sind jetzt abgeschlossen: Auf `8d75cee7`
+besteht Lauf `41144579429` auf Intel und Apple Silicon jeweils **7/7**
+einschließlich Menüadapter und App-Start.
+[Kompakter Nachweis](verification/macos-menu-workflows-2026-10-31.json).
+Getestet sind echte AppKit-Eingaben, Menüauswahl/Abbruch, Fokus und Speichern,
+unabhängiges Projektfenster sowie die echten Fenstersteuerungsknöpfe.
+Die Produktionsmenülogik wurde dabei nicht verändert. Der Test wartet nach
+Größenwechseln auf tatsächlich gezeichnete Kopfgeometrie; frühe Prozessenden
+zählen ohne Abschlussmarkierung nicht mehr als bestanden. Windows/Linux
+bestehen je zwei klassische Menüabläufe; die vorhandene Dateien-Aktion ist
+in den bisherigen Tastaturerwartungen jetzt berücksichtigt.
+Diese abgeschlossene Teilmenge nicht wegen eines Kontextwechsels wiederholen.
+
+Andere Dokument-/Dateitab-/API-/Completion-/Batch-/Dockingabläufe klicken
+teilweise weiterhin auf die alten
 In-Window-Menüflächen oder erwarten das eigene F10-Menü. Diese Erwartungen
 passen nach der ausdrücklich gewünschten Verschiebung nicht mehr zu macOS;
 keinen alten Menü-Fallback ausschließlich zum Bestehen dieser Tests aktivieren.
@@ -23,8 +37,11 @@ AppKit-Menüadapter und gestartete App mit entfernten In-Window-Menüknöpfen.
 Windows Release und Linux Debug ASan/UBSan bestehen je vier Menü-/Headerfälle
 plus App-Start; der Testkatalog ist geprüft. Diese grünen Kampagnen bei bloßem
 Kontextwechsel nicht wiederholen. Manuelle Bedienung/VoiceOver/Vollbild sowie die
-gesamte Mac-GUI-Suite bleiben gesondert offen. Den Nutzer-Mac ohne neue
-Online-Meldung nicht ansprechen.
+gesamte Mac-GUI-Suite bleiben gesondert offen. Der Nutzer hat am 31.10.
+ausdrücklich gemeldet: **Der Mac ist aus.** Ohne neue Online-Meldung nicht
+ansprechen; der abgeschlossene Lauf verwendete ausschließlich GitHub-Runner.
+ARM `toolbar_large` startete dort tatsächlich mit 1080×740; nur Intel erreichte
+1440×940. Die beiden ARM-Varianten belegen keine getrennte Großbildabnahme.
 
 Weitere verbindliche Arbeit umfasst A2 in der Szene, Mehrfachauswahl,
 Kontextmenüs A, Completion D mit Parameterhilfe und die übrige native Oberfläche.
@@ -61,8 +78,9 @@ die gesamte CI ableiten. Die alten Fehlerprotokolle unter
 
 | Teil | Ergebnis und Nachweis | Verbleibende Grenze |
 | --- | --- | --- |
+| Historische Mac-Toolbar-/Tastaturabläufe | `8d75cee7`: Intel/Apple Silicon je 7/7 einschließlich Menüadapter und App-Start; Windows Release/Linux Debug ASan/UBSan je 2/2. [Nachweis](verification/macos-menu-workflows-2026-10-31.json). | Übrige historische Workflows, manuelle VoiceOver-/Vollbildprüfung und physische Großbild-/DPI-Abnahme offen; ARM-Großvariante hatte 1080×740. |
 | F1-Link-Gate und Offline-Lizenzen im SDK | `ed3866ed`: 188 Themen/234 Abschnittslinks unter Windows/Linux; Herkunft und beide Lizenzen tatsächlich per F1-Tastatur geöffnet, Quellenadresse kopiert; SDK-Umzug mit fehlenden Dateien als Gegenprobe. Intel/Apple Silicon je 4/4. [Nachweis](verification/documentation-links-2026-10-30.json). | Gesamte GUI-/Inhalts-/Screenreader-Abnahme bleibt offen; fremde Status-Ergänzung nicht mit geprüft. |
-| macOS-Systemmenüleiste | `d43dcd6c` + `517021f0`; je 2/2 native Fälle Intel/Apple Silicon, je 4/4 Menü-/Headerfälle plus Start unter Windows/Linux. [Kompakter Nachweis](verification/macos-menubar-2026-10-30.json). | Manuelle Vollbild-/VoiceOver-Prüfung und Portierung historischer kompletter Mac-GUI-Workflows offen. |
+| macOS-Systemmenüleiste | `d43dcd6c` + `517021f0`; je 2/2 native Fälle Intel/Apple Silicon, je 4/4 Menü-/Headerfälle plus Start unter Windows/Linux. [Kompakter Nachweis](verification/macos-menubar-2026-10-30.json). | Manuelle Vollbild-/VoiceOver-Prüfung und übrige historische Mac-GUI-Workflows offen; Toolbar/Tastatur siehe eigene Zeile. |
 | Trennlinie oberhalb des Protokolls | **Behoben seit `ef1f3321`.** Dauerhaft 1 px, gemeinsame Konturfarbe; Akzent bei Hover/Fokus. [Ursprüngliche Korrektur und negative Kontrolle](verification/protocol-separator-2026-10-29.json). [Nachlauf 30.10.](verification/protocol-boundary-workspaces-2026-10-30.json): Windows Release und Linux Debug ASan/UBSan, je 12/12 Zustände in Entwickeln, Simulieren, Auswerten. | Große Schrift im Nachlauf: 22 px; keine neue macOS-/DPI-/Screenreader-Abnahme. |
 | A2 für Textauswahl | Gemeinsamer Textfeldrenderer, Commit `c12e2a10`. [Umfang und native Belege](visuals/unified-workspace/TEXT-SELECTION-A2-NATIVE.md). | Belegt keine vollständige A2-Umsetzung aller Objektarten. |
 | A2 für Protokoll- und Explorerlisten/-kacheln | Commit `d228b16e`. [Native Umsetzung](visuals/unified-workspace/LIST-SELECTION-A2-NATIVE.md), [Windows-/Linux-Prüfungen und sechs native Gegenproben](verification/list-selection-a2-2026-10-30.json). | Mehrfachauswahl bleibt offen. |
@@ -103,13 +121,28 @@ Für dessen nächste Änderung das neue Manifest verwenden, nicht den älteren
 umfasst 101 Dateien. Der neue Menüstand `mac-menu-shell` erfasst 105 Eingaben
 einschließlich Adapter-/Testdateien. Seine Windows-/Linux-Läufe sind beendet;
 Manifest-/Archivnachweise liegen im gleichen Kampagnenordner.
-**Neuester Anschluss ist `doc-links-final` mit 112 Eingaben und 1097 gegen Git
+Der frühere Anschluss `doc-links-final` hat 112 Eingaben und 1097 gegen Git
 abgeglichenen Compiler-/Testdateien**, aufgebaut auf `mac-menu-shell`.
 Die F1-Läufe `doc-links-first` sind Windows/Linux je 2/2 bestanden; danach änderte
 sich nur der Mac-Menüabsatz in `design-direction.md`, kein Compilerinput oder
 App-Runtime. Alle lokalen Builds, Textprüfungen und Archivläufe sind beendet.
-Für weitere Änderungen `doc-links-final` als vorheriges Manifest verwenden.
+**Neuester Anschluss ist `mac-menu-workflows-accepted`: 114 Eingaben, 1098
+gegen Git-Quellstand `8d75cee7` abgeglichene Compiler-/Testdateien, 200
+Windows-/103 Linux-Runtimedateien; sämtliche Archivbytes zurückgelesen.**
+Die lokalen Läufe `mac-menu-workflows-second` sind je 2/2 bestanden.
+Danach änderte sich nur das komplett mit `__APPLE__` geschützte Testmodul;
+echte MSVC-/GCC-Präprozessorläufe bestätigen dessen Ausschluss unter
+Windows/Linux. Die Runtimes bleiben unverändert. Alle lokalen Builds,
+Präprozessor- und Archivläufe sind beendet. Für weitere Änderungen
+`mac-menu-workflows-accepted` als vorheriges Manifest verwenden.
 A2-/Protokolltests ohne relevante Änderung weiterhin nicht wiederholen.
+
+Die neue Menüprüfrunde entfernte 32 erfolgreiche Rohbilder (116.589.376 Bytes).
+Fehlerbelege und bestehende Referenzen bleiben erhalten; Mac-Ergebnisse bestehen
+aus kompakten JSON-Berichten. Der Workflow bewahrt sie 14 Tage auf; lokale,
+hashgeprüfte ZIP-Kopien liegen unter `build/validation/macos-menu-workflows-2026-10-30/`.
+SDL 3.2.30 wird in CI je Runner-Image/Architektur zwischengespeichert; beide
+abschließenden Jobs haben diesen Cache tatsächlich wiederhergestellt.
 
 Die 16 neuen erfolgreichen F1-Rohbilder wurden nach bestandener Zustandsprüfung
 entfernt (26.267.808 Bytes); Textberichte und Originalreferenzen bleiben erhalten.
@@ -125,7 +158,6 @@ Für spätere Mac-Tests verweist der Nutzer ausdrücklich auf NexaCloud und Nexa
 `D:/NexaCloud/docs/MACOS_TESTING.md` sowie die aktuellen Mac-Hinweise in
 `D:/NexaUI/AGENTS.md` zuerst lesen. Eigene Remote-Reste nach gesicherter,
 hashgeprüfter Belegkopie gezielt aufräumen; gemeinsame Werkzeuge erhalten.
-Die neueste gelesene Verfügbarkeitsnotiz (26.10.) meldet den Nutzer-Mac als aus.
-Die Nachricht vom 30.10. enthält einen Anleitungshinweis, keine neue
-Verfügbarkeitsmeldung. Deshalb gab es keine neue SSH-/Probe auf dem Nutzer-Mac.
+Der Nutzer hat am 31.10. direkt bestätigt, dass sein Mac jetzt aus ist.
+Deshalb keine SSH-/Probe auf dem Nutzer-Mac ohne neue Verfügbarkeitsmeldung.
 Die hier belegten neuen Mac-Tests liefen auf gehosteten GitHub-Runnern.
