@@ -89,6 +89,11 @@ static bool native_test_shell(app *a){
     for(unsigned i=0;i<SDL_arraysize(toolbar_top_order);i++)if(a->toolbar_bounds[toolbar_top_order[i]].w!=0)return false;
     return a->navigation_bounds[0].w>0 && a->navigation_bounds[0].y==a->navigation_bounds[2].y;
 }
+static bool native_test_caption_painted(app *a){
+    int width,height;SDL_GetWindowSize(a->window,&width,&height);(void)height;
+    struct nk_rect close=a->window_control_bounds[2];
+    return close.w>0 && fabsf(close.x+close.w-width)<=1;
+}
 static bool native_test_focus_wait(app *a,SDL_Window *window,int *stage,double deadline){
     static SDL_Window *last;static double last_deadline;static bool painted;
     if(last!=window || last_deadline!=deadline){last=window;last_deadline=deadline;painted=false;}
@@ -134,19 +139,21 @@ static void native_toolbar_test_frame(app *a,int *stage,int *code,const char **c
     case 15:ok=!a->dialog_pending && !a->workspace_open;native_test_caption_mouse(a,1,true);deadline=ps_clock()+5;break;
     case 16:native_test_caption_mouse(a,1,false);break;
     case 17:
-        if(!(SDL_GetWindowFlags(a->window)&SDL_WINDOW_MAXIMIZED) && ps_clock()<deadline){--*stage;return;}
-        ok=(SDL_GetWindowFlags(a->window)&SDL_WINDOW_MAXIMIZED)!=0;native_test_caption_mouse(a,1,true);deadline=ps_clock()+5;break;
+        if((SDL_GetWindowFlags(a->window)&SDL_WINDOW_MAXIMIZED) && !SDL_SyncWindow(a->window)){ok=false;break;}
+        if(!native_test_model_wait((SDL_GetWindowFlags(a->window)&SDL_WINDOW_MAXIMIZED) && native_test_caption_painted(a),stage,deadline))return;
+        ok=(SDL_GetWindowFlags(a->window)&SDL_WINDOW_MAXIMIZED) && native_test_caption_painted(a);native_test_caption_mouse(a,1,true);deadline=ps_clock()+5;break;
     case 18:native_test_caption_mouse(a,1,false);break;
     case 19:
-        if((SDL_GetWindowFlags(a->window)&SDL_WINDOW_MAXIMIZED) && ps_clock()<deadline){--*stage;return;}
-        ok=!(SDL_GetWindowFlags(a->window)&SDL_WINDOW_MAXIMIZED);native_test_caption_mouse(a,0,true);deadline=ps_clock()+5;break;
+        if(!(SDL_GetWindowFlags(a->window)&SDL_WINDOW_MAXIMIZED) && !SDL_SyncWindow(a->window)){ok=false;break;}
+        if(!native_test_model_wait(!(SDL_GetWindowFlags(a->window)&(SDL_WINDOW_MAXIMIZED|SDL_WINDOW_MINIMIZED)) && native_test_caption_painted(a),stage,deadline))return;
+        ok=!(SDL_GetWindowFlags(a->window)&(SDL_WINDOW_MAXIMIZED|SDL_WINDOW_MINIMIZED)) && native_test_caption_painted(a);native_test_caption_mouse(a,0,true);deadline=ps_clock()+5;break;
     case 20:native_test_caption_mouse(a,0,false);break;
     case 21:
         if(!(SDL_GetWindowFlags(a->window)&SDL_WINDOW_MINIMIZED) && ps_clock()<deadline){--*stage;return;}
         ok=(SDL_GetWindowFlags(a->window)&SDL_WINDOW_MINIMIZED)!=0;SDL_RestoreWindow(a->window);SDL_RaiseWindow(a->window);deadline=ps_clock()+5;break;
     case 22:
         if(!native_test_focus_wait(a,a->window,stage,deadline))return;
-        ok=SDL_GetKeyboardFocus()==a->window && !(SDL_GetWindowFlags(a->window)&SDL_WINDOW_MINIMIZED) && native_test_shell(a);
+        ok=SDL_GetKeyboardFocus()==a->window && !(SDL_GetWindowFlags(a->window)&SDL_WINDOW_MINIMIZED) && native_test_shell(a) && native_test_caption_painted(a);
         native_test_caption_mouse(a,2,true);break;
     case 23:native_test_caption_mouse(a,2,false);break;
     case 24:break; /* Allow the close event posted by the release frame. */
