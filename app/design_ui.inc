@@ -56,6 +56,13 @@ static void style(struct nk_context *ui) {
     c[NK_COLOR_SCROLLBAR_CURSOR_HOVER] = UI_COLOR(scrollbar_hover);
     c[NK_COLOR_SCROLLBAR_CURSOR_ACTIVE] = UI_COLOR(scrollbar_active);
     nk_style_from_table(ui, c);
+    /* A2 changes the background alone. Preserve dynamically styled ink too,
+     * including error colors, readonly previews and transparent code overlays. */
+    struct nk_style_edit *text_styles[]={&ui->style.edit,&ui->style.property.edit};
+    for(unsigned i=0;i<SDL_arraysize(text_styles);i++) {
+        text_styles[i]->selected_normal=text_styles[i]->selected_hover=UI_COLOR(text_selection);
+        text_styles[i]->selected_text_preserve=nk_true;
+    }
     ui->style.progress.padding = nk_vec2(0, 0);
     ui->style.progress.rounding = PS_UI_RADIUS_PROGRESS;
     ui->style.progress.cursor_rounding = PS_UI_RADIUS_PROGRESS;

@@ -3221,8 +3221,8 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
     nk_style_push_color(ui, &ui->style.edit.text_active, transparent);
     nk_style_push_color(ui, &ui->style.edit.selected_text_normal, transparent);
     nk_style_push_color(ui, &ui->style.edit.selected_text_hover, transparent);
-    nk_style_push_color(ui, &ui->style.edit.selected_normal, UI_COLOR(selection_active));
-    nk_style_push_color(ui, &ui->style.edit.selected_hover, UI_COLOR(selection_active));
+    nk_style_push_color(ui, &ui->style.edit.selected_normal, UI_COLOR(text_selection));
+    nk_style_push_color(ui, &ui->style.edit.selected_hover, UI_COLOR(text_selection));
     nk_style_push_color(ui, &ui->style.edit.cursor_normal, transparent);
     nk_style_push_color(ui, &ui->style.edit.cursor_hover, transparent);
     nk_style_push_color(ui, &ui->style.edit.cursor_text_normal, transparent);
@@ -3750,6 +3750,7 @@ static void manager_test_key(app *a,SDL_Keycode key,SDL_Keymod mod) {
 #include "component_details_tests.inc"
 #include "analysis_editor_tests.inc"
 #include "file_browser_tests.inc"
+#include "text_selection_tests.inc"
 #include "project_window_tests.inc"
 #include "workspace_tests.inc"
 // clang-format on
@@ -4527,7 +4528,7 @@ int main(int argc, char **argv) {
             if (ps_clock() - test_started >
                 ((!strcmp(argv[3],"transport-design") || !strcmp(argv[3],"timeline-design") || !strcmp(argv[3],"camera-design") || !strcmp(argv[3],"scene-frame-design") || !strcmp(argv[3],"measurement-design") || !strcmp(argv[3],"curve-design") || !strncmp(argv[3],"analysis-editor-",16) || !strcmp(argv[3],"inspector-channel") || !strcmp(argv[3],"run-fields-design") || !strncmp(argv[3],"inspector-tail-",15))?180:!strncmp(argv[3],"file-tabs-design",16)?60:!strncmp(argv[3],"component-",10)?60:!strncmp(argv[3],"comparison-",11)?120:!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:(!strncmp(argv[3],"workbench-",10) || !strncmp(argv[3],"protocol-ui-",12) || !strncmp(argv[3],"project-window",14))?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?1800:!strncmp(argv[3],"manager-design-remote",21)?120:!strncmp(argv[3],"manager-design-help",19)?90:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
                   !strncmp(argv[3], "isolation-", 10) || !strncmp(argv[3], "breakpoints-", 12) || !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"object-design",13) || !strcmp(argv[3],"tree-design") || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || (!strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"pendulum-medium-",16)) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strncmp(argv[3],"logging-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
-                     ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : !strncmp(argv[3],"explorer-a-",11)?90:15))) {
+                     ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : (!strncmp(argv[3],"explorer-a-",11) || !strncmp(argv[3],"selection-a2-",13))?90:15))) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
                         argv[3], ps_clock() - test_started);
                 exit_code = 1;
@@ -5620,6 +5621,7 @@ int main(int argc, char **argv) {
         if(workspace_state_test && !strncmp(argv[3],"component-",10)) {
             component_details_draw(a,argv[3]);if(component_details.failed){exit_code=1;a->quitting=true;}
         }
+        if(workspace_state_test && !strncmp(argv[3],"selection-a2-",13))selection_a2_draw(a);
         preferences_capture(a);
         nk_sdl_update_TextInput(a->ui);
         if (a->profiler) {

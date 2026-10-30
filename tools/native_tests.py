@@ -183,6 +183,7 @@ def catalog():
         Case("editor_clipboard", ("tests/test_editor_clipboard.c", "app/ui_backend.c"), app=True),
         Case("editor_readonly", ("tests/test_editor_readonly.c", "app/ui_backend.c"), app=True),
         Case("text_cursor", ("tests/test_text_cursor.c", "app/ui_backend.c"), app=True),
+        Case("text_selection", ("tests/test_text_selection.c", "app/ui_backend.c"), app=True),
         Case("editor_scroll", ("tests/test_editor_scroll.c", "app/ui_backend.c"), app=True),
         Case("font_shape", ("tests/test_font_shape.c",), app=True),
         Case("font_atlas_limits", ("tests/test_font_atlas_limits.c",), app=True),

@@ -5465,6 +5465,8 @@ struct nk_style_edit {
     struct nk_color selected_hover;
     struct nk_color selected_text_normal;
     struct nk_color selected_text_hover;
+    /* Physim A2: selected characters retain the actual state-dependent ink. */
+    nk_bool selected_text_preserve;
 
     /* properties */
     float border;
@@ -19276,6 +19278,7 @@ nk_style_from_table(struct nk_context *ctx, const struct nk_color *table)
     edit->selected_hover    = table[NK_COLOR_TEXT];
     edit->selected_text_normal  = table[NK_COLOR_EDIT];
     edit->selected_text_hover   = table[NK_COLOR_EDIT];
+    edit->selected_text_preserve = nk_false;
     edit->scrollbar_size    = nk_vec2(10,10);
     edit->scrollbar         = style->scrollv;
     edit->padding           = nk_vec2(4,4);
@@ -19349,6 +19352,7 @@ nk_style_from_table(struct nk_context *ctx, const struct nk_color *table)
     edit->selected_hover    = table[NK_COLOR_TEXT];
     edit->selected_text_normal  = table[NK_COLOR_EDIT];
     edit->selected_text_hover   = table[NK_COLOR_EDIT];
+    edit->selected_text_preserve = nk_false;
     edit->padding           = nk_vec2(0,0);
     edit->cursor_size       = 8;
     edit->border            = 0;
@@ -28839,6 +28843,7 @@ nk_edit_draw_visual(struct nk_command_buffer *out, struct nk_text_edit *edit,
         background=&style->normal;color=style->text_normal;selected=style->selected_normal;
         selected_text=style->selected_text_normal;cursor=style->cursor_normal;
     }
+    if(style->selected_text_preserve)selected_text=color;
     color=nk_rgb_factor(color,style->color_factor);
     selected=nk_rgb_factor(selected,style->color_factor);
     selected_text=nk_rgb_factor(selected_text,style->color_factor);
@@ -29325,6 +29330,7 @@ nk_do_edit(nk_flags *state, struct nk_command_buffer *out,
             sel_background_color = style->selected_normal;
             cursor_color = style->cursor_normal;
         }
+        if(style->selected_text_preserve)sel_text_color=text_color;
         if (background->type == NK_STYLE_ITEM_IMAGE)
             background_color = nk_rgba(0,0,0,0);
         else

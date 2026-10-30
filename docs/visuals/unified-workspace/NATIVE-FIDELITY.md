@@ -90,6 +90,11 @@ Navigation, Vorschau und ungespeicherte Editorinhalte über Unteraufrufe. Der
 Umbruch und vollständige Orte-Beschriftungen. Er prüft Originaltext und native
 Auswahl sowie die beiden korrigierten Fokusfälle. Die vom Nutzer verlangten
 [schmalen Einfügemarken](TEXT-CARET-NATIVE.md) gelten im gemeinsamen Textfeldrenderer.
+Die folgende [A2-Textauswahl](TEXT-SELECTION-A2-NATIVE.md) verwendet eine eigene
+transparente Auswahlfläche und erhält normale, dynamische und Syntaxfarben.
+Originalbytes und echte Zwischenablage werden an Codeeditor, Explorersuche und
+schreibgeschützter Vorschau geprüft. A2 für Listen/Szene, Mehrfachauswahl und
+die gemeinsame Kontextmenübindung bleiben weitere offene Teile.
 Der folgende [C-API-Kontext](EXPLORER-API-NATIVE.md) verbindet tatsächliche
 Quellsymbole mit dem passenden Handbuchabschnitt, eigener Signaturauswahl und
 F1-Sprung. Messlauf-/Bildvorschau, große native Listen und vollständige praktische

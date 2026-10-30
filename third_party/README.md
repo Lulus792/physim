@@ -23,6 +23,16 @@ included as `licenses/zlib-LICENSE.txt` in the portable package.
 
 ## Nuklear snapshot
 
+Local patch (2026-10-30): `nk_style_edit.selected_text_preserve` optionally keeps
+the actual normal/hover/active text color inside selections. Ordinary and
+readonly visual editors share this behavior. Both ordinary and property-edit
+styles default to false, retaining the snapshot's original behavior for callers
+which do not opt in. Physim opts in for A2; its code editor keeps the transparent
+native text layer and draws the original syntax colors above the selection wash.
+`text_selection` checks opt-in/default behavior, dynamic ink, UTF-8 and readonly
+fields. The native `text_selection_a2` group compares real pixels and clipboard
+results in the code editor, Explorer search and readonly preview.
+
 Local patch (2026-10-29): ordinary text fields draw the configured `cursor_size`
 caret inside words as well as at line ends. The old inside-word path painted
 a glyph-width inverted block regardless of the configured thin cursor.

@@ -1,0 +1,690 @@
+{
+  "format": 1,
+  "date": "2026-10-30",
+  "base_commit": "d478cb2de5de8c68590a03fd666edbf1b06c45d7",
+  "scope": "A2 text wash/original ink in native code/search/readonly fields; not full A2/menu/UI or platform acceptance.",
+  "reference": {
+    "path": "docs/visuals/selection-options/APPROVED.md",
+    "sha256": "35195b4faad400e1b156486473f05a930794316129e710ced939564dc3f0e5a5"
+  },
+  "source_audit": {
+    "inputs_match_git_index": 1084,
+    "manifest": {
+      "path": "build/validation/explorer-inline-2026-10-29/selection-final-compiler-source.json",
+      "sha256": "3eaad7c0f9682ace3a7c9ee9566c2460c6513cae43f26daf0a671030a10fbf5c"
+    },
+    "overlay": {
+      "path": "build/validation/explorer-inline-2026-10-29/selection-final-compiler-source.zip",
+      "sha256": "e2e2abc1d2908a5863966c5f2b1f86b25f67e855e5acc49b44de3c125d80b848"
+    },
+    "runtime": {
+      "path": "build/validation/explorer-inline-2026-10-29/selection-final-runtime.json",
+      "sha256": "aeea40e7f34c2c094d84d376b9cb7629d07fd93a326455e72616acf107414348"
+    },
+    "byte_index": {
+      "path": "build/validation/explorer-inline-2026-10-29/selection-final-byte-index.json",
+      "sha256": "31f3eebf2937295e16fb93c026ca2ceac0f55d0c2c3a3673f373e017caad8744"
+    },
+    "captured_inputs": {
+      "path": "build/validation/explorer-inline-2026-10-29/selection-third-inputs.json",
+      "sha256": "c0e62c7efbe2ae08719fa3cf93d473ceeadfef1d9983db4939a14f9e6f7a426f"
+    },
+    "captured_input_archive": {
+      "path": "build/validation/explorer-inline-2026-10-29/selection-third-inputs.zip",
+      "sha256": "4a04099debd7b85cd37c4ddfc53ba68a99b1b8b73fc671366235f67b7f591428"
+    },
+    "all_archived_bytes_read_back": true
+  },
+  "environment": {
+    "windows": "Windows11 Pro26200 / Release / native NVIDIA OpenGL",
+    "linux": "Alpine-Dev3.24.2 WSL2 / X11 Xvfb Openbox / Debug ASan UBSan / GUI detect_leaks=0"
+  },
+  "implementation": [
+    "Independent text_selection role: dark RGBA170/184/202/38 and light90/108/130/28 (nearest8-bit alpha to approved .15/.11); existing high-contrast opaque role retained.",
+    "Nuklear selected_text_preserve is opt-in and defaultsfalse in ordinary/property edit style; app opts in and both ordinary/readonly-visual paths preserve current state-dependent original ink.",
+    "Main code editor uses the shared wash under its unchanged syntax overlay. No source/clipboard/undo algorithm change."
+  ],
+  "cohorts": [
+    {
+      "tag": "selection-first",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-first-windows.json",
+        "sha256": "85333f6c4734f907f96bd45b75693fd338120211a28f1e502ce93e1d35014ef0"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "text_selection",
+        "--test-filter",
+        "text_cursor",
+        "--test-filter",
+        "editor_readonly",
+        "--test-filter",
+        "explorer_a_preview_flow",
+        "--test-filter",
+        "explorer_a_api_context"
+      ],
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-first-windows.log",
+        "sha256": "b01b0f15c55e799a532331ff49e568dc4266c75be8546345b6b8ebddff75a186"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-o_7edy3h/results.json",
+        "sha256": "ba2a0c9195ca1c819459b130970be6892327d4ad325276ad1ff257287c820c9e"
+      },
+      "exit_code": 0,
+      "binary_sha256": "484b372baed840db7ed6c7de705f31c50051341c3a70b3dfff87f4b12211115c",
+      "groups": {
+        "explorer_a_api_context": "passed",
+        "explorer_a_preview_flow": "passed"
+      }
+    },
+    {
+      "tag": "selection-first",
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-first-linux.json",
+        "sha256": "ebe688d1c2a6fcf659cec7e4fc4667a2d11540c3b2612de00f69743398bb0632"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "text_selection",
+        "--test-filter",
+        "text_cursor",
+        "--test-filter",
+        "editor_readonly",
+        "--test-filter",
+        "explorer_a_preview_flow",
+        "--test-filter",
+        "explorer_a_api_context"
+      ],
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-first-linux.log",
+        "sha256": "123c7ce218676346669dee5001952c6eb85da77a2c8057487d147ee3d1cd5e9a"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-1_5547pq/results.json",
+        "sha256": "4e4b5e5f950a859d33fe7edd635a66ba7efe90847745ddc7bbdd4b1b744c7c0d"
+      },
+      "exit_code": 0,
+      "binary_sha256": "3a9286ad6a68a0b7f1567e1aaa21dd90b4a6c936c2bcc824d2a93cce27639876",
+      "groups": {
+        "explorer_a_api_context": "passed",
+        "explorer_a_preview_flow": "passed"
+      }
+    },
+    {
+      "tag": "selection-second",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-second-windows.json",
+        "sha256": "0f92a0bab57b87daf6f9d89972b0c6257f6ea3dcf076783ba5deb3afdc589f69"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "text_selection_a2"
+      ],
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-second-windows.log",
+        "sha256": "e00e3d97c9aa8516896ec2b1fd93157b01ac28d54f99582b5542ad90207b50a0"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-uttn53y1/results.json",
+        "sha256": "faf57607c3b3eea75a56c9903c5a3b032f2a124c9f18fe9a41776cbfde322dbb"
+      },
+      "exit_code": 1,
+      "binary_sha256": "f145df4147fba314d98432dc9622bebdd7d13520129996cbe65baaaf79817367",
+      "groups": {
+        "text_selection_a2": "failed"
+      }
+    },
+    {
+      "tag": "selection-second",
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-second-linux.json",
+        "sha256": "d4b00ddeba408d3f046092f4d42dba88d53a01517f18366337a96d89e7c1775d"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "text_selection_a2"
+      ],
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-second-linux.log",
+        "sha256": "c999b96c55b75b9704373296cc9e839fddec6090a0e9c6f7307413dbbded85dd"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-_rep8273/results.json",
+        "sha256": "03118e2d58c2a54cffcba413560ffac240e3b3ba76ea8fc6e2bdd32fd254828e"
+      },
+      "exit_code": 1,
+      "binary_sha256": "49038abceda4f527cd561f6c3b3f10a514dc4652ee0a7637372345bc71fd0540",
+      "groups": {
+        "text_selection_a2": "failed"
+      }
+    },
+    {
+      "tag": "selection-third",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-third-windows.json",
+        "sha256": "9e37f9f45fddeb52e5c978999c6543913e65a0dafd393bd427aa506711d4849b"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "text_selection_a2",
+        "--test-filter",
+        "protocol_original",
+        "--test-filter",
+        "documentation_context_code"
+      ],
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-third-windows.log",
+        "sha256": "d5b8e1a80a37a0b8a08185bab9261c9105cc3928e7bf8f857185fdae065f5b9a"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-o5iv0ksn/results.json",
+        "sha256": "64cc8b815f382c472b8390f64bf6a02bf6fd3a65c33da98b9adb6baa57881af0"
+      },
+      "exit_code": 1,
+      "binary_sha256": "fac0ef41e29721ee846c8d12d422e77ce030eaa84f72c5be938f52d85f0b5d0f",
+      "groups": {
+        "protocol_original": "passed",
+        "text_selection_a2": "passed",
+        "documentation_context_code": "failed"
+      }
+    },
+    {
+      "tag": "selection-third",
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-third-linux.json",
+        "sha256": "412498da5829ca140546cc0426c78cba4600fa5bd3895f2bb2d9b643459b7814"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "text_selection_a2",
+        "--test-filter",
+        "protocol_original",
+        "--test-filter",
+        "documentation_context_code"
+      ],
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-third-linux.log",
+        "sha256": "87eef095cec27d1498973ccc9ba1f99f09a0f49b6fa9255dcde16dc17777c955"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-h7uefw4y/results.json",
+        "sha256": "9b3d9b624359781db86dea4816f3e1e1ba1f228d928aa4aae43054ec815ef904"
+      },
+      "exit_code": 1,
+      "binary_sha256": "81723fc32bbf01ad30f202707a209ecd2c3e537fe64e46b7e47dcc1c8e459af5",
+      "groups": {
+        "protocol_original": "passed",
+        "text_selection_a2": "passed",
+        "documentation_context_code": "failed"
+      }
+    },
+    {
+      "tag": "selection-gui-first",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-gui-first-windows.json",
+        "sha256": "ee3a168f3318addb8fede6bd81c6d697dd0b1edbbcd944c383438b19fbb69189"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "text_selection_a2"
+      ],
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-gui-first-windows.log",
+        "sha256": "8e08d81adbf764d2fccb1f677d7a1385db4b96ae2262b644c1ea74552f052946"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-_y5v35bj/results.json",
+        "sha256": "1eac46cb3b45be865c039232647b54456945753c45168ad4b467e5818c28b364"
+      },
+      "exit_code": 1,
+      "binary_sha256": "484b372baed840db7ed6c7de705f31c50051341c3a70b3dfff87f4b12211115c",
+      "groups": {
+        "text_selection_a2": "failed"
+      }
+    },
+    {
+      "tag": "selection-unit-first",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-unit-first-windows.json",
+        "sha256": "58a237a3e2e33785607e7e69bd65b28bc80df9ebb30f98595312242b065eac5d"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test",
+        "--test-filter",
+        "text_selection",
+        "--test-filter",
+        "text_cursor",
+        "--test-filter",
+        "editor_readonly"
+      ],
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-unit-first-windows.log",
+        "sha256": "7d262dd8ac414cad63c4fb25022005fd78406e437670fe12f8532e8ce7faf539"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-4_hj6o3y/results.json",
+        "sha256": "11321d91d482e6a56416d8eab9b6eef6dad7c695d87d3de2779dee08576b1609"
+      },
+      "exit_code": 0,
+      "binary_sha256": "484b372baed840db7ed6c7de705f31c50051341c3a70b3dfff87f4b12211115c",
+      "groups": {
+        "editor_readonly": "passed",
+        "text_cursor": "passed",
+        "text_selection": "passed"
+      }
+    },
+    {
+      "tag": "selection-unit-second",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-unit-second-windows.json",
+        "sha256": "e9f5f69f70a8ff213f89d31d4bedeb0618f9415bd63614007cb9a9409ca12bc1"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test",
+        "--test-filter",
+        "text_selection",
+        "--test-filter",
+        "text_cursor",
+        "--test-filter",
+        "editor_readonly"
+      ],
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-unit-second-windows.log",
+        "sha256": "df956c8103f58b27e3b1f1599eb7997f9c7024f6808538b4d4f38603e917764b"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-lzmhxyg4/results.json",
+        "sha256": "1ccc8442fe8e4080c6b6251c2bdaad66389335971df7d406d2ab25d135689597"
+      },
+      "exit_code": 0,
+      "binary_sha256": "f145df4147fba314d98432dc9622bebdd7d13520129996cbe65baaaf79817367",
+      "groups": {
+        "editor_readonly": "passed",
+        "text_cursor": "passed",
+        "text_selection": "passed"
+      }
+    },
+    {
+      "tag": "selection-unit-final",
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-unit-final-linux.json",
+        "sha256": "97a8a8da291da263c1a5a735af7c5de9060e15c554462279427cf9dbb5b27eb2"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test",
+        "--sanitizers",
+        "--test-filter",
+        "text_selection",
+        "--test-filter",
+        "text_cursor",
+        "--test-filter",
+        "editor_readonly",
+        "--test-filter",
+        "editor_wrapped",
+        "--test-filter",
+        "editor_clip"
+      ],
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-unit-final-linux.log",
+        "sha256": "c19d245eb19c1bac04e15c023a142297aac91552815af2bd05569f36d756cb52"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-hqppf9n2/results.json",
+        "sha256": "c874b6ec0c875813088e8a7f403d313b559fcc10af4845787e69af5da9abc8cc"
+      },
+      "exit_code": 0,
+      "binary_sha256": "81723fc32bbf01ad30f202707a209ecd2c3e537fe64e46b7e47dcc1c8e459af5",
+      "groups": {
+        "editor_wrapped": "passed",
+        "editor_clip": "passed",
+        "editor_readonly": "passed",
+        "text_cursor": "passed",
+        "text_selection": "passed"
+      }
+    },
+    {
+      "tag": "selection-wrap-final",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-wrap-final-windows.json",
+        "sha256": "1509e41d9796fddc254fe2ab9bf9323c4ce17731727794ff2dc3b453d8d5db6d"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test",
+        "--test-filter",
+        "editor_wrapped",
+        "--test-filter",
+        "editor_clip"
+      ],
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/selection-wrap-final-windows.log",
+        "sha256": "b3dec8586f80f5ac7e923aae226cc4b3749d25a9b111989684b9a84afa334144"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-zjaa0icw/results.json",
+        "sha256": "bab6520d76f2fd8fd86f62c03643ce771e1395f216849ac7050c8d8ecd5fb863"
+      },
+      "exit_code": 0,
+      "binary_sha256": "fac0ef41e29721ee846c8d12d422e77ce030eaa84f72c5be938f52d85f0b5d0f",
+      "groups": {
+        "editor_wrapped": "passed",
+        "editor_clip": "passed"
+      }
+    }
+  ],
+  "final_a2_metrics": [
+    {
+      "platform": "windows",
+      "cases": 12,
+      "source": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-o5iv0ksn/text_selection_a2/files ä/verification.json",
+        "sha256": "c11aa3ceec22c0c3edbb1e0fbe3b5141ca6f0423dd5b409aa59106b8118e208e"
+      },
+      "background_pixel_checks": 66188,
+      "ink_pixel_checks": 10448
+    },
+    {
+      "platform": "linux",
+      "cases": 12,
+      "source": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-h7uefw4y/text_selection_a2/files ä/verification.json",
+        "sha256": "8dbc6816ce1d762c63865b24c1d9c69880f73df6e1fd87108443aa1a237b4ea4"
+      },
+      "background_pixel_checks": 64439,
+      "ink_pixel_checks": 10125
+    }
+  ],
+  "renderer_contract": "text_selection standalone checks12 real selected-command cases, dynamic ink changes, readonly/multiline/editable, legacy defaults and original UTF8; neighboring cursor/readonly/wrap/clip programs passed as recorded.",
+  "fixture_corrections": [
+    "Initial preparation lacked the new reference parent directory; resumed captured88inputs after mkdir, archive/root/source hashes matched, no build had started.",
+    "Initial display filter text_selection did not match text_selection_a2; first display cohorts only prove existing API4/preview2 cases, newGUI was then explicitly selected and standalone programs run with --test.",
+    "InitialGUI code case used strlen on a nonterminated nk_str; actual103bytes vs old backing bytes13767. Fixed bounded original-byte observation and constant expected code clipboard.",
+    "SecondGUI baseline focused a different control and then triggered outer focus scrolling for field-large; exact geometry assertion retained, fixture focuses same field before both captures."
+  ],
+  "counterexample": {
+    "report": {
+      "path": "build/validation/explorer-inline-2026-10-29/selection-a2-counter.json",
+      "sha256": "0fa7dccd40322c81467e8b0695e4ba4391aed73d6a8de7cdcbf3294a8207dce8"
+    },
+    "expected_failures": [
+      "A2 text selection background differs",
+      "A2 selected ink differs from original"
+    ],
+    "exits": [
+      1,
+      1,
+      0
+    ],
+    "positive_cases": 12,
+    "archive_members_read_back": 22,
+    "production_unchanged": true
+  },
+  "baseline_f1": {
+    "runtime": {
+      "path": "build/validation/explorer-inline-2026-10-29/selection-f1-baseline/runtime.json",
+      "sha256": "1ef457269764cd21ce4e0f14f0dd0f1ba1d2f118a0bc7814bae38bc64abdf84d"
+    },
+    "base_commit": "b4eaea5b486605a29f907d17e1dd50c27a186345",
+    "unchanged_f1_test_and_view_sources": true,
+    "runs": [
+      {
+        "platform": "windows",
+        "record": {
+          "path": "build/validation/explorer-inline-2026-10-29/selection-f1-baseline/windows/run-actual.json",
+          "sha256": "39baff325bac17482af25a33ce118ebb68520e578061971018f7a75d0ab08202"
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/selection-f1-baseline/windows/run-actual.log",
+          "sha256": "ac565485749dd654e5d53a8bfa22265672481ef6765d6b7fb1ce8079f2e99c37"
+        },
+        "same_failure_reproduced": "Code preview stage=6 case=0 focus=25",
+        "initial_invalid_setup_log": {
+          "path": "build/validation/explorer-inline-2026-10-29/selection-f1-baseline/windows/run.log",
+          "sha256": "396575bb12c7e24d99327c39ef0e27c72f54f5b7e7ec2c21d162ef48bde33731"
+        }
+      },
+      {
+        "platform": "linux",
+        "record": {
+          "path": "build/validation/explorer-inline-2026-10-29/selection-f1-baseline/linux/run-actual.json",
+          "sha256": "2cc6ba90d7df45f71a70b10db5380513356d42808e7ab41271d74aa3875eff36"
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/selection-f1-baseline/linux/run-actual.log",
+          "sha256": "df92f63aee17b6af80893888dcfe9ec8ec94e01049e392755dbdead4fb8d44c9"
+        },
+        "same_failure_reproduced": "runtime error: load of value 159, which is not a valid value",
+        "initial_invalid_setup_log": {
+          "path": "build/validation/explorer-inline-2026-10-29/selection-f1-baseline/linux/run.log",
+          "sha256": "c0081034d8132bb3c2bfb3da501be0e4f0caa6a16b595c599445f1cd06ff5df8"
+        }
+      }
+    ],
+    "initial_setup_error": "Both first calls lacked the output parent; FileNotFoundError was not evidence of an app regression. Repeated with an existing fresh work directory and recorded actual failures."
+  },
+  "visual_images": [
+    {
+      "platform": "windows",
+      "mode": "code-dark",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-o5iv0ksn/text_selection_a2/files ä/code-dark/a2-after.png",
+      "sha256": "2a26f83eb36b6ea60ed66abe2e95bc7e4373d5a434cbd40321ea99b1cccccd1f"
+    },
+    {
+      "platform": "windows",
+      "mode": "code-light",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-o5iv0ksn/text_selection_a2/files ä/code-light/a2-after.png",
+      "sha256": "d37729e83d6f7bddcf93a2e649a0c787921042e0a26b5bbe77dc60cf8b11711d"
+    },
+    {
+      "platform": "windows",
+      "mode": "code-contrast",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-o5iv0ksn/text_selection_a2/files ä/code-contrast/a2-after.png",
+      "sha256": "97c42a5de540b20b2ba3d5471819fa2790511dbf8392f0b3289db26d98abba0f"
+    },
+    {
+      "platform": "windows",
+      "mode": "field-large",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-o5iv0ksn/text_selection_a2/files ä/field-large/a2-after.png",
+      "sha256": "680b3e7f61936b544846198a33ad2d6e07d105f9bd19483ef408cfc2ac42061c"
+    },
+    {
+      "platform": "linux",
+      "mode": "code-dark",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-h7uefw4y/text_selection_a2/files ä/code-dark/a2-after.png",
+      "sha256": "c84f6c45d2eaf54e4375214c932688b0d3ad258ce47c461044e0cc7d9bf0aec9"
+    },
+    {
+      "platform": "linux",
+      "mode": "readonly-dark",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-h7uefw4y/text_selection_a2/files ä/readonly-dark/a2-after.png",
+      "sha256": "8b6b7b8c106f647acd141bdb15163a581365ac14ead67eee2bcb3dc8029fe212"
+    }
+  ],
+  "visual_review": "Viewed six retained final native after-images: Windows dark/light/high-contrast code and large search, Linux dark code and readonly preview. Actual original colors remain above the wash.",
+  "runner_contract": {
+    "command": "python -X utf8 -B tools/with-artifacts.py -- python -X utf8 -B build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/test_native_test_runner.py --work D:/Physim/build/validation/explorer-inline-2026-10-29/selection-runner",
+    "exit_code": 0,
+    "scope": "win32/linux/darwin catalog plus expected error/timeout reports; not macOS runtime"
+  },
+  "open_findings": [
+    "Windows F1 context-code preview fails its published focus predicate at stage6 despite doc_focus25; trace reports no host keyboard focus. Reproduced with archived pre-A2 EXE. Root cause not established.",
+    "Linux F1 context-code preview raises UBSan on SDL_KeyboardEvent.repeat with invalid bool159 during synthetic Shift flow. Same value/fault reproduced in archived pre-A2 ELF. Root cause not established.",
+    "List edges/checks/multi-selection, scene marking/camera gestures, distinct dashed focus and nine-target context-menuA remain. Other task windows/B2/settingsA/feedbackA/progressB/full Develop/Simulate/Analyze/F1 and practical input/reader/monitor/DPI/macOS acceptance remain."
+  ],
+  "storage_cleanup": {
+    "record": {
+      "path": "build/validation/explorer-inline-2026-10-29/selection-success-cleanup.json",
+      "sha256": "75d489ef8caf0eef7b0013e5cad759b1a5c61b06a9b3e3a23e2a74046a963e8b"
+    },
+    "successful_raw_images_removed": 66,
+    "duplicate_baseline_programs_removed": 4,
+    "bytes": 68059521,
+    "native_after_references_retained": 6,
+    "failed_and_negative_images_logs_archives_retained": true,
+    "baseline_programs_recoverable_from_exact_archive_members": true
+  }
+}
