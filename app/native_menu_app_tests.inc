@@ -12,6 +12,7 @@ extern id const NSEventTrackingRunLoopMode;
 typedef struct {double x,y;} menu_test_point;
 static id native_test_string(const char *text){return MT1(id,objc_getClass("NSString"),"stringWithUTF8String:",const char*,text);}
 static id native_test_application(void){return MT0(id,objc_getClass("NSApplication"),"sharedApplication");}
+static id native_test_window(SDL_Window *window){return window?(id)SDL_GetPointerProperty(SDL_GetWindowProperties(window),SDL_PROP_WINDOW_COCOA_WINDOW_POINTER,NULL):NULL;}
 static bool native_test_item(app *a,toolbar_action action,id *menu,intptr_t *index){
     static id menus[TOOLBAR_BROWSE+1];static intptr_t indices[TOOLBAR_BROWSE+1];
     if(!a->native_menu_active)return false;
@@ -42,7 +43,8 @@ static bool native_test_invoke(app *a,toolbar_action action,bool enabled){
 static bool native_test_key(SDL_Window *window,intptr_t type,const char *text,unsigned short raw,uintptr_t modifiers,BOOL repeat){
     if(SDL_GetKeyboardFocus()!=window)return false;
     id pool=MT0(id,MT0(id,objc_getClass("NSAutoreleasePool"),"alloc"),"init");
-    id application=native_test_application(),target=MT0(id,application,"keyWindow");
+    id application=native_test_application(),target=native_test_window(window);
+    if(!target || MT0(id,application,"keyWindow")!=target){MT0(void,pool,"drain");return false;}
     id event=((id(*)(id,SEL,intptr_t,menu_test_point,uintptr_t,double,intptr_t,id,id,id,BOOL,unsigned short))objc_msgSend)(
         objc_getClass("NSEvent"),sel_registerName("keyEventWithType:location:modifierFlags:timestamp:windowNumber:context:characters:charactersIgnoringModifiers:isARepeat:keyCode:"),
         type,(menu_test_point){0,0},modifiers,MT0(double,MT0(id,objc_getClass("NSProcessInfo"),"processInfo"),"systemUptime"),
@@ -80,7 +82,9 @@ static bool native_test_focus_wait(app *a,SDL_Window *window,int *stage,double d
     if(last!=window || last_deadline!=deadline){last=window;last_deadline=deadline;painted=false;}
     /* Tests run before drawing. One completed paint after focus changes is
      * required before selecting a menu whose snapshot belongs to that window. */
-    if(SDL_GetKeyboardFocus()==window){if(painted)return true;painted=true;--*stage;return false;}
+    if(window && SDL_GetKeyboardFocus()==window && MT0(id,native_test_application(),"keyWindow")==native_test_window(window)){
+        if(painted)return true;painted=true;--*stage;return false;
+    }
     painted=false;
     if(ps_clock()<deadline){--*stage;return false;}
     fprintf(stderr,"Native menu focus timeout: wanted=%u actual=%u\n",SDL_GetWindowID(window),SDL_GetKeyboardFocus()?SDL_GetWindowID(SDL_GetKeyboardFocus()):0);
@@ -141,7 +145,7 @@ static void native_toolbar_test_frame(app *a,int *stage,int *code,const char **c
     if(a->quitting)printf("TOOLBAR AND TABS: %s (native AppKit, stage %d)\n",*code?"FAILED":"PASSED",*stage);
 }
 static void native_keyboard_menu_test_frame(app *a,const char *root,int *stage,int *code,const char **capture){
-    static double deadline;static bool log_before;static int length,repeat_frames;bool ok=true;(void)capture;
+    static double deadline;static bool log_before;static int length,repeat_frames;bool ok=true,completed=false;(void)capture;
     switch((*stage)++){
     case 0:SDL_RaiseWindow(a->window);deadline=ps_clock()+5;break;
     case 1:
@@ -200,10 +204,10 @@ static void native_keyboard_menu_test_frame(app *a,const char *root,int *stage,i
     case 25:
         if(!native_test_focus_wait(a,a->window,stage,deadline))return;
         ok=SDL_GetKeyboardFocus()==a->window && native_test_shell(a) && !active_document(a)->dirty;
-        a->quitting=true;break;
+        completed=true;a->quitting=true;break;
     }
     if(!ok){fprintf(stderr,"Native keyboard menu failure stage=%d tab=%d search=%d doc=%d length=%d expected=%d active=%d text=%d\n",*stage-1,a->tab,a->show_search,a->doc_visible,active_document(a)?nk_str_len_char(&active_document(a)->edit.string):-1,length,active_document(a)?active_document(a)->edit.active:0,SDL_TextInputActive(a->window));*code=1;a->quitting=true;}
-    if(a->quitting && *stage<26){*code=1;fprintf(stderr,"Native keyboard workflow quit before completion\n");}
+    if(a->quitting && !completed){*code=1;fprintf(stderr,"Native keyboard workflow quit before completion\n");}
     if(a->quitting)printf("KEYBOARD MENU SELF-TEST: %s (native AppKit, stage %d)\n",*code?"FAILED":"PASSED",*stage);
 }
 #undef MT_COMMAND
