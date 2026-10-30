@@ -1,18 +1,20 @@
-# D05: Hinweise und Rückmeldungen · getrennte Entwürfe
+# D05: Rückmeldungen A · Leiser Hinweis ist freigegeben
 
-Stand: **30. Oktober 2026 · Auswahl offen.** Der Nutzer hat den nächsten Punkt
-der UI-Liste beauftragt. Diese Runde gestaltet D05; keine Variante ist bereits
-für das fertige Design ausgewählt. Alle bisherigen Freigaben bleiben gültig,
-insbesondere Protokoll C, Export, A2, B2 und Einstellungen A.
+Stand: **30. Oktober 2026 · A ausdrücklich ins fertige Design übernommen.**
+Die vorherige Übernahmesperre ist aufgehoben. A im bestehenden nativen Auftrag
+mit umsetzen; keine neue Variantenwahl. B/C bleiben Vergleichshistorie.
+[Verbindliche Spezifikation](APPROVED.md) ·
+[ADR 019](../../decisions/019-selected-feedback-a.md).
+Alle bisherigen Freigaben Protokoll C, Export, A2, B2 und Einstellungen A bleiben.
 
-[Vorschau öffnen](index.html?variant=a&scenario=burst&theme=dark) ·
-[A · kurze Karten](index.html?variant=a&scenario=saved) ·
-[B · Statusband](index.html?variant=b&scenario=saved) ·
-[C · Aktivitäten](index.html?variant=c&scenario=burst).
+[Festgelegte Referenz](index.html?approved=1&scenario=burst&theme=dark) ·
+[A · einzelner Erfolg](index.html?approved=1&scenario=saved) ·
+[historischer Vergleich B](index.html?approved=0&variant=b&scenario=saved) ·
+[historischer Vergleich C](index.html?approved=0&variant=c&scenario=burst).
 Lokal unter `http://127.0.0.1:8791/feedback-options/`, auch direkt als Datei
 ohne Server/Netzwerk nutzbar. Keine externen Fonts oder Abhängigkeiten der Seite.
 
-## Drei Gestaltungsrichtungen
+## Ausgewähltes A und historische Alternativen
 
 | Variante | Rückmeldung | Verlauf |
 | --- | --- | --- |
@@ -20,8 +22,9 @@ ohne Server/Netzwerk nutzbar. Keine externen Fonts oder Abhängigkeiten der Seit
 | **B · Statusband** | Gemeinsames, hervorgehobenes Band unten. Der Inhalt bleibt frei von Erfolgskarten. | Band/Schaltfläche klappt die Liste darüber auf. |
 | **C · Aktivitäten** | Von Beginn an sichtbarer Verlauf rechts. Lokale Fehler besitzen nur einen kurzen Verweis im Verlauf. | Verkleinert die Arbeitsfläche statt sie zu überlagern; ein-/ausblendbar. Schmal unter dem Inhalt. |
 
-Gleiche Inhalte, andere Gewichtung und Platzierung. Wechsel erhält Rückmeldungen,
-Wiederholungszähler und bearbeiteten Beispielcode. Die gezeigte Werkbank ist nur
+Standardaufruf und `approved=1` zeigen fest A ohne Variantenwahl. Nur im
+historischen Vergleich (`approved=0`) kann zwischen A/B/C gewechselt werden;
+das erhält Rückmeldungen, Wiederholungszähler und bearbeiteten Beispielcode. Die gezeigte Werkbank ist nur
 Kontext für D05 und ersetzt keine ausgewählten Bereichslayouts. Galerie,
 Variantenwahl, Szenarien und Fehlerfreigaben sind Prüfhülle, keine Produktseiten.
 
@@ -47,7 +50,8 @@ Informationshinweis braucht ebenfalls kein Aufgabenfenster.
 
 ## Interaktiv ausprobieren
 
-1. Richtung und Beispiel wählen; „Beispiel erneut auslösen“ zeigt Gruppierung.
+1. In der festgelegten Referenz ein Beispiel wählen; „Beispiel erneut auslösen“
+   zeigt Gruppierung. Richtungswahl gibt es nur im historischen Vergleich.
 2. Im Code ein Wort ändern, dann „Im Beispiel speichern“. Nur der Seitenspeicher
    wird aktualisiert. Richtungs-/Bereichswechsel erhalten diesen Text.
 3. Bei Bildkopie bleibt Wiederholen erfolglos, solange die Beispielursache
@@ -94,12 +98,12 @@ Dialogentwürfe. [Exportvertrag](../unified-workspace/EXPORT-EXAMPLE.md),
 [Bereichsauswahl](../design-options/APPROVED.md) und
 [ADR 015](../../decisions/015-independent-task-windows.md) bleiben erhalten.
 
-## Übergabe nach späterer Auswahl
+## Verbindliche Übergabe nach Auswahl A
 
-**Vor Auswahl A/B/C nicht nativ als finales Design übernehmen.** Nach Entscheidung
-Variante, genaue Farben/Abstände aus `feedback.css`, Zustände und Referenzen
-festschreiben und in den [Gesamtauftrag](../unified-workspace/NEXT-CHAT.md)
-aufnehmen. Folgende Anforderungen unabhängig von der Wahl weiter prüfen:
+**A ist jetzt freigegeben.** Genaue Farben/Abstände, Zustände und Referenz gemäß
+[APPROVED.md](APPROVED.md) im bestehenden nativen Auftrag mit umsetzen.
+Der [Gesamtauftrag](../unified-workspace/NEXT-CHAT.md) enthält diese Freigabe.
+Die folgenden Anforderungen gehören zur Umsetzung:
 
 - Echte Ereignisse mit Dokument-/Projekt-/Lauf-/Fenster- und Versionsbezug
   verbinden. Eine alte erfolgreiche Aktion darf keinen späteren Fehler oder
@@ -129,7 +133,9 @@ dialog noch neue Kontextmenüs ein.
 
 ## Prüfung
 
-[Prüfbericht](review/VALIDATION.md), [Maschinenbericht](review/validation.json).
+[Historischer Entwurfsprüfbericht](review/VALIDATION.md),
+[Maschinenbericht](review/validation.json),
+[aktuelle Freigabeprüfung](review/APPROVAL-VALIDATION.md).
 `node tools/check_feedback_options.cjs` benötigt Playwright und einen Browser;
 auf Windows Edge, alternativ `PHYSIM_BROWSER`. Ausgaben ausschließlich unter
 `build/feedback-options-review`. Browserbelege sind keine native Plattformabnahme.

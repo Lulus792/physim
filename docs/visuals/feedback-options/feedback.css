@@ -11,3 +11,5 @@
 .export-body>.chart,.export-body>div{background:#fff;--line:#d5d9e1;--muted:#555e6c;--accent:#17569e;--good:#286240;color:#20242c;border-radius:4px}#copy-feedback:not(:empty){padding:0 16px}#copy-feedback .local-message{margin:0 0 12px}.message-actions a{display:inline-flex;align-items:center;font-size:.73rem;min-height:34px}.statusbar #status-label{overflow-wrap:anywhere}
 
 .variants button{overflow-wrap:anywhere}.gallery-footer a{overflow-wrap:anywhere}
+
+body[data-approved=true] .variants{display:none}

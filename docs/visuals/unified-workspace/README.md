@@ -1,5 +1,10 @@
 # Physim · Gemeinsame Designvorschau
 
+**Freigegebene Rückmeldungen vom 30. Oktober:** **A · Leiser Hinweis** mit
+kurzen Karten, lokalen Fehlern und erreichbarem Verlauf.
+[Verbindliche Spezifikation](../feedback-options/APPROVED.md) ·
+[ausgewählte Referenz](../feedback-options/index.html?approved=1&scenario=burst).
+
 **Freigegebene Einstellungen vom 29. Oktober:** **A · Kategorien** mit Suche,
 Optionen und Live-Vorschau. [Verbindliche Spezifikation](../settings-options/APPROVED.md) ·
 [ausgewählte Referenz](../settings-options/index.html?approved=1).

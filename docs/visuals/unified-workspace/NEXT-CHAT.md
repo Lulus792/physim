@@ -1,12 +1,22 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
-**Getrennte Entwürfe vom 30. Oktober 2026 – Hinweise/Rückmeldungen D05:**
-[A/B/C vergleichen](../feedback-options/README.md). A zeigt kurze Karten,
-B ein Statusband, C einen Aktivitätenverlauf. Lokale Pfad-/Kopierfehler und
-Veraltet-Kennzeichnung behalten ihren Bezug; Wiederholungen werden gruppiert.
-**Noch keine Variante übernehmen: Nutzerwahl offen.** Bestehende Freigaben und
-native Arbeit fortsetzen. Diese Studie ist keine neue Protokollgestaltung und
-keine fertige native Funktion. D06/D07 bleiben weitere eigene Entwurfsrunden.
+**Verbindliche Freigabe vom 30. Oktober 2026 – Rückmeldungen A / D05:**
+Der Nutzer hat **A · Leiser Hinweis ins fertige Design übernommen**. Die
+vorherige Übernahmesperre ist aufgehoben; nativ mit umsetzen, keine neue
+Variantenwahl. [ADR 019](../../decisions/019-selected-feedback-a.md),
+[genaue Spezifikation](../feedback-options/APPROVED.md) und
+[festgelegte Referenz](../feedback-options/index.html?approved=1&scenario=burst)
+lesen. Höchstens zwei kurze Erfolgskarten rechts unten, kleiner erreichbarer
+Verlauf; lokale Pfad-/Kopierfehler und dauerhafte Veraltet-Kennzeichnung gehören
+dazu. Wiederholungen sinnvoll gruppieren, keine doppelten vollständigen Fehler-
+meldungen; echte Datei-/Lauf-/Fenster-/Versionsidentitäten und Protokoll C als
+Ereignisquelle verwenden. Schließen behebt nichts, Erfolg erst nach echter
+Rückgabe; Daten und Eingaben erhalten. Optionales Ausblenden mit Fokus-/Hover-
+Pause wie spezifiziert, keine zusätzliche Einstellung aus dem Prüfschalter
+ableiten. Lokale Meldungen in vorhandenen ADR-015-Aufgabenfenstern anzeigen.
+B/C bleiben Vergleichshistorie; Browserbelege bestätigen keine fertige native
+Umsetzung. D06/D07 bleiben eigene offene Entwurfsrunden. Alle folgenden
+Freigaben und die laufende native Arbeit bleiben erhalten.
 
 **Verbindliche Freigabe vom 29. Oktober 2026 – Einstellungen A:** Der Nutzer
 hat **A · Kategorien ins fertige Design übernommen**. Die vorherige

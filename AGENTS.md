@@ -71,13 +71,20 @@
   nach ADR 015, Preferences/Geometrie/Einheiten unabhängig halten.
   Bisherige Freigaben bleiben erhalten; Browserbelege sind keine native Abnahme.
 
-## Getrennte Entwürfe: Rückmeldungen D05
+## Verbindliche Designfreigabe: Rückmeldungen A
 
-- Die [Hinweis-/Rückmeldungsvorschauen A/B/C](docs/visuals/feedback-options/README.md)
-  vom 30. Oktober 2026 sind ausdrücklich getrennt und **noch nicht ausgewählt**.
-  Keine Variante als fertiges Design übernehmen, bevor der Nutzer entscheidet.
-  Protokoll C, Grafikexport, A2, B2, Einstellungen A und alle übrigen Freigaben
-  sowie laufende native Arbeiten bleiben erhalten. D06/D07 bleiben eigene Runden.
+- Der Nutzer hat am 30. Oktober 2026 **A · Leiser Hinweis für D05 ausdrücklich
+  ins fertige Design übernommen**. Die vorherige Übernahmesperre ist aufgehoben;
+  A im bestehenden nativen Auftrag mit umsetzen, keine neue Variantenwahl.
+  B/C bleiben Vergleichshistorie.
+- [ADR 019](docs/decisions/019-selected-feedback-a.md),
+  [verbindliche Spezifikation](docs/visuals/feedback-options/APPROVED.md) und
+  [Gesamtübergabe](docs/visuals/unified-workspace/NEXT-CHAT.md) beachten:
+  höchstens zwei Erfolgskarten, erreichbarer Verlauf, lokale Pfad-/Kopierfehler,
+  dauerhafte Veraltet-Kennzeichnung, Gruppierung und Fokus. Mit dem vorhandenen
+  Protokoll-C-Ereignisbestand verbinden; echte Ziel-/Versionsidentitäten erhalten.
+  Alle bisherigen Freigaben und native Arbeiten bleiben bestehen. Browserbelege
+  sind keine native Abnahme. D06/D07 bleiben eigene offene Entwurfsrunden.
 
 ## Speicherpflege
 
