@@ -10,6 +10,18 @@ extern id const NSEventTrackingRunLoopMode;
 #define MT2(T,O,S,A,V,B,W) ((T(*)(id,SEL,A,B))objc_msgSend)((id)(O),sel_registerName(S),(V),(W))
 #define MT_COMMAND ((uintptr_t)1<<20)
 typedef struct {double x,y;} menu_test_point;
+static int *native_test_stage_pointer;
+static bool SDLCALL native_test_close_watch(void *unused,SDL_Event *event){
+    (void)unused;
+    if(event->type==SDL_EVENT_QUIT || event->type==SDL_EVENT_WINDOW_CLOSE_REQUESTED)
+        fprintf(stderr,"Native test queued close: event=%u window=%u stage=%d\n",event->type,event->type==SDL_EVENT_QUIT?0:event->window.windowID,native_test_stage_pointer?*native_test_stage_pointer:-1);
+    return true;
+}
+static void native_test_caption_mouse(app *a,unsigned control,bool down){
+    int w,h;SDL_GetWindowSize(a->window,&w,&h);struct nk_rect r=a->window_control_bounds[control];
+    fprintf(stderr,"Native caption input: control=%u down=%d size=%dx%d rect=%.1f/%.1f/%.1f/%.1f flags=%llu\n",control,down,w,h,r.x,r.y,r.w,r.h,(unsigned long long)SDL_GetWindowFlags(a->window));
+    test_mouse(a,r,down);
+}
 static id native_test_string(const char *text){return MT1(id,objc_getClass("NSString"),"stringWithUTF8String:",const char*,text);}
 static id native_test_application(void){return MT0(id,objc_getClass("NSApplication"),"sharedApplication");}
 static id native_test_window(SDL_Window *window){return window?(id)SDL_GetPointerProperty(SDL_GetWindowProperties(window),SDL_PROP_WINDOW_COCOA_WINDOW_POINTER,NULL):NULL;}
@@ -96,7 +108,7 @@ static bool native_test_model_wait(bool observed,int *stage,double deadline){
 static void native_toolbar_test_frame(app *a,int *stage,int *code,const char **capture){
     static double deadline;static bool log_before;bool ok=true;(void)capture;
     switch((*stage)++){
-    case 0:SDL_RaiseWindow(a->window);deadline=ps_clock()+5;break;
+    case 0:native_test_stage_pointer=stage;ok=SDL_AddEventWatch(native_test_close_watch,NULL);SDL_RaiseWindow(a->window);deadline=ps_clock()+5;break;
     case 1:{
         if(!native_test_focus_wait(a,a->window,stage,deadline))return;
         int width,height;SDL_GetWindowSize(a->window,&width,&height);
@@ -119,24 +131,24 @@ static void native_toolbar_test_frame(app *a,int *stage,int *code,const char **c
     case 12:if(!native_test_model_wait(a->tab==0,stage,deadline))return;ok=a->tab==0 && native_test_invoke(a,TOOLBAR_HELP,true);deadline=ps_clock()+2;break;
     case 13:if(!native_test_model_wait(a->doc_visible,stage,deadline))return;ok=a->doc_visible && a->doc_window && a->doc_window!=a->window;documentation_window_hide(a);SDL_RaiseWindow(a->window);deadline=ps_clock()+5;break;
     case 14:if(!native_test_focus_wait(a,a->window,stage,deadline))return;ok=native_test_invoke(a,TOOLBAR_ADD_FILE,false);break;
-    case 15:ok=!a->dialog_pending && !a->workspace_open;test_mouse(a,a->window_control_bounds[1],true);deadline=ps_clock()+5;break;
-    case 16:test_mouse(a,a->window_control_bounds[1],false);break;
+    case 15:ok=!a->dialog_pending && !a->workspace_open;native_test_caption_mouse(a,1,true);deadline=ps_clock()+5;break;
+    case 16:native_test_caption_mouse(a,1,false);break;
     case 17:
         if(!(SDL_GetWindowFlags(a->window)&SDL_WINDOW_MAXIMIZED) && ps_clock()<deadline){--*stage;return;}
-        ok=(SDL_GetWindowFlags(a->window)&SDL_WINDOW_MAXIMIZED)!=0;test_mouse(a,a->window_control_bounds[1],true);deadline=ps_clock()+5;break;
-    case 18:test_mouse(a,a->window_control_bounds[1],false);break;
+        ok=(SDL_GetWindowFlags(a->window)&SDL_WINDOW_MAXIMIZED)!=0;native_test_caption_mouse(a,1,true);deadline=ps_clock()+5;break;
+    case 18:native_test_caption_mouse(a,1,false);break;
     case 19:
         if((SDL_GetWindowFlags(a->window)&SDL_WINDOW_MAXIMIZED) && ps_clock()<deadline){--*stage;return;}
-        ok=!(SDL_GetWindowFlags(a->window)&SDL_WINDOW_MAXIMIZED);test_mouse(a,a->window_control_bounds[0],true);deadline=ps_clock()+5;break;
-    case 20:test_mouse(a,a->window_control_bounds[0],false);break;
+        ok=!(SDL_GetWindowFlags(a->window)&SDL_WINDOW_MAXIMIZED);native_test_caption_mouse(a,0,true);deadline=ps_clock()+5;break;
+    case 20:native_test_caption_mouse(a,0,false);break;
     case 21:
         if(!(SDL_GetWindowFlags(a->window)&SDL_WINDOW_MINIMIZED) && ps_clock()<deadline){--*stage;return;}
         ok=(SDL_GetWindowFlags(a->window)&SDL_WINDOW_MINIMIZED)!=0;SDL_RestoreWindow(a->window);SDL_RaiseWindow(a->window);deadline=ps_clock()+5;break;
     case 22:
         if(!native_test_focus_wait(a,a->window,stage,deadline))return;
         ok=SDL_GetKeyboardFocus()==a->window && !(SDL_GetWindowFlags(a->window)&SDL_WINDOW_MINIMIZED) && native_test_shell(a);
-        test_mouse(a,a->window_control_bounds[2],true);break;
-    case 23:test_mouse(a,a->window_control_bounds[2],false);break;
+        native_test_caption_mouse(a,2,true);break;
+    case 23:native_test_caption_mouse(a,2,false);break;
     case 24:break; /* Allow the close event posted by the release frame. */
     case 25:ok=false;break; /* The real close button must already have quit. */
     }
@@ -147,7 +159,7 @@ static void native_toolbar_test_frame(app *a,int *stage,int *code,const char **c
 static void native_keyboard_menu_test_frame(app *a,const char *root,int *stage,int *code,const char **capture){
     static double deadline;static bool log_before;static int length,repeat_frames;bool ok=true,completed=false;(void)capture;
     switch((*stage)++){
-    case 0:SDL_RaiseWindow(a->window);deadline=ps_clock()+5;break;
+    case 0:native_test_stage_pointer=stage;ok=SDL_AddEventWatch(native_test_close_watch,NULL);SDL_RaiseWindow(a->window);deadline=ps_clock()+5;break;
     case 1:
         if(!native_test_focus_wait(a,a->window,stage,deadline))return;
         log_before=a->show_log;ok=SDL_GetKeyboardFocus()==a->window && native_test_shell(a) && native_test_invoke(a,TOOLBAR_SAVE,false);
@@ -176,7 +188,7 @@ static void native_keyboard_menu_test_frame(app *a,const char *root,int *stage,i
         ok=a->show_search && nk_str_len_char(&active_document(a)->edit.string)==length;
         ok &= native_test_stroke(a->window,"\x1b",53,0);deadline=ps_clock()+2;break;
     case 15:
-        if(!native_test_model_wait(!a->show_search && !a->search_icon_focus,stage,deadline))return;
+        if(!native_test_model_wait(!a->show_search && !a->search_icon_focus && nk_sdl_accessibility_is_focused(a->ui,NULL,"Dokumentsuche öffnen"),stage,deadline))return;
         ok=!a->show_search && nk_sdl_accessibility_is_focused(a->ui,NULL,"Dokumentsuche öffnen") && nk_str_len_char(&active_document(a)->edit.string)==length;
         ok &= native_test_stroke(a->window,"\t",48,(uintptr_t)1<<18);deadline=ps_clock()+2;break;
     case 16:
