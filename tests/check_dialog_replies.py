@@ -12,5 +12,5 @@ changed=[json.loads(line) for line in result.stdout.decode('utf8',errors='replac
 (a.work/'verification.json').write_text(json.dumps(dict(command=command,exit_code=result.returncode,binary_sha256=hashlib.sha256(a.app.read_bytes()).hexdigest(),measurements=rows,project_changes=changed),indent=2)+'\n')
 assert result.returncode==0 and b'DIALOG REPLY OWNERSHIP SELF-TEST: PASSED' in result.stdout,result.stderr.decode('utf8',errors='replace')
 assert len(rows)==1 and rows[0]['stale_reply_ignored'] and rows[0]['current_version']>rows[0]['retired_version']
-assert len(changed)==1 and changed[0]['retired_routes']==4 and changed[0]['late_callbacks_ignored']
-print('Dialog replies: real B/A close/reopen, stale ticket rejection, current selection and actual workspace change with four late callbacks passed')
+assert len(changed)==1 and changed[0]['retired_routes']==6 and changed[0]['late_callbacks_ignored']
+print('Dialog replies: real B/A close/reopen, stale ticket rejection, current selection and actual workspace change with six late callbacks passed')

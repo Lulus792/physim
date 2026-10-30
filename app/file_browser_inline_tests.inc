@@ -42,14 +42,14 @@ static void browser_inline_test_frame(app *a,const char *mode,int *stage,int *co
     case 7:test_mouse(a,a->navigation_bounds[2],false);break;
     case 8:okay=a->tab==2 && !browser_workspace_visible(a) && !browser_active(a);toolbar_dispatch(a,TOOLBAR_BROWSE);break;
     case 9:okay=d==owner && browser_workspace_visible(a) && !strcmp(d->query,"main") && d->selected==selected && d->preview.text==preview && !strcmp(d->location,location);open_project_manager(a,"Datei");break;
-    case 10:if(!manager_test_focus(a,7))return;test_window_key_mod(a->window,SDLK_RETURN,0);break;
-    case 11:okay=a->manager_step==1;if(!manager_test_focus(a,1))return;test_window_key_mod(a->window,SDLK_RETURN,0);break;
+    case 10:if(!manager_test_focus(a,7))return;manager_test_key(a,SDLK_RETURN,0);break;
+    case 11:okay=a->manager_step==1;if(!manager_test_focus(a,1))return;manager_test_key(a,SDLK_RETURN,0);break;
     case 12:okay=browser_active(a) && a->browser!=owner && a->browser->worker!=owner->worker && a->project_manager &&
             !strcmp(owner->query,"main") && owner->selected==selected && owner->preview.text==preview && !strcmp(owner->location,location);
         okay &= browser_test_row(a,"runs").h>0;test_mouse(a,browser_test_row(a,"runs"),true);break;
     case 13:test_mouse(a,browser_test_row(a,"runs"),false);break;
     case 14:if(!browser_test_focus(a,20))return;test_window_key_mod(a->window,SDLK_RETURN,0);break;
-    case 15:{char path[4096];ps_browser_child(browser_test_root,"runs",path);okay=!browser_active(a) && !a->dialog_pending && !strcmp(a->manager_parent,path) && owner->preview.text==preview && !strcmp(owner->query,"main");test_window_key_mod(a->window,SDLK_ESCAPE,0);break;}
+    case 15:{char path[4096];ps_browser_child(browser_test_root,"runs",path);okay=!browser_active(a) && !a->dialog_pending && !strcmp(a->manager_parent,path) && owner->preview.text==preview && !strcmp(owner->query,"main");manager_test_key(a,SDLK_ESCAPE,0);break;}
     case 16:okay=browser_workspace_visible(a) && d==owner && !strcmp(d->query,"main") && d->selected==selected && !strcmp(d->location,location);toolbar_dispatch(a,TOOLBAR_WORKSPACES);break;
     case 17:okay=a->workspace_manager && !browser_workspace_visible(a);test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
     case 18:okay=!a->workspace_manager && browser_workspace_visible(a) && !strcmp(d->query,"main");test_window_key_mod(a->window,SDLK_F,PS_UI_COMMAND_MOD);toolbar_dispatch(a,TOOLBAR_LOG);break;

@@ -98,6 +98,7 @@ def verify_display_catalog(runner, display_checker):
         specialized_display["explorer_a_api_context"]=("tests/check_explorer_api_context.py",("--work",))
         specialized_display["explorer_a_replies"]=("tests/check_dialog_replies.py",("--work",))
         specialized_display["protocol_separator"]=("tests/check_protocol_separator.py",("--work",))
+        specialized_display["independent_project_window"]=("tests/check_project_window.py",("--work",))
         specialized_display["independent_graphic_window"]=("tests/check_independent_graphic_window.py",("--work",))
     if sys.platform == "linux":
         specialized_display.update({

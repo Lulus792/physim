@@ -5,7 +5,6 @@ static size_t workspace_run_count(const app *a) {
 }
 static void select_workspace_tab(app *a, int tab) {
     dock_show(a,PS_DOCK_WORKSPACE);
-    a->project_manager = false;
     if(tab==0 && a->file_tabs_initialized && file_tab_visible(a,a->file_tab_last_active)){
         file_tab_select(a,a->file_tab_last_active);return;
     }
@@ -13,7 +12,6 @@ static void select_workspace_tab(app *a, int tab) {
     a->tab = tab == 0 && !a->loaded && a->document_count ? 8 : tab;
 }
 static int workspace_active_area(const app *a){
-    if(a->project_manager)return -1;
     if(browser_workspace_visible(a))return 0;
     if(workbench_visible(a))return 0;
     return a->tab==1?1:a->tab==2?2:-1;
@@ -65,7 +63,7 @@ static unsigned toolbar_entries(app *a, int menu, toolbar_entry entries[9]) {
     if(menu==3) {
         struct nk_text_edit *edit=completion_target(a);
         /* The menu itself is open, so inspect the selected document directly. */
-        if(!edit && !a->project_manager) {
+        if(!edit) {
             if(a->tab==8 && active_document(a))edit=&active_document(a)->edit;
             else if(a->loaded && a->tab==0)edit=a->analysis_only?&a->analysis:&a->experiment;
             else if(a->loaded && a->tab==2 && a->analysis_tab==1)edit=&a->analysis;
@@ -80,7 +78,7 @@ static unsigned toolbar_entries(app *a, int menu, toolbar_entry entries[9]) {
         memcpy(entries,help,sizeof help);return SDL_arraysize(help);
     }
     if(menu==5) {
-        bool editor=!a->project_manager && ((a->loaded && (a->tab==0 || (a->tab==2 && a->analysis_tab==1))) ||
+        bool editor=((a->loaded && (a->tab==0 || (a->tab==2 && a->analysis_tab==1))) ||
                     (a->tab==8 && active_document(a) && !active_document(a)->recovery));
         entries[0]=(toolbar_entry){"Suchen / Ersetzen\t" PS_UI_SHORTCUT "F",TOOLBAR_SEARCH,editor};
         entries[1]=(toolbar_entry){"Einstellungen …",TOOLBAR_SETTINGS,true};return 2;
@@ -102,8 +100,8 @@ static void toolbar_dispatch(app *a, toolbar_action action) {
     case TOOLBAR_WORKSPACES: a->workspace_manager=true;break;
     case TOOLBAR_LOG: protocol_toggle(a,"Ansicht");break;
     case TOOLBAR_REFRESH: refresh_workspace_entries(a);break;
-    case TOOLBAR_LIBRARY: a->project_manager=false;open_library(a);break;
-    case TOOLBAR_BATCH: a->project_manager=false;a->tab=5;break;
+    case TOOLBAR_LIBRARY: open_library(a);break;
+    case TOOLBAR_BATCH: a->tab=5;break;
     case TOOLBAR_SIDEBAR:
         if(a->preferences.dock.hidden&1)dock_show(a,PS_DOCK_SIDEBAR);
         else ps_dock_hide(&a->preferences.dock,PS_DOCK_SIDEBAR);break;
@@ -120,7 +118,7 @@ static void toolbar_dispatch(app *a, toolbar_action action) {
     case TOOLBAR_REFERENCE: {struct nk_text_edit *edit=completion_target(a);if(edit)api_reference_from_editor(a,edit);break;}
     case TOOLBAR_COMPLETION: {struct nk_text_edit *edit=completion_target(a);if(edit)completion_open(a,edit);break;}
     case TOOLBAR_BUILD_SETTINGS: a->project_build_disclosure=NK_MAXIMIZED;dock_show(a,PS_DOCK_SIDEBAR);break;
-    case TOOLBAR_SETTINGS:a->project_manager=false;open_settings(a);break;
+    case TOOLBAR_SETTINGS:open_settings(a);break;
     case TOOLBAR_REFERENCE_CLOSE:api_reference_close(a);break;
     }
 }

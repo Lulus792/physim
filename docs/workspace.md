@@ -43,7 +43,10 @@ auf 8192 Einträge und 64 Unterordnerebenen begrenzt; beim Erreichen der Grenze
 erscheint ein Hinweis. Zuklappen gibt Platz für andere Zweige frei. Hinzugefügte
 Wurzeleinträge bleiben auch bei einem großen Hauptordner sichtbar.
 
-**Datei → Neues Projekt** führt durch drei Schritte:
+**Datei → Neues Projekt** öffnet ein eigenes Fenster und führt durch drei Schritte.
+Im Hauptfenster kannst du weiterarbeiten. Ein erneuter Aufruf aktiviert das
+vorhandene Projektfenster und erhält seine Eingaben.
+Die Ordnerwahl belegt das Hauptfenster bis zur Bestätigung oder zum Abbrechen.
 
 1. **Startpunkt:** Wähle eine der acht Modellvorlagen oder aktiviere
    **Nur Auswertung gespeicherter Läufe**.

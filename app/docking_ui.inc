@@ -1,8 +1,8 @@
 static const char *dock_names[] = {"Seitenleiste", "Arbeitsbereich", "Protokoll", "Inspektor"};
 static const char *dock_windows[] = {"sidebar", "workspace", "log", "inspector"};
-static bool workbench_visible(const app *a) {return !a->project_manager && (a->tab==0 || a->tab==8 || (a->tab==2 && a->analysis_tab==1));}
+static bool workbench_visible(const app *a) {return (a->tab==0 || a->tab==8 || (a->tab==2 && a->analysis_tab==1));}
 static bool workspace_shell_visible(const app *a) {
-    return !a->project_manager && (a->tab==0 || a->tab==1 || a->tab==2 || a->tab==8 || browser_workspace_visible(a));
+    return (a->tab==0 || a->tab==1 || a->tab==2 || a->tab==8 || browser_workspace_visible(a));
 }
 enum { WORKSPACE_HEADER_HEIGHT=79, WORKSPACE_PATH_HEIGHT=39,
        WORKSPACE_CONTENT_TOP=118, WORKSPACE_STATUS_HEIGHT=28 };
@@ -373,7 +373,7 @@ static void dock_headers(app *a) {
             if(laboratory_heading)close_fraction=0;
             nk_layout_row_begin(ui,NK_DYNAMIC,r.h,(int)count+1);
             for(unsigned j=0;j<PS_DOCK_PANELS;j++) if(mask&(1u<<j)) {
-                bool files=!panel_is_detached(a,PS_DOCK_WORKSPACE) && !laboratory_visible(a) && j==PS_DOCK_WORKSPACE && (floating || d->nodes[i].active==j) && !a->project_manager && (a->loaded || a->document_count);
+                bool files=!panel_is_detached(a,PS_DOCK_WORKSPACE) && !laboratory_visible(a) && j==PS_DOCK_WORKSPACE && (floating || d->nodes[i].active==j) && (a->loaded || a->document_count);
                 float fraction=count==1 || !(mask&(1u<<PS_DOCK_WORKSPACE))?(1-close_fraction)/count:j==PS_DOCK_WORKSPACE?(1-close_fraction)*.68f:(1-close_fraction)*.32f/(count-1);
                 nk_layout_row_push(ui,fraction);
                 a->dock_headers[j]=nk_widget_bounds(ui);

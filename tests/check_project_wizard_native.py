@@ -1,4 +1,4 @@
-"""Independent native project-card selection, reveal and modal isolation."""
+"""Independent native project window, card selection/reveal and live main UI."""
 import argparse
 import hashlib
 import json
@@ -50,30 +50,31 @@ for size in ('normal','large'):
             time.sleep(.03)
         raise RuntimeError('Timeout '+label+': '+str(last))
     def selected_events():return [json.loads(line) for line in output().splitlines() if line.startswith('{"kind":"wizard_remote_selected"')]
-    def probe(action,label,group=None):
+    def probe(action,label,group=None,window='Physim | Neues Projekt'):
         command=[str(args.probe.resolve()),str(process.pid),action,label]
         if group:command.append(group)
-        result=subprocess.run(command,capture_output=True,timeout=15)
-        state=dict(command=command,exit_code=result.returncode,stdout=result.stdout.decode('utf8',errors='replace'),stderr=result.stderr.decode('utf8',errors='replace'))
+        result=subprocess.run(command,capture_output=True,timeout=15,env=dict(os.environ,PHYSIM_UIA_WINDOW_TITLE=window))
+        state=dict(command=command,window=window,exit_code=result.returncode,stdout=result.stdout.decode('utf8',errors='replace'),stderr=result.stderr.decode('utf8',errors='replace'))
         record['observations'].append(state)
         if result.returncode or 'INDEPENDENT WINDOWS UIA: PASSED' not in state['stdout']:raise RuntimeError('Native UIA action failed: '+json.dumps(state))
         rows=[json.loads(line) for line in state['stdout'].splitlines() if line.startswith('{')]
         return rows[-1] if rows else True
     def tree():
+        found=[]
         for application in pyatspi.Registry.getDesktop(0):
             if application.name!='Physim' or application.get_process_id()!=process.pid:continue
-            found=[];stack=[(node,0) for node in application]
+            stack=[(node,0) for node in application]
             while stack:
                 node,depth=stack.pop();found.append(node)
                 if depth<10:stack.extend((child,depth+1) for child in node)
-            return found
-        return []
+        return found
     def named(name):return next((node for node in tree() if node.name==name),None)
     try:
         wait(lambda:'PROJECT WIZARD REMOTE READY' in output(),'remote ready')
         environment=next(json.loads(line) for line in output().splitlines() if line.startswith('{"kind":"wizard_remote_environment"'))
         record['environment']=environment
         assert (environment['width'],environment['height'],environment['ui_size'])==(1080,740,22 if size=='large' else 16)
+        assert (environment['project_width'],environment['project_height'])==(1000,660)
         if sys.platform=='linux':
             legacy=next((node for node in tree() if node.name==NAMES[0] and node.getRole()==pyatspi.ROLE_PUSH_BUTTON),None)
             if legacy:
@@ -84,7 +85,9 @@ for size in ('normal','large'):
             record['observations'].append(dict(members=[dict(name=node.name,role=node.getRoleName(),role_id=node.getRole()) for node in members]))
             assert len(members)==8 and {node.name for node in members}==set(NAMES)
             assert all(node.getRole()==pyatspi.ROLE_RADIO_BUTTON for node in members)
-            assert not any(node.name=='Messläufe durchsuchen' for node in tree()),'Background edit leaked into modal publication'
+            main_search=wait(lambda:named('Messläufe durchsuchen'),'live main-window search')
+            assert main_search.getState().contains(pyatspi.STATE_ENABLED)
+            record['main_window_edit_enabled']=True
             cards={node.name:node for node in members}
             # AT-SPI radio buttons expose CHECKABLE/CHECKED, rather than the
             # selectable-child contract of a list. UIA uses SelectionItem below.
@@ -98,7 +101,8 @@ for size in ('normal','large'):
                 initial_box=last.queryComponent().getExtents(pyatspi.DESKTOP_COORDS)
                 assert not initial_showing and initial_box[2]==0 and initial_box[3]==0
         else:
-            probe('absent','Messläufe durchsuchen')
+            probe('control-state','Messläufe durchsuchen',window='Physim | Experiment Studio')
+            record['main_window_edit_enabled']=True
             initial=probe('control-state',NAMES[7],'Vorlage')
             if size=='large':assert initial['offscreen']
         for ordinal,index in enumerate((7,1,6,2,5,3,4,0),start=2):
@@ -122,12 +126,14 @@ for size in ('normal','large'):
             assert cancel.queryComponent().grabFocus()
             wait(lambda:cancel.getState().contains(pyatspi.STATE_FOCUSED) and cancel.getState().contains(pyatspi.STATE_SHOWING),'cancel reveal')
             assert cancel.queryAction().doAction(0)
+            wait(lambda:'PROJECT WIZARD REMOTE CLOSED' in output(),'project window closed')
             wait(lambda:(node:=named('Datei')) and node.getState().contains(pyatspi.STATE_FOCUSED),'actual opener focus return')
             record['opener_native_focus']=True
         else:
             probe('invoke','Abbrechen')
-            wait(lambda:probe('control-state','Datei'),'background restored')
-            record['opener_focus_observation']=probe('control-state','Datei')
+            wait(lambda:'PROJECT WIZARD REMOTE CLOSED' in output(),'project window closed')
+            wait(lambda:probe('control-state','Datei',window='Physim | Experiment Studio'),'main window after close')
+            record['opener_focus_observation']=probe('control-state','Datei',window='Physim | Experiment Studio')
             record['windows_scope']='Selection interfaces and reveal; no physical foreground-focus proof'
         (reader/'wizard-reader-complete').write_text('native reader finished\n',encoding='utf8')
         assert process.wait(timeout=15)==0
@@ -144,4 +150,4 @@ for size in ('normal','large'):
             except subprocess.TimeoutExpired:process.kill();process.wait()
         out.close();err.close();record['app_exit_code']=process.returncode;cases.append(record)
         (args.work/'verification.json').write_text(json.dumps(dict(app_sha256=binary,platform=sys.platform,cases=cases),ensure_ascii=False,indent=2)+'\n',encoding='utf8')
-print('Independent project wizard: complete radio groups, selection, offscreen reveal, modal isolation, cancel and source integrity passed')
+print('Independent project window: complete radio groups, selection, offscreen reveal, enabled main UI, cancel and source integrity passed')

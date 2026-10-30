@@ -71,7 +71,7 @@ static void api_reference_from_editor(app *a,struct nk_text_edit *edit) {
 }
 static void api_reference_view(app *a) {
     struct nk_context *ui=a->ui;
-    bool compact=!a->project_manager && (a->tab==0 || a->tab==8);
+    bool compact=(a->tab==0 || a->tab==8);
     const struct nk_user_font *heading=compact?&a->workbench_fonts[2]:a->font_title;
     const struct nk_user_font *body=compact?&a->workbench_fonts[0]:a->font_ui;
     nk_layout_row_dynamic(ui,24,1);nk_label_colored(ui,"API-Referenz",NK_TEXT_LEFT,UI_COLOR(muted));

@@ -29,6 +29,16 @@ static HRESULT named(IUIAutomation *a,IUIAutomationElement *root,const wchar_t *
  if(both)IUIAutomationCondition_Release(both);if(type)IUIAutomationCondition_Release(type);if(name)IUIAutomationCondition_Release(name);
  VariantClear(&value);return result;
 }
+static HRESULT process_window(IUIAutomation *a,IUIAutomationElement *desktop,VARIANT process,const wchar_t *title,IUIAutomationElement **out) {
+ if(!title || !*title)return find(a,desktop,TreeScope_Children,UIA_ProcessIdPropertyId,process,out);
+ VARIANT name;VariantInit(&name);name.vt=VT_BSTR;name.bstrVal=SysAllocString(title);if(!name.bstrVal)return E_OUTOFMEMORY;
+ IUIAutomationCondition *pid=NULL,*label=NULL,*both=NULL;
+ HRESULT result=IUIAutomation_CreatePropertyCondition(a,UIA_ProcessIdPropertyId,process,&pid);
+ if(SUCCEEDED(result))result=IUIAutomation_CreatePropertyCondition(a,UIA_NamePropertyId,name,&label);
+ if(SUCCEEDED(result))result=IUIAutomation_CreateAndCondition(a,pid,label,&both);
+ if(SUCCEEDED(result))result=IUIAutomationElement_FindFirst(desktop,TreeScope_Children,both,out);
+ if(both)IUIAutomationCondition_Release(both);if(label)IUIAutomationCondition_Release(label);if(pid)IUIAutomationCondition_Release(pid);VariantClear(&name);return result;
+}
 #include "accessibility_windows_events_probe.inc"
 #include "accessibility_windows_link_tree.inc"
 static HRESULT document_links(IUIAutomation *automation,IUIAutomationElement *control,const wchar_t *label,bool invoke,bool invalid,unsigned focus_cycles) {
@@ -499,7 +509,7 @@ int wmain(int argc,wchar_t **argv) {
  IUnknown *unknown=NULL;bool ok=SUCCEEDED(CoCreateInstance(&CLSID_CUIAutomation,NULL,CLSCTX_INPROC_SERVER,&IID_IUIAutomation,(void**)&automation));
  if(ok)ok=SUCCEEDED(IUIAutomation_GetRootElement(automation,&desktop));
  VARIANT process;VariantInit(&process);process.vt=VT_I4;process.lVal=(LONG)pid;
- if(ok)ok=SUCCEEDED(find(automation,desktop,TreeScope_Children,UIA_ProcessIdPropertyId,process,&window)) && window;
+ if(ok)ok=SUCCEEDED(process_window(automation,desktop,process,_wgetenv(L"PHYSIM_UIA_WINDOW_TITLE"),&window)) && window;
  if(ok && (edit || edit_value || read_value || focused_field || focused_button || focused_control || text_select || scroll_start || scroll_end || read_only_file || read_only_selected))ok=SUCCEEDED(find_edit(automation,desktop,(LONG)pid,argv[3],focused_control?0:focused_button?UIA_ButtonControlTypeId:UIA_EditControlTypeId,&control)) && control;
  else if(ok && (read || links || invoke_link || invalid_link || lifecycle)) {
   IUIAutomationCondition *pid_condition=NULL,*title_condition=NULL,*both=NULL;VARIANT title;VariantInit(&title);title.vt=VT_BSTR;title.bstrVal=SysAllocString(argv[3]);

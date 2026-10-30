@@ -1,5 +1,5 @@
 /* Session-owned use of the existing docking engine. No new preference wire format. */
-static bool laboratory_visible(const app *a) {return a->tab==1 && !a->project_manager;}
+static bool laboratory_visible(const app *a) {return a->tab==1;}
 static ps_layout_state laboratory_capture(const app *a) {
     return (ps_layout_state){a->preferences.dock,a->preferences.sidebar_width,
         a->preferences.inspector_width,a->preferences.log_height,a->show_log};

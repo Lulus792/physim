@@ -65,7 +65,7 @@ static void protocol_row_name(const ps_protocol_record *record,char name[2300]) 
 }
 static bool protocol_navigation_key(app *a,const SDL_KeyboardEvent *key) {
     ps_protocol_ui *p=&a->protocol_view;
-    if(!a->show_log || a->project_manager || key->mod&(SDL_KMOD_CTRL|SDL_KMOD_ALT|SDL_KMOD_GUI) || key->key==SDLK_TAB){p->navigation_request=0;return false;}
+    if(!a->show_log || key->mod&(SDL_KMOD_CTRL|SDL_KMOD_ALT|SDL_KMOD_GUI) || key->key==SDLK_TAB){p->navigation_request=0;return false;}
     int delta=key->key==SDLK_UP?-1:key->key==SDLK_DOWN?1:0;
     bool page=key->key==SDLK_PAGEUP || key->key==SDLK_PAGEDOWN,edge=key->key==SDLK_HOME || key->key==SDLK_END;
     if(!delta && !page && !edge)return false;

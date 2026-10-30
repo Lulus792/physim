@@ -9,6 +9,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
     if (a->workspace_open || a->loaded || a->project_input[0])
         return false;
     if(!strncmp(mode,"explorer-a-",11))return browser_test_start(a,root,mode);
+    if(!strncmp(mode,"project-window",14))return project_window_test_start(a,root,mode);
     if(!strncmp(mode,"protocol-ui-",12))return protocol_ui_test_start(a,root,mode);
     if(!strcmp(mode,"file-tabs"))return file_tabs_test_start(a,root);
     if(!strncmp(mode,"file-tabs-design",16))return tab_design_start(a,root);
@@ -284,6 +285,7 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
     }
     if(!strcmp(mode,"project-tree")){project_tree_test_frame(a,stage,code,capture);return;}
     if(!strcmp(mode,"manager-errors") || !strcmp(mode,"manager-errors-22")){project_manager_error_test_frame(a,a->manager_parent,stage,code,capture);return;}
+    if(!strncmp(mode,"project-window",14)){project_window_test_frame(a,a->manager_parent,stage,code);return;}
     if(!strncmp(mode,"manager-design-help",19)){project_wizard_help_frame(a,stage,code);return;}
     if(!strncmp(mode,"manager-design-remote",21)){project_wizard_remote_frame(a,a->manager_parent,stage,code);return;}
     if(!strncmp(mode,"manager-design",14)){project_wizard_test_frame(a,stage,code,capture);return;}

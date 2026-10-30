@@ -9,7 +9,7 @@ static unsigned file_tab_active(const app *a) {
     return FILE_TABS;
 }
 static void file_tab_select(app *a,unsigned key) {
-    completion_close(a);a->project_manager=false;
+    completion_close(a);
     if(key>=2)document_select(a,key-2);
     else {
         a->source_tab_closed[key]=false;a->tab=key==0?0:2;if(key==1)a->analysis_tab=1;
@@ -28,7 +28,7 @@ static void file_tab_select(app *a,unsigned key) {
     nk_window_set_focus(a->ui,"workspace");
 }
 static bool file_tabs_keyboard(app *a,const SDL_KeyboardEvent *key) {
-    if(a->project_manager || a->document_pending || a->recovery || a->toolbar_menu)return false;
+    if(a->document_pending || a->recovery || a->toolbar_menu)return false;
     bool cycle=(key->mod&SDL_KMOD_CTRL) && (key->key==SDLK_TAB || key->key==SDLK_PAGEUP || key->key==SDLK_PAGEDOWN);
     if(!cycle)return false;
     if(key->repeat)return true;

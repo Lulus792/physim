@@ -2,12 +2,12 @@
 /* Reach actual controls by Tab; never assign the product's focus or step. */
 static bool manager_test_focus(app *a,int id) {
     if(a->manager_focus_known && a->manager_focus==id && a->manager_keyboard)return !a->manager_focus_reveal;
-    test_window_key_mod(a->window,SDLK_TAB,0);return false;
+    manager_test_key(a,SDLK_TAB,0);return false;
 }
 static void manager_test_text(app *a,const char *text) {
-    test_window_key_mod(a->window,SDLK_A,PS_UI_COMMAND_MOD);
-    SDL_Event e={0};e.type=SDL_EVENT_TEXT_INPUT;e.text.windowID=SDL_GetWindowID(a->window);e.text.text=text;SDL_PushEvent(&e);
-    test_window_key_mod(a->window,SDLK_TAB,0);
+    manager_test_key(a,SDLK_A,PS_UI_COMMAND_MOD);
+    SDL_Event e={0};e.type=SDL_EVENT_TEXT_INPUT;e.text.windowID=SDL_GetWindowID(a->manager_window);e.text.text=text;SDL_PushEvent(&e);
+    manager_test_key(a,SDLK_TAB,0);
 }
 static bool manager_test_open(app *a) {
     toolbar_entry entries[9];unsigned count=toolbar_entries(a,1,entries);int at=a->toolbar_keyboard_item;
@@ -26,7 +26,7 @@ static void project_manager_keyboard_test_frame(app *a,const char *root,int *sta
     if(wait_stage!=*stage || wait_project!=project){wait_stage=*stage;wait_project=project;wait_started=now;}
     double limit=*stage>=14 && *stage<=19?180:60;
     if(now-wait_started>limit){fprintf(stderr,"Project wizard stalled: project=%u stage=%d elapsed=%.3f limit=%.0f\n",project,*stage,now-wait_started,limit);*code=1;a->quitting=true;return;}
-#define MANAGER_KEY(key) test_window_key_mod(a->window,key,0)
+#define MANAGER_KEY(key) manager_test_key(a,key,0)
 #define MANAGER_FOCUS(id) if(!manager_test_focus(a,id)){--*stage;return;}
     switch((*stage)++) {
     case 0:project=0;matrix_started=now;snprintf(parent,sizeof parent,"%s",root);producer[0]=0;SDL_SetWindowSize(a->window,1080,740);break;
@@ -71,7 +71,7 @@ static void project_manager_keyboard_test_frame(app *a,const char *root,int *sta
 }
 static void project_manager_error_test_frame(app *a,const char *root,int *stage,int *code,const char **capture) {
     static char parent[4096],original[4096],not_directory[4096];bool ok=true;int checked=*stage;
-#define FORM_KEY(key) test_window_key_mod(a->window,key,0)
+#define FORM_KEY(key) manager_test_key(a,key,0)
 #define FORM_FOCUS(id) if(!manager_test_focus(a,id)){--*stage;return;}
     switch((*stage)++) {
     case 0: {snprintf(parent,sizeof parent,"%s",root);char directory[4096];join(directory,sizeof directory,parent,"existing ä");ok=ps_make_directory_exclusive(directory);

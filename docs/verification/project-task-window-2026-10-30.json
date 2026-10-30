@@ -1,0 +1,1245 @@
+{
+  "format": 1,
+  "date": "2026-10-30",
+  "campaign_started": "2026-10-29",
+  "base_commit": "91cbe3790feb1f7b4130ce4b1baa78428d815e81",
+  "scope": "Project B hosted in a genuine independent nonmodal OS window; Explorer A remains an outstanding main-window overlay.",
+  "implementation": [
+    "Separate SDL/Nuklear/accessibility/GL owners, immutable shared fonts, explicit manager UI context in every form helper.",
+    "Main/detached workspace layouts and input no longer depend on project-manager visibility; background project/workspace changes preserve its private name, parent, template, languages and current step.",
+    "Repeated invocation raises the existing form; own Escape/close retires child requests and defers native destruction until outside draw. Focus restoration checks a live source SDL window ID and never overrides another actual focused window.",
+    "Only successful submission from this form closes it. Failed creation restores the previous main project-input/example selection. Successful project/workspace changes retire six main-context request routes; parent route4 survives.",
+    "Approved CSS compact breakpoint560, compact header/body/steps, wrapping footer and location field, muted subtitle; measured text heights feed card rows, checkbox, hints, review heading and error panel.",
+    "Live font changes re-reveal the focused action; content that fits resets its old scroll offset. Final review propagates failed native presentation to the existing renderer-error path; bundled manual explains B and the still-modal A limitation. project-fifth passes F1 help, window smoke and CSS geometry but exposes a fixture-size error in the new error case. project-sixth repeats the native six-state case with that test-only fix; full matrix remains separately identified at project-fourth."
+  ],
+  "environment": {
+    "windows": "Windows 11 Pro10.0.26200 / Release",
+    "linux": "Alpine-Dev3.24.2 / X11 Xvfb Openbox / Debug ASan UBSan / GUI LSan=0"
+  },
+  "cohorts": [
+    {
+      "phase": "project-fourth",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-fourth-windows.json",
+        "sha256": "ede96ab5f44240963831f71a8c61c4b80769337423df4f2fb7b32e9cd48e1ad8"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-fourth-windows.log",
+        "sha256": "004ca181f18392e18365314d1fc136b185c1a014b18267867706f380e2af1be3"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-padmfcnk/results.json",
+        "sha256": "9ed9473009aa1a99d6c6b6999dfc4df5f87036c7b046e9e02b0b19f97dfbe02b"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "independent_project_window",
+        "--test-filter",
+        "explorer_a_replies",
+        "--test-filter",
+        "explorer_a_inline",
+        "--test-filter",
+        "explorer_a",
+        "--test-filter",
+        "project_wizard_windows",
+        "--test-filter",
+        "project_wizard_help",
+        "--test-filter",
+        "project_wizard",
+        "--test-filter",
+        "project_manager_keyboard_errors",
+        "--test-filter",
+        "analysis_projects_workflow",
+        "--test-filter",
+        "project_manager_keyboard_workflow"
+      ],
+      "exit_code": 0,
+      "passed": 10,
+      "total": 10,
+      "cases": [
+        {
+          "name": "analysis_projects_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "project_wizard_windows",
+          "status": "passed"
+        },
+        {
+          "name": "project_wizard_help",
+          "status": "passed"
+        },
+        {
+          "name": "independent_project_window",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a_replies",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a_inline",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a",
+          "status": "passed"
+        },
+        {
+          "name": "project_wizard",
+          "status": "passed"
+        },
+        {
+          "name": "project_manager_keyboard_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "project_manager_keyboard_errors",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "phase": "project-fifth",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-fifth-windows.json",
+        "sha256": "9e08efd8e6959a66b33dd0e2998b6bd286a985d39ab94e4484eb7e28b4d55216"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-fifth-windows.log",
+        "sha256": "8536d569c4c6d54a524f10235c0d76fa6d1fcb04b2c698b8fb2ccdd5035ba3c2"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-fe1p1_ez/results.json",
+        "sha256": "80d049e7a4900ca250389d9ac80d05853b1f543f9deef776ceed50b75c084d59"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "independent_project_window",
+        "--test-filter",
+        "project_wizard_help",
+        "--test-filter",
+        "window_smoke",
+        "--test-filter",
+        "project_wizard"
+      ],
+      "exit_code": 1,
+      "passed": 3,
+      "total": 4,
+      "cases": [
+        {
+          "name": "window_smoke",
+          "status": "passed"
+        },
+        {
+          "name": "project_wizard_help",
+          "status": "passed"
+        },
+        {
+          "name": "independent_project_window",
+          "status": "failed"
+        },
+        {
+          "name": "project_wizard",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "phase": "project-sixth",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-sixth-windows.json",
+        "sha256": "bc84d019c1121a6b303801867b3802ce5ce3c6ffbc949132b65aeb69435bca73"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-sixth-windows.log",
+        "sha256": "e440e47d47d3a8415fbbac24ac7d2c8fd264e5e957d729867744dab8b9fec6c0"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-t6h8_vrp/results.json",
+        "sha256": "799b42a6681caad8ef63c3a2f485ff844d54850fbffefd28ac2393db84b683f2"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "independent_project_window"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "total": 1,
+      "cases": [
+        {
+          "name": "independent_project_window",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "phase": "project-fourth",
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-fourth-linux.json",
+        "sha256": "3095cbb6d575e464c603a739928521d826b06ef5060ec5d5fffa57a7099b6677"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-fourth-linux.log",
+        "sha256": "67de0391c5a9a2fe42e51bccca2e6935876f7bfb1395fb1a21a68f1e3bb99f0a"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7sdfe09w/results.json",
+        "sha256": "f870f26e2a1261ed9caa6c9ea2219fa04e7c376ba2ba6b2eaec0760d625dfb7f"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "independent_project_window",
+        "--test-filter",
+        "explorer_a_replies",
+        "--test-filter",
+        "explorer_a_inline",
+        "--test-filter",
+        "explorer_a",
+        "--test-filter",
+        "project_wizard_atspi",
+        "--test-filter",
+        "project_wizard_help",
+        "--test-filter",
+        "project_wizard",
+        "--test-filter",
+        "project_manager_keyboard_errors",
+        "--test-filter",
+        "analysis_projects_workflow",
+        "--test-filter",
+        "project_manager_keyboard_workflow"
+      ],
+      "exit_code": 1,
+      "passed": 9,
+      "total": 10,
+      "cases": [
+        {
+          "name": "analysis_projects_workflow",
+          "status": "failed"
+        },
+        {
+          "name": "project_wizard_atspi",
+          "status": "passed"
+        },
+        {
+          "name": "project_wizard_help",
+          "status": "passed"
+        },
+        {
+          "name": "independent_project_window",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a_replies",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a_inline",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a",
+          "status": "passed"
+        },
+        {
+          "name": "project_wizard",
+          "status": "passed"
+        },
+        {
+          "name": "project_manager_keyboard_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "project_manager_keyboard_errors",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "phase": "project-fifth",
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-fifth-linux.json",
+        "sha256": "5d8072ab857469add0eae56f9e9c992b700ebec0d2bcd0be65abae4910b87df1"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-fifth-linux.log",
+        "sha256": "485726e7504b605553daea6a138075d3618bc92e56889873e28f9e72892d0665"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-6cs21j48/results.json",
+        "sha256": "11e3cb295e5364b2485eb7aeb5e9f2565d6c9eab1a64f6b2fe404bce9451b905"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "independent_project_window",
+        "--test-filter",
+        "project_wizard_help",
+        "--test-filter",
+        "window_smoke",
+        "--test-filter",
+        "project_wizard"
+      ],
+      "exit_code": 1,
+      "passed": 3,
+      "total": 4,
+      "cases": [
+        {
+          "name": "window_smoke",
+          "status": "passed"
+        },
+        {
+          "name": "project_wizard_help",
+          "status": "passed"
+        },
+        {
+          "name": "independent_project_window",
+          "status": "failed"
+        },
+        {
+          "name": "project_wizard",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "phase": "project-sixth",
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-sixth-linux.json",
+        "sha256": "bef8b4bba01395149ec98a2fd544ff240458687e61218a3d2c47cfa73b95e80c"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-sixth-linux.log",
+        "sha256": "786cf2b820a1ceda4fecf871a6074dfa3fd55fdcdf1ac765ee4dcd0d745f0fab"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-srxvo68s/results.json",
+        "sha256": "9c6766fd346a18fd7cae551196bd01331b3d7059cc8d0f38315568418742bdd1"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "independent_project_window"
+      ],
+      "exit_code": 0,
+      "passed": 1,
+      "total": 1,
+      "cases": [
+        {
+          "name": "independent_project_window",
+          "status": "passed"
+        }
+      ]
+    }
+  ],
+  "native_windows": [
+    {
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-padmfcnk/independent_project_window/files ä/verification.json",
+        "sha256": "2eec69c8d623b33a7758af6db7cf3462707add6c1a0fdb3ddcb4a3bbaed2086a"
+      },
+      "modes": [
+        "dark",
+        "light",
+        "contrast",
+        "large",
+        "small",
+        "large-small"
+      ],
+      "measurements": [
+        {
+          "kind": "independent_project_window",
+          "main_id": 2,
+          "project_id": 3,
+          "native_handles_distinct": true
+        },
+        {
+          "kind": "independent_project_window",
+          "main_id": 2,
+          "project_id": 3,
+          "native_handles_distinct": true
+        },
+        {
+          "kind": "independent_project_window",
+          "main_id": 2,
+          "project_id": 3,
+          "native_handles_distinct": true
+        },
+        {
+          "kind": "independent_project_window",
+          "main_id": 2,
+          "project_id": 3,
+          "native_handles_distinct": true
+        },
+        {
+          "kind": "independent_project_window",
+          "main_id": 2,
+          "project_id": 3,
+          "native_handles_distinct": true
+        },
+        {
+          "kind": "independent_project_window",
+          "main_id": 2,
+          "project_id": 3,
+          "native_handles_distinct": true
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7sdfe09w/independent_project_window/files ä/verification.json",
+        "sha256": "544df7467b8c97a74c4e85600ef03d3e6f977e19c09da3d4bfbf469e9fcb1942"
+      },
+      "modes": [
+        "dark",
+        "light",
+        "contrast",
+        "large",
+        "small",
+        "large-small"
+      ],
+      "measurements": [
+        {
+          "kind": "independent_project_window",
+          "main_id": 2,
+          "project_id": 3,
+          "native_handles_distinct": true
+        },
+        {
+          "kind": "independent_project_window",
+          "main_id": 2,
+          "project_id": 3,
+          "native_handles_distinct": true
+        },
+        {
+          "kind": "independent_project_window",
+          "main_id": 2,
+          "project_id": 3,
+          "native_handles_distinct": true
+        },
+        {
+          "kind": "independent_project_window",
+          "main_id": 2,
+          "project_id": 3,
+          "native_handles_distinct": true
+        },
+        {
+          "kind": "independent_project_window",
+          "main_id": 2,
+          "project_id": 3,
+          "native_handles_distinct": true
+        },
+        {
+          "kind": "independent_project_window",
+          "main_id": 2,
+          "project_id": 3,
+          "native_handles_distinct": true
+        }
+      ]
+    }
+  ],
+  "final_native_windows": [
+    {
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-t6h8_vrp/independent_project_window/files ä/verification.json",
+        "sha256": "a83f963d23a5aeeef90256807e340616dade57c2586000a050e55dbd7960f18a"
+      },
+      "scope": "Final fixture selects template2 via keys, cycles16/22 and back while checking footer visibility/zero scroll when fitting, opens another loaded project then a bare workspace with retained fields, and causes an actual reserved-file creation failure without changing the workspace/input/example/sentinel. Measured error text stays inside its panel, including320px/22px. Main domain entry points are direct calls; navigation/form/error actions use routed SDL gestures."
+    },
+    {
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-srxvo68s/independent_project_window/files ä/verification.json",
+        "sha256": "f089caabc66b83c0db2d5c23b5e1dabd78baf52893e0a6257ca329a66f114109"
+      },
+      "scope": "Final fixture selects template2 via keys, cycles16/22 and back while checking footer visibility/zero scroll when fitting, opens another loaded project then a bare workspace with retained fields, and causes an actual reserved-file creation failure without changing the workspace/input/example/sentinel. Measured error text stays inside its panel, including320px/22px. Main domain entry points are direct calls; navigation/form/error actions use routed SDL gestures."
+    }
+  ],
+  "project_matrices": [
+    {
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-padmfcnk/project_manager_keyboard_workflow/files ä/app-steps.json",
+        "sha256": "d825275e34f5623bb4be56d6cc5ea4b60887c84799cc6622fec27436a4fe8e4a"
+      },
+      "projects": 68,
+      "ui_sizes": [
+        16,
+        22
+      ],
+      "observed_timings": [
+        {
+          "ui_size": 16,
+          "projects": 34,
+          "matrix_seconds": 763.779
+        },
+        {
+          "ui_size": 22,
+          "projects": 34,
+          "matrix_seconds": 850.468
+        }
+      ],
+      "scope": "Actual create/build/record-or-import/analyze, all32 template/language pairs plus two analysis-only projects at each size; checker retains source/manifest/report checks."
+    },
+    {
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7sdfe09w/project_manager_keyboard_workflow/files ä/app-steps.json",
+        "sha256": "1f36ecc5b88f419037da3a5fd63ad9158373362c1c33628412f88c2693d6b567"
+      },
+      "projects": 68,
+      "ui_sizes": [
+        16,
+        22
+      ],
+      "observed_timings": [
+        {
+          "ui_size": 16,
+          "projects": 34,
+          "matrix_seconds": 1577.242
+        },
+        {
+          "ui_size": 22,
+          "projects": 34,
+          "matrix_seconds": 1298.873
+        }
+      ],
+      "scope": "Actual create/build/record-or-import/analyze, all32 template/language pairs plus two analysis-only projects at each size; checker retains source/manifest/report checks."
+    }
+  ],
+  "reply_retirement": [
+    {
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-padmfcnk/explorer_a_replies/files ä/verification.json",
+        "sha256": "aefa8881d8c3519d57d9f70cfdba18bcdb455fd64c73b11bdbeac212a29056fc"
+      },
+      "project_changes": [
+        {
+          "kind": "dialog_project_change",
+          "retired_routes": 6,
+          "late_callbacks_ignored": true
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7sdfe09w/explorer_a_replies/files ä/verification.json",
+        "sha256": "6ddcc91b34e1afe4aa7df417014db269928ead6e835132d637f5dff016af4a01"
+      },
+      "project_changes": [
+        {
+          "kind": "dialog_project_change",
+          "retired_routes": 6,
+          "late_callbacks_ignored": true
+        }
+      ]
+    }
+  ],
+  "independent_accessibility_clients": [
+    {
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-padmfcnk/project_wizard_windows/files ä/verification.json",
+        "sha256": "d7930eeffaa44e9f22b4328f6c1fc68ec52d979e764002c763866c914c046be4"
+      },
+      "scope": "Independent UIA/AT-SPI client chooses all eight radio cards, reveals hidden cards, observes live enabled main search, cancels own project window and checks unchanged main project/source. No physical keyboard or screenreader claim."
+    },
+    {
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7sdfe09w/project_wizard_atspi/files ä/verification.json",
+        "sha256": "fc6b55c2fa4d6880c5ac8300e96df4608ed1565ebb10822c12de63f1d2fa115b"
+      },
+      "scope": "Independent UIA/AT-SPI client chooses all eight radio cards, reveals hidden cards, observes live enabled main search, cancels own project window and checks unchanged main project/source. No physical keyboard or screenreader claim."
+    }
+  ],
+  "counters": [
+    {
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-input-counter-portable.json",
+        "sha256": "e22da0742cc109729db7908795960f4920283dd42da6de0acff390e4d02fcd7f"
+      },
+      "expected_negative_exit": 1,
+      "expected_positive_exit": 0
+    },
+    {
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-footer-counter-portable.json",
+        "sha256": "b4acf2d5932fce94db135052e5ed8c58e340785710cd4b8d0a7db51811ce983b"
+      },
+      "expected_negative_exit": 1,
+      "expected_positive_exit": 0
+    },
+    {
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-font-counter-portable.json",
+        "sha256": "7c7bbb224b46b9c6520caa15597fb5f1af2dde1427efe372c6cb560886dbeefe"
+      },
+      "expected_negative_exit": 1,
+      "expected_positive_exit": 0
+    }
+  ],
+  "retained_failures": [
+    {
+      "phase": "project-second",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-second-windows.json",
+        "sha256": "abb4c0014db9fe8088604e481afcd008bf37eb27d56a45b578ce2ecb0362d3ee"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-second-windows.log",
+        "sha256": "1dbc18fa5425e062d341ebc3c912048e0f9e52eb8ddcc66593a31f6df0e9c543"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-kntjl9cd/results.json",
+        "sha256": "b864e2a458b44d40db490f2a2ea00595c5aa19f89b77e51e95bc44662dad4812"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "independent_project_window",
+        "--test-filter",
+        "explorer_a_replies",
+        "--test-filter",
+        "explorer_a_inline",
+        "--test-filter",
+        "explorer_a",
+        "--test-filter",
+        "project_wizard_windows",
+        "--test-filter",
+        "project_wizard_help",
+        "--test-filter",
+        "project_manager_keyboard_errors",
+        "--test-filter",
+        "analysis_projects_workflow"
+      ],
+      "exit_code": 1,
+      "passed": 7,
+      "total": 8,
+      "cases": [
+        {
+          "name": "analysis_projects_workflow",
+          "status": "failed"
+        },
+        {
+          "name": "project_wizard_windows",
+          "status": "passed"
+        },
+        {
+          "name": "project_wizard_help",
+          "status": "passed"
+        },
+        {
+          "name": "independent_project_window",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a_replies",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a_inline",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a",
+          "status": "passed"
+        },
+        {
+          "name": "project_manager_keyboard_errors",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "phase": "project-second",
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-second-linux.json",
+        "sha256": "c5720e2c26b68384c6415a9fbbd28564eba851ef0e82e8427d8d657b6ef4d390"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-second-linux.log",
+        "sha256": "eb85ca853ddaf3518faa32e21ef5f610ddad70c0787193e5c70b3c8bc4ac1363"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-n9iesj6l/results.json",
+        "sha256": "137f0ca7c219d17276f20b9e1998895fd6338bad234e7b3fa1c91dd263d46d0f"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "independent_project_window",
+        "--test-filter",
+        "explorer_a_replies",
+        "--test-filter",
+        "explorer_a_inline",
+        "--test-filter",
+        "explorer_a",
+        "--test-filter",
+        "project_wizard_atspi",
+        "--test-filter",
+        "project_wizard_help",
+        "--test-filter",
+        "project_manager_keyboard_errors",
+        "--test-filter",
+        "analysis_projects_workflow"
+      ],
+      "exit_code": 1,
+      "passed": 6,
+      "total": 8,
+      "cases": [
+        {
+          "name": "analysis_projects_workflow",
+          "status": "failed"
+        },
+        {
+          "name": "project_wizard_atspi",
+          "status": "failed"
+        },
+        {
+          "name": "project_wizard_help",
+          "status": "passed"
+        },
+        {
+          "name": "independent_project_window",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a_replies",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a_inline",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a",
+          "status": "passed"
+        },
+        {
+          "name": "project_manager_keyboard_errors",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "phase": "project-third",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-third-windows.json",
+        "sha256": "b8e092149b6c16997d060888841eab9ed03ad62f299aff76e38b98b333026f5a"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-third-windows.log",
+        "sha256": "0861ceb4625b4035b9cea6dc9d7bc02c124a93dd150bf2ce623e366747b86d99"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-12e_08vi/results.json",
+        "sha256": "5f7e6118460037732d488a81916ffd9ff5bc9e95be6b7939070cf9a9fff34f05"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "independent_project_window",
+        "--test-filter",
+        "explorer_a_replies",
+        "--test-filter",
+        "explorer_a_inline",
+        "--test-filter",
+        "explorer_a",
+        "--test-filter",
+        "project_wizard_windows",
+        "--test-filter",
+        "project_wizard_help",
+        "--test-filter",
+        "project_wizard",
+        "--test-filter",
+        "project_manager_keyboard_errors",
+        "--test-filter",
+        "analysis_projects_workflow"
+      ],
+      "exit_code": 1,
+      "passed": 8,
+      "total": 9,
+      "cases": [
+        {
+          "name": "analysis_projects_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "project_wizard_windows",
+          "status": "passed"
+        },
+        {
+          "name": "project_wizard_help",
+          "status": "passed"
+        },
+        {
+          "name": "independent_project_window",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a_replies",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a_inline",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a",
+          "status": "passed"
+        },
+        {
+          "name": "project_wizard",
+          "status": "failed"
+        },
+        {
+          "name": "project_manager_keyboard_errors",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "phase": "project-third",
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-third-linux.json",
+        "sha256": "01b178929d61da3400c4a03f12e5d93c3a913d8f445aa8f503a2805cc0b21ea0"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-third-linux.log",
+        "sha256": "bc95d223f897f082b246104dbe2ec7d11324862f7d0754a3e4f74ad495745c8f"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-zkpzwyxx/results.json",
+        "sha256": "80611862c61d47354ccaffbb9f2b44373574e7fb6bb91f3c89eda93e549a86bc"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "independent_project_window",
+        "--test-filter",
+        "explorer_a_replies",
+        "--test-filter",
+        "explorer_a_inline",
+        "--test-filter",
+        "explorer_a",
+        "--test-filter",
+        "project_wizard_atspi",
+        "--test-filter",
+        "project_wizard_help",
+        "--test-filter",
+        "project_wizard",
+        "--test-filter",
+        "project_manager_keyboard_errors",
+        "--test-filter",
+        "analysis_projects_workflow"
+      ],
+      "exit_code": 1,
+      "passed": 8,
+      "total": 9,
+      "cases": [
+        {
+          "name": "analysis_projects_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "project_wizard_atspi",
+          "status": "passed"
+        },
+        {
+          "name": "project_wizard_help",
+          "status": "passed"
+        },
+        {
+          "name": "independent_project_window",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a_replies",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a_inline",
+          "status": "passed"
+        },
+        {
+          "name": "explorer_a",
+          "status": "passed"
+        },
+        {
+          "name": "project_wizard",
+          "status": "failed"
+        },
+        {
+          "name": "project_manager_keyboard_errors",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "phase": "project-fifth",
+      "platform": "windows",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-fifth-windows.json",
+        "sha256": "9e08efd8e6959a66b33dd0e2998b6bd286a985d39ab94e4484eb7e28b4d55216"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-fifth-windows.log",
+        "sha256": "8536d569c4c6d54a524f10235c0d76fa6d1fcb04b2c698b8fb2ccdd5035ba3c2"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-fe1p1_ez/results.json",
+        "sha256": "80d049e7a4900ca250389d9ac80d05853b1f543f9deef776ceed50b75c084d59"
+      },
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "independent_project_window",
+        "--test-filter",
+        "project_wizard_help",
+        "--test-filter",
+        "window_smoke",
+        "--test-filter",
+        "project_wizard"
+      ],
+      "exit_code": 1,
+      "passed": 3,
+      "total": 4,
+      "cases": [
+        {
+          "name": "window_smoke",
+          "status": "passed"
+        },
+        {
+          "name": "project_wizard_help",
+          "status": "passed"
+        },
+        {
+          "name": "independent_project_window",
+          "status": "failed"
+        },
+        {
+          "name": "project_wizard",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "phase": "project-fifth",
+      "platform": "linux",
+      "record": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-fifth-linux.json",
+        "sha256": "5d8072ab857469add0eae56f9e9c992b700ebec0d2bcd0be65abae4910b87df1"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/project-fifth-linux.log",
+        "sha256": "485726e7504b605553daea6a138075d3618bc92e56889873e28f9e72892d0665"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-6cs21j48/results.json",
+        "sha256": "11e3cb295e5364b2485eb7aeb5e9f2565d6c9eab1a64f6b2fe404bce9451b905"
+      },
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "independent_project_window",
+        "--test-filter",
+        "project_wizard_help",
+        "--test-filter",
+        "window_smoke",
+        "--test-filter",
+        "project_wizard"
+      ],
+      "exit_code": 1,
+      "passed": 3,
+      "total": 4,
+      "cases": [
+        {
+          "name": "window_smoke",
+          "status": "passed"
+        },
+        {
+          "name": "project_wizard_help",
+          "status": "passed"
+        },
+        {
+          "name": "independent_project_window",
+          "status": "failed"
+        },
+        {
+          "name": "project_wizard",
+          "status": "passed"
+        }
+      ]
+    }
+  ],
+  "unchanged_serial_analysis_control": {
+    "record": {
+      "path": "build/validation/explorer-inline-2026-10-29/project-analysis-serial-linux.json",
+      "sha256": "ec128afa06cdc38eeb6c35710fce50eb6b96efb5a35b00485d52c32f8395b819"
+    },
+    "log": {
+      "path": "build/validation/explorer-inline-2026-10-29/project-analysis-serial-linux.log",
+      "sha256": "4b6c0644f4f2566915d5f27cac98821fd12c71a8aec01c6ae218e4988aea45c8"
+    },
+    "steps": {
+      "path": "build/validation/explorer-inline-2026-10-29/project-analysis-serial/app-steps.json",
+      "sha256": "2e93c992a51d5a2a6482f980e2de263146ebfee64cce50133054eaa67394cecd"
+    },
+    "sdk_write_spans": {
+      "path": "build/validation/explorer-inline-2026-10-29/project-sdk-write-times.json",
+      "sha256": "3323d8f388e1098813528c20dfd3d290552d2b3b21d5e1f34a4c4ccbc01157af"
+    },
+    "command": [
+      "/usr/bin/python3",
+      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+      "analysis_projects_workflow",
+      "--app",
+      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+      "--work",
+      "/mnt/d/Physim/build/validation/explorer-inline-2026-10-29/project-analysis-serial",
+      "--root",
+      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src",
+      "--cc",
+      "/usr/bin/gcc"
+    ],
+    "scope": "Same phase4 binary/checker bytes, fresh fixture, unchanged120s native budget, after both platform cohorts ended. All four create/analyze/reopen checks passed. Write spans are not a direct compiler benchmark or proof of contention; no product fix is credited for this timing failure."
+  },
+  "catalog_selftest": {
+    "log": {
+      "path": "build/validation/explorer-inline-2026-10-29/project-catalog-final.log",
+      "sha256": "73b62fe65ca9b6a58deb57d7ff375b396775f424b5eea714f1f3547426eb0da4"
+    },
+    "exit_code": 0,
+    "scope": "Actual final source runner selftest, including intentionally rejected build/exit/timeout fixtures; no macOS runtime claim."
+  },
+  "linux_instrumentation": {
+    "command": [
+      "wsl",
+      "-d",
+      "Alpine-Dev",
+      "--exec",
+      "readelf",
+      "-d",
+      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim"
+    ],
+    "exit_code": 0,
+    "observed_needed": [
+      "libasan.so.8",
+      "libubsan.so.1"
+    ],
+    "scope": "Actual final ELF dynamic section inspected; GUI LSan remains0."
+  },
+  "repair_notes": [
+    "Phase2 analysis-only mouse fixture clicked a review action outside the new native client viewport. Actual keyboard reveal is now observed before clicking; original import/report expectations remain.",
+    "Phase2 Linux remote large case opened the child before asynchronous parent resize settled. Wait for actual parent SDL size before opening; expected1000x660 child and original offscreen/reveal checks remain.",
+    "Phase3 product used an incorrectly inferred850 CSS compact breakpoint. The unchanged CSS-driven checker rejected it on both platforms; product now follows actual560 media rule.",
+    "Phase5 new creation-error fixture reopened B at its normal1080x920 size, then compared its error panel to740px. Phase6 explicitly resizes that reopened window to the chosen680/320x740 test client; original containment, source preservation and sentinel assertions remain. No product change for this fixture failure."
+  ],
+  "source_audit": {
+    "tracked_inputs_matched_git_index": 1075,
+    "compiler_manifest": {
+      "path": "build/validation/explorer-inline-2026-10-29/project-final-compiler-source.json",
+      "sha256": "d2c6336c46040f0e9df05efc1bb55557ca7735084eb79d6249a3e18b7ae45159"
+    },
+    "source_overlay": {
+      "path": "build/validation/explorer-inline-2026-10-29/project-final-compiler-source.zip",
+      "sha256": "d968cc899a9fb31d312258faaf808ce2002a8f8177dccadd9860b4de27a0638f"
+    },
+    "runtime_manifest": {
+      "path": "build/validation/explorer-inline-2026-10-29/project-final-runtime.json",
+      "sha256": "5e8cec45b63641db2ac0ef1840e923ecb5df2cde9e1a9585a2fbdd80616f70fe"
+    },
+    "runtime_byte_index": {
+      "path": "build/validation/explorer-inline-2026-10-29/project-final-byte-index.json",
+      "sha256": "4449b797abe5f2f3e62ad557fd016518cfaa1e5f94754f2f20e877b835550635"
+    },
+    "all_archive_bytes_read_back": true
+  },
+  "limits": [
+    "Picker A still occupies the main window and globally blocks input during its use. Per-owner native A windows remain the next task.",
+    "No physical input/titlebar drag, screenreader reading, monitor/DPI switching or macOS runtime claim; these remain separate acceptance work.",
+    "All approved A2/B2/settings and overall UI fidelity work remains open unless covered by its own native evidence."
+  ]
+}

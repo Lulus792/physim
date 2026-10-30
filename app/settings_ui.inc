@@ -196,7 +196,7 @@ static void settings_defaults_draft(app *a) {
     a->settings_draft.width=a->preferences.width;a->settings_draft.height=a->preferences.height;
 }
 static bool settings_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
-    if(a->tab!=6 || a->project_manager || a->toolbar_menu || a->toolbar_keyboard)return false;
+    if(a->tab!=6 || a->toolbar_menu || a->toolbar_keyboard)return false;
     if(key->mod&(SDL_KMOD_CTRL|SDL_KMOD_GUI|SDL_KMOD_ALT))return false;
     if(key->key==SDLK_ESCAPE) {a->tab=a->settings_previous_tab;a->settings_keyboard=false;return true;}
     if(key->key==SDLK_TAB) {

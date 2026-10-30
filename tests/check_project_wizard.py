@@ -27,6 +27,9 @@ def main():
     py,px=(float(value[:-3])*14 for value in padding)
     minimum=float(declaration('button','min-height')[:-2]);button_height=max(minimum,role_sizes[4]*line+2*py+2)
     card_gap=float(declaration('.template-cards','gap')[:-2])
+    single_column=css.index('.wizard-fields,.template-cards{grid-template-columns:1fr}')
+    media_start=css.rfind('@media(max-width:',0,single_column)
+    compact_width=float(re.match(r'@media\(max-width:(\d+)px\)',css[media_start:])[1])
     binary=hashlib.sha256(args.app.read_bytes()).hexdigest();cases=[]
     for mode in ('dark','light','contrast','large','narrow','large-narrow'):
         work=args.work/mode;work.mkdir()
@@ -44,10 +47,15 @@ def main():
         row=rows[0];expected=min(maximum*row['scale'],row['modal'][2]-2-row['scrollbar'])
         require(abs(row['body'][2]-expected)<2,'Body width differs from selected CSS maximum')
         require(len(controls)==1,'Missing measured controls');control=controls[0];scale=row['scale']
-        require(len(control['font_roles'])==len(role_sizes) and all(abs(a-b)<.02 for a,b in zip(control['font_roles'],role_sizes)),'Font role differs from reference CSS')
+        expected_roles=role_sizes.copy()
+        if row['client'][0]<=compact_width*scale:expected_roles[1]=1.4*14
+        require(len(control['font_roles'])==len(expected_roles) and all(abs(a-b)<.02 for a,b in zip(control['font_roles'],expected_roles)),'Font role differs from reference CSS')
         require(abs(control['next'][3]-button_height*scale)<.05,'Footer button height differs from CSS')
         require(abs(control['next'][2]-control['next_text_width']-(2*px+2)*scale)<.05,'Footer button padding differs from CSS')
-        require(abs(control['second_card'][0]-row['card'][0]-row['card'][2]-card_gap*scale)<.05,'Template card gap differs from CSS')
+        if row['client'][0]<=compact_width*scale:
+            require(abs(control['second_card'][0]-row['card'][0])<.05 and abs(control['second_card'][1]-row['card'][1]-row['card'][3]-card_gap*scale)<.05,'Compact card column differs from CSS')
+        else:
+            require(abs(control['second_card'][0]-row['card'][0]-row['card'][2]-card_gap*scale)<.05 and abs(control['second_card'][1]-row['card'][1])<.05,'Template card gap differs from CSS')
         require(hashlib.sha256(args.app.read_bytes()).hexdigest()==binary,'Program changed during test')
     print('Native project B: six themes/widths, cards, actual next/back and retained inputs passed')
 

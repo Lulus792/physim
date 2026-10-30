@@ -319,12 +319,18 @@ typedef struct {
     int manager_focus,manager_step;
     bool manager_keyboard,manager_focus_known,manager_focus_reveal,manager_initial_focus,manager_popup_close;
     struct nk_rect manager_focus_bounds[19],manager_bounds,manager_body,manager_steps[3];
+    struct nk_rect manager_error_bounds,manager_error_text_bounds;
     struct nk_user_font manager_fonts[12];
     float manager_scrollbar;
     ps_ui_backdrop manager_backdrop;
-    ps_ui_shadow manager_shadow;
     char manager_opener[64];
     char manager_return_label[64];unsigned manager_return_frames;
+    SDL_Window *manager_window;
+    ps_graphics *manager_graphics;
+    struct nk_context *manager_ui,*manager_source_ui;
+    SDL_WindowID manager_source_id;
+    bool manager_close_pending,manager_submitting;
+    char manager_capture[4096];
     char workspace_additions[32][4096];
     unsigned workspace_addition_count;
     ps_workspace_tree workspace_tree;
@@ -780,15 +786,19 @@ static void browser_complete(app *a,ps_dialog_ticket ticket,const char *path);
 static void browser_tick(app *a);
 static bool browser_event(app *a,const SDL_Event *event,SDL_Window *window);
 static void browser_destroy(app *a);
+static void browser_cancel_project_context(app *a);
 static void import_run(app *a,const char *path);
 static void resume_batch(app *a,const char *path);
 static void workspace_dialog_project_changed(app *a) {
-    const unsigned routes[]={PS_DIALOG_ADD_FILE,PS_DIALOG_ADD_FOLDER,PS_DIALOG_IMPORT_RUN,PS_DIALOG_RESUME_BATCH};
+    const unsigned routes[]={PS_DIALOG_OPEN_FOLDER,PS_DIALOG_ADD_FILE,PS_DIALOG_ADD_FOLDER,PS_DIALOG_IMPORT_RUN,PS_DIALOG_RESUME_BATCH,PS_DIALOG_BROWSE};
     for(size_t i=0;i<sizeof routes/sizeof *routes;i++)ps_dialog_request_cancel_route(&a->dialog_requests,routes[i]);
+    browser_cancel_project_context(a);
     a->dialog_pending=ps_dialog_requests_pending(&a->dialog_requests);
 }
 static void analyze(app *a,bool csv);
 static void create_managed_project(app *a);
+static void project_manager_close(app *a);
+static void browser_cancel_project_parent(app *a);
 static bool open_workspace_path(app *a, const char *path);
 static void restore_workspace(app *a);
 static void workspace_catalog_start(app *a);
@@ -804,7 +814,7 @@ static const char *analysis_source(const app *a) {
     return a->language_analysis ? "analysis.phys" : "analysis.c";
 }
 static float editor_row_padding(const app *a) {
-    return !a->project_manager && (a->tab==0 || a->tab==8)?11.f:a->ui->style.edit.row_padding;
+    return (a->tab==0 || a->tab==8)?11.f:a->ui->style.edit.row_padding;
 }
 static void preview_workspace_path(app *a,const char *path);
 static void join(char *out, size_t n, const char *base, const char *leaf);
@@ -1439,7 +1449,7 @@ static bool migrate_current_project(app *a) {
     status(a,report.changed?"Projektformat auf Version 2 aktualisiert. Sicherung: physim.project.bak.":"Projektformat ist bereits aktuell; keine Dateien geändert.");return true;
 }
 static bool open_project(app *a) {
-    bool leaving_manager = a->project_manager;
+    bool leaving_manager = a->manager_submitting;
     if (a->recovery)
         return false;
     if (!idle(a) || a->library_thread) {
@@ -1511,7 +1521,7 @@ static bool open_project(app *a) {
     workspace_dialog_project_changed(a);
     a->workspace_addition_count = 0;
     refresh_workspace_entries(a);
-    a->project_manager = false;
+    if(a->manager_submitting)project_manager_close(a);
     a->workspace_preview_path[0] = 0;
     if (leaving_manager || a->tab == 8)
         a->tab = 0;
@@ -2782,7 +2792,7 @@ static void plot_draw(app *a, const double *times, const double *values, int cou
         plot_expand_range(&lo, &hi, true);
     double bounds[] = {count ? times[0] : 0, count ? times[count - 1] : 1, lo, hi};
     if(compared)memcpy(bounds,description.axes.full,sizeof bounds);
-    bool analysis=a->tab==2 && a->analysis_tab==0 && !a->project_manager && view;
+    bool analysis=a->tab==2 && a->analysis_tab==0 && view;
     struct nk_color curve_color=analysis?ui_palette->curves[0]:UI_COLOR(accent);
     if(analysis)analysis_plot_heading(a,view,have_values && (compared || count>1)?bounds:NULL,comparison);
     else {
@@ -2899,7 +2909,7 @@ static void plot(app *a,const double *times,const double *values,int count,float
     plot_draw(a,times,values,count,height,label,scatter,view,NULL);
 }
 static struct nk_text_edit *editor_search_target(app *a) {
-    if(a->recovery || a->document_pending || a->dialog_pending || a->project_manager ||
+    if(a->recovery || a->document_pending || a->dialog_pending ||
        a->layout_manager || a->workspace_manager || a->channel_unit_manager || a->run_details_manager) return NULL;
     workspace_document *doc=active_document(a);
     if(a->tab==8 && doc) return doc->recovery?NULL:&doc->edit;
@@ -3452,18 +3462,22 @@ static void create_managed_project(app *a) {
         snprintf(a->manager_error,sizeof a->manager_error,"%s",a->status);a->manager_error_reveal=true;
         return;
     }
-    int n = snprintf(a->project_input, sizeof a->project_input, "%s/%s", a->manager_parent,
+    char target[4096];
+    int n = snprintf(target, sizeof target, "%s/%s", a->manager_parent,
                      a->manager_name);
-    if (n < 0 || n >= (int)sizeof a->project_input) {
+    if (n < 0 || n >= (int)sizeof target) {
         status(a, "Projektpfad ist zu lang.");
         snprintf(a->manager_error,sizeof a->manager_error,"%s",a->status);a->manager_error_reveal=true;
         return;
     }
     static const int language_templates[8] = {8, 9, 18, 12, 16, 10, 19, 17};
+    char previous_input[4096];SDL_strlcpy(previous_input,a->project_input,sizeof previous_input);int previous_example=a->example;
+    SDL_strlcpy(a->project_input,target,sizeof a->project_input);
     a->example = a->manager_experiment_language
                      ? language_templates[a->manager_template] : a->manager_template;
-    new_project(a);
-    if(a->project_manager){snprintf(a->manager_error,sizeof a->manager_error,"%s",a->status);a->manager_error_reveal=true;}
+    a->manager_submitting=true;new_project(a);a->manager_submitting=false;
+    if(a->project_manager){SDL_strlcpy(a->project_input,previous_input,sizeof a->project_input);a->example=previous_example;
+        snprintf(a->manager_error,sizeof a->manager_error,"%s",a->status);a->manager_error_reveal=true;}
 }
 static bool open_workspace_path(app *a, const char *path) {
     SDL_PathInfo info;
@@ -3503,7 +3517,7 @@ static bool open_workspace_path(app *a, const char *path) {
     snprintf(a->project_input, sizeof a->project_input, "%s", path);
     a->workspace_open = true;
     a->workspace_disclosure = NK_MAXIMIZED;
-    a->project_manager = false;
+    if(a->manager_submitting)project_manager_close(a);
     a->tab = 0;
     a->workspace_preview_path[0] = 0;
     a->workspace_addition_count = 0;
@@ -3543,6 +3557,7 @@ static void choose_workspace_path(app *a, int mode) {
     else if(!a->native_dialog_legacy_test) {
         ps_dialog_ticket ticket=ps_dialog_request_ticket(request);
         if(!browser_open(a,mode,ticket)){ps_dialog_request_cancel(&a->dialog_requests,ticket);a->dialog_pending=ps_dialog_requests_pending(&a->dialog_requests);status(a,"Dateiauswahl konnte nicht geöffnet werden.");}
+        else if(mode==PS_DIALOG_MANAGER_PARENT)SDL_RaiseWindow(a->window);
     }
     else if(mode==PS_DIALOG_IMPORT_RUN) {
         static const SDL_DialogFileFilter filters[]={{"Physim-Messlauf","psrun"}};
@@ -3646,6 +3661,9 @@ static void test_window_mouse(SDL_Window *window,struct nk_rect rect,bool down) 
 static void test_mouse(app *a,struct nk_rect rect,bool down) {
     test_window_mouse(a->window,rect,down);
 }
+static void manager_test_key(app *a,SDL_Keycode key,SDL_Keymod mod) {
+    test_window_key_mod(a->project_manager?a->manager_window:a->window,key,mod);
+}
 // clang-format off
 #include "autosave_tests.inc"
 #include "batch_tests.inc"
@@ -3728,6 +3746,7 @@ static void test_mouse(app *a,struct nk_rect rect,bool down) {
 #include "component_details_tests.inc"
 #include "analysis_editor_tests.inc"
 #include "file_browser_tests.inc"
+#include "project_window_tests.inc"
 #include "workspace_tests.inc"
 // clang-format on
 /* Independent archive check for the optional tutorial energy-ledger report. */
@@ -4291,6 +4310,7 @@ int main(int argc, char **argv) {
             a->profile_frame.frame = frames;
         }
         graphic_export_tick(a);
+        project_manager_tick(a);
         preferences_theme_tick(a);
         api_reference_insert_tick(a);
         documentation_actions_tick(a);
@@ -4300,6 +4320,7 @@ int main(int argc, char **argv) {
          * picker and its owner's fields must observe the same transaction. */
         workspace_dialog_tick(a);
         nk_input_begin(a->ui);
+        if(a->manager_ui)nk_input_begin(a->manager_ui);
         if(a->graphic_export)nk_input_begin(a->graphic_export->ui);
         if (a->doc_ui)
             nk_input_begin(a->doc_ui);
@@ -4321,6 +4342,7 @@ int main(int argc, char **argv) {
             }
             SDL_Window *event_window = SDL_GetWindowFromEvent(&e);
             if(browser_event(a,&e,event_window))continue;
+            if(project_manager_event(a,&e,event_window))continue;
             if(timeline_controls_event(a,&e,event_window))continue;
             if(graphic_export_event(a,&e,event_window))continue;
             if(panel_window_event(a,&e,event_window))continue;
@@ -4342,7 +4364,7 @@ int main(int argc, char **argv) {
                 if(a->protocol_view.resize)protocol_resize_abort(a);
             }
             /* A delayed modal return must not override a new user gesture. */
-            if(event_window==a->window && !a->project_manager &&
+            if(event_window==a->window &&
                (e.type==SDL_EVENT_KEY_DOWN || e.type==SDL_EVENT_MOUSE_BUTTON_DOWN || e.type==SDL_EVENT_TEXT_INPUT))a->manager_return_frames=0;
             if(event_window==a->window && nk_sdl_accessibility_event(a->ui,&e))continue;
             if(event_window==a->doc_window && a->doc_ui && documentation_actions_event(a,&e))continue;
@@ -4385,15 +4407,6 @@ int main(int argc, char **argv) {
                 if (!a->dirty && !a->analysis_dirty && !a->project_settings_dirty && !a->project_definitions_dirty && documents_save_all(a))
                     a->quitting = true;
             }
-            if(a->project_manager && e.type==SDL_EVENT_KEY_DOWN && event_window==a->window) {
-                if(e.key.key==SDLK_F1 && !e.key.repeat){open_documentation(a,a->documentation?a->doc_topic:1);continue;}
-                if(project_manager_keyboard_key(a,&e.key))continue;
-                /* Edit shortcuts belong to the modal field. Other application
-                 * commands must not operate on the obscured workspace. */
-                bool edit_key=e.key.key==SDLK_A || e.key.key==SDLK_C || e.key.key==SDLK_V || e.key.key==SDLK_X || e.key.key==SDLK_Z || e.key.key==SDLK_Y;
-                if(!(e.key.mod&(SDL_KMOD_CTRL|SDL_KMOD_GUI|SDL_KMOD_ALT)) || edit_key)nk_sdl_handle_event(a->ui,&e);
-                continue;
-            }
             if(e.type==SDL_EVENT_KEY_DOWN && event_window==a->window)a->workbench_sidebar_focus=0;
             if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && (a->layout_manager || a->workspace_manager || a->channel_unit_manager || a->run_details_manager) && e.key.key == SDLK_ESCAPE) {
                 a->layout_manager = false;
@@ -4411,7 +4424,6 @@ int main(int argc, char **argv) {
                 if(file_tabs_keyboard(a,&e.key))continue;
                 if (toolbar_keyboard_key(a, &e.key)) continue;
                 if (settings_keyboard_key(a, &e.key)) continue;
-                if (project_manager_keyboard_key(a, &e.key)) continue;
                 if (runner_keyboard_key(a, &e.key)) continue;
                 if (a->dock_drag && e.key.key==SDLK_ESCAPE) { a->dock_drag=0;a->dock_dragging=false;continue; }
                 if (a->file_tab_drag && e.key.key==SDLK_ESCAPE) {
@@ -4465,6 +4477,7 @@ int main(int argc, char **argv) {
             nk_sdl_handle_event(a->ui, &e);
         }
         nk_input_end(a->ui);
+        if(a->manager_ui)nk_input_end(a->manager_ui);
         if(a->graphic_export)nk_input_end(a->graphic_export->ui);
         if (a->doc_ui)
             nk_input_end(a->doc_ui);
@@ -4506,7 +4519,7 @@ int main(int argc, char **argv) {
             /* The deliberate 80 ms frame delay also runs on hosted software GL.
              * Keep its bounded keyboard assertions; allow their extra wall time. */
             if (ps_clock() - test_started >
-                ((!strcmp(argv[3],"transport-design") || !strcmp(argv[3],"timeline-design") || !strcmp(argv[3],"camera-design") || !strcmp(argv[3],"scene-frame-design") || !strcmp(argv[3],"measurement-design") || !strcmp(argv[3],"curve-design") || !strncmp(argv[3],"analysis-editor-",16) || !strcmp(argv[3],"inspector-channel") || !strcmp(argv[3],"run-fields-design") || !strncmp(argv[3],"inspector-tail-",15))?180:!strncmp(argv[3],"file-tabs-design",16)?60:!strncmp(argv[3],"component-",10)?60:!strncmp(argv[3],"comparison-",11)?120:!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:(!strncmp(argv[3],"workbench-",10) || !strncmp(argv[3],"protocol-ui-",12))?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?1800:!strncmp(argv[3],"manager-design-remote",21)?120:!strncmp(argv[3],"manager-design-help",19)?90:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
+                ((!strcmp(argv[3],"transport-design") || !strcmp(argv[3],"timeline-design") || !strcmp(argv[3],"camera-design") || !strcmp(argv[3],"scene-frame-design") || !strcmp(argv[3],"measurement-design") || !strcmp(argv[3],"curve-design") || !strncmp(argv[3],"analysis-editor-",16) || !strcmp(argv[3],"inspector-channel") || !strcmp(argv[3],"run-fields-design") || !strncmp(argv[3],"inspector-tail-",15))?180:!strncmp(argv[3],"file-tabs-design",16)?60:!strncmp(argv[3],"component-",10)?60:!strncmp(argv[3],"comparison-",11)?120:!strncmp(argv[3],"api-card-",9)?120:!strncmp(argv[3],"model-values-",13)?300:!strncmp(argv[3],"fixed-panels-",13)?180:!strncmp(argv[3],"laboratory-",11)?150:(!strncmp(argv[3],"workbench-",10) || !strncmp(argv[3],"protocol-ui-",12) || !strncmp(argv[3],"project-window",14))?60:!strncmp(argv[3],"shell-theme-",12)?60:(!strncmp(argv[3],"analysis-layout-",16) || !strncmp(argv[3],"analysis-units-",15))?60:!strncmp(argv[3],"report-details-",15)?60:!strncmp(argv[3],"library-selection-",18)?120:!strncmp(argv[3],"api-reference-",14)?60:!strncmp(argv[3],"completion-",11)?60:!strncmp(argv[3],"docs-keyboard",13)?(!strcmp(argv[3],"docs-keyboard-delayed")?120:!strcmp(argv[3],"docs-keyboard-typeset")?90:60):!strncmp(argv[3],"manager-keyboard",16)?1800:!strncmp(argv[3],"manager-design-remote",21)?120:!strncmp(argv[3],"manager-design-help",19)?90:(!strcmp(argv[3], "documents-build") || !strncmp(argv[3], "project-settings-", 17) || !strncmp(argv[3],"parameter-form-",15) ||
                   !strncmp(argv[3], "isolation-", 10) || !strncmp(argv[3], "breakpoints-", 12) || !strncmp(argv[3], "reset-", 6) || !strncmp(argv[3], "speed-", 6) || !strncmp(argv[3], "timeline-", 9) || !strncmp(argv[3],"adaptive-",9) || !strncmp(argv[3],"series-",7) || !strncmp(argv[3],"inspector-",10) || !strncmp(argv[3],"object-design",13) || !strcmp(argv[3],"tree-design") || !strncmp(argv[3],"layouts-",8) || !strncmp(argv[3],"named-",6) || !strncmp(argv[3],"pchip-",6) || !strncmp(argv[3],"units-",6) || !strncmp(argv[3],"analysis-project-",17) || !strncmp(argv[3],"resume-",7) || !strncmp(argv[3],"missing-",8) || !strncmp(argv[3],"mask-",5) || !strncmp(argv[3],"frames-",7) || !strncmp(argv[3],"saved-run-tutorial-",19) || !strncmp(argv[3],"monte-carlo-tutorial-",21) || !strncmp(argv[3],"collision-tutorial-",19) || (!strncmp(argv[3],"pendulum-tutorial-",18) || !strncmp(argv[3],"pendulum-medium-",16)) || !strncmp(argv[3],"spring-tutorial-",16) || !strncmp(argv[3],"material-",9) || !strncmp(argv[3],"contact-world",13) || !strncmp(argv[3],"diagnostic-",11) || !strncmp(argv[3],"logging-",8) || (!strncmp(argv[3], "dock-", 5) || !strncmp(argv[3], "hierarchy-", 10))
                      ? 120 : !strncmp(argv[3], "native-dialog", 13) ? 180 : !strncmp(argv[3],"explorer-a-",11)?90:15))) {
                 fprintf(stderr, "Workspace self-test timeout: %s after %.3f wall seconds\n",
@@ -4542,7 +4555,7 @@ int main(int argc, char **argv) {
                     test_stage = 102;
                 }
             } else if (test_stage == 102) {
-                a->project_manager = true;
+                open_project_manager(a,"Datei");
                 snprintf(a->manager_parent, sizeof a->manager_parent, "%s", argv[2]);
                 snprintf(a->manager_name, sizeof a->manager_name, "created-%u",
                          (unsigned)(ps_clock() * 1000000));
@@ -5628,6 +5641,7 @@ int main(int argc, char **argv) {
             join(path, sizeof path, workspace_state_test ? argv[2] : a->project, capture);
             bool graphic_capture=a->graphic_export && (plot_test || !strcmp(capture,"comparison-export.png"));
             if(graphic_capture)SDL_strlcpy(a->graphic_export->capture,path,sizeof a->graphic_export->capture);
+            else if(a->project_manager && a->manager_ui && !browser_active(a))SDL_strlcpy(a->manager_capture,path,sizeof a->manager_capture);
             else {
             if(plot_test && SDL_getenv("PHYSIM_TEST_GRAPHIC_DIALOG")) {
                 /* One paired BMP/PNG proves identical readback; the remaining
@@ -5658,6 +5672,7 @@ int main(int argc, char **argv) {
         char doc_capture_path[4096];
         if(!panel_windows_render(a)){fprintf(stderr,"Panel rendering: %s\n",SDL_GetError());exit_code=1;a->quitting=true;}
         panel_requests(a);
+        if(!project_manager_window_render(a)){fprintf(stderr,"Project window: %s\n",SDL_GetError());exit_code=1;a->quitting=true;}
         if(!graphic_export_window_render(a)){fprintf(stderr,"Graphic export window: %s\n",SDL_GetError());exit_code=1;a->quitting=true;}
         if (doc_capture)
             join(doc_capture_path, sizeof doc_capture_path, a->project, capture);
@@ -5772,6 +5787,7 @@ int main(int argc, char **argv) {
     ps_workspace_tree_destroy(&a->workspace_tree);
     ps_dialog_requests_cancel_all(&a->dialog_requests);
     browser_destroy(a);
+    project_manager_window_destroy(a);
     documents_clear(a);
     graphic_export_close(a);
     panel_windows_destroy(a);

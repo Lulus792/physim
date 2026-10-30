@@ -8,7 +8,6 @@ static void document_select(app *a, unsigned index) {
     completion_close(a);
     a->document_active = index;
     a->document_pending = 0;
-    a->project_manager = false;
     a->tab = 8;
     dock_show(a,PS_DOCK_WORKSPACE);
     a->completion_focus_edit=&a->documents[index].edit;
@@ -317,7 +316,6 @@ static void preview_workspace_path(app *a, const char *path) {
         join(source, sizeof source, a->project, analysis_source(a));
         if (experiment || document_matches(path, source)) {
             dock_show(a,PS_DOCK_WORKSPACE);
-            a->project_manager = false;
             a->tab = experiment ? 0 : 2;
             if (!experiment)
                 a->analysis_tab = 1;
@@ -328,7 +326,6 @@ static void preview_workspace_path(app *a, const char *path) {
     const char *extension=strrchr(path,'.');
     if(extension && !SDL_strcasecmp(extension,".psrun")) {
         if(open_run_path(a,path)) {
-            a->project_manager=false;
             snprintf(a->workspace_preview_path,sizeof a->workspace_preview_path,"%s",path);
         }
         return;

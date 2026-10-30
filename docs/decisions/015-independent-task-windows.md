@@ -1,7 +1,7 @@
 # Eigenständige Fenster für Dialogaufgaben
 
-Status: vom Nutzer am 29. Oktober 2026 beauftragt; Grafikexport als erster
-[nativer Teilstand](../visuals/unified-workspace/TASK-WINDOWS-NATIVE.md) geprüft.
+Status: vom Nutzer am 29. Oktober 2026 beauftragt; Grafikexport und seit
+30. Oktober Projektanlage B als [native Teilstände](../visuals/unified-workspace/TASK-WINDOWS-NATIVE.md) geprüft.
 Weitere Dialoge und die vollständige Abnahme bleiben offen.
 
 ## Auftrag

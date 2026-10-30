@@ -597,7 +597,7 @@ static void sidebar_panel(app *a) {
             else {nk_layout_row_dynamic(ui,56,1);nk_label_wrap(ui,"Öffne einen Ordner, um seine Dateien hier zu sehen.");}
             nk_end(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);return;
         }
-        if(a->loaded && a->tab==1 && !a->project_manager) {
+        if(a->loaded && a->tab==1) {
             if(laboratory)laboratory_scene_sidebar(a);else scene_controls_view(a);nk_end(ui);
             if(laboratory){nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}
             if(compact){nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);}return;
@@ -736,7 +736,7 @@ static void inspector_panel(app *a) {
     bool compact=workbench_visible(a);
     if(compact){nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(16,4));nk_style_push_vec2(ui,&ui->style.window.scrollbar_size,nk_vec2(ui->style.window.scrollbar_size.x,0));}
     if(dock_begin(a,PS_DOCK_INSPECTOR)) {
-        if(a->api_reference && !compact && !a->project_manager && (a->tab==0 || (a->tab==2 && a->analysis_tab==1) || a->tab==8))
+        if(a->api_reference && !compact && (a->tab==0 || (a->tab==2 && a->analysis_tab==1) || a->tab==8))
             api_reference_view(a);
         else if(workbench_visible(a)) {
             workbench_context_view(a);
@@ -1290,15 +1290,9 @@ static void workspace_draw_ui(app *a, int width, int height) {
  * rest of the scene still renders, but has no active controls behind the sheet. */
 static void draw_ui(app *a,int width,int height) {
     graphic_input_guard guard=graphic_export_guard(a);
-    bool manager=a->project_manager;if(manager)a->project_manager=false;
     workspace_tip_frame_begin(a);
     workspace_draw_ui(a,width,height);
     workspace_tip_frame_end(a);
-    if(manager)a->project_manager=true;
     graphic_export_unguard(a,guard);
-    graphic_input_guard browser_guard={0};
-    if(browser_active(a))browser_guard=graphic_export_guard(a);
-    project_manager_view(a,width,height);
-    graphic_export_unguard(a,browser_guard);
     browser_view(a,a->browser,width,height,nk_rect(0,0,0,0));
 }

@@ -116,13 +116,13 @@ static void browser_test_frame(app *a,const char *mode,int *stage,int *code,cons
     case 15:ok=d->failed && !a->workspace_open && !a->document_count;BROWSER_FOCUS(1);test_window_key_mod(a->window,SDLK_RETURN,0);break;
     case 16:ok=!d->failed && d->count==7;test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
     case 17:ok=!browser_active(a) && !a->dialog_pending;open_project_manager(a,"Datei");break;
-    case 18:if(!manager_test_focus(a,7))return;test_window_key_mod(a->window,SDLK_RETURN,0);break;
-    case 19:ok=a->manager_step==1;if(!manager_test_focus(a,1))return;test_window_key_mod(a->window,SDLK_RETURN,0);break;
+    case 18:if(!manager_test_focus(a,7))return;manager_test_key(a,SDLK_RETURN,0);break;
+    case 19:ok=a->manager_step==1;if(!manager_test_focus(a,1))return;manager_test_key(a,SDLK_RETURN,0);break;
     case 20:ok=browser_active(a) && a->project_manager && d->mode==PS_DIALOG_MANAGER_PARENT && d->filter==PS_BROWSER_FOLDERS && d->count==3;
         ok &= browser_test_row(a,"runs").h>0;test_mouse(a,browser_test_row(a,"runs"),true);break;
     case 21:test_mouse(a,browser_test_row(a,"runs"),false);break;
     case 22:BROWSER_FOCUS(20);test_window_key_mod(a->window,SDLK_RETURN,0);break;
-    case 23:{char path[4096];ps_browser_child(browser_test_root,"runs",path);ok=!browser_active(a) && !a->dialog_pending && a->project_manager && a->manager_step==1 && !strcmp(a->manager_parent,path) && !strcmp(a->manager_name,browser_test_name);test_window_key_mod(a->window,SDLK_ESCAPE,0);break;}
+    case 23:{char path[4096];ps_browser_child(browser_test_root,"runs",path);ok=!browser_active(a) && !a->dialog_pending && a->project_manager && a->manager_step==1 && !strcmp(a->manager_parent,path) && !strcmp(a->manager_name,browser_test_name);manager_test_key(a,SDLK_ESCAPE,0);break;}
     case 24:ok=!a->project_manager;choose_workspace_path(a,PS_DIALOG_BROWSE);break;
     case 25:test_window_key_mod(a->window,SDLK_UP,SDL_KMOD_ALT);break;
     case 26:ok=d->count==7 && browser_test_row(a,"main.c").h>0;test_mouse(a,browser_test_row(a,"main.c"),true);break;

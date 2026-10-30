@@ -1,7 +1,7 @@
 /* The analysis workspace owns its side visibility and widths for this session.
  * Reuse the existing docking format, while preserving the other workspaces. */
 static bool analysis_visible(const app *a) {
-    return a->tab==2 && a->analysis_tab==0 && !a->project_manager;
+    return a->tab==2 && a->analysis_tab==0;
 }
 static float analysis_side_minimum(const app *a,unsigned panel) {
     return ceilf((panel==PS_DOCK_SIDEBAR?140.f:180.f)*a->preferences.ui_size/16.f);
@@ -33,7 +33,7 @@ static void analysis_context(app *a) {
 static void workspace_context(app *a) {
     /* A context or modal transition ends the pointer transaction before its
      * intermediate dimensions can be captured as that workspace's wish. */
-    if(a->dock_resize_transaction && (a->tab!=a->dock_last_tab || analysis_visible(a)!=a->analysis_layout_active || laboratory_visible(a)!=a->laboratory_active || a->project_manager ||
+    if(a->dock_resize_transaction && (a->tab!=a->dock_last_tab || analysis_visible(a)!=a->analysis_layout_active || laboratory_visible(a)!=a->laboratory_active ||
        a->recovery || a->layout_manager || a->channel_unit_manager || a->workspace_manager ||
        a->run_details_manager || a->dialog_pending))dock_resize_abort(a);
     /* Leave a context before entering its neighbour: neither may capture the

@@ -37,7 +37,7 @@ static const char *browser_kind_name(ps_browser_kind kind) {
 }
 static bool browser_active(const app *a){return a->browser && a->browser->visible;}
 static bool browser_workspace_visible(const app *a){return a->browser_workspace && a->browser_workspace->visible && a->tab==9 &&
-    !a->project_manager && !a->workspace_manager && !a->layout_manager && !a->channel_unit_manager && !a->run_details_manager && !a->recovery && !a->document_pending;}
+    !a->workspace_manager && !a->layout_manager && !a->channel_unit_manager && !a->run_details_manager && !a->recovery && !a->document_pending;}
 static bool browser_busy(const browser_dialog *d){return ps_browser_worker_read(d->worker).loading;}
 static bool browser_mutating(const browser_dialog *d){return browser_busy(d) && (d->operation==PS_BROWSER_CONFIRM || d->operation==PS_BROWSER_MAKE_DIRECTORY);}
 static bool browser_path_field(const browser_dialog *d){return d->path_edit || d->failed || (browser_busy(d) && d->operation==PS_BROWSER_READ_DIRECTORY);}
@@ -79,6 +79,9 @@ static void browser_close(app *a,browser_dialog *d,const char *path) {
     if(!d || !d->visible)return;
     char chosen[4096];if(path)snprintf(chosen,sizeof chosen,"%s",path);
     d->visible=false;d->return_frames=!path || d->mode==PS_DIALOG_MANAGER_PARENT?3:0;ps_browser_worker_cancel(d->worker);
+    if(d->mode==PS_DIALOG_MANAGER_PARENT && a->manager_window){
+        d->return_frames=0;if(SDL_GetKeyboardFocus()==a->window)SDL_RaiseWindow(a->manager_window);
+    }
     if(d->embedded){a->tab=d->return_tab;if(path)browser_complete(a,d->ticket,chosen);else ps_dialog_request_cancel(&a->dialog_requests,d->ticket);}
     else browser_complete(a,d->ticket,path?chosen:NULL);
     a->dialog_pending=ps_dialog_requests_pending(&a->dialog_requests);
@@ -87,6 +90,14 @@ static void browser_context_destroy(browser_dialog *d) {
     if(!d)return;
     ps_browser_worker_destroy(d->worker);ps_browser_listing_destroy(&d->listing);
     browser_preview_clear(d);free(d);
+}
+static void browser_cancel_project_parent(app *a) {
+    browser_dialog *d=a->browser;if(!d || !d->visible || d->mode!=PS_DIALOG_MANAGER_PARENT)return;
+    browser_close(a,d,NULL);d->return_frames=0;
+}
+static void browser_cancel_project_context(app *a) {
+    browser_dialog *d=a->browser;if(!d || !d->visible || d->mode==PS_DIALOG_MANAGER_PARENT)return;
+    browser_close(a,d,NULL);d->return_frames=0;
 }
 static void browser_destroy(app *a) {browser_context_destroy(a->browser);browser_context_destroy(a->browser_workspace);a->browser=a->browser_workspace=NULL;}
 static void browser_places(app *a,browser_dialog *d) {
@@ -122,7 +133,7 @@ static bool browser_open(app *a,int mode,ps_dialog_ticket ticket){
 }
 static void browser_select(browser_dialog *d,int index);
 static bool browser_workspace_open(app *a) {
-    if(a->dialog_pending || a->project_manager)return false;
+    if(a->dialog_pending)return false;
     browser_dialog *d=a->browser_workspace;int previous=a->tab;
     if(!d){if(!browser_context_open(a,&a->browser_workspace,PS_DIALOG_BROWSE,true))return false;d=a->browser_workspace;}
     else {d->visible=true;d->keyboard=d->reveal=d->initial=true;nk_sdl_accessibility_keyboard_begin(a->ui);

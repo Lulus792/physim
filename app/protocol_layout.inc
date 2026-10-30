@@ -1,6 +1,6 @@
 /* The common log is a presentation of PS_DOCK_LOG, not a second dock graph.
  * Context changes retain its visibility and wishes; ordinary slots stay put. */
-static bool protocol_visible(const app *a) {return a->show_log && !a->project_manager && a->tab!=6 && !a->panel_render;}
+static bool protocol_visible(const app *a) {return a->show_log && a->tab!=6 && !a->panel_render;}
 static float protocol_max_height(const app *a,float h) {
     float maximum=fminf(500,h*.55f);
     if(laboratory_visible(a)) {

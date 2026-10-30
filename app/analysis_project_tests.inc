@@ -24,14 +24,16 @@ static void analysis_project_test_frame(app *a,const char *root,const char *mode
         ok=a->data.total>2;total=a->data.total;snprintf(original,sizeof original,"%s",a->last_run);
         open_project_manager(a,"Datei");(void)root;
         strcpy(a->manager_name,"Independent analysis");a->template_analysis_language=!strcmp(mode,"analysis-project-phys");break;
-    case 4:test_mouse(a,a->project_kind_bounds,true);break;
-    case 5:test_mouse(a,a->project_kind_bounds,false);break;
-    case 6:ok=a->manager_analysis_only;test_mouse(a,a->project_create_bounds,true);break;
-    case 7:test_mouse(a,a->project_create_bounds,false);break;
-    case 8:ok=a->manager_step==1;test_mouse(a,a->project_create_bounds,true);break;
-    case 9:test_mouse(a,a->project_create_bounds,false);break;
-    case 10:ok=a->manager_step==2;*capture="analysis-only-manager.bmp";test_mouse(a,a->project_create_bounds,true);break;
-    case 11:test_mouse(a,a->project_create_bounds,false);break;
+    case 4:test_window_mouse(a->manager_window,a->project_kind_bounds,true);break;
+    case 5:test_window_mouse(a->manager_window,a->project_kind_bounds,false);break;
+    case 6:ok=a->manager_analysis_only;test_window_mouse(a->manager_window,a->project_create_bounds,true);break;
+    case 7:test_window_mouse(a->manager_window,a->project_create_bounds,false);break;
+    case 8:ok=a->manager_step==1;test_window_mouse(a->manager_window,a->project_create_bounds,true);break;
+    case 9:test_window_mouse(a->manager_window,a->project_create_bounds,false);break;
+    case 10:
+        ok=a->manager_step==2;if(!manager_test_focus(a,7))return;
+        *capture="analysis-only-manager.bmp";test_window_mouse(a->manager_window,a->project_create_bounds,true);break;
+    case 11:if(a->manager_window)test_window_mouse(a->manager_window,a->project_create_bounds,false);break;
     case 12: {
         if(a->library_thread)return;
         ok=a->loaded && a->analysis_only && !a->project_manager && !nk_str_len_char(&a->experiment.string);
