@@ -1,4 +1,10 @@
 /* Exercise real SDL keyboard input and the same menu actions as the pointer. */
+#ifndef __APPLE__
+static bool keyboard_menu_selected_action(app *a,toolbar_action action){
+    toolbar_entry entries[9];unsigned count=toolbar_entries(a,a->toolbar_menu,entries);
+    return a->toolbar_keyboard_item>=0 && (unsigned)a->toolbar_keyboard_item<count && entries[a->toolbar_keyboard_item].action==action;
+}
+#endif
 static void keyboard_menu_test_frame(app *a, const char *root, int *stage, int *code,
                                      const char **capture) {
 #ifdef __APPLE__
@@ -15,11 +21,12 @@ static void keyboard_menu_test_frame(app *a, const char *root, int *stage, int *
         MENU_KEY(SDLK_F10);break;
     case 2: ok=a->toolbar_keyboard && !a->toolbar_menu && a->toolbar_keyboard_top==0;MENU_KEY(SDLK_DOWN);break;
     case 3: ok=a->toolbar_menu==1 && a->toolbar_keyboard_item==0;MENU_KEY(SDLK_DOWN);break;
-    case 4: ok=a->toolbar_keyboard_item==3;MENU_KEY(SDLK_DOWN);break;
-    case 5: ok=a->toolbar_keyboard_item==5;MENU_KEY(SDLK_DOWN);break;
-    case 6: ok=a->toolbar_keyboard_item==0;MENU_KEY(SDLK_UP);break;
-    case 7: ok=a->toolbar_keyboard_item==5;MENU_KEY(SDLK_HOME);break;
-    case 8: ok=a->toolbar_keyboard_item==0;MENU_KEY(SDLK_RIGHT);MENU_KEY(SDLK_RIGHT);break;
+    case 4: ok=keyboard_menu_selected_action(a,TOOLBAR_NEW);MENU_KEY(SDLK_DOWN);break;
+    case 5: ok=keyboard_menu_selected_action(a,TOOLBAR_WORKSPACES);MENU_KEY(SDLK_DOWN);break;
+    case 6: ok=keyboard_menu_selected_action(a,TOOLBAR_BROWSE);MENU_KEY(SDLK_DOWN);break;
+    case 7: ok=keyboard_menu_selected_action(a,TOOLBAR_OPEN);MENU_KEY(SDLK_UP);break;
+    case 8: ok=keyboard_menu_selected_action(a,TOOLBAR_BROWSE);MENU_KEY(SDLK_HOME);*stage=80;break;
+    case 80:ok=keyboard_menu_selected_action(a,TOOLBAR_OPEN);MENU_KEY(SDLK_RIGHT);MENU_KEY(SDLK_RIGHT);*stage=9;break;
     case 9: ok=a->toolbar_menu==2 && a->toolbar_keyboard_top==1 && a->toolbar_keyboard_item==0;MENU_KEY(SDLK_DOWN);break;
     case 10: ok=a->toolbar_keyboard_item==4;MENU_KEY(SDLK_END);break;
     case 11:

@@ -147,7 +147,7 @@ static void native_keyboard_menu_test_frame(app *a,const char *root,int *stage,i
         ok=!a->project_manager && document_test_start(a,root);
         if(ok)preview_workspace_path(a,a->workspace_tree_test_path);SDL_RaiseWindow(a->window);deadline=ps_clock()+5;break;
     case 11:
-        if((a->preview_thread || !idle(a)) && ps_clock()<deadline){--*stage;return;}
+        if((a->library_thread || !idle(a)) && ps_clock()<deadline){--*stage;return;}
         if(!native_test_focus_wait(a,a->window,stage,deadline))return;
         ok=active_document(a) && a->tab==8;test_mouse(a,a->document_bounds[6],true);break;
     case 12:test_mouse(a,a->document_bounds[6],false);break;
