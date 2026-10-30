@@ -1,14 +1,23 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
-**Getrennte Entwürfe vom 30. Oktober 2026 – Fortschritt/Abbruch D06:**
-[A/B/C vergleichen](../progress-options/README.md). A platziert die Aufgabe beim
-Inhalt, B in einer kompakten Aufgabenleiste, C in einer Begleitfenster-Vorschau.
-Bekannte Zähler, unbekannter Umfang, Abbruch angefordert/bestätigt, fertige
-Teilresultate und nicht unterbrechbarer Exportabschluss sind dargestellt.
-**Nutzerwahl offen: noch keine Variante übernehmen.** Adapterfähigkeiten und
-wirkliche Abbruch-/Versionsverträge vor nativer Umsetzung abgleichen; keine
-erfundenen Prozentwerte oder Abbruchgarantien. Bisherige Freigaben und Arbeit
-erhalten. C zeigt kein echtes OS-Fenster; D07 bleibt die nächste neue Runde.
+**Verbindliche Auswahl vom 30. Oktober 2026 – Fortschritt B mit Pop-out / D06:**
+Der Nutzer hat **B · Aufgabenleiste mit Herauslösen als eigenes Fenster** gewählt.
+Die vorherige Übernahmesperre ist aufgehoben; nativ mit umsetzen, keine neue
+Variantenentscheidung. [ADR 020](../../decisions/020-selected-progress-b-popout.md),
+[genaue Spezifikation](../progress-options/APPROVED.md) und
+[festgelegte Referenz](../progress-options/index.html?approved=1&task=series)
+lesen. Kompakte B-Leiste bleibt Standard, Details aufklappbar; der ausdrücklich
+gewünschte Icon-only-Pop-out-Button öffnet ein echtes eigenes OS-Fenster nach ADR 015.
+Tooltip/zugänglicher Name statt Platz verbrauchendem Text; auch „Fenster anzeigen“
+als Icon, „Zurückholen“ bleibt beschriftet. Dieselbe Aufgabe/Versuchsnummer,
+Zähler, Details, Fehler und Abbruchanforderung; keine zweite Worker-Kopie.
+Erneuter Aufruf aktiviert das vorhandene Fenster. Zurückholen, Fenster-Schließen
+und Escape im Pop-out bringen die Anzeige in B zurück, ohne Abbruch/Neustart.
+Hauptfenster bleibt bedienbar. Bekannte/unbekannte Mengen, bestätigter Abbruch,
+Teilresultate, Erfolg-Abbruch-Rennen und ehrliche Adapterfähigkeiten erhalten.
+Browser-Pop-up ist nur Referenz, keine native Physim- oder Plattformabnahme.
+A/C bleiben Historie. Rückmeldungen A, Läufe A und alle folgenden Freigaben
+sowie laufende native Arbeit erhalten; D07 bleibt die nächste neue Runde.
 
 **Verbindliche Freigabe vom 30. Oktober 2026 – Rückmeldungen A / D05:**
 Der Nutzer hat **A · Leiser Hinweis ins fertige Design übernommen**. Die

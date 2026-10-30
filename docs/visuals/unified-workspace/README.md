@@ -1,5 +1,9 @@
 # Physim · Gemeinsame Designvorschau
 
+**Gewählter Fortschritt vom 30. Oktober:** **B · Aufgabenleiste mit Pop-out**.
+[Spezifikation](../progress-options/APPROVED.md) ·
+[ausgewählte Referenz](../progress-options/index.html?approved=1&task=series).
+
 **Freigegebene Rückmeldungen vom 30. Oktober:** **A · Leiser Hinweis** mit
 kurzen Karten, lokalen Fehlern und erreichbarem Verlauf.
 [Verbindliche Spezifikation](../feedback-options/APPROVED.md) ·

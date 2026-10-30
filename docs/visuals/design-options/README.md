@@ -1,9 +1,10 @@
 # Physim – getrennte Designvarianten
 
-**Neue getrennte Runde vom 30. Oktober 2026:**
-[Fortschritt und Abbruch A/B/C](../progress-options/index.html?variant=a&task=series).
-Auswahl offen; noch nicht ins fertige Design übernehmen. Bestehende Freigaben
-einschließlich Rückmeldungen A bleiben erhalten.
+**Weitere Auswahl vom 30. Oktober 2026:** Fortschritt ist im Design
+**B · Aufgabenleiste mit Pop-out als eigenes Fenster** gewählt.
+[Spezifikation](../progress-options/APPROVED.md) ·
+[festgelegte Referenz](../progress-options/index.html?approved=1&task=series).
+Die vorherige Übernahmesperre ist aufgehoben; A/C bleiben Historie.
 
 **Weitere Freigabe vom 30. Oktober 2026:** Hinweise und Rückmeldungen sind im
 Design **A · Leiser Hinweis** gewählt. [Spezifikation](../feedback-options/APPROVED.md) ·

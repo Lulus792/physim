@@ -1,25 +1,39 @@
-# D06: Fortschritt und Abbruch · getrennte Designvorschauen
+# D06: B · Aufgabenleiste mit Pop-out ist ausgewählt
 
-Stand: **30. Oktober 2026 · Auswahl offen.** Auf „mit dem nächsten weiter“
-folgt D06 der [UI-Liste](../unified-workspace/UI-DESIGN-BACKLOG.md). A/B/C dieser
-Runde sind noch nicht für das fertige Design ausgewählt. Alle bisherigen
-Freigaben bleiben erhalten, einschließlich Rückmeldungen A und Läufe/Serien A.
+Stand: **30. Oktober 2026 · B mit eigenem Pop-out-Fenster gewählt.** Die
+vorherige Übernahmesperre ist aufgehoben. B mit dieser Ergänzung gehört zum
+fertigen Design; nativ mit umsetzen, keine neue Variantenwahl.
+[Verbindliche Spezifikation](APPROVED.md) ·
+[ADR 020](../../decisions/020-selected-progress-b-popout.md).
+Alle bisherigen Freigaben bleiben erhalten, einschließlich Rückmeldungen A
+und Läufe/Serien A. A/C sind Vergleichshistorie.
 
-[Vorschau öffnen](index.html?variant=a&task=series&scenario=running&theme=dark) ·
-[A · Am Arbeitsort](index.html?variant=a&task=analysis) ·
-[B · Aufgabenleiste](index.html?variant=b&task=series) ·
-[C · Eigenes Fenster](index.html?variant=c&task=export).
+[Festgelegte Referenz](index.html?approved=1&task=series&scenario=running&theme=dark) ·
+[unbekannter Fortschritt](index.html?approved=1&task=analysis) ·
+[historisches A](index.html?approved=0&variant=a&task=analysis) ·
+[historisches C](index.html?approved=0&variant=c&task=export).
 Lokaler Server: `http://127.0.0.1:8791/progress-options/`.
 Auch als lokale HTML-Datei nutzbar; keine externen Fonts oder Netzwerkzugriffe.
 
-## Gestaltungsrichtungen
+## Gewähltes B und historische Alternativen
 
 | Variante | Platzierung | Verhalten |
 | --- | --- | --- |
 | **A · Am Arbeitsort** | Aufgabenkarte direkt über dem Inhalt | Bezug, Tätigkeit, Fortschritt, Phasen und Abbruch unmittelbar beim Ergebnis. |
-| **B · Aufgabenleiste** | Kompakte Zeile unten, über der Statuszeile | Aufgabenstatus bleibt sichtbar; Aufklappen zeigt dieselben Details und Aktionen. Reserviert Platz, kein blockierendes Overlay. |
+| **B · Aufgabenleiste mit Pop-out · gewählt** | Kompakte Zeile unten, über der Statuszeile | Aufklappen oder in eigenes Fenster auslagern; Status bleibt in der Leiste, Rückholen ohne neuen Versuch. |
 | **C · Eigenes Fenster** | Begleitfenster neben der Werkbank | Aufgabe getrennt ansehen, Hauptbereich weiter bedienen. Die Browserseite zeigt nur zwei Clientflächen; kein tatsächliches OS-Fenster. |
 
+Standardaufruf und `approved=1` zeigen B ohne Variantenwahl. **In eigenem
+Fenster** ist als platzsparender Icon-only-Button mit Tooltip und zugänglichem
+Namen umgesetzt (anschließender Nutzerwunsch) und öffnet ein echtes Browser-Pop-up; Darstellung als Fenster oder Tab
+hängt vom Browser/App ab. Blockade wird erklärt, Aufgabe bleibt in der Leiste.
+Im Pop-out sind dieselben Details und Aktionen synchron bedienbar; Hauptnotizen
+bleiben nutzbar. „Fenster anzeigen“ verwendet dieselbe Instanz. „Zur Leiste“,
+Fenster-Schließen oder Escape holen B aufgeklappt zurück, ohne Abbruch/Neustart.
+Bei Neuladen der Quellseite wird die reine Fixture-Verbindung getrennt und
+im Fenster ohne aktive Befehle erklärt. Dies ist kein nativer Aufgaben-Lifecycle.
+
+Nur im expliziten historischen Vergleich (`approved=0`) sind A/B/C umschaltbar.
 Alle Richtungen verwenden denselben Beispielauftrag. Wechsel erhält Zustand,
 Abbruchanforderung, Fortschritt, Versuch und Notizen. Details und Aufgabenanzeige
 dürfen ausgeblendet werden; über Status oder „Aufgabe anzeigen“ sind sie wieder
@@ -74,7 +88,8 @@ werden. Er zeigt keine alten Daten als Ergebnis des neuen Versuchs.
 
 Tastatur: Details/Aktionen per Tab, Aktivieren wie üblich, sichtbarer Fokus.
 Wird der Abbruchbutton deaktiviert, wandert der Fokus zu Details. Escape aus
-der Aufgabenanzeige blendet sie aus und fokussiert den Wiederöffnungszugang.
+der aufgeklappten Leistenanzeige blendet sie aus und fokussiert den Wiederöffnungszugang.
+Escape im Pop-out holt dagegen die Anzeige zur Leiste zurück.
 Neue Statusmeldungen holen keinen Fokus. Die Notizen sind durchgehend
 bearbeitbar; keine modale Sperre. Erfolgshinweise entsprechen D05 A, keine
 neue Rückmeldungsvariante oder zusätzliche Bestätigung.
@@ -109,9 +124,11 @@ und technische Fertigstellung bleiben unterschiedliche Vorgänge.
 
 ## Grenzen und Übergabe
 
-**A/B/C noch nicht ins fertige Design übernehmen.** Nach Nutzerwahl Variante,
-Zustände, genaue Werte aus `progress.css` und Referenzen festschreiben und in den
-[Gesamtauftrag](../unified-workspace/NEXT-CHAT.md) aufnehmen.
+**B mit Pop-out ist verbindlich gewählt.** Zustände und genaue Gestaltung nach
+[APPROVED.md](APPROVED.md) im bestehenden nativen Auftrag mit umsetzen.
+Der [Gesamtauftrag](../unified-workspace/NEXT-CHAT.md) enthält diese Auswahl.
+Die Browsernachrichten teilen lediglich den Beispielzustand; nativ echtes
+zentral besessenes Aufgabenmodell und eigenes OS-Fenster verwenden.
 
 - Native Fortschrittsmeldungen aus echten Zählern/Status ableiten; keine
   Demo-Schritte, künstlichen Verzögerungen, erfundenen Prozente oder Restzeiten.
@@ -135,8 +152,8 @@ Zustände, genaue Werte aus `progress.css` und Referenzen festschreiben und in d
   [Grafikexport](../unified-workspace/EXPORT-EXAMPLE.md) erhalten. Abschlusskarte
   nutzt dasselbe Ereignis, keine zweite unabhängige Erfolgsmeldung.
 - [ADR 015](../../decisions/015-independent-task-windows.md) und tatsächliche
-  Fenster-/Auftraggeberbindung erhalten. C wäre bei Wahl nativ ein echtes
-  zusätzliches Begleitfenster; die Browser-Clientflächen sind kein Beleg dafür.
+  Fenster-/Auftraggeberbindung erhalten. Das gewählte B mit Pop-out braucht nativ
+  ein echtes eigenes OS-Fenster; die Browserreferenz ist kein Beleg dafür.
 
 Galerie, Zustandswahl, Schritt-/Renn-/Altantwort-Prüfschalter und Notizfeld sind
 Prüfhülle. Keine echte Physik, Compiler, Worker, Projekte, Dateien oder Exporte
@@ -149,7 +166,12 @@ Diese Vorschau enthält keine neuen Kontextmenüs.
 
 ## Nachweise
 
-[Prüfbericht](review/VALIDATION.md), [Maschinenbericht](review/validation.json).
+[Historischer Entwurfsprüfbericht](review/VALIDATION.md),
+[Maschinenbericht](review/validation.json),
+[aktuelle Pop-out-/Freigabeprüfung](review/APPROVAL-VALIDATION.md).
 `node tools/check_progress_options.cjs` mit Playwright und unter Windows Edge;
 alternativ `PHYSIM_BROWSER`. Ausgaben unter `build/progress-options-review`.
-Browserprüfung ist keine native Windows-/Linux-/macOS- oder Screenreaderabnahme.
+`node tools/check_progress_popout.cjs` prüft zusätzlich echte Browser-Pop-ups
+und synchronen Zustand; standardmäßig lokale Datei, mit `PHYSIM_PREVIEW_URL`
+auch über HTTP. Browserprüfung ist keine native Windows-/Linux-/macOS- oder
+Screenreaderabnahme.

@@ -86,13 +86,21 @@
   Alle bisherigen Freigaben und native Arbeiten bleiben bestehen. Browserbelege
   sind keine native Abnahme. D06/D07 bleiben eigene offene Entwurfsrunden.
 
-## Getrennte Entwürfe: Fortschritt und Abbruch D06
+## Verbindliche Designauswahl: Fortschritt B mit Pop-out
 
-- Die [Fortschrittsvorschauen A/B/C](docs/visuals/progress-options/README.md)
-  vom 30. Oktober 2026 sind ausdrücklich getrennt und **noch nicht ausgewählt**.
-  Keine Variante als fertiges Design übernehmen, bevor der Nutzer entscheidet.
-  Alle bisherigen Freigaben, besonders Rückmeldungen A und Läufe/Serien A,
-  sowie die laufende native Arbeit erhalten. D07 bleibt die nächste neue Runde.
+- Der Nutzer hat am 30. Oktober 2026 **B · Aufgabenleiste mit der Möglichkeit
+  zum Herauslösen als eigenes Fenster** ausgewählt. Die vorherige Übernahmesperre
+  für D06 ist aufgehoben; nativ mit umsetzen, keine neue Variantenwahl.
+  A/C bleiben Vergleichshistorie.
+- [ADR 020](docs/decisions/020-selected-progress-b-popout.md),
+  [verbindliche Spezifikation](docs/visuals/progress-options/APPROVED.md) und
+  [Gesamtübergabe](docs/visuals/unified-workspace/NEXT-CHAT.md) beachten:
+  kompakte B-Leiste, aufklappbare Details, echtes eigenes OS-Pop-out. Pop-out und
+  erneutes Fensteranzeigen ausdrücklich als Icon-only mit Tooltip/zugänglichem Namen. Rückholen
+  und Fensterschließen ohne Abbruch/Neustart. Ein gemeinsamer Auftragszustand,
+  keine doppelten Worker. Hauptfenster bleibt bedienbar. Browser-Pop-up ist
+  keine native Abnahme. Bestehende Freigaben und native Arbeit erhalten;
+  D07 bleibt die nächste neue Entwurfsrunde.
 
 ## Speicherpflege
 

@@ -1,0 +1,43 @@
+{
+  "regression_before_icon": {
+    "date": "2026-10-30T13:12:08.538Z",
+    "sourceCommit": "31cb9cf0e8f2f9d68ea8194bccd6740ceca07129",
+    "platform": "win32",
+    "browser": "156.0.4314.50",
+    "layouts": 156,
+    "checks": [
+      "156 layouts: all six tasks in three directions/themes at 1440/500px; seven additional series states and noninterruptible export completion; no horizontal page/workbench overflow",
+      "Every direction: real-count semantics vs unknown progress without percentage; request/ack cancellation retains completed runs; retry resets only new attempt; stale-reply fixture leaves state; notes and task survive direction/context changes and hide/Escape; focus restored; success wins cancellation race; queued removal; export completion disables cancellation; D05-A success dismissal leaves result",
+      "200% root text at 500px including long target and details in all variants; forced colors/reduced motion cancellation flow; 2Ã— browser density"
+    ],
+    "errors": [],
+    "passed": true
+  },
+  "popout_file_before_icon": {
+    "date": "2026-10-30T13:12:07.386Z",
+    "sourceCommit": "31cb9cf0e8f2f9d68ea8194bccd6740ceca07129",
+    "browser": "156.0.4314.50",
+    "platform": "win32",
+    "checks": [
+      "Default and old A/C approved URLs lock B; real browser popup shares one attempt, details and count; main notes stay usable; repeated open reuses window; cancellation/retry/steps synchronize; explicit return, browser close and Escape restore shelf without cancel/restart",
+      "Popup in three themes and 360px/200% text; noninterruptible export, race and exactly one D05 success card; result navigation; source reload disconnects child; invalid message ignored; blocked popup keeps shelf; narrow/large-text shelf and forced colors/reduced motion cancellation"
+    ],
+    "errors": [],
+    "passed": true
+  },
+  "popout_http_final_icon": {
+    "date": "2026-10-30T13:19:41.887Z",
+    "sourceCommit": "31cb9cf0e8f2f9d68ea8194bccd6740ceca07129",
+    "browser": "156.0.4314.50",
+    "platform": "win32",
+    "checks": [
+      "Default and old A/C approved URLs lock B; real browser popup shares one attempt, details and count; main notes stay usable; repeated open reuses window; cancellation/retry/steps synchronize; explicit return, browser close and Escape restore shelf without cancel/restart",
+      "Popup in three themes and 360px/200% text; noninterruptible export, race and exactly one D05 success card; result navigation; source reload disconnects child; invalid message ignored; blocked popup keeps shelf; narrow/large-text shelf and forced colors/reduced motion cancellation"
+    ],
+    "errors": [],
+    "source": "HTTP fixture",
+    "passed": true
+  },
+  "iconAssertions": "Empty visible label, SVG, tooltip and aria-label checked for detach; empty label and SVG checked for focus-window; 360px/200% and functional flows passed",
+  "passed": true
+}
