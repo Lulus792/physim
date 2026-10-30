@@ -2,7 +2,9 @@
 
 **Nutzerwahl vom 30. Oktober 2026:** Design D mit fünf sichtbaren Zeilen,
 schmaler Scrollleiste, Variablen in Funktionsargumenten und gemeinsamen
-Syntaxfarben. **Nur der genaue Kurzinfo-Hintergrundton bleibt offen.**
+Syntaxfarben. **Abschließend samt Parameterhilfe und neutraler Kurzinfo freigegeben.**
+Die letzte Nutzerpräzisierung legt VS-Code-/VS-2022-orientierte Codefarben fest,
+insbesondere **Funktionen gelb**. Diese ersetzt die zuvor abgebildete native Palette.
 [ADR 023](../../decisions/023-selected-completion-d.md),
 [Auto-Anzeige ADR 022](../../decisions/022-automatic-completion.md) und
 [Gesamtübergabe](../unified-workspace/NEXT-CHAT.md) beachten.
@@ -107,42 +109,73 @@ Dokumentrevisionen, IME-, Fokus-, Escape- und Accessibility-Verträge einhalten.
 
 ## Ein Syntaxschema für Editor und Kurzinfo
 
-Aktive native Rollen aus [design_tokens.h](../../../app/design_tokens.h),
-`code_text`, `code_keyword`, `code_type`, `code_string`, `code_number`,
-`code_preprocessor`, `code_comment`, in **beiden** Kontexten verwenden.
-Keine unabhängigen hartcodierten Kurzinfo-Farben oder weiße Kopie der Signatur.
-Themewechsel gilt gleichzeitig für Editor und Signatur/Deklaration.
+Die letzte Nutzerpräzisierung ist verbindlich: Codefarben an VS Code und Visual
+Studio 2022 orientieren, **Funktionsnamen gelb**. Die konkrete Palette stammt aus
+den offiziellen VS-Code-Themes [Dark+](https://github.com/microsoft/vscode/blob/main/extensions/theme-defaults/themes/dark_plus.json)
+und [Light+](https://github.com/microsoft/vscode/blob/main/extensions/theme-defaults/themes/light_plus.json)
+samt [dunkler](https://github.com/microsoft/vscode/blob/main/extensions/theme-defaults/themes/dark_vs.json)
+und [heller Basis](https://github.com/microsoft/vscode/blob/main/extensions/theme-defaults/themes/light_vs.json),
+gelesen am 30. Oktober 2026. Keine Behauptung einer identischen universellen
+VS-2022-Palette: dessen Farben hängen von Theme, Sprache und Einstellungen ab.
+
+Nativ gemeinsame Rollen in [design_tokens.h](../../../app/design_tokens.h) und
+Syntaxrenderer erweitern: `code_function`, `code_variable`, `code_control`
+zusätzlich zu `code_text`, `code_keyword`, `code_type`, `code_string`,
+`code_number`, `code_preprocessor`, `code_comment`. Das ist ein verbindlicher
+**nativer Folgeauftrag**, keine bereits ausgeführte Änderung dieser Headerdatei.
+Editor, Completion-Namen und -Icons, Kandidaten-Kurzinfo und Aufrufsignatur aus
+denselben aktiven Rollen zeichnen. Keine unabhängigen Kurzinfo-Farben oder weiße
+Kopie der Signatur. Themewechsel gilt gleichzeitig für alle Codekontexte.
 
 | Rolle | Dunkle Werkbank | Helle Werkbank |
 | --- | --- | --- |
-| Schlüsselwort/Präprozessor | `#c9a6e8` | `#7844a0` |
-| Typ | `#8abaff` | `#17569e` |
-| Zeichenkette | `#b8cd8e` | `#44651e` |
-| Zahl | `#e8ba91` | `#8b4a19` |
-| Kommentar | `#969da8` | `#626b78` |
-| Übriger Code | gemeinsame Textrolle | gemeinsame Textrolle |
+| Funktion | `#dcdcaa` · sanftes Gelb | `#795e26` · lesbares Goldbraun |
+| Typ | `#4ec9b0` | `#1f6b81` |
+| Variable/Parameter | `#9cdcfe` | `#001080` |
+| Schlüsselwort/Präprozessor | `#569cd6` | `#0000ff` |
+| Kontrollfluss (`if`, `return`, …) | `#c586c0` | `#af00db` |
+| Zeichenkette | `#ce9178` | `#a31515` |
+| Zahl | `#b5cea8` | `#098658` |
+| Kommentar | `#6a9955` | `#008000` |
+| Übriger Code/Zeichen | `#d4d4d4` | `#000000` |
 
-Diese Werte bilden den gelesenen Werkbankstand ab; nativ die Rollen des aktiven
-Themes verwenden. Hoher Kontrast/Systemfarben haben Vorrang. A2 bleibt eine
+Der helle Typfarbton ist aus Light+ `#267f99` auf `#1f6b81` abgedunkelt,
+damit kleine Typtexte auch auf der aktiven Parameterfläche lesbar bleiben.
+Das ist eine eigene Kontrastanpassung für Physims bestehende Flächen.
+
+Die frühere pauschale Regel „alle `ps_`-Namen sind Typen“ ist damit **ersetzt**:
+`ps_vec3` ist türkis, `ps_vadd`/`ps_v3` sind gelb. Eigene Funktionen wie `step`
+ebenfalls als Funktion zeichnen; `velocity` und Parameter `a`/`b` sind Variablen.
+Nativ tatsächliche sprachabhängige Symbolrollen verwenden, nicht den Namenspräfix
+als Typbeweis. Der Browserhelfer nutzt echte Katalogrollen plus begrenzte
+Aufrufsyntax; er liefert keine vollständige semantische Klassifizierung.
+
+Hoher Kontrast/Systemfarben haben Vorrang; die eigene Kontrastvorschau verwendet
+für Funktionen `#ffff00`. In Forced Colors übernimmt der Systemtext. Auswahl-
+und Präfixmarkierung dürfen Funktionsnamen nicht wieder blau oder weiß umfärben;
+Präfix durch Fettschrift kenntlich machen. A2 bleibt eine
 Auswahlfläche hinter den vollfarbigen Glyphen. Die Browserstudie zeichnet
 Syntaxglyphen in einem `aria-hidden`-Spiegel über dem nativen Auswahlhintergrund;
 Text/Caret/Undo bleiben an der einzigen Textarea-Quelle. Nativ vorhandenen
 Editorrenderer und gemeinsam genutzte Syntaxregeln weiterverwenden.
 
-## Kurzinfo-Hintergrund: Feinabstimmung noch offen
+## Kurzinfo-Hintergrund: neutral freigegeben
 
-Es sind **keine drei neuen Layoutvarianten**. Nur die kleine Fläche der Kurzinfo
-lässt sich im selben D vergleichen:
+Mit „Ansonsten gefällt mir das so“ hat der Nutzer die gezeigte neutrale Referenz
+einschließlich Parameterhilfe zur Umsetzung freigegeben. Die zuvor offene
+Farbfrage ist damit abgeschlossen. Die beiden anderen Töne bleiben Historie:
 
 | Ton | Dunkel | Hell |
 | --- | --- | --- |
-| Neutral, vorläufiger Start | `#23252a` | `#f4f5f7` |
-| Etwas heller | `#2a2c31` | `#fcfcfd` |
-| Leicht kühl | `#222830` | `#eef2f6` |
+| **Neutral · freigegeben** | `#23252a` | `#f4f5f7` |
+| Etwas heller · Historie | `#2a2c31` | `#fcfcfd` |
+| Leicht kühl · Historie | `#222830` | `#eef2f6` |
 
-Auswahl im Galerie-Feld „Kurzinfo-Ton“. Kein Ton als endgültige Nutzerfreigabe
-behandeln. Syntaxrollen, Text, Verhalten, gewähltes Layout und fünf Zeilen sind
-von dieser offenen Farbfrage unabhängig. Kein neues globales Theme ableiten.
+Standard/`approved=1` erzwingt D und neutral, auch bei alten Vergleichs-URLs;
+die Farbwahl ist dort verborgen. Nur `approved=0` lässt historische Töne prüfen.
+Signaturfläche verwendet weiterhin die bestehende Feldrolle, Parameterhilfe die
+bestehende Headerrolle. Der Auftrag betrifft Codefarben und diese Referenz,
+keine Änderung der restlichen Werkbank-/A2-/Statuspalette.
 
 Automatische Anzeige, bewusste Übernahme, Escape-/IME-/Timer-/Zielregeln und
 vorhandene API-/F1-Zugänge bleiben wie in [README](README.md) und ADR 022.
@@ -150,3 +183,5 @@ vorhandene API-/F1-Zugänge bleiben wie in [README](README.md) und ADR 022.
 native Funktionen, echte Preferences, Screenreader und Plattformen separat abnehmen.
 Die ergänzte [Parameterhilfe-Prüfung](review/SIGNATURE-VALIDATION.md) hält den
 präzisierten Aufrufvertrag und die neuen Referenzbilder separat fest.
+Der [abschließende Farbnachweis](review/COLOR-VALIDATION.md) dokumentiert die
+neuere Freigabe; ältere eingefrorene Berichte bleiben historisch unverändert.

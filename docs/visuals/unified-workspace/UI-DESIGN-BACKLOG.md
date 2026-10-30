@@ -33,7 +33,7 @@ Diese Teile brauchen **keine erneute Variantenentscheidung**:
 | Fortschritt und Abbruch | **B · Aufgabenleiste mit Pop-out**, gewählt | Echte OS-Fenster mit gemeinsamem Auftragszustand, Rückholen ohne Abbruch/Neustart, native Adapter-/Endzustandsabnahme. |
 | Kontextmenüs | **A · Kompakt**, gewählt | Neun Zielarten, echte Befehlsverfügbarkeit/Zielbindung, Untermenüs, Fokus und rechte Kamerageste gemäß Spezifikation nativ umsetzen. |
 | Editor-Suche / einzelne Ersetzungen | **Vorhandene kühle Suchinsel mit aufklappbarer Ersetzung** | Bestehendes Layout und native Funktion erhalten. Verbleibende Detail-/Plattformprüfungen brauchen keine erneute Anordnungswahl. |
-| Automatische Vervollständigung | **D mit fünf sichtbaren Einträgen**, gewählt | Anzahl in Einstellungen A / Editor, schmaler Scrollbar, Variablen in Argumenten, separate Aufrufsignatur mit aktivem Parameter und gemeinsame Syntaxrollen nativ umsetzen. Nur Kurzinfo-Hintergrundton noch offen. |
+| Automatische Vervollständigung | **D mit fünf sichtbaren Einträgen**, gewählt | Anzahl in Einstellungen A / Editor, schmaler Scrollbar, Variablen in Argumenten, separate Aufrufsignatur mit aktivem Parameter und gemeinsame Syntaxrollen nativ umsetzen. Neutraler Hintergrund und VS-Code-/VS-2022-orientierte Codefarben freigegeben: Funktionen gelb. |
 | F1 / Hilfe | Bestehendes Design H und dessen Folgeverträge | Reale Inhalte, Tastatur, Screenreader und verbleibende Abweichungen weiter prüfen. |
 
 Verträge: [Bereichsauswahl](../design-options/APPROVED.md),
@@ -54,7 +54,7 @@ entschieden: [Einstellungen A · Kategorien](../settings-options/APPROVED.md).**
 **D08 war als neue Layoutrunde doppelt:** Die vorhandene Suchinsel bleibt.
 Die [ergänzende Studie](../search-options/README.md) ist nicht freigegeben und
 keine Pflichtentscheidung. **D09: [D mit Ergänzungen](../completion-typing-options/APPROVED.md) gewählt;
-nur Kurzinfo-Hintergrundton offen.** A/B/C verworfen, E/F Vergleichshistorie.
+samt neutraler Kurzinfo und gelben Funktionen abschließend freigegeben.** A/B/C verworfen, E/F Vergleichshistorie.
 Vorhandene Vervollständigung/API-Karte/F1 bleiben bestehen.
 
 | ID / Prio | Was gestalten? | Benötigte Zustände und Ergebnis |
@@ -67,7 +67,7 @@ Vorhandene Vervollständigung/API-Karte/F1 bleiben bestehen.
 | D06 · P1 | **Fortschritt/Abbruch · B mit Pop-out gewählt** | Kompakte B-Leiste mit aufklappbaren Details und eigenem Fenster für dieselbe Aufgabe; Rückholen/Schließen ohne Abbruch/Neustart. Echte Zähler/Status, Abbruchbestätigung und Teilresultate nativ umsetzen, keine neue Variantenwahl. |
 | D07 · P1 | **Kontextmenüs · A gewählt** | Kompakte Liste mit Trennlinien und Tastaturhinweisen für neun Ziele. A2, Rechtsklick/Tastatur, Mehrfachauswahl, Untermenüs, gesperrte Befehle mit Grund und Ziel-/Versionsbindung nativ umsetzen; keine neue Variantenwahl. |
 | D08 · P1 | **Editor-Suche und Ersetzen · vorhandene Suchinsel erhalten** | Grundlayout und native Einzelersetzung bestehen. Detailprüfungen für Treffer/A2, Unicode, Nur lesen und Dateibezug offen halten; keine neue Layoutwahl. Zusatzstudie nicht freigegeben. Alle ersetzen und projektweite Suche sind kein stiller Implementierungsauftrag. |
-| D09 · P2 | **Automatische Vervollständigung · D gewählt** | Fünf sichtbare Zeilen und spätere Einstellung, schmale Scrollleiste, sichtbare Variablen in Argumenten, Codefarben wie Editor. Separate Parameterhilfe wie VS Code/VS 2022: erwartete Namen/Typen/Anzahl, aktiven Parameter markieren, automatisch und Strg+Umschalt+Leertaste. Liste normal unten; zusätzliches Oben-Beispiel zurückgenommen. Nativ integrieren; genaue Kurzinfo-Fläche noch abstimmen, keine neue Grundlayoutwahl. |
+| D09 · P2 | **Automatische Vervollständigung · D gewählt** | Fünf sichtbare Zeilen und spätere Einstellung, schmale Scrollleiste, sichtbare Variablen in Argumenten, Codefarben wie Editor. Separate Parameterhilfe wie VS Code/VS 2022: erwartete Namen/Typen/Anzahl, aktiven Parameter markieren, automatisch und Strg+Umschalt+Leertaste. Liste normal unten; zusätzliches Oben-Beispiel zurückgenommen. Neutrale Kurzinfo und Codefarben mit gelben Funktionen freigegeben. Nativ integrieren; keine neue Farb-/Grundlayoutwahl. |
 | D10 · P1 | **Explorer-Inhalte und Dateitypen** | Langer Dateiname/Pfad, viele Einträge, leer, Laden, verschwunden, Rechtefehler; Text, Bild und Messlauf als verschiedene Vorschauen. Explorer-A-Grundlayout steht; API-Kontext befindet sich in laufender nativer Arbeit und darf nicht pauschal als fehlend gelten. |
 | D11 · P2 | **Kamera und räumliche Orientierung** | 2D/3D, Projektion, Standardblick, Zentrieren auf Auswahl, verdeckte/außerhalb liegende Objekte. Bestehende Kamerasteuerungen in eine klare, unaufdringliche Werkzeuggruppe einpassen; rechter Kameradrag vs. Rechtsklick-Menü ist Teil der Prüfung. |
 | D12 · P1 | **Kräfte, Beschriftungen und überlagerte Objekte** | Mehrere Pfeile, Nullvektor, kollidierende/mehrzeilige Labels, ausgeblendete Eltern und verschwundene Auswahl. Szene-A-/A2-Grundlage erhalten; Maßstäbe getrennt und Werte nur bei expliziter Kanal-/Metadatenzuordnung. Kein Newtonwert aus beliebigem Pfeil. |
@@ -120,7 +120,7 @@ und verteilte Simulation für die erste Version aus.
 **D06 ist mit B plus eigenem Pop-out-Fenster gewählt** und gehört ebenfalls in die native Umsetzung.
 **D07 · Kontextmenüs A ist gewählt** und gehört zur nativen Umsetzung.
 **D08 ist keine neue Layoutrunde:** vorhandene Suchinsel und Einzelersetzung erhalten.
-**D09 ist mit D samt Ergänzungen gewählt; nur der Kurzinfo-Hintergrundton ist offen.**
+**D09 ist mit D, Parameterhilfe, neutraler Kurzinfo und gelben Funktionen freigegeben.**
 A/B/C verworfen, E/F Historie. Keine neue Grundlayoutwahl vorschalten.
 **D10 ist der nächste Listenpunkt, vor Entwurfsstart am nativen Bestand prüfen:**
 Explorer A, Dateivorschauen und C-API-Kontext bestehen bereits. Nur tatsächlich

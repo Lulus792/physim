@@ -2,7 +2,8 @@
 
 Stand: **30. Oktober 2026 · D mit Ergänzungen gewählt.** Fünf sichtbare Einträge,
 schmale Scrollleiste, Variablen in Funktionsargumenten und dieselben Codefarben
-wie im Editor. **Nur der genaue Kurzinfo-Hintergrundton bleibt offen.**
+wie im Editor. **Abschließend mit Parameterhilfe, neutraler Kurzinfo und
+VS-Code-/VS-2022-orientierten Codefarben freigegeben: Funktionen gelb.**
 [APPROVED.md](APPROVED.md), [ADR 023](../../decisions/023-selected-completion-d.md),
 [Auto-Anzeige ADR 022](../../decisions/022-automatic-completion.md) und
 [Gesamtübergabe](../unified-workspace/NEXT-CHAT.md) beachten. E/F bleiben Historie;
@@ -26,6 +27,7 @@ keine kopierten Marken-Assets oder Behauptung identischer IDE-Funktionen.
 | Quelle | Gelesenes Muster | Eigene Ableitung |
 | --- | --- | --- |
 | [VS Code IntelliSense](https://code.visualstudio.com/docs/editing/intellisense) | Symboltypen, automatische Vorschläge, seitliche Kurzinfo, Strg+Leertaste zum Umschalten | Flache Zeilen, Rollen-/Typ-Spalte und separates Dokumentationsfenster. Kein VS-Code-Language-Service übernommen. |
+| [VS Code Dark+](https://github.com/microsoft/vscode/blob/main/extensions/theme-defaults/themes/dark_plus.json), [Light+](https://github.com/microsoft/vscode/blob/main/extensions/theme-defaults/themes/light_plus.json) samt jeweiliger Basis | Getrennte Farben für Funktionen, Typen, Variablen und Kontrollfluss | Nutzerpräzisierung: Funktionen gelb; dieselben Rollen in Editor, Vorschlägen, Kurzinfo und Aufrufsignatur. Palette und native Übergabe in APPROVED.md. |
 | [VS Code Signature Help](https://code.visualstudio.com/docs/languages/javascript#_signature-help) | Automatisch bei `(`/`,`, aktueller Parameter, Strg+Umschalt+Leertaste | Separate Signatur des bestehenden Aufrufs, bleibt nach Namensübernahme sichtbar. |
 | [Visual Studio 2022 Parameter Info](https://learn.microsoft.com/en-us/visualstudio/ide/using-intellisense?view=vs-2022#parameter-info), [C++ Parameter Help](https://learn.microsoft.com/en-us/visualstudio/ide/visual-cpp-intellisense?view=vs-2022#parameter-help) | Erwartete Anzahl, Namen und Typen; aktueller Parameter fett, Parameterinfo getrennt von Liste und Quick Info | Originalsignatur mit aktiver Parameterfläche und Zähler; keine erfundenen Überladungen. Offizielle Dokumentation gelesen, keine lokale VS-2022-Instanz getestet. |
 | [blink.cmp · Completion, v1.10.2](https://cmp.saghen.dev/configuration/completion) | Keyword-/Triggerauslöser, konfigurierbares Preselect/Auto-Insert, Spalten, getrennte verzögerte Dokumentation | Dichte monospaced Liste, `[API]` als echte Quelle; bewusste Auswahl statt automatischem Code-Preview. 140/280 ms sind eigene Physim-Entwurfswerte. |
@@ -128,11 +130,15 @@ persistentes Preferences-Backend.
 Fünf sichtbare Zeilen begrenzen die Höhe, nicht den Ergebnisbestand. Anzahl
 später in Einstellungen A / Editor; Scope-Helfer und gemeinsamer Syntaxrenderer
 der Browserstudie illustrieren die Ergänzungen. [Genaue Grenzen und Werte](APPROVED.md).
-Hintergrundton neutral/heller/kühl bleibt eine Farbprobe. Native Integration
+Neutral ist freigegeben; hellere/kühle Töne bleiben nur unter approved=0
+historisch vergleichbar. Funktionen, Typen, Variablen und Kontrollfluss gemäß
+der gemeinsamen Palette in allen Codekontexten unterscheiden; die alte native
+Palette und pauschale ps_-Typfarbe sind ersetzt. Native Integration
 und Betriebssystem-/Screenreader-/IME-Abnahme bleiben offen.
 Suchinsel, API-Karte, F1 H, A2, Kontextmenüs A und alle bisherigen Freigaben erhalten.
 Code-/Auswahllogik verwendet nur lokale Browser-Fixtures; kein Speichern,
 Kompilieren, Systemclipboard oder Local Storage.
 
 [Prüfbericht](review/VALIDATION.md) · [Maschinenbericht](review/validation.json).
-[Parameterhilfe: neuer Nachweis](review/SIGNATURE-VALIDATION.md).
+[Parameterhilfe: Nachweis](review/SIGNATURE-VALIDATION.md) ·
+[Abschließende Codefarben und Freigabe](review/COLOR-VALIDATION.md).

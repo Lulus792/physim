@@ -13,10 +13,17 @@ zugängliche Variablen und Funktionsparameter anbieten, lokale Namen priorisiere
 Scope/Revision/Rechte berücksichtigen. Kein fremder/geschlossener/nachträglicher
 Name; keine erfundenen Laufzeitwerte. Browser-C-Lexer ist nur begrenzte Studie,
 nativ tatsächliche sprachabhängige Symbol-/Scope-Daten verwenden. Code in
-Kurzinfo und Editor aus demselben aktiven Syntaxschema zeichnen. **Nur der genaue
-Kurzinfo-Hintergrundton bleibt offen**: neutral/heller/kühl im selben D testen;
-keinen Ton bereits als final freigegeben behandeln. Die offene Farbe blockiert
-die übrigen Festlegungen nicht. API-Karte, F1, Suchinsel, A2 und Auto-Anzeige erhalten.
+Kurzinfo und Editor aus demselben aktiven Syntaxschema zeichnen. **Abschließende
+Freigabe samt neutralem Kurzinfo-Hintergrund; keine offene Farbwahl mehr.**
+Die letzte Nutzerpräzisierung ersetzt die alte Palette: Codefarben an VS Code/
+Visual Studio 2022 orientieren, **Funktionen gelb** (dunkel #dcdcaa, hell #795e26).
+Gemeinsame Rollen code_function, code_variable und code_control im nativen
+Token-/Syntaxsystem ergänzen; Funktionen, Typen und Variablen tatsächlich
+unterscheiden, nicht alle ps_-Namen als Typ färben. Alle Codekontexte inklusive
+Completion-Namen/-Icons, Kurzinfo und Parameterhilfe verwenden dieselben Rollen.
+[Genaue Palette und Kontrastvertrag](../completion-typing-options/APPROVED.md#ein-syntaxschema-für-editor-und-kurzinfo),
+[aktuelle Prüfung](../completion-typing-options/review/COLOR-VALIDATION.md).
+API-Karte, F1, Suchinsel, A2 und Auto-Anzeige erhalten.
 
 **Präzisierung desselben Auftrags – erwartete Funktionsparameter:** Zusätzlich
 zur Variablen-Completion eine separate Aufrufsignatur wie in VS Code und Visual

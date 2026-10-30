@@ -1,6 +1,7 @@
 # ADR 023: Vervollständigung D mit fünf Zeilen und Variablenvorschlägen
 
-Datum: 30. Oktober 2026. Status: **D vom Nutzer gewählt; Hintergrundton offen**.
+Datum: 30. Oktober 2026. Status: **D samt Parameterhilfe, neutralem Hintergrund
+und präzisierten Codefarben abschließend freigegeben**.
 
 Der Nutzer wählt Design D mit folgenden Ergänzungen:
 
@@ -11,15 +12,15 @@ Der Nutzer wählt Design D mit folgenden Ergänzungen:
 - In Funktionsargumenten weiterhin vervollständigen, einschließlich sichtbarer
   Variablen und Funktionsparameter; keine Beschränkung auf API-Funktionsnamen.
 - Code in der Kurzinfo mit demselben aktiven Syntaxschema wie im Editor zeichnen.
-- Der genaue Hintergrundton der Kurzinfo ist ausdrücklich **noch nicht final**.
-  Die Vorschau zeigt neutral, etwas heller und leicht kühl zur Feinabstimmung.
+- Der Hintergrundton war zunächst offen. Die spätere Freigabe unten legt die
+  gezeigte neutrale Gestaltung fest; andere Töne bleiben Vergleichshistorie.
 
 Maßgeblich: [APPROVED.md](../visuals/completion-typing-options/APPROVED.md),
 [festgelegte Referenz](../visuals/completion-typing-options/index.html?approved=1&scenario=arguments),
 [Gesamtauftrag](../visuals/unified-workspace/NEXT-CHAT.md).
 Keine erneute Grundlayoutwahl D/E/F vorschalten. E/F bleiben Vergleichshistorie;
 A/B/C waren zuvor verworfen. Automatische Anzeige nach [ADR 022](022-automatic-completion.md)
-bleibt beauftragt. Die verbleibende Farbfrage blockiert die anderen Festlegungen nicht.
+bleibt beauftragt. Die abschließende Farbpräzisierung steht unten.
 
 Die Browser-Fixture ergänzt einen begrenzten C-Scope-Lexer für Beispiele.
 Native Umsetzung muss tatsächliche sprachabhängige Symbol-/Gültigkeitsbereiche,
@@ -46,3 +47,21 @@ ausdrücklich zurückgenommen: **normale Liste unten beibehalten, keine zusätzl
 Oben-Variante gestalten**. Vorhandener Platzmangel-Fallback bleibt erhalten.
 Die Browserreferenz zeigt erstes, zweites und verschachteltes Argument; genaue
 Verträge und native Grenzen stehen in APPROVED.md.
+
+## Abschließende Freigabe und Codefarben
+
+Der Nutzer bestätigt anschließend die Gestaltung für den umsetzenden Chat und
+präzisiert: Farben für Code an Visual Studio 2022 und VS Code orientieren,
+**Funktionen sind gelb**. Damit D samt Aufrufsignatur, fünf Zeilen und gezeigter
+neutraler Kurzinfo als fertige Referenz aufnehmen; keine weitere Farb-/Layoutwahl
+vorschalten. Die vorherige offene Hintergrundfrage ist erledigt.
+
+Konkrete Rollwerte aus den offiziellen VS-Code-Themes Dark+/Light+ gemäß
+APPROVED.md verwenden: Funktionen dunkel `#dcdcaa`, hell `#795e26` als
+kontrastreiche Goldbraun-Variante; Typen türkis, Variablen/Parameter hellblau,
+Schlüsselwörter blau, Kontrollfluss violett, Strings warm und Kommentare grün.
+Alle Codekontexte teilen die Rollen, einschließlich Completion-Namen und aktiver
+Parameterhilfe. Native Token-/Syntaxintegration ist Aufgabe des umsetzenden Chats.
+Die frühere Abbildung der vorhandenen Werkbankfarben und pauschale `ps_`-Typfarbe
+sind ersetzt. Systemkontrast und A2-Verhalten erhalten. Browsernachweis ist keine
+native Abnahme. [Abschließender Nachweis](../visuals/completion-typing-options/review/COLOR-VALIDATION.md).

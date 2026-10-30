@@ -158,8 +158,12 @@
   das zusätzliche Oben-Beispiel hat der Nutzer ausdrücklich zurückgenommen.
   Zugängliche Variablen/Parameter aus tatsächlichen sprachabhängigen Scopes
   anbieten; der begrenzte Browser-C-Lexer ist keine vollständige native Lösung.
-  **Der genaue Kurzinfo-Hintergrundton ist noch offen**; neutral/heller/kühl
-  sind nur Farbproben im gewählten D. Keine erneute Grundlayoutwahl vorschalten.
+  Abschließend mit neutraler Kurzinfo freigegeben; Farbfrage ist abgeschlossen.
+  Codefarben an VS Code/VS 2022 orientieren: **Funktionen gelb**, dunkel #dcdcaa,
+  hell #795e26. Gemeinsame Rollen für Funktionen, Typen, Variablen/Parameter und
+  Kontrollfluss in Editor, Liste, Kurzinfo und Aufrufsignatur nativ ergänzen.
+  Die alte pauschale ps_-Typfarbe ist ersetzt; genaue Werte in APPROVED.md.
+  Keine erneute Farb-/Grundlayoutwahl vorschalten.
   Automatische Anzeige und alle bisherigen Freigaben bleiben bestehen;
   Browserbelege bestätigen keine native oder Plattformabnahme.
 

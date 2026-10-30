@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-30T19:25:41.912Z",
+  "sourceCommit": "7e6a39457a691c2d23d3616f769a95d8b89eb077",
+  "browser": "156.0.4314.50",
+  "layouts": 54,
+  "checks": [
+    "54 layouts: approved D locked, three themes and legacy tone URLs locked to neutral, API/arguments/parameter contexts at 1440/500; five rows by default, adjustable row count, thin scrollbar; scoped variable insertion/undo and empty argument locals; identical syntax token colors in editor and docs, escaped HTML, historical tone samples accessible only outside approved reference, 360px/200% text"
+  ],
+  "errors": [],
+  "codeColors": [
+    {
+      "theme": "dark",
+      "function": "rgb(220, 220, 170)",
+      "custom": "rgb(220, 220, 170)",
+      "signature": "rgb(220, 220, 170)",
+      "type": "rgb(78, 201, 176)",
+      "variable": "rgb(156, 220, 254)",
+      "local": "rgb(156, 220, 254)",
+      "localDoc": "rgb(156, 220, 254)",
+      "param": "rgb(156, 220, 254)",
+      "minimumTextContrast": {
+        "role": "syntax-comment",
+        "ratio": 5.216339339173419
+      }
+    },
+    {
+      "theme": "light",
+      "function": "rgb(121, 94, 38)",
+      "custom": "rgb(121, 94, 38)",
+      "signature": "rgb(121, 94, 38)",
+      "type": "rgb(31, 107, 129)",
+      "variable": "rgb(0, 16, 128)",
+      "local": "rgb(0, 16, 128)",
+      "localDoc": "rgb(0, 16, 128)",
+      "param": "rgb(0, 16, 128)",
+      "minimumTextContrast": {
+        "role": "syntax-type",
+        "ratio": 4.583787057333442
+      }
+    },
+    {
+      "theme": "contrast",
+      "function": "rgb(255, 255, 0)",
+      "custom": "rgb(255, 255, 0)",
+      "signature": "rgb(255, 255, 0)",
+      "type": "rgb(255, 244, 79)",
+      "variable": "rgb(156, 220, 254)",
+      "local": "rgb(156, 220, 254)",
+      "localDoc": "rgb(156, 220, 254)",
+      "param": "rgb(156, 220, 254)",
+      "minimumTextContrast": {
+        "role": "syntax-variable",
+        "ratio": 10.31884413508142
+      }
+    }
+  ],
+  "passed": true
+}
