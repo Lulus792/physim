@@ -7200,6 +7200,21 @@
       ]
     },
     {
+      "name": "explorer_a_layout",
+      "app": true,
+      "display": true,
+      "platforms": ["win32", "linux"],
+      "targets": ["python", "physim"],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": ["{root}/tests/check_explorer_layout.py", "--app", "{physim}", "--root", "{root}", "--work", "{work}"],
+          "timeout": 600,
+          "files": ["verification.json"]
+        }
+      ]
+    },
+    {
       "name": "project_wizard",
       "app": true,
       "display": true,

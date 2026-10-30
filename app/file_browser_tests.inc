@@ -67,11 +67,13 @@ static bool browser_clipboard_text_equal(const char *source,const char *copy) {
     return !strcmp(source,copy);
 #endif
 }
+#include "file_browser_layout_tests.inc"
 #include "file_browser_inline_tests.inc"
 #include "file_browser_api_tests.inc"
 #include "file_browser_replies_tests.inc"
 #include "file_browser_window_tests.inc"
 static void browser_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(strstr(mode,"layout")){browser_layout_test_frame(a,mode,stage,code);return;}
     if(strstr(mode,"windows")){browser_window_test_frame(a,mode,stage,code);return;}
     if(strstr(mode,"replies")){browser_replies_test_frame(a,stage,code);return;}
     if(strstr(mode,"api-context")){browser_api_test_frame(a,mode,stage,code,capture);return;}

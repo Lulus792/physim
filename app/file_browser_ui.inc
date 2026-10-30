@@ -15,13 +15,14 @@ typedef struct browser_dialog {
     char history[32][4096],places[3][4096],place_names[3][256],opener[96],return_label[128];
     unsigned history_count,return_frames,grid_columns;ps_browser_sort sort;
     size_t filtered[PS_BROWSER_ENTRY_LIMIT],count;float tops[PS_BROWSER_ENTRY_LIMIT+1],cache_width,cache_scale,content_height;
-    struct nk_user_font fonts[12];struct nk_rect bounds,list_bounds,preview_bounds,controls[32],selected_bounds;
+    struct nk_user_font fonts[13];struct nk_rect bounds,list_bounds,preview_bounds,controls[32],selected_bounds;
     struct {int index;struct nk_rect bounds;} rows[64];unsigned row_count;
     struct nk_text_edit edits[5]; /* Location, search, new name, source, API signature. */
     browser_preview_layout text_layouts[2];unsigned text_layout_next;
     browser_preview_layout api_layouts[2];unsigned api_layout_next;
     browser_api_table_layout api_tables[2];unsigned api_table_next;
     struct nk_rect preview_text_bounds,place_ink[3];size_t place_bytes[3];float preview_text_height;char empty_preview[2];
+    void (*draw_probe)(struct browser_dialog *); /* Optional native command observation in layout fixtures. */
 } browser_dialog;
 static void browser_preview_clear(browser_dialog *d) {
     d->edits[3].visual=NULL;
@@ -372,6 +373,20 @@ static float browser_text(app *a,browser_dialog *d,float x,float y,float w,const
         nk_draw_text(nk_window_get_canvas(d->ui),nk_rect(r.x,top,w,font->height),text+at,used,font,nk_rgba(0,0,0,0),color);at+=used;top+=pitch;}
     return h;
 }
+static void browser_centered_text(browser_dialog *d,float x,float y,float width,const char *text,unsigned role,float pitch,struct nk_color color) {
+    const struct nk_user_font *font=&d->fonts[role];size_t at=0,n=strlen(text);
+    struct nk_rect r=browser_slot(d,x,y,width,browser_text_height(d,text,role,width,pitch));
+    while(at<n){int used=ps_ui_text_line(font,text+at,(int)(n-at),fmaxf(1,width),false);if(used<=0)used=1;
+        float advance=font->width(font->userdata,font->height,text+at,used);
+        nk_draw_text(nk_window_get_canvas(d->ui),nk_rect(r.x+(width-advance)/2,r.y+(pitch-font->height)/2,advance,font->height),text+at,used,font,nk_rgba(0,0,0,0),color);
+        at+=used;r.y+=pitch;
+    }
+}
+static float browser_grid_padding(const browser_dialog *d,float f){return (d->compact?8:12)*f;}
+static float browser_grid_gap(const browser_dialog *d,float f){return (d->compact?6:9)*f;}
+static float browser_grid_width(const browser_dialog *d,float width,float f){return (width-2*browser_grid_padding(d,f)-(d->grid_columns-1)*browser_grid_gap(d,f))/d->grid_columns;}
+static float browser_list_start(const browser_dialog *d,float f){return (d->count && !d->compact?32.756f*f:0)+(d->grid?browser_grid_padding(d,f):0);}
+static float browser_list_extent(const browser_dialog *d,float f){return browser_list_start(d,f)+d->tops[d->count]+(d->grid?browser_grid_padding(d,f)-(d->count?browser_grid_gap(d,f):0):0);}
 static void browser_focus_draw(app *a,browser_dialog *d,int id,struct nk_rect r,const char *name) {
     if(id<32)d->controls[id]=r;
     bool native=nk_sdl_accessibility_is_focus_target(d->ui,NULL,name);
@@ -404,14 +419,14 @@ static void browser_icon(struct nk_command_buffer *canvas,int icon,struct nk_rec
 static bool browser_button(app *a,browser_dialog *d,int id,float x,float y,float w,float h,const char *label,int icon,bool enabled,bool primary,bool selected,bool border) {
     struct nk_context *ui=d->ui;float f=a->preferences.ui_size/16.f;
     struct nk_rect r=browser_slot(d,x,y,w,h);bool hover=enabled && nk_input_is_mouse_hovering_rect(&ui->input,r);
-    struct nk_color color=primary?UI_COLOR(primary_text):UI_COLOR(text);
+    struct nk_color color=primary?UI_COLOR(primary_text):id==15?UI_COLOR(muted):UI_COLOR(text);
     struct nk_color fill=primary?UI_COLOR(primary):selected?UI_COLOR(selection_active):hover?UI_COLOR(button_hover):border?UI_COLOR(surface):nk_rgba(0,0,0,0),edge=primary?UI_COLOR(primary):UI_COLOR(border);
     if(!enabled){fill.a=(nk_byte)(fill.a*.45f);edge.a=(nk_byte)(edge.a*.45f);color.a=(nk_byte)(color.a*.45f);}
     nk_fill_rect(nk_window_get_canvas(ui),r,7*f,fill);
     bool place=id>=8 && id<=10;float place_padding=(d->compact?6.6f:10.8f)*f;
     if(border || primary || (place && selected))nk_stroke_rect(nk_window_get_canvas(ui),r,7*f,f,edge);
     if(icon!=-99)browser_icon(nk_window_get_canvas(ui),icon,nk_rect(r.x+(label&&*label?(place?place_padding:10*f):(r.w-18*f)/2),r.y+(h-18*f)/2,18*f,18*f),color);
-    if(label && *label){unsigned place_role=d->compact?4:3;const struct nk_user_font *font=&d->fonts[id==19 || (id==20 && !d->embedded)?7:id>=8 && id<=10?place_role:2];float tw=font->width(font->userdata,font->height,label,(int)strlen(label));
+    if(label && *label){unsigned place_role=d->compact?4:3;const struct nk_user_font *font=&d->fonts[id==19 || (id==20 && !d->embedded)?7:id==15?12:id>=8 && id<=10?place_role:2];float tw=font->width(font->userdata,font->height,label,(int)strlen(label));
         if(place){float inset=(d->compact?28.6f:37.8f)*f,width=fmaxf(1,r.w-inset-place_padding),pitch=(d->compact?14.756f:17.36f)*f,th=browser_text_height(d,label,place_role,width,pitch),top=r.y+(r.h-th)/2;
             size_t at=0,n=strlen(label);struct nk_rect ink=nk_rect(r.x+inset,top+(pitch-font->height)/2,0,th-pitch+font->height);
             while(at<n){int used=ps_ui_text_line(font,label+at,(int)(n-at),width,false);if(used<=0)used=1;
@@ -442,15 +457,16 @@ static void browser_rebuild(browser_dialog *d,float width,float f) {
     d->tops[0]=0;
     if(!d->grid)for(size_t k=0;k<d->count;k++) {
         const char *name=ps_browser_entry_name(&d->listing.entries[d->filtered[k]]);
-        float text_width=width-(d->compact?64:245)*f;
+        float text_width=width-(d->compact?51:229)*f;
         float text_h=browser_text_height(d,name,3,fmaxf(30*f,text_width),17.92f*f);
-        d->tops[k+1]=d->tops[k]+text_h+(d->compact?15.232f+22:26)*f;
+        d->tops[k+1]=d->tops[k]+fmaxf(18*f,text_h)+(d->compact?9+14.756f+26:26)*f;
     }
     if(d->grid){float y=0;for(size_t k=0;k<d->count;k+=d->grid_columns){float h=0;size_t end=k+d->grid_columns;if(end>d->count)end=d->count;
-        /* Each grid row accommodates its tallest filename. */
+        /* CSS flex column: border, padding, icon + margin, two gaps, name,
+         * kind, and the inherited 2px bottom margin outside the card. */
         h=150*f;for(size_t j=k;j<end;j++)h=fmaxf(h,browser_text_height(d,ps_browser_entry_name(&d->listing.entries[d->filtered[j]]),3,
-            fmaxf(30*f,(width-24*f-(d->grid_columns-1)*9*f)/d->grid_columns-24*f),17.92f*f)+85*f);
-        for(size_t j=k;j<end;j++)d->tops[j]=y;y+=h+9*f;d->tops[end]=y;
+            fmaxf(1,browser_grid_width(d,width,f)-(d->compact?20:26)*f),17.92f*f)+(2+2*(d->compact?15:20)+35+8+18+14.756f)*f);
+        for(size_t j=k;j<end;j++)d->tops[j]=y;y+=h+2*f+browser_grid_gap(d,f);d->tops[end]=y;
     }}
     d->cache_dirty=false;d->cache_width=width;d->cache_scale=f;
 }
@@ -492,7 +508,7 @@ static void browser_list(app *a,browser_dialog *d,float x,float y,float width,fl
     d->list_bounds=browser_slot(d,x,y,width,height);if(d->list_reset){nk_group_set_scroll(ui,"Explorer Dateiliste",0,0);d->list_reset=false;}
     nk_flags flags=NK_WINDOW_NO_SCROLLBAR;
     if(!d->failed && !(browser_busy(d) && d->operation==PS_BROWSER_READ_DIRECTORY)) {
-        browser_rebuild(d,width,f);float content=(d->grid?12:d->compact?0:33.232f)*f+d->tops[d->count]+12*f;
+        browser_rebuild(d,width,f);float content=browser_list_extent(d,f);
         if(content>height){flags=0;browser_rebuild(d,width-ui->style.window.scrollbar_size.x,f);}
     }
     nk_layout_space_push(ui,nk_rect(x,y,width,height));
@@ -503,7 +519,7 @@ static void browser_list(app *a,browser_dialog *d,float x,float y,float width,fl
         } else {
             browser_rebuild(d,width,f);if(d->keyboard && d->focus==11 && d->selected<0 && d->count)browser_select(d,(int)d->filtered[0]);
             nk_uint sx=0,sy=0;nk_group_get_scroll(ui,"Explorer Dateiliste",&sx,&sy);
-            float header=(d->grid?12:d->compact?0:33.232f)*f,content=header+d->tops[d->count]+12*f;
+            float header=browser_list_start(d,f),content=browser_list_extent(d,f);
             if(d->keyboard && d->focus==11 && d->reveal && d->selected>=0)for(size_t k=0;k<d->count;k++)if((int)d->filtered[k]==d->selected) {
                 size_t end=d->grid?k-k%d->grid_columns+d->grid_columns:k+1;if(end>d->count)end=d->count;
                 float top=header+d->tops[k],bottom=header+d->tops[end];
@@ -511,32 +527,35 @@ static void browser_list(app *a,browser_dialog *d,float x,float y,float width,fl
                 nk_group_set_scroll(ui,"Explorer Dateiliste",0,sy);break;
             }
             nk_layout_space_begin(ui,NK_STATIC,fmaxf(content,height-4*f),(int)(d->count*5+4));
-            if(!d->grid && !d->compact){browser_text(a,d,18*f,9*f,width-200*f,"Name",4,15.232f*f,UI_COLOR(muted),true);
-                browser_text(a,d,width-173*f,9*f,86*f,"Art",4,15.232f*f,UI_COLOR(muted),true);browser_text(a,d,width-74*f,9*f,65*f,"Größe",4,15.232f*f,UI_COLOR(muted),true);}
+            if(d->count && !d->compact){browser_text(a,d,10*f,9*f,width-175*f,"Name",4,14.756f*f,UI_COLOR(muted),true);
+                browser_text(a,d,width-165*f,9*f,90*f,"Art",4,14.756f*f,UI_COLOR(muted),true);browser_text(a,d,width-75*f,9*f,65*f,"Größe",4,14.756f*f,UI_COLOR(muted),true);}
             if(!d->count)browser_text(a,d,18*f,header+20*f,width-36*f,*d->query?"Keine passenden Einträge":"Dieser Ordner ist leer.",3,17.92f*f,UI_COLOR(muted),true);
             for(size_t k=0;k<d->count;k++) {
                 size_t end=d->grid?k-k%d->grid_columns+d->grid_columns:k+1;if(end>d->count)end=d->count;
                 float top=header+d->tops[k],bottom=header+d->tops[end];if(bottom<sy || top>sy+height)continue;
                 ps_browser_entry *entry=&d->listing.entries[d->filtered[k]];bool selected=d->selected==(int)d->filtered[k];
-                float rw=d->grid?(width-24*f-(d->grid_columns-1)*9*f)/d->grid_columns:width-16*f;
-                float rx=d->grid?12*f+(k%d->grid_columns)*(rw+9*f):8*f,rh=bottom-top-(d->grid?9:2)*f;
+                float rw=d->grid?browser_grid_width(d,width,f):width;
+                float rx=d->grid?browser_grid_padding(d,f)+(k%d->grid_columns)*(rw+browser_grid_gap(d,f)):0,rh=bottom-top-2*f-(d->grid?browser_grid_gap(d,f):0);
                 struct nk_rect r=browser_slot(d,rx,top,rw,rh);struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
                 if(d->row_count<64){d->rows[d->row_count].index=(int)d->filtered[k];d->rows[d->row_count++].bounds=r;}
                 bool hover=nk_input_is_mouse_hovering_rect(&ui->input,r);
                 nk_fill_rect(canvas,r,6*f,selected?UI_COLOR(selection_active):hover?UI_COLOR(button_hover):d->grid?UI_COLOR(edit):nk_rgba(0,0,0,0));
                 if(selected || d->grid)nk_stroke_rect(canvas,r,6*f,f,selected?UI_COLOR(accent):UI_COLOR(border));
                 int icon=entry->kind==PS_BROWSER_DIRECTORY?PS_ICON_FOLDER:entry->kind==PS_BROWSER_RUN?PS_ICON_CHART:entry->kind==PS_BROWSER_C_SOURCE || entry->kind==PS_BROWSER_PHYS_SOURCE?-5:PS_ICON_FILE;
-                float iw=(d->grid?35:18)*f;browser_icon(canvas,icon,nk_rect(r.x+(d->grid?(rw-iw)/2:11*f),r.y+(d->grid?20*f:(rh-iw)/2),iw,iw),UI_COLOR(accent));
                 char size[64];browser_size(size,entry);const char *name=ps_browser_entry_name(entry);
-                if(d->grid){browser_text(a,d,rx+12*f,top+64*f,rw-24*f,name,3,17.92f*f,UI_COLOR(text),false);
-                    browser_text(a,d,rx+12*f,bottom-30*f,rw-24*f,browser_kind_name(entry->kind),4,15.232f*f,UI_COLOR(muted),false);}
-                else if(d->compact){float tw=fmaxf(1,rw-48*f),th=browser_text_height(d,name,3,tw,17.92f*f);
-                    browser_text(a,d,rx+39*f,top+10*f,tw,name,3,17.92f*f,UI_COLOR(text),false);
-                    browser_text(a,d,rx+39*f,top+10*f+th,tw,browser_kind_name(entry->kind),4,15.232f*f,UI_COLOR(muted),false);}
+                float iw=(d->grid?35:18)*f,tw=fmaxf(1,rw-(d->grid?(d->compact?20:26):d->compact?51:229)*f);
+                float th=browser_text_height(d,name,3,tw,17.92f*f),first=fmaxf(18*f,th);
+                float icon_y=d->grid?(d->compact?16:21)*f:d->compact?12*f+(first-iw)/2:(rh-iw)/2;
+                browser_icon(canvas,icon,nk_rect(r.x+(d->grid?(rw-iw)/2:(d->compact?10:11)*f),r.y+icon_y,iw,iw),UI_COLOR(accent));
+                if(d->grid){float inset=(d->compact?10:13)*f,name_y=top+icon_y+iw+17*f;
+                    browser_centered_text(d,rx+inset,name_y,tw,name,3,17.92f*f,UI_COLOR(text));
+                    browser_centered_text(d,rx+inset,name_y+th+9*f,tw,browser_kind_name(entry->kind),4,14.756f*f,UI_COLOR(muted));}
+                else if(d->compact){browser_text(a,d,rx+41*f,top+12*f+(first-th)/2,tw,name,3,17.92f*f,UI_COLOR(text),false);
+                    browser_text(a,d,rx+41*f,top+12*f+first+9*f,tw,browser_kind_name(entry->kind),4,14.756f*f,UI_COLOR(muted),false);}
                 else {float tw=rw-229*f,th=browser_text_height(d,name,3,fmaxf(30*f,tw),17.92f*f);
                     browser_text(a,d,rx+45*f,top+(rh-th)/2,fmaxf(30*f,tw),name,3,17.92f*f,UI_COLOR(text),false);
-                    browser_text(a,d,rx+rw-175*f,top+(rh-15.232f*f)/2,90*f,browser_kind_name(entry->kind),4,15.232f*f,UI_COLOR(muted),false);
-                    browser_text(a,d,rx+rw-76*f,top+(rh-15.232f*f)/2,65*f,size,4,15.232f*f,UI_COLOR(muted),false);}
+                    browser_text(a,d,rx+rw-175*f,top+(rh-14.756f*f)/2,90*f,browser_kind_name(entry->kind),4,14.756f*f,UI_COLOR(muted),false);
+                    browser_text(a,d,rx+rw-76*f,top+(rh-14.756f*f)/2,65*f,size,4,14.756f*f,UI_COLOR(muted),false);}
                 bool native=false;nk_begin_disabled(ui,browser_mutating(d));
                 if(ps_ui_option_at_custom_focus(ui,r,"Dateien",name,selected,&native))browser_select(d,(int)d->filtered[k]);nk_end_disabled(ui);
                 if(native && !d->keyboard){d->focus=11;d->focused_row=(int)d->filtered[k];}
@@ -587,7 +606,8 @@ static float browser_preview_content(app *a,browser_dialog *d,float width,float 
     float y=(entry?54.7f:73)*f+browser_text_height(d,name,5,width,22.785f*f)+12*f;
     if(entry){char size[64];browser_size(size,entry);
         const char *values[]={browser_kind_name(entry->kind),size,d->listing.directory,entry->error==PS_OK?"Verfügbar bei der Auflistung":"Nicht lesbar"};
-        for(unsigned k=0;k<4;k++)y+=(15.232f+2+10)*f+browser_text_height(d,values[k],2,width,16.8f*f);
+        const char *labels[]={"Typ","Größe","Ort","Status"};
+        for(unsigned k=0;k<4;k++)y+=browser_text_height(d,labels[k],3,width,17.36f*f)+(2+10)*f+browser_text_height(d,values[k],3,width,17.36f*f);
         *action_y=y+(entry->kind==PS_BROWSER_DIRECTORY?0:8*f);
         if(entry->kind==PS_BROWSER_DIRECTORY)y+=32*f;
         else if(d->preview.text)y+=8*f+browser_preview_extent(a,d,width,f)+(d->preview.truncated?21.232f*f:0);
@@ -643,8 +663,8 @@ static void browser_preview(app *a,browser_dialog *d,float x,float y,float width
             char size[64];browser_size(size,entry);
             const char *labels[]={"Typ","Größe","Ort","Status"};
             const char *values[]={browser_kind_name(entry->kind),size,d->listing.directory,entry->error==PS_OK?"Verfügbar bei der Auflistung":"Nicht lesbar"};
-            for(unsigned k=0;k<4;k++){top+=browser_text(a,d,18*f,top,w,labels[k],4,15.232f*f,UI_COLOR(muted),true)+2*f;
-                top+=browser_text(a,d,18*f,top,w,values[k],2,16.8f*f,UI_COLOR(text),true)+10*f;}
+            for(unsigned k=0;k<4;k++){top+=browser_text(a,d,18*f,top,w,labels[k],3,17.36f*f,UI_COLOR(muted),true)+2*f;
+                top+=browser_text(a,d,18*f,top,w,values[k],3,17.36f*f,UI_COLOR(text),true)+10*f;}
             if(entry->kind==PS_BROWSER_DIRECTORY){float action_width=fminf(w,d->fonts[2].width(d->fonts[2].userdata,d->fonts[2].height,"Ordner öffnen",(int)strlen("Ordner öffnen"))+24.4f*f);
                 if(browser_button(a,d,13,18*f,top,action_width,32*f,"Ordner öffnen",-99,!browser_mutating(d),false,false,true))browser_action(a,d,13);}
             else if(d->preview.text && !strcmp(d->preview.path,entry->path)) {
@@ -687,9 +707,9 @@ static void browser_view(app *a,browser_dialog *d,int width,int height,struct nk
         palette.accent=light?nk_rgb(32,92,170):nk_rgb(154,195,255);palette.selection_active=palette.button_hover=light?nk_rgb(220,233,250):nk_rgb(41,62,91);
         palette.primary=light?nk_rgb(32,93,172):nk_rgb(35,102,196);palette.primary_text=nk_rgb(255,255,255);}
     ui_palette=&palette;style(ui);
-    const float sizes[]={9.8f,24.5f,10.5f,11.2f,9.52f,14.7f,10.5f,11.9f,10.08f,10.08f,11.9f,10.92f};
+    const float sizes[]={9.8f,24.5f,10.5f,11.2f,9.52f,14.7f,10.5f,11.9f,10.08f,10.08f,11.9f,10.92f,10.22f};
     float previous_height=d->fonts[2].height;
-    for(unsigned k=0;k<12;k++){bool strong=k==1 || k==5 || k==10,code=k==6 || k==8;d->fonts[k]=*(code?a->font_code:strong?a->font_title:a->font_ui);d->fonts[k].height=sizes[k]*(code?a->workbench_code_em:strong?a->workbench_bold_em:a->workbench_regular_em)*f;}
+    for(unsigned k=0;k<13;k++){bool strong=k==1 || k==5 || k==10,code=k==6 || k==8;d->fonts[k]=*(code?a->font_code:strong?a->font_title:a->font_ui);d->fonts[k].height=sizes[k]*(code?a->workbench_code_em:strong?a->workbench_bold_em:a->workbench_regular_em)*f;}
     if(previous_height && previous_height!=d->fonts[2].height && d->keyboard)d->reveal=true;
     if(compact)d->fonts[1].height=19.6f*a->workbench_bold_em*f;
     nk_style_set_font(ui,&d->fonts[2]);ui->style.window.padding=ui->style.window.spacing=ui->style.window.group_padding=nk_vec2(0,0);ui->style.window.group_border=0;
@@ -721,12 +741,12 @@ static void browser_view(app *a,browser_dialog *d,int width,int height,struct nk
         footer_actions_wrap=w<362*f;if(footer_actions_wrap)footer+=40*f;
         form_buttons_wrap=w<290*f;if(d->create)form=(compact?(form_buttons_wrap?138:98):64)*f;
         if(d->embedded){char text[5120];snprintf(text,sizeof text,"%zu Einträge%s · %s%s%s",d->count,d->listing.omitted?" · begrenzt":"",d->location,*d->message?" · ":"",d->message);
-            float text_height=browser_text_height(d,text,4,footer_wrap?w-32*f:w*.39f,15.232f*f);
+            float text_height=browser_text_height(d,text,12,footer_wrap?w-32*f:w*.39f,15.841f*f);
             footer=fmaxf(footer,text_height+(footer_wrap?72:34)*f);if(footer_wrap)footer_controls=text_height+35*f;}
         const char *location=*d->message?d->message:d->path_dirty?"Ort mit Enter öffnen · Escape verwirft die Eingabe":d->selected>=0?d->listing.entries[d->selected].path:d->location;
-        dialog_footer=d->embedded?0:fmaxf(72*f,browser_text_height(d,location,4,fmaxf(50*f,w-cancel_w-confirm_w-73*f),15.232f*f)+32*f);
+        dialog_footer=d->embedded?0:fmaxf(72*f,browser_text_height(d,location,2,fmaxf(50*f,w-cancel_w-confirm_w-73*f),16.275f*f)+32*f);
         dialog_buttons_wrap=w<cancel_w+confirm_w+44*f;
-        if(compact && !d->embedded){dialog_controls=15*f+browser_text_height(d,location,4,w-36*f,15.232f*f)+10*f;
+        if(compact && !d->embedded){dialog_controls=15*f+browser_text_height(d,location,2,w-36*f,16.275f*f)+10*f;
             dialog_footer=dialog_controls+(dialog_buttons_wrap?77.77f:33.885f)*f+15*f;}
         total=header+tools+places_h+body*(narrow?2:1)+form+footer+dialog_footer;
         if(!pass && total+2>available)w-=ui->style.window.scrollbar_size.x;else break;
@@ -786,15 +806,21 @@ static void browser_view(app *a,browser_dialog *d,int width,int height,struct nk
             if(browser_button(a,d,18,form_buttons_wrap?16*f:compact?136*f:w-138*f,fy+(form_buttons_wrap?98:compact?56:14)*f,form_buttons_wrap?w-32*f:122*f,34*f,"Abbrechen",-99,!browser_mutating(d),false,false,true))browser_action(a,d,18);fy+=form;}
         struct nk_rect footer_r=browser_slot(d,0,fy,w,footer);nk_stroke_line(canvas,footer_r.x,footer_r.y,footer_r.x+w,footer_r.y,f,UI_COLOR(border));
         char count[128];snprintf(count,sizeof count,"%zu Einträge%s",d->count,d->listing.omitted?" · begrenzt":"");
-        if(d->embedded){char footer_text[5120];snprintf(footer_text,sizeof footer_text,"%s · %s%s%s",count,d->location,*d->message?" · ":"",d->message);browser_text(a,d,16*f,fy+17*f,footer_wrap?w-32*f:w*.39f,footer_text,4,15.232f*f,*d->message?UI_COLOR(error):UI_COLOR(muted),true);}
-        else browser_text(a,d,16*f,fy+17*f,w*.36f,count,4,15.232f*f,UI_COLOR(muted),true);
+        if(d->embedded){char footer_text[5120];snprintf(footer_text,sizeof footer_text,"%s · %s%s%s",count,d->location,*d->message?" · ":"",d->message);browser_text(a,d,16*f,fy+17*f,footer_wrap?w-32*f:w*.39f,footer_text,12,15.841f*f,*d->message?UI_COLOR(error):UI_COLOR(muted),true);}
+        else browser_text(a,d,16*f,fy+17*f,w*.36f,count,12,15.841f*f,UI_COLOR(muted),true);
         nk_layout_space_push(ui,nk_rect(footer_wrap?16*f:w*.42f,fy+footer_controls,200*f,30*f));nk_bool hidden=d->hidden;struct nk_rect toggle=nk_widget_bounds(ui);
+        nk_style_push_font(ui,&d->fonts[12]);
+        nk_style_push_color(ui,&ui->style.checkbox.text_normal,UI_COLOR(muted));
+        nk_style_push_color(ui,&ui->style.checkbox.text_hover,UI_COLOR(muted));
+        nk_style_push_color(ui,&ui->style.checkbox.text_active,UI_COLOR(muted));
         if(ps_ui_checkbox_named(ui,"Versteckte Einträge","Versteckte Einträge",&hidden)){d->hidden=hidden;d->cache_dirty=true;}
+        nk_style_pop_color(ui);nk_style_pop_color(ui);nk_style_pop_color(ui);
+        nk_style_pop_font(ui);
         browser_focus_draw(a,d,14,toggle,"Versteckte Einträge");
         if(browser_button(a,d,15,footer_actions_wrap?16*f:w-130*f,fy+footer_controls+(footer_actions_wrap?40*f:0),114*f,32*f,"Neuer Ordner",-99,!d->failed && !browser_busy(d),false,false,true))browser_action(a,d,15);
         fy+=footer;if(!d->embedded){struct nk_rect end=browser_slot(d,0,fy,w,dialog_footer);nk_stroke_line(canvas,end.x,end.y,end.x+w,end.y,f,UI_COLOR(border));
         const char *location=*d->message?d->message:d->path_dirty?"Ort mit Enter öffnen · Escape verwirft die Eingabe":d->selected>=0?d->listing.entries[d->selected].path:d->location;
-        browser_text(a,d,(compact?18:24)*f,fy+(compact?15:16)*f,compact?w-36*f:fmaxf(50*f,w-cancel_w-confirm_w-73*f),location,4,15.232f*f,*d->message?UI_COLOR(error):UI_COLOR(muted),true);
+        browser_text(a,d,(compact?18:24)*f,fy+(compact?15:16)*f,compact?w-36*f:fmaxf(50*f,w-cancel_w-confirm_w-73*f),location,2,16.275f*f,*d->message?UI_COLOR(error):UI_COLOR(muted),true);
         if(browser_button(a,d,19,dialog_buttons_wrap?18*f:w-(compact?18:24)*f-confirm_w-8*f-cancel_w,fy+dialog_controls,dialog_buttons_wrap?w-36*f:cancel_w,33.885f*f,"Abbrechen",-99,true,false,false,true))browser_action(a,d,19);
         bool confirm=!d->failed && !d->path_dirty && !browser_mutating(d) && !(browser_busy(d) && d->operation==PS_BROWSER_READ_DIRECTORY) && (d->filter==PS_BROWSER_FOLDERS || d->selected>=0);
         if(browser_button(a,d,20,dialog_buttons_wrap?18*f:w-(compact?18:24)*f-confirm_w,fy+dialog_controls+(dialog_buttons_wrap?43.885f*f:0),dialog_buttons_wrap?w-36*f:confirm_w,33.885f*f,confirm_label,-99,confirm,true,false,true))browser_action(a,d,20);}
@@ -806,7 +832,8 @@ static void browser_view(app *a,browser_dialog *d,int width,int height,struct nk
             nk_uint sx,sy;nk_window_get_scroll(ui,&sx,&sy);if(delta)nk_window_set_scroll(ui,sx,(nk_uint)fmaxf(0,ceilf(sy+delta)));else d->reveal=false;}
         nk_layout_space_end(ui);
     }
-    nk_end(ui);ui->style=saved;ui_palette=prior;
+    nk_end(ui);if(d->draw_probe && !d->embedded)d->draw_probe(d);
+    ui->style=saved;ui_palette=prior;
 }
 static void browser_input(app *a,bool begin) {
     for(unsigned i=1;i<PS_DIALOG_REQUEST_ROUTES;i++){browser_dialog *d=a->browser_popups[i];

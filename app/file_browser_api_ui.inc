@@ -59,17 +59,17 @@ static void browser_api_control(app *a,browser_dialog *d,int id,float y,float wi
     if(id==21){struct nk_command_buffer *canvas=nk_window_get_canvas(d->ui);float cx=r.x+4*f,cy=r.y+height/2;
         if(d->api_expanded)nk_fill_triangle(canvas,cx-3*f,cy-2*f,cx+4*f,cy-2*f,cx+.5f*f,cy+3*f,UI_COLOR(accent));
         else nk_fill_triangle(canvas,cx-2*f,cy-4*f,cx-2*f,cy+4*f,cx+3*f,cy,UI_COLOR(accent));}
-    browser_text(a,d,18*f+left,y+(id==21?7*f:0),width-left,label,id==21?11:2,(id==21?16.38f:16.8f)*f,UI_COLOR(accent),false);
+    browser_text(a,d,18*f+left,y+(id==21?7*f:0),width-left,label,11,16.926f*f,UI_COLOR(accent),false);
     if(ps_ui_button_at(d->ui,r,name,id==21 && d->api_expanded))browser_action(a,d,id);
     browser_focus_draw(a,d,id,r,name);
 }
 static float browser_api_content(app *a,browser_dialog *d,float width,float y,float f,bool draw) {
     if(!d->preview.api.symbol)return y;
-    y+=18*f;browser_api_control(a,d,21,y,width,30.38f*f,f,draw);y+=30.38f*f;
+    y+=18*f;browser_api_control(a,d,21,y,width,30.926f*f,f,draw);y+=30.926f*f;
     if(!d->api_expanded)return y;
     const char *name=d->preview.api.symbol->name;
-    y+=8*f;float h=browser_api_range(a,d,name,strlen(name),10,18*f,y,width,17.85f*f,draw,UI_COLOR(text));
-    if(draw)ps_ui_accessibility_label(d->ui,nk_rect(d->preview_bounds.x+18*f,d->controls[21].y+30.38f*f+8*f,width,h),name);
+    y+=8*f;float h=browser_api_range(a,d,name,strlen(name),10,18*f,y,width,18.445f*f,draw,UI_COLOR(text));
+    if(draw)ps_ui_accessibility_label(d->ui,nk_rect(d->preview_bounds.x+18*f,d->controls[21].y+30.926f*f+8*f,width,h),name);
     y+=h+8*f;
     ps_document *document=d->preview.api.document;
     if(d->preview.api.status!=PS_OK || !document){
@@ -96,7 +96,7 @@ static float browser_api_content(app *a,browser_dialog *d,float width,float y,fl
         y+=h+14*f;
     }
     if(preview->summary!=SIZE_MAX){const ps_doc_block *block=&document->blocks[preview->summary];const char *text=document->text+block->text;
-        h=browser_api_range(a,d,text,block->length,2,18*f,y,width,16.8f*f,draw,UI_COLOR(text));
+        h=browser_api_range(a,d,text,block->length,11,18*f,y,width,16.926f*f,draw,UI_COLOR(muted));
         if(draw){nk_uint sx,sy;nk_group_get_scroll(d->ui,"Explorer Vorschau",&sx,&sy);ps_ui_accessibility_label(d->ui,nk_rect(d->preview_bounds.x+18*f,d->preview_bounds.y+y-sy,width,h),text);}
         y+=h+14*f;
     }
@@ -107,7 +107,7 @@ static float browser_api_content(app *a,browser_dialog *d,float width,float y,fl
             float height=0;
             for(size_t c=0;c<row->cell_count;c++){const ps_doc_cell *cell=&document->cells[row->first_cell+c];
                 float column=table?table->columns[c]:width/columns;
-                height=fmaxf(height,browser_api_range(a,d,document->text+cell->text,cell->length,9,0,0,fmaxf(1,column-10*f),15.12f*f,false,UI_COLOR(text)));}
+                height=fmaxf(height,browser_api_range(a,d,document->text+cell->text,cell->length,9,0,0,fmaxf(1,column-10*f),15.624f*f,false,UI_COLOR(text)));}
             if(draw){nk_layout_space_push(d->ui,nk_rect(18*f,y,width,height+16*f));struct nk_rect r;
                 bool header=i==first && row->level==1;
                 if(nk_widget(&r,d->ui)!=NK_WIDGET_INVALID){if(header)nk_fill_rect(nk_window_get_canvas(d->ui),r,0,UI_COLOR(surface));
@@ -115,10 +115,10 @@ static float browser_api_content(app *a,browser_dialog *d,float width,float y,fl
                 ps_ui_accessibility_label(d->ui,r,document->text+row->text);
                 float left=23*f;
                 for(size_t c=0;c<row->cell_count;c++){const ps_doc_cell *cell=&document->cells[row->first_cell+c];float column=table?table->columns[c]:width/columns;
-                    browser_api_range(a,d,document->text+cell->text,cell->length,9,left,y+8*f,fmaxf(1,column-10*f),15.12f*f,true,header?UI_COLOR(muted):UI_COLOR(text));left+=column;}}
+                    browser_api_range(a,d,document->text+cell->text,cell->length,9,left,y+8*f,fmaxf(1,column-10*f),15.624f*f,true,header?UI_COLOR(muted):UI_COLOR(text));left+=column;}}
             y+=height+16*f;
         }y+=14*f;
     }
-    h=browser_text_height(d,"Bestehende F1-Referenz ansehen ↗",2,width,16.8f*f);
+    h=browser_text_height(d,"Bestehende F1-Referenz ansehen ↗",11,width,16.926f*f);
     browser_api_control(a,d,22,y,width,h,f,draw);return y+h;
 }

@@ -6,7 +6,7 @@ from check_project_window_counterexample import archive,digest,replace_once
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     for name in ('source-root','build-dir','sdl','proof-dir'):p.add_argument('--'+name,type=Path,required=True)
-    p.add_argument('--fault',choices=('main-input','places-padding'),default='main-input')
+    p.add_argument('--fault',choices=('main-input','places-padding','grid-center'),default='main-input')
     p.add_argument('--report',type=Path);a=p.parse_args()
     if sys.platform!='win32':p.error('Requires a completed Windows Release build')
     source,directory,proof=(value.resolve() for value in (a.source_root,a.build_dir,a.proof_dir))
@@ -19,16 +19,21 @@ def main():
         production=archive(proof/'production.zip',normal_files)
         originals=[source/name for name in ('app/file_browser_ui.inc','app/file_browser_api_ui.inc',
             'app/design_ui.inc','app/main.c','app/file_browser_window_tests.inc','tests/check_independent_picker_windows.py',
-            'app/file_browser_tests.inc','tests/check_explorer_a.py','docs/visuals/design-options/options.css')]
+            'app/file_browser_tests.inc','tests/check_explorer_a.py','docs/visuals/design-options/options.css',
+            'app/file_browser_layout_tests.inc','tests/check_explorer_layout.py')]
         if a.fault=='main-input':
             browser=replace_once(originals[0].read_text(encoding='utf8'),
                 'static bool browser_event(app *a,const SDL_Event *event,SDL_Window *window) {',
                 'static bool browser_event(app *a,const SDL_Event *event,SDL_Window *window) {\n    if(window==a->window && browser_active(a))return true;')
             checker='tests/check_independent_picker_windows.py';expected=b'Independent picker stage10 failed'
-        else:
+        elif a.fault=='places-padding':
             browser=replace_once(originals[0].read_text(encoding='utf8'),
                 'inset=(d->compact?28.6f:37.8f)*f','inset=(d->compact?28.6f:35.f)*f')
             checker='tests/check_explorer_a.py';expected=b'Place text inset differs from approved CSS'
+        else:
+            browser=replace_once(originals[0].read_text(encoding='utf8'),
+                'r.x+(width-advance)/2','r.x')
+            checker='tests/check_explorer_layout.py';expected=b'Grid raster is not centered'
         picker=proof/'counter_picker.inc';picker.write_text(browser,encoding='utf8')
         design=proof/'counter_design.inc';design.write_text(replace_once(originals[2].read_text(encoding='utf8'),
             '#include "file_browser_ui.inc"','#include "'+picker.as_posix()+'"'),encoding='utf8')
@@ -45,7 +50,7 @@ def main():
         cases=[]
         for variant,app in (('counter',counter),('positive',normal)):
             command=[sys.executable,str(source/checker),'--app',str(app),'--work',str(proof/variant)]
-            if a.fault=='places-padding':command+=['--root',str(source)]
+            if a.fault!='main-input':command+=['--root',str(source)]
             result=subprocess.run(command,cwd=source,capture_output=True,timeout=600,env=builder.env)
             log=proof/(variant+'.log');log.write_bytes(result.stdout+result.stderr)
             cases.append(dict(variant=variant,command=command,exit_code=result.returncode,

@@ -1,0 +1,276 @@
+{
+  "format": 1,
+  "date": "2026-10-30",
+  "base_commit": "8cdb01e5af540d070eea60f444f7c8806b4a8c82",
+  "scope": "Explorer A CSS list/grid geometry, wrapped long filenames, preview property roles and footer/API typography; native Windows/Linux component proof, not full application fidelity.",
+  "reference": {
+    "path": "docs/visuals/design-options/options.css",
+    "sha256": "79500e3638b63af8b0ac9d1d64c562742236cad38f950773659a7b1b031a889f"
+  },
+  "environment": {
+    "windows": "Windows11 Pro26200 / Release",
+    "linux": "Alpine-Dev3.24.2 / WSL2 / X11 Xvfb Openbox / Debug ASan UBSan / GUI detect_leaks=0"
+  },
+  "source_audit": {
+    "inputs_match_git_index": 1080,
+    "manifest": {
+      "path": "build/validation/explorer-inline-2026-10-29/layout-third-compiler-source.json",
+      "sha256": "c127608ebf9309261cc72f3c44d1ba20b427bf1a0a468feba1d62ad2c9ca987c"
+    },
+    "source_overlay": {
+      "path": "build/validation/explorer-inline-2026-10-29/layout-third-compiler-source.zip",
+      "sha256": "709ead17bf65303ecb8a6a9eaf2b8c4d20777a23200bec21704959dc01808a34"
+    },
+    "runtime": {
+      "path": "build/validation/explorer-inline-2026-10-29/layout-third-runtime.json",
+      "sha256": "075a85ee3789ded7e807cb74c6056e9e7dd14188c86df9a7a98f68525eed7517"
+    },
+    "byte_index": {
+      "path": "build/validation/explorer-inline-2026-10-29/layout-third-byte-index.json",
+      "sha256": "6788d71c48d7faa7ea9641ae62d9838dc985fad8718f2304577ef88dcd03c1d6"
+    },
+    "all_archived_bytes_read_back": true
+  },
+  "implementation": [
+    "Filename explicitly remains1.6; metadata/header inherit1.55. Single-line list stride44 from icon minimum18, border/padding and bottom margin2. Removed extra8px side inset; compact grid rowgap9 and actual symbol/name columns.",
+    "Header remains before grid above compact threshold. Grid padding12/gap9 or compact8/gap6; full border+padding+icon35+margin8+two gaps+all filename lines+kind drive equal card row heights, minimum150. Text is centered per line, margin2 outside each card; no trailing grid gap in measured extent.",
+    "Preview labels and values both.8rem/1.55; browser footer.73rem including checkbox/button and muted colors; dialog location.75rem/1.55. Measuring and painting use the same scoped roles.",
+    "API summary/link.78rem/1.55, heading.85rem/1.55, table.72rem/1.55; existing signature.72rem/1.85 preserved. Original API functional4 cases and actual Windows API image were inspected, not a complete independent prose/table metric proof.",
+    "Normally-null popup draw observer reads actual completed Nuklear text commands before render clears buffers. It is not run midway through the embedded main draw. Queued SDL Tab/Space/Escape and real read-only preview reveal are used by the fixture."
+  ],
+  "cohorts": [
+    {
+      "tag": "layout-first",
+      "platform": "windows",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/layout-first-windows.json",
+        "sha256": "02767873d206bc3bf6224c89a52b8890f3372d03156cce444db033947bda185e"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/layout-first-windows.log",
+        "sha256": "71baee978b033dfe25d46bd4e24dd70ffeab4a7fc326d04d449292fcbb65e2ef"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-ca62wd9s/results.json",
+        "sha256": "c5751d7a4b1dd1628eed13cd77d8f58809810b83acd84b06b39c1496b920897c"
+      },
+      "exit_code": 1,
+      "binary_sha256": "bcb887f399448b15c90d4032bc6e9727683cc6bad525bdd41ff3a719db7a238a",
+      "groups": {
+        "independent_picker_windows": "passed",
+        "explorer_a_api_context": "passed",
+        "explorer_a_preview_flow": "passed",
+        "explorer_a_inline": "passed",
+        "explorer_a": "passed",
+        "explorer_a_layout": "failed"
+      }
+    },
+    {
+      "tag": "layout-first",
+      "platform": "linux",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/layout-first-linux.json",
+        "sha256": "f358bbd7a3a8adb993fb8915e7a8d1969b51c35a9f1368e1d9d777d90e22545c"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/layout-first-linux.log",
+        "sha256": "a8187a35767ec3bbf0df7e76ea09ddecaa8aff55db46ba867265dc069561a165"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-snkx9zer/results.json",
+        "sha256": "4ba4abb9e903b8baa7e7fb8b8ad6d4598feb6485f6956772a40f041e90bfa13e"
+      },
+      "exit_code": 1,
+      "binary_sha256": "d604a310155d124ce50d23b955dd903fb56e22946954dfb73bcd84906cd8097e",
+      "groups": {
+        "independent_picker_windows": "passed",
+        "explorer_a_api_context": "passed",
+        "explorer_a_preview_flow": "passed",
+        "explorer_a_inline": "passed",
+        "explorer_a": "passed",
+        "explorer_a_layout": "failed"
+      }
+    },
+    {
+      "tag": "layout-second",
+      "platform": "windows",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/layout-second-windows.json",
+        "sha256": "158c663157d4d7d8ac1d7cca84684fb8cd66d08b7d403e6f4058528ef69c223d"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/layout-second-windows.log",
+        "sha256": "71d26f515d9b02ea439ca1a3ed3c3be0db26f3e6bb87477099a747933274cdd3"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-jm28zuvx/results.json",
+        "sha256": "ec59ead90bd6ea303b53dcaefd941b9a743177d3706eb2d647679007b2276eba"
+      },
+      "exit_code": 0,
+      "binary_sha256": "15bbb7f0c02fd530ab335cec3f87d01ae5ece95d13e1d2a07371120c80d6ad33",
+      "groups": {
+        "explorer_a_layout": "passed"
+      }
+    },
+    {
+      "tag": "layout-second",
+      "platform": "linux",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/layout-second-linux.json",
+        "sha256": "22dbbcd2c8aa85edfb440400a1501f58b9416bfb4709187df309dafb19cc4d8c"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/layout-second-linux.log",
+        "sha256": "8d957617ba84de5c3ec9a7c1921ba4b81b36d734eb39f9374c0c2d0514147d5f"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-jsas8lct/results.json",
+        "sha256": "60516454ac41cba8fc0853df54b843a58eece5e444340f8f89dcbda450763415"
+      },
+      "exit_code": 1,
+      "binary_sha256": "85a6a5aaba655291924516f2fd4e00f9627ea50ac14280de870e82fb168606f2",
+      "groups": {
+        "explorer_a_layout": "failed"
+      }
+    },
+    {
+      "tag": "layout-third",
+      "platform": "windows",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/layout-third-windows.json",
+        "sha256": "ac8564ee6d5db8156e28c460c85956c03e58ae80d8e3b253594bd37bf51f674e"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/layout-third-windows.log",
+        "sha256": "f09590f189cac39051bcc868a97d0484542ba04f14eb4dd100ddf2d7cd74ccd8"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-eiupqr0n/results.json",
+        "sha256": "094a916dff36d2b23212f163c44227d8ece5f0116253f17d23773f4d2b8de1ca"
+      },
+      "exit_code": 0,
+      "binary_sha256": "8c9e61fe64c0435f4de630076eb06ec86811151c0cd5c1a202db2b4c49a70dad",
+      "groups": {
+        "explorer_a_layout": "passed"
+      }
+    },
+    {
+      "tag": "layout-third",
+      "platform": "linux",
+      "command_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/layout-third-linux.json",
+        "sha256": "429e72a804a4076f8bacef284d002a44f80fa54736e42f5a7e1fe44f7bc5db5c"
+      },
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/layout-third-linux.log",
+        "sha256": "998f21f32d50b9a50cd7e5063847527eefda246a5b145488dfd3a0719d0389e3"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qsfh05yv/results.json",
+        "sha256": "3769015b3af83b869f2878abf7d54fcf6239f3d9faa3d2fab02a9030fb0abe84"
+      },
+      "exit_code": 0,
+      "binary_sha256": "2dc6f2b291e796178a82d3fb4b49b51ebe2dd9b3f74fc97689349b6384837413",
+      "groups": {
+        "explorer_a_layout": "passed"
+      }
+    }
+  ],
+  "final_native_metrics": [
+    {
+      "platform": "windows",
+      "cases": 6,
+      "visible_properties_all_four_in_each_case": true,
+      "minimum_width": 320,
+      "source": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-eiupqr0n/explorer_a_layout/files ä/verification.json",
+        "sha256": "1af87e686222a7e555aaedcc889d471394dd5b8a334bf211a5e4394d1ded19c8"
+      }
+    },
+    {
+      "platform": "linux",
+      "cases": 6,
+      "visible_properties_all_four_in_each_case": true,
+      "minimum_width": 320,
+      "source": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qsfh05yv/explorer_a_layout/files ä/verification.json",
+        "sha256": "f17941936cdfd0deac510b5a9c3a02c2298281a036a9ed0181032fd06097bea0"
+      }
+    }
+  ],
+  "paired_native_raster_counterexamples": [
+    {
+      "report": {
+        "path": "build/validation/explorer-inline-2026-10-29/layout-grid-center-counter.json",
+        "sha256": "dccc2e2de9c24f1d3bddb8ce80ed136994f0dc339d5f0c39034e5c51b3f2582b"
+      },
+      "negative_exit": 1,
+      "positive_exit": 0,
+      "positive_cases": 6,
+      "archive_members_read_back": 20,
+      "expected_failure": "Grid raster is not centered",
+      "production_unchanged": true,
+      "scope": "420px compact fixture"
+    },
+    {
+      "report": {
+        "path": "build/validation/explorer-inline-2026-10-29/layout-min-grid-center-counter.json",
+        "sha256": "0cd2e132b1ada0935272ee146487355d1ed54d5c00ec669684144d8eb40ee655"
+      },
+      "negative_exit": 1,
+      "positive_exit": 0,
+      "positive_cases": 6,
+      "archive_members_read_back": 20,
+      "expected_failure": "Grid raster is not centered",
+      "production_unchanged": true,
+      "scope": "Final320px compact fixture and visible-line raster checker"
+    }
+  ],
+  "visual_review": {
+    "reference": "docs/visuals/design-options/review/files-a.png",
+    "native_final_images": [
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-eiupqr0n/explorer_a_layout/files ä/dark/explorer-layout-grid.png",
+        "sha256": "407859f8f82b22e8be3c90fcd9a56490d69ee0f753c9ff9f74a13e26b4569053"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-eiupqr0n/explorer_a_layout/files ä/large-compact/explorer-layout-grid.png",
+        "sha256": "f58e7c096ecd9ee1946a2cc01a31c1a8b33af801687d7906c87831e0b9def6e2"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qsfh05yv/explorer_a_layout/files ä/dark/explorer-layout-grid.png",
+        "sha256": "dc192e3e556881820de14acac74a57419507e1137fa6fbc3b61c61b4270927e5"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qsfh05yv/explorer_a_layout/files ä/large-compact/explorer-layout-grid.png",
+        "sha256": "03ff6f27588969fe70ca754dce40460f2fd0c00857c3d09312fc8d47362d4bcd"
+      }
+    ],
+    "scope": "Both final dark and320px/22px grid views inspected on Windows/Linux. Captures show their actual keyboard-driven outer/preview scroll positions, not a guarantee of all content simultaneously visible."
+  },
+  "failure_analysis": [
+    "layout-first: existing five functional groups pass both platforms; new layout checker passes four modes, then expects preview labels outside the actual compact viewport. Fixture corrected to reveal preview with actual Tab events; same metadata checks preserved and label/value flow assertions added.",
+    "layout-second: Windows six-state layout passes; Linux all six native app cases return0 but checker requires pixels only from assets/runs, which lie below the large-compact viewport. Actual command/image observation confirms visible long name and analysis.phys. Checker now scans every fully visible filename line; it still requires actual ink, centering and at least one raster sample.",
+    "layout-third: compact test moved from420 to the real minimum320 on both hosts. Both actual six-state native probes pass, including complete long-card glyph commands, all four visible metadata labels, footer roles and actual raster. Final paired left-alignment mutation is rejected by pixels; unchanged binary passes same6."
+  ],
+  "runner_contract": {
+    "command": "python -X utf8 -B build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/test_native_test_runner.py --work D:/Physim/build/validation/explorer-inline-2026-10-29/layout-first-runner",
+    "exit_code": 0,
+    "scope": "Actually executed catalog mappings and failure/timeout/report tests; not a Darwin runtime proof."
+  },
+  "remaining": [
+    "Complete Explorer/reference acceptance remains open. Caption weight/tracking (.eyebrow600/1.7px, .pane-title600/1px) and some informational/empty .small texts still differ. Current role0 is also used for untracked regular badges; do not globally bold/track it.",
+    "A2 selection/focus rendering and complete independent API prose/table metrics remain open; current component checks do not establish every control state.",
+    "Actual physical input, external screenreader tasks, further monitor/DPI and macOS app execution still need their own evidence. Windows timeline host-focus limitation from prior campaign unchanged.",
+    "Other ADR015 task surfaces, B2, settingsA, feedbackA, newly selected progressB pop-out/icon controls (ADR020), and full Develop/Simulate/Analyze/F1 matrix remain in the active goal."
+  ],
+  "storage_cleanup": {
+    "record": {
+      "path": "build/validation/explorer-inline-2026-10-29/layout-positive-image-cleanup.json",
+      "sha256": "e6fe63b7862a5c27e70205127ef3e06dd348b25dbe86f82d5373c2e48f60e1e6"
+    },
+    "removed_redundant_positive_images": 2,
+    "freed_bytes": 186921,
+    "negative_and_canonical_images_preserved": true
+  }
+}

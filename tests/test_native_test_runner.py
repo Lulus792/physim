@@ -94,6 +94,7 @@ def verify_display_catalog(runner, display_checker):
     if sys.platform in ("win32","linux"):
         specialized_display["graphic_dialog"]=("tests/check_graphic_dialog.py",("--root",))
         specialized_display["explorer_a"]=("tests/check_explorer_a.py",("--root","--work"))
+        specialized_display["explorer_a_layout"]=("tests/check_explorer_layout.py",("--root","--work"))
         specialized_display["explorer_a_inline"]=("tests/check_explorer_inline.py",("--work",))
         specialized_display["explorer_a_preview_flow"]=("tests/check_explorer_preview.py",("--work",))
         specialized_display["explorer_a_api_context"]=("tests/check_explorer_api_context.py",("--work",))

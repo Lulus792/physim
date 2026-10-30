@@ -175,10 +175,12 @@ Eine zweite Gegenvariante verschiebt nur den Orte-Text um 2,8 Pixel; derselbe
 unabhängige CSS-Prüfer weist die falsche Einrückung zurück. Beide unveränderten
 Kontrollprogramme bestehen die jeweils gleichen sechs Zustände.
 
-Der vollständige visuelle Abgleich von A bleibt offen: Dateizeilen, Metadaten,
-Fußtexte, Kachelfluss und API-Prosa/-Tabellen müssen noch mit den passenden
-CSS-Regeln abgeglichen werden. Insbesondere besitzt der Dateiname ausdrücklich
-1,6 Zeilenhöhe; andere Texte erben 1,55. Ein pauschaler Austausch wäre falsch.
+Der nachfolgende [Dateizeilen-/Kachelabgleich](EXPLORER-LAYOUT-NATIVE.md) übernimmt
+inzwischen Listen-/Kachelmaße und mehrere Metadaten-/Fußschriftrollen. Der
+vollständige visuelle Abgleich von A bleibt offen, einschließlich weiterer
+Kopftypografie, Informationszustände und unabhängiger API-Prosa-/Tabellenmetriken.
+Insbesondere besitzt der Dateiname ausdrücklich 1,6 Zeilenhöhe; andere Texte
+erben 1,55. Ein pauschaler Austausch wäre falsch.
 Dieser Fensterteilstand bestätigt daher keine vollständige 1:1-Umsetzung.
 Physische Eingabe, echte Screenreader, weitere DPI-/Monitorzustände und macOS
 bleiben gesonderte Abnahme.

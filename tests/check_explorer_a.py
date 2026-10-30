@@ -16,6 +16,10 @@ nav_padding=[float(value[:-3])*14 for value in declaration('.navigation-list but
 nav_gap=px('.navigation-list button','gap');nav_icon=px('svg.icon','width')
 nav_border=float(declaration('.navigation-list button','border').split()[0][:-2])
 nav_line_height=float(re.search(r'/([\d.]+)',declaration('body','font'))[1])
+entry_padding=[float(v[:-2]) for v in declaration('.file-entry','padding').split()]
+entry_border=float(declaration('.file-entry','border').split()[0][:-2])
+entry_line=float(declaration('.file-entry .file-name','line-height'))
+entry_margin=px('.file-entry','margin-bottom')
 body_height=float(re.search(r'\.browser-main,\.file-preview\{height:(\d+)px',css)[1])
 fonts=[rem('.eyebrow'),rem('.dialog-header h2'),10.5,11.2,rem('.file-list-header'),14.7,rem('.file-preview pre'),rem('.dialog-footer button')]
 binary=hashlib.sha256(args.app.read_bytes()).hexdigest();cases=[]
@@ -50,6 +54,7 @@ for mode in ('dark','light','contrast','large','narrow','large-narrow'):
         assert abs(r['preview'][0]-r['list'][0])<.05 and abs(r['preview'][1]-r['list'][1]-body_height*f)<.05
     else:
         assert abs(r['preview'][0]-r['list'][0]-r['list'][2])<.05 and abs(r['preview'][2]-preview*f)<.05
-    assert abs(r['row_pitch']-(11.2*1.6+26)*f)<.05
+    expected_row=max(nav_icon,rem('.file-entry')*entry_line)+2*(entry_padding[0]+entry_border)+entry_margin
+    assert abs(r['row_pitch']-expected_row*f)<.05,'File row height differs from approved CSS'
     assert hashlib.sha256(args.app.read_bytes()).hexdigest()==binary
 print('Explorer A: six themes/sizes, list/grid/search, exclusive folder creation, missing path/back, project B parent selection and actual file open passed')

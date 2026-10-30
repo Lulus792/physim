@@ -94,6 +94,11 @@ Der folgende [C-API-Kontext](EXPLORER-API-NATIVE.md) verbindet tatsächliche
 Quellsymbole mit dem passenden Handbuchabschnitt, eigener Signaturauswahl und
 F1-Sprung. Messlauf-/Bildvorschau, große native Listen und vollständige praktische
 Aufgaben bleiben offen; die dort genannten zusätzlichen API-Abnahmen ebenfalls.
+Der [Dateizeilen-/Kachelabgleich](EXPLORER-LAYOUT-NATIVE.md) übernimmt anschließend
+die CSS-Abstände, vollständige Kartenhöhen, zentrierte Textzeilen und mehrere
+Metadaten-/Fußschriftrollen. Native Zeichenbefehle und gezielte Rastergegenproben
+ergänzen die Bediennachweise. Weitere Typografiedetails und die vollständige
+Explorer-/Oberflächenabnahme bleiben offen.
 Der folgende
 [Zeiger-Nachlauf](PROTOCOL-POINTER-NATIVE.md) schließt verlorene schnelle Klicks
 in den gemeinsamen Aktionen/Editfeldern und am Protokolltrenner. Linux prüft
