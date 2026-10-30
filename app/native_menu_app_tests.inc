@@ -13,7 +13,12 @@ typedef struct {double x,y;} menu_test_point;
 static id native_test_string(const char *text){return MT1(id,objc_getClass("NSString"),"stringWithUTF8String:",const char*,text);}
 static id native_test_application(void){return MT0(id,objc_getClass("NSApplication"),"sharedApplication");}
 static bool native_test_item(app *a,toolbar_action action,id *menu,intptr_t *index){
+    static id menus[TOOLBAR_BROWSE+1];static intptr_t indices[TOOLBAR_BROWSE+1];
     if(!a->native_menu_active)return false;
+    if((unsigned)action>TOOLBAR_BROWSE)return false;
+    /* Bind the actual object once. Its visible caption can change when an
+     * already-queued command updates the model before the next paint. */
+    if(menus[action]){*menu=menus[action];*index=indices[action];return true;}
     char title[256]={0};toolbar_entry entries[9];
     for(int group=1;group<=6;group++)for(unsigned i=0,n=toolbar_entries(a,group,entries);i<n;i++)
         if(entries[i].action==action)SDL_strlcpy(title,entries[i].text,sizeof title);
@@ -23,7 +28,7 @@ static bool native_test_item(app *a,toolbar_action action,id *menu,intptr_t *ind
         id root=MT1(id,bar,"itemAtIndex:",intptr_t,g),group=MT0(id,root,"submenu");
         for(intptr_t i=0;i<MT0(intptr_t,group,"numberOfItems");i++){
             id item=MT1(id,group,"itemAtIndex:",intptr_t,i);const char *text=MT0(const char*,MT0(id,item,"title"),"UTF8String");
-            if(text && !strcmp(text,title)){*menu=group;*index=i;return true;}
+            if(text && !strcmp(text,title)){menus[action]=*menu=group;indices[action]=*index=i;return true;}
         }
     }
     return false;
@@ -71,10 +76,18 @@ static bool native_test_shell(app *a){
     return a->navigation_bounds[0].w>0 && a->navigation_bounds[0].y==a->navigation_bounds[2].y;
 }
 static bool native_test_focus_wait(app *a,SDL_Window *window,int *stage,double deadline){
-    if(SDL_GetKeyboardFocus()==window)return true;
+    static SDL_Window *last;static double last_deadline;static bool painted;
+    if(last!=window || last_deadline!=deadline){last=window;last_deadline=deadline;painted=false;}
+    /* Tests run before drawing. One completed paint after focus changes is
+     * required before selecting a menu whose snapshot belongs to that window. */
+    if(SDL_GetKeyboardFocus()==window){if(painted)return true;painted=true;--*stage;return false;}
+    painted=false;
     if(ps_clock()<deadline){--*stage;return false;}
     fprintf(stderr,"Native menu focus timeout: wanted=%u actual=%u\n",SDL_GetWindowID(window),SDL_GetKeyboardFocus()?SDL_GetWindowID(SDL_GetKeyboardFocus()):0);
     (void)a;return true; /* Let the caller's focus assertion fail. */
+}
+static bool native_test_model_wait(bool observed,int *stage,double deadline){
+    if(!observed && ps_clock()<deadline){--*stage;return false;}return true;
 }
 static void native_toolbar_test_frame(app *a,int *stage,int *code,const char **capture){
     static double deadline;static bool log_before;bool ok=true;(void)capture;
@@ -87,20 +100,20 @@ static void native_toolbar_test_frame(app *a,int *stage,int *code,const char **c
         ok=SDL_GetKeyboardFocus()==a->window && native_test_shell(a) &&
             fabsf(a->navigation_bounds[0].w-((float)width-(workspace_shell_visible(a)?32:0))/3)<=1 &&
             window_hit_test(a->window,&drag,a)==SDL_HITTEST_DRAGGABLE && window_hit_test(a->window,&control,a)==SDL_HITTEST_NORMAL &&
-            window_hit_test(a->window,&edge,a)==SDL_HITTEST_RESIZE_LEFT && native_test_invoke(a,TOOLBAR_NEW,true);break;
+            window_hit_test(a->window,&edge,a)==SDL_HITTEST_RESIZE_LEFT && native_test_invoke(a,TOOLBAR_NEW,true);deadline=ps_clock()+2;break;
     }
-    case 2:ok=a->project_manager && !a->loaded;test_mouse(a,a->navigation_bounds[1],true);break;
+    case 2:if(!native_test_model_wait(a->project_manager,stage,deadline))return;ok=a->project_manager && !a->loaded;test_mouse(a,a->navigation_bounds[1],true);break;
     case 3:test_mouse(a,a->navigation_bounds[1],false);break;
     case 4:ok=a->tab==1 && a->project_manager;test_mouse(a,a->navigation_bounds[2],true);break;
     case 5:test_mouse(a,a->navigation_bounds[2],false);break;
     case 6:ok=a->tab==2 && a->project_manager;manager_test_key(a,SDLK_ESCAPE,0);break;
     case 7:ok=!a->project_manager;SDL_RaiseWindow(a->window);deadline=ps_clock()+5;break;
-    case 8:if(!native_test_focus_wait(a,a->window,stage,deadline))return;log_before=a->show_log;ok=native_test_invoke(a,TOOLBAR_LOG,true);break;
-    case 9:ok=a->show_log!=log_before && native_test_invoke(a,TOOLBAR_LOG,true);break;
-    case 10:ok=a->show_log==log_before && native_test_invoke(a,TOOLBAR_SETTINGS,true);break;
-    case 11:ok=a->tab==6 && native_test_stroke(a->window,"1",18,MT_COMMAND);break;
-    case 12:ok=a->tab==0 && native_test_invoke(a,TOOLBAR_HELP,true);break;
-    case 13:ok=a->doc_visible && a->doc_window && a->doc_window!=a->window;documentation_window_hide(a);SDL_RaiseWindow(a->window);deadline=ps_clock()+5;break;
+    case 8:if(!native_test_focus_wait(a,a->window,stage,deadline))return;log_before=a->show_log;ok=native_test_invoke(a,TOOLBAR_LOG,true);deadline=ps_clock()+2;break;
+    case 9:if(!native_test_model_wait(a->show_log!=log_before,stage,deadline))return;ok=a->show_log!=log_before && native_test_invoke(a,TOOLBAR_LOG,true);deadline=ps_clock()+2;break;
+    case 10:if(!native_test_model_wait(a->show_log==log_before,stage,deadline))return;ok=a->show_log==log_before && native_test_invoke(a,TOOLBAR_SETTINGS,true);deadline=ps_clock()+2;break;
+    case 11:if(!native_test_model_wait(a->tab==6,stage,deadline))return;ok=a->tab==6 && native_test_stroke(a->window,"1",18,MT_COMMAND);deadline=ps_clock()+2;break;
+    case 12:if(!native_test_model_wait(a->tab==0,stage,deadline))return;ok=a->tab==0 && native_test_invoke(a,TOOLBAR_HELP,true);deadline=ps_clock()+2;break;
+    case 13:if(!native_test_model_wait(a->doc_visible,stage,deadline))return;ok=a->doc_visible && a->doc_window && a->doc_window!=a->window;documentation_window_hide(a);SDL_RaiseWindow(a->window);deadline=ps_clock()+5;break;
     case 14:if(!native_test_focus_wait(a,a->window,stage,deadline))return;ok=native_test_invoke(a,TOOLBAR_ADD_FILE,false);break;
     case 15:ok=!a->dialog_pending && !a->workspace_open;test_mouse(a,a->window_control_bounds[1],true);deadline=ps_clock()+5;break;
     case 16:test_mouse(a,a->window_control_bounds[1],false);break;
@@ -128,21 +141,21 @@ static void native_toolbar_test_frame(app *a,int *stage,int *code,const char **c
     if(a->quitting)printf("TOOLBAR AND TABS: %s (native AppKit, stage %d)\n",*code?"FAILED":"PASSED",*stage);
 }
 static void native_keyboard_menu_test_frame(app *a,const char *root,int *stage,int *code,const char **capture){
-    static double deadline;static bool log_before;static int length;bool ok=true;(void)capture;
+    static double deadline;static bool log_before;static int length,repeat_frames;bool ok=true;(void)capture;
     switch((*stage)++){
     case 0:SDL_RaiseWindow(a->window);deadline=ps_clock()+5;break;
     case 1:
         if(!native_test_focus_wait(a,a->window,stage,deadline))return;
         log_before=a->show_log;ok=SDL_GetKeyboardFocus()==a->window && native_test_shell(a) && native_test_invoke(a,TOOLBAR_SAVE,false);
-        ok &= native_test_key(a->window,12,"",55,MT_COMMAND,NO) && native_test_key(a->window,10,"l",37,MT_COMMAND,NO);break;
-    case 2:ok=a->show_log!=log_before && !a->document_count;ok &= native_test_key(a->window,10,"l",37,MT_COMMAND,YES);break;
-    case 3:ok=a->show_log!=log_before;ok &= native_test_key(a->window,11,"l",37,MT_COMMAND,NO) && native_test_key(a->window,12,"",55,0,NO);break;
-    case 4:ok=native_test_stroke(a->window,",",43,MT_COMMAND);break;
-    case 5:ok=a->tab==6 && native_test_stroke(a->window,"1",18,MT_COMMAND);break;
-    case 6:ok=a->tab==0 && native_test_stroke(a->window,"\xef\x9c\x84",122,0);break;
-    case 7:ok=a->doc_visible;documentation_window_hide(a);SDL_RaiseWindow(a->window);deadline=ps_clock()+5;break;
-    case 8:if(!native_test_focus_wait(a,a->window,stage,deadline))return;ok=native_test_invoke(a,TOOLBAR_NEW,true);break;
-    case 9:ok=a->project_manager;manager_test_key(a,SDLK_ESCAPE,0);break;
+        ok &= native_test_key(a->window,12,"",55,MT_COMMAND,NO) && native_test_key(a->window,10,"l",37,MT_COMMAND,NO);deadline=ps_clock()+2;break;
+    case 2:if(!native_test_model_wait(a->show_log!=log_before,stage,deadline))return;ok=a->show_log!=log_before && !a->document_count;ok &= native_test_key(a->window,10,"l",37,MT_COMMAND,YES);repeat_frames=3;break;
+    case 3:if(--repeat_frames>0){--*stage;return;}ok=a->show_log!=log_before;ok &= native_test_key(a->window,11,"l",37,MT_COMMAND,NO) && native_test_key(a->window,12,"",55,0,NO);break;
+    case 4:ok=native_test_stroke(a->window,",",43,MT_COMMAND);deadline=ps_clock()+2;break;
+    case 5:if(!native_test_model_wait(a->tab==6,stage,deadline))return;ok=a->tab==6 && native_test_stroke(a->window,"1",18,MT_COMMAND);deadline=ps_clock()+2;break;
+    case 6:if(!native_test_model_wait(a->tab==0,stage,deadline))return;ok=a->tab==0 && native_test_stroke(a->window,"\xef\x9c\x84",122,0);deadline=ps_clock()+2;break;
+    case 7:if(!native_test_model_wait(a->doc_visible,stage,deadline))return;ok=a->doc_visible;documentation_window_hide(a);SDL_RaiseWindow(a->window);deadline=ps_clock()+5;break;
+    case 8:if(!native_test_focus_wait(a,a->window,stage,deadline))return;ok=native_test_invoke(a,TOOLBAR_NEW,true);deadline=ps_clock()+2;break;
+    case 9:if(!native_test_model_wait(a->project_manager,stage,deadline))return;ok=a->project_manager;manager_test_key(a,SDLK_ESCAPE,0);break;
     case 10:
         ok=!a->project_manager && document_test_start(a,root);
         if(ok)preview_workspace_path(a,a->workspace_tree_test_path);SDL_RaiseWindow(a->window);deadline=ps_clock()+5;break;
@@ -153,24 +166,33 @@ static void native_keyboard_menu_test_frame(app *a,const char *root,int *stage,i
     case 12:test_mouse(a,a->document_bounds[6],false);break;
     case 13:
         ok=active_document(a) && active_document(a)->edit.active;
-        if(ok){length=nk_str_len_char(&active_document(a)->edit.string);ok=native_test_track_search(a,false);}break;
+        if(ok){length=nk_str_len_char(&active_document(a)->edit.string);ok=native_test_track_search(a,false);}deadline=ps_clock()+2;break;
     case 14:
+        if(!native_test_model_wait(a->show_search,stage,deadline))return;
         ok=a->show_search && nk_str_len_char(&active_document(a)->edit.string)==length;
-        ok &= native_test_stroke(a->window,"\x1b",53,0);break;
+        ok &= native_test_stroke(a->window,"\x1b",53,0);deadline=ps_clock()+2;break;
     case 15:
-        ok=!a->show_search && nk_str_len_char(&active_document(a)->edit.string)==length && native_test_track_search(a,true);break;
-    case 16:ok=!a->show_search && nk_str_len_char(&active_document(a)->edit.string)==length && native_test_stroke(a->window,"z",6,0);break;
+        if(!native_test_model_wait(!a->show_search && !a->search_icon_focus,stage,deadline))return;
+        ok=!a->show_search && nk_sdl_accessibility_is_focused(a->ui,NULL,"Dokumentsuche öffnen") && nk_str_len_char(&active_document(a)->edit.string)==length;
+        ok &= native_test_stroke(a->window,"\t",48,(uintptr_t)1<<18);deadline=ps_clock()+2;break;
+    case 16:
+        if(!native_test_model_wait(active_document(a)->edit.active && SDL_TextInputActive(a->window),stage,deadline))return;
+        ok=active_document(a)->edit.active && SDL_TextInputActive(a->window) && native_test_track_search(a,true);deadline=ps_clock()+2;break;
     case 17:
-        ok=nk_str_len_char(&active_document(a)->edit.string)==length+1 && active_document(a)->dirty && native_test_stroke(a->window,"s",1,MT_COMMAND);break;
-    case 18:ok=!active_document(a)->dirty && native_test_stroke(a->window,"q",12,0);break;
-    case 19:ok=active_document(a)->dirty && native_test_stroke(a->window,"\xef\x9c\x84",122,0);deadline=ps_clock()+5;break;
+        if(!native_test_model_wait(active_document(a)->edit.active && SDL_TextInputActive(a->window),stage,deadline))return;
+        ok=!a->show_search && active_document(a)->edit.active && nk_str_len_char(&active_document(a)->edit.string)==length && native_test_stroke(a->window,"z",6,0);deadline=ps_clock()+2;*stage=170;break;
+    case 170:
+        if(!native_test_model_wait(nk_str_len_char(&active_document(a)->edit.string)==length+1,stage,deadline))return;
+        ok=nk_str_len_char(&active_document(a)->edit.string)==length+1 && active_document(a)->dirty && native_test_stroke(a->window,"s",1,MT_COMMAND);deadline=ps_clock()+2;*stage=18;break;
+    case 18:if(!native_test_model_wait(!active_document(a)->dirty,stage,deadline))return;ok=!active_document(a)->dirty && native_test_stroke(a->window,"q",12,0);deadline=ps_clock()+2;break;
+    case 19:if(!native_test_model_wait(active_document(a)->dirty,stage,deadline))return;ok=active_document(a)->dirty && native_test_stroke(a->window,"\xef\x9c\x84",122,0);deadline=ps_clock()+5;break;
     case 20:
         if(!native_test_focus_wait(a,a->doc_window,stage,deadline))return;
         ok=a->doc_visible && native_test_invoke(a,TOOLBAR_SAVE,false) && native_test_stroke(a->doc_window,"s",1,MT_COMMAND);break;
     case 21:
         ok=active_document(a)->dirty && a->doc_visible;documentation_window_hide(a);SDL_RaiseWindow(a->window);deadline=ps_clock()+5;break;
-    case 22:if(!native_test_focus_wait(a,a->window,stage,deadline))return;ok=native_test_stroke(a->window,"s",1,MT_COMMAND);break;
-    case 23:ok=!active_document(a)->dirty && native_test_shell(a);SDL_HideWindow(a->window);deadline=ps_clock()+5;break;
+    case 22:if(!native_test_focus_wait(a,a->window,stage,deadline))return;ok=native_test_stroke(a->window,"s",1,MT_COMMAND);deadline=ps_clock()+2;break;
+    case 23:if(!native_test_model_wait(!active_document(a)->dirty,stage,deadline))return;ok=!active_document(a)->dirty && native_test_shell(a);SDL_HideWindow(a->window);deadline=ps_clock()+5;break;
     case 24:
         if(SDL_GetKeyboardFocus()==a->window && ps_clock()<deadline){--*stage;return;}
         ok=SDL_GetKeyboardFocus()!=a->window && !a->toolbar_keyboard && !a->toolbar_menu;
@@ -180,7 +202,7 @@ static void native_keyboard_menu_test_frame(app *a,const char *root,int *stage,i
         ok=SDL_GetKeyboardFocus()==a->window && native_test_shell(a) && !active_document(a)->dirty;
         a->quitting=true;break;
     }
-    if(!ok){fprintf(stderr,"Native keyboard menu failure stage=%d tab=%d search=%d doc=%d\n",*stage-1,a->tab,a->show_search,a->doc_visible);*code=1;a->quitting=true;}
+    if(!ok){fprintf(stderr,"Native keyboard menu failure stage=%d tab=%d search=%d doc=%d length=%d expected=%d active=%d text=%d\n",*stage-1,a->tab,a->show_search,a->doc_visible,active_document(a)?nk_str_len_char(&active_document(a)->edit.string):-1,length,active_document(a)?active_document(a)->edit.active:0,SDL_TextInputActive(a->window));*code=1;a->quitting=true;}
     if(a->quitting && *stage<26){*code=1;fprintf(stderr,"Native keyboard workflow quit before completion\n");}
     if(a->quitting)printf("KEYBOARD MENU SELF-TEST: %s (native AppKit, stage %d)\n",*code?"FAILED":"PASSED",*stage);
 }
