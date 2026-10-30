@@ -2207,6 +2207,8 @@ def main():
             for name in ("run-details-overview.bmp","run-details-metadata.bmp","run-details-metadata-end.bmp","run-details-legacy.bmp"):
                 require((directory / name).is_file(),"Missing run-details capture: "+name)
         elif args.case in ("documents_small", "documents_large"):
+            require("DOCUMENT WORKFLOW: PASSED" in flow.steps[-1]["stdout"],
+                    "Document workflow quit before completing its assertions")
             exact(directory / "notes α.txt", "Saved on close: γ\n")
             exact(directory / "notes α.txt.bak", "Text über SDL: β = 2\n")
             exact(directory / "second.txt", "external")

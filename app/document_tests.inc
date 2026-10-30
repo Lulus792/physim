@@ -178,7 +178,12 @@ static void document_test_frame(app *a, const char *root, int *stage, int *code,
         ok = !a->quitting && doc && doc->dirty;
         ok = ok && !open_workspace_path(a, a->root) && a->document_count == 2 &&
              !strcmp(a->workspace, root);
+#ifdef __APPLE__
+        if(!native_test_command(a,TOOLBAR_RELOAD,stage,&ok))return;
+        *stage=91;
+#else
         test_mouse(a, a->toolbar_bounds[0], true);
+#endif
         break;
     case 23:
         test_mouse(a, a->toolbar_bounds[0], false);

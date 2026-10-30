@@ -33,7 +33,14 @@ static void completion_test_frame(app *a,const char *mode,int *stage,int *code,c
     case 2:test_mouse(a,nk_rect(a->source_editor_bounds.x+20,a->source_editor_bounds.y+20,2,2),false);break;
     case 3:
         ok=completion_test_equal(edit,original);edit->cursor=nk_utf_len(original,(int)strlen(original)-4);edit->select_start=edit->select_end=edit->cursor;
-        if(target==2){test_mouse(a,a->toolbar_bounds[2],true);*stage=35;}
+        if(target==2){
+#ifdef __APPLE__
+            if(!native_test_command(a,TOOLBAR_COMPLETION,stage,&ok))return;
+            *stage=40;
+#else
+            test_mouse(a,a->toolbar_bounds[2],true);*stage=35;
+#endif
+        }
         else test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);
         break;
     case 35:test_mouse(a,a->toolbar_bounds[2],false);break;

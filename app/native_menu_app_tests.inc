@@ -110,6 +110,16 @@ static bool native_test_focus_wait(app *a,SDL_Window *window,int *stage,double d
 static bool native_test_model_wait(bool observed,int *stage,double deadline){
     if(!observed && ps_clock()<deadline){--*stage;return false;}return true;
 }
+/* Shared by historical workflows. Bind to a painted main-window snapshot,
+ * invoke the published NSMenu item once, then let the normal loop deliver it. */
+static bool native_test_command(app *a,toolbar_action action,int *stage,bool *okay){
+    static bool waiting;static double deadline;
+    if(!waiting){waiting=true;deadline=ps_clock()+5;SDL_RaiseWindow(a->window);}
+    if(!native_test_focus_wait(a,a->window,stage,deadline))return false;
+    *okay &= SDL_GetKeyboardFocus()==a->window && native_test_shell(a) && native_test_invoke(a,action,true);
+    fprintf(stderr,"Native workflow menu command: action=%d stage=%d dispatched=%d\n",action,*stage-1,*okay);
+    waiting=false;return true;
+}
 static void native_toolbar_test_frame(app *a,int *stage,int *code,const char **capture){
     static double deadline;static bool log_before;bool ok=true;(void)capture;
     switch((*stage)++){

@@ -3672,6 +3672,9 @@ static void manager_test_key(app *a,SDL_Keycode key,SDL_Keymod mod) {
     test_window_key_mod(a->project_manager?a->manager_window:a->window,key,mod);
 }
 // clang-format off
+#ifdef __APPLE__
+static bool native_test_command(app *a,toolbar_action action,int *stage,bool *okay);
+#endif
 #include "autosave_tests.inc"
 #include "batch_tests.inc"
 #include "plot_tests.inc"
