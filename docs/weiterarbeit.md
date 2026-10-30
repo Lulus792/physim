@@ -8,6 +8,22 @@ Bei Widersprüchen zuerst Quellstand, Datum und betroffenen Umfang abgleichen.
 ## Nächster konkreter Schritt
 
 **Übrige historische Mac-GUI-Testeingaben auf die native Menüleiste portieren.**
+Dokument-Neuladen, Vervollständigung und API-Referenz sind nun ebenfalls
+abgeschlossen: `c35fc39d`, Mac-Lauf `41146212373`, Intel/Apple Silicon je **4/4**
+registrierte Fälle mit je sechs App-Unterprozessen. Windows Release und Linux
+Debug ASan/UBSan bestehen dieselben vier Fälle. Beide Sprachen, alle drei
+Editorkontexte, Text-/Undo-/Dateierhaltung und tatsächliche native Menübefehle
+sind belegt. [Nachweis](verification/macos-editor-menu-2026-10-31.json).
+Der geänderte gemeinsame Testhelfer löste zusätzlich Lauf `41146212246` aus;
+die vorhandene Menüregression besteht auf demselben Stand je **7/7**.
+Auch diese Fälle nicht bei bloßem Kontextwechsel wiederholen.
+
+Andere automatisch ausgelöste CI-Läufe auf `c35fc39d` sind separat:
+F1 `41146212249` war bei dieser Übergabe noch aktiv, C17 `41146212393`,
+Linux-Paket `41146212247` und Linux-UI `41146212248` warteten noch.
+Diese vorhandenen Handles bei Bedarf prüfen, nicht wegen einer Beobachtungspause
+neu starten. Die grünen gezielten Menüläufe bestätigen keine gesamte CI.
+
 Die fünf Toolbar-/Tastaturfälle sind jetzt abgeschlossen: Auf `8d75cee7`
 besteht Lauf `41144579429` auf Intel und Apple Silicon jeweils **7/7**
 einschließlich Menüadapter und App-Start.
@@ -21,13 +37,20 @@ bestehen je zwei klassische Menüabläufe; die vorhandene Dateien-Aktion ist
 in den bisherigen Tastaturerwartungen jetzt berücksichtigt.
 Diese abgeschlossene Teilmenge nicht wegen eines Kontextwechsels wiederholen.
 
-Andere Dokument-/Dateitab-/API-/Completion-/Batch-/Dockingabläufe klicken
-teilweise weiterhin auf die alten
+Aktive Dateitab-/Projektmanager-/Einstellungs-/Batch-/Serien-/Build- und
+Workspace-Katalogabläufe verwenden teilweise weiterhin die alten
 In-Window-Menüflächen oder erwarten das eigene F10-Menü. Diese Erwartungen
 passen nach der ausdrücklich gewünschten Verschiebung nicht mehr zu macOS;
 keinen alten Menü-Fallback ausschließlich zum Bestehen dieser Tests aktivieren.
 Das vorher fehlerhafte Dokumentationsanker-Gate ist inzwischen gezielt behoben
 und unten als eigener Teilabschluss belegt.
+
+**Vor weiteren Portierungen den registrierten Einstieg prüfen:**
+`docking_workflow` und `inspector_workflow` rufen bereits `fixed_panels` auf.
+Die alten freien Topologieübungen in `docking_tests.inc`/`inspector_tests.inc`
+sind historische Fixtures, keine aktuelle Anforderung. Freies internes Docking
+nicht wiederherstellen und diese alten Flächen nicht als offene Mac-Portierung
+zählen. ADR 009 verlangt feste Plätze mit echten Zusatzfenstern.
 
 Die Systemmenüleiste selbst nach [ADR 024](decisions/024-native-macos-menubar.md)
 ist implementiert und gezielt nativ geprüft: Datei/Bearbeiten/Ansicht/Build/Hilfe
@@ -78,6 +101,7 @@ die gesamte CI ableiten. Die alten Fehlerprotokolle unter
 
 | Teil | Ergebnis und Nachweis | Verbleibende Grenze |
 | --- | --- | --- |
+| Mac-Dokument-/Completion-/API-Menüeingaben | `c35fc39d`: Intel/Apple Silicon, Windows Release und Linux Debug ASan/UBSan je 4/4 registrierte Fälle / sechs App-Unterprozesse. Gleicher Mac-Stand zusätzlich je 7/7 Menüregression. [Nachweis](verification/macos-editor-menu-2026-10-31.json). | Gesamte GUI-/Design-/VoiceOver-/physische DPI-Abnahme und andere aktive historische Menütests offen. |
 | Historische Mac-Toolbar-/Tastaturabläufe | `8d75cee7`: Intel/Apple Silicon je 7/7 einschließlich Menüadapter und App-Start; Windows Release/Linux Debug ASan/UBSan je 2/2. [Nachweis](verification/macos-menu-workflows-2026-10-31.json). | Übrige historische Workflows, manuelle VoiceOver-/Vollbildprüfung und physische Großbild-/DPI-Abnahme offen; ARM-Großvariante hatte 1080×740. |
 | F1-Link-Gate und Offline-Lizenzen im SDK | `ed3866ed`: 188 Themen/234 Abschnittslinks unter Windows/Linux; Herkunft und beide Lizenzen tatsächlich per F1-Tastatur geöffnet, Quellenadresse kopiert; SDK-Umzug mit fehlenden Dateien als Gegenprobe. Intel/Apple Silicon je 4/4. [Nachweis](verification/documentation-links-2026-10-30.json). | Gesamte GUI-/Inhalts-/Screenreader-Abnahme bleibt offen; fremde Status-Ergänzung nicht mit geprüft. |
 | macOS-Systemmenüleiste | `d43dcd6c` + `517021f0`; je 2/2 native Fälle Intel/Apple Silicon, je 4/4 Menü-/Headerfälle plus Start unter Windows/Linux. [Kompakter Nachweis](verification/macos-menubar-2026-10-30.json). | Manuelle Vollbild-/VoiceOver-Prüfung und übrige historische Mac-GUI-Workflows offen; Toolbar/Tastatur siehe eigene Zeile. |
@@ -122,20 +146,31 @@ umfasst 101 Dateien. Der neue Menüstand `mac-menu-shell` erfasst 105 Eingaben
 einschließlich Adapter-/Testdateien. Seine Windows-/Linux-Läufe sind beendet;
 Manifest-/Archivnachweise liegen im gleichen Kampagnenordner.
 Der frühere Anschluss `doc-links-final` hat 112 Eingaben und 1097 gegen Git
-abgeglichenen Compiler-/Testdateien**, aufgebaut auf `mac-menu-shell`.
+abgeglichenen Compiler-/Testdateien, aufgebaut auf `mac-menu-shell`.
 Die F1-Läufe `doc-links-first` sind Windows/Linux je 2/2 bestanden; danach änderte
 sich nur der Mac-Menüabsatz in `design-direction.md`, kein Compilerinput oder
 App-Runtime. Alle lokalen Builds, Textprüfungen und Archivläufe sind beendet.
-**Neuester Anschluss ist `mac-menu-workflows-accepted`: 114 Eingaben, 1098
+Der vorherige Anschluss `mac-menu-workflows-accepted` hat 114 Eingaben, 1098
 gegen Git-Quellstand `8d75cee7` abgeglichene Compiler-/Testdateien, 200
-Windows-/103 Linux-Runtimedateien; sämtliche Archivbytes zurückgelesen.**
+Windows-/103 Linux-Runtimedateien; sämtliche Archivbytes zurückgelesen.
 Die lokalen Läufe `mac-menu-workflows-second` sind je 2/2 bestanden.
 Danach änderte sich nur das komplett mit `__APPLE__` geschützte Testmodul;
 echte MSVC-/GCC-Präprozessorläufe bestätigen dessen Ausschluss unter
 Windows/Linux. Die Runtimes bleiben unverändert. Alle lokalen Builds,
-Präprozessor- und Archivläufe sind beendet. Für weitere Änderungen
-`mac-menu-workflows-accepted` als vorheriges Manifest verwenden.
+Präprozessor- und Archivläufe sind beendet.
+**Neuester Anschluss: `mac-editor-menu-first`, 117 eigene Eingaben, 1098 gegen
+`c35fc39d` abgeglichene Compiler-/Testdateien, 200 Windows-/103 Linux-Runtimes.**
+Windows `run-0_069fqq` und Linux `run-5xfqg2vv` bestehen je 4/4. Alle lokalen
+Builds, App-Prozesse, Tests und Archivläufe sind beendet. Die sechs geänderten
+Compiler-/Testquellen und alle referenzierten Runtime-Archivbytes wurden
+zurückgelesen. Für weitere Änderungen dieses Manifest verwenden.
 A2-/Protokolltests ohne relevante Änderung weiterhin nicht wiederholen.
+
+Nach dieser Editorprüfrunde wurden 40 erfolgreiche Rohbilder entfernt
+(143.181.840 Bytes). Ergebnisberichte, Referenzen, Quellen und Runtimes bleiben
+erhalten; vier zusätzliche Mac-ZIPs sind gegen GitHub-Artefaktdigests geprüft.
+Sie liegen zusammen mit dem Textbericht unter
+`build/validation/macos-menu-workflows-2026-10-30/`.
 
 Die neue Menüprüfrunde entfernte 32 erfolgreiche Rohbilder (116.589.376 Bytes).
 Fehlerbelege und bestehende Referenzen bleiben erhalten; Mac-Ergebnisse bestehen

@@ -1,0 +1,611 @@
+{
+  "date": "2026-10-31",
+  "code_commit": "c35fc39dd97f9c51a9ff71c983727c3539b93a64",
+  "scope": "Native menu input in existing document reload, completion and API reference app workflows",
+  "production_behavior_changed": false,
+  "mac": {
+    "run_id": 41146212373,
+    "url": "https://github.com/PhysicSimulator/physim/actions/runs/41146212373",
+    "source_sha": "c35fc39dd97f9c51a9ff71c983727c3539b93a64",
+    "user_mac_used": false,
+    "results": {
+      "arm": {
+        "job_id": 124371809638,
+        "artifact_id": 13021092079,
+        "artifact_sha256": "ea1f4d5d272a3a73d63940a420d207d8629c750046b4081f11bdbc37c03b935d",
+        "results_member": "Release/test-results/run-ew6c8f9n/results.json",
+        "passed": 4,
+        "total": 4,
+        "application_subprocesses": 6,
+        "app_sha256": "915ac4a7648415655ef1d97757f18f0dffb47e9753cd9a32a19efcb7b069d4ea",
+        "cases": [
+          {
+            "name": "documents_small",
+            "status": "passed",
+            "commands": [
+              [
+                "/opt/homebrew/opt/python@3.15/bin/python3.15",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "documents_small",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-ew6c8f9n/documents_small/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ]
+            ],
+            "completion": [
+              "DOCUMENT WORKFLOW: PASSED stage 50: Datei gespeichert."
+            ],
+            "native_menu_actions": [
+              15
+            ]
+          },
+          {
+            "name": "documents_large",
+            "status": "passed",
+            "commands": [
+              [
+                "/opt/homebrew/opt/python@3.15/bin/python3.15",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "documents_large",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-ew6c8f9n/documents_large/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ]
+            ],
+            "completion": [
+              "DOCUMENT WORKFLOW: PASSED stage 50: Datei gespeichert."
+            ],
+            "native_menu_actions": [
+              15
+            ]
+          },
+          {
+            "name": "completion_workflow",
+            "status": "passed",
+            "commands": [
+              [
+                "/opt/homebrew/opt/python@3.15/bin/python3.15",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "completion_workflow",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-ew6c8f9n/completion_workflow/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ]
+            ],
+            "completion": [
+              "COMPLETION SELF-TEST: PASSED",
+              "COMPLETION SELF-TEST: PASSED"
+            ],
+            "native_menu_actions": [
+              20,
+              20
+            ]
+          },
+          {
+            "name": "api_reference_workflow",
+            "status": "passed",
+            "commands": [
+              [
+                "/opt/homebrew/opt/python@3.15/bin/python3.15",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "api_reference_workflow",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-ew6c8f9n/api_reference_workflow/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ]
+            ],
+            "completion": [
+              "API REFERENCE SELF-TEST: PASSED",
+              "API REFERENCE SELF-TEST: PASSED"
+            ],
+            "native_menu_actions": [
+              23,
+              19,
+              23,
+              23,
+              23,
+              19,
+              23,
+              23
+            ]
+          }
+        ]
+      },
+      "intel": {
+        "job_id": 124371809947,
+        "artifact_id": 13020538354,
+        "artifact_sha256": "02ea51b13e1d2eac720735fc3790a1af741d6172d174b30e3d6cdab6df5bfff6",
+        "results_member": "Release/test-results/run-krs4cxw4/results.json",
+        "passed": 4,
+        "total": 4,
+        "application_subprocesses": 6,
+        "app_sha256": "9ffe2bf1f44c26d8ccc9dca459a0057f5b9e9796b39107b216c6e4255b261406",
+        "cases": [
+          {
+            "name": "documents_small",
+            "status": "passed",
+            "commands": [
+              [
+                "/usr/local/opt/python@3.14/bin/python3.14",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "documents_small",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-krs4cxw4/documents_small/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ]
+            ],
+            "completion": [
+              "DOCUMENT WORKFLOW: PASSED stage 50: Datei gespeichert."
+            ],
+            "native_menu_actions": [
+              15
+            ]
+          },
+          {
+            "name": "documents_large",
+            "status": "passed",
+            "commands": [
+              [
+                "/usr/local/opt/python@3.14/bin/python3.14",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "documents_large",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-krs4cxw4/documents_large/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ]
+            ],
+            "completion": [
+              "DOCUMENT WORKFLOW: PASSED stage 50: Datei gespeichert."
+            ],
+            "native_menu_actions": [
+              15
+            ]
+          },
+          {
+            "name": "completion_workflow",
+            "status": "passed",
+            "commands": [
+              [
+                "/usr/local/opt/python@3.14/bin/python3.14",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "completion_workflow",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-krs4cxw4/completion_workflow/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ]
+            ],
+            "completion": [
+              "COMPLETION SELF-TEST: PASSED",
+              "COMPLETION SELF-TEST: PASSED"
+            ],
+            "native_menu_actions": [
+              20,
+              20
+            ]
+          },
+          {
+            "name": "api_reference_workflow",
+            "status": "passed",
+            "commands": [
+              [
+                "/usr/local/opt/python@3.14/bin/python3.14",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "api_reference_workflow",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-krs4cxw4/api_reference_workflow/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ]
+            ],
+            "completion": [
+              "API REFERENCE SELF-TEST: PASSED",
+              "API REFERENCE SELF-TEST: PASSED"
+            ],
+            "native_menu_actions": [
+              23,
+              19,
+              23,
+              23,
+              23,
+              19,
+              23,
+              23
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "regression": {
+    "reason": "The shared Apple-only test helper changed; the automatically triggered native-menu workflow was inspected on the same source",
+    "run_id": 41146212246,
+    "url": "https://github.com/PhysicSimulator/physim/actions/runs/41146212246",
+    "results": {
+      "arm": {
+        "job_id": 124371809549,
+        "artifact_id": 13021171687,
+        "artifact_sha256": "0d72816a5aef111df6ed154ef3721b9ad617710676a876c916229076f9525f98",
+        "passed": 7,
+        "total": 7,
+        "cases": [
+          "native_menu",
+          "window_smoke",
+          "toolbar_small",
+          "toolbar_large",
+          "toolbar_input_isolation",
+          "keyboard_menu_small",
+          "keyboard_menu_large"
+        ]
+      },
+      "intel": {
+        "job_id": 124371809454,
+        "artifact_id": 13021681176,
+        "artifact_sha256": "9d82ede7409fa7fc69341e25c6cbe7ae73cb750364f4d54c87d53a361795cfc0",
+        "passed": 7,
+        "total": 7,
+        "cases": [
+          "native_menu",
+          "window_smoke",
+          "toolbar_small",
+          "toolbar_large",
+          "toolbar_input_isolation",
+          "keyboard_menu_small",
+          "keyboard_menu_large"
+        ]
+      }
+    }
+  },
+  "local": {
+    "windows": {
+      "run": "run-0_069fqq",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "documents_small",
+        "--test-filter",
+        "documents_large",
+        "--test-filter",
+        "completion_workflow",
+        "--test-filter",
+        "api_reference_workflow"
+      ],
+      "exit_code": 0,
+      "passed": 4,
+      "total": 4,
+      "application_subprocesses": 6,
+      "app_sha256": "e034ed36da18864326d80e829716244c0fb8cc1b76afaed2db7e6940b3d230ce",
+      "cases": [
+        {
+          "name": "documents_small",
+          "status": "passed",
+          "commands": [
+            [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+              "documents_small",
+              "--app",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+              "--work",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-0_069fqq\\documents_small\\files ä",
+              "--root",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+              "--cc",
+              "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+            ]
+          ],
+          "completion": [
+            "DOCUMENT WORKFLOW: PASSED stage 50: Datei gespeichert."
+          ],
+          "native_menu_actions": null
+        },
+        {
+          "name": "documents_large",
+          "status": "passed",
+          "commands": [
+            [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+              "documents_large",
+              "--app",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+              "--work",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-0_069fqq\\documents_large\\files ä",
+              "--root",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+              "--cc",
+              "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+            ]
+          ],
+          "completion": [
+            "DOCUMENT WORKFLOW: PASSED stage 50: Datei gespeichert."
+          ],
+          "native_menu_actions": null
+        },
+        {
+          "name": "completion_workflow",
+          "status": "passed",
+          "commands": [
+            [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+              "completion_workflow",
+              "--app",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+              "--work",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-0_069fqq\\completion_workflow\\files ä",
+              "--root",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+              "--cc",
+              "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+            ]
+          ],
+          "completion": [
+            "COMPLETION SELF-TEST: PASSED",
+            "COMPLETION SELF-TEST: PASSED"
+          ],
+          "native_menu_actions": null
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed",
+          "commands": [
+            [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+              "api_reference_workflow",
+              "--app",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+              "--work",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-0_069fqq\\api_reference_workflow\\files ä",
+              "--root",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+              "--cc",
+              "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+            ]
+          ],
+          "completion": [
+            "API REFERENCE SELF-TEST: PASSED",
+            "API REFERENCE SELF-TEST: PASSED"
+          ],
+          "native_menu_actions": null
+        }
+      ]
+    },
+    "linux": {
+      "run": "run-5xfqg2vv",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "documents_small",
+        "--test-filter",
+        "documents_large",
+        "--test-filter",
+        "completion_workflow",
+        "--test-filter",
+        "api_reference_workflow"
+      ],
+      "exit_code": 0,
+      "passed": 4,
+      "total": 4,
+      "application_subprocesses": 6,
+      "app_sha256": "a54dce54e8c75d45fbc0706fb3dbaa19168a3d14d20f046c58304c2579dd6757",
+      "cases": [
+        {
+          "name": "documents_small",
+          "status": "passed",
+          "commands": [
+            [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+              "documents_small",
+              "--app",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+              "--work",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5xfqg2vv/documents_small/files ä",
+              "--root",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src",
+              "--cc",
+              "/usr/bin/cc"
+            ]
+          ],
+          "completion": [
+            "DOCUMENT WORKFLOW: PASSED stage 50: Datei gespeichert."
+          ],
+          "native_menu_actions": null
+        },
+        {
+          "name": "documents_large",
+          "status": "passed",
+          "commands": [
+            [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+              "documents_large",
+              "--app",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+              "--work",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5xfqg2vv/documents_large/files ä",
+              "--root",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src",
+              "--cc",
+              "/usr/bin/cc"
+            ]
+          ],
+          "completion": [
+            "DOCUMENT WORKFLOW: PASSED stage 50: Datei gespeichert."
+          ],
+          "native_menu_actions": null
+        },
+        {
+          "name": "completion_workflow",
+          "status": "passed",
+          "commands": [
+            [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+              "completion_workflow",
+              "--app",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+              "--work",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5xfqg2vv/completion_workflow/files ä",
+              "--root",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src",
+              "--cc",
+              "/usr/bin/cc"
+            ]
+          ],
+          "completion": [
+            "COMPLETION SELF-TEST: PASSED",
+            "COMPLETION SELF-TEST: PASSED"
+          ],
+          "native_menu_actions": null
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed",
+          "commands": [
+            [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+              "api_reference_workflow",
+              "--app",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+              "--work",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5xfqg2vv/api_reference_workflow/files ä",
+              "--root",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src",
+              "--cc",
+              "/usr/bin/cc"
+            ]
+          ],
+          "completion": [
+            "API REFERENCE SELF-TEST: PASSED",
+            "API REFERENCE SELF-TEST: PASSED"
+          ],
+          "native_menu_actions": null
+        }
+      ]
+    }
+  },
+  "assertions": [
+    "Document Unicode editing, dirty state, backup and external-conflict handling, cancelled reload/close, confirmed reload, undo/redo and actual final persisted files",
+    "Completion in experiment, analysis and workspace document for C and Physim: keyboard/menu invocation, choice, exact Unicode text, undo/redo, dynamic input, empty and string-literal boundaries",
+    "API reference in all three editor contexts for both languages: keyboard/menu invocation, exact symbol, source preservation, document editing/undo, F1 source link and scrolling, return and close through native menu",
+    "Actual NSMenu targets deliver commands through the normal SDL event loop; no production dispatcher call or old macOS in-window menu fallback",
+    "Completion and API traces reached the final assertion stage in both language subprocesses; successful exit alone was not used as completion evidence"
+  ],
+  "checkpoint": {
+    "tag": "mac-editor-menu-first",
+    "owned_inputs": 117,
+    "compiler_and_test_files_compared_to_git": 1098,
+    "source_overlay": [
+      "app/api_reference_tests.inc",
+      "app/completion_tests.inc",
+      "app/document_tests.inc",
+      "app/main.c",
+      "app/native_menu_app_tests.inc",
+      "tests/check_display_workflow.py"
+    ],
+    "runtime_files": {
+      "windows": 200,
+      "linux": 103
+    },
+    "archives_read_back": true,
+    "source_manifest": "build/validation/explorer-inline-2026-10-29/mac-editor-menu-first-compiler-source.json"
+  },
+  "cleanup": {
+    "successful_images_removed": 40,
+    "bytes_freed": 143181840,
+    "failed_cases_existing_references_sources_and_runtime_preserved": true
+  },
+  "migration_inventory": {
+    "next_active": [
+      "file_tabs_workflow: old File/Edit/Build menu surfaces",
+      "project-manager and settings keyboard entries: F10 assumption",
+      "batch/series and project-build menu entries",
+      "named-workspace catalogue and shell typography/menu-focus tests"
+    ],
+    "inactive_legacy": [
+      "docking_tests.inc and inspector_tests.inc retain historical free-topology fixtures; registered docking_workflow and inspector_workflow already call fixed_panels. Do not restore free docking or port these obsolete surfaces as current acceptance."
+    ],
+    "evidence": [
+      "tests/check_display_workflow.py: docking and inspector wrappers",
+      "app/docking_ui.inc: dock_fixed resets displayed topology",
+      "docs/decisions/009-fixed-workspace-windows.md"
+    ]
+  },
+  "limits": [
+    "Four registered editor/document cases wrap six app subprocesses per platform; they do not prove the complete GUI suite or whole design acceptance",
+    "Requested small/large document cases both executed; actual distinct physical window/display sizes were not independently recorded in this campaign",
+    "Hosted GUI runs do not establish manual VoiceOver/fullscreen/physical DPI or multi-monitor acceptance",
+    "Other active historical Mac menu inputs remain unported; static matches must be checked against registered entrypoints before changing obsolete fixtures",
+    "Foreign AT-SPI/Orca/workflow/status/website changes excluded from isolated local builds and commits; no overall CI claim"
+  ],
+  "restart": "All listed local builds, tests and archive operations are terminal. Continue from mac-editor-menu-first; do not rerun unchanged completed cases because of context loss. User Mac is switched off; no SSH/upload/probe."
+}
