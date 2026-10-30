@@ -1,0 +1,6 @@
+{
+  "docs/visuals/context-menu-options/index.html": "ce2e3f8a03207c0e27635a3d88e2bbe2434ab37db5a1d6f4fe14f16d1ce196ce",
+  "docs/visuals/context-menu-options/menus.css": "fef360ac87af5dcf13ff94c37796aaa7808a5bb9f859a74e68c599f85734faf4",
+  "docs/visuals/context-menu-options/menus.js": "9f882aad8f78dbad7a42146a7392fdbc0e19ba8001c272cd8c37afe7f7cdddb1",
+  "tools/check_context_menu_options.cjs": "28ca79ea712262e8d5ff823551266c5d0d0581c4b11cbcfd995e0efa7f270f73"
+}

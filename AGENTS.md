@@ -102,6 +102,15 @@
   keine native Abnahme. Bestehende Freigaben und native Arbeit erhalten;
   D07 bleibt die nächste neue Entwurfsrunde.
 
+## Getrennte Entwürfe: Kontextmenüs D07
+
+- Die [Kontextmenüvorschauen A/B/C](docs/visuals/context-menu-options/README.md)
+  vom 30. Oktober 2026 sind ausdrücklich getrennt und **noch nicht ausgewählt**.
+  Keine Variante als fertiges Design übernehmen, bevor der Nutzer entscheidet.
+  A2-Markierung, Rechtsklick-/Tastaturbedienung und alle bisherigen Freigaben
+  bleiben erhalten. Die Runde gestaltet die Befehlsmatrix je Ziel; sie führt
+  keine unbelegten Datei-/Modellfunktionen ein. D08 bleibt die nächste neue Runde.
+
 ## Speicherpflege
 
 - Der Nutzer hat die F:-Nutzung am 25. Oktober 2026 widerrufen: Physim bleibt

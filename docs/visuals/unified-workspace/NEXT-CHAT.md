@@ -1,5 +1,14 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
+**Getrennte Entwürfe vom 30. Oktober 2026 – Kontextmenüs D07:**
+[A/B/C vergleichen](../context-menu-options/README.md). A ist kompakt, B zeigt
+Zielkopf/Gruppen, C kurze Aktionserklärungen. Gleiche Befehle für Text, Tab,
+Datei, Ordner, Meldung, Diagramm, Szene, Mehrfachauswahl und freie Fläche.
+**Auswahl offen: noch keine Variante übernehmen.** A2 und Rechtsklick/Menütaste/
+Umschalt+F10 bleiben verbindlich; keine automatische Aktionsleiste. Ziel-/
+Versionsbindung, Untermenüs, gesperrte Befehle, Fokus und Kameradrag sind
+berücksichtigt. Native Arbeit und folgende Freigaben erhalten; D08 folgt danach.
+
 **Verbindliche Auswahl vom 30. Oktober 2026 – Fortschritt B mit Pop-out / D06:**
 Der Nutzer hat **B · Aufgabenleiste mit Herauslösen als eigenes Fenster** gewählt.
 Die vorherige Übernahmesperre ist aufgehoben; nativ mit umsetzen, keine neue
