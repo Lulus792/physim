@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Physim · Suche und Ersetzen im Vergleich</title><link rel="stylesheet" href="search.css"><script src="search.js" defer></script></head>
+<body>
+<header class="gallery"><a class="brand" href="../unified-workspace/">p<span>·</span><small>Physim / Designatelier</small></a><span>Zusatzstudie · bestehende Suche bleibt</span><button id="theme">Darstellung: Hell</button></header>
+<main>
+<section class="intro"><p class="eyebrow">D08 / EDITOR-SUCHE / 30. OKTOBER 2026</p><h1>Finden. Ändern. Im Zusammenhang.</h1><p>Drei Anordnungen für dieselbe Suche in der aktuellen Datei.<br>Die dezente A2-Auswahl bleibt – Suchtreffer bekommen eine eigene Kontur.</p></section>
+<nav class="variants" aria-label="Designrichtung">
+<button data-variant="a"><b>A</b><span><strong>Suchinsel</strong><small>Kompakt über dem Code.<br>Ersetzen bei Bedarf aufklappen.</small></span></button>
+<button data-variant="b"><b>B</b><span><strong>Dokumentleiste</strong><small>Fest zwischen Tabs und Code.<br>Der Inhalt bleibt unverdeckt.</small></span></button>
+<button data-variant="c"><b>C</b><span><strong>Trefferbereich</strong><small>Suche rechts neben dem Code.<br>Fundstellen mit Zeilenkontext.</small></span></button>
+</nav>
+<section class="controls"><div><p class="eyebrow" id="direction">A · SUCHINSEL</p><h2 id="direction-title">Nah am Code. Leicht erreichbar.</h2></div><label>Beispielzustand<select id="scenario"><option value="matches">Mehrere Treffer</option><option value="none">Keine Treffer</option><option value="empty">Leere Suche</option><option value="readonly">Nur lesen</option><option value="unicode">Umlaute & Emoji</option><option value="long">Lange Datei & Pfade</option><option value="loading">Quelle wird geladen</option><option value="error">Quelle nicht verfügbar</option></select></label><label class="check-control"><input id="opaque" type="checkbox"> Transparenz reduzieren</label></section>
+<p class="isolation">Die Suchinsel ist bereits festgelegt. Diese Zusatzstudie ersetzt sie nicht · Änderungen bleiben im Beispieltext dieser Seite.</p>
+<section class="workbench" aria-label="Entwurf für die Physim-Werkbank">
+<header class="app-header"><strong>p· <span>Pendelstudie</span></strong><span>Entwickeln</span><span class="badge">A2 · Dezenter Schleier</span></header>
+<div class="tabs" role="tablist" aria-label="Beispieldateien"><button role="tab" data-file="experiment" aria-selected="true">pendel.c</button><button role="tab" data-file="analysis" aria-selected="false">auswertung.c</button><button role="tab" data-file="notes" aria-selected="false">notizen.txt</button></div>
+<div class="editor-toolbar"><span id="file-path">experiments / pendel / pendel.c</span><div><button id="undo" title="Letzte Beispieländerung rückgängig · Strg/⌘+Z" aria-label="Letzte Beispieländerung rückgängig">↶</button><button id="open-search" title="Dokument durchsuchen · Strg/⌘+F" aria-label="Dokument durchsuchen">⌕</button></div></div>
+<div class="editor-layout">
+<section id="search" class="search-panel" role="search" aria-label="Suche in der aktuellen Datei">
+<div class="search-heading"><div><span class="eyebrow">AKTUELLE DATEI</span><strong id="search-file">pendel.c</strong></div></div>
+<div class="find-row"><button id="expand" class="icon" aria-label="Ersetzung aufklappen" title="Ersetzung aufklappen" aria-expanded="false" aria-controls="replacement">›</button><label class="search-input"><span aria-hidden="true">⌕</span><input id="query" aria-label="Suchtext" placeholder="Im Dokument suchen" autocomplete="off" spellcheck="false" aria-describedby="search-status search-mode"></label><div class="navigation"><button id="previous" class="icon" aria-label="Vorheriger Treffer" title="Vorheriger Treffer · Umschalt+Enter">↑</button><button id="next" class="icon" aria-label="Nächster Treffer" title="Nächster Treffer · Enter">↓</button></div><button id="close" class="icon" aria-label="Dokumentsuche schließen" title="Dokumentsuche schließen · Escape">×</button></div>
+<div id="replacement" hidden><div class="replace-row"><label><span class="sr-only">Ersetzen durch</span><input id="replacement-input" placeholder="Ersetzen durch" autocomplete="off" spellcheck="false"></label><button id="replace-one">Ersetzen</button><button id="replace-all">Alle ersetzen…</button></div><p class="extension">Alle ersetzen: Entwurfserweiterung · nur diese Beispieldatei</p></div>
+<div class="search-meta"><span id="search-status" role="status" aria-live="polite" aria-atomic="true">1 von 4 Treffern</span><span id="search-mode">Wörtlich · Groß/Klein beachten</span></div>
+<div id="problem" class="problem" hidden><p id="problem-text"></p><button id="retry">Erneut prüfen</button><button id="cancel-load">Abbrechen</button></div>
+<section id="confirm" class="confirm" aria-label="Alle Ersetzungen prüfen" hidden><strong id="confirm-title"></strong><p id="confirm-description"></p><div><button id="confirm-replace" class="primary">Jetzt ersetzen</button><button id="cancel-replace">Abbrechen</button></div></section>
+<div id="results" class="results" aria-label="Treffer in der aktuellen Datei"></div>
+</section>
+<div class="code-pane"><div class="code-head"><span id="document-label">pendel.c</span><span class="legend"><i></i> Suchtreffer <i class="selected-key"></i> Auswahl A2</span></div><div class="code-layer"><pre id="mirror" aria-hidden="true"></pre><textarea id="editor" aria-label="Bearbeitbarer Beispielcode" spellcheck="false" wrap="off"></textarea></div><div class="document-state"><span id="dirty-state">Gespeicherter Beispielstand</span><span id="selection-state">Keine Textauswahl</span></div></div>
+</div>
+<footer class="workspace-footer"><span id="feedback" role="status" aria-live="polite">Nur die aktuelle Beispieldatei wird durchsucht.</span><button id="reset">Beispiel zurücksetzen</button></footer>
+</section>
+<section class="principles"><article><p class="eyebrow">TREFFER ≠ AUSWAHL</p><h3>Lesen bleibt leicht.</h3><p>Gedämpfte bernsteinfarbene Treffer, eine Kontur für die aktive Fundstelle und A2 für die echte Textauswahl. Zeichen behalten ihre Farbe und volle Deckkraft.</p></article><article><p class="eyebrow">EIN DOKUMENT</p><h3>Der Dateibezug bleibt klar.</h3><p>Ein Tabwechsel durchsucht die neue Datei. Entwürfe der anderen Tabs bleiben erhalten. „Alle ersetzen“ nennt Datei und Anzahl vor der Änderung.</p></article><article><p class="eyebrow">TASTATUR & RÜCKWEG</p><h3>Änderungen bleiben nachvollziehbar.</h3><p>Strg/⌘+F öffnet die Suche. Enter und Umschalt+Enter navigieren, Escape gibt Fokus an den Code. Ersetzungen sind rückgängig zu machen; es wird nichts gespeichert.</p></article></section>
+<footer class="gallery-footer"><span>Keine erneute Auswahl erforderlich. Die vorhandene Suchinsel bleibt; neue Anordnungen sind nicht freigegeben.</span><a href="README.md">Bestandsabgleich & Funktionsumfang ↗</a></footer>
+</main>
+</body></html>

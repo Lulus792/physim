@@ -1,0 +1,10 @@
+{
+  "normalization": "CRLF to LF before SHA-256",
+  "sourceCommit": "b4eaea5b486605a29f907d17e1dd50c27a186345",
+  "sha256": {
+    "docs/visuals/search-options/index.html": "044559d803d789e0573e9e8ae03ea824b4b45f21e54d8b0ffb5688be8c4a64b1",
+    "docs/visuals/search-options/search.css": "dde5551611c6bfbf4f0874473c7b32fb2c239d3f610af92108ffff194f66e6a4",
+    "docs/visuals/search-options/search.js": "10e8c541ce01fa2646e18c1d7b86e04cffefedbfefa4d336c56fac67e63c442f",
+    "tools/check_search_options.cjs": "3bf2460b59e3d73e5230dd3f37b581348ba1947f0bb6c20a0d990a3d1d62e0b1"
+  }
+}

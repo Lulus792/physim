@@ -100,7 +100,7 @@
   und Fensterschließen ohne Abbruch/Neustart. Ein gemeinsamer Auftragszustand,
   keine doppelten Worker. Hauptfenster bleibt bedienbar. Browser-Pop-up ist
   keine native Abnahme. Bestehende Freigaben und native Arbeit erhalten;
-  D07 ist inzwischen als A gewählt; D08 bleibt die nächste neue Entwurfsrunde.
+  D07 ist inzwischen als A gewählt; die vorhandene Suche bleibt, D09 folgt als neue Runde.
 
 ## Verbindliche Designauswahl: Kontextmenüs A
 
@@ -115,7 +115,18 @@
   Mehrfachauswahl, A2, Rechtsklick/Menütaste/Umschalt+F10, Fokus und Kameradrag
   erhalten. Echte native Verfügbarkeit, Ziel-/Versionsbindung und Ergebnisse
   verwenden. Alle bisherigen Freigaben und native Arbeit bleiben erhalten;
-  Browserbelege sind keine native Abnahme. D08 ist die nächste neue Entwurfsrunde.
+  Browserbelege sind keine native Abnahme. D09 ist die nächste offene Designrunde.
+
+## Bestandsabgleich: Editor-Suche D08
+
+- Die vorhandene Suche/Suchinsel ist bereits gestaltet und nativ vorhanden.
+  Nach dem Nutzerhinweis vom 30. Oktober 2026 D08 nicht als neue Layoutwahl führen.
+  Die [ergänzende A/B/C-Studie](docs/visuals/search-options/README.md) ist getrennt,
+  nicht freigegeben und ersetzt die bestehende Suche nicht. Keine erneute
+  Variantenentscheidung vorschalten; A2, Kontextmenüs A und alle Freigaben erhalten.
+  „Alle ersetzen“ ist nur eine gekennzeichnete Studie, kein neuer nativer Auftrag.
+  Keine projektweite Suche/Regex/Ganzwortmodi ableiten. D09 ist die nächste
+  tatsächlich offene Designrunde.
 
 ## Speicherpflege
 

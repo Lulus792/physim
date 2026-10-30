@@ -1,5 +1,9 @@
 # Physim · Gemeinsame Designvorschau
 
+**Bestandskorrektur vom 30. Oktober:** Die Suchinsel samt Ersetzung ist bereits
+gestaltet. Die [ergänzende Suchstudie](../search-options/README.md) ersetzt sie
+nicht und benötigt keine neue Auswahl. D09 ist der nächste offene Designpunkt.
+
 **Gewählte Kontextmenüs vom 30. Oktober:** **A · Kompakt** mit Trennlinien,
 Tastaturhinweisen und unveränderter A2-Markierung.
 [Verbindliche Spezifikation](../context-menu-options/APPROVED.md) ·

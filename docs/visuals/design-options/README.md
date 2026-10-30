@@ -1,5 +1,10 @@
 # Physim – getrennte Designvarianten
 
+**Bestandsabgleich vom 30. Oktober 2026:** Die Suchinsel war bereits gestaltet.
+Die [ergänzende Suchstudie](../search-options/README.md) bleibt nicht freigegeben;
+keine neue Auswahl nötig. Bestehende Suche und alle Freigaben bleiben erhalten.
+D09 ist der nächste offene Designpunkt.
+
 **Weitere Auswahl vom 30. Oktober 2026:** Kontextmenüs sind im Design
 **A · Kompakt** gewählt. [Spezifikation](../context-menu-options/APPROVED.md) ·
 [festgelegte Referenz](../context-menu-options/index.html?approved=1&context=text).

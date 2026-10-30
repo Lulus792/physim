@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "method": "HTTP content check after label-only status correction",
+  "assertions": [
+    "Existing search retained",
+    "No repeat selection required",
+    "Supplemental variants not approved"
+  ]
+}

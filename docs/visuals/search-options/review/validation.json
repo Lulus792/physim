@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-30T15:15:07.193Z",
+  "sourceCommit": "b4eaea5b486605a29f907d17e1dd50c27a186345",
+  "platform": "win32",
+  "browser": "156.0.4314.50",
+  "layouts": 144,
+  "checks": [
+    "144 layouts: three designs, eight scenarios, three themes, 1440/500px; search/actions reachable and no horizontal page overflow",
+    "All designs: literal case-sensitive/empty search, wrap both directions, exact single/all/delete replacements, one-step undo, cancellation/query invalidation, per-file dirty buffers and target binding, Escape/Ctrl+F focus return, Unicode/UTF-8 limits, read-only/load/error handling and preserved A2 range; escaped query text",
+    "Document revision invalidates confirmation and stale activation; identical replacement terminates; long-line hit scrolls horizontally and vertically",
+    "C result jump and keyboard tabs; 360px with 200% root font and cancellation; reduced transparency, forced colors/reduced motion keyboard navigation and 2x browser pixel density"
+  ],
+  "errors": [],
+  "passed": true
+}

@@ -32,6 +32,7 @@ Diese Teile brauchen **keine erneute Variantenentscheidung**:
 | Hinweise und Rückmeldungen | **A · Leiser Hinweis**, final freigegeben | Echte Ereignisse/Protokoll C, lokale Rückmeldungen und Verlauf mit Fokus-/Fenster-/Versionsprüfung nativ umsetzen. |
 | Fortschritt und Abbruch | **B · Aufgabenleiste mit Pop-out**, gewählt | Echte OS-Fenster mit gemeinsamem Auftragszustand, Rückholen ohne Abbruch/Neustart, native Adapter-/Endzustandsabnahme. |
 | Kontextmenüs | **A · Kompakt**, gewählt | Neun Zielarten, echte Befehlsverfügbarkeit/Zielbindung, Untermenüs, Fokus und rechte Kamerageste gemäß Spezifikation nativ umsetzen. |
+| Editor-Suche / einzelne Ersetzungen | **Vorhandene kühle Suchinsel mit aufklappbarer Ersetzung** | Bestehendes Layout und native Funktion erhalten. Verbleibende Detail-/Plattformprüfungen brauchen keine erneute Anordnungswahl. |
 | F1 / Hilfe | Bestehendes Design H und dessen Folgeverträge | Reale Inhalte, Tastatur, Screenreader und verbleibende Abweichungen weiter prüfen. |
 
 Verträge: [Bereichsauswahl](../design-options/APPROVED.md),
@@ -49,7 +50,9 @@ entschieden: [Einstellungen A · Kategorien](../settings-options/APPROVED.md).**
 **D05 ist ebenfalls entschieden: [Rückmeldungen A · Leiser Hinweis](../feedback-options/APPROVED.md).**
 **D06 ist entschieden: [B · Aufgabenleiste mit Pop-out](../progress-options/APPROVED.md).**
 **D07 ist entschieden: [Kontextmenüs A · Kompakt](../context-menu-options/APPROVED.md).**
-D08 bleibt die nächste neue Entwurfsrunde.
+**D08 war als neue Layoutrunde doppelt:** Die vorhandene Suchinsel bleibt.
+Die [ergänzende Studie](../search-options/README.md) ist nicht freigegeben und
+keine Pflichtentscheidung. D09 ist der nächste tatsächlich offene Designpunkt.
 
 | ID / Prio | Was gestalten? | Benötigte Zustände und Ergebnis |
 | --- | --- | --- |
@@ -60,7 +63,7 @@ D08 bleibt die nächste neue Entwurfsrunde.
 | D05 · P1 | **Hinweise/Rückmeldungen · A gewählt** | Höchstens zwei kurze Karten, erreichbarer Verlauf, lokale Kopier-/Pfadfehler und dauerhafte Veraltet-Kennzeichnung; Gruppierung, Fokus und optionales Ausblenden. Mit echten Ereignissen aus Protokoll C nativ umsetzen, keine neue Variantenwahl. |
 | D06 · P1 | **Fortschritt/Abbruch · B mit Pop-out gewählt** | Kompakte B-Leiste mit aufklappbaren Details und eigenem Fenster für dieselbe Aufgabe; Rückholen/Schließen ohne Abbruch/Neustart. Echte Zähler/Status, Abbruchbestätigung und Teilresultate nativ umsetzen, keine neue Variantenwahl. |
 | D07 · P1 | **Kontextmenüs · A gewählt** | Kompakte Liste mit Trennlinien und Tastaturhinweisen für neun Ziele. A2, Rechtsklick/Tastatur, Mehrfachauswahl, Untermenüs, gesperrte Befehle mit Grund und Ziel-/Versionsbindung nativ umsetzen; keine neue Variantenwahl. |
-| D08 · P1 | **Editor-Suche und Ersetzen** | Keine Treffer, mehrere Dateien, aktive Fundstelle vs. A2-Auswahl, Ersetzen einzelner/aller Treffer, ungespeicherte Änderungen. Bestehende Suchfunktion einpassen; projektweite Suche separat als mögliche Erweiterung behandeln. |
+| D08 · P1 | **Editor-Suche und Ersetzen · vorhandene Suchinsel erhalten** | Grundlayout und native Einzelersetzung bestehen. Detailprüfungen für Treffer/A2, Unicode, Nur lesen und Dateibezug offen halten; keine neue Layoutwahl. Zusatzstudie nicht freigegeben. Alle ersetzen und projektweite Suche sind kein stiller Implementierungsauftrag. |
 | D09 · P2 | **Vervollständigung und Hilfe direkt am Code** | Vorschlagsliste, Signatur, Parameter, Dokumentation, abgeschnittener Name, keine Treffer und Ladezustand. Vorhandene API-Vervollständigung/F1 nicht neu erfinden; Popup, Kontext und Fokus gemeinsam abgleichen. |
 | D10 · P1 | **Explorer-Inhalte und Dateitypen** | Langer Dateiname/Pfad, viele Einträge, leer, Laden, verschwunden, Rechtefehler; Text, Bild und Messlauf als verschiedene Vorschauen. Explorer-A-Grundlayout steht; API-Kontext befindet sich in laufender nativer Arbeit und darf nicht pauschal als fehlend gelten. |
 | D11 · P2 | **Kamera und räumliche Orientierung** | 2D/3D, Projektion, Standardblick, Zentrieren auf Auswahl, verdeckte/außerhalb liegende Objekte. Bestehende Kamerasteuerungen in eine klare, unaufdringliche Werkzeuggruppe einpassen; rechter Kameradrag vs. Rechtsklick-Menü ist Teil der Prüfung. |
@@ -113,8 +116,9 @@ und verteilte Simulation für die erste Version aus.
 **D05 ist mit A freigegeben** und gehört ebenfalls in die native Umsetzung.
 **D06 ist mit B plus eigenem Pop-out-Fenster gewählt** und gehört ebenfalls in die native Umsetzung.
 **D07 · Kontextmenüs A ist gewählt** und gehört zur nativen Umsetzung.
-Als nächste neue Entwurfsrunde **D08**: Editor-Suche und Ersetzen. Anschließend
-Explorer-/Szenen- und Auswertungsdetails anhand realer Inhalte ausarbeiten.
+**D08 ist keine neue Layoutrunde:** vorhandene Suchinsel und Einzelersetzung erhalten.
+Als nächste neue Entwurfsrunde **D09**: Vervollständigung und Hilfe direkt am Code.
+Danach Explorer-/Szenen- und Auswertungsdetails anhand realer Inhalte ausarbeiten.
 
 Pro Thema liefern: Normalzustand, Leer-/Lade-/Fehler-/Abbruchzustand, Auswahl,
 Tastatur-/Fokusweg und eine kleine/helle/dunkle Darstellung. Neue Gestaltungs-

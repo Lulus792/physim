@@ -1,0 +1,75 @@
+{
+  "method": "sRGB luminance; translucent fills composed over editor field before contrast; pass checked before rounding",
+  "pairs": [
+    {
+      "theme": "dark",
+      "role": "body",
+      "ratio": 14.996,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "theme": "dark",
+      "role": "secondary",
+      "ratio": 7.395,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "theme": "dark",
+      "role": "A2 text",
+      "ratio": 11.129,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "theme": "dark",
+      "role": "hit text",
+      "ratio": 11.033,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "theme": "light",
+      "role": "body",
+      "ratio": 15.554,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "theme": "light",
+      "role": "secondary",
+      "ratio": 6.555,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "theme": "light",
+      "role": "A2 text",
+      "ratio": 13.477,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "theme": "light",
+      "role": "hit text",
+      "ratio": 13.34,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "role": "primary button",
+      "background": "#1965ce",
+      "ratio": 5.535,
+      "minimum": 4.5,
+      "passed": true
+    },
+    {
+      "role": "primary button",
+      "background": "#1556ac",
+      "ratio": 7.098,
+      "minimum": 4.5,
+      "passed": true
+    }
+  ]
+}

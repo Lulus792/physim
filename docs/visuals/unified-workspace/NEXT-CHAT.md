@@ -1,5 +1,16 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
+**Bestandskorrektur vom 30. Oktober 2026 – Editor-Suche D08:**
+Die vorhandene Suchinsel samt aufklappbarem Ersetzen ist bereits gestaltet und
+nativ vorhanden. Der Nutzer hat auf diese Doppelung hingewiesen. **Bestehende
+Suchinsel weiterführen, keine erneute Variantenwahl vorschalten.** Die
+[ergänzende A/B/C-Studie](../search-options/README.md) ist nicht freigegeben und
+ersetzt das bestehende Design nicht. Ihre neuen Anordnungen, Trefferliste und
+„Alle ersetzen“-Erweiterung sind kein neuer nativer Implementierungsauftrag.
+Vorhandene aktuelle-Datei-Suche, Unicode-/Undo-/Dirty-Regeln, A2 und alle folgenden
+Freigaben erhalten. Verbleibende Detailprüfungen sind keine neue Layoutentscheidung;
+projektweite Suche bleibt separat. D09 ist der nächste tatsächlich offene Designpunkt.
+
 **Verbindliche Auswahl vom 30. Oktober 2026 – Kontextmenüs A / D07:**
 Der Nutzer hat **A · Kompakt** gewählt. Die vorherige Übernahmesperre ist
 aufgehoben; im bestehenden nativen Auftrag mit umsetzen, keine neue Variantenwahl.
@@ -23,7 +34,7 @@ Explorer A auf. Fehler aus realem Ergebnis über Rückmeldungen A/Protokoll C.
 Keine erfundenen Datei-/Objektfunktionen oder Fixture-Erfolgstexte übernehmen.
 Alle bisherigen Freigaben und die laufende native Arbeit bleiben erhalten.
 Browserreferenz ist keine native oder Screenreader-/Plattformabnahme.
-D08 „Editor-Suche und Ersetzen“ ist die nächste neue Entwurfsrunde.
+D08 führt die vorhandene Suchinsel fort; D09 ist die nächste neue Runde.
 
 **Verbindliche Auswahl vom 30. Oktober 2026 – Fortschritt B mit Pop-out / D06:**
 Der Nutzer hat **B · Aufgabenleiste mit Herauslösen als eigenes Fenster** gewählt.
@@ -42,7 +53,7 @@ Hauptfenster bleibt bedienbar. Bekannte/unbekannte Mengen, bestätigter Abbruch,
 Teilresultate, Erfolg-Abbruch-Rennen und ehrliche Adapterfähigkeiten erhalten.
 Browser-Pop-up ist nur Referenz, keine native Physim- oder Plattformabnahme.
 A/C bleiben Historie. Rückmeldungen A, Läufe A und alle folgenden Freigaben
-sowie laufende native Arbeit erhalten; D07 ist inzwischen A, D08 folgt als neue Runde.
+sowie laufende native Arbeit erhalten; D07 ist inzwischen A, vorhandene Suche bleibt.
 
 **Verbindliche Freigabe vom 30. Oktober 2026 – Rückmeldungen A / D05:**
 Der Nutzer hat **A · Leiser Hinweis ins fertige Design übernommen**. Die
