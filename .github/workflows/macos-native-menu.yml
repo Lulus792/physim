@@ -30,7 +30,7 @@ jobs:
           cmake --build build/sdl-build --parallel 4
           cmake --install build/sdl-build
       - name: Actual AppKit menu and complete app build
-        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test-display --test-filter native_menu
+        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test-display --test-filter native_menu --test-filter window_smoke
       - name: Compact native results
         if: always()
         uses: actions/upload-artifact@v4

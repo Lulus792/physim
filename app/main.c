@@ -5713,8 +5713,17 @@ int main(int argc, char **argv) {
             profile_previous = now;
         }
         frames++;
-        if (smoke && frames >= 8)
+        if (smoke && frames >= 8) {
+#ifdef __APPLE__
+            bool native_shell=a->native_menu_active && a->native_menu && !a->toolbar_menu && !a->toolbar_keyboard;
+            for(unsigned i=0;i<SDL_arraysize(toolbar_top_order);i++)
+                native_shell=native_shell && a->toolbar_bounds[toolbar_top_order[i]].w==0;
+            native_shell=native_shell && a->navigation_bounds[0].w>0 && a->window_control_bounds[2].w>0;
+            if(!native_shell)exit_code=1;
+            printf("NATIVE MACOS MENUBAR SHELL: %s\n",native_shell?"PASSED":"FAILED");
+#endif
             a->quitting = true;
+        }
         /* Deterministic slow rendering for the keyboard regression only. */
         SDL_Delay(workspace_state_test && !strcmp(argv[3],"docs-keyboard-delayed")?80:5);
     }
