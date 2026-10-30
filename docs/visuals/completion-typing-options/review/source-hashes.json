@@ -1,0 +1,14 @@
+{
+  "normalization": "CRLF to LF before SHA-256",
+  "sourceCommit": "8840b9c93df5ef8f7a178cfc89b6fb577806041d",
+  "sha256": {
+    "docs/visuals/completion-typing-options/index.html": "594c95eab3cbe78420822e59af347ad0eadf6a9b7efd4e6a1ec91e98e8ab433d",
+    "docs/visuals/completion-typing-options/completion.css": "e3646d435ba5606362e7727732c07a23125fa298daf455626533e42723e0e779",
+    "docs/visuals/completion-typing-options/completion.js": "0a91d4652130838843eb41fdefe30132c0e6895aeee18de59e58340335c033cf",
+    "docs/visuals/completion-options/completion.css": "4f1f954abdb9967c902085faf7da2bfad500d5abef29798ca65137939d8301e9",
+    "docs/visuals/context-menu-options/menus.css": "e6b3d205629b94a2a07e06ba81604056d6d24880743009dbccf3cda9b41339cd",
+    "docs/visuals/completion-options/catalog.js": "50bd8c70ca979ccc48900f0524b60a38138c7aef536853cdaf442c35c63e7707",
+    "tools/build_completion_preview_data.py": "80a6b64f5437ae45b13c662df60f823f792f578fd32d4b18cc36f7e16e79ce83",
+    "tools/check_completion_typing_options.cjs": "72c907f2ae68f8ae52488d7431551e296dec4deeda377896b64ef6e3c127c9f7"
+  }
+}

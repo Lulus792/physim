@@ -1,8 +1,9 @@
 # Physim · Gemeinsame Designvorschau
 
-**Neue getrennte Popup-Detailentwürfe vom 30. Oktober:**
-[Code-Vorschläge A/B/C](../completion-options/index.html?variant=a).
-Auswahl offen. Bestehende Completion, API-Karte, F1 H und Suchinsel bleiben erhalten.
+**Neue Runde vom 30. Oktober: automatische Vervollständigung.**
+[D · Editor / E · Neovim / F · IDE](../completion-typing-options/index.html?variant=e).
+Auto-Anzeige beim Tippen ist beauftragt; Optik D/E/F offen. A/B/C sind verworfen.
+Bestehender Katalog, API-Karte, F1 H, Suchinsel und A2 bleiben erhalten.
 
 **Bestandskorrektur vom 30. Oktober:** Die Suchinsel samt Ersetzung ist bereits
 gestaltet. Die [ergänzende Suchstudie](../search-options/README.md) ersetzt sie

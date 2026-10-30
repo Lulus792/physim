@@ -128,18 +128,20 @@
   Keine projektweite Suche/Regex/Ganzwortmodi ableiten. D09 ist die nächste
   tatsächlich offene Designrunde; dafür liegen inzwischen getrennte Popup-Entwürfe vor.
 
-## Getrennte Detailentwürfe: Vorschlags-Popup D09
+## Automatische Vervollständigung und neue Popup-Entwürfe D09
 
-- Die [Popup-Vorschauen A/B/C](docs/visuals/completion-options/README.md)
-  vom 30. Oktober 2026 sind **noch nicht ausgewählt**. Nur das Popup für die
-  bereits bestehende API-Vervollständigung wird verglichen; keine Variante vor
-  Nutzerentscheidung übernehmen. Bestehende API-Karte, F1 H und Suchinsel erhalten.
-  Katalog, Signaturen, lexikalische Memberregeln, Einfügen/Undo und Umschalt+F1
-  sind vorhandene Grundlagen, keine neu beauftragte Engine. Referenzladen ist
-  im nativen Bestand synchron; der gezeigte Ladefall ist nur ein Zustandsentwurf.
-  Keine KI-/LSP-/Typanalyse oder automatische Aufrufparameterhilfe ableiten.
-  A2, Kontextmenüs A und alle bisherigen Freigaben bleiben bestehen. D10 vor
-  einer neuen Runde gegen vorhandene Explorer-Inhalte/API-Kontext abgleichen.
+- Der Nutzer hat am 30. Oktober 2026 **automatisches Anzeigen beim Tippen
+  ausdrücklich beauftragt und die Optik A/B/C verworfen**.
+  [ADR 022](docs/decisions/022-automatic-completion.md) und
+  [neue Entwürfe D/E/F](docs/visuals/completion-typing-options/README.md) lesen.
+  Automatische Anzeige nativ mit ergänzen; manuelles Strg+Leertaste erhalten.
+  D/E/F sind noch nicht ausgewählt, keine Optik vor der Entscheidung übernehmen;
+  A/B/C nicht erneut zur Wahl stellen. Vorhandenen Katalog/Sprach-/Memberregeln,
+  Undo/Zielbindung, API-Karte, F1 H, Suchinsel und A2 erhalten. Automatische Anzeige
+  ist keine automatische Einfügung. Vorschläge/Timer bei Eingabe-/Dokumentwechsel
+  verwerfen, IME/Kommentare/Strings/Nur lesen berücksichtigen. Kein neuer KI-/
+  LSP-Dienst oder Provider-Worker. Referenz-Ladefall bleibt ein Zustandsentwurf.
+  D10 vor neuer Gestaltung am bereits vorhandenen Explorer-/API-Bestand prüfen.
 
 ## Speicherpflege
 

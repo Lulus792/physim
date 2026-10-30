@@ -1,9 +1,9 @@
 # Physim – getrennte Designvarianten
 
-**Neue getrennte Detailrunde vom 30. Oktober 2026:**
-[Vorschlags-Popup A/B/C](../completion-options/index.html?variant=a).
-Auswahl offen; bestehende Vervollständigung, API-Karte, F1 und Suchinsel erhalten.
-Nur die Popup-Details vergleichen, noch keine Variante übernehmen.
+**Neue Runde vom 30. Oktober 2026:** automatische Vorschläge beim Tippen sind
+ausdrücklich beauftragt. [Neue Optik D/E/F](../completion-typing-options/index.html?variant=e)
+vergleicht Editor-/Neovim-/IDE-Muster. Noch nicht ausgewählt; A/B/C sind verworfen.
+Bestehenden Katalog, API-Karte, F1 und Suchinsel erhalten.
 
 **Bestandsabgleich vom 30. Oktober 2026:** Die Suchinsel war bereits gestaltet.
 Die [ergänzende Suchstudie](../search-options/README.md) bleibt nicht freigegeben;

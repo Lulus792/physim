@@ -1,10 +1,15 @@
-# D09: Vorschlags-Popup · getrennte Detailentwürfe
+# D09: erste Popup-Runde · A/B/C verworfen
 
-Stand: **30. Oktober 2026 · Auswahl offen.** Auf Nutzerauftrag folgt nach dem
+**Aktualisierung vom 30. Oktober 2026:** Der Nutzer hat alle drei Entwürfe
+verworfen und automatische Anzeige beim Tippen beauftragt. Es gibt eine
+[neue Runde D/E/F](../completion-typing-options/README.md). Diese Seite bleibt
+Vergleichshistorie, keine erneute Wahl von A/B/C. [ADR 022](../../decisions/022-automatic-completion.md).
+
+Historischer Ausgangspunkt: Auf Nutzerauftrag folgt nach dem
 [Bestandsabgleich der Suche](../search-options/README.md) der Punkt
 „Vervollständigung und Hilfe direkt am Code“. Die vorhandenen Funktionen werden
 weiterverwendet. **Nur das Vorschlags-Popup wird verglichen**, keine neue
-API-Karte, F1-Hilfe oder Suchinsel. A/B/C noch nicht ins fertige Design übernehmen.
+API-Karte, F1-Hilfe oder Suchinsel. A/B/C nicht ins fertige Design übernehmen.
 
 [Vorschau öffnen](index.html?variant=a&scenario=normal&theme=dark) ·
 [A · Kompakt](index.html?variant=a) · [B · Liste & Kurzinfo](index.html?variant=b) ·
@@ -134,7 +139,8 @@ Schmale Fenster, große Schrift, Hell/Dunkel, hoher Kontrast und reduzierte
 Bewegung sind Teil der Prüfung. Vollständige Werte in [completion.css](completion.css),
 gemeinsame Rollen aus [menus.css](../context-menu-options/menus.css).
 
-**Auswahl offen.** Nach Nutzerentscheidung genaue Popup-Geometrie/Bedienung,
+**A/B/C sind verworfen.** Die neue Runde führt automatische Anzeige und
+Optik D/E/F fort. Nach deren Nutzerentscheidung genaue Popup-Geometrie/Bedienung,
 native Daten-/Ziel-/Versionsbindung und Referenzen im
 [Gesamtauftrag](../unified-workspace/NEXT-CHAT.md) festschreiben. Bestehende
 Suche, API-Karte, F1 H, A2, Kontextmenüs A und alle anderen Freigaben erhalten.

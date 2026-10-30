@@ -1,18 +1,26 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
-**Getrennte Detailentwürfe vom 30. Oktober 2026 – Vorschlags-Popup D09:**
-[A/B/C vergleichen](../completion-options/README.md): A kompakte Liste mit
-Signatur/Kurzinfo, B Liste mit Kurzinfo daneben, C Information in der aktiven
-Zeile. **Auswahl offen; keine Variante übernehmen.** Vervollständigung,
-Signaturen, API-Karte und F1 sind bereits vorhanden. Nur die Popup-Details
-werden hier ergänzt; keine neue Suche/API-Karte/F1-Gestaltung. Originalkatalog,
-Sprach-/Memberregeln, Bezeichnerersetzung, Undo und Umschalt+F1 weiterverwenden.
-Cursor-/Dokument-/Versionsbindung, lange Namen, echte Parameterhinweise,
-Referenzfehler und kleine Fenster sind interaktiv. Referenz-Ladefall ist nur
-ein markierter Zustandsentwurf; keinen neuen Worker/LSP/Typinferenz oder aktiven
-Aufrufparameter aus der Fixture ableiten. Nach Auswahl nativ anbinden und prüfen;
-Browserbeleg ist keine native Abnahme. Alle folgenden Freigaben erhalten.
-D10 vor dem nächsten Entwurf gegen bereits vorhandenen Explorer-A-/API-Bestand prüfen.
+**Aktualisierter Auftrag vom 30. Oktober 2026 – automatische Vorschläge D09:**
+Der Nutzer will **automatisches Anzeigen während des Tippens**. Bisherige Optik
+A/B/C wurde ausdrücklich verworfen. [ADR 022](../../decisions/022-automatic-completion.md)
+und [neue Entwürfe D/E/F](../completion-typing-options/README.md) beachten:
+D Editor, E Neovim, F IDE; flache Zeilen und separate Dokumentation.
+**Funktion automatisch anzeigen ist beauftragt; Optik D/E/F noch offen.**
+A/B/C nicht erneut vorlegen oder übernehmen. Manuelles Strg+Leertaste erhalten.
+Getestete Entwurfswerte: zwei Zeichen, 140 ms Eingabepause, Physim-Memberpunkt
+ohne Blattpräfix, 280 ms Zusatzinfo. Automatisch keine Übernahmeauswahl;
+Pfeile/Ctrl+N/P wählen, dann Enter/Tab übernehmen, Klick direkt. Sonst Enter
+Zeilenumbruch/Tab Einrückung; Umschalt+Tab verlässt das Feld. Escape unterdrückt
+für den laufenden Bezeichner; manuelles Öffnen überstimmt. Keine automatische
+Einfügung, Vorschau-Textänderung oder Übernahme durch Satzzeichen.
+IME, Paste, Undo, Kommentare/Strings, Nur lesen, Cursor-/Versions-/Dokumentwechsel
+und ausstehende Timer beachten. Vorhandenen Katalog, Sprach-/Memberregeln,
+Undo/Dirty/Build-Regeln und Umschalt+F1 an denselben echten Quellen weiterverwenden.
+Auto-Option in vorhandene Einstellungen-A-Editor-Kategorie einpassen, kein
+zweites Preferences-Modell. Kein neuer LSP/KI-/Provider-Worker. API-Karte,
+F1 H und Suchinsel bleiben unverändert. Referenz-Ladefall nur Zustandsentwurf.
+Browsernachweise bestätigen keine native oder echte Screenreader-/IME-Abnahme.
+D10 vor neuer Gestaltung am bereits vorhandenen Explorer-/API-Bestand prüfen.
 
 **Bestandskorrektur vom 30. Oktober 2026 – Editor-Suche D08:**
 Die vorhandene Suchinsel samt aufklappbarem Ersetzen ist bereits gestaltet und
