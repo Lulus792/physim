@@ -4,6 +4,11 @@
 Er nennt abgeschlossene Prüfungen und den nächsten konkreten Umsetzungsschritt.
 Eine Kontextkompaktierung ist kein Anlass, erledigte Prüfungen neu zu starten.
 
+**Neuer Plattformauftrag vom 30.10.:** [ADR 024](../../decisions/024-native-macos-menubar.md):
+die vorhandenen Menüs unter macOS in die echte Systemmenüleiste verlegen.
+Die übrige App-Gestaltung erhalten; gemeinsame Aktionen und Verfügbarkeit
+weiterverwenden. Umsetzung und tatsächliche Mac-Abnahme stehen noch aus.
+
 **Nutzerwahl vom 30. Oktober 2026 – Vervollständigung D mit Ergänzungen:**
 [ADR 023](../../decisions/023-selected-completion-d.md),
 [verbindliche Spezifikation](../completion-typing-options/APPROVED.md) und

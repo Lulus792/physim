@@ -1,11 +1,20 @@
 #ifndef PHYSIM_SELECTION_UI_H
 #define PHYSIM_SELECTION_UI_H
+#include "ui.h"
 #include "design_tokens.h"
 #include <math.h>
 
 /* A2 adds a 20px selection column and 9px gap to existing file/status icons.
  * Keep original content ink and navigation highlights independent. */
 enum { PS_SELECTION_COLUMN = 29 };
+/* A scene row has a disjoint disclosure button. The selection indicator is a
+ * pointer alias of its existing selection action, not another focus stop. */
+static inline bool ps_ui_selection_pointer(struct nk_context *ui,struct nk_rect indicator) {
+    if(!ui || !ui->current || !ui->current->layout || ui->current->widgets_disabled ||
+       (ui->current->layout->flags&NK_WINDOW_ROM))return false;
+    return ps_ui_mouse_pressed_in_rect(&ui->input,NK_BUTTON_LEFT,ui->current->layout->clip) &&
+           ps_ui_mouse_pressed_in_rect(&ui->input,NK_BUTTON_LEFT,indicator);
+}
 static inline void ps_ui_selection_row(struct nk_command_buffer *canvas,struct nk_rect row,float rounding,float scale,const ps_ui_palette *palette) {
     nk_fill_rect(canvas,row,rounding,palette->text_selection);
     nk_fill_rect(canvas,nk_rect(row.x,row.y,3*scale,row.h),0,palette->selection_accent);

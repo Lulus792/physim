@@ -7121,6 +7121,14 @@
       "steps": [{"program":"python","arguments":["{root}/tests/check_project_window.py","--app","{physim}","--work","{work}"],"timeout":400,"files":["verification.json"]}]
     },
     {
+      "name": "tree_selection_a2",
+      "app": true,
+      "display": true,
+      "platforms": ["win32", "linux"],
+      "targets": ["python", "physim"],
+      "steps": [{"program":"python","arguments":["{root}/tests/check_tree_selection_a2.py","--app","{physim}","--root","{root}","--work","{work}"],"timeout":1200,"files":["verification.json"]}]
+    },
+    {
       "name": "list_selection_a2",
       "app": true,
       "display": true,

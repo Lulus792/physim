@@ -61,7 +61,8 @@ besteht danach dieselben zwölf Listenfälle; seine EXE-/PDB-Bytes bleiben gepr�
 
 ## Verbleibender Umfang
 
-Dieser Schritt schließt A2 nicht insgesamt ab. Workspace-Dateibaum, Szenenbaum,
+Dieser Schritt schließt A2 nicht insgesamt ab. Workspace-Dateibaum und Szenenbaum
+folgen im [separaten nativen Baumabgleich](TREE-SELECTION-A2-NATIVE.md).
 Szenenobjekte und weitere auswählbare Inhalte sind noch abzugleichen. Ebenso
 offen bleiben Strg/⌘-/Umschalt-Mehrfachauswahl, Auswahlrahmen, die neun nativen
 Kontextmenüziele aus ADR 021, Auswahl bei Menüöffnung und sichere Zielbindung.

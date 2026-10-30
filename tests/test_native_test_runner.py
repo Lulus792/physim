@@ -102,6 +102,7 @@ def verify_display_catalog(runner, display_checker):
         specialized_display["protocol_separator"]=("tests/check_protocol_separator.py",("--work",))
         specialized_display["text_selection_a2"]=("tests/check_text_selection_a2.py",("--root","--work"))
         specialized_display["list_selection_a2"]=("tests/check_list_selection_a2.py",("--root","--work"))
+        specialized_display["tree_selection_a2"]=("tests/check_tree_selection_a2.py",("--root","--work"))
         specialized_display["independent_project_window"]=("tests/check_project_window.py",("--work",))
         specialized_display["independent_picker_windows"]=("tests/check_independent_picker_windows.py",("--work",))
         specialized_display["independent_graphic_window"]=("tests/check_independent_graphic_window.py",("--work",))

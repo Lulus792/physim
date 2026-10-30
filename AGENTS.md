@@ -23,6 +23,25 @@
 - Den kurzen Arbeitsstand beim Abschluss eines Schritts aktualisieren:
   Ergebnis, Commit/Nachweis, offene Punkte und der nächste konkrete Schritt.
 
+## Lokale macOS-Prüfungen
+
+- Der Nutzer hat die Verlegung der bisherigen Datei-/Bearbeiten-/Ansicht-/Build-/
+  Hilfe-Menüs in die echte macOS-Systemmenüleiste beauftragt. [ADR 024](docs/decisions/024-native-macos-menubar.md)
+  beachten: nur diese Plattformanpassung, vorhandene Aktionen/Zustände erhalten;
+  native Umsetzung und macOS-Abnahme sind noch offen.
+- Vor Tests auf dem Nutzer-Mac die aktuelle Anleitung
+  `D:/NexaCloud/docs/MACOS_TESTING.md` und die aktuellen Mac-Hinweise in
+  `D:/NexaUI/AGENTS.md` samt verlinkten Umgebungs-/Prüfberichten lesen.
+  Der Nutzer hat ausdrücklich auf diese gemeinsame Umgebung verwiesen.
+  Historische Verfügbarkeitsmeldungen nicht als aktuelle Erreichbarkeit auslegen.
+- Vor Remote-Zugriffen den dort zuletzt dokumentierten Verfügbarkeitszustand
+  beachten; eine dokumentierte Aus-Meldung erlaubt keine SSH-/Erreichbarkeitsprobe.
+- Nach Mac-Tests eigene entbehrliche Tools, Downloads, Helfer und ersetzte Ausgaben
+  aufräumen. Zuerst Ergebnisse und offene Fehlerbelege nach D: sichern und Hashes
+  prüfen; vor dem Löschen aufgelöste Pfade, Eigentum, laufende Nutzung und nächsten
+  Bedarf prüfen. Gemeinsame NexaUI-/NexaCloud-Toolchains und fremde Arbeiten erhalten.
+  Entfernte Pfade, freigegebene Bytes und verbleibende Wiederverwendung dokumentieren.
+
 ## Verbindliche Designfreigabe: Grafikexport
 
 - Der Nutzer hat den Grafikexport am 20. Oktober 2026 als Teil des fertigen Designs

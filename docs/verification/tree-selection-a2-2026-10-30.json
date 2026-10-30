@@ -1,0 +1,154 @@
+{
+  "format": 1,
+  "date": "2026-10-30",
+  "base_commit": "2d5f77891cc1bf48e5c8bdfe4d4a9e1418857b73",
+  "scope": "A2 selection in native Workspace and scene trees; existing single selection retained. No whole UI acceptance.",
+  "cohorts": [
+    {
+      "platform": "windows",
+      "configuration": "Release",
+      "command": ["C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe", "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py", "--", "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe", "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py", "--build-dir", "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build", "--config", "Release", "--jobs", "4", "--sdl", "D:\\Physim\\third_party\\SDL3-3.2.30", "--test-display", "--test-filter", "tree_selection_a2"],
+      "exit_code": 0,
+      "binary_sha256": "546d106d743e2842a819487edc470d74d25687212655531acbc7d7558551ae95",
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/tree-a2-fifth-windows.log",
+        "sha256": "77f830c19cc4dd3dcf3187ab87c7708ee4bfb2974a670ba34efa98fdee1e5f14"
+      },
+      "result": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-8oz89te_/tree_selection_a2/result.json",
+        "sha256": "c6055e597c6f31fbf230b7517cd5687b3ef08cb60a131d252c415896f8a9dfe2"
+      },
+      "verification": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-8oz89te_/tree_selection_a2/files ä/verification.json",
+        "sha256": "dd3f2e3be7cac8b4611b133b7c313a62eaefe850edbdf8b445020ddb8afe4ddb"
+      },
+      "cases": [
+        {"mode": "workspace-dark", "image_size": [1440, 1000], "background": [30, 31, 35], "wash": [51, 54, 60], "flat_pixels": 4045, "original_text_pixels": 630, "edge_pixels": 60, "check_pixels": 27, "focus_segments": 0, "before_sha256": "61f541a14eab7614866d59225ce0d0f23eb1faa43aa58ad04c4feda8dcf053e3", "after_sha256": "6c83e874cda361e02d0486d429f71dd374a6049615f9cf88e2aad67cbfbe608e", "scale": 1},
+        {"mode": "workspace-light", "image_size": [1440, 1000], "background": [246, 247, 249], "wash": [229, 232, 236], "flat_pixels": 4045, "original_text_pixels": 630, "edge_pixels": 60, "check_pixels": 27, "focus_segments": 0, "before_sha256": "26d5791e9e752cf7b28916cd70e75f3b69648d4c73384b434526a9b4cb612df7", "after_sha256": "30c9ed5dcb21b18c4678354cd89422482386740cef2d069b4e38597af15ced81", "scale": 1},
+        {"mode": "workspace-contrast", "image_size": [1440, 1000], "background": [0, 0, 0], "wash": [0, 0, 110], "flat_pixels": 4045, "original_text_pixels": 630, "edge_pixels": 60, "check_pixels": 27, "focus_segments": 0, "before_sha256": "ef1c21399e75cf80e38dd84e80cdade8c007953fe2c7795a5b434d4cb7f159fd", "after_sha256": "3d495904c8c078a44c736a14198d5a2d82eae3433b41ed85c228b453891796b0", "scale": 1},
+        {"mode": "workspace-large", "image_size": [1440, 1000], "background": [30, 31, 35], "wash": [51, 54, 60], "flat_pixels": 13573, "original_text_pixels": 1083, "edge_pixels": 270, "check_pixels": 44, "focus_segments": 0, "before_sha256": "1ca033e54f7794e05c2e10e2d2f5ca90579ad65cf54f9d115f192f99b8e9c8f5", "after_sha256": "c284108ac50faa5c3275783d3e71813d34a53b1325d77a9c0daea576c3ebee1c", "scale": 1.375},
+        {"mode": "workspace-xxlarge", "image_size": [1440, 1000], "background": [30, 31, 35], "wash": [51, 54, 60], "flat_pixels": 38279, "original_text_pixels": 2249, "edge_pixels": 1305, "check_pixels": 86, "focus_segments": 0, "before_sha256": "703d87b9d9839777fc4fbda7272250d559c90fc4bd51da89912088f5785492a7", "after_sha256": "30297b3c06512b150ba38b0315a59a25c56d81d6aaf1a017866e7a726531a49e", "scale": 2},
+        {"mode": "scene-dark", "image_size": [1440, 1000], "background": [30, 31, 35], "wash": [51, 54, 60], "flat_pixels": 7140, "original_text_pixels": 354, "edge_pixels": 104, "check_pixels": 25, "focus_segments": 0, "before_sha256": "60a1af0948c9041da9baf9fae54ac05e0671bdb56748cb48cdd0f728198bfbfa", "after_sha256": "6b9eaba54e06f53597e4fdf30b95a9fccfb13dd3f930ef2c2c6a40bfc4b36e9c", "scale": 1},
+        {"mode": "scene-light", "image_size": [1440, 1000], "background": [246, 247, 249], "wash": [229, 232, 236], "flat_pixels": 7140, "original_text_pixels": 354, "edge_pixels": 104, "check_pixels": 25, "focus_segments": 0, "before_sha256": "a0a29d94d8d586bdcee00acf2cc8fb809ad02519b576fa4358f30d039cfa6d88", "after_sha256": "4c5a96996c5cfbebee3b5b9a9990bac75ed19f8a68f74ed17d2fc04a0271f13b", "scale": 1},
+        {"mode": "scene-contrast", "image_size": [1440, 1000], "background": [0, 0, 0], "wash": [0, 0, 110], "flat_pixels": 7140, "original_text_pixels": 354, "edge_pixels": 104, "check_pixels": 25, "focus_segments": 0, "before_sha256": "cb41ff202e7a3090529047f8e2ce19d0651b0130e49e36885481f29dada33249", "after_sha256": "9985b5d80df65dd600ddaff467e6c630c62166a1ae3f00ee24c17f70742c3e4d", "scale": 1},
+        {"mode": "scene-large", "image_size": [1440, 1000], "background": [30, 31, 35], "wash": [51, 54, 60], "flat_pixels": 12296, "original_text_pixels": 693, "edge_pixels": 282, "check_pixels": 48, "focus_segments": 0, "before_sha256": "804cea5b2c8166e1ade118f842e2c26e4982b53dbdef66e17bb83ae29038a8b2", "after_sha256": "81fcdc088d98a1350c55f2a50408efece63803e687416ccdee956258039ffaf7", "scale": 1.375},
+        {"mode": "scene-xxlarge", "image_size": [1440, 1000], "background": [30, 31, 35], "wash": [51, 54, 60], "flat_pixels": 22302, "original_text_pixels": 1707, "edge_pixels": 1315, "check_pixels": 86, "focus_segments": 0, "before_sha256": "85bf68fa632681dad164df2070bc1cb1a5f1420bc998f03a8650e55ef3252d13", "after_sha256": "aeacefa43fbe601b016b57d08c7f61c0214c2a6398fe08682f212d9d0dff0463", "scale": 2}
+      ]
+    },
+    {
+      "platform": "linux",
+      "configuration": "Alpine-Dev Debug ASan UBSan, X11 Xvfb/Openbox, GUI detect_leaks=0",
+      "command": ["/usr/bin/python3", "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py", "--", "/usr/bin/python3", "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py", "--build-dir", "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build", "--config", "Debug", "--jobs", "4", "--sdl", "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30", "--test-display", "--sanitizers", "--test-filter", "tree_selection_a2"],
+      "exit_code": 0,
+      "binary_sha256": "c6c0db9c65e8b0aeff4fba20271ca1d3b91f1f07efae117da8a3a7b4368d70ba",
+      "log": {
+        "path": "build/validation/explorer-inline-2026-10-29/tree-a2-fifth-linux.log",
+        "sha256": "6f060847d2f895d7719366fc8c26ef08e1f6fb4924734cc04b3366788a64fb7b"
+      },
+      "result": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-jtt573e5/tree_selection_a2/result.json",
+        "sha256": "d2a4b416e2b19a6d4f825b687827c98608fcf0fe272f672af46d0872c4f6b95d"
+      },
+      "verification": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-jtt573e5/tree_selection_a2/files ä/verification.json",
+        "sha256": "d7fa8d49de79869a6d4038ae6c9ca17bd7e47e59a0dba455a6c7dd07d0a9779e"
+      },
+      "cases": [
+        {"mode": "workspace-dark", "image_size": [1440, 1000], "background": [30, 31, 35], "wash": [51, 54, 60], "flat_pixels": 6406, "original_text_pixels": 727, "edge_pixels": 88, "check_pixels": 27, "focus_segments": 31, "before_sha256": "4b58ef8fc895b64cb8eec33037794c8d7a4792a04fc4a3b8e0fcae99dddc7090", "after_sha256": "d8e61df457a46c60df713a623dc7205ccecd01f9457bd8fa5b9a09e07a9c4042", "scale": 1, "focus_sha256": "19014626aa7e66c70d6b884c14515742e0cbe49e308d1430ab33cff21749df14"},
+        {"mode": "workspace-light", "image_size": [1440, 1000], "background": [246, 247, 249], "wash": [229, 232, 236], "flat_pixels": 6406, "original_text_pixels": 724, "edge_pixels": 88, "check_pixels": 27, "focus_segments": 31, "before_sha256": "f9df181ae63232fcb125d27a2553fd4f7c895f7324cf9db5a4669223861cb6e5", "after_sha256": "aa6eae58beaeea94511e9e7fbd8fce7b296ce8fcd5e8dec685e0cb4cea4265bc", "scale": 1, "focus_sha256": "9dd0e0a2267dd8b5363ba26c1e870751f5df5d2718450573bf15e2c13a8df6d2"},
+        {"mode": "workspace-contrast", "image_size": [1440, 1000], "background": [0, 0, 0], "wash": [0, 0, 110], "flat_pixels": 6406, "original_text_pixels": 724, "edge_pixels": 88, "check_pixels": 27, "focus_segments": 31, "before_sha256": "11c8df2047912b1b51edfeeb098538364f4dcf5b314277c0c544b5749794ed49", "after_sha256": "7bbae140e8221a85f0ffb5b704f8d86ed6c0d9311aa04ca29711901379d384d8", "scale": 1, "focus_sha256": "957d5585deb401174630c9459021ac2993cea51c530365f14baa336815e665ae"},
+        {"mode": "workspace-large", "image_size": [1440, 1000], "background": [30, 31, 35], "wash": [51, 54, 60], "flat_pixels": 11608, "original_text_pixels": 1331, "edge_pixels": 240, "check_pixels": 44, "focus_segments": 22, "before_sha256": "393277a712c2759921d191b98de4cad99bd49a44b5c605a82917b0edf1cc48ef", "after_sha256": "88b57c5b734e9ad81152302331dab9fe7f0f301e706ed53ac0d57c382a48e842", "scale": 1.375, "focus_sha256": "344d4a9369de6b2d75cd3fa48efa64d0cf811cd91ac0776c8d1ee93b1639795f"},
+        {"mode": "workspace-xxlarge", "image_size": [1440, 1000], "background": [30, 31, 35], "wash": [51, 54, 60], "flat_pixels": 37988, "original_text_pixels": 2867, "edge_pixels": 1310, "check_pixels": 88, "focus_segments": 14, "before_sha256": "9dfc8393d9e0ff89d26882cc816101d39ef15fe6333a4f118babffb5ad1d2786", "after_sha256": "312f38a0f13f1ee7481276914fef99a9f90cfd557fd8f56b04413fef031d34bb", "scale": 2, "focus_sha256": "da079fd6faea151e8a96bd0a224f8570506a7569485ed01102c52ecc6ec53a60"},
+        {"mode": "scene-dark", "image_size": [1440, 1000], "background": [30, 31, 35], "wash": [51, 54, 60], "flat_pixels": 6975, "original_text_pixels": 427, "edge_pixels": 104, "check_pixels": 25, "focus_segments": 27, "before_sha256": "19423d04d11258a8f0a840075efa54b7bf423c231b2e654f2f54e9a7d70f0126", "after_sha256": "fe6e67c2b908eb351d71d630f8c89064e42e3690436a989a4bd1c9e953c5049f", "scale": 1, "focus_sha256": "06bb06c579099c221008a57e307dcaff6058d1e00e1232660ad8cef9fca8c6f8"},
+        {"mode": "scene-light", "image_size": [1440, 1000], "background": [246, 247, 249], "wash": [229, 232, 236], "flat_pixels": 6975, "original_text_pixels": 426, "edge_pixels": 104, "check_pixels": 25, "focus_segments": 27, "before_sha256": "49b9706c9370605b8ce27b30bfc9e72b041089ae245168fa7e370b88541ce2be", "after_sha256": "af46d84e3154be1eb1732a320e1973e2818be51af1e6dcc2482499ecaa41003f", "scale": 1, "focus_sha256": "f1bd5ea9fbf2d0747d99339e34b236e11c1dbf9a3198390538b87338a8b4d562"},
+        {"mode": "scene-contrast", "image_size": [1440, 1000], "background": [0, 0, 0], "wash": [0, 0, 110], "flat_pixels": 6975, "original_text_pixels": 426, "edge_pixels": 104, "check_pixels": 25, "focus_segments": 27, "before_sha256": "525ff879af7ee1ec2b0dc06e920a14397cd2bb53f304e19b01254f40252848ff", "after_sha256": "835bcd67a69702faa638ad253b7b67b9aa11458a8476b73992d34ff0221e4c12", "scale": 1, "focus_sha256": "6abdf9111f3207f635f44a1fe79e71cb4d5ff260dfcb2008746553ea605e6fe6"},
+        {"mode": "scene-large", "image_size": [1440, 1000], "background": [30, 31, 35], "wash": [51, 54, 60], "flat_pixels": 12051, "original_text_pixels": 842, "edge_pixels": 282, "check_pixels": 48, "focus_segments": 19, "before_sha256": "eebc6c42d5cc2d0dcde11261fa30a00afc33f4d2111d97be3d1b4b82dc2750fb", "after_sha256": "7d428f0517a47ad8296dde21ac1691be1d989546978d1ac213b3c0d593428c37", "scale": 1.375, "focus_sha256": "058e8ba9108a6a2ba78c4bb75669a49c440355f1cb11a39870ec5b05a189472f"},
+        {"mode": "scene-xxlarge", "image_size": [1440, 1000], "background": [30, 31, 35], "wash": [51, 54, 60], "flat_pixels": 25374, "original_text_pixels": 2086, "edge_pixels": 1475, "check_pixels": 86, "focus_segments": 9, "before_sha256": "ef8ce7a70019e5b28e69d2c03258e1d95c65ff6edb645d5ecbf7e07fd340ebe7", "after_sha256": "073e345627517afa47cce241bb04fb4f131b5371ad456c8bb23cfeca0e946f83", "scale": 2, "focus_sha256": "ab411253c87128953f57d8e57a028dffa35afb28b4ca9b48c0f988e3a6836bd4"}
+      ]
+    }
+  ],
+  "reused_regressions": [
+    {"platform": "windows", "phase": "tree-a2-first", "group": "workspace_tree_workflow", "result": {"path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-zc9u8w9_/workspace_tree_workflow/result.json", "sha256": "3f40309a4de21f690a4ffceea98223f81344253764f0c1862876dfd7b8744077"}, "binary_sha256": "4849b1446bfd359e3a5cef30c83e821c5ab9a5b9e5de5e41afb70109209a8158"},
+    {"platform": "windows", "phase": "tree-a2-first", "group": "hierarchy_workflow", "result": {"path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-zc9u8w9_/hierarchy_workflow/result.json", "sha256": "ffe05a1f97513a17e28434a3ed267a5eb4b2ce290cda813f72d2d9c360ef6f84"}, "binary_sha256": "4849b1446bfd359e3a5cef30c83e821c5ab9a5b9e5de5e41afb70109209a8158"},
+    {"platform": "windows", "phase": "tree-a2-first", "group": "list_selection_a2", "result": {"path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-zc9u8w9_/list_selection_a2/result.json", "sha256": "c62b824a8ca850dfa68ba4256fe6836ca87ba4036b721b6f9b7d97ba1bc4d806"}, "binary_sha256": "4849b1446bfd359e3a5cef30c83e821c5ab9a5b9e5de5e41afb70109209a8158"},
+    {"platform": "windows", "phase": "tree-a2-third", "group": "project_tree_workflow", "result": {"path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-8a09kcfa/project_tree_workflow/result.json", "sha256": "db9f1a969493c3a6af91d4faa89d8be2039356286b18624f0dd7956e15e23894"}, "binary_sha256": "170457e732fcce52ae7adbc54455bbf5e409f0705219ce71d5a02406828a6d3a"},
+    {"platform": "linux", "phase": "tree-a2-first", "group": "workspace_tree_workflow", "result": {"path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-l64pkkca/workspace_tree_workflow/result.json", "sha256": "160a3e3ac46d598d9cac8fe5d25bc7a34337b6a4a1acd89772b2fd035bbfd24c"}, "binary_sha256": "2b0ae291cba848ad287716104492efad53d530af996249520aa96d688b1ab3b7"},
+    {"platform": "linux", "phase": "tree-a2-first", "group": "hierarchy_workflow", "result": {"path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-l64pkkca/hierarchy_workflow/result.json", "sha256": "cd710bc0705c2a44f8feb99f155b6a7f4f809405ef5fb34d6b66f90460ef23df"}, "binary_sha256": "2b0ae291cba848ad287716104492efad53d530af996249520aa96d688b1ab3b7"},
+    {"platform": "linux", "phase": "tree-a2-first", "group": "list_selection_a2", "result": {"path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-l64pkkca/list_selection_a2/result.json", "sha256": "6057eeb7badd7db2b5b643e1615c178a3cca0bbd949fd4103d6cc49d31bb049d"}, "binary_sha256": "2b0ae291cba848ad287716104492efad53d530af996249520aa96d688b1ab3b7"},
+    {"platform": "linux", "phase": "tree-a2-first", "group": "tree_design", "result": {"path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-l64pkkca/tree_design/result.json", "sha256": "60639317b3e2ec467a38f2838cf85c47a050e47bd53ce92e6f9f13059f9b62e6"}, "binary_sha256": "2b0ae291cba848ad287716104492efad53d530af996249520aa96d688b1ab3b7"},
+    {"platform": "linux", "phase": "tree-a2-third", "group": "project_tree_workflow", "result": {"path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-61y2kqbe/project_tree_workflow/result.json", "sha256": "819d483e996e8bb6d83a1f28bdbcdc5017968a618cc52bc1d2470836d7d0032c"}, "binary_sha256": "dfbe65b3e333c69c4327fc4309cc226a13f64a3fd3d1969efc4e43b1d27b2b95"}
+  ],
+  "source": {
+    "index_matching_inputs": 1092,
+    "captured_inputs": 101,
+    "audit": {"path": "build/validation/tree-selection-a2-2026-10-30/source-audit.json", "sha256": "04a0ff4a39cc63b054c39a5c73f8c88829c9df1b9175a82d7770307a1b9ce37a"},
+    "app/workspace_tree_ui.inc": "64b7fb14fffff1223352379aa0c2ef8fa16ff44488893070568334414ddd9aac",
+    "app/scene_tree_ui.inc": "81f303de240f33519af3a9bf8ae3b8854dd1b3fbc9e9d3c67049642c96784347",
+    "app/selection_ui.h": "c11ef387177d6123d4c4585895b33c775c47914abfab4364050b34521d7de2cd",
+    "final_inputs": {
+      "path": "build/validation/explorer-inline-2026-10-29/tree-a2-final-inputs.json",
+      "sha256": "6e51c32dee4eca09730445490b9cdeb3d1acfd071f48162485cbd638f64d7643"
+    },
+    "compiler-source.json": {
+      "path": "build/validation/explorer-inline-2026-10-29/tree-a2-final-compiler-source.json",
+      "sha256": "c0a54b3df5c4700cf65141dae861abd658e1835608ff36315cafeab6d8808d92"
+    },
+    "runtime.json": {
+      "path": "build/validation/explorer-inline-2026-10-29/tree-a2-final-runtime.json",
+      "sha256": "d79f904982e65d78ec7c749bba0880e9ae84f8b326f62fbba3b033754d2f80f7"
+    },
+    "byte-index.json": {
+      "path": "build/validation/explorer-inline-2026-10-29/tree-a2-final-byte-index.json",
+      "sha256": "d614c4e91d3b5fdbd155a2b4d591a44eca4a52f19d0cb1dd7521af37e10be320"
+    },
+    "all_archive_bytes_read_back": true
+  },
+  "runner_matrix": {
+    "verification": {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-l64pkkca/tree_design/files ä/validation.json",
+      "sha256": "d96af341802e744e378664065d27acc237d56eb4ff2a6be914138c11119e1812"
+    },
+    "records": 72,
+    "actions_per_font": 6,
+    "fonts": ["system", "bundled"],
+    "sizes": [16, 16, 18, 20, 22, 22],
+    "note": "Real compiled pendulum, hierarchy/visibility/filter/camera plus source/run preservation. Production tree renderer hashes identical to final state."
+  },
+  "native_counterexamples": {
+    "report": {
+      "path": "build/validation/explorer-inline-2026-10-29/tree-a2-counter-r3.json",
+      "sha256": "28ac6a1d2363749c56e3b5a707f50d6610034d30a76aeeb92b1ce725d1a22923"
+    },
+    "normal_runtime_unchanged": true,
+    "cases": [
+      {"variant": "opaque", "exit_code": 1, "native_exit_code": 0, "binary_sha256": "30193aef8175a96ad29c5a8c3bb3c1b3265cfdeae7d1cf9f7c8fe350a02b2bc0", "expected_failure": ["A2 row wash differs", 0]},
+      {"variant": "check", "exit_code": 1, "native_exit_code": 0, "binary_sha256": "30193aef8175a96ad29c5a8c3bb3c1b3265cfdeae7d1cf9f7c8fe350a02b2bc0", "expected_failure": ["A2 selected check missing", 0]},
+      {"variant": "ink", "exit_code": 1, "native_exit_code": 0, "binary_sha256": "30193aef8175a96ad29c5a8c3bb3c1b3265cfdeae7d1cf9f7c8fe350a02b2bc0", "expected_failure": ["Selection changed original text", 0]},
+      {"variant": "select", "exit_code": 1, "native_exit_code": 1, "binary_sha256": "30193aef8175a96ad29c5a8c3bb3c1b3265cfdeae7d1cf9f7c8fe350a02b2bc0", "expected_failure": ["TREE A2 failed stage=3", 1]},
+      {"variant": "visibility", "exit_code": 1, "native_exit_code": 1, "binary_sha256": "30193aef8175a96ad29c5a8c3bb3c1b3265cfdeae7d1cf9f7c8fe350a02b2bc0", "expected_failure": ["TREE A2 failed stage=6", 1]},
+      {"variant": "fold", "exit_code": 1, "native_exit_code": 1, "binary_sha256": "30193aef8175a96ad29c5a8c3bb3c1b3265cfdeae7d1cf9f7c8fe350a02b2bc0", "expected_failure": ["TREE A2 failed stage=10", 1]},
+      {"variant": "positive", "exit_code": 0, "native_exit_code": 0, "binary_sha256": "546d106d743e2842a819487edc470d74d25687212655531acbc7d7558551ae95", "expected_failure": null}
+    ],
+    "source_archive_sha256": "822bc58ef274310d6175d816f30adc9ac1a5937a22380cbb48ce8fed52c1ac8d"
+  },
+  "repairs": ["First Windows A2 fixture guessed a slash-separated path; actual SDL enumeration uses a native separator. Fixture now uses actual tree-entry identities. The direct SDL diagnostic is retained.", "First Linux A2 pixel comparison included a path tooltip over the row. The real pointer is now parked outside before comparing images; original text/ink requirements were preserved.", "Scene fixture initially inherited the normal hidden sidebar. It now enters the laboratory context and opens the real sidebar as an explicit setup step.", "Existing Windows project-tree workflow also fails with the preserved pre-change application. Its early run-path assertion compared mixed separators bytewise; canonical path comparison retains exact identity. The later invalid-file action now returns through actual Develop navigation and preserves the restored document tab. Diagnostics report the actual tested item/stage.", "Third suite passed, but visual inspection found that its 32px request had been rejected by normal preference validation, leaving 22px. Those states are not 200% evidence. Final fixture applies an explicit 32px renderer stress; checker requires scale2. Settings still allow16..22.", "First true32px Workspace probe could not scroll the last row edge by a remaining fractional pixel because Nuklear truncates the content extent and offset to integer scroll values. Reveal allows one raster pixel at the row edge; full label and glyph/clip checks remain independent.", "Initial two counter harness attempts constructed the fault environment but omitted env= from subprocess.run, so the defect was not enabled. The same mutant with explicit environment correctly rejected opaque pixels; the final tool passes the environment and all six faults are rejected."],
+  "baseline_control": {
+    "report": {
+      "path": "build/validation/tree-selection-a2-2026-10-30/project-tree-baseline-r2.json",
+      "sha256": "a1588c82d404b3f1b5feaf86b92a994df0aecde0f7ca5f970ce6895bbfd8bcdb"
+    },
+    "log": {
+      "path": "build/validation/tree-selection-a2-2026-10-30/project-tree-baseline-r2.log",
+      "sha256": "8f53c6d80e185a3cf3fb4a0713e5e5751ad60327d61c6ae69b2146f81dffb508"
+    },
+    "app_sha256": "a1a1dae8766e9034cb09d308f4061179fa79b097c87d1661f206df1f08d5f281",
+    "note": "Initial baseline setup did not create its work directory; retained separately, not an application result."
+  },
+  "catalog_check": {
+    "command": "python -X utf8 -B tools/with-artifacts.py -- python -X utf8 -B tests/test_native_test_runner.py --work D:/Physim/build/validation/tree-selection-a2-2026-10-30/catalog",
+    "exit_code": 0,
+    "note": "Intentional fake failure/timeout cases are part of this passing runner test."
+  },
+  "limitations": ["No new macOS, physical input, screenreader, real monitor/DPI or whole UI acceptance.", "Windows fixtures cover actual queued pointer actions; they do not claim the Linux host-keyboard focus evidence.", "32px is an explicit renderer stress beyond normal16..22px preferences, not a new Settings option or real200%DPI acceptance; other app regions are outside this row proof.", "Single selection only; scene-object A2 contours/handles, multi-selection, compact context menus and other approved UI work remain open."],
+  "storage_cleanup": {"reason": "Accepted fresh A2 tree captures and actual-runner captures: compact native state/pixel reports retained; five visual references preserved. Failed/counter/frozen historical proof images untouched.", "removed_png_count": 119, "freed_bytes": 16519836, "retained_references": [{"path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-8oz89te_/tree_selection_a2/files ä/scene/scene-xxlarge/list-after.png", "sha256": "aeacefa43fbe601b016b57d08c7f61c0214c2a6398fe08682f212d9d0dff0463", "bytes": 211927, "retained": true}, {"path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-8oz89te_/tree_selection_a2/files ä/workspace/workspace-light/list-after.png", "sha256": "30c9ed5dcb21b18c4678354cd89422482386740cef2d069b4e38597af15ced81", "bytes": 105223, "retained": true}, {"path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-jtt573e5/tree_selection_a2/files ä/scene/scene-contrast/list-focus.png", "sha256": "6abdf9111f3207f635f44a1fe79e71cb4d5ff260dfcb2008746553ea605e6fe6", "bytes": 150330, "retained": true}, {"path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-jtt573e5/tree_selection_a2/files ä/workspace/workspace-xxlarge/list-focus.png", "sha256": "da079fd6faea151e8a96bd0a224f8570506a7569485ed01102c52ecc6ec53a60", "bytes": 186031, "retained": true}, {"path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-l64pkkca/tree_design/files ä/bundled/tree-large-keyboard.png", "sha256": "bf79caeeaf42636459a1af1d0101a3952a8f843e193e1a8ce47ba83d81e29d00", "bytes": 131863, "retained": true}], "record": {"path": "build/validation/tree-selection-a2-2026-10-30/cleanup.json", "sha256": "0792f353e25b3f19f9560094351f34dc3f6f2f83658fd3a1c993a1c966732bfe"}}
+}

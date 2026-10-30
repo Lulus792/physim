@@ -1,11 +1,11 @@
 """A2 list wash, accent/check pixels and preserved native text/status ink."""
-import argparse,collections,hashlib,json,os,re,subprocess
+import argparse,collections,hashlib,json,os,re,subprocess,sys
 from pathlib import Path
 from check_graphic_raster import png
 p=argparse.ArgumentParser(description=__doc__)
 for key in ('app','root','work'):p.add_argument('--'+key,type=Path,required=True)
-p.add_argument('--context',choices=('protocol','files','grid'))
-p.add_argument('--theme',choices=('dark','light','contrast','large'))
+p.add_argument('--context',choices=('protocol','files','grid','workspace','scene'))
+p.add_argument('--theme',choices=('dark','light','contrast','large','xxlarge'))
 a=p.parse_args();a.app=a.app.resolve();a.work.mkdir(parents=True,exist_ok=True)
 css=(a.root/'docs/visuals/selection-options/selection.css').read_text(encoding='utf8')
 rgba=re.findall(r'--soft-tint:rgba\((\d+),(\d+),(\d+),([\d.]+)\)',css)
@@ -17,26 +17,47 @@ binary=hashlib.sha256(a.app.read_bytes()).hexdigest();cases=[]
 def rgb(data,w,x,y):return tuple(data[(y*w+x)*3:(y*w+x)*3+3])
 def inside(r,x,y):return r[0]<=x<r[0]+r[2] and r[1]<=y<r[1]+r[3]
 for context in ([a.context] if a.context else ('protocol','files','grid')):
- for theme in ([a.theme] if a.theme else ('dark','light','contrast','large')):
-  mode=context+'-'+theme;work=a.work/mode;work.mkdir();cmd=[str(a.app),'--workspace-state-test',str(work),'list-a2-'+mode]
+ tree=context in ('workspace','scene')
+ for theme in ([a.theme] if a.theme else ('dark','light','contrast','large','xxlarge') if tree else ('dark','light','contrast','large')):
+  assert tree or theme!='xxlarge','200% is currently a tree fixture dimension'
+  mode=context+'-'+theme;work=a.work/mode;work.mkdir();cmd=[str(a.app),'--workspace-state-test',str(work),('tree-a2-' if tree else 'list-a2-')+mode]
   result=subprocess.run(cmd,capture_output=True,timeout=90,env=dict(os.environ,PHYSIM_TEST_TRACE='1'))
   (work/'stdout.bin').write_bytes(result.stdout);(work/'stderr.bin').write_bytes(result.stderr)
   frames=[json.loads(line) for line in result.stdout.decode('utf8',errors='replace').splitlines() if line.startswith('{"kind":"list_selection_a2"')]
   case=dict(mode=mode,command=cmd,exit_code=result.returncode,frames=frames);cases.append(case)
   (a.work/'verification.json').write_text(json.dumps(dict(binary_sha256=binary,cases=cases),indent=2)+'\n')
-  assert result.returncode==0 and b'LIST SELECTION A2 SELF-TEST: PASSED' in result.stdout,(mode,result.stderr.decode('utf8',errors='replace'))
-  assert [frame['phase'] for frame in frames]==(['before','after'] if context=='protocol' else ['before','after','focus']);before,after=frames[:2]
+  marker=b'TREE SELECTION A2 SELF-TEST: PASSED' if tree else b'LIST SELECTION A2 SELF-TEST: PASSED'
+  assert result.returncode==0 and marker in result.stdout,(mode,result.stderr.decode('utf8',errors='replace'))
+  if tree:
+   action=f'TREE SELECTION ACTIONS: scene={int(context=="scene")} selected=1 fold=1 visibility={int(context=="scene")} menu-close-no-selection=1 source-and-camera=1'
+   assert action.encode() in result.stdout,('Missing actual tree action proof',mode)
+  expect_focus=context!='protocol' and not (tree and sys.platform=='win32')
+  assert [frame['phase'] for frame in frames]==(['before','after','focus'] if expect_focus else ['before','after']);before,after=frames[:2]
   assert before['row']==after['row'],'Selecting a row moved its contents'
   key=lambda t:(t['hex'],tuple(t['box']),tuple(t['clip']),tuple(t['color']))
   assert collections.Counter(map(key,before['texts']))==collections.Counter(map(key,after['texts'])),'Selection changed original text, geometry or ink'
+  if tree:
+   expected='A2_Originaldatei_mit_vollständigem_Namen_α.txt' if context=='workspace' else 'Kugel mit vollständiger Beschriftung α'
+   painted=''.join(bytes.fromhex(t['hex']).decode('utf8') for t in before['texts'])
+   assert ''.join(painted.split())==''.join(expected.split()),('Incomplete original tree label',mode,painted)
+   for text in before['texts']:
+    x,y,width,height=text['box'];cx,cy,cw,ch=text['clip']
+    assert x>=cx-.01 and y>=cy-.01 and x+text['paint_width']<=cx+cw+1 and y+height<=cy+ch+1,('Tree label clipped',mode,text)
   bw,bh,bdata,bsha=png(work/'list-before.png');w,h,data,asha=png(work/'list-after.png');assert (bw,bh)==(w,h)
   r=after['row'];f=after['scale'];assert r[2]>40*f and r[3]>20*f
-  checkbox=(r[0]+13*f,r[1]+13*f if context=='grid' else r[1]+(r[3]-15*f)/2,15*f,15*f)
+  if tree:assert f==({'large':22/16,'xxlarge':2}.get(theme,1)),('Requested tree scale was not applied',mode,f)
+  compact=context=='scene' and min(t['box'][1] for t in before['texts'])-r[1]>30*f
+  checkbox=(r[0]+13*f,r[1]+13*f if context=='grid' else r[1]+((32*f if compact else r[3])-15*f)/2,15*f,15*f)
   border_color=(212,212,212) if theme=='contrast' else muted[theme=='light']
   for frame in (before,after):
    borders=[rect for rect in frame['rectangles'] if max(abs(rect['box'][i]-checkbox[i]) for i in range(4))<.01]
    assert len(borders)==1 and tuple(borders[0]['color'])==(*border_color,255) and abs(borders[0]['width']-f)<.01 and abs(borders[0]['rounding']-3*f)<.01,'A2 check border differs from shared CSS role/geometry'
   mask={(x,y) for y in range(max(0,int(r[1]+7*f)),min(h,int(r[1]+r[3]-7*f))) for x in range(max(0,int(r[0]+7*f)),min(w,int(r[0]+r[2]-7*f))) if not inside((checkbox[0]-2*f,checkbox[1]-2*f,19*f,19*f),x+.5,y+.5)}
+  if context=='scene':
+   # The independent eye affordance becomes visible on selection/hover.
+   # Its state is verified by actual hide/restore actions in the native fixture.
+   eye=(r[0]+r[2]-22*f,r[1],22*f,32*f if compact else r[3])
+   mask={point for point in mask if not inside(eye,point[0]+.5,point[1]+.5)}
   background=collections.Counter(rgb(bdata,w,x,y) for x,y in mask).most_common(1)[0][0]
   tint,alpha=((0,0,110),1.) if theme=='contrast' else colors['light' if theme=='light' else 'dark']
   accent=(255,225,0) if theme=='contrast' else accents[theme=='light']
@@ -76,7 +97,7 @@ for context in ([a.context] if a.context else ('protocol','files','grid')):
    else:ink+=count
   assert ink>=10 and (context!='protocol' or status_ink>=5),('Missing original text/status ink evidence',mode,ink,status_ink)
   focus_segments=0
-  if context!='protocol':
+  if expect_focus:
    focus=frames[2];fr=focus['row'];assert fr[2:]==r[2:],'Keyboard focus resized the selected row'
    relative_key=lambda t,row:(t['hex'],tuple(round(t['box'][i]-row[i],3) if i<2 else t['box'][i] for i in range(4)),tuple(t['color']))
    assert collections.Counter(relative_key(t,r) for t in after['texts'])==collections.Counter(relative_key(t,fr) for t in focus['texts']),'Keyboard reveal changed row text, ink or relative layout'

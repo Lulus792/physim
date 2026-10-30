@@ -56,9 +56,9 @@ static bool project_tree_test_start(app *a,const char *directory) {
     return ok;
 }
 static void project_tree_test_frame(app *a,int *stage,int *code,const char **capture) {
-    static unsigned item;static const char *pending_capture;
+    static unsigned item;static int invalid_tab;static const char *pending_capture;
     static const char *names[]={"main.c","analysis.c","assets","note α.txt","assets","runs","recorded ä.PSRUN","invalid.psrun"};
-    bool ok=true;
+    bool ok=true;unsigned tested_item=item;int tested_stage=*stage;
     if(a->library_thread)return;
     switch((*stage)++) {
     case 0:item=0;pending_capture=NULL;break;
@@ -75,13 +75,13 @@ static void project_tree_test_frame(app *a,int *stage,int *code,const char **cap
         else if(item==4)ok=workspace_tree_test_find(a,"note α.txt",0)==SIZE_MAX;
         else if(item==5){ok=workspace_tree_test_find(a,"recorded ä.PSRUN",0)!=SIZE_MAX;pending_capture="project-tree-files.bmp";}
         else if(item==6){char path[4096];join(path,sizeof path,a->project,"runs/recorded ä.PSRUN");
-            ok=a->tab==2 && a->analysis_tab==0 && !strcmp(a->last_run,path) && a->data.result==PS_EOF && a->data.total==3 && a->data.channel_count==1 &&
+            ok=a->tab==2 && a->analysis_tab==0 && workbench_path_equal(a->last_run,path) && a->data.result==PS_EOF && a->data.total==3 && a->data.channel_count==1 &&
                a->data.values[0][0]==4 && a->data.values[0][1]==5 && a->data.values[0][2]==6 &&
                a->data.time[0]==0 && a->data.time[1]==.01 && a->data.time[2]==.02 &&
                !strcmp(a->data.channels[0].name,"position.x") && !memcmp(a->data.channels[0].dimension,PS_METRE.dimension,7) && a->document_count==1;
             pending_capture="project-tree-run.bmp";}
         else if(item==7){char path[4096];join(path,sizeof path,a->project,"runs/recorded ä.PSRUN");workspace_document *doc=active_document(a);
-            ok=a->tab==2 && a->analysis_tab==0 && !strcmp(a->last_run,path) && a->data.total==3 && a->document_count==1 &&
+            ok=a->tab==invalid_tab && a->analysis_tab==0 && workbench_path_equal(a->last_run,path) && a->data.total==3 && a->document_count==1 &&
                doc && doc->dirty && nk_str_len_char(&doc->edit.string)==(int)strlen("Asset edit α\n") &&
                !memcmp(nk_str_get_const(&doc->edit.string),"Asset edit α\n",strlen("Asset edit α\n")) && strstr(a->status,"Laufdatei");
             pending_capture="project-tree-invalid.bmp";}
@@ -91,10 +91,19 @@ static void project_tree_test_frame(app *a,int *stage,int *code,const char **cap
         break;
     case 5:
         *capture=pending_capture;pending_capture=NULL;
-        if(item<8)*stage=1;else a->quitting=true;
+        if(item==7) {
+            /* Analysis A owns a run list, not the Workspace file tree. Return
+             * through the real navigation before targeting the invalid file. */
+            test_mouse(a,a->navigation_bounds[0],true);*stage=6;
+        } else if(item<8)*stage=1;else a->quitting=true;
+        break;
+    case 6:test_mouse(a,a->navigation_bounds[0],false);break;
+    case 7:
+        ok=workspace_active_area(a)==0 && workbench_visible(a);invalid_tab=a->tab;
+        puts("PROJECT TREE: returned through Develop navigation before invalid-file action");*stage=1;
         break;
     }
-    if(!ok){fprintf(stderr,"Project tree failure item=%u stage=%d tab=%d status=%s\n",item,*stage-1,a->tab,a->status);*code=1;a->quitting=true;}
+    if(!ok){fprintf(stderr,"Project tree failure item=%u stage=%d tab=%d status=%s last-run=%s\n",tested_item,tested_stage,a->tab,a->status,a->last_run);*code=1;a->quitting=true;}
     if(a->quitting)printf("PROJECT TREE SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 }
 static void workspace_tree_test_frame(app *a, int *stage, int *code, const char **capture) {

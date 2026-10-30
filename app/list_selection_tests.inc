@@ -10,16 +10,15 @@ static bool list_a2_start(app *a,const char *root,const char *mode) {
 static struct nk_rect list_a2_target(app *a) {
     return list_a2.kind?browser_test_row(a,"main.c"):a->protocol_view.rows[1];
 }
-static void list_a2_probe(app *a,struct nk_context *ui) {
-    if(!list_a2.phase)return;struct nk_rect row=list_a2_target(a);
-    printf("{\"kind\":\"list_selection_a2\",\"phase\":\"%s\",\"scale\":%.4f,\"row\":",list_a2.phase,a->preferences.ui_size/16.f);selection_a2_rect(row);
+static void selection_row_probe(app *a,struct nk_context *ui,const char *phase,struct nk_rect row) {
+    printf("{\"kind\":\"list_selection_a2\",\"phase\":\"%s\",\"scale\":%.4f,\"row\":",phase,a->preferences.ui_size/16.f);selection_a2_rect(row);
     printf(",\"texts\":[");bool comma=false;const struct nk_command *command;struct nk_rect clip=nk_rect(0,0,100000,100000);
     nk_foreach(command,ui) {
         if(command->type==NK_COMMAND_SCISSOR){const struct nk_command_scissor *s=(const struct nk_command_scissor*)command;clip=nk_rect(s->x,s->y,s->w,s->h);}
         if(command->type!=NK_COMMAND_TEXT)continue;const struct nk_command_text *t=(const struct nk_command_text*)command;
         if(!t->length || !t->foreground.a || !selection_a2_inside(row,t->x,t->y))continue;
         if(comma)putchar(',');comma=true;printf("{\"box\":");selection_a2_rect(nk_rect(t->x,t->y,t->w,t->h));printf(",\"clip\":");selection_a2_rect(clip);
-        printf(",\"color\":[%u,%u,%u,%u],\"hex\":\"",t->foreground.r,t->foreground.g,t->foreground.b,t->foreground.a);
+        printf(",\"paint_width\":%.4f,\"color\":[%u,%u,%u,%u],\"hex\":\"",t->font->width(t->font->userdata,t->height,t->string,t->length),t->foreground.r,t->foreground.g,t->foreground.b,t->foreground.a);
         for(int k=0;k<t->length;k++)printf("%02x",(unsigned char)t->string[k]);printf("\"}");
     }
     printf("],\"lines\":[");comma=false;
@@ -36,7 +35,10 @@ static void list_a2_probe(app *a,struct nk_context *ui) {
         if(comma)putchar(',');comma=true;printf("{\"box\":");selection_a2_rect(nk_rect(r->x,r->y,r->w,r->h));
         printf(",\"rounding\":%.4f,\"width\":%.4f,\"color\":[%u,%u,%u,%u]}",r->rounding,r->line_thickness,r->color.r,r->color.g,r->color.b,r->color.a);
     }
-    printf("]}\n");list_a2.phase=NULL;
+    printf("]}\n");
+}
+static void list_a2_probe(app *a,struct nk_context *ui) {
+    if(!list_a2.phase)return;selection_row_probe(a,ui,list_a2.phase,list_a2_target(a));list_a2.phase=NULL;
 }
 static void list_a2_browser_probe(browser_dialog *d){list_a2_probe(list_a2.owner,d->ui);}
 static void list_a2_draw(app *a){if(!list_a2.kind)list_a2_probe(a,a->ui);}

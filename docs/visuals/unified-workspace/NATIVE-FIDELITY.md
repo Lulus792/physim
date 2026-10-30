@@ -96,8 +96,11 @@ Originalbytes und echte Zwischenablage werden an Codeeditor, Explorersuche und
 schreibgeschützter Vorschau geprüft. Der folgende
 [A2-Listenabgleich](LIST-SELECTION-A2-NATIVE.md) ergänzt Meldungen und
 Explorer-Dateizeilen/-Kacheln mit Auswahlfläche, Kante, Häkchen und getrenntem
-Fokus. Workspace-/Szenenmarkierung, Mehrfachauswahl und die gemeinsame
-Kontextmenübindung bleiben weitere offene Teile.
+Fokus. Der [A2-Baumabgleich](TREE-SELECTION-A2-NATIVE.md) ergänzt Workspace und
+Szenenbaum mit erhaltenen Hierarchien, Namen, Typfarben, Sichtbarkeit und
+Aufklappaktionen; Windows/Linux bestehen je zehn gezielte Zustände.
+Szenenobjekt-Markierung, Mehrfachauswahl und die gemeinsame Kontextmenübindung
+bleiben weitere offene Teile.
 Der [F1-Ereignisnachlauf](F1-CONTEXT-EVENTS-NATIVE.md) korrigiert anschließend
 unvollständig initialisierte künstliche Ereignisse im Kontextcode-Test.
 Linux besteht die sieben Fälle mit ASan/UBSan; der Windows-Fokusbefund und
