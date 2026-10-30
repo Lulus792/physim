@@ -1,9 +1,14 @@
 # Physim – getrennte Designvarianten
 
+**Neue getrennte Detailrunde vom 30. Oktober 2026:**
+[Vorschlags-Popup A/B/C](../completion-options/index.html?variant=a).
+Auswahl offen; bestehende Vervollständigung, API-Karte, F1 und Suchinsel erhalten.
+Nur die Popup-Details vergleichen, noch keine Variante übernehmen.
+
 **Bestandsabgleich vom 30. Oktober 2026:** Die Suchinsel war bereits gestaltet.
 Die [ergänzende Suchstudie](../search-options/README.md) bleibt nicht freigegeben;
 keine neue Auswahl nötig. Bestehende Suche und alle Freigaben bleiben erhalten.
-D09 ist der nächste offene Designpunkt.
+D09 hat inzwischen separate Popup-Detailentwürfe.
 
 **Weitere Auswahl vom 30. Oktober 2026:** Kontextmenüs sind im Design
 **A · Kompakt** gewählt. [Spezifikation](../context-menu-options/APPROVED.md) ·

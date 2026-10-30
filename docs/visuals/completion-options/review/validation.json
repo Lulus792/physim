@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-30T15:41:51.843Z",
+  "sourceCommit": "b6b27ddb2d3a3515b80a985dca05e6d8986a4295",
+  "platform": "win32",
+  "browser": "156.0.4314.50",
+  "layouts": 216,
+  "checks": [
+    "216 layouts: three popup variants, twelve scenarios, three themes, 1440/500px; no horizontal page overflow, popup clamped to editor, unavailable contexts produce status without options",
+    "All variants: keyboard/click/Tab commits only whole identifier, UTF-8 prefix and suffix preserved, one-step undo, no-op-free selection navigation, Escape/focus return, Physim instance/static leaf insertion, C type insertion, stale document/file actions rejected, independent dirty documents, reference identity without code edit, reference error/loading preserves name insertion, strings/C members/overlong prefix and selection rejected",
+    "360px/200% font and all variants keyboard escape; popup flips above bottom caret; content scroll dismisses; forced colors/reduced motion and 2x browser pixel density"
+  ],
+  "errors": [],
+  "passed": true
+}

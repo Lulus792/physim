@@ -52,7 +52,8 @@ entschieden: [Einstellungen A · Kategorien](../settings-options/APPROVED.md).**
 **D07 ist entschieden: [Kontextmenüs A · Kompakt](../context-menu-options/APPROVED.md).**
 **D08 war als neue Layoutrunde doppelt:** Die vorhandene Suchinsel bleibt.
 Die [ergänzende Studie](../search-options/README.md) ist nicht freigegeben und
-keine Pflichtentscheidung. D09 ist der nächste tatsächlich offene Designpunkt.
+keine Pflichtentscheidung. **D09 hat getrennte [Popup-Detailentwürfe A/B/C](../completion-options/README.md);
+Auswahl offen.** Vorhandene Vervollständigung/API-Karte/F1 bleiben bestehen.
 
 | ID / Prio | Was gestalten? | Benötigte Zustände und Ergebnis |
 | --- | --- | --- |
@@ -64,7 +65,7 @@ keine Pflichtentscheidung. D09 ist der nächste tatsächlich offene Designpunkt.
 | D06 · P1 | **Fortschritt/Abbruch · B mit Pop-out gewählt** | Kompakte B-Leiste mit aufklappbaren Details und eigenem Fenster für dieselbe Aufgabe; Rückholen/Schließen ohne Abbruch/Neustart. Echte Zähler/Status, Abbruchbestätigung und Teilresultate nativ umsetzen, keine neue Variantenwahl. |
 | D07 · P1 | **Kontextmenüs · A gewählt** | Kompakte Liste mit Trennlinien und Tastaturhinweisen für neun Ziele. A2, Rechtsklick/Tastatur, Mehrfachauswahl, Untermenüs, gesperrte Befehle mit Grund und Ziel-/Versionsbindung nativ umsetzen; keine neue Variantenwahl. |
 | D08 · P1 | **Editor-Suche und Ersetzen · vorhandene Suchinsel erhalten** | Grundlayout und native Einzelersetzung bestehen. Detailprüfungen für Treffer/A2, Unicode, Nur lesen und Dateibezug offen halten; keine neue Layoutwahl. Zusatzstudie nicht freigegeben. Alle ersetzen und projektweite Suche sind kein stiller Implementierungsauftrag. |
-| D09 · P2 | **Vervollständigung und Hilfe direkt am Code** | Vorschlagsliste, Signatur, Parameter, Dokumentation, abgeschnittener Name, keine Treffer und Ladezustand. Vorhandene API-Vervollständigung/F1 nicht neu erfinden; Popup, Kontext und Fokus gemeinsam abgleichen. |
+| D09 · P2 | **Vorschlags-Popup · A/B/C zur Auswahl bereit** | Vorhandene Completion, Signaturen/API-Karte/F1 erhalten. Nur Popup-Dichte vergleichen: kompakt, geteilte Kurzinfo, Info in aktiver Zeile. Reale Namen/Parameterhinweise, lange Inhalte, Fehler, Cursor-/Versionsbindung; Ladefall nur Zustandsentwurf. Noch nicht übernehmen. |
 | D10 · P1 | **Explorer-Inhalte und Dateitypen** | Langer Dateiname/Pfad, viele Einträge, leer, Laden, verschwunden, Rechtefehler; Text, Bild und Messlauf als verschiedene Vorschauen. Explorer-A-Grundlayout steht; API-Kontext befindet sich in laufender nativer Arbeit und darf nicht pauschal als fehlend gelten. |
 | D11 · P2 | **Kamera und räumliche Orientierung** | 2D/3D, Projektion, Standardblick, Zentrieren auf Auswahl, verdeckte/außerhalb liegende Objekte. Bestehende Kamerasteuerungen in eine klare, unaufdringliche Werkzeuggruppe einpassen; rechter Kameradrag vs. Rechtsklick-Menü ist Teil der Prüfung. |
 | D12 · P1 | **Kräfte, Beschriftungen und überlagerte Objekte** | Mehrere Pfeile, Nullvektor, kollidierende/mehrzeilige Labels, ausgeblendete Eltern und verschwundene Auswahl. Szene-A-/A2-Grundlage erhalten; Maßstäbe getrennt und Werte nur bei expliziter Kanal-/Metadatenzuordnung. Kein Newtonwert aus beliebigem Pfeil. |
@@ -117,8 +118,11 @@ und verteilte Simulation für die erste Version aus.
 **D06 ist mit B plus eigenem Pop-out-Fenster gewählt** und gehört ebenfalls in die native Umsetzung.
 **D07 · Kontextmenüs A ist gewählt** und gehört zur nativen Umsetzung.
 **D08 ist keine neue Layoutrunde:** vorhandene Suchinsel und Einzelersetzung erhalten.
-Als nächste neue Entwurfsrunde **D09**: Vervollständigung und Hilfe direkt am Code.
-Danach Explorer-/Szenen- und Auswertungsdetails anhand realer Inhalte ausarbeiten.
+Für **D09** stehen getrennte Vorschlags-Popup-Details A/B/C zur Auswahl.
+**D10 ist der nächste Listenpunkt, vor Entwurfsstart am nativen Bestand prüfen:**
+Explorer A, Dateivorschauen und C-API-Kontext bestehen bereits. Nur tatsächlich
+offene Detailzustände gestalten, keine neue Grundlayoutwahl. Danach Szenen-/
+Auswertungsdetails ebenfalls anhand realer Inhalte abgleichen.
 
 Pro Thema liefern: Normalzustand, Leer-/Lade-/Fehler-/Abbruchzustand, Auswahl,
 Tastatur-/Fokusweg und eine kleine/helle/dunkle Darstellung. Neue Gestaltungs-

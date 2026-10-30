@@ -1,5 +1,19 @@
 # Kopierfertiger Auftrag: die gemeinsame Physim-Oberfläche nativ umsetzen
 
+**Getrennte Detailentwürfe vom 30. Oktober 2026 – Vorschlags-Popup D09:**
+[A/B/C vergleichen](../completion-options/README.md): A kompakte Liste mit
+Signatur/Kurzinfo, B Liste mit Kurzinfo daneben, C Information in der aktiven
+Zeile. **Auswahl offen; keine Variante übernehmen.** Vervollständigung,
+Signaturen, API-Karte und F1 sind bereits vorhanden. Nur die Popup-Details
+werden hier ergänzt; keine neue Suche/API-Karte/F1-Gestaltung. Originalkatalog,
+Sprach-/Memberregeln, Bezeichnerersetzung, Undo und Umschalt+F1 weiterverwenden.
+Cursor-/Dokument-/Versionsbindung, lange Namen, echte Parameterhinweise,
+Referenzfehler und kleine Fenster sind interaktiv. Referenz-Ladefall ist nur
+ein markierter Zustandsentwurf; keinen neuen Worker/LSP/Typinferenz oder aktiven
+Aufrufparameter aus der Fixture ableiten. Nach Auswahl nativ anbinden und prüfen;
+Browserbeleg ist keine native Abnahme. Alle folgenden Freigaben erhalten.
+D10 vor dem nächsten Entwurf gegen bereits vorhandenen Explorer-A-/API-Bestand prüfen.
+
 **Bestandskorrektur vom 30. Oktober 2026 – Editor-Suche D08:**
 Die vorhandene Suchinsel samt aufklappbarem Ersetzen ist bereits gestaltet und
 nativ vorhanden. Der Nutzer hat auf diese Doppelung hingewiesen. **Bestehende
@@ -9,7 +23,7 @@ ersetzt das bestehende Design nicht. Ihre neuen Anordnungen, Trefferliste und
 „Alle ersetzen“-Erweiterung sind kein neuer nativer Implementierungsauftrag.
 Vorhandene aktuelle-Datei-Suche, Unicode-/Undo-/Dirty-Regeln, A2 und alle folgenden
 Freigaben erhalten. Verbleibende Detailprüfungen sind keine neue Layoutentscheidung;
-projektweite Suche bleibt separat. D09 ist der nächste tatsächlich offene Designpunkt.
+projektweite Suche bleibt separat. D09 hat inzwischen getrennte Popup-Detailentwürfe.
 
 **Verbindliche Auswahl vom 30. Oktober 2026 – Kontextmenüs A / D07:**
 Der Nutzer hat **A · Kompakt** gewählt. Die vorherige Übernahmesperre ist
@@ -34,7 +48,7 @@ Explorer A auf. Fehler aus realem Ergebnis über Rückmeldungen A/Protokoll C.
 Keine erfundenen Datei-/Objektfunktionen oder Fixture-Erfolgstexte übernehmen.
 Alle bisherigen Freigaben und die laufende native Arbeit bleiben erhalten.
 Browserreferenz ist keine native oder Screenreader-/Plattformabnahme.
-D08 führt die vorhandene Suchinsel fort; D09 ist die nächste neue Runde.
+D08 führt die vorhandene Suchinsel fort; D09 hat getrennte Popup-Detailentwürfe.
 
 **Verbindliche Auswahl vom 30. Oktober 2026 – Fortschritt B mit Pop-out / D06:**
 Der Nutzer hat **B · Aufgabenleiste mit Herauslösen als eigenes Fenster** gewählt.

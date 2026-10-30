@@ -1,8 +1,12 @@
 # Physim · Gemeinsame Designvorschau
 
+**Neue getrennte Popup-Detailentwürfe vom 30. Oktober:**
+[Code-Vorschläge A/B/C](../completion-options/index.html?variant=a).
+Auswahl offen. Bestehende Completion, API-Karte, F1 H und Suchinsel bleiben erhalten.
+
 **Bestandskorrektur vom 30. Oktober:** Die Suchinsel samt Ersetzung ist bereits
 gestaltet. Die [ergänzende Suchstudie](../search-options/README.md) ersetzt sie
-nicht und benötigt keine neue Auswahl. D09 ist der nächste offene Designpunkt.
+nicht und benötigt keine neue Auswahl. D09 hat inzwischen separate Popup-Detailentwürfe.
 
 **Gewählte Kontextmenüs vom 30. Oktober:** **A · Kompakt** mit Trennlinien,
 Tastaturhinweisen und unveränderter A2-Markierung.

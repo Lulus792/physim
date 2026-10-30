@@ -1,0 +1,13 @@
+{
+  "normalization": "CRLF to LF before SHA-256",
+  "sourceCommit": "b6b27ddb2d3a3515b80a985dca05e6d8986a4295",
+  "sha256": {
+    "docs/visuals/completion-options/index.html": "1a3fb8a5164223f5861bc489a19e814bbec9204b3ab55e68747af150c72245bb",
+    "docs/visuals/completion-options/catalog.js": "50bd8c70ca979ccc48900f0524b60a38138c7aef536853cdaf442c35c63e7707",
+    "docs/visuals/completion-options/completion.css": "4f1f954abdb9967c902085faf7da2bfad500d5abef29798ca65137939d8301e9",
+    "docs/visuals/completion-options/completion.js": "5841b4d48a41bd41e3581abeb4fb5590ef18426b3e476740cd0e15ea14b9eaec",
+    "docs/visuals/context-menu-options/menus.css": "e6b3d205629b94a2a07e06ba81604056d6d24880743009dbccf3cda9b41339cd",
+    "tools/build_completion_preview_data.py": "80a6b64f5437ae45b13c662df60f823f792f578fd32d4b18cc36f7e16e79ce83",
+    "tools/check_completion_options.cjs": "15019ceedb0d453089351b2fa49087dc6e5bef2a4fa3bfb4136796de0a0f1a09"
+  }
+}

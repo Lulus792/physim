@@ -126,7 +126,20 @@
   Variantenentscheidung vorschalten; A2, Kontextmenüs A und alle Freigaben erhalten.
   „Alle ersetzen“ ist nur eine gekennzeichnete Studie, kein neuer nativer Auftrag.
   Keine projektweite Suche/Regex/Ganzwortmodi ableiten. D09 ist die nächste
-  tatsächlich offene Designrunde.
+  tatsächlich offene Designrunde; dafür liegen inzwischen getrennte Popup-Entwürfe vor.
+
+## Getrennte Detailentwürfe: Vorschlags-Popup D09
+
+- Die [Popup-Vorschauen A/B/C](docs/visuals/completion-options/README.md)
+  vom 30. Oktober 2026 sind **noch nicht ausgewählt**. Nur das Popup für die
+  bereits bestehende API-Vervollständigung wird verglichen; keine Variante vor
+  Nutzerentscheidung übernehmen. Bestehende API-Karte, F1 H und Suchinsel erhalten.
+  Katalog, Signaturen, lexikalische Memberregeln, Einfügen/Undo und Umschalt+F1
+  sind vorhandene Grundlagen, keine neu beauftragte Engine. Referenzladen ist
+  im nativen Bestand synchron; der gezeigte Ladefall ist nur ein Zustandsentwurf.
+  Keine KI-/LSP-/Typanalyse oder automatische Aufrufparameterhilfe ableiten.
+  A2, Kontextmenüs A und alle bisherigen Freigaben bleiben bestehen. D10 vor
+  einer neuen Runde gegen vorhandene Explorer-Inhalte/API-Kontext abgleichen.
 
 ## Speicherpflege
 
