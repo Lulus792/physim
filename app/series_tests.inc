@@ -71,8 +71,21 @@ static void series_test_frame(app *a,const char *mode,int *stage,int *code,const
         /* The workbench exposes studies in the existing menu; its former
          * workspace shortcut is no longer part of the fixed layout. */
         if(!ok)break;
-        test_mouse(a,a->toolbar_bounds[1],true);*stage=160;return;
-    case 160:test_mouse(a,a->toolbar_bounds[1],false);*stage=161;return;
+#ifndef __APPLE__
+        test_mouse(a,a->toolbar_bounds[1],true);
+#endif
+        *stage=160;return;
+    case 160:
+#ifdef __APPLE__
+        {
+            int native_stage=*stage+1;
+            if(!native_test_command(a,TOOLBAR_BATCH,&native_stage,&ok))return;
+            if(ok){*stage=3;return;}
+        }
+        break;
+#else
+        test_mouse(a,a->toolbar_bounds[1],false);*stage=161;return;
+#endif
     case 161:
         ok=a->toolbar_menu==2 && a->batch_navigation_bounds.w>0;
         if(ok){test_mouse(a,a->batch_navigation_bounds,true);*stage=2;return;}break;

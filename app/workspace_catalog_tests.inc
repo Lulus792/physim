@@ -33,8 +33,21 @@ static void workspace_catalog_test_frame(app *a,const char *mode,int *stage,int 
     } else if(strcmp(mode,"named-write")) {
         switch(*stage) {
         case 0:
+#ifndef __APPLE__
             if(!a->toolbar_bounds[0].w)return;
-            ok=a->workspaces_writable && a->workspaces->count==1 && !a->workspace_open;test_mouse(a,a->toolbar_bounds[0],true);break;
+#endif
+            ok=a->workspaces_writable && a->workspaces->count==1 && !a->workspace_open;
+#ifdef __APPLE__
+            if(!ok)break;
+            {
+                int native_stage=*stage+1;
+                if(!native_test_command(a,TOOLBAR_WORKSPACES,&native_stage,&ok))return;
+                if(ok){*stage=4;return;}
+            }
+            break;
+#else
+            test_mouse(a,a->toolbar_bounds[0],true);break;
+#endif
         case 1:test_mouse(a,a->toolbar_bounds[0],false);break;
         case 2:test_mouse(a,a->workspace_menu_bounds,true);break;
         case 3:test_mouse(a,a->workspace_menu_bounds,false);break;
@@ -60,8 +73,21 @@ static void workspace_catalog_test_frame(app *a,const char *mode,int *stage,int 
         join(path,sizeof path,a->project,"Notizen ä.txt");preview_workspace_path(a,path);
         join(path,sizeof path,a->project,"Zweite.txt");preview_workspace_path(a,path);document_select(a,0);
         join(path,sizeof path,named_test_root,"Zusatz ä");ok=ps_make_directory(path);add_workspace_path(a,path);
-        test_mouse(a,a->toolbar_bounds[0],true);break;
-    case 3:test_mouse(a,a->toolbar_bounds[0],false);break;
+#ifndef __APPLE__
+        test_mouse(a,a->toolbar_bounds[0],true);
+#endif
+        break;
+    case 3:
+#ifdef __APPLE__
+        {
+            int native_stage=*stage+1;
+            if(!native_test_command(a,TOOLBAR_WORKSPACES,&native_stage,&ok))return;
+            if(ok){*stage=6;return;}
+        }
+        break;
+#else
+        test_mouse(a,a->toolbar_bounds[0],false);break;
+#endif
     case 4:test_mouse(a,a->workspace_menu_bounds,true);break;
     case 5:test_mouse(a,a->workspace_menu_bounds,false);break;
     case 6:

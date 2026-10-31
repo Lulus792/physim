@@ -1,9 +1,21 @@
 /* Internal SDL-event workflow. Uses real compiler, runner processes and reports. */
-static void test_parallel_arrow(app *a, bool down) {
+static void test_plot_wheel(app *a,float x,float y,float amount);
+static bool test_batch_click(app *a,struct nk_rect r,bool down) {
+    static unsigned scroll_pending;
+    if(scroll_pending){--scroll_pending;return false;}
+    struct nk_rect panel=a->dock_panels[PS_DOCK_WORKSPACE];
+    if(!r.w || !r.h)return false;
+    if(down && (r.y<panel.y+32 || r.y+r.h>panel.y+panel.h-24)) {
+        test_plot_wheel(a,panel.x+panel.w/2,panel.y+panel.h/2,r.y<panel.y+32?1:-1);
+        scroll_pending=2;return false;
+    }
+    test_mouse(a,r,down);return true;
+}
+static bool test_parallel_arrow(app *a, bool down) {
     struct nk_rect arrow = a->batch_workers_bounds;
     arrow.x += arrow.w - 22;
     arrow.w = 20;
-    test_mouse(a, arrow, down);
+    return test_batch_click(a,arrow,down);
 }
 static void test_batch_frame(app *a, int *stage, int *code, const char **capture, int workers) {
     switch (*stage) {
@@ -15,8 +27,16 @@ static void test_batch_frame(app *a, int *stage, int *code, const char **capture
             a->quitting = true;
             break;
         }
-        test_mouse(a, a->toolbar_bounds[1], true);
-        *stage = 112;
+#ifdef __APPLE__
+        {
+            bool okay=true;int native_stage=*stage+1;
+            if(!native_test_command(a,TOOLBAR_BATCH,&native_stage,&okay))return;
+            if(!okay){*code=1;a->quitting=true;break;}
+            *stage=92;
+        }
+#else
+        test_mouse(a, a->toolbar_bounds[1], true);*stage=112;
+#endif
         break;
     case 112:
         test_mouse(a, a->toolbar_bounds[1], false);
@@ -38,18 +58,18 @@ static void test_batch_frame(app *a, int *stage, int *code, const char **capture
     case 92:
         if (a->tab != 5)
             *code = 1;
-        test_parallel_arrow(a, true);
+        if(!test_parallel_arrow(a,true))break;
         *stage = 110;
         break;
     case 110:
-        test_parallel_arrow(a, false);
+        if(!test_parallel_arrow(a,false))break;
         *stage = 111;
         break;
     case 111:
         if (a->batch_workers != workers)
             *code = 1;
+        if(!test_batch_click(a,a->batch_start_bounds,true))break;
         *capture = "batch-setup.bmp";
-        test_mouse(a, a->batch_start_bounds, true);
         *stage = 93;
         break;
     case 93:

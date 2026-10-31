@@ -112,8 +112,14 @@ static void project_controls_test_frame(app *a,const char *mode,int *stage,int *
         ok=a->profile==1 && !a->built && a->project_settings_dirty && a->build_info_valid && !a->build_info.release;
         test_window_key_mod(a->window,SDLK_F6,0);break;
     case 7:
-        ok=!a->runner.running && !a->last_run[0] && !a->built && a->toolbar_bounds[5].w>0;
-        test_mouse(a,a->toolbar_bounds[5],true);break;
+        ok=!a->runner.running && !a->last_run[0] && !a->built;
+#ifdef __APPLE__
+        if(!ok)break;
+        if(!native_test_command(a,TOOLBAR_BUILD,stage,&ok))return;
+        *stage=9;break;
+#else
+        ok=ok && a->toolbar_bounds[5].w>0;test_mouse(a,a->toolbar_bounds[5],true);break;
+#endif
     case 8:test_mouse(a,a->toolbar_bounds[5],false);*stage=70;break;
     case 70:ok=a->toolbar_menu==6 && a->editor_build_bounds.w>0;test_mouse(a,a->editor_build_bounds,true);break;
     case 71:test_mouse(a,a->editor_build_bounds,false);break;
