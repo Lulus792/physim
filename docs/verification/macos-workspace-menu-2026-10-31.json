@@ -1,0 +1,215 @@
+{
+  "date": "2026-10-31",
+  "source_commit": "7a95c8ae13d55e31e1343c8dbf822eed13f67aa3",
+  "application_test_code_commit": "fe54e7a0cadcd8b2dddc431f26ef296c978bdffc",
+  "settings_checker_fix": "cc267a6da910bc30a24d12c78cab953703384b14",
+  "scope": "Native macOS file-tab menus, keyboard-only project wizard and settings entry; full existing34-project matrix at16/22px",
+  "production_behavior_changed": false,
+  "mac": {
+    "run_id": 41147957905,
+    "url": "https://github.com/PhysicSimulator/physim/actions/runs/41147957905",
+    "user_mac_used": false,
+    "results": {
+      "arm": {
+        "job_id": 124377591438,
+        "artifact_id": 13022147512,
+        "artifact_sha256": "ccf2fed38b2028e20552e049007ba933ecad0d9b01b000d6d76fb54d38d2434a",
+        "results_members": [
+          "Release/test-results/run-nqqb2mtd/results.json",
+          "Release/test-results/run-xcfh0kv9/results.json"
+        ],
+        "passed": 4,
+        "total": 4,
+        "matrix": {
+          "actual_projects": 68,
+          "indices": "00..33 exactly twice",
+          "font_sizes": [
+            16,
+            22
+          ],
+          "complete_subprocesses": 2,
+          "native_new_keyboard_commands": 70
+        },
+        "settings_native_command_comma": 4,
+        "app_sha256": [
+          "cec8649be81876ce2f1d9a17b59f5371170f7cd1816c827180c3e53244e8f583"
+        ]
+      },
+      "intel": {
+        "job_id": 124377591787,
+        "artifact_id": 13022014446,
+        "artifact_sha256": "9659e7ca9db8f6ae276744d15154ca6c48d40188605e653be49884d9a2f92153",
+        "results_members": [
+          "Release/test-results/run-kf080z2p/results.json",
+          "Release/test-results/run-oguqby_5/results.json"
+        ],
+        "passed": 4,
+        "total": 4,
+        "matrix": {
+          "actual_projects": 68,
+          "indices": "00..33 exactly twice",
+          "font_sizes": [
+            16,
+            22
+          ],
+          "complete_subprocesses": 2,
+          "native_new_keyboard_commands": 70
+        },
+        "settings_native_command_comma": 4,
+        "app_sha256": [
+          "3ab6570c58f61ef0852b11a04a86139f3f6813278c9c3f810bf1b52dcd354b4f"
+        ]
+      }
+    }
+  },
+  "local": {
+    "windows": {
+      "original_run": "run-ch7e30mf",
+      "original_result": "3/4; old Python settings expectation32 rejects actual96",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "file_tabs_workflow",
+        "--test-filter",
+        "settings_keyboard_workflow",
+        "--test-filter",
+        "project_manager_keyboard_errors",
+        "--test-filter",
+        "project_manager_keyboard_workflow"
+      ],
+      "app_sha256": "7a4595ff84cd4a2effde5762552a547d595329fbec4afb54de1bef9f93ff62f0",
+      "matrix": {
+        "actual_projects": 68,
+        "indices": "00..33 exactly twice",
+        "font_sizes": [
+          16,
+          22
+        ],
+        "complete_subprocesses": 2,
+        "native_new_keyboard_commands": 0
+      },
+      "corrected_settings": {
+        "exit_code": 0,
+        "checker_sha256": "6988f0bce589bbc528373a9f750f5c0042d5746559a9d856a00f9f20d4eb147e",
+        "original_checker_sha256": "8078049f3728a01339d7b9e3d2d597972224c8aa0923e596e0b86fed09fd930f",
+        "same_app_binary": true,
+        "separate_verified_python_overlay": true,
+        "report": "build/validation/macos-menu-workflows-2026-10-30/corrected-settings-r2-windows.json"
+      },
+      "covered_cases_after_targeted_correction": 4
+    },
+    "linux": {
+      "original_run": "run-_qma9a32",
+      "original_result": "3/4; old Python settings expectation32 rejects actual96",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "file_tabs_workflow",
+        "--test-filter",
+        "settings_keyboard_workflow",
+        "--test-filter",
+        "project_manager_keyboard_errors",
+        "--test-filter",
+        "project_manager_keyboard_workflow"
+      ],
+      "app_sha256": "e4b090b8d438c6a28e7efe8648350c21c58076df813cbc90e1335d0d79d9145c",
+      "matrix": {
+        "actual_projects": 68,
+        "indices": "00..33 exactly twice",
+        "font_sizes": [
+          16,
+          22
+        ],
+        "complete_subprocesses": 2,
+        "native_new_keyboard_commands": 0
+      },
+      "corrected_settings": {
+        "exit_code": 0,
+        "checker_sha256": "78fe694a69f8ebdd9fc3f8e739e4772877058ad85fc78b3d126a1caaaa50ab06",
+        "original_checker_sha256": "8078049f3728a01339d7b9e3d2d597972224c8aa0923e596e0b86fed09fd930f",
+        "same_app_binary": true,
+        "separate_verified_python_overlay": true,
+        "report": "build/validation/macos-menu-workflows-2026-10-30/corrected-settings-r2-linux.json"
+      },
+      "covered_cases_after_targeted_correction": 4
+    }
+  },
+  "coverage": [
+    "File tabs: editor activation/caret, dirty close/cancel/save, reorder, overflow cycling, inline completion, tree expansion; native Search/CmdF, Build navigation/cancellation, Save and light/contrast File cancellation preserve source bytes",
+    "Wizard:32 template/experiment/analysis language combinations plus2 independent analyses, each actually built, recorded/imported and analyzed; both font sizes; final cancellation",
+    "Wizard errors: invalid name, parent file, existing files preserved and cancel at16/22px",
+    "Settings: native CmdComma; all seven toggles, UI/code font, autosave and theme persistence; cancel/default behavior and readback keep saved bytes unchanged"
+  ],
+  "settings_baseline": {
+    "expected_old": 32,
+    "actual": 96,
+    "theme": 1,
+    "bytes": 312,
+    "preferences_sha256": "4195990619af103cce0329845a7ca8603c406bcf4a6dec79be6340e6571d6ab4",
+    "cause": "Approved protocol C starts closed: initial flags31 toggled across127 become96, not historical95 to32",
+    "product_changed": false,
+    "original_failures_retained": true
+  },
+  "checkpoint": {
+    "tag": "mac-workspace-menu-accepted",
+    "owned_inputs": 119,
+    "compiler_test_files_compared_to_source_commit": 1098,
+    "runtime_files": {
+      "windows": 200,
+      "linux": 103
+    },
+    "archive_bytes_read_back": true,
+    "app_binaries_unchanged_after_python_correction": true
+  },
+  "cleanup": {
+    "successful_images_removed": 40,
+    "bytes_freed": 116741520,
+    "original_logs_preferences_and_open_f1_evidence_preserved": true
+  },
+  "superseded_mac_runs": [
+    {
+      "id": 41147445351,
+      "conclusion": "cancelled"
+    },
+    {
+      "id": 41147732814,
+      "conclusion": "cancelled"
+    }
+  ],
+  "limits": [
+    "This four-case campaign is not the complete GUI suite or full design acceptance",
+    "Mac New Project uses actual AppKit type-ahead/Return within a programmatically presented published NSMenu; physical ControlF2 menu-bar activation remains untested",
+    "Hosted displays and logical font sizes do not establish physical multi-monitor/DPI/fullscreen or manual VoiceOver acceptance",
+    "Local app configurations: Windows Release; Linux Debug ASan/UBSan. Generated user projects use the normal wizard build profiles; do not infer sanitizer coverage of every generated module",
+    "The first local runs remain failed3/4; the corrected Python comparison passed separately against the identical binary. No historical result was rewritten",
+    "Broader F1 run41146212249 still has separate open findings, recorded in macos-f1-open-findings-2026-10-31.json",
+    "Remaining historical batch/series/build/catalogue/typography menu entries still require review and porting; obsolete free-docking fixtures are not current requirements"
+  ]
+}

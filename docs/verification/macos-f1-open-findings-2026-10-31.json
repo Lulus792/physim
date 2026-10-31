@@ -1,0 +1,268 @@
+{
+  "date": "2026-10-31",
+  "source_commit": "c35fc39dd97f9c51a9ff71c983727c3539b93a64",
+  "run_id": 41146212249,
+  "url": "https://github.com/PhysicSimulator/physim/actions/runs/41146212249",
+  "status": "failed; open findings preserved",
+  "user_mac_used": false,
+  "platforms": {
+    "intel": {
+      "job_id": 124371810023,
+      "artifact_id": 13021856173,
+      "artifact_sha256": "b060b568dae5acde548d215b99831a4bf244a1c6d1a8365ff662484ba36adf48",
+      "gui": {
+        "member": "Debug-sanitized/test-results/run-2etd175b/results.json",
+        "passed": 22,
+        "total": 27,
+        "failed": [
+          "font_bank_ui",
+          "documentation_math",
+          "accessibility_edit_macos",
+          "documentation_panes",
+          "documentation_h"
+        ]
+      },
+      "portable": {
+        "member": "Debug-sanitized/test-results/run-vhs_r6vf/results.json",
+        "passed": 19,
+        "total": 19
+      },
+      "traces": {
+        "documentation_math": {
+          "member": "Debug-sanitized/test-results/run-2etd175b/documentation_math/files ä/app-steps.json",
+          "exit_code": 1,
+          "complete_pane_states": 0,
+          "complete_h_geometry_states": 0,
+          "failure": [
+            "Documentation math stage 2 failed",
+            "Workflow failed at stage 3: Bereit. Ordner öffnen oder ein neues Projekt anlegen. (tab=0, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)"
+          ],
+          "glyph_missing_counts": {
+            "2318": 42
+          }
+        },
+        "accessibility_edit_macos": {
+          "member": "Debug-sanitized/test-results/run-2etd175b/accessibility_edit_macos/files ä/app-steps.json",
+          "exit_code": 1,
+          "complete_pane_states": 0,
+          "complete_h_geometry_states": 0,
+          "failure": [
+            "Native macOS F1 field stage 4 failed",
+            "Workflow failed at stage 5: Bereit. Ordner öffnen oder ein neues Projekt anlegen. (tab=0, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)"
+          ],
+          "glyph_missing_counts": {}
+        },
+        "documentation_panes": {
+          "member": "Debug-sanitized/test-results/run-2etd175b/documentation_panes/files ä/app-steps.json",
+          "exit_code": 1,
+          "complete_pane_states": 21,
+          "complete_h_geometry_states": 0,
+          "failure": [
+            "Workspace self-test timeout: docs-keyboard-panes after 60.100 wall seconds",
+            "Workflow failed at stage 6: Bereit. Ordner öffnen oder ein neues Projekt anlegen. (tab=0, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)"
+          ],
+          "glyph_missing_counts": {}
+        },
+        "documentation_h": {
+          "member": "Debug-sanitized/test-results/run-2etd175b/documentation_h/files ä/app-steps.json",
+          "exit_code": 1,
+          "complete_pane_states": 0,
+          "complete_h_geometry_states": 56,
+          "failure": [
+            "Workspace self-test timeout: docs-keyboard-h after 60.019 wall seconds",
+            "Workflow failed at stage 52: Bereit. Ordner öffnen oder ein neues Projekt anlegen. (tab=0, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)"
+          ],
+          "glyph_missing_counts": {}
+        }
+      },
+      "external_ax": {
+        "member": "external-ax/results.json",
+        "status": "passed",
+        "scope": "Independent external F1 text read/end reveal; not manual VoiceOver"
+      }
+    },
+    "arm": {
+      "job_id": 124371810213,
+      "artifact_id": 13021722295,
+      "artifact_sha256": "4492db5734c91f1dabcfd970bc657e0676418fa9efc81f91aa8644a262486826",
+      "gui": {
+        "member": "Debug-sanitized/test-results/run-j330en1j/results.json",
+        "passed": 23,
+        "total": 27,
+        "failed": [
+          "font_bank_ui",
+          "documentation_math",
+          "accessibility_edit_macos",
+          "documentation_h"
+        ]
+      },
+      "portable": {
+        "member": "Debug-sanitized/test-results/run-dl_rkzqs/results.json",
+        "passed": 19,
+        "total": 19
+      },
+      "traces": {
+        "documentation_math": {
+          "member": "Debug-sanitized/test-results/run-j330en1j/documentation_math/files ä/app-steps.json",
+          "exit_code": 1,
+          "complete_pane_states": 0,
+          "complete_h_geometry_states": 0,
+          "failure": [
+            "Documentation math stage 2 failed",
+            "Workflow failed at stage 3: Bereit. Ordner öffnen oder ein neues Projekt anlegen. (tab=0, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)"
+          ],
+          "glyph_missing_counts": {
+            "2318": 42
+          }
+        },
+        "accessibility_edit_macos": {
+          "member": "Debug-sanitized/test-results/run-j330en1j/accessibility_edit_macos/files ä/app-steps.json",
+          "exit_code": 1,
+          "complete_pane_states": 0,
+          "complete_h_geometry_states": 0,
+          "failure": [
+            "Native macOS F1 field stage 4 failed",
+            "Workflow failed at stage 5: Bereit. Ordner öffnen oder ein neues Projekt anlegen. (tab=0, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)"
+          ],
+          "glyph_missing_counts": {}
+        },
+        "documentation_h": {
+          "member": "Debug-sanitized/test-results/run-j330en1j/documentation_h/files ä/app-steps.json",
+          "exit_code": 1,
+          "complete_pane_states": 0,
+          "complete_h_geometry_states": 56,
+          "failure": [
+            "Workspace self-test timeout: docs-keyboard-h after 60.101 wall seconds",
+            "Workflow failed at stage 20: Bereit. Ordner öffnen oder ein neues Projekt anlegen. (tab=0, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)"
+          ],
+          "glyph_missing_counts": {}
+        }
+      },
+      "external_ax": {
+        "member": "external-ax/results.json",
+        "status": "passed",
+        "scope": "Independent external F1 text read/end reveal; not manual VoiceOver"
+      }
+    }
+  },
+  "findings": [
+    {
+      "id": "command-glyph",
+      "state": "cause identified; not fixed in this report",
+      "evidence": "Both architectures report U+2318 missing across F1 font roles. ui_ranges/code_ranges and general fallback_ranges omit this scalar.",
+      "next": "Add U+2318 to the actual UI/code/fallback repertoire; keep strict all-role glyph/raster checks and verify bundled primary fonts.",
+      "offline_font": "third_party/fonts/NotoSansSymbols2-Regular.ttf",
+      "offline_font_sha256": "7d5fb73b7ca67a6798101741f5d280a3d016a56a197afcd4199dbb57b4b82a21",
+      "offline_probe": "wsl -d Alpine-Dev --exec fc-query --format=%{charset} /mnt/d/Physim/third_party/fonts/NotoSansSymbols2-Regular.ttf reports 2318"
+    },
+    {
+      "id": "font-bank-binding",
+      "state": "test/implementation contract mismatch identified; new probe pending",
+      "evidence": "Both native tests fail test_font_bank_ui.c binding==0 after injected GL error. graphics.c texture_create restores the saved prior binding/unpack state on success and failure.",
+      "next": "Require restoration of a deliberately bound nonzero texture and nondefault unpack alignment, preserving retry, retained pixels and teardown assertions. Do not change the renderer to clear caller state just to satisfy the old test."
+    },
+    {
+      "id": "native-edit-field",
+      "state": "stale on-demand-search fixture inferred; native shortcut integration also needs correction",
+      "evidence": "Both fail outer stage4, which requests the current-document search field at native step2. The fixture never opens the now-on-demand search island. No internal step2 failure is printed; the helper returns early when the field is absent.",
+      "source_inconsistency": "native_menu_input handles Search for the F1 owner by setting doc_search_focus, but does not set doc_find_open/doc_keyboard/doc_focus as documentation_keyboard_key does.",
+      "next": "Open search through actual native Cmd+F before AX edits; first demonstrate the production shortcut failure, then share the real search-open transaction. Keep all Unicode/selection/caret/reveal/hidden checks."
+    },
+    {
+      "id": "h-keyboard-seek",
+      "state": "avoidably long fixture traversal identified; repair pending",
+      "evidence": "All 56 H geometry states complete on both architectures. Intel then expires while seeking context-copy target22 through 204 entries; ARM reaches stage20 after long context and find-close traversal.",
+      "next": "Use the real F6 pane navigation and bounded within-pane Tab/Shift+Tab for context controls/find-close. Preserve exact H assertions and source state; do not bypass keyboard input or simply enlarge the deadline."
+    },
+    {
+      "id": "intel-pane-watchdog",
+      "state": "internal/outer test-budget mismatch identified; repair pending",
+      "evidence": "Intel completes21 of24 valid pane states before the fixed60s app watchdog. ARM completes24/24. Python runner already allows75s.",
+      "next": "Keep all24 states and a bounded deadline within the existing outer allowance; no claim of product speedup or UI acceptance from a timeout adjustment."
+    }
+  ],
+  "limits": [
+    "This failed run is not a new implementation or complete macOS acceptance",
+    "External AX reading passed on both hosted runners; this is separate from the failed in-process edit fixture and from manual VoiceOver",
+    "Renderer counterexample steps after the failed GUI step were skipped; do not claim their execution",
+    "F1 archives contain open-failure evidence; do not remove them as obsolete successful images",
+    "Related workspace matrices completed separately; see macos-workspace-menu-2026-10-31.json. This does not establish F1 repair."
+  ],
+  "next_order": [
+    "Reproduce native F1 Cmd+F before production fix",
+    "Apply and verify the smallest glyph/state/fixture corrections",
+    "Run the five failed cases with actual native results; retain the baseline and separately document remaining manual/DPI/whole-UI scope"
+  ],
+  "glyph_range_counterexample": {
+    "platform": "Windows MSVC Release, no GUI/GL context",
+    "scope": "Actual existing fallback builder and Noto assets; required U+2318 raster/source presence at16/32 px with the existing ownership/error/strong-face assertions",
+    "shared_source_untouched": true,
+    "production_fix_not_yet_applied": true,
+    "permanent_regression": "tests/test_font_sources.c",
+    "negative_recipe": "Remove only the U+2318 range pair from the permanent positive test; keep U+2318 in required scalars.",
+    "permanent_normalized_source_sha256": "7d09bb65c0fe904c57faf0afe8666d6ae33637863694e45f379c1b0adf98aa70",
+    "results": [
+      {
+        "label": "missing-range",
+        "exit_code": 1,
+        "source_sha256": "3c0f501677995c73cbe968fa5c5ff96bccfe87c798f22527c7c7db11acf9303c",
+        "normalized_source_sha256": "3ab6ce277886316ff4c4834f9a09f4cf7d86f13d28b5be31c358d701b6df9a1b",
+        "binary_sha256": "1751fdb1be16e2a25840c554bfe9550c4ec231ac97aa97ed96439128ed70a90d",
+        "command": [
+          "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE",
+          "/nologo",
+          "/std:c17",
+          "/D_CRT_SECURE_NO_WARNINGS",
+          "/MD",
+          "/O2",
+          "/ID:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\app",
+          "/ID:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\include",
+          "/ID:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\third_party",
+          "/ID:\\Physim\\third_party\\SDL3-3.2.30\\include",
+          "/FoD:\\Physim\\build\\validation\\macos-menu-workflows-2026-10-30\\command-glyph-probe/",
+          "D:\\Physim\\build\\validation\\macos-menu-workflows-2026-10-30\\command-glyph-probe\\missing-range.c",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\app\\ui_backend.c",
+          "/FeD:\\Physim\\build\\validation\\macos-menu-workflows-2026-10-30\\command-glyph-probe\\missing-range.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\lib\\physim-platform.lib",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\lib\\physim-core.lib",
+          "D:\\Physim\\third_party\\SDL3-3.2.30\\lib\\x64\\SDL3.lib",
+          "user32.lib",
+          "shell32.lib",
+          "advapi32.lib"
+        ],
+        "diagnostic": "Font sources 57: g && g->codepoint==required[i] && g->source_present && ps_ui_font_has_glyph(&target->handle,required[i])"
+      },
+      {
+        "label": "included-range",
+        "exit_code": 0,
+        "source_sha256": "3128dd78ea7c99dca669fa540250b5f47bd4ed5b22ca4fb0088f55b99fb0a9ef",
+        "normalized_source_sha256": "7d09bb65c0fe904c57faf0afe8666d6ae33637863694e45f379c1b0adf98aa70",
+        "binary_sha256": "a5068cc92228284df0c93d7960b97b10d52f6da19bd79c1d55ff196f2e6a0b45",
+        "command": [
+          "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE",
+          "/nologo",
+          "/std:c17",
+          "/D_CRT_SECURE_NO_WARNINGS",
+          "/MD",
+          "/O2",
+          "/ID:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\app",
+          "/ID:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\include",
+          "/ID:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\third_party",
+          "/ID:\\Physim\\third_party\\SDL3-3.2.30\\include",
+          "/FoD:\\Physim\\build\\validation\\macos-menu-workflows-2026-10-30\\command-glyph-probe/",
+          "D:\\Physim\\build\\validation\\macos-menu-workflows-2026-10-30\\command-glyph-probe\\included-range.c",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\app\\ui_backend.c",
+          "/FeD:\\Physim\\build\\validation\\macos-menu-workflows-2026-10-30\\command-glyph-probe\\included-range.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\lib\\physim-platform.lib",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\lib\\physim-core.lib",
+          "D:\\Physim\\third_party\\SDL3-3.2.30\\lib\\x64\\SDL3.lib",
+          "user32.lib",
+          "shell32.lib",
+          "advapi32.lib"
+        ],
+        "diagnostic": "Actual Latin raster coverage: regular=526290 strong=821164"
+      }
+    ],
+    "report": "build/validation/macos-menu-workflows-2026-10-30/command-glyph-probe/results.json"
+  }
+}
