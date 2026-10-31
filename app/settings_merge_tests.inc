@@ -18,7 +18,7 @@ static void test_settings_merge_frame(app *a,int *stage,int *code) {
         ok=ps_dock_hide(&a->preferences.dock,PS_DOCK_INSPECTOR);
         settings_commit(a);
         ok=ok && a->tab==0 && a->preferences.theme==PS_THEME_LIGHT && a->preferences.editor_size==20 &&
-            a->preferences.sidebar_width==333 && a->preferences.inspector_width==366 && a->preferences.log_height==430 &&
+            !a->settings_open && a->preferences.sidebar_width==333 && a->preferences.inspector_width==366 && a->preferences.log_height==430 &&
             !a->show_paths && !a->show_grid && a->view_disclosure==NK_MAXIMIZED &&
             (a->preferences.dock.hidden&(1u<<PS_DOCK_INSPECTOR)) &&
             ps_preferences_read(path,&saved)==PS_OK && !memcmp(&saved,&a->preferences,sizeof saved);
@@ -37,11 +37,11 @@ static void test_settings_merge_frame(app *a,int *stage,int *code) {
         settings_defaults_draft(a);draft=a->settings_draft;
         preferences_capture(a);active=a->preferences;
         ok=ok && a->preferences.theme==PS_THEME_LIGHT && a->settings_draft.theme==PS_THEME_DARK &&
-            !memcmp(&draft.dock,&active.dock,sizeof draft.dock);
+            !memcmp(&draft.dock,&a->settings_base.dock,sizeof draft.dock);
         /* A real failed replacement, followed by retry with the same draft. */
         SDL_strlcpy(a->preferences_path,a->project,sizeof a->preferences_path);
         settings_commit(a);
-        ok=ok && a->tab==6 && *a->preferences_error && !memcmp(&a->preferences,&active,sizeof active) &&
+        ok=ok && a->settings_open && a->tab==1 && *a->preferences_error && !memcmp(&a->preferences,&active,sizeof active) &&
             !memcmp(&a->settings_draft,&draft,sizeof draft) && ps_preferences_read(path,&readback)==PS_OK &&
             !memcmp(&readback,&saved,sizeof saved) && !memcmp(&analysis,&a->analysis_layout,sizeof analysis) &&
             !memcmp(&laboratory,&a->laboratory_layout,sizeof laboratory);
@@ -49,7 +49,7 @@ static void test_settings_merge_frame(app *a,int *stage,int *code) {
         SDL_strlcpy(a->preferences_path,path,sizeof a->preferences_path);
         if(ok)settings_commit(a);
         workspace_context(a);
-        ok=ok && a->tab==1 && a->preferences.theme==PS_THEME_DARK && a->preferences.editor_size==12 &&
+        ok=ok && !a->settings_open && a->tab==1 && a->preferences.theme==PS_THEME_DARK && a->preferences.editor_size==12 &&
             a->laboratory_initialized && a->analysis_layout_initialized &&
             a->preferences.sidebar_width==277 && a->preferences.inspector_width==321 &&
             !memcmp(&analysis,&a->analysis_layout,sizeof analysis) &&
@@ -63,13 +63,13 @@ static void test_settings_merge_frame(app *a,int *stage,int *code) {
         ok=ok && a->preferences.sidebar_width==218 && a->preferences.inspector_width==255;
         open_settings(a);preferences_capture(a);active=a->preferences;
         a->settings_draft.sidebar_width=139;settings_commit(a);
-        ok=ok && a->tab==6 && *a->preferences_error && a->settings_draft.sidebar_width==139 &&
+        ok=ok && a->settings_open && a->tab==0 && *a->preferences_error && a->settings_draft.sidebar_width==139 &&
             !memcmp(&a->preferences,&active,sizeof active);
         ok=ok && ps_preferences_read(path,&readback)==PS_OK && !memcmp(&readback,&saved,sizeof saved);
-        test_window_key_mod(a->window,SDLK_ESCAPE,0);
+        test_window_key_mod(a->settings_window,SDLK_ESCAPE,0);
         break;
     case 3:
-        ok=a->tab==0;
+        ok=a->tab==0 && !a->settings_open;
         printf("SETTINGS MERGE: invalid range preserves draft, active state and file; Escape cancels=%d\n",ok);
         a->quitting=true;break;
     }

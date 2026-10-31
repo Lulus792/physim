@@ -1,3 +1,4 @@
+static bool settings_test_tab_to(app *a,int id,int stage,bool *ok);
 #ifdef __APPLE__
 static bool native_test_shell(app *a);
 static bool native_test_focus_wait(app *a,SDL_Window *window,int *stage,double deadline);
@@ -56,6 +57,7 @@ static void test_ui_size_frame(app *a,const char *mode,int *stage,int *code,cons
     bool ok=target>=16 && target<=22 && target%2==0;
     switch((*stage)++) {
     case 0:
+        if(!reading && !cancel && !defaults && a->preferences.ui_size==target){ps_preferences seed=a->preferences;seed.ui_size=target==16?18:16;preferences_apply(a,&seed);}
         previous=a->preferences.ui_size;
         previous_editor=a->preferences.editor_size;
         SDL_SetWindowSize(a->window,1080,740);
@@ -76,12 +78,15 @@ static void test_ui_size_frame(app *a,const char *mode,int *stage,int *code,cons
         if(reading)ok=ok && previous==target;
         open_settings(a);break;
     case 2:
-        test_mouse(a,defaults?a->settings_bounds[5]:a->ui_size_bounds[(target-16)/2],true);break;
-    case 3: test_mouse(a,defaults?a->settings_bounds[5]:a->ui_size_bounds[(target-16)/2],false);break;
+        if(defaults)test_window_mouse(a->settings_window,a->settings_focus_bounds[3],true);
+        else{if(!settings_test_tab_to(a,0,*stage-1,&ok)){--*stage;return;}
+            unsigned steps=(target+8-a->settings_draft.ui_size)%8/2;for(unsigned i=0;i<steps;i++)test_window_key_mod(a->settings_window,SDLK_RIGHT,0);}
+        break;
+    case 3:if(defaults && a->settings_window)test_window_mouse(a->settings_window,a->settings_focus_bounds[3],false);break;
     case 5:
         ok=ok && a->settings_draft.ui_size==target && a->preferences.ui_size==previous;
-        test_mouse(a,a->settings_bounds[cancel || reading?4:0],true);break;
-    case 6: test_mouse(a,a->settings_bounds[cancel || reading?4:0],false);break;
+        test_window_mouse(a->settings_window,a->settings_bounds[cancel || reading?4:0],true);break;
+    case 6: if(a->settings_window)test_window_mouse(a->settings_window,a->settings_bounds[cancel || reading?4:0],false);break;
     case 8: {
         unsigned expected=cancel?previous:target;
         float body=documentation_type_font(a,DOC_TYPE_BODY)->height/a->doc_type_em[DOC_TYPE_BODY];
@@ -115,7 +120,7 @@ static void test_ui_size_frame(app *a,const char *mode,int *stage,int *code,cons
     case 10:
         a->toolbar_menu=0;open_settings(a);break;
     case 11: *capture="ui-size-settings.bmp";break;
-    case 12: a->tab=0;break;
+    case 12: settings_close(a);a->tab=0;break;
     case 13: *capture="ui-size-editor.bmp";break;
     case 14:
         {

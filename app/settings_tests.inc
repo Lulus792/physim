@@ -54,20 +54,20 @@ static void test_theme_frame(app *a, const char *mode, int *stage, int *code,
         open_settings(a);
         break;
     case 2:
-        test_mouse(a, defaults ? a->settings_bounds[5]
+        test_window_mouse(a->settings_window, defaults ? a->settings_bounds[5]
                                : a->theme_bounds[cancel ? PS_THEME_LIGHT : target], true);
         break;
     case 3:
-        test_mouse(a, defaults ? a->settings_bounds[5]
+        test_window_mouse(a->settings_window, defaults ? a->settings_bounds[5]
                                : a->theme_bounds[cancel ? PS_THEME_LIGHT : target], false);
         break;
     case 5:
         ok = a->settings_draft.theme == (cancel ? PS_THEME_LIGHT : target) &&
              a->preferences.theme == previous;
-        test_mouse(a, a->settings_bounds[cancel || reading ? 4 : 0], true);
+        test_window_mouse(a->settings_window, a->settings_bounds[cancel || reading ? 4 : 0], true);
         break;
     case 6:
-        test_mouse(a, a->settings_bounds[cancel || reading ? 4 : 0], false);
+        test_window_mouse(a->settings_window, a->settings_bounds[cancel || reading ? 4 : 0], false);
         break;
     case 8:
         ok = a->tab == 0 && a->preferences.theme == (cancel ? previous : target) &&
@@ -113,81 +113,7 @@ static void test_theme_frame(app *a, const char *mode, int *stage, int *code,
     (*stage)++;
 }
 /* No pointer input: traverse every settings group and check the save transaction. */
-static void test_settings_keyboard_frame(app *a,bool reading,int *stage,int *code,const char **capture) {
-    bool ok=true;
-#ifdef __APPLE__
-    static double native_deadline;
-#endif
-#define SETTINGS_KEY(key) test_window_key_mod(a->window,key,0)
-    switch((*stage)++) {
-    case 0: SDL_SetWindowSize(a->window,1080,740);
-#ifdef __APPLE__
-        if(!native_test_keyboard_command(a,TOOLBAR_SETTINGS,stage,&ok))return;
-        native_deadline=ps_clock()+2;*stage=100;
-#else
-        SETTINGS_KEY(SDLK_F10);SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_RETURN);SETTINGS_KEY(SDLK_DOWN);SETTINGS_KEY(SDLK_RETURN);
-#endif
-        break;
-#ifdef __APPLE__
-    case 100:
-        if(a->tab!=6 && ps_clock()<native_deadline){--*stage;return;}
-        ok=a->tab==6;*stage=1;break;
-#endif
-    case 1: ok=a->tab==6;SETTINGS_KEY(SDLK_TAB);break;
-    case 2: ok=a->settings_keyboard && a->settings_focus==0;
-        if(reading) {
-            ok=ok && a->preferences.ui_size==22 && a->preferences.editor_size==20 && a->preferences.theme==PS_THEME_LIGHT && a->preferences.autosave_seconds==120;
-            test_window_key_mod(a->window,SDLK_TAB,SDL_KMOD_SHIFT);*stage=21;break;
-        }
-        SETTINGS_KEY(SDLK_LEFT);break;
-    case 3: ok=a->settings_draft.ui_size==22;for(int i=0;i<4;i++)SETTINGS_KEY(SDLK_TAB);break;
-    case 4: ok=a->settings_focus==4;SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_TAB);break;
-    case 5: ok=a->settings_draft.theme==PS_THEME_LIGHT && a->settings_focus==5;for(unsigned i=0;i<4;i++)SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_TAB);break;
-    case 6: ok=a->settings_draft.editor_size==20 && a->settings_focus==6;SETTINGS_KEY(SDLK_END);SETTINGS_KEY(SDLK_LEFT);SETTINGS_KEY(SDLK_LEFT);break;
-    case 7: ok=a->settings_draft.autosave_seconds==120;SETTINGS_KEY(SDLK_TAB);break;
-    case 8: case 9: case 10: case 11: case 12: case 13: case 14:
-        ok=a->settings_focus==*stage-2;SETTINGS_KEY(SDLK_SPACE);SETTINGS_KEY(SDLK_TAB);break;
-    case 15: ok=a->settings_focus==0;SETTINGS_KEY(SDLK_TAB);break;
-    case 16: ok=a->settings_focus==1;*capture="keyboard-settings-focus.bmp";SETTINGS_KEY(SDLK_RETURN);break;
-    case 17: ok=a->tab!=6 && a->preferences.ui_size==22 && a->preferences.editor_size==20 && a->preferences.theme==PS_THEME_LIGHT && a->preferences.autosave_seconds==120;
-#ifdef __APPLE__
-        if(!native_test_keyboard_command(a,TOOLBAR_SETTINGS,stage,&ok))return;
-        native_deadline=ps_clock()+2;*stage=117;
-#else
-        SETTINGS_KEY(SDLK_F10);SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_RETURN);SETTINGS_KEY(SDLK_DOWN);SETTINGS_KEY(SDLK_RETURN);
-#endif
-        break;
-#ifdef __APPLE__
-    case 117:
-        if(a->tab!=6 && ps_clock()<native_deadline){--*stage;return;}
-        ok=a->tab==6;*stage=18;break;
-#endif
-    case 18: SETTINGS_KEY(SDLK_TAB);SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_TAB);SETTINGS_KEY(SDLK_TAB);SETTINGS_KEY(SDLK_RETURN);break;
-    case 19: ok=a->tab!=6 && a->preferences.ui_size==22;
-#ifdef __APPLE__
-        if(!native_test_keyboard_command(a,TOOLBAR_SETTINGS,stage,&ok))return;
-        native_deadline=ps_clock()+2;*stage=119;break;
-    case 119:
-        if(a->tab!=6 && ps_clock()<native_deadline){--*stage;return;}
-        ok=a->tab==6;
-#else
-        SETTINGS_KEY(SDLK_F10);SETTINGS_KEY(SDLK_RIGHT);SETTINGS_KEY(SDLK_RETURN);SETTINGS_KEY(SDLK_DOWN);SETTINGS_KEY(SDLK_RETURN);
-#endif
-        for(int i=0;i<4;i++)SETTINGS_KEY(SDLK_TAB);SETTINGS_KEY(SDLK_SPACE);*stage=23;break;
-    case 23: ok=a->settings_draft.ui_size==16 && a->settings_draft.editor_size==PS_PREFERENCES_DEFAULT.editor_size && a->settings_draft.theme==PS_THEME_DARK && a->preferences.ui_size==22;
-        test_window_key_mod(a->window,SDLK_TAB,SDL_KMOD_SHIFT);SETTINGS_KEY(SDLK_RETURN);*stage=20;break;
-    case 21: if(a->settings_focus_scroll){--*stage;return;}
-        ok=a->settings_focus==13;
-        {struct nk_rect b=a->settings_focus_bounds[13],panel=a->dock_panels[PS_DOCK_WORKSPACE];
-         ok=ok && b.y>=panel.y+30 && b.y+b.h<=panel.y+panel.h-10;}
-        *capture="keyboard-settings-scroll.bmp";SETTINGS_KEY(SDLK_TAB);break;
-    case 22: if(a->settings_focus_scroll){--*stage;return;}
-        ok=a->settings_focus==0;SETTINGS_KEY(SDLK_ESCAPE);*stage=20;break;
-    case 20: ok=a->tab!=6;a->quitting=true;printf("SETTINGS KEYBOARD SELF-TEST: %s\n",*code?"FAILED":"PASSED");break;
-    }
-    if(!ok){fprintf(stderr,"Settings keyboard failure stage %d focus %d tab %d interval %u\n",*stage-1,a->settings_focus,a->tab,a->settings_draft.autosave_seconds);*code=1;a->quitting=true;}
-#undef SETTINGS_KEY
-}
+#include "settings_keyboard_tests.inc"
 /* Exercise the real settings draft through native checkbox activation. On
  * Linux the independent AT-SPI client drives checkbox-remote; AppKit drives
  * checkbox-native directly. Existing keyboard tests cover commit/restart. */
@@ -279,9 +205,11 @@ static void test_settings_focus_frame(app *a,bool remote,int *stage,int *code,co
  if(!ok){fprintf(stderr,"Settings focus failed stage %d\n",*stage);*code=1;a->quitting=true;}
 }
 #include "settings_merge_tests.inc"
+#include "settings_window_tests.inc"
 static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
                                const char **capture) {
     if(!strcmp(mode,"merge")){test_settings_merge_frame(a,stage,code);return;}
+    if(!strncmp(mode,"window-",7)){test_settings_window_frame(a,!strcmp(mode,"window-22"),stage,code,capture);return;}
     if(!strncmp(mode,"focus-",6)){test_settings_focus_frame(a,!strcmp(mode,"focus-remote"),stage,code,capture);return;}
     if(!strncmp(mode,"options-",8)){test_settings_options_frame(a,!strcmp(mode,"options-remote"),stage,code);return;}
     if(!strncmp(mode,"checkbox-",9)){test_settings_checkbox_frame(a,!strcmp(mode,"checkbox-remote"),stage,code);return;}

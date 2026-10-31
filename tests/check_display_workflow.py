@@ -1667,6 +1667,17 @@ def settings_transactions(flow, directory):
     require(not list(directory.glob("*.tmp-*")), "Failed settings save leaked a temporary file")
 
 
+def settings_a_window(flow, directory):
+    directory.mkdir()
+    for size in (16, 22):
+        root = directory / ("UI " + str(size)); root.mkdir()
+        flow.run("--settings-test", root, "window-" + str(size), timeout=35,
+                 marker="SETTINGS A WINDOW SELF-TEST: PASSED")
+        require("complete=1" in flow.steps[-1]["stdout"], "Settings window did not finish its ownership checks")
+        require("typed-size=300 range-retry=1" in flow.steps[-1]["stdout"], "Settings window did not correct and save a typed size")
+        require((root / ("settings-a-wide-16.png" if size == 16 else "settings-a-small-22.png")).is_file(), "Missing native Settings A image")
+
+
 def project_manager_keyboard(flow, directory):
     directory.mkdir()
     for size in (16,22):
@@ -1764,9 +1775,9 @@ def themes(flow, directory):
             bits = struct.unpack_from("<H", data, 28)[0]
             require(bits in (24, 32) and width > 0 and height != 0, "Unsupported capture layout")
             stride = ((width * bits + 31) // 32) * 4
-            # The selected workbench has its own fixed reading-surface token;
-            # settings, handbook and plots retain the general app palette.
-            surface=(246,247,249) if mode=="light" and prefix=="theme-" else expected
+            # Workbench and the approved Settings A panel use their specified
+            # light surfaces; handbook and plots keep their existing palette.
+            surface=(246,247,249) if mode=="light" and prefix in ("theme-", "theme-settings-", "theme-plot-") else expected
             pixel = bytes(reversed(surface))
             count = sum(data[at:at + 3] == pixel
                         for row in range(abs(height))
@@ -1975,6 +1986,7 @@ SPECIAL["source_outline_workflow"]=source_outline
 SPECIAL["laboratory_workflow"]=laboratory
 SPECIAL["model_values_workflow"]=model_values
 SPECIAL["settings_transactions"]=settings_transactions
+SPECIAL["settings_a_window"]=settings_a_window
 
 def documentation_model_contract(flow,directory,output):
     rows=re.findall(r'DOCUMENTATION SVG CAPTION: case=(\d+) figure=([\d.,]+) lines=(\d+) em=([\d.]+) center=([\d.]+) baseline=([\d.]+) complete=(\d)',output)

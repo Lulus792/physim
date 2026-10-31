@@ -47,7 +47,7 @@ static void keyboard_menu_test_frame(app *a, const char *root, int *stage, int *
         ok=a->toolbar_keyboard_top==2;
         MENU_KEY(SDLK_LEFT);MENU_KEY(SDLK_LEFT);MENU_KEY(SDLK_LEFT);
         MENU_KEY(SDLK_RETURN);MENU_KEY(SDLK_RETURN);break;
-    case 19: ok=a->tab==6 && !a->toolbar_keyboard;MENU_KEY(SDLK_F10);MENU_KEY(SDLK_DOWN);MENU_KEY(SDLK_ESCAPE);break;
+    case 19: ok=a->settings_open && a->tab==a->settings_previous_tab && !a->toolbar_keyboard;test_window_key_mod(a->settings_window,SDLK_ESCAPE,0);MENU_KEY(SDLK_F10);MENU_KEY(SDLK_DOWN);MENU_KEY(SDLK_ESCAPE);break;
     case 20: ok=!a->toolbar_keyboard && !a->toolbar_menu;MENU_KEY(SDLK_F10);MENU_KEY(SDLK_DOWN);MENU_KEY(SDLK_DOWN);MENU_KEY(SDLK_SPACE);break;
     case 21:
         ok=a->project_manager && !a->toolbar_keyboard;

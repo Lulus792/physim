@@ -36,6 +36,7 @@ static bool protocol_resize_key(app *a,const SDL_KeyboardEvent *key) {
     else if(key->key==SDLK_RETURN || key->key==SDLK_KP_ENTER)value=340;
     else return false;
     a->preferences.log_height=(uint32_t)lroundf(fmaxf(150,fminf(protocol_max_height(a,(float)h),value)));
+    a->protocol_initial_pending&=~PS_PROTOCOL_INITIAL_HEIGHT;
     if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"PROTOCOL KEY HANDLED: height=%u mod=%u\n",a->preferences.log_height,(unsigned)key->mod);
     return true;
 }
@@ -56,6 +57,7 @@ static void protocol_resize_input(app *a,float w,float h) {
         if(p->resize) {
             if(button->clicked && button->releases)a->preferences.log_height=(uint32_t)lroundf(fmaxf(150,fminf(protocol_max_height(a,h),p->resize_effective+p->resize_y-button->release_pos.y)));
             SDL_CaptureMouse(false);
+            a->protocol_initial_pending&=~PS_PROTOCOL_INITIAL_HEIGHT;
         }
         p->resize=false;p->resize_cancelled=false;return;
     }
@@ -67,11 +69,11 @@ static void protocol_resize_input(app *a,float w,float h) {
         if(SDL_getenv("PHYSIM_TEST_FOCUS_TRACE"))fprintf(stderr,"FOCUS POINTER REQUEST: accepted=%d keyboard=%d\n",focus_requested,SDL_GetKeyboardFocus()==a->window);
         p->resize=true;p->resize_original=(float)a->preferences.log_height;p->resize_effective=protocol_height_value(a,h);p->resize_y=ps_ui_mouse_press_position(in,NK_BUTTON_LEFT).y;
         if(down)SDL_CaptureMouse(true);
-        if(ps_ui_mouse_pressed(in,NK_BUTTON_DOUBLE)){a->preferences.log_height=340;p->resize=false;SDL_CaptureMouse(false);return;}
+        if(ps_ui_mouse_pressed(in,NK_BUTTON_DOUBLE)){a->preferences.log_height=340;a->protocol_initial_pending&=~PS_PROTOCOL_INITIAL_HEIGHT;p->resize=false;SDL_CaptureMouse(false);return;}
     }
     if(p->resize) {
         float position=!down && button->releases?button->release_pos.y:in->mouse.pos.y;
         a->preferences.log_height=(uint32_t)lroundf(fmaxf(150,fminf(protocol_max_height(a,h),p->resize_effective+p->resize_y-position)));
-        if(!down){p->resize=false;SDL_CaptureMouse(false);}
+        if(!down){a->protocol_initial_pending&=~PS_PROTOCOL_INITIAL_HEIGHT;p->resize=false;SDL_CaptureMouse(false);}
     }
 }

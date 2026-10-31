@@ -834,9 +834,7 @@ static void workspace_panel(app *a) {
     if (dock_begin(a, PS_DOCK_WORKSPACE)) {
         if (a->tab == 8 && active_document(a)) {
             document_view(a, content-status_space);
-        } else if (a->tab == 6)
-            settings_view(a);
-        else if (a->tab == 4 && a->loaded)
+        } else if (a->tab == 4 && a->loaded)
             library_view(a, content);
         else if (a->tab == 5 && a->loaded)
             batch_view(a);

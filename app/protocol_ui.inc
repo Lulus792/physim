@@ -3,11 +3,13 @@ static const char *protocol_origins[]={"Physim","Build","Simulation","Auswertung
 static const char *protocol_levels[]={"Alle","Debug","Info","Warnungen","Fehler"};
 static const char *protocol_outcome_names[]={"Keine Prozessauswirkung übermittelt","Läuft","Erfolgreich beendet","Fehlgeschlagen","Abgebrochen"};
 static void protocol_open_from(app *a,const char *opener) {
+    a->protocol_initial_pending&=~PS_PROTOCOL_INITIAL_OPEN;
     ps_protocol_ui *p=&a->protocol_view;
     if(!a->show_log){snprintf(p->return_window,sizeof p->return_window,"%s",a->ui->active?a->ui->active->name_string:"workspace");snprintf(p->return_action,sizeof p->return_action,"%s",opener?opener:"");}
     p->focus_return=false;a->show_log=true;
 }
 static void protocol_close(app *a) {
+    a->protocol_initial_pending&=~PS_PROTOCOL_INITIAL_OPEN;
     if(a->protocol_view.resize)protocol_resize_abort(a);
     a->show_log=false;a->protocol_view.navigation_request=0;a->protocol_view.focus_return=true;a->protocol_view.return_frames=3;
     const char *target=a->protocol_view.return_window;

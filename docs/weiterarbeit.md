@@ -6,130 +6,101 @@ abgleichen. Designverträge stehen in [AGENTS.md](../AGENTS.md) und der
 ist kein Anlass, abgeschlossene Prüfungen oder die Protokoll-Trennlinie erneut
 zu beginnen. Detailhistorien stehen in den verlinkten Nachweisen und Git.
 
-## Aktueller Abschluss
+## Aktueller Abschluss: Einstellungen A als eigenes Fenster
 
-**Neuer Anschluss: `settings-transactions-first`.** Einstellungen A hat jetzt
-eine geprüfte feldweise Entwurfszusammenführung in `preferences.c/.h`, integriert
-in den vorhandenen Einstellungsablauf. Nur bearbeitete Werte ersetzen den aktuellen
-Stand; Defaults erhalten Fenster-/Dockzustände und beide Workspace-Sitzungen.
-Windows Release/Linux Debug ASan/UBSan: Preferences je 1/1 sowie neue tatsächliche
-App-Transaktion und bestehende Tastaturgruppe bestanden. Die Display-Aufrufe
-`run-ro2m7jiy`/`run-ysv6o4i0` sind dennoch **insgesamt fehlgeschlagen, je 2/3**:
-der historische `settings_workflow` zieht einen 0/0-Protokollgriff und scheitert
-in Stufe 23. Die archivierte unveränderte Windows-Vorgänger-App scheitert exakt
-gleich; kein neuer Fehler dieser Änderung. Nicht die abgeschlossene Trennlinie
-neu prüfen. [Umfang, Grenzen und Anschluss](verification/settings-a-transactions-2026-10-31.md).
-**Das native Kategorienfenster A ist weiterhin offen**, nicht mit diesen
-Transaktionsprüfungen als erledigt darstellen. Kein neuer Mac-Zugriff.
-216 entbehrliche Dateien entfernt (198.471.296 Bytes): vier erfolgreiche
-Tastatur-Rohbilder und 212 nur zum Vergleich entpackte, weiter archivierte
-Vorgänger-Runtimedateien. Fehlerbilder/Referenzen und Archive erhalten.
+**Neuester eingefrorener Anschluss: `settings-a-window-visual`, 141 eigene Eingaben.**
+Das Kategorienfenster A ist jetzt nativ implementiert: eigenes nichtmodales
+OS-Fenster, fünf Kategorien, echte Suche, Theme-/Schriftentwurf in separater
+Vorschau, dreispaltige Änderungsprüfung und sichere Übernahme. Der alte
+Tab-6-Einstellungsrenderer ist entfernt. Wiederaufruf erhält Entwurf/Suche;
+das Hauptfenster bleibt im aktuellen Workspace bedienbar. Alle vierzehn
+vorhandenen Einstellungen bleiben wirksam. Keine neue Variantenwahl einholen.
+[Umsetzung und verbleibender Umfang](visuals/unified-workspace/SETTINGS-A-NATIVE.md),
+[kompakter Prüfnachweis](verification/settings-a-window-2026-10-31.md).
 
-`68ab5f71` ist in `origin` und `upstream` gepusht. Typografie-/Headerlauf
-**`41158796808` (`Lulus792/physim`)**: Apple Silicon `124411442189` und Intel
-`124411442496` sind terminal erfolgreich, je **4/4**. Die Archive wurden gegen
-GitHub-Digests und ihre einzelnen Ergebnisdateien geprüft: drei Theme-/Fokusfälle,
-zwölf Schriftgrößen-/Lese-/Abbruch-/Standardwert-Prozesse und zwölf tatsächliche
-AppKit-Menüabbrüche unter 1,5 s je Architektur. Die 2-s-Notfallstornierung zählt
-nicht. [Vollständiger kompakter Nachweis](verification/macos-typography-menu-2026-10-31.json).
+Windows Release/Linux Debug ASan/UBSan: `settings-a-window-ready` je **7/7**,
+`run-hxya7sl3` / `run-8qt40qsk`. Geprüft sind tatsächliche Texteingaben,
+Suche/Wiederaufruf, paralleler Workspace-Wechsel, nur im Entwurf verändertes Theme,
+Änderungsprüfung/Escape/OS-Schließen, ungültige Größe 139 behalten, auf 300
+korrigieren, sicher speichern und erneut lesen. Dazu feldweise Transaktionen,
+Tastaturfolge, zwölf Typografie-Unterprozesse, sieben Theme-Unterprozesse und
+beide F10-Menügrößen. GUI-Leakprüfung unter Linux aus; Sanitizerfehler bleiben fatal.
 
-Windows Release/Linux Debug ASan/UBSan: erste Aufrufe je **3/4 bestanden,
-insgesamt fehlgeschlagen** (`run-hhh5fjki`/`run-36885fz9`). Alle drei Theme-Fälle
-bestanden. Die alte Typografie-Fixture verlangte F1-Titel UI+7 statt H-Rollen.
-Der gesonderte H-Rollen-Nachlauf blieb je **0/1** (`run-yikz9w1_`/`run-bjbddlso`):
-erst danach griff die zweite alte Erwartung „Editor 16“, tatsächlicher Standard 12.
-Beide Ursachen sind korrigiert: Body/Titel/Chrome/Controls werden über tatsächliche
-H-Handlehöhen und behaltene em-Metriken geprüft; die vorherige Editorgröße bleibt
-erhalten, nur Standardwerte verwenden `PS_PREFERENCES_DEFAULT.editor_size`.
-Ohne eigenen Lesezoom folgt F1 der UI-Größe. Der letzte Typografie-Aufruf besteht
-je **1/1** mit allen zwölf Unterprozessen: Windows `run-vt2p0lgi`, Linux
-`run-gdzm0sqt`. Die unveränderten Theme-Fälle behalten ihren ersten Nachweis;
-keinen einzelnen neuen lokalen Vollaufruf mit einer Binärdatei behaupten.
+Die anschließende kleine Bildkorrektur `settings-a-window-visual` betrifft den
+einzeiligen Änderungszähler, die transparenten CSS-Auswahlfarben und die normale
+Zurück-Schaltfläche. Dafür nur `settings_a_window` mit je zwei tatsächlichen
+App-Prozessen nachprüfen; keine erneute Gesamtmatrix behaupten.
+Der gezielte Nachlauf besteht je **1/1**: `run-mgnwir2w` / `run-cv0mpuxb`.
+Die lokalen Build-/Prüf-/Archivhandles dieses Anschlusses sind beendet.
+Alle referenzierten Archivbytes sind zurückgelesen. Details und Originalfehlläufe
+bleiben im JSON erhalten. Die alten fehlerhaften Phasen sind keine bestandenen
+Abnahmen; Debugger-Gegenproben zählen nur als Ursachenbeleg. 656 ersetzte
+erfolgreiche BMPs entfernt (2.093.854.368 Bytes); Fehler und PNG-Referenzen erhalten.
 
-**Alle zugehörigen lokalen Build-/App-/Prüf-/Archivsessions und beide gezielten
-Mac-Jobs sind beendet.** 104 entbehrliche erfolgreiche BMPs wurden entfernt
-(376.257.552 Bytes). Originale Fehlerbilder, Quellen, Runtimes, App-Schritte,
-reale Preferences und genau ein PNG des offenen Designbefunds bleiben erhalten.
-Weitere automatisch ausgelöste breite CI ist davon getrennt zu bewerten.
+Der Nutzer-Mac ist **aus** und wird nicht angesprochen. Neue macOS-Nachweise nur
+aus tatsächlich ausgeführten gehosteten Intel-/Apple-Silicon-Läufen werten.
+Der neue Workflow umfasst zusätzlich Settings A und Transaktionen; seine
+Ausführung ist bis zum dokumentierten Ergebnis offen. Ältere erfolgreiche
+Menü-/F1-/Typografieläufe gelten nur für ihren jeweiligen Quellstand.
 
-## Nächster konkreter Umsetzungsblock: Einstellungen A
+## Nächster konkreter Umsetzungsblock
 
-Der tatsächliche 22-px-Bildabgleich zeigt weiterhin das alte Formular im
-Hauptfenster. `open_settings` in `app/settings_ui.inc:134` setzt nur Tab 6;
-`settings_view` ab Zeile 241 besitzt noch keine Kategorien/Suche/Live-Vorschau
-oder Änderungsprüfung. Das ist eine **offene native Umsetzungslücke**, keine
-belegte technische Unmöglichkeit. Die bestandenen Schrift-/Menütests nehmen das
-Design nicht ab. [Befund und geschützter einzelner Bildbeleg](verification/settings-a-native-gap-2026-10-31.md).
+Einstellungen A ist noch **nicht vollständig abgenommen**:
 
-Zuerst [ADR 018](decisions/018-selected-settings-a.md),
-[verbindliche Spezifikation](visuals/settings-options/APPROVED.md) vollständig,
-[Referenz](visuals/settings-options/index.html?approved=1&group=appearance) und
-[ADR 015](decisions/015-independent-task-windows.md) lesen. **A ist bereits
-freigegeben; keine neue Variantenentscheidung einholen.** Danach passende
-zentrale Skills nach `D:/Skills/skills/AGENTS.md` laden: UI-Umsetzung/Designsystem,
-C17/Lebenszeiten und Accessibility. Die erste deterministische Auswahl schlug
-Accessibility und C vor; UI-Umsetzung/Designsystem anhand des tatsächlichen
-Designauftrags ergänzen, nicht auf die Triggerauswahl beschränken.
+- Anzeigeeinheiten öffnet bisher noch den alten modalen Einheitenablauf.
+  Nach ADR 015/018 eigenes OS-Aufgabenfenster implementieren: echte Kanäle und
+  Kataloge, Entwurf je Kanal, Vorschau, unabhängiges Anwenden/Abbrechen,
+  vollständige numerische und reale Datenvalidierung erhalten. Allgemeines
+  Abbrechen darf angewendete Einheiten oder einen offenen Einheitenentwurf
+  nicht zurücksetzen.
+- Completion D benötigt echte Backend-/Preferences-Optionen für Auto-Anzeige
+  und sichtbare Trefferzahl (Standard fünf). Keine funktionslosen Ersatzfelder
+  hinzufügen. Scope-/Signaturhilfe und gemeinsames Syntaxschema bleiben offen.
+- Historische `settings_workflow`-/AX-Fixtures von Tab 6, Radios und globalem
+  Fokus auf das aktuelle Aufgabenfenster portieren. Dabei Wiederherstellung,
+  maximierte/restaurierte Geometrie und Sicherheitsassertionen erhalten.
+  Der alte Test scheiterte bereits vor diesem Umbau am 0/0-Protokollgriff.
+  Das begründet keinen neuen Test der abgeschlossenen Protokoll-Trennlinie.
+- No-results-Zustand: Suchleisten-Löschen und Ergebnis-Rücksetzen teilen derzeit
+  benutzerdefinierte Fokus-ID 26. Tastatureigentümer gezielt trennen und prüfen.
+- Manuelle Screenreader-/DPI-/Monitor-/physische Eingabe-/macOS-Vollbildabnahme
+  sowie weitere visuelle Feinheiten bleiben gesondert offen.
 
-Eigenes nichtmodales OS-Aufgabenfenster mit eigener Eingabe-/Nuklear-/AX-/GL-
-Oberfläche; keine zweite App-Instanz und kein WebView. Vorhandene Fenster-
-Lebenszeiten/Font-Ownership aus `panel_windows.inc`, `graphic_export_ui.inc`,
-`project_manager_ui.inc` und `documentation_window.inc` anhand tatsächlicher
-Aufrufstellen prüfen. Fünf Kategorien, Suche, Optionen, separate Entwurfsvorschau,
-vollständiger Änderungsvergleich und wirksame/gesperrte Fußaktionen wie freigegeben
-umsetzen. Wiederaufruf erhält den Entwurf; Hauptfenster bleibt bedienbar.
+Feldweise Preferences-Zusammenführung aus `fa97b315` erhalten. Ein reiner Theme-
+oder Schriftentwurf darf spätere Geometrie nicht überschreiben. Entwickeln-
+Ausgangswerte sind von laufenden Simulieren-/Auswerten-Sitzungen getrennt.
+Explizite gespeicherte Protokollwerte warten beim parallelen Übernehmen auf
+Entwickeln; spätere bewusste Resize-/Sichtbarkeits-/Layoutaktionen haben Vorrang.
+Beim Beenden `settings_current` verwenden, sonst überschreibt die aktuelle
+andere Sitzung wieder den gespeicherten Ausgangswert.
 
-Bestehende sichere Preferences-/Font-Transaktionen erhalten. Theme-/Schriftentwurf
-darf parallel geänderte Arbeitsflächengeometrie nicht zurückschreiben; Defaults
-bleiben Entwurf. Unabhängig angewendete Anzeigeeinheiten samt eigener offener
-Einheitenaufgabe beim allgemeinen Abbrechen erhalten. Reale Kanäle/Kataloge,
-vollständige numerische Validierung und Fehlerwiederholung verwenden.
-Die Ergänzungen der gewählten Completion D (Auto-Anzeige, fünf sichtbare Zeilen,
-restliche Treffer scrollbar) in „Editor & Sicherung“ berücksichtigen; tatsächlichen
-Backend-/Preferences-Bestand vor Feld-/Schemaänderungen prüfen, keine funktionslose
-Galerie-Nachbildung. Keine alten Tab-6-/No-op-Übernehmen-Erwartungen nur für Tests
-beibehalten. Benutzerfunktionen und genaue Designfreigaben haben Vorrang.
-
-Weitere offene native Arbeit bleibt bestehen: Completion D mit echter Scope-/
-Signaturhilfe und gemeinsamem Syntaxschema, A2 in der Szene/Mehrfachauswahl,
-Kontextmenüs A, B2 und übrige freigegebene Oberfläche. Andere aktive historische
-F10-/Bereichsfokusfälle bei relevanter Änderung am tatsächlichen registrierten
-Einstieg prüfen; alte freie Docking-/Inspector-Fixtures nicht reaktivieren.
-`docking_workflow` und `inspector_workflow` rufen bereits `fixed_panels` auf.
+Weitere native Arbeit: A2 in Szene/Mehrfachauswahl, Kontextmenüs A, B2 und übrige
+freigegebene Oberfläche. Kein „volle Punktzahl“ aus Teilprüfungen ableiten.
+`docking_workflow`/`inspector_workflow` prüfen bereits `fixed_panels`; alte freie
+Docking-Fixtures nicht reaktivieren.
 
 ## Sicherer lokaler Anschluss
 
-**Neuester eingefrorener Anschluss: `settings-transactions-first`.**
-136 Eingaben, neun Quell-/Testdateien gegenüber dem vorherigen Anschluss geändert;
-215 Windows-/113 Linux-Runtimedateien und alle Archivbytes zurückgelesen.
-Build-/Prüf-/Archivhandles sind beendet. `prepare-next.py <neuer-tag>
-settings-transactions-first` verwenden. Neue Dateien bleiben ausdrücklich zur
-Eingabeliste hinzuzufügen. Die bisherigen Typografie-Festschreibungen erhalten.
-
-Vorheriger Anschluss: `mac-typography-menu-accepted-local`.
-132 eigene Eingaben, 1101 Compiler-/Testdateien entsprechen nach beidseitiger
-Zeilenendennormalisierung `68ab5f71`; 212 Windows-/111 Linux-Runtimedateien und
-alle referenzierten Archivbytes sind zurückgelesen. Der Git-Blob des
-libunibreak-Manifests enthält selbst CRLF; diese Ausnahme ist eingegrenzt.
-Der akzeptierte Anschluss übernimmt dieselben App-Bytes wie der tatsächlich
-ausgeführte Nachlauf `mac-typography-menu-editor` und fügt keine Quelländerung hinzu.
-`mac-typography-menu-first` und `mac-typography-menu-h-roles` bleiben unverändert.
-
+- `prepare-next.py <neuer-tag> settings-a-window-visual` verwenden. Der Helfer
+  prüft den eingefrorenen Quell-/Runtime-/Archivstand. Neue Module ausdrücklich
+  zur Eingabeliste hinzufügen, bevor ihre Include-Kette gebaut wird.
+- Helfer/Manifeste/Byteindizes: `build/validation/explorer-inline-2026-10-29/`.
+  `run.py`/`freeze.py` vor Verwendung auf tatsächliche Argumente prüfen.
 - Gemeinsamer isolierter Baum: `build/validation/protocol-wrap-2026-10-26/3-isolated/`
-  mit `src`, `windows-build`, `linux-build`. Nicht aus einem älteren A2-/Menüstand
-  überschreiben. Keine Quell-/Runtimeänderung bei lebendem Build-/Test-/Archivhandle.
-- Eingaben/Manifeste/Byteindizes: `build/validation/explorer-inline-2026-10-29/`.
-  `prepare-next.py <neuer-tag> settings-transactions-first` prüft den alten
-  Stand und übernimmt den eigenen Eingabebestand. **Neue Dateien/Module ausdrücklich
-  zur Eingabeliste hinzufügen**, bevor ihre Include-Kette gebaut wird.
-  `run.py` und `freeze.py` liegen dort; vorher ihre tatsächlichen Argumente lesen.
-- Kampagnenberichte, Originalfehlerlogs und hashgeprüfte Mac-ZIPs:
-  `build/validation/macos-menu-workflows-2026-10-30/`. Der einzelne geschützte
-  Settings-A-Beleg heißt `ui-22-typography-settings.png` (146.649 Bytes); Hash im Befund.
-- Vor jedem neuen Lauf: relevante Änderung, offene Frage und kleinsten passenden
-  Test benennen. Quellen/Kommandos/Soll-Ist/Exitcode/Hash/Restbefunde zuerst als
-  Text/JSON sichern; Bilder nur für tatsächliche visuelle Fragen. Keine abgeschlossene
-  Matrix, Trennlinie oder A2-Auswahl allein wegen eines Kontextwechsels wiederholen.
+  mit `src`, `windows-build`, `linux-build`. Keine Quell-/Runtimeänderung bei
+  lebendem Build-, Test- oder Archivhandle. Nicht aus einem älteren Stand ersetzen.
+- Diagnose und kompakte Aufräumnachweise: `build/validation/settings-window-2026-10-31/`.
+  GDB-ROM-Gegenprobe ist kein normaler App-Pass. Der neue normale 7/7-Nachlauf
+  ist der maßgebliche Eingabenachweis.
+- Historischen Settings-A-Fehlerbeleg unverändert erhalten:
+  `build/validation/macos-menu-workflows-2026-10-30/ui-22-typography-settings.png`.
+  Er zeigt den damaligen Stand; er beschreibt nicht den neuen aktuellen Renderer.
+- Nur D:, kein Zugriff auf F:. Alle neuen Build-/Testdaten unter `build/`.
+  Erfolgreiche, ersetzte Rohbilder nach dokumentiertem Pfad-/Hashabgleich entfernen;
+  aktuelle Referenzen, offene Fehler, Quellen, Archive und benötigte Symbole erhalten.
+- Vor jedem Nachlauf konkrete Änderung/offene Frage und kleinsten passenden Test
+  benennen. Ergebnisse zuerst als Text/JSON mit Quelle/Kommandos/Soll-Ist/Hash
+  dokumentieren. Keine Matrix allein wegen eines Kontextwechsels wiederholen.
 
 ## Abgeschlossen – Umfang und Grenzen erhalten
 

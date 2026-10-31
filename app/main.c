@@ -199,8 +199,20 @@ typedef struct {
     int settings_previous_tab, panel_drag;
     bool settings_from_analysis,settings_defaults;
     int settings_focus;
-    struct nk_rect settings_focus_bounds[14];
+    struct nk_rect settings_focus_bounds[28];
     bool settings_keyboard, settings_focus_scroll;
+    SDL_Window *settings_window;
+    ps_graphics *settings_graphics;
+    struct nk_context *settings_ui;
+    bool settings_open,settings_close_pending,settings_review,settings_initial_focus,settings_apply_requested,settings_popup_close;
+    unsigned settings_group,settings_invalid_numbers,settings_edited_numbers;
+    SDL_WindowID settings_source_id;
+    char settings_search[192],settings_numbers[3][16],settings_capture[4096];
+    struct nk_user_font settings_fonts[11];
+    struct nk_rect settings_frame,settings_body,settings_preview,settings_categories[5],settings_fields[14];
+    unsigned protocol_initial_pending;
+    uint32_t protocol_initial_height;
+    bool protocol_initial_open;
     struct nk_rect dock_rects[PS_DOCK_NODES], dock_panels[PS_DOCK_PANELS];
     struct nk_rect dock_headers[PS_DOCK_PANELS], dock_closes[PS_DOCK_PANELS], dock_splitters[PS_DOCK_NODES], dock_float_grips[PS_DOCK_PANELS];
     struct nk_rect dock_targets[5], dock_preview;
@@ -3861,7 +3873,7 @@ int main(int argc, char **argv) {
     if(migration_test && (argc!=4 || (strcmp(argv[3],"normal") && strcmp(argv[3],"stale") && strcmp(argv[3],"dirty"))))return 2;
     bool settings_test = argc > 1 && !strcmp(argv[1], "--settings-test");
     if (settings_test && (argc != 4 || (strcmp(argv[3], "write") && strcmp(argv[3], "read") &&
-        strcmp(argv[3], "keyboard") && strcmp(argv[3], "keyboard-read") && strcmp(argv[3], "merge") &&
+        strcmp(argv[3], "keyboard") && strcmp(argv[3], "keyboard-read") && strcmp(argv[3], "merge") && strcmp(argv[3], "window-16") && strcmp(argv[3], "window-22") &&
         strcmp(argv[3], "checkbox-native") && strcmp(argv[3], "checkbox-remote") &&
         strcmp(argv[3], "options-native") && strcmp(argv[3], "options-remote") &&
         strcmp(argv[3], "focus-native") && strcmp(argv[3], "focus-remote") &&
@@ -4326,6 +4338,7 @@ int main(int argc, char **argv) {
         }
         graphic_export_tick(a);
         project_manager_tick(a);
+        settings_tick(a);
         preferences_theme_tick(a);
         api_reference_insert_tick(a);
         documentation_actions_tick(a);
@@ -4337,6 +4350,7 @@ int main(int argc, char **argv) {
         nk_input_begin(a->ui);
         browser_input(a,true);
         if(a->manager_ui)nk_input_begin(a->manager_ui);
+        if(a->settings_ui)nk_input_begin(a->settings_ui);
         if(a->graphic_export)nk_input_begin(a->graphic_export->ui);
         if (a->doc_ui)
             nk_input_begin(a->doc_ui);
@@ -4360,6 +4374,7 @@ int main(int argc, char **argv) {
             SDL_Window *event_window = SDL_GetWindowFromEvent(&e);
             if(browser_event(a,&e,event_window))continue;
             if(project_manager_event(a,&e,event_window))continue;
+            if(settings_event(a,&e,event_window))continue;
             if(timeline_controls_event(a,&e,event_window))continue;
             if(graphic_export_event(a,&e,event_window))continue;
             if(panel_window_event(a,&e,event_window))continue;
@@ -4387,7 +4402,7 @@ int main(int argc, char **argv) {
             if(event_window==a->doc_window && a->doc_ui && documentation_actions_event(a,&e))continue;
             if(event_window==a->doc_window && a->doc_ui && nk_sdl_accessibility_event(a->doc_ui,&e))continue;
             if (event_window == a->window && e.type == SDL_EVENT_WINDOW_FOCUS_LOST)
-                { completion_close(a);toolbar_keyboard_close(a);a->settings_keyboard=false; }
+                { completion_close(a);toolbar_keyboard_close(a); }
             if(event_window==a->window && e.type==SDL_EVENT_MOUSE_BUTTON_DOWN)completion_pointer_event(a,&e.button);
             if (a->doc_window && event_window == a->doc_window) {
                 if (e.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED)
@@ -4440,7 +4455,7 @@ int main(int argc, char **argv) {
                 if(completion_keyboard_key(a,&e.key))continue;
                 if(file_tabs_keyboard(a,&e.key))continue;
                 if (toolbar_keyboard_key(a, &e.key)) continue;
-                if (settings_keyboard_key(a, &e.key)) continue;
+
                 if (runner_keyboard_key(a, &e.key)) continue;
                 if (a->dock_drag && e.key.key==SDLK_ESCAPE) { a->dock_drag=0;a->dock_dragging=false;continue; }
                 if (a->file_tab_drag && e.key.key==SDLK_ESCAPE) {
@@ -4490,17 +4505,19 @@ int main(int argc, char **argv) {
                         command(a, a->paused ? PS_MSG_RUN : PS_MSG_PAUSE);
                 }
             }
-            if ((a->toolbar_keyboard || (a->tab==6 && a->settings_keyboard)) && e.type == SDL_EVENT_TEXT_INPUT) continue;
+            if (a->toolbar_keyboard && e.type == SDL_EVENT_TEXT_INPUT) continue;
             nk_sdl_handle_event(a->ui, &e);
         }
         nk_input_end(a->ui);
         browser_input(a,false);
         if(a->manager_ui)nk_input_end(a->manager_ui);
+        if(a->settings_ui)nk_input_end(a->settings_ui);
+        if(a->settings_ui && nk_sdl_accessibility_has_focus(a->settings_ui) && !nk_sdl_accessibility_keyboard_owned(a->settings_ui))a->settings_keyboard=false;
         if(a->graphic_export)nk_input_end(a->graphic_export->ui);
         if (a->doc_ui)
             nk_input_end(a->doc_ui);
         for(unsigned i=0;i<PS_PANEL_COUNT;i++)if(a->panels[i].ui)nk_input_end(a->panels[i].ui);
-        if(nk_sdl_accessibility_has_focus(a->ui) && !nk_sdl_accessibility_keyboard_owned(a->ui)){a->settings_keyboard=false;toolbar_keyboard_close(a);}
+        if(nk_sdl_accessibility_has_focus(a->ui) && !nk_sdl_accessibility_keyboard_owned(a->ui)){toolbar_keyboard_close(a);}
         if(a->doc_ui && nk_sdl_accessibility_has_focus(a->doc_ui) && !nk_sdl_accessibility_keyboard_owned(a->doc_ui))a->doc_keyboard=false;
         if (a->profiler) {
             Uint64 now = SDL_GetTicksNS();
@@ -5664,6 +5681,7 @@ int main(int argc, char **argv) {
             if(graphic_capture)SDL_strlcpy(a->graphic_export->capture,path,sizeof a->graphic_export->capture);
             else if(a->browser && a->browser->visible && a->browser->ui)SDL_strlcpy(a->browser->capture,path,sizeof a->browser->capture);
             else if(a->project_manager && a->manager_ui)SDL_strlcpy(a->manager_capture,path,sizeof a->manager_capture);
+            else if(a->settings_open && a->settings_ui)SDL_strlcpy(a->settings_capture,path,sizeof a->settings_capture);
             else {
             if(plot_test && SDL_getenv("PHYSIM_TEST_GRAPHIC_DIALOG")) {
                 /* One paired BMP/PNG proves identical readback; the remaining
@@ -5695,6 +5713,7 @@ int main(int argc, char **argv) {
         if(!panel_windows_render(a)){fprintf(stderr,"Panel rendering: %s\n",SDL_GetError());exit_code=1;a->quitting=true;}
         panel_requests(a);
         if(!project_manager_window_render(a)){fprintf(stderr,"Project window: %s\n",SDL_GetError());exit_code=1;a->quitting=true;}
+        if(!settings_window_render(a)){fprintf(stderr,"Settings window: %s\n",SDL_GetError());exit_code=1;a->quitting=true;}
         if(!browser_windows_render(a)){fprintf(stderr,"File browser window: %s\n",SDL_GetError());exit_code=1;a->quitting=true;}
         if(!graphic_export_window_render(a)){fprintf(stderr,"Graphic export window: %s\n",SDL_GetError());exit_code=1;a->quitting=true;}
         if (doc_capture)
@@ -5740,9 +5759,7 @@ int main(int argc, char **argv) {
         exit_code = 1;
     }
     if (a->preferences_writable && a->preferences_path[0]) {
-        preferences_capture(a);
-        ps_preferences persisted=a->preferences;
-        if(a->laboratory_active || a->analysis_layout_active){const ps_layout_state *regular=a->analysis_layout_active?&a->analysis_previous:&a->laboratory_previous;persisted.dock=regular->dock;persisted.sidebar_width=regular->sidebar_width;persisted.inspector_width=regular->inspector_width;}
+        ps_preferences persisted=settings_current(a);
         ps_result saved = ps_preferences_write(a->preferences_path, &persisted);
         if (saved != PS_OK) {
             fprintf(stderr, "Einstellungen nicht gespeichert: %s\n", ps_result_string(saved));
@@ -5821,6 +5838,7 @@ int main(int argc, char **argv) {
     ps_dialog_requests_cancel_all(&a->dialog_requests);
     browser_destroy(a);
     project_manager_window_destroy(a);
+    settings_window_destroy(a);
     documents_clear(a);
     graphic_export_close(a);
     panel_windows_destroy(a);

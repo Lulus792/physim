@@ -40,6 +40,7 @@ static void layout_store(app *a) {
         for(unsigned i=0;i<next.count;i++)if(!strcmp(next.entries[i].name,a->layout_name))a->layout_selected=(int)i;
 }
 static void layout_apply(app *a) {
+    a->protocol_initial_pending=0;
     const ps_layout_state *s=&a->layouts.entries[a->layout_selected].state;
     a->preferences.dock=ps_dock_fixed_layout(s->dock.hidden);a->preferences.sidebar_width=s->sidebar_width;
     a->preferences.inspector_width=s->inspector_width;a->preferences.log_height=s->log_height;

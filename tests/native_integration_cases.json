@@ -5686,6 +5686,13 @@
       }]
     },
     {
+      "name": "settings_a_window",
+      "app": true,
+      "display": true,
+      "targets": ["python", "physim"],
+      "steps": [{"program": "python", "arguments": ["{root}/tests/check_display_workflow.py", "settings_a_window", "--app", "{physim}", "--work", "{work}", "--root", "{root}"], "timeout": 85, "files": ["app-steps.json"]}]
+    },
+    {
       "name": "themes_workflow",
       "app": true,
       "display": true,

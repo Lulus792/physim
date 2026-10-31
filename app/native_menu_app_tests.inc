@@ -161,8 +161,8 @@ static void native_toolbar_test_frame(app *a,int *stage,int *code,const char **c
     case 8:if(!native_test_focus_wait(a,a->window,stage,deadline))return;log_before=a->show_log;ok=native_test_invoke(a,TOOLBAR_LOG,true);deadline=ps_clock()+2;break;
     case 9:if(!native_test_model_wait(a->show_log!=log_before,stage,deadline))return;ok=a->show_log!=log_before && native_test_invoke(a,TOOLBAR_LOG,true);deadline=ps_clock()+2;break;
     case 10:if(!native_test_model_wait(a->show_log==log_before,stage,deadline))return;ok=a->show_log==log_before && native_test_invoke(a,TOOLBAR_SETTINGS,true);deadline=ps_clock()+2;break;
-    case 11:if(!native_test_model_wait(a->tab==6,stage,deadline))return;ok=a->tab==6 && native_test_stroke(a->window,"1",18,MT_COMMAND);deadline=ps_clock()+2;break;
-    case 12:if(!native_test_model_wait(a->tab==0,stage,deadline))return;ok=a->tab==0 && native_test_invoke(a,TOOLBAR_HELP,true);deadline=ps_clock()+2;break;
+    case 11:if(!native_test_model_wait(a->settings_open,stage,deadline))return;if(!native_test_focus_wait(a,a->settings_window,stage,deadline))return;ok=a->settings_open && a->tab==a->settings_previous_tab && native_test_stroke(a->settings_window,"\x1b",53,0);deadline=ps_clock()+3;break;
+    case 12:if(!native_test_model_wait(!a->settings_open && a->tab==0,stage,deadline))return;if(!native_test_focus_wait(a,a->window,stage,deadline))return;ok=!a->settings_open && a->tab==0 && native_test_invoke(a,TOOLBAR_HELP,true);deadline=ps_clock()+2;break;
     case 13:if(!native_test_model_wait(a->doc_visible,stage,deadline))return;ok=a->doc_visible && a->doc_window && a->doc_window!=a->window;documentation_window_hide(a);SDL_RaiseWindow(a->window);deadline=ps_clock()+5;break;
     case 14:if(!native_test_focus_wait(a,a->window,stage,deadline))return;ok=native_test_invoke(a,TOOLBAR_ADD_FILE,false);break;
     case 15:ok=!a->dialog_pending && !a->workspace_open;native_test_caption_mouse(a,1,true);deadline=ps_clock()+5;break;
@@ -203,8 +203,8 @@ static void native_keyboard_menu_test_frame(app *a,const char *root,int *stage,i
     case 2:if(!native_test_model_wait(a->show_log!=log_before,stage,deadline))return;ok=a->show_log!=log_before && !a->document_count;ok &= native_test_key(a->window,10,"l",37,MT_COMMAND,YES);repeat_frames=3;break;
     case 3:if(--repeat_frames>0){--*stage;return;}ok=a->show_log!=log_before;ok &= native_test_key(a->window,11,"l",37,MT_COMMAND,NO) && native_test_key(a->window,12,"",55,0,NO);break;
     case 4:ok=native_test_stroke(a->window,",",43,MT_COMMAND);deadline=ps_clock()+2;break;
-    case 5:if(!native_test_model_wait(a->tab==6,stage,deadline))return;ok=a->tab==6 && native_test_stroke(a->window,"1",18,MT_COMMAND);deadline=ps_clock()+2;break;
-    case 6:if(!native_test_model_wait(a->tab==0,stage,deadline))return;ok=a->tab==0 && native_test_stroke(a->window,"\xef\x9c\x84",122,0);deadline=ps_clock()+2;break;
+    case 5:if(!native_test_model_wait(a->settings_open,stage,deadline))return;if(!native_test_focus_wait(a,a->settings_window,stage,deadline))return;ok=a->settings_open && a->tab==a->settings_previous_tab && native_test_stroke(a->settings_window,"\x1b",53,0);deadline=ps_clock()+3;break;
+    case 6:if(!native_test_model_wait(!a->settings_open && a->tab==0,stage,deadline))return;if(!native_test_focus_wait(a,a->window,stage,deadline))return;ok=!a->settings_open && a->tab==0 && native_test_stroke(a->window,"\xef\x9c\x84",122,0);deadline=ps_clock()+2;break;
     case 7:if(!native_test_model_wait(a->doc_visible,stage,deadline))return;ok=a->doc_visible;documentation_window_hide(a);SDL_RaiseWindow(a->window);deadline=ps_clock()+5;break;
     case 8:if(!native_test_focus_wait(a,a->window,stage,deadline))return;ok=native_test_invoke(a,TOOLBAR_NEW,true);deadline=ps_clock()+2;break;
     case 9:if(!native_test_model_wait(a->project_manager,stage,deadline))return;ok=a->project_manager;manager_test_key(a,SDLK_ESCAPE,0);break;

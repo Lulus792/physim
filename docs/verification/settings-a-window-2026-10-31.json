@@ -1,0 +1,1369 @@
+{
+  "date": "2026-10-31",
+  "scope": "Native Settings A task-window milestone; units task, Completion D and full platform/design acceptance remain open",
+  "base_commit": "fa97b315d45d9e4afabfb820065fe3520b00e3c1",
+  "own_input_count": 141,
+  "root_inputs_match_tested_bytes": true,
+  "phases": [
+    {
+      "tag": "settings-a-window-first",
+      "interpretation": "Initial window fixture text-input readiness; shutdown overwrote saved Develop log default with active cross-workspace log height.",
+      "runs": [
+        {
+          "platform": "windows",
+          "config": "Release MSVC",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "settings_transactions",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 1,
+            "app_sha256": "4e31ffd11e42948999ad13b310ef56c19ba0abfe282e941822c8602f22fce820"
+          },
+          "run": "run-u4f9zbcq",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-u4f9zbcq/results.json",
+            "bytes": 14189,
+            "sha256": "070569636edded616722c39ef6d23cf28c685b7c55abebf57ff7efee2d9ef048"
+          },
+          "passed": 0,
+          "total": 2,
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "failed",
+              "diagnostics": [
+                "nds=0.027923\nAPP TEST TRACE: main fonts ready 585858.826509\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 0 -> 1, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 1 -> 2, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 2 -> 3, status Einstellungen gespeichert.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=1472338000\nAPP TEST TRACE: stage 3 -> 4, status Einstellungen gespeichert.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=1 id=0 ticks=1498623400\nTraceback (most recent call last):\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 2286, in <module>\n    main()\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 2035, in main\n    SPECIAL[args.case](flow, directory)\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 1665, in settings_transactions\n    require(struct.unpack_from(\"<I\", data, 24)[0] == 218 and struct.unpack_from(\"<I\", data, 56)[0] == 255 and\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: Settings merge stored another workspace's geometry\n"
+              ]
+            },
+            {
+              "name": "settings_a_window",
+              "status": "failed",
+              "diagnostics": [
+                " anlegen. (tab=0, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 2286, in <module>\n    main()\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 2035, in main\n    SPECIAL[args.case](flow, directory)\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 1674, in settings_a_window\n    flow.run(\"--settings-test\", root, \"window-\" + str(size), timeout=35,\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\bin\\\\physim.exe', '--settings-test', 'D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\test-results\\\\run-u4f9zbcq\\\\settings_a_window\\\\files ä\\\\workflow ä\\\\UI 16', 'window-16']\n"
+              ]
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "config": "Debug GCC ASan/UBSan, GUI detect_leaks=0",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "settings_transactions",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 1,
+            "app_sha256": "17c9dd10428c2c88a2a7f5d7b71f6d99ed85404564f4afff6a01a6d57d275465"
+          },
+          "run": "run-4q3c3nx0",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-4q3c3nx0/results.json",
+            "bytes": 15095,
+            "sha256": "647b4786908cf8c1e9f28880e537b02d08b3ed2fe93d5d8cef05e9efc52e5798"
+          },
+          "passed": 0,
+          "total": 2,
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "failed",
+              "diagnostics": [
+                "d=0 id=0 ticks=4810562372\nAPP TEST TRACE: stage 3 -> 4, status Einstellungen gespeichert.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=1 id=0 ticks=5003115511\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 2286, in <module>\n    main()\n    ~~~~^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 2035, in main\n    SPECIAL[args.case](flow, directory)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 1665, in settings_transactions\n    require(struct.unpack_from(\"<I\", data, 24)[0] == 218 and struct.unpack_from(\"<I\", data, 56)[0] == 255 and\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n            struct.unpack_from(\"<I\", data, 28)[0] == 340, \"Settings merge stored another workspace's geometry\")\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: Settings merge stored another workspace's geometry\n"
+              ]
+            },
+            {
+              "name": "settings_a_window",
+              "status": "failed",
+              "diagnostics": [
+                "play_workflow.py\", line 2035, in main\n    SPECIAL[args.case](flow, directory)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 1674, in settings_a_window\n    flow.run(\"--settings-test\", root, \"window-\" + str(size), timeout=35,\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n             marker=\"SETTINGS A WINDOW SELF-TEST: PASSED\")\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim', '--settings-test', '/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-4q3c3nx0/settings_a_window/files ä/workflow ä/UI 16', 'window-16']\n"
+              ]
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-first-inputs.json",
+        "bytes": 14198,
+        "sha256": "f14ad90264fd02b6992cf49032c634b41acf71eace252983d925fab46e9b8375"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-first-compiler-source.json",
+        "bytes": 117329,
+        "sha256": "f8d22a831d44f50ad8030ab3381c435a9196568c7d5e927e63ff94a78ae65326"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-first-runtime.json",
+        "bytes": 36332,
+        "sha256": "2c5c99ee6b5522952dae623f6170a5adb930aeb154d1c22ae8c88f3fce4829b0"
+      },
+      "byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-first-byte-index.json",
+        "bytes": 93992,
+        "sha256": "554481454f34ac0ddc678be26326ddeb86a42134297d9d8fddfdee280e50a3d5"
+      }
+    },
+    {
+      "tag": "settings-a-window-focus",
+      "interpretation": "Search owner retained Nuklear ROM despite SDL text input being active. Theme wrapper still expected obsolete light analysis surface.",
+      "runs": [
+        {
+          "platform": "windows",
+          "config": "Release MSVC",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "settings_transactions",
+              "--test-filter",
+              "settings_a_window",
+              "--test-filter",
+              "settings_keyboard_workflow",
+              "--test-filter",
+              "ui_typography_workflow",
+              "--test-filter",
+              "themes_workflow"
+            ],
+            "exit_code": 1,
+            "app_sha256": "ca18180d54cc7fd5ccc288a780c8556c7d5b0b3452d43391e16a42fd822cb360"
+          },
+          "run": "run-b9u_1x12",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-b9u_1x12/results.json",
+            "bytes": 128632,
+            "sha256": "ec7a711abc5a6ff1943ecea5c56e4746501e563b253660c813629e97833b4856"
+          },
+          "passed": 3,
+          "total": 5,
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "settings_a_window",
+              "status": "failed",
+              "diagnostics": [
+                " anlegen. (tab=0, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 2286, in <module>\n    main()\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 2035, in main\n    SPECIAL[args.case](flow, directory)\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 1674, in settings_a_window\n    flow.run(\"--settings-test\", root, \"window-\" + str(size), timeout=35,\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\bin\\\\physim.exe', '--settings-test', 'D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\test-results\\\\run-b9u_1x12\\\\settings_a_window\\\\files ä\\\\workflow ä\\\\UI 16', 'window-16']\n"
+              ]
+            },
+            {
+              "name": "themes_workflow",
+              "status": "failed",
+              "diagnostics": [
+                ". Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 11 -> 12, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 12 -> 13, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=1912160400\nAPP TEST TRACE: stage 13 -> 14, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 14 -> 15, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 15 -> 16, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nTraceback (most recent call last):\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 2286, in <module>\n    main()\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 2035, in main\n    SPECIAL[args.case](flow, directory)\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 1784, in themes\n    require(count > width * abs(height) // 100, f\"Theme background was not rendered: {prefix}{mode}\")\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: Theme background was not rendered: theme-plot-light\n"
+              ]
+            },
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "diagnostics": []
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "config": "Debug GCC ASan/UBSan, GUI detect_leaks=0",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "settings_transactions",
+              "--test-filter",
+              "settings_a_window",
+              "--test-filter",
+              "settings_keyboard_workflow",
+              "--test-filter",
+              "ui_typography_workflow",
+              "--test-filter",
+              "themes_workflow"
+            ],
+            "exit_code": 1,
+            "app_sha256": "13117c8aa65dd0de9b043ebcd667604e15eba8e971e2d2fcbb8b436526d08017"
+          },
+          "run": "run-yektax1i",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-yektax1i/results.json",
+            "bytes": 131535,
+            "sha256": "c5026dda9ed50ee0729d66c8cc2d6f5f687714bbb8c315f780197f7aca7c7c16"
+          },
+          "passed": 3,
+          "total": 5,
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "settings_a_window",
+              "status": "failed",
+              "diagnostics": [
+                "play_workflow.py\", line 2035, in main\n    SPECIAL[args.case](flow, directory)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 1674, in settings_a_window\n    flow.run(\"--settings-test\", root, \"window-\" + str(size), timeout=35,\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n             marker=\"SETTINGS A WINDOW SELF-TEST: PASSED\")\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim', '--settings-test', '/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-yektax1i/settings_a_window/files ä/workflow ä/UI 16', 'window-16']\n"
+              ]
+            },
+            {
+              "name": "themes_workflow",
+              "status": "failed",
+              "diagnostics": [
+                "13, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=6894646569\nAPP TEST TRACE: stage 13 -> 14, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 14 -> 15, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 15 -> 16, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nTraceback (most recent call last):\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 2286, in <module>\n    main()\n    ~~~~^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 2035, in main\n    SPECIAL[args.case](flow, directory)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 1784, in themes\n    require(count > width * abs(height) // 100, f\"Theme background was not rendered: {prefix}{mode}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: Theme background was not rendered: theme-plot-light\n"
+              ]
+            },
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "diagnostics": []
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-focus-inputs.json",
+        "bytes": 14396,
+        "sha256": "f2fe884ae7f1cb939a38690cb6657091020ed299eee1a69862fc393b648ae503"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-focus-compiler-source.json",
+        "bytes": 117486,
+        "sha256": "e2f9909fa235488d31ea0bd042ceee440957befb040662b106c20783e7acb4c7"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-focus-runtime.json",
+        "bytes": 36332,
+        "sha256": "f881bb9740b02c42a7e23aa498c4acf5cc9016bc00a9dc9b81e9968301b05ef7"
+      },
+      "byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-focus-byte-index.json",
+        "bytes": 93992,
+        "sha256": "f9b9dff6362295d34eca0620905554d77e537886581042c12b86e50e9d132b24"
+      }
+    },
+    {
+      "tag": "settings-a-window-review",
+      "interpretation": "Actual SDL search text arrived, but passive header hover made search pane read-only. Full-width review implemented; approved light analysis expectation corrected.",
+      "runs": [
+        {
+          "platform": "windows",
+          "config": "Release MSVC",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "settings_transactions",
+              "--test-filter",
+              "settings_a_window",
+              "--test-filter",
+              "settings_keyboard_workflow",
+              "--test-filter",
+              "ui_typography_workflow",
+              "--test-filter",
+              "themes_workflow",
+              "--test-filter",
+              "keyboard_menu_small",
+              "--test-filter",
+              "keyboard_menu_large"
+            ],
+            "exit_code": 1,
+            "app_sha256": "470ef48e7c048d74a5a07ee5e9cd62e1582ad67ef2b280c5685b525ada588d7d"
+          },
+          "run": "run-52q455bt",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-52q455bt/results.json",
+            "bytes": 129831,
+            "sha256": "ae303c8f70c12da4485131fea5a8d0a8abe4972ae31513356ff536e349262c5c"
+          },
+          "passed": 6,
+          "total": 7,
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "settings_a_window",
+              "status": "failed",
+              "diagnostics": [
+                " anlegen. (tab=0, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 2286, in <module>\n    main()\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 2035, in main\n    SPECIAL[args.case](flow, directory)\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 1674, in settings_a_window\n    flow.run(\"--settings-test\", root, \"window-\" + str(size), timeout=35,\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\bin\\\\physim.exe', '--settings-test', 'D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\test-results\\\\run-52q455bt\\\\settings_a_window\\\\files ä\\\\workflow ä\\\\UI 16', 'window-16']\n"
+              ]
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "keyboard_menu_small",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "keyboard_menu_large",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "diagnostics": []
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "config": "Debug GCC ASan/UBSan, GUI detect_leaks=0",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "settings_transactions",
+              "--test-filter",
+              "settings_a_window",
+              "--test-filter",
+              "settings_keyboard_workflow",
+              "--test-filter",
+              "ui_typography_workflow",
+              "--test-filter",
+              "themes_workflow",
+              "--test-filter",
+              "keyboard_menu_small",
+              "--test-filter",
+              "keyboard_menu_large"
+            ],
+            "exit_code": 1,
+            "app_sha256": "8f57a3e15a579a7b5840e9fca0021b137a36f0bb92d849c27575d3c54ad104cd"
+          },
+          "run": "run-l_5azifi",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-l_5azifi/results.json",
+            "bytes": 130618,
+            "sha256": "aedf0fec59ed8c3e10be0ae3c88b94b47c6a7af9b1d70b79a6f08dfd00e79b90"
+          },
+          "passed": 6,
+          "total": 7,
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "settings_a_window",
+              "status": "failed",
+              "diagnostics": [
+                "play_workflow.py\", line 2035, in main\n    SPECIAL[args.case](flow, directory)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 1674, in settings_a_window\n    flow.run(\"--settings-test\", root, \"window-\" + str(size), timeout=35,\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n             marker=\"SETTINGS A WINDOW SELF-TEST: PASSED\")\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim', '--settings-test', '/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-l_5azifi/settings_a_window/files ä/workflow ä/UI 16', 'window-16']\n"
+              ]
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "keyboard_menu_small",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "keyboard_menu_large",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "diagnostics": []
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-review-inputs.json",
+        "bytes": 14396,
+        "sha256": "29eeb4fa95e52a9d551aa85330a4573147f47797d3a62f0e4d2d53a99ed42549"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-review-compiler-source.json",
+        "bytes": 117323,
+        "sha256": "c4979945269b77ae4c2551a5f82a795600da47057c37098201f7da444262f36f"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-review-runtime.json",
+        "bytes": 36334,
+        "sha256": "4d3df4750fe21e397653707e03f741f347f1d0cfc2dfe4d00d66d7450b70eefd"
+      },
+      "byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-review-byte-index.json",
+        "bytes": 94089,
+        "sha256": "7004e3b639d3508cf698bfa3ddae5402afeea27bddfe664efb4cc20293734754"
+      }
+    },
+    {
+      "tag": "settings-a-window-input",
+      "interpretation": "Unlocking only before nk_begin was insufficient: pane activation changed again during painting.",
+      "runs": [
+        {
+          "platform": "windows",
+          "config": "Release MSVC",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "settings_transactions",
+              "--test-filter",
+              "settings_a_window",
+              "--test-filter",
+              "settings_keyboard_workflow",
+              "--test-filter",
+              "ui_typography_workflow",
+              "--test-filter",
+              "themes_workflow",
+              "--test-filter",
+              "keyboard_menu_small",
+              "--test-filter",
+              "keyboard_menu_large"
+            ],
+            "exit_code": 1,
+            "app_sha256": "1c965cce2a09307e9e989c39ea47a0fd53f8fb7be983686d43480961eec90bb5"
+          },
+          "run": "run-y055vu5r",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-y055vu5r/results.json",
+            "bytes": 129839,
+            "sha256": "3ac7550233b5f7e774b95778030db596084f7a515b2d336f7649f1bc726b108e"
+          },
+          "passed": 6,
+          "total": 7,
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "settings_a_window",
+              "status": "failed",
+              "diagnostics": [
+                " anlegen. (tab=0, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 2286, in <module>\n    main()\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 2035, in main\n    SPECIAL[args.case](flow, directory)\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 1674, in settings_a_window\n    flow.run(\"--settings-test\", root, \"window-\" + str(size), timeout=35,\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\bin\\\\physim.exe', '--settings-test', 'D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\test-results\\\\run-y055vu5r\\\\settings_a_window\\\\files ä\\\\workflow ä\\\\UI 16', 'window-16']\n"
+              ]
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "keyboard_menu_small",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "keyboard_menu_large",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "diagnostics": []
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "config": "Debug GCC ASan/UBSan, GUI detect_leaks=0",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "settings_transactions",
+              "--test-filter",
+              "settings_a_window",
+              "--test-filter",
+              "settings_keyboard_workflow",
+              "--test-filter",
+              "ui_typography_workflow",
+              "--test-filter",
+              "themes_workflow",
+              "--test-filter",
+              "keyboard_menu_small",
+              "--test-filter",
+              "keyboard_menu_large"
+            ],
+            "exit_code": 1,
+            "app_sha256": "3d654b1011a18e7b786db424dc3003462f7f5dd9e8ce6b2758f0373b4fc9cec8"
+          },
+          "run": "run-wazjmflg",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-wazjmflg/results.json",
+            "bytes": 130634,
+            "sha256": "3f35959638dd9af0d3be7ae000b9b6f7b5e59d896fc3ed45d2ab53ea4bbc23f4"
+          },
+          "passed": 6,
+          "total": 7,
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "settings_a_window",
+              "status": "failed",
+              "diagnostics": [
+                "play_workflow.py\", line 2035, in main\n    SPECIAL[args.case](flow, directory)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 1674, in settings_a_window\n    flow.run(\"--settings-test\", root, \"window-\" + str(size), timeout=35,\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n             marker=\"SETTINGS A WINDOW SELF-TEST: PASSED\")\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim', '--settings-test', '/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-wazjmflg/settings_a_window/files ä/workflow ä/UI 16', 'window-16']\n"
+              ]
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "keyboard_menu_small",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "keyboard_menu_large",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "diagnostics": []
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-input-inputs.json",
+        "bytes": 14396,
+        "sha256": "e2ac8ec1e2ac04100474e5197673113d282b65c718c6fef1abafa75b0ebff8d3"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-input-compiler-source.json",
+        "bytes": 117171,
+        "sha256": "8066b8d6865bd3330302f42c014a854e4a66d54e03b88584b376d875493c7c7e"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-input-runtime.json",
+        "bytes": 36332,
+        "sha256": "10b7bc2826a7a8341607459cc607b9cb72af03463d304d2010731aa7a3588cfb"
+      },
+      "byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-input-byte-index.json",
+        "bytes": 93992,
+        "sha256": "0466dff8607df3728b0d710b862aaf2725a35642d13973e8ddffc9884664548b"
+      }
+    },
+    {
+      "tag": "settings-a-window-edit",
+      "interpretation": "Actual search now passed. Pre-render fixture checked workspace/review layout one frame too early; combined Ctrl+A and Backspace processed in enum order.",
+      "runs": [
+        {
+          "platform": "windows",
+          "config": "Release MSVC",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "settings_transactions",
+              "--test-filter",
+              "settings_a_window",
+              "--test-filter",
+              "settings_keyboard_workflow",
+              "--test-filter",
+              "ui_typography_workflow",
+              "--test-filter",
+              "themes_workflow",
+              "--test-filter",
+              "keyboard_menu_small",
+              "--test-filter",
+              "keyboard_menu_large"
+            ],
+            "exit_code": 1,
+            "app_sha256": "b30d5f4530c2391fd499297a17e5d8edfe868350a72953710c133211a87bb075"
+          },
+          "run": "run-p2xlgzid",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-p2xlgzid/results.json",
+            "bytes": 130047,
+            "sha256": "dc1020813382961ceb542ac71da50dfb2e4489a77ff32a6e23e2b29010ea52c5"
+          },
+          "passed": 6,
+          "total": 7,
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "settings_a_window",
+              "status": "failed",
+              "diagnostics": [
+                " anlegen. (tab=1, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 2287, in <module>\n    main()\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 2036, in main\n    SPECIAL[args.case](flow, directory)\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 1674, in settings_a_window\n    flow.run(\"--settings-test\", root, \"window-\" + str(size), timeout=35,\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\bin\\\\physim.exe', '--settings-test', 'D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\test-results\\\\run-p2xlgzid\\\\settings_a_window\\\\files ä\\\\workflow ä\\\\UI 16', 'window-16']\n"
+              ]
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "keyboard_menu_small",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "keyboard_menu_large",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "diagnostics": []
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "config": "Debug GCC ASan/UBSan, GUI detect_leaks=0",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "settings_transactions",
+              "--test-filter",
+              "settings_a_window",
+              "--test-filter",
+              "settings_keyboard_workflow",
+              "--test-filter",
+              "ui_typography_workflow",
+              "--test-filter",
+              "themes_workflow",
+              "--test-filter",
+              "keyboard_menu_small",
+              "--test-filter",
+              "keyboard_menu_large"
+            ],
+            "exit_code": 1,
+            "app_sha256": "854fb4a253e71184944b57fee83ccb4cb85e997197bbdbad005c9468dea18091"
+          },
+          "run": "run-wn5tfltc",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-wn5tfltc/results.json",
+            "bytes": 131167,
+            "sha256": "73cfbb292a3959cac808b2f5b9a7ff1c7fd8bccc10564a5cec04b3c1bbe55381"
+          },
+          "passed": 6,
+          "total": 7,
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "settings_a_window",
+              "status": "failed",
+              "diagnostics": [
+                "play_workflow.py\", line 2036, in main\n    SPECIAL[args.case](flow, directory)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 1674, in settings_a_window\n    flow.run(\"--settings-test\", root, \"window-\" + str(size), timeout=35,\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n             marker=\"SETTINGS A WINDOW SELF-TEST: PASSED\")\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim', '--settings-test', '/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-wn5tfltc/settings_a_window/files ä/workflow ä/UI 16', 'window-16']\n"
+              ]
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "keyboard_menu_small",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "keyboard_menu_large",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "diagnostics": []
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-edit-inputs.json",
+        "bytes": 14396,
+        "sha256": "51511080b85dcfc932dd88885070747723d0abbdda43f4e18339d1cf34de48b1"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-edit-compiler-source.json",
+        "bytes": 117247,
+        "sha256": "88559ce6f48088b1f29dbb9838468fe1a03a74d25c7e87f30da4385cb5f29d60"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-edit-runtime.json",
+        "bytes": 36330,
+        "sha256": "0e3111297d8ec948be558e1ef6e1f5e7e07a737117582211cdbf57d2e30e5770"
+      },
+      "byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-edit-byte-index.json",
+        "bytes": 93895,
+        "sha256": "03f3574aa2e2600df6c7cf019bb81d30d916838f80b9267ea4399bd111e44170"
+      }
+    },
+    {
+      "tag": "settings-a-window-ready",
+      "interpretation": "All seven groups passed normally on each OS after focused-pane activation, bounded layout waits and ordered user gestures.",
+      "runs": [
+        {
+          "platform": "windows",
+          "config": "Release MSVC",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "settings_transactions",
+              "--test-filter",
+              "settings_a_window",
+              "--test-filter",
+              "settings_keyboard_workflow",
+              "--test-filter",
+              "ui_typography_workflow",
+              "--test-filter",
+              "themes_workflow",
+              "--test-filter",
+              "keyboard_menu_small",
+              "--test-filter",
+              "keyboard_menu_large"
+            ],
+            "exit_code": 0,
+            "app_sha256": "e421a74849d407fd2da85caf4b3953e5476e23084dbbe15b912ba5f9e915eab9"
+          },
+          "run": "run-hxya7sl3",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-hxya7sl3/results.json",
+            "bytes": 131278,
+            "sha256": "520f3b2a4f39abfc9083c3478a2340fa7ca9bd3545cb62c598776913dfa4d4b0"
+          },
+          "passed": 7,
+          "total": 7,
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "keyboard_menu_small",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "keyboard_menu_large",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "diagnostics": []
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "config": "Debug GCC ASan/UBSan, GUI detect_leaks=0",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "settings_transactions",
+              "--test-filter",
+              "settings_a_window",
+              "--test-filter",
+              "settings_keyboard_workflow",
+              "--test-filter",
+              "ui_typography_workflow",
+              "--test-filter",
+              "themes_workflow",
+              "--test-filter",
+              "keyboard_menu_small",
+              "--test-filter",
+              "keyboard_menu_large"
+            ],
+            "exit_code": 0,
+            "app_sha256": "ea406c066b36f43360dedc3f35f3f5242cf187ad6d791f674eef66559d9e385a"
+          },
+          "run": "run-8qt40qsk",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-8qt40qsk/results.json",
+            "bytes": 131650,
+            "sha256": "ca1b04eedfd69a54595b668bf4ee1d8f6b1cfe4f12c3440ecc4f4c77c4d8fda3"
+          },
+          "passed": 7,
+          "total": 7,
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "keyboard_menu_small",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "keyboard_menu_large",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "diagnostics": []
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "diagnostics": []
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-ready-inputs.json",
+        "bytes": 14396,
+        "sha256": "948fd08bb18699ac86af9a2385001878f33024b9c94d7a70f5d999db3631598e"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-ready-compiler-source.json",
+        "bytes": 117207,
+        "sha256": "59a0e652d6aa3f7333b98300b21eeb38f5efa72c2b8d4a772257453ba2cd651a"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-ready-runtime.json",
+        "bytes": 36332,
+        "sha256": "ed5ca75ffe7975ddc0dd59f27d3065c3d505a272bdffad182229f66f7499c45f"
+      },
+      "byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-ready-byte-index.json",
+        "bytes": 93992,
+        "sha256": "0068f576a6a0381e1d81917b256e53178bf1a477cf5cfec57774f20ae8c219cf"
+      }
+    },
+    {
+      "tag": "settings-a-window-visual",
+      "interpretation": "Single-line singular badge and CSS alpha selection roles; targeted task-window workflow only, two app processes per OS.",
+      "runs": [
+        {
+          "platform": "windows",
+          "config": "Release MSVC",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 0,
+            "app_sha256": "9bbcba8bf78755bd791ed9dab593307588dbad772d4271a55185497ad9fb5dd3"
+          },
+          "run": "run-mgnwir2w",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mgnwir2w/results.json",
+            "bytes": 9252,
+            "sha256": "5af22eeb9fabaca52eb76ca9f4de0bf04e42465d3fd9b44fa9c2d2a14125217c"
+          },
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "diagnostics": []
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "config": "Debug GCC ASan/UBSan, GUI detect_leaks=0",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 0,
+            "app_sha256": "60df4d573a04187426ed0b500884e912b8e75cfb7602904fb3000af634afbccd"
+          },
+          "run": "run-cv0mpuxb",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-cv0mpuxb/results.json",
+            "bytes": 9041,
+            "sha256": "1c03948def290a211abf5c776e53dbc7d1b634b8bb1e0bc31cd8fcffab3bfe18"
+          },
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "diagnostics": []
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-visual-inputs.json",
+        "bytes": 14396,
+        "sha256": "c87f80284e8cdeaff70e84d884714b2bd752539f3795dc315e8606e14f0c41f4"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-visual-compiler-source.json",
+        "bytes": 117171,
+        "sha256": "862997bc2834c0aed1dbe672e435625c500cf2eff4d2b1d548c974eb53a591f2"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-visual-runtime.json",
+        "bytes": 36334,
+        "sha256": "80982266d335e928876e3db4cdac5b1832112e5e1f1e9e188e3986ab207ff67c"
+      },
+      "byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-a-window-visual-byte-index.json",
+        "bytes": 94089,
+        "sha256": "18434977350cf669a99a39e9c634ed0ba6d4aae55159b445ca1f3f1016548254"
+      }
+    }
+  ],
+  "debugger_causality": {
+    "traces": [
+      {
+        "directory": "build/validation/settings-window-2026-10-31/input-gdb",
+        "files": [
+          {
+            "path": "build/validation/settings-window-2026-10-31/input-gdb/probe.log",
+            "bytes": 1681,
+            "sha256": "931d9eb8763925db249517dddc6ba9b7c28090538e88abd87042292fc2f33af9"
+          }
+        ],
+        "acceptance": false
+      },
+      {
+        "directory": "build/validation/settings-window-2026-10-31/input-gdb-harness",
+        "files": [
+          {
+            "path": "build/validation/settings-window-2026-10-31/input-gdb-harness/binary.json",
+            "bytes": 273,
+            "sha256": "12ebde35a92c8e210f3f9c2fe7ac9c75259bd81fd703029b1bb8437da282d32c"
+          },
+          {
+            "path": "build/validation/settings-window-2026-10-31/input-gdb-harness/probe.log",
+            "bytes": 2481,
+            "sha256": "aa00a9997da3d3476bfff466c27191fbe7771844c11301fdd77bc8fd7fcbc297"
+          }
+        ],
+        "acceptance": false
+      },
+      {
+        "directory": "build/validation/settings-window-2026-10-31/input-gdb-harness2",
+        "files": [
+          {
+            "path": "build/validation/settings-window-2026-10-31/input-gdb-harness2/binary.json",
+            "bytes": 273,
+            "sha256": "12ebde35a92c8e210f3f9c2fe7ac9c75259bd81fd703029b1bb8437da282d32c"
+          },
+          {
+            "path": "build/validation/settings-window-2026-10-31/input-gdb-harness2/probe.log",
+            "bytes": 3991,
+            "sha256": "839cd4c35b84becebc45163fb168124e43f304617148fd2ed64f037c01f89ac4"
+          }
+        ],
+        "acceptance": false
+      },
+      {
+        "directory": "build/validation/settings-window-2026-10-31/input-gdb-route",
+        "files": [
+          {
+            "path": "build/validation/settings-window-2026-10-31/input-gdb-route/binary.json",
+            "bytes": 273,
+            "sha256": "558d331958974ac4cc615783065932de8d403989a4ee07f7fceab38c497446a5"
+          },
+          {
+            "path": "build/validation/settings-window-2026-10-31/input-gdb-route/probe.log",
+            "bytes": 1743,
+            "sha256": "639905f3f77b6713a923c6ebeb27bd136cb954dd22c5f61d022c101c097c390d"
+          }
+        ],
+        "acceptance": false
+      },
+      {
+        "directory": "build/validation/settings-window-2026-10-31/input-gdb-unlock",
+        "files": [
+          {
+            "path": "build/validation/settings-window-2026-10-31/input-gdb-unlock/binary.json",
+            "bytes": 273,
+            "sha256": "558d331958974ac4cc615783065932de8d403989a4ee07f7fceab38c497446a5"
+          },
+          {
+            "path": "build/validation/settings-window-2026-10-31/input-gdb-unlock/probe.log",
+            "bytes": 1748,
+            "sha256": "9b74dd9bacab0ad768b8f1ed9e4d134a22bc9d3a5753f88e6485b66bf8b20544"
+          }
+        ],
+        "acceptance": false
+      }
+    ],
+    "conclusion": "Correct SDL event owner and SCHRIFT bytes, active edit, but win/layout flags 4128 (ROM); actual focused-pane unlock yielded flags32 and SCHRIFT. Debugger-modified executions are diagnostic only, never counted as normal passes."
+  },
+  "visual_review": {
+    "files": [
+      {
+        "platform": "windows",
+        "file": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mgnwir2w/settings_a_window/files ä/workflow ä/UI 16/settings-a-wide-16.png",
+          "bytes": 91554,
+          "sha256": "1287d0103918bea7a63fe7df3b71933d7cef426ffcc201fc9872ce6f7bcb49f6"
+        }
+      },
+      {
+        "platform": "windows",
+        "file": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mgnwir2w/settings_a_window/files ä/workflow ä/UI 22/settings-a-small-22.png",
+          "bytes": 44062,
+          "sha256": "3bfcebdd0411058b5540adb427ba9c6d1b08c7d2b8bf9c7c4e0f167400b606f4"
+        }
+      },
+      {
+        "platform": "windows",
+        "file": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mgnwir2w/settings_a_window/files ä/workflow ä/UI 16/settings-a-review-16.png",
+          "bytes": 46130,
+          "sha256": "513343c1e4f9ff68d3d3905092fed71ac982d9f12b1d3d3a2195965384ab700f"
+        }
+      },
+      {
+        "platform": "linux",
+        "file": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-cv0mpuxb/settings_a_window/files ä/workflow ä/UI 16/settings-a-wide-16.png",
+          "bytes": 97007,
+          "sha256": "2a1c8afe8b3546fae5cea7b84a546134d5032a22278483a0d5f8976a6b270ec4"
+        }
+      },
+      {
+        "platform": "linux",
+        "file": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-cv0mpuxb/settings_a_window/files ä/workflow ä/UI 22/settings-a-small-22.png",
+          "bytes": 46332,
+          "sha256": "b434e1b94637b34d80102dc3407f25c900ee5e18f80d025fbfe27fbf5640dd7b"
+        }
+      },
+      {
+        "platform": "linux",
+        "file": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-cv0mpuxb/settings_a_window/files ä/workflow ä/UI 16/settings-a-review-16.png",
+          "bytes": 48004,
+          "sha256": "2b151937f27ce5e3c03f86d1f8903d896ad422bf74db37eb7ca13e402785de5d"
+        }
+      }
+    ],
+    "reviewed": "Native wide dark16, narrow light22 and full-width review16; badge remains inside its box. OS chrome stays platform owned.",
+    "limits": "No pixel-identical whole-app claim, no physical DPI/monitor/screenreader or manual macOS acceptance."
+  },
+  "cleanup": {
+    "plan": {
+      "path": "build/validation/settings-window-2026-10-31/cleanup-plan.json",
+      "bytes": 296699,
+      "sha256": "9560ba3639de553e7a524af149a2085e53827604dbfb6c2cc61bf96cac98dd7d"
+    },
+    "result": {
+      "path": "build/validation/settings-window-2026-10-31/cleanup-result.json",
+      "bytes": 297,
+      "sha256": "f00018b8094b3bd85194f46201c7fa0e0283aa850b09c12b726d46df1c8244ad"
+    },
+    "count": 656,
+    "bytes": 2093854368,
+    "plan_sha256": "9560ba3639de553e7a524af149a2085e53827604dbfb6c2cc61bf96cac98dd7d",
+    "all_targets_preflighted": true,
+    "all_targets_absent": true,
+    "active_processes": "All Settings A build/test/freeze handles were terminal before deletion."
+  },
+  "macos": {
+    "user_mac": "Off; not accessed",
+    "hosted": "New committed workflow execution pending"
+  },
+  "open": [
+    "Independent units OS task with per-channel drafts and full data validation",
+    "Completion D auto-suggestion and visible-row preferences",
+    "Legacy settings_workflow and AX fixture port retaining recovery/geometry/maximize coverage",
+    "No-results clear actions share custom focus ID26; keyboard owner needs dedicated follow-up",
+    "Manual screenreader, physical input, DPI, monitor changes and macOS fullscreen"
+  ]
+}

@@ -41,4 +41,5 @@ static void workspace_context(app *a) {
     if(!analysis_visible(a))analysis_context(a);
     laboratory_context(a);
     if(analysis_visible(a))analysis_context(a);
+    settings_protocol_apply(a);
 }
