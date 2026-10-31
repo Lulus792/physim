@@ -193,7 +193,7 @@ typedef struct {
     uint16_t workbench_tree_order[PS_WORKSPACE_TREE_LIMIT];
     const struct nk_user_font *ui_fonts[4], *title_fonts[4];
     const struct nk_user_font *code_fonts[6];
-    ps_preferences preferences, settings_draft;
+    ps_preferences preferences, settings_draft, settings_base;
     char preferences_path[4096], preferences_error[192];
     bool preferences_writable, show_grid;
     int settings_previous_tab, panel_drag;
@@ -3861,7 +3861,7 @@ int main(int argc, char **argv) {
     if(migration_test && (argc!=4 || (strcmp(argv[3],"normal") && strcmp(argv[3],"stale") && strcmp(argv[3],"dirty"))))return 2;
     bool settings_test = argc > 1 && !strcmp(argv[1], "--settings-test");
     if (settings_test && (argc != 4 || (strcmp(argv[3], "write") && strcmp(argv[3], "read") &&
-        strcmp(argv[3], "keyboard") && strcmp(argv[3], "keyboard-read") &&
+        strcmp(argv[3], "keyboard") && strcmp(argv[3], "keyboard-read") && strcmp(argv[3], "merge") &&
         strcmp(argv[3], "checkbox-native") && strcmp(argv[3], "checkbox-remote") &&
         strcmp(argv[3], "options-native") && strcmp(argv[3], "options-remote") &&
         strcmp(argv[3], "focus-native") && strcmp(argv[3], "focus-remote") &&

@@ -22,6 +22,23 @@ typedef struct {
 } ps_preferences;
 extern const ps_preferences PS_PREFERENCES_DEFAULT;
 bool ps_preferences_valid(const ps_preferences *settings);
+/* Settings A edits only these fourteen values. Window geometry, workspace,
+ * disclosure and dock topology belong to independent owners. The base is the
+ * snapshot on opening; unchanged draft fields retain the latest current value.
+ * Inputs must be valid. Merge is transactional, including when out aliases an
+ * input. The returned mask describes individual fields, never struct padding. */
+enum {
+    PS_SETTING_THEME, PS_SETTING_UI_SIZE, PS_SETTING_EDITOR_SIZE, PS_SETTING_AUTOSAVE,
+    PS_SETTING_VECTORS, PS_SETTING_PATHS, PS_SETTING_POINTS, PS_SETTING_LABELS,
+    PS_SETTING_GRID, PS_SETTING_ORTHOGRAPHIC, PS_SETTING_LOG,
+    PS_SETTING_SIDEBAR, PS_SETTING_INSPECTOR, PS_SETTING_LOG_HEIGHT,
+    PS_SETTING_COUNT
+};
+uint32_t ps_preferences_settings_changes(const ps_preferences *base, const ps_preferences *draft);
+ps_result ps_preferences_settings_merge(const ps_preferences *current, const ps_preferences *base,
+                                       const ps_preferences *draft, ps_preferences *out);
+/* Defaults affect the editable values only; no file or active state changes. */
+void ps_preferences_settings_defaults(ps_preferences *draft);
 /* Private, versioned app format. Read is transactional; PS_EOF means absent.
  * Write closes a unique sibling file before replacement. Failed writes preserve
  * the previous file. Simultaneous instances use last completed write wins. */

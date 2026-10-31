@@ -61,9 +61,77 @@ static int contrast(void) {
     }
     return 0;
 }
+static int settings_transactions(void) {
+    ps_preferences base = PS_PREFERENCES_DEFAULT, draft = base, current = base, out;
+    /* A stale appearance draft must not revert a later resize, workspace,
+     * disclosure, hidden panel or scene visibility change. */
+    current.width = 1900; current.height = 1100; current.maximized = 1;
+    current.workspace = 2; current.inspector_open = 1;
+    current.sidebar_width = 333; current.inspector_width = 366; current.log_height = 430;
+    current.theme = PS_THEME_LIGHT; current.view_flags ^= PS_VIEW_PATHS | PS_VIEW_GRID;
+    CHECK(ps_dock_hide(&current.dock, PS_DOCK_INSPECTOR));
+    draft.theme = PS_THEME_HIGH_CONTRAST;
+    CHECK(ps_preferences_settings_changes(&base, &draft) == (1u << PS_SETTING_THEME));
+    CHECK(ps_preferences_settings_merge(&current, &base, &draft, &out) == PS_OK);
+    CHECK(out.theme == PS_THEME_HIGH_CONTRAST);
+    out.theme = current.theme;
+    CHECK(!memcmp(&out, &current, sizeof out));
+    /* Cancelling an individual edit by reverting it to the opening value
+     * leaves the current value alone, including a later theme change. */
+    draft = base;
+    CHECK(!ps_preferences_settings_changes(&base, &draft));
+    CHECK(ps_preferences_settings_merge(&current, &base, &draft, &out) == PS_OK);
+    CHECK(!memcmp(&out, &current, sizeof out));
+    draft.editor_size = 20;
+    draft.view_flags &= ~PS_VIEW_VECTORS;
+    draft.sidebar_width = 480;
+    CHECK(ps_preferences_settings_changes(&base, &draft) ==
+          ((1u << PS_SETTING_EDITOR_SIZE) | (1u << PS_SETTING_VECTORS) | (1u << PS_SETTING_SIDEBAR)));
+    CHECK(ps_preferences_settings_merge(&current, &base, &draft, &out) == PS_OK);
+    CHECK(out.editor_size == 20 && out.sidebar_width == 480 && out.inspector_width == 366 && out.log_height == 430);
+    CHECK(out.view_flags == (PS_VIEW_POINTS | PS_VIEW_LABELS));
+    CHECK(out.theme == PS_THEME_LIGHT && out.ui_size == 16 && out.autosave_seconds == 30);
+    CHECK(!memcmp(&out.dock, &current.dock, sizeof out.dock));
+    /* Aliased output follows exactly the same snapshot semantics. */
+    ps_preferences aliased = current;
+    CHECK(ps_preferences_settings_merge(&aliased, &base, &draft, &aliased) == PS_OK && !memcmp(&aliased, &out, sizeof out));
+    aliased = draft;
+    CHECK(ps_preferences_settings_merge(&current, &base, &aliased, &aliased) == PS_OK && !memcmp(&aliased, &out, sizeof out));
+    aliased = base;
+    CHECK(ps_preferences_settings_merge(&current, &aliased, &draft, &aliased) == PS_OK && !memcmp(&aliased, &out, sizeof out));
+    /* Defaults replace all fourteen editable values, retaining every owner
+     * outside this transaction, even a non-default panel topology. */
+    base = current;
+    base.theme = PS_THEME_HIGH_CONTRAST; base.ui_size = 22; base.editor_size = 20; base.autosave_seconds = 120;
+    base.view_flags = PS_PREFERENCES_DEFAULT.view_flags ^ 127u;
+    draft = base;
+    ps_preferences_settings_defaults(&draft);
+    CHECK(ps_preferences_settings_changes(&base, &draft) == ((1u << PS_SETTING_COUNT) - 1));
+    CHECK(ps_preferences_settings_merge(&current, &base, &draft, &out) == PS_OK);
+    CHECK(out.theme == PS_THEME_DARK && out.ui_size == 16 && out.editor_size == 12 && out.autosave_seconds == 30);
+    CHECK(out.view_flags == 31 && out.sidebar_width == 218 && out.inspector_width == 255 && out.log_height == 340);
+    CHECK(out.width == 1900 && out.height == 1100 && out.maximized == 1 && out.workspace == 2 && out.inspector_open == 1);
+    CHECK(!memcmp(&out.dock, &current.dock, sizeof out.dock));
+    CHECK(!memcmp(&draft.dock, &base.dock, sizeof draft.dock) && draft.width == base.width && draft.height == base.height);
+    /* Bad inputs leave output unchanged. A merge is never a partial apply. */
+    ps_preferences sentinel = out;
+    draft.sidebar_width = 139;
+    CHECK(ps_preferences_settings_merge(&current, &base, &draft, &out) == PS_INVALID && !memcmp(&out, &sentinel, sizeof out));
+    draft = base; draft.ui_size = 17;
+    CHECK(ps_preferences_settings_merge(&current, &base, &draft, &out) == PS_INVALID && !memcmp(&out, &sentinel, sizeof out));
+    draft = base; draft.view_flags |= 128u;
+    CHECK(ps_preferences_settings_merge(&current, &base, &draft, &out) == PS_INVALID && !memcmp(&out, &sentinel, sizeof out));
+    CHECK(ps_preferences_settings_merge(NULL, &base, &base, &out) == PS_INVALID && !memcmp(&out, &sentinel, sizeof out));
+    CHECK(ps_preferences_settings_merge(&current, NULL, &base, &out) == PS_INVALID && !memcmp(&out, &sentinel, sizeof out));
+    CHECK(ps_preferences_settings_merge(&current, &base, NULL, &out) == PS_INVALID && !memcmp(&out, &sentinel, sizeof out));
+    CHECK(ps_preferences_settings_merge(&current, &base, &base, NULL) == PS_INVALID);
+    puts("Settings transactions: parallel geometry/visibility, reverted edits, independent flags, defaults, aliases and failure preservation passed");
+    return 0;
+}
 int main(int argc, char **argv) {
     CHECK(argc == 2);
     CHECK(contrast() == 0);
+    CHECK(settings_transactions() == 0);
     char path[4096], bad[4096];
     snprintf(path, sizeof path, "%s/preferences-unit.bin", argv[1]);
     snprintf(bad, sizeof bad, "%s/preferences-corrupt.bin", argv[1]);

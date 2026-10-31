@@ -19,6 +19,55 @@ bool ps_preferences_valid(const ps_preferences *p) {
            p->theme < PS_THEME_COUNT && p->inspector_width>=180 && p->inspector_width<=480 &&
            ps_dock_valid(&p->dock) && p->ui_size>=16 && p->ui_size<=22 && p->ui_size%2==0;
 }
+uint32_t ps_preferences_settings_changes(const ps_preferences *base, const ps_preferences *draft) {
+    if (!base || !draft) return 0;
+    uint32_t changed = 0;
+#define FIELD(member, id) if (base->member != draft->member) changed |= 1u << (id)
+    FIELD(theme, PS_SETTING_THEME);
+    FIELD(ui_size, PS_SETTING_UI_SIZE);
+    FIELD(editor_size, PS_SETTING_EDITOR_SIZE);
+    FIELD(autosave_seconds, PS_SETTING_AUTOSAVE);
+    FIELD(sidebar_width, PS_SETTING_SIDEBAR);
+    FIELD(inspector_width, PS_SETTING_INSPECTOR);
+    FIELD(log_height, PS_SETTING_LOG_HEIGHT);
+#undef FIELD
+    const uint32_t flags[] = {PS_VIEW_VECTORS, PS_VIEW_PATHS, PS_VIEW_POINTS, PS_VIEW_LABELS,
+                              PS_VIEW_GRID, PS_VIEW_ORTHOGRAPHIC, PS_VIEW_LOG};
+    for (unsigned i = 0; i < sizeof flags / sizeof flags[0]; i++)
+        if ((base->view_flags ^ draft->view_flags) & flags[i]) changed |= 1u << (PS_SETTING_VECTORS + i);
+    return changed;
+}
+ps_result ps_preferences_settings_merge(const ps_preferences *current, const ps_preferences *base,
+                                       const ps_preferences *draft, ps_preferences *out) {
+    if (!out || !ps_preferences_valid(current) || !ps_preferences_valid(base) || !ps_preferences_valid(draft))
+        return PS_INVALID;
+    uint32_t changed = ps_preferences_settings_changes(base, draft);
+    ps_preferences next = *current;
+#define FIELD(member, id) if (changed & (1u << (id))) next.member = draft->member
+    FIELD(theme, PS_SETTING_THEME);
+    FIELD(ui_size, PS_SETTING_UI_SIZE);
+    FIELD(editor_size, PS_SETTING_EDITOR_SIZE);
+    FIELD(autosave_seconds, PS_SETTING_AUTOSAVE);
+    FIELD(sidebar_width, PS_SETTING_SIDEBAR);
+    FIELD(inspector_width, PS_SETTING_INSPECTOR);
+    FIELD(log_height, PS_SETTING_LOG_HEIGHT);
+#undef FIELD
+    uint32_t view_changes = base->view_flags ^ draft->view_flags;
+    next.view_flags = (current->view_flags & ~view_changes) | (draft->view_flags & view_changes);
+    *out = next;
+    return PS_OK;
+}
+void ps_preferences_settings_defaults(ps_preferences *draft) {
+    if (!draft) return;
+    draft->theme = PS_PREFERENCES_DEFAULT.theme;
+    draft->ui_size = PS_PREFERENCES_DEFAULT.ui_size;
+    draft->editor_size = PS_PREFERENCES_DEFAULT.editor_size;
+    draft->autosave_seconds = PS_PREFERENCES_DEFAULT.autosave_seconds;
+    draft->view_flags = PS_PREFERENCES_DEFAULT.view_flags;
+    draft->sidebar_width = PS_PREFERENCES_DEFAULT.sidebar_width;
+    draft->inspector_width = PS_PREFERENCES_DEFAULT.inspector_width;
+    draft->log_height = PS_PREFERENCES_DEFAULT.log_height;
+}
 static void put32(unsigned char *p, uint32_t v) {
     for (unsigned i = 0; i < 4; i++)
         p[i] = (unsigned char)(v >> (8 * i));

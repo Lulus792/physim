@@ -1,0 +1,348 @@
+{
+  "date": "2026-10-31",
+  "scope": "Settings A transaction foundation; native task-window/layout implementation remains open",
+  "base_commit": "36bc7247",
+  "isolated_source": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+  "input_manifest": {
+    "path": "build/validation/explorer-inline-2026-10-29/settings-transactions-first-inputs.json",
+    "bytes": 13900,
+    "sha256": "bc59e76be4d5f0bbc7c0f255c3bcba589b84c1783dee59e27881a7d300a457d5"
+  },
+  "compiler_source": {
+    "path": "build/validation/explorer-inline-2026-10-29/settings-transactions-first-compiler-source.json",
+    "bytes": 116995,
+    "sha256": "fcc405610cae65fe5b453d8452c65f1dd361f989d8adfa3d9c4c5aa2034d6a93"
+  },
+  "runtime": {
+    "path": "build/validation/explorer-inline-2026-10-29/settings-transactions-first-runtime.json",
+    "bytes": 36340,
+    "sha256": "dfe0d14cc4180f653f7015cd841f19e220eba1ab7c517e32fc590f865bca35ff"
+  },
+  "runtime_byte_index": {
+    "path": "build/validation/explorer-inline-2026-10-29/settings-transactions-first-byte-index.json",
+    "bytes": 94380,
+    "sha256": "48d43cadf73f7681bfecc8446c507d5353837046d4cdcc4a84b14cb1cc924249"
+  },
+  "runs": [
+    {
+      "platform": "windows",
+      "config": "Release MSVC",
+      "display_run": "run-ro2m7jiy",
+      "display_overall": "failed; 2/3 passed",
+      "display_results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-ro2m7jiy/results.json",
+        "bytes": 25676,
+        "sha256": "1df3bea190960a573bd66cf8147cabca171976cef6f56b1bf063c8cf1b2e136e"
+      },
+      "cases": [
+        {
+          "name": "settings_workflow",
+          "status": "failed",
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+            "settings_workflow",
+            "--app",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+            "--work",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-ro2m7jiy\\settings_workflow\\files ä",
+            "--root",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+            "--cc",
+            "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+          ],
+          "exit_code": 1,
+          "app_sha256": "214c50b71ccf50a68be909da37572b84c5cccee09dd899f9d192e1bb3ff0df94",
+          "diagnostics": [
+            "Settings write stage 23: tab=0 font=20 draft=20 flags=79 side=282 log=340"
+          ]
+        },
+        {
+          "name": "settings_transactions",
+          "status": "passed",
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+            "settings_transactions",
+            "--app",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+            "--work",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-ro2m7jiy\\settings_transactions\\files ä",
+            "--root",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src"
+          ],
+          "exit_code": 0,
+          "app_sha256": "214c50b71ccf50a68be909da37572b84c5cccee09dd899f9d192e1bb3ff0df94",
+          "checks": [
+            "SETTINGS MERGE: stale appearance draft preserves geometry, disclosure, topology and visibility=1",
+            "SETTINGS MERGE: defaults draft and failed save preserve active values, file and both sessions=1",
+            "SETTINGS MERGE: retry saves Develop defaults and preserves Simulieren/Auswerten sessions=1",
+            "SETTINGS MERGE: invalid range preserves draft, active state and file; Escape cancels=1"
+          ]
+        },
+        {
+          "name": "settings_keyboard_workflow",
+          "status": "passed",
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+            "settings_keyboard_workflow",
+            "--app",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+            "--work",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-ro2m7jiy\\settings_keyboard_workflow\\files ä",
+            "--root",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+            "--cc",
+            "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+          ],
+          "exit_code": 0,
+          "app_sha256": "214c50b71ccf50a68be909da37572b84c5cccee09dd899f9d192e1bb3ff0df94"
+        }
+      ],
+      "unit_run": "run-m2aq5i3w",
+      "unit_results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-m2aq5i3w/results.json",
+        "bytes": 712,
+        "sha256": "31a32336e0849a1ad6506f3b3c48fe1e638f5159c41df9450b3661a77c97d124"
+      },
+      "unit_output": "Settings transactions: parallel geometry/visibility, reverted edits, independent flags, defaults, aliases and failure preservation passed\nPreferences: themes, contrast, v1/v2 migration, docked/floating roundtrip, replacement, bounds, CRC, truncations and failure preservation passed\n",
+      "invocations": [
+        {
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+            "--",
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+            "--build-dir",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+            "--config",
+            "Release",
+            "--jobs",
+            "4",
+            "--sdl",
+            "D:\\Physim\\third_party\\SDL3-3.2.30",
+            "--test-display",
+            "--test-filter",
+            "preferences",
+            "--test-filter",
+            "settings_transactions",
+            "--test-filter",
+            "settings_keyboard_workflow",
+            "--test-filter",
+            "settings_workflow"
+          ],
+          "exit_code": 1,
+          "app_sha256": "214c50b71ccf50a68be909da37572b84c5cccee09dd899f9d192e1bb3ff0df94"
+        },
+        {
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+            "--",
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+            "--build-dir",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+            "--config",
+            "Release",
+            "--jobs",
+            "4",
+            "--sdl",
+            "D:\\Physim\\third_party\\SDL3-3.2.30",
+            "--test",
+            "--test-filter",
+            "preferences"
+          ],
+          "exit_code": 0
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "config": "Debug GCC ASan/UBSan, GUI leak detection off; portable test leak detection on",
+      "display_run": "run-ysv6o4i0",
+      "display_overall": "failed; 2/3 passed",
+      "display_results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ysv6o4i0/results.json",
+        "bytes": 25012,
+        "sha256": "4b24fbf699da4de39e301655687efa28a4ed4f6f837da35f956978e170bbed6e"
+      },
+      "cases": [
+        {
+          "name": "settings_workflow",
+          "status": "failed",
+          "command": [
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+            "settings_workflow",
+            "--app",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+            "--work",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ysv6o4i0/settings_workflow/files ä",
+            "--root",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src",
+            "--cc",
+            "/usr/bin/cc"
+          ],
+          "exit_code": 1,
+          "app_sha256": "1a4b0cbe47b0481b6e017e6fb3c9ff0038f89d017cb8c8e16c20dcdf4d6b808e",
+          "diagnostics": [
+            "Settings write stage 23: tab=0 font=20 draft=20 flags=79 side=282 log=340"
+          ]
+        },
+        {
+          "name": "settings_transactions",
+          "status": "passed",
+          "command": [
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+            "settings_transactions",
+            "--app",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+            "--work",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ysv6o4i0/settings_transactions/files ä",
+            "--root",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src"
+          ],
+          "exit_code": 0,
+          "app_sha256": "1a4b0cbe47b0481b6e017e6fb3c9ff0038f89d017cb8c8e16c20dcdf4d6b808e",
+          "checks": [
+            "SETTINGS MERGE: stale appearance draft preserves geometry, disclosure, topology and visibility=1",
+            "SETTINGS MERGE: defaults draft and failed save preserve active values, file and both sessions=1",
+            "SETTINGS MERGE: retry saves Develop defaults and preserves Simulieren/Auswerten sessions=1",
+            "SETTINGS MERGE: invalid range preserves draft, active state and file; Escape cancels=1"
+          ]
+        },
+        {
+          "name": "settings_keyboard_workflow",
+          "status": "passed",
+          "command": [
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+            "settings_keyboard_workflow",
+            "--app",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+            "--work",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ysv6o4i0/settings_keyboard_workflow/files ä",
+            "--root",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src",
+            "--cc",
+            "/usr/bin/cc"
+          ],
+          "exit_code": 0,
+          "app_sha256": "1a4b0cbe47b0481b6e017e6fb3c9ff0038f89d017cb8c8e16c20dcdf4d6b808e"
+        }
+      ],
+      "unit_run": "run-hxbvq_ma",
+      "unit_results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-hxbvq_ma/results.json",
+        "bytes": 690,
+        "sha256": "34bc1989bee30de8ea08ca27e516b85f88757eeceb96f07aa792a75bdd2cf28a"
+      },
+      "unit_output": "Settings transactions: parallel geometry/visibility, reverted edits, independent flags, defaults, aliases and failure preservation passed\nPreferences: themes, contrast, v1/v2 migration, docked/floating roundtrip, replacement, bounds, CRC, truncations and failure preservation passed\n",
+      "invocations": [
+        {
+          "command": [
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+            "--",
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+            "--build-dir",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+            "--config",
+            "Debug",
+            "--jobs",
+            "4",
+            "--sdl",
+            "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+            "--test-display",
+            "--sanitizers",
+            "--test-filter",
+            "preferences",
+            "--test-filter",
+            "settings_transactions",
+            "--test-filter",
+            "settings_keyboard_workflow",
+            "--test-filter",
+            "settings_workflow"
+          ],
+          "exit_code": 1,
+          "app_sha256": "1a4b0cbe47b0481b6e017e6fb3c9ff0038f89d017cb8c8e16c20dcdf4d6b808e"
+        },
+        {
+          "command": [
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+            "--",
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+            "--build-dir",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+            "--config",
+            "Debug",
+            "--jobs",
+            "4",
+            "--sdl",
+            "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+            "--test",
+            "--test-filter",
+            "preferences",
+            "--sanitizers"
+          ],
+          "exit_code": 0
+        }
+      ]
+    }
+  ],
+  "prior_windows_runtime": {
+    "command": [
+      "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tests\\check_display_workflow.py",
+      "settings_workflow",
+      "--app",
+      "D:\\Physim\\build\\validation\\settings-transactions-2026-10-31\\prior-windows\\bin\\physim.exe",
+      "--work",
+      "D:\\Physim\\build\\validation\\settings-transactions-2026-10-31\\prior-windows\\work",
+      "--root",
+      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src"
+    ],
+    "exit_code": 1,
+    "app_sha256": "767211215452546e86fb40a3b9d9fe84d8b248694ff586d2ba98ce526b940634",
+    "diagnostics": [
+      "Settings write stage 23: tab=0 font=20 draft=20 flags=79 side=282 log=340"
+    ],
+    "prior_runtime_files": 212,
+    "evidence": {
+      "path": "build/validation/settings-transactions-2026-10-31/prior-windows/baseline-result.json",
+      "bytes": 835,
+      "sha256": "5066507c4065dae262e4ea4f9b4fb130594929ad177a89f9b846bd8ca11a8dd8"
+    }
+  },
+  "cleanup": {
+    "result": {
+      "files": 216,
+      "freed_bytes": 198471296,
+      "verified_all_absent": true,
+      "plan": "D:\\Physim\\build\\validation\\settings-transactions-2026-10-31\\cleanup-plan.json"
+    },
+    "evidence": {
+      "path": "build/validation/settings-transactions-2026-10-31/cleanup-result.json",
+      "bytes": 180,
+      "sha256": "7906b40edfab3c9537df1600673e8bda3dba52d71c3ead87b0359bea445b8d46"
+    },
+    "plan": {
+      "path": "build/validation/settings-transactions-2026-10-31/cleanup-plan.json",
+      "bytes": 67986,
+      "sha256": "3c054ded4239e4537e0fff14f96769b297b48562d22d9ceacf0b0475add240bd"
+    }
+  },
+  "limitations": [
+    "Old settings_workflow fails at stage 23 with protocol handle 0/0 and log=340, identically on the archived prior Windows app; that historical fixture remains open. The protocol separator itself is not reopened or rejected by this proof.",
+    "App ownership mutations are injected in the actual app state; this is not physical simultaneous input into a native Settings task window.",
+    "No new macOS run or user Mac access; manual assistive, DPI and complete design acceptance remain open.",
+    "Settings still uses main tab 6. Category/search/live preview/review/native units tasks and Completion D preferences remain implementation work."
+  ]
+}

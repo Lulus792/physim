@@ -278,8 +278,10 @@ static void test_settings_focus_frame(app *a,bool remote,int *stage,int *code,co
  }
  if(!ok){fprintf(stderr,"Settings focus failed stage %d\n",*stage);*code=1;a->quitting=true;}
 }
+#include "settings_merge_tests.inc"
 static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
                                const char **capture) {
+    if(!strcmp(mode,"merge")){test_settings_merge_frame(a,stage,code);return;}
     if(!strncmp(mode,"focus-",6)){test_settings_focus_frame(a,!strcmp(mode,"focus-remote"),stage,code,capture);return;}
     if(!strncmp(mode,"options-",8)){test_settings_options_frame(a,!strcmp(mode,"options-remote"),stage,code);return;}
     if(!strncmp(mode,"checkbox-",9)){test_settings_checkbox_frame(a,!strcmp(mode,"checkbox-remote"),stage,code);return;}

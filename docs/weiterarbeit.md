@@ -8,6 +8,23 @@ zu beginnen. Detailhistorien stehen in den verlinkten Nachweisen und Git.
 
 ## Aktueller Abschluss
 
+**Neuer Anschluss: `settings-transactions-first`.** Einstellungen A hat jetzt
+eine geprüfte feldweise Entwurfszusammenführung in `preferences.c/.h`, integriert
+in den vorhandenen Einstellungsablauf. Nur bearbeitete Werte ersetzen den aktuellen
+Stand; Defaults erhalten Fenster-/Dockzustände und beide Workspace-Sitzungen.
+Windows Release/Linux Debug ASan/UBSan: Preferences je 1/1 sowie neue tatsächliche
+App-Transaktion und bestehende Tastaturgruppe bestanden. Die Display-Aufrufe
+`run-ro2m7jiy`/`run-ysv6o4i0` sind dennoch **insgesamt fehlgeschlagen, je 2/3**:
+der historische `settings_workflow` zieht einen 0/0-Protokollgriff und scheitert
+in Stufe 23. Die archivierte unveränderte Windows-Vorgänger-App scheitert exakt
+gleich; kein neuer Fehler dieser Änderung. Nicht die abgeschlossene Trennlinie
+neu prüfen. [Umfang, Grenzen und Anschluss](verification/settings-a-transactions-2026-10-31.md).
+**Das native Kategorienfenster A ist weiterhin offen**, nicht mit diesen
+Transaktionsprüfungen als erledigt darstellen. Kein neuer Mac-Zugriff.
+216 entbehrliche Dateien entfernt (198.471.296 Bytes): vier erfolgreiche
+Tastatur-Rohbilder und 212 nur zum Vergleich entpackte, weiter archivierte
+Vorgänger-Runtimedateien. Fehlerbilder/Referenzen und Archive erhalten.
+
 `68ab5f71` ist in `origin` und `upstream` gepusht. Typografie-/Headerlauf
 **`41158796808` (`Lulus792/physim`)**: Apple Silicon `124411442189` und Intel
 `124411442496` sind terminal erfolgreich, je **4/4**. Die Archive wurden gegen
@@ -39,7 +56,7 @@ Weitere automatisch ausgelöste breite CI ist davon getrennt zu bewerten.
 
 Der tatsächliche 22-px-Bildabgleich zeigt weiterhin das alte Formular im
 Hauptfenster. `open_settings` in `app/settings_ui.inc:134` setzt nur Tab 6;
-`settings_view` ab Zeile 257 besitzt noch keine Kategorien/Suche/Live-Vorschau
+`settings_view` ab Zeile 241 besitzt noch keine Kategorien/Suche/Live-Vorschau
 oder Änderungsprüfung. Das ist eine **offene native Umsetzungslücke**, keine
 belegte technische Unmöglichkeit. Die bestandenen Schrift-/Menütests nehmen das
 Design nicht ab. [Befund und geschützter einzelner Bildbeleg](verification/settings-a-native-gap-2026-10-31.md).
@@ -82,7 +99,14 @@ Einstieg prüfen; alte freie Docking-/Inspector-Fixtures nicht reaktivieren.
 
 ## Sicherer lokaler Anschluss
 
-**Neuester eingefrorener Anschluss: `mac-typography-menu-accepted-local`.**
+**Neuester eingefrorener Anschluss: `settings-transactions-first`.**
+136 Eingaben, neun Quell-/Testdateien gegenüber dem vorherigen Anschluss geändert;
+215 Windows-/113 Linux-Runtimedateien und alle Archivbytes zurückgelesen.
+Build-/Prüf-/Archivhandles sind beendet. `prepare-next.py <neuer-tag>
+settings-transactions-first` verwenden. Neue Dateien bleiben ausdrücklich zur
+Eingabeliste hinzuzufügen. Die bisherigen Typografie-Festschreibungen erhalten.
+
+Vorheriger Anschluss: `mac-typography-menu-accepted-local`.
 132 eigene Eingaben, 1101 Compiler-/Testdateien entsprechen nach beidseitiger
 Zeilenendennormalisierung `68ab5f71`; 212 Windows-/111 Linux-Runtimedateien und
 alle referenzierten Archivbytes sind zurückgelesen. Der Git-Blob des
@@ -95,7 +119,7 @@ ausgeführte Nachlauf `mac-typography-menu-editor` und fügt keine Quelländerun
   mit `src`, `windows-build`, `linux-build`. Nicht aus einem älteren A2-/Menüstand
   überschreiben. Keine Quell-/Runtimeänderung bei lebendem Build-/Test-/Archivhandle.
 - Eingaben/Manifeste/Byteindizes: `build/validation/explorer-inline-2026-10-29/`.
-  `prepare-next.py <neuer-tag> mac-typography-menu-accepted-local` prüft den alten
+  `prepare-next.py <neuer-tag> settings-transactions-first` prüft den alten
   Stand und übernimmt den eigenen Eingabebestand. **Neue Dateien/Module ausdrücklich
   zur Eingabeliste hinzufügen**, bevor ihre Include-Kette gebaut wird.
   `run.py` und `freeze.py` liegen dort; vorher ihre tatsächlichen Argumente lesen.

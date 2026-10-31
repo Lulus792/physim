@@ -140,46 +140,31 @@ static void open_settings(app *a) {
     a->settings_from_analysis=a->analysis_layout_active;a->settings_defaults=false;
     a->tab = 6;
     workspace_context(a);
+    /* Size fields edit Develop's saved starting values, even when opened from
+     * a different workspace. The source workspace's session stays independent. */
+    a->settings_draft = a->settings_base = a->preferences;
     a->settings_focus=0;a->settings_keyboard=false;a->settings_focus_scroll=false;
 }
 /* Semantic focus groups preserve the same draft and save transaction as pointer input. */
 static void settings_commit(app *a) {
-    ps_preferences *p=&a->settings_draft;
-    ps_preferences next = *p;
     preferences_capture(a);
-    next.width = a->preferences.width;
-    next.height = a->preferences.height;
-    next.maximized = a->preferences.maximized;
-    bool laboratory=a->settings_previous_tab==1 && a->laboratory_initialized;
-    bool analysis=a->settings_from_analysis;
-    if(!laboratory && !analysis && !a->settings_defaults)next.dock = a->preferences.dock;
-    if((next.view_flags&PS_VIEW_LOG) && (next.dock.hidden&(1u<<PS_DOCK_LOG)))
+    ps_preferences next;
+    if(ps_preferences_settings_merge(&a->preferences,&a->settings_base,&a->settings_draft,&next)!=PS_OK) {
+        snprintf(a->preferences_error,sizeof a->preferences_error,"Ungültige Einstellungen. Größen und Werte prüfen; der Entwurf bleibt erhalten.");
+        return;
+    }
+    uint32_t changed=ps_preferences_settings_changes(&a->settings_base,&a->settings_draft);
+    if((changed&(1u<<PS_SETTING_LOG)) && (next.view_flags&PS_VIEW_LOG) && (next.dock.hidden&(1u<<PS_DOCK_LOG)))
         ps_dock_reveal(&next.dock,PS_DOCK_LOG,PS_DOCK_BOTTOM);
     if(!documentation_fonts_prepare_sizes(a,a->doc_zoom_size?a->doc_zoom_size:next.ui_size,
         a->doc_zoom_size?a->doc_zoom_size:next.editor_size,next.ui_size,next.editor_size)) {
         snprintf(a->preferences_error,sizeof a->preferences_error,"Schriftgröße konnte nicht geladen werden. Einstellungen bleiben erhalten.");
         return;
     }
-    /* Workspace widths are session-owned. A global theme/font save must not
-     * replace the workbench layout with the caller's temporary geometry. */
-    ps_preferences persisted=next;
-    if((laboratory || analysis) && !a->settings_defaults) {
-        persisted.dock=a->preferences.dock;
-        persisted.sidebar_width=a->preferences.sidebar_width;
-        persisted.inspector_width=a->preferences.inspector_width;
-        persisted.log_height=a->preferences.log_height;
-        persisted.view_flags=(persisted.view_flags&~PS_VIEW_LOG)|(a->show_log?PS_VIEW_LOG:0);
-    }
     ps_result r =
-        a->preferences_path[0] ? ps_preferences_write(a->preferences_path, &persisted) : PS_IO;
+        a->preferences_path[0] ? ps_preferences_write(a->preferences_path, &next) : PS_IO;
     if (r == PS_OK) {
-        preferences_apply(a, &persisted);
-        /* Apply accepted geometry to its originating workspace on return. */
-        if(a->settings_defaults){a->laboratory_initialized=false;a->analysis_layout_initialized=false;}
-        if(laboratory && !a->settings_defaults)a->laboratory_layout=(ps_layout_state){next.dock,next.sidebar_width,
-            next.inspector_width,next.log_height,(next.view_flags&PS_VIEW_LOG)!=0};
-        if(analysis && !a->settings_defaults)a->analysis_layout=(ps_layout_state){next.dock,next.sidebar_width,
-            next.inspector_width,next.log_height,(next.view_flags&PS_VIEW_LOG)!=0};
+        preferences_apply(a, &next);
         a->preferences_writable = true;
         a->preferences_error[0] = 0;
         a->tab = a->settings_previous_tab;
@@ -192,8 +177,7 @@ static void settings_commit(app *a) {
             ps_result_string(r));
 }
 static void settings_defaults_draft(app *a) {
-    a->settings_defaults=true;a->settings_draft=PS_PREFERENCES_DEFAULT;
-    a->settings_draft.width=a->preferences.width;a->settings_draft.height=a->preferences.height;
+    a->settings_defaults=true;ps_preferences_settings_defaults(&a->settings_draft);
 }
 static bool settings_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
     if(a->tab!=6 || a->toolbar_menu || a->toolbar_keyboard)return false;

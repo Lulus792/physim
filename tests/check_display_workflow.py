@@ -1656,6 +1656,17 @@ def settings(flow, directory):
     exact(directory / "preferences.bin", "damaged preferences")
 
 
+def settings_transactions(flow, directory):
+    directory.mkdir()
+    flow.run("--settings-test", directory, "merge", marker="SETTINGS MERGE SELF-TEST: PASSED")
+    data = (directory / "preferences.bin").read_bytes()
+    require(len(data) == 312 and data[:8] == b"PSPREF05", "Settings merge changed the preference format")
+    require(struct.unpack_from("<I", data, 308)[0] == zlib.crc32(data[:308]), "Settings merge stored an invalid CRC")
+    require(struct.unpack_from("<I", data, 24)[0] == 218 and struct.unpack_from("<I", data, 56)[0] == 255 and
+            struct.unpack_from("<I", data, 28)[0] == 340, "Settings merge stored another workspace's geometry")
+    require(not list(directory.glob("*.tmp-*")), "Failed settings save leaked a temporary file")
+
+
 def project_manager_keyboard(flow, directory):
     directory.mkdir()
     for size in (16,22):
@@ -1963,6 +1974,7 @@ SPECIAL["protocol_sources"]=lambda flow,directory: logging(flow,directory,protoc
 SPECIAL["source_outline_workflow"]=source_outline
 SPECIAL["laboratory_workflow"]=laboratory
 SPECIAL["model_values_workflow"]=model_values
+SPECIAL["settings_transactions"]=settings_transactions
 
 def documentation_model_contract(flow,directory,output):
     rows=re.findall(r'DOCUMENTATION SVG CAPTION: case=(\d+) figure=([\d.,]+) lines=(\d+) em=([\d.]+) center=([\d.]+) baseline=([\d.]+) complete=(\d)',output)
