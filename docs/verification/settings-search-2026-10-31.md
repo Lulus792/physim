@@ -76,3 +76,11 @@ der ausgeschaltete Nutzer-Mac wurde nie angesprochen. In dieser Suchkampagne
 wurde keine weitere Bereinigung behauptet. Completion D mit tatsächlichen
 Preferences/Backend, historische Settings-/AX-Fixtures, übrige freigegebene UI
 und manuelle DPI-/Monitor-/Vollbild-/Screenreader-Aufgaben bleiben offen.
+
+## Nachtrag: gehosteter Mac-Abschluss
+
+Der nachfolgende Stand `b20d550e` besteht auf Intel und Apple Silicon je **15/15**,
+getrennte Menüregression je **7/7**. Alle vier tatsächlichen Archive, Digests und
+Ergebnisdateien sind geprüft. [Abschlussbeleg](settings-search-macos-2026-10-31.json).
+Die ursprünglichen Fehl- und Wartesnapshots oben bleiben als Historie erhalten;
+der spätere Einheiten-Fokusstand ist damit noch nicht abgenommen.

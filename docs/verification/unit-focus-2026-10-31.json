@@ -1,0 +1,891 @@
+{
+  "date": "2026-10-31",
+  "base_commit": "6414e128e08dd6a334da2be60ecca002e031c114",
+  "scope": "Native unit-task pointer ownership in a fixed footer above clipped body controls",
+  "own_inputs": 151,
+  "root_matches_final_tested_inputs": true,
+  "phases": [
+    {
+      "tag": "unit-focus-before",
+      "runs": [
+        {
+          "platform": "windows",
+          "executed": true,
+          "run": "run-5ywcdn5y",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "unit_task_window"
+            ],
+            "exit_code": 1,
+            "app_sha256": "c0d135ae8bdcf6189cc74775826048d4964925756621d0e6ee088748ad168e2f"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/unit-focus-before-windows.log",
+            "bytes": 45813,
+            "sha256": "e2426f01feb4a84e5ea578c3aaf3525abd5edf3d23f49a6e42375a89b809eb39"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-5ywcdn5y/results.json",
+            "bytes": 14032,
+            "sha256": "cfbe9c9c850c1cc6c01b812d7e8b9e9a17acc975f8693268b916341bf247b446"
+          },
+          "passed": 0,
+          "total": 1,
+          "cases": [
+            {
+              "name": "unit_task_window",
+              "status": "failed",
+              "seconds": 3.203,
+              "reason_excerpt": "directory)\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 1698, in unit_task_window\n    flow.run(\"--workspace-state-test\", root, \"units-task-\" + str(size), timeout=60,\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\bin\\\\physim.exe', '--workspace-state-test', 'D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\test-results\\\\run-5ywcdn5y\\\\unit_task_window\\\\files ä\\\\workflow ä\\\\UI 16', 'units-task-16']\n"
+            }
+          ],
+          "app_steps": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-5ywcdn5y/unit_task_window/files ä/app-steps.json",
+            "bytes": 5764,
+            "sha256": "49a3f86cc49c2f49b4f4ee4deb388adeb3ef7df075ee6bfee60d1ede02becfba"
+          },
+          "footer_observations": [
+            "UNIT FOOTER GAP: hidden=2 focus=4 x=253.75 y=269.50 footer=230.00 found=1",
+            "UNIT FOOTER FOCUS: hidden=2 actual=2 expected=4 complete=0"
+          ],
+          "window_app_processes": 1
+        },
+        {
+          "platform": "linux",
+          "executed": false
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/unit-focus-before-inputs.json",
+        "bytes": 15410,
+        "sha256": "20628e7729e3d97c97e405fc343e5e5c24b6ea988e6fbeb1b0986b90a4a27f93"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/unit-focus-before-compiler-source.json",
+        "bytes": 117503,
+        "sha256": "9102b3044c49529bcf789505026651d49653b429ed26051ef315f8bb5bdb4e14"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/unit-focus-before-runtime.json",
+        "bytes": 36320,
+        "sha256": "f31807d04c92489aa46c6eacaf9a06f9828a87c1373dede345b3185fac07877b"
+      },
+      "byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/unit-focus-before-byte-index.json",
+        "bytes": 93614,
+        "sha256": "bcc6b0be165e726a4ebbf0689b1fbb9b950a8eef7cb9ec78172e7d7b41db507a"
+      }
+    },
+    {
+      "tag": "unit-focus-clipped",
+      "runs": [
+        {
+          "platform": "windows",
+          "executed": true,
+          "run": "run-9i0uur2k",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "unit_task_window",
+              "--test-filter",
+              "channel_units_workflow"
+            ],
+            "exit_code": 0,
+            "app_sha256": "920e581b90e8dc791926f39712fe815406f7c94bd2fc240714d6f79357aa0a27"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/unit-focus-clipped-windows.log",
+            "bytes": 40241,
+            "sha256": "dad23031448e2b10a0d4f78486605d25cae2c6a1abe667ec6512b098d3bd20d2"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-9i0uur2k/results.json",
+            "bytes": 57890,
+            "sha256": "fae51e83d92c94c771581ad566fccc2786f556af6589d86d984f12a317a273ae"
+          },
+          "passed": 2,
+          "total": 2,
+          "cases": [
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 7.953,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "passed",
+              "seconds": 77.656,
+              "reason_excerpt": ""
+            }
+          ],
+          "app_steps": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-9i0uur2k/unit_task_window/files ä/app-steps.json",
+            "bytes": 12155,
+            "sha256": "791f4c3753fffea6caae60fbd9283f6f019e5a56cd9ca0a766c6994730adf616"
+          },
+          "footer_observations": [
+            "UNIT FOOTER GAP: hidden=2 focus=4 x=253.75 y=269.50 footer=230.00 found=1",
+            "UNIT FOOTER FOCUS: hidden=2 actual=4 expected=4 complete=1",
+            "UNIT FOOTER POINTER: retained=SI next=Schließen complete=1",
+            "UNIT CLIPPED POINTER: ignored=2 pane=unit-body control-y=261.00 clip-bottom=223.00 mouse-y=269.50",
+            "UNIT FOOTER GAP: hidden=0 focus=4 x=103.38 y=190.03 footer=181.25 found=1",
+            "UNIT FOOTER FOCUS: hidden=0 actual=4 expected=4 complete=1",
+            "UNIT FOOTER POINTER: retained=SI next=Schließen complete=1",
+            "UNIT CLIPPED POINTER: ignored=0 pane=unit-body control-y=163.62 clip-bottom=174.25 mouse-y=190.03"
+          ],
+          "window_app_processes": 2,
+          "legacy_app_steps": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-9i0uur2k/channel_units_workflow/files ä/app-steps.json",
+            "bytes": 45925,
+            "sha256": "ddd5d2b1c0f6d51e918093ce475b4bcc12938f7f61f163904b7708b4a333382b"
+          },
+          "legacy_app_processes": 8
+        },
+        {
+          "platform": "linux",
+          "executed": true,
+          "run": "run-ip6fpifj",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "unit_task_window",
+              "--test-filter",
+              "channel_units_workflow"
+            ],
+            "exit_code": 0,
+            "app_sha256": "14d825912d2ad567fa56efb490a8312499e34bfab8180cc13cf6173b16128edd"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/unit-focus-clipped-linux.log",
+            "bytes": 296844,
+            "sha256": "aa031fa38fb0d79e20ada5165f3c2e3ef57b977e2253c705b6ceb57ee88e631a"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ip6fpifj/results.json",
+            "bytes": 46255,
+            "sha256": "3e0249b610d360c05c811d1f67c5a139835a17329698d9720ad98e139a1d08a1"
+          },
+          "passed": 2,
+          "total": 2,
+          "cases": [
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 28.392,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "passed",
+              "seconds": 129.059,
+              "reason_excerpt": ""
+            }
+          ],
+          "app_steps": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ip6fpifj/unit_task_window/files ä/app-steps.json",
+            "bytes": 12170,
+            "sha256": "8e87055e6b39f2492ff94a8afdd0dd902919114c68991f59fce42b7b9d1d1782"
+          },
+          "footer_observations": [
+            "UNIT FOOTER GAP: hidden=2 focus=4 x=253.75 y=269.50 footer=230.00 found=1",
+            "UNIT FOOTER FOCUS: hidden=2 actual=4 expected=4 complete=1",
+            "UNIT FOOTER POINTER: retained=SI next=Schließen complete=1",
+            "UNIT CLIPPED POINTER: ignored=2 pane=unit-body control-y=261.00 clip-bottom=223.00 mouse-y=269.50",
+            "UNIT FOOTER GAP: hidden=0 focus=4 x=103.38 y=190.03 footer=181.25 found=1",
+            "UNIT FOOTER FOCUS: hidden=0 actual=4 expected=4 complete=1",
+            "UNIT FOOTER POINTER: retained=SI next=Schließen complete=1",
+            "UNIT CLIPPED POINTER: ignored=0 pane=unit-body control-y=163.62 clip-bottom=174.25 mouse-y=190.03"
+          ],
+          "window_app_processes": 2,
+          "legacy_app_steps": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ip6fpifj/channel_units_workflow/files ä/app-steps.json",
+            "bytes": 34564,
+            "sha256": "5d9a05eb6de3c10dc588171b91ed1b6acf6bb366c257213fed5e352a68b44734"
+          },
+          "legacy_app_processes": 8
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/unit-focus-clipped-inputs.json",
+        "bytes": 15410,
+        "sha256": "fc9eb91fee0ed08ebf0210a3089e55ec3ba75857717783f1c2628f47c60af865"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/unit-focus-clipped-compiler-source.json",
+        "bytes": 117453,
+        "sha256": "c2906350bce027240a6d0acd74f47ac2bf60a712a025267249f5faef9e54dd38"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/unit-focus-clipped-runtime.json",
+        "bytes": 36322,
+        "sha256": "ee0e80b617ae9ef918f7ec887fd66b7aff61674a4752909a880073f2412a6b86"
+      },
+      "byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/unit-focus-clipped-byte-index.json",
+        "bytes": 93507,
+        "sha256": "ced384493a08092f10b940f832c00225064a7d22c83685c5e179cc0d5f951f82"
+      }
+    },
+    {
+      "tag": "unit-focus-compact",
+      "runs": [
+        {
+          "platform": "windows",
+          "executed": true,
+          "run": "run-dqqgwoof",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "channel_units_workflow"
+            ],
+            "exit_code": 0,
+            "app_sha256": "4bcc7fb3743e3717b55fbb43bca82cd33d556ad6a887c35f5a10d78e641aca76"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/unit-focus-compact-windows.log",
+            "bytes": 40380,
+            "sha256": "bab6f66302accb3d30bd549278b16fb82bc7bed0d517956c88ae5a689a049fa7"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-dqqgwoof/results.json",
+            "bytes": 45516,
+            "sha256": "80d4bfef16e44df7be497c6f1e7ada41490edfd29a320cfe9912ba9ed693dfd5"
+          },
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "channel_units_workflow",
+              "status": "passed",
+              "seconds": 79.047,
+              "reason_excerpt": ""
+            }
+          ],
+          "legacy_app_steps": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-dqqgwoof/channel_units_workflow/files ä/app-steps.json",
+            "bytes": 46836,
+            "sha256": "ab4075d203e376c15da9b3d7820be3b0b02296c0003007af2ff08b2e0a7d8eac"
+          },
+          "legacy_app_processes": 8,
+          "legacy_observations": [
+            "CHANNEL UNITS LIVE: raw=0.1079265986504224 display=10.792659865042239 symbol=cm scale=0.01 source-preserved=1 running=1 complete=1",
+            "CHANNEL UNITS STATISTICS: raw-mean=-0.12988510579888846 display-mean=-12.988510579888846 scale=0.01 complete=1",
+            "CHANNEL UNITS units-c SELF-TEST: PASSED",
+            "CHANNEL UNITS CATALOG: mode=units-read writable=1 entries=1 symbol=cm scale=0.01",
+            "CHANNEL UNITS units-read SELF-TEST: PASSED",
+            "CHANNEL UNITS CATALOG: mode=units-corrupt writable=0 entries=0 symbol=m scale=1",
+            "CHANNEL UNITS units-corrupt SELF-TEST: PASSED",
+            "CHANNEL UNITS CATALOG: mode=units-reset writable=0 entries=0 symbol=m scale=1",
+            "CHANNEL UNITS units-reset SELF-TEST: PASSED",
+            "CHANNEL UNITS LIVE: raw=0.57333817221984651 display=57.333817221984653 symbol=cm scale=0.01 source-preserved=1 running=1 complete=1",
+            "CHANNEL UNITS STATISTICS: raw-mean=-0.051681949815063112 display-mean=-5.1681949815063115 scale=0.01 complete=1",
+            "CHANNEL UNITS units-phys SELF-TEST: PASSED",
+            "CHANNEL UNITS CATALOG: mode=units-read writable=1 entries=1 symbol=cm scale=0.01",
+            "CHANNEL UNITS units-read SELF-TEST: PASSED",
+            "CHANNEL UNITS CATALOG: mode=units-corrupt writable=0 entries=0 symbol=m scale=1",
+            "CHANNEL UNITS units-corrupt SELF-TEST: PASSED",
+            "CHANNEL UNITS CATALOG: mode=units-reset writable=0 entries=0 symbol=m scale=1",
+            "CHANNEL UNITS units-reset SELF-TEST: PASSED"
+          ],
+          "legacy_bmp_files": 0
+        },
+        {
+          "platform": "linux",
+          "executed": true,
+          "run": "run-4wghyt1d",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "channel_units_workflow"
+            ],
+            "exit_code": 0,
+            "app_sha256": "7af8eb750ba2c26f3955c716b6657f870acee2f125d6cea8661f1ea4d2f84def"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/unit-focus-compact-linux.log",
+            "bytes": 296814,
+            "sha256": "2caaa9d12878e5aae897aea2a40b0b3c4cfcdd9125940015955cb8f01990a999"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-4wghyt1d/results.json",
+            "bytes": 34049,
+            "sha256": "b9493a40e020b00592183d9f805bf22a129e97f1c9b21365d811b14dd38a971f"
+          },
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "channel_units_workflow",
+              "status": "passed",
+              "seconds": 126.379,
+              "reason_excerpt": ""
+            }
+          ],
+          "legacy_app_steps": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-4wghyt1d/channel_units_workflow/files ä/app-steps.json",
+            "bytes": 35475,
+            "sha256": "36c8be547467cde14486273c976a3e61499356bb8bea0bfa5805de2677964e2b"
+          },
+          "legacy_app_processes": 8,
+          "legacy_observations": [
+            "CHANNEL UNITS LIVE: raw=0.43886610396446041 display=43.886610396446038 symbol=cm scale=0.01 source-preserved=1 running=1 complete=1",
+            "CHANNEL UNITS STATISTICS: raw-mean=0.0016197488103476081 display-mean=0.16197488103476079 scale=0.01 complete=1",
+            "CHANNEL UNITS units-c SELF-TEST: PASSED",
+            "CHANNEL UNITS CATALOG: mode=units-read writable=1 entries=1 symbol=cm scale=0.01",
+            "CHANNEL UNITS units-read SELF-TEST: PASSED",
+            "CHANNEL UNITS CATALOG: mode=units-corrupt writable=0 entries=0 symbol=m scale=1",
+            "CHANNEL UNITS units-corrupt SELF-TEST: PASSED",
+            "CHANNEL UNITS CATALOG: mode=units-reset writable=0 entries=0 symbol=m scale=1",
+            "CHANNEL UNITS units-reset SELF-TEST: PASSED",
+            "CHANNEL UNITS LIVE: raw=0.63780493561915796 display=63.780493561915797 symbol=cm scale=0.01 source-preserved=1 running=1 complete=1",
+            "CHANNEL UNITS STATISTICS: raw-mean=0.013031549423706388 display-mean=1.3031549423706388 scale=0.01 complete=1",
+            "CHANNEL UNITS units-phys SELF-TEST: PASSED",
+            "CHANNEL UNITS CATALOG: mode=units-read writable=1 entries=1 symbol=cm scale=0.01",
+            "CHANNEL UNITS units-read SELF-TEST: PASSED",
+            "CHANNEL UNITS CATALOG: mode=units-corrupt writable=0 entries=0 symbol=m scale=1",
+            "CHANNEL UNITS units-corrupt SELF-TEST: PASSED",
+            "CHANNEL UNITS CATALOG: mode=units-reset writable=0 entries=0 symbol=m scale=1",
+            "CHANNEL UNITS units-reset SELF-TEST: PASSED"
+          ],
+          "legacy_bmp_files": 0
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/unit-focus-compact-inputs.json",
+        "bytes": 15410,
+        "sha256": "615dc09e3805059c3cfc134e1976bcb6687feccafda63f9353577fe0c55046fc"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/unit-focus-compact-compiler-source.json",
+        "bytes": 117493,
+        "sha256": "00e8aa4b8d53918f871f420f7a9b18664f0e5ca7aa49fd223e095c9797489418"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/unit-focus-compact-runtime.json",
+        "bytes": 36322,
+        "sha256": "2ce5418a60468185ecef5cb8eb3e9b74aa829957669e3d1f2691e2a793e2eb86"
+      },
+      "byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/unit-focus-compact-byte-index.json",
+        "bytes": 93507,
+        "sha256": "47dfba37acdfdf446e58598f28b26ab17954068c16d4c528f968e3f1f95cc71e"
+      }
+    }
+  ],
+  "counterexample": "Unchanged product fails real Windows stage53: footer blank point253.75/269.50 overlaps hidden symbol2; focus4 SI becomes2. No Linux counter run claimed; its archive retains prior runtime.",
+  "correction": "unit_focus now requires actual pane clip for pointer ownership. No unit data/catalog/layout changes. The same real pointer probe retains SI, and Tab reaches native Close before Enter closes the task.",
+  "coverage": "Both UI16 dark and22 light at360x360. Existing channel drafts, error retries, SI/corrupt/save semantics, GL caller restoration and C/Physim live-run workflows retained. SDL events and internal published focus, not physical keyboard or whole assistive acceptance.",
+  "storage": "Only D:. No new image states added for the focus probe. Existing unit-window reference captures remain. Legacy captures only checked for existence replaced by numeric/catalog text; eight real legacy app processes per OS emitted no BMPs. User Mac OFF, never contacted.",
+  "compact_scope": "Only channel_units_workflow re-run after removing unused raw captures and capture-only scrolling. Earlier two-group result remains authoritative for the unchanged product clip fix; no new two-group run with the final test-only binary claimed.",
+  "cleanup": {
+    "result": {
+      "path": "build/validation/unit-focus-2026-10-31/cleanup-result.json",
+      "bytes": 476,
+      "sha256": "81de7d7edc3bef24b2954faed9791c6c80c42039ec2fbf1a5086256da30938dd"
+    },
+    "plan": {
+      "path": "build/validation/unit-focus-2026-10-31/cleanup-plan-v2.json",
+      "bytes": 7080,
+      "sha256": "2a5091f140c747ed34b03c329317fcffff88650735c63c6349d780c25fd7a131"
+    },
+    "data": {
+      "count": 20,
+      "bytes": 51229960,
+      "all_targets_preflighted": true,
+      "all_files_absent": true,
+      "plan_sha256": "2a5091f140c747ed34b03c329317fcffff88650735c63c6349d780c25fd7a131",
+      "replacement": "Compact legacy C/Physim unit workflow passed on both OSes; compiler/runtime/archive handles terminal and archive bytes verified.",
+      "preserved": "All data, sources, runtime/source archives, result reports, unit-task PNG references, dependencies and VM files."
+    }
+  },
+  "hosted_prior_source": [
+    {
+      "file": "menu-b20d550e-arm.zip",
+      "artifact": 13034548326,
+      "run": 41180437463,
+      "job": 124476553001,
+      "source": "b20d550e6b925003c9dc8220aff850aa2ee8d6c6",
+      "kind": "menu",
+      "sha256": "7937d46bbed38be3dab267f0bd1fe4e29f358a933db46ddfb0d4b8e3ceec39c5",
+      "path": "build/validation/unit-focus-2026-10-31/menu-b20d550e-arm.zip",
+      "bytes": 4436,
+      "github_digest_matches": true,
+      "result_entries": [
+        {
+          "entry": "Release/test-results/run-a75wtucd/results.json",
+          "sha256": "db38ac44199d52c2faf9dcab394383ba326b0d04bcd45b3c82975462164e9207",
+          "passed": 7,
+          "total": 7,
+          "cases": [
+            {
+              "name": "native_menu",
+              "status": "passed",
+              "seconds": 2.017,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "window_smoke",
+              "status": "passed",
+              "seconds": 2.343,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "toolbar_small",
+              "status": "passed",
+              "seconds": 5.795,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "toolbar_large",
+              "status": "passed",
+              "seconds": 4.782,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "toolbar_input_isolation",
+              "status": "passed",
+              "seconds": 9.327,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "keyboard_menu_small",
+              "status": "passed",
+              "seconds": 5.474,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "keyboard_menu_large",
+              "status": "passed",
+              "seconds": 5.377,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "passed": 7,
+      "total": 7
+    },
+    {
+      "file": "menu-b20d550e-intel.zip",
+      "artifact": 13034314428,
+      "run": 41180437463,
+      "job": 124476552881,
+      "source": "b20d550e6b925003c9dc8220aff850aa2ee8d6c6",
+      "kind": "menu",
+      "sha256": "0ee310cf0d33c29c7adcc68a9607a495956ad1d7560c2d100a938df3f37b4a75",
+      "path": "build/validation/unit-focus-2026-10-31/menu-b20d550e-intel.zip",
+      "bytes": 4550,
+      "github_digest_matches": true,
+      "result_entries": [
+        {
+          "entry": "Release/test-results/run-przyxz4d/results.json",
+          "sha256": "f544acd7f0439fe70c110e9cb983ae02e69bfc522c020456c42a5b597d8ebb96",
+          "passed": 7,
+          "total": 7,
+          "cases": [
+            {
+              "name": "native_menu",
+              "status": "passed",
+              "seconds": 1.799,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "window_smoke",
+              "status": "passed",
+              "seconds": 3.296,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "toolbar_small",
+              "status": "passed",
+              "seconds": 6.692,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "toolbar_large",
+              "status": "passed",
+              "seconds": 7.115,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "toolbar_input_isolation",
+              "status": "passed",
+              "seconds": 12.146,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "keyboard_menu_small",
+              "status": "passed",
+              "seconds": 10.16,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "keyboard_menu_large",
+              "status": "passed",
+              "seconds": 11.447,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "passed": 7,
+      "total": 7
+    },
+    {
+      "file": "settings-b20d550e-intel.zip",
+      "artifact": 13034544139,
+      "run": 41180437523,
+      "job": 124476552980,
+      "source": "b20d550e6b925003c9dc8220aff850aa2ee8d6c6",
+      "kind": "settings",
+      "sha256": "77fafc73db40f62a6c8b36c81bd67b06563854e99cf0b23d09cd07214ea74a6e",
+      "path": "build/validation/unit-focus-2026-10-31/settings-b20d550e-intel.zip",
+      "bytes": 22660,
+      "github_digest_matches": true,
+      "result_entries": [
+        {
+          "entry": "Release/test-results/run-9j67kyzx/results.json",
+          "sha256": "21ce12d880e32b269963c08b884d3ec2b932a5451fc4a47b1be8c39b4b668147",
+          "passed": 3,
+          "total": 3,
+          "cases": [
+            {
+              "name": "shell_theme_dark",
+              "status": "passed",
+              "seconds": 7.341,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "shell_theme_light_large_narrow",
+              "status": "passed",
+              "seconds": 3.904,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "shell_theme_contrast",
+              "status": "passed",
+              "seconds": 4.601,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-dntdj3d0/results.json",
+          "sha256": "024bd547e95a7a57a0ac20dae38fe0a31ccb4573f0f664e8c001263db5bf490e",
+          "passed": 10,
+          "total": 10,
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "seconds": 1.842,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 19.03,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_search_keyboard",
+              "status": "passed",
+              "seconds": 12.3,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 24.649,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed",
+              "seconds": 25.392,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "passed",
+              "seconds": 51.008,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "seconds": 18.084,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_dark",
+              "status": "passed",
+              "seconds": 6.539,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_light_large_narrow",
+              "status": "passed",
+              "seconds": 5.56,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "inspector_channel",
+              "status": "passed",
+              "seconds": 107.12,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-bw1098xg/results.json",
+          "sha256": "514db10dc9755d8fb6ea24d70832acaf0cfe5b96173484daa3a0c640cfc77109",
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "preferences",
+              "status": "passed",
+              "seconds": 0.262,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-rm0dq5p7/results.json",
+          "sha256": "f868cfcf79320809485c571ffeaf59c3b7d8702da435bb373f9db7bd915a583a",
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "seconds": 58.013,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "passed": 15,
+      "total": 15
+    },
+    {
+      "file": "settings-b20d550e-arm.zip",
+      "artifact": 13035640635,
+      "run": 41180437523,
+      "job": 124476553111,
+      "source": "b20d550e6b925003c9dc8220aff850aa2ee8d6c6",
+      "kind": "settings",
+      "sha256": "945fcad15b464b1ef24e0d0ea6fd613e48dc632445ef10a6b866c801f657ea0b",
+      "path": "build/validation/unit-focus-2026-10-31/settings-b20d550e-arm.zip",
+      "bytes": 21806,
+      "github_digest_matches": true,
+      "result_entries": [
+        {
+          "entry": "Release/test-results/run-193_fi7z/results.json",
+          "sha256": "90e8493b5428c413345594b036ffb81b763aff8b33ccb64190fbd3340689419d",
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "seconds": 58.056,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-nxxvjn5f/results.json",
+          "sha256": "18f353ba9dc88def2b14aace2fb0bdfe6f714432d6701a3eb429000977bddd5b",
+          "passed": 10,
+          "total": 10,
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "seconds": 1.336,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 15.482,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_search_keyboard",
+              "status": "passed",
+              "seconds": 10.443,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 22.052,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed",
+              "seconds": 22.141,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "passed",
+              "seconds": 45.25,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "seconds": 14.581,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_dark",
+              "status": "passed",
+              "seconds": 6.425,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_light_large_narrow",
+              "status": "passed",
+              "seconds": 5.576,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "inspector_channel",
+              "status": "passed",
+              "seconds": 101.922,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-tpeke8e0/results.json",
+          "sha256": "dcf5d064daea5d3c7a1ce407a80a5a0d2e30571a929283823edca0741ceb0641",
+          "passed": 3,
+          "total": 3,
+          "cases": [
+            {
+              "name": "shell_theme_dark",
+              "status": "passed",
+              "seconds": 5.512,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "shell_theme_light_large_narrow",
+              "status": "passed",
+              "seconds": 3.574,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "shell_theme_contrast",
+              "status": "passed",
+              "seconds": 4.579,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-ybydi8v9/results.json",
+          "sha256": "f9d49ff225c9cbb43f571d84a7af8d99a92c82e5fc1352c7d0083e733d3a014f",
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "preferences",
+              "status": "passed",
+              "seconds": 0.129,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "passed": 15,
+      "total": 15
+    }
+  ],
+  "hosted_scope": "All four downloaded artifact ZIP digests and all actual result entries read. Settings/search/units15/15 each; separate menu7/7 each, b20d550e. These completed results do not cover the later unit-focus correction.",
+  "limits": [
+    "New-source hosted macOS unit-focus regression pending source commit/push",
+    "Full UI/manual screenreader/physical-input/DPI/monitor/fullscreen acceptance remains open",
+    "Completion D native backend/preferences/scope/signature and other approved UI remain open"
+  ]
+}

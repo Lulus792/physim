@@ -1,0 +1,458 @@
+{
+  "date": "2026-10-31",
+  "source_commit": "b20d550e6b925003c9dc8220aff850aa2ee8d6c6",
+  "settings_workflow": 41180437523,
+  "menu_workflow": 41180437463,
+  "verified_jobs": [
+    {
+      "id": 124476553001,
+      "kind": "menu",
+      "passed": 7,
+      "total": 7,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124476552881,
+      "kind": "menu",
+      "passed": 7,
+      "total": 7,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124476552980,
+      "kind": "settings",
+      "passed": 15,
+      "total": 15,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124476553111,
+      "kind": "settings",
+      "passed": 15,
+      "total": 15,
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "artifact_evidence": [
+    {
+      "file": "menu-b20d550e-arm.zip",
+      "artifact": 13034548326,
+      "run": 41180437463,
+      "job": 124476553001,
+      "source": "b20d550e6b925003c9dc8220aff850aa2ee8d6c6",
+      "kind": "menu",
+      "sha256": "7937d46bbed38be3dab267f0bd1fe4e29f358a933db46ddfb0d4b8e3ceec39c5",
+      "path": "build/validation/unit-focus-2026-10-31/menu-b20d550e-arm.zip",
+      "bytes": 4436,
+      "github_digest_matches": true,
+      "result_entries": [
+        {
+          "entry": "Release/test-results/run-a75wtucd/results.json",
+          "sha256": "db38ac44199d52c2faf9dcab394383ba326b0d04bcd45b3c82975462164e9207",
+          "passed": 7,
+          "total": 7,
+          "cases": [
+            {
+              "name": "native_menu",
+              "status": "passed",
+              "seconds": 2.017,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "window_smoke",
+              "status": "passed",
+              "seconds": 2.343,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "toolbar_small",
+              "status": "passed",
+              "seconds": 5.795,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "toolbar_large",
+              "status": "passed",
+              "seconds": 4.782,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "toolbar_input_isolation",
+              "status": "passed",
+              "seconds": 9.327,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "keyboard_menu_small",
+              "status": "passed",
+              "seconds": 5.474,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "keyboard_menu_large",
+              "status": "passed",
+              "seconds": 5.377,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "passed": 7,
+      "total": 7
+    },
+    {
+      "file": "menu-b20d550e-intel.zip",
+      "artifact": 13034314428,
+      "run": 41180437463,
+      "job": 124476552881,
+      "source": "b20d550e6b925003c9dc8220aff850aa2ee8d6c6",
+      "kind": "menu",
+      "sha256": "0ee310cf0d33c29c7adcc68a9607a495956ad1d7560c2d100a938df3f37b4a75",
+      "path": "build/validation/unit-focus-2026-10-31/menu-b20d550e-intel.zip",
+      "bytes": 4550,
+      "github_digest_matches": true,
+      "result_entries": [
+        {
+          "entry": "Release/test-results/run-przyxz4d/results.json",
+          "sha256": "f544acd7f0439fe70c110e9cb983ae02e69bfc522c020456c42a5b597d8ebb96",
+          "passed": 7,
+          "total": 7,
+          "cases": [
+            {
+              "name": "native_menu",
+              "status": "passed",
+              "seconds": 1.799,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "window_smoke",
+              "status": "passed",
+              "seconds": 3.296,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "toolbar_small",
+              "status": "passed",
+              "seconds": 6.692,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "toolbar_large",
+              "status": "passed",
+              "seconds": 7.115,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "toolbar_input_isolation",
+              "status": "passed",
+              "seconds": 12.146,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "keyboard_menu_small",
+              "status": "passed",
+              "seconds": 10.16,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "keyboard_menu_large",
+              "status": "passed",
+              "seconds": 11.447,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "passed": 7,
+      "total": 7
+    },
+    {
+      "file": "settings-b20d550e-intel.zip",
+      "artifact": 13034544139,
+      "run": 41180437523,
+      "job": 124476552980,
+      "source": "b20d550e6b925003c9dc8220aff850aa2ee8d6c6",
+      "kind": "settings",
+      "sha256": "77fafc73db40f62a6c8b36c81bd67b06563854e99cf0b23d09cd07214ea74a6e",
+      "path": "build/validation/unit-focus-2026-10-31/settings-b20d550e-intel.zip",
+      "bytes": 22660,
+      "github_digest_matches": true,
+      "result_entries": [
+        {
+          "entry": "Release/test-results/run-9j67kyzx/results.json",
+          "sha256": "21ce12d880e32b269963c08b884d3ec2b932a5451fc4a47b1be8c39b4b668147",
+          "passed": 3,
+          "total": 3,
+          "cases": [
+            {
+              "name": "shell_theme_dark",
+              "status": "passed",
+              "seconds": 7.341,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "shell_theme_light_large_narrow",
+              "status": "passed",
+              "seconds": 3.904,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "shell_theme_contrast",
+              "status": "passed",
+              "seconds": 4.601,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-dntdj3d0/results.json",
+          "sha256": "024bd547e95a7a57a0ac20dae38fe0a31ccb4573f0f664e8c001263db5bf490e",
+          "passed": 10,
+          "total": 10,
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "seconds": 1.842,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 19.03,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_search_keyboard",
+              "status": "passed",
+              "seconds": 12.3,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 24.649,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed",
+              "seconds": 25.392,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "passed",
+              "seconds": 51.008,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "seconds": 18.084,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_dark",
+              "status": "passed",
+              "seconds": 6.539,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_light_large_narrow",
+              "status": "passed",
+              "seconds": 5.56,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "inspector_channel",
+              "status": "passed",
+              "seconds": 107.12,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-bw1098xg/results.json",
+          "sha256": "514db10dc9755d8fb6ea24d70832acaf0cfe5b96173484daa3a0c640cfc77109",
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "preferences",
+              "status": "passed",
+              "seconds": 0.262,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-rm0dq5p7/results.json",
+          "sha256": "f868cfcf79320809485c571ffeaf59c3b7d8702da435bb373f9db7bd915a583a",
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "seconds": 58.013,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "passed": 15,
+      "total": 15
+    },
+    {
+      "file": "settings-b20d550e-arm.zip",
+      "artifact": 13035640635,
+      "run": 41180437523,
+      "job": 124476553111,
+      "source": "b20d550e6b925003c9dc8220aff850aa2ee8d6c6",
+      "kind": "settings",
+      "sha256": "945fcad15b464b1ef24e0d0ea6fd613e48dc632445ef10a6b866c801f657ea0b",
+      "path": "build/validation/unit-focus-2026-10-31/settings-b20d550e-arm.zip",
+      "bytes": 21806,
+      "github_digest_matches": true,
+      "result_entries": [
+        {
+          "entry": "Release/test-results/run-193_fi7z/results.json",
+          "sha256": "90e8493b5428c413345594b036ffb81b763aff8b33ccb64190fbd3340689419d",
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "seconds": 58.056,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-nxxvjn5f/results.json",
+          "sha256": "18f353ba9dc88def2b14aace2fb0bdfe6f714432d6701a3eb429000977bddd5b",
+          "passed": 10,
+          "total": 10,
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "seconds": 1.336,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 15.482,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_search_keyboard",
+              "status": "passed",
+              "seconds": 10.443,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 22.052,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed",
+              "seconds": 22.141,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "passed",
+              "seconds": 45.25,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "seconds": 14.581,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_dark",
+              "status": "passed",
+              "seconds": 6.425,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_light_large_narrow",
+              "status": "passed",
+              "seconds": 5.576,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "inspector_channel",
+              "status": "passed",
+              "seconds": 101.922,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-tpeke8e0/results.json",
+          "sha256": "dcf5d064daea5d3c7a1ce407a80a5a0d2e30571a929283823edca0741ceb0641",
+          "passed": 3,
+          "total": 3,
+          "cases": [
+            {
+              "name": "shell_theme_dark",
+              "status": "passed",
+              "seconds": 5.512,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "shell_theme_light_large_narrow",
+              "status": "passed",
+              "seconds": 3.574,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "shell_theme_contrast",
+              "status": "passed",
+              "seconds": 4.579,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-ybydi8v9/results.json",
+          "sha256": "f9d49ff225c9cbb43f571d84a7af8d99a92c82e5fc1352c7d0083e733d3a014f",
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "preferences",
+              "status": "passed",
+              "seconds": 0.129,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "passed": 15,
+      "total": 15
+    }
+  ],
+  "scope": "Both Intel and Apple Silicon actual native builds: header3, typography1, Settings/search/units/analysis/inspector10, portable preferences1 each; separate native menu7 each.",
+  "regression": "Earlier657219a3 first-cm inspector record mismatched selector m versus updated catalog/value cm. This source includes bounded real-draw wait and passed the unchanged full pixel/data checker, both font sources.",
+  "storage": "All four actual ZIPs downloaded on D:, GitHub SHA256 digests matched, every results.json entry read. Failure-only inspector image step skipped on successful jobs. User Mac OFF and never contacted.",
+  "limits": [
+    "These results belong to b20d550e, not the later unit-focus clip correction or compact-output test changes.",
+    "No complete GUI/design/manual screenreader/physical-input/DPI/monitor/fullscreen acceptance.",
+    "Completion D native backend/preferences/scope/signature and other approved UI remain open."
+  ]
+}

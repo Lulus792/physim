@@ -77,9 +77,15 @@ Frame-Grenze freigegeben; geliehene Fonts bleiben Eigentum des Hauptkontexts.
 Erzeugen und Freigeben erhalten den tatsächlich aktuellen GL-Kontext des
 Aufrufers, auch beim Öffnen per Maus innerhalb des Einstellungsrenderers.
 
+Pointerfokus gilt nur innerhalb des tatsächlichen sichtbaren Ausschnitts.
+Ein hinter der festen Fußleiste abgeschnittenes Eingabefeld darf deren freien
+Klickbereich nicht übernehmen; die nächste Tabaktion bleibt dadurch erhalten.
+[Gegenprobe, Windows-/Linux-Nachlauf und kompakte Belege](../../verification/unit-focus-2026-10-31.md).
+
 Der neue native Fall verwendet eine tatsächlich geschriebene und geladene
-Messdatei mit zwei Kanälen. Die bestehenden C-/Physim-Lauf-, Analyse- und
-Inspektorfälle behalten zusätzlich ihre eigenen Daten-/Datei-/Rasterassertionen.
+Messdatei mit zwei Kanälen. Die C-/Physim-Lauffälle behalten numerische und
+Dateischutzprüfungen; ihre inhaltlich ungeprüften Vollbilder sind durch Textnachweise
+ersetzt. Analyse und Inspektor behalten ihre gezielten Rasterassertionen.
 Die vollständige GUI-, manuelle Screenreader-, physische Eingabe-, Monitor-/DPI-
 und Plattformabnahme ist durch diese Implementierung noch nicht bestätigt.
 Der Nutzer-Mac bleibt ausgeschaltet; gehostete Tests getrennt nach Quellstand werten.

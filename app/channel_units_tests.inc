@@ -17,7 +17,7 @@ static void channel_units_test_frame(app *a,const char *mode,int *stage,int *cod
             ok=!strcmp(mode,"units-read")?a->channel_units_writable && a->channel_units.count==1:!a->channel_units_writable && *a->channel_units_error;
             channel_unit_open(a,&ch);break;
         case 1:
-            *capture="units-reopened.bmp";
+            printf("CHANNEL UNITS CATALOG: mode=%s writable=%d entries=%u symbol=%s scale=%.17g\n",mode,a->channel_units_writable,a->channel_units.count,a->unit_draft.symbol,a->unit_draft.scale);
             if(!strcmp(mode,"units-read")) {
                 ok=a->unit_draft.scale==.01 && !strcmp(a->unit_draft.symbol,"cm");a->quitting=true;
             } else if(!strcmp(mode,"units-corrupt"))a->quitting=true;
@@ -61,7 +61,7 @@ static void channel_units_test_frame(app *a,const char *mode,int *stage,int *cod
     case 16:test_window_mouse(a->unit_task->window,a->channel_unit_bounds[2],false);break;
     case 17:test_window_key_mod(a->unit_task->window,SDLK_A,PS_UI_COMMAND_MOD);break;
     case 18:unit_test_text(a,"0.01");break;
-    case 19:*capture="units-selection.bmp";test_window_key_mod(a->unit_task->window,SDLK_F7,0);test_window_mouse(a->unit_task->window,a->channel_unit_bounds[3],true);break;
+    case 19:test_window_key_mod(a->unit_task->window,SDLK_F7,0);test_window_mouse(a->unit_task->window,a->channel_unit_bounds[3],true);break;
     case 20:test_window_mouse(a->unit_task->window,a->channel_unit_bounds[3],false);break;
     case 21: {
         ps_display_unit u=channel_display_unit(a,&a->live_channels[selected]);double converted;
@@ -70,13 +70,15 @@ static void channel_units_test_frame(app *a,const char *mode,int *stage,int *cod
             source==ps_crc32((const unsigned char*)nk_str_get_const(&a->experiment.string),(size_t)nk_str_len_char(&a->experiment.string));
         double shown=a->values[selected];ok &= ps_display_unit_value(&u,shown,&converted)==PS_OK && converted==shown/.01;
         double gaps[]={1,NAN,2},displayed[3];ok &= channel_display_values(&u,gaps,3,displayed) && displayed[0]==100 && isnan(displayed[1]) && displayed[2]==200;
-        channel_unit_close(a);*capture="units-live.bmp";command(a,PS_MSG_STOP);a->stop_at=ps_clock();break;
+        if(ok)printf("CHANNEL UNITS LIVE: raw=%.17g display=%.17g symbol=%s scale=%.17g source-preserved=1 running=1 complete=1\n",shown,converted,u.symbol,u.scale);
+        channel_unit_close(a);command(a,PS_MSG_STOP);a->stop_at=ps_clock();break;
     }
     case 22:if(!idle(a) || a->library_thread)return;ok=a->data.total>2 && a->data.result==PS_EOF;a->tab=2;a->show_report=false;a->show_log=false;break;
     case 23: {
         ps_display_unit u=channel_display_unit(a,&a->data.channels[selected]);double mean;
         ok=u.scale==.01 && ps_display_unit_value(&u,a->data.stats[selected].mean,&mean)==PS_OK && mean==a->data.stats[selected].mean/.01;
-        *capture="units-statistics.bmp";test_mouse(a,a->channel_unit_buttons[1],true);break;
+        if(ok)printf("CHANNEL UNITS STATISTICS: raw-mean=%.17g display-mean=%.17g scale=%.17g complete=1\n",a->data.stats[selected].mean,mean,u.scale);
+        test_mouse(a,a->channel_unit_buttons[1],true);break;
     }
     case 24:test_mouse(a,a->channel_unit_buttons[1],false);break;
     case 25:
@@ -96,10 +98,7 @@ static void channel_units_test_frame(app *a,const char *mode,int *stage,int *cod
         ok &= a->channel_unit_manager && !a->channel_units.count && *a->channel_units_error;
         strcpy(a->channel_unit_scale,"0.01");channel_unit_apply(a);ok &= a->channel_unit_manager && a->channel_units.count==1;
         channel_unit_open(a,&a->data.channels[selected]);strcpy(a->unit_draft.symbol,"cancelled");test_window_key_mod(a->unit_task->window,SDLK_ESCAPE,0);break;
-    case 28:ok=!a->channel_unit_manager && !strcmp(a->channel_units.entries[0].unit.symbol,"cm");
-        {struct nk_window *window=nk_window_find(a->ui,dock_windows[PS_DOCK_WORKSPACE]);
-         if(window)window->scrollbar.y=220;else ok=false;}break;
-    case 29:*capture="units-statistics-detail.bmp";a->quitting=true;break;
+    case 28:ok=!a->channel_unit_manager && !strcmp(a->channel_units.entries[0].unit.symbol,"cm");a->quitting=true;break;
     }
     if(!ok){fprintf(stderr,"Channel units GUI stage %d failed: %s / %s\n",*stage,a->status,a->channel_units_error);*code=1;a->quitting=true;}
     if(a->quitting)printf("CHANNEL UNITS %s SELF-TEST: %s\n",mode,*code?"FAILED":"PASSED");

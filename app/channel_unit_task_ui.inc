@@ -16,7 +16,10 @@ static float unit_text(channel_unit_task *d,float x,float y,float width,const ch
 }
 static void unit_focus(app *a,unsigned id,struct nk_rect r,bool native) {
     channel_unit_task *d=a->unit_task;struct nk_context *ui=d->ui;d->controls[id]=r;
-    if(ps_ui_mouse_pressed(&ui->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ui->input,r)){d->focus=id;d->keyboard=d->focus_scroll=false;}
+    if(ps_ui_mouse_pressed(&ui->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ui->input,r)){
+        if(nk_input_is_mouse_hovering_rect(&ui->input,ui->current->layout->clip)){d->focus=id;d->keyboard=d->focus_scroll=false;}
+        else if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"UNIT CLIPPED POINTER: ignored=%u pane=%s control-y=%.2f clip-bottom=%.2f mouse-y=%.2f\n",id,ui->current->name_string,r.y,ui->current->layout->clip.y+ui->current->layout->clip.h,ui->input.mouse.pos.y);
+    }
     if(native && !d->keyboard && d->focus!=id){d->focus=id;d->focus_scroll=true;}
     bool custom=d->keyboard && d->focus==id;
     if(d->first && id==UNIT_CHANNEL && nk_sdl_accessibility_keyboard_target(ui,r))d->first=false;

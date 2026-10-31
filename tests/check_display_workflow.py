@@ -1317,8 +1317,7 @@ def channel_units(flow, directory):
         catalog = root / "channel-units.bin"
         data = catalog.read_bytes()
         require(data[:8] == b"PSCUNI01" and len(data) == 147, "Unit choice did not persist")
-        for name in ("selection", "live", "statistics", "statistics-detail"):
-            require((root / ("units-" + name + ".bmp")).exists(), "Unit capture missing")
+        require("CHANNEL UNITS LIVE:" in flow.steps[-1]["stdout"] and "CHANNEL UNITS STATISTICS:" in flow.steps[-1]["stdout"], "Missing actual live/statistics unit checks")
         flow.run("--workspace-state-test", root, "units-read", timeout=130,
                  marker="CHANNEL UNITS units-read SELF-TEST: PASSED")
         require(catalog.read_bytes() == data, "Reopening wrote unit choices")
@@ -1331,6 +1330,7 @@ def channel_units(flow, directory):
                  marker="CHANNEL UNITS units-reset SELF-TEST: PASSED")
         require(len(catalog.read_bytes()) == 20, "Explicit reset did not persist")
         require(hashes == [fingerprint(path) for path in protected], "Unit selection changed sources or raw measurements")
+        require(not list(root.glob("units-*.bmp")), "Unit function checks generated redundant full-window images")
 
 
 def pchip(flow, directory):
@@ -1698,6 +1698,7 @@ def unit_task_window(flow, directory):
         flow.run("--workspace-state-test", root, "units-task-" + str(size), timeout=60,
                  marker="UNIT TASK SELF-TEST: PASSED")
         require("complete=1" in flow.steps[-1]["stdout"], "Independent unit task did not finish")
+        require("UNIT FOOTER POINTER: retained=SI next=Schließen complete=1" in flow.steps[-1]["stdout"], "Clipped unit controls changed the footer pointer's next keyboard target")
         contexts = re.findall(r"UNIT CALLER CONTEXT: source=(\d+) caller=(\d+) restored=(\d+) same=(\d+)", flow.steps[-1]["stderr"])
         require(contexts and all(caller == restored and same == "1" for source, caller, restored, same in contexts), "Unit launch did not restore its caller's actual GL context")
         require(any((source == caller) == (size == 16) for source, caller, restored, same in contexts), "Pointer and keyboard launches did not exercise distinct caller render contexts")

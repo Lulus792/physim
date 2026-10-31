@@ -21,8 +21,22 @@ static bool unit_task_test_start(app *a,const char *root,const char *mode) {
     SDL_strlcpy(a->last_run,path,sizeof a->last_run);refresh_library(a);a->selected_count=0;select_run(a,path,true);request_dataset(a);
     ps_preferences p=a->preferences;p.ui_size=strstr(mode,"22")?22:16;p.theme=p.ui_size==22?PS_THEME_LIGHT:PS_THEME_DARK;preferences_apply(a,&p);a->tab=2;a->analysis_tab=0;return true;
 }
+static bool unit_test_footer_gap(app *a,struct nk_rect *point,unsigned *hidden) {
+    channel_unit_task *d=a->unit_task;int width,height;SDL_GetWindowSize(d->window,&width,&height);
+    float footer=d->body_rect.y+d->body_rect.h;
+    for(unsigned id=UNIT_CHANNEL;id<=UNIT_FACTOR;id++){
+        struct nk_rect r=d->controls[id];float left=fmaxf(2,r.x),right=fminf(width-2,r.x+r.w);
+        float top=fmaxf(footer+2,r.y),bottom=fminf(height-2,r.y+r.h);if(right-left<8 || bottom-top<8)continue;
+        for(unsigned iy=1;iy<4;iy++)for(unsigned ix=1;ix<4;ix++){
+            float x=left+(right-left)*ix/4,y=top+(bottom-top)*iy/4;bool action=false;
+            for(unsigned button=UNIT_SI;button<=UNIT_APPLY;button++){struct nk_rect b=d->controls[button];if(x>=b.x-2 && x<=b.x+b.w+2 && y>=b.y-2 && y<=b.y+b.h+2)action=true;}
+            if(!action){*point=nk_rect(x-1,y-1,2,2);*hidden=id;return true;}
+        }
+    }return false;
+}
 static void unit_task_test_frame(app *a,int *stage,int *code,const char **capture) {
     static double deadline;static SDL_WindowID window;static char path[4096];static unsigned small_settle,small_scroll;bool ok=true;
+    static struct nk_rect gap;static unsigned hidden;
     if(a->data.thread || a->library_thread)return;
 #define UNIT_FOCUS(id) do{if(!unit_test_focus(a,id,*stage,&ok))return;}while(0)
 #define UNIT_KEY(key) test_window_key_mod(a->unit_task->window,key,0)
@@ -114,6 +128,25 @@ static void unit_task_test_frame(app *a,int *stage,int *code,const char **captur
         if(body && body->popup.active && ps_clock()<deadline)return;ok=a->channel_unit_manager && body && !body->popup.active;UNIT_KEY(SDLK_ESCAPE);break;}
     case 29:
         ok=!a->channel_unit_manager && a->data.count==3 && a->data.values[0][1]==2 && a->data.values[1][2]==6;
+        channel_unit_open(a,a->data.channels);SDL_SetWindowSize(a->unit_task->window,360,360);SDL_SyncWindow(a->unit_task->window);deadline=ps_clock()+3;*stage=49;break;
+    case 50:
+        if((a->unit_task->body_rect.w!=360 || !a->unit_task->controls[UNIT_SI].w) && ps_clock()<deadline)return;
+        UNIT_FOCUS(UNIT_SI);{struct nk_window *body=nk_window_find(a->unit_task->ui,"unit-body");ok=body!=NULL;if(body)body->scrollbar.y=0;}break;
+    case 51:
+        ok=unit_test_footer_gap(a,&gap,&hidden) && a->unit_task->focus==UNIT_SI;
+        printf("UNIT FOOTER GAP: hidden=%u focus=%u x=%.2f y=%.2f footer=%.2f found=%d\n",hidden,a->unit_task->focus,gap.x+1,gap.y+1,a->unit_task->body_rect.y+a->unit_task->body_rect.h,ok);
+        if(ok)test_window_mouse(a->unit_task->window,gap,true);break;
+    case 52:test_window_mouse(a->unit_task->window,gap,false);break;
+    case 53:
+        ok=a->unit_task->focus==UNIT_SI;
+        printf("UNIT FOOTER FOCUS: hidden=%u actual=%u expected=%u complete=%d\n",hidden,a->unit_task->focus,UNIT_SI,ok);
+        if(ok)UNIT_KEY(SDLK_TAB);deadline=ps_clock()+3;break;
+    case 54:
+        if(!nk_sdl_accessibility_is_focus_target(a->unit_task->ui,NULL,"Schließen") && ps_clock()<deadline)return;
+        ok=a->unit_task->focus==UNIT_CLOSE && nk_sdl_accessibility_is_focus_target(a->unit_task->ui,NULL,"Schließen");if(ok)UNIT_KEY(SDLK_RETURN);break;
+    case 55:
+        ok=!a->channel_unit_manager && !a->channel_units.count && a->data.count==3 && a->data.values[0][1]==2 && a->data.values[1][2]==6;
+        printf("UNIT FOOTER POINTER: retained=SI next=Schließen complete=%d\n",ok);
         printf("UNIT TASK: two-real-channels=1 independent-windows=1 typed-symbol-factor=1 retained-drafts=1 settings-cancel-independent=1 si-draft=1 full-data-overflow=1 write-retry=1 os-close=1 popup-tab-escape=1 complete=%d\n",ok);a->quitting=true;break;
     }
     if(!ok){fprintf(stderr,"Unit task failed at stage %d: channel=%s symbol=%s factor=%s error=%s\n",*stage,a->unit_channel.name,a->unit_draft.symbol,a->channel_unit_scale,a->channel_units_error);*code=1;a->quitting=true;}

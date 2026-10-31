@@ -5,7 +5,26 @@ abgleichen. Verbindliche Designs: [AGENTS.md](../AGENTS.md) und
 [Gesamtübergabe](visuals/unified-workspace/NEXT-CHAT.md). Keine geschlossene
 Prüfung oder Protokoll-Trennlinie allein wegen Kompaktierung erneut beginnen.
 
-## Aktueller Anschluss: Suchaktionen und Pointerfokus
+## Aktueller Anschluss: Einheitenfokus und kompakte Nachweise
+
+**Eingefroren: `unit-focus-compact`, 151 eigene Eingaben.**
+Der Einheitenfall ist tatsächlich reproduziert: Ein freier Fußleistenklick
+übernahm den Fokus des verdeckten Symbolfelds. `unit_focus` prüft jetzt den
+wirklichen sichtbaren Ausschnitt. Der neue reale Pointerfall bei 360 × 360
+erhält SI-Fokus; Tab erreicht Schließen und Enter schließt die Aufgabe.
+[Gegenprobe, Originalergebnisse und Umfang](verification/unit-focus-2026-10-31.md).
+
+`unit-focus-clipped` besteht Windows Release/Linux Debug ASan/UBSan je **2/2**,
+`run-9i0uur2k` / `run-ip6fpifj`: Fenster bei UI 16/22 plus alter C-/Physim-
+Einheitenablauf (zusammen zehn App-Prozesse je Plattform). Danach ersetzt
+`unit-focus-compact` nur ungenutzte BMP-Ausgaben durch Katalog-/Live-/Statistiktext,
+je **1/1**, `run-dqqgwoof` / `run-4wghyt1d`, acht App-Prozesse. Kein neuer
+Zweierlauf mit der letzten, nur in Testausgaben veränderten Binärdatei behauptet.
+Alle lokalen Handles beendet, Quell-/Runtime-/Archivbytes geprüft.
+20 ersetzte erfolgreiche Rohbilder (51.229.960 Bytes) nach genauer Pfad-/Hash-
+Prüfung entfernt; erforderliche PNG-Referenzen, Fehler, Daten und Archive erhalten.
+
+## Abgeschlossener Suchanschluss
 
 **Eingefroren: `settings-search-clipped`, 151 eigene Eingaben.**
 **`b20d550e` ist in beide Repositories gepusht; 1.109 Compiler-/Testdateien
@@ -48,21 +67,21 @@ portabler Preferences-Schritt übersprungen. Nur erster cm-Inspektornachweis
 scheitert an Selektor „m“ bei schon aktualisiertem Katalog/Wert „cm“.
 Fixture wartet nun begrenzt auf die wirkliche neue Zeichnung; Daten-/Raster-
 Konsistenz und Mindestzahlen nicht gelockert. Lokal beide Fontquellen bestanden.
-Mac-Nachlauf auf korrigiertem neuen Quellcommit bleibt eigens nachzuweisen.
-Neue Handles auf `b20d550e`: Settings/Suche/Einheiten `41180437523`,
-ARM `124476553111`, Intel `124476552980`; Menü `41180437463`,
-ARM `124476553001`, Intel `124476552881`. Beim Snapshot warten die Settings-
-Jobs; Intel-Menü startet. Diese Handles weiter beobachten, keine Ersatzläufe.
-Separate Menüregression `41177844185` je **7/7**; alle vier ZIP-Digests und
-Ergebnisdateien tatsächlich gelesen. Details im neuen Suchnachweis.
+Der korrigierte Stand **`b20d550e` ist inzwischen auf beiden Architekturen
+abgeschlossen**: Settings/Suche/Einheiten `41180437523` je **15/15**;
+separate Menüregression `41180437463` je **7/7**. Alle vier Archive, Digests und
+Einzelergebnisse tatsächlich gelesen. [Abschlussbeleg](verification/settings-search-macos-2026-10-31.json).
+Diese Matrix nicht wegen Kompaktierung wiederholen. Die nachfolgende
+Einheiten-Fokusänderung und kompakte Testausgabe benötigen einen eigenen Mac-Nachlauf.
 Ältere Settings-/Mac-Menümatrix (9/9 auf `479a8954`, 7/7 auf `140ead03`) ist
 ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
 
 ## Nächste konkrete Arbeit
 
-- Neuen gehosteten Such-/Inspektorlauf nach Push des Quellcommits über seine tatsächlichen
-  Handles weiter beobachten und Artefakte/Digests/Einzelfälle lesen. Bestehende
-  Läufe nicht durch Ersatzläufe überdecken. Nutzer-Mac wird dafür nicht benötigt.
+- Neuen gehosteten Lauf für Einheiten-Fokus/kompakte Testausgabe nach Push des
+  Quellcommits über seine tatsächlichen Handles beobachten und Artefakte/Digests/
+  Einzelfälle lesen. Bestehende Läufe nicht durch Ersatzläufe überdecken.
+  Nutzer-Mac wird dafür nicht benötigt.
 - Completion D nach ADR 022/023 tatsächlich implementieren. Bestandsaudit:
   `app/completion_ui.inc` zeigt noch vier Zeilen und Vierergruppen, manuelles
   Strg+Leertaste; `ps_preferences`/Format PSPREF05 enthält noch keine Completion-
@@ -72,29 +91,29 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
 - Historische Settings-/AX-Fixtures von Tab 6/Radios/globalem Fokus portieren.
   Wiederherstellung, Maximieren, Geometrie und Dateisicherheit erhalten. Der alte
   0/0-Protokollgriff ist kein neuer Befund an der behobenen Trennlinie.
-- Gleichen Clip-Vertrag gezielt beim eigenen `unit_focus` prüfen: auch dort
-  existiert ein roher Bounds-Hovertest. Noch keine reproduzierte Einheiten-
-  Fehlwirkung behaupten. Unicode-Randleerzeichen im Einheitensymbol separat prüfen.
+- Unicode-Randleerzeichen im Einheitensymbol separat prüfen. Der konkrete
+  `unit_focus`-Clipfehler ist jetzt mit Vorher-/Nachherlauf geschlossen.
 - Übrige freigegebene UI: A2 Szene/Mehrfachauswahl, Kontextmenüs A, B2, weitere
   Aufgabenfenster. Manuelle Screenreader-/physische Eingabe-/DPI-/Monitor-/
   Vollbildabnahme und Gesamtgestaltung bleiben offen. Keine volle Punktzahl behaupten.
 
 ## Sicherer lokaler Anschluss
 
-- `prepare-next.py <neuer-tag> settings-search-clipped` prüft vorher Quelle,
+- `prepare-next.py <neuer-tag> unit-focus-compact` prüft vorher Quelle,
   Runtime und Archive. Neue Module ausdrücklich in die Eingabeliste aufnehmen.
   Eigene Quellen vollständig versionieren, fremde AT-SPI-/Orca-/Status-/dist-
   Änderungen erhalten und nicht in eigene isolierte Quellen übernehmen.
 - Helfer/Indizes: `build/validation/explorer-inline-2026-10-29/`; aktueller
-  Arbeitsnachweis: `build/validation/settings-search-2026-10-31/`.
+  Arbeitsnachweis: `build/validation/unit-focus-2026-10-31/`; älterer Suchstand
+  unter `build/validation/settings-search-2026-10-31/`.
   `run.py`/`freeze.py` vor Verwendung auf tatsächliche Argumente prüfen.
 - Isolierter Baum `build/validation/protocol-wrap-2026-10-26/3-isolated/`
   mit `src`, `windows-build`, `linux-build`; keine Mutation bei lebendem Handle.
 - Nur D:, kein Zugriff auf F:. Generiertes unter `build/`; WSL-Datenträger,
   benötigte Offline-Abhängigkeiten, Nutzerexperimente und fremde Arbeit erhalten.
   Vorige abgeschlossene Bereinigungen: Einheiten 315 Dateien/563.430.107 Bytes,
-  davor Settings 656 BMPs/2.093.854.368 Bytes. Nicht doppelt zählen. Neue Such-
-  Kampagne behauptet keine weitere Löschung. Fehler und benötigte Referenzen schützen.
+  davor Settings 656 BMPs/2.093.854.368 Bytes; danach Einheitenfokus 20 BMPs/
+  51.229.960 Bytes. Nicht doppelt zählen. Fehler und benötigte Referenzen schützen.
 - Text/JSON mit Quelle/Kommando/Soll-Ist zuerst; Bilder gezielt. Vier finale
   Such-PNGs für Fokusdarstellung reichen; nicht jeden Eingabeschritt fotografieren.
 
