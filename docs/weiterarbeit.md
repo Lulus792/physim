@@ -5,6 +5,61 @@ mit `git status` sowie den relevanten Diffs abgleichen. Designverträge stehen i
 [AGENTS.md](../AGENTS.md) und der [Gesamtübergabe](visuals/unified-workspace/NEXT-CHAT.md).
 Bei Widersprüchen zuerst Quellstand, Datum und betroffenen Umfang abgleichen.
 
+## Aktuell laufend – gemeinsamen Compilerbaum nicht verändern
+
+Die nächste Portierung ist als `fe54e7a0` umgesetzt: Dateitab-Menüs über AppKit,
+Projektmanager per nativer Menü-Tastatureingabe, Einstellungen über Cmd+Komma.
+Die kurze Mac-CI-Prüfstufe liegt jetzt vor der vollständigen Projektmatrix.
+Aktueller Git-Stand für diesen Nachlauf: `7a95c8ae`.
+
+**Die lokalen Läufe sind noch aktiv, kein eingefrorener Abschluss:**
+Windows-Session `35015`, Linux-Session `91410` zuerst mit `write_stdin` prüfen.
+Windows führt `run-ch7e30mf`, Linux `run-_qma9a32` aus; beide mit Tag
+`mac-workspace-menu-first`. Die Matrix baut und analysiert tatsächlich 34
+Projekt-/Sprachkombinationen bei 16 und 22 px. Beobachtet wurden bereits 17
+abgeschlossene Projekte bei 16 px unter Windows und fünf unter Linux; das ist
+keine Abnahme der restlichen Kombinationen. Beobachtungsdatei:
+`build/validation/macos-menu-workflows-2026-10-30/workspace-first-observation.json`.
+Keinen Lauf wegen einer Beobachtungspause neu starten. Vorherige Aussagen zu
+beendeten lokalen Läufen weiter unten beziehen sich auf frühere Teilabschlüsse.
+
+Beide lokalen Dateitab-Fälle sind bestanden. Der Einstellungsprüfer verwirft
+noch die tatsächlich korrekte Datei: alte Erwartung 32 statt 96 für die sieben
+umgeschalteten Sichtbarkeitsflags. Seit Protokoll C startet der Standard mit
+Flags 31 (geschlossenes Protokoll); nach sieben Umschaltungen bleiben 32|64.
+Beide echten Dateien sind 312 Bytes groß, Theme 1, Flags 96 und haben SHA256
+`4195990619af103cce0329845a7ca8603c406bcf4a6dec79be6340e6571d6ab4`.
+`cc267a6d` korrigiert ausschließlich diese Python-Erwartung; keine neue
+Produktionsänderung. Der lokale Compilerbaum enthält absichtlich weiterhin
+den ersten Prüfer, solange seine Läufe leben. Der zugehörige Fehler bleibt
+im ersten Lauf erhalten, auch wenn die Projektmatrix später besteht.
+
+**Nach beiden tatsächlichen Prozessenden:** erst
+`freeze.py mac-workspace-menu-first mac-editor-menu-first-byte-index.json` ausführen;
+Quelle und Runtime nicht während der Matrix einfrieren. Die erste Kopie hat
+119 eigene Eingaben und App-Testcode von `fe54e7a0`. Danach mit `prepare-next.py`
+einen neuen Tag aus diesem Manifest anlegen; die einzige weitere lokale
+Compiler-/Testinputänderung ist die Python-Erwartung. Den korrigierten
+Einstellungsfall ohne neuen App-Build mit
+`build/validation/macos-menu-workflows-2026-10-30/run-corrected-settings.py`
+auf Windows und separat per Xvfb/Alpine-Dev ausführen. Dieser Helfer verlangt
+den abgeschlossenen ersten Ergebnisbericht und die korrigierte Quellkopie,
+verwendet den gleichen App-Binärstand und prüft dessen unveränderten Hash.
+Die unveränderte lange Matrix nicht allein wegen des Python-Vergleichs wiederholen.
+
+**Gehostete aktuelle Mac-Matrix:** Lauf `41147957905`, Quelle `7a95c8ae`,
+ARM-Job `124377591438`, Intel-Job `124377591787`. Die kurze Prüfstufe ist auf
+beiden Architekturen erfolgreich; beide vollständigen Matrizen laufen noch.
+Das sind die bestätigten Step-Zustände; Ergebnisse/Logs nach Abschluss sichern.
+Ältere eigene Workspace-Läufe `41147445351`/`41147732814` wurden durch die
+neue Fassung ersetzt; der erste ist bestätigt abgebrochen, beim zweiten den
+Endstatus nachlesen. Das eigene neue Workflow-Concurrency-Verhalten bricht
+überholte Versionen ab; keine Testfehler als bestanden umdeuten.
+Die unveränderte Editorregression `41147445304` sowie Menüregression
+`41147445297` sind auf `fe54e7a0` auf beiden Architekturen erfolgreich;
+für neue Zähl-/Archivnachweise noch ihre tatsächlichen Ergebnisse sichern.
+Kein pauschales Grün für diesen noch laufenden Teilabschluss melden.
+
 ## Nächster konkreter Schritt
 
 **Übrige historische Mac-GUI-Testeingaben auf die native Menüleiste portieren.**

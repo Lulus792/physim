@@ -7,7 +7,9 @@ Eine Kontextkompaktierung ist kein Anlass, erledigte Prüfungen neu zu starten.
 **Neuer Plattformauftrag vom 30.10.:** [ADR 024](../../decisions/024-native-macos-menubar.md):
 die vorhandenen Menüs unter macOS in die echte Systemmenüleiste verlegen.
 Die übrige App-Gestaltung erhalten; gemeinsame Aktionen und Verfügbarkeit
-weiterverwenden. Umsetzung und tatsächliche Mac-Abnahme stehen noch aus.
+weiterverwenden. Adapter und gezielte Intel-/Apple-Silicon-Prüfungen sind
+vorhanden; die gesamte GUI-, manuelle Vollbild- und VoiceOver-Abnahme bleibt
+offen. Aktuelle abgeschlossene und laufende Prüfumfänge stehen im Arbeitsstand.
 
 **Nutzerwahl vom 30. Oktober 2026 – Vervollständigung D mit Ergänzungen:**
 [ADR 023](../../decisions/023-selected-completion-d.md),
