@@ -1,0 +1,673 @@
+{
+  "schema": 1,
+  "date": "2026-10-31",
+  "status": "Targeted F1 repair acceptance complete on Intel and Apple Silicon",
+  "source_commit": "b648b0e7ed9ea94c77c8f9cdc9c47e4bf854d1de",
+  "run_id": 41155920224,
+  "url": "https://github.com/Lulus792/physim/actions/runs/41155920224",
+  "workflow": ".github/workflows/macos-f1-regressions.yml",
+  "results": {
+    "arm": {
+      "job_id": 124402565043,
+      "portable_passed": 1,
+      "gui_passed": 5,
+      "metric_contract_tests_passed": 3,
+      "actual_native_and_gl_counterexamples_rejected": 3,
+      "artifact": {
+        "archive": "f1-metrics-arm.zip",
+        "bytes": 16881,
+        "sha256": "5d16db2f2fdbec0cdf7958ae4f0aa02e40d6953f807ab46b2a542c88102307f6",
+        "members": {
+          "Release/font-bank-state-counterexample/binding/stderr": "50ac9f3216f41c7007722ca9e6053e632e3c59dbdb1abf285d3517819412f062",
+          "Release/font-bank-state-counterexample/report.json": "f41bf3784b26845b680a7d08aa61089bdc794c5f05ffe91300980d9739d29f78",
+          "Release/native-search-counterexample/report.json": "55e8d3a9ba1c5dd6ee0603020530c5258cad23055a7e87e407ff16d60a459d5b",
+          "Release/font-bank-state-counterexample/unpack/stderr": "df27686857e61858cf57f50d5da350756ca033201241f7596cc57fdb741783ee",
+          "Release/native-search-counterexample/stderr": "e6c837134b7c603fa13f42936ab09e40c99a3b9c91e98bf7317c2876c8db6ee4",
+          "Release/native-search-counterexample/stdout": "ef1e47ee5c8b380d89b78272985e92b82d4a5ffcf7815b5afe8c5a9fea224101",
+          "Release/test-results/run-lgszn5s1/results.json": "6bdb8de8c99ee95f884d45d21c093cb3297a098e5e975e0281ed3bde3ab1f8f1",
+          "Release/test-results/run-wi0i5wjc/results.json": "2c53cf157102db5d5d43b1dd38f9fea5804df52236f906a77cca208915b16521"
+        },
+        "cases": [
+          {
+            "name": "font_bank_ui",
+            "status": "passed",
+            "result_member": "Release/test-results/run-lgszn5s1/results.json",
+            "app_binaries": [],
+            "h_geometry_states": 0,
+            "pane_states": 0,
+            "metric_source": [],
+            "markers": []
+          },
+          {
+            "name": "documentation_math",
+            "status": "passed",
+            "result_member": "Release/test-results/run-lgszn5s1/results.json",
+            "app_binaries": [
+              {
+                "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "sha256": "22e800352683435fcc7dc51866340f05942219f94280da9c74975e9cb5b672ac"
+              }
+            ],
+            "h_geometry_states": 0,
+            "pane_states": 0,
+            "metric_source": [
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /Users/runner/work/physim/physim/third_party/fonts/NotoSans.ttf"
+            ],
+            "markers": [
+              "DOCUMENTATION MATH SELF-TEST: PASSED",
+              "DOCUMENTATION MATH SELF-TEST: PASSED"
+            ]
+          },
+          {
+            "name": "accessibility_edit_macos",
+            "status": "passed",
+            "result_member": "Release/test-results/run-lgszn5s1/results.json",
+            "app_binaries": [
+              {
+                "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "sha256": "22e800352683435fcc7dc51866340f05942219f94280da9c74975e9cb5b672ac"
+              }
+            ],
+            "h_geometry_states": 0,
+            "pane_states": 0,
+            "metric_source": [
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+            ],
+            "markers": [
+              "NATIVE F1 SEARCH OPEN: PASSED (actual AppKit Cmd+F)",
+              "MAC F1 EDIT: actual fields, Unicode selection/replacement, caret, end reveal, hidden rejection and editor isolation passed",
+              "DOCUMENTATION EDIT SELF-TEST: PASSED"
+            ]
+          },
+          {
+            "name": "documentation_panes",
+            "status": "passed",
+            "result_member": "Release/test-results/run-lgszn5s1/results.json",
+            "app_binaries": [
+              {
+                "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "sha256": "22e800352683435fcc7dc51866340f05942219f94280da9c74975e9cb5b672ac"
+              }
+            ],
+            "h_geometry_states": 0,
+            "pane_states": 24,
+            "metric_source": [
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+            ],
+            "markers": [
+              "DOCUMENTATION PANES SELF-TEST: PASSED"
+            ]
+          },
+          {
+            "name": "documentation_h",
+            "status": "passed",
+            "result_member": "Release/test-results/run-lgszn5s1/results.json",
+            "app_binaries": [
+              {
+                "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "sha256": "22e800352683435fcc7dc51866340f05942219f94280da9c74975e9cb5b672ac"
+              }
+            ],
+            "h_geometry_states": 56,
+            "pane_states": 0,
+            "metric_source": [
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "DOCUMENTATION H METRIC: case=0 primary-em=1.000000 body-height=16.000 title-height=26.400"
+            ],
+            "markers": [
+              "DOCUMENTATION H SELF-TEST: PASSED"
+            ]
+          },
+          {
+            "name": "font_sources",
+            "status": "passed",
+            "result_member": "Release/test-results/run-wi0i5wjc/results.json",
+            "app_binaries": [],
+            "h_geometry_states": 0,
+            "pane_states": 0,
+            "metric_source": [],
+            "markers": []
+          }
+        ],
+        "counterexamples": [
+          {
+            "member": "Release/font-bank-state-counterexample/report.json",
+            "report": {
+              "original_source_sha256": "b07a35dc9d4ba180073aed576161d231ee6eb138bb34d6c2fc32380c0cc9b561",
+              "rows": [
+                {
+                  "kind": "binding",
+                  "command": [
+                    "/Users/runner/work/physim/physim/build/native/Release/bin/physim-font-bank-counterexample-binding",
+                    "/Users/runner/work/physim/physim/build/native/Release/font-bank-state-counterexample/binding/workflow"
+                  ],
+                  "exit_code": 1,
+                  "precise_rejection": true,
+                  "source_sha256": "58b9e68b63ead488dcfe33e4899829bac16ba58c3d1f4c0313cfd9e3c12daa48",
+                  "normalized_source_sha256": "58b9e68b63ead488dcfe33e4899829bac16ba58c3d1f4c0313cfd9e3c12daa48",
+                  "binary_sha256": "80ce499ed044fa5900cc9f8d8f8431980a878704da62e8560a509b049c93f9c5"
+                },
+                {
+                  "kind": "unpack",
+                  "command": [
+                    "/Users/runner/work/physim/physim/build/native/Release/bin/physim-font-bank-counterexample-unpack",
+                    "/Users/runner/work/physim/physim/build/native/Release/font-bank-state-counterexample/unpack/workflow"
+                  ],
+                  "exit_code": 1,
+                  "precise_rejection": true,
+                  "source_sha256": "9d1a8d9a3ef27ded92720bacd0359333f4eed756d27925a08165849313716d94",
+                  "normalized_source_sha256": "9d1a8d9a3ef27ded92720bacd0359333f4eed756d27925a08165849313716d94",
+                  "binary_sha256": "ea38378b1ffe84d73d2cb630069de8b5da6653b2a9d05b998296cdd6eb2c09bb"
+                }
+              ],
+              "shared_source_unchanged": true,
+              "scope": "Injected upload GL error with caller texture nonzero and unpack alignment8; not GPU exhaustion or negative-process leak acceptance"
+            }
+          },
+          {
+            "member": "Release/native-search-counterexample/report.json",
+            "report": {
+              "command": [
+                "/opt/homebrew/opt/python@3.15/bin/python3.15",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "accessibility_edit_macos",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim-native-search-counterexample",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/native-search-counterexample/workflow"
+              ],
+              "exit_code": 1,
+              "precise_rejection": true,
+              "source_sha256": "488160c0963f70c58249f58dc81f1641b46c9e771133f85ac96d85ed8388a714",
+              "previous_handler_sha256": "3b77f6063d3ca0db6c17e77fd558e8a90e85cca95a35c135b5dacdbd4ea73a8c",
+              "fixture_sha256": "f5aa88ede0bd83111b70e9bebbedba6f961c4ecad82431f73ffee4a410da568c",
+              "binary_sha256": "7d29551e356b57b68a776e49eb1c82108574e2de4de89167ec215b2d916b4f95",
+              "shared_source_unchanged": true,
+              "scope": "Actual AppKit Cmd+F; only the native Search handler is restored to its previous body"
+            }
+          }
+        ],
+        "path": "build/validation/macos-menu-workflows-2026-10-30/f1-metrics-arm.zip"
+      },
+      "job_log": {
+        "path": "build/validation/macos-menu-workflows-2026-10-30/f1-origin-metrics-124402565043.log",
+        "sha256": "a93739c41802d05d8c8e5efa832205471011f6c0b47809ca488e15c57864f485"
+      }
+    },
+    "intel": {
+      "job_id": 124402565304,
+      "portable_passed": 1,
+      "gui_passed": 5,
+      "metric_contract_tests_passed": 3,
+      "actual_native_and_gl_counterexamples_rejected": 3,
+      "artifact": {
+        "archive": "f1-metrics-intel.zip",
+        "bytes": 16879,
+        "sha256": "4327a5cc87d175ed8f7e8b8198cf9c82cb5dbe258c4e75321e4ebe6b49613eaa",
+        "members": {
+          "Release/font-bank-state-counterexample/binding/stderr": "50ac9f3216f41c7007722ca9e6053e632e3c59dbdb1abf285d3517819412f062",
+          "Release/font-bank-state-counterexample/report.json": "24372272da682a2afa4bf2d95266774c31d8c8d1a1acf1fae8b5979fc2bc3a80",
+          "Release/font-bank-state-counterexample/unpack/stderr": "df27686857e61858cf57f50d5da350756ca033201241f7596cc57fdb741783ee",
+          "Release/native-search-counterexample/report.json": "2c69c0347f787df41458a228c3598c688ee4a45e0018959626d376e2ff9c62a4",
+          "Release/native-search-counterexample/stderr": "1c3b45e4643f6384784aaf868785c1db932fa450effba689e1e0c191249758b7",
+          "Release/native-search-counterexample/stdout": "ef1e47ee5c8b380d89b78272985e92b82d4a5ffcf7815b5afe8c5a9fea224101",
+          "Release/test-results/run-ezlbj5_e/results.json": "4ed3eff90f0616d305925a26d2708fae857249e10f1f05dd60dad4ef316079df",
+          "Release/test-results/run-fijp30qt/results.json": "45da9d67ddcf4e6dbd64cf2e64e396fc357bdc7bc13c136aa92560ee2ead8987"
+        },
+        "cases": [
+          {
+            "name": "font_sources",
+            "status": "passed",
+            "result_member": "Release/test-results/run-ezlbj5_e/results.json",
+            "app_binaries": [],
+            "h_geometry_states": 0,
+            "pane_states": 0,
+            "metric_source": [],
+            "markers": []
+          },
+          {
+            "name": "font_bank_ui",
+            "status": "passed",
+            "result_member": "Release/test-results/run-fijp30qt/results.json",
+            "app_binaries": [],
+            "h_geometry_states": 0,
+            "pane_states": 0,
+            "metric_source": [],
+            "markers": []
+          },
+          {
+            "name": "documentation_math",
+            "status": "passed",
+            "result_member": "Release/test-results/run-fijp30qt/results.json",
+            "app_binaries": [
+              {
+                "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "sha256": "8c958b3da91c3133178d027b5c328a32110c2267a0f65387d2af0187a7191782"
+              }
+            ],
+            "h_geometry_states": 0,
+            "pane_states": 0,
+            "metric_source": [
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /Users/runner/work/physim/physim/third_party/fonts/NotoSans.ttf"
+            ],
+            "markers": [
+              "DOCUMENTATION MATH SELF-TEST: PASSED",
+              "DOCUMENTATION MATH SELF-TEST: PASSED"
+            ]
+          },
+          {
+            "name": "accessibility_edit_macos",
+            "status": "passed",
+            "result_member": "Release/test-results/run-fijp30qt/results.json",
+            "app_binaries": [
+              {
+                "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "sha256": "8c958b3da91c3133178d027b5c328a32110c2267a0f65387d2af0187a7191782"
+              }
+            ],
+            "h_geometry_states": 0,
+            "pane_states": 0,
+            "metric_source": [
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+            ],
+            "markers": [
+              "NATIVE F1 SEARCH OPEN: PASSED (actual AppKit Cmd+F)",
+              "MAC F1 EDIT: actual fields, Unicode selection/replacement, caret, end reveal, hidden rejection and editor isolation passed",
+              "DOCUMENTATION EDIT SELF-TEST: PASSED"
+            ]
+          },
+          {
+            "name": "documentation_panes",
+            "status": "passed",
+            "result_member": "Release/test-results/run-fijp30qt/results.json",
+            "app_binaries": [
+              {
+                "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "sha256": "8c958b3da91c3133178d027b5c328a32110c2267a0f65387d2af0187a7191782"
+              }
+            ],
+            "h_geometry_states": 0,
+            "pane_states": 24,
+            "metric_source": [
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+            ],
+            "markers": [
+              "DOCUMENTATION PANES SELF-TEST: PASSED"
+            ]
+          },
+          {
+            "name": "documentation_h",
+            "status": "passed",
+            "result_member": "Release/test-results/run-fijp30qt/results.json",
+            "app_binaries": [
+              {
+                "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "sha256": "8c958b3da91c3133178d027b5c328a32110c2267a0f65387d2af0187a7191782"
+              }
+            ],
+            "h_geometry_states": 56,
+            "pane_states": 0,
+            "metric_source": [
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "DOCUMENTATION H METRIC: case=0 primary-em=1.000000 body-height=16.000 title-height=26.400"
+            ],
+            "markers": [
+              "DOCUMENTATION H SELF-TEST: PASSED"
+            ]
+          }
+        ],
+        "counterexamples": [
+          {
+            "member": "Release/font-bank-state-counterexample/report.json",
+            "report": {
+              "original_source_sha256": "b07a35dc9d4ba180073aed576161d231ee6eb138bb34d6c2fc32380c0cc9b561",
+              "rows": [
+                {
+                  "kind": "binding",
+                  "command": [
+                    "/Users/runner/work/physim/physim/build/native/Release/bin/physim-font-bank-counterexample-binding",
+                    "/Users/runner/work/physim/physim/build/native/Release/font-bank-state-counterexample/binding/workflow"
+                  ],
+                  "exit_code": 1,
+                  "precise_rejection": true,
+                  "source_sha256": "58b9e68b63ead488dcfe33e4899829bac16ba58c3d1f4c0313cfd9e3c12daa48",
+                  "normalized_source_sha256": "58b9e68b63ead488dcfe33e4899829bac16ba58c3d1f4c0313cfd9e3c12daa48",
+                  "binary_sha256": "b5e264a50e4044ed4bfe9d8e824b229097fd51a0f0800c3d39cee789d95e155c"
+                },
+                {
+                  "kind": "unpack",
+                  "command": [
+                    "/Users/runner/work/physim/physim/build/native/Release/bin/physim-font-bank-counterexample-unpack",
+                    "/Users/runner/work/physim/physim/build/native/Release/font-bank-state-counterexample/unpack/workflow"
+                  ],
+                  "exit_code": 1,
+                  "precise_rejection": true,
+                  "source_sha256": "9d1a8d9a3ef27ded92720bacd0359333f4eed756d27925a08165849313716d94",
+                  "normalized_source_sha256": "9d1a8d9a3ef27ded92720bacd0359333f4eed756d27925a08165849313716d94",
+                  "binary_sha256": "e24169cbce8d411da5aed55bedc315ca6534aa71a014b1010f942020c16f67fc"
+                }
+              ],
+              "shared_source_unchanged": true,
+              "scope": "Injected upload GL error with caller texture nonzero and unpack alignment8; not GPU exhaustion or negative-process leak acceptance"
+            }
+          },
+          {
+            "member": "Release/native-search-counterexample/report.json",
+            "report": {
+              "command": [
+                "/usr/local/opt/python@3.14/bin/python3.14",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "accessibility_edit_macos",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim-native-search-counterexample",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/native-search-counterexample/workflow"
+              ],
+              "exit_code": 1,
+              "precise_rejection": true,
+              "source_sha256": "488160c0963f70c58249f58dc81f1641b46c9e771133f85ac96d85ed8388a714",
+              "previous_handler_sha256": "3b77f6063d3ca0db6c17e77fd558e8a90e85cca95a35c135b5dacdbd4ea73a8c",
+              "fixture_sha256": "f5aa88ede0bd83111b70e9bebbedba6f961c4ecad82431f73ffee4a410da568c",
+              "binary_sha256": "595b147f3807dfd92226ee9cdd047d27a096e119f4262c1f12bc0c0be3b2f801",
+              "shared_source_unchanged": true,
+              "scope": "Actual AppKit Cmd+F; only the native Search handler is restored to its previous body"
+            }
+          }
+        ],
+        "path": "build/validation/macos-menu-workflows-2026-10-30/f1-metrics-intel.zip"
+      },
+      "job_log": {
+        "path": "build/validation/macos-menu-workflows-2026-10-30/f1-origin-metrics-124402565304.log",
+        "sha256": "f2eefd2b131be4c67b34abe0a650f5d7ef9049f2eb56bbfc09bbf2e6f33456a9"
+      }
+    }
+  },
+  "local_baseline": "docs/verification/f1-repairs-2026-10-31.json",
+  "previous_failures": [
+    {
+      "source_commit": "de6586121dbdc00cb5066217cfb8383a331653b8",
+      "run_id": 41153543476,
+      "diagnostic": "Counterexample link omitted LINEBREAK and GRAPHEME, failing with missing set_graphemebreaks_utf8/set_linebreaks_utf8. Actual app builds passed; later checks skipped, no negative acceptance.",
+      "logs": [
+        {
+          "path": "build/validation/macos-menu-workflows-2026-10-30/f1-origin-first-124395232241.log",
+          "sha256": "3f00f5793b20c8b52983068554d42069c5d6504774479b713867406fe43e37f7"
+        },
+        {
+          "path": "build/validation/macos-menu-workflows-2026-10-30/f1-origin-first-124395232512.log",
+          "sha256": "aa52a7f0bbb4f39252ddfcc071afa9acf29611923e07ea454c57b0c4bb989190"
+        }
+      ]
+    },
+    {
+      "source_commit": "9f4c842f75151ce8889f28ea9651618d7f2f97c9",
+      "run_id": 41154656936,
+      "diagnostic": "Actual native H fixture failed at stage 231: unmodified End scrolls on macOS; use Cmd+Right for line end",
+      "artifacts": {
+        "arm": {
+          "path": "build/validation/macos-menu-workflows-2026-10-30/f1-linkfix-arm.zip",
+          "sha256": "ba00ecac4142d8e8ba84937a551d312c5895f994b1f415f341b145ff473e04b5",
+          "bytes": 16827,
+          "cases": [
+            {
+              "name": "font_bank_ui",
+              "status": "passed"
+            },
+            {
+              "name": "documentation_math",
+              "status": "passed"
+            },
+            {
+              "name": "accessibility_edit_macos",
+              "status": "passed"
+            },
+            {
+              "name": "documentation_panes",
+              "status": "passed"
+            },
+            {
+              "name": "documentation_h",
+              "status": "failed"
+            },
+            {
+              "name": "font_sources",
+              "status": "passed"
+            }
+          ]
+        },
+        "intel": {
+          "path": "build/validation/macos-menu-workflows-2026-10-30/f1-linkfix-intel.zip",
+          "sha256": "cca19470c77e9904f121f6514303cc420e533269f568bd1b94aa004264af8e30",
+          "bytes": 16875,
+          "cases": [
+            {
+              "name": "font_sources",
+              "status": "passed"
+            },
+            {
+              "name": "font_bank_ui",
+              "status": "passed"
+            },
+            {
+              "name": "documentation_math",
+              "status": "passed"
+            },
+            {
+              "name": "accessibility_edit_macos",
+              "status": "passed"
+            },
+            {
+              "name": "documentation_panes",
+              "status": "passed"
+            },
+            {
+              "name": "documentation_h",
+              "status": "failed"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "source_commit": "9dcd3e0ac97ed36f2f1a71be9467514a47b540f8",
+      "run_id": 41155003105,
+      "diagnostic": "Native H completed, but wrapper rejected valid Helvetica em ratio 1 because it assumed >1.05; exact source-file comparison replaces this assumption",
+      "artifacts": {
+        "arm": {
+          "path": "build/validation/macos-menu-workflows-2026-10-30/f1-line-end-arm.zip",
+          "sha256": "e64a394f68c70792c7369ad937cc609410f107a03c6bf5be4e13e10986129b71",
+          "bytes": 17525,
+          "cases": [
+            {
+              "name": "font_bank_ui",
+              "status": "passed"
+            },
+            {
+              "name": "documentation_math",
+              "status": "passed"
+            },
+            {
+              "name": "accessibility_edit_macos",
+              "status": "passed"
+            },
+            {
+              "name": "documentation_panes",
+              "status": "passed"
+            },
+            {
+              "name": "documentation_h",
+              "status": "failed"
+            },
+            {
+              "name": "font_sources",
+              "status": "passed"
+            }
+          ]
+        },
+        "intel": {
+          "path": "build/validation/macos-menu-workflows-2026-10-30/f1-line-end-intel.zip",
+          "sha256": "19d5665d44f9bb2afba2a5d09f28e77d6a6982d204be42f4cf2f63de10160b52",
+          "bytes": 17597,
+          "cases": [
+            {
+              "name": "font_bank_ui",
+              "status": "passed"
+            },
+            {
+              "name": "documentation_math",
+              "status": "passed"
+            },
+            {
+              "name": "accessibility_edit_macos",
+              "status": "passed"
+            },
+            {
+              "name": "documentation_panes",
+              "status": "passed"
+            },
+            {
+              "name": "documentation_h",
+              "status": "failed"
+            },
+            {
+              "name": "font_sources",
+              "status": "passed"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "checker_basis": {
+    "implementation": "(hhea.ascent - hhea.descent) / head.unitsPerEm from actual loaded font source and selected TTC face; compare retained em exactly",
+    "renderer_basis": "third_party/nuklear.h: stbtt_ScaleForPixelHeight and stbtt_ScaleForMappingEmToPixels; app/ui_backend.c: ps_ui_font_em_ratio",
+    "same_56_state_local_outputs_rechecked": {
+      "windows": {
+        "original_steps": "build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-wwb7ojfa\\documentation_h\\files ä\\app-steps.json",
+        "steps_sha256": "30a922055f87c563df42ed5e0fb3934fe27c72782460a3960310e91ba71638d0",
+        "actual_56_state_output_passed": true,
+        "primary_font": "C:\\WINDOWS\\Fonts\\segoeui.ttf",
+        "font_sha256": "704eada12961a27fd271f7d3b09e2066520e758390c1776744eff430fee30f6e",
+        "source_em": 1.330078125,
+        "counterexamples": [
+          {
+            "name": "lost-retained-em",
+            "rejected": true,
+            "diagnostic": "Missing actual font em correction in native H drawing"
+          },
+          {
+            "name": "wrong-body-height",
+            "rejected": true,
+            "diagnostic": "Missing actual font em correction in native H drawing"
+          },
+          {
+            "name": "missing-font-source",
+            "rejected": true,
+            "diagnostic": "Missing actual primary font source for H metric comparison"
+          }
+        ],
+        "checker_sha256": "11511dc21a80e05350d4657cc7cc6dfdb2623f44f4cd64f0f51185244e820624"
+      },
+      "linux": {
+        "original_steps": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-wtzsvybh/documentation_h/files ä/app-steps.json",
+        "steps_sha256": "d4fb96dc263352890e83b16914b561aa89fda9249e52243dd2afb7cfa07f82ca",
+        "actual_56_state_output_passed": true,
+        "primary_font": "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        "font_sha256": "7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954",
+        "source_em": 1.1640625,
+        "counterexamples": [
+          {
+            "name": "lost-retained-em",
+            "rejected": true,
+            "diagnostic": "Missing actual font em correction in native H drawing"
+          },
+          {
+            "name": "wrong-body-height",
+            "rejected": true,
+            "diagnostic": "Missing actual font em correction in native H drawing"
+          },
+          {
+            "name": "missing-font-source",
+            "rejected": true,
+            "diagnostic": "Missing actual primary font source for H metric comparison"
+          }
+        ],
+        "checker_sha256": "11511dc21a80e05350d4657cc7cc6dfdb2623f44f4cd64f0f51185244e820624"
+      }
+    },
+    "snapshot_unit_runs": {
+      "windows": {
+        "platform": "windows",
+        "steps": [
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "-B",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tests\\test_documentation_typography_metrics.py",
+              "D:\\Physim\\build\\validation\\macos-menu-workflows-2026-10-30\\font-metric-fixtures-windows-snapshot"
+            ],
+            "exit_code": 0,
+            "stdout": "",
+            "stderr": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.018s\n\nOK\n"
+          },
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "-B",
+              "D:\\Physim\\build\\validation\\macos-menu-workflows-2026-10-30\\recheck-h-metrics.py"
+            ],
+            "exit_code": 0,
+            "stdout": "{\"original_steps\": \"build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\test-results\\\\run-wwb7ojfa\\\\documentation_h\\\\files \\u00e4\\\\app-steps.json\", \"steps_sha256\": \"30a922055f87c563df42ed5e0fb3934fe27c72782460a3960310e91ba71638d0\", \"actual_56_state_output_passed\": true, \"primary_font\": \"C:\\\\WINDOWS\\\\Fonts\\\\segoeui.ttf\", \"font_sha256\": \"704eada12961a27fd271f7d3b09e2066520e758390c1776744eff430fee30f6e\", \"source_em\": 1.330078125, \"counterexamples\": [{\"name\": \"lost-retained-em\", \"rejected\": true, \"diagnostic\": \"Missing actual font em correction in native H drawing\"}, {\"name\": \"wrong-body-height\", \"rejected\": true, \"diagnostic\": \"Missing actual font em correction in native H drawing\"}, {\"name\": \"missing-font-source\", \"rejected\": true, \"diagnostic\": \"Missing actual primary font source for H metric comparison\"}], \"checker_sha256\": \"11511dc21a80e05350d4657cc7cc6dfdb2623f44f4cd64f0f51185244e820624\"}\n",
+            "stderr": ""
+          }
+        ],
+        "source_files": {
+          "tests/check_display_workflow.py": "11511dc21a80e05350d4657cc7cc6dfdb2623f44f4cd64f0f51185244e820624",
+          "tests/test_documentation_typography_metrics.py": "92cded64fb0c2a6a2ab645522f56215420ab44c54bfb3195eee5b952c468813b"
+        }
+      },
+      "linux": {
+        "platform": "linux",
+        "steps": [
+          {
+            "command": [
+              "/usr/bin/python3",
+              "-B",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/test_documentation_typography_metrics.py",
+              "/mnt/d/Physim/build/validation/macos-menu-workflows-2026-10-30/font-metric-fixtures-linux-snapshot"
+            ],
+            "exit_code": 0,
+            "stdout": "",
+            "stderr": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.089s\n\nOK\n"
+          },
+          {
+            "command": [
+              "/usr/bin/python3",
+              "-B",
+              "/mnt/d/Physim/build/validation/macos-menu-workflows-2026-10-30/recheck-h-metrics.py"
+            ],
+            "exit_code": 0,
+            "stdout": "{\"original_steps\": \"build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-wtzsvybh/documentation_h/files \\u00e4/app-steps.json\", \"steps_sha256\": \"d4fb96dc263352890e83b16914b561aa89fda9249e52243dd2afb7cfa07f82ca\", \"actual_56_state_output_passed\": true, \"primary_font\": \"/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf\", \"font_sha256\": \"7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954\", \"source_em\": 1.1640625, \"counterexamples\": [{\"name\": \"lost-retained-em\", \"rejected\": true, \"diagnostic\": \"Missing actual font em correction in native H drawing\"}, {\"name\": \"wrong-body-height\", \"rejected\": true, \"diagnostic\": \"Missing actual font em correction in native H drawing\"}, {\"name\": \"missing-font-source\", \"rejected\": true, \"diagnostic\": \"Missing actual primary font source for H metric comparison\"}], \"checker_sha256\": \"11511dc21a80e05350d4657cc7cc6dfdb2623f44f4cd64f0f51185244e820624\"}\n",
+            "stderr": ""
+          }
+        ],
+        "source_files": {
+          "tests/check_display_workflow.py": "11511dc21a80e05350d4657cc7cc6dfdb2623f44f4cd64f0f51185244e820624",
+          "tests/test_documentation_typography_metrics.py": "92cded64fb0c2a6a2ab645522f56215420ab44c54bfb3195eee5b952c468813b"
+        }
+      }
+    }
+  },
+  "limits": [
+    "User Mac stayed off and was not accessed; hosted GitHub runners executed these tests",
+    "No manual VoiceOver, physical menu-bar activation, fullscreen or full-UI design acceptance",
+    "Targeted cases do not establish the entire broad GUI suite or unrelated CI",
+    "Original baseline reports and failure archives remain unchanged; no earlier skipped step is counted as executed"
+  ]
+}

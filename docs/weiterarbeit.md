@@ -7,6 +7,12 @@ Bei Widersprüchen zuerst Quellstand, Datum und betroffenen Umfang abgleichen.
 
 ## Letzter abgeschlossener Abschnitt
 
+Zuletzt sind die gezielten F1-Reparaturen und die Studien-/Projektmenüabläufe auf
+Intel und Apple Silicon vollständig bestanden: `b648b0e7`/`41155920224` und
+`725dd84e`/`41156020989`. [F1-Abnahme und Gegenproben](verification/macos-f1-repairs-2026-10-31.json),
+[fünf Studien-/Projektabläufe je Architektur](verification/macos-study-menu-2026-10-31.json).
+Der nächste aktive Prüfumfang und der neueste lokale Anschluss stehen unten.
+
 Die Workspace-Menüportierung ist abgeschlossen: Dateitab-Menüs über AppKit,
 Projektmanager per nativer Menü-Tastatureingabe und Einstellungen über Cmd+Komma.
 Lauf `41147957905` auf `7a95c8ae` besteht auf Intel und Apple Silicon je **4/4**.
@@ -18,7 +24,7 @@ Die frühere Editorregression `41147445304` besteht je 4/4 und die Menüregressi
 
 Auch Windows Release und Linux Debug ASan/UBSan bestehen die Matrizen und die
 Fehlerfälle. Die ersten lokalen Gesamtläufe `run-ch7e30mf`/`run-_qma9a32` bleiben
-korrekt **3/4 fehlgeschlagen**, weil der Python-Prüfer nach sieben Umschaltungen
+korrekt **3/4 bestanden, insgesamt fehlgeschlagen**, weil der Python-Prüfer nach sieben Umschaltungen
 noch Flags 32 statt der tatsächlichen 96 erwartete. Seit Protokoll C startet der
 Standard geschlossen mit 31; 31 xor 127 ergibt 96. Beide gespeicherten Dateien
 sind 312 Bytes groß und haben SHA256
@@ -32,11 +38,11 @@ der korrigierte Helfer lief als `corrected-settings-r2` erfolgreich.
 
 **Alle lokalen Sessions/Builds/Apps/Archivläufe dieses Abschnitts sind beendet.**
 `mac-workspace-menu-first` sichert den ursprünglichen Stand `fe54e7a0`.
-Neuester eingefrorener Anschluss ist **`mac-workspace-menu-accepted` mit 119
+Der eingefrorene Anschluss dieses Abschnitts ist **`mac-workspace-menu-accepted` mit 119
 eigenen Eingaben, 1098 gegen `7a95c8ae` abgeglichenen Compiler-/Testdateien,
 200 Windows-/103 Linux-Runtimedateien und zurückgelesenen Archivbytes**.
 Nur die geprüfte Python-Erwartung änderte sich zwischen diesen Quellkopien;
-die App-Runtimes blieben gleich. Diesen Anschluss vor weiteren Änderungen nutzen.
+die App-Runtimes blieben gleich. Der neuere Anschluss steht im nächsten Abschnitt.
 Die überholten Workspace-CI-Läufe `41147445351`/`41147732814` sind bestätigt
 abgebrochen, keine positiven Nachweise.
 
@@ -47,67 +53,93 @@ Protokoll-Trennlinie allein wegen eines Kontextwechsels erneut prüfen.
 
 ## Nächster konkreter Schritt
 
-**Gehosteten F1-Lauf `41153551967` auf `de658612` verfolgen; danach übrige aktive
-Menütests portieren.** Die fünf Ursachen sind korrigiert und in beide Repositories
-gepusht. Windows Release und Linux Debug ASan/UBSan bestehen je **5/5 GUI-Fälle**
-(`font_bank_ui`, `documentation_keyboard`, `documentation_math`,
-`documentation_panes`, `documentation_h`) sowie separat **1/1 `font_sources`**.
-Die beiden absichtlich fehlerhaften Grafikvarianten werden auf beiden Plattformen
-gezielt abgelehnt. [Kompakter Nachweis](verification/f1-repairs-2026-10-31.json).
-`font_sources` gehört zu `--test`, nicht zu `--test-display`; das gemeinsame
-Filterargument im ersten GUI-Aufruf führte deshalb korrekt nur fünf Fälle aus.
-Der separate portable Nachlauf ist tatsächlich bestanden, keine angenommene sechste
-GUI-Prüfung. Diese lokalen Fälle nicht wegen eines Kontextwechsels neu starten.
+**Als Nächstes die aktiven Typografie-/Bereichsfokus- und alten F10-Erwartungen
+prüfen/portieren:** beim registrierten `ui_typography_workflow` und den
+`shell_theme_*`-Fällen beginnen; vor Änderungen den tatsächlichen Einstieg
+abgleichen. `ui_size_tests.inc` erzwingt noch `toolbar_menu=1` und erwartet F10,
+`shell_theme_tests.inc` alte In-Window-Menüflächen. Diese Annahmen auf macOS an
+ADR 024 anpassen, alle Schriftgrößen/Theme-/Speicher-/Abbruchprüfungen erhalten.
+Keine alten internen Menüflächen ausschließlich für diese Tests wiederherstellen.
 
-- U+2318 (⌘) ist jetzt in allen fünf UI-/Code-/Fallback-Bereichen enthalten.
-  Der schon vorher mit positiver und negativer Rasterprobe bestätigte Testinput
-  `tests/test_font_sources.c` ist ausdrücklich im neuen Quellsnapshot enthalten.
-- Der Fontbank-Test prüft nach injiziertem GL-Fehler die vorherige lebende
-  Nichtnull-Textur und Unpack-Ausrichtung 8. Der Renderer blieb unverändert.
-  `tools/check_font_bank_state_counterexample.py` baut isoliert je eine falsche
-  Bindungs-/Unpack-Wiederherstellung; beide treffen unter Windows/Linux exakt
-  ihre eigene Assertion mit Exitcode 1. Das ist kein Nachweis für GPU-Erschöpfung
-  oder Leckfreiheit der absichtlich früh beendeten Negativprozesse.
-- F1-Tastaturbefehl, native Suche und Aktionspopover verwenden dieselbe
-  Öffnungstransaktion einschließlich Suchinsel und Tastaturfokus.
-  Die Mac-Feldfixture öffnet sie jetzt mit echtem AppKit-Cmd+F und behält alle
-  Unicode-/Auswahl-/Caret-/Reveal-/Hidden-Prüfungen. Die neue gehostete Gegenprobe
-  setzt ausschließlich den alten nativen Handler in einer isolierten Include-Kette
-  zurück und verlangt genau den Cmd+F-Öffnungsfehler; ihre Ausführung ist noch offen.
-- H nutzt für Kontextsteuerung und Suchinsel-Schließen echte F6-Wechsel und
-  kurze Tab-/Umschalt+Tab-Wege. Keine direkte Fokuszuweisung; der interne
-  H-Watchdog wurde nicht erhöht. Alle 56 Geometriezustände bleiben erhalten.
-- Die Bereichsprüfung behält alle 24 Zustände; nur ihr interner Watchdog liegt
-  jetzt bei 70 Sekunden innerhalb des bisherigen äußeren 75-Sekunden-Budgets.
+Der Studien-Menülauf **`41156020989` auf `725dd84e` ist beendet**: Intel-Job
+`124402876775` und Apple-Silicon-Job `124402876974` bestehen je **5/5**. Beide
+Ergebnis-ZIPs sind hashgeprüft und belegen je neun echte AppKit-Menübefehle.
+[Nachweis und lokaler Anschluss](verification/macos-study-menu-2026-10-31.json).
+Diese Gruppe nicht wegen eines Kontextwechsels neu prüfen.
 
-Lokale GUI-Ergebnisse: Windows `run-wwb7ojfa`, Linux `run-wtzsvybh`;
-portable Ergebnisse: Windows `run-gtln9on5`, Linux `run-i1exa7dx`.
-Alle vier lokalen Build-/Test-Sessions sind beendet. Der neue eingefrorene
-Anschluss heißt **`f1-repairs-accepted-local`**; er ersetzt für neue Änderungen
-`mac-workspace-menu-accepted`, ohne dessen Belege zu verändern.
-1100 Compiler-/Testdateien entsprechen nach beidseitiger Zeilenendennormalisierung
-`de658612`; 212 Windows-/111 Linux-Runtimedateien und alle referenzierten Archivbytes
-sind zurückgelesen. Der Git-Blob des libunibreak-Manifests enthält selbst CRLF;
-dieser Metadatenunterschied ist im Nachweis ausdrücklich eingegrenzt.
-228 entbehrliche BMP-Rohbilder der beiden erfolgreichen GUI-Läufe wurden entfernt
-(491.327.304 Bytes). Das tatsächlich betrachtete 32-px-Formelbild bleibt als ein
-PNG unter dem Kampagnenordner; Logs, App-Schritte, Quellen, Runtimes und die alten
-offenen Mac-Fehlerarchive sind erhalten. Diese enge Sichtprüfung ersetzt keine
-gesamte Designabnahme.
+Die vier eigenen Studien-Fixtures und `macos-study-menu.yml` sind in beide
+Repositories gepusht. Batch, zeitgesteuerte Serie, Debug-/Release-Build-Steuerung
+und benannte Workspaces verwenden unter Mac echte NSMenu-Befehle. Alle übrigen
+Prüfungen bleiben: je C/Physim mit m/cm, adaptive Endzeit, Archiv-/Exportvergleich,
+Abbruch, reale Parallelität, Wiederöffnung, Konflikte und beschädigter Katalog.
 
-Der gezielte Mac-Lauf war zuletzt eingereiht, Jobs **`124395257321` (ARM)** und
-**`124395257512` (Intel)**. Vorhandene Handles verwenden, keine zweite Kampagne
-wegen Wartezeit starten. Erst der tatsächliche Abschluss bestätigt die native
-Cmd+F-Gegenprobe und die reparierte AX-Feldprüfung. Der Nutzer-Mac ist weiterhin
-aus und bleibt unangetastet. Automatisch ausgelöste breitere CI-Läufe getrennt
-bewerten; aus den lokalen Teilprüfungen kein Gesamtgrün ableiten.
+Windows erster Vollaufruf bleibt korrekt **4/5 bestanden, insgesamt fehlgeschlagen**
+(`run-8wx7g1wf`):
+Die alte Batch-Mausfixture klickte auf die Position des unterhalb des sichtbaren
+Workspace liegenden Parallel-Reglers und traf das Protokoll; die Arbeiterzahl
+blieb 1 statt 2. Stufe 111 und die spätere Parallelitätsprüfung verwarfen das.
+Linux erster Aufruf besteht
+**5/5** (`run-j8e4vtez`). Die reparierte Fixture scrollt über echte SDL-Ereignisse
+zuerst den Regler und danach den Startknopf sichtbar, ohne einen Wert direkt zu
+setzen. Nur dieser geänderte Fall wurde erneut geprüft: Windows `run-msthnd8a`
+und Linux `run-yu6mwr2a`, je **1/1**. Die vier unveränderten Fälle behalten ihren
+ersten Nachweis; daraus keinen einzelnen neuen Vollaufruf mit einer Binärdatei
+konstruieren. Die ursprünglichen fehlgeschlagenen Windows-Batch-Bilder bleiben.
 
-Die unveränderte Mac-Baseline `41146212249` (`c35fc39d`: Intel 22/27, ARM 23/27,
-je 19/19 portable Fälle) und ihre ZIPs/Logs bleiben erhalten.
-[Ursprüngliche Diagnose](verification/macos-f1-open-findings-2026-10-31.json).
-Die dort unabhängig bestandene externe Lesetextprüfung bleibt von der reparierten
-in-process Feldfixture getrennt. Die drei dort übersprungenen späteren
-Renderer-Gegenproben weiterhin nicht als ausgeführt zählen.
+**Alle lokalen Builds/Apps/Prüf- und Archivsessions sind beendet. Neuester
+eingefrorener Anschluss: `mac-studies-menu-accepted-local`.** 130 eigene Eingaben,
+1101 Compiler-/Testdateien entsprechen nach beidseitiger Zeilenendennormalisierung
+`725dd84e`; 212 Windows-/111 Linux-Runtimedateien und alle referenzierten Archivbytes
+sind zurückgelesen. `mac-studies-menu-first` erhält den ursprünglichen Fehlerstand,
+`mac-studies-menu-visible` den tatsächlich ausgeführten Batch-Nachlauf. Der finale
+Overlay ergänzt nur den H-Metrikprüfer und seinen portablen Test; die App-Binärbytes
+bleiben identisch zum Batch-Nachlauf. Unter beiden lokalen Plattformen bestehen
+3 Metriktests und die Nachprüfung der vorhandenen 56 echten H-Zustände samt drei
+gezielten Fehlern (verlorener Faktor, falsche Höhe, fehlende Schriftquelle).
+Diese Fälle ohne relevante Änderung nicht erneut beginnen.
+
+63 entbehrliche BMP-Rohbilder bestandener Studienfälle wurden entfernt
+(201.925.494 Bytes). Logs, App-Schritte, Projekte/Läufe/Berichte/Exporte,
+Quell-/Runtime-Snapshots und die ursprünglichen Fehlerbilder bleiben erhalten.
+Die vorherigen F1-Läufe hatten bereits 228 BMPs/491.327.304 Bytes eingespart;
+ihr betrachtetes Formel-PNG bleibt. Keine weiteren Vollbildsammlungen nur
+wegen eines Kontextwechsels erzeugen.
+
+**F1-Reparaturen sind auf beiden Mac-Architekturen abgeschlossen:** `b648b0e7`,
+Lauf **`41155920224` (`Lulus792/physim`)**, ARM `124402565043` und Intel
+`124402565304` jeweils terminal erfolgreich. Je **5/5 GUI**, **1/1 portable
+Fontquelle**, **3/3 Metriktests** und **drei gezielt abgelehnte native/GL-
+Gegenbeispiele**. Alle sechs registrierten Ergebnisse, echte Cmd+F- und
+AX-Unicode-/Auswahl-/Caret-Prüfungen, 56 H-Geometrien und 24 Bereichszustände sind
+aus hashgeprüften Archiven gelesen. [Abnahme, Fehlerhistorie und Grenzen](verification/macos-f1-repairs-2026-10-31.json).
+Die lokale F1-Abnahme bleibt im [früheren Nachweis](verification/f1-repairs-2026-10-31.json)
+unverändert. `font_sources` ist separat mit `--test` ausgeführt; die GUI-Auswahl
+`--test-display` umfasst fünf Fälle, keine angenommene sechste GUI-Prüfung.
+
+Die Produktion korrigiert U+2318 in allen fünf UI-/Code-/Fallback-Bereichen und
+verwendet dieselbe Suchinsel-Öffnungstransaktion für Tastatur, native Suche und
+Aktionspopover. Der Renderer blieb unverändert; echte Nichtnull-Textur und
+Unpack-Ausrichtung 8 bleiben nach dem injizierten Fehler erhalten. Die Fixture
+navigiert per F6/Tab/Umschalt+Tab; H bleibt bei seinem bisherigen Watchdog,
+die 24 Bereichszustände haben intern 70 s innerhalb des äußeren 75-s-Budgets.
+
+Die Fortsetzung fand zusätzliche reine Prüferfehler und behob sie nach echtem
+Mac-Nachweis: zuerst fehlendes `LINEBREAK+GRAPHEME` beim Linken des isolierten
+Gegenbeispiels (`9f4c842f`), dann Mac-Cmd+Pfeil rechts statt unmodifiziertem Ende
+im Suchfeld (`9dcd3e0a`). Der native H-Ablauf bestand danach schon vollständig;
+der Python-Prüfer lehnte aber den gültigen Helvetica-Faktor 1,0 pauschal ab.
+Seit `b648b0e7` vergleicht er exakt mit hhea/head der tatsächlich geladenen
+Schrift und TTC-Face. Die 1,0-/Nicht-1,0-, korrupte Cache-/Höhen- und beschädigte
+Metadaten-Proben bestehen; keine bloße Aufweichung einer Mindestgrenze.
+Die gescheiterten Läufe `41153543476`, `41154656936`, `41155003105` und ihre
+Belege bleiben unverändert. Frühere übersprungene Schritte nicht als ausgeführt
+zählen. Der veraltete parallele Upstream-Lauf `41153551967` ist kein neuer
+Prüfauftrag; für diese abgeschlossene Teilmenge ist der gelesene Origin-Nachweis
+maßgeblich. Breitere automatisch ausgelöste CI bleibt getrennt zu bewerten.
+
+**Der Nutzer-Mac ist weiterhin aus und wurde nicht angesprochen.** Nur gehostete
+GitHub-Runner wurden verwendet. Manuelle VoiceOver-/Vollbild-/physische
+Menüleistenbedienung und die gesamte UI-/Designabnahme bleiben gesondert offen.
 
 Dokument-Neuladen, Vervollständigung und API-Referenz sind nun ebenfalls
 abgeschlossen: `c35fc39d`, Mac-Lauf `41146212373`, Intel/Apple Silicon je **4/4**
@@ -204,6 +236,8 @@ die gesamte CI ableiten. Die alten Fehlerprotokolle unter
 
 | Teil | Ergebnis und Nachweis | Verbleibende Grenze |
 | --- | --- | --- |
+| Mac-Studien-/Projektmenüs | `725dd84e`, `41156020989`: Intel/Apple Silicon je 5/5 mit je neun echten AppKit-Menübefehlen; lokale erste Läufe Windows 4/5 und Linux 5/5, danach reparierte Batch-Fixture je 1/1. [Nachweis](verification/macos-study-menu-2026-10-31.json). | Kein einzelner neuer lokaler Vollaufruf mit einer Binärdatei behauptet; Typografie-/Bereichsfokusabläufe und gesamte native UI-Abnahme bleiben offen. |
+| F1-Reparaturen auf Mac | `b648b0e7`, `41155920224`: Intel/Apple Silicon je 5/5 GUI, 1/1 portable Fontquelle, 3/3 Metriktests und drei gezielt abgelehnte Gegenbeispiele; je 56 H-Geometrien/24 Bereichszustände. [Nachweis](verification/macos-f1-repairs-2026-10-31.json). | Gezielte Teilabnahme; keine manuelle VoiceOver-/Vollbild-/physische Menüleistenbedienung oder gesamte GUI-Suite. |
 | Mac-Dateitabs/Projektmanager/Einstellungen | `7a95c8ae`: Intel/Apple Silicon je 4/4 mit je 68 tatsächlich gebauten/analysierten Projekten; Windows/Linux gleiche Abdeckung nach separat bestandenem Python-Prüfernachlauf mit unveränderter App. [Nachweis](verification/macos-workspace-menu-2026-10-31.json). | Breitere F1-Befunde, übrige aktive Menütests und gesamte GUI-/physische Abnahme bleiben offen. |
 | Mac-Dokument-/Completion-/API-Menüeingaben | `c35fc39d`: Intel/Apple Silicon, Windows Release und Linux Debug ASan/UBSan je 4/4 registrierte Fälle / sechs App-Unterprozesse. Gleicher Mac-Stand zusätzlich je 7/7 Menüregression. [Nachweis](verification/macos-editor-menu-2026-10-31.json). | Gesamte GUI-/Design-/VoiceOver-/physische DPI-Abnahme und andere aktive historische Menütests offen. |
 | Historische Mac-Toolbar-/Tastaturabläufe | `8d75cee7`: Intel/Apple Silicon je 7/7 einschließlich Menüadapter und App-Start; Windows Release/Linux Debug ASan/UBSan je 2/2. [Nachweis](verification/macos-menu-workflows-2026-10-31.json). | Übrige historische Workflows, manuelle VoiceOver-/Vollbildprüfung und physische Großbild-/DPI-Abnahme offen; ARM-Großvariante hatte 1080×740. |

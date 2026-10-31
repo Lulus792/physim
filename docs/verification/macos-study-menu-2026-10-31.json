@@ -1,0 +1,606 @@
+{
+  "schema": 1,
+  "date": "2026-10-31",
+  "source_commit": "725dd84ede3ccb7739221bcc68cee3aa7f59b66e",
+  "status": "Local targeted workflow coverage and both native Mac architectures complete",
+  "changes": [
+    "Existing batch, adaptive series, build profile and workspace restoration cases invoke actual AppKit menu actions on Mac",
+    "Batch fixture scrolls offscreen worker and start controls into the actual visible workspace before real pointer events; no worker value assignment or production layout change"
+  ],
+  "local": {
+    "windows": {
+      "first_full_run": {
+        "execution": {
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+            "--",
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+            "--build-dir",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+            "--config",
+            "Release",
+            "--jobs",
+            "4",
+            "--sdl",
+            "D:\\Physim\\third_party\\SDL3-3.2.30",
+            "--test-display",
+            "--test-filter",
+            "build_controls_workflow",
+            "--test-filter",
+            "named_workspaces_workflow",
+            "--test-filter",
+            "batch_workflow",
+            "--test-filter",
+            "timed_series_workflow",
+            "--test-filter",
+            "parameter_units_workflow"
+          ],
+          "exit_code": 1,
+          "app_sha256": "410242171861dca354ae81b47bc5406199a6b0ce36f350fe998d24fcdabf6d3d"
+        },
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-8wx7g1wf/results.json",
+        "sha256": "a99905fbd8ba24cf69962a30776c722bebb18d795e38f142e227be66d9369c41",
+        "cases": [
+          {
+            "name": "batch_workflow",
+            "status": "failed"
+          },
+          {
+            "name": "timed_series_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "parameter_units_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "named_workspaces_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "build_controls_workflow",
+            "status": "passed"
+          }
+        ]
+      },
+      "targeted_batch_followup": {
+        "execution": {
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+            "--",
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+            "--build-dir",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+            "--config",
+            "Release",
+            "--jobs",
+            "4",
+            "--sdl",
+            "D:\\Physim\\third_party\\SDL3-3.2.30",
+            "--test-display",
+            "--test-filter",
+            "batch_workflow"
+          ],
+          "exit_code": 0,
+          "app_sha256": "a276c68ecd913bb6faa696cc511cd728c5b3da1cd1a71a9511bb931a4b810136"
+        },
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-msthnd8a/results.json",
+        "sha256": "8569b845c9275a163a2f57a4028dbae8f9069313d5dff58776eb29179ac150ac",
+        "cases": [
+          {
+            "name": "batch_workflow",
+            "status": "passed"
+          }
+        ]
+      },
+      "acceptance": "All five workflow names covered; four unchanged cases retain their first-run evidence, only changed batch fixture rerun",
+      "metric_checker_snapshot_runs": {
+        "platform": "windows",
+        "steps": [
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "-B",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tests\\test_documentation_typography_metrics.py",
+              "D:\\Physim\\build\\validation\\macos-menu-workflows-2026-10-30\\font-metric-fixtures-windows-snapshot"
+            ],
+            "exit_code": 0,
+            "stdout": "",
+            "stderr": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.018s\n\nOK\n"
+          },
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "-B",
+              "D:\\Physim\\build\\validation\\macos-menu-workflows-2026-10-30\\recheck-h-metrics.py"
+            ],
+            "exit_code": 0,
+            "stdout": "{\"original_steps\": \"build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\test-results\\\\run-wwb7ojfa\\\\documentation_h\\\\files \\u00e4\\\\app-steps.json\", \"steps_sha256\": \"30a922055f87c563df42ed5e0fb3934fe27c72782460a3960310e91ba71638d0\", \"actual_56_state_output_passed\": true, \"primary_font\": \"C:\\\\WINDOWS\\\\Fonts\\\\segoeui.ttf\", \"font_sha256\": \"704eada12961a27fd271f7d3b09e2066520e758390c1776744eff430fee30f6e\", \"source_em\": 1.330078125, \"counterexamples\": [{\"name\": \"lost-retained-em\", \"rejected\": true, \"diagnostic\": \"Missing actual font em correction in native H drawing\"}, {\"name\": \"wrong-body-height\", \"rejected\": true, \"diagnostic\": \"Missing actual font em correction in native H drawing\"}, {\"name\": \"missing-font-source\", \"rejected\": true, \"diagnostic\": \"Missing actual primary font source for H metric comparison\"}], \"checker_sha256\": \"11511dc21a80e05350d4657cc7cc6dfdb2623f44f4cd64f0f51185244e820624\"}\n",
+            "stderr": ""
+          }
+        ],
+        "source_files": {
+          "tests/check_display_workflow.py": "11511dc21a80e05350d4657cc7cc6dfdb2623f44f4cd64f0f51185244e820624",
+          "tests/test_documentation_typography_metrics.py": "92cded64fb0c2a6a2ab645522f56215420ab44c54bfb3195eee5b952c468813b"
+        }
+      }
+    },
+    "linux": {
+      "first_full_run": {
+        "execution": {
+          "command": [
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+            "--",
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+            "--build-dir",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+            "--config",
+            "Debug",
+            "--jobs",
+            "4",
+            "--sdl",
+            "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+            "--test-display",
+            "--sanitizers",
+            "--test-filter",
+            "build_controls_workflow",
+            "--test-filter",
+            "named_workspaces_workflow",
+            "--test-filter",
+            "batch_workflow",
+            "--test-filter",
+            "timed_series_workflow",
+            "--test-filter",
+            "parameter_units_workflow"
+          ],
+          "exit_code": 0,
+          "app_sha256": "d40c8f347ff98a64ea23af86f49e8d1ef77e55ea54115dd5750858c0c99d4b3f"
+        },
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-j8e4vtez/results.json",
+        "sha256": "3e0d2363c29d86a6f0cbc5d8154656c316914b3d0d80d0d20a7b51eb4721ec96",
+        "cases": [
+          {
+            "name": "batch_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "timed_series_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "parameter_units_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "named_workspaces_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "build_controls_workflow",
+            "status": "passed"
+          }
+        ]
+      },
+      "targeted_batch_followup": {
+        "execution": {
+          "command": [
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+            "--",
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+            "--build-dir",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+            "--config",
+            "Debug",
+            "--jobs",
+            "4",
+            "--sdl",
+            "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+            "--test-display",
+            "--sanitizers",
+            "--test-filter",
+            "batch_workflow"
+          ],
+          "exit_code": 0,
+          "app_sha256": "1dd26125fbfe61d32c736b8f0b80b853cb980dbe57f1e0a23d81b4902b9221b0"
+        },
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-yu6mwr2a/results.json",
+        "sha256": "a5e865772fa3614d6c7bac2978f2e7fd976d64e5c54b4f782b1f7a4c7061df8b",
+        "cases": [
+          {
+            "name": "batch_workflow",
+            "status": "passed"
+          }
+        ]
+      },
+      "acceptance": "All five workflow names covered; four unchanged cases retain their first-run evidence, only changed batch fixture rerun",
+      "metric_checker_snapshot_runs": {
+        "platform": "linux",
+        "steps": [
+          {
+            "command": [
+              "/usr/bin/python3",
+              "-B",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/test_documentation_typography_metrics.py",
+              "/mnt/d/Physim/build/validation/macos-menu-workflows-2026-10-30/font-metric-fixtures-linux-snapshot"
+            ],
+            "exit_code": 0,
+            "stdout": "",
+            "stderr": "...\n----------------------------------------------------------------------\nRan 3 tests in 0.089s\n\nOK\n"
+          },
+          {
+            "command": [
+              "/usr/bin/python3",
+              "-B",
+              "/mnt/d/Physim/build/validation/macos-menu-workflows-2026-10-30/recheck-h-metrics.py"
+            ],
+            "exit_code": 0,
+            "stdout": "{\"original_steps\": \"build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-wtzsvybh/documentation_h/files \\u00e4/app-steps.json\", \"steps_sha256\": \"d4fb96dc263352890e83b16914b561aa89fda9249e52243dd2afb7cfa07f82ca\", \"actual_56_state_output_passed\": true, \"primary_font\": \"/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf\", \"font_sha256\": \"7da195a74c55bef988d0d48f9508bd5d849425c1770dba5d7bfc6ce9ed848954\", \"source_em\": 1.1640625, \"counterexamples\": [{\"name\": \"lost-retained-em\", \"rejected\": true, \"diagnostic\": \"Missing actual font em correction in native H drawing\"}, {\"name\": \"wrong-body-height\", \"rejected\": true, \"diagnostic\": \"Missing actual font em correction in native H drawing\"}, {\"name\": \"missing-font-source\", \"rejected\": true, \"diagnostic\": \"Missing actual primary font source for H metric comparison\"}], \"checker_sha256\": \"11511dc21a80e05350d4657cc7cc6dfdb2623f44f4cd64f0f51185244e820624\"}\n",
+            "stderr": ""
+          }
+        ],
+        "source_files": {
+          "tests/check_display_workflow.py": "11511dc21a80e05350d4657cc7cc6dfdb2623f44f4cd64f0f51185244e820624",
+          "tests/test_documentation_typography_metrics.py": "92cded64fb0c2a6a2ab645522f56215420ab44c54bfb3195eee5b952c468813b"
+        }
+      }
+    }
+  },
+  "original_windows_failure": {
+    "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-8wx7g1wf/batch_workflow/files ä/app-steps.json",
+    "sha256": "09d9954eb0b5319c69b62e8b5a824a6ab0707c81037632960d188af5cbbf542e",
+    "wanted_workers": 2,
+    "actual_workers": 1,
+    "cause": "Worker field was below the visible workspace; the old pointer coordinate hit the protocol. Existing stage111 and peak-worker assertions rejected it.",
+    "preserved": "Original app steps and failed-case BMPs retained"
+  },
+  "source_snapshot": {
+    "compiler_manifest": "build/validation/explorer-inline-2026-10-29/mac-studies-menu-accepted-local-compiler-source.json",
+    "sha256": "56c079b1a171d776dcc93850a74c2a9d8f68e6e1bc7cfc765b88ce1f4bd51f9d",
+    "files": 1101,
+    "all_normalized_blobs_match_commit": true,
+    "git_crlf_metadata_normalized_on_both_sides": [
+      "third_party/libunibreak-8.0/manifest.json"
+    ],
+    "owned_inputs": 130,
+    "runtime_index": "build/validation/explorer-inline-2026-10-29/mac-studies-menu-accepted-local-byte-index.json",
+    "runtime_files": {
+      "windows": 212,
+      "linux": 111
+    },
+    "first_snapshot": "mac-studies-menu-first",
+    "batch_followup_snapshot": "mac-studies-menu-visible",
+    "final_snapshot": "mac-studies-menu-accepted-local",
+    "final_overlay": "Only H Python metric checker and its new portable test; unchanged batch-followup app binaries retained and verified. Three unit tests plus actual 56-state archived outputs and three specific negatives per local platform passed."
+  },
+  "hosted_mac": {
+    "run_id": 41156020989,
+    "url": "https://github.com/Lulus792/physim/actions/runs/41156020989",
+    "architectures": {
+      "intel": {
+        "job_id": 124402876775,
+        "gui_cases_passed": 5,
+        "actual_menu_dispatches": 9,
+        "artifact": {
+          "archive": "study-menu-intel.zip",
+          "bytes": 9291,
+          "sha256": "43ff97912c282eafdb3496596e2bc484b8fdce154dc1c0e41b56ec7442348611",
+          "members": {
+            "Release/test-results/run-im69oj8d/results.json": "d368a7144866944b7d3a2670c4c02028f18f0ae4f1dca806eed794fb40c4bcfd",
+            "Release/test-results/run-q2zex3za/results.json": "bfe16472b0bc60a4b15d4d74b3b8735ddaa1cacf917b0ccdc1e80c3012c4b733"
+          },
+          "cases": [
+            {
+              "name": "batch_workflow",
+              "status": "passed",
+              "result_member": "Release/test-results/run-im69oj8d/results.json",
+              "app_binaries": [
+                {
+                  "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                  "sha256": "95161cb7d72927f4d730ec48e7545b6bb626b28a48d665854c85ac0c25684d92"
+                }
+              ],
+              "h_geometry_states": 0,
+              "pane_states": 0,
+              "metric_source": [
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+              ],
+              "markers": [
+                "BATCH UI SELF-TEST: PASSED",
+                "Native workflow menu command: action=9 stage=90 dispatched=1"
+              ]
+            },
+            {
+              "name": "timed_series_workflow",
+              "status": "passed",
+              "result_member": "Release/test-results/run-im69oj8d/results.json",
+              "app_binaries": [
+                {
+                  "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                  "sha256": "95161cb7d72927f4d730ec48e7545b6bb626b28a48d665854c85ac0c25684d92"
+                }
+              ],
+              "h_geometry_states": 0,
+              "pane_states": 0,
+              "metric_source": [
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+              ],
+              "markers": [
+                "TIMED SERIES series-c SELF-TEST: PASSED",
+                "TIMED SERIES series-read SELF-TEST: PASSED",
+                "TIMED SERIES series-phys SELF-TEST: PASSED",
+                "TIMED SERIES series-read SELF-TEST: PASSED",
+                "Native workflow menu command: action=9 stage=160 dispatched=1",
+                "Native workflow menu command: action=9 stage=160 dispatched=1"
+              ]
+            },
+            {
+              "name": "parameter_units_workflow",
+              "status": "passed",
+              "result_member": "Release/test-results/run-im69oj8d/results.json",
+              "app_binaries": [
+                {
+                  "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                  "sha256": "95161cb7d72927f4d730ec48e7545b6bb626b28a48d665854c85ac0c25684d92"
+                }
+              ],
+              "h_geometry_states": 0,
+              "pane_states": 0,
+              "metric_source": [
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+              ],
+              "markers": [
+                "TIMED SERIES series-cm-c SELF-TEST: PASSED",
+                "TIMED SERIES series-read SELF-TEST: PASSED",
+                "TIMED SERIES series-cm-phys SELF-TEST: PASSED",
+                "TIMED SERIES series-read SELF-TEST: PASSED",
+                "Native workflow menu command: action=9 stage=160 dispatched=1",
+                "Native workflow menu command: action=9 stage=160 dispatched=1"
+              ]
+            },
+            {
+              "name": "named_workspaces_workflow",
+              "status": "passed",
+              "result_member": "Release/test-results/run-q2zex3za/results.json",
+              "app_binaries": [
+                {
+                  "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                  "sha256": "95161cb7d72927f4d730ec48e7545b6bb626b28a48d665854c85ac0c25684d92"
+                }
+              ],
+              "h_geometry_states": 0,
+              "pane_states": 0,
+              "metric_source": [
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+              ],
+              "markers": [
+                "NAMED WORKSPACES named-write SELF-TEST: PASSED",
+                "NAMED WORKSPACES named-read SELF-TEST: PASSED",
+                "NAMED WORKSPACES named-short SELF-TEST: PASSED",
+                "NAMED WORKSPACES named-corrupt SELF-TEST: PASSED",
+                "NAMED WORKSPACES named-reset SELF-TEST: PASSED",
+                "Native workflow menu command: action=5 stage=3 dispatched=1",
+                "Native workflow menu command: action=5 stage=0 dispatched=1",
+                "Native workflow menu command: action=5 stage=0 dispatched=1"
+              ]
+            },
+            {
+              "name": "build_controls_workflow",
+              "status": "passed",
+              "result_member": "Release/test-results/run-q2zex3za/results.json",
+              "app_binaries": [
+                {
+                  "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                  "sha256": "95161cb7d72927f4d730ec48e7545b6bb626b28a48d665854c85ac0c25684d92"
+                }
+              ],
+              "h_geometry_states": 0,
+              "pane_states": 0,
+              "metric_source": [
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+              ],
+              "markers": [
+                "BUILD CONTROLS SELF-TEST: PASSED",
+                "BUILD CONTROLS SELF-TEST: PASSED",
+                "Native workflow menu command: action=17 stage=7 dispatched=1"
+              ]
+            }
+          ],
+          "counterexamples": [],
+          "path": "build/validation/macos-menu-workflows-2026-10-30/study-menu-intel.zip"
+        },
+        "job_log": {
+          "path": "build/validation/macos-menu-workflows-2026-10-30/study-origin-intel-124402876775.log",
+          "sha256": "4c50dad139dd57122972ec1eea38041a51e60353a6bbfd52d848edc8c9a30ea4"
+        }
+      },
+      "arm": {
+        "job_id": 124402876974,
+        "gui_cases_passed": 5,
+        "actual_menu_dispatches": 9,
+        "artifact": {
+          "archive": "study-menu-arm.zip",
+          "bytes": 9261,
+          "sha256": "89bf37ac89ebfa1a1ac6d249b4dab0e2c1a3a3530f917faf55ecf636221e721a",
+          "members": {
+            "Release/test-results/run-4wrqz296/results.json": "28ce832937ef2d5b0881ec827e866ff719e8748abe96a7cf5c8f2302141bc6c6",
+            "Release/test-results/run-uqa1lrn6/results.json": "909cc87b0a375e37025662b0bdd8bf5069d6a76d756a8b8c4d25da486ff1ded9"
+          },
+          "cases": [
+            {
+              "name": "batch_workflow",
+              "status": "passed",
+              "result_member": "Release/test-results/run-4wrqz296/results.json",
+              "app_binaries": [
+                {
+                  "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                  "sha256": "a89dacd83ec045f94df24d2fe2d7dc480d62e072d92aa9be29066284b832242c"
+                }
+              ],
+              "h_geometry_states": 0,
+              "pane_states": 0,
+              "metric_source": [
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+              ],
+              "markers": [
+                "BATCH UI SELF-TEST: PASSED",
+                "Native workflow menu command: action=9 stage=90 dispatched=1"
+              ]
+            },
+            {
+              "name": "timed_series_workflow",
+              "status": "passed",
+              "result_member": "Release/test-results/run-4wrqz296/results.json",
+              "app_binaries": [
+                {
+                  "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                  "sha256": "a89dacd83ec045f94df24d2fe2d7dc480d62e072d92aa9be29066284b832242c"
+                }
+              ],
+              "h_geometry_states": 0,
+              "pane_states": 0,
+              "metric_source": [
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+              ],
+              "markers": [
+                "TIMED SERIES series-c SELF-TEST: PASSED",
+                "TIMED SERIES series-read SELF-TEST: PASSED",
+                "TIMED SERIES series-phys SELF-TEST: PASSED",
+                "TIMED SERIES series-read SELF-TEST: PASSED",
+                "Native workflow menu command: action=9 stage=160 dispatched=1",
+                "Native workflow menu command: action=9 stage=160 dispatched=1"
+              ]
+            },
+            {
+              "name": "parameter_units_workflow",
+              "status": "passed",
+              "result_member": "Release/test-results/run-4wrqz296/results.json",
+              "app_binaries": [
+                {
+                  "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                  "sha256": "a89dacd83ec045f94df24d2fe2d7dc480d62e072d92aa9be29066284b832242c"
+                }
+              ],
+              "h_geometry_states": 0,
+              "pane_states": 0,
+              "metric_source": [
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+              ],
+              "markers": [
+                "TIMED SERIES series-cm-c SELF-TEST: PASSED",
+                "TIMED SERIES series-read SELF-TEST: PASSED",
+                "TIMED SERIES series-cm-phys SELF-TEST: PASSED",
+                "TIMED SERIES series-read SELF-TEST: PASSED",
+                "Native workflow menu command: action=9 stage=160 dispatched=1",
+                "Native workflow menu command: action=9 stage=160 dispatched=1"
+              ]
+            },
+            {
+              "name": "named_workspaces_workflow",
+              "status": "passed",
+              "result_member": "Release/test-results/run-uqa1lrn6/results.json",
+              "app_binaries": [
+                {
+                  "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                  "sha256": "a89dacd83ec045f94df24d2fe2d7dc480d62e072d92aa9be29066284b832242c"
+                }
+              ],
+              "h_geometry_states": 0,
+              "pane_states": 0,
+              "metric_source": [
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+              ],
+              "markers": [
+                "NAMED WORKSPACES named-write SELF-TEST: PASSED",
+                "NAMED WORKSPACES named-read SELF-TEST: PASSED",
+                "NAMED WORKSPACES named-short SELF-TEST: PASSED",
+                "NAMED WORKSPACES named-corrupt SELF-TEST: PASSED",
+                "NAMED WORKSPACES named-reset SELF-TEST: PASSED",
+                "Native workflow menu command: action=5 stage=3 dispatched=1",
+                "Native workflow menu command: action=5 stage=0 dispatched=1",
+                "Native workflow menu command: action=5 stage=0 dispatched=1"
+              ]
+            },
+            {
+              "name": "build_controls_workflow",
+              "status": "passed",
+              "result_member": "Release/test-results/run-uqa1lrn6/results.json",
+              "app_binaries": [
+                {
+                  "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                  "sha256": "a89dacd83ec045f94df24d2fe2d7dc480d62e072d92aa9be29066284b832242c"
+                }
+              ],
+              "h_geometry_states": 0,
+              "pane_states": 0,
+              "metric_source": [
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+                "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+              ],
+              "markers": [
+                "BUILD CONTROLS SELF-TEST: PASSED",
+                "BUILD CONTROLS SELF-TEST: PASSED",
+                "Native workflow menu command: action=17 stage=7 dispatched=1"
+              ]
+            }
+          ],
+          "counterexamples": [],
+          "path": "build/validation/macos-menu-workflows-2026-10-30/study-menu-arm.zip"
+        },
+        "job_log": {
+          "path": "build/validation/macos-menu-workflows-2026-10-30/study-origin-arm-124402876974.log",
+          "sha256": "92234c073023260911afb0dbccc5e8a504eb3549db0762ddd588620d501d9d42"
+        }
+      }
+    },
+    "final_jobs": {
+      "path": "build/validation/macos-menu-workflows-2026-10-30/study-final-jobs.json",
+      "sha256": "cbb97b2258ecc709f9c458b037ac6edeba9ce35ee4359a76bcd0915bd6ee85f1"
+    }
+  },
+  "cleanup": {
+    "preserved": "Original failed Windows batch images, source/runtime snapshots, generated projects, run/report/export data, original F1 failure archives",
+    "roots": [
+      "D:/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-8wx7g1wf",
+      "D:/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-j8e4vtez",
+      "D:/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-msthnd8a",
+      "D:/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-yu6mwr2a"
+    ],
+    "reason": "Successful local case checks complete; commands, hashes, app steps and data retained",
+    "bytes_freed": 201925494,
+    "files_removed": 63
+  },
+  "limits": [
+    "The first Windows run remains 4/5 failed; it is not relabelled as green after the targeted followup",
+    "Local platform coverage combines preserved first-run cases and one changed-fixture followup; not one final-binary full-suite execution",
+    "User Mac stayed off and was not accessed; hosted runners only. No manual/fullscreen/VoiceOver or full-UI design acceptance"
+  ]
+}
