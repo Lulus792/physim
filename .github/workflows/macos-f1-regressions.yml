@@ -8,6 +8,7 @@ on:
       - app/documentation_ui.inc
       - app/documentation_actions.inc
       - app/documentation_keyboard_tests.inc
+      - app/documentation_h_tests.inc
       - tests/test_font_bank_ui.c
       - tests/test_font_sources.c
       - tools/check_native_doc_search_counterexample.py

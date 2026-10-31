@@ -268,7 +268,13 @@ static void documentation_h_test_frame(app *a,int *stage,int *code,const char **
         if(frame++<2 || a->doc_focus_reveal || !a->doc_search_active){--*stage;return;}
         ok=a->doc_find_open && a->doc_focus==DOC_SEARCH && documentation_h_same_rect(reading_bounds,a->doc_body_bounds) &&
             reading_scroll==a->doc_scroll_y && !strcmp(a->doc_query,reading_query);
-        *capture="docs-h-find-overlay.bmp";test_window_key_mod(a->doc_window,SDLK_END,0);frame=0;*stage=231;break;
+        *capture="docs-h-find-overlay.bmp";
+#ifdef __APPLE__
+        test_window_key_mod(a->doc_window,SDLK_RIGHT,PS_UI_COMMAND_MOD);
+#else
+        test_window_key_mod(a->doc_window,SDLK_END,0);
+#endif
+        frame=0;*stage=231;break;
     case 231:
         if(frame++<2){*stage=231;return;}
         {struct nk_window *find=nk_window_find(a->doc_ui,"documentation-find");
