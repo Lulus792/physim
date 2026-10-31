@@ -37,10 +37,19 @@ bleiben im JSON erhalten. Die alten fehlerhaften Phasen sind keine bestandenen
 Abnahmen; Debugger-Gegenproben zählen nur als Ursachenbeleg. 656 ersetzte
 erfolgreiche BMPs entfernt (2.093.854.368 Bytes); Fehler und PNG-Referenzen erhalten.
 
+**`479a8954` ist in origin und upstream gepusht.** Alle 1.106 erfassten
+Compiler-/Testdateien entsprechen diesem Commit nach direktem Git-Blob-Vergleich
+oder beidseitiger Zeilenendennormalisierung. [Commitabgleich und CI-Snapshot](verification/settings-a-window-commit-2026-10-31.json).
+
 Der Nutzer-Mac ist **aus** und wird nicht angesprochen. Neue macOS-Nachweise nur
 aus tatsächlich ausgeführten gehosteten Intel-/Apple-Silicon-Läufen werten.
 Der neue Workflow umfasst zusätzlich Settings A und Transaktionen; seine
-Ausführung ist bis zum dokumentierten Ergebnis offen. Ältere erfolgreiche
+Ausführung ist bis zum dokumentierten Ergebnis offen. Gezielter Lauf
+`41170676474`: Apple Silicon `124447773891`, Intel `124447773821`.
+Menüregression `41170676487`: ARM `124447774112`, Intel `124447773804`.
+Beim letzten gelesenen Snapshot lief ARM-Typografie, die anderen drei Jobs
+waren eingereiht. Nicht blind neu starten; diese IDs bis zum terminalen Ergebnis
+weiterverfolgen. Ältere erfolgreiche
 Menü-/F1-/Typografieläufe gelten nur für ihren jeweiligen Quellstand.
 
 ## Nächster konkreter Umsetzungsblock

@@ -1,0 +1,139 @@
+{
+  "as_of_utc": "2026-10-31 04:59:37 UTC",
+  "source_commit": "479a89549c28f02e59226f922c3f200650771611",
+  "both_remotes_pushed": true,
+  "compiler_source_comparison": {
+    "files": 1106,
+    "matched": 1106,
+    "different": [],
+    "method": "Frozen source bytes compared against committed Git blob hashes, directly or after CRLF-to-LF normalization.",
+    "local_report": "build/validation/settings-window-2026-10-31/commit-match.json"
+  },
+  "user_mac": "Off; no access attempted",
+  "hosted_runs": [
+    {
+      "id": 41170676474,
+      "url": "https://github.com/Lulus792/physim/actions/runs/41170676474",
+      "name": "Native macOS settings, typography and header focus",
+      "jobs": [
+        {
+          "id": 124447773821,
+          "name": "typography (macos-15-intel)",
+          "status": "queued",
+          "conclusion": null,
+          "run_id": 41170676474,
+          "logs_url": null,
+          "steps": null
+        },
+        {
+          "id": 124447773891,
+          "name": "typography (macos-15)",
+          "status": "in_progress",
+          "conclusion": null,
+          "run_id": 41170676474,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "SDL cache identity",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Restore pinned SDL install",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "Pinned SDL3",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 5
+            },
+            {
+              "name": "Save pinned SDL install",
+              "status": "completed",
+              "conclusion": "skipped",
+              "number": 6
+            },
+            {
+              "name": "Actual native header, theme and focus preservation",
+              "status": "in_progress",
+              "conclusion": null,
+              "number": 7
+            },
+            {
+              "name": "All four UI sizes, reload, cancel, defaults and native menu keyboard cancellation",
+              "status": "pending",
+              "conclusion": null,
+              "number": 8
+            },
+            {
+              "name": "Settings A task window, independent state, real text fields and draft transactions",
+              "status": "pending",
+              "conclusion": null,
+              "number": 9
+            },
+            {
+              "name": "Preference format and field-wise merge invariants",
+              "status": "pending",
+              "conclusion": null,
+              "number": 10
+            },
+            {
+              "name": "Compact native results",
+              "status": "pending",
+              "conclusion": null,
+              "number": 11
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "pending",
+              "conclusion": null,
+              "number": 22
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 41170676487,
+      "url": "https://github.com/Lulus792/physim/actions/runs/41170676487",
+      "name": "Native macOS menu bar",
+      "jobs": [
+        {
+          "id": 124447773804,
+          "name": "appkit (macos-15-intel)",
+          "status": "queued",
+          "conclusion": null,
+          "run_id": 41170676487,
+          "logs_url": null,
+          "steps": null
+        },
+        {
+          "id": 124447774112,
+          "name": "appkit (macos-15)",
+          "status": "queued",
+          "conclusion": null,
+          "run_id": 41170676487,
+          "logs_url": null,
+          "steps": null
+        }
+      ]
+    }
+  ],
+  "acceptance": "Pending. Queued/in-progress jobs and workflow configuration are not a macOS pass. Read actual terminal job results and artifact bytes before acceptance."
+}
