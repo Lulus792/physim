@@ -1,0 +1,292 @@
+{
+  "source_commit": "479a89549c28f02e59226f922c3f200650771611",
+  "user_mac": "Off; no access",
+  "run": 41170676474,
+  "url": "https://github.com/Lulus792/physim/actions/runs/41170676474",
+  "architectures": [
+    {
+      "architecture": "Apple Silicon",
+      "job": 124447773891,
+      "passed": 9,
+      "total": 9,
+      "proof": "docs/verification/settings-a-macos-arm-2026-10-31.json",
+      "proof_sha256": "dafe79a3ff35a639d94247bbf48fe9302801fc60d28be2576202d1de77e7d8db"
+    },
+    {
+      "architecture": "Intel",
+      "job": 124447773821,
+      "passed": 9,
+      "total": 9,
+      "artifact_id": 13031039073,
+      "artifact_sha256": "3e287d867028f90b32063ef930bdd6832038648f9f1a70555daa176ee0a84005",
+      "github_digest_match": true,
+      "all_result_entries_read": true,
+      "entries": [
+        {
+          "entry": "Release/test-results/run-27a27q6f/results.json",
+          "bytes": 77064,
+          "sha256": "728fce80c619f1a98995a87872b35d6b6cf77a0b910abdc7eaeebadedf055d22"
+        },
+        {
+          "entry": "Release/test-results/run-aqmck0c9/results.json",
+          "bytes": 64692,
+          "sha256": "8ef48a6c08372b9b1fd8259c71db1c898e7e20bbd764f2963f73c25fae520dac"
+        },
+        {
+          "entry": "Release/test-results/run-4h9adnnr/results.json",
+          "bytes": 640,
+          "sha256": "63be6ea58317176601e23d32d9d356512d633d99ecf6e005c91eb07e3b706828"
+        },
+        {
+          "entry": "Release/test-results/run-vhii_7ir/results.json",
+          "bytes": 17906,
+          "sha256": "8334ef043cb6bf752f6c58e1f9acacbc07f1e21ca2fb7c901a47c5b0dd2709ba"
+        }
+      ],
+      "cases": [
+        {
+          "name": "ui_typography_workflow",
+          "status": "passed",
+          "steps": [
+            {
+              "command": [
+                "/usr/local/opt/python@3.14/bin/python3.14",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "ui_typography_workflow",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-27a27q6f/ui_typography_workflow/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ],
+              "exit_code": 0,
+              "seconds": 56.327
+            }
+          ],
+          "app_sha256": [
+            "64ab869cf5fa7af7d4ecb295d28db614f632101cf6a7d003e71c0935b7e1594f"
+          ]
+        },
+        {
+          "name": "settings_transactions",
+          "status": "passed",
+          "steps": [
+            {
+              "command": [
+                "/usr/local/opt/python@3.14/bin/python3.14",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "settings_transactions",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-aqmck0c9/settings_transactions/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim"
+              ],
+              "exit_code": 0,
+              "seconds": 1.736
+            }
+          ],
+          "app_sha256": [
+            "64ab869cf5fa7af7d4ecb295d28db614f632101cf6a7d003e71c0935b7e1594f"
+          ]
+        },
+        {
+          "name": "settings_a_window",
+          "status": "passed",
+          "steps": [
+            {
+              "command": [
+                "/usr/local/opt/python@3.14/bin/python3.14",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "settings_a_window",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-aqmck0c9/settings_a_window/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim"
+              ],
+              "exit_code": 0,
+              "seconds": 18.299
+            }
+          ],
+          "app_sha256": [
+            "64ab869cf5fa7af7d4ecb295d28db614f632101cf6a7d003e71c0935b7e1594f"
+          ]
+        },
+        {
+          "name": "themes_workflow",
+          "status": "passed",
+          "steps": [
+            {
+              "command": [
+                "/usr/local/opt/python@3.14/bin/python3.14",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "themes_workflow",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-aqmck0c9/themes_workflow/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ],
+              "exit_code": 0,
+              "seconds": 24.666
+            }
+          ],
+          "app_sha256": [
+            "64ab869cf5fa7af7d4ecb295d28db614f632101cf6a7d003e71c0935b7e1594f"
+          ]
+        },
+        {
+          "name": "settings_keyboard_workflow",
+          "status": "passed",
+          "steps": [
+            {
+              "command": [
+                "/usr/local/opt/python@3.14/bin/python3.14",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "settings_keyboard_workflow",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-aqmck0c9/settings_keyboard_workflow/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim",
+                "--cc",
+                "/usr/bin/clang"
+              ],
+              "exit_code": 0,
+              "seconds": 18.81
+            }
+          ],
+          "app_sha256": [
+            "64ab869cf5fa7af7d4ecb295d28db614f632101cf6a7d003e71c0935b7e1594f"
+          ]
+        },
+        {
+          "name": "preferences",
+          "status": "passed",
+          "steps": [
+            {
+              "command": [
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim-test-preferences",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-4h9adnnr/preferences"
+              ],
+              "exit_code": 0,
+              "seconds": 0.217
+            }
+          ],
+          "app_sha256": []
+        },
+        {
+          "name": "shell_theme_dark",
+          "status": "passed",
+          "steps": [
+            {
+              "command": [
+                "/usr/local/opt/python@3.14/bin/python3.14",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "shell_theme_dark",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-vhii_7ir/shell_theme_dark/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim"
+              ],
+              "exit_code": 0,
+              "seconds": 6.735
+            }
+          ],
+          "app_sha256": [
+            "64ab869cf5fa7af7d4ecb295d28db614f632101cf6a7d003e71c0935b7e1594f"
+          ]
+        },
+        {
+          "name": "shell_theme_light_large_narrow",
+          "status": "passed",
+          "steps": [
+            {
+              "command": [
+                "/usr/local/opt/python@3.14/bin/python3.14",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "shell_theme_light_large_narrow",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-vhii_7ir/shell_theme_light_large_narrow/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim"
+              ],
+              "exit_code": 0,
+              "seconds": 4.009
+            }
+          ],
+          "app_sha256": [
+            "64ab869cf5fa7af7d4ecb295d28db614f632101cf6a7d003e71c0935b7e1594f"
+          ]
+        },
+        {
+          "name": "shell_theme_contrast",
+          "status": "passed",
+          "steps": [
+            {
+              "command": [
+                "/usr/local/opt/python@3.14/bin/python3.14",
+                "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                "shell_theme_contrast",
+                "--app",
+                "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "--work",
+                "/Users/runner/work/physim/physim/build/native/Release/test-results/run-vhii_7ir/shell_theme_contrast/files ä",
+                "--root",
+                "/Users/runner/work/physim/physim"
+              ],
+              "exit_code": 0,
+              "seconds": 4.301
+            }
+          ],
+          "app_sha256": [
+            "64ab869cf5fa7af7d4ecb295d28db614f632101cf6a7d003e71c0935b7e1594f"
+          ]
+        }
+      ]
+    }
+  ],
+  "separate_menu_regression": {
+    "run": 41170676487,
+    "source_commit": "479a89549c28f02e59226f922c3f200650771611",
+    "overall": "failed, each architecture 4/7",
+    "jobs": [
+      {
+        "id": 124447773804,
+        "architecture": "Intel",
+        "result": "run-h_tnqynh"
+      },
+      {
+        "id": 124447774112,
+        "architecture": "Apple Silicon",
+        "result": "run-92euzsco"
+      }
+    ],
+    "cause": "Toolbar stage12 still expected tab0 although independent Settings correctly preserved source tab2. Adapter, app-start and both keyboard-menu cases passed on both architectures."
+  },
+  "correction": {
+    "commit": "140ead036660514889c25e9db5da67e322599dfd",
+    "run": 41171432257,
+    "url": "https://github.com/Lulus792/physim/actions/runs/41171432257",
+    "jobs": [
+      124450543920,
+      124450544037
+    ],
+    "status": "Queued at last observation; not accepted yet. Follow these existing jobs, no blind rerun."
+  },
+  "limits": "No complete GUI/design/screenreader/DPI/physical-input/fullscreen claim. Independent units OS task is new uncommitted work and is not covered by this commit."
+}

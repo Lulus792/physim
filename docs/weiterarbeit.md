@@ -43,14 +43,21 @@ oder beidseitiger Zeilenendennormalisierung. [Commitabgleich und CI-Snapshot](ve
 
 Der Nutzer-Mac ist **aus** und wird nicht angesprochen. Neue macOS-Nachweise nur
 aus tatsächlich ausgeführten gehosteten Intel-/Apple-Silicon-Läufen werten.
-Der neue Workflow umfasst zusätzlich Settings A und Transaktionen; seine
-Ausführung ist bis zum dokumentierten Ergebnis offen. Gezielter Lauf
-`41170676474`: Apple Silicon `124447773891`, Intel `124447773821`.
-Menüregression `41170676487`: ARM `124447774112`, Intel `124447773804`.
-Beim letzten gelesenen Snapshot lief ARM-Typografie, die anderen drei Jobs
-waren eingereiht. Nicht blind neu starten; diese IDs bis zum terminalen Ergebnis
-weiterverfolgen. Ältere erfolgreiche
-Menü-/F1-/Typografieläufe gelten nur für ihren jeweiligen Quellstand.
+Settings-/Typografielauf `41170676474` auf `479a8954`: Apple Silicon
+`124447773891` und Intel `124447773821`, terminal erfolgreich, je **9/9**.
+Beide Artefakte tatsächlich heruntergeladen, GitHub-Digests und alle einzelnen
+Ergebnisdateien geprüft. [Nachweis](verification/settings-a-macos-2026-10-31.json).
+
+Die getrennte Menüregression `41170676487` blieb zunächst auf beiden
+Architekturen **4/7**: Toolbar-Fixture Stufe 12 verlangte Entwickeln, obwohl
+Einstellungen korrekt den Quellworkspace Auswerten erhielt. `140ead03` ist in
+beide Remotes gepusht und korrigiert genau diese Erwartung. Der Nachlauf
+`41171432257` ist auf ARM `124450544037` und Intel `124450543920` terminal
+erfolgreich, je **7/7**. Beide Archive/Digests und sämtliche Ergebnisdateien
+gelesen. [Nachweis](verification/macos-settings-menu-accepted-2026-10-31.json).
+Keine neue lokale Ausführung dieses Apple-only-Zweigs behaupten und nicht
+erneut wegen einer Kompaktierung starten. Die neun Settings-Fälle und sieben
+Menüfälle gehören ausdrücklich zu ihren verschiedenen Quellständen.
 
 ## Nächster konkreter Umsetzungsblock
 
