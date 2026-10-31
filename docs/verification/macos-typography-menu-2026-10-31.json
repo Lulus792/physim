@@ -1,0 +1,1184 @@
+{
+  "schema": 1,
+  "date": "2026-10-31",
+  "source_commit": "68ab5f71e37d6e8d4cf19d61ec70fd7d87bebce4",
+  "status": "Targeted typography and header focus complete on both native Mac architectures and local platform coverage",
+  "run_id": 41158796808,
+  "url": "https://github.com/Lulus792/physim/actions/runs/41158796808",
+  "workflow": ".github/workflows/macos-typography-menu.yml",
+  "changes": [
+    "Mac validates the real AppKit menu and actual arrow/Escape cancellation; emergency timer closure is rejected",
+    "Theme fixture validates native header instead of removed menu rectangles; actual source/selection/layout/sample/statistics/view/time invariants retained",
+    "H font roles use the approved CSS em sizes instead of the unrelated main-title +7 px assumption",
+    "UI font changes preserve the prior editor size; defaults use PS_PREFERENCES_DEFAULT.editor_size, currently12, not a hard-coded16"
+  ],
+  "local": {
+    "windows": {
+      "first_full_run": {
+        "execution": {
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+            "--",
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+            "--build-dir",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+            "--config",
+            "Release",
+            "--jobs",
+            "4",
+            "--sdl",
+            "D:\\Physim\\third_party\\SDL3-3.2.30",
+            "--test-display",
+            "--test-filter",
+            "ui_typography_workflow",
+            "--test-filter",
+            "shell_theme_*"
+          ],
+          "exit_code": 1,
+          "app_sha256": "c40a8b6a05c34c5e55b082e06e9bfaffc4b11dd320b12f049832d8817970ab5f"
+        },
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-hhh5fjki/results.json",
+        "sha256": "66b23d4cf91edf6fc974756f9e16759643399f2de53d24c414cee4c78d97b735",
+        "cases": [
+          {
+            "name": "ui_typography_workflow",
+            "status": "failed"
+          },
+          {
+            "name": "shell_theme_dark",
+            "status": "passed"
+          },
+          {
+            "name": "shell_theme_light_large_narrow",
+            "status": "passed"
+          },
+          {
+            "name": "shell_theme_contrast",
+            "status": "passed"
+          }
+        ]
+      },
+      "h_role_followup": {
+        "execution": {
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+            "--",
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+            "--build-dir",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+            "--config",
+            "Release",
+            "--jobs",
+            "4",
+            "--sdl",
+            "D:\\Physim\\third_party\\SDL3-3.2.30",
+            "--test-display",
+            "--test-filter",
+            "ui_typography_workflow"
+          ],
+          "exit_code": 1,
+          "app_sha256": "b9b9713aa7506b629777c17fdea93b85cf160dd6ee49a0102cb51d5a21236990"
+        },
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-yikz9w1_/results.json",
+        "sha256": "ea713ffe97dd10e32661bdf5583629429ef208daccc62b7367f722168aae1a92",
+        "cases": [
+          {
+            "name": "ui_typography_workflow",
+            "status": "failed"
+          }
+        ]
+      },
+      "editor_preservation_followup": {
+        "execution": {
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+            "--",
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+            "--build-dir",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+            "--config",
+            "Release",
+            "--jobs",
+            "4",
+            "--sdl",
+            "D:\\Physim\\third_party\\SDL3-3.2.30",
+            "--test-display",
+            "--test-filter",
+            "ui_typography_workflow"
+          ],
+          "exit_code": 0,
+          "app_sha256": "767211215452546e86fb40a3b9d9fe84d8b248694ff586d2ba98ce526b940634"
+        },
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-vt2p0lgi/results.json",
+        "sha256": "d9b3a5ff3cae4d3ad74ee424956f372ff3a0189a03f3f71ecf6cf2ff74e6ac7d",
+        "cases": [
+          {
+            "name": "ui_typography_workflow",
+            "status": "passed"
+          }
+        ]
+      },
+      "app_steps": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-vt2p0lgi/ui_typography_workflow/files ä/app-steps.json",
+        "sha256": "b94cc6463296e368798550f062217620b8096350b6fc86a5813e04beb50b5b6d",
+        "completed_processes": 12,
+        "font_role_records": [
+          [
+            16.0,
+            16.0,
+            16.0,
+            26.4,
+            11.0,
+            12.0,
+            12.0
+          ],
+          [
+            16.0,
+            16.0,
+            16.0,
+            26.4,
+            11.0,
+            12.0,
+            12.0
+          ],
+          [
+            18.0,
+            18.0,
+            18.0,
+            29.7,
+            12.375,
+            13.5,
+            12.0
+          ],
+          [
+            18.0,
+            18.0,
+            18.0,
+            29.7,
+            12.375,
+            13.5,
+            12.0
+          ],
+          [
+            20.0,
+            20.0,
+            20.0,
+            33.0,
+            13.75,
+            15.0,
+            12.0
+          ],
+          [
+            20.0,
+            20.0,
+            20.0,
+            33.0,
+            13.75,
+            15.0,
+            12.0
+          ],
+          [
+            22.0,
+            22.0,
+            22.0,
+            36.3,
+            15.125,
+            16.5,
+            12.0
+          ],
+          [
+            22.0,
+            22.0,
+            22.0,
+            36.3,
+            15.125,
+            16.5,
+            12.0
+          ],
+          [
+            22.0,
+            22.0,
+            22.0,
+            36.3,
+            15.125,
+            16.5,
+            12.0
+          ],
+          [
+            22.0,
+            22.0,
+            22.0,
+            36.3,
+            15.125,
+            16.5,
+            12.0
+          ],
+          [
+            16.0,
+            16.0,
+            16.0,
+            26.4,
+            11.0,
+            12.0,
+            12.0
+          ],
+          [
+            16.0,
+            16.0,
+            16.0,
+            26.4,
+            11.0,
+            12.0,
+            12.0
+          ]
+        ],
+        "editor_preservation_records": [
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1"
+        ]
+      },
+      "preferences": [
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-vt2p0lgi/ui_typography_workflow/files ä/workflow ä/UI 16/preferences.bin",
+          "sha256": "1c16832fbdb667485d7cbeea298ec2fe5e96f881bd22c4d53cfe2dfa5e613078",
+          "bytes": 312,
+          "final_ui_size": 16,
+          "crc_verified": true
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-vt2p0lgi/ui_typography_workflow/files ä/workflow ä/UI 18/preferences.bin",
+          "sha256": "5caa84fae7accbac774518235b88bec1d98ccfed4eaf2ab0ce5910973afe9ecb",
+          "bytes": 312,
+          "final_ui_size": 18,
+          "crc_verified": true
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-vt2p0lgi/ui_typography_workflow/files ä/workflow ä/UI 20/preferences.bin",
+          "sha256": "dc897b3703a64c621569897f8a0bbb499e50c97da208e6529d57a7f79460832d",
+          "bytes": 312,
+          "final_ui_size": 20,
+          "crc_verified": true
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-vt2p0lgi/ui_typography_workflow/files ä/workflow ä/UI 22/preferences.bin",
+          "sha256": "1c16832fbdb667485d7cbeea298ec2fe5e96f881bd22c4d53cfe2dfa5e613078",
+          "bytes": 312,
+          "final_ui_size": 16,
+          "crc_verified": true
+        }
+      ],
+      "acceptance": "Three unchanged shell cases retain first-run evidence; only typography rerun. Not one final-binary full-suite execution."
+    },
+    "linux": {
+      "first_full_run": {
+        "execution": {
+          "command": [
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+            "--",
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+            "--build-dir",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+            "--config",
+            "Debug",
+            "--jobs",
+            "4",
+            "--sdl",
+            "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+            "--test-display",
+            "--sanitizers",
+            "--test-filter",
+            "ui_typography_workflow",
+            "--test-filter",
+            "shell_theme_*"
+          ],
+          "exit_code": 1,
+          "app_sha256": "cfdd5150ff6cd951b0bed0b5a260b417e9b4cb0c22b6dff2b141d454bb395ab9"
+        },
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-36885fz9/results.json",
+        "sha256": "61205dad8834905390535f5bc10241db0453582f90cc8d7c0b57d65ff99b9572",
+        "cases": [
+          {
+            "name": "ui_typography_workflow",
+            "status": "failed"
+          },
+          {
+            "name": "shell_theme_dark",
+            "status": "passed"
+          },
+          {
+            "name": "shell_theme_light_large_narrow",
+            "status": "passed"
+          },
+          {
+            "name": "shell_theme_contrast",
+            "status": "passed"
+          }
+        ]
+      },
+      "h_role_followup": {
+        "execution": {
+          "command": [
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+            "--",
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+            "--build-dir",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+            "--config",
+            "Debug",
+            "--jobs",
+            "4",
+            "--sdl",
+            "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+            "--test-display",
+            "--sanitizers",
+            "--test-filter",
+            "ui_typography_workflow"
+          ],
+          "exit_code": 1,
+          "app_sha256": "514ab2b2dc14aeec9788c5b965e06f1fc54f31f13b856d57e3f173068b46747e"
+        },
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-bjbddlso/results.json",
+        "sha256": "125d87c11baeef77b28be920845d41de326075354278f42863f52819136a21e2",
+        "cases": [
+          {
+            "name": "ui_typography_workflow",
+            "status": "failed"
+          }
+        ]
+      },
+      "editor_preservation_followup": {
+        "execution": {
+          "command": [
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+            "--",
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+            "--build-dir",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+            "--config",
+            "Debug",
+            "--jobs",
+            "4",
+            "--sdl",
+            "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+            "--test-display",
+            "--sanitizers",
+            "--test-filter",
+            "ui_typography_workflow"
+          ],
+          "exit_code": 0,
+          "app_sha256": "ce5657cc3674371468eeedfb4054c45c5884af66ecc4634a582aaad36f4362c3"
+        },
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gdzm0sqt/results.json",
+        "sha256": "6397426aaaea7441f7dd8e0762940f0f5893e43d1b0064294304354cca696178",
+        "cases": [
+          {
+            "name": "ui_typography_workflow",
+            "status": "passed"
+          }
+        ]
+      },
+      "app_steps": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gdzm0sqt/ui_typography_workflow/files ä/app-steps.json",
+        "sha256": "bdb8e2eb7b60a50cba4849456c39dcc8671450425a449057d1f43b83dca3bd8b",
+        "completed_processes": 12,
+        "font_role_records": [
+          [
+            16.0,
+            16.0,
+            16.0,
+            26.4,
+            11.0,
+            12.0,
+            12.0
+          ],
+          [
+            16.0,
+            16.0,
+            16.0,
+            26.4,
+            11.0,
+            12.0,
+            12.0
+          ],
+          [
+            18.0,
+            18.0,
+            18.0,
+            29.7,
+            12.375,
+            13.5,
+            12.0
+          ],
+          [
+            18.0,
+            18.0,
+            18.0,
+            29.7,
+            12.375,
+            13.5,
+            12.0
+          ],
+          [
+            20.0,
+            20.0,
+            20.0,
+            33.0,
+            13.75,
+            15.0,
+            12.0
+          ],
+          [
+            20.0,
+            20.0,
+            20.0,
+            33.0,
+            13.75,
+            15.0,
+            12.0
+          ],
+          [
+            22.0,
+            22.0,
+            22.0,
+            36.3,
+            15.125,
+            16.5,
+            12.0
+          ],
+          [
+            22.0,
+            22.0,
+            22.0,
+            36.3,
+            15.125,
+            16.5,
+            12.0
+          ],
+          [
+            22.0,
+            22.0,
+            22.0,
+            36.3,
+            15.125,
+            16.5,
+            12.0
+          ],
+          [
+            22.0,
+            22.0,
+            22.0,
+            36.3,
+            15.125,
+            16.5,
+            12.0
+          ],
+          [
+            16.0,
+            16.0,
+            16.0,
+            26.4,
+            11.0,
+            12.0,
+            12.0
+          ],
+          [
+            16.0,
+            16.0,
+            16.0,
+            26.4,
+            11.0,
+            12.0,
+            12.0
+          ]
+        ],
+        "editor_preservation_records": [
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+          "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1"
+        ]
+      },
+      "preferences": [
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gdzm0sqt/ui_typography_workflow/files ä/workflow ä/UI 16/preferences.bin",
+          "sha256": "1c16832fbdb667485d7cbeea298ec2fe5e96f881bd22c4d53cfe2dfa5e613078",
+          "bytes": 312,
+          "final_ui_size": 16,
+          "crc_verified": true
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gdzm0sqt/ui_typography_workflow/files ä/workflow ä/UI 18/preferences.bin",
+          "sha256": "5caa84fae7accbac774518235b88bec1d98ccfed4eaf2ab0ce5910973afe9ecb",
+          "bytes": 312,
+          "final_ui_size": 18,
+          "crc_verified": true
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gdzm0sqt/ui_typography_workflow/files ä/workflow ä/UI 20/preferences.bin",
+          "sha256": "dc897b3703a64c621569897f8a0bbb499e50c97da208e6529d57a7f79460832d",
+          "bytes": 312,
+          "final_ui_size": 20,
+          "crc_verified": true
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gdzm0sqt/ui_typography_workflow/files ä/workflow ä/UI 22/preferences.bin",
+          "sha256": "1c16832fbdb667485d7cbeea298ec2fe5e96f881bd22c4d53cfe2dfa5e613078",
+          "bytes": 312,
+          "final_ui_size": 16,
+          "crc_verified": true
+        }
+      ],
+      "acceptance": "Three unchanged shell cases retain first-run evidence; only typography rerun. Not one final-binary full-suite execution."
+    }
+  },
+  "hosted_mac": {
+    "arm": {
+      "job_id": 124411442189,
+      "gui_cases_passed": 4,
+      "ui_modes_completed": 12,
+      "actual_native_menu_cancellations": 12,
+      "native_cancel_seconds": [
+        0.405,
+        0.288,
+        0.354,
+        0.315,
+        0.322,
+        0.346,
+        0.366,
+        0.289,
+        0.33,
+        0.296,
+        0.3,
+        0.314
+      ],
+      "font_role_records": [
+        [
+          16.0,
+          16.0,
+          16.0,
+          26.4,
+          11.0,
+          12.0,
+          12.0
+        ],
+        [
+          16.0,
+          16.0,
+          16.0,
+          26.4,
+          11.0,
+          12.0,
+          12.0
+        ],
+        [
+          18.0,
+          18.0,
+          18.0,
+          29.7,
+          12.375,
+          13.5,
+          12.0
+        ],
+        [
+          18.0,
+          18.0,
+          18.0,
+          29.7,
+          12.375,
+          13.5,
+          12.0
+        ],
+        [
+          20.0,
+          20.0,
+          20.0,
+          33.0,
+          13.75,
+          15.0,
+          12.0
+        ],
+        [
+          20.0,
+          20.0,
+          20.0,
+          33.0,
+          13.75,
+          15.0,
+          12.0
+        ],
+        [
+          22.0,
+          22.0,
+          22.0,
+          36.3,
+          15.125,
+          16.5,
+          12.0
+        ],
+        [
+          22.0,
+          22.0,
+          22.0,
+          36.3,
+          15.125,
+          16.5,
+          12.0
+        ],
+        [
+          22.0,
+          22.0,
+          22.0,
+          36.3,
+          15.125,
+          16.5,
+          12.0
+        ],
+        [
+          22.0,
+          22.0,
+          22.0,
+          36.3,
+          15.125,
+          16.5,
+          12.0
+        ],
+        [
+          16.0,
+          16.0,
+          16.0,
+          26.4,
+          11.0,
+          12.0,
+          12.0
+        ],
+        [
+          16.0,
+          16.0,
+          16.0,
+          26.4,
+          11.0,
+          12.0,
+          12.0
+        ]
+      ],
+      "artifact": {
+        "archive": "typography-menu-arm.zip",
+        "bytes": 6934,
+        "sha256": "e4367fe43bb8a7a786c0e5a2098fb176f924996f5d0f2c0b3bd2b1fe0ad5a565",
+        "members": {
+          "Release/test-results/run-1hrxf4p0/results.json": "adc5eb32d86d6363c013da1da3df0b3b2246bb38c2121e5a7df1f71e6b7a3d7c",
+          "Release/test-results/run-9na1viwq/results.json": "ad88d319ccb0cfd7c88d857c583cd015d99e48fde694c18af0b6dd8c40d7b142"
+        },
+        "cases": [
+          {
+            "name": "shell_theme_dark",
+            "status": "passed",
+            "result_member": "Release/test-results/run-1hrxf4p0/results.json",
+            "app_binaries": [
+              {
+                "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "sha256": "62826d188c09b95a8cdb4061efd83d41fe55217e6c755356b893f43221c929a9"
+              }
+            ],
+            "h_geometry_states": 0,
+            "pane_states": 0,
+            "metric_source": [
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+            ],
+            "markers": [
+              "SHELL THEME NATIVE HEADER: menu=AppKit ui-menus=0 theme-button=1",
+              "SHELL THEME INVARIANTS: source, selection, layout wishes, samples, statistics, view and simulation time unchanged=1",
+              "SHELL THEME SELF-TEST: PASSED"
+            ]
+          },
+          {
+            "name": "shell_theme_light_large_narrow",
+            "status": "passed",
+            "result_member": "Release/test-results/run-1hrxf4p0/results.json",
+            "app_binaries": [
+              {
+                "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "sha256": "62826d188c09b95a8cdb4061efd83d41fe55217e6c755356b893f43221c929a9"
+              }
+            ],
+            "h_geometry_states": 0,
+            "pane_states": 0,
+            "metric_source": [
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+            ],
+            "markers": [
+              "SHELL THEME NATIVE HEADER: menu=AppKit ui-menus=0 theme-button=1",
+              "SHELL THEME INVARIANTS: source, selection, layout wishes, samples, statistics, view and simulation time unchanged=1",
+              "SHELL THEME SELF-TEST: PASSED"
+            ]
+          },
+          {
+            "name": "shell_theme_contrast",
+            "status": "passed",
+            "result_member": "Release/test-results/run-1hrxf4p0/results.json",
+            "app_binaries": [
+              {
+                "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "sha256": "62826d188c09b95a8cdb4061efd83d41fe55217e6c755356b893f43221c929a9"
+              }
+            ],
+            "h_geometry_states": 0,
+            "pane_states": 0,
+            "metric_source": [
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+            ],
+            "markers": [
+              "SHELL THEME NATIVE HEADER: menu=AppKit ui-menus=0 theme-button=1",
+              "SHELL THEME INVARIANTS: source, selection, layout wishes, samples, statistics, view and simulation time unchanged=1",
+              "SHELL THEME SELF-TEST: PASSED"
+            ]
+          },
+          {
+            "name": "ui_typography_workflow",
+            "status": "passed",
+            "result_member": "Release/test-results/run-9na1viwq/results.json",
+            "app_binaries": [
+              {
+                "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "sha256": "62826d188c09b95a8cdb4061efd83d41fe55217e6c755356b893f43221c929a9"
+              }
+            ],
+            "h_geometry_states": 0,
+            "pane_states": 0,
+            "metric_source": [
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+            ],
+            "markers": [
+              "UI SIZE FONT ROLES: ui=16 reader=16 body-em=16.000 title-em=26.400 chrome-em=11.000 control-em=12.000 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.405 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=16 reader=16 body-em=16.000 title-em=26.400 chrome-em=11.000 control-em=12.000 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.288 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=18 reader=18 body-em=18.000 title-em=29.700 chrome-em=12.375 control-em=13.500 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.354 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=18 reader=18 body-em=18.000 title-em=29.700 chrome-em=12.375 control-em=13.500 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.315 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=20 reader=20 body-em=20.000 title-em=33.000 chrome-em=13.750 control-em=15.000 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.322 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=20 reader=20 body-em=20.000 title-em=33.000 chrome-em=13.750 control-em=15.000 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.346 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=22 reader=22 body-em=22.000 title-em=36.300 chrome-em=15.125 control-em=16.500 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.366 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=22 reader=22 body-em=22.000 title-em=36.300 chrome-em=15.125 control-em=16.500 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.289 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=22 reader=22 body-em=22.000 title-em=36.300 chrome-em=15.125 control-em=16.500 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.330 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=22 reader=22 body-em=22.000 title-em=36.300 chrome-em=15.125 control-em=16.500 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.296 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=16 reader=16 body-em=16.000 title-em=26.400 chrome-em=11.000 control-em=12.000 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.300 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=16 reader=16 body-em=16.000 title-em=26.400 chrome-em=11.000 control-em=12.000 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.314 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED"
+            ]
+          }
+        ],
+        "counterexamples": [],
+        "path": "build/validation/macos-menu-workflows-2026-10-30/typography-menu-arm.zip"
+      },
+      "job_log": {
+        "path": "build/validation/macos-menu-workflows-2026-10-30/typography-origin-arm-124411442189.log",
+        "sha256": "7fa4541f2e5b223d9cd54ce2e9462f48c91bade8f166bd6e16f416c72e4402a6"
+      }
+    },
+    "intel": {
+      "job_id": 124411442496,
+      "gui_cases_passed": 4,
+      "ui_modes_completed": 12,
+      "actual_native_menu_cancellations": 12,
+      "native_cancel_seconds": [
+        0.91,
+        0.325,
+        0.319,
+        0.306,
+        0.305,
+        0.323,
+        0.302,
+        0.271,
+        0.3,
+        0.343,
+        0.302,
+        0.283
+      ],
+      "font_role_records": [
+        [
+          16.0,
+          16.0,
+          16.0,
+          26.4,
+          11.0,
+          12.0,
+          12.0
+        ],
+        [
+          16.0,
+          16.0,
+          16.0,
+          26.4,
+          11.0,
+          12.0,
+          12.0
+        ],
+        [
+          18.0,
+          18.0,
+          18.0,
+          29.7,
+          12.375,
+          13.5,
+          12.0
+        ],
+        [
+          18.0,
+          18.0,
+          18.0,
+          29.7,
+          12.375,
+          13.5,
+          12.0
+        ],
+        [
+          20.0,
+          20.0,
+          20.0,
+          33.0,
+          13.75,
+          15.0,
+          12.0
+        ],
+        [
+          20.0,
+          20.0,
+          20.0,
+          33.0,
+          13.75,
+          15.0,
+          12.0
+        ],
+        [
+          22.0,
+          22.0,
+          22.0,
+          36.3,
+          15.125,
+          16.5,
+          12.0
+        ],
+        [
+          22.0,
+          22.0,
+          22.0,
+          36.3,
+          15.125,
+          16.5,
+          12.0
+        ],
+        [
+          22.0,
+          22.0,
+          22.0,
+          36.3,
+          15.125,
+          16.5,
+          12.0
+        ],
+        [
+          22.0,
+          22.0,
+          22.0,
+          36.3,
+          15.125,
+          16.5,
+          12.0
+        ],
+        [
+          16.0,
+          16.0,
+          16.0,
+          26.4,
+          11.0,
+          12.0,
+          12.0
+        ],
+        [
+          16.0,
+          16.0,
+          16.0,
+          26.4,
+          11.0,
+          12.0,
+          12.0
+        ]
+      ],
+      "artifact": {
+        "archive": "typography-menu-intel.zip",
+        "bytes": 7012,
+        "sha256": "14003f305fcd5cca67007c48df5b90a5db2257e8d48caba949131b445322091c",
+        "members": {
+          "Release/test-results/run-h4ivqnxo/results.json": "2f788c778c4932cf6c6a0a671f7a1cedff54910e0b65f643fe75c1b182dd1639",
+          "Release/test-results/run-hd_q5dri/results.json": "be3066f7f5d9251287754d9074a5aa12a6197ff0cac09c9e9248f33021838340"
+        },
+        "cases": [
+          {
+            "name": "shell_theme_dark",
+            "status": "passed",
+            "result_member": "Release/test-results/run-h4ivqnxo/results.json",
+            "app_binaries": [
+              {
+                "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "sha256": "fe224c48f63cb137037231771e8663fd4329b5d62bb06d66699c1d23c86ade97"
+              }
+            ],
+            "h_geometry_states": 0,
+            "pane_states": 0,
+            "metric_source": [
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+            ],
+            "markers": [
+              "SHELL THEME NATIVE HEADER: menu=AppKit ui-menus=0 theme-button=1",
+              "SHELL THEME INVARIANTS: source, selection, layout wishes, samples, statistics, view and simulation time unchanged=1",
+              "SHELL THEME SELF-TEST: PASSED"
+            ]
+          },
+          {
+            "name": "shell_theme_light_large_narrow",
+            "status": "passed",
+            "result_member": "Release/test-results/run-h4ivqnxo/results.json",
+            "app_binaries": [
+              {
+                "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "sha256": "fe224c48f63cb137037231771e8663fd4329b5d62bb06d66699c1d23c86ade97"
+              }
+            ],
+            "h_geometry_states": 0,
+            "pane_states": 0,
+            "metric_source": [
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+            ],
+            "markers": [
+              "SHELL THEME NATIVE HEADER: menu=AppKit ui-menus=0 theme-button=1",
+              "SHELL THEME INVARIANTS: source, selection, layout wishes, samples, statistics, view and simulation time unchanged=1",
+              "SHELL THEME SELF-TEST: PASSED"
+            ]
+          },
+          {
+            "name": "shell_theme_contrast",
+            "status": "passed",
+            "result_member": "Release/test-results/run-h4ivqnxo/results.json",
+            "app_binaries": [
+              {
+                "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "sha256": "fe224c48f63cb137037231771e8663fd4329b5d62bb06d66699c1d23c86ade97"
+              }
+            ],
+            "h_geometry_states": 0,
+            "pane_states": 0,
+            "metric_source": [
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+            ],
+            "markers": [
+              "SHELL THEME NATIVE HEADER: menu=AppKit ui-menus=0 theme-button=1",
+              "SHELL THEME INVARIANTS: source, selection, layout wishes, samples, statistics, view and simulation time unchanged=1",
+              "SHELL THEME SELF-TEST: PASSED"
+            ]
+          },
+          {
+            "name": "ui_typography_workflow",
+            "status": "passed",
+            "result_member": "Release/test-results/run-hd_q5dri/results.json",
+            "app_binaries": [
+              {
+                "path": "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                "sha256": "fe224c48f63cb137037231771e8663fd4329b5d62bb06d66699c1d23c86ade97"
+              }
+            ],
+            "h_geometry_states": 0,
+            "pane_states": 0,
+            "metric_source": [
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc",
+              "UI primary font: /System/Library/Fonts/Helvetica.ttc"
+            ],
+            "markers": [
+              "UI SIZE FONT ROLES: ui=16 reader=16 body-em=16.000 title-em=26.400 chrome-em=11.000 control-em=12.000 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.910 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=16 reader=16 body-em=16.000 title-em=26.400 chrome-em=11.000 control-em=12.000 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.325 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=18 reader=18 body-em=18.000 title-em=29.700 chrome-em=12.375 control-em=13.500 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.319 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=18 reader=18 body-em=18.000 title-em=29.700 chrome-em=12.375 control-em=13.500 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.306 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=20 reader=20 body-em=20.000 title-em=33.000 chrome-em=13.750 control-em=15.000 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.305 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=20 reader=20 body-em=20.000 title-em=33.000 chrome-em=13.750 control-em=15.000 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.323 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=22 reader=22 body-em=22.000 title-em=36.300 chrome-em=15.125 control-em=16.500 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.302 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=22 reader=22 body-em=22.000 title-em=36.300 chrome-em=15.125 control-em=16.500 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.271 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=22 reader=22 body-em=22.000 title-em=36.300 chrome-em=15.125 control-em=16.500 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.300 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=22 reader=22 body-em=22.000 title-em=36.300 chrome-em=15.125 control-em=16.500 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.343 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=16 reader=16 body-em=16.000 title-em=26.400 chrome-em=11.000 control-em=12.000 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.302 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED",
+              "UI SIZE FONT ROLES: ui=16 reader=16 body-em=16.000 title-em=26.400 chrome-em=11.000 control-em=12.000 editor=12 complete=1",
+              "UI SIZE EDITOR PRESERVED: expected=12 actual=12 code-height=12.0 complete=1",
+              "UI SIZE NATIVE MENU: cancelled=1 elapsed=0.283 watchdog-accepted=0 capture=SDL-shell-only",
+              "UI SIZE SELF-TEST: PASSED"
+            ]
+          }
+        ],
+        "counterexamples": [],
+        "path": "build/validation/macos-menu-workflows-2026-10-30/typography-menu-intel.zip"
+      },
+      "job_log": {
+        "path": "build/validation/macos-menu-workflows-2026-10-30/typography-origin-intel-124411442496.log",
+        "sha256": "ab52f71a6981697afb2c05e8609533212cf8f58db68153a5930824fc147a5993"
+      }
+    }
+  },
+  "source_snapshot": {
+    "path": "build/validation/explorer-inline-2026-10-29/mac-typography-menu-accepted-local-compiler-source.json",
+    "sha256": "a08a4c1f7e80089385a8f7877c53377ee24daedbdef90dffa56bc577a1010bb7",
+    "files": 1101,
+    "all_normalized_blobs_match_commit": true,
+    "git_crlf_metadata_normalized_on_both_sides": [
+      "third_party/libunibreak-8.0/manifest.json"
+    ],
+    "owned_inputs": 132,
+    "final_snapshot": "mac-typography-menu-accepted-local",
+    "runtime_files": {
+      "windows": 212,
+      "linux": 111
+    },
+    "runtime_index": "build/validation/explorer-inline-2026-10-29/mac-typography-menu-accepted-local-byte-index.json",
+    "all_referenced_archive_bytes_read_back": true
+  },
+  "cleanup": {
+    "files_removed": 104,
+    "preserved": "Single protected settings-A gap PNG, original failed-case BMPs, source/runtime snapshots, logs, app steps and real preferences",
+    "bytes_freed": 376257552,
+    "roots": [
+      "D:/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-hhh5fjki",
+      "D:/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-36885fz9",
+      "D:/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-vt2p0lgi",
+      "D:/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gdzm0sqt"
+    ],
+    "reason": "Successful typography/header checks complete; compact command/result/font-role/preference proofs retained"
+  },
+  "open_design_gap": {
+    "report": "docs/verification/settings-a-native-gap-2026-10-31.md",
+    "native_capture": "build/validation/macos-menu-workflows-2026-10-30/ui-22-typography-settings.png",
+    "sha256": "5f6f617faeb3c532c8b3d2b4f6f5923e49ba2656619d6ad5dcde85da19e2085c",
+    "bytes": 146649,
+    "protected": true
+  },
+  "limits": [
+    "No production design change in this patch; passing font and menu cases does not establish Settings A implementation or full UI fidelity",
+    "Mac menu is programmatically presented from the actual NSMenu and receives native key events; physical menubar activation, VoiceOver and fullscreen remain separate",
+    "Historical ui-size-menu.bmp captures the SDL shell on Mac, not the synchronous AppKit popup",
+    "Local first runs remain 3/4 failed overall, followed by a distinct 0/1 H-role followup and a passing 1/1 typography run; not relabelled as one green full run",
+    "Editor preservation is checked with the actual 12 px default here; this is not an exhaustive six-editor-size matrix",
+    "User Mac stayed off and was not accessed; hosted GitHub runners only"
+  ]
+}
