@@ -8,6 +8,8 @@ Prüfung oder Protokoll-Trennlinie allein wegen Kompaktierung erneut beginnen.
 ## Aktueller Anschluss: Suchaktionen und Pointerfokus
 
 **Eingefroren: `settings-search-clipped`, 151 eigene Eingaben.**
+**`b20d550e` ist in beide Repositories gepusht; 1.109 Compiler-/Testdateien
+stimmen mit dem Commit überein.** [Commitabgleich und offener CI-Snapshot](verification/settings-search-commit-2026-10-31.json).
 Suchkopf „Suche löschen“ und Inhaltsaktion „Suche zurücksetzen“ sind getrennt;
 sichtbare Tabfolge, Rückkehr zu Suche/Texteingabe und Entwurfserhaltung umgesetzt.
 Das erste Suchzeichen zeichnet kein Löschsymbol mit alter Breitenreservierung.
@@ -47,6 +49,10 @@ scheitert an Selektor „m“ bei schon aktualisiertem Katalog/Wert „cm“.
 Fixture wartet nun begrenzt auf die wirkliche neue Zeichnung; Daten-/Raster-
 Konsistenz und Mindestzahlen nicht gelockert. Lokal beide Fontquellen bestanden.
 Mac-Nachlauf auf korrigiertem neuen Quellcommit bleibt eigens nachzuweisen.
+Neue Handles auf `b20d550e`: Settings/Suche/Einheiten `41180437523`,
+ARM `124476553111`, Intel `124476552980`; Menü `41180437463`,
+ARM `124476553001`, Intel `124476552881`. Beim Snapshot warten die Settings-
+Jobs; Intel-Menü startet. Diese Handles weiter beobachten, keine Ersatzläufe.
 Separate Menüregression `41177844185` je **7/7**; alle vier ZIP-Digests und
 Ergebnisdateien tatsächlich gelesen. Details im neuen Suchnachweis.
 Ältere Settings-/Mac-Menümatrix (9/9 auf `479a8954`, 7/7 auf `140ead03`) ist

@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-31",
+  "source_commit": "b20d550e6b925003c9dc8220aff850aa2ee8d6c6",
+  "branch": "codex/f1-design-h",
+  "pushed_remotes": ["origin", "upstream"],
+  "compiler_inputs_compared": 1109,
+  "matched": 1109,
+  "different": [],
+  "comparison": "Final settings-search-clipped compiler/test source bytes match committed Git blobs directly or after CRLF/LF normalization; foreign AT-SPI/Orca/status/dist WIP excluded.",
+  "local_evidence": "docs/verification/settings-search-2026-10-31.json",
+  "local_result_scope": {
+    "final_phase": "settings-search-clipped",
+    "windows": {"run": "run-n2nnzihq", "passed": 2, "total": 2, "config": "Release/MSVC"},
+    "linux": {"run": "run-z7knodp0", "passed": 2, "total": 2, "config": "Debug/GCC ASan/UBSan, GUI leak detection off, fatal sanitizer errors"},
+    "groups": ["settings_search_keyboard", "settings_a_window"],
+    "app_processes_per_platform": 4,
+    "ui_sizes": [16, 22],
+    "ignored_clipped_category_21_exercised_on_both_platforms": true,
+    "inspector_passed_on_prior_ready_phase": true,
+    "new_combined_three_group_pass_claimed": false,
+    "all_local_handles_terminal": true,
+    "all_referenced_archive_bytes_read_back": true
+  },
+  "hosted_snapshot_utc": "2026-10-31 07:23:56 UTC",
+  "hosted_mac_runs": [
+    {
+      "id": 41180437523,
+      "url": "https://github.com/Lulus792/physim/actions/runs/41180437523",
+      "name": "Native macOS settings, typography and header focus",
+      "head_sha": "b20d550e6b925003c9dc8220aff850aa2ee8d6c6",
+      "jobs": [
+        {"id": 124476553111, "runner": "macos-15", "status": "queued", "conclusion": null},
+        {"id": 124476552980, "runner": "macos-15-intel", "status": "queued", "conclusion": null}
+      ],
+      "planned_registered_cases_per_architecture": 15,
+      "actual_pass_count": null
+    },
+    {
+      "id": 41180437463,
+      "url": "https://github.com/Lulus792/physim/actions/runs/41180437463",
+      "name": "Native macOS menu bar",
+      "head_sha": "b20d550e6b925003c9dc8220aff850aa2ee8d6c6",
+      "jobs": [
+        {"id": 124476553001, "runner": "macos-15", "status": "queued", "conclusion": null},
+        {"id": 124476552881, "runner": "macos-15-intel", "status": "in_progress", "conclusion": null}
+      ],
+      "actual_pass_count": null
+    }
+  ],
+  "limits": [
+    "Pending hosted jobs do not prove a passing macOS acceptance.",
+    "Earlier source657219a3 had combined12/13 and separate menu7/7 each; all four artifact digests/results read, preserved in local_evidence.",
+    "User Mac remains OFF and was never contacted. Only D: used.",
+    "Full UI/design/assistive/physical-input/DPI/monitor/fullscreen acceptance and remaining Completion D implementation stay open."
+  ]
+}

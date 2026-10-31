@@ -30,6 +30,10 @@ Die Laufzeitspur bestätigt den ignorierten verdeckten Treffer; danach wird
 publizierter Control-Fokus sind damit geprüft, keine physische Tasten-/Screenreader-Abnahme.
 Vier gezielte finale PNGs zeigen den Rücksetzfokus; weitere Zustände zuerst als Text/JSON.
 
+`b20d550e` ist in beide Repositories gepusht. Alle 1.109 erfassten Compiler-/
+Testdateien stimmen direkt oder nach Zeilenendennormalisierung mit dem Commit
+überein. [Commitabgleich und gestartete gehostete Nachläufe](settings-search-commit-2026-10-31.json).
+
 Der getrennte Anschluss `settings-search-ready` besteht insgesamt je **2/3**:
 allgemeines Einstellungen-A-Fenster und Inspektor bestehen, der damalige neue
 Suchprüfer scheitert noch bei großer Schrift. Die Inspektorprüfung mit beiden
