@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 concurrency:
   group: native-workspace-menu-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   editor:
     strategy:

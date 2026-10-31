@@ -1667,7 +1667,9 @@ def settings_keyboard(flow, directory):
     require(data[:8]==b"PSPREF05" and len(data)==312, "Keyboard settings format")
     require(int.from_bytes(data[304:308],"little")==22, "Keyboard UI font persistence")
     require(struct.unpack_from("<I",data,32)[0]==20 and struct.unpack_from("<I",data,36)[0]==120, "Keyboard code font and autosave persistence")
-    require(struct.unpack_from("<I",data,40)[0]==32 and struct.unpack_from("<I",data,52)[0]==1, "Keyboard seven toggles and theme persistence")
+    # Protocol C now starts closed: toggling the seven initial flags (31)
+    # leaves orthographic view and the protocol enabled (32 | 64).
+    require(struct.unpack_from("<I",data,40)[0]==(32|64) and struct.unpack_from("<I",data,52)[0]==1, "Keyboard seven toggles and theme persistence")
     before=fingerprint(directory / "preferences.bin")
     flow.run("--settings-test", directory, "keyboard-read", timeout=35, marker="SETTINGS KEYBOARD SELF-TEST: PASSED")
     require(fingerprint(directory / "preferences.bin")==before, "Escape changed saved settings")
