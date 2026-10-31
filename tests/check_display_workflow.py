@@ -1708,10 +1708,14 @@ def settings_keyboard(flow, directory):
 
 def ui_typography(flow, directory):
     directory.mkdir()
+    def run(root,mode):
+        flow.run("--settings-test",root,mode,timeout=35,marker="UI SIZE SELF-TEST: PASSED")
+        if sys.platform=='darwin':
+            require('UI SIZE NATIVE MENU: cancelled=1 ' in flow.steps[-1]['stdout'],
+                    'UI typography did not exercise bounded native menu keyboard cancellation')
     for size in (16, 18, 20, 22):
         root = directory / ("UI " + str(size)); root.mkdir()
-        flow.run("--settings-test", root, "ui-size-" + str(size), timeout=35,
-                 marker="UI SIZE SELF-TEST: PASSED")
+        run(root,"ui-size-"+str(size))
         captures=root / "initial-size-captures";captures.mkdir()
         for name in ("ui-size-menu.bmp","docs-ui-size.bmp","ui-size-settings.bmp",
                      "ui-size-editor.bmp","ui-size-plot.bmp"):
@@ -1722,18 +1726,10 @@ def ui_typography(flow, directory):
                 struct.unpack_from("<I",data,308)[0]==zlib.crc32(data[:308]),
                 "UI size was not saved in the versioned CRC-protected preferences")
         before = fingerprint(root / "preferences.bin")
-        flow.run("--settings-test", root, "ui-size-" + str(size) + "-read", timeout=35,
-                 marker="UI SIZE SELF-TEST: PASSED")
+        run(root,"ui-size-"+str(size)+"-read")
         require(fingerprint(root / "preferences.bin") == before, "Read/cancel changed saved UI size")
     root = directory / "UI 22"
-    flow.run("--settings-test", root, "ui-size-18-cancel", timeout=35,
-             marker="UI SIZE SELF-TEST: PASSED")
-    flow.run("--settings-test", root, "ui-size-22-read", timeout=35,
-             marker="UI SIZE SELF-TEST: PASSED")
-    flow.run("--settings-test", root, "ui-size-16-defaults", timeout=35,
-             marker="UI SIZE SELF-TEST: PASSED")
-    flow.run("--settings-test", root, "ui-size-16-read", timeout=35,
-             marker="UI SIZE SELF-TEST: PASSED")
+    for mode in ('ui-size-18-cancel','ui-size-22-read','ui-size-16-defaults','ui-size-16-read'):run(root,mode)
 
 
 def themes(flow, directory):
@@ -2038,6 +2034,14 @@ def main():
         arguments, timeout, _ = SIMPLE[args.case]
         paths = dict(directory=str(directory), root=str(flow.root))
         flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)
+        if args.case.startswith('shell_theme_'):
+            output=flow.steps[-1]['stdout']
+            require('SHELL THEME SELF-TEST: PASSED' in output and
+                    'SHELL THEME INVARIANTS: source, selection, layout wishes, samples, statistics, view and simulation time unchanged=1' in output,
+                    'Shell theme workflow quit before checking its preserved state')
+            if sys.platform=='darwin':
+                require('SHELL THEME NATIVE HEADER: menu=AppKit ui-menus=0 theme-button=1' in output,
+                        'Shell theme did not validate the native menu header')
         if args.case in ("toolbar_small","toolbar_large","keyboard_menu_small","keyboard_menu_large"):
             marker="KEYBOARD MENU SELF-TEST: PASSED" if args.case.startswith("keyboard_") else "TOOLBAR AND TABS: PASSED"
             require(marker in flow.steps[-1]["stdout"],"Menu workflow quit before completing its assertions")

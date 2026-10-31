@@ -14,8 +14,14 @@ static void shell_theme_test_frame(app *a,int *stage,int *code,const char **capt
         a->experiment.select_start=2;a->experiment.select_end=6;a->experiment.cursor=6;
         break;
     case 1: {
-        ok=SDL_arraysize(toolbar_top_order)==5 && a->toolbar_bounds[3].w==0 && a->toolbar_theme_bounds.w>0;
+        ok=a->toolbar_theme_bounds.w>0;
+#ifdef __APPLE__
+        ok=ok && native_test_shell(a);
+        if(ok)puts("SHELL THEME NATIVE HEADER: menu=AppKit ui-menus=0 theme-button=1");
+#else
+        ok=ok && SDL_arraysize(toolbar_top_order)==5 && a->toolbar_bounds[3].w==0;
         for(unsigned i=1;i<SDL_arraysize(toolbar_top_order);i++)ok=ok && a->toolbar_bounds[toolbar_top_order[i]].x>a->toolbar_bounds[toolbar_top_order[i-1]].x;
+#endif
         SDL_Point p={(int)(a->toolbar_theme_bounds.x+10),(int)(a->toolbar_theme_bounds.y+15)};
         ok=ok && window_hit_test(a->window,&p,a)==SDL_HITTEST_NORMAL;
         layout=laboratory_capture(a);expected=a->preferences.theme==PS_THEME_LIGHT?PS_THEME_DARK:PS_THEME_LIGHT;
