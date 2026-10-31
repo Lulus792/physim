@@ -10,10 +10,18 @@ on:
       - app/preferences.*
       - app/protocol*
       - app/analysis_layout.inc
+      - app/analysis_ui.inc
+      - app/analysis_units_tests.inc
+      - app/inspector_channel_tests.inc
+      - app/laboratory_channel.inc
+      - app/ui.h
+      - app/ui_sdl.c
       - app/layout_ui.inc
       - app/ui_size_tests.inc
       - app/shell_theme_tests.inc
       - tests/check_display_workflow.py
+      - tests/check_inspector_channel.py
+      - tests/native_integration_cases.json
       - tools/build.py
       - .github/workflows/macos-typography-menu.yml
   workflow_dispatch:
@@ -56,7 +64,7 @@ jobs:
       - name: All four UI sizes, reload, cancel, defaults and native menu keyboard cancellation
         run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test-display --test-filter ui_typography_workflow
       - name: Settings A task window, independent state, real text fields and draft transactions
-        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test-display --test-filter settings_a_window --test-filter settings_transactions --test-filter settings_keyboard_workflow --test-filter themes_workflow --test-filter unit_task_window --test-filter channel_units_workflow --test-filter analysis_units_dark --test-filter analysis_units_light_large_narrow --test-filter inspector_channel
+        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test-display --test-filter settings_a_window --test-filter settings_search_keyboard --test-filter settings_transactions --test-filter settings_keyboard_workflow --test-filter themes_workflow --test-filter unit_task_window --test-filter channel_units_workflow --test-filter analysis_units_dark --test-filter analysis_units_light_large_narrow --test-filter inspector_channel
       - name: Preference format and field-wise merge invariants
         run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test --test-filter preferences
       - name: Compact native results
@@ -68,4 +76,14 @@ jobs:
             build/native/**/test-results/**/results.json
             build/native/**/test-results/**/junit.xml
           if-no-files-found: warn
+          retention-days: 14
+      - name: Inspector failure evidence
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-inspector-failure-${{ matrix.runner }}
+          path: |
+            build/native/**/test-results/**/inspector_channel/files */app-steps.json
+            build/native/**/test-results/**/inspector_channel/files */*/channel-dark-centimetres.png
+          if-no-files-found: ignore
           retention-days: 14

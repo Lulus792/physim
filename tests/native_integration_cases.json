@@ -5693,6 +5693,13 @@
       "steps": [{"program": "python", "arguments": ["{root}/tests/check_display_workflow.py", "settings_a_window", "--app", "{physim}", "--work", "{work}", "--root", "{root}"], "timeout": 85, "files": ["app-steps.json"]}]
     },
     {
+      "name": "settings_search_keyboard",
+      "app": true,
+      "display": true,
+      "targets": ["python", "physim"],
+      "steps": [{"program": "python", "arguments": ["{root}/tests/check_display_workflow.py", "settings_search_keyboard", "--app", "{physim}", "--work", "{work}", "--root", "{root}"], "timeout": 105, "files": ["app-steps.json"]}]
+    },
+    {
       "name": "unit_task_window",
       "app": true,
       "display": true,

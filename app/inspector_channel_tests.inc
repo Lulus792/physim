@@ -38,8 +38,13 @@ static void inspector_channel_step(app *a,int *stage,int *code,const char **capt
     case 7:inspector_channel_test.channel=-1;for(unsigned i=0;i<a->channel_count;i++)if(!strcmp(a->live_channels[i].name,"position.x"))inspector_channel_test.channel=(int)i;
         ok=inspector_channel_test.channel>=0;if(!ok)break;if(!inspector_design_focus(a,"position.x"))return;test_window_key_mod(a->window,SDLK_RETURN,0);break;
     case 8:ok=a->laboratory_channels[0]==inspector_channel_test.channel;if(!ok)break;if(!camera_design_reveal(a,a->inspector_channel_fields[1]) || !inspector_design_focus(a,laboratory_choice_names[1]))return;test_window_key_mod(a->window,SDLK_RETURN,0);break;
-    case 9:if(!inspector_design_focus(a,"cm"))return;test_window_key_mod(a->window,SDLK_RETURN,0);break;
-    case 10:{ps_display_unit u=channel_display_unit(a,&a->live_channels[inspector_channel_test.channel]);ok=!a->channel_unit_manager && u.scale==.01 && !strcmp(u.symbol,"cm") && inspector_channel_preserved(a);if(!ok)break;if(!camera_design_reveal(a,a->inspector_channel_value))return;inspector_channel_record(a,"centimetres",capture);break;}
+    case 9:if(!inspector_design_focus(a,"cm"))return;test_window_key_mod(a->window,SDLK_RETURN,0);inspector_channel_test.unit_deadline=ps_clock()+3;break;
+    case 10:{ps_display_unit u=channel_display_unit(a,&a->live_channels[inspector_channel_test.channel]);ok=!a->channel_unit_manager && u.scale==.01 && !strcmp(u.symbol,"cm") && inspector_channel_preserved(a);if(!ok)break;
+        /* A menu command may be applied after its selector was painted in the
+         * same frame. Record only once a later real draw shows the new unit;
+         * the checker still requires selector/data/value agreement. */
+        if(strcmp(inspector_channel_test.paint[1],u.symbol) && ps_clock()<inspector_channel_test.unit_deadline)return;
+        ok=!strcmp(inspector_channel_test.paint[1],u.symbol);if(!ok)break;if(!camera_design_reveal(a,a->inspector_channel_value))return;inspector_channel_record(a,"centimetres",capture);break;}
     case 11:timeline_design_mouse(a,0,true);break;
     case 12:timeline_design_mouse(a,0,false);break;
     case 13:ok=a->timeline_browsing && display_time(a)<inspector_design.held && inspector_channel_preserved(a);if(!ok)break;if(!camera_design_reveal(a,a->inspector_channel_value))return;inspector_channel_record(a,"browse",capture);test_mouse(a,a->timeline_bounds[2],true);break;

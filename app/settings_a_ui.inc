@@ -18,7 +18,10 @@ static float settings_text(app *a,float x,float y,float w,const char *text,unsig
 }
 static void settings_focus_draw(app *a,int id,struct nk_rect r,bool native) {
     struct nk_context *ui=a->settings_ui;a->settings_focus_bounds[id]=r;
-    if(ps_ui_mouse_pressed(&ui->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ui->input,r)){a->settings_focus=id;a->settings_keyboard=false;}
+    if(ps_ui_mouse_pressed(&ui->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ui->input,r)){
+        if(nk_input_is_mouse_hovering_rect(&ui->input,ui->current->layout->clip)){a->settings_focus=id;a->settings_keyboard=false;}
+        else if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"SETTINGS CLIPPED POINTER: ignored=%d pane=%s control-y=%.2f clip-y=%.2f mouse-y=%.2f\n",id,ui->current->name_string,r.y,ui->current->layout->clip.y,ui->input.mouse.pos.y);
+    }
     if(a->settings_initial_focus && id==17 && nk_sdl_accessibility_keyboard_target(ui,r))a->settings_initial_focus=false;
     if(native && !a->settings_keyboard && a->settings_focus!=id){a->settings_focus=id;a->settings_focus_scroll=true;}
     bool custom=a->settings_keyboard && a->settings_focus==id;
@@ -222,10 +225,13 @@ static void settings_view(app *a,int width,int height) {
         if(ps_ui_button_at_custom_focus(ui,close,"Einstellungen schließen",false,&native))settings_close(a);settings_focus_draw(a,19,close,native);settings_line(a,0,header-1,w,c.border);nk_layout_space_end(ui);}nk_end(ui);
     if(nk_begin(ui,"settings-search",nk_rect(0,header,w,search),NK_WINDOW_NO_SCROLLBAR)){nk_layout_space_begin(ui,NK_STATIC,search,20);
         ps_ui_accessibility_route(ui,true);settings_activate_focus(a);
-        float sw=fminf(520*f,w-46*f-(*a->settings_search?40*f:0));if(settings_edit(a,17,"settings-search",a->settings_search,sizeof a->settings_search,23*f,13*f,sw,36*f))a->settings_review=false;
+        bool clear_visible=*a->settings_search!=0;
+        float sw=fminf(520*f,w-46*f-(clear_visible?40*f:0));if(settings_edit(a,17,"settings-search",a->settings_search,sizeof a->settings_search,23*f,13*f,sw,36*f))a->settings_review=false;
         struct nk_rect lens=settings_slot(a,32*f,25*f,8*f,8*f);nk_stroke_circle(nk_window_get_canvas(ui),lens,f,c.muted);nk_stroke_line(nk_window_get_canvas(ui),lens.x,lens.y+8*f,lens.x-3*f,lens.y+11*f,f,c.muted);
         if(!*a->settings_search)settings_text(a,51*f,23*f,sw-36*f,"Einstellungen suchen …",SET_FONT_BUTTON,17*f,c.muted);
-        if(*a->settings_search && settings_button(a,26,"×",23*f+sw+6*f,13*f,34*f,36*f,false,true,false)){a->settings_search[0]=0;a->settings_focus=17;a->settings_keyboard=true;}
+        /* Text can become nonempty inside settings_edit. Show its new clear
+         * action only with the matching reserved-width layout next frame. */
+        if(clear_visible && *a->settings_search && settings_button(a,26,"×",23*f+sw+6*f,13*f,34*f,36*f,false,true,false))settings_search_clear(a);
         if(w>900*f)settings_text(a,w-220*f,23*f,197*f,"Darstellung, Schrift, Sicherung …",SET_FONT_SMALL,17*f,c.muted);
         settings_line(a,0,search-1,w,c.border);nk_layout_space_end(ui);}nk_end(ui);
     float body_y=header+search,body_h=fmaxf(1,footer_y-body_y);a->settings_body=nk_rect(0,body_y,w,body_h);
@@ -283,7 +289,7 @@ static void settings_view(app *a,int width,int height) {
                 if(settings_button(a,27,"Anzeigeeinheit bearbeiten …",content_x,content_y,fminf(content_w,240*f),34*f,false,channel!=NULL,false))channel_unit_open_from(a,channel,a->settings_window,settings_focus_name(27));
                 if(!channel)settings_text(a,content_x,content_y+46*f,content_w,"Noch keine Messkanäle verfügbar. Ein Experiment oder einen gespeicherten Lauf öffnen.",SET_FONT_HELP,18*f,c.muted);}
             if(!matches){settings_text(a,content_x,content_y,content_w,"Keine passenden Einstellungen.",SET_FONT_LABEL,22*f,c.text);content_y+=34*f;
-                if(settings_button(a,26,"Suche zurücksetzen",content_x,content_y,fminf(content_w,190*f),34*f,false,true,false))a->settings_search[0]=0;}}
+                if(settings_button(a,28,"Suche zurücksetzen",content_x,content_y,fminf(content_w,190*f),34*f,false,true,false))settings_search_clear(a);}}
         if(preview){struct nk_rect edge=settings_slot(a,usable-preview,0,1,fmaxf(total,body_h));nk_stroke_line(canvas,edge.x,edge.y,edge.x,edge.y+fmaxf(total,body_h),1,c.border);settings_preview_draw(a,usable-preview,0,preview,f,changes);}
         else if(!a->settings_review)settings_preview_draw(a,nav,content_y+26*f,usable-nav,f,changes);
         nk_layout_space_end(ui);

@@ -1678,6 +1678,19 @@ def settings_a_window(flow, directory):
         require((root / ("settings-a-wide-16.png" if size == 16 else "settings-a-small-22.png")).is_file(), "Missing native Settings A image")
 
 
+def settings_search_keyboard(flow, directory):
+    directory.mkdir()
+    for size in (16, 22):
+        root = directory / ("UI " + str(size)); root.mkdir()
+        flow.run("--settings-test", root, "search-" + str(size), timeout=45,
+                 marker="SETTINGS SEARCH SELF-TEST: PASSED")
+        require("complete=1" in flow.steps[-1]["stdout"], "Settings search keyboard task did not finish")
+        require("pointer-both=1 text-input-return=1 unchanged-draft=1" in flow.steps[-1]["stdout"], "Search actions lost input or changed preferences")
+        if size == 22:
+            require("SETTINGS CLIPPED POINTER: ignored=21" in flow.steps[-1]["stderr"], "Search did not exercise the scrolled-out category pointer guard")
+        require((root / ("settings-search-reset-" + str(size) + ".png")).is_file(), "Missing native no-results focus image")
+
+
 def unit_task_window(flow, directory):
     directory.mkdir()
     for size in (16, 22):
@@ -2001,6 +2014,7 @@ SPECIAL["laboratory_workflow"]=laboratory
 SPECIAL["model_values_workflow"]=model_values
 SPECIAL["settings_transactions"]=settings_transactions
 SPECIAL["settings_a_window"]=settings_a_window
+SPECIAL["settings_search_keyboard"]=settings_search_keyboard
 SPECIAL["unit_task_window"]=unit_task_window
 
 def documentation_model_contract(flow,directory,output):

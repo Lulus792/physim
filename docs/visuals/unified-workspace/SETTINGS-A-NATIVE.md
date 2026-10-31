@@ -49,6 +49,14 @@ ein passiver Hover auf einem anderen Teilfenster darf Texteingaben nicht sperren
 Die tatsächlich ausgeführten Prüfungen, Zwischenfehler und Grenzen stehen im
 [kompakten Nachweis](../../verification/settings-a-window-2026-10-31.md).
 
+Die Suchaktionen im Kopf und im leeren Ergebnis haben eigene Namen, Fokus-IDs
+und Besitzer. Beide geben Texteingabe und Fokus ans Suchfeld zurück. Abgescrollte
+Controls können keinen Klick auf den festen Suchkopf übernehmen; Pointerfokus
+beachtet den sichtbaren Ausschnitt. Das erste Suchzeichen verwendet für das
+Löschsymbol eine passende Breitenreservierung. [Gezielte Suchprüfung und
+Mac-Inspektorbefund](../../verification/settings-search-2026-10-31.md) halten den
+späteren Nachlauf und ursprüngliche Fehlschritte getrennt fest.
+
 ## Noch umzusetzen
 
 - Anzeigeeinheiten ist inzwischen eine [eigene native Aufgabe](UNIT-TASK-NATIVE.md)

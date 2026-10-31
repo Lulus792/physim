@@ -1,0 +1,1299 @@
+{
+  "date": "2026-10-31",
+  "base_commit": "680eae69cbaff1dd52f396dc87d65e28db670dcc",
+  "scope": "Settings A distinct search actions, actual tab/reverse-tab/pointer/text-return tasks; bounded inspector draw-state recording",
+  "own_inputs": 151,
+  "root_matches_final_tested_inputs": true,
+  "phases": [
+    {
+      "tag": "settings-search-before",
+      "note": "Windows wrapper omitted SPECIAL registration, so registered run did not start the app. Two direct helper attempts also failed before the new test: missing work parent, then CLI mode rejection. Linux not executed; its archive retains earlier runtime.",
+      "runs": [
+        {
+          "platform": "windows",
+          "executed": true,
+          "run": "run-c1mw1dm0",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "settings_search_keyboard"
+            ],
+            "exit_code": 1,
+            "app_sha256": "d9cf4fbac61b9928eaf789ba2b9fe6e9547f9d2519f5e00812819ec46231b7ca"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/settings-search-before-windows.log",
+            "bytes": 47828,
+            "sha256": "f1327c159b5d3c26534b8bae8c71079dd75b489e6efc1f43cf29f9cdc4bb08ef"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-c1mw1dm0/results.json",
+            "bytes": 17505,
+            "sha256": "0a5718675bb3f313b2bd54ec67c704b155e077ab66c260ded2f7893afa060635"
+          },
+          "passed": 0,
+          "total": 1,
+          "cases": [
+            {
+              "name": "settings_search_keyboard",
+              "status": "failed",
+              "seconds": 0.204,
+              "reason_excerpt": "d_run_tutorial_workflow, scene_frames_workflow, scene_visibility_16, scene_visibility_22, series_mask_workflow, settings_a_window, settings_keyboard_workflow, settings_transactions, settings_workflow, shell_theme_contrast, shell_theme_dark, shell_theme_light_large_narrow, source_outline_workflow, speed_workflow, sphere_collision_workflow, spring_tutorial_workflow, spring_workflow, step_breakpoints_workflow, themes_workflow, timed_series_workflow, timeline_workflow, toolbar_input_isolation, toolbar_large, toolbar_small, ui_typography_workflow, unit_task_window, window_smoke, workbench_workflow, workflow_pointer_isolation, workspace_state_workflow, workspace_tree_workflow, workspace_workflow)\n"
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "executed": false
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-before-inputs.json",
+        "bytes": 15410,
+        "sha256": "b92a7c4df39220fef0a1223ca165071aa0710174bb98e58151724a87feb49b74"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-before-compiler-source.json",
+        "bytes": 117575,
+        "sha256": "87627f8c007bb5424929535bafa0cdcf22552f30ac5362f88a56848ec4ce048a"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-before-runtime.json",
+        "bytes": 36330,
+        "sha256": "79026f99e13bfce2e2eee6a72ec82bb2ac135a6fa4375f9207ac089de3c46db9"
+      },
+      "byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-before-byte-index.json",
+        "bytes": 93793,
+        "sha256": "4d15fff0a521477f2dc0a8eed925fef863e4151656792b0bcdbfa25493b7bbb5"
+      }
+    },
+    {
+      "tag": "settings-search-counter",
+      "note": "Old product reached real stage3 with duplicate action26 and old name. The fixture also incorrectly used pane as native group; this is not a clean single-cause counterexample. Linux not executed.",
+      "runs": [
+        {
+          "platform": "windows",
+          "executed": true,
+          "run": "run-o4izdtt1",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "settings_search_keyboard"
+            ],
+            "exit_code": 1,
+            "app_sha256": "e128323c8c2665e6004177684b4487534e61027de7bf427eacb52ce67f0bcc62"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/settings-search-counter-windows.log",
+            "bytes": 31529,
+            "sha256": "5a380095e4bccb6eb8692bb8a6337d2e08c9a61ced7c4baa70e470f90cee1c09"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-o4izdtt1/results.json",
+            "bytes": 8177,
+            "sha256": "c913112e3bf5b09b62714bbe36147692643baa2de2d6894acba0e1d5c26d35bc"
+          },
+          "passed": 0,
+          "total": 1,
+          "cases": [
+            {
+              "name": "settings_search_keyboard",
+              "status": "failed",
+              "seconds": 4.359,
+              "reason_excerpt": "isolated\\src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\bin\\\\physim.exe', '--settings-test', 'D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\test-results\\\\run-o4izdtt1\\\\settings_search_keyboard\\\\files ä\\\\workflow ä\\\\UI 16', 'search-16']\n"
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "executed": false
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-counter-inputs.json",
+        "bytes": 15410,
+        "sha256": "c08c33538328c923aa32772c25a3fa8e6c0b7269e5c641c58a6ba74c3e1269d5"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-counter-compiler-source.json",
+        "bytes": 117485,
+        "sha256": "796f25e36728a6f1896c455e26481ef11dadeab95c23d59f63bc963b82d25b97"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-counter-runtime.json",
+        "bytes": 36332,
+        "sha256": "b7efd53c81b76e800b0b6f4104e6a2fd0a4153b8d0630a3ad532be70b1bdfe67"
+      },
+      "byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-counter-byte-index.json",
+        "bytes": 93796,
+        "sha256": "9243d14e528d47e9219e50645299e8291f886f9697e371e4360352597044ee55"
+      }
+    },
+    {
+      "tag": "settings-search-fixed",
+      "note": "Product actions separated. Existing Settings A window passed both OSes; new fixture incorrectly passed pane as native group, failing stage3. Native API second parameter is group; fixed test queries target with NULL and separately checks active pane.",
+      "runs": [
+        {
+          "platform": "windows",
+          "executed": true,
+          "run": "run-e1fv5_6x",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "settings_search_keyboard",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 1,
+            "app_sha256": "891acbaff585751aa5aed95e8e2ef490e9877351de0bbba9f9f52e633fbd9177"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/settings-search-fixed-windows.log",
+            "bytes": 42725,
+            "sha256": "4c9fa570dc7e6efa4c6d40f1cf428403380f0a642c7694d465ffd2554bf40e9b"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-e1fv5_6x/results.json",
+            "bytes": 17410,
+            "sha256": "2e5ff751ff6a120911fcb37db3da4b1f1d841300702f074e65c29ff973d6e371"
+          },
+          "passed": 1,
+          "total": 2,
+          "cases": [
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 6.188,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_search_keyboard",
+              "status": "failed",
+              "seconds": 5.078,
+              "reason_excerpt": "isolated\\src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\bin\\\\physim.exe', '--settings-test', 'D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\test-results\\\\run-e1fv5_6x\\\\settings_search_keyboard\\\\files ä\\\\workflow ä\\\\UI 16', 'search-16']\n"
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "executed": true,
+          "run": "run-th02pqzm",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "settings_search_keyboard",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 1,
+            "app_sha256": "e629f28c8a69a1b69aa4ce9c23b43d50fb7664e75904bd86ea2598309c66456f"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/settings-search-fixed-linux.log",
+            "bytes": 298778,
+            "sha256": "5508d497f78f460fcd1d669acd9e46f2b30da64befb1ad2f82ffe2ae907f05bb"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-th02pqzm/results.json",
+            "bytes": 17562,
+            "sha256": "aa5abbb34ccf85aa943e7dbb9bc77928ad4ae28d8aab852b699c6b9a32c96649"
+          },
+          "passed": 1,
+          "total": 2,
+          "cases": [
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 23.216,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_search_keyboard",
+              "status": "failed",
+              "seconds": 8.552,
+              "reason_excerpt": "e, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim', '--settings-test', '/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-th02pqzm/settings_search_keyboard/files ä/workflow ä/UI 16', 'search-16']\n"
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-fixed-inputs.json",
+        "bytes": 15410,
+        "sha256": "06441946095065a1b660acc741372a2d8e572f67cf735ac3fc1bd358fd700bdc"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-fixed-compiler-source.json",
+        "bytes": 117506,
+        "sha256": "b35b20002a3c7174bafae620f649b94a9363b03b25806146992d675a46f14733"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-fixed-runtime.json",
+        "bytes": 36328,
+        "sha256": "69f4d5af3e22fae92fca1104e9015caf7d37cf79362cfd5719f89973d3131f5e"
+      },
+      "byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-fixed-byte-index.json",
+        "bytes": 93798,
+        "sha256": "179c172687340d1b26a4858a3c38af3ff9cff150c5f1ca39c909ef2bf9e1e6ca"
+      }
+    },
+    {
+      "tag": "settings-search-ready",
+      "note": "Corrected focus API proves all new UI16 actions and UI22 keyboard actions. UI22 pointer test clicked pre-scroll coordinates. Existing Settings A and inspector both pass. Pointer fixture now waits for real target geometry and completed focus scrolling.",
+      "runs": [
+        {
+          "platform": "windows",
+          "executed": true,
+          "run": "run-_8a5pztq",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "settings_search_keyboard",
+              "--test-filter",
+              "settings_a_window",
+              "--test-filter",
+              "inspector_channel"
+            ],
+            "exit_code": 1,
+            "app_sha256": "4609b3ca0d04a31d0e36b3920901a233aed5a280bc3300d5f50eaac7112279f1"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/settings-search-ready-windows.log",
+            "bytes": 46752,
+            "sha256": "29b5af13c768a0e55ec1f2f0add67303a7b047a237fca0fb3de066848f3a73f2"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-_8a5pztq/results.json",
+            "bytes": 116110,
+            "sha256": "193f306a95684576925421b2485f1af312b1614b719a62dd31af6b528b72a6fd"
+          },
+          "passed": 2,
+          "total": 3,
+          "cases": [
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 7.562,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_search_keyboard",
+              "status": "failed",
+              "seconds": 7.516,
+              "reason_excerpt": "isolated\\src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\bin\\\\physim.exe', '--settings-test', 'D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\test-results\\\\run-_8a5pztq\\\\settings_search_keyboard\\\\files ä\\\\workflow ä\\\\UI 22', 'search-22']\n"
+            },
+            {
+              "name": "inspector_channel",
+              "status": "passed",
+              "seconds": 159.922,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "executed": true,
+          "run": "run-m17aq13q",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "settings_search_keyboard",
+              "--test-filter",
+              "settings_a_window",
+              "--test-filter",
+              "inspector_channel"
+            ],
+            "exit_code": 1,
+            "app_sha256": "2660894ad3f1c920d927c603bbde14faa793691e798384a9d14bab3cc7c9b4af"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/settings-search-ready-linux.log",
+            "bytes": 302744,
+            "sha256": "83bb5a3c77738da86b127637d28549ad0e3f278c515a312e5e85ba4db0b05dab"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-m17aq13q/results.json",
+            "bytes": 72617,
+            "sha256": "ea30e9d61a62339f2944976aad1f227b3730c3dcbf128171489a4b85c74bfaf0"
+          },
+          "passed": 2,
+          "total": 3,
+          "cases": [
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 22.677,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_search_keyboard",
+              "status": "failed",
+              "seconds": 16.472,
+              "reason_excerpt": "e, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim', '--settings-test', '/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-m17aq13q/settings_search_keyboard/files ä/workflow ä/UI 22', 'search-22']\n"
+            },
+            {
+              "name": "inspector_channel",
+              "status": "passed",
+              "seconds": 123.565,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-ready-inputs.json",
+        "bytes": 15410,
+        "sha256": "adbc4ab32b4a5d14a3ce736c31fc757be226bde793f2958e63760150899bb69d"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-ready-compiler-source.json",
+        "bytes": 117501,
+        "sha256": "17ac2e94f6b0ca6d9d9aaea85bdb983d39de9db587ff65bfa0f6ae3fa7fa5416"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-ready-runtime.json",
+        "bytes": 36328,
+        "sha256": "0d67f5629e0f02eb3ae45395b261a6548cf60ad30021f67d564122b0fceab5f4"
+      },
+      "byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-ready-byte-index.json",
+        "bytes": 93798,
+        "sha256": "ea52bef60528b442b636a8d4996bab2c0082a6a6a4d6e03833b154896a07c404"
+      }
+    },
+    {
+      "tag": "settings-search-pointer",
+      "note": "UI16 and UI22 body-reset pointer now pass. Newly appearing header-clear action was clicked before matching-width layout was drawn; UI22 fails stage18. Source review found settings_edit can change search after width calculation. The clear action now uses the same query-presence snapshot as reserved width; test also waits for real in-window geometry.",
+      "runs": [
+        {
+          "platform": "windows",
+          "executed": true,
+          "run": "run-4kz5p0wr",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "settings_search_keyboard"
+            ],
+            "exit_code": 1,
+            "app_sha256": "8d691fcd540d384c98752f97098cb7628d77dd92c348dcc5029f4950bd750e0d"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/settings-search-pointer-windows.log",
+            "bytes": 47078,
+            "sha256": "75e1acee44399822b02b762466c5dee0edabb4d22125af86d27f7e81140c6396"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-4kz5p0wr/results.json",
+            "bytes": 18385,
+            "sha256": "c656fdb4eae77d11ba408d27f6209e6a9127513eb33cb7142a844213eda71da2"
+          },
+          "passed": 0,
+          "total": 1,
+          "cases": [
+            {
+              "name": "settings_search_keyboard",
+              "status": "failed",
+              "seconds": 8.484,
+              "reason_excerpt": "isolated\\src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\bin\\\\physim.exe', '--settings-test', 'D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\test-results\\\\run-4kz5p0wr\\\\settings_search_keyboard\\\\files ä\\\\workflow ä\\\\UI 22', 'search-22']\n"
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "executed": true,
+          "run": "run-4avhz2z6",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "settings_search_keyboard"
+            ],
+            "exit_code": 1,
+            "app_sha256": "366d3a6133e3eae9507c13816060270259b85cba36f71c1eedcb4bd95fab36c6"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/settings-search-pointer-linux.log",
+            "bytes": 303074,
+            "sha256": "06481cd51b11917f2ff1e9aae26b88f0ad2db8ce73e5767a54fe8454c349bd49"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-4avhz2z6/results.json",
+            "bytes": 18744,
+            "sha256": "b7dd4af2eee48672eee6c34eda2bfc12fd8838ab4732dabb86c8acffb5ccf536"
+          },
+          "passed": 0,
+          "total": 1,
+          "cases": [
+            {
+              "name": "settings_search_keyboard",
+              "status": "failed",
+              "seconds": 18.679,
+              "reason_excerpt": "e, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim', '--settings-test', '/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-4avhz2z6/settings_search_keyboard/files ä/workflow ä/UI 22', 'search-22']\n"
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-pointer-inputs.json",
+        "bytes": 15410,
+        "sha256": "05c75f2f4e8f20d19a5ce34811f4354c55f05b446ac46f5e83c9f4b308be0eeb"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-pointer-compiler-source.json",
+        "bytes": 117463,
+        "sha256": "a9cfead2bc23542661f61f9bb01979da339b9555b8ba9f79ef18fc4d4b23f5ef"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-pointer-runtime.json",
+        "bytes": 36332,
+        "sha256": "9a033ddf5fd9073bb0047a3fdeebc6f2e8d6a9f0653e02f51c12710e13af0f10"
+      },
+      "byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-pointer-byte-index.json",
+        "bytes": 93992,
+        "sha256": "65c5b02ff211af49697d420b5cc989ab8c9c1af18e90c5f14dda406dbcc44b91"
+      }
+    },
+    {
+      "tag": "settings-search-stable",
+      "note": "Query-presence snapshot and new-button visibility gate fix the header click. Both OSes now clear the query but lose focus to clipped-out category21 at stage18. settings_focus_draw tested raw bounds without its pane clip; this actual product failure is distinct from earlier stale-coordinate fixture failures.",
+      "runs": [
+        {
+          "platform": "windows",
+          "executed": true,
+          "run": "run-rn873p0n",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "settings_search_keyboard",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 1,
+            "app_sha256": "96fc141a5faec201bdd4974efde74ad6a0e0f60b695cbccd6bf478d0f42b858a"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/settings-search-stable-windows.log",
+            "bytes": 47089,
+            "sha256": "55ddb660d74f743964dd51a999a5f47a3301635c712af031210e3f8b7aa723fa"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-rn873p0n/results.json",
+            "bytes": 27739,
+            "sha256": "5bb64123196218f57e1960e183fe793771e25f4fb9f4017251ce5edbc86727d4"
+          },
+          "passed": 1,
+          "total": 2,
+          "cases": [
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 7.234,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_search_keyboard",
+              "status": "failed",
+              "seconds": 7.719,
+              "reason_excerpt": "isolated\\src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\bin\\\\physim.exe', '--settings-test', 'D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\test-results\\\\run-rn873p0n\\\\settings_search_keyboard\\\\files ä\\\\workflow ä\\\\UI 22', 'search-22']\n"
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "executed": true,
+          "run": "run-bzryo3zv",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "settings_search_keyboard",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 1,
+            "app_sha256": "88cb358874761e711802024c18051dc1b7ee7c6c1e214f01abfe8f1b92d6a3ad"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/settings-search-stable-linux.log",
+            "bytes": 303084,
+            "sha256": "0addd409a16b7bb41cf2a3bd599d4135d0524fdc2fdbd5fc06012f96bb44da41"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-bzryo3zv/results.json",
+            "bytes": 27894,
+            "sha256": "1a11464686de40321ef26e431c4b6937f5631a5e8a1e3a09eda5084d3b7c2ba8"
+          },
+          "passed": 1,
+          "total": 2,
+          "cases": [
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 21.814,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_search_keyboard",
+              "status": "failed",
+              "seconds": 16.864,
+              "reason_excerpt": "e, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim', '--settings-test', '/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-bzryo3zv/settings_search_keyboard/files ä/workflow ä/UI 22', 'search-22']\n"
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-stable-inputs.json",
+        "bytes": 15410,
+        "sha256": "18918d876fac743f20715cf979257d298e07a063537e4b10e60192f9bf5c8109"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-stable-compiler-source.json",
+        "bytes": 117494,
+        "sha256": "0e1597eceebd26d2b806daa351cc65f510755672747e2a6f2d0a9dab7487b10c"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-stable-runtime.json",
+        "bytes": 36330,
+        "sha256": "9054af895c4b496e9b0c722a55eb1a94fa6e426852dc2795fb2b9fa868651892"
+      },
+      "byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-stable-byte-index.json",
+        "bytes": 93895,
+        "sha256": "e17d953a9a40145c7ee30f080c23d0db9554da7f832c05aabd08ac103a75b9bc"
+      }
+    },
+    {
+      "tag": "settings-search-clipped",
+      "note": "Final pointer focus respects the real pane clip. UI22 deliberately scrolls category21 behind the fixed search bar; real header pointer succeeds, ignored clipped target21 is traced, and new text is actually entered. Search task and existing Settings A window repeated: two groups/four app processes per OS. Inspector source unchanged from ready; no new full three-group run claimed.",
+      "runs": [
+        {
+          "platform": "windows",
+          "executed": true,
+          "run": "run-n2nnzihq",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "settings_search_keyboard",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 0,
+            "app_sha256": "1ff42638c87c64244f955e47fe6a54fae54b748155e0968bcb9e73828105602f"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/settings-search-clipped-windows.log",
+            "bytes": 39864,
+            "sha256": "22b8950d6dda9098d465f003bb14639b704133a918793052ceb5f7e6ebd93613"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-n2nnzihq/results.json",
+            "bytes": 19229,
+            "sha256": "cbc92ca3594bde5eb7ff00760f586558974c7efb85a47372b97c375519aaa4d6"
+          },
+          "passed": 2,
+          "total": 2,
+          "cases": [
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 6.187,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_search_keyboard",
+              "status": "passed",
+              "seconds": 5.125,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "executed": true,
+          "run": "run-z7knodp0",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "settings_search_keyboard",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 0,
+            "app_sha256": "8126a06c7398e68f7475124d4241ec52e7d664bfc0b291d4dc37da2142efdffa"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/settings-search-clipped-linux.log",
+            "bytes": 295596,
+            "sha256": "3e0ee2b8feb5652b72e856ad307f87a02dd98be7e7d7c9a70b2e713b1d367ef0"
+          },
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-z7knodp0/results.json",
+            "bytes": 18765,
+            "sha256": "e14e80d17c35f508bc5f5c2d7b2bf03d10020f47c24fda3b4dbe01eb8524e3d2"
+          },
+          "passed": 2,
+          "total": 2,
+          "cases": [
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 22.192,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_search_keyboard",
+              "status": "passed",
+              "seconds": 15.059,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-clipped-inputs.json",
+        "bytes": 15410,
+        "sha256": "540b6367daa1e085fc55bd496a0a2b470e6080bb71dedf85ec9fba6b96281e36"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-clipped-compiler-source.json",
+        "bytes": 117534,
+        "sha256": "a85d1546301bc955903723634f1a8a39555ae96e8f9237e6ea0c041da6ffd7e2"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-clipped-runtime.json",
+        "bytes": 36332,
+        "sha256": "f266aa47b7a9b947b0c9063a92472422bdefd026b572f59de17416aa2f5da07c"
+      },
+      "byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-search-clipped-byte-index.json",
+        "bytes": 93992,
+        "sha256": "d619ccb01fc7e71e39ea7390eab2ba760270e9c0477cbbc714ab1bc03cb71090"
+      }
+    }
+  ],
+  "observations": [
+    {
+      "platform": "windows",
+      "app_steps": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-n2nnzihq/settings_search_keyboard/files ä/app-steps.json",
+        "bytes": 8802,
+        "sha256": "2020461420849d980401289ecb6590d865ba884881aa85930febc61da8a8ae40"
+      },
+      "lines": [
+        "SETTINGS SEARCH HEADER: focus=26 name=Suche löschen y=83.00 body=133.00 target=1",
+        "SETTINGS SEARCH RESET: focus=28 name=Suche zurücksetzen y=287.00 body=133.00 target=1",
+        "SETTINGS SEARCH POINTER: y=287.00 bottom=321.00 body=133.00/692.00 settled=1",
+        "SETTINGS SEARCH CLEAR POINTER: x=549.00 y=83.00 width=34.00 height=36.00",
+        "SETTINGS SEARCH: distinct-actions=1 header-keyboard=1 reset-tab-shift-tab-enter=1 pointer-both=1 text-input-return=1 unchanged-draft=1 size=16 complete=1",
+        "SETTINGS SEARCH SELF-TEST: PASSED",
+        "SETTINGS SEARCH HEADER: focus=26 name=Suche löschen y=114.12 body=182.88 target=1",
+        "SETTINGS SEARCH RESET: focus=28 name=Suche zurücksetzen y=526.50 body=182.88 target=1",
+        "SETTINGS SEARCH POINTER: y=526.50 bottom=573.25 body=182.88/581.12 settled=1",
+        "SETTINGS SEARCH CLEAR POINTER: x=541.62 y=114.12 width=46.75 height=49.50",
+        "SETTINGS SEARCH: distinct-actions=1 header-keyboard=1 reset-tab-shift-tab-enter=1 pointer-both=1 text-input-return=1 unchanged-draft=1 size=22 complete=1",
+        "SETTINGS SEARCH SELF-TEST: PASSED",
+        "SETTINGS CLIPPED POINTER: ignored=21 pane=settings-body control-y=109.00 clip-y=182.88 mouse-y=138.88"
+      ]
+    },
+    {
+      "platform": "linux",
+      "app_steps": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-z7knodp0/settings_search_keyboard/files ä/app-steps.json",
+        "bytes": 8732,
+        "sha256": "e7046dc79951ad03aa895222e4123fd180f860b2d3a952bc9f3b2f79d36920a0"
+      },
+      "lines": [
+        "SETTINGS SEARCH HEADER: focus=26 name=Suche löschen y=83.00 body=133.00 target=1",
+        "SETTINGS SEARCH RESET: focus=28 name=Suche zurücksetzen y=287.00 body=133.00 target=1",
+        "SETTINGS SEARCH POINTER: y=287.00 bottom=321.00 body=133.00/692.00 settled=1",
+        "SETTINGS SEARCH CLEAR POINTER: x=549.00 y=83.00 width=34.00 height=36.00",
+        "SETTINGS SEARCH: distinct-actions=1 header-keyboard=1 reset-tab-shift-tab-enter=1 pointer-both=1 text-input-return=1 unchanged-draft=1 size=16 complete=1",
+        "SETTINGS SEARCH SELF-TEST: PASSED",
+        "SETTINGS SEARCH HEADER: focus=26 name=Suche löschen y=114.12 body=182.88 target=1",
+        "SETTINGS SEARCH RESET: focus=28 name=Suche zurücksetzen y=526.50 body=182.88 target=1",
+        "SETTINGS SEARCH POINTER: y=526.50 bottom=573.25 body=182.88/581.12 settled=1",
+        "SETTINGS SEARCH CLEAR POINTER: x=541.62 y=114.12 width=46.75 height=49.50",
+        "SETTINGS SEARCH: distinct-actions=1 header-keyboard=1 reset-tab-shift-tab-enter=1 pointer-both=1 text-input-return=1 unchanged-draft=1 size=22 complete=1",
+        "SETTINGS SEARCH SELF-TEST: PASSED",
+        "SETTINGS CLIPPED POINTER: ignored=21 pane=settings-body control-y=109.00 clip-y=182.88 mouse-y=138.88"
+      ]
+    }
+  ],
+  "visual_references": [
+    {
+      "platform": "windows",
+      "file": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-n2nnzihq/settings_search_keyboard/files ä/workflow ä/UI 16/settings-search-reset-16.png",
+        "bytes": 80285,
+        "sha256": "fc69b3bcebbe40b6b0f7a25baeb4457029b549479b47f0d4812a2864ccfa257d"
+      }
+    },
+    {
+      "platform": "windows",
+      "file": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-n2nnzihq/settings_search_keyboard/files ä/workflow ä/UI 22/settings-search-reset-22.png",
+        "bytes": 47076,
+        "sha256": "403de3c17179fd3e6404c79e2cd2b2d14fc453db49255d53cfdcd7ab76c8db6b"
+      }
+    },
+    {
+      "platform": "linux",
+      "file": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-z7knodp0/settings_search_keyboard/files ä/workflow ä/UI 16/settings-search-reset-16.png",
+        "bytes": 84156,
+        "sha256": "a0ff614565dd4d0c5d7ed92c2a97af6f3f4b4125222ec392a09eff0d777cbf09"
+      }
+    },
+    {
+      "platform": "linux",
+      "file": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-z7knodp0/settings_search_keyboard/files ä/workflow ä/UI 22/settings-search-reset-22.png",
+        "bytes": 49759,
+        "sha256": "bbf6f3ed074d6f5e3d272392ba674d5b7bc94bd8ad73698eea23bc0ca1d99e80"
+      }
+    }
+  ],
+  "product": "Search-header clear action26 and no-results body reset28 have distinct labels/owners/bounds. Only visible no-results reset enters tab order. Both use a common helper to return keyboard and text input to search17. Clear-button visibility uses the same query-presence snapshot as reserved width. Pointer focus additionally requires the real pane clip, so offscreen categories cannot steal the header action. No layout/theme redesign.",
+  "inspector": "After actual cm selection, bounded3s wait for real selector draw to show cm before recording. A menu can update catalog/value after selector painting in that frame. Python raster/data consistency and minimum12fields/8values retained.",
+  "mac_source": "657219a3963fc252372589ff99e45a4ab05bef11",
+  "mac_first_results": [
+    {
+      "artifact": 13032808819,
+      "run": 41177844214,
+      "job": 124468995798,
+      "path": "build/validation/units-window-2026-10-31/units-macos-arm-657219a3.zip",
+      "bytes": 20506,
+      "sha256": "ef2081aed9efcbc6037e92f5cad5ec94928206d1b652a0278ed3b1fe0802b61f",
+      "github_digest_matches": true,
+      "result_entries": [
+        {
+          "entry": "Release/test-results/run-7brveb7a/results.json",
+          "sha256": "31ae25517eddf070bc6135db823cd4af1da4c6d4543b9f478b9d8073a8416cb9",
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "seconds": 44.586,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-q8oyap58/results.json",
+          "sha256": "fb3453d010676e93d7878207e50a9699cc8b552ce3fbf3378430cd30f345704f",
+          "passed": 3,
+          "total": 3,
+          "cases": [
+            {
+              "name": "shell_theme_dark",
+              "status": "passed",
+              "seconds": 4.28,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "shell_theme_light_large_narrow",
+              "status": "passed",
+              "seconds": 2.613,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "shell_theme_contrast",
+              "status": "passed",
+              "seconds": 2.87,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-dclw60s3/results.json",
+          "sha256": "958497ef45b56ab545151f29efbbf2dfa70522b7d96ff95de09f9578b7967670",
+          "passed": 8,
+          "total": 9,
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "seconds": 1.074,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 11.377,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 17.054,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed",
+              "seconds": 16.254,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "passed",
+              "seconds": 35.551,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "seconds": 14.252,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_dark",
+              "status": "passed",
+              "seconds": 6.032,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_light_large_narrow",
+              "status": "passed",
+              "seconds": 5.299,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "inspector_channel",
+              "status": "failed",
+              "seconds": 54.968,
+              "reason_excerpt": "used=66 pending=0 window=2 keyboard=2 ticks=11908566083\nAPP TEST TRACE: stage 12 -> 13, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 13 -> 14, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=26 pending=0 window=2 keyboard=2 ticks=12243777916\nAPP TEST TRACE: stage 14 -> 15, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 15 -> 16, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=66 window=2 ticks=12873853500\nAPP TEST TRACE: stage 16 -> 17, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nUNIT CALLER CONTEXT: source=2 caller=2 restored=2 same=1\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=187 ticks=13275707958\nAPP TEST TRACE: publication cleared focus id=187 window=2 ticks=13275781291\nAPP TEST TRACE: stage 17 -> 18, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=1 id=66 ticks=13932442041\nAPP TEST TRACE: stage 18 -> 19, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=66 window=2 ticks=14086737250\nAPP TEST TRACE: stage 19 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=188 window=2 ticks=14431744500\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=66 window=2 ticks=16813115625\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 23, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 23 -> 24, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 24 -> 25, status 87 Messpunkte geladen.\nTraceback (most recent call last):\n  File \"/Users/runner/work/physim/physim/tests/check_inspector_channel.py\", line 68, in <module>\n    if __name__=='__main__':main()\n                            ~~~~^^\n  File \"/Users/runner/work/physim/physim/tests/check_inspector_channel.py\", line 65, in main\n    checks.append(dict(font_mode=font,**inspect(folder,flow.steps[-1]['stdout'])))\n                                        ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/runner/work/physim/physim/tests/check_inspector_channel.py\", line 33, in inspect\n    assert field['paint']==(r['data']['name'] if i==0 else r['data']['symbol']),(r,field)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ({'kind': 'centimetres', 'variant': 'dark', 'size': 16, 'time': 0.43, 'browsing': False, 'body': (1121.0, 278.85, 319.0, 536.15), 'value': (1137.0, 710.75, 287.0, 34.8), 'hint': (1137.0, 751.55, 287.0, 51.15), 'paint': '31,35 cm', 'font': 24.0, 'em': 1.0, 'fields': [{'card': (1137.0, 534.85, 287.0, 76.95), 'label': (1150.0, 546.85, 261.0, 15.95), 'field': (1150.0, 567.8, 261.0, 32.0), 'paint': 'position.x'}, {'card': (1137.0, 621.8, 287.0, 76.95), 'label': (1150.0, 633.8, 261.0, 15.95), 'field': (1150.0, 654.75, 261.0, 32.0), 'paint': 'm'}], 'data': {'selected': 2, 'raw': 0.3135499050816378, 'scale': 0.01, 'symbol': 'cm', 'name': 'position.x'}}, {'card': (1137.0, 621.8, 287.0, 76.95), 'label': (1150.0, 633.8, 261.0, 15.95), 'field': (1150.0, 654.75, 261.0, 32.0), 'paint': 'm'})\n"
+            }
+          ]
+        }
+      ],
+      "passed": 12,
+      "total": 13
+    },
+    {
+      "artifact": 13034191345,
+      "run": 41177844214,
+      "job": 124468995912,
+      "path": "build/validation/units-window-2026-10-31/units-macos-intel-657219a3.zip",
+      "bytes": 20913,
+      "sha256": "5074f1c3a7dada2ceb558b315d2fb3bf2495c726d1e5a97c9043c9e776530fe0",
+      "github_digest_matches": true,
+      "result_entries": [
+        {
+          "entry": "Release/test-results/run-5evlf8aa/results.json",
+          "sha256": "c9fcd49fd72f44d238db3da0ed2d378661f132c5a91f8aca28c3aabdf5e21b85",
+          "passed": 3,
+          "total": 3,
+          "cases": [
+            {
+              "name": "shell_theme_dark",
+              "status": "passed",
+              "seconds": 10.183,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "shell_theme_light_large_narrow",
+              "status": "passed",
+              "seconds": 6.515,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "shell_theme_contrast",
+              "status": "passed",
+              "seconds": 5.585,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-jykq652x/results.json",
+          "sha256": "ed1eede1b527b70581f69b290f175b5976cba29f6685c45dea0fd588836b349e",
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "seconds": 77.866,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-uwkerf01/results.json",
+          "sha256": "2be30c4af35b82d397752d16111b65555314588559c53c95f577d57a699e95b1",
+          "passed": 8,
+          "total": 9,
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "seconds": 3.792,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 26.579,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 33.153,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed",
+              "seconds": 32.914,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "passed",
+              "seconds": 72.11,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "seconds": 23.12,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_dark",
+              "status": "passed",
+              "seconds": 7.695,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_light_large_narrow",
+              "status": "passed",
+              "seconds": 6.649,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "inspector_channel",
+              "status": "failed",
+              "seconds": 64.506,
+              "reason_excerpt": "d=66 pending=0 window=2 keyboard=2 ticks=20182628704\nAPP TEST TRACE: stage 12 -> 13, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 13 -> 14, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: accessibility blur event=1025 focused=26 pending=0 window=2 keyboard=2 ticks=20623024738\nAPP TEST TRACE: stage 14 -> 15, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 15 -> 16, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=66 window=2 ticks=21367190136\nAPP TEST TRACE: stage 16 -> 17, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nUNIT CALLER CONTEXT: source=2 caller=2 restored=2 same=1\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=212 ticks=21860458821\nAPP TEST TRACE: publication cleared focus id=212 window=2 ticks=21860608845\nAPP TEST TRACE: stage 17 -> 18, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=1 id=66 ticks=22636720365\nAPP TEST TRACE: stage 18 -> 19, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=66 window=2 ticks=22823681099\nAPP TEST TRACE: stage 19 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=213 window=2 ticks=23323495333\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: publication cleared focus id=66 window=2 ticks=26217999876\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 20, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 20 -> 21, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 21 -> 22, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 22 -> 23, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 23 -> 24, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 24 -> 25, status 137 Messpunkte geladen.\nTraceback (most recent call last):\n  File \"/Users/runner/work/physim/physim/tests/check_inspector_channel.py\", line 68, in <module>\n    if __name__=='__main__':main()\n                            ~~~~^^\n  File \"/Users/runner/work/physim/physim/tests/check_inspector_channel.py\", line 65, in main\n    checks.append(dict(font_mode=font,**inspect(folder,flow.steps[-1]['stdout'])))\n                                        ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/runner/work/physim/physim/tests/check_inspector_channel.py\", line 33, in inspect\n    assert field['paint']==(r['data']['name'] if i==0 else r['data']['symbol']),(r,field)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: ({'kind': 'centimetres', 'variant': 'dark', 'size': 16, 'time': 0.68, 'browsing': False, 'body': (1121.0, 278.85, 319.0, 536.15), 'value': (1137.0, 710.75, 287.0, 34.8), 'hint': (1137.0, 751.55, 287.0, 51.15), 'paint': '-9,85 cm', 'font': 24.0, 'em': 1.0, 'fields': [{'card': (1137.0, 534.85, 287.0, 76.95), 'label': (1150.0, 546.85, 261.0, 15.95), 'field': (1150.0, 567.8, 261.0, 32.0), 'paint': 'position.x'}, {'card': (1137.0, 621.8, 287.0, 76.95), 'label': (1150.0, 633.8, 261.0, 15.95), 'field': (1150.0, 654.75, 261.0, 32.0), 'paint': 'm'}], 'data': {'selected': 2, 'raw': -0.09848509891146129, 'scale': 0.01, 'symbol': 'cm', 'name': 'position.x'}}, {'card': (1137.0, 621.8, 287.0, 76.95), 'label': (1150.0, 633.8, 261.0, 15.95), 'field': (1150.0, 654.75, 261.0, 32.0), 'paint': 'm'})\n"
+            }
+          ]
+        }
+      ],
+      "passed": 12,
+      "total": 13
+    },
+    {
+      "artifact": 13033960510,
+      "run": 41177844185,
+      "job": 124468995758,
+      "path": "build/validation/units-window-2026-10-31/menu-macos-arm-657219a3.zip",
+      "bytes": 4433,
+      "sha256": "7377bbbba0de43a6b4728d16667780610cc841c5efa86b7da2f8acb80f2dfc6a",
+      "github_digest_matches": true,
+      "result_entries": [
+        {
+          "entry": "Release/test-results/run-woot__au/results.json",
+          "sha256": "ed1e35e571f7456fddaa653dfc0a942b51ed3a5b20041ccd5c5788ce0c893c75",
+          "passed": 7,
+          "total": 7,
+          "cases": [
+            {
+              "name": "native_menu",
+              "status": "passed",
+              "seconds": 1.907,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "window_smoke",
+              "status": "passed",
+              "seconds": 1.617,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "toolbar_small",
+              "status": "passed",
+              "seconds": 4.849,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "toolbar_large",
+              "status": "passed",
+              "seconds": 4.904,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "toolbar_input_isolation",
+              "status": "passed",
+              "seconds": 9.124,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "keyboard_menu_small",
+              "status": "passed",
+              "seconds": 6.373,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "keyboard_menu_large",
+              "status": "passed",
+              "seconds": 5.729,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "passed": 7,
+      "total": 7
+    },
+    {
+      "artifact": 13034225401,
+      "run": 41177844185,
+      "job": 124468995948,
+      "path": "build/validation/units-window-2026-10-31/menu-macos-intel-657219a3.zip",
+      "bytes": 4524,
+      "sha256": "bfd7a92700a613d9e64d053273f7caf6806506d5dc453e06eff677236d69cfb4",
+      "github_digest_matches": true,
+      "result_entries": [
+        {
+          "entry": "Release/test-results/run-kh7fb_v8/results.json",
+          "sha256": "bda6775eaeaff5471e1dde2fffedc6012fa033177c59b503e9c36015cc490f77",
+          "passed": 7,
+          "total": 7,
+          "cases": [
+            {
+              "name": "native_menu",
+              "status": "passed",
+              "seconds": 2.663,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "window_smoke",
+              "status": "passed",
+              "seconds": 2.381,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "toolbar_small",
+              "status": "passed",
+              "seconds": 5.764,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "toolbar_large",
+              "status": "passed",
+              "seconds": 5.553,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "toolbar_input_isolation",
+              "status": "passed",
+              "seconds": 10.166,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "keyboard_menu_small",
+              "status": "passed",
+              "seconds": 9.052,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "keyboard_menu_large",
+              "status": "passed",
+              "seconds": 9.177,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "passed": 7,
+      "total": 7
+    }
+  ],
+  "mac_interpretation": "Both hosted architectures: header3/3, typography1/1, combined8/9; inspector failed first cm record selector m versus value/catalog cm. Portable preference step skipped. Separate menu7/7 each. All four ZIP digests and all actual results entries read. This is not a passing whole Mac run.",
+  "storage": "Only D:. User Mac off and never contacted. No new cleanup claimed in this search campaign.",
+  "limits": [
+    "Corrected hosted macOS inspector/search results pending new source commit",
+    "No full GUI/design/manual screenreader/physical-input/DPI/monitor/fullscreen acceptance",
+    "Completion D backend/preferences and other approved UI remain open",
+    "Earlier before/counter runs contain fixture limitations, explicitly recorded; no unsupported counterexample claim"
+  ]
+}

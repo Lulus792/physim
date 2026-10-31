@@ -147,13 +147,23 @@ static const ps_channel *settings_channel(app *a) {
     if(!a->data.thread && a->data.channel_count)return &a->data.channels[0];
     return NULL;
 }
-static int settings_order(app *a,int ids[28]) {
+static bool settings_search_no_results(app *a) {
+    if(!*a->settings_search || settings_units_match(a))return false;
+    for(unsigned i=0;i<14;i++)if(settings_match(a,i))return false;
+    return true;
+}
+static void settings_search_clear(app *a) {
+    a->settings_search[0]=0;a->settings_focus=17;
+    a->settings_keyboard=a->settings_focus_scroll=true;
+    nk_sdl_accessibility_keyboard_begin(a->settings_ui);
+}
+static int settings_order(app *a,int ids[29]) {
     int n=0;ids[n++]=17;if(*a->settings_search)ids[n++]=26;
-    if(!a->settings_review){for(int i=20;i<25;i++)ids[n++]=i;for(unsigned i=0;i<14;i++)if(settings_match(a,i))ids[n++]=settings_fields[i].focus;if(settings_units_match(a) && settings_channel(a))ids[n++]=27;}
+    if(!a->settings_review){for(int i=20;i<25;i++)ids[n++]=i;for(unsigned i=0;i<14;i++)if(settings_match(a,i))ids[n++]=settings_fields[i].focus;if(settings_units_match(a) && settings_channel(a))ids[n++]=27;if(settings_search_no_results(a))ids[n++]=28;}
     if(a->settings_review)ids[n++]=25;ids[n++]=3;ids[n++]=2;if(settings_changes(a) || !a->preferences_writable){ids[n++]=18;ids[n++]=1;}ids[n++]=19;return n;
 }
 static const char *settings_focus_name(int id) {
-    static const char *names[]={"Schriftgröße der Oberfläche","Übernehmen","Abbrechen","Standardwerte","Darstellung","Schriftgröße im Code-Editor","Automatische Sicherung","Vektoren anzeigen","Flugbahnen anzeigen","Punkte anzeigen","Beschriftungen anzeigen","Raster und Achsen","Orthografische Ansicht","Protokoll geöffnet","Seitenleistenbreite","Inspektorbreite","Protokollhöhe","Einstellungen suchen","Änderungen prüfen","Einstellungen schließen","Darstellung","Editor & Sicherung","Simulation","Arbeitsfläche","Anzeigeeinheiten","Zurück","Suche zurücksetzen","Anzeigeeinheit bearbeiten …"};
+    static const char *names[]={"Schriftgröße der Oberfläche","Übernehmen","Abbrechen","Standardwerte","Darstellung","Schriftgröße im Code-Editor","Automatische Sicherung","Vektoren anzeigen","Flugbahnen anzeigen","Punkte anzeigen","Beschriftungen anzeigen","Raster und Achsen","Orthografische Ansicht","Protokoll geöffnet","Seitenleistenbreite","Inspektorbreite","Protokollhöhe","Einstellungen suchen","Änderungen prüfen","Einstellungen schließen","Darstellung","Editor & Sicherung","Simulation","Arbeitsfläche","Anzeigeeinheiten","Zurück","Suche löschen","Anzeigeeinheit bearbeiten …","Suche zurücksetzen"};
     return names[id];
 }
 static void settings_field_flush(app *a) {
@@ -165,7 +175,7 @@ static void settings_field_flush(app *a) {
 static bool settings_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
     if(!a->settings_open || key->mod&(SDL_KMOD_CTRL|SDL_KMOD_GUI|SDL_KMOD_ALT))return false;
     if(key->key==SDLK_ESCAPE){struct nk_window *body=nk_window_find(a->settings_ui,"settings-body");if(body && body->popup.active)a->settings_popup_close=true;else if(a->settings_review){a->settings_review=false;a->settings_focus=18;a->settings_keyboard=true;a->settings_focus_scroll=true;}else settings_close(a);return true;}
-    if(key->key==SDLK_TAB){settings_field_flush(a);int ids[28],n=settings_order(a,ids),at=-1,d=key->mod&SDL_KMOD_SHIFT?-1:1;for(int i=0;i<n;i++)if(ids[i]==a->settings_focus)at=i;
+    if(key->key==SDLK_TAB){settings_field_flush(a);int ids[29],n=settings_order(a,ids),at=-1,d=key->mod&SDL_KMOD_SHIFT?-1:1;for(int i=0;i<n;i++)if(ids[i]==a->settings_focus)at=i;
         a->settings_focus=ids[(at+d+n)%n];a->settings_keyboard=a->settings_focus_scroll=true;nk_sdl_accessibility_keyboard_begin(a->settings_ui);return true;}
     if(!a->settings_keyboard || a->settings_focus==17 || (a->settings_focus>=14 && a->settings_focus<=16))return false;
     int id=a->settings_focus,d=key->key==SDLK_LEFT || key->key==SDLK_UP?-1:key->key==SDLK_RIGHT || key->key==SDLK_DOWN?1:0;
@@ -177,7 +187,7 @@ static bool settings_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
     else if(id==3 && activate)settings_defaults_draft(a);
     else if(id==18 && activate){a->settings_review=!a->settings_review;a->settings_focus_scroll=true;}
     else if(id==25 && activate){a->settings_review=false;a->settings_focus=18;a->settings_focus_scroll=true;}
-    else if(id==26 && activate){a->settings_search[0]=0;a->settings_focus=17;a->settings_focus_scroll=true;}
+    else if((id==26 || id==28) && activate)settings_search_clear(a);
     else if(id==27 && activate && settings_channel(a))channel_unit_open_from(a,settings_channel(a),a->settings_window,settings_focus_name(27));
     else if(id>=20 && id<=24 && (activate || d)){a->settings_group=(id-20+(d<0?4:d>0?1:0))%5;a->settings_focus=20+a->settings_group;a->settings_search[0]=0;}
     else if(id==0 || id==5){uint32_t *size=id==0?&p->ui_size:&p->editor_size;unsigned min=id==0?16:12,count=id==0?4:6;*size=min+2*(((*size-min)/2+(d<0?count-1:1))%count);}

@@ -209,6 +209,7 @@ static void test_settings_focus_frame(app *a,bool remote,int *stage,int *code,co
 static void test_settings_frame(app *a, const char *mode, int *stage, int *code,
                                const char **capture) {
     if(!strcmp(mode,"merge")){test_settings_merge_frame(a,stage,code);return;}
+    if(!strncmp(mode,"search-",7)){test_settings_search_frame(a,!strcmp(mode,"search-22"),stage,code,capture);return;}
     if(!strncmp(mode,"window-",7)){test_settings_window_frame(a,!strcmp(mode,"window-22"),stage,code,capture);return;}
     if(!strncmp(mode,"focus-",6)){test_settings_focus_frame(a,!strcmp(mode,"focus-remote"),stage,code,capture);return;}
     if(!strncmp(mode,"options-",8)){test_settings_options_frame(a,!strcmp(mode,"options-remote"),stage,code);return;}

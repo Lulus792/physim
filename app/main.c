@@ -199,7 +199,7 @@ typedef struct {
     int settings_previous_tab, panel_drag;
     bool settings_from_analysis,settings_defaults;
     int settings_focus;
-    struct nk_rect settings_focus_bounds[28];
+    struct nk_rect settings_focus_bounds[29];
     bool settings_keyboard, settings_focus_scroll;
     SDL_Window *settings_window;
     ps_graphics *settings_graphics;
@@ -3875,7 +3875,7 @@ int main(int argc, char **argv) {
     if(migration_test && (argc!=4 || (strcmp(argv[3],"normal") && strcmp(argv[3],"stale") && strcmp(argv[3],"dirty"))))return 2;
     bool settings_test = argc > 1 && !strcmp(argv[1], "--settings-test");
     if (settings_test && (argc != 4 || (strcmp(argv[3], "write") && strcmp(argv[3], "read") &&
-        strcmp(argv[3], "keyboard") && strcmp(argv[3], "keyboard-read") && strcmp(argv[3], "merge") && strcmp(argv[3], "window-16") && strcmp(argv[3], "window-22") &&
+        strcmp(argv[3], "keyboard") && strcmp(argv[3], "keyboard-read") && strcmp(argv[3], "merge") && strcmp(argv[3], "window-16") && strcmp(argv[3], "window-22") && strcmp(argv[3], "search-16") && strcmp(argv[3], "search-22") &&
         strcmp(argv[3], "checkbox-native") && strcmp(argv[3], "checkbox-remote") &&
         strcmp(argv[3], "options-native") && strcmp(argv[3], "options-remote") &&
         strcmp(argv[3], "focus-native") && strcmp(argv[3], "focus-remote") &&
