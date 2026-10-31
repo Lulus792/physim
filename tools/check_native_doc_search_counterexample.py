@@ -40,7 +40,8 @@ def main():
         libraries=[builder.lib/('libphysim-'+name+'.a') for name in ('project','batch','platform','language','zlib','core')]
         if not all(p.is_file() for p in libraries):
             raise RuntimeError('Build the current Release app before the counterexample')
-        sources=[str(main_source) if name=='main' else f'app/{name}.c' for name in build.APP]
+        sources=([str(main_source) if name=='main' else f'app/{name}.c' for name in build.APP]
+                 +build.LINEBREAK+build.GRAPHEME)
         binary=builder.executable('physim-native-search-counterexample',sources,libraries,sdl=True,
             defines=('Z_PREFIX',f'PS_SOURCE_DIR="{build.ROOT.as_posix()}"'))
     command=[sys.executable,str(build.ROOT/'tests/check_display_workflow.py'),'accessibility_edit_macos',
