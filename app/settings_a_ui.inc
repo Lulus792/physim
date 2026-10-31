@@ -280,7 +280,7 @@ static void settings_view(app *a,int width,int height) {
             if(settings_units_match(a)){matches++;settings_text(a,content_x,content_y,content_w,"Anzeigeeinheiten für Messkanäle",SET_FONT_LABEL,19*f,c.text);content_y+=29*f;
                 content_y+=settings_text(a,content_x,content_y,content_w,"Persönliche Auswahl je Kanal und SI-Dimension. Eigene Aufgabe mit eigenem Anwenden; Rohdaten und CSV bleiben unverändert.",SET_FONT_HELP,18*f,c.muted)+18*f;
                 const ps_channel *channel=settings_channel(a);if(channel){char current[160];ps_display_unit unit=channel_display_unit(a,channel);snprintf(current,sizeof current,"%s [%s]",channel->name,unit.symbol);settings_text(a,content_x,content_y,content_w,current,SET_FONT_BUTTON,20*f,c.text);content_y+=28*f;}
-                if(settings_button(a,27,"Anzeigeeinheit bearbeiten …",content_x,content_y,fminf(content_w,240*f),34*f,false,channel!=NULL,false))channel_unit_open(a,channel);
+                if(settings_button(a,27,"Anzeigeeinheit bearbeiten …",content_x,content_y,fminf(content_w,240*f),34*f,false,channel!=NULL,false))channel_unit_open_from(a,channel,a->settings_window,settings_focus_name(27));
                 if(!channel)settings_text(a,content_x,content_y+46*f,content_w,"Noch keine Messkanäle verfügbar. Ein Experiment oder einen gespeicherten Lauf öffnen.",SET_FONT_HELP,18*f,c.muted);}
             if(!matches){settings_text(a,content_x,content_y,content_w,"Keine passenden Einstellungen.",SET_FONT_LABEL,22*f,c.text);content_y+=34*f;
                 if(settings_button(a,26,"Suche zurücksetzen",content_x,content_y,fminf(content_w,190*f),34*f,false,true,false))a->settings_search[0]=0;}}

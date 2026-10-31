@@ -47,12 +47,6 @@ static void channel_unit_cell(struct nk_context *ui,const char *text) {
     nk_label(ui,visible,NK_TEXT_LEFT);
     if(nk_input_is_mouse_hovering_rect(&ui->input,bounds))nk_tooltip(ui,text);
 }
-static void channel_unit_open(app *a,const ps_channel *ch) {
-    a->unit_channel=*ch;a->unit_draft=channel_display_unit(a,ch);
-    snprintf(a->channel_unit_scale,sizeof a->channel_unit_scale,"%.17g",a->unit_draft.scale);
-    if(a->channel_units_writable)a->channel_units_error[0]=0;
-    a->channel_unit_manager=true;
-}
 static bool channel_units_save(app *a,const ps_channel_units *next) {
     ps_result r=ps_channel_units_write(a->channel_units_path,next);
     if(r!=PS_OK) {
@@ -88,13 +82,6 @@ static bool channel_unit_commit(app *a,const ps_channel *channel,const ps_displa
     if(r!=PS_OK){snprintf(a->channel_units_error,sizeof a->channel_units_error,"Einheit ungültig oder alle 64 Plätze belegt (%s).",ps_result_string(r));return false;}
     return channel_units_save(a,&next);
 }
-static void channel_unit_apply(app *a) {
-    ps_display_unit u=a->unit_draft;
-    if(!ps_parse_finite_number(a->channel_unit_scale,NULL,&u.scale) || !ps_display_unit_valid(&u)) {
-        snprintf(a->channel_units_error,sizeof a->channel_units_error,"Symbol und einen endlichen Faktor größer als null eingeben.");return;
-    }
-    if(channel_unit_commit(a,&a->unit_channel,&u))a->channel_unit_manager=false;
-}
 typedef struct {const char *symbol;double scale;int8_t dimension[7];} channel_unit_preset;
 static const channel_unit_preset channel_unit_presets[]={
     {"1",1,{0}}, {"%",.01,{0}}, {"rad",1,{0}}, {"°",0.017453292519943295,{0}},
@@ -108,67 +95,4 @@ static const channel_unit_preset channel_unit_presets[]={
     {"W",1,{2,1,-3}}, {"kW",1000,{2,1,-3}}, {"Hz",1,{0,0,-1}},
     {"A",1,{0,0,0,1}}, {"K",1,{0,0,0,0,1}}, {"mol",1,{0,0,0,0,0,1}}, {"cd",1,{0,0,0,0,0,0,1}}
 };
-static void channel_unit_manager_view(app *a,int width,int height) {
-    struct nk_context *ui=a->ui;
-    nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(0,5));
-    nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(0,0));
-    if(nk_begin(ui,"channel-units-header",nk_rect(0,0,(float)width,38),NK_WINDOW_NO_SCROLLBAR)) {
-        nk_layout_row_begin(ui,NK_STATIC,28,4);nk_layout_row_push(ui,(float)width-138);
-        a->window_drag_bounds=nk_widget_bounds(ui);nk_label(ui,"   Physim  ·  Anzeigeeinheit",NK_TEXT_LEFT);
-        for(unsigned i=0;i<3;i++){nk_layout_row_push(ui,46);window_control(a,i);}nk_layout_row_end(ui);
-    }
-    nk_end(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
-    float w=fminf(640,(float)width-32),h=fminf(540,(float)height-54);
-    if(nk_begin(ui,"channel-units-manager",nk_rect(((float)width-w)/2,((float)height-h)/2,w,h),0)) {
-        nk_layout_row_dynamic(ui,38,1);nk_style_push_font(ui,a->font_title);nk_label(ui,"Anzeigeeinheit",NK_TEXT_LEFT);nk_style_pop_font(ui);
-        char label[160];snprintf(label,sizeof label,"Kanal: %s [%s]",a->unit_channel.name,a->unit_channel.unit);
-        nk_layout_row_dynamic(ui,28,1);nk_label(ui,label,NK_TEXT_LEFT);
-        nk_layout_row_dynamic(ui,52,1);nk_label_wrap(ui,"Die Auswahl gilt für Live-Werte, Messkurven und Statistiken dieses Kanals. Messdatei, Modell und CSV bleiben in SI.");
-        nk_begin_disabled(ui,!a->channel_units_writable);
-        nk_layout_row_dynamic(ui,30,1);a->channel_unit_bounds[0]=nk_widget_bounds(ui);
-        if(nk_combo_begin_label(ui,"Passende Einheit auswählen",nk_vec2(w-40,220))) {
-            nk_layout_row_dynamic(ui,26,1);
-            for(unsigned i=0;i<sizeof channel_unit_presets/sizeof channel_unit_presets[0];i++) {
-                const channel_unit_preset *p=channel_unit_presets+i;
-                if(memcmp(p->dimension,a->unit_channel.dimension,7))continue;
-                if(nk_button_label(ui,p->symbol)) {
-                    snprintf(a->unit_draft.symbol,sizeof a->unit_draft.symbol,"%s",p->symbol);
-                    snprintf(a->channel_unit_scale,sizeof a->channel_unit_scale,"%.17g",p->scale);nk_combo_close(ui);
-                }
-            }nk_combo_end(ui);
-        }
-        nk_layout_row_dynamic(ui,24,2);nk_label(ui,"Symbol",NK_TEXT_LEFT);nk_label(ui,"SI-Einheiten pro Anzeigeeinheit",NK_TEXT_LEFT);
-        nk_layout_row_dynamic(ui,32,2);a->channel_unit_bounds[1]=nk_widget_bounds(ui);
-        nk_edit_string_zero_terminated(ui,NK_EDIT_FIELD,a->unit_draft.symbol,sizeof a->unit_draft.symbol,nk_filter_default);
-        a->channel_unit_bounds[2]=nk_widget_bounds(ui);
-        nk_edit_string_zero_terminated(ui,NK_EDIT_FIELD,a->channel_unit_scale,sizeof a->channel_unit_scale,nk_filter_default);
-        nk_layout_row_dynamic(ui,32,1);nk_label_wrap(ui,"Beispiel: cm mit Faktor 0.01. Nur lineare Einheiten ohne Temperatur-Offset.");
-        nk_layout_row_dynamic(ui,32,1);
-        ps_display_unit preview=a->unit_draft;double si=1;
-        for(uint32_t i=0;i<a->channel_count;i++)if(!strcmp(a->live_channels[i].name,a->unit_channel.name) &&
-            !memcmp(a->live_channels[i].dimension,a->unit_channel.dimension,7)) {
-            const double *shown=display_values(a);int mask=a->channel_status[i];
-            if(mask<0 || shown[mask]==1)si=shown[i];
-            break;
-        }
-        char converted[96];
-        if(ps_parse_finite_number(a->channel_unit_scale,NULL,&preview.scale))channel_display_text(&preview,si,converted,sizeof converted);
-        else snprintf(converted,sizeof converted,"ungültiger Faktor");
-        snprintf(label,sizeof label,"Vorschau: %.8g SI = %s",si,converted);nk_label(ui,label,NK_TEXT_LEFT);
-        nk_layout_row_dynamic(ui,36,2);a->channel_unit_bounds[3]=nk_widget_bounds(ui);
-        if(nk_button_label(ui,"Anwenden"))channel_unit_apply(a);
-        a->channel_unit_bounds[4]=nk_widget_bounds(ui);
-        if(nk_button_label(ui,"SI wiederherstellen")) {
-            ps_channel_units next=a->channel_units;
-            if(ps_channel_units_remove(&next,&a->unit_channel)==PS_OK && channel_units_save(a,&next))a->channel_unit_manager=false;
-        }
-        nk_end_disabled(ui);
-        nk_layout_row_dynamic(ui,52,1);nk_label_wrap(ui,a->channel_units_error);
-        nk_layout_row_dynamic(ui,36,2);a->channel_unit_bounds[5]=nk_widget_bounds(ui);
-        if(!a->channel_units_writable && *a->channel_units_path) {
-            if(nk_button_label(ui,"Datei bewusst zurücksetzen")) {ps_channel_units empty={0};(void)channel_units_save(a,&empty);}
-        } else nk_label(ui,"",NK_TEXT_LEFT);
-        a->channel_unit_bounds[6]=nk_widget_bounds(ui);
-        if(nk_button_label(ui,"Abbrechen · Esc"))a->channel_unit_manager=false;
-    }nk_end(ui);
-}
+#include "channel_unit_window.inc"

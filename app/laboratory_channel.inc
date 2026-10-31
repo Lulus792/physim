@@ -55,7 +55,7 @@ static void laboratory_channel_inspector(app *a){
         }
         if(!current && ps_ui_fixed_button_label(ui,unit.symbol)){a->inspector_channel_return[1]=true;nk_combo_close(ui);}
         nk_end_disabled(ui);a->inspector_channel_custom=nk_widget_bounds(ui);
-        if(ps_ui_fixed_button_label(ui,"Benutzerdefiniert …")){channel_unit_open(a,channel);a->inspector_channel_return[1]=true;nk_combo_close(ui);}
+        if(ps_ui_fixed_button_label(ui,"Benutzerdefiniert …")){channel_unit_open_from(a,channel,a->window,laboratory_choice_names[1]);a->inspector_channel_return[1]=false;nk_combo_close(ui);}
     }
     laboratory_choice_end(a,1,open);
     float f=a->preferences.ui_size/16.f,width=nk_window_get_content_region(ui).w;char value[200]="Noch keine Messwerte",precise[240]="Noch keine Messwerte";

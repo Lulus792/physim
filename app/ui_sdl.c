@@ -626,6 +626,11 @@ void nk_sdl_accessibility_keyboard_begin(struct nk_context *ctx) {
 bool nk_sdl_accessibility_keyboard_owned(struct nk_context *ctx) {
  return ctx && ctx->userdata.ptr && ((struct nk_sdl *)ctx->userdata.ptr)->accessibility_custom_keyboard;
 }
+void nk_sdl_accessibility_keyboard_release(struct nk_context *ctx) {
+ if(!ctx || !ctx->userdata.ptr)return;
+ struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility)return;
+ SDL_LockMutex(sdl->accessibility_mutex);sdl->accessibility_custom_keyboard=false;SDL_UnlockMutex(sdl->accessibility_mutex);
+}
 bool nk_sdl_accessibility_keyboard_target(struct nk_context *ctx,struct nk_rect bounds) {
  if(!ctx || !ctx->userdata.ptr || !ctx->current || !ctx->current->layout)return false;
  struct nk_sdl *sdl=ctx->userdata.ptr;if(!sdl->accessibility || !sdl->accessibility_custom_keyboard)return false;

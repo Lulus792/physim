@@ -51,10 +51,10 @@ Die tatsächlich ausgeführten Prüfungen, Zwischenfehler und Grenzen stehen im
 
 ## Noch umzusetzen
 
-- Anzeigeeinheiten verwenden echte Messkanäle und den vorhandenen validierten
-  Einheitenbestand. Der Bearbeitungseinstieg öffnet allerdings noch den bisherigen
-  modalen Einheitenablauf. Eigenes OS-Aufgabenfenster, erhaltene Entwürfe je Kanal
-  und unabhängiges Anwenden/Abbrechen nach ADR 015/018 fehlen noch.
+- Anzeigeeinheiten ist inzwischen eine [eigene native Aufgabe](UNIT-TASK-NATIVE.md)
+  mit erhaltenen Kanalentwürfen und unabhängigem Anwenden/Abbrechen. Fünf relevante
+  Gruppen bestehen unter Windows/Linux; der neue macOS-Lauf und die gesamte
+  assistive/physische Abnahme bleiben gesondert offen.
 - Completion D: „Vorschläge beim Tippen“ und sichtbare Trefferzahl (Standard fünf)
   benötigen die tatsächliche Backend-/Preferences-Integration. Keine wirkungslosen
   Ersatzfelder in die Kategorienansicht einbauen.

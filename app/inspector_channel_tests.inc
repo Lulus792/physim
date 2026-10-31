@@ -1,5 +1,5 @@
 /* Actual pendulum, viewed-time selection and persisted display units. */
-static struct {unsigned settle;bool wait;int channel;char paint[3][512];} inspector_channel_test;
+static struct {unsigned settle,reveal_mask,unit_frames;double unit_deadline;bool wait;int channel;char paint[3][512];} inspector_channel_test;
 static bool inspector_channel_start(app *a,const char *root){memset(&inspector_channel_test,0,sizeof inspector_channel_test);if(!inspector_design_start(a,root))return false;channel_units_start(a);return a->channel_units_writable;}
 static void inspector_channel_draw(app *a){
     memset(inspector_channel_test.paint,0,sizeof inspector_channel_test.paint);const struct nk_command *command;
@@ -17,6 +17,14 @@ static void inspector_channel_record(app *a,const char *kind,const char **captur
     if(a->channel_count){int selected=a->laboratory_channels[0];ps_display_unit unit=channel_display_unit(a,&a->live_channels[selected]);printf("CHANNEL DATA selected=%d raw=%.17g scale=%.17g symbol=",selected,display_values(a)[selected],unit.scale);camera_design_hex(unit.symbol);printf(" name=");camera_design_hex(a->live_channels[selected].name);puts("");}
 }
 static void inspector_channel_setup(app *a){int stage=4,code=0;const char *capture=NULL;inspector_design_frame(a,&stage,&code,&capture);a->laboratory_groups[1]=NK_MAXIMIZED;inspector_channel_test.settle=0;}
+static bool inspector_channel_reveal_fields(app *a){
+    struct nk_rect target=a->inspector_channel_cards[0];float available=a->laboratory_inspector_body.h-20;
+    if(target.h>available){
+        if(!(inspector_channel_test.reveal_mask&(1u<<inspector_design.variant))){printf("CHANNEL REVEAL: variant=%s card-height=%.4f available=%.4f use-label-and-control=1\n",inspector_design_variant(),target.h,available);inspector_channel_test.reveal_mask|=1u<<inspector_design.variant;}
+        target=a->inspector_channel_labels[0];target.h=a->inspector_channel_fields[0].y+a->inspector_channel_fields[0].h-target.y;
+    }
+    return camera_design_reveal(a,target);
+}
 static void inspector_channel_step(app *a,int *stage,int *code,const char **capture){
     bool ok=true;if(inspector_channel_test.wait){inspector_channel_test.wait=false;return;}inspector_channel_test.wait=true;
     switch(*stage){
@@ -37,12 +45,12 @@ static void inspector_channel_step(app *a,int *stage,int *code,const char **capt
     case 13:ok=a->timeline_browsing && display_time(a)<inspector_design.held && inspector_channel_preserved(a);if(!ok)break;if(!camera_design_reveal(a,a->inspector_channel_value))return;inspector_channel_record(a,"browse",capture);test_mouse(a,a->timeline_bounds[2],true);break;
     case 14:test_mouse(a,a->timeline_bounds[2],false);break;
     case 15:ok=!a->timeline_browsing && inspector_channel_preserved(a);if(!ok)break;if(!camera_design_reveal(a,a->inspector_channel_fields[1]) || !inspector_design_focus(a,laboratory_choice_names[1]))return;test_window_key_mod(a->window,SDLK_RETURN,0);break;
-    case 16:if(!inspector_design_focus(a,"Benutzerdefiniert …"))return;test_window_key_mod(a->window,SDLK_RETURN,0);break;
-    case 17:ok=a->channel_unit_manager;if(!ok)break;test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
+    case 16:if(!inspector_design_focus(a,"Benutzerdefiniert …"))return;test_window_key_mod(a->window,SDLK_RETURN,0);inspector_channel_test.unit_deadline=ps_clock()+3;inspector_channel_test.unit_frames=0;break;
+    case 17:if(!unit_test_window_focus(a,inspector_channel_test.unit_deadline,&inspector_channel_test.unit_frames,&ok))return;ok=ok && a->channel_unit_manager;if(!ok)break;test_window_key_mod(a->unit_task->window,SDLK_ESCAPE,0);break;
     case 18:ok=!a->channel_unit_manager;if(!ok)break;if(!inspector_design_focus(a,laboratory_choice_names[1]))return;test_window_key_mod(a->window,SDLK_RETURN,0);break;
     case 19:if(!inspector_design_focus(a,"m"))return;test_window_key_mod(a->window,SDLK_RETURN,0);break;
     case 20:ok=!a->channel_units.count && inspector_channel_preserved(a);inspector_channel_setup(a);break;
-    case 21:if(inspector_channel_test.settle++<3 || !camera_design_reveal(a,a->inspector_channel_cards[0]))return;ok=inspector_channel_preserved(a);inspector_channel_record(a,"fields",capture);break;
+    case 21:if(inspector_channel_test.settle++<3 || !inspector_channel_reveal_fields(a))return;ok=inspector_channel_preserved(a);inspector_channel_record(a,"fields",capture);break;
     case 22:if(!camera_design_reveal(a,a->inspector_channel_value))return;ok=inspector_channel_preserved(a);inspector_channel_record(a,"value",capture);if(++inspector_design.variant<6){*stage=20;return;}break;
     case 23:ok=inspector_channel_preserved(a);command(a,PS_MSG_STOP);a->stop_at=ps_clock();break;
     case 24:if(!idle(a) || a->library_thread || a->data.thread)return;puts("INSPECTOR CHANNEL ACTIONS keyboard-channel=1 keyboard-unit=1 inline=1 viewed-time=1 custom-escape=1 restore-SI=1 source-and-run=1");puts("INSPECTOR CHANNEL SELF-TEST: PASSED");a->quitting=true;break;

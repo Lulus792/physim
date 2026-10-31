@@ -1,6 +1,6 @@
 /* Exercise the compact native chooser, its real persistence and recovery path. */
 static void analysis_units_test_frame(app *a,int *stage,int *code,const char **capture) {
-    static bool settle;static ps_statistics statistics;static ps_plot_view view;
+    static bool settle;static ps_statistics statistics;static ps_plot_view view;static double unit_deadline;static unsigned unit_frames;
     static uint32_t values_crc,time_crc,file_crc;static char units_path[4096];
     if(settle){settle=false;return;}settle=true;
     if(a->data.thread || a->library_thread || ps_comparison_read(a->comparison).loading)return;
@@ -39,8 +39,8 @@ static void analysis_units_test_frame(app *a,int *stage,int *code,const char **c
     }
     case 6:test_mouse(a,a->channel_unit_buttons[1],false);break;
     case 7:ok=nk_sdl_accessibility_request_focus(a->ui,NULL,"Benutzerdefiniert …");break;
-    case 8:if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"Benutzerdefiniert …"))return;test_window_key_mod(a->window,SDLK_SPACE,0);break;
-    case 9:ok=a->channel_unit_manager;test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
+    case 8:if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"Benutzerdefiniert …"))return;test_window_key_mod(a->window,SDLK_SPACE,0);unit_deadline=ps_clock()+3;unit_frames=0;break;
+    case 9:if(!unit_test_window_focus(a,unit_deadline,&unit_frames,&ok))return;ok=ok && a->channel_unit_manager;if(ok)test_window_key_mod(a->unit_task->window,SDLK_ESCAPE,0);break;
     case 10:
         ok=!a->channel_unit_manager && channel_display_unit(a,channel).scale==channel_unit_presets[3].scale;
         /* A directory cannot be replaced by the atomic unit-file writer. */
@@ -68,7 +68,7 @@ static void analysis_units_test_frame(app *a,int *stage,int *code,const char **c
     case 19:test_mouse(a,a->channel_unit_buttons[1],false);break;
     case 20:ok=a->analysis_unit_custom.w>0 && nk_sdl_accessibility_request_focus(a->ui,NULL,"Benutzerdefiniert …");*capture="analysis-unit-readonly.bmp";break;
     case 21:if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"Benutzerdefiniert …"))return;test_window_key_mod(a->window,SDLK_SPACE,0);break;
-    case 22:ok=a->channel_unit_manager && !a->channel_units_writable;test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
+    case 22:ok=a->channel_unit_manager && !a->channel_units_writable;test_window_key_mod(a->unit_task->window,SDLK_ESCAPE,0);break;
     case 23: {
         uint32_t after=0;a->channel_units_writable=true;a->channel_units_error[0]=0;
         ok=!a->channel_unit_manager && a->data.total==301 && a->selected_count==1 &&

@@ -279,6 +279,7 @@ static void parameter_form_view(app *a) {
 }
 static ps_display_unit channel_display_unit(app *a,const ps_channel *ch);
 static void channel_unit_open(app *a,const ps_channel *ch);
+static void channel_unit_open_from(app *a,const ps_channel *ch,SDL_Window *source,const char *label);
 static void channel_display_text(const ps_display_unit *u,double value,char *text,size_t size);
 static bool channel_display_values(const ps_display_unit *u,const double *source,size_t n,double *out);
 static void live_measurements_view(app *a) {
@@ -300,7 +301,7 @@ static void live_measurements_view(app *a) {
                                    nk_vec2(280, 240));
         nk_layout_row_dynamic(ui,28,2);
         a->channel_unit_buttons[0]=nk_widget_bounds(ui);
-        if(nk_button_label(ui,"Einheit …"))channel_unit_open(a,&a->live_channels[a->plot_channel]);
+        if(nk_button_label(ui,"Einheit …"))channel_unit_open_from(a,&a->live_channels[a->plot_channel],a->window,"Einheit …");
         ps_display_unit unit=channel_display_unit(a,&a->live_channels[a->plot_channel]);
         char value[96];
         const double *shown = display_values(a);
@@ -1112,11 +1113,10 @@ static void workspace_draw_ui(app *a, int width, int height) {
     /* Modal views also cross workspace boundaries (for example Settings with
      * the layout manager open); finish the session transition before returning. */
     workspace_context(a);
-    if(a->panel_pull && (a->recovery || a->layout_manager || a->channel_unit_manager || a->workspace_manager || a->run_details_manager))panel_pull_cancel(a);
+    if(a->panel_pull && (a->recovery || a->layout_manager || a->workspace_manager || a->run_details_manager))panel_pull_cancel(a);
     ps_graphics_backdrop(a->graphics,NULL);
     ps_graphics_shadows(a->graphics,NULL,0);
     if(a->run_details_manager) {run_details_view(a,width,height);return;}
-    if(a->channel_unit_manager) { channel_unit_manager_view(a,width,height);return; }
     if(a->layout_manager) { layout_manager_view(a,width,height);return; }
     if(a->workspace_manager) { workspace_catalog_view(a,width,height);return; }
     if (a->recovery) {

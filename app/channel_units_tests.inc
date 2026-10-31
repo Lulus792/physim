@@ -1,10 +1,12 @@
 static bool channel_units_test_start(app *a,const char *root,const char *mode) {
+    if(!strncmp(mode,"units-task-",11))return unit_task_test_start(a,root,mode);
     char path[4096];join(path,sizeof path,root,"preferences.bin");preferences_start(a,path);
     join(a->project_input,sizeof a->project_input,root,"project");SDL_SetWindowSize(a->window,1080,740);
     if(strcmp(mode,"units-c") && strcmp(mode,"units-phys")){open_project(a);return a->loaded;}
     a->example=!strcmp(mode,"units-c")?0:8;new_project(a);a->dt=.01;a->project_settings_dirty=true;select_build_profile(a,1);return a->loaded;
 }
 static void channel_units_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
+    if(!strncmp(mode,"units-task-",11)){unit_task_test_frame(a,stage,code,capture);return;}
     static bool settle;static double started;static uint32_t source;static unsigned selected;static ps_plot_view view;
     if(settle){settle=false;return;}settle=true;bool ok=true;
     bool running=!strcmp(mode,"units-c") || !strcmp(mode,"units-phys");
@@ -19,9 +21,9 @@ static void channel_units_test_frame(app *a,const char *mode,int *stage,int *cod
             if(!strcmp(mode,"units-read")) {
                 ok=a->unit_draft.scale==.01 && !strcmp(a->unit_draft.symbol,"cm");a->quitting=true;
             } else if(!strcmp(mode,"units-corrupt"))a->quitting=true;
-            else test_mouse(a,a->channel_unit_bounds[5],true);
+            else test_window_mouse(a->unit_task->window,a->channel_unit_bounds[5],true);
             break;
-        case 2:test_mouse(a,a->channel_unit_bounds[5],false);break;
+        case 2:test_window_mouse(a->unit_task->window,a->channel_unit_bounds[5],false);break;
         case 3:ok=a->channel_units_writable && !a->channel_units.count && !*a->channel_units_error;a->quitting=true;break;
         }
     } else switch(*stage) {
@@ -43,32 +45,32 @@ static void channel_units_test_frame(app *a,const char *mode,int *stage,int *cod
     case 4:test_mouse(a,a->channel_unit_buttons[0],false);break;
     case 5:
         if(laboratory_visible(a) && !a->channel_unit_manager){ok=a->inspector_channel_custom.w>0;if(ok){test_mouse(a,a->inspector_channel_custom,true);*stage=50;return;}break;}
-        ok=a->channel_unit_manager;test_mouse(a,a->channel_unit_bounds[1],true);break;
+        ok=a->channel_unit_manager;test_window_mouse(a->unit_task->window,a->channel_unit_bounds[1],true);break;
     case 50:test_mouse(a,a->inspector_channel_custom,false);*stage=51;return;
     case 51:ok=a->channel_unit_manager;if(ok){*stage=5;return;}break;
-    case 6:test_mouse(a,a->channel_unit_bounds[1],false);break;
-    case 7:test_key(a,SDLK_A);break;
-    case 8:layout_test_text(a,"cm");break;
-    case 9:test_mouse(a,a->channel_unit_bounds[2],true);break;
-    case 10:test_mouse(a,a->channel_unit_bounds[2],false);break;
-    case 11:test_key(a,SDLK_A);break;
-    case 12:layout_test_text(a,"0");break;
-    case 13:test_mouse(a,a->channel_unit_bounds[3],true);break;
-    case 14:test_mouse(a,a->channel_unit_bounds[3],false);break;
-    case 15:ok=a->channel_unit_manager && !a->channel_units.count && *a->channel_units_error;test_mouse(a,a->channel_unit_bounds[2],true);break;
-    case 16:test_mouse(a,a->channel_unit_bounds[2],false);break;
-    case 17:test_key(a,SDLK_A);break;
-    case 18:layout_test_text(a,"0.01");break;
-    case 19:*capture="units-selection.bmp";test_window_key_mod(a->window,SDLK_F7,0);test_mouse(a,a->channel_unit_bounds[3],true);break;
-    case 20:test_mouse(a,a->channel_unit_bounds[3],false);break;
+    case 6:test_window_mouse(a->unit_task->window,a->channel_unit_bounds[1],false);break;
+    case 7:test_window_key_mod(a->unit_task->window,SDLK_A,PS_UI_COMMAND_MOD);break;
+    case 8:unit_test_text(a,"cm");break;
+    case 9:test_window_mouse(a->unit_task->window,a->channel_unit_bounds[2],true);break;
+    case 10:test_window_mouse(a->unit_task->window,a->channel_unit_bounds[2],false);break;
+    case 11:test_window_key_mod(a->unit_task->window,SDLK_A,PS_UI_COMMAND_MOD);break;
+    case 12:unit_test_text(a,"0");break;
+    case 13:test_window_mouse(a->unit_task->window,a->channel_unit_bounds[3],true);break;
+    case 14:test_window_mouse(a->unit_task->window,a->channel_unit_bounds[3],false);break;
+    case 15:ok=a->channel_unit_manager && !a->channel_units.count && *a->channel_units_error;test_window_mouse(a->unit_task->window,a->channel_unit_bounds[2],true);break;
+    case 16:test_window_mouse(a->unit_task->window,a->channel_unit_bounds[2],false);break;
+    case 17:test_window_key_mod(a->unit_task->window,SDLK_A,PS_UI_COMMAND_MOD);break;
+    case 18:unit_test_text(a,"0.01");break;
+    case 19:*capture="units-selection.bmp";test_window_key_mod(a->unit_task->window,SDLK_F7,0);test_window_mouse(a->unit_task->window,a->channel_unit_bounds[3],true);break;
+    case 20:test_window_mouse(a->unit_task->window,a->channel_unit_bounds[3],false);break;
     case 21: {
         ps_display_unit u=channel_display_unit(a,&a->live_channels[selected]);double converted;
-        ok=!a->channel_unit_manager && a->channel_units.count==1 && u.scale==.01 && !strcmp(u.symbol,"cm") &&
+        ok=a->channel_unit_manager && a->channel_units.count==1 && u.scale==.01 && !strcmp(u.symbol,"cm") &&
             a->runner.running && !a->reset_pending && a->simulation_time>started &&
             source==ps_crc32((const unsigned char*)nk_str_get_const(&a->experiment.string),(size_t)nk_str_len_char(&a->experiment.string));
         double shown=a->values[selected];ok &= ps_display_unit_value(&u,shown,&converted)==PS_OK && converted==shown/.01;
         double gaps[]={1,NAN,2},displayed[3];ok &= channel_display_values(&u,gaps,3,displayed) && displayed[0]==100 && isnan(displayed[1]) && displayed[2]==200;
-        *capture="units-live.bmp";command(a,PS_MSG_STOP);a->stop_at=ps_clock();break;
+        channel_unit_close(a);*capture="units-live.bmp";command(a,PS_MSG_STOP);a->stop_at=ps_clock();break;
     }
     case 22:if(!idle(a) || a->library_thread)return;ok=a->data.total>2 && a->data.result==PS_EOF;a->tab=2;a->show_report=false;a->show_log=false;break;
     case 23: {
@@ -83,16 +85,17 @@ static void channel_units_test_frame(app *a,const char *mode,int *stage,int *cod
             if(!ok)break;
             test_mouse(a,a->analysis_unit_custom,true);*stage=40;return;
         }
-        ps_plot_view_zoom(&a->data_views[selected],.5,.5,.5);view=a->data_views[selected];test_mouse(a,a->channel_unit_bounds[4],true);break;
+        ps_plot_view_zoom(&a->data_views[selected],.5,.5,.5);view=a->data_views[selected];test_window_mouse(a->unit_task->window,a->channel_unit_bounds[4],true);break;
     case 40:test_mouse(a,a->analysis_unit_custom,false);*stage=41;return;
     case 41:ok=a->channel_unit_manager;if(ok){*stage=25;return;}break;
-    case 26:test_mouse(a,a->channel_unit_bounds[4],false);break;
+    case 26:test_window_mouse(a->unit_task->window,a->channel_unit_bounds[4],false);break;
     case 27:
-        ok=!a->channel_unit_manager && !a->channel_units.count && !memcmp(&view,&a->data_views[selected],sizeof view);
+        ok=a->channel_unit_manager && a->channel_units.count==1 && !strcmp(a->channel_unit_scale,"1") && !memcmp(&view,&a->data_views[selected],sizeof view);
+        channel_unit_apply(a);ok=ok && !a->channel_units.count;channel_unit_close(a);
         channel_unit_open(a,&a->data.channels[selected]);strcpy(a->unit_draft.symbol,"cm");strcpy(a->channel_unit_scale,"1e-320");channel_unit_apply(a);
         ok &= a->channel_unit_manager && !a->channel_units.count && *a->channel_units_error;
-        strcpy(a->channel_unit_scale,"0.01");channel_unit_apply(a);ok &= !a->channel_unit_manager && a->channel_units.count==1;
-        channel_unit_open(a,&a->data.channels[selected]);strcpy(a->unit_draft.symbol,"cancelled");test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
+        strcpy(a->channel_unit_scale,"0.01");channel_unit_apply(a);ok &= a->channel_unit_manager && a->channel_units.count==1;
+        channel_unit_open(a,&a->data.channels[selected]);strcpy(a->unit_draft.symbol,"cancelled");test_window_key_mod(a->unit_task->window,SDLK_ESCAPE,0);break;
     case 28:ok=!a->channel_unit_manager && !strcmp(a->channel_units.entries[0].unit.symbol,"cm");
         {struct nk_window *window=nk_window_find(a->ui,dock_windows[PS_DOCK_WORKSPACE]);
          if(window)window->scrollbar.y=220;else ok=false;}break;

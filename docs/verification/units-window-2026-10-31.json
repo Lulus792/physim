@@ -1,0 +1,1409 @@
+{
+  "date": "2026-10-31",
+  "scope": "Independent native display-unit task, real channel drafts, validation and caller ownership; full project/UI/manual/platform acceptance remains open",
+  "base_commit": "1bb07db5df1e504a399ccd0f350975aaf4c00497",
+  "own_inputs": 151,
+  "root_matches_tested_bytes": true,
+  "phases": [
+    {
+      "tag": "units-window-first",
+      "interpretation": "Build failed on both OSes: helper function collided with existing channel_unit_preset typedef. No new app execution; any existing bin/physim is an older app, not this source.",
+      "runs": [
+        {
+          "platform": "windows",
+          "config": "Release MSVC",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "unit_task_window",
+              "--test-filter",
+              "channel_units_workflow",
+              "--test-filter",
+              "analysis_units_dark",
+              "--test-filter",
+              "analysis_units_light_large_narrow",
+              "--test-filter",
+              "inspector_channel",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 1,
+            "app_sha256": "9bbcba8bf78755bd791ed9dab593307588dbad772d4271a55185497ad9fb5dd3"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/units-window-first-windows.log",
+            "bytes": 40042,
+            "sha256": "bcb0591a78e6eb97a81e24f69eaa9455b71d58cbb6778d1c11a377a3de582e54"
+          },
+          "build_failed": true,
+          "new_app_executed": false
+        },
+        {
+          "platform": "linux",
+          "config": "Debug GCC ASan/UBSan; GUI leak detection0, fatal sanitizer errors",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "unit_task_window",
+              "--test-filter",
+              "channel_units_workflow",
+              "--test-filter",
+              "analysis_units_dark",
+              "--test-filter",
+              "analysis_units_light_large_narrow",
+              "--test-filter",
+              "inspector_channel",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 1,
+            "app_sha256": "60df4d573a04187426ed0b500884e912b8e75cfb7602904fb3000af634afbccd"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/units-window-first-linux.log",
+            "bytes": 260713,
+            "sha256": "25e73e27932a1e13381681c86b3c01ed64a8a093648c0a4cf9bec69ed908e1b0"
+          },
+          "build_failed": true,
+          "new_app_executed": false
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-first-inputs.json",
+        "bytes": 15119,
+        "sha256": "4ab748b453fedffc673a722a3c31ad6e29a94592d4c1fa66414d90d7f406612c"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-first-compiler-source.json",
+        "bytes": 117944,
+        "sha256": "71899d8f6e6a2b4e24a56c425a2833542dbc52a530dc2a5f2950eee76cf5234c"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-first-runtime.json",
+        "bytes": 36322,
+        "sha256": "2145bd9ebc25c2b7af16a555e04ea0b03f7e5d75916e056ded1721c023c07811"
+      },
+      "runtime_byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-first-byte-index.json",
+        "bytes": 93537,
+        "sha256": "47e79825f6f00075cf08df3980bdc9da0a72101ea445d7460af839af31e1a4f2"
+      }
+    },
+    {
+      "tag": "units-window-build",
+      "interpretation": "New independent-window workflow passed on both OSes. Old unit test sent F7 to now-usable primary window, correctly restarting the run; destination corrected to unit task. Windows inspector timed out trying to reveal a whole card at22px; archived predecessor fails identically.",
+      "runs": [
+        {
+          "platform": "windows",
+          "config": "Release MSVC",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "unit_task_window",
+              "--test-filter",
+              "channel_units_workflow",
+              "--test-filter",
+              "analysis_units_dark",
+              "--test-filter",
+              "analysis_units_light_large_narrow",
+              "--test-filter",
+              "inspector_channel",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 1,
+            "app_sha256": "8b78bdbbcbb2974f0146b046d33a42d07e7c2388124c7469f4f1f37eb54dc6ac"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/units-window-build-windows.log",
+            "bytes": 68450,
+            "sha256": "794a190b86e9519ac06696e43371369a84aab62583a84807c499da6cfd58db00"
+          },
+          "run": "run-wg5ab98u",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wg5ab98u/results.json",
+            "bytes": 115841,
+            "sha256": "ee33a34792c411f4736900419b2b1421f56068577e1e10b5683655a4e4df809a"
+          },
+          "passed": 4,
+          "total": 6,
+          "cases": [
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 6.328,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 6.391,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "failed",
+              "seconds": 26.14,
+              "reason_excerpt": "age 28 -> 29, status Zurücksetzen fehlgeschlagen (Exit 7). Der bisherige Zustand bleibt erhalten.\nAPP TEST TRACE: stage 29 -> 30, status Zurücksetzen fehlgeschlagen (Exit 7). Der bisherige Zustand bleibt erhalten.\nTraceback (most recent call last):\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 2299, in <module>\n    main()\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 2048, in main\n    SPECIAL[args.case](flow, directory)\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 1314, in channel_units\n    require(len(runs) == 1, \"Display unit selection restarted the simulation\")\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: Display unit selection restarted the simulation\n"
+            },
+            {
+              "name": "analysis_units_dark",
+              "status": "passed",
+              "seconds": 3.25,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_light_large_narrow",
+              "status": "passed",
+              "seconds": 3.031,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "inspector_channel",
+              "status": "failed",
+              "seconds": 182.516,
+              "reason_excerpt": "older,'inspector-channel',timeout=190,marker='INSPECTOR CHANNEL SELF-TEST: PASSED')\n                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tests\\check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tests\\check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\bin\\\\physim.exe', '--workspace-state-test', 'D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\test-results\\\\run-wg5ab98u\\\\inspector_channel\\\\files ä\\\\system', 'inspector-channel']\n"
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "config": "Debug GCC ASan/UBSan; GUI leak detection0, fatal sanitizer errors",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "unit_task_window",
+              "--test-filter",
+              "channel_units_workflow",
+              "--test-filter",
+              "analysis_units_dark",
+              "--test-filter",
+              "analysis_units_light_large_narrow",
+              "--test-filter",
+              "inspector_channel",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 1,
+            "app_sha256": "d3f97642ada51c8d287f420c2adc4f8ce166e9a2f6a9b7ba18f7448e574224c3"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/units-window-build-linux.log",
+            "bytes": 291360,
+            "sha256": "338ab4a03a57a26073ffe6d85d73fa917dfec757536022a0e65407aa9864a553"
+          },
+          "run": "run-v7g5qlha",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-v7g5qlha/results.json",
+            "bytes": 93568,
+            "sha256": "2bfb583bed4de9e9af8533b809b2c63edf4c9a2b37c858bd72fb85bdd2a9b0c5"
+          },
+          "passed": 5,
+          "total": 6,
+          "cases": [
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 22.865,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 22.132,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "failed",
+              "seconds": 52.021,
+              "reason_excerpt": "units-\" + language + \" SELF-TEST: PASSED\")\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim', '--workspace-state-test', '/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-v7g5qlha/channel_units_workflow/files ä/workflow ä/c', 'units-c']\n"
+            },
+            {
+              "name": "analysis_units_dark",
+              "status": "passed",
+              "seconds": 11.975,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_light_large_narrow",
+              "status": "passed",
+              "seconds": 10.52,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "inspector_channel",
+              "status": "passed",
+              "seconds": 122.134,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-build-inputs.json",
+        "bytes": 15119,
+        "sha256": "35b547b8c347cf5db127b846ebebc4d113e4a1a318bc097bfdf9655ae57d8f26"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-build-compiler-source.json",
+        "bytes": 117490,
+        "sha256": "4def1653c69962dc1e8d6afe296b0967f41a8d4a4476c061d0e52193ccd79340"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-build-runtime.json",
+        "bytes": 36322,
+        "sha256": "3c67931d3404571d50ace482b2d9483c6a92dad9d00bd3332046642d41e1fa33"
+      },
+      "runtime_byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-build-byte-index.json",
+        "bytes": 93507,
+        "sha256": "8fe48b7e5016ddec586a883deec15abdd5517fb36ddbe7e88887db51f3238006"
+      }
+    },
+    {
+      "tag": "units-window-controls",
+      "interpretation": "Normal groups: Windows4/6, Linux5/6. New error screenshot was repeatedly requested before a Tab wait, so exclusive PNG creation correctly refused replacement. Windows inspector diagnostic prefix collided with existing field-record parser.",
+      "runs": [
+        {
+          "platform": "windows",
+          "config": "Release MSVC",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "unit_task_window",
+              "--test-filter",
+              "channel_units_workflow",
+              "--test-filter",
+              "analysis_units_dark",
+              "--test-filter",
+              "analysis_units_light_large_narrow",
+              "--test-filter",
+              "inspector_channel",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 1,
+            "app_sha256": "a876aa6b2f2e3567fa33b122800f0d3c0570b9167bfee4567a0815b0745913a4"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/units-window-controls-windows.log",
+            "bytes": 67541,
+            "sha256": "aeab60538544a3397bf9f1a2c5ab5841d0f35a8d6a7bbea32c596bd5f2c9b5c9"
+          },
+          "run": "run-amnpr5mv",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-amnpr5mv/results.json",
+            "bytes": 145139,
+            "sha256": "148269be23c0de718fb24a1104823e007453fc3905a9b8cbe887319680d2558c"
+          },
+          "passed": 4,
+          "total": 6,
+          "cases": [
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 6.109,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "unit_task_window",
+              "status": "failed",
+              "seconds": 3.063,
+              "reason_excerpt": "directory)\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 1685, in unit_task_window\n    flow.run(\"--workspace-state-test\", root, \"units-task-\" + str(size), timeout=60,\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\bin\\\\physim.exe', '--workspace-state-test', 'D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\test-results\\\\run-amnpr5mv\\\\unit_task_window\\\\files ä\\\\workflow ä\\\\UI 16', 'units-task-16']\n"
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "passed",
+              "seconds": 80.281,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_dark",
+              "status": "passed",
+              "seconds": 3.172,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_light_large_narrow",
+              "status": "passed",
+              "seconds": 3.125,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "inspector_channel",
+              "status": "failed",
+              "seconds": 69.375,
+              "reason_excerpt": "nel.py\", line 61, in main\n    checks.append(dict(font_mode=font,**inspect(folder,flow.steps[-1]['stdout'])))\n                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_inspector_channel.py\", line 14, in inspect\n    elif line.startswith('CHANNEL FIELD '):records[-1]['fields'].append(dict(card=rect(line,'card'),label=rect(line,'label'),field=rect(line,'field'),paint=hextext(line,'paint')))\n                                                                                  ^^^^^^^^^^^^^^^^^\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tests\\check_inspector_tail.py\", line 8, in rect\n    def rect(line,key):return tuple(map(float,re.search(r'(?:^|\\s)'+re.escape(key)+r'=([\\d.,-]+)',line)[1].split(',')))\n                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^\nTypeError: 'NoneType' object is not subscriptable\n"
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "config": "Debug GCC ASan/UBSan; GUI leak detection0, fatal sanitizer errors",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "unit_task_window",
+              "--test-filter",
+              "channel_units_workflow",
+              "--test-filter",
+              "analysis_units_dark",
+              "--test-filter",
+              "analysis_units_light_large_narrow",
+              "--test-filter",
+              "inspector_channel",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 1,
+            "app_sha256": "e9cfebe2dcc4e449c293bd8a6da837f46a9f87e600c4a98d988bf0f804058c2f"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/units-window-controls-linux.log",
+            "bytes": 291302,
+            "sha256": "62d80b7eb97bed6b96028009ffde766cfb7142ba13643281994451bdcd7343e1"
+          },
+          "run": "run-hbb_stve",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-hbb_stve/results.json",
+            "bytes": 108325,
+            "sha256": "57950258f190af80041af72452c7a4d6466769e0eabc27df5e45cac8cdc7cc90"
+          },
+          "passed": 5,
+          "total": 6,
+          "cases": [
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 22.665,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "unit_task_window",
+              "status": "failed",
+              "seconds": 9.472,
+              "reason_excerpt": "^^^^^^^^^^^^^^\n             marker=\"UNIT TASK SELF-TEST: PASSED\")\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim', '--workspace-state-test', '/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-hbb_stve/unit_task_window/files ä/workflow ä/UI 16', 'units-task-16']\n"
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "passed",
+              "seconds": 132.282,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_dark",
+              "status": "passed",
+              "seconds": 11.872,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_light_large_narrow",
+              "status": "passed",
+              "seconds": 10.872,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "inspector_channel",
+              "status": "passed",
+              "seconds": 120.834,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-controls-inputs.json",
+        "bytes": 15119,
+        "sha256": "d394cc901574764e323354b48f22bc336ebe06fa7168a76b72fb6b0df16df1aa"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-controls-compiler-source.json",
+        "bytes": 117611,
+        "sha256": "3f3045afe174c040a592eb2698174e08d215da37ed32cfda505605dd3bba4ea8"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-controls-runtime.json",
+        "bytes": 36328,
+        "sha256": "59f72b4bb5ded8584eaede81238df2459dbde15b993a9cb644d3db45505017b1"
+      },
+      "runtime_byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-controls-byte-index.json",
+        "bytes": 93798,
+        "sha256": "f9c8bd430e701a426f965c7dc9c2947c47bedd599bcbf5660a9d4f2264daa6a7"
+      }
+    },
+    {
+      "tag": "units-window-keys",
+      "interpretation": "Windows0/2, Linux1/2. Window16 completed actual popup navigation; Window22 rechecked initial error visibility while Tab correction legitimately scrolled to its field. Separate fixture stage fixes that. Windows inspector app completed14 states, but checker counted decorative full-card visibility instead of visible label+input.",
+      "runs": [
+        {
+          "platform": "windows",
+          "config": "Release MSVC",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "unit_task_window",
+              "--test-filter",
+              "inspector_channel"
+            ],
+            "exit_code": 1,
+            "app_sha256": "1633ba93c7c47b41e743cfdd9313fa6133049505d0a7bb0bf0df98e23b607b06"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/units-window-keys-windows.log",
+            "bytes": 70227,
+            "sha256": "f6f68eedca6771ff2ee0af4cd612c5383374d9ad163c7aa3cb9160dbe5df8deb"
+          },
+          "run": "run-_np9044z",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-_np9044z/results.json",
+            "bytes": 85699,
+            "sha256": "21faa8182eba235d2cdce5f8f2645b97757e8732d28c1608b5ef152f0e74bee0"
+          },
+          "passed": 0,
+          "total": 2,
+          "cases": [
+            {
+              "name": "unit_task_window",
+              "status": "failed",
+              "seconds": 10.11,
+              "reason_excerpt": "directory)\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 1685, in unit_task_window\n    flow.run(\"--workspace-state-test\", root, \"units-task-\" + str(size), timeout=60,\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\bin\\\\physim.exe', '--workspace-state-test', 'D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\test-results\\\\run-_np9044z\\\\unit_task_window\\\\files ä\\\\workflow ä\\\\UI 22', 'units-task-22']\n"
+            },
+            {
+              "name": "inspector_channel",
+              "status": "failed",
+              "seconds": 78.687,
+              "reason_excerpt": "FILE STDIO READ: bytes=32198 crc=dbe13576\nAPP TEST TRACE: stage 23 -> 24, status Simulation pausiert. Einzelschritt oder Fortsetzen wählen.\nAPP TEST TRACE: stage 24 -> 25, status 45 Messpunkte geladen.\nTraceback (most recent call last):\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_inspector_channel.py\", line 64, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_inspector_channel.py\", line 61, in main\n    checks.append(dict(font_mode=font,**inspect(folder,flow.steps[-1]['stdout'])))\n                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_inspector_channel.py\", line 49, in inspect\n    assert seen_fields>=12 and seen_values>=8,(seen_fields,seen_values)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: (8, 8)\n"
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "config": "Debug GCC ASan/UBSan; GUI leak detection0, fatal sanitizer errors",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "unit_task_window",
+              "--test-filter",
+              "inspector_channel"
+            ],
+            "exit_code": 1,
+            "app_sha256": "57314b731d736c0378cb93c7b6c22cd842572e4d273c8b25c2cd2302f0a3c4d1"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/units-window-keys-linux.log",
+            "bytes": 297014,
+            "sha256": "c0c5dbabc808cea5086c822219626a203e0d5ac7c22c094d04198f4a76f87bfb"
+          },
+          "run": "run-czc05a9g",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-czc05a9g/results.json",
+            "bytes": 62261,
+            "sha256": "581e1a2da19dba221fc2b4c4e1d5977d60c289c00866470d5e3e53f5322e90f6"
+          },
+          "passed": 1,
+          "total": 2,
+          "cases": [
+            {
+              "name": "unit_task_window",
+              "status": "failed",
+              "seconds": 23.481,
+              "reason_excerpt": "^^^^^^^^^^^^^^\n             marker=\"UNIT TASK SELF-TEST: PASSED\")\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim', '--workspace-state-test', '/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-czc05a9g/unit_task_window/files ä/workflow ä/UI 22', 'units-task-22']\n"
+            },
+            {
+              "name": "inspector_channel",
+              "status": "passed",
+              "seconds": 120.722,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-keys-inputs.json",
+        "bytes": 15202,
+        "sha256": "19623a7a7455bbc01158310f4c7580f7712939aa8c9a5a5e2efe7a21adeb57c0"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-keys-compiler-source.json",
+        "bytes": 117612,
+        "sha256": "f5e5bd2ef33f73535c5dab6e112cd13aa03d5a9396869dfb50c55a9fd8252697"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-keys-runtime.json",
+        "bytes": 36320,
+        "sha256": "ff60582b212c96459fb35278b573c7c0fe0dee5ec9184027a0101828afadf539"
+      },
+      "runtime_byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-keys-byte-index.json",
+        "bytes": 93410,
+        "sha256": "99099c47b38d575df3a53ac1d386531d88a575391c362b567cffae33eedf46c2"
+      }
+    },
+    {
+      "tag": "units-window-proof",
+      "interpretation": "Targeted two groups passed on both OSes, including both window sizes and both inspector font sources. Full registered six-group run was not repeated.",
+      "runs": [
+        {
+          "platform": "windows",
+          "config": "Release MSVC",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "unit_task_window",
+              "--test-filter",
+              "inspector_channel"
+            ],
+            "exit_code": 0,
+            "app_sha256": "0024b6861bfb3d5207806b990c5513a66b261ced2365821d07172f7ffafe1566"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/units-window-proof-windows.log",
+            "bytes": 39856,
+            "sha256": "15cdbb6a62dd15f3be6a1a3ce4c348638236156d0d047cf9df2d9bb67f68220a"
+          },
+          "run": "run-ixff_ooc",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-ixff_ooc/results.json",
+            "bytes": 98961,
+            "sha256": "47b6802f62a09528f0dc0d245538b0a8f01d1e171fcb49aa17b8fecf04833984"
+          },
+          "passed": 2,
+          "total": 2,
+          "cases": [
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 7.281,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "inspector_channel",
+              "status": "passed",
+              "seconds": 145.344,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "config": "Debug GCC ASan/UBSan; GUI leak detection0, fatal sanitizer errors",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "unit_task_window",
+              "--test-filter",
+              "inspector_channel"
+            ],
+            "exit_code": 0,
+            "app_sha256": "b1a87886bc251bed1eb82b1d06f47c1aaeb1423aaa4496f9cebe59e0bde388f2"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/units-window-proof-linux.log",
+            "bytes": 291453,
+            "sha256": "9e03e33fcc3d285452806372d8bfd18f8424a7a17ae9a7e6397ab7962f6e8079"
+          },
+          "run": "run-vyo7skob",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-vyo7skob/results.json",
+            "bytes": 56111,
+            "sha256": "c464962bbeb1b2c0e53c777557bd44712e310b3d0dd1ed2398e0146492dd81f6"
+          },
+          "passed": 2,
+          "total": 2,
+          "cases": [
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 24.7,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "inspector_channel",
+              "status": "passed",
+              "seconds": 116.667,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-proof-inputs.json",
+        "bytes": 15309,
+        "sha256": "f1bba96ff4eefb81d2210c4bc75fe819273f8796a8a1148b2e3b750279df7b05"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-proof-compiler-source.json",
+        "bytes": 117536,
+        "sha256": "3f26796ecf5fbf2131df3d9396931620d5d9a1a8cbc9caa80701f4fa0ebf03f1"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-proof-runtime.json",
+        "bytes": 36322,
+        "sha256": "0780ca0d2f2017d2a5302796bfcdcfa390cbcc27e8025fbc2a5abd7595fabf42"
+      },
+      "runtime_byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-proof-byte-index.json",
+        "bytes": 93507,
+        "sha256": "1287629d95bd479917064cdddcc52e52ea700237b2bfb1f73436abdeb6f01075"
+      }
+    },
+    {
+      "tag": "units-window-focus",
+      "interpretation": "Additional parent ownership/focus and minimum-size error reflow changes. Actual settings-category launcher used. Five relevant groups; results below are authoritative.",
+      "runs": [
+        {
+          "platform": "windows",
+          "config": "Release MSVC",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "unit_task_window",
+              "--test-filter",
+              "channel_units_workflow",
+              "--test-filter",
+              "analysis_units_dark",
+              "--test-filter",
+              "analysis_units_light_large_narrow",
+              "--test-filter",
+              "inspector_channel"
+            ],
+            "exit_code": 0,
+            "app_sha256": "883e2f6d97a2bde3cb34b5834d18ab5f7a5d94fb67c89e7a3c379d0578660ebb"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/units-window-focus-windows.log",
+            "bytes": 39975,
+            "sha256": "6766aab7f1625672b0b63879a96baa54f8dbe2387c73dae4a52dab3cfbab15c7"
+          },
+          "run": "run-tp2w0fqh",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-tp2w0fqh/results.json",
+            "bytes": 155848,
+            "sha256": "15badc84de8227fca4f3e0c02b84ef927b5bfce671cc0958ffff401594664205"
+          },
+          "passed": 5,
+          "total": 5,
+          "cases": [
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 8.375,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "passed",
+              "seconds": 80.64,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_dark",
+              "status": "passed",
+              "seconds": 2.704,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_light_large_narrow",
+              "status": "passed",
+              "seconds": 2.718,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "inspector_channel",
+              "status": "passed",
+              "seconds": 136.922,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "config": "Debug GCC ASan/UBSan; GUI leak detection0, fatal sanitizer errors",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "unit_task_window",
+              "--test-filter",
+              "channel_units_workflow",
+              "--test-filter",
+              "analysis_units_dark",
+              "--test-filter",
+              "analysis_units_light_large_narrow",
+              "--test-filter",
+              "inspector_channel"
+            ],
+            "exit_code": 0,
+            "app_sha256": "ed918ce36f12f8338a9e4fa3de59364ba68042a025384ae8f32d4e5580c6d6bf"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/units-window-focus-linux.log",
+            "bytes": 293174,
+            "sha256": "cc9073bbc8324cff8dd9042da31537a8aca52752ef2cf4a5579801b62e67c07f"
+          },
+          "run": "run-flt4us81",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-flt4us81/results.json",
+            "bytes": 101018,
+            "sha256": "526a5e9ae0f59f8f58a8e8a9aa0b51a907107e6d66ca463016cb0c44eb3a999d"
+          },
+          "passed": 5,
+          "total": 5,
+          "cases": [
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 31.962,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "passed",
+              "seconds": 126.684,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_dark",
+              "status": "passed",
+              "seconds": 11.661,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_light_large_narrow",
+              "status": "passed",
+              "seconds": 10.528,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "inspector_channel",
+              "status": "passed",
+              "seconds": 119.298,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-focus-inputs.json",
+        "bytes": 15410,
+        "sha256": "8aeba7e52ecc7e4c6d32c210c5856ce1161985cfef91104641264a75f160bee9"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-focus-compiler-source.json",
+        "bytes": 117760,
+        "sha256": "6013625203c010b767709178de3fd2fbd2c0ef9b8c6aac4469c572b868ba53b2"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-focus-runtime.json",
+        "bytes": 36322,
+        "sha256": "17eed4d2b019705cb9ec8e5ae258632a809759f5ebfeecbd90702b98ffc8b8f1"
+      },
+      "runtime_byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-focus-byte-index.json",
+        "bytes": 93507,
+        "sha256": "280a9a1d895d109f8ec7f0d26f902c8eee8a3f0505b3dfa15665a8d78be43e52"
+      }
+    },
+    {
+      "tag": "units-window-reference",
+      "interpretation": "Visual correction: initial850x473 matches approved unit-task reference at UI16; height scales with UI preference. Only task-window group repeated, two real app processes. No new full five-group run claimed.",
+      "runs": [
+        {
+          "platform": "windows",
+          "config": "Release MSVC",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "unit_task_window"
+            ],
+            "exit_code": 0,
+            "app_sha256": "b25536cdf1a3110dca2fb86d8c15efcc0fc43acf7eda5d58ec43baf818490527"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/units-window-reference-windows.log",
+            "bytes": 39824,
+            "sha256": "fc4a3d068778cd4a967ea1795bdc38d4a7d3d96c69801803bbcca40e3b77ea7d"
+          },
+          "run": "run-klag3aoo",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-klag3aoo/results.json",
+            "bytes": 11322,
+            "sha256": "142036f4736897a62cf553a02c45b477f82f2c8057e9f2af6d26245bd5ac8dc8"
+          },
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 8.234,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "config": "Debug GCC ASan/UBSan; GUI leak detection0, fatal sanitizer errors",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "unit_task_window"
+            ],
+            "exit_code": 0,
+            "app_sha256": "cbb8943d2598f6097d7aa64ee13e731222b5e6a4a64979acad00cb3f3aa35359"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/units-window-reference-linux.log",
+            "bytes": 293973,
+            "sha256": "e9f39140b75f6fecd862103f32a08da6483f47dd3447de3de68ba77d3fde57b6"
+          },
+          "run": "run-5n2u1huw",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5n2u1huw/results.json",
+            "bytes": 11136,
+            "sha256": "16b4c13553a24084f8faa1adeca0d57b849bdd1dec4af4534f258cfe4f9b5bdf"
+          },
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 27.811,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-reference-inputs.json",
+        "bytes": 15410,
+        "sha256": "02e2cb1097a6cd56706020512474f53744442367bb8b4c71e003774b6dfb59d0"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-reference-compiler-source.json",
+        "bytes": 117499,
+        "sha256": "7cd406139453d127d103d37c975f105f30c76bb1a0f5d77725040ee53dc4e1af"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-reference-runtime.json",
+        "bytes": 36330,
+        "sha256": "0fed21e26ff47b81ba4ffa455ee6ce89bf57a93e6a5e80fefc4b6bc7c33798e7"
+      },
+      "runtime_byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-reference-byte-index.json",
+        "bytes": 93895,
+        "sha256": "030d4acbdad703bd47ab2c9cb4f0a0d2d7f723d0cbf4135f4c1d328a482eeff8"
+      }
+    },
+    {
+      "tag": "units-window-caller",
+      "interpretation": "Preserve actual caller GL context when mouse activation creates the task inside the Settings renderer. UI16 uses real pointer events with Settings context; UI22 uses keyboard events between frames with primary context. Trace asserts exact context restoration. Only task-window group repeated.",
+      "runs": [
+        {
+          "platform": "windows",
+          "config": "Release MSVC",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "unit_task_window"
+            ],
+            "exit_code": 0,
+            "app_sha256": "3fb1cd41718970991f10c7d192902d6215ab8335b1e17e87dafdcb2dc1addb2d"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/units-window-caller-windows.log",
+            "bytes": 39824,
+            "sha256": "36fa088d433c19451012908feab6f7bc6df81a4026d6fc886ce7ef5c97809389"
+          },
+          "run": "run-6vu__ab5",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-6vu__ab5/results.json",
+            "bytes": 11604,
+            "sha256": "e511411e5aa9ef88f7c087a7e684cb5c8947503c71f42a24f891dfe014326f89"
+          },
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 7.921,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "platform": "linux",
+          "config": "Debug GCC ASan/UBSan; GUI leak detection0, fatal sanitizer errors",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "unit_task_window"
+            ],
+            "exit_code": 0,
+            "app_sha256": "0a17b31dae4860e7f71bdf77478d7ad9fb59a85bfa78db2857ee71aac3390884"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/units-window-caller-linux.log",
+            "bytes": 294706,
+            "sha256": "b267d6c94bde25ec44b85e4541ef1e6695557d1d52c40fa1e905f8fcd651c1e0"
+          },
+          "run": "run-ieum8tcs",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ieum8tcs/results.json",
+            "bytes": 11418,
+            "sha256": "21e1b2c9deb95f45d9cc9f8b3a8b1ef068b1f01ec5814017ca47e56ab2bc55db"
+          },
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 27.625,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-caller-inputs.json",
+        "bytes": 15410,
+        "sha256": "e461f6d8ecd501f281179845ce76da011cc0ab9f4c371be29b1ec9bafe756284"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-caller-compiler-source.json",
+        "bytes": 117540,
+        "sha256": "bc7267060b58a85dcf1af60e396b86d61026becebf92b84329a0800761271572"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-caller-runtime.json",
+        "bytes": 36324,
+        "sha256": "2b329d752b88edc29ed1014b34b24c08ebe017030ae74f15f15d0edfb058db82"
+      },
+      "runtime_byte_index": {
+        "path": "build/validation/explorer-inline-2026-10-29/units-window-caller-byte-index.json",
+        "bytes": 93604,
+        "sha256": "894705063e7ad86c5b0b694bc01a21621b7381af49ee82aa66f8c958583feb03"
+      }
+    }
+  ],
+  "archived_predecessor": {
+    "result": {
+      "path": "build/validation/units-window-2026-10-31/baseline-inspector-result.json",
+      "bytes": 776,
+      "sha256": "ac4147a0da0a4cce7271620ef636ab8a7a591f29a86a62bccd86396a9a90126f"
+    },
+    "log": {
+      "path": "build/validation/units-window-2026-10-31/baseline-inspector.log",
+      "bytes": 32330,
+      "sha256": "e4324f309a44dc21cd44ef0978b64e0749debf6473b4cb8d1075ee58131dffcb"
+    },
+    "runtime_index": {
+      "path": "build/validation/units-window-2026-10-31/baseline-runtime.json",
+      "bytes": 62262,
+      "sha256": "53a654de2c56a7fe068850d5cb03c6b25761c723b67b58938140a73daf1ad995"
+    },
+    "finding": "Old archived Windows app also reaches size20 then times out at inspector stage21; source-unit task does not cause the old reveal failure."
+  },
+  "inspector_pixel_coverage": [
+    {
+      "platform": "windows",
+      "validation": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-tp2w0fqh/inspector_channel/files ä/validation.json",
+        "bytes": 50833,
+        "sha256": "410f9634c1ed31bc391f5e2e3fb0d131064e88bd015342c1b7baca5b9c672431"
+      },
+      "font_sources": [
+        {
+          "font": "system",
+          "records": 14,
+          "visible_fields": 12,
+          "visible_values": 8
+        },
+        {
+          "font": "bundled",
+          "records": 14,
+          "visible_fields": 12,
+          "visible_values": 8
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "validation": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-flt4us81/inspector_channel/files ä/validation.json",
+        "bytes": 48694,
+        "sha256": "38c678866bf4e953e7854a243b3c5408f2e73232af6d775844dec71dfd2f2431"
+      },
+      "font_sources": [
+        {
+          "font": "system",
+          "records": 14,
+          "visible_fields": 21,
+          "visible_values": 10
+        },
+        {
+          "font": "bundled",
+          "records": 14,
+          "visible_fields": 21,
+          "visible_values": 10
+        }
+      ]
+    }
+  ],
+  "minimum_window_error": [
+    {
+      "platform": "windows",
+      "observations": [
+        "UNIT SMALL ERROR: body=79.500 message=101.750 top=-0.750 scroll=746 stable=1"
+      ]
+    },
+    {
+      "platform": "linux",
+      "observations": [
+        "UNIT SMALL ERROR: body=79.500 message=126.500 top=-0.750 scroll=790 stable=1"
+      ]
+    }
+  ],
+  "caller_gl_context": [
+    {
+      "platform": "windows",
+      "observations": [
+        "UNIT CALLER CONTEXT: source=3 caller=3 restored=3 same=1",
+        "UNIT CALLER CONTEXT: source=3 caller=2 restored=2 same=1"
+      ]
+    },
+    {
+      "platform": "linux",
+      "observations": [
+        "UNIT CALLER CONTEXT: source=3 caller=3 restored=3 same=1",
+        "UNIT CALLER CONTEXT: source=3 caller=2 restored=2 same=1"
+      ]
+    }
+  ],
+  "native_visual_references": [
+    {
+      "platform": "windows",
+      "file": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-6vu__ab5/unit_task_window/files ä/workflow ä/UI 16/unit-task-wide-16.png",
+        "bytes": 38280,
+        "sha256": "aadfad94d777f2b22e7d28aeeeee40cd2826350008af1036905aecea9e3426db"
+      }
+    },
+    {
+      "platform": "windows",
+      "file": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-6vu__ab5/unit_task_window/files ä/workflow ä/UI 16/unit-task-error-16.png",
+        "bytes": 48597,
+        "sha256": "991479c6d0d4e7958e6f04fd4a2ce7bb7661bf9b5c97c8728110204718c36439"
+      }
+    },
+    {
+      "platform": "windows",
+      "file": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-6vu__ab5/unit_task_window/files ä/workflow ä/UI 22/unit-task-small-22.png",
+        "bytes": 36404,
+        "sha256": "6dadcebb5b4bacb7629cd420fdeba9d287ec91b75d514ece7d5a0b2f37d0cea9"
+      }
+    },
+    {
+      "platform": "linux",
+      "file": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ieum8tcs/unit_task_window/files ä/workflow ä/UI 16/unit-task-wide-16.png",
+        "bytes": 40912,
+        "sha256": "378a085405da10d6238fe6999b0e43c5dd805da2443de04d708b8be77e053a5a"
+      }
+    },
+    {
+      "platform": "linux",
+      "file": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ieum8tcs/unit_task_window/files ä/workflow ä/UI 16/unit-task-error-16.png",
+        "bytes": 51848,
+        "sha256": "6b93650a7f95ccfe0c04f92e4fbd0acea7ee1a25d55b004ef5d9c05c45de7e47"
+      }
+    },
+    {
+      "platform": "linux",
+      "file": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ieum8tcs/unit_task_window/files ä/workflow ä/UI 22/unit-task-small-22.png",
+        "bytes": 38288,
+        "sha256": "f361e7af977506d45780b24cf6bf6836df0c58169c57c6261bc8c08d7b1a8702"
+      }
+    }
+  ],
+  "approved_visual_reference": {
+    "image": {
+      "path": "docs/visuals/settings-options/review/unit-task.png",
+      "bytes": 26773,
+      "sha256": "a7748d61a46d31d9c0bf02f0027e664bd3c0aabc36ccd5559e548006cb846244"
+    },
+    "tokens": {
+      "path": "docs/visuals/settings-options/settings.css",
+      "bytes": 22894,
+      "sha256": "f474fb3cb02d9841823c29a0d110a6a2eb608635cfb4bcca1d34226b3c5a2e36"
+    },
+    "review": "Approved850x473 reference and final native wide/error/small views compared. Native OS chrome and platform fonts remain platform-owned; no pixel-identical whole-app claim."
+  },
+  "source_contract": "Explicit caller window ID and control label. No global modal guards. Preferences cancel does not cancel units. Apply retains other channel drafts. Native keyboard focus stays on the task across main-window renders in analysis and inspector fixtures.",
+  "keyboard_contract": "Custom route hands combo activation back to normal controls; popup arrows activate real entries, selected draft is focused when reopening, Tab closes and advances, Escape closes popup before task.",
+  "unit_validation": "Existing full live/history/dataset/statistics checks and safe current-catalog file replacement preserved; real overflow away from preview sample, failed save/retry, corrupt-file preservation and explicit recovery covered.",
+  "storage": "D: only. User Mac off, never accessed. Earlier hosted Settings/menu proofs cover their own old commits, not this uncommitted unit implementation.",
+  "limits": [
+    "New hosted macOS units execution pending after commit/push",
+    "No full GUI/design/screenreader/physical-input/DPI/monitor/fullscreen acceptance",
+    "Completion D preferences and remaining Settings/AX fixture ports still open",
+    "Five changed groups passed together on focus phase; initial-height correction and caller-context preservation are covered by subsequent targeted one-group task-window checks. Unchanged Settings A window group retains earlier pass."
+  ],
+  "cleanup": {
+    "result": {
+      "path": "build/validation/units-window-2026-10-31/cleanup-result.json",
+      "bytes": 370,
+      "sha256": "a12420b497b09552db8c757c3cd913ad5167453a841528131dd34699ee5f6855"
+    },
+    "data": {
+      "count": 315,
+      "bytes": 563430107,
+      "empty_directories": 3,
+      "plan_sha256": "1884c174a6f51a969c6ef44e3b578c7c61eec45d2149788e75a5b6fa2affd959",
+      "all_targets_preflighted": true,
+      "all_files_absent": true,
+      "backup_archive_bytes_reverified": true,
+      "processes": "All unit-window build/test/freeze and predecessor comparison handles were terminal."
+    }
+  }
+}

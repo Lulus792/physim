@@ -103,6 +103,8 @@ bool nk_sdl_accessibility_has_focus(struct nk_context *ctx);
 /* Publish the custom keyboard route's visible target without queuing an
  * assistive action. A granted native focus request takes ownership back. */
 void nk_sdl_accessibility_keyboard_begin(struct nk_context *ctx);
+/* Hand custom keyboard ownership back to controls without discarding focus. */
+void nk_sdl_accessibility_keyboard_release(struct nk_context *ctx);
 bool nk_sdl_accessibility_keyboard_owned(struct nk_context *ctx);
 bool nk_sdl_accessibility_keyboard_target(struct nk_context *ctx,struct nk_rect bounds);
 void ps_ui_accessibility_route(struct nk_context *ctx,bool allowed);

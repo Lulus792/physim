@@ -280,6 +280,7 @@ typedef struct {
     ps_channel_units channel_units;
     char channel_units_path[4096], channel_units_error[192], channel_unit_scale[64];
     bool channel_units_writable, channel_unit_manager;
+    struct channel_unit_task *unit_task;
     ps_channel unit_channel, live_channels[PS_MAX_CHANNELS], reset_channels[PS_MAX_CHANNELS];
     ps_display_unit unit_draft;
     struct nk_rect channel_unit_buttons[2], channel_unit_bounds[7];
@@ -2928,7 +2929,7 @@ static void plot(app *a,const double *times,const double *values,int count,float
 }
 static struct nk_text_edit *editor_search_target(app *a) {
     if(a->recovery || a->document_pending ||
-       a->layout_manager || a->workspace_manager || a->channel_unit_manager || a->run_details_manager) return NULL;
+       a->layout_manager || a->workspace_manager || a->run_details_manager) return NULL;
     workspace_document *doc=active_document(a);
     if(a->tab==8 && doc) return doc->recovery?NULL:&doc->edit;
     if(a->loaded && a->tab==0) return a->analysis_only?&a->analysis:&a->experiment;
@@ -3716,6 +3717,7 @@ static bool native_test_keyboard_command(app *a,toolbar_action action,int *stage
 #include "layout_tests.inc"
 #include "workspace_catalog_tests.inc"
 #include "pchip_tests.inc"
+#include "channel_unit_window_tests.inc"
 #include "channel_units_tests.inc"
 #include "analysis_project_tests.inc"
 #include "analysis_workspace_tests.inc"
@@ -4339,6 +4341,7 @@ int main(int argc, char **argv) {
         graphic_export_tick(a);
         project_manager_tick(a);
         settings_tick(a);
+        channel_unit_tick(a);
         preferences_theme_tick(a);
         api_reference_insert_tick(a);
         documentation_actions_tick(a);
@@ -4351,6 +4354,7 @@ int main(int argc, char **argv) {
         browser_input(a,true);
         if(a->manager_ui)nk_input_begin(a->manager_ui);
         if(a->settings_ui)nk_input_begin(a->settings_ui);
+        if(a->unit_task)nk_input_begin(a->unit_task->ui);
         if(a->graphic_export)nk_input_begin(a->graphic_export->ui);
         if (a->doc_ui)
             nk_input_begin(a->doc_ui);
@@ -4375,6 +4379,7 @@ int main(int argc, char **argv) {
             if(browser_event(a,&e,event_window))continue;
             if(project_manager_event(a,&e,event_window))continue;
             if(settings_event(a,&e,event_window))continue;
+            if(channel_unit_event(a,&e,event_window))continue;
             if(timeline_controls_event(a,&e,event_window))continue;
             if(graphic_export_event(a,&e,event_window))continue;
             if(panel_window_event(a,&e,event_window))continue;
@@ -4440,14 +4445,13 @@ int main(int argc, char **argv) {
                     a->quitting = true;
             }
             if(e.type==SDL_EVENT_KEY_DOWN && event_window==a->window)a->workbench_sidebar_focus=0;
-            if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && (a->layout_manager || a->workspace_manager || a->channel_unit_manager || a->run_details_manager) && e.key.key == SDLK_ESCAPE) {
+            if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && (a->layout_manager || a->workspace_manager || a->run_details_manager) && e.key.key == SDLK_ESCAPE) {
                 a->layout_manager = false;
                 a->workspace_manager = false;
-                a->channel_unit_manager = false;
                 a->run_details_manager = false;
                 continue;
             }
-            if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && !a->recovery && !a->layout_manager && !a->workspace_manager && !a->channel_unit_manager && !a->run_details_manager) {
+            if (e.type == SDL_EVENT_KEY_DOWN && event_window == a->window && !a->recovery && !a->layout_manager && !a->workspace_manager && !a->run_details_manager) {
                 if(e.key.key==SDLK_F1 && (e.key.mod&SDL_KMOD_SHIFT) && !e.key.repeat) {
                     struct nk_text_edit *edit=completion_target(a);
                     if(edit && edit->active){api_reference_from_editor(a,edit);continue;}
@@ -4513,6 +4517,7 @@ int main(int argc, char **argv) {
         if(a->manager_ui)nk_input_end(a->manager_ui);
         if(a->settings_ui)nk_input_end(a->settings_ui);
         if(a->settings_ui && nk_sdl_accessibility_has_focus(a->settings_ui) && !nk_sdl_accessibility_keyboard_owned(a->settings_ui))a->settings_keyboard=false;
+        if(a->unit_task){nk_input_end(a->unit_task->ui);if(nk_sdl_accessibility_has_focus(a->unit_task->ui) && !nk_sdl_accessibility_keyboard_owned(a->unit_task->ui))a->unit_task->keyboard=false;}
         if(a->graphic_export)nk_input_end(a->graphic_export->ui);
         if (a->doc_ui)
             nk_input_end(a->doc_ui);
@@ -5679,6 +5684,7 @@ int main(int argc, char **argv) {
             join(path, sizeof path, workspace_state_test ? argv[2] : a->project, capture);
             bool graphic_capture=a->graphic_export && (plot_test || !strcmp(capture,"comparison-export.png"));
             if(graphic_capture)SDL_strlcpy(a->graphic_export->capture,path,sizeof a->graphic_export->capture);
+            else if(a->unit_task && !a->unit_task->close)SDL_strlcpy(a->unit_task->capture,path,sizeof a->unit_task->capture);
             else if(a->browser && a->browser->visible && a->browser->ui)SDL_strlcpy(a->browser->capture,path,sizeof a->browser->capture);
             else if(a->project_manager && a->manager_ui)SDL_strlcpy(a->manager_capture,path,sizeof a->manager_capture);
             else if(a->settings_open && a->settings_ui)SDL_strlcpy(a->settings_capture,path,sizeof a->settings_capture);
@@ -5714,6 +5720,7 @@ int main(int argc, char **argv) {
         panel_requests(a);
         if(!project_manager_window_render(a)){fprintf(stderr,"Project window: %s\n",SDL_GetError());exit_code=1;a->quitting=true;}
         if(!settings_window_render(a)){fprintf(stderr,"Settings window: %s\n",SDL_GetError());exit_code=1;a->quitting=true;}
+        if(!channel_unit_window_render(a)){fprintf(stderr,"Unit window: %s\n",SDL_GetError());exit_code=1;a->quitting=true;}
         if(!browser_windows_render(a)){fprintf(stderr,"File browser window: %s\n",SDL_GetError());exit_code=1;a->quitting=true;}
         if(!graphic_export_window_render(a)){fprintf(stderr,"Graphic export window: %s\n",SDL_GetError());exit_code=1;a->quitting=true;}
         if (doc_capture)
@@ -5839,6 +5846,7 @@ int main(int argc, char **argv) {
     browser_destroy(a);
     project_manager_window_destroy(a);
     settings_window_destroy(a);
+    channel_unit_window_destroy(a);
     documents_clear(a);
     graphic_export_close(a);
     panel_windows_destroy(a);

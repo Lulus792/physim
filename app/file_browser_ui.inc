@@ -68,7 +68,7 @@ fail:
     SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT,0);browser_window_destroy(a,d);return false;
 }
 static bool browser_workspace_visible(const app *a){return a->browser_workspace && a->browser_workspace->visible && a->tab==9 &&
-    !a->workspace_manager && !a->layout_manager && !a->channel_unit_manager && !a->run_details_manager && !a->recovery && !a->document_pending;}
+    !a->workspace_manager && !a->layout_manager && !a->run_details_manager && !a->recovery && !a->document_pending;}
 static bool browser_busy(const browser_dialog *d){return ps_browser_worker_read(d->worker).loading;}
 static bool browser_mutating(const browser_dialog *d){return browser_busy(d) && (d->operation==PS_BROWSER_CONFIRM || d->operation==PS_BROWSER_MAKE_DIRECTORY);}
 static bool browser_path_field(const browser_dialog *d){return d->path_edit || d->failed || (browser_busy(d) && d->operation==PS_BROWSER_READ_DIRECTORY);}

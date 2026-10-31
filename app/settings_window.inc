@@ -1,6 +1,7 @@
 /* Approved Settings A. Immutable font textures are borrowed from the main UI;
  * the task owns its window, GL context, input and accessibility surface. */
 static void channel_unit_open(app *a,const ps_channel *ch);
+static void channel_unit_open_from(app *a,const ps_channel *ch,SDL_Window *source,const char *label);
 static ps_display_unit channel_display_unit(app *a,const ps_channel *ch);
 enum {PS_PROTOCOL_INITIAL_HEIGHT=1,PS_PROTOCOL_INITIAL_OPEN=2};
 /* The common log retains its current cross-workspace wish. Explicit starting
@@ -177,7 +178,7 @@ static bool settings_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
     else if(id==18 && activate){a->settings_review=!a->settings_review;a->settings_focus_scroll=true;}
     else if(id==25 && activate){a->settings_review=false;a->settings_focus=18;a->settings_focus_scroll=true;}
     else if(id==26 && activate){a->settings_search[0]=0;a->settings_focus=17;a->settings_focus_scroll=true;}
-    else if(id==27 && activate && settings_channel(a))channel_unit_open(a,settings_channel(a));
+    else if(id==27 && activate && settings_channel(a))channel_unit_open_from(a,settings_channel(a),a->settings_window,settings_focus_name(27));
     else if(id>=20 && id<=24 && (activate || d)){a->settings_group=(id-20+(d<0?4:d>0?1:0))%5;a->settings_focus=20+a->settings_group;a->settings_search[0]=0;}
     else if(id==0 || id==5){uint32_t *size=id==0?&p->ui_size:&p->editor_size;unsigned min=id==0?16:12,count=id==0?4:6;*size=min+2*(((*size-min)/2+(d<0?count-1:1))%count);}
     else if(id==4)p->theme=(p->theme+(d<0?2:1))%3;

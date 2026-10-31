@@ -29,11 +29,15 @@ def inspect(folder,out):
             assert abs(label[0]-card[0]-13*f)<.03 and abs(label[1]-card[1]-12*f)<.03
             assert abs(control[0]-label[0])<.03 and abs(control[1]-label[1]-label[3]-5*f)<.03
             assert control[3]>=32*f-.03 and abs(card[1]+card[3]-control[1]-control[3]-12*f)<.03
-            if inside(card,r['body']):
+            if inside(label,r['body']) and inside(control,r['body']):
                 assert field['paint']==(r['data']['name'] if i==0 else r['data']['symbol']),(r,field)
                 assert pixels(im,control,ink,55),('missing control glyphs',r)
-                # A single outer card border; the selector itself has no filled pill.
-                assert pixels(im,card,border,6),('missing card border',r)
+                # Scrolling can clip decorative card padding while both label
+                # and input remain fully visible. Check the actually exposed
+                # outer contour; keep the required field/value counts.
+                x,y=max(card[0],r['body'][0]),max(card[1],r['body'][1])
+                edge=(x,y,min(card[0]+card[2],r['body'][0]+r['body'][2])-x,min(card[1]+card[3],r['body'][1]+r['body'][3])-y)
+                assert pixels(im,edge,border,6),('missing card border',r)
                 seen_fields+=1
         if inside(r['value'],r['body']):
             assert pixels(im,r['value'],ink,50),('missing value glyphs',r)

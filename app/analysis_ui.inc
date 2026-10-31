@@ -109,7 +109,7 @@ static void analysis_unit_menu(app *a,const ps_channel *channel) {
             }
         }
         nk_end_disabled(ui);a->analysis_unit_custom=nk_widget_bounds(ui);
-        if(nk_button_label(ui,"Benutzerdefiniert …")){channel_unit_open(a,channel);a->analysis_unit_focus_return=true;nk_combo_close(ui);}
+        if(nk_button_label(ui,"Benutzerdefiniert …")){channel_unit_open_from(a,channel,a->window,"Anzeigeeinheit auswählen");a->analysis_unit_focus_return=false;nk_combo_close(ui);}
         ui->style.button=button;
         nk_combo_end(ui);
     }

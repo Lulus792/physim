@@ -1678,6 +1678,20 @@ def settings_a_window(flow, directory):
         require((root / ("settings-a-wide-16.png" if size == 16 else "settings-a-small-22.png")).is_file(), "Missing native Settings A image")
 
 
+def unit_task_window(flow, directory):
+    directory.mkdir()
+    for size in (16, 22):
+        root = directory / ("UI " + str(size)); root.mkdir()
+        flow.run("--workspace-state-test", root, "units-task-" + str(size), timeout=60,
+                 marker="UNIT TASK SELF-TEST: PASSED")
+        require("complete=1" in flow.steps[-1]["stdout"], "Independent unit task did not finish")
+        contexts = re.findall(r"UNIT CALLER CONTEXT: source=(\d+) caller=(\d+) restored=(\d+) same=(\d+)", flow.steps[-1]["stderr"])
+        require(contexts and all(caller == restored and same == "1" for source, caller, restored, same in contexts), "Unit launch did not restore its caller's actual GL context")
+        require(any((source == caller) == (size == 16) for source, caller, restored, same in contexts), "Pointer and keyboard launches did not exercise distinct caller render contexts")
+        require(len((root / "channel-units.bin").read_bytes()) == 20, "Explicit SI apply did not remove the override")
+        require(not list(root.glob("*.tmp-*")), "Unit task leaked an atomic temporary")
+
+
 def project_manager_keyboard(flow, directory):
     directory.mkdir()
     for size in (16,22):
@@ -1987,6 +2001,7 @@ SPECIAL["laboratory_workflow"]=laboratory
 SPECIAL["model_values_workflow"]=model_values
 SPECIAL["settings_transactions"]=settings_transactions
 SPECIAL["settings_a_window"]=settings_a_window
+SPECIAL["unit_task_window"]=unit_task_window
 
 def documentation_model_contract(flow,directory,output):
     rows=re.findall(r'DOCUMENTATION SVG CAPTION: case=(\d+) figure=([\d.,]+) lines=(\d+) em=([\d.]+) center=([\d.]+) baseline=([\d.]+) complete=(\d)',output)

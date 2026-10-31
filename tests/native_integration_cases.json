@@ -5693,6 +5693,13 @@
       "steps": [{"program": "python", "arguments": ["{root}/tests/check_display_workflow.py", "settings_a_window", "--app", "{physim}", "--work", "{work}", "--root", "{root}"], "timeout": 85, "files": ["app-steps.json"]}]
     },
     {
+      "name": "unit_task_window",
+      "app": true,
+      "display": true,
+      "targets": ["python", "physim"],
+      "steps": [{"program": "python", "arguments": ["{root}/tests/check_display_workflow.py", "unit_task_window", "--app", "{physim}", "--work", "{work}", "--root", "{root}"], "timeout": 140, "files": ["app-steps.json"]}]
+    },
+    {
       "name": "themes_workflow",
       "app": true,
       "display": true,
