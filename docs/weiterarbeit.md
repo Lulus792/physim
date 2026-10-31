@@ -47,40 +47,67 @@ Protokoll-Trennlinie allein wegen eines Kontextwechsels erneut prüfen.
 
 ## Nächster konkreter Schritt
 
-**Die fünf offenen F1-Befunde gezielt beheben; danach übrige aktive Menütests portieren.**
-Der inzwischen abgeschlossene breitere F1-Lauf `41146212249` (`c35fc39d`) besteht
-Intel 22/27 und Apple Silicon 23/27 GUI-Fälle, dazu je 19/19 portable Fälle.
-Die unabhängige externe F1-Lesetextprüfung besteht auf beiden Runnern; die
-in-process Feldprüfung ist ein separater Fehler. [Diagnose und Originalbelege](verification/macos-f1-open-findings-2026-10-31.json).
+**Gehosteten F1-Lauf `41153551967` auf `de658612` verfolgen; danach übrige aktive
+Menütests portieren.** Die fünf Ursachen sind korrigiert und in beide Repositories
+gepusht. Windows Release und Linux Debug ASan/UBSan bestehen je **5/5 GUI-Fälle**
+(`font_bank_ui`, `documentation_keyboard`, `documentation_math`,
+`documentation_panes`, `documentation_h`) sowie separat **1/1 `font_sources`**.
+Die beiden absichtlich fehlerhaften Grafikvarianten werden auf beiden Plattformen
+gezielt abgelehnt. [Kompakter Nachweis](verification/f1-repairs-2026-10-31.json).
+`font_sources` gehört zu `--test`, nicht zu `--test-display`; das gemeinsame
+Filterargument im ersten GUI-Aufruf führte deshalb korrekt nur fünf Fälle aus.
+Der separate portable Nachlauf ist tatsächlich bestanden, keine angenommene sechste
+GUI-Prüfung. Diese lokalen Fälle nicht wegen eines Kontextwechsels neu starten.
 
-- U+2318 (⌘) fehlt in den geladenen UI-/Code-/Fallback-Bereichen. Die vorhandene
-  NotoSansSymbols2 enthält es. Eine echte MSVC-Fallbackprobe scheitert ohne den
-  Bereich und besteht mit ihm bei 16/32 px samt Rastertinte, Eigentum und Cleanup.
-  `tests/test_font_sources.c` enthält jetzt dieselbe tatsächlich geprüfte
-  positive Erweiterung; die App-Korrektur ist noch nicht angewandt. Dieser neue
-  Testinput ist noch nicht Teil des vorher eingefrorenen `7a95c8ae`-Appstands.
-  Für den nächsten F1-Snapshot ausdrücklich in die Eingabeliste aufnehmen.
-- Der Fontbank-Test erwartet nach injiziertem GL-Fehler Bindung 0, obwohl der
-  Renderer den vorherigen Zustand wiederherstellt. Nicht den Renderer zum
-  Zurücksetzen zwingen; Nichtnull-Bindung und Nichtstandard-Unpack gezielt prüfen.
-- Die alte native F1-Feldfixture öffnet die inzwischen bedarfsabhängige Suchinsel
-  nicht. Zusätzlich setzt der native F1-Suchbefehl bisher nur `doc_search_focus`,
-  während die echte Tastaturtransaktion auch `doc_find_open`/Fokusmodus setzt.
-  Zuerst echtes Cmd+F als Negativnachweis, dann gemeinsame Öffnungstransaktion und
-  alle Unicode-/Auswahl-/Caret-/Reveal-/Hidden-Prüfungen erhalten.
-- H hat alle 56 Geometriezustände auf beiden Architekturen geschafft, braucht
-  danach aber unnötig viele Tabs zum Kontext-Kopieren/Schließen der Suchinsel.
-  Reale F6-Bereichswechsel und kurze Tab-/Umschalt+Tab-Wege verwenden; keine
-  direkte Fokuszuweisung und keine bloße Timeout-Erhöhung als Reparatur.
-- Intel erreicht bei der Bereichsprüfung 21/24 gültige Zustände vor dem internen
-  60-s-Watchdog; Apple Silicon erreicht 24/24. Äußeres Budget ist bereits 75 s.
-  Alle Zustände und einen begrenzten Abschluss innerhalb dieses Budgets erhalten.
+- U+2318 (⌘) ist jetzt in allen fünf UI-/Code-/Fallback-Bereichen enthalten.
+  Der schon vorher mit positiver und negativer Rasterprobe bestätigte Testinput
+  `tests/test_font_sources.c` ist ausdrücklich im neuen Quellsnapshot enthalten.
+- Der Fontbank-Test prüft nach injiziertem GL-Fehler die vorherige lebende
+  Nichtnull-Textur und Unpack-Ausrichtung 8. Der Renderer blieb unverändert.
+  `tools/check_font_bank_state_counterexample.py` baut isoliert je eine falsche
+  Bindungs-/Unpack-Wiederherstellung; beide treffen unter Windows/Linux exakt
+  ihre eigene Assertion mit Exitcode 1. Das ist kein Nachweis für GPU-Erschöpfung
+  oder Leckfreiheit der absichtlich früh beendeten Negativprozesse.
+- F1-Tastaturbefehl, native Suche und Aktionspopover verwenden dieselbe
+  Öffnungstransaktion einschließlich Suchinsel und Tastaturfokus.
+  Die Mac-Feldfixture öffnet sie jetzt mit echtem AppKit-Cmd+F und behält alle
+  Unicode-/Auswahl-/Caret-/Reveal-/Hidden-Prüfungen. Die neue gehostete Gegenprobe
+  setzt ausschließlich den alten nativen Handler in einer isolierten Include-Kette
+  zurück und verlangt genau den Cmd+F-Öffnungsfehler; ihre Ausführung ist noch offen.
+- H nutzt für Kontextsteuerung und Suchinsel-Schließen echte F6-Wechsel und
+  kurze Tab-/Umschalt+Tab-Wege. Keine direkte Fokuszuweisung; der interne
+  H-Watchdog wurde nicht erhöht. Alle 56 Geometriezustände bleiben erhalten.
+- Die Bereichsprüfung behält alle 24 Zustände; nur ihr interner Watchdog liegt
+  jetzt bei 70 Sekunden innerhalb des bisherigen äußeren 75-Sekunden-Budgets.
 
-Baseline-ZIPs/Logs liegen unter `build/validation/macos-menu-workflows-2026-10-30/`.
-Sie sind offene Fehlerbelege. Drei nachfolgende Renderer-Gegenproben wurden im
-fehlgeschlagenen F1-Workflow übersprungen; keine Ausführung daraus ableiten.
-Die neuen zielgenauen F1-Prüfungen erst nach relevanter Korrektur ausführen;
-ganze alte erfolgreiche Kampagnen und Protokollgrenzen nicht neu beginnen.
+Lokale GUI-Ergebnisse: Windows `run-wwb7ojfa`, Linux `run-wtzsvybh`;
+portable Ergebnisse: Windows `run-gtln9on5`, Linux `run-i1exa7dx`.
+Alle vier lokalen Build-/Test-Sessions sind beendet. Der neue eingefrorene
+Anschluss heißt **`f1-repairs-accepted-local`**; er ersetzt für neue Änderungen
+`mac-workspace-menu-accepted`, ohne dessen Belege zu verändern.
+1100 Compiler-/Testdateien entsprechen nach beidseitiger Zeilenendennormalisierung
+`de658612`; 212 Windows-/111 Linux-Runtimedateien und alle referenzierten Archivbytes
+sind zurückgelesen. Der Git-Blob des libunibreak-Manifests enthält selbst CRLF;
+dieser Metadatenunterschied ist im Nachweis ausdrücklich eingegrenzt.
+228 entbehrliche BMP-Rohbilder der beiden erfolgreichen GUI-Läufe wurden entfernt
+(491.327.304 Bytes). Das tatsächlich betrachtete 32-px-Formelbild bleibt als ein
+PNG unter dem Kampagnenordner; Logs, App-Schritte, Quellen, Runtimes und die alten
+offenen Mac-Fehlerarchive sind erhalten. Diese enge Sichtprüfung ersetzt keine
+gesamte Designabnahme.
+
+Der gezielte Mac-Lauf war zuletzt eingereiht, Jobs **`124395257321` (ARM)** und
+**`124395257512` (Intel)**. Vorhandene Handles verwenden, keine zweite Kampagne
+wegen Wartezeit starten. Erst der tatsächliche Abschluss bestätigt die native
+Cmd+F-Gegenprobe und die reparierte AX-Feldprüfung. Der Nutzer-Mac ist weiterhin
+aus und bleibt unangetastet. Automatisch ausgelöste breitere CI-Läufe getrennt
+bewerten; aus den lokalen Teilprüfungen kein Gesamtgrün ableiten.
+
+Die unveränderte Mac-Baseline `41146212249` (`c35fc39d`: Intel 22/27, ARM 23/27,
+je 19/19 portable Fälle) und ihre ZIPs/Logs bleiben erhalten.
+[Ursprüngliche Diagnose](verification/macos-f1-open-findings-2026-10-31.json).
+Die dort unabhängig bestandene externe Lesetextprüfung bleibt von der reparierten
+in-process Feldfixture getrennt. Die drei dort übersprungenen späteren
+Renderer-Gegenproben weiterhin nicht als ausgeführt zählen.
 
 Dokument-Neuladen, Vervollständigung und API-Referenz sind nun ebenfalls
 abgeschlossen: `c35fc39d`, Mac-Lauf `41146212373`, Intel/Apple Silicon je **4/4**

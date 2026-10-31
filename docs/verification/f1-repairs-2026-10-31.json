@@ -1,0 +1,477 @@
+{
+  "schema": 1,
+  "date": "2026-10-31",
+  "source_commit": "de6586121dbdc00cb5066217cfb8383a331653b8",
+  "status": "Local targeted regression closed; hosted macOS native confirmation pending",
+  "baseline": "docs/verification/macos-f1-open-findings-2026-10-31.json",
+  "changes": [
+    "Add U+2318 to all five UI/code/fallback glyph ranges; actual font-source regression retained",
+    "Share F1 search opening transaction among keyboard, native menu and action popover",
+    "Test caller GL state preservation using a live nonzero texture and unpack alignment 8; renderer unchanged",
+    "Use real F6 and bounded forward/backward Tab paths for context controls and search close",
+    "Retain all pane states; bound the pane self-test at 70 seconds inside the existing 75-second external budget"
+  ],
+  "local": {
+    "windows": {
+      "config": "Release MSVC",
+      "execution": {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--sdl",
+          "D:\\Physim\\third_party\\SDL3-3.2.30",
+          "--test-display",
+          "--test-filter",
+          "font_sources",
+          "--test-filter",
+          "font_bank_ui",
+          "--test-filter",
+          "documentation_math",
+          "--test-filter",
+          "documentation_h",
+          "--test-filter",
+          "documentation_panes",
+          "--test-filter",
+          "documentation_keyboard"
+        ],
+        "exit_code": 0,
+        "app_sha256": "75949ef2fdbbefb36b4ed0e1dc92fe08e4270a936619ed70e5d69bd78f50e28d"
+      },
+      "display": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wwb7ojfa/results.json",
+        "sha256": "8d04992a52899b5a6fbef36e6c742e0e6a1f55f5435ad7b17bd8ae645d66daaf",
+        "cases": [
+          {
+            "name": "font_bank_ui",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_keyboard",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_math",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_panes",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_h",
+            "status": "passed"
+          }
+        ],
+        "app_steps": [
+          {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wwb7ojfa/documentation_h/files ä/app-steps.json",
+            "sha256": "30a922055f87c563df42ed5e0fb3934fe27c72782460a3960310e91ba71638d0",
+            "exit_codes": [
+              0
+            ],
+            "h_geometry_states": 56,
+            "pane_states": 0,
+            "completion_markers": [
+              "DOCUMENTATION H CONTEXT COPY: scroll=69 revealed=1",
+              "DOCUMENTATION H BREAKPOINT: widths=900,901 sides=220,250 source-and-view-preserved=1",
+              "DOCUMENTATION H SELF-TEST: PASSED"
+            ],
+            "seeks": [
+              "DOCUMENTATION SEEK: target=22 tabs=1 panes=3 elapsed=0.056",
+              "DOCUMENTATION SEEK: target=23 tabs=19 panes=0 elapsed=0.440"
+            ]
+          },
+          {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wwb7ojfa/documentation_keyboard/files ä/app-steps.json",
+            "sha256": "2eb22124986676f8509e6fe4cf97cc31650de354e784d6209c30b5ac6c45c2d8",
+            "exit_codes": [
+              0
+            ],
+            "h_geometry_states": 0,
+            "pane_states": 0,
+            "completion_markers": [
+              "DOCUMENTATION KEYBOARD SELF-TEST: PASSED"
+            ],
+            "seeks": []
+          },
+          {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wwb7ojfa/documentation_math/files ä/app-steps.json",
+            "sha256": "650328f160f06e6e758f1f3bc74a7cea14a6655a9c77317ed5940e2362d5069b",
+            "exit_codes": [
+              0,
+              0
+            ],
+            "h_geometry_states": 0,
+            "pane_states": 0,
+            "completion_markers": [
+              "DOCUMENTATION MATH SELF-TEST: PASSED",
+              "DOCUMENTATION MATH SELF-TEST: PASSED"
+            ],
+            "seeks": []
+          },
+          {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wwb7ojfa/documentation_panes/files ä/app-steps.json",
+            "sha256": "448abeaccbf42bcc9c40f58058cba35f3f7cc7ec65d0ca1aec05bc7b56ff15cd",
+            "exit_codes": [
+              0
+            ],
+            "h_geometry_states": 0,
+            "pane_states": 24,
+            "completion_markers": [
+              "DOCUMENTATION PANES SELF-TEST: PASSED"
+            ],
+            "seeks": []
+          }
+        ]
+      },
+      "portable": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-gtln9on5/results.json",
+        "sha256": "70355997baac8f6304c95f0f6de43b5e4e2d4e4cd002d3f026aada40e660e195",
+        "cases": [
+          {
+            "name": "font_sources",
+            "status": "passed"
+          }
+        ],
+        "app_steps": []
+      },
+      "counterexample_commands": [
+        {
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+            "--build-dir",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+            "--config",
+            "Release",
+            "--jobs",
+            "4",
+            "--sdl",
+            "D:\\Physim\\third_party\\SDL3-3.2.30",
+            "--test",
+            "--test-filter",
+            "font_sources"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\check_font_bank_state_counterexample.py",
+            "--build-dir",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+            "--config",
+            "Release",
+            "--sdl",
+            "D:\\Physim\\third_party\\SDL3-3.2.30"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "gl_counterexamples": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/font-bank-state-counterexample/report.json",
+        "sha256": "b2250d718029a3770bf989c8c926dd7fa52ef61763b00d54f96be9d3570cc7af",
+        "report": {
+          "original_source_sha256": "b07a35dc9d4ba180073aed576161d231ee6eb138bb34d6c2fc32380c0cc9b561",
+          "rows": [
+            {
+              "kind": "binding",
+              "command": [
+                "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim-font-bank-counterexample-binding.exe",
+                "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\font-bank-state-counterexample\\binding\\workflow"
+              ],
+              "exit_code": 1,
+              "precise_rejection": true,
+              "source_sha256": "05580b87b6ae0c15e37e8fbd5ba5a6f207d8c541a00929dfe808240a22e908e4",
+              "normalized_source_sha256": "58b9e68b63ead488dcfe33e4899829bac16ba58c3d1f4c0313cfd9e3c12daa48",
+              "binary_sha256": "1b2b51e49be83ae6bdbef670a74ba8d6c57659244e2d6cc64731fcb952df0caa"
+            },
+            {
+              "kind": "unpack",
+              "command": [
+                "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim-font-bank-counterexample-unpack.exe",
+                "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\font-bank-state-counterexample\\unpack\\workflow"
+              ],
+              "exit_code": 1,
+              "precise_rejection": true,
+              "source_sha256": "536a116e31e78f7fbac802bd73c0fb86f811e96121000f1f1f77ef6f6765bced",
+              "normalized_source_sha256": "9d1a8d9a3ef27ded92720bacd0359333f4eed756d27925a08165849313716d94",
+              "binary_sha256": "cc40a8c42f6f20f0ced2f0df27d72a917b73b87513e2c7cd14bef8929268cc45"
+            }
+          ],
+          "shared_source_unchanged": true,
+          "scope": "Injected upload GL error with caller texture nonzero and unpack alignment8; not GPU exhaustion or negative-process leak acceptance"
+        }
+      }
+    },
+    "linux": {
+      "config": "Debug GCC ASan/UBSan, Xvfb/Openbox, software GL",
+      "execution": {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+          "--build-dir",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+          "--config",
+          "Debug",
+          "--jobs",
+          "4",
+          "--sdl",
+          "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+          "--test-display",
+          "--sanitizers",
+          "--test-filter",
+          "font_sources",
+          "--test-filter",
+          "font_bank_ui",
+          "--test-filter",
+          "documentation_math",
+          "--test-filter",
+          "documentation_h",
+          "--test-filter",
+          "documentation_panes",
+          "--test-filter",
+          "documentation_keyboard"
+        ],
+        "exit_code": 0,
+        "app_sha256": "d8ede256cc6e660686548a9ea551720ec81836c2c6d2875af88644c9f3d953b7"
+      },
+      "display": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-wtzsvybh/results.json",
+        "sha256": "82f4d9d1cdbf08feab64e23ab69eab15e1d6624aa1a57b3d61ccede8410d7e86",
+        "cases": [
+          {
+            "name": "font_bank_ui",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_keyboard",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_math",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_panes",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_h",
+            "status": "passed"
+          }
+        ],
+        "app_steps": [
+          {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-wtzsvybh/documentation_h/files ä/app-steps.json",
+            "sha256": "d4fb96dc263352890e83b16914b561aa89fda9249e52243dd2afb7cfa07f82ca",
+            "exit_codes": [
+              0
+            ],
+            "h_geometry_states": 56,
+            "pane_states": 0,
+            "completion_markers": [
+              "DOCUMENTATION H CONTEXT COPY: scroll=69 revealed=1",
+              "DOCUMENTATION H BREAKPOINT: widths=900,901 sides=220,250 source-and-view-preserved=1",
+              "DOCUMENTATION H SELF-TEST: PASSED"
+            ],
+            "seeks": [
+              "DOCUMENTATION SEEK: target=22 tabs=1 panes=3 elapsed=0.282",
+              "DOCUMENTATION SEEK: target=23 tabs=19 panes=0 elapsed=1.347"
+            ]
+          },
+          {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-wtzsvybh/documentation_keyboard/files ä/app-steps.json",
+            "sha256": "cbc1b951a0d74d9b19c915ccc5ccf13bce0253a5e1b45bd8141b1afecd187499",
+            "exit_codes": [
+              0
+            ],
+            "h_geometry_states": 0,
+            "pane_states": 0,
+            "completion_markers": [
+              "DOCUMENTATION KEYBOARD SELF-TEST: PASSED"
+            ],
+            "seeks": []
+          },
+          {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-wtzsvybh/documentation_math/files ä/app-steps.json",
+            "sha256": "3b7f6cbfc51c9c89ad6e5babe226de1960a9b2e313da8be771d8440c00362cc2",
+            "exit_codes": [
+              0,
+              0
+            ],
+            "h_geometry_states": 0,
+            "pane_states": 0,
+            "completion_markers": [
+              "DOCUMENTATION MATH SELF-TEST: PASSED",
+              "DOCUMENTATION MATH SELF-TEST: PASSED"
+            ],
+            "seeks": []
+          },
+          {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-wtzsvybh/documentation_panes/files ä/app-steps.json",
+            "sha256": "658bb13e798167e9873e842214d643342bfe9a3616ba83e2c8518905562aa9c9",
+            "exit_codes": [
+              0
+            ],
+            "h_geometry_states": 0,
+            "pane_states": 24,
+            "completion_markers": [
+              "DOCUMENTATION PANES SELF-TEST: PASSED"
+            ],
+            "seeks": []
+          }
+        ]
+      },
+      "portable": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-i1exa7dx/results.json",
+        "sha256": "5edbb075fa79174143250c27e0da17c6b839dbbfc18f24d05a048242ecf8ffb8",
+        "cases": [
+          {
+            "name": "font_sources",
+            "status": "passed"
+          }
+        ],
+        "app_steps": []
+      },
+      "counterexample_commands": [
+        {
+          "command": [
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+            "--build-dir",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+            "--config",
+            "Debug",
+            "--jobs",
+            "4",
+            "--sdl",
+            "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+            "--test",
+            "--test-filter",
+            "font_sources",
+            "--sanitizers"
+          ],
+          "exit_code": 0
+        },
+        {
+          "command": [
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/check_font_bank_state_counterexample.py",
+            "--build-dir",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+            "--config",
+            "Debug",
+            "--sdl",
+            "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+            "--sanitizers"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "gl_counterexamples": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/font-bank-state-counterexample/report.json",
+        "sha256": "f0cc4c280b7436a25c3e2a3bf71a27e83c9fb891352ada76db62d3094c1f26de",
+        "report": {
+          "original_source_sha256": "b07a35dc9d4ba180073aed576161d231ee6eb138bb34d6c2fc32380c0cc9b561",
+          "rows": [
+            {
+              "kind": "binding",
+              "command": [
+                "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-font-bank-counterexample-binding",
+                "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/font-bank-state-counterexample/binding/workflow"
+              ],
+              "exit_code": 1,
+              "precise_rejection": true,
+              "source_sha256": "58b9e68b63ead488dcfe33e4899829bac16ba58c3d1f4c0313cfd9e3c12daa48",
+              "normalized_source_sha256": "58b9e68b63ead488dcfe33e4899829bac16ba58c3d1f4c0313cfd9e3c12daa48",
+              "binary_sha256": "246dd73301990241acd072ffee54340b88de7a7ef1b2001419df8ae27f1b6dbb"
+            },
+            {
+              "kind": "unpack",
+              "command": [
+                "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-font-bank-counterexample-unpack",
+                "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/font-bank-state-counterexample/unpack/workflow"
+              ],
+              "exit_code": 1,
+              "precise_rejection": true,
+              "source_sha256": "9d1a8d9a3ef27ded92720bacd0359333f4eed756d27925a08165849313716d94",
+              "normalized_source_sha256": "9d1a8d9a3ef27ded92720bacd0359333f4eed756d27925a08165849313716d94",
+              "binary_sha256": "27d3741a62566a4ea724efcd856cc3d294899e073a336c8aa82880214857b6e0"
+            }
+          ],
+          "shared_source_unchanged": true,
+          "scope": "Injected upload GL error with caller texture nonzero and unpack alignment8; not GPU exhaustion or negative-process leak acceptance"
+        }
+      }
+    }
+  },
+  "source_snapshot": {
+    "path": "build/validation/explorer-inline-2026-10-29/f1-repairs-accepted-local-compiler-source.json",
+    "sha256": "874fb7df863255c10fcf9d6d5ef8cfc8cdfd4b50948dbb6fcabbd1cbecc71cce",
+    "compiler_test_files": 1100,
+    "all_normalized_blobs_match_commit": true,
+    "inputs": "build/validation/explorer-inline-2026-10-29/f1-repairs-first-inputs.json",
+    "runtime_index": "build/validation/explorer-inline-2026-10-29/f1-repairs-accepted-local-byte-index.json",
+    "normalization_notes": [
+      {
+        "path": "third_party/libunibreak-8.0/manifest.json",
+        "reason": "The Git blob itself retains CRLF; normalized both sides before comparison",
+        "git_bytes": 11398,
+        "normalized_bytes": 11114
+      }
+    ]
+  },
+  "hosted_mac": {
+    "run_id": 41153551967,
+    "url": "https://github.com/PhysicSimulator/physim/actions/runs/41153551967",
+    "status": "queued at last observation",
+    "jobs": [
+      124395257321,
+      124395257512
+    ],
+    "expected": [
+      "Old native Search handler rejected by actual AppKit Cmd+F",
+      "Both GL state mutations rejected",
+      "font_sources portable case",
+      "five focused graphical/native cases"
+    ]
+  },
+  "visual": {
+    "path": "build/validation/macos-menu-workflows-2026-10-30/f1-repairs-math-32.png",
+    "sha256": "4971e728ad36458a472416c1d7ec94ebad5ff05dffa03b472c49fdc6e105ef62",
+    "observation": "Inspected the current Windows 32 px mathematics capture: serif equations with subscripts/superscripts and the pendulum graphic in the native F1 pane. This narrow viewport inspection is not full design acceptance."
+  },
+  "limits": [
+    "User Mac stays powered off and was not accessed",
+    "No manual VoiceOver, physical menu-bar activation or full-UI design acceptance claimed",
+    "Hosted old-handler negative and repaired AX editing still require actual completion",
+    "Negative-process failure does not establish leak-freedom or GPU memory exhaustion",
+    "Foreign working-tree changes excluded; no broad CI success claimed",
+    "font_sources is a portable case, run separately with --test; --test-display selects five local cases"
+  ],
+  "cleanup": {
+    "report": "build/validation/macos-menu-workflows-2026-10-30/f1-success-image-cleanup.json",
+    "sha256": "5a0285bd05b430b68179ff9a5210868362aa611169ce9451cf2adacd13433d0b",
+    "reason": "All five graphical cases passed per platform; compact reports and inspected PNG retained",
+    "bytes_freed": 491327304,
+    "roots": [
+      "D:/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wwb7ojfa",
+      "D:/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-wtzsvybh"
+    ],
+    "preserved": "Inputs, runtimes, logs, app-steps, previous frozen snapshots and open Mac failure archives",
+    "files_removed": 228
+  }
+}
