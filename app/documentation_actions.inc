@@ -41,7 +41,7 @@ static void documentation_action_activate(app *a,int id) {
     if(id==DOC_BACK || id==DOC_FORWARD)documentation_history_go(a,id==DOC_BACK?-1:1);
     else if(id==DOC_HOME)open_documentation(a,documentation_learning_topic(a->doc_track==2?2:1));
     else if(id==DOC_WORKSPACE)SDL_RaiseWindow(a->window);
-    else if(id==DOC_SEARCH){a->doc_find_open=true;a->doc_search_focus=true;a->doc_focus=DOC_SEARCH;}
+    else if(id==DOC_SEARCH)documentation_search_open(a);
     else documentation_zoom(a,id==DOC_ZOOM_OUT?-1:id==DOC_ZOOM_IN?1:0);
 }
 static void documentation_actions_tick(app *a) {

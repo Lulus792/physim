@@ -74,7 +74,7 @@ static bool native_menu_input(app *a,const SDL_Event *event) {
              * action explicitly opens the handbook start. */
             open_documentation(a,a->documentation?a->doc_topic:1);
         } else if(command==TOOLBAR_SEARCH && a->doc_window && owner==SDL_GetWindowID(a->doc_window)) {
-            a->doc_search_focus=true;a->doc_filter_active=false;
+            documentation_search_open(a);
         } else if(command==TOOLBAR_SEARCH && a->tab==4)a->library_search_focus=true;
         else toolbar_dispatch(a,(toolbar_action)command);
     }

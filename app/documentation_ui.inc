@@ -1003,6 +1003,11 @@ static void documentation_focus_pane(app *a,int direction) {
     a->doc_filter_focus=a->doc_focus==DOC_FILTER;a->doc_search_focus=a->doc_focus==DOC_SEARCH;
     nk_sdl_accessibility_keyboard_begin(a->doc_ui);
 }
+static void documentation_search_open(app *a) {
+    nk_sdl_accessibility_keyboard_begin(a->doc_ui);
+    a->doc_keyboard=true;a->doc_focus=DOC_SEARCH;a->doc_focus_reveal=true;
+    a->doc_find_open=true;a->doc_search_focus=true;a->doc_filter_active=false;
+}
 static bool documentation_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
     if(key->key==SDLK_F6 && !(key->mod&(SDL_KMOD_CTRL|SDL_KMOD_GUI|SDL_KMOD_ALT))) {
         if(!key->repeat)documentation_focus_pane(a,key->mod&SDL_KMOD_SHIFT?-1:1);
@@ -1025,9 +1030,7 @@ static bool documentation_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
     }
     if(key->mod&(SDL_KMOD_CTRL|SDL_KMOD_GUI|SDL_KMOD_ALT)) {
         if(key->key==SDLK_F && (key->mod&PS_UI_COMMAND_MOD)) {
-            nk_sdl_accessibility_keyboard_begin(a->doc_ui);
-            a->doc_keyboard=true;a->doc_focus=DOC_SEARCH;a->doc_focus_reveal=true;
-            a->doc_find_open=true;a->doc_search_focus=true;a->doc_filter_active=false;return true;
+            documentation_search_open(a);return true;
         }
         return false;
     }

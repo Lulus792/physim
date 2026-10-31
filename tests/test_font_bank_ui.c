@@ -59,6 +59,8 @@ int main(int argc,char **argv) {
     GLboolean (APIENTRY *is_texture)(GLuint)=(GLboolean (APIENTRY *)(GLuint))SDL_GL_GetProcAddress("glIsTexture");CHECK(is_texture);
     void (APIENTRY *enable)(GLenum)=(void (APIENTRY *)(GLenum))SDL_GL_GetProcAddress("glEnable");CHECK(enable);
     void (APIENTRY *get_integer)(GLenum,GLint *)=(void (APIENTRY *)(GLenum,GLint *))SDL_GL_GetProcAddress("glGetIntegerv");CHECK(get_integer);
+    void (APIENTRY *bind_texture)(GLenum,GLuint)=(void (APIENTRY *)(GLenum,GLuint))SDL_GL_GetProcAddress("glBindTexture");CHECK(bind_texture);
+    void (APIENTRY *pixel_store)(GLenum,GLint)=(void (APIENTRY *)(GLenum,GLint))SDL_GL_GetProcAddress("glPixelStorei");CHECK(pixel_store);
     struct nk_font_atlas *base=nk_sdl_font_stash_begin(ui);
     struct nk_font *old=nk_font_atlas_add_default(base,16,NULL);CHECK(old && nk_sdl_font_stash_end(ui));
     nk_style_set_font(ui,&old->handle);unsigned original=(unsigned)old->texture.id;CHECK(is_texture(original));
@@ -71,9 +73,12 @@ int main(int argc,char **argv) {
     CHECK(!nk_sdl_font_stash_append(ui,&extra,2) && extra.fonts==added);
     memory.fail=true;CHECK(!nk_sdl_font_stash_append(ui,&extra,1));memory.fail=false;
     CHECK(extra.fonts==added && ui->style.font==&old->handle && is_texture(original));
+    /* Failure must preserve the caller's real state, including nondefaults. */
+    bind_texture(GL_TEXTURE_2D,original);pixel_store(GL_UNPACK_ALIGNMENT,8);
     enable(0); /* Inject a GL error into the upload's existing failure path. */
     CHECK(!nk_sdl_font_stash_append(ui,&extra,1) && extra.pixel && extra.glyphs);
-    GLint binding=-1;get_integer(GL_TEXTURE_BINDING_2D,&binding);CHECK(binding==0);
+    GLint binding=-1,unpack=-1;get_integer(GL_TEXTURE_BINDING_2D,&binding);CHECK(binding==(GLint)original);
+    get_integer(GL_UNPACK_ALIGNMENT,&unpack);CHECK(unpack==8);
     CHECK(ui->style.font==&old->handle && is_texture(original));
     size_t failed_live=memory.live;
     CHECK(!nk_sdl_font_stash_append(ui,&extra,1) && memory.live==failed_live);

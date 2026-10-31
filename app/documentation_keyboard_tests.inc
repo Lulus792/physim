@@ -63,10 +63,14 @@ static bool documentation_test_seek(app *a,int id,int *stage,int *code) {
     }
     unsigned current=count,wanted=count;
     for(unsigned i=0;i<count;i++){if(entries[i]==a->doc_focus)current=i;if(entries[i]==id)wanted=i;}
-    if((id==DOC_BODY || id>=DOC_COPY) && (!a->doc_keyboard ||
+    bool context=id==DOC_MODEL_TAB || id==DOC_EXAMPLE_TAB || id==DOC_CONTEXT_COPY || id==DOC_CONTEXT_CODE;
+    bool short_region=context || id==DOC_FIND_CLOSE;
+    if(short_region && (!a->doc_keyboard || documentation_focus_region(a->doc_focus)!=documentation_focus_region(id))) {
+        ++panes;test_window_key_mod(a->doc_window,SDLK_F6,0);
+    } else if((id==DOC_BODY || id>=DOC_COPY) && (!a->doc_keyboard ||
        (a->doc_focus!=DOC_BODY && (a->doc_focus<DOC_COPY || current>wanted)))) {
         ++panes;test_window_key_mod(a->doc_window,SDLK_F6,0);
-    } else {++tabs;test_window_key_mod(a->doc_window,SDLK_TAB,0);}
+    } else {++tabs;test_window_key_mod(a->doc_window,SDLK_TAB,short_region && current>wanted?SDL_KMOD_SHIFT:0);}
     --*stage;return false;
 }
 static void documentation_api_test_frame(app *a,int *stage,int *code,const char **capture) {
@@ -1472,14 +1476,38 @@ static void documentation_keyboard_test_frame(app *a,const char *mode,int *stage
     }
     if(!strcmp(mode,"docs-keyboard-edit-native")) {
         static int experiment_length,analysis_length;bool ok=true;
+#ifdef __APPLE__
+        static bool search_queued,focus_waiting;static double search_deadline;
+#endif
         switch(*stage) {
         case 0:
+#ifdef __APPLE__
+            search_queued=focus_waiting=false;
+#endif
             experiment_length=a->experiment.string.len;analysis_length=a->analysis.string.len;
             test_window_key_mod(a->window,SDLK_F1,0);++*stage;break;
         case 1:
             SDL_SetWindowSize(a->doc_window,760,540);a->doc_contents=false;a->doc_reset_sidebar=true;++*stage;break;
         case 2:case 3:case 4:case 5:case 6:case 7:case 8:case 9:case 10:case 11:
-            ok=nk_sdl_accessibility_native_edit_test_step(a->doc_ui,*stage-2);
+#ifdef __APPLE__
+            if(*stage==4) {
+                if(!search_queued) {
+                    if(!focus_waiting){focus_waiting=true;search_deadline=ps_clock()+5;SDL_RaiseWindow(a->doc_window);}
+                    int wait_stage=*stage+1;
+                    if(!native_test_focus_wait(a,a->doc_window,&wait_stage,search_deadline))return;
+                    ok=native_test_stroke(a->doc_window,"f",3,((uintptr_t)1<<20));
+                    search_queued=true;search_deadline=ps_clock()+2;
+                    if(ok)return;
+                } else {
+                    bool visible=a->doc_find_open && a->doc_search_bounds.w>0 && !a->doc_focus_reveal;
+                    if(!visible && ps_clock()<search_deadline)return;
+                    ok=visible;
+                    if(!ok)fprintf(stderr,"NATIVE F1 SEARCH OPEN: FAILED (Cmd+F did not open the search island)\n");
+                    else puts("NATIVE F1 SEARCH OPEN: PASSED (actual AppKit Cmd+F)");
+                }
+            }
+#endif
+            if(ok)ok=nk_sdl_accessibility_native_edit_test_step(a->doc_ui,*stage-2);
             if(*stage==11)*capture="docs-macos-edit-end.bmp";
             ++*stage;break;
         case 12:
