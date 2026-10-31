@@ -46,8 +46,10 @@ jobs:
         with:
           path: build/sdl-install
           key: ${{ steps.sdl-identity.outputs.key }}
-      - name: Actual file tabs, project wizard and settings keyboard workflows
-        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test-display --test-filter file_tabs_workflow --test-filter settings_keyboard_workflow --test-filter project_manager_keyboard_errors --test-filter project_manager_keyboard_workflow
+      - name: Actual file tabs, project errors and settings keyboard workflows
+        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test-display --test-filter file_tabs_workflow --test-filter settings_keyboard_workflow --test-filter project_manager_keyboard_errors
+      - name: Complete 34-project keyboard matrix at both font sizes
+        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test-display --test-filter project_manager_keyboard_workflow
       - name: Compact native results
         if: always()
         uses: actions/upload-artifact@v4
