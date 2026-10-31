@@ -8,6 +8,9 @@ Anlass, geschlossene Prüfungen oder die Protokoll-Trennlinie erneut zu beginnen
 ## Aktueller Abschluss: eigene Anzeigeeinheitenaufgabe
 
 **Neuester eingefrorener Anschluss: `units-window-caller`, 151 eigene Eingaben.**
+**`657219a3` ist in beide Repositories gepusht.** Alle 1.109 erfassten
+Compiler-/Testdateien entsprechen dem Commit direkt oder nach Zeilenendennormalisierung.
+[Commitabgleich und offener CI-Snapshot](verification/units-window-commit-2026-10-31.json).
 Die alte globale Einheitenüberlagerung ist entfernt. Eigene OS-/GL-/Nuklear-/
 Eingabe-/AX-Oberfläche, reale Kanäle, erhaltene Entwürfe je Kanal, tatsächliche
 Symbol-/Faktoreingabe, Vorschau, sichere unabhängige Übernahme und explizite
@@ -73,7 +76,11 @@ Diese Fälle sind geschlossen; nicht allein wegen Kompaktierung neu starten.
 Der neue Einheitenfenster-Stand braucht seinen eigenen tatsächlichen gehosteten
 macOS-Nachweis nach Push; eine Workflowdatei ist kein Pass. Kein physischer Mac
 für diese CI nötig. Der vor diesem Unit-Commit letzte Dokumentationscommit war
-1bb07db5, in beide Repositories gepusht.
+1bb07db5, in beide Repositories gepusht. Der neue tatsächliche Lauf auf
+`657219a3` ist `41177844214`: ARM `124468995798`, Intel `124468995912`;
+Menüregression `41177844185`: ARM `124468995758`, Intel `124468995948`.
+Beim Snapshot laufen ARM-Builds, Intel wartet; **kein neues Mac-Pass behaupten**.
+Diese bestehenden Handles weiter beobachten, keine Ersatzläufe starten.
 
 ## Nächste konkrete Arbeit
 

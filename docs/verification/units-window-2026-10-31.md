@@ -126,7 +126,10 @@ Fehlerbilder, PNG-Referenzen, kompakte Nachweise, Quellen, Archive, benötigte a
 Programme/Symbole und Abhängigkeiten bleiben erhalten. Genauer Plan und Ergebnis:
 `build/validation/units-window-2026-10-31/cleanup-{plan,result}.json`.
 
-Neue tatsächliche macOS-Einheitenläufe stehen nach Commit/Push noch aus. Manuelle
+`657219a3` ist in beide Repositories gepusht; alle 1.109 erfassten Compiler-/
+Testdateien stimmen direkt oder nach Zeilenendennormalisierung mit dem Commit
+überein. Die neuen gehosteten Mac-Läufe sind noch offen. [Commitabgleich und
+CI-Snapshot](units-window-commit-2026-10-31.json). Manuelle
 Screenreader-, physische Eingabe-, Monitor-/DPI-/Vollbild- und gesamte native
 Designabnahme bleiben offen. Completion-D-Preferences, die allgemeine historische
 Settings-/AX-Fixture-Portierung und die übrige freigegebene Oberfläche bleiben

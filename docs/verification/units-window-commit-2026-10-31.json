@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-31",
+  "source_commit": "657219a3963fc252372589ff99e45a4ab05bef11",
+  "source_branch": "codex/f1-design-h",
+  "pushed_remotes": ["origin", "upstream"],
+  "compiler_inputs_compared": 1109,
+  "matched": 1109,
+  "different": [],
+  "comparison": "Actual frozen units-window-caller compiler/test source bytes match committed Git blobs directly or after CRLF-to-LF normalization. Foreign AT-SPI/Orca/status/dist changes excluded.",
+  "local_evidence": "docs/verification/units-window-2026-10-31.json",
+  "local_result_scope": {
+    "units-window-focus": "Windows Release and Linux Debug ASan/UBSan: five relevant registered groups passed each",
+    "units-window-reference": "Initial reference-height correction: one task-window group passed each, two actual app processes per platform",
+    "units-window-caller": "Actual pointer/keyboard caller-context preservation: one task-window group passed each, two actual app processes per platform",
+    "final_windows_run": "run-6vu__ab5",
+    "final_linux_run": "run-ieum8tcs",
+    "final_manifest": "build/validation/explorer-inline-2026-10-29/units-window-caller-compiler-source.json",
+    "all_local_build_test_archive_handles_terminal": true,
+    "all_referenced_archive_bytes_read_back": true,
+    "full_gui_suite_claimed": false
+  },
+  "hosted_snapshot_utc": "2026-10-31 06:45:14 UTC",
+  "hosted_mac_runs": [
+    {
+      "id": 41177844214,
+      "url": "https://github.com/Lulus792/physim/actions/runs/41177844214",
+      "name": "Native macOS settings, typography and header focus",
+      "head_sha": "657219a3963fc252372589ff99e45a4ab05bef11",
+      "jobs": [
+        {"id": 124468995798, "runner": "macos-15", "status": "in_progress", "conclusion": null},
+        {"id": 124468995912, "runner": "macos-15-intel", "status": "queued", "conclusion": null}
+      ],
+      "planned_registered_cases_per_architecture": 14,
+      "actual_pass_count": null
+    },
+    {
+      "id": 41177844185,
+      "url": "https://github.com/Lulus792/physim/actions/runs/41177844185",
+      "name": "Native macOS menu bar",
+      "head_sha": "657219a3963fc252372589ff99e45a4ab05bef11",
+      "jobs": [
+        {"id": 124468995758, "runner": "macos-15", "status": "in_progress", "conclusion": null},
+        {"id": 124468995948, "runner": "macos-15-intel", "status": "queued", "conclusion": null}
+      ],
+      "actual_pass_count": null
+    }
+  ],
+  "user_mac": "OFF. No SSH, reachability probe, upload or test access. Hosted GitHub runners are separate machines.",
+  "limits": [
+    "Hosted snapshot is pending evidence, not a completed macOS acceptance.",
+    "Earlier Settings 9/9 and menu 7/7 results belong to their own earlier commits.",
+    "Manual screenreader, physical input, monitor/DPI, fullscreen and whole design acceptance remain open.",
+    "Completion D preferences/backend, historical Settings/AX fixture ports and other approved native work remain open."
+  ]
+}
