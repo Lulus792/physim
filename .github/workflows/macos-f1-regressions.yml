@@ -13,6 +13,8 @@ on:
       - tests/test_font_sources.c
       - tools/check_native_doc_search_counterexample.py
       - tools/check_font_bank_state_counterexample.py
+      - tests/check_display_workflow.py
+      - tests/test_documentation_typography_metrics.py
       - .github/workflows/macos-f1-regressions.yml
   workflow_dispatch:
 concurrency:
@@ -51,6 +53,8 @@ jobs:
           key: ${{ steps.sdl-identity.outputs.key }}
       - name: Build the actual Release app and UI libraries
         run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install"
+      - name: Strict H primary-font metrics and corrupted-cache counterexamples
+        run: python3 tests/test_documentation_typography_metrics.py "$PWD/build/h-font-metric-fixtures"
       - name: Previous native Search handler is rejected by AppKit Cmd+F
         run: python3 tools/check_native_doc_search_counterexample.py --compiler clang --sdl "$PWD/build/sdl-install" --build-dir "$PWD/build/native/Release"
       - name: Lost texture binding and unpack state are rejected

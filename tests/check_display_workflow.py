@@ -249,7 +249,38 @@ def documentation_h_chrome_pixels(path, bounds, dark, right_visible, scale=1, pi
                 'Selected context tab lost a row of its two-pixel underline')
 
 
+def documentation_primary_em(output):
+    match=re.search(r'^UI primary font: (.+)$',output,re.M)
+    require(match is not None,'Missing actual primary font source for H metric comparison')
+    source=Path(match[1].strip());data=source.read_bytes();face=0
+    if data[:4]==b'ttcf':
+        selected=re.search(r'^Platform font face: '+re.escape(str(source))+r' index=(\d+) bold=0$',output,re.M)
+        require(selected is not None,'Missing actual primary TTC face')
+        face=int(selected[1]);require(len(data)>=12,'Truncated TTC header')
+        count=struct.unpack_from('>I',data,8)[0]
+        require(face<count and count<=(len(data)-12)//4,'Invalid primary TTC directory')
+        offset=struct.unpack_from('>I',data,12+face*4)[0]
+    else:offset=0
+    require(0<=offset<=len(data)-12,'Truncated primary SFNT header')
+    count=struct.unpack_from('>H',data,offset+4)[0]
+    require(count<=(len(data)-offset-12)//16,'Truncated primary SFNT directory')
+    tables={}
+    for index in range(count):
+        tag,_,begin,length=struct.unpack_from('>4sIII',data,offset+12+index*16)
+        require(begin<=len(data) and length<=len(data)-begin,'Primary font table exceeds its source')
+        tables[tag]=data[begin:begin+length]
+    require(len(tables.get(b'head',b''))>=20 and len(tables.get(b'hhea',b''))>=8,
+            'Missing primary font em or vertical metrics')
+    units=struct.unpack_from('>H',tables[b'head'],18)[0]
+    ascent,descent=struct.unpack_from('>hh',tables[b'hhea'],4)
+    require(units>0 and ascent>descent,'Invalid primary font em or vertical metrics')
+    ratio=(ascent-descent)/units
+    require(.5<=ratio<=3,'Primary font metric ratio exceeds the renderer contract')
+    return ratio
+
+
 def documentation_h_typography(output):
+    source_em=documentation_primary_em(output)
     typography=re.findall(r'DOCUMENTATION H TYPE: case=(\d+) reader=(\d+) ui=(\d+) body-em=([\d.]+) title-em=([\d.]+) control-em=([\d.]+) nav-em=([\d.]+) title-draws=(\d+) body-draws=(\d+)',output)
     require(len(typography)==56,'Missing native H typography matrix')
     metrics=re.findall(r'DOCUMENTATION H METRIC: case=(\d+) primary-em=([\d.]+) body-height=([\d.]+) title-height=([\d.]+)',output)
@@ -260,7 +291,7 @@ def documentation_h_typography(output):
         require(abs(body-reader)<.01 and abs(title-reader*(1.3 if reader==32 else 1.65))<.01 and
                 abs(control-12*ui/16)<.01 and abs(nav-13*ui/16)<.01,'H CSS em roles differ from reference')
         metric_case,em,body_height,title_height=map(float,metrics[expected])
-        require(metric_case==expected and 1.05<em<2 and abs(body_height/em-reader)<.01 and
+        require(metric_case==expected and abs(em-source_em)<.000001 and abs(body_height/em-reader)<.01 and
                 title_height>body_height,'Missing actual font em correction in native H drawing')
 
 
