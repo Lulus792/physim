@@ -1080,6 +1080,18 @@ def completion(flow,directory):
             require((root/name).is_file(),"Missing actual completion view: "+name)
 
 
+def completion_automatic(flow,directory):
+    markers=("enter-without-selection=1","tab-without-selection=1","escape-suppression=1 manual-override=1 undo=1",
+             "explicit-control-n-p=1 undo=1","changed-prefix-needs-selection=1","short-prefix-closes=1","stale-cursor=1","stale-equal-length-source=1",
+             "ime-pause=1 ime-commit=1","comments-and-strings=1","selection-invalidates=1","target-change=1","focus-loss=1")
+    for language in ("c","phys"):
+        root=directory/language;root.mkdir(parents=True)
+        flow.run("--workspace-state-test",root,"completion-auto-"+language,timeout=75,
+                 marker="AUTOMATIC COMPLETION SELF-TEST: PASSED")
+        for marker in markers:require("AUTO COMPLETION "+marker in flow.steps[-1]["stdout"],"Missing actual automatic completion scenario: "+marker)
+        require(not list(root.glob("*.png")) and not list(root.glob("*.bmp")),"Automatic input regression emitted redundant pictures")
+
+
 def project_tree(flow,directory):
     flow.run("--workspace-state-test",directory,"project-tree",timeout=30,marker="PROJECT TREE SELF-TEST: PASSED")
     project=directory / "project"
@@ -2021,6 +2033,7 @@ SPECIAL["source_outline_workflow"]=source_outline
 SPECIAL["laboratory_workflow"]=laboratory
 SPECIAL["model_values_workflow"]=model_values
 SPECIAL["settings_transactions"]=settings_transactions
+SPECIAL["completion_automatic_workflow"]=completion_automatic
 SPECIAL["settings_keyboard_paced"]=lambda flow,directory: settings_keyboard(flow,directory,True)
 SPECIAL["settings_a_window"]=settings_a_window
 SPECIAL["settings_search_keyboard"]=settings_search_keyboard

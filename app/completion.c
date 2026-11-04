@@ -18,7 +18,14 @@ ps_result ps_completion_prepare(const char *text,size_t bytes,size_t cursor,bool
     unsigned block=0;bool line=false;char quote=0;
     for(size_t i=0;i<q.start;i++) {
         char c=text[i],next=i+1<q.start?text[i+1]:0;
-        if(line){if(c=='\n')line=false;continue;}
+        if(line){
+            /* C splices a physical newline before recognizing // comments.
+             * Physim line comments do not have that C continuation rule. */
+            if(!language && c=='\\' && next=='\n'){i++;continue;}
+            if(!language && c=='\\' && next=='\r' && i+2<q.start && text[i+2]=='\n'){i+=2;continue;}
+            if(c=='\n')line=false;
+            continue;
+        }
         if(block){if(c=='*' && next=='/'){block--;i++;}else if(language && c=='/' && next=='*'){block++;i++;}continue;}
         if(quote){if(c=='\\' && next)i++;else if(c==quote)quote=0;continue;}
         if(c=='/' && next=='/'){line=true;i++;}

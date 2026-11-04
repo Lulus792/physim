@@ -324,6 +324,12 @@ typedef struct {
     int caret_cursor;
     double caret_activity;
     bool completion_typed;
+    bool completion_composing,completion_explicit,completion_manual;
+    struct nk_text_edit *completion_pending_edit,*completion_suppressed_edit;
+    char *completion_pending_text;
+    size_t completion_pending_bytes,completion_suppressed_start;
+    int completion_pending_cursor,completion_cursor,completion_suppressed_cursor;
+    double completion_due;
     char document_drafts_directory[4096];
     uint64_t source_revision, build_revision;
     int document_pending; /* 1: close, 2: reload; discard requires an explicit choice. */
@@ -3208,7 +3214,8 @@ static void editor_caret(app *a,struct nk_text_edit *edit,struct nk_rect bounds,
 }
 static void editor(app *a, struct nk_text_edit *edit, float height) {
     struct nk_context *ui = a->ui;
-    if(a->completion_active && a->completion_edit!=edit)completion_close(a);
+    if((a->completion_active && a->completion_edit!=edit) ||
+       (a->completion_pending_edit && a->completion_pending_edit!=edit))completion_close(a);
     height=fmaxf(100,height);
     nk_style_push_font(ui, a->font_code);
     nk_layout_row_begin(ui, NK_STATIC, height, 2);
@@ -3273,6 +3280,14 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
         edit->active=false;
     }
     if(covered)ui->input.mouse=pointer;
+    if(a->completion_active && !a->completion_accept_pending){
+        bool edited_before_accept=before!=nk_str_len_char(&edit->string) ||
+            hash!=ps_crc32((const unsigned char *)nk_str_get_const(&edit->string),(size_t)nk_str_len_char(&edit->string));
+        ps_completion_query query;
+        if((!a->completion_typed && (edited_before_accept || a->completion_cursor!=edit->cursor)) ||
+           (edited_before_accept && completion_query_for(a,edit,&query) && !query.member &&
+            (!*query.prefix || (!a->completion_manual && strlen(query.prefix)<2))))completion_close(a);
+    }
     bool accepted=a->completion_accept_pending;
     if(a->completion_active) {
         if(completion_refresh(a) && a->completion_accept_pending)completion_commit(a);
@@ -3292,13 +3307,7 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
             invalidate_build(a);
         } else document_changed(a, edit);
     }
-    if(a->completion_typed && changed && !accepted && edit->active && completion_target(a)==edit && !a->completion_active && document_language(a,edit)>=0) {
-        const char *text=nk_str_get_const(&edit->string);nk_rune rune;int n;
-        const char *at=nk_str_at_const(&edit->string,edit->cursor,&rune,&n);
-        size_t cursor=at?(size_t)(at-text):(size_t)after;ps_completion_query query;
-        if(text && ps_completion_prepare(text,(size_t)after,cursor,document_language(a,edit)==1,&query)==PS_OK &&
-           (query.member || strlen(query.prefix)>=2) && ps_completion_matches(&query,NULL,0))completion_open(a,edit);
-    }
+    completion_auto_update(a,edit,changed && !accepted);
     a->completion_typed=false;
     nk_layout_row_end(ui);
     struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
@@ -3742,6 +3751,7 @@ static bool native_test_keyboard_command(app *a,toolbar_action action,int *stage
 #include "diagnostic_tests.inc"
 #include "editor_replace_tests.inc"
 #include "completion_tests.inc"
+#include "completion_auto_tests.inc"
 #include "source_outline_tests.inc"
 #include "file_tabs_tests.inc"
 #include "workbench_tests.inc"
@@ -4389,7 +4399,13 @@ int main(int argc, char **argv) {
                 for(unsigned i=0;i<PS_PANEL_COUNT;i++)if(a->panels[i].action.w>0 && nk_sdl_accessibility_keyboard_target(a->ui,a->panels[i].action))a->panel_open_request|=1u<<i;
                 continue;
             }
-            if(event_window==a->window && e.type==SDL_EVENT_TEXT_INPUT)a->completion_typed=true;
+            if(event_window==a->window && e.type==SDL_EVENT_TEXT_EDITING){
+                a->completion_composing=e.edit.text && *e.edit.text;
+                if(a->completion_composing)completion_close(a);
+            }
+            if(event_window==a->window && e.type==SDL_EVENT_TEXT_INPUT){completion_edit_input(a);a->completion_composing=false;a->completion_typed=true;}
+            if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN &&
+               (e.key.key==SDLK_BACKSPACE || e.key.key==SDLK_DELETE)){completion_edit_input(a);a->completion_typed=true;}
             if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && e.key.key==SDLK_TAB)a->outline_keyboard=false;
             if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && (protocol_navigation_key(a,&e.key) || protocol_resize_key(a,&e.key) || analysis_plot_resize_key(a,&e.key) || laboratory_resize_key(a,&e.key) || dock_resize_key(a,&e.key)))continue;
             if(event_window==a->window && e.type==SDL_EVENT_KEY_DOWN && workbench_context_key(a,a->ui,&e.key,false))continue;
@@ -4408,7 +4424,7 @@ int main(int argc, char **argv) {
             if(event_window==a->doc_window && a->doc_ui && documentation_actions_event(a,&e))continue;
             if(event_window==a->doc_window && a->doc_ui && nk_sdl_accessibility_event(a->doc_ui,&e))continue;
             if (event_window == a->window && e.type == SDL_EVENT_WINDOW_FOCUS_LOST)
-                { completion_close(a);toolbar_keyboard_close(a); }
+                { a->completion_composing=false;completion_close(a);toolbar_keyboard_close(a); }
             if(event_window==a->window && e.type==SDL_EVENT_MOUSE_BUTTON_DOWN)completion_pointer_event(a,&e.button);
             if (a->doc_window && event_window == a->doc_window) {
                 if (e.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED)

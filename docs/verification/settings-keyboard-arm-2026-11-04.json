@@ -1,0 +1,129 @@
+{
+  "source_commit": "4adf2699d805c71cea994f98dfa01d3f3306fc31",
+  "workflow": 41871954744,
+  "job": 126721139251,
+  "artifact": 13346238144,
+  "sha256": "476ba475c9d8d5dc8ed03db721cf52ba24ce35714ceeda2c6fdd270820d6520c",
+  "github_digest_matches": true,
+  "bytes": 26862,
+  "entries": [
+    {
+      "entry": "Release/test-results/run-9vnrxilp/results.json",
+      "sha256": "f59c87aeb77b2ca779e8ab155da3d749a52f7ce8b1645dabd9ce66cd6aae754f",
+      "cases": [
+        {
+          "name": "preferences",
+          "status": "passed",
+          "seconds": 0.199
+        }
+      ],
+      "passed": 1,
+      "total": 1
+    },
+    {
+      "entry": "Release/test-results/run-84vse6lp/results.json",
+      "sha256": "a4437c3d3663fdf86496e8ac9adea8490e94a7e6d5d5e3e8cb22d70e7705f451",
+      "cases": [
+        {
+          "name": "shell_theme_dark",
+          "status": "passed",
+          "seconds": 5.544
+        },
+        {
+          "name": "shell_theme_light_large_narrow",
+          "status": "passed",
+          "seconds": 3.657
+        },
+        {
+          "name": "shell_theme_contrast",
+          "status": "passed",
+          "seconds": 3.63
+        }
+      ],
+      "passed": 3,
+      "total": 3
+    },
+    {
+      "entry": "Release/test-results/run-du9vnxzm/results.json",
+      "sha256": "9de2749ca795671a65d80e66d73941da14fee0732c04713dc7b385a27129d058",
+      "cases": [
+        {
+          "name": "settings_transactions",
+          "status": "passed",
+          "seconds": 1.33
+        },
+        {
+          "name": "settings_a_window",
+          "status": "passed",
+          "seconds": 13.18
+        },
+        {
+          "name": "settings_search_keyboard",
+          "status": "passed",
+          "seconds": 10.573
+        },
+        {
+          "name": "unit_task_window",
+          "status": "passed",
+          "seconds": 20.63
+        },
+        {
+          "name": "themes_workflow",
+          "status": "passed",
+          "seconds": 22.671
+        },
+        {
+          "name": "channel_units_workflow",
+          "status": "passed",
+          "seconds": 41.446
+        },
+        {
+          "name": "settings_keyboard_workflow",
+          "status": "passed",
+          "seconds": 17.332
+        },
+        {
+          "name": "settings_keyboard_paced",
+          "status": "passed",
+          "seconds": 57.422
+        },
+        {
+          "name": "analysis_units_dark",
+          "status": "passed",
+          "seconds": 7.224
+        },
+        {
+          "name": "analysis_units_light_large_narrow",
+          "status": "passed",
+          "seconds": 6.226
+        },
+        {
+          "name": "inspector_channel",
+          "status": "passed",
+          "seconds": 112.246
+        }
+      ],
+      "passed": 11,
+      "total": 11
+    },
+    {
+      "entry": "Release/test-results/run-vy30mlve/results.json",
+      "sha256": "a253222f23ff61d8e1273c3ba2487d4e0e08bdc266977b0cc7850ca798b6653b",
+      "cases": [
+        {
+          "name": "ui_typography_workflow",
+          "status": "passed",
+          "seconds": 51.263
+        }
+      ],
+      "passed": 1,
+      "total": 1
+    }
+  ],
+  "passed": 16,
+  "total": 16,
+  "intel_job": 126721139641,
+  "intel_last_observed": "queued",
+  "user_mac_accessed": false,
+  "scope": "Hosted Settings deadline correction source; not current uncommitted completion implementation."
+}

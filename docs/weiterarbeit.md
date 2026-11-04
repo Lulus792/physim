@@ -5,26 +5,53 @@ abgleichen. Verbindliche Designs: [AGENTS.md](../AGENTS.md) und
 [Gesamtübergabe](visuals/unified-workspace/NEXT-CHAT.md). Keine geschlossene
 Prüfung oder Protokoll-Trennlinie allein wegen Kompaktierung erneut beginnen.
 
-## Aktueller Anschluss: Einstellungen-Tastatur bei langsamen Frames
+## Aktueller Anschluss: automatische Vorschläge als Unterbau von D
 
-**Nutzer-Mac erneut als ausgeschaltet gemeldet; kein Zugriff und keine Probe.**
-**Eingefroren: `settings-keyboard-verified`, 153 eigene Eingaben.**
-Der Settings-Tastaturablauf benötigt auf langsamen Renderern mehr als die bisher
-global erlaubten 20 s. Kontrollierte Windows-Gegenprobe mit 250-ms-Frames:
-Fortschritt bis Stufe 10, dann ausdrücklicher Timeout bei 20,158 s; kein
-Feld-/Fokusfehler. Nur `keyboard*` erhält 60 s; andere Settings-Modi bleiben bei
-20 s, Tab-Traversierungen bei höchstens 28 Versuchen. Alle Speicher-/Default-/
-Abbrechen-Assertions erhalten. Langsame Variante erreicht Stufe 36 tatsächlich
-nach 27,988 s (Windows) / 34,929 s (Linux) und erzeugt keine weiteren Bilder.
-Abschluss **je 2/2**, `run-amponrq5` / `run-uexcwcq1`, je vier App-Prozesse:
-normaler und langsamer Ablauf jeweils mit eigenem Preferences-Neustart.
-Quell-/Runtime-/Archivbytes geprüft, Handles beendet. [Umfang, ursprüngliche
-Harness-/Filterfehler und Originalnachweise](verification/settings-keyboard-2026-11-04.md).
-Gehosteter Mac-Abschluss dieses neuen Quellstands ist noch offen.
+**Nutzer-Mac aus; keine Zugriffe oder Erreichbarkeitsproben.**
+**Eingefroren: `completion-auto-refined`, 154 eigene Eingaben / 1.110 Compiler-
+und Testdateien.** Automatische Listen warten 140 ms auf einen unveränderten
+Quell-/Cursor-/Editorstand und übernehmen erst nach ausdrücklicher Auswahl.
+Enter/Tab ohne Auswahl behalten Zeilenumbruch/Einrückung; weitere Eingabe
+verwirft alte automatische Auswahl/Übernahme, unter zwei Zeichen schließt sie.
+Escape samt manuellem
+Überstimmen, Strg+N/P, Undo, IME-Pause/-Commit und Kontextverwerfung umgesetzt;
+C-Zeilenkommentare mit Backslash-LF/CRLF bleiben Kommentare. Leerlauf ohne weitere
+Quelltextsuche. [Umfang und noch offenes vollständiges D](visuals/unified-workspace/COMPLETION-D-NATIVE.md).
 
-Vorheriger Mac-Stand `7064a38c`: Apple Silicon 15/15, Intel 13/14, dort globaler
-Abbruch an Stufe 33. Einheitenfenster/-ablauf bestehen auf beiden; tatsächliche
-ZIPs und Digests gelesen. [Historischer CI-Snapshot](verification/unit-focus-macos-2026-11-04.json).
+Abschluss Windows Release / Linux Debug ASan/UBSan je **Unit 1/1 + GUI 2/2**,
+`run-8ge77tbp` / `run-w9x107g3` und `run-jzzktbs2` / `run-1ae5dg9v`.
+Je vier GUI-App-Prozesse; dieselbe Binärdatei zwischen Unit- und GUI-Aufruf.
+Isolierte Gegenprobe fügt ohne Auswahl wirklich `ps_aabb` ein und wird an Stufe 7
+abgelehnt; echte Präfix-Gegenprobe fügt `ps_v2` nach weiterer Eingabe ein und
+wird ebenfalls erkannt. Zusätzliche C-Kommentar-Unit-Gegenprobe scheitert vor
+der Korrektur. Dreizehn automatische Abschlussmarker je Sprache bestanden.
+Alle lokalen Handles beendet, Quell-/Runtime-/Archivbytes gelesen. Automatische
+Prüfung ohne Bilder; 36 ersetzte erfolgreiche BMPs entfernt (115.089.768 Bytes),
+zwölf aktuelle manuelle D-Vergleichsbilder erhalten. [Originalergebnisse, Quellen,
+Gegenproben und Orchestrierungsgrenzen](verification/completion-auto-2026-11-04.md).
+
+**D bleibt unvollständig:** noch Viererlisten-Renderer, keine neuen Preferences,
+kein echtes Scope-Backend, keine getrennte Parameterhilfe und keine gemeinsame
+freigegebene Syntaxpalette. Diesen Eingabeschritt nicht als gesamte D-Abnahme
+oder volle Punktzahl ausgeben. Der neue Mac-Editor-Workflow prüft die automatische
+Gruppe nach Push; tatsächliche neue Handles im lokalen Arbeitsstand festhalten.
+
+## Abgeschlossener Einstellungen-Tastaturanschluss
+
+`4adf2699` ist in beide Repositories gepusht, 1.109 Compiler-/Testdateien
+abgeglichen. Die fortschreitende Tastaturprüfung lief bei 250-ms-Frames in die
+alte Gesamtgrenze von 20 s; nur `keyboard*` erhält 60 s, andere Modi bleiben bei
+20 s und einzelne Tab-Traversierungen bei 28 Versuchen. Alle Speicher-/Default-/
+Abbrechen-Assertions erhalten. Lokal je **2/2** mit vier App-Prozessen.
+[Nachweise einschließlich früherer Harness-/Filterfehler](verification/settings-keyboard-2026-11-04.md).
+
+Gehosteter Lauf `41871954744`: Apple Silicon Job `126721139251` tatsächlich
+**16/16**, ZIP/Digest und vier Originalergebnisdateien gelesen.
+[ARM-Beleg](verification/settings-keyboard-arm-2026-11-04.json).
+Intel Job `126721139641` wartet zuletzt noch; keinen Ersatzlauf anstoßen.
+Dies prüft `4adf2699`, nicht den späteren Completion-Quellstand.
+Vorheriger Mac-Stand `7064a38c`: Apple Silicon 15/15, Intel 13/14; [historischer
+CI-Snapshot](verification/unit-focus-macos-2026-11-04.json).
 Referenzgenerator-Korrektur **`d0d529de`** ist in beiden Repositories: vorhandene
 Channel-Beispiele reproduzierbar, 31 Dokumente unter Windows/Linux geprüft;
 WIP-Status-Link bleibt getrennt offen. [Abschluss](verification/continuation-2026-11-04.md).
@@ -102,18 +129,19 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
 
 ## Nächste konkrete Arbeit
 
-- Gehosteten Settings-Lauf des neuen Quellcommits nach Push über seine wirklichen
-  Handles beobachten und tatsächliche Artefakte lesen. Neuer langsamer Fall ist
-  im Mac-Workflow registriert. Kein unveränderter Ersatzlauf; Nutzer-Mac bleibt aus.
-  Aktueller lokaler Anschluss: `build/validation/settings-keyboard-2026-11-04/STATE.md`.
-- Completion D nach ADR 022/023 tatsächlich implementieren. Bestandsaudit:
-  `main.c::editor` zeigt bereits unmittelbar Vorschläge nach Textänderungen
-  (ab zwei Zeichen bzw. Memberzugriff); die frühere Aussage „nur manuell“ war
-  unvollständig. `app/completion_ui.inc` verwendet noch vier Zeilen/Vierergruppen;
-  `ps_preferences`/PSPREF05 hat keine Completion-Optionen. D-Verhalten/Abbruch,
-  sichtbare Trefferzahl (Standard fünf), echte Scope- und separate Parameterhilfe
-  sowie gemeinsames Syntaxschema vervollständigen. Kein Ersatz-Backend,
-  kein neuer Dienst; Einstellungen A, Transaktion und Altdateien erhalten.
+- Intel-Settings-Job `126721139641` und den neuen Completion-Mac-Editorlauf über
+  ihre wirklichen Handles beobachten und tatsächliche Artefakte lesen. ARM-
+  Settings ist mit 16/16 geschlossen; nicht wiederholen. Nutzer-Mac bleibt aus.
+  Aktueller lokaler Anschluss: `build/validation/completion-auto-2026-11-04/STATE.md`.
+- D konkret weiter umsetzen: fünf sichtbare Zeilen und echte Einstellungen A /
+  Editor mit Preferences-Migration und Übernehmen/Abbrechen/Defaults integrieren;
+  schmale Liste/Scrollleiste und neutrale getrennte Kandidateninfo aus der
+  freigegebenen HTML-Referenz nativ abgleichen. Keine wirkungslosen Optionen.
+- Danach/verknüpft gemeinsame Syntaxrollen sowie echte C-/Physim-Scopes und
+  getrennte Aufrufsignatur einschließlich Benutzerfunktionen vervollständigen.
+  Leere Argumente, Shadowing, unvollständige Initialisierung, verschachtelte
+  Aufrufe und Revisionen gehören weiterhin zum vollen Auftrag. Kein begrenzter
+  Browser-Lexer als nativer Ersatz, kein neuer Dienst/Provider-Worker.
 - Historische Settings-/AX-Fixtures von Tab 6/Radios/globalem Fokus portieren.
   Wiederherstellung, Maximieren, Geometrie und Dateisicherheit erhalten. Der alte
   0/0-Protokollgriff ist kein neuer Befund an der behobenen Trennlinie.
@@ -128,12 +156,13 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
 
 ## Sicherer lokaler Anschluss
 
-- `prepare-next.py <neuer-tag> settings-keyboard-verified` prüft vorher Quelle,
+- `prepare-next.py <neuer-tag> completion-auto-refined` prüft vorher Quelle,
   Runtime und Archive. Neue Module ausdrücklich in die Eingabeliste aufnehmen.
   Eigene Quellen vollständig versionieren, fremde AT-SPI-/Orca-/Status-/dist-
   Änderungen erhalten und nicht in eigene isolierte Quellen übernehmen.
 - Helfer/Indizes: `build/validation/explorer-inline-2026-10-29/`; aktueller
-  Arbeitsnachweis: `build/validation/settings-keyboard-2026-11-04/`; Einheitenfokus
+  Arbeitsnachweis: `build/validation/completion-auto-2026-11-04/`; Settings unter
+  `build/validation/settings-keyboard-2026-11-04/`; Einheitenfokus
   unter `build/validation/unit-focus-2026-10-31/`; älterer Suchstand
   unter `build/validation/settings-search-2026-10-31/`.
   `run.py`/`freeze.py` vor Verwendung auf tatsächliche Argumente prüfen.
@@ -143,7 +172,7 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
   benötigte Offline-Abhängigkeiten, Nutzerexperimente und fremde Arbeit erhalten.
   Vorige abgeschlossene Bereinigungen: Einheiten 315 Dateien/563.430.107 Bytes,
   davor Settings 656 BMPs/2.093.854.368 Bytes; danach Einheitenfokus 20 BMPs/
-  51.229.960 Bytes. Nicht doppelt zählen. Fehler und benötigte Referenzen schützen.
+  51.229.960 Bytes und Completion 36 BMPs/115.089.768 Bytes. Nicht doppelt zählen. Fehler und benötigte Referenzen schützen.
 - Text/JSON mit Quelle/Kommando/Soll-Ist zuerst; Bilder gezielt. Vier finale
   Such-PNGs für Fokusdarstellung reichen; nicht jeden Eingabeschritt fotografieren.
 

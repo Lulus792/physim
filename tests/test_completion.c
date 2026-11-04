@@ -32,12 +32,15 @@ int main(void) {
     CHECK(ps_completion_prepare("ps_",3,3,false,&q)==PS_OK);
     size_t limited[2]={0,987654};CHECK(ps_completion_matches(&q,limited,1)>100 && limited[1]==987654);
     CHECK(ps_completion_matches(&q,NULL,0)>100 && ps_completion_matches(&q,NULL,1)==0);
-    const char *invalid[]={"// ps_v","/* ps_v","\"ps_v","'ps_v","ctx.ps_v","ctx->ps_v","123ps_v","αps_v"};
+    const char *invalid[]={"// ps_v","/* ps_v","\"ps_v","'ps_v","ctx.ps_v","ctx->ps_v","123ps_v","αps_v",
+        "// continued" "\\" "\nps_v", "// continued" "\\" "\r\nps_v"};
     for(size_t i=0;i<sizeof invalid/sizeof *invalid;i++) {
         ps_completion_query before;memset(&before,0xa5,sizeof before);q=before;
         CHECK(ps_completion_prepare(invalid[i],strlen(invalid[i]),strlen(invalid[i]),false,&q)==PS_INVALID && !memcmp(&q,&before,sizeof q));
     }
     const char *nested="/* outer /* inner */ ps_v";
+    const char *physim_line="// continued" "\\" "\nVec";
+    CHECK(ps_completion_prepare(physim_line,strlen(physim_line),strlen(physim_line),true,&q)==PS_OK && includes(&q,"Vec3"));
     CHECK(ps_completion_prepare(nested,strlen(nested),strlen(nested),true,&q)==PS_INVALID);
     const char *escaped="\"escaped \\\" ps_v";
     CHECK(ps_completion_prepare(escaped,strlen(escaped),strlen(escaped),true,&q)==PS_INVALID);
