@@ -6,6 +6,10 @@ Produktionssteuerung und sämtliche bisherigen Daten-/Undo-/Geometrieassertionen
 bleiben erhalten. Keine Fristverlängerung: weiterhin 3 s je Prüfstufe und
 60 s im vorhandenen `completion-*`-Watchdog.
 
+Quellcommit **`0c525422`** in beiden Repositories. Alle erfassten 1.124 Compiler-/
+Testdateien und 174 eigenen Eingaben gegen tatsächliche Git-Blobs geprüft,
+nur CRLF/LF normalisiert. [Commitabschluss und offene CI-Handles](auto-info-deadline-commit-2026-11-05.json).
+
 Auslöser war der gehostete ARM-Befund zu `f01f25c1`: Automatikablauf an Stufe 71,
 Editorgruppe 5/6; [Originalarchiv und Einzelresultate](completion-info-macos-2026-11-05.json).
 Der damalige Fehlertext enthält keine Kurzinfo-Mode-/Fristdaten. Die folgende

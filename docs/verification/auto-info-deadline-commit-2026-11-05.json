@@ -1,0 +1,180 @@
+{
+  "phase": "auto-info-deadline-final",
+  "revision": "HEAD",
+  "compiler_and_test_count": 1124,
+  "own_input_count": 174,
+  "unique_files": 1132,
+  "all_tested_input_bytes_match_git": true,
+  "crlf_normalized_only": true,
+  "source_commit": "0c5254225e19ebd82726437f5b4afbe4dd9d56cc",
+  "date": "2026-11-05",
+  "source_match_original": {
+    "path": "build/validation/auto-info-deadline-2026-11-05/commit-match.json",
+    "sha256": "abb57ef1233dcecec0e756472a91c1212ca3ae874b9bcf80b36ff2969ca5e0c0",
+    "bytes": 237433
+  },
+  "remotes": {
+    "origin": {
+      "branch": "codex/f1-design-h",
+      "tip": "0c5254225e19ebd82726437f5b4afbe4dd9d56cc",
+      "normal_push_exit": 0,
+      "ls_remote_verified": true
+    },
+    "upstream": {
+      "branch": "codex/f1-design-h",
+      "tip": "0c5254225e19ebd82726437f5b4afbe4dd9d56cc",
+      "normal_push_exit": 0,
+      "ls_remote_verified": true
+    }
+  },
+  "source_runtime_frozen": "auto-info-deadline-final",
+  "local_handles": "all terminal",
+  "local_gui": {
+    "windows": {
+      "run": "run-5wx3me0m",
+      "passed": 3,
+      "count": 3,
+      "configuration": "Release/MSVC"
+    },
+    "linux": {
+      "run": "run-s96zafnf",
+      "passed": 3,
+      "count": 3,
+      "configuration": "Debug/GCC ASan+UBSan detect_leaks=0"
+    }
+  },
+  "all_source_runtime_referenced_archive_bytes_read": true,
+  "original_evidence": {
+    "path": "docs/verification/auto-info-deadline-2026-11-05.json",
+    "sha256": "a9e3b6783c63ac1a7eaf2afb770391ae31b57ff3f4b72bade04485c6c196b49c",
+    "bytes": 83555
+  },
+  "actual_negative": {
+    "platform": "Windows",
+    "language": "C",
+    "run": "run-06uwoald",
+    "passed": 0,
+    "count": 1,
+    "stage": 71
+  },
+  "production_renderer_controller_parser_inputs_unchanged_from": "02a3905f",
+  "unchanged_git_paths": [
+    "app/completion_ui.inc",
+    "app/completion.c",
+    "app/completion.h",
+    "app/completion_info.c",
+    "app/completion_info.h",
+    "app/completion_help.c",
+    "app/completion_help.h",
+    "app/design_tokens.h",
+    "app/design_ui.inc",
+    "src/language/parser.c",
+    "src/language/parser.h",
+    "src/language/editor_bindings.h"
+  ],
+  "main_change": "Test-only post-draw observer call behind workspace_state_test and completion-auto mode checks",
+  "current_editor_run": 41935266700,
+  "editor_jobs": {
+    "arm": {
+      "id": 126942020658,
+      "last_status": "queued"
+    },
+    "intel": {
+      "id": 126942021220,
+      "last_status": "queued"
+    }
+  },
+  "ci_snapshot": [
+    {
+      "id": 41935266542,
+      "name": "Native macOS settings, typography and header focus",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "0c5254225e19ebd82726437f5b4afbe4dd9d56cc"
+    },
+    {
+      "id": 41935266426,
+      "name": "Native macOS study and project menus",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "0c5254225e19ebd82726437f5b4afbe4dd9d56cc"
+    },
+    {
+      "id": 41935266381,
+      "name": "macOS offline handbook links",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "0c5254225e19ebd82726437f5b4afbe4dd9d56cc"
+    },
+    {
+      "id": 41935266785,
+      "name": "Runner backpressure regressions",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "0c5254225e19ebd82726437f5b4afbe4dd9d56cc"
+    },
+    {
+      "id": 41935266700,
+      "name": "Native macOS editor menu workflows",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "0c5254225e19ebd82726437f5b4afbe4dd9d56cc"
+    },
+    {
+      "id": 41935266532,
+      "name": "Linux release package on fresh systems",
+      "status": "pending",
+      "conclusion": null,
+      "head_sha": "0c5254225e19ebd82726437f5b4afbe4dd9d56cc"
+    },
+    {
+      "id": 41935266529,
+      "name": "C17 build and validation",
+      "status": "pending",
+      "conclusion": null,
+      "head_sha": "0c5254225e19ebd82726437f5b4afbe4dd9d56cc"
+    },
+    {
+      "id": 41935266519,
+      "name": "Focused macOS F1 accessibility",
+      "status": "pending",
+      "conclusion": null,
+      "head_sha": "0c5254225e19ebd82726437f5b4afbe4dd9d56cc"
+    },
+    {
+      "id": 41935266563,
+      "name": "Native macOS menu bar",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "0c5254225e19ebd82726437f5b4afbe4dd9d56cc"
+    },
+    {
+      "id": 41935266465,
+      "name": "Native macOS workspace menu workflows",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "0c5254225e19ebd82726437f5b4afbe4dd9d56cc"
+    },
+    {
+      "id": 41935266496,
+      "name": "Focused macOS F1 regressions",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "0c5254225e19ebd82726437f5b4afbe4dd9d56cc"
+    },
+    {
+      "id": 41935266977,
+      "name": "Linux UI sanitizer regressions",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "0c5254225e19ebd82726437f5b4afbe4dd9d56cc"
+    }
+  ],
+  "current_hosted_pass_not_claimed": true,
+  "user_mac": "off; not contacted or probed",
+  "storage": "D: only; F: untouched",
+  "images_created": 0,
+  "foreign_wip": "AX/Orca/workflows/status/dist preserved unstaged; excluded from own capture",
+  "objective_complete": false,
+  "next_step": "Observe exact hosted editor run artifacts; then native local bindings, real C scopes and separate parameter help"
+}

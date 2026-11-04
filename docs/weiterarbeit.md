@@ -10,7 +10,9 @@ Prüfung oder Protokoll-Trennlinie allein wegen Kompaktierung erneut beginnen.
 **Nutzer-Mac aus; keine Zugriffe/Erreichbarkeitsproben.**
 **Eingefroren: `auto-info-deadline-final`, 174 eigene Eingaben / 1.124 erfasste
 Compiler-/Testdateien. Alle lokalen Handles beendet. Quell-/Laufzeit-/Archivbytes
-gelesen. Eigene Änderungen vor Commit; Git-Abschluss anschließend ergänzen.**
+gelesen. Quellcommit `0c525422` in origin/upstream; 1.132 eindeutige Eingaben
+gegen tatsächliche Git-Blobs abgeglichen, nur CRLF/LF normalisiert.**
+[Commitabschluss](verification/auto-info-deadline-commit-2026-11-05.json).
 Belegtes Rennen im Prüfer: Vor Zeichnung unsichtbare Pending-Karte → geplanter
 Strg+Leertaste-Befehl → zwischenzeitlich gezeichnete Karte → Taste blendet sie
 aus. Auswahl/Cursor/Quelle und Scrollposition bleiben gleich. Kontrollierter
@@ -29,8 +31,10 @@ Phasen gleich. C/Physim, normaler/erzwungener Automatikablauf und Info-Gruppe;
 keine neuen Bilder. Register-/Harness-Selbstprüfung Exit 0; Mockfehler sind keine
 Produktfehler. [Phasen, Originalbefunde und Grenzen](verification/auto-info-deadline-2026-11-05.md).
 
-**Nächster konkreter Schritt:** neuen gehosteten Editorlauf mit sieben Gruppen
-auf beiden Mac-Runnern anhand der Originalartefakte bewerten; Nutzer-Mac bleibt
+**Nächster konkreter Schritt:** gehosteten Editorlauf **`41935266700`** mit sieben
+Gruppen anhand der Originalartefakte bewerten: ARM **`126942020658`**, Intel
+**`126942021220`**, zuletzt beide queued. Keine aktuelle Mac-Abnahme behaupten,
+keinen Ersatzlauf starten. Nutzer-Mac bleibt
 unberührt. Danach native lokale Namen/Quellstellen-Karte/Einfügen/Undo/leere
 Argumentauslöser, echte C-Scopes und separate Parameterhilfe fortsetzen.
 Keine volle D-/UI-Punktzahl oder neue manuelle/assistive/DPI-Abnahme. Keine
