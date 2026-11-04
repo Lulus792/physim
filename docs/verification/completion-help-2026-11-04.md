@@ -1,5 +1,8 @@
 # Kandidaten-Kurzinfo: Dokumentbesitz und Inhalt
 
+Quellcommit **`25dd37dca639005f9640fe49fa774b03d595feec`** in beiden Repositories.
+[Tatsächlicher Git-Abgleich und neuer offener CI-Stand](completion-help-commit-2026-11-04.json).
+
 Die neutrale D-Karte zeigt die echte Kurzbeschreibung des gewählten Katalogeintrags,
 seine Signatur in den gemeinsamen Syntaxrollen, Art und Referenzquelle. Alle Zeilen
 der vorhandenen zweispaltigen Argumenttabelle bleiben erhalten. Deren tatsächliche

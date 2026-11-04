@@ -9,7 +9,10 @@ Prüfung oder Protokoll-Trennlinie allein wegen Kompaktierung erneut beginnen.
 
 **Nutzer-Mac aus; keine Zugriffe oder Erreichbarkeitsproben.**
 **Eingefroren: `completion-help-restored`, 166 eigene Eingaben / 1.118 Compiler-
-und Testdateien.** Eigener Referenzseiten-Cache, echte Beschreibung, vollständige
+und Testdateien. Quellcommit `25dd37dc` in beiden Repositories; sämtliche
+Compiler-/Test- und eigenen Eingaben mit tatsächlichen Git-Blobs abgeglichen,
+nur CRLF/LF normalisiert.** [Commitabschluss](verification/completion-help-commit-2026-11-04.json).
+Eigener Referenzseiten-Cache, echte Beschreibung, vollständige
 vorhandene Argumenttabelle samt Originalüberschrift, Fehler ohne alten Inhalt,
 gesperrter Referenzknopf und neuer Versuch nach Listenschließen. Neutrale Karte
 mit 6-Einheiten-Vertikalleiste, keine unnötige Leiste bei kurzem Inhalt. Input
@@ -49,6 +52,10 @@ Intel `documentation_h`, Job `126856133610`, Zeitlimit 60,026 s an Stufe 39:
 Ursache offen; dieser konkrete neue Befund erlaubt einen gezielten Nachlauf.
 [Getrennte Mac-Evidenz](verification/syntax-roles-macos-2026-11-04.json).
 Kein Nachweis der neuen Kandidaten-Kurzinfo; Nutzer-Mac bleibt unberührt.
+Neue gehostete Läufe zu `25dd37dc`: Editor **`41919823783`**, Einstellungen
+**`41919823552`**, F1 **`41919823808`**, zuletzt queued. C17 `41919823708` pending.
+Konkrete Handles beobachten, keinen Ersatzlauf starten. Noch keine aktuelle
+Mac-Completion-Abnahme oder gesamte grüne CI behaupten.
 
 ## Abgeschlossen: gemeinsame Syntaxrollen
 

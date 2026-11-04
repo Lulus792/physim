@@ -1,0 +1,140 @@
+{
+  "phase": "completion-help-restored",
+  "revision": "HEAD",
+  "compiler_and_test_count": 1118,
+  "own_input_count": 166,
+  "unique_files": 1126,
+  "all_tested_input_bytes_match_git": true,
+  "crlf_normalized_only": true,
+  "source_commit": "25dd37dca639005f9640fe49fa774b03d595feec",
+  "date": "2026-11-04",
+  "both_remote_refs_verified": "25dd37dca639005f9640fe49fa774b03d595feec",
+  "source_match": {
+    "path": "build/validation/completion-help-2026-11-04/commit-match.json",
+    "sha256": "1b7bd052b04142a67f3211ae13f524005c61ebf83ab592741528e7a0c3a4a368",
+    "bytes": 236181
+  },
+  "proof": {
+    "path": "docs/verification/completion-help-2026-11-04.json",
+    "sha256": "39b72258e7b5c9f59838366e0f88f8b3c0051666979dba57091c37273d339e58",
+    "bytes": 139390
+  },
+  "tested_positive": "completion-help-bottom",
+  "closure": "completion-help-restored",
+  "closure_method": "After isolated Windows renderer counter, exact source and all 368 runtime files restored from tested positive; no new trial claimed.",
+  "all_local_build_test_archive_handles": "completed; process inventory checked before cleanup",
+  "cleanup": {
+    "files": 27,
+    "bytes": 86317326,
+    "record": {
+      "path": "build/validation/completion-help-2026-11-04/cleanup-plan.json",
+      "sha256": "4678a32e299326d7da842dc1816e66f53a85c66976ea04a2a7999641c475641e",
+      "bytes": 18017
+    }
+  },
+  "user_mac": "off; no accesses/probes/uploads",
+  "storage": "D: only; F: untouched",
+  "goal_complete": false,
+  "new_hosted_runs": {
+    "captured_at": "2026-11-04T21:51:19.237Z",
+    "runs": [
+      {
+        "id": 41919823808,
+        "name": "Focused macOS F1 regressions",
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "25dd37dca639005f9640fe49fa774b03d595feec",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41919823808"
+      },
+      {
+        "id": 41919823772,
+        "name": "Focused macOS F1 accessibility",
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "25dd37dca639005f9640fe49fa774b03d595feec",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41919823772"
+      },
+      {
+        "id": 41919823930,
+        "name": "Runner backpressure regressions",
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "25dd37dca639005f9640fe49fa774b03d595feec",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41919823930"
+      },
+      {
+        "id": 41919823783,
+        "name": "Native macOS editor menu workflows",
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "25dd37dca639005f9640fe49fa774b03d595feec",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41919823783"
+      },
+      {
+        "id": 41919823768,
+        "name": "Linux UI sanitizer regressions",
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "25dd37dca639005f9640fe49fa774b03d595feec",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41919823768"
+      },
+      {
+        "id": 41919823527,
+        "name": "Native macOS workspace menu workflows",
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "25dd37dca639005f9640fe49fa774b03d595feec",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41919823527"
+      },
+      {
+        "id": 41919823997,
+        "name": "macOS offline handbook links",
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "25dd37dca639005f9640fe49fa774b03d595feec",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41919823997"
+      },
+      {
+        "id": 41919823552,
+        "name": "Native macOS settings, typography and header focus",
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "25dd37dca639005f9640fe49fa774b03d595feec",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41919823552"
+      },
+      {
+        "id": 41919823753,
+        "name": "Native macOS study and project menus",
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "25dd37dca639005f9640fe49fa774b03d595feec",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41919823753"
+      },
+      {
+        "id": 41919824080,
+        "name": "Native macOS menu bar",
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "25dd37dca639005f9640fe49fa774b03d595feec",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41919824080"
+      },
+      {
+        "id": 41919823995,
+        "name": "Linux release package on fresh systems",
+        "status": "pending",
+        "conclusion": null,
+        "head_sha": "25dd37dca639005f9640fe49fa774b03d595feec",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41919823995"
+      },
+      {
+        "id": 41919823708,
+        "name": "C17 build and validation",
+        "status": "pending",
+        "conclusion": null,
+        "head_sha": "25dd37dca639005f9640fe49fa774b03d595feec",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41919823708"
+      }
+    ]
+  },
+  "new_mac_acceptance": "OPEN: queued/pending runs are not passing tests."
+}
