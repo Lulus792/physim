@@ -87,6 +87,7 @@ def catalog():
     cases.append(Case("process_usage", ("tests/test_process_usage.c",)))
     cases.append(Case("compiler_diagnostic", ("tests/test_compiler_diagnostic.c", "app/compiler_diagnostic.c")))
     cases.append(Case("completion", ("tests/test_completion.c", "app/completion.c")))
+    cases.append(Case("completion_help", ("tests/test_completion_help.c", "app/completion_help.c", "app/completion.c", "app/documentation.c")))
     cases.append(Case("syntax", ("tests/test_syntax.c", "app/syntax.c", "app/completion.c"),libraries=("language","core")))
     cases.append(Case("api_reference", ("tests/test_api_reference.c", "app/documentation.c", "app/completion.c"), arguments=("{source}",)))
     cases.append(Case("positive_peaks", ("tests/test_positive_peaks.c",), arguments=("{work}/peaks",)))

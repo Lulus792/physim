@@ -9,7 +9,7 @@ static bool api_reference_test_start(app *a,const char *root,const char *mode) {
     return true;
 }
 static void api_reference_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
-    static unsigned target,seeks;static bool prepared;
+    static unsigned target,seeks;static bool prepared;static double reference_due;
     bool language=!strcmp(mode,"api-reference-phys"),ok=true;
     const char *original=language?api_reference_ph_original[target]:api_reference_c_original[target];
     const char *desired=language?(target==0?"Vec3":target==1?"Mat4.translation":"Vec3.normalized"):
@@ -43,8 +43,13 @@ static void api_reference_test_frame(app *a,const char *mode,int *stage,int *cod
         if(ok && strcmp(ps_completion_at(a->completion_indices[a->completion_selected])->name,desired)) {
             if(++seeks>ps_completion_count()){ok=false;break;}test_window_key_mod(a->window,SDLK_DOWN,0);--*stage;return;
         }
-        *stage=19;break;
-    case 19:ok=a->completion_reference_bounds.w>0;test_mouse(a,a->completion_reference_bounds,true);break;
+        reference_due=ps_clock()+3;*stage=19;break;
+    case 19:
+        ok=a->completion_active && a->completion_help.status==PS_OK;
+        if(ok && (!a->completion_help.symbol || strcmp(a->completion_help.symbol->name,desired) || !completion_reference_visible(a))){
+            if(ps_clock()<reference_due){completion_help_test_scroll(a,-4);--*stage;return;}ok=false;
+        }
+        if(ok)test_mouse(a,a->completion_reference_bounds,true);break;
     case 20:test_mouse(a,a->completion_reference_bounds,false);break;
     case 21:*stage=9;break;
     case 7:test_mouse(a,a->toolbar_bounds[2],false);break;

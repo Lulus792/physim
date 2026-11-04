@@ -7,6 +7,9 @@ Maßgeblich bleiben [ADR 022](../../decisions/022-automatic-completion.md),
 ergänzt. Fünfer-Viewport und wirksame Editor-Preferences sind als weiterer
 Teilstand ergänzt. Gemeinsame Syntaxrollen und Funktionsfarben sind inzwischen
 ebenfalls verbunden; eine vollständige D-Designabnahme steht weiterhin aus.
+Eigener Dokumentbesitz, echte Kurzbeschreibung und vorhandene Argumenttexte sind
+nun ergänzt; Anzeigeverzögerung, Tastatur-Scrollen und weitere Interaktionsgates
+bleiben ausdrücklich offen.
 
 ## Ergänzte Eingabegrundlage
 
@@ -45,8 +48,8 @@ Scrolloffset, Mausrad und ziehbarer 6-Einheiten-Thumb erschließen weitere Treff
 Pfeilnavigation bringt die Auswahl ins Sichtfeld. Scrollen allein übernimmt
 keinen Eintrag. Einzeilige Namen, rechte Typ-/Rückgabetypangabe und Gesamtzähler
 sind ergänzt. Die getrennte neutrale Kandidatenkarte zeigt reale Katalogdaten
-und den bisherigen Referenzzugang. Zusammenfassung und parameterbezogene Inhalte
-sind dort noch zu ergänzen; keine Aufrufhilfe daraus ableiten. Bei Platzmangel
+und den bisherigen Referenzzugang. Echte Kurzbeschreibung und vorhandene
+Argumenttabellen sind inzwischen verbunden; keine Aufrufhilfe daraus ableiten. Bei Platzmangel
 kann die Karte seitlich schmaler werden.
 
 Einstellungen A / Editor enthält „Vorschläge beim Tippen“ und „Sichtbare
@@ -75,11 +78,33 @@ nicht allgemein migriert. Der vorhandene ASCII-Semiboldfont deckt die aktuellen
 Katalogpräfixe; Unicode-Scopevorschläge brauchen später ihre eigene Abdeckung.
 [Native Ausführung, reale Gegenfälle und genaue Grenzen](../../verification/syntax-roles-2026-11-04.md).
 
+## Kandidateninhalt und Dokumentbesitz: Anschluss vom 4. November 2026
+
+Die Karte besitzt eine eigene geparste Referenzseite, unabhängig von der geöffneten
+Inspektor-Karte. Gleiche Seite wiederverwenden, neue Auswahl neu auflösen; bei
+Fehlern keine Beschreibung des alten Eintrags zeigen. Listenschließen gibt den
+Cache frei. Echte Zusammenfassung, Art, Katalogsignatur und Quellenpfad sind
+verbunden. Sprachhandbuch-Fallbacks bleiben als solche erkennbar.
+
+Alle vorhandenen Argumenttabellenzeilen bleiben erhalten, einschließlich ihrer
+tatsächlichen Spaltenüberschrift. Beispielbezogene Texte werden nicht als volle
+formale Parameterdokumentation ausgegeben. Die auf 260 Einheiten begrenzte Karte
+scrollt vertikal mit 6-Einheiten-Leiste; kurze Inhalte erhalten keine unnötige
+Leiste. Schriftgröße, Umbruch und unterer Abstand erhalten den erreichbaren
+Referenzknopf. Fehlende Referenz wird lokal erklärt, der Knopf gesperrt; nach
+Listenschließen ist ein neuer Ladeversuch möglich. Die Signatur bleibt sichtbar.
+
+Mausinput der Karte erreicht keine darunterliegenden Dockgruppen. Nach der
+Übernahme bleibt der Editor Tastaturbesitzer bis zum bewussten Fokuswechsel;
+Quelle und Undo bleiben erhalten. [Native Ausführung, echte Fehler, dritte
+Renderer-Prüfzeile und Gegenprobe](../../verification/completion-help-2026-11-04.md).
+Dies schließt die nachstehenden Interaktions-/Scope-/Aufrufhilfe-Gates nicht ab.
+
 ## Weiterhin verbindlich umzusetzen
 
-1. Vollständige Kandidatenzusammenfassung und Parametertexte mit eigenem
-   Dokumentbesitz ergänzen. Die gemeinsamen Rollen auch in die noch offene
-   separate Aufrufhilfe übernehmen; keine getrennte Kurzinfo-Palette einführen.
+1. Kurzinfo-Anzeige nach Auswahl verzögern, versteckte Trefferflächen sowie
+   Tastatur-Scrollen und Assistive-Bedienung prüfen/ergänzen. Die gemeinsamen Rollen
+   auch in die noch offene separate Aufrufhilfe übernehmen; keine getrennte Palette.
 2. Tatsächliche C-/Physim-Deklarationen und Scopes anbieten: sichtbare Variablen,
    Parameter und Quellstellen, Shadowing, Schleifen-/Block-/Funktionsgrenzen,
    Ausschluss späterer Deklarationen und der eigenen unvollständigen

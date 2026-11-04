@@ -832,6 +832,10 @@ static void workspace_panel(app *a) {
         a->file_tab_keyboard_edit=NULL;
     if(a->file_tab_keyboard_edit && editor_search_target(a)==a->file_tab_keyboard_edit)
         nk_window_set_focus(ui,"workspace");
+    if(a->completion_keyboard_edit && nk_sdl_accessibility_has_focus(ui) && !nk_sdl_accessibility_keyboard_owned(ui))
+        a->completion_keyboard_edit=NULL;
+    if(a->completion_keyboard_edit && editor_search_target(a)==a->completion_keyboard_edit)
+        nk_window_set_focus(ui,"workspace");
     if (dock_begin(a, PS_DOCK_WORKSPACE)) {
         if (a->tab == 8 && active_document(a)) {
             document_view(a, content-status_space);
@@ -1185,6 +1189,10 @@ static void workspace_draw_ui(app *a, int width, int height) {
        a->search_keyboard || a->search_focus || (a->preferences.dock.hidden&(1u<<PS_DOCK_WORKSPACE)) ||
        nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) ||
        (nk_sdl_accessibility_has_focus(ui) && !nk_sdl_accessibility_keyboard_owned(ui))))a->file_tab_keyboard_edit=NULL;
+    if(a->completion_keyboard_edit && (editor_search_target(a)!=a->completion_keyboard_edit || a->toolbar_menu || a->toolbar_keyboard ||
+       a->search_keyboard || a->search_focus || (a->preferences.dock.hidden&(1u<<PS_DOCK_WORKSPACE)) ||
+       nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) ||
+       (nk_sdl_accessibility_has_focus(ui) && !nk_sdl_accessibility_keyboard_owned(ui))))a->completion_keyboard_edit=NULL;
     const float sizes[]={11,9,12,11,23,16,10,10,8,10,12,11};
     for(unsigned i=0;i<SDL_arraysize(a->workbench_fonts);i++) {
         bool mono=i==7 || i==10 || i==11,bold=(i>=3 && i<=6) || i==8;
@@ -1227,6 +1235,18 @@ static void workspace_draw_ui(app *a, int width, int height) {
     float w=(float)width,h=(float)height;
     a->search_edit=NULL;
     a->toolbar_pointer_consumed=false;
+    /* Completion overlays own their mouse route before underlying dock groups
+     * can consume wheel/clicks. Keyboard input continues to reach the editor. */
+    struct nk_mouse completion_pointer=ui->input.mouse;
+    bool completion_hover=a->completion_active && !panel_is_detached(a,PS_DOCK_WORKSPACE) &&
+        (nk_input_is_mouse_hovering_rect(&ui->input,a->completion_list_bounds) ||
+         (a->completion_info_visible && nk_input_is_mouse_hovering_rect(&ui->input,a->completion_info_bounds)));
+    bool completion_mask=completion_hover || a->completion_pointer_capture || a->completion_scroll_drag;
+    a->completion_pointer_capture=completion_pointer.buttons[NK_BUTTON_LEFT].down && (completion_hover || a->completion_pointer_capture);
+    if(completion_mask){
+        memset(ui->input.mouse.buttons,0,sizeof ui->input.mouse.buttons);
+        ui->input.mouse.pos=nk_vec2(-1,-1);ui->input.mouse.scroll_delta=nk_vec2(0,0);
+    }
     bool files=browser_workspace_visible(a);
     if(!files)dock_prepare(a,w,h);
     else {
@@ -1255,6 +1275,7 @@ static void workspace_draw_ui(app *a, int width, int height) {
         float bottom=protocol_visible(a)?a->dock_panels[PS_DOCK_LOG].y:h-WORKSPACE_STATUS_HEIGHT;
         browser_view(a,a->browser_workspace,width,height,nk_rect(0,WORKSPACE_CONTENT_TOP,w,fmaxf(1,bottom-WORKSPACE_CONTENT_TOP)));
         log_panel(a);protocol_separator_view(a);workbench_status_view(a,w,h);
+        if(completion_mask)ui->input.mouse=completion_pointer;
         ui_palette=previous_palette;style(ui);nk_style_set_font(ui,previous_font);return;
     }
     workspace_context(a);
@@ -1282,11 +1303,13 @@ static void workspace_draw_ui(app *a, int width, int height) {
     laboratory_separators(a);
     protocol_separator_view(a);
     protocol_return_focus(a);
-    if(!panel_is_detached(a,PS_DOCK_WORKSPACE)){editor_search_view(a);completion_view(a,width,height);}
+    if(!panel_is_detached(a,PS_DOCK_WORKSPACE))editor_search_view(a);
+    if(completion_mask)ui->input.mouse=completion_pointer;
+    if(!panel_is_detached(a,PS_DOCK_WORKSPACE))completion_view(a,width,height);
     /* Docking temporarily routes hover/wheel to the panel under the pointer.
      * A declaration activation returns keyboard ownership to its source until
      * the user explicitly clicks, tabs, opens a menu or enters another field. */
-    if(a->outline_keyboard || a->file_tab_keyboard_edit)ui->active=nk_window_find(ui,"workspace");
+    if(a->outline_keyboard || a->file_tab_keyboard_edit || a->completion_keyboard_edit)ui->active=nk_window_find(ui,"workspace");
     if(workspace_shell){ui_palette=previous_palette;style(ui);}
     if(workspace_shell)nk_style_set_font(ui,previous_font);
 }

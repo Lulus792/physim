@@ -45,12 +45,12 @@ static void api_reference_insert_tick(app *a) {
     if(edit==&a->experiment){a->dirty=true;invalidate_build(a);}
     else if(edit==&a->analysis){a->analysis_dirty=true;invalidate_build(a);}
     else document_changed(a,edit);
-    a->completion_focus_edit=edit;
+    completion_return_focus(a,edit);
 }
 static void api_reference_from_editor(app *a,struct nk_text_edit *edit) {
     if(a->completion_active && a->completion_edit==edit) {
         const ps_completion_symbol *symbol=ps_completion_at(a->completion_indices[a->completion_selected]);
-        if(api_reference_open(a,symbol)){completion_close(a);a->completion_focus_edit=edit;}
+        if(api_reference_open(a,symbol)){completion_close(a);completion_return_focus(a,edit);}
         return;
     }
     int kind=document_language(a,edit);if(kind<0)return;

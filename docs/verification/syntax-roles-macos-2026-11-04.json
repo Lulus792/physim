@@ -1,0 +1,391 @@
+{
+  "source_commit": "f97344fb63d9fc35e2724e8d2ad6100da51af412",
+  "user_mac": "off; no access/probe",
+  "candidate_help_included": false,
+  "artifacts": [
+    {
+      "artifact_id": 13362787824,
+      "run_id": 41910405173,
+      "job_id": 126856132466,
+      "name": "Settings Intel",
+      "zip_sha256": "2282e4fa9dc6969afc64d7aa913e55f3c849f87d7fb1a9da71c57975097a96c6",
+      "digest_matches_github": true,
+      "all_entries_read": {
+        "Release/test-results/run-25hfo6_m/results.json": "e9666e9a95360aece293601fda17341a91c5ee1995202bfa60574d2826f39046",
+        "Release/test-results/run-nwpjeub6/results.json": "3489a362b2c7fe256e5d9d77483e9022eb72b0ca6faf524d91bfc777a061720c",
+        "Release/test-results/run-gu0t5f9j/results.json": "8a8a3f6c9d84ed21f214550cb270ede12bd71a94d3da513dd9e0d8611315a286",
+        "Release/test-results/run-wb1iorhz/results.json": "3588f4c6f4bec7813086ea9a1d7260784087845237336013f6ea750b87719551"
+      },
+      "results": [
+        {
+          "path": "Release/test-results/run-25hfo6_m/results.json",
+          "cases": [
+            {
+              "name": "shell_theme_dark",
+              "status": "passed",
+              "seconds": 10.615
+            },
+            {
+              "name": "shell_theme_light_large_narrow",
+              "status": "passed",
+              "seconds": 5.999
+            },
+            {
+              "name": "shell_theme_contrast",
+              "status": "passed",
+              "seconds": 6.786
+            }
+          ]
+        },
+        {
+          "path": "Release/test-results/run-nwpjeub6/results.json",
+          "cases": [
+            {
+              "name": "preferences",
+              "status": "passed",
+              "seconds": 0.271
+            }
+          ]
+        },
+        {
+          "path": "Release/test-results/run-gu0t5f9j/results.json",
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "seconds": 2.414
+            },
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 25.167
+            },
+            {
+              "name": "settings_search_keyboard",
+              "status": "passed",
+              "seconds": 20.019
+            },
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 33.096
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed",
+              "seconds": 27.961
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "passed",
+              "seconds": 61.654
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "seconds": 20.309
+            },
+            {
+              "name": "settings_keyboard_paced",
+              "status": "passed",
+              "seconds": 65.111
+            },
+            {
+              "name": "analysis_units_dark",
+              "status": "passed",
+              "seconds": 7.412
+            },
+            {
+              "name": "analysis_units_light_large_narrow",
+              "status": "passed",
+              "seconds": 6.872
+            },
+            {
+              "name": "inspector_channel",
+              "status": "passed",
+              "seconds": 119.241
+            }
+          ]
+        },
+        {
+          "path": "Release/test-results/run-wb1iorhz/results.json",
+          "cases": [
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "seconds": 78.766
+            }
+          ]
+        }
+      ],
+      "passed": 16,
+      "count": 16
+    },
+    {
+      "artifact_id": 13362638033,
+      "run_id": 41910405173,
+      "job_id": 126856132968,
+      "name": "Settings ARM",
+      "zip_sha256": "446af1d9d7a92819ffdba83ad4db97c2384448af4897ed8d39f0d8ba51209666",
+      "digest_matches_github": true,
+      "all_entries_read": {
+        "Release/test-results/run-3s0j7r_7/results.json": "c8bba5f42e0e78fb2f45d251fdf7a322e0a483c230a58bd5308ee891f1e2fe8d",
+        "Release/test-results/run-ansgsvdu/results.json": "48849f2100cbb620163078dc0c292a262fdc9282905990e30f1de46a40d613a0",
+        "Release/test-results/run-kzhfd35a/results.json": "c63419de24778bffc0363777bd44ad281abc40ec7705d322b617221341a95630",
+        "Release/test-results/run-njtn1mex/results.json": "652e5fd6a30c1472ecc29dde52f5989acefb59d8761040ff3c396d2391103fca"
+      },
+      "results": [
+        {
+          "path": "Release/test-results/run-3s0j7r_7/results.json",
+          "cases": [
+            {
+              "name": "preferences",
+              "status": "passed",
+              "seconds": 0.14
+            }
+          ]
+        },
+        {
+          "path": "Release/test-results/run-ansgsvdu/results.json",
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "seconds": 0.983
+            },
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 11.062
+            },
+            {
+              "name": "settings_search_keyboard",
+              "status": "passed",
+              "seconds": 7.994
+            },
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 18.629
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed",
+              "seconds": 17.175
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "passed",
+              "seconds": 35.382
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "seconds": 11.44
+            },
+            {
+              "name": "settings_keyboard_paced",
+              "status": "passed",
+              "seconds": 53.755
+            },
+            {
+              "name": "analysis_units_dark",
+              "status": "passed",
+              "seconds": 6.264
+            },
+            {
+              "name": "analysis_units_light_large_narrow",
+              "status": "passed",
+              "seconds": 5.75
+            },
+            {
+              "name": "inspector_channel",
+              "status": "passed",
+              "seconds": 110.314
+            }
+          ]
+        },
+        {
+          "path": "Release/test-results/run-kzhfd35a/results.json",
+          "cases": [
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "seconds": 45.949
+            }
+          ]
+        },
+        {
+          "path": "Release/test-results/run-njtn1mex/results.json",
+          "cases": [
+            {
+              "name": "shell_theme_dark",
+              "status": "passed",
+              "seconds": 5.278
+            },
+            {
+              "name": "shell_theme_light_large_narrow",
+              "status": "passed",
+              "seconds": 3.134
+            },
+            {
+              "name": "shell_theme_contrast",
+              "status": "passed",
+              "seconds": 3.308
+            }
+          ]
+        }
+      ],
+      "passed": 16,
+      "count": 16
+    },
+    {
+      "artifact_id": 13363367780,
+      "run_id": 41910405136,
+      "job_id": 126856133100,
+      "name": "F1 ARM",
+      "zip_sha256": "54bd45c03009b5f77e22156687cc8a3f5d29a776ad3f9ffdf08d8e414db1b4e8",
+      "digest_matches_github": true,
+      "all_entries_read": {
+        "Release/font-bank-state-counterexample/binding/stderr": "50ac9f3216f41c7007722ca9e6053e632e3c59dbdb1abf285d3517819412f062",
+        "Release/font-bank-state-counterexample/report.json": "3718a1d27cbf908ee8430cc7cec584eeebf74abb59be6480d5771fba77dcf980",
+        "Release/font-bank-state-counterexample/unpack/stderr": "df27686857e61858cf57f50d5da350756ca033201241f7596cc57fdb741783ee",
+        "Release/native-search-counterexample/report.json": "226a64ef96a7583c6c013e9931d159e5713fd1966f949070dbdb70f0519f0685",
+        "Release/native-search-counterexample/stderr": "e19db5c28eb997ef5ca5d24661052bebf3e7ba9e0c8e01c5da2ff1365faa682e",
+        "Release/native-search-counterexample/stdout": "ef1e47ee5c8b380d89b78272985e92b82d4a5ffcf7815b5afe8c5a9fea224101",
+        "Release/test-results/run-k4u0_kkc/results.json": "c42e15f3f8dc9584624826d912fee2e575dd748ef01a64d5e68358657e796f1a",
+        "Release/test-results/run-9_w8q_v3/results.json": "1bb6f44922f815f68cac2d1fb04739824fe6a18e08a8b2bdcdfa6b27eb0d5574"
+      },
+      "results": [
+        {
+          "path": "Release/test-results/run-k4u0_kkc/results.json",
+          "cases": [
+            {
+              "name": "font_sources",
+              "status": "passed",
+              "seconds": 0.033
+            }
+          ]
+        },
+        {
+          "path": "Release/test-results/run-9_w8q_v3/results.json",
+          "cases": [
+            {
+              "name": "font_bank_ui",
+              "status": "passed",
+              "seconds": 0.273
+            },
+            {
+              "name": "documentation_math",
+              "status": "passed",
+              "seconds": 12.159
+            },
+            {
+              "name": "accessibility_edit_macos",
+              "status": "passed",
+              "seconds": 2.597
+            },
+            {
+              "name": "documentation_panes",
+              "status": "passed",
+              "seconds": 39.157
+            },
+            {
+              "name": "documentation_h",
+              "status": "passed",
+              "seconds": 33.232
+            }
+          ]
+        }
+      ],
+      "passed": 6,
+      "count": 6
+    },
+    {
+      "artifact_id": 13361834713,
+      "run_id": 41910405136,
+      "job_id": 126856133610,
+      "name": "F1 Intel",
+      "zip_sha256": "8f9d8e0afc3652b4cc2514d9ef4cf097e783ded9555609117553dae6bb852a4f",
+      "digest_matches_github": true,
+      "all_entries_read": {
+        "Release/font-bank-state-counterexample/binding/stderr": "50ac9f3216f41c7007722ca9e6053e632e3c59dbdb1abf285d3517819412f062",
+        "Release/font-bank-state-counterexample/report.json": "e4b3eede19e5093c14d8b315ff21c0e322a08c9b567d12e2ed54aa6859e400a7",
+        "Release/font-bank-state-counterexample/unpack/stderr": "df27686857e61858cf57f50d5da350756ca033201241f7596cc57fdb741783ee",
+        "Release/native-search-counterexample/report.json": "21cd83dbb1cdf84947169cd29a6bce9c9714aa4f24604fff5e7307e439e19927",
+        "Release/native-search-counterexample/stderr": "ce25e235287a957a8fb8ed9b73f24d73ebb0e317be44fdb940f0c9623600dcf8",
+        "Release/native-search-counterexample/stdout": "ef1e47ee5c8b380d89b78272985e92b82d4a5ffcf7815b5afe8c5a9fea224101",
+        "Release/test-results/run-k_7ofu36/results.json": "904c40fa2c43f741d11ce71eb42e7e6e1a3c21981ad025c88b2db31dd69a39ae",
+        "Release/test-results/run-ve7cvaid/results.json": "a6cddf8e814468155dd6e3eca8af824ed804fd1a0947921a5b72a28bd0828307"
+      },
+      "results": [
+        {
+          "path": "Release/test-results/run-k_7ofu36/results.json",
+          "cases": [
+            {
+              "name": "font_bank_ui",
+              "status": "passed",
+              "seconds": 0.378
+            },
+            {
+              "name": "documentation_math",
+              "status": "passed",
+              "seconds": 30.514
+            },
+            {
+              "name": "accessibility_edit_macos",
+              "status": "passed",
+              "seconds": 6.13
+            },
+            {
+              "name": "documentation_panes",
+              "status": "passed",
+              "seconds": 66.974
+            },
+            {
+              "name": "documentation_h",
+              "status": "failed",
+              "seconds": 63.02,
+              "reason": "Exit code 1; expected 0",
+              "failed_steps": [
+                {
+                  "command": [
+                    "/usr/local/opt/python@3.14/bin/python3.14",
+                    "/Users/runner/work/physim/physim/tests/check_display_workflow.py",
+                    "documentation_h",
+                    "--app",
+                    "/Users/runner/work/physim/physim/build/native/Release/bin/physim",
+                    "--work",
+                    "/Users/runner/work/physim/physim/build/native/Release/test-results/run-k_7ofu36/documentation_h/files ä",
+                    "--root",
+                    "/Users/runner/work/physim/physim",
+                    "--cc",
+                    "/usr/bin/clang"
+                  ],
+                  "exit_code": 1,
+                  "observed_failure": [
+                    "Workspace self-test timeout: docs-keyboard-h after 60.026 wall seconds",
+                    "First workflow failure at stage 39 (next 39): Bereit. Ordner öffnen oder ein neues Projekt anlegen. (tab=0, selected=0, samples=0, report=0, query=)",
+                    "Workflow failed at stage 39: Bereit. Ordner öffnen oder ein neues Projekt anlegen. (tab=0, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "Release/test-results/run-ve7cvaid/results.json",
+          "cases": [
+            {
+              "name": "font_sources",
+              "status": "passed",
+              "seconds": 0.045
+            }
+          ]
+        }
+      ],
+      "passed": 5,
+      "count": 6
+    }
+  ]
+}

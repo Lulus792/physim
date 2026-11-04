@@ -20,6 +20,7 @@
 #include "protocol_ui.h"
 #include "physim/detail/run_identity.h"
 #include "completion.h"
+#include "completion_help.h"
 #include "syntax.h"
 #include "editor_search.h"
 #include "source_outline.h"
@@ -656,11 +657,15 @@ typedef struct {
     struct nk_rect diagnostic_mode_bounds;
     struct nk_rect search_bounds,replace_bounds,source_editor_bounds;
     struct nk_rect source_editor_frame;
-    struct nk_text_edit *completion_edit,*completion_focus_edit,*file_tab_keyboard_edit;
+    struct nk_text_edit *completion_edit,*completion_focus_edit,*completion_keyboard_edit,*file_tab_keyboard_edit;
     ps_completion_query completion_query;
     size_t *completion_indices,completion_count,completion_selected,completion_first;
     unsigned completion_visible_rows;
-    bool completion_reveal,completion_scroll_drag,completion_info_visible;
+    bool completion_reveal,completion_scroll_drag,completion_info_visible,completion_pointer_capture;
+    ps_completion_help completion_help;
+    nk_uint completion_help_scroll_x,completion_help_scroll_y;
+    struct nk_rect completion_help_body_bounds,completion_summary_bounds,completion_arguments_bounds;
+    float completion_help_natural_height;
     struct nk_user_font completion_bold_font;
     nk_size syntax_commands_begin,syntax_commands_end;
     float completion_scroll_grab;
@@ -783,6 +788,7 @@ static void completion_close(app *a);
 static bool api_reference_open(app *a,const ps_completion_symbol *symbol);
 static void api_reference_from_editor(app *a,struct nk_text_edit *edit);
 static float documentation_height(const struct nk_user_font *font,const char *text,size_t n,float width);
+static size_t documentation_line(const struct nk_user_font *font,const char *text,size_t n,float width,size_t *length);
 static void dock_show(app *a,unsigned panel);
 static bool laboratory_resize_key(app *a,const SDL_KeyboardEvent *key);
 static bool laboratory_visible(const app *a);

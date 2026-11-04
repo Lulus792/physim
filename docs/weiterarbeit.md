@@ -5,7 +5,52 @@ abgleichen. Verbindliche Designs: [AGENTS.md](../AGENTS.md) und
 [Gesamtübergabe](visuals/unified-workspace/NEXT-CHAT.md). Keine geschlossene
 Prüfung oder Protokoll-Trennlinie allein wegen Kompaktierung erneut beginnen.
 
-## Aktueller Anschluss: gemeinsame Syntaxrollen
+## Aktueller Anschluss: Kandidaten-Kurzinfo
+
+**Nutzer-Mac aus; keine Zugriffe oder Erreichbarkeitsproben.**
+**Eingefroren: `completion-help-restored`, 166 eigene Eingaben / 1.118 Compiler-
+und Testdateien.** Eigener Referenzseiten-Cache, echte Beschreibung, vollständige
+vorhandene Argumenttabelle samt Originalüberschrift, Fehler ohne alten Inhalt,
+gesperrter Referenzknopf und neuer Versuch nach Listenschließen. Neutrale Karte
+mit 6-Einheiten-Vertikalleiste, keine unnötige Leiste bei kurzem Inhalt. Input
+erreicht keinen darunterliegenden Bereich; Tastaturrückkehr erhält Undo.
+[Umfang, Originalbefunde und Nachweise](verification/completion-help-2026-11-04.md).
+
+Windows Release/Linux Debug ASan/UBSan: Cache-Stand `completion-help-routing`
+je **Unit 3/3**, nach Fokuskorrektur `completion-help-focus` je **GUI 3/3**.
+Anschließend nur Kartengeometrie und gezielte Prüfer geändert; Abschluss
+`completion-help-bottom` je **GUI 2/2**, `run-l1ud0_3b` / `run-xbzg1kzk`.
+C und Physim in drei Editoren/Themes, echte Beschreibungen, Referenzzugang,
+Source/Undo, zwei echte Argumentzeilen und separate synthetische dritte
+Renderer-Prüfzeile, Fehler/gesperrter Klick/Retry tatsächlich geprüft.
+Aktuelle Cache-Unit separat mit ASan/UBSan und `detect_leaks=1` bestanden.
+Keinen vollständigen neuen 3+3-Lauf mit letzter Binärdatei behaupten.
+
+Isolierter Windows-Gegenfall `run-cgtbhjhm` **0/1**: nur Beschreibungszeichnung
+unterdrückt; `summary=0`, Dokument/Referenz und alle Syntaxmerkmale weiterhin 1.
+Root unverändert. Danach alle Quell- und 239 Windows-/129 Linux-Laufzeitdateien
+exakt aus bestandenem Stand wiederhergestellt, sämtliche referenzierten ZIP-
+Bytes geprüft; kein zusätzlicher identischer Testlauf erfunden. Alle lokalen
+Handles beendet. Vier aktuelle native Bilder gesehen. 27 ersetzte Erfolgs-BMPs
+entfernt (**86.317.326 Bytes**); Fehler/Gegenprobe/aktuelle Ansichten und eine
+ursprüngliche visuelle Vergleichsaufnahme erhalten. Keine Objektordner löschen:
+deren Namen sind Define-/Sprachvarianten, keine veralteten Quellstand-Hashes.
+
+**Nächster konkreter Schritt:** Kurzinfo-Verzögerung nach Auswahl und i/manueller
+Sofortzugang, versteckte Trefferflächen und Tastatur-Scrollen prüfen/ergänzen.
+Danach echte lokale Scopes und separate Aufrufhilfe; keine volle D-/UI-Punktzahl.
+Physische Eingabe/IME, Screenreader, DPI/Monitor/Vollbild und aktuelle Mac-
+Completion-Abnahme offen. Keine geschlossene F1-/Protokoll-/Settings-Matrix allein
+wegen Kontextwechsels wiederholen.
+
+Gehosteter vorheriger Syntaxstand `f97344fb`: Einstellungen Intel/ARM **je 16/16**,
+F1 ARM **6/6**, Intel **5/6**. Vier ZIPs/Digests/Originalergebnisse gelesen.
+Intel `documentation_h`, Job `126856133610`, Zeitlimit 60,026 s an Stufe 39:
+Ursache offen; dieser konkrete neue Befund erlaubt einen gezielten Nachlauf.
+[Getrennte Mac-Evidenz](verification/syntax-roles-macos-2026-11-04.json).
+Kein Nachweis der neuen Kandidaten-Kurzinfo; Nutzer-Mac bleibt unberührt.
+
+## Abgeschlossen: gemeinsame Syntaxrollen
 
 **Nutzer-Mac weiterhin aus; keine Zugriffe oder Erreichbarkeitsproben.**
 **Eingefroren: `syntax-roles-head-proof`, 163 eigene Eingaben / 1.115 Compiler-
@@ -30,10 +75,9 @@ Alle lokalen Handles beendet; Quell-/Runtime-/Archivbytes gelesen. Dunkel,
 hell/große Schrift und Kontrast nativ betrachtet. 36 ersetzte erfolgreiche eigene
 BMPs entfernt (**115.089.768 Bytes**), aktuelle zwölf Completion-Bilder und
 Fehler/Referenzen erhalten; getrennte neue Pfade, frühere Einsparungen nicht addieren.
-Offen: volle Kandidatenkurzinfo/Parametertexte, echte Scopes, separate Aufrufhilfe,
+Kandidateninhalt/Dokumentbesitz inzwischen oben ergänzt. Offen: echte Scopes, separate Aufrufhilfe,
 übrige Codekontexte und physische/Assistive-/DPI-/aktuelle Mac-Abnahme. D bleibt
-unvollständig. Nächster konkreter Schritt: Kandidatenkurzinfo mit eigenem
-Dokumentbesitz und tatsächlichem Referenz-/Reflow-Nachweis ergänzen.
+unvollständig. Der aktuelle nächste Schritt steht im Kurzinfo-Anschluss oben.
 
 Vorheriger Stand `913d60ed`: gehostete Intel-Editorfälle **5/5**, Settings **16/16**
 tatsächlich abgeschlossen, beide Archive/Digests/Originalergebnisse gelesen.
@@ -41,7 +85,7 @@ ARM-Jobs `126806005373` / `126811425903` inzwischen **cancelled**, keine offene
 Warteschlange oder bestandene ARM-Abnahme dieses Stands behaupten.
 [Getrennter Beleg](verification/completion-d-macos-intel-2026-11-04.json).
 Dies ist keine Mac-Abnahme der neuen Syntaxquellen. Nutzer-Mac bleibt aus.
-Neuer gehosteter Settings-Lauf `41910405173` zu `f97344fb` zuletzt queued;
+Gehosteter Settings-Lauf `41910405173` zu `f97344fb` inzwischen Intel/ARM je 16/16;
 Editorlauf im API-Snapshot noch nicht aufgeführt. Keine neue Mac-Abnahme oder
 laufende Editor-Jobnummer ableiten, keinen Ersatzlauf ohne Anlass starten.
 
@@ -194,8 +238,9 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
   ARM `126774543066` zuletzt wartend. Dies nicht als neue D-Abnahme ausgeben.
   Intel-Settings `4adf2699` wurde abgebrochen; ARM-Settings 16/16 geschlossen, nicht neu prüfen.
   Nutzer-Mac bleibt aus.
-  Aktueller lokaler Anschluss: `build/validation/syntax-roles-2026-11-04/STATE.md`.
-- D weiterführen: vollständige Kandidaten-Kurzinfo mit eigenem Dokumentbesitz ergänzen.
+  Aktueller lokaler Anschluss: `build/validation/completion-help-2026-11-04/STATE.md`.
+- D weiterführen: Kurzinfo-Verzögerung/i/manueller Zugang, versteckte Trefferflächen,
+  Tastatur-Scrollen und Assistive-Bedienung ergänzen; Inhalt/Dokumentbesitz oben geprüft.
   Referenz-Pointerzugang und Karten-Reflow dabei tatsächlich prüfen. Viewport
   und Preferences sind oben geprüft; nicht wegen Kompaktierung neu beginnen.
 - Danach/verknüpft gemeinsame Syntaxrollen in weiteren Codekontexten sowie echte C-/Physim-Scopes und
@@ -217,12 +262,13 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
 
 ## Sicherer lokaler Anschluss
 
-- `prepare-next.py <neuer-tag> syntax-roles-head-proof` prüft vorher Quelle,
+- `prepare-next.py <neuer-tag> completion-help-restored` prüft vorher Quelle,
   Runtime und Archive. Neue Module ausdrücklich in die Eingabeliste aufnehmen.
   Eigene Quellen vollständig versionieren, fremde AT-SPI-/Orca-/Status-/dist-
   Änderungen erhalten und nicht in eigene isolierte Quellen übernehmen.
 - Helfer/Indizes: `build/validation/explorer-inline-2026-10-29/`; aktueller
-  Arbeitsnachweis: `build/validation/syntax-roles-2026-11-04/`; frühere Completion
+  Arbeitsnachweis: `build/validation/completion-help-2026-11-04/`; Syntax unter
+  `build/validation/syntax-roles-2026-11-04/`; frühere Completion
   unter `build/validation/completion-auto-2026-11-04/`; Settings unter
   `build/validation/settings-keyboard-2026-11-04/`; Einheitenfokus
   unter `build/validation/unit-focus-2026-10-31/`; älterer Suchstand

@@ -6,18 +6,18 @@ static const char *completion_ph_original[]={COMPLETION_PH_PRELUDE "VecOLD\n",CO
 static const char *completion_ph_changed[]={COMPLETION_PH_PRELUDE "Vec3\n",COMPLETION_PH_PRELUDE "Mat4.translation\n",COMPLETION_PH_PRELUDE "direction.normalized\n"};
 #undef COMPLETION_C_PRELUDE
 #undef COMPLETION_PH_PRELUDE
-static struct {unsigned source;bool list,header,signature,prefix;const ps_completion_symbol *symbol;} completion_ink;
+static struct {unsigned source;bool list,header,signature,prefix,summary,error,argument,third;unsigned theme;struct nk_text_edit *edit;const ps_completion_symbol *symbol;} completion_ink;
 static bool completion_ink_word(const struct nk_command_text *t,const char *word){return t->length==(int)strlen(word) && !memcmp(t->string,word,(size_t)t->length);}
 static bool completion_ink_color(struct nk_color a,struct nk_color b){return a.r==b.r && a.g==b.g && a.b==b.b && a.a==b.a;}
 static bool completion_ink_region(const struct nk_command_text *t,struct nk_rect r){return t->x>=r.x && t->y>=r.y && t->x<r.x+r.w && t->y<r.y+r.h;}
 /* Observe real final draw commands after draw_ui, before GPU submission. Expected
  * colors come independently from the approved palette, not syntax_color(). */
 static void completion_syntax_draw(app *a){
-    memset(&completion_ink,0,sizeof completion_ink);
-    if(!a->completion_active || !a->completion_count)return;
+    if(!a->completion_active || !a->completion_count){memset(&completion_ink,0,sizeof completion_ink);return;}
     const ps_ui_palette *p=a->preferences.theme==PS_THEME_LIGHT?&PS_UI_LIGHT:a->preferences.theme==PS_THEME_HIGH_CONTRAST?&PS_UI_HIGH_CONTRAST:&PS_UI_DARK;
     const ps_completion_symbol *symbol=ps_completion_at(a->completion_indices[a->completion_selected]);
-    completion_ink.symbol=symbol;
+    if(completion_ink.symbol!=symbol || completion_ink.theme!=(unsigned)a->preferences.theme || completion_ink.edit!=a->completion_edit)memset(&completion_ink,0,sizeof completion_ink);
+    completion_ink.symbol=symbol;completion_ink.theme=(unsigned)a->preferences.theme;completion_ink.edit=a->completion_edit;
     struct nk_color selected=symbol->kind==PS_COMPLETION_FUNCTION?p->code_function:symbol->kind==PS_COMPLETION_TYPE?p->code_type:p->code_variable;
     bool language=document_language(a,a->completion_edit)==1;
     struct nk_rect row=a->completion_choice_bounds[a->completion_selected-a->completion_first];row.x+=33;row.w-=33;
@@ -31,6 +31,13 @@ static void completion_syntax_draw(app *a){
         if(completion_ink_region(t,a->completion_info_bounds) && t->y<a->completion_signature_bounds.y && completion_ink_word(t,symbol->name) && completion_ink_color(t->foreground,selected))completion_ink.header=true;
         const char *leaf=strrchr(symbol->name,'.');if(!leaf)leaf=symbol->name;else leaf++;
         if(completion_ink_region(t,a->completion_signature_bounds) && completion_ink_word(t,leaf) && completion_ink_color(t->foreground,selected))completion_ink.signature=true;
+        const char *summary=language?(a->preferences.theme==0?"Vektor":a->preferences.theme==1?"Affine":"Normiert"):
+            a->preferences.theme==0?"Euklidische":a->preferences.theme==1?"Keine Kurzbeschreibung":"UCRT";
+        struct nk_color prose=a->preferences.theme==PS_THEME_LIGHT?nk_rgb(32,36,44):p->text;
+        if(completion_ink_region(t,a->completion_summary_bounds) && t->length>=(int)strlen(summary) && !memcmp(t->string,summary,strlen(summary)) && completion_ink_color(t->foreground,prose))completion_ink.summary=true;
+        if(completion_ink_region(t,a->completion_summary_bounds) && t->length>=13 && !memcmp(t->string,"Dokumentation",13))completion_ink.error=true;
+        if(completion_ink_region(t,a->completion_arguments_bounds) && completion_ink_word(t,"z. B. PS_RADIAN"))completion_ink.argument=true;
+        if(completion_ink_region(t,a->completion_arguments_bounds) && completion_ink_word(t,"Dritter sichtbarer Parameter"))completion_ink.third=true;
         nk_size offset=(nk_size)((const char*)cmd-(const char*)a->ui->memory.memory.ptr);
         if(offset<a->syntax_commands_begin || offset>=a->syntax_commands_end)continue;
 #define INK(word,role,field) if(completion_ink_word(t,word) && completion_ink_color(t->foreground,p->field))completion_ink.source|=1u<<(role)
@@ -46,7 +53,21 @@ static void completion_syntax_draw(app *a){
         if(t->length>=2 && !memcmp(t->string,"//",2) && completion_ink_color(t->foreground,p->code_comment))completion_ink.source|=1u<<PS_SYNTAX_COMMENT;
 #undef INK
     }
-    completion_ink.list=drawn==strlen(ps_completion_insertion(&a->completion_query,symbol));
+    completion_ink.list|=drawn==strlen(ps_completion_insertion(&a->completion_query,symbol));
+}
+static bool completion_reference_visible(app *a){
+    struct nk_rect r=a->completion_reference_bounds,b=a->completion_help_body_bounds;
+    return r.h>0 && r.y>=b.y && r.y+r.h<=b.y+b.h-1;
+}
+static void completion_help_test_scroll(app *a,float amount){
+    struct nk_rect b=a->completion_help_body_bounds;float x=b.x+b.w/2,y=b.y+b.h/2;
+    SDL_Event e={0};e.type=SDL_EVENT_MOUSE_MOTION;e.motion.windowID=SDL_GetWindowID(a->window);e.motion.which=PS_TEST_MOUSE_ID;e.motion.x=x;e.motion.y=y;SDL_PushEvent(&e);
+    e=(SDL_Event){0};e.type=SDL_EVENT_MOUSE_WHEEL;e.wheel.windowID=SDL_GetWindowID(a->window);e.wheel.which=PS_TEST_MOUSE_ID;e.wheel.x=0;e.wheel.y=amount;e.wheel.mouse_x=x;e.wheel.mouse_y=y;SDL_PushEvent(&e);
+}
+static ps_result completion_help_three_rows(void *user,const char *path,ps_document **out){
+    (void)user;(void)path;
+    const char *text="# Renderer-Prüfdaten\n\n## ps_channel_add\n\nDrei vollständig sichtbare Argumenteinträge prüfen.\n\n| Argument | Renderer-Prüfdaten |\n| --- | --- |\n| context | Erster Eintrag |\n| name | Zweiter Eintrag |\n| unit | Dritter sichtbarer Parameter |\n";
+    return ps_document_parse(text,strlen(text),false,out);
 }
 static bool completion_test_start(app *a,const char *root,const char *mode) {
     bool language=!strcmp(mode,"completion-phys");
@@ -62,7 +83,8 @@ static bool completion_test_equal(struct nk_text_edit *edit,const char *text) {
     return nk_str_len_char(&edit->string)==(int)length && (!length || (actual && !memcmp(actual,text,length)));
 }
 static void completion_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
-    static unsigned target,seeks;static bool prepared;static double reference_due;bool language=!strcmp(mode,"completion-phys"),ok=true;
+    static unsigned target,seeks;static bool prepared,captured,reference_drawn;static double reference_due;bool language=!strcmp(mode,"completion-phys"),ok=true;
+    static ps_document *reference_owned;static char saved_root[4096];static nk_uint inspector_scroll;static struct nk_vec2 editor_scroll;
     const char *original=language?completion_ph_original[target]:completion_c_original[target];
     const char *changed=language?completion_ph_changed[target]:completion_c_changed[target];
     workspace_document *doc=active_document(a);
@@ -71,7 +93,7 @@ static void completion_test_frame(app *a,const char *mode,int *stage,int *code,c
     switch((*stage)++) {
     case 0:
         if(!prepared){ok=open_project(a);prepared=ok;}
-        seeks=0;
+        seeks=0;captured=false;
         {ps_preferences p=a->preferences;p.theme=target;p.ui_size=target==1?22:16;p.editor_size=target==1?22:12;preferences_apply(a,&p);}
         if(target==2){char path[4096];join(path,sizeof path,a->project,language?"completion-note.phys":"completion-note.c");preview_workspace_path(a,path);}
         else {a->tab=target?2:0;if(target)a->analysis_tab=1;}
@@ -104,12 +126,17 @@ static void completion_test_frame(app *a,const char *mode,int *stage,int *code,c
         break;
     }
     case 5:
+        if(!captured){*capture=target==0?"completion-experiment.bmp":target==1?"completion-analysis.bmp":"completion-document.bmp";captured=true;reference_due=ps_clock()+4;}
+        if(!completion_ink.signature || !completion_ink.summary || !completion_reference_visible(a)){
+            if(ps_clock()<reference_due){completion_help_test_scroll(a,-3);--*stage;return;}
+        }
         {unsigned expected=(1u<<PS_SYNTAX_COUNT)-1;if(language)expected&=~(1u<<PS_SYNTAX_PREPROCESSOR);
         ok=(completion_ink.source&expected)==expected && completion_ink.list && completion_ink.header && completion_ink.signature && completion_ink.prefix;
         printf("COMPLETION SYNTAX target=%u theme=%u source=%u expected=%u list=%d header=%d signature=%d prefix-bold=%d\n",target,a->preferences.theme,completion_ink.source,expected,completion_ink.list,completion_ink.header,completion_ink.signature,completion_ink.prefix);}
-        ok=ok &&a->completion_info_bounds.w>0 && a->completion_reference_bounds.y>=a->completion_info_bounds.y &&
-           a->completion_reference_bounds.y+a->completion_reference_bounds.h<=a->completion_info_bounds.y+a->completion_info_bounds.h-4;
-        *capture=target==0?"completion-experiment.bmp":target==1?"completion-analysis.bmp":"completion-document.bmp";
+        ok=ok && completion_ink.summary && completion_reference_visible(a) && a->completion_help.status==PS_OK &&
+            a->completion_help.document && a->completion_help.document!=a->api_reference && a->completion_help.symbol==completion_ink.symbol;
+        if(a->completion_help_natural_height+28<=260)ok=ok && a->completion_help_scroll_y==0;
+        printf("COMPLETION HELP target=%u summary=%d own-document=%d reference-visible=%d scroll=%u\n",target,completion_ink.summary,a->completion_help.document!=a->api_reference,completion_reference_visible(a),a->completion_help_scroll_y);
         if(target==2)test_mouse(a,a->completion_choice_bounds[a->completion_selected-a->completion_first],true);
         else test_window_key_mod(a->window,target?SDLK_TAB:SDLK_RETURN,0);
         break;
@@ -161,17 +188,68 @@ static void completion_test_frame(app *a,const char *mode,int *stage,int *code,c
     case 38:ok=a->completion_active && a->completion_count>0;test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
     case 39:{const char *name=language?"Mat4.translation":"ps_vlength";
         ok=!a->completion_active && completion_test_equal(edit,"");ok=ok && set_editor_text(edit,name,strlen(name));
-        edit->cursor=edit->select_start=edit->select_end=(int)strlen(name);test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);reference_due=ps_clock()+3;*stage=41;break;}
+        edit->cursor=edit->select_start=edit->select_end=(int)strlen(name);test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);reference_due=ps_clock()+3;reference_drawn=false;*stage=41;break;}
     case 41:
         ok=a->completion_active;
-        if(ok && (completion_ink.symbol!=ps_completion_at(a->completion_indices[a->completion_selected]) || !completion_ink.header || !completion_ink.signature)){
+        if(ok && !reference_drawn && (completion_ink.symbol!=ps_completion_at(a->completion_indices[a->completion_selected]) || !completion_ink.header || !completion_ink.signature)){
             if(ps_clock()<reference_due){--*stage;return;}ok=false;
         }
+        if(ok){reference_drawn=true;if(!completion_reference_visible(a)){
+            if(ps_clock()<reference_due){completion_help_test_scroll(a,-4);--*stage;return;}ok=false;}}
         if(ok)test_mouse(a,a->completion_reference_bounds,true);break;
     case 42:test_mouse(a,a->completion_reference_bounds,false);break;
     case 43:ok=!a->completion_active && a->api_reference && !strcmp(a->api_reference_name,language?"Mat4.translation":"ps_vlength") && completion_test_equal(edit,language?"Mat4.translation":"ps_vlength");
-        if(ok)puts("COMPLETION REFERENCE: pointer=1 source-preserved=1");a->quitting=true;break;
+        if(ok){puts("COMPLETION REFERENCE: pointer=1 source-preserved=1");reference_owned=a->api_reference;
+            const char *name=language?"Vec3":"ps_channel_add";ok=set_editor_text(edit,name,strlen(name));
+            edit->cursor=edit->select_start=edit->select_end=(int)strlen(name);test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);reference_due=ps_clock()+3;}break;
+    case 44:
+        if(a->completion_help.symbol!=completion_ink.symbol || !a->completion_help.attempted){if(ps_clock()<reference_due){--*stage;return;}ok=false;break;}
+        ok=a->completion_active && a->completion_help.status==PS_OK && a->completion_help.document &&
+            a->completion_help.document!=reference_owned && a->api_reference==reference_owned && completion_test_equal(edit,language?"Vec3":"ps_channel_add");
+        inspector_scroll=a->api_reference_scroll_y;editor_scroll=edit->scrollbar;break;
+    case 45:
+        if(!completion_reference_visible(a)){if(ps_clock()<reference_due){completion_help_test_scroll(a,-4);--*stage;return;}ok=false;break;}
+        ok=a->api_reference_scroll_y==inspector_scroll && edit->scrollbar.y==editor_scroll.y && edit->scrollbar.x==editor_scroll.x;
+        if(!language){ps_completion_help *h=&a->completion_help;size_t rows=0;
+            ok=ok && h->preview.arguments!=SIZE_MAX;
+            if(ok)for(size_t i=h->preview.arguments+1;i<h->end;i++){const ps_doc_block *b=&h->document->blocks[i];if(b->kind!=PS_DOC_TABLE_ROW || b->table_first!=h->preview.arguments)break;rows++;}
+            ok=ok && rows==2 && completion_ink.argument && a->completion_arguments_bounds.h>0 && a->completion_arguments_bounds.y+a->completion_arguments_bounds.h<=a->completion_help_body_bounds.y+a->completion_help_body_bounds.h;
+            if(ok)printf("COMPLETION HELP ARGUMENTS: rows=%zu last-visible=1 inspector-preserved=1 scroll=%u\n",rows,a->completion_help_scroll_y);
+            if(ok){reference_due=ps_clock()+3;*stage=60;}
+        }break;
+    case 60:{
+        const ps_completion_symbol *symbol=a->completion_help.symbol;ps_completion_help_destroy(&a->completion_help);
+        ok=ps_completion_help_select(&a->completion_help,symbol,completion_help_three_rows,NULL)==PS_OK;
+        a->completion_help_scroll_x=a->completion_help_scroll_y=0;completion_ink.third=false;break;}
+    case 61:
+        if(!completion_reference_visible(a) || !completion_ink.third){
+            if(ps_clock()<reference_due){completion_help_test_scroll(a,-4);--*stage;return;}ok=false;break;}
+        ok=a->completion_help.preview.arguments!=SIZE_MAX && a->completion_help.document->blocks[a->completion_help.preview.arguments].table_rows==4 && a->api_reference==reference_owned;
+        if(ok)puts("COMPLETION HELP TABLE FIXTURE: rows=3 last-painted=1 inspector-preserved=1");
+        *stage=46;break;
+    case 46:
+        completion_close(a);snprintf(saved_root,sizeof saved_root,"%s",a->root);
+        snprintf(a->root,sizeof a->root,"%s/no-completion-help-reference",saved_root);
+        test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);reference_due=ps_clock()+3;break;
+    case 47:
+        if(!a->completion_help.attempted){if(ps_clock()<reference_due){--*stage;return;}ok=false;break;}
+        ok=a->completion_active && a->completion_help.status!=PS_OK && !a->completion_help.document &&
+            a->completion_help.first==0 && a->completion_help.end==0 && a->api_reference==reference_owned;break;
+    case 48:
+        if(!completion_ink.error || !completion_reference_visible(a)){
+            if(ps_clock()<reference_due){completion_help_test_scroll(a,-4);--*stage;return;}ok=false;break;}
+        *capture="completion-reference-error.bmp";test_mouse(a,a->completion_reference_bounds,true);break;
+    case 49:test_mouse(a,a->completion_reference_bounds,false);break;
+    case 50:
+        ok=a->completion_active && a->api_reference==reference_owned && completion_test_equal(edit,language?"Vec3":"ps_channel_add");
+        snprintf(a->root,sizeof a->root,"%s",saved_root);completion_close(a);
+        test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);reference_due=ps_clock()+3;break;
+    case 51:
+        if(!a->completion_help.attempted){if(ps_clock()<reference_due){--*stage;return;}ok=false;break;}
+        ok=a->completion_active && a->completion_help.status==PS_OK && a->completion_help.document && a->api_reference==reference_owned;
+        if(ok)puts("COMPLETION HELP FAILURE: visible=1 disabled-reference=1 inspector-preserved=1 retry-after-close=1");
+        completion_close(a);a->quitting=true;break;
     }
-    if(!ok){fprintf(stderr,"Completion UI target=%u stage=%d active=%u cursor=%d text=%.*s\n",target,*stage-1,a->completion_active,edit?edit->cursor:-1,edit?nk_str_len_char(&edit->string):7,edit?nk_str_get_const(&edit->string):"missing");*code=1;a->quitting=true;}
+    if(!ok){fprintf(stderr,"Completion UI target=%u stage=%d active=%u cursor=%d text=%.*s help-status=%d scroll=%u footer=%d natural=%.1f body=%.1f/%.1f ref=%.1f/%.1f arg=%.1f/%.1f painted=%d\n",target,*stage-1,a->completion_active,edit?edit->cursor:-1,edit?nk_str_len_char(&edit->string):7,edit?nk_str_get_const(&edit->string):"missing",a->completion_help.status,a->completion_help_scroll_y,completion_reference_visible(a),a->completion_help_natural_height,a->completion_help_body_bounds.y,a->completion_help_body_bounds.h,a->completion_reference_bounds.y,a->completion_reference_bounds.h,a->completion_arguments_bounds.y,a->completion_arguments_bounds.h,completion_ink.argument);*code=1;a->quitting=true;}
     if(a->quitting)printf("COMPLETION SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 }

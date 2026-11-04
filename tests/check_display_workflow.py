@@ -1081,6 +1081,10 @@ def completion(flow,directory):
             require(f"COMPLETION SYNTAX target={target} theme={target} " in output,"Missing real completion theme/editor observation")
         require(output.count("list=1 header=1 signature=1 prefix-bold=1")==3,"Shared native syntax colors or real bold prefix absent")
         require("COMPLETION REFERENCE: pointer=1 source-preserved=1" in output,"Candidate card reference pointer route not executed")
+        require(output.count("summary=1 own-document=1 reference-visible=1")==3,"Actual candidate summaries, owned document or scroll-to-reference not proven")
+        require("COMPLETION HELP FAILURE: visible=1 disabled-reference=1 inspector-preserved=1 retry-after-close=1" in output,"Candidate documentation failure/retry contract not executed")
+        if language=="c":require("COMPLETION HELP ARGUMENTS: rows=2 last-visible=1 inspector-preserved=1" in output,"Bundled argument table not reached by native scrolling")
+        if language=="c":require("COMPLETION HELP TABLE FIXTURE: rows=3 last-painted=1 inspector-preserved=1" in output,"Third native renderer-fixture argument was truncated or not painted")
         for name in ("completion-experiment.bmp","completion-analysis.bmp","completion-document.bmp"):
             require((root/name).is_file(),"Missing actual completion view: "+name)
 
