@@ -1,0 +1,122 @@
+{
+  "phase": "syntax-roles-head-proof",
+  "revision": "HEAD",
+  "compiler_and_test_count": 1115,
+  "own_input_count": 163,
+  "unique_files": 1123,
+  "all_tested_input_bytes_match_git": true,
+  "crlf_normalized_only": true,
+  "source_commit": "f97344fb63d9fc35e2724e8d2ad6100da51af412",
+  "date": "2026-11-04",
+  "both_remote_refs_verified": "f97344fb63d9fc35e2724e8d2ad6100da51af412",
+  "source_match": {
+    "path": "build/validation/syntax-roles-2026-11-04/commit-match.json",
+    "sha256": "9b4afcd588b23cb5ecac0918d6efb039ec170f6dcf9f18ae457b9700f3b1ee88",
+    "bytes": 235567
+  },
+  "tested_phase": "syntax-roles-head-proof",
+  "local_handles": "all completed; no active build/test/freeze",
+  "frozen_archive_verification": "source and runtime ZIP entries read back by freeze.py",
+  "user_mac": "off, no accesses/probes/uploads",
+  "goal_complete": false,
+  "proof": {
+    "path": "docs/verification/syntax-roles-2026-11-04.json",
+    "sha256": "6d734f89020e3fbd2c81d72422be74111bb67b01dda299ba621a8ddd8571a93c",
+    "bytes": 122075
+  },
+  "new_hosted_runs": {
+    "captured_at": "2026-11-04T20:51:23.104Z",
+    "runs": [
+      {
+        "id": 41910405856,
+        "name": "Native macOS study and project menus",
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "f97344fb63d9fc35e2724e8d2ad6100da51af412",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41910405856"
+      },
+      {
+        "id": 41910405201,
+        "name": "Linux release package on fresh systems",
+        "status": "in_progress",
+        "conclusion": null,
+        "head_sha": "f97344fb63d9fc35e2724e8d2ad6100da51af412",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41910405201"
+      },
+      {
+        "id": 41910405233,
+        "name": "Linux UI sanitizer regressions",
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "f97344fb63d9fc35e2724e8d2ad6100da51af412",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41910405233"
+      },
+      {
+        "id": 41910405136,
+        "name": "Focused macOS F1 regressions",
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "f97344fb63d9fc35e2724e8d2ad6100da51af412",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41910405136"
+      },
+      {
+        "id": 41910405336,
+        "name": "Runner backpressure regressions",
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "f97344fb63d9fc35e2724e8d2ad6100da51af412",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41910405336"
+      },
+      {
+        "id": 41910405173,
+        "name": "Native macOS settings, typography and header focus",
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "f97344fb63d9fc35e2724e8d2ad6100da51af412",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41910405173"
+      },
+      {
+        "id": 41910405132,
+        "name": "macOS offline handbook links",
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "f97344fb63d9fc35e2724e8d2ad6100da51af412",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41910405132"
+      },
+      {
+        "id": 41910405088,
+        "name": "Native macOS menu bar",
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "f97344fb63d9fc35e2724e8d2ad6100da51af412",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41910405088"
+      },
+      {
+        "id": 41910405160,
+        "name": "Focused macOS F1 accessibility",
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "f97344fb63d9fc35e2724e8d2ad6100da51af412",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41910405160"
+      },
+      {
+        "id": 41910405079,
+        "name": "Native macOS workspace menu workflows",
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "f97344fb63d9fc35e2724e8d2ad6100da51af412",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41910405079"
+      },
+      {
+        "id": 41910405205,
+        "name": "C17 build and validation",
+        "status": "pending",
+        "conclusion": null,
+        "head_sha": "f97344fb63d9fc35e2724e8d2ad6100da51af412",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/41910405205"
+      }
+    ]
+  },
+  "hosted_acceptance": "Not yet proven for this source; queued/in-progress statuses are not passes.",
+  "helper_correction": "Git-match helper initially normalized only isolated bytes; vendor manifest retains CRLF in Git. Corrected to compare both with CRLF->LF, then verified all 1123 unique files. No product/source mutation or test rerun for this helper error."
+}

@@ -1,5 +1,8 @@
 # Gemeinsame Syntaxrollen · 4. November 2026
 
+Quellcommit **`f97344fb63d9fc35e2724e8d2ad6100da51af412`** in beiden Repositories.
+[Abgleich aller tatsächlich getesteten Eingaben mit Git und offener CI-Stand](syntax-roles-commit-2026-11-04.json).
+
 Die freigegebenen zehn Rollen aus [D](../visuals/completion-typing-options/APPROVED.md)
 werden jetzt im Editor, in Vorschlagsnamen/-glyphen, Titel und Signatur der
 neutralen Kandidatenkarte sowie Codeblöcken der API-Karte gemeinsam gezeichnet.

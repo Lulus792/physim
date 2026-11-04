@@ -9,7 +9,10 @@ Prüfung oder Protokoll-Trennlinie allein wegen Kompaktierung erneut beginnen.
 
 **Nutzer-Mac weiterhin aus; keine Zugriffe oder Erreichbarkeitsproben.**
 **Eingefroren: `syntax-roles-head-proof`, 163 eigene Eingaben / 1.115 Compiler-
-und Testdateien.** Gemeinsame zehn freigegebene Rollen in Editor, Vorschlagsliste,
+und Testdateien. Quellcommit `f97344fb` in beiden Repositories; alle 1.115
+Compiler-/Testdateien und 163 eigenen Eingaben mit tatsächlichen Git-Blobs
+abgeglichen, nur CRLF/LF normalisiert.** [Commitabschluss](verification/syntax-roles-commit-2026-11-04.json).
+Gemeinsame zehn freigegebene Rollen in Editor, Vorschlagsliste,
 neutraler Karte und API-Codeblöcken, Funktionen gelb, Typen/Variablen getrennt,
 echtes Semibold-Präfix. Echter Physim-Lexer/Typregistry, exakte Katalogsuche und
 revisionseigener vorhandener Dokumentumriss; keine vollständigen lokalen Scopes.
@@ -38,6 +41,9 @@ ARM-Jobs `126806005373` / `126811425903` inzwischen **cancelled**, keine offene
 Warteschlange oder bestandene ARM-Abnahme dieses Stands behaupten.
 [Getrennter Beleg](verification/completion-d-macos-intel-2026-11-04.json).
 Dies ist keine Mac-Abnahme der neuen Syntaxquellen. Nutzer-Mac bleibt aus.
+Neuer gehosteter Settings-Lauf `41910405173` zu `f97344fb` zuletzt queued;
+Editorlauf im API-Snapshot noch nicht aufgeführt. Keine neue Mac-Abnahme oder
+laufende Editor-Jobnummer ableiten, keinen Ersatzlauf ohne Anlass starten.
 
 ## Abgeschlossen: D-Viewport und wirksame Preferences
 
@@ -188,7 +194,7 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
   ARM `126774543066` zuletzt wartend. Dies nicht als neue D-Abnahme ausgeben.
   Intel-Settings `4adf2699` wurde abgebrochen; ARM-Settings 16/16 geschlossen, nicht neu prüfen.
   Nutzer-Mac bleibt aus.
-  Aktueller lokaler Anschluss: `build/validation/completion-d-2026-11-04/STATE.md`.
+  Aktueller lokaler Anschluss: `build/validation/syntax-roles-2026-11-04/STATE.md`.
 - D weiterführen: vollständige Kandidaten-Kurzinfo mit eigenem Dokumentbesitz ergänzen.
   Referenz-Pointerzugang und Karten-Reflow dabei tatsächlich prüfen. Viewport
   und Preferences sind oben geprüft; nicht wegen Kompaktierung neu beginnen.
@@ -216,7 +222,8 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
   Eigene Quellen vollständig versionieren, fremde AT-SPI-/Orca-/Status-/dist-
   Änderungen erhalten und nicht in eigene isolierte Quellen übernehmen.
 - Helfer/Indizes: `build/validation/explorer-inline-2026-10-29/`; aktueller
-  Arbeitsnachweis: `build/validation/completion-auto-2026-11-04/`; Settings unter
+  Arbeitsnachweis: `build/validation/syntax-roles-2026-11-04/`; frühere Completion
+  unter `build/validation/completion-auto-2026-11-04/`; Settings unter
   `build/validation/settings-keyboard-2026-11-04/`; Einheitenfokus
   unter `build/validation/unit-focus-2026-10-31/`; älterer Suchstand
   unter `build/validation/settings-search-2026-10-31/`.
