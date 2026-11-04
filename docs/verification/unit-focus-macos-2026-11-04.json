@@ -1,0 +1,560 @@
+{
+  "source_commit": "7064a38c91073d447ced79d6c4f5b4308d6bcfda",
+  "retrieved_date": "2026-11-04",
+  "runs": [
+    {
+      "id": 41182399084,
+      "name": "Native macOS settings, typography and header focus",
+      "head_sha": "7064a38c91073d447ced79d6c4f5b4308d6bcfda",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Lulus792/physim/actions/runs/41182399084"
+    },
+    {
+      "id": 41182399136,
+      "name": "Linux UI sanitizer regressions",
+      "head_sha": "7064a38c91073d447ced79d6c4f5b4308d6bcfda",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Lulus792/physim/actions/runs/41182399136"
+    },
+    {
+      "id": 41182399238,
+      "name": "Native macOS study and project menus",
+      "head_sha": "7064a38c91073d447ced79d6c4f5b4308d6bcfda",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Lulus792/physim/actions/runs/41182399238"
+    },
+    {
+      "id": 41182399137,
+      "name": "Focused macOS F1 regressions",
+      "head_sha": "7064a38c91073d447ced79d6c4f5b4308d6bcfda",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Lulus792/physim/actions/runs/41182399137"
+    },
+    {
+      "id": 41182399063,
+      "name": "Native macOS editor menu workflows",
+      "head_sha": "7064a38c91073d447ced79d6c4f5b4308d6bcfda",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Lulus792/physim/actions/runs/41182399063"
+    },
+    {
+      "id": 41182399183,
+      "name": "Native macOS workspace menu workflows",
+      "head_sha": "7064a38c91073d447ced79d6c4f5b4308d6bcfda",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/Lulus792/physim/actions/runs/41182399183"
+    },
+    {
+      "id": 41182399105,
+      "name": "Focused macOS F1 accessibility",
+      "head_sha": "7064a38c91073d447ced79d6c4f5b4308d6bcfda",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Lulus792/physim/actions/runs/41182399105"
+    },
+    {
+      "id": 41182399097,
+      "name": "Linux release package on fresh systems",
+      "head_sha": "7064a38c91073d447ced79d6c4f5b4308d6bcfda",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Lulus792/physim/actions/runs/41182399097"
+    },
+    {
+      "id": 41182399354,
+      "name": "C17 build and validation",
+      "head_sha": "7064a38c91073d447ced79d6c4f5b4308d6bcfda",
+      "status": "completed",
+      "conclusion": "failure",
+      "html_url": "https://github.com/Lulus792/physim/actions/runs/41182399354"
+    }
+  ],
+  "settings_jobs": [
+    {
+      "id": 124482298883,
+      "name": "typography (macos-15)",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 3,
+          "name": "SDL cache identity",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 4,
+          "name": "Restore pinned SDL install",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 5,
+          "name": "Pinned SDL3",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 6,
+          "name": "Save pinned SDL install",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Actual native header, theme and focus preservation",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 8,
+          "name": "All four UI sizes, reload, cancel, defaults and native menu keyboard cancellation",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 9,
+          "name": "Settings A task window, independent state, real text fields and draft transactions",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 10,
+          "name": "Preference format and field-wise merge invariants",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 11,
+          "name": "Compact native results",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 12,
+          "name": "Inspector failure evidence",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 24,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 25,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 124482299110,
+      "name": "typography (macos-15-intel)",
+      "status": "completed",
+      "conclusion": "failure",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 2,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 3,
+          "name": "SDL cache identity",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 4,
+          "name": "Restore pinned SDL install",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 5,
+          "name": "Pinned SDL3",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 6,
+          "name": "Save pinned SDL install",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 7,
+          "name": "Actual native header, theme and focus preservation",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 8,
+          "name": "All four UI sizes, reload, cancel, defaults and native menu keyboard cancellation",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 9,
+          "name": "Settings A task window, independent state, real text fields and draft transactions",
+          "status": "completed",
+          "conclusion": "failure"
+        },
+        {
+          "number": 10,
+          "name": "Preference format and field-wise merge invariants",
+          "status": "completed",
+          "conclusion": "skipped"
+        },
+        {
+          "number": 11,
+          "name": "Compact native results",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 12,
+          "name": "Inspector failure evidence",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 24,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 25,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "inspected_failure_log_excerpts": {
+    "7064_log_c17-gcc": [
+      "2026-10-31T08:06:00.9907931Z TEST documentation_reference: failed",
+      "2026-10-31T08:06:00.9909328Z Stale reference; run tools/generate-reference.py: docs/reference/experiment.md, docs/reference/language-library.md"
+    ],
+    "7064_log_c17-win": [
+      "2026-10-31T08:18:01.9860219Z TEST documentation_reference: failed\r",
+      "2026-10-31T08:18:01.9862103Z Stale reference; run tools/generate-reference.py: docs/reference/experiment.md, docs/reference/language-library.md\r",
+      "2026-10-31T09:23:37.5783815Z TEST run_events: failed\r",
+      "2026-10-31T09:23:37.5790716Z AssertionError: (WindowsPath('D:/a/physim/physim/build/native/Release/test-results/run-vgfd367c/run_events/files �/nul.psrun'), 'events', 'open 5\\n')\r"
+    ],
+    "7064_log_linux-ui": [
+      "2026-10-31T07:58:35.8024654Z TEST floating_workflow: failed",
+      "2026-10-31T07:58:35.8042099Z First workflow failure at stage 34 (next 35): 743 Messpunkte geladen. (tab=2, selected=1, samples=743, report=1, query=)",
+      "2026-10-31T07:59:19.8396825Z TEST accessibility_atspi: failed",
+      "2026-10-31T08:01:07.1613032Z TEST spring_workflow: failed",
+      "2026-10-31T08:01:07.1630237Z First workflow failure at stage 34 (next 35): 714 Messpunkte geladen. (tab=2, selected=1, samples=714, report=1, query=)",
+      "2026-10-31T08:03:00.8550896Z TEST documentation_font_demand: failed",
+      "2026-10-31T08:03:00.8561886Z Font demand stage 3 failed: ui=16 code=16 variants=7",
+      "2026-10-31T08:03:00.8563160Z First workflow failure at stage 3 (next 4): Bereit. Ordner öffnen oder ein neues Projekt anlegen. (tab=0, selected=0, samples=0, report=0, query=)",
+      "2026-10-31T08:03:55.3440460Z TEST accessibility_links_atspi: failed",
+      "2026-10-31T08:03:55.3447287Z AssertionError: actual link error: None"
+    ],
+    "7064_log_package": [
+      "2026-10-31T08:18:31.2614572Z TEST documentation_reference: failed",
+      "2026-10-31T08:18:31.2615506Z Stale reference; run tools/generate-reference.py: docs/reference/experiment.md, docs/reference/language-library.md"
+    ]
+  },
+  "artifact_evidence": [
+    {
+      "arch": "arm",
+      "workflow": 41182399084,
+      "job": 124482298883,
+      "artifact": 13034894704,
+      "path": "build/validation/continuation-2026-11-04/settings-7064-arm.zip",
+      "bytes": 22922,
+      "sha256": "9d8927faa70e1fe166e0c9dd8a240eb2a85c6c8f18c87bf5afd823dbc2827d4e",
+      "github_digest_matches": true,
+      "results": [
+        {
+          "entry": "Release/test-results/run-2silujwk/results.json",
+          "sha256": "f34f83748fd10359e375f7d997845a7567e3efddad6f6f1e728852c9627293a8",
+          "passed": 3,
+          "total": 3,
+          "cases": [
+            {
+              "name": "shell_theme_dark",
+              "status": "passed",
+              "seconds": 4.155,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "shell_theme_light_large_narrow",
+              "status": "passed",
+              "seconds": 2.582,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "shell_theme_contrast",
+              "status": "passed",
+              "seconds": 3.148,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-_7dl080v/results.json",
+          "sha256": "23aa4df56911a2415651ada8c9fcdc1ebb22be475e8105deb7acaf5159c82aec",
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "preferences",
+              "status": "passed",
+              "seconds": 0.245,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-4k_13bb_/results.json",
+          "sha256": "80143767ce5bd236d8b8c219880ef1788a6abc46d61c7a5616ccdf007f4f0905",
+          "passed": 10,
+          "total": 10,
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "seconds": 1.963,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 11.752,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_search_keyboard",
+              "status": "passed",
+              "seconds": 7.657,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 16.853,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed",
+              "seconds": 16.197,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "passed",
+              "seconds": 32.593,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "seconds": 10.381,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_dark",
+              "status": "passed",
+              "seconds": 5.862,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_light_large_narrow",
+              "status": "passed",
+              "seconds": 4.93,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "inspector_channel",
+              "status": "passed",
+              "seconds": 98.825,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-nm5c8_wj/results.json",
+          "sha256": "7b39fea6419776f51fce911c7659e3b80f534efc0f66ae50fdd8dabee3bf97eb",
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "seconds": 42.498,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "passed": 15,
+      "total": 15
+    },
+    {
+      "arch": "intel",
+      "workflow": 41182399084,
+      "job": 124482299110,
+      "artifact": 13035683037,
+      "path": "build/validation/continuation-2026-11-04/settings-7064-intel.zip",
+      "bytes": 23038,
+      "sha256": "167c3244584b3f3e22d9646f447e6115273c4fb0560f75af21011f42c64d71f9",
+      "github_digest_matches": true,
+      "results": [
+        {
+          "entry": "Release/test-results/run-_b5v6j68/results.json",
+          "sha256": "30e829bade9d4e4f89ac6b1cfed149c4fe087dbcdb1d37c59ee9b7cebcd6ce57",
+          "passed": 3,
+          "total": 3,
+          "cases": [
+            {
+              "name": "shell_theme_dark",
+              "status": "passed",
+              "seconds": 10.797,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "shell_theme_light_large_narrow",
+              "status": "passed",
+              "seconds": 7.553,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "shell_theme_contrast",
+              "status": "passed",
+              "seconds": 8.269,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-ofcug98l/results.json",
+          "sha256": "f72ff9353b9ef139bd012824957a46fad03dd102f2d4114c195abca9c189301e",
+          "passed": 1,
+          "total": 1,
+          "cases": [
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "seconds": 87.24,
+              "reason_excerpt": ""
+            }
+          ]
+        },
+        {
+          "entry": "Release/test-results/run-v4u_sdw7/results.json",
+          "sha256": "3b1d0840326e9a230a9e234b976bb8e2175d82d98178e0d88e37462bc86b4372",
+          "passed": 9,
+          "total": 10,
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "seconds": 2.971,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 28.337,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_search_keyboard",
+              "status": "passed",
+              "seconds": 19.444,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 33.511,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed",
+              "seconds": 32.398,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "passed",
+              "seconds": 68.252,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "failed",
+              "seconds": 22.054,
+              "reason_excerpt": "Exit code 1; expected 0\nAPP TEST TRACE: initializing SDL\nAPP TEST TRACE: SDL initialized, video driver cocoa\nAPP TEST TRACE: creating window\nAPP TEST TRACE: window created, creating OpenGL context\nAPP TEST TRACE: window and OpenGL ready\nAPP TEST TRACE: main fonts begin 1141.798588\nAPP TEST TRACE: main font sources ready 1141.998721\nAPP TEST TRACE: main atlas bake seconds=0.569323\nAPP TEST TRACE: main atlas validation/upload seconds=0.023210\nAPP TEST TRACE: main fonts ready 1142.617081\nAPP TEST TRACE: initial stage 0, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=1469430107\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=1 id=0 ticks=1617108975\nNative workflow keyboard command: action=22 stage=0 queued=1\nAPP TEST TRACE: stage 0 -> 1, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: keyboard focus changed window=2 keyboard=0 id=0 ticks=1958271233\nAPP TEST TRACE: stage 1 -> 2, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 2 -> 3, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 3 -> 4, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 4 -> 5, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 5 -> 6, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 6 -> 7, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 7 -> 8, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 8 -> 9, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 9 -> 10, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 10 -> 11, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 11 -> 12, status Bereit. Ordner öffnen oder ein neues Projekt anlegen.\nAPP TEST TRACE: stage 12 -> 30, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 30 -> 31, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 31 -> 32, status Einstellungen gespeichert.\nAPP TEST TRACE: stage 32 -> 33, status Einstellungen gespeichert.\nFirst workflow failure at stage 33 (next 33): Einstellungen gespeichert. (tab=0, selected=0, samples=0, report=0, query=)\nWorkflow failed at stage 33: Einstellungen gespeichert. (tab=0, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)\nTraceback (most recent call last):\n  File \"/Users/runner/work/physim/physim/tests/check_display_workflow.py\", line 2317, in <module>\n    main()\n    ~~~~^^\n  File \"/Users/runner/work/physim/physim/tests/check_display_workflow.py\", line 2066, in main\n    SPECIAL[args.case](flow, directory)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/Users/runner/work/physim/physim/tests/check_display_workflow.py\", line 1746, in settings_keyboard\n    flow.run(\"--settings-test\", directory, \"keyboard\", timeout=35, marker=\"SETTINGS KEYBOARD SELF-TEST: PASSED\")\n    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/runner/work/physim/physim/tests/check_display_workflow.py\", line 627, in run\n    require(result.returncode == expected_exit_code, f\"App exited {result.returncode}, expected {expected_exit_code}: {command}\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/Users/runner/work/physim/physim/tests/check_display_workflow.py\", line 564, in require\n    raise RuntimeError(message)\nRuntimeError: App exited 1, expected 0: ['/Users/runner/work/physim/physim/build/native/Release/bin/physim', '--settings-test', '/Users/runner/work/physim/physim/build/native/Release/test-results/run-v4u_sdw7/settings_keyboard_workflow/files ä/workflow ä', 'keyboard']\n"
+            },
+            {
+              "name": "analysis_units_dark",
+              "status": "passed",
+              "seconds": 9.978,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "analysis_units_light_large_narrow",
+              "status": "passed",
+              "seconds": 8.114,
+              "reason_excerpt": ""
+            },
+            {
+              "name": "inspector_channel",
+              "status": "passed",
+              "seconds": 148.281,
+              "reason_excerpt": ""
+            }
+          ]
+        }
+      ],
+      "passed": 13,
+      "total": 14
+    }
+  ],
+  "user_mac_accessed": false,
+  "compiler_source_match": {
+    "commit": "7064a38c91073d447ced79d6c4f5b4308d6bcfda",
+    "compiler_inputs_compared": 1109,
+    "matched": 1109,
+    "different": [],
+    "comparison": "Actual final unit-focus-compact compiler/test bytes match committed Git blobs directly or after CRLF/LF normalization. Foreign WIP excluded."
+  }
+}

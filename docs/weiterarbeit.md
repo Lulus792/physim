@@ -1,9 +1,30 @@
 # Wiedereinstieg in die native UI-Arbeit
 
-Stand: 31. Oktober 2026. Zuerst diese Übergabe, `git status` und relevante Diffs
+Stand: 4. November 2026. Zuerst diese Übergabe, `git status` und relevante Diffs
 abgleichen. Verbindliche Designs: [AGENTS.md](../AGENTS.md) und
 [Gesamtübergabe](visuals/unified-workspace/NEXT-CHAT.md). Keine geschlossene
 Prüfung oder Protokoll-Trennlinie allein wegen Kompaktierung erneut beginnen.
+
+## Aktueller Anschluss: gehostete Ergebnisse und Referenzgenerator
+
+**Nutzer-Mac erneut als ausgeschaltet gemeldet; kein Zugriff und keine Probe.**
+Quellstand **`7064a38c` ist in beide Repositories gepusht**, 1.109 Compiler-/
+Testdateien abgeglichen. Der zugehörige gehostete Mac-Lauf `41182399084` ist
+beendet: Apple Silicon **15/15**, Intel **13/14** tatsächlich ausgeführte Fälle.
+Einheitenfenster und kompakter C-/Physim-Einheitenablauf bestehen auf beiden;
+Intel scheitert im erneuten Einstellungen-Tastaturablauf an Stufe 33. Der dortige
+portable Preferences-Schritt wurde übersprungen. Beide Ergebnisarchive mit
+GitHub-Digest abgeglichen und alle Einzelergebnisse gelesen; kein Ersatzlauf.
+[Ergebnisse und weitere CI-Befunde](verification/unit-focus-macos-2026-11-04.json).
+
+Die breitere CI meldet außerdem veraltete API-Referenzen. Ursache: Der Generator
+enthielt die seit `6f527f65` vorhandenen Channel-Editorbeispiele/-Beschreibungen
+nicht. Er bildet sie jetzt exakt ab; die beiden Referenzdateien bleiben unverändert.
+Vorher/Nachher gegen den eingefrorenen sauberen Quellbaum unter Windows/Linux:
+vorher derselbe Zwei-Dateien-Fehler, nachher **31 Referenzen geprüft**. Im WIP-Baum
+bleibt der bekannte fremde Status-Link auf den nicht registrierten Bereinigungs-
+Hilfetext offen. Kein neuer GUI-Build oder gesamter CI-Erfolg behauptet.
+[Umfang, Kommandos und Grenzen](verification/continuation-2026-11-04.md).
 
 ## Aktueller Anschluss: Einheitenfokus und kompakte Nachweise
 
@@ -71,22 +92,25 @@ Der korrigierte Stand **`b20d550e` ist inzwischen auf beiden Architekturen
 abgeschlossen**: Settings/Suche/Einheiten `41180437523` je **15/15**;
 separate Menüregression `41180437463` je **7/7**. Alle vier Archive, Digests und
 Einzelergebnisse tatsächlich gelesen. [Abschlussbeleg](verification/settings-search-macos-2026-10-31.json).
-Diese Matrix nicht wegen Kompaktierung wiederholen. Die nachfolgende
-Einheiten-Fokusänderung und kompakte Testausgabe benötigen einen eigenen Mac-Nachlauf.
+Diese Matrix nicht wegen Kompaktierung wiederholen. Der eigene Nachlauf der
+Einheiten-Fokusänderung `7064a38c` ist oben mit seinem offenen Intel-Fall erfasst.
 Ältere Settings-/Mac-Menümatrix (9/9 auf `479a8954`, 7/7 auf `140ead03`) ist
 ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
 
 ## Nächste konkrete Arbeit
 
-- Neuen gehosteten Lauf für Einheiten-Fokus/kompakte Testausgabe nach Push des
-  Quellcommits über seine tatsächlichen Handles beobachten und Artefakte/Digests/
-  Einzelfälle lesen. Bestehende Läufe nicht durch Ersatzläufe überdecken.
-  Nutzer-Mac wird dafür nicht benötigt.
+- Intel-Einstellungen-Tastaturfall von `41182399084` untersuchen: Stufe 33 nach
+  Schließen/erneutem Öffnen und begrenztem Tab-Fokushelfer. Noch keine Ursache
+  belegt; kein unveränderter Wiederholungslauf. Weitere CI-Befunde stehen im
+  Snapshot: historischer `run_events`-Windows-Pfad `nul.psrun`, Floating/Spring-
+  Workflow, Font-Demand und AX. Fremde laufende AX-/Orca-Arbeit nicht überschreiben.
 - Completion D nach ADR 022/023 tatsächlich implementieren. Bestandsaudit:
-  `app/completion_ui.inc` zeigt noch vier Zeilen und Vierergruppen, manuelles
-  Strg+Leertaste; `ps_preferences`/Format PSPREF05 enthält noch keine Completion-
-  Optionen. Auto-Anzeige, sichtbare Trefferzahl (Standard fünf), echte Scope- und
-  Parameterhilfe sowie gemeinsames Syntaxschema fehlen. Kein Ersatz-Backend,
+  `main.c::editor` zeigt bereits unmittelbar Vorschläge nach Textänderungen
+  (ab zwei Zeichen bzw. Memberzugriff); die frühere Aussage „nur manuell“ war
+  unvollständig. `app/completion_ui.inc` verwendet noch vier Zeilen/Vierergruppen;
+  `ps_preferences`/PSPREF05 hat keine Completion-Optionen. D-Verhalten/Abbruch,
+  sichtbare Trefferzahl (Standard fünf), echte Scope- und separate Parameterhilfe
+  sowie gemeinsames Syntaxschema vervollständigen. Kein Ersatz-Backend,
   kein neuer Dienst; Einstellungen A, Transaktion und Altdateien erhalten.
 - Historische Settings-/AX-Fixtures von Tab 6/Radios/globalem Fokus portieren.
   Wiederherstellung, Maximieren, Geometrie und Dateisicherheit erhalten. Der alte

@@ -1,0 +1,75 @@
+{
+  "date": "2026-11-04",
+  "base_commit": "58185206114e79c4684914ff6f285517f1a6ee5d",
+  "scope": "Generator reproduces the existing reviewed Channel/ps_channel_add API-card examples and teaching descriptions without changing either generated reference.",
+  "checks": [
+    {
+      "platform": "win32",
+      "baseline": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+      "command": "python -B docs/verification/reference-generator-2026-11-04.py",
+      "mode": "Read-only generator --check against the frozen clean unit-focus-compact source tree; before uses pinned 58185206 generator inputs, after uses the two modified generator inputs.",
+      "phases": [
+        {
+          "phase": "before",
+          "exit_code": 1,
+          "output": "Stale reference; run tools/generate-reference.py: docs/reference/experiment.md, docs/reference/language-library.md\n",
+          "source_sha256": {
+            "generate-reference.py": "dd2c04dd9998a1a2f293db83777949ca276418d7f7cf4971b5b98e903035581a",
+            "reference_descriptions.py": "7fa0a39a379f854199f331422d5e89a3f9c5583a1ad1900756b90bc3784f58cb"
+          }
+        },
+        {
+          "phase": "after",
+          "exit_code": 0,
+          "output": "31 reference documents verified\n",
+          "source_sha256": {
+            "generate-reference.py": "ef7383ca5ad4db582db4431066abe21df0c82f250ee67e2b19afdbba808a8adf",
+            "reference_descriptions.py": "1451781624a2e2bd036a8293ad10a1e6b0f29b65d550239b71eb2e88c2511d59"
+          }
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "baseline": "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src",
+      "command": "python -B docs/verification/reference-generator-2026-11-04.py",
+      "mode": "Read-only generator --check against the frozen clean unit-focus-compact source tree; before uses pinned 58185206 generator inputs, after uses the two modified generator inputs.",
+      "phases": [
+        {
+          "phase": "before",
+          "exit_code": 1,
+          "output": "Stale reference; run tools/generate-reference.py: docs/reference/experiment.md, docs/reference/language-library.md\n",
+          "source_sha256": {
+            "generate-reference.py": "dd2c04dd9998a1a2f293db83777949ca276418d7f7cf4971b5b98e903035581a",
+            "reference_descriptions.py": "7fa0a39a379f854199f331422d5e89a3f9c5583a1ad1900756b90bc3784f58cb"
+          }
+        },
+        {
+          "phase": "after",
+          "exit_code": 0,
+          "output": "31 reference documents verified\n",
+          "source_sha256": {
+            "generate-reference.py": "ef7383ca5ad4db582db4431066abe21df0c82f250ee67e2b19afdbba808a8adf",
+            "reference_descriptions.py": "1451781624a2e2bd036a8293ad10a1e6b0f29b65d550239b71eb2e88c2511d59"
+          }
+        }
+      ]
+    },
+    {
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "tools/generate-reference.py",
+        "--check"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\Physim\\tools\\generate-reference.py\", line 1247, in <module>\n    main()\n  File \"D:\\Physim\\tools\\generate-reference.py\", line 1241, in main\n    assert target in topics, f'Unreachable offline link: {topic} -> {target}'\n           ^^^^^^^^^^^^^^^^\nAssertionError: Unreachable offline link: docs/status.md -> docs/storage-cleanup-2026-10-22.md\n",
+      "reason": "Existing foreign status WIP links an unregistered help topic; this work does not change that WIP."
+    }
+  ],
+  "generated_reference_diff": "",
+  "user_mac_accessed": false
+}

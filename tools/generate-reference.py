@@ -11,6 +11,41 @@ from pathlib import Path
 from reference_descriptions import DESCRIPTIONS
 
 ROOT = Path(__file__).resolve().parents[1]
+# These reviewed examples also feed the native API card. Keep them in the
+# generator so regenerating the reference cannot silently remove them.
+C_EDITOR_EXAMPLES = {
+    'ps_channel_add': '''Beispiel für den Editor:
+
+```c
+ps_channel_add(context, "angle",
+    PS_RADIAN, "Winkel in rad");
+```
+
+| Argument | Bedeutung im Beispiel |
+| --- | --- |
+| context | Experimentkontext |
+| unit | z. B. PS_RADIAN |
+
+Den Ausschnitt im create-Callback verwenden. `context` bezeichnet dessen vorhandenen
+Experimentkontext; einen anders benannten Parameter entsprechend einsetzen. Den
+Kanalnamen nur einmal registrieren und den zurückgegebenen Index bei Bedarf speichern.''',
+}
+LANG_EDITOR_EXAMPLES = {
+    'Channel': '''Beispiel für den Editor:
+
+```text
+let radians = Unit(0, 0, 0, 0, 0, 0, 0, 1, "rad")
+let angle = Channel("angle", radians, "Winkel in rad")
+```
+
+| Argument | Bedeutung im Beispiel |
+| --- | --- |
+| name | Eindeutiger Kanalname |
+| unit | SI-Skala 1 |
+
+Auf Modulebene eines Experimentmoduls einfügen. Vorhandene Bezeichner und
+Kanalnamen bei Bedarf anpassen; einen Namen nur einmal registrieren.''',
+}
 MODULES = {
     'properties': ('Material- und Medieneigenschaften', 'properties.md', 'Eigenschaften sind explizite SI-Daten mit Quellenangabe, Gültigkeitsbereich und konstantem oder tabellarischem Modell. Tabellen werden begrenzt linear/bilinear interpoliert; keine Extrapolation oder automatische Materialauswahl. Das konsumierende Modell prüft die benötigten Eigenschaften.'),
     'fluid': ('Laminare Rohre, Netze und Tracertransport', 'fluid.md', 'Lehrmodelle für inkompressible Newtonsche Rohre, passive stationäre Drucknetze und konservativen periodischen 1D-Tracer. Explizite Stoffdaten, Größen- und Stabilitätsgrenzen; keine turbulente oder mehrdimensionale CFD.'),
@@ -98,6 +133,8 @@ def c_reference(module, title, guide, intro):
             result.append('### ' + (named[-1] if named else 'Datentyp'))
         result.append('```c\n' + code + '\n```')
         result.extend(comments)
+        if names and not code.startswith('typedef') and names[0] in C_EDITOR_EXAMPLES:
+            result.append(C_EDITOR_EXAMPLES[names[0]])
     return '\n\n'.join(result) + '\n'
 
 
@@ -372,7 +409,10 @@ LANG_DESCRIPTIONS = {
     'divideUnit': 'Dividiert Dimensionen und Skalen zweier Einheiten.',
     'powerUnit': 'Erhebt eine Einheit in eine ganzzahlige Potenz.',
     'compatibleUnit': 'Prüft gleiche SI-Dimensionen unabhängig von Skala und Symbol.',
-    'Channel': 'Deklariert einen eindeutigen Messkanal mit kanonischer SI-Skala 1 und begrenzten UTF-8-Metadaten. Werte vorher ausdrücklich nach SI umrechnen. Fehler sind mit attempt abfangbar und verbrauchen keinen Slot.',
+    'Channel': 'Deklariert einen SI-Messkanal mit Name, Einheit und Beschreibung.\n\n'
+               'Der Name muss eindeutig sein; kanonische SI-Skala 1 und begrenzte UTF-8-Metadaten\n'
+               'sind erforderlich. Werte vorher ausdrücklich nach SI umrechnen. Fehler sind mit\n'
+               'attempt abfangbar und verbrauchen keinen Slot.',
     'sampleQuantity': 'Prüft Dimensionen und Samplingphase, konvertiert eine Quantity nach SI und aktualisiert den eigenen Kanal atomar.',
     'sample': 'Setzt den aktuellen Messwert des Kanals in seiner deklarierten Einheit. Auch den Anfangswert in reset setzen.',
     'logDebug': 'Schreibt eine Debug-Meldung mit aktueller Simulationszeit. Nur im Experiment; Bool meldet Annahme durch den Hostlogger.',
@@ -730,7 +770,10 @@ def language_reference():
         for display, parameters in aliases:
             signature = display + '(' + ', '.join(label + ': ' + types[t] for label, t in parameters) + ')'
             context = ['Überall verfügbar.', 'Experimentmodul erforderlich.', 'Analysemodul erforderlich.'][int(host)]
-            entries.append((display, f'## {display}\n\n```text\n{signature} -> {types[ret]}\n```\n\n{LANG_DESCRIPTIONS[name]}\n\n{context}'))
+            entry = f'## {display}\n\n```text\n{signature} -> {types[ret]}\n```\n\n{LANG_DESCRIPTIONS[name]}\n\n{context}'
+            if display in LANG_EDITOR_EXAMPLES:
+                entry += '\n\n' + LANG_EDITOR_EXAMPLES[display]
+            entries.append((display, entry))
     for numeric in ('Int64', 'Float64'):
         display = numeric + '.parse'
         entries.append((display,
