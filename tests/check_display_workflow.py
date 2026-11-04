@@ -1741,9 +1741,15 @@ def project_manager_errors(flow, directory):
         require((root / "manager-keyboard-cancel.bmp").is_file(),"Missing focused cancel view")
 
 
-def settings_keyboard(flow, directory):
+def settings_keyboard(flow, directory, paced=False):
     directory.mkdir()
-    flow.run("--settings-test", directory, "keyboard", timeout=35, marker="SETTINGS KEYBOARD SELF-TEST: PASSED")
+    suffix="-paced" if paced else ""
+    flow.run("--settings-test", directory, "keyboard"+suffix, timeout=75, marker="SETTINGS KEYBOARD SELF-TEST: PASSED")
+    if paced:
+        step=flow.steps[-1]
+        end=re.search(r"SETTINGS PROGRESS: stage=36 elapsed=([0-9.]+)",step["stderr"])
+        require("SETTINGS FRAME PACING: 250 ms" in step["stdout"] and end and float(end[1])>20,
+                "Paced settings test did not cross the old global deadline through its final assertion")
     data=(directory / "preferences.bin").read_bytes()
     require(data[:8]==b"PSPREF05" and len(data)==312, "Keyboard settings format")
     require(int.from_bytes(data[304:308],"little")==22, "Keyboard UI font persistence")
@@ -1752,7 +1758,8 @@ def settings_keyboard(flow, directory):
     # leaves orthographic view and the protocol enabled (32 | 64).
     require(struct.unpack_from("<I",data,40)[0]==(32|64) and struct.unpack_from("<I",data,52)[0]==1, "Keyboard seven toggles and theme persistence")
     before=fingerprint(directory / "preferences.bin")
-    flow.run("--settings-test", directory, "keyboard-read", timeout=35, marker="SETTINGS KEYBOARD SELF-TEST: PASSED")
+    flow.run("--settings-test", directory, "keyboard-read"+suffix, timeout=75, marker="SETTINGS KEYBOARD SELF-TEST: PASSED")
+    if paced: require("SETTINGS FRAME PACING: 250 ms" in flow.steps[-1]["stdout"], "Readback did not use paced frames")
     require(fingerprint(directory / "preferences.bin")==before, "Escape changed saved settings")
 
 
@@ -2014,6 +2021,7 @@ SPECIAL["source_outline_workflow"]=source_outline
 SPECIAL["laboratory_workflow"]=laboratory
 SPECIAL["model_values_workflow"]=model_values
 SPECIAL["settings_transactions"]=settings_transactions
+SPECIAL["settings_keyboard_paced"]=lambda flow,directory: settings_keyboard(flow,directory,True)
 SPECIAL["settings_a_window"]=settings_a_window
 SPECIAL["settings_search_keyboard"]=settings_search_keyboard
 SPECIAL["unit_task_window"]=unit_task_window

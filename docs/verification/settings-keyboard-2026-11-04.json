@@ -1,0 +1,697 @@
+{
+  "date": "2026-11-04",
+  "base_commit": "d0d529de57e972b77bec367a3bf2ffebbf413adf",
+  "scope": "Bounded Settings A keyboard workflow on slow frame delivery; unchanged controls, draft/save/default/readback assertions.",
+  "own_inputs": 153,
+  "root_matches_final_inputs": true,
+  "phases": [
+    {
+      "tag": "settings-keyboard-before",
+      "kind": "harness_missing_cli_modes",
+      "runs": [
+        {
+          "platform": "windows",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "settings_keyboard_paced"
+            ],
+            "exit_code": 1,
+            "app_sha256": "fdb1e3a74c66d171711325cbde53ba2522f6d406d36b9db1dec89e2267ad1d6e"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/settings-keyboard-before-windows.log",
+            "bytes": 31006,
+            "sha256": "824110e4833facb1932770a9e69fbbc3ec09a30a556adfcbca2be0533150db7f"
+          },
+          "executed_tests": true,
+          "observations": [
+            "RuntimeError: App exited 2, expected 0: ['D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\bin\\\\physim.exe', '--settings-test', 'D:\\\\Physim\\\\build\\\\validation\\\\protocol-wrap-2026-10-26\\\\3-isolated\\\\windows-build\\\\test-results\\\\run-d28xyasd\\\\settings_keyboard_paced\\\\files ä\\\\workflow ä', 'keyboard-paced']"
+          ],
+          "run": "run-d28xyasd",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-d28xyasd/results.json",
+            "bytes": 5454,
+            "sha256": "e99fd6ebdb1168c661e96467c66607cfb093fdf8238e96e0c655f1bdf917905a"
+          },
+          "passed": 0,
+          "total": 1,
+          "cases": [
+            {
+              "name": "settings_keyboard_paced",
+              "status": "failed",
+              "seconds": 1.422
+            }
+          ],
+          "apps": [
+            {
+              "case": "settings_keyboard_paced",
+              "source": {
+                "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-d28xyasd/settings_keyboard_paced/files ä/app-steps.json",
+                "bytes": 437,
+                "sha256": "d41f8cbe672a6ddb4e62d5dbe3a38c91e78e2d0ffdb2722e3284e0942dfb37f3"
+              },
+              "steps": [
+                {
+                  "command": [
+                    "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                    "--settings-test",
+                    "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-d28xyasd\\settings_keyboard_paced\\files ä\\workflow ä",
+                    "keyboard-paced"
+                  ],
+                  "exit_code": 2,
+                  "end_elapsed": [],
+                  "timeout": [],
+                  "paced": false
+                }
+              ]
+            }
+          ],
+          "app_processes": 1,
+          "paced_pngs": []
+        },
+        {
+          "platform": "linux",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "settings_keyboard_paced"
+            ],
+            "exit_code": 1,
+            "app_sha256": "01e638df6a26308c7ea7ce8b16f08f17db14f6489bdb82b0addb86a6e2185cca"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/settings-keyboard-before-linux.log",
+            "bytes": 237781,
+            "sha256": "76eb4d211349b72bcfbdb68e8c53dc4278dba8f612187129f4835152fe7d216d"
+          },
+          "executed_tests": true,
+          "observations": [
+            "RuntimeError: App exited 2, expected 0: ['/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim', '--settings-test', '/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-6yay_xml/settings_keyboard_paced/files ä/workflow ä', 'keyboard-paced']"
+          ],
+          "run": "run-6yay_xml",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-6yay_xml/results.json",
+            "bytes": 5584,
+            "sha256": "7dd8e335bc6f7abc27777a9b4756cd96febd424bf736c71ecb25a8383f9a551d"
+          },
+          "passed": 0,
+          "total": 1,
+          "cases": [
+            {
+              "name": "settings_keyboard_paced",
+              "status": "failed",
+              "seconds": 1.325
+            }
+          ],
+          "apps": [
+            {
+              "case": "settings_keyboard_paced",
+              "source": {
+                "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-6yay_xml/settings_keyboard_paced/files ä/app-steps.json",
+                "bytes": 405,
+                "sha256": "35f06c7f89376f2ff99f42bbc359da6c7f31c957983b158f7d701ff542772885"
+              },
+              "steps": [
+                {
+                  "command": [
+                    "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                    "--settings-test",
+                    "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-6yay_xml/settings_keyboard_paced/files ä/workflow ä",
+                    "keyboard-paced"
+                  ],
+                  "exit_code": 2,
+                  "end_elapsed": [],
+                  "timeout": [],
+                  "paced": false
+                }
+              ]
+            }
+          ],
+          "app_processes": 1,
+          "paced_pngs": []
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-keyboard-before-inputs.json",
+        "bytes": 15618,
+        "sha256": "21ac7e058bfe639633293f34f5bcbe80d3b7007abe304cb22fe3dbd66ee2b489"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-keyboard-before-compiler-source.json",
+        "bytes": 117602,
+        "sha256": "8f549ecfb5f738f8a68b3a87b55cfca863c9354dd49ce6d1e629495cc9ca7de5"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-keyboard-before-runtime.json",
+        "bytes": 36334,
+        "sha256": "a7de257721767eb81e0f1ceca84d92d83f00007e8673ab30b73cd38297275c2a"
+      },
+      "archives_verified": true
+    },
+    {
+      "tag": "settings-keyboard-counter",
+      "kind": "real_20_second_timeout",
+      "runs": [
+        {
+          "platform": "windows",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "settings_keyboard_paced"
+            ],
+            "exit_code": 1,
+            "app_sha256": "425c013bd4646be09addd9613a4d7312ec2f7e7b166c90895163d9b31639684c"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/settings-keyboard-counter-windows.log",
+            "bytes": 44877,
+            "sha256": "51bc69c71906632a0da199978d7fdb7f7e97ec2ab980c72efc1174a6c6a27932"
+          },
+          "executed_tests": true,
+          "observations": [
+            "SETTINGS PROGRESS: stage=1 elapsed=0.002 focus=0 keyboard=0 open=0",
+            "SETTINGS PROGRESS: stage=2 elapsed=2.204 focus=0 keyboard=1 open=1",
+            "SETTINGS PROGRESS: stage=3 elapsed=5.528 focus=4 keyboard=1 open=1",
+            "SETTINGS PROGRESS: stage=4 elapsed=8.079 focus=21 keyboard=1 open=1",
+            "SETTINGS PROGRESS: stage=5 elapsed=9.388 focus=5 keyboard=1 open=1",
+            "SETTINGS PROGRESS: stage=6 elapsed=9.900 focus=6 keyboard=1 open=1",
+            "SETTINGS PROGRESS: stage=7 elapsed=12.455 focus=22 keyboard=1 open=1",
+            "SETTINGS PROGRESS: stage=8 elapsed=16.047 focus=12 keyboard=1 open=1",
+            "SETTINGS PROGRESS: stage=9 elapsed=18.871 focus=23 keyboard=1 open=1",
+            "SETTINGS PROGRESS: stage=10 elapsed=19.642 focus=13 keyboard=1 open=1",
+            "Settings self-test timeout: mode=keyboard-paced stage=10 elapsed=20.158 limit=20 focus=14 keyboard=1 open=1"
+          ],
+          "run": "run-hutk9rc9",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-hutk9rc9/results.json",
+            "bytes": 11551,
+            "sha256": "3135961edfd0c6715a187597d5c897a5193c50cc4acc3bf34df4ef2f01832a65"
+          },
+          "passed": 0,
+          "total": 1,
+          "cases": [
+            {
+              "name": "settings_keyboard_paced",
+              "status": "failed",
+              "seconds": 22.641
+            }
+          ],
+          "apps": [
+            {
+              "case": "settings_keyboard_paced",
+              "source": {
+                "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-hutk9rc9/settings_keyboard_paced/files ä/app-steps.json",
+                "bytes": 3777,
+                "sha256": "d28574d3375e289ac7656304c8525b3a108e53cea8ddef32614d57aad6d2c8a9"
+              },
+              "steps": [
+                {
+                  "command": [
+                    "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                    "--settings-test",
+                    "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-hutk9rc9\\settings_keyboard_paced\\files ä\\workflow ä",
+                    "keyboard-paced"
+                  ],
+                  "exit_code": 1,
+                  "end_elapsed": [],
+                  "timeout": [
+                    "Settings self-test timeout: mode=keyboard-paced stage=10 elapsed=20.158 limit=20 focus=14 keyboard=1 open=1"
+                  ],
+                  "paced": true
+                }
+              ]
+            }
+          ],
+          "app_processes": 1,
+          "paced_pngs": []
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-keyboard-counter-inputs.json",
+        "bytes": 15618,
+        "sha256": "d91eb5925f4b483cabdddbff313edb7a4726ef96a25f01579b370e8c7e17c51a"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-keyboard-counter-compiler-source.json",
+        "bytes": 117564,
+        "sha256": "33f17b8cdea4e4f9830f6233cea12f835c01eadacb9bbb537844b93fce832421"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-keyboard-counter-runtime.json",
+        "bytes": 36336,
+        "sha256": "e1cf7040e0e826ca2da1dbc98b816c841a2df8f1c4821466ccc5834945e2def0"
+      },
+      "archives_verified": true
+    },
+    {
+      "tag": "settings-keyboard-ready",
+      "kind": "selector_setup_error_after_successful_link",
+      "runs": [
+        {
+          "platform": "windows",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "settings_keyboard"
+            ],
+            "exit_code": 1,
+            "app_sha256": "213ddbde2c2ceca7a02c7f9906b5a2c4ce7e4ad206b789452e6d158849c956f1"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/settings-keyboard-ready-windows.log",
+            "bytes": 29019,
+            "sha256": "5cbca0c3bdf87774a1f720e97c0d1c9ea2614405d355fd0468517e7fc1fefab7"
+          },
+          "executed_tests": false,
+          "observations": [
+            "Build failed: No native tests match ['settings_keyboard'] in this configuration"
+          ],
+          "passed": 0,
+          "total": 0,
+          "app_processes": 0
+        },
+        {
+          "platform": "linux",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "settings_keyboard"
+            ],
+            "exit_code": 1,
+            "app_sha256": "e4842afbdb6127c0963d8587486a112e69ec1b16cfbf98693c85e51fdf6fca66"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/settings-keyboard-ready-linux.log",
+            "bytes": 296619,
+            "sha256": "033f4b56ba37ff2f30fdfeb111c0e041727490ad757c6faf4e9d43db7c8b183a"
+          },
+          "executed_tests": false,
+          "observations": [
+            "Build failed: No native tests match ['settings_keyboard'] in this configuration"
+          ],
+          "passed": 0,
+          "total": 0,
+          "app_processes": 0
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-keyboard-ready-inputs.json",
+        "bytes": 15618,
+        "sha256": "9180dab46dc6519fa57b94eddf76c4d5710d4ab51c0e9e4067cf69ade65e631d"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-keyboard-ready-compiler-source.json",
+        "bytes": 117448,
+        "sha256": "be0feb20156fc3ff83eec63036f3975f11ebfe1dcaa220a2b3328ed4eb5aa25d"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-keyboard-ready-runtime.json",
+        "bytes": 36332,
+        "sha256": "6a3d13b53386956764c7f86d01167e1cf51b2766ebcaef655eb66f5f4516f170"
+      },
+      "archives_verified": true
+    },
+    {
+      "tag": "settings-keyboard-verified",
+      "kind": "actual_fast_and_paced_regression",
+      "runs": [
+        {
+          "platform": "windows",
+          "invocation": {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "settings_keyboard_workflow",
+              "--test-filter",
+              "settings_keyboard_paced"
+            ],
+            "exit_code": 0,
+            "app_sha256": "213ddbde2c2ceca7a02c7f9906b5a2c4ce7e4ad206b789452e6d158849c956f1"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/settings-keyboard-verified-windows.log",
+            "bytes": 366,
+            "sha256": "28df748c38b6ec2fe4eed6e9f99dd591a055d2561369b494b60558078f81e9ab"
+          },
+          "executed_tests": true,
+          "observations": [],
+          "run": "run-amponrq5",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-amponrq5/results.json",
+            "bytes": 18882,
+            "sha256": "1d814d5d707ee9a25949b3d9fc88bee4edd3b0cb6e9c3062422de24ebc116e28"
+          },
+          "passed": 2,
+          "total": 2,
+          "cases": [
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "seconds": 5.765
+            },
+            {
+              "name": "settings_keyboard_paced",
+              "status": "passed",
+              "seconds": 37.157
+            }
+          ],
+          "apps": [
+            {
+              "case": "settings_keyboard_paced",
+              "source": {
+                "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-amponrq5/settings_keyboard_paced/files ä/app-steps.json",
+                "bytes": 8147,
+                "sha256": "287e982e3135667ac583afdda3e52003d5a498b7c9a253eb7b2e0e420d14804f"
+              },
+              "steps": [
+                {
+                  "command": [
+                    "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                    "--settings-test",
+                    "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-amponrq5\\settings_keyboard_paced\\files ä\\workflow ä",
+                    "keyboard-paced"
+                  ],
+                  "exit_code": 0,
+                  "end_elapsed": [
+                    "27.988"
+                  ],
+                  "timeout": [],
+                  "paced": true
+                },
+                {
+                  "command": [
+                    "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                    "--settings-test",
+                    "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-amponrq5\\settings_keyboard_paced\\files ä\\workflow ä",
+                    "keyboard-read-paced"
+                  ],
+                  "exit_code": 0,
+                  "end_elapsed": [
+                    "5.846"
+                  ],
+                  "timeout": [],
+                  "paced": true
+                }
+              ]
+            },
+            {
+              "case": "settings_keyboard_workflow",
+              "source": {
+                "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-amponrq5/settings_keyboard_workflow/files ä/app-steps.json",
+                "bytes": 8065,
+                "sha256": "1da8ffa4e5719202eadfcef21ccab4617599e0ea2da0ab343355e811bae4009d"
+              },
+              "steps": [
+                {
+                  "command": [
+                    "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                    "--settings-test",
+                    "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-amponrq5\\settings_keyboard_workflow\\files ä\\workflow ä",
+                    "keyboard"
+                  ],
+                  "exit_code": 0,
+                  "end_elapsed": [
+                    "2.131"
+                  ],
+                  "timeout": [],
+                  "paced": false
+                },
+                {
+                  "command": [
+                    "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                    "--settings-test",
+                    "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-amponrq5\\settings_keyboard_workflow\\files ä\\workflow ä",
+                    "keyboard-read"
+                  ],
+                  "exit_code": 0,
+                  "end_elapsed": [
+                    "0.577"
+                  ],
+                  "timeout": [],
+                  "paced": false
+                }
+              ]
+            }
+          ],
+          "app_processes": 4,
+          "paced_pngs": [],
+          "same_binary_as_ready": true
+        },
+        {
+          "platform": "linux",
+          "invocation": {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "settings_keyboard_workflow",
+              "--test-filter",
+              "settings_keyboard_paced"
+            ],
+            "exit_code": 0,
+            "app_sha256": "e4842afbdb6127c0963d8587486a112e69ec1b16cfbf98693c85e51fdf6fca66"
+          },
+          "log": {
+            "path": "build/validation/explorer-inline-2026-10-29/settings-keyboard-verified-linux.log",
+            "bytes": 393,
+            "sha256": "710eecd7e5f64464d4a7314d97018ca5e695c1ed861983b91d745431342b08fc"
+          },
+          "executed_tests": true,
+          "observations": [],
+          "run": "run-uexcwcq1",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-uexcwcq1/results.json",
+            "bytes": 18204,
+            "sha256": "ad55e32a810a39e3527e8571af33ed8229f4865d0e8c2290176b3090b23ddc2f"
+          },
+          "passed": 2,
+          "total": 2,
+          "cases": [
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "seconds": 20.115
+            },
+            {
+              "name": "settings_keyboard_paced",
+              "status": "passed",
+              "seconds": 52.511
+            }
+          ],
+          "apps": [
+            {
+              "case": "settings_keyboard_paced",
+              "source": {
+                "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-uexcwcq1/settings_keyboard_paced/files ä/app-steps.json",
+                "bytes": 8103,
+                "sha256": "f43db52f10e25951fdc4c1b32bae325f17b271e9911d03d49c4adb732c5a02c3"
+              },
+              "steps": [
+                {
+                  "command": [
+                    "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                    "--settings-test",
+                    "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-uexcwcq1/settings_keyboard_paced/files ä/workflow ä",
+                    "keyboard-paced"
+                  ],
+                  "exit_code": 0,
+                  "end_elapsed": [
+                    "34.929"
+                  ],
+                  "timeout": [],
+                  "paced": true
+                },
+                {
+                  "command": [
+                    "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                    "--settings-test",
+                    "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-uexcwcq1/settings_keyboard_paced/files ä/workflow ä",
+                    "keyboard-read-paced"
+                  ],
+                  "exit_code": 0,
+                  "end_elapsed": [
+                    "7.711"
+                  ],
+                  "timeout": [],
+                  "paced": true
+                }
+              ]
+            },
+            {
+              "case": "settings_keyboard_workflow",
+              "source": {
+                "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-uexcwcq1/settings_keyboard_workflow/files ä/app-steps.json",
+                "bytes": 8019,
+                "sha256": "2e2ca96349e4e5819d5bc9edf15dff8fd15577f954ee1ec8a5bf35c8e506db5d"
+              },
+              "steps": [
+                {
+                  "command": [
+                    "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                    "--settings-test",
+                    "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-uexcwcq1/settings_keyboard_workflow/files ä/workflow ä",
+                    "keyboard"
+                  ],
+                  "exit_code": 0,
+                  "end_elapsed": [
+                    "7.694"
+                  ],
+                  "timeout": [],
+                  "paced": false
+                },
+                {
+                  "command": [
+                    "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                    "--settings-test",
+                    "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-uexcwcq1/settings_keyboard_workflow/files ä/workflow ä",
+                    "keyboard-read"
+                  ],
+                  "exit_code": 0,
+                  "end_elapsed": [
+                    "2.169"
+                  ],
+                  "timeout": [],
+                  "paced": false
+                }
+              ]
+            }
+          ],
+          "app_processes": 4,
+          "paced_pngs": [],
+          "same_binary_as_ready": true
+        }
+      ],
+      "inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-keyboard-verified-inputs.json",
+        "bytes": 15618,
+        "sha256": "9180dab46dc6519fa57b94eddf76c4d5710d4ab51c0e9e4067cf69ade65e631d"
+      },
+      "compiler_source": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-keyboard-verified-compiler-source.json",
+        "bytes": 117427,
+        "sha256": "9092fbec835caa6fea67980da985013474893005e103ec9e576ce3edf56466bb"
+      },
+      "runtime": {
+        "path": "build/validation/explorer-inline-2026-10-29/settings-keyboard-verified-runtime.json",
+        "bytes": 36338,
+        "sha256": "3dc53529779160ca18d37f40e00ff7eed3e94cfefeeaa1549c590ded3a9c8624"
+      },
+      "archives_verified": true
+    }
+  ],
+  "native_runner": {
+    "command": "python -B tools/with-artifacts.py -- python -B tests/test_native_test_runner.py --work D:/Physim/build/validation/settings-keyboard-2026-11-04/native-runner",
+    "exit_code": 0,
+    "log": {
+      "path": "build/validation/settings-keyboard-2026-11-04/native-runner.log",
+      "bytes": 1642,
+      "sha256": "44d14e642ef4687ad12390f3907a9e802842f9e579cc363b1241f5b4bbe3813d"
+    }
+  },
+  "user_mac_accessed": false,
+  "hosted_new_source": "Not yet accepted: inspect the hosted source-commit run after push; this report contains local execution.",
+  "limits": [
+    "No new whole-GUI, manual accessibility, physical input, DPI or complete platform acceptance.",
+    "The old hosted Intel source7064 result is distinct from this local diagnosis and correction.",
+    "Existing foreign AX/Orca/status/dist work is excluded."
+  ]
+}

@@ -1,5 +1,5 @@
 /* Actual visible order of Settings A, including its new OS window. */
-static void test_settings_keyboard_frame(app *a,bool reading,int *stage,int *code,const char **capture) {
+static void test_settings_keyboard_frame(app *a,bool reading,bool paced,int *stage,int *code,const char **capture) {
     bool ok=true;static unsigned flag;static double deadline;
 #define SET_KEY(key) test_window_key_mod(a->settings_window,key,0)
 #define SET_FOCUS(id) do{if(!settings_test_tab_to(a,id,*stage-1,&ok)){--*stage;return;}}while(0)
@@ -27,7 +27,7 @@ static void test_settings_keyboard_frame(app *a,bool reading,int *stage,int *cod
     case 8:SET_FOCUS(23);SET_KEY(SDLK_SPACE);break;
     case 9:ok=a->settings_group==3;SET_FOCUS(13);SET_KEY(SDLK_SPACE);break;
     case 10:ok=a->settings_draft.view_flags==(PS_VIEW_LOG|PS_VIEW_ORTHOGRAPHIC);SET_FOCUS(18);SET_KEY(SDLK_SPACE);break;
-    case 11:ok=a->settings_review && a->preferences.ui_size==16;SET_FOCUS(1);*capture="keyboard-settings-focus.png";SET_KEY(SDLK_RETURN);break;
+    case 11:ok=a->settings_review && a->preferences.ui_size==16;SET_FOCUS(1);if(!paced)*capture="keyboard-settings-focus.png";SET_KEY(SDLK_RETURN);break;
     case 12:if(a->settings_apply_requested){--*stage;return;}ok=!a->settings_open && a->preferences.ui_size==22 && a->preferences.editor_size==20 && a->preferences.autosave_seconds==120 && a->preferences.theme==PS_THEME_LIGHT && a->preferences.view_flags==(PS_VIEW_LOG|PS_VIEW_ORTHOGRAPHIC);open_settings(a);*stage=30;break;
     case 30:SET_FOCUS(0);SET_KEY(SDLK_RIGHT);break;
     case 31:ok=a->settings_draft.ui_size==16 && a->preferences.ui_size==22;SET_KEY(SDLK_ESCAPE);break;

@@ -5,28 +5,31 @@ abgleichen. Verbindliche Designs: [AGENTS.md](../AGENTS.md) und
 [Gesamtübergabe](visuals/unified-workspace/NEXT-CHAT.md). Keine geschlossene
 Prüfung oder Protokoll-Trennlinie allein wegen Kompaktierung erneut beginnen.
 
-## Aktueller Anschluss: gehostete Ergebnisse und Referenzgenerator
+## Aktueller Anschluss: Einstellungen-Tastatur bei langsamen Frames
 
 **Nutzer-Mac erneut als ausgeschaltet gemeldet; kein Zugriff und keine Probe.**
-Quellstand **`7064a38c` ist in beide Repositories gepusht**, 1.109 Compiler-/
-Testdateien abgeglichen. Der zugehörige gehostete Mac-Lauf `41182399084` ist
-beendet: Apple Silicon **15/15**, Intel **13/14** tatsächlich ausgeführte Fälle.
-Einheitenfenster und kompakter C-/Physim-Einheitenablauf bestehen auf beiden;
-Intel scheitert im erneuten Einstellungen-Tastaturablauf an Stufe 33. Der dortige
-portable Preferences-Schritt wurde übersprungen. Beide Ergebnisarchive mit
-GitHub-Digest abgeglichen und alle Einzelergebnisse gelesen; kein Ersatzlauf.
-[Ergebnisse und weitere CI-Befunde](verification/unit-focus-macos-2026-11-04.json).
+**Eingefroren: `settings-keyboard-verified`, 153 eigene Eingaben.**
+Der Settings-Tastaturablauf benötigt auf langsamen Renderern mehr als die bisher
+global erlaubten 20 s. Kontrollierte Windows-Gegenprobe mit 250-ms-Frames:
+Fortschritt bis Stufe 10, dann ausdrücklicher Timeout bei 20,158 s; kein
+Feld-/Fokusfehler. Nur `keyboard*` erhält 60 s; andere Settings-Modi bleiben bei
+20 s, Tab-Traversierungen bei höchstens 28 Versuchen. Alle Speicher-/Default-/
+Abbrechen-Assertions erhalten. Langsame Variante erreicht Stufe 36 tatsächlich
+nach 27,988 s (Windows) / 34,929 s (Linux) und erzeugt keine weiteren Bilder.
+Abschluss **je 2/2**, `run-amponrq5` / `run-uexcwcq1`, je vier App-Prozesse:
+normaler und langsamer Ablauf jeweils mit eigenem Preferences-Neustart.
+Quell-/Runtime-/Archivbytes geprüft, Handles beendet. [Umfang, ursprüngliche
+Harness-/Filterfehler und Originalnachweise](verification/settings-keyboard-2026-11-04.md).
+Gehosteter Mac-Abschluss dieses neuen Quellstands ist noch offen.
 
-Die breitere CI meldet außerdem veraltete API-Referenzen. Ursache: Der Generator
-enthielt die seit `6f527f65` vorhandenen Channel-Editorbeispiele/-Beschreibungen
-nicht. Er bildet sie jetzt exakt ab; die beiden Referenzdateien bleiben unverändert.
-Vorher/Nachher gegen den eingefrorenen sauberen Quellbaum unter Windows/Linux:
-vorher derselbe Zwei-Dateien-Fehler, nachher **31 Referenzen geprüft**. Im WIP-Baum
-bleibt der bekannte fremde Status-Link auf den nicht registrierten Bereinigungs-
-Hilfetext offen. Kein neuer GUI-Build oder gesamter CI-Erfolg behauptet.
-[Umfang, Kommandos und Grenzen](verification/continuation-2026-11-04.md).
+Vorheriger Mac-Stand `7064a38c`: Apple Silicon 15/15, Intel 13/14, dort globaler
+Abbruch an Stufe 33. Einheitenfenster/-ablauf bestehen auf beiden; tatsächliche
+ZIPs und Digests gelesen. [Historischer CI-Snapshot](verification/unit-focus-macos-2026-11-04.json).
+Referenzgenerator-Korrektur **`d0d529de`** ist in beiden Repositories: vorhandene
+Channel-Beispiele reproduzierbar, 31 Dokumente unter Windows/Linux geprüft;
+WIP-Status-Link bleibt getrennt offen. [Abschluss](verification/continuation-2026-11-04.md).
 
-## Aktueller Anschluss: Einheitenfokus und kompakte Nachweise
+## Abgeschlossener Einheitenfokus und kompakte Nachweise
 
 **Eingefroren: `unit-focus-compact`, 151 eigene Eingaben.**
 Der Einheitenfall ist tatsächlich reproduziert: Ein freier Fußleistenklick
@@ -99,11 +102,10 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
 
 ## Nächste konkrete Arbeit
 
-- Intel-Einstellungen-Tastaturfall von `41182399084` untersuchen: Stufe 33 nach
-  Schließen/erneutem Öffnen und begrenztem Tab-Fokushelfer. Noch keine Ursache
-  belegt; kein unveränderter Wiederholungslauf. Weitere CI-Befunde stehen im
-  Snapshot: historischer `run_events`-Windows-Pfad `nul.psrun`, Floating/Spring-
-  Workflow, Font-Demand und AX. Fremde laufende AX-/Orca-Arbeit nicht überschreiben.
+- Gehosteten Settings-Lauf des neuen Quellcommits nach Push über seine wirklichen
+  Handles beobachten und tatsächliche Artefakte lesen. Neuer langsamer Fall ist
+  im Mac-Workflow registriert. Kein unveränderter Ersatzlauf; Nutzer-Mac bleibt aus.
+  Aktueller lokaler Anschluss: `build/validation/settings-keyboard-2026-11-04/STATE.md`.
 - Completion D nach ADR 022/023 tatsächlich implementieren. Bestandsaudit:
   `main.c::editor` zeigt bereits unmittelbar Vorschläge nach Textänderungen
   (ab zwei Zeichen bzw. Memberzugriff); die frühere Aussage „nur manuell“ war
@@ -117,18 +119,22 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
   0/0-Protokollgriff ist kein neuer Befund an der behobenen Trennlinie.
 - Unicode-Randleerzeichen im Einheitensymbol separat prüfen. Der konkrete
   `unit_focus`-Clipfehler ist jetzt mit Vorher-/Nachherlauf geschlossen.
+- Weitere CI-Befunde bleiben getrennt offen: historischer `run_events`-Windows-
+  Pfad `nul.psrun`, Floating/Spring-Workflow, Font-Demand und AX. Fremde laufende
+  AX-/Orca-Arbeit nicht überschreiben und keine vollständige grüne CI behaupten.
 - Übrige freigegebene UI: A2 Szene/Mehrfachauswahl, Kontextmenüs A, B2, weitere
   Aufgabenfenster. Manuelle Screenreader-/physische Eingabe-/DPI-/Monitor-/
   Vollbildabnahme und Gesamtgestaltung bleiben offen. Keine volle Punktzahl behaupten.
 
 ## Sicherer lokaler Anschluss
 
-- `prepare-next.py <neuer-tag> unit-focus-compact` prüft vorher Quelle,
+- `prepare-next.py <neuer-tag> settings-keyboard-verified` prüft vorher Quelle,
   Runtime und Archive. Neue Module ausdrücklich in die Eingabeliste aufnehmen.
   Eigene Quellen vollständig versionieren, fremde AT-SPI-/Orca-/Status-/dist-
   Änderungen erhalten und nicht in eigene isolierte Quellen übernehmen.
 - Helfer/Indizes: `build/validation/explorer-inline-2026-10-29/`; aktueller
-  Arbeitsnachweis: `build/validation/unit-focus-2026-10-31/`; älterer Suchstand
+  Arbeitsnachweis: `build/validation/settings-keyboard-2026-11-04/`; Einheitenfokus
+  unter `build/validation/unit-focus-2026-10-31/`; älterer Suchstand
   unter `build/validation/settings-search-2026-10-31/`.
   `run.py`/`freeze.py` vor Verwendung auf tatsächliche Argumente prüfen.
 - Isolierter Baum `build/validation/protocol-wrap-2026-10-26/3-isolated/`

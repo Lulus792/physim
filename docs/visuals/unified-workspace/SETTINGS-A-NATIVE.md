@@ -57,6 +57,14 @@ Löschsymbol eine passende Breitenreservierung. [Gezielte Suchprüfung und
 Mac-Inspektorbefund](../../verification/settings-search-2026-10-31.md) halten den
 späteren Nachlauf und ursprüngliche Fehlschritte getrennt fest.
 
+Der vollständige Kategorien-/Speicher-/Neustart-Tastaturablauf verwendet eine
+eigene begrenzte Testzeit von 60 Sekunden; einzelne Tab-Traversierungen bleiben
+auf 28 Versuche begrenzt. Eine zweite Variante liefert absichtlich langsame
+Frames und muss sämtliche Schlussprüfungen nach Überschreiten der früheren
+20-Sekunden-Grenze erreichen. Die Dateioffsets und Abbrechen-Fingerprints bleiben
+unverändert geprüft; diese Variante schreibt keine zusätzlichen Bilder.
+[Gegenprobe und tatsächliche Windows-/Linux-Ergebnisse](../../verification/settings-keyboard-2026-11-04.md).
+
 ## Noch umzusetzen
 
 - Anzeigeeinheiten ist inzwischen eine [eigene native Aufgabe](UNIT-TASK-NATIVE.md)

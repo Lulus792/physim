@@ -3875,7 +3875,7 @@ int main(int argc, char **argv) {
     if(migration_test && (argc!=4 || (strcmp(argv[3],"normal") && strcmp(argv[3],"stale") && strcmp(argv[3],"dirty"))))return 2;
     bool settings_test = argc > 1 && !strcmp(argv[1], "--settings-test");
     if (settings_test && (argc != 4 || (strcmp(argv[3], "write") && strcmp(argv[3], "read") &&
-        strcmp(argv[3], "keyboard") && strcmp(argv[3], "keyboard-read") && strcmp(argv[3], "merge") && strcmp(argv[3], "window-16") && strcmp(argv[3], "window-22") && strcmp(argv[3], "search-16") && strcmp(argv[3], "search-22") &&
+        strcmp(argv[3], "keyboard") && strcmp(argv[3], "keyboard-read") && strcmp(argv[3], "keyboard-paced") && strcmp(argv[3], "keyboard-read-paced") && strcmp(argv[3], "merge") && strcmp(argv[3], "window-16") && strcmp(argv[3], "window-22") && strcmp(argv[3], "search-16") && strcmp(argv[3], "search-22") &&
         strcmp(argv[3], "checkbox-native") && strcmp(argv[3], "checkbox-remote") &&
         strcmp(argv[3], "options-native") && strcmp(argv[3], "options-remote") &&
         strcmp(argv[3], "focus-native") && strcmp(argv[3], "focus-remote") &&
@@ -4230,6 +4230,7 @@ int main(int argc, char **argv) {
         snprintf(a->project_input,sizeof a->project_input,"%s",argv[2]);
         if(!open_project(a)){exit_code=1;a->quitting=true;}
     } else if (settings_test) {
+        if(strstr(argv[3],"-paced"))puts("SETTINGS FRAME PACING: 250 ms");
         snprintf(a->project, sizeof a->project, "%s", argv[2]);
         char path[4096];
         join(path, sizeof path, a->project, "preferences.bin");
@@ -4628,7 +4629,13 @@ int main(int argc, char **argv) {
             if(ps_clock()-test_started>20){exit_code=1;a->quitting=true;}
             else project_migration_test_frame(a,argv[3],identity_test,&test_stage,&exit_code);
         } else if (settings_test) {
-            if (ps_clock() - test_started > 20) {
+            /* Settings A traverses categories and recreates its OS window.
+             * Keep each tab traversal bounded; hosted software GL may need
+             * more than 20 s for the complete save/reopen/defaults workflow. */
+            double settings_limit=!strncmp(argv[3],"keyboard",8)?60:20;
+            if (ps_clock() - test_started > settings_limit) {
+                fprintf(stderr,"Settings self-test timeout: mode=%s stage=%d elapsed=%.3f limit=%.0f focus=%d keyboard=%d open=%d\n",
+                        argv[3],test_stage,ps_clock()-test_started,settings_limit,a->settings_focus,a->settings_keyboard,a->settings_open);
                 exit_code = 1;
                 a->quitting = true;
             } else
@@ -5622,6 +5629,9 @@ int main(int argc, char **argv) {
         if (trace_test && test_stage != checked_stage)
             fprintf(stderr, "APP TEST TRACE: stage %d -> %d, status %s\n",
                     checked_stage, test_stage, a->status);
+        if(trace_test && settings_test && test_stage!=checked_stage)
+            fprintf(stderr,"SETTINGS PROGRESS: stage=%d elapsed=%.3f focus=%d keyboard=%d open=%d\n",
+                    test_stage,ps_clock()-test_started,a->settings_focus,a->settings_keyboard,a->settings_open);
         if (exit_code && !previous_exit_code)
             fprintf(stderr, "First workflow failure at stage %d (next %d): %s "
                             "(tab=%d, selected=%u, samples=%llu, report=%d, query=%s)\n",
@@ -5755,8 +5765,9 @@ int main(int argc, char **argv) {
 #endif
             a->quitting = true;
         }
-        /* Deterministic slow rendering for the keyboard regression only. */
-        SDL_Delay(workspace_state_test && !strcmp(argv[3],"docs-keyboard-delayed")?80:5);
+        /* Deterministic slow frames only in explicit keyboard regressions. */
+        SDL_Delay(settings_test && strstr(argv[3],"-paced")?250:
+                  workspace_state_test && !strcmp(argv[3],"docs-keyboard-delayed")?80:5);
     }
     project_display_finish(a,true);
     if (a->dirty || a->analysis_dirty || a->project_settings_dirty || a->project_definitions_dirty)
