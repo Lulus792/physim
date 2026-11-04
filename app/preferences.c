@@ -7,7 +7,8 @@
 #include <string.h>
 /* Shared protocol C starts closed; the compact workbench summary stays visible. */
 const ps_preferences PS_PREFERENCES_DEFAULT = {1440, 940, 0, 218, 340, 12, 30, 31, 0, 0,
-                                               PS_THEME_DARK, 255, PS_DOCK_DEFAULT_INITIALIZER, 16};
+                                               PS_THEME_DARK, 255, PS_DOCK_DEFAULT_INITIALIZER, 16,
+                                               1, PS_COMPLETION_ROWS_DEFAULT};
 bool ps_preferences_valid(const ps_preferences *p) {
     return p && p->width >= 1080 && p->width <= 8192 && p->height >= 740 && p->height <= 8192 &&
            p->maximized <= 1 && p->sidebar_width >= 140 && p->sidebar_width <= 480 &&
@@ -17,7 +18,8 @@ bool ps_preferences_valid(const ps_preferences *p) {
             p->autosave_seconds == 120) &&
            !(p->view_flags & ~127u) && p->inspector_open <= 1 && p->workspace <= 2 &&
            p->theme < PS_THEME_COUNT && p->inspector_width>=180 && p->inspector_width<=480 &&
-           ps_dock_valid(&p->dock) && p->ui_size>=16 && p->ui_size<=22 && p->ui_size%2==0;
+           ps_dock_valid(&p->dock) && p->ui_size>=16 && p->ui_size<=22 && p->ui_size%2==0 &&
+           p->completion_auto<=1 && p->completion_rows>=1 && p->completion_rows<=PS_COMPLETION_ROWS_MAX;
 }
 uint32_t ps_preferences_settings_changes(const ps_preferences *base, const ps_preferences *draft) {
     if (!base || !draft) return 0;
@@ -30,6 +32,8 @@ uint32_t ps_preferences_settings_changes(const ps_preferences *base, const ps_pr
     FIELD(sidebar_width, PS_SETTING_SIDEBAR);
     FIELD(inspector_width, PS_SETTING_INSPECTOR);
     FIELD(log_height, PS_SETTING_LOG_HEIGHT);
+    FIELD(completion_auto, PS_SETTING_COMPLETION_AUTO);
+    FIELD(completion_rows, PS_SETTING_COMPLETION_ROWS);
 #undef FIELD
     const uint32_t flags[] = {PS_VIEW_VECTORS, PS_VIEW_PATHS, PS_VIEW_POINTS, PS_VIEW_LABELS,
                               PS_VIEW_GRID, PS_VIEW_ORTHOGRAPHIC, PS_VIEW_LOG};
@@ -51,6 +55,8 @@ ps_result ps_preferences_settings_merge(const ps_preferences *current, const ps_
     FIELD(sidebar_width, PS_SETTING_SIDEBAR);
     FIELD(inspector_width, PS_SETTING_INSPECTOR);
     FIELD(log_height, PS_SETTING_LOG_HEIGHT);
+    FIELD(completion_auto, PS_SETTING_COMPLETION_AUTO);
+    FIELD(completion_rows, PS_SETTING_COMPLETION_ROWS);
 #undef FIELD
     uint32_t view_changes = base->view_flags ^ draft->view_flags;
     next.view_flags = (current->view_flags & ~view_changes) | (draft->view_flags & view_changes);
@@ -67,6 +73,8 @@ void ps_preferences_settings_defaults(ps_preferences *draft) {
     draft->sidebar_width = PS_PREFERENCES_DEFAULT.sidebar_width;
     draft->inspector_width = PS_PREFERENCES_DEFAULT.inspector_width;
     draft->log_height = PS_PREFERENCES_DEFAULT.log_height;
+    draft->completion_auto = PS_PREFERENCES_DEFAULT.completion_auto;
+    draft->completion_rows = PS_PREFERENCES_DEFAULT.completion_rows;
 }
 static void put32(unsigned char *p, uint32_t v) {
     for (unsigned i = 0; i < 4; i++)
@@ -81,9 +89,9 @@ ps_result ps_preferences_read(const char *path, ps_preferences *out) {
     FILE *f = fopen(path, "rb");
     if (!f)
         return errno == ENOENT ? PS_EOF : PS_IO;
-    unsigned char bytes[312];
+    unsigned char bytes[320];
     size_t n = fread(bytes, 1, sizeof bytes, f);
-    bool ok = (n == 56 || n == 60 || n == 240 || n==308 || n==312) && fgetc(f) == EOF && !ferror(f);
+    bool ok = (n == 56 || n == 60 || n == 240 || n==308 || n==312 || n==320) && fgetc(f) == EOF && !ferror(f);
     if (fclose(f))
         ok = false;
     if (!ok || memcmp(bytes, "PSPREF", 6))
@@ -92,15 +100,18 @@ ps_result ps_preferences_read(const char *path, ps_preferences *out) {
     bool second = !memcmp(bytes + 6, "02", 2);
     bool third = !memcmp(bytes + 6, "03", 2);
     bool fourth=!memcmp(bytes+6,"04",2),fifth=!memcmp(bytes+6,"05",2);
-    if (!legacy && !second && !third && !fourth && !fifth) return PS_VERSION;
-    size_t payload = legacy ? 40 : second ? 44 : third?224:fourth?292:296, crc = 12 + payload;
+    bool sixth=!memcmp(bytes+6,"06",2);
+    if (!legacy && !second && !third && !fourth && !fifth && !sixth) return PS_VERSION;
+    size_t payload = legacy ? 40 : second ? 44 : third?224:fourth?292:fifth?296:304, crc = 12 + payload;
     if (n != crc + 4 || get32(bytes + 8) != payload || get32(bytes + crc) != ps_crc32(bytes, crc))
         return PS_CORRUPT;
     ps_preferences p = {get32(bytes + 12), get32(bytes + 16), get32(bytes + 20), get32(bytes + 24),
                         get32(bytes + 28), get32(bytes + 32), get32(bytes + 36), get32(bytes + 40),
                         get32(bytes + 44), get32(bytes + 48), legacy ? PS_THEME_DARK : get32(bytes + 52),
                         legacy || second || third?280:get32(bytes+56), PS_DOCK_DEFAULT_INITIALIZER,
-                        fifth?get32(bytes+304):16};
+                        fifth || sixth?get32(bytes+304):16,
+                        sixth?get32(bytes+308):1,
+                        sixth?get32(bytes+312):PS_COMPLETION_ROWS_DEFAULT};
     if(!legacy && !second && !third) {
         if(!ps_dock_decode(bytes+60,PS_DOCK_WIRE_BYTES,&p.dock))return PS_CORRUPT;
     } else if (third) {
@@ -125,9 +136,9 @@ ps_result ps_preferences_read(const char *path, ps_preferences *out) {
 ps_result ps_preferences_write(const char *path, const ps_preferences *p) {
     if (!path || !*path || !ps_preferences_valid(p))
         return PS_INVALID;
-    unsigned char bytes[312] = {0};
-    memcpy(bytes, "PSPREF05", 8);
-    put32(bytes + 8, 296);
+    unsigned char bytes[320] = {0};
+    memcpy(bytes, "PSPREF06", 8);
+    put32(bytes + 8, 304);
     uint32_t fields[] = {p->width,          p->height,      p->maximized,        p->sidebar_width,
                          p->log_height,     p->editor_size, p->autosave_seconds, p->view_flags,
                          p->inspector_open, p->workspace, p->theme,p->inspector_width};
@@ -135,7 +146,9 @@ ps_result ps_preferences_write(const char *path, const ps_preferences *p) {
         put32(bytes + 12 + 4 * i, fields[i]);
     if(!ps_dock_encode(&p->dock,bytes+60,PS_DOCK_WIRE_BYTES))return PS_INVALID;
     put32(bytes+304,p->ui_size);
-    put32(bytes+308,ps_crc32(bytes,308));
+    put32(bytes+308,p->completion_auto);
+    put32(bytes+312,p->completion_rows);
+    put32(bytes+316,ps_crc32(bytes,316));
     char temporary[4096];
     FILE *f = NULL;
     for (unsigned i = 0; i < 16 && !f; i++) {

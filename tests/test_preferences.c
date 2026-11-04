@@ -49,6 +49,8 @@ static int contrast(void) {
         CHECK(readable(p->gutter_text, p->gutter, minimum));
         CHECK(readable(p->doc_text, p->doc_body, minimum));
         CHECK(readable(p->doc_text, p->doc_header, minimum));
+        CHECK(readable(p->text, p->completion_info, minimum));
+        CHECK(readable(p->muted, p->completion_info, minimum));
         CHECK(readable(p->primary_text, p->primary, minimum));
         CHECK(readable(p->primary_text, p->primary_hover, minimum));
         CHECK(readable(p->primary_text, p->primary_active, minimum));
@@ -99,11 +101,12 @@ static int settings_transactions(void) {
     CHECK(ps_preferences_settings_merge(&current, &base, &aliased, &aliased) == PS_OK && !memcmp(&aliased, &out, sizeof out));
     aliased = base;
     CHECK(ps_preferences_settings_merge(&current, &aliased, &draft, &aliased) == PS_OK && !memcmp(&aliased, &out, sizeof out));
-    /* Defaults replace all fourteen editable values, retaining every owner
+    /* Defaults replace all editable values, retaining every owner
      * outside this transaction, even a non-default panel topology. */
     base = current;
     base.theme = PS_THEME_HIGH_CONTRAST; base.ui_size = 22; base.editor_size = 20; base.autosave_seconds = 120;
     base.view_flags = PS_PREFERENCES_DEFAULT.view_flags ^ 127u;
+    base.completion_auto=0; base.completion_rows=9;
     draft = base;
     ps_preferences_settings_defaults(&draft);
     CHECK(ps_preferences_settings_changes(&base, &draft) == ((1u << PS_SETTING_COUNT) - 1));
@@ -113,12 +116,28 @@ static int settings_transactions(void) {
     CHECK(out.width == 1900 && out.height == 1100 && out.maximized == 1 && out.workspace == 2 && out.inspector_open == 1);
     CHECK(!memcmp(&out.dock, &current.dock, sizeof out.dock));
     CHECK(!memcmp(&draft.dock, &base.dock, sizeof draft.dock) && draft.width == base.width && draft.height == base.height);
+    CHECK(out.completion_auto==1 && out.completion_rows==5);
+    /* Independent completion edits merge without reverting another owner. */
+    base=PS_PREFERENCES_DEFAULT;draft=base;current=base;
+    current.completion_rows=11;current.width=1900;draft.completion_auto=0;
+    CHECK(ps_preferences_settings_changes(&base,&draft)==(1u<<PS_SETTING_COMPLETION_AUTO));
+    CHECK(ps_preferences_settings_merge(&current,&base,&draft,&out)==PS_OK &&
+          out.completion_auto==0 && out.completion_rows==11 && out.width==1900);
+    draft=base;draft.completion_rows=7;current.completion_auto=0;
+    CHECK(ps_preferences_settings_merge(&current,&base,&draft,&out)==PS_OK &&
+          out.completion_auto==0 && out.completion_rows==7 && out.width==1900);
     /* Bad inputs leave output unchanged. A merge is never a partial apply. */
     ps_preferences sentinel = out;
     draft.sidebar_width = 139;
     CHECK(ps_preferences_settings_merge(&current, &base, &draft, &out) == PS_INVALID && !memcmp(&out, &sentinel, sizeof out));
     draft = base; draft.ui_size = 17;
     CHECK(ps_preferences_settings_merge(&current, &base, &draft, &out) == PS_INVALID && !memcmp(&out, &sentinel, sizeof out));
+    draft=base;draft.completion_auto=2;
+    CHECK(ps_preferences_settings_merge(&current,&base,&draft,&out)==PS_INVALID && !memcmp(&out,&sentinel,sizeof out));
+    draft=base;draft.completion_rows=0;
+    CHECK(ps_preferences_settings_merge(&current,&base,&draft,&out)==PS_INVALID && !memcmp(&out,&sentinel,sizeof out));
+    draft=base;draft.completion_rows=PS_COMPLETION_ROWS_MAX+1;
+    CHECK(ps_preferences_settings_merge(&current,&base,&draft,&out)==PS_INVALID && !memcmp(&out,&sentinel,sizeof out));
     draft = base; draft.view_flags |= 128u;
     CHECK(ps_preferences_settings_merge(&current, &base, &draft, &out) == PS_INVALID && !memcmp(&out, &sentinel, sizeof out));
     CHECK(ps_preferences_settings_merge(NULL, &base, &base, &out) == PS_INVALID && !memcmp(&out, &sentinel, sizeof out));
@@ -153,6 +172,18 @@ int main(int argc, char **argv) {
     boundary=p;boundary.inspector_width=179;CHECK(!ps_preferences_valid(&boundary));
     boundary=p;boundary.log_height=125;CHECK(!ps_preferences_valid(&boundary));
     boundary=p;boundary.log_height=501;CHECK(!ps_preferences_valid(&boundary));
+    CHECK(p.completion_auto==1 && p.completion_rows==5);
+    for(unsigned rows=1;rows<=PS_COMPLETION_ROWS_MAX;rows++) {
+        boundary=p;boundary.completion_auto=rows%2;boundary.completion_rows=rows;
+        CHECK(ps_preferences_write(path,&boundary)==PS_OK && ps_preferences_read(path,&out)==PS_OK &&
+              !memcmp(&boundary,&out,sizeof out));
+    }
+    for(unsigned which=0;which<3;which++) {
+        boundary=p;
+        if(which==0)boundary.completion_auto=2;
+        else boundary.completion_rows=which==1?0:PS_COMPLETION_ROWS_MAX+1;
+        CHECK(ps_preferences_write(path,&boundary)==PS_INVALID);
+    }
     CHECK(ps_preferences_write(path, &p) == PS_OK);
     for (unsigned theme = 0; theme < PS_THEME_COUNT; theme++) {
         p.theme = theme;
@@ -212,39 +243,58 @@ int main(int argc, char **argv) {
     invalid.theme = PS_THEME_COUNT;
     CHECK(ps_preferences_write(path, &invalid) == PS_INVALID);
     CHECK(ps_preferences_read(path, &out) == PS_OK && !memcmp(&p, &out, sizeof p));
-    unsigned char bytes[313] = {0};
+    unsigned char bytes[321] = {0};
     FILE *f = fopen(path, "rb");
-    CHECK(f && fread(bytes, 1, 312, f) == 312 && !fclose(f));
-    for (size_t n = 0; n < 312; n++) {
+    CHECK(f && fread(bytes, 1, 320, f) == 320 && !fclose(f));
+    for (size_t n = 0; n < 320; n++) {
         CHECK(bytes_write(bad, bytes, n));
         CHECK(ps_preferences_read(bad, &out) == PS_CORRUPT && !memcmp(&p, &out, sizeof p));
     }
-    CHECK(bytes_write(bad, bytes, 313) && ps_preferences_read(bad, &out) == PS_CORRUPT);
-    for (unsigned i = 0; i < 312; i++) {
+    CHECK(bytes_write(bad, bytes, 321) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    for (unsigned i = 0; i < 320; i++) {
         bytes[i] ^= 1;
-        CHECK(bytes_write(bad, bytes, 312));
+        CHECK(bytes_write(bad, bytes, 320));
         CHECK(ps_preferences_read(bad, &out) != PS_OK && !memcmp(&p, &out, sizeof p));
         bytes[i] ^= 1;
     }
     put32(bytes + 32, 17);
-    put32(bytes + 308, ps_crc32(bytes, 308));
-    CHECK(bytes_write(bad, bytes, 312) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    put32(bytes + 316, ps_crc32(bytes, 316));
+    CHECK(bytes_write(bad, bytes, 320) && ps_preferences_read(bad, &out) == PS_CORRUPT);
     put32(bytes + 32, p.editor_size);
     put32(bytes + 52, PS_THEME_COUNT);
-    put32(bytes + 308, ps_crc32(bytes, 308));
-    CHECK(bytes_write(bad, bytes, 312) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    put32(bytes + 316, ps_crc32(bytes, 316));
+    CHECK(bytes_write(bad, bytes, 320) && ps_preferences_read(bad, &out) == PS_CORRUPT);
     CHECK(!memcmp(&p, &out, sizeof p));
+    /* Correct-CRC invalid completion values must preserve the output too. */
+    put32(bytes+52,p.theme);
+    for(unsigned which=0;which<3;which++) {
+        put32(bytes+308,which==0?2:p.completion_auto);
+        put32(bytes+312,which==1?0:which==2?PS_COMPLETION_ROWS_MAX+1:p.completion_rows);
+        put32(bytes+316,ps_crc32(bytes,316));
+        CHECK(bytes_write(bad,bytes,320) && ps_preferences_read(bad,&out)==PS_CORRUPT &&
+              !memcmp(&p,&out,sizeof out));
+    }
+    put32(bytes+308,p.completion_auto);put32(bytes+312,p.completion_rows);
     /* Correct-CRC invalid graphs must also preserve the previous settings. */
     put32(bytes + 52, p.theme);
-    put32(bytes+304,17);put32(bytes+308,ps_crc32(bytes,308));
-    CHECK(bytes_write(bad,bytes,312) && ps_preferences_read(bad,&out)==PS_CORRUPT &&
+    put32(bytes+304,17);put32(bytes+316,ps_crc32(bytes,316));
+    CHECK(bytes_write(bad,bytes,320) && ps_preferences_read(bad,&out)==PS_CORRUPT &&
           !memcmp(&p,&out,sizeof p));
     put32(bytes+304,p.ui_size);
     put32(bytes + 60 + 5 * 24 + 4, 5); /* split references itself */
-    put32(bytes + 308, ps_crc32(bytes, 308));
-    CHECK(bytes_write(bad, bytes, 312) && ps_preferences_read(bad, &out) == PS_CORRUPT);
+    put32(bytes + 316, ps_crc32(bytes, 316));
+    CHECK(bytes_write(bad, bytes, 320) && ps_preferences_read(bad, &out) == PS_CORRUPT);
     put32(bytes + 60 + 5 * 24 + 4, 0);
     put32(bytes + 52, p.theme);
+    /* V5 ends in a CRC at offset 308, not the new automatic setting. */
+    unsigned char v5[312];memcpy(v5,bytes,sizeof v5);
+    memcpy(v5+6,"05",2);put32(v5+8,296);put32(v5+304,22);
+    put32(v5+308,ps_crc32(v5,308));
+    CHECK(bytes_write(bad,v5,sizeof v5) && ps_preferences_read(bad,&out)==PS_OK);
+    ps_preferences migrated=p;migrated.ui_size=22;
+    CHECK(out.completion_auto==1 && out.completion_rows==5 && !memcmp(&migrated,&out,sizeof out));
+    CHECK(ps_preferences_write(bad,&out)==PS_OK && ps_preferences_read(bad,&migrated)==PS_OK &&
+          !memcmp(&migrated,&out,sizeof out));
     unsigned char v4[308];memcpy(v4,bytes,sizeof v4);
     memcpy(v4+6,"04",2);put32(v4+8,292);put32(v4+304,ps_crc32(v4,304));
     CHECK(bytes_write(bad,v4,sizeof v4) && ps_preferences_read(bad,&out)==PS_OK);

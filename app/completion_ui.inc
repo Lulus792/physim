@@ -5,6 +5,8 @@ static void completion_pending_clear(app *a) {
 static void completion_hide(app *a) {
     free(a->completion_indices);a->completion_indices=NULL;a->completion_edit=a->completion_focus_edit=NULL;
     a->completion_active=a->completion_accept_pending=a->completion_explicit=a->completion_manual=false;a->completion_count=a->completion_selected=0;
+    a->completion_first=0;a->completion_visible_rows=0;a->completion_scroll_drag=false;
+    a->completion_info_bounds=a->completion_scroll_bounds=nk_rect(0,0,0,0);
 }
 static void completion_close(app *a) {
     completion_pending_clear(a);completion_hide(a);a->completion_suppressed_edit=NULL;
@@ -29,10 +31,12 @@ static bool completion_refresh(app *a) {
     if(ps_completion_prepare(text,bytes,cursor,document_language(a,edit)==1,&a->completion_query)!=PS_OK) {
         completion_close(a);return false;
     }
+    size_t count=a->completion_count;
     a->completion_count=ps_completion_matches(&a->completion_query,a->completion_indices,ps_completion_count());
     if(!a->completion_count){completion_close(a);return false;}
     a->completion_selected=0;
     for(size_t i=0;i<a->completion_count;i++)if(a->completion_indices[i]==previous){a->completion_selected=i;break;}
+    if(count!=a->completion_count)a->completion_reveal=true;
     return true;
 }
 static void completion_open_kind(app *a,struct nk_text_edit *edit,bool manual) {
@@ -43,6 +47,7 @@ static void completion_open_kind(app *a,struct nk_text_edit *edit,bool manual) {
     a->completion_indices=malloc(count*sizeof *a->completion_indices);
     if(!a->completion_indices){status(a,"Nicht genügend Speicher für API-Vorschläge.");return;}
     a->completion_edit=edit;a->completion_active=true;a->completion_explicit=a->completion_manual=manual;a->completion_cursor=edit->cursor;
+    a->completion_reveal=a->completion_info_visible=true;
     if(!completion_refresh(a) && manual)status(a,"Keine API-Vorschläge an dieser Textposition.");
 }
 static void completion_open(app *a,struct nk_text_edit *edit) {completion_open_kind(a,edit,true);}
@@ -67,6 +72,11 @@ static void completion_dismiss(app *a,struct nk_text_edit *edit) {
     completion_pending_clear(a);completion_hide(a);a->completion_focus_edit=edit;
 }
 static void completion_auto_update(app *a,struct nk_text_edit *edit,bool changed) {
+    if(!a->preferences.completion_auto){
+        completion_pending_clear(a);
+        if(a->completion_active && !a->completion_manual)completion_hide(a);
+        return;
+    }
     if(a->completion_active){a->completion_cursor=edit->cursor;return;}
     /* Idle frames do not rescan the source. Suppression only needs a new
      * query after text, caret or owner changes; a pending request still checks
@@ -134,6 +144,7 @@ static bool completion_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
         bool up=key->key==SDLK_UP || key->key==SDLK_P;
         a->completion_selected=a->completion_explicit?(a->completion_selected+(up?a->completion_count-1:1))%a->completion_count:up?a->completion_count-1:0;
         a->completion_explicit=true;
+        a->completion_reveal=true;
         return true;
     }
     if(key->key==SDLK_RETURN || key->key==SDLK_KP_ENTER || key->key==SDLK_TAB) {
@@ -145,10 +156,31 @@ static bool completion_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
 }
 static void completion_pointer_event(app *a,const SDL_MouseButtonEvent *event) {
     if(!a->completion_active){if(a->completion_focus_edit)completion_close(a);return;}
-    const struct nk_rect regions[]={a->source_editor_bounds,a->completion_list_bounds,a->completion_button_bounds,a->api_reference_button_bounds};
-    for(unsigned i=0;i<4;i++)if(event->x>=regions[i].x && event->x<regions[i].x+regions[i].w &&
+    const struct nk_rect regions[]={a->source_editor_bounds,a->completion_list_bounds,a->completion_info_bounds,a->completion_button_bounds,a->api_reference_button_bounds};
+    for(unsigned i=0;i<5;i++)if(event->x>=regions[i].x && event->x<regions[i].x+regions[i].w &&
         event->y>=regions[i].y && event->y<regions[i].y+regions[i].h)return;
     completion_close(a);
+}
+/* A whole-row viewport over the complete catalog result. Wheel movement is
+ * independent of acceptance selection; only explicit arrows reveal a choice. */
+static void completion_label(struct nk_context *ui,struct nk_rect r,const char *text,const struct nk_user_font *font,struct nk_color ink) {
+    int n=(int)strlen(text),shown=n;float dots=font->width(font->userdata,font->height,"…",3);
+    while(shown>0 && font->width(font->userdata,font->height,text,shown)>r.w-(shown<n?dots:0)){
+        shown--;while(shown>0 && ((unsigned char)text[shown]&0xc0)==0x80)shown--;
+    }
+    r.y+=(r.h-font->height)/2;r.h=font->height;
+    nk_draw_text(nk_window_get_canvas(ui),r,text,shown,font,nk_rgba(0,0,0,0),ink);
+    if(shown<n){r.x+=font->width(font->userdata,font->height,text,shown);r.w=dots;
+        nk_draw_text(nk_window_get_canvas(ui),r,"…",3,font,nk_rgba(0,0,0,0),ink);}
+}
+static void completion_type(const ps_completion_symbol *symbol,char text[128]) {
+    const char *name=strstr(symbol->signature,symbol->name),*arrow=strstr(symbol->signature," -> ");
+    if(symbol->kind==PS_COMPLETION_TYPE)snprintf(text,128,"Typ");
+    else if(symbol->kind==PS_COMPLETION_FUNCTION && symbol->language && arrow)snprintf(text,128,"%s",arrow+4);
+    else if(symbol->kind==PS_COMPLETION_FUNCTION && name && name>symbol->signature){
+        size_t n=(size_t)(name-symbol->signature);while(n && symbol->signature[n-1]==' ')n--;
+        snprintf(text,128,"%.*s",(int)fmin(n,127),symbol->signature);
+    }else snprintf(text,128,"%s",symbol->module);
 }
 static void completion_view(app *a,int width,int height) {
     struct nk_context *ui=a->ui;
@@ -156,52 +188,135 @@ static void completion_view(app *a,int width,int height) {
     if(!a->dock_visible[PS_DOCK_WORKSPACE] || (a->completion_pending_edit && a->completion_pending_edit!=target) ||
        (a->completion_active && a->completion_edit!=target) ||
        (a->completion_suppressed_edit && a->completion_suppressed_edit!=target))completion_close(a);
-    if(!a->completion_active || !a->dock_visible[PS_DOCK_WORKSPACE]) {nk_window_show(ui,"api-completion",NK_HIDDEN);return;}
-    float w=fminf(480,(float)width-24);
-    const ps_completion_symbol *selected=ps_completion_at(a->completion_indices[a->completion_selected]);
-    float signature_height=documentation_height(ui->style.font,selected->signature,strlen(selected->signature),w-20);
-    unsigned rows=(unsigned)(a->completion_count<4?a->completion_count:4);
-    float row_height=fmaxf(28,(float)a->preferences.ui_size+4);
-    float h=18+rows*(row_height+2)+signature_height+row_height+4;
-    float x=fmaxf(8,fminf(a->editor_caret.x,(float)width-w-8));
-    float y=a->editor_caret.y+a->editor_caret.h+4;
-    if(y+h>height-8)y=fmaxf(72,a->editor_caret.y-h-4);
+    a->completion_info_bounds=nk_rect(0,0,0,0);
+    if(!a->completion_active || !a->dock_visible[PS_DOCK_WORKSPACE]) {
+        nk_window_show(ui,"api-completion",NK_HIDDEN);nk_window_show(ui,"api-completion-info",NK_HIDDEN);return;
+    }
+    float w=fminf(400,(float)width-24),row_height=fmaxf(28,(float)a->preferences.ui_size+8),footer=26;
+    unsigned rows=(unsigned)fmin(a->completion_count,a->preferences.completion_rows);
+    float editor_top=fmaxf(8,a->source_editor_bounds.y),editor_bottom=fminf(height-8.f,a->source_editor_bounds.y+a->source_editor_bounds.h);
+    float below=fmaxf(0,editor_bottom-(a->editor_caret.y+a->editor_caret.h+4));
+    float above=fmaxf(0,a->editor_caret.y-editor_top-4);
+    unsigned room=(unsigned)fmaxf(1,floorf((fmaxf(below,above)-footer-8)/row_height));
+    if(rows>room)rows=room;
+    if(rows!=a->completion_visible_rows)a->completion_reveal=true;
+    a->completion_visible_rows=rows;
+    float h=rows*row_height+footer+8;
+    float x=fmaxf(8,fminf(a->editor_caret.x,(float)width-w-8)),y=a->editor_caret.y+a->editor_caret.h+4;
+    if(h>below)y=fmaxf(editor_top,a->editor_caret.y-h-4);
     a->completion_list_bounds=nk_rect(x,y,w,h);
+    size_t max_first=a->completion_count-rows;
+    if(!max_first)a->completion_scroll_drag=false;
+    if(a->completion_first>max_first)a->completion_first=max_first;
+    if(a->completion_reveal){
+        if(a->completion_selected<a->completion_first)a->completion_first=a->completion_selected;
+        if(a->completion_selected>=a->completion_first+rows)a->completion_first=a->completion_selected-rows+1;
+        a->completion_reveal=false;
+    }
     struct nk_window *previous=ui->active;
-    nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(8,6));
-    nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(4,2));
-    nk_style_push_float(ui,&ui->style.button.rounding,2);
+    nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(1,3));
+    nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(0,0));
+    nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(header)));
+    nk_style_push_float(ui,&ui->style.window.rounding,5);
+    nk_style_push_float(ui,&ui->style.window.border,1);
+    memset(a->completion_choice_bounds,0,sizeof a->completion_choice_bounds);
+    a->completion_scroll_bounds=nk_rect(0,0,0,0);
     nk_window_show(ui,"api-completion",NK_SHOWN);
     if(nk_begin(ui,"api-completion",a->completion_list_bounds,NK_WINDOW_NO_SCROLLBAR|NK_WINDOW_BORDER|NK_WINDOW_BACKGROUND)) {
         ui->active=previous;
         ui->current->flags &= ~(nk_flags)NK_WINDOW_ROM;ui->current->layout->flags &= ~(nk_flags)NK_WINDOW_ROM;
-        if(nk_input_is_mouse_hovering_rect(&ui->input,a->completion_list_bounds) && ui->input.mouse.scroll_delta.y!=0) {
-            int step=ui->input.mouse.scroll_delta.y>0?-1:1;
-            a->completion_selected=(a->completion_selected+a->completion_count+step)%a->completion_count;
+        struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+        if(nk_input_is_mouse_hovering_rect(&ui->input,a->completion_list_bounds) && ui->input.mouse.scroll_delta.y!=0){
+            double next=(double)a->completion_first-ui->input.mouse.scroll_delta.y;
+            a->completion_first=(size_t)fmax(0,fmin((double)max_first,next));
             ui->input.mouse.scroll_delta=nk_vec2(0,0);
         }
-        size_t first=(a->completion_selected/4)*4;
-        for(size_t row=0;row<4 && first+row<a->completion_count;row++) {
-            size_t at=first+row;const ps_completion_symbol *symbol=ps_completion_at(a->completion_indices[at]);
-            nk_layout_row_dynamic(ui,row_height,1);a->completion_choice_bounds[row]=nk_widget_bounds(ui);
-            struct nk_rect b=a->completion_choice_bounds[row];
-            if(a->completion_explicit && at==a->completion_selected)nk_fill_rect(nk_window_get_canvas(ui),b,2,UI_COLOR(selection_active));
-            nk_spacer(ui);
-            ps_ui_draw_icon(nk_window_get_canvas(ui),symbol->kind==PS_COMPLETION_FUNCTION?PS_ICON_FUNCTION:symbol->kind==PS_COMPLETION_TYPE?PS_ICON_TYPE:PS_ICON_VALUE,nk_rect(b.x,b.y,22,b.h),UI_COLOR(accent));
-            nk_draw_text(nk_window_get_canvas(ui),nk_rect(b.x+26,b.y+(b.h-ui->style.font->height)/2,b.w-28,ui->style.font->height),symbol->name,(int)strlen(symbol->name),ui->style.font,nk_rgba(0,0,0,0),UI_COLOR(text));
-            if(ps_ui_button_at(ui,b,symbol->name,a->completion_explicit && at==a->completion_selected)){a->completion_selected=at;a->completion_explicit=true;a->completion_accept_pending=true;}
+        if(max_first){
+            struct nk_rect track=nk_rect(x+w-8,y+4,6,rows*row_height);
+            float thumb_h=fmaxf(18,track.h*rows/(float)a->completion_count),travel=track.h-thumb_h;
+            float top=track.y+travel*(float)a->completion_first/(float)max_first;
+            bool down=nk_input_is_mouse_down(&ui->input,NK_BUTTON_LEFT);
+            if(nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) && nk_input_is_mouse_hovering_rect(&ui->input,track)){
+                a->completion_scroll_drag=true;
+                a->completion_scroll_grab=ui->input.mouse.pos.y>=top && ui->input.mouse.pos.y<top+thumb_h?ui->input.mouse.pos.y-top:thumb_h/2;
+            }
+            if(a->completion_scroll_drag && down && travel>0){
+                float position=(ui->input.mouse.pos.y-track.y-a->completion_scroll_grab)/travel;
+                a->completion_first=(size_t)floor(fmax(0,fmin(1,position))*max_first+.5);
+                top=track.y+travel*(float)a->completion_first/(float)max_first;
+            }
+            if(!down)a->completion_scroll_drag=false;
+            a->completion_scroll_bounds=nk_rect(track.x,top,track.w,thumb_h);
         }
-        const ps_completion_symbol *symbol=ps_completion_at(a->completion_indices[a->completion_selected]);
-        nk_layout_row_dynamic(ui,signature_height,1);nk_label_wrap(ui,symbol->signature);
-        nk_layout_row_dynamic(ui,28,2);
-        a->completion_reference_bounds=nk_widget_bounds(ui);
-        if(nk_button_label(ui,"Referenz")) {
-            struct nk_text_edit *edit=a->completion_edit;
-            if(api_reference_open(a,symbol)){completion_close(a);a->completion_focus_edit=edit;}
+        for(unsigned row=0;row<rows;row++){
+            size_t at=a->completion_first+row;const ps_completion_symbol *symbol=ps_completion_at(a->completion_indices[at]);
+            nk_layout_row_dynamic(ui,row_height,1);struct nk_rect b=nk_widget_bounds(ui);nk_spacer(ui);
+            b.w-=max_first?10:0;a->completion_choice_bounds[row]=b;
+            bool chosen=a->completion_explicit && at==a->completion_selected;
+            if(chosen || nk_input_is_mouse_hovering_rect(&ui->input,b))nk_fill_rect(canvas,b,0,UI_COLOR(text_selection));
+            if(chosen)nk_fill_rect(canvas,nk_rect(b.x,b.y,2,b.h),0,UI_COLOR(selection_accent));
+            ps_ui_draw_icon(canvas,symbol->kind==PS_COMPLETION_FUNCTION?PS_ICON_FUNCTION:symbol->kind==PS_COMPLETION_TYPE?PS_ICON_TYPE:PS_ICON_VALUE,nk_rect(b.x+7,b.y+4,18,b.h-8),UI_COLOR(accent));
+            char type[128];completion_type(symbol,type);
+            const struct nk_user_font *font=a->font_code;
+            float type_w=fminf(105,font->width(font->userdata,font->height,type,(int)strlen(type)));
+            completion_label(ui,nk_rect(b.x+33,b.y,fmaxf(1,b.w-49-type_w),b.h),ps_completion_insertion(&a->completion_query,symbol),font,UI_COLOR(code_text));
+            completion_label(ui,nk_rect(b.x+b.w-type_w-8,b.y,type_w,b.h),type,font,UI_COLOR(muted));
+            if(ps_ui_button_at(ui,b,symbol->name,chosen)){a->completion_selected=at;a->completion_explicit=true;a->completion_accept_pending=true;}
         }
-        nk_label_colored(ui,"Enter / Tab · Esc",NK_TEXT_RIGHT,UI_COLOR(muted));
+        if(max_first)nk_fill_rect(canvas,a->completion_scroll_bounds,3,UI_COLOR(selection_accent));
+        nk_layout_row_dynamic(ui,footer,1);struct nk_rect b=nk_widget_bounds(ui);nk_spacer(ui);
+        nk_stroke_line(canvas,b.x,b.y,b.x+b.w,b.y,1,UI_COLOR(border));
+        char count[64];snprintf(count,sizeof count,a->completion_count==1?"1 Vorschlag":"%zu Vorschläge",a->completion_count);
+        completion_label(ui,nk_rect(b.x+8,b.y,b.w*.42f,b.h),count,ui->style.font,UI_COLOR(muted));
+        completion_label(ui,nk_rect(b.x+b.w*.44f,b.y,b.w*.47f-8,b.h),a->completion_explicit?"Enter / Tab":"↑ ↓ auswählen",ui->style.font,UI_COLOR(muted));
+        struct nk_rect info=nk_rect(b.x+b.w-25,b.y+3,19,19);
+        completion_label(ui,info,"i",ui->style.font,UI_COLOR(muted));
+        if(ps_ui_button_at(ui,info,a->completion_info_visible?"Kurzinfo ausblenden":"Kurzinfo anzeigen",a->completion_info_visible))a->completion_info_visible=!a->completion_info_visible;
     }
     nk_end(ui);ui->active=previous;
-    nk_style_pop_float(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
+    nk_style_pop_float(ui);nk_style_pop_float(ui);nk_style_pop_style_item(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);
     nk_sdl_window_raise(ui,"api-completion");
+    /* The candidate card describes a real catalog item. Call-parameter help
+     * has its own controller; do not pass this off as that missing feature. */
+    if(a->completion_info_visible){
+        const ps_completion_symbol *symbol=ps_completion_at(a->completion_indices[a->completion_selected]);
+        float iw=fminf(330,width-16.f);
+        float right=width-8.f-(x+w+6),left=x-14;
+        bool on_right=right>=220 || right>=iw;
+        if(on_right)iw=fminf(iw,right);
+        else if(left>=220)iw=fminf(iw,left);
+        float sh=documentation_height(ui->style.font,symbol->signature,strlen(symbol->signature),iw-42);
+        float ih=fminf(260,sh+16+3*row_height+24+3*ui->style.window.spacing.y+10);
+        float ix=x+w+6,iy=y;
+        if(!on_right){if(x-iw-6>=8)ix=x-iw-6;else{ix=fmaxf(8,fminf(x,width-iw-8));iy=y+h+6;}}
+        iy=fmaxf(8,fminf(iy,height-ih-8));
+        a->completion_info_bounds=nk_rect(ix,iy,iw,ih);
+        nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(completion_info)));
+        nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(13,12));
+        nk_style_push_vec2(ui,&ui->style.window.scrollbar_size,nk_vec2(6,6));
+        nk_style_push_float(ui,&ui->style.window.border,1);
+        nk_style_push_float(ui,&ui->style.window.rounding,5);
+        nk_window_show(ui,"api-completion-info",NK_SHOWN);
+        if(nk_begin(ui,"api-completion-info",a->completion_info_bounds,NK_WINDOW_BORDER|NK_WINDOW_BACKGROUND)){
+            ui->active=previous;ui->current->flags&=~(nk_flags)NK_WINDOW_ROM;ui->current->layout->flags&=~(nk_flags)NK_WINDOW_ROM;
+            nk_layout_row_dynamic(ui,row_height,1);nk_label(ui,symbol->name,NK_TEXT_LEFT);
+            nk_layout_row_dynamic(ui,sh+16,1);struct nk_rect signature=nk_widget_bounds(ui);nk_spacer(ui);
+            nk_fill_rect(nk_window_get_canvas(ui),signature,3,UI_COLOR(edit));
+            ps_ui_accessibility_label(ui,signature,symbol->signature);
+            int at=0,n=(int)strlen(symbol->signature);float sy=signature.y+8;
+            while(at<n){int used=ps_ui_text_line(ui->style.font,symbol->signature+at,n-at,signature.w-16,false);if(used<=0)used=1;
+                nk_draw_text(nk_window_get_canvas(ui),nk_rect(signature.x+8,sy,signature.w-16,ui->style.font->height),symbol->signature+at,used,ui->style.font,nk_rgba(0,0,0,0),UI_COLOR(code_text));
+                at+=used;sy+=ui->style.font->height;}
+            nk_layout_row_dynamic(ui,row_height,1);nk_label_colored(ui,symbol->module,NK_TEXT_LEFT,UI_COLOR(muted));
+            nk_layout_row_dynamic(ui,row_height,1);a->completion_reference_bounds=nk_widget_bounds(ui);nk_spacer(ui);
+            completion_label(ui,a->completion_reference_bounds,"Referenz öffnen",ui->style.font,UI_COLOR(accent));
+            if(ps_ui_button_at(ui,a->completion_reference_bounds,"Referenz öffnen",false)){
+                struct nk_text_edit *edit=a->completion_edit;
+                if(api_reference_open(a,symbol)){completion_close(a);a->completion_focus_edit=edit;}
+            }
+        }
+        nk_end(ui);ui->active=previous;
+        nk_style_pop_float(ui);nk_style_pop_float(ui);nk_style_pop_vec2(ui);nk_style_pop_vec2(ui);nk_style_pop_style_item(ui);
+        nk_sdl_window_raise(ui,"api-completion-info");
+    }else nk_window_show(ui,"api-completion-info",NK_HIDDEN);
 }

@@ -16,6 +16,7 @@ typedef struct {
     struct nk_color curves[8];
     /* A2 selection wash. Independent of navigation/toggle highlights. */
     struct nk_color text_selection, selection_accent, selection_focus, selection_border;
+    struct nk_color completion_info;
 } ps_ui_palette;
 
 enum {
@@ -50,9 +51,11 @@ static const ps_ui_palette PS_UI_DARK = {
     .text_selection = {170, 184, 202, 38},
     .selection_accent = PS_RGB(171, 185, 202),
     .selection_focus = PS_RGB(138, 186, 255),
-    .selection_border = PS_RGB(166, 169, 177)
+    .selection_border = PS_RGB(166, 169, 177),
+    .completion_info = PS_RGB(35, 37, 42)
 };
 static const ps_ui_palette PS_UI_LIGHT = {
+    .completion_info = PS_RGB(244, 245, 247),
     .text = PS_RGB(25, 30, 38),
     .muted = PS_RGB(78, 87, 100),
     .window = PS_RGB(246, 247, 250),
@@ -100,6 +103,7 @@ static const ps_ui_palette PS_UI_LIGHT = {
     .curves = {PS_RGB(0, 75, 165), PS_RGB(145, 72, 0), PS_RGB(0, 100, 59), PS_RGB(115, 48, 163), PS_RGB(158, 34, 95), PS_RGB(0, 90, 107), PS_RGB(106, 86, 0), PS_RGB(60, 71, 89)}
 };
 static const ps_ui_palette PS_UI_HIGH_CONTRAST = {
+    .completion_info = PS_RGB(0, 0, 0),
     .text = PS_RGB(255, 255, 255),
     .muted = PS_RGB(212, 212, 212),
     .window = PS_RGB(0, 0, 0),

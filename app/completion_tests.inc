@@ -57,11 +57,13 @@ static void completion_test_frame(app *a,const char *mode,int *stage,int *code,c
         break;
     }
     case 5:
+        ok=a->completion_info_bounds.w>0 && a->completion_reference_bounds.y>=a->completion_info_bounds.y &&
+           a->completion_reference_bounds.y+a->completion_reference_bounds.h<=a->completion_info_bounds.y+a->completion_info_bounds.h-4;
         *capture=target==0?"completion-experiment.bmp":target==1?"completion-analysis.bmp":"completion-document.bmp";
-        if(target==2)test_mouse(a,a->completion_choice_bounds[a->completion_selected%4],true);
+        if(target==2)test_mouse(a,a->completion_choice_bounds[a->completion_selected-a->completion_first],true);
         else test_window_key_mod(a->window,target?SDLK_TAB:SDLK_RETURN,0);
         break;
-    case 6:if(target==2){test_mouse(a,a->completion_choice_bounds[a->completion_selected%4],false);*stage=16;}break;
+    case 6:if(target==2){test_mouse(a,a->completion_choice_bounds[a->completion_selected-a->completion_first],false);*stage=16;}break;
     case 16:*stage=17;break;
     case 17:*stage=7;break;
     case 7:

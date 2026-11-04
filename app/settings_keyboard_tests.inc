@@ -14,13 +14,15 @@ static void test_settings_keyboard_frame(app *a,bool reading,bool paced,int *sta
     case 1:
         if(!a->settings_open && ps_clock()<deadline){--*stage;return;}
         ok=a->settings_open && a->tab!=6;
-        if(reading){ok=ok && a->preferences.ui_size==22 && a->preferences.editor_size==20 && a->preferences.autosave_seconds==120 && a->preferences.theme==PS_THEME_LIGHT;*stage=30;break;}
+        if(reading){ok=ok && a->preferences.ui_size==22 && a->preferences.editor_size==20 && a->preferences.autosave_seconds==120 && a->preferences.theme==PS_THEME_LIGHT && !a->preferences.completion_auto && a->preferences.completion_rows==9;*stage=30;break;}
         SET_FOCUS(0);SET_KEY(SDLK_LEFT);break;
     case 2:ok=a->settings_draft.ui_size==22;SET_FOCUS(4);SET_KEY(SDLK_RIGHT);break;
     case 3:ok=a->settings_draft.theme==PS_THEME_LIGHT;SET_FOCUS(21);SET_KEY(SDLK_SPACE);break;
     case 4:ok=a->settings_group==1;SET_FOCUS(5);for(int i=0;i<4;i++)SET_KEY(SDLK_RIGHT);break;
     case 5:ok=a->settings_draft.editor_size==20;SET_FOCUS(6);SET_KEY(SDLK_LEFT);SET_KEY(SDLK_LEFT);break;
-    case 6:ok=a->settings_draft.autosave_seconds==120;SET_FOCUS(22);SET_KEY(SDLK_SPACE);flag=0;break;
+    case 6:ok=a->settings_draft.autosave_seconds==120;SET_FOCUS(29);SET_KEY(SDLK_SPACE);*stage=40;break;
+    case 40:ok=!a->settings_draft.completion_auto && a->preferences.completion_auto==1;SET_FOCUS(30);for(unsigned i=0;i<4;i++)SET_KEY(SDLK_RIGHT);break;
+    case 41:ok=a->settings_draft.completion_rows==9 && a->preferences.completion_rows==5;SET_FOCUS(22);SET_KEY(SDLK_SPACE);flag=0;*stage=7;break;
     case 7:
         ok=a->settings_group==2;SET_FOCUS(7+(int)flag);SET_KEY(SDLK_SPACE);flag++;
         if(flag<6)--*stage;break;
@@ -28,13 +30,13 @@ static void test_settings_keyboard_frame(app *a,bool reading,bool paced,int *sta
     case 9:ok=a->settings_group==3;SET_FOCUS(13);SET_KEY(SDLK_SPACE);break;
     case 10:ok=a->settings_draft.view_flags==(PS_VIEW_LOG|PS_VIEW_ORTHOGRAPHIC);SET_FOCUS(18);SET_KEY(SDLK_SPACE);break;
     case 11:ok=a->settings_review && a->preferences.ui_size==16;SET_FOCUS(1);if(!paced)*capture="keyboard-settings-focus.png";SET_KEY(SDLK_RETURN);break;
-    case 12:if(a->settings_apply_requested){--*stage;return;}ok=!a->settings_open && a->preferences.ui_size==22 && a->preferences.editor_size==20 && a->preferences.autosave_seconds==120 && a->preferences.theme==PS_THEME_LIGHT && a->preferences.view_flags==(PS_VIEW_LOG|PS_VIEW_ORTHOGRAPHIC);open_settings(a);*stage=30;break;
+    case 12:if(a->settings_apply_requested){--*stage;return;}ok=!a->settings_open && a->preferences.ui_size==22 && a->preferences.editor_size==20 && a->preferences.autosave_seconds==120 && a->preferences.theme==PS_THEME_LIGHT && a->preferences.view_flags==(PS_VIEW_LOG|PS_VIEW_ORTHOGRAPHIC) && !a->preferences.completion_auto && a->preferences.completion_rows==9;puts("SETTINGS COMPLETION: keyboard-edits=1 applied=1 rows=9 auto=0");open_settings(a);*stage=30;break;
     case 30:SET_FOCUS(0);SET_KEY(SDLK_RIGHT);break;
     case 31:ok=a->settings_draft.ui_size==16 && a->preferences.ui_size==22;SET_KEY(SDLK_ESCAPE);break;
     case 32:ok=!a->settings_open && a->preferences.ui_size==22;open_settings(a);break;
     case 33:SET_FOCUS(3);SET_KEY(SDLK_SPACE);break;
-    case 34:ok=a->settings_draft.ui_size==16 && a->settings_draft.editor_size==12 && a->settings_draft.view_flags==31 && a->settings_draft.theme==PS_THEME_DARK && a->preferences.ui_size==22;SET_KEY(SDLK_ESCAPE);break;
-    case 35:ok=!a->settings_open && a->preferences.ui_size==22;a->quitting=true;break;
+    case 34:ok=a->settings_draft.ui_size==16 && a->settings_draft.editor_size==12 && a->settings_draft.view_flags==31 && a->settings_draft.theme==PS_THEME_DARK && a->settings_draft.completion_auto==1 && a->settings_draft.completion_rows==5 && a->preferences.ui_size==22;SET_KEY(SDLK_ESCAPE);break;
+    case 35:ok=!a->settings_open && a->preferences.ui_size==22 && !a->preferences.completion_auto && a->preferences.completion_rows==9;puts("SETTINGS COMPLETION: defaults-in-draft=1 cancel-preserves=1 rows=9 auto=0");a->quitting=true;break;
     }
     if(!ok){fprintf(stderr,"Settings A keyboard failed at stage %d: focus=%d group=%u open=%d tab=%d draft=%u/%u/%u flags=%u error=%s\n",*stage-1,a->settings_focus,a->settings_group,a->settings_open,a->tab,a->settings_draft.ui_size,a->settings_draft.editor_size,a->settings_draft.autosave_seconds,a->settings_draft.view_flags,a->preferences_error);*code=1;a->quitting=true;}
     if(a->quitting)printf("SETTINGS KEYBOARD SELF-TEST: %s\n",*code?"FAILED":"PASSED");

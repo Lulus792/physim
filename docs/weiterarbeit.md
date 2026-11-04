@@ -5,39 +5,49 @@ abgleichen. Verbindliche Designs: [AGENTS.md](../AGENTS.md) und
 [Gesamtübergabe](visuals/unified-workspace/NEXT-CHAT.md). Keine geschlossene
 Prüfung oder Protokoll-Trennlinie allein wegen Kompaktierung erneut beginnen.
 
-## Aktueller Anschluss: automatische Vorschläge als Unterbau von D
+## Aktueller Anschluss: D-Viewport und wirksame Preferences
 
 **Nutzer-Mac aus; keine Zugriffe oder Erreichbarkeitsproben.**
-**Quellstand `25662d6f` ist in beide Repositories gepusht; alle 1.110 Compiler-/
-Testdateien stimmen mit dem Commit überein.**
-**Eingefroren: `completion-auto-refined`, 154 eigene Eingaben / 1.110 Compiler-
-und Testdateien.** Automatische Listen warten 140 ms auf einen unveränderten
-Quell-/Cursor-/Editorstand und übernehmen erst nach ausdrücklicher Auswahl.
-Enter/Tab ohne Auswahl behalten Zeilenumbruch/Einrückung; weitere Eingabe
-verwirft alte automatische Auswahl/Übernahme, unter zwei Zeichen schließt sie.
-Escape samt manuellem
-Überstimmen, Strg+N/P, Undo, IME-Pause/-Commit und Kontextverwerfung umgesetzt;
-C-Zeilenkommentare mit Backslash-LF/CRLF bleiben Kommentare. Leerlauf ohne weitere
-Quelltextsuche. [Umfang und noch offenes vollständiges D](visuals/unified-workspace/COMPLETION-D-NATIVE.md).
+**Eingefroren: `completion-d-refined`, 155 eigene Eingaben / 1.110 Compiler-
+und Testdateien.** D bleibt insgesamt unvollständig; keine volle Punktzahl.
 
-Abschluss Windows Release / Linux Debug ASan/UBSan je **Unit 1/1 + GUI 2/2**,
-`run-8ge77tbp` / `run-w9x107g3` und `run-jzzktbs2` / `run-1ae5dg9v`.
-Je vier GUI-App-Prozesse; dieselbe Binärdatei zwischen Unit- und GUI-Aufruf.
-Isolierte Gegenprobe fügt ohne Auswahl wirklich `ps_aabb` ein und wird an Stufe 7
-abgelehnt; echte Präfix-Gegenprobe fügt `ps_v2` nach weiterer Eingabe ein und
-wird ebenfalls erkannt. Zusätzliche C-Kommentar-Unit-Gegenprobe scheitert vor
-der Korrektur. Dreizehn automatische Abschlussmarker je Sprache bestanden.
-Alle lokalen Handles beendet, Quell-/Runtime-/Archivbytes gelesen. Automatische
-Prüfung ohne Bilder; 36 ersetzte erfolgreiche BMPs entfernt (115.089.768 Bytes),
-zwölf aktuelle manuelle D-Vergleichsbilder erhalten. [Originalergebnisse, Quellen,
-Gegenproben und Orchestrierungsgrenzen](verification/completion-auto-2026-11-04.md).
+Ergänzt: flache 400-Einheiten-Liste mit standardmäßig fünf ganzen Zeilen,
+unabhängigem Scrolloffset und ziehbarem 6-Einheiten-Thumb. Alle Treffer erhalten,
+Namen einzeilig, Typ rechts, Gesamtzähler und getrennte neutrale Kandidatenkarte
+mit tatsächlicher Katalogsignatur/Modul. Referenzlink vollständig sichtbar.
+Einstellungen A / Editor: automatische Vorschläge und sichtbare Zeilen 1–20,
+Standard 1/5. PSPREF06 speichert/migriert 01–05; Übernehmen, Abbrechen,
+Standardwerte, Suche und Änderungsprüfung sind verbunden. Manueller Zugang bleibt
+bei ausgeschalteter Automatik wirksam. Frühere 140-ms-Eingabe-/IME-/Escape-/Undo-
+Verträge bleiben erhalten. [Umfang und weiterhin offenes D](visuals/unified-workspace/COMPLETION-D-NATIVE.md).
 
-**D bleibt unvollständig:** noch Viererlisten-Renderer, keine neuen Preferences,
-kein echtes Scope-Backend, keine getrennte Parameterhilfe und keine gemeinsame
-freigegebene Syntaxpalette. Diesen Eingabeschritt nicht als gesamte D-Abnahme
-oder volle Punktzahl ausgeben. Der neue Mac-Editorlauf `41887147796` ist gestartet: Jobs `126774543066`
-(Apple Silicon) / `126774542390` (Intel) zuletzt wartend. Diese Handles beobachten,
-keinen Ersatzlauf anstoßen; tatsächliche Resultate stehen noch aus.
+`completion-d-final` Windows Release / Linux Debug ASan/UBSan je **Unit 2/2 +
+GUI 5/5**, `run-ko9q17o5` / `run-b9elxr1a` und `run-2pr6qzoa` / `run-7qms13gs`.
+Danach tatsächlicher Reflow-Gegenfall: gewählt 648, erste sichtbare Position 640,
+eine Zeile. Korrektur bringt Auswahl bei veränderter Zeilenzahl ins Sichtfeld.
+Gezielter Abschluss `completion-d-refined` je **Unit 1/1 + GUI 2/2**,
+`run-wzwnoqh0` / `run-3m9ciqz6` und `run-vrm9pyps` / `run-qghdxkv9`.
+Preferences-/Settings-Quellen einschließlich main.c und Design-Tokens seit der
+vollständigen Gruppe unverändert; Nachweis über tatsächliche Hashes. Nicht einen
+neuen vollständigen 2+5-Lauf mit der letzten Binärdatei behaupten.
+
+Erste Funktionstests hatten den abgeschnittenen Referenzknopf übersehen. Native
+Bildprüfung fand ihn, neue Bounds-Prüfung lehnt isolierten Höhenmutant wirklich ab;
+Korrektur visuell betrachtet. Beide Gegenfälle bleiben erhalten. Große UI-/Code-
+Schrift 22 mit Hell/Kontrast, Editorraumbegrenzung, ein/neun Zeilen, Rad ohne
+Übernahme, Thumb-Drag und langsam getaktete Settings tatsächlich geprüft.
+Alle lokalen Handles beendet, Quell-/Runtime-/Archivbytes gelesen. 23 ersetzte
+BMPs entfernt (73.529.574 Bytes); Originalfehler, zwölf aktuelle manuelle Bilder
+und ausdrücklich benötigte Referenzen behalten. Automatische Prüfung ohne Bilder.
+[Originalkommandos, Phasen, Gegenfälle und Grenzen](verification/completion-d-2026-11-04.md).
+
+**Weiter offen:** gemeinsame freigegebene Syntaxrollen und gelbe Funktionen,
+Rollenicons/-farben, vollständige Kandidatenkurzinfo, echte C-/Physim-Scopes und
+separate Aufrufhilfe mit Benutzerfunktionen und Revisionen. Referenz-Pointerzugang
+bei Ergänzung der Kurzinfo ausdrücklich mitprüfen. Physische Eingabe/IME,
+Screenreader, DPI/Monitor/Vollbild und aktuelle Mac-Abnahme stehen aus.
+Interaktiver `file:`-Browseraufruf durch URL-Richtlinie blockiert; kein Umweg.
+Versionierte Freigabe/CSS und Referenz-PNG gelesen; keine Browserbedienung behaupten.
 
 ## Abgeschlossener Einstellungen-Tastaturanschluss
 
@@ -139,11 +149,11 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
   `4adf2699` wurde abgebrochen und ist nicht abgenommen; vor einem Nachlauf prüfen,
   ob für den neuen Quellstand bereits ein Settings-Lauf existiert. ARM-Settings
   ist mit 16/16 geschlossen; nicht wiederholen. Nutzer-Mac bleibt aus.
-  Aktueller lokaler Anschluss: `build/validation/completion-auto-2026-11-04/STATE.md`.
-- D konkret weiter umsetzen: fünf sichtbare Zeilen und echte Einstellungen A /
-  Editor mit Preferences-Migration und Übernehmen/Abbrechen/Defaults integrieren;
-  schmale Liste/Scrollleiste und neutrale getrennte Kandidateninfo aus der
-  freigegebenen HTML-Referenz nativ abgleichen. Keine wirkungslosen Optionen.
+  Aktueller lokaler Anschluss: `build/validation/completion-d-2026-11-04/STATE.md`.
+- D weiterführen: gemeinsame freigegebene Syntaxrollen/Palette und Rollenicons
+  sowie vollständige Kandidaten-Kurzinfo mit eigenem Dokumentbesitz ergänzen.
+  Referenz-Pointerzugang und Karten-Reflow dabei tatsächlich prüfen. Viewport
+  und Preferences sind oben geprüft; nicht wegen Kompaktierung neu beginnen.
 - Danach/verknüpft gemeinsame Syntaxrollen sowie echte C-/Physim-Scopes und
   getrennte Aufrufsignatur einschließlich Benutzerfunktionen vervollständigen.
   Leere Argumente, Shadowing, unvollständige Initialisierung, verschachtelte
@@ -163,7 +173,7 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
 
 ## Sicherer lokaler Anschluss
 
-- `prepare-next.py <neuer-tag> completion-auto-refined` prüft vorher Quelle,
+- `prepare-next.py <neuer-tag> completion-d-refined` prüft vorher Quelle,
   Runtime und Archive. Neue Module ausdrücklich in die Eingabeliste aufnehmen.
   Eigene Quellen vollständig versionieren, fremde AT-SPI-/Orca-/Status-/dist-
   Änderungen erhalten und nicht in eigene isolierte Quellen übernehmen.

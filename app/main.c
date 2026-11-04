@@ -199,7 +199,7 @@ typedef struct {
     int settings_previous_tab, panel_drag;
     bool settings_from_analysis,settings_defaults;
     int settings_focus;
-    struct nk_rect settings_focus_bounds[29];
+    struct nk_rect settings_focus_bounds[31];
     bool settings_keyboard, settings_focus_scroll;
     SDL_Window *settings_window;
     ps_graphics *settings_graphics;
@@ -209,7 +209,7 @@ typedef struct {
     SDL_WindowID settings_source_id;
     char settings_search[192],settings_numbers[3][16],settings_capture[4096];
     struct nk_user_font settings_fonts[11];
-    struct nk_rect settings_frame,settings_body,settings_preview,settings_categories[5],settings_fields[14];
+    struct nk_rect settings_frame,settings_body,settings_preview,settings_categories[5],settings_fields[PS_SETTING_COUNT];
     unsigned protocol_initial_pending;
     uint32_t protocol_initial_height;
     bool protocol_initial_open;
@@ -657,9 +657,12 @@ typedef struct {
     struct nk_rect source_editor_frame;
     struct nk_text_edit *completion_edit,*completion_focus_edit,*file_tab_keyboard_edit;
     ps_completion_query completion_query;
-    size_t *completion_indices,completion_count,completion_selected;
+    size_t *completion_indices,completion_count,completion_selected,completion_first;
+    unsigned completion_visible_rows;
+    bool completion_reveal,completion_scroll_drag,completion_info_visible;
+    float completion_scroll_grab;
     bool completion_active,completion_accept_pending;
-    struct nk_rect completion_button_bounds,completion_list_bounds,completion_choice_bounds[4];
+    struct nk_rect completion_button_bounds,completion_list_bounds,completion_info_bounds,completion_scroll_bounds,completion_choice_bounds[PS_COMPLETION_ROWS_MAX];
     size_t diagnostic_used;
     ps_wire_buffer wire;
     uint32_t command_seq;
@@ -3257,7 +3260,9 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
     if(search_pointer && nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT))a->search_keyboard=true;
     if(a->show_search && nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) && !search_pointer &&
        nk_input_is_mouse_hovering_rect(&ui->input,editor_bounds))a->search_keyboard=false;
-    bool covered=search_pointer || (a->completion_active && nk_input_is_mouse_hovering_rect(&ui->input,a->completion_list_bounds));
+    bool covered=search_pointer || (a->completion_active && (a->completion_scroll_drag ||
+        nk_input_is_mouse_hovering_rect(&ui->input,a->completion_list_bounds) ||
+        nk_input_is_mouse_hovering_rect(&ui->input,a->completion_info_bounds)));
     struct nk_keyboard keyboard=ui->input.keyboard;
     int saved_start=edit->select_start,saved_end=edit->select_end,saved_cursor=edit->cursor;
     struct nk_vec2 saved_scroll=edit->scrollbar;

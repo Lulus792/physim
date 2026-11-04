@@ -29,8 +29,11 @@ static const settings_field settings_fields[]={
     {"Protokoll geöffnet","Persönliche Sichtbarkeit. Die gemeinsame Protokollgestaltung C bleibt erhalten.","",3,13,PS_VIEW_LOG},
     {"Seitenleistenbreite","Gespeicherter Größenwert für den dargestellten Bereich Entwickeln.","größe seite panel",3,14,0},
     {"Inspektorbreite","Unabhängig von der linken Seitenleiste. Feste Panelplätze bleiben erhalten.","größe panel",3,15,0},
-    {"Protokollhöhe","Gespeicherter Ausgangswert. Der verfügbare Platz im Arbeitsfenster begrenzt die tatsächliche Höhe.","größe log",3,16,0}
+    {"Protokollhöhe","Gespeicherter Ausgangswert. Der verfügbare Platz im Arbeitsfenster begrenzt die tatsächliche Höhe.","größe log",3,16,0},
+    {"Vorschläge beim Tippen","Zeigt passende Vervollständigungen automatisch. Strg+Leertaste bleibt auch ausgeschaltet verfügbar.","completion autocomplete vervollständigung automatisch",1,29,0},
+    {"Sichtbare Vervollständigungen","Anzahl ganzer Zeilen in der Vorschlagsliste. Alle weiteren Treffer bleiben durch Scrollen und Pfeiltasten erreichbar.","completion autocomplete vorschläge zeilen",1,30,0}
 };
+_Static_assert(sizeof settings_fields/sizeof settings_fields[0]==PS_SETTING_COUNT,"Settings fields follow preference mask order");
 typedef struct {struct nk_color panel,header,field,button,border,text,muted,accent,primary,on_primary,selected,edge,warn,error;} settings_colors;
 static settings_colors settings_theme(unsigned theme) {
     if(theme==PS_THEME_LIGHT)return (settings_colors){nk_rgb(246,247,249),nk_rgb(237,239,243),nk_rgb(255,255,255),nk_rgb(224,227,234),nk_rgb(190,195,206),nk_rgb(32,36,44),nk_rgb(85,94,108),nk_rgb(23,86,158),nk_rgb(21,86,172),nk_rgb(255,255,255),nk_rgba(90,108,130,28),nk_rgb(101,120,141),nk_rgb(128,85,9),nk_rgb(165,41,37)};
@@ -149,7 +152,7 @@ static const ps_channel *settings_channel(app *a) {
 }
 static bool settings_search_no_results(app *a) {
     if(!*a->settings_search || settings_units_match(a))return false;
-    for(unsigned i=0;i<14;i++)if(settings_match(a,i))return false;
+    for(unsigned i=0;i<PS_SETTING_COUNT;i++)if(settings_match(a,i))return false;
     return true;
 }
 static void settings_search_clear(app *a) {
@@ -157,13 +160,15 @@ static void settings_search_clear(app *a) {
     a->settings_keyboard=a->settings_focus_scroll=true;
     nk_sdl_accessibility_keyboard_begin(a->settings_ui);
 }
-static int settings_order(app *a,int ids[29]) {
+static int settings_order(app *a,int ids[31]) {
     int n=0;ids[n++]=17;if(*a->settings_search)ids[n++]=26;
-    if(!a->settings_review){for(int i=20;i<25;i++)ids[n++]=i;for(unsigned i=0;i<14;i++)if(settings_match(a,i))ids[n++]=settings_fields[i].focus;if(settings_units_match(a) && settings_channel(a))ids[n++]=27;if(settings_search_no_results(a))ids[n++]=28;}
+    if(!a->settings_review){for(int i=20;i<25;i++)ids[n++]=i;for(unsigned i=0;i<PS_SETTING_COUNT;i++)if(settings_match(a,i))ids[n++]=settings_fields[i].focus;if(settings_units_match(a) && settings_channel(a))ids[n++]=27;if(settings_search_no_results(a))ids[n++]=28;}
     if(a->settings_review)ids[n++]=25;ids[n++]=3;ids[n++]=2;if(settings_changes(a) || !a->preferences_writable){ids[n++]=18;ids[n++]=1;}ids[n++]=19;return n;
 }
 static const char *settings_focus_name(int id) {
     static const char *names[]={"Schriftgröße der Oberfläche","Übernehmen","Abbrechen","Standardwerte","Darstellung","Schriftgröße im Code-Editor","Automatische Sicherung","Vektoren anzeigen","Flugbahnen anzeigen","Punkte anzeigen","Beschriftungen anzeigen","Raster und Achsen","Orthografische Ansicht","Protokoll geöffnet","Seitenleistenbreite","Inspektorbreite","Protokollhöhe","Einstellungen suchen","Änderungen prüfen","Einstellungen schließen","Darstellung","Editor & Sicherung","Simulation","Arbeitsfläche","Anzeigeeinheiten","Zurück","Suche löschen","Anzeigeeinheit bearbeiten …","Suche zurücksetzen"};
+    if(id==29)return "Vorschläge beim Tippen";
+    if(id==30)return "Sichtbare Vervollständigungen";
     return names[id];
 }
 static void settings_field_flush(app *a) {
@@ -175,7 +180,7 @@ static void settings_field_flush(app *a) {
 static bool settings_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
     if(!a->settings_open || key->mod&(SDL_KMOD_CTRL|SDL_KMOD_GUI|SDL_KMOD_ALT))return false;
     if(key->key==SDLK_ESCAPE){struct nk_window *body=nk_window_find(a->settings_ui,"settings-body");if(body && body->popup.active)a->settings_popup_close=true;else if(a->settings_review){a->settings_review=false;a->settings_focus=18;a->settings_keyboard=true;a->settings_focus_scroll=true;}else settings_close(a);return true;}
-    if(key->key==SDLK_TAB){settings_field_flush(a);int ids[29],n=settings_order(a,ids),at=-1,d=key->mod&SDL_KMOD_SHIFT?-1:1;for(int i=0;i<n;i++)if(ids[i]==a->settings_focus)at=i;
+    if(key->key==SDLK_TAB){settings_field_flush(a);int ids[31],n=settings_order(a,ids),at=-1,d=key->mod&SDL_KMOD_SHIFT?-1:1;for(int i=0;i<n;i++)if(ids[i]==a->settings_focus)at=i;
         a->settings_focus=ids[(at+d+n)%n];a->settings_keyboard=a->settings_focus_scroll=true;nk_sdl_accessibility_keyboard_begin(a->settings_ui);return true;}
     if(!a->settings_keyboard || a->settings_focus==17 || (a->settings_focus>=14 && a->settings_focus<=16))return false;
     int id=a->settings_focus,d=key->key==SDLK_LEFT || key->key==SDLK_UP?-1:key->key==SDLK_RIGHT || key->key==SDLK_DOWN?1:0;
@@ -194,6 +199,8 @@ static bool settings_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
     else if(id==4)p->theme=(p->theme+(d<0?2:1))%3;
     else if(id==6){const uint32_t secs[]={10,30,60,120};unsigned at=0;while(at<3 && secs[at]!=p->autosave_seconds)at++;p->autosave_seconds=secs[(at+(d<0?3:1))%4];}
     else if(id>=7 && id<=13 && activate)p->view_flags^=1u<<(id-7);
+    else if(id==29 && activate)p->completion_auto=!p->completion_auto;
+    else if(id==30)p->completion_rows=1+(p->completion_rows-1+(d<0?PS_COMPLETION_ROWS_MAX-1:1))%PS_COMPLETION_ROWS_MAX;
     else return false;
     return true;
 }

@@ -71,17 +71,19 @@ static void settings_value(const ps_preferences *p,unsigned field,char text[96])
     else if(field==1 || field==2)snprintf(text,96,"%u px",field==1?p->ui_size:p->editor_size);
     else if(field==3)snprintf(text,96,"%u Sekunden",p->autosave_seconds);
     else if(field<=10)snprintf(text,96,"%s",p->view_flags&settings_fields[field].flag?"An":"Aus");
-    else snprintf(text,96,"%u px",field==11?p->sidebar_width:field==12?p->inspector_width:p->log_height);
+    else if(field<=13)snprintf(text,96,"%u px",field==11?p->sidebar_width:field==12?p->inspector_width:p->log_height);
+    else if(field==PS_SETTING_COMPLETION_AUTO)snprintf(text,96,"%s",p->completion_auto?"An":"Aus");
+    else snprintf(text,96,"%u",p->completion_rows);
 }
 static void settings_combo(app *a,unsigned field,float x,float y,float w,float f) {
     struct nk_context *ui=a->settings_ui;int id=settings_fields[field].focus;char label[96];settings_value(&a->settings_draft,field,label);
     nk_layout_space_push(ui,nk_rect(x,y,w,34*f));struct nk_rect r=nk_widget_bounds(ui);nk_style_push_font(ui,&a->settings_fonts[SET_FONT_BUTTON]);
     settings_colors c=settings_theme(a->preferences.theme);nk_fill_rect(nk_window_get_canvas(ui),r,5*f,c.field);nk_stroke_rect(nk_window_get_canvas(ui),r,5*f,f,c.border);
     if(ps_ui_combo_begin_named_scaled(ui,settings_focus_name(id),label,nk_vec2(w,220*f),f)){
-        nk_layout_row_dynamic(ui,34*f,1);unsigned count=field==2?6:4;
-        for(unsigned i=0;i<count;i++){const uint32_t secs[]={10,30,60,120};uint32_t value=field==3?secs[i]:(field==1?16:12)+i*2;
-            snprintf(label,sizeof label,field==3?"%u Sekunden":"%u px",value);
-            if(nk_button_label(ui,label)){if(field==1)a->settings_draft.ui_size=value;else if(field==2)a->settings_draft.editor_size=value;else a->settings_draft.autosave_seconds=value;nk_combo_close(ui);}}
+        nk_layout_row_dynamic(ui,34*f,1);unsigned count=field==PS_SETTING_COMPLETION_ROWS?PS_COMPLETION_ROWS_MAX:field==2?6:4;
+        for(unsigned i=0;i<count;i++){const uint32_t secs[]={10,30,60,120};uint32_t value=field==PS_SETTING_COMPLETION_ROWS?i+1:field==3?secs[i]:(field==1?16:12)+i*2;
+            snprintf(label,sizeof label,field==PS_SETTING_COMPLETION_ROWS?"%u":field==3?"%u Sekunden":"%u px",value);
+            if(nk_button_label(ui,label)){if(field==1)a->settings_draft.ui_size=value;else if(field==2)a->settings_draft.editor_size=value;else if(field==PS_SETTING_COMPLETION_ROWS)a->settings_draft.completion_rows=value;else a->settings_draft.autosave_seconds=value;nk_combo_close(ui);}}
         if(a->settings_popup_close)nk_combo_close(ui);nk_combo_end(ui);
     }
     nk_style_pop_font(ui);settings_focus_draw(a,id,r,nk_sdl_accessibility_is_focus_target(ui,NULL,settings_focus_name(id)));
@@ -110,10 +112,11 @@ static float settings_field_draw(app *a,unsigned field,float x,float y,float wid
             if(ps_ui_option_at_custom_focus(ui,r,"Darstellung",names[i],chosen,&focused))a->settings_draft.theme=i;
             a->theme_bounds[i]=r;if(chosen || focused)settings_focus_draw(a,4,r,focused);}
     }else{float cx=stack?x:x+width-160*f,cy=stack?y+23*f+hh+10*f:y,cw=stack?fminf(190*f,width):160*f;
-        if(field<=3)settings_combo(a,field,cx,cy,cw,f);
-        else if(field<=10){nk_layout_space_push(ui,nk_rect(cx,cy,cw,34*f));struct nk_rect r=nk_widget_bounds(ui);nk_bool value=(a->settings_draft.view_flags&item->flag)!=0;
+        if(field<=3 || field==PS_SETTING_COMPLETION_ROWS)settings_combo(a,field,cx,cy,cw,f);
+        else if(field<=10 || field==PS_SETTING_COMPLETION_AUTO){nk_layout_space_push(ui,nk_rect(cx,cy,cw,34*f));struct nk_rect r=nk_widget_bounds(ui);nk_bool value=field==PS_SETTING_COMPLETION_AUTO?a->settings_draft.completion_auto:(a->settings_draft.view_flags&item->flag)!=0;
             nk_style_push_font(ui,&a->settings_fonts[SET_FONT_BUTTON]);ps_ui_checkbox_named(ui,value?"An":"Aus",item->title,&value);nk_style_pop_font(ui);
-            if(value)a->settings_draft.view_flags|=item->flag;else a->settings_draft.view_flags&=~item->flag;
+            if(field==PS_SETTING_COMPLETION_AUTO)a->settings_draft.completion_auto=value!=0;
+            else if(value)a->settings_draft.view_flags|=item->flag;else a->settings_draft.view_flags&=~item->flag;
             settings_focus_draw(a,item->focus,r,nk_sdl_accessibility_is_focus_target(ui,NULL,item->title));
             if(field==8)a->settings_bounds[2]=r;if(field==10)a->settings_bounds[3]=r;
         }else{unsigned i=field-11;bool changed=settings_edit(a,14+i,"settings-body",a->settings_numbers[i],16,cx,cy,fminf(105*f,cw),34*f);
@@ -152,7 +155,7 @@ static void settings_preview_draw(app *a,float x,float y,float width,float f,uin
     settings_line(a,x,y,inner,c.border);y+=19*f;
     if(!changed)settings_text(a,x,y,inner,"Noch keine Änderungen",SET_FONT_LABEL,18*f,c.text);
     else{settings_text(a,x,y,inner,"Noch nicht übernommen",SET_FONT_LABEL,18*f,c.warn);y+=28*f;
-        for(unsigned i=0;i<14;i++)if(changed&(1u<<i)){char value[96];settings_value(&a->settings_draft,i,value);snprintf(text,sizeof text,"%s: %s",settings_fields[i].title,value);y+=settings_text(a,x,y,inner,text,SET_FONT_HELP,17*f,c.muted)+7*f;}}
+        for(unsigned i=0;i<PS_SETTING_COUNT;i++)if(changed&(1u<<i)){char value[96];settings_value(&a->settings_draft,i,value);snprintf(text,sizeof text,"%s: %s",settings_fields[i].title,value);y+=settings_text(a,x,y,inner,text,SET_FONT_HELP,17*f,c.muted)+7*f;}}
 }
 static void settings_style(app *a) {
     float f=a->preferences.ui_size/16.f,regular=a->workbench_regular_em>0?a->workbench_regular_em:1,bold=a->workbench_bold_em>0?a->workbench_bold_em:1,code=a->workbench_code_em>0?a->workbench_code_em:1;
@@ -177,14 +180,14 @@ static settings_body_layout settings_body_measure(app *a,float width,float heigh
         if(a->settings_review){
             h=24*f+37*f+settings_text_height(a,SET_FONT_HELP,"Anzeigeeinheiten und unabhängige Fenster-/Layoutänderungen gehören nicht zu diesem Entwurf.",r.content_w,18*f)+18*f+54*f+28*f;
             ps_preferences current=settings_current(a);float col=r.content_w/3;
-            for(unsigned i=0;i<14;i++)if(changes&(1u<<i)){
+            for(unsigned i=0;i<PS_SETTING_COUNT;i++)if(changes&(1u<<i)){
                 char old[96],value[96];settings_value(&current,i,old);settings_value(&a->settings_draft,i,value);
-                if(i>=11 && a->settings_invalid_numbers&(1u<<(i-11)))snprintf(value,sizeof value,"%s (ungültig)",a->settings_numbers[i-11]);
+                if(i>=11 && i<=13 && a->settings_invalid_numbers&(1u<<(i-11)))snprintf(value,sizeof value,"%s (ungültig)",a->settings_numbers[i-11]);
                 float row=settings_text_height(a,SET_FONT_NAV,settings_fields[i].title,col-18*f,17.5f*f);
                 row=fmaxf(row,settings_text_height(a,SET_FONT_NAV,old,col-18*f,17.5f*f));row=fmaxf(row,settings_text_height(a,SET_FONT_NAV,value,col-18*f,17.5f*f));h+=row+24*f;
             }
         }else{
-            for(unsigned i=0;i<14;i++)if(settings_match(a,i))h+=settings_field_height(a,i,r.content_w,f);
+            for(unsigned i=0;i<PS_SETTING_COUNT;i++)if(settings_match(a,i))h+=settings_field_height(a,i,r.content_w,f);
             if(settings_units_match(a))h+=190*f;
         }
         if(*a->preferences_error)h+=settings_text_height(a,SET_FONT_HELP,a->preferences_error,r.content_w,18*f)+18*f;
@@ -269,9 +272,9 @@ static void settings_view(app *a,int width,int height) {
             for(unsigned j=0;j<3;j++)settings_text(a,content_x+j*col+9*f,content_y,col-18*f,heads[j],SET_FONT_SMALL,15*f,c.muted);
             content_y+=28*f;settings_line(a,content_x,content_y,content_w,c.border);
             ps_preferences current=settings_current(a);
-            for(unsigned i=0;i<14;i++)if(changes&(1u<<i)){
+            for(unsigned i=0;i<PS_SETTING_COUNT;i++)if(changes&(1u<<i)){
                 char old[96],value[96];settings_value(&current,i,old);settings_value(&a->settings_draft,i,value);
-                if(i>=11 && a->settings_invalid_numbers&(1u<<(i-11)))snprintf(value,sizeof value,"%s (ungültig)",a->settings_numbers[i-11]);
+                if(i>=11 && i<=13 && a->settings_invalid_numbers&(1u<<(i-11)))snprintf(value,sizeof value,"%s (ungültig)",a->settings_numbers[i-11]);
                 const char *cells[]={settings_fields[i].title,old,value};float row=0;
                 for(unsigned j=0;j<3;j++)row=fmaxf(row,settings_text_height(a,SET_FONT_NAV,cells[j],col-18*f,17.5f*f));row+=24*f;
                 struct nk_rect selected=settings_slot(a,content_x+2*col,content_y,col,row);nk_fill_rect(canvas,selected,0,c.selected);
@@ -282,7 +285,7 @@ static void settings_view(app *a,int width,int height) {
         else{const char *title=*a->settings_search?"Suchergebnisse":settings_groups[a->settings_group];const char *eyebrows[]={"DARSTELLUNG","EDITOR & SICHERUNG","SIMULATION","ARBEITSFLÄCHE","ANZEIGEEINHEITEN"};settings_text(a,content_x,content_y,content_w,*a->settings_search?"SUCHERGEBNISSE":eyebrows[a->settings_group],SET_FONT_SMALL,15*f,c.muted);content_y+=22*f;
             settings_text(a,content_x,content_y,content_w,title,SET_FONT_TITLE,28*f,c.text);content_y+=34*f;
             settings_text(a,content_x,content_y,content_w,*a->settings_search?"Passende Einstellungen in allen Kategorien.":settings_notes[a->settings_group],SET_FONT_HELP,18*f,c.muted);content_y+=40*f;
-            unsigned matches=0;for(unsigned i=0;i<14;i++)if(settings_match(a,i)){matches++;content_y+=settings_field_draw(a,i,content_x,content_y,content_w,f);}
+            unsigned matches=0;for(unsigned i=0;i<PS_SETTING_COUNT;i++)if(settings_match(a,i)){matches++;content_y+=settings_field_draw(a,i,content_x,content_y,content_w,f);}
             if(settings_units_match(a)){matches++;settings_text(a,content_x,content_y,content_w,"Anzeigeeinheiten für Messkanäle",SET_FONT_LABEL,19*f,c.text);content_y+=29*f;
                 content_y+=settings_text(a,content_x,content_y,content_w,"Persönliche Auswahl je Kanal und SI-Dimension. Eigene Aufgabe mit eigenem Anwenden; Rohdaten und CSV bleiben unverändert.",SET_FONT_HELP,18*f,c.muted)+18*f;
                 const ps_channel *channel=settings_channel(a);if(channel){char current[160];ps_display_unit unit=channel_display_unit(a,channel);snprintf(current,sizeof current,"%s [%s]",channel->name,unit.symbol);settings_text(a,content_x,content_y,content_w,current,SET_FONT_BUTTON,20*f,c.text);content_y+=28*f;}

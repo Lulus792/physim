@@ -1083,7 +1083,10 @@ def completion(flow,directory):
 def completion_automatic(flow,directory):
     markers=("enter-without-selection=1","tab-without-selection=1","escape-suppression=1 manual-override=1 undo=1",
              "explicit-control-n-p=1 undo=1","changed-prefix-needs-selection=1","short-prefix-closes=1","stale-cursor=1","stale-equal-length-source=1",
-             "ime-pause=1 ime-commit=1","comments-and-strings=1","selection-invalidates=1","target-change=1","focus-loss=1")
+             "ime-pause=1 ime-commit=1","comments-and-strings=1","selection-invalidates=1","target-change=1","focus-loss=1",
+             "preference-off-manual-remains=1",
+             "viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+             "viewport-large-light-contrast=1 space-clamp=1","viewport-shrink-selection=1")
     for language in ("c","phys"):
         root=directory/language;root.mkdir(parents=True)
         flow.run("--workspace-state-test",root,"completion-auto-"+language,timeout=75,
@@ -1672,8 +1675,8 @@ def settings_transactions(flow, directory):
     directory.mkdir()
     flow.run("--settings-test", directory, "merge", marker="SETTINGS MERGE SELF-TEST: PASSED")
     data = (directory / "preferences.bin").read_bytes()
-    require(len(data) == 312 and data[:8] == b"PSPREF05", "Settings merge changed the preference format")
-    require(struct.unpack_from("<I", data, 308)[0] == zlib.crc32(data[:308]), "Settings merge stored an invalid CRC")
+    require(len(data) == 320 and data[:8] == b"PSPREF06", "Settings merge changed the preference format")
+    require(struct.unpack_from("<I", data, 316)[0] == zlib.crc32(data[:316]), "Settings merge stored an invalid CRC")
     require(struct.unpack_from("<I", data, 24)[0] == 218 and struct.unpack_from("<I", data, 56)[0] == 255 and
             struct.unpack_from("<I", data, 28)[0] == 340, "Settings merge stored another workspace's geometry")
     require(not list(directory.glob("*.tmp-*")), "Failed settings save leaked a temporary file")
@@ -1763,12 +1766,14 @@ def settings_keyboard(flow, directory, paced=False):
         require("SETTINGS FRAME PACING: 250 ms" in step["stdout"] and end and float(end[1])>20,
                 "Paced settings test did not cross the old global deadline through its final assertion")
     data=(directory / "preferences.bin").read_bytes()
-    require(data[:8]==b"PSPREF05" and len(data)==312, "Keyboard settings format")
+    require(data[:8]==b"PSPREF06" and len(data)==320, "Keyboard settings format")
     require(int.from_bytes(data[304:308],"little")==22, "Keyboard UI font persistence")
     require(struct.unpack_from("<I",data,32)[0]==20 and struct.unpack_from("<I",data,36)[0]==120, "Keyboard code font and autosave persistence")
     # Protocol C now starts closed: toggling the seven initial flags (31)
     # leaves orthographic view and the protocol enabled (32 | 64).
     require(struct.unpack_from("<I",data,40)[0]==(32|64) and struct.unpack_from("<I",data,52)[0]==1, "Keyboard seven toggles and theme persistence")
+    require(struct.unpack_from("<II",data,308)==(0,9), "Keyboard completion preferences persistence")
+    require("SETTINGS COMPLETION: keyboard-edits=1 applied=1 rows=9 auto=0" in flow.steps[-1]["stdout"], "Completion controls were not exercised")
     before=fingerprint(directory / "preferences.bin")
     flow.run("--settings-test", directory, "keyboard-read"+suffix, timeout=75, marker="SETTINGS KEYBOARD SELF-TEST: PASSED")
     if paced: require("SETTINGS FRAME PACING: 250 ms" in flow.steps[-1]["stdout"], "Readback did not use paced frames")
@@ -1790,9 +1795,9 @@ def ui_typography(flow, directory):
                      "ui-size-editor.bmp","ui-size-plot.bmp"):
             shutil.copy2(root / name,captures / name)
         data=(root / "preferences.bin").read_bytes()
-        require(len(data)==312 and data[:8]==b"PSPREF05" and
+        require(len(data)==320 and data[:8]==b"PSPREF06" and
                 struct.unpack_from("<I",data,304)[0]==size and
-                struct.unpack_from("<I",data,308)[0]==zlib.crc32(data[:308]),
+                struct.unpack_from("<I",data,316)[0]==zlib.crc32(data[:316]),
                 "UI size was not saved in the versioned CRC-protected preferences")
         before = fingerprint(root / "preferences.bin")
         run(root,"ui-size-"+str(size)+"-read")

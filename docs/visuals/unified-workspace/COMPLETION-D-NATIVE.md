@@ -4,7 +4,8 @@ Maßgeblich bleiben [ADR 022](../../decisions/022-automatic-completion.md),
 [ADR 023](../../decisions/023-selected-completion-d.md) und die
 [vollständige Freigabe](../completion-typing-options/APPROVED.md).
 **D ist noch nicht vollständig nativ umgesetzt.** Die Eingabegrundlage ist
-ergänzt; der vorhandene Viererlisten-Renderer ist noch keine D-Designabnahme.
+ergänzt. Fünfer-Viewport und wirksame Editor-Preferences sind als weiterer
+Teilstand ergänzt; eine vollständige D-Designabnahme steht weiterhin aus.
 
 ## Ergänzte Eingabegrundlage
 
@@ -34,27 +35,42 @@ ergänzt; der vorhandene Viererlisten-Renderer ist noch keine D-Designabnahme.
 
 [Windows-/Linux-Prüfungen, Gegenbeispiele und Grenzen](../../verification/completion-auto-2026-11-04.md).
 
+## Liste und Einstellungen: Anschluss vom 4. November 2026
+
+Die flache Liste ist 400 logische Einheiten breit. Standardmäßig fünf ganze
+Zeilen, bei weniger Treffern entsprechend weniger; der verfügbare Editorraum
+begrenzt die Höhe. Die gesamte Ergebnismenge bleibt erhalten. Ein unabhängiger
+Scrolloffset, Mausrad und ziehbarer 6-Einheiten-Thumb erschließen weitere Treffer;
+Pfeilnavigation bringt die Auswahl ins Sichtfeld. Scrollen allein übernimmt
+keinen Eintrag. Einzeilige Namen, rechte Typ-/Rückgabetypangabe und Gesamtzähler
+sind ergänzt. Die getrennte neutrale Kandidatenkarte zeigt reale Katalogdaten
+und den bisherigen Referenzzugang. Zusammenfassung, parameterbezogene Inhalte
+und gemeinsame Syntaxglyphen sind dort noch zu ergänzen; keine Aufrufhilfe daraus
+ableiten. Bei Platzmangel kann die Karte seitlich schmaler werden.
+
+Einstellungen A / Editor enthält „Vorschläge beim Tippen“ und „Sichtbare
+Vervollständigungen“ (1–20, Standard 5). Ausschalten deaktiviert Vormerkung und
+automatische Anzeige; Strg+Leertaste bleibt wirksam. PSPREF06 speichert die
+Werte, liest 01–05 weiterhin mit den neuen Defaults. Feldweises Zusammenführen,
+Änderungsprüfung, Übernehmen, Abbrechen und Standardwerte verwenden denselben
+Vertrag wie die bisherigen Einstellungen. Geometrie und Nutzdaten bleiben
+unabhängig. [Ausführungsstand, Gegenfall und Grenzen](../../verification/completion-d-2026-11-04.md).
+
 ## Weiterhin verbindlich umzusetzen
 
-1. Fünf sichtbare Einträge als Standard, alle weiteren Treffer scrollbar erhalten;
-   verfügbare Höhe und große Schrift berücksichtigen. Eine echte schmale
-   Scrollleiste, flache D-Zeilen, Rollenicons, Typen und Gesamtzähler ergänzen.
-2. Automatische Vorschläge und sichtbare Trefferzahl in Einstellungen A / Editor
-   mit echter Preferences-Speicherung, Migration, Übernehmen/Abbrechen/Defaults
-   integrieren. Der bisherige PSPREF05-Bestand enthält diese Felder noch nicht.
-3. Gemeinsame freigegebene Syntaxrollen und Palette für Editor, Liste, neutrale
+1. Gemeinsame freigegebene Syntaxrollen und Palette für Editor, Liste, neutrale
    Kandidateninfo und Aufrufsignatur, insbesondere gelbe Funktionen. Den bisherigen
    pauschalen `ps_`-Typansatz ersetzen, keine getrennte Kurzinfo-Palette einführen.
-4. Tatsächliche C-/Physim-Deklarationen und Scopes anbieten: sichtbare Variablen,
+2. Tatsächliche C-/Physim-Deklarationen und Scopes anbieten: sichtbare Variablen,
    Parameter und Quellstellen, Shadowing, Schleifen-/Block-/Funktionsgrenzen,
    Ausschluss späterer Deklarationen und der eigenen unvollständigen
    Initialisierung. Der Browser-Demo-Lexer ist kein nativer Scope-Backend-Ersatz.
-5. Eine eigene Aufrufsignatur einschließlich verfügbarer Benutzerfunktionen,
+3. Eine eigene Aufrufsignatur einschließlich verfügbarer Benutzerfunktionen,
    aktueller Argumentposition, verschachtelter Aufrufe und ehrlichem Überlauf.
    Strg+Umschalt+Leertaste sowie getrennte Escape-Zustände umsetzen; Übernahme
    eines Variablennamens lässt die Aufrufsignatur bestehen. Leere Argumente
    sollen ebenfalls sichtbare Namen anbieten. Kein Typinferenzversprechen.
-6. Anfragen und spätere Scope-/Signaturdaten an tatsächliche Dokumentrevisionen
+4. Anfragen und spätere Scope-/Signaturdaten an tatsächliche Dokumentrevisionen
    binden. Echte IME-, Screenreader-, DPI-, Monitor- und Plattformprüfung sowie
    D-Vergleich mit der freigegebenen HTML-Referenz abschließen.
 

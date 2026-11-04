@@ -1,6 +1,6 @@
 # Einstellungen A: natives Kategorienfenster
 
-Stand 31. Oktober 2026. Umsetzung nach [ADR 018](../../decisions/018-selected-settings-a.md)
+Stand 4. November 2026. Umsetzung nach [ADR 018](../../decisions/018-selected-settings-a.md)
 und [freigegebener Spezifikation](../settings-options/APPROVED.md).
 **Geprüfter Teilstand; keine vollständige Design-/Plattformabnahme.**
 Der frühere Einstellungs-Tab im Hauptfenster wurde durch ein eigenes, nichtmodales
@@ -23,7 +23,12 @@ Tab/Umschalt+Tab, Auswahlpfeile und Escape verwenden die sichtbaren Felder.
 Escape verlässt zuerst die Änderungsprüfung, danach verwirft es den Entwurf.
 Schließen über das Betriebssystem hat dieselbe Abbruchwirkung.
 
-Die vierzehn vorhandenen persönlichen Einstellungen bleiben wirksam.
+Die vierzehn bisherigen persönlichen Einstellungen bleiben wirksam. Ergänzt sind
+„Vorschläge beim Tippen“ und „Sichtbare Vervollständigungen“ in Editor & Sicherung.
+Standardmäßig automatisch an und fünf Zeilen; 1–20 Zeilen sind einstellbar.
+PSPREF06 speichert beide Werte und migriert alte Formate 01–05 mit diesen Defaults.
+Die automatische Option wirkt auf die echte Anzeige; manueller Strg+Leertaste-
+Zugang bleibt erhalten. [Nachweis und offener D-Umfang](../../verification/completion-d-2026-11-04.md).
 Theme-/Schriftentwürfe ändern zunächst nur die Miniatur. Übernehmen validiert
 Ganzzahlen und Wertebereiche, bereitet Fonts vor und speichert sicher, bevor
 der aktive Stand geändert wird. Fehler erhalten Eingabe, Entwurf und bisherigen

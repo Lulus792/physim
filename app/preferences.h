@@ -3,6 +3,7 @@
 #include "physim/core.h"
 #include "docking.h"
 enum { PS_THEME_DARK, PS_THEME_LIGHT, PS_THEME_HIGH_CONTRAST, PS_THEME_COUNT };
+enum { PS_COMPLETION_ROWS_DEFAULT = 5, PS_COMPLETION_ROWS_MAX = 20 };
 enum {
     PS_VIEW_VECTORS = 1,
     PS_VIEW_PATHS = 2,
@@ -19,10 +20,11 @@ typedef struct {
     uint32_t inspector_width;
     ps_dock_layout dock;
     uint32_t ui_size;
+    uint32_t completion_auto, completion_rows;
 } ps_preferences;
 extern const ps_preferences PS_PREFERENCES_DEFAULT;
 bool ps_preferences_valid(const ps_preferences *settings);
-/* Settings A edits only these fourteen values. Window geometry, workspace,
+/* Settings A edits only these values. Window geometry, workspace,
  * disclosure and dock topology belong to independent owners. The base is the
  * snapshot on opening; unchanged draft fields retain the latest current value.
  * Inputs must be valid. Merge is transactional, including when out aliases an
@@ -32,6 +34,7 @@ enum {
     PS_SETTING_VECTORS, PS_SETTING_PATHS, PS_SETTING_POINTS, PS_SETTING_LABELS,
     PS_SETTING_GRID, PS_SETTING_ORTHOGRAPHIC, PS_SETTING_LOG,
     PS_SETTING_SIDEBAR, PS_SETTING_INSPECTOR, PS_SETTING_LOG_HEIGHT,
+    PS_SETTING_COMPLETION_AUTO, PS_SETTING_COMPLETION_ROWS,
     PS_SETTING_COUNT
 };
 uint32_t ps_preferences_settings_changes(const ps_preferences *base, const ps_preferences *draft);

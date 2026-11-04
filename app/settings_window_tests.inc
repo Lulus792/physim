@@ -18,7 +18,7 @@ static void test_settings_search_frame(app *a,bool large,int *stage,int *code,co
     case 0:{ps_preferences p=a->preferences;p.ui_size=large?22:16;p.theme=large?PS_THEME_LIGHT:PS_THEME_DARK;preferences_apply(a,&p);
         open_settings(a);SDL_SetWindowSize(a->settings_window,large?620:1326,large?720:756);SDL_SyncWindow(a->settings_window);deadline=ps_clock()+3;break;}
     case 1:SEARCH_WAIT(SDL_TextInputActive(a->settings_window));settings_test_text(a,query);deadline=ps_clock()+3;break;
-    case 2:SEARCH_WAIT(!strcmp(a->settings_search,query));for(unsigned i=0;i<14;i++)ok=ok && !a->settings_fields[i].w;SEARCH_KEY(SDLK_TAB);deadline=ps_clock()+3;break;
+    case 2:SEARCH_WAIT(!strcmp(a->settings_search,query));for(unsigned i=0;i<PS_SETTING_COUNT;i++)ok=ok && !a->settings_fields[i].w;SEARCH_KEY(SDLK_TAB);deadline=ps_clock()+3;break;
     case 3:{
         bool target=settings_test_action_focused(a,"settings-search","Suche löschen");
         SEARCH_WAIT(target);struct nk_rect r=a->settings_focus_bounds[a->settings_focus];

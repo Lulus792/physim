@@ -1795,7 +1795,7 @@ def main():
                         if "UI SIZE SELF-TEST: PASSED" not in output.read_text(encoding="utf-8"):
                             raise RuntimeError("Installed SDK UI typography did not complete")
                     data=(directory / "preferences.bin").read_bytes()
-                    if len(data)!=312 or data[:8]!=b"PSPREF05" or int.from_bytes(data[304:308],"little")!=ui_size:
+                    if len(data)!=320 or data[:8]!=b"PSPREF06" or int.from_bytes(data[304:308],"little")!=ui_size:
                         raise RuntimeError("Installed SDK UI size was not persisted")
                 print("Installed SDK UI typography: four sizes, restart, independent code fonts, open documentation, plots and menus passed",flush=True)
                 directory=root / "Keyboard settings";directory.mkdir()

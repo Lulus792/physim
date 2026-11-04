@@ -1,0 +1,2566 @@
+{
+  "date": "2026-11-04",
+  "objective_complete": false,
+  "own_inputs": 155,
+  "scope": "Completion D viewport and effective Editor preferences, not full D",
+  "user_mac": "off: no connection/probe",
+  "storage": "D: only; F: untouched",
+  "phases": {
+    "completion-d-viewport": {
+      "windows": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-d-viewport-windows.json",
+          "sha256": "494059be3a860403b859a03c8903f2e3e23dd55fe50ff86d4d81df1b207ea04d",
+          "bytes": 2640
+        },
+        "commands": [
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test",
+              "--test-filter",
+              "preferences",
+              "--test-filter",
+              "completion",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow",
+              "--test-filter",
+              "settings_keyboard_workflow",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 0,
+            "app_sha256": "3452fb603ce7939407a5e5576841f7f6a51f3df5235d28f755bb4692d1383988"
+          },
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "preferences",
+              "--test-filter",
+              "completion",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow",
+              "--test-filter",
+              "settings_keyboard_workflow",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 0,
+            "app_sha256": "3452fb603ce7939407a5e5576841f7f6a51f3df5235d28f755bb4692d1383988"
+          }
+        ],
+        "exit_code": 0,
+        "same_app_bytes_between_invocations": true,
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-d-viewport-windows.log",
+          "sha256": "5685d346d848275f7bfd7c360f2717a1534c6f5fb15ef43f4f5300cb132e49a6",
+          "bytes": 41669
+        },
+        "runs": [
+          {
+            "id": "run-yn6ub86s",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-yn6ub86s/results.json",
+              "sha256": "6b5f620149dd4ebc838b5d2b1b9208e127348eb0c9164336dfa21c7de1dea140",
+              "bytes": 1128
+            },
+            "cases": [
+              {
+                "name": "completion",
+                "status": "passed",
+                "seconds": 0.063,
+                "commands": [
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim-test-completion.exe"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ]
+              },
+              {
+                "name": "preferences",
+                "status": "passed",
+                "seconds": 8.016,
+                "commands": [
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim-test-preferences.exe",
+                      "D:/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-yn6ub86s/preferences"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "run-bd6d8qo0",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bd6d8qo0/results.json",
+              "sha256": "0b5782f20a54403bb6acaf84de3fd7a04181c406f6e76f69857a33ebb7460993",
+              "bytes": 61465
+            },
+            "cases": [
+              {
+                "name": "settings_a_window",
+                "status": "passed",
+                "seconds": 6.188,
+                "commands": [
+                  {
+                    "command": [
+                      "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+                      "settings_a_window",
+                      "--app",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--work",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-bd6d8qo0\\settings_a_window\\files ä",
+                      "--root",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bd6d8qo0/settings_a_window/files ä/app-steps.json",
+                  "sha256": "1cb73a81e49bb38a88164c86fb0f7fe18083542bc09ee4d4e61dac9d1acc2fd1",
+                  "bytes": 10869
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--settings-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-bd6d8qo0\\settings_a_window\\files ä\\workflow ä\\UI 16",
+                      "window-16"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "SETTINGS A WINDOW SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--settings-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-bd6d8qo0\\settings_a_window\\files ä\\workflow ä\\UI 22",
+                      "window-22"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "SETTINGS A WINDOW SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              },
+              {
+                "name": "settings_keyboard_workflow",
+                "status": "passed",
+                "seconds": 5.578,
+                "commands": [
+                  {
+                    "command": [
+                      "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+                      "settings_keyboard_workflow",
+                      "--app",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--work",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-bd6d8qo0\\settings_keyboard_workflow\\files ä",
+                      "--root",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+                      "--cc",
+                      "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bd6d8qo0/settings_keyboard_workflow/files ä/app-steps.json",
+                  "sha256": "4ed9964e4f7838a007980a1b0d40b1dc005c6ab8246a2d11b12d1592209f7c1f",
+                  "bytes": 8616
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--settings-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-bd6d8qo0\\settings_keyboard_workflow\\files ä\\workflow ä",
+                      "keyboard"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "SETTINGS COMPLETION: keyboard-edits=1 applied=1 rows=9 auto=0",
+                      "SETTINGS COMPLETION: defaults-in-draft=1 cancel-preserves=1 rows=9 auto=0",
+                      "SETTINGS KEYBOARD SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--settings-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-bd6d8qo0\\settings_keyboard_workflow\\files ä\\workflow ä",
+                      "keyboard-read"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "SETTINGS COMPLETION: defaults-in-draft=1 cancel-preserves=1 rows=9 auto=0",
+                      "SETTINGS KEYBOARD SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              },
+              {
+                "name": "completion_workflow",
+                "status": "passed",
+                "seconds": 4.984,
+                "commands": [
+                  {
+                    "command": [
+                      "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+                      "completion_workflow",
+                      "--app",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--work",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-bd6d8qo0\\completion_workflow\\files ä",
+                      "--root",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+                      "--cc",
+                      "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bd6d8qo0/completion_workflow/files ä/app-steps.json",
+                  "sha256": "7166830eaee80b876c1b88e57d64d749894f1b26b2d9adb21f523262e6211b1e",
+                  "bytes": 18017
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--workspace-state-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-bd6d8qo0\\completion_workflow\\files ä\\workflow ä\\c",
+                      "completion-c"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--workspace-state-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-bd6d8qo0\\completion_workflow\\files ä\\workflow ä\\phys",
+                      "completion-phys"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              },
+              {
+                "name": "completion_automatic_workflow",
+                "status": "passed",
+                "seconds": 14.031,
+                "commands": [
+                  {
+                    "command": [
+                      "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+                      "completion_automatic_workflow",
+                      "--app",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--work",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-bd6d8qo0\\completion_automatic_workflow\\files ä",
+                      "--root",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+                      "--cc",
+                      "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bd6d8qo0/completion_automatic_workflow/files ä/app-steps.json",
+                  "sha256": "b62910735ae5a70970c60481d60d2c58198957a5a037f64a38e23404d88641b6",
+                  "bytes": 18853
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--workspace-state-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-bd6d8qo0\\completion_automatic_workflow\\files ä\\workflow ä\\c",
+                      "completion-auto-c"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "AUTO COMPLETION enter-without-selection=1",
+                      "AUTO COMPLETION tab-without-selection=1",
+                      "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                      "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                      "AUTO COMPLETION changed-prefix-needs-selection=1",
+                      "AUTO COMPLETION short-prefix-closes=1",
+                      "AUTO COMPLETION stale-cursor=1",
+                      "AUTO COMPLETION stale-equal-length-source=1",
+                      "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                      "AUTO COMPLETION comments-and-strings=1",
+                      "AUTO COMPLETION selection-invalidates=1",
+                      "AUTO COMPLETION target-change=1",
+                      "AUTO COMPLETION preference-off-manual-remains=1",
+                      "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                      "AUTO COMPLETION focus-loss=1",
+                      "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--workspace-state-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-bd6d8qo0\\completion_automatic_workflow\\files ä\\workflow ä\\phys",
+                      "completion-auto-phys"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "AUTO COMPLETION enter-without-selection=1",
+                      "AUTO COMPLETION tab-without-selection=1",
+                      "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                      "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                      "AUTO COMPLETION changed-prefix-needs-selection=1",
+                      "AUTO COMPLETION short-prefix-closes=1",
+                      "AUTO COMPLETION stale-cursor=1",
+                      "AUTO COMPLETION stale-equal-length-source=1",
+                      "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                      "AUTO COMPLETION comments-and-strings=1",
+                      "AUTO COMPLETION selection-invalidates=1",
+                      "AUTO COMPLETION target-change=1",
+                      "AUTO COMPLETION preference-off-manual-remains=1",
+                      "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                      "AUTO COMPLETION focus-loss=1",
+                      "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "linux": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-d-viewport-linux.json",
+          "sha256": "ce95c39a38370dd56285f97d4baf66654529cd1fd050d4766c6b31e12fc3d64f",
+          "bytes": 2294
+        },
+        "commands": [
+          {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--sanitizers",
+              "--test",
+              "--test-filter",
+              "preferences",
+              "--test-filter",
+              "completion",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow",
+              "--test-filter",
+              "settings_keyboard_workflow",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 0,
+            "app_sha256": "fafd5e4e0af1c5072018138061c26abc783e985dc0086f9ece0a60e1b4291ce1"
+          },
+          {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--sanitizers",
+              "--test-display",
+              "--test-filter",
+              "preferences",
+              "--test-filter",
+              "completion",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow",
+              "--test-filter",
+              "settings_keyboard_workflow",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 0,
+            "app_sha256": "fafd5e4e0af1c5072018138061c26abc783e985dc0086f9ece0a60e1b4291ce1"
+          }
+        ],
+        "exit_code": 0,
+        "same_app_bytes_between_invocations": true,
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-d-viewport-linux.log",
+          "sha256": "74fa0070b5a30605a495edc3a4323ad4d5e8233096c02c37111dea817960ed13",
+          "bytes": 297470
+        },
+        "runs": [
+          {
+            "id": "run-8svq9cag",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-8svq9cag/results.json",
+              "sha256": "a9153a47760bed27f9248b539fef0d0a843f570080a96623f4d094061ded5247",
+              "bytes": 1084
+            },
+            "cases": [
+              {
+                "name": "completion",
+                "status": "passed",
+                "seconds": 0.02,
+                "commands": [
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-completion"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ]
+              },
+              {
+                "name": "preferences",
+                "status": "passed",
+                "seconds": 4.138,
+                "commands": [
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-preferences",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-8svq9cag/preferences"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "run-sav33f5a",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-sav33f5a/results.json",
+              "sha256": "6ecd9abb6e276b85b1f0b7b51901c65b566cfd7a6642705f2e252f99d8eb28b4",
+              "bytes": 60165
+            },
+            "cases": [
+              {
+                "name": "settings_a_window",
+                "status": "passed",
+                "seconds": 29.488,
+                "commands": [
+                  {
+                    "command": [
+                      "/usr/bin/python3",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+                      "settings_a_window",
+                      "--app",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--work",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-sav33f5a/settings_a_window/files ä",
+                      "--root",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-sav33f5a/settings_a_window/files ä/app-steps.json",
+                  "sha256": "4948b51199e212d1c787b21ebb257c0cc47e27d6b017bbbdd86691e27eee0919",
+                  "bytes": 10843
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--settings-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-sav33f5a/settings_a_window/files ä/workflow ä/UI 16",
+                      "window-16"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "SETTINGS A WINDOW SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--settings-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-sav33f5a/settings_a_window/files ä/workflow ä/UI 22",
+                      "window-22"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "SETTINGS A WINDOW SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              },
+              {
+                "name": "settings_keyboard_workflow",
+                "status": "passed",
+                "seconds": 21.395,
+                "commands": [
+                  {
+                    "command": [
+                      "/usr/bin/python3",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+                      "settings_keyboard_workflow",
+                      "--app",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--work",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-sav33f5a/settings_keyboard_workflow/files ä",
+                      "--root",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src",
+                      "--cc",
+                      "/usr/bin/cc"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-sav33f5a/settings_keyboard_workflow/files ä/app-steps.json",
+                  "sha256": "481e2adb597fb29d54f875b1d990f721ff0872419483344b2bc53ac4b492433e",
+                  "bytes": 8570
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--settings-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-sav33f5a/settings_keyboard_workflow/files ä/workflow ä",
+                      "keyboard"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "SETTINGS COMPLETION: keyboard-edits=1 applied=1 rows=9 auto=0",
+                      "SETTINGS COMPLETION: defaults-in-draft=1 cancel-preserves=1 rows=9 auto=0",
+                      "SETTINGS KEYBOARD SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--settings-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-sav33f5a/settings_keyboard_workflow/files ä/workflow ä",
+                      "keyboard-read"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "SETTINGS COMPLETION: defaults-in-draft=1 cancel-preserves=1 rows=9 auto=0",
+                      "SETTINGS KEYBOARD SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              },
+              {
+                "name": "completion_workflow",
+                "status": "passed",
+                "seconds": 15.678,
+                "commands": [
+                  {
+                    "command": [
+                      "/usr/bin/python3",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+                      "completion_workflow",
+                      "--app",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--work",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-sav33f5a/completion_workflow/files ä",
+                      "--root",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src",
+                      "--cc",
+                      "/usr/bin/cc"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-sav33f5a/completion_workflow/files ä/app-steps.json",
+                  "sha256": "f1e6825376fb782397009ed95d630bf8faab28263cd4fa1e9fbb41842a2fa55b",
+                  "bytes": 17933
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--workspace-state-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-sav33f5a/completion_workflow/files ä/workflow ä/c",
+                      "completion-c"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--workspace-state-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-sav33f5a/completion_workflow/files ä/workflow ä/phys",
+                      "completion-phys"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              },
+              {
+                "name": "completion_automatic_workflow",
+                "status": "passed",
+                "seconds": 22.502,
+                "commands": [
+                  {
+                    "command": [
+                      "/usr/bin/python3",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+                      "completion_automatic_workflow",
+                      "--app",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--work",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-sav33f5a/completion_automatic_workflow/files ä",
+                      "--root",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src",
+                      "--cc",
+                      "/usr/bin/cc"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-sav33f5a/completion_automatic_workflow/files ä/app-steps.json",
+                  "sha256": "dee3eccb25ab430b89f0a9ade3322d1f22646aa243fbfb731d9956f51e31eaf6",
+                  "bytes": 18770
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--workspace-state-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-sav33f5a/completion_automatic_workflow/files ä/workflow ä/c",
+                      "completion-auto-c"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "AUTO COMPLETION enter-without-selection=1",
+                      "AUTO COMPLETION tab-without-selection=1",
+                      "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                      "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                      "AUTO COMPLETION changed-prefix-needs-selection=1",
+                      "AUTO COMPLETION short-prefix-closes=1",
+                      "AUTO COMPLETION stale-cursor=1",
+                      "AUTO COMPLETION stale-equal-length-source=1",
+                      "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                      "AUTO COMPLETION comments-and-strings=1",
+                      "AUTO COMPLETION selection-invalidates=1",
+                      "AUTO COMPLETION target-change=1",
+                      "AUTO COMPLETION preference-off-manual-remains=1",
+                      "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                      "AUTO COMPLETION focus-loss=1",
+                      "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--workspace-state-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-sav33f5a/completion_automatic_workflow/files ä/workflow ä/phys",
+                      "completion-auto-phys"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "AUTO COMPLETION enter-without-selection=1",
+                      "AUTO COMPLETION tab-without-selection=1",
+                      "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                      "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                      "AUTO COMPLETION changed-prefix-needs-selection=1",
+                      "AUTO COMPLETION short-prefix-closes=1",
+                      "AUTO COMPLETION stale-cursor=1",
+                      "AUTO COMPLETION stale-equal-length-source=1",
+                      "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                      "AUTO COMPLETION comments-and-strings=1",
+                      "AUTO COMPLETION selection-invalidates=1",
+                      "AUTO COMPLETION target-change=1",
+                      "AUTO COMPLETION preference-off-manual-remains=1",
+                      "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                      "AUTO COMPLETION focus-loss=1",
+                      "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "inputs.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-d-viewport-inputs.json",
+        "sha256": "f35a93cf685af96d0a2589ffa7596a4d42d81e645550747d7b265cd8ba208d5a",
+        "bytes": 15823
+      },
+      "compiler-source.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-d-viewport-compiler-source.json",
+        "sha256": "b6fe7e94dc2e6f2e338b92ccafee1741c05a292257f84c2264be2e75f2d2a7c3",
+        "bytes": 117951
+      },
+      "runtime.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-d-viewport-runtime.json",
+        "sha256": "f60ccda7885d0b1a93df2d20622d60a05d662351797b9d377c438bab869f3d35",
+        "bytes": 36875
+      },
+      "byte-index.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-d-viewport-byte-index.json",
+        "sha256": "66b5c5dc0ec6d6b8386c5714cc6e517c62da30c8b031493c5a0ec2aa7f8a877c",
+        "bytes": 95220
+      }
+    },
+    "completion-d-clip-counter": {
+      "windows": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-d-clip-counter-windows.json",
+          "sha256": "1964e00cfe9ca10d4cf8e780a63641da17ee8c9d20f6b2cdae6982524603db4b",
+          "bytes": 857
+        },
+        "commands": [
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "completion_workflow"
+            ],
+            "exit_code": 1
+          }
+        ],
+        "exit_code": 1,
+        "same_app_bytes_between_invocations": null,
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-d-clip-counter-windows.log",
+          "sha256": "cb1858188aa885867201b2529ee66f38e2875f038a06a43946c62c4551ee527d",
+          "bytes": 43864
+        },
+        "runs": [
+          {
+            "id": "run-wpu9dinw",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wpu9dinw/results.json",
+              "sha256": "f65a9cc1b13e630dc53590682d2a37906bed0500f72b468d18448fbe32964eb3",
+              "bytes": 8745
+            },
+            "cases": [
+              {
+                "name": "completion_workflow",
+                "status": "failed",
+                "seconds": 1.562,
+                "commands": [
+                  {
+                    "command": [
+                      "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+                      "completion_workflow",
+                      "--app",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--work",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-wpu9dinw\\completion_workflow\\files ä",
+                      "--root",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+                      "--cc",
+                      "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+                    ],
+                    "exit_code": 1,
+                    "status": "failed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wpu9dinw/completion_workflow/files ä/app-steps.json",
+                  "sha256": "fac50adad87ed893cccf8c68f0a2d697d5f0f3609f28becb0018bf4dfeed31df",
+                  "bytes": 2764
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--workspace-state-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-wpu9dinw\\completion_workflow\\files ä\\workflow ä\\c",
+                      "completion-c"
+                    ],
+                    "exit_code": 1,
+                    "markers": [
+                      "COMPLETION SELF-TEST: FAILED"
+                    ],
+                    "failure": [
+                      "Completion UI target=0 stage=5 active=1 cursor=11 text=// α😀",
+                      "First workflow failure at stage 5 (next 6): Projekt geladen. Build kompiliert die lokalen Quelldateien. (tab=0, selected=0, samples=0, report=0, query=)",
+                      "Workflow failed at stage 6: Projekt geladen. Build kompiliert die lokalen Quelldateien. (tab=0, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "inputs.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-d-clip-counter-inputs.json",
+        "sha256": "8212751db7d2affcb77d6fc9cba76abad3a48514b35e28e903a9b9427ce90332",
+        "bytes": 15823
+      },
+      "compiler-source.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-d-clip-counter-compiler-source.json",
+        "sha256": "57ded7d38f518cfdc3fb62dd4ce75ddbcbbfc7eeef9e85d31005b5c125d579be",
+        "bytes": 117729
+      },
+      "runtime.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-d-clip-counter-runtime.json",
+        "sha256": "a7b3e97085e9277e1063b7e6a911b5d46f2abf23435d06af0613c01350f53980",
+        "bytes": 36883
+      },
+      "byte-index.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-d-clip-counter-byte-index.json",
+        "sha256": "5cde531a5c2d567c55786dbd4492a0f1a61e875cd630b4e06c3f8f64dd02e1e6",
+        "bytes": 95472
+      }
+    },
+    "completion-d-final": {
+      "windows": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-d-final-windows.json",
+          "sha256": "7229ab6f1dcbbf9beda84106230f4dcf7573ddba9789348eeb1d9cc414d30606",
+          "bytes": 2764
+        },
+        "commands": [
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test",
+              "--test-filter",
+              "preferences",
+              "--test-filter",
+              "completion",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow",
+              "--test-filter",
+              "settings_keyboard_workflow",
+              "--test-filter",
+              "settings_keyboard_paced",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 0,
+            "app_sha256": "0794e4d4120bff6081bfd9b71ecb859ce3434ee338de52147a910f7b8b723469"
+          },
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "preferences",
+              "--test-filter",
+              "completion",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow",
+              "--test-filter",
+              "settings_keyboard_workflow",
+              "--test-filter",
+              "settings_keyboard_paced",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 0,
+            "app_sha256": "0794e4d4120bff6081bfd9b71ecb859ce3434ee338de52147a910f7b8b723469"
+          }
+        ],
+        "exit_code": 0,
+        "same_app_bytes_between_invocations": true,
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-d-final-windows.log",
+          "sha256": "1db53200f693520e2c3b0fa51f99c1b4807c1a9b7092ac60af631cf43f563f79",
+          "bytes": 41707
+        },
+        "runs": [
+          {
+            "id": "run-ko9q17o5",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-ko9q17o5/results.json",
+              "sha256": "bb4f53115b249d1005210c808abf1a878c67999573ee4109a090a27fbfc3e23b",
+              "bytes": 1128
+            },
+            "cases": [
+              {
+                "name": "completion",
+                "status": "passed",
+                "seconds": 0.062,
+                "commands": [
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim-test-completion.exe"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ]
+              },
+              {
+                "name": "preferences",
+                "status": "passed",
+                "seconds": 2.656,
+                "commands": [
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim-test-preferences.exe",
+                      "D:/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-ko9q17o5/preferences"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "run-b9elxr1a",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-b9elxr1a/results.json",
+              "sha256": "f20acbbddf827bfc67ae304132c725e09dda761d94e9e0a12a7f2447ef236305",
+              "bytes": 72008
+            },
+            "cases": [
+              {
+                "name": "settings_a_window",
+                "status": "passed",
+                "seconds": 6.25,
+                "commands": [
+                  {
+                    "command": [
+                      "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+                      "settings_a_window",
+                      "--app",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--work",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-b9elxr1a\\settings_a_window\\files ä",
+                      "--root",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-b9elxr1a/settings_a_window/files ä/app-steps.json",
+                  "sha256": "f35abd30b26dbdc667eab2d7fe305afb28fade53527add991d4485d454b6a728",
+                  "bytes": 10869
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--settings-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-b9elxr1a\\settings_a_window\\files ä\\workflow ä\\UI 16",
+                      "window-16"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "SETTINGS A WINDOW SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--settings-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-b9elxr1a\\settings_a_window\\files ä\\workflow ä\\UI 22",
+                      "window-22"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "SETTINGS A WINDOW SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              },
+              {
+                "name": "settings_keyboard_workflow",
+                "status": "passed",
+                "seconds": 6.516,
+                "commands": [
+                  {
+                    "command": [
+                      "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+                      "settings_keyboard_workflow",
+                      "--app",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--work",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-b9elxr1a\\settings_keyboard_workflow\\files ä",
+                      "--root",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+                      "--cc",
+                      "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-b9elxr1a/settings_keyboard_workflow/files ä/app-steps.json",
+                  "sha256": "3c29dd60795bdf6fdc6340ca83cae180459e0b2a62324bb7679b2c571424e57f",
+                  "bytes": 8616
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--settings-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-b9elxr1a\\settings_keyboard_workflow\\files ä\\workflow ä",
+                      "keyboard"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "SETTINGS COMPLETION: keyboard-edits=1 applied=1 rows=9 auto=0",
+                      "SETTINGS COMPLETION: defaults-in-draft=1 cancel-preserves=1 rows=9 auto=0",
+                      "SETTINGS KEYBOARD SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--settings-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-b9elxr1a\\settings_keyboard_workflow\\files ä\\workflow ä",
+                      "keyboard-read"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "SETTINGS COMPLETION: defaults-in-draft=1 cancel-preserves=1 rows=9 auto=0",
+                      "SETTINGS KEYBOARD SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              },
+              {
+                "name": "settings_keyboard_paced",
+                "status": "passed",
+                "seconds": 38.906,
+                "commands": [
+                  {
+                    "command": [
+                      "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+                      "settings_keyboard_paced",
+                      "--app",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--work",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-b9elxr1a\\settings_keyboard_paced\\files ä",
+                      "--root",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+                      "--cc",
+                      "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-b9elxr1a/settings_keyboard_paced/files ä/app-steps.json",
+                  "sha256": "8e32a4e427156d1e952fda5260c4ec22baa36b1426b84db6504d8fd2220b4e50",
+                  "bytes": 8700
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--settings-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-b9elxr1a\\settings_keyboard_paced\\files ä\\workflow ä",
+                      "keyboard-paced"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "SETTINGS COMPLETION: keyboard-edits=1 applied=1 rows=9 auto=0",
+                      "SETTINGS COMPLETION: defaults-in-draft=1 cancel-preserves=1 rows=9 auto=0",
+                      "SETTINGS KEYBOARD SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--settings-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-b9elxr1a\\settings_keyboard_paced\\files ä\\workflow ä",
+                      "keyboard-read-paced"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "SETTINGS COMPLETION: defaults-in-draft=1 cancel-preserves=1 rows=9 auto=0",
+                      "SETTINGS KEYBOARD SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              },
+              {
+                "name": "completion_workflow",
+                "status": "passed",
+                "seconds": 4.86,
+                "commands": [
+                  {
+                    "command": [
+                      "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+                      "completion_workflow",
+                      "--app",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--work",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-b9elxr1a\\completion_workflow\\files ä",
+                      "--root",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+                      "--cc",
+                      "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-b9elxr1a/completion_workflow/files ä/app-steps.json",
+                  "sha256": "fa880ebbcb20e93469a9ee5633b7629c0b769b202ae077ad92afe8b7d7578bd0",
+                  "bytes": 18017
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--workspace-state-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-b9elxr1a\\completion_workflow\\files ä\\workflow ä\\c",
+                      "completion-c"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--workspace-state-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-b9elxr1a\\completion_workflow\\files ä\\workflow ä\\phys",
+                      "completion-phys"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              },
+              {
+                "name": "completion_automatic_workflow",
+                "status": "passed",
+                "seconds": 13.062,
+                "commands": [
+                  {
+                    "command": [
+                      "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+                      "completion_automatic_workflow",
+                      "--app",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--work",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-b9elxr1a\\completion_automatic_workflow\\files ä",
+                      "--root",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+                      "--cc",
+                      "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-b9elxr1a/completion_automatic_workflow/files ä/app-steps.json",
+                  "sha256": "b9038422f1b6934989b6d08ceb64d0f05ddfa6be5eaa40aeba73f1d45cbb44ea",
+                  "bytes": 19377
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--workspace-state-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-b9elxr1a\\completion_automatic_workflow\\files ä\\workflow ä\\c",
+                      "completion-auto-c"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "AUTO COMPLETION enter-without-selection=1",
+                      "AUTO COMPLETION tab-without-selection=1",
+                      "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                      "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                      "AUTO COMPLETION changed-prefix-needs-selection=1",
+                      "AUTO COMPLETION short-prefix-closes=1",
+                      "AUTO COMPLETION stale-cursor=1",
+                      "AUTO COMPLETION stale-equal-length-source=1",
+                      "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                      "AUTO COMPLETION comments-and-strings=1",
+                      "AUTO COMPLETION selection-invalidates=1",
+                      "AUTO COMPLETION target-change=1",
+                      "AUTO COMPLETION preference-off-manual-remains=1",
+                      "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                      "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                      "AUTO COMPLETION focus-loss=1",
+                      "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--workspace-state-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-b9elxr1a\\completion_automatic_workflow\\files ä\\workflow ä\\phys",
+                      "completion-auto-phys"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "AUTO COMPLETION enter-without-selection=1",
+                      "AUTO COMPLETION tab-without-selection=1",
+                      "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                      "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                      "AUTO COMPLETION changed-prefix-needs-selection=1",
+                      "AUTO COMPLETION short-prefix-closes=1",
+                      "AUTO COMPLETION stale-cursor=1",
+                      "AUTO COMPLETION stale-equal-length-source=1",
+                      "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                      "AUTO COMPLETION comments-and-strings=1",
+                      "AUTO COMPLETION selection-invalidates=1",
+                      "AUTO COMPLETION target-change=1",
+                      "AUTO COMPLETION preference-off-manual-remains=1",
+                      "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                      "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                      "AUTO COMPLETION focus-loss=1",
+                      "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "linux": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-d-final-linux.json",
+          "sha256": "7581ef0f479b4f33758ec626999058e524ddaff5af6134e39ebd4fa34419682d",
+          "bytes": 2414
+        },
+        "commands": [
+          {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--sanitizers",
+              "--test",
+              "--test-filter",
+              "preferences",
+              "--test-filter",
+              "completion",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow",
+              "--test-filter",
+              "settings_keyboard_workflow",
+              "--test-filter",
+              "settings_keyboard_paced",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 0,
+            "app_sha256": "e314b999c5b4eae927a4bb429d9360ef19942229007fb5ce7d45f04cbad2b8a3"
+          },
+          {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--sanitizers",
+              "--test-display",
+              "--test-filter",
+              "preferences",
+              "--test-filter",
+              "completion",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow",
+              "--test-filter",
+              "settings_keyboard_workflow",
+              "--test-filter",
+              "settings_keyboard_paced",
+              "--test-filter",
+              "settings_a_window"
+            ],
+            "exit_code": 0,
+            "app_sha256": "e314b999c5b4eae927a4bb429d9360ef19942229007fb5ce7d45f04cbad2b8a3"
+          }
+        ],
+        "exit_code": 0,
+        "same_app_bytes_between_invocations": true,
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-d-final-linux.log",
+          "sha256": "d268336afe544945a03f88eea83a02725c57c387433cc30d8aa1191a499c4e94",
+          "bytes": 297507
+        },
+        "runs": [
+          {
+            "id": "run-2pr6qzoa",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2pr6qzoa/results.json",
+              "sha256": "05ca1ca0e66b4e9bd03f45b0d25f274588f3355b440155cc38c8a7d8ea9c2419",
+              "bytes": 1085
+            },
+            "cases": [
+              {
+                "name": "completion",
+                "status": "passed",
+                "seconds": 0.019,
+                "commands": [
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-completion"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ]
+              },
+              {
+                "name": "preferences",
+                "status": "passed",
+                "seconds": 3.662,
+                "commands": [
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-preferences",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2pr6qzoa/preferences"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "run-7qms13gs",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/results.json",
+              "sha256": "f760eec72b9cc7c2823d5473a1b2d27a0dbbb011ce8f6b062d98c5d5ee2a9e2f",
+              "bytes": 70380
+            },
+            "cases": [
+              {
+                "name": "settings_a_window",
+                "status": "passed",
+                "seconds": 23.421,
+                "commands": [
+                  {
+                    "command": [
+                      "/usr/bin/python3",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+                      "settings_a_window",
+                      "--app",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--work",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/settings_a_window/files ä",
+                      "--root",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/settings_a_window/files ä/app-steps.json",
+                  "sha256": "c6748794a8e5fd51a7623795c597c47322398102196a3422ec1335024cf582ed",
+                  "bytes": 10843
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--settings-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/settings_a_window/files ä/workflow ä/UI 16",
+                      "window-16"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "SETTINGS A WINDOW SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--settings-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/settings_a_window/files ä/workflow ä/UI 22",
+                      "window-22"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "SETTINGS A WINDOW SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              },
+              {
+                "name": "settings_keyboard_workflow",
+                "status": "passed",
+                "seconds": 19.569,
+                "commands": [
+                  {
+                    "command": [
+                      "/usr/bin/python3",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+                      "settings_keyboard_workflow",
+                      "--app",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--work",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/settings_keyboard_workflow/files ä",
+                      "--root",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src",
+                      "--cc",
+                      "/usr/bin/cc"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/settings_keyboard_workflow/files ä/app-steps.json",
+                  "sha256": "093ecf186ba2a2d7a94f620e2000c0a5509dadec24b9592b303ae06930d72c88",
+                  "bytes": 8570
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--settings-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/settings_keyboard_workflow/files ä/workflow ä",
+                      "keyboard"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "SETTINGS COMPLETION: keyboard-edits=1 applied=1 rows=9 auto=0",
+                      "SETTINGS COMPLETION: defaults-in-draft=1 cancel-preserves=1 rows=9 auto=0",
+                      "SETTINGS KEYBOARD SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--settings-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/settings_keyboard_workflow/files ä/workflow ä",
+                      "keyboard-read"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "SETTINGS COMPLETION: defaults-in-draft=1 cancel-preserves=1 rows=9 auto=0",
+                      "SETTINGS KEYBOARD SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              },
+              {
+                "name": "settings_keyboard_paced",
+                "status": "passed",
+                "seconds": 52.27,
+                "commands": [
+                  {
+                    "command": [
+                      "/usr/bin/python3",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+                      "settings_keyboard_paced",
+                      "--app",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--work",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/settings_keyboard_paced/files ä",
+                      "--root",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src",
+                      "--cc",
+                      "/usr/bin/cc"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/settings_keyboard_paced/files ä/app-steps.json",
+                  "sha256": "fcf2517003009b00fb5650dc322ccce7782aaa78ff9916be273b3e8a8da5f57e",
+                  "bytes": 8656
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--settings-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/settings_keyboard_paced/files ä/workflow ä",
+                      "keyboard-paced"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "SETTINGS COMPLETION: keyboard-edits=1 applied=1 rows=9 auto=0",
+                      "SETTINGS COMPLETION: defaults-in-draft=1 cancel-preserves=1 rows=9 auto=0",
+                      "SETTINGS KEYBOARD SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--settings-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/settings_keyboard_paced/files ä/workflow ä",
+                      "keyboard-read-paced"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "SETTINGS COMPLETION: defaults-in-draft=1 cancel-preserves=1 rows=9 auto=0",
+                      "SETTINGS KEYBOARD SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              },
+              {
+                "name": "completion_workflow",
+                "status": "passed",
+                "seconds": 17.115,
+                "commands": [
+                  {
+                    "command": [
+                      "/usr/bin/python3",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+                      "completion_workflow",
+                      "--app",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--work",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/completion_workflow/files ä",
+                      "--root",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src",
+                      "--cc",
+                      "/usr/bin/cc"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/completion_workflow/files ä/app-steps.json",
+                  "sha256": "04752440e26b554d58f30d02139e9535fa6bd28992e23dcedee6c3adf9a1aa92",
+                  "bytes": 17933
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--workspace-state-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/completion_workflow/files ä/workflow ä/c",
+                      "completion-c"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--workspace-state-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/completion_workflow/files ä/workflow ä/phys",
+                      "completion-phys"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              },
+              {
+                "name": "completion_automatic_workflow",
+                "status": "passed",
+                "seconds": 23.273,
+                "commands": [
+                  {
+                    "command": [
+                      "/usr/bin/python3",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+                      "completion_automatic_workflow",
+                      "--app",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--work",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/completion_automatic_workflow/files ä",
+                      "--root",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src",
+                      "--cc",
+                      "/usr/bin/cc"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/completion_automatic_workflow/files ä/app-steps.json",
+                  "sha256": "5e3330dd628698e7db7ac99165a4f4e4b3ba2800c306311e4f1d204418b28881",
+                  "bytes": 19299
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--workspace-state-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/completion_automatic_workflow/files ä/workflow ä/c",
+                      "completion-auto-c"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "AUTO COMPLETION enter-without-selection=1",
+                      "AUTO COMPLETION tab-without-selection=1",
+                      "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                      "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                      "AUTO COMPLETION changed-prefix-needs-selection=1",
+                      "AUTO COMPLETION short-prefix-closes=1",
+                      "AUTO COMPLETION stale-cursor=1",
+                      "AUTO COMPLETION stale-equal-length-source=1",
+                      "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                      "AUTO COMPLETION comments-and-strings=1",
+                      "AUTO COMPLETION selection-invalidates=1",
+                      "AUTO COMPLETION target-change=1",
+                      "AUTO COMPLETION preference-off-manual-remains=1",
+                      "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                      "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                      "AUTO COMPLETION focus-loss=1",
+                      "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--workspace-state-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7qms13gs/completion_automatic_workflow/files ä/workflow ä/phys",
+                      "completion-auto-phys"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "AUTO COMPLETION enter-without-selection=1",
+                      "AUTO COMPLETION tab-without-selection=1",
+                      "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                      "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                      "AUTO COMPLETION changed-prefix-needs-selection=1",
+                      "AUTO COMPLETION short-prefix-closes=1",
+                      "AUTO COMPLETION stale-cursor=1",
+                      "AUTO COMPLETION stale-equal-length-source=1",
+                      "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                      "AUTO COMPLETION comments-and-strings=1",
+                      "AUTO COMPLETION selection-invalidates=1",
+                      "AUTO COMPLETION target-change=1",
+                      "AUTO COMPLETION preference-off-manual-remains=1",
+                      "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                      "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                      "AUTO COMPLETION focus-loss=1",
+                      "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "inputs.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-d-final-inputs.json",
+        "sha256": "f3671a639b55187bdfbf2eab66c974b6dc3db03ef84c6d9cd1af6aaad31f3bf3",
+        "bytes": 15823
+      },
+      "compiler-source.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-d-final-compiler-source.json",
+        "sha256": "f864adcb945d8ea5ddf427a57360c959788ff31f4a4b9f32b89f9ec1f39ca209",
+        "bytes": 117638
+      },
+      "runtime.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-d-final-runtime.json",
+        "sha256": "deefd8057eb73f036f4b2c62fc3b3aaabe4d9d45c91766404264d48fef1616ad",
+        "bytes": 36869
+      },
+      "byte-index.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-d-final-byte-index.json",
+        "sha256": "ec21cc54f625b4a316404af57e8dde8abde40d5a4850e3cf0c6f0430f5f07e3d",
+        "bytes": 94902
+      }
+    },
+    "completion-d-reflow-before": {
+      "windows": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-d-reflow-before-windows.json",
+          "sha256": "fd97eb884e67e749e1057a7783b60330930f699ded1dd641dce34f052b94508e",
+          "bytes": 867
+        },
+        "commands": [
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "completion_automatic_workflow"
+            ],
+            "exit_code": 1
+          }
+        ],
+        "exit_code": 1,
+        "same_app_bytes_between_invocations": null,
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-d-reflow-before-windows.log",
+          "sha256": "a1abdf96c89b800cbb2f17457bb91a1b571136cde1dc0b49c6a034e8d126a5c7",
+          "bytes": 49463
+        },
+        "runs": [
+          {
+            "id": "run-2zczegwv",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-2zczegwv/results.json",
+              "sha256": "e887dea4e3c19d6b76bb2043ef0d1bb55ed62f3a01a9979fc4b0c698bbfc1ebe",
+              "bytes": 20461
+            },
+            "cases": [
+              {
+                "name": "completion_automatic_workflow",
+                "status": "failed",
+                "seconds": 7.313,
+                "commands": [
+                  {
+                    "command": [
+                      "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+                      "completion_automatic_workflow",
+                      "--app",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--work",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-2zczegwv\\completion_automatic_workflow\\files ä",
+                      "--root",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+                      "--cc",
+                      "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+                    ],
+                    "exit_code": 1,
+                    "status": "failed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-2zczegwv/completion_automatic_workflow/files ä/app-steps.json",
+                  "sha256": "eb5f3d938cf5c5d02da7b980e4abe7e80bdccec214bedd37d142ff6688e9fb66",
+                  "bytes": 8900
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--workspace-state-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-2zczegwv\\completion_automatic_workflow\\files ä\\workflow ä\\c",
+                      "completion-auto-c"
+                    ],
+                    "exit_code": 1,
+                    "markers": [
+                      "AUTO COMPLETION enter-without-selection=1",
+                      "AUTO COMPLETION tab-without-selection=1",
+                      "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                      "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                      "AUTO COMPLETION changed-prefix-needs-selection=1",
+                      "AUTO COMPLETION short-prefix-closes=1",
+                      "AUTO COMPLETION stale-cursor=1",
+                      "AUTO COMPLETION stale-equal-length-source=1",
+                      "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                      "AUTO COMPLETION comments-and-strings=1",
+                      "AUTO COMPLETION selection-invalidates=1",
+                      "AUTO COMPLETION target-change=1",
+                      "AUTO COMPLETION preference-off-manual-remains=1",
+                      "AUTOMATIC COMPLETION SELF-TEST: FAILED"
+                    ],
+                    "failure": [
+                      "Auto completion stage=69 active=1 explicit=1 pending=0 composing=0 cursor=0 first=640 selected=648 rows=1 count=649 text=",
+                      "First workflow failure at stage 64 (next 69): Projekt geladen. Build kompiliert die lokalen Quelldateien. (tab=0, selected=0, samples=0, report=0, query=)",
+                      "Workflow failed at stage 69: Projekt gespeichert. (tab=0, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "inputs.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-d-reflow-before-inputs.json",
+        "sha256": "c24905388a7baff814ac1b594e2eb9c3c4d7a42d6dbc0d524944b34ca6923b5e",
+        "bytes": 15823
+      },
+      "compiler-source.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-d-reflow-before-compiler-source.json",
+        "sha256": "588dbcfcd5d39689442bae14350b47a14b0849b35915be528688ec1ec9deb140",
+        "bytes": 117569
+      },
+      "runtime.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-d-reflow-before-runtime.json",
+        "sha256": "88384c6206fcc481ba745df22eea1495fc1665b92dc3f274c7b1f3000f6d08de",
+        "bytes": 36885
+      },
+      "byte-index.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-d-reflow-before-byte-index.json",
+        "sha256": "a05dd9051ee53ef942b30f8bba2aa0f18fc74aa29d77da9b7b882376fb669db0",
+        "bytes": 95406
+      }
+    },
+    "completion-d-refined": {
+      "windows": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-d-refined-windows.json",
+          "sha256": "68cf7179a22986111ac4a9e49fcb11917854b9e410aab8a604e5e335e92e73d1",
+          "bytes": 2298
+        },
+        "commands": [
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test",
+              "--test-filter",
+              "completion",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow"
+            ],
+            "exit_code": 0,
+            "app_sha256": "93478a81f8c8f887782325fb9ebe70ba67317811b7093ab60d85c52688de6cdd"
+          },
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "completion",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow"
+            ],
+            "exit_code": 0,
+            "app_sha256": "93478a81f8c8f887782325fb9ebe70ba67317811b7093ab60d85c52688de6cdd"
+          }
+        ],
+        "exit_code": 0,
+        "same_app_bytes_between_invocations": true,
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-d-refined-windows.log",
+          "sha256": "730666d066336bfd1bcc61571c47c3e45d4869c7456b747ab11a87a0d1e65fcf",
+          "bytes": 41228
+        },
+        "runs": [
+          {
+            "id": "run-wzwnoqh0",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wzwnoqh0/results.json",
+              "sha256": "288e1176c7f8434ef5764088f62eb30d1c261b6ce953c7bb47fb735be6f19817",
+              "bytes": 421
+            },
+            "cases": [
+              {
+                "name": "completion",
+                "status": "passed",
+                "seconds": 0.063,
+                "commands": [
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim-test-completion.exe"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "run-3m9ciqz6",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-3m9ciqz6/results.json",
+              "sha256": "2c5b4f8091633fe9f1cdc1f98d25fd1dfe5f0b3637182cc1c493397d3bd15b38",
+              "bytes": 40417
+            },
+            "cases": [
+              {
+                "name": "completion_workflow",
+                "status": "passed",
+                "seconds": 4.5,
+                "commands": [
+                  {
+                    "command": [
+                      "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+                      "completion_workflow",
+                      "--app",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--work",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-3m9ciqz6\\completion_workflow\\files ä",
+                      "--root",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+                      "--cc",
+                      "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-3m9ciqz6/completion_workflow/files ä/app-steps.json",
+                  "sha256": "aa7193a9551d1cf0cdfe083226b63039d0803129ff3b20a42faf0ab53aa55e87",
+                  "bytes": 18177
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--workspace-state-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-3m9ciqz6\\completion_workflow\\files ä\\workflow ä\\c",
+                      "completion-c"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--workspace-state-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-3m9ciqz6\\completion_workflow\\files ä\\workflow ä\\phys",
+                      "completion-phys"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              },
+              {
+                "name": "completion_automatic_workflow",
+                "status": "passed",
+                "seconds": 13.109,
+                "commands": [
+                  {
+                    "command": [
+                      "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+                      "completion_automatic_workflow",
+                      "--app",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--work",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-3m9ciqz6\\completion_automatic_workflow\\files ä",
+                      "--root",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+                      "--cc",
+                      "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-3m9ciqz6/completion_automatic_workflow/files ä/app-steps.json",
+                  "sha256": "056237abe88fb6e3c63d6bf7a7b644520885f481a1f9bf0b6e1a288abe18af47",
+                  "bytes": 19629
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--workspace-state-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-3m9ciqz6\\completion_automatic_workflow\\files ä\\workflow ä\\c",
+                      "completion-auto-c"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "AUTO COMPLETION enter-without-selection=1",
+                      "AUTO COMPLETION tab-without-selection=1",
+                      "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                      "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                      "AUTO COMPLETION changed-prefix-needs-selection=1",
+                      "AUTO COMPLETION short-prefix-closes=1",
+                      "AUTO COMPLETION stale-cursor=1",
+                      "AUTO COMPLETION stale-equal-length-source=1",
+                      "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                      "AUTO COMPLETION comments-and-strings=1",
+                      "AUTO COMPLETION selection-invalidates=1",
+                      "AUTO COMPLETION target-change=1",
+                      "AUTO COMPLETION preference-off-manual-remains=1",
+                      "AUTO COMPLETION viewport-shrink-selection=1",
+                      "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                      "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                      "AUTO COMPLETION focus-loss=1",
+                      "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--workspace-state-test",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-3m9ciqz6\\completion_automatic_workflow\\files ä\\workflow ä\\phys",
+                      "completion-auto-phys"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "AUTO COMPLETION enter-without-selection=1",
+                      "AUTO COMPLETION tab-without-selection=1",
+                      "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                      "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                      "AUTO COMPLETION changed-prefix-needs-selection=1",
+                      "AUTO COMPLETION short-prefix-closes=1",
+                      "AUTO COMPLETION stale-cursor=1",
+                      "AUTO COMPLETION stale-equal-length-source=1",
+                      "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                      "AUTO COMPLETION comments-and-strings=1",
+                      "AUTO COMPLETION selection-invalidates=1",
+                      "AUTO COMPLETION target-change=1",
+                      "AUTO COMPLETION preference-off-manual-remains=1",
+                      "AUTO COMPLETION viewport-shrink-selection=1",
+                      "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                      "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                      "AUTO COMPLETION focus-loss=1",
+                      "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "linux": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-d-refined-linux.json",
+          "sha256": "33478cc0dc1d88ee8e14ee0abca5fa3894821cf3f19ea2169afa223d13c90966",
+          "bytes": 1964
+        },
+        "commands": [
+          {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--sanitizers",
+              "--test",
+              "--test-filter",
+              "completion",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow"
+            ],
+            "exit_code": 0,
+            "app_sha256": "5747102aa6e599ebbd746018ec290bc0e8f4f24afae210809f6f9a8fbbf8219d"
+          },
+          {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--sanitizers",
+              "--test-display",
+              "--test-filter",
+              "completion",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow"
+            ],
+            "exit_code": 0,
+            "app_sha256": "5747102aa6e599ebbd746018ec290bc0e8f4f24afae210809f6f9a8fbbf8219d"
+          }
+        ],
+        "exit_code": 0,
+        "same_app_bytes_between_invocations": true,
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-d-refined-linux.log",
+          "sha256": "3d9b026524d9fd4a746744908e01ca9ac5cc978ff5a7af8f2b275b339f93202d",
+          "bytes": 297259
+        },
+        "runs": [
+          {
+            "id": "run-vrm9pyps",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-vrm9pyps/results.json",
+              "sha256": "5676fade1a8b568ad37b77721d10ec63913f6bcc4d731d3618ee83cd639a909d",
+              "bytes": 397
+            },
+            "cases": [
+              {
+                "name": "completion",
+                "status": "passed",
+                "seconds": 0.02,
+                "commands": [
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-completion"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "run-qghdxkv9",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qghdxkv9/results.json",
+              "sha256": "2d5e0e0bc8aec1799e201651b6d35b972d107716a4d7bf82977c77cda7996fc9",
+              "bytes": 39350
+            },
+            "cases": [
+              {
+                "name": "completion_workflow",
+                "status": "passed",
+                "seconds": 16.787,
+                "commands": [
+                  {
+                    "command": [
+                      "/usr/bin/python3",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+                      "completion_workflow",
+                      "--app",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--work",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qghdxkv9/completion_workflow/files ä",
+                      "--root",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src",
+                      "--cc",
+                      "/usr/bin/cc"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qghdxkv9/completion_workflow/files ä/app-steps.json",
+                  "sha256": "07772a9f34b6acc8b5985258b48bef764f96656584d385f40beb403ce5af4dee",
+                  "bytes": 17933
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--workspace-state-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qghdxkv9/completion_workflow/files ä/workflow ä/c",
+                      "completion-c"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--workspace-state-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qghdxkv9/completion_workflow/files ä/workflow ä/phys",
+                      "completion-phys"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              },
+              {
+                "name": "completion_automatic_workflow",
+                "status": "passed",
+                "seconds": 23.231,
+                "commands": [
+                  {
+                    "command": [
+                      "/usr/bin/python3",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/check_display_workflow.py",
+                      "completion_automatic_workflow",
+                      "--app",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--work",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qghdxkv9/completion_automatic_workflow/files ä",
+                      "--root",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src",
+                      "--cc",
+                      "/usr/bin/cc"
+                    ],
+                    "exit_code": 0,
+                    "status": "passed"
+                  }
+                ],
+                "app_steps": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qghdxkv9/completion_automatic_workflow/files ä/app-steps.json",
+                  "sha256": "e356ae56415852dc08ee250df7bb66f8fca82a94efc1032d1a7728558fc27a2e",
+                  "bytes": 19388
+                },
+                "applications": [
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--workspace-state-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qghdxkv9/completion_automatic_workflow/files ä/workflow ä/c",
+                      "completion-auto-c"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "AUTO COMPLETION enter-without-selection=1",
+                      "AUTO COMPLETION tab-without-selection=1",
+                      "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                      "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                      "AUTO COMPLETION changed-prefix-needs-selection=1",
+                      "AUTO COMPLETION short-prefix-closes=1",
+                      "AUTO COMPLETION stale-cursor=1",
+                      "AUTO COMPLETION stale-equal-length-source=1",
+                      "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                      "AUTO COMPLETION comments-and-strings=1",
+                      "AUTO COMPLETION selection-invalidates=1",
+                      "AUTO COMPLETION target-change=1",
+                      "AUTO COMPLETION preference-off-manual-remains=1",
+                      "AUTO COMPLETION viewport-shrink-selection=1",
+                      "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                      "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                      "AUTO COMPLETION focus-loss=1",
+                      "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  },
+                  {
+                    "command": [
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+                      "--workspace-state-test",
+                      "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qghdxkv9/completion_automatic_workflow/files ä/workflow ä/phys",
+                      "completion-auto-phys"
+                    ],
+                    "exit_code": 0,
+                    "markers": [
+                      "AUTO COMPLETION enter-without-selection=1",
+                      "AUTO COMPLETION tab-without-selection=1",
+                      "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                      "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                      "AUTO COMPLETION changed-prefix-needs-selection=1",
+                      "AUTO COMPLETION short-prefix-closes=1",
+                      "AUTO COMPLETION stale-cursor=1",
+                      "AUTO COMPLETION stale-equal-length-source=1",
+                      "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                      "AUTO COMPLETION comments-and-strings=1",
+                      "AUTO COMPLETION selection-invalidates=1",
+                      "AUTO COMPLETION target-change=1",
+                      "AUTO COMPLETION preference-off-manual-remains=1",
+                      "AUTO COMPLETION viewport-shrink-selection=1",
+                      "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                      "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                      "AUTO COMPLETION focus-loss=1",
+                      "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                    ],
+                    "failure": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "inputs.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-d-refined-inputs.json",
+        "sha256": "21b4340c0d558b7b501622595c8f091210a0ea398fc2e90d1917bedbb7348d9c",
+        "bytes": 15823
+      },
+      "compiler-source.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-d-refined-compiler-source.json",
+        "sha256": "690754e0bda2a785e36679f8ea88e0940bb22aece1199279413c7465d27eedd8",
+        "bytes": 117641
+      },
+      "runtime.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-d-refined-runtime.json",
+        "sha256": "125766534b2863e78e5c27c9bc0a046fe9e26a4d6dc3e7d3a8973bd07c9f7abf",
+        "bytes": 36873
+      },
+      "byte-index.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-d-refined-byte-index.json",
+        "sha256": "7cc7ec2a15cc5e04c36d92034b00be5750bd5e9af94492b5c44a27882b3aa616",
+        "bytes": 95104
+      }
+    }
+  },
+  "counter_mutation": {
+    "path": "app/completion_ui.inc",
+    "parent_phase": "completion-d-clip-counter",
+    "before_sha256": "783e9079ed14bae4506bb612b58886ed752ecc793f6217fe6b58221c2ed68759",
+    "after_sha256": "10d9f0ec362c706d0431de2ff8d164b3cee375abb3e59afb8a06e41a1990cb99",
+    "mutation": "Deliberately restore undersized candidate-card allocation; new visible-reference assertion must reject.",
+    "root_unchanged": true,
+    "archive_sha256": "a7499187f2a202d49c35c518a0943b767b2c099412bf89dbfbbce43ac088d930"
+  },
+  "limits": [
+    "Shared approved syntax palette, actual scopes, separate call-signature controller and fuller doc card still required.",
+    "Native synthetic SDL input is not physical OS keyboard/IME or screenreader proof.",
+    "Interactive local browser file navigation was rejected by URL security policy; approved spec and versioned color-dark reference PNG read instead.",
+    "Full DPI/monitor/fullscreen/Assistive Technology and Mac completion acceptance open."
+  ],
+  "unchanged_since_full_settings_run": {
+    "app/preferences.c": "d6d69bc491a45ce7dd4d21800551168d60b9a13b396290b84523c174cf4d6b84",
+    "app/preferences.h": "866638f2bb7eaa4e8e3b537ce3dcb8cd392daf53ba0c8a084e40929ae3e083ad",
+    "app/settings_a_ui.inc": "2c3d8538f9e70562842f4607541f933cbe46aa965beee0d54547ed2f1da04a7c",
+    "app/settings_window.inc": "dd5f28b469c7f5e6bdf653f24c916edbed2827886f7f6b4a56e81ff90927289b",
+    "app/settings_keyboard_tests.inc": "bd6f3f76df0d589b26eaa3ae1fc1489e49d7080b36614aa4b946834b75023f02",
+    "app/settings_window_tests.inc": "83bd8c4aa73a1fa2f6915247d26a1c18d4d362360521383c812d07e3eaab97ae",
+    "tests/test_preferences.c": "a839aaa3aaa9947fa03c1ed254c7f49e8ebd0ecd17241b6afc4033a8a13463e9",
+    "app/design_tokens.h": "339f6db19360c180bb6b720641047d47e64dd19ec33c383811b1cbdec1531e42",
+    "app/main.c": "dff46015f130e8aed63105749292586022f11125ea3b0b67c7991e0366aeffd6"
+  },
+  "cleanup": {
+    "files": 23,
+    "freed_bytes": 73529574,
+    "all_absent": true,
+    "all_path_size_hash_preflights": true,
+    "windows_owned_test_processes": 0,
+    "reason": "Superseded successful native completion images; original error and current references retained.",
+    "plan_sha256": "889e25e4410eec8cd24b87d1c1096adc988f682b800c2ebd8fea48a16c4dd863"
+  },
+  "source_compiler_test_input_count": 1110,
+  "proof_assembly_note": "Initial local collector stopped on the distinct flat-unit JSON schema before writing evidence; collector corrected to read units and GUI steps separately. Original executed results unchanged; no tests rerun for this report-only correction."
+}

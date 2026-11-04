@@ -145,7 +145,63 @@ static void completion_auto_frame(app *a,const char *mode,int *stage,int *code) 
     case 44:
         if(ps_clock()<hold)return;
         ok=!a->completion_active && !a->completion_pending_edit && completion_test_equal(edit,prefix);
-        puts("AUTO COMPLETION target-change=1");ok=ok && completion_auto_seed(a,"");AUTO_NEXT(45);break;
+        puts("AUTO COMPLETION target-change=1");ok=ok && completion_auto_seed(a,"");a->preferences.completion_auto=0;AUTO_NEXT(56);break;
+    case 56:AUTO_WAIT(edit->active);completion_auto_text(a,prefix);hold=ps_clock()+.250;AUTO_NEXT(57);break;
+    case 57:
+        AUTO_WAIT(completion_test_equal(edit,prefix));if(ps_clock()<hold)return;
+        ok=!a->completion_active && !a->completion_pending_edit;
+        AUTO_KEY(SDLK_SPACE,SDL_KMOD_CTRL);AUTO_NEXT(58);break;
+    case 58:
+        AUTO_WAIT(a->completion_active);ok=a->completion_manual;
+        puts("AUTO COMPLETION preference-off-manual-remains=1");
+        ok=ok && completion_auto_seed(a,"");AUTO_NEXT(59);break;
+    case 59:AUTO_WAIT(edit->active);AUTO_KEY(SDLK_SPACE,SDL_KMOD_CTRL);AUTO_NEXT(60);break;
+    case 60:
+        AUTO_WAIT(a->completion_active && a->completion_visible_rows==5);
+        ok=a->completion_count>5 && a->completion_choice_bounds[4].h>0 && !a->completion_choice_bounds[5].w &&
+           a->completion_choice_bounds[4].y+a->completion_choice_bounds[4].h<=a->completion_list_bounds.y+a->completion_list_bounds.h-29 &&
+           fabsf(a->completion_list_bounds.w-400)<1 && a->completion_scroll_bounds.w==6 && a->completion_info_bounds.w>0;
+        test_plot_wheel(a,a->completion_choice_bounds[0].x+60,a->completion_choice_bounds[0].y+10,-3);AUTO_NEXT(61);break;
+    case 61:
+        AUTO_WAIT(a->completion_first>0);ok=a->completion_selected==0 && completion_test_equal(edit,"");
+        AUTO_KEY(SDLK_UP,0);AUTO_NEXT(62);break;
+    case 62:
+        AUTO_WAIT(a->completion_selected==a->completion_count-1 && a->completion_first+5==a->completion_count);
+        a->preferences.completion_rows=9;AUTO_NEXT(63);break;
+    case 63:
+        AUTO_WAIT(a->completion_visible_rows==9);ok=a->completion_choice_bounds[8].h>0 && !a->completion_choice_bounds[9].w;
+        a->preferences.completion_rows=1;AUTO_NEXT(64);break;
+    case 64:
+        AUTO_WAIT(a->completion_visible_rows==1);ok=a->completion_choice_bounds[0].h>0 && !a->completion_choice_bounds[1].w &&
+            a->completion_first==a->completion_selected;
+        if(ok)puts("AUTO COMPLETION viewport-shrink-selection=1");
+        {ps_preferences p=a->preferences;p.completion_rows=20;p.ui_size=p.editor_size=22;p.theme=PS_THEME_LIGHT;preferences_apply(a,&p);}AUTO_NEXT(69);break;
+    case 69:
+        AUTO_WAIT(a->preferences.ui_size==22 && a->completion_visible_rows>0 && a->completion_visible_rows<20);
+        {struct nk_rect last=a->completion_choice_bounds[a->completion_visible_rows-1];
+        ok=a->font_ui==a->ui_fonts[3] && a->font_code==a->code_fonts[5] && last.h>=30 &&
+           last.y+last.h<=a->completion_list_bounds.y+a->completion_list_bounds.h-29 &&
+           a->completion_list_bounds.y>=a->source_editor_bounds.y &&
+           a->completion_list_bounds.y+a->completion_list_bounds.h<=a->source_editor_bounds.y+a->source_editor_bounds.h;
+        ps_preferences p=a->preferences;p.completion_rows=5;p.theme=PS_THEME_HIGH_CONTRAST;preferences_apply(a,&p);}AUTO_NEXT(70);break;
+    case 70:
+        AUTO_WAIT(a->completion_visible_rows==5 && a->preferences.theme==PS_THEME_HIGH_CONTRAST);
+        ok=a->completion_choice_bounds[4].h>=30 && a->completion_info_bounds.w>0;
+        puts("AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1");
+        {ps_preferences p=a->preferences;p.ui_size=16;p.editor_size=12;p.theme=PS_THEME_DARK;preferences_apply(a,&p);}AUTO_NEXT(65);break;
+    case 65:
+        AUTO_WAIT(a->completion_visible_rows==5);
+        test_mouse(a,a->completion_scroll_bounds,true);AUTO_NEXT(66);break;
+    case 66:
+        AUTO_WAIT(a->completion_scroll_drag);
+        test_plot_motion(a,a->completion_scroll_bounds.x+3,a->completion_list_bounds.y+4);AUTO_NEXT(67);break;
+    case 67:
+        AUTO_WAIT(a->completion_first==0);
+        test_mouse(a,nk_rect(a->completion_scroll_bounds.x,a->completion_list_bounds.y+4,6,2),false);AUTO_NEXT(68);break;
+    case 68:
+        AUTO_WAIT(!a->completion_scroll_drag);ok=completion_test_equal(edit,"") && a->completion_selected==a->completion_count-1;
+        puts("AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1");
+        a->preferences.completion_auto=1;ok=ok && completion_auto_seed(a,"");AUTO_NEXT(45);break;
     case 45:AUTO_WAIT(edit->active);completion_auto_text(a,prefix);AUTO_NEXT(46);break;
     case 46: {
         AUTO_WAIT(a->completion_pending_edit==edit);
@@ -158,7 +214,7 @@ static void completion_auto_frame(app *a,const char *mode,int *stage,int *code) 
         puts("AUTO COMPLETION focus-loss=1");a->quitting=true;break;
     }
 finished:
-    if(!ok){const char *text=nk_str_get_const(&edit->string);fprintf(stderr,"Auto completion stage=%d active=%d explicit=%d pending=%d composing=%d cursor=%d text=%.*s\n",*stage,a->completion_active,a->completion_explicit,a->completion_pending_edit!=NULL,a->completion_composing,edit->cursor,nk_str_len_char(&edit->string),text?text:"");*code=1;a->quitting=true;}
+    if(!ok){const char *text=nk_str_get_const(&edit->string);fprintf(stderr,"Auto completion stage=%d active=%d explicit=%d pending=%d composing=%d cursor=%d first=%zu selected=%zu rows=%u count=%zu text=%.*s\n",*stage,a->completion_active,a->completion_explicit,a->completion_pending_edit!=NULL,a->completion_composing,edit->cursor,a->completion_first,a->completion_selected,a->completion_visible_rows,a->completion_count,nk_str_len_char(&edit->string),text?text:"");*code=1;a->quitting=true;}
     if(a->quitting)printf("AUTOMATIC COMPLETION SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 #undef AUTO_WAIT
 #undef AUTO_NEXT
