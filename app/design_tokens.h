@@ -17,6 +17,7 @@ typedef struct {
     /* A2 selection wash. Independent of navigation/toggle highlights. */
     struct nk_color text_selection, selection_accent, selection_focus, selection_border;
     struct nk_color completion_info;
+    struct nk_color code_function, code_variable, code_control;
 } ps_ui_palette;
 
 enum {
@@ -40,9 +41,9 @@ static const ps_ui_palette PS_UI_DARK = {
     PS_RGB(25, 101, 206), PS_RGB(37, 116, 222), PS_RGB(19, 84, 179),
     PS_RGB(55, 57, 63), PS_RGB(255, 155, 148),
     PS_RGB(237, 238, 242), PS_RGB(48, 49, 54), PS_RGB(20, 21, 24),
-    PS_RGB(30, 31, 35), PS_RGB(142, 145, 154), PS_RGB(211, 224, 237),
-    PS_RGB(118, 145, 154), PS_RGB(232, 192, 121), PS_RGB(187, 160, 236),
-    PS_RGB(100, 170, 255), PS_RGB(192, 157, 230), PS_RGB(119, 191, 246),
+    PS_RGB(30, 31, 35), PS_RGB(142, 145, 154), PS_RGB(212, 212, 212),
+    PS_RGB(106, 153, 85), PS_RGB(206, 145, 120), PS_RGB(86, 156, 214),
+    PS_RGB(78, 201, 176), PS_RGB(86, 156, 214), PS_RGB(181, 206, 168),
     PS_RGB(53, 55, 63), PS_RGB(42, 44, 51), PS_RGB(38, 48, 65),
     PS_RGB(25, 26, 30), PS_RGB(225, 227, 233),
     {PS_RGB(100, 170, 255), PS_RGB(245, 166, 87), PS_RGB(109, 207, 148),
@@ -52,9 +53,15 @@ static const ps_ui_palette PS_UI_DARK = {
     .selection_accent = PS_RGB(171, 185, 202),
     .selection_focus = PS_RGB(138, 186, 255),
     .selection_border = PS_RGB(166, 169, 177),
-    .completion_info = PS_RGB(35, 37, 42)
+    .completion_info = PS_RGB(35, 37, 42),
+    .code_function = PS_RGB(220, 220, 170),
+    .code_variable = PS_RGB(156, 220, 254),
+    .code_control = PS_RGB(197, 134, 192)
 };
 static const ps_ui_palette PS_UI_LIGHT = {
+    .code_function = PS_RGB(121, 94, 38),
+    .code_variable = PS_RGB(0, 16, 128),
+    .code_control = PS_RGB(175, 0, 219),
     .completion_info = PS_RGB(244, 245, 247),
     .text = PS_RGB(25, 30, 38),
     .muted = PS_RGB(78, 87, 100),
@@ -88,13 +95,13 @@ static const ps_ui_palette PS_UI_LIGHT = {
     .canvas = PS_RGB(232, 235, 241),
     .gutter = PS_RGB(246, 247, 250),
     .gutter_text = PS_RGB(78, 87, 100),
-    .code_text = PS_RGB(25, 30, 38),
-    .code_comment = PS_RGB(72, 94, 89),
-    .code_string = PS_RGB(123, 61, 0),
-    .code_keyword = PS_RGB(0, 73, 163),
-    .code_type = PS_RGB(0, 82, 108),
-    .code_preprocessor = PS_RGB(90, 51, 144),
-    .code_number = PS_RGB(113, 47, 130),
+    .code_text = PS_RGB(0, 0, 0),
+    .code_comment = PS_RGB(0, 128, 0),
+    .code_string = PS_RGB(163, 21, 21),
+    .code_keyword = PS_RGB(0, 0, 255),
+    .code_type = PS_RGB(31, 107, 129),
+    .code_preprocessor = PS_RGB(0, 0, 255),
+    .code_number = PS_RGB(9, 134, 88),
     .plot_grid = PS_RGB(203, 210, 222),
     .plot_grid_minor = PS_RGB(225, 229, 235),
     .doc_header = PS_RGB(219, 230, 247),
@@ -103,6 +110,9 @@ static const ps_ui_palette PS_UI_LIGHT = {
     .curves = {PS_RGB(0, 75, 165), PS_RGB(145, 72, 0), PS_RGB(0, 100, 59), PS_RGB(115, 48, 163), PS_RGB(158, 34, 95), PS_RGB(0, 90, 107), PS_RGB(106, 86, 0), PS_RGB(60, 71, 89)}
 };
 static const ps_ui_palette PS_UI_HIGH_CONTRAST = {
+    .code_function = PS_RGB(255, 255, 0),
+    .code_variable = PS_RGB(156, 220, 254),
+    .code_control = PS_RGB(255, 225, 0),
     .completion_info = PS_RGB(0, 0, 0),
     .text = PS_RGB(255, 255, 255),
     .muted = PS_RGB(212, 212, 212),
@@ -140,8 +150,8 @@ static const ps_ui_palette PS_UI_HIGH_CONTRAST = {
     .code_comment = PS_RGB(190, 220, 190),
     .code_string = PS_RGB(255, 220, 130),
     .code_keyword = PS_RGB(255, 225, 0),
-    .code_type = PS_RGB(140, 225, 255),
-    .code_preprocessor = PS_RGB(235, 185, 255),
+    .code_type = PS_RGB(255, 244, 79),
+    .code_preprocessor = PS_RGB(255, 225, 0),
     .code_number = PS_RGB(215, 210, 255),
     .plot_grid = PS_RGB(140, 140, 140),
     .plot_grid_minor = PS_RGB(90, 90, 90),
@@ -154,32 +164,30 @@ static const ps_ui_palette PS_UI_HIGH_CONTRAST = {
 
 /* Selected workbench reference. Keep its fixed reading surfaces and muted
  * selection separate from the larger general-purpose app controls. */
+static inline struct nk_color ps_ui_color_rgb(unsigned char r,unsigned char g,unsigned char b){
+    struct nk_color color={r,g,b,255};return color;
+}
 static inline const ps_ui_palette *ps_workbench_palette(const ps_ui_palette *base) {
     static ps_ui_palette dark,light;
     if(base==&PS_UI_HIGH_CONTRAST)return base;
     ps_ui_palette *p=base==&PS_UI_LIGHT?&light:&dark;*p=*base;
     bool is_light=base==&PS_UI_LIGHT;
-    p->text=is_light?nk_rgb(32,36,44):nk_rgb(237,238,242);
-    p->muted=is_light?nk_rgb(85,94,108):nk_rgb(166,169,177);
-    p->window=is_light?nk_rgb(246,247,249):nk_rgb(30,31,35);
-    p->header=is_light?nk_rgb(237,239,243):nk_rgb(37,38,43);
-    p->border=is_light?nk_rgb(190,195,206):nk_rgb(59,61,69);
-    p->divider=p->border;p->gutter=p->edit=is_light?nk_rgb(255,255,255):nk_rgb(25,26,30);
-    p->button=is_light?nk_rgb(224,227,234):nk_rgb(53,54,62);
-    p->surface=is_light?p->button:nk_rgb(48,49,54);
-    p->button_hover=is_light?nk_rgb(213,218,228):nk_rgb(66,68,78);
-    p->selection_active=is_light?nk_rgb(217,230,248):nk_rgb(43,61,89);
-    p->accent=is_light?nk_rgb(23,86,158):nk_rgb(138,186,255);
-    p->primary=is_light?nk_rgb(21,86,172):nk_rgb(25,101,206);
-    p->primary_text=nk_rgb(255,255,255);
-    p->canvas=is_light?nk_rgb(230,233,238):nk_rgb(20,21,24);
-    p->error=is_light?nk_rgb(165,41,37):nk_rgb(255,170,162);
-    p->gutter_text=p->muted;p->code_text=p->text;
-    p->code_keyword=is_light?nk_rgb(120,68,160):nk_rgb(201,166,232);
-    p->code_preprocessor=p->code_keyword;p->code_type=p->accent;
-    p->code_string=is_light?nk_rgb(68,101,30):nk_rgb(184,205,142);
-    p->code_number=is_light?nk_rgb(139,74,25):nk_rgb(232,186,145);
-    p->code_comment=is_light?nk_rgb(98,107,120):nk_rgb(150,157,168);
+    p->text=is_light?ps_ui_color_rgb(32,36,44):ps_ui_color_rgb(237,238,242);
+    p->muted=is_light?ps_ui_color_rgb(85,94,108):ps_ui_color_rgb(166,169,177);
+    p->window=is_light?ps_ui_color_rgb(246,247,249):ps_ui_color_rgb(30,31,35);
+    p->header=is_light?ps_ui_color_rgb(237,239,243):ps_ui_color_rgb(37,38,43);
+    p->border=is_light?ps_ui_color_rgb(190,195,206):ps_ui_color_rgb(59,61,69);
+    p->divider=p->border;p->gutter=p->edit=is_light?ps_ui_color_rgb(255,255,255):ps_ui_color_rgb(25,26,30);
+    p->button=is_light?ps_ui_color_rgb(224,227,234):ps_ui_color_rgb(53,54,62);
+    p->surface=is_light?p->button:ps_ui_color_rgb(48,49,54);
+    p->button_hover=is_light?ps_ui_color_rgb(213,218,228):ps_ui_color_rgb(66,68,78);
+    p->selection_active=is_light?ps_ui_color_rgb(217,230,248):ps_ui_color_rgb(43,61,89);
+    p->accent=is_light?ps_ui_color_rgb(23,86,158):ps_ui_color_rgb(138,186,255);
+    p->primary=is_light?ps_ui_color_rgb(21,86,172):ps_ui_color_rgb(25,101,206);
+    p->primary_text=ps_ui_color_rgb(255,255,255);
+    p->canvas=is_light?ps_ui_color_rgb(230,233,238):ps_ui_color_rgb(20,21,24);
+    p->error=is_light?ps_ui_color_rgb(165,41,37):ps_ui_color_rgb(255,170,162);
+    p->gutter_text=p->muted;
     return p;
 }
 /* Messlabor's inspector and individual value surfaces share semantic themes. */
@@ -188,7 +196,7 @@ static inline const ps_ui_palette *ps_laboratory_palette(const ps_ui_palette *ba
     if(base==&PS_UI_HIGH_CONTRAST)return base;
     bool is_light=base==&PS_UI_LIGHT;ps_ui_palette *p=is_light?&light:&dark;
     *p=*ps_workbench_palette(base);
-    p->edit=is_light?nk_rgb(246,247,250):nk_rgb(30,31,35);
+    p->edit=is_light?ps_ui_color_rgb(246,247,250):ps_ui_color_rgb(30,31,35);
     p->divider=p->border;
     return p;
 }

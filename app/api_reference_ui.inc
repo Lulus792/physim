@@ -92,6 +92,7 @@ static void api_reference_view(app *a) {
         ps_document *d=a->api_reference;width=fmaxf(40,nk_window_get_content_region(ui).w-16);
         for(size_t i=a->api_reference_first;i<a->api_reference_end;i++) {
             const ps_doc_block *block=&d->blocks[i];const char *text=d->text+block->text;
+            syntax_cursor syntax={0};if(block->kind==PS_DOC_CODE)ps_syntax_init(&syntax.scan,text,block->length,a->api_reference_symbol && a->api_reference_symbol->language);
             const struct nk_user_font *font=block->kind==PS_DOC_CODE?a->font_code:block->kind==PS_DOC_HEADING?heading:body;
             float height=documentation_height(font,text,block->length,width)+16;
             nk_layout_row_dynamic(ui,height,1);struct nk_rect bounds;
@@ -100,7 +101,8 @@ static void api_reference_view(app *a) {
                 if(block->kind==PS_DOC_CODE)nk_fill_rect(canvas,bounds,4,UI_COLOR(edit));
                 size_t at=0;float y=bounds.y+8;
                 do{size_t length,used=documentation_line(font,text+at,block->length-at,width,&length);
-                    nk_draw_text(canvas,nk_rect(bounds.x+8,y,width,font->height+6),text+at,(int)length,font,nk_rgba(0,0,0,0),UI_COLOR(text));
+                    if(block->kind==PS_DOC_CODE)syntax_draw_range(canvas,font,&syntax,at,at+length,bounds.x+8,y);
+                    else nk_draw_text(canvas,nk_rect(bounds.x+8,y,width,font->height+6),text+at,(int)length,font,nk_rgba(0,0,0,0),UI_COLOR(text));
                     at+=used;y+=font->height+6;
                 }while(at<block->length);
             }

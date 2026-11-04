@@ -2,6 +2,7 @@
 #include "preferences.h"
 #include "ui.h"
 #include "design_tokens.h"
+#include "syntax.h"
 #include <math.h>
 #include <SDL3/SDL.h>
 #include <stdio.h>
@@ -55,12 +56,36 @@ static int contrast(void) {
         CHECK(readable(p->primary_text, p->primary_hover, minimum));
         CHECK(readable(p->primary_text, p->primary_active, minimum));
         struct nk_color syntax[] = {p->code_text, p->code_comment, p->code_string, p->code_keyword,
-            p->code_type, p->code_preprocessor, p->code_number, p->accent, p->error};
+            p->code_type, p->code_preprocessor, p->code_number,p->code_function,p->code_variable,p->code_control,p->accent, p->error};
         for (unsigned j = 0; j < sizeof syntax / sizeof syntax[0]; j++)
             CHECK(readable(syntax[j], p->edit, minimum));
         for (unsigned j = 0; j < 8; j++)
             CHECK(readable(p->curves[j], p->edit, minimum));
     }
+    return 0;
+}
+static unsigned rgb(struct nk_color color){return ((unsigned)color.r<<16)|((unsigned)color.g<<8)|color.b;}
+static int syntax_palette(void){
+    const ps_ui_palette *bases[]={&PS_UI_DARK,&PS_UI_LIGHT,&PS_UI_HIGH_CONTRAST};
+    const unsigned expected[3][PS_SYNTAX_COUNT]={
+        {0xd4d4d4,0x6a9955,0xce9178,0x569cd6,0x4ec9b0,0x569cd6,0xb5cea8,0xdcdcaa,0x9cdcfe,0xc586c0},
+        {0x000000,0x008000,0xa31515,0x0000ff,0x1f6b81,0x0000ff,0x098658,0x795e26,0x001080,0xaf00db},
+        {0xffffff,0xbedcbe,0xffdc82,0xffe100,0xfff44f,0xffe100,0xd7d2ff,0xffff00,0x9cdcfe,0xffe100}
+    };
+    for(unsigned theme=0;theme<3;theme++){
+        const ps_ui_palette *variants[]={bases[theme],ps_workbench_palette(bases[theme]),ps_laboratory_palette(bases[theme])};
+        for(unsigned i=0;i<3;i++){
+            const ps_ui_palette *p=variants[i];
+            struct nk_color roles[]={p->code_text,p->code_comment,p->code_string,p->code_keyword,p->code_type,p->code_preprocessor,p->code_number,p->code_function,p->code_variable,p->code_control};
+            for(unsigned r=0;r<PS_SYNTAX_COUNT;r++){
+                CHECK(rgb(roles[r])==expected[theme][r] && roles[r].a==255);
+                /* Only base/workbench edits host source/signature code. The
+                 * laboratory's generic value field has a different surface. */
+                if(i<2)CHECK(readable(roles[r],p->edit,theme==2?7:4.5));
+            }
+        }
+    }
+    puts("Approved syntax palette: all ten roles, three themes and base/workbench/laboratory preserved; active code-field contrast passed");
     return 0;
 }
 static int settings_transactions(void) {
@@ -150,6 +175,7 @@ static int settings_transactions(void) {
 int main(int argc, char **argv) {
     CHECK(argc == 2);
     CHECK(contrast() == 0);
+    CHECK(syntax_palette() == 0);
     CHECK(settings_transactions() == 0);
     char path[4096], bad[4096];
     snprintf(path, sizeof path, "%s/preferences-unit.bin", argv[1]);

@@ -1,0 +1,141 @@
+{
+  "date": "2026-11-04",
+  "source_commit": "913d60ed6b2e5802cb3fdf0e7d99bc8797e84eeb",
+  "source_includes_new_syntax": false,
+  "user_mac": "off; untouched",
+  "editor_run": 41895571962,
+  "editor_intel_job": 126806005993,
+  "artifact_id": 13359355700,
+  "zip_sha256": "88a9bce6889dd5856cde7a8f00ce9df3c28600e6fe53324dd94b68a6167e5e0a",
+  "digest_matches_github": true,
+  "all_entries_read": {
+    "Release/test-results/run-bryqdatt/results.json": "60c30f8e5bf6b175d6bda19c4ae3225178e30efefd5134969164db3e1d04716e"
+  },
+  "results": [
+    {
+      "path": "Release/test-results/run-bryqdatt/results.json",
+      "cases": [
+        {
+          "name": "documents_small",
+          "status": "passed",
+          "seconds": 7.906
+        },
+        {
+          "name": "documents_large",
+          "status": "passed",
+          "seconds": 9.202
+        },
+        {
+          "name": "completion_workflow",
+          "status": "passed",
+          "seconds": 12.713
+        },
+        {
+          "name": "completion_automatic_workflow",
+          "status": "passed",
+          "seconds": 23.158
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed",
+          "seconds": 12.796
+        }
+      ]
+    }
+  ],
+  "arm_jobs": {
+    "editor": {
+      "id": 126806005373,
+      "status": "completed",
+      "conclusion": "cancelled"
+    },
+    "settings": {
+      "id": 126811425903,
+      "status": "completed",
+      "conclusion": "cancelled"
+    }
+  },
+  "settings_intel": {
+    "run_id": 41895572088,
+    "job_id": 126811426925,
+    "artifact_id": 13357704185,
+    "zip_sha256": "1e4ca4d0cdfa4db7b1e6c81da6e071f55b31fb218c7ea9f07d41b524a372d05f",
+    "case_count": 16,
+    "passed": 16,
+    "all_entries_read": {
+      "Release/test-results/run-ftkv2ivw/results.json": "322ec0b9c8cdaeded108c830043bd291e62b0cbae6b84da54c8185c36c8d0412",
+      "Release/test-results/run-ku96xzg3/results.json": "3eb72af2ec42abe8c6aeff07c2357431cbe4d083d872c2043b143ce6d8b06c6e",
+      "Release/test-results/run-l6645rr7/results.json": "2fc20b9dbc95c491fe2ae5b15502503965ffe9138a5806d2a6e08e700330c6f7",
+      "Release/test-results/run-e8zkg6lg/results.json": "631626eca6f23266ae75dfe97eaeef8e7c23a91657980f4743e71dea5a3ff7f2"
+    },
+    "digest_matches_github": true,
+    "cases": [
+      {
+        "name": "ui_typography_workflow",
+        "status": "passed"
+      },
+      {
+        "name": "shell_theme_dark",
+        "status": "passed"
+      },
+      {
+        "name": "shell_theme_light_large_narrow",
+        "status": "passed"
+      },
+      {
+        "name": "shell_theme_contrast",
+        "status": "passed"
+      },
+      {
+        "name": "settings_transactions",
+        "status": "passed"
+      },
+      {
+        "name": "settings_a_window",
+        "status": "passed"
+      },
+      {
+        "name": "settings_search_keyboard",
+        "status": "passed"
+      },
+      {
+        "name": "unit_task_window",
+        "status": "passed"
+      },
+      {
+        "name": "themes_workflow",
+        "status": "passed"
+      },
+      {
+        "name": "channel_units_workflow",
+        "status": "passed"
+      },
+      {
+        "name": "settings_keyboard_workflow",
+        "status": "passed"
+      },
+      {
+        "name": "settings_keyboard_paced",
+        "status": "passed"
+      },
+      {
+        "name": "analysis_units_dark",
+        "status": "passed"
+      },
+      {
+        "name": "analysis_units_light_large_narrow",
+        "status": "passed"
+      },
+      {
+        "name": "inspector_channel",
+        "status": "passed"
+      },
+      {
+        "name": "preferences",
+        "status": "passed"
+      }
+    ]
+  },
+  "editor_passed": 5,
+  "editor_count": 5
+}

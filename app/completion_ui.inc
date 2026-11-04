@@ -6,7 +6,7 @@ static void completion_hide(app *a) {
     free(a->completion_indices);a->completion_indices=NULL;a->completion_edit=a->completion_focus_edit=NULL;
     a->completion_active=a->completion_accept_pending=a->completion_explicit=a->completion_manual=false;a->completion_count=a->completion_selected=0;
     a->completion_first=0;a->completion_visible_rows=0;a->completion_scroll_drag=false;
-    a->completion_info_bounds=a->completion_scroll_bounds=nk_rect(0,0,0,0);
+    a->completion_info_bounds=a->completion_signature_bounds=a->completion_scroll_bounds=nk_rect(0,0,0,0);
 }
 static void completion_close(app *a) {
     completion_pending_clear(a);completion_hide(a);a->completion_suppressed_edit=NULL;
@@ -182,6 +182,16 @@ static void completion_type(const ps_completion_symbol *symbol,char text[128]) {
         snprintf(text,128,"%.*s",(int)fmin(n,127),symbol->signature);
     }else snprintf(text,128,"%s",symbol->module);
 }
+static void completion_name(app *a,struct nk_rect r,const char *name,struct nk_color ink){
+    const char *prefix=a->completion_query.prefix;size_t n=strlen(prefix);
+    if(n && n<=strlen(name) && !memcmp(name,prefix,n)){
+        float width=a->completion_bold_font.width(a->completion_bold_font.userdata,a->completion_bold_font.height,prefix,(int)n);
+        completion_label(a->ui,r,prefix,&a->completion_bold_font,ink);
+        if(width>=r.w)return;
+        r.x+=width;r.w-=width;name+=n;
+    }
+    completion_label(a->ui,r,name,a->font_code,ink);
+}
 static void completion_view(app *a,int width,int height) {
     struct nk_context *ui=a->ui;
     struct nk_text_edit *target=completion_target(a);
@@ -192,7 +202,7 @@ static void completion_view(app *a,int width,int height) {
     if(!a->completion_active || !a->dock_visible[PS_DOCK_WORKSPACE]) {
         nk_window_show(ui,"api-completion",NK_HIDDEN);nk_window_show(ui,"api-completion-info",NK_HIDDEN);return;
     }
-    float w=fminf(400,(float)width-24),row_height=fmaxf(28,(float)a->preferences.ui_size+8),footer=26;
+    float w=fminf(400,(float)width-24),row_height=fmaxf(fmaxf(28,(float)a->preferences.ui_size+8),a->font_code->height+8),footer=26;
     unsigned rows=(unsigned)fmin(a->completion_count,a->preferences.completion_rows);
     float editor_top=fmaxf(8,a->source_editor_bounds.y),editor_bottom=fminf(height-8.f,a->source_editor_bounds.y+a->source_editor_bounds.h);
     float below=fmaxf(0,editor_bottom-(a->editor_caret.y+a->editor_caret.h+4));
@@ -214,6 +224,10 @@ static void completion_view(app *a,int width,int height) {
         a->completion_reveal=false;
     }
     struct nk_window *previous=ui->active;
+    /* Reuse the real semibold monospace face already in the atlas. Current
+     * catalog/query spellings are ASCII; no extra texture or synthetic stroke. */
+    a->completion_bold_font=*a->workbench_marker_source;
+    a->completion_bold_font.height=a->font_code->height;
     nk_style_push_vec2(ui,&ui->style.window.padding,nk_vec2(1,3));
     nk_style_push_vec2(ui,&ui->style.window.spacing,nk_vec2(0,0));
     nk_style_push_style_item(ui,&ui->style.window.fixed_background,nk_style_item_color(UI_COLOR(header)));
@@ -255,11 +269,12 @@ static void completion_view(app *a,int width,int height) {
             bool chosen=a->completion_explicit && at==a->completion_selected;
             if(chosen || nk_input_is_mouse_hovering_rect(&ui->input,b))nk_fill_rect(canvas,b,0,UI_COLOR(text_selection));
             if(chosen)nk_fill_rect(canvas,nk_rect(b.x,b.y,2,b.h),0,UI_COLOR(selection_accent));
-            ps_ui_draw_icon(canvas,symbol->kind==PS_COMPLETION_FUNCTION?PS_ICON_FUNCTION:symbol->kind==PS_COMPLETION_TYPE?PS_ICON_TYPE:PS_ICON_VALUE,nk_rect(b.x+7,b.y+4,18,b.h-8),UI_COLOR(accent));
+            struct nk_color ink=syntax_color(syntax_symbol_kind(symbol));
+            completion_label(ui,nk_rect(b.x+7,b.y,18,b.h),symbol->kind==PS_COMPLETION_FUNCTION?"ƒ":symbol->kind==PS_COMPLETION_TYPE?"T":"#",a->font_code,ink);
             char type[128];completion_type(symbol,type);
             const struct nk_user_font *font=a->font_code;
             float type_w=fminf(105,font->width(font->userdata,font->height,type,(int)strlen(type)));
-            completion_label(ui,nk_rect(b.x+33,b.y,fmaxf(1,b.w-49-type_w),b.h),ps_completion_insertion(&a->completion_query,symbol),font,UI_COLOR(code_text));
+            completion_name(a,nk_rect(b.x+33,b.y,fmaxf(1,b.w-49-type_w),b.h),ps_completion_insertion(&a->completion_query,symbol),ink);
             completion_label(ui,nk_rect(b.x+b.w-type_w-8,b.y,type_w,b.h),type,font,UI_COLOR(muted));
             if(ps_ui_button_at(ui,b,symbol->name,chosen)){a->completion_selected=at;a->completion_explicit=true;a->completion_accept_pending=true;}
         }
@@ -285,7 +300,7 @@ static void completion_view(app *a,int width,int height) {
         bool on_right=right>=220 || right>=iw;
         if(on_right)iw=fminf(iw,right);
         else if(left>=220)iw=fminf(iw,left);
-        float sh=documentation_height(ui->style.font,symbol->signature,strlen(symbol->signature),iw-42);
+        float sh=documentation_height(a->font_code,symbol->signature,strlen(symbol->signature),iw-42);
         float ih=fminf(260,sh+16+3*row_height+24+3*ui->style.window.spacing.y+10);
         float ix=x+w+6,iy=y;
         if(!on_right){if(x-iw-6>=8)ix=x-iw-6;else{ix=fmaxf(8,fminf(x,width-iw-8));iy=y+h+6;}}
@@ -299,14 +314,18 @@ static void completion_view(app *a,int width,int height) {
         nk_window_show(ui,"api-completion-info",NK_SHOWN);
         if(nk_begin(ui,"api-completion-info",a->completion_info_bounds,NK_WINDOW_BORDER|NK_WINDOW_BACKGROUND)){
             ui->active=previous;ui->current->flags&=~(nk_flags)NK_WINDOW_ROM;ui->current->layout->flags&=~(nk_flags)NK_WINDOW_ROM;
-            nk_layout_row_dynamic(ui,row_height,1);nk_label(ui,symbol->name,NK_TEXT_LEFT);
+            nk_layout_row_dynamic(ui,row_height,1);struct nk_rect name=nk_widget_bounds(ui);nk_spacer(ui);
+            completion_label(ui,name,symbol->name,a->font_code,syntax_color(syntax_symbol_kind(symbol)));
+            ps_ui_accessibility_label(ui,name,symbol->name);
             nk_layout_row_dynamic(ui,sh+16,1);struct nk_rect signature=nk_widget_bounds(ui);nk_spacer(ui);
+            a->completion_signature_bounds=signature;
             nk_fill_rect(nk_window_get_canvas(ui),signature,3,UI_COLOR(edit));
             ps_ui_accessibility_label(ui,signature,symbol->signature);
-            int at=0,n=(int)strlen(symbol->signature);float sy=signature.y+8;
-            while(at<n){int used=ps_ui_text_line(ui->style.font,symbol->signature+at,n-at,signature.w-16,false);if(used<=0)used=1;
-                nk_draw_text(nk_window_get_canvas(ui),nk_rect(signature.x+8,sy,signature.w-16,ui->style.font->height),symbol->signature+at,used,ui->style.font,nk_rgba(0,0,0,0),UI_COLOR(code_text));
-                at+=used;sy+=ui->style.font->height;}
+            int at=0,n=(int)strlen(symbol->signature);float sy=signature.y+8;syntax_cursor cursor={0};
+            ps_syntax_init(&cursor.scan,symbol->signature,(size_t)n,symbol->language);
+            while(at<n){int used=ps_ui_text_line(a->font_code,symbol->signature+at,n-at,signature.w-16,false);if(used<=0)used=1;
+                syntax_draw_range(nk_window_get_canvas(ui),a->font_code,&cursor,(size_t)at,(size_t)(at+used),signature.x+8,sy);
+                at+=used;sy+=a->font_code->height;}
             nk_layout_row_dynamic(ui,row_height,1);nk_label_colored(ui,symbol->module,NK_TEXT_LEFT,UI_COLOR(muted));
             nk_layout_row_dynamic(ui,row_height,1);a->completion_reference_bounds=nk_widget_bounds(ui);nk_spacer(ui);
             completion_label(ui,a->completion_reference_bounds,"Referenz öffnen",ui->style.font,UI_COLOR(accent));

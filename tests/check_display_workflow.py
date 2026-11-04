@@ -1076,6 +1076,11 @@ def completion(flow,directory):
     for language in ("c","phys"):
         root=directory/language;root.mkdir(parents=True)
         flow.run("--workspace-state-test",root,"completion-"+language,timeout=75,marker="COMPLETION SELF-TEST: PASSED")
+        output=flow.steps[-1]["stdout"]
+        for target in range(3):
+            require(f"COMPLETION SYNTAX target={target} theme={target} " in output,"Missing real completion theme/editor observation")
+        require(output.count("list=1 header=1 signature=1 prefix-bold=1")==3,"Shared native syntax colors or real bold prefix absent")
+        require("COMPLETION REFERENCE: pointer=1 source-preserved=1" in output,"Candidate card reference pointer route not executed")
         for name in ("completion-experiment.bmp","completion-analysis.bmp","completion-document.bmp"):
             require((root/name).is_file(),"Missing actual completion view: "+name)
 

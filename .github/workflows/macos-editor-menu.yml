@@ -7,6 +7,11 @@ on:
       - app/main.c
       - app/document_tests.inc
       - app/completion*
+      - app/syntax*
+      - app/design_tokens.h
+      - src/language/builtin_type_names.inc
+      - src/language/lexer*
+      - tools/generate-completions.py
       - app/api_reference_tests.inc
       - tests/check_display_workflow.py
       - tests/native_integration_cases.json

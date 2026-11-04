@@ -5,7 +5,8 @@ Maßgeblich bleiben [ADR 022](../../decisions/022-automatic-completion.md),
 [vollständige Freigabe](../completion-typing-options/APPROVED.md).
 **D ist noch nicht vollständig nativ umgesetzt.** Die Eingabegrundlage ist
 ergänzt. Fünfer-Viewport und wirksame Editor-Preferences sind als weiterer
-Teilstand ergänzt; eine vollständige D-Designabnahme steht weiterhin aus.
+Teilstand ergänzt. Gemeinsame Syntaxrollen und Funktionsfarben sind inzwischen
+ebenfalls verbunden; eine vollständige D-Designabnahme steht weiterhin aus.
 
 ## Ergänzte Eingabegrundlage
 
@@ -44,9 +45,9 @@ Scrolloffset, Mausrad und ziehbarer 6-Einheiten-Thumb erschließen weitere Treff
 Pfeilnavigation bringt die Auswahl ins Sichtfeld. Scrollen allein übernimmt
 keinen Eintrag. Einzeilige Namen, rechte Typ-/Rückgabetypangabe und Gesamtzähler
 sind ergänzt. Die getrennte neutrale Kandidatenkarte zeigt reale Katalogdaten
-und den bisherigen Referenzzugang. Zusammenfassung, parameterbezogene Inhalte
-und gemeinsame Syntaxglyphen sind dort noch zu ergänzen; keine Aufrufhilfe daraus
-ableiten. Bei Platzmangel kann die Karte seitlich schmaler werden.
+und den bisherigen Referenzzugang. Zusammenfassung und parameterbezogene Inhalte
+sind dort noch zu ergänzen; keine Aufrufhilfe daraus ableiten. Bei Platzmangel
+kann die Karte seitlich schmaler werden.
 
 Einstellungen A / Editor enthält „Vorschläge beim Tippen“ und „Sichtbare
 Vervollständigungen“ (1–20, Standard 5). Ausschalten deaktiviert Vormerkung und
@@ -56,11 +57,29 @@ Werte, liest 01–05 weiterhin mit den neuen Defaults. Feldweises Zusammenführe
 Vertrag wie die bisherigen Einstellungen. Geometrie und Nutzdaten bleiben
 unabhängig. [Ausführungsstand, Gegenfall und Grenzen](../../verification/completion-d-2026-11-04.md).
 
+## Gemeinsame Syntaxrollen: Anschluss vom 4. November 2026
+
+Editor, Vorschlagsnamen und Rollenkennzeichen, neutraler Kartentitel und Signatur
+sowie Codeblöcke der API-Karte verwenden dieselben zehn aktiven Rollen. Funktionen
+sind dunkel `#dcdcaa`, hell `#795e26`; Typen und Variablen werden getrennt. Der
+pauschale `ps_`-Typansatz ist entfernt. Kennzeichen sind `ƒ`, `T` und `#`; das
+Präfix nutzt echte vorhandene Semibold-Glyphen. Zeilenhöhen berücksichtigen auch
+die Codeschrift. Die neutrale Karte und Referenzzugang bleiben erhalten.
+
+Exakte Katalogidentitäten, echter Physim-Lexer und gemeinsame Compiler-Typregistry
+bilden die lexikalische Grundlage. Der vorhandene Dokumentumriss ergänzt
+quellstandsgebundene Deklarationsrollen, ohne lokale Scope-Vollständigkeit oder
+Typinferenz zu behaupten. C-Standardtypnamen sind ein lexikalischer Rückfall,
+keine Include-Auflösung. F1-Codeblöcke und weitere Beispielkontexte sind noch
+nicht allgemein migriert. Der vorhandene ASCII-Semiboldfont deckt die aktuellen
+Katalogpräfixe; Unicode-Scopevorschläge brauchen später ihre eigene Abdeckung.
+[Native Ausführung, reale Gegenfälle und genaue Grenzen](../../verification/syntax-roles-2026-11-04.md).
+
 ## Weiterhin verbindlich umzusetzen
 
-1. Gemeinsame freigegebene Syntaxrollen und Palette für Editor, Liste, neutrale
-   Kandidateninfo und Aufrufsignatur, insbesondere gelbe Funktionen. Den bisherigen
-   pauschalen `ps_`-Typansatz ersetzen, keine getrennte Kurzinfo-Palette einführen.
+1. Vollständige Kandidatenzusammenfassung und Parametertexte mit eigenem
+   Dokumentbesitz ergänzen. Die gemeinsamen Rollen auch in die noch offene
+   separate Aufrufhilfe übernehmen; keine getrennte Kurzinfo-Palette einführen.
 2. Tatsächliche C-/Physim-Deklarationen und Scopes anbieten: sichtbare Variablen,
    Parameter und Quellstellen, Shadowing, Schleifen-/Block-/Funktionsgrenzen,
    Ausschluss späterer Deklarationen und der eigenen unvollständigen

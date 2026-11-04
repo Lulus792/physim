@@ -1,0 +1,2669 @@
+{
+  "date": "2026-11-04",
+  "objective_complete": false,
+  "scope": "Shared approved syntax roles in editor, completion list/card and API code snippets; not full D or all UI",
+  "user_mac": "off; no connection, probe, upload or test",
+  "storage": "D: only; F: untouched",
+  "phases": {
+    "syntax-roles-ready": {
+      "windows": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ready-windows.json",
+          "sha256": "93febf040fa77568827f6087b927feccf31d5b5ae61b850881bf19901331f154",
+          "bytes": 1470
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ready-windows.log",
+          "sha256": "cd85de851ab1cfaa51b9a738fbc5692939bed6889e8d554185317655de2b7e95",
+          "bytes": 348
+        },
+        "exit_code": 1,
+        "commands": [
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test",
+              "--test-filter",
+              "syntax",
+              "--test-filter",
+              "completion",
+              "--test-filter",
+              "preferences",
+              "--test-filter",
+              "source_outline",
+              "--test-filter",
+              "api_reference",
+              "--test-filter",
+              "language_lexer",
+              "--test-filter",
+              "language_parser",
+              "--test-filter",
+              "language_checker"
+            ],
+            "exit_code": 1,
+            "app_sha256": "93478a81f8c8f887782325fb9ebe70ba67317811b7093ab60d85c52688de6cdd"
+          }
+        ],
+        "same_app_bytes_between_invocations": false,
+        "runs": []
+      },
+      "linux": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ready-linux.json",
+          "sha256": "9ec7b798d15307d138c6848ac164c10db94c70b815aa381a5cef2a1fb3ef5f32",
+          "bytes": 1290
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ready-linux.log",
+          "sha256": "ba8c50c9b6e5f5fea01be4c77b02cc2efe2a69e953fcf6d5291160212811b72c",
+          "bytes": 289
+        },
+        "exit_code": 1,
+        "commands": [
+          {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--sanitizers",
+              "--test",
+              "--test-filter",
+              "syntax",
+              "--test-filter",
+              "completion",
+              "--test-filter",
+              "preferences",
+              "--test-filter",
+              "source_outline",
+              "--test-filter",
+              "api_reference",
+              "--test-filter",
+              "language_lexer",
+              "--test-filter",
+              "language_parser",
+              "--test-filter",
+              "language_checker"
+            ],
+            "exit_code": 1,
+            "app_sha256": "5747102aa6e599ebbd746018ec290bc0e8f4f24afae210809f6f9a8fbbf8219d"
+          }
+        ],
+        "same_app_bytes_between_invocations": false,
+        "runs": []
+      },
+      "inputs.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ready-inputs.json",
+        "sha256": "a10a71b889275e6e23816ca3503160d9e91ecc63165233dfcf3e86623bf7275e",
+        "bytes": 16504
+      },
+      "compiler-source.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ready-compiler-source.json",
+        "sha256": "98c39d3eee3c510019ad30dfa6ea9a3c559628675965396b4af8e315b18dde67",
+        "bytes": 118495,
+        "archive_checks": {
+          "base_commit": "2f9b318a",
+          "overlay_base_source_manifest": "build/validation/explorer-inline-2026-10-29/completion-d-refined-compiler-source.json",
+          "unchanged_c_inputs_compared_to_git": 788,
+          "overlay_files": [
+            "app/api_reference_ui.inc",
+            "app/completion.c",
+            "app/completion.h",
+            "app/completion_tests.inc",
+            "app/completion_ui.inc",
+            "app/design_tokens.h",
+            "app/main.c",
+            "app/syntax.c",
+            "app/syntax.h",
+            "app/syntax_ui.inc",
+            "src/language/builtin_type_names.inc",
+            "src/language/checker.c",
+            "tests/check_display_workflow.py",
+            "tests/test_preferences.c",
+            "tests/test_syntax.c",
+            "tools/build.py",
+            "tools/native_tests.py"
+          ],
+          "archive_sha256": "1e2ccdcfe8e9dfac93e4f739148550758801aa4b2d21bc984735fea9e0a6c77d",
+          "runtime_index": "syntax-roles-ready-byte-index.json"
+        }
+      },
+      "runtime.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ready-runtime.json",
+        "sha256": "e1dbc53340cb5d58ddf7717fc2342cb0373ffa3b4d8e4a61201bdcadd5bd8b76",
+        "bytes": 36869,
+        "archive_checks": {
+          "new_archives_sha256": {
+            "build/validation/explorer-inline-2026-10-29/syntax-roles-ready-runtime-windows.zip": "8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85",
+            "build/validation/explorer-inline-2026-10-29/syntax-roles-ready-runtime-linux.zip": "8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85"
+          },
+          "all_referenced_bytes_read_back": true
+        }
+      },
+      "byte-index.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ready-byte-index.json",
+        "sha256": "31f6897109e2aecc7d5f1697197a03a286dd24a571c0e2eabaf1dcafdec76661",
+        "bytes": 95104
+      }
+    },
+    "syntax-roles-registry": {
+      "windows": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-registry-windows.json",
+          "sha256": "ba3204cead74173325051077d3317c408a87d874aa87a69b1ca28bb0a7614dde",
+          "bytes": 1470
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-registry-windows.log",
+          "sha256": "fd3132ba407adee8014ca48146d36fbf9a139b8a78f4d0c5976a6add79b85298",
+          "bytes": 44813
+        },
+        "exit_code": 1,
+        "commands": [
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test",
+              "--test-filter",
+              "syntax",
+              "--test-filter",
+              "completion",
+              "--test-filter",
+              "preferences",
+              "--test-filter",
+              "source_outline",
+              "--test-filter",
+              "api_reference",
+              "--test-filter",
+              "language_lexer",
+              "--test-filter",
+              "language_parser",
+              "--test-filter",
+              "language_checker"
+            ],
+            "exit_code": 1,
+            "app_sha256": "841348232868ba7a861cfe63f0fe243b77cfbb4dc5b46835c20f61e1aa50b9a8"
+          }
+        ],
+        "same_app_bytes_between_invocations": false,
+        "runs": [
+          {
+            "id": "run-hi6u049h",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-hi6u049h/results.json",
+              "sha256": "9f52afda22adecdfbb3a9dcfa270e711eb3c39b4bcebe61deb001b6fe3c5c5cd",
+              "bytes": 4277
+            },
+            "passed": 7,
+            "count": 8,
+            "cases": [
+              {
+                "name": "source_outline",
+                "status": "passed"
+              },
+              {
+                "name": "completion",
+                "status": "passed"
+              },
+              {
+                "name": "syntax",
+                "status": "passed"
+              },
+              {
+                "name": "api_reference",
+                "status": "passed"
+              },
+              {
+                "name": "language_lexer",
+                "status": "passed"
+              },
+              {
+                "name": "language_parser",
+                "status": "passed"
+              },
+              {
+                "name": "language_checker",
+                "status": "passed"
+              },
+              {
+                "name": "preferences",
+                "status": "build_failed",
+                "failed_steps": [
+                  {
+                    "status": "build_failed",
+                    "reason": "Command failed (2): \"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE\" D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\obj\\dac633dd99\\tests\\test_preferences.obj D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\obj\\dac633dd99\\app\\preferences.obj D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\obj\\dac633dd99\\app\\docking.obj D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\lib\\physim-platform.lib D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\lib\\physim-core.lib D:\\Physim\\third_party\\SDL3-3.2.30\\lib\\x64\\SDL3.lib /nologo /Fe:D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim-test-preferences.pending.exe /link /INCREMENTAL:NO /DEBUG /PDB:D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim-test-preferences.pending.pdb /MANIFEST:EMBED /MANIFESTINPUT:D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\app\\utf8.manifest /PDBALTPATH:physim-test-preferences.pdb user32.lib shell32.lib advapi32.lib"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "run-w86_o9yy",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-w86_o9yy/results.json",
+              "sha256": "a686d41040e55211b294b7b4eb313b51952eaffbf159e13a4c5e1d8cdb9ca697",
+              "bytes": 40452
+            },
+            "passed": 0,
+            "count": 1,
+            "cases": [
+              {
+                "name": "completion_workflow",
+                "status": "failed",
+                "failed_steps": [
+                  {
+                    "status": "failed",
+                    "exit_code": 1,
+                    "reason": "Exit code 1; expected 0",
+                    "command": [
+                      "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+                      "completion_workflow",
+                      "--app",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--work",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-w86_o9yy\\completion_workflow\\files ä",
+                      "--root",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+                      "--cc",
+                      "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+                    ]
+                  }
+                ],
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-w86_o9yy/completion_workflow/files ä/app-steps.json",
+                      "sha256": "d4d2bfb1f8eecac62ffe6afe454fd2a040be7d69697d4435d02aae9cee4d6bd2",
+                      "bytes": 19781
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION SYNTAX target=0 theme=0 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=1 theme=1 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=2 theme=2 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1"
+                        ],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 1,
+                        "markers": [
+                          "COMPLETION SYNTAX target=0 theme=0 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=1 theme=1 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=2 theme=2 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1"
+                        ],
+                        "failure": [
+                          "Completion UI target=2 stage=43 active=1 cursor=16 text=Mat4.translation",
+                          "First workflow failure at stage 43 (next 44): Keine API-Vorschläge an dieser Textposition. (tab=8, selected=0, samples=0, report=0, query=)",
+                          "Workflow failed at stage 44: Projekt gespeichert. (tab=8, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "linux": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-registry-linux.json",
+          "sha256": "efb5f45e1df41f712d38c7fd9fd1ffb1ec0a797d0f956c95130cad7bd434ff4d",
+          "bytes": 1290
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-registry-linux.log",
+          "sha256": "9746dafa1f782991a3e371b9d4e0e6d368bfff738d227cad772b2b047277a885",
+          "bytes": 303209
+        },
+        "exit_code": 1,
+        "commands": [
+          {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--sanitizers",
+              "--test",
+              "--test-filter",
+              "syntax",
+              "--test-filter",
+              "completion",
+              "--test-filter",
+              "preferences",
+              "--test-filter",
+              "source_outline",
+              "--test-filter",
+              "api_reference",
+              "--test-filter",
+              "language_lexer",
+              "--test-filter",
+              "language_parser",
+              "--test-filter",
+              "language_checker"
+            ],
+            "exit_code": 1,
+            "app_sha256": "e9e7f9f231cd69e1b0fdd929c7a8203b5bdf4755305df91aca9a933810ae8e7c"
+          }
+        ],
+        "same_app_bytes_between_invocations": false,
+        "runs": [
+          {
+            "id": "run-j_l_w0_s",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-j_l_w0_s/results.json",
+              "sha256": "1329d4ef1135788e9d41a427aaefd80aef0b757272a338c38963b2b1d53e4075",
+              "bytes": 3704
+            },
+            "passed": 7,
+            "count": 8,
+            "cases": [
+              {
+                "name": "source_outline",
+                "status": "passed"
+              },
+              {
+                "name": "completion",
+                "status": "passed"
+              },
+              {
+                "name": "syntax",
+                "status": "passed"
+              },
+              {
+                "name": "api_reference",
+                "status": "passed"
+              },
+              {
+                "name": "language_lexer",
+                "status": "passed"
+              },
+              {
+                "name": "language_parser",
+                "status": "passed"
+              },
+              {
+                "name": "language_checker",
+                "status": "passed"
+              },
+              {
+                "name": "preferences",
+                "status": "build_failed",
+                "failed_steps": [
+                  {
+                    "status": "build_failed",
+                    "reason": "Command failed (1): /usr/bin/cc /mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/obj/dac633dd99/tests/test_preferences.o /mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/obj/dac633dd99/app/preferences.o /mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/obj/dac633dd99/app/docking.o /mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/lib/libphysim-platform.a /mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/lib/libphysim-core.a /mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30/lib/libSDL3.so.0 -fsanitize=address,undefined -fno-sanitize-recover=all -o /mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-preferences.pending -lm -ldl -pthread -Wl,-rpath,$ORIGIN"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "inputs.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-registry-inputs.json",
+        "sha256": "97e0c28d64c24bcafb9f23c78c57e025cd4ba1db5342fd3a644ec3c3ea0e9984",
+        "bytes": 16608
+      },
+      "compiler-source.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-registry-compiler-source.json",
+        "sha256": "d2d3df8d4584e1078dc6108ad7088d78478a0fe1ba77c89c215c08f9df84ed61",
+        "bytes": 118044,
+        "archive_checks": {
+          "base_commit": "2f9b318a",
+          "overlay_base_source_manifest": "build/validation/explorer-inline-2026-10-29/syntax-roles-ready-compiler-source.json",
+          "unchanged_c_inputs_compared_to_git": 788,
+          "overlay_files": [
+            "tools/generate-completions.py"
+          ],
+          "archive_sha256": "1efffe6188d7a7feccafd5679393748ac085ed07903cf03c1671530b855b410a",
+          "runtime_index": "syntax-roles-registry-byte-index.json"
+        }
+      },
+      "runtime.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-registry-runtime.json",
+        "sha256": "053e2ee4bc0e031a142d9ca8d3d52e7ea604489f4dc1719ed0a9c98141ee417b",
+        "bytes": 40365,
+        "archive_checks": {
+          "new_archives_sha256": {
+            "build/validation/explorer-inline-2026-10-29/syntax-roles-registry-runtime-windows.zip": "11912949610191c8586aa4b773341fdf63b5ab29fac0cbd8d3b40f6ca2545757",
+            "build/validation/explorer-inline-2026-10-29/syntax-roles-registry-runtime-linux.zip": "961b7ceba1071dad7869c6270a0891d711f9d10932ce3e81cc6a6a715352c3bc"
+          },
+          "all_referenced_bytes_read_back": true
+        }
+      },
+      "byte-index.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-registry-byte-index.json",
+        "sha256": "04adb876b60de218cf4cea1eac29586ef70ae334360c2be7f79c7e3e9a85b18f",
+        "bytes": 104419
+      }
+    },
+    "syntax-roles-palette": {
+      "windows": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-palette-windows.json",
+          "sha256": "eb6f33074b9c6c2b7aec42b0f855814ed48ec8db00186f5ab876b0a1ec438749",
+          "bytes": 2688
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-palette-windows.log",
+          "sha256": "63e221afb36f237c2f4a8cf1834345582aabc10c071336a2f1bb176c515a319a",
+          "bytes": 43820
+        },
+        "exit_code": 0,
+        "commands": [
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test",
+              "--test-filter",
+              "syntax",
+              "--test-filter",
+              "completion",
+              "--test-filter",
+              "preferences",
+              "--test-filter",
+              "source_outline",
+              "--test-filter",
+              "api_reference",
+              "--test-filter",
+              "language_lexer",
+              "--test-filter",
+              "language_parser",
+              "--test-filter",
+              "language_checker"
+            ],
+            "exit_code": 0,
+            "app_sha256": "cda285a21667133c2aa46d766d9c24d2fe2aeb2451a72c3167ce0231804de679"
+          },
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow",
+              "--test-filter",
+              "api_reference_workflow",
+              "--test-filter",
+              "language_editor_unicode_preview",
+              "--test-filter",
+              "language_editor_multiline_preview"
+            ],
+            "exit_code": 0,
+            "app_sha256": "cda285a21667133c2aa46d766d9c24d2fe2aeb2451a72c3167ce0231804de679"
+          }
+        ],
+        "same_app_bytes_between_invocations": true,
+        "runs": [
+          {
+            "id": "run-li1ctj7i",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-li1ctj7i/results.json",
+              "sha256": "f2dd76f85b43c9fc55b9b5ef0eb5d8a54446aba95ad626c1ca4758b486311593",
+              "bytes": 3752
+            },
+            "passed": 8,
+            "count": 8,
+            "cases": [
+              {
+                "name": "source_outline",
+                "status": "passed"
+              },
+              {
+                "name": "completion",
+                "status": "passed"
+              },
+              {
+                "name": "syntax",
+                "status": "passed"
+              },
+              {
+                "name": "api_reference",
+                "status": "passed"
+              },
+              {
+                "name": "language_lexer",
+                "status": "passed"
+              },
+              {
+                "name": "language_parser",
+                "status": "passed"
+              },
+              {
+                "name": "language_checker",
+                "status": "passed"
+              },
+              {
+                "name": "preferences",
+                "status": "passed"
+              }
+            ]
+          },
+          {
+            "id": "run-2ri07jul",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-2ri07jul/results.json",
+              "sha256": "c35b527dabe66ab2e5c770b198decc4ce1b83a7c7505dd4a070812f75fa2c1c5",
+              "bytes": 70520
+            },
+            "passed": 5,
+            "count": 5,
+            "cases": [
+              {
+                "name": "language_editor_unicode_preview",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-2ri07jul/language_editor_unicode_preview/files ä/app-steps.json",
+                      "sha256": "e3151c30db3fdbaa9e1131228d5f0e1dfe45b48ab6416799cf4f90759500874a",
+                      "bytes": 1764
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "language_editor_multiline_preview",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-2ri07jul/language_editor_multiline_preview/files ä/app-steps.json",
+                      "sha256": "e3aeed2ac5433a6e38f4bfa87aa01d43a8db47c1a0d64bd133b6ca240ca84498",
+                      "bytes": 1764
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "completion_workflow",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-2ri07jul/completion_workflow/files ä/app-steps.json",
+                      "sha256": "cf5c17c8221c6e3e82ce799c5f1ef300fd454db084e269690f71a3d58a5810ec",
+                      "bytes": 19487
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION SYNTAX target=0 theme=0 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=1 theme=1 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=2 theme=2 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1"
+                        ],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION SYNTAX target=0 theme=0 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=1 theme=1 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=2 theme=2 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1"
+                        ],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "completion_automatic_workflow",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-2ri07jul/completion_automatic_workflow/files ä/app-steps.json",
+                      "sha256": "331f1409b4757e40b7f263b17bb67cada45e5162c946237d2bc7d7f276dc687d",
+                      "bytes": 19469
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "api_reference_workflow",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-2ri07jul/api_reference_workflow/files ä/app-steps.json",
+                      "sha256": "d997af275aec13e3b279b8d045a7ab1e58832157fdc05c92466fc47d57001459",
+                      "bytes": 20765
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "linux": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-palette-linux.json",
+          "sha256": "1d220ad36e44dca1d4395cc2f5b95047e46e20304c448059e6114f4554c997b0",
+          "bytes": 2340
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-palette-linux.log",
+          "sha256": "63ee5fb2cf8b2e49c5c7c0e1c62c0e00e9db5580e1cdb86868bbf91cd8966fd2",
+          "bytes": 301628
+        },
+        "exit_code": 0,
+        "commands": [
+          {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--sanitizers",
+              "--test",
+              "--test-filter",
+              "syntax",
+              "--test-filter",
+              "completion",
+              "--test-filter",
+              "preferences",
+              "--test-filter",
+              "source_outline",
+              "--test-filter",
+              "api_reference",
+              "--test-filter",
+              "language_lexer",
+              "--test-filter",
+              "language_parser",
+              "--test-filter",
+              "language_checker"
+            ],
+            "exit_code": 0,
+            "app_sha256": "d71b1fdb1b7aa267d26d1b1f625fcfd3671edd3963fddb0e5b452e77f5fc6197"
+          },
+          {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--sanitizers",
+              "--test-display",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow",
+              "--test-filter",
+              "api_reference_workflow",
+              "--test-filter",
+              "language_editor_unicode_preview",
+              "--test-filter",
+              "language_editor_multiline_preview"
+            ],
+            "exit_code": 0,
+            "app_sha256": "d71b1fdb1b7aa267d26d1b1f625fcfd3671edd3963fddb0e5b452e77f5fc6197"
+          }
+        ],
+        "same_app_bytes_between_invocations": true,
+        "runs": [
+          {
+            "id": "run-siaom1ot",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-siaom1ot/results.json",
+              "sha256": "996bcd0c677f7fce4518ca0273e78c0b07a87bfb209a670330cbda66f6100b86",
+              "bytes": 3584
+            },
+            "passed": 8,
+            "count": 8,
+            "cases": [
+              {
+                "name": "source_outline",
+                "status": "passed"
+              },
+              {
+                "name": "completion",
+                "status": "passed"
+              },
+              {
+                "name": "syntax",
+                "status": "passed"
+              },
+              {
+                "name": "api_reference",
+                "status": "passed"
+              },
+              {
+                "name": "language_lexer",
+                "status": "passed"
+              },
+              {
+                "name": "language_parser",
+                "status": "passed"
+              },
+              {
+                "name": "language_checker",
+                "status": "passed"
+              },
+              {
+                "name": "preferences",
+                "status": "passed"
+              }
+            ]
+          },
+          {
+            "id": "run-jxg6kcoa",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-jxg6kcoa/results.json",
+              "sha256": "38992131377e8f24ddb49e093a8a0596787d5f450312e3e75e80f69167d41f5b",
+              "bytes": 68766
+            },
+            "passed": 5,
+            "count": 5,
+            "cases": [
+              {
+                "name": "language_editor_unicode_preview",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-jxg6kcoa/language_editor_unicode_preview/files ä/app-steps.json",
+                      "sha256": "49d7bfce99060513d76343019d09e155b30931d63df064735314b104f053a226",
+                      "bytes": 1723
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "language_editor_multiline_preview",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-jxg6kcoa/language_editor_multiline_preview/files ä/app-steps.json",
+                      "sha256": "9a97f050314714a17677700f650ecd11396559d3024d1cf67d2ce4ad50138398",
+                      "bytes": 1723
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "completion_workflow",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-jxg6kcoa/completion_workflow/files ä/app-steps.json",
+                      "sha256": "35e9cb93d6c50227c01b8aa15055912fa3b92d18d0fc12f4e919c34d0795f3a1",
+                      "bytes": 19410
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION SYNTAX target=0 theme=0 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=1 theme=1 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=2 theme=2 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1"
+                        ],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION SYNTAX target=0 theme=0 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=1 theme=1 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=2 theme=2 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1"
+                        ],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "completion_automatic_workflow",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-jxg6kcoa/completion_automatic_workflow/files ä/app-steps.json",
+                      "sha256": "8da3d04bf39466fa93b5c2e76234cc534c997b197fb1d4e368cf84c484160bac",
+                      "bytes": 19395
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "api_reference_workflow",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-jxg6kcoa/api_reference_workflow/files ä/app-steps.json",
+                      "sha256": "af72a380e0b762bdbb9383d81313f43a056e439178bac63cc435b81f46c089bb",
+                      "bytes": 20761
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "inputs.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-palette-inputs.json",
+        "sha256": "00a28b8b524bd3f540d6137061766cb09874560ce02d2e3e54c05c3511875dd7",
+        "bytes": 16608
+      },
+      "compiler-source.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-palette-compiler-source.json",
+        "sha256": "dbcb8ff1b956857b0484586648c5b89b98612aa8c32d13270970cd23cf46602a",
+        "bytes": 118118,
+        "archive_checks": {
+          "base_commit": "2f9b318a",
+          "overlay_base_source_manifest": "build/validation/explorer-inline-2026-10-29/syntax-roles-registry-compiler-source.json",
+          "unchanged_c_inputs_compared_to_git": 788,
+          "overlay_files": [
+            "app/completion_tests.inc",
+            "app/design_tokens.h",
+            "app/syntax.c",
+            "tests/test_syntax.c"
+          ],
+          "archive_sha256": "3e6ac6b0202417e72479a185604485ec8dc12086b4497f180e020cea1e411dbd",
+          "runtime_index": "syntax-roles-palette-byte-index.json"
+        }
+      },
+      "runtime.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-palette-runtime.json",
+        "sha256": "dd6a0f0cae3fe8653f8be4ead56a1d7944a0175f963cc19abc4ddc58466faedd",
+        "bytes": 40245,
+        "archive_checks": {
+          "new_archives_sha256": {
+            "build/validation/explorer-inline-2026-10-29/syntax-roles-palette-runtime-windows.zip": "b99ae2fcb42b49fe25f8bdb057151ae7e3a4c22dc1fdddfd2ccd3e768406f750",
+            "build/validation/explorer-inline-2026-10-29/syntax-roles-palette-runtime-linux.zip": "71b5eb8b67c5b36ea435662df36185a1b3c76e589202b135ec0662fb82616712"
+          },
+          "all_referenced_bytes_read_back": true
+        }
+      },
+      "byte-index.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-palette-byte-index.json",
+        "sha256": "afc75d34c47631f8c8bdde63499b310824e70796e39375dc267a7f672fa547c8",
+        "bytes": 103998
+      }
+    },
+    "syntax-roles-ink-counter": {
+      "windows": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ink-counter-windows.json",
+          "sha256": "35a11c09c92240dd73d7878171b03a01b135d15c40879420dbb81c7f06a35065",
+          "bytes": 857
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ink-counter-windows.log",
+          "sha256": "f84c66d815e9ec701826cac7212165ac9507dd3dc84adbd6f837f702d680367f",
+          "bytes": 44219
+        },
+        "exit_code": 1,
+        "commands": [
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "completion_workflow"
+            ],
+            "exit_code": 1,
+            "app_sha256": "c198336fc849e2fda73221cdd7a0bd782c8df9a5a480e951904e988ca58186ce"
+          }
+        ],
+        "same_app_bytes_between_invocations": null,
+        "runs": [
+          {
+            "id": "run-wpt_xh7w",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wpt_xh7w/results.json",
+              "sha256": "b2aa38afd8cb59739d548a8f46edd9aa05e526b2e0a352b918521a2ff9bb2bfa",
+              "bytes": 9203
+            },
+            "passed": 0,
+            "count": 1,
+            "cases": [
+              {
+                "name": "completion_workflow",
+                "status": "failed",
+                "failed_steps": [
+                  {
+                    "status": "failed",
+                    "exit_code": 1,
+                    "reason": "Exit code 1; expected 0",
+                    "command": [
+                      "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src/tests/check_display_workflow.py",
+                      "completion_workflow",
+                      "--app",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+                      "--work",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-wpt_xh7w\\completion_workflow\\files ä",
+                      "--root",
+                      "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+                      "--cc",
+                      "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.38.33130\\bin\\HostX64\\x64\\cl.EXE"
+                    ]
+                  }
+                ],
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wpt_xh7w/completion_workflow/files ä/app-steps.json",
+                      "sha256": "4e2ea289d12316587543fe7fbdc24d3a39bcef36ccc9bda29edc3f07a5e52151",
+                      "bytes": 3045
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 1,
+                        "markers": [
+                          "COMPLETION SYNTAX target=0 theme=0 source=895 expected=1023 list=0 header=0 signature=0 prefix-bold=0"
+                        ],
+                        "failure": [
+                          "Completion UI target=0 stage=5 active=1 cursor=176 text=// α😀",
+                          "First workflow failure at stage 5 (next 6): Projekt geladen. Build kompiliert die lokalen Quelldateien. (tab=0, selected=0, samples=0, report=0, query=)",
+                          "Workflow failed at stage 6: Projekt geladen. Build kompiliert die lokalen Quelldateien. (tab=0, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "inputs.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ink-counter-inputs.json",
+        "sha256": "5b635bba3d906c7eeb6289f6ba3d7d42488c7c70663ca70e61bb7f7129799503",
+        "bytes": 16608
+      },
+      "compiler-source.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ink-counter-compiler-source.json",
+        "sha256": "cbd3db62fa698a2f190eaeaddd15a6ee9c6a72ddb322e24c0ce0cd9b542c3b26",
+        "bytes": 118086,
+        "archive_checks": {
+          "base_commit": "2f9b318a",
+          "overlay_base_source_manifest": "build/validation/explorer-inline-2026-10-29/syntax-roles-palette-compiler-source.json",
+          "unchanged_c_inputs_compared_to_git": 788,
+          "overlay_files": [
+            "app/syntax.c",
+            "app/syntax_ui.inc",
+            "tests/test_syntax.c"
+          ],
+          "archive_sha256": "6ff374353c2c64b8cf90328f8ade8a3cfb3b91b2f387548af2b1490e9ec2de2c",
+          "runtime_index": "syntax-roles-ink-counter-byte-index.json"
+        }
+      },
+      "runtime.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ink-counter-runtime.json",
+        "sha256": "d81768f3b9ee417d530a15977519b3b881cb40baab3b16936de197289ada21ba",
+        "bytes": 40253,
+        "archive_checks": {
+          "new_archives_sha256": {
+            "build/validation/explorer-inline-2026-10-29/syntax-roles-ink-counter-runtime-windows.zip": "3a9e407a16bc6f364d81627ed9ef46929ffc85bc91ad118e105e3073099921ea",
+            "build/validation/explorer-inline-2026-10-29/syntax-roles-ink-counter-runtime-linux.zip": "8739c76e681f900923b900c9df0ef75cf421d39cabb54650c4b9ad19b6a76d85"
+          },
+          "all_referenced_bytes_read_back": true
+        }
+      },
+      "byte-index.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ink-counter-byte-index.json",
+        "sha256": "75e5e10cd9ab3e04cff6458fc855c768ff0561fdd359ee43a889649ed33ca5a0",
+        "bytes": 104250
+      }
+    },
+    "syntax-roles-final": {
+      "windows": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-final-windows.json",
+          "sha256": "db4477b06e30a8dabe49bcaa6f6b52b9e182d3c52b0db458409045055ab495e5",
+          "bytes": 2688
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-final-windows.log",
+          "sha256": "b6c61a7d6f11a08c34f72bc24f79cce61b5473ab643ff9995acd109d95287a27",
+          "bytes": 42258
+        },
+        "exit_code": 0,
+        "commands": [
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test",
+              "--test-filter",
+              "syntax",
+              "--test-filter",
+              "completion",
+              "--test-filter",
+              "preferences",
+              "--test-filter",
+              "source_outline",
+              "--test-filter",
+              "api_reference",
+              "--test-filter",
+              "language_lexer",
+              "--test-filter",
+              "language_parser",
+              "--test-filter",
+              "language_checker"
+            ],
+            "exit_code": 0,
+            "app_sha256": "7013524756a4c1c0ade08b2b5213d6704e5c7403199ae7c64c54e20913a6c818"
+          },
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow",
+              "--test-filter",
+              "api_reference_workflow",
+              "--test-filter",
+              "language_editor_unicode_preview",
+              "--test-filter",
+              "language_editor_multiline_preview"
+            ],
+            "exit_code": 0,
+            "app_sha256": "7013524756a4c1c0ade08b2b5213d6704e5c7403199ae7c64c54e20913a6c818"
+          }
+        ],
+        "same_app_bytes_between_invocations": true,
+        "runs": [
+          {
+            "id": "run-zk1qnkdv",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-zk1qnkdv/results.json",
+              "sha256": "980b3b697a502f8f52f90381a1435b6a3f213ea5e91af54a640c7b9ee7d45704",
+              "bytes": 3752
+            },
+            "passed": 8,
+            "count": 8,
+            "cases": [
+              {
+                "name": "source_outline",
+                "status": "passed"
+              },
+              {
+                "name": "completion",
+                "status": "passed"
+              },
+              {
+                "name": "syntax",
+                "status": "passed"
+              },
+              {
+                "name": "api_reference",
+                "status": "passed"
+              },
+              {
+                "name": "language_lexer",
+                "status": "passed"
+              },
+              {
+                "name": "language_parser",
+                "status": "passed"
+              },
+              {
+                "name": "language_checker",
+                "status": "passed"
+              },
+              {
+                "name": "preferences",
+                "status": "passed"
+              }
+            ]
+          },
+          {
+            "id": "run-txjray6c",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-txjray6c/results.json",
+              "sha256": "7f66908541988bbd22fd8b42399d24ee08531e7848aec61119bcdfb62e3b75d3",
+              "bytes": 70510
+            },
+            "passed": 5,
+            "count": 5,
+            "cases": [
+              {
+                "name": "language_editor_unicode_preview",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-txjray6c/language_editor_unicode_preview/files ä/app-steps.json",
+                      "sha256": "406a3c98757b04b84a440e81fb05ca8e9d4ae133d92198d7c670e8d5c4e56063",
+                      "bytes": 1764
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "language_editor_multiline_preview",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-txjray6c/language_editor_multiline_preview/files ä/app-steps.json",
+                      "sha256": "134486f5704dce72bb65350fc8fa0f2c76f939050e9b02b32f3d5b96803b4029",
+                      "bytes": 1764
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "completion_workflow",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-txjray6c/completion_workflow/files ä/app-steps.json",
+                      "sha256": "7adfdb6fe63a56ad56c1ca85854f974401795205fa31bb25b684398277c585a7",
+                      "bytes": 19484
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION SYNTAX target=0 theme=0 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=1 theme=1 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=2 theme=2 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1"
+                        ],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION SYNTAX target=0 theme=0 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=1 theme=1 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=2 theme=2 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1"
+                        ],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "completion_automatic_workflow",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-txjray6c/completion_automatic_workflow/files ä/app-steps.json",
+                      "sha256": "1ff05ceeee33253506ebe742f24f33860a90ca6ff8adf5aaf3f62249d82d21e0",
+                      "bytes": 19468
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "api_reference_workflow",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-txjray6c/api_reference_workflow/files ä/app-steps.json",
+                      "sha256": "0f94c5abe4f64b9d15ecc6988766da9331a169a119cdcc47fdd172dede3ef191",
+                      "bytes": 20764
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "linux": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-final-linux.json",
+          "sha256": "4e39b9568b25d7e0db03b03aaf46df42790080c334dc1eaf401caef55c10f4f4",
+          "bytes": 2340
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-final-linux.log",
+          "sha256": "3489d481e8f9ac9125e493b60397b0ab30f915f9b4d962ff193ed598f9b95762",
+          "bytes": 1132
+        },
+        "exit_code": 0,
+        "commands": [
+          {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--sanitizers",
+              "--test",
+              "--test-filter",
+              "syntax",
+              "--test-filter",
+              "completion",
+              "--test-filter",
+              "preferences",
+              "--test-filter",
+              "source_outline",
+              "--test-filter",
+              "api_reference",
+              "--test-filter",
+              "language_lexer",
+              "--test-filter",
+              "language_parser",
+              "--test-filter",
+              "language_checker"
+            ],
+            "exit_code": 0,
+            "app_sha256": "30c9c560f39f597ca6c898c43a445d35a71ea306559f7b8b8e0e757b75bc7388"
+          },
+          {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--sanitizers",
+              "--test-display",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow",
+              "--test-filter",
+              "api_reference_workflow",
+              "--test-filter",
+              "language_editor_unicode_preview",
+              "--test-filter",
+              "language_editor_multiline_preview"
+            ],
+            "exit_code": 0,
+            "app_sha256": "30c9c560f39f597ca6c898c43a445d35a71ea306559f7b8b8e0e757b75bc7388"
+          }
+        ],
+        "same_app_bytes_between_invocations": true,
+        "runs": [
+          {
+            "id": "run-s9tijuhw",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-s9tijuhw/results.json",
+              "sha256": "e6aa0daf63a8bbc94d09f70b7a0ef8cd8955a2c944f692c53a9620a3fc54f09e",
+              "bytes": 3586
+            },
+            "passed": 8,
+            "count": 8,
+            "cases": [
+              {
+                "name": "source_outline",
+                "status": "passed"
+              },
+              {
+                "name": "completion",
+                "status": "passed"
+              },
+              {
+                "name": "syntax",
+                "status": "passed"
+              },
+              {
+                "name": "api_reference",
+                "status": "passed"
+              },
+              {
+                "name": "language_lexer",
+                "status": "passed"
+              },
+              {
+                "name": "language_parser",
+                "status": "passed"
+              },
+              {
+                "name": "language_checker",
+                "status": "passed"
+              },
+              {
+                "name": "preferences",
+                "status": "passed"
+              }
+            ]
+          },
+          {
+            "id": "run-paymmy12",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-paymmy12/results.json",
+              "sha256": "05e180a26f45aa2454345999a9eaef2b826ed0e09b46ac9c556e4f3bc2c6fa55",
+              "bytes": 68711
+            },
+            "passed": 5,
+            "count": 5,
+            "cases": [
+              {
+                "name": "language_editor_unicode_preview",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-paymmy12/language_editor_unicode_preview/files ä/app-steps.json",
+                      "sha256": "1feb13a4bd35e1ebd1786226b6c2d7cdc72c9676108450b961424ba4ab9d4ede",
+                      "bytes": 1720
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "language_editor_multiline_preview",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-paymmy12/language_editor_multiline_preview/files ä/app-steps.json",
+                      "sha256": "6d16c794b1684fdcfb0aba72b794c7d6993cdf49d2c1439635b38c5dc532fc79",
+                      "bytes": 1720
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "completion_workflow",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-paymmy12/completion_workflow/files ä/app-steps.json",
+                      "sha256": "a6a6ff9da880102a625219a7f173c1e2ab34b12236471895ba9c5c63c7591d17",
+                      "bytes": 19403
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION SYNTAX target=0 theme=0 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=1 theme=1 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=2 theme=2 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1"
+                        ],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION SYNTAX target=0 theme=0 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=1 theme=1 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=2 theme=2 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1"
+                        ],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "completion_automatic_workflow",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-paymmy12/completion_automatic_workflow/files ä/app-steps.json",
+                      "sha256": "5a6b45d5737af0d229cbbe06895e29c8aba98a33a5e6d36adfc625a54a5985b0",
+                      "bytes": 19387
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "api_reference_workflow",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-paymmy12/api_reference_workflow/files ä/app-steps.json",
+                      "sha256": "3843f407153ef22624e95504982fa4f7a2a56713dc63cd480a9874225c5979b1",
+                      "bytes": 20727
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "inputs.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-final-inputs.json",
+        "sha256": "5b635bba3d906c7eeb6289f6ba3d7d42488c7c70663ca70e61bb7f7129799503",
+        "bytes": 16608
+      },
+      "compiler-source.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-final-compiler-source.json",
+        "sha256": "96591aabaea5e0dd257261bee6d72dc91f7616d3e94495fc88bdde591d1d1119",
+        "bytes": 118035,
+        "archive_checks": {
+          "base_commit": "2f9b318a",
+          "overlay_base_source_manifest": "build/validation/explorer-inline-2026-10-29/syntax-roles-ink-counter-compiler-source.json",
+          "unchanged_c_inputs_compared_to_git": 788,
+          "overlay_files": [
+            "app/syntax_ui.inc"
+          ],
+          "archive_sha256": "cf49f474ab0a806dc86ab43c6839559f7f51e8c9d2c8df64199805c4ccefee44",
+          "runtime_index": "syntax-roles-final-byte-index.json"
+        }
+      },
+      "runtime.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-final-runtime.json",
+        "sha256": "595f295ad6880a1029c0c9ab386d7b39b845eb520b7f5ccb062cb88d4af22105",
+        "bytes": 40241,
+        "archive_checks": {
+          "new_archives_sha256": {
+            "build/validation/explorer-inline-2026-10-29/syntax-roles-final-runtime-windows.zip": "0f70af2d1846929e7e4c7de45b3128fc97bf10aaf93011cec56dfb1a86db5879",
+            "build/validation/explorer-inline-2026-10-29/syntax-roles-final-runtime-linux.zip": "dc5cac86f1911b334b96ad50f92a8b5c3333fd70e3352adc8acfcadf135d1992"
+          },
+          "all_referenced_bytes_read_back": true
+        }
+      },
+      "byte-index.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-final-byte-index.json",
+        "sha256": "3dfca1e8c0b89213bb9e165778c45dc826f0c2ffbde789538c56f363605e0812",
+        "bytes": 103816
+      }
+    },
+    "syntax-roles-ranges": {
+      "windows": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ranges-windows.json",
+          "sha256": "458a6ff38c497d5e6f63886535125850580a043e482585016ddc6248a0a32a59",
+          "bytes": 2322
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ranges-windows.log",
+          "sha256": "2dffc5a0e83542e406fc107ce7eaf40647058c3fa2a41b12dd04831e23f8a28d",
+          "bytes": 1241
+        },
+        "exit_code": 0,
+        "commands": [
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test",
+              "--test-filter",
+              "syntax"
+            ],
+            "exit_code": 0,
+            "app_sha256": "cb1c541f3e3d9e4979580cb2e09ae3760127a3a69cc907b8104e505c3ba215bb"
+          },
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow",
+              "--test-filter",
+              "api_reference_workflow",
+              "--test-filter",
+              "language_editor_unicode_preview",
+              "--test-filter",
+              "language_editor_multiline_preview"
+            ],
+            "exit_code": 0,
+            "app_sha256": "cb1c541f3e3d9e4979580cb2e09ae3760127a3a69cc907b8104e505c3ba215bb"
+          }
+        ],
+        "same_app_bytes_between_invocations": true,
+        "runs": [
+          {
+            "id": "run-5z80dbsj",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-5z80dbsj/results.json",
+              "sha256": "1d91144f9cfc28441e080b9198e6349d4301f2521e3afc9361d87f9d9127e939",
+              "bytes": 480
+            },
+            "passed": 1,
+            "count": 1,
+            "cases": [
+              {
+                "name": "syntax",
+                "status": "passed"
+              }
+            ]
+          },
+          {
+            "id": "run-w2ygczev",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-w2ygczev/results.json",
+              "sha256": "2478d2edac3a0cda4a026a48fa8f60d5198ecbbe0754023fcc00a4b0cc803ee0",
+              "bytes": 70519
+            },
+            "passed": 5,
+            "count": 5,
+            "cases": [
+              {
+                "name": "language_editor_unicode_preview",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-w2ygczev/language_editor_unicode_preview/files ä/app-steps.json",
+                      "sha256": "dfba9c7ef4a6b3ff62597498610fc056d30e72afe6ddc8384034b20d4d76c355",
+                      "bytes": 1764
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "language_editor_multiline_preview",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-w2ygczev/language_editor_multiline_preview/files ä/app-steps.json",
+                      "sha256": "b65f6859b5094ca0ea4b354b098d0f0d9dfd735293a506cd71271818d1f69519",
+                      "bytes": 1764
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "completion_workflow",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-w2ygczev/completion_workflow/files ä/app-steps.json",
+                      "sha256": "46cb10bace334f5466ee5e81ffd21227118fe14f82457deceed078b0a45ff7b6",
+                      "bytes": 19486
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION SYNTAX target=0 theme=0 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=1 theme=1 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=2 theme=2 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1"
+                        ],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION SYNTAX target=0 theme=0 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=1 theme=1 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=2 theme=2 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1"
+                        ],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "completion_automatic_workflow",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-w2ygczev/completion_automatic_workflow/files ä/app-steps.json",
+                      "sha256": "7515bff263a422fc3771c39e941418233bfcb6c2f36b0f7d085c4d28df8985fa",
+                      "bytes": 19467
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "api_reference_workflow",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-w2ygczev/api_reference_workflow/files ä/app-steps.json",
+                      "sha256": "e29de9832c6721712ac56eb7e815792ad411ef2f1c03dc7dbedd2d232a6e13a8",
+                      "bytes": 20765
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "linux": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ranges-linux.json",
+          "sha256": "7d66a36042e5b4c3b80b9bd89f39fb5a7005107887609bfe2157049b57ac6760",
+          "bytes": 1988
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ranges-linux.log",
+          "sha256": "2735540db2798eda77946020db29cc525873bdabf04e4e9c7e5259129546969f",
+          "bytes": 941
+        },
+        "exit_code": 0,
+        "commands": [
+          {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--sanitizers",
+              "--test",
+              "--test-filter",
+              "syntax"
+            ],
+            "exit_code": 0,
+            "app_sha256": "e3f5272ed106f96b56dfb5a5e8fb58f9488727934f05d937345d1700fc4d5fe6"
+          },
+          {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--sanitizers",
+              "--test-display",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow",
+              "--test-filter",
+              "api_reference_workflow",
+              "--test-filter",
+              "language_editor_unicode_preview",
+              "--test-filter",
+              "language_editor_multiline_preview"
+            ],
+            "exit_code": 0,
+            "app_sha256": "e3f5272ed106f96b56dfb5a5e8fb58f9488727934f05d937345d1700fc4d5fe6"
+          }
+        ],
+        "same_app_bytes_between_invocations": true,
+        "runs": [
+          {
+            "id": "run-3cvv54f3",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-3cvv54f3/results.json",
+              "sha256": "ca665e71bca8a88e4a166eca8ec68f71d1ebd1101acbfc1707dc57579d7922b4",
+              "bytes": 457
+            },
+            "passed": 1,
+            "count": 1,
+            "cases": [
+              {
+                "name": "syntax",
+                "status": "passed"
+              }
+            ]
+          },
+          {
+            "id": "run-gv1_8b_5",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gv1_8b_5/results.json",
+              "sha256": "1de6fb134df7ab44ad586331b3dc0cb52307a69191c8c8c3c1410024cd5206fc",
+              "bytes": 68710
+            },
+            "passed": 5,
+            "count": 5,
+            "cases": [
+              {
+                "name": "language_editor_unicode_preview",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gv1_8b_5/language_editor_unicode_preview/files ä/app-steps.json",
+                      "sha256": "06004a3111a2546a8414783cc6d3d0d78c641cd1d502d2525a856824254c84c9",
+                      "bytes": 1720
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "language_editor_multiline_preview",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gv1_8b_5/language_editor_multiline_preview/files ä/app-steps.json",
+                      "sha256": "6d3e1fbed8f145cfc7fcb1dc0c40640cd15fff0c7af7718b76715a355efc46ba",
+                      "bytes": 1720
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "completion_workflow",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gv1_8b_5/completion_workflow/files ä/app-steps.json",
+                      "sha256": "af9beb1e0a8e651c00b0fa37e2d2708ce07f7bd0618a46412eb82ab697118875",
+                      "bytes": 19403
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION SYNTAX target=0 theme=0 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=1 theme=1 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=2 theme=2 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1"
+                        ],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION SYNTAX target=0 theme=0 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=1 theme=1 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=2 theme=2 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1"
+                        ],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "completion_automatic_workflow",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gv1_8b_5/completion_automatic_workflow/files ä/app-steps.json",
+                      "sha256": "21e92f75f236abb25e120652e88cbe0234ca5863ac382e98de079f7382e380db",
+                      "bytes": 19386
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "api_reference_workflow",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gv1_8b_5/api_reference_workflow/files ä/app-steps.json",
+                      "sha256": "8a3c29c7dac6120a1bc4499d101b17911c5a644caa42d74a0f86705411f8663c",
+                      "bytes": 20727
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "inputs.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ranges-inputs.json",
+        "sha256": "268ed7bc7434be7c200308dcce8e6c6f3a564f052d1f081fa34bab7f20ff4d86",
+        "bytes": 16608
+      },
+      "compiler-source.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ranges-compiler-source.json",
+        "sha256": "9c8fe1996001d8977e503e3dbf45c4a8d67bb6d5ef2ebc2e848f0eefbda88635",
+        "bytes": 118053,
+        "archive_checks": {
+          "base_commit": "2f9b318a",
+          "overlay_base_source_manifest": "build/validation/explorer-inline-2026-10-29/syntax-roles-final-compiler-source.json",
+          "unchanged_c_inputs_compared_to_git": 788,
+          "overlay_files": [
+            "app/syntax.c",
+            "tests/test_syntax.c"
+          ],
+          "archive_sha256": "1019eb9ec463139236c4ba8a0afcc45678c62f0cd176d703a06d461998c7be8e",
+          "runtime_index": "syntax-roles-ranges-byte-index.json"
+        }
+      },
+      "runtime.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ranges-runtime.json",
+        "sha256": "cca711fd99fb09e0dfb066e8cf7cc47aea6030d97442a196ce806c289af0730a",
+        "bytes": 40243,
+        "archive_checks": {
+          "new_archives_sha256": {
+            "build/validation/explorer-inline-2026-10-29/syntax-roles-ranges-runtime-windows.zip": "c0b936380dd5bac65f783dada5cd3c8b90303066bd6be0047919e6542becaec1",
+            "build/validation/explorer-inline-2026-10-29/syntax-roles-ranges-runtime-linux.zip": "75a8044bf9daa3a32d9604078255fd006d4402f5e9327445699b1be70862c55a"
+          },
+          "all_referenced_bytes_read_back": true
+        }
+      },
+      "byte-index.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-ranges-byte-index.json",
+        "sha256": "ca35d1179dcbd7a0b67af56fffcb340a6da6a2df6715412ac0af1539faef4cca",
+        "bytes": 103826
+      }
+    },
+    "syntax-roles-head-proof": {
+      "windows": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-head-proof-windows.json",
+          "sha256": "c869aca9f3043621fb802ee678a6f57bfb20d94c9afb8cd86e9522af28d84883",
+          "bytes": 857
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-head-proof-windows.log",
+          "sha256": "01bb18ed47b8dcd445ee6cadb4df157d5597ba02a04ddc06b69a5a1c7d006e32",
+          "bytes": 40924
+        },
+        "exit_code": 0,
+        "commands": [
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "completion_workflow"
+            ],
+            "exit_code": 0,
+            "app_sha256": "ce071839833a42e37cd837dfb852638fed6c73bddb8d0582ec022df214151c47"
+          }
+        ],
+        "same_app_bytes_between_invocations": null,
+        "runs": [
+          {
+            "id": "run-u1wb6920",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-u1wb6920/results.json",
+              "sha256": "95ae5636acc800f48ab05fc0eb60b1686b65dcb87918138c5842ed48d75b79ef",
+              "bytes": 20784
+            },
+            "passed": 1,
+            "count": 1,
+            "cases": [
+              {
+                "name": "completion_workflow",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-u1wb6920/completion_workflow/files ä/app-steps.json",
+                      "sha256": "6c3a83deb3333c158ff81e0bdf1463cd45d0ab50fee0bfdbe4a055a6dd03f58f",
+                      "bytes": 19486
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION SYNTAX target=0 theme=0 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=1 theme=1 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=2 theme=2 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1"
+                        ],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION SYNTAX target=0 theme=0 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=1 theme=1 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=2 theme=2 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1"
+                        ],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "linux": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-head-proof-linux.json",
+          "sha256": "26e5e602087d7e6241eddf2121ef496e452abf92c71862b8913d2203edd39040",
+          "bytes": 694
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-head-proof-linux.log",
+          "sha256": "ecd95b39cd0664296e89e9da8555928d10a456446870265c6e833c995124f5ad",
+          "bytes": 298292
+        },
+        "exit_code": 0,
+        "commands": [
+          {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--test-display",
+              "--sanitizers",
+              "--test-filter",
+              "completion_workflow"
+            ],
+            "exit_code": 0,
+            "app_sha256": "1f36002755aca9f84eb4d36ad7734806056fabf8ec4c6bbcef095965d38977a8"
+          }
+        ],
+        "same_app_bytes_between_invocations": null,
+        "runs": [
+          {
+            "id": "run-ryf85y0v",
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ryf85y0v/results.json",
+              "sha256": "6fc70feddbf8b16e7f344129778f4aa26856606afe01c57878063a63425419cb",
+              "bytes": 20415
+            },
+            "passed": 1,
+            "count": 1,
+            "cases": [
+              {
+                "name": "completion_workflow",
+                "status": "passed",
+                "app_results": [
+                  {
+                    "file": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ryf85y0v/completion_workflow/files ä/app-steps.json",
+                      "sha256": "a4c0b881f2d05c42d5bf2be8d89359e2a7a5b7e64017bef472dd4f4af2bb3cc3",
+                      "bytes": 19409
+                    },
+                    "applications": [
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION SYNTAX target=0 theme=0 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=1 theme=1 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=2 theme=2 source=1023 expected=1023 list=1 header=1 signature=1 prefix-bold=1"
+                        ],
+                        "failure": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION SYNTAX target=0 theme=0 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=1 theme=1 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1",
+                          "COMPLETION SYNTAX target=2 theme=2 source=991 expected=991 list=1 header=1 signature=1 prefix-bold=1"
+                        ],
+                        "failure": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "inputs.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-head-proof-inputs.json",
+        "sha256": "f500a0b67669bb1f81023db8784c1f94743e7ab14147ff53d68ff747f9f82ab9",
+        "bytes": 16608
+      },
+      "compiler-source.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-head-proof-compiler-source.json",
+        "sha256": "2327f1e8dae56cf8b399b994927b12ea4109d4e2fde9282563dc135706ff4f05",
+        "bytes": 118042,
+        "archive_checks": {
+          "base_commit": "2f9b318a",
+          "overlay_base_source_manifest": "build/validation/explorer-inline-2026-10-29/syntax-roles-ranges-compiler-source.json",
+          "unchanged_c_inputs_compared_to_git": 788,
+          "overlay_files": [
+            "app/completion_tests.inc"
+          ],
+          "archive_sha256": "162a760989c4976c10b81c9d02219e3f28d17270c18dd8d06c875a3eec483c08",
+          "runtime_index": "syntax-roles-head-proof-byte-index.json"
+        }
+      },
+      "runtime.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-head-proof-runtime.json",
+        "sha256": "4ccfa787b5904b851135935d141e31375422e06ccd71fc4791a724887f3327b9",
+        "bytes": 40251,
+        "archive_checks": {
+          "new_archives_sha256": {
+            "build/validation/explorer-inline-2026-10-29/syntax-roles-head-proof-runtime-windows.zip": "d64f85fa4feca84f091e479c2e351c5e613fc82d85a012ce7b10fa344bcf2ad8",
+            "build/validation/explorer-inline-2026-10-29/syntax-roles-head-proof-runtime-linux.zip": "52a83298de7a0885582e0612bb6d92f1cff2c03fa7f9b1776a3dc7f5f43cffa2"
+          },
+          "all_referenced_bytes_read_back": true
+        }
+      },
+      "byte-index.json": {
+        "path": "build/validation/explorer-inline-2026-10-29/syntax-roles-head-proof-byte-index.json",
+        "sha256": "bad5a7a0e0562eba8e3dfd897210ee58ca1b40821ec5ad257564750df6722ec8",
+        "bytes": 104242
+      }
+    }
+  },
+  "source_closure": {
+    "own_inputs": 163,
+    "compiler_and_test_files": 1115,
+    "final_to_ranges": [
+      "app/syntax.c",
+      "tests/test_syntax.c"
+    ],
+    "ranges_to_header_proof": [
+      "app/completion_tests.inc"
+    ]
+  },
+  "negative_controls": {
+    "ink-mutation": {
+      "record": {
+        "path": "build/validation/syntax-roles-2026-11-04/ink-mutation.json",
+        "sha256": "3472b357461be5fecf6cac92d2e1b927224018f6ff7a76c6bae8a69b0a1db789",
+        "bytes": 533
+      },
+      "details": {
+        "path": "app/syntax_ui.inc",
+        "parent_phase": "syntax-roles-ink-counter",
+        "before_sha256": "f957c65a99d4cda5694a6cdfaed84f2ea20f8af57aa0804cc110c92555bd7d87",
+        "after_sha256": "af1caa96cea3ed6cf2b3f8f171562d32606910cb59ccf2463ff81b3d85e7ef6a",
+        "mutation": "Only native role-to-color mapping FUNCTION -> TYPE; lexer and approved palette unchanged. Existing final draw-command assertions must reject.",
+        "root_unchanged": true,
+        "archive_sha256": "f8c3a1df57ec5afb1a8153c5198f05e5801ef5b6e8c2e09be831550c9f387b94"
+      }
+    },
+    "range-before": {
+      "record": {
+        "path": "build/validation/syntax-roles-2026-11-04/range-before.json",
+        "sha256": "09ca4ebba6dc606b22bd2d135baeae89877c209eb533fdfb4f84b5284d40841a",
+        "bytes": 1495
+      },
+      "details": {
+        "exit_code": 1,
+        "expected_rejection": "Ph range operator must be one TEXT span between two numbers; scanner rejected at test_syntax.c80.",
+        "production_mutated": false,
+        "binary_sha256": "eef5c4f0b6d63d866b36590493c7876d943946a63f676222961b517d4ea033a9",
+        "files": {
+          "tests/test_syntax.c": "6c33aacfa695706d61201b5b8cafcdd07e1bbfb2f4f880c89ae73f9c73d4c3f6",
+          "app/syntax.c": "e597145be182ae0cb44e19c823162b0dccf3d9d4f1d100b86b7bd3a0586da222",
+          "app/syntax.h": "75454e0a85908820dac1eb7fd7c4b52f9bb74d7cc1f46c9197e07aa408caacd7",
+          "app/completion.c": "f456ec80aa8f3e80e330fea9f34e31b7d804ba2d64c53fac1c9f4657d2a2d914",
+          "app/completion.h": "2f95e188342727ac3363c6c7425e9d03cfa54441387e0185969a75f7c8ead078",
+          "include/physim/core.h": "159d63a460334a0ea27dc7645a5f2b5de30666bfbc6840492b843e2c0f3be7d2",
+          "src/language/lexer.h": "13c2141a9735fccb4d7f431c3fcecdf3db3573c6bdc67f2e9373257184a06b2e",
+          "src/language/builtin_type_names.inc": "0547fc275a0e25d179cf9672e2086aa65dd77582c1f1e0cbb2503bfa2b9a3495"
+        },
+        "libraries": {
+          "libphysim-core.a": "4d1395eea78c59f87860585dbf09c75018890a3f06601e7c7e16c277a7bc4c49",
+          "libphysim-language.a": "45ff261bc10ef3f3c7160bc261167fa52e2be63c289cd6d69da652b57e27c6c2"
+        },
+        "library_origin": "Frozen syntax-roles-ink-counter byte index; verified copies, live build outputs not read.",
+        "stderr": "Syntax line 80: ps_syntax_next(&range,&op) && op.begin==1 && op.end==4 && op.role==PS_SYNTAX_TEXT"
+      }
+    },
+    "range-after": {
+      "record": {
+        "path": "build/validation/syntax-roles-2026-11-04/range-after.json",
+        "sha256": "83da9d4b13b439f93a8ea878c1498de4489ee07daf1a298aa306f8d0f701d569",
+        "bytes": 669
+      },
+      "details": {
+        "exit_code": 0,
+        "binary_sha256": "e5a72df7b30c42d4e2323f5324f615a26f6962f29eb4648a3017457a0ab839d0",
+        "strict_c17_warnings_as_errors": true,
+        "sanitizers": "address,undefined",
+        "stdout": "Shared syntax checks passed including actual compiler range-kind assertions",
+        "source_sha256": "f73309a0c82702d5b360008bc166a51349dbcd00151b41def1ff6d498bd7641b",
+        "test_sha256": "6c33aacfa695706d61201b5b8cafcdd07e1bbfb2f4f880c89ae73f9c73d4c3f6",
+        "libraries": {
+          "libphysim-core.a": "4d1395eea78c59f87860585dbf09c75018890a3f06601e7c7e16c277a7bc4c49",
+          "libphysim-language.a": "45ff261bc10ef3f3c7160bc261167fa52e2be63c289cd6d69da652b57e27c6c2"
+        }
+      }
+    }
+  },
+  "negative_archives": [
+    {
+      "path": "build/validation/syntax-roles-2026-11-04/ink-mutant.zip",
+      "sha256": "f8c3a1df57ec5afb1a8153c5198f05e5801ef5b6e8c2e09be831550c9f387b94",
+      "bytes": 1138
+    },
+    {
+      "path": "build/validation/syntax-roles-2026-11-04/range-before-inputs.zip",
+      "sha256": "d6acce079bb2b13ff1d8f6c9cde66f144b1caa08cd59515e5af55d388840fa58",
+      "bytes": 12726
+    }
+  ],
+  "older_hosted_settings": {
+    "source_commit": "913d60ed6b2e5802cb3fdf0e7d99bc8797e84eeb",
+    "run_id": 41895572088,
+    "job_id": 126811426925,
+    "architecture": "Intel",
+    "artifact_id": 13357704185,
+    "zip_sha256": "1e4ca4d0cdfa4db7b1e6c81da6e071f55b31fb218c7ea9f07d41b524a372d05f",
+    "digest_matches_github": true,
+    "all_entries_read": {
+      "Release/test-results/run-ftkv2ivw/results.json": "322ec0b9c8cdaeded108c830043bd291e62b0cbae6b84da54c8185c36c8d0412",
+      "Release/test-results/run-ku96xzg3/results.json": "3eb72af2ec42abe8c6aeff07c2357431cbe4d083d872c2043b143ce6d8b06c6e",
+      "Release/test-results/run-l6645rr7/results.json": "2fc20b9dbc95c491fe2ae5b15502503965ffe9138a5806d2a6e08e700330c6f7",
+      "Release/test-results/run-e8zkg6lg/results.json": "631626eca6f23266ae75dfe97eaeef8e7c23a91657980f4743e71dea5a3ff7f2"
+    },
+    "case_count": 16,
+    "passed": 16,
+    "case_names": [
+      "ui_typography_workflow",
+      "shell_theme_dark",
+      "shell_theme_light_large_narrow",
+      "shell_theme_contrast",
+      "settings_transactions",
+      "settings_a_window",
+      "settings_search_keyboard",
+      "unit_task_window",
+      "themes_workflow",
+      "channel_units_workflow",
+      "settings_keyboard_workflow",
+      "settings_keyboard_paced",
+      "analysis_units_dark",
+      "analysis_units_light_large_narrow",
+      "inspector_channel",
+      "preferences"
+    ]
+  },
+  "cleanup": {
+    "record": {
+      "path": "build/validation/syntax-roles-2026-11-04/cleanup-plan.json",
+      "sha256": "9102063f6fe7fd4e6e3cccc4550fb869a7a29848b1387936f831f55260aeb51a",
+      "bytes": 23047
+    },
+    "deleted_files": 36,
+    "deleted_bytes": 115089768,
+    "scope": "Earlier successful manual completion states replaced by latest header-proof states on each platform; failure evidence and other groups preserved.",
+    "paths": [
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-2ri07jul/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-2ri07jul/completion_workflow/files ä/workflow ä/c/completion-document.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-2ri07jul/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-2ri07jul/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-2ri07jul/completion_workflow/files ä/workflow ä/phys/completion-document.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-2ri07jul/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-txjray6c/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-txjray6c/completion_workflow/files ä/workflow ä/c/completion-document.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-txjray6c/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-txjray6c/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-txjray6c/completion_workflow/files ä/workflow ä/phys/completion-document.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-txjray6c/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-w2ygczev/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-w2ygczev/completion_workflow/files ä/workflow ä/c/completion-document.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-w2ygczev/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-w2ygczev/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-w2ygczev/completion_workflow/files ä/workflow ä/phys/completion-document.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-w2ygczev/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-jxg6kcoa/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-jxg6kcoa/completion_workflow/files ä/workflow ä/c/completion-document.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-jxg6kcoa/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-jxg6kcoa/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-jxg6kcoa/completion_workflow/files ä/workflow ä/phys/completion-document.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-jxg6kcoa/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-paymmy12/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-paymmy12/completion_workflow/files ä/workflow ä/c/completion-document.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-paymmy12/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-paymmy12/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-paymmy12/completion_workflow/files ä/workflow ä/phys/completion-document.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-paymmy12/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gv1_8b_5/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gv1_8b_5/completion_workflow/files ä/workflow ä/c/completion-document.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gv1_8b_5/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gv1_8b_5/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gv1_8b_5/completion_workflow/files ä/workflow ä/phys/completion-document.bmp",
+      "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gv1_8b_5/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp"
+    ]
+  },
+  "visually_inspected_native_BMPs": [
+    {
+      "file": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-u1wb6920/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp",
+        "sha256": "14cba2a28293f949c9cd77503a638c950a25668dd40280a9332e30c3e3dbb281",
+        "bytes": 3196938
+      },
+      "theme": "dark",
+      "code_size": 12
+    },
+    {
+      "file": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-u1wb6920/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp",
+        "sha256": "3e9b2906907bc5486263e342afbdc3a06dd5ab71eb4b3c4be38670ed55b672a9",
+        "bytes": 3196938
+      },
+      "theme": "light",
+      "code_size": 22
+    },
+    {
+      "file": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-u1wb6920/completion_workflow/files ä/workflow ä/phys/completion-document.bmp",
+        "sha256": "738f9bdb72a3f16b3dc4e48e1954f27fd9f9f0d48f8357b33f7e7a2072d1a486",
+        "bytes": 3196938
+      },
+      "theme": "high contrast",
+      "code_size": 12
+    }
+  ],
+  "limits": [
+    "No completion scope provider, no separate call-signature controller, candidate summary/parameter prose still open.",
+    "Outline declaration colors are revision-owned file-level declarations, not complete local scope or type inference.",
+    "F1 rich code fences and other code examples are not all migrated to the common tokenizer.",
+    "Current catalog prefix bold uses existing ASCII semibold glyphs; future Unicode scope suggestions need their own glyph coverage.",
+    "Physical keyboard/IME, screenreader, DPI/monitor/fullscreen and current macOS completion acceptance remain open.",
+    "No new complete 8-unit+5-GUI run with the latest binary: verified unchanged components plus targeted 1+5 and 1 runs.",
+    "AA code contrast checked on actual base/workbench code backgrounds; generic laboratory edit background is not an additional code-surface AA claim."
+  ]
+}

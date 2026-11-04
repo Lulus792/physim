@@ -5,7 +5,41 @@ abgleichen. Verbindliche Designs: [AGENTS.md](../AGENTS.md) und
 [Gesamtübergabe](visuals/unified-workspace/NEXT-CHAT.md). Keine geschlossene
 Prüfung oder Protokoll-Trennlinie allein wegen Kompaktierung erneut beginnen.
 
-## Aktueller Anschluss: D-Viewport und wirksame Preferences
+## Aktueller Anschluss: gemeinsame Syntaxrollen
+
+**Nutzer-Mac weiterhin aus; keine Zugriffe oder Erreichbarkeitsproben.**
+**Eingefroren: `syntax-roles-head-proof`, 163 eigene Eingaben / 1.115 Compiler-
+und Testdateien.** Gemeinsame zehn freigegebene Rollen in Editor, Vorschlagsliste,
+neutraler Karte und API-Codeblöcken, Funktionen gelb, Typen/Variablen getrennt,
+echtes Semibold-Präfix. Echter Physim-Lexer/Typregistry, exakte Katalogsuche und
+revisionseigener vorhandener Dokumentumriss; keine vollständigen lokalen Scopes.
+
+`syntax-roles-final`: Windows Release/Linux Debug ASan/UBSan je **8/8 Unit +
+5/5 GUI**. Danach echter Ph-Bereichsoperatorfehler mit scheiterndem Vorherlauf
+behoben; ausschließlich Scanner + Syntax-Unit geändert. `syntax-roles-ranges`
+je **1/1 Unit + 5/5 GUI**. Zuletzt nur Titel-Nachweis räumlich verschärft,
+`syntax-roles-head-proof` je **1/1** (`run-u1wb6920` / `run-ryf85y0v`).
+Produktionsbytes seit ranges unverändert; alle übrigen Eingaben seit final per
+Hash gleich. Keinen neuen vollständigen 8+5-Lauf mit letzter Binärdatei behaupten.
+[Originalkommandos, Phasen, Fehler/Gegenproben, Grenzen](verification/syntax-roles-2026-11-04.md).
+
+Alle lokalen Handles beendet; Quell-/Runtime-/Archivbytes gelesen. Dunkel,
+hell/große Schrift und Kontrast nativ betrachtet. 36 ersetzte erfolgreiche eigene
+BMPs entfernt (**115.089.768 Bytes**), aktuelle zwölf Completion-Bilder und
+Fehler/Referenzen erhalten; getrennte neue Pfade, frühere Einsparungen nicht addieren.
+Offen: volle Kandidatenkurzinfo/Parametertexte, echte Scopes, separate Aufrufhilfe,
+übrige Codekontexte und physische/Assistive-/DPI-/aktuelle Mac-Abnahme. D bleibt
+unvollständig. Nächster konkreter Schritt: Kandidatenkurzinfo mit eigenem
+Dokumentbesitz und tatsächlichem Referenz-/Reflow-Nachweis ergänzen.
+
+Vorheriger Stand `913d60ed`: gehostete Intel-Editorfälle **5/5**, Settings **16/16**
+tatsächlich abgeschlossen, beide Archive/Digests/Originalergebnisse gelesen.
+ARM-Jobs `126806005373` / `126811425903` inzwischen **cancelled**, keine offene
+Warteschlange oder bestandene ARM-Abnahme dieses Stands behaupten.
+[Getrennter Beleg](verification/completion-d-macos-intel-2026-11-04.json).
+Dies ist keine Mac-Abnahme der neuen Syntaxquellen. Nutzer-Mac bleibt aus.
+
+## Abgeschlossen: D-Viewport und wirksame Preferences
 
 **Nutzer-Mac aus; keine Zugriffe oder Erreichbarkeitsproben.**
 **Quellstand `913d60ed` in beide Repositories gepusht; alle 1.110 Compiler-/
@@ -43,8 +77,8 @@ BMPs entfernt (73.529.574 Bytes); Originalfehler, zwölf aktuelle manuelle Bilde
 und ausdrücklich benötigte Referenzen behalten. Automatische Prüfung ohne Bilder.
 [Originalkommandos, Phasen, Gegenfälle und Grenzen](verification/completion-d-2026-11-04.md).
 
-**Weiter offen:** gemeinsame freigegebene Syntaxrollen und gelbe Funktionen,
-Rollenicons/-farben, vollständige Kandidatenkurzinfo, echte C-/Physim-Scopes und
+**Weiter offen (Syntaxanschluss inzwischen oben ergänzt):** vollständige
+Kandidatenkurzinfo, echte C-/Physim-Scopes und
 separate Aufrufhilfe mit Benutzerfunktionen und Revisionen. Referenz-Pointerzugang
 bei Ergänzung der Kurzinfo ausdrücklich mitprüfen. Physische Eingabe/IME,
 Screenreader, DPI/Monitor/Vollbild und aktuelle Mac-Abnahme stehen aus.
@@ -146,8 +180,8 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
 
 ## Nächste konkrete Arbeit
 
-- Neue Läufe zu `913d60ed`: Editor `41895571962` und Settings `41895572088`
-  beobachten (zuletzt pending, noch ohne Jobzuweisung), keinen Ersatzlauf starten.
+- Läufe zu `913d60ed`: Intel Editor `41895571962` **5/5**, Settings `41895572088`
+  **16/16** geschlossen; ARM jeweils cancelled. Keine Wiederholung wegen Kompaktierung.
   Vorheriger Editor `25662d6f`: Intel `126774542390` jetzt beendet **4/5**;
   C-Completion-App nach letzter Stufe 2→3 / keyboard=0 in 75-s-Timeout, Ursache offen.
   ZIP/Digest und alle Originalergebnisse gelesen, automatische Gruppe/API bestanden.
@@ -155,11 +189,10 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
   Intel-Settings `4adf2699` wurde abgebrochen; ARM-Settings 16/16 geschlossen, nicht neu prüfen.
   Nutzer-Mac bleibt aus.
   Aktueller lokaler Anschluss: `build/validation/completion-d-2026-11-04/STATE.md`.
-- D weiterführen: gemeinsame freigegebene Syntaxrollen/Palette und Rollenicons
-  sowie vollständige Kandidaten-Kurzinfo mit eigenem Dokumentbesitz ergänzen.
+- D weiterführen: vollständige Kandidaten-Kurzinfo mit eigenem Dokumentbesitz ergänzen.
   Referenz-Pointerzugang und Karten-Reflow dabei tatsächlich prüfen. Viewport
   und Preferences sind oben geprüft; nicht wegen Kompaktierung neu beginnen.
-- Danach/verknüpft gemeinsame Syntaxrollen sowie echte C-/Physim-Scopes und
+- Danach/verknüpft gemeinsame Syntaxrollen in weiteren Codekontexten sowie echte C-/Physim-Scopes und
   getrennte Aufrufsignatur einschließlich Benutzerfunktionen vervollständigen.
   Leere Argumente, Shadowing, unvollständige Initialisierung, verschachtelte
   Aufrufe und Revisionen gehören weiterhin zum vollen Auftrag. Kein begrenzter
@@ -178,7 +211,7 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
 
 ## Sicherer lokaler Anschluss
 
-- `prepare-next.py <neuer-tag> completion-d-refined` prüft vorher Quelle,
+- `prepare-next.py <neuer-tag> syntax-roles-head-proof` prüft vorher Quelle,
   Runtime und Archive. Neue Module ausdrücklich in die Eingabeliste aufnehmen.
   Eigene Quellen vollständig versionieren, fremde AT-SPI-/Orca-/Status-/dist-
   Änderungen erhalten und nicht in eigene isolierte Quellen übernehmen.

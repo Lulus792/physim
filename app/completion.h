@@ -17,6 +17,9 @@ typedef struct {
 ps_result ps_completion_prepare(const char *text,size_t bytes,size_t cursor,bool language,ps_completion_query *out);
 size_t ps_completion_count(void);
 const ps_completion_symbol *ps_completion_at(size_t index);
+/* Exact length-delimited lookup in the generated (language,name) ordering.
+ * Static result lifetime; no prefix guess, allocation or source execution. */
+const ps_completion_symbol *ps_completion_lookup(const char *name,size_t bytes,bool language);
 /* Returns all matches; writes at most capacity indices. No allocation. */
 size_t ps_completion_matches(const ps_completion_query *query,size_t *indices,size_t capacity);
 /* Member completion inserts the leaf name, preserving an existing receiver. */

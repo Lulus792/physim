@@ -20,6 +20,7 @@
 #include "protocol_ui.h"
 #include "physim/detail/run_identity.h"
 #include "completion.h"
+#include "syntax.h"
 #include "editor_search.h"
 #include "source_outline.h"
 #include "model_values.h"
@@ -660,9 +661,11 @@ typedef struct {
     size_t *completion_indices,completion_count,completion_selected,completion_first;
     unsigned completion_visible_rows;
     bool completion_reveal,completion_scroll_drag,completion_info_visible;
+    struct nk_user_font completion_bold_font;
+    nk_size syntax_commands_begin,syntax_commands_end;
     float completion_scroll_grab;
     bool completion_active,completion_accept_pending;
-    struct nk_rect completion_button_bounds,completion_list_bounds,completion_info_bounds,completion_scroll_bounds,completion_choice_bounds[PS_COMPLETION_ROWS_MAX];
+    struct nk_rect completion_button_bounds,completion_list_bounds,completion_info_bounds,completion_signature_bounds,completion_scroll_bounds,completion_choice_bounds[PS_COMPLETION_ROWS_MAX];
     size_t diagnostic_used;
     ps_wire_buffer wire;
     uint32_t command_seq;
@@ -3028,167 +3031,34 @@ static void find_text_direction(app *a, struct nk_text_edit *edit, bool replace,
 static void find_text(app *a,struct nk_text_edit *edit,bool replace) {
     find_text_direction(a,edit,replace,false);
 }
-static bool c_keyword(const char *word, size_t length) {
-    static const char *keywords[] = {
-        "auto",    "break",  "case",     "char",    "const",    "continue",      "default",
-        "do",      "double", "else",     "enum",    "extern",   "float",         "for",
-        "goto",    "if",     "inline",   "int",     "long",     "register",      "restrict",
-        "return",  "short",  "signed",   "sizeof",  "static",   "struct",        "switch",
-        "typedef", "union",  "unsigned", "void",    "volatile", "while",         "bool",
-        "true",    "false",  "NULL",     "_Atomic", "_Bool",    "_Static_assert"};
-    for (size_t i = 0; i < sizeof keywords / sizeof keywords[0]; i++)
-        if (strlen(keywords[i]) == length && !memcmp(word, keywords[i], length))
-            return true;
-    return false;
-}
-static bool language_keyword(const char *word, size_t length) {
-    static const char *keywords[] = {
-        "break", "case", "continue", "default", "else", "enum", "false", "for", "func",
-        "if", "import", "in", "let", "mutating", "nil", "return", "self", "static",
-        "struct", "switch", "true", "var", "while", "Int64", "Float64", "Bool", "String",
-        "Void", "Vec2", "Vec3", "Vec4", "Quat", "Unit", "Quantity", "Channel", "Dataset", "Series", "Plot",
-        "Distribution", "SensorConfig", "Sensor", "Measurement", "Table", "Body",
-        "Contacts", "ContactSolver", "ContactResult", "DistanceJoint", "JointResult", "Submersion",
-        "ContactConstraint", "JointConstraint", "ConstraintResult", "Sweep", "Aabb", "CollisionPair", "Mat3", "Mat4", "Bezier3", "Optional"};
-    for (size_t i = 0; i < sizeof keywords / sizeof keywords[0]; i++)
-        if (strlen(keywords[i]) == length && !memcmp(word, keywords[i], length))
-            return true;
-    return false;
-}
-/* Overlay lexical colors on the ordinary Nuklear editor; selection and cursor stay native.
- * Only the visible lines generate draw commands; scanning preserves multiline comments. */
-static void syntax_text(app *a, struct nk_text_edit *edit, struct nk_rect bounds) {
-    int kind = document_language(a, edit);
-    bool language = kind == 1;
-    struct nk_context *ui = a->ui;
-    const struct nk_user_font *font = ui->style.font;
-    struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
-    struct nk_rect area =
-        nk_rect(bounds.x + ui->style.edit.padding.x + ui->style.edit.border,
-                bounds.y + ui->style.edit.padding.y + ui->style.edit.border,
-                bounds.w - 2 * (ui->style.edit.padding.x + ui->style.edit.border) -
-                    ui->style.edit.scrollbar_size.x,
-                bounds.h - 2 * (ui->style.edit.padding.y + ui->style.edit.border));
-    struct nk_rect previous_clip = canvas->clip;
-    nk_push_scissor(canvas, area);
-    const char *text = nk_str_get_const(&edit->string);
-    size_t size = (size_t)nk_str_len_char(&edit->string), at = 0;
-    float row = font->height + ui->style.edit.row_padding;
-    float x = area.x - edit->scrollbar.x, y = area.y - edit->scrollbar.y;
-    size_t block_depth = 0;
-    bool triple_string = false;
-    while (at < size && y < area.y + area.h) {
-        if (text[at] == '\n') {
-            at++;
-            x = area.x - edit->scrollbar.x;
-            y += row;
-            continue;
-        }
-        if (text[at] == '\r') {
-            at++;
-            continue;
-        }
-        size_t begin = at;
-        struct nk_color color = UI_COLOR(code_text);
-        if (kind < 0) {
-            nk_rune rune;
-            int n = nk_utf_decode(text + at, &rune, (int)(size - at));
-            at += (size_t)(n > 0 ? n : 1);
-        } else if (triple_string ||
-            (language && at + 2 < size && text[at] == '"' && text[at + 1] == '"' &&
-             text[at + 2] == '"')) {
-            color = UI_COLOR(code_string);
-            if (!triple_string) {
-                at += 3;
-                triple_string = true;
-            }
-            while (at < size && text[at] != '\n' && text[at] != '\r') {
-                if (text[at] == '\\' && at + 1 < size && text[at + 1] != '\n' &&
-                    text[at + 1] != '\r') {
-                    at += 2;
-                } else if (at + 2 < size && text[at] == '"' && text[at + 1] == '"' &&
-                           text[at + 2] == '"') {
-                    at += 3;
-                    triple_string = false;
-                    break;
-                } else {
-                    at++;
-                }
-            }
-        } else if (block_depth || (at + 1 < size && text[at] == '/' && text[at + 1] == '*')) {
-            color = UI_COLOR(code_comment);
-            if (!block_depth) {
-                at += 2;
-                block_depth = 1;
-            }
-            while (at < size && text[at] != '\n') {
-                if (language && at + 1 < size && text[at] == '/' && text[at + 1] == '*') {
-                    block_depth++;
-                    at += 2;
-                } else if (at + 1 < size && text[at] == '*' && text[at + 1] == '/') {
-                    at += 2;
-                    if (!--block_depth)
-                        break;
-                } else
-                    at++;
-            }
-        } else if ((at + 1 < size && text[at] == '/' && text[at + 1] == '/') ||
-                   (!language && text[at] == '#')) {
-            color = text[at] == '#' ? UI_COLOR(code_preprocessor) : UI_COLOR(code_comment);
-            while (at < size && text[at] != '\n' && text[at] != '\r')
-                at++;
-        } else if (text[at] == '"' || (!language && text[at] == '\'')) {
-            color = UI_COLOR(code_string);
-            char quote = text[at++];
-            while (at < size && text[at] != '\n') {
-                if (text[at] == '\\' && at + 1 < size && text[at + 1] != '\n') {
-                    at += 2;
-                    continue;
-                }
-                if (text[at++] == quote)
-                    break;
-            }
-        } else if ((language && ps_lang_identifier_width(text + at, size - at, 1)) ||
-                   (!language && (isalpha((unsigned char)text[at]) || text[at] == '_'))) {
-            if (language) {
-                at += ps_lang_identifier_width(text + at, size - at, 1);
-                while (at < size) {
-                    size_t width = ps_lang_identifier_width(text + at, size - at, 0);
-                    if (!width)
-                        break;
-                    at += width;
-                }
-            } else {
-                at++;
-                while (at < size && (isalnum((unsigned char)text[at]) || text[at] == '_'))
-                    at++;
-            }
-            if (language ? language_keyword(text + begin, at - begin)
-                         : c_keyword(text + begin, at - begin))
-                color = UI_COLOR(code_keyword);
-            else if (at - begin >= 3 && text[begin] == 'p' && text[begin + 1] == 's' &&
-                     text[begin + 2] == '_')
-                color = UI_COLOR(code_type);
-        } else if (isdigit((unsigned char)text[at])) {
-            color = UI_COLOR(code_number);
-            at++;
-            while (at < size && (isalnum((unsigned char)text[at]) || text[at] == '.' ||
-                                 (language && text[at] == '_')))
-                at++;
-        } else {
-            nk_rune rune;
-            int n = nk_utf_decode(text + at, &rune, (int)(size - at));
-            at += (size_t)(n > 0 ? n : 1);
-        }
-        int length = (int)(at - begin);
-        float width = font->width(font->userdata, font->height, text + begin, length);
-        if (y + row >= area.y && x + width >= area.x && x < area.x + area.w)
-            nk_draw_text(canvas,
-                         nk_rect(x, y + ui->style.edit.row_padding / 2, width + 1, font->height),
-                         text + begin, length, font, nk_rgba(0, 0, 0, 0), color);
-        x += width;
+#include "syntax_ui.inc"
+static void workbench_outline_refresh(app *a,struct nk_text_edit *edit,int language);
+/* The real revision-owned outline supplies written declaration roles. Lexical
+ * fallback colors calls/identifiers; it does not claim a completion scope index. */
+static void syntax_text(app *a,struct nk_text_edit *edit,struct nk_rect bounds){
+    int kind=document_language(a,edit);struct nk_context *ui=a->ui;
+    const struct nk_user_font *font=ui->style.font;struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
+    struct nk_rect area=nk_rect(bounds.x+ui->style.edit.padding.x+ui->style.edit.border,
+        bounds.y+ui->style.edit.padding.y+ui->style.edit.border,
+        bounds.w-2*(ui->style.edit.padding.x+ui->style.edit.border)-ui->style.edit.scrollbar_size.x,
+        bounds.h-2*(ui->style.edit.padding.y+ui->style.edit.border));
+    struct nk_rect previous=canvas->clip;nk_push_scissor(canvas,area);
+    if(edit==a->completion_edit)a->syntax_commands_begin=ui->memory.allocated;
+    const char *source=nk_str_get_const(&edit->string);size_t bytes=(size_t)nk_str_len_char(&edit->string);
+    if(!source)source="";
+    ps_syntax_scan scan;ps_syntax_init(&scan,source,bytes,kind==1);
+    if(kind>=0){workbench_outline_refresh(a,edit,kind);scan.resolve=syntax_outline_role;scan.user=a;}
+    float pitch=font->height+ui->style.edit.row_padding,x=area.x-edit->scrollbar.x,y=area.y-edit->scrollbar.y;
+    ps_syntax_token token;
+    while(y<area.y+area.h && ps_syntax_next(&scan,&token)){
+        if(source[token.begin]=='\n' || source[token.begin]=='\r'){x=area.x-edit->scrollbar.x;y+=pitch;continue;}
+        int n=(int)(token.end-token.begin);float width=font->width(font->userdata,font->height,source+token.begin,n);
+        if(y+pitch>=area.y && x+width>=area.x && x<area.x+area.w)
+            nk_draw_text(canvas,nk_rect(x,y+ui->style.edit.row_padding/2,width+1,font->height),source+token.begin,n,font,nk_rgba(0,0,0,0),syntax_color(kind<0?PS_SYNTAX_TEXT:token.role));
+        x+=width;
     }
-    nk_push_scissor(canvas, previous_clip);
+    if(edit==a->completion_edit)a->syntax_commands_end=ui->memory.allocated;
+    nk_push_scissor(canvas,previous);
 }
 #include "completion_ui.inc"
 static void editor_caret(app *a,struct nk_text_edit *edit,struct nk_rect bounds,bool changed) {
@@ -5666,6 +5536,7 @@ int main(int argc, char **argv) {
         int w, h;
         SDL_GetWindowSize(window, &w, &h);
         draw_ui(a, w, h);
+        if(workspace_state_test && (!strcmp(argv[3],"completion-c") || !strcmp(argv[3],"completion-phys")))completion_syntax_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"outline-hover-",14))outline_hover_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"analysis-layout-",16))analysis_workspace_test_draw(a,test_stage);
         if(workspace_state_test && !strncmp(argv[3],"file-tabs-design",16))tab_design_draw(a);

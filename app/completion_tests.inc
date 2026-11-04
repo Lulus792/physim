@@ -1,7 +1,53 @@
-static const char *completion_c_original[]={"// α😀\nps_vlOLD\n","// α😀\nPS_METOLD\n","// α😀\nps_memory_alOLD\n"};
-static const char *completion_c_changed[]={"// α😀\nps_vlength\n","// α😀\nPS_METRE\n","// α😀\nps_memory_alignment\n"};
-static const char *completion_ph_original[]={"// α😀\nVecOLD\n","// α😀\nMat4.transOLD\n","// α😀\ndirection.normOLD\n"};
-static const char *completion_ph_changed[]={"// α😀\nVec3\n","// α😀\nMat4.translation\n","// α😀\ndirection.normalized\n"};
+#define COMPLETION_C_PRELUDE "// α😀\n#include \"physim/core.h\"\ntypedef ps_vec3 Velocity;\nvoid step(double dt) {\n ps_vec3 velocity = ps_v3(0.0, 1.0, 0.0);\n const char *label = \"label\";\n if (dt) return;\n}\n"
+#define COMPLETION_PH_PRELUDE "// α😀\nstruct Particle { var mass: Float64 }\nfunc step(dt: Float64) {\n let velocity: Vec3 = Vec3(0.0, 1.0, 0.0)\n let label = \"label\"\n if true { return }\n}\n"
+static const char *completion_c_original[]={COMPLETION_C_PRELUDE "ps_vlOLD\n",COMPLETION_C_PRELUDE "PS_METOLD\n",COMPLETION_C_PRELUDE "ps_memory_alOLD\n"};
+static const char *completion_c_changed[]={COMPLETION_C_PRELUDE "ps_vlength\n",COMPLETION_C_PRELUDE "PS_METRE\n",COMPLETION_C_PRELUDE "ps_memory_alignment\n"};
+static const char *completion_ph_original[]={COMPLETION_PH_PRELUDE "VecOLD\n",COMPLETION_PH_PRELUDE "Mat4.transOLD\n",COMPLETION_PH_PRELUDE "direction.normOLD\n"};
+static const char *completion_ph_changed[]={COMPLETION_PH_PRELUDE "Vec3\n",COMPLETION_PH_PRELUDE "Mat4.translation\n",COMPLETION_PH_PRELUDE "direction.normalized\n"};
+#undef COMPLETION_C_PRELUDE
+#undef COMPLETION_PH_PRELUDE
+static struct {unsigned source;bool list,header,signature,prefix;const ps_completion_symbol *symbol;} completion_ink;
+static bool completion_ink_word(const struct nk_command_text *t,const char *word){return t->length==(int)strlen(word) && !memcmp(t->string,word,(size_t)t->length);}
+static bool completion_ink_color(struct nk_color a,struct nk_color b){return a.r==b.r && a.g==b.g && a.b==b.b && a.a==b.a;}
+static bool completion_ink_region(const struct nk_command_text *t,struct nk_rect r){return t->x>=r.x && t->y>=r.y && t->x<r.x+r.w && t->y<r.y+r.h;}
+/* Observe real final draw commands after draw_ui, before GPU submission. Expected
+ * colors come independently from the approved palette, not syntax_color(). */
+static void completion_syntax_draw(app *a){
+    memset(&completion_ink,0,sizeof completion_ink);
+    if(!a->completion_active || !a->completion_count)return;
+    const ps_ui_palette *p=a->preferences.theme==PS_THEME_LIGHT?&PS_UI_LIGHT:a->preferences.theme==PS_THEME_HIGH_CONTRAST?&PS_UI_HIGH_CONTRAST:&PS_UI_DARK;
+    const ps_completion_symbol *symbol=ps_completion_at(a->completion_indices[a->completion_selected]);
+    completion_ink.symbol=symbol;
+    struct nk_color selected=symbol->kind==PS_COMPLETION_FUNCTION?p->code_function:symbol->kind==PS_COMPLETION_TYPE?p->code_type:p->code_variable;
+    bool language=document_language(a,a->completion_edit)==1;
+    struct nk_rect row=a->completion_choice_bounds[a->completion_selected-a->completion_first];row.x+=33;row.w-=33;
+    size_t drawn=0;const struct nk_command *cmd;
+    nk_foreach(cmd,a->ui)if(cmd->type==NK_COMMAND_TEXT){
+        const struct nk_command_text *t=(const struct nk_command_text*)cmd;
+        if(completion_ink_region(t,row) && completion_ink_color(t->foreground,selected)){
+            drawn+=(size_t)t->length;
+            if(t->font->userdata.ptr==a->workbench_marker_source->userdata.ptr && completion_ink_word(t,a->completion_query.prefix))completion_ink.prefix=true;
+        }
+        if(completion_ink_region(t,a->completion_info_bounds) && t->y<a->completion_signature_bounds.y && completion_ink_word(t,symbol->name) && completion_ink_color(t->foreground,selected))completion_ink.header=true;
+        const char *leaf=strrchr(symbol->name,'.');if(!leaf)leaf=symbol->name;else leaf++;
+        if(completion_ink_region(t,a->completion_signature_bounds) && completion_ink_word(t,leaf) && completion_ink_color(t->foreground,selected))completion_ink.signature=true;
+        nk_size offset=(nk_size)((const char*)cmd-(const char*)a->ui->memory.memory.ptr);
+        if(offset<a->syntax_commands_begin || offset>=a->syntax_commands_end)continue;
+#define INK(word,role,field) if(completion_ink_word(t,word) && completion_ink_color(t->foreground,p->field))completion_ink.source|=1u<<(role)
+        INK("=",PS_SYNTAX_TEXT,code_text);
+        INK("\"label\"",PS_SYNTAX_STRING,code_string);
+        INK(language?"let":"double",PS_SYNTAX_KEYWORD,code_keyword);
+        INK(language?"Vec3":"ps_vec3",PS_SYNTAX_TYPE,code_type);
+        INK("include",PS_SYNTAX_PREPROCESSOR,code_preprocessor);
+        INK("0.0",PS_SYNTAX_NUMBER,code_number);
+        INK(language?"step":"ps_v3",PS_SYNTAX_FUNCTION,code_function);
+        INK("velocity",PS_SYNTAX_VARIABLE,code_variable);
+        INK("if",PS_SYNTAX_CONTROL,code_control);
+        if(t->length>=2 && !memcmp(t->string,"//",2) && completion_ink_color(t->foreground,p->code_comment))completion_ink.source|=1u<<PS_SYNTAX_COMMENT;
+#undef INK
+    }
+    completion_ink.list=drawn==strlen(ps_completion_insertion(&a->completion_query,symbol));
+}
 static bool completion_test_start(app *a,const char *root,const char *mode) {
     bool language=!strcmp(mode,"completion-phys");
     join(a->project_input,sizeof a->project_input,root,"project");a->example=language?8:0;a->template_analysis_language=language?1:0;new_project(a);
@@ -16,7 +62,7 @@ static bool completion_test_equal(struct nk_text_edit *edit,const char *text) {
     return nk_str_len_char(&edit->string)==(int)length && (!length || (actual && !memcmp(actual,text,length)));
 }
 static void completion_test_frame(app *a,const char *mode,int *stage,int *code,const char **capture) {
-    static unsigned target,seeks;static bool prepared;bool language=!strcmp(mode,"completion-phys"),ok=true;
+    static unsigned target,seeks;static bool prepared;static double reference_due;bool language=!strcmp(mode,"completion-phys"),ok=true;
     const char *original=language?completion_ph_original[target]:completion_c_original[target];
     const char *changed=language?completion_ph_changed[target]:completion_c_changed[target];
     workspace_document *doc=active_document(a);
@@ -26,6 +72,7 @@ static void completion_test_frame(app *a,const char *mode,int *stage,int *code,c
     case 0:
         if(!prepared){ok=open_project(a);prepared=ok;}
         seeks=0;
+        {ps_preferences p=a->preferences;p.theme=target;p.ui_size=target==1?22:16;p.editor_size=target==1?22:12;preferences_apply(a,&p);}
         if(target==2){char path[4096];join(path,sizeof path,a->project,language?"completion-note.phys":"completion-note.c");preview_workspace_path(a,path);}
         else {a->tab=target?2:0;if(target)a->analysis_tab=1;}
         break;
@@ -57,7 +104,10 @@ static void completion_test_frame(app *a,const char *mode,int *stage,int *code,c
         break;
     }
     case 5:
-        ok=a->completion_info_bounds.w>0 && a->completion_reference_bounds.y>=a->completion_info_bounds.y &&
+        {unsigned expected=(1u<<PS_SYNTAX_COUNT)-1;if(language)expected&=~(1u<<PS_SYNTAX_PREPROCESSOR);
+        ok=(completion_ink.source&expected)==expected && completion_ink.list && completion_ink.header && completion_ink.signature && completion_ink.prefix;
+        printf("COMPLETION SYNTAX target=%u theme=%u source=%u expected=%u list=%d header=%d signature=%d prefix-bold=%d\n",target,a->preferences.theme,completion_ink.source,expected,completion_ink.list,completion_ink.header,completion_ink.signature,completion_ink.prefix);}
+        ok=ok &&a->completion_info_bounds.w>0 && a->completion_reference_bounds.y>=a->completion_info_bounds.y &&
            a->completion_reference_bounds.y+a->completion_reference_bounds.h<=a->completion_info_bounds.y+a->completion_info_bounds.h-4;
         *capture=target==0?"completion-experiment.bmp":target==1?"completion-analysis.bmp":"completion-document.bmp";
         if(target==2)test_mouse(a,a->completion_choice_bounds[a->completion_selected-a->completion_first],true);
@@ -109,7 +159,18 @@ static void completion_test_frame(app *a,const char *mode,int *stage,int *code,c
         ok &= set_editor_text(edit,"",0);edit->cursor=edit->select_start=edit->select_end=0;
         test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);*stage=38;break;
     case 38:ok=a->completion_active && a->completion_count>0;test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
-    case 39:ok=!a->completion_active && completion_test_equal(edit,"");a->quitting=true;break;
+    case 39:{const char *name=language?"Mat4.translation":"ps_vlength";
+        ok=!a->completion_active && completion_test_equal(edit,"");ok=ok && set_editor_text(edit,name,strlen(name));
+        edit->cursor=edit->select_start=edit->select_end=(int)strlen(name);test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);reference_due=ps_clock()+3;*stage=41;break;}
+    case 41:
+        ok=a->completion_active;
+        if(ok && (completion_ink.symbol!=ps_completion_at(a->completion_indices[a->completion_selected]) || !completion_ink.header || !completion_ink.signature)){
+            if(ps_clock()<reference_due){--*stage;return;}ok=false;
+        }
+        if(ok)test_mouse(a,a->completion_reference_bounds,true);break;
+    case 42:test_mouse(a,a->completion_reference_bounds,false);break;
+    case 43:ok=!a->completion_active && a->api_reference && !strcmp(a->api_reference_name,language?"Mat4.translation":"ps_vlength") && completion_test_equal(edit,language?"Mat4.translation":"ps_vlength");
+        if(ok)puts("COMPLETION REFERENCE: pointer=1 source-preserved=1");a->quitting=true;break;
     }
     if(!ok){fprintf(stderr,"Completion UI target=%u stage=%d active=%u cursor=%d text=%.*s\n",target,*stage-1,a->completion_active,edit?edit->cursor:-1,edit?nk_str_len_char(&edit->string):7,edit?nk_str_get_const(&edit->string):"missing");*code=1;a->quitting=true;}
     if(a->quitting)printf("COMPLETION SELF-TEST: %s\n",*code?"FAILED":"PASSED");

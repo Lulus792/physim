@@ -72,12 +72,15 @@ size_t ps_completion_matches(const ps_completion_query *q,size_t *indices,size_t
 static bool completion_space(unsigned char c){return c==' ' || c=='\t' || c=='\r' || c=='\n' || c=='\v' || c=='\f';}
 /* The generated catalog is ordered by (language,name). Search the C prefix
  * without allocating a temporary token or walking every documented symbol. */
-static const ps_completion_symbol *c_reference_symbol(const char *text,size_t n) {
+const ps_completion_symbol *ps_completion_lookup(const char *text,size_t n,bool language) {
+    if(!text || !n)return NULL;
     size_t low=0,high=ps_completion_count();
     while(low<high){size_t middle=low+(high-low)/2;const ps_completion_symbol *s=&symbols[middle];
-        int order=s->language?1:strncmp(s->name,text,n);if(!order && s->name[n])order=1;
+        size_t length=strlen(s->name),common=length<n?length:n;
+        int order=s->language!=language?(s->language?1:-1):memcmp(s->name,text,common);
+        if(!order)order=length<n?-1:length>n?1:0;
         if(order<0)low=middle+1;else high=middle;}
-    if(low==ps_completion_count() || symbols[low].language)return NULL;
+    if(low==ps_completion_count() || symbols[low].language!=language)return NULL;
     const ps_completion_symbol *s=&symbols[low];return strlen(s->name)==n && !memcmp(s->name,text,n)?s:NULL;
 }
 static size_t c_reference_trivia(const char *text,size_t n,size_t at) {
@@ -110,7 +113,7 @@ const ps_completion_symbol *ps_completion_c_reference(const char *text,size_t by
             size_t begin=at;while(at<bytes && word((unsigned char)text[at]))at++;
             bool boundary=(!begin || (unsigned char)text[begin-1]<0x80) && (at==bytes || (unsigned char)text[at]<0x80);
             bool member=previous=='.' || (previous=='>' && before_previous=='-') || (previous==':' && before_previous==':');
-            const ps_completion_symbol *s=boundary && !(c>='0' && c<='9') && !member?c_reference_symbol(text+begin,at-begin):NULL;
+            const ps_completion_symbol *s=boundary && !(c>='0' && c<='9') && !member?ps_completion_lookup(text+begin,at-begin,false):NULL;
             if(s){
                 if(!fallback){fallback=s;fallback_at=begin;}
                 size_t call=c_reference_trivia(text,bytes,at);

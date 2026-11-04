@@ -55,8 +55,7 @@ def symbols():
         if "." in name and name[0].isupper():
             owner=name.split(".",1)[0]
             add(True,owner,"Physim",owner,"PS_COMPLETION_TYPE")
-    checker=(ROOT / "src/language/checker.c").read_text(encoding="utf-8")
-    types=checker.split("static int builtin_type_name(",1)[1].split("};",1)[0]
+    types=(ROOT / "src/language/builtin_type_names.inc").read_text(encoding="utf-8")
     for type_name in re.findall(r'"([A-Za-z0-9]+)"',types):
         add(True,type_name,"Physim",type_name,"PS_COMPLETION_TYPE")
     return [entries[key] for key in sorted(entries)]
