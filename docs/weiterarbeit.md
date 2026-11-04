@@ -8,6 +8,8 @@ Prüfung oder Protokoll-Trennlinie allein wegen Kompaktierung erneut beginnen.
 ## Aktueller Anschluss: automatische Vorschläge als Unterbau von D
 
 **Nutzer-Mac aus; keine Zugriffe oder Erreichbarkeitsproben.**
+**Quellstand `25662d6f` ist in beide Repositories gepusht; alle 1.110 Compiler-/
+Testdateien stimmen mit dem Commit überein.**
 **Eingefroren: `completion-auto-refined`, 154 eigene Eingaben / 1.110 Compiler-
 und Testdateien.** Automatische Listen warten 140 ms auf einen unveränderten
 Quell-/Cursor-/Editorstand und übernehmen erst nach ausdrücklicher Auswahl.
@@ -33,8 +35,9 @@ Gegenproben und Orchestrierungsgrenzen](verification/completion-auto-2026-11-04.
 **D bleibt unvollständig:** noch Viererlisten-Renderer, keine neuen Preferences,
 kein echtes Scope-Backend, keine getrennte Parameterhilfe und keine gemeinsame
 freigegebene Syntaxpalette. Diesen Eingabeschritt nicht als gesamte D-Abnahme
-oder volle Punktzahl ausgeben. Der neue Mac-Editor-Workflow prüft die automatische
-Gruppe nach Push; tatsächliche neue Handles im lokalen Arbeitsstand festhalten.
+oder volle Punktzahl ausgeben. Der neue Mac-Editorlauf `41887147796` ist gestartet: Jobs `126774543066`
+(Apple Silicon) / `126774542390` (Intel) zuletzt wartend. Diese Handles beobachten,
+keinen Ersatzlauf anstoßen; tatsächliche Resultate stehen noch aus.
 
 ## Abgeschlossener Einstellungen-Tastaturanschluss
 
@@ -48,7 +51,9 @@ Abbrechen-Assertions erhalten. Lokal je **2/2** mit vier App-Prozessen.
 Gehosteter Lauf `41871954744`: Apple Silicon Job `126721139251` tatsächlich
 **16/16**, ZIP/Digest und vier Originalergebnisdateien gelesen.
 [ARM-Beleg](verification/settings-keyboard-arm-2026-11-04.json).
-Intel Job `126721139641` wartet zuletzt noch; keinen Ersatzlauf anstoßen.
+Intel Job `126721139641` ist inzwischen **abgebrochen (`cancelled`)**; keine
+ausgeführte Intel-Abnahme dieses Stands. Nicht als bestanden oder weiter laufend
+behandeln. Ursache des Abbruchs nicht aus dem Status ableiten.
 Dies prüft `4adf2699`, nicht den späteren Completion-Quellstand.
 Vorheriger Mac-Stand `7064a38c`: Apple Silicon 15/15, Intel 13/14; [historischer
 CI-Snapshot](verification/unit-focus-macos-2026-11-04.json).
@@ -129,9 +134,11 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
 
 ## Nächste konkrete Arbeit
 
-- Intel-Settings-Job `126721139641` und den neuen Completion-Mac-Editorlauf über
-  ihre wirklichen Handles beobachten und tatsächliche Artefakte lesen. ARM-
-  Settings ist mit 16/16 geschlossen; nicht wiederholen. Nutzer-Mac bleibt aus.
+- Neuen Completion-Mac-Editorlauf `41887147796` über seine beiden wirklichen
+  Handles beobachten und tatsächliche Artefakte lesen. Intel-Settings von
+  `4adf2699` wurde abgebrochen und ist nicht abgenommen; vor einem Nachlauf prüfen,
+  ob für den neuen Quellstand bereits ein Settings-Lauf existiert. ARM-Settings
+  ist mit 16/16 geschlossen; nicht wiederholen. Nutzer-Mac bleibt aus.
   Aktueller lokaler Anschluss: `build/validation/completion-auto-2026-11-04/STATE.md`.
 - D konkret weiter umsetzen: fünf sichtbare Zeilen und echte Einstellungen A /
   Editor mit Preferences-Migration und Übernehmen/Abbrechen/Defaults integrieren;
