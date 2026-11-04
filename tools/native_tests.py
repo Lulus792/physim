@@ -113,7 +113,7 @@ def catalog():
                          ("language_string_storage", "language_string"),
                          ("language_locale", "language_locale")):
         cases.append(Case(name, (f"tests/test_{source}.c",)))
-    for part in ("lexer", "parser", "checker"):
+    for part in ("lexer", "parser", "checker", "editor_bindings"):
         cases.append(Case("language_" + part, (f"tests/test_language_{part}.c",),
                           ("language",), timeout=120))
     cases.extend([

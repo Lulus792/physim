@@ -1,0 +1,199 @@
+{
+  "date": "2026-11-05",
+  "user_mac": "off; not contacted or probed",
+  "hosted_only": true,
+  "scope_parser_mac_acceptance": false,
+  "reports": [
+    {
+      "label": "info-editor-intel",
+      "source_commit": "f01f25c15c3cfd133e244435229238d80ba5bd03",
+      "run_id": 41928194536,
+      "job_id": 126918062517,
+      "artifact_id": 13370352802,
+      "zip_sha256": "a87f2423eb4c17e903dea0a5b6d817f42d6a6d08844ee5fefd0aec314164b6d9",
+      "digest_matches_github": true,
+      "includes_scope_parser": false,
+      "original_zip": "build/validation/language-scopes-2026-11-04/info-editor-intel.zip",
+      "all_entries_read": {
+        "Release/test-results/run-q2k93qaq/results.json": "471d6a787f6ad85ded6ede2ef5f18e05ea7d8b38fbb515f5e87ceaefd6d9cd8d"
+      },
+      "results": [
+        {
+          "path": "Release/test-results/run-q2k93qaq/results.json",
+          "cases": [
+            {
+              "name": "documents_small",
+              "status": "passed",
+              "seconds": 11.266
+            },
+            {
+              "name": "documents_large",
+              "status": "passed",
+              "seconds": 10.228
+            },
+            {
+              "name": "completion_workflow",
+              "status": "passed",
+              "seconds": 23.124
+            },
+            {
+              "name": "completion_automatic_workflow",
+              "status": "passed",
+              "seconds": 29.882
+            },
+            {
+              "name": "api_reference_workflow",
+              "status": "passed",
+              "seconds": 17.008
+            },
+            {
+              "name": "completion_info_workflow",
+              "status": "passed",
+              "seconds": 50.857
+            }
+          ]
+        }
+      ],
+      "failure_lines": [],
+      "passed": 6,
+      "count": 6
+    },
+    {
+      "label": "info-editor-arm",
+      "source_commit": "f01f25c15c3cfd133e244435229238d80ba5bd03",
+      "run_id": 41928194536,
+      "job_id": 126918063025,
+      "artifact_id": 13370946343,
+      "zip_sha256": "6139ad929e05d26f43967766b48f3a53c8bccb7c299d15ee31225089965b4d16",
+      "digest_matches_github": true,
+      "includes_scope_parser": false,
+      "original_zip": "build/validation/language-scopes-2026-11-04/info-editor-arm.zip",
+      "all_entries_read": {
+        "Release/test-results/run-zuf565yc/results.json": "2611a6d7497ba76baa0263dda3eb21102fd40bff9518416cb6c3c31a3df3c2b4"
+      },
+      "results": [
+        {
+          "path": "Release/test-results/run-zuf565yc/results.json",
+          "cases": [
+            {
+              "name": "documents_small",
+              "status": "passed",
+              "seconds": 7.812
+            },
+            {
+              "name": "documents_large",
+              "status": "passed",
+              "seconds": 5.539
+            },
+            {
+              "name": "completion_workflow",
+              "status": "passed",
+              "seconds": 17.652
+            },
+            {
+              "name": "completion_automatic_workflow",
+              "status": "failed",
+              "seconds": 13.812
+            },
+            {
+              "name": "api_reference_workflow",
+              "status": "passed",
+              "seconds": 11.8
+            },
+            {
+              "name": "completion_info_workflow",
+              "status": "passed",
+              "seconds": 39.108
+            }
+          ]
+        }
+      ],
+      "failure_lines": [
+        "Auto completion stage=71 active=1 explicit=1 pending=0 composing=0 cursor=0 first=644 selected=648 rows=5 count=649 text=",
+        "First workflow failure at stage 71 (next 71): Projekt geladen. Build kompiliert die lokalen Quelldateien. (tab=0, selected=0, samples=0, report=0, query=)",
+        "Auto completion stage=71 active=1 explicit=1 pending=0 composing=0 cursor=0 first=644 selected=648 rows=5 count=649 text=",
+        "First workflow failure at stage 71 (next 71): Projekt geladen. Build kompiliert die lokalen Quelldateien. (tab=0, selected=0, samples=0, report=0, query=)"
+      ],
+      "passed": 5,
+      "count": 6
+    },
+    {
+      "label": "info-f1-intel",
+      "source_commit": "f01f25c15c3cfd133e244435229238d80ba5bd03",
+      "run_id": 41928194478,
+      "job_id": 126918063242,
+      "artifact_id": 13371511519,
+      "zip_sha256": "253967f3b3ebe1b6ec4108d66cf3f84991d0c2a79bc6b2aab60edf57e09ae2fc",
+      "digest_matches_github": true,
+      "includes_scope_parser": false,
+      "original_zip": "build/validation/language-scopes-2026-11-04/info-f1-intel.zip",
+      "all_entries_read": {
+        "Release/font-bank-state-counterexample/binding/stderr": "50ac9f3216f41c7007722ca9e6053e632e3c59dbdb1abf285d3517819412f062",
+        "Release/font-bank-state-counterexample/report.json": "8f512ce0052bf00f4a1a73a4a597d9af5029493a700b0a3f61cecfcf10094dae",
+        "Release/font-bank-state-counterexample/unpack/stderr": "df27686857e61858cf57f50d5da350756ca033201241f7596cc57fdb741783ee",
+        "Release/native-search-counterexample/report.json": "001c9d1e53cdbeaad50aa00a60a06d94dd10c3d18edace85322006c3f8f294c8",
+        "Release/native-search-counterexample/stderr": "c2fccb3f00391dc31e2a4091f799156b42a352ca2a3b24d9e381eba6e7ec93f3",
+        "Release/native-search-counterexample/stdout": "ef1e47ee5c8b380d89b78272985e92b82d4a5ffcf7815b5afe8c5a9fea224101",
+        "Release/test-results/run-74p7c92r/results.json": "d7a392d638c4eb85249dff3aaec57c619321b50a54de19a4dd6a1fa7412d66c3",
+        "Release/test-results/run-cket7ztr/results.json": "9098d1b5d4c62f45bdafc8375cf2fc666cba9cde151a2b6fd3555a5fd17606e5"
+      },
+      "results": [
+        {
+          "path": "Release/test-results/run-74p7c92r/results.json",
+          "cases": [
+            {
+              "name": "font_bank_ui",
+              "status": "passed",
+              "seconds": 0.274,
+              "exit_code": 0
+            },
+            {
+              "name": "documentation_math",
+              "status": "passed",
+              "seconds": 15.701
+            },
+            {
+              "name": "accessibility_edit_macos",
+              "status": "passed",
+              "seconds": 4.07
+            },
+            {
+              "name": "documentation_panes",
+              "status": "passed",
+              "seconds": 54.353
+            },
+            {
+              "name": "documentation_h",
+              "status": "passed",
+              "seconds": 51.691
+            }
+          ]
+        },
+        {
+          "path": "Release/test-results/run-cket7ztr/results.json",
+          "cases": [
+            {
+              "name": "font_sources",
+              "status": "passed",
+              "seconds": 0.032,
+              "exit_code": 0
+            }
+          ]
+        }
+      ],
+      "failure_lines": [],
+      "passed": 6,
+      "count": 6
+    }
+  ],
+  "still_queued": {
+    "settings_run": 41928194543,
+    "intel_job": 126918063971,
+    "arm_job": 126918062297,
+    "f1_arm_job": 126918062826
+  },
+  "conclusions": [
+    "Intel actual completion info regression passed; ARM exact failure retained, cause open.",
+    "Intel F1 current snapshot passed; previous timeouts not thereby diagnosed or erased."
+  ]
+}

@@ -1,7 +1,13 @@
 #include "parser.h"
+#include "editor_bindings.h"
 #include <string.h>
 
 enum { PS_PARSE_DEPTH = 128 };
+typedef struct editor_bindings {
+    ps_lang_editor_binding *items;
+    size_t count, capacity, cursor_indent;
+    int limited, nonblank, resource_limited;
+} editor_bindings;
 typedef struct parser {
     ps_lang_lexer lexer;
     ps_lang_token current, error;
@@ -11,6 +17,8 @@ typedef struct parser {
     unsigned depth;
     unsigned index_range_depth;
     unsigned lambda_block_count;
+    editor_bindings *editor;
+    ps_lang_token record_name;
 } parser;
 
 static void error(parser *p, const char *message) {
@@ -95,6 +103,7 @@ static int enter(parser *p) {
     if (p->error.kind == PS_LANG_ERROR)
         return 0;
     if (p->depth >= PS_PARSE_DEPTH) {
+        if (p->editor) p->editor->resource_limited = 1;
         error(p, "Syntax nesting limit exceeded (128)");
         return 0;
     }
@@ -106,11 +115,12 @@ static size_t node(parser *p, ps_lang_node_kind kind, ps_lang_token t, size_t a,
     if (p->error.kind == PS_LANG_ERROR)
         return 0;
     if (p->count >= p->capacity) {
+        if (p->editor) p->editor->resource_limited = 1;
         error(p, "Syntax node capacity exceeded");
         return 0;
     }
     size_t id = p->count++;
-    p->nodes[id] = (ps_lang_node){kind, t, a, b, c, 0};
+    p->nodes[id] = (ps_lang_node){kind, t, a, b, c, 0, 0, 0};
     return id;
 }
 static void append(parser *p, size_t *first, size_t *last, size_t id) {
@@ -125,6 +135,39 @@ static void append(parser *p, size_t *first, size_t *last, size_t id) {
 static size_t expression(parser *p, int minimum, int multiline);
 static size_t statement(parser *p);
 static size_t block(parser *p, size_t parent_indent);
+static size_t binding_block(parser *p, size_t parent_indent, size_t parameters,
+                            size_t condition, const ps_lang_token *iterator);
+static void editor_add(parser *p, ps_lang_token name, ps_lang_editor_binding_kind kind,
+                       size_t annotation) {
+    if (!p->editor || p->error.kind == PS_LANG_ERROR) return;
+    editor_bindings *e = p->editor;
+    if (e->count == e->capacity) {e->limited = 1;return;}
+    ps_lang_editor_binding binding = {name, kind, 0, 0};
+    if (annotation) {
+        binding.type_start = p->nodes[annotation].type_start;
+        binding.type_end = p->nodes[annotation].type_end;
+    }
+    if (kind == PS_LANG_EDITOR_SELF) {
+        binding.type_start = p->record_name.offset;
+        binding.type_end = p->record_name.offset + p->record_name.length;
+    }
+    e->items[e->count++] = binding;
+}
+static void editor_condition(parser *p, size_t condition) {
+    if (condition && p->nodes[condition].kind == PS_AST_OPTIONAL_BINDING)
+        editor_add(p, p->nodes[condition].token, PS_LANG_EDITOR_VARIABLE, p->nodes[condition].b);
+}
+static void editor_payload(parser *p, size_t value, unsigned depth) {
+    if (!p->editor || !value || depth >= PS_PARSE_DEPTH) return;
+    const ps_lang_node *n = &p->nodes[value];
+    if (n->kind == PS_AST_NAME) {
+        if (n->token.length != 1 || p->lexer.source[n->token.offset] != '_')
+            editor_add(p, n->token, PS_LANG_EDITOR_PATTERN, 0);
+    } else if (n->kind == PS_AST_CALL && p->nodes[n->a].kind == PS_AST_MEMBER) {
+        for (size_t arg = n->b; arg; arg = p->nodes[arg].next)
+            if (!p->nodes[arg].token.length) editor_payload(p, p->nodes[arg].a, depth + 1);
+    }
+}
 static int contextual_by(parser *p) {
     return p->current.kind == PS_LANG_IDENTIFIER && p->current.length == 2 &&
            memcmp(p->lexer.source + p->current.offset, "by", 2) == 0;
@@ -190,6 +233,10 @@ static size_t type(parser *p) {
     }
     while (accept(p, PS_LANG_QUESTION))
         id = node(p, PS_AST_OPTIONAL_TYPE, t, id, 0, 0);
+    if (id && p->error.kind != PS_LANG_ERROR) {
+        p->nodes[id].type_start = t.offset;
+        p->nodes[id].type_end = p->current.offset;
+    }
     p->depth--;
     return id;
 }
@@ -393,7 +440,7 @@ static size_t primary(parser *p, int multiline) {
             newlines(p);
             result = type(p);
         }
-        size_t body = block(p, indentation);
+        size_t body = binding_block(p, indentation, first, 0, NULL);
         p->lambda_block_count++;
         id = node(p, PS_AST_LAMBDA, t, first, result, body);
     } else if (accept(p, PS_LANG_IDENTIFIER)) {
@@ -553,15 +600,30 @@ static size_t expression(parser *p, int minimum, int multiline) {
     p->depth--;
     return left;
 }
-static size_t block(parser *p, size_t parent_indent) {
+static size_t binding_block(parser *p, size_t parent_indent, size_t parameters,
+                            size_t condition, const ps_lang_token *iterator) {
     ps_lang_token t = p->current;
     if (!expect(p, PS_LANG_COLON, "Expected ':' to start an indented block") ||
         !expect(p, PS_LANG_NEWLINE, "Expected newline after ':'"))
         return 0;
     size_t first = 0, last = 0;
     newlines(p);
+    size_t mark = p->editor ? p->editor->count : 0;
+    int limited_mark = p->editor ? p->editor->limited : 0;
+    int inside = p->current.kind == PS_LANG_EOF
+                     ? p->editor && p->editor->cursor_indent > parent_indent
+                     : p->indent > parent_indent;
+    if (inside && p->error.kind != PS_LANG_ERROR) {
+        for (size_t parameter = parameters; parameter; parameter = p->nodes[parameter].next) {
+            ps_lang_node n = p->nodes[parameter];
+            editor_add(p, n.token, n.kind == PS_AST_SELF_PARAMETER ? PS_LANG_EDITOR_SELF : PS_LANG_EDITOR_PARAMETER, n.a);
+        }
+        editor_condition(p, condition);
+        if (iterator) editor_add(p, *iterator, PS_LANG_EDITOR_ITERATOR, 0);
+    }
     if (p->current.kind == PS_LANG_EOF || p->indent <= parent_indent) {
         error(p, "Expected an indented block");
+        if (p->editor && !inside) {p->editor->count = mark;p->editor->limited = limited_mark;}
         return 0;
     }
     size_t body_indent = p->indent;
@@ -574,7 +636,13 @@ static size_t block(parser *p, size_t parent_indent) {
         append(p, &first, &last, statement(p));
         separators(p);
     }
+    if (p->editor && !(p->current.kind == PS_LANG_EOF &&
+        (p->editor->nonblank || p->editor->cursor_indent > parent_indent ||
+         p->error.kind == PS_LANG_ERROR))) {p->editor->count = mark;p->editor->limited = limited_mark;}
     return node(p, PS_AST_BLOCK, t, first, 0, 0);
+}
+static size_t block(parser *p, size_t parent_indent) {
+    return binding_block(p, parent_indent, 0, 0, NULL);
 }
 static size_t function(parser *p, size_t parent_indent, int method);
 static size_t conditional_condition(parser *p) {
@@ -608,6 +676,8 @@ static size_t record(parser *p, size_t parent_indent) {
         error(p, "Expected indented struct fields");
         return 0;
     }
+    ps_lang_token saved_record = p->record_name;
+    p->record_name = name;
     size_t indentation = p->indent, first = 0, last = 0;
     size_t methods = 0, last_method = 0;
     while (p->current.kind != PS_LANG_EOF && p->indent > parent_indent &&
@@ -653,6 +723,7 @@ static size_t record(parser *p, size_t parent_indent) {
     }
     size_t signature = generic ? node(p, PS_AST_GENERIC_SIGNATURE, name,
                                       type_parameters, 0, template_start) : 0;
+    p->record_name = saved_record;
     return node(p, generic ? PS_AST_GENERIC_STRUCT : PS_AST_STRUCT,
                 name, first, methods, signature);
 }
@@ -673,6 +744,8 @@ static size_t enumeration(parser *p, size_t parent_indent) {
         error(p, "Expected indented enum cases");
         return 0;
     }
+    ps_lang_token saved_record = p->record_name;
+    p->record_name = name;
     size_t indentation = p->indent, first = 0, last = 0;
     size_t methods = 0, last_method = 0;
     while (p->current.kind != PS_LANG_EOF && p->indent > parent_indent &&
@@ -723,6 +796,7 @@ static size_t enumeration(parser *p, size_t parent_indent) {
     }
     size_t signature = generic ? node(p, PS_AST_GENERIC_SIGNATURE, name,
                                       type_parameters, 0, template_start) : 0;
+    p->record_name = saved_record;
     return node(p, generic ? PS_AST_GENERIC_ENUM : PS_AST_ENUM,
                 name, first, methods, signature);
 }
@@ -761,10 +835,19 @@ static size_t selection(parser *p, ps_lang_token keyword, size_t parent_indent) 
             error(p, "Expected case or default in switch");
             break;
         }
+        size_t editor_mark = p->editor ? p->editor->count : 0;
+        int limited_mark = p->editor ? p->editor->limited : 0;
+        if (pattern && !p->nodes[pattern].next && p->nodes[pattern].kind == PS_AST_CALL)
+            editor_payload(p, pattern, 0);
         size_t guard = 0;
         if (pattern && accept(p, PS_LANG_IF))
             guard = expression(p, 1, 0);
         size_t body = block(p, indentation);
+        if (p->editor && !(p->current.kind == PS_LANG_EOF &&
+            (p->editor->nonblank || p->editor->cursor_indent > indentation ||
+             p->error.kind == PS_LANG_ERROR))) {
+            p->editor->count = editor_mark;p->editor->limited = limited_mark;
+        }
         append(p, &first, &last, node(p, PS_AST_SWITCH_ARM, arm, pattern, body, guard));
         separators(p);
     }
@@ -812,7 +895,7 @@ static size_t function(parser *p, size_t parent_indent, int method) {
     if (generic)
         result = node(p, PS_AST_GENERIC_SIGNATURE, name, type_parameters, result,
                       template_start);
-    size_t body = block(p, parent_indent);
+    size_t body = binding_block(p, parent_indent, first, 0, NULL);
     return node(p, generic ? PS_AST_GENERIC_FUNCTION : PS_AST_FUNCTION,
                 name, first, result, body);
 }
@@ -863,7 +946,7 @@ static size_t statement(parser *p) {
     } else if (t.kind == PS_LANG_IF || t.kind == PS_LANG_WHILE) {
         advance(p);
         size_t condition = conditional_condition(p);
-        size_t body = block(p, statement_indent), alternative = 0;
+        size_t body = binding_block(p, statement_indent, 0, condition, NULL), alternative = 0;
         if (t.kind == PS_LANG_IF) {
             newlines(p);
             if (p->indent == statement_indent && accept(p, PS_LANG_ELSE)) {
@@ -878,6 +961,9 @@ static size_t statement(parser *p) {
         size_t condition = conditional_condition(p);
         expect(p, PS_LANG_ELSE, "Expected 'else' after guard condition");
         size_t alternative = block(p, statement_indent);
+        if (p->current.kind != PS_LANG_EOF ||
+            (p->editor && !p->editor->nonblank && p->editor->cursor_indent <= statement_indent &&
+             p->error.kind != PS_LANG_ERROR)) editor_condition(p, condition);
         id = node(p, PS_AST_GUARD, t, condition, alternative, 0);
         compound = 1;
     } else if (accept(p, PS_LANG_FOR)) {
@@ -885,7 +971,7 @@ static size_t statement(parser *p) {
         expect(p, PS_LANG_IDENTIFIER, "Expected iteration variable");
         expect(p, PS_LANG_IN, "Expected 'in' after iteration variable");
         size_t iterable = expression(p, 1, 0);
-        size_t body = block(p, statement_indent);
+        size_t body = binding_block(p, statement_indent, 0, 0, &name);
         id = node(p, PS_AST_FOR, name, iterable, body, 0);
         compound = 1;
     } else if (t.kind == PS_LANG_BREAK || t.kind == PS_LANG_CONTINUE) {
@@ -921,12 +1007,21 @@ static size_t statement(parser *p) {
         p->current.kind != PS_LANG_NEWLINE && p->current.kind != PS_LANG_SEMICOLON &&
         p->current.kind != PS_LANG_EOF)
         error(p, "Expected newline or ';' after statement");
+    /* A lambda's indented body consumes its trailing separators. Its completed
+     * declaration can therefore end at a dedented token/blank cursor line. */
+    int lambda_finished = lambda_blocks_before != p->lambda_block_count &&
+        (p->current.kind != PS_LANG_EOF || (p->editor && !p->editor->nonblank &&
+                                           p->editor->cursor_indent <= statement_indent));
+    if (id && p->nodes[id].kind == PS_AST_VARIABLE &&
+        (p->current.kind == PS_LANG_NEWLINE || p->current.kind == PS_LANG_SEMICOLON || lambda_finished))
+        editor_add(p, p->nodes[id].token, PS_LANG_EDITOR_VARIABLE, p->nodes[id].a);
     p->depth--;
     return id;
 }
-ps_lang_parse_result ps_lang_parse(const void *source, size_t size, ps_lang_node *nodes,
-                                   size_t capacity) {
+static ps_lang_parse_result parse(const void *source, size_t size, ps_lang_node *nodes,
+                                  size_t capacity, editor_bindings *editor) {
     parser p = {0};
+    p.editor = editor;
     p.nodes = nodes;
     p.capacity = capacity;
     p.count = capacity && nodes ? 1 : 0;
@@ -973,4 +1068,44 @@ ps_lang_parse_result ps_lang_parse(const void *source, size_t size, ps_lang_node
     }
     size_t root = node(&p, PS_AST_MODULE, start, first, 0, 0);
     return (ps_lang_parse_result){p.error.kind == PS_LANG_ERROR ? 0 : root, p.count, p.error};
+}
+ps_lang_parse_result ps_lang_parse(const void *source, size_t size, ps_lang_node *nodes,
+                                   size_t capacity) {
+    return parse(source, size, nodes, capacity, NULL);
+}
+ps_lang_editor_bindings_result ps_lang_editor_bindings(
+    const void *source, size_t size, size_t cursor, ps_lang_node *nodes, size_t node_capacity,
+    ps_lang_editor_binding *bindings, size_t binding_capacity) {
+    ps_lang_editor_bindings_result result = {0, PS_LANG_EDITOR_INVALID, {0}};
+    if ((!source && size) || cursor > size || !nodes || node_capacity < 2 ||
+        (binding_capacity && !bindings)) return result;
+    const unsigned char *text = source;
+    if (cursor < size && (text[cursor] & 0xc0) == 0x80) return result;
+    size_t line = cursor;
+    while (line && text[line - 1] != '\n') line--;
+    size_t indent = line;
+    while (indent < cursor && text[indent] == ' ') indent++;
+    editor_bindings e = {bindings, 0, binding_capacity, indent - line, 0, indent != cursor, 0};
+    if (!e.nonblank && cursor < size) {
+        /* Blank lines do not themselves dedent in the real lexer. Consult
+         * only layout beyond the caret, not future declarations or values. */
+        ps_lang_lexer lookahead;
+        ps_lang_lexer_init(&lookahead, source, size);
+        for (;;) {
+            ps_lang_token next = ps_lang_lexer_next(&lookahead);
+            if (next.kind == PS_LANG_ERROR || next.kind == PS_LANG_EOF) break;
+            if (next.offset < cursor || next.kind == PS_LANG_NEWLINE) continue;
+            size_t begin = next.offset - (next.column - 1), end = begin;
+            while (end < next.offset && text[end] == ' ') end++;
+            e.cursor_indent = end - begin;
+            break;
+        }
+    }
+    ps_lang_parse_result parsed = parse(source, cursor, nodes, node_capacity, &e);
+    result.diagnostic = parsed.diagnostic;
+    if (e.limited || e.resource_limited) result.status = PS_LANG_EDITOR_LIMIT;
+    else if (parsed.root) result.status = PS_LANG_EDITOR_OK;
+    else if (parsed.diagnostic.offset == cursor) result.status = PS_LANG_EDITOR_PREFIX;
+    if (result.status == PS_LANG_EDITOR_OK || result.status == PS_LANG_EDITOR_PREFIX) result.count = e.count;
+    return result;
 }

@@ -64,6 +64,9 @@ typedef struct ps_lang_node {
     ps_lang_node_kind kind;
     ps_lang_token token;
     size_t a, b, c, next;
+    /* Exact written type annotation, including grouping/qualification. Set by
+     * the parser's type production; zero on other/synthesized nodes. */
+    size_t type_start, type_end;
 } ps_lang_node;
 
 typedef struct ps_lang_parse_result {

@@ -1,0 +1,1166 @@
+{
+  "date": "2026-11-05",
+  "started": "2026-11-04",
+  "objective_complete": false,
+  "storage": "D: only; F: untouched",
+  "user_mac": "off; no access/probe/upload",
+  "scope": "Physim real-parser lexical binding extraction foundation; no native completion integration or C scopes yet",
+  "final_phase": "language-scopes-affinity",
+  "phases": {
+    "language-scopes-parser": {
+      "windows": {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--no-app",
+          "--test",
+          "--test-filter",
+          "language_editor_bindings",
+          "--test-filter",
+          "language_parser",
+          "--test-filter",
+          "language_checker",
+          "--test-filter",
+          "source_outline",
+          "--test-filter",
+          "syntax"
+        ],
+        "exit_code": 0,
+        "no_app": true,
+        "display_tests": false,
+        "compiler_and_units_only": true,
+        "asan_options": "detect_leaks=1:halt_on_error=1",
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/language-scopes-parser-windows.json",
+          "sha256": "910bed2a45bda1ddd1fe422bc61dc1b909de51a05ca0d78cf6bbb04ff9d499b9",
+          "bytes": 1037
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/language-scopes-parser-windows.log",
+          "sha256": "e2bd35fc5117d7380fdec6eb350946779162c5d6a95420cfd9f01ce6ffb7c367",
+          "bytes": 8542
+        },
+        "run": "run-tl4vac0i",
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-tl4vac0i/results.json",
+          "sha256": "20c8ef2acc0ced9a7b0b44f7276be03f9b76164ecb2bba769d172c614b209334",
+          "bytes": 2190
+        },
+        "passed": 5,
+        "count": 5,
+        "cases": [
+          {
+            "name": "source_outline",
+            "status": "passed",
+            "seconds": 0.062,
+            "exit_code": 0,
+            "stdout": "source outline tests passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "syntax",
+            "status": "passed",
+            "seconds": 0.14,
+            "exit_code": 0,
+            "stdout": "Shared syntax: exact catalog roles, C/Physim, declaration override, line continuations, nested comments, multiline strings, Unicode, all prefix partitions and failure preservation passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "language_parser",
+            "status": "passed",
+            "seconds": 0.109,
+            "exit_code": 0,
+            "stdout": "Language parser: AST, precedence, diagnostics, resource limits and mutations passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "language_checker",
+            "status": "passed",
+            "seconds": 5.704,
+            "exit_code": 0,
+            "stdout": "Language checker: scopes, types, calls, control flow, limits and mutations passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "language_editor_bindings",
+            "status": "passed",
+            "seconds": 0.063,
+            "exit_code": 0,
+            "stdout": "Physim editor bindings: 32 real-parser prefixes, lexical scopes, shadow lookup, declarations, parameters, loops, guards, patterns, self, type spans, UTF-8 and bounded failures passed\nStrict/observed AST field parity and binding bounds: 1024 deterministic byte inputs passed\n",
+            "stderr": ""
+          }
+        ]
+      },
+      "linux": {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+          "--build-dir",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+          "--config",
+          "Debug",
+          "--jobs",
+          "4",
+          "--no-app",
+          "--test",
+          "--sanitizers",
+          "--test-filter",
+          "language_editor_bindings",
+          "--test-filter",
+          "language_parser",
+          "--test-filter",
+          "language_checker",
+          "--test-filter",
+          "source_outline",
+          "--test-filter",
+          "syntax"
+        ],
+        "exit_code": 0,
+        "no_app": true,
+        "display_tests": false,
+        "compiler_and_units_only": true,
+        "asan_options": "detect_leaks=1:halt_on_error=1",
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/language-scopes-parser-linux.json",
+          "sha256": "3bdc89aadded8a3cb2f1267e6c6110074717d6e1855c9b105796e94819d93df9",
+          "bytes": 850
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/language-scopes-parser-linux.log",
+          "sha256": "7c39fe9dce09095d07bfe94da7c298e52267c0eec5f989044b4ae28baa99f147",
+          "bytes": 30259
+        },
+        "run": "run-1yrw9_ea",
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-1yrw9_ea/results.json",
+          "sha256": "51cd652cfa9193d2cb17b9053257a46491ff75e8c8023aa658450548d98e3c27",
+          "bytes": 2084
+        },
+        "passed": 5,
+        "count": 5,
+        "cases": [
+          {
+            "name": "source_outline",
+            "status": "passed",
+            "seconds": 0.068,
+            "exit_code": 0,
+            "stdout": "source outline tests passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "syntax",
+            "status": "passed",
+            "seconds": 0.036,
+            "exit_code": 0,
+            "stdout": "Shared syntax: exact catalog roles, C/Physim, declaration override, line continuations, nested comments, multiline strings, Unicode, all prefix partitions and failure preservation passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "language_parser",
+            "status": "passed",
+            "seconds": 0.393,
+            "exit_code": 0,
+            "stdout": "Language parser: AST, precedence, diagnostics, resource limits and mutations passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "language_checker",
+            "status": "passed",
+            "seconds": 35.377,
+            "exit_code": 0,
+            "stdout": "Language checker: scopes, types, calls, control flow, limits and mutations passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "language_editor_bindings",
+            "status": "passed",
+            "seconds": 0.04,
+            "exit_code": 0,
+            "stdout": "Physim editor bindings: 32 real-parser prefixes, lexical scopes, shadow lookup, declarations, parameters, loops, guards, patterns, self, type spans, UTF-8 and bounded failures passed\nStrict/observed AST field parity and binding bounds: 1024 deterministic byte inputs passed\n",
+            "stderr": ""
+          }
+        ]
+      },
+      "source_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/language-scopes-parser-compiler-source.json",
+        "sha256": "ee78b36c1c461f187961398dfde9f4aa7e9e8b7a1fc12758864dbeb233d60790",
+        "bytes": 119112
+      },
+      "own_inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/language-scopes-parser-inputs.json",
+        "sha256": "28fc9a7d2cf7883839e095a648cb30a8e1b85e9e9712e421f285b428a3b30206",
+        "bytes": 17711
+      },
+      "runtime_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/language-scopes-parser-runtime.json",
+        "sha256": "58666b2a82450384456ebf3b61540270a9009f3942547b800b32deeeee3dde18",
+        "bytes": 42010
+      }
+    },
+    "language-scopes-refined": {
+      "windows": {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--no-app",
+          "--test",
+          "--test-filter",
+          "language_editor_bindings",
+          "--test-filter",
+          "language_parser",
+          "--test-filter",
+          "language_checker",
+          "--test-filter",
+          "source_outline",
+          "--test-filter",
+          "syntax"
+        ],
+        "exit_code": 0,
+        "no_app": true,
+        "display_tests": false,
+        "compiler_and_units_only": true,
+        "asan_options": "detect_leaks=1:halt_on_error=1",
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/language-scopes-refined-windows.json",
+          "sha256": "910bed2a45bda1ddd1fe422bc61dc1b909de51a05ca0d78cf6bbb04ff9d499b9",
+          "bytes": 1037
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/language-scopes-refined-windows.log",
+          "sha256": "29e9d001ba3ebfcce1bb8a07aa9452d502643ca34448c5badb60067eb5bfa3de",
+          "bytes": 730
+        },
+        "run": "run-a_cflptz",
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-a_cflptz/results.json",
+          "sha256": "da24a4b57aec329a3c47d0649950b5102d12ae5fb7bcbb8848fcfb39e6cb43a3",
+          "bytes": 2190
+        },
+        "passed": 5,
+        "count": 5,
+        "cases": [
+          {
+            "name": "source_outline",
+            "status": "passed",
+            "seconds": 0.047,
+            "exit_code": 0,
+            "stdout": "source outline tests passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "syntax",
+            "status": "passed",
+            "seconds": 0.125,
+            "exit_code": 0,
+            "stdout": "Shared syntax: exact catalog roles, C/Physim, declaration override, line continuations, nested comments, multiline strings, Unicode, all prefix partitions and failure preservation passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "language_parser",
+            "status": "passed",
+            "seconds": 0.11,
+            "exit_code": 0,
+            "stdout": "Language parser: AST, precedence, diagnostics, resource limits and mutations passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "language_checker",
+            "status": "passed",
+            "seconds": 5.141,
+            "exit_code": 0,
+            "stdout": "Language checker: scopes, types, calls, control flow, limits and mutations passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "language_editor_bindings",
+            "status": "passed",
+            "seconds": 0.062,
+            "exit_code": 0,
+            "stdout": "Physim editor bindings: 34 real-parser prefixes, lexical scopes, shadow lookup, declarations, parameters, loops, guards, patterns, self, type spans, UTF-8 and bounded failures passed\nStrict/observed AST field parity and binding bounds: 1024 deterministic byte inputs passed\n",
+            "stderr": ""
+          }
+        ]
+      },
+      "linux": {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+          "--build-dir",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+          "--config",
+          "Debug",
+          "--jobs",
+          "4",
+          "--no-app",
+          "--test",
+          "--sanitizers",
+          "--test-filter",
+          "language_editor_bindings",
+          "--test-filter",
+          "language_parser",
+          "--test-filter",
+          "language_checker",
+          "--test-filter",
+          "source_outline",
+          "--test-filter",
+          "syntax"
+        ],
+        "exit_code": 0,
+        "no_app": true,
+        "display_tests": false,
+        "compiler_and_units_only": true,
+        "asan_options": "detect_leaks=1:halt_on_error=1",
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/language-scopes-refined-linux.json",
+          "sha256": "3bdc89aadded8a3cb2f1267e6c6110074717d6e1855c9b105796e94819d93df9",
+          "bytes": 850
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/language-scopes-refined-linux.log",
+          "sha256": "e5a2015b509dfcb49e36a0dcc361e5f27b0dce9b1cc698b0aeb03d6438175b97",
+          "bytes": 652
+        },
+        "run": "run-c90ctmc8",
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-c90ctmc8/results.json",
+          "sha256": "7846099885f0e87bcbd380f0e2ba6eda363f7831cd5956c55f0cee92678675bd",
+          "bytes": 2084
+        },
+        "passed": 5,
+        "count": 5,
+        "cases": [
+          {
+            "name": "source_outline",
+            "status": "passed",
+            "seconds": 0.062,
+            "exit_code": 0,
+            "stdout": "source outline tests passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "syntax",
+            "status": "passed",
+            "seconds": 0.034,
+            "exit_code": 0,
+            "stdout": "Shared syntax: exact catalog roles, C/Physim, declaration override, line continuations, nested comments, multiline strings, Unicode, all prefix partitions and failure preservation passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "language_parser",
+            "status": "passed",
+            "seconds": 0.447,
+            "exit_code": 0,
+            "stdout": "Language parser: AST, precedence, diagnostics, resource limits and mutations passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "language_checker",
+            "status": "passed",
+            "seconds": 34.046,
+            "exit_code": 0,
+            "stdout": "Language checker: scopes, types, calls, control flow, limits and mutations passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "language_editor_bindings",
+            "status": "passed",
+            "seconds": 0.04,
+            "exit_code": 0,
+            "stdout": "Physim editor bindings: 34 real-parser prefixes, lexical scopes, shadow lookup, declarations, parameters, loops, guards, patterns, self, type spans, UTF-8 and bounded failures passed\nStrict/observed AST field parity and binding bounds: 1024 deterministic byte inputs passed\n",
+            "stderr": ""
+          }
+        ]
+      },
+      "source_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/language-scopes-refined-compiler-source.json",
+        "sha256": "4818c551db44dc5b61885920a65d825e92884de8b35ae031d9ec6cd2a445b296",
+        "bytes": 119017
+      },
+      "own_inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/language-scopes-refined-inputs.json",
+        "sha256": "04a84a622e5d6fbae6601d534c5d28a45103094150fcb91f5d0c70c459167648",
+        "bytes": 17711
+      },
+      "runtime_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/language-scopes-refined-runtime.json",
+        "sha256": "7488f8d97f41bff5ed16bab9072c292cf20b74d4f746fb7d3abe44e899b65fb0",
+        "bytes": 42012
+      }
+    },
+    "language-scopes-affinity": {
+      "windows": {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--no-app",
+          "--test",
+          "--test-filter",
+          "language_editor_bindings",
+          "--test-filter",
+          "language_parser",
+          "--test-filter",
+          "language_checker",
+          "--test-filter",
+          "source_outline",
+          "--test-filter",
+          "syntax"
+        ],
+        "exit_code": 0,
+        "no_app": true,
+        "display_tests": false,
+        "compiler_and_units_only": true,
+        "asan_options": "detect_leaks=1:halt_on_error=1",
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/language-scopes-affinity-windows.json",
+          "sha256": "910bed2a45bda1ddd1fe422bc61dc1b909de51a05ca0d78cf6bbb04ff9d499b9",
+          "bytes": 1037
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/language-scopes-affinity-windows.log",
+          "sha256": "2755159cc61bc9a7a10a3bc8e5f52039f47b44f09c79d2e7f2b73acc223f93c6",
+          "bytes": 8542
+        },
+        "run": "run-efq_y_cx",
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-efq_y_cx/results.json",
+          "sha256": "4dbb8912830d74addc4fc76ac07c40c893706e6c9f8558046ff3d744abdb12fc",
+          "bytes": 2190
+        },
+        "passed": 5,
+        "count": 5,
+        "cases": [
+          {
+            "name": "source_outline",
+            "status": "passed",
+            "seconds": 0.078,
+            "exit_code": 0,
+            "stdout": "source outline tests passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "syntax",
+            "status": "passed",
+            "seconds": 0.141,
+            "exit_code": 0,
+            "stdout": "Shared syntax: exact catalog roles, C/Physim, declaration override, line continuations, nested comments, multiline strings, Unicode, all prefix partitions and failure preservation passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "language_parser",
+            "status": "passed",
+            "seconds": 0.11,
+            "exit_code": 0,
+            "stdout": "Language parser: AST, precedence, diagnostics, resource limits and mutations passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "language_checker",
+            "status": "passed",
+            "seconds": 6.516,
+            "exit_code": 0,
+            "stdout": "Language checker: scopes, types, calls, control flow, limits and mutations passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "language_editor_bindings",
+            "status": "passed",
+            "seconds": 0.063,
+            "exit_code": 0,
+            "stdout": "Physim editor bindings: 36 real-parser prefixes, lexical scopes, shadow lookup, declarations, parameters, loops, guards, patterns, self, type spans, UTF-8 and bounded failures passed\nStrict/observed AST field parity and binding bounds: 1024 deterministic byte inputs passed\n",
+            "stderr": ""
+          }
+        ]
+      },
+      "linux": {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+          "--build-dir",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+          "--config",
+          "Debug",
+          "--jobs",
+          "4",
+          "--no-app",
+          "--test",
+          "--sanitizers",
+          "--test-filter",
+          "language_editor_bindings",
+          "--test-filter",
+          "language_parser",
+          "--test-filter",
+          "language_checker",
+          "--test-filter",
+          "source_outline",
+          "--test-filter",
+          "syntax"
+        ],
+        "exit_code": 0,
+        "no_app": true,
+        "display_tests": false,
+        "compiler_and_units_only": true,
+        "asan_options": "detect_leaks=1:halt_on_error=1",
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/language-scopes-affinity-linux.json",
+          "sha256": "3bdc89aadded8a3cb2f1267e6c6110074717d6e1855c9b105796e94819d93df9",
+          "bytes": 850
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/language-scopes-affinity-linux.log",
+          "sha256": "e2ae1cfc15d35e7ddf9b01a374959b154ea1c26d6f2d99f8af1b0a29b0e03248",
+          "bytes": 30259
+        },
+        "run": "run-nurnwodj",
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-nurnwodj/results.json",
+          "sha256": "99488167ee6c23d0f10d2e82cdbae4004bc345bcf4cadca53075c2264e73771e",
+          "bytes": 2085
+        },
+        "passed": 5,
+        "count": 5,
+        "cases": [
+          {
+            "name": "source_outline",
+            "status": "passed",
+            "seconds": 0.071,
+            "exit_code": 0,
+            "stdout": "source outline tests passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "syntax",
+            "status": "passed",
+            "seconds": 0.043,
+            "exit_code": 0,
+            "stdout": "Shared syntax: exact catalog roles, C/Physim, declaration override, line continuations, nested comments, multiline strings, Unicode, all prefix partitions and failure preservation passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "language_parser",
+            "status": "passed",
+            "seconds": 0.571,
+            "exit_code": 0,
+            "stdout": "Language parser: AST, precedence, diagnostics, resource limits and mutations passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "language_checker",
+            "status": "passed",
+            "seconds": 44.491,
+            "exit_code": 0,
+            "stdout": "Language checker: scopes, types, calls, control flow, limits and mutations passed\n",
+            "stderr": ""
+          },
+          {
+            "name": "language_editor_bindings",
+            "status": "passed",
+            "seconds": 0.037,
+            "exit_code": 0,
+            "stdout": "Physim editor bindings: 36 real-parser prefixes, lexical scopes, shadow lookup, declarations, parameters, loops, guards, patterns, self, type spans, UTF-8 and bounded failures passed\nStrict/observed AST field parity and binding bounds: 1024 deterministic byte inputs passed\n",
+            "stderr": ""
+          }
+        ]
+      },
+      "source_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/language-scopes-affinity-compiler-source.json",
+        "sha256": "548e3908f801ab701f2d39801ae71618346517fc06a36b21858b5d31f6cea587",
+        "bytes": 119058
+      },
+      "own_inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/language-scopes-affinity-inputs.json",
+        "sha256": "c70d1528383aa1b8b2ed9767f5760c7499ca08096be28f9f5813e7f483976dd5",
+        "bytes": 17711
+      },
+      "runtime_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/language-scopes-affinity-runtime.json",
+        "sha256": "b5383111d6c44792be6fe5716662561a568359645c2882a27e01b516567887a9",
+        "bytes": 42014
+      }
+    }
+  },
+  "direct": [
+    {
+      "tag": "scopes-unit-first",
+      "original": {
+        "path": "build/validation/language-scopes-2026-11-04/scopes-unit-first.json",
+        "sha256": "9143ae48e2b918237caff2ae02fe83d8f6d6d1286475cd0fcd2a7921bae89a6b",
+        "bytes": 1821
+      },
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "TMPDIR=/mnt/d/Physim/build/validation/language-scopes-2026-11-04/tmp",
+        "gcc",
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-I/mnt/d/Physim/src",
+        "/mnt/d/Physim/tests/test_language_editor_bindings.c",
+        "/mnt/d/Physim/src/language/parser.c",
+        "/mnt/d/Physim/src/language/lexer.c",
+        "-o",
+        "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/scopes-unit-first"
+      ],
+      "compile_exit": 0,
+      "compile_stdout": "",
+      "compile_stderr": "",
+      "inputs": {
+        "tests/test_language_editor_bindings.c": "5efb4701f8b61bcf5ebe6f214f3bbb7ff1da414adc8a3b311d5341cfe1ad5702",
+        "src/language/parser.c": "793a29b37d32dad8a657aa9f05add2f1f3a23cd5e74e2b56b7d5f3a0a8c735f5",
+        "src/language/parser.h": "d7c0a849ff4fdae73fd7f12eb054c222a60dc5a13329a856e75f4cf9da806c19",
+        "src/language/editor_bindings.h": "d500be9716a7ceb1fe443292686a5e327fe370021370a96ddf863518bb93e9a6",
+        "src/language/lexer.c": "f98a62ae0bfed722a6d7a513b860b315b48a9b493c82ceae5e147ba8fb61ccff",
+        "src/language/lexer.h": "13c2141a9735fccb4d7f431c3fcecdf3db3573c6bdc67f2e9373257184a06b2e"
+      },
+      "run_command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+        "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/scopes-unit-first"
+      ],
+      "exit_code": 0,
+      "stdout": "Physim editor bindings: 32 real-parser prefixes, lexical scopes, shadow lookup, declarations, parameters, loops, guards, patterns, self, type spans, UTF-8 and bounded failures passed\n",
+      "stderr": "",
+      "binary_sha256": "1a33328ed4ae2de1e9a4be597a1b5c6c804e2d04f82d892c33f2640cfff3d2a2"
+    },
+    {
+      "tag": "scopes-unit-parity",
+      "original": {
+        "path": "build/validation/language-scopes-2026-11-04/scopes-unit-parity.json",
+        "sha256": "8fe98156fc666f49e07ac5c9d6f7d853e5e8d2a4bf869f0f0e50a6375b13b6cd",
+        "bytes": 1914
+      },
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "TMPDIR=/mnt/d/Physim/build/validation/language-scopes-2026-11-04/tmp",
+        "gcc",
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-I/mnt/d/Physim/src",
+        "/mnt/d/Physim/tests/test_language_editor_bindings.c",
+        "/mnt/d/Physim/src/language/parser.c",
+        "/mnt/d/Physim/src/language/lexer.c",
+        "-o",
+        "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/scopes-unit-parity"
+      ],
+      "compile_exit": 0,
+      "compile_stdout": "",
+      "compile_stderr": "",
+      "inputs": {
+        "tests/test_language_editor_bindings.c": "fdedf2ace37cd5695392b6e1af166057add3a6a6bf20557e3ce819c8e0a6d663",
+        "src/language/parser.c": "f989b0435e982136039cd53a94c1c54b0643005ec2ca9a8115b454d33b290336",
+        "src/language/parser.h": "d7c0a849ff4fdae73fd7f12eb054c222a60dc5a13329a856e75f4cf9da806c19",
+        "src/language/editor_bindings.h": "d500be9716a7ceb1fe443292686a5e327fe370021370a96ddf863518bb93e9a6",
+        "src/language/lexer.c": "f98a62ae0bfed722a6d7a513b860b315b48a9b493c82ceae5e147ba8fb61ccff",
+        "src/language/lexer.h": "13c2141a9735fccb4d7f431c3fcecdf3db3573c6bdc67f2e9373257184a06b2e"
+      },
+      "run_command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+        "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/scopes-unit-parity"
+      ],
+      "exit_code": 0,
+      "stdout": "Physim editor bindings: 32 real-parser prefixes, lexical scopes, shadow lookup, declarations, parameters, loops, guards, patterns, self, type spans, UTF-8 and bounded failures passed\nStrict/observed AST byte parity and binding bounds: 1024 deterministic byte inputs passed\n",
+      "stderr": "",
+      "binary_sha256": "6b46e079ec26a40925559a3203b68abf9c8ce9c296e3a83ab1c73a3d564e107a"
+    },
+    {
+      "tag": "scopes-unit-final",
+      "original": {
+        "path": "build/validation/language-scopes-2026-11-04/scopes-unit-final.json",
+        "sha256": "e2e1204be7dd21975e40d8a6fe006b52da9cacb189e6f500523af00206204ad3",
+        "bytes": 1913
+      },
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "TMPDIR=/mnt/d/Physim/build/validation/language-scopes-2026-11-04/tmp",
+        "gcc",
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-I/mnt/d/Physim/src",
+        "/mnt/d/Physim/tests/test_language_editor_bindings.c",
+        "/mnt/d/Physim/src/language/parser.c",
+        "/mnt/d/Physim/src/language/lexer.c",
+        "-o",
+        "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/scopes-unit-final"
+      ],
+      "compile_exit": 0,
+      "compile_stdout": "",
+      "compile_stderr": "",
+      "inputs": {
+        "tests/test_language_editor_bindings.c": "12d0ef9f433f0f563ddefd6af45b2a15ee761908497ebcdc78e598965ddccf52",
+        "src/language/parser.c": "f989b0435e982136039cd53a94c1c54b0643005ec2ca9a8115b454d33b290336",
+        "src/language/parser.h": "d7c0a849ff4fdae73fd7f12eb054c222a60dc5a13329a856e75f4cf9da806c19",
+        "src/language/editor_bindings.h": "d500be9716a7ceb1fe443292686a5e327fe370021370a96ddf863518bb93e9a6",
+        "src/language/lexer.c": "f98a62ae0bfed722a6d7a513b860b315b48a9b493c82ceae5e147ba8fb61ccff",
+        "src/language/lexer.h": "13c2141a9735fccb4d7f431c3fcecdf3db3573c6bdc67f2e9373257184a06b2e"
+      },
+      "run_command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+        "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/scopes-unit-final"
+      ],
+      "exit_code": 0,
+      "stdout": "Physim editor bindings: 32 real-parser prefixes, lexical scopes, shadow lookup, declarations, parameters, loops, guards, patterns, self, type spans, UTF-8 and bounded failures passed\nStrict/observed AST field parity and binding bounds: 1024 deterministic byte inputs passed\n",
+      "stderr": "",
+      "binary_sha256": "d9495ad1a1dcfd43ede86caa67c2c9ab3dd39df80bf944a5b6344f3e373837e3"
+    },
+    {
+      "tag": "scopes-lambda-before",
+      "original": {
+        "path": "build/validation/language-scopes-2026-11-04/scopes-lambda-before.json",
+        "sha256": "ccbd752be1cc40e55c3a17db3d8755feead7339f6b498244ef3c44f56b63f47a",
+        "bytes": 1703
+      },
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "TMPDIR=/mnt/d/Physim/build/validation/language-scopes-2026-11-04/tmp",
+        "gcc",
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-I/mnt/d/Physim/src",
+        "/mnt/d/Physim/tests/test_language_editor_bindings.c",
+        "/mnt/d/Physim/src/language/parser.c",
+        "/mnt/d/Physim/src/language/lexer.c",
+        "-o",
+        "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/scopes-lambda-before"
+      ],
+      "compile_exit": 0,
+      "compile_stdout": "",
+      "compile_stderr": "",
+      "inputs": {
+        "tests/test_language_editor_bindings.c": "0a95a7a42fcef0025ff173c8a42a8690b1a4b583c20c5bcfa1c4dd44740d69cd",
+        "src/language/parser.c": "f989b0435e982136039cd53a94c1c54b0643005ec2ca9a8115b454d33b290336",
+        "src/language/parser.h": "d7c0a849ff4fdae73fd7f12eb054c222a60dc5a13329a856e75f4cf9da806c19",
+        "src/language/editor_bindings.h": "d500be9716a7ceb1fe443292686a5e327fe370021370a96ddf863518bb93e9a6",
+        "src/language/lexer.c": "f98a62ae0bfed722a6d7a513b860b315b48a9b493c82ceae5e147ba8fb61ccff",
+        "src/language/lexer.h": "13c2141a9735fccb4d7f431c3fcecdf3db3573c6bdc67f2e9373257184a06b2e"
+      },
+      "run_command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+        "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/scopes-lambda-before"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Editor bindings line 72: find(\"closure\") && !find(\"b\")\n",
+      "binary_sha256": "0c755a8bd0a74d014ff890599a67e60c33f2e3b364a8a4e15777082b13d5090c"
+    },
+    {
+      "tag": "scopes-lambda-after",
+      "original": {
+        "path": "build/validation/language-scopes-2026-11-04/scopes-lambda-after.json",
+        "sha256": "c2abe05afbfd1dd0d71edff72769ef1538fc6ae70efb116abe6bbcc5f3e07604",
+        "bytes": 1917
+      },
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "TMPDIR=/mnt/d/Physim/build/validation/language-scopes-2026-11-04/tmp",
+        "gcc",
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-I/mnt/d/Physim/src",
+        "/mnt/d/Physim/tests/test_language_editor_bindings.c",
+        "/mnt/d/Physim/src/language/parser.c",
+        "/mnt/d/Physim/src/language/lexer.c",
+        "-o",
+        "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/scopes-lambda-after"
+      ],
+      "compile_exit": 0,
+      "compile_stdout": "",
+      "compile_stderr": "",
+      "inputs": {
+        "tests/test_language_editor_bindings.c": "0a95a7a42fcef0025ff173c8a42a8690b1a4b583c20c5bcfa1c4dd44740d69cd",
+        "src/language/parser.c": "9c6e9126d2afb33c29ad8e7a3e003fe2fa58ebf94a093c4c2b47ad94971c7e25",
+        "src/language/parser.h": "d7c0a849ff4fdae73fd7f12eb054c222a60dc5a13329a856e75f4cf9da806c19",
+        "src/language/editor_bindings.h": "d500be9716a7ceb1fe443292686a5e327fe370021370a96ddf863518bb93e9a6",
+        "src/language/lexer.c": "f98a62ae0bfed722a6d7a513b860b315b48a9b493c82ceae5e147ba8fb61ccff",
+        "src/language/lexer.h": "13c2141a9735fccb4d7f431c3fcecdf3db3573c6bdc67f2e9373257184a06b2e"
+      },
+      "run_command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+        "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/scopes-lambda-after"
+      ],
+      "exit_code": 0,
+      "stdout": "Physim editor bindings: 34 real-parser prefixes, lexical scopes, shadow lookup, declarations, parameters, loops, guards, patterns, self, type spans, UTF-8 and bounded failures passed\nStrict/observed AST field parity and binding bounds: 1024 deterministic byte inputs passed\n",
+      "stderr": "",
+      "binary_sha256": "4a1d717b01936885a9f5c7741076065a6a250f7bde4d7c7af364a4f368decdad"
+    },
+    {
+      "tag": "scopes-capacity-before",
+      "original": {
+        "path": "build/validation/language-scopes-2026-11-04/scopes-capacity-before.json",
+        "sha256": "9aa29f61513770517630103a0f59d455ab393556266991753f861f9547910bea",
+        "bytes": 1726
+      },
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "TMPDIR=/mnt/d/Physim/build/validation/language-scopes-2026-11-04/tmp",
+        "gcc",
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-I/mnt/d/Physim/src",
+        "/mnt/d/Physim/tests/test_language_editor_bindings.c",
+        "/mnt/d/Physim/src/language/parser.c",
+        "/mnt/d/Physim/src/language/lexer.c",
+        "-o",
+        "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/scopes-capacity-before"
+      ],
+      "compile_exit": 0,
+      "compile_stdout": "",
+      "compile_stderr": "",
+      "inputs": {
+        "tests/test_language_editor_bindings.c": "e52236e64d68e211082160059fbe943e54d887d6c2feca0bb7caa461c2cbbb68",
+        "src/language/parser.c": "9c6e9126d2afb33c29ad8e7a3e003fe2fa58ebf94a093c4c2b47ad94971c7e25",
+        "src/language/parser.h": "d7c0a849ff4fdae73fd7f12eb054c222a60dc5a13329a856e75f4cf9da806c19",
+        "src/language/editor_bindings.h": "d500be9716a7ceb1fe443292686a5e327fe370021370a96ddf863518bb93e9a6",
+        "src/language/lexer.c": "f98a62ae0bfed722a6d7a513b860b315b48a9b493c82ceae5e147ba8fb61ccff",
+        "src/language/lexer.h": "13c2141a9735fccb4d7f431c3fcecdf3db3573c6bdc67f2e9373257184a06b2e"
+      },
+      "run_command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+        "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/scopes-capacity-before"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Editor bindings line 140: result.status==PS_LANG_EDITOR_OK && result.count==1\n",
+      "binary_sha256": "827bf00801a9c4868b18d41ebf060f01ac3b41fd3e62c8b9a61003e383544366"
+    },
+    {
+      "tag": "scopes-final-bounds",
+      "original": {
+        "path": "build/validation/language-scopes-2026-11-04/scopes-final-bounds.json",
+        "sha256": "578d87fc2026565ac0bb1007ddc3c1815ec05e9676c9afb9c61de269a3be9408",
+        "bytes": 1917
+      },
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "TMPDIR=/mnt/d/Physim/build/validation/language-scopes-2026-11-04/tmp",
+        "gcc",
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-I/mnt/d/Physim/src",
+        "/mnt/d/Physim/tests/test_language_editor_bindings.c",
+        "/mnt/d/Physim/src/language/parser.c",
+        "/mnt/d/Physim/src/language/lexer.c",
+        "-o",
+        "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/scopes-final-bounds"
+      ],
+      "compile_exit": 0,
+      "compile_stdout": "",
+      "compile_stderr": "",
+      "inputs": {
+        "tests/test_language_editor_bindings.c": "e52236e64d68e211082160059fbe943e54d887d6c2feca0bb7caa461c2cbbb68",
+        "src/language/parser.c": "336e3217c0aea3f644376ce8de959cd677ccd47e47cb9bc2d414a06362c30b7e",
+        "src/language/parser.h": "d7c0a849ff4fdae73fd7f12eb054c222a60dc5a13329a856e75f4cf9da806c19",
+        "src/language/editor_bindings.h": "d500be9716a7ceb1fe443292686a5e327fe370021370a96ddf863518bb93e9a6",
+        "src/language/lexer.c": "f98a62ae0bfed722a6d7a513b860b315b48a9b493c82ceae5e147ba8fb61ccff",
+        "src/language/lexer.h": "13c2141a9735fccb4d7f431c3fcecdf3db3573c6bdc67f2e9373257184a06b2e"
+      },
+      "run_command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+        "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/scopes-final-bounds"
+      ],
+      "exit_code": 0,
+      "stdout": "Physim editor bindings: 34 real-parser prefixes, lexical scopes, shadow lookup, declarations, parameters, loops, guards, patterns, self, type spans, UTF-8 and bounded failures passed\nStrict/observed AST field parity and binding bounds: 1024 deterministic byte inputs passed\n",
+      "stderr": "",
+      "binary_sha256": "3a44be1d459c08340ef2ad1ed991445c0013b94f0009e5e5ff000a046020393e"
+    },
+    {
+      "tag": "scopes-blank-before",
+      "original": {
+        "path": "build/validation/language-scopes-2026-11-04/scopes-blank-before.json",
+        "sha256": "6d46cc148b182d42c38d55a8281699abfd21c050bb156f85093cfbbc1ebd24a4",
+        "bytes": 1703
+      },
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "TMPDIR=/mnt/d/Physim/build/validation/language-scopes-2026-11-04/tmp",
+        "gcc",
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-I/mnt/d/Physim/src",
+        "/mnt/d/Physim/tests/test_language_editor_bindings.c",
+        "/mnt/d/Physim/src/language/parser.c",
+        "/mnt/d/Physim/src/language/lexer.c",
+        "-o",
+        "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/scopes-blank-before"
+      ],
+      "compile_exit": 0,
+      "compile_stdout": "",
+      "compile_stderr": "",
+      "inputs": {
+        "tests/test_language_editor_bindings.c": "7437745cc491a2377f3afa7b9ca452f82b0617733ad92ea6eb8d2d07c66db80a",
+        "src/language/parser.c": "336e3217c0aea3f644376ce8de959cd677ccd47e47cb9bc2d414a06362c30b7e",
+        "src/language/parser.h": "d7c0a849ff4fdae73fd7f12eb054c222a60dc5a13329a856e75f4cf9da806c19",
+        "src/language/editor_bindings.h": "d500be9716a7ceb1fe443292686a5e327fe370021370a96ddf863518bb93e9a6",
+        "src/language/lexer.c": "f98a62ae0bfed722a6d7a513b860b315b48a9b493c82ceae5e147ba8fb61ccff",
+        "src/language/lexer.h": "13c2141a9735fccb4d7f431c3fcecdf3db3573c6bdc67f2e9373257184a06b2e"
+      },
+      "run_command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+        "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/scopes-blank-before"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Editor bindings line 130: find(\"value\") && find(\"local\")\n",
+      "binary_sha256": "7ebf67b6cab011460d4b5b2a81dc6ba2fe42042fdd8a228ac4f411aabcf325ec"
+    },
+    {
+      "tag": "scopes-final-affinity",
+      "original": {
+        "path": "build/validation/language-scopes-2026-11-04/scopes-final-affinity.json",
+        "sha256": "0a94069d9bb75512ec64c9b1af76b202fad9d21126ce1c73eb2071d03da412bd",
+        "bytes": 1921
+      },
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "TMPDIR=/mnt/d/Physim/build/validation/language-scopes-2026-11-04/tmp",
+        "gcc",
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-I/mnt/d/Physim/src",
+        "/mnt/d/Physim/tests/test_language_editor_bindings.c",
+        "/mnt/d/Physim/src/language/parser.c",
+        "/mnt/d/Physim/src/language/lexer.c",
+        "-o",
+        "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/scopes-final-affinity"
+      ],
+      "compile_exit": 0,
+      "compile_stdout": "",
+      "compile_stderr": "",
+      "inputs": {
+        "tests/test_language_editor_bindings.c": "7437745cc491a2377f3afa7b9ca452f82b0617733ad92ea6eb8d2d07c66db80a",
+        "src/language/parser.c": "e8902dc7e1a895383bd1964fffaa219c1f9524ae9d955ad92997c6d012e6443f",
+        "src/language/parser.h": "d7c0a849ff4fdae73fd7f12eb054c222a60dc5a13329a856e75f4cf9da806c19",
+        "src/language/editor_bindings.h": "072d49694a09583b24cf804039e20d8f83045ce673845cf443ecb19c9877a082",
+        "src/language/lexer.c": "f98a62ae0bfed722a6d7a513b860b315b48a9b493c82ceae5e147ba8fb61ccff",
+        "src/language/lexer.h": "13c2141a9735fccb4d7f431c3fcecdf3db3573c6bdc67f2e9373257184a06b2e"
+      },
+      "run_command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+        "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/scopes-final-affinity"
+      ],
+      "exit_code": 0,
+      "stdout": "Physim editor bindings: 36 real-parser prefixes, lexical scopes, shadow lookup, declarations, parameters, loops, guards, patterns, self, type spans, UTF-8 and bounded failures passed\nStrict/observed AST field parity and binding bounds: 1024 deterministic byte inputs passed\n",
+      "stderr": "",
+      "binary_sha256": "522814942161d4d53c9e52bb1ab3b17d59fe83ec5a6e5113b907ae6000e94172"
+    }
+  ],
+  "final_counter": {
+    "original": {
+      "path": "build/validation/language-scopes-2026-11-04/counter-affinity/report.json",
+      "sha256": "d3f8aa6ffeb46ce53681838e446987afaf0e49d79f4c4934dd7e0ef7e7311a50",
+      "bytes": 1567
+    },
+    "mutation": "Disable only the editor block-exit binding rollback; strict compiler grammar untouched",
+    "command": [
+      "wsl",
+      "-d",
+      "Alpine-Dev",
+      "--exec",
+      "env",
+      "TMPDIR=/mnt/d/Physim/build/validation/language-scopes-2026-11-04/tmp",
+      "gcc",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-g",
+      "-fsanitize=address,undefined",
+      "-I/mnt/d/Physim/src",
+      "-I/mnt/d/Physim/src/language",
+      "/mnt/d/Physim/tests/test_language_editor_bindings.c",
+      "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/counter-affinity/parser.c",
+      "/mnt/d/Physim/src/language/lexer.c",
+      "-o",
+      "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/counter-affinity/unit"
+    ],
+    "compile_exit": 0,
+    "run_command": [
+      "wsl",
+      "-d",
+      "Alpine-Dev",
+      "--exec",
+      "env",
+      "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+      "/mnt/d/Physim/build/validation/language-scopes-2026-11-04/counter-affinity/unit"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "Editor bindings line 52: !find(\"foreign\") && !find(\"hidden\") && !find(\"result\") && !find(\"later\")\n",
+    "production_source_unchanged": true,
+    "original_sha256": "e8902dc7e1a895383bd1964fffaa219c1f9524ae9d955ad92997c6d012e6443f",
+    "mutant_sha256": "8dd205cc4c98cca02b93ed348a894fca044e6364d80e3f89d20057b8a03ff699",
+    "unit_sha256": "7437745cc491a2377f3afa7b9ca452f82b0617733ad92ea6eb8d2d07c66db80a",
+    "binary_sha256": "6a17c8364c14b0a5e07442b3d085181fd1b9c77747120935c8f46b72cc1a1897"
+  },
+  "contracts": [
+    "Caller owns source/nodes/output; no allocation, I/O, source rewriting or execution.",
+    "Only original prefix before cursor is parsed by actual grammar. Blank-line layout lookahead retains the enclosing block, without publishing future declarations. Syntax failures before cursor yield zero bindings.",
+    "EOF syntax holes produce explicit PREFIX, not a valid compiler AST claim.",
+    "Declaration stack preserves active scopes; reverse name lookup chooses nearest shadow. Unique UI dedup remains future work.",
+    "Written annotation spans only; inferred types are not invented. self refers to nominal receiver header.",
+    "Compiler parsing remains strict, checked by existing parser/checker units and every AST field in 36 prefixes +1024 deterministic inputs.",
+    "Final strict GCC C17 -Wall -Wextra -Werror with ASan/UBSan +detect_leaks=1 exit0; Windows Release/MSVC +Linux Debug/GCC actual registered5/5 each.",
+    "Builds used --no-app; no new app or GUI/platform/design acceptance. Existing older app runtimes remain archived, not presented as newly built.",
+    "No new pictures. Raw compiler inputs/runtime/ZIP bytes actually read back; no obsolete variant directories removed."
+  ],
+  "known_failures_closed": [
+    "Closure variable missing after a finished indented initializer: new direct before exit1, after exit0.",
+    "Exactly full valid node buffer incorrectly reported LIMIT: new direct before exit1, final exit0.",
+    "Blank unindented line inside a continuing indented block lost locals: new direct before exit1, after exit0 without future declarations.",
+    "Final isolated scope rollback mutant rejected with real foreign/closed-function binding leak; root production unchanged."
+  ],
+  "remaining": [
+    "Native candidate merge/source-backed card/insertion/Undo/empty-argument trigger and actual C declaration/scope parser.",
+    "Separate parameter help incl user functions, inferred types from verified semantic data where available, full UI and AT/DPI/current Mac acceptance.",
+    "Hosted previous f01 editor ARM automatic flow stage71 failed; original artifact retained, cause open. New scope source not tested there."
+  ]
+}

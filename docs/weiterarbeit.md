@@ -1,11 +1,56 @@
 # Wiedereinstieg in die native UI-Arbeit
 
-Stand: 4. November 2026. Zuerst diese Übergabe, `git status` und relevante Diffs
+Stand: 5. November 2026. Zuerst diese Übergabe, `git status` und relevante Diffs
 abgleichen. Verbindliche Designs: [AGENTS.md](../AGENTS.md) und
 [Gesamtübergabe](visuals/unified-workspace/NEXT-CHAT.md). Keine geschlossene
 Prüfung oder Protokoll-Trennlinie allein wegen Kompaktierung erneut beginnen.
 
-## Aktueller Anschluss: Kurzinfo-Bedienung abgeschlossen
+## Aktueller Anschluss: Physim-Scopes als Parsergrundlage
+
+**Nutzer-Mac aus; keine Zugriffe/Erreichbarkeitsproben.**
+**Eingefroren: `language-scopes-affinity`, 174 eigene Eingaben / 1.124 erfasste
+Compiler-/Testdateien. Eigene Änderungen vor Commit; tatsächlichen Commitabgleich
+beim Abschluss ergänzen. Alle lokalen Handles beendet.**
+Echter Physim-Parser liefert aktive Deklarationsstapel samt Quell-/geschriebenen
+Typbereichen, Parameter, Block-/Funktions-/Lambda-Grenzen, Iteration, bedingte
+Bindungen, Guard, Switch-Nutzlast und nominales `self`. Rückwärtssuche wählt den
+nächsten Namen; keine fertige eindeutige UI-Liste. Keine eigenen Namen in noch
+offener Initialisierung, keine späteren/fremden Bindungen. Leerzeilen-Lookahead
+liest ausschließlich Layout, nicht spätere Deklarationen. Strenger Parser bleibt
+streng; kein AST aus einem unvollständigen Präfix zur Übersetzung verwenden.
+
+Abschluss Windows Release/MSVC und Linux Debug/GCC ASan/UBSan je **Unit 5/5**,
+`run-efq_y_cx` / `run-nurnwodj`: Parser, Checker, neue Bindings, Source-Outline,
+Syntax. 36 konkrete Präfixe plus 1.024 deterministische Eingaben; jeder AST-
+Einzelfeldwert mit strengem Einstieg verglichen. Direkter strenger C17-Test mit
+`detect_leaks=1` bestanden. Drei echte Vorherfehler (Lambda-Variablenname,
+exakte Puffergrenze, Leerzeilenzugehörigkeit) erkannt/behoben; isolierter Scope-
+Rollback-Mutant abgelehnt. Alle Quell-/Laufzeit-/Archivbytes gelesen, keine Bilder.
+**`--no-app`: keine neue App-/GUI-Abnahme, ältere App-Dateien bleiben archiviert.**
+[Phasen, Originalkommandos und Grenzen](verification/language-scopes-2026-11-05.md).
+
+**Nicht erledigt:** native Zusammenführung/Quellstellen-Karte/Einfügen/Undo/leere
+Argumentauslöser, echte C-Scopes, semantisch nachgewiesene Typinferenz und separate
+Aufrufhilfe einschließlich Benutzerfunktionen. Physische Eingabe/IME, AT,
+DPI/Monitor/Vollbild/aktuelle Mac-Abnahme und volle D-/UI-Punktzahl bleiben offen.
+
+Neue gehostete Evidenz zum **vorherigen** `f01f25c1`: Editor-Intel **6/6**, ARM
+**5/6**; nur `completion_automatic_workflow` scheitert auf ARM an Stufe 71,
+Ursache offen. Originalarchiv/Digest/alle Einträge gelesen; neuer Info-Ablauf
+selbst bestanden. Intel-F1 **6/6** aktuell, frühere Timeouts damit nicht erklärt.
+Settings `41928194543` und ARM-F1 `126918062826` zuletzt queued.
+[Getrennter Mac-Bericht](verification/completion-info-macos-2026-11-05.json).
+Keine Mac-Abnahme der neuen Parserquellen.
+
+**Nächster konkreter Schritt:** zuerst ARM-Automatik-Stufe 71 gezielt
+untersuchen, danach lokalen Scopebestand nativ integrieren und C ergänzen.
+Hypothese noch unbelegt: Sichtbar-Zustand vor tatsächlicher Geometrie-/Viewport-
+Stabilisierung beim Theme-/Schriftwechsel. Vor Korrektur konkrete Gegenprobe
+oder stärkere Diagnose ergänzen; keine blinde Fristverlängerung oder gelockerte
+Datenassertion. Keine geschlossenen F1-/Protokoll-/Settings-Matrizen wegen Kontext
+wiederholen. Notiz: `build/validation/language-scopes-2026-11-04/STATE.md`.
+
+## Abgeschlossen: Kurzinfo-Bedienung Windows/Linux
 
 **Nutzer-Mac aus; keinerlei Zugriff oder Erreichbarkeitsprobe.**
 **Eingefroren: `completion-info-tab`, 170 eigene Eingaben / 1.122 Compiler-
@@ -313,12 +358,13 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
 
 ## Sicherer lokaler Anschluss
 
-- `prepare-next.py <neuer-tag> completion-info-tab` prüft vorher Quelle,
+- `prepare-next.py <neuer-tag> language-scopes-affinity` prüft vorher Quelle,
   Runtime und Archive. Neue Module ausdrücklich in die Eingabeliste aufnehmen.
   Eigene Quellen vollständig versionieren, fremde AT-SPI-/Orca-/Status-/dist-
   Änderungen erhalten und nicht in eigene isolierte Quellen übernehmen.
 - Helfer/Indizes: `build/validation/explorer-inline-2026-10-29/`; aktueller
-  Arbeitsnachweis: `build/validation/completion-info-2026-11-04/`; vorherige Inhalte
+  Arbeitsnachweis: `build/validation/language-scopes-2026-11-04/`; Kurzinfo unter
+  `build/validation/completion-info-2026-11-04/`; vorherige Inhalte
   unter `build/validation/completion-help-2026-11-04/`; Syntax unter
   `build/validation/syntax-roles-2026-11-04/`; frühere Completion
   unter `build/validation/completion-auto-2026-11-04/`; Settings unter

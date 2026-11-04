@@ -122,6 +122,24 @@ Neuauswahl, Quelländerung außerhalb des Präfixes und Cursorabbruch. Der neue
 Ablauf erzeugt keine Bilder. [Originalbefunde, Korrekturen und Grenzen](../../verification/completion-info-2026-11-04.md).
 Dies ersetzt keine vollständige Screenreader-/physische Eingabe-/DPI-Abnahme;
 echte lokale Scopes und separate Parameterhilfe bleiben offen.
+
+## Physim-Parsergrundlage: Anschluss vom 5. November 2026
+
+Der echte Physim-Parser kann nun aktive Deklarationsstapel am Cursor liefern:
+Parameter, frühere Variablen, Block-/Funktions-/Lambda-Grenzen, Schleifen,
+bedingte Bindungen, Guard, Switch-Nutzlast und `self`. Quell-/Typbereiche stammen
+aus dem aktuellen Originaltext. Unfertige Initialisierung veröffentlicht ihren
+eigenen Namen noch nicht; ein Fehler vor dem Cursor liefert keine Kandidaten.
+Leerzeilen erhalten ihre Blockzugehörigkeit anhand tatsächlicher Lexer-Einrückung,
+ohne spätere Namen vorzuziehen. Der Übersetzungsparser bleibt streng.
+
+Dies ist ausdrücklich **noch kein Anschluss an die native Vorschlagsliste**.
+Zusammenführung, Quellstellen-Karte, Einfügen/Undo, leere Argumentauslöser,
+echte C-Scopes und separate Aufrufhilfe bleiben offen. Fehlende Typannotation
+wird nicht als bereits inferierter Typ ausgegeben. Windows Release/MSVC und
+Linux Debug/GCC ASan/UBSan je 5/5 betroffene Unit-Gruppen, 36 konkrete Präfixe
+und 1.024 deterministische Eingaben. `--no-app`, keine neue GUI-/Mac-Abnahme.
+[Originalbefunde, Gegenproben und Grenzen](../../verification/language-scopes-2026-11-05.md).
 Dies schließt die nachstehenden Interaktions-/Scope-/Aufrufhilfe-Gates nicht ab.
 
 ## Weiterhin verbindlich umzusetzen
