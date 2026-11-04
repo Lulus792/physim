@@ -465,3 +465,15 @@ Abweichungen im gemeinsamen Designordner fest. Committe abgeschlossene geprüfte
 Änderungen und pushe nach `origin` und `upstream` ohne Force-Push entsprechend
 AGENTS.md. Räume nur eigene nachweislich entbehrliche Ausgaben auf; Quellen,
 Nutzdaten, Referenzen, aktive Arbeiten und den gemeinsamen WSL-Datenträger erhalten.
+
+## Für später gewählt: Rechnen & Geräte A
+
+Am 4. November 2026 hat der Nutzer **A · Geräteliste** für die spätere Umsetzung
+festgelegt. [ADR 025](../../decisions/025-selected-compute-devices-a.md) und
+[Spezifikation](../compute-device-options/APPROVED.md) beachten. Kategorien,
+kompakte Geräteliste und Details rechts, bewusste Kopplung, Leistungstest und
+Freischalten zusätzlicher Ausführungsziele nach Verknüpfung übernehmen.
+B/C bleiben Historie; keine erneute Grundlayoutwahl. Der Ausbau ist nachrangig
+zur aktuellen UI-/Oberflächenarbeit. Offene technische Fragen im
+[Konzept](../../remote-computing-concept.md) vor Umsetzung klären. Diese Freigabe
+ist keine native Rechendienst-/Benchmark-/Plattformabnahme.

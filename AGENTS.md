@@ -253,3 +253,12 @@
   ändern; diesen Datenträger bei Projektbereinigungen erhalten.
 - Lokale Betriebs-/Umzugsnotiz: `D:\WSL\README.md`. Diese Angaben beschreiben
   die lokale Entwicklungsmaschine, keine Voraussetzung für andere Rechner/CI.
+
+## Für spätere Umsetzung gewählt: Rechnen & Geräte A
+
+- Der Nutzer hat am 4. November 2026 **A · Geräteliste** zur späteren Übernahme
+  festgehalten. [ADR 025](docs/decisions/025-selected-compute-devices-a.md) und
+  [Spezifikation](docs/visuals/compute-device-options/APPROVED.md) beachten.
+- Die aktuelle UI-/Oberflächenarbeit hat Vorrang. Den Rechendienst und verteilte
+  Serien erst im späteren Ausbau umsetzen; keine erneute Grundlayoutwahl.
+  B/C bleiben Historie. Browserwerte/-nachweise sind keine native Abnahme.

@@ -177,3 +177,13 @@ als späterer Plan aufgenommen; aktuelle UI-/Oberflächenarbeit hat Vorrang.
 [Interaktive A/B/C-Entwürfe](visuals/compute-device-options/README.md) zeigen
 Gerätekopplung und Leistungstest. Auswahl offen; keine Freigabe oder native
 Implementierung. Nächster Schritt dieser Runde: Entwürfe mit dem Nutzer besprechen.
+
+## Gewählt für später: Rechnen & Geräte A · 4. November 2026
+
+Der Nutzer hat **A · Geräteliste** zur späteren Übernahme festgelegt.
+[ADR 025](decisions/025-selected-compute-devices-a.md) und
+[Spezifikation](visuals/compute-device-options/APPROVED.md) sind maßgeblich;
+A/B/C-Auswahl abgeschlossen, B/C nur Historie. Frühere Offen-Vermerke oben
+sind damit überholt. Aktuelle native UI-Arbeit bleibt vorrangig; anschließend
+die offenen technischen Konzeptfragen klären und A ohne neue Layoutwahl umsetzen.
+Keine neue Implementierung oder Plattformprüfung durch diese Dokumentation.

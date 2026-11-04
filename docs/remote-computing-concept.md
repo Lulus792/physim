@@ -1,6 +1,6 @@
 # Konzept: Rechnen auf verbundenen Geräten
 
-Stand: 4. November 2026 · Als späterer Projektplan aufgenommen. Die aktuelle UI-/Oberflächenarbeit hat Vorrang; Rechendienst und Verteilung werden erst danach umgesetzt. Noch keine UI-Designfreigabe.
+Stand: 4. November 2026 · Als späterer Projektplan aufgenommen. Die aktuelle UI-/Oberflächenarbeit hat Vorrang; Rechendienst und Verteilung werden erst danach umgesetzt. A · Geräteliste ist für diesen späteren Ausbau gewählt; siehe [ADR 025](decisions/025-selected-compute-devices-a.md) und [Spezifikation](visuals/compute-device-options/APPROVED.md).
 
 ## Ziel und vorhandene Grundlage
 
@@ -38,7 +38,7 @@ Start in Einstellungen für diesen Rechner, einzelne Geräte oder alle ausgewäh
 
 Wiederholungen, Aufwärmphase und Zusammenfassung (etwa Median) festlegen; Berechnungszeit getrennt von Netz-/Übertragungszeit messen und Letztere optional zusätzlich ausweisen. Keine FPS oder frei erfundenen Werte verwenden. Korrektheitsprüfung innerhalb definierter numerischer Toleranzen vor Wertung; Abbruch, Überhitzung/Drosselung soweit erkennbar, Zeitlimit und fehlerhafte Ergebnisse kenntlich machen. Version, Plattform/Architektur, genutzte Worker, Zeitpunkt und Testbedingungen speichern; alte Werte nach relevanten Änderungen als möglicherweise veraltet kennzeichnen. Gerätekonfiguration, Energiezustand, Last und Netzwerk können Ergebnisse verändern. Kein Test läuft automatisch ohne bewussten Start; andere laufende Aufträge und Ressourcenlimits berücksichtigen.
 
-## UI-Skizzen — Vorschläge, keine freigegebenen Designs
+## Erste UI-Skizzen und anschließende Auswahl A
 
 Aktuelle interaktive Entwurfsrunde: [A/B/C für Rechnen & Geräte](visuals/compute-device-options/README.md). Die nachfolgenden Textskizzen dokumentieren den ersten Konzeptstand.
 
@@ -107,7 +107,7 @@ Details zeigen wartend/laufend/abgeschlossen/fehlgeschlagen sowie Übertragung u
 
 ## Zu klären und mögliche Reihenfolge
 
-Offen: Bedienung auf dem headless Gerät bei der Erstkopplung; welche Betriebssystem-/Architekturkombinationen und Modellarten zuerst; ob und wie lange Aufgaben nach Client- oder Dienstneustart überleben; Aufbewahrung und Löschung von Eingaben/Resultaten; Benutzer- und Ressourcenrechte; konkrete Testlast und statistische Wiederholungszahl; Nutzersteuerung von parallelen Aufträgen und automatischer Wiedervergabe. Die Skizzen sind ein Gesprächsangebot und keine Designentscheidung.
+Offen: Bedienung auf dem headless Gerät bei der Erstkopplung; welche Betriebssystem-/Architekturkombinationen und Modellarten zuerst; ob und wie lange Aufgaben nach Client- oder Dienstneustart überleben; Aufbewahrung und Löschung von Eingaben/Resultaten; Benutzer- und Ressourcenrechte; konkrete Testlast und statistische Wiederholungszahl; Nutzersteuerung von parallelen Aufträgen und automatischer Wiedervergabe. Die ersten Textskizzen sind Konzeptgeschichte; die anschließende interaktive Richtung A ist inzwischen gewählt.
 
 Mögliche Schritte: (1) Protokoll, Vertrauensgrenzen und portable Auftrags-/Ergebnisverträge anhand bestehender Runner prüfen; (2) Verbindung und einzelne entfernte Ausführung samt Wiederverbindung; (3) Benchmark und transparente Ergebnisse; (4) mehrere Geräte und robuste Serienverteilung; (5) reale Bedien-, Fehler-, Sicherheits- und Plattformprüfungen. Die Schritte sind eine Planungsoption, keine Termin- oder Funktionszusage.
 

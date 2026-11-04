@@ -1,6 +1,6 @@
-# Rechnen & Geräte · offene UI-Entwurfsrunde
+# Rechnen & Geräte · A · Geräteliste gewählt
 
-4. November 2026. Der Nutzer hat das Vorhaben als **späteren Projektplan** aufgenommen. Die laufende UI-/Oberflächenarbeit hat Vorrang; kein vorgezogener Auftrag zur Implementierung des Rechendiensts. Diese eigenständige Entwurfsrunde liefert tatsächliche interaktive Vorschläge. **A/B/C sind noch nicht gewählt.** Einstellungen A und Fortschritt B mit Pop-out bleiben verbindlich.
+4. November 2026. Der Nutzer hat das Vorhaben als **späteren Projektplan** aufgenommen. Die laufende UI-/Oberflächenarbeit hat Vorrang; kein vorgezogener Auftrag zur Implementierung des Rechendiensts. Diese eigenständige Entwurfsrunde liefert tatsächliche interaktive Vorschläge. **A · Geräteliste ist für die spätere Umsetzung gewählt.** B/C bleiben Vergleichshistorie. [Verbindliche Spezifikation](APPROVED.md) · [ADR 025](../../decisions/025-selected-compute-devices-a.md). Einstellungen A und Fortschritt B mit Pop-out bleiben verbindlich.
 
 [Galerie öffnen](index.html) · [A · Geräteliste](index.html?variant=a) · [B · Gerätekarten](index.html?variant=b) · [C · Leistungsvergleich](index.html?variant=c) · [Leerzustand](index.html?scenario=empty).
 

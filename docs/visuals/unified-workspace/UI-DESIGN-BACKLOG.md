@@ -132,3 +132,12 @@ Tastatur-/Fokusweg und eine kleine/helle/dunkle Darstellung. Neue Gestaltungs-
 richtungen zunächst getrennt vergleichen; bestehende Freigaben erhalten.
 Nach Auswahl Referenz, genaue Werte, Datenannahmen und Abnahme im Gesamtauftrag
 festhalten. Weitere Vorschauen entstehen erst durch einen eigenen Entwurfsauftrag.
+
+## Nachrangiger Ausbau · Rechnen & Geräte
+
+**A · Geräteliste ist am 4. November 2026 zur späteren Übernahme gewählt.**
+[ADR 025](../../decisions/025-selected-compute-devices-a.md),
+[Spezifikation](../compute-device-options/APPROVED.md).
+Aktuelle UI-/Oberflächenarbeit zuerst; entfernte Einzelläufe und verteilte Serien
+sind ein späterer ausdrücklicher Nutzerplan, kein Zusatzumfang der ersten Version.
+B/C sind Vergleichshistorie. Keine erneute Designwahl; technische Fragen bleiben offen.
