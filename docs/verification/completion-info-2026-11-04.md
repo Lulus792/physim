@@ -6,6 +6,11 @@ insbesondere Punkte 3–5. Kein vollständiger Abschluss von D oder der Oberflä
 Der Nutzer-Mac bleibt aus; kein Zugriff und keine Erreichbarkeitsprobe. Nur D:,
 kein Zugriff auf F:.
 
+Quellcommit **`f01f25c1`** normal in origin/upstream gepusht. Alle 1.122
+Compiler-/Testdateien und 170 eigenen Eingaben gegen tatsächliche Git-Blobs
+geprüft, ausschließlich CRLF/LF normalisiert:
+[Commitabschluss und neue offene CI-Handles](completion-info-commit-2026-11-04.json).
+
 ## Verhalten
 
 Manuelles Öffnen wählt den ersten Vorschlag zur möglichen Übernahme, zeigt aber

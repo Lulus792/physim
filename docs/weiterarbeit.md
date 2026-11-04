@@ -9,8 +9,9 @@ Prüfung oder Protokoll-Trennlinie allein wegen Kompaktierung erneut beginnen.
 
 **Nutzer-Mac aus; keinerlei Zugriff oder Erreichbarkeitsprobe.**
 **Eingefroren: `completion-info-tab`, 170 eigene Eingaben / 1.122 Compiler-
-und Testdateien. Eigene Änderungen vor Commit; nachfolgender Commitabschluss
-ergänzt den tatsächlichen Git-Abgleich.**
+und Testdateien. Quellcommit `f01f25c1` in origin/upstream; alle 1.130 eindeutigen
+Compiler-/Test-/eigenen Eingaben mit tatsächlichen Git-Blobs abgeglichen,
+nur CRLF/LF normalisiert.** [Commitabschluss](verification/completion-info-commit-2026-11-04.json).
 Manuelle Liste zunächst ohne Info, Auswahl-/Mausvorschau nach 280 ms,
 `i`/Strg+Leertaste sofort und ohne neue Übernahmeauswahl. Exakte vollständige
 Quell-/Editor-/Kandidaten-/Cursor-/Viewportbindung; kein alter Hinweis nach
@@ -36,6 +37,10 @@ dieser drei Läufe. Drei ZIPs/Digests/alle Einträge gelesen. F1 `docs-keyboard-
 Timeout 60,089 s an Stufe 26, Ursache offen; getrennt vom früheren Stufe-39-Fall.
 [Mac-Bericht](verification/completion-help-macos-2026-11-04.json).
 Keine Mac-Abnahme der neuen Kurzinfo-Bedienung. Nutzer-Mac bleibt unberührt.
+Neue gehostete Handles zu `f01f25c1`: Editor **`41928194536`**, Einstellungen
+**`41928194543`**, F1-Regressionsgruppe **`41928194478`**, zuletzt queued;
+C17 **`41928194403`** pending. Keine neue Mac-Abnahme oder gesamte grüne CI
+behaupten. Konkrete Handles weiter beobachten, keinen Ersatzlauf starten.
 
 **Nächster konkreter Schritt:** echte lokale C-/Physim-Scopes und separate
 Aufrufhilfe einschließlich Benutzerfunktionen. Weitere Codekontexte,

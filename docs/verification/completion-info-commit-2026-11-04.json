@@ -1,0 +1,152 @@
+{
+  "phase": "completion-info-tab",
+  "revision": "HEAD",
+  "compiler_and_test_count": 1122,
+  "own_input_count": 170,
+  "unique_files": 1130,
+  "all_tested_input_bytes_match_git": true,
+  "crlf_normalized_only": true,
+  "source_commit": "f01f25c15c3cfd133e244435229238d80ba5bd03",
+  "date": "2026-11-04",
+  "source_match_original": {
+    "path": "build/validation/completion-info-2026-11-04/commit-match.json",
+    "sha256": "fcd32225dd3bc2cb855255517b8fc358d1fab786b64a68a81196bacd6d033834",
+    "bytes": 236999
+  },
+  "remotes": {
+    "origin": {
+      "branch": "codex/f1-design-h",
+      "tip": "f01f25c15c3cfd133e244435229238d80ba5bd03",
+      "normal_push_exit": 0,
+      "ls_remote_verified": true
+    },
+    "upstream": {
+      "branch": "codex/f1-design-h",
+      "tip": "f01f25c15c3cfd133e244435229238d80ba5bd03",
+      "normal_push_exit": 0,
+      "ls_remote_verified": true
+    }
+  },
+  "local_tests": {
+    "windows": {
+      "unit": "run-ot7qjiy2",
+      "gui": "run-zzc2kapy",
+      "unit_passed": 1,
+      "unit_count": 1,
+      "gui_passed": 4,
+      "gui_count": 4
+    },
+    "linux": {
+      "unit": "run-3ypvbd2x",
+      "gui": "run-7fh8kh0v",
+      "unit_passed": 1,
+      "unit_count": 1,
+      "gui_passed": 4,
+      "gui_count": 4
+    }
+  },
+  "source_and_runtime_frozen": "completion-info-tab",
+  "local_handles": "all terminal",
+  "evidence": {
+    "path": "docs/verification/completion-info-2026-11-04.json",
+    "sha256": "9901638c28ee4659b59915149c2f5903db634213a338efb6b10013dfa6443e42",
+    "bytes": 65705
+  },
+  "cleanup": {
+    "path": "docs/verification/completion-info-cleanup-2026-11-04.json",
+    "sha256": "e238f5890dd9eff7837d289bd79bd17e9214f9e73aec1eb94d4a972156e05318",
+    "bytes": 7906
+  },
+  "hosted_ci_snapshot": [
+    {
+      "id": 41928195904,
+      "name": "Native macOS workspace menu workflows",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "f01f25c15c3cfd133e244435229238d80ba5bd03"
+    },
+    {
+      "id": 41928194534,
+      "name": "Linux UI sanitizer regressions",
+      "status": "in_progress",
+      "conclusion": null,
+      "head_sha": "f01f25c15c3cfd133e244435229238d80ba5bd03"
+    },
+    {
+      "id": 41928194410,
+      "name": "Linux release package on fresh systems",
+      "status": "in_progress",
+      "conclusion": null,
+      "head_sha": "f01f25c15c3cfd133e244435229238d80ba5bd03"
+    },
+    {
+      "id": 41928194497,
+      "name": "macOS offline handbook links",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "f01f25c15c3cfd133e244435229238d80ba5bd03"
+    },
+    {
+      "id": 41928194493,
+      "name": "Native macOS study and project menus",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "f01f25c15c3cfd133e244435229238d80ba5bd03"
+    },
+    {
+      "id": 41928194543,
+      "name": "Native macOS settings, typography and header focus",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "f01f25c15c3cfd133e244435229238d80ba5bd03"
+    },
+    {
+      "id": 41928194536,
+      "name": "Native macOS editor menu workflows",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "f01f25c15c3cfd133e244435229238d80ba5bd03"
+    },
+    {
+      "id": 41928194566,
+      "name": "Runner backpressure regressions",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "f01f25c15c3cfd133e244435229238d80ba5bd03"
+    },
+    {
+      "id": 41928194504,
+      "name": "Native macOS menu bar",
+      "status": "pending",
+      "conclusion": null,
+      "head_sha": "f01f25c15c3cfd133e244435229238d80ba5bd03"
+    },
+    {
+      "id": 41928194478,
+      "name": "Focused macOS F1 regressions",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "f01f25c15c3cfd133e244435229238d80ba5bd03"
+    },
+    {
+      "id": 41928194513,
+      "name": "Focused macOS F1 accessibility",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "f01f25c15c3cfd133e244435229238d80ba5bd03"
+    },
+    {
+      "id": 41928194403,
+      "name": "C17 build and validation",
+      "status": "pending",
+      "conclusion": null,
+      "head_sha": "f01f25c15c3cfd133e244435229238d80ba5bd03"
+    }
+  ],
+  "current_hosted_pass_not_claimed": true,
+  "user_mac": "off; not contacted or probed",
+  "storage": "D: only; F: untouched",
+  "foreign_wip": "AX/Orca/workflow/status/dist edits preserved unstaged; not included in tested source or commit",
+  "next_step": "Actual local C/Physim scopes and separate parameter help; full D/UI and AT/DPI/current macOS acceptance remain open",
+  "objective_complete": false
+}
