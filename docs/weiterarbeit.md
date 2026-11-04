@@ -9,8 +9,10 @@ Prüfung oder Protokoll-Trennlinie allein wegen Kompaktierung erneut beginnen.
 
 **Nutzer-Mac aus; keine Zugriffe/Erreichbarkeitsproben.**
 **Eingefroren: `language-scopes-affinity`, 174 eigene Eingaben / 1.124 erfasste
-Compiler-/Testdateien. Eigene Änderungen vor Commit; tatsächlichen Commitabgleich
-beim Abschluss ergänzen. Alle lokalen Handles beendet.**
+Compiler-/Testdateien. Quellcommit `5d67db6e` in origin/upstream; 1.132 eindeutige
+Compiler-/Test-/eigene Eingaben gegen tatsächliche Git-Blobs abgeglichen,
+nur CRLF/LF normalisiert. Alle lokalen Handles beendet.**
+[Commitabschluss](verification/language-scopes-commit-2026-11-05.json).
 Echter Physim-Parser liefert aktive Deklarationsstapel samt Quell-/geschriebenen
 Typbereichen, Parameter, Block-/Funktions-/Lambda-Grenzen, Iteration, bedingte
 Bindungen, Guard, Switch-Nutzlast und nominales `self`. Rückwärtssuche wählt den
@@ -41,6 +43,10 @@ selbst bestanden. Intel-F1 **6/6** aktuell, frühere Timeouts damit nicht erklä
 Settings `41928194543` und ARM-F1 `126918062826` zuletzt queued.
 [Getrennter Mac-Bericht](verification/completion-info-macos-2026-11-05.json).
 Keine Mac-Abnahme der neuen Parserquellen.
+Neue gehostete Läufe zu `5d67db6e`: C17 **`41932070515`** pending,
+Linux-UI **`41932070573`** in_progress, Mac-F1-Accessibility **`41932070548`**
+pending. Kein neuer Editor-/Settings-/F1-Regressionslauf im API-Snapshot;
+keine Jobnummer oder erfolgreiche Mac-Abnahme ableiten. Kein Ersatzlauf.
 
 **Nächster konkreter Schritt:** zuerst ARM-Automatik-Stufe 71 gezielt
 untersuchen, danach lokalen Scopebestand nativ integrieren und C ergänzen.

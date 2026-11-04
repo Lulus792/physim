@@ -6,6 +6,11 @@ nativen UI und keine vollständige D-Abnahme. Maßgeblich bleibt
 Der Nutzer-Mac bleibt aus; kein Zugriff oder Erreichbarkeitstest. Nur D:,
 kein Zugriff auf F:. Beginn der lokalen Prüfung am 4. November, Abschluss am 5.
 
+Quellcommit **`5d67db6e`** normal in beide Repositories gepusht; alle 1.124
+erfassten Compiler-/Testdateien und 174 eigenen Eingaben mit tatsächlichen
+Git-Blobs abgeglichen, nur CRLF/LF normalisiert.
+[Commitabschluss und offene CI-Handles](language-scopes-commit-2026-11-05.json).
+
 ## Schnittstelle und Besitz
 
 [`ps_lang_editor_bindings`](../../src/language/editor_bindings.h) verwendet die

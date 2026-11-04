@@ -1,0 +1,107 @@
+{
+  "phase": "language-scopes-affinity",
+  "revision": "HEAD",
+  "compiler_and_test_count": 1124,
+  "own_input_count": 174,
+  "unique_files": 1132,
+  "all_tested_input_bytes_match_git": true,
+  "crlf_normalized_only": true,
+  "source_commit": "5d67db6ee503473c75decc6e63c41879c1033559",
+  "date": "2026-11-05",
+  "source_match_original": {
+    "path": "build/validation/language-scopes-2026-11-04/commit-match.json",
+    "sha256": "61f60df91a98ef4a5bb4796e7653df65e461258ded547874b4ffd7393bd12a69",
+    "bytes": 237433
+  },
+  "remotes": {
+    "origin": {
+      "branch": "codex/f1-design-h",
+      "tip": "5d67db6ee503473c75decc6e63c41879c1033559",
+      "normal_push_exit": 0,
+      "ls_remote_verified": true
+    },
+    "upstream": {
+      "branch": "codex/f1-design-h",
+      "tip": "5d67db6ee503473c75decc6e63c41879c1033559",
+      "normal_push_exit": 0,
+      "ls_remote_verified": true
+    }
+  },
+  "no_app": true,
+  "new_gui_or_app_acceptance": false,
+  "local_handles": "all terminal",
+  "local_tests": {
+    "windows": {
+      "run": "run-efq_y_cx",
+      "passed": 5,
+      "count": 5,
+      "configuration": "Release/MSVC"
+    },
+    "linux": {
+      "run": "run-nurnwodj",
+      "passed": 5,
+      "count": 5,
+      "configuration": "Debug/GCC ASan+UBSan detect_leaks=1"
+    }
+  },
+  "frozen": "language-scopes-affinity",
+  "all_source_runtime_referenced_archive_bytes_read": true,
+  "original_evidence": {
+    "path": "docs/verification/language-scopes-2026-11-05.json",
+    "sha256": "d1ce93262e179939a5f2c261aea725476ddd4bfdef0360b3cf553f32f3f72aa1",
+    "bytes": 50138
+  },
+  "source_parser_prefixes": 36,
+  "deterministic_inputs": 1024,
+  "actual_mutant_rejected": true,
+  "ci_snapshot": [
+    {
+      "id": 41932070549,
+      "name": "Runner backpressure regressions",
+      "status": "pending",
+      "conclusion": null,
+      "head_sha": "5d67db6ee503473c75decc6e63c41879c1033559"
+    },
+    {
+      "id": 41932070573,
+      "name": "Linux UI sanitizer regressions",
+      "status": "in_progress",
+      "conclusion": null,
+      "head_sha": "5d67db6ee503473c75decc6e63c41879c1033559"
+    },
+    {
+      "id": 41932070639,
+      "name": "Native macOS menu bar",
+      "status": "queued",
+      "conclusion": null,
+      "head_sha": "5d67db6ee503473c75decc6e63c41879c1033559"
+    },
+    {
+      "id": 41932070548,
+      "name": "Focused macOS F1 accessibility",
+      "status": "pending",
+      "conclusion": null,
+      "head_sha": "5d67db6ee503473c75decc6e63c41879c1033559"
+    },
+    {
+      "id": 41932070597,
+      "name": "Linux release package on fresh systems",
+      "status": "pending",
+      "conclusion": null,
+      "head_sha": "5d67db6ee503473c75decc6e63c41879c1033559"
+    },
+    {
+      "id": 41932070515,
+      "name": "C17 build and validation",
+      "status": "pending",
+      "conclusion": null,
+      "head_sha": "5d67db6ee503473c75decc6e63c41879c1033559"
+    }
+  ],
+  "current_hosted_pass_not_claimed": true,
+  "user_mac": "off; not contacted or probed",
+  "storage": "D: only; F: untouched",
+  "foreign_wip": "AX/Orca/workflows/status/dist kept unstaged and excluded from own capture",
+  "objective_complete": false,
+  "next_step": "Investigate previous f01 ARM auto-completion stage71; then integrate local bindings and real C scopes into native completion, followed by separate parameter help"
+}
