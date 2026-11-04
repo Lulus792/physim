@@ -5548,6 +5548,7 @@ int main(int argc, char **argv) {
         draw_ui(a, w, h);
         if(workspace_state_test && (!strcmp(argv[3],"completion-c") || !strcmp(argv[3],"completion-phys")))completion_syntax_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"completion-info-",16))completion_info_test_draw(a);
+        if(workspace_state_test && !strncmp(argv[3],"completion-auto-",16))completion_auto_draw(a,test_stage);
         if(workspace_state_test && !strncmp(argv[3],"outline-hover-",14))outline_hover_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"analysis-layout-",16))analysis_workspace_test_draw(a,test_stage);
         if(workspace_state_test && !strncmp(argv[3],"file-tabs-design",16))tab_design_draw(a);

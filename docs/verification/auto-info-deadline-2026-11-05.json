@@ -1,0 +1,1256 @@
+{
+  "date": "2026-11-05",
+  "objective_complete": false,
+  "user_mac": "off; not contacted or probed",
+  "storage": "D: only; F: untouched",
+  "scope": "Native automatic-completion test queued-toggle/pending-info expiry race; production UI/controller/appearance unchanged",
+  "final_phase": "auto-info-deadline-final",
+  "phases": {
+    "auto-info-deadline-repro": {
+      "windows": {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--sdl",
+          "D:\\Physim\\third_party\\SDL3-3.2.30",
+          "--test-display",
+          "--test-filter",
+          "completion_automatic_deadline_workflow"
+        ],
+        "exit_code": 1,
+        "app_sha256": "52debd90c87a2d362ad2daeb255812bcae1a6f17fd183a0a40d53ce7964c9a49",
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/auto-info-deadline-repro-windows.json",
+          "sha256": "bb2269d14cdf0e9eabf1d3ea8b66f10ecaa34ccd63d2a4a5054060272dbee6df",
+          "bytes": 876
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/auto-info-deadline-repro-windows.log",
+          "sha256": "80dc4c59a35df54ec7fc21a90ca451ee68d0edaef682ae4a176ff60054132f98",
+          "bytes": 51283
+        },
+        "run": "run-06uwoald",
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-06uwoald/results.json",
+          "sha256": "993ed97b999daa91330d748a72d8e06d4f81fcd0c67c1a2f5cfabdde39deab3b",
+          "bytes": 23644
+        },
+        "images": [],
+        "passed": 0,
+        "count": 1,
+        "cases": [
+          {
+            "name": "completion_automatic_deadline_workflow",
+            "status": "failed",
+            "seconds": 8.485,
+            "apps": [
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-06uwoald/completion_automatic_deadline_workflow/files \u00e4/app-steps.json",
+                  "sha256": "e0961adea99eab8183ad3cfd7007a557c12e1c611439e132fc57687629fdf446",
+                  "bytes": 10086
+                },
+                "exit_code": 1,
+                "stdout_markers": [
+                  "AUTO COMPLETION enter-without-selection=1",
+                  "AUTO COMPLETION tab-without-selection=1",
+                  "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                  "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                  "AUTO COMPLETION changed-prefix-needs-selection=1",
+                  "AUTO COMPLETION short-prefix-closes=1",
+                  "AUTO COMPLETION stale-cursor=1",
+                  "AUTO COMPLETION stale-equal-length-source=1",
+                  "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                  "AUTO COMPLETION comments-and-strings=1",
+                  "AUTO COMPLETION selection-invalidates=1",
+                  "AUTO COMPLETION target-change=1",
+                  "AUTO COMPLETION preference-off-manual-remains=1",
+                  "AUTO COMPLETION viewport-shrink-selection=1",
+                  "AUTO INFO DEADLINE injected=1",
+                  "AUTOMATIC COMPLETION SELF-TEST: FAILED"
+                ],
+                "state_trace": [
+                  "AUTO INFO phase=draw stage=70 mode=1 visible=0 bounds=0.0/0.0 due=1003891.911502 now=1003891.659262 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=1 visible=0 bounds=0.0/0.0 due=1003891.665253 now=1003891.665254 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1003891.666353 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=71 mode=0 visible=0 bounds=0.0/0.0 due=0.000000 now=1003891.672870 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=71 mode=0 visible=0 bounds=0.0/0.0 due=0.000000 now=1003891.673362 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "Auto completion stage=71 active=1 explicit=1 pending=0 composing=0 cursor=0 first=644 selected=648 rows=5 count=649 text=",
+                  "First workflow failure at stage 71 (next 71): Projekt geladen. Build kompiliert die lokalen Quelldateien. (tab=0, selected=0, samples=0, report=0, query=)"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "source_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/auto-info-deadline-repro-compiler-source.json",
+        "sha256": "1012f37ee671f95970c6139c080c329a7f4107a03451443ff9a0cef334bacc67",
+        "bytes": 118989
+      },
+      "own_inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/auto-info-deadline-repro-inputs.json",
+        "sha256": "bd8ea5e39aea048014d2a21d3a3b3ae876c1e0d96f32d66312194e5c6f5b551e",
+        "bytes": 17711
+      },
+      "runtime_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/auto-info-deadline-repro-runtime.json",
+        "sha256": "bed0d74ab3e56fa33b3aed4b0d7914d5ec02f3fa8704d9008769357ecb37dc3b",
+        "bytes": 42014
+      }
+    },
+    "auto-info-deadline-fixed": {
+      "windows": {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--sdl",
+          "D:\\Physim\\third_party\\SDL3-3.2.30",
+          "--test-display",
+          "--test-filter",
+          "completion_automatic_workflow",
+          "--test-filter",
+          "completion_automatic_deadline_workflow",
+          "--test-filter",
+          "completion_info_workflow"
+        ],
+        "exit_code": 0,
+        "app_sha256": "ac7b9d4c273de25f6ab1122e9a5b2d47f79e58fccae76320ea44d0e965a0230e",
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/auto-info-deadline-fixed-windows.json",
+          "sha256": "97d8d4fba99fc070634bf63980784584c011e33922ed91ea2b24b04a79291c73",
+          "bytes": 991
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/auto-info-deadline-fixed-windows.log",
+          "sha256": "019782f33ab56063dd0088167d4459d263936a8b025645b801e9a590d3ba224f",
+          "bytes": 41128
+        },
+        "run": "run-wrqzdvpk",
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wrqzdvpk/results.json",
+          "sha256": "aece499418fb9c0b634ca59c21eeadcebe1f57eab918f564dbb856e93dffd186",
+          "bytes": 81523
+        },
+        "images": [],
+        "passed": 3,
+        "count": 3,
+        "cases": [
+          {
+            "name": "completion_automatic_workflow",
+            "status": "passed",
+            "seconds": 12.718,
+            "apps": [
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wrqzdvpk/completion_automatic_workflow/files \u00e4/app-steps.json",
+                  "sha256": "06f621b92b5ac51c9003f79d1a40c7cf1fd95d352e5ca95e8e12b8896f259abf",
+                  "bytes": 21831
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "AUTO COMPLETION enter-without-selection=1",
+                  "AUTO COMPLETION tab-without-selection=1",
+                  "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                  "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                  "AUTO COMPLETION changed-prefix-needs-selection=1",
+                  "AUTO COMPLETION short-prefix-closes=1",
+                  "AUTO COMPLETION stale-cursor=1",
+                  "AUTO COMPLETION stale-equal-length-source=1",
+                  "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                  "AUTO COMPLETION comments-and-strings=1",
+                  "AUTO COMPLETION selection-invalidates=1",
+                  "AUTO COMPLETION target-change=1",
+                  "AUTO COMPLETION preference-off-manual-remains=1",
+                  "AUTO COMPLETION viewport-shrink-selection=1",
+                  "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                  "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                  "AUTO COMPLETION focus-loss=1",
+                  "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                ],
+                "state_trace": [
+                  "AUTO INFO phase=draw stage=70 mode=1 visible=0 bounds=0.0/0.0 due=1004022.401231 now=1004022.148532 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=1 visible=0 bounds=0.0/0.0 due=1004022.401231 now=1004022.154760 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004022.408151 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004022.415221 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004022.415880 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004022.422758 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0"
+                ]
+              },
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wrqzdvpk/completion_automatic_workflow/files \u00e4/app-steps.json",
+                  "sha256": "06f621b92b5ac51c9003f79d1a40c7cf1fd95d352e5ca95e8e12b8896f259abf",
+                  "bytes": 21831
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "AUTO COMPLETION enter-without-selection=1",
+                  "AUTO COMPLETION tab-without-selection=1",
+                  "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                  "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                  "AUTO COMPLETION changed-prefix-needs-selection=1",
+                  "AUTO COMPLETION short-prefix-closes=1",
+                  "AUTO COMPLETION stale-cursor=1",
+                  "AUTO COMPLETION stale-equal-length-source=1",
+                  "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                  "AUTO COMPLETION comments-and-strings=1",
+                  "AUTO COMPLETION selection-invalidates=1",
+                  "AUTO COMPLETION target-change=1",
+                  "AUTO COMPLETION preference-off-manual-remains=1",
+                  "AUTO COMPLETION viewport-shrink-selection=1",
+                  "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                  "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                  "AUTO COMPLETION focus-loss=1",
+                  "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                ],
+                "state_trace": [
+                  "AUTO INFO phase=draw stage=70 mode=1 visible=0 bounds=0.0/0.0 due=1004028.774186 now=1004028.526582 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=1 visible=0 bounds=0.0/0.0 due=1004028.774186 now=1004028.533466 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004028.802096 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004028.809445 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004028.810592 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004028.817495 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "completion_info_workflow",
+            "status": "passed",
+            "seconds": 18.516,
+            "apps": [
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wrqzdvpk/completion_info_workflow/files \u00e4/app-steps.json",
+                  "sha256": "8517a4fd95db7276e32ca66f5a0d299f4d26570c5bf25bb23776ad576c86269e",
+                  "bytes": 33741
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "COMPLETION INFO target=0 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=36 rapid-reselection=1",
+                  "COMPLETION INFO target=0 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=0 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=0 modified-tab-no-accept=1",
+                  "COMPLETION INFO target=1 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=37 rapid-reselection=1",
+                  "COMPLETION INFO target=1 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=1 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=1 modified-tab-no-accept=1",
+                  "COMPLETION INFO target=2 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=41 rapid-reselection=1",
+                  "COMPLETION INFO target=2 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=2 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=2 modified-tab-no-accept=1",
+                  "COMPLETION INFO SELF-TEST: PASSED"
+                ],
+                "state_trace": []
+              },
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wrqzdvpk/completion_info_workflow/files \u00e4/app-steps.json",
+                  "sha256": "8517a4fd95db7276e32ca66f5a0d299f4d26570c5bf25bb23776ad576c86269e",
+                  "bytes": 33741
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "COMPLETION INFO target=0 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=39 rapid-reselection=1",
+                  "COMPLETION INFO target=0 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=0 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=0 modified-tab-no-accept=1",
+                  "COMPLETION INFO target=1 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=38 rapid-reselection=1",
+                  "COMPLETION INFO target=1 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=1 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=1 modified-tab-no-accept=1",
+                  "COMPLETION INFO target=2 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=42 rapid-reselection=1",
+                  "COMPLETION INFO target=2 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=2 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=2 modified-tab-no-accept=1",
+                  "COMPLETION INFO SELF-TEST: PASSED"
+                ],
+                "state_trace": []
+              }
+            ]
+          },
+          {
+            "name": "completion_automatic_deadline_workflow",
+            "status": "passed",
+            "seconds": 13.078,
+            "apps": [
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wrqzdvpk/completion_automatic_deadline_workflow/files \u00e4/app-steps.json",
+                  "sha256": "b4f68bc086aab07dea8f88fca14c450049797b3301e90907069425d8571b0068",
+                  "bytes": 22007
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "AUTO COMPLETION enter-without-selection=1",
+                  "AUTO COMPLETION tab-without-selection=1",
+                  "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                  "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                  "AUTO COMPLETION changed-prefix-needs-selection=1",
+                  "AUTO COMPLETION short-prefix-closes=1",
+                  "AUTO COMPLETION stale-cursor=1",
+                  "AUTO COMPLETION stale-equal-length-source=1",
+                  "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                  "AUTO COMPLETION comments-and-strings=1",
+                  "AUTO COMPLETION selection-invalidates=1",
+                  "AUTO COMPLETION target-change=1",
+                  "AUTO COMPLETION preference-off-manual-remains=1",
+                  "AUTO COMPLETION viewport-shrink-selection=1",
+                  "AUTO INFO DEADLINE injected=1",
+                  "AUTO INFO DEADLINE pending-observed=1",
+                  "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                  "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                  "AUTO COMPLETION focus-loss=1",
+                  "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                ],
+                "state_trace": [
+                  "AUTO INFO phase=draw stage=70 mode=1 visible=0 bounds=0.0/0.0 due=1004054.049119 now=1004053.799902 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=1 visible=0 bounds=0.0/0.0 due=1004053.806299 now=1004053.806301 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004053.808381 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004053.815327 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004053.815941 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004053.822891 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0"
+                ]
+              },
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wrqzdvpk/completion_automatic_deadline_workflow/files \u00e4/app-steps.json",
+                  "sha256": "b4f68bc086aab07dea8f88fca14c450049797b3301e90907069425d8571b0068",
+                  "bytes": 22007
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "AUTO COMPLETION enter-without-selection=1",
+                  "AUTO COMPLETION tab-without-selection=1",
+                  "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                  "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                  "AUTO COMPLETION changed-prefix-needs-selection=1",
+                  "AUTO COMPLETION short-prefix-closes=1",
+                  "AUTO COMPLETION stale-cursor=1",
+                  "AUTO COMPLETION stale-equal-length-source=1",
+                  "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                  "AUTO COMPLETION comments-and-strings=1",
+                  "AUTO COMPLETION selection-invalidates=1",
+                  "AUTO COMPLETION target-change=1",
+                  "AUTO COMPLETION preference-off-manual-remains=1",
+                  "AUTO COMPLETION viewport-shrink-selection=1",
+                  "AUTO INFO DEADLINE injected=1",
+                  "AUTO INFO DEADLINE pending-observed=1",
+                  "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                  "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                  "AUTO COMPLETION focus-loss=1",
+                  "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                ],
+                "state_trace": [
+                  "AUTO INFO phase=draw stage=70 mode=1 visible=0 bounds=0.0/0.0 due=1004060.623267 now=1004060.374443 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=1 visible=0 bounds=0.0/0.0 due=1004060.381269 now=1004060.381271 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004060.404356 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004060.411093 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004060.412046 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004060.419127 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "linux": {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+          "--build-dir",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+          "--config",
+          "Debug",
+          "--jobs",
+          "4",
+          "--sdl",
+          "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+          "--test-display",
+          "--sanitizers",
+          "--test-filter",
+          "completion_automatic_workflow",
+          "--test-filter",
+          "completion_automatic_deadline_workflow",
+          "--test-filter",
+          "completion_info_workflow"
+        ],
+        "exit_code": 0,
+        "app_sha256": "1ae14fa487abe9eeae634eb5309120b4df95b6c73f270e9f0202762536ed8236",
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/auto-info-deadline-fixed-linux.json",
+          "sha256": "f1e1ff722565c7d89b4b60cf4d711dc0f4f0ce01f93360b6669cf760f2397de0",
+          "bytes": 824
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/auto-info-deadline-fixed-linux.log",
+          "sha256": "c673d18a599dd078cc306fe5b9f4d11d0b0fea413d4ebe17c9f1101c0bf46d6b",
+          "bytes": 299773
+        },
+        "run": "run-s2dwpvv4",
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-s2dwpvv4/results.json",
+          "sha256": "d219ea4c5f18ec636ad19c5dd9416701872c854aa272819f246d6c0fb24c54c8",
+          "bytes": 80363
+        },
+        "images": [],
+        "passed": 3,
+        "count": 3,
+        "cases": [
+          {
+            "name": "completion_automatic_workflow",
+            "status": "passed",
+            "seconds": 26.328,
+            "apps": [
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-s2dwpvv4/completion_automatic_workflow/files \u00e4/app-steps.json",
+                  "sha256": "6d6a95e2a329ef4bd6aa9a903d756455dce05418d3f488b48d662b81692df985",
+                  "bytes": 21725
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "AUTO COMPLETION enter-without-selection=1",
+                  "AUTO COMPLETION tab-without-selection=1",
+                  "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                  "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                  "AUTO COMPLETION changed-prefix-needs-selection=1",
+                  "AUTO COMPLETION short-prefix-closes=1",
+                  "AUTO COMPLETION stale-cursor=1",
+                  "AUTO COMPLETION stale-equal-length-source=1",
+                  "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                  "AUTO COMPLETION comments-and-strings=1",
+                  "AUTO COMPLETION selection-invalidates=1",
+                  "AUTO COMPLETION target-change=1",
+                  "AUTO COMPLETION preference-off-manual-remains=1",
+                  "AUTO COMPLETION viewport-shrink-selection=1",
+                  "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                  "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                  "AUTO COMPLETION focus-loss=1",
+                  "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                ],
+                "state_trace": [
+                  "AUTO INFO phase=draw stage=70 mode=1 visible=0 bounds=0.0/0.0 due=11292.769207 now=11292.655082 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=1 visible=0 bounds=0.0/0.0 due=11292.769207 now=11292.678994 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=70 mode=2 visible=1 bounds=330.0/239.8 due=0.000000 now=11292.789464 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=2 visible=1 bounds=330.0/239.8 due=0.000000 now=11292.826545 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=71 mode=2 visible=1 bounds=330.0/239.8 due=0.000000 now=11292.829131 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=71 mode=2 visible=1 bounds=330.0/239.8 due=0.000000 now=11292.851129 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0"
+                ]
+              },
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-s2dwpvv4/completion_automatic_workflow/files \u00e4/app-steps.json",
+                  "sha256": "6d6a95e2a329ef4bd6aa9a903d756455dce05418d3f488b48d662b81692df985",
+                  "bytes": 21725
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "AUTO COMPLETION enter-without-selection=1",
+                  "AUTO COMPLETION tab-without-selection=1",
+                  "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                  "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                  "AUTO COMPLETION changed-prefix-needs-selection=1",
+                  "AUTO COMPLETION short-prefix-closes=1",
+                  "AUTO COMPLETION stale-cursor=1",
+                  "AUTO COMPLETION stale-equal-length-source=1",
+                  "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                  "AUTO COMPLETION comments-and-strings=1",
+                  "AUTO COMPLETION selection-invalidates=1",
+                  "AUTO COMPLETION target-change=1",
+                  "AUTO COMPLETION preference-off-manual-remains=1",
+                  "AUTO COMPLETION viewport-shrink-selection=1",
+                  "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                  "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                  "AUTO COMPLETION focus-loss=1",
+                  "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                ],
+                "state_trace": [
+                  "AUTO INFO phase=draw stage=70 mode=1 visible=0 bounds=0.0/0.0 due=11304.846300 now=11304.735207 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=1 visible=0 bounds=0.0/0.0 due=11304.846300 now=11304.760904 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=11305.136820 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=11305.180385 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=11305.190164 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=11305.225553 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "completion_info_workflow",
+            "status": "passed",
+            "seconds": 35.608,
+            "apps": [
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-s2dwpvv4/completion_info_workflow/files \u00e4/app-steps.json",
+                  "sha256": "708960fa90a6cf4e8b5ffa911587ef63f413364e9029746696445d67d154b8a6",
+                  "bytes": 33671
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "COMPLETION INFO target=0 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=10 rapid-reselection=1",
+                  "COMPLETION INFO target=0 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=0 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=0 modified-tab-no-accept=1",
+                  "COMPLETION INFO target=1 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=11 rapid-reselection=1",
+                  "COMPLETION INFO target=1 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=1 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=1 modified-tab-no-accept=1",
+                  "COMPLETION INFO target=2 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=9 rapid-reselection=1",
+                  "COMPLETION INFO target=2 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=2 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=2 modified-tab-no-accept=1",
+                  "COMPLETION INFO SELF-TEST: PASSED"
+                ],
+                "state_trace": []
+              },
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-s2dwpvv4/completion_info_workflow/files \u00e4/app-steps.json",
+                  "sha256": "708960fa90a6cf4e8b5ffa911587ef63f413364e9029746696445d67d154b8a6",
+                  "bytes": 33671
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "COMPLETION INFO target=0 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=9 rapid-reselection=1",
+                  "COMPLETION INFO target=0 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=0 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=0 modified-tab-no-accept=1",
+                  "COMPLETION INFO target=1 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=12 rapid-reselection=1",
+                  "COMPLETION INFO target=1 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=1 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=1 modified-tab-no-accept=1",
+                  "COMPLETION INFO target=2 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=12 rapid-reselection=1",
+                  "COMPLETION INFO target=2 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=2 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=2 modified-tab-no-accept=1",
+                  "COMPLETION INFO SELF-TEST: PASSED"
+                ],
+                "state_trace": []
+              }
+            ]
+          },
+          {
+            "name": "completion_automatic_deadline_workflow",
+            "status": "passed",
+            "seconds": 24.479,
+            "apps": [
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-s2dwpvv4/completion_automatic_deadline_workflow/files \u00e4/app-steps.json",
+                  "sha256": "852a9b8518d57f9db7560e80afd5376a3603325543bc6a6b1563f82d24629d84",
+                  "bytes": 21901
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "AUTO COMPLETION enter-without-selection=1",
+                  "AUTO COMPLETION tab-without-selection=1",
+                  "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                  "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                  "AUTO COMPLETION changed-prefix-needs-selection=1",
+                  "AUTO COMPLETION short-prefix-closes=1",
+                  "AUTO COMPLETION stale-cursor=1",
+                  "AUTO COMPLETION stale-equal-length-source=1",
+                  "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                  "AUTO COMPLETION comments-and-strings=1",
+                  "AUTO COMPLETION selection-invalidates=1",
+                  "AUTO COMPLETION target-change=1",
+                  "AUTO COMPLETION preference-off-manual-remains=1",
+                  "AUTO COMPLETION viewport-shrink-selection=1",
+                  "AUTO INFO DEADLINE injected=1",
+                  "AUTO INFO DEADLINE pending-observed=1",
+                  "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                  "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                  "AUTO COMPLETION focus-loss=1",
+                  "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                ],
+                "state_trace": [
+                  "AUTO INFO phase=draw stage=70 mode=1 visible=0 bounds=0.0/0.0 due=11354.269704 now=11354.154357 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=1 visible=0 bounds=0.0/0.0 due=11354.176733 now=11354.176737 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=70 mode=2 visible=1 bounds=330.0/239.8 due=0.000000 now=11354.191607 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=2 visible=1 bounds=330.0/239.8 due=0.000000 now=11354.228557 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=71 mode=2 visible=1 bounds=330.0/239.8 due=0.000000 now=11354.231175 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=71 mode=2 visible=1 bounds=330.0/239.8 due=0.000000 now=11354.251989 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0"
+                ]
+              },
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-s2dwpvv4/completion_automatic_deadline_workflow/files \u00e4/app-steps.json",
+                  "sha256": "852a9b8518d57f9db7560e80afd5376a3603325543bc6a6b1563f82d24629d84",
+                  "bytes": 21901
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "AUTO COMPLETION enter-without-selection=1",
+                  "AUTO COMPLETION tab-without-selection=1",
+                  "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                  "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                  "AUTO COMPLETION changed-prefix-needs-selection=1",
+                  "AUTO COMPLETION short-prefix-closes=1",
+                  "AUTO COMPLETION stale-cursor=1",
+                  "AUTO COMPLETION stale-equal-length-source=1",
+                  "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                  "AUTO COMPLETION comments-and-strings=1",
+                  "AUTO COMPLETION selection-invalidates=1",
+                  "AUTO COMPLETION target-change=1",
+                  "AUTO COMPLETION preference-off-manual-remains=1",
+                  "AUTO COMPLETION viewport-shrink-selection=1",
+                  "AUTO INFO DEADLINE injected=1",
+                  "AUTO INFO DEADLINE pending-observed=1",
+                  "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                  "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                  "AUTO COMPLETION focus-loss=1",
+                  "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                ],
+                "state_trace": [
+                  "AUTO INFO phase=draw stage=70 mode=1 visible=0 bounds=0.0/0.0 due=11365.388505 now=11365.263015 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=1 visible=0 bounds=0.0/0.0 due=11365.285793 now=11365.285797 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=11365.459867 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=11365.491918 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=11365.496880 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=11365.516822 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "source_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/auto-info-deadline-fixed-compiler-source.json",
+        "sha256": "3c8b747835fc4f1b2f27260b44c4cd792eb26255d515812b37799704a9b353f8",
+        "bytes": 119022
+      },
+      "own_inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/auto-info-deadline-fixed-inputs.json",
+        "sha256": "c4214ff045193f89f465db1e875c7475cc7c9b4468a60edcaa28779389f0d2f0",
+        "bytes": 17711
+      },
+      "runtime_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/auto-info-deadline-fixed-runtime.json",
+        "sha256": "9b78dd26583b18c29f13dcffed9600dcb88fbda915f1cc81f4793b0357df54a0",
+        "bytes": 42014
+      }
+    },
+    "auto-info-deadline-final": {
+      "windows": {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--sdl",
+          "D:\\Physim\\third_party\\SDL3-3.2.30",
+          "--test-display",
+          "--test-filter",
+          "completion_automatic_workflow",
+          "--test-filter",
+          "completion_automatic_deadline_workflow",
+          "--test-filter",
+          "completion_info_workflow"
+        ],
+        "exit_code": 0,
+        "app_sha256": "ac7b9d4c273de25f6ab1122e9a5b2d47f79e58fccae76320ea44d0e965a0230e",
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/auto-info-deadline-final-windows.json",
+          "sha256": "97d8d4fba99fc070634bf63980784584c011e33922ed91ea2b24b04a79291c73",
+          "bytes": 991
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/auto-info-deadline-final-windows.log",
+          "sha256": "8aac60bb216a4575a4cbd03b9786ea195826282f2f8b9a3e4630840d0a11004c",
+          "bytes": 423
+        },
+        "run": "run-5wx3me0m",
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-5wx3me0m/results.json",
+          "sha256": "697e9b5f123c8f9d300deaa6031b8d172a22512a490166de31c113572dc1dcc1",
+          "bytes": 81519
+        },
+        "images": [],
+        "passed": 3,
+        "count": 3,
+        "cases": [
+          {
+            "name": "completion_automatic_workflow",
+            "status": "passed",
+            "seconds": 12.328,
+            "apps": [
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-5wx3me0m/completion_automatic_workflow/files \u00e4/app-steps.json",
+                  "sha256": "ab17d21d7eadd8169bb3d1b4f18e755b94c2df491292d9601191a5aaeb4e6c0f",
+                  "bytes": 21830
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "AUTO COMPLETION enter-without-selection=1",
+                  "AUTO COMPLETION tab-without-selection=1",
+                  "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                  "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                  "AUTO COMPLETION changed-prefix-needs-selection=1",
+                  "AUTO COMPLETION short-prefix-closes=1",
+                  "AUTO COMPLETION stale-cursor=1",
+                  "AUTO COMPLETION stale-equal-length-source=1",
+                  "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                  "AUTO COMPLETION comments-and-strings=1",
+                  "AUTO COMPLETION selection-invalidates=1",
+                  "AUTO COMPLETION target-change=1",
+                  "AUTO COMPLETION preference-off-manual-remains=1",
+                  "AUTO COMPLETION viewport-shrink-selection=1",
+                  "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                  "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                  "AUTO COMPLETION focus-loss=1",
+                  "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                ],
+                "state_trace": [
+                  "AUTO INFO phase=draw stage=70 mode=1 visible=0 bounds=0.0/0.0 due=1004421.405455 now=1004421.153017 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=1 visible=0 bounds=0.0/0.0 due=1004421.405455 now=1004421.159207 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004421.412440 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004421.418951 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004421.419317 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004421.425233 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0"
+                ]
+              },
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-5wx3me0m/completion_automatic_workflow/files \u00e4/app-steps.json",
+                  "sha256": "ab17d21d7eadd8169bb3d1b4f18e755b94c2df491292d9601191a5aaeb4e6c0f",
+                  "bytes": 21830
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "AUTO COMPLETION enter-without-selection=1",
+                  "AUTO COMPLETION tab-without-selection=1",
+                  "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                  "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                  "AUTO COMPLETION changed-prefix-needs-selection=1",
+                  "AUTO COMPLETION short-prefix-closes=1",
+                  "AUTO COMPLETION stale-cursor=1",
+                  "AUTO COMPLETION stale-equal-length-source=1",
+                  "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                  "AUTO COMPLETION comments-and-strings=1",
+                  "AUTO COMPLETION selection-invalidates=1",
+                  "AUTO COMPLETION target-change=1",
+                  "AUTO COMPLETION preference-off-manual-remains=1",
+                  "AUTO COMPLETION viewport-shrink-selection=1",
+                  "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                  "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                  "AUTO COMPLETION focus-loss=1",
+                  "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                ],
+                "state_trace": [
+                  "AUTO INFO phase=draw stage=70 mode=1 visible=0 bounds=0.0/0.0 due=1004427.192497 now=1004426.944356 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=1 visible=0 bounds=0.0/0.0 due=1004427.192497 now=1004426.950283 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004427.211105 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004427.217708 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004427.218283 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004427.224236 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "completion_info_workflow",
+            "status": "passed",
+            "seconds": 17.391,
+            "apps": [
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-5wx3me0m/completion_info_workflow/files \u00e4/app-steps.json",
+                  "sha256": "c364c272e0d9dbbc7361740b37a563c37c2ac201fb35eb91892d4a20053a02ed",
+                  "bytes": 33741
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "COMPLETION INFO target=0 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=35 rapid-reselection=1",
+                  "COMPLETION INFO target=0 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=0 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=0 modified-tab-no-accept=1",
+                  "COMPLETION INFO target=1 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=42 rapid-reselection=1",
+                  "COMPLETION INFO target=1 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=1 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=1 modified-tab-no-accept=1",
+                  "COMPLETION INFO target=2 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=43 rapid-reselection=1",
+                  "COMPLETION INFO target=2 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=2 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=2 modified-tab-no-accept=1",
+                  "COMPLETION INFO SELF-TEST: PASSED"
+                ],
+                "state_trace": []
+              },
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-5wx3me0m/completion_info_workflow/files \u00e4/app-steps.json",
+                  "sha256": "c364c272e0d9dbbc7361740b37a563c37c2ac201fb35eb91892d4a20053a02ed",
+                  "bytes": 33741
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "COMPLETION INFO target=0 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=38 rapid-reselection=1",
+                  "COMPLETION INFO target=0 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=0 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=0 modified-tab-no-accept=1",
+                  "COMPLETION INFO target=1 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=40 rapid-reselection=1",
+                  "COMPLETION INFO target=1 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=1 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=1 modified-tab-no-accept=1",
+                  "COMPLETION INFO target=2 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=42 rapid-reselection=1",
+                  "COMPLETION INFO target=2 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=2 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=2 modified-tab-no-accept=1",
+                  "COMPLETION INFO SELF-TEST: PASSED"
+                ],
+                "state_trace": []
+              }
+            ]
+          },
+          {
+            "name": "completion_automatic_deadline_workflow",
+            "status": "passed",
+            "seconds": 11.5,
+            "apps": [
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-5wx3me0m/completion_automatic_deadline_workflow/files \u00e4/app-steps.json",
+                  "sha256": "a739e621edd49999347035739dffdec2fd8953755e7932152d31df30c3ce12e3",
+                  "bytes": 22006
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "AUTO COMPLETION enter-without-selection=1",
+                  "AUTO COMPLETION tab-without-selection=1",
+                  "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                  "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                  "AUTO COMPLETION changed-prefix-needs-selection=1",
+                  "AUTO COMPLETION short-prefix-closes=1",
+                  "AUTO COMPLETION stale-cursor=1",
+                  "AUTO COMPLETION stale-equal-length-source=1",
+                  "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                  "AUTO COMPLETION comments-and-strings=1",
+                  "AUTO COMPLETION selection-invalidates=1",
+                  "AUTO COMPLETION target-change=1",
+                  "AUTO COMPLETION preference-off-manual-remains=1",
+                  "AUTO COMPLETION viewport-shrink-selection=1",
+                  "AUTO INFO DEADLINE injected=1",
+                  "AUTO INFO DEADLINE pending-observed=1",
+                  "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                  "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                  "AUTO COMPLETION focus-loss=1",
+                  "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                ],
+                "state_trace": [
+                  "AUTO INFO phase=draw stage=70 mode=1 visible=0 bounds=0.0/0.0 due=1004450.676623 now=1004450.426079 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=1 visible=0 bounds=0.0/0.0 due=1004450.432218 now=1004450.432219 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004450.433402 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004450.443077 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004450.443646 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004450.449965 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0"
+                ]
+              },
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-5wx3me0m/completion_automatic_deadline_workflow/files \u00e4/app-steps.json",
+                  "sha256": "a739e621edd49999347035739dffdec2fd8953755e7932152d31df30c3ce12e3",
+                  "bytes": 22006
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "AUTO COMPLETION enter-without-selection=1",
+                  "AUTO COMPLETION tab-without-selection=1",
+                  "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                  "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                  "AUTO COMPLETION changed-prefix-needs-selection=1",
+                  "AUTO COMPLETION short-prefix-closes=1",
+                  "AUTO COMPLETION stale-cursor=1",
+                  "AUTO COMPLETION stale-equal-length-source=1",
+                  "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                  "AUTO COMPLETION comments-and-strings=1",
+                  "AUTO COMPLETION selection-invalidates=1",
+                  "AUTO COMPLETION target-change=1",
+                  "AUTO COMPLETION preference-off-manual-remains=1",
+                  "AUTO COMPLETION viewport-shrink-selection=1",
+                  "AUTO INFO DEADLINE injected=1",
+                  "AUTO INFO DEADLINE pending-observed=1",
+                  "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                  "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                  "AUTO COMPLETION focus-loss=1",
+                  "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                ],
+                "state_trace": [
+                  "AUTO INFO phase=draw stage=70 mode=1 visible=0 bounds=0.0/0.0 due=1004456.416948 now=1004456.166423 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=1 visible=0 bounds=0.0/0.0 due=1004456.172401 now=1004456.172403 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004456.185186 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004456.191447 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004456.192020 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=1004456.197947 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "linux": {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+          "--build-dir",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+          "--config",
+          "Debug",
+          "--jobs",
+          "4",
+          "--sdl",
+          "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+          "--test-display",
+          "--sanitizers",
+          "--test-filter",
+          "completion_automatic_workflow",
+          "--test-filter",
+          "completion_automatic_deadline_workflow",
+          "--test-filter",
+          "completion_info_workflow"
+        ],
+        "exit_code": 0,
+        "app_sha256": "1ae14fa487abe9eeae634eb5309120b4df95b6c73f270e9f0202762536ed8236",
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/auto-info-deadline-final-linux.json",
+          "sha256": "f1e1ff722565c7d89b4b60cf4d711dc0f4f0ce01f93360b6669cf760f2397de0",
+          "bytes": 824
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/auto-info-deadline-final-linux.log",
+          "sha256": "098802a6ef982dc5dfc9d95b84ca7cacee9a071dfa39cb723e929c5e0e529a6f",
+          "bytes": 449
+        },
+        "run": "run-s96zafnf",
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-s96zafnf/results.json",
+          "sha256": "456eca861b9d195df4716ab18c21f8b1c1c9e5f75424e8d22de08be160a7a5c7",
+          "bytes": 80363
+        },
+        "images": [],
+        "passed": 3,
+        "count": 3,
+        "cases": [
+          {
+            "name": "completion_automatic_workflow",
+            "status": "passed",
+            "seconds": 23.371,
+            "apps": [
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-s96zafnf/completion_automatic_workflow/files \u00e4/app-steps.json",
+                  "sha256": "80cee3704d58317405a4f6a4df29c6278932d071d827d6d3651e8d4cea58c7f5",
+                  "bytes": 21724
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "AUTO COMPLETION enter-without-selection=1",
+                  "AUTO COMPLETION tab-without-selection=1",
+                  "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                  "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                  "AUTO COMPLETION changed-prefix-needs-selection=1",
+                  "AUTO COMPLETION short-prefix-closes=1",
+                  "AUTO COMPLETION stale-cursor=1",
+                  "AUTO COMPLETION stale-equal-length-source=1",
+                  "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                  "AUTO COMPLETION comments-and-strings=1",
+                  "AUTO COMPLETION selection-invalidates=1",
+                  "AUTO COMPLETION target-change=1",
+                  "AUTO COMPLETION preference-off-manual-remains=1",
+                  "AUTO COMPLETION viewport-shrink-selection=1",
+                  "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                  "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                  "AUTO COMPLETION focus-loss=1",
+                  "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                ],
+                "state_trace": [
+                  "AUTO INFO phase=draw stage=70 mode=1 visible=0 bounds=0.0/0.0 due=11548.328165 now=11548.229368 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=1 visible=0 bounds=0.0/0.0 due=11548.328165 now=11548.252183 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=70 mode=2 visible=1 bounds=330.0/239.8 due=0.000000 now=11548.354466 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=2 visible=1 bounds=330.0/239.8 due=0.000000 now=11548.393516 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=71 mode=2 visible=1 bounds=330.0/239.8 due=0.000000 now=11548.395945 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=71 mode=2 visible=1 bounds=330.0/239.8 due=0.000000 now=11548.416136 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0"
+                ]
+              },
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-s96zafnf/completion_automatic_workflow/files \u00e4/app-steps.json",
+                  "sha256": "80cee3704d58317405a4f6a4df29c6278932d071d827d6d3651e8d4cea58c7f5",
+                  "bytes": 21724
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "AUTO COMPLETION enter-without-selection=1",
+                  "AUTO COMPLETION tab-without-selection=1",
+                  "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                  "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                  "AUTO COMPLETION changed-prefix-needs-selection=1",
+                  "AUTO COMPLETION short-prefix-closes=1",
+                  "AUTO COMPLETION stale-cursor=1",
+                  "AUTO COMPLETION stale-equal-length-source=1",
+                  "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                  "AUTO COMPLETION comments-and-strings=1",
+                  "AUTO COMPLETION selection-invalidates=1",
+                  "AUTO COMPLETION target-change=1",
+                  "AUTO COMPLETION preference-off-manual-remains=1",
+                  "AUTO COMPLETION viewport-shrink-selection=1",
+                  "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                  "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                  "AUTO COMPLETION focus-loss=1",
+                  "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                ],
+                "state_trace": [
+                  "AUTO INFO phase=draw stage=70 mode=1 visible=0 bounds=0.0/0.0 due=11558.997601 now=11558.876197 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=1 visible=0 bounds=0.0/0.0 due=11558.997601 now=11558.898871 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=11559.186717 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=11559.220244 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=11559.225422 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=11559.246257 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "completion_info_workflow",
+            "status": "passed",
+            "seconds": 33.897,
+            "apps": [
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-s96zafnf/completion_info_workflow/files \u00e4/app-steps.json",
+                  "sha256": "3d495d34e80490ae708edf89dbe15cacefa29a10fb7d2799a6162ce0546ce85b",
+                  "bytes": 33672
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "COMPLETION INFO target=0 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=11 rapid-reselection=1",
+                  "COMPLETION INFO target=0 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=0 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=0 modified-tab-no-accept=1",
+                  "COMPLETION INFO target=1 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=12 rapid-reselection=1",
+                  "COMPLETION INFO target=1 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=1 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=1 modified-tab-no-accept=1",
+                  "COMPLETION INFO target=2 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=7 rapid-reselection=1",
+                  "COMPLETION INFO target=2 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=2 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=2 modified-tab-no-accept=1",
+                  "COMPLETION INFO SELF-TEST: PASSED"
+                ],
+                "state_trace": []
+              },
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-s96zafnf/completion_info_workflow/files \u00e4/app-steps.json",
+                  "sha256": "3d495d34e80490ae708edf89dbe15cacefa29a10fb7d2799a6162ce0546ce85b",
+                  "bytes": 33672
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "COMPLETION INFO target=0 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=11 rapid-reselection=1",
+                  "COMPLETION INFO target=0 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=0 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=0 modified-tab-no-accept=1",
+                  "COMPLETION INFO target=1 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=12 rapid-reselection=1",
+                  "COMPLETION INFO target=1 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=1 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=1 modified-tab-no-accept=1",
+                  "COMPLETION INFO target=2 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=11 rapid-reselection=1",
+                  "COMPLETION INFO target=2 hover-preview=1 no-keyboard-accept=1",
+                  "COMPLETION INFO target=2 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                  "COMPLETION INFO target=2 modified-tab-no-accept=1",
+                  "COMPLETION INFO SELF-TEST: PASSED"
+                ],
+                "state_trace": []
+              }
+            ]
+          },
+          {
+            "name": "completion_automatic_deadline_workflow",
+            "status": "passed",
+            "seconds": 29.589,
+            "apps": [
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-s96zafnf/completion_automatic_deadline_workflow/files \u00e4/app-steps.json",
+                  "sha256": "84a0a4814e64405ef07ff9c2ac3b271bd6201ec90a676876fb34b54beed1f44c",
+                  "bytes": 21901
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "AUTO COMPLETION enter-without-selection=1",
+                  "AUTO COMPLETION tab-without-selection=1",
+                  "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                  "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                  "AUTO COMPLETION changed-prefix-needs-selection=1",
+                  "AUTO COMPLETION short-prefix-closes=1",
+                  "AUTO COMPLETION stale-cursor=1",
+                  "AUTO COMPLETION stale-equal-length-source=1",
+                  "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                  "AUTO COMPLETION comments-and-strings=1",
+                  "AUTO COMPLETION selection-invalidates=1",
+                  "AUTO COMPLETION target-change=1",
+                  "AUTO COMPLETION preference-off-manual-remains=1",
+                  "AUTO COMPLETION viewport-shrink-selection=1",
+                  "AUTO INFO DEADLINE injected=1",
+                  "AUTO INFO DEADLINE pending-observed=1",
+                  "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                  "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                  "AUTO COMPLETION focus-loss=1",
+                  "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                ],
+                "state_trace": [
+                  "AUTO INFO phase=draw stage=70 mode=1 visible=0 bounds=0.0/0.0 due=11610.869471 now=11610.787365 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=1 visible=0 bounds=0.0/0.0 due=11610.819168 now=11610.819172 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=70 mode=2 visible=1 bounds=330.0/239.8 due=0.000000 now=11610.849674 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=2 visible=1 bounds=330.0/239.8 due=0.000000 now=11610.925297 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=71 mode=2 visible=1 bounds=330.0/239.8 due=0.000000 now=11610.929837 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=71 mode=2 visible=1 bounds=330.0/239.8 due=0.000000 now=11610.961488 selected=648 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0"
+                ]
+              },
+              {
+                "original": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-s96zafnf/completion_automatic_deadline_workflow/files \u00e4/app-steps.json",
+                  "sha256": "84a0a4814e64405ef07ff9c2ac3b271bd6201ec90a676876fb34b54beed1f44c",
+                  "bytes": 21901
+                },
+                "exit_code": 0,
+                "stdout_markers": [
+                  "AUTO COMPLETION enter-without-selection=1",
+                  "AUTO COMPLETION tab-without-selection=1",
+                  "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                  "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                  "AUTO COMPLETION changed-prefix-needs-selection=1",
+                  "AUTO COMPLETION short-prefix-closes=1",
+                  "AUTO COMPLETION stale-cursor=1",
+                  "AUTO COMPLETION stale-equal-length-source=1",
+                  "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                  "AUTO COMPLETION comments-and-strings=1",
+                  "AUTO COMPLETION selection-invalidates=1",
+                  "AUTO COMPLETION target-change=1",
+                  "AUTO COMPLETION preference-off-manual-remains=1",
+                  "AUTO COMPLETION viewport-shrink-selection=1",
+                  "AUTO INFO DEADLINE injected=1",
+                  "AUTO INFO DEADLINE pending-observed=1",
+                  "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                  "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                  "AUTO COMPLETION focus-loss=1",
+                  "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                ],
+                "state_trace": [
+                  "AUTO INFO phase=draw stage=70 mode=1 visible=0 bounds=0.0/0.0 due=11622.524282 now=11622.410201 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=1 visible=0 bounds=0.0/0.0 due=11622.434212 now=11622.434216 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=11622.660837 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=70 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=11622.695635 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=draw stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=11622.700102 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0",
+                  "AUTO INFO phase=before stage=71 mode=2 visible=1 bounds=330.0/260.0 due=0.000000 now=11622.722065 selected=300 explicit=1 cursor=0 snapshot-scroll=0.0/0.0 source-scroll=0.0/0.0"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "source_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/auto-info-deadline-final-compiler-source.json",
+        "sha256": "0b8e160665f44917e30244e4fd68e23c80b89be552d295d6374e5a4f1cc290bc",
+        "bytes": 118988
+      },
+      "own_inputs": {
+        "path": "build/validation/explorer-inline-2026-10-29/auto-info-deadline-final-inputs.json",
+        "sha256": "3d27d666572a9b068a56142ce723b019013c8326d407c14959cf619608be4cab",
+        "bytes": 17711
+      },
+      "runtime_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/auto-info-deadline-final-runtime.json",
+        "sha256": "972a3ba9cb9812b9ce6c72ce402e37c98f160e204f810ea1854a22835b11d2fd",
+        "bytes": 42014
+      }
+    }
+  },
+  "registry_format": {
+    "original": {
+      "path": "build/validation/auto-info-deadline-2026-11-05/registry-format.json",
+      "sha256": "a031b05ae4964f5259583fccef410395c449d9f00634435c6e7065c201cea33d",
+      "bytes": 447
+    },
+    "all_original_test_payloads_unchanged": true,
+    "new_test_only": "completion_automatic_deadline_workflow",
+    "before_sha256": "b27a301d4868daad4497c382a474d77f09c210cbe6d0b7990cbe2b8387fe4dd2",
+    "after_sha256": "d9dbd7d15200ed16b046b7fa2f6a1a8c6e4083d42e9d38d572639cc17101df6e",
+    "before_bytes": 366609,
+    "after_bytes": 359169,
+    "reason": "Preserve original compact formatting and literal Unicode; no unrelated payload changes"
+  },
+  "actual_counter": "Windows C fails at71 with PENDING-hidden -> drawn VISIBLE -> queued CtrlSpace hides. Current/snapshot scroll0/0, cursor0, selection648, explicit1 unchanged.",
+  "fix": "Observe mode != PENDING within existing3-second stage deadline before conditionally queuing CtrlSpace; no new sleep/timeout/data weakening.",
+  "native_apps_per_final_platform": 6,
+  "images_created": 0,
+  "harness_check": {
+    "command": [
+      "C:/Users/angel/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "tools/with-artifacts.py",
+      "--",
+      "C:/Users/angel/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "tests/test_native_test_runner.py",
+      "--work",
+      "D:/Physim/build/validation/auto-info-deadline-2026-11-05/runner-check"
+    ],
+    "actual_exit_code": 0,
+    "evidence": "Observed exec session29564 terminal0 and final Native test runner passed marker; expectedmock build/exit/timeouts were not product failures.",
+    "registered_platform_contracts": [
+      "win32",
+      "linux",
+      "darwin"
+    ]
+  },
+  "tooling_notes": [
+    "Initial setup used absent cases key; KeyError before write. Corrected actual tests key. Initial before snapshot not executed; source/runtime frozen, no native result claimed.",
+    "First registry serialization changed unrelated formatting/Unicode escapes. Restored exact original style plus single new30-line entry; every decoded old/new test payload compared equal.",
+    "Final format-only source capture actually reran same3GUI cases both platforms; measured app SHA equal to previous fixed phase."
+  ],
+  "limitations": [
+    "The original f01 ARM stderr lacked info mode/deadline; counter proves this fixture race, not a direct recording of the historical ARM event sequence.",
+    "Hosted current ARM and Intel acceptance must be read from new exact run artifacts; no private Mac access.",
+    "No new manual/API/F1/protocol/settings matrix claimed; their production renderers unchanged. Full D/UI remains incomplete."
+  ]
+}

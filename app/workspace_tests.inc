@@ -37,7 +37,7 @@ static bool workspace_test_start(app *a, const char *root, const char *mode) {
     if(!strncmp(mode,"outline-",8))return outline_test_start(a,root,mode);
     if(!strncmp(mode,"editor-replace",14))return editor_replace_start(a,root,mode);
     if(!strncmp(mode,"completion-info-",16))return completion_test_start(a,root,strstr(mode,"phys")?"completion-phys":"completion-c");
-    if(!strcmp(mode,"completion-auto-c") || !strcmp(mode,"completion-auto-phys"))return completion_test_start(a,root,strstr(mode,"phys")?"completion-phys":"completion-c");
+    if(!strncmp(mode,"completion-auto-",16))return completion_test_start(a,root,strstr(mode,"phys")?"completion-phys":"completion-c");
     if(!strcmp(mode,"completion-c") || !strcmp(mode,"completion-phys"))return completion_test_start(a,root,mode);
     if(!strcmp(mode,"api-reference-c") || !strcmp(mode,"api-reference-phys"))return api_reference_test_start(a,root,mode);
     if(!strncmp(mode,"api-card-",9))return api_card_test_start(a,root,mode);
@@ -208,7 +208,7 @@ static void workspace_test_frame(app *a, const char *mode, int *stage, int *code
     if(!strncmp(mode,"outline-",8)){outline_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"editor-replace",14)){editor_replace_frame(a,stage,code,capture);return;}
     if(!strncmp(mode,"completion-info-",16)){completion_info_test_frame(a,mode,stage,code);return;}
-    if(!strcmp(mode,"completion-auto-c") || !strcmp(mode,"completion-auto-phys")){completion_auto_frame(a,mode,stage,code);return;}
+    if(!strncmp(mode,"completion-auto-",16)){completion_auto_frame(a,mode,stage,code);return;}
     if(!strcmp(mode,"completion-c") || !strcmp(mode,"completion-phys")){completion_test_frame(a,mode,stage,code,capture);return;}
     if(!strcmp(mode,"api-reference-c") || !strcmp(mode,"api-reference-phys")){api_reference_test_frame(a,mode,stage,code,capture);return;}
     if(!strncmp(mode,"api-card-",9)){api_card_test_frame(a,mode,stage,code,capture);return;}

@@ -10,8 +10,22 @@ static bool completion_auto_seed(app *a,const char *text) {
     a->experiment.select_start=a->experiment.select_end=a->experiment.cursor;
     a->completion_focus_edit=&a->experiment;return true;
 }
+static void completion_auto_info_trace(app *a,const char *phase,int stage) {
+    static int previous_mode[2]={-1,-1},previous_stage[2]={-1,-1},previous_visible[2]={-1,-1};
+    unsigned at=!strcmp(phase,"draw");
+    if(previous_stage[at]==stage && previous_mode[at]==(int)a->completion_info.mode &&
+       previous_visible[at]==(int)a->completion_info_visible)return;
+    previous_stage[at]=stage;previous_mode[at]=(int)a->completion_info.mode;previous_visible[at]=(int)a->completion_info_visible;
+    fprintf(stderr,"AUTO INFO phase=%s stage=%d mode=%d visible=%d bounds=%.1f/%.1f due=%.6f now=%.6f selected=%zu explicit=%d cursor=%d snapshot-scroll=%.1f/%.1f source-scroll=%.1f/%.1f\n",
+        phase,stage,a->completion_info.mode,a->completion_info_visible,a->completion_info_bounds.w,a->completion_info_bounds.h,
+        a->completion_info.due,ps_clock(),a->completion_selected,a->completion_explicit,a->experiment.cursor,
+        a->completion_info.scroll_x,a->completion_info.scroll_y,(double)a->experiment.scrollbar.x,(double)a->experiment.scrollbar.y);
+}
+static void completion_auto_draw(app *a,int stage) {
+    if(stage==70 || stage==71)completion_auto_info_trace(a,"draw",stage);
+}
 static void completion_auto_frame(app *a,const char *mode,int *stage,int *code) {
-    static double deadline,hold;static char expected[256];
+    static double deadline,hold;static char expected[256];static bool deadline_injected,deadline_observed;
     bool language=strstr(mode,"phys")!=NULL,ok=true;
     const char *prefix=language?"Ve":"ps",*tail=language?"c":"_";
     struct nk_text_edit *edit=&a->experiment;
@@ -186,9 +200,23 @@ static void completion_auto_frame(app *a,const char *mode,int *stage,int *code) 
         ps_preferences p=a->preferences;p.completion_rows=5;p.theme=PS_THEME_HIGH_CONTRAST;preferences_apply(a,&p);}AUTO_NEXT(70);break;
     case 70:
         AUTO_WAIT(a->completion_visible_rows==5 && a->preferences.theme==PS_THEME_HIGH_CONTRAST);
+        if(strstr(mode,"deadline") && !deadline_injected){
+            /* Test-only boundary: selection's real pending request becomes due
+             * in the draw after this pre-draw assertion, before queued keys. */
+            completion_info_request(a,false);a->completion_info.due=ps_clock();deadline_injected=true;
+            puts("AUTO INFO DEADLINE injected=1");
+        }
+        completion_auto_info_trace(a,"before",*stage);
+        if(deadline_injected && !deadline_observed && a->completion_info.mode==PS_COMPLETION_INFO_PENDING){
+            puts("AUTO INFO DEADLINE pending-observed=1");deadline_observed=true;
+        }
+        /* A queued toggle must not race the pending selection timer's draw.
+         * First observe its result; then toggle only a settled hidden card. */
+        AUTO_WAIT(a->completion_info.mode!=PS_COMPLETION_INFO_PENDING);
         if(!a->completion_info_visible)AUTO_KEY(SDLK_SPACE,SDL_KMOD_CTRL);
         AUTO_NEXT(71);break;
     case 71:
+        completion_auto_info_trace(a,"before",*stage);
         AUTO_WAIT(a->completion_info_visible && a->completion_info_bounds.w>0);
         ok=a->completion_choice_bounds[4].h>=30 && a->completion_info_bounds.w>0;
         puts("AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1");
@@ -218,6 +246,7 @@ static void completion_auto_frame(app *a,const char *mode,int *stage,int *code) 
         puts("AUTO COMPLETION focus-loss=1");a->quitting=true;break;
     }
 finished:
+    if(!ok)completion_auto_info_trace(a,"failure",*stage);
     if(!ok){const char *text=nk_str_get_const(&edit->string);fprintf(stderr,"Auto completion stage=%d active=%d explicit=%d pending=%d composing=%d cursor=%d first=%zu selected=%zu rows=%u count=%zu text=%.*s\n",*stage,a->completion_active,a->completion_explicit,a->completion_pending_edit!=NULL,a->completion_composing,edit->cursor,a->completion_first,a->completion_selected,a->completion_visible_rows,a->completion_count,nk_str_len_char(&edit->string),text?text:"");*code=1;a->quitting=true;}
     if(a->quitting)printf("AUTOMATIC COMPLETION SELF-TEST: %s\n",*code?"FAILED":"PASSED");
 #undef AUTO_WAIT

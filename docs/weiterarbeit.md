@@ -5,7 +5,39 @@ abgleichen. Verbindliche Designs: [AGENTS.md](../AGENTS.md) und
 [Gesamtübergabe](visuals/unified-workspace/NEXT-CHAT.md). Keine geschlossene
 Prüfung oder Protokoll-Trennlinie allein wegen Kompaktierung erneut beginnen.
 
-## Aktueller Anschluss: Physim-Scopes als Parsergrundlage
+## Aktueller Anschluss: Automatikprüfer gegen Fristrennen gesichert
+
+**Nutzer-Mac aus; keine Zugriffe/Erreichbarkeitsproben.**
+**Eingefroren: `auto-info-deadline-final`, 174 eigene Eingaben / 1.124 erfasste
+Compiler-/Testdateien. Alle lokalen Handles beendet. Quell-/Laufzeit-/Archivbytes
+gelesen. Eigene Änderungen vor Commit; Git-Abschluss anschließend ergänzen.**
+Belegtes Rennen im Prüfer: Vor Zeichnung unsichtbare Pending-Karte → geplanter
+Strg+Leertaste-Befehl → zwischenzeitlich gezeichnete Karte → Taste blendet sie
+aus. Auswahl/Cursor/Quelle und Scrollposition bleiben gleich. Kontrollierter
+Windows-C-Vorherfall **0/1**, `run-06uwoald`, Stufe 71; keine Linux-/Physim-
+Vorherausführung behaupten. Original-ARM-Fehler hatte keine Mode-/Fristdaten;
+den konkreten damaligen Ereignisablauf nicht als nachträglich beobachtet ausgeben.
+
+Prüfer wartet nun innerhalb derselben 3-s-Stufengrenze auf `mode != PENDING`,
+bevor er gegebenenfalls umschaltet. Keine Produktionsoptik/Controlleränderung,
+keine gelockerten Daten-/Undo-/Geometrieassertionen, kein neuer Schlaf/Watchdog.
+Test-only Fristvariante und sparsame Vor-/Nachzeichnungsdiagnose ergänzt.
+Windows Release/Linux Debug ASan/UBSan zunächst je **GUI 3/3**, danach nur
+Testregistrierungsformat bereinigt, endgültige Eingaben erneut je **GUI 3/3**:
+`run-5wx3me0m` / `run-s96zafnf`. Appbytes je Plattform zwischen beiden positiven
+Phasen gleich. C/Physim, normaler/erzwungener Automatikablauf und Info-Gruppe;
+keine neuen Bilder. Register-/Harness-Selbstprüfung Exit 0; Mockfehler sind keine
+Produktfehler. [Phasen, Originalbefunde und Grenzen](verification/auto-info-deadline-2026-11-05.md).
+
+**Nächster konkreter Schritt:** neuen gehosteten Editorlauf mit sieben Gruppen
+auf beiden Mac-Runnern anhand der Originalartefakte bewerten; Nutzer-Mac bleibt
+unberührt. Danach native lokale Namen/Quellstellen-Karte/Einfügen/Undo/leere
+Argumentauslöser, echte C-Scopes und separate Parameterhilfe fortsetzen.
+Keine volle D-/UI-Punktzahl oder neue manuelle/assistive/DPI-Abnahme. Keine
+geschlossenen F1-/Protokoll-/Settings-Matrizen wegen Kontextwechsel wiederholen.
+Notiz: `build/validation/auto-info-deadline-2026-11-05/STATE.md`.
+
+## Abgeschlossen: Physim-Scopes als Parsergrundlage
 
 **Nutzer-Mac aus; keine Zugriffe/Erreichbarkeitsproben.**
 **Eingefroren: `language-scopes-affinity`, 174 eigene Eingaben / 1.124 erfasste
@@ -364,12 +396,13 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
 
 ## Sicherer lokaler Anschluss
 
-- `prepare-next.py <neuer-tag> language-scopes-affinity` prüft vorher Quelle,
+- `prepare-next.py <neuer-tag> auto-info-deadline-final` prüft vorher Quelle,
   Runtime und Archive. Neue Module ausdrücklich in die Eingabeliste aufnehmen.
   Eigene Quellen vollständig versionieren, fremde AT-SPI-/Orca-/Status-/dist-
   Änderungen erhalten und nicht in eigene isolierte Quellen übernehmen.
 - Helfer/Indizes: `build/validation/explorer-inline-2026-10-29/`; aktueller
-  Arbeitsnachweis: `build/validation/language-scopes-2026-11-04/`; Kurzinfo unter
+  Arbeitsnachweis: `build/validation/auto-info-deadline-2026-11-05/`; Scopes unter
+  `build/validation/language-scopes-2026-11-04/`; Kurzinfo unter
   `build/validation/completion-info-2026-11-04/`; vorherige Inhalte
   unter `build/validation/completion-help-2026-11-04/`; Syntax unter
   `build/validation/syntax-roles-2026-11-04/`; frühere Completion

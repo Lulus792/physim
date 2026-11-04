@@ -1102,7 +1102,7 @@ def completion_info_workflow(flow,directory):
         require(not list(root.glob("*.png")) and not list(root.glob("*.bmp")),"Info timing regression emitted redundant pictures")
 
 
-def completion_automatic(flow,directory):
+def completion_automatic(flow,directory,deadline=False):
     markers=("enter-without-selection=1","tab-without-selection=1","escape-suppression=1 manual-override=1 undo=1",
              "explicit-control-n-p=1 undo=1","changed-prefix-needs-selection=1","short-prefix-closes=1","stale-cursor=1","stale-equal-length-source=1",
              "ime-pause=1 ime-commit=1","comments-and-strings=1","selection-invalidates=1","target-change=1","focus-loss=1",
@@ -1111,9 +1111,12 @@ def completion_automatic(flow,directory):
              "viewport-large-light-contrast=1 space-clamp=1","viewport-shrink-selection=1")
     for language in ("c","phys"):
         root=directory/language;root.mkdir(parents=True)
-        flow.run("--workspace-state-test",root,"completion-auto-"+language,timeout=75,
+        flow.run("--workspace-state-test",root,("completion-auto-deadline-" if deadline else "completion-auto-")+language,timeout=75,
                  marker="AUTOMATIC COMPLETION SELF-TEST: PASSED")
         for marker in markers:require("AUTO COMPLETION "+marker in flow.steps[-1]["stdout"],"Missing actual automatic completion scenario: "+marker)
+        if deadline:
+            require("AUTO INFO DEADLINE injected=1" in flow.steps[-1]["stdout"],"Missing forced real info deadline boundary")
+            require("AUTO INFO DEADLINE pending-observed=1" in flow.steps[-1]["stdout"],"Pending info state was not observed before queuing any toggle")
         require(not list(root.glob("*.png")) and not list(root.glob("*.bmp")),"Automatic input regression emitted redundant pictures")
 
 
@@ -2061,6 +2064,7 @@ SPECIAL["laboratory_workflow"]=laboratory
 SPECIAL["model_values_workflow"]=model_values
 SPECIAL["settings_transactions"]=settings_transactions
 SPECIAL["completion_automatic_workflow"]=completion_automatic
+SPECIAL["completion_automatic_deadline_workflow"]=lambda flow,directory:completion_automatic(flow,directory,True)
 SPECIAL["completion_info_workflow"]=completion_info_workflow
 SPECIAL["settings_keyboard_paced"]=lambda flow,directory: settings_keyboard(flow,directory,True)
 SPECIAL["settings_a_window"]=settings_a_window
