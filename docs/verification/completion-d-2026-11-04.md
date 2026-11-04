@@ -109,3 +109,22 @@ Testprozesse beendet und alle Löschungen nachkontrolliert. Der ursprüngliche
 Windows-Kartenfehler, beide Gegenfälle, zwölf aktuelle manuelle Completion-Bilder,
 ausdrücklich benötigte ältere Referenzen, Quellen/Runtime-Archive, Nutzdaten,
 Abhängigkeiten und VM bleiben erhalten. Ergebnis-/Beweisdateien unverändert.
+
+## Commit und gehosteter Anschluss
+
+Quellstand **913d60ed** in origin/upstream gepusht. Alle **1.110** eingefrorenen
+Compiler-/Testdateien gegen die tatsächlichen Git-Blobs gelesen: 152 direkt,
+958 nach CRLF/LF-Normalisierung, keine Abweichung. Dokumentation wurde nach
+der Quellerfassung ergänzt; kein vollständiger Bytegleichstand aller Dokumente
+mit dem früheren Eingabearchiv behauptet.
+
+Neue gehostete Läufe dieses Commits: Editor **41895571962**, Settings
+**41895572088**, zuletzt pending/noch ohne zugeteilte Jobs. Nicht neu starten.
+Vorheriger Editorlauf `25662d6f` **41887147796**: Intel **126774542390** inzwischen
+beendet, tatsächlich **4/5**; ZIP `13353629456` und dessen GitHub-Digest gelesen.
+Dokumente klein/groß, automatische Completion und API-Referenz bestanden;
+C-Completion-App läuft nach letzter Stufe 2→3 mit keyboard=0 in einen Timeout nach 75 s.
+Manuelle Physim-App danach nicht gestartet. Ursache ungeklärt, keine pauschale
+Produkt-/Harnessdiagnose oder Lockerung. ARM `126774543066` zuletzt noch wartend.
+Diese Ergebnisse prüfen den früheren Unterbau und gelten nicht als D-Abnahme
+von `913d60ed`. Der Nutzer-Mac bleibt aus und unangetastet.

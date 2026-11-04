@@ -8,6 +8,8 @@ Prüfung oder Protokoll-Trennlinie allein wegen Kompaktierung erneut beginnen.
 ## Aktueller Anschluss: D-Viewport und wirksame Preferences
 
 **Nutzer-Mac aus; keine Zugriffe oder Erreichbarkeitsproben.**
+**Quellstand `913d60ed` in beide Repositories gepusht; alle 1.110 Compiler-/
+Testdateien stimmen mit den tatsächlichen Git-Blobs überein.**
 **Eingefroren: `completion-d-refined`, 155 eigene Eingaben / 1.110 Compiler-
 und Testdateien.** D bleibt insgesamt unvollständig; keine volle Punktzahl.
 
@@ -144,11 +146,14 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
 
 ## Nächste konkrete Arbeit
 
-- Neuen Completion-Mac-Editorlauf `41887147796` über seine beiden wirklichen
-  Handles beobachten und tatsächliche Artefakte lesen. Intel-Settings von
-  `4adf2699` wurde abgebrochen und ist nicht abgenommen; vor einem Nachlauf prüfen,
-  ob für den neuen Quellstand bereits ein Settings-Lauf existiert. ARM-Settings
-  ist mit 16/16 geschlossen; nicht wiederholen. Nutzer-Mac bleibt aus.
+- Neue Läufe zu `913d60ed`: Editor `41895571962` und Settings `41895572088`
+  beobachten (zuletzt pending, noch ohne Jobzuweisung), keinen Ersatzlauf starten.
+  Vorheriger Editor `25662d6f`: Intel `126774542390` jetzt beendet **4/5**;
+  C-Completion-App nach letzter Stufe 2→3 / keyboard=0 in 75-s-Timeout, Ursache offen.
+  ZIP/Digest und alle Originalergebnisse gelesen, automatische Gruppe/API bestanden.
+  ARM `126774543066` zuletzt wartend. Dies nicht als neue D-Abnahme ausgeben.
+  Intel-Settings `4adf2699` wurde abgebrochen; ARM-Settings 16/16 geschlossen, nicht neu prüfen.
+  Nutzer-Mac bleibt aus.
   Aktueller lokaler Anschluss: `build/validation/completion-d-2026-11-04/STATE.md`.
 - D weiterführen: gemeinsame freigegebene Syntaxrollen/Palette und Rollenicons
   sowie vollständige Kandidaten-Kurzinfo mit eigenem Dokumentbesitz ergänzen.

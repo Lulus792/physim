@@ -2562,5 +2562,76 @@
     "plan_sha256": "889e25e4410eec8cd24b87d1c1096adc988f682b800c2ebd8fea48a16c4dd863"
   },
   "source_compiler_test_input_count": 1110,
-  "proof_assembly_note": "Initial local collector stopped on the distinct flat-unit JSON schema before writing evidence; collector corrected to read units and GUI steps separately. Original executed results unchanged; no tests rerun for this report-only correction."
+  "proof_assembly_note": "Initial local collector stopped on the distinct flat-unit JSON schema before writing evidence; collector corrected to read units and GUI steps separately. Original executed results unchanged; no tests rerun for this report-only correction.",
+  "commit_match": {
+    "commit": "913d60ed6b2e5802cb3fdf0e7d99bc8797e84eeb",
+    "phase": "completion-d-refined",
+    "input_count": 1110,
+    "exact_matches": 152,
+    "crlf_lf_normalized_matches": 958,
+    "mismatches": [],
+    "compiler_source_sha256": "690754e0bda2a785e36679f8ea88e0940bb22aece1199279413c7465d27eedd8",
+    "all_actual_source_bytes_read": true,
+    "all_committed_git_blobs_read": true,
+    "documentation_updated_after_source_capture": true
+  },
+  "hosted_initial": {
+    "source_commit": "913d60ed6b2e5802cb3fdf0e7d99bc8797e84eeb",
+    "current_editor_run": 41895571962,
+    "current_settings_run": 41895572088,
+    "current_jobs_assigned_at_observation": false,
+    "prior_editor_source": "25662d6f3c60fd16220dfd4e3f0c0fc522b51c10",
+    "prior_editor_run": 41887147796,
+    "prior_jobs": [
+      {
+        "id": 126774542390,
+        "name": "editor (macos-15-intel)",
+        "status": "completed",
+        "conclusion": "failure"
+      },
+      {
+        "id": 126774543066,
+        "name": "editor (macos-15)",
+        "status": "queued",
+        "conclusion": null
+      }
+    ],
+    "mac_off": true,
+    "no_user_mac_access": true
+  },
+  "hosted_prior_editor_intel": {
+    "commit": "25662d6f3c60fd16220dfd4e3f0c0fc522b51c10",
+    "run_id": 41887147796,
+    "job_id": 126774542390,
+    "artifact_id": 13353629456,
+    "zip_sha256": "e39bd2f6edc1b039aa01ba7af6f887b082fddda8d56d6ade2b38f8a56f9d95bf",
+    "zip_digest_matches_github": true,
+    "all_zip_entries_read": {
+      "Release/test-results/run-0bdqmjwk/results.json": "27b0d148dc535bdca3bae38b01d8c1e97cf324d2153d5e50b7f30dc9d1f032c7"
+    },
+    "cases": [
+      {
+        "name": "documents_small",
+        "status": "passed"
+      },
+      {
+        "name": "documents_large",
+        "status": "passed"
+      },
+      {
+        "name": "completion_workflow",
+        "status": "failed"
+      },
+      {
+        "name": "completion_automatic_workflow",
+        "status": "passed"
+      },
+      {
+        "name": "api_reference_workflow",
+        "status": "passed"
+      }
+    ],
+    "failure": "Manual C completion app exceeded75s after last stage2->3, keyboard focus0; cause unproven. Physim manual app not executed after first failure. Automatic completion and API reference groups passed. No timeout increase or condition weakening applied.",
+    "applies_to_current_D_commit": false
+  }
 }
