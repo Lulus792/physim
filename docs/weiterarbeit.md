@@ -160,3 +160,12 @@ Git-Stand mit ausschließlich eigenen Änderungen. Die fremde Status-Ergänzung
 verweist auf einen noch nicht registrierten Bereinigungsbericht; deshalb keine
 pauschale Link-/Gesamt-CI-Abnahme. Eigene abgeschlossene Änderungen normal committen
 und in `origin` und `upstream` pushen; keine erzwungenen Pushes.
+
+## Konzept für verbundene Rechengeräte · 4. November 2026
+
+[Konzept und UI-Skizzen](remote-computing-concept.md) halten den Nutzerwunsch
+für entfernte Einzelläufe, verteilte Serien, explizite Geräteverknüpfung und
+vergleichbaren Leistungstest fest. Konzeptstand, keine Designfreigabe oder
+Implementierung; offene Architektur-, Sicherheits- und Plattformfragen stehen dort.
+Nächster Schritt: Bedienideen mit dem Nutzer besprechen und offene Entscheidungen
+klären. Die oben genannten nativen Aufgaben und offenen Nachweise bleiben bestehen.
