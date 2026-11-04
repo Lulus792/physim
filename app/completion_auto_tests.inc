@@ -160,7 +160,7 @@ static void completion_auto_frame(app *a,const char *mode,int *stage,int *code) 
         AUTO_WAIT(a->completion_active && a->completion_visible_rows==5);
         ok=a->completion_count>5 && a->completion_choice_bounds[4].h>0 && !a->completion_choice_bounds[5].w &&
            a->completion_choice_bounds[4].y+a->completion_choice_bounds[4].h<=a->completion_list_bounds.y+a->completion_list_bounds.h-29 &&
-           fabsf(a->completion_list_bounds.w-400)<1 && a->completion_scroll_bounds.w==6 && a->completion_info_bounds.w>0;
+           fabsf(a->completion_list_bounds.w-400)<1 && a->completion_scroll_bounds.w==6 && !a->completion_info_visible && !a->completion_info_bounds.w;
         test_plot_wheel(a,a->completion_choice_bounds[0].x+60,a->completion_choice_bounds[0].y+10,-3);AUTO_NEXT(61);break;
     case 61:
         AUTO_WAIT(a->completion_first>0);ok=a->completion_selected==0 && completion_test_equal(edit,"");
@@ -186,6 +186,10 @@ static void completion_auto_frame(app *a,const char *mode,int *stage,int *code) 
         ps_preferences p=a->preferences;p.completion_rows=5;p.theme=PS_THEME_HIGH_CONTRAST;preferences_apply(a,&p);}AUTO_NEXT(70);break;
     case 70:
         AUTO_WAIT(a->completion_visible_rows==5 && a->preferences.theme==PS_THEME_HIGH_CONTRAST);
+        if(!a->completion_info_visible)AUTO_KEY(SDLK_SPACE,SDL_KMOD_CTRL);
+        AUTO_NEXT(71);break;
+    case 71:
+        AUTO_WAIT(a->completion_info_visible && a->completion_info_bounds.w>0);
         ok=a->completion_choice_bounds[4].h>=30 && a->completion_info_bounds.w>0;
         puts("AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1");
         {ps_preferences p=a->preferences;p.ui_size=16;p.editor_size=12;p.theme=PS_THEME_DARK;preferences_apply(a,&p);}AUTO_NEXT(65);break;

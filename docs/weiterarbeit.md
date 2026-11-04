@@ -5,7 +5,46 @@ abgleichen. Verbindliche Designs: [AGENTS.md](../AGENTS.md) und
 [Gesamtübergabe](visuals/unified-workspace/NEXT-CHAT.md). Keine geschlossene
 Prüfung oder Protokoll-Trennlinie allein wegen Kompaktierung erneut beginnen.
 
-## Aktueller Anschluss: Kandidaten-Kurzinfo
+## Aktueller Anschluss: Kurzinfo-Bedienung abgeschlossen
+
+**Nutzer-Mac aus; keinerlei Zugriff oder Erreichbarkeitsprobe.**
+**Eingefroren: `completion-info-tab`, 170 eigene Eingaben / 1.122 Compiler-
+und Testdateien. Eigene Änderungen vor Commit; nachfolgender Commitabschluss
+ergänzt den tatsächlichen Git-Abgleich.**
+Manuelle Liste zunächst ohne Info, Auswahl-/Mausvorschau nach 280 ms,
+`i`/Strg+Leertaste sofort und ohne neue Übernahmeauswahl. Exakte vollständige
+Quell-/Editor-/Kandidaten-/Cursor-/Viewportbindung; kein alter Hinweis nach
+Ausblenden. Alt+BildAuf/BildAb/Pos1/Ende scrollt die sichtbare Karte. Umschalt+Tab
+verlässt das Codefeld ohne die vorher tatsächlich eingefügten vier Leerzeichen.
+
+Abschluss Windows Release/Linux Debug ASan/UBSan je **Unit 1/1 + GUI 4/4**,
+Windows `run-ot7qjiy2` / `run-zzc2kapy`, Linux `run-3ypvbd2x` / `run-7fh8kh0v`.
+Jeweils identische App-Bytes zwischen Unit-/GUI-Aufruf. Neuer Ablauf C/Physim
+in drei Editor-/Theme-Kontexten, echte Zeichnungs-/Datenbeobachtung, keine Bilder.
+Vorherlauf Win 0/1; erste Integration beidseits 2/4 mit belegtem Shift+Tab-Fehler
+und Messung vor Zeichnung. Keine Undo-/Daten-/Referenzassertionen entfernt.
+Separater abschließender strenger C17-ASan/UBSan-Test mit `detect_leaks=1`
+bestanden; GUI weiterhin `detect_leaks=0`. Alle lokalen Handles beendet,
+Quell-/Laufzeit-/Archivbytes gelesen. Drei aktuelle Windows-Ansichten betrachtet.
+Zwölf ersetzte erfolgreiche Rohbilder entfernt: **38.363.256 Bytes**;
+Fehlerbilder/aktuelle Referenzen erhalten, eigener Bereinigungsbeleg verlinkt.
+[Phasen, Originalkommandos, konkrete Fehler und Grenzen](verification/completion-info-2026-11-04.md).
+
+Gehosteter **vorheriger** Quellstand `25dd37dc` nun beendet: Intel-Editor **5/5**,
+Einstellungen **16/16**, F1 **5/6**; ARM jeweils cancelled, kein offener Job
+dieser drei Läufe. Drei ZIPs/Digests/alle Einträge gelesen. F1 `docs-keyboard-h`
+Timeout 60,089 s an Stufe 26, Ursache offen; getrennt vom früheren Stufe-39-Fall.
+[Mac-Bericht](verification/completion-help-macos-2026-11-04.json).
+Keine Mac-Abnahme der neuen Kurzinfo-Bedienung. Nutzer-Mac bleibt unberührt.
+
+**Nächster konkreter Schritt:** echte lokale C-/Physim-Scopes und separate
+Aufrufhilfe einschließlich Benutzerfunktionen. Weitere Codekontexte,
+physische Eingabe/IME, Screenreader, DPI/Monitor/Vollbild und aktuelle Mac-Abnahme
+offen. Keine volle D-/UI-Punktzahl; geschlossene F1-/Protokoll-/Settings-Matrix
+nicht wegen Kontextwechsels wiederholen. Aktuelle lokale Notiz:
+`build/validation/completion-info-2026-11-04/STATE.md`.
+
+## Abgeschlossen: Kandidateninhalt und Dokumentbesitz
 
 **Nutzer-Mac aus; keine Zugriffe oder Erreichbarkeitsproben.**
 **Eingefroren: `completion-help-restored`, 166 eigene Eingaben / 1.118 Compiler-
@@ -39,9 +78,8 @@ entfernt (**86.317.326 Bytes**); Fehler/Gegenprobe/aktuelle Ansichten und eine
 ursprüngliche visuelle Vergleichsaufnahme erhalten. Keine Objektordner löschen:
 deren Namen sind Define-/Sprachvarianten, keine veralteten Quellstand-Hashes.
 
-**Nächster konkreter Schritt:** Kurzinfo-Verzögerung nach Auswahl und i/manueller
-Sofortzugang, versteckte Trefferflächen und Tastatur-Scrollen prüfen/ergänzen.
-Danach echte lokale Scopes und separate Aufrufhilfe; keine volle D-/UI-Punktzahl.
+Kurzinfo-Verzögerung, Sofortzugang und Tastatur-Scrollen sind inzwischen oben
+ergänzt. Danach echte lokale Scopes und separate Aufrufhilfe; keine volle D-/UI-Punktzahl.
 Physische Eingabe/IME, Screenreader, DPI/Monitor/Vollbild und aktuelle Mac-
 Completion-Abnahme offen. Keine geschlossene F1-/Protokoll-/Settings-Matrix allein
 wegen Kontextwechsels wiederholen.
@@ -53,9 +91,9 @@ Ursache offen; dieser konkrete neue Befund erlaubt einen gezielten Nachlauf.
 [Getrennte Mac-Evidenz](verification/syntax-roles-macos-2026-11-04.json).
 Kein Nachweis der neuen Kandidaten-Kurzinfo; Nutzer-Mac bleibt unberührt.
 Neue gehostete Läufe zu `25dd37dc`: Editor **`41919823783`**, Einstellungen
-**`41919823552`**, F1 **`41919823808`**, zuletzt queued. C17 `41919823708` pending.
-Konkrete Handles beobachten, keinen Ersatzlauf starten. Noch keine aktuelle
-Mac-Completion-Abnahme oder gesamte grüne CI behaupten.
+**`41919823552`**, F1 **`41919823808`** sind inzwischen beendet, siehe aktuellen
+Mac-Bericht oben. Historischen Wartestatus nicht als aktuellen Handle verwenden.
+Keine aktuelle Mac-Kurzinfo-Bedienungsabnahme oder gesamte grüne CI behaupten.
 
 ## Abgeschlossen: gemeinsame Syntaxrollen
 
@@ -245,9 +283,10 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
   ARM `126774543066` zuletzt wartend. Dies nicht als neue D-Abnahme ausgeben.
   Intel-Settings `4adf2699` wurde abgebrochen; ARM-Settings 16/16 geschlossen, nicht neu prüfen.
   Nutzer-Mac bleibt aus.
-  Aktueller lokaler Anschluss: `build/validation/completion-help-2026-11-04/STATE.md`.
-- D weiterführen: Kurzinfo-Verzögerung/i/manueller Zugang, versteckte Trefferflächen,
-  Tastatur-Scrollen und Assistive-Bedienung ergänzen; Inhalt/Dokumentbesitz oben geprüft.
+- D weiterführen: echte lokale Scopes, separate Aufrufhilfe und Assistive-Bedienung;
+  aktueller Anschluss `build/validation/completion-info-2026-11-04/STATE.md`.
+  Kurzinfo-Verzögerung/i/manueller Zugang, versteckte Trefferfläche und
+  Tastatur-Scrollen oben geprüft; nicht allein wegen Kontextwechsel wiederholen.
   Referenz-Pointerzugang und Karten-Reflow dabei tatsächlich prüfen. Viewport
   und Preferences sind oben geprüft; nicht wegen Kompaktierung neu beginnen.
 - Danach/verknüpft gemeinsame Syntaxrollen in weiteren Codekontexten sowie echte C-/Physim-Scopes und
@@ -269,12 +308,13 @@ ebenfalls geschlossen; nicht als Abnahme des späteren Quellstands ausgeben.
 
 ## Sicherer lokaler Anschluss
 
-- `prepare-next.py <neuer-tag> completion-help-restored` prüft vorher Quelle,
+- `prepare-next.py <neuer-tag> completion-info-tab` prüft vorher Quelle,
   Runtime und Archive. Neue Module ausdrücklich in die Eingabeliste aufnehmen.
   Eigene Quellen vollständig versionieren, fremde AT-SPI-/Orca-/Status-/dist-
   Änderungen erhalten und nicht in eigene isolierte Quellen übernehmen.
 - Helfer/Indizes: `build/validation/explorer-inline-2026-10-29/`; aktueller
-  Arbeitsnachweis: `build/validation/completion-help-2026-11-04/`; Syntax unter
+  Arbeitsnachweis: `build/validation/completion-info-2026-11-04/`; vorherige Inhalte
+  unter `build/validation/completion-help-2026-11-04/`; Syntax unter
   `build/validation/syntax-roles-2026-11-04/`; frühere Completion
   unter `build/validation/completion-auto-2026-11-04/`; Settings unter
   `build/validation/settings-keyboard-2026-11-04/`; Einheitenfokus

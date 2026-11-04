@@ -1,0 +1,269 @@
+{
+  "source_commit": "25dd37dca639005f9640fe49fa774b03d595feec",
+  "user_mac": "off; no access or availability probes",
+  "hosted_only": true,
+  "current_timing_implementation_tested": false,
+  "apple_silicon": {
+    "editor": 126889056126,
+    "settings": 126889053793,
+    "f1": 126889054758,
+    "status": "completed",
+    "conclusion": "cancelled",
+    "passed_not_claimed": true
+  },
+  "intel": [
+    {
+      "source_commit": "25dd37dca639005f9640fe49fa774b03d595feec",
+      "run_id": 41919823783,
+      "job_id": 126889056760,
+      "architecture": "Intel",
+      "artifact_id": 13367305928,
+      "zip_sha256": "a92ddd9f329508d54cf5d8e4c43132c9f44bdd92d35c14f3d8e41723ddd17976",
+      "digest_matches_github": true,
+      "user_mac": "off; not contacted",
+      "includes_new_info_timing": false,
+      "all_entries_read": {
+        "Release/test-results/run-pwzcc1ja/results.json": "cf9cd870891cb35f18a0d4c35a229244088be0a3525edec05e948cfa33ab2dce"
+      },
+      "passed": 5,
+      "count": 5,
+      "local_original_report": "build/validation/completion-info-2026-11-04/help-25dd-editor-intel.json",
+      "original_report_sha256": "fad28a0ee27d18dc6a59fea4eb7f08cd9a6822598514d874809ca862c987542c",
+      "cases": [
+        {
+          "path": "Release/test-results/run-pwzcc1ja/results.json",
+          "cases": [
+            {
+              "name": "documents_small",
+              "status": "passed",
+              "seconds": 12.385
+            },
+            {
+              "name": "documents_large",
+              "status": "passed",
+              "seconds": 12.158
+            },
+            {
+              "name": "completion_workflow",
+              "status": "passed",
+              "seconds": 28.979
+            },
+            {
+              "name": "completion_automatic_workflow",
+              "status": "passed",
+              "seconds": 29.125
+            },
+            {
+              "name": "api_reference_workflow",
+              "status": "passed",
+              "seconds": 17.568
+            }
+          ]
+        }
+      ],
+      "failure_lines": []
+    },
+    {
+      "source_commit": "25dd37dca639005f9640fe49fa774b03d595feec",
+      "run_id": 41919823552,
+      "job_id": 126889054310,
+      "artifact_id": 13367736652,
+      "zip_sha256": "18620aa7619db92461d35f5356e2e08f40d437bf702419de659affa0b2d8298f",
+      "digest_matches_github": true,
+      "architecture": "Intel",
+      "user_mac": "off; not contacted",
+      "includes_new_info_timing": false,
+      "all_entries_read": {
+        "Release/test-results/run-13edwb0a/results.json": "b30c14e6ae9844db8e0f3efbbf01e225c638dcb3da862d5dc261acf54a412267",
+        "Release/test-results/run-mqac003w/results.json": "feec563f6d5e5e312b2e03c3b4c03615c5e80b1abb905399817ca046f9bb9897",
+        "Release/test-results/run-v7_xpnb9/results.json": "f68c7aff5693c3599b0d4483cbcd8f60cc27163e3dde4dcdc3bbe638ba1b2663",
+        "Release/test-results/run-wyb32atu/results.json": "4ca09cf5d7ce10def6821a7680331f410529f96553de431e99f167a3acb1aa4c"
+      },
+      "passed": 16,
+      "count": 16,
+      "local_original_report": "build/validation/completion-info-2026-11-04/help-25dd-settings-intel.json",
+      "original_report_sha256": "8f41cc1670e080a272444fef3f6baa03560676734187d3fc15c952946f634c89",
+      "cases": [
+        {
+          "path": "Release/test-results/run-13edwb0a/results.json",
+          "cases": [
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed",
+              "seconds": 83.293
+            }
+          ]
+        },
+        {
+          "path": "Release/test-results/run-mqac003w/results.json",
+          "cases": [
+            {
+              "name": "shell_theme_dark",
+              "status": "passed",
+              "seconds": 10.648
+            },
+            {
+              "name": "shell_theme_light_large_narrow",
+              "status": "passed",
+              "seconds": 5.792
+            },
+            {
+              "name": "shell_theme_contrast",
+              "status": "passed",
+              "seconds": 7.26
+            }
+          ]
+        },
+        {
+          "path": "Release/test-results/run-v7_xpnb9/results.json",
+          "cases": [
+            {
+              "name": "preferences",
+              "status": "passed",
+              "seconds": 0.415,
+              "exit_code": 0
+            }
+          ]
+        },
+        {
+          "path": "Release/test-results/run-wyb32atu/results.json",
+          "cases": [
+            {
+              "name": "settings_transactions",
+              "status": "passed",
+              "seconds": 2.876
+            },
+            {
+              "name": "settings_a_window",
+              "status": "passed",
+              "seconds": 25.665
+            },
+            {
+              "name": "settings_search_keyboard",
+              "status": "passed",
+              "seconds": 16.639
+            },
+            {
+              "name": "unit_task_window",
+              "status": "passed",
+              "seconds": 36.376
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed",
+              "seconds": 37.994
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "passed",
+              "seconds": 77.403
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed",
+              "seconds": 24.464
+            },
+            {
+              "name": "settings_keyboard_paced",
+              "status": "passed",
+              "seconds": 67.111
+            },
+            {
+              "name": "analysis_units_dark",
+              "status": "passed",
+              "seconds": 8.105
+            },
+            {
+              "name": "analysis_units_light_large_narrow",
+              "status": "passed",
+              "seconds": 6.748
+            },
+            {
+              "name": "inspector_channel",
+              "status": "passed",
+              "seconds": 136.765
+            }
+          ]
+        }
+      ],
+      "failure_lines": []
+    },
+    {
+      "source_commit": "25dd37dca639005f9640fe49fa774b03d595feec",
+      "run_id": 41919823808,
+      "job_id": 126889055305,
+      "artifact_id": 13366234297,
+      "zip_sha256": "1836924149b53dd10c0a2bbd13f25eff926a221a99ce04298a7c88c22e2798ba",
+      "digest_matches_github": true,
+      "architecture": "Intel",
+      "user_mac": "off; not contacted",
+      "includes_new_info_timing": false,
+      "all_entries_read": {
+        "Release/font-bank-state-counterexample/binding/stderr": "50ac9f3216f41c7007722ca9e6053e632e3c59dbdb1abf285d3517819412f062",
+        "Release/font-bank-state-counterexample/report.json": "2dc01dbfbc1493fe6c9053dcf57ef4ee9aae2d578c5ed00e8e4d2692c3597153",
+        "Release/font-bank-state-counterexample/unpack/stderr": "df27686857e61858cf57f50d5da350756ca033201241f7596cc57fdb741783ee",
+        "Release/native-search-counterexample/report.json": "5bd4b8ce7914d4eb95c71751fd6e190d3893b0ac29ffdc2c31a80e35c67a1d45",
+        "Release/native-search-counterexample/stderr": "5738cd738d901d313ef7d7022d0c8455146e2c73afc6665a8805bb3c202fd394",
+        "Release/native-search-counterexample/stdout": "ef1e47ee5c8b380d89b78272985e92b82d4a5ffcf7815b5afe8c5a9fea224101",
+        "Release/test-results/run-asdg0239/results.json": "3eb5078139c8b1433ad9e3aa3c2b1a5a7ef3777c5b0a925fbc60c9b0580e9cb1",
+        "Release/test-results/run-fp5lhhyr/results.json": "a79014d3806523455303e88ef53ef10d34fcc0f01f2be0a0a0d216bfa61dd9cf"
+      },
+      "passed": 5,
+      "count": 6,
+      "local_original_report": "build/validation/completion-info-2026-11-04/help-25dd-f1-intel.json",
+      "original_report_sha256": "2591ed9853d70fbd96c57f666e691edbdefbdc2a93bc48dd1ca3bb6df22e38ac",
+      "cases": [
+        {
+          "path": "Release/test-results/run-asdg0239/results.json",
+          "cases": [
+            {
+              "name": "font_sources",
+              "status": "passed",
+              "seconds": 0.118,
+              "exit_code": 0
+            }
+          ]
+        },
+        {
+          "path": "Release/test-results/run-fp5lhhyr/results.json",
+          "cases": [
+            {
+              "name": "font_bank_ui",
+              "status": "passed",
+              "seconds": 0.561,
+              "exit_code": 0
+            },
+            {
+              "name": "documentation_math",
+              "status": "passed",
+              "seconds": 37.097
+            },
+            {
+              "name": "accessibility_edit_macos",
+              "status": "passed",
+              "seconds": 4.256
+            },
+            {
+              "name": "documentation_panes",
+              "status": "passed",
+              "seconds": 69.345
+            },
+            {
+              "name": "documentation_h",
+              "status": "failed",
+              "seconds": 62.26
+            }
+          ]
+        }
+      ],
+      "failure_lines": [
+        "Workspace self-test timeout: docs-keyboard-h after 60.089 wall seconds",
+        "First workflow failure at stage 26 (next 26): Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen. (tab=0, selected=0, samples=0, report=0, query=)"
+      ]
+    }
+  ],
+  "limitations": [
+    "No current completion timing acceptance.",
+    "F1 Intel failure remains open; exact report retained."
+  ]
+}

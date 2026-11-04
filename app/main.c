@@ -21,6 +21,7 @@
 #include "physim/detail/run_identity.h"
 #include "completion.h"
 #include "completion_help.h"
+#include "completion_info.h"
 #include "syntax.h"
 #include "editor_search.h"
 #include "source_outline.h"
@@ -663,7 +664,9 @@ typedef struct {
     unsigned completion_visible_rows;
     bool completion_reveal,completion_scroll_drag,completion_info_visible,completion_pointer_capture;
     ps_completion_help completion_help;
+    ps_completion_info completion_info;
     nk_uint completion_help_scroll_x,completion_help_scroll_y;
+    struct nk_rect completion_info_button_bounds;
     struct nk_rect completion_help_body_bounds,completion_summary_bounds,completion_arguments_bounds;
     float completion_help_natural_height;
     struct nk_user_font completion_bold_font;
@@ -3633,6 +3636,7 @@ static bool native_test_keyboard_command(app *a,toolbar_action action,int *stage
 #include "editor_replace_tests.inc"
 #include "completion_tests.inc"
 #include "completion_auto_tests.inc"
+#include "completion_info_tests.inc"
 #include "source_outline_tests.inc"
 #include "file_tabs_tests.inc"
 #include "workbench_tests.inc"
@@ -5543,6 +5547,7 @@ int main(int argc, char **argv) {
         SDL_GetWindowSize(window, &w, &h);
         draw_ui(a, w, h);
         if(workspace_state_test && (!strcmp(argv[3],"completion-c") || !strcmp(argv[3],"completion-phys")))completion_syntax_draw(a);
+        if(workspace_state_test && !strncmp(argv[3],"completion-info-",16))completion_info_test_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"outline-hover-",14))outline_hover_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"analysis-layout-",16))analysis_workspace_test_draw(a,test_stage);
         if(workspace_state_test && !strncmp(argv[3],"file-tabs-design",16))tab_design_draw(a);

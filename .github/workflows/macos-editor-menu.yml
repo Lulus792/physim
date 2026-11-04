@@ -53,7 +53,7 @@ jobs:
           path: build/sdl-install
           key: ${{ steps.sdl-identity.outputs.key }}
       - name: Actual document, completion and API reference workflows
-        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test-display --test-filter documents_small --test-filter documents_large --test-filter completion_workflow --test-filter completion_automatic_workflow --test-filter api_reference_workflow
+        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test-display --test-filter documents_small --test-filter documents_large --test-filter completion_workflow --test-filter completion_automatic_workflow --test-filter completion_info_workflow --test-filter api_reference_workflow
       - name: Compact native results
         if: always()
         uses: actions/upload-artifact@v4

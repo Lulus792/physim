@@ -1,0 +1,95 @@
+{
+  "date": "2026-11-04",
+  "reason": "Superseded successful manual completion captures; final captures retained",
+  "files": 12,
+  "bytes": 38363256.0,
+  "running_use_checked": true,
+  "resolved_paths_and_hashes_checked": true,
+  "error_captures_and_current_references_retained": true,
+  "entries": [
+    {
+      "path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-_vh8e3mw\\completion_workflow\\files ä\\workflow ä\\c\\completion-analysis.bmp",
+      "bytes": 3196938,
+      "sha256": "8f9bfe6f5a0ff6ee16a04eac288d09d17e64ee9e01d8d0c92f4f498c8f4101c1",
+      "replacement": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-zzc2kapy\\completion_workflow\\files ä\\workflow ä\\c\\completion-analysis.bmp",
+      "replacement_sha256": "8f9bfe6f5a0ff6ee16a04eac288d09d17e64ee9e01d8d0c92f4f498c8f4101c1"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-_vh8e3mw\\completion_workflow\\files ä\\workflow ä\\c\\completion-document.bmp",
+      "bytes": 3196938,
+      "sha256": "4f54e16e5de74b48a3fa3e46ab8eba44b124e767bf1ec9fd070541b1eba26657",
+      "replacement": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-zzc2kapy\\completion_workflow\\files ä\\workflow ä\\c\\completion-document.bmp",
+      "replacement_sha256": "4f54e16e5de74b48a3fa3e46ab8eba44b124e767bf1ec9fd070541b1eba26657"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-_vh8e3mw\\completion_workflow\\files ä\\workflow ä\\c\\completion-experiment.bmp",
+      "bytes": 3196938,
+      "sha256": "15fecc83b3c2f7d6893aef222a21c400b28b01eafb4fc5c9666a3fc5a0447e0d",
+      "replacement": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-zzc2kapy\\completion_workflow\\files ä\\workflow ä\\c\\completion-experiment.bmp",
+      "replacement_sha256": "15fecc83b3c2f7d6893aef222a21c400b28b01eafb4fc5c9666a3fc5a0447e0d"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-_vh8e3mw\\completion_workflow\\files ä\\workflow ä\\phys\\completion-analysis.bmp",
+      "bytes": 3196938,
+      "sha256": "e11aa9a3942b9a03cc2c981478943d9003639a0c8eba6e0b74bf183c23a3ddbb",
+      "replacement": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-zzc2kapy\\completion_workflow\\files ä\\workflow ä\\phys\\completion-analysis.bmp",
+      "replacement_sha256": "e11aa9a3942b9a03cc2c981478943d9003639a0c8eba6e0b74bf183c23a3ddbb"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-_vh8e3mw\\completion_workflow\\files ä\\workflow ä\\phys\\completion-document.bmp",
+      "bytes": 3196938,
+      "sha256": "57dfb4f827ac5fbdac7bb72e1f07bb2e5644faaccc03e3582c881b46844c6931",
+      "replacement": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-zzc2kapy\\completion_workflow\\files ä\\workflow ä\\phys\\completion-document.bmp",
+      "replacement_sha256": "57dfb4f827ac5fbdac7bb72e1f07bb2e5644faaccc03e3582c881b46844c6931"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-_vh8e3mw\\completion_workflow\\files ä\\workflow ä\\phys\\completion-experiment.bmp",
+      "bytes": 3196938,
+      "sha256": "ba8aa091274f0a74f029bc84747bf4a64519d29b8a80d658ff352789f4dc90c3",
+      "replacement": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-zzc2kapy\\completion_workflow\\files ä\\workflow ä\\phys\\completion-experiment.bmp",
+      "replacement_sha256": "ba8aa091274f0a74f029bc84747bf4a64519d29b8a80d658ff352789f4dc90c3"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\linux-build\\test-results\\run-ksw2prtx\\completion_workflow\\files ä\\workflow ä\\c\\completion-analysis.bmp",
+      "bytes": 3196938,
+      "sha256": "aa6fcc9405923e5737eaeb1807ca5837c27080e151b5706561c647891751c98d",
+      "replacement": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\linux-build\\test-results\\run-7fh8kh0v\\completion_workflow\\files ä\\workflow ä\\c\\completion-analysis.bmp",
+      "replacement_sha256": "aa6fcc9405923e5737eaeb1807ca5837c27080e151b5706561c647891751c98d"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\linux-build\\test-results\\run-ksw2prtx\\completion_workflow\\files ä\\workflow ä\\c\\completion-document.bmp",
+      "bytes": 3196938,
+      "sha256": "ef262e11585ffe742af3578c949a7537b703de9ec3c32db5f3ccbe5877e31c5a",
+      "replacement": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\linux-build\\test-results\\run-7fh8kh0v\\completion_workflow\\files ä\\workflow ä\\c\\completion-document.bmp",
+      "replacement_sha256": "ef262e11585ffe742af3578c949a7537b703de9ec3c32db5f3ccbe5877e31c5a"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\linux-build\\test-results\\run-ksw2prtx\\completion_workflow\\files ä\\workflow ä\\c\\completion-experiment.bmp",
+      "bytes": 3196938,
+      "sha256": "a07b8577698a0baecaac7c5b62b0c22307d50eb05aea1e5dd3eafe9d9a4f9b10",
+      "replacement": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\linux-build\\test-results\\run-7fh8kh0v\\completion_workflow\\files ä\\workflow ä\\c\\completion-experiment.bmp",
+      "replacement_sha256": "a07b8577698a0baecaac7c5b62b0c22307d50eb05aea1e5dd3eafe9d9a4f9b10"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\linux-build\\test-results\\run-ksw2prtx\\completion_workflow\\files ä\\workflow ä\\phys\\completion-analysis.bmp",
+      "bytes": 3196938,
+      "sha256": "eb85fd3e395468c72b4f8caa2107513d0821b2ea1cca282b276e9bad01d77786",
+      "replacement": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\linux-build\\test-results\\run-7fh8kh0v\\completion_workflow\\files ä\\workflow ä\\phys\\completion-analysis.bmp",
+      "replacement_sha256": "eb85fd3e395468c72b4f8caa2107513d0821b2ea1cca282b276e9bad01d77786"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\linux-build\\test-results\\run-ksw2prtx\\completion_workflow\\files ä\\workflow ä\\phys\\completion-document.bmp",
+      "bytes": 3196938,
+      "sha256": "4e7116dc23fd810107f8f34b951bf965107f3d9da24b16bb6b4840511d8d1fe6",
+      "replacement": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\linux-build\\test-results\\run-7fh8kh0v\\completion_workflow\\files ä\\workflow ä\\phys\\completion-document.bmp",
+      "replacement_sha256": "4e7116dc23fd810107f8f34b951bf965107f3d9da24b16bb6b4840511d8d1fe6"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\linux-build\\test-results\\run-ksw2prtx\\completion_workflow\\files ä\\workflow ä\\phys\\completion-experiment.bmp",
+      "bytes": 3196938,
+      "sha256": "be131389628a4f164a8ecd36315460e6fe36a5b75bbec03672ddf712637e3a44",
+      "replacement": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\linux-build\\test-results\\run-7fh8kh0v\\completion_workflow\\files ä\\workflow ä\\phys\\completion-experiment.bmp",
+      "replacement_sha256": "be131389628a4f164a8ecd36315460e6fe36a5b75bbec03672ddf712637e3a44"
+    }
+  ]
+}

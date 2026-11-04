@@ -43,8 +43,10 @@ static void api_reference_test_frame(app *a,const char *mode,int *stage,int *cod
         if(ok && strcmp(ps_completion_at(a->completion_indices[a->completion_selected])->name,desired)) {
             if(++seeks>ps_completion_count()){ok=false;break;}test_window_key_mod(a->window,SDLK_DOWN,0);--*stage;return;
         }
+        if(ok && !a->completion_info_visible)test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);
         reference_due=ps_clock()+3;*stage=19;break;
     case 19:
+        if(!a->completion_info_visible){if(ps_clock()<reference_due){test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);--*stage;return;}ok=false;break;}
         ok=a->completion_active && a->completion_help.status==PS_OK;
         if(ok && (!a->completion_help.symbol || strcmp(a->completion_help.symbol->name,desired) || !completion_reference_visible(a))){
             if(ps_clock()<reference_due){completion_help_test_scroll(a,-4);--*stage;return;}ok=false;

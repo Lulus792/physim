@@ -1,0 +1,1302 @@
+{
+  "date": "2026-11-04",
+  "objective_complete": false,
+  "user_mac": "off; not contacted or probed",
+  "storage": "D: only; F: untouched",
+  "scope": "Delayed candidate documentation, immediate toggle, source binding, hover preview, keyboard scroll; not complete design D",
+  "final_phase": "completion-info-tab",
+  "phases": {
+    "completion-info-before": {
+      "windows": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-info-before-windows.json",
+          "sha256": "5cf956329439110d4db00507f840932532d8b64a0ac29b4f419f2437a9c2967d",
+          "bytes": 2065
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-info-before-windows.log",
+          "sha256": "ae4bf890b4be0d489635ca39b02f066328dad1e64560dd9135915f68118cdb88",
+          "bytes": 44564
+        },
+        "commands": [
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test",
+              "--test-filter",
+              "completion_info"
+            ],
+            "exit_code": 0,
+            "app_sha256": "052709e06e459e17d6a8e1f7b061d89d1b9f516a6d314066c7f3fcaf4cfc6b3e"
+          },
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "completion_info_workflow"
+            ],
+            "exit_code": 1,
+            "app_sha256": "052709e06e459e17d6a8e1f7b061d89d1b9f516a6d314066c7f3fcaf4cfc6b3e"
+          }
+        ],
+        "exit_code": 1,
+        "app_sha256": "052709e06e459e17d6a8e1f7b061d89d1b9f516a6d314066c7f3fcaf4cfc6b3e",
+        "same_app_bytes_between_invocations": true,
+        "runs": [
+          {
+            "run": "run-q9m8qqiq",
+            "original": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-q9m8qqiq/results.json",
+              "sha256": "3e47dfdf05f5ff8afab93cf8fcc31e1005d491adb35a8423747b5f709bd24e9f",
+              "bytes": 491
+            },
+            "passed": 1,
+            "count": 1,
+            "cases": [
+              {
+                "name": "completion_info",
+                "status": "passed",
+                "exit_code": 0,
+                "seconds": 0.078
+              }
+            ]
+          },
+          {
+            "run": "run-6g03mep5",
+            "original": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-6g03mep5/results.json",
+              "sha256": "2e85318da90280b19a17cc2e5c4408c7550681fe29904b0ce2b0c3b07a4c3839",
+              "bytes": 8320
+            },
+            "passed": 0,
+            "count": 1,
+            "cases": [
+              {
+                "name": "completion_info_workflow",
+                "status": "failed",
+                "seconds": 1.406,
+                "app_records": [
+                  {
+                    "original": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-6g03mep5/completion_info_workflow/files \u00e4/app-steps.json",
+                      "sha256": "21a97bd4774bde21ab29f6937fd250db95d232c73685bfe50d6970469e9a0181",
+                      "bytes": 2523
+                    },
+                    "apps": [
+                      {
+                        "exit_code": 1,
+                        "markers": [
+                          "COMPLETION INFO SELF-TEST: FAILED"
+                        ],
+                        "failure_lines": [
+                          "Completion info target=0 stage=4 active=1 visible=1 painted=0 mode=0 due=0.000000 now=999943.216648 info=0.0/0.0 scroll=0 cursor=13",
+                          "First workflow failure at stage 3 (next 4): Projekt geladen. Build kompiliert die lokalen Quelldateien. (tab=0, selected=0, samples=0, report=0, query=)"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "source_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-info-before-compiler-source.json",
+        "sha256": "bd776c34737277f2421fb4569176078aa8edec9cac5acfc559e280929cab3f93",
+        "bytes": 119044
+      },
+      "own_input_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-info-before-inputs.json",
+        "sha256": "37227210ea2d69034c9b67954d29c7e4f492ab56fbf4d46aae55de702db6150a",
+        "bytes": 17302
+      },
+      "runtime_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-info-before-runtime.json",
+        "sha256": "dcf3419ff1f8119312a4fce959e3a2d02c035721794e478f0e251ec85e156028",
+        "bytes": 41168
+      }
+    },
+    "completion-info-integrated": {
+      "windows": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-info-integrated-windows.json",
+          "sha256": "69351be11d235c805a8744d09abebb3f4c319044d5633bf83ad5f22667c71ccb",
+          "bytes": 2252
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-info-integrated-windows.log",
+          "sha256": "d19a49712fd2083084eb074e047e9cfa733b167ee9e7d201d681f77326944d9c",
+          "bytes": 57872
+        },
+        "commands": [
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test",
+              "--test-filter",
+              "completion_info"
+            ],
+            "exit_code": 0,
+            "app_sha256": "dc50777e81349fd141b3e2b654d68904be04f3a79c25c25ef832e204142dd78d"
+          },
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "completion_info_workflow",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow",
+              "--test-filter",
+              "api_reference_workflow"
+            ],
+            "exit_code": 1,
+            "app_sha256": "dc50777e81349fd141b3e2b654d68904be04f3a79c25c25ef832e204142dd78d"
+          }
+        ],
+        "exit_code": 1,
+        "app_sha256": "dc50777e81349fd141b3e2b654d68904be04f3a79c25c25ef832e204142dd78d",
+        "same_app_bytes_between_invocations": true,
+        "runs": [
+          {
+            "run": "run-v44zf1is",
+            "original": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-v44zf1is/results.json",
+              "sha256": "cee87f3c9f3cf554c2244a96885cb62808cd78405a5a3fe0a5a158f65d363a79",
+              "bytes": 491
+            },
+            "passed": 1,
+            "count": 1,
+            "cases": [
+              {
+                "name": "completion_info",
+                "status": "passed",
+                "exit_code": 0,
+                "seconds": 0.047
+              }
+            ]
+          },
+          {
+            "run": "run-_vh8e3mw",
+            "original": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-_vh8e3mw/results.json",
+              "sha256": "05b0d81b210fcc11de68da00ac1654b57ee4acef18f3b2a73a48cb01911b3ce9",
+              "bytes": 83826
+            },
+            "passed": 2,
+            "count": 4,
+            "cases": [
+              {
+                "name": "completion_workflow",
+                "status": "passed",
+                "seconds": 4.344,
+                "app_records": [
+                  {
+                    "original": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-_vh8e3mw/completion_workflow/files \u00e4/app-steps.json",
+                      "sha256": "9b502e266d10b520b968e8b6e3c1e2a6310f90cec27388402d8743543043b182",
+                      "bytes": 22160
+                    },
+                    "apps": [
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION HELP target=0 summary=1 own-document=1 reference-visible=1 scroll=0",
+                          "COMPLETION HELP target=1 summary=1 own-document=1 reference-visible=1 scroll=0",
+                          "COMPLETION HELP target=2 summary=1 own-document=1 reference-visible=1 scroll=6",
+                          "COMPLETION HELP ARGUMENTS: rows=2 last-visible=1 inspector-preserved=1 scroll=103",
+                          "COMPLETION HELP TABLE FIXTURE: rows=3 last-painted=1 inspector-preserved=1",
+                          "COMPLETION HELP FAILURE: visible=1 disabled-reference=1 inspector-preserved=1 retry-after-close=1",
+                          "COMPLETION SELF-TEST: PASSED"
+                        ],
+                        "failure_lines": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION HELP target=0 summary=1 own-document=1 reference-visible=1 scroll=0",
+                          "COMPLETION HELP target=1 summary=1 own-document=1 reference-visible=1 scroll=117",
+                          "COMPLETION HELP target=2 summary=1 own-document=1 reference-visible=1 scroll=0",
+                          "COMPLETION HELP FAILURE: visible=1 disabled-reference=1 inspector-preserved=1 retry-after-close=1",
+                          "COMPLETION SELF-TEST: PASSED"
+                        ],
+                        "failure_lines": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "completion_automatic_workflow",
+                "status": "failed",
+                "seconds": 5.469,
+                "app_records": [
+                  {
+                    "original": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-_vh8e3mw/completion_automatic_workflow/files \u00e4/app-steps.json",
+                      "sha256": "bbac2cef8e38a4885f48a36ecebc286311a0e872799bd9aa6c614e2d71c56956",
+                      "bytes": 9210
+                    },
+                    "apps": [
+                      {
+                        "exit_code": 1,
+                        "markers": [
+                          "AUTO COMPLETION enter-without-selection=1",
+                          "AUTO COMPLETION tab-without-selection=1",
+                          "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                          "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                          "AUTO COMPLETION changed-prefix-needs-selection=1",
+                          "AUTO COMPLETION short-prefix-closes=1",
+                          "AUTO COMPLETION stale-cursor=1",
+                          "AUTO COMPLETION stale-equal-length-source=1",
+                          "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                          "AUTO COMPLETION comments-and-strings=1",
+                          "AUTO COMPLETION selection-invalidates=1",
+                          "AUTO COMPLETION target-change=1",
+                          "AUTO COMPLETION preference-off-manual-remains=1",
+                          "AUTO COMPLETION viewport-shrink-selection=1",
+                          "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                          "AUTOMATIC COMPLETION SELF-TEST: FAILED"
+                        ],
+                        "failure_lines": [
+                          "Auto completion stage=65 active=1 explicit=1 pending=0 composing=0 cursor=0 first=644 selected=648 rows=5 count=649 text=",
+                          "First workflow failure at stage 70 (next 65): Projekt geladen. Build kompiliert die lokalen Quelldateien. (tab=0, selected=0, samples=0, report=0, query=)"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "api_reference_workflow",
+                "status": "passed",
+                "seconds": 4.562,
+                "app_records": [
+                  {
+                    "original": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-_vh8e3mw/api_reference_workflow/files \u00e4/app-steps.json",
+                      "sha256": "a77a8acc6adb2adcc0056193c7f470db3962b6b2665566e8b9eb8f2312cb17bd",
+                      "bytes": 20777
+                    },
+                    "apps": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure_lines": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure_lines": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "completion_info_workflow",
+                "status": "failed",
+                "seconds": 3.906,
+                "app_records": [
+                  {
+                    "original": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-_vh8e3mw/completion_info_workflow/files \u00e4/app-steps.json",
+                      "sha256": "7629e72570be998644d678117998142367694804cf4cd8660262a78d0eec1444",
+                      "bytes": 7207
+                    },
+                    "apps": [
+                      {
+                        "exit_code": 1,
+                        "markers": [
+                          "COMPLETION INFO target=0 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=40 rapid-reselection=1",
+                          "COMPLETION INFO target=0 hover-preview=1 no-keyboard-accept=1",
+                          "COMPLETION INFO target=0 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                          "COMPLETION INFO target=0 modified-tab-no-accept=1",
+                          "COMPLETION INFO SELF-TEST: FAILED"
+                        ],
+                        "failure_lines": [
+                          "Completion info target=1 stage=0 active=0 visible=0 painted=0 mode=0 due=0.000000 now=1000905.975991 info=0.0/0.0 scroll=0 cursor=18",
+                          "First workflow failure at stage 32 (next 0): Projekt geladen. Build kompiliert die lokalen Quelldateien. (tab=0, selected=0, samples=0, report=0, query=)"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "linux": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-info-integrated-linux.json",
+          "sha256": "fc1910a8a19b7d448888286df04d181b8fa33f255221d0e9536c87e17ab9de0d",
+          "bytes": 1920
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-info-integrated-linux.log",
+          "sha256": "5d7112080a9f9c0f2d2ad869eb270441df6701df32504913fc57ead0ee33e743",
+          "bytes": 315932
+        },
+        "commands": [
+          {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--sanitizers",
+              "--test",
+              "--test-filter",
+              "completion_info"
+            ],
+            "exit_code": 0,
+            "app_sha256": "47591371ef155b56bc21957e8f3006444b9dac8e8eb4a9454b96ca53cca7a8f8"
+          },
+          {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--sanitizers",
+              "--test-display",
+              "--test-filter",
+              "completion_info_workflow",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow",
+              "--test-filter",
+              "api_reference_workflow"
+            ],
+            "exit_code": 1,
+            "app_sha256": "47591371ef155b56bc21957e8f3006444b9dac8e8eb4a9454b96ca53cca7a8f8"
+          }
+        ],
+        "exit_code": 1,
+        "app_sha256": "47591371ef155b56bc21957e8f3006444b9dac8e8eb4a9454b96ca53cca7a8f8",
+        "same_app_bytes_between_invocations": true,
+        "runs": [
+          {
+            "run": "run-6t2ym6xm",
+            "original": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-6t2ym6xm/results.json",
+              "sha256": "aaab8b3889db53cd563bca0dbe1d28b90c41f9939c411549ff44ed75770a3a80",
+              "bytes": 468
+            },
+            "passed": 1,
+            "count": 1,
+            "cases": [
+              {
+                "name": "completion_info",
+                "status": "passed",
+                "exit_code": 0,
+                "seconds": 0.011
+              }
+            ]
+          },
+          {
+            "run": "run-ksw2prtx",
+            "original": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ksw2prtx/results.json",
+              "sha256": "5e3bbb0ec4c73d76ae6f90c1b62e1e02434d5f3b74293a20e83c73f5b10e5b7d",
+              "bytes": 83528
+            },
+            "passed": 2,
+            "count": 4,
+            "cases": [
+              {
+                "name": "completion_workflow",
+                "status": "passed",
+                "seconds": 18.944,
+                "app_records": [
+                  {
+                    "original": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ksw2prtx/completion_workflow/files \u00e4/app-steps.json",
+                      "sha256": "bdcea26eb7f2ceb8d08eebf324af9b93a9e35c9e1fe4b70c246ea58b7d75be91",
+                      "bytes": 22075
+                    },
+                    "apps": [
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION HELP target=0 summary=1 own-document=1 reference-visible=1 scroll=0",
+                          "COMPLETION HELP target=1 summary=1 own-document=1 reference-visible=1 scroll=0",
+                          "COMPLETION HELP target=2 summary=1 own-document=1 reference-visible=1 scroll=0",
+                          "COMPLETION HELP ARGUMENTS: rows=2 last-visible=1 inspector-preserved=1 scroll=92",
+                          "COMPLETION HELP TABLE FIXTURE: rows=3 last-painted=1 inspector-preserved=1",
+                          "COMPLETION HELP FAILURE: visible=1 disabled-reference=1 inspector-preserved=1 retry-after-close=1",
+                          "COMPLETION SELF-TEST: PASSED"
+                        ],
+                        "failure_lines": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION HELP target=0 summary=1 own-document=1 reference-visible=1 scroll=0",
+                          "COMPLETION HELP target=1 summary=1 own-document=1 reference-visible=1 scroll=147",
+                          "COMPLETION HELP target=2 summary=1 own-document=1 reference-visible=1 scroll=0",
+                          "COMPLETION HELP FAILURE: visible=1 disabled-reference=1 inspector-preserved=1 retry-after-close=1",
+                          "COMPLETION SELF-TEST: PASSED"
+                        ],
+                        "failure_lines": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "completion_automatic_workflow",
+                "status": "failed",
+                "seconds": 11.243,
+                "app_records": [
+                  {
+                    "original": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ksw2prtx/completion_automatic_workflow/files \u00e4/app-steps.json",
+                      "sha256": "868d78e3e37fbf639e5bb449278ae229e6931af7bde758126789ba706a671835",
+                      "bytes": 9168
+                    },
+                    "apps": [
+                      {
+                        "exit_code": 1,
+                        "markers": [
+                          "AUTO COMPLETION enter-without-selection=1",
+                          "AUTO COMPLETION tab-without-selection=1",
+                          "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                          "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                          "AUTO COMPLETION changed-prefix-needs-selection=1",
+                          "AUTO COMPLETION short-prefix-closes=1",
+                          "AUTO COMPLETION stale-cursor=1",
+                          "AUTO COMPLETION stale-equal-length-source=1",
+                          "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                          "AUTO COMPLETION comments-and-strings=1",
+                          "AUTO COMPLETION selection-invalidates=1",
+                          "AUTO COMPLETION target-change=1",
+                          "AUTO COMPLETION preference-off-manual-remains=1",
+                          "AUTO COMPLETION viewport-shrink-selection=1",
+                          "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                          "AUTOMATIC COMPLETION SELF-TEST: FAILED"
+                        ],
+                        "failure_lines": [
+                          "Auto completion stage=65 active=1 explicit=1 pending=0 composing=0 cursor=0 first=644 selected=648 rows=5 count=649 text=",
+                          "First workflow failure at stage 70 (next 65): Projekt geladen. Build kompiliert die lokalen Quelldateien. (tab=0, selected=0, samples=0, report=0, query=)"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "api_reference_workflow",
+                "status": "passed",
+                "seconds": 18.432,
+                "app_records": [
+                  {
+                    "original": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ksw2prtx/api_reference_workflow/files \u00e4/app-steps.json",
+                      "sha256": "5a78679c0d3b039eeddda448dc9802e4b8f0b719b32be1ccb9e3b4064d8cfd89",
+                      "bytes": 20739
+                    },
+                    "apps": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure_lines": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure_lines": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "completion_info_workflow",
+                "status": "failed",
+                "seconds": 8.644,
+                "app_records": [
+                  {
+                    "original": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-ksw2prtx/completion_info_workflow/files \u00e4/app-steps.json",
+                      "sha256": "f28a445962fbcabcf44e60059f9eb80973dbc98b08432e448eebceffee44a4e2",
+                      "bytes": 7161
+                    },
+                    "apps": [
+                      {
+                        "exit_code": 1,
+                        "markers": [
+                          "COMPLETION INFO target=0 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=12 rapid-reselection=1",
+                          "COMPLETION INFO target=0 hover-preview=1 no-keyboard-accept=1",
+                          "COMPLETION INFO target=0 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                          "COMPLETION INFO target=0 modified-tab-no-accept=1",
+                          "COMPLETION INFO SELF-TEST: FAILED"
+                        ],
+                        "failure_lines": [
+                          "Completion info target=1 stage=0 active=0 visible=0 painted=0 mode=0 due=0.000000 now=8191.742607 info=0.0/0.0 scroll=0 cursor=18",
+                          "First workflow failure at stage 32 (next 0): Projekt geladen. Build kompiliert die lokalen Quelldateien. (tab=0, selected=0, samples=0, report=0, query=)"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "source_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-info-integrated-compiler-source.json",
+        "sha256": "bd74be21a0c302443192330a475e04354d7f8c298974dc5ad75a94fc0f32e77a",
+        "bytes": 118938
+      },
+      "own_input_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-info-integrated-inputs.json",
+        "sha256": "0c9612bea8d8f048c2eb408497c4813e0b19cdd7aec8b1c826093e9146df73dc",
+        "bytes": 17302
+      },
+      "runtime_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-info-integrated-runtime.json",
+        "sha256": "6f3b291656f6c72d61e2c6c3bead89cc36cd2e2438845dc8e40c5f51155ee7ce",
+        "bytes": 41401
+      }
+    },
+    "completion-info-tab": {
+      "windows": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-info-tab-windows.json",
+          "sha256": "8223cb9c86cfaeaa2aaa41ec8ea4eae66873e74bbce7335d0f8ce8da79143a45",
+          "bytes": 2252
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-info-tab-windows.log",
+          "sha256": "58444d62e62cfab7a8ec8f9b75fb55ca64d13cc560d6e98cff5a68502f66e22f",
+          "bytes": 41768
+        },
+        "commands": [
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test",
+              "--test-filter",
+              "completion_info"
+            ],
+            "exit_code": 0,
+            "app_sha256": "97d769cff3db05ca3c973080438534e77c74ebd20cebdaab1cbe84330ecec430"
+          },
+          {
+            "command": [
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+              "--",
+              "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+              "--build-dir",
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+              "--config",
+              "Release",
+              "--jobs",
+              "4",
+              "--sdl",
+              "D:\\Physim\\third_party\\SDL3-3.2.30",
+              "--test-display",
+              "--test-filter",
+              "completion_info_workflow",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow",
+              "--test-filter",
+              "api_reference_workflow"
+            ],
+            "exit_code": 0,
+            "app_sha256": "97d769cff3db05ca3c973080438534e77c74ebd20cebdaab1cbe84330ecec430"
+          }
+        ],
+        "exit_code": 0,
+        "app_sha256": "97d769cff3db05ca3c973080438534e77c74ebd20cebdaab1cbe84330ecec430",
+        "same_app_bytes_between_invocations": true,
+        "runs": [
+          {
+            "run": "run-ot7qjiy2",
+            "original": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-ot7qjiy2/results.json",
+              "sha256": "22faf5025ac2bf0d4bf1afa016f0e4ccba892a87c3a6462fc69f79116cf54bcc",
+              "bytes": 491
+            },
+            "passed": 1,
+            "count": 1,
+            "cases": [
+              {
+                "name": "completion_info",
+                "status": "passed",
+                "exit_code": 0,
+                "seconds": 0.062
+              }
+            ]
+          },
+          {
+            "run": "run-zzc2kapy",
+            "original": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-zzc2kapy/results.json",
+              "sha256": "1406af7488c20ac736e53f9bf19d6947d9c1aad0a7088bfa12c099e59c3274b3",
+              "bytes": 101561
+            },
+            "passed": 4,
+            "count": 4,
+            "cases": [
+              {
+                "name": "completion_workflow",
+                "status": "passed",
+                "seconds": 4.453,
+                "app_records": [
+                  {
+                    "original": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-zzc2kapy/completion_workflow/files \u00e4/app-steps.json",
+                      "sha256": "d9773f29330d7c0103a9ceae28681bc1c1608ecb173c3a614f5257a158729495",
+                      "bytes": 22160
+                    },
+                    "apps": [
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION HELP target=0 summary=1 own-document=1 reference-visible=1 scroll=0",
+                          "COMPLETION HELP target=1 summary=1 own-document=1 reference-visible=1 scroll=0",
+                          "COMPLETION HELP target=2 summary=1 own-document=1 reference-visible=1 scroll=6",
+                          "COMPLETION HELP ARGUMENTS: rows=2 last-visible=1 inspector-preserved=1 scroll=103",
+                          "COMPLETION HELP TABLE FIXTURE: rows=3 last-painted=1 inspector-preserved=1",
+                          "COMPLETION HELP FAILURE: visible=1 disabled-reference=1 inspector-preserved=1 retry-after-close=1",
+                          "COMPLETION SELF-TEST: PASSED"
+                        ],
+                        "failure_lines": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION HELP target=0 summary=1 own-document=1 reference-visible=1 scroll=0",
+                          "COMPLETION HELP target=1 summary=1 own-document=1 reference-visible=1 scroll=117",
+                          "COMPLETION HELP target=2 summary=1 own-document=1 reference-visible=1 scroll=0",
+                          "COMPLETION HELP FAILURE: visible=1 disabled-reference=1 inspector-preserved=1 retry-after-close=1",
+                          "COMPLETION SELF-TEST: PASSED"
+                        ],
+                        "failure_lines": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "completion_automatic_workflow",
+                "status": "passed",
+                "seconds": 11.609,
+                "app_records": [
+                  {
+                    "original": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-zzc2kapy/completion_automatic_workflow/files \u00e4/app-steps.json",
+                      "sha256": "36d721ebb3bf415c6cd6818cbd48005d109b4ea611fb96ff494bc5350480af0c",
+                      "bytes": 19675
+                    },
+                    "apps": [
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "AUTO COMPLETION enter-without-selection=1",
+                          "AUTO COMPLETION tab-without-selection=1",
+                          "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                          "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                          "AUTO COMPLETION changed-prefix-needs-selection=1",
+                          "AUTO COMPLETION short-prefix-closes=1",
+                          "AUTO COMPLETION stale-cursor=1",
+                          "AUTO COMPLETION stale-equal-length-source=1",
+                          "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                          "AUTO COMPLETION comments-and-strings=1",
+                          "AUTO COMPLETION selection-invalidates=1",
+                          "AUTO COMPLETION target-change=1",
+                          "AUTO COMPLETION preference-off-manual-remains=1",
+                          "AUTO COMPLETION viewport-shrink-selection=1",
+                          "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                          "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                          "AUTO COMPLETION focus-loss=1",
+                          "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                        ],
+                        "failure_lines": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "AUTO COMPLETION enter-without-selection=1",
+                          "AUTO COMPLETION tab-without-selection=1",
+                          "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                          "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                          "AUTO COMPLETION changed-prefix-needs-selection=1",
+                          "AUTO COMPLETION short-prefix-closes=1",
+                          "AUTO COMPLETION stale-cursor=1",
+                          "AUTO COMPLETION stale-equal-length-source=1",
+                          "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                          "AUTO COMPLETION comments-and-strings=1",
+                          "AUTO COMPLETION selection-invalidates=1",
+                          "AUTO COMPLETION target-change=1",
+                          "AUTO COMPLETION preference-off-manual-remains=1",
+                          "AUTO COMPLETION viewport-shrink-selection=1",
+                          "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                          "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                          "AUTO COMPLETION focus-loss=1",
+                          "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                        ],
+                        "failure_lines": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "api_reference_workflow",
+                "status": "passed",
+                "seconds": 4.61,
+                "app_records": [
+                  {
+                    "original": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-zzc2kapy/api_reference_workflow/files \u00e4/app-steps.json",
+                      "sha256": "efa67ff296ee0b64dd02bea4929110f2a4e6f638a888ec15b824a7faa0b7a0c5",
+                      "bytes": 20777
+                    },
+                    "apps": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure_lines": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure_lines": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "completion_info_workflow",
+                "status": "passed",
+                "seconds": 17.922,
+                "app_records": [
+                  {
+                    "original": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-zzc2kapy/completion_info_workflow/files \u00e4/app-steps.json",
+                      "sha256": "6a19c9c58d506ed0e48f104d4d939f2f77d43414c0fdcf1f39a67c2bfcf7a8cc",
+                      "bytes": 33741
+                    },
+                    "apps": [
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION INFO target=0 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=39 rapid-reselection=1",
+                          "COMPLETION INFO target=0 hover-preview=1 no-keyboard-accept=1",
+                          "COMPLETION INFO target=0 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                          "COMPLETION INFO target=0 modified-tab-no-accept=1",
+                          "COMPLETION INFO target=1 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=39 rapid-reselection=1",
+                          "COMPLETION INFO target=1 hover-preview=1 no-keyboard-accept=1",
+                          "COMPLETION INFO target=1 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                          "COMPLETION INFO target=1 modified-tab-no-accept=1",
+                          "COMPLETION INFO target=2 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=40 rapid-reselection=1",
+                          "COMPLETION INFO target=2 hover-preview=1 no-keyboard-accept=1",
+                          "COMPLETION INFO target=2 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                          "COMPLETION INFO target=2 modified-tab-no-accept=1",
+                          "COMPLETION INFO SELF-TEST: PASSED"
+                        ],
+                        "failure_lines": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION INFO target=0 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=39 rapid-reselection=1",
+                          "COMPLETION INFO target=0 hover-preview=1 no-keyboard-accept=1",
+                          "COMPLETION INFO target=0 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                          "COMPLETION INFO target=0 modified-tab-no-accept=1",
+                          "COMPLETION INFO target=1 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=39 rapid-reselection=1",
+                          "COMPLETION INFO target=1 hover-preview=1 no-keyboard-accept=1",
+                          "COMPLETION INFO target=1 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                          "COMPLETION INFO target=1 modified-tab-no-accept=1",
+                          "COMPLETION INFO target=2 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=37 rapid-reselection=1",
+                          "COMPLETION INFO target=2 hover-preview=1 no-keyboard-accept=1",
+                          "COMPLETION INFO target=2 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                          "COMPLETION INFO target=2 modified-tab-no-accept=1",
+                          "COMPLETION INFO SELF-TEST: PASSED"
+                        ],
+                        "failure_lines": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "linux": {
+        "runner": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-info-tab-linux.json",
+          "sha256": "1ec6c5d42bcbe5b43e05f4bb7ec06f57a6c694ac35ce83395b1d272772e271a4",
+          "bytes": 1920
+        },
+        "log": {
+          "path": "build/validation/explorer-inline-2026-10-29/completion-info-tab-linux.log",
+          "sha256": "efcf8a19341ba897d9949bc1097377b7d14bf142e61f6ea3297fd256fe088b34",
+          "bytes": 299332
+        },
+        "commands": [
+          {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--sanitizers",
+              "--test",
+              "--test-filter",
+              "completion_info"
+            ],
+            "exit_code": 0,
+            "app_sha256": "06e8322b2dd2b945c418fba5e6d2fc5f89bf94680d277cc4135f790d6298fbce"
+          },
+          {
+            "command": [
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+              "--",
+              "/usr/bin/python3",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+              "--build-dir",
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+              "--config",
+              "Debug",
+              "--jobs",
+              "4",
+              "--sdl",
+              "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+              "--sanitizers",
+              "--test-display",
+              "--test-filter",
+              "completion_info_workflow",
+              "--test-filter",
+              "completion_workflow",
+              "--test-filter",
+              "completion_automatic_workflow",
+              "--test-filter",
+              "api_reference_workflow"
+            ],
+            "exit_code": 0,
+            "app_sha256": "06e8322b2dd2b945c418fba5e6d2fc5f89bf94680d277cc4135f790d6298fbce"
+          }
+        ],
+        "exit_code": 0,
+        "app_sha256": "06e8322b2dd2b945c418fba5e6d2fc5f89bf94680d277cc4135f790d6298fbce",
+        "same_app_bytes_between_invocations": true,
+        "runs": [
+          {
+            "run": "run-3ypvbd2x",
+            "original": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-3ypvbd2x/results.json",
+              "sha256": "182d1bed24ebf0d9efac7262794359b95e1e7d073785161dd1c358a6f6ec1f18",
+              "bytes": 467
+            },
+            "passed": 1,
+            "count": 1,
+            "cases": [
+              {
+                "name": "completion_info",
+                "status": "passed",
+                "exit_code": 0,
+                "seconds": 0.01
+              }
+            ]
+          },
+          {
+            "run": "run-7fh8kh0v",
+            "original": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7fh8kh0v/results.json",
+              "sha256": "583dbfd678fed19fd932874da4001bdfad388f7cf4204150afd63204e3560a18",
+              "bytes": 100130
+            },
+            "passed": 4,
+            "count": 4,
+            "cases": [
+              {
+                "name": "completion_workflow",
+                "status": "passed",
+                "seconds": 19.997,
+                "app_records": [
+                  {
+                    "original": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7fh8kh0v/completion_workflow/files \u00e4/app-steps.json",
+                      "sha256": "14ad6671aaddc61844f93fc3e5e6fdbb860b6240d4b8e6250ac729c26190882e",
+                      "bytes": 22075
+                    },
+                    "apps": [
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION HELP target=0 summary=1 own-document=1 reference-visible=1 scroll=0",
+                          "COMPLETION HELP target=1 summary=1 own-document=1 reference-visible=1 scroll=0",
+                          "COMPLETION HELP target=2 summary=1 own-document=1 reference-visible=1 scroll=0",
+                          "COMPLETION HELP ARGUMENTS: rows=2 last-visible=1 inspector-preserved=1 scroll=92",
+                          "COMPLETION HELP TABLE FIXTURE: rows=3 last-painted=1 inspector-preserved=1",
+                          "COMPLETION HELP FAILURE: visible=1 disabled-reference=1 inspector-preserved=1 retry-after-close=1",
+                          "COMPLETION SELF-TEST: PASSED"
+                        ],
+                        "failure_lines": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION HELP target=0 summary=1 own-document=1 reference-visible=1 scroll=0",
+                          "COMPLETION HELP target=1 summary=1 own-document=1 reference-visible=1 scroll=147",
+                          "COMPLETION HELP target=2 summary=1 own-document=1 reference-visible=1 scroll=0",
+                          "COMPLETION HELP FAILURE: visible=1 disabled-reference=1 inspector-preserved=1 retry-after-close=1",
+                          "COMPLETION SELF-TEST: PASSED"
+                        ],
+                        "failure_lines": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "completion_automatic_workflow",
+                "status": "passed",
+                "seconds": 22.696,
+                "app_records": [
+                  {
+                    "original": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7fh8kh0v/completion_automatic_workflow/files \u00e4/app-steps.json",
+                      "sha256": "2d0b2aab456de95bcdc6e995de4a08762beff4e0b7509f20c33e2a73e9387255",
+                      "bytes": 19593
+                    },
+                    "apps": [
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "AUTO COMPLETION enter-without-selection=1",
+                          "AUTO COMPLETION tab-without-selection=1",
+                          "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                          "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                          "AUTO COMPLETION changed-prefix-needs-selection=1",
+                          "AUTO COMPLETION short-prefix-closes=1",
+                          "AUTO COMPLETION stale-cursor=1",
+                          "AUTO COMPLETION stale-equal-length-source=1",
+                          "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                          "AUTO COMPLETION comments-and-strings=1",
+                          "AUTO COMPLETION selection-invalidates=1",
+                          "AUTO COMPLETION target-change=1",
+                          "AUTO COMPLETION preference-off-manual-remains=1",
+                          "AUTO COMPLETION viewport-shrink-selection=1",
+                          "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                          "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                          "AUTO COMPLETION focus-loss=1",
+                          "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                        ],
+                        "failure_lines": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "AUTO COMPLETION enter-without-selection=1",
+                          "AUTO COMPLETION tab-without-selection=1",
+                          "AUTO COMPLETION escape-suppression=1 manual-override=1 undo=1",
+                          "AUTO COMPLETION explicit-control-n-p=1 undo=1",
+                          "AUTO COMPLETION changed-prefix-needs-selection=1",
+                          "AUTO COMPLETION short-prefix-closes=1",
+                          "AUTO COMPLETION stale-cursor=1",
+                          "AUTO COMPLETION stale-equal-length-source=1",
+                          "AUTO COMPLETION ime-pause=1 ime-commit=1",
+                          "AUTO COMPLETION comments-and-strings=1",
+                          "AUTO COMPLETION selection-invalidates=1",
+                          "AUTO COMPLETION target-change=1",
+                          "AUTO COMPLETION preference-off-manual-remains=1",
+                          "AUTO COMPLETION viewport-shrink-selection=1",
+                          "AUTO COMPLETION viewport-large-light-contrast=1 space-clamp=1",
+                          "AUTO COMPLETION viewport-five=1 rows-one-nine=1 all-results=1 wheel-no-accept=1 thumb-drag=1",
+                          "AUTO COMPLETION focus-loss=1",
+                          "AUTOMATIC COMPLETION SELF-TEST: PASSED"
+                        ],
+                        "failure_lines": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "api_reference_workflow",
+                "status": "passed",
+                "seconds": 25.02,
+                "app_records": [
+                  {
+                    "original": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7fh8kh0v/api_reference_workflow/files \u00e4/app-steps.json",
+                      "sha256": "cee1a5bcbbb7f672cff99a86620176778872cb5f2ee801334e4a69e43ed9f254",
+                      "bytes": 20754
+                    },
+                    "apps": [
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure_lines": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [],
+                        "failure_lines": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "completion_info_workflow",
+                "status": "passed",
+                "seconds": 37.112,
+                "app_records": [
+                  {
+                    "original": {
+                      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-7fh8kh0v/completion_info_workflow/files \u00e4/app-steps.json",
+                      "sha256": "bfd3249c7179ddeb4d27765a8efbfc072f573c72c4fe51b5860155cf6ad9314a",
+                      "bytes": 33667
+                    },
+                    "apps": [
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION INFO target=0 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=11 rapid-reselection=1",
+                          "COMPLETION INFO target=0 hover-preview=1 no-keyboard-accept=1",
+                          "COMPLETION INFO target=0 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                          "COMPLETION INFO target=0 modified-tab-no-accept=1",
+                          "COMPLETION INFO target=1 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=13 rapid-reselection=1",
+                          "COMPLETION INFO target=1 hover-preview=1 no-keyboard-accept=1",
+                          "COMPLETION INFO target=1 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                          "COMPLETION INFO target=1 modified-tab-no-accept=1",
+                          "COMPLETION INFO target=2 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=11 rapid-reselection=1",
+                          "COMPLETION INFO target=2 hover-preview=1 no-keyboard-accept=1",
+                          "COMPLETION INFO target=2 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                          "COMPLETION INFO target=2 modified-tab-no-accept=1",
+                          "COMPLETION INFO SELF-TEST: PASSED"
+                        ],
+                        "failure_lines": []
+                      },
+                      {
+                        "exit_code": 0,
+                        "markers": [
+                          "COMPLETION INFO target=0 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=10 rapid-reselection=1",
+                          "COMPLETION INFO target=0 hover-preview=1 no-keyboard-accept=1",
+                          "COMPLETION INFO target=0 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                          "COMPLETION INFO target=0 modified-tab-no-accept=1",
+                          "COMPLETION INFO target=1 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=12 rapid-reselection=1",
+                          "COMPLETION INFO target=1 hover-preview=1 no-keyboard-accept=1",
+                          "COMPLETION INFO target=1 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                          "COMPLETION INFO target=1 modified-tab-no-accept=1",
+                          "COMPLETION INFO target=2 manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=12 rapid-reselection=1",
+                          "COMPLETION INFO target=2 hover-preview=1 no-keyboard-accept=1",
+                          "COMPLETION INFO target=2 full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1",
+                          "COMPLETION INFO target=2 modified-tab-no-accept=1",
+                          "COMPLETION INFO SELF-TEST: PASSED"
+                        ],
+                        "failure_lines": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "source_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-info-tab-compiler-source.json",
+        "sha256": "a03201d206342d0dde6d9c53a00d03716f14e7d9fcaf045c08f49a57e964b4a5",
+        "bytes": 118826
+      },
+      "own_input_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-info-tab-inputs.json",
+        "sha256": "ce3c57b7a63875b89d4a16fc2ed6f16159a88d1681c1a24b7af98760ce169289",
+        "bytes": 17302
+      },
+      "runtime_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-info-tab-runtime.json",
+        "sha256": "28e9bbb019a36318245d37c575131ba628e9b537c5e17d9b7266046cdd201dbc",
+        "bytes": 41387
+      }
+    }
+  },
+  "direct_strict_leak_unit": {
+    "command": [
+      "wsl",
+      "-d",
+      "Alpine-Dev",
+      "--exec",
+      "env",
+      "TMPDIR=/mnt/d/Physim/build/validation/completion-info-2026-11-04/tmp",
+      "gcc",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-g",
+      "-fsanitize=address,undefined",
+      "-I/mnt/d/Physim/include",
+      "-I/mnt/d/Physim/app",
+      "/mnt/d/Physim/tests/test_completion_info.c",
+      "/mnt/d/Physim/app/completion_info.c",
+      "-o",
+      "/mnt/d/Physim/build/validation/completion-info-2026-11-04/info-unit-final"
+    ],
+    "compile_exit": 0,
+    "compile_stdout": "",
+    "compile_stderr": "",
+    "files": {
+      "app/completion_info.c": "390103a917ece786bc823bc1d32fcc0e926ed4f60acc95bb2b36381abd7b933b",
+      "app/completion_info.h": "c3435086dd9a664c36bce72131b60b5b614d48f487ef378315e8296053ed07db",
+      "tests/test_completion_info.c": "fb71d4a2f9adc30e3160cfd43f5da73f74eda80672097514857b96af49f20c7f",
+      "app/autosave.h": "ed121ce20bfe977973b75ba0532724c7ebede160307c2dd020ba2480411e6ed1",
+      "include/physim/core.h": "159d63a460334a0ea27dc7645a5f2b5de30666bfbc6840492b843e2c0f3be7d2"
+    },
+    "run_command": [
+      "wsl",
+      "-d",
+      "Alpine-Dev",
+      "--exec",
+      "env",
+      "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+      "/mnt/d/Physim/build/validation/completion-info-2026-11-04/info-unit-final"
+    ],
+    "exit_code": 0,
+    "stdout": "Completion info: exact delay boundary, idle deadline, rapid reselection, immediate show, owned full-source binding, editor/candidate/cursor/viewport invalidation and cancel passed\n",
+    "stderr": "",
+    "binary_sha256": "60a62f41dfdc315391cec0e99efcf358dee0d11708741e26d59775c305d1c787"
+  },
+  "direct_strict_leak_original": {
+    "path": "build/validation/completion-info-2026-11-04/direct-unit-final.json",
+    "sha256": "c0baa0e2ddb7126875e940e4337dd7b9d3d8713ffca0907cfcf5a7a870d89eb1",
+    "bytes": 1674
+  },
+  "boundaries": [
+    "Unit exact independent 0.280-second constant and before/at-deadline tests.",
+    "Native flow observes painted text commands after draw, bounds, actual source and cursor.",
+    "C/Physim, model/analysis/document, dark16-code12/light22-code22/contrast16-code12.",
+    "Windows Release/MSVC; Linux Debug/GCC ASan+UBSan GUI detect_leaks=0; direct unit detect_leaks=1.",
+    "No new screenshots in timing flow; previous card renderer unchanged apart from info footer tooltip.",
+    "Old manual/API tests explicitly request info; no Undo/data/reference assertions removed.",
+    "No current macOS acceptance. Local scopes, separate parameter help, physical input/IME, AT, DPI/monitor/fullscreen remain open."
+  ],
+  "attempts": [
+    {
+      "phase": "completion-info-before",
+      "finding": "Old first-manual-open visibility state rejected before render, not proof of glyph painting at that failure frame; Linux not run."
+    },
+    {
+      "phase": "completion-info-integrated",
+      "finding": "Both platforms unit1/1 GUI2/4. Shift+Tab passed to Nuklear ALLOW_TAB and inserted four spaces; auto test inspected bounds before draw. Model/manual/API preserved."
+    },
+    {
+      "phase": "completion-info-tab",
+      "finding": "Exact Shift+Tab exits editor without insertion, releases custom keyboard; auto test waits for actual card bounds after one toggle. Both platforms unit1/1 GUI4/4."
+    }
+  ],
+  "tooling_notes": [
+    "Early PowerShell sanitizer comma parse failed before execution; fixed structured argv, no product failure.",
+    "Native runner registry/harness check exited0, mock build/exit failures expected, not native platform results.",
+    "Test assertions execute before draw; fixture uses draw generations +1 direct changes/+2 SDL actions. No fixed sleep substitutes.",
+    "Earlier signed hosted artifact URL expired; reacquired same artifact then digest and all entries read. No private Mac access."
+  ]
+}

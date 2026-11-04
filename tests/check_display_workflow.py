@@ -1089,6 +1089,19 @@ def completion(flow,directory):
             require((root/name).is_file(),"Missing actual completion view: "+name)
 
 
+def completion_info_workflow(flow,directory):
+    for language in ("c","phys"):
+        root=directory/language;root.mkdir(parents=True)
+        flow.run("--workspace-state-test",root,"completion-info-"+language,timeout=75,marker="COMPLETION INFO SELF-TEST: PASSED")
+        output=flow.steps[-1]["stdout"]
+        for target in range(3):
+            require(f"COMPLETION INFO target={target} manual-toggle=1 hidden-pointer=1 delay-ms=280" in output,"Missing native info delay/toggle/hit-test sequence")
+            require(f"COMPLETION INFO target={target} full-source-cancel=1 cursor-cancel=1 keyboard-scroll=1 i-toggle=1 source-preserved=1" in output,"Missing native info cancellation/keyboard sequence")
+            require(f"COMPLETION INFO target={target} hover-preview=1 no-keyboard-accept=1" in output,"Pointer preview armed an insertion or did not bind delayed documentation")
+            require(f"COMPLETION INFO target={target} modified-tab-no-accept=1" in output,"Modified Tab accepted a suggestion")
+        require(not list(root.glob("*.png")) and not list(root.glob("*.bmp")),"Info timing regression emitted redundant pictures")
+
+
 def completion_automatic(flow,directory):
     markers=("enter-without-selection=1","tab-without-selection=1","escape-suppression=1 manual-override=1 undo=1",
              "explicit-control-n-p=1 undo=1","changed-prefix-needs-selection=1","short-prefix-closes=1","stale-cursor=1","stale-equal-length-source=1",
@@ -2048,6 +2061,7 @@ SPECIAL["laboratory_workflow"]=laboratory
 SPECIAL["model_values_workflow"]=model_values
 SPECIAL["settings_transactions"]=settings_transactions
 SPECIAL["completion_automatic_workflow"]=completion_automatic
+SPECIAL["completion_info_workflow"]=completion_info_workflow
 SPECIAL["settings_keyboard_paced"]=lambda flow,directory: settings_keyboard(flow,directory,True)
 SPECIAL["settings_a_window"]=settings_a_window
 SPECIAL["settings_search_keyboard"]=settings_search_keyboard

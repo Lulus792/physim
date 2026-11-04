@@ -8,8 +8,8 @@ ergänzt. Fünfer-Viewport und wirksame Editor-Preferences sind als weiterer
 Teilstand ergänzt. Gemeinsame Syntaxrollen und Funktionsfarben sind inzwischen
 ebenfalls verbunden; eine vollständige D-Designabnahme steht weiterhin aus.
 Eigener Dokumentbesitz, echte Kurzbeschreibung und vorhandene Argumenttexte sind
-nun ergänzt; Anzeigeverzögerung, Tastatur-Scrollen und weitere Interaktionsgates
-bleiben ausdrücklich offen.
+nun ergänzt. Anzeigeverzögerung, sofortige Umschaltung und Tastatur-Scrollen sind
+als weiterer geprüfter Teilstand verbunden; Assistive-Abnahme bleibt offen.
 
 ## Ergänzte Eingabegrundlage
 
@@ -98,6 +98,30 @@ Mausinput der Karte erreicht keine darunterliegenden Dockgruppen. Nach der
 Übernahme bleibt der Editor Tastaturbesitzer bis zum bewussten Fokuswechsel;
 Quelle und Undo bleiben erhalten. [Native Ausführung, echte Fehler, dritte
 Renderer-Prüfzeile und Gegenprobe](../../verification/completion-help-2026-11-04.md).
+
+## Kurzinfo-Bedienung: Anschluss vom 4. November 2026
+
+Erstes manuelles Öffnen zeigt die Liste mit Übernahmeauswahl, aber ohne Kurzinfo;
+automatisches Öffnen bleibt ohne Übernahmeauswahl. Pfeile oder eine Mausbewegung
+über einen anderen Eintrag starten 280 ms bis zur Kurzinfo. Hover allein erlaubt
+keine Enter-/Tab-Übernahme. Mausrad und Griff verschieben nur den Listenausschnitt.
+`i` und Strg+Leertaste im offenen Popup schalten die Info sofort, ohne die Auswahl
+oder Übernahmebereitschaft zurückzusetzen. Ausblenden verwirft die alte Vormerkung.
+
+Der Hinweis besitzt eine vollständige begrenzte Quellkopie und bindet sich an
+Editor, Katalogidentität, Cursor und Editor-Scrollposition. Jede Änderung verwirft
+die Vormerkung bzw. sichtbare Karte. Alt+BildAuf/BildAb und Alt+Pos1/Ende scrollen
+die sichtbare Karte ohne Änderung am Code oder an der Listenauswahl. Tooltip und
+zugänglicher Name nennen den Zugang. Umschalt+Tab verlässt das Codefeld ohne
+Einrückung oder Übernahme. Kein zusätzlicher Worker oder Dienst.
+
+Windows Release und Linux Debug ASan/UBSan jeweils Unit 1/1 und UI 4/4;
+neue Bedienfolge in C/Physim und drei Editor-/Theme-Kontexten tatsächlich geprüft,
+einschließlich gezeichneter Texte, versteckter alter Kartenfläche, schneller
+Neuauswahl, Quelländerung außerhalb des Präfixes und Cursorabbruch. Der neue
+Ablauf erzeugt keine Bilder. [Originalbefunde, Korrekturen und Grenzen](../../verification/completion-info-2026-11-04.md).
+Dies ersetzt keine vollständige Screenreader-/physische Eingabe-/DPI-Abnahme;
+echte lokale Scopes und separate Parameterhilfe bleiben offen.
 Dies schließt die nachstehenden Interaktions-/Scope-/Aufrufhilfe-Gates nicht ab.
 
 ## Weiterhin verbindlich umzusetzen

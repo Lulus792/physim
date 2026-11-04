@@ -123,6 +123,7 @@ static void completion_test_frame(app *a,const char *mode,int *stage,int *code,c
             if(++seeks>ps_completion_count()){ok=false;break;}
             test_window_key_mod(a->window,SDLK_DOWN,0);--*stage;return;
         }
+        if(ok && !a->completion_info_visible)test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);
         break;
     }
     case 5:
@@ -191,6 +192,7 @@ static void completion_test_frame(app *a,const char *mode,int *stage,int *code,c
         edit->cursor=edit->select_start=edit->select_end=(int)strlen(name);test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);reference_due=ps_clock()+3;reference_drawn=false;*stage=41;break;}
     case 41:
         ok=a->completion_active;
+        if(ok && !a->completion_info_visible){if(ps_clock()<reference_due){test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);--*stage;return;}ok=false;}
         if(ok && !reference_drawn && (completion_ink.symbol!=ps_completion_at(a->completion_indices[a->completion_selected]) || !completion_ink.header || !completion_ink.signature)){
             if(ps_clock()<reference_due){--*stage;return;}ok=false;
         }
@@ -203,6 +205,7 @@ static void completion_test_frame(app *a,const char *mode,int *stage,int *code,c
             const char *name=language?"Vec3":"ps_channel_add";ok=set_editor_text(edit,name,strlen(name));
             edit->cursor=edit->select_start=edit->select_end=(int)strlen(name);test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);reference_due=ps_clock()+3;}break;
     case 44:
+        if(!a->completion_info_visible){if(ps_clock()<reference_due){test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);--*stage;return;}ok=false;break;}
         if(a->completion_help.symbol!=completion_ink.symbol || !a->completion_help.attempted){if(ps_clock()<reference_due){--*stage;return;}ok=false;break;}
         ok=a->completion_active && a->completion_help.status==PS_OK && a->completion_help.document &&
             a->completion_help.document!=reference_owned && a->api_reference==reference_owned && completion_test_equal(edit,language?"Vec3":"ps_channel_add");
@@ -232,6 +235,7 @@ static void completion_test_frame(app *a,const char *mode,int *stage,int *code,c
         snprintf(a->root,sizeof a->root,"%s/no-completion-help-reference",saved_root);
         test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);reference_due=ps_clock()+3;break;
     case 47:
+        if(!a->completion_info_visible){if(ps_clock()<reference_due){test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);--*stage;return;}ok=false;break;}
         if(!a->completion_help.attempted){if(ps_clock()<reference_due){--*stage;return;}ok=false;break;}
         ok=a->completion_active && a->completion_help.status!=PS_OK && !a->completion_help.document &&
             a->completion_help.first==0 && a->completion_help.end==0 && a->api_reference==reference_owned;break;
@@ -245,6 +249,7 @@ static void completion_test_frame(app *a,const char *mode,int *stage,int *code,c
         snprintf(a->root,sizeof a->root,"%s",saved_root);completion_close(a);
         test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);reference_due=ps_clock()+3;break;
     case 51:
+        if(!a->completion_info_visible){if(ps_clock()<reference_due){test_window_key_mod(a->window,SDLK_SPACE,SDL_KMOD_CTRL);--*stage;return;}ok=false;break;}
         if(!a->completion_help.attempted){if(ps_clock()<reference_due){--*stage;return;}ok=false;break;}
         ok=a->completion_active && a->completion_help.status==PS_OK && a->completion_help.document && a->api_reference==reference_owned;
         if(ok)puts("COMPLETION HELP FAILURE: visible=1 disabled-reference=1 inspector-preserved=1 retry-after-close=1");
