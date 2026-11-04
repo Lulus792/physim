@@ -1,6 +1,6 @@
 # Konzept: Rechnen auf verbundenen Geräten
 
-Stand: 4. November 2026 · Konzept und UI-Skizzen, keine Implementierung oder Designfreigabe.
+Stand: 4. November 2026 · Als späterer Projektplan aufgenommen. Die aktuelle UI-/Oberflächenarbeit hat Vorrang; Rechendienst und Verteilung werden erst danach umgesetzt. Noch keine UI-Designfreigabe.
 
 ## Ziel und vorhandene Grundlage
 
@@ -39,6 +39,8 @@ Start in Einstellungen für diesen Rechner, einzelne Geräte oder alle ausgewäh
 Wiederholungen, Aufwärmphase und Zusammenfassung (etwa Median) festlegen; Berechnungszeit getrennt von Netz-/Übertragungszeit messen und Letztere optional zusätzlich ausweisen. Keine FPS oder frei erfundenen Werte verwenden. Korrektheitsprüfung innerhalb definierter numerischer Toleranzen vor Wertung; Abbruch, Überhitzung/Drosselung soweit erkennbar, Zeitlimit und fehlerhafte Ergebnisse kenntlich machen. Version, Plattform/Architektur, genutzte Worker, Zeitpunkt und Testbedingungen speichern; alte Werte nach relevanten Änderungen als möglicherweise veraltet kennzeichnen. Gerätekonfiguration, Energiezustand, Last und Netzwerk können Ergebnisse verändern. Kein Test läuft automatisch ohne bewussten Start; andere laufende Aufträge und Ressourcenlimits berücksichtigen.
 
 ## UI-Skizzen — Vorschläge, keine freigegebenen Designs
+
+Aktuelle interaktive Entwurfsrunde: [A/B/C für Rechnen & Geräte](visuals/compute-device-options/README.md). Die nachfolgenden Textskizzen dokumentieren den ersten Konzeptstand.
 
 Die drei Spalten von Einstellungen A (Kategorien, Optionen, Live-Vorschau) und die unabhängigen Aufgabenfenster bleiben Grundlage. Die Skizzen zeigen Informationshierarchie, keine festen Maße oder endgültigen Farben. Bestehende Freigaben bleiben unverändert.
 

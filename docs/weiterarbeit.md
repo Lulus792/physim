@@ -169,3 +169,11 @@ vergleichbaren Leistungstest fest. Konzeptstand, keine Designfreigabe oder
 Implementierung; offene Architektur-, Sicherheits- und Plattformfragen stehen dort.
 Nächster Schritt: Bedienideen mit dem Nutzer besprechen und offene Entscheidungen
 klären. Die oben genannten nativen Aufgaben und offenen Nachweise bleiben bestehen.
+
+## Späterer Ausbau: Rechnen & Geräte · 4. November 2026
+
+Nutzerpriorität präzisiert: [entferntes Rechnen](remote-computing-concept.md) ist
+als späterer Plan aufgenommen; aktuelle UI-/Oberflächenarbeit hat Vorrang.
+[Interaktive A/B/C-Entwürfe](visuals/compute-device-options/README.md) zeigen
+Gerätekopplung und Leistungstest. Auswahl offen; keine Freigabe oder native
+Implementierung. Nächster Schritt dieser Runde: Entwürfe mit dem Nutzer besprechen.

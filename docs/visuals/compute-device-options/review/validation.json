@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-04T16:05:52.085Z",
+  "sourceCommit": "230ac69b53a2aa9ba64d157762401be352bee704",
+  "browser": "156.0.4314.58",
+  "platform": "win32",
+  "layouts": 90,
+  "checks": [
+    "90 layouts without horizontal page overflow",
+    "A/B/C benchmark completion",
+    "empty state gates execution targets; pairing and unlinking update targets",
+    "pair identity step and Escape focus return",
+    "offline target disabled and explained",
+    "benchmark failure and cancellation preserve example values"
+  ],
+  "errors": [],
+  "scope": "Browser study only; no real service or benchmark; native platform and assistive testing open"
+}
