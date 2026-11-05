@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "c9b9c00f2e253768a78ecdad844544d46e709cdc",
+  "remotes": {
+    "origin": "c9b9c00f2e253768a78ecdad844544d46e709cdc",
+    "upstream": "c9b9c00f2e253768a78ecdad844544d46e709cdc"
+  },
+  "all1240compiler_test_owned_git_blobs_read": true,
+  "all_original_report_bytes_reread": true,
+  "source_match_report_sha256": "9d2de2e1fd1ecb57e02a1349e5a7ebddcda5b7df0e0efc0618bc534810631f09",
+  "hosted_mac": {
+    "repo": "Lulus792/physim",
+    "run": 41972622898,
+    "head_sha": "c9b9c00f2e253768a78ecdad844544d46e709cdc",
+    "arm_job": 127064120558,
+    "arm_status": "queued",
+    "intel_job": 127064120877,
+    "intel_status": "queued",
+    "expected": "4 direct data units and8 GUI groups per architecture; actual results pending"
+  },
+  "private_mac": "OFF, untouched",
+  "scope": "Parser/model foundation only; signature resolution/native HUD/large edit performance/full UI and physical acceptance remain open"
+}

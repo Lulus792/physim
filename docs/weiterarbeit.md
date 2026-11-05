@@ -19,6 +19,11 @@ alle 1.240 Eingaben gegen Git-Index gelesen. Details/STATE unter
 34 bytegleiche BMPs/108.695.892 Bytes entfernt, sämtliche Referenzen erhalten.
 Neuer Mac-Workflow enthält vier Daten-Units vor acht GUI-Gruppen; Ausführung am
 neuen Quellstand noch offen. Kein neues Performance-/physisches Abnahmeversprechen.
+Quellcommit **`c9b9c00f`**, beide Repositories;
+[Commitabgleich und Mac-Anschluss](verification/call-targets-commit-2026-11-05.json).
+Neuer gehosteter Lauf **`41972622898`**: ARM `127064120558` und Intel
+`127064120877` warten auf Runner. Diese Jobs am Anschluss prüfen; erwartet sind
+je vier Daten-Units und acht GUI-Gruppen, noch keine neue Mac-Abnahme.
 
 [C-Syntaxwiederverwendung](verification/completion-reuse-2026-11-05.md): ein
 unveränderter, eigener Flat-Snapshot für Cursorwechsel/erneutes Öffnen; Scope-/

@@ -5,6 +5,8 @@ Aufrufsignatur oder Signaturauflösung.** Die vollständige Parameterhilfe bleib
 nach [ADR 023](../decisions/023-selected-completion-d.md) und
 [APPROVED.md](../visuals/completion-typing-options/APPROVED.md) beauftragt.
 [Kompakter Nachweis und Originalberichte](call-targets-2026-11-05.json).
+Quellcommit **`c9b9c00f`** in beiden Repositories;
+[Quellabgleich und gehosteter Mac-Anschluss](call-targets-commit-2026-11-05.json).
 
 Beide Sprachparser liefern jetzt neben `(` und Argumentnummer ursprüngliche
 Bytebereiche für Aufrufziel, Namen und gegebenenfalls Empfänger. C verwendet
