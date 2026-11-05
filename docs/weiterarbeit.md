@@ -23,8 +23,9 @@ Vorbereitung künftig auf **`c-lookup-closed`** aufbauen: 290 eigene /1.229 Comp
 Testeingaben, alle1.248 mit Git abgeglichen; Archive geprüft. Lokale Handles beendet.
 Keine neuen Bilder. Details: `build/validation/c-lookup-2026-11-05/STATE.md`.
 Quellcommit **`d75da866`**, beide Remotes; [Commitabgleich](verification/c-lookup-commit-2026-11-05.json).
-Mac-Nachlauf **41992949589** läuft: Intel127129280006 /ARM127129280370.
-Denselben Lauf weiter beobachten: erwartet9 Daten +8 GUI jeArch, Originalartefakte offen.
+Mac-Nachlauf **41992949589 abgeschlossen**: Intel/ARM je **9/9 Daten +8/8 GUI**.
+Beide Original-ZIPs/GitHub-Digests/alle Einträge gelesen: [Mac-Nachweis](verification/c-lookup-macos-2026-11-05.json).
+Nicht erneut pollen/starten. Aktuell gemeinsames Modell in Arbeit, noch ungeprüft.
 
 ## Nächste konkrete Schritte
 
@@ -60,7 +61,7 @@ Trennlinie ist seit `ef1f3321` behoben: kein neuer Test allein wegen Kontextwech
 - Modulabfrage `ec7824ca`, Lauf41986344544: [ARM/Intel je8 Daten +8 GUI](verification/module-signatures-macos-2026-11-05.json),
   beide Original-ZIPs/Digests/Einträge gelesen. Abgeschlossen, nicht erneut pollen.
 
-Diese Belege bestätigen noch keinen aktuellen C-Lookup, gemeinsamen Resolver/HUD
+Diese Belege bestätigen den C-Lookup, noch keinen gemeinsamen Resolver/HUD
 oder die vollständige UI-Abnahme. Alter Modulnachweis bleibt im Prüfindex.
 
 ## Dokumentation und Speicherpflege abgeschlossen

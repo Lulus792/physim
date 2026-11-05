@@ -16,8 +16,9 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
   Typedefs/Enum/Parameter, vollständige direkte Funktions-/Zeigerköpfe. Windows/Linux
   zunächst je8/8 Daten, endgültige neue Abfrage52 Fälle samt zwei belegten
   Bereichskorrekturen, zwei Scratch-Fehlern und vier sauberen Negativprogrammen.
-  Keine neue GUI/Bildserie; gemeinsamer Resolver, sichtbarer HUD und Mac-Nachlauf
-  dieses Quellstands noch offen. [Prüfstufen/Hashes](verification/c-lookup-2026-11-05.json).
+  Lokal keine neue GUI/Bildserie; [gehosteter Quellnachlauf ARM/Intel je9/9 Daten
+  +8/8 GUI, Originalarchive geprüft](verification/c-lookup-macos-2026-11-05.json).
+  Gemeinsamer Resolver und sichtbarer HUD offen. [Prüfstufen/Hashes](verification/c-lookup-2026-11-05.json).
 - [Physim-Modulköpfe während unvollständiger Eingabe](verification/module-signatures-2026-11-05.md):
   echte Parser-/Lexer-Wiederaufnahme für spätere Modul-/Methodenköpfe, lokale
   Funktionen weiter über Cursor-Präfix. Windows/Linux erster Stand je17/17 Daten

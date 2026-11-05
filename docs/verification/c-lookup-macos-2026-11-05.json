@@ -1,0 +1,131 @@
+{
+  "date": "2026-11-05",
+  "repo": "Lulus792/physim",
+  "run": 41992949589,
+  "source_commit": "d75da866285703faea9fef543dd46268bed0b799",
+  "all_jobs_terminal": true,
+  "reports": [
+    {
+      "architecture": "intel",
+      "job": 127129280006,
+      "artifact": 13398769435,
+      "zip_path": "build/validation/c-lookup-2026-11-05/native-editor-menu-macos-15-intel.zip",
+      "zip_sha256": "1a1aebfd74034617d2ce3df1a3838e16291f6413ebc1285f9f1130ce4bedb52d",
+      "github_digest_verified": true,
+      "all_original_entries_read": {
+        "Release/test-results/run-4ibg6ahh/results.json": "7b2f423d6eedb9d398b0dc740be06e31c9ec525a7ba20a0ab18702371eea8e42",
+        "Release/test-results/run-t7qt3c82/results.json": "18c3de4adc0c4e0743cf56c8571e9d9d1077b260295d78402ddc66cc1cd7032a"
+      },
+      "units_passed": 9,
+      "units_total": 9,
+      "unit_cases": [
+        "c_call_context",
+        "c_signatures",
+        "c_lookup",
+        "completion_locals",
+        "completion_c_locals",
+        "call_targets",
+        "editor_signatures",
+        "module_signatures",
+        "completion_info"
+      ],
+      "actual_unit_markers": [
+        "33 actual declarator/prototype/pointer/legacy/recovery vectors",
+        "205 every-byte inputs",
+        "775 cursor/name comparisons",
+        "3/3 clean counts",
+        "294 strict-AST/prefix byte comparisons passed",
+        "36 actual C/Physim grammar vectors",
+        "887 fresh-reference comparisons",
+        "123/123 preserve snapshot",
+        "7/7 preserve source/syntax/results",
+        "87/87 preserve source/syntax/results",
+        "Completion info: exact delay boundary",
+        "52 initializer/namespace/shadow/scope/callback vectors",
+        "2 scratch failures, clean capacity counts",
+        "13 actual parser recovery/header/namespace vectors",
+        "70 original-span prefix/header comparisons",
+        "3 malformed namespace headers resume with bounded forward progress"
+      ],
+      "gui_passed": 8,
+      "gui_total": 8,
+      "gui_cases": [
+        "documents_small",
+        "documents_large",
+        "completion_workflow",
+        "completion_automatic_workflow",
+        "api_reference_workflow",
+        "completion_info_workflow",
+        "completion_automatic_deadline_workflow",
+        "completion_locals_workflow"
+      ],
+      "actual_obsolete_deadline_rejected_markers": 6,
+      "actual_cache_c_physim_targets": 3,
+      "app_sha256": "69986f36b305f5be32d5802df6b569269f73e37547e5ffcbbc70bddda2139589"
+    },
+    {
+      "architecture": "arm",
+      "job": 127129280370,
+      "artifact": 13398109847,
+      "zip_path": "build/validation/c-lookup-2026-11-05/native-editor-menu-macos-15.zip",
+      "zip_sha256": "05545791cc779e4abd2d45055100d370ce197f14814bcf9c3d2d491caa4be311",
+      "github_digest_verified": true,
+      "all_original_entries_read": {
+        "Release/test-results/run-jshg1p7y/results.json": "f741d1e2cea62c3b665d5aadd9e992c2a969295231f5b851a338a89435f187e3",
+        "Release/test-results/run-sbppdp3x/results.json": "e8cdb4e052bf2cca03d23b29b59c490be894d759f34488fd3025611e87f9cc56"
+      },
+      "units_passed": 9,
+      "units_total": 9,
+      "unit_cases": [
+        "c_call_context",
+        "c_signatures",
+        "c_lookup",
+        "completion_locals",
+        "completion_c_locals",
+        "call_targets",
+        "editor_signatures",
+        "module_signatures",
+        "completion_info"
+      ],
+      "actual_unit_markers": [
+        "33 actual declarator/prototype/pointer/legacy/recovery vectors",
+        "205 every-byte inputs",
+        "775 cursor/name comparisons",
+        "3/3 clean counts",
+        "294 strict-AST/prefix byte comparisons passed",
+        "36 actual C/Physim grammar vectors",
+        "887 fresh-reference comparisons",
+        "123/123 preserve snapshot",
+        "7/7 preserve source/syntax/results",
+        "87/87 preserve source/syntax/results",
+        "Completion info: exact delay boundary",
+        "52 initializer/namespace/shadow/scope/callback vectors",
+        "2 scratch failures, clean capacity counts",
+        "13 actual parser recovery/header/namespace vectors",
+        "70 original-span prefix/header comparisons",
+        "3 malformed namespace headers resume with bounded forward progress"
+      ],
+      "gui_passed": 8,
+      "gui_total": 8,
+      "gui_cases": [
+        "documents_small",
+        "documents_large",
+        "completion_workflow",
+        "completion_automatic_workflow",
+        "api_reference_workflow",
+        "completion_info_workflow",
+        "completion_automatic_deadline_workflow",
+        "completion_locals_workflow"
+      ],
+      "actual_obsolete_deadline_rejected_markers": 6,
+      "actual_cache_c_physim_targets": 3,
+      "app_sha256": "81dd8025a31ca92c47809938b9b92320259e6717b1e0971c35ba0e9fccefa09a"
+    }
+  ],
+  "temporary_signed_config_removed": true,
+  "original_json": {
+    "path": "build/validation/c-lookup-2026-11-05/mac-original-report.json",
+    "sha256": "18c94976cecec8f2c0492274a35c7548e24e4988aa66bea7796b5e4b37fe797c"
+  },
+  "scope": "Actual C lookup52/2 and module13/70/3, C33/205/775/3, Ph294/call/revision/info data9/9 both architectures plusGUI8/8; six obsolete-deadline checks and C/Physim3target cache/reopen. No common resolver/native HUD/full UI/physical/performance acceptance. Private user MacOFF/untouched."
+}
