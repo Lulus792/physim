@@ -22,8 +22,9 @@ nachgewiesen; keine erneute unveränderte GUI. [Stufen/Hashes](verification/c-lo
 Vorbereitung künftig auf **`c-lookup-closed`** aufbauen: 290 eigene /1.229 Compiler-
 Testeingaben, alle1.248 mit Git abgeglichen; Archive geprüft. Lokale Handles beendet.
 Keine neuen Bilder. Details: `build/validation/c-lookup-2026-11-05/STATE.md`.
-Mac-Nachlauf dieses neuen C-Quellstands noch offen. Nach Push denselben tatsächlich
-gefundenen Lauf anhand des Quellcommits beobachten: erwartet9 Daten +8 GUI jeArch.
+Quellcommit **`d75da866`**, beide Remotes; [Commitabgleich](verification/c-lookup-commit-2026-11-05.json).
+Mac-Nachlauf **41992949589** läuft: Intel127129280006 /ARM127129280370.
+Denselben Lauf weiter beobachten: erwartet9 Daten +8 GUI jeArch, Originalartefakte offen.
 
 ## Nächste konkrete Schritte
 

@@ -1,0 +1,44 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "d75da866285703faea9fef543dd46268bed0b799",
+  "remotes": {
+    "origin": "d75da866285703faea9fef543dd46268bed0b799",
+    "upstream": "d75da866285703faea9fef543dd46268bed0b799"
+  },
+  "all1248_tested_input_git_blobs_read": true,
+  "commit_match_sha256": "7a420ad8c10d65661f1116c764fd6e7a4f1a78d18366db62826aa4366d81250f",
+  "original_proof_sha256": "a74e9d96a8af7268f8969b6500e7b55be43ab2a7f55641116b1f5f9a686c5d44",
+  "all_original_proof_artifact_bytes_reread": true,
+  "hosted_followup": {
+    "repo": "Lulus792/physim",
+    "run": 41992949589,
+    "source_commit": "d75da866285703faea9fef543dd46268bed0b799",
+    "status": "in_progress",
+    "jobs": [
+      {
+        "id": 127129280006,
+        "name": "editor (macos-15-intel)",
+        "status": "in_progress",
+        "conclusion": null,
+        "active_step": "Run actions/checkout@v4"
+      },
+      {
+        "id": 127129280370,
+        "name": "editor (macos-15)",
+        "status": "in_progress",
+        "conclusion": null,
+        "active_step": "Run actions/checkout@v4"
+      }
+    ],
+    "expected": "9 direct data units and8 GUI groups each architecture; actual results/artifacts pending"
+  },
+  "intermediate_cleanup": {
+    "receipt_path": "build/validation/c-lookup-2026-11-05/intermediate-cleanup.json",
+    "sha256": "dc0fe818abdde0bea3cd4f6b2ae362bd02136bd49a5cd874cff3ba4b0638a6b7",
+    "removed_files": 9,
+    "logical_bytes": 57589288.0,
+    "retained_final_programs": 6,
+    "all_source_variants_and_raw_reports_preserved": true
+  },
+  "scope": "Actual C name/header lookup only; shared resolver/native HUD/full UI/physical and new hosted Mac acceptance remain open. Private user MacOFF/untouched."
+}
