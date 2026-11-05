@@ -1,0 +1,40 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "7c1870c4371bd5edf98b0b87fcac3110f76580c2",
+  "run": 42081349550,
+  "intel_job": 127434902003,
+  "conclusion": "success",
+  "groups": [
+    {
+      "entry": "Release/test-results/run-d9y77p8u/results.json",
+      "passed": 14,
+      "total": 14
+    },
+    {
+      "entry": "Release/test-results/run-nlmevufi/results.json",
+      "passed": 12,
+      "total": 12
+    }
+  ],
+  "actual_search_focus_sequences": 12,
+  "artifact": {
+    "id": 13442267259,
+    "path": "build/validation/macos-search-focus-intel-2026-11-05/artifact-13442267259.zip",
+    "sha256": "4df791bf6a42a35cd83c86894035354724d04a63c386e279389982f2d3947c84",
+    "bytes": 585907,
+    "all_entries_read": 11,
+    "image_entries": 9,
+    "all_image_bytes_identical_to_previously_verified_entries": true,
+    "prior_manifest": "build/validation/macos-8bf-2026-11-05/13435683530-original.json",
+    "images_extracted": 0
+  },
+  "original_manifest": {
+    "path": "build/validation/macos-search-focus-intel-2026-11-05/original.json",
+    "sha256": "7865d094e2c793297e62b1063ca261d02b18383739cb4f57650a5f80e6e4d0c4"
+  },
+  "limits": [
+    "ARM job127434901591 last queued; no new ARM acceptance.",
+    "SDL scripted payloads and actual separate-process OS focus, not physical keyboard or full screenreader acceptance.",
+    "Private user Mac OFF; no probe or access."
+  ]
+}

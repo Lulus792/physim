@@ -1,0 +1,724 @@
+{
+  "date": "2026-11-05",
+  "parent_source": "7bbc5f1335ea72a4222049bfb821965b67743e7d",
+  "scope": "Only native self-test routing/expectations and independent output validation changed; approved UI/export renderer and domain implementation unchanged.",
+  "baseline": {
+    "windows": {
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "floating_workflow",
+        "--test-filter",
+        "spring_workflow"
+      ],
+      "exit_code": 1,
+      "app_sha256": "302845d6155b381c81f9e958b4ee956f461ee263257108ba55b05f1cee13eff6",
+      "asan_options": "detect_leaks=0:halt_on_error=1",
+      "results_original_path": "D:/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-uqzo_kj_/results.json",
+      "results_sha256": "2ec338473b9463e9175cdff2db2c26f0af03d2385739705839a168cf6f1ffc31",
+      "log": "build/validation/report-export-workflow-2026-11-05/before-windows.log",
+      "log_sha256": "59c7562781faeabe6d69961078deae13c73ae97107208ce0fda80f28acf370e0",
+      "cases": [
+        {
+          "name": "floating_workflow",
+          "status": "failed"
+        },
+        {
+          "name": "spring_workflow",
+          "status": "failed"
+        }
+      ],
+      "diagnostics": [
+        "First workflow failure at stage 34 (next 35): Analyseergebnis geladen. Diagramme und Tabellen sind bereit. (tab=2, selected=1, samples=647, report=1, query=)",
+        "First workflow failure at stage 34 (next 35): 648 Messpunkte geladen. (tab=2, selected=1, samples=648, report=1, query=)"
+      ]
+    }
+  },
+  "intermediate": {
+    "after": {
+      "windows": {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--sdl",
+          "D:\\Physim\\third_party\\SDL3-3.2.30",
+          "--test-display",
+          "--test-filter",
+          "floating_workflow",
+          "--test-filter",
+          "spring_workflow",
+          "--test-filter",
+          "pendulum_medium_workflow",
+          "--test-filter",
+          "pendulum_c_energy_workflow",
+          "--test-filter",
+          "plot_workflow"
+        ],
+        "exit_code": 1,
+        "app_sha256": "00dbd3c60f180a179c6b7ee43c623c37f2ed6648277c3f87052f8e71d0249363",
+        "asan_options": "detect_leaks=0:halt_on_error=1",
+        "results_original_path": "D:/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-ydtmujv8/results.json",
+        "results_sha256": "a41f3d980ec6a3cdb188ef2ece35da2e169397431fceb8df8e77fb13936dc8b1",
+        "log": "build/validation/report-export-workflow-2026-11-05/after-windows.log",
+        "log_sha256": "9fe51ec6707e05798d2ec1d7756ce5ee4ce85ec10f949211914a14894835c21d",
+        "cases": [
+          {
+            "name": "floating_workflow",
+            "status": "failed"
+          },
+          {
+            "name": "plot_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "pendulum_c_energy_workflow",
+            "status": "failed"
+          },
+          {
+            "name": "pendulum_medium_workflow",
+            "status": "failed"
+          },
+          {
+            "name": "spring_workflow",
+            "status": "failed"
+          }
+        ],
+        "diagnostics": [
+          "First workflow failure at stage 9 (next 10): Bericht abgewiesen: Corrupt data. Ein vorheriges Ergebnis bleibt erhalten. (tab=8, selected=1, samples=646, report=1, query=)",
+          "First workflow failure at stage 9 (next 10): Bericht abgewiesen: Corrupt data. Ein vorheriges Ergebnis bleibt erhalten. (tab=8, selected=1, samples=4009, report=1, query=)",
+          "First workflow failure at stage 18 (next 19): Export gespeichert. Pfad im Protokoll. (tab=2, selected=1, samples=3065, report=1, query=)",
+          "First workflow failure at stage 9 (next 10): Bericht abgewiesen: Corrupt data. Ein vorheriges Ergebnis bleibt erhalten. (tab=8, selected=1, samples=647, report=1, query=)"
+        ]
+      },
+      "linux": {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+          "--build-dir",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+          "--config",
+          "Debug",
+          "--jobs",
+          "4",
+          "--sdl",
+          "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+          "--sanitizers",
+          "--test-display",
+          "--test-filter",
+          "floating_workflow",
+          "--test-filter",
+          "spring_workflow",
+          "--test-filter",
+          "pendulum_medium_workflow",
+          "--test-filter",
+          "pendulum_c_energy_workflow",
+          "--test-filter",
+          "plot_workflow"
+        ],
+        "exit_code": 1,
+        "app_sha256": "9060a9392d9a7bf04e1caedaed60b2ef139be0582e778930139af92591ba22bd",
+        "asan_options": "detect_leaks=0:halt_on_error=1",
+        "results_original_path": "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-22q8iksb/results.json",
+        "results_sha256": "1ee9a9a6ad4fac218858f6d27f06b7efb43d51a49e7a4cead0f7f25cd11f6c5f",
+        "log": "build/validation/report-export-workflow-2026-11-05/after-linux.log",
+        "log_sha256": "1b87aaee676b0a9ca5ec22819bbb27eb491ea2599aa36957f718f6ed265018d4",
+        "cases": [
+          {
+            "name": "floating_workflow",
+            "status": "failed"
+          },
+          {
+            "name": "plot_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "pendulum_c_energy_workflow",
+            "status": "failed"
+          },
+          {
+            "name": "pendulum_medium_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "spring_workflow",
+            "status": "failed"
+          }
+        ],
+        "diagnostics": [
+          "APP TEST TRACE: initial stage 0, status SELF-TEST: Import oder sicheres Speichern fehlgeschlagen.",
+          "APP TEST TRACE: initial stage 0, status SELF-TEST: Import oder sicheres Speichern fehlgeschlagen.",
+          "APP TEST TRACE: initial stage 0, status SELF-TEST: Import oder sicheres Speichern fehlgeschlagen."
+        ]
+      }
+    },
+    "fixed": {
+      "windows": {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--sdl",
+          "D:\\Physim\\third_party\\SDL3-3.2.30",
+          "--test-display",
+          "--test-filter",
+          "floating_workflow",
+          "--test-filter",
+          "spring_workflow",
+          "--test-filter",
+          "pendulum_medium_workflow",
+          "--test-filter",
+          "pendulum_c_energy_workflow",
+          "--test-filter",
+          "plot_workflow"
+        ],
+        "exit_code": 1,
+        "app_sha256": "64d57b7cde695ae80f4f232bf61991266a4a12a68b9584043a3833126d4b6a80",
+        "asan_options": "detect_leaks=0:halt_on_error=1",
+        "results_original_path": "D:/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-t9mkcyy3/results.json",
+        "results_sha256": "9d19009b6a5c585f9c9f96a497c5103b72e617469fc428e481a6b0493c479a5e",
+        "log": "build/validation/report-export-workflow-2026-11-05/fixed-windows.log",
+        "log_sha256": "9fd61dcba9d7b003e109d42f88c21d48f3a86fb845d3c73e192ff29b494227d0",
+        "cases": [
+          {
+            "name": "floating_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "plot_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "pendulum_c_energy_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "pendulum_medium_workflow",
+            "status": "failed"
+          },
+          {
+            "name": "spring_workflow",
+            "status": "passed"
+          }
+        ],
+        "diagnostics": [
+          "First workflow failure at stage 22 (next 22): Export gespeichert. Pfad im Protokoll. (tab=2, selected=1, samples=3076, report=0, query=)"
+        ]
+      },
+      "linux": {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+          "--build-dir",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+          "--config",
+          "Debug",
+          "--jobs",
+          "4",
+          "--sdl",
+          "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+          "--sanitizers",
+          "--test-display",
+          "--test-filter",
+          "floating_workflow",
+          "--test-filter",
+          "spring_workflow",
+          "--test-filter",
+          "pendulum_medium_workflow",
+          "--test-filter",
+          "pendulum_c_energy_workflow",
+          "--test-filter",
+          "plot_workflow"
+        ],
+        "exit_code": 1,
+        "app_sha256": "02243c04a55b11834dedc392a799908da566bd498d3e563d58af704939f1a4a9",
+        "asan_options": "detect_leaks=0:halt_on_error=1",
+        "results_original_path": "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-3tckbnz2/results.json",
+        "results_sha256": "dde14059f64863bccbe6a8c1e89c4a5427ef3aae7d120a65954ff904a4752ca5",
+        "log": "build/validation/report-export-workflow-2026-11-05/fixed-linux.log",
+        "log_sha256": "cf41c5f0803d0f16c6fae5b335b7fd03dba3a5ba92e5afee15dfde1c45fc5aa1",
+        "cases": [
+          {
+            "name": "floating_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "plot_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "pendulum_c_energy_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "pendulum_medium_workflow",
+            "status": "failed"
+          },
+          {
+            "name": "spring_workflow",
+            "status": "passed"
+          }
+        ],
+        "original_archive": {
+          "path": "build/validation/report-export-workflow-2026-11-05/fixed-linux-original-results.zip",
+          "sha256": "64576234ef1921178512fce6b0dda7b744ef628e339ddb03f30a0a28d5e9e0ea",
+          "files": 662,
+          "all_bytes_read_back": true
+        },
+        "diagnostics": [
+          "First workflow failure at stage 20 (next 20): Export gespeichert. Pfad im Protokoll. (tab=2, selected=1, samples=3200, report=0, query=)"
+        ]
+      }
+    }
+  },
+  "final": {
+    "windows": {
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "floating_workflow",
+        "--test-filter",
+        "spring_workflow",
+        "--test-filter",
+        "pendulum_medium_workflow",
+        "--test-filter",
+        "pendulum_c_energy_workflow",
+        "--test-filter",
+        "plot_workflow"
+      ],
+      "exit_code": 0,
+      "app_sha256": "b0d175665f738c67d6d7acf09b799d798e96c19b9ce35001a4e66ddb732e4555",
+      "asan_options": "detect_leaks=0:halt_on_error=1",
+      "results_original_path": "D:/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-kbdk8vph/results.json",
+      "results_sha256": "f66abb73874aef0ba304421d51b7bfd19141d873397033595ac6b3fa1ae4cbf0",
+      "log": "build/validation/report-export-workflow-2026-11-05/accepted-windows.log",
+      "log_sha256": "2382315e77dd9b0b55d5f19970cbb34e54ed0bf707f28a521d5c2833b831a96d",
+      "cases": [
+        {
+          "name": "floating_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "plot_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "pendulum_c_energy_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "pendulum_medium_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "spring_workflow",
+          "status": "passed"
+        }
+      ],
+      "native_exports_read": [
+        {
+          "case": "floating_workflow",
+          "plot": 2,
+          "format": "SVG",
+          "original_path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-kbdk8vph\\floating_workflow\\files \u00e4\\workflow \u00e4/runs/20261105-194735-36448629700-diagramm.svg",
+          "bytes": 8314,
+          "sha256": "1f85e2e17c788891bde386f2cd09191042aebc977427be6e66de0bd6e217cde6",
+          "labels": 18,
+          "geometry": 38
+        },
+        {
+          "case": "pendulum_c_energy_workflow",
+          "plot": 2,
+          "format": "SVG",
+          "original_path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-kbdk8vph\\pendulum_c_energy_workflow\\files \u00e4\\workflow \u00e4\\pendulum/runs/20261105-194847-61384082100-diagramm.svg",
+          "bytes": 8318,
+          "sha256": "008c3d8bc20ae832199280708fcfe51aed3bf8efa15d7fae2c3f44359e6b71cd",
+          "labels": 18,
+          "geometry": 38
+        },
+        {
+          "case": "pendulum_c_energy_workflow",
+          "plot": 4,
+          "format": "SVG",
+          "original_path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-kbdk8vph\\pendulum_c_energy_workflow\\files \u00e4\\workflow \u00e4\\pendulum/runs/20261105-194848-61756777200-diagramm.svg",
+          "bytes": 233500,
+          "sha256": "2dbe5d9e2092e318ec057250c92eafc96ba20e4e53304381dc4411e4682218db",
+          "labels": 18,
+          "geometry": 2020
+        },
+        {
+          "case": "pendulum_c_energy_workflow",
+          "plot": 4,
+          "format": "PNG",
+          "original_path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-kbdk8vph\\pendulum_c_energy_workflow\\files \u00e4\\workflow \u00e4\\pendulum/runs/20261105-194848-62021213600-diagramm.png",
+          "bytes": 236997,
+          "sha256": "537ab73cde9c55a05c6b2ad6cabd354336195209d424a3bc8753170619a122aa",
+          "dimensions": [
+            2400,
+            1700
+          ],
+          "representative_copy": "build/validation/report-export-workflow-2026-11-05/representative-windows.png"
+        },
+        {
+          "case": "pendulum_c_energy_workflow",
+          "plot": 2,
+          "format": "SVG",
+          "original_path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-kbdk8vph\\pendulum_c_energy_workflow\\files \u00e4\\workflow \u00e4\\language_pendulum/runs/20261105-194947-55544231700-diagramm.svg",
+          "bytes": 8318,
+          "sha256": "4f55416a8ee856bf1cc6789e5433e35c15164b5cfa246e337ef983346870ba32",
+          "labels": 18,
+          "geometry": 38
+        },
+        {
+          "case": "pendulum_c_energy_workflow",
+          "plot": 4,
+          "format": "SVG",
+          "original_path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-kbdk8vph\\pendulum_c_energy_workflow\\files \u00e4\\workflow \u00e4\\language_pendulum/runs/20261105-194947-55899508200-diagramm.svg",
+          "bytes": 233459,
+          "sha256": "241c8c1437fed79f892f41b3355b66e7f0dcea051901101274a983f4fe8d34a1",
+          "labels": 18,
+          "geometry": 2020
+        },
+        {
+          "case": "pendulum_c_energy_workflow",
+          "plot": 4,
+          "format": "PNG",
+          "original_path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-kbdk8vph\\pendulum_c_energy_workflow\\files \u00e4\\workflow \u00e4\\language_pendulum/runs/20261105-194948-56177096400-diagramm.png",
+          "bytes": 439700,
+          "sha256": "7f4f52bd421483e6dcb0124898a4617d0e8caffac22ce00f61a01a9cb82234e6",
+          "dimensions": [
+            2400,
+            1700
+          ]
+        },
+        {
+          "case": "pendulum_medium_workflow",
+          "plot": 3,
+          "format": "SVG",
+          "original_path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-kbdk8vph\\pendulum_medium_workflow\\files \u00e4\\workflow \u00e4\\c/project/runs/20261105-195014-21936103500-diagramm.svg",
+          "bytes": 385793,
+          "sha256": "65fe1aec2a13dcb824a62756be8cd51bbb9fc474bfe57b4e252bac21de5827d3",
+          "labels": 20,
+          "geometry": 3361
+        },
+        {
+          "case": "pendulum_medium_workflow",
+          "plot": 3,
+          "format": "PNG",
+          "original_path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-kbdk8vph\\pendulum_medium_workflow\\files \u00e4\\workflow \u00e4\\c/project/runs/20261105-195014-22315926200-diagramm.png",
+          "bytes": 198726,
+          "sha256": "bed244a1b5de398596496eddfeb7677b61ac979f0c9969c0f480733670cbca58",
+          "dimensions": [
+            2400,
+            1700
+          ]
+        },
+        {
+          "case": "pendulum_medium_workflow",
+          "plot": 1,
+          "format": "SVG",
+          "original_path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-kbdk8vph\\pendulum_medium_workflow\\files \u00e4\\workflow \u00e4\\phys/project/runs/20261105-195109-53897072900-diagramm.svg",
+          "bytes": 180952,
+          "sha256": "9ea2110a1a84c04719d7a608d3757e57b5c96e36ded3e7493f54ef15be0cdc8e",
+          "labels": 18,
+          "geometry": 1557
+        },
+        {
+          "case": "pendulum_medium_workflow",
+          "plot": 1,
+          "format": "PNG",
+          "original_path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-kbdk8vph\\pendulum_medium_workflow\\files \u00e4\\workflow \u00e4\\phys/project/runs/20261105-195110-54211687300-diagramm.png",
+          "bytes": 185334,
+          "sha256": "2514baf69bb9ab2c21be24d43fcb196f7ff5e0966763f4f96e79829193bc70ca",
+          "dimensions": [
+            2400,
+            1700
+          ]
+        },
+        {
+          "case": "spring_workflow",
+          "plot": 2,
+          "format": "SVG",
+          "original_path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-kbdk8vph\\spring_workflow\\files \u00e4\\workflow \u00e4/runs/20261105-195149-38056239700-diagramm.svg",
+          "bytes": 8307,
+          "sha256": "a9e4a73985bb1e4dd22ca2c80a8bac39e6ab356c7bf5aad6afd84f2ac1b09df3",
+          "labels": 18,
+          "geometry": 38
+        }
+      ]
+    },
+    "linux": {
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "floating_workflow",
+        "--test-filter",
+        "spring_workflow",
+        "--test-filter",
+        "pendulum_medium_workflow",
+        "--test-filter",
+        "pendulum_c_energy_workflow",
+        "--test-filter",
+        "plot_workflow"
+      ],
+      "exit_code": 0,
+      "app_sha256": "173be39f173254af6927909fb13ce76741747c1499939f3e1e24e51b530582af",
+      "asan_options": "detect_leaks=0:halt_on_error=1",
+      "results_original_path": "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-oal6k0k9/results.json",
+      "results_sha256": "f064ef89009587af6d0de59758dc65739e2d85ba80087aa571c2604e1b1b9536",
+      "log": "build/validation/report-export-workflow-2026-11-05/accepted-linux.log",
+      "log_sha256": "d1316532a937aae4f821805ca844e71ec253e3d3c1cad61c688a5b7d848ccca8",
+      "cases": [
+        {
+          "name": "floating_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "plot_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "pendulum_c_energy_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "pendulum_medium_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "spring_workflow",
+          "status": "passed"
+        }
+      ],
+      "original_archive": {
+        "path": "build/validation/report-export-workflow-2026-11-05/accepted-linux-original-results.zip",
+        "sha256": "9d1ed4b29160f09c53fed9195113bf21002aaee461d8c36dcd7e4031acdd3c89",
+        "files": 758,
+        "all_bytes_read_back": true
+      },
+      "native_exports_read": [
+        {
+          "case": "floating_workflow",
+          "plot": 2,
+          "format": "SVG",
+          "original_path": "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-oal6k0k9/floating_workflow/files \u00e4/workflow \u00e4/runs/20261105-195037-37755284304-diagramm.svg",
+          "bytes": 8368,
+          "sha256": "c1c7cd431167b94f6f78dc01173b598ca2ca4f8c214a9c6fdcbeecae8d810ac4",
+          "labels": 18,
+          "geometry": 38
+        },
+        {
+          "case": "pendulum_c_energy_workflow",
+          "plot": 2,
+          "format": "SVG",
+          "original_path": "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-oal6k0k9/pendulum_c_energy_workflow/files \u00e4/workflow \u00e4/pendulum/runs/20261105-195218-54818553724-diagramm.svg",
+          "bytes": 8372,
+          "sha256": "1081bffa06061156bc2aa5665009b7f300ac86138222892688dc965b846a3d99",
+          "labels": 18,
+          "geometry": 38
+        },
+        {
+          "case": "pendulum_c_energy_workflow",
+          "plot": 4,
+          "format": "SVG",
+          "original_path": "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-oal6k0k9/pendulum_c_energy_workflow/files \u00e4/workflow \u00e4/pendulum/runs/20261105-195220-56449271730-diagramm.svg",
+          "bytes": 234690,
+          "sha256": "b165a0f8608e467185b2def5dd65689bad1ae03cb97f512fc227a3052814ec5e",
+          "labels": 18,
+          "geometry": 2030
+        },
+        {
+          "case": "pendulum_c_energy_workflow",
+          "plot": 4,
+          "format": "PNG",
+          "original_path": "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-oal6k0k9/pendulum_c_energy_workflow/files \u00e4/workflow \u00e4/pendulum/runs/20261105-195221-57942387861-diagramm.png",
+          "bytes": 239856,
+          "sha256": "dbbf1576f2767d66d67ef7d0367014786097767d738992745daa9d7bea111745",
+          "dimensions": [
+            2400,
+            1700
+          ],
+          "representative_copy": "build/validation/report-export-workflow-2026-11-05/representative-linux.png"
+        },
+        {
+          "case": "pendulum_c_energy_workflow",
+          "plot": 2,
+          "format": "SVG",
+          "original_path": "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-oal6k0k9/pendulum_c_energy_workflow/files \u00e4/workflow \u00e4/language_pendulum/runs/20261105-195328-51189749099-diagramm.svg",
+          "bytes": 8372,
+          "sha256": "28c76489f1a089ac9d37879b1ebdff86a3895810506deb1d89611e1366ef464f",
+          "labels": 18,
+          "geometry": 38
+        },
+        {
+          "case": "pendulum_c_energy_workflow",
+          "plot": 4,
+          "format": "SVG",
+          "original_path": "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-oal6k0k9/pendulum_c_energy_workflow/files \u00e4/workflow \u00e4/language_pendulum/runs/20261105-195330-52860257793-diagramm.svg",
+          "bytes": 233742,
+          "sha256": "4c7f0eb1edc69a4b102c17194ba8e96f54b62016f3e5faebb8d18e4251c38be8",
+          "labels": 18,
+          "geometry": 2022
+        },
+        {
+          "case": "pendulum_c_energy_workflow",
+          "plot": 4,
+          "format": "PNG",
+          "original_path": "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-oal6k0k9/pendulum_c_energy_workflow/files \u00e4/workflow \u00e4/language_pendulum/runs/20261105-195332-54342295082-diagramm.png",
+          "bytes": 445732,
+          "sha256": "2da78ac231abee591e1d90376f34650251886eb272e7ae11ad13ee3a7c3759b3",
+          "dimensions": [
+            2400,
+            1700
+          ]
+        },
+        {
+          "case": "pendulum_medium_workflow",
+          "plot": 3,
+          "format": "SVG",
+          "original_path": "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-oal6k0k9/pendulum_medium_workflow/files \u00e4/workflow \u00e4/c/project/runs/20261105-195419-31949542162-diagramm.svg",
+          "bytes": 372718,
+          "sha256": "727af5e247da96181dd56dd868fda10dd9be77962c7552ab89b7121b864966d2",
+          "labels": 20,
+          "geometry": 3245
+        },
+        {
+          "case": "pendulum_medium_workflow",
+          "plot": 3,
+          "format": "PNG",
+          "original_path": "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-oal6k0k9/pendulum_medium_workflow/files \u00e4/workflow \u00e4/c/project/runs/20261105-195421-33701020089-diagramm.png",
+          "bytes": 207117,
+          "sha256": "80988828176e8cde4138134aea475248f7b4d24f2694d07816a113e8f77eea70",
+          "dimensions": [
+            2400,
+            1700
+          ]
+        },
+        {
+          "case": "pendulum_medium_workflow",
+          "plot": 1,
+          "format": "SVG",
+          "original_path": "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-oal6k0k9/pendulum_medium_workflow/files \u00e4/workflow \u00e4/phys/project/runs/20261105-195509-44611443320-diagramm.svg",
+          "bytes": 181914,
+          "sha256": "292fa7ac00220458feb842bb7a0f1a1aa81b9e6a7792271643e568abb8b786af",
+          "labels": 18,
+          "geometry": 1565
+        },
+        {
+          "case": "pendulum_medium_workflow",
+          "plot": 1,
+          "format": "PNG",
+          "original_path": "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-oal6k0k9/pendulum_medium_workflow/files \u00e4/workflow \u00e4/phys/project/runs/20261105-195510-46141162394-diagramm.png",
+          "bytes": 193917,
+          "sha256": "ea2065d6929dcb090f380886bbb5d039c758c6ca3883e6ef05a5a334fed53923",
+          "dimensions": [
+            2400,
+            1700
+          ]
+        },
+        {
+          "case": "spring_workflow",
+          "plot": 2,
+          "format": "SVG",
+          "original_path": "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-oal6k0k9/spring_workflow/files \u00e4/workflow \u00e4/runs/20261105-195551-35884764246-diagramm.svg",
+          "bytes": 8358,
+          "sha256": "ec4a28f34856726dd16b35b457cc979c6888501256ddb800c060d40cd3d0a97d",
+          "labels": 18,
+          "geometry": 38
+        }
+      ]
+    }
+  },
+  "prebuild_audit": {
+    "owned_inputs": 306,
+    "all_changed_inputs_owned": true,
+    "root_isolated_manifest_equal": true,
+    "hashes": {
+      "tools/package-verification-kit.py": "86df4f266de402bcc812de9d0663fbc207b4234d3b04650ac24df27a290df996",
+      "tests/test_verification_kit.py": "d91946c8f24768b36c93391c4adfbc1671114493114c5376e06ebe1a95a49cda",
+      "app/main.c": "3acb926fecaf11254c557522e5d51123726496febe6516dee32e78f9e90104a9",
+      "app/plot_tests.inc": "47458c3d2f409333a48c712821da6379dc28ab3bc304d428a5d089145bc23a87",
+      "app/pendulum_medium_tests.inc": "aac844b8a8884e9171280e7c68f61b0e3ea5b3c8f694182bd6a59916ba810f0c",
+      "tests/check_display_workflow.py": "09b52824ed2bbc95d401a264896a1eb4733733847eff158f9e7beed2bc1d4160"
+    }
+  },
+  "filesystem": {
+    "drvfs": {
+      "mode": "0o777",
+      "symlink": true
+    },
+    "private_ext4": {
+      "mode": "0o700",
+      "symlink": true
+    },
+    "image_under_project_build": true,
+    "shared_mount_configuration_changed": false
+  },
+  "limits": [
+    "Alpine/musl X11 ASan+UBSan scope; no new glibc or macOS export acceptance yet.",
+    "Actual OS export window with scripted SDL gestures; save picker is resolved by existing test-path hook.",
+    "Full UI/physical keyboard/screenreader approval remains open."
+  ]
+}

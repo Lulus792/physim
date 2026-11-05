@@ -1,0 +1,40 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "7c1870c4371bd5edf98b0b87fcac3110f76580c2",
+  "run": 42081349550,
+  "arm_job": 127434901591,
+  "conclusion": "success",
+  "groups": [
+    {
+      "entry": "Release/test-results/run-86yiczsv/results.json",
+      "passed": 12,
+      "total": 12
+    },
+    {
+      "entry": "Release/test-results/run-jgwv55oo/results.json",
+      "passed": 14,
+      "total": 14
+    }
+  ],
+  "actual_search_focus_sequences": 12,
+  "artifact": {
+    "id": 13441164932,
+    "path": "build/validation/macos-search-focus-arm-2026-11-05/artifact-13441164932.zip",
+    "sha256": "bc489b58d5087a168765219c2165150e04008a0efd4f93d8ec40eb49806e7cec",
+    "bytes": 585579,
+    "all_entries_read": 11,
+    "image_entries": 9,
+    "all_image_bytes_identical_to_previously_verified_entries": true,
+    "prior_manifest": "build/validation/macos-8bf-2026-11-05/13435897044-original.json",
+    "images_extracted": 0
+  },
+  "original_manifest": {
+    "path": "build/validation/macos-search-focus-arm-2026-11-05/original.json",
+    "sha256": "0716975070952b20d71e254062784c622004fd9e2972ad8a691ef71d36b237bb"
+  },
+  "limits": [
+    "Intel already verified; no full workspace dual-architecture acceptance.",
+    "SDL scripted payloads and actual separate-process OS focus, not physical keyboard or full screenreader acceptance.",
+    "Private user Mac OFF; no probe or access."
+  ]
+}

@@ -287,6 +287,59 @@ static void test_graphic_key(app *a,SDL_Keycode key,SDL_Keymod mod,bool repeat) 
     SDL_Window *owner=a->window;if(a->graphic_export)a->window=a->graphic_export->window;
     test_scene_key(a,key,mod,repeat);a->window=owner;
 }
+/* Follow the current report export UI, including its independent OS window
+ * and asynchronous save. Return 0 while pending, 1 after a verified file and
+ * focus return, or -1 with the actual failing phase. No direct exporter call. */
+static int test_report_graphic_export(app *a,bool svg) {
+    static unsigned step;static double deadline;static int index;
+    static ps_report *report;static ps_plot_view view;static char path[4096];
+    graphic_dialog *d=a->graphic_export;bool okay=true;
+    if(!step) {
+        uint32_t plots=0;index=a->result_view;report=a->analysis_report;deadline=ps_clock()+20;
+        okay=report && ps_report_describe(report,NULL,NULL,&plots,NULL)==PS_OK && index>=0 &&
+            (uint32_t)index<plots && (size_t)index<SDL_arraysize(a->report_views) && !d &&
+            a->result_export_bounds[2].w>0 && a->result_export_bounds[2].h>0;
+        if(!okay)goto failure;
+        view=a->report_views[index];
+        unique_path(a,path,sizeof path,svg?"-diagramm.svg":"-diagramm.png");
+        okay=okay && !exists(path);
+        if(!okay)goto failure;
+        snprintf(a->graphic_export_test_path,sizeof a->graphic_export_test_path,"%s",path);
+        test_mouse(a,a->result_export_bounds[2],true);step=1;return 0;
+    }
+    if(ps_clock()>deadline || a->analysis_report!=report || a->result_view!=index ||
+       memcmp(&a->report_views[index],&view,sizeof view))goto failure;
+    if(step>=3 && step<=6 && !d)goto failure;
+    switch(step) {
+    case 1:test_mouse(a,a->result_export_bounds[2],false);step=2;break;
+    case 2:
+        if(!d || d->dirty || !d->raster || SDL_GetKeyboardFocus()!=d->window)return 0;
+        if(d->window==a->window || d->source_window!=a->window)goto failure;
+        if(!test_graphic_reveal(a,d->formats[svg?1:0]))return 0;
+        test_graphic_mouse(a,d->formats[svg?1:0],true);step=3;break;
+    case 3:test_graphic_mouse(a,d->formats[svg?1:0],false);step=4;break;
+    case 4:
+        if(d->svg!=svg || d->dirty || !test_graphic_reveal(a,d->store))return 0;
+        test_graphic_mouse(a,d->store,true);step=5;break;
+    case 5:test_graphic_mouse(a,d->store,false);step=6;break;
+    case 6:
+        if(d->save || strcmp(a->result_export,path) || !exists(path))return 0;
+        if(svg) {
+            char header[1025]={0};FILE *file=fopen(path,"rb");size_t bytes=file?fread(header,1,1024,file):0;
+            if(file)fclose(file);okay=bytes>64 && strstr(header,"<svg") && strstr(header,"http://www.w3.org/2000/svg");
+        }else okay=test_plot_png_size(path,2400,1700);
+        if(!okay)goto failure;
+        test_window_key_mod(d->window,SDLK_ESCAPE,0);step=7;break;
+    case 7:
+        if(d || SDL_GetKeyboardFocus()!=a->window)return 0;
+        printf("REPORT GRAPHIC WORKFLOW plot=%d format=%s native-window=1 saved-file=1 unchanged-view=1 focus-return=1 path=%s\n",index,svg?"SVG":"PNG",path);
+        a->graphic_export_test_path[0]=0;step=0;return 1;
+    }
+    return 0;
+failure:
+    fprintf(stderr,"Report graphic workflow failed: step=%u plot=%d format=%s dialog=%d target=%s message=%s\n",step,index,svg?"SVG":"PNG",d!=NULL,path,d?d->message:a->status);
+    a->graphic_export_test_path[0]=0;step=0;return -1;
+}
 #include "graphic_export_window_tests.inc"
 static void test_plot_frame(app *a, int *stage, int *code, const char **capture) {
     if(SDL_getenv("PHYSIM_TEST_GRAPHIC_WINDOW")){

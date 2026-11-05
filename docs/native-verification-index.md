@@ -11,6 +11,17 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
 
 ## Neuere Editorprüfungen
 
+- [Aktuelle Berichtsexport-Abläufe](verification/report-export-workflow-2026-11-05.md):
+  Windows und Alpine/X11 ASan/UBSan je 5/5, 24 echte Grafikdateien zusätzlich
+  geprüft. Eigene OS-Exportfenster, asynchrones Speichern, genaue Quellziel-
+  Rückkehr und Rohdatenaktion aus der Messdatenansicht. Renderer/Design erhalten.
+  POSIX-Kontrollen und komprimierte Originale statt Abschalten der Dateisicherheit;
+  [eigene Testabbilder aufgeräumt](verification/report-export-filesystem-cleanup-2026-11-05.json).
+- [Mac-Suchfokus auf Intel und ARM](verification/macos-search-focus-2026-11-05.md):
+  Quelle7c1870c4, beide tatsächlich 14/14 Daten + 12/12 UI-Gruppen, je zwölf
+  neue Suchfokussequenzen. Beide ZIPs und alle22Einträge gelesen,18Bildinhalte
+  bytegleich zu geprüften Referenzen, keine Extraktion. Getrennter Workspace
+  Intel4/4+68Projekte, ARM vor Start abgebrochen und weiterhin offen.
 - [Verschobenes SDK-Prüfarchiv](verification/verification-kit-import-2026-11-05.md):
   fehlendes lokales `artifact_paths.py` in beiden frischen Installationssystemen
   nachgewiesen; isolierter Treiberimport auf Windows/Linux vor Fix negativ,

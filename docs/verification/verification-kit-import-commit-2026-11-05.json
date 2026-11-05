@@ -1,0 +1,37 @@
+{
+  "source_commit": "7bbc5f1335ea72a4222049bfb821965b67743e7d",
+  "verified_refs": {
+    "origin/codex/f1-design-h": "7bbc5f1335ea72a4222049bfb821965b67743e7d",
+    "upstream/codex/f1-design-h": "7bbc5f1335ea72a4222049bfb821965b67743e7d"
+  },
+  "tested_inputs": [
+    {
+      "path": "tools/package-verification-kit.py",
+      "sha256": "86df4f266de402bcc812de9d0663fbc207b4234d3b04650ac24df27a290df996",
+      "actual_committed_bytes_match": true
+    },
+    {
+      "path": "tests/test_verification_kit.py",
+      "sha256": "d91946c8f24768b36c93391c4adfbc1671114493114c5376e06ebe1a95a49cda",
+      "actual_committed_bytes_match": true
+    }
+  ],
+  "consumer_file_audit": "212 file bytes compared to actual parent Git in verification-kit-import-2026-11-05.json",
+  "runs": [
+    {
+      "id": 42082675664,
+      "path": ".github/workflows/linux-package.yml",
+      "status": "pending",
+      "conclusion": null,
+      "source": "7bbc5f1335ea72a4222049bfb821965b67743e7d"
+    },
+    {
+      "id": 42082675610,
+      "path": ".github/workflows/ci.yml",
+      "status": "pending",
+      "conclusion": null,
+      "source": "7bbc5f1335ea72a4222049bfb821965b67743e7d"
+    }
+  ],
+  "scope": "Source/remote proof and new handles, not fresh installed consumer acceptance."
+}

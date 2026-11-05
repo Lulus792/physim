@@ -2205,6 +2205,17 @@ def main():
         arguments, timeout, _ = SIMPLE[args.case]
         paths = dict(directory=str(directory), root=str(flow.root))
         flow.run(*(arg.format_map(paths) for arg in arguments), timeout=timeout)
+        if args.case in ('floating_workflow','spring_workflow','sphere_collision_workflow','box_collision_workflow'):
+            output=flow.steps[-1]['stdout']
+            require('REPORT GRAPHIC WORKFLOW plot=2 format=SVG native-window=1 saved-file=1 unchanged-view=1 focus-return=1' in output,
+                    'Report workflow did not follow the native export window and actual saved SVG')
+            exports=list(directory.rglob('*-diagramm.svg'))
+            require(exports,'Native report workflow produced no SVG')
+            for path in exports:
+                svg=ET.parse(path);ns={'s':'http://www.w3.org/2000/svg'}
+                require(svg.getroot().tag=='{http://www.w3.org/2000/svg}svg' and
+                        svg.findall('.//s:text',ns) and (svg.findall('.//s:line',ns) or svg.findall('.//s:path',ns)),
+                        'Saved report SVG has no actual native labels/geometry')
         if args.case.startswith('shell_theme_'):
             output=flow.steps[-1]['stdout']
             require('SHELL THEME SELF-TEST: PASSED' in output and

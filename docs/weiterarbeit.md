@@ -1,182 +1,103 @@
 # Wiedereinstieg in die native UI-Arbeit
 
-Stand: 5. November 2026. Zuerst diese Datei, `git status` und relevante Diffs
-lesen. Gesamtauftrag/Freigaben: [AGENTS.md](../AGENTS.md) und
-[Gesamtübergabe](visuals/unified-workspace/NEXT-CHAT.md). Vollständige UI und
-Projektumsetzung bleiben offen; Teilprüfungen sind keine volle Punktzahl.
+Stand: 5. November 2026. Zuerst diese Datei, Git-Status und relevante Diffs lesen.
+Maßgeblich bleiben [AGENTS.md](../AGENTS.md) und der
+[Gesamtauftrag](visuals/unified-workspace/NEXT-CHAT.md).
+**Vollständige UI-/Projektumsetzung und volle Punktzahl sind weiterhin offen.**
 
-## Letzter geprüfter Schritt
+## Aktueller geprüfter Schritt
 
-[Verschobenes SDK-Prüfarchiv](verification/verification-kit-import-2026-11-05.md):
-Originaler Debian-Release-Build df9927c6 besteht tatsächlich789/789. Beide frischen
-Installationssysteme starten die App ohne Compiler/Python, scheitern danach am
-fehlenden lokalen artifact_paths.py im Prüfbaukasten. Modul jetzt aufgenommen;
-isolierter Import vor Fix auf Windows/Linux negativ, danach beide positiv.
-Alle212Verbraucherdateien gegen Git gelesen, keine fremden WIP-Bytes. Neue
-vollständige Verbraucherabnahme noch offen. Keine neue GUI-Wiederholung.
+[Berichtsexport über die heutigen Aufgabenfenster](verification/report-export-workflow-2026-11-05.md):
+Windows Release und Alpine/X11 ASan/UBSan jeweils **5/5**. Auftrieb, Feder,
+Plot, Pendel-Energie sowie Pendel mit Medium; beide Pendelsprachen enthalten.
+24 gespeicherte Grafiken zusätzlich gelesen, SVG-XML/Geometrie und vollständige
+PNG-Daten geprüft; zwei repräsentative PNGs geöffnet.
+Nur Testabläufe/Erwartungen angepasst: tatsächliches Exportfenster, letzte
+Quelldatei, Rohdatenaktion aus Messdaten. Renderer und Design erhalten.
+[Originale und Grenzen](verification/report-export-workflow-2026-11-05.json).
 
-[Suchfokus nach Anwendungswechsel](verification/search-focus-2026-11-05.md):
-Schaltflächenfokus ging im SDL-Adapter beim echten OS-Fokusverlust verloren.
-Alte Quelle auf Windows und Linux mit neuer Probe exakt an Stufe 50 verworfen.
-Jetzt logisches Ziel beim Host-Blur erhalten; Tastaturhoheit sofort entziehen,
-Mausklick und Verwerfen deaktivierter/verschwundener Ziele erhalten.
-Windows Release und Alpine ASan/UBSan jeweils **4/4 Daten + 3/3 UI-Gruppen**;
-je 12 echte Suchfokus-Sequenzen mit separatem Prozess über C/Ph und drei Editoren.
-[Originale und Grenzen](verification/search-focus-2026-11-05.json).
-Alle acht repräsentativen Bilder bytegleich zu bereits geprüften Referenzen;
-[nur Duplikate entfernt](verification/search-focus-images-cleanup-2026-11-05.json).
-Warmstand **search-focus-fixed**, 303 Eingaben; alle drei Änderungen vor Build
-Root/Isolation/Manifest bytegleich. Beide Zustände eingefroren. Detailstand:
-`build/validation/search-focus-2026-11-05/STATE.md`.
-[Quelle7c1870c4 und beide Remotes geprüft](verification/search-focus-commit-2026-11-05.json):
-alle1257Eingaben gegen tatsächlichen Commit gelesen. Keine eigene offene Source-
-Änderung. Neue Editor-Macprüfung42081349550: ARM127434901591/Intel127434902003;
-Workspace-Mac42081349500: ARM127434901974/Intel127434902628, zunächst queued.
-Weitere neue Runs samt Quellbindung stehen im Nachweis; dieselben Handles nutzen.
+Warmstand **report-export-accepted**, **306 eigene Eingaben**. Alle sechs seit
+dem vorherigen Warmstand berührten Eingaben vor Build zwischen Root, Isolation
+und Manifest bytegleich. Sämtliche Zwischenstände und Runtimearchive eingefroren.
+Windows-Run `run-kbdk8vph`, Linux `run-oal6k0k9`; alle lokalen Test-/Freeze-
+Sessions terminal. Nicht aus Kontext erneut starten, vorbereiten oder einfrieren.
+Detailstand: `build/validation/report-export-workflow-2026-11-05/STATE.md`.
 
-[Linux-Endianschnittstellen im C-Parser](verification/glibc-endian-2026-11-05.md):
-Ubuntu/Clang scheiterte beim Kompilieren an versteckten le16toh/be16toh;
-Debian/GCC später beim Linken. Beide Original-Joblogs zur Quelle13cc4422 gelesen
-und gesichert; keine nativen Ergebnisarchive entstanden. Jetzt _DEFAULT_SOURCE
-im projektseitigen Linux-Adapter vor Systemheadern anfordern. Upstream-Dateien,
-Compiler-/POSIX-Optionen und UI unverändert.
-Windows Release8/8Daten+2/2GUI (run-ms_cod0i/run-fw347tfd), Alpine ASan/UBSan
-8/8+2/2 (run-07qrdp6f/run-syykpp1q), Datenprüfungen mit detect_leaks=1.
-**Alpine verwendet musl; neue tatsächliche glibc-Abnahme bleibt offen.**
-[Originale, Befehle und Grenzen](verification/glibc-endian-2026-11-05.json).
+Die POSIX-Sicherheitsprüfung blieb aktiv: DrvFS liefert nach chmod0700 weiterhin
+0777, die private ext4-Fixture korrekt0700. Die zwei eigenen temporären Abbilder
+wurden nach vollständiger Archivierung und Prüfung auf offene Nutzung entfernt:
+[191.393.792 zugeordnete Dateibytes](verification/report-export-filesystem-cleanup-2026-11-05.json).
+Originalarchive und Referenzen bleiben erhalten; keine gemeinsame WSL-Änderung.
 
-Warmstand **glibc-endian**,303 Eingaben, eine geänderte Adapterdatei vor Build
-Root/Isolation/Manifest bytegleich, zwei Upstream-Header roh gegen Git geprüft.
-Source-/Runtimearchive vollständig gelesen. Detailstand:
-`build/validation/glibc-endian-2026-11-05/STATE.md`.
-[Quelledf9927c6 in beiden Remotes](verification/glibc-endian-commit-2026-11-05.json),
-alle1257Eingaben gegen Index und tatsächlichen Commit gelesen.
+## Weitere aktuelle Abschlüsse
 
-Zuvor [Dateireiter-Auto-Completion](verification/file-tabs-auto-2026-11-05.md),
-[Quelle13cc4422 in beiden Remotes](verification/file-tabs-auto-commit-2026-11-05.json):
-Windows/Linux je3/3 nach begrenztem Warten auf tatsächlich automatische Liste,
-App/Design/140ms-Timer unverändert. Beide Listenansichten geöffnet. Alle1257Inputs
-gegen echten Commit gelesen; nicht erneut wegen Kontext prüfen.
-
-Zuvor [OS-Fokus im Zusatzfenster](verification/signature-focus-2026-11-05.md):
-Quelle8bf467ce, Windows Release/Linux ASan/UBSan je2/2. Eigener Peerprozess,
-Quelle/Cursor/Anker/Scroll und nichtleere Auswahl über echte OS-Fokuswechsel.
-[Alle1257Quellen gegen tatsächlichen Commit gelesen, beide Remotes](verification/signature-focus-commit-2026-11-05.json).
-Nicht wegen Kontext erneut prüfen; der neue Dateireitertest ändert diesen
-Productfix nicht. Vollständige physische/assistive Abnahme bleibt offen.
-
-[Mac-Nachlauf42059129050 zu0d3f4a65 abgeschlossen](verification/filename-wrap-macos-2026-11-05.json):
-Intel127355571409 und ARM127355571940 **terminal/success**, jeweils14/14 Daten+
-12/12 GUI. Beide Original-ZIPs/Digests und alle22 Einträge gelesen, vier neue
-Bildinhalte geöffnet,14 weitere bytegleich zu erhaltenen Referenzen. Nicht weiter
-pollen oder neu starten. Diese alte Quelle belegt nicht die spätere Fokuskorrektur.
-
-## Vorherige Abschlüsse erhalten
-
-- [Dateinamen bei großer Schrift](verification/filename-wrap-2026-11-05.md),
-  [Quelle0d3f4a65 in beiden Remotes](verification/filename-wrap-commit-2026-11-05.json):
-  Windows/Linux jeweils4/4 Daten+3/3 GUI, vollständige Namen/Erweiterungen,
-  echter22px-Draw/Clip und richtige Dateiöffnung. Alle1257 Eingaben gegen Commit
-  gelesen. Werkbank-Testmaße korrigiert; Produkt-Protokoll unverändert.
-- [Zusatzfenster](verification/signature-detached-2026-11-05.md),
-  [Quelle9cc44508](verification/signature-detached-commit-2026-11-05.json):
-  zwei Fokuskorrekturen; Windows/Linux je7/7. Hauptfenster und echter Zusatzkontext,
-  C/Ph je drei Editoren, Scrollgriff über Quelle, Tippen und Rückholen geprüft.
-- [Mac-Nachlauf42049114569 zu9cc44508](verification/signature-detached-macos-2026-11-05.json)
-  ist terminal: Intel127320087841 **11/11 Daten+10/10 GUI**, Original-ZIP/Digest/
-  alle zehn Einträge gelesen. Vier neue Bilder geöffnet, vier bytegleich zu
-  zuvor geöffneten Hauptfensterreferenzen. ARM127320087545 vor Teststart
-  abgebrochen: **kein ARM-Ergebnis**. Nicht erneut pollen; neue Quelle getrennt
-  prüfen. Der aktuelle Workflow umfasst jetzt14 Daten+12 GUI je Architektur.
-- [Workspace ohne Häkchen](verification/workspace-no-checks-2026-11-05.md),
-  Quelle0ddfe287: keine Checkboxen UND keine reservierte Spalte. Nutzerpräzisierung
-  in AGENTS/ADR016/A2 festgehalten; historische Bilder ändern diesen Vertrag nicht.
-- Weitere geschlossene Quellen und Plattformläufe stehen im
-  [Prüfindex](native-verification-index.md). Alte geschlossene Läufe nicht neu
-  starten oder pollen. Protokoll-Trennlinie seit `ef1f3321` behoben; kein neuer
-  Nachweis allein wegen Kontextwechsel. Ebenso keine F1-/Settings-Wiederholung.
+- [SDK-Prüfbaukasten](verification/verification-kit-import-2026-11-05.md),
+  [Quelle7bbc5f13 und beide Remotes geprüft](verification/verification-kit-import-commit-2026-11-05.json):
+  fehlendes lokales artifact_paths.py aufgenommen; isolierter Import auf Windows/
+  Linux vor Fix negativ, danach positiv. Alle212Verbraucherdateien gegen Git gelesen.
+  Originaler Debian-Release-Build zur Quelle df9927c6 tatsächlich789/789, Appstart
+  ohne Compiler/Python auf Debian und Ubuntu erfolgreich. Die spätere unabhängige
+  Verbraucherprüfung scheiterte am inzwischen korrigierten Prüfarchiv.
+- [Mac-Suchfokus zur Quelle7c1870c4](verification/macos-search-focus-2026-11-05.md):
+  Editorlauf42081349550 vollständig terminal/success. Intel127434902003 und
+  ARM127434901591 jeweils14/14Daten+12/12UI mit je zwölf neuen Suchfokussequenzen.
+  Beide Original-ZIPs/Digests/alle22Einträge gelesen;18Bildinhalte identisch zu
+  geprüften Referenzen, keine Extraktion. **Nicht erneut pollen oder lesen.**
+- [Getrennter Mac-Workspace](verification/macos-workspace-7c-intel-2026-11-05.json):
+  Lauf42081349500 vollständig terminal. Intel127434902628 erfolgreich4/4 samt
+  68gebauten/aufgezeichneten/ausgewerteten Projekten bei16/22px. ARM127434901974
+  vor dem ersten Schritt cancelled; keine ARM-Workspace-Abnahme. Beide Original-
+  Einträge gelesen. Nicht weiter pollen; bekannten Retry403 nicht wiederholen.
+- Frühere belegte Abschlüsse im [Prüfindex](native-verification-index.md) erhalten.
+  Dazu gehören Dateireiter-Auto-Completion, Zusatzfensterfokus, Dateinamen,
+  Workspace ohne Häkchen/ohne reservierte Spalte sowie F1-/Settings-Teilprüfungen.
+  Protokoll-Trennlinie seit ef1f3321 behoben. Kein neuer Test allein wegen Kontext.
 
 ## Nächste konkrete Aufgaben
 
-1. glibc-Quelle df9927c6: [Ubuntu-Clang-Nachlauf gelesen](verification/glibc-endian-clang-2026-11-05.md),
-   Job127418724879 terminal/failure: Kompilierung/Linken jetzt erfolgreich,
-   26/26 Daten und 44/48 UI. Vier offene Fehler: floating/spring jeweils erster
-   Fehler Stufe34, font_demand Stufe3, accessibility_links_atspi fehlende Meldung.
-   Original-ZIP/Digest/alle2365Einträge gelesen, keine Bildextraktion. Nicht
-   erneut aus Kontext herunterladen. Ursachenprüfung anhand gesicherter Originale.
-   **Linux-Paket42076708931** jetzt vollständig terminal: Buildjob127418724841
-   success, Original789/789 gelesen. Debian127435054249/Ubuntu127435054258 failure
-   durch oben korrigierten Prüfbaukastenimport; vier Original-ZIPs/Digests/alle
-   Einträge gelesen. Nicht weiter pollen oder aus Kontext herunterladen.
-   **Linux-UI42076708745** ebenfalls beide terminal/failure; GCC127418724267-
-   Original-Joblog gelesen und unter verification-kit-import gesichert,43/48UI.
-   Clang-Originale sind oben gesichert. Diesen geschlossenen UI-Run nicht weiter
-   pollen. **CI42076708718** zuletzt pending, noch keine Jobs. Dieselben aktiven
-   Handles weiterverfolgen, nicht neu starten. Ubuntu-Clang belegt die
-   Parserkorrektur; vollständige Paket-/Installationsabnahme bleibt offen.
-   [Quell-/Run-Nachweis](verification/glibc-endian-commit-2026-11-05.json).
-   Dateireiterquelle13cc4422: Mac-Workspace **42073119561** jetzt terminal.
-   [Intel127406074781 vollständig 4/4 samt 68-Projekt-Matrix](verification/macos-workspace-13cc-intel-2026-11-05.json),
-   Original-ZIP, Digest und beide Einträge gelesen; 00..33 exakt zweimal bei 16/22 px.
-   ARM127406075215 vor dem Teststart cancelled, keine ARM-Abnahme. Gezielter
-   ARM-Retry vom GitHub-Connector mit 403/FORBIDDEN verweigert (fehlende Actions-
-   Schreibrechte), CLI nicht installiert; kein Neustart erfolgt. Nicht erneut
-   denselben 403-Aufruf versuchen, geschlossenen Intel-Nachweis nicht weiter pollen.
-   Weitere bekannte CI-Handles derselben Quelle:42073119608 (CI),42073119770
-   (Linux-UI-Sanitizer),42073119600 (Linux-Paket). Paketjob127406074505 terminal/
-   failure und Clang-UI127406075360 terminal/failure durch oben dokumentierte
-   glibc-Header; keine Ergebnisarchive suchen. GCC-UI127406075709 zuletzt noch
-   in_progress bei Abhängigkeiten. Neue korrigierte glibc-Quelle separat prüfen;
-   bereits gelesene Fehlerlogs nicht wegen Kontext erneut herunterladen.
-   [Quell-/Run-Nachweis](verification/file-tabs-auto-commit-2026-11-05.json).
-   Fokusquelle8bf467ce ist jetzt [vollständig nachgelesen](verification/macos-8bf-2026-11-05.json):
-   Editor beide14/14Daten+12/12GUI, Typografie beide16/16, Menü beide7/7;
-   alter Workspace beide2/3 durch Stufe27, nächste Matrix übersprungen.
-   Alle vier8bf-Läufe terminal;8ZIPs/Digests/34Einträge gelesen.18Bildinhalte
-   bytegleich zu behaltenen Referenzen, keine Extraktionen. Nicht weiter pollen
-   oder erneut lesen. Ebenso geschlossene Quelle0d3f4a65/42059129050 erhalten.
-2. Suchfeld/Schaltfläche sind im obigen engen Umfang geprüft; noch Capture außerhalb einer
-   OS-Fenstergrenze und native Accessibility-/Screenreader-Aufgaben. Die neue
-   Peerprobe verwendet einen eigenen Prozess derselben Binärdatei und geskriptete
-   SDL-Tasten; keine vollständige physische/OS-Tastatur- oder assistive Abnahme.
-3. Übrige freigegebene Oberfläche (A2, Kontextmenüs A, B2, Aufgabenfenster,
-   Einstellungen/AX, Gesamtgestaltung) und tatsächliche Plattformabnahme.
-   Rechnen & Geräte A erst danach (ADR025).
-4. Die190 Signaturfälle nach Spezialaufrufen/Overloads/Optionen/Eigenschaften
-   unterscheiden. Intrinsics, Funktionswerte, Importaliases und ausgelassene
-   Rückgabeannotationen aus echten Verträgen ergänzen. Keine Typinferenz erfinden.
-5. Große C-Textänderungen parsen noch vollständig; Cursorcache allein erfüllt
-   16,7ms nicht zuverlässig. Inkrementelle Edits brauchen Frischvergleich,
-   atomare Fehlerpfade und Messung; kein Provider-Worker oder gekürzter Scope.
+1. Aktuelle eigene Testkorrekturen samt Nachweisen prüfen, committen und beide
+   Remotes normal pushen; tatsächlichen Quellcommit gegen alle verwendeten Eingaben
+   lesen und neue CI-Handles festhalten. Kit-Quelle7bbc5f13 hat bisher
+   Linux-Paket42082675664 und CI42082675610, zuletzt pending. Keine Wiederholung
+   wegen Beobachtungsfrist; auf dem tatsächlich neuen Quellstand weiterarbeiten.
+2. Übrige bestätigte glibc-CI-Fehler anhand gesicherter Originale bearbeiten:
+   font_demand Stufe3, accessibility_links_atspi fehlende Fehlermeldung und
+   GCC zusätzlich accessibility_atspi.py:200, reader.grabFocus() liefert false.
+   Alte Auftriebs-/Federfehler Stufe34 sind lokal behoben; neue glibc-Abnahme
+   ist noch nicht bewiesen. Quelle df9927c6 / Linux-UI42076708745 ist vollständig
+   terminal (Clang44/48, GCC43/48, jeweils26/26Daten).
+   Clang-Archiv im [Nachweis](verification/glibc-endian-clang-2026-11-05.md),
+   vollständiges GCC-Joblog unter `verification-kit-import-2026-11-05`.
+3. Native Accessibility-/Screenreader-Aufgaben, physische Eingabe und Capture
+   außerhalb einer OS-Fenstergrenze; gesamte freigegebene Gestaltung A2/B2,
+   Kontextmenüs A, Einstellungen, Aufgabenfenster und F1 weiter abgleichen.
+   Die geskripteten SDL-Ereignisse und engen Teilprüfungen ersetzen diese Abnahme nicht.
+4. Die190Signaturverträge weiter auf Intrinsics, Funktionswerte, Importaliases und
+   ausgelassene Rückgabetypen prüfen. Große C-Änderungen parsen noch vollständig;
+   16,7ms erfordern inkrementelle Edits mit Frischvergleich und atomaren Fehlerpfaden.
+   Rechnen & Geräte A folgt nach der UI (ADR025).
 
 ## Speicher und Schutz
 
-[Speicheraufnahme](verification/storage-inventory-2026-11-05.json) abgeschlossen:
-536100 Projektdateien,83,80GB Dateigrößen/41,33GB tatsächlich zugeordnet;
-40,47GB davon in build*-Ordnern. Gemeinsame WSL-VHDX44,98GB separat, kein
-vollständiger Physim-Anteil. Lange Testpfade nacherfasst, danach0Fehler.
-Keine erneute Inventur allein wegen Kontextwechsel. Bereinigungen und erhaltene
-Referenzen: [Wartungsbericht](storage-maintenance-2026-11-05.md).
-Zusätzlich [acht lokale Bildkopien](verification/signature-focus-images-cleanup-2026-11-05.json)
-und [14 Mac-Bildkopien](verification/filename-wrap-macos-cleanup-2026-11-05.json)
-entfernt: zusammen29.123.036 Bytes Dateigrößen; tatsächliche NTFS-Zuordnung dafür
-nicht gemessen. Kanonbilder und Mac-Original-ZIPs erhalten.
-[Vier weitere identische Mac-Extraktionsbilder entfernt](verification/signature-detached-macos-cleanup-2026-11-05.json):
-9.850.152Bytes, Original-ZIP und kanonische Bildinhalte erhalten.
-
-Nur **D:**; F: weder lesen noch schreiben. Generiertes unter `build`; gemeinsame
-WSL **Alpine-Dev**, VM, Offline-Abhängigkeiten, Nutzdaten und offene Fehler erhalten.
+Nur **D:**, F: weder lesen noch schreiben. Generiertes unter `build`.
+Gemeinsame WSL **Alpine-Dev**, VHDX, Offline-Werkzeuge, Nutzdaten und Referenzen
+erhalten. [Speicheraufnahme](verification/storage-inventory-2026-11-05.json)
+abgeschlossen; keine neue vollständige Inventur nur wegen Kontext.
 **Privater Nutzer-Mac AUS: keine SSH-/Erreichbarkeitsprobe oder Uploads.**
-Gehostete GitHub-Runner sind getrennt. Vor späterem Nutzer-Mac-Zugriff die in
-AGENTS genannten NexaCloud-/NexaUI-Anleitungen lesen.
+Gehostete Runner sind getrennt; für spätere Nutzer-Mac-Arbeit zuerst die in
+AGENTS genannten NexaCloud-/NexaUI-Hinweise lesen.
 
-Abgelehnte Löschpfade nicht erneut versuchen: `build/validation/documentation-links-2026-10-30/windows-build/obj`
-und `build/validation/completion-c-2026-11-05/restored-portable-windows`.
-Zusätzlich wurde die Löschung von `build/validation/signature-focus-2026-11-05/xauth-verified`
-und `build/validation/signature-focus-2026-11-05/xauth-accepted` automatisch mit
-„blocked by policy“ abgelehnt. Diese Ziele ebenfalls nicht erneut versuchen oder
-über andere Werkzeuge löschen. Die22 Bildduplikate wurden zuvor separat entfernt.
-Fremdes AT-SPI-/Orca-/Workflow-/Status-WIP, Referenz-/Tutorial-Zeilenendungen
-und `dist/index.html`-Löschung erhalten. Eigene geprüfte Änderungen normal in
-**origin und upstream** pushen; keine Force-Pushes. Root-Linkcheck findet einen
-bekannten fremden Status-WIP-Link: ohne neue relevante Änderung nicht wiederholen.
+Fremdes AT-SPI-/Orca-/Workflow-/Status-WIP, Referenz-/Tutorial-Zeilenendungen und
+`dist/index.html`-Löschung erhalten. Keine fremden Diffs in die Isolation übernehmen.
+Eigene geprüfte Änderungen normal in origin UND upstream pushen; kein Force-Push.
+Der Root-Linkcheck hat einen bekannten fremden Status-WIP-Link; ohne neue relevante
+Änderung nicht wiederholen.
+
+Abgelehnte Löschziele nicht erneut versuchen oder mit anderem Werkzeug umgehen:
+- `build/validation/documentation-links-2026-10-30/windows-build/obj`
+- `build/validation/completion-c-2026-11-05/restored-portable-windows`
+- `build/validation/signature-focus-2026-11-05/xauth-verified`
+- `build/validation/signature-focus-2026-11-05/xauth-accepted`
+
+Letztere wurden automatisch mit „blocked by policy“ abgelehnt; diese Ablehnung
+ist kein Auftrag für einen anderen Löschweg.

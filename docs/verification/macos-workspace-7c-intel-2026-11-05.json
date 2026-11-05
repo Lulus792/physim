@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "7c1870c4371bd5edf98b0b87fcac3110f76580c2",
+  "run": 42081349500,
+  "intel_job": 127434902628,
+  "intel_result": "4/4 groups including68actual projects,00..33twice at16/22px, built/recorded/analyzed",
+  "artifact": {
+    "id": 13443047054,
+    "path": "build/validation/macos-workspace-7c-intel-2026-11-05/artifact-13443047054.zip",
+    "sha256": "9021b69a5dd26101ce167c6fe41ba13348d21e49f4f695016375a7e239824366",
+    "bytes": 21082,
+    "entries": {
+      "Release/test-results/run-1cce44_2/results.json": "e1b68704d85ca8de1b80904c5a8ad8dd7e00f50caf5f304f60ce41fd9bf71f47",
+      "Release/test-results/run-ceui8fxb/results.json": "de6f4686c2b77a5c8ced8535815ce135a220dae89841299cf01ce9df167e74f8"
+    },
+    "all_entries_read": true,
+    "images_extracted": 0
+  },
+  "original_manifest": {
+    "path": "build/validation/macos-workspace-7c-intel-2026-11-05/original.json",
+    "sha256": "53cf2a4c03aa22aa0a5b94d1a79acb90ed1e56e3bbccbc8d6076294e224e44e2"
+  },
+  "arm": {
+    "job": 127434901974,
+    "conclusion": "cancelled",
+    "steps_executed": 0,
+    "acceptance": "missing; no retry of known403 permission denial"
+  },
+  "scope": "Actual new hosted Intel workspace regression for source7c1870c4; no dual-architecture/full UI acceptance. Private user Mac remains OFF."
+}

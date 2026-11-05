@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-05",
+  "reason": "Own temporary POSIX test images; both namespaces ended, no loop or process handle, all original artifacts archived and read back",
+  "deleted": [
+    {
+      "path": "build/validation/report-export-workflow-2026-11-05/native-test-filesystem.ext4",
+      "logical_bytes": 2147483648,
+      "allocated_bytes": 91701248
+    },
+    {
+      "path": "build/validation/report-export-workflow-2026-11-05/native-test-filesystem-accepted.ext4",
+      "logical_bytes": 2147483648,
+      "allocated_bytes": 99692544
+    }
+  ],
+  "removed_logical_file_bytes": 4294967296.0,
+  "removed_allocated_file_bytes": 191393792.0,
+  "metric": "GetCompressedFileSizeW per-file storage before deletion; not a global drive-free delta",
+  "original_archives": [
+    "build/validation/report-export-workflow-2026-11-05/fixed-linux-original-results.zip",
+    "build/validation/report-export-workflow-2026-11-05/accepted-linux-original-results.zip"
+  ],
+  "no_recursive_delete": true,
+  "shared_wsl_vhdx_untouched": true
+}

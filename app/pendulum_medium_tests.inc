@@ -7,7 +7,7 @@ static bool pendulum_medium_start(app *a,const char *root,const char *mode) {
     select_build_profile(a,1);SDL_SetWindowSize(a->window,1080,740);return true;
 }
 static void pendulum_medium_frame(app *a,int *stage,int *code,const char **capture) {
-    static double initial;bool ok=true;
+    static double initial;static unsigned raw_reveals;bool ok=true;
     switch(*stage) {
     case 0:build_project(a);break;
     case 1: {
@@ -72,16 +72,36 @@ static void pendulum_medium_frame(app *a,int *stage,int *code,const char **captu
     case 11:
         ok=exists(a->result_export) && strstr(a->result_export,".csv");
         a->result_view=a->language_analysis?1:3;break;
-    case 12:test_mouse(a,a->result_export_bounds[1],true);break;
-    case 13:test_mouse(a,a->result_export_bounds[1],false);break;
-    case 14:
-        ok=exists(a->result_export) && strstr(a->result_export,".svg");
-        test_mouse(a,a->result_export_bounds[2],true);break;
-    case 15:test_mouse(a,a->result_export_bounds[2],false);break;
+    case 12: {
+        int exported=test_report_graphic_export(a,true);if(!exported)return;
+        ok=exported>0;*stage=13;break;
+    }
+    case 14: {
+        int exported=test_report_graphic_export(a,false);if(!exported)return;
+        ok=exported>0;*stage=15;break;
+    }
     case 16:
         ok=exists(a->result_export) && strstr(a->result_export,".png");
+        raw_reveals=0;
+        test_mouse(a,a->analysis_tabs[0],true);break;
+    case 17:test_mouse(a,a->analysis_tabs[0],false);*stage=19;break;
+    case 20:
+        if(a->show_report || ps_comparison_read(a->comparison).loading)return;
+        /* Raw export belongs to the measured-data body, below its statistics.
+         * Reveal that actual control rather than clicking stale report bounds. */
+        {struct nk_rect area=a->dock_panels[PS_DOCK_WORKSPACE],button=a->raw_export_bounds;
+         if(button.w<=0 || button.h<=0 || button.y<area.y+54 || button.y+button.h>area.y+area.h) {
+             if(raw_reveals++>=24){
+                 fprintf(stderr,"Raw export reveal failed: button=%.1f/%.1f/%.1f/%.1f viewport=%.1f/%.1f/%.1f/%.1f plot=%.1f/%.1f/%.1f/%.1f\n",button.x,button.y,button.w,button.h,area.x,area.y,area.w,area.h,a->plot_area.x,a->plot_area.y,a->plot_area.w,a->plot_area.h);
+                 ok=false;break;
+             }
+             /* The plot owns wheel input over its data rectangle. Scroll the
+              * body through its left gutter, as in the statistics regression. */
+             test_plot_wheel(a,area.x+30,area.y+area.h*.5f,-6);*stage=21;break;
+         }}
         test_mouse(a,a->raw_export_bounds,true);break;
-    case 17:test_mouse(a,a->raw_export_bounds,false);break;
+    case 21:test_mouse(a,a->raw_export_bounds,false);*stage=17;break;
+    case 22:*stage=19;break; /* Observe fresh layout after the wheel frame. */
     case 18:
         if(!idle(a) || a->library_thread)return;
         ok=a->job_kind==4 && exists(a->report) && strstr(a->report,".csv");

@@ -4129,6 +4129,7 @@ int main(int argc, char **argv) {
     unsigned doc_input_events = 0, doc_input_bytes = 0;
     nk_uint test_doc_scroll = 0;
     SDL_WindowID test_doc_window_id = 0;
+    unsigned test_editor_file = 0;
     ps_report *test_previous_report = NULL;
     char test_original_run[4096] = {0}, test_original_report[4096] = {0};
     uint64_t test_original_samples = 0;
@@ -5075,17 +5076,12 @@ int main(int argc, char **argv) {
                 capture = "analysis-histogram.bmp";
                 test_stage = 32;
             } else if (test_stage == 32) {
-                test_mouse(a, a->result_export_bounds[1], true);
-                test_stage = 33;
-            } else if (test_stage == 33) {
-                test_mouse(a, a->result_export_bounds[1], false);
-                test_stage = 34;
-            } else if (test_stage == 34) {
-                if (!exists(a->result_export) || !strstr(a->result_export, ".svg"))
-                    exit_code = 1;
-                a->result_view = test_example == 0 || test_example == 8 ? 5 : test_example == 4 || test_example == 5 || test_example == 7 ? 4 : 3;
-                capture = "analysis-table.bmp";
-                test_stage = 35;
+                int exported=test_report_graphic_export(a,true);
+                if(exported<0){exit_code=1;a->quitting=true;}
+                else if(exported>0) {
+                    a->result_view = test_example == 0 || test_example == 8 ? 5 : test_example == 4 || test_example == 5 || test_example == 7 ? 4 : 3;
+                    capture = "analysis-table.bmp";test_stage = 35;
+                }
             } else if (test_stage == 35) {
                 test_mouse(a, a->result_export_bounds[0], true);
                 test_stage = 36;
@@ -5149,28 +5145,11 @@ int main(int argc, char **argv) {
                 }
                 test_stage = test_example == 0 || test_example == 8 ? 170 : 40;
             } else if (test_stage == 170) {
-                test_mouse(a, a->result_export_bounds[1], true);
-                test_stage = 171;
+                int exported=test_report_graphic_export(a,true);
+                if(exported<0){exit_code=1;a->quitting=true;}else if(exported>0)test_stage=171;
             } else if (test_stage == 171) {
-                test_mouse(a, a->result_export_bounds[1], false);
-                test_stage = 172;
-            } else if (test_stage == 172) {
-                if (!exists(a->result_export) || !strstr(a->result_export, ".svg"))
-                    exit_code = 1;
-                test_mouse(a, a->result_export_bounds[2], true);
-                test_stage = 173;
-            } else if (test_stage == 173) {
-                test_mouse(a, a->result_export_bounds[2], false);
-                test_stage = 174;
-            } else if (test_stage == 174) {
-                unsigned char header[24];
-                FILE *png = fopen(a->result_export, "rb");
-                if (!png || !strstr(a->result_export, ".png") ||
-                    fread(header, 1, sizeof header, png) != sizeof header ||
-                    memcmp(header, "\x89PNG\r\n\x1a\n", 8) || memcmp(header + 12, "IHDR", 4))
-                    exit_code = 1;
-                if (png) fclose(png);
-                test_stage = 40;
+                int exported=test_report_graphic_export(a,false);
+                if(exported<0){exit_code=1;a->quitting=true;}else if(exported>0)test_stage=40;
             } else if (test_stage == 40) {
                 test_previous_report = a->analysis_report;
                 join(a->result_path, sizeof a->result_path, a->project,
@@ -5196,12 +5175,14 @@ int main(int argc, char **argv) {
                 /* Compiler warnings may keep the log open after a successful build. */
                 a->show_log = false;
                 a->show_search = false;
+                test_editor_file=a->file_tabs_initialized?a->file_tab_last_active:0;
                 test_key(a, SDLK_1);
                 test_key(a, SDLK_F);
                 test_key(a, SDLK_L);
                 test_stage = 9;
             } else if (test_stage == 9) {
-                if (a->tab != 0 || !a->show_search || !a->show_log)
+                if (!workbench_visible(a) || file_tab_active(a)!=test_editor_file ||
+                    !editor_search_target(a) || !a->show_search || !a->show_log)
                     exit_code = 1;
                 capture = "search.bmp";
                 test_key(a, SDLK_L);
@@ -5334,13 +5315,13 @@ int main(int argc, char **argv) {
                 SDL_PushEvent(&close_event);
                 test_stage = 26;
             } else if (test_stage == 26) {
-                if (a->quitting || a->doc_visible || a->tab != 0)
+                if (a->quitting || a->doc_visible || !workbench_visible(a) || file_tab_active(a)!=test_editor_file)
                     exit_code = 1;
                 test_key(a, SDLK_F1);
                 test_stage = 27;
             } else if (test_stage == 27) {
                 if (!a->doc_visible || SDL_GetWindowID(a->doc_window) != test_doc_window_id ||
-                    a->tab != 0 || a->doc_topic != 3 || a->doc_scroll_y != test_doc_scroll ||
+                    !workbench_visible(a) || file_tab_active(a)!=test_editor_file || a->doc_topic != 3 || a->doc_scroll_y != test_doc_scroll ||
                     strcmp(a->doc_query, "ps_series_derivative"))
                     exit_code = 1;
                 SDL_SetWindowSize(a->doc_window, 760, 540);
