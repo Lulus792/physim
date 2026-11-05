@@ -64,9 +64,9 @@ static void api_reference_from_editor(app *a,struct nk_text_edit *edit) {
     size_t indices_count=ps_completion_count(),*indices=malloc(indices_count*sizeof *indices);
     if(!indices){status(a,"Nicht genügend Speicher für die API-Referenz.");return;}
     ps_completion_query whole=query;size_t word=query.end-query.start,count=0;
-    if(kind==1 && !query.member && word){
+    if(!query.member && word){
         ps_completion_locals locals={0};
-        ps_result result=ps_completion_locals_update(&locals,edit,text,bytes,cursor,true);
+        ps_result result=ps_completion_locals_update(&locals,edit,text,bytes,cursor,kind==1);
         if(result==PS_OK){
             const ps_completion_local *local=ps_completion_locals_find(&locals,text+query.start,word);
             if(local){char source[4160];completion_source_label(a,edit,local,source);status(a,source);

@@ -15,6 +15,9 @@ typedef struct {
 /* Byte offsets, UTF-8 boundary required. Comments/strings and unsupported C
  * members produce PS_INVALID. Every failure preserves the output query. */
 ps_result ps_completion_prepare(const char *text,size_t bytes,size_t cursor,bool language,ps_completion_query *out);
+/* One written identifier unit: shared XID UTF-8, plus C grammar $/UCN spellings.
+ * Lexical boundaries only, no type/name resolution or UCN normalization. */
+size_t ps_completion_identifier_width(const char *text,size_t bytes,bool first,bool language);
 size_t ps_completion_count(void);
 const ps_completion_symbol *ps_completion_at(size_t index);
 /* Exact length-delimited lookup in the generated (language,name) ordering.

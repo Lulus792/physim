@@ -3,11 +3,13 @@
 #include "completion.h"
 #include "physim/memory.h"
 #include "language/editor_bindings.h"
+#include "c_bindings.h"
 
 typedef struct {
     ps_completion_symbol symbol;
     ps_lang_editor_binding declaration;
-    size_t id;
+    ps_c_binding c_declaration; /* Exact C declarator spans; zero for Physim. */
+    size_t id,signature_name_offset;
     const char *type; /* Empty means no written annotation, not an inferred type. */
 } ps_completion_local;
 typedef struct {
@@ -27,7 +29,7 @@ typedef struct {
  * Same owner/bytes/cursor reuses the snapshot and does not reparse or allocate.
  * Invalid requests/allocation failure preserve the previous state. Valid source
  * syntax failure publishes an empty, explicitly classified new snapshot.
- * Physim uses its real parser; C currently returns no local candidates.
+ * Physim uses its parser; C uses the actual C grammar/recovery collector.
  * IDs are catalog-count + 1 + declaration byte offset, never catalog aliases. */
 ps_result ps_completion_locals_update(ps_completion_locals *locals,const void *owner,
     const char *source,size_t bytes,size_t cursor,bool language);
@@ -35,7 +37,7 @@ void ps_completion_locals_destroy(ps_completion_locals *locals);
 const ps_completion_local *ps_completion_locals_at(const ps_completion_locals *locals,size_t id);
 const ps_completion_local *ps_completion_locals_find(const ps_completion_locals *locals,const char *name,size_t bytes);
 /* Complete result count, writes at most capacity IDs; never truncates at five.
- * Local scope values apply to non-member Physim queries only. */
+ * Local scope values apply to same-language non-member queries only. */
 size_t ps_completion_locals_matches(const ps_completion_locals *locals,const ps_completion_query *query,
                                    size_t *ids,size_t capacity);
 /* Cheap lexical scheduling hint only. The parser's call.at_start must confirm

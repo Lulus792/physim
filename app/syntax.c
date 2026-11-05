@@ -13,8 +13,7 @@ static bool listed(const char *s,size_t n,const char *const *list,size_t count){
 }
 static size_t identifier(const ps_syntax_scan *p,size_t at,bool first){
     if(at>=p->bytes)return 0;
-    if(p->language)return ps_lang_identifier_width(p->source+at,p->bytes-at,first);
-    return ascii_start(p->source[at]) || (!first && digit(p->source[at]))?1:0;
+    return ps_completion_identifier_width(p->source+at,p->bytes-at,first,p->language);
 }
 static size_t trivia(const ps_syntax_scan *p,size_t at){
     const char *s=p->source;size_t n=p->bytes;

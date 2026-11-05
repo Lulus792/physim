@@ -59,7 +59,7 @@ int main(void) {
     CHECK(ps_completion_prepare("ps_",3,3,false,&q)==PS_OK);
     size_t limited[2]={0,987654};CHECK(ps_completion_matches(&q,limited,1)>100 && limited[1]==987654);
     CHECK(ps_completion_matches(&q,NULL,0)>100 && ps_completion_matches(&q,NULL,1)==0);
-    const char *invalid[]={"// ps_v","/* ps_v","\"ps_v","'ps_v","ctx.ps_v","ctx->ps_v","123ps_v","αps_v",
+    const char *invalid[]={"// ps_v","/* ps_v","\"ps_v","'ps_v","ctx.ps_v","ctx->ps_v","123ps_v",
         "// continued" "\\" "\nps_v", "// continued" "\\" "\r\nps_v"};
     for(size_t i=0;i<sizeof invalid/sizeof *invalid;i++) {
         ps_completion_query before;memset(&before,0xa5,sizeof before);q=before;
@@ -74,6 +74,7 @@ int main(void) {
     const char *after="\"ps_v\" ps_vl";
     CHECK(ps_completion_prepare(after,strlen(after),strlen(after),false,&q)==PS_OK && includes(&q,"ps_vlength"));
     CHECK(ps_completion_prepare("α",2,1,false,&q)==PS_INVALID);
+    CHECK(ps_completion_prepare("αps_v",strlen("αps_v"),strlen("αps_v"),false,&q)==PS_OK && !strcmp(q.prefix,"αps_v") && !ps_completion_matches(&q,NULL,0));
     const char *unicode="foo(GröOLD)";size_t caret=strlen("foo(Grö");
     CHECK(ps_completion_prepare(unicode,strlen(unicode),caret,true,&q)==PS_OK && !strcmp(q.prefix,"Grö") && q.start==4 && q.end==strlen(unicode)-1);
     CHECK(ps_completion_prepare("größe.norm",strlen("größe.norm"),strlen("größe.norm"),true,&q)==PS_OK && !strcmp(q.receiver,"größe"));

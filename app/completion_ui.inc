@@ -304,9 +304,8 @@ static float completion_help_text(app *a,const struct nk_user_font *font,const c
 }
 static void completion_help_gap(app *a,float height,bool draw){if(draw){ps_ui_row_exact_dynamic(a->ui,height,1);nk_spacer(a->ui);}}
 static ps_syntax_role completion_signature_role(void *user,size_t offset,size_t bytes){
-    const ps_completion_symbol *symbol=user;
-    size_t begin=!strncmp(symbol->signature,"let ",4) || !strncmp(symbol->signature,"var ",4)?4:0;
-    return offset==begin && bytes==strlen(symbol->name)?PS_SYNTAX_VARIABLE:PS_SYNTAX_TEXT;
+    const ps_completion_local *local=user;
+    return offset==local->signature_name_offset && bytes==strlen(local->symbol.name)?PS_SYNTAX_VARIABLE:PS_SYNTAX_TEXT;
 }
 static float completion_help_content(app *a,const ps_completion_symbol *symbol,float width,bool draw){
     ps_completion_help *help=&a->completion_help;ps_document *d=help->document;
@@ -330,7 +329,7 @@ static float completion_help_content(app *a,const ps_completion_symbol *symbol,f
         nk_fill_rect(nk_window_get_canvas(a->ui),r,3,UI_COLOR(edit));
         ps_ui_accessibility_label(a->ui,r,symbol->signature);
         syntax_cursor cursor={0};ps_syntax_init(&cursor.scan,symbol->signature,strlen(symbol->signature),symbol->language);
-        if(local){cursor.scan.resolve=completion_signature_role;cursor.scan.user=(void*)symbol;}
+        if(local){cursor.scan.resolve=completion_signature_role;cursor.scan.user=(void*)local;}
         size_t at=0,n=strlen(symbol->signature);float y=r.y+8;
         do{size_t length=0,used=documentation_line(code,symbol->signature+at,n-at,fmaxf(1,width-16),&length);
             syntax_draw_range(nk_window_get_canvas(a->ui),code,&cursor,at,at+length,r.x+8,y);at+=used;y+=code->height+6;

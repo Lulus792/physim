@@ -1,5 +1,8 @@
 /* Actual indented Physim source: no brace-syntax/browser scope substitute. */
 #define LOCALS_SOURCE "let amplitude: Float64 = 1.0\nfunc closed(foreign: Float64):\n    let gone: Float64 = foreign\nfunc step(dt: Float64):\n    let velocity: Vec3 = Vec3(0.0, 1.0, 0.0)\n    let gravity: Vec3 = Vec3(0.0, -9.81, 0.0)\n    var damping: Float64 = 0.02\n    let Größe: Float64 = dt\n    let sin: Float64 = dt\n    if true:\n        let amplitude: String = \"shadow\"\n        print"
+#define C_LOCALS_SOURCE "double amplitude=1;\nvoid closed(double foreign){double gone=foreign;}\nvoid step(double dt){\n ps_vec3 velocity=ps_v3(0,1,0);\n ps_vec3 gravity=ps_v3(0,-9.81,0);\n double damping=.02, Größe=dt, sin=dt;\n if(dt){const char *amplitude=\"shadow\"; ps_vadd"
+static bool locals_c_mode;
+static const char *locals_source(void){return locals_c_mode?C_LOCALS_SOURCE:LOCALS_SOURCE;}
 static unsigned locals_draw_generation,locals_wait_generation;
 static struct {bool list,prefix,signature,source,kind,no_reference;} locals_ink;
 static void completion_locals_draw(app *a){
@@ -27,7 +30,7 @@ static void completion_locals_draw(app *a){
     locals_ink.no_reference=!a->completion_reference_bounds.w && !a->completion_arguments_bounds.w && !a->completion_help.document;
 }
 static bool completion_locals_seed(app *a,struct nk_text_edit *edit,const char *tail,const char *caret){
-    char text[2048];snprintf(text,sizeof text,"%s%s",LOCALS_SOURCE,tail);
+    char text[2048];snprintf(text,sizeof text,"%s%s",locals_source(),tail);
     if(!completion_info_seed(a,edit,text))return false;
     const char *at=caret?strstr(text,caret):NULL;
     if(at)edit->cursor=edit->select_start=edit->select_end=nk_utf_len(text,(int)(at-text));
@@ -38,7 +41,8 @@ static bool completion_locals_choose(app *a,const char *name){
         a->completion_selected=i;a->completion_reveal=true;a->completion_explicit=true;completion_info_request(a,true);return true;
     }return false;
 }
-static void completion_locals_frame(app *a,int *stage,int *code,const char **capture){
+static void completion_locals_frame(app *a,bool c_mode,int *stage,int *code,const char **capture){
+    locals_c_mode=c_mode;
     static unsigned target;static bool prepared;static double timeout;static ps_document *inspector;
     static char original[2048],changed[2048];bool ok=true;
     workspace_document *doc=active_document(a);
@@ -51,14 +55,14 @@ static void completion_locals_frame(app *a,int *stage,int *code,const char **cap
     case 0:
         if(!prepared){ok=open_project(a);prepared=ok;}
         {ps_preferences p=a->preferences;p.theme=target;p.completion_rows=5;p.completion_auto=true;p.ui_size=target==1?22:16;p.editor_size=target==1?22:12;preferences_apply(a,&p);}
-        if(target==2){char path[4096];join(path,sizeof path,a->project,"completion-note.phys");preview_workspace_path(a,path);}
+        if(target==2){char path[4096];join(path,sizeof path,a->project,c_mode?"completion-note.c":"completion-note.phys");preview_workspace_path(a,path);}
         else{a->tab=target?2:0;if(target)a->analysis_tab=1;}
-        ok=ok && api_reference_open(a,ps_completion_lookup("Vec3",4,true));inspector=a->api_reference;
+        ok=ok && api_reference_open(a,ps_completion_lookup(c_mode?"ps_vec3":"Vec3",c_mode?7:4,!c_mode));inspector=a->api_reference;
         locals_wait_generation=locals_draw_generation+1;LOCAL_NEXT(1);break;
     case 1:
-        ok=completion_locals_seed(a,edit,"(GröOLD, gravity)\n        let later: Float64 = 2.0\n","OLD");
-        snprintf(original,sizeof original,"%s(GröOLD, gravity)\n        let later: Float64 = 2.0\n",LOCALS_SOURCE);
-        snprintf(changed,sizeof changed,"%s(Größe, gravity)\n        let later: Float64 = 2.0\n",LOCALS_SOURCE);LOCAL_NEXT(2);break;
+        ok=completion_locals_seed(a,edit,c_mode?"(GröOLD, gravity); double later=2; }}":"(GröOLD, gravity)\n        let later: Float64 = 2.0\n","OLD");
+        snprintf(original,sizeof original,"%s%s",locals_source(),c_mode?"(GröOLD, gravity); double later=2; }}":"(GröOLD, gravity)\n        let later: Float64 = 2.0\n");
+        snprintf(changed,sizeof changed,"%s%s",locals_source(),c_mode?"(Größe, gravity); double later=2; }}":"(Größe, gravity)\n        let later: Float64 = 2.0\n");LOCAL_NEXT(2);break;
     case 2:LOCAL_WAIT(edit && edit->active);LOCAL_KEY(SDLK_SPACE,SDL_KMOD_CTRL);LOCAL_NEXT(3);break;
     case 3:
         LOCAL_WAIT(a->completion_active && a->completion_list_bounds.w>0);
@@ -69,7 +73,7 @@ static void completion_locals_frame(app *a,int *stage,int *code,const char **cap
         ok=locals_ink.list && locals_ink.prefix && locals_ink.kind && locals_ink.no_reference && a->api_reference==inspector &&
            ps_ui_font_has_glyph(a->workbench_marker_source,0xf6) && ps_ui_font_has_glyph(a->workbench_marker_source,0xdf) &&
            completion_test_equal(edit,original);
-        *capture=target==0?"locals-model.bmp":target==1?"locals-analysis.bmp":"locals-document.bmp";
+        if(c_mode)*capture=target==0?"locals-model.bmp":target==1?"locals-analysis.bmp":"locals-document.bmp";
         printf("COMPLETION LOCALS target=%u theme=%u unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1\n",target,target);
         LOCAL_KEY(SDLK_F1,SDL_KMOD_SHIFT);LOCAL_NEXT(5);break;
     case 5:
@@ -80,7 +84,7 @@ static void completion_locals_frame(app *a,int *stage,int *code,const char **cap
         LOCAL_KEY(SDLK_Z,PS_UI_COMMAND_MOD);LOCAL_NEXT(7);break;
     case 7:
         LOCAL_WAIT(completion_test_equal(edit,original));
-        ok=completion_locals_seed(a,edit,"(siOLD, gravity)","OLD");LOCAL_NEXT(8);break;
+        ok=completion_locals_seed(a,edit,c_mode?"(siOLD, gravity); }}":"(siOLD, gravity)","OLD");LOCAL_NEXT(8);break;
     case 8:LOCAL_WAIT(edit->active);LOCAL_KEY(SDLK_SPACE,SDL_KMOD_CTRL);LOCAL_NEXT(9);break;
     case 9:
         LOCAL_WAIT(a->completion_active);ok=completion_locals_choose(a,"sin");
@@ -90,7 +94,7 @@ static void completion_locals_frame(app *a,int *stage,int *code,const char **cap
     case 10:
         LOCAL_WAIT(locals_ink.signature && locals_ink.source);
         ok=locals_ink.no_reference && a->api_reference==inspector;
-        ok=ok && completion_locals_seed(a,edit,"(sin, gravity)",", gravity");LOCAL_NEXT(20);break;
+        ok=ok && completion_locals_seed(a,edit,c_mode?"(sin, gravity); }}":"(sin, gravity)",", gravity");LOCAL_NEXT(20);break;
     case 20:LOCAL_WAIT(edit->active);LOCAL_KEY(SDLK_F1,SDL_KMOD_SHIFT);LOCAL_NEXT(21);break;
     case 21:
         ok=!a->completion_active && a->api_reference==inspector;
@@ -102,21 +106,23 @@ static void completion_locals_frame(app *a,int *stage,int *code,const char **cap
             a->completion_locals.count==7 && a->completion_count>7 && a->completion_visible_rows==5 && a->completion_scroll_bounds.h>0;
         for(size_t i=0;i<a->completion_locals.count;i++)ok=ok && completion_symbol(a,a->completion_indices[i])->kind==PS_COMPLETION_VARIABLE;
         ok=ok && !ps_completion_locals_find(&a->completion_locals,"gone",4) && !ps_completion_locals_find(&a->completion_locals,"foreign",7) &&
-            !ps_completion_locals_find(&a->completion_locals,"later",5) && !strcmp(ps_completion_locals_find(&a->completion_locals,"amplitude",9)->type,"String");
+            !ps_completion_locals_find(&a->completion_locals,"later",5) && !strcmp(ps_completion_locals_find(&a->completion_locals,"amplitude",9)->type,c_mode?"const char *":"String");
         ok=ok && completion_locals_choose(a,"sin");locals_wait_generation=locals_draw_generation+1;LOCAL_NEXT(13);break;
     case 13:
         LOCAL_WAIT(locals_ink.signature);ok=a->completion_selected>=5 && a->completion_first>0;
         LOCAL_KEY(SDLK_RETURN,0);LOCAL_NEXT(14);break;
     case 14:{
-        char text[2048];snprintf(text,sizeof text,"%s(sin",LOCALS_SOURCE);
+        char text[2048];snprintf(text,sizeof text,"%s(sin",locals_source());
         LOCAL_WAIT(!a->completion_active && completion_test_equal(edit,text));
         LOCAL_KEY(SDLK_Z,PS_UI_COMMAND_MOD);LOCAL_NEXT(15);break;}
     case 15:{
-        char text[2048];snprintf(text,sizeof text,"%s(",LOCALS_SOURCE);LOCAL_WAIT(completion_test_equal(edit,text));
+        char text[2048];snprintf(text,sizeof text,"%s(",locals_source());LOCAL_WAIT(completion_test_equal(edit,text));
         completion_auto_text(a,"velocity,");locals_wait_generation=locals_draw_generation+2;LOCAL_NEXT(16);break;}
     case 16:
         LOCAL_WAIT(a->completion_active && a->completion_locals.call.argument==1 && a->completion_locals.call.at_start);
         ok=!a->completion_manual && a->completion_locals.count==7 && a->api_reference==inspector;
+        ok=ok && a->completion_locals.language==!c_mode;
+        printf("COMPLETION LOCALS language=%s target=%u actual-model-language=1\n",c_mode?"c":"phys",target);
         printf("COMPLETION LOCALS target=%u exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1\n",target);
         completion_close(a);
         if(target<2){target++;LOCAL_NEXT(0);}else a->quitting=true;
@@ -133,3 +139,4 @@ finished:
 #undef LOCAL_KEY
 }
 #undef LOCALS_SOURCE
+#undef C_LOCALS_SOURCE

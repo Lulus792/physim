@@ -37,7 +37,7 @@ static int scopes(void){
     CHECK(!strcmp(ps_completion_locals_find(&locals,"self",4)->type,"Particle"));
     const char invalid[]="func broken(:\n    print(";
     CHECK(ps_completion_locals_update(&locals,&owner,invalid,strlen(invalid),strlen(invalid),true)==PS_OK && !locals.count && locals.status==PS_LANG_EDITOR_INVALID && !locals.call.active);
-    CHECK(ps_completion_locals_update(&locals,&owner,text,strlen(text),strlen(text),false)==PS_OK && !locals.count && !locals.source && !locals.language);
+    CHECK(ps_completion_locals_update(&locals,&owner,text,strlen(text),strlen(text),false)==PS_OK && !locals.count && locals.source && !locals.language);
     ps_completion_locals_destroy(&locals);ps_completion_locals_destroy(&locals);ps_completion_locals_destroy(NULL);
     CHECK(!tracker.invalid && !tracker.live_blocks && !tracker.live_bytes);return 0;
 }
@@ -69,7 +69,7 @@ static int bounds(void){
     CHECK(ps_completion_locals_update(&locals,&owner,"x\0y",3,3,true)==PS_INVALID && locals.source==owned);
     CHECK(ps_completion_locals_argument_hint("foo( /* hi */ ",14,14,true));
     CHECK(!ps_completion_locals_argument_hint("foo(\"a,",7,7,true));
-    CHECK(!ps_completion_locals_argument_hint("foo(",4,4,false));
+    CHECK(ps_completion_locals_argument_hint("foo(",4,4,false));
     ps_completion_locals_destroy(&locals);return 0;
 }
 int main(void){CHECK(!scopes() && !failures() && !bounds());puts("Completion locals: real Physim scope merge, stable IDs, source/type ownership, Unicode, cache reuse and every allocation failure passed");return 0;}

@@ -23,9 +23,11 @@ No CLI, Node/Rust toolchain, generator, runtime download or language service.
 The private `app/c_syntax.c` translation unit uses the runtime's existing compile-
 time allocator hooks, not its default process-aborting allocator or global
 allocator mutation. All objects stay inside a bounded per-thread lifetime.
-This is currently a tested syntax foundation: not linked into the shipping GUI
-or core, and not yet a C variable-completion, preprocessor or type-checking feature.
-Before GUI integration, include all three licenses in the portable distribution.
+The runtime/grammar adapters are confined to the editor application and its
+native tests; the GUI-independent core remains independent. C local completion
+uses the actual grammar/recovery collector. No preprocessing or type-checking
+service. Portable installation copies runtime MIT, grammar MIT and embedded ICU
+license texts into `licenses/`; platform/GUI acceptance is documented separately.
 
 ## SDL3 3.2.30
 

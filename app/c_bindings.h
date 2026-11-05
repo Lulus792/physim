@@ -8,9 +8,14 @@ typedef struct {
     bool parameter;
 } ps_c_binding;
 typedef struct {
+    size_t open,argument;
+    bool active,at_start;
+} ps_c_call;
+typedef struct {
     ps_result status;
     size_t count;
     bool has_error;
+    ps_c_call call; /* Original '(' and zero-based argument; no callee resolution. */
 } ps_c_bindings_result;
 
 /* Original full-source C grammar, never rewritten or preprocessed. Complete
@@ -32,4 +37,7 @@ ps_c_bindings_result ps_c_bindings(const char *source,size_t bytes,size_t cursor
  * Caller detects insufficient capacity from return value > capacity. */
 size_t ps_c_binding_type(const char *source,size_t bytes,ps_c_binding binding,
                          char *output,size_t capacity);
+/* Same contract, including the name; original declaration without initializer. */
+size_t ps_c_binding_signature(const char *source,size_t bytes,ps_c_binding binding,
+                              char *output,size_t capacity);
 #endif

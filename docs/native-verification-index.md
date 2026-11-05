@@ -8,6 +8,11 @@ wegen Kontextwechsel erneut anfangen; die ursprünglichen Nachweise unverändert
 
 ## Neuere Editorprüfungen
 
+- [Native C-Locals](verification/completion-c-2026-11-05.md): Windows/Linux je
+  Unit 8/8 + GUI 6/6, C/Physim über drei Editorziele, 121/121 C-Modellfehler erhalten
+  den Snapshot; Typ-/Quellkarte, Unicode, lokale API-Abschirmung, Ersetzen/Undo und
+  leere Argumente geprüft. Drei Paketlizenzen/6.422 Dateihashes gelesen. **Neuer
+  Mac-Nachlauf, separate Signaturhilfe und physische Abnahme noch offen.**
 - [C-Scope-Sammlung](verification/c-bindings-2026-11-05.md), `37cb80dd`: Windows/Linux je Unit
   1/1, final 35 Codefälle, 182 Cursor-/Dokumentpaare, 65/65 Allokationsfehler und
   1.024 fehlerhafte Eingaben; echte Schleifenkopf-/Zeiger-Rückgabe-Regressionen und

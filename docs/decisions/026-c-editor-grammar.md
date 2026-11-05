@@ -1,7 +1,8 @@
 # ADR 026 — native C syntax foundation for completion
 
-Date: 2026-11-05. Syntax foundation and subsequent lexical scope collector are
-implemented/tested; completion-model and GUI integration remain open.
+Date: 2026-11-05. Syntax foundation, lexical scope collector and subsequent C
+completion-model/GUI integration are implemented and tested on Windows/Linux.
+New macOS acceptance and separate signature help remain open.
 Selected completion design D / ADR 023 is unchanged.
 
 ## Requirement and choice
@@ -49,8 +50,10 @@ or hand-written browser scope model. [Scope implementation and actual proof](../
 
 Written C declarator forms, for-loop lifetime and outer/inner declaration order
 are provided by the collector. Owner/revision binding, completion-model merge,
-actual call/empty-argument context, insertion/Undo and separate signature/parameter
-help still need integration and native acceptance. Do not publish preprocessor/include
+actual call/empty-argument context and native insertion/Undo are now integrated:
+[actual scope, commands and Windows/Linux evidence](../verification/completion-c-2026-11-05.md).
+Separate signature/parameter help still needs implementation and native acceptance.
+Do not publish preprocessor/include
 resolution, inferred types or runtime values from this syntax tree.
 
 ## Verification and provenance
@@ -60,6 +63,11 @@ failure with cleanup/retry, memory/capacity/progress limits, independent paralle
 domains and 1,024 malformed inputs. Registered Windows Release and Linux Debug
 ASan/UBSan each passed 1/1. [Actual commands, provenance, warnings and limits](../verification/c-syntax-foundation-2026-11-05.md).
 This does not establish macOS or GUI acceptance of the new backend.
+
+The subsequent linked-app proof is separate from the original syntax-only test:
+Windows/Linux each8/8 units and6/6 GUI groups, installed three-license bytes and
+private app symbol audits. The GUI-independent core remains independent. No new
+private-Mac access; current hosted macOS follow-up is still required.
 
 Primary sources inspected 2026-11-05: [runtime release](https://github.com/tree-sitter/tree-sitter/releases/tag/v0.27.1),
 [grammar release](https://github.com/tree-sitter/tree-sitter-c/releases/tag/v0.24.2),

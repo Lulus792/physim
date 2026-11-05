@@ -3059,7 +3059,7 @@ static void syntax_text(app *a,struct nk_text_edit *edit,struct nk_rect bounds){
     if(!source)source="";
     ps_syntax_scan scan;ps_syntax_init(&scan,source,bytes,kind==1);
     const ps_completion_locals *locals=&a->completion_locals;
-    syntax_editor_context syntax_context={a,source,a->completion_active && locals->language && locals->owner==edit &&
+    syntax_editor_context syntax_context={a,source,a->completion_active && locals->language==(kind==1) && locals->owner==edit &&
         locals->bytes==bytes && locals->source && !memcmp(locals->source,source,bytes)};
     if(kind>=0){workbench_outline_refresh(a,edit,kind);scan.resolve=syntax_editor_role;scan.user=&syntax_context;}
     float pitch=font->height+ui->style.edit.row_padding,x=area.x-edit->scrollbar.x,y=area.y-edit->scrollbar.y;
@@ -5550,7 +5550,7 @@ int main(int argc, char **argv) {
         draw_ui(a, w, h);
         if(workspace_state_test && (!strcmp(argv[3],"completion-c") || !strcmp(argv[3],"completion-phys")))completion_syntax_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"completion-info-",16))completion_info_test_draw(a);
-        if(workspace_state_test && !strcmp(argv[3],"completion-locals-phys"))completion_locals_draw(a);
+        if(workspace_state_test && !strncmp(argv[3],"completion-locals-",18))completion_locals_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"completion-auto-",16))completion_auto_draw(a,test_stage);
         if(workspace_state_test && !strncmp(argv[3],"outline-hover-",14))outline_hover_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"analysis-layout-",16))analysis_workspace_test_draw(a,test_stage);

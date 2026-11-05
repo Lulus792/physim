@@ -1,4 +1,5 @@
 #include "completion_locals.h"
+#include "c_lexical.h"
 #include "autosave.h"
 #include <stdlib.h>
 #include <string.h>
@@ -37,6 +38,12 @@ static int order(const void *left,const void *right){
 static char *copy_string(char **at,const char *text,size_t bytes){
     char *start=*at;memcpy(start,text,bytes);start[bytes]=0;*at+=bytes+1;return start;
 }
+static ps_lang_editor_binding raw_binding(const ps_lang_editor_binding *raw,const ps_c_binding *craw,size_t i){
+    if(raw)return raw[i];
+    ps_c_binding b=craw[i];
+    return (ps_lang_editor_binding){.name={.kind=PS_LANG_IDENTIFIER,.offset=b.name_start,.length=b.name_end-b.name_start,.line=b.line,.column=b.column},
+        .kind=b.parameter?PS_LANG_EDITOR_PARAMETER:PS_LANG_EDITOR_VARIABLE,.type_start=b.type_start,.type_end=b.type_end};
+}
 ps_result ps_completion_locals_update(ps_completion_locals *p,const void *owner,
     const char *source,size_t bytes,size_t cursor,bool language){
     if(!p || !owner || (!source && bytes) || cursor>bytes)return PS_INVALID;
@@ -45,30 +52,37 @@ ps_result ps_completion_locals_update(ps_completion_locals *p,const void *owner,
     ps_allocator a=p->allocator;
     if(!a.allocate && !a.deallocate)a=ps_allocator_default();
     if(!ps_allocator_valid(a))return PS_INVALID;
-    if(!language){
-        ps_completion_locals_destroy(p);*p=(ps_completion_locals){.allocator=a,.owner=owner,.bytes=bytes,.cursor=cursor};return PS_OK;
-    }
-    if(p->language && p->owner==owner && p->bytes==bytes && p->cursor==cursor && p->source && (!bytes || !memcmp(source,p->source,bytes)))return PS_OK;
-    ps_completion_locals next={.allocator=a,.owner=owner,.bytes=bytes,.cursor=cursor,.language=true};
+    if(p->language==language && p->owner==owner && p->bytes==bytes && p->cursor==cursor && p->source && (!bytes || !memcmp(source,p->source,bytes)))return PS_OK;
+    ps_completion_locals next={.allocator=a,.owner=owner,.bytes=bytes,.cursor=cursor,.language=language};
     ps_lang_node *nodes=NULL;ps_lang_editor_binding *raw=NULL;unsigned char *chosen=NULL;
+    ps_c_binding *craw=NULL;
     size_t *seen=NULL,raw_count=0,capacity=bytes<32767?bytes*2+2:65536,slots=0;
     ps_result r=ps_memory_allocate(a,bytes+1,(void**)&next.source);if(r!=PS_OK)goto done;
     if(bytes)memcpy(next.source,source,bytes);
     next.source[bytes]=0;
-    r=ps_memory_zero(a,capacity,sizeof *nodes,(void**)&nodes);if(r!=PS_OK)goto done;
-    r=ps_memory_zero(a,capacity,sizeof *raw,(void**)&raw);if(r!=PS_OK)goto done;
-    ps_lang_editor_bindings_result parsed=ps_lang_editor_bindings(next.source,bytes,cursor,nodes,capacity,raw,capacity);
-    next.status=parsed.status;next.call=parsed.call;raw_count=parsed.count;
+    if(language){
+        r=ps_memory_zero(a,capacity,sizeof *nodes,(void**)&nodes);if(r!=PS_OK)goto done;
+        r=ps_memory_zero(a,capacity,sizeof *raw,(void**)&raw);if(r!=PS_OK)goto done;
+        ps_lang_editor_bindings_result parsed=ps_lang_editor_bindings(next.source,bytes,cursor,nodes,capacity,raw,capacity);
+        next.status=parsed.status;next.call=parsed.call;raw_count=parsed.count;
+    }else{
+        r=ps_memory_zero(a,capacity,sizeof *craw,(void**)&craw);if(r!=PS_OK)goto done;
+        ps_c_bindings_result parsed=ps_c_bindings(next.source,bytes,cursor,craw,capacity,a);
+        if(parsed.status==PS_MEMORY){r=PS_MEMORY;goto done;}
+        next.status=parsed.status==PS_LIMIT?PS_LANG_EDITOR_LIMIT:parsed.status!=PS_OK?PS_LANG_EDITOR_INVALID:parsed.has_error?PS_LANG_EDITOR_PREFIX:PS_LANG_EDITOR_OK;
+        next.call=(ps_lang_editor_call){.open=parsed.call.open,.argument=parsed.call.argument,.active=parsed.call.active,.at_start=parsed.call.at_start};
+        raw_count=parsed.count;
+    }
     if(!raw_count)goto publish;
     slots=1;while(slots<raw_count*2+1)slots*=2;
     r=ps_memory_zero(a,slots,sizeof *seen,(void**)&seen);if(r!=PS_OK)goto done;
     r=ps_memory_zero(a,raw_count,sizeof *chosen,(void**)&chosen);if(r!=PS_OK)goto done;
     for(size_t i=raw_count;i--;){
-        ps_lang_editor_binding b=raw[i];
+        ps_lang_editor_binding b=raw_binding(raw,craw,i);
         if(b.name.offset>bytes || b.name.length>bytes-b.name.offset || b.type_start>b.type_end || b.type_end>bytes){r=PS_INVALID;goto done;}
         size_t n=0;const char *name=binding_name(next.source,b,&n);size_t slot=hash_name(name,n)&(slots-1);
         while(seen[slot]){
-            size_t other_n=0;const char *other=binding_name(next.source,raw[seen[slot]-1],&other_n);
+            size_t other_n=0;const char *other=binding_name(next.source,raw_binding(raw,craw,seen[slot]-1),&other_n);
             if(n==other_n && !memcmp(name,other,n))break;
             slot=(slot+1)&(slots-1);
         }
@@ -76,23 +90,38 @@ ps_result ps_completion_locals_update(ps_completion_locals *p,const void *owner,
     }
     r=ps_memory_zero(a,next.count,sizeof *next.entries,(void**)&next.entries);if(r!=PS_OK)goto done;
     for(size_t i=0;i<raw_count;i++)if(chosen[i]){
-        size_t n=0,begin,end;binding_name(next.source,raw[i],&n);type_span(next.source,raw[i],&begin,&end);
-        size_t type=end-begin,prefix=strlen(binding_prefix(raw[i]));
-        size_t need=2*n+2*type+prefix+(type?5:3);
+        ps_lang_editor_binding b=raw_binding(raw,craw,i);size_t n=0,begin,end;binding_name(next.source,b,&n);type_span(next.source,b,&begin,&end);
+        size_t type=end-begin,prefix=strlen(binding_prefix(b)),need;
+        if(language)need=2*n+2*type+prefix+(type?5:3);
+        else{
+            size_t tn=ps_c_binding_type(next.source,bytes,craw[i],NULL,0),sn=ps_c_binding_signature(next.source,bytes,craw[i],NULL,0);
+            if(!tn || !sn){r=PS_INVALID;goto done;}need=n+1+tn+sn;
+        }
         if(next.string_bytes>SIZE_MAX-need){r=PS_LIMIT;goto done;}next.string_bytes+=need;
     }
     r=ps_memory_allocate(a,next.string_bytes,(void**)&next.strings);if(r!=PS_OK)goto done;
     char *at=next.strings;size_t used=0,base=ps_completion_count()+1;
     for(size_t i=0;i<raw_count;i++)if(chosen[i]){
         ps_completion_local *entry=&next.entries[used++];size_t n=0,begin,end;
-        const char *name=binding_name(next.source,raw[i],&n);type_span(next.source,raw[i],&begin,&end);
-        const char *prefix=binding_prefix(raw[i]);size_t pn=strlen(prefix),tn=end-begin;
-        char *owned_name=copy_string(&at,name,n),*type=copy_string(&at,next.source+begin,tn),*signature=at;
-        memcpy(at,prefix,pn);at+=pn;memcpy(at,name,n);at+=n;
-        if(tn){memcpy(at,": ",2);at+=2;memcpy(at,type,tn);at+=tn;}*at++=0;
-        if(raw[i].name.offset>SIZE_MAX-base){r=PS_LIMIT;goto done;}
-        *entry=(ps_completion_local){.symbol={owned_name,"Lokal",signature,PS_COMPLETION_VARIABLE,true,false},
-            .declaration=raw[i],.id=base+raw[i].name.offset,.type=type};
+        ps_lang_editor_binding b=raw_binding(raw,craw,i);const char *name=binding_name(next.source,b,&n);type_span(next.source,b,&begin,&end);
+        char *owned_name=copy_string(&at,name,n),*type,*signature;size_t signature_name=0;
+        if(language){
+            const char *prefix=binding_prefix(b);size_t pn=strlen(prefix),tn=end-begin;
+            type=copy_string(&at,next.source+begin,tn);signature=at;
+            signature_name=pn;
+            memcpy(at,prefix,pn);at+=pn;memcpy(at,name,n);at+=n;
+            if(tn){memcpy(at,": ",2);at+=2;memcpy(at,type,tn);at+=tn;}*at++=0;
+        }else{
+            size_t tn=ps_c_binding_type(next.source,bytes,craw[i],NULL,0),sn=ps_c_binding_signature(next.source,bytes,craw[i],NULL,0);
+            type=at;ps_c_binding_type(next.source,bytes,craw[i],at,tn);at+=tn;
+            signature=at;ps_c_binding_signature(next.source,bytes,craw[i],at,sn);at+=sn;
+            size_t prefix_start=craw[i].declarator_start;
+            while(prefix_start<craw[i].name_start && whitespace((unsigned char)next.source[prefix_start]))prefix_start++;
+            signature_name=end-begin+1+craw[i].name_start-prefix_start;
+        }
+        if(b.name.offset>SIZE_MAX-base){r=PS_LIMIT;goto done;}
+        *entry=(ps_completion_local){.symbol={owned_name,"Lokal",signature,PS_COMPLETION_VARIABLE,language,false},
+            .declaration=b,.c_declaration=craw?craw[i]:(ps_c_binding){0},.id=base+b.name.offset,.signature_name_offset=signature_name,.type=type};
     }
     if((size_t)(at-next.strings)!=next.string_bytes){r=PS_INVALID;goto done;}
     qsort(next.entries,next.count,sizeof *next.entries,order);
@@ -107,6 +136,7 @@ publish:
     ps_completion_locals_destroy(p);*p=next;memset(&next,0,sizeof next);
 done:
     ps_memory_free(a,nodes,capacity*sizeof *nodes);ps_memory_free(a,raw,capacity*sizeof *raw);
+    ps_memory_free(a,craw,capacity*sizeof *craw);
     ps_memory_free(a,chosen,raw_count*sizeof *chosen);ps_memory_free(a,seen,slots*sizeof *seen);
     ps_completion_locals_destroy(&next);return r;
 }
@@ -126,7 +156,7 @@ const ps_completion_local *ps_completion_locals_at(const ps_completion_locals *p
     return low<p->count && p->entries[low].id==id?&p->entries[low]:NULL;
 }
 size_t ps_completion_locals_matches(const ps_completion_locals *p,const ps_completion_query *q,size_t *ids,size_t capacity){
-    if(!p || !q || !q->language || q->member || (capacity && !ids))return 0;
+    if(!p || !q || q->language!=p->language || q->member || (capacity && !ids))return 0;
     size_t count=0,prefix=strlen(q->prefix);
     for(size_t i=0;i<p->count;i++)if(!strncmp(p->entries[i].symbol.name,q->prefix,prefix)){
         if(count<capacity)ids[count]=p->entries[i].id;
@@ -134,7 +164,8 @@ size_t ps_completion_locals_matches(const ps_completion_locals *p,const ps_compl
     }return count;
 }
 bool ps_completion_locals_argument_hint(const char *source,size_t bytes,size_t cursor,bool language){
-    if(!language || (!source && bytes) || cursor>bytes)return false;
+    if((!source && bytes) || cursor>bytes || bytes>PS_SOURCE_MAX_BYTES)return false;
+    if(!language){int last=0;return ps_c_lexical_cursor(source,bytes,cursor,&last) && (last=='(' || last==',');}
     ps_lang_lexer lexer;ps_lang_lexer_init(&lexer,source,cursor);ps_lang_token last={0};
     for(;;){ps_lang_token t=ps_lang_lexer_next(&lexer);if(t.kind==PS_LANG_ERROR)return false;if(t.kind==PS_LANG_EOF)break;if(t.kind!=PS_LANG_NEWLINE)last=t;}
     return last.kind==PS_LANG_LPAREN || last.kind==PS_LANG_COMMA || last.kind==PS_LANG_COLON;

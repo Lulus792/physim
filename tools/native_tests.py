@@ -48,6 +48,7 @@ def catalog():
     cases = []
     cases.append(Case("c_syntax",("tests/test_c_syntax.c","app/c_syntax.c","app/c_grammar.c"),libraries=("platform","core"),leak_check=True))
     cases.append(Case("c_bindings",("tests/test_c_bindings.c","app/c_bindings.c","app/c_syntax.c","app/c_grammar.c"),libraries=("platform","core"),leak_check=True))
+    cases.append(Case("c_call_context",("tests/test_c_call_context.c","app/c_bindings.c","app/c_syntax.c","app/c_grammar.c"),libraries=("platform","core"),leak_check=True))
     cases.append(Case("dialog_request",("tests/test_dialog_request.c","app/dialog_request.c","app/autosave.c"),app=True,leak_check=True))
     cases.append(Case("protocol_store",("tests/test_protocol.c","app/protocol_store.c"),libraries=()))
     cases.append(Case("protocol_text",("tests/test_protocol_text.c","app/protocol_text.c"),libraries=()))
@@ -90,7 +91,8 @@ def catalog():
     cases.append(Case("compiler_diagnostic", ("tests/test_compiler_diagnostic.c", "app/compiler_diagnostic.c")))
     cases.append(Case("completion", ("tests/test_completion.c", "app/completion.c"),libraries=("language","core")))
     cases.append(Case("completion_help", ("tests/test_completion_help.c", "app/completion_help.c", "app/completion.c", "app/documentation.c"),libraries=("language","core")))
-    cases.append(Case("completion_locals", ("tests/test_completion_locals.c", "app/completion_locals.c", "app/completion.c"),libraries=("language","core")))
+    cases.append(Case("completion_locals", ("tests/test_completion_locals.c", "app/completion_locals.c", "app/completion.c","app/c_bindings.c","app/c_syntax.c","app/c_grammar.c"),libraries=("language","core"),leak_check=True))
+    cases.append(Case("completion_c_locals", ("tests/test_completion_c_locals.c", "app/completion_locals.c", "app/completion.c","app/c_bindings.c","app/c_syntax.c","app/c_grammar.c"),libraries=("language","core"),leak_check=True))
     cases.append(Case("completion_info", ("tests/test_completion_info.c", "app/completion_info.c")))
     cases.append(Case("syntax", ("tests/test_syntax.c", "app/syntax.c", "app/completion.c"),libraries=("language","core")))
     cases.append(Case("api_reference", ("tests/test_api_reference.c", "app/documentation.c", "app/completion.c"),libraries=("language","core"), arguments=("{source}",)))

@@ -1,4 +1,5 @@
 #include "c_bindings.h"
+#include "c_lexical.h"
 #include "autosave.h"
 #include <stdlib.h>
 #include <string.h>
@@ -188,6 +189,63 @@ static ps_result recovered_declaration(collector *c,size_t error){
 static int order(const void *a,const void *b){
     size_t x=((const ps_c_binding*)a)->name_start,y=((const ps_c_binding*)b)->name_start;return (x>y)-(x<y);
 }
+static bool ancestor(const collector *c,size_t node,const char *type){
+    for(size_t i=node;i<c->count;i=c->nodes[i].parent)if(is(c,i,type))return true;
+    return false;
+}
+static bool call_opener(const collector *c,size_t open){
+    size_t p=c->nodes[open].parent;
+    if(is(c,p,"argument_list") && is(c,c->nodes[p].parent,"call_expression"))return true;
+    if(is(c,p,"parameter_list") || ancestor(c,open,"type_descriptor"))return false;
+    size_t before=c->index[open].previous;
+    if(is(c,before,")") || is(c,before,"]")){
+        return ancestor(c,before,"parenthesized_expression") || ancestor(c,before,"subscript_expression") ||
+            (is(c,c->nodes[before].parent,"argument_list") && is(c,c->nodes[c->nodes[before].parent].parent,"call_expression"));
+    }
+    if(!is(c,before,"identifier") && !is(c,before,"field_identifier"))return false;
+    if(field(c,before,"declarator"))return false;
+    /* Recovery may leave `void name(` without a parameter_list. Distinguish a
+     * written declaration prefix from a call in an initializer/expression using
+     * original grammar specifiers in this exact delimiter group. */
+    size_t group=c->index[open].group;bool comma=false;
+    for(size_t i=c->index[before].previous;i<c->count;i=c->index[i].previous){
+        if(i==group || is(c,i,"{") || is(c,i,"}") || is(c,i,";"))break;
+        if(c->index[i].group!=group)continue;
+        if(is(c,i,",")){comma=true;continue;}
+        if((is(c,i,"=") && !comma) || is(c,i,"return") || is(c,i,"?") || is(c,i,":"))break;
+        for(size_t n=i;n<c->count;n=c->nodes[n].parent){
+            if(specifier(c,n))return false;
+            if(c->index[n].group!=group)break;
+        }
+    }
+    return true;
+}
+static ps_c_call call_context(const collector *c){
+    ps_c_call call={0};
+    if(!ps_c_lexical_cursor(c->source,c->bytes,c->cursor,NULL))return call;
+    for(size_t i=0;i<c->count;i++){
+        ps_c_node n=c->nodes[i];if(n.start>=c->cursor)break;
+        if(is(c,i,"comment") && c->cursor<=n.end){
+            bool closed=n.end>=n.start+4 && c->source[n.start]=='/' && c->source[n.start+1]=='*' &&
+                c->source[n.end-2]=='*' && c->source[n.end-1]=='/';
+            if(c->cursor<n.end || !closed)return (ps_c_call){0};
+        }
+        if(c->index[i].end!=i+1 || n.missing || is(c,i,"comment"))continue;
+        if(is(c,i,"(") && contains(c,i) && call_opener(c,i))call=(ps_c_call){.open=n.start,.active=true,.at_start=true};
+    }
+    if(!call.active)return call;
+    size_t open=SIZE_MAX;
+    for(size_t i=0;i<c->count;i++)if(c->nodes[i].start==call.open && is(c,i,"(")){open=i;break;}
+    size_t conditional=0;
+    for(size_t i=open+1;i<c->count && c->nodes[i].start<c->cursor;i++){
+        if(c->index[i].end!=i+1 || c->nodes[i].missing || is(c,i,"comment") || c->index[i].group!=open)continue;
+        if(is(c,i,"?"))conditional++;
+        else if(is(c,i,":") && conditional)conditional--;
+        if(is(c,i,",") && !conditional){call.argument++;call.at_start=true;}
+        else call.at_start=false;
+    }
+    return call;
+}
 ps_c_bindings_result ps_c_bindings(const char *source,size_t bytes,size_t cursor,
     ps_c_binding *bindings,size_t capacity,ps_allocator allocator){
     ps_c_bindings_result result={.status=PS_INVALID};
@@ -214,12 +272,12 @@ ps_c_bindings_result ps_c_bindings(const char *source,size_t bytes,size_t cursor
         if(result.status!=PS_OK)goto done;
     }
     if(c.used>1)qsort(bindings,c.used,sizeof *bindings,order);
-    result.count=c.used;
+    result.count=c.used;result.call=call_context(&c);
 done:
     ps_memory_free(allocator,c.index,nodes_capacity*sizeof *c.index);
     ps_memory_free(allocator,c.nodes,nodes_capacity*sizeof *c.nodes);return result;
 }
-size_t ps_c_binding_type(const char *source,size_t bytes,ps_c_binding b,char *out,size_t capacity){
+static size_t binding_text(const char *source,size_t bytes,ps_c_binding b,char *out,size_t capacity,bool name){
     if(bytes>PS_SOURCE_MAX_BYTES || (!source && bytes) || (!out && capacity) || b.type_start>b.type_end || b.type_end>b.declarator_start ||
        b.declarator_start>b.name_start || b.name_start>=b.name_end || b.name_end>b.declarator_end || b.declarator_end>bytes)return 0;
     size_t base=b.type_start,end=b.type_end,prefix=b.declarator_start,suffix=b.declarator_end;
@@ -227,13 +285,16 @@ size_t ps_c_binding_type(const char *source,size_t bytes,ps_c_binding b,char *ou
     while(end>base && space((unsigned char)source[end-1]))end--;
     while(prefix<b.name_start && space((unsigned char)source[prefix]))prefix++;
     while(suffix>b.name_end && space((unsigned char)source[suffix-1]))suffix--;
-    size_t extra=b.name_start-prefix+suffix-b.name_end,needed=end-base+(extra?1:0)+extra+1,at=0;
+    size_t extra=b.name_start-prefix+suffix-b.name_end+(name?b.name_end-b.name_start:0),needed=end-base+(extra?1:0)+extra+1,at=0;
 #define PUT(ch) do{if(at+1<capacity)out[at]=(ch);at++;}while(0)
     for(size_t i=base;i<end;i++)PUT(source[i]);
     if(extra)PUT(' ');
     for(size_t i=prefix;i<b.name_start;i++)PUT(source[i]);
+    if(name)for(size_t i=b.name_start;i<b.name_end;i++)PUT(source[i]);
     for(size_t i=b.name_end;i<suffix;i++)PUT(source[i]);
     if(capacity)out[at<capacity?at:capacity-1]=0;
 #undef PUT
     return needed;
 }
+size_t ps_c_binding_type(const char *source,size_t bytes,ps_c_binding b,char *out,size_t capacity){return binding_text(source,bytes,b,out,capacity,false);}
+size_t ps_c_binding_signature(const char *source,size_t bytes,ps_c_binding b,char *out,size_t capacity){return binding_text(source,bytes,b,out,capacity,true);}
