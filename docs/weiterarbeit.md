@@ -7,57 +7,45 @@ vollständige Umsetzung/Abnahme; keine volle Punktzahl oder gesamte grüne CI be
 
 ## Aktueller Anschluss
 
-Neue [C-Syntaxgrundlage](verification/c-syntax-foundation-2026-11-05.md): echte
-Tree-sitter-C-Grammatik mit privater begrenzter Allokationsdomäne. Windows Release
-und Linux Debug ASan/UBSan je **Unit 1/1**, zusätzlich strenger C17-Build ohne
-Warnungen; 94/94 Allokationsfehler, Parallelaufrufe und 1.024 fehlerhafte Eingaben
-geprüft. **Noch nicht in GUI/Core verknüpft; C-Scopes und C-Vorschlagsliste offen.**
-Upstream-Dateien/Lizenzen unverändert, [ADR 026](decisions/026-c-editor-grammar.md).
-Quellcommit **`a25683ef`**, beide Repositories gepusht, **1.233** eindeutige
-Eingaben gegen tatsächliche Git-Blobs gelesen (Vendor ohne Normalisierung).
-[Commitabschluss](verification/c-syntax-foundation-commit-2026-11-05.json).
-Drei ersetzte Testprogramme / **17.129.816 Bytes** entfernt; Ergebnisse erhalten.
+Neue [C-Scope-Sammlung](verification/c-bindings-2026-11-05.md) auf der echten
+Grammatik: Objektdeklaratoren und Parameter, geschriebene Typformen, aktive
+Bereiche einschließlich ERROR-Erholung, Schleifen, Arrays/Funktionszeiger und
+vollständige vorherige Komma-Deklaratoren. Windows Release/Linux Debug ASan/UBSan
+final je **Unit 1/1**; 35 Codefälle, 182 Cursor-/Dokumentpaare, 65/65
+Speicherfehler und 1.024 fehlerhafte Eingaben. Strenger direkter C17-Build bestanden;
+Schleifenkopf-/Zeiger-Rückgabe-Regressionen und Bereichs-Gegenprobe tatsächlich
+abgelehnt, korrigierter Stand bestanden. **Noch nicht in Completion-Modell/GUI
+verknüpft.** Keine C-Aufruf-/Parameterhilfe oder neue Mac-Abnahme daraus ableiten.
+[ADR 026](decisions/026-c-editor-grammar.md). Git-Abgleich/Commitabschluss folgt.
 
-Die Physim-Vervollständigung ließ `Ve` innerhalb eines offenen mehrzeiligen Strings
-mit innerem Anführungszeichen zu. Reguläre Regression am alten Code Exit 1;
-nach Anbindung an den echten Sprachlexer elf Literal-Kontexte im strengen
-C17-ASan/UBSan-Test bestanden. Windows/Linux danach jeweils **Unit 5/5 + GUI 6/6**,
-einschließlich automatischer/manueller Unterdrückung und Wiederaufnahme außerhalb.
-Keine Optik-/Friständerung, kein neuer Dienst; C-Verhalten erhalten. Kein nativer
-Vorherlauf behauptet. [Umfang/Kommandos/Grenzen](verification/completion-literals-2026-11-05.md).
-Quellcommit **`7f2cb2fc`**, alle **1.136** Eingaben gegen tatsächliche Git-Blobs
-gelesen, nur CRLF/LF normalisiert. [Commitabschluss](verification/completion-literals-commit-2026-11-05.json).
+Die [Syntaxgrundlage](verification/c-syntax-foundation-2026-11-05.md) ist unter
+`a25683ef`/`9827831b` geschlossen, beide Repositories; 91 unveränderte Upstream-
+Dateien, private Allokationsdomäne, Herkunft/Lizenzen/Symbole geprüft. Nicht erneut
+prüfen ohne relevante Änderung. Drei ersetzte Programme/17.129.816 Bytes entfernt.
+Die [Physim-Stringkorrektur](verification/completion-literals-2026-11-05.md)
+`7f2cb2fc` und [native Physim-Locals](verification/completion-locals-2026-11-05.md)
+sind separat geschlossen. Gehosteter String-Nachlauf `41947340908` zu `5c3b6da4`:
+ARM/Intel je [8/8, Originalarchive/Digests gelesen](verification/completion-literals-macos-2026-11-05.json).
+Alle früheren Mac-Läufe sind beendet; keinen davon weiter pollen. Nutzer-Mac aus.
 
-Gehosteter Nachlauf der Stringkorrektur **`41947340908`** zu `5c3b6da4` beendet:
-ARM **`126982703834`** / Intel **`126982704072`** je **8/8**. Originalarchive,
-Digests und alle Einträge gelesen; [Mac-Abschluss](verification/completion-literals-macos-2026-11-05.json).
-Enthält die neue C-Grammatik nicht. Nutzer-Mac weiterhin aus und unberührt.
-
-Die vorherige [native Locals-Integration](verification/completion-locals-2026-11-05.md)
-ist unter Windows/Linux geprüft. Gehosteter Nachlauf **`41945223855`** zu `b64cc8ca`
-nach Undo-Testkorrektur `e27fc144`: ARM **`126975654119`** / Intel **`126975654382`**
-je **8/8**, Originalarchive/Digests/alle Einträge gelesen. [Mac-Abschluss](verification/completion-locals-macos-after-2026-11-05.json).
-Vorheriger [7/8-Befund](verification/completion-locals-macos-before-2026-11-05.json)
-bleibt erhalten. Diese Mac-Läufe enthalten die anschließende Stringkorrektur nicht.
-In diesen Schritten 47 ersetzte BMPs / **150.256.086 Bytes** entfernt; Originalfehler,
-Archive und benötigte Referenzen erhalten. Einzelbelege in den verlinkten Berichten.
-
-Eingefrorener lokaler Anschluss: `c-syntax-first`, 275 eigene Eingaben /
-1.214 Compiler-/Testdateien, 251 Windows-/137 Linux-Laufzeitdateien; alle Quell-/
-Archivbytes gelesen, lokale Handles beendet. Detaillierte aktuelle Notiz:
-`build/validation/c-scopes-2026-11-05/STATE.md`. Vorbereitung/Frieren über
-die Helfer unter `build/validation/explorer-inline-2026-10-29/`; Argumente lesen.
+Eingefrorener lokaler Anschluss: `c-bindings-final`, 278 eigene Eingaben /
+1.217 Compiler-/Testdateien, 254 Windows-/139 Linux-Laufzeitdateien; alle Quell-/
+Archivbytes gelesen, lokale Handles beendet. Detaillierte Notiz:
+`build/validation/c-bindings-2026-11-05/STATE.md`. Vorbereitung/Frieren über Helfer
+unter `build/validation/explorer-inline-2026-10-29/`; Argumente lesen.
 Shared Baum: `build/validation/protocol-wrap-2026-10-26/3-isolated/` mit `src`,
 `windows-build`, `linux-build`. Niemals bei laufendem lokalem Build/Test mutieren.
 
 ## Nächste Arbeit und verbleibender Umfang
 
-1. C-Syntaxgrundlage abgeschlossen. Keine erneute Prüfung unveränderter Syntax-/
-   GUI-Fälle; keine C-Vervollständigung daraus ableiten. Konkreter Anschluss: Punkt 3.
+1. C-Scope-Sammlung mit Git-Abgleich abschließen. Keine erneute Prüfung
+   unveränderter Syntax-/GUI-Fälle; keine C-Vervollständigung daraus ableiten.
 2. Alle obigen Mac-Läufe sind beendet; nicht neu starten oder pollen.
-3. Echte C-Scopes anhand der Grammatik einschließlich ERROR-Erholung ergänzen:
-   offener Aufruf kann die normale Funktions-/Blockhierarchie verlieren (ADR 026).
-   Danach native C-Integration und separate Aufruf-/Parameterhilfe einschließlich Benutzerfunktionen
+3. C-Scope-Daten ins Completion-Modell und die GUI integrieren: Besitzer/Revision,
+   Cache und Speicherfehler, vollständige lokale Treffer, geschriebene Typ-/Quellkarte,
+   tatsächlicher C-Aufrufkontext/leere Argumente und Einfügen/Undo. Drei Lizenzen
+   vor GUI-Linkage ins portable Paket aufnehmen; Core unabhängig halten. Danach
+   separate Aufruf-/Parameterhilfe einschließlich Benutzerfunktionen
    ergänzen; weitere Codekontexte und semantische Rollen vervollständigen. Keine
    Typinferenz/Includes/Werte vortäuschen, kein Browser-Lexer/Dienst/Provider-Worker.
 4. Übrige freigegebene UI: A2 Szene/Mehrfachauswahl, Kontextmenüs A, B2, weitere

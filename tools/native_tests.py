@@ -47,6 +47,7 @@ class Case:
 def catalog():
     cases = []
     cases.append(Case("c_syntax",("tests/test_c_syntax.c","app/c_syntax.c","app/c_grammar.c"),libraries=("platform","core"),leak_check=True))
+    cases.append(Case("c_bindings",("tests/test_c_bindings.c","app/c_bindings.c","app/c_syntax.c","app/c_grammar.c"),libraries=("platform","core"),leak_check=True))
     cases.append(Case("dialog_request",("tests/test_dialog_request.c","app/dialog_request.c","app/autosave.c"),app=True,leak_check=True))
     cases.append(Case("protocol_store",("tests/test_protocol.c","app/protocol_store.c"),libraries=()))
     cases.append(Case("protocol_text",("tests/test_protocol_text.c","app/protocol_text.c"),libraries=()))

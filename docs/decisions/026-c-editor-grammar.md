@@ -1,7 +1,8 @@
 # ADR 026 — native C syntax foundation for completion
 
-Date: 2026-11-05. Implementation foundation; scope visitor and GUI integration
-remain open. Selected completion design D / ADR 023 is unchanged.
+Date: 2026-11-05. Syntax foundation and subsequent lexical scope collector are
+implemented/tested; completion-model and GUI integration remain open.
+Selected completion design D / ADR 023 is unchanged.
 
 ## Requirement and choice
 
@@ -40,14 +41,16 @@ Actual sanitizer probe: `void step(double dt){ double velocity=1; f(` gives an
 ERROR subtree containing the function declarator, parameter and declaration, not
 a normal function/compound-statement hierarchy. The complete counterpart parses
 normally. A visitor that only accepts `function_definition` would silently lose
-parameters/locals during typing. The future scope collector must handle this
-using actual grammar/token/recovery data and prove closed/foreign/future/unfinished
-initializer exclusions. No synthetic variable or hand-written browser scope model.
-The syntax foundation itself does not rewrite source or claim scopes are implemented.
+parameters/locals during typing. `app/c_bindings.c` now combines actual grammar-leaf
+delimiter intervals and declarator edges to retain these scopes and prove
+closed/foreign/future/unfinished-initializer exclusions. Complete recovered comma
+declarators retain original specifier spans. No synthetic variable, source rewriting
+or hand-written browser scope model. [Scope implementation and actual proof](../verification/c-bindings-2026-11-05.md).
 
-Written C declarator types, for-loop lifetime, shadowing, owner/revision binding,
-empty argument triggers, insertion/Undo and the separate signature/parameter help
-still need integration and native acceptance. Do not publish preprocessor/include
+Written C declarator forms, for-loop lifetime and outer/inner declaration order
+are provided by the collector. Owner/revision binding, completion-model merge,
+actual call/empty-argument context, insertion/Undo and separate signature/parameter
+help still need integration and native acceptance. Do not publish preprocessor/include
 resolution, inferred types or runtime values from this syntax tree.
 
 ## Verification and provenance

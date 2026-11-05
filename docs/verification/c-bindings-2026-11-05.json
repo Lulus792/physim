@@ -1,0 +1,450 @@
+{
+  "date": "2026-11-05",
+  "base_commit": "9827831b57fcb4a89bff0de1f5a3e3663ccd363b",
+  "scope": "C object/definition-parameter lexical bindings over actual original-source grammar and error recovery; not linked into shipping APP/core or completion model",
+  "private_mac": "OFF; no access or probes",
+  "source_hashes": {
+    "app/c_bindings.c": "b8fd47aa9142016ce70a4a300c933212dcd14f95d6fa00773b8d41c1a294e66b",
+    "app/c_bindings.h": "35927a21dd5de16cb78798ef1cd2492c391997bfd1fba604dddc86389c6cf66e",
+    "tests/test_c_bindings.c": "221251cf15dde0cc13b81eace65cd52f4d2a44369cc574c017eb16d554def5bf",
+    "tools/native_tests.py": "805054a45ebaffa00ed7e9bfb83192722b0607e10810621b97e7100488688ea4"
+  },
+  "native": {
+    "windows": {
+      "first": {
+        "build": {
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+            "--",
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+            "--build-dir",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+            "--config",
+            "Release",
+            "--jobs",
+            "4",
+            "--no-app",
+            "--test",
+            "--test-filter",
+            "c_bindings"
+          ],
+          "exit_code": 0,
+          "no_app": true
+        },
+        "results_path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-vjokuzca/results.json",
+        "results_sha256": "84d60ea8a8fcb52f4f6e5fe768c43dfab61799b587dcd107a50247ad1c67bf34",
+        "cases": [
+          {
+            "command": [
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim-test-c_bindings.exe"
+            ],
+            "status": "passed",
+            "exit_code": 0,
+            "stdout": "C bindings scopes: 32 original-source vectors passed\nC bindings allocation failures: 65/65 cleanup and retry passed\nC bindings prefixes: 182 cursor/full-document pairs checked against explicit scope intervals\nC bindings malformed input: 1024 deterministic byte cases bounded\nC bindings: actual declarators, recovery scopes, written types, bounds and allocation failure passed\n",
+            "stderr": "",
+            "seconds": 0.343,
+            "name": "c_bindings"
+          }
+        ]
+      },
+      "final": {
+        "build": {
+          "command": [
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+            "--",
+            "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+            "--build-dir",
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+            "--config",
+            "Release",
+            "--jobs",
+            "4",
+            "--no-app",
+            "--test",
+            "--test-filter",
+            "c_bindings"
+          ],
+          "exit_code": 0,
+          "no_app": true
+        },
+        "results_path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-0a_i9bxg/results.json",
+        "results_sha256": "116bc476b3caf485852507a16dd46fc81f1dbf75b7a344005aaa5f52d3b44749",
+        "cases": [
+          {
+            "command": [
+              "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim-test-c_bindings.exe"
+            ],
+            "status": "passed",
+            "exit_code": 0,
+            "stdout": "C bindings scopes: 35 original-source vectors passed\nC bindings allocation failures: 65/65 cleanup and retry passed\nC bindings prefixes: 182 cursor/full-document pairs checked against explicit scope intervals\nC bindings malformed input: 1024 deterministic byte cases bounded\nC bindings: actual declarators, recovery scopes, written types, bounds and allocation failure passed\n",
+            "stderr": "",
+            "seconds": 0.344,
+            "name": "c_bindings"
+          }
+        ]
+      }
+    },
+    "linux": {
+      "first": {
+        "build": {
+          "command": [
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+            "--",
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+            "--build-dir",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+            "--config",
+            "Debug",
+            "--jobs",
+            "4",
+            "--no-app",
+            "--test",
+            "--test-filter",
+            "c_bindings",
+            "--sanitizers"
+          ],
+          "exit_code": 0,
+          "no_app": true
+        },
+        "results_path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-tf8s4ihe/results.json",
+        "results_sha256": "b779afd6bd7c438df97ad53345494c468d7e7de331ab435fa062611db184867d",
+        "cases": [
+          {
+            "command": [
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-c_bindings"
+            ],
+            "status": "passed",
+            "exit_code": 0,
+            "stdout": "C bindings scopes: 32 original-source vectors passed\nC bindings allocation failures: 65/65 cleanup and retry passed\nC bindings prefixes: 182 cursor/full-document pairs checked against explicit scope intervals\nC bindings malformed input: 1024 deterministic byte cases bounded\nC bindings: actual declarators, recovery scopes, written types, bounds and allocation failure passed\n",
+            "stderr": "",
+            "seconds": 3.516,
+            "name": "c_bindings"
+          }
+        ]
+      },
+      "final": {
+        "build": {
+          "command": [
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+            "--",
+            "/usr/bin/python3",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+            "--build-dir",
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+            "--config",
+            "Debug",
+            "--jobs",
+            "4",
+            "--no-app",
+            "--test",
+            "--test-filter",
+            "c_bindings",
+            "--sanitizers"
+          ],
+          "exit_code": 0,
+          "no_app": true
+        },
+        "results_path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-tdymmf7x/results.json",
+        "results_sha256": "09512e25a79e0c68374b33b769094b6ead0036677d5ac90b52ca02e133a14c78",
+        "cases": [
+          {
+            "command": [
+              "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-c_bindings"
+            ],
+            "status": "passed",
+            "exit_code": 0,
+            "stdout": "C bindings scopes: 35 original-source vectors passed\nC bindings allocation failures: 65/65 cleanup and retry passed\nC bindings prefixes: 182 cursor/full-document pairs checked against explicit scope intervals\nC bindings malformed input: 1024 deterministic byte cases bounded\nC bindings: actual declarators, recovery scopes, written types, bounds and allocation failure passed\n",
+            "stderr": "",
+            "seconds": 3.833,
+            "name": "c_bindings"
+          }
+        ]
+      }
+    }
+  },
+  "direct_c17_asan_ubsan": {
+    "command": [
+      "wsl",
+      "-d",
+      "Alpine-Dev",
+      "--exec",
+      "env",
+      "TMPDIR=/mnt/d/Physim/build/validation/c-bindings-2026-11-05",
+      "gcc",
+      "-std=c17",
+      "-fvisibility=hidden",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-g",
+      "-fsanitize=address,undefined",
+      "-pthread",
+      "-I/mnt/d/Physim/include",
+      "-I/mnt/d/Physim/src",
+      "-I/mnt/d/Physim/app",
+      "-I/mnt/d/Physim/tests",
+      "-I/mnt/d/Physim/third_party/tree-sitter-0.27.1/lib/include",
+      "-I/mnt/d/Physim/third_party/tree-sitter-0.27.1/lib/src",
+      "/mnt/d/Physim/tests/test_c_bindings.c",
+      "/mnt/d/Physim/app/c_bindings.c",
+      "/mnt/d/Physim/app/c_syntax.c",
+      "/mnt/d/Physim/app/c_grammar.c",
+      "/mnt/d/Physim/src/memory.c",
+      "-o",
+      "/mnt/d/Physim/build/validation/c-bindings-2026-11-05/declarators"
+    ],
+    "compile_exit": 0,
+    "compile_stderr": "",
+    "source_hashes": {
+      "tests/test_c_bindings.c": "221251cf15dde0cc13b81eace65cd52f4d2a44369cc574c017eb16d554def5bf",
+      "app/c_bindings.c": "b8fd47aa9142016ce70a4a300c933212dcd14f95d6fa00773b8d41c1a294e66b",
+      "app/c_syntax.c": "215fcd47ba050a689c9f8633c7e3a0839b5c98afb2c5362855bb13da51249b63",
+      "app/c_grammar.c": "ac9447c2fd6edd4997b0bf28c037c6a805cee3a788695f5e0f18cbae53e85513",
+      "src/memory.c": "28051ac112e004c566dd05d67ee5c44753d425726655f05573c3dca4bb80b811",
+      "app/c_bindings.h": "35927a21dd5de16cb78798ef1cd2492c391997bfd1fba604dddc86389c6cf66e"
+    },
+    "run_command": [
+      "wsl",
+      "-d",
+      "Alpine-Dev",
+      "--exec",
+      "env",
+      "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+      "/mnt/d/Physim/build/validation/c-bindings-2026-11-05/declarators"
+    ],
+    "exit_code": 0,
+    "stdout": "C bindings scopes: 35 original-source vectors passed\nC bindings allocation failures: 65/65 cleanup and retry passed\nC bindings prefixes: 182 cursor/full-document pairs checked against explicit scope intervals\nC bindings malformed input: 1024 deterministic byte cases bounded\nC bindings: actual declarators, recovery scopes, written types, bounds and allocation failure passed\n",
+    "stderr": ""
+  },
+  "actual_regressions": {
+    "prefixes": {
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "TMPDIR=/mnt/d/Physim/build/validation/c-bindings-2026-11-05",
+        "gcc",
+        "-std=c17",
+        "-fvisibility=hidden",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-pthread",
+        "-I/mnt/d/Physim/include",
+        "-I/mnt/d/Physim/src",
+        "-I/mnt/d/Physim/app",
+        "-I/mnt/d/Physim/tests",
+        "-I/mnt/d/Physim/third_party/tree-sitter-0.27.1/lib/include",
+        "-I/mnt/d/Physim/third_party/tree-sitter-0.27.1/lib/src",
+        "/mnt/d/Physim/tests/test_c_bindings.c",
+        "/mnt/d/Physim/app/c_bindings.c",
+        "/mnt/d/Physim/app/c_syntax.c",
+        "/mnt/d/Physim/app/c_grammar.c",
+        "/mnt/d/Physim/src/memory.c",
+        "-o",
+        "/mnt/d/Physim/build/validation/c-bindings-2026-11-05/prefixes"
+      ],
+      "compile_exit": 0,
+      "compile_stderr": "",
+      "source_hashes": {
+        "tests/test_c_bindings.c": "240de2b1b9c49ec354f0f857700d1e5e008af55a2143c8a31472eca7c1a7c675",
+        "app/c_bindings.c": "0654723ce9b3286cf518451b22d03b9959435885fb4f90d7e5aa0597e1d43c42",
+        "app/c_syntax.c": "215fcd47ba050a689c9f8633c7e3a0839b5c98afb2c5362855bb13da51249b63",
+        "app/c_grammar.c": "ac9447c2fd6edd4997b0bf28c037c6a805cee3a788695f5e0f18cbae53e85513",
+        "src/memory.c": "28051ac112e004c566dd05d67ee5c44753d425726655f05573c3dca4bb80b811",
+        "app/c_bindings.h": "35927a21dd5de16cb78798ef1cd2492c391997bfd1fba604dddc86389c6cf66e"
+      },
+      "run_command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+        "/mnt/d/Physim/build/validation/c-bindings-2026-11-05/prefixes"
+      ],
+      "exit_code": 1,
+      "stdout": "C bindings scopes: 26 original-source vectors passed\nC bindings allocation failures: 65/65 cleanup and retry passed\n",
+      "stderr": "prefix cursor 140 mode 1 name i expected 1 found 0\nC bindings line 127: !vectors() && !failures() && !bounds() && !prefixes() && !malformed()\n"
+    },
+    "pointer-before": {
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "TMPDIR=/mnt/d/Physim/build/validation/c-bindings-2026-11-05",
+        "gcc",
+        "-std=c17",
+        "-fvisibility=hidden",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-pthread",
+        "-I/mnt/d/Physim/include",
+        "-I/mnt/d/Physim/src",
+        "-I/mnt/d/Physim/app",
+        "-I/mnt/d/Physim/tests",
+        "-I/mnt/d/Physim/third_party/tree-sitter-0.27.1/lib/include",
+        "-I/mnt/d/Physim/third_party/tree-sitter-0.27.1/lib/src",
+        "/mnt/d/Physim/tests/test_c_bindings.c",
+        "/mnt/d/Physim/app/c_bindings.c",
+        "/mnt/d/Physim/app/c_syntax.c",
+        "/mnt/d/Physim/app/c_grammar.c",
+        "/mnt/d/Physim/src/memory.c",
+        "-o",
+        "/mnt/d/Physim/build/validation/c-bindings-2026-11-05/pointer-before"
+      ],
+      "compile_exit": 0,
+      "compile_stderr": "",
+      "source_hashes": {
+        "tests/test_c_bindings.c": "19895e7a8092a84c26cead6352618c763421a77fe2c42f6310ce629e069d895d",
+        "app/c_bindings.c": "4c1a0a62619c3bea9d560c1039b52eeb4000d7447ffce67563b769373906184b",
+        "app/c_syntax.c": "215fcd47ba050a689c9f8633c7e3a0839b5c98afb2c5362855bb13da51249b63",
+        "app/c_grammar.c": "ac9447c2fd6edd4997b0bf28c037c6a805cee3a788695f5e0f18cbae53e85513",
+        "src/memory.c": "28051ac112e004c566dd05d67ee5c44753d425726655f05573c3dca4bb80b811",
+        "app/c_bindings.h": "35927a21dd5de16cb78798ef1cd2492c391997bfd1fba604dddc86389c6cf66e"
+      },
+      "run_command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+        "/mnt/d/Physim/build/validation/c-bindings-2026-11-05/pointer-before"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "vector 32: got names 'value' types 'int'; expected 'dt,value' 'int|int'\nC bindings line 135: !vectors() && !failures() && !bounds() && !prefixes() && !malformed()\n"
+    }
+  },
+  "final_scope_leak_counterexample": {
+    "expected_rejection": true,
+    "original_source_unchanged": true,
+    "source_sha256": "b8fd47aa9142016ce70a4a300c933212dcd14f95d6fa00773b8d41c1a294e66b",
+    "test": {
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "TMPDIR=/mnt/d/Physim/build/validation/c-bindings-2026-11-05",
+        "gcc",
+        "-std=c17",
+        "-fvisibility=hidden",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-pthread",
+        "-I/mnt/d/Physim/include",
+        "-I/mnt/d/Physim/src",
+        "-I/mnt/d/Physim/app",
+        "-I/mnt/d/Physim/tests",
+        "-I/mnt/d/Physim/third_party/tree-sitter-0.27.1/lib/include",
+        "-I/mnt/d/Physim/third_party/tree-sitter-0.27.1/lib/src",
+        "/mnt/d/Physim/tests/test_c_bindings.c",
+        "/mnt/d/Physim/build/validation/c-bindings-2026-11-05/scope-mutant-final.c",
+        "/mnt/d/Physim/app/c_syntax.c",
+        "/mnt/d/Physim/app/c_grammar.c",
+        "/mnt/d/Physim/src/memory.c",
+        "-o",
+        "/mnt/d/Physim/build/validation/c-bindings-2026-11-05/scope-mutant-final"
+      ],
+      "compile_exit": 0,
+      "compile_stderr": "",
+      "source_hashes": {
+        "tests/test_c_bindings.c": "221251cf15dde0cc13b81eace65cd52f4d2a44369cc574c017eb16d554def5bf",
+        "app/c_bindings.c": "b8fd47aa9142016ce70a4a300c933212dcd14f95d6fa00773b8d41c1a294e66b",
+        "app/c_syntax.c": "215fcd47ba050a689c9f8633c7e3a0839b5c98afb2c5362855bb13da51249b63",
+        "app/c_grammar.c": "ac9447c2fd6edd4997b0bf28c037c6a805cee3a788695f5e0f18cbae53e85513",
+        "src/memory.c": "28051ac112e004c566dd05d67ee5c44753d425726655f05573c3dca4bb80b811",
+        "app/c_bindings.h": "35927a21dd5de16cb78798ef1cd2492c391997bfd1fba604dddc86389c6cf66e"
+      },
+      "counterexample_source": {
+        "path": "build/validation/c-bindings-2026-11-05/scope-mutant-final.c",
+        "sha256": "b41cf74f3f710bcb4c6634c724ec0ac85c57071e151560576fdaf19bee6dbc19"
+      },
+      "run_command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+        "/mnt/d/Physim/build/validation/c-bindings-2026-11-05/scope-mutant-final"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "vector 2: got names 'global,foreign,hidden,dt,velocity' types 'int|int|int|double|int'; expected 'global,dt,velocity' 'int|double|int'\nC bindings line 136: !vectors() && !failures() && !bounds() && !prefixes() && !malformed()\n"
+    }
+  },
+  "frozen": {
+    "first": {
+      "tag": "c-bindings-first",
+      "owned_inputs": 278,
+      "compiler_test_inputs": 1217,
+      "runtime_files": {
+        "windows": 254,
+        "linux": 139
+      },
+      "source_manifest_sha256": "77d5b54881fccec16234422e269974cc749b7a1f7ca427a52689bd07d859535e",
+      "compiler_overlay_sha256": "62fa72bf8ec1e1f97751411f6b44e3e7a775ec4ce5546ed66cd05a4b8ad23af1",
+      "new_runtime_archive_sha256": {
+        "build/validation/explorer-inline-2026-10-29/c-bindings-first-runtime-windows.zip": "fbf19aa32f77367216ddf4cfef9697d12b8403fa99b0434805fb921cd3fb73a7",
+        "build/validation/explorer-inline-2026-10-29/c-bindings-first-runtime-linux.zip": "abfcc58af71e75e26de8ea0869049648192f86ba157e8c6996b477a0fd186e89"
+      }
+    },
+    "final": {
+      "tag": "c-bindings-final",
+      "owned_inputs": 278,
+      "compiler_test_inputs": 1217,
+      "runtime_files": {
+        "windows": 254,
+        "linux": 139
+      },
+      "source_manifest_sha256": "01e0c2166f871008da11d8392ff965e2caefa43b6d6a5f419eeac1413560d77f",
+      "compiler_overlay_sha256": "5cfbcef5558d2080fd24c0b90c8a6ad82b06744ba564083aa7d20220df72095e",
+      "new_runtime_archive_sha256": {
+        "build/validation/explorer-inline-2026-10-29/c-bindings-final-runtime-windows.zip": "d3a728c4b6bb16b018c38921bea99c071357eff66a3767c7b993907e409901d4",
+        "build/validation/explorer-inline-2026-10-29/c-bindings-final-runtime-linux.zip": "45fc8da91241f0579b8025d3855718288a82049f869827dba6f7d537e23ed301"
+      }
+    }
+  },
+  "implementation": [
+    "Full original source and original byte/line/column identities; no source rewriting",
+    "Actual grammar-leaf delimiter nesting preserves lexical block identity even in flattened ERROR trees",
+    "Declarator-edge traversal distinguishes object/function/pointer/array and nested callback parameters",
+    "Complete comma/semicolon boundaries exclude unfinished initializer and future declarators",
+    "Recovered complete siblings of an unfinished comma declaration retain original specifier spans",
+    "For initializer lifetime, empty pending body, nested unbraced headers and completed statement exclusions",
+    "Typed old-style parameter declarations belong to their actual body, never file scope",
+    "Original written base/declarator text with identifier removed; no implicit pointer/array/function adjustment or inferred type"
+  ],
+  "bounds": "256KiB source, max65536 tree nodes plus bounded same-capacity scratch; parser default32MiB/10000 progress checks. No measured wall-clock performance/deadline claim.",
+  "warnings": "Final incremental Windows and Linux builds only recompiled test_c_bindings.c/c_bindings.c with no warnings; initial full build retained existing upstream runtime/alignment/example warnings recorded in original logs. Strict direct GCC final had zero warnings.",
+  "remaining": [
+    "Completion model merge, owner/revision/type/source binding and cache/fault contracts for C",
+    "Actual C call/empty-argument context, native list/info/insertion/Undo and full results",
+    "Separate user-function signature/parameter help",
+    "GUI APP linkage and portable distribution three-license inclusion; keep core independent",
+    "Actual macOS build/test of new backend, physical input/IME/AT/DPI/full UI acceptance"
+  ]
+}
