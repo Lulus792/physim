@@ -7,6 +7,11 @@ third_party/libunibreak-8.0/** -text
 third_party/libunibreak-8.0/*.gz binary
 third_party/libunibreak-8.0/manifest.json whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 
+# Pinned C editor grammar/runtime and their licenses retain exact upstream bytes.
+third_party/tree-sitter-0.27.1/** -text
+third_party/tree-sitter-c-0.24.2/** -text
+third_party/c-editor-grammar.json text eol=lf
+
 # Formula hashes and compressed coverage must survive every checkout unchanged.
 docs/formulas/*.json text eol=lf
 docs/formulas/*.svg -text

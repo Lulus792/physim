@@ -206,7 +206,8 @@ class Builder:
         self.ar = shutil.which("lib" if self.msvc else "ar", path=env.get("PATH"))
         if not self.ar:
             raise RuntimeError("Static library tool not found (lib.exe / ar).")
-        self.includes = [ROOT / "include", ROOT / "src", ROOT / "app", ROOT / "third_party/zlib-1.3.2"]
+        self.includes = [ROOT / "include", ROOT / "src", ROOT / "app", ROOT / "third_party/zlib-1.3.2",
+                         ROOT / "third_party/tree-sitter-0.27.1/lib/include", ROOT / "third_party/tree-sitter-0.27.1/lib/src"]
         self.sdl_library: Path | None = None
         self.runtime: Path | None = None
         if not args.no_app:
@@ -297,6 +298,8 @@ class Builder:
                        "-fno-fast-math", "-ffp-contract=off"]
             if not language:
                 command += ["-Wall", "-Wextra", "-Wpedantic", "-Wshadow"]
+            if path in (ROOT / "app/c_syntax.c", ROOT / "app/c_grammar.c"):
+                command.append("-fvisibility=hidden")
             command += ["-I" + str(p) for p in self.includes] + ["-D" + d for d in defines]
             if not debug:
                 command.append("-DNDEBUG")
@@ -310,7 +313,14 @@ class Builder:
         headers = self.headers + (self.test_headers if path.is_relative_to(ROOT / "tests") else "")
         if path.is_relative_to(ROOT / "tools"):
             headers += self.tool_headers
-        changed = self.execute(output, command, [path], headers)
+        inputs = [path]
+        # The editor adapters deliberately include unchanged upstream C sources;
+        # their transitive C inputs must invalidate the cache as headers do.
+        if path == ROOT / "app/c_syntax.c":
+            inputs += sorted((ROOT / "third_party/tree-sitter-0.27.1/lib/src").rglob("*.c"))
+        elif path == ROOT / "app/c_grammar.c":
+            inputs += sorted(p for p in (ROOT / "third_party/tree-sitter-c-0.24.2/src").rglob("*") if p.suffix in (".c", ".h"))
+        changed = self.execute(output, command, inputs, headers)
         if changed:
             print(f"Compiled {source}", flush=True)
         return output

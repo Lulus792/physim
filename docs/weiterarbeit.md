@@ -7,6 +7,13 @@ vollständige Umsetzung/Abnahme; keine volle Punktzahl oder gesamte grüne CI be
 
 ## Aktueller Anschluss
 
+Neue [C-Syntaxgrundlage](verification/c-syntax-foundation-2026-11-05.md): echte
+Tree-sitter-C-Grammatik mit privater begrenzter Allokationsdomäne. Windows Release
+und Linux Debug ASan/UBSan je **Unit 1/1**, zusätzlich strenger C17-Build ohne
+Warnungen; 94/94 Allokationsfehler, Parallelaufrufe und 1.024 fehlerhafte Eingaben
+geprüft. **Noch nicht in GUI/Core verknüpft; C-Scopes und C-Vorschlagsliste offen.**
+Upstream-Dateien/Lizenzen unverändert, [ADR 026](decisions/026-c-editor-grammar.md).
+
 Die Physim-Vervollständigung ließ `Ve` innerhalb eines offenen mehrzeiligen Strings
 mit innerem Anführungszeichen zu. Reguläre Regression am alten Code Exit 1;
 nach Anbindung an den echten Sprachlexer elf Literal-Kontexte im strengen
@@ -17,6 +24,11 @@ Vorherlauf behauptet. [Umfang/Kommandos/Grenzen](verification/completion-literal
 Quellcommit **`7f2cb2fc`**, alle **1.136** Eingaben gegen tatsächliche Git-Blobs
 gelesen, nur CRLF/LF normalisiert. [Commitabschluss](verification/completion-literals-commit-2026-11-05.json).
 
+Gehosteter Nachlauf der Stringkorrektur **`41947340908`** zu `5c3b6da4` beendet:
+ARM **`126982703834`** / Intel **`126982704072`** je **8/8**. Originalarchive,
+Digests und alle Einträge gelesen; [Mac-Abschluss](verification/completion-literals-macos-2026-11-05.json).
+Enthält die neue C-Grammatik nicht. Nutzer-Mac weiterhin aus und unberührt.
+
 Die vorherige [native Locals-Integration](verification/completion-locals-2026-11-05.md)
 ist unter Windows/Linux geprüft. Gehosteter Nachlauf **`41945223855`** zu `b64cc8ca`
 nach Undo-Testkorrektur `e27fc144`: ARM **`126975654119`** / Intel **`126975654382`**
@@ -26,21 +38,22 @@ bleibt erhalten. Diese Mac-Läufe enthalten die anschließende Stringkorrektur n
 In diesen Schritten 47 ersetzte BMPs / **150.256.086 Bytes** entfernt; Originalfehler,
 Archive und benötigte Referenzen erhalten. Einzelbelege in den verlinkten Berichten.
 
-Eingefrorener lokaler Anschluss: `completion-literals-first`, 178 eigene Eingaben /
-1.128 Compiler-/Testdateien, 248 Windows-/135 Linux-Laufzeitdateien; alle Quell-/
+Eingefrorener lokaler Anschluss: `c-syntax-first`, 275 eigene Eingaben /
+1.214 Compiler-/Testdateien, 251 Windows-/137 Linux-Laufzeitdateien; alle Quell-/
 Archivbytes gelesen, lokale Handles beendet. Detaillierte aktuelle Notiz:
-`build/validation/completion-literals-2026-11-05/STATE.md`. Vorbereitung/Frieren über
+`build/validation/c-scopes-2026-11-05/STATE.md`. Vorbereitung/Frieren über
 die Helfer unter `build/validation/explorer-inline-2026-10-29/`; Argumente lesen.
 Shared Baum: `build/validation/protocol-wrap-2026-10-26/3-isolated/` mit `src`,
 `windows-build`, `linux-build`. Niemals bei laufendem lokalem Build/Test mutieren.
 
 ## Nächste Arbeit und verbleibender Umfang
 
-1. Nach Push der geprüften Stringkorrektur tatsächlichen neuen gehosteten
-   Editorlauf beobachten und Originalergebnisse lesen; keine Wiederholung unveränderter lokaler Prüfungen.
-2. Die beiden obigen Mac-Läufe sind beendet; nicht neu starten oder pollen.
-   Die neue Stringkorrektur benötigt nach lokalem Abschluss ihren eigenen Nachlauf.
-3. Echte C-Scopes und separate Aufruf-/Parameterhilfe einschließlich Benutzerfunktionen
+1. C-Syntaxgrundlage mit Git-Abgleich abschließen. Keine erneute GUI-Prüfung der
+   unveränderten Vorschlagsliste; keine C-Integration daraus ableiten.
+2. Alle obigen Mac-Läufe sind beendet; nicht neu starten oder pollen.
+3. Echte C-Scopes anhand der Grammatik einschließlich ERROR-Erholung ergänzen:
+   offener Aufruf kann die normale Funktions-/Blockhierarchie verlieren (ADR 026).
+   Danach native C-Integration und separate Aufruf-/Parameterhilfe einschließlich Benutzerfunktionen
    ergänzen; weitere Codekontexte und semantische Rollen vervollständigen. Keine
    Typinferenz/Includes/Werte vortäuschen, kein Browser-Lexer/Dienst/Provider-Worker.
 4. Übrige freigegebene UI: A2 Szene/Mehrfachauswahl, Kontextmenüs A, B2, weitere

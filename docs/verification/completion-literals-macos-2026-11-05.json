@@ -1,0 +1,142 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "7f2cb2fcb4c20abd3bd065e0609cc61b1524f853",
+  "head_sha": "5c3b6da4c83ec56a8d21b7af4d96349d79620bdf",
+  "run": 41947340908,
+  "hosted_only": true,
+  "private_mac": "OFF; no access/probes",
+  "reports": [
+    {
+      "architecture": "arm",
+      "job": 126982703834,
+      "artifact": 13379676769,
+      "zip_path": "build/validation/completion-literals-2026-11-05/mac-arm.zip",
+      "zip_sha256": "76111c49edda4bbfa997d224139644f1d9955086e98bf679fafde773d8b6c9f9",
+      "github_digest_matches": true,
+      "all_original_entries_read": {
+        "Release/test-results/run-5u0cfu9h/results.json": "538bf0409d7e05b3974a97256a1c1de1a2f7533529b0561bb6716bd404aab77d"
+      },
+      "results": [
+        {
+          "path": "Release/test-results/run-5u0cfu9h/results.json",
+          "cases": [
+            {
+              "name": "documents_small",
+              "status": "passed",
+              "seconds": 6.073
+            },
+            {
+              "name": "documents_large",
+              "status": "passed",
+              "seconds": 5.28
+            },
+            {
+              "name": "completion_workflow",
+              "status": "passed",
+              "seconds": 14.42
+            },
+            {
+              "name": "completion_automatic_workflow",
+              "status": "passed",
+              "seconds": 21.512
+            },
+            {
+              "name": "api_reference_workflow",
+              "status": "passed",
+              "seconds": 9.379
+            },
+            {
+              "name": "completion_info_workflow",
+              "status": "passed",
+              "seconds": 34.795
+            },
+            {
+              "name": "completion_automatic_deadline_workflow",
+              "status": "passed",
+              "seconds": 20.719
+            },
+            {
+              "name": "completion_locals_workflow",
+              "status": "passed",
+              "seconds": 7.625
+            }
+          ]
+        }
+      ],
+      "literal_markers": [
+        "AUTO COMPLETION multiline-string-suppressed=1 manual-string-rejected=1 after-close-resumed=1",
+        "AUTO COMPLETION multiline-string-suppressed=1 manual-string-rejected=1 after-close-resumed=1"
+      ],
+      "passed": 8,
+      "total": 8
+    },
+    {
+      "architecture": "intel",
+      "job": 126982704072,
+      "artifact": 13379407856,
+      "zip_path": "build/validation/completion-literals-2026-11-05/mac-intel.zip",
+      "zip_sha256": "a27d994e1f3f988150953181f9ee565376c54faafecd6be21dc7b28455b0ed69",
+      "github_digest_matches": true,
+      "all_original_entries_read": {
+        "Release/test-results/run-93ooylb0/results.json": "d3b64c73c74d91efecbf658758ca73d215d4df9c440b4e3e9acc6c1e7658567b"
+      },
+      "results": [
+        {
+          "path": "Release/test-results/run-93ooylb0/results.json",
+          "cases": [
+            {
+              "name": "documents_small",
+              "status": "passed",
+              "seconds": 10.908
+            },
+            {
+              "name": "documents_large",
+              "status": "passed",
+              "seconds": 9.798
+            },
+            {
+              "name": "completion_workflow",
+              "status": "passed",
+              "seconds": 18.279
+            },
+            {
+              "name": "completion_automatic_workflow",
+              "status": "passed",
+              "seconds": 23.3
+            },
+            {
+              "name": "api_reference_workflow",
+              "status": "passed",
+              "seconds": 11.06
+            },
+            {
+              "name": "completion_info_workflow",
+              "status": "passed",
+              "seconds": 39.061
+            },
+            {
+              "name": "completion_automatic_deadline_workflow",
+              "status": "passed",
+              "seconds": 23.398
+            },
+            {
+              "name": "completion_locals_workflow",
+              "status": "passed",
+              "seconds": 8.755
+            }
+          ]
+        }
+      ],
+      "literal_markers": [
+        "AUTO COMPLETION multiline-string-suppressed=1 manual-string-rejected=1 after-close-resumed=1",
+        "AUTO COMPLETION multiline-string-suppressed=1 manual-string-rejected=1 after-close-resumed=1"
+      ],
+      "passed": 8,
+      "total": 8
+    }
+  ],
+  "includes_uncommitted_c_grammar": false,
+  "limits": [
+    "No new C scopes, parameter help, physical/AT/DPI/monitor/fullscreen or complete UI acceptance"
+  ]
+}

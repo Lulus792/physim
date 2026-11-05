@@ -2,6 +2,31 @@
 
 No file in this directory is linked into the GUI-independent core library.
 
+## C editor grammar foundation
+
+Pinned Tree-sitter runtime **0.27.1**, commit
+`10eb5ac119eec9cb4267a8e035066473983f5f3a`, and C grammar **0.24.2**, commit
+`b780e47fc780ddc8da13afa35a3f4ed5c157823d`. Sources and per-file upstream Git blob/
+SHA-256 identities: `c-editor-grammar.json`. Runtime archive SHA-256:
+`71bbc0a7a98013b519b104e281e6ad98524a438c8c822a095e6f27de05d15562`.
+Official complete grammar archive SHA-256:
+`f3a2cdfbca39c79f60baf2ef62b42084c609782c76485de457ba36ff65d51baf`.
+
+Official releases: <https://github.com/tree-sitter/tree-sitter/releases/tag/v0.27.1>
+and <https://github.com/tree-sitter/tree-sitter-c/releases/tag/v0.24.2>.
+Selected source files are unmodified; checkout attributes preserve their bytes.
+Runtime and grammar use MIT licenses in their respective `LICENSE` files. The
+runtime's embedded ICU headers additionally retain `lib/src/unicode/LICENSE`,
+copyright headers and upstream revision. No ICU shared library is required.
+No CLI, Node/Rust toolchain, generator, runtime download or language service.
+
+The private `app/c_syntax.c` translation unit uses the runtime's existing compile-
+time allocator hooks, not its default process-aborting allocator or global
+allocator mutation. All objects stay inside a bounded per-thread lifetime.
+This is currently a tested syntax foundation: not linked into the shipping GUI
+or core, and not yet a C variable-completion, preprocessor or type-checking feature.
+Before GUI integration, include all three licenses in the portable distribution.
+
 ## SDL3 3.2.30
 
 Official source: <https://github.com/libsdl-org/SDL/tree/release-3.2.30>

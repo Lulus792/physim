@@ -1,0 +1,236 @@
+{
+  "date": "2026-11-05",
+  "base_commit": "5c3b6da4c83ec56a8d21b7af4d96349d79620bdf",
+  "phase": "c-syntax-first",
+  "scope": "Isolated actual C grammar foundation only; not linked into GUI/core, no C scope collector or completion integration yet",
+  "user_mac": "OFF; not accessed or probed",
+  "platforms": {
+    "windows": {
+      "build": {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--no-app",
+          "--test",
+          "--test-filter",
+          "c_syntax"
+        ],
+        "exit_code": 0,
+        "no_app": true
+      },
+      "result_path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-xsmeb1mw/results.json",
+      "result_sha256": "1b87bf7429fa2b0a8c368e424166790f2521577ecd0d04ef330be4fddef52e2e",
+      "cases": [
+        {
+          "command": [
+            "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim-test-c_syntax.exe"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "C syntax allocation failures: 94/94 rejected with exact cleanup and retry\nC syntax malformed input: 1024 deterministic byte cases bounded\nC syntax: actual grammar, source spans, incomplete error tree, budgets, cancellation, every allocation failure and parallel domains passed\n",
+          "stderr": "",
+          "seconds": 0.219,
+          "name": "c_syntax"
+        }
+      ]
+    },
+    "linux": {
+      "build": {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+          "--build-dir",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+          "--config",
+          "Debug",
+          "--jobs",
+          "4",
+          "--no-app",
+          "--test",
+          "--test-filter",
+          "c_syntax",
+          "--sanitizers"
+        ],
+        "exit_code": 0,
+        "no_app": true
+      },
+      "result_path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-rwgb14le/results.json",
+      "result_sha256": "7e6c1215cb20ce8301d8304f443d3d79c7fc19f170852a94d1b49441f6bd2440",
+      "cases": [
+        {
+          "command": [
+            "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-c_syntax"
+          ],
+          "status": "passed",
+          "exit_code": 0,
+          "stdout": "C syntax allocation failures: 94/94 rejected with exact cleanup and retry\nC syntax malformed input: 1024 deterministic byte cases bounded\nC syntax: actual grammar, source spans, incomplete error tree, budgets, cancellation, every allocation failure and parallel domains passed\n",
+          "stderr": "",
+          "seconds": 2.158,
+          "name": "c_syntax"
+        }
+      ]
+    }
+  },
+  "direct_strict_c17_asan_ubsan": {
+    "command": [
+      "wsl",
+      "-d",
+      "Alpine-Dev",
+      "--exec",
+      "env",
+      "TMPDIR=/mnt/d/Physim/build/validation/c-scopes-2026-11-05/tmp",
+      "gcc",
+      "-std=c17",
+      "-fvisibility=hidden",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-g",
+      "-fsanitize=address,undefined",
+      "-pthread",
+      "-I/mnt/d/Physim/src",
+      "-I/mnt/d/Physim/include",
+      "-I/mnt/d/Physim/app",
+      "-I/mnt/d/Physim/third_party/tree-sitter-0.27.1/lib/include",
+      "-I/mnt/d/Physim/third_party/tree-sitter-0.27.1/lib/src",
+      "/mnt/d/Physim/tests/test_c_syntax.c",
+      "/mnt/d/Physim/app/c_syntax.c",
+      "/mnt/d/Physim/src/memory.c",
+      "/mnt/d/Physim/app/c_grammar.c",
+      "-o",
+      "/mnt/d/Physim/build/validation/c-scopes-2026-11-05/visibility-syntax"
+    ],
+    "compile_exit": 0,
+    "compile_stderr": "",
+    "files": {
+      "tests/test_c_syntax.c": "550bb458feee5154b82c681b1ec9e4ba9af14b8e429be4b5a7b3aa087e243d97",
+      "app/c_syntax.c": "215fcd47ba050a689c9f8633c7e3a0839b5c98afb2c5362855bb13da51249b63",
+      "src/memory.c": "28051ac112e004c566dd05d67ee5c44753d425726655f05573c3dca4bb80b811",
+      "app/c_grammar.c": "ac9447c2fd6edd4997b0bf28c037c6a805cee3a788695f5e0f18cbae53e85513"
+    },
+    "run_command": [
+      "wsl",
+      "-d",
+      "Alpine-Dev",
+      "--exec",
+      "env",
+      "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+      "/mnt/d/Physim/build/validation/c-scopes-2026-11-05/visibility-syntax"
+    ],
+    "exit_code": 0,
+    "stdout": "C syntax allocation failures: 94/94 rejected with exact cleanup and retry\nC syntax malformed input: 1024 deterministic byte cases bounded\nC syntax: actual grammar, source spans, incomplete error tree, budgets, cancellation, every allocation failure and parallel domains passed\n",
+    "stderr": ""
+  },
+  "symbol_visibility": {
+    "command": [
+      "wsl",
+      "-d",
+      "Alpine-Dev",
+      "--exec",
+      "readelf",
+      "-Ws",
+      "/mnt/d/Physim/build/validation/c-scopes-2026-11-05/visibility-syntax"
+    ],
+    "dynamic_command": [
+      "wsl",
+      "-d",
+      "Alpine-Dev",
+      "--exec",
+      "readelf",
+      "--dyn-syms",
+      "/mnt/d/Physim/build/validation/c-scopes-2026-11-05/visibility-syntax"
+    ],
+    "binary_sha256": "5a2c8686fb47b89774504e05ec23d89a19192f14b6934a8cd76f21bc8df78c85",
+    "rows": [
+      "540: 00000000002a4fae    13 FUNC    LOCAL  DEFAULT   12 tree_sitter_c",
+      "687: 00000000001cbbfe  3307 FUNC    LOCAL  DEFAULT   12 ts_parser_new",
+      "883: 000000000038d660     8 OBJECT  GLOBAL HIDDEN    24 ts_current_malloc"
+    ],
+    "private_runtime_not_dynamic_exported": true,
+    "windows_binary": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/bin/physim-test-c_syntax.exe",
+    "windows_sha256": "880ca0e264e6fdd93e34b9aaac206f2eb4b77bf6ae9eff13ea94cbf57d044799",
+    "windows_export_rva": 0,
+    "windows_export_bytes": 0,
+    "checker_correction": "Initial check accepted HIDDEN only; linker legitimately localizes private functions to LOCAL. Both LOCAL and HIDDEN are private; neither appears in the dynamic symbol table."
+  },
+  "dependency_provenance": [
+    {
+      "repo": "tree-sitter/tree-sitter",
+      "commit": "10eb5ac119eec9cb4267a8e035066473983f5f3a",
+      "files": 83,
+      "bytes": 893435,
+      "all_raw_git_blobs_match": true
+    },
+    {
+      "repo": "tree-sitter/tree-sitter-c",
+      "commit": "b780e47fc780ddc8da13afa35a3f4ed5c157823d",
+      "files": 8,
+      "bytes": 4017226,
+      "all_raw_git_blobs_match": true
+    }
+  ],
+  "license_hashes": {
+    "third_party/tree-sitter-0.27.1/LICENSE": "c5cfb43042b6b72045f4ba997834d0a7786d2793d91680868b5815b39f14fc78",
+    "third_party/tree-sitter-c-0.24.2/LICENSE": "2e0110e07abef7c2548b26ec9d6969775617ca539a0dc8dbeeb14d6452c711d1",
+    "third_party/tree-sitter-0.27.1/lib/src/unicode/LICENSE": "6a18c5fac70d7860b57f5b72b4e2c9a1ba6b3d2741eef7ff9767c5379364f10d"
+  },
+  "source_hashes": {
+    "app/c_syntax.c": "215fcd47ba050a689c9f8633c7e3a0839b5c98afb2c5362855bb13da51249b63",
+    "app/c_syntax.h": "6e3c3beff39e34c687af74702c4aaef9e13c3518e526a4391b08dc920230725b",
+    "app/c_grammar.c": "ac9447c2fd6edd4997b0bf28c037c6a805cee3a788695f5e0f18cbae53e85513",
+    "tests/test_c_syntax.c": "550bb458feee5154b82c681b1ec9e4ba9af14b8e429be4b5a7b3aa087e243d97",
+    "tools/build.py": "19d275301b47ec5996adc7f9d406b15ff5c15bcda1c22adff15583c0c9422f89",
+    "tools/native_tests.py": "8bf9c5ff6128369e0911eb9e1317875157324b4a1fc60ddb07d58493b752eb12"
+  },
+  "frozen": {
+    "own_inputs": 275,
+    "compiler_test_inputs": 1214,
+    "compiler_manifest_sha256": "86c165b93f50bf3d44e65b1ccfd0386d2c35d1305c1c7fa7566eda2cc8ae1315",
+    "runtime_files": {
+      "windows": 251,
+      "linux": 137
+    },
+    "compiler_overlay_sha256": "cd47f55955bf6e4be26e1651087f783371af6cf9775cd1357f5c04f2217038be",
+    "new_runtime_archives": {
+      "build/validation/explorer-inline-2026-10-29/c-syntax-first-runtime-windows.zip": "7e94a80492a8bd54accb4828d890fc6248968358587aa13fc3300dc7f6f51148",
+      "build/validation/explorer-inline-2026-10-29/c-syntax-first-runtime-linux.zip": "26e28d39ae23efd5636f3c725600bb0e44be8ebd0290a746df49e738603b22db"
+    },
+    "all_referenced_archive_bytes_read": true
+  },
+  "test_scope": [
+    "original spans/fields and grammar string lifetime",
+    "incomplete source ERROR recovery",
+    "94/94 allocation failures: zero live bytes and successful retry",
+    "source/NUL/output/private heap/progress bounds",
+    "two OS threads: independent failing/succeeding allocation domains, 40 iterations each",
+    "1024 deterministic malformed byte inputs"
+  ],
+  "build_warnings": "Windows MSVC retains upstream narrowing/signedness/C4701 warnings and own C4324 aligned block padding; Linux registered build retains existing example missing initializer warnings. Strict GCC adapter test has zero warnings. No warning-free Windows build claimed.",
+  "setup_negatives": [
+    "upstream archive selector/root layout fixed before vendoring",
+    "POSIX feature macro and ICU source include path required by initial compile",
+    "test assumption corrected: malformed root may itself be ERROR (sample 57)",
+    "visibility pragma wrongly hid libc imports: link failed; corrected to per-source visibility compiler flag",
+    "symbol checker initially required HIDDEN, corrected to also accept linker LOCAL; no exported runtime symbols"
+  ],
+  "remaining": [
+    "C declarator/scope collector including real error recovery and exclusions",
+    "native variable UI integration/type cards/empty argument/insertion/Undo",
+    "separate user-function parameter help",
+    "three licenses must be bundled before shipping GUI linkage",
+    "macOS build of new foundation",
+    "physical input/IME/AT/DPI/full UI acceptance"
+  ]
+}

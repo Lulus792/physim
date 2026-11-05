@@ -8,9 +8,15 @@ wegen Kontextwechsel erneut anfangen; die ursprünglichen Nachweise unverändert
 
 ## Neuere Editorprüfungen
 
+- [C-Syntaxgrundlage](verification/c-syntax-foundation-2026-11-05.md): echte
+  Grammatik, Windows/Linux je Unit 1/1, zusätzlicher strenger C17-ASan/UBSan-Build;
+  94/94 Speicherfehler und 1.024 fehlerhafte Eingaben geprüft. **Noch keine
+  C-Scope-/GUI-Integration oder neue Mac-Abnahme.**
 - [Physim-Stringkontext](verification/completion-literals-2026-11-05.md): reguläre
   Vorherregression abgelehnt, elf Literal-Kontexte und Windows/Linux Unit 5/5 + GUI 6/6
-  bestanden. Kein neuer Mac-Nachweis dieser anschließenden Korrektur.
+  bestanden. Eigener gehosteter Nachlauf `41947340908` zu `5c3b6da4`: ARM/Intel je
+  [8/8, Originalarchive und Digests gelesen](verification/completion-literals-macos-2026-11-05.json).
+  Dieser Nachlauf enthält die anschließende C-Syntaxgrundlage nicht.
 - [Native lokale Physim-Namen](verification/completion-locals-2026-11-05.md):
   Quellcommit `072c06f5`, Windows/Linux zuerst Unit 10/10 + GUI 6/6, danach GUI 2/2;
   Signatur-Gegenprobe abgelehnt. Nach Testkorrektur `e27fc144` gehosteter Mac-Lauf

@@ -1,0 +1,577 @@
+{
+  "date": "2026-11-05",
+  "components": [
+    {
+      "repo": "tree-sitter/tree-sitter",
+      "tag": "v0.27.1",
+      "commit": "10eb5ac119eec9cb4267a8e035066473983f5f3a",
+      "url": "https://codeload.github.com/tree-sitter/tree-sitter/tar.gz/10eb5ac119eec9cb4267a8e035066473983f5f3a",
+      "release_url": "https://github.com/tree-sitter/tree-sitter/releases/tag/v0.27.1",
+      "published": "2026-10-08T17:43:54Z",
+      "archive_sha256": "71bbc0a7a98013b519b104e281e6ad98524a438c8c822a095e6f27de05d15562",
+      "official_asset_digest": null,
+      "files": {
+        "LICENSE": {
+          "bytes": 1080,
+          "sha256": "c5cfb43042b6b72045f4ba997834d0a7786d2793d91680868b5815b39f14fc78",
+          "git_blob": "971b81f9a86c0c91827e225aeac9159a13bfd3c1",
+          "git_blob_matches": true
+        },
+        "lib/include/tree_sitter/api.h": {
+          "bytes": 50349,
+          "sha256": "f8480415ae20cb5e0fd519ba44c84268c5acb4c918106238fc1d328d91431783",
+          "git_blob": "334b25f3b5e5e7f50e01744127020a4688394f73",
+          "git_blob_matches": true
+        },
+        "lib/src/alloc.c": {
+          "bytes": 1542,
+          "sha256": "c7d15b9015568f439af4adf28ead9e2bd14901221819276727c11227a29576da",
+          "git_blob": "e5cb1d5eab4b1832b00b09263e14615f944192d0",
+          "git_blob_matches": true
+        },
+        "lib/src/alloc.h": {
+          "bytes": 917,
+          "sha256": "6a59c4997fe6df7fa2c00fcaff9cf0882e26309d1743bea05983ea56e0ca0c91",
+          "git_blob": "3ea4cc96c8d933da5398278bdc9ff35ffa51d41d",
+          "git_blob_matches": true
+        },
+        "lib/src/array.h": {
+          "bytes": 13467,
+          "sha256": "3a66fd611d88de00207bf40466b2393170c2110b17ce0d16e3716ef3a00e3d8e",
+          "git_blob": "7ff5df4c697f54672b1eb53b75e717fdd3887908",
+          "git_blob_matches": true
+        },
+        "lib/src/atomic.h": {
+          "bytes": 1384,
+          "sha256": "bbc630cb913ac64274ce4412bc9d504174220323993f306ded74abe502867e74",
+          "git_blob": "e680b60e521fe1060eb0b1c8deb6c8598e9c38d9",
+          "git_blob_matches": true
+        },
+        "lib/src/error_costs.h": {
+          "bytes": 294,
+          "sha256": "0e8d1a21e0d60981e762989108231df6610d95591892f631c6c78a9ef831a2ab",
+          "git_blob": "32d3666a661c97da0a1e95e69f201d2caff5079d",
+          "git_blob_matches": true
+        },
+        "lib/src/get_changed_ranges.c": {
+          "bytes": 17733,
+          "sha256": "6fcee7d2663ac67d88b9e79a03ff4854dde1e8d30d3c985d945bad8017532c52",
+          "git_blob": "c4c63653d5ef35b60067ae0ae4c375cb066e24b6",
+          "git_blob_matches": true
+        },
+        "lib/src/get_changed_ranges.h": {
+          "bytes": 836,
+          "sha256": "f394bd0b6fce006be460fd16cbea3cc96e248c810a4d97e8830463c29c85e4a5",
+          "git_blob": "a1f1dbb43041c51d1e802f1ce12711b65f2ff9c3",
+          "git_blob_matches": true
+        },
+        "lib/src/host.h": {
+          "bytes": 520,
+          "sha256": "e1982b9795b9c52b5ab564d8b9876189d65a97ca02f78351e1740b0985992fd2",
+          "git_blob": "a07e9f8949535189f05a3f93bb8757abdb9e210e",
+          "git_blob_matches": true
+        },
+        "lib/src/language.c": {
+          "bytes": 11440,
+          "sha256": "16ca0511cd57ff301c63a19b4f10821552153224affa23908d4fc0d2bbca353e",
+          "git_blob": "5bc83165f53fef14081396588b75a045a25193d9",
+          "git_blob_matches": true
+        },
+        "lib/src/language.h": {
+          "bytes": 9030,
+          "sha256": "9371240c2060bd7c145b41a32b2535bbca3c3ac1713a4684e272e268ac924c22",
+          "git_blob": "dab5fd0675aab441d3a602bda9dc3e19c33452a7",
+          "git_blob_matches": true
+        },
+        "lib/src/length.h": {
+          "bytes": 1275,
+          "sha256": "7fc186fb4bf50233059e8be9ca68efe95e66d34ced4b8a8f38f14497352faeb1",
+          "git_blob": "ddf156ce098170c85c8d260470e0929168d9fa6d",
+          "git_blob_matches": true
+        },
+        "lib/src/lexer.c": {
+          "bytes": 16062,
+          "sha256": "eb6ca639beaea9fb99bfb0faa0bd0f8e8df785a52dc09321582dc858a448eb34",
+          "git_blob": "b0ac3b6f3b352798eae8ad4ab70bd1b4cc165391",
+          "git_blob_matches": true
+        },
+        "lib/src/lexer.h": {
+          "bytes": 1263,
+          "sha256": "7d76308f7a2d3246a3e28fb27698be928f848130d1bfacc39f9f623127671b74",
+          "git_blob": "7f451e3f93af77ba32ac5e4552daed7d6016d6a9",
+          "git_blob_matches": true
+        },
+        "lib/src/lib.c": {
+          "bytes": 405,
+          "sha256": "a9830f5a1e72db564afef45f690510cf0aa751075ed855789e26c9f25f087b80",
+          "git_blob": "c94719f806caefe4de7a30cda496584167679c03",
+          "git_blob_matches": true
+        },
+        "lib/src/node.c": {
+          "bytes": 25151,
+          "sha256": "fb0b5eecacb6d7e324f60914893801c0d147f413dd0af73a19ef270d341a77b5",
+          "git_blob": "ec7fee4cf433f28c2d1318997e0d4047a0935f7b",
+          "git_blob_matches": true
+        },
+        "lib/src/parser.c": {
+          "bytes": 80095,
+          "sha256": "450cb5196ffb74ffd8ba16fcb770b995f000348ac054542afb9f547bd86ab611",
+          "git_blob": "dd77e5d1eb001941e2ae6eb6a83ab582b3b78de7",
+          "git_blob_matches": true
+        },
+        "lib/src/parser.h": {
+          "bytes": 7624,
+          "sha256": "180b893c8734778fd32f372dfbc27bd6ad1cd2221f26150b31256ff6716320d2",
+          "git_blob": "858107deb9e4a1ffcd2ed5e6ffe98a5fcab3e1f6",
+          "git_blob_matches": true
+        },
+        "lib/src/point.c": {
+          "bytes": 547,
+          "sha256": "04a101f16f40a651814c0f307fadf3f351d0f24013fa6d8b89c85bf1c6a5e717",
+          "git_blob": "da46f61b9f865f74274d037bff8f513d767788ce",
+          "git_blob_matches": true
+        },
+        "lib/src/point.h": {
+          "bytes": 1307,
+          "sha256": "0929027be2ff54627be560f3bafc1af59e81ac6d5a8d5864455601a0dbee50ff",
+          "git_blob": "39581988435f0be05ae8962c6d1f77acbab7baf1",
+          "git_blob_matches": true
+        },
+        "lib/src/portable/endian.h": {
+          "bytes": 7325,
+          "sha256": "528ca0666737e1a66218e2179004d5af2154393c6564ac9c57c110c5d8f57f85",
+          "git_blob": "70df2c874ca8d510e42a70c8a3ed922ab413482f",
+          "git_blob_matches": true
+        },
+        "lib/src/query.c": {
+          "bytes": 171693,
+          "sha256": "d5424d95c92fbb95b39f64d4fbec19d53d3d51bfd30bf34b0030679547dd59fc",
+          "git_blob": "5f6e284d02b2bab521eb859c4b5cc01af29a8be0",
+          "git_blob_matches": true
+        },
+        "lib/src/reduce_action.h": {
+          "bytes": 772,
+          "sha256": "8f40396e431d7ff558694ca248eed1332b6cf6f7e6255f06cddfde78020bd308",
+          "git_blob": "72aff08d73dc36e563d0a18c71c7476441bfdf61",
+          "git_blob_matches": true
+        },
+        "lib/src/reusable_node.h": {
+          "bytes": 2747,
+          "sha256": "10be747ea4c733ca181dc43d55d155ac8e5b8caa247079621cca0ce633347bfb",
+          "git_blob": "63fe3c1a36c7b3780f47c6c9fe951072f168b085",
+          "git_blob_matches": true
+        },
+        "lib/src/stack.c": {
+          "bytes": 28636,
+          "sha256": "f70b7e5823e82901801193562908037db4c1a73721e48da0fe54cdb2a6b5856d",
+          "git_blob": "91420074760d787b5d2b9a8845708602e1e36679",
+          "git_blob_matches": true
+        },
+        "lib/src/stack.h": {
+          "bytes": 4872,
+          "sha256": "dea9df947fa871b253528dca48611aa174181a286ec2734c16d4038e040834f6",
+          "git_blob": "a9ac8e0643158ef67e192d06206945e71300eb36",
+          "git_blob_matches": true
+        },
+        "lib/src/subtree.c": {
+          "bytes": 36832,
+          "sha256": "6b8737764405898a2941df6951f548d73131ada230eec906ee062ca453a2bb80",
+          "git_blob": "91674fd7c17038d14f5885074daf6dc63e41e55a",
+          "git_blob_matches": true
+        },
+        "lib/src/subtree.h": {
+          "bytes": 12614,
+          "sha256": "290ac499f1cdd03d2100de98e12c3fccfe806b663337d648eaf4744348bfb2d5",
+          "git_blob": "5d390c71349053c4e32bd79c326246899c4ac841",
+          "git_blob_matches": true
+        },
+        "lib/src/tree.c": {
+          "bytes": 5144,
+          "sha256": "a0f63bc46fc4fcb88d35caa6fe89d7fc18edb895bc781db20f11d5c58988fb06",
+          "git_blob": "6ca2a944fa46e36e6f976031b6fd5c9d937c2b65",
+          "git_blob_matches": true
+        },
+        "lib/src/tree.h": {
+          "bytes": 915,
+          "sha256": "628701f470166ad550471a673dce078f28a7851193939f02a342c30c3a8ef39c",
+          "git_blob": "f24338f8e0807ea6f7f906145a82ad378b91c9cc",
+          "git_blob_matches": true
+        },
+        "lib/src/tree_cursor.c": {
+          "bytes": 23140,
+          "sha256": "5638f6702b6d0b40755fcba32d85ca0fc44ab51bd3546525b4787a304a7b503c",
+          "git_blob": "63c49ae590070bd176f24cfeb1d4e8bc0758b254",
+          "git_blob_matches": true
+        },
+        "lib/src/tree_cursor.h": {
+          "bytes": 1285,
+          "sha256": "3e8d9671ab1397bcaeb3e0cbf153a61a99e214782b43c09e5cde5a01e8283a1a",
+          "git_blob": "7d4e7ef0a673253cab31c678eb756d0f47bbeda9",
+          "git_blob_matches": true
+        },
+        "lib/src/ts_assert.h": {
+          "bytes": 205,
+          "sha256": "ac1ec4b7ba388a9d8708feeb6c5c766b2927cecfd6db644b939772e1dc086526",
+          "git_blob": "4cb8f36a122522b73151dca8e3c6e41e940d6133",
+          "git_blob_matches": true
+        },
+        "lib/src/unicode.h": {
+          "bytes": 2084,
+          "sha256": "968175f1e018e4130c403fe08d12b4d103e6fe6c1dbbf658e58ab9af378530a4",
+          "git_blob": "196c6bf416b6bf7c2e4efcd67a5ef083a90f49ab",
+          "git_blob_matches": true
+        },
+        "lib/src/unicode/ICU_SHA": {
+          "bytes": 41,
+          "sha256": "2879b4cf5a2c625c6509c26e341b9c8b0c50fde284113b449e00567bdf4e593c",
+          "git_blob": "3622283ba3572c9d94c0482fd3dbc5084f2f7841",
+          "git_blob_matches": true
+        },
+        "lib/src/unicode/LICENSE": {
+          "bytes": 21001,
+          "sha256": "6a18c5fac70d7860b57f5b72b4e2c9a1ba6b3d2741eef7ff9767c5379364f10d",
+          "git_blob": "2e01e368768a4b992e22f98c05ead747134492a6",
+          "git_blob_matches": true
+        },
+        "lib/src/unicode/README.md": {
+          "bytes": 1270,
+          "sha256": "73bbccbcf2e6648385d188d914b16ae56b4553a0f1efb033e6b6d6242e41df1d",
+          "git_blob": "623b8e38430406db87ea955934b1e461af38a5ea",
+          "git_blob_matches": true
+        },
+        "lib/src/unicode/ptypes.h": {
+          "bytes": 72,
+          "sha256": "a87e9710c9cad7b08a945f4fb8b9d4629189897cc535f8ac927640c210a94b69",
+          "git_blob": "ac79ad0f983d054e3d53930b52a7e91ab2f61817",
+          "git_blob_matches": true
+        },
+        "lib/src/unicode/umachine.h": {
+          "bytes": 14865,
+          "sha256": "2d79c0903d9e73e247b948bc0a12b6a785257ca0273bddab56fb59561f8d7391",
+          "git_blob": "9195824d5b9959a985779da9081d259b7a6e841c",
+          "git_blob_matches": true
+        },
+        "lib/src/unicode/urename.h": {
+          "bytes": 72,
+          "sha256": "a87e9710c9cad7b08a945f4fb8b9d4629189897cc535f8ac927640c210a94b69",
+          "git_blob": "ac79ad0f983d054e3d53930b52a7e91ab2f61817",
+          "git_blob_matches": true
+        },
+        "lib/src/unicode/utf.h": {
+          "bytes": 72,
+          "sha256": "a87e9710c9cad7b08a945f4fb8b9d4629189897cc535f8ac927640c210a94b69",
+          "git_blob": "ac79ad0f983d054e3d53930b52a7e91ab2f61817",
+          "git_blob_matches": true
+        },
+        "lib/src/unicode/utf16.h": {
+          "bytes": 23878,
+          "sha256": "c370d9069f37fad2b53981c06dc648bbc21923db1655517a31bb237df4fba041",
+          "git_blob": "9fd7d5c8a7727979c172dc781a7c6a4ee3fc839a",
+          "git_blob_matches": true
+        },
+        "lib/src/unicode/utf8.h": {
+          "bytes": 31698,
+          "sha256": "39651224b2ca2452359c7f3339f3cc0a841fe7db64f8a00c9c5ec19c0389645c",
+          "git_blob": "bb001303747efec58edf0e60c18561e225467a05",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/README.md": {
+          "bytes": 1255,
+          "sha256": "37bb3e39b390ed1cedf9127edb00bf2baf896f277ca34a8722694aa41fb3546a",
+          "git_blob": "c8153977b5807307079dd0f85fe7d148d8b667dd",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/external_scanner_allocator.c": {
+          "bytes": 4275,
+          "sha256": "b13eb3c31b8b952578260b858462e821985d347d1dae186e71566ff36d875b1f",
+          "git_blob": "b9e6dcb6ee4b0bb75cf1cda0e10e77adcce49841",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/external_scanner_stdlib.h": {
+          "bytes": 107108,
+          "sha256": "462bb994df614cb18899b03b1435f2749414e4722ba8cf450266a149426cea0c",
+          "git_blob": "4233b190c7a4e79e6bc38c251cdc6c2dbdaf5d6a",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/imports.txt": {
+          "bytes": 276,
+          "sha256": "4fb97410d22925f88857d9adfecc2b955c08819e7d55de4e460d417bf1a2215d",
+          "git_blob": "2285b57aaad6708c592e7780f2e59a8a1c7af2a3",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc.c": {
+          "bytes": 1346,
+          "sha256": "1b70f41eda904b816e641d5841c7ad0b637cf5bc637e1f3d0965f75789711ff5",
+          "git_blob": "91834122de5c857cdd04c7da81411aa95448f7d0",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/LICENSE": {
+          "bytes": 6204,
+          "sha256": "f9bc4423732350eb0b3f7ed7e91d530298476f8fec0c6c427a1c04ade22655af",
+          "git_blob": "c1628e9ac84f927fe791124ec172fb61c760bb9b",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/README.md": {
+          "bytes": 685,
+          "sha256": "a5714bd844b272c950cb055fcabbd04e4da0ee02f35e5d5340caa4f3af9626fb",
+          "git_blob": "5724b2ef6066bfb720168ff7138c6c04c3207c9b",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/ctype/alpha.h": {
+          "bytes": 12783,
+          "sha256": "bf14a0a8e2e3722e8d618d00f903be102a0214c4ab30d96dc8d7f3e15c5106e7",
+          "git_blob": "4167f3876c6cc291ba36c75dbb92ea5d31f98e8e",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/ctype/casemap.h": {
+          "bytes": 16079,
+          "sha256": "e69896dc36e5b1c0f0f30917cad6dcda2f55c2d691be1b84625880ebf22fb618",
+          "git_blob": "6ee1209b9698884b0fd24e88bd157b1355878b68",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/ctype/isblank.c": {
+          "bytes": 173,
+          "sha256": "2fe71bd5c48604d04f2582e35e1230c2c302bd175ebcfa3c7ed15cf191156bd3",
+          "git_blob": "716da23a566155ebc90646751a3be838523c0c10",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/ctype/iswalnum.c": {
+          "bytes": 191,
+          "sha256": "647f8fc54b33790c1de8a26acd2f5b7212952c2e60db0ada433f9ddd639ce186",
+          "git_blob": "046c399c3775f30ca065d29239395c39e6b82831",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/ctype/iswalpha.c": {
+          "bytes": 333,
+          "sha256": "c22480b08b6943bbecfb6e0ab6677bf3b41c0371d5df51286f437b3cb37c130e",
+          "git_blob": "1c5485d2bfb418feed5911bd2292d4acd3278e7b",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/ctype/iswblank.c": {
+          "bytes": 193,
+          "sha256": "6f3a3161506c01d7a425c766e6de722101618d14548b56998bc147e86077e744",
+          "git_blob": "68c88002029791f92c6e5b258220e58097a0873d",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/ctype/iswdigit.c": {
+          "bytes": 201,
+          "sha256": "d7e9bda18ff14bd8ace47884d8bd021130e95c69a2dc747f83effc1a2714895b",
+          "git_blob": "db817edf7dd73544da17be7ba77e9da0eeb68ea4",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/ctype/iswlower.c": {
+          "bytes": 181,
+          "sha256": "e51bb97002c407e416bfca5689abef2e9b9dc625bef19ae684753722e98d0392",
+          "git_blob": "f02a4362a8664c424c35adfd4dbe22d57c6c94fc",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/ctype/iswpunct.c": {
+          "bytes": 303,
+          "sha256": "6bc6c0a07485c87aa556c265f37968c42d635e4a2fd89e701efdb57f8a111b66",
+          "git_blob": "f0b9ea0a4bfc4fc1e7161e5f19596f5bfd011494",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/ctype/iswspace.c": {
+          "bytes": 616,
+          "sha256": "c8592c0fb5463b314c38926e3df26b9efdfe5f1437958ba20c7c36f81facba80",
+          "git_blob": "263afa15c5d746bd5421f5c2271587d2d08f8f28",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/ctype/iswupper.c": {
+          "bytes": 181,
+          "sha256": "f6b68aa9983a6fb5c09479e1349a2b35721cb7aef308192584fdea5585032cd8",
+          "git_blob": "7e486665eef59fd79e795b5a7d62eeb7a5ae5264",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/ctype/iswxdigit.c": {
+          "bytes": 222,
+          "sha256": "1f6dc78efe7c313ddcf47401101f903ce194af5dacd89922f483a995075f52cb",
+          "git_blob": "62bc9e743953bfc532ca42ef96e5ab9431b4c3c1",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/ctype/punct.h": {
+          "bytes": 10440,
+          "sha256": "45382a2b630fc896057871ac9abe9e3f1580048f1f3b1c96505aaf3dc522832d",
+          "git_blob": "67929470c9e0ec164895b65c1073a086cc94b279",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/ctype/towctrans.c": {
+          "bytes": 1715,
+          "sha256": "43f4374b7dfcd24a957b4be4cfa304611e24912529183174ec724fcbaedf82cd",
+          "git_blob": "76d137696ee9eb9bfef6607f49ae24779f918dc0",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/string/memchr.c": {
+          "bytes": 2818,
+          "sha256": "1ea082084a8cfcc6aee5dc962e0ddd2167d2ce38e529a22d138bdfaab83c223a",
+          "git_blob": "2825ac80b6be9cd821055b55b230a16aebcb24b0",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/string/memcmp.c": {
+          "bytes": 1413,
+          "sha256": "44ec5045d00709ddd9ae59b4b0e7ac7e78a8401d27acc4cb95bb46acb2d103f2",
+          "git_blob": "ce313049a9e45035882d30f70095c745c8a8d969",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/string/memcpy.c": {
+          "bytes": 2756,
+          "sha256": "4ad219f8d43467d894ef2cfd3d6d17ae958710c689097c15d41b68ee99c74769",
+          "git_blob": "3cc7e28f3bd38f866dfbfa8404ab47a04c11f679",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/string/memmove.c": {
+          "bytes": 965,
+          "sha256": "202adc3108340168e8604c1ed848e84df51a806726ebc992b597218a50c9a8d9",
+          "git_blob": "7376a520bbfcab411646b4d49903a127a242b4f0",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/string/memset.c": {
+          "bytes": 2324,
+          "sha256": "a7a8ff014b6a196342bbe3e8bdd7ae7ee91f0003f96e328d915f1af13066dad8",
+          "git_blob": "f64c9cf5ae96a7a021990276807d58825effd19a",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/string/stpncpy.c": {
+          "bytes": 819,
+          "sha256": "12f0e4fd1005104a6c1200af5b90e1694d75ad0fb2586305b560341be0ef6481",
+          "git_blob": "f57fa6b71bf3d2479a3eeff24fba5225e3007c18",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/string/strchr.c": {
+          "bytes": 147,
+          "sha256": "629d401b95d07ddff9560eb5a9cfbda1652caaec273dc6a79013a56b1790af53",
+          "git_blob": "3cbc828bebf705ae570e1bfd0c2b518f929c054c",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/string/strchrnul.c": {
+          "bytes": 2295,
+          "sha256": "3eaa363698e2dfb472a59ed35c445d970a06d4da9d94a47eb918c0a3e2f74e7b",
+          "git_blob": "07e058490c529761ac1c2df432b025c3f8986ef4",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/string/strcmp.c": {
+          "bytes": 150,
+          "sha256": "3e1793ea2dd358e5c884c4dd232083605d0f6775f7ebe19d03d64fe97068a78f",
+          "git_blob": "808bd8370ddeca3a2cfc124601cbd6012be89f80",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/string/strlen.c": {
+          "bytes": 2036,
+          "sha256": "767f030f94a4868eb88c8b28e0aa535f53deb2f23b79ba5627d6d8ba6b460d7d",
+          "git_blob": "d43853f11e1a5eaece4d28ba3f09f683e1ebbad3",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/string/strncat.c": {
+          "bytes": 179,
+          "sha256": "784dbc83b122671f97711ab6cbcb1ee871513e8d0da3462a8ce267e1367353af",
+          "git_blob": "01ca2a2317c6f29ecc1289e94b76b72c69698ea8",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/string/strncmp.c": {
+          "bytes": 220,
+          "sha256": "df801c43304b27dcda67f219a7a3ca34a8fb06f4e63d21e8a6bcb36b03c3c012",
+          "git_blob": "e228843f0bb394a209b764296e1df52fc8663344",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/string/strncpy.c": {
+          "bytes": 123,
+          "sha256": "88301f7a48004250e1833e9155c7d2fa607ffdddca3b1b1804774d93c82acb96",
+          "git_blob": "545892e6ec5f602deb1d3b46cde440213812a390",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/string/wcschr.c": {
+          "bytes": 171,
+          "sha256": "c9ac14e131c281bef6ab9228ae4e0aea824b3b96c32ed4c2b1a573d7529e7194",
+          "git_blob": "8dfc2f318316f84ac396d85349373f423d5fd6df",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/libc/string/wcslen.c": {
+          "bytes": 109,
+          "sha256": "4baada75103e9906fa85dd6650c07752c1803b36cbdfc1b5e0678c5e3f3223a6",
+          "git_blob": "1b7b66550c618a2126fdd92eefa0ea38af48d356",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm-stdlib/stdio.c": {
+          "bytes": 6791,
+          "sha256": "463ff7c94b4f9df0164aa3d966eeb5765a7f9acecdf477119e2fe54891e34b0e",
+          "git_blob": "9e755ed772b405465919a2e14c9ba1089161231c",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm_store.c": {
+          "bytes": 70668,
+          "sha256": "e630e55f3984cc9111646a719f793f5b7b4823632767129c4583aa2b1521e746",
+          "git_blob": "525b8c78bc499d7b9c6ef81a3963f070d32c614d",
+          "git_blob_matches": true
+        },
+        "lib/src/wasm_store.h": {
+          "bytes": 1137,
+          "sha256": "4f70d0500b0775e5d862a8e7d191b3853d73378c65e020e01767838a18debe0e",
+          "git_blob": "0fd17e0d1736a0a69e428efcad494d74dee3d623",
+          "git_blob_matches": true
+        }
+      },
+      "directory": "tree-sitter-0.27.1"
+    },
+    {
+      "repo": "tree-sitter/tree-sitter-c",
+      "tag": "v0.24.2",
+      "commit": "b780e47fc780ddc8da13afa35a3f4ed5c157823d",
+      "url": "https://github.com/tree-sitter/tree-sitter-c/releases/download/v0.24.2/tree-sitter-c.tar.gz",
+      "release_url": "https://github.com/tree-sitter/tree-sitter-c/releases/tag/v0.24.2",
+      "published": "2026-04-22T08:04:13Z",
+      "archive_sha256": "f3a2cdfbca39c79f60baf2ef62b42084c609782c76485de457ba36ff65d51baf",
+      "official_asset_digest": "f3a2cdfbca39c79f60baf2ef62b42084c609782c76485de457ba36ff65d51baf",
+      "files": {
+        "LICENSE": {
+          "bytes": 1080,
+          "sha256": "2e0110e07abef7c2548b26ec9d6969775617ca539a0dc8dbeeb14d6452c711d1",
+          "git_blob": "4b52d191cead337b11e274b79459a86f1b5a7779",
+          "git_blob_matches": true
+        },
+        "grammar.js": {
+          "bytes": 38242,
+          "sha256": "f362b9fe06db321464fc77f1e5ba2ce089baec9d18f4defddb0c9ca87885e546",
+          "git_blob": "7cdde6eda5ef2959d2e9d2e99c4591df68475620",
+          "git_blob_matches": true
+        },
+        "src/node-types.json": {
+          "bytes": 83057,
+          "sha256": "23e819ef1eefd357bb6eba844f47f8492f6a88da3e5046b06ec4acd4da8a9fd6",
+          "git_blob": "6106fcc3f1f3f286a24ee252521e8864e87dac7b",
+          "git_blob_matches": true
+        },
+        "src/parser.c": {
+          "bytes": 3872012,
+          "sha256": "f2883ff9b21f4a5bd5553c1b10366c418947d17a7bc6bf256124a7542f079dd2",
+          "git_blob": "5032e3d0c39c49445e3ae1c2f6459802ed40f9b3",
+          "git_blob_matches": true
+        },
+        "src/tree_sitter/alloc.h": {
+          "bytes": 985,
+          "sha256": "b29c1c9fb7cc82f58c84b376df1297d6e2737a1d655fd356db0859e3c29c2fea",
+          "git_blob": "1abdd1201578605b8d05a3001f01ebc0d58826d9",
+          "git_blob_matches": true
+        },
+        "src/tree_sitter/array.h": {
+          "bytes": 13269,
+          "sha256": "31e60a1bff6f715afacce03b5b70efe42b58371b4f9595dd4af52a577ff9608c",
+          "git_blob": "56fc8cd470996ded64a5452be25e26dbd2aa682a",
+          "git_blob_matches": true
+        },
+        "src/tree_sitter/parser.h": {
+          "bytes": 7624,
+          "sha256": "180b893c8734778fd32f372dfbc27bd6ad1cd2221f26150b31256ff6716320d2",
+          "git_blob": "858107deb9e4a1ffcd2ed5e6ffe98a5fcab3e1f6",
+          "git_blob_matches": true
+        },
+        "tree-sitter.json": {
+          "bytes": 957,
+          "sha256": "9a823f24385fbb5fa06e52c258c726449c4e417a4476306589b6dcfaf9b831ee",
+          "git_blob": "77a4574d59b6d0a373f29214e3e0769268536bcf",
+          "git_blob_matches": true
+        }
+      },
+      "directory": "tree-sitter-c-0.24.2"
+    }
+  ]
+}
