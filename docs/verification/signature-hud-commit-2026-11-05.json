@@ -1,0 +1,54 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "caa1faf87854ea5bc736ef65fd798f57a9e9a14d",
+  "branch": "codex/f1-design-h",
+  "both_remote_tracking_refs_match": true,
+  "remotes": [
+    "origin",
+    "upstream"
+  ],
+  "own_inputs": 296,
+  "compiler_and_test_inputs": 1235,
+  "unique_input_files": 1254,
+  "all_tested_input_bytes_read_against_git_index_and_actual_commit": true,
+  "normalization": "Only CRLF/LF normalization for nonvendor source; raw vendor bytes exact.",
+  "index_match": {
+    "path": "build/validation/signature-hud-2026-11-05/index-match.json",
+    "sha256": "aba95a32458e4fbd2b327b910e6636dfd3bdaa29ada5b3391380ed5ef110e457"
+  },
+  "commit_match": {
+    "path": "build/validation/signature-hud-2026-11-05/commit-match.json",
+    "sha256": "70e8eeb1c6b0069556ee4b373b167ecb77724d1930b23ffb9d95343d6f467f14"
+  },
+  "proof": "docs/verification/signature-hud-2026-11-05.json",
+  "cleanup": "docs/verification/signature-hud-cleanup-2026-11-05.json",
+  "hosted_mac": {
+    "run": 42015203815,
+    "name": "Native macOS editor menu workflows",
+    "path": ".github/workflows/macos-editor-menu.yml",
+    "source_commit": "caa1faf87854ea5bc736ef65fd798f57a9e9a14d",
+    "status": "queued",
+    "conclusion": null,
+    "url": "https://github.com/Lulus792/physim/actions/runs/42015203815",
+    "jobs": [
+      {
+        "id": 127203930735,
+        "name": "editor (macos-15)",
+        "status": "queued",
+        "conclusion": null
+      },
+      {
+        "id": 127203931302,
+        "name": "editor (macos-15-intel)",
+        "status": "queued",
+        "conclusion": null
+      }
+    ],
+    "expected_units": 10,
+    "expected_gui": 9,
+    "private_user_mac": "OFF/untouched",
+    "next": "Observe this exact run; no restart. Read original ZIPs/digests/all entries after both jobs terminate."
+  },
+  "local_handles_all_terminal": true,
+  "scope": "Verified first native HUD integration, not full UI/physical/platform/performance acceptance. Private user MacOFF/untouched; F unused."
+}

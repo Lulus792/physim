@@ -17,8 +17,11 @@ GDB-Negativbeleg: gleicher Text/alteBreite am Ursprung28px, Bildschirmort56px;
 relative Stift-/Zeilenrechnung liefert nun28/28 und28 sichtbare Bytes. Kein neuer
 Test allein wegen Kontextwechsel; [Phasen und Grenzen](verification/signature-hud-2026-11-05.json).
 
-Warmstand künftig **`signature-hud-5`**,296 eigene Eingaben; Source-/Runtime-
-Deltas aller Stufen gelesen. Lokale Builds/Tests/GDB-Prozesse beendet.
+Warmstand künftig **`signature-hud-5`**,296 eigene/1.235 Compiler-Testeingaben,
+alle1.254 gegen Git gelesen; Source-/Runtime-Deltas geprüft. Lokale Handles beendet.
+Quelle **`caa1faf8`**, beide Remotes; [Commitabgleich](verification/signature-hud-commit-2026-11-05.json).
+HUD-Mac-Nachlauf **42015203815**: ARM127203930735/Intel127203931302 eingereiht;
+genau diesen Lauf mit10 Daten+9 GUI samt Original-ZIPs nachverfolgen, nicht neu starten.
 [Modellkern](verification/signature-model-2026-11-05.md) und dessen
 [Mac-Nachlauf42005020387](verification/signature-model-macos-2026-11-05.json) geschlossen:
 ARM/Intel10/10 Daten +8/8 GUI, Originale geprüft. Kein sichtbarer HUD im alten Mac-Stand.
@@ -30,7 +33,7 @@ ARM/Intel10/10 Daten +8/8 GUI, Originale geprüft. Kein sichtbarer HUD im alten 
    kleine Fenster/Scroll und aktiven Parameter nativ prüfen; dann herausgelöster
    Workspace, echte Fokuswechsel und Accessibility-/Screenreader-Aufgaben.
    Detailstand unter `build/validation/signature-hud-2026-11-05/STATE.md`; den
-   neuen gehosteten HUD-Mac-Nachlauf nach Quellpush unter seiner Kennung verfolgen.
+   gehosteten HUD-Mac-Nachlauf42015203815 samt Originalartefakten abschließen.
 2. 190 Einträge nach echten Spezialaufrufen/Overloads/Optionen und Eigenschaften
    unterscheiden; Compilerintrinsics außerhalb Katalog (print/assert/Konvertierung)
    aus echten Verträgen ergänzen. Funktionswert-Annotationen/Import-/Aliasfälle
@@ -54,12 +57,9 @@ konkreter Code-/Abhängigkeitsänderung, neuem Fehler oder offener Prüfdimensio
 wiederholen; Anlass/Umfang vor dem Lauf nennen. Insbesondere die Protokoll-
 Trennlinie ist seit `ef1f3321` behoben: kein neuer Test allein wegen Kontextwechsel.
 
-- Frühere C-/Ph-Nachläufe sind im Prüfindex geschlossen; Originale geprüft.
-  Alten Intel-Fristfehler seit `7a3e7950` nachgeprüft. Keine neue Beobachtung.
-- Modulabfrage `ec7824ca`, Lauf41986344544: [ARM/Intel je8 Daten +8 GUI](verification/module-signatures-macos-2026-11-05.json),
-  beide Original-ZIPs/Digests/Einträge gelesen. Abgeschlossen, nicht erneut pollen.
-- C-Lookup `d75da866`, Lauf41992949589: [ARM/Intel je9 Daten +8 GUI](verification/c-lookup-macos-2026-11-05.json),
-  beide Original-ZIPs/Digests/Einträge gelesen. Abgeschlossen, nicht erneut pollen.
+- Frühere C-/Ph-Nachläufe und alter Intel-Fristfehler seit `7a3e7950` geschlossen; Originale geprüft.
+- Modulabfrage `ec7824ca`/41986344544 und C-Lookup `d75da866`/41992949589 abgeschlossen.
+- Original-ZIPs/Digests/Einträge beider Architekturen im Prüfindex belegt; nicht erneut pollen.
 
 Der neueste Mac-Beleg bestätigt den Datenkern, keinen sichtbaren HUD. Root-Linkcheck findet
 vorhandenen fremden Status-WIP-Link zur internen Wartungsnotiz: gleicher Fehler
@@ -74,6 +74,8 @@ Text-/JSON-Nachweise. [Bereinigung vom 5. November](storage-maintenance-2026-11-
 99 Programm-/Bibliotheksdateien vorher/nachher hashgleich. Zusätzliche Bildprüfung
 ohne weitere sichere Duplikate; Referenzen/Fehler geschützt. Kein App-Neubau
 für diese Dokumentationskorrektur. Details/Quittungen im verlinkten Bericht.
+Zusätzlich [60 bytegleich doppelte HUD-Testbilder entfernt](verification/signature-hud-cleanup-2026-11-05.json):
+191.816.280 logische Bytes; alle57 Bildinhalte/40 geschützten Aufnahmen und beide Apps erhalten.
 
 ## Umgebung und Schutz
 

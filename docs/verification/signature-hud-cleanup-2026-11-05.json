@@ -1,0 +1,47 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "caa1faf87854ea5bc736ef65fd798f57a9e9a14d",
+  "scope": "Only exact byte-identical BMP duplicates in this work own terminated native test runs. All latest-run pictures and two old visual counterexamples protected; all other distinct bytes preserved. No source, dependencies, VM, caches, binaries, frozen archives or open-error unique evidence selected.",
+  "bmp_scanned": 117,
+  "unique_contents_preserved": 57,
+  "protected_images_preserved": 40,
+  "removed_exact_duplicate_files": 60,
+  "removed_logical_bytes": 191816280,
+  "plan": {
+    "path": "build/validation/signature-hud-2026-11-05/duplicate-images-plan.json",
+    "sha256": "8d853ce4d773861d20589c864502061939886c03115386b0e57d4430ce2c649f"
+  },
+  "receipt": {
+    "path": "build/validation/signature-hud-2026-11-05/duplicate-images-receipt.json",
+    "sha256": "26a3c0f80758186ea884b1e7c83509ac0ee50a14d765f89f4100c7b80fe014f0"
+  },
+  "planner": {
+    "path": "build/validation/signature-hud-2026-11-05/plan-images.py",
+    "sha256": "df47e0fea9e77494c8462a99bfc34f713c73412b202ed533a9664fa9342e723f"
+  },
+  "remover": {
+    "path": "build/validation/signature-hud-2026-11-05/remove-duplicate-images.ps1",
+    "sha256": "0c1834ab49cb8e8c3c74ee96571275de5bb6c9bdcf3c3a071f5b8bc490f8efb4"
+  },
+  "all_deletions_resolved_inside_named_D_build_roots": true,
+  "reparse_and_tracked_source_checks": true,
+  "no_active_own_native_processes_before_delete": true,
+  "full_byte_equality_checked_before_plan": true,
+  "all_canonical_and_protected_bytes_verified_afterwards": true,
+  "remaining_bmp_count": 57,
+  "apps_unchanged": [
+    {
+      "path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+      "sha256": "a74a4c718070240084b653c476eae14e4f21b68361d86c37e90078e9fe7e28c3"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\linux-build\\bin\\physim",
+      "sha256": "ee358bbd06166b75681a5551dafa62088c41f420cb8c373327ffd69f9a322544"
+    }
+  ],
+  "free_D_observed_before": 8589832192,
+  "free_D_observed_after": 8811159552,
+  "free_space_note": "Concurrent D activity is possible; observed free delta is not attributed exclusively to this cleanup. Removed bytes are logical file lengths.",
+  "preflight_note": "Two path-validator attempts failed before any deletion: raw .NET DirectoryInfo lacks the provider PSIsContainer property. Final type-based traversal completed; original successful receipt inspected directly.",
+  "preserved": "All latest own-run images, two selected old visual counterexamples, every distinct image content, source, dependencies, binaries/objects/caches, frozen source/runtime archives, unique error evidence, user experiments, shared VM and foreign WIP. No F or private Mac access."
+}

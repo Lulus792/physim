@@ -19,6 +19,8 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
   Zehn gezielte Bilder geprüft. Wort-/Tokengrenzen, lange/kleine Layouts, Detached,
   Fensterfokus, AX/physische Abnahme und weitere Verträge offen; keine volle UI-Abnahme.
   [Quellen/Programme/Prüfstufen](verification/signature-hud-2026-11-05.json).
+  [Quellcommit und gehosteter Mac-Nachlauf](verification/signature-hud-commit-2026-11-05.json),
+  [sichere Entfernung bytegleicher Bildduplikate](verification/signature-hud-cleanup-2026-11-05.json).
 - [Gemeinsamer Datenkern der Parameterhilfe](verification/signature-model-2026-11-05.md):
   C-/Physim-Quellbesitz, tatsächliche Ziele,370C-/396formalePh-API-Aufrufe sowie
   eigene Funktionen/Methoden. Windows/Linux App+je10/10 Daten, final neuer
