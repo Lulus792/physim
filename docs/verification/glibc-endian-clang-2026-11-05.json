@@ -1,0 +1,71 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "df9927c68d2295ce0ad4f4ada689f774cfa281ac",
+  "run": 42076708745,
+  "job": 127418724879,
+  "platform": "Ubuntu24.04 / Clang / Debug ASan+UBSan",
+  "conclusion": "failure",
+  "adapter_compile_and_link": "passed; native test executable ran both actual groups",
+  "groups": [
+    {
+      "entry": "native/Debug-sanitized/test-results/run-85ml__sh/results.json",
+      "passed": 26,
+      "total": 26,
+      "failures": []
+    },
+    {
+      "entry": "native/Debug-sanitized/test-results/run-mnptyxra/results.json",
+      "passed": 44,
+      "total": 48,
+      "failures": [
+        {
+          "name": "floating_workflow",
+          "exit_code": 1,
+          "diagnostics": [
+            "First workflow failure at stage 34 (next 35): 750 Messpunkte geladen. (tab=2, selected=1, samples=750, report=1, query=)"
+          ]
+        },
+        {
+          "name": "spring_workflow",
+          "exit_code": 1,
+          "diagnostics": [
+            "First workflow failure at stage 34 (next 35): 726 Messpunkte geladen. (tab=2, selected=1, samples=726, report=1, query=)"
+          ]
+        },
+        {
+          "name": "documentation_font_demand",
+          "exit_code": 1,
+          "diagnostics": [
+            "Font demand stage 3 failed: ui=16 code=16 variants=7",
+            "First workflow failure at stage 3 (next 4): Bereit. Ordner \u00f6ffnen oder ein neues Projekt anlegen. (tab=0, selected=0, samples=0, report=0, query=)"
+          ]
+        },
+        {
+          "name": "accessibility_links_atspi",
+          "exit_code": 1,
+          "diagnostics": [
+            "AssertionError: actual link error: None"
+          ]
+        }
+      ]
+    }
+  ],
+  "artifact": {
+    "id": 13439073784,
+    "path": "build/validation/glibc-endian-2026-11-05/artifact-13439073784.zip",
+    "sha256": "39f90751bb06f57ea94d9d06ecd8495c9a49d62ffea3a3e0558bb4267ff76d14",
+    "bytes": 113772928,
+    "entries_read_and_hashed": 2365,
+    "images_extracted": 0
+  },
+  "original_manifest": {
+    "path": "build/validation/glibc-endian-2026-11-05/clang-original.json",
+    "sha256": "66fd1fd7c09808a457b782973bbcc9f8c901402ce50c611cca2aad7c86ec20a5"
+  },
+  "scope": "Confirms glibc adapter compile/link and26data cases;44/48GUI cases passed. Four actual failures remain open; no full Linux UI acceptance.",
+  "remaining_handles": {
+    "gcc_ui": 127418724267,
+    "debian_package": 127418724841,
+    "general_ci": 42076708718
+  }
+}

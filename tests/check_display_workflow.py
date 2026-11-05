@@ -1112,7 +1112,7 @@ def signature_help_workflow(flow,directory):
 def signature_detached_workflow(flow,directory):
     for language in ("c","phys"):
         root=directory/language;root.mkdir(parents=True)
-        flow.run("--workspace-state-test",root,"signature-hud-detached-"+language,timeout=75,marker="SIGNATURE DETACHED SELF-TEST: PASSED")
+        flow.run("--workspace-state-test",root,"signature-hud-detached-"+language,timeout=105,marker="SIGNATURE DETACHED SELF-TEST: PASSED")
         output=flow.steps[-1]["stdout"]
         for target in range(3):
             require(f"SIGNATURE DETACHED language={language} target={target} actual-child-context=1 auto-open=1 list-disjoint=1 child-typing=1 native-return=1 source-caret-layout-preserved=1 primary-typing=1" in output,
@@ -1121,6 +1121,10 @@ def signature_detached_workflow(flow,directory):
                     "Missing actual main/child/external-process focus and preserved editor input")
             require(f"SIGNATURE FOCUS SELECTION language={language} target={target} nonempty-range=1 actual-return=1 source-caret-anchors-scroll=1" in output,
                     "OS focus return changed the source selection or did not restore its text channel")
+            require(f"SIGNATURE SEARCH FOCUS language={language} target={target} query-owner=1 separate-process=1 actual-return=1 query-typing=1 source-caret-selection-scroll=1" in output,
+                    "External OS focus return stole the search query's text channel or changed source state")
+            require(f"SIGNATURE SEARCH FOCUS language={language} target={target} button-owner=1 separate-process=1 actual-return=1 no-text-leak=1 source-caret-selection-scroll=1" in output,
+                    "External OS focus return stole a search button's focus or leaked text into the source/query")
         require(f"SIGNATURE DETACHED language={language} target=2 actual-child-context=1 long16=1 thumb-over-editor=1 outside-drag-preserved=1 typing-after-drag=1" in output,
                 "Missing overlapping detached signature drag and subsequent editor input")
         for name in ("signature-detached-normal.bmp","signature-detached-long.bmp"):

@@ -11,6 +11,16 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
 
 ## Neuere Editorprüfungen
 
+- [Suchfokus nach Anwendungswechsel](verification/search-focus-2026-11-05.md):
+  echter Verlust des Schaltflächenfokus auf Windows/Linux reproduziert und im
+  SDL-Adapter korrigiert. Beide Plattformen je 4/4 Daten und 3/3 UI-Gruppen,
+  darunter je 12 Suchfeld-/Schaltflächen-Sequenzen mit separatem OS-Prozess.
+  Acht Bildkopien vollständig identisch zu erhaltenen Referenzen;
+  [Duplikate entfernt](verification/search-focus-images-cleanup-2026-11-05.json).
+- [Ubuntu-Clang-Nachlauf zur Endian-Korrektur](verification/glibc-endian-clang-2026-11-05.md):
+  native Kompilierung/Linken erfolgreich, 26/26 Daten und 44/48 UI. Vier echte
+  Fehler offen; Original-ZIP mit offiziellem Digest und allen 2.365 Einträgen
+  gelesen, keine Bildextraktion. Keine vollständige glibc-/Linux-UI-Abnahme.
 - [Mac-Intel-Dateireiterquelle13cc4422](verification/macos-workspace-13cc-intel-2026-11-05.json):
   erster Schritt 3/3 und Matrix 1/1, tatsächlich 68 Projekte gebaut, aufgezeichnet
   und ausgewertet; Indizes 00..33 exakt zweimal bei 16/22 px. Original-ZIP,

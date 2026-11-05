@@ -655,7 +655,11 @@ bool nk_sdl_accessibility_event(struct nk_context *ctx,const SDL_Event *event) {
  SDL_LockMutex(sdl->accessibility_mutex);ps_a11y_model *m=sdl->accessibility;bool handled=false;
  if(event->type==SDL_EVENT_WINDOW_FOCUS_LOST || event->type==SDL_EVENT_MOUSE_BUTTON_DOWN) {
   if(SDL_getenv("PHYSIM_TEST_TRACE"))fprintf(stderr,"APP TEST TRACE: accessibility blur event=%u focused=%llu pending=%llu window=%u keyboard=%u ticks=%llu\n",event->type,(unsigned long long)m->focused_id,(unsigned long long)m->pending_focus,SDL_GetWindowID(sdl->win),SDL_GetKeyboardFocus()?SDL_GetWindowID(SDL_GetKeyboardFocus()):0,(unsigned long long)SDL_GetTicksNS());
-  ps_a11y_blur(m,0);
+  /* Losing host focus hides the focus indication, but keeps this window's
+   * logical control target. Publication already rejects removed/disabled
+   * targets. A pointer press, by contrast, explicitly changes that target. */
+  if(event->type==SDL_EVENT_WINDOW_FOCUS_LOST)m->keyboard_focus=false;
+  else ps_a11y_blur(m,0);
   sdl->accessibility_custom_keyboard=false;
  }
  else if(sdl->accessibility_custom_keyboard && (event->type==SDL_EVENT_KEY_DOWN ||

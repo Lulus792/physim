@@ -11,7 +11,7 @@ static struct {
     struct nk_rect thumb,outside;
     ps_dock_layout layout;
     SDL_Process *peer;
-    bool peer_ready;
+    bool peer_ready,search_control;
     char release[4096];
     unsigned child_blurs;
 } signature_detached;
@@ -238,7 +238,68 @@ static void signature_detached_inner(app *a,bool language,int *stage,int *code){
         SD_WAIT(edit->cursor==signature_detached.resume_cursor && edit->select_start==edit->select_end && signature_test_full(a,0));
         ok=(size_t)nk_str_len_char(&edit->string)==signature_detached.bytes &&
             !memcmp(nk_str_get_const(&edit->string),signature_detached.source,signature_detached.bytes) && signature_detached_remember(edit);
-        SD_NEXT(7,5);break;
+        a->find[0]=0;signature_detached.search_control=false;
+        SD_KEY(SDLK_F,PS_UI_COMMAND_MOD);SD_NEXT(44,5);break;
+    case 44:
+        SD_WAIT(a->show_search && a->search_keyboard && !a->search_focus && a->search_field==1 &&
+            a->ui->active && !strcmp(a->ui->active->name_string,"editor-search") && a->ui->active->edit.active &&
+            !edit->active && SDL_TextInputActive(p->window) && signature_detached_hidden(a));
+        ok=signature_detached_preserved(edit,true);completion_auto_text(a,"focus-probe");SD_NEXT(45,5);break;
+    case 45:
+        SD_WAIT(!strcmp(a->find,"focus-probe"));
+        ok=signature_detached_preserved(edit,true);SD_NEXT(46,5);break;
+    case 46:
+        {char executable[4096];join(signature_detached.release,sizeof signature_detached.release,signature_detached.root,"signature-focus-release");
+         ok=signature_detached_preserved(edit,true) && !exists(signature_detached.release) && ps_executable_path(executable,sizeof executable);
+         if(ok){const char *args[]={executable,"--signature-focus-peer",signature_detached.release,NULL};
+             signature_detached.child_blurs=0;signature_detached.peer_ready=false;
+             signature_detached.peer=SDL_CreateProcess(args,true);ok=signature_detached.peer!=NULL;}}
+        SD_NEXT(47,15);break;
+    case 47:
+        if(!signature_detached.peer_ready){char ready=0;size_t count=SDL_ReadIO(SDL_GetProcessOutput(signature_detached.peer),&ready,1);
+            signature_detached.peer_ready=count==1 && ready=='R';}
+        SD_WAIT(signature_detached.peer_ready && !SDL_GetKeyboardFocus() && signature_detached.child_blurs>0);
+        SD_NEXT(48,5);break;
+    case 48:
+        SD_WAIT(!SDL_GetKeyboardFocus() && signature_detached.child_blurs>0);
+        ok=signature_detached_preserved(edit,true) && !p->blurred_editor && !a->completion_active && signature_detached_hidden(a);
+        {FILE *release=fopen(signature_detached.release,"wb");if(!release)ok=false;else if(fclose(release))ok=false;}
+        SD_NEXT(49,5);break;
+    case 49:
+        {int exit_code=-1;SD_WAIT(SDL_WaitProcess(signature_detached.peer,false,&exit_code));ok=exit_code==0;
+         SDL_DestroyProcess(signature_detached.peer);signature_detached.peer=NULL;}
+        ok=ok && remove(signature_detached.release)==0 && SDL_RaiseWindow(p->window);SD_NEXT(50,15);break;
+    case 50:
+        SD_WAIT(SDL_GetKeyboardFocus()==p->window && a->search_keyboard && !edit->active && !p->blurred_editor &&
+            a->completion_keyboard_edit!=edit && a->completion_focus_edit!=edit && signature_detached_hidden(a));
+        ok=signature_detached_preserved(edit,true);
+        if(signature_detached.search_control){
+            ok=ok && nk_sdl_accessibility_is_focused(a->ui,NULL,"Vorheriger Treffer");
+            completion_auto_text(a,"ignored");SD_NEXT(53,5);
+        }else{
+            SD_WAIT(SDL_TextInputActive(p->window) && a->ui->active && !strcmp(a->ui->active->name_string,"editor-search") && a->ui->active->edit.active);
+            completion_auto_text(a,"!");SD_NEXT(51,5);
+        }
+        break;
+    case 51:
+        SD_WAIT(!strcmp(a->find,"focus-probe!"));
+        ok=signature_detached_preserved(edit,true);
+        if(ok)printf("SIGNATURE SEARCH FOCUS language=%s target=%u query-owner=1 separate-process=1 actual-return=1 query-typing=1 source-caret-selection-scroll=1\n",language?"phys":"c",signature_detached.target);
+        SD_KEY(SDLK_TAB,0);SD_NEXT(52,5);break;
+    case 52:
+        SD_WAIT(nk_sdl_accessibility_is_focused(a->ui,NULL,"Vorheriger Treffer") && a->ui->active && !a->ui->active->edit.active);
+        ok=signature_detached_preserved(edit,true);signature_detached.search_control=true;SD_NEXT(46,5);break;
+    case 53:
+        ok=!strcmp(a->find,"focus-probe!") && signature_detached_preserved(edit,true) &&
+            nk_sdl_accessibility_is_focused(a->ui,NULL,"Vorheriger Treffer") && signature_detached_hidden(a);
+        if(ok)printf("SIGNATURE SEARCH FOCUS language=%s target=%u button-owner=1 separate-process=1 actual-return=1 no-text-leak=1 source-caret-selection-scroll=1\n",language?"phys":"c",signature_detached.target);
+        SD_KEY(SDLK_ESCAPE,0);SD_NEXT(54,5);break;
+    case 54:
+        SD_WAIT(!a->show_search && !a->search_icon_focus);
+        ok=signature_detached_preserved(edit,true);
+        /* Restore the source test fixture only after both search-owner
+         * assertions. This is not evidence of physical keyboard traversal. */
+        completion_return_focus(a,edit);SD_NEXT(7,5);break;
     }
 done:
     if(!ok){

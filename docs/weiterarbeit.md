@@ -7,6 +7,20 @@ Projektumsetzung bleiben offen; Teilprüfungen sind keine volle Punktzahl.
 
 ## Letzter geprüfter Schritt
 
+[Suchfokus nach Anwendungswechsel](verification/search-focus-2026-11-05.md):
+Schaltflächenfokus ging im SDL-Adapter beim echten OS-Fokusverlust verloren.
+Alte Quelle auf Windows und Linux mit neuer Probe exakt an Stufe 50 verworfen.
+Jetzt logisches Ziel beim Host-Blur erhalten; Tastaturhoheit sofort entziehen,
+Mausklick und Verwerfen deaktivierter/verschwundener Ziele erhalten.
+Windows Release und Alpine ASan/UBSan jeweils **4/4 Daten + 3/3 UI-Gruppen**;
+je 12 echte Suchfokus-Sequenzen mit separatem Prozess über C/Ph und drei Editoren.
+[Originale und Grenzen](verification/search-focus-2026-11-05.json).
+Alle acht repräsentativen Bilder bytegleich zu bereits geprüften Referenzen;
+[nur Duplikate entfernt](verification/search-focus-images-cleanup-2026-11-05.json).
+Warmstand **search-focus-fixed**, 303 Eingaben; alle drei Änderungen vor Build
+Root/Isolation/Manifest bytegleich. Beide Zustände eingefroren. Detailstand:
+`build/validation/search-focus-2026-11-05/STATE.md`.
+
 [Linux-Endianschnittstellen im C-Parser](verification/glibc-endian-2026-11-05.md):
 Ubuntu/Clang scheiterte beim Kompilieren an versteckten le16toh/be16toh;
 Debian/GCC später beim Linken. Beide Original-Joblogs zur Quelle13cc4422 gelesen
@@ -71,11 +85,16 @@ pollen oder neu starten. Diese alte Quelle belegt nicht die spätere Fokuskorrek
 
 ## Nächste konkrete Aufgaben
 
-1. glibc-Quelledf9927c6: **Linux-Paket42076708931**, Job127418724841 zuletzt im
-   Release-Build/Test; **Linux-UI42076708745**, GCC127418724267 bei Abhängigkeiten,
-   Clang127418724879 beim SDL-Build. **CI42076708718** pending, noch keine Jobs.
-   Dieselben Handles weiterverfolgen, nicht neu starten. Erst tatsächliche
-   Ubuntu-/Debian-Ergebnisse belegen die Korrektur unter glibc.
+1. glibc-Quelle df9927c6: [Ubuntu-Clang-Nachlauf gelesen](verification/glibc-endian-clang-2026-11-05.md),
+   Job127418724879 terminal/failure: Kompilierung/Linken jetzt erfolgreich,
+   26/26 Daten und 44/48 UI. Vier offene Fehler: floating/spring jeweils erster
+   Fehler Stufe34, font_demand Stufe3, accessibility_links_atspi fehlende Meldung.
+   Original-ZIP/Digest/alle2365Einträge gelesen, keine Bildextraktion. Nicht
+   erneut aus Kontext herunterladen. Ursachenprüfung anhand gesicherter Originale.
+   **Linux-Paket42076708931**, Job127418724841 zuletzt im
+   Release-Build/Test; **Linux-UI42076708745**, GCC127418724267 bei UI-Abläufen.
+   **CI42076708718** pending, noch keine Jobs. Dieselben Handles weiterverfolgen,
+   nicht neu starten. Ubuntu-Clang belegt die Parserkorrektur; Debian bleibt offen.
    [Quell-/Run-Nachweis](verification/glibc-endian-commit-2026-11-05.json).
    Dateireiterquelle13cc4422: Mac-Workspace **42073119561** jetzt terminal.
    [Intel127406074781 vollständig 4/4 samt 68-Projekt-Matrix](verification/macos-workspace-13cc-intel-2026-11-05.json),
@@ -97,7 +116,7 @@ pollen oder neu starten. Diese alte Quelle belegt nicht die spätere Fokuskorrek
    Alle vier8bf-Läufe terminal;8ZIPs/Digests/34Einträge gelesen.18Bildinhalte
    bytegleich zu behaltenen Referenzen, keine Extraktionen. Nicht weiter pollen
    oder erneut lesen. Ebenso geschlossene Quelle0d3f4a65/42059129050 erhalten.
-2. Fokuswechsel aus Suchinsel/anderen Controls, Capture außerhalb einer
+2. Suchfeld/Schaltfläche sind im obigen engen Umfang geprüft; noch Capture außerhalb einer
    OS-Fenstergrenze und native Accessibility-/Screenreader-Aufgaben. Die neue
    Peerprobe verwendet einen eigenen Prozess derselben Binärdatei und geskriptete
    SDL-Tasten; keine vollständige physische/OS-Tastatur- oder assistive Abnahme.

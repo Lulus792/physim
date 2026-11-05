@@ -1,0 +1,363 @@
+{
+  "date": "2026-11-05",
+  "parent_commit": "3370bb63",
+  "cause": "SDL adapter erased logical control focus on host blur as well as pointer press. Keep logical target on blur; clear host keyboard ownership immediately; publication rejects removed/disabled targets.",
+  "changed": [
+    "app/ui_sdl.c",
+    "app/signature_detached_tests.inc",
+    "tests/check_display_workflow.py"
+  ],
+  "baseline": {
+    "windows": {
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "signature_detached_workflow"
+      ],
+      "exit_code": 1,
+      "app_sha256": "6ff393cf501f0f79f3ffc6ace99c5ac220d915be7afcd587f4a9da9ad2837d63",
+      "asan_options": "detect_leaks=0:halt_on_error=1",
+      "display": null,
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-jpow3fa2/results.json",
+      "results_sha256": "a94293a8874d6b7b541ed303b426b6093271398dc88caf46d2d7d3bac87c863a",
+      "log": "build/validation/search-focus-2026-11-05/first-windows.log",
+      "log_sha256": "2b71e2d25426c629d18b7f7fc9f7a4ad1e4196c00f71d38dd88722bede0fe7cd",
+      "cases": [
+        {
+          "name": "signature_detached_workflow",
+          "status": "failed"
+        }
+      ],
+      "precise_rejection": "Search button loses actual focus after external process return; source and query preserved."
+    },
+    "linux": {
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "signature_detached_workflow"
+      ],
+      "exit_code": 1,
+      "app_sha256": "02010afba0de203e333c6b96417dc8aec720a97320e5e6b15a1a1594597d9658",
+      "asan_options": "detect_leaks=0:halt_on_error=1",
+      "display": ":102",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-uo5ho2nz/results.json",
+      "results_sha256": "8022f5148f468cedf7e5c564eba00c65bab36ae9e96c04a9a07999f44d62b9f8",
+      "log": "build/validation/search-focus-2026-11-05/first-linux.log",
+      "log_sha256": "d205f43585bfeac0d52481cbd7a245e48ae53f298b04e0798219ad7d2cfe2b78",
+      "cases": [
+        {
+          "name": "signature_detached_workflow",
+          "status": "failed"
+        }
+      ],
+      "precise_rejection": "Search button loses actual focus after external process return; source and query preserved."
+    }
+  },
+  "final": {
+    "windows": {
+      "data": {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--sdl",
+          "D:\\Physim\\third_party\\SDL3-3.2.30",
+          "--test",
+          "--test-filter",
+          "accessibility_focus",
+          "--test-filter",
+          "accessibility_suspend",
+          "--test-filter",
+          "accessibility_edit",
+          "--test-filter",
+          "accessibility_options"
+        ],
+        "exit_code": 0,
+        "app_sha256": "302845d6155b381c81f9e958b4ee956f461ee263257108ba55b05f1cee13eff6",
+        "asan_options": "detect_leaks=1:halt_on_error=1",
+        "display": null,
+        "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-00bghdvb/results.json",
+        "results_sha256": "83192d277bff23c91fea51e2f4828b2579c7a902139301a0ac188a256b1b0831",
+        "log": "build/validation/search-focus-2026-11-05/data-windows.log",
+        "log_sha256": "675634e3f7a8f3511f02c3491faab16a34345d57ae0fc1d5d24b1c13e43b1253",
+        "cases": [
+          {
+            "name": "accessibility_suspend",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_edit",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_options",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_focus",
+            "status": "passed"
+          }
+        ]
+      },
+      "fixed": {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--sdl",
+          "D:\\Physim\\third_party\\SDL3-3.2.30",
+          "--test-display",
+          "--test-filter",
+          "signature_detached_workflow",
+          "--test-filter",
+          "settings_keyboard_workflow",
+          "--test-filter",
+          "workbench_workflow"
+        ],
+        "exit_code": 0,
+        "app_sha256": "302845d6155b381c81f9e958b4ee956f461ee263257108ba55b05f1cee13eff6",
+        "asan_options": "detect_leaks=0:halt_on_error=1",
+        "display": null,
+        "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-rwafpxso/results.json",
+        "results_sha256": "121f8368e22cb7306329762a670ef644e8d2eaed6b0525c42b1e9a24ce051209",
+        "log": "build/validation/search-focus-2026-11-05/fixed-windows.log",
+        "log_sha256": "09532f6d791c1436215cac1d211d7d98b07d0e5038b0e1f9d0853f27de800f28",
+        "cases": [
+          {
+            "name": "settings_keyboard_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "workbench_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "signature_detached_workflow",
+            "status": "passed"
+          }
+        ],
+        "actual_search_focus_sequences": 12
+      }
+    },
+    "linux": {
+      "data": {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+          "--build-dir",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+          "--config",
+          "Debug",
+          "--jobs",
+          "4",
+          "--sdl",
+          "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+          "--sanitizers",
+          "--test",
+          "--test-filter",
+          "accessibility_focus",
+          "--test-filter",
+          "accessibility_suspend",
+          "--test-filter",
+          "accessibility_edit",
+          "--test-filter",
+          "accessibility_options"
+        ],
+        "exit_code": 0,
+        "app_sha256": "a3c34f6937a96654a7e4724f01ff1d9826e48fc02d78c6d2434e660441da4f22",
+        "asan_options": "detect_leaks=1:halt_on_error=1",
+        "display": ":102",
+        "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-w81jmfgk/results.json",
+        "results_sha256": "cfe2913b042fc6485c2a0cf7aceccabef79b13638aa70bdcc543f52b0afd2085",
+        "log": "build/validation/search-focus-2026-11-05/data-linux.log",
+        "log_sha256": "c5aec1b8d5d6624261b2b89f0a10016052b30d6821e02ecf0406a37ef815e177",
+        "cases": [
+          {
+            "name": "accessibility_suspend",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_edit",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_options",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_focus",
+            "status": "passed"
+          }
+        ]
+      },
+      "fixed": {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+          "--build-dir",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+          "--config",
+          "Debug",
+          "--jobs",
+          "4",
+          "--sdl",
+          "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+          "--sanitizers",
+          "--test-display",
+          "--test-filter",
+          "signature_detached_workflow",
+          "--test-filter",
+          "settings_keyboard_workflow",
+          "--test-filter",
+          "workbench_workflow"
+        ],
+        "exit_code": 0,
+        "app_sha256": "a3c34f6937a96654a7e4724f01ff1d9826e48fc02d78c6d2434e660441da4f22",
+        "asan_options": "detect_leaks=0:halt_on_error=1",
+        "display": ":102",
+        "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-fx9mjcjx/results.json",
+        "results_sha256": "4a0a96b86c34e175a49f50237969a825c5f9b2870e925c3d9064bd7d3d9ca171",
+        "log": "build/validation/search-focus-2026-11-05/fixed-linux.log",
+        "log_sha256": "a637f4558f0c0221de2b497148afc978e7edf09ca4d883c472881fea02b2ab2e",
+        "cases": [
+          {
+            "name": "settings_keyboard_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "workbench_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "signature_detached_workflow",
+            "status": "passed"
+          }
+        ],
+        "actual_search_focus_sequences": 12
+      }
+    }
+  },
+  "existing_representative_images": [
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-rwafpxso/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-normal.bmp",
+      "canonical": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-69j1crw4/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-normal.bmp",
+      "sha256": "7831636fcfcc5175cdc99c778b6bfcbc7432360858a0dcfb3fe648b12be7099a",
+      "canonical_sha256": "7831636fcfcc5175cdc99c778b6bfcbc7432360858a0dcfb3fe648b12be7099a",
+      "identical": true
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-rwafpxso/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-long.bmp",
+      "canonical": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-69j1crw4/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-long.bmp",
+      "sha256": "98cfa61e49cf392de118cfe26989aefc68116788a5cffcb7a11a58ba5a8f28bc",
+      "canonical_sha256": "98cfa61e49cf392de118cfe26989aefc68116788a5cffcb7a11a58ba5a8f28bc",
+      "identical": true
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-rwafpxso/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-normal.bmp",
+      "canonical": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-69j1crw4/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-normal.bmp",
+      "sha256": "664cc75e22943b40c65cd1f36c116d7b1da0137000bc5074b8ecf81254db6bde",
+      "canonical_sha256": "664cc75e22943b40c65cd1f36c116d7b1da0137000bc5074b8ecf81254db6bde",
+      "identical": true
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-rwafpxso/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-long.bmp",
+      "canonical": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-69j1crw4/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-long.bmp",
+      "sha256": "7199fb45dfb8c63369a7edda063afde4cb380130581ca1282f73e703cb681807",
+      "canonical_sha256": "7199fb45dfb8c63369a7edda063afde4cb380130581ca1282f73e703cb681807",
+      "identical": true
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-fx9mjcjx/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-normal.bmp",
+      "canonical": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xh60v0jy/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-normal.bmp",
+      "sha256": "9d3831542991da417a0607c2826f6253890c4896aa7662396805f4686d6e9251",
+      "canonical_sha256": "9d3831542991da417a0607c2826f6253890c4896aa7662396805f4686d6e9251",
+      "identical": true
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-fx9mjcjx/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-long.bmp",
+      "canonical": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xh60v0jy/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-long.bmp",
+      "sha256": "3b9ea85a5574be19ef7931eeba2c740ff6d48e51615169220a14ee687c725b9b",
+      "canonical_sha256": "3b9ea85a5574be19ef7931eeba2c740ff6d48e51615169220a14ee687c725b9b",
+      "identical": true
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-fx9mjcjx/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-normal.bmp",
+      "canonical": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xh60v0jy/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-normal.bmp",
+      "sha256": "59bf8b2f3ee143ed8143c8c90e6d395d5b738b3831633d0f92fc6e9a202423ac",
+      "canonical_sha256": "59bf8b2f3ee143ed8143c8c90e6d395d5b738b3831633d0f92fc6e9a202423ac",
+      "identical": true
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-fx9mjcjx/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-long.bmp",
+      "canonical": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xh60v0jy/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-long.bmp",
+      "sha256": "a4e052256d3039f5dc68de697afdb5b6ca5e9da8882cdd5e55815b03986cf7d6",
+      "canonical_sha256": "a4e052256d3039f5dc68de697afdb5b6ca5e9da8882cdd5e55815b03986cf7d6",
+      "identical": true
+    }
+  ],
+  "prebuild_audit": {
+    "owned_inputs": 303,
+    "all_changed_files_owned": true,
+    "root_isolated_manifest_equal": true,
+    "changed_files": {
+      "app/ui_sdl.c": "218a211c4dbcf5531e24f05f0f9652e5076030fe5fce9582cc518196b40d8951",
+      "app/signature_detached_tests.inc": "ae464955b80da328146558fad9b535f7e0d098e1f9776d0296aed10900d3425d",
+      "tests/check_display_workflow.py": "fe6560f4e1d72636da60ff56767e86d4dbc93258c43b3ecd59b1f60a4c2716f9"
+    }
+  },
+  "limits": [
+    "Actual OS focus uses separate executable process; text/key payloads are scripted SDL events, not physical keyboard.",
+    "Focus setup for the existing source continuation occurs only after both search-owner assertions.",
+    "Private Mac OFF. New native Mac acceptance remains open.",
+    "No visual layout change or full UI/assistive acceptance claimed."
+  ]
+}
