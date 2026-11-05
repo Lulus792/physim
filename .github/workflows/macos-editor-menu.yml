@@ -83,5 +83,6 @@ jobs:
             build/native/**/test-results/**/junit.xml
             build/native/**/test-results/**/signature_help_workflow/**/signature-first.bmp
             build/native/**/test-results/**/signature_help_workflow/**/signature-long.bmp
+            build/native/**/test-results/**/signature_help_workflow/**/signature-failure.bmp
           if-no-files-found: warn
           retention-days: 14

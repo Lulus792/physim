@@ -5,6 +5,7 @@ static bool signature_function_ink;
 static char signature_code_text[8192];
 static bool signature_arrow_broken,signature_arrow_seen,signature_footer_error;
 static size_t signature_footer_bytes;
+static struct nk_rect signature_thumb_bounds;
 static size_t signature_text_bytes(const char *text,size_t bytes){
     size_t count=0;for(size_t i=0;i<bytes;i++)if(text[i]!=' ' && text[i]!='\t' && text[i]!='\r' && text[i]!='\n')count++;return count;
 }
@@ -13,6 +14,7 @@ static void signature_deny_free(void *user,void *pointer,size_t bytes){(void)use
 static void signature_test_draw(app *a){
     signature_generation++;signature_painted_bytes=signature_bold_bytes=0;signature_function_ink=false;
     signature_code_text[0]=0;signature_arrow_broken=signature_arrow_seen=signature_footer_error=false;signature_footer_bytes=0;
+    signature_thumb_bounds=nk_rect(0,0,0,0);
     struct nk_window *w=nk_window_find(a->ui,"call-parameter-help");
     if(!w || w->seq!=a->ui->seq || (w->flags&NK_WINDOW_HIDDEN))return;
     const struct nk_command *cmd;const ps_ui_palette *p=a->preferences.theme==PS_THEME_LIGHT?&PS_UI_LIGHT:
@@ -23,7 +25,15 @@ static void signature_test_draw(app *a){
     nk_foreach(cmd,a->ui){
         if(cmd->type==NK_COMMAND_SCISSOR){const struct nk_command_scissor *s=(const struct nk_command_scissor*)cmd;clip=nk_rect(s->x,s->y,s->w,s->h);continue;}
         nk_size at=(nk_size)((const char*)cmd-(const char*)a->ui->memory.memory.ptr);
-        if(cmd->type!=NK_COMMAND_TEXT || at<w->buffer.begin || at>=w->buffer.end)continue;
+        if(at<w->buffer.begin || at>=w->buffer.end)continue;
+        if(cmd->type==NK_COMMAND_RECT_FILLED){
+            const struct nk_command_rect_filled *r=(const struct nk_command_rect_filled*)cmd;
+            const struct nk_style_scrollbar *s=&a->ui->style.scrollv;struct nk_rect b=a->signature_body_bounds;
+            bool cursor=completion_ink_color(r->color,s->cursor_normal.data.color) || completion_ink_color(r->color,s->cursor_hover.data.color) || completion_ink_color(r->color,s->cursor_active.data.color);
+            if(cursor && r->w>0 && r->w<=8 && r->h>0 && r->h<b.h*.5f && r->x>=b.x+b.w-10 && r->x+r->w<=b.x+b.w+1 && r->y>=b.y-1 && r->y+r->h<=b.y+b.h+1)
+                signature_thumb_bounds=nk_rect(r->x,r->y,r->w,r->h);
+        }
+        if(cmd->type!=NK_COMMAND_TEXT)continue;
         const struct nk_command_text *t=(const struct nk_command_text*)cmd;
         float glyph_width=t->font->width(t->font->userdata,t->font->height,t->string,t->length);
         if(t->x<clip.x || t->y<clip.y || t->x+glyph_width>clip.x+clip.w+1 || t->y+t->font->height>clip.y+clip.h+1)continue;
@@ -69,6 +79,7 @@ static void signature_wheel(app *a,float delta){
 static void signature_test_frame(app *a,bool language,int *stage,int *code,const char **capture){
     static unsigned target;static bool prepared;static double timeout;bool ok=true;
     static int long_cursor;static struct nk_vec2 long_scroll;static const void *long_rows;
+    static struct nk_rect drag_start,drag_end;
     workspace_document *doc=active_document(a);
     struct nk_text_edit *edit=target==0?&a->experiment:target==1?&a->analysis:doc?&doc->edit:NULL;
     if(a->library_thread || signature_generation<signature_wait_generation)return;
@@ -79,12 +90,19 @@ static void signature_test_frame(app *a,bool language,int *stage,int *code,const
     switch(*stage){
     case 0:
         if(!prepared){ok=open_project(a);prepared=ok;}
+        /* Raising is asynchronous and may be denied by the desktop. Never
+         * replace the real focus guard with synthetic focus events. */
+        if(target==0 && !SDL_RaiseWindow(a->window)){fprintf(stderr,"Signature focus request failed: %s\n",SDL_GetError());ok=false;break;}
         {ps_preferences p=a->preferences;p.theme=target;p.completion_auto=true;p.ui_size=target==1?22:16;p.editor_size=target==1?22:12;preferences_apply(a,&p);}
         if(target==2){char path[4096];join(path,sizeof path,a->project,language?"completion-note.phys":"completion-note.c");preview_workspace_path(a,path);}
         else{a->tab=target?2:0;if(target)a->analysis_tab=1;}
         SIG_NEXT(1);break;
-    case 1:ok=signature_seed(a,edit,language?"func step():\n    Vec3":"void f(){ps_v3");SIG_NEXT(2);break;
-    case 2:SIG_WAIT(edit && edit->active);SIG_TEXT("(");SIG_NEXT(3);break;
+    case 1:
+        ok=signature_seed(a,edit,language?"func step():\n    Vec3":"void f(){ps_v3");SIG_NEXT(2);
+        /* Real desktop activation/Computer Use can take longer than the
+         * normal5s UI assertion. Still fail honestly if focus never arrives. */
+        timeout=ps_clock()+30;break;
+    case 2:SIG_WAIT(edit && edit->active && SDL_GetKeyboardFocus()==a->window);SIG_TEXT("(");SIG_NEXT(3);break;
     case 3:
         SIG_WAIT(signature_test_full(a,0));ok=a->signature_help.language==language && a->signature_help.display->count==3;
         if((!language && target==0) || (language && target==1))*capture="signature-first.bmp";
@@ -104,6 +122,14 @@ static void signature_test_frame(app *a,bool language,int *stage,int *code,const
     case 8:
         SIG_WAIT(signature_test_full(a,1));ok=strstr(a->signature_status,"Parameter 2 von 3")!=NULL;
         if(a->completion_active)completion_dismiss(a,edit);
+        signature_wait_generation=signature_generation+2;SIG_NEXT(35);break;
+    case 35:
+        /* Exercise the real automatic refresh even when its timer has not yet
+         * elapsed. No-result refresh used to drop editor keyboard ownership. */
+        SIG_WAIT(edit->active && a->completion_focus_edit!=edit);
+        {bool owned=a->completion_keyboard_edit==edit;completion_open_kind(a,edit,false);
+        ok=owned && a->completion_keyboard_edit==edit;
+        if(ok)printf("SIGNATURE INPUT language=%s target=%u automatic-query-keeps-editor=1\n",language?"phys":"c",target);}
         SIG_TEXT("2, 3, ");SIG_NEXT(9);break;
     case 9:
         SIG_WAIT(signature_test_full(a,SIZE_MAX));ok=strstr(a->signature_status,"Argument 4 · erwartet 3 Parameter")!=NULL;
@@ -198,7 +224,21 @@ static void signature_test_frame(app *a,bool language,int *stage,int *code,const
     case 25:
         SIG_WAIT(strstr(signature_code_text,language?"Float64":"p15") && signature_footer_full(a));
         SIG_KEY(SDLK_HOME,SDL_KMOD_ALT);SIG_NEXT(26);break;
-    case 26:SIG_WAIT(!a->signature_scroll_y);SIG_KEY(SDLK_SPACE,SDL_KMOD_CTRL|SDL_KMOD_SHIFT);SIG_NEXT(27);break;
+    case 26:
+        SIG_WAIT(!a->signature_scroll_y && signature_thumb_bounds.w>0);
+        drag_start=signature_thumb_bounds;drag_end=drag_start;drag_end.y=a->signature_body_bounds.y+a->signature_body_bounds.h-drag_end.h-2;
+        test_window_mouse(a->window,drag_start,true);signature_wait_generation=signature_generation+2;SIG_NEXT(32);break;
+    case 32:
+        {SDL_Event e={0};e.type=SDL_EVENT_MOUSE_MOTION;e.motion.windowID=SDL_GetWindowID(a->window);e.motion.which=PS_TEST_MOUSE_ID;e.motion.state=SDL_BUTTON_LMASK;
+        e.motion.x=drag_end.x+drag_end.w*.5f;e.motion.y=drag_end.y+drag_end.h*.5f;SDL_PushEvent(&e);}
+        signature_wait_generation=signature_generation+2;SIG_NEXT(33);break;
+    case 33:
+        SIG_WAIT(a->signature_scroll_y>0 && signature_footer_full(a));
+        ok=edit->cursor==long_cursor && edit->scrollbar.x==long_scroll.x && edit->scrollbar.y==long_scroll.y && a->signature_layout==long_rows;
+        test_window_mouse(a->window,drag_end,false);signature_wait_generation=signature_generation+2;SIG_NEXT(34);break;
+    case 34:
+        SIG_WAIT(!a->ui->input.mouse.buttons[NK_BUTTON_LEFT].down);
+        SIG_KEY(SDLK_SPACE,SDL_KMOD_CTRL|SDL_KMOD_SHIFT);SIG_NEXT(27);break;
     case 27:
         SIG_WAIT(a->signature_scroll_y>0 && strstr(signature_code_text,"p15") && signature_footer_full(a));
         ok=a->signature_layout==long_rows && edit->cursor==long_cursor;
@@ -217,7 +257,7 @@ static void signature_test_frame(app *a,bool language,int *stage,int *code,const
     case 31:
         SIG_WAIT(signature_footer_full(a) && signature_footer_error);
         ok=!strcmp(a->signature_status,"Argument 1 · erwartet 0 Parameter") && a->signature_help.active_parameter==SIZE_MAX;
-        printf("SIGNATURE LONG language=%s all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1\n",language?"phys":"c");
+        printf("SIGNATURE LONG language=%s all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1 thumb-drag=1\n",language?"phys":"c");
         a->quitting=true;break;
     }
 finished:

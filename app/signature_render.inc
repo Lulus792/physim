@@ -126,12 +126,18 @@ static void signature_view(app *a,int width,int height){
         if(a->signature_scroll_max>0){
             ps_ui_row_exact_dynamic(ui,body_h,1);a->signature_body_bounds=nk_widget_bounds(ui);
             ui->active=ui->current;
+            /* This inert background card retains editor focus. Groups inherit
+             * its ROM flag, though: allow pointer input ONLY while constructing
+             * the signature scrollbar, then restore the card's prior state. */
+            nk_flags readonly=ui->current->flags&NK_WINDOW_ROM;
+            ui->current->flags&=~(nk_flags)NK_WINDOW_ROM;
             if(nk_group_scrolled_offset_begin(ui,&a->signature_scroll_x,&a->signature_scroll_y,"call-signature-body",0)){
                 ps_ui_row_exact_dynamic(ui,code_h,1);nk_widget(&r,ui);r.w=inner;a->signature_field_bounds=r;
                 signature_code(a,inner,r.x,r.y,true);
                 if(!fixed_footer){ps_ui_row_exact_dynamic(ui,status_h,1);nk_widget(&r,ui);r.w=inner;a->signature_status_bounds=r;signature_status_draw(a,r);}
                 nk_group_scrolled_end(ui);
             }
+            ui->current->flags|=readonly;
             ui->active=previous;
         }else{
             ps_ui_row_exact_dynamic(ui,code_h,1);nk_widget(&r,ui);r.w=inner;a->signature_body_bounds=a->signature_field_bounds=r;

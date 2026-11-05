@@ -1,0 +1,251 @@
+{
+  "date": "2026-11-05",
+  "run": 42026549588,
+  "source_commit": "ba95641f29eb8c18de9b2e3d4d5c3585daedf1a8",
+  "status": "completed",
+  "conclusion": "failure",
+  "url": "https://github.com/Lulus792/physim/actions/runs/42026549588",
+  "reports": [
+    {
+      "architecture": "arm64",
+      "artifact": 13413319480,
+      "zip": {
+        "path": "build/validation/signature-wrap-2026-11-05/13413319480.zip",
+        "sha256": "508256379dc8d7f70defd9c9c5210862e47280024d4d635d6216416ddda72a78"
+      },
+      "original": {
+        "path": "build/validation/signature-wrap-2026-11-05/13413319480-original.json",
+        "sha256": "cf9e054b2466f6b9f7892147564df696a1debe0fbb0af7a01ae40de0f605a839"
+      },
+      "all_original_zip_entries_read_and_hashed": true,
+      "entries": {
+        "Release/test-results/run-9wp21mo5/results.json": "83568db32ec29ee2ee8b1c324e55a8caa553ce5ce0615c59c139a9635c883501",
+        "Release/test-results/run-iyac_1pg/results.json": "0b0cb8e0d38cca9d9cdb271700ef4b465b718d3f59e62125f79b63272facbd60"
+      },
+      "groups": [
+        {
+          "path": "Release/test-results/run-9wp21mo5/results.json",
+          "cases": [
+            {
+              "name": "c_call_context",
+              "status": "passed"
+            },
+            {
+              "name": "c_signatures",
+              "status": "passed"
+            },
+            {
+              "name": "c_lookup",
+              "status": "passed"
+            },
+            {
+              "name": "signature_wrap",
+              "status": "passed"
+            },
+            {
+              "name": "completion_locals",
+              "status": "passed"
+            },
+            {
+              "name": "completion_c_locals",
+              "status": "passed"
+            },
+            {
+              "name": "call_targets",
+              "status": "passed"
+            },
+            {
+              "name": "signature_help",
+              "status": "passed"
+            },
+            {
+              "name": "editor_signatures",
+              "status": "passed"
+            },
+            {
+              "name": "module_signatures",
+              "status": "passed"
+            },
+            {
+              "name": "completion_info",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "path": "Release/test-results/run-iyac_1pg/results.json",
+          "cases": [
+            {
+              "name": "documents_small",
+              "status": "passed"
+            },
+            {
+              "name": "documents_large",
+              "status": "passed"
+            },
+            {
+              "name": "completion_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_automatic_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "api_reference_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "signature_help_workflow",
+              "status": "failed"
+            },
+            {
+              "name": "completion_info_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_automatic_deadline_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_locals_workflow",
+              "status": "passed"
+            }
+          ]
+        }
+      ],
+      "failures": [
+        {
+          "name": "signature_help_workflow",
+          "exit_code": 1,
+          "diagnostic": [
+            "Signature geometry: scroll=0 max=0.000 rows=0 body=0.000/0.000/0.000/0.000 code=0.000/0.000/0.000/0.000 footer=0.000/0.000/0.000/0.000 footer-bytes=0 reveal=1 current=1 focus=0 text=[]",
+            "Signature HUD failure: language=0 target=0 stage=3 visible=1 bounds=0x0 state=4 arg=0 active=0 painted=0 bold=0 function=0 status=Parameter 1 von 3 \u00b7 double x"
+          ]
+        }
+      ]
+    },
+    {
+      "architecture": "x86_64",
+      "artifact": 13413623785,
+      "zip": {
+        "path": "build/validation/signature-wrap-2026-11-05/13413623785.zip",
+        "sha256": "da4698adb4056cda2766061f60800c96deefee6f712423939fc06f302881f146"
+      },
+      "original": {
+        "path": "build/validation/signature-wrap-2026-11-05/13413623785-original.json",
+        "sha256": "60180854db16a75f64dd388d8c3da59d79551b804954612ff220b95ffbfa9f3a"
+      },
+      "all_original_zip_entries_read_and_hashed": true,
+      "entries": {
+        "Release/test-results/run-8v__rul3/results.json": "393058148c44d3a035e3b2433c2f32125880d853d7bff3fb9af3d60a1586c12c",
+        "Release/test-results/run-caqnp1ai/results.json": "2fba3fd18c82ffe78c942d7772dd6d486654cfbee75272c0d51cbf31f7d87c35"
+      },
+      "groups": [
+        {
+          "path": "Release/test-results/run-8v__rul3/results.json",
+          "cases": [
+            {
+              "name": "documents_small",
+              "status": "passed"
+            },
+            {
+              "name": "documents_large",
+              "status": "passed"
+            },
+            {
+              "name": "completion_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_automatic_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "api_reference_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "signature_help_workflow",
+              "status": "failed"
+            },
+            {
+              "name": "completion_info_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_automatic_deadline_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_locals_workflow",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "path": "Release/test-results/run-caqnp1ai/results.json",
+          "cases": [
+            {
+              "name": "c_call_context",
+              "status": "passed"
+            },
+            {
+              "name": "c_signatures",
+              "status": "passed"
+            },
+            {
+              "name": "c_lookup",
+              "status": "passed"
+            },
+            {
+              "name": "signature_wrap",
+              "status": "passed"
+            },
+            {
+              "name": "completion_locals",
+              "status": "passed"
+            },
+            {
+              "name": "completion_c_locals",
+              "status": "passed"
+            },
+            {
+              "name": "call_targets",
+              "status": "passed"
+            },
+            {
+              "name": "signature_help",
+              "status": "passed"
+            },
+            {
+              "name": "editor_signatures",
+              "status": "passed"
+            },
+            {
+              "name": "module_signatures",
+              "status": "passed"
+            },
+            {
+              "name": "completion_info",
+              "status": "passed"
+            }
+          ]
+        }
+      ],
+      "failures": [
+        {
+          "name": "signature_help_workflow",
+          "exit_code": 1,
+          "diagnostic": [
+            "Signature geometry: scroll=0 max=0.000 rows=0 body=0.000/0.000/0.000/0.000 code=0.000/0.000/0.000/0.000 footer=0.000/0.000/0.000/0.000 footer-bytes=0 reveal=1 current=1 focus=0 text=[]",
+            "Signature HUD failure: language=0 target=0 stage=3 visible=1 bounds=0x0 state=4 arg=0 active=0 painted=0 bold=0 function=0 status=Parameter 1 von 3 \u00b7 double x"
+          ]
+        }
+      ]
+    }
+  ],
+  "scope": "Both architectures11/11data+8/9GUI; actual new diagnostic confirms OS focus0 with source current1/modelready atC0stage3. Product correctly pauses HUD. No native HUD images reached/uploaded. This source predates thumb input fix and explicit focus-request/readiness test setup.",
+  "next": "New source-bound hosted test after SDL_RaiseWindow request plus actual SDL_GetKeyboardFocus readiness; never bypass or synthesize focus. Original failed run closed, do not rerun/poll it.",
+  "private_user_mac": "OFF; no access/probes/uploads"
+}

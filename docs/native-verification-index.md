@@ -11,6 +11,16 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
 
 ## Neuere Editorprüfungen
 
+- [Scrollgriff und Editor-Eingabe](verification/signature-thumb-2026-11-05.md):
+  Windows Release und Linux ASan/UBSan jeweils **6/6 GUI** nach zwei Produktkorrekturen.
+  Echter alter Drag-Fehler abgewiesen; automatische Vorschlagsabfrage erhält den
+  Editorbesitzer. Native Text-/ROM-Diagnose und Hardware-Watchpoint belegen die
+  zweite Ursache. C/Ph je drei Ziele, Griff-Drücken/Bewegen/Loslassen und Erhaltung.
+  Acht Bilder bytegleich zu geöffneten Referenzen; ein gezieltes Fehlerbild erhalten.
+  [Quellen, Phasen und Grenzen](verification/signature-thumb-2026-11-05.json).
+  [Mac-Lauf42026549588](verification/signature-wrap-macos-first-2026-11-05.json)
+  zum vorherigen Quellstand beendet: beide11/11 Daten,8/9 GUI; tatsächlicher
+  OS-Fokus0 bei gültiger Quelle. Original-ZIPs gelesen; keine HUD-Abnahme.
 - [Parameterhilfe: Umbruch und lange Signaturen](verification/signature-wrap-2026-11-05.md):
   Windows/Linux je4/4 Daten, präzisierte neue Unit je1/1; fünf bestehende GUI-Gruppen
   bestanden und abschließend neuer HUD-Ablauf gesondert je1/1. Unicode/Operatorgrenzen,

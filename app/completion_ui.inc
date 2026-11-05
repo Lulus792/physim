@@ -108,11 +108,16 @@ static bool completion_refresh(app *a) {
     return true;
 }
 static void completion_open_kind(app *a,struct nk_text_edit *edit,bool manual) {
+    /* Refreshing suggestions is not an input-owner change. In particular an
+     * automatic request with no matches must not leave the active editor ROM. */
+    bool owned=edit && a->completion_keyboard_edit==edit;
     completion_close(a);
-    if(a->completion_composing || document_language(a,edit)<0)return;
-    a->completion_edit=edit;a->completion_active=true;a->completion_explicit=a->completion_manual=manual;a->completion_cursor=edit->cursor;
-    a->completion_reveal=true;
-    if(!completion_refresh(a) && manual)status(a,"Keine Vorschläge an dieser Textposition.");
+    if(!a->completion_composing && document_language(a,edit)>=0){
+        a->completion_edit=edit;a->completion_active=true;a->completion_explicit=a->completion_manual=manual;a->completion_cursor=edit->cursor;
+        a->completion_reveal=true;
+        if(!completion_refresh(a) && manual)status(a,"Keine Vorschläge an dieser Textposition.");
+    }
+    if(owned)a->completion_keyboard_edit=edit;
 }
 static void completion_open(app *a,struct nk_text_edit *edit) {completion_open_kind(a,edit,true);}
 static void completion_edit_input(app *a) {

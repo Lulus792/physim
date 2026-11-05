@@ -7,27 +7,29 @@ Vollständige Umsetzung und Abnahme bleiben das Ziel; Teiltests sind keine volle
 
 ## Aktueller Abschluss
 
-[Parameterhilfe: Umbruch und lange Signaturen](verification/signature-wrap-2026-11-05.md):
-Unicode-Wort-/Graphemumbruch, ungeteilter `->`, quellgebundener Zeilenplan;
-16 Parameter bei tatsächlich800×540/22px, letzter aktiv, fester Hinweis,
-Mausrad/Alt+Pos1/Ende/manuelle Rückkehr ohne Editoränderung und disjunkte Liste.
-Nullparameter neutral, Exzess mit Fehlerfarbe. Windows/Linux je4/4 Daten,
-präzisierter Umbruch je1/1; fünf bestehende GUI-Gruppen bestanden, finaler neuer
-HUD-Ablauf gesondert je1/1. Acht gezielte Bilder geöffnet; keine volle UI-Abnahme.
-Testannahmen zu fraktionalem Y, SDL-Mindestgröße und Rückgabetyp in eigener
-Zeile korrigiert; Alt+Pos1 war bereits korrekt. [Phasen/Hashes/Grenzen](verification/signature-wrap-2026-11-05.json).
+[Scrollgriff und Editor-Eingabe](verification/signature-thumb-2026-11-05.md):
+zwei echte Produktfehler behoben. Scrollgruppe übernimmt die Eingabe nur für
+ihren Griff; automatische Vorschlagsabfrage erhält den bisherigen Editorbesitzer.
+GDB/Watchpoint belegt zuvor sechs ankommende Textbytes, Workspace-ROM und
+gelöschten Besitzer durch completion_open_kind → completion_close.
+Windows Release **6/6 run-9euexj2y**, Linux ASan/UBSan **6/6 run-h3atr8no**;
+C/Ph je drei Editorziele, automatische Abfrage, Griff-Down/Move/Up, fester Hinweis,
+Editorerhaltung, Nullparameter und Fehlerfarbe. Kein vollständiger UI-Abschluss.
+[Befehle, Phasen und Quellen](verification/signature-thumb-2026-11-05.json).
 
-Warmstand **`signature-wrap-final`**,300 eigene/1.237 Compiler-Testeingaben;
-alle1.256 gegen Git gelesen, Source-/Runtime-Deltas eingefroren.
-[Quelle ba95641f, beide Remotes](verification/signature-wrap-commit-2026-11-05.json).
-Lokale Tests beendet. Frühere
-[HUD-Integration](verification/signature-hud-2026-11-05.md) und
-[Modellkern](verification/signature-model-2026-11-05.md) bleiben eigene Belegstände.
-[Erster HUD-Mac-Lauf42015203815](verification/signature-hud-macos-first-2026-11-05.json)
-zu `caa1faf8` beendet: ARM/Intel10/10 Daten,8/9 GUI; Original-ZIPs gelesen.
-Intel-Fokus und ARM-Darstellungskontrolle fehlgeschlagen; nicht erneut pollen.
-Neuer gehosteter Mac-Nachlauf **42026549588** zu `ba95641f` läuft:
-Intel127242076163/ARM127242076701, jeweils Datenstep tatsächlich aktiv geprüft.
+Warmstand **`signature-thumb-input`**, 300 eigene Eingaben. Source-/Runtime-
+Archive eingefroren und gegen Git gelesen; lokale Jobs beendet.
+[Umbruch-/16-Parameter-Grundlage](verification/signature-wrap-2026-11-05.md)
+bleibt eigener Belegstand; deren acht geöffnete Bilder sind Vergleichsreferenzen.
+Der zusätzliche Warteschritt allein löste den Eingabefehler nicht; die Ursache
+ist die automatische Abfrage, nicht ein vermeintlich verlorenes SDL-Ereignis.
+
+[Mac-Lauf42026549588 zu ba95641f](verification/signature-wrap-macos-first-2026-11-05.json)
+beendet: ARM/Intel je11/11 Daten,8/9 GUI, Original-ZIPs/alle Einträge gelesen.
+Beide Diagnosen belegen current1/focus0 und deshalb korrekt pausierten HUD.
+Nicht erneut pollen. Neues Testsetup fordert echten Fokus an und wartet bis30s;
+keine synthetischen Fokusereignisse oder Umgehung des Guards. Eigener Mac-Nachlauf
+des neuen Quellstands bleibt offen; private Nutzerhardware bleibt ausgeschaltet.
 
 ## Nächste konkrete Schritte
 
