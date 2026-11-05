@@ -1,0 +1,835 @@
+{
+  "date": "2026-11-05",
+  "scope": "Native Physim local variables/parameters, not C scopes or separate call-parameter help",
+  "private_mac": "OFF: no access or probes",
+  "foreign_wip": "Excluded from isolated source and commit",
+  "records": [
+    {
+      "phase": "sdl",
+      "platform": "windows",
+      "passed": 10,
+      "total": 10,
+      "original": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-5gdvxv90/results.json",
+        "sha256": "06d404a08312004694fa75ca83794c815f581d56b319516ab56acffa4e609903"
+      },
+      "invocation_record": {
+        "path": "build/validation/completion-locals-2026-11-05/sdl-windows.json",
+        "sha256": "ef2dcb84e788e8aa624c75da7461c06cce1570e8943b0d1919d9b732aae5aec8"
+      },
+      "log_sha256": "64cdc3bdfc7d5414bc4116af6c9cfc32d78cf73917fbdd07cd8684b9cfa6b288",
+      "cases": [
+        {
+          "name": "completion",
+          "status": "passed"
+        },
+        {
+          "name": "completion_help",
+          "status": "passed"
+        },
+        {
+          "name": "completion_locals",
+          "status": "passed"
+        },
+        {
+          "name": "completion_info",
+          "status": "passed"
+        },
+        {
+          "name": "syntax",
+          "status": "passed"
+        },
+        {
+          "name": "api_reference",
+          "status": "passed"
+        },
+        {
+          "name": "language_parser",
+          "status": "passed"
+        },
+        {
+          "name": "language_checker",
+          "status": "passed"
+        },
+        {
+          "name": "language_editor_bindings",
+          "status": "passed"
+        },
+        {
+          "name": "file_browser_worker",
+          "status": "passed"
+        }
+      ],
+      "markers": [],
+      "artifacts": [],
+      "invocation_key": "sdl-windows"
+    },
+    {
+      "phase": "sdl",
+      "platform": "windows",
+      "passed": 6,
+      "total": 6,
+      "original": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/results.json",
+        "sha256": "065b0fa19d5887d372ac83dfefaaa6b8ab19ec7af4f10d770fbffb2fe8b2cb64"
+      },
+      "invocation_record": {
+        "path": "build/validation/completion-locals-2026-11-05/sdl-windows.json",
+        "sha256": "ef2dcb84e788e8aa624c75da7461c06cce1570e8943b0d1919d9b732aae5aec8"
+      },
+      "log_sha256": "64cdc3bdfc7d5414bc4116af6c9cfc32d78cf73917fbdd07cd8684b9cfa6b288",
+      "cases": [
+        {
+          "name": "completion_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_automatic_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_info_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_automatic_deadline_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_locals_workflow",
+          "status": "passed"
+        }
+      ],
+      "markers": [
+        "COMPLETION LOCALS target=0 theme=0 unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1",
+        "COMPLETION LOCALS target=0 exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1",
+        "COMPLETION LOCALS target=1 theme=1 unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1",
+        "COMPLETION LOCALS target=1 exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1",
+        "COMPLETION LOCALS target=2 theme=2 unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1",
+        "COMPLETION LOCALS target=2 exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1",
+        "COMPLETION LOCALS SELF-TEST: PASSED"
+      ],
+      "artifacts": [
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/app-steps.json",
+          "sha256": "c40afe01070f9e32ca6a2282ce43a83ec65570f5ad5feac487e4c77c3d32aac9",
+          "bytes": 22032
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_automatic_workflow/files ä/app-steps.json",
+          "sha256": "023ddc2bde77c52371d7d56e4780a0a81f56715000cba4e99c5d6f78d79964d9",
+          "bytes": 21831
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/app-steps.json",
+          "sha256": "16c1c45f6efb872d92a51bee7477758c5148364f6188cf6edd1daaa891d46153",
+          "bytes": 20777
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_info_workflow/files ä/app-steps.json",
+          "sha256": "7c4c1ece9ef2aa0fe491dddc970bc01204e171d02ce3e9d38d2e920ab56c9ee0",
+          "bytes": 33741
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_automatic_deadline_workflow/files ä/app-steps.json",
+          "sha256": "c02ae390f9d7d27fd9a79b25e432ad5a3762a8e3c579362e331d04817dc1aac9",
+          "bytes": 22005
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_locals_workflow/files ä/app-steps.json",
+          "sha256": "ec7b57e0e8c05f5c45bfc89f70556bcaf999fc1b0f18c4a8b2f7fa1d72869723",
+          "bytes": 6238
+        }
+      ],
+      "invocation_key": "sdl-windows"
+    },
+    {
+      "phase": "sdl",
+      "platform": "linux",
+      "passed": 10,
+      "total": 10,
+      "original": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-vj6fisw0/results.json",
+        "sha256": "8ea4dc0a418ea837e0ce551e8b921a9ef604583f09903f03af59157294049e01"
+      },
+      "invocation_record": {
+        "path": "build/validation/completion-locals-2026-11-05/sdl-linux.json",
+        "sha256": "c94bf362321b2001f030373651c20e9fc549351991c056990f9bdf7e6ff1193d"
+      },
+      "log_sha256": "9092dc5af73f093e895c5a0753e9e9ead8bf62b313bba4664477960fa326c5e6",
+      "cases": [
+        {
+          "name": "completion",
+          "status": "passed"
+        },
+        {
+          "name": "completion_help",
+          "status": "passed"
+        },
+        {
+          "name": "completion_locals",
+          "status": "passed"
+        },
+        {
+          "name": "completion_info",
+          "status": "passed"
+        },
+        {
+          "name": "syntax",
+          "status": "passed"
+        },
+        {
+          "name": "api_reference",
+          "status": "passed"
+        },
+        {
+          "name": "language_parser",
+          "status": "passed"
+        },
+        {
+          "name": "language_checker",
+          "status": "passed"
+        },
+        {
+          "name": "language_editor_bindings",
+          "status": "passed"
+        },
+        {
+          "name": "file_browser_worker",
+          "status": "passed"
+        }
+      ],
+      "markers": [],
+      "artifacts": [],
+      "invocation_key": "sdl-linux"
+    },
+    {
+      "phase": "sdl",
+      "platform": "linux",
+      "passed": 6,
+      "total": 6,
+      "original": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/results.json",
+        "sha256": "6bee53b62c0ce1d295e2be3498b7f7dc8015258adc04a79050274deb9170830b"
+      },
+      "invocation_record": {
+        "path": "build/validation/completion-locals-2026-11-05/sdl-linux.json",
+        "sha256": "c94bf362321b2001f030373651c20e9fc549351991c056990f9bdf7e6ff1193d"
+      },
+      "log_sha256": "9092dc5af73f093e895c5a0753e9e9ead8bf62b313bba4664477960fa326c5e6",
+      "cases": [
+        {
+          "name": "completion_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_automatic_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_info_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_automatic_deadline_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_locals_workflow",
+          "status": "passed"
+        }
+      ],
+      "markers": [
+        "COMPLETION LOCALS target=0 theme=0 unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1",
+        "COMPLETION LOCALS target=0 exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1",
+        "COMPLETION LOCALS target=1 theme=1 unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1",
+        "COMPLETION LOCALS target=1 exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1",
+        "COMPLETION LOCALS target=2 theme=2 unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1",
+        "COMPLETION LOCALS target=2 exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1",
+        "COMPLETION LOCALS SELF-TEST: PASSED"
+      ],
+      "artifacts": [
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/app-steps.json",
+          "sha256": "1dc8253cf3a1ac59f163d8a52dca8eec8e2729d5ace632e5b579707bea4112b9",
+          "bytes": 21953
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_automatic_workflow/files ä/app-steps.json",
+          "sha256": "b1cae236c27065ea9c3e660a033db18bb317274a3c1de693d242b4ce9e952231",
+          "bytes": 21722
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/app-steps.json",
+          "sha256": "a4830e7a05182c2e39bb4bd586510352304f8f11ca9bfc5dc0b39218d6f7402c",
+          "bytes": 20751
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_info_workflow/files ä/app-steps.json",
+          "sha256": "edd27adb1e6f2f312f00ec609f7a34a41849e41bffe511cfc3c47b74fbd18f00",
+          "bytes": 33673
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_automatic_deadline_workflow/files ä/app-steps.json",
+          "sha256": "71010a0be653984d9ed0887ca041c933f9445a9f7a4c7b815b1fc99ff9003499",
+          "bytes": 21900
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_locals_workflow/files ä/app-steps.json",
+          "sha256": "58a5aedc0885f53257499bfb221ff8832792a68b754927a0e3aee0158f60a315",
+          "bytes": 6199
+        }
+      ],
+      "invocation_key": "sdl-linux"
+    },
+    {
+      "phase": "final",
+      "platform": "windows",
+      "passed": 2,
+      "total": 2,
+      "original": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-0n04ipy5/results.json",
+        "sha256": "0718eed51d9b241799c058ba7c27bee294c7ca099afe8dc3eafde35d4c3a02cf"
+      },
+      "invocation_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-locals-final-windows.json",
+        "sha256": "4d1043d8fa71df87a486f7cd6d2ad86e9e30f305adc672dd47fff31ce2e67928"
+      },
+      "log_sha256": "d6d1a96cd8e9aaa08a50a529d4c91c1bcf903f9653cc1651b3589818af92a856",
+      "cases": [
+        {
+          "name": "api_reference_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_locals_workflow",
+          "status": "passed"
+        }
+      ],
+      "markers": [
+        "COMPLETION LOCALS target=0 theme=0 unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1",
+        "COMPLETION LOCALS target=0 exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1",
+        "COMPLETION LOCALS target=1 theme=1 unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1",
+        "COMPLETION LOCALS target=1 exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1",
+        "COMPLETION LOCALS target=2 theme=2 unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1",
+        "COMPLETION LOCALS target=2 exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1",
+        "COMPLETION LOCALS SELF-TEST: PASSED"
+      ],
+      "artifacts": [
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-0n04ipy5/api_reference_workflow/files ä/app-steps.json",
+          "sha256": "7bcbbf267e479c5206f41723d79c10fc0dc13fbda78c24b57dc699a667739e3b",
+          "bytes": 20777
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-0n04ipy5/completion_locals_workflow/files ä/app-steps.json",
+          "sha256": "1d9f0a42a65758452f014d2c5282d71ac057318a7b43a098d79ce4bf89939d5a",
+          "bytes": 6751
+        }
+      ],
+      "invocation_key": "final-windows"
+    },
+    {
+      "phase": "final",
+      "platform": "linux",
+      "passed": 2,
+      "total": 2,
+      "original": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-mlom98ej/results.json",
+        "sha256": "be10bac9139fe282ad9315efdc0093a734b4c9681d1c8acddc9197ce2b11fd90"
+      },
+      "invocation_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-locals-final-linux.json",
+        "sha256": "6cec39f88bfaa49a82aa7afbb735c46fe9e6b5d6760ed9c0dd4f530f848e9b9c"
+      },
+      "log_sha256": "3004ba35b8df83ca0db83893d6df633f89e573515e90a1865aab863d1a714ae0",
+      "cases": [
+        {
+          "name": "api_reference_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_locals_workflow",
+          "status": "passed"
+        }
+      ],
+      "markers": [
+        "COMPLETION LOCALS target=0 theme=0 unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1",
+        "COMPLETION LOCALS target=0 exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1",
+        "COMPLETION LOCALS target=1 theme=1 unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1",
+        "COMPLETION LOCALS target=1 exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1",
+        "COMPLETION LOCALS target=2 theme=2 unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1",
+        "COMPLETION LOCALS target=2 exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1",
+        "COMPLETION LOCALS SELF-TEST: PASSED"
+      ],
+      "artifacts": [
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-mlom98ej/api_reference_workflow/files ä/app-steps.json",
+          "sha256": "a3f5facbe600f23cc2ee1ecd60f99221c3bd7f58aac1306bcb80074b2e9172fd",
+          "bytes": 20758
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-mlom98ej/completion_locals_workflow/files ä/app-steps.json",
+          "sha256": "b949a94f88db8054848a85a827594ac53635578bab603ac1ac50514358137145",
+          "bytes": 6712
+        }
+      ],
+      "invocation_key": "final-linux"
+    },
+    {
+      "phase": "mutant",
+      "platform": "windows",
+      "passed": 0,
+      "total": 1,
+      "original": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-70hxafqh/results.json",
+        "sha256": "03a0fe96cd6d6b4dc12a99d53d6ff4bd0b02d4e13b518055fbba31f4cb9df50f"
+      },
+      "invocation_record": {
+        "path": "build/validation/explorer-inline-2026-10-29/completion-locals-mutant-windows.json",
+        "sha256": "5bf87eed7507ae4911538ee923beee86e8e5ca0fd685d3783bf18e46e94961aa"
+      },
+      "log_sha256": "0a76706cebb3f77e742fdf44d933c744bb84198b0bcd6b6924a85d1373cc07a4",
+      "cases": [
+        {
+          "name": "completion_locals_workflow",
+          "status": "failed"
+        }
+      ],
+      "markers": [
+        "COMPLETION LOCALS target=0 theme=0 unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1",
+        "COMPLETION LOCALS SELF-TEST: FAILED"
+      ],
+      "artifacts": [],
+      "invocation_key": "mutant-windows"
+    }
+  ],
+  "direct": {
+    "original": {
+      "path": "build/validation/completion-locals-2026-11-05/locals-query.json",
+      "sha256": "e382c849438531287642be8f9d008a6fb909b637a54961d1af6b481f1911193e"
+    },
+    "commands": [
+      {
+        "name": "locals",
+        "command": [
+          "wsl",
+          "-d",
+          "Alpine-Dev",
+          "--exec",
+          "env",
+          "TMPDIR=/mnt/d/Physim/build/validation/completion-locals-2026-11-05/tmp",
+          "gcc",
+          "-std=c17",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-I/mnt/d/Physim/src",
+          "-I/mnt/d/Physim/app",
+          "-I/mnt/d/Physim/include",
+          "/mnt/d/Physim/tests/test_completion_locals.c",
+          "/mnt/d/Physim/app/completion_locals.c",
+          "/mnt/d/Physim/app/completion.c",
+          "/mnt/d/Physim/src/language/parser.c",
+          "/mnt/d/Physim/src/language/lexer.c",
+          "/mnt/d/Physim/src/memory.c",
+          "-o",
+          "/mnt/d/Physim/build/validation/completion-locals-2026-11-05/locals-query-locals"
+        ],
+        "compile_exit": 0,
+        "compile_stdout": "",
+        "compile_stderr": "",
+        "inputs": {
+          "tests/test_completion_locals.c": "25538b9f2013deeaedfd1d8581ddf3704130164b894fc07cabfbee8367b73863",
+          "app/completion_locals.c": "a2e511674e71392b651f35471b830c77d3d7f4f09dfa1f262dd5ef296e99bc23",
+          "app/completion.c": "0ba086b20a6837520fd36d0ffd1984c3f67b178a1ef9dc0e6a44c58b6c75b9bc",
+          "src/language/parser.c": "0486cfba0123ade1fb7704d52cd8c7848b970d351441383aa8fddf429a9fff4b",
+          "src/language/lexer.c": "f98a62ae0bfed722a6d7a513b860b315b48a9b493c82ceae5e147ba8fb61ccff",
+          "src/memory.c": "28051ac112e004c566dd05d67ee5c44753d425726655f05573c3dca4bb80b811"
+        },
+        "run_command": [
+          "wsl",
+          "-d",
+          "Alpine-Dev",
+          "--exec",
+          "env",
+          "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+          "/mnt/d/Physim/build/validation/completion-locals-2026-11-05/locals-query-locals"
+        ],
+        "exit_code": 0,
+        "stdout": "Completion locals: real Physim scope merge, stable IDs, source/type ownership, Unicode, cache reuse and every allocation failure passed\n",
+        "stderr": "",
+        "binary_sha256": "cf2f00caa50921fde9a6982284c3610b9f96aa141eb136f83525f829999e10f9"
+      },
+      {
+        "name": "bindings",
+        "command": [
+          "wsl",
+          "-d",
+          "Alpine-Dev",
+          "--exec",
+          "env",
+          "TMPDIR=/mnt/d/Physim/build/validation/completion-locals-2026-11-05/tmp",
+          "gcc",
+          "-std=c17",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-I/mnt/d/Physim/src",
+          "-I/mnt/d/Physim/app",
+          "-I/mnt/d/Physim/include",
+          "/mnt/d/Physim/tests/test_language_editor_bindings.c",
+          "/mnt/d/Physim/src/language/parser.c",
+          "/mnt/d/Physim/src/language/lexer.c",
+          "-o",
+          "/mnt/d/Physim/build/validation/completion-locals-2026-11-05/locals-query-bindings"
+        ],
+        "compile_exit": 0,
+        "compile_stdout": "",
+        "compile_stderr": "",
+        "inputs": {
+          "tests/test_language_editor_bindings.c": "13a91b2fef5c13d5d2b094c1ad853774fb93e1c94ace55af327815994a8cab6b",
+          "src/language/parser.c": "0486cfba0123ade1fb7704d52cd8c7848b970d351441383aa8fddf429a9fff4b",
+          "src/language/lexer.c": "f98a62ae0bfed722a6d7a513b860b315b48a9b493c82ceae5e147ba8fb61ccff"
+        },
+        "run_command": [
+          "wsl",
+          "-d",
+          "Alpine-Dev",
+          "--exec",
+          "env",
+          "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+          "/mnt/d/Physim/build/validation/completion-locals-2026-11-05/locals-query-bindings"
+        ],
+        "exit_code": 0,
+        "stdout": "Physim editor bindings: 49 real-parser prefixes, lexical scopes, shadow lookup, declarations, parameters, loops, guards, patterns, self, type spans, UTF-8 and bounded failures passed\nStrict/observed AST field parity and binding bounds: 1024 deterministic byte inputs passed\n",
+        "stderr": "",
+        "binary_sha256": "16b02bf0d9eff99633f6f36ce1801f96f681acc232c73076d14c7ff0930db0ff"
+      }
+    ]
+  },
+  "visual": [
+    {
+      "platform": "windows",
+      "view": "model",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-0n04ipy5/completion_locals_workflow/files ä/workflow ä/locals-model.bmp",
+      "sha256": "7b1435f20ecef373aa10c41e713a5f650dbe45115377affac0b99e7b4e6819a2",
+      "bytes": 3196938,
+      "visually_reviewed": true
+    },
+    {
+      "platform": "windows",
+      "view": "analysis",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-0n04ipy5/completion_locals_workflow/files ä/workflow ä/locals-analysis.bmp",
+      "sha256": "4355fe40ef34637cc3c7a74c9e204dde2aa995b4d47d06493026a6945565ac83",
+      "bytes": 3196938,
+      "visually_reviewed": true
+    },
+    {
+      "platform": "windows",
+      "view": "document",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-0n04ipy5/completion_locals_workflow/files ä/workflow ä/locals-document.bmp",
+      "sha256": "4008c1d85b4eb9c673c932d713a50d5de2fdcfa61baae5ad538f213859ef4279",
+      "bytes": 3196938,
+      "visually_reviewed": true
+    },
+    {
+      "platform": "linux",
+      "view": "model",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-mlom98ej/completion_locals_workflow/files ä/workflow ä/locals-model.bmp",
+      "sha256": "ccfa00df24f26fe59bd1708c5aad05aa7142d39708ab28c1d7273d7a17f865e7",
+      "bytes": 3196938,
+      "visually_reviewed": true
+    },
+    {
+      "platform": "linux",
+      "view": "analysis",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-mlom98ej/completion_locals_workflow/files ä/workflow ä/locals-analysis.bmp",
+      "sha256": "cc3e0ab453cc7591f75086f14ba768f899aa5a63a073ea647471de2dd6f1c164",
+      "bytes": 3196938,
+      "visually_reviewed": true
+    },
+    {
+      "platform": "linux",
+      "view": "document",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-mlom98ej/completion_locals_workflow/files ä/workflow ä/locals-document.bmp",
+      "sha256": "382ffa2643d63b3250e85a104fe86ac99eb310a854a7d0689b3be02ce8a13e46",
+      "bytes": 3196938,
+      "visually_reviewed": true
+    }
+  ],
+  "final_snapshot": {
+    "tag": "completion-locals-final",
+    "compiler_test_files": 1128,
+    "owned_inputs": 178
+  },
+  "counterexample": {
+    "original": {
+      "file": "app/completion_ui.inc",
+      "before": "0c9e188167deb154f10124e45a4e37e200bc7d803acf41aceefc177958c29f77",
+      "after": "e9a4df8011637a703da5bc25cfd20b19ec63ba0e07d86b8626f0484d722a8f1e",
+      "root_unchanged": true
+    },
+    "restored": {
+      "final_tag": "completion-locals-final",
+      "all_final_compiler_and_owned_bytes_verified": true,
+      "runtime_and_all_referenced_archive_bytes_read": 383,
+      "no_identical_retest_claim": true,
+      "changed_paths_restored": 64
+    },
+    "restored_record": {
+      "path": "build/validation/completion-locals-2026-11-05/restored.json",
+      "sha256": "5746e88babd39b0a36d33db1b39de25859f3584dc72820fc2c73f3cf313570a3"
+    }
+  },
+  "initial_build_failure": "Both first builds failed on test-only SDL2 spelling SDLK_z; no native pass or rebuilt app claimed. Corrected to SDL3 SDLK_Z.",
+  "limits": [
+    "Real C local scopes not implemented",
+    "Separate parameter/signature help including user functions open",
+    "No inferred types or runtime values",
+    "No full scope-aware syntax classification outside current query/declaration spans",
+    "Physical IME/AT/DPI/monitor/fullscreen and new macOS acceptance open",
+    "Large Linux tree filenames wrap at 22: compare with approved Explorer A before changing layout; final Linux analysis image retained"
+  ],
+  "no_identical_retest_after_restoring_proven_bytes": true,
+  "invocations": {
+    "sdl-windows": [
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--sdl",
+          "D:\\Physim\\third_party\\SDL3-3.2.30",
+          "--test",
+          "--test-filter",
+          "completion",
+          "--test-filter",
+          "completion_locals",
+          "--test-filter",
+          "completion_help",
+          "--test-filter",
+          "completion_info",
+          "--test-filter",
+          "language_editor_bindings",
+          "--test-filter",
+          "language_parser",
+          "--test-filter",
+          "language_checker",
+          "--test-filter",
+          "syntax",
+          "--test-filter",
+          "api_reference",
+          "--test-filter",
+          "file_browser_worker"
+        ],
+        "exit_code": 0,
+        "app_sha256": "ac2af155be85288e5156b19a93f30538978b7ee900283d01ae25153070a7318a"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--sdl",
+          "D:\\Physim\\third_party\\SDL3-3.2.30",
+          "--test-display",
+          "--test-filter",
+          "completion_locals_workflow",
+          "--test-filter",
+          "completion_automatic_workflow",
+          "--test-filter",
+          "completion_automatic_deadline_workflow",
+          "--test-filter",
+          "completion_info_workflow",
+          "--test-filter",
+          "completion_workflow",
+          "--test-filter",
+          "api_reference_workflow"
+        ],
+        "exit_code": 0,
+        "app_sha256": "ac2af155be85288e5156b19a93f30538978b7ee900283d01ae25153070a7318a"
+      }
+    ],
+    "sdl-linux": [
+      {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+          "--build-dir",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+          "--config",
+          "Debug",
+          "--jobs",
+          "4",
+          "--sdl",
+          "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+          "--sanitizers",
+          "--test",
+          "--test-filter",
+          "completion",
+          "--test-filter",
+          "completion_locals",
+          "--test-filter",
+          "completion_help",
+          "--test-filter",
+          "completion_info",
+          "--test-filter",
+          "language_editor_bindings",
+          "--test-filter",
+          "language_parser",
+          "--test-filter",
+          "language_checker",
+          "--test-filter",
+          "syntax",
+          "--test-filter",
+          "api_reference",
+          "--test-filter",
+          "file_browser_worker"
+        ],
+        "exit_code": 0,
+        "app_sha256": "a492a5fde42537e9b22674613c5949bafd9d99e5ac97dd50a47e7dd64d8929b3"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+          "--build-dir",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+          "--config",
+          "Debug",
+          "--jobs",
+          "4",
+          "--sdl",
+          "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+          "--sanitizers",
+          "--test-display",
+          "--test-filter",
+          "completion_locals_workflow",
+          "--test-filter",
+          "completion_automatic_workflow",
+          "--test-filter",
+          "completion_automatic_deadline_workflow",
+          "--test-filter",
+          "completion_info_workflow",
+          "--test-filter",
+          "completion_workflow",
+          "--test-filter",
+          "api_reference_workflow"
+        ],
+        "exit_code": 0,
+        "app_sha256": "a492a5fde42537e9b22674613c5949bafd9d99e5ac97dd50a47e7dd64d8929b3"
+      }
+    ],
+    "final-windows": {
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "completion_locals_workflow",
+        "--test-filter",
+        "api_reference_workflow"
+      ],
+      "exit_code": 0,
+      "app_sha256": "26b5d252c37c04222683479c00534394188be3f9e224e7d353089874d3ea76ff"
+    },
+    "final-linux": {
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--test-display",
+        "--sanitizers",
+        "--test-filter",
+        "completion_locals_workflow",
+        "--test-filter",
+        "api_reference_workflow"
+      ],
+      "exit_code": 0,
+      "app_sha256": "19a00b8585539699358fbe1ebb4a3ee44eb3005d0eff2c2dd810daa244b94620"
+    },
+    "mutant-windows": {
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "completion_locals_workflow"
+      ],
+      "exit_code": 1,
+      "app_sha256": "9f25b3552802d62b8a3cad27fe213d76ada9a573aa21b6b1d166b1b79d0ef459"
+    }
+  },
+  "cleanup": {
+    "path": "docs/verification/completion-locals-cleanup-2026-11-05.json",
+    "sha256": "ae3c7564a67badc3db04dfeead4adfeeb387394f2e116c95451d023dc93b888b",
+    "freed_bytes": 22378566
+  }
+}

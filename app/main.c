@@ -22,6 +22,7 @@
 #include "completion.h"
 #include "completion_help.h"
 #include "completion_info.h"
+#include "completion_locals.h"
 #include "syntax.h"
 #include "editor_search.h"
 #include "source_outline.h"
@@ -660,7 +661,8 @@ typedef struct {
     struct nk_rect source_editor_frame;
     struct nk_text_edit *completion_edit,*completion_focus_edit,*completion_keyboard_edit,*file_tab_keyboard_edit;
     ps_completion_query completion_query;
-    size_t *completion_indices,completion_count,completion_selected,completion_first;
+    size_t *completion_indices,completion_count,completion_selected,completion_first,completion_capacity;
+    ps_completion_locals completion_locals;
     unsigned completion_visible_rows;
     bool completion_reveal,completion_scroll_drag,completion_info_visible,completion_pointer_capture;
     ps_completion_help completion_help;
@@ -3056,7 +3058,10 @@ static void syntax_text(app *a,struct nk_text_edit *edit,struct nk_rect bounds){
     const char *source=nk_str_get_const(&edit->string);size_t bytes=(size_t)nk_str_len_char(&edit->string);
     if(!source)source="";
     ps_syntax_scan scan;ps_syntax_init(&scan,source,bytes,kind==1);
-    if(kind>=0){workbench_outline_refresh(a,edit,kind);scan.resolve=syntax_outline_role;scan.user=a;}
+    const ps_completion_locals *locals=&a->completion_locals;
+    syntax_editor_context syntax_context={a,source,a->completion_active && locals->language && locals->owner==edit &&
+        locals->bytes==bytes && locals->source && !memcmp(locals->source,source,bytes)};
+    if(kind>=0){workbench_outline_refresh(a,edit,kind);scan.resolve=syntax_editor_role;scan.user=&syntax_context;}
     float pitch=font->height+ui->style.edit.row_padding,x=area.x-edit->scrollbar.x,y=area.y-edit->scrollbar.y;
     ps_syntax_token token;
     while(y<area.y+area.h && ps_syntax_next(&scan,&token)){
@@ -3167,10 +3172,7 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
     if(a->completion_active && !a->completion_accept_pending){
         bool edited_before_accept=before!=nk_str_len_char(&edit->string) ||
             hash!=ps_crc32((const unsigned char *)nk_str_get_const(&edit->string),(size_t)nk_str_len_char(&edit->string));
-        ps_completion_query query;
-        if((!a->completion_typed && (edited_before_accept || a->completion_cursor!=edit->cursor)) ||
-           (edited_before_accept && completion_query_for(a,edit,&query) && !query.member &&
-            (!*query.prefix || (!a->completion_manual && strlen(query.prefix)<2))))completion_close(a);
+        if(!a->completion_typed && (edited_before_accept || a->completion_cursor!=edit->cursor))completion_close(a);
     }
     bool accepted=a->completion_accept_pending;
     if(a->completion_active) {
@@ -3637,6 +3639,7 @@ static bool native_test_keyboard_command(app *a,toolbar_action action,int *stage
 #include "completion_tests.inc"
 #include "completion_auto_tests.inc"
 #include "completion_info_tests.inc"
+#include "completion_locals_tests.inc"
 #include "source_outline_tests.inc"
 #include "file_tabs_tests.inc"
 #include "workbench_tests.inc"
@@ -4008,8 +4011,7 @@ int main(int argc, char **argv) {
         code_fonts_ok &= code_fonts[i] != NULL;
     }
     struct nk_font *title_font = title_fonts[0];
-    static const nk_rune marker_ranges[]={0x20,0x7e,0};
-    struct nk_font *marker_font=system_font_sampling_demand(atlas,a->root,16,true,true,3,2,marker_ranges,NULL,false);
+    struct nk_font *marker_font=system_font_sampling_demand(atlas,a->root,16,true,true,3,2,NULL,NULL,false);
     ui_fonts_ok &= marker_font!=NULL;
     a->workbench_marker_em=ps_ui_font_em_ratio(marker_font);
     a->workbench_regular_em=ps_ui_font_em_ratio(font);
@@ -5548,6 +5550,7 @@ int main(int argc, char **argv) {
         draw_ui(a, w, h);
         if(workspace_state_test && (!strcmp(argv[3],"completion-c") || !strcmp(argv[3],"completion-phys")))completion_syntax_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"completion-info-",16))completion_info_test_draw(a);
+        if(workspace_state_test && !strcmp(argv[3],"completion-locals-phys"))completion_locals_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"completion-auto-",16))completion_auto_draw(a,test_stage);
         if(workspace_state_test && !strncmp(argv[3],"outline-hover-",14))outline_hover_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"analysis-layout-",16))analysis_workspace_test_draw(a,test_stage);

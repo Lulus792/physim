@@ -5,7 +5,38 @@ abgleichen. Verbindliche Designs: [AGENTS.md](../AGENTS.md) und
 [Gesamtübergabe](visuals/unified-workspace/NEXT-CHAT.md). Keine geschlossene
 Prüfung oder Protokoll-Trennlinie allein wegen Kompaktierung erneut beginnen.
 
-## Aktueller Anschluss: Automatikprüfer gegen Fristrennen gesichert
+## Aktueller Anschluss: lokale Physim-Namen nativ angebunden
+
+**Nutzer-Mac aus; keine Zugriffe/Erreichbarkeitsproben.**
+**Eingefroren: `completion-locals-final`, 178 eigene Eingaben / 1.128 Compiler-/
+Testdateien; alle lokalen Handles beendet, Quell-/Laufzeit-/Archivbytes gelesen.**
+Eigene Scope-Kopie aus echtem Parser, lokale Variablen/Parameter vor API-Namen,
+geschriebener Typ/Quellzeile, Unicode-Präfix mit echtem fetten Font, neutrale Karte
+ohne falschen API-Link, exakter Ersatz/Undo. Grammatisch bestätigte leere Argumente
+nach `(`/`,`; strenger Compiler-Parser bleibt unverändert streng. Shift+F1 erhält
+den Inspektor auch bei einem lokalen Namen ohne geöffnete Liste.
+
+Windows Release/Linux Debug ASan/UBSan zunächst je **Unit 10/10 + GUI 6/6**;
+danach nur Referenz-Fehlerpfad, ergänzte Prüfung und Bedienungsdoku geändert,
+Abschluss je **GUI 2/2**, `run-0n04ipy5` / `run-mlom98ej`. Keine gesamte Matrix
+mit letzter App behaupten. Direkte strenge Tests mit `detect_leaks=1` bestanden,
+49 Parserpräfixe + 1.024 AST-Feldvergleiche. Gezielter Windows-Signatur-Mutant
+**0/1** Stufe 10, nur Signaturrolle falsch; danach alle Quellen und **383**
+Laufzeitdateien und referenzierte Archivbytes bytegenau aus bestandenem Stand hergestellt.
+Sechs finale native Ansichten geprüft; kompakte Interaktionsnachweise statt Bildserien.
+Sieben ersetzte Rohbilder entfernt (**22.378.566 Bytes**); finale Referenzen und
+Fehlerbelege erhalten, Bereinigungsnachweis im verlinkten Prüfbericht.
+[Umfang, Kommandos und Grenzen](verification/completion-locals-2026-11-05.md).
+
+**Nächster konkreter Schritt:** echte C-Scope-Grammatik/Integration und separate
+Parameterhilfe einschließlich Benutzerfunktionen. Allgemeine semantische Rollen,
+physische/assistive Eingabe, DPI/Monitor/Vollbild und neue Mac-Abnahme offen;
+keine volle D-/UI-Punktzahl. Linux-Baumnamen bei 22 brechen in der Erweiterung:
+vor Korrektur mit Explorer A abgleichen, finale Analyseaufnahme erhalten.
+Arbeitsnotiz: `build/validation/completion-locals-2026-11-05/STATE.md`.
+Keine geschlossenen F1-/Protokoll-/Settings-Matrizen wegen Kontextwechsel wiederholen.
+
+## Abgeschlossen: Automatikprüfer gegen Fristrennen gesichert
 
 **Nutzer-Mac aus; keine Zugriffe/Erreichbarkeitsproben.**
 **Eingefroren: `auto-info-deadline-final`, 174 eigene Eingaben / 1.124 erfasste

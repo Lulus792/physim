@@ -15,9 +15,14 @@ typedef enum {
     PS_LANG_EDITOR_OK, PS_LANG_EDITOR_PREFIX, PS_LANG_EDITOR_INVALID, PS_LANG_EDITOR_LIMIT
 } ps_lang_editor_status;
 typedef struct {
+    size_t open, argument; /* Byte offset of '(', zero-based argument ordinal. */
+    int active, at_start; /* Current grammar path is inside a call argument. */
+} ps_lang_editor_call;
+typedef struct {
     size_t count;
     ps_lang_editor_status status;
     ps_lang_token diagnostic;
+    ps_lang_editor_call call; /* No callee/signature/type resolution claim. */
 } ps_lang_editor_bindings_result;
 
 /* Parse only the original [0,cursor) with the real Physim grammar. A blank

@@ -1,0 +1,94 @@
+{
+  "date": "2026-11-05",
+  "reason": "Six superseded successful local-card raw views; one positive Unicode state from the deliberately failing signature mutant. Final six reviewed references and Linux tree-wrap observation retained. No failed original log/source/runtime archive removed.",
+  "all_local_build_test_handles_terminal": true,
+  "resolved_paths_checked_inside_own_test_runs": true,
+  "removed": [
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_locals_workflow/files ä/workflow ä/locals-model.bmp",
+      "bytes": 3196938,
+      "sha256": "7b1435f20ecef373aa10c41e713a5f650dbe45115377affac0b99e7b4e6819a2"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_locals_workflow/files ä/workflow ä/locals-analysis.bmp",
+      "bytes": 3196938,
+      "sha256": "fd3120f8d5bacf4dbbb67d6cda6f89e7db7ac7aeeb0a4261ae194316d737266d"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_locals_workflow/files ä/workflow ä/locals-document.bmp",
+      "bytes": 3196938,
+      "sha256": "283ddae5cfe4168fd025d560c490d0728ce1080a377829a4d371b77b3db05c2b"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_locals_workflow/files ä/workflow ä/locals-model.bmp",
+      "bytes": 3196938,
+      "sha256": "ccfa00df24f26fe59bd1708c5aad05aa7142d39708ab28c1d7273d7a17f865e7"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_locals_workflow/files ä/workflow ä/locals-analysis.bmp",
+      "bytes": 3196938,
+      "sha256": "acca52833bb7d16e3752865c727b8dde6d36ce60d3fcd33ef5cba5062ecbe9be"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_locals_workflow/files ä/workflow ä/locals-document.bmp",
+      "bytes": 3196938,
+      "sha256": "099197358f309ee10eebd010d33b2bd71b4df05681894af82710940be7e9645f"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-70hxafqh/completion_locals_workflow/files ä/workflow ä/locals-model.bmp",
+      "bytes": 3196938,
+      "sha256": "7b1435f20ecef373aa10c41e713a5f650dbe45115377affac0b99e7b4e6819a2"
+    }
+  ],
+  "freed_bytes": 22378566,
+  "retained": [
+    {
+      "platform": "windows",
+      "view": "model",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-0n04ipy5/completion_locals_workflow/files ä/workflow ä/locals-model.bmp",
+      "sha256": "7b1435f20ecef373aa10c41e713a5f650dbe45115377affac0b99e7b4e6819a2",
+      "bytes": 3196938,
+      "visually_reviewed": true
+    },
+    {
+      "platform": "windows",
+      "view": "analysis",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-0n04ipy5/completion_locals_workflow/files ä/workflow ä/locals-analysis.bmp",
+      "sha256": "4355fe40ef34637cc3c7a74c9e204dde2aa995b4d47d06493026a6945565ac83",
+      "bytes": 3196938,
+      "visually_reviewed": true
+    },
+    {
+      "platform": "windows",
+      "view": "document",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-0n04ipy5/completion_locals_workflow/files ä/workflow ä/locals-document.bmp",
+      "sha256": "4008c1d85b4eb9c673c932d713a50d5de2fdcfa61baae5ad538f213859ef4279",
+      "bytes": 3196938,
+      "visually_reviewed": true
+    },
+    {
+      "platform": "linux",
+      "view": "model",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-mlom98ej/completion_locals_workflow/files ä/workflow ä/locals-model.bmp",
+      "sha256": "ccfa00df24f26fe59bd1708c5aad05aa7142d39708ab28c1d7273d7a17f865e7",
+      "bytes": 3196938,
+      "visually_reviewed": true
+    },
+    {
+      "platform": "linux",
+      "view": "analysis",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-mlom98ej/completion_locals_workflow/files ä/workflow ä/locals-analysis.bmp",
+      "sha256": "cc3e0ab453cc7591f75086f14ba768f899aa5a63a073ea647471de2dd6f1c164",
+      "bytes": 3196938,
+      "visually_reviewed": true
+    },
+    {
+      "platform": "linux",
+      "view": "document",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-mlom98ej/completion_locals_workflow/files ä/workflow ä/locals-document.bmp",
+      "sha256": "382ffa2643d63b3250e85a104fe86ac99eb310a854a7d0689b3be02ce8a13e46",
+      "bytes": 3196938,
+      "visually_reviewed": true
+    }
+  ]
+}

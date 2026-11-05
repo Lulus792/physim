@@ -18,7 +18,7 @@ static ps_result page(ps_completion_help *help,const char *relative,ps_completio
 }
 ps_result ps_completion_help_select(ps_completion_help *help,const ps_completion_symbol *symbol,
                                     ps_completion_help_loader load,void *user){
-    if(!help || !symbol || !symbol->name || !symbol->module || !load)return PS_INVALID;
+    if(!help || !symbol || !symbol->name || !symbol->module || !load || symbol->kind==PS_COMPLETION_VARIABLE)return PS_INVALID;
     if(help->attempted && help->symbol==symbol)return help->status;
     help->attempted=true;help->symbol=symbol;help->guide=false;help->first=help->end=0;
     help->preview=(ps_doc_api_preview){SIZE_MAX,SIZE_MAX,SIZE_MAX,SIZE_MAX};

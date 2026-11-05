@@ -86,11 +86,12 @@ def catalog():
     cases.append(Case("run_details", ("tests/test_run_details.c", "app/run_details.c")))
     cases.append(Case("process_usage", ("tests/test_process_usage.c",)))
     cases.append(Case("compiler_diagnostic", ("tests/test_compiler_diagnostic.c", "app/compiler_diagnostic.c")))
-    cases.append(Case("completion", ("tests/test_completion.c", "app/completion.c")))
-    cases.append(Case("completion_help", ("tests/test_completion_help.c", "app/completion_help.c", "app/completion.c", "app/documentation.c")))
+    cases.append(Case("completion", ("tests/test_completion.c", "app/completion.c"),libraries=("language","core")))
+    cases.append(Case("completion_help", ("tests/test_completion_help.c", "app/completion_help.c", "app/completion.c", "app/documentation.c"),libraries=("language","core")))
+    cases.append(Case("completion_locals", ("tests/test_completion_locals.c", "app/completion_locals.c", "app/completion.c"),libraries=("language","core")))
     cases.append(Case("completion_info", ("tests/test_completion_info.c", "app/completion_info.c")))
     cases.append(Case("syntax", ("tests/test_syntax.c", "app/syntax.c", "app/completion.c"),libraries=("language","core")))
-    cases.append(Case("api_reference", ("tests/test_api_reference.c", "app/documentation.c", "app/completion.c"), arguments=("{source}",)))
+    cases.append(Case("api_reference", ("tests/test_api_reference.c", "app/documentation.c", "app/completion.c"),libraries=("language","core"), arguments=("{source}",)))
     cases.append(Case("positive_peaks", ("tests/test_positive_peaks.c",), arguments=("{work}/peaks",)))
     cases.append(Case("child_usage", ("tests/test_child_usage.c",)))
     cases.append(Case("app_profiling", ("tests/test_app_profiling.c", "app/profiling.c"),
@@ -212,7 +213,7 @@ def catalog():
         Case("file_browser", ("tests/test_file_browser.c", "app/file_browser.c", "app/workspace_state.c", "app/autosave.c"),
              arguments=("{work}","{source}/tests/file_browser_junction.ps1"), app=True),
         Case("file_browser_worker", ("tests/test_file_browser_worker.c", "app/file_browser_worker.c", "app/file_browser.c", "app/workspace_state.c", "app/autosave.c", "app/completion.c", "app/documentation.c"),
-             arguments=("{work}",), defines=("PS_BROWSER_WORKER_TESTING",), app=True),
+             libraries=("language","platform","core"),arguments=("{work}",), defines=("PS_BROWSER_WORKER_TESTING",), app=True),
         Case("text_document", ("tests/test_text_document.c",), ("project", "core"),
              arguments=("{work}",), app=True),
     ])

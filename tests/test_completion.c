@@ -47,6 +47,10 @@ int main(void) {
     const char *after="\"ps_v\" ps_vl";
     CHECK(ps_completion_prepare(after,strlen(after),strlen(after),false,&q)==PS_OK && includes(&q,"ps_vlength"));
     CHECK(ps_completion_prepare("α",2,1,false,&q)==PS_INVALID);
+    const char *unicode="foo(GröOLD)";size_t caret=strlen("foo(Grö");
+    CHECK(ps_completion_prepare(unicode,strlen(unicode),caret,true,&q)==PS_OK && !strcmp(q.prefix,"Grö") && q.start==4 && q.end==strlen(unicode)-1);
+    CHECK(ps_completion_prepare("größe.norm",strlen("größe.norm"),strlen("größe.norm"),true,&q)==PS_OK && !strcmp(q.receiver,"größe"));
+    CHECK(ps_completion_prepare("α",2,1,true,&q)==PS_INVALID);
     CHECK(ps_completion_prepare("x",1,2,false,&q)==PS_INVALID && ps_completion_prepare(NULL,0,0,false,&q)==PS_INVALID);
     char long_word[260];memset(long_word,'a',sizeof long_word);
     ps_completion_query before=q;

@@ -130,6 +130,19 @@ int main(void) {
     CHECK(find("value") && find("local"));
     CHECK(inspect("func f(value: Float64):\n    if true:\n        let hidden = 1\n@\n    print(value)\n    let future = 2\n"));
     CHECK(find("value") && !find("hidden") && !find("future"));
+    CHECK(inspect("foo(@"));CHECK(result.call.active && result.call.at_start && result.call.argument==0 && result.call.open==3);
+    CHECK(inspect("foo(first, @"));CHECK(result.call.active && result.call.at_start && result.call.argument==1);
+    CHECK(inspect("foo(first, bar(@"));CHECK(result.call.active && result.call.at_start && result.call.argument==0 && result.call.open==14);
+    CHECK(inspect("foo(first, bar(value), @"));CHECK(result.call.active && result.call.at_start && result.call.argument==2 && result.call.open==3);
+    CHECK(inspect("foo([first, second], @"));CHECK(result.call.active && result.call.at_start && result.call.argument==1);
+    CHECK(inspect("foo([first, @"));CHECK(result.call.active && !result.call.at_start && result.call.argument==0);
+    CHECK(inspect("foo((@"));CHECK(result.call.active && !result.call.at_start);
+    CHECK(inspect("foo(label: @"));CHECK(result.call.active && result.call.at_start && result.call.argument==0);
+    CHECK(inspect("foo(\"a,b\", /* , */ @"));CHECK(result.call.active && result.call.at_start && result.call.argument==1);
+    CHECK(inspect("foo()@"));CHECK(!result.call.active);
+    CHECK(inspect("func foo(value: @"));CHECK(!result.call.active);
+    CHECK(inspect("var callback: func(@"));CHECK(!result.call.active);
+    CHECK(inspect("foo(na@"));CHECK(result.call.active && !result.call.at_start);
 
     const char bad[]="var global = 1\nfunc broken(:\n    print(\n";
     result=ps_lang_editor_bindings(bad,strlen(bad),strlen(bad),nodes,8192,bindings,1024);

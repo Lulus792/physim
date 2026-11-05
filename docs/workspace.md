@@ -281,8 +281,9 @@ Setze den Cursor in einen C- oder Physim-Bezeichner und drücke
 **Ctrl+Leertaste**, auch auf macOS, oder wähle **Hilfe → Vervollständigen**.
 Beim Tippen ab zwei Zeichen oder nach einem Physim-Memberpunkt erscheinen
 passende Vorschläge automatisch direkt am dünnen, blinkenden Textcursor.
-Die Liste zeigt Namen mit Typ-Icons und Signatur. Pfeil auf/ab
-wechselt den Vorschlag; **Enter**, **Tab** oder ein Klick übernimmt ihn.
+Die Liste zeigt standardmäßig fünf Zeilen; weitere Treffer sind scrollbar.
+Pfeil auf/ab wählt einen Vorschlag; **Enter**, **Tab** oder ein Klick übernimmt
+ihn. Eine automatisch geöffnete Liste übernimmt ohne bewusste Auswahl nichts.
 **Esc** oder ein Klick außerhalb des Editors und der Liste beendet die Liste.
 Beim Weitertippen passen sich
 die Vorschläge an. Das angefangene Wort wird vollständig ersetzt, auch wenn
@@ -290,7 +291,7 @@ der Cursor in seiner Mitte steht. Die Übernahme lässt sich in einem Schritt
 rückgängig machen; ein bereits vollständiger Name erzeugt keinen zusätzlichen
 Undo-Schritt.
 
-Die Vorschläge stammen aus der zur App gehörenden C-API und Physim-Bibliothek.
+Die API-Vorschläge stammen aus der zur App gehörenden C-API und Physim-Bibliothek.
 Beispiele sind `ps_vl` für `ps_vlength`, `PS_MET` für `PS_METRE` und
 `Mat4.trans` für die statische Fabrik `Mat4.translation`. Bei einer
 Variablen wie `direction.nor` nennt die Liste auch den Empfängertyp, etwa
@@ -299,6 +300,21 @@ bleibt stehen. Wähle die Methode passend zum Typ deiner Variablen. Der
 Compiler prüft ihren Einsatz beim Build. In Kommentaren, Stringliteralen
 und einfachen Textdateien werden keine API-Vorschläge eingefügt.
 
+In Physim-Quellen stehen sichtbare Variablen und Funktionsparameter vor den
+API-Namen. Nach `(` und `,` in einem Aufruf erscheinen sie auch im leeren
+Argument. Die Liste berücksichtigt den aktuellen Gültigkeitsbereich: innere
+Deklarationen überdecken äußere; spätere Namen und geschlossene oder fremde
+Blöcke werden ausgelassen. Beim Einfügen bleiben Aufruf und andere Argumente
+erhalten. Für C sind lokale Variablenvorschläge noch nicht verfügbar.
+
+**Ctrl+Leertaste** bei offener Liste oder das **i** blendet die Kurzinfo ein
+oder aus. Nach einem Auswahlwechsel erscheint sie kurz verzögert. Bei lokalen
+Namen zeigt sie den geschriebenen Typ und die Datei mit Deklarationszeile.
+Fehlt eine Typannotation, wird kein abgeleiteter Typ behauptet. Lokale Namen
+haben keinen API-Referenzknopf; **Shift+F1** meldet ihre Quellstelle und erhält
+die bereits geöffnete API-Referenz. Eine separate Parameterhilfe für den
+aktuellen Aufruf ist noch nicht verfügbar.
+
 ### API-Dokumentation neben dem Code
 
 Setze den Cursor in einen API-Namen und drücke **Shift+F1** oder klicke
@@ -306,7 +322,7 @@ Setze den Cursor in einen API-Namen und drücke **Shift+F1** oder klicke
 Dokumentationsabschnitt mit Signatur und Beschreibung. Der Code bleibt
 bearbeitbar; die Referenz bleibt beim Tippen und Rückgängigmachen geöffnet.
 Bei mehreren passenden Typen öffnet sich die Vorschlagsliste: Wähle den
-gewünschten Eintrag und klicke dort **Referenz**. Der Name wird dabei nicht
+gewünschten Eintrag, blende die Kurzinfo ein und klicke dort **Referenz öffnen**. Der Name wird dabei nicht
 in den Code eingefügt.
 
 **Handbuch** öffnet denselben Abschnitt im vollständigen Handbuchfenster.

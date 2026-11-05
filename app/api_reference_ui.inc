@@ -1,5 +1,5 @@
 static bool api_reference_open(app *a,const ps_completion_symbol *symbol) {
-    if(!symbol)return false;
+    if(!symbol || symbol->kind==PS_COMPLETION_VARIABLE)return false;
     char relative[256],path[4096];
     snprintf(relative,sizeof relative,symbol->language?"docs/reference/language-library.md":"docs/reference/%s.md",symbol->module);
     ps_document *document=NULL;size_t first=0,end=0;ps_result result=PS_IO;
@@ -49,7 +49,9 @@ static void api_reference_insert_tick(app *a) {
 }
 static void api_reference_from_editor(app *a,struct nk_text_edit *edit) {
     if(a->completion_active && a->completion_edit==edit) {
-        const ps_completion_symbol *symbol=ps_completion_at(a->completion_indices[a->completion_selected]);
+        const ps_completion_symbol *symbol=completion_symbol(a,a->completion_indices[a->completion_selected]);
+        const ps_completion_local *local=completion_local(a,symbol);
+        if(local){char source[4160];completion_source_label(a,edit,local,source);status(a,source);return;}
         if(api_reference_open(a,symbol)){completion_close(a);completion_return_focus(a,edit);}
         return;
     }
@@ -62,6 +64,17 @@ static void api_reference_from_editor(app *a,struct nk_text_edit *edit) {
     size_t indices_count=ps_completion_count(),*indices=malloc(indices_count*sizeof *indices);
     if(!indices){status(a,"Nicht genügend Speicher für die API-Referenz.");return;}
     ps_completion_query whole=query;size_t word=query.end-query.start,count=0;
+    if(kind==1 && !query.member && word){
+        ps_completion_locals locals={0};
+        ps_result result=ps_completion_locals_update(&locals,edit,text,bytes,cursor,true);
+        if(result==PS_OK){
+            const ps_completion_local *local=ps_completion_locals_find(&locals,text+query.start,word);
+            if(local){char source[4160];completion_source_label(a,edit,local,source);status(a,source);
+                ps_completion_locals_destroy(&locals);free(indices);return;}
+        }
+        ps_completion_locals_destroy(&locals);
+        if(result!=PS_OK){free(indices);status(a,"Lokale Namen konnten nicht geprüft werden. Bisherige Referenz bleibt erhalten.");return;}
+    }
     if(word<sizeof whole.prefix){memcpy(whole.prefix,text+query.start,word);whole.prefix[word]=0;count=ps_completion_matches(&whole,indices,indices_count);}
     if(!count)count=ps_completion_matches(&query,indices,indices_count);
     if(count==1)api_reference_open(a,ps_completion_at(indices[0]));

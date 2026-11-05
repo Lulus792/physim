@@ -1,4 +1,5 @@
 #include "completion.h"
+#include "language/lexer.h"
 #include <string.h>
 static const ps_completion_symbol symbols[]={
 #include "completion_symbols.inc"
@@ -6,12 +7,19 @@ static const ps_completion_symbol symbols[]={
 size_t ps_completion_count(void){return sizeof symbols/sizeof *symbols;}
 const ps_completion_symbol *ps_completion_at(size_t index){return index<ps_completion_count()?&symbols[index]:NULL;}
 static bool word(unsigned char c){return (c>='a' && c<='z') || (c>='A' && c<='Z') || (c>='0' && c<='9') || c=='_';}
+static size_t word_before(const char *text,size_t at,bool language){
+    if(!at)return at;
+    if(!language)return word((unsigned char)text[at-1])?at-1:at;
+    size_t begin=at-1;while(begin && ((unsigned char)text[begin]&0xc0)==0x80)begin--;
+    return ps_lang_identifier_width(text+begin,at-begin,0)==at-begin?begin:at;
+}
 ps_result ps_completion_prepare(const char *text,size_t bytes,size_t cursor,bool language,ps_completion_query *out) {
     if(!text || !out || cursor>bytes || (cursor<bytes && ((unsigned char)text[cursor]&0xc0)==0x80))return PS_INVALID;
     ps_completion_query q={.start=cursor,.end=cursor,.language=language};
-    while(q.start && word((unsigned char)text[q.start-1]))q.start--;
-    while(q.end<bytes && word((unsigned char)text[q.end]))q.end++;
-    if(q.start && (unsigned char)text[q.start-1]>=0x80)return PS_INVALID;
+    for(;;){size_t before=word_before(text,q.start,language);if(before==q.start)break;q.start=before;}
+    while(q.end<bytes){size_t width=language?ps_lang_identifier_width(text+q.end,bytes-q.end,0):word((unsigned char)text[q.end])?1:0;if(!width)break;q.end+=width;}
+    if(!language && q.start && (unsigned char)text[q.start-1]>=0x80)return PS_INVALID;
+    if(language && q.start<cursor && !ps_lang_identifier_width(text+q.start,cursor-q.start,1))return PS_INVALID;
     if(q.start<cursor && text[q.start]>='0' && text[q.start]<='9')return PS_INVALID;
     if(cursor-q.start>=sizeof q.prefix)return PS_LIMIT;
     memcpy(q.prefix,text+q.start,cursor-q.start);
@@ -36,7 +44,7 @@ ps_result ps_completion_prepare(const char *text,size_t bytes,size_t cursor,bool
     if(q.start && text[q.start-1]=='.') {
         if(!language)return PS_INVALID;
         q.member=true;size_t begin=q.start-1;
-        while(begin && word((unsigned char)text[begin-1]))begin--;
+        for(;;){size_t before=word_before(text,begin,true);if(before==begin)break;begin=before;}
         size_t length=q.start-1-begin;
         if(length>=sizeof q.receiver)return PS_LIMIT;
         memcpy(q.receiver,text+begin,length);

@@ -1102,6 +1102,16 @@ def completion_info_workflow(flow,directory):
         require(not list(root.glob("*.png")) and not list(root.glob("*.bmp")),"Info timing regression emitted redundant pictures")
 
 
+def completion_locals_workflow(flow,directory):
+    flow.run("--workspace-state-test",directory,"completion-locals-phys",timeout=75,marker="COMPLETION LOCALS SELF-TEST: PASSED")
+    output=flow.steps[-1]["stdout"]
+    for target in range(3):
+        require(f"COMPLETION LOCALS target={target} theme={target} unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1" in output,"Missing painted local declaration card / real Unicode semibold")
+        require(f"COMPLETION LOCALS target={target} exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1" in output,"Missing actual scope/argument/insertion workflow")
+    for name in ("locals-model.bmp","locals-analysis.bmp","locals-document.bmp"):
+        require((directory/name).is_file(),"Missing native local candidate view: "+name)
+
+
 def completion_automatic(flow,directory,deadline=False):
     markers=("enter-without-selection=1","tab-without-selection=1","escape-suppression=1 manual-override=1 undo=1",
              "explicit-control-n-p=1 undo=1","changed-prefix-needs-selection=1","short-prefix-closes=1","stale-cursor=1","stale-equal-length-source=1",
@@ -2066,6 +2076,7 @@ SPECIAL["settings_transactions"]=settings_transactions
 SPECIAL["completion_automatic_workflow"]=completion_automatic
 SPECIAL["completion_automatic_deadline_workflow"]=lambda flow,directory:completion_automatic(flow,directory,True)
 SPECIAL["completion_info_workflow"]=completion_info_workflow
+SPECIAL["completion_locals_workflow"]=completion_locals_workflow
 SPECIAL["settings_keyboard_paced"]=lambda flow,directory: settings_keyboard(flow,directory,True)
 SPECIAL["settings_a_window"]=settings_a_window
 SPECIAL["settings_search_keyboard"]=settings_search_keyboard

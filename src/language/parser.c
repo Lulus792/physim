@@ -7,6 +7,7 @@ typedef struct editor_bindings {
     ps_lang_editor_binding *items;
     size_t count, capacity, cursor_indent;
     int limited, nonblank, resource_limited;
+    ps_lang_editor_call call;
 } editor_bindings;
 typedef struct parser {
     ps_lang_lexer lexer;
@@ -486,6 +487,9 @@ static size_t primary(parser *p, int multiline) {
             }
         }
         if (accept(p, PS_LANG_LPAREN)) {
+            ps_lang_editor_call saved_call = p->editor ? p->editor->call : (ps_lang_editor_call){0};
+            if (p->editor) p->editor->call = (ps_lang_editor_call){t.offset, 0, 1, 0};
+            size_t argument_index = 0;
             size_t first = 0, last = 0;
             newlines(p);
             if (p->current.kind != PS_LANG_RPAREN) {
@@ -506,11 +510,17 @@ static size_t primary(parser *p, int multiline) {
                             newlines(p);
                         }
                     }
+                    if (p->editor && p->editor->call.open == t.offset) {
+                        p->editor->call.argument = argument_index;
+                        p->editor->call.at_start = p->current.kind == PS_LANG_EOF;
+                    }
                     size_t value = expression(p, 1, 1);
                     append(p, &first, &last, node(p, PS_AST_ARGUMENT, label, value, 0, 0));
+                    argument_index++;
                 } while (accept(p, PS_LANG_COMMA));
             }
-            expect(p, PS_LANG_RPAREN, "Expected ')' after arguments");
+            int closed = expect(p, PS_LANG_RPAREN, "Expected ')' after arguments");
+            if (p->editor && closed) p->editor->call = saved_call;
             id = node(p, PS_AST_CALL, t, id, first, type_arguments);
         } else if (accept(p, PS_LANG_DOT)) {
             ps_lang_token name = p->current;
@@ -1076,7 +1086,7 @@ ps_lang_parse_result ps_lang_parse(const void *source, size_t size, ps_lang_node
 ps_lang_editor_bindings_result ps_lang_editor_bindings(
     const void *source, size_t size, size_t cursor, ps_lang_node *nodes, size_t node_capacity,
     ps_lang_editor_binding *bindings, size_t binding_capacity) {
-    ps_lang_editor_bindings_result result = {0, PS_LANG_EDITOR_INVALID, {0}};
+    ps_lang_editor_bindings_result result = {.status = PS_LANG_EDITOR_INVALID};
     if ((!source && size) || cursor > size || !nodes || node_capacity < 2 ||
         (binding_capacity && !bindings)) return result;
     const unsigned char *text = source;
@@ -1085,7 +1095,7 @@ ps_lang_editor_bindings_result ps_lang_editor_bindings(
     while (line && text[line - 1] != '\n') line--;
     size_t indent = line;
     while (indent < cursor && text[indent] == ' ') indent++;
-    editor_bindings e = {bindings, 0, binding_capacity, indent - line, 0, indent != cursor, 0};
+    editor_bindings e = {bindings, 0, binding_capacity, indent - line, 0, indent != cursor, 0, {0}};
     if (!e.nonblank && cursor < size) {
         /* Blank lines do not themselves dedent in the real lexer. Consult
          * only layout beyond the caret, not future declarations or values. */
@@ -1106,6 +1116,8 @@ ps_lang_editor_bindings_result ps_lang_editor_bindings(
     if (e.limited || e.resource_limited) result.status = PS_LANG_EDITOR_LIMIT;
     else if (parsed.root) result.status = PS_LANG_EDITOR_OK;
     else if (parsed.diagnostic.offset == cursor) result.status = PS_LANG_EDITOR_PREFIX;
-    if (result.status == PS_LANG_EDITOR_OK || result.status == PS_LANG_EDITOR_PREFIX) result.count = e.count;
+    if (result.status == PS_LANG_EDITOR_OK || result.status == PS_LANG_EDITOR_PREFIX) {
+        result.count = e.count;result.call = e.call;
+    }
     return result;
 }

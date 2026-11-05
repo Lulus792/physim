@@ -1,7 +1,7 @@
 #ifndef PHYSIM_APP_COMPLETION_H
 #define PHYSIM_APP_COMPLETION_H
 #include "physim/core.h"
-typedef enum { PS_COMPLETION_FUNCTION,PS_COMPLETION_TYPE,PS_COMPLETION_VALUE } ps_completion_kind;
+typedef enum { PS_COMPLETION_FUNCTION,PS_COMPLETION_TYPE,PS_COMPLETION_VALUE,PS_COMPLETION_VARIABLE } ps_completion_kind;
 typedef struct {
     const char *name,*module,*signature;
     ps_completion_kind kind;

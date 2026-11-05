@@ -39,6 +39,8 @@ int main(void){
     CHECK(ps_completion_help_select(&help,&type,load,&f)==PS_OK && help.guide && !strcmp(help.path,"docs/language.md") && f.loads==5);
     CHECK(ps_completion_help_select(&help,&type,load,&f)==PS_OK && f.loads==5);
     ps_completion_help saved=help;
+    ps_completion_symbol local={"alpha","Lokal","let alpha: Int64",PS_COMPLETION_VARIABLE,true,false};
+    CHECK(ps_completion_help_select(&help,&local,load,&f)==PS_INVALID && f.loads==5 && !memcmp(&help,&saved,sizeof help));
     CHECK(ps_completion_help_select(&help,NULL,load,&f)==PS_INVALID && !memcmp(&help,&saved,sizeof help));
     CHECK(ps_completion_help_select(&help,&alpha,NULL,&f)==PS_INVALID && !memcmp(&help,&saved,sizeof help));
     char long_module[300];memset(long_module,'x',sizeof long_module-1);long_module[sizeof long_module-1]=0;

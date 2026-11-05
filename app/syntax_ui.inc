@@ -45,3 +45,17 @@ static ps_syntax_role syntax_outline_role(void *user,size_t offset,size_t bytes)
     }
     return PS_SYNTAX_TEXT;
 }
+typedef struct {app *a;const char *source;bool locals_current;} syntax_editor_context;
+static ps_syntax_role syntax_editor_role(void *user,size_t offset,size_t bytes){
+    syntax_editor_context *c=user;app *a=c->a;const ps_completion_locals *p=&a->completion_locals;
+    /* Only revision-bound declaration spans and the current query are known to
+     * this completion snapshot. Never apply the caret's scope to other blocks
+     * or to a same-spelled type annotation elsewhere in the file. */
+    if(c->locals_current){
+        if(!a->completion_query.member && offset==a->completion_query.start &&
+           ps_completion_locals_find(p,c->source+offset,bytes))return PS_SYNTAX_VARIABLE;
+        for(size_t i=0;i<p->count;i++)if(p->entries[i].declaration.kind!=PS_LANG_EDITOR_SELF &&
+            p->entries[i].declaration.name.offset==offset && p->entries[i].declaration.name.length==bytes)return PS_SYNTAX_VARIABLE;
+    }
+    return syntax_outline_role(a,offset,bytes);
+}
