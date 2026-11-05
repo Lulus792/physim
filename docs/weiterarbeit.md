@@ -7,6 +7,25 @@ vollständige Umsetzung/Abnahme; keine volle Punktzahl oder gesamte grüne CI be
 
 ## Aktueller Anschluss
 
+[Geschriebene Physim-Signaturen](verification/signature-declarations-2026-11-05.md):
+echter Parser veröffentlicht vollständige Köpfe mit Parametern/Typen/Rückgabe,
+Generics, Methoden/Besitzer und lokalen Block-/Sichtbarkeitsspannen. Noch keine
+C-Deklarationsprojektion, Auflösung oder unabhängiger sichtbarer Parameter-HUD.
+Windows/Linux je **15 Unit-Gruppen + GUI 6/6**; 294 AST-/Präfix-Bytevergleiche,
+drei defekte Datenvarianten abgewiesen. Erster Windows-Test verglich Padding;
+feldweiser Nachtest je 1/1 bei gleichen Appbytes, Windows 1.410 Padding-Abweichungen.
+Kurzinfo-Fristprüfer testet reale alte Frist am wartenden Modell statt ein
+100-ms-Abtastfenster zu verlangen; sichtbare Prüfungen bleiben. Neuer Mac-Nachlauf
+offen, Workflow jetzt sechs Daten-Units + acht GUI-Gruppen.
+Finaler Snapshot **`signature-declarations-fields`**, 284 eigene / 1.223
+Compiler-/Testeingaben; alle 1.242 Eingaben gegen Git-Index gelesen, alle Archive
+geprüft. Windows `run-nxyvdfhz` / `run-ptblb524`, Linux `run-q9gskm57` /
+`run-ttk794d8`; erste 15er-Gruppen/Fehler und Details im
+[JSON](verification/signature-declarations-2026-11-05.json) und
+`build/validation/signature-declarations-2026-11-05/STATE.md`.
+Alle lokalen Handles beendet. 34 bytegleiche BMPs/108.695.892 Bytes entfernt,
+Referenzen und Originalberichte erhalten. Keine SDK-/VM-/Fremddatenbereinigung.
+
 [Aufrufziele für die Parameterhilfe](verification/call-targets-2026-11-05.md):
 beide echten Parser liefern ursprüngliche Ziel-/Namens-/Empfängerspannen und
 Member-Syntax; indirekte Ziele bleiben ohne geratenen Namen. Noch keine
@@ -21,9 +40,14 @@ Neuer Mac-Workflow enthält vier Daten-Units vor acht GUI-Gruppen; Ausführung a
 neuen Quellstand noch offen. Kein neues Performance-/physisches Abnahmeversprechen.
 Quellcommit **`c9b9c00f`**, beide Repositories;
 [Commitabgleich und Mac-Anschluss](verification/call-targets-commit-2026-11-05.json).
-Neuer gehosteter Lauf **`41972622898`**: ARM `127064120558` und Intel
-`127064120877` warten auf Runner. Diese Jobs am Anschluss prüfen; erwartet sind
-je vier Daten-Units und acht GUI-Gruppen, noch keine neue Mac-Abnahme.
+Gehosteter Lauf **`41972622898`** ist beendet und seine beiden ZIPs/Digests/
+Originaleinträge sind gelesen: ARM `127064120558` **Unit 4/4 + GUI 8/8**,
+Intel `127064120877` **Unit 4/4 + GUI 7/8**. [Nachweis und Fehler](verification/call-targets-macos-2026-11-05.json).
+Intel scheitert in `completion_info_workflow`, Physim-Ziel 2, Stufe 15: der alte
+Prüfer verlangt einen gerenderten Frame zwischen zwei kurzen Fristen. Die
+Zeitprüfung wird am realen wartenden Modell von der Frame-Abtastung getrennt;
+ein neuer Quellnachlauf bleibt erforderlich. Diesen abgeschlossenen Lauf nicht
+erneut pollen/starten. Kein neuer Zugriff auf den Nutzer-Mac.
 
 [C-Syntaxwiederverwendung](verification/completion-reuse-2026-11-05.md): ein
 unveränderter, eigener Flat-Snapshot für Cursorwechsel/erneutes Öffnen; Scope-/
@@ -57,7 +81,7 @@ Die früheren Läufe `41960990299`, `41947340908` und ältere nicht erneut polle
 aus Kontextgründen wiederholen. Aktueller gemeinsamer isolierter Baum bleibt
 `build/validation/protocol-wrap-2026-10-26/3-isolated/` (`src`, `windows-build`,
 `linux-build`); Helfer unter `build/validation/explorer-inline-2026-10-29/`.
-Nächste Vorbereitung auf **`call-targets-ci`** aufbauen, niemals bei laufenden
+Nächste Vorbereitung auf **`signature-declarations-fields`** aufbauen, niemals bei laufenden
 lokalen Jobs mutieren. Die frühere C-Verfügbarkeitstextkorrektur in
 `docs/workspace.md` ist inzwischen übernommen.
 
@@ -72,8 +96,9 @@ lokalen Jobs mutieren. Die frühere C-Verfügbarkeitstextkorrektur in
    Cursor-/Edit-Zeit samt gehaltenem Speicher weiter als offene Performance führen.
    Kein neuer Provider-Worker, keine Ergebnis-/Scopeverkürzung oder Budgetschwächung.
    Keine UI-/Linux-/Mac-Performance-Abnahme. Mac-UI-Nachlauf zu `9292b67e` geschlossen.
-3. Aufrufziel-Daten fertig; tatsächliche API-/Benutzerfunktionsdeklarationen und
-   geschriebene Parameter/Typen für C/Physim anbinden, anschließend unabhängigen
+3. Aufrufziel-Daten und geschriebene Physim-Köpfe fertig; tatsächliche C-
+   Deklaratoren/Zeiger/Prototypen/Parameter/Scopes projizieren, danach API-/
+   Benutzerfunktionsauflösung für beide Sprachen anbinden und unabhängigen
    Signatur-HUD vollständig nach ADR 023/APPROVED umsetzen (automatisch/manuell,
    aktive A2-/Fett-/Unterkantenmarkierung, zu viele/innere Argumente, Escape,
    Fokus/IME/Revision/Accessibility, normale Liste darunter). Keine Typinferenz/

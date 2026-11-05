@@ -14,7 +14,7 @@ static bool completion_info_seed(app *a,struct nk_text_edit *edit,const char *te
     completion_info_wait_generation=completion_info_draw_generation+1;return true;
 }
 static void completion_info_test_frame(app *a,const char *mode,int *stage,int *code){
-    static unsigned target,early;static bool prepared,old_deadline_seen;static double timeout,issued,due,old_due,hold;
+    static unsigned target,early;static bool prepared,old_deadline_rejected;static double timeout,issued,due,old_due,hold;
     static char expected[256];static size_t chosen;static int cursor;static struct nk_vec2 editor_scroll;static struct nk_rect old_card;
     bool language=strstr(mode,"phys")!=NULL,ok=true;workspace_document *doc=active_document(a);
     struct nk_text_edit *edit=target==0?&a->experiment:target==1?&a->analysis:doc?&doc->edit:NULL;
@@ -66,12 +66,19 @@ static void completion_info_test_frame(app *a,const char *mode,int *stage,int *c
         INFO_KEY(SDLK_DOWN,0);INFO_NEXT(14);break;
     case 14:
         INFO_WAIT(a->completion_info.mode==PS_COMPLETION_INFO_PENDING);
-        due=a->completion_info.due;ok=due>old_due+.070;old_deadline_seen=false;INFO_NEXT(15);break;
+        due=a->completion_info.due;ok=due>old_due+.070;
+        /* Exercise the real pending request at the obsolete deadline. A slow
+         * rendered frame can skip that interval; it must not decide correctness.
+         * A correct update leaves this same live request completely pending. */
+        {ps_completion_info_key key=completion_info_current(a);
+        old_deadline_rejected=!ps_completion_info_update(&a->completion_info,&key,old_due) &&
+            a->completion_info.mode==PS_COMPLETION_INFO_PENDING && a->completion_info.due==due;}
+        ok=ok && old_deadline_rejected && !a->completion_info_visible && !completion_info_painted;INFO_NEXT(15);break;
     case 15:
-        if(ps_clock()<due){ok=!a->completion_info_visible && !completion_info_painted;if(ps_clock()>=old_due)old_deadline_seen=true;break;}
+        if(ps_clock()<due){ok=!a->completion_info_visible && !completion_info_painted;break;}
         INFO_WAIT(a->completion_info_visible && completion_info_painted);
-        ok=old_deadline_seen && completion_test_equal(edit,expected);
-        printf("COMPLETION INFO target=%u manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=%u rapid-reselection=1\n",target,early);
+        ok=old_deadline_rejected && completion_test_equal(edit,expected);
+        if(ok)printf("COMPLETION INFO target=%u manual-toggle=1 hidden-pointer=1 delay-ms=280 early-samples=%u rapid-reselection=1 obsolete-deadline-rejected=1\n",target,early);
         chosen=a->completion_selected;
         {size_t row=a->completion_first==chosen?1:0;ok=ok && row<a->completion_visible_rows;
         struct nk_rect r=a->completion_choice_bounds[row];test_plot_motion(a,r.x+60,r.y+r.h/2);completion_info_wait_generation=completion_info_draw_generation+2;}

@@ -1,0 +1,158 @@
+{
+  "date": "2026-11-05",
+  "repo": "Lulus792/physim",
+  "run": 41972622898,
+  "source_commit": "c9b9c00f2e253768a78ecdad844544d46e709cdc",
+  "reports": [
+    {
+      "architecture": "arm",
+      "job": 127064120558,
+      "artifact": 13390497140,
+      "zip_sha256": "7da9d5937a0ffacc62d3926288db8a652b5a67a95571437784fd87f8a98325cc",
+      "zip_path": "build/validation/call-targets-2026-11-05/native-editor-menu-macos-15.zip",
+      "github_digest_verified": true,
+      "all_original_entries_read": {
+        "Release/test-results/run-aoc_cbgl/results.json": "0b089439000c82cc1fe5eb4eb5a3713330305b8f4bfc0ec1c936e8f97caef158",
+        "Release/test-results/run-kgmdn530/results.json": "146ad59cd71496b403dd8b0d3cd2bd40410c6bcea669f36f6ce2042943a1ecb3"
+      },
+      "unit_passed": 4,
+      "unit_total": 4,
+      "unit_cases": [
+        "c_call_context",
+        "completion_locals",
+        "completion_c_locals",
+        "call_targets"
+      ],
+      "actual_unit_markers": [
+        "38 original-source call/declaration/literal/nesting vectors",
+        "36 actual C/Physim grammar vectors",
+        "887 fresh-reference comparisons",
+        "123/123 preserve snapshot",
+        "7/7 preserve source/syntax/results",
+        "87/87 preserve source/syntax/results"
+      ],
+      "gui_passed": 8,
+      "gui_total": 8,
+      "gui_cases": [
+        {
+          "name": "documents_small",
+          "status": "passed"
+        },
+        {
+          "name": "documents_large",
+          "status": "passed"
+        },
+        {
+          "name": "completion_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_automatic_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_info_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_automatic_deadline_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_locals_workflow",
+          "status": "passed"
+        }
+      ],
+      "actual_c_physim_cache_targets": 3,
+      "app_sha256": "7a69f6e2c1fdea1f4d75cf22eb19f485218c50d2b5d2e95c871d7673a1a9c4b9",
+      "failure": null
+    },
+    {
+      "architecture": "intel",
+      "job": 127064120877,
+      "artifact": 13389934688,
+      "zip_sha256": "24726862343ee47d4130ba964db92ca16ca4cddfb0d4436bb23f0c7cc71a86d3",
+      "zip_path": "build/validation/call-targets-2026-11-05/native-editor-menu-macos-15-intel.zip",
+      "github_digest_verified": true,
+      "all_original_entries_read": {
+        "Release/test-results/run-1lwvxzgh/results.json": "7975f695a1cbe984149c50cd19290fa7957742940f85ff36484d2d0de68ddee6",
+        "Release/test-results/run-rsk4t4k_/results.json": "780b232d0c8db4654b7a46bb98019314c205b971f13d03c5484f08504975d520"
+      },
+      "unit_passed": 4,
+      "unit_total": 4,
+      "unit_cases": [
+        "c_call_context",
+        "completion_locals",
+        "completion_c_locals",
+        "call_targets"
+      ],
+      "actual_unit_markers": [
+        "38 original-source call/declaration/literal/nesting vectors",
+        "36 actual C/Physim grammar vectors",
+        "887 fresh-reference comparisons",
+        "123/123 preserve snapshot",
+        "7/7 preserve source/syntax/results",
+        "87/87 preserve source/syntax/results"
+      ],
+      "gui_passed": 7,
+      "gui_total": 8,
+      "gui_cases": [
+        {
+          "name": "documents_small",
+          "status": "passed"
+        },
+        {
+          "name": "documents_large",
+          "status": "passed"
+        },
+        {
+          "name": "completion_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_automatic_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_info_workflow",
+          "status": "failed"
+        },
+        {
+          "name": "completion_automatic_deadline_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_locals_workflow",
+          "status": "passed"
+        }
+      ],
+      "actual_c_physim_cache_targets": 3,
+      "app_sha256": "ec6462f02142a1a555c876888e967ff284e39c5f07d3db39d272d7c496a601b4",
+      "failure": {
+        "case": "completion_info_workflow",
+        "exit_code": 1,
+        "diagnostic": [
+          "Completion info target=2 stage=40 active=1 visible=1 painted=1 mode=2 due=0.000000 now=567.970406 info=304.1/177.0 scroll=0 cursor=23",
+          "First workflow failure at stage 15 (next 40): Projekt geladen. Build kompiliert die lokalen Quelldateien. (tab=8, selected=0, samples=0, report=0, query=)",
+          "Workflow failed at stage 40: Projekt gespeichert. (tab=8, sweep=0, ready=0, built=0, idle=1, runs=0, button=0.0/0.0/0.0/0.0)"
+        ],
+        "scope": "C target0/1/2 passes; Physim target2 fails after its rapid-reselection deadline observation at stage15. First-failure stage15 advances to40 before failure reporting. Actual old code requires a real rendered sample in old/new deadline interval. No new semantic data failure."
+      }
+    }
+  ],
+  "all_jobs_terminal": true,
+  "temporary_signed_config_removed": true,
+  "original_json": {
+    "path": "build/validation/call-targets-2026-11-05/mac-original-report.json",
+    "sha256": "7dd77b97e037af29030509602bf89e0d07d25716dd5eeca195586be23356a92b"
+  },
+  "scope": "Call-target36 and revision/fault units4/4 both architectures. ARMGUI8/8, IntelGUI7/8; not a green whole-Mac claim. Follow-up test timing fix and later Physim signature declarations are outside this source run. Private user MacOFF/untouched, no new physical/performance acceptance."
+}

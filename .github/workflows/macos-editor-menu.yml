@@ -11,6 +11,11 @@ on:
       - app/design_tokens.h
       - src/language/builtin_type_names.inc
       - src/language/lexer*
+      - src/language/parser*
+      - src/language/editor_*.h
+      - app/c_bindings*
+      - tests/test_editor_signatures.c
+      - tests/test_call_targets.c
       - tools/generate-completions.py
       - app/api_reference_tests.inc
       - tests/check_display_workflow.py
@@ -52,8 +57,8 @@ jobs:
         with:
           path: build/sdl-install
           key: ${{ steps.sdl-identity.outputs.key }}
-      - name: Actual call-target and revision data
-        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test --test-filter call_targets --test-filter c_call_context --test-filter completion_c_locals --test-filter completion_locals
+      - name: Actual signature, call-target and revision data
+        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test --test-filter editor_signatures --test-filter call_targets --test-filter c_call_context --test-filter completion_c_locals --test-filter completion_locals --test-filter completion_info
       - name: Actual document, completion and API reference workflows
         run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test-display --test-filter documents_small --test-filter documents_large --test-filter completion_workflow --test-filter completion_automatic_workflow --test-filter completion_automatic_deadline_workflow --test-filter completion_info_workflow --test-filter completion_locals_workflow --test-filter api_reference_workflow
       - name: Compact native results

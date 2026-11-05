@@ -8,11 +8,20 @@ wegen Kontextwechsel erneut anfangen; die ursprünglichen Nachweise unverändert
 
 ## Neuere Editorprüfungen
 
+- [Geschriebene Physim-Funktionssignaturen](verification/signature-declarations-2026-11-05.md):
+  echte Parserproduktionen für Parameter/Typen/Rückgabe, Methoden/Besitzer und
+  lokale Bereiche. Windows/Linux je 15 Unit-Gruppen + GUI 6/6; 294 AST-/Präfix-
+  Vergleiche, drei beschädigte Varianten erkannt. Padding-Testfehler korrigiert,
+  Appbytes über Phasen gleich; Kurzinfo-Prüfer weist alte Frist am tatsächlichen
+  Modell ab. **C-Projektion, Auflösung, sichtbarer HUD und neuer Mac-Nachlauf offen.**
 - [C-/Physim-Aufrufziele](verification/call-targets-2026-11-05.md): Windows/Linux
   je Unit 9/9 + GUI 6/6; 36 exakte Namens-/Empfängerfälle und beide vorigen
   Sprachpfade konkret abgewiesen. 887 Cachevergleiche umfassen neue Metadaten.
   **Nur Datengrundlage: Signatur-/Deklarationsauflösung, sichtbarer Parameter-HUD
-  und neue Mac-Datenabnahme noch offen.**
+  noch offen.** Gehosteter Nachlauf `c9b9c00f`: [ARM Unit 4/4 + GUI 8/8,
+  Intel Unit 4/4 + GUI 7/8](verification/call-targets-macos-2026-11-05.json).
+  Intel-Kurzinfo-Prüfer scheitert bei der Frame-Abtastung einer kurzen Frist;
+  Korrektur/Nachlauf separat verfolgen, keine grüne gesamte Mac-Abnahme.
 - [C-Syntaxwiederverwendung](verification/completion-reuse-2026-11-05.md): Windows/Linux
   je Unit 8/8 + GUI 6/6, danach verstärkter C-Test je 1/1 ohne Appänderung.
   887 Frischvergleiche, 7/7 Cursor-/87/87 Edit-Speicherfehler, zwei bewusst falsche
