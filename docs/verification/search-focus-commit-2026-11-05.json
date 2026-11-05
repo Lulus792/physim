@@ -1,0 +1,91 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "7c1870c4371bd5edf98b0b87fcac3110f76580c2",
+  "refs_verified": {
+    "HEAD": "7c1870c4371bd5edf98b0b87fcac3110f76580c2",
+    "origin/codex/f1-design-h": "7c1870c4371bd5edf98b0b87fcac3110f76580c2",
+    "upstream/codex/f1-design-h": "7c1870c4371bd5edf98b0b87fcac3110f76580c2"
+  },
+  "tested_input_match": {
+    "path": "build/validation/search-focus-2026-11-05/commit-match.json",
+    "sha256": "a6225d697b1eb182c0f959f318357c92b372778c28b2af065837642d66f8099c",
+    "owned_inputs": 303,
+    "compiler_and_test_files": 1238,
+    "unique_files": 1257,
+    "all_bytes_match": true,
+    "nonvendor_crlf_normalized_only": true
+  },
+  "frozen_manifests": {
+    "build/validation/explorer-inline-2026-10-29/search-focus-compiler-source.json": "55a8829d2c0870aa9389869b57511c5071f45a6bfe459e288f174487a5b408fe",
+    "build/validation/explorer-inline-2026-10-29/search-focus-byte-index.json": "f01fdfdc585b56fa612856d0e24d4d6aba537e3f37e508db43b2c3b8262620a7",
+    "build/validation/explorer-inline-2026-10-29/search-focus-fixed-compiler-source.json": "3871cb13294cdf31aecba5cb77513e1c99e29f2312c302e5acedcd0d74bbef7e",
+    "build/validation/explorer-inline-2026-10-29/search-focus-fixed-runtime.json": "085cc958d1ce9b288ecb0ba879eea4b6226dfbc373e6ff5683ed73b9c7f98856",
+    "build/validation/explorer-inline-2026-10-29/search-focus-fixed-byte-index.json": "d50da181b133e4963ef8c4cccaa877bd5229189d08bc31c771b6572c74e8d2b8"
+  },
+  "hosted_runs": [
+    {
+      "id": 42081349615,
+      "path": ".github/workflows/ci.yml",
+      "status": "pending",
+      "conclusion": null,
+      "source": "7c1870c4371bd5edf98b0b87fcac3110f76580c2"
+    },
+    {
+      "id": 42081349609,
+      "path": ".github/workflows/linux-ui-sanitizers.yml",
+      "status": "in_progress",
+      "conclusion": null,
+      "source": "7c1870c4371bd5edf98b0b87fcac3110f76580c2"
+    },
+    {
+      "id": 42081349537,
+      "path": ".github/workflows/linux-package.yml",
+      "status": "pending",
+      "conclusion": null,
+      "source": "7c1870c4371bd5edf98b0b87fcac3110f76580c2"
+    },
+    {
+      "id": 42081349653,
+      "path": ".github/workflows/macos-f1-accessibility.yml",
+      "status": "queued",
+      "conclusion": null,
+      "source": "7c1870c4371bd5edf98b0b87fcac3110f76580c2"
+    },
+    {
+      "id": 42081349550,
+      "path": ".github/workflows/macos-editor-menu.yml",
+      "status": "queued",
+      "conclusion": null,
+      "source": "7c1870c4371bd5edf98b0b87fcac3110f76580c2"
+    },
+    {
+      "id": 42081349500,
+      "path": ".github/workflows/macos-workspace-menu.yml",
+      "status": "queued",
+      "conclusion": null,
+      "source": "7c1870c4371bd5edf98b0b87fcac3110f76580c2"
+    },
+    {
+      "id": 42081349596,
+      "path": ".github/workflows/macos-study-menu.yml",
+      "status": "queued",
+      "conclusion": null,
+      "source": "7c1870c4371bd5edf98b0b87fcac3110f76580c2"
+    },
+    {
+      "id": 42081349778,
+      "path": ".github/workflows/macos-f1-regressions.yml",
+      "status": "queued",
+      "conclusion": null,
+      "source": "7c1870c4371bd5edf98b0b87fcac3110f76580c2"
+    },
+    {
+      "id": 42081349651,
+      "path": ".github/workflows/macos-typography-menu.yml",
+      "status": "queued",
+      "conclusion": null,
+      "source": "7c1870c4371bd5edf98b0b87fcac3110f76580c2"
+    }
+  ],
+  "scope": "Verified local source and remote publication; new hosted runs are pending/in progress, not platform acceptance."
+}

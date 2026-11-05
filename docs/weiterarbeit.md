@@ -20,6 +20,11 @@ Alle acht repräsentativen Bilder bytegleich zu bereits geprüften Referenzen;
 Warmstand **search-focus-fixed**, 303 Eingaben; alle drei Änderungen vor Build
 Root/Isolation/Manifest bytegleich. Beide Zustände eingefroren. Detailstand:
 `build/validation/search-focus-2026-11-05/STATE.md`.
+[Quelle7c1870c4 und beide Remotes geprüft](verification/search-focus-commit-2026-11-05.json):
+alle1257Eingaben gegen tatsächlichen Commit gelesen. Keine eigene offene Source-
+Änderung. Neue Editor-Macprüfung42081349550: ARM127434901591/Intel127434902003;
+Workspace-Mac42081349500: ARM127434901974/Intel127434902628, zunächst queued.
+Weitere neue Runs samt Quellbindung stehen im Nachweis; dieselben Handles nutzen.
 
 [Linux-Endianschnittstellen im C-Parser](verification/glibc-endian-2026-11-05.md):
 Ubuntu/Clang scheiterte beim Kompilieren an versteckten le16toh/be16toh;
@@ -91,10 +96,14 @@ pollen oder neu starten. Diese alte Quelle belegt nicht die spätere Fokuskorrek
    Fehler Stufe34, font_demand Stufe3, accessibility_links_atspi fehlende Meldung.
    Original-ZIP/Digest/alle2365Einträge gelesen, keine Bildextraktion. Nicht
    erneut aus Kontext herunterladen. Ursachenprüfung anhand gesicherter Originale.
-   **Linux-Paket42076708931**, Job127418724841 zuletzt im
-   Release-Build/Test; **Linux-UI42076708745**, GCC127418724267 bei UI-Abläufen.
-   **CI42076708718** pending, noch keine Jobs. Dieselben Handles weiterverfolgen,
-   nicht neu starten. Ubuntu-Clang belegt die Parserkorrektur; Debian bleibt offen.
+   **Linux-Paket42076708931**: Buildjob127418724841 jetzt terminal/success;
+   tatsächliche Ergebnisarchive noch nachlesen. Installationsprüfungen laufen
+   als Debian127435054249 und Ubuntu127435054258. **Linux-UI42076708745** jetzt
+   beide terminal/failure; GCC127418724267-Originale noch nicht gelesen.
+   Clang-Originale sind oben gesichert. Diesen geschlossenen UI-Run nicht weiter
+   pollen. **CI42076708718** zuletzt pending, noch keine Jobs. Dieselben aktiven
+   Handles weiterverfolgen, nicht neu starten. Ubuntu-Clang belegt die
+   Parserkorrektur; vollständige Paket-/Installationsabnahme bleibt offen.
    [Quell-/Run-Nachweis](verification/glibc-endian-commit-2026-11-05.json).
    Dateireiterquelle13cc4422: Mac-Workspace **42073119561** jetzt terminal.
    [Intel127406074781 vollständig 4/4 samt 68-Projekt-Matrix](verification/macos-workspace-13cc-intel-2026-11-05.json),

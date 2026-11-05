@@ -17,6 +17,8 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
   darunter je 12 Suchfeld-/Schaltflächen-Sequenzen mit separatem OS-Prozess.
   Acht Bildkopien vollständig identisch zu erhaltenen Referenzen;
   [Duplikate entfernt](verification/search-focus-images-cleanup-2026-11-05.json).
+  [Quellcommit7c1870c4 samt beiden Remotes und1257Eingaben geprüft](verification/search-focus-commit-2026-11-05.json);
+  neue gehostete Plattformläufe laufen bzw. warten, keine fertige Mac-Abnahme.
 - [Ubuntu-Clang-Nachlauf zur Endian-Korrektur](verification/glibc-endian-clang-2026-11-05.md):
   native Kompilierung/Linken erfolgreich, 26/26 Daten und 44/48 UI. Vier echte
   Fehler offen; Original-ZIP mit offiziellem Digest und allen 2.365 Einträgen
