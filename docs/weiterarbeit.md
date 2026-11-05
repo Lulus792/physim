@@ -7,35 +7,30 @@ Vollständige Umsetzung und Abnahme bleiben das Ziel; Teiltests sind keine volle
 
 ## Aktueller Abschluss
 
-[Physim-Köpfe trotz unvollständiger Eingabe](verification/module-signatures-2026-11-05.md):
-getrennte Dokumentabfrage am echten Parser, vollständige Modul-/Methodenköpfe
-auch hinter einer bearbeiteten Aufrufstelle. Keine beliebigen partiellen ASTs
-als gültig behandeln. Lokale Funktionen bleiben in der Cursor-Präfixabfrage.
-Compiler/alte API behalten ihre Verträge; noch kein gemeinsamer Resolver/HUD.
+[Tatsächliches C-Aufrufziel](verification/c-lookup-2026-11-05.md): getrennte
+Namensabfrage im vorhandenen C-Snapshot. Vollständige Deklaratoren verdecken API-
+Namen bereits in ihrer unfertigen Initialisierung; Typedef/Enum/Parameter ebenso.
+Direkt geschriebene vollständige Funktions-/Zeigerköpfe nutzen die gemeinsame
+Signaturprojektion. Alte Vorschlags-/Signatur-API unverändert; kein Resolver/HUD.
 
-Erster Stand Windows/Linux je **Daten 17/17 + GUI 6/6**. Zusätzliche Sicherung nur
-der neuen Dokumentabfrage gegen erneutes Beginnen beschädigter Namespace-Köpfe:
-endgültig je **5/5 gezielte Datenprüfungen**, keine erneute unveränderte GUI-Matrix.
-13 Fälle, 70 Präfix-/Kopfvergleiche, drei beschädigte Köpfe; vier Negativprogramme
-und begrenzter alter Timeout geprüft. [Umfang/Hashes](verification/module-signatures-2026-11-05.json).
+Windows/Linux zunächst je **8/8 Daten**; danach zwei nur die neue Abfrage
+betreffende Bereichslücken belegt/korrigiert. Endgültig **52 Fälle**, zwei Scratch-
+Fehler, vier saubere gezielte Ablehnungen; finale Testdatei auf beiden Plattformen
+und direkt strikt C17/ASan/UBSan/LSan bestanden. Testfehler-Bereinigung separat
+nachgewiesen; keine erneute unveränderte GUI. [Stufen/Hashes](verification/c-lookup-2026-11-05.json).
 
-Finale Vorbereitung künftig auf **`module-signatures-final`** aufbauen.
-288 eigene / 1.227 Compiler-/Testeingaben; alle 1.246 Eingaben gegen Git-Index,
-alle Archive geprüft. Alle lokalen Handles beendet. 34 bytegleiche BMPs /
-108.695.892 Bytes entfernt, Referenzen/Fehler erhalten.
-Details: `build/validation/module-signatures-2026-11-05/STATE.md`.
-Quellcommit **`ec7824ca`**, in beide Repositories gepusht;
-[Commitabgleich](verification/module-signatures-commit-2026-11-05.json).
-Gehosteter Lauf **`41986344544` abgeschlossen**: ARM/Intel je **8/8 Daten +8/8 GUI**,
-Original-ZIPs, GitHub-Digests und alle Einträge gelesen. [Mac-Nachlauf](verification/module-signatures-macos-2026-11-05.json).
-Nicht erneut pollen/starten; der Nutzer-Mac bleibt ausgeschaltet/unberührt.
+Vorbereitung künftig auf **`c-lookup-closed`** aufbauen: 290 eigene /1.229 Compiler-
+Testeingaben, alle1.248 mit Git abgeglichen; Archive geprüft. Lokale Handles beendet.
+Keine neuen Bilder. Details: `build/validation/c-lookup-2026-11-05/STATE.md`.
+Mac-Nachlauf dieses neuen C-Quellstands noch offen. Nach Push denselben tatsächlich
+gefundenen Lauf anhand des Quellcommits beobachten: erwartet9 Daten +8 GUI jeArch.
 
 ## Nächste konkrete Schritte
 
 1. Gemeinsamen tatsächlichen C-/Physim-Signaturresolver anbinden: API und eigene
-   Funktionen, Scopes/Überdeckung, keine erfundenen Typen/Überladungen. C-eigene
-   unvollständige Initialisierer sowie Typ-/Enum-Namen brauchen echte Zielmasken;
-   die Vorschlagsliste allein ist dafür kein vollständiger Scope-Nachweis.
+   Funktionen, Scopes/Überdeckung, keine erfundenen Typen/Überladungen. C-Lookup
+   am ursprünglichen Callee-Namensort verwenden, nicht am Editorcursor in einem
+   inneren Argumentblock. Gefundene gewöhnliche Namen verhindern API-Rückfall.
 2. Unabhängigen nativen Parameter-HUD vollständig nach ADR 023/APPROVED:
    volle Signatur, gemeinsame Syntaxrollen, aktiver Parameter A2/fett/Unterkante,
    innere/überzählige Argumente, automatisch/manuell, normale Liste darunter,
@@ -61,9 +56,11 @@ Trennlinie ist seit `ef1f3321` behoben: kein neuer Test allein wegen Kontextwech
 - Frühere C-/Physim-Mac-Nachläufe41980836062/41976275068 geschlossen, Originale
   geprüft; siehe Prüfindex. Alten Intel-Fristfehler41972622898 seit7a3e7950
   erfolgreich nachgeprüft. Diese Läufe nicht erneut pollen/starten.
+- Modulabfrage `ec7824ca`, Lauf41986344544: [ARM/Intel je8 Daten +8 GUI](verification/module-signatures-macos-2026-11-05.json),
+  beide Original-ZIPs/Digests/Einträge gelesen. Abgeschlossen, nicht erneut pollen.
 
-Der oben verlinkte aktuelle Mac-Nachlauf bestätigt die Dokumentabfrage,
-noch keinen gemeinsamen Resolver/HUD oder die vollständige UI-Abnahme.
+Diese Belege bestätigen noch keinen aktuellen C-Lookup, gemeinsamen Resolver/HUD
+oder die vollständige UI-Abnahme. Alter Modulnachweis bleibt im Prüfindex.
 
 ## Dokumentation und Speicherpflege abgeschlossen
 

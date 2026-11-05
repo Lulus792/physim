@@ -43,4 +43,28 @@ typedef struct {
 ps_c_signatures_result ps_c_bindings_source_signatures(
     const ps_c_bindings_source *source,ps_c_function *functions,size_t function_capacity,
     ps_c_parameter *parameters,size_t parameter_capacity,ps_allocator allocator);
+
+typedef enum { PS_C_NAME_NONE,PS_C_NAME_DECLARATION,PS_C_NAME_TYPEDEF,PS_C_NAME_ENUMERATOR,PS_C_NAME_PARAMETER } ps_c_name_kind;
+typedef struct {
+    ps_result status;
+    bool has_error,found,callable;
+    ps_c_name_kind kind;
+    ps_c_binding declaration;
+    ps_c_function function; /* Valid only when callable: actual written header. */
+    size_t parameter_count;
+} ps_c_lookup_result;
+/* Exact ordinary-identifier lookup in the original snapshot at cursor. Nearest
+ * active declaration wins, including typedefs/enumerators and a completed object
+ * declarator inside its unfinished initializer. This is intentionally distinct
+ * from completed variable suggestions. Tags/fields/labels are other namespaces;
+ * no preprocessing, alias inference, external includes or overload resolution.
+ * Unresolved ordinary objects still set found and prevent API-name fallback.
+ * callable means a complete directly written function/function-pointer header,
+ * not proof that an opaque object/typedef cannot be called. Parameter entries
+ * follow the signature API. NULL/0 queries the complete required count. Capacity
+ * PS_LIMIT returns only parameter_count/has_error; every other failure clears
+ * usable results/counts. Scratch is private/freed; immutable source unchanged. */
+ps_c_lookup_result ps_c_bindings_source_lookup(const ps_c_bindings_source *source,
+    size_t cursor,const char *name,size_t name_bytes,
+    ps_c_parameter *parameters,size_t parameter_capacity,ps_allocator allocator);
 #endif

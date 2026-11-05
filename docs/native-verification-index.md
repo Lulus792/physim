@@ -11,6 +11,13 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
 
 ## Neuere Editorprüfungen
 
+- [Tatsächliches C-Aufrufziel und Namensüberdeckung](verification/c-lookup-2026-11-05.md):
+  getrennte Abfrage auf dem vorhandenen C-Snapshot, eigene unfertige Initialisierer,
+  Typedefs/Enum/Parameter, vollständige direkte Funktions-/Zeigerköpfe. Windows/Linux
+  zunächst je8/8 Daten, endgültige neue Abfrage52 Fälle samt zwei belegten
+  Bereichskorrekturen, zwei Scratch-Fehlern und vier sauberen Negativprogrammen.
+  Keine neue GUI/Bildserie; gemeinsamer Resolver, sichtbarer HUD und Mac-Nachlauf
+  dieses Quellstands noch offen. [Prüfstufen/Hashes](verification/c-lookup-2026-11-05.json).
 - [Physim-Modulköpfe während unvollständiger Eingabe](verification/module-signatures-2026-11-05.md):
   echte Parser-/Lexer-Wiederaufnahme für spätere Modul-/Methodenköpfe, lokale
   Funktionen weiter über Cursor-Präfix. Windows/Linux erster Stand je17/17 Daten

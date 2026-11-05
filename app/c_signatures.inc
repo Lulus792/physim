@@ -9,6 +9,7 @@ typedef struct {
     ps_c_function *functions;
     ps_c_parameter *parameters;
     size_t function_count,function_capacity,parameter_count,parameter_capacity;
+    bool single;
 } signature_projection;
 
 static ps_c_binding signature_binding(const collector *c,size_t base,size_t base_end,size_t d,bool parameter){
@@ -159,7 +160,7 @@ static ps_result signature_emit(signature_projection *s,size_t base,size_t base_
     s->function_count++;
     /* Only top-level parameters of an actual definition bind callback names in
      * its body. A nested callback's prototype parameter names never escape. */
-    if(definition_body_node<c->count)for(size_t i=list+1;i<c->index[list].end;i=c->index[i].end){
+    if(!s->single && definition_body_node<c->count)for(size_t i=list+1;i<c->index[list].end;i=c->index[i].end){
         size_t parameter=i,actual=SIZE_MAX;
         if(is(c,i,"parameter_declaration"))actual=child(c,i,"declarator");
         else if(is(c,i,"identifier") && legacy){signature_legacy *entry=signature_slot(c,legacy,legacy_capacity,i);

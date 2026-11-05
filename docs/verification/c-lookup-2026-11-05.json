@@ -1,0 +1,376 @@
+{
+  "date": "2026-11-05",
+  "base_commit": "bbf6793d0ffcebd3746c5759f311bef545e29a3f",
+  "scope": "New actual ordinary C name/header lookup on the existing immutable grammar; no app integration/common resolver/native parameter HUD/full UI/physical acceptance.",
+  "test_reason": "New C target lookup and shared signature projection. Subsequent fixes affect only the new, not-yet-connected lookup. Last target rerun follows failure-path cleanup in the test, not another production change.",
+  "behavior": "Nearest actual ordinary declaration including incomplete own initializer, typedef/enumerator/parameter masks and direct complete callable headers; separate candidate API contract retained. No alias/include/preprocessor/type/overload inference.",
+  "platforms": [
+    {
+      "platform": "windows",
+      "configuration": "Release",
+      "stages": [
+        {
+          "phase": "initial-48-cases-and-shared-regressions",
+          "passed": 8,
+          "total": 8,
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-3xdv5a5v/results.json",
+            "sha256": "b6f83d87b1a5b8dbeadaa91cbb795f4a4149d32e7783ca4f22c784d01fa5856c"
+          },
+          "program_sha256": {
+            "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/bin/physim-test-c_syntax.exe": "4535394bf43d762a3df0dac29608324ccb2932c32219f5df48774f5846fece3b",
+            "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/bin/physim-test-c_bindings.exe": "159175151b2e1c3a2c9dd3b17542910aa287b06ab534548a85a8cd858741b605",
+            "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/bin/physim-test-c_call_context.exe": "8708f9c4e8430efcd0d0dfa1c12591975fea3a0fe3ad3ea344d0c4b953df375c",
+            "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/bin/physim-test-c_signatures.exe": "b5dba58bf14eb07c424321f7b2cd2187087daddc48a73366251b7e58d25193e7",
+            "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/bin/physim-test-c_lookup.exe": "cefb8437ea73cb32bd4c7d8d97663f6eb2b6449005f32481290ab0b061e15485",
+            "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/bin/physim-test-completion_locals.exe": "9a1788de6a2b430d61ddf7affeffe7a1ccbc18bb6ba537abc01fe80e3689cf72",
+            "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/bin/physim-test-completion_c_locals.exe": "c32433e15c12c2c603ed635552727df8e7f67e9f483d4b187d3a5008e0be2333",
+            "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/bin/physim-test-call_targets.exe": "a58213a2b8c04e5fdc7fcfeab60142af44add0b14e07b909a8b78e45635251f0"
+          }
+        },
+        {
+          "phase": "final",
+          "passed": 1,
+          "total": 1,
+          "run": "run-ohhaikd6",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-ohhaikd6/results.json",
+            "bytes": 571,
+            "sha256": "4fbcc17b4c5b34c80a32acd39a264ec22b7a7050bd9d2c8f74c581bc7d587a88"
+          }
+        },
+        {
+          "phase": "closed",
+          "passed": 1,
+          "total": 1,
+          "run": "run-y3biccsb",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-y3biccsb/results.json",
+            "bytes": 571,
+            "sha256": "2d06fb0552b55936792b7cd6e982f8fd287cd577b6b55e635ac05c1855028344"
+          }
+        }
+      ],
+      "final_lookup_program": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/bin/physim-test-c_lookup.exe",
+        "bytes": 876032,
+        "sha256": "e94a24da96f93dc6aed2837cf13cb8f5e3148b89e0d01682c6f6a130f9e284df"
+      },
+      "gui_run": false,
+      "app_built": false
+    },
+    {
+      "platform": "linux",
+      "configuration": "Debug ASan/UBSan; data-case LSan active",
+      "stages": [
+        {
+          "phase": "initial-48-cases-and-shared-regressions",
+          "passed": 8,
+          "total": 8,
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-415w71zq/results.json",
+            "sha256": "86085e1643e504d9ca91a9183a6e5018f89c2c5cbe08d20b41d13131d1aa906b"
+          },
+          "program_sha256": {
+            "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-c_syntax": "00bbaae90220f914c257927729e5dd6acfbaab527c23b65b4ddec07188ee961a",
+            "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-c_bindings": "0d6731b1218eb257d3d761c0830b0b7439e4b3f256f356af52ccae2e1910eb44",
+            "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-c_call_context": "5c01f83bffff5ed4c226d84eba4f26880abcecb7be730738df0cda203b1fe710",
+            "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-c_signatures": "719741821d5b56f3d215dbcd12e1d13a9b2cd68a7ee042be5b9775b4c22a2d35",
+            "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-c_lookup": "238d31021de9abef22597aca22a71196a46eabc39c20a2aa2b1d63e374bc233d",
+            "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-completion_locals": "9e221f79a4009d5a953cad8ef02f6a1e249d77b457d98aa6d66d83cdc8cfd7a9",
+            "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-completion_c_locals": "e774e91bb0d8a6e8fa698f8fccd051d282b0dd99c39ff75d5f4c7e5f90c5004e",
+            "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-call_targets": "389e475a58eee2bf9b422347940d84bed7682a4b4a8cc2b73ef709d591afbdb9"
+          }
+        },
+        {
+          "phase": "final",
+          "passed": 1,
+          "total": 1,
+          "run": "run-pxu3utzs",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-pxu3utzs/results.json",
+            "bytes": 548,
+            "sha256": "d384668abf51155f8a096e7e91ecb6fa51ae108a0b80b2be9aebbbca313be743"
+          }
+        },
+        {
+          "phase": "closed",
+          "passed": 1,
+          "total": 1,
+          "run": "run-xl2o7ecz",
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xl2o7ecz/results.json",
+            "bytes": 546,
+            "sha256": "fede52ccef2507ab7d4fb6f68e32c94f1b5d89b2fd2835de1977e673a8fa2207"
+          }
+        }
+      ],
+      "final_lookup_program": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-c_lookup",
+        "bytes": 6408720,
+        "sha256": "80d2fff6d76be74f3eb1da86aaa9f319b11176aa639943c9125b6902ea9a5237"
+      },
+      "gui_run": false,
+      "app_built": false
+    }
+  ],
+  "direct": {
+    "report": {
+      "path": "build/validation/c-lookup-2026-11-05/closed-direct.json",
+      "bytes": 2322,
+      "sha256": "16378b5fcddaa11970824d9c5fe905b3af493574bcaf9d9bc5f1aa613e158ea1"
+    },
+    "program": {
+      "path": "build/validation/c-lookup-2026-11-05/closed-direct",
+      "bytes": 6408448,
+      "sha256": "a30110beb07f74871eeec80510c248e3db6cd9b782558e63c5db6a73f80a256e"
+    },
+    "strict_c17_warnings": true,
+    "asan_ubsan_lsan": true,
+    "cases": 52,
+    "scratch_failures": 2
+  },
+  "counterexamples": {
+    "precise_boundary_failure": {
+      "path": "build/validation/c-lookup-2026-11-05/boundary-before.json",
+      "bytes": 2578,
+      "sha256": "c049a10d5a6ed7ff8f87dda2af87fdbdd77511af1aa94a15d943143e7df7b82a"
+    },
+    "cases": [
+      48,
+      49,
+      50,
+      51
+    ],
+    "corrected_direct": {
+      "path": "build/validation/c-lookup-2026-11-05/boundary-after.json",
+      "bytes": 2283,
+      "sha256": "8a1ffdf31852ad893e15d3084457405236fdba1eccdca2215f83b5394cf3f75c"
+    },
+    "clean_rejections": [
+      {
+        "tag": "clean-pending-completed",
+        "exit_code": 1,
+        "program_sha256": "4bedda407c35e8922d649598156c6cadeca49fa9e59d2389d8005d8961857222"
+      },
+      {
+        "tag": "clean-typedef-mask",
+        "exit_code": 1,
+        "program_sha256": "18e9bdeb1403f0768460b04667c951288a6dc88109162ff423f16c62aae880e2"
+      },
+      {
+        "tag": "clean-enum-mask",
+        "exit_code": 1,
+        "program_sha256": "773e1019904aaf4a20e5254a493e3680078f58c0fc468c802cc14036f2e40da2"
+      },
+      {
+        "tag": "clean-nearest-depth",
+        "exit_code": 1,
+        "program_sha256": "cfa0cdda8c72564be096160465c2b45bc5750dcfa67773a4143b2f35a195968c"
+      }
+    ],
+    "report": {
+      "path": "build/validation/c-lookup-2026-11-05/negative-final.json",
+      "bytes": 10789,
+      "sha256": "101f813388f582435177030941c294d7538411876d92dda805c87a130d119c50"
+    },
+    "ineffective_first_parent_mutation_not_counted": {
+      "path": "build/validation/c-lookup-2026-11-05/negative-first-replay.json",
+      "bytes": 2533,
+      "sha256": "62ee85673f8787110b422acd196649ae2521216de6a8402c8f11aa6a8ff1095e"
+    },
+    "earlier_test_cleanup_leak_preserved": {
+      "path": "build/validation/c-lookup-2026-11-05/nearest-depth-final-report.json",
+      "bytes": 4546,
+      "sha256": "77847c9b448a60f421f59be4774b32324f77b661dea0b76e6d292a2e1a785c82"
+    },
+    "final_test_cleanup_verified_without_leak_suppression": true
+  },
+  "source": {
+    "tag": "c-lookup-closed",
+    "owned_inputs": 290,
+    "compiler_test_inputs": 1229,
+    "unique_matched_git_inputs": 1248,
+    "source_manifest": {
+      "path": "build/validation/explorer-inline-2026-10-29/c-lookup-closed-compiler-source.json",
+      "bytes": 132486,
+      "sha256": "78ac3f4cc21ac7f8bcfe03225286e3b84c930873fdfb7eff0c9be65756b95410"
+    },
+    "owned_manifest": {
+      "path": "build/validation/explorer-inline-2026-10-29/c-lookup-closed-inputs.json",
+      "bytes": 32261,
+      "sha256": "04151141eb720e1fac1ef36e3925c9724a06b542cac6830eabeea3a67542a069"
+    },
+    "runtime_index": {
+      "path": "build/validation/explorer-inline-2026-10-29/c-lookup-closed-byte-index.json",
+      "bytes": 228508,
+      "sha256": "0cc56ab1dd462293525038ea25db6d51f3f3b9b3441292e18ccd4dadc007976c"
+    },
+    "runtime_manifest": {
+      "path": "build/validation/explorer-inline-2026-10-29/c-lookup-closed-runtime.json",
+      "bytes": 87852,
+      "sha256": "92dfb68e53d94a61fe26553a20512fb583f9bd09905e60018cebc9fab97efc72"
+    },
+    "all_referenced_archive_bytes_read": true,
+    "runtime_files": {
+      "windows": 638,
+      "linux": 153
+    }
+  },
+  "artifacts": [
+    {
+      "path": "build/validation/c-lookup-2026-11-05/first.json",
+      "bytes": 2303,
+      "sha256": "46f4f0b852b91242034c01d6838a06857c8bcb15e0dfe0b4b28ec21050d73afb"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/second.json",
+      "bytes": 1969,
+      "sha256": "a69748f8552d5a0b1e504555bb206a8dfddeacff54e85f48db4d3d5ef8048da7"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/extended.json",
+      "bytes": 2056,
+      "sha256": "5187a337a67481b96b40c359761462b5faaa0c87e8d8f75278efb7b2eed166ec"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/boundary-before.json",
+      "bytes": 2578,
+      "sha256": "c049a10d5a6ed7ff8f87dda2af87fdbdd77511af1aa94a15d943143e7df7b82a"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/boundary-after.json",
+      "bytes": 2283,
+      "sha256": "8a1ffdf31852ad893e15d3084457405236fdba1eccdca2215f83b5394cf3f75c"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/closed-direct.json",
+      "bytes": 2322,
+      "sha256": "16378b5fcddaa11970824d9c5fe905b3af493574bcaf9d9bc5f1aa613e158ea1"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/negative-final.json",
+      "bytes": 10789,
+      "sha256": "101f813388f582435177030941c294d7538411876d92dda805c87a130d119c50"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/negative-first-replay.json",
+      "bytes": 2533,
+      "sha256": "62ee85673f8787110b422acd196649ae2521216de6a8402c8f11aa6a8ff1095e"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/nearest-depth-final-report.json",
+      "bytes": 4546,
+      "sha256": "77847c9b448a60f421f59be4774b32324f77b661dea0b76e6d292a2e1a785c82"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/initial-matrices.json",
+      "bytes": 3433,
+      "sha256": "8e5ca5754ff2d92b2f85b4f300c65390efe682ae01c6a3b26eeb721b6bea9287"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/index-match.json",
+      "bytes": 301564,
+      "sha256": "da71bfca3d1706fd136a2c44f5af8b490266d589c582c1296dae9228c580f5e0"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/windows.json",
+      "bytes": 1316,
+      "sha256": "3b7c2f99d37b895c366471e745a775adbf8592782d6521a839a596d1d394bbec"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/linux.json",
+      "bytes": 1127,
+      "sha256": "855e8b91b74deb4252e3ea5c27c5edb92f90f2ee32101cb3ab413dd5bb722e6b"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/final-windows.json",
+      "bytes": 814,
+      "sha256": "6ed66b22c61627932f02cca5eac0024e3003fd60203edc061e3a234d291b11a0"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/final-linux.json",
+      "bytes": 649,
+      "sha256": "8bfe03aa53e43f1a6c6deed3b6a2fc1b993037aef42f37e67ae9d55ace4f9eb5"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/closed-windows.json",
+      "bytes": 814,
+      "sha256": "6ed66b22c61627932f02cca5eac0024e3003fd60203edc061e3a234d291b11a0"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/closed-linux.json",
+      "bytes": 649,
+      "sha256": "8bfe03aa53e43f1a6c6deed3b6a2fc1b993037aef42f37e67ae9d55ace4f9eb5"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/direct.py",
+      "bytes": 1460,
+      "sha256": "a831faa417b25687ee058ec38e02ee07cd447080491b7f8902bbe1e3087238e1"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/cached.py",
+      "bytes": 1965,
+      "sha256": "f2f149141d2dc323960acf7a99a692411f8807d487b07c71e5ba5542583cabef"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/cached-close.py",
+      "bytes": 2087,
+      "sha256": "c0f30a879dd4a9e0a6e826197d2e94d88427f38564bd7f645e0582a3173df2a8"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/run.py",
+      "bytes": 1294,
+      "sha256": "64fcc188f4094f6fac58b45d6af509f4dab70b821a35ea8e1cb093e588dc0885"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/advance.py",
+      "bytes": 1968,
+      "sha256": "a39d28c843220fca801613683e6f56679adb9f9e70e4023dc7952b16d4609a60"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/final.py",
+      "bytes": 1151,
+      "sha256": "b8194b04260bff4774fd7c10804df49df8b17364ac279d25615bb212053c4479"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/last.py",
+      "bytes": 1153,
+      "sha256": "c4a7bcb888ddb56ac403d2d82be97d1d6b5269cc2f56ff34ca62c8a05136efe2"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/negative.py",
+      "bytes": 2579,
+      "sha256": "b5c57afbed2cd3b04c254e5af4a755b03fda85257d244d034a9b95f7c0badb5b"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/negative-replay.py",
+      "bytes": 3304,
+      "sha256": "a9524c8e8432645896200c068c21d8ebd5c753153ff7cd741ce9730ac9d5057c"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/negative-clean.py",
+      "bytes": 2450,
+      "sha256": "5e09cecec6bdb925b0948c02c3fa7d2d5d25effa1b317ffff429820773283945"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/capture-closed.py",
+      "bytes": 1037,
+      "sha256": "497313de8ef64c2b62cd0311e9df079ee2e5209be8a5ff270703c8a12643f6b3"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/report.py",
+      "bytes": 6412,
+      "sha256": "2279e7c3ed3a7bde601ea746fb61f361ee96db61d98e4bdd4fc27e9fefcf9635"
+    },
+    {
+      "path": "build/validation/c-lookup-2026-11-05/STATE.md",
+      "bytes": 1755,
+      "sha256": "ab07d5cca3558f02453fda81d0727a142d962cad319d8b61aa9a6cb3470147bf"
+    }
+  ],
+  "private_mac": "OFF, untouched; no reachability probe",
+  "hosted_mac": "New source followup not yet observed; expected9 data+8GUI per architecture after push. Previous41986344544 is closed and excludes this change.",
+  "storage": "D only. No images produced/removed in this data step. Existing archives/refs/VM/denied cleanup paths preserved; F untouched.",
+  "next": "Owned shared C/Physim signature model; query C name at original callee name location, then independent native HUD. Keep API fallback suppressed for every found ordinary declaration, even when opaque/non-callable-header."
+}

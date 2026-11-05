@@ -373,3 +373,4 @@ size_t ps_c_binding_type(const char *source,size_t bytes,ps_c_binding b,char *ou
 size_t ps_c_binding_signature(const char *source,size_t bytes,ps_c_binding b,char *out,size_t capacity){return binding_text(source,bytes,b,out,capacity,true);}
 
 #include "c_signatures.inc"
+#include "c_lookup.inc"
