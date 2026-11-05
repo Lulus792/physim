@@ -15,6 +15,8 @@ PNG-Daten geprüft; zwei repräsentative PNGs geöffnet.
 Nur Testabläufe/Erwartungen angepasst: tatsächliches Exportfenster, letzte
 Quelldatei, Rohdatenaktion aus Messdaten. Renderer und Design erhalten.
 [Originale und Grenzen](verification/report-export-workflow-2026-11-05.json).
+[Quelle 01d2c0d0 und beide Remotes geprüft](verification/report-export-commit-2026-11-05.json):
+alle 1.257 verwendeten Eingaben gegen den tatsächlichen Commit gelesen.
 
 Warmstand **report-export-accepted**, **306 eigene Eingaben**. Alle sechs seit
 dem vorherigen Warmstand berührten Eingaben vor Build zwischen Root, Isolation
@@ -55,11 +57,12 @@ Originalarchive und Referenzen bleiben erhalten; keine gemeinsame WSL-Änderung.
 
 ## Nächste konkrete Aufgaben
 
-1. Aktuelle eigene Testkorrekturen samt Nachweisen prüfen, committen und beide
-   Remotes normal pushen; tatsächlichen Quellcommit gegen alle verwendeten Eingaben
-   lesen und neue CI-Handles festhalten. Kit-Quelle7bbc5f13 hat bisher
-   Linux-Paket42082675664 und CI42082675610, zuletzt pending. Keine Wiederholung
-   wegen Beobachtungsfrist; auf dem tatsächlich neuen Quellstand weiterarbeiten.
+1. Quelle01d2c0d0 ist geprüft und in beiden Remotes. Neue tatsächliche Läufe:
+   Linux-UI42090594921 in_progress, Paket42090594644 und CI42090594659 pending.
+   Mac-Editor42090594861 und Workspace42090594627 queued; weitere neue Mac-Runs
+   samt Quellbindung stehen im Commitnachweis. Dieselben Handles weiterverfolgen,
+   kein Neustart wegen Beobachtungsfrist. Kit-Quelle7bbc5f13 hatte zuvor
+   Paket42082675664 und CI42082675610; neue Quelle enthält diesen Fix ebenfalls.
 2. Übrige bestätigte glibc-CI-Fehler anhand gesicherter Originale bearbeiten:
    font_demand Stufe3, accessibility_links_atspi fehlende Fehlermeldung und
    GCC zusätzlich accessibility_atspi.py:200, reader.grabFocus() liefert false.

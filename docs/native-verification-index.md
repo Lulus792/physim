@@ -17,6 +17,8 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
   Rückkehr und Rohdatenaktion aus der Messdatenansicht. Renderer/Design erhalten.
   POSIX-Kontrollen und komprimierte Originale statt Abschalten der Dateisicherheit;
   [eigene Testabbilder aufgeräumt](verification/report-export-filesystem-cleanup-2026-11-05.json).
+  [Quelle 01d2c0d0 und alle 1.257 Eingaben gegen tatsächlichen Commit geprüft](verification/report-export-commit-2026-11-05.json),
+  normal in beide Remotes gepusht; neue Plattformläufe noch offen.
 - [Mac-Suchfokus auf Intel und ARM](verification/macos-search-focus-2026-11-05.md):
   Quelle7c1870c4, beide tatsächlich 14/14 Daten + 12/12 UI-Gruppen, je zwölf
   neue Suchfokussequenzen. Beide ZIPs und alle22Einträge gelesen,18Bildinhalte

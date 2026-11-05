@@ -1,0 +1,103 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "01d2c0d043af601804825c155d3bfb7fba535049",
+  "verified_refs": {
+    "HEAD": "01d2c0d043af601804825c155d3bfb7fba535049",
+    "origin/codex/f1-design-h": "01d2c0d043af601804825c155d3bfb7fba535049",
+    "upstream/codex/f1-design-h": "01d2c0d043af601804825c155d3bfb7fba535049"
+  },
+  "tested_input_match": {
+    "path": "build/validation/report-export-workflow-2026-11-05/commit-match.json",
+    "sha256": "93b4ab2788f835626da04bf7d29f9e24e90f694e8548eac9e5070f92395e6cef",
+    "compiler_and_test_files": 1238,
+    "owned_inputs": 306,
+    "unique_files": 1257,
+    "all_bytes_match": true,
+    "nonvendor_crlf_normalized_only": true
+  },
+  "frozen_manifests": {
+    "build/validation/explorer-inline-2026-10-29/report-export-before-compiler-source.json": "5efcc525cae0b38adcb0df2b487e241320c5df40338379f6b85316bf37c22efc",
+    "build/validation/explorer-inline-2026-10-29/report-export-after-compiler-source.json": "8804a38ce34be0a5aebe50bae8c2809916c3d8d4776c7758c0308ee00e451479",
+    "build/validation/explorer-inline-2026-10-29/report-export-fixed-compiler-source.json": "01f78e666a395f1a319f60b1f479399d839fa0cf8ad17ead1243cb1cdad30c09",
+    "build/validation/explorer-inline-2026-10-29/report-export-accepted-compiler-source.json": "f4e06c500d26e08c4b6ab4c841f802e748164fa279d017bb188488fbed9dfa31",
+    "build/validation/explorer-inline-2026-10-29/report-export-accepted-runtime.json": "11f3faca546b8c9254ff7e1986698e2d05aed83a95992f793fbdb08b86784e55",
+    "build/validation/explorer-inline-2026-10-29/report-export-accepted-byte-index.json": "4da5629ba67d859ee49604ee05858d4384dbae299e5ea9f21588f0272eba43e8"
+  },
+  "local_results": {
+    "windows": "b0d175665f738c67d6d7acf09b799d798e96c19b9ce35001a4e66ddb732e4555",
+    "linux": "173be39f173254af6927909fb13ce76741747c1499939f3e1e24e51b530582af"
+  },
+  "hosted_runs": [
+    {
+      "id": 42090594724,
+      "path": ".github/workflows/macos-study-menu.yml",
+      "status": "queued",
+      "conclusion": null,
+      "source": "01d2c0d043af601804825c155d3bfb7fba535049"
+    },
+    {
+      "id": 42090594624,
+      "path": ".github/workflows/macos-f1-regressions.yml",
+      "status": "queued",
+      "conclusion": null,
+      "source": "01d2c0d043af601804825c155d3bfb7fba535049"
+    },
+    {
+      "id": 42090594627,
+      "path": ".github/workflows/macos-workspace-menu.yml",
+      "status": "queued",
+      "conclusion": null,
+      "source": "01d2c0d043af601804825c155d3bfb7fba535049"
+    },
+    {
+      "id": 42090594861,
+      "path": ".github/workflows/macos-editor-menu.yml",
+      "status": "queued",
+      "conclusion": null,
+      "source": "01d2c0d043af601804825c155d3bfb7fba535049"
+    },
+    {
+      "id": 42090594756,
+      "path": ".github/workflows/macos-typography-menu.yml",
+      "status": "queued",
+      "conclusion": null,
+      "source": "01d2c0d043af601804825c155d3bfb7fba535049"
+    },
+    {
+      "id": 42090594921,
+      "path": ".github/workflows/linux-ui-sanitizers.yml",
+      "status": "in_progress",
+      "conclusion": null,
+      "source": "01d2c0d043af601804825c155d3bfb7fba535049"
+    },
+    {
+      "id": 42090594773,
+      "path": ".github/workflows/macos-native-menu.yml",
+      "status": "queued",
+      "conclusion": null,
+      "source": "01d2c0d043af601804825c155d3bfb7fba535049"
+    },
+    {
+      "id": 42090594699,
+      "path": ".github/workflows/macos-f1-accessibility.yml",
+      "status": "queued",
+      "conclusion": null,
+      "source": "01d2c0d043af601804825c155d3bfb7fba535049"
+    },
+    {
+      "id": 42090594644,
+      "path": ".github/workflows/linux-package.yml",
+      "status": "pending",
+      "conclusion": null,
+      "source": "01d2c0d043af601804825c155d3bfb7fba535049"
+    },
+    {
+      "id": 42090594659,
+      "path": ".github/workflows/ci.yml",
+      "status": "pending",
+      "conclusion": null,
+      "source": "01d2c0d043af601804825c155d3bfb7fba535049"
+    }
+  ],
+  "scope": "Actual committed source bytes and both normal pushes verified. New source-specific hosted runs are queued/pending/in progress, not completed platform acceptance."
+}
