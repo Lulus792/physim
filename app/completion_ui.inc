@@ -47,7 +47,9 @@ static void completion_pending_clear(app *a) {
 static void completion_hide(app *a) {
     completion_info_stop(a);a->completion_info_button_bounds=nk_rect(0,0,0,0);
     ps_completion_help_destroy(&a->completion_help);
-    ps_completion_locals_destroy(&a->completion_locals);
+    /* Keep one owned, exact-source cache after hiding. It is never a visible
+     * suggestion list; refresh validates owner/language/all bytes/cursor. The
+     * editor/project/document lifetime paths explicitly discard it. */
     a->completion_help_scroll_x=a->completion_help_scroll_y=0;
     free(a->completion_indices);a->completion_indices=NULL;a->completion_edit=a->completion_focus_edit=NULL;
     a->completion_active=a->completion_accept_pending=a->completion_explicit=a->completion_manual=false;a->completion_count=a->completion_selected=a->completion_capacity=0;

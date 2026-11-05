@@ -7,6 +7,23 @@ vollständige Umsetzung/Abnahme; keine volle Punktzahl oder gesamte grüne CI be
 
 ## Aktueller Anschluss
 
+[C-Syntaxwiederverwendung](verification/completion-reuse-2026-11-05.md): ein
+unveränderter, eigener Flat-Snapshot für Cursorwechsel/erneutes Öffnen; Scope-/
+Aufrufdaten frisch sammeln, alle Bytes/Besitzer/Sprache prüfen. Sichtbare Liste
+beim Schließen leer; Cache bei Editor-/Dokument-/Projektwechsel und Ende frei.
+Windows/Linux je **Unit 8/8 + GUI 6/6**, danach gezielt C-Unit **1/1** bei identischen
+Appbytes. 887 Frischvergleiche, 123/123 Aufbau-, 7/7 Cursor-, 87/87 Edit-Speicherfehler.
+Die erste falsche Inhaltsprüfung durchlief den alten Test; verstärkter gleicher
+Besitzer/Cursor/Textumfang (`double`→`return`) weist sie und einen ignorierten
+Cursor zurück. Finale 1.239 Eingaben gegen Git-Index gelesen, Snapshot
+`completion-reuse-strong`; alle lokalen Handles beendet. Details/STATE unter
+`build/validation/completion-reuse-2026-11-05/`. 33 bytegleiche BMPs/105.498.954 B
+entfernt, eine abweichende Blinkphase behalten. Keine SDK-/VM-Bereinigung.
+Cursor-Messung nur 7 Allokationen; größter p95 je Lauf 10,20 bzw.22,95 ms, Textedits
+weiter langsam; 16,7-ms-Ziel **nicht zuverlässig erfüllt**. Ein Cache kostet im
+größten Beispiel 6.166.734 gehaltene Bytes. Kein neuer Worker oder Designwechsel.
+Neue gehostete Mac-Abnahme nach Quellpush noch offen; privater Mac aus/unberührt.
+
 [C-Performance-Baseline](verification/completion-perf-2026-11-05.md) abgeschlossen:
 Anwendungscode unverändert `694bb586`, neue CLI-Werkzeuge und kompakter JSON-Beleg.
 Windows Release, sechs Quellen/21 Aufrufe pro Modus/Allocator; Cache p95 <0,04 ms,
@@ -51,12 +68,13 @@ Details: `build/validation/completion-c-2026-11-05/STATE.md`; Helfer unter
 
 1. C-Locals-Schritt einschließlich gehostetem Mac-Nachlauf abgeschlossen;
    keine unveränderten lokalen/CI-Prüfungen allein wegen Kontextwechsel wiederholen.
-2. C-Backend-Baseline abgeschlossen, große frische/Cursor-Auswertungen noch langsam.
-   Nächster begrenzter Ansatz: echte Tipp-/Editierfolgen mit wechselnden Quelldateibytes
-   und unabhängigen Ergebnisvergleichen ergänzen; danach sichere Syntaxwiederverwendung
-   als Hypothese prüfen. Keine Ergebnis-/Scopeverkürzung, neuen Provider-Worker oder
-   geschwächten Fehler-/Budgetvertrag. Nur neue Produktionsänderungen begründen eine
-   erneute passende App-Regression. Keine UI-Latenz-/Linux-/Mac-Performance-Abnahme.
+2. Unveränderte C-Syntax wird wiederverwendet; echte Einfüge-/Löschfolgen und
+   gleich lange Strukturänderung gegen kalte Modelle geprüft. Große Textänderungen
+   parsen weiter vollständig. Nächster Ansatz: sichere inkrementelle Edit-Auswertung
+   mit unabhängigem vollständigem Ergebnisvergleich und atomaren Fehlerpfaden;
+   Cursor-/Edit-Zeit samt gehaltenem Speicher weiter als offene Performance führen.
+   Kein neuer Provider-Worker, keine Ergebnis-/Scopeverkürzung oder Budgetschwächung.
+   Keine UI-/Linux-/Mac-Performance-Abnahme. Neue gehostete Mac-Quellprüfung offen.
 3. Separate Aufruf-/Parameterhilfe einschließlich Benutzerfunktionen
    ergänzen; weitere Codekontexte und semantische Rollen vervollständigen. Keine
    Typinferenz/Includes/Werte vortäuschen, kein Browser-Lexer/Dienst/Provider-Worker.

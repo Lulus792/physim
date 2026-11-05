@@ -11,10 +11,17 @@ typedef struct {
 typedef struct {
     const char *source;
     size_t bytes,cursor,count,used,capacity;
-    ps_c_node *nodes;
+    const ps_c_node *nodes;
     index_entry *index;
     ps_c_binding *output;
 } collector;
+struct ps_c_bindings_source {
+    ps_allocator allocator;
+    char *text;
+    ps_c_node *nodes;
+    size_t bytes,count,capacity;
+    bool has_error;
+};
 static bool is(const collector *c,size_t i,const char *type){return i<c->count && !strcmp(c->nodes[i].type,type);}
 static bool field(const collector *c,size_t i,const char *name){return i<c->count && c->nodes[i].field && !strcmp(c->nodes[i].field,name);}
 static bool space(unsigned char ch){return ch==' '||ch=='\t'||ch=='\n'||ch=='\r'||ch=='\v'||ch=='\f';}
@@ -246,20 +253,43 @@ static ps_c_call call_context(const collector *c){
     }
     return call;
 }
-ps_c_bindings_result ps_c_bindings(const char *source,size_t bytes,size_t cursor,
+void ps_c_bindings_source_destroy(ps_c_bindings_source *source){
+    if(!source)return;
+    ps_allocator a=source->allocator;
+    ps_memory_free(a,source->nodes,source->capacity*sizeof *source->nodes);
+    ps_memory_free(a,source->text,source->bytes+1);
+    ps_memory_free(a,source,sizeof *source);
+}
+ps_result ps_c_bindings_source_create(const char *text,size_t bytes,ps_allocator allocator,ps_c_bindings_source **out){
+    if(!out || (!text && bytes))return PS_INVALID;
+    if(bytes>PS_SOURCE_MAX_BYTES)return PS_LIMIT;
+    if(bytes && memchr(text,0,bytes))return PS_INVALID;
+    if(!allocator.allocate && !allocator.deallocate)allocator=ps_allocator_default();
+    if(!ps_allocator_valid(allocator))return PS_INVALID;
+    ps_c_bindings_source *source=NULL;
+    ps_result r=ps_memory_zero(allocator,1,sizeof *source,(void**)&source);if(r!=PS_OK)return r;
+    source->allocator=allocator;source->bytes=bytes;source->capacity=bytes<32767?bytes*2+2:65536;
+    r=ps_memory_allocate(allocator,bytes+1,(void**)&source->text);if(r!=PS_OK)goto done;
+    if(bytes)memcpy(source->text,text,bytes);
+    source->text[bytes]=0;
+    r=ps_memory_allocate(allocator,source->capacity*sizeof *source->nodes,(void**)&source->nodes);if(r!=PS_OK)goto done;
+    ps_c_syntax_result syntax=ps_c_syntax(source->text,bytes,source->nodes,source->capacity,allocator,(ps_c_limits){0});
+    r=syntax.status;if(r!=PS_OK)goto done;
+    source->count=syntax.count;source->has_error=syntax.has_error;*out=source;return PS_OK;
+done:
+    ps_c_bindings_source_destroy(source);return r;
+}
+ps_c_bindings_result ps_c_bindings_source_at(const ps_c_bindings_source *source,size_t cursor,
     ps_c_binding *bindings,size_t capacity,ps_allocator allocator){
     ps_c_bindings_result result={.status=PS_INVALID};
-    if((!source && bytes) || (!bindings && capacity) || cursor>bytes)return result;
-    if(bytes>PS_SOURCE_MAX_BYTES){result.status=PS_LIMIT;return result;}
-    if((bytes && memchr(source,0,bytes)) || (cursor<bytes && ((unsigned char)source[cursor]&0xc0)==0x80))return result;
+    if(!source || (!bindings && capacity) || cursor>source->bytes)return result;
+    if(cursor<source->bytes && ((unsigned char)source->text[cursor]&0xc0)==0x80)return result;
     if(!allocator.allocate && !allocator.deallocate)allocator=ps_allocator_default();
     if(!ps_allocator_valid(allocator))return result;
-    size_t nodes_capacity=bytes<32767?bytes*2+2:65536;
-    collector c={.source=source,.bytes=bytes,.cursor=cursor,.capacity=capacity,.output=bindings};
-    result.status=ps_memory_zero(allocator,nodes_capacity,sizeof *c.nodes,(void**)&c.nodes);if(result.status!=PS_OK)goto done;
-    result.status=ps_memory_zero(allocator,nodes_capacity,sizeof *c.index,(void**)&c.index);if(result.status!=PS_OK)goto done;
-    ps_c_syntax_result syntax=ps_c_syntax(source,bytes,c.nodes,nodes_capacity,allocator,(ps_c_limits){0});
-    result.status=syntax.status;result.has_error=syntax.has_error;c.count=syntax.count;if(result.status!=PS_OK)goto done;
+    collector c={.source=source->text,.bytes=source->bytes,.cursor=cursor,.count=source->count,
+        .nodes=source->nodes,.capacity=capacity,.output=bindings};
+    result.has_error=source->has_error;
+    result.status=ps_memory_allocate(allocator,c.count*sizeof *c.index,(void**)&c.index);if(result.status!=PS_OK)goto done;
     result.status=build_index(&c);if(result.status!=PS_OK)goto done;
     for(size_t i=0;i<c.count;i++){
         if(is(&c,i,"declaration"))result.status=declaration(&c,i);
@@ -274,8 +304,18 @@ ps_c_bindings_result ps_c_bindings(const char *source,size_t bytes,size_t cursor
     if(c.used>1)qsort(bindings,c.used,sizeof *bindings,order);
     result.count=c.used;result.call=call_context(&c);
 done:
-    ps_memory_free(allocator,c.index,nodes_capacity*sizeof *c.index);
-    ps_memory_free(allocator,c.nodes,nodes_capacity*sizeof *c.nodes);return result;
+    ps_memory_free(allocator,c.index,c.count*sizeof *c.index);return result;
+}
+ps_c_bindings_result ps_c_bindings(const char *source,size_t bytes,size_t cursor,
+    ps_c_binding *bindings,size_t capacity,ps_allocator allocator){
+    ps_c_bindings_result result={.status=PS_INVALID};
+    if((!source && bytes) || (!bindings && capacity) || cursor>bytes)return result;
+    if(bytes>PS_SOURCE_MAX_BYTES){result.status=PS_LIMIT;return result;}
+    if((bytes && memchr(source,0,bytes)) || (cursor<bytes && ((unsigned char)source[cursor]&0xc0)==0x80))return result;
+    ps_c_bindings_source *snapshot=NULL;
+    result.status=ps_c_bindings_source_create(source,bytes,allocator,&snapshot);
+    if(result.status==PS_OK)result=ps_c_bindings_source_at(snapshot,cursor,bindings,capacity,allocator);
+    ps_c_bindings_source_destroy(snapshot);return result;
 }
 static size_t binding_text(const char *source,size_t bytes,ps_c_binding b,char *out,size_t capacity,bool name){
     if(bytes>PS_SOURCE_MAX_BYTES || (!source && bytes) || (!out && capacity) || b.type_start>b.type_end || b.type_end>b.declarator_start ||

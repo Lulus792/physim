@@ -23,6 +23,7 @@ static const char *binding_prefix(ps_lang_editor_binding b){
 }
 void ps_completion_locals_destroy(ps_completion_locals *p){
     if(!p)return;
+    ps_c_bindings_source_destroy(p->c_source);
     if(ps_allocator_valid(p->allocator)){
         if(p->source)ps_memory_free(p->allocator,p->source,p->bytes+1);
         if(p->strings)ps_memory_free(p->allocator,p->strings,p->string_bytes);
@@ -52,8 +53,10 @@ ps_result ps_completion_locals_update(ps_completion_locals *p,const void *owner,
     ps_allocator a=p->allocator;
     if(!a.allocate && !a.deallocate)a=ps_allocator_default();
     if(!ps_allocator_valid(a))return PS_INVALID;
-    if(p->language==language && p->owner==owner && p->bytes==bytes && p->cursor==cursor && p->source && (!bytes || !memcmp(source,p->source,bytes)))return PS_OK;
+    bool same=p->language==language && p->owner==owner && p->bytes==bytes && p->source && (!bytes || !memcmp(source,p->source,bytes));
+    if(same && p->cursor==cursor)return PS_OK;
     ps_completion_locals next={.allocator=a,.owner=owner,.bytes=bytes,.cursor=cursor,.language=language};
+    bool borrowed_syntax=false;
     ps_lang_node *nodes=NULL;ps_lang_editor_binding *raw=NULL;unsigned char *chosen=NULL;
     ps_c_binding *craw=NULL;
     size_t *seen=NULL,raw_count=0,capacity=bytes<32767?bytes*2+2:65536,slots=0;
@@ -67,7 +70,10 @@ ps_result ps_completion_locals_update(ps_completion_locals *p,const void *owner,
         next.status=parsed.status;next.call=parsed.call;raw_count=parsed.count;
     }else{
         r=ps_memory_zero(a,capacity,sizeof *craw,(void**)&craw);if(r!=PS_OK)goto done;
-        ps_c_bindings_result parsed=ps_c_bindings(next.source,bytes,cursor,craw,capacity,a);
+        ps_c_bindings_result parsed={.status=PS_OK};
+        if(same && p->c_source){next.c_source=p->c_source;borrowed_syntax=true;}
+        else parsed.status=ps_c_bindings_source_create(next.source,bytes,a,&next.c_source);
+        if(parsed.status==PS_OK)parsed=ps_c_bindings_source_at(next.c_source,cursor,craw,capacity,a);
         if(parsed.status==PS_MEMORY){r=PS_MEMORY;goto done;}
         next.status=parsed.status==PS_LIMIT?PS_LANG_EDITOR_LIMIT:parsed.status!=PS_OK?PS_LANG_EDITOR_INVALID:parsed.has_error?PS_LANG_EDITOR_PREFIX:PS_LANG_EDITOR_OK;
         next.call=(ps_lang_editor_call){.open=parsed.call.open,.argument=parsed.call.argument,.active=parsed.call.active,.at_start=parsed.call.at_start};
@@ -133,11 +139,13 @@ ps_result ps_completion_locals_update(ps_completion_locals *p,const void *owner,
     }
     next.slots=seen;next.slot_count=slots;seen=NULL;
 publish:
+    if(borrowed_syntax){p->c_source=NULL;borrowed_syntax=false;}
     ps_completion_locals_destroy(p);*p=next;memset(&next,0,sizeof next);
 done:
     ps_memory_free(a,nodes,capacity*sizeof *nodes);ps_memory_free(a,raw,capacity*sizeof *raw);
     ps_memory_free(a,craw,capacity*sizeof *craw);
     ps_memory_free(a,chosen,raw_count*sizeof *chosen);ps_memory_free(a,seen,slots*sizeof *seen);
+    if(borrowed_syntax)next.c_source=NULL;
     ps_completion_locals_destroy(&next);return r;
 }
 const ps_completion_local *ps_completion_locals_find(const ps_completion_locals *p,const char *name,size_t bytes){

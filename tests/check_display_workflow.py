@@ -1111,6 +1111,7 @@ def completion_locals_workflow(flow,directory):
             require(f"COMPLETION LOCALS target={target} theme={target} unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1" in output,"Missing painted local declaration card / real Unicode semibold")
             require(f"COMPLETION LOCALS target={target} exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1" in output,"Missing actual scope/argument/insertion workflow")
             require(f"COMPLETION LOCALS language={language} target={target} actual-model-language=1" in output,"Wrong native source language")
+            require(f"COMPLETION LOCALS language={language} target={target} hidden-list-cleared=1 exact-cache-reopened=1" in output,"Hidden suggestions or exact-source cache reopen failed")
         if language=="c":
             for name in ("locals-model.bmp","locals-analysis.bmp","locals-document.bmp"):
                 require((root/name).is_file(),"Missing native C local candidate view: "+name)

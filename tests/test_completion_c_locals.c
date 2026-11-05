@@ -65,4 +65,95 @@ static int hints(void){
     }
     return 0;
 }
-int main(void){CHECK(!scopes() && !failures() && !hints());puts("C completion locals: real types/source, scope merge, full count, cache/owner/language and atomic faults passed");return 0;}
+static int equivalent(const ps_completion_locals *a,const ps_completion_locals *b){
+    CHECK(a->bytes==b->bytes && a->cursor==b->cursor && a->language==b->language && a->status==b->status && a->count==b->count);
+    CHECK(!memcmp(a->source,b->source,a->bytes));
+    CHECK(a->call.active==b->call.active && a->call.open==b->call.open && a->call.argument==b->call.argument && a->call.at_start==b->call.at_start);
+    for(size_t i=0;i<a->count;i++){
+        const ps_completion_local *x=&a->entries[i],*y=&b->entries[i];
+        CHECK(x->id==y->id && x->signature_name_offset==y->signature_name_offset && x->symbol.kind==y->symbol.kind && x->symbol.language==y->symbol.language && x->symbol.instance==y->symbol.instance);
+        CHECK(!strcmp(x->symbol.name,y->symbol.name) && !strcmp(x->type,y->type) && !strcmp(x->symbol.signature,y->symbol.signature));
+        CHECK(x->declaration.name.offset==y->declaration.name.offset && x->declaration.name.length==y->declaration.name.length && x->declaration.name.line==y->declaration.name.line && x->declaration.name.column==y->declaration.name.column && x->declaration.kind==y->declaration.kind);
+        const ps_c_binding c=x->c_declaration,d=y->c_declaration;
+        CHECK(c.name_start==d.name_start && c.name_end==d.name_end && c.line==d.line && c.column==d.column && c.type_start==d.type_start && c.type_end==d.type_end && c.declarator_start==d.declarator_start && c.declarator_end==d.declarator_end && c.parameter==d.parameter);
+    }
+    const char *prefixes[]={"","v","dt","Gr","$","ps_"};
+    for(size_t i=0;i<sizeof prefixes/sizeof *prefixes;i++){
+        ps_completion_query q={0};strcpy(q.prefix,prefixes[i]);size_t x[64],y[64];
+        size_t count=ps_completion_locals_matches(a,&q,x,64);CHECK(count==ps_completion_locals_matches(b,&q,y,64) && count<=64);
+        for(size_t j=0;j<count;j++)CHECK(x[j]==y[j]);
+    }
+    return 0;
+}
+static int revision_compare(ps_completion_locals *current,const char *text,size_t bytes,size_t cursor,const void *owner){
+    ps_completion_locals fresh={0};
+    CHECK(ps_completion_locals_update(current,owner,text,bytes,cursor,false)==PS_OK);
+    CHECK(ps_completion_locals_update(&fresh,owner,text,bytes,cursor,false)==PS_OK);
+    CHECK(!equivalent(current,&fresh));ps_completion_locals_destroy(&fresh);return 0;
+}
+static int revisions(void){
+    const char *sources[]={text,
+        "int velocity=1; void f(int dt){int local=2; consume(velocity, local);}",
+        "int position=1; void f(int dt){int local=2; consume(position, local);}",
+        "int global=1; void f(int dt){ {double global=2; consume(global);} consume(global);}",
+        "void f(a,b) int a; double b; {int local=1; consume(a,b,local);} int after=0;",
+        "void f(int dt){for(int index=0; index<3; ++index) consume(index); consume(dt);}",
+        "void f(int dt){const char *value=\"not a name,\"; /* comment */ consume(value, dt);}",
+        "void f(int dt){int Größe=1, $value=2, Gr\\u00f6sse=3; consume(Größe, dt);}",
+        "void f(int dt){int ready=1, unfinished=; consume(ready,", ")", ""};
+    int owner=0,other=1;ps_completion_locals current={0};size_t comparisons=0;
+    char buffer[1024];
+    const char *declaration="void f(int dt){double value=dt; consume(  );}";
+    const char *expression="void f(int dt){return value=dt; consume(  );}";
+    size_t length=strlen(declaration),position=(size_t)(strstr(declaration,"consume(")-declaration)+8;
+    CHECK(length==strlen(expression));
+    memcpy(buffer,declaration,length+1);CHECK(!revision_compare(&current,buffer,length,position,&owner));comparisons++;
+    CHECK(ps_completion_locals_find(&current,"value",5));
+    memcpy(buffer,expression,length+1);CHECK(!revision_compare(&current,buffer,length,position,&owner));comparisons++;
+    CHECK(!ps_completion_locals_find(&current,"value",5) && ps_completion_locals_find(&current,"dt",2));
+    for(size_t s=0;s<sizeof sources/sizeof *sources;s++){
+        size_t bytes=strlen(sources[s]);CHECK(bytes<sizeof buffer);memcpy(buffer,sources[s],bytes+1);
+        /* Same buffer address and equal-length renamed revision; no pointer-
+         * only or length-only cache identity is admissible. Reverse traversal
+         * crosses scopes/calls, UTF-8 boundaries and legacy parameter regions. */
+        for(size_t i=bytes+1;i--;){
+            if(i<bytes && ((unsigned char)buffer[i]&0xc0)==0x80)continue;
+            CHECK(!revision_compare(&current,buffer,bytes,i,&owner));comparisons++;
+        }
+        CHECK(!revision_compare(&current,buffer,bytes,bytes,&other));comparisons++;
+    }
+    const char *typing="void f(int dt){double velocity=dt; consume(velocity, dt);}";
+    size_t bytes=strlen(typing);
+    /* Every inserted/deleted byte creates a real new full-source revision;
+     * recovery, closing delimiters and UTF-8 names are covered above. */
+    for(size_t n=0;n<=bytes;n++){memcpy(buffer,typing,n);buffer[n]=0;CHECK(!revision_compare(&current,buffer,n,n,&owner));comparisons++;}
+    for(size_t n=bytes;n--;){buffer[n]=0;CHECK(!revision_compare(&current,buffer,n,n,&owner));comparisons++;}
+    ps_completion_locals_destroy(&current);
+    printf("C completion revisions: %zu fresh-reference comparisons across edits/cursors/owners\n",comparisons);return 0;
+}
+static int cache_failures(bool edit){
+    const char *before="int value=1; void f(int dt){double velocity=dt; consume(velocity, dt);}";
+    const char *after="int value=1; void f(int dt){double position=dt; consume(position, dt);}";
+    int owner=0;size_t bytes=strlen(before),first=(size_t)(strstr(before,"consume(")-before)+8;
+    size_t next=edit?strlen(after):first+10;const char *target=edit?after:before;
+    test_allocator probe={0};ps_completion_locals p={.allocator=test_domain(&probe)};
+    CHECK(ps_completion_locals_update(&p,&owner,before,bytes,first,false)==PS_OK);
+    size_t count=probe.attempts;CHECK(ps_completion_locals_update(&p,&owner,target,strlen(target),next,false)==PS_OK);
+    count=probe.attempts-count;ps_completion_locals_destroy(&p);CHECK(!probe.invalid && !probe.live_blocks && count);
+    ps_completion_locals oracle={0};CHECK(ps_completion_locals_update(&oracle,&owner,before,bytes,first,false)==PS_OK);
+    for(size_t failure=1;failure<=count;failure++){
+        test_allocator a={0};p=(ps_completion_locals){.allocator=test_domain(&a)};
+        CHECK(ps_completion_locals_update(&p,&owner,before,bytes,first,false)==PS_OK);
+        const char *source=p.source,*strings=p.strings;const ps_completion_local *entries=p.entries;
+        const ps_c_bindings_source *syntax=p.c_source;size_t live=a.live_bytes,blocks=a.live_blocks;
+        a.fail_on=a.attempts+failure;
+        CHECK(ps_completion_locals_update(&p,&owner,target,strlen(target),next,false)==PS_MEMORY);
+        CHECK(p.source==source && p.strings==strings && p.entries==entries && p.c_source==syntax && a.live_bytes==live && a.live_blocks==blocks && !a.invalid && !equivalent(&p,&oracle));
+        a.fail_on=0;CHECK(ps_completion_locals_update(&p,&owner,target,strlen(target),next,false)==PS_OK);
+        CHECK(edit || p.c_source==syntax);CHECK(!revision_compare(&p,target,strlen(target),next,&owner));
+        ps_completion_locals_destroy(&p);CHECK(!a.invalid && !a.live_blocks && !a.live_bytes);
+    }
+    ps_completion_locals_destroy(&oracle);
+    printf("C completion %s failures: %zu/%zu preserve source/syntax/results and retry\n",edit?"edit":"cursor",count,count);return 0;
+}
+int main(void){CHECK(!scopes() && !failures() && !hints() && !revisions() && !cache_failures(false) && !cache_failures(true));puts("C completion locals: real types/source, scope merge, full count, cache/owner/language, revisions and atomic faults passed");return 0;}

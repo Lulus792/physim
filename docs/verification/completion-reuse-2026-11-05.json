@@ -1,0 +1,1230 @@
+{
+  "date": "2026-11-05",
+  "before_commit": "8bddf0fa0d5475e7e3b299c4453e8848a90a9033",
+  "source": "Actual final compiler/test/owned bytes matched against Git index; code commit supplied by later commit closure.",
+  "behavior": "One immutable owned C source/flat-node snapshot; fresh scope/call scratch on changed cursor, all bytes/owner/language checked. No Tree-sitter object persists. Changed source still fully parses. Model publishes/ownership transfers only on success; OOM preserves old cache/results.",
+  "ui": "Hide clears visible choices/help/timers and retains a single owned cache; actual reopen checks owner/language/full bytes/cursor. Editor changes, document selection/removal, project clear and shutdown discard. No provider worker or design/palette change.",
+  "native": [
+    {
+      "platform": "windows",
+      "app_sha256": "f8aad93caa49d01419960f1555cd1bdd52d7ee1f970addc3fc20905567d136e9",
+      "units": 8,
+      "gui": 6,
+      "stronger_c_unit": 1,
+      "app_unchanged_after_test_strengthening": true,
+      "checks": [
+        {
+          "run": "run-fprs8zad",
+          "count": 8,
+          "passed": 8,
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-fprs8zad/results.json",
+            "bytes": 4195,
+            "sha256": "1bdaaa5d3198e864b1e8c3c998f1cd0973a23bd360ad1a84f65cbe7321909ae1"
+          },
+          "cases": [
+            "c_bindings",
+            "c_call_context",
+            "completion",
+            "completion_help",
+            "completion_locals",
+            "completion_c_locals",
+            "syntax",
+            "api_reference"
+          ]
+        },
+        {
+          "run": "run-72_vs_ye",
+          "count": 6,
+          "passed": 6,
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-72_vs_ye/results.json",
+            "bytes": 143739,
+            "sha256": "004208e96b5393d6c383e43a2d8f53c6626c9605c4f64594d4d4e1aac9216079"
+          },
+          "cases": [
+            "completion_workflow",
+            "completion_automatic_workflow",
+            "api_reference_workflow",
+            "completion_info_workflow",
+            "completion_automatic_deadline_workflow",
+            "completion_locals_workflow"
+          ]
+        },
+        {
+          "run": "run-ld5_qfcb",
+          "count": 1,
+          "passed": 1,
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-ld5_qfcb/results.json",
+            "bytes": 756,
+            "sha256": "8b8bbf1af23b351c679ec21734e18c252ec5895ade3687cc86e8f768a7395337"
+          },
+          "cases": [
+            "completion_c_locals"
+          ]
+        }
+      ]
+    },
+    {
+      "platform": "linux",
+      "app_sha256": "191b3bbb5a069fa71771fd816653eac41afe3986fedc11a302ec4586f400a539",
+      "units": 8,
+      "gui": 6,
+      "stronger_c_unit": 1,
+      "app_unchanged_after_test_strengthening": true,
+      "checks": [
+        {
+          "run": "run-8wdui1d4",
+          "count": 8,
+          "passed": 8,
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-8wdui1d4/results.json",
+            "bytes": 4028,
+            "sha256": "08058a87bdc6da101c3f5b9230f0c3672a5fb9bae5aee89590442a9bc9149624"
+          },
+          "cases": [
+            "c_bindings",
+            "c_call_context",
+            "completion",
+            "completion_help",
+            "completion_locals",
+            "completion_c_locals",
+            "syntax",
+            "api_reference"
+          ]
+        },
+        {
+          "run": "run-2rj1yemb",
+          "count": 6,
+          "passed": 6,
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/results.json",
+            "bytes": 141694,
+            "sha256": "9235cc6ca8d14de129fe6db732a289b9f9d7eed60cd4dbaa7e88bf5292cbd82a"
+          },
+          "cases": [
+            "completion_workflow",
+            "completion_automatic_workflow",
+            "api_reference_workflow",
+            "completion_info_workflow",
+            "completion_automatic_deadline_workflow",
+            "completion_locals_workflow"
+          ]
+        },
+        {
+          "run": "run-2zr3wga7",
+          "count": 1,
+          "passed": 1,
+          "results": {
+            "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2zr3wga7/results.json",
+            "bytes": 732,
+            "sha256": "5e98bae6e23f689a56b8e7970010fc915156ea8056f3e080862a9baaf0c1b45d"
+          },
+          "cases": [
+            "completion_c_locals"
+          ]
+        }
+      ]
+    }
+  ],
+  "strict_c": {
+    "path": "build/validation/completion-reuse-2026-11-05/model-strong.json",
+    "bytes": 2885,
+    "sha256": "05e3d94e8cf318bb1cf7584216fc65740c1c1f2095d12026680c24f79825bbb1"
+  },
+  "unit_scope": {
+    "c_scope_vectors": 35,
+    "c_scope_cursor_pairs": 182,
+    "c_scope_allocation_failures": 67,
+    "c_malformed": 1024,
+    "c_call_contexts": 38,
+    "c_model_allocation_failures": 123,
+    "c_revision_fresh_reference_comparisons": 887,
+    "c_cursor_failures": 7,
+    "c_edit_failures": 87
+  },
+  "negative": {
+    "first_probe": "Initial deliberate content-key omission unexpectedly exited0 with the first885-comparison test version. Alternating owners and non-structural equal-length rename did not exercise the missing content key. No production correction was needed: test strengthened with same owner/cursor/address/length double->return, explicit binding removal; then both content/cursor key mutations compile and exit1 at assertion.",
+    "first_subject": {
+      "path": "build/validation/completion-reuse-2026-11-05/negative/content.c",
+      "bytes": 11132,
+      "sha256": "d84e863b66bd23f9f11d245c70d92e2fffb3d2f6a988191937c554edd593d571"
+    },
+    "passed_rejections": [
+      {
+        "name": "content",
+        "mutation": [
+          "(!bytes || !memcmp(source,p->source,bytes))",
+          "true"
+        ],
+        "compile_exit": 0,
+        "exit_code": 1,
+        "stderr": "C completion locals line 69: a->bytes==b->bytes && a->cursor==b->cursor && a->language==b->language && a->status==b->status && a->count==b->count\nC completion locals line 92: !equivalent(current,&fresh)\nC completion locals line 112: !revision_compare(&current,buffer,length,position,&owner)\nC completion locals line 159: !scopes() && !failures() && !hints() && !revisions() && !cache_failures(false) && !cache_failures(true)\n"
+      },
+      {
+        "name": "cursor",
+        "mutation": [
+          "if(same && p->cursor==cursor)",
+          "if(same)"
+        ],
+        "compile_exit": 0,
+        "exit_code": 1,
+        "stderr": "C completion locals line 69: a->bytes==b->bytes && a->cursor==b->cursor && a->language==b->language && a->status==b->status && a->count==b->count\nC completion locals line 92: !equivalent(current,&fresh)\nC completion locals line 121: !revision_compare(&current,buffer,bytes,i,&owner)\nC completion locals line 159: !scopes() && !failures() && !hints() && !revisions() && !cache_failures(false) && !cache_failures(true)\n"
+      }
+    ],
+    "leaks": "Positive Linux units/direct run with detect_leaks=1. Deliberately failing CHECK exits skip teardown, so negative rejection probes use detect_leaks=0; no suppression on positive checks."
+  },
+  "profiling": {
+    "scope": "Alternating separate processes, warm process/OS. Same finalized profile C tool and exact original source bytes. No same-process ratio/allocator-overhead claim.",
+    "full_after_samples": 1512,
+    "alternating_compare_samples": 1008,
+    "source_identities_identical": true,
+    "cases": [
+      {
+        "name": "pendulum",
+        "source_sha256": "2e0cb1e1f7311ba73fb6d0d748d5be56728739da3fa0ebe63b7376698ffb2b1e",
+        "records": [
+          {
+            "variant": "before",
+            "mode": "cursor",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 6.2534,
+              "p95_ms": 6.5839,
+              "max_ms": 6.7576,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "cursor",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 6.771100000000001,
+              "p95_ms": 9.7293,
+              "max_ms": 9.9513,
+              "peak_requested_bytes": 5832069,
+              "allocations": [
+                4269
+              ]
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "cursor",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 1.1979,
+              "p95_ms": 1.3401,
+              "max_ms": 1.7767,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "cursor",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 1.0732000000000002,
+              "p95_ms": 1.4445000000000001,
+              "max_ms": 1.5312,
+              "peak_requested_bytes": 4027749,
+              "allocations": [
+                7
+              ]
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "edit",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 7.194,
+              "p95_ms": 11.2883,
+              "max_ms": 12.0684,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "edit",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 6.7115,
+              "p95_ms": 10.2117,
+              "max_ms": 11.6562,
+              "peak_requested_bytes": 5832454,
+              "allocations": [
+                4269
+              ]
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "edit",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 5.2992,
+              "p95_ms": 5.7113,
+              "max_ms": 5.8264,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "edit",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 5.552,
+              "p95_ms": 6.2559,
+              "max_ms": 7.612299999999999,
+              "peak_requested_bytes": 6080311,
+              "allocations": [
+                4271
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "locals-64",
+        "source_sha256": "114c108b0365a02ea24fdf51e9594e6fba5f08f8c17efada115580e59d6c15a9",
+        "records": [
+          {
+            "variant": "after",
+            "mode": "cursor",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 0.066,
+              "p95_ms": 0.07669999999999999,
+              "max_ms": 0.0785,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "cursor",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 0.1457,
+              "p95_ms": 0.156,
+              "max_ms": 0.1591,
+              "peak_requested_bytes": 520555,
+              "allocations": [
+                7
+              ]
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "cursor",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 0.8598,
+              "p95_ms": 0.9573,
+              "max_ms": 1.3082,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "cursor",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 1.3006,
+              "p95_ms": 1.3766,
+              "max_ms": 1.415,
+              "peak_requested_bytes": 762190,
+              "allocations": [
+                705
+              ]
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "edit",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 0.8002,
+              "p95_ms": 0.855,
+              "max_ms": 0.8593000000000001,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "edit",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 0.6927,
+              "p95_ms": 0.8288,
+              "max_ms": 1.3426,
+              "peak_requested_bytes": 794794,
+              "allocations": [
+                707,
+                723
+              ]
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "edit",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 0.8621,
+              "p95_ms": 0.9940000000000001,
+              "max_ms": 1.0067,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "edit",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 0.8323999999999999,
+              "p95_ms": 1.5897999999999999,
+              "max_ms": 1.6025,
+              "peak_requested_bytes": 764287,
+              "allocations": [
+                705,
+                721
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "locals-512",
+        "source_sha256": "1aad658753d7185efda4d2abdba0107a9df81f85588efe49a1af7b489688de52",
+        "records": [
+          {
+            "variant": "before",
+            "mode": "cursor",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 7.1966,
+              "p95_ms": 11.071,
+              "max_ms": 11.2338,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "cursor",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 7.103800000000001,
+              "p95_ms": 8.1598,
+              "max_ms": 10.531699999999999,
+              "peak_requested_bytes": 6108398,
+              "allocations": [
+                5189
+              ]
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "cursor",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 1.4951,
+              "p95_ms": 2.2412,
+              "max_ms": 2.4930999999999996,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "cursor",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 1.5594000000000001,
+              "p95_ms": 1.8497999999999999,
+              "max_ms": 1.9488,
+              "peak_requested_bytes": 4211583,
+              "allocations": [
+                7
+              ]
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "edit",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 7.4142,
+              "p95_ms": 10.0928,
+              "max_ms": 10.9887,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "edit",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 7.1057999999999995,
+              "p95_ms": 7.634,
+              "max_ms": 10.0782,
+              "peak_requested_bytes": 6110495,
+              "allocations": [
+                5189,
+                5205
+              ]
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "edit",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 6.4652,
+              "p95_ms": 10.1562,
+              "max_ms": 10.2656,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "edit",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 6.661700000000001,
+              "p95_ms": 10.1986,
+              "max_ms": 10.344100000000001,
+              "peak_requested_bytes": 6358082,
+              "allocations": [
+                5191,
+                5207
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "locals-2048",
+        "source_sha256": "c47dceaef26514592085895c5fb0459eab9f4e8820a40ac52f33579998c4b9e8",
+        "records": [
+          {
+            "variant": "after",
+            "mode": "cursor",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 5.7148,
+              "p95_ms": 8.2685,
+              "max_ms": 9.4741,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "cursor",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 5.3314,
+              "p95_ms": 6.6501,
+              "max_ms": 7.0317,
+              "peak_requested_bytes": 10795319,
+              "allocations": [
+                7
+              ]
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "cursor",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 28.7343,
+              "p95_ms": 39.0049,
+              "max_ms": 39.618100000000005,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "cursor",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 26.2589,
+              "p95_ms": 27.988,
+              "max_ms": 32.936,
+              "peak_requested_bytes": 15866782,
+              "allocations": [
+                20552
+              ]
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "edit",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 23.4293,
+              "p95_ms": 25.2325,
+              "max_ms": 28.1369,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "edit",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 24.4019,
+              "p95_ms": 30.142200000000003,
+              "max_ms": 31.0868,
+              "peak_requested_bytes": 16505474,
+              "allocations": [
+                20554,
+                20570
+              ]
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "edit",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 26.8537,
+              "p95_ms": 32.3063,
+              "max_ms": 32.4177,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "edit",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 27.1278,
+              "p95_ms": 31.6899,
+              "max_ms": 31.9069,
+              "peak_requested_bytes": 15868495,
+              "allocations": [
+                20552,
+                20568
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "locals-4096",
+        "source_sha256": "c6a7be323a7ab5b5cd00083d9201a3abca05afbd4ae89253daff9d90b54c1648",
+        "records": [
+          {
+            "variant": "before",
+            "mode": "cursor",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 52.280100000000004,
+              "p95_ms": 59.564400000000006,
+              "max_ms": 59.9281,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "cursor",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 54.5586,
+              "p95_ms": 59.4892,
+              "max_ms": 61.5131,
+              "peak_requested_bytes": 19143582,
+              "allocations": [
+                41033
+              ]
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "cursor",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 8.5215,
+              "p95_ms": 14.1705,
+              "max_ms": 14.2907,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "cursor",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 8.2231,
+              "p95_ms": 12.7235,
+              "max_ms": 14.2018,
+              "peak_requested_bytes": 12679479,
+              "allocations": [
+                7
+              ]
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "edit",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 55.7411,
+              "p95_ms": 75.5267,
+              "max_ms": 80.37769999999999,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "edit",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 57.755599999999994,
+              "p95_ms": 64.2017,
+              "max_ms": 65.5887,
+              "peak_requested_bytes": 19145295,
+              "allocations": [
+                41033,
+                41049
+              ]
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "edit",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 49.6258,
+              "p95_ms": 60.1898,
+              "max_ms": 60.998,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "edit",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 57.0829,
+              "p95_ms": 62.62570000000001,
+              "max_ms": 63.2026,
+              "peak_requested_bytes": 19896962,
+              "allocations": [
+                41035,
+                41051
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "locals-6144",
+        "source_sha256": "3266a17b41f19c0eae13bbd763c0eaa49b7cb5aaa8b93b1c2837690bfae3563f",
+        "records": [
+          {
+            "variant": "after",
+            "mode": "cursor",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 18.331,
+              "p95_ms": 22.9463,
+              "max_ms": 23.454800000000002,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "cursor",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 15.5649,
+              "p95_ms": 26.436500000000002,
+              "max_ms": 43.0998,
+              "peak_requested_bytes": 14498103,
+              "allocations": [
+                7
+              ]
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "cursor",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 74.7389,
+              "p95_ms": 92.7263,
+              "max_ms": 96.0757,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "cursor",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 74.3849,
+              "p95_ms": 81.8519,
+              "max_ms": 87.9326,
+              "peak_requested_bytes": 22330270,
+              "allocations": [
+                61513
+              ]
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "edit",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 83.5722,
+              "p95_ms": 104.1576,
+              "max_ms": 140.5692,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "after",
+            "mode": "edit",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 75.2782,
+              "p95_ms": 85.2278,
+              "max_ms": 89.044,
+              "peak_requested_bytes": 23198338,
+              "allocations": [
+                61515,
+                61531
+              ]
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "edit",
+            "allocator": "default",
+            "summary": {
+              "p50_ms": 73.73259999999999,
+              "p95_ms": 77.939,
+              "max_ms": 78.33279999999999,
+              "peak_requested_bytes": null,
+              "allocations": null
+            }
+          },
+          {
+            "variant": "before",
+            "mode": "edit",
+            "allocator": "tracked",
+            "summary": {
+              "p50_ms": 73.8669,
+              "p95_ms": 86.5591,
+              "max_ms": 86.98010000000001,
+              "peak_requested_bytes": 22331983,
+              "allocations": [
+                61513,
+                61529
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "target": "Original backend review marks remain cachep95<=1ms, fresh/cursor/editp95<=16.7ms. Cursor6k after full run10.2035ms but alternating compare22.9463ms; not reliably met. Edits remain full parse and >16.7ms. No full UI/FPS/Linux/Mac performance acceptance or precise speedup ratio.",
+    "allocator": "Cursor update7 allocations for all six fixtures, versus705..61513 generated baseline and4269 pendulum. Largest snapshot retained6166734B versus1801397B before; observed edit peak23198338B. Includes internal tracking, not outer tracker headers or RSS. No64MiB guard denials."
+  },
+  "cli": {
+    "cases": 108,
+    "per_platform": 54,
+    "windows": "Release; current C profile and before backend strict /W4 /WX",
+    "linux": "Actual GCC O1 -Wall -Wextra -Werror ASan/UBSan detect_leaks=1",
+    "edit": "Real insertion/deletion of ASCII v at the selected UTF8 cursor; input buffer setup outside timer and requested allocator counts."
+  },
+  "git_index_match": {
+    "phase": "completion-reuse-strong",
+    "revision": "INDEX",
+    "compiler_and_test_count": 1220,
+    "own_input_count": 281,
+    "unique_files": 1239,
+    "all_tested_input_bytes_match_git": true,
+    "nonvendor_crlf_normalized_only": true
+  },
+  "cleanup": {
+    "removed": [
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-72_vs_ye/api_reference_workflow/files ä/workflow ä/c/api-reference-analysis.bmp",
+        "sha256": "35f0f073984fdf014c6c72719afd5006a4e8b282533f756c770ee272b6a14d0e",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/c/api-reference-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-72_vs_ye/api_reference_workflow/files ä/workflow ä/c/api-reference-document.bmp",
+        "sha256": "2dcfeba839ce3dda98f483c55a758a49d7594d8a12dc0feadd5cb2306924333f",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/c/api-reference-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-72_vs_ye/api_reference_workflow/files ä/workflow ä/c/api-reference-experiment.bmp",
+        "sha256": "b32898a1e9da3f92ed46549f587cf5c09af8ed99742bfb9d94e17be422cc32c2",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/c/api-reference-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-72_vs_ye/api_reference_workflow/files ä/workflow ä/phys/api-reference-analysis.bmp",
+        "sha256": "eb781e69082e545bd3299d61395921e39977039287a30dac59a759f03d307e4c",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/phys/api-reference-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-72_vs_ye/api_reference_workflow/files ä/workflow ä/phys/api-reference-document.bmp",
+        "sha256": "e18723da22f0bf14e108e4412886053bfc778e52b1ed6a22aa51f98becda7b62",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/phys/api-reference-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-72_vs_ye/api_reference_workflow/files ä/workflow ä/phys/api-reference-experiment.bmp",
+        "sha256": "ff4dd9abc68e0bcc7dbc81eebb3b98dc4d449b1a45b063b27877aa8c57f13301",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/phys/api-reference-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-72_vs_ye/completion_locals_workflow/files ä/workflow ä/c/locals-analysis.bmp",
+        "sha256": "d206b8a7c3bcf09878bb653a690ff621ac4dcaf85589574bc94793b5410879fa",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mxoufvz4/completion_locals_workflow/files ä/workflow ä/c/locals-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-72_vs_ye/completion_locals_workflow/files ä/workflow ä/c/locals-document.bmp",
+        "sha256": "c701c35c2e2de7748ee1f9143ece7f3e4a87e8efda44cd76f756c6b52f20c5df",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mxoufvz4/completion_locals_workflow/files ä/workflow ä/c/locals-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-72_vs_ye/completion_locals_workflow/files ä/workflow ä/c/locals-model.bmp",
+        "sha256": "0042f02d41897e4213d636305837504ad6d1c544394491c4f7f6dd86833cb3a0",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mxoufvz4/completion_locals_workflow/files ä/workflow ä/c/locals-model.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-72_vs_ye/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp",
+        "sha256": "8f9bfe6f5a0ff6ee16a04eac288d09d17e64ee9e01d8d0c92f4f498c8f4101c1",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-72_vs_ye/completion_workflow/files ä/workflow ä/c/completion-document.bmp",
+        "sha256": "4f54e16e5de74b48a3fa3e46ab8eba44b124e767bf1ec9fd070541b1eba26657",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/c/completion-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-72_vs_ye/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp",
+        "sha256": "15fecc83b3c2f7d6893aef222a21c400b28b01eafb4fc5c9666a3fc5a0447e0d",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-72_vs_ye/completion_workflow/files ä/workflow ä/c/completion-reference-error.bmp",
+        "sha256": "952047d0d6bd41484c7aac4566616355acc360ce2331d26be9fc091ccc63588c",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/c/completion-reference-error.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-72_vs_ye/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp",
+        "sha256": "e11aa9a3942b9a03cc2c981478943d9003639a0c8eba6e0b74bf183c23a3ddbb",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-72_vs_ye/completion_workflow/files ä/workflow ä/phys/completion-document.bmp",
+        "sha256": "57dfb4f827ac5fbdac7bb72e1f07bb2e5644faaccc03e3582c881b46844c6931",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/phys/completion-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-72_vs_ye/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp",
+        "sha256": "ba8aa091274f0a74f029bc84747bf4a64519d29b8a80d658ff352789f4dc90c3",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-72_vs_ye/completion_workflow/files ä/workflow ä/phys/completion-reference-error.bmp",
+        "sha256": "c4bd5a3ac058e09503ee761a8351264a1db1b40c046bfe44c26643f129ca8d43",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/phys/completion-reference-error.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/api_reference_workflow/files ä/workflow ä/c/api-reference-analysis.bmp",
+        "sha256": "a3151fba54c4ffc73c27cf9693535da1b456e87307804f96e1e568b98cf7d8a7",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/workflow ä/c/api-reference-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/api_reference_workflow/files ä/workflow ä/c/api-reference-document.bmp",
+        "sha256": "785d69709a33a1e01d04ceb19187613cb6ab5bc655b28035b1eefd1d98028cf1",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/workflow ä/c/api-reference-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/api_reference_workflow/files ä/workflow ä/c/api-reference-experiment.bmp",
+        "sha256": "78add32d17f9b2fe76dfd12f51fea297416884f28e5ea169f0af1bd3253d6168",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/workflow ä/c/api-reference-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/api_reference_workflow/files ä/workflow ä/phys/api-reference-analysis.bmp",
+        "sha256": "9c3d685bee93d272b9bd05297c029ce9e4eaad1b641ee3cc650f680cede89d5d",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/workflow ä/phys/api-reference-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/api_reference_workflow/files ä/workflow ä/phys/api-reference-experiment.bmp",
+        "sha256": "02d012a16af3e88763a5ce2d2d7a49666240aec16464a81acfadfd3f4d6c669d",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/workflow ä/phys/api-reference-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/completion_locals_workflow/files ä/workflow ä/c/locals-analysis.bmp",
+        "sha256": "91a68926cbc83746adc7de9bf9690922a544a7de7829da168a4eb30259c3cf6a",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-pqjm5dl2/completion_locals_workflow/files ä/workflow ä/c/locals-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/completion_locals_workflow/files ä/workflow ä/c/locals-document.bmp",
+        "sha256": "fff0aaf9afa1286d3b21b486a834c22062de244575297b1e1e7342d4dfcc80d0",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-pqjm5dl2/completion_locals_workflow/files ä/workflow ä/c/locals-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/completion_locals_workflow/files ä/workflow ä/c/locals-model.bmp",
+        "sha256": "3d0d4321285424d98e1f66c10dc9a4d43a004153dd2728ac1f1cd0b1f50d0c9a",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-pqjm5dl2/completion_locals_workflow/files ä/workflow ä/c/locals-model.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp",
+        "sha256": "54029509eabb27fce79fac18071d7b9d0e99137783aacb6b7ffd93d443ab7637",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/completion_workflow/files ä/workflow ä/c/completion-document.bmp",
+        "sha256": "ef262e11585ffe742af3578c949a7537b703de9ec3c32db5f3ccbe5877e31c5a",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/c/completion-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp",
+        "sha256": "a07b8577698a0baecaac7c5b62b0c22307d50eb05aea1e5dd3eafe9d9a4f9b10",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/completion_workflow/files ä/workflow ä/c/completion-reference-error.bmp",
+        "sha256": "66238798df72a2f947647243012350331580c91f92f20f5f68a6ff1cb5292dd5",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/c/completion-reference-error.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp",
+        "sha256": "eb85fd3e395468c72b4f8caa2107513d0821b2ea1cca282b276e9bad01d77786",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/completion_workflow/files ä/workflow ä/phys/completion-document.bmp",
+        "sha256": "4e7116dc23fd810107f8f34b951bf965107f3d9da24b16bb6b4840511d8d1fe6",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/phys/completion-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp",
+        "sha256": "be131389628a4f164a8ecd36315460e6fe36a5b75bbec03672ddf712637e3a44",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/completion_workflow/files ä/workflow ä/phys/completion-reference-error.bmp",
+        "sha256": "6d7c691cf0625f24b11de507532b2ae2c8fed5d03f9b58021179e2d19b0b9efa",
+        "bytes": 3196938,
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/phys/completion-reference-error.bmp"
+      }
+    ],
+    "kept": [
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/api_reference_workflow/files ä/workflow ä/phys/api-reference-document.bmp",
+        "sha256": "e21d1d8845e0b86fd54a6e1f32f6396fd2ec78e9137ca8bf766fa6efc37de501",
+        "bytes": 3196938
+      }
+    ],
+    "bytes_freed": 105498954,
+    "all_targets_verified": true,
+    "protected_references_retained": true
+  },
+  "raw": [
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-fprs8zad/results.json",
+      "bytes": 4195,
+      "sha256": "1bdaaa5d3198e864b1e8c3c998f1cd0973a23bd360ad1a84f65cbe7321909ae1"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-72_vs_ye/results.json",
+      "bytes": 143739,
+      "sha256": "004208e96b5393d6c383e43a2d8f53c6626c9605c4f64594d4d4e1aac9216079"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-ld5_qfcb/results.json",
+      "bytes": 756,
+      "sha256": "8b8bbf1af23b351c679ec21734e18c252ec5895ade3687cc86e8f768a7395337"
+    },
+    {
+      "path": "build/validation/completion-reuse-2026-11-05/native-windows.json",
+      "bytes": 2447,
+      "sha256": "577776112d54262b7e174721bef17c10d115ff2571e9d6d1270b7f116a8567f2"
+    },
+    {
+      "path": "build/validation/completion-reuse-2026-11-05/strong-windows.json",
+      "bytes": 968,
+      "sha256": "b9da3eaceb478639cf5f6fe2425bbb05d553ee7613e5248d39fd5266406839e2"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-8wdui1d4/results.json",
+      "bytes": 4028,
+      "sha256": "08058a87bdc6da101c3f5b9230f0c3672a5fb9bae5aee89590442a9bc9149624"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/results.json",
+      "bytes": 141694,
+      "sha256": "9235cc6ca8d14de129fe6db732a289b9f9d7eed60cd4dbaa7e88bf5292cbd82a"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2zr3wga7/results.json",
+      "bytes": 732,
+      "sha256": "5e98bae6e23f689a56b8e7970010fc915156ea8056f3e080862a9baaf0c1b45d"
+    },
+    {
+      "path": "build/validation/completion-reuse-2026-11-05/native-linux.json",
+      "bytes": 2098,
+      "sha256": "0f937e60ea49bfeb9836540b9a14d04c78f5a4618bccdbafb9368176e3ee9d39"
+    },
+    {
+      "path": "build/validation/completion-reuse-2026-11-05/strong-linux.json",
+      "bytes": 803,
+      "sha256": "a1e682dc8b3f67ec9573aa9ea07fa88e4def3bc27456646c30eba23057f54850"
+    },
+    {
+      "path": "build/validation/completion-reuse-2026-11-05/compare.json",
+      "bytes": 473046,
+      "sha256": "6aac9aa21588267cfc7c6858c1360677835988d1b4561db070f58a1a4218c4f6"
+    },
+    {
+      "path": "build/validation/completion-reuse-2026-11-05/profile-after/report.json",
+      "bytes": 1169169,
+      "sha256": "a7e5f8a33c0f72a707ade2113758a6910a89d246ceae8d90387de8c5f76787e7"
+    },
+    {
+      "path": "build/validation/completion-reuse-2026-11-05/negative.json",
+      "bytes": 4981,
+      "sha256": "561a937df9692ceb179219c195ba93819810e85a89ce1e2b1df8735a823fd766"
+    },
+    {
+      "path": "build/validation/completion-reuse-2026-11-05/tool-check.json",
+      "bytes": 116948,
+      "sha256": "13efaea24631376fd76bc9a24f76ebfedd385ab368cf41197c912ad4d8804d5c"
+    },
+    {
+      "path": "build/validation/completion-reuse-2026-11-05/model-first.json",
+      "bytes": 2883,
+      "sha256": "4c1a721e48be29c28c7ad03bbc9702024e85c76b54daa8245059e888a3fd5ca5"
+    },
+    {
+      "path": "build/validation/completion-reuse-2026-11-05/model-strong.json",
+      "bytes": 2885,
+      "sha256": "05e3d94e8cf318bb1cf7584216fc65740c1c1f2095d12026680c24f79825bbb1"
+    },
+    {
+      "path": "build/validation/completion-reuse-2026-11-05/index-match.json",
+      "bytes": 299456,
+      "sha256": "7276892bc25dde147e41234ffc7ad0bdf83b10847df2aadcf133cdb34bca0625"
+    },
+    {
+      "path": "build/validation/completion-reuse-2026-11-05/cleanup.json",
+      "bytes": 16720,
+      "sha256": "2249e474c9158b5e691b28dab7c5297f72af73df048769bb6be55fb50754a41f"
+    },
+    {
+      "path": "build/validation/completion-reuse-2026-11-05/image-plan.json",
+      "bytes": 17172,
+      "sha256": "c04a1757d8cb3d3063a87a4fe1b82a80cc35e561f9a0c8e6098c22c13b92e700"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/completion-reuse-inputs.json",
+      "bytes": 31369,
+      "sha256": "1effbc447db5d0a636c9cb685f33c4e1799df7c668cee85ace607c3db7b5fc32"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/completion-reuse-compiler-source.json",
+      "bytes": 131752,
+      "sha256": "ce74b90d568ecf323019576284ab4c5279742933dd1a2f10f1df8fecfa274214"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/completion-reuse-runtime.json",
+      "bytes": 85039,
+      "sha256": "d8ddda47f752ae4c2c5cc3f2e4cff947e5ba7dc5e38642d18ed7a926468ca39c"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/completion-reuse-byte-index.json",
+      "bytes": 221018,
+      "sha256": "00bf37be169d5a3903d6da334bf3b06241d37f685b2830704ce18480709c85d7"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/completion-reuse-strong-inputs.json",
+      "bytes": 31369,
+      "sha256": "e60ac0f2047c63d00e4ffcedcc8a1eaa58c25af05f7f07953a3c8bf61b5c5c4f"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/completion-reuse-strong-compiler-source.json",
+      "bytes": 131452,
+      "sha256": "86c8a6361f0743fb4d183bf74586934bb35923e97407b9600f868dc74112555b"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/completion-reuse-strong-runtime.json",
+      "bytes": 85053,
+      "sha256": "d14968705609c20029e8532164efa7a357907639ebc00d20ff7828fc67569e73"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/completion-reuse-strong-byte-index.json",
+      "bytes": 221053,
+      "sha256": "e351121a86e0ccb709dbb1c239a3c37e24b285abc47deffdbfe61e544b7122af"
+    }
+  ],
+  "mac": "Private Mac OFF, untouched. New hosted ARM/Intel source verification pending; old closed runs not repolled.",
+  "open": [
+    "Large-source typing/edit performance remains open; no incremental edit parser yet.",
+    "Native parameter/signature HUD and other approved UI still open.",
+    "Physical IME/AT/DPI/monitor/focus and complete platform/UI acceptance not established.",
+    "Known22px Explorer wrap unchanged."
+  ]
+}

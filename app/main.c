@@ -1412,6 +1412,7 @@ static void clear_project(app *a) {
     a->comparison_pending_active[0]=0;
     model_edit_clear(a);
     completion_close(a);
+    ps_completion_locals_destroy(&a->completion_locals);
     a->source_tab_closed[0]=a->source_tab_closed[1]=false;
     a->file_tab_keyboard_edit=NULL;
     a->caret_edit=NULL;
@@ -3101,6 +3102,7 @@ static void editor_caret(app *a,struct nk_text_edit *edit,struct nk_rect bounds,
 }
 static void editor(app *a, struct nk_text_edit *edit, float height) {
     struct nk_context *ui = a->ui;
+    if(a->completion_locals.owner && a->completion_locals.owner!=edit)ps_completion_locals_destroy(&a->completion_locals);
     if((a->completion_active && a->completion_edit!=edit) ||
        (a->completion_pending_edit && a->completion_pending_edit!=edit))completion_close(a);
     height=fmaxf(100,height);
@@ -5730,6 +5732,7 @@ int main(int argc, char **argv) {
     if (a->library_thread)
         SDL_WaitThread(a->library_thread, NULL);
     completion_close(a);
+    ps_completion_locals_destroy(&a->completion_locals);
     ps_library_destroy(a->pending_library);
     ps_library_destroy(a->library);
     ps_report_destroy(a->pending_report);

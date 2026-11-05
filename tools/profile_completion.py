@@ -84,7 +84,8 @@ def main():
         modes=dict(syntax='Grammar plus flat node output; output allocation outside timer',
                    bindings='Syntax plus scope/call collector; output allocation outside timer',
                    cold='Fresh model per sample; destroy preceding model outside timer',
-                   cursor='Same source, alternating adjacent UTF-8 boundaries; every sample reparses',
+                   cursor='Same source, alternating adjacent UTF-8 boundaries; every sample recollects; syntax may be reused',
+                   edit='Alternate inserting/deleting ASCII v at cursor; source bytes/revision and cursor change; input buffers outside timer/allocator metrics',
                    cached='Same owner, source and cursor; primed before timing'),
         memory='Tracked requested-live bytes, excluding tracker headers; includes caller output buffers. 64MiB guard. Not RSS. Default allocator memory metrics are null.',
         commands=[], records=[])
@@ -107,7 +108,7 @@ def main():
         for index, (name, data, cursor) in enumerate(cases):
             path = source_dir/(name+'.c')
             path.write_bytes(data)
-            for mode in ('syntax', 'bindings', 'cold', 'cursor', 'cached'):
+            for mode in ('syntax', 'bindings', 'cold', 'cursor', 'cached', 'edit'):
                 # Alternate ordering between workloads to make drift visible;
                 # this is not a paired same-process allocator-overhead proof.
                 for allocator in (('default', 'tracked') if index%2 else ('tracked', 'default')):
@@ -124,8 +125,8 @@ def main():
                         raise RuntimeError('Incomplete or failed backend measurement')
                     if mode == 'cached' and allocator == 'tracked' and any(r['allocations'] for r in rows):
                         raise RuntimeError('The identical-snapshot cache allocated')
-                    if mode == 'cursor' and allocator == 'tracked' and any(not r['allocations'] for r in rows):
-                        raise RuntimeError('A cursor-refresh sample hit the cache')
+                    if mode in ('cursor', 'edit') and allocator == 'tracked' and any(not r['allocations'] for r in rows):
+                        raise RuntimeError('A revision/cursor-refresh sample hit the result cache')
                     times = sorted(r['seconds']*1000 for r in rows)
                     if any(not math.isfinite(t) or t < 0 for t in times):
                         raise RuntimeError('Invalid wall time')

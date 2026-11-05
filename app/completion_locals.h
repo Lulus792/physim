@@ -21,12 +21,16 @@ typedef struct {
     size_t *slots;
     ps_lang_editor_status status;
     ps_lang_editor_call call;
+    ps_c_bindings_source *c_source; /* Owned immutable C syntax, same owner/bytes. */
     bool language;
 } ps_completion_locals;
 
 /* Zero-initialize (default allocator), or set a valid allocator before use.
  * Owns the exact immutable source and all candidate strings. No I/O/execution.
  * Same owner/bytes/cursor reuses the snapshot and does not reparse or allocate.
+ * Same C owner/source with a changed cursor recollects scope/call data from
+ * immutable flat syntax. Changed source/owner/language cannot reuse it. Only
+ * publication transfers ownership; allocation failure preserves the old cache.
  * Invalid requests/allocation failure preserve the previous state. Valid source
  * syntax failure publishes an empty, explicitly classified new snapshot.
  * Physim uses its parser; C uses the actual C grammar/recovery collector.

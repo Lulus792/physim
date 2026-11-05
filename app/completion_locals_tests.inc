@@ -45,6 +45,7 @@ static void completion_locals_frame(app *a,bool c_mode,int *stage,int *code,cons
     locals_c_mode=c_mode;
     static unsigned target;static bool prepared;static double timeout;static ps_document *inspector;
     static char original[2048],changed[2048];bool ok=true;
+    static const char *cached_source;
     workspace_document *doc=active_document(a);
     struct nk_text_edit *edit=target==0?&a->experiment:target==1?&a->analysis:doc?&doc->edit:NULL;
     if(a->library_thread || locals_draw_generation<locals_wait_generation)return;
@@ -67,6 +68,16 @@ static void completion_locals_frame(app *a,bool c_mode,int *stage,int *code,cons
     case 3:
         LOCAL_WAIT(a->completion_active && a->completion_list_bounds.w>0);
         ok=a->completion_count==1 && !strcmp(completion_symbol(a,a->completion_indices[0])->name,"Größe") && a->completion_locals.call.active;
+        cached_source=a->completion_locals.source;
+        LOCAL_KEY(SDLK_ESCAPE,0);LOCAL_NEXT(30);break;
+    case 30:
+        LOCAL_WAIT(!a->completion_active);
+        ok=!a->completion_count && !a->completion_indices && a->completion_locals.source==cached_source && completion_test_equal(edit,original);
+        LOCAL_KEY(SDLK_SPACE,SDL_KMOD_CTRL);LOCAL_NEXT(31);break;
+    case 31:
+        LOCAL_WAIT(a->completion_active && a->completion_list_bounds.w>0);
+        ok=a->completion_locals.source==cached_source && a->completion_count==1 && !strcmp(completion_symbol(a,a->completion_indices[0])->name,"Größe");
+        printf("COMPLETION LOCALS language=%s target=%u hidden-list-cleared=1 exact-cache-reopened=1\n",c_mode?"c":"phys",target);
         LOCAL_KEY(SDLK_SPACE,SDL_KMOD_CTRL);LOCAL_NEXT(4);break;
     case 4:
         LOCAL_WAIT(a->completion_info_visible && locals_ink.signature && locals_ink.source);

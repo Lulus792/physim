@@ -18,6 +18,19 @@ typedef struct {
     ps_c_call call; /* Original '(' and zero-based argument; no callee resolution. */
 } ps_c_bindings_result;
 
+typedef struct ps_c_bindings_source ps_c_bindings_source;
+/* Immutable, owned original-source/flat-grammar snapshot. No Tree-sitter object
+ * survives creation. Cursor collection uses fresh private scratch, so repeated
+ * calls do not share mutable scope/old-style-parameter flags. Single owner;
+ * create writes *out only on success, destroy accepts NULL. Same source/node/
+ * parser budgets as ps_c_bindings; cached nodes are at most 65536 entries.
+ * This reuses unchanged syntax only; changed text must create a new snapshot. */
+ps_result ps_c_bindings_source_create(const char *source,size_t bytes,ps_allocator allocator,
+                                     ps_c_bindings_source **out);
+void ps_c_bindings_source_destroy(ps_c_bindings_source *source);
+ps_c_bindings_result ps_c_bindings_source_at(const ps_c_bindings_source *source,size_t cursor,
+                                            ps_c_binding *bindings,size_t capacity,ps_allocator allocator);
+
 /* Original full-source C grammar, never rewritten or preprocessed. Complete
  * object declarators and definition parameters in scopes active at cursor,
  * including actual ERROR recovery nodes. Written base/declarator spans only;

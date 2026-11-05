@@ -8,6 +8,12 @@ wegen Kontextwechsel erneut anfangen; die ursprünglichen Nachweise unverändert
 
 ## Neuere Editorprüfungen
 
+- [C-Syntaxwiederverwendung](verification/completion-reuse-2026-11-05.md): Windows/Linux
+  je Unit 8/8 + GUI 6/6, danach verstärkter C-Test je 1/1 ohne Appänderung.
+  887 Frischvergleiche, 7/7 Cursor-/87/87 Edit-Speicherfehler, zwei bewusst falsche
+  Cacheidentitäten abgewiesen. Liste ausblenden/Cache erneut öffnen nativ C/Physim
+  über je drei Ziele belegt. Sieben Cursor-Allokationen; große Edits und zuverlässige
+  16,7-ms-Marke weiter offen. **Neue Mac-/gesamte Performance-Abnahme fehlt.**
 - [C-Backend-Performance-Baseline](verification/completion-perf-2026-11-05.md):
   Anwendungscode `694bb586` unverändert, Windows Release sechs Quellen und getrennte
   Syntax-/Binding-/Modell-/Cache-Messungen. Große frische/Cursor-Fälle verfehlen
