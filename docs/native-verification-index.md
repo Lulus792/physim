@@ -8,10 +8,14 @@ wegen Kontextwechsel erneut anfangen; die ursprünglichen Nachweise unverändert
 
 ## Neuere Editorprüfungen
 
+- [Physim-Stringkontext](verification/completion-literals-2026-11-05.md): reguläre
+  Vorherregression abgelehnt, elf Literal-Kontexte und Windows/Linux Unit 5/5 + GUI 6/6
+  bestanden. Kein neuer Mac-Nachweis dieser anschließenden Korrektur.
 - [Native lokale Physim-Namen](verification/completion-locals-2026-11-05.md):
   Quellcommit `072c06f5`, Windows/Linux zuerst Unit 10/10 + GUI 6/6, danach GUI 2/2;
-  Signatur-Gegenprobe abgelehnt. Nachträglicher Mac-Prüferfehler und dessen Korrektur
-  stehen im aktuellen Arbeitsstand; keine Mac-Gesamtabnahme daraus ableiten.
+  Signatur-Gegenprobe abgelehnt. Nach Testkorrektur `e27fc144` gehosteter Mac-Lauf
+  [ARM/Intel je 8/8](verification/completion-locals-macos-after-2026-11-05.json).
+  Keine Mac-Gesamtabnahme oder Abnahme der anschließenden Stringkorrektur daraus ableiten.
 - [Automatik-Prüfer gegen Fristrennen](verification/auto-info-deadline-2026-11-05.md):
   Quellcommit `0c525422`, lokale GUI je 3/3 und ursprüngliche gehostete Editorgruppen
   ARM/Intel je 7/7. Kein Nachweis der erst danach integrierten lokalen Vorschläge.

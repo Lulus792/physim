@@ -1,5 +1,6 @@
 #include "completion.h"
 #include <stdio.h>
+#include <stdint.h>
 #include <string.h>
 #define CHECK(x) do {if(!(x)){fprintf(stderr,"Completion line %d: %s\n",__LINE__,#x);return 1;}}while(0)
 static bool includes(const ps_completion_query *q,const char *name) {
@@ -8,8 +9,34 @@ static bool includes(const ps_completion_query *q,const char *name) {
     for(size_t i=0;i<count;i++)if(!strcmp(ps_completion_at(indices[i])->name,name))return true;
     return false;
 }
+static int literal_contexts(void){
+    const struct {const char *text;size_t cursor;ps_result expected;} cases[]={
+        {"let text = \"\"\"hello \"quoted\nVe",SIZE_MAX,PS_INVALID},
+        {"let text = \"\"\"hello \"quoted\nend\"\"\"\nVe",SIZE_MAX,PS_OK},
+        {"\"\"\"// fake \"quoted\nVe",SIZE_MAX,PS_INVALID},
+        {"\"\"\"/* fake */ \"quoted\nend\"\"\"\nVe",SIZE_MAX,PS_OK},
+        {"\"value \\(f(\"inner\"))\" Ve",SIZE_MAX,PS_OK},
+        {"\"value \\(f(\"inner\")) Ve",SIZE_MAX,PS_INVALID},
+        {"\"\"\"a\nVe\n\"\"\"",sizeof "\"\"\"a\nVe"-1,PS_INVALID},
+        {"\"\"\"a\n\"\"\"",sizeof "\"\"\"a\n\""-1,PS_INVALID},
+        {"\"\"\"open",1,PS_INVALID},
+        {"\"\"\"open",2,PS_INVALID},
+        {"\"\"\"a\n\"\"\" Ve",SIZE_MAX,PS_OK}
+    };
+    for(size_t i=0;i<sizeof cases/sizeof *cases;i++){
+        ps_completion_query before,q;memset(&before,0xa5,sizeof before);q=before;
+        size_t bytes=strlen(cases[i].text),cursor=cases[i].cursor==SIZE_MAX?bytes:cases[i].cursor;
+        ps_result actual=ps_completion_prepare(cases[i].text,bytes,cursor,true,&q);
+        if(actual!=cases[i].expected)fprintf(stderr,"Physim literal case%zu: expected %d, actual %d\n",i,cases[i].expected,actual);
+        CHECK(actual==cases[i].expected);
+        if(actual==PS_OK)CHECK(!strcmp(q.prefix,"Ve") && includes(&q,"Vec3"));
+        else CHECK(!memcmp(&q,&before,sizeof q));
+    }
+    return 0;
+}
 int main(void) {
     ps_completion_query q;
+    CHECK(literal_contexts()==0);
     CHECK(ps_completion_count()>1000 && ps_completion_at(ps_completion_count())==NULL);
     const char *c="// α\nps_vlold";
     CHECK(ps_completion_prepare(c,strlen(c),strlen(c)-3,false,&q)==PS_OK);

@@ -1,0 +1,138 @@
+{
+  "date": "2026-11-05",
+  "run": 41945223855,
+  "head_sha": "b64cc8ca76f5f5f666f96c5bf3e79b5510b1ed94",
+  "source_commit": "e27fc14440c4da31b74d48fa4a02de67ca10b8cf",
+  "hosted_only": true,
+  "private_mac": "OFF; no access or probes",
+  "original_before": "completion-locals-macos-before-2026-11-05.json",
+  "reports": [
+    {
+      "architecture": "arm",
+      "job": 126975654119,
+      "artifact": 13378317868,
+      "zip_path": "build/validation/completion-locals-2026-11-05/locals-command-arm.zip",
+      "zip_sha256": "40fb7b8f821dc7006e4cf558a71500f70fdf84fa4fc096bbfc3dbca198ae6617",
+      "github_digest_matches": true,
+      "all_original_entries_read": {
+        "Release/test-results/run-tlq7ai9o/results.json": "7d1c5e8f06687086aa99a0835813a2ea0000ed59bfe98fd45100502eea515447"
+      },
+      "results": [
+        {
+          "path": "Release/test-results/run-tlq7ai9o/results.json",
+          "cases": [
+            {
+              "name": "documents_small",
+              "status": "passed",
+              "seconds": 4.67
+            },
+            {
+              "name": "documents_large",
+              "status": "passed",
+              "seconds": 3.834
+            },
+            {
+              "name": "completion_workflow",
+              "status": "passed",
+              "seconds": 11.124
+            },
+            {
+              "name": "completion_automatic_workflow",
+              "status": "passed",
+              "seconds": 18.148
+            },
+            {
+              "name": "api_reference_workflow",
+              "status": "passed",
+              "seconds": 7.922
+            },
+            {
+              "name": "completion_info_workflow",
+              "status": "passed",
+              "seconds": 31.918
+            },
+            {
+              "name": "completion_automatic_deadline_workflow",
+              "status": "passed",
+              "seconds": 18.283
+            },
+            {
+              "name": "completion_locals_workflow",
+              "status": "passed",
+              "seconds": 6.602
+            }
+          ]
+        }
+      ],
+      "passed": 8,
+      "total": 8
+    },
+    {
+      "architecture": "intel",
+      "job": 126975654382,
+      "artifact": 13378387576,
+      "zip_path": "build/validation/completion-locals-2026-11-05/locals-command-intel.zip",
+      "zip_sha256": "abbafd001d9d09b3b16e6936ec841c57f60dea8baa30063be3c5c94245fc175b",
+      "github_digest_matches": true,
+      "all_original_entries_read": {
+        "Release/test-results/run-mhrgpvpi/results.json": "7f71635751c347a4187686321282c87a72f7aaed7e843a706f5520e57ecf7f11"
+      },
+      "results": [
+        {
+          "path": "Release/test-results/run-mhrgpvpi/results.json",
+          "cases": [
+            {
+              "name": "documents_small",
+              "status": "passed",
+              "seconds": 7.541
+            },
+            {
+              "name": "documents_large",
+              "status": "passed",
+              "seconds": 7.297
+            },
+            {
+              "name": "completion_workflow",
+              "status": "passed",
+              "seconds": 16.639
+            },
+            {
+              "name": "completion_automatic_workflow",
+              "status": "passed",
+              "seconds": 23.924
+            },
+            {
+              "name": "api_reference_workflow",
+              "status": "passed",
+              "seconds": 11.5
+            },
+            {
+              "name": "completion_info_workflow",
+              "status": "passed",
+              "seconds": 40.186
+            },
+            {
+              "name": "completion_automatic_deadline_workflow",
+              "status": "passed",
+              "seconds": 23.204
+            },
+            {
+              "name": "completion_locals_workflow",
+              "status": "passed",
+              "seconds": 8.826
+            }
+          ]
+        }
+      ],
+      "passed": 8,
+      "total": 8
+    }
+  ],
+  "change": "Two native fixture Undo key modifiers use PS_UI_COMMAND_MOD; production/timeouts/assertions unchanged.",
+  "conclusion": "Actual ARM and Intel groups each 8/8, including native local variables in all three editors/themes.",
+  "includes_uncommitted_literal_context_fix": false,
+  "limits": [
+    "No physical IME, assistive, DPI/monitor/fullscreen or complete UI acceptance.",
+    "Separate call parameter help and real C scope integration remain open."
+  ]
+}

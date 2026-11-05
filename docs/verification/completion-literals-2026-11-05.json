@@ -1,0 +1,445 @@
+{
+  "date": "2026-11-05",
+  "base_commit": "b64cc8ca76f5f5f666f96c5bf3e79b5510b1ed94",
+  "snapshot": "completion-literals-first",
+  "reason": "New real-language multiline literal with internal quote incorrectly exposed an API query; not a context-only rerun",
+  "change": "Physim string spans come from one real compiler-lexer token on bounded full source, including triple delimiters and interpolation. C logic unchanged.",
+  "direct": {
+    "before": {
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "TMPDIR=/mnt/d/Physim/build/validation/completion-literals-2026-11-05/tmp",
+        "gcc",
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-I/mnt/d/Physim/src",
+        "-I/mnt/d/Physim/app",
+        "-I/mnt/d/Physim/include",
+        "/mnt/d/Physim/tests/test_completion.c",
+        "/mnt/d/Physim/app/completion.c",
+        "/mnt/d/Physim/src/language/lexer.c",
+        "-o",
+        "/mnt/d/Physim/build/validation/completion-literals-2026-11-05/before-completion"
+      ],
+      "compile_exit": 0,
+      "compile_stderr": "",
+      "inputs": {
+        "tests/test_completion.c": "fefefa492c15b172753892061ef7716bcd14eea83a38817cc2f5038cd9234fcb",
+        "app/completion.c": "0ba086b20a6837520fd36d0ffd1984c3f67b178a1ef9dc0e6a44c58b6c75b9bc",
+        "src/language/lexer.c": "f98a62ae0bfed722a6d7a513b860b315b48a9b493c82ceae5e147ba8fb61ccff"
+      },
+      "base_commit": "b64cc8ca76f5f5f666f96c5bf3e79b5510b1ed94",
+      "run_command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+        "/mnt/d/Physim/build/validation/completion-literals-2026-11-05/before-completion"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Physim literal case0: expected 1, actual 0\nCompletion line 31: actual==cases[i].expected\nCompletion line 39: literal_contexts()==0\n"
+    },
+    "after": {
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "TMPDIR=/mnt/d/Physim/build/validation/completion-literals-2026-11-05/tmp",
+        "gcc",
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-I/mnt/d/Physim/src",
+        "-I/mnt/d/Physim/app",
+        "-I/mnt/d/Physim/include",
+        "/mnt/d/Physim/tests/test_completion.c",
+        "/mnt/d/Physim/app/completion.c",
+        "/mnt/d/Physim/src/language/lexer.c",
+        "-o",
+        "/mnt/d/Physim/build/validation/completion-literals-2026-11-05/after-completion"
+      ],
+      "compile_exit": 0,
+      "compile_stderr": "",
+      "inputs": {
+        "tests/test_completion.c": "fefefa492c15b172753892061ef7716bcd14eea83a38817cc2f5038cd9234fcb",
+        "app/completion.c": "8e9c10549d2b899992ebf030ee402d8b71ace1839f103f3eba59a80e417498ad",
+        "src/language/lexer.c": "f98a62ae0bfed722a6d7a513b860b315b48a9b493c82ceae5e147ba8fb61ccff"
+      },
+      "base_commit": "b64cc8ca76f5f5f666f96c5bf3e79b5510b1ed94",
+      "run_command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+        "/mnt/d/Physim/build/validation/completion-literals-2026-11-05/after-completion"
+      ],
+      "exit_code": 0,
+      "stdout": "API completion: C/Physim symbols, members, UTF-8 boundaries, comments, literals, limits and failure preservation passed\n",
+      "stderr": ""
+    },
+    "table_cases": 11,
+    "identical_test_source": true,
+    "strict_c17": true,
+    "asan_ubsan_detect_leaks": 1
+  },
+  "native": [
+    {
+      "platform": "windows",
+      "passed": 5,
+      "total": 5,
+      "original": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-npz0r953/results.json",
+      "original_sha256": "9982c2a1ecc63e7b251a9c761d78f26a203ee44afaeb84d22d54cee218ebb0e5",
+      "cases": [
+        {
+          "name": "completion",
+          "status": "passed"
+        },
+        {
+          "name": "completion_help",
+          "status": "passed"
+        },
+        {
+          "name": "completion_locals",
+          "status": "passed"
+        },
+        {
+          "name": "syntax",
+          "status": "passed"
+        },
+        {
+          "name": "api_reference",
+          "status": "passed"
+        }
+      ],
+      "artifacts": [],
+      "literal_markers": []
+    },
+    {
+      "platform": "windows",
+      "passed": 6,
+      "total": 6,
+      "original": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-j9qf8uxz/results.json",
+      "original_sha256": "8b3ea8ecee00762270e529bef9ed7f2be84bbec48e9a508b3fb7040e317882b7",
+      "cases": [
+        {
+          "name": "completion_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_automatic_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_info_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_automatic_deadline_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_locals_workflow",
+          "status": "passed"
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-j9qf8uxz/completion_workflow/files \u00e4/app-steps.json",
+          "sha256": "6a843ca86e90363933f489c0891399def09297eed920797969b92bc7b67e7527"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-j9qf8uxz/completion_automatic_workflow/files \u00e4/app-steps.json",
+          "sha256": "c3fcfabc922e4868cea7e024d5a63add232aaec3407890124f333d8960c80bf6"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-j9qf8uxz/api_reference_workflow/files \u00e4/app-steps.json",
+          "sha256": "7134073c751f1a58c06cb33e635f9a808e7955fc33de04abf677a4e15fa2e510"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-j9qf8uxz/completion_info_workflow/files \u00e4/app-steps.json",
+          "sha256": "4ddd3fa589e7c5c46b3a2578395e2fd6b2828863081a3150a215654d5f9f1f2c"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-j9qf8uxz/completion_automatic_deadline_workflow/files \u00e4/app-steps.json",
+          "sha256": "dd11446a54bd15ad8d89e5466a4f9c2886f021e26f5e6e30e1bf890b4d816210"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-j9qf8uxz/completion_locals_workflow/files \u00e4/app-steps.json",
+          "sha256": "fa7697b6bd35d23e294be212cf450580d486891f1ddb14b4f78dc2b17e4e738a"
+        }
+      ],
+      "literal_markers": [
+        "AUTO COMPLETION multiline-string-suppressed=1 manual-string-rejected=1 after-close-resumed=1",
+        "AUTO COMPLETION multiline-string-suppressed=1 manual-string-rejected=1 after-close-resumed=1"
+      ]
+    },
+    {
+      "platform": "linux",
+      "passed": 5,
+      "total": 5,
+      "original": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-bu5mih99/results.json",
+      "original_sha256": "0605c0460a432eba2e429d15b4c5778ac9405e7cb4a667b3e4c2eec8b8ef4392",
+      "cases": [
+        {
+          "name": "completion",
+          "status": "passed"
+        },
+        {
+          "name": "completion_help",
+          "status": "passed"
+        },
+        {
+          "name": "completion_locals",
+          "status": "passed"
+        },
+        {
+          "name": "syntax",
+          "status": "passed"
+        },
+        {
+          "name": "api_reference",
+          "status": "passed"
+        }
+      ],
+      "artifacts": [],
+      "literal_markers": []
+    },
+    {
+      "platform": "linux",
+      "passed": 6,
+      "total": 6,
+      "original": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-femnnlmv/results.json",
+      "original_sha256": "139e3a054f0f020cebdd4bc805d82fba29a406b1676d2e23f00a48a6bd86dc63",
+      "cases": [
+        {
+          "name": "completion_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_automatic_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_info_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_automatic_deadline_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_locals_workflow",
+          "status": "passed"
+        }
+      ],
+      "artifacts": [
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-femnnlmv/completion_workflow/files \u00e4/app-steps.json",
+          "sha256": "8fbc556c3f287f2f9c05025ff7bf7d8214177aa2ffe600989ad14915e8a9e2bc"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-femnnlmv/completion_automatic_workflow/files \u00e4/app-steps.json",
+          "sha256": "76a6b229de8f687b04eeaa7d0b839939e0af0ae7b7106f608669a873a72489aa"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-femnnlmv/api_reference_workflow/files \u00e4/app-steps.json",
+          "sha256": "b81d6e86ae2e7081469f243b545f8848992b9aaabe8368b50749d296f1423187"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-femnnlmv/completion_info_workflow/files \u00e4/app-steps.json",
+          "sha256": "384d7cc2dc606544bc6c949c966a441e50c390a7f61d1e243b9e72c4140fe485"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-femnnlmv/completion_automatic_deadline_workflow/files \u00e4/app-steps.json",
+          "sha256": "69f152d1c55d075f4e924ac41f022aad9497ef114d314d34d51d5780852644ad"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-femnnlmv/completion_locals_workflow/files \u00e4/app-steps.json",
+          "sha256": "183bfc2ac14ba499dd7db6e6c36d5f42a924dcc33899d011e7442fd4528895d9"
+        }
+      ],
+      "literal_markers": [
+        "AUTO COMPLETION multiline-string-suppressed=1 manual-string-rejected=1 after-close-resumed=1",
+        "AUTO COMPLETION multiline-string-suppressed=1 manual-string-rejected=1 after-close-resumed=1"
+      ]
+    }
+  ],
+  "invocations": {
+    "windows": [
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--sdl",
+          "D:\\Physim\\third_party\\SDL3-3.2.30",
+          "--test",
+          "--test-filter",
+          "completion",
+          "--test-filter",
+          "completion_locals",
+          "--test-filter",
+          "completion_help",
+          "--test-filter",
+          "syntax",
+          "--test-filter",
+          "api_reference"
+        ],
+        "exit_code": 0,
+        "app_sha256": "1004fc4b1780871a0f9aba80cc550c6f99a43b3a7acbc743a66049d199bb6fa9"
+      },
+      {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--sdl",
+          "D:\\Physim\\third_party\\SDL3-3.2.30",
+          "--test-display",
+          "--test-filter",
+          "completion_locals_workflow",
+          "--test-filter",
+          "completion_automatic_workflow",
+          "--test-filter",
+          "completion_automatic_deadline_workflow",
+          "--test-filter",
+          "completion_info_workflow",
+          "--test-filter",
+          "completion_workflow",
+          "--test-filter",
+          "api_reference_workflow"
+        ],
+        "exit_code": 0,
+        "app_sha256": "1004fc4b1780871a0f9aba80cc550c6f99a43b3a7acbc743a66049d199bb6fa9"
+      }
+    ],
+    "linux": [
+      {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+          "--build-dir",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+          "--config",
+          "Debug",
+          "--jobs",
+          "4",
+          "--sdl",
+          "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+          "--sanitizers",
+          "--test",
+          "--test-filter",
+          "completion",
+          "--test-filter",
+          "completion_locals",
+          "--test-filter",
+          "completion_help",
+          "--test-filter",
+          "syntax",
+          "--test-filter",
+          "api_reference"
+        ],
+        "exit_code": 0,
+        "app_sha256": "120314a378496ce7afc4add4d7acfdf284d44ed4e65dd9ea349150b9030182e7"
+      },
+      {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+          "--build-dir",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+          "--config",
+          "Debug",
+          "--jobs",
+          "4",
+          "--sdl",
+          "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+          "--sanitizers",
+          "--test-display",
+          "--test-filter",
+          "completion_locals_workflow",
+          "--test-filter",
+          "completion_automatic_workflow",
+          "--test-filter",
+          "completion_automatic_deadline_workflow",
+          "--test-filter",
+          "completion_info_workflow",
+          "--test-filter",
+          "completion_workflow",
+          "--test-filter",
+          "api_reference_workflow"
+        ],
+        "exit_code": 0,
+        "app_sha256": "120314a378496ce7afc4add4d7acfdf284d44ed4e65dd9ea349150b9030182e7"
+      }
+    ]
+  },
+  "compiler_test_count": 1128,
+  "owned_input_count": 178,
+  "all_local_handles_terminal": true,
+  "all_source_runtime_and_referenced_archive_bytes_read": true,
+  "actual_native_before": false,
+  "no_new_pictures_for_literal_sequence": true,
+  "no_renderer_or_timeout_changes": true,
+  "private_mac": "OFF; no access/probes",
+  "macos": "Previous b64cc8ca ARM/Intel8/8 excludes this new literal fix; new-source acceptance open",
+  "remaining": [
+    "Real C scopes",
+    "Separate parameter help including user functions",
+    "Full semantic roles and remaining approved UI",
+    "Physical IME/AT/DPI/monitor/fullscreen/current Mac acceptance"
+  ],
+  "cleanup": {
+    "path": "docs/verification/completion-literals-cleanup-2026-11-05.json",
+    "sha256": "e1cbd9bb09fb1dbc1ac7b30fa0d874e2587b5e616e53805bbd9070a3620c9ce0",
+    "freed_bytes": 108695892
+  }
+}

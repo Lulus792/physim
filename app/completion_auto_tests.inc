@@ -146,7 +146,25 @@ static void completion_auto_frame(app *a,const char *mode,int *stage,int *code) 
     case 38:
         snprintf(expected,sizeof expected,"\"%s",prefix);AUTO_WAIT(completion_test_equal(edit,expected));if(ps_clock()<hold)return;
         ok=!a->completion_active && !a->completion_pending_edit;
-        puts("AUTO COMPLETION comments-and-strings=1");ok=ok && completion_auto_seed(a,"");AUTO_NEXT(39);break;
+        puts("AUTO COMPLETION comments-and-strings=1");
+        if(language){ok=ok && completion_auto_seed(a,"let text = \"\"\"hello \"quoted\n");AUTO_NEXT(90);}
+        else{ok=ok && completion_auto_seed(a,"");AUTO_NEXT(39);}break;
+    case 90:AUTO_WAIT(edit->active);completion_auto_text(a,prefix);hold=ps_clock()+.250;AUTO_NEXT(91);break;
+    case 91:
+        snprintf(expected,sizeof expected,"let text = \"\"\"hello \"quoted\n%s",prefix);
+        AUTO_WAIT(completion_test_equal(edit,expected));if(ps_clock()<hold)return;
+        ok=!a->completion_active && !a->completion_pending_edit;
+        AUTO_KEY(SDLK_SPACE,SDL_KMOD_CTRL);AUTO_NEXT(92);break;
+    case 92:
+        ok=!a->completion_active && !a->completion_pending_edit && completion_test_equal(edit,expected);
+        ok=ok && completion_auto_seed(a,"let text = \"\"\"hello \"quoted\nend\"\"\"\n");AUTO_NEXT(93);break;
+    case 93:AUTO_WAIT(edit->active);completion_auto_text(a,prefix);AUTO_NEXT(94);break;
+    case 94:
+        AUTO_WAIT(a->completion_active);
+        snprintf(expected,sizeof expected,"let text = \"\"\"hello \"quoted\nend\"\"\"\n%s",prefix);
+        ok=!a->completion_manual && !strcmp(a->completion_query.prefix,prefix) && completion_test_equal(edit,expected);
+        puts("AUTO COMPLETION multiline-string-suppressed=1 manual-string-rejected=1 after-close-resumed=1");
+        ok=ok && completion_auto_seed(a,"");AUTO_NEXT(39);break;
     case 39:AUTO_WAIT(edit->active);completion_auto_text(a,prefix);AUTO_NEXT(40);break;
     case 40:
         AUTO_WAIT(a->completion_pending_edit==edit);edit->select_start=0;edit->select_end=2;hold=ps_clock()+.250;AUTO_NEXT(41);break;

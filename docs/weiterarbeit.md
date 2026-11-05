@@ -7,45 +7,37 @@ vollständige Umsetzung/Abnahme; keine volle Punktzahl oder gesamte grüne CI be
 
 ## Aktueller Anschluss
 
-Lokale Physim-Variablen/Parameter sind nativ angebunden: eigener Source-Snapshot,
-nächste Bindung vor API-Namen, geschriebener Typ/Zeile, neutrale Karte ohne falsche
-API-Referenz, Unicode-Präfix, leerer Aufruf/Komma, exakter Ersatz und ein Undo.
-Quellcommit `072c06f5`, Nachweisabschluss `ae331255`, beide Repositories gepusht.
-[Umfang und tatsächliche Phasen](verification/completion-locals-2026-11-05.md):
-Windows/Linux je Unit 10/10 + GUI 6/6, danach gezielt GUI 2/2. Kein einzelner
-neuer Vollaufruf mit letzter Binärdatei behauptet. Sechs finale Ansichten erhalten;
-22.378.566 Bytes ersetzte Rohbilder nachvollziehbar entfernt.
+Die Physim-Vervollständigung ließ `Ve` innerhalb eines offenen mehrzeiligen Strings
+mit innerem Anführungszeichen zu. Reguläre Regression am alten Code Exit 1;
+nach Anbindung an den echten Sprachlexer elf Literal-Kontexte im strengen
+C17-ASan/UBSan-Test bestanden. Windows/Linux danach jeweils **Unit 5/5 + GUI 6/6**,
+einschließlich automatischer/manueller Unterdrückung und Wiederaufnahme außerhalb.
+Keine Optik-/Friständerung, kein neuer Dienst; C-Verhalten erhalten. Kein nativer
+Vorherlauf behauptet. [Umfang/Kommandos/Grenzen](verification/completion-literals-2026-11-05.md).
 
-Gehosteter Editorlauf `41943245186` zu `ae331255` ist beendet: ARM `126969009301`
-und Intel `126969009667` jeweils **7/8**. Nur die neue Locals-Fixture scheitert
-an Stufe 7: Sie sendete auch auf Apple Ctrl+Z statt Command+Z. Beide ZIPs/Digests/
-Originaleinträge gelesen. [Originalbefund](verification/completion-locals-macos-before-2026-11-05.json).
-Jetzt ausschließlich die zwei Undo-Teststellen auf `PS_UI_COMMAND_MOD` korrigiert;
-Produktcode, Assertions und Fristen unverändert. Windows/Linux gezielt je **GUI 1/1**,
-`run-s422uc0n` / `run-iqxgva07`. [Prüfnachweis](verification/completion-locals-command-2026-11-05.json).
-Ein neuer gehosteter Lauf mit dieser Fassung steht noch aus; keine neue Mac-Abnahme.
-Testkorrektur-Quellcommit **`e27fc144`**, alle **1.136** Eingaben gegen Git gelesen;
-[Commitnachweis](verification/completion-locals-command-commit-2026-11-05.json).
+Die vorherige [native Locals-Integration](verification/completion-locals-2026-11-05.md)
+ist unter Windows/Linux geprüft. Gehosteter Nachlauf **`41945223855`** zu `b64cc8ca`
+nach Undo-Testkorrektur `e27fc144`: ARM **`126975654119`** / Intel **`126975654382`**
+je **8/8**, Originalarchive/Digests/alle Einträge gelesen. [Mac-Abschluss](verification/completion-locals-macos-after-2026-11-05.json).
+Vorheriger [7/8-Befund](verification/completion-locals-macos-before-2026-11-05.json)
+bleibt erhalten. Diese Mac-Läufe enthalten die anschließende Stringkorrektur nicht.
+In diesen Schritten 47 ersetzte BMPs / **150.256.086 Bytes** entfernt; Originalfehler,
+Archive und benötigte Referenzen erhalten. Einzelbelege in den verlinkten Berichten.
 
-Eingefrorener lokaler Anschluss: `completion-locals-command`, 178 eigene Eingaben /
+Eingefrorener lokaler Anschluss: `completion-literals-first`, 178 eigene Eingaben /
 1.128 Compiler-/Testdateien, 248 Windows-/135 Linux-Laufzeitdateien; alle Quell-/
 Archivbytes gelesen, lokale Handles beendet. Detaillierte aktuelle Notiz:
-`build/validation/completion-locals-2026-11-05/STATE.md`. Vorbereitung/Frieren über
+`build/validation/completion-literals-2026-11-05/STATE.md`. Vorbereitung/Frieren über
 die Helfer unter `build/validation/explorer-inline-2026-10-29/`; Argumente lesen.
 Shared Baum: `build/validation/protocol-wrap-2026-10-26/3-isolated/` mit `src`,
 `windows-build`, `linux-build`. Niemals bei laufendem lokalem Build/Test mutieren.
 
 ## Nächste Arbeit und verbleibender Umfang
 
-1. Tatsächlichen neuen Mac-Lauf nach Push der geprüften Testkorrektur verfolgen;
-   ursprünglichen beendeten Lauf nicht erneut starten. Ergebnisse/Archive lesen.
-2. Neuer konkreter Fehler: `completion_prepare` erlaubt `Ve` innerhalb eines
-   mehrzeiligen Physim-Strings mit enthaltenem Anführungszeichen; echter Lexer
-   erkennt den offenen String. Strenger direkter ASan/UBSan-Probe Exit 1,
-   Soll `PS_INVALID`, Ist `PS_OK`. Quelldatei/Kommandos/Hashes in
-   `build/validation/completion-locals-2026-11-05/literal-probe.json`.
-   Vor Korrektur reguläre Regression ergänzen, Stringerkennung an den echten
-   Sprachlexer anbinden; C-Verhalten erhalten. Noch kein nativer Vorherlauf behauptet.
+1. Geprüfte Stringkorrektur committen/pushen, tatsächlichen neuen gehosteten
+   Editorlauf beobachten und Originalergebnisse lesen; keine Wiederholung unveränderter lokaler Prüfungen.
+2. Die beiden obigen Mac-Läufe sind beendet; nicht neu starten oder pollen.
+   Die neue Stringkorrektur benötigt nach lokalem Abschluss ihren eigenen Nachlauf.
 3. Echte C-Scopes und separate Aufruf-/Parameterhilfe einschließlich Benutzerfunktionen
    ergänzen; weitere Codekontexte und semantische Rollen vervollständigen. Keine
    Typinferenz/Includes/Werte vortäuschen, kein Browser-Lexer/Dienst/Provider-Worker.

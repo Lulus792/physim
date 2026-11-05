@@ -1124,6 +1124,7 @@ def completion_automatic(flow,directory,deadline=False):
         flow.run("--workspace-state-test",root,("completion-auto-deadline-" if deadline else "completion-auto-")+language,timeout=75,
                  marker="AUTOMATIC COMPLETION SELF-TEST: PASSED")
         for marker in markers:require("AUTO COMPLETION "+marker in flow.steps[-1]["stdout"],"Missing actual automatic completion scenario: "+marker)
+        if language=="phys":require("AUTO COMPLETION multiline-string-suppressed=1 manual-string-rejected=1 after-close-resumed=1" in flow.steps[-1]["stdout"],"Missing actual multiline literal suppression/manual rejection/resumption")
         if deadline:
             require("AUTO INFO DEADLINE injected=1" in flow.steps[-1]["stdout"],"Missing forced real info deadline boundary")
             require("AUTO INFO DEADLINE pending-observed=1" in flow.steps[-1]["stdout"],"Pending info state was not observed before queuing any toggle")

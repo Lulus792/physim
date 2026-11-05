@@ -38,6 +38,16 @@ ps_result ps_completion_prepare(const char *text,size_t bytes,size_t cursor,bool
         if(quote){if(c=='\\' && next)i++;else if(c==quote)quote=0;continue;}
         if(c=='/' && next=='/'){line=true;i++;}
         else if(c=='/' && next=='*'){block=1;i++;}
+        else if(language && c=='"'){
+            /* One real language token covers multiline delimiters, escapes and
+             * nested interpolation strings. Read the bounded full source so a
+             * caret inside an opening/closing delimiter is not mistaken for
+             * a completed empty string in a truncated prefix. */
+            ps_lang_lexer literal;ps_lang_lexer_init(&literal,text+i,bytes-i);
+            ps_lang_token token=ps_lang_lexer_next(&literal);
+            if(token.kind!=PS_LANG_STRING || !token.length || token.length>q.start-i)return PS_INVALID;
+            i+=token.length-1;
+        }
         else if(c=='"' || (!language && c=='\''))quote=c;
     }
     if(block || line || quote)return PS_INVALID;
