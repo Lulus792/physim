@@ -413,16 +413,21 @@ static void completion_view(app *a,int width,int height) {
     float above=fmaxf(0,a->editor_caret.y-editor_top-4);
     struct nk_rect signature=a->signature_hud_bounds;
     bool hud=signature.w>0;
-    float list_below=hud?signature.y+signature.h+6:a->editor_caret.y+a->editor_caret.h+4;
-    if(hud)below=fmaxf(0,editor_bottom-list_below);
-    if(hud && signature.y<a->editor_caret.y)above=fmaxf(0,signature.y-editor_top-6);
+    float list_below=a->editor_caret.y+a->editor_caret.h+4,list_above=a->editor_caret.y-4;
+    if(hud){
+        list_below=fmaxf(list_below,signature.y+signature.h+6);list_above=fminf(list_above,signature.y-6);
+        below=fmaxf(0,editor_bottom-list_below);above=fmaxf(0,list_above-editor_top);
+        /* A very short editor can still have client space over neighbouring
+         * panes. Use that existing popup fallback instead of overlapping HUD. */
+        if(fmaxf(below,above)<row_height+footer+8){editor_top=8;editor_bottom=height-8.f;below=fmaxf(0,editor_bottom-list_below);above=fmaxf(0,list_above-editor_top);}
+    }
     unsigned room=(unsigned)fmaxf(1,floorf((fmaxf(below,above)-footer-8)/row_height));
     if(rows>room)rows=room;
     if(rows!=a->completion_visible_rows)a->completion_reveal=true;
     a->completion_visible_rows=rows;
     float h=rows*row_height+footer+8;
     float x=fmaxf(8,fminf(a->editor_caret.x,(float)width-w-8)),y=list_below;
-    if(h>below)y=fmaxf(editor_top,(hud && signature.y<a->editor_caret.y?signature.y-6:a->editor_caret.y-4)-h);
+    if(h>below)y=fmaxf(editor_top,list_above-h);
     a->completion_list_bounds=nk_rect(x,y,w,h);
     size_t max_first=a->completion_count-rows;
     if(!max_first)a->completion_scroll_drag=false;

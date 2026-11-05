@@ -672,6 +672,13 @@ typedef struct {
     size_t signature_suppressed_bytes;
     char *signature_status;
     struct nk_rect signature_hud_bounds,signature_field_bounds,signature_status_bounds;
+    struct nk_rect signature_body_bounds;
+    ps_code_preview *signature_layout;
+    struct nk_user_font signature_layout_font,signature_layout_bold;
+    float signature_layout_width,signature_scroll_max;
+    size_t signature_layout_parameter;
+    nk_uint signature_scroll_x,signature_scroll_y;
+    bool signature_reveal,signature_suppressed_language;
     unsigned completion_visible_rows;
     bool completion_reveal,completion_scroll_drag,completion_info_visible,completion_pointer_capture;
     ps_completion_help completion_help;

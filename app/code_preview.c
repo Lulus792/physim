@@ -32,7 +32,19 @@ static bool append(ps_code_preview *p,size_t begin,size_t end,float width,bool h
     }
     p->lines[p->count++]=(ps_code_preview_line){begin,end,width,hyphen};p->maximum=fmaxf(p->maximum,width);return true;
 }
-static bool build(const char *source,size_t n,float width,ps_code_measure measure,void *user,ps_code_preview **output,bool anywhere) {
+static void signature_breaks(const char *source,size_t n,char *breaks,char *clusters){
+    static const char *operators[]={"...",">>=","<<=","->","=>","::","&&","||","<=",">=","==","!=","++","--","+=","-=","*=","/=","%=","&=","|=","^=","<<",">>","??","?.","**"};
+    for(size_t at=0;at<n;){
+        size_t length=1;
+        for(size_t i=0;i<sizeof operators/sizeof *operators;i++){
+            size_t bytes=strlen(operators[i]);
+            if(bytes<=n-at && !memcmp(source+at,operators[i],bytes)){length=bytes;break;}
+        }
+        for(size_t i=1;i<length;i++){breaks[at+i-1]=LINEBREAK_NOBREAK;clusters[at+i-1]=GRAPHEMEBREAK_NOBREAK;}
+        at+=length;
+    }
+}
+static bool build(const char *source,size_t n,float width,ps_code_measure measure,void *user,ps_code_preview **output,bool anywhere,bool signature) {
     if(!source || !measure || !output || !isfinite(width) || width<1 || n==SIZE_MAX)return false;
     for(size_t at=0;at<n;) {
         uint32_t c;size_t bytes=ps_code_preview_rune(source+at,n-at,&c);
@@ -46,6 +58,7 @@ static bool build(const char *source,size_t n,float width,ps_code_measure measur
     p->source=source;p->length=n;p->width=width;p->tab=space*8;
     if(n)set_linebreaks_utf8((const utf8_t *)source,n,"de",breaks);
     if(n && anywhere)set_graphemebreaks_utf8((const utf8_t *)source,n,"de",clusters);
+    if(n && signature)signature_breaks(source,n,breaks,clusters);
     size_t begin=0;
     while(begin<n) {
         size_t at=begin,allowed=SIZE_MAX,cluster=begin;float x=0,ink=0,allowed_width=0,cluster_ink=0;bool allowed_hyphen=false,finished=false;
@@ -72,7 +85,7 @@ static bool build(const char *source,size_t n,float width,ps_code_measure measur
             x=next;if(!whitespace && !ps_code_preview_invisible(c))ink=x;
             at+=bytes;
             if(breaks[at-1]==LINEBREAK_ALLOWBREAK && (!anywhere || clusters[at-1]==GRAPHEMEBREAK_BREAK)) {
-                allowed=at;allowed_hyphen=c==0xad;allowed_width=ink+(allowed_hyphen?dash:0);
+                allowed=at;allowed_hyphen=!signature && c==0xad;allowed_width=ink+(allowed_hyphen?dash:0);
                 if(ink>width) {
                     if(!append(p,begin,at,allowed_width,allowed_hyphen))goto fail;
                     begin=at;finished=true;break;
@@ -87,8 +100,11 @@ static bool build(const char *source,size_t n,float width,ps_code_measure measur
 fail:free(breaks);free(clusters);ps_code_preview_destroy(p);return false;
 }
 bool ps_code_preview_build(const char *source,size_t n,float width,ps_code_measure measure,void *user,ps_code_preview **output) {
-    return build(source,n,width,measure,user,output,false);
+    return build(source,n,width,measure,user,output,false,false);
 }
 bool ps_code_preview_build_anywhere(const char *source,size_t n,float width,ps_code_measure measure,void *user,ps_code_preview **output) {
-    return build(source,n,width,measure,user,output,true);
+    return build(source,n,width,measure,user,output,true,false);
+}
+bool ps_code_preview_build_signature(const char *source,size_t n,float width,ps_code_measure measure,void *user,ps_code_preview **output){
+    return build(source,n,width,measure,user,output,true,true);
 }

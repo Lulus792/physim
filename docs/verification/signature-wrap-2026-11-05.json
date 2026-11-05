@@ -1,0 +1,657 @@
+{
+  "date": "2026-11-05",
+  "source_snapshot": "signature-wrap-final",
+  "own_inputs": 300,
+  "all_own_worktree_and_isolated_bytes_match": true,
+  "product_inputs_unchanged_since_first_gui": true,
+  "only_test_inputs_changed": [
+    "app/signature_tests.inc",
+    "tests/check_display_workflow.py",
+    "tests/test_signature_wrap.c"
+  ],
+  "reports": [
+    {
+      "platform": "windows",
+      "data": {
+        "run": "run-btf_kvak",
+        "exit_code": 0,
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--sdl",
+          "D:\\Physim\\third_party\\SDL3-3.2.30",
+          "--no-app",
+          "--test",
+          "--test-filter",
+          "signature_wrap",
+          "--test-filter",
+          "code_preview",
+          "--test-filter",
+          "code_wrap",
+          "--test-filter",
+          "text_wrap"
+        ],
+        "receipt": {
+          "path": "build/validation/signature-wrap-2026-11-05/data-windows.json",
+          "sha256": "5dd86aee39a4f67c5ae219fc844eeb927445d093d4880c5895d49de7a22555c3"
+        },
+        "log": {
+          "path": "build/validation/signature-wrap-2026-11-05/data-windows.log",
+          "sha256": "01feebd0ec1affcf2b3a2f41f04bedd98107c53c3c90a364ab3c1a60e0914ae0"
+        },
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-btf_kvak/results.json",
+          "sha256": "bed7112669b22658e2102d7e198cc74fff459c5ce38d23132a245c6f70e15245"
+        },
+        "passed": 4,
+        "total": 4,
+        "cases": [
+          {
+            "name": "code_preview",
+            "status": "passed"
+          },
+          {
+            "name": "code_wrap",
+            "status": "passed"
+          },
+          {
+            "name": "signature_wrap",
+            "status": "passed"
+          },
+          {
+            "name": "text_wrap",
+            "status": "passed"
+          }
+        ],
+        "app_sha256": null
+      },
+      "precise_counterexample_unit": {
+        "run": "run-e82vsnpg",
+        "exit_code": 0,
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--sdl",
+          "D:\\Physim\\third_party\\SDL3-3.2.30",
+          "--no-app",
+          "--test",
+          "--test-filter",
+          "signature_wrap"
+        ],
+        "receipt": {
+          "path": "build/validation/signature-wrap-2026-11-05/checked-data-windows.json",
+          "sha256": "7e5ac88c9a61beb01a8c872ee1c09ba4cbdbbbdec31a5246f4743682e7dc2109"
+        },
+        "log": {
+          "path": "build/validation/signature-wrap-2026-11-05/checked-data-windows.log",
+          "sha256": "a91637efe8d89853c630c3f580de929530b7c3c9271fb8f0f1f2be57619b6c36"
+        },
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-e82vsnpg/results.json",
+          "sha256": "667233056ca8942cf122105918d901a24b0519632ae7f4b1a73f3e793457b119"
+        },
+        "passed": 1,
+        "total": 1,
+        "cases": [
+          {
+            "name": "signature_wrap",
+            "status": "passed"
+          }
+        ],
+        "app_sha256": null
+      },
+      "existing_gui_regressions": {
+        "run": "run-qyjc4_mp",
+        "exit_code": 1,
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--sdl",
+          "D:\\Physim\\third_party\\SDL3-3.2.30",
+          "--test-display",
+          "--test-filter",
+          "signature_help_workflow",
+          "--test-filter",
+          "completion_workflow",
+          "--test-filter",
+          "completion_automatic_workflow",
+          "--test-filter",
+          "completion_info_workflow",
+          "--test-filter",
+          "completion_locals_workflow",
+          "--test-filter",
+          "api_reference_workflow"
+        ],
+        "receipt": {
+          "path": "build/validation/signature-wrap-2026-11-05/gui-windows.json",
+          "sha256": "02ec0744c3ce2cba2bf2b10ec9018c4e523eee19cf38b466223912699ea09563"
+        },
+        "log": {
+          "path": "build/validation/signature-wrap-2026-11-05/gui-windows.log",
+          "sha256": "7a395ea0909bb9150b3a0ae572afadd3b868dce0c6a865d789591180ce9c7381"
+        },
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-qyjc4_mp/results.json",
+          "sha256": "14cf4be6bb55d487b6c1db8665923c42dc65a9c81ff0a3953ad4673c57407141"
+        },
+        "passed": 5,
+        "total": 6,
+        "cases": [
+          {
+            "name": "completion_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "completion_automatic_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "api_reference_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "signature_help_workflow",
+            "status": "failed"
+          },
+          {
+            "name": "completion_info_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "completion_locals_workflow",
+            "status": "passed"
+          }
+        ],
+        "app_sha256": "68e2ac5a71e095446de2f636d7d4ee43048e99ffe353872c8a7229872002097a"
+      },
+      "final_new_gui": {
+        "run": "run-sslfl4cn",
+        "exit_code": 0,
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--sdl",
+          "D:\\Physim\\third_party\\SDL3-3.2.30",
+          "--test-display",
+          "--test-filter",
+          "signature_help_workflow"
+        ],
+        "receipt": {
+          "path": "build/validation/signature-wrap-2026-11-05/fixed-gui-windows.json",
+          "sha256": "3e4bbe3e2ede082d2f1c302c623b0cafd03d1e6520ec2da16dda1986dbe47552"
+        },
+        "log": {
+          "path": "build/validation/signature-wrap-2026-11-05/fixed-gui-windows.log",
+          "sha256": "7bed10c58374a1fe1dc78381781a1a7adfdea9e798291547312db49d64154e62"
+        },
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-sslfl4cn/results.json",
+          "sha256": "93b2dd557ac6a9f388daaeb1dbb2479994fa477398492ec80d4fddd29408dd41"
+        },
+        "passed": 1,
+        "total": 1,
+        "cases": [
+          {
+            "name": "signature_help_workflow",
+            "status": "passed"
+          }
+        ],
+        "app_sha256": "ea9c984c77e5de73e61954b17618ad170150504c97912d886881cd781d1cae74"
+      },
+      "actual_app_steps": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-sslfl4cn/signature_help_workflow/files \u00e4/app-steps.json",
+        "sha256": "4bff2e19995ceca925269fa3cb822c7f676539070796c26424feef5adb7c9a53"
+      },
+      "actual_long_markers": [
+        "SIGNATURE WINDOW language=c requested=800x540 actual=800x540 test-only-minimum=1",
+        "SIGNATURE LONG language=c all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1",
+        "SIGNATURE WINDOW language=phys requested=800x540 actual=800x540 test-only-minimum=1",
+        "SIGNATURE LONG language=phys all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1"
+      ],
+      "images_actually_opened_and_reviewed": [
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-sslfl4cn/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-first.bmp",
+          "sha256": "7a4b76a73206faa49d14a6087400241d54d7404dab667c04f84fc1b54d52e002"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-sslfl4cn/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-long.bmp",
+          "sha256": "8c961c3e0be5cadb2f180db406c391aa26cfaaa7d99cdc3f10ab8f0661406f22"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-sslfl4cn/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-first.bmp",
+          "sha256": "87d5e9aa044ff716472fb6add2259077e45a4bde69d597c6565677be2a7d08bc"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-sslfl4cn/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-long.bmp",
+          "sha256": "e62f11ffe5e28ce37cf30873a2dd66f043636c33ad680c5dd9884cc3450d6e9f"
+        }
+      ],
+      "data_leak_detection": false,
+      "gui_leak_detection": null
+    },
+    {
+      "platform": "linux",
+      "data": {
+        "run": "run-yxyoi2d9",
+        "exit_code": 0,
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+          "--build-dir",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+          "--config",
+          "Debug",
+          "--jobs",
+          "4",
+          "--sdl",
+          "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+          "--sanitizers",
+          "--no-app",
+          "--test",
+          "--test-filter",
+          "signature_wrap",
+          "--test-filter",
+          "code_preview",
+          "--test-filter",
+          "code_wrap",
+          "--test-filter",
+          "text_wrap"
+        ],
+        "receipt": {
+          "path": "build/validation/signature-wrap-2026-11-05/data-linux.json",
+          "sha256": "2e35011e85cf75726aad2ce069034b3daae2a4478989605fb8603811dc026a36"
+        },
+        "log": {
+          "path": "build/validation/signature-wrap-2026-11-05/data-linux.log",
+          "sha256": "f8b8759ce2e7f896e185d1cf4186db2a9d0a3b5c22297a9cac83fbd4fc1087cc"
+        },
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-yxyoi2d9/results.json",
+          "sha256": "b36af5c5cc76a7c16685e0a778b94ace7a13bb0971df7316cc9bb63e799903ba"
+        },
+        "passed": 4,
+        "total": 4,
+        "cases": [
+          {
+            "name": "code_preview",
+            "status": "passed"
+          },
+          {
+            "name": "code_wrap",
+            "status": "passed"
+          },
+          {
+            "name": "signature_wrap",
+            "status": "passed"
+          },
+          {
+            "name": "text_wrap",
+            "status": "passed"
+          }
+        ],
+        "app_sha256": null
+      },
+      "precise_counterexample_unit": {
+        "run": "run-d9pp8pkz",
+        "exit_code": 0,
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+          "--build-dir",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+          "--config",
+          "Debug",
+          "--jobs",
+          "4",
+          "--sdl",
+          "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+          "--sanitizers",
+          "--no-app",
+          "--test",
+          "--test-filter",
+          "signature_wrap"
+        ],
+        "receipt": {
+          "path": "build/validation/signature-wrap-2026-11-05/checked-data-linux.json",
+          "sha256": "9d9d001a273580047c80117b979917d77145451b1c5fa967f5e0c3d48caa008a"
+        },
+        "log": {
+          "path": "build/validation/signature-wrap-2026-11-05/checked-data-linux.log",
+          "sha256": "b12e7ef409da19cdef70c49cf0dfa49d75a7d7cfb258571c2919eccecf96ecc0"
+        },
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-d9pp8pkz/results.json",
+          "sha256": "de6d9e651424aed1d4e3a2ab98d1574726a92716b1d5cffe22f9a75cf1cd9210"
+        },
+        "passed": 1,
+        "total": 1,
+        "cases": [
+          {
+            "name": "signature_wrap",
+            "status": "passed"
+          }
+        ],
+        "app_sha256": null
+      },
+      "existing_gui_regressions": {
+        "run": "run-p5abfijl",
+        "exit_code": 1,
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+          "--build-dir",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+          "--config",
+          "Debug",
+          "--jobs",
+          "4",
+          "--sdl",
+          "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+          "--sanitizers",
+          "--test-display",
+          "--test-filter",
+          "signature_help_workflow",
+          "--test-filter",
+          "completion_workflow",
+          "--test-filter",
+          "completion_automatic_workflow",
+          "--test-filter",
+          "completion_info_workflow",
+          "--test-filter",
+          "completion_locals_workflow",
+          "--test-filter",
+          "api_reference_workflow"
+        ],
+        "receipt": {
+          "path": "build/validation/signature-wrap-2026-11-05/gui-linux.json",
+          "sha256": "92ef4e899fb4132b526d5eb69d8408903b5ff6c5c6a16f05a99aa8ad314c4bc3"
+        },
+        "log": {
+          "path": "build/validation/signature-wrap-2026-11-05/gui-linux.log",
+          "sha256": "1ccf78598238b1f7b64bfe592798b60b0aa6bddd439faa9318250c0531a0d345"
+        },
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-p5abfijl/results.json",
+          "sha256": "499b4a84a33c93865cb2c64b91337590d49f01def533c3074a9210b819e89641"
+        },
+        "passed": 5,
+        "total": 6,
+        "cases": [
+          {
+            "name": "completion_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "completion_automatic_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "api_reference_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "signature_help_workflow",
+            "status": "failed"
+          },
+          {
+            "name": "completion_info_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "completion_locals_workflow",
+            "status": "passed"
+          }
+        ],
+        "app_sha256": "8629b3be1ad0114c021ff3c712679a054671af665caae2f4601c37db2a8a5b4b"
+      },
+      "final_new_gui": {
+        "run": "run-vhkveohd",
+        "exit_code": 0,
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+          "--build-dir",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+          "--config",
+          "Debug",
+          "--jobs",
+          "4",
+          "--sdl",
+          "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+          "--sanitizers",
+          "--test-display",
+          "--test-filter",
+          "signature_help_workflow"
+        ],
+        "receipt": {
+          "path": "build/validation/signature-wrap-2026-11-05/fixed-gui-linux.json",
+          "sha256": "8a2ba99b9be62f6a5ced25d35832fddb2ccfd63e63f1a9c90d84b4b57aab0eac"
+        },
+        "log": {
+          "path": "build/validation/signature-wrap-2026-11-05/fixed-gui-linux.log",
+          "sha256": "c97a4ea79cae2ac77eb08d031f43319a1e0c9057e5ab772c7606e6797597f177"
+        },
+        "results": {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-vhkveohd/results.json",
+          "sha256": "b27ac8562f9aac9234cfa63ad09b65e091fd06a258e912a36e6fc5fa96e29eec"
+        },
+        "passed": 1,
+        "total": 1,
+        "cases": [
+          {
+            "name": "signature_help_workflow",
+            "status": "passed"
+          }
+        ],
+        "app_sha256": "c473dd2cd33c756829d6ac971c042b4dfa9a3199077cb7083bc459c8ce6f8e36"
+      },
+      "actual_app_steps": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-vhkveohd/signature_help_workflow/files \u00e4/app-steps.json",
+        "sha256": "00fc33297ba6764fe0b59a1f5a74d4d183d3ae0f0d6ac4a86d7ff13c546810a9"
+      },
+      "actual_long_markers": [
+        "SIGNATURE WINDOW language=c requested=800x540 actual=800x540 test-only-minimum=1",
+        "SIGNATURE LONG language=c all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1",
+        "SIGNATURE WINDOW language=phys requested=800x540 actual=800x540 test-only-minimum=1",
+        "SIGNATURE LONG language=phys all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1"
+      ],
+      "images_actually_opened_and_reviewed": [
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-vhkveohd/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-first.bmp",
+          "sha256": "daf52f2fea9e5885001a65a4ba193c47656af7b4a43b60085b13047b878f0528"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-vhkveohd/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-long.bmp",
+          "sha256": "f9210d061b887f7689dc596d93a63bca35afb6fe6516e2d8dbdc86c878e242e6"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-vhkveohd/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-first.bmp",
+          "sha256": "788d5a7141730d3f2982638465e5cb455eec5e21ad1cc6553941dbfd0117bbc7"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-vhkveohd/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-long.bmp",
+          "sha256": "af495712b50a4f8754e9cb09e240f5dbd7b48f48df37c358b810fc4a8f7eed2b"
+        }
+      ],
+      "data_leak_detection": true,
+      "gui_leak_detection": false
+    }
+  ],
+  "snapshots": {
+    "signature-wrap": [
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-wrap-inputs.json",
+        "sha256": "1fdd173ec352b31fd006a8a4dc81f1edcb4138025d0f47406a9f26f88439d933"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-wrap-compiler-source.json",
+        "sha256": "f54f84be4690343a177051a9d9db0a483e30bd6b5ef8ba73951d105d2721776e"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-wrap-runtime.json",
+        "sha256": "7c3444c78754a5b026def282e0c553e8ef5f5ccba5d27923b8284ba4b6e9d2e4"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-wrap-byte-index.json",
+        "sha256": "cf8b0a4b107067329485b0d49be06904e581c2134356f16f8f00f9e26600f20c"
+      }
+    ],
+    "signature-wrap-checked": [
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-wrap-checked-inputs.json",
+        "sha256": "a520c58d95dd80ae0166817e6c535781be33554eeadb80da749f6122671d980c"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-wrap-checked-compiler-source.json",
+        "sha256": "839ee20e9cd231a4b488ff675672bff8ae5e3ad05a0f88c2bb7d3d967fa5863a"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-wrap-checked-runtime.json",
+        "sha256": "0c7a0b86408069fcfdeaf2b91e73db8dffc2ac96dec323a8e1563f38aed82144"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-wrap-checked-byte-index.json",
+        "sha256": "ffcaad6521ce0193aedf14d92e962a1dbb213b87d3917bbf9a6372140c0dc4c7"
+      }
+    ],
+    "signature-wrap-diagnostic": [
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-wrap-diagnostic-inputs.json",
+        "sha256": "2c157f07d529ec9ef616623c6ce950eb7325b88afd99e3816f789c09a447d301"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-wrap-diagnostic-compiler-source.json",
+        "sha256": "1aafdb5e469e2b292eb3b6ccd3e8153f9a9b08657b60823b20d7b129977e07b2"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-wrap-diagnostic-runtime.json",
+        "sha256": "83fcbe0b9bc85b393deb475064c38cc4a4d63ae147bd4de63e513d8d03ac92b4"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-wrap-diagnostic-byte-index.json",
+        "sha256": "ce2c21cfc320f18772343cf00ffd3fb6688d3b91b8fc4be1f52bf200d5754129"
+      }
+    ],
+    "signature-wrap-final": [
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-wrap-final-inputs.json",
+        "sha256": "5579454202f0a24db9fb63dfd37707908fba50a6b47fdc9127dff08019831f08"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-wrap-final-compiler-source.json",
+        "sha256": "aef008d32913f1ef0f34c444096f5f699b034e4192cc7b106fdc1e0489d8449f"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-wrap-final-runtime.json",
+        "sha256": "447909fc1a45f14eea241b6ebae2ce0031be529f83373e941b0999c984f132f2"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-wrap-final-byte-index.json",
+        "sha256": "df218503726fb82100e3efd95964fee2b6d7a2ee83ffd08317eea5fa55b2cd7b"
+      }
+    ]
+  },
+  "initial_mac": "docs/verification/signature-hud-macos-first-2026-11-05.json",
+  "earlier_attempts": [
+    {
+      "source": "signature-wrap",
+      "windows": "run-qyjc4_mp",
+      "linux": "run-p5abfijl",
+      "reason": "New test stored glyph Y in short, truncating native fractional coordinates; Linux small-window request clamped by shipping minimum, so all16 parameters fitted without scrolling. Five existing GUI groups passed on each."
+    },
+    {
+      "source": "signature-wrap-checked",
+      "windows": "run-osrz_a8s",
+      "linux": "run-vs4h22mf",
+      "reason": "Linux revised workflow passed. Windows initial HUD had zero bounds/focus unavailable. Same-binary direct run then passed all3C editors, actual800x540, last-parameter reveal; test falsely expected function name on the first row atHome, although C return type occupies that row."
+    },
+    {
+      "source": "signature-wrap-diagnostic",
+      "windows": "run-ttc6aemc",
+      "reason": "Actual native diagnostic at failed stage23 proves scroll0, focus1, current1,17rows and visible first row double; only new test expectation corrected. Diagnostic remains in final failure output."
+    }
+  ],
+  "diagnostics": [
+    {
+      "path": "build/validation/signature-wrap-2026-11-05/focus.json",
+      "sha256": "3a2415103fc08ab7001defd4c4281f1614da2cb8d7d6e32cf01639ba9b4625fe"
+    },
+    {
+      "path": "build/validation/signature-wrap-2026-11-05/focus.log",
+      "sha256": "5e0eaaf32d64077c7e5561ca3d09c20011426f3c4ad1a10e38517bac1607a4db"
+    },
+    {
+      "path": "build/validation/signature-wrap-2026-11-05/arrow-gdb.log",
+      "sha256": "9e864fad0dfe3c9560f512bff699128fb87bb43dbb058bf1f171b30d1607c7d8"
+    },
+    {
+      "path": "build/validation/signature-wrap-2026-11-05/long-setup-gdb.log",
+      "sha256": "7206f3720678223617f78fdcc3cd406999ba2c57e93d7ba6a4a38574990f8146"
+    },
+    {
+      "path": "build/validation/signature-wrap-2026-11-05/diag-gui-windows.json",
+      "sha256": "7d6619254c91641046d8ef0de3ed21a806176b6eb61049fe29e5a2f7b7217d32"
+    },
+    {
+      "path": "build/validation/signature-wrap-2026-11-05/diag-gui-windows.log",
+      "sha256": "298f559cbb4ed0f3063fd21814eaa3ca81d73b4d7e7f6bb2372165583d4e43a0"
+    }
+  ],
+  "scope": "Native signature wrapping and scrolling with actual SDL input, code draw clips/fonts, fixed status, source preservation, zero/excess semantics. Old generic wrapper actually splits embedded arrow, new865cases preserve operators/Unicode/source spans. Five prior GUI regressions plus final separate1/1 new workflow, not a claimed single final6/6 run.",
+  "open": [
+    "Scrollbar thumb drag and detached workspace",
+    "Actual cross-window focus and native assistive consumer/screenreader tasks",
+    "Private user Mac OFF; new source needs hosted Mac original artifacts/visual review",
+    "Physical DPI/IME and full performance/UI acceptance",
+    "190special/property contracts, intrinsics/function values/import aliases and remaining approved project UI"
+  ],
+  "storage": "D only. Frozen source/runtime archives read back; open-failure/reference images protected; no F/private Mac access or cleanup."
+}

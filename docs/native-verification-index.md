@@ -11,6 +11,15 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
 
 ## Neuere Editorprüfungen
 
+- [Parameterhilfe: Umbruch und lange Signaturen](verification/signature-wrap-2026-11-05.md):
+  Windows/Linux je4/4 Daten, präzisierte neue Unit je1/1; fünf bestehende GUI-Gruppen
+  bestanden und abschließend neuer HUD-Ablauf gesondert je1/1. Unicode/Operatorgrenzen,
+  tatsächliche800×540/22px,16Parameter, fester Hinweis, Mausrad/Alt-Navigation,
+  unveränderter Editor, Nullparameter und Fehlerfarbe. Acht gezielte Bilder geöffnet.
+  [Quellen, Phasen und Grenzen](verification/signature-wrap-2026-11-05.json).
+  [Älterer erster HUD-Mac-Lauf](verification/signature-hud-macos-first-2026-11-05.json)
+  beendet: ARM/Intel10/10 Daten,8/9 GUI; Fokus-/Darstellungskontrolle offen,
+  Original-ZIPs gelesen. Kein Beweis für den neuen Umbruchstand.
 - [Erste sichtbare native Parameterhilfe](verification/signature-hud-2026-11-05.md):
   Windows Release/Linux ASan-UBSan jeweils6/6 GUI; C/Ph je Modell/Analyse/Datei,
   reale SDL-Eingaben, aktive Semibold-Syntaxglyphen/Clips, Auto/manuell/Escape,

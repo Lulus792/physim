@@ -7,33 +7,32 @@ Vollständige Umsetzung und Abnahme bleiben das Ziel; Teiltests sind keine volle
 
 ## Aktueller Abschluss
 
-[Sichtbare native Parameterhilfe](verification/signature-hud-2026-11-05.md):
-erster integrierter Stand nach ADR023, unabhängig von Liste/Kurzinfo. Volle getestete
-Signaturen, aktive A2-/Semibold-Syntax, Auto/Strg+Umschalt+Leertaste, Escape,
-Übernahme, innere/überzählige Argumente, IME/Auswahl und OOM-Veröffentlichung geprüft.
-Windows Release **6/6 GUI run-rg_b7qhf**, Linux ASan/UBSan **6/6 run-46yp8mpv**;
-je C/Ph in drei Editorzielen. Zehn gezielte Bilder geöffnet, übrige Ergebnisse als JSON.
-GDB-Negativbeleg: gleicher Text/alteBreite am Ursprung28px, Bildschirmort56px;
-relative Stift-/Zeilenrechnung liefert nun28/28 und28 sichtbare Bytes. Kein neuer
-Test allein wegen Kontextwechsel; [Phasen und Grenzen](verification/signature-hud-2026-11-05.json).
+[Parameterhilfe: Umbruch und lange Signaturen](verification/signature-wrap-2026-11-05.md):
+Unicode-Wort-/Graphemumbruch, ungeteilter `->`, quellgebundener Zeilenplan;
+16 Parameter bei tatsächlich800×540/22px, letzter aktiv, fester Hinweis,
+Mausrad/Alt+Pos1/Ende/manuelle Rückkehr ohne Editoränderung und disjunkte Liste.
+Nullparameter neutral, Exzess mit Fehlerfarbe. Windows/Linux je4/4 Daten,
+präzisierter Umbruch je1/1; fünf bestehende GUI-Gruppen bestanden, finaler neuer
+HUD-Ablauf gesondert je1/1. Acht gezielte Bilder geöffnet; keine volle UI-Abnahme.
+Testannahmen zu fraktionalem Y, SDL-Mindestgröße und Rückgabetyp in eigener
+Zeile korrigiert; Alt+Pos1 war bereits korrekt. [Phasen/Hashes/Grenzen](verification/signature-wrap-2026-11-05.json).
 
-Warmstand künftig **`signature-hud-5`**,296 eigene/1.235 Compiler-Testeingaben,
-alle1.254 gegen Git gelesen; Source-/Runtime-Deltas geprüft. Lokale Handles beendet.
-Quelle **`caa1faf8`**, beide Remotes; [Commitabgleich](verification/signature-hud-commit-2026-11-05.json).
-HUD-Mac-Nachlauf **42015203815**: ARM127203930735/Intel127203931302 eingereiht;
-genau diesen Lauf mit10 Daten+9 GUI samt Original-ZIPs nachverfolgen, nicht neu starten.
-[Modellkern](verification/signature-model-2026-11-05.md) und dessen
-[Mac-Nachlauf42005020387](verification/signature-model-macos-2026-11-05.json) geschlossen:
-ARM/Intel10/10 Daten +8/8 GUI, Originale geprüft. Kein sichtbarer HUD im alten Mac-Stand.
+Warmstand **`signature-wrap-final`**,300 eigene Eingaben; Source-/Runtime-Deltas
+eingefroren und gegen Git abgeglichen. Lokale Tests beendet. Frühere
+[HUD-Integration](verification/signature-hud-2026-11-05.md) und
+[Modellkern](verification/signature-model-2026-11-05.md) bleiben eigene Belegstände.
+[Erster HUD-Mac-Lauf42015203815](verification/signature-hud-macos-first-2026-11-05.json)
+zu `caa1faf8` beendet: ARM/Intel10/10 Daten,8/9 GUI; Original-ZIPs gelesen.
+Intel-Fokus und ARM-Darstellungskontrolle fehlgeschlagen; nicht erneut pollen.
+Der neue Quellstand benötigt einen eigenen gehosteten Mac-Nachlauf.
 
 ## Nächste konkrete Schritte
 
-1. HUD-Feinschliff: Wort-/Tokengrenzen statt Auftrennung von `->` (Linux22px-Bild),
-   ehrlichen Exzesshinweis mit freigegebenem Fehlerton zeichnen. Lange16Parameter,
-   kleine Fenster/Scroll und aktiven Parameter nativ prüfen; dann herausgelöster
-   Workspace, echte Fokuswechsel und Accessibility-/Screenreader-Aufgaben.
-   Detailstand unter `build/validation/signature-hud-2026-11-05/STATE.md`; den
-   gehosteten HUD-Mac-Nachlauf42015203815 samt Originalartefakten abschließen.
+1. HUD: Scrollleisten-Drag, herausgelöster Workspace, echte Fokuswechsel und
+   Accessibility-/Screenreader-Aufgaben. Detailstand und aktuelle Mac-Handles:
+   `build/validation/signature-wrap-2026-11-05/STATE.md` zuerst lesen.
+   Neuer Mac-Nachlauf muss11 Daten+9 GUI und gezielte HUD-Bilder liefern;
+   Original-ZIPs/Digests lesen. Alte geschlossene Läufe nicht neu starten.
 2. 190 Einträge nach echten Spezialaufrufen/Overloads/Optionen und Eigenschaften
    unterscheiden; Compilerintrinsics außerhalb Katalog (print/assert/Konvertierung)
    aus echten Verträgen ergänzen. Funktionswert-Annotationen/Import-/Aliasfälle

@@ -1,0 +1,253 @@
+{
+  "date": "2026-11-05",
+  "run": 42015203815,
+  "source_commit": "caa1faf87854ea5bc736ef65fd798f57a9e9a14d",
+  "url": "https://github.com/Lulus792/physim/actions/runs/42015203815",
+  "status": "completed",
+  "conclusion": "failure",
+  "jobs": [
+    {
+      "id": 127203930735,
+      "architecture": "arm64",
+      "conclusion": "failure"
+    },
+    {
+      "id": 127203931302,
+      "architecture": "x86_64",
+      "conclusion": "failure"
+    }
+  ],
+  "platforms": [
+    {
+      "artifact": 13411643213,
+      "name": "native-editor-menu-macos-15-intel",
+      "zip": {
+        "path": "build/validation/signature-wrap-2026-11-05/native-editor-menu-macos-15-intel.zip",
+        "sha256": "9968e7834d59ff6987dee831839bd603dc8fa6553f60e6c8628e5ba30aa3f4e1"
+      },
+      "all_original_zip_entries_read_and_hashed": true,
+      "entries": {
+        "Release/test-results/run-d3kwaxeq/results.json": "4fa4d431552489a932483dfafb42d1a6fe3901d52ee72c34900a174d63cbd4f9",
+        "Release/test-results/run-gxoa3z3m/results.json": "ab71572714b8bf604373c74c9bd72f1191e382e2bcb4f95311a4b9125857f3cb"
+      },
+      "groups": [
+        {
+          "path": "Release/test-results/run-d3kwaxeq/results.json",
+          "passed": 10,
+          "total": 10,
+          "cases": [
+            {
+              "name": "c_call_context",
+              "status": "passed"
+            },
+            {
+              "name": "c_signatures",
+              "status": "passed"
+            },
+            {
+              "name": "c_lookup",
+              "status": "passed"
+            },
+            {
+              "name": "completion_locals",
+              "status": "passed"
+            },
+            {
+              "name": "completion_c_locals",
+              "status": "passed"
+            },
+            {
+              "name": "call_targets",
+              "status": "passed"
+            },
+            {
+              "name": "signature_help",
+              "status": "passed"
+            },
+            {
+              "name": "editor_signatures",
+              "status": "passed"
+            },
+            {
+              "name": "module_signatures",
+              "status": "passed"
+            },
+            {
+              "name": "completion_info",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "path": "Release/test-results/run-gxoa3z3m/results.json",
+          "passed": 8,
+          "total": 9,
+          "cases": [
+            {
+              "name": "documents_small",
+              "status": "passed"
+            },
+            {
+              "name": "documents_large",
+              "status": "passed"
+            },
+            {
+              "name": "completion_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_automatic_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "api_reference_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "signature_help_workflow",
+              "status": "failed"
+            },
+            {
+              "name": "completion_info_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_automatic_deadline_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_locals_workflow",
+              "status": "passed"
+            }
+          ]
+        }
+      ],
+      "failures": [
+        {
+          "case": "signature_help_workflow",
+          "exit_code": 1,
+          "diagnostic": "Signature HUD failure: language=0 target=0 stage=3 visible=1 bounds=0x0 state=4 arg=0 active=0 painted=0 bold=0 function=0 status=Parameter 1 von 3 \u00b7 double x"
+        }
+      ]
+    },
+    {
+      "artifact": 13411598377,
+      "name": "native-editor-menu-macos-15",
+      "zip": {
+        "path": "build/validation/signature-wrap-2026-11-05/native-editor-menu-macos-15.zip",
+        "sha256": "71b40dc1223ce07aeb129acb597498804a13d1ab8319b42e3d7f8d289de6071e"
+      },
+      "all_original_zip_entries_read_and_hashed": true,
+      "entries": {
+        "Release/test-results/run-7hlfpd_6/results.json": "0fa5c3210da79d99c8ef0458fa9913c02bfba53f169f070d83bf8cdbd75d44d5",
+        "Release/test-results/run-l3kd0nkv/results.json": "278599d8281bb9b38ded25ca9e6741cc7437f62a6e850ce48123c26fb8b25215"
+      },
+      "groups": [
+        {
+          "path": "Release/test-results/run-7hlfpd_6/results.json",
+          "passed": 8,
+          "total": 9,
+          "cases": [
+            {
+              "name": "documents_small",
+              "status": "passed"
+            },
+            {
+              "name": "documents_large",
+              "status": "passed"
+            },
+            {
+              "name": "completion_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_automatic_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "api_reference_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "signature_help_workflow",
+              "status": "failed"
+            },
+            {
+              "name": "completion_info_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_automatic_deadline_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_locals_workflow",
+              "status": "passed"
+            }
+          ]
+        },
+        {
+          "path": "Release/test-results/run-l3kd0nkv/results.json",
+          "passed": 10,
+          "total": 10,
+          "cases": [
+            {
+              "name": "c_call_context",
+              "status": "passed"
+            },
+            {
+              "name": "c_signatures",
+              "status": "passed"
+            },
+            {
+              "name": "c_lookup",
+              "status": "passed"
+            },
+            {
+              "name": "completion_locals",
+              "status": "passed"
+            },
+            {
+              "name": "completion_c_locals",
+              "status": "passed"
+            },
+            {
+              "name": "call_targets",
+              "status": "passed"
+            },
+            {
+              "name": "signature_help",
+              "status": "passed"
+            },
+            {
+              "name": "editor_signatures",
+              "status": "passed"
+            },
+            {
+              "name": "module_signatures",
+              "status": "passed"
+            },
+            {
+              "name": "completion_info",
+              "status": "passed"
+            }
+          ]
+        }
+      ],
+      "failures": [
+        {
+          "case": "signature_help_workflow",
+          "exit_code": 1,
+          "diagnostic": "Signature HUD failure: language=0 target=1 stage=9 visible=1 bounds=512x102 state=4 arg=1 active=1 painted=43 bold=8 function=1 status=Parameter 2 von 3 \u00b7 double y"
+        }
+      ]
+    }
+  ],
+  "original_report": {
+    "path": "build/validation/signature-wrap-2026-11-05/mac-original-report.json",
+    "sha256": "af9786478ceff9ea2c6dc96326e96f2bc8fd6efab3e2139c660b2f149705d0a8"
+  },
+  "scope": "First integrated signature HUD only; does not include signature-wrap. Both10/10 data and8/9 GUI. No visual BMPs uploaded by this historical workflow. Intel native stage3 had visible model but zero HUD bounds, consistent with focus guard; ARM reached C analysis target1 stage9, failed rendering/full-signature assertion. No full GUI or physical Mac acceptance.",
+  "next": "Follow the updated wrapper/viewport source in a new source-bound hosted run; preserve these failures, do not rerun the same old run.",
+  "private_user_mac": "OFF; no connection/probe/upload"
+}

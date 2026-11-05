@@ -62,6 +62,7 @@ def catalog():
     grapheme=tuple(f"third_party/libunibreak-8.0/{name}.c" for name in "graphemebreak emojidef".split())
     cases.append(Case("code_preview",("tests/test_code_preview.c","app/code_preview.c",*linebreak,*grapheme),libraries=()))
     cases.append(Case("code_wrap",("tests/test_code_wrap.c","app/code_preview.c",*linebreak,*grapheme),libraries=()))
+    cases.append(Case("signature_wrap",("tests/test_signature_wrap.c","app/code_preview.c",*linebreak,*grapheme),libraries=(),leak_check=True))
     cases.append(Case("text_wrap",("tests/test_text_wrap.c","app/text_wrap.c","app/code_preview.c",*linebreak,*grapheme),libraries=()))
     cases.append(Case("editor_wrapped",("tests/test_editor_wrapped.c","app/text_wrap.c","app/code_preview.c","app/ui_backend.c",*linebreak,*grapheme),app=True,libraries=()))
     cases.append(Case("editor_clip",("tests/test_editor_clip.c","app/text_wrap.c","app/code_preview.c","app/ui_backend.c",*linebreak,*grapheme),app=True,libraries=()))
