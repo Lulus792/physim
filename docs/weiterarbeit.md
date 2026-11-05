@@ -7,6 +7,11 @@ Vollständige Umsetzung und Abnahme bleiben das Ziel; Teiltests sind keine volle
 
 ## Aktueller Abschluss
 
+[Kartenüberschreitung im Hauptfenster](verification/signature-outside-2026-11-05.md):
+C/Ph samt Tippen nach Release, Windows gleicher Build direkt nach Fokusaktivierung,
+Linux1/1; acht aktuelle Bilder ohne Workspace-Häkchen. Test-Gesamtfrist korrigiert,
+normales Appverhalten unverändert. [Originalversuche und Grenzen](verification/signature-outside-2026-11-05.json).
+
 [Workspace ohne Häkchen](verification/workspace-no-checks-2026-11-05.md):
 ausdrücklicher Nutzerwunsch vom5.11. Checkboxzeichnung UND reservierte Spalte
 entfernt; aktive Zeile, Symbole und Hierarchie erhalten. Ausnahme in AGENTS,
@@ -14,31 +19,30 @@ ADR016 und A2-Spezifikation festgehalten; Häkchen dort nicht wieder einbauen.
 Windows Release **2/2 run-wepdvezc**, Linux ASan/UBSan **2/2 run-2n0icoeu**;
 vorhandene Datei-/Projektbaumabläufe und vier gezielte Bilder geprüft.
 [Befehle, Programme und Grenzen](verification/workspace-no-checks-2026-11-05.json).
-Warmstand **`workspace-no-checks`**, 300 eigene Eingaben. Source-/Runtime-
+Warmstand jetzt **`signature-outside-checked`**, 300 eigene Eingaben. Source-/Runtime-
 Archive eingefroren und gegen Git gelesen; lokale Jobs beendet.
 [Quelle0ddfe287, beide Remotes](verification/workspace-no-checks-commit-2026-11-05.json).
 
 [Scrollgriff und Editor-Eingabe](verification/signature-thumb-2026-11-05.md):
-vorherige zwei Produktkorrekturen, Windows **6/6 run-9euexj2y**, Linux **6/6 run-h3atr8no**.
-Echter Griff-Drag und Editorbesitzer über Auto-Refresh; GDB/Watchpoint belegt
-zuvor sechs Textbytes bei Workspace-ROM und gelöschtem Besitzer.
+vorherige zwei Produktkorrekturen, Windows **6/6 run-9euexj2y**, Linux **6/6 run-h3atr8no**:
+Griff-Drag und Editorbesitzer über Auto-Refresh, echte GDB-/Watchpoint-Belege.
 [Quelle05e43dc0, beide Remotes](verification/signature-thumb-commit-2026-11-05.json);
 alle1.256 Eingaben gelesen. Acht Bilder bytegleich zu geöffneten Referenzen.
 Behoben durch Erhalt des Editorbesitzers beim Auffrischen; Warten allein half nicht.
 
-Gehosteter Editor-Mac-Nachlauf **42031236181 zu05e43dc0**: Intel127257917635/
-ARM127257917828 zuletzt tatsächlichqueued geprüft;11Daten+9GUI und gezielteBMPs.
+[Gehosteter Editor-Mac-Nachlauf42031236181 zu05e43dc0](verification/signature-thumb-macos-2026-11-05.json)
+geschlossen: Intel/ARM je11/11Daten+9/9GUI, Original-ZIPs/alle12Einträge gelesen,
+acht tatsächliche HUD-Bilder geöffnet. Keine erneute Abfrage dieses alten Laufs.
 Er enthält die anschließende Workspace-Häkchenentfernung noch nicht.
-[Vorgänger42026549588](verification/signature-wrap-macos-first-2026-11-05.json)
-geschlossen: beide11/11Daten,8/9GUI, echte focus0-Diagnose; Original-ZIPs gelesen.
-Alte Läufe nicht pollen; neuer Fokuswunsch wartet real bis30s, kein Guard-Bypass.
+Auch [Vorgänger42026549588](verification/signature-wrap-macos-first-2026-11-05.json) ist geschlossen; nicht pollen.
 
 ## Nächste konkrete Schritte
 
-1. HUD: Drag außerhalb der Karte/Fenstergrenze, herausgelöster Workspace, Fokuswechsel und
+1. Jetzt OS-Fenstergrenze, herausgelöster Workspace, stärkere Überlappungsfälle,
+   Fokuswechsel und
    Accessibility-/Screenreader-Aufgaben. Detailstand und aktuelle Mac-Handles:
    `build/validation/signature-wrap-2026-11-05/STATE.md` zuerst lesen.
-   Neuer Mac-Nachlauf muss11 Daten+9 GUI und gezielte HUD-Bilder liefern;
+   Mac-Nachlauf des jeweils neuen Quellstands getrennt verfolgen;
    Original-ZIPs/Digests lesen. Alte geschlossene Läufe nicht neu starten.
 2. 190 Einträge nach echten Spezialaufrufen/Overloads/Optionen und Eigenschaften
    unterscheiden; Compilerintrinsics außerhalb Katalog (print/assert/Konvertierung)
@@ -63,25 +67,18 @@ konkreter Code-/Abhängigkeitsänderung, neuem Fehler oder offener Prüfdimensio
 wiederholen; Anlass/Umfang vor dem Lauf nennen. Insbesondere die Protokoll-
 Trennlinie ist seit `ef1f3321` behoben: kein neuer Test allein wegen Kontextwechsel.
 
-- Frühere C-/Ph-Nachläufe und alter Intel-Fristfehler seit `7a3e7950` geschlossen; Originale geprüft.
-- Modulabfrage `ec7824ca`/41986344544 und C-Lookup `d75da866`/41992949589 abgeschlossen.
-- Original-ZIPs/Digests/Einträge beider Architekturen im Prüfindex belegt; nicht erneut pollen.
+- Frühere C-/Ph-/Modul-/C-Lookup-/Intel-Fristnachläufe samt Original-ZIPs sind im Prüfindex geschlossen; nicht erneut pollen.
 
-Der neueste Mac-Beleg bestätigt den Datenkern, keinen sichtbaren HUD. Root-Linkcheck findet
+Der neue Mac-Beleg enthält jetzt auch den sichtbaren HUD zu05e43dc0. Root-Linkcheck findet
 vorhandenen fremden Status-WIP-Link zur internen Wartungsnotiz: gleicher Fehler
 vor/nach Generatorpatch belegt, fremde Dateien erhalten. Ohne neue Änderung nicht wiederholen.
 
 ## Dokumentation und Speicherpflege abgeschlossen
 
-[Entwicklungsleitfaden](development-workflow.md), AGENTS, Speicherregeln und
-Prüfvorlage führen jetzt kurze ersetzte Übergaben, klaren Prüfanlass und einmalige
-Text-/JSON-Nachweise. [Bereinigung vom 5. November](storage-maintenance-2026-11-05.md):
-248 ersetzte Compiler-/Cachedateien, 105.475.284 logische Bytes entfernt;
-99 Programm-/Bibliotheksdateien vorher/nachher hashgleich. Zusätzliche Bildprüfung
-ohne weitere sichere Duplikate; Referenzen/Fehler geschützt. Kein App-Neubau
-für diese Dokumentationskorrektur. Details/Quittungen im verlinkten Bericht.
-Zusätzlich [60 bytegleich doppelte HUD-Testbilder entfernt](verification/signature-hud-cleanup-2026-11-05.json):
-191.816.280 logische Bytes; alle57 Bildinhalte/40 geschützten Aufnahmen und beide Apps erhalten.
+[Entwicklungsleitfaden](development-workflow.md): kurze ersetzte Übergaben und Text-/JSON zuerst.
+[Bereinigung vom5.11.](storage-maintenance-2026-11-05.md): 248 Cachedateien/105.475.284 Bytes;
+99 Programme/Bibliotheken hashgleich. [60 doppelte HUD-Bilder entfernt](verification/signature-hud-cleanup-2026-11-05.json):
+191.816.280 Bytes, alle57 Bildinhalte/40 geschützten Aufnahmen erhalten. Quittungen gelten; nicht wiederholen.
 
 ## Umgebung und Schutz
 

@@ -76,6 +76,10 @@ static void signature_wheel(app *a,float delta){
     SDL_Event e={0};e.type=SDL_EVENT_MOUSE_MOTION;e.motion.windowID=SDL_GetWindowID(a->window);e.motion.which=PS_TEST_MOUSE_ID;e.motion.x=x;e.motion.y=y;SDL_PushEvent(&e);
     e=(SDL_Event){0};e.type=SDL_EVENT_MOUSE_WHEEL;e.wheel.windowID=SDL_GetWindowID(a->window);e.wheel.which=PS_TEST_MOUSE_ID;e.wheel.y=delta;e.wheel.mouse_x=x;e.wheel.mouse_y=y;SDL_PushEvent(&e);
 }
+static void signature_move(app *a,struct nk_rect target){
+    SDL_Event e={0};e.type=SDL_EVENT_MOUSE_MOTION;e.motion.windowID=SDL_GetWindowID(a->window);e.motion.which=PS_TEST_MOUSE_ID;e.motion.state=SDL_BUTTON_LMASK;
+    e.motion.x=target.x+target.w*.5f;e.motion.y=target.y+target.h*.5f;SDL_PushEvent(&e);
+}
 static void signature_test_frame(app *a,bool language,int *stage,int *code,const char **capture){
     static unsigned target;static bool prepared;static double timeout;bool ok=true;
     static int long_cursor;static struct nk_vec2 long_scroll;static const void *long_rows;
@@ -229,15 +233,30 @@ static void signature_test_frame(app *a,bool language,int *stage,int *code,const
         drag_start=signature_thumb_bounds;drag_end=drag_start;drag_end.y=a->signature_body_bounds.y+a->signature_body_bounds.h-drag_end.h-2;
         test_window_mouse(a->window,drag_start,true);signature_wait_generation=signature_generation+2;SIG_NEXT(32);break;
     case 32:
-        {SDL_Event e={0};e.type=SDL_EVENT_MOUSE_MOTION;e.motion.windowID=SDL_GetWindowID(a->window);e.motion.which=PS_TEST_MOUSE_ID;e.motion.state=SDL_BUTTON_LMASK;
-        e.motion.x=drag_end.x+drag_end.w*.5f;e.motion.y=drag_end.y+drag_end.h*.5f;SDL_PushEvent(&e);}
+        signature_move(a,drag_end);
         signature_wait_generation=signature_generation+2;SIG_NEXT(33);break;
     case 33:
         SIG_WAIT(a->signature_scroll_y>0 && signature_footer_full(a));
         ok=edit->cursor==long_cursor && edit->scrollbar.x==long_scroll.x && edit->scrollbar.y==long_scroll.y && a->signature_layout==long_rows;
+        drag_end.x=a->source_editor_bounds.x+a->source_editor_bounds.w*.5f;
+        drag_end.y=a->source_editor_bounds.y+a->source_editor_bounds.h*.55f;drag_end.w=drag_end.h=1;
+        signature_move(a,drag_end);signature_wait_generation=signature_generation+2;SIG_NEXT(36);break;
+    case 36:
+        SIG_WAIT(a->completion_pointer_capture && signature_current(a,edit));
+        ok=edit->cursor==long_cursor && edit->scrollbar.x==long_scroll.x && edit->scrollbar.y==long_scroll.y;
         test_window_mouse(a->window,drag_end,false);signature_wait_generation=signature_generation+2;SIG_NEXT(34);break;
     case 34:
-        SIG_WAIT(!a->ui->input.mouse.buttons[NK_BUTTON_LEFT].down);
+        SIG_WAIT(!a->ui->input.mouse.buttons[NK_BUTTON_LEFT].down && !a->completion_pointer_capture && signature_current(a,edit));
+        ok=edit->cursor==long_cursor && edit->scrollbar.x==long_scroll.x && edit->scrollbar.y==long_scroll.y;
+        SIG_TEXT("1");SIG_NEXT(37);break;
+    case 37:
+        SIG_WAIT(edit->cursor==long_cursor+1 && signature_current(a,edit));
+        /* Restore the empty argument before the existing Ctrl+Space check:
+         * a literal numeric prefix intentionally has no name suggestions. */
+        SIG_KEY(SDLK_BACKSPACE,0);SIG_NEXT(38);break;
+    case 38:
+        SIG_WAIT(edit->cursor==long_cursor && signature_current(a,edit));
+        long_scroll=edit->scrollbar;long_rows=a->signature_layout;
         SIG_KEY(SDLK_SPACE,SDL_KMOD_CTRL|SDL_KMOD_SHIFT);SIG_NEXT(27);break;
     case 27:
         SIG_WAIT(a->signature_scroll_y>0 && strstr(signature_code_text,"p15") && signature_footer_full(a));
@@ -257,7 +276,7 @@ static void signature_test_frame(app *a,bool language,int *stage,int *code,const
     case 31:
         SIG_WAIT(signature_footer_full(a) && signature_footer_error);
         ok=!strcmp(a->signature_status,"Argument 1 · erwartet 0 Parameter") && a->signature_help.active_parameter==SIZE_MAX;
-        printf("SIGNATURE LONG language=%s all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1 thumb-drag=1\n",language?"phys":"c");
+        printf("SIGNATURE LONG language=%s all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1 thumb-drag=1 outside-drag-editor-preserved=1 typing-after-drag=1\n",language?"phys":"c");
         a->quitting=true;break;
     }
 finished:

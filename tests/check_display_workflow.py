@@ -1102,7 +1102,7 @@ def signature_help_workflow(flow,directory):
             require(f"SIGNATURE INPUT language={language} target={target} automatic-query-keeps-editor=1" in output,
                     "Automatic suggestion refresh changed editor keyboard ownership")
         require((root/"signature-first.bmp").is_file(),"Missing representative native signature image")
-        require(f"SIGNATURE LONG language={language} all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1 thumb-drag=1" in output,
+        require(f"SIGNATURE LONG language={language} all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1 thumb-drag=1 outside-drag-editor-preserved=1 typing-after-drag=1" in output,
                 "Missing long native signature viewport/keyboard/zero-argument workflow")
         require((root/"signature-long.bmp").is_file(),"Missing long signature native viewport image")
         require(f"SIGNATURE WINDOW language={language} requested=800x540 actual=800x540 test-only-minimum=1" in output,

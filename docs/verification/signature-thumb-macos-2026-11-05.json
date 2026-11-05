@@ -1,0 +1,208 @@
+{
+  "date": "2026-11-05",
+  "run": 42031236181,
+  "source_commit": "05e43dc076bc6f5578df8399056b8bc20b94a97c",
+  "both_jobs_completed_successfully": true,
+  "url": "https://github.com/Lulus792/physim/actions/runs/42031236181",
+  "platforms": [
+    {
+      "job": 127257917635,
+      "architecture": "x86_64",
+      "runner": "macos-15-intel",
+      "job_status": "completed",
+      "job_conclusion": "success",
+      "artifact": 13416293839,
+      "archive": {
+        "path": "build/validation/signature-thumb-macos-2026-11-05/artifact-13416293839.zip",
+        "sha256": "821ef8f7548d65fc2d7a8017e0ec777bf2eb74f2f7dea02e4cc0835a875eabe0"
+      },
+      "advertised_zip_digest": "821ef8f7548d65fc2d7a8017e0ec777bf2eb74f2f7dea02e4cc0835a875eabe0",
+      "all_original_zip_entries_read_and_hashed": true,
+      "entries": {
+        "Release/test-results/run-jkczd2ve/results.json": "fd90661286c17f251b94cf1f69531610e427b3b3526cf5927013b5579ba8a9d5",
+        "Release/test-results/run-jkczd2ve/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-first.bmp": "6218d1afae8ccff3918e62e5b1cfc93aa9a86d733e7a82b5e79cb17b4b7d8b37",
+        "Release/test-results/run-jkczd2ve/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-long.bmp": "cf3e0b8d95296af42f717023fc6b1e7fb7dd0a3bdb8f850c3f64e56fecd97b51",
+        "Release/test-results/run-jkczd2ve/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-first.bmp": "02a76bb9037bc3d4fb70592a5cc510b27d4d7096501560cdae067b1bdeccfb45",
+        "Release/test-results/run-jkczd2ve/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-long.bmp": "d2ce6b4f059bf8a0df3c99c9c4aa2ebd850a8cbd2afa56071fc04324dcc15edf",
+        "Release/test-results/run-yetfoh_j/results.json": "ffc4b772cbe12ea12ec67d3a1c2a797c77321e344d52bbde0fa24bf741beaeaa"
+      },
+      "original_report": {
+        "path": "build/validation/signature-thumb-macos-2026-11-05/intel-original.json",
+        "sha256": "539173c8d71f48ee4be31119ddfa805a7a12ebb72caa3466bd764d8adaaa5139"
+      },
+      "groups": [
+        {
+          "path": "Release/test-results/run-jkczd2ve/results.json",
+          "passed": 9,
+          "total": 9,
+          "cases": [
+            "api_reference_workflow",
+            "completion_automatic_deadline_workflow",
+            "completion_automatic_workflow",
+            "completion_info_workflow",
+            "completion_locals_workflow",
+            "completion_workflow",
+            "documents_large",
+            "documents_small",
+            "signature_help_workflow"
+          ]
+        },
+        {
+          "path": "Release/test-results/run-yetfoh_j/results.json",
+          "passed": 11,
+          "total": 11,
+          "cases": [
+            "c_call_context",
+            "c_lookup",
+            "c_signatures",
+            "call_targets",
+            "completion_c_locals",
+            "completion_info",
+            "completion_locals",
+            "editor_signatures",
+            "module_signatures",
+            "signature_help",
+            "signature_wrap"
+          ]
+        }
+      ],
+      "actual_signature_markers": [
+        "SIGNATURE INPUT language=c target=0 automatic-query-keeps-editor=1",
+        "SIGNATURE INPUT language=c target=1 automatic-query-keeps-editor=1",
+        "SIGNATURE INPUT language=c target=2 automatic-query-keeps-editor=1",
+        "SIGNATURE LONG language=c all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1 thumb-drag=1",
+        "SIGNATURE WINDOW language=c requested=800x540 actual=800x540 test-only-minimum=1",
+        "SIGNATURE INPUT language=phys target=0 automatic-query-keeps-editor=1",
+        "SIGNATURE INPUT language=phys target=1 automatic-query-keeps-editor=1",
+        "SIGNATURE INPUT language=phys target=2 automatic-query-keeps-editor=1",
+        "SIGNATURE LONG language=phys all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1 thumb-drag=1",
+        "SIGNATURE WINDOW language=phys requested=800x540 actual=800x540 test-only-minimum=1"
+      ],
+      "representative_images_opened_and_reviewed": [
+        {
+          "path": "build/validation/signature-thumb-macos-2026-11-05/intel/c-signature-first.bmp",
+          "sha256": "6218d1afae8ccff3918e62e5b1cfc93aa9a86d733e7a82b5e79cb17b4b7d8b37",
+          "zip_entry": "Release/test-results/run-jkczd2ve/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-first.bmp"
+        },
+        {
+          "path": "build/validation/signature-thumb-macos-2026-11-05/intel/c-signature-long.bmp",
+          "sha256": "cf3e0b8d95296af42f717023fc6b1e7fb7dd0a3bdb8f850c3f64e56fecd97b51",
+          "zip_entry": "Release/test-results/run-jkczd2ve/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-long.bmp"
+        },
+        {
+          "path": "build/validation/signature-thumb-macos-2026-11-05/intel/phys-signature-first.bmp",
+          "sha256": "02a76bb9037bc3d4fb70592a5cc510b27d4d7096501560cdae067b1bdeccfb45",
+          "zip_entry": "Release/test-results/run-jkczd2ve/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-first.bmp"
+        },
+        {
+          "path": "build/validation/signature-thumb-macos-2026-11-05/intel/phys-signature-long.bmp",
+          "sha256": "d2ce6b4f059bf8a0df3c99c9c4aa2ebd850a8cbd2afa56071fc04324dcc15edf",
+          "zip_entry": "Release/test-results/run-jkczd2ve/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-long.bmp"
+        }
+      ]
+    },
+    {
+      "job": 127257917828,
+      "architecture": "arm64",
+      "runner": "macos-15",
+      "job_status": "completed",
+      "job_conclusion": "success",
+      "artifact": 13418540820,
+      "archive": {
+        "path": "build/validation/signature-thumb-macos-2026-11-05/artifact-13418540820.zip",
+        "sha256": "ad65b9dd9858e9a21eedcc48dbdc492c2ded9daf1a4c69556a48bdb3091ccb14"
+      },
+      "advertised_zip_digest": "ad65b9dd9858e9a21eedcc48dbdc492c2ded9daf1a4c69556a48bdb3091ccb14",
+      "all_original_zip_entries_read_and_hashed": true,
+      "entries": {
+        "Release/test-results/run-nxoow1nh/results.json": "3172a4d430d83294ebcc7b87cad11ea030df54b45aac50916fe00d7eb4c3b50f",
+        "Release/test-results/run-nxoow1nh/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-first.bmp": "6218d1afae8ccff3918e62e5b1cfc93aa9a86d733e7a82b5e79cb17b4b7d8b37",
+        "Release/test-results/run-nxoow1nh/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-long.bmp": "cf3e0b8d95296af42f717023fc6b1e7fb7dd0a3bdb8f850c3f64e56fecd97b51",
+        "Release/test-results/run-nxoow1nh/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-first.bmp": "02a76bb9037bc3d4fb70592a5cc510b27d4d7096501560cdae067b1bdeccfb45",
+        "Release/test-results/run-nxoow1nh/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-long.bmp": "d2ce6b4f059bf8a0df3c99c9c4aa2ebd850a8cbd2afa56071fc04324dcc15edf",
+        "Release/test-results/run-yep60q28/results.json": "adae65301856aa8a13a192f2ccc9d6856be11f72509b405cb8b40b3dfccdc454"
+      },
+      "original_report": {
+        "path": "build/validation/signature-thumb-macos-2026-11-05/arm-original.json",
+        "sha256": "c1f9deb10bfc130397f86ec99bd96f9039df938fff3525ba0717afc899bb9c76"
+      },
+      "groups": [
+        {
+          "path": "Release/test-results/run-nxoow1nh/results.json",
+          "passed": 9,
+          "total": 9,
+          "cases": [
+            "api_reference_workflow",
+            "completion_automatic_deadline_workflow",
+            "completion_automatic_workflow",
+            "completion_info_workflow",
+            "completion_locals_workflow",
+            "completion_workflow",
+            "documents_large",
+            "documents_small",
+            "signature_help_workflow"
+          ]
+        },
+        {
+          "path": "Release/test-results/run-yep60q28/results.json",
+          "passed": 11,
+          "total": 11,
+          "cases": [
+            "c_call_context",
+            "c_lookup",
+            "c_signatures",
+            "call_targets",
+            "completion_c_locals",
+            "completion_info",
+            "completion_locals",
+            "editor_signatures",
+            "module_signatures",
+            "signature_help",
+            "signature_wrap"
+          ]
+        }
+      ],
+      "actual_signature_markers": [
+        "SIGNATURE INPUT language=c target=0 automatic-query-keeps-editor=1",
+        "SIGNATURE INPUT language=c target=1 automatic-query-keeps-editor=1",
+        "SIGNATURE INPUT language=c target=2 automatic-query-keeps-editor=1",
+        "SIGNATURE LONG language=c all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1 thumb-drag=1",
+        "SIGNATURE WINDOW language=c requested=800x540 actual=800x540 test-only-minimum=1",
+        "SIGNATURE INPUT language=phys target=0 automatic-query-keeps-editor=1",
+        "SIGNATURE INPUT language=phys target=1 automatic-query-keeps-editor=1",
+        "SIGNATURE INPUT language=phys target=2 automatic-query-keeps-editor=1",
+        "SIGNATURE LONG language=phys all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1 thumb-drag=1",
+        "SIGNATURE WINDOW language=phys requested=800x540 actual=800x540 test-only-minimum=1"
+      ],
+      "representative_images_opened_and_reviewed": [
+        {
+          "path": "build/validation/signature-thumb-macos-2026-11-05/arm/c-signature-first.bmp",
+          "sha256": "6218d1afae8ccff3918e62e5b1cfc93aa9a86d733e7a82b5e79cb17b4b7d8b37",
+          "zip_entry": "Release/test-results/run-nxoow1nh/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-first.bmp"
+        },
+        {
+          "path": "build/validation/signature-thumb-macos-2026-11-05/arm/c-signature-long.bmp",
+          "sha256": "cf3e0b8d95296af42f717023fc6b1e7fb7dd0a3bdb8f850c3f64e56fecd97b51",
+          "zip_entry": "Release/test-results/run-nxoow1nh/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-long.bmp"
+        },
+        {
+          "path": "build/validation/signature-thumb-macos-2026-11-05/arm/phys-signature-first.bmp",
+          "sha256": "02a76bb9037bc3d4fb70592a5cc510b27d4d7096501560cdae067b1bdeccfb45",
+          "zip_entry": "Release/test-results/run-nxoow1nh/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-first.bmp"
+        },
+        {
+          "path": "build/validation/signature-thumb-macos-2026-11-05/arm/phys-signature-long.bmp",
+          "sha256": "d2ce6b4f059bf8a0df3c99c9c4aa2ebd850a8cbd2afa56071fc04324dcc15edf",
+          "zip_entry": "Release/test-results/run-nxoow1nh/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-long.bmp"
+        }
+      ]
+    }
+  ],
+  "scope": "Actual hosted Intel/ARM source05e43dc0: each11/11data+9/9GUI, C/Physim3editor targets, active font/clip/operator checks, actual800x540/16params/fixedfooter/wheel/Altkeys/thumbdrag/automatic query retains editor owner. Both original ZIPs/digests/all12entries read and all8targeted native BMPs inspected. No private userMac access.",
+  "historical_design_note": "Both archives predate explicit Workspace checkbox removal0ddfe287. Old boxes in their frozen screenshots are historical and must not be restored.",
+  "open": [
+    "Subsequent Workspace checkbox removal/outside-card test not included in this source",
+    "Drag beyond OS window, detached workspace, actual AX/screenreader and physical DPI/IME tasks",
+    "Full approved UI/project and190signature/performance contracts"
+  ]
+}

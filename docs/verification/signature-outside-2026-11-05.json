@@ -1,0 +1,202 @@
+{
+  "date": "2026-11-05",
+  "source_snapshot": "signature-outside-checked",
+  "own_inputs": 300,
+  "all_owned_root_and_isolated_bytes_match": true,
+  "reports": [
+    {
+      "platform": "windows",
+      "type": "same-binary direct workflow after ComputerUse activation",
+      "app_sha256": "adf741660686b886f9908e10c9d19ec24bf2e97fde39ea10a0bbe0d2af8b073c",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-X",
+        "utf8",
+        "-B",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tests\\check_display_workflow.py",
+        "signature_help_workflow",
+        "--app",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\bin\\physim.exe",
+        "--work",
+        "D:\\Physim\\build\\validation\\signature-outside-2026-11-05\\windows-checked-focus",
+        "--root",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src",
+        "--cc",
+        "cl"
+      ],
+      "actual_app_steps": {
+        "path": "build/validation/signature-outside-2026-11-05/windows-checked-focus/app-steps.json",
+        "sha256": "3d330904444d60b2508b679a02bdd9969c52ba2b21724544dd00f6d5c939a5bb"
+      },
+      "actual_markers": [
+        "SIGNATURE LONG language=c all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1 thumb-drag=1 outside-drag-editor-preserved=1 typing-after-drag=1",
+        "SIGNATURE LONG language=phys all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1 thumb-drag=1 outside-drag-editor-preserved=1 typing-after-drag=1"
+      ],
+      "images_opened_and_reviewed": [
+        {
+          "path": "build/validation/signature-outside-2026-11-05/windows-checked-focus/workflow \u00e4/c/signature-first.bmp",
+          "sha256": "937b590709d1ca4d1db87f55add4be792306b2d4ece051a4e067dd1a06b95171"
+        },
+        {
+          "path": "build/validation/signature-outside-2026-11-05/windows-checked-focus/workflow \u00e4/c/signature-long.bmp",
+          "sha256": "c7adb47933146c17335a6cc5d0dcd19663aaa5a1cc650fc4d784405976bb98e5"
+        },
+        {
+          "path": "build/validation/signature-outside-2026-11-05/windows-checked-focus/workflow \u00e4/phys/signature-first.bmp",
+          "sha256": "2489b6b80b70a700b7f859853841fcfccce72840395d14b88176840e979f7920"
+        },
+        {
+          "path": "build/validation/signature-outside-2026-11-05/windows-checked-focus/workflow \u00e4/phys/signature-long.bmp",
+          "sha256": "e5bda5885c093389abf204b25c9a9122c88f1d1aa8342525695b1a45b78ee11c"
+        }
+      ],
+      "receipt": {
+        "path": "build/validation/signature-outside-2026-11-05/checked-focus.json",
+        "sha256": "951e2ab15ef0aa90d062fa9ef99c6b06a3e3089e4d64ff094f63766ccf0efd23"
+      },
+      "gui_leak_detection": null
+    },
+    {
+      "platform": "linux",
+      "type": "registered native workflow1/1",
+      "app_sha256": "af551e82577a2eb0127a018954fd72e159585a149cd9bb93ffe9c795b2eac878",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "signature_help_workflow"
+      ],
+      "actual_app_steps": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2o19h59r/signature_help_workflow/files \u00e4/app-steps.json",
+        "sha256": "a0c25c3cc4fd5dde872ce14d28aa6eb396e6a33a5c5c988e78802259845644f2"
+      },
+      "actual_markers": [
+        "SIGNATURE LONG language=c all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1 thumb-drag=1 outside-drag-editor-preserved=1 typing-after-drag=1",
+        "SIGNATURE LONG language=phys all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1 thumb-drag=1 outside-drag-editor-preserved=1 typing-after-drag=1"
+      ],
+      "images_opened_and_reviewed": [
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2o19h59r/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-first.bmp",
+          "sha256": "5c71b93436f70882d2bdd25c17b2f95dd688aac1636776d3e2e5ea5ff9ab681b"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2o19h59r/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-long.bmp",
+          "sha256": "ac489301660434c5cb00ea1c7844ad193d17f7dbeb8543e98f53a3415e54caf3"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2o19h59r/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-first.bmp",
+          "sha256": "9b1e5aa31953c986fd609b9aaced62cff6be279573c1001d66a3d33ccc7e430a"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2o19h59r/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-long.bmp",
+          "sha256": "fe4b55da72bed8c04751d290765140bc3ebfbcbb79e16bdf3154ec39072feae5"
+        }
+      ],
+      "receipt": {
+        "path": "build/validation/signature-outside-2026-11-05/checked-linux.json",
+        "sha256": "78a97002da1c5014724cccd3cff72d61a2241a2967af38ce550d150eab12aaa7"
+      },
+      "gui_leak_detection": false
+    }
+  ],
+  "linux_results": {
+    "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2o19h59r/results.json",
+    "sha256": "266b90ed700bcf1708bf102665467dd6b245d059f75325d7a14dfbf4f2aa67fc"
+  },
+  "snapshots": {
+    "signature-outside-probe": [
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-outside-probe-inputs.json",
+        "sha256": "894121e8372a0df9f43b7dc0657c03593845281c4ca42c923c5c738c055d6f2b"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-outside-probe-compiler-source.json",
+        "sha256": "ecebdbe5dbe62b1e37bf2f43a3e409b73dfed1d151e6b50ba20997714ab819f8"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-outside-probe-runtime.json",
+        "sha256": "a40590a677617462fa89a05841201802b230d943715c2f37e3005822aecb827a"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-outside-probe-byte-index.json",
+        "sha256": "d96900b7b042e2a9646706c52ee4421adc02d974ab52a294dbbda0ae4273bdcc"
+      }
+    ],
+    "signature-outside-checked": [
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-outside-checked-inputs.json",
+        "sha256": "b1e080b76033f7a24c4337425026ae48467271677ca4f4d44451c553f82c92c6"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-outside-checked-compiler-source.json",
+        "sha256": "c87d9d1f0fb577ce483841d0b903f68328d16bf89d5e500c4841da0837984b87"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-outside-checked-runtime.json",
+        "sha256": "c16a1d39ee2a683627ac6c084f66f476b795b3b8d5e4d534dc6f78a1b0b03db7"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-outside-checked-byte-index.json",
+        "sha256": "80d37b1d091d0d7b29b406a07456bfc747b2f94b4c1ce135efc7deada1a4a4f8"
+      }
+    ]
+  },
+  "initial_attempts": [
+    {
+      "platform": "WindowsRelease",
+      "source": "signature-outside-probe",
+      "run": "run-dis6a2p0",
+      "log": {
+        "path": "build/validation/signature-outside-2026-11-05/probe-windows.log",
+        "sha256": "f4de0c06a074f078cc342c6d1b16213e729b2866765e08afac60048978930c1a"
+      },
+      "direct_log": {
+        "path": "build/validation/signature-outside-2026-11-05/probe-focus.log",
+        "sha256": "2bd206374854185a4d979b948e4bbb560b7acd06271489313ebc3a503db83d8d"
+      },
+      "finding": "OSfocus0. Existing outer generic15s selftest guard terminated before inner30s focus wait. Signature-hud selftest now has60s total budget; internal focus wait30s and Python process timeout75s remain real bounded guards."
+    },
+    {
+      "platform": "LinuxASanUBSan",
+      "source": "signature-outside-probe",
+      "run": "run-4hkomcdp",
+      "log": {
+        "path": "build/validation/signature-outside-2026-11-05/probe-linux.log",
+        "sha256": "d0350f3dbd93a3e1d48a1ae774a25abc7703911180dd6e8031f0368b97ac0bcd"
+      },
+      "finding": "Coutsidecard/release/typing reached later stage28, so original new gesture assertions passed. New test then wrongly demanded name suggestions after numeric1. Backspace restores empty argument before that separate existing CtrlSpace check. This was a test assumption, not a product defect."
+    },
+    {
+      "platform": "WindowsRelease",
+      "source": "signature-outside-checked",
+      "run": "run-ok1fubdz",
+      "log": {
+        "path": "build/validation/signature-outside-2026-11-05/checked-windows.log",
+        "sha256": "38dd20f8840361f3b770a27bcbd22fcd1822a4d9af6b61c827877746dfe63edd"
+      },
+      "finding": "Focus genuinely not obtained, strict stage2fails. Direct samebinary workflow laterpassed both languages after selecting/activating the two real windows using ComputerUse. Snapshot/sanitizer assertions never bypassed."
+    }
+  ],
+  "scope": "One native signature workflow perplatform: hold painted thumb, move inside then over source editor outside HUD card, release, preserve current source/caret/selection/scroll, type1, remove1, manualreveal/list/zero/excess. Mainwindow/client boundary only, scripted SDL pointer events, actual Windows OSfocus gating. No new normal-app rendering/interaction change; only stronger tests and corrected test-only total deadline.",
+  "mac_prior_source": "docs/verification/signature-thumb-macos-2026-11-05.json",
+  "open": [
+    "Detachedworkspace and stronger adversarial overlap fixtures",
+    "Actual pointer capture beyond OSwindow and real focus-loss/reentry tasks",
+    "Native AX/screenreader/physicalDPI/IME and full approvedUI/project",
+    "190signature/intrinsic/import/performance contracts"
+  ],
+  "storage": "Donly. No F/privateMac access. Eight targeted current images reviewed, frozen earlier evidence retained."
+}

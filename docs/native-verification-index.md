@@ -11,6 +11,18 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
 
 ## Neuere Editorprüfungen
 
+- [Parameterhilfe: über den Kartenrand ziehen](verification/signature-outside-2026-11-05.md):
+  Hauptfenster, C/Ph: Griff halten, über den Quelleditor ziehen, dort loslassen,
+  Erhaltung von Cursor/Auswahl/Scroll und anschließendes Tippen/Löschen geprüft.
+  Windows direkter Nachlauf derselben Binärdatei nach echter Fokusaktivierung;
+  Linux ASan/UBSan registriert1/1. Acht aktuelle Bilder geöffnet, Workspace ohne
+  Häkchen. Nur Testabdeckung und korrekte Gesamtfrist geändert, keine neue
+  normale Appfunktion. [Befehle und Grenzen](verification/signature-outside-2026-11-05.json).
+- [Gehosteter Mac-Nachlauf der Scrollgriff-/Eingabekorrektur](verification/signature-thumb-macos-2026-11-05.json),
+  Quelle05e43dc0, Lauf42031236181: **Intel/ARM jeweils11/11 Daten und9/9 GUI**,
+  Original-ZIPs/Digests/alle12Einträge gelesen und acht native HUD-Bilder geöffnet.
+  Beide Jobs geschlossen. Die spätere Workspace-Häkchenentfernung und neue
+  Kartenüberschreitungsprüfung gehören nicht zu diesem historischen Quellstand.
 - [Workspace ohne Häkchen](verification/workspace-no-checks-2026-11-05.md):
   Nutzerpräzisierung vom5.11. nativ umgesetzt; Checkboxzeichnung und reservierte
   Spalte entfernt, aktive Zeile/Symbole/Hierarchie erhalten. Windows Release und
