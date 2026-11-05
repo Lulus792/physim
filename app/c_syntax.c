@@ -1,3 +1,8 @@
+#if defined(__linux__) && !defined(_DEFAULT_SOURCE)
+/* Tree-sitter uses the libc endian helpers, which glibc hides in strict
+ * C/POSIX mode unless its default interfaces are requested before headers. */
+#define _DEFAULT_SOURCE 1
+#endif
 #if !defined(_WIN32) && !defined(_POSIX_C_SOURCE)
 #define _POSIX_C_SOURCE 200809L
 #endif

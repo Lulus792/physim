@@ -1,0 +1,266 @@
+{
+  "date": "2026-11-05",
+  "source_snapshot": "glibc-endian",
+  "scope": "Expose glibc endian declarations before system headers in the project-owned Tree-sitter adapter. Existing strict C17/POSIX flags and pinned third-party files retained; Windows/macOS guard excludes change.",
+  "production_change": "Define _DEFAULT_SOURCE=1 only on Linux, unless already defined, at the start of app/c_syntax.c before all includes.",
+  "cause": "Strict C17 plus explicit POSIX_C_SOURCE hides glibc endian interfaces. The included pinned portable/endian.h selects system endian.h; tree-sitter unicode decoding uses le16toh/be16toh. Clang errors during compile; GCC leaves unresolved calls and fails app link. Local Alpine musl builds did not establish glibc support.",
+  "original_failures": [
+    {
+      "source_commit": "13cc442226bf8405b5bdf5950818b551bd2fe5ab",
+      "run": 42073119600,
+      "job": 127406074505,
+      "phase": "GCC Debian12 Release link",
+      "log": "build/validation/glibc-endian-2026-11-05/job-127406074505.log",
+      "sha256": "90aa4ed96c4e3a6982d26887c60a6f486828067647a80bb9a9301303a2db4050",
+      "normalization": "GitHub decoded job log text, LF and trailing newline from local patch writer; not a downloaded signed ZIP",
+      "source_sha_present": true,
+      "diagnostics": [
+        "2026-11-05T17:20:47.8114633Z /__w/physim/physim/app/../third_party/tree-sitter-0.27.1/lib/src/././unicode.h:63: undefined reference to `le16toh'",
+        "2026-11-05T17:20:47.8115064Z /usr/bin/ld: /__w/physim/physim/app/../third_party/tree-sitter-0.27.1/lib/src/././unicode.h:63: undefined reference to `le16toh'",
+        "2026-11-05T17:20:47.8115966Z /__w/physim/physim/app/../third_party/tree-sitter-0.27.1/lib/src/././unicode.h:79: undefined reference to `be16toh'",
+        "2026-11-05T17:20:47.8116367Z /usr/bin/ld: /__w/physim/physim/app/../third_party/tree-sitter-0.27.1/lib/src/././unicode.h:79: undefined reference to `be16toh'"
+      ],
+      "no_native_results_artifact_produced": true
+    },
+    {
+      "source_commit": "13cc442226bf8405b5bdf5950818b551bd2fe5ab",
+      "run": 42073119770,
+      "job": 127406075360,
+      "phase": "Clang Ubuntu24.04 sanitized compile",
+      "log": "build/validation/glibc-endian-2026-11-05/job-127406075360.log",
+      "sha256": "fe17de1c173ee388564efc1c9ea930a870fae30aeeaac2c4b63f41dc5fddd9ac",
+      "normalization": "GitHub decoded job log text, LF and trailing newline from local patch writer; not a downloaded signed ZIP",
+      "source_sha_present": true,
+      "diagnostics": [
+        "2026-11-05T17:18:43.9253780Z /home/runner/work/physim/physim/app/../third_party/tree-sitter-0.27.1/lib/src/././unicode.h:63:3: error: call to undeclared function 'le16toh'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]",
+        "2026-11-05T17:18:43.9433525Z /home/runner/work/physim/physim/app/../third_party/tree-sitter-0.27.1/lib/src/././unicode.h:79:3: error: call to undeclared function 'be16toh'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]"
+      ],
+      "no_native_results_artifact_produced": true
+    }
+  ],
+  "local_results": [
+    {
+      "platform": "windows",
+      "libc": "MSVC CRT",
+      "group": "data",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test",
+        "--test-filter",
+        "c_syntax",
+        "--test-filter",
+        "c_bindings",
+        "--test-filter",
+        "c_call_context",
+        "--test-filter",
+        "c_signatures",
+        "--test-filter",
+        "c_lookup",
+        "--test-filter",
+        "completion_c_locals",
+        "--test-filter",
+        "call_targets",
+        "--test-filter",
+        "editor_signatures"
+      ],
+      "exit_code": 0,
+      "passed": 8,
+      "total": 8,
+      "app_sha256": "a078257707bf0602da446c50881294fe2d7689d5e15c27f463107d628723affc",
+      "asan_options": "detect_leaks=1:halt_on_error=1",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-ms_cod0i/results.json",
+      "results_sha256": "8c1aa214e30bd7044ca16c9882f05378cba2cc16cc4932567137aab453772a2b",
+      "log": "build/validation/glibc-endian-2026-11-05/data-windows.log",
+      "log_sha256": "a48013cbbf640af43684f08e8741156814f83d9c4cfe2c382f03fc41c991d578",
+      "cases": [
+        "c_syntax",
+        "c_bindings",
+        "c_call_context",
+        "c_signatures",
+        "c_lookup",
+        "completion_c_locals",
+        "call_targets",
+        "editor_signatures"
+      ]
+    },
+    {
+      "platform": "windows",
+      "libc": "MSVC CRT",
+      "group": "ui",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "completion_workflow",
+        "--test-filter",
+        "signature_help_workflow"
+      ],
+      "exit_code": 0,
+      "passed": 2,
+      "total": 2,
+      "app_sha256": "a078257707bf0602da446c50881294fe2d7689d5e15c27f463107d628723affc",
+      "asan_options": "detect_leaks=0:halt_on_error=1",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-fw347tfd/results.json",
+      "results_sha256": "e3f0fb333bcaede3f571dd24aa1a98163518371b5284a72f15887968266e6e41",
+      "log": "build/validation/glibc-endian-2026-11-05/ui-windows.log",
+      "log_sha256": "3dc6c8e4ca54414b40c71641e51b00eb21eb4dc7afdad8ff703955921191dcff",
+      "cases": [
+        "completion_workflow",
+        "signature_help_workflow"
+      ]
+    },
+    {
+      "platform": "linux",
+      "libc": "musl",
+      "group": "data",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test",
+        "--test-filter",
+        "c_syntax",
+        "--test-filter",
+        "c_bindings",
+        "--test-filter",
+        "c_call_context",
+        "--test-filter",
+        "c_signatures",
+        "--test-filter",
+        "c_lookup",
+        "--test-filter",
+        "completion_c_locals",
+        "--test-filter",
+        "call_targets",
+        "--test-filter",
+        "editor_signatures"
+      ],
+      "exit_code": 0,
+      "passed": 8,
+      "total": 8,
+      "app_sha256": "ac29b27d61c4c777dfc63f0c61212293c2be625517ad43438187dc962c549b84",
+      "asan_options": "detect_leaks=1:halt_on_error=1",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-07qrdp6f/results.json",
+      "results_sha256": "ac97a1fe8db93412bd3b3c66e543b432b7cc6ce2cc307f4a85910d4842d78037",
+      "log": "build/validation/glibc-endian-2026-11-05/data-linux.log",
+      "log_sha256": "6de2db5da0616e6c0447d5631a7012d6dc717f4608048e1c3262cd1cbe5f8a38",
+      "cases": [
+        "c_syntax",
+        "c_bindings",
+        "c_call_context",
+        "c_signatures",
+        "c_lookup",
+        "completion_c_locals",
+        "call_targets",
+        "editor_signatures"
+      ]
+    },
+    {
+      "platform": "linux",
+      "libc": "musl",
+      "group": "ui",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "completion_workflow",
+        "--test-filter",
+        "signature_help_workflow"
+      ],
+      "exit_code": 0,
+      "passed": 2,
+      "total": 2,
+      "app_sha256": "ac29b27d61c4c777dfc63f0c61212293c2be625517ad43438187dc962c549b84",
+      "asan_options": "detect_leaks=0:halt_on_error=1",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-syykpp1q/results.json",
+      "results_sha256": "2b2c4b9625d336b8ffb2b538a89dae633ddafef6fc06461819192c9ae4906bc1",
+      "log": "build/validation/glibc-endian-2026-11-05/ui-linux.log",
+      "log_sha256": "799ad62759c5333c233ae2efa009d5fd021fa63077443cd471e6c37483683b2e",
+      "cases": [
+        "completion_workflow",
+        "signature_help_workflow"
+      ]
+    }
+  ],
+  "prebuild_audit": {
+    "path": "build/validation/glibc-endian-2026-11-05/prebuild-audit.json",
+    "sha256": "e809b969616b774db4eeb7786a34d94cf8d5af1631c5b82943cd4e57d2b6f49c"
+  },
+  "manifests": [
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/glibc-endian-inputs.json",
+      "sha256": "e602dade9530dd07ec1c0184c0a5480780a8c607723d07c239ad6b75024b7eb9"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/glibc-endian-compiler-source.json",
+      "sha256": "a9bccf89d6de0af567a7562eaa9a86dbf57c7a4b173f732a14b6f55454fcd933"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/glibc-endian-runtime.json",
+      "sha256": "3ff17b25814ce02bc937cc53737a96365aac7c236792150942ab367a00447f92"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/glibc-endian-byte-index.json",
+      "sha256": "f33f07afdf9bd0ae96cdf23de8ec6d6321734c15892ee4a64683e9b5d811cee3"
+    }
+  ],
+  "primary_references": [
+    "https://sourceware.org/glibc/manual/2.36/html_node/Feature-Test-Macros.html",
+    "https://man7.org/linux/man-pages/man3/endian.3.html"
+  ],
+  "glibc_positive_acceptance": "pending actual new-source Ubuntu/Debian builds; local Linux uses musl and must not substitute for glibc",
+  "limits": [
+    "Local8data+2GUI per platform are not complete UI/physical keyboard/screenreader acceptance.",
+    "Unit sanitizer environment has detect_leaks=1; native runner also explicitly enables it for these8cases. GUI suppresses external graphics leaks only.",
+    "No new screenshot capture added for this macro-only integration change.",
+    "No private Mac access or F drive access."
+  ]
+}

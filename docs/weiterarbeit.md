@@ -7,20 +7,27 @@ Projektumsetzung bleiben offen; Teilprüfungen sind keine volle Punktzahl.
 
 ## Letzter geprüfter Schritt
 
-[Dateireiter und automatische Vorschläge](verification/file-tabs-auto-2026-11-05.md):
-alter Test prüfte vor Ablauf des140ms-Timers. Gleiche Stufe27 auf Mac Intel/ARM
-und lokalen unveränderten Windows-/Linux-Programmen reproduziert. Jetzt begrenzt
-auf echtes automatisches Öffnen warten und Quelle/Editor/Präfix/Geometrie prüfen.
-**App/Design/140ms-Timer unverändert.** Windows Release3/3 run-iuqaftzp und Linux
-ASan/UBSan3/3 run-gd7xo029, jeweils inklusive separater Auto-/Fristgruppen.
-Beide vorhandenen Listenansichten geöffnet; keine neue Bildserie.
-[Originale und Grenzen](verification/file-tabs-auto-2026-11-05.json).
+[Linux-Endianschnittstellen im C-Parser](verification/glibc-endian-2026-11-05.md):
+Ubuntu/Clang scheiterte beim Kompilieren an versteckten le16toh/be16toh;
+Debian/GCC später beim Linken. Beide Original-Joblogs zur Quelle13cc4422 gelesen
+und gesichert; keine nativen Ergebnisarchive entstanden. Jetzt _DEFAULT_SOURCE
+im projektseitigen Linux-Adapter vor Systemheadern anfordern. Upstream-Dateien,
+Compiler-/POSIX-Optionen und UI unverändert.
+Windows Release8/8Daten+2/2GUI (run-ms_cod0i/run-fw347tfd), Alpine ASan/UBSan
+8/8+2/2 (run-07qrdp6f/run-syykpp1q), Datenprüfungen mit detect_leaks=1.
+**Alpine verwendet musl; neue tatsächliche glibc-Abnahme bleibt offen.**
+[Originale, Befehle und Grenzen](verification/glibc-endian-2026-11-05.json).
 
-Warmstand **file-tabs-auto**,303 Eingaben; die eine geänderte Testdatei vor Build
-Root/Isolation/Manifest bytegleich. Source-/Runtimearchive vollständig gelesen.
-[Quelle13cc4422 in beiden Remotes](verification/file-tabs-auto-commit-2026-11-05.json),
-alle1257Eingaben gegen Index und tatsächlichen Commit gelesen.
-Detailstand: `build/validation/file-tabs-auto-2026-11-05/STATE.md`.
+Warmstand **glibc-endian**,303 Eingaben, eine geänderte Adapterdatei vor Build
+Root/Isolation/Manifest bytegleich, zwei Upstream-Header roh gegen Git geprüft.
+Source-/Runtimearchive vollständig gelesen. Detailstand:
+`build/validation/glibc-endian-2026-11-05/STATE.md`.
+
+Zuvor [Dateireiter-Auto-Completion](verification/file-tabs-auto-2026-11-05.md),
+[Quelle13cc4422 in beiden Remotes](verification/file-tabs-auto-commit-2026-11-05.json):
+Windows/Linux je3/3 nach begrenztem Warten auf tatsächlich automatische Liste,
+App/Design/140ms-Timer unverändert. Beide Listenansichten geöffnet. Alle1257Inputs
+gegen echten Commit gelesen; nicht erneut wegen Kontext prüfen.
 
 Zuvor [OS-Fokus im Zusatzfenster](verification/signature-focus-2026-11-05.md):
 Quelle8bf467ce, Windows Release/Linux ASan/UBSan je2/2. Eigener Peerprozess,
@@ -64,9 +71,14 @@ pollen oder neu starten. Diese alte Quelle belegt nicht die spätere Fokuskorrek
 
 1. Dateireiterquelle13cc4422: Mac-Workspace **42073119561** weiterverfolgen.
    Intel127406074781 zuletzt in der68-Projekt-Matrix; erster3er-Schritt erfolgreich,
-   ARM127406075215 queued. Noch keine vollständige neue Mac-Abnahme behaupten.
+   ARM127406075215 inzwischen vor dem Teststart cancelled. Keine ARM-Abnahme;
+   keine vollständige neue Mac-Abnahme behaupten. Intelhandle weiter beobachten.
    Weitere bekannte CI-Handles derselben Quelle:42073119608 (CI),42073119770
-   (Linux-UI-Sanitizer),42073119600 (Linux-Paket), zuletzt noch nicht terminal.
+   (Linux-UI-Sanitizer),42073119600 (Linux-Paket). Paketjob127406074505 terminal/
+   failure und Clang-UI127406075360 terminal/failure durch oben dokumentierte
+   glibc-Header; keine Ergebnisarchive suchen. GCC-UI127406075709 zuletzt noch
+   in_progress bei Abhängigkeiten. Neue korrigierte glibc-Quelle separat prüfen;
+   bereits gelesene Fehlerlogs nicht wegen Kontext erneut herunterladen.
    [Quell-/Run-Nachweis](verification/file-tabs-auto-commit-2026-11-05.json).
    Fokusquelle8bf467ce ist jetzt [vollständig nachgelesen](verification/macos-8bf-2026-11-05.json):
    Editor beide14/14Daten+12/12GUI, Typografie beide16/16, Menü beide7/7;

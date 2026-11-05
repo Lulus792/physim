@@ -11,6 +11,11 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
 
 ## Neuere Editorprüfungen
 
+- [glibc-Endianschnittstellen im C-Parser](verification/glibc-endian-2026-11-05.md):
+  tatsächlicher Clang-Kompilierfehler/Ubuntu und GCC-Linkfehler/Debian eingegrenzt;
+  `_DEFAULT_SOURCE` im projektseitigen Linux-Adapter vor Systemheadern setzen.
+  Upstream-Dateien unverändert. Windows Release und Alpine ASan/UBSan lokal je
+  8/8 Daten+2/2 GUI; neue tatsächliche glibc-Abnahme bleibt ausdrücklich offen.
 - [Mac-Quelle8bf467ce](verification/macos-8bf-2026-11-05.json): beide Architekturen
   Editor14/14 Daten+12/12 GUI einschließlich echter Fokus-/Auswahlrückkehr;
   Typografie/Einstellungen16/16 und native AppKit-Menüs7/7. Alle acht Original-ZIPs/
