@@ -25,6 +25,11 @@ geprüft. Windows `run-nxyvdfhz` / `run-ptblb524`, Linux `run-q9gskm57` /
 `build/validation/signature-declarations-2026-11-05/STATE.md`.
 Alle lokalen Handles beendet. 34 bytegleiche BMPs/108.695.892 Bytes entfernt,
 Referenzen und Originalberichte erhalten. Keine SDK-/VM-/Fremddatenbereinigung.
+Quellcommit **`7a3e7950`**, normal in beide Repositories gepusht;
+[Commitabgleich und Mac-Anschluss](verification/signature-declarations-commit-2026-11-05.json).
+Gehosteter neuer Lauf **`41976275068`** zu genau diesem Quellstand: Intel
+`127075753047` läuft (Checkout), ARM `127075753405` wartet. Diesen Lauf weiter
+prüfen; sechs Daten-Units und acht GUI-Gruppen samt Originalartefakten auswerten.
 
 [Aufrufziele für die Parameterhilfe](verification/call-targets-2026-11-05.md):
 beide echten Parser liefern ursprüngliche Ziel-/Namens-/Empfängerspannen und
