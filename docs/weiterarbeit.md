@@ -11,6 +11,9 @@ Vollständige Umsetzung und Abnahme bleiben das Ziel; Teiltests sind keine volle
 C/Ph samt Tippen nach Release, Windows gleicher Build direkt nach Fokusaktivierung,
 Linux1/1; acht aktuelle Bilder ohne Workspace-Häkchen. Test-Gesamtfrist korrigiert,
 normales Appverhalten unverändert. [Originalversuche und Grenzen](verification/signature-outside-2026-11-05.json).
+[Quelle27ffb2f6, beide Remotes](verification/signature-outside-commit-2026-11-05.json).
+Neuer Mac-Lauf42037853611: ARM127280562388 im Datenstep, Intel127280563043 queued;
+zuletzt per Jobtool belegt. Diesen neuen Quellstand getrennt nachverfolgen.
 
 [Workspace ohne Häkchen](verification/workspace-no-checks-2026-11-05.md):
 ausdrücklicher Nutzerwunsch vom5.11. Checkboxzeichnung UND reservierte Spalte
@@ -41,7 +44,7 @@ Auch [Vorgänger42026549588](verification/signature-wrap-macos-first-2026-11-05.
 1. Jetzt OS-Fenstergrenze, herausgelöster Workspace, stärkere Überlappungsfälle,
    Fokuswechsel und
    Accessibility-/Screenreader-Aufgaben. Detailstand und aktuelle Mac-Handles:
-   `build/validation/signature-wrap-2026-11-05/STATE.md` zuerst lesen.
+   `build/validation/signature-outside-2026-11-05/STATE.md` zuerst lesen.
    Mac-Nachlauf des jeweils neuen Quellstands getrennt verfolgen;
    Original-ZIPs/Digests lesen. Alte geschlossene Läufe nicht neu starten.
 2. 190 Einträge nach echten Spezialaufrufen/Overloads/Optionen und Eigenschaften
