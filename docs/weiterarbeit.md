@@ -22,11 +22,14 @@ entfernt, eine abweichende Blinkphase behalten. Keine SDK-/VM-Bereinigung.
 Cursor-Messung nur 7 Allokationen; größter p95 je Lauf 10,20 bzw.22,95 ms, Textedits
 weiter langsam; 16,7-ms-Ziel **nicht zuverlässig erfüllt**. Ein Cache kostet im
 größten Beispiel 6.166.734 gehaltene Bytes. Kein neuer Worker oder Designwechsel.
-Neue gehostete Mac-Abnahme nach Quellpush noch offen; privater Mac aus/unberührt.
 Quellcommit **`9292b67e`**, beide Repositories; [Commitabschluss](verification/completion-reuse-commit-2026-11-05.json).
-Neuer gehosteter Lauf **`41968549203`** zu genau diesem Quellstand:
-Intel `127051147984` läuft, ARM `127051148217` wartet auf Runner. Beim Anschluss
-diese Jobs prüfen; keine alten geschlossenen Läufe neu starten/pollen.
+Gehosteter Lauf **`41968549203`** zu genau diesem Quellstand geschlossen:
+Intel `127051147984` und ARM `127051148217` jeweils
+[8/8; beide ZIPs/Digests/alle Originaleinträge gelesen](verification/completion-reuse-macos-2026-11-05.json),
+einschließlich C/Physim drei Ziele und Schließen/Cache-Wiederöffnen. Diesen und
+ältere geschlossene Läufe nicht wiederholen/pollen. Keine ganze Mac-/physische/
+neue Mac-Allokationsfehler- oder Performance-Abnahme. Privater Mac aus/unberührt.
+Die nächste Parameterhilfe-Datenarbeit gehört nicht zu dieser Mac-Abnahme.
 
 [C-Performance-Baseline](verification/completion-perf-2026-11-05.md) abgeschlossen:
 Anwendungscode unverändert `694bb586`, neue CLI-Werkzeuge und kompakter JSON-Beleg.
@@ -78,7 +81,7 @@ Details: `build/validation/completion-c-2026-11-05/STATE.md`; Helfer unter
    mit unabhängigem vollständigem Ergebnisvergleich und atomaren Fehlerpfaden;
    Cursor-/Edit-Zeit samt gehaltenem Speicher weiter als offene Performance führen.
    Kein neuer Provider-Worker, keine Ergebnis-/Scopeverkürzung oder Budgetschwächung.
-   Keine UI-/Linux-/Mac-Performance-Abnahme. Neue gehostete Mac-Quellprüfung offen.
+   Keine UI-/Linux-/Mac-Performance-Abnahme. Mac-UI-Nachlauf zu `9292b67e` geschlossen.
 3. Separate Aufruf-/Parameterhilfe einschließlich Benutzerfunktionen
    ergänzen; weitere Codekontexte und semantische Rollen vervollständigen. Keine
    Typinferenz/Includes/Werte vortäuschen, kein Browser-Lexer/Dienst/Provider-Worker.

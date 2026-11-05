@@ -115,9 +115,13 @@ mit abweichender Caret-Blinkphase. Keine neue Bildserie für jeden Eingabeschrit
 Kein SDK-/Toolchain-/VM-Bestand gelöscht und keine früher abgelehnte Löschung umgangen.
 Ausgaben und temporäre Daten bleiben auf D:, F: unberührt.
 
-Der private Mac bleibt ausdrücklich **aus und unberührt**. Neue gehostete
-ARM-/Intel-Prüfungen sind separat nach dem Quellpush zu bewerten; die älteren
-abgeschlossenen Läufe beweisen diese Änderung nicht.
+Der private Mac bleibt ausdrücklich **aus und unberührt**. Der gehostete Nachlauf
+`41968549203` zu `9292b67e` ist geschlossen: ARM `127051148217` und Intel
+`127051147984` je **8/8**, beide Original-ZIPs/Digests/alle Einträge gelesen,
+C/Physim je drei Editorziele mit neuem Cache-Wiederöffnungsmarker.
+[Gemeinsamer Mac-Abschluss](completion-reuse-macos-2026-11-05.json).
+Keine ganze Mac-/physische/Performance- oder neue Mac-Allokationsfehler-Abnahme;
+die nachfolgende Parameterhilfe-Datenarbeit ist nicht darin enthalten.
 Als Nächstes bleiben große Editierfolgen und sichere inkrementelle Auswertung
 offen, anschließend die eigene Parameterhilfe und die übrigen freigegebenen
 UI-Bereiche. Physische IME-, Screenreader-, Fokus- und DPI-Abnahme bleiben getrennt.

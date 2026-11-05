@@ -1,0 +1,198 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "9292b67e9981521524434eb83d6c9723f09c6c3b",
+  "repo": "Lulus792/physim",
+  "run": 41968549203,
+  "reports": [
+    {
+      "architecture": "arm",
+      "job": 127051148217,
+      "artifact": 13388952468,
+      "zip_path": "build/validation/completion-reuse-2026-11-05/mac-arm.zip",
+      "zip_sha256": "3bd5c516cf08b476b3a00e99cde6b600ccea60414fad3f8781c6eeb496d4c820",
+      "github_digest_matches": true,
+      "all_original_entries_read": {
+        "Release/test-results/run-w288k_05/results.json": "e87ac488819a1174861151fb23f4271e729d0d484793a882fbd80860030a4635"
+      },
+      "passed": 8,
+      "total": 8,
+      "cases": [
+        {
+          "name": "documents_small",
+          "status": "passed",
+          "seconds": 6.291
+        },
+        {
+          "name": "documents_large",
+          "status": "passed",
+          "seconds": 4.64
+        },
+        {
+          "name": "completion_workflow",
+          "status": "passed",
+          "seconds": 12.831
+        },
+        {
+          "name": "completion_automatic_workflow",
+          "status": "passed",
+          "seconds": 23.983
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed",
+          "seconds": 11.769
+        },
+        {
+          "name": "completion_info_workflow",
+          "status": "passed",
+          "seconds": 40.833
+        },
+        {
+          "name": "completion_automatic_deadline_workflow",
+          "status": "passed",
+          "seconds": 23.463
+        },
+        {
+          "name": "completion_locals_workflow",
+          "status": "passed",
+          "seconds": 20.189
+        }
+      ],
+      "app_sha256": "7fb718d8c59f1b94d8bbfde146e3e61d44cd1713426735ba8e4bb3c1ea9075c0",
+      "actual_cache_markers": [
+        {
+          "language": "c",
+          "target": 0,
+          "visible_list_cleared": true,
+          "exact_source_snapshot_reopened": true
+        },
+        {
+          "language": "c",
+          "target": 1,
+          "visible_list_cleared": true,
+          "exact_source_snapshot_reopened": true
+        },
+        {
+          "language": "c",
+          "target": 2,
+          "visible_list_cleared": true,
+          "exact_source_snapshot_reopened": true
+        },
+        {
+          "language": "phys",
+          "target": 0,
+          "visible_list_cleared": true,
+          "exact_source_snapshot_reopened": true
+        },
+        {
+          "language": "phys",
+          "target": 1,
+          "visible_list_cleared": true,
+          "exact_source_snapshot_reopened": true
+        },
+        {
+          "language": "phys",
+          "target": 2,
+          "visible_list_cleared": true,
+          "exact_source_snapshot_reopened": true
+        }
+      ]
+    },
+    {
+      "architecture": "intel",
+      "job": 127051147984,
+      "artifact": 13389375770,
+      "zip_path": "build/validation/completion-reuse-2026-11-05/mac-intel.zip",
+      "zip_sha256": "e8cab9a69d2e3a76ac2ec1274cd551356bfc909d7871f35b60913f57a1524f65",
+      "github_digest_matches": true,
+      "all_original_entries_read": {
+        "Release/test-results/run-154gn1uc/results.json": "7ab3f56f9d76460bce75ac503a8852b2000d903aa70bf89300a708f1ad3d087a"
+      },
+      "passed": 8,
+      "total": 8,
+      "cases": [
+        {
+          "name": "documents_small",
+          "status": "passed",
+          "seconds": 10.168
+        },
+        {
+          "name": "documents_large",
+          "status": "passed",
+          "seconds": 10.311
+        },
+        {
+          "name": "completion_workflow",
+          "status": "passed",
+          "seconds": 21.364
+        },
+        {
+          "name": "completion_automatic_workflow",
+          "status": "passed",
+          "seconds": 26.513
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed",
+          "seconds": 14.351
+        },
+        {
+          "name": "completion_info_workflow",
+          "status": "passed",
+          "seconds": 45.116
+        },
+        {
+          "name": "completion_automatic_deadline_workflow",
+          "status": "passed",
+          "seconds": 27.063
+        },
+        {
+          "name": "completion_locals_workflow",
+          "status": "passed",
+          "seconds": 22.66
+        }
+      ],
+      "app_sha256": "492c2acf6b4248f5f30435fee37dc1b7b44923ee5cf698e58d77f0cde8ae9f59",
+      "actual_cache_markers": [
+        {
+          "language": "c",
+          "target": 0,
+          "visible_list_cleared": true,
+          "exact_source_snapshot_reopened": true
+        },
+        {
+          "language": "c",
+          "target": 1,
+          "visible_list_cleared": true,
+          "exact_source_snapshot_reopened": true
+        },
+        {
+          "language": "c",
+          "target": 2,
+          "visible_list_cleared": true,
+          "exact_source_snapshot_reopened": true
+        },
+        {
+          "language": "phys",
+          "target": 0,
+          "visible_list_cleared": true,
+          "exact_source_snapshot_reopened": true
+        },
+        {
+          "language": "phys",
+          "target": 1,
+          "visible_list_cleared": true,
+          "exact_source_snapshot_reopened": true
+        },
+        {
+          "language": "phys",
+          "target": 2,
+          "visible_list_cleared": true,
+          "exact_source_snapshot_reopened": true
+        }
+      ]
+    }
+  ],
+  "scope": "Actual hosted GUI workflows8/8 per architecture including C/Physim three editor targets; no whole-platform/performance/physical or new Mac allocation-fault-unit acceptance. Private user Mac OFF, untouched. Does not cover subsequent call-target metadata work.",
+  "temporary_signed_download_configs_removed": true
+}

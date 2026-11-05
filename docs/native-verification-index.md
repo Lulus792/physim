@@ -13,7 +13,9 @@ wegen Kontextwechsel erneut anfangen; die ursprünglichen Nachweise unverändert
   887 Frischvergleiche, 7/7 Cursor-/87/87 Edit-Speicherfehler, zwei bewusst falsche
   Cacheidentitäten abgewiesen. Liste ausblenden/Cache erneut öffnen nativ C/Physim
   über je drei Ziele belegt. Sieben Cursor-Allokationen; große Edits und zuverlässige
-  16,7-ms-Marke weiter offen. **Neue Mac-/gesamte Performance-Abnahme fehlt.**
+  16,7-ms-Marke weiter offen. Gehosteter Quellnachlauf `9292b67e`,
+  [Intel/ARM je 8/8 mit Originalarchiven](verification/completion-reuse-macos-2026-11-05.json).
+  **Gesamte/physische/Performance- und neue Mac-Allokationsfehler-Abnahme fehlt.**
 - [C-Backend-Performance-Baseline](verification/completion-perf-2026-11-05.md):
   Anwendungscode `694bb586` unverändert, Windows Release sechs Quellen und getrennte
   Syntax-/Binding-/Modell-/Cache-Messungen. Große frische/Cursor-Fälle verfehlen
