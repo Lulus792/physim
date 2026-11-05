@@ -69,3 +69,23 @@ Tree-sitter-Exporte. Snapshots `completion-c-first`/`completion-c-restored`: jew
 281 eigene / 1.220 Compiler-/Testeingaben; alle referenzierten Archivbytes gelesen.
 Keine Wiederholung geschlossener F1-/Protokoll-/Settings-Matrizen. Gehosteter
 Mac-Nachlauf dieser Änderung ist noch offen; der Nutzer-Mac blieb aus und unberührt.
+
+Gehosteter Intel-Nachlauf `41960990299` / Job `127027035424` zu Quellcommit
+`694bb586`: **8/8** tatsächlich bestanden, Original-ZIP/Digest/alle Einträge gelesen;
+C und Physim jeweils über drei Editorziele. [Intel-Originalauswertung](completion-c-macos-intel-2026-11-05.json).
+ARM-Job `127027035143` ist noch nicht abgeschlossen. Daraus keine gesamte
+Mac-, physische oder neue Mac-Allokationsfehler-Abnahme ableiten.
+
+Quellcommit **`694bb586`** in beiden Repositories gepusht. Alle **1.239** erfassten
+Eingaben gegen tatsächliche Git-Blobs gelesen, Vendor bytegenau, sonst nur CRLF/LF
+normalisiert. Die Benutzeranleitung korrigiert anschließend lediglich den früheren
+C-Verfügbarkeitssatz; Überschriften und Links bleiben gleich. Diese spätere reine
+Textkorrektur ist getrennt vom Quellabgleich dokumentiert.
+[Commitabschluss und Mac-Anschluss](completion-c-commit-2026-11-05.json).
+
+28 bytegleiche Bildduplikate/**89.514.264 Bytes** entfernt; sechs neue C-Referenzen
+und sämtliche Originalergebnisse erhalten. Die automatische Freigabeprüfung lehnte
+den kombinierten rekursiven SDK-/Bild-Löschschritt ab („blocked by policy“, ohne
+weiteren Grund). Danach wurden nur die einzeln geprüften Bildduplikate entfernt;
+die geprüfte SDK-Kopie bleibt bestehen und wird nicht durch einen anderen Löschweg
+umgangen. [Bereinigung und genaue Grenzen](completion-c-cleanup-2026-11-05.json).

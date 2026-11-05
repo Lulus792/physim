@@ -300,12 +300,14 @@ bleibt stehen. Wähle die Methode passend zum Typ deiner Variablen. Der
 Compiler prüft ihren Einsatz beim Build. In Kommentaren, Stringliteralen
 und einfachen Textdateien werden keine API-Vorschläge eingefügt.
 
-In Physim-Quellen stehen sichtbare Variablen und Funktionsparameter vor den
+In C- und Physim-Quellen stehen sichtbare Variablen und Funktionsparameter vor den
 API-Namen. Nach `(` und `,` in einem Aufruf erscheinen sie auch im leeren
 Argument. Die Liste berücksichtigt den aktuellen Gültigkeitsbereich: innere
 Deklarationen überdecken äußere; spätere Namen und geschlossene oder fremde
 Blöcke werden ausgelassen. Beim Einfügen bleiben Aufruf und andere Argumente
-erhalten. Für C sind lokale Variablenvorschläge noch nicht verfügbar.
+erhalten. C-Typen zeigen ihre geschriebene Deklaratorform, etwa `double *` oder
+`int (*)(double)`. Includes, Makros und tatsächliche Variablenwerte werden dafür
+nicht aufgelöst.
 
 **Ctrl+Leertaste** bei offener Liste oder das **i** blendet die Kurzinfo ein
 oder aus. Nach einem Auswahlwechsel erscheint sie kurz verzögert. Bei lokalen

@@ -1,0 +1,41 @@
+{
+  "phase": "completion-c-restored",
+  "revision": "HEAD",
+  "compiler_and_test_count": 1220,
+  "own_input_count": 281,
+  "unique_files": 1239,
+  "all_tested_input_bytes_match_git": true,
+  "nonvendor_crlf_normalized_only": true,
+  "source_commit": "694bb5862fa507d4d0a4e6c7974e6910c9190b3e",
+  "date": "2026-11-05",
+  "complete_input_match_path": "build/validation/completion-c-2026-11-05/commit-match.json",
+  "complete_input_match_sha256": "12eb776230aa50021ead00b93789d25ecc1ea35c2082f5fcdd744ee603d2c8b1",
+  "source_pushes_exit_code": 0,
+  "source_pushed_to": [
+    "origin/codex/f1-design-h",
+    "upstream/codex/f1-design-h"
+  ],
+  "cleanup": {
+    "report": "docs/verification/completion-c-cleanup-2026-11-05.json",
+    "images_removed": 28,
+    "bytes_freed": 89514264,
+    "duplicate_sdk_retained_due_to_automatic_policy_rejection": true
+  },
+  "user_guide_after_tests": {
+    "path": "docs/workspace.md",
+    "prose_only_c_availability_correction": true,
+    "tested_source_text_sha256": "4bb1876b6f2e21f8a9aab3f162cdfe461915e8d88914a88e2decc338812883cf",
+    "updated_normalized_sha256": "2a532dd28cc6a73172916471acd18f00d9670854bea1aa7428697c1fbc852bbc",
+    "headings_links_unchanged": true,
+    "validation": "Read-only source review; no executable changes and no repeated closed F1 matrix. Code/input Git match above applies to source commit, preceding this documentation-only correction."
+  },
+  "hosted_mac": {
+    "run": 41960990299,
+    "source_head": "694bb5862fa507d4d0a4e6c7974e6910c9190b3e",
+    "arm_job": 127027035143,
+    "intel_job": 127027035424,
+    "last_verified_status": "queued; current completion not established",
+    "private_mac": "OFF; no access/probes"
+  },
+  "scope": "Native C locals Windows/Linux units8/8+GUI6/6; actual Mac follow-up, separate signature help, large-source performance and full approved UI/physical acceptance remain open"
+}
