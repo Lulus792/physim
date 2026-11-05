@@ -1,0 +1,25 @@
+{
+  "phase": "c-syntax-first",
+  "revision": "HEAD",
+  "compiler_and_test_count": 1214,
+  "own_input_count": 275,
+  "unique_files": 1233,
+  "all_tested_input_bytes_match_git": true,
+  "nonvendor_crlf_normalized_only": true,
+  "source_commit": "a25683efd380bcd81f360d93c4a575d26eb7e931",
+  "date": "2026-11-05",
+  "complete_input_match_path": "build/validation/c-scopes-2026-11-05/commit-match.json",
+  "complete_input_match_sha256": "236262050bc96e8ff8f01e18893ea5e6317ba9d742685652309fe1a316abb54c",
+  "own_source_commit_pushed_to": [
+    "origin/codex/f1-design-h",
+    "upstream/codex/f1-design-h"
+  ],
+  "source_pushes_exit_code": 0,
+  "private_mac": "OFF; no probes or accesses",
+  "cleanup": {
+    "files_removed": 3,
+    "bytes_freed": 17129816,
+    "report": "docs/verification/c-syntax-foundation-cleanup-2026-11-05.json"
+  },
+  "boundary": "Syntax module only, no C scope visitor/UI/macOS acceptance; existing shipping GUI inputs and foreign WIP preserved"
+}

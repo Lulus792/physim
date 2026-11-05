@@ -13,6 +13,10 @@ und Linux Debug ASan/UBSan je **Unit 1/1**, zusätzlich strenger C17-Build ohne
 Warnungen; 94/94 Allokationsfehler, Parallelaufrufe und 1.024 fehlerhafte Eingaben
 geprüft. **Noch nicht in GUI/Core verknüpft; C-Scopes und C-Vorschlagsliste offen.**
 Upstream-Dateien/Lizenzen unverändert, [ADR 026](decisions/026-c-editor-grammar.md).
+Quellcommit **`a25683ef`**, beide Repositories gepusht, **1.233** eindeutige
+Eingaben gegen tatsächliche Git-Blobs gelesen (Vendor ohne Normalisierung).
+[Commitabschluss](verification/c-syntax-foundation-commit-2026-11-05.json).
+Drei ersetzte Testprogramme / **17.129.816 Bytes** entfernt; Ergebnisse erhalten.
 
 Die Physim-Vervollständigung ließ `Ve` innerhalb eines offenen mehrzeiligen Strings
 mit innerem Anführungszeichen zu. Reguläre Regression am alten Code Exit 1;
@@ -48,8 +52,8 @@ Shared Baum: `build/validation/protocol-wrap-2026-10-26/3-isolated/` mit `src`,
 
 ## Nächste Arbeit und verbleibender Umfang
 
-1. C-Syntaxgrundlage mit Git-Abgleich abschließen. Keine erneute GUI-Prüfung der
-   unveränderten Vorschlagsliste; keine C-Integration daraus ableiten.
+1. C-Syntaxgrundlage abgeschlossen. Keine erneute Prüfung unveränderter Syntax-/
+   GUI-Fälle; keine C-Vervollständigung daraus ableiten. Konkreter Anschluss: Punkt 3.
 2. Alle obigen Mac-Läufe sind beendet; nicht neu starten oder pollen.
 3. Echte C-Scopes anhand der Grammatik einschließlich ERROR-Erholung ergänzen:
    offener Aufruf kann die normale Funktions-/Blockhierarchie verlieren (ADR 026).

@@ -68,3 +68,11 @@ erneute Ausführung dieser Tests. Keine neuen Bilder und keine Wiederholung
 geschlossener F1-/Protokoll-/Settings-Prüfungen. Neue macOS-Abnahme dieses Moduls,
 GUI-Integration und physische Eingabe/IME/AT/DPI/Gesamtabnahme bleiben offen.
 Der Nutzer-Mac ist ausgeschaltet und wurde nicht kontaktiert.
+
+Quellcommit **`a25683ef`** ist in beiden Repositories gepusht. Alle **1.233**
+eindeutigen erfassten Eingabedateien wurden gegen die tatsächlichen Commit-Blobs
+gelesen, Vendor bytegenau, sonst nur CRLF/LF normalisiert.
+[Commitabschluss](c-syntax-foundation-commit-2026-11-05.json).
+Drei ersetzte direkte Testprogramme entfernt: **17.129.816 Bytes**; Ergebnisse,
+aktuelle Binaries, benötigte Grammatikprobe und Quellen erhalten.
+[Bereinigungsbeleg](c-syntax-foundation-cleanup-2026-11-05.json).

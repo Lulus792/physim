@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "a25683efd380bcd81f360d93c4a575d26eb7e931",
+  "reason": "Superseded own direct-test executables; includes result replaced by final visibility pass; malformed and diagnostic test assumptions corrected, no open product failure. Original JSON evidence retained.",
+  "running_use_check": "WSL /proc executable and maps inspected; no users of these three paths",
+  "preserved": "Current visibility executable/symbol proof, raw grammar probe for next scope work, source archives, registered test binaries, all original JSON results, vendor sources, foreign work",
+  "files": [
+    {
+      "path": "D:\\Physim\\build\\validation\\c-scopes-2026-11-05\\includes-syntax",
+      "bytes": 5699784,
+      "sha256": "d4899782f30767408b9f4e64ec1979c2eac36623a44df5460ca5af45739b97ff",
+      "retained_result": "D:\\Physim\\build\\validation\\c-scopes-2026-11-05\\includes.json",
+      "result_sha256": "721e389aff87aa53c0e2647fcb3cf5beca1093c56ab444f375a261ea3d298dca"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\c-scopes-2026-11-05\\malformed-syntax",
+      "bytes": 5712640,
+      "sha256": "b4edb98e8d6d2a4e09e59273c95e43ced50ca91b08c3c8e8d6b0ce50909ee207",
+      "retained_result": "D:\\Physim\\build\\validation\\c-scopes-2026-11-05\\malformed.json",
+      "result_sha256": "bf44ba1af460f44b9e7bee3ec625bb0bb16748c94aa825822246db3c01056e9d"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\c-scopes-2026-11-05\\malformed-diagnostic-syntax",
+      "bytes": 5717392,
+      "sha256": "6194645dcc5c93b9c8231172a3cabc005a534a2f6969c6480f0a9ae28df09c05",
+      "retained_result": "D:\\Physim\\build\\validation\\c-scopes-2026-11-05\\malformed-diagnostic.json",
+      "result_sha256": "268c2bfd55ec42373b3b594fda25b31447fe031c128820968b493798308ab121"
+    }
+  ],
+  "files_removed": 3,
+  "bytes_freed": 17129816,
+  "all_retained_results_still_present": true,
+  "report_correction": "Initial PowerShell Measure-Object over ordered dictionaries returned null; total computed from the three pre-deletion recorded integer lengths, no repeated deletion."
+}

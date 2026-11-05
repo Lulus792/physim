@@ -9,7 +9,7 @@ wegen Kontextwechsel erneut anfangen; die ursprünglichen Nachweise unverändert
 ## Neuere Editorprüfungen
 
 - [C-Syntaxgrundlage](verification/c-syntax-foundation-2026-11-05.md): echte
-  Grammatik, Windows/Linux je Unit 1/1, zusätzlicher strenger C17-ASan/UBSan-Build;
+  Grammatik, Quellcommit `a25683ef`, Windows/Linux je Unit 1/1, zusätzlicher strenger C17-ASan/UBSan-Build;
   94/94 Speicherfehler und 1.024 fehlerhafte Eingaben geprüft. **Noch keine
   C-Scope-/GUI-Integration oder neue Mac-Abnahme.**
 - [Physim-Stringkontext](verification/completion-literals-2026-11-05.md): reguläre
