@@ -8,6 +8,11 @@ wegen Kontextwechsel erneut anfangen; die ursprünglichen Nachweise unverändert
 
 ## Neuere Editorprüfungen
 
+- [C-/Physim-Aufrufziele](verification/call-targets-2026-11-05.md): Windows/Linux
+  je Unit 9/9 + GUI 6/6; 36 exakte Namens-/Empfängerfälle und beide vorigen
+  Sprachpfade konkret abgewiesen. 887 Cachevergleiche umfassen neue Metadaten.
+  **Nur Datengrundlage: Signatur-/Deklarationsauflösung, sichtbarer Parameter-HUD
+  und neue Mac-Datenabnahme noch offen.**
 - [C-Syntaxwiederverwendung](verification/completion-reuse-2026-11-05.md): Windows/Linux
   je Unit 8/8 + GUI 6/6, danach verstärkter C-Test je 1/1 ohne Appänderung.
   887 Frischvergleiche, 7/7 Cursor-/87/87 Edit-Speicherfehler, zwei bewusst falsche

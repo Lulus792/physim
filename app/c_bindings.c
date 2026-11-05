@@ -227,6 +227,38 @@ static bool call_opener(const collector *c,size_t open){
     }
     return true;
 }
+static ps_c_call call_target(const collector *c,size_t open){
+    ps_c_call call={.open=c->nodes[open].start,.active=true,.at_start=true};
+    size_t parent=c->nodes[open].parent,target=SIZE_MAX,before=c->index[open].previous;
+    if(is(c,parent,"argument_list") && is(c,c->nodes[parent].parent,"call_expression"))target=child(c,c->nodes[parent].parent,"function");
+    if(target==SIZE_MAX && (is(c,before,"identifier") || is(c,before,"field_identifier"))){
+        target=before;
+        if(is(c,before,"field_identifier") && is(c,c->nodes[before].parent,"field_expression"))target=c->nodes[before].parent;
+    }
+    if(target==SIZE_MAX && before<c->count){
+        for(size_t i=c->nodes[before].parent;i<c->count;i=c->nodes[i].parent){
+            if(c->nodes[i].end!=c->nodes[before].end)break;
+            if(is(c,i,"parenthesized_expression") || is(c,i,"subscript_expression") || is(c,i,"call_expression")){target=i;break;}
+        }
+    }
+    if(target==SIZE_MAX)return call;
+    call.callee_start=c->nodes[target].start;call.callee_end=c->nodes[target].end;
+    while(is(c,target,"parenthesized_expression")){
+        size_t inner=SIZE_MAX;
+        for(size_t i=target+1;i<c->index[target].end;i=c->index[i].end)if(c->nodes[i].named && !is(c,i,"comment")){
+            if(inner!=SIZE_MAX){inner=SIZE_MAX;break;}inner=i;
+        }
+        if(inner==SIZE_MAX)break;
+        target=inner;
+    }
+    if(is(c,target,"identifier")){call.name_start=c->nodes[target].start;call.name_end=c->nodes[target].end;}
+    else if(is(c,target,"field_expression")){
+        size_t name=child(c,target,"field"),receiver=child(c,target,"argument");call.member=true;
+        if(is(c,name,"field_identifier")){call.name_start=c->nodes[name].start;call.name_end=c->nodes[name].end;}
+        if(receiver<c->count){call.receiver_start=c->nodes[receiver].start;call.receiver_end=c->nodes[receiver].end;}
+    }else if(is(c,target,"field_identifier"))call.member=true;
+    return call;
+}
 static ps_c_call call_context(const collector *c){
     ps_c_call call={0};
     if(!ps_c_lexical_cursor(c->source,c->bytes,c->cursor,NULL))return call;
@@ -238,7 +270,7 @@ static ps_c_call call_context(const collector *c){
             if(c->cursor<n.end || !closed)return (ps_c_call){0};
         }
         if(c->index[i].end!=i+1 || n.missing || is(c,i,"comment"))continue;
-        if(is(c,i,"(") && contains(c,i) && call_opener(c,i))call=(ps_c_call){.open=n.start,.active=true,.at_start=true};
+        if(is(c,i,"(") && contains(c,i) && call_opener(c,i))call=call_target(c,i);
     }
     if(!call.active)return call;
     size_t open=SIZE_MAX;

@@ -76,7 +76,9 @@ ps_result ps_completion_locals_update(ps_completion_locals *p,const void *owner,
         if(parsed.status==PS_OK)parsed=ps_c_bindings_source_at(next.c_source,cursor,craw,capacity,a);
         if(parsed.status==PS_MEMORY){r=PS_MEMORY;goto done;}
         next.status=parsed.status==PS_LIMIT?PS_LANG_EDITOR_LIMIT:parsed.status!=PS_OK?PS_LANG_EDITOR_INVALID:parsed.has_error?PS_LANG_EDITOR_PREFIX:PS_LANG_EDITOR_OK;
-        next.call=(ps_lang_editor_call){.open=parsed.call.open,.argument=parsed.call.argument,.active=parsed.call.active,.at_start=parsed.call.at_start};
+        next.call=(ps_lang_editor_call){.open=parsed.call.open,.argument=parsed.call.argument,.active=parsed.call.active,.at_start=parsed.call.at_start,
+            .callee_start=parsed.call.callee_start,.callee_end=parsed.call.callee_end,.name_start=parsed.call.name_start,.name_end=parsed.call.name_end,
+            .receiver_start=parsed.call.receiver_start,.receiver_end=parsed.call.receiver_end,.member=parsed.call.member};
         raw_count=parsed.count;
     }
     if(!raw_count)goto publish;

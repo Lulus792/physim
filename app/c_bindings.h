@@ -10,13 +10,21 @@ typedef struct {
 typedef struct {
     size_t open,argument;
     bool active,at_start;
+    size_t callee_start,callee_end,name_start,name_end,receiver_start,receiver_end;
+    bool member;
 } ps_c_call;
 typedef struct {
     ps_result status;
     size_t count;
     bool has_error;
-    ps_c_call call; /* Original '(' and zero-based argument; no callee resolution. */
+    ps_c_call call; /* Original target/name/receiver spans, '(' and argument. No semantic resolution. */
 } ps_c_bindings_result;
+
+/* Active target spans refer to the original grammar/recovery nodes. Name length
+ * zero is an indirect/complex target, not a guessed named function. Parenthesized
+ * names may expose their actual identifier, but dereferences, subscript/call
+ * results remain unnamed. member distinguishes written field calls even when
+ * no receiver span survives recovery. No declaration/type/signature inference. */
 
 typedef struct ps_c_bindings_source ps_c_bindings_source;
 /* Immutable, owned original-source/flat-grammar snapshot. No Tree-sitter object

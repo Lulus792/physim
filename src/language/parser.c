@@ -407,6 +407,7 @@ static size_t interpolated_string(parser *p, ps_lang_token whole) {
 }
 static size_t primary(parser *p, int multiline) {
     ps_lang_token t = p->current;
+    size_t primary_start=t.offset,member_receiver_end=0;
     size_t id = 0;
     if (t.kind == PS_LANG_MINUS || t.kind == PS_LANG_PLUS ||
         t.kind == PS_LANG_NOT || t.kind == PS_LANG_TILDE) {
@@ -488,7 +489,20 @@ static size_t primary(parser *p, int multiline) {
         }
         if (accept(p, PS_LANG_LPAREN)) {
             ps_lang_editor_call saved_call = p->editor ? p->editor->call : (ps_lang_editor_call){0};
-            if (p->editor) p->editor->call = (ps_lang_editor_call){t.offset, 0, 1, 0};
+            if (p->editor) {
+                ps_lang_editor_call call={.open=t.offset,.active=1,.callee_start=primary_start,.callee_end=t.offset};
+                if(id && (p->nodes[id].kind==PS_AST_NAME || p->nodes[id].kind==PS_AST_MEMBER)){
+                    ps_lang_node target=p->nodes[id];call.name_start=target.token.offset;call.name_end=target.token.offset+target.token.length;
+                    if(target.kind==PS_AST_MEMBER){
+                        call.member=1;ps_lang_node receiver=p->nodes[target.a];
+                        if(receiver.kind==PS_AST_NAME){call.receiver_start=receiver.token.offset;call.receiver_end=receiver.token.offset+receiver.token.length;}
+                        else if(receiver.kind==PS_AST_TYPE_APPLY && receiver.a && p->nodes[receiver.a].kind==PS_AST_NAME){
+                            call.receiver_start=p->nodes[receiver.a].token.offset;call.receiver_end=receiver.token.offset;
+                        }else if(member_receiver_end>primary_start){call.receiver_start=primary_start;call.receiver_end=member_receiver_end;}
+                    }
+                }
+                p->editor->call=call;
+            }
             size_t argument_index = 0;
             size_t first = 0, last = 0;
             newlines(p);
@@ -523,6 +537,7 @@ static size_t primary(parser *p, int multiline) {
             if (p->editor && closed) p->editor->call = saved_call;
             id = node(p, PS_AST_CALL, t, id, first, type_arguments);
         } else if (accept(p, PS_LANG_DOT)) {
+            member_receiver_end=t.offset;
             ps_lang_token name = p->current;
             expect(p, PS_LANG_IDENTIFIER, "Expected member name after '.'");
             id = node(p, PS_AST_MEMBER, name, id, 0, 0);

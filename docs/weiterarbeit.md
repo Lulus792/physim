@@ -7,6 +7,19 @@ vollständige Umsetzung/Abnahme; keine volle Punktzahl oder gesamte grüne CI be
 
 ## Aktueller Anschluss
 
+[Aufrufziele für die Parameterhilfe](verification/call-targets-2026-11-05.md):
+beide echten Parser liefern ursprüngliche Ziel-/Namens-/Empfängerspannen und
+Member-Syntax; indirekte Ziele bleiben ohne geratenen Namen. Noch keine
+Deklarations-/Signaturauflösung oder sichtbare Parameterhilfe. Windows/Linux
+je **Unit 9/9 + GUI 6/6**, 36 neue Fälle, vorige C-/Physim-Logik konkret abgewiesen.
+887 Frischvergleiche samt neuen Metadaten, 123/7/87 Speicherfehler weiter bestanden.
+Finaler Snapshot `call-targets-ci`, 282 eigene / 1.221 Compiler-/Testeingaben;
+alle 1.240 Eingaben gegen Git-Index gelesen. Details/STATE unter
+`build/validation/call-targets-2026-11-05/`. Alle lokalen Handles beendet.
+34 bytegleiche BMPs/108.695.892 Bytes entfernt, sämtliche Referenzen erhalten.
+Neuer Mac-Workflow enthält vier Daten-Units vor acht GUI-Gruppen; Ausführung am
+neuen Quellstand noch offen. Kein neues Performance-/physisches Abnahmeversprechen.
+
 [C-Syntaxwiederverwendung](verification/completion-reuse-2026-11-05.md): ein
 unveränderter, eigener Flat-Snapshot für Cursorwechsel/erneutes Öffnen; Scope-/
 Aufrufdaten frisch sammeln, alle Bytes/Besitzer/Sprache prüfen. Sichtbare Liste
@@ -31,45 +44,17 @@ einschließlich C/Physim drei Ziele und Schließen/Cache-Wiederöffnen. Diesen u
 neue Mac-Allokationsfehler- oder Performance-Abnahme. Privater Mac aus/unberührt.
 Die nächste Parameterhilfe-Datenarbeit gehört nicht zu dieser Mac-Abnahme.
 
-[C-Performance-Baseline](verification/completion-perf-2026-11-05.md) abgeschlossen:
-Anwendungscode unverändert `694bb586`, neue CLI-Werkzeuge und kompakter JSON-Beleg.
-Windows Release, sechs Quellen/21 Aufrufe pro Modus/Allocator; Cache p95 <0,04 ms,
-große frische/Cursor-Auswertungen verfehlen die vorher gewählte 16,7-ms-Prüfmarke.
-Im größten Fall Syntaxmedian: Parsen 37,67 / Knotenliste 12,50 / Freigabe 5,06 ms;
-maximal 22.330.270 angeforderte Bytes. Keine Optimierung/gesamte UI-Abnahme daraus
-ableiten. Werkzeug Windows/Linux je 47 Fälle, Linux ASan/UBSan mit Leakprüfung;
-abschließender Python-CLI-Check frisch gebaut. Rohwerte/STATE unter
-`build/validation/completion-perf-2026-11-05/`, keine neuen Bilder. Geschlossene
-App-/GUI-/Mac-Prüfungen nicht wiederholt; Nutzer-Mac ausdrücklich weiter aus.
-
-[Native C-Locals](verification/completion-c-2026-11-05.md) sind jetzt in Modell und
-GUI angeschlossen: geschriebene Typ-/Deklarations-/Quellkarte, Besitzer-/Sprach-/
-Revisionscache, lokale Namen vor API, volle Trefferzahl, UTF-8/UCN, leere Argumente,
-Ersetzen/Undo und Schutz vor falscher API-Referenz. Core unabhängig; keine separate
-Aufrufsignaturhilfe oder semantische C-/Include-/Präprozessoranalyse daraus ableiten.
-Windows Release/Linux Debug ASan/UBSan jeweils **Unit 8/8 + GUI 6/6**, gleiche
-Appbytes pro Plattform. Sechs C-Ansichten gesehen; 121/121 C-Modell-Speicherfehler
-mit Snapshot-Erhaltung, 38 Aufrufkontexte. Paket/6.422 Dateien und drei Lizenzen
-geprüft, keine dynamischen Parser-Exporte. Quellcommit **`694bb586`**, beide Repos;
-alle **1.239** erfassten Eingaben gegen Git-Blobs gelesen. [Commitabschluss](verification/completion-c-commit-2026-11-05.json).
-
-**Gehosteter Mac-Nachlauf geschlossen:** `41960990299`, Source/Head `694bb586`;
-ARM `127027035143` / Intel `127027035424` jeweils
-[8/8, beide ZIPs/Digests/alle Originaleinträge gelesen](verification/completion-c-macos-2026-11-05.json),
-einschließlich C/Physim über je drei Ziele. Keine gesamte Mac-/physische oder neue
-Mac-Allokationsfehler-Abnahme behaupten. Nutzer-Mac aus und unberührt. Diesen Lauf
-und die alten Läufe `41947340908`/frühere nicht erneut starten oder pollen.
-
-Eingefrorener lokaler Anschluss: `completion-c-restored`, 281 eigene / 1.220
-Compiler-/Testeingaben, 623 Windows-/143 Linux-Laufzeitdateien; Archive gelesen,
-alle lokalen Handles beendet. Die spätere reine C-Verfügbarkeitstextkorrektur in
-`docs/workspace.md` ist separat dokumentiert, in diesem Snapshot noch nicht drin;
-beim nächsten vorbereiteten Schritt über die vorhandene Own-Input-Liste übernehmen.
-Details: `build/validation/completion-c-2026-11-05/STATE.md`; Helfer unter
-`build/validation/explorer-inline-2026-10-29/`. Shared Baum bleibt
+Frühere abgeschlossene Grundlagen bleiben über ihre Belege erreichbar:
+[C-Performance-Baseline](verification/completion-perf-2026-11-05.md) mit tatsächlichem
+Syntaxengpass und [native C-Locals](verification/completion-c-2026-11-05.md),
+`694bb586`, inklusive Paket/Lizenzen und [ARM/Intel je 8/8](verification/completion-c-macos-2026-11-05.json).
+Die früheren Läufe `41960990299`, `41947340908` und ältere nicht erneut pollen oder
+aus Kontextgründen wiederholen. Aktueller gemeinsamer isolierter Baum bleibt
 `build/validation/protocol-wrap-2026-10-26/3-isolated/` (`src`, `windows-build`,
-`linux-build`); niemals bei laufendem Build/Test mutieren. 28 bytegleiche BMPs/
-89.514.264 Bytes entfernt, sechs C-Referenzen und alle Originalergebnisse erhalten.
+`linux-build`); Helfer unter `build/validation/explorer-inline-2026-10-29/`.
+Nächste Vorbereitung auf **`call-targets-ci`** aufbauen, niemals bei laufenden
+lokalen Jobs mutieren. Die frühere C-Verfügbarkeitstextkorrektur in
+`docs/workspace.md` ist inzwischen übernommen.
 
 ## Nächste Arbeit und verbleibender Umfang
 
@@ -82,9 +67,12 @@ Details: `build/validation/completion-c-2026-11-05/STATE.md`; Helfer unter
    Cursor-/Edit-Zeit samt gehaltenem Speicher weiter als offene Performance führen.
    Kein neuer Provider-Worker, keine Ergebnis-/Scopeverkürzung oder Budgetschwächung.
    Keine UI-/Linux-/Mac-Performance-Abnahme. Mac-UI-Nachlauf zu `9292b67e` geschlossen.
-3. Separate Aufruf-/Parameterhilfe einschließlich Benutzerfunktionen
-   ergänzen; weitere Codekontexte und semantische Rollen vervollständigen. Keine
-   Typinferenz/Includes/Werte vortäuschen, kein Browser-Lexer/Dienst/Provider-Worker.
+3. Aufrufziel-Daten fertig; tatsächliche API-/Benutzerfunktionsdeklarationen und
+   geschriebene Parameter/Typen für C/Physim anbinden, anschließend unabhängigen
+   Signatur-HUD vollständig nach ADR 023/APPROVED umsetzen (automatisch/manuell,
+   aktive A2-/Fett-/Unterkantenmarkierung, zu viele/innere Argumente, Escape,
+   Fokus/IME/Revision/Accessibility, normale Liste darunter). Keine Typinferenz/
+   Includes/Werte vortäuschen, kein Browser-Lexer/Dienst/Provider-Worker.
 4. Übrige freigegebene UI: A2 Szene/Mehrfachauswahl, Kontextmenüs A, B2, weitere
    Aufgabenfenster sowie historische Settings-/AX-Fixtures und Gesamtgestaltung.
    Physische Eingabe/IME, Screenreader, DPI/Monitor/Vollbild und unabhängige

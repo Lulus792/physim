@@ -69,6 +69,7 @@ static int equivalent(const ps_completion_locals *a,const ps_completion_locals *
     CHECK(a->bytes==b->bytes && a->cursor==b->cursor && a->language==b->language && a->status==b->status && a->count==b->count);
     CHECK(!memcmp(a->source,b->source,a->bytes));
     CHECK(a->call.active==b->call.active && a->call.open==b->call.open && a->call.argument==b->call.argument && a->call.at_start==b->call.at_start);
+    CHECK(a->call.callee_start==b->call.callee_start && a->call.callee_end==b->call.callee_end && a->call.name_start==b->call.name_start && a->call.name_end==b->call.name_end && a->call.receiver_start==b->call.receiver_start && a->call.receiver_end==b->call.receiver_end && a->call.member==b->call.member);
     for(size_t i=0;i<a->count;i++){
         const ps_completion_local *x=&a->entries[i],*y=&b->entries[i];
         CHECK(x->id==y->id && x->signature_name_offset==y->signature_name_offset && x->symbol.kind==y->symbol.kind && x->symbol.language==y->symbol.language && x->symbol.instance==y->symbol.instance);

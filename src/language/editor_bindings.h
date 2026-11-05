@@ -17,13 +17,22 @@ typedef enum {
 typedef struct {
     size_t open, argument; /* Byte offset of '(', zero-based argument ordinal. */
     int active, at_start; /* Current grammar path is inside a call argument. */
+    size_t callee_start,callee_end,name_start,name_end,receiver_start,receiver_end;
+    int member; /* Written member syntax; not receiver/type resolution. */
 } ps_lang_editor_call;
 typedef struct {
     size_t count;
     ps_lang_editor_status status;
     ps_lang_token diagnostic;
-    ps_lang_editor_call call; /* No callee/signature/type resolution claim. */
+    ps_lang_editor_call call; /* Original syntactic target spans, no declaration/signature/type resolution. */
 } ps_lang_editor_bindings_result;
+
+/* Active calls retain original source spans of the written target and its name.
+ * A zero-length name means an indirect/complex target, not a guessed function.
+ * Member receivers are separate spans when their AST provides them; member=1
+ * still distinguishes an unresolved receiver from an unqualified call. Callee
+ * range runs from the original primary expression through trivia before '(';
+ * explicit type arguments/grouping stay in the original source. */
 
 /* Parse only the original [0,cursor) with the real Physim grammar. A blank
  * cursor line uses the next real token's indentation to retain the enclosing
