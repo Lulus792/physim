@@ -1,0 +1,988 @@
+{
+  "date": "2026-11-05",
+  "scope": "Actual written C function/signature projection prerequisite only. No API/user resolver or visible independent parameter HUD; no full UI/performance/physical acceptance.",
+  "behavior": "Cached immutable actual grammar and private index, complete function/prototype/callback/one-level-pointer metadata. Exact own parameter list for callback returns; written names/types, anonymous/void/unspecified/ellipsis and old-style unknowns preserved. Lexical scope/order and callbacks only in definition body; legacy annotations stay private even when actual function header is malformed. No reparse/worker/preprocessing/include/alias/value inference.",
+  "tests": {
+    "platforms": [
+      {
+        "platform": "windows",
+        "phases": [
+          {
+            "phase": "native",
+            "app_sha256": "9de22156a58ffad54b214a5ef4e559a36419e9743ad372c2b4464a25d76f509a",
+            "runs": [
+              {
+                "run": "run-z8eyuiit",
+                "passed": 12,
+                "total": 12,
+                "cases": [
+                  "c_bindings",
+                  "c_call_context",
+                  "c_signatures",
+                  "completion",
+                  "completion_help",
+                  "completion_locals",
+                  "completion_c_locals",
+                  "call_targets",
+                  "editor_signatures",
+                  "completion_info",
+                  "syntax",
+                  "api_reference"
+                ],
+                "results": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-z8eyuiit/results.json",
+                  "bytes": 6469,
+                  "sha256": "28ac8e1e70159f1401cf8f3b777076eb373778fea5ae91ce369e70bae5e62f7b"
+                }
+              },
+              {
+                "run": "run-woey8f19",
+                "passed": 6,
+                "total": 6,
+                "cases": [
+                  "completion_workflow",
+                  "completion_automatic_workflow",
+                  "api_reference_workflow",
+                  "completion_info_workflow",
+                  "completion_automatic_deadline_workflow",
+                  "completion_locals_workflow"
+                ],
+                "results": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-woey8f19/results.json",
+                  "bytes": 143912,
+                  "sha256": "b9df927450f7a89c26ca6007cddc2d9a2c237f42e1c152dd64ebc05f6f02234d"
+                }
+              }
+            ]
+          },
+          {
+            "phase": "final",
+            "app_sha256": "61a1d9bd966dfd79de1c94d994817b52c906d1a27ca9e6efa5da92038f980dac",
+            "runs": [
+              {
+                "run": "run-bx1hn8_m",
+                "passed": 12,
+                "total": 12,
+                "cases": [
+                  "c_bindings",
+                  "c_call_context",
+                  "c_signatures",
+                  "completion",
+                  "completion_help",
+                  "completion_locals",
+                  "completion_c_locals",
+                  "call_targets",
+                  "editor_signatures",
+                  "completion_info",
+                  "syntax",
+                  "api_reference"
+                ],
+                "results": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bx1hn8_m/results.json",
+                  "bytes": 6469,
+                  "sha256": "ac5b01c68fe83ca49811201165a3234b0cf0f5d93a4b5d16e8fcca30e7e930e5"
+                }
+              },
+              {
+                "run": "run-caqjhctl",
+                "passed": 6,
+                "total": 6,
+                "cases": [
+                  "completion_workflow",
+                  "completion_automatic_workflow",
+                  "api_reference_workflow",
+                  "completion_info_workflow",
+                  "completion_automatic_deadline_workflow",
+                  "completion_locals_workflow"
+                ],
+                "results": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-caqjhctl/results.json",
+                  "bytes": 143911,
+                  "sha256": "352fa9fb3cf1a0eae143b304caada055fa3fedc8bebaa1866b56438c21c582cd"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "platform": "linux",
+        "phases": [
+          {
+            "phase": "native",
+            "app_sha256": "3ce8d1e090cae8f8912868b881db6f324d6675ade07099b3b4295671bb579d0c",
+            "runs": [
+              {
+                "run": "run-cl7cwmks",
+                "passed": 12,
+                "total": 12,
+                "cases": [
+                  "c_bindings",
+                  "c_call_context",
+                  "c_signatures",
+                  "completion",
+                  "completion_help",
+                  "completion_locals",
+                  "completion_c_locals",
+                  "call_targets",
+                  "editor_signatures",
+                  "completion_info",
+                  "syntax",
+                  "api_reference"
+                ],
+                "results": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-cl7cwmks/results.json",
+                  "bytes": 6212,
+                  "sha256": "23977ad10a30200eff263eee5bf167958264ddc09e4d761c20892ed333af3d23"
+                }
+              },
+              {
+                "run": "run-a6pkdwyg",
+                "passed": 6,
+                "total": 6,
+                "cases": [
+                  "completion_workflow",
+                  "completion_automatic_workflow",
+                  "api_reference_workflow",
+                  "completion_info_workflow",
+                  "completion_automatic_deadline_workflow",
+                  "completion_locals_workflow"
+                ],
+                "results": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-a6pkdwyg/results.json",
+                  "bytes": 141874,
+                  "sha256": "e2c2be9a14066a842b331a18d5790c6940e71bb52a592d3badb1d67f7e5dc73f"
+                }
+              }
+            ]
+          },
+          {
+            "phase": "final",
+            "app_sha256": "3230a8f259d7f16bc530d3fe4a6f15315d46cf9b12b85b363206e5a1769858fe",
+            "runs": [
+              {
+                "run": "run-g7rdvvr5",
+                "passed": 12,
+                "total": 12,
+                "cases": [
+                  "c_bindings",
+                  "c_call_context",
+                  "c_signatures",
+                  "completion",
+                  "completion_help",
+                  "completion_locals",
+                  "completion_c_locals",
+                  "call_targets",
+                  "editor_signatures",
+                  "completion_info",
+                  "syntax",
+                  "api_reference"
+                ],
+                "results": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-g7rdvvr5/results.json",
+                  "bytes": 6213,
+                  "sha256": "3fb6f17a8f5a33d74ac2fef7a03772e9be23791240cf2cc2b11b153b0fc383c9"
+                }
+              },
+              {
+                "run": "run-r90u_b6w",
+                "passed": 6,
+                "total": 6,
+                "cases": [
+                  "completion_workflow",
+                  "completion_automatic_workflow",
+                  "api_reference_workflow",
+                  "completion_info_workflow",
+                  "completion_automatic_deadline_workflow",
+                  "completion_locals_workflow"
+                ],
+                "results": {
+                  "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-r90u_b6w/results.json",
+                  "bytes": 141873,
+                  "sha256": "fd4164d802e45497660297f43f69cb16f194aee4ead8b4d8667ae6e9bb0f4d0f"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "direct_strict_gcc": {
+      "path": "build/validation/c-signatures-2026-11-05/invalid-legacy-fixed.json",
+      "bytes": 2171,
+      "sha256": "d9f67c5634261d14351603e9f0c1a6608660f0e6e6ca84c39059e78b3df32884"
+    },
+    "vectors": 33,
+    "prefixes": 205,
+    "scope_comparisons": 775,
+    "scope_oracle": "Same actual grammar and structural index, separate established local-variable visibility evaluation; no independent compiler/type-checking claim.",
+    "scratch_failures": 3,
+    "negative": [
+      {
+        "tag": "before-scope",
+        "command": [
+          "wsl",
+          "-d",
+          "Alpine-Dev",
+          "--exec",
+          "env",
+          "TMPDIR=/mnt/d/Physim/build/validation/c-signatures-2026-11-05",
+          "gcc",
+          "-std=c17",
+          "-fvisibility=hidden",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "-pthread",
+          "-I/mnt/d/Physim/include",
+          "-I/mnt/d/Physim/src",
+          "-I/mnt/d/Physim/app",
+          "-I/mnt/d/Physim/tests",
+          "-I/mnt/d/Physim/third_party/tree-sitter-0.27.1/lib/include",
+          "-I/mnt/d/Physim/third_party/tree-sitter-0.27.1/lib/src",
+          "/mnt/d/Physim/tests/test_c_signatures.c",
+          "/mnt/d/Physim/build/validation/c-signatures-2026-11-05/before-scope.c",
+          "/mnt/d/Physim/app/c_syntax.c",
+          "/mnt/d/Physim/app/c_grammar.c",
+          "/mnt/d/Physim/src/memory.c",
+          "-o",
+          "/mnt/d/Physim/build/validation/c-signatures-2026-11-05/before-scope"
+        ],
+        "compile_exit": 0,
+        "compile_stderr": "",
+        "source_sha256": "faadbb637d9ff21525ed93a20c6fabe4b7ba61f4574622dcff6ab561c68e4961",
+        "test_sha256": "f93547587d6fd0be0742c3a1c18b626703eb7046755ffb06f9347600f53db613",
+        "mode": "scope",
+        "exit_code": 1,
+        "stdout": "",
+        "stderr": "C signature scope mismatch at cursor 104 name 86 expected=1 visible=0 start=78 end=104 from=104 open=0\n"
+      },
+      {
+        "tag": "before-comma",
+        "command": [
+          "wsl",
+          "-d",
+          "Alpine-Dev",
+          "--exec",
+          "env",
+          "TMPDIR=/mnt/d/Physim/build/validation/c-signatures-2026-11-05",
+          "gcc",
+          "-std=c17",
+          "-fvisibility=hidden",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "-pthread",
+          "-I/mnt/d/Physim/include",
+          "-I/mnt/d/Physim/src",
+          "-I/mnt/d/Physim/app",
+          "-I/mnt/d/Physim/tests",
+          "-I/mnt/d/Physim/third_party/tree-sitter-0.27.1/lib/include",
+          "-I/mnt/d/Physim/third_party/tree-sitter-0.27.1/lib/src",
+          "/mnt/d/Physim/tests/test_c_signatures.c",
+          "/mnt/d/Physim/build/validation/c-signatures-2026-11-05/before-comma.c",
+          "/mnt/d/Physim/app/c_syntax.c",
+          "/mnt/d/Physim/app/c_grammar.c",
+          "/mnt/d/Physim/src/memory.c",
+          "-o",
+          "/mnt/d/Physim/build/validation/c-signatures-2026-11-05/before-comma"
+        ],
+        "compile_exit": 0,
+        "compile_stderr": "",
+        "source_sha256": "a70e965dade8906dacdc3879cb1b40c6cd1ea4d374576947576092cd42f5ed7b",
+        "test_sha256": "f93547587d6fd0be0742c3a1c18b626703eb7046755ffb06f9347600f53db613",
+        "mode": "written",
+        "exit_code": 1,
+        "stdout": "",
+        "stderr": "Recovered comma signature: int (*a)(int x)=0, (*b)(double y)\n"
+      },
+      {
+        "tag": "false-zero-final",
+        "command": [
+          "wsl",
+          "-d",
+          "Alpine-Dev",
+          "--exec",
+          "env",
+          "TMPDIR=/mnt/d/Physim/build/validation/c-signatures-2026-11-05",
+          "gcc",
+          "-std=c17",
+          "-fvisibility=hidden",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "-pthread",
+          "-I/mnt/d/Physim/include",
+          "-I/mnt/d/Physim/src",
+          "-I/mnt/d/Physim/app",
+          "-I/mnt/d/Physim/tests",
+          "-I/mnt/d/Physim/third_party/tree-sitter-0.27.1/lib/include",
+          "-I/mnt/d/Physim/third_party/tree-sitter-0.27.1/lib/src",
+          "/mnt/d/Physim/tests/test_c_signatures.c",
+          "/mnt/d/Physim/build/validation/c-signatures-2026-11-05/false-zero-final.c",
+          "/mnt/d/Physim/app/c_syntax.c",
+          "/mnt/d/Physim/app/c_grammar.c",
+          "/mnt/d/Physim/src/memory.c",
+          "-o",
+          "/mnt/d/Physim/build/validation/c-signatures-2026-11-05/false-zero-final"
+        ],
+        "compile_exit": 0,
+        "compile_stderr": "",
+        "source_sha256": "ac42d911e3cfd781c8fd83443c4ad2c605cb142eb4a8449b813bea1f41945913",
+        "test_sha256": "f93547587d6fd0be0742c3a1c18b626703eb7046755ffb06f9347600f53db613",
+        "mode": "prototype",
+        "exit_code": 1,
+        "stdout": "",
+        "stderr": "C signature unspecified prototype was presented as a known zero-parameter function\n"
+      },
+      {
+        "tag": "before-invalid-legacy",
+        "command": [
+          "wsl",
+          "-d",
+          "Alpine-Dev",
+          "--exec",
+          "env",
+          "TMPDIR=/mnt/d/Physim/build/validation/c-signatures-2026-11-05",
+          "gcc",
+          "-std=c17",
+          "-fvisibility=hidden",
+          "-Wall",
+          "-Wextra",
+          "-Werror",
+          "-g",
+          "-fsanitize=address,undefined",
+          "-fno-sanitize-recover=all",
+          "-pthread",
+          "-I/mnt/d/Physim/include",
+          "-I/mnt/d/Physim/src",
+          "-I/mnt/d/Physim/app",
+          "-I/mnt/d/Physim/tests",
+          "-I/mnt/d/Physim/third_party/tree-sitter-0.27.1/lib/include",
+          "-I/mnt/d/Physim/third_party/tree-sitter-0.27.1/lib/src",
+          "/mnt/d/Physim/tests/test_c_signatures.c",
+          "/mnt/d/Physim/build/validation/c-signatures-2026-11-05/before-invalid-legacy.c",
+          "/mnt/d/Physim/app/c_syntax.c",
+          "/mnt/d/Physim/app/c_grammar.c",
+          "/mnt/d/Physim/src/memory.c",
+          "-o",
+          "/mnt/d/Physim/build/validation/c-signatures-2026-11-05/before-invalid-legacy"
+        ],
+        "compile_exit": 0,
+        "compile_stderr": "",
+        "source_sha256": "854038fca565c94f18b204aecc72db2c99773a02501d14a009fa30dd795a70df",
+        "test_sha256": "f93547587d6fd0be0742c3a1c18b626703eb7046755ffb06f9347600f53db613",
+        "mode": "legacy",
+        "exit_code": 1,
+        "stdout": "",
+        "stderr": "C signature invalid old-style header leaked its callback annotation as a file-scope function\n"
+      }
+    ],
+    "actual_fixed_failures": [
+      "Before-closing-brace scope endpoint rejected a still-visible local; corrected to halfopen end after brace.",
+      "Comma recovery base included previous declarator/initializer; keep actual last written specifier end.",
+      "Malformed old-style header leaked its callback annotation as file-scope signature; mark annotation ownership before rejecting bad header."
+    ],
+    "first_test_leak": "First expected-failing scope test returned before freeing its snapshot, giving a secondary LSan report. Clean negative modes free snapshot and retain detect_leaks=1, no sanitizer suppression.",
+    "reason_for_final_matrix": "Concrete additional bad old-style header regression after initial12+6 matrices, not a context-triggered repetition. Final source again12+6 on both hosts."
+  },
+  "snapshot": {
+    "final": "c-signatures-final",
+    "compiler_test_inputs": 1226,
+    "owned_inputs": 287,
+    "unique_inputs": 1245,
+    "all_input_bytes_match_git_index": true,
+    "all_referenced_archive_bytes_read": true
+  },
+  "cleanup": {
+    "removed": [
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-woey8f19/api_reference_workflow/files ä/workflow ä/c/api-reference-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "35f0f073984fdf014c6c72719afd5006a4e8b282533f756c770ee272b6a14d0e",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/c/api-reference-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-woey8f19/api_reference_workflow/files ä/workflow ä/c/api-reference-document.bmp",
+        "bytes": 3196938,
+        "sha256": "2dcfeba839ce3dda98f483c55a758a49d7594d8a12dc0feadd5cb2306924333f",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/c/api-reference-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-woey8f19/api_reference_workflow/files ä/workflow ä/c/api-reference-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "b32898a1e9da3f92ed46549f587cf5c09af8ed99742bfb9d94e17be422cc32c2",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/c/api-reference-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-woey8f19/api_reference_workflow/files ä/workflow ä/phys/api-reference-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "eb781e69082e545bd3299d61395921e39977039287a30dac59a759f03d307e4c",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/phys/api-reference-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-woey8f19/api_reference_workflow/files ä/workflow ä/phys/api-reference-document.bmp",
+        "bytes": 3196938,
+        "sha256": "e18723da22f0bf14e108e4412886053bfc778e52b1ed6a22aa51f98becda7b62",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/phys/api-reference-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-woey8f19/api_reference_workflow/files ä/workflow ä/phys/api-reference-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "ff4dd9abc68e0bcc7dbc81eebb3b98dc4d449b1a45b063b27877aa8c57f13301",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/phys/api-reference-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-woey8f19/completion_locals_workflow/files ä/workflow ä/c/locals-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "d206b8a7c3bcf09878bb653a690ff621ac4dcaf85589574bc94793b5410879fa",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mxoufvz4/completion_locals_workflow/files ä/workflow ä/c/locals-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-woey8f19/completion_locals_workflow/files ä/workflow ä/c/locals-document.bmp",
+        "bytes": 3196938,
+        "sha256": "c701c35c2e2de7748ee1f9143ece7f3e4a87e8efda44cd76f756c6b52f20c5df",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mxoufvz4/completion_locals_workflow/files ä/workflow ä/c/locals-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-woey8f19/completion_locals_workflow/files ä/workflow ä/c/locals-model.bmp",
+        "bytes": 3196938,
+        "sha256": "0042f02d41897e4213d636305837504ad6d1c544394491c4f7f6dd86833cb3a0",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mxoufvz4/completion_locals_workflow/files ä/workflow ä/c/locals-model.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-woey8f19/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "8f9bfe6f5a0ff6ee16a04eac288d09d17e64ee9e01d8d0c92f4f498c8f4101c1",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-woey8f19/completion_workflow/files ä/workflow ä/c/completion-document.bmp",
+        "bytes": 3196938,
+        "sha256": "4f54e16e5de74b48a3fa3e46ab8eba44b124e767bf1ec9fd070541b1eba26657",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/c/completion-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-woey8f19/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "15fecc83b3c2f7d6893aef222a21c400b28b01eafb4fc5c9666a3fc5a0447e0d",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-woey8f19/completion_workflow/files ä/workflow ä/c/completion-reference-error.bmp",
+        "bytes": 3196938,
+        "sha256": "952047d0d6bd41484c7aac4566616355acc360ce2331d26be9fc091ccc63588c",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/c/completion-reference-error.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-woey8f19/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "e11aa9a3942b9a03cc2c981478943d9003639a0c8eba6e0b74bf183c23a3ddbb",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-woey8f19/completion_workflow/files ä/workflow ä/phys/completion-document.bmp",
+        "bytes": 3196938,
+        "sha256": "57dfb4f827ac5fbdac7bb72e1f07bb2e5644faaccc03e3582c881b46844c6931",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/phys/completion-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-woey8f19/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "ba8aa091274f0a74f029bc84747bf4a64519d29b8a80d658ff352789f4dc90c3",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-woey8f19/completion_workflow/files ä/workflow ä/phys/completion-reference-error.bmp",
+        "bytes": 3196938,
+        "sha256": "c4bd5a3ac058e09503ee761a8351264a1db1b40c046bfe44c26643f129ca8d43",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/phys/completion-reference-error.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-caqjhctl/api_reference_workflow/files ä/workflow ä/c/api-reference-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "35f0f073984fdf014c6c72719afd5006a4e8b282533f756c770ee272b6a14d0e",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/c/api-reference-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-caqjhctl/api_reference_workflow/files ä/workflow ä/c/api-reference-document.bmp",
+        "bytes": 3196938,
+        "sha256": "2dcfeba839ce3dda98f483c55a758a49d7594d8a12dc0feadd5cb2306924333f",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/c/api-reference-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-caqjhctl/api_reference_workflow/files ä/workflow ä/c/api-reference-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "b32898a1e9da3f92ed46549f587cf5c09af8ed99742bfb9d94e17be422cc32c2",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/c/api-reference-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-caqjhctl/api_reference_workflow/files ä/workflow ä/phys/api-reference-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "eb781e69082e545bd3299d61395921e39977039287a30dac59a759f03d307e4c",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/phys/api-reference-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-caqjhctl/api_reference_workflow/files ä/workflow ä/phys/api-reference-document.bmp",
+        "bytes": 3196938,
+        "sha256": "e18723da22f0bf14e108e4412886053bfc778e52b1ed6a22aa51f98becda7b62",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/phys/api-reference-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-caqjhctl/api_reference_workflow/files ä/workflow ä/phys/api-reference-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "ff4dd9abc68e0bcc7dbc81eebb3b98dc4d449b1a45b063b27877aa8c57f13301",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/phys/api-reference-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-caqjhctl/completion_locals_workflow/files ä/workflow ä/c/locals-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "d206b8a7c3bcf09878bb653a690ff621ac4dcaf85589574bc94793b5410879fa",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mxoufvz4/completion_locals_workflow/files ä/workflow ä/c/locals-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-caqjhctl/completion_locals_workflow/files ä/workflow ä/c/locals-document.bmp",
+        "bytes": 3196938,
+        "sha256": "c701c35c2e2de7748ee1f9143ece7f3e4a87e8efda44cd76f756c6b52f20c5df",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mxoufvz4/completion_locals_workflow/files ä/workflow ä/c/locals-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-caqjhctl/completion_locals_workflow/files ä/workflow ä/c/locals-model.bmp",
+        "bytes": 3196938,
+        "sha256": "0042f02d41897e4213d636305837504ad6d1c544394491c4f7f6dd86833cb3a0",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mxoufvz4/completion_locals_workflow/files ä/workflow ä/c/locals-model.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-caqjhctl/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "8f9bfe6f5a0ff6ee16a04eac288d09d17e64ee9e01d8d0c92f4f498c8f4101c1",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-caqjhctl/completion_workflow/files ä/workflow ä/c/completion-document.bmp",
+        "bytes": 3196938,
+        "sha256": "4f54e16e5de74b48a3fa3e46ab8eba44b124e767bf1ec9fd070541b1eba26657",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/c/completion-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-caqjhctl/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "15fecc83b3c2f7d6893aef222a21c400b28b01eafb4fc5c9666a3fc5a0447e0d",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-caqjhctl/completion_workflow/files ä/workflow ä/c/completion-reference-error.bmp",
+        "bytes": 3196938,
+        "sha256": "952047d0d6bd41484c7aac4566616355acc360ce2331d26be9fc091ccc63588c",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/c/completion-reference-error.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-caqjhctl/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "e11aa9a3942b9a03cc2c981478943d9003639a0c8eba6e0b74bf183c23a3ddbb",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-caqjhctl/completion_workflow/files ä/workflow ä/phys/completion-document.bmp",
+        "bytes": 3196938,
+        "sha256": "57dfb4f827ac5fbdac7bb72e1f07bb2e5644faaccc03e3582c881b46844c6931",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/phys/completion-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-caqjhctl/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "ba8aa091274f0a74f029bc84747bf4a64519d29b8a80d658ff352789f4dc90c3",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-caqjhctl/completion_workflow/files ä/workflow ä/phys/completion-reference-error.bmp",
+        "bytes": 3196938,
+        "sha256": "c4bd5a3ac058e09503ee761a8351264a1db1b40c046bfe44c26643f129ca8d43",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/phys/completion-reference-error.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-a6pkdwyg/api_reference_workflow/files ä/workflow ä/c/api-reference-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "a3151fba54c4ffc73c27cf9693535da1b456e87307804f96e1e568b98cf7d8a7",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/workflow ä/c/api-reference-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-a6pkdwyg/api_reference_workflow/files ä/workflow ä/c/api-reference-document.bmp",
+        "bytes": 3196938,
+        "sha256": "785d69709a33a1e01d04ceb19187613cb6ab5bc655b28035b1eefd1d98028cf1",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/workflow ä/c/api-reference-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-a6pkdwyg/api_reference_workflow/files ä/workflow ä/c/api-reference-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "78add32d17f9b2fe76dfd12f51fea297416884f28e5ea169f0af1bd3253d6168",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/workflow ä/c/api-reference-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-a6pkdwyg/api_reference_workflow/files ä/workflow ä/phys/api-reference-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "9c3d685bee93d272b9bd05297c029ce9e4eaad1b641ee3cc650f680cede89d5d",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/workflow ä/phys/api-reference-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-a6pkdwyg/api_reference_workflow/files ä/workflow ä/phys/api-reference-document.bmp",
+        "bytes": 3196938,
+        "sha256": "e21d1d8845e0b86fd54a6e1f32f6396fd2ec78e9137ca8bf766fa6efc37de501",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/api_reference_workflow/files ä/workflow ä/phys/api-reference-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-a6pkdwyg/api_reference_workflow/files ä/workflow ä/phys/api-reference-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "02d012a16af3e88763a5ce2d2d7a49666240aec16464a81acfadfd3f4d6c669d",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/workflow ä/phys/api-reference-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-a6pkdwyg/completion_locals_workflow/files ä/workflow ä/c/locals-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "91a68926cbc83746adc7de9bf9690922a544a7de7829da168a4eb30259c3cf6a",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-pqjm5dl2/completion_locals_workflow/files ä/workflow ä/c/locals-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-a6pkdwyg/completion_locals_workflow/files ä/workflow ä/c/locals-document.bmp",
+        "bytes": 3196938,
+        "sha256": "fff0aaf9afa1286d3b21b486a834c22062de244575297b1e1e7342d4dfcc80d0",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-pqjm5dl2/completion_locals_workflow/files ä/workflow ä/c/locals-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-a6pkdwyg/completion_locals_workflow/files ä/workflow ä/c/locals-model.bmp",
+        "bytes": 3196938,
+        "sha256": "3d0d4321285424d98e1f66c10dc9a4d43a004153dd2728ac1f1cd0b1f50d0c9a",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-pqjm5dl2/completion_locals_workflow/files ä/workflow ä/c/locals-model.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-a6pkdwyg/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "54029509eabb27fce79fac18071d7b9d0e99137783aacb6b7ffd93d443ab7637",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-a6pkdwyg/completion_workflow/files ä/workflow ä/c/completion-document.bmp",
+        "bytes": 3196938,
+        "sha256": "ef262e11585ffe742af3578c949a7537b703de9ec3c32db5f3ccbe5877e31c5a",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/c/completion-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-a6pkdwyg/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "a07b8577698a0baecaac7c5b62b0c22307d50eb05aea1e5dd3eafe9d9a4f9b10",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-a6pkdwyg/completion_workflow/files ä/workflow ä/c/completion-reference-error.bmp",
+        "bytes": 3196938,
+        "sha256": "66238798df72a2f947647243012350331580c91f92f20f5f68a6ff1cb5292dd5",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/c/completion-reference-error.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-a6pkdwyg/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "eb85fd3e395468c72b4f8caa2107513d0821b2ea1cca282b276e9bad01d77786",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-a6pkdwyg/completion_workflow/files ä/workflow ä/phys/completion-document.bmp",
+        "bytes": 3196938,
+        "sha256": "4e7116dc23fd810107f8f34b951bf965107f3d9da24b16bb6b4840511d8d1fe6",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/phys/completion-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-a6pkdwyg/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "be131389628a4f164a8ecd36315460e6fe36a5b75bbec03672ddf712637e3a44",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-a6pkdwyg/completion_workflow/files ä/workflow ä/phys/completion-reference-error.bmp",
+        "bytes": 3196938,
+        "sha256": "6d7c691cf0625f24b11de507532b2ae2c8fed5d03f9b58021179e2d19b0b9efa",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/phys/completion-reference-error.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-r90u_b6w/api_reference_workflow/files ä/workflow ä/c/api-reference-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "a3151fba54c4ffc73c27cf9693535da1b456e87307804f96e1e568b98cf7d8a7",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/workflow ä/c/api-reference-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-r90u_b6w/api_reference_workflow/files ä/workflow ä/c/api-reference-document.bmp",
+        "bytes": 3196938,
+        "sha256": "785d69709a33a1e01d04ceb19187613cb6ab5bc655b28035b1eefd1d98028cf1",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/workflow ä/c/api-reference-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-r90u_b6w/api_reference_workflow/files ä/workflow ä/c/api-reference-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "78add32d17f9b2fe76dfd12f51fea297416884f28e5ea169f0af1bd3253d6168",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/workflow ä/c/api-reference-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-r90u_b6w/api_reference_workflow/files ä/workflow ä/phys/api-reference-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "9c3d685bee93d272b9bd05297c029ce9e4eaad1b641ee3cc650f680cede89d5d",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/workflow ä/phys/api-reference-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-r90u_b6w/api_reference_workflow/files ä/workflow ä/phys/api-reference-document.bmp",
+        "bytes": 3196938,
+        "sha256": "e21d1d8845e0b86fd54a6e1f32f6396fd2ec78e9137ca8bf766fa6efc37de501",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/api_reference_workflow/files ä/workflow ä/phys/api-reference-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-r90u_b6w/api_reference_workflow/files ä/workflow ä/phys/api-reference-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "02d012a16af3e88763a5ce2d2d7a49666240aec16464a81acfadfd3f4d6c669d",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/workflow ä/phys/api-reference-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-r90u_b6w/completion_locals_workflow/files ä/workflow ä/c/locals-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "91a68926cbc83746adc7de9bf9690922a544a7de7829da168a4eb30259c3cf6a",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-pqjm5dl2/completion_locals_workflow/files ä/workflow ä/c/locals-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-r90u_b6w/completion_locals_workflow/files ä/workflow ä/c/locals-document.bmp",
+        "bytes": 3196938,
+        "sha256": "fff0aaf9afa1286d3b21b486a834c22062de244575297b1e1e7342d4dfcc80d0",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-pqjm5dl2/completion_locals_workflow/files ä/workflow ä/c/locals-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-r90u_b6w/completion_locals_workflow/files ä/workflow ä/c/locals-model.bmp",
+        "bytes": 3196938,
+        "sha256": "3d0d4321285424d98e1f66c10dc9a4d43a004153dd2728ac1f1cd0b1f50d0c9a",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-pqjm5dl2/completion_locals_workflow/files ä/workflow ä/c/locals-model.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-r90u_b6w/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "54029509eabb27fce79fac18071d7b9d0e99137783aacb6b7ffd93d443ab7637",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-r90u_b6w/completion_workflow/files ä/workflow ä/c/completion-document.bmp",
+        "bytes": 3196938,
+        "sha256": "ef262e11585ffe742af3578c949a7537b703de9ec3c32db5f3ccbe5877e31c5a",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/c/completion-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-r90u_b6w/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "a07b8577698a0baecaac7c5b62b0c22307d50eb05aea1e5dd3eafe9d9a4f9b10",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-r90u_b6w/completion_workflow/files ä/workflow ä/c/completion-reference-error.bmp",
+        "bytes": 3196938,
+        "sha256": "66238798df72a2f947647243012350331580c91f92f20f5f68a6ff1cb5292dd5",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/c/completion-reference-error.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-r90u_b6w/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "eb85fd3e395468c72b4f8caa2107513d0821b2ea1cca282b276e9bad01d77786",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-r90u_b6w/completion_workflow/files ä/workflow ä/phys/completion-document.bmp",
+        "bytes": 3196938,
+        "sha256": "4e7116dc23fd810107f8f34b951bf965107f3d9da24b16bb6b4840511d8d1fe6",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/phys/completion-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-r90u_b6w/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "be131389628a4f164a8ecd36315460e6fe36a5b75bbec03672ddf712637e3a44",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-r90u_b6w/completion_workflow/files ä/workflow ä/phys/completion-reference-error.bmp",
+        "bytes": 3196938,
+        "sha256": "6d7c691cf0625f24b11de507532b2ae2c8fed5d03f9b58021179e2d19b0b9efa",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/phys/completion-reference-error.bmp"
+      }
+    ],
+    "kept": [],
+    "bytes_freed": 217391784,
+    "reason": "All four initial/final local jobs terminal; exact byte-identical BMPs matched protected references. Original errors, source/runtime archives, logs and references preserved. No SDK/cache/VM/foreign data deleted."
+  },
+  "raw": [
+    {
+      "path": "build/validation/c-signatures-2026-11-05/invalid-legacy-fixed.json",
+      "bytes": 2171,
+      "sha256": "d9f67c5634261d14351603e9f0c1a6608660f0e6e6ca84c39059e78b3df32884"
+    },
+    {
+      "path": "build/validation/c-signatures-2026-11-05/invalid-legacy-before.json",
+      "bytes": 2308,
+      "sha256": "e36d53022ecc8a7e67dd6cf4fa279f61d004089c1b2fe6e3935eeeba347cc4b9"
+    },
+    {
+      "path": "build/validation/c-signatures-2026-11-05/independent-oracle.json",
+      "bytes": 4430,
+      "sha256": "2106fcc052eb549dabcd7a12be094b1a1594633915f823b6ef789d74cf642c71"
+    },
+    {
+      "path": "build/validation/c-signatures-2026-11-05/scope-fixed.json",
+      "bytes": 2270,
+      "sha256": "f057e5ddb3020b1d2248da790ee8df2aa0d9c2068de838b26dc6301a690cd954"
+    },
+    {
+      "path": "build/validation/c-signatures-2026-11-05/negative-final.json",
+      "bytes": 5765,
+      "sha256": "40288899ec46b6564dfe0a15c604cb4119e75ba3817f05984218ae46eb630ae5"
+    },
+    {
+      "path": "build/validation/c-signatures-2026-11-05/index-match.json",
+      "bytes": 300867,
+      "sha256": "1f7e61cf02a6c266cc8d501d3364fbc8428b4ce7c3e6b86dff7254b74a984b67"
+    },
+    {
+      "path": "build/validation/c-signatures-2026-11-05/cleanup.json",
+      "bytes": 33821,
+      "sha256": "88a17cf2cbb5876ff3bb9ab42d9927c63fbe5602b9659a37fe0ea67ffa462a93"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-z8eyuiit/results.json",
+      "bytes": 6469,
+      "sha256": "28ac8e1e70159f1401cf8f3b777076eb373778fea5ae91ce369e70bae5e62f7b"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-woey8f19/results.json",
+      "bytes": 143912,
+      "sha256": "b9df927450f7a89c26ca6007cddc2d9a2c237f42e1c152dd64ebc05f6f02234d"
+    },
+    {
+      "path": "build/validation/c-signatures-2026-11-05/native-windows.json",
+      "bytes": 2643,
+      "sha256": "9e09af9facf9fc28b88e09547fa3dd214a97497dfca55bfc9af8ee5b5e22ccac"
+    },
+    {
+      "path": "build/validation/c-signatures-2026-11-05/native-windows.log",
+      "bytes": 70994,
+      "sha256": "e2c08a7cb41a2edf9b342eb0c0614bbfc74186901889e3ed7f791386a4fff985"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bx1hn8_m/results.json",
+      "bytes": 6469,
+      "sha256": "ac5b01c68fe83ca49811201165a3234b0cf0f5d93a4b5d16e8fcca30e7e930e5"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-caqjhctl/results.json",
+      "bytes": 143911,
+      "sha256": "352fa9fb3cf1a0eae143b304caada055fa3fedc8bebaa1866b56438c21c582cd"
+    },
+    {
+      "path": "build/validation/c-signatures-2026-11-05/final-windows.json",
+      "bytes": 2643,
+      "sha256": "cf127c34d1397003c53a55377ac1e42d41350227cd91d6768da1b836cc389ee9"
+    },
+    {
+      "path": "build/validation/c-signatures-2026-11-05/final-windows.log",
+      "bytes": 70994,
+      "sha256": "ab521aa742b51551a11621cf9f89919c876aa0afdff7d26e39e23a2c9a17794e"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-cl7cwmks/results.json",
+      "bytes": 6212,
+      "sha256": "23977ad10a30200eff263eee5bf167958264ddc09e4d761c20892ed333af3d23"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-a6pkdwyg/results.json",
+      "bytes": 141874,
+      "sha256": "e2c2be9a14066a842b331a18d5790c6940e71bb52a592d3badb1d67f7e5dc73f"
+    },
+    {
+      "path": "build/validation/c-signatures-2026-11-05/native-linux.json",
+      "bytes": 2286,
+      "sha256": "68e815523f2f61399cf67bbb244dd996c0507beee922613edd5f6952521a986a"
+    },
+    {
+      "path": "build/validation/c-signatures-2026-11-05/native-linux.log",
+      "bytes": 303412,
+      "sha256": "97979af29144c09e6907a03e29e067712ce3ce55405addb81efd67d1ce67070a"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-g7rdvvr5/results.json",
+      "bytes": 6213,
+      "sha256": "3fb6f17a8f5a33d74ac2fef7a03772e9be23791240cf2cc2b11b153b0fc383c9"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-r90u_b6w/results.json",
+      "bytes": 141873,
+      "sha256": "fd4164d802e45497660297f43f69cb16f194aee4ead8b4d8667ae6e9bb0f4d0f"
+    },
+    {
+      "path": "build/validation/c-signatures-2026-11-05/final-linux.json",
+      "bytes": 2286,
+      "sha256": "b256b7c8e0b9d7458ffa2fb3548244d6e8d3d0378863c284be47ac5ff49ff453"
+    },
+    {
+      "path": "build/validation/c-signatures-2026-11-05/final-linux.log",
+      "bytes": 303412,
+      "sha256": "020d6f81faa3ea03f6e7b88dfccdbc1dc808826a7cf815acf12b29aa264a1c6a"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/c-signatures-inputs.json",
+      "bytes": 31969,
+      "sha256": "ea3030d6adceeb17c277c847820ce7eaad9d1fa8b4bcdfcc3e6200736da62f4c"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/c-signatures-first-compiler-source.json",
+      "bytes": 132176,
+      "sha256": "b5ec308d1eaf745053c30d69df045b44d21d39a51259f5f97b698652093d34f7"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/c-signatures-first-runtime.json",
+      "bytes": 86739,
+      "sha256": "d3e8dfaa744e4907f2da35a85e1564638fdeced6f15c0de9619e5eb73df14b10"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/c-signatures-first-byte-index.json",
+      "bytes": 225722,
+      "sha256": "1d0c6090224ddb42b01a6178b2e2bf40d3c60b39d296475293f2e7f5b9210aea"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/c-signatures-final-inputs.json",
+      "bytes": 31969,
+      "sha256": "ad8c3f44da00cb1e9922db2a846f841a3d054acbac097cb626abf472f6e333d5"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/c-signatures-final-compiler-source.json",
+      "bytes": 132083,
+      "sha256": "ed724451b2f2757e46414c8da89f2d293250e88ed427db0e42656fe2451557de"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/c-signatures-final-runtime.json",
+      "bytes": 86739,
+      "sha256": "8fa2a12623b86f6328bb7ccbf96970d5cba7656b9092238556c7a20608220996"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/c-signatures-final-byte-index.json",
+      "bytes": 225722,
+      "sha256": "ddf1f292ee24076116ce277223126752eae88a6d6a1705861c1b562a367734a3"
+    }
+  ],
+  "mac": {
+    "private": "OFF, untouched",
+    "previous": "7a3e7950 hosted41976275068 closed ARM/Intel6units+8GUI, originalZIPs verified; excludes this C API.",
+    "current": "Workflow7data+8GUI configured; execution pending source commit/push and original artifact verification."
+  },
+  "remaining": [
+    "Common owned actual API/user signature resolution for C and Physim, scope/shadow/unknown and overload honesty.",
+    "Full independent native parameter HUD per ADR023 with complete signature/activeA2+bold+underline, auto/manual, nested/too-many args, list-below/escape/accept/focus/IME/revision/accessibility.",
+    "Large edit performance, all remaining approved native UI and platform/physical acceptance."
+  ]
+}

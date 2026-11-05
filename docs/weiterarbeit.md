@@ -7,6 +7,27 @@ vollständige Umsetzung/Abnahme; keine volle Punktzahl oder gesamte grüne CI be
 
 ## Aktueller Anschluss
 
+[Geschriebene C-Signaturen](verification/c-signatures-2026-11-05.md): tatsächliche
+vollständige Deklaratoren aus vorhandenem unveränderlichem Grammatik-Snapshot,
+kein erneutes Parsen/Worker. Funktionen/Prototypen, einfache Funktionszeiger und
+Definitions-Callbackparameter, eigene Parameterliste bei Zeiger-Rückgaben,
+void/unspezifiziert/Ellipsis, geschriebene alte Typen und echte Bereiche/Reihenfolge.
+Keine API-/Benutzerauflösung oder sichtbarer unabhängiger Parameter-HUD.
+Windows/Linux endgültig je **Unit 12/12 + GUI 6/6**; 33 Deklarationsfälle,
+205 Bytepräfixe, 775 Cursor-/Namensvergleiche und 3 Scratch-Fehler. Vier defekte
+Varianten gezielt abgewiesen. Drei tatsächliche Implementierungsfehler behoben:
+Cursor vor `}`, falscher Kommalisten-Basisbereich und globale Callback-Annotation
+bei beschädigtem altem Kopf. Letzter Befund war konkreter Anlass für zweite
+12+6-Matrizen; kein Wiederholen wegen Kontextwechsel.
+Finaler Snapshot **`c-signatures-final`**, 287 eigene / 1.226 Compiler-/Testeingaben;
+alle 1.245 Eingaben gegen Git-Index gelesen, alle Archive geprüft.
+Windows `run-bx1hn8_m` / `run-caqjhctl`, Linux `run-g7rdvvr5` / `run-r90u_b6w`;
+[JSON](verification/c-signatures-2026-11-05.json) und
+`build/validation/c-signatures-2026-11-05/STATE.md` enthalten erste/finale Phasen.
+Alle lokalen Handles beendet; 68 bytegleiche BMPs/217.391.784 Bytes entfernt,
+Referenzen und Originalberichte erhalten. Neuer Mac-Nachlauf offen, Workflow
+sieben Daten-Units + acht GUI-Gruppen. Keine gesamte UI-/Performance-/physische Abnahme.
+
 [Geschriebene Physim-Signaturen](verification/signature-declarations-2026-11-05.md):
 echter Parser veröffentlicht vollständige Köpfe mit Parametern/Typen/Rückgabe,
 Generics, Methoden/Besitzer und lokalen Block-/Sichtbarkeitsspannen. Noch keine
@@ -15,8 +36,8 @@ Windows/Linux je **15 Unit-Gruppen + GUI 6/6**; 294 AST-/Präfix-Bytevergleiche,
 drei defekte Datenvarianten abgewiesen. Erster Windows-Test verglich Padding;
 feldweiser Nachtest je 1/1 bei gleichen Appbytes, Windows 1.410 Padding-Abweichungen.
 Kurzinfo-Fristprüfer testet reale alte Frist am wartenden Modell statt ein
-100-ms-Abtastfenster zu verlangen; sichtbare Prüfungen bleiben. Neuer Mac-Nachlauf
-offen, Workflow jetzt sechs Daten-Units + acht GUI-Gruppen.
+100-ms-Abtastfenster zu verlangen; sichtbare Prüfungen bleiben. Der gehostete
+sechs-Daten-/acht-GUI-Nachlauf ist abgeschlossen (siehe unten).
 Finaler Snapshot **`signature-declarations-fields`**, 284 eigene / 1.223
 Compiler-/Testeingaben; alle 1.242 Eingaben gegen Git-Index gelesen, alle Archive
 geprüft. Windows `run-nxyvdfhz` / `run-ptblb524`, Linux `run-q9gskm57` /
@@ -45,8 +66,8 @@ Finaler Snapshot `call-targets-ci`, 282 eigene / 1.221 Compiler-/Testeingaben;
 alle 1.240 Eingaben gegen Git-Index gelesen. Details/STATE unter
 `build/validation/call-targets-2026-11-05/`. Alle lokalen Handles beendet.
 34 bytegleiche BMPs/108.695.892 Bytes entfernt, sämtliche Referenzen erhalten.
-Neuer Mac-Workflow enthält vier Daten-Units vor acht GUI-Gruppen; Ausführung am
-neuen Quellstand noch offen. Kein neues Performance-/physisches Abnahmeversprechen.
+Mac-Nachlauf mit vier Daten-Units vor acht GUI-Gruppen ist mit dem unten belegten
+Intel-GUI-Fehler beendet. Kein neues Performance-/physisches Abnahmeversprechen.
 Quellcommit **`c9b9c00f`**, beide Repositories;
 [Commitabgleich und Mac-Anschluss](verification/call-targets-commit-2026-11-05.json).
 Gehosteter Lauf **`41972622898`** ist beendet und seine beiden ZIPs/Digests/
@@ -54,8 +75,8 @@ Originaleinträge sind gelesen: ARM `127064120558` **Unit 4/4 + GUI 8/8**,
 Intel `127064120877` **Unit 4/4 + GUI 7/8**. [Nachweis und Fehler](verification/call-targets-macos-2026-11-05.json).
 Intel scheitert in `completion_info_workflow`, Physim-Ziel 2, Stufe 15: der alte
 Prüfer verlangt einen gerenderten Frame zwischen zwei kurzen Fristen. Die
-Zeitprüfung wird am realen wartenden Modell von der Frame-Abtastung getrennt;
-ein neuer Quellnachlauf bleibt erforderlich. Diesen abgeschlossenen Lauf nicht
+Zeitprüfung ist in `7a3e7950` am realen wartenden Modell von der Frame-Abtastung
+getrennt und auf beiden Architekturen erfolgreich nachgeprüft. Diesen alten Lauf nicht
 erneut pollen/starten. Kein neuer Zugriff auf den Nutzer-Mac.
 
 [C-Syntaxwiederverwendung](verification/completion-reuse-2026-11-05.md): ein
@@ -90,7 +111,7 @@ Die früheren Läufe `41960990299`, `41947340908` und ältere nicht erneut polle
 aus Kontextgründen wiederholen. Aktueller gemeinsamer isolierter Baum bleibt
 `build/validation/protocol-wrap-2026-10-26/3-isolated/` (`src`, `windows-build`,
 `linux-build`); Helfer unter `build/validation/explorer-inline-2026-10-29/`.
-Nächste Vorbereitung auf **`signature-declarations-fields`** aufbauen, niemals bei laufenden
+Nächste Vorbereitung auf **`c-signatures-final`** aufbauen, niemals bei laufenden
 lokalen Jobs mutieren. Die frühere C-Verfügbarkeitstextkorrektur in
 `docs/workspace.md` ist inzwischen übernommen.
 
@@ -105,9 +126,9 @@ lokalen Jobs mutieren. Die frühere C-Verfügbarkeitstextkorrektur in
    Cursor-/Edit-Zeit samt gehaltenem Speicher weiter als offene Performance führen.
    Kein neuer Provider-Worker, keine Ergebnis-/Scopeverkürzung oder Budgetschwächung.
    Keine UI-/Linux-/Mac-Performance-Abnahme. Mac-UI-Nachlauf zu `9292b67e` geschlossen.
-3. Aufrufziel-Daten und geschriebene Physim-Köpfe fertig; tatsächliche C-
-   Deklaratoren/Zeiger/Prototypen/Parameter/Scopes projizieren, danach API-/
-   Benutzerfunktionsauflösung für beide Sprachen anbinden und unabhängigen
+3. Aufrufziel-Daten und geschriebene C-/Physim-Köpfe fertig; gemeinsame tatsächliche
+   API-/Benutzerfunktionsauflösung für beide Sprachen mit Scopes, Überdeckung und
+   ehrlichen unbekannten/mehrdeutigen Ergebnissen anbinden und unabhängigen
    Signatur-HUD vollständig nach ADR 023/APPROVED umsetzen (automatisch/manuell,
    aktive A2-/Fett-/Unterkantenmarkierung, zu viele/innere Argumente, Escape,
    Fokus/IME/Revision/Accessibility, normale Liste darunter). Keine Typinferenz/

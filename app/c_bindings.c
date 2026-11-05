@@ -1,4 +1,5 @@
 #include "c_bindings.h"
+#include "c_signatures.h"
 #include "c_lexical.h"
 #include "autosave.h"
 #include <stdlib.h>
@@ -370,3 +371,5 @@ static size_t binding_text(const char *source,size_t bytes,ps_c_binding b,char *
 }
 size_t ps_c_binding_type(const char *source,size_t bytes,ps_c_binding b,char *out,size_t capacity){return binding_text(source,bytes,b,out,capacity,false);}
 size_t ps_c_binding_signature(const char *source,size_t bytes,ps_c_binding b,char *out,size_t capacity){return binding_text(source,bytes,b,out,capacity,true);}
+
+#include "c_signatures.inc"

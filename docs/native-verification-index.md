@@ -8,6 +8,13 @@ wegen Kontextwechsel erneut anfangen; die ursprünglichen Nachweise unverändert
 
 ## Neuere Editorprüfungen
 
+- [Geschriebene C-Funktionssignaturen](verification/c-signatures-2026-11-05.md):
+  tatsächliche Deklaratoren/Prototypen/einfache Zeiger/Definitionsparameter und
+  alte geschriebene Typen aus dem unveränderten C-Snapshot. Endgültig Windows/Linux
+  je Unit 12/12 + GUI 6/6; 33 Fälle, 205 Präfixe, 775 Bereichsvergleiche, drei
+  Scratch-Fehler und vier gezielte Negativprogramme. Drei belegte Randfehler
+  behoben; zweite Matrizen aufgrund neuer Produktionskorrektur. **Gemeinsame
+  Auflösung, sichtbarer HUD, neuer Mac-Nachlauf und Gesamt-/physische Abnahme offen.**
 - [Geschriebene Physim-Funktionssignaturen](verification/signature-declarations-2026-11-05.md):
   echte Parserproduktionen für Parameter/Typen/Rückgabe, Methoden/Besitzer und
   lokale Bereiche. Windows/Linux je 15 Unit-Gruppen + GUI 6/6; 294 AST-/Präfix-
