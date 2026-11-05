@@ -13,7 +13,9 @@ wegen Kontextwechsel erneut anfangen; die ursprünglichen Nachweise unverändert
   lokale Bereiche. Windows/Linux je 15 Unit-Gruppen + GUI 6/6; 294 AST-/Präfix-
   Vergleiche, drei beschädigte Varianten erkannt. Padding-Testfehler korrigiert,
   Appbytes über Phasen gleich; Kurzinfo-Prüfer weist alte Frist am tatsächlichen
-  Modell ab. **C-Projektion, Auflösung, sichtbarer HUD und neuer Mac-Nachlauf offen.**
+  Modell ab. Gehosteter Quellnachlauf `7a3e7950` [ARM/Intel je Unit 6/6 + GUI 8/8,
+  beide Originalarchive geprüft](verification/signature-declarations-macos-2026-11-05.json).
+  **C-Projektion, Auflösung, sichtbarer HUD, Gesamt-/physische und Performance-Abnahme offen.**
 - [C-/Physim-Aufrufziele](verification/call-targets-2026-11-05.md): Windows/Linux
   je Unit 9/9 + GUI 6/6; 36 exakte Namens-/Empfängerfälle und beide vorigen
   Sprachpfade konkret abgewiesen. 887 Cachevergleiche umfassen neue Metadaten.

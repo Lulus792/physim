@@ -27,9 +27,13 @@ Alle lokalen Handles beendet. 34 bytegleiche BMPs/108.695.892 Bytes entfernt,
 Referenzen und Originalberichte erhalten. Keine SDK-/VM-/Fremddatenbereinigung.
 Quellcommit **`7a3e7950`**, normal in beide Repositories gepusht;
 [Commitabgleich und Mac-Anschluss](verification/signature-declarations-commit-2026-11-05.json).
-Gehosteter neuer Lauf **`41976275068`** zu genau diesem Quellstand: Intel
-`127075753047` läuft (Checkout), ARM `127075753405` wartet. Diesen Lauf weiter
-prüfen; sechs Daten-Units und acht GUI-Gruppen samt Originalartefakten auswerten.
+Gehosteter Lauf **`41976275068`** zu genau diesem Quellstand geschlossen: Intel
+`127075753047` und ARM `127075753405` je **Unit 6/6 + GUI 8/8**.
+[Beide ZIPs/Digests/Originaleinträge gelesen](verification/signature-declarations-macos-2026-11-05.json),
+294 AST-Präfixfälle, neue Frist-Units und sechs tatsächliche Altfrist-Prüfmarker
+pro Architektur, C/Physim je drei Cache-/Wiederöffnungsziele bestätigt. Diesen
+Lauf nicht weiter pollen oder wegen Kontextwechsel wiederholen. Keine neue
+C-Signatur-/HUD-/Gesamt-/physische oder Performance-Abnahme. Nutzer-Mac aus.
 
 [Aufrufziele für die Parameterhilfe](verification/call-targets-2026-11-05.md):
 beide echten Parser liefern ursprüngliche Ziel-/Namens-/Empfängerspannen und
