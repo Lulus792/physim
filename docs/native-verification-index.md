@@ -14,7 +14,9 @@ wegen Kontextwechsel erneut anfangen; die ursprünglichen Nachweise unverändert
   je Unit 12/12 + GUI 6/6; 33 Fälle, 205 Präfixe, 775 Bereichsvergleiche, drei
   Scratch-Fehler und vier gezielte Negativprogramme. Drei belegte Randfehler
   behoben; zweite Matrizen aufgrund neuer Produktionskorrektur. **Gemeinsame
-  Auflösung, sichtbarer HUD, neuer Mac-Nachlauf und Gesamt-/physische Abnahme offen.**
+  Auflösung, sichtbarer HUD und Gesamt-/physische Abnahme offen.** Gehosteter
+  Quellnachlauf `f3ed4068` [ARM/Intel je Unit 7/7 + GUI 8/8, Originalarchive
+  geprüft](verification/c-signatures-macos-2026-11-05.json); spätere Parserarbeit ausgeschlossen.
 - [Geschriebene Physim-Funktionssignaturen](verification/signature-declarations-2026-11-05.md):
   echte Parserproduktionen für Parameter/Typen/Rückgabe, Methoden/Besitzer und
   lokale Bereiche. Windows/Linux je 15 Unit-Gruppen + GUI 6/6; 294 AST-/Präfix-

@@ -1,0 +1,117 @@
+{
+  "date": "2026-11-05",
+  "repo": "Lulus792/physim",
+  "run": 41980836062,
+  "source_commit": "f3ed4068607580e3cf23e89a53a88a941c1e0f89",
+  "all_jobs_terminal": true,
+  "reports": [
+    {
+      "architecture": "intel",
+      "job": 127090312320,
+      "artifact": 13393748087,
+      "zip_path": "build/validation/c-signatures-2026-11-05/native-editor-menu-macos-15-intel.zip",
+      "zip_sha256": "91510260b2bff54a35f6c03e90bf9df26b5fc243051e8326a065038e8f9be1b1",
+      "github_digest_verified": true,
+      "all_original_entries_read": {
+        "Release/test-results/run-06xmqb38/results.json": "86dc0acf059e3b57a734037f8a3fdc6e88b87fe7ea30e17f7443dfe1f2b52698",
+        "Release/test-results/run-hquotd8v/results.json": "3eb0706a50b15dcb28df92f4845dcbfd00ed2a4fa1c3eb076768f84c34a957cb"
+      },
+      "units_passed": 7,
+      "units_total": 7,
+      "unit_cases": [
+        "c_call_context",
+        "c_signatures",
+        "completion_locals",
+        "completion_c_locals",
+        "call_targets",
+        "editor_signatures",
+        "completion_info"
+      ],
+      "actual_unit_markers": [
+        "33 actual declarator/prototype/pointer/legacy/recovery vectors",
+        "205 every-byte inputs",
+        "775 cursor/name comparisons",
+        "3/3 clean counts",
+        "294 strict-AST/prefix byte comparisons passed",
+        "36 actual C/Physim grammar vectors",
+        "887 fresh-reference comparisons",
+        "123/123 preserve snapshot",
+        "7/7 preserve source/syntax/results",
+        "87/87 preserve source/syntax/results",
+        "Completion info: exact delay boundary"
+      ],
+      "gui_passed": 8,
+      "gui_total": 8,
+      "gui_cases": [
+        "documents_small",
+        "documents_large",
+        "completion_workflow",
+        "completion_automatic_workflow",
+        "api_reference_workflow",
+        "completion_info_workflow",
+        "completion_automatic_deadline_workflow",
+        "completion_locals_workflow"
+      ],
+      "actual_obsolete_deadline_rejected_markers": 6,
+      "actual_cache_c_physim_targets": 3,
+      "app_sha256": "3f8b3578b3e7cb79c9170035f21e061330f0af03e88e5cffa69072fc712d9daa"
+    },
+    {
+      "architecture": "arm",
+      "job": 127090312595,
+      "artifact": 13393333737,
+      "zip_path": "build/validation/c-signatures-2026-11-05/native-editor-menu-macos-15.zip",
+      "zip_sha256": "0228ef9b2d4f21863dbef2c2453536ef2a1b7859c0c9b8ca2627fd01ba658f69",
+      "github_digest_verified": true,
+      "all_original_entries_read": {
+        "Release/test-results/run-p44u_285/results.json": "9c4a75fc21e192ca7dbe9af9652ea5d43a50c3983531f786aa48b50147a71e7f",
+        "Release/test-results/run-rbsqolxt/results.json": "5e0a18eeea237e9a40466633b288530d4c128da7535dc11f0a076d8d35084289"
+      },
+      "units_passed": 7,
+      "units_total": 7,
+      "unit_cases": [
+        "c_call_context",
+        "c_signatures",
+        "completion_locals",
+        "completion_c_locals",
+        "call_targets",
+        "editor_signatures",
+        "completion_info"
+      ],
+      "actual_unit_markers": [
+        "33 actual declarator/prototype/pointer/legacy/recovery vectors",
+        "205 every-byte inputs",
+        "775 cursor/name comparisons",
+        "3/3 clean counts",
+        "294 strict-AST/prefix byte comparisons passed",
+        "36 actual C/Physim grammar vectors",
+        "887 fresh-reference comparisons",
+        "123/123 preserve snapshot",
+        "7/7 preserve source/syntax/results",
+        "87/87 preserve source/syntax/results",
+        "Completion info: exact delay boundary"
+      ],
+      "gui_passed": 8,
+      "gui_total": 8,
+      "gui_cases": [
+        "documents_small",
+        "documents_large",
+        "completion_workflow",
+        "completion_automatic_workflow",
+        "api_reference_workflow",
+        "completion_info_workflow",
+        "completion_automatic_deadline_workflow",
+        "completion_locals_workflow"
+      ],
+      "actual_obsolete_deadline_rejected_markers": 6,
+      "actual_cache_c_physim_targets": 3,
+      "app_sha256": "e11e2e2e5b054c161117b7b357c8c4511620af715e1e98b0cff1f6d2f0d872bc"
+    }
+  ],
+  "temporary_signed_config_removed": true,
+  "original_json": {
+    "path": "build/validation/c-signatures-2026-11-05/mac-original-report.json",
+    "sha256": "abfe990e464287d56358e72b2a3720fbdd611e4b2ee757291408d773215b166c"
+  },
+  "scope": "Actual C signature33/205/775/3 and Ph294/call/revision/info units7/7 both architectures plusGUI8/8, six obsolete-deadline checks and C/Physim3targetcache/reopen. No common resolver/native HUD/full UI/physical/performance acceptance. Private user MacOFF/untouched. Excludes later module-recovery work."
+}

@@ -29,10 +29,12 @@ Referenzen und Originalberichte erhalten. Neuer Mac-Nachlauf offen, Workflow
 sieben Daten-Units + acht GUI-Gruppen. Keine gesamte UI-/Performance-/physische Abnahme.
 Quellcommit **`f3ed4068`**, normal in beide Repositories gepusht;
 [Commitabgleich und Mac-Anschluss](verification/c-signatures-commit-2026-11-05.json).
-Neuer gehosteter Lauf **`41980836062`** zu genau diesem Quellstand: ARM
-`127090312595` läuft (Daten-Units), Intel `127090312320` wartet. Diesen Lauf weiter
-prüfen: je sieben Daten-Units und acht GUI-Gruppen, tatsächliche Originalartefakte
-lesen. Frühere sechs-Unit-Nachläufe bestätigen diese neue C-Projektion nicht.
+Gehosteter Lauf **`41980836062`** zu genau diesem Quellstand geschlossen: ARM
+`127090312595` und Intel `127090312320` je **Unit 7/7 + GUI 8/8**.
+[Beide ZIPs/Digests/alle Originaleinträge gelesen](verification/c-signatures-macos-2026-11-05.json),
+C-Fälle 33/205/775/3, Physim 294 und Cache-/Fristmarker bestätigt. Diesen Lauf
+nicht erneut pollen oder wegen Kontextwechsel wiederholen. Keine gemeinsame
+Signaturauflösung, neue Modul-Recovery-, HUD-/Gesamt-/physische oder Performance-Abnahme.
 
 [Geschriebene Physim-Signaturen](verification/signature-declarations-2026-11-05.md):
 echter Parser veröffentlicht vollständige Köpfe mit Parametern/Typen/Rückgabe,
