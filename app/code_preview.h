@@ -23,6 +23,11 @@ bool ps_code_preview_build_anywhere(const char *source,size_t bytes,float width,
  * This is a typographic rule, not a language parser. An indivisible wider unit
  * honestly overflows through maximum; source bytes remain borrowed/unmodified. */
 bool ps_code_preview_build_signature(const char *source,size_t bytes,float width,ps_code_measure measure,void *user,ps_code_preview **output);
+/* Filename anywhere-wrap, preserving a fitting final name part and extension,
+ * falling back to the preceding grapheme when needed. Dotfiles/oversized
+ * suffixes retain the normal grapheme-safe fallback. Names and byte spans
+ * remain unchanged. */
+bool ps_code_preview_build_filename(const char *source,size_t bytes,float width,ps_code_measure measure,void *user,ps_code_preview **output);
 void ps_code_preview_destroy(ps_code_preview *preview);
 /* Validated source helpers shared with the renderer. */
 size_t ps_code_preview_rune(const char *source,size_t bytes,uint32_t *rune);

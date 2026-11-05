@@ -35,5 +35,31 @@ int main(void) {
     CHECK(!ps_code_preview_build("x",1,10,invalid,NULL,&p) && p==prior);
     CHECK(!ps_code_preview_build("x",1,NAN,mono,NULL,&p) && p==prior);ps_code_preview_destroy(p);
     CHECK(ps_code_preview_build("",0,1,mono,NULL,&p));CHECK(p->count==1 && p->maximum==0);ps_code_preview_destroy(p);
+    s="analysis.phys";CHECK(ps_code_preview_build_filename(s,strlen(s),10,mono,NULL,&p));
+    CHECK(p->count==2 && line(p,0,"analysi") && line(p,1,"s.phys") && p->maximum<=10);ps_code_preview_destroy(p);
+    s="completion-note.phys";CHECK(ps_code_preview_build_filename(s,strlen(s),17,mono,NULL,&p));
+    CHECK(p->count==2 && line(p,0,"completion-") && line(p,1,"note.phys"));ps_code_preview_destroy(p);
+    const char *names[]={"completion-note.phys","very_long_header.h","archive.tar.gz","e\xcc\x81.phys",".gitignore","ending.","x.an_extension_wider_than_the_panel","my project.phys"};
+    for(size_t k=0;k<sizeof names/sizeof *names;k++)for(unsigned width=6;width<=24;width++){
+        s=names[k];size_t n=strlen(s),next=0;CHECK(ps_code_preview_build_filename(s,n,(float)width,mono,NULL,&p));
+        CHECK(p->source==s && p->length==n && p->maximum<=width);
+        for(size_t i=0;i<p->count;i++){
+            CHECK(p->lines[i].begin==next && p->lines[i].end>next && !p->lines[i].hyphen);
+            next=p->lines[i].end;CHECK(next==n || ((unsigned char)s[next]&0xc0)!=0x80);
+            /* The decomposed e/acute is one grapheme, not a legal row cut. */
+            if(k==3)CHECK(next!=1);
+        }
+        CHECK(next==n);
+        const char *dot=strrchr(s,'.');
+        if(dot && dot!=s && dot[1] && strlen(dot)<=width){
+            bool intact=false;
+            for(size_t i=0;i<p->count;i++)if(p->lines[i].begin<=(size_t)(dot-s) && p->lines[i].end==n)intact=true;
+            CHECK(intact);
+        }
+        ps_code_preview_destroy(p);
+    }
+    CHECK(ps_code_preview_build_filename("analysis.phys",13,30,mono,NULL,&p));
+    prior=p;CHECK(!ps_code_preview_build_filename("bad\0.phys",9,10,mono,NULL,&p) && p==prior);ps_code_preview_destroy(p);
+    puts("Filename wrap: fitting suffixes, dotfiles, oversized extensions, combining graphemes and exact source spans passed");
     puts("Code preview: Unicode opportunities, intact long tokens/UTF8, whitespace, tabs, forced breaks, soft hyphen, ZWSP, byte spans and failure preservation passed");return 0;
 }

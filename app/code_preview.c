@@ -44,7 +44,33 @@ static void signature_breaks(const char *source,size_t n,char *breaks,char *clus
         at+=length;
     }
 }
-static bool build(const char *source,size_t n,float width,ps_code_measure measure,void *user,ps_code_preview **output,bool anywhere,bool signature) {
+static void filename_breaks(const char *source,size_t n,float width,float tab,
+                            ps_code_measure measure,void *user,char *breaks,char *clusters){
+    size_t dot=SIZE_MAX;
+    for(size_t i=0;i<n;i++)if(source[i]=='.')dot=i;
+    if(dot==SIZE_MAX || !dot || dot+1==n || clusters[dot-1]!=GRAPHEMEBREAK_BREAK)return;
+    size_t previous=dot-1;
+    while(previous && clusters[previous-1]!=GRAPHEMEBREAK_BREAK)previous--;
+    size_t word=0;
+    for(size_t i=0;i<dot;i++)if(source[i]=='-' || source[i]=='_' || source[i]==' ')word=i+1;
+    if(word>=dot || (word && clusters[word-1]!=GRAPHEMEBREAK_BREAK))word=previous;
+    size_t begin=dot;
+    for(unsigned choice=0;choice<3;choice++){
+        size_t candidate=choice==0?word:choice==1?previous:dot;float x=0;
+        for(size_t at=candidate;at<n;){
+            uint32_t rune;size_t bytes=ps_code_preview_rune(source+at,n-at,&rune);
+            if(!bytes)return;
+            float glyph=ps_code_preview_invisible(rune) || rune=='\t'?0:measure(user,source+at,bytes);
+            if(!isfinite(glyph) || glyph<0)return;
+            x=ps_code_preview_advance(rune,x,tab,glyph);at+=bytes;
+        }
+        if(x<=width){begin=candidate;break;}
+        if(choice==2)return;
+    }
+    if(begin){breaks[begin-1]=LINEBREAK_ALLOWBREAK;clusters[begin-1]=GRAPHEMEBREAK_BREAK;}
+    for(size_t i=begin+1;i<n;i++){breaks[i-1]=LINEBREAK_NOBREAK;clusters[i-1]=GRAPHEMEBREAK_NOBREAK;}
+}
+static bool build(const char *source,size_t n,float width,ps_code_measure measure,void *user,ps_code_preview **output,bool anywhere,bool signature,bool filename) {
     if(!source || !measure || !output || !isfinite(width) || width<1 || n==SIZE_MAX)return false;
     for(size_t at=0;at<n;) {
         uint32_t c;size_t bytes=ps_code_preview_rune(source+at,n-at,&c);
@@ -59,6 +85,7 @@ static bool build(const char *source,size_t n,float width,ps_code_measure measur
     if(n)set_linebreaks_utf8((const utf8_t *)source,n,"de",breaks);
     if(n && anywhere)set_graphemebreaks_utf8((const utf8_t *)source,n,"de",clusters);
     if(n && signature)signature_breaks(source,n,breaks,clusters);
+    if(n && filename)filename_breaks(source,n,width,p->tab,measure,user,breaks,clusters);
     size_t begin=0;
     while(begin<n) {
         size_t at=begin,allowed=SIZE_MAX,cluster=begin;float x=0,ink=0,allowed_width=0,cluster_ink=0;bool allowed_hyphen=false,finished=false;
@@ -100,11 +127,14 @@ static bool build(const char *source,size_t n,float width,ps_code_measure measur
 fail:free(breaks);free(clusters);ps_code_preview_destroy(p);return false;
 }
 bool ps_code_preview_build(const char *source,size_t n,float width,ps_code_measure measure,void *user,ps_code_preview **output) {
-    return build(source,n,width,measure,user,output,false,false);
+    return build(source,n,width,measure,user,output,false,false,false);
 }
 bool ps_code_preview_build_anywhere(const char *source,size_t n,float width,ps_code_measure measure,void *user,ps_code_preview **output) {
-    return build(source,n,width,measure,user,output,true,false);
+    return build(source,n,width,measure,user,output,true,false,false);
 }
 bool ps_code_preview_build_signature(const char *source,size_t n,float width,ps_code_measure measure,void *user,ps_code_preview **output){
-    return build(source,n,width,measure,user,output,true,true);
+    return build(source,n,width,measure,user,output,true,true,false);
+}
+bool ps_code_preview_build_filename(const char *source,size_t n,float width,ps_code_measure measure,void *user,ps_code_preview **output){
+    return build(source,n,width,measure,user,output,true,false,true);
 }

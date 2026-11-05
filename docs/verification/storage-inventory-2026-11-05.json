@@ -1,0 +1,81 @@
+{
+  "measured_at": "2026-11-05 16:33:42+0100",
+  "long_path_recovery_completed_at": "2026-11-05 16:35:57+0100",
+  "scope": "All normal files recursively under D:/Physim and known Windows Physim app-data directories; metadata only, reparse points skipped. AllocationSize deduplicated for hardlinks; excludes filesystem/MFT metadata. Shared VM reported separately, not attributed to Physim.",
+  "project": {
+    "files": 536100,
+    "logical_bytes": 83796993383,
+    "allocated_unique_bytes": 41328065928,
+    "duplicate_hardlinks": 0
+  },
+  "all_build_directories_allocated_bytes": 40472609288,
+  "other_project_files_allocated_bytes": 855456640,
+  "selected_parts": {
+    "top/build": {
+      "files": 244821,
+      "logical_bytes": 70676378859,
+      "allocated_unique_bytes": 27829683016,
+      "duplicate_hardlinks": 0
+    },
+    "build/validation": {
+      "files": 139448,
+      "logical_bytes": 26863817587,
+      "allocated_unique_bytes": 14173840080,
+      "duplicate_hardlinks": 0
+    },
+    "build/native": {
+      "files": 94592,
+      "logical_bytes": 35479374152,
+      "allocated_unique_bytes": 8257188624,
+      "duplicate_hardlinks": 0
+    },
+    "build/archive": {
+      "files": 4893,
+      "logical_bytes": 8044024621,
+      "allocated_unique_bytes": 5240261440,
+      "duplicate_hardlinks": 0
+    },
+    "top/build-clang-ninja": {
+      "files": 201556,
+      "logical_bytes": 7329659620,
+      "allocated_unique_bytes": 7583088488,
+      "duplicate_hardlinks": 0
+    },
+    "top/.git": {
+      "files": 92,
+      "logical_bytes": 251497519,
+      "allocated_unique_bytes": 251614928,
+      "duplicate_hardlinks": 0
+    },
+    "top/docs": {
+      "files": 6474,
+      "logical_bytes": 282580486,
+      "allocated_unique_bytes": 295402824,
+      "duplicate_hardlinks": 0
+    }
+  },
+  "external_windows_appdata": {
+    "files": 3,
+    "logical_bytes": 731,
+    "allocated_unique_bytes": 736,
+    "duplicate_hardlinks": 0
+  },
+  "shared_vm": {
+    "path": "D:\\WSL\\Alpine-Dev\\ext4.vhdx",
+    "logical_bytes": 44978667520,
+    "allocated_bytes": 44978667520
+  },
+  "shared_vm_attribution": "Shared by Physim, NexaUI and NexaCloud; not wholly attributable to Physim.",
+  "drive_d_at_scan": {
+    "total_bytes": 255521189888,
+    "free_bytes": 11295330304
+  },
+  "unreadable_entries_after_long_path_recovery": 0,
+  "skipped_reparse_points": 16,
+  "deletion_performed": false,
+  "original_report": {
+    "path": "build/maintenance/storage-inventory-20261105-complete.json",
+    "sha256": "57fd657e833cf7728679f324ac80ec955f7cc7484b0bd08beff37d1d8096e3b7"
+  },
+  "allocation_check": "FileStandardInfo allocation matched GetCompressedFileSize for the compressed Windows and Linux app files and for the shared VHDX; metadata-only queries."
+}

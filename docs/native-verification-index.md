@@ -11,6 +11,16 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
 
 ## Neuere Editorprüfungen
 
+- [Dateinamen bei großer Schrift](verification/filename-wrap-2026-11-05.md):
+  Windows Release/Linux ASan/UBSan jeweils4/4 Daten und3/3 GUI-Gruppen.
+  Ganze Erweiterung/letzter Namensteil, exakte Spannen und echter22px-Draw/Clip
+  samt Dateiöffnung; zwei gezielte Bilder geöffnet. Scope-Audit verhindert
+  übergangene vorhandene Testdateien. [Originale](verification/filename-wrap-2026-11-05.json).
+- [Mac-Nachlauf zum Zusatzfenster](verification/signature-detached-macos-2026-11-05.json),
+  Quelle9cc44508, Lauf42049114569 terminal: Intel11/11 Daten+10/10 GUI,
+  Original-ZIP/Digest/alle zehn Einträge gelesen. Vier neue Bilder geöffnet,
+  vier bytegleich zu zuvor geöffneten Referenzen. ARM vor Start abgebrochen;
+  keine ARM-Abnahme. Nicht weiter pollen; aktuelle neue Quelle separat prüfen.
 - [Parameterhilfe im nativen Zusatzfenster](verification/signature-detached-2026-11-05.md):
   zwei Fokuskorrekturen; Windows Release und Linux ASan/UBSan jeweils7/7.
   C/Ph je drei Editoren, echter Zusatzkontext, Überlappung/Scrollgriff/Tippen

@@ -1,0 +1,749 @@
+{
+  "date": "2026-11-05",
+  "source_snapshot": "filename-wrap-owned",
+  "scope": "Workspace filename wrapping at actual native22px, exact full source/name spans, extension and trailing name part, actual painted glyph/clip bounds, independent legacy-wrap rejection and opening the correct file. Windows/Linux data4/4 and GUI3/3 each. No full UI/platform/physical/assistive acceptance.",
+  "product_change": "Use fitting last basename part plus final extension as one grapheme-safe wrapping unit; narrower fallback preserves a fitting preceding grapheme+extension, then extension alone, otherwise ordinary grapheme-safe anywhere-wrap. Borrow original bytes; draw and measure one shared temporary layout only for overwide file labels. Folders/prose and colors/icons unchanged.",
+  "test_changes": [
+    "Native project tree now verifies the actual final commands and opens completion-note.phys at22px.",
+    "Workbench fixture explicitly sets218/255/152 dimensions it already asserted; Protocol C keyboard expectations use its existing150 minimum,10/40 steps,55%-of-client/500 maximum and340 reset. Product protocol unchanged.",
+    "Explicitly add both changed pre-existing test files to the isolated input manifest, and audit all9own source/test/workflow paths before the final build."
+  ],
+  "originals": [
+    {
+      "phase": "probe",
+      "group": "data",
+      "platform": "windows",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--no-app",
+        "--test",
+        "--test-filter",
+        "code_preview",
+        "--test-filter",
+        "code_wrap",
+        "--test-filter",
+        "signature_wrap",
+        "--test-filter",
+        "text_wrap"
+      ],
+      "exit_code": 0,
+      "passed": 4,
+      "total": 4,
+      "app_sha256": null,
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-kzy500yj/results.json",
+      "results_sha256": "3026e5ad5a6446683a591bcb6d47d1e5a7d821969a644f3d28430882db45fd5a",
+      "log": "build/validation/filename-wrap-2026-11-05/probe-data-windows.log",
+      "log_sha256": "8400f7dcec231fd5f2e9c7c15c68f6b85cc503e0526f44c69e72edca759ff9bf",
+      "tests": [
+        {
+          "name": "code_preview",
+          "status": "passed"
+        },
+        {
+          "name": "code_wrap",
+          "status": "passed"
+        },
+        {
+          "name": "signature_wrap",
+          "status": "passed"
+        },
+        {
+          "name": "text_wrap",
+          "status": "passed"
+        }
+      ],
+      "actual_source_snapshot": "filename-wrap-probe",
+      "actual_compiler_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/filename-wrap-probe-compiler-source.json",
+        "sha256": "55649db5f549dcdabad0c0934770104ba8d1598c1828a72bccb4b3c340020dc3"
+      }
+    },
+    {
+      "phase": "probe",
+      "group": "data",
+      "platform": "linux",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--no-app",
+        "--test",
+        "--test-filter",
+        "code_preview",
+        "--test-filter",
+        "code_wrap",
+        "--test-filter",
+        "signature_wrap",
+        "--test-filter",
+        "text_wrap"
+      ],
+      "exit_code": 0,
+      "passed": 4,
+      "total": 4,
+      "app_sha256": null,
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-yf3hwjzq/results.json",
+      "results_sha256": "456ae73838119d5158ecb03b1855b7122929949344cf2b9ff20807f6e1e4fc84",
+      "log": "build/validation/filename-wrap-2026-11-05/probe-data-linux.log",
+      "log_sha256": "d0db8bbf4867059bee31efb2dc5a4ccdb756e97a7fef017dcc631b65b93c6bde",
+      "tests": [
+        {
+          "name": "code_preview",
+          "status": "passed"
+        },
+        {
+          "name": "code_wrap",
+          "status": "passed"
+        },
+        {
+          "name": "signature_wrap",
+          "status": "passed"
+        },
+        {
+          "name": "text_wrap",
+          "status": "passed"
+        }
+      ],
+      "actual_source_snapshot": "filename-wrap-probe",
+      "actual_compiler_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/filename-wrap-probe-compiler-source.json",
+        "sha256": "55649db5f549dcdabad0c0934770104ba8d1598c1828a72bccb4b3c340020dc3"
+      }
+    },
+    {
+      "phase": "probe",
+      "group": "ui",
+      "platform": "windows",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "project_tree_workflow",
+        "--test-filter",
+        "workspace_tree_workflow",
+        "--test-filter",
+        "workbench_workflow"
+      ],
+      "exit_code": 1,
+      "passed": 2,
+      "total": 3,
+      "app_sha256": "fd0ebb81ffe2fe46a213d8c7b528aae6414e04897e445c659a787999ff87335d",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-jz0_vh68/results.json",
+      "results_sha256": "7100556fb14fdd2ba0a56a8610f3119be04a83885f6a9c9ef17502c13ad6781b",
+      "log": "build/validation/filename-wrap-2026-11-05/probe-ui-windows.log",
+      "log_sha256": "6cdec9e0b43dbb62d465ce59889631b97e555fcc30ee52742e4a437b09152139",
+      "tests": [
+        {
+          "name": "workspace_tree_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "failed"
+        },
+        {
+          "name": "project_tree_workflow",
+          "status": "passed"
+        }
+      ],
+      "actual_source_snapshot": "filename-wrap-ui",
+      "actual_compiler_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/filename-wrap-ui-compiler-source.json",
+        "sha256": "76b7267de8423af109c988332c28db21912cdfdc6118d1df210705048a6b6008"
+      }
+    },
+    {
+      "phase": "probe",
+      "group": "ui",
+      "platform": "linux",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "project_tree_workflow",
+        "--test-filter",
+        "workspace_tree_workflow",
+        "--test-filter",
+        "workbench_workflow"
+      ],
+      "exit_code": 1,
+      "passed": 2,
+      "total": 3,
+      "app_sha256": "aa3e8f5a04b6c5e7fabac6a30f55af108384aa047263cdc3fece552cf4657e12",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-zpih_d_h/results.json",
+      "results_sha256": "b3db793fd959a0ede61bc9869e5a7bf668d0e79ae69c1ac16b470d5aefb150a4",
+      "log": "build/validation/filename-wrap-2026-11-05/probe-ui-linux.log",
+      "log_sha256": "3bcc2fd4daa8bdc8a566520a33afca9cad5bb2f2f9196907b2f4939260f755ef",
+      "tests": [
+        {
+          "name": "workspace_tree_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "failed"
+        },
+        {
+          "name": "project_tree_workflow",
+          "status": "passed"
+        }
+      ],
+      "actual_source_snapshot": "filename-wrap-ui",
+      "actual_compiler_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/filename-wrap-ui-compiler-source.json",
+        "sha256": "76b7267de8423af109c988332c28db21912cdfdc6118d1df210705048a6b6008"
+      }
+    },
+    {
+      "phase": "final",
+      "group": "data",
+      "platform": "windows",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--no-app",
+        "--test",
+        "--test-filter",
+        "code_preview",
+        "--test-filter",
+        "code_wrap",
+        "--test-filter",
+        "signature_wrap",
+        "--test-filter",
+        "text_wrap"
+      ],
+      "exit_code": 0,
+      "passed": 4,
+      "total": 4,
+      "app_sha256": null,
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-nt0h8s16/results.json",
+      "results_sha256": "66a354726764e396cd5d3030da82a6397c8fc58185866da35257a76c9ea501fa",
+      "log": "build/validation/filename-wrap-2026-11-05/final-data-windows.log",
+      "log_sha256": "63d7ef1cd7437bbede2e7d2dae8a6d0bb61819f563339c00a971b71f9a080dca",
+      "tests": [
+        {
+          "name": "code_preview",
+          "status": "passed"
+        },
+        {
+          "name": "code_wrap",
+          "status": "passed"
+        },
+        {
+          "name": "signature_wrap",
+          "status": "passed"
+        },
+        {
+          "name": "text_wrap",
+          "status": "passed"
+        }
+      ],
+      "actual_source_snapshot": "filename-wrap-checked",
+      "actual_compiler_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/filename-wrap-checked-compiler-source.json",
+        "sha256": "09dede0928b58af82d02fdd112ed1b0ba69eb75c76a89ec59ea205202cf85a9f"
+      }
+    },
+    {
+      "phase": "final",
+      "group": "data",
+      "platform": "linux",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--no-app",
+        "--test",
+        "--test-filter",
+        "code_preview",
+        "--test-filter",
+        "code_wrap",
+        "--test-filter",
+        "signature_wrap",
+        "--test-filter",
+        "text_wrap"
+      ],
+      "exit_code": 0,
+      "passed": 4,
+      "total": 4,
+      "app_sha256": null,
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-1ft8aaep/results.json",
+      "results_sha256": "c73cf8a6c3f9c5bdc2041825e678bd51face86d4113493f6f3bd055febf78ef8",
+      "log": "build/validation/filename-wrap-2026-11-05/final-data-linux.log",
+      "log_sha256": "11a65a2c6afa349c0aca0f7fd0a71a617812163ea20f2453fa33042a6ef4b552",
+      "tests": [
+        {
+          "name": "code_preview",
+          "status": "passed"
+        },
+        {
+          "name": "code_wrap",
+          "status": "passed"
+        },
+        {
+          "name": "signature_wrap",
+          "status": "passed"
+        },
+        {
+          "name": "text_wrap",
+          "status": "passed"
+        }
+      ],
+      "actual_source_snapshot": "filename-wrap-checked",
+      "actual_compiler_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/filename-wrap-checked-compiler-source.json",
+        "sha256": "09dede0928b58af82d02fdd112ed1b0ba69eb75c76a89ec59ea205202cf85a9f"
+      }
+    },
+    {
+      "phase": "final",
+      "group": "ui",
+      "platform": "windows",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "project_tree_workflow",
+        "--test-filter",
+        "workspace_tree_workflow",
+        "--test-filter",
+        "workbench_workflow"
+      ],
+      "exit_code": 1,
+      "passed": 2,
+      "total": 3,
+      "app_sha256": "12aa2e1be4f59527a031f345e74916a62769f9e8db3efa88b715708fdab2c9f0",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-ge8sa7df/results.json",
+      "results_sha256": "b10e6dcf7c23f1fcca4d969007e5effd1bee0cfb1b3c94828278aed25b833660",
+      "log": "build/validation/filename-wrap-2026-11-05/final-ui-windows.log",
+      "log_sha256": "4fcb35f30c8606554ccd2db13ea999ca58fde988485db1a2bbc41c75ca9275c7",
+      "tests": [
+        {
+          "name": "workspace_tree_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "failed"
+        },
+        {
+          "name": "project_tree_workflow",
+          "status": "passed"
+        }
+      ],
+      "actual_source_snapshot": "filename-wrap-checked",
+      "actual_compiler_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/filename-wrap-checked-compiler-source.json",
+        "sha256": "09dede0928b58af82d02fdd112ed1b0ba69eb75c76a89ec59ea205202cf85a9f"
+      }
+    },
+    {
+      "phase": "final",
+      "group": "ui",
+      "platform": "linux",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "project_tree_workflow",
+        "--test-filter",
+        "workspace_tree_workflow",
+        "--test-filter",
+        "workbench_workflow"
+      ],
+      "exit_code": 1,
+      "passed": 2,
+      "total": 3,
+      "app_sha256": "be5eb3507be329433c6181d4b5defa1ecbb5867d67e7219a93cbb08d5e00c2fe",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-c9lrdp0g/results.json",
+      "results_sha256": "a4f507f9fd06e5a93eb0547ca9d691c330fee38dfc102070813358634c0d733e",
+      "log": "build/validation/filename-wrap-2026-11-05/final-ui-linux.log",
+      "log_sha256": "06464d4074e5823b336d0003e9b4078f68c6bab5ed5761f69b9fe47d70cd045a",
+      "tests": [
+        {
+          "name": "workspace_tree_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "failed"
+        },
+        {
+          "name": "project_tree_workflow",
+          "status": "passed"
+        }
+      ],
+      "actual_source_snapshot": "filename-wrap-checked",
+      "actual_compiler_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/filename-wrap-checked-compiler-source.json",
+        "sha256": "09dede0928b58af82d02fdd112ed1b0ba69eb75c76a89ec59ea205202cf85a9f"
+      }
+    },
+    {
+      "phase": "owned",
+      "group": "data",
+      "platform": "windows",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--no-app",
+        "--test",
+        "--test-filter",
+        "code_preview",
+        "--test-filter",
+        "code_wrap",
+        "--test-filter",
+        "signature_wrap",
+        "--test-filter",
+        "text_wrap"
+      ],
+      "exit_code": 0,
+      "passed": 4,
+      "total": 4,
+      "app_sha256": null,
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mcqp7r4k/results.json",
+      "results_sha256": "6c47c3a25a40e5ef025c923df8c37eea2ebe5b0e012b117ddf6055a3631d7f55",
+      "log": "build/validation/filename-wrap-2026-11-05/owned-data-windows.log",
+      "log_sha256": "3cf218e7dd1e726d22de106411f633a9565954740028ddadefa8eb71c250d4e2",
+      "tests": [
+        {
+          "name": "code_preview",
+          "status": "passed"
+        },
+        {
+          "name": "code_wrap",
+          "status": "passed"
+        },
+        {
+          "name": "signature_wrap",
+          "status": "passed"
+        },
+        {
+          "name": "text_wrap",
+          "status": "passed"
+        }
+      ],
+      "actual_source_snapshot": "filename-wrap-owned",
+      "actual_compiler_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/filename-wrap-owned-compiler-source.json",
+        "sha256": "5f1fee07987511794b62565b966f0854deb7792661e6aea819e2789edbee9a68"
+      }
+    },
+    {
+      "phase": "owned",
+      "group": "data",
+      "platform": "linux",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--no-app",
+        "--test",
+        "--test-filter",
+        "code_preview",
+        "--test-filter",
+        "code_wrap",
+        "--test-filter",
+        "signature_wrap",
+        "--test-filter",
+        "text_wrap"
+      ],
+      "exit_code": 0,
+      "passed": 4,
+      "total": 4,
+      "app_sha256": null,
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-qzioq4l4/results.json",
+      "results_sha256": "36b3b033ecc87c25d83889fe22454880def2cc38b524db19ed0f11ff97f31261",
+      "log": "build/validation/filename-wrap-2026-11-05/owned-data-linux.log",
+      "log_sha256": "35757d8b983580a66a16d595b4dd19b83b1d04c5f02efbf3d52d44f08fc30c75",
+      "tests": [
+        {
+          "name": "code_preview",
+          "status": "passed"
+        },
+        {
+          "name": "code_wrap",
+          "status": "passed"
+        },
+        {
+          "name": "signature_wrap",
+          "status": "passed"
+        },
+        {
+          "name": "text_wrap",
+          "status": "passed"
+        }
+      ],
+      "actual_source_snapshot": "filename-wrap-owned",
+      "actual_compiler_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/filename-wrap-owned-compiler-source.json",
+        "sha256": "5f1fee07987511794b62565b966f0854deb7792661e6aea819e2789edbee9a68"
+      }
+    },
+    {
+      "phase": "owned",
+      "group": "ui",
+      "platform": "windows",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "project_tree_workflow",
+        "--test-filter",
+        "workspace_tree_workflow",
+        "--test-filter",
+        "workbench_workflow"
+      ],
+      "exit_code": 0,
+      "passed": 3,
+      "total": 3,
+      "app_sha256": "b4a13832284b6d79089840aa743a54a8f5ec4916808ae6ebe0536e394372248e",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-x47ka1pt/results.json",
+      "results_sha256": "a1b416abd87e4eee2b6ffe4d6f55edf8e5c5cfc5e0aa0a5540113b15c635a043",
+      "log": "build/validation/filename-wrap-2026-11-05/owned-ui-windows.log",
+      "log_sha256": "1031219581db7d391ef75d83fa7924756fc5ea873a66950bebaf3453be6d25e1",
+      "tests": [
+        {
+          "name": "workspace_tree_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "project_tree_workflow",
+          "status": "passed"
+        }
+      ],
+      "actual_source_snapshot": "filename-wrap-owned",
+      "actual_compiler_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/filename-wrap-owned-compiler-source.json",
+        "sha256": "5f1fee07987511794b62565b966f0854deb7792661e6aea819e2789edbee9a68"
+      }
+    },
+    {
+      "phase": "owned",
+      "group": "ui",
+      "platform": "linux",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "project_tree_workflow",
+        "--test-filter",
+        "workspace_tree_workflow",
+        "--test-filter",
+        "workbench_workflow"
+      ],
+      "exit_code": 0,
+      "passed": 3,
+      "total": 3,
+      "app_sha256": "48d7df8c92d815d3f0119cfe5f156ad5d073250ef65354f5e62625c15054f2d3",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5vvltg9o/results.json",
+      "results_sha256": "36a1a226f49fda17299d0291ead6e873da1d1bba79c3b9502c3e73b3f626cb80",
+      "log": "build/validation/filename-wrap-2026-11-05/owned-ui-linux.log",
+      "log_sha256": "57802969811b9e3dae419a56f442542354f8316e8c7dcba782fa9325af3f7bec",
+      "tests": [
+        {
+          "name": "workspace_tree_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "workbench_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "project_tree_workflow",
+          "status": "passed"
+        }
+      ],
+      "actual_source_snapshot": "filename-wrap-owned",
+      "actual_compiler_manifest": {
+        "path": "build/validation/explorer-inline-2026-10-29/filename-wrap-owned-compiler-source.json",
+        "sha256": "5f1fee07987511794b62565b966f0854deb7792661e6aea819e2789edbee9a68"
+      }
+    }
+  ],
+  "images": [
+    {
+      "platform": "windows",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-x47ka1pt/project_tree_workflow/files ä/workflow ä/project-tree-large-name.bmp",
+      "sha256": "6447ea17e45e4b7ee08fd15a6888f8ad3a311838105da6acca19c87963799b9d",
+      "actual_native_image_opened": true
+    },
+    {
+      "platform": "linux",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5vvltg9o/project_tree_workflow/files ä/workflow ä/project-tree-large-name.bmp",
+      "sha256": "b0c3e53d9be2ec11636beba8937d42de94021ad51b253a0acf4a14eea9d25b72",
+      "actual_native_image_opened": true
+    }
+  ],
+  "pre_build_scope_audit": {
+    "path": "build/validation/filename-wrap-2026-11-05/owned-input-audit.json",
+    "sha256": "f6ed6433ec7750a45cc75b405b12833d0cf58cac1aa4b409457f84e71a04b5de",
+    "owned_inputs": 303
+  },
+  "source_manifests": [
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/filename-wrap-owned-inputs.json",
+      "sha256": "9e1b8adcabd96c3bad8c20f81f1f11ab66428a886906ff013a756d3656806274"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/filename-wrap-owned-compiler-source.json",
+      "sha256": "5f1fee07987511794b62565b966f0854deb7792661e6aea819e2789edbee9a68"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/filename-wrap-owned-runtime.json",
+      "sha256": "a38854e998ee8f9eed9f741cd61eeb13f60244a1e7d87887a0811495e4fa7837"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/filename-wrap-owned-byte-index.json",
+      "sha256": "198d053fbb6a984c1fd6793deefc8302c56e837cf5cce10cb9ddd6400d254673"
+    }
+  ],
+  "macos": "Next current-source workflow configured for14data+12GUI. Previous9cc source: Intel11+10 passed, ARM cancelled before steps, documented separately. No current-source macOS acceptance yet.",
+  "private_user_mac": "OFF; untouched",
+  "source_scope_note": "Each original attempt is bound to its own actual compiler manifest. Data-only runs do not establish acceptance of retained previous app binaries. Only owned is the final303-input scope-audited source."
+}

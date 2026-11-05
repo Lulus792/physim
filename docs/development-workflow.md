@@ -41,6 +41,14 @@ Ein Build aus dem Arbeitsverzeichnis enthält dessen lokale Änderungen.
 Ein bestandener isolierter Stand bestätigt andere uncommittete Änderungen nicht.
 Diese Unterscheidung auch bei Release-Anleitungen und Übergaben beibehalten.
 
+Vor einem isolierten Build die eigenen geänderten Eingaben ausdrücklich
+auflisten: vorhandene Testdateien und `.inc`-Helfer ebenso wie neue Quellen,
+Header und benötigte Ressourcen. Für jeden dieser Pfade prüfen, dass er im
+Eingabemanifest enthalten ist und Arbeitsbaum, Testkopie und Manifest denselben
+Byteinhalt haben. Die bloße Registrierung eines Testfalls genügt nicht.
+Fremdes WIP dabei erhalten; nicht pauschal alle lokalen Änderungen übernehmen.
+Den Abgleich vor dem Start und den getesteten Inhalt beim Abschluss festhalten.
+
 ## Nachweise ohne unnötige Bildserien
 
 [Markdown-Vorlage](templates/native-validation.md) und

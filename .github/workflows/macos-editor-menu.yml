@@ -13,6 +13,11 @@ on:
       - app/signature_tests.inc
       - app/signature_detached_tests.inc
       - app/code_preview.*
+      - app/workspace_tree_ui.inc
+      - app/workspace_tree_tests.inc
+      - tests/test_code_preview.c
+      - tests/test_code_wrap.c
+      - tests/test_text_wrap.c
       - tests/test_signature_wrap.c
       - app/syntax*
       - app/design_tokens.h
@@ -71,9 +76,9 @@ jobs:
           path: build/sdl-install
           key: ${{ steps.sdl-identity.outputs.key }}
       - name: Actual signature, call-target and revision data
-        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test --test-filter signature_wrap --test-filter signature_help --test-filter c_lookup --test-filter module_signatures --test-filter c_signatures --test-filter editor_signatures --test-filter call_targets --test-filter c_call_context --test-filter completion_c_locals --test-filter completion_locals --test-filter completion_info
+        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test --test-filter code_preview --test-filter code_wrap --test-filter text_wrap --test-filter signature_wrap --test-filter signature_help --test-filter c_lookup --test-filter module_signatures --test-filter c_signatures --test-filter editor_signatures --test-filter call_targets --test-filter c_call_context --test-filter completion_c_locals --test-filter completion_locals --test-filter completion_info
       - name: Actual document, completion and API reference workflows
-        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test-display --test-filter documents_small --test-filter documents_large --test-filter completion_workflow --test-filter completion_automatic_workflow --test-filter completion_automatic_deadline_workflow --test-filter completion_info_workflow --test-filter completion_locals_workflow --test-filter signature_help_workflow --test-filter signature_detached_workflow --test-filter api_reference_workflow
+        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test-display --test-filter documents_small --test-filter documents_large --test-filter completion_workflow --test-filter completion_automatic_workflow --test-filter completion_automatic_deadline_workflow --test-filter completion_info_workflow --test-filter completion_locals_workflow --test-filter signature_help_workflow --test-filter signature_detached_workflow --test-filter api_reference_workflow --test-filter project_tree_workflow --test-filter workspace_tree_workflow
       - name: Compact native results
         if: always()
         uses: actions/upload-artifact@v4
@@ -88,5 +93,6 @@ jobs:
             build/native/**/test-results/**/signature_detached_workflow/**/signature-detached-normal.bmp
             build/native/**/test-results/**/signature_detached_workflow/**/signature-detached-long.bmp
             build/native/**/test-results/**/signature_detached_workflow/**/signature-detached-failure.bmp
+            build/native/**/test-results/**/project_tree_workflow/**/project-tree-large-name.bmp
           if-no-files-found: warn
           retention-days: 14

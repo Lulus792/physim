@@ -70,6 +70,14 @@ Referenzbilder und eingefrorene Nachweise bleiben erhalten.
 
 ## Nachweise mit weniger Bildern
 
+Die [lokale Bestandsaufnahme vom5. November](verification/storage-inventory-2026-11-05.json)
+erfasst536100 Projektdateien:83,80GB logische Dateigrößen und41,33GB tatsächlich
+zugeordneter Speicher, einschließlich Git, Abhängigkeiten und aller lokalen
+build*-Verzeichnisse. Davon entfallen40,47GB auf build*-Ordner. NTFS-Kompression
+ist berücksichtigt. Die gemeinsame WSL-VHDX mit44,98GB wird separat ausgewiesen;
+sie gehört auch zu NexaUI/NexaCloud. Die Messung löschte nichts. Diese datierte
+Aufnahme nicht allein bei einem Kontextwechsel wiederholen.
+
 Für die regelmäßige Pflege gelten die
 [Dokumentations- und Übergaberegeln](development-workflow.md). Aktuellen Status im
 kurzen Arbeitsstand halten, abgeschlossene Einzelheiten im Prüfindex verlinken.

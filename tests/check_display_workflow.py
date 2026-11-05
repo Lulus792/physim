@@ -1174,11 +1174,12 @@ def completion_automatic(flow,directory,deadline=False):
 
 def project_tree(flow,directory):
     flow.run("--workspace-state-test",directory,"project-tree",timeout=30,marker="PROJECT TREE SELF-TEST: PASSED")
+    require("PROJECT FILENAME ui=22 full-painted=1 extension-intact=1 within-clip=1 legacy-split-rejected=1 opened-exact-file=1 basename-part-intact=1" in flow.steps[-1]["stdout"],"Missing actual large-font filename paint/clip/extension and file-open proof")
     project=directory / "project"
     for name,source in (("main.c","examples/pendulum/main.c"),("analysis.c","examples/pendulum/analysis.c")):
         require((project/name).read_bytes()==(flow.root/source).read_bytes(),"Tree navigation changed project source: "+name)
     exact(project / "assets/note α.txt","Tree nested preview: α = 42\n")
-    for name in ("project-tree-files.bmp","project-tree-run.bmp","project-tree-invalid.bmp"):
+    for name in ("project-tree-files.bmp","project-tree-run.bmp","project-tree-invalid.bmp","project-tree-large-name.bmp"):
         require((directory/name).is_file(),"Missing actual project tree view: "+name)
 
 

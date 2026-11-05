@@ -2,6 +2,9 @@ static bool workbench_test_start(app *a,const char *root,const char *mode) {
     join(a->project_input,sizeof a->project_input,root,"project");a->example=0;new_project(a);
     if(!a->loaded)return false;
     ps_preferences p=a->preferences;p.theme=strstr(mode,"light")?PS_THEME_LIGHT:PS_THEME_DARK;
+    /* This reference-layout fixture has always asserted these dimensions.
+     * Keep it independent of the user's/default protocol expansion height. */
+    p.sidebar_width=218;p.inspector_width=255;p.log_height=152;
     if(strstr(mode,"contrast"))p.theme=PS_THEME_HIGH_CONTRAST;
     if(strstr(mode,"large")){p.ui_size=22;p.editor_size=22;}
     preferences_apply(a,&p);
@@ -248,13 +251,19 @@ static void workbench_test_frame(app *a,const char *mode,int *stage,int *code,co
     case 77:
         if(!nk_sdl_accessibility_is_focused(a->ui,NULL,"Protokoll-Höhe"))return;
         test_window_key_mod(a->window,SDLK_HOME,0);break;
-    case 78:ok=a->preferences.log_height==126;test_window_key_mod(a->window,SDLK_UP,0);break;
-    case 79:ok=a->preferences.log_height==136;test_window_key_mod(a->window,SDLK_UP,SDL_KMOD_SHIFT);break;
-    case 80:ok=a->preferences.log_height==176;test_window_key_mod(a->window,SDLK_END,0);break;
-    case 81:ok=a->preferences.log_height==366;test_window_key_mod(a->window,SDLK_RETURN,0);break;
+    /* Shared Protocol C owns this range now (protocol_tests.inc), rather than
+     * the old workbench-only dock. Keep the actual keyboard integration. */
+    case 78:ok=a->preferences.log_height==150;test_window_key_mod(a->window,SDLK_UP,0);break;
+    case 79:ok=a->preferences.log_height==160;test_window_key_mod(a->window,SDLK_UP,SDL_KMOD_SHIFT);break;
+    case 80:ok=a->preferences.log_height==200;test_window_key_mod(a->window,SDLK_END,0);break;
+    case 81:{
+        int w=0,h=0;ok=SDL_GetWindowSize(a->window,&w,&h) &&
+            a->preferences.log_height==(uint32_t)lroundf(fminf(500,h*.55f));
+        test_window_key_mod(a->window,SDLK_RETURN,0);break;
+    }
     case 82:
-        ok=a->preferences.log_height==152;
-        if(ok && a->dock_panels[PS_DOCK_LOG].h!=152)return;
+        ok=a->preferences.log_height==340;
+        if(ok && a->dock_panels[PS_DOCK_LOG].h!=340)return;
         printf("WORKBENCH GEOMETRY: workspace=%.1f context=%.1f log=%.1f body=%.1f editor-height=%.1f\n",a->dock_panels[PS_DOCK_SIDEBAR].w,a->dock_panels[PS_DOCK_INSPECTOR].w,a->dock_panels[PS_DOCK_LOG].h,a->dock_panels[PS_DOCK_LOG].h-42-24,a->dock_panels[PS_DOCK_WORKSPACE].h);
         *capture="workbench-reset-geometry.bmp";a->quitting=true;break;
     }

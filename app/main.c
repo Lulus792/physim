@@ -5587,6 +5587,7 @@ int main(int argc, char **argv) {
         int w, h;
         SDL_GetWindowSize(window, &w, &h);
         draw_ui(a, w, h);
+        if(workspace_state_test && !strcmp(argv[3],"project-tree"))project_tree_name_draw(a);
         if(workspace_state_test && (!strcmp(argv[3],"completion-c") || !strcmp(argv[3],"completion-phys")))completion_syntax_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"completion-info-",16))completion_info_test_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"completion-locals-",18))completion_locals_draw(a);

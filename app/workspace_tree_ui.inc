@@ -1,4 +1,8 @@
 #include "workspace_path_tooltip.inc"
+static float workspace_name_measure(void *user,const char *text,size_t bytes){
+    const struct nk_user_font *font=user;
+    return font->width(font->userdata,font->height,text,(int)bytes);
+}
 static bool workbench_path_equal(const char *left,const char *right) {
     while(*left && *right) {
         unsigned char a=(unsigned char)*left++,b=(unsigned char)*right++;
@@ -74,7 +78,11 @@ static void workspace_tree_view(app *a) {
         const char *name=workspace_name(entry->path);
         const struct nk_user_font *font=compact && !entry->depth?&a->workbench_fonts[3]:ui->style.font;
         float text_width=fmaxf(1,width-indent-(entry->depth?ui->style.window.spacing.x:0)-inset-3*f);
-        float text_height=workbench_card_text_height(font,name,text_width),height=fmaxf((compact?31:27)*f,text_height+12*f);
+        ps_code_preview *name_lines=NULL;size_t name_bytes=strlen(name);
+        if(!entry->directory && workspace_name_measure((void*)font,name,name_bytes)>text_width)
+            ps_code_preview_build_filename(name,name_bytes,text_width,workspace_name_measure,(void*)font,&name_lines);
+        float text_height=name_lines?name_lines->count*(font->height+5)-5:workbench_card_text_height(font,name,text_width);
+        float height=fmaxf((compact?31:27)*f,text_height+12*f);
         nk_layout_row_begin(ui, NK_STATIC, height, entry->depth ? 2 : 1);
         if (entry->depth) {
             nk_layout_row_push(ui, indent);
@@ -94,7 +102,15 @@ static void workspace_tree_view(app *a) {
         nk_widget(&bounds,ui);struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
         if(selected)ps_ui_selection_row(canvas,row,4*f,f,ui_palette);
         else if(!entry->directory && nk_input_is_mouse_hovering_rect(&ui->input,row))nk_fill_rect(canvas,row,4*f,UI_COLOR(button_hover));
-        workbench_card_text(canvas,font,nk_rect(bounds.x+inset,bounds.y+(bounds.h-text_height)/2,text_width,text_height),name,!entry->depth || !compact?UI_COLOR(text):UI_COLOR(muted));
+        struct nk_rect name_bounds=nk_rect(bounds.x+inset,bounds.y+(bounds.h-text_height)/2,text_width,text_height);
+        struct nk_color name_color=!entry->depth || !compact?UI_COLOR(text):UI_COLOR(muted);
+        if(name_lines){
+            for(size_t line=0;line<name_lines->count;line++){
+                ps_code_preview_line span=name_lines->lines[line];
+                nk_draw_text(canvas,nk_rect(name_bounds.x,name_bounds.y+line*(font->height+5),name_bounds.w,font->height),name+span.begin,(int)(span.end-span.begin),font,nk_rgba(0,0,0,0),name_color);
+            }
+            ps_code_preview_destroy(name_lines);
+        }else workbench_card_text(canvas,font,name_bounds,name,name_color);
         bool focused=false,clicked=ps_ui_button_at_custom_focus(ui,row,compact?name:label,selected,&focused);
         if(focused)ps_ui_selection_focus(canvas,row,f,ui_palette);
         nk_style_pop_flags(ui);

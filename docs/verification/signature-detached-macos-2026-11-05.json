@@ -1,0 +1,130 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "9cc445085ac8dc6c34f16aa010f9bc88f6c6c1de",
+  "run": 42049114569,
+  "url": "https://github.com/Lulus792/physim/actions/runs/42049114569",
+  "overall_run_conclusion": "failure",
+  "intel": {
+    "job": 127320087841,
+    "conclusion": "success",
+    "artifact": 13427991003,
+    "bytes": 490139,
+    "zip_sha256": "706a89594da801ee81fb35bb98110c2790d2735f461f951b565eca509e1f5129",
+    "all_ten_original_zip_entries_read_and_hashed": true,
+    "entry_hashes": {
+      "Release/test-results/run-tl7f2i4f/results.json": "5f404097da7083f881a5a30d7fdb04dc78456a702e5928a196ee80fe1d955a4d",
+      "Release/test-results/run-tl7f2i4f/signature_detached_workflow/files ä/workflow ä/c/signature-detached-normal.bmp": "29e0bcde0de8e0833a86dc17dee33f690bbee922ad667e8fc5c2113d9c969bdd",
+      "Release/test-results/run-tl7f2i4f/signature_detached_workflow/files ä/workflow ä/c/signature-detached-long.bmp": "99e0c1f42bf2949f31902a00fcbc4e8f793d41634462637cf5b4afd6e4c27d69",
+      "Release/test-results/run-tl7f2i4f/signature_detached_workflow/files ä/workflow ä/phys/signature-detached-long.bmp": "79e02df38c51b42ed2679d4eb13297e1f9b609621ad2f1b1f49d2afd45133132",
+      "Release/test-results/run-tl7f2i4f/signature_detached_workflow/files ä/workflow ä/phys/signature-detached-normal.bmp": "fe707e5f335b1dd950481a8ef3bb3b08c230871f2a11ea104cb4487672c4b145",
+      "Release/test-results/run-tl7f2i4f/signature_help_workflow/files ä/workflow ä/c/signature-first.bmp": "f99d1a570e01b8f9b20a6a149947f20251ce72999312cbdb9b2b31cdfaa7a5fd",
+      "Release/test-results/run-tl7f2i4f/signature_help_workflow/files ä/workflow ä/c/signature-long.bmp": "facb10eb17c3e3b5b0cbc27aeb2d59873559d5080c0fd9a49566d781a18036c4",
+      "Release/test-results/run-tl7f2i4f/signature_help_workflow/files ä/workflow ä/phys/signature-first.bmp": "4ed9852a7a489c80a08b1f7dad8e1035407cb89a328c5eccbe9a5db8d8c25a07",
+      "Release/test-results/run-tl7f2i4f/signature_help_workflow/files ä/workflow ä/phys/signature-long.bmp": "77164837a96ca7eb5274231753c30f86cd4d8060b585a4f7753f2084130acea0",
+      "Release/test-results/run-yby50s34/results.json": "7780baf87a9f2dded678de9d3d90442143e8165bc7c019d3b1d12978ea634624"
+    },
+    "groups": [
+      {
+        "path": "Release/test-results/run-tl7f2i4f/results.json",
+        "passed": 10,
+        "total": 10,
+        "names": [
+          "documents_small",
+          "documents_large",
+          "completion_workflow",
+          "completion_automatic_workflow",
+          "api_reference_workflow",
+          "signature_help_workflow",
+          "completion_info_workflow",
+          "completion_automatic_deadline_workflow",
+          "completion_locals_workflow",
+          "signature_detached_workflow"
+        ]
+      },
+      {
+        "path": "Release/test-results/run-yby50s34/results.json",
+        "passed": 11,
+        "total": 11,
+        "names": [
+          "c_call_context",
+          "c_signatures",
+          "c_lookup",
+          "signature_wrap",
+          "completion_locals",
+          "completion_c_locals",
+          "call_targets",
+          "signature_help",
+          "editor_signatures",
+          "module_signatures",
+          "completion_info"
+        ]
+      }
+    ],
+    "detached_markers": [
+      "SIGNATURE DETACHED language=c target=0 actual-child-context=1 auto-open=1 list-disjoint=1 child-typing=1 native-return=1 source-caret-layout-preserved=1 primary-typing=1",
+      "SIGNATURE DETACHED language=c target=1 actual-child-context=1 auto-open=1 list-disjoint=1 child-typing=1 native-return=1 source-caret-layout-preserved=1 primary-typing=1",
+      "SIGNATURE DETACHED language=c target=2 actual-child-context=1 long16=1 thumb-over-editor=1 outside-drag-preserved=1 typing-after-drag=1",
+      "SIGNATURE DETACHED language=c target=2 actual-child-context=1 auto-open=1 list-disjoint=1 child-typing=1 native-return=1 source-caret-layout-preserved=1 primary-typing=1",
+      "SIGNATURE DETACHED SELF-TEST: PASSED",
+      "SIGNATURE DETACHED language=phys target=0 actual-child-context=1 auto-open=1 list-disjoint=1 child-typing=1 native-return=1 source-caret-layout-preserved=1 primary-typing=1",
+      "SIGNATURE DETACHED language=phys target=1 actual-child-context=1 auto-open=1 list-disjoint=1 child-typing=1 native-return=1 source-caret-layout-preserved=1 primary-typing=1",
+      "SIGNATURE DETACHED language=phys target=2 actual-child-context=1 long16=1 thumb-over-editor=1 outside-drag-preserved=1 typing-after-drag=1",
+      "SIGNATURE DETACHED language=phys target=2 actual-child-context=1 auto-open=1 list-disjoint=1 child-typing=1 native-return=1 source-caret-layout-preserved=1 primary-typing=1",
+      "SIGNATURE DETACHED SELF-TEST: PASSED"
+    ],
+    "images": [
+      {
+        "entry": "Release/test-results/run-tl7f2i4f/signature_detached_workflow/files ä/workflow ä/c/signature-detached-normal.bmp",
+        "sha256": "29e0bcde0de8e0833a86dc17dee33f690bbee922ad667e8fc5c2113d9c969bdd",
+        "review": "actual native image opened"
+      },
+      {
+        "entry": "Release/test-results/run-tl7f2i4f/signature_detached_workflow/files ä/workflow ä/c/signature-detached-long.bmp",
+        "sha256": "99e0c1f42bf2949f31902a00fcbc4e8f793d41634462637cf5b4afd6e4c27d69",
+        "review": "actual native image opened"
+      },
+      {
+        "entry": "Release/test-results/run-tl7f2i4f/signature_detached_workflow/files ä/workflow ä/phys/signature-detached-long.bmp",
+        "sha256": "79e02df38c51b42ed2679d4eb13297e1f9b609621ad2f1b1f49d2afd45133132",
+        "review": "actual native image opened"
+      },
+      {
+        "entry": "Release/test-results/run-tl7f2i4f/signature_detached_workflow/files ä/workflow ä/phys/signature-detached-normal.bmp",
+        "sha256": "fe707e5f335b1dd950481a8ef3bb3b08c230871f2a11ea104cb4487672c4b145",
+        "review": "actual native image opened"
+      },
+      {
+        "entry": "Release/test-results/run-tl7f2i4f/signature_help_workflow/files ä/workflow ä/c/signature-first.bmp",
+        "sha256": "f99d1a570e01b8f9b20a6a149947f20251ce72999312cbdb9b2b31cdfaa7a5fd",
+        "review": "byte-identical to previously opened source27 Intel canonical image"
+      },
+      {
+        "entry": "Release/test-results/run-tl7f2i4f/signature_help_workflow/files ä/workflow ä/c/signature-long.bmp",
+        "sha256": "facb10eb17c3e3b5b0cbc27aeb2d59873559d5080c0fd9a49566d781a18036c4",
+        "review": "byte-identical to previously opened source27 Intel canonical image"
+      },
+      {
+        "entry": "Release/test-results/run-tl7f2i4f/signature_help_workflow/files ä/workflow ä/phys/signature-first.bmp",
+        "sha256": "4ed9852a7a489c80a08b1f7dad8e1035407cb89a328c5eccbe9a5db8d8c25a07",
+        "review": "byte-identical to previously opened source27 Intel canonical image"
+      },
+      {
+        "entry": "Release/test-results/run-tl7f2i4f/signature_help_workflow/files ä/workflow ä/phys/signature-long.bmp",
+        "sha256": "77164837a96ca7eb5274231753c30f86cd4d8060b585a4f7753f2084130acea0",
+        "review": "byte-identical to previously opened source27 Intel canonical image"
+      }
+    ],
+    "original_report": "build/validation/signature-detached-macos-2026-11-05/intel-original.json",
+    "original_report_sha256": "31a79e39de242ef16042aafb2eb08fe5c9149feaf796fb3fa04c106d7d40f5fb"
+  },
+  "arm": {
+    "job": 127320087545,
+    "conclusion": "cancelled",
+    "steps": null,
+    "native_test_acceptance": false,
+    "result": "Cancelled before any test step; no ARM result for this source."
+  },
+  "continuation": "Do not poll this terminal run again. Verify ARM with the next current-source workflow including the detached regression; do not present Intel as both architectures.",
+  "scope": "Hosted Intel SDL child/main UI workflow. No ARM acceptance, physical input, screenreader or OS-boundary capture acceptance.",
+  "private_user_mac": "OFF; untouched"
+}
