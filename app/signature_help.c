@@ -186,6 +186,41 @@ static ps_result ph_display(ps_signature_help *next,ps_lang_editor_function f,co
     }
     next->declaration=f.name_start;next->state=PS_SIGNATURE_READY;return PS_OK;
 }
+static ps_result ph_function_value(ps_signature_help *next,ps_lang_editor_binding binding,
+                                  ps_lang_node *nodes,size_t capacity){
+    size_t begin=binding.type_start,end=binding.type_end;
+    if(begin>=end || end>next->bytes)return PS_OK;
+    trim(next->source,&begin,&end);const char *type_text=next->source+begin;
+    ps_lang_editor_function_type_result q=ps_lang_editor_function_type(type_text,end-begin,nodes,capacity,NULL,0);
+    if(q.status==PS_LANG_EDITOR_LIMIT)return PS_LIMIT;
+    if(q.status!=PS_LANG_EDITOR_OK || !q.callable)return PS_OK;
+    ps_lang_editor_parameter *parameters=NULL;ps_result r=PS_OK;
+    if(q.parameter_count){
+        r=ps_memory_zero(next->allocator,q.parameter_count,sizeof *parameters,(void**)&parameters);if(r!=PS_OK)return r;
+        ps_lang_editor_function_type_result full=ps_lang_editor_function_type(type_text,end-begin,nodes,capacity,parameters,q.parameter_count);
+        if(full.status!=PS_LANG_EDITOR_OK || !full.callable || full.parameter_count!=q.parameter_count){r=full.status==PS_LANG_EDITOR_LIMIT?PS_LIMIT:PS_INVALID;goto done;}
+    }
+    for(unsigned pass=0;pass<2;pass++){
+        writer w={.text=next->display?next->display->text:NULL,.status=PS_OK};
+        append(&w,next->source+next->call.name_start,next->call.name_end-next->call.name_start);
+        if(next->display){next->display->name_begin=0;next->display->name_end=w.bytes;}
+        append(&w,"(",1);
+        for(size_t i=0;i<q.parameter_count;i++){
+            if(i)append(&w,", ",2);
+            size_t x=parameters[i].type_start,y=parameters[i].type_end;trim(type_text,&x,&y);
+            size_t start=w.bytes;append(&w,type_text+x,y-x);
+            if(next->display)next->display->parameters[i]=(ps_signature_parameter){start,w.bytes,0,0,false};
+        }
+        append(&w,") -> ",5);
+        size_t x=q.result_start,y=q.result_end;trim(type_text,&x,&y);append(&w,type_text+x,y-x);
+        if(w.status!=PS_OK){r=w.status;goto done;}
+        if(!pass){r=display_new(next->allocator,q.parameter_count,w.bytes,&next->display);if(r!=PS_OK)goto done;}
+        else{if(w.bytes!=next->display->text_bytes){r=PS_INVALID;goto done;}next->display->text[w.bytes]=0;}
+    }
+    next->declaration=binding.name.offset;next->state=PS_SIGNATURE_READY;
+done:
+    ps_memory_free(next->allocator,parameters,q.parameter_count*sizeof *parameters);return r;
+}
 static ps_result ph_select(ps_signature_help *next,const ps_signature_help *previous,bool *borrowed_display){
     ps_allocator a=next->allocator;size_t capacity=next->bytes<32767?next->bytes*2+2:65536;
     ps_lang_node *nodes=NULL;ps_lang_editor_binding *bindings=NULL;
@@ -237,7 +272,7 @@ static ps_result ph_select(ps_signature_help *next,const ps_signature_help *prev
         }
     }
     if(!next->call.member && has_binding)masked=!best || !best->scope_depth || binding.name.offset>best->name_start;
-    if(masked){next->state=PS_SIGNATURE_MASKED;goto done;}
+    if(masked){next->state=PS_SIGNATURE_MASKED;r=ph_function_value(next,binding,nodes,capacity);goto done;}
     if(ambiguous){next->state=PS_SIGNATURE_AMBIGUOUS;goto done;}
     if(best){r=ph_display(next,*best,best_params);goto done;}
     if(next->call.member){

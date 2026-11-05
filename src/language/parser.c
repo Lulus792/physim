@@ -1348,3 +1348,32 @@ ps_lang_editor_signatures_result ps_lang_editor_module_signatures(
     ps_lang_editor_parameter *parameters,size_t parameter_capacity){
     return signature_query(source,size,nodes,node_capacity,functions,function_capacity,parameters,parameter_capacity,1);
 }
+ps_lang_editor_function_type_result ps_lang_editor_function_type(
+    const void *source,size_t size,ps_lang_node *nodes,size_t node_capacity,
+    ps_lang_editor_parameter *parameters,size_t parameter_capacity){
+    ps_lang_editor_function_type_result result={.status=PS_LANG_EDITOR_INVALID};
+    if(size>256u*1024u){result.status=PS_LANG_EDITOR_LIMIT;return result;}
+    if((!source && size) || !nodes || node_capacity<2 || (!parameters && parameter_capacity) ||
+       (size && memchr(source,0,size)))return result;
+    editor_signatures limits={0};
+    parser p={.nodes=nodes,.capacity=node_capacity,.count=1,.signatures=&limits};
+    memset(nodes,0,sizeof *nodes);ps_lang_lexer_init(&p.lexer,source,size);advance(&p);newlines(&p);
+    size_t root=type(&p);newlines(&p);
+    if(p.current.kind!=PS_LANG_EOF)error(&p,"Expected end of written type");
+    result.diagnostic=p.error;
+    if(limits.limited){result.status=PS_LANG_EDITOR_LIMIT;return result;}
+    if(!root || p.error.kind==PS_LANG_ERROR || p.lexer.failure.kind==PS_LANG_ERROR)return result;
+    result.status=PS_LANG_EDITOR_OK;
+    if(nodes[root].kind!=PS_AST_FUNCTION_TYPE)return result;
+    result.callable=1;
+    for(size_t id=nodes[root].a;id;id=nodes[id].next)result.parameter_count++;
+    result.result_start=nodes[nodes[root].b].type_start;
+    result.result_end=nodes[nodes[root].b].type_end;
+    if(parameter_capacity && parameter_capacity<result.parameter_count){result.status=PS_LANG_EDITOR_LIMIT;return result;}
+    if(parameters && parameter_capacity){
+        size_t at=0;
+        for(size_t id=nodes[root].a;id;id=nodes[id].next)
+            parameters[at++]=(ps_lang_editor_parameter){0,0,nodes[id].type_start,nodes[id].type_end};
+    }
+    return result;
+}

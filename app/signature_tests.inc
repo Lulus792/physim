@@ -193,6 +193,23 @@ static void signature_test_frame(app *a,bool language,int *stage,int *code,const
         SIG_WAIT(signature_test_full(a,0));
         printf("SIGNATURE HUD language=%s target=%u theme=%u auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1\n",language?"phys":"c",target,target);
         printf("SIGNATURE HUD language=%s target=%u retained-old-locals-model-hidden-on-oom=1 recovered=1\n",language?"phys":"c",target);
+        if(language){
+            ok=signature_seed(a,edit,"func step(callback: func(Float64, Vec3) -> Float64):\n    callback(|)\n");
+            SIG_NEXT(40);break;
+        }
+        SIG_NEXT(42);break;
+    case 40:
+        SIG_WAIT(signature_test_full(a,0));
+        ok=a->signature_help.display->count==2 && !a->signature_help.api_symbol &&
+           !strcmp(a->signature_help.display->text,"callback(Float64, Vec3) -> Float64") &&
+           !a->signature_help.display->parameters[0].name_end && !a->signature_help.display->parameters[1].name_end;
+        SIG_TEXT("1, ");SIG_NEXT(41);break;
+    case 41:
+        SIG_WAIT(signature_test_full(a,1) && signature_footer_full(a));
+        ok=strstr(a->signature_status,"Parameter 2 von 2")!=NULL;
+        if(ok)printf("SIGNATURE FUNCTION VALUE target=%u written-types=1 unnamed-honest=1 first-second-active=1 full-syntax=1 footer=1\n",target);
+        SIG_NEXT(42);break;
+    case 42:
         completion_close(a);signature_clear(a);
         if(target<2){target++;SIG_NEXT(0);}else SIG_NEXT(20);
         break;

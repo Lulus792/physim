@@ -314,8 +314,22 @@ oder aus. Nach einem Auswahlwechsel erscheint sie kurz verzögert. Bei lokalen
 Namen zeigt sie den geschriebenen Typ und die Datei mit Deklarationszeile.
 Fehlt eine Typannotation, wird kein abgeleiteter Typ behauptet. Lokale Namen
 haben keinen API-Referenzknopf; **Shift+F1** meldet ihre Quellstelle und erhält
-die bereits geöffnete API-Referenz. Eine separate Parameterhilfe für den
-aktuellen Aufruf ist noch nicht verfügbar.
+die bereits geöffnete API-Referenz.
+
+Die **Parameterhilfe** zeigt beim Tippen eines Aufrufs die vollständige bekannte
+Signatur und hebt das aktuelle Argument hervor. **Ctrl+Shift+Leertaste** öffnet
+sie manuell. Die Vorschlagsliste und die Parameterhilfe lassen sich getrennt mit
+**Escape** schließen; die Übernahme einer Variablen schließt die Parameterhilfe
+nicht. Bei zu vielen Argumenten meldet sie die erwartete Anzahl, statt einen
+falschen letzten Parameter hervorzuheben.
+
+Neben C-/Physim-API- und geschriebenen Benutzerfunktionen berücksichtigt sie
+ausdrücklich annotierte Physim-Funktionswerte: Bei
+`callback: func(Float64, Vec3) -> Float64` zeigt sie
+`callback(Float64, Vec3) -> Float64`. Der Funktionswerttyp enthält keine
+Parameternamen; solche Namen werden nicht erfunden. Typableitung aus einem
+Initialisierer und Importaliasauflösung sind dafür noch nicht verfügbar.
+Unbekannte oder mehrdeutige Ziele erhalten keine geratene Signatur.
 
 ### API-Dokumentation neben dem Code
 

@@ -11,6 +11,12 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
 
 ## Neuere Editorprüfungen
 
+- [Geschriebene Funktionswertsignaturen](verification/signature-function-values-2026-11-05.md):
+  tatsächliche Typ-Produktion statt bloßer Maskierung. Windows Release und Alpine/
+  X11 ASan/UBSan je10/10 Daten+2/2 UI,50 Modellfälle,9 neue Fehlerpfade und sechs
+  native Zeichen-/Argumentwechsel.294 AST-Vergleiche erhalten. Anleitung korrigiert.
+  Vorherige F1-Quelle dc6d3264: Clang26/26+48/48, GCC26/26+47/48;
+  beide Font-/Linkfälle bestanden, GCC-grabFocus weiterhin offen.
 - [F1-Linkfehler außerhalb der Ansicht](verification/f1-error-semantics-2026-11-05.md):
   vorhandenes Fehlerlabel mit echten Offscreen-Zuständen veröffentlichen.
   Windows UIA/Tastatur/Metadaten3/3; Linux Tastatur/Metadaten und finaler unabhängiger

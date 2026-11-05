@@ -145,5 +145,44 @@ static int ast_equivalence(void){
     }
     printf("Physim signatures: %zu strict-AST/prefix byte comparisons passed; %zu padding-only node representation differences\n",total,padding_differences);return 0;
 }
-int main(void){CHECK(!declarations());CHECK(!owners());CHECK(!scopes());CHECK(!prefixes());CHECK(!limits());CHECK(!ast_equivalence());
+static int function_types(void){
+    const char *text="(func(Int64, func([Float64]?, Module.Item) -> String) -> (func() -> Bool))";
+    ps_lang_editor_function_type_result r=ps_lang_editor_function_type(text,strlen(text),nodes,8192,NULL,0);
+    CHECK(r.status==PS_LANG_EDITOR_OK && r.callable && r.parameter_count==2);
+    CHECK(span(text,r.result_start,r.result_end,"(func() -> Bool)"));
+    memset(parameters,0xa5,sizeof parameters);
+    ps_lang_editor_parameter held[128];memcpy(held,parameters,sizeof held);
+    r=ps_lang_editor_function_type(text,strlen(text),nodes,8192,parameters,1);
+    CHECK(r.status==PS_LANG_EDITOR_LIMIT && r.parameter_count==2 && !memcmp(held,parameters,sizeof held));
+    r=ps_lang_editor_function_type(text,strlen(text),nodes,8192,parameters,128);
+    CHECK(r.status==PS_LANG_EDITOR_OK && r.callable && r.parameter_count==2);
+    CHECK(!parameters[0].name_start && !parameters[0].name_end);
+    CHECK(span(text,parameters[0].type_start,parameters[0].type_end,"Int64"));
+    CHECK(span(text,parameters[1].type_start,parameters[1].type_end,"func([Float64]?, Module.Item) -> String"));
+    static const char *noncallable[]={"Int64","Callback","[func(Int64) -> Bool]","(func(Int64) -> Bool)?"};
+    for(size_t i=0;i<sizeof noncallable/sizeof *noncallable;i++){
+        r=ps_lang_editor_function_type(noncallable[i],strlen(noncallable[i]),nodes,8192,parameters,128);
+        CHECK(r.status==PS_LANG_EDITOR_OK && !r.callable && !r.parameter_count && !r.result_end);
+    }
+    static const char *invalid[]={"","func(","func(Int64)","func(Int64) ->","func(Int64,) -> Bool","func(x: Int64) -> Bool","func() -> Bool extra","func() -> \xc0\xaf"};
+    for(size_t i=0;i<sizeof invalid/sizeof *invalid;i++){
+        memcpy(parameters,held,sizeof held);
+        r=ps_lang_editor_function_type(invalid[i],strlen(invalid[i]),nodes,8192,parameters,128);
+        CHECK(r.status==PS_LANG_EDITOR_INVALID && !r.callable && !r.parameter_count && !r.result_end && !memcmp(held,parameters,sizeof held));
+    }
+    r=ps_lang_editor_function_type("func() -> Void",14,nodes,8192,parameters,128);
+    CHECK(r.status==PS_LANG_EDITOR_OK && r.callable && !r.parameter_count);
+    r=ps_lang_editor_function_type(text,strlen(text),nodes,2,parameters,128);
+    CHECK(r.status==PS_LANG_EDITOR_LIMIT && !r.callable && !r.parameter_count);
+    r=ps_lang_editor_function_type("func()\0 -> Void",15,nodes,8192,parameters,128);
+    CHECK(r.status==PS_LANG_EDITOR_INVALID && !r.callable);
+    r=ps_lang_editor_function_type(NULL,1,nodes,8192,parameters,128);CHECK(r.status==PS_LANG_EDITOR_INVALID);
+    r=ps_lang_editor_function_type(text,strlen(text),NULL,8192,parameters,128);CHECK(r.status==PS_LANG_EDITOR_INVALID);
+    r=ps_lang_editor_function_type(text,strlen(text),nodes,8192,NULL,1);CHECK(r.status==PS_LANG_EDITOR_INVALID);
+    r=ps_lang_editor_function_type(text,256u*1024u+1,nodes,8192,parameters,128);CHECK(r.status==PS_LANG_EDITOR_LIMIT);
+    char deep[512];memset(deep,'(',140);memcpy(deep+140,"Int64",5);memset(deep+145,')',140);
+    r=ps_lang_editor_function_type(deep,285,nodes,8192,parameters,128);CHECK(r.status==PS_LANG_EDITOR_LIMIT && !r.callable);
+    puts("Physim function types: real grammar, grouped/nested/optional/array distinction, exact unnamed spans, invalid input and atomic output/node/depth boundaries passed");return 0;
+}
+int main(void){CHECK(!declarations());CHECK(!owners());CHECK(!scopes());CHECK(!prefixes());CHECK(!limits());CHECK(!ast_equivalence());CHECK(!function_types());
     puts("Physim signature declarations: exact names/types/counts, generic/method owners, lexical/dedent scopes, complete EOF headers, invalid input and all node/output capacity boundaries passed");return 0;}

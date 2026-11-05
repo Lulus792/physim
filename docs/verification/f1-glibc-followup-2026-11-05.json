@@ -1,0 +1,630 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "dc6d326495551806e60649c895aa635708dce949",
+  "run_id": 42097105709,
+  "jobs": [
+    {
+      "compiler": "gcc",
+      "job_id": 127489909305,
+      "data_passed": 26,
+      "data_total": 26,
+      "gui_passed": 47,
+      "gui_total": 48,
+      "failures": [
+        "accessibility_atspi"
+      ],
+      "decoded_log": "build/validation/signature-function-values-2026-11-05/hosted-f1-gcc-127489909305.log",
+      "decoded_log_sha256": "9d6c0fce583a107d9b4e65608fed3a1f6da42f8d5fad17d385e30d5b7b70c864",
+      "cases": [
+        {
+          "name": "accessibility_text_index",
+          "status": "passed"
+        },
+        {
+          "name": "project_display",
+          "status": "passed"
+        },
+        {
+          "name": "utf8_string_bounds",
+          "status": "passed"
+        },
+        {
+          "name": "scene_view",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_document",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_tables",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_suspend",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_edit",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_options",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_focus",
+          "status": "passed"
+        },
+        {
+          "name": "parameter_catalog",
+          "status": "passed"
+        },
+        {
+          "name": "documentation",
+          "status": "passed"
+        },
+        {
+          "name": "project_file",
+          "status": "passed"
+        },
+        {
+          "name": "editor_clipboard",
+          "status": "passed"
+        },
+        {
+          "name": "editor_readonly",
+          "status": "passed"
+        },
+        {
+          "name": "editor_scroll",
+          "status": "passed"
+        },
+        {
+          "name": "font_shape",
+          "status": "passed"
+        },
+        {
+          "name": "font_atlas_limits",
+          "status": "passed"
+        },
+        {
+          "name": "font_fallback",
+          "status": "passed"
+        },
+        {
+          "name": "font_sources",
+          "status": "passed"
+        },
+        {
+          "name": "font_faces",
+          "status": "passed"
+        },
+        {
+          "name": "font_density",
+          "status": "passed"
+        },
+        {
+          "name": "native_project_build",
+          "status": "passed"
+        },
+        {
+          "name": "material_property_examples",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_anchors",
+          "status": "passed"
+        },
+        {
+          "name": "font_bank_ui",
+          "status": "passed"
+        },
+        {
+          "name": "floating_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "project_settings_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "language_full_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "language_mixed_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_atspi",
+          "status": "failed"
+        },
+        {
+          "name": "accessibility_tables_atspi",
+          "status": "passed"
+        },
+        {
+          "name": "project_tree_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "build_controls_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "parameter_form_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "spring_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "camera_plane_16",
+          "status": "passed"
+        },
+        {
+          "name": "camera_plane_22",
+          "status": "passed"
+        },
+        {
+          "name": "project_display_16",
+          "status": "passed"
+        },
+        {
+          "name": "project_display_22",
+          "status": "passed"
+        },
+        {
+          "name": "scene_visibility_16",
+          "status": "passed"
+        },
+        {
+          "name": "scene_visibility_22",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_media_16",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_media_22",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_anchors_16",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_anchors_22",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_history",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_math",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_zoom",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_font_demand",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_inline",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_density",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_navigation",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_document_atspi",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_edit_atspi",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_links_atspi",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_sidebar",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_typeset",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_formula_catalog",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_formula_physics",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_formula_narrow",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_detail",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_formula_models",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_formula_models_narrow",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_formula_mechanics",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_formula_mechanics_narrow",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_formula_basics",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_formula_basics_narrow",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_inline_math",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_panes",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_h",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "compiler": "clang",
+      "job_id": 127489909944,
+      "data_passed": 26,
+      "data_total": 26,
+      "gui_passed": 48,
+      "gui_total": 48,
+      "failures": [],
+      "decoded_log": "build/validation/signature-function-values-2026-11-05/hosted-f1-clang-127489909944.log",
+      "decoded_log_sha256": "9997b02e57eaa6900fd02725207bd78b7dcd3a8eb84dc977665e668d9af5d2bd",
+      "cases": [
+        {
+          "name": "accessibility_text_index",
+          "status": "passed"
+        },
+        {
+          "name": "project_display",
+          "status": "passed"
+        },
+        {
+          "name": "utf8_string_bounds",
+          "status": "passed"
+        },
+        {
+          "name": "scene_view",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_document",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_tables",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_suspend",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_edit",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_options",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_focus",
+          "status": "passed"
+        },
+        {
+          "name": "parameter_catalog",
+          "status": "passed"
+        },
+        {
+          "name": "documentation",
+          "status": "passed"
+        },
+        {
+          "name": "project_file",
+          "status": "passed"
+        },
+        {
+          "name": "editor_clipboard",
+          "status": "passed"
+        },
+        {
+          "name": "editor_readonly",
+          "status": "passed"
+        },
+        {
+          "name": "editor_scroll",
+          "status": "passed"
+        },
+        {
+          "name": "font_shape",
+          "status": "passed"
+        },
+        {
+          "name": "font_atlas_limits",
+          "status": "passed"
+        },
+        {
+          "name": "font_fallback",
+          "status": "passed"
+        },
+        {
+          "name": "font_sources",
+          "status": "passed"
+        },
+        {
+          "name": "font_faces",
+          "status": "passed"
+        },
+        {
+          "name": "font_density",
+          "status": "passed"
+        },
+        {
+          "name": "native_project_build",
+          "status": "passed"
+        },
+        {
+          "name": "material_property_examples",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_anchors",
+          "status": "passed"
+        },
+        {
+          "name": "font_bank_ui",
+          "status": "passed"
+        },
+        {
+          "name": "floating_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "project_settings_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "language_full_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "language_mixed_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_atspi",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_tables_atspi",
+          "status": "passed"
+        },
+        {
+          "name": "project_tree_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "build_controls_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "parameter_form_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "spring_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "camera_plane_16",
+          "status": "passed"
+        },
+        {
+          "name": "camera_plane_22",
+          "status": "passed"
+        },
+        {
+          "name": "project_display_16",
+          "status": "passed"
+        },
+        {
+          "name": "project_display_22",
+          "status": "passed"
+        },
+        {
+          "name": "scene_visibility_16",
+          "status": "passed"
+        },
+        {
+          "name": "scene_visibility_22",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_media_16",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_media_22",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_anchors_16",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_anchors_22",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_history",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_math",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_zoom",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_font_demand",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_inline",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_density",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_navigation",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_document_atspi",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_edit_atspi",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_links_atspi",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_sidebar",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_typeset",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_formula_catalog",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_formula_physics",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_formula_narrow",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_detail",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_formula_models",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_formula_models_narrow",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_formula_mechanics",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_formula_mechanics_narrow",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_formula_basics",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_formula_basics_narrow",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_inline_math",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_panes",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_h",
+          "status": "passed"
+        }
+      ]
+    }
+  ],
+  "evidence": "Both decoded official terminal job logs fully read; large artifact ZIPs not additionally downloaded.",
+  "scope": "Previous F1 font/error source, not new function-value implementation.",
+  "open_failure": "GCC tests/test_accessibility_atspi.py:200 reader.queryComponent().grabFocus() returned false. Same older intermittent native focus dimension; not fixed or waved through."
+}

@@ -1,0 +1,390 @@
+{
+  "date": "2026-11-05",
+  "parent_source": "dc6d326495551806e60649c895aa635708dce949",
+  "scope": "Written Physim function-value type signatures from the existing type production, immutable signature model and actual native HUD; no value/type/alias inference.",
+  "direct": {
+    "before": {
+      "path": "build/validation/signature-function-values-2026-11-05/before.json",
+      "sha256": "65b2c7a5a013b55569849dc3729a50ffc6dc0224d19f50bf9a5cbb8df73c39f0",
+      "compile_exit": 0,
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "Signature vector 38 language=1 result=0 state=2 call=1 arg=1 active=18446744073709551615\ntext=<none> expected=cb(Int64, Float64) -> String state=4\nSignature help line 228: !vectors()\n",
+      "compile_stderr": ""
+    },
+    "after-initial": {
+      "path": "build/validation/signature-function-values-2026-11-05/after-initial.json",
+      "sha256": "860a46f79b556b9c499a0d05bb4afa213d50856fb647b734ed543540f15bc3ea",
+      "compile_exit": 0,
+      "exit_code": 0,
+      "stdout": "Signature model: 39 C/Physim API/user/header/scope/ownership vectors passed\nSignature model: exact revision/owner/cursor, module/display reuse and call exit passed\nSignature model: C 60/60 allocation failures preserve old snapshot, clear stale matching and retry\nSignature model: Physim 8/8 allocation failures preserve old snapshot, clear stale matching and retry\nSignature model: 4/4 borrowed source/module failure paths preserve old ownership and retry\nSignature model: all16 user parameters survive for both languages; no five-entry cap\nSignature catalog: 370 C and 396 compiler-registered Physim formal calls resolved; 190 special/property/documentation entries explicitly unresolved\nSignature model: inner target/scope changes invalidate cache; C mask and Physim inner-to-outer resume passed\nSignature model: invalid prefix hides display; returning to valid point restores the call\n",
+      "stderr": "",
+      "compile_stderr": ""
+    },
+    "after-expanded": {
+      "path": "build/validation/signature-function-values-2026-11-05/after-expanded.json",
+      "sha256": "526216f7f243899cb13683c6167b17d15d9cb152457d50ea1cbae401e634cf83",
+      "compile_exit": 0,
+      "exit_code": 0,
+      "stdout": "Signature model: 50 C/Physim API/user/header/scope/ownership vectors passed\nSignature model: exact revision/owner/cursor, module/display reuse and call exit passed\nSignature model: C 60/60 allocation failures preserve old snapshot, clear stale matching and retry\nSignature model: Physim 8/8 allocation failures preserve old snapshot, clear stale matching and retry\nSignature model: function value 9/9 allocation failures preserve old snapshot, clear stale matching and retry\nSignature model: 4/4 borrowed source/module failure paths preserve old ownership and retry\nSignature model: all16 user parameters survive for both languages; no five-entry cap\nSignature catalog: 370 C and 396 compiler-registered Physim formal calls resolved; 190 special/property/documentation entries explicitly unresolved\nSignature model: inner target/scope changes invalidate cache; C mask and Physim inner-to-outer resume passed\nSignature model: invalid prefix hides display; returning to valid point restores the call\n",
+      "stderr": "",
+      "compile_stderr": ""
+    },
+    "parser-direct": {
+      "path": "build/validation/signature-function-values-2026-11-05/parser-direct.json",
+      "sha256": "acfc8817b06e63b01cf986ee65c5ff8fb1be968ef69f5ca85bc7da288e86a94c",
+      "compile_exit": 0,
+      "exit_code": 0,
+      "stdout": "Physim signatures: 294 strict-AST/prefix byte comparisons passed; 0 padding-only node representation differences\nPhysim function types: real grammar, grouped/nested/optional/array distinction, exact unnamed spans, invalid input and atomic output/node/depth boundaries passed\nPhysim signature declarations: exact names/types/counts, generic/method owners, lexical/dedent scopes, complete EOF headers, invalid input and all node/output capacity boundaries passed\n",
+      "stderr": "",
+      "compile_stderr": ""
+    },
+    "manual-direct": {
+      "path": "build/validation/signature-function-values-2026-11-05/manual-direct.json",
+      "sha256": "617d11adb1984ead690c8100859a66949f60af44876fc56e3e562be6a4e76e24",
+      "compile_exit": 1,
+      "exit_code": null,
+      "stdout": "",
+      "stderr": "",
+      "compile_stderr": "/mnt/d/Physim/app/documentation.c: In function 'ps_document_parse':\n/mnt/d/Physim/app/documentation.c:411:13: error: this 'if' clause does not guard... [-Werror=misleading-indentation]\n  411 |             if(span->text<first)first=span->text;if(span->text+span->length>last)last=span->text+span->length;\n      |             ^~\n/mnt/d/Physim/app/documentation.c:411:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'\n  411 |             if(span->text<first)first=span->text;if(span->text+span->length>last)last=span->text+span->length;\n      |                                                  ^~\ncc1: all warnings being treated as errors\n"
+    },
+    "manual-native-policy": {
+      "path": "build/validation/signature-function-values-2026-11-05/manual-native-policy.json",
+      "sha256": "d1a74123117185bd162419da46dab81282010c4231ab397599b9473db94cf203",
+      "compile_exit": 0,
+      "exit_code": 0,
+      "stdout": "Parsed bundled page: /mnt/d/Physim/docs/workspace.md (63681 bytes, 201 blocks)\nDocumentation parser: prose, code, tables, links, TeX formulas, inline math, search and bounds passed\n",
+      "stderr": "",
+      "compile_stderr": "/mnt/d/Physim/app/documentation.c: In function 'ps_document_parse':\n/mnt/d/Physim/app/documentation.c:411:13: warning: this 'if' clause does not guard... [-Wmisleading-indentation]\n  411 |             if(span->text<first)first=span->text;if(span->text+span->length>last)last=span->text+span->length;\n      |             ^~\n/mnt/d/Physim/app/documentation.c:411:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'if'\n  411 |             if(span->text<first)first=span->text;if(span->text+span->length>last)last=span->text+span->length;\n      |                                                  ^~\n"
+    }
+  },
+  "native": {
+    "windows-units": {
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test",
+        "--test-filter",
+        "signature_help",
+        "--test-filter",
+        "editor_signatures",
+        "--test-filter",
+        "module_signatures",
+        "--test-filter",
+        "call_targets",
+        "--test-filter",
+        "language_lexer",
+        "--test-filter",
+        "language_parser",
+        "--test-filter",
+        "language_checker",
+        "--test-filter",
+        "language_editor_bindings",
+        "--test-filter",
+        "completion_locals",
+        "--test-filter",
+        "completion_c_locals"
+      ],
+      "exit_code": 0,
+      "filters": [
+        "signature_help",
+        "editor_signatures",
+        "module_signatures",
+        "call_targets",
+        "language_lexer",
+        "language_parser",
+        "language_checker",
+        "language_editor_bindings",
+        "completion_locals",
+        "completion_c_locals"
+      ],
+      "app_sha256": "b392786ac8caeeba1386b1824e61cab762aad379b006929d69d46c9c77743154",
+      "note": "Leak-tagged Linux data cases enable detect_leaks=1 inside the native runner; GUI external graphics runtime uses0.",
+      "log": "build/validation/signature-function-values-2026-11-05/windows-units.log",
+      "log_sha256": "bf6f0bcb5fb981fe52d3a70c72b7c91daaaf4be70fb3b20b3e2ee77398dcd83f",
+      "results_path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-0aw795bf/results.json",
+      "results_sha256": "3ee2eefd42dc3ee0cfdc223627aa6e8ad7a155aece836d1bc9e5204b1a121062",
+      "cases": [
+        {
+          "name": "completion_locals",
+          "status": "passed"
+        },
+        {
+          "name": "completion_c_locals",
+          "status": "passed"
+        },
+        {
+          "name": "call_targets",
+          "status": "passed"
+        },
+        {
+          "name": "signature_help",
+          "status": "passed"
+        },
+        {
+          "name": "editor_signatures",
+          "status": "passed"
+        },
+        {
+          "name": "module_signatures",
+          "status": "passed"
+        },
+        {
+          "name": "language_lexer",
+          "status": "passed"
+        },
+        {
+          "name": "language_parser",
+          "status": "passed"
+        },
+        {
+          "name": "language_checker",
+          "status": "passed"
+        },
+        {
+          "name": "language_editor_bindings",
+          "status": "passed"
+        }
+      ],
+      "model_stdout": "Signature model: 50 C/Physim API/user/header/scope/ownership vectors passed\nSignature model: exact revision/owner/cursor, module/display reuse and call exit passed\nSignature model: C 60/60 allocation failures preserve old snapshot, clear stale matching and retry\nSignature model: Physim 8/8 allocation failures preserve old snapshot, clear stale matching and retry\nSignature model: function value 9/9 allocation failures preserve old snapshot, clear stale matching and retry\nSignature model: 4/4 borrowed source/module failure paths preserve old ownership and retry\nSignature model: all16 user parameters survive for both languages; no five-entry cap\nSignature catalog: 370 C and 396 compiler-registered Physim formal calls resolved; 190 special/property/documentation entries explicitly unresolved\nSignature model: inner target/scope changes invalidate cache; C mask and Physim inner-to-outer resume passed\nSignature model: invalid prefix hides display; returning to valid point restores the call\n"
+    },
+    "windows-gui": {
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "signature_help_workflow",
+        "--test-filter",
+        "completion_locals_workflow"
+      ],
+      "exit_code": 0,
+      "filters": [
+        "signature_help_workflow",
+        "completion_locals_workflow"
+      ],
+      "app_sha256": "b392786ac8caeeba1386b1824e61cab762aad379b006929d69d46c9c77743154",
+      "note": "Leak-tagged Linux data cases enable detect_leaks=1 inside the native runner; GUI external graphics runtime uses0.",
+      "log": "build/validation/signature-function-values-2026-11-05/windows-gui.log",
+      "log_sha256": "ad1f41136ad0dd877838e54e5907d9345e89d3f2cf4fa8395e967d6dcf21ed24",
+      "results_path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-dtrs_88y/results.json",
+      "results_sha256": "dec2954953c54b26c3088daddc8aa06b29045a588af5a79b80ca9dd91c761f88",
+      "cases": [
+        {
+          "name": "signature_help_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_locals_workflow",
+          "status": "passed"
+        }
+      ],
+      "new_actual_paint_sequences": [
+        "SIGNATURE FUNCTION VALUE target=0 written-types=1 unnamed-honest=1 first-second-active=1 full-syntax=1 footer=1",
+        "SIGNATURE FUNCTION VALUE target=1 written-types=1 unnamed-honest=1 first-second-active=1 full-syntax=1 footer=1",
+        "SIGNATURE FUNCTION VALUE target=2 written-types=1 unnamed-honest=1 first-second-active=1 full-syntax=1 footer=1"
+      ]
+    },
+    "linux-units": {
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test",
+        "--test-filter",
+        "signature_help",
+        "--test-filter",
+        "editor_signatures",
+        "--test-filter",
+        "module_signatures",
+        "--test-filter",
+        "call_targets",
+        "--test-filter",
+        "language_lexer",
+        "--test-filter",
+        "language_parser",
+        "--test-filter",
+        "language_checker",
+        "--test-filter",
+        "language_editor_bindings",
+        "--test-filter",
+        "completion_locals",
+        "--test-filter",
+        "completion_c_locals"
+      ],
+      "exit_code": 0,
+      "filters": [
+        "signature_help",
+        "editor_signatures",
+        "module_signatures",
+        "call_targets",
+        "language_lexer",
+        "language_parser",
+        "language_checker",
+        "language_editor_bindings",
+        "completion_locals",
+        "completion_c_locals"
+      ],
+      "app_sha256": "7d94661b065ff31de3d325997e078d52ecc9bedec0082ff039336db69dd1a5bd",
+      "note": "Leak-tagged Linux data cases enable detect_leaks=1 inside the native runner; GUI external graphics runtime uses0.",
+      "log": "build/validation/signature-function-values-2026-11-05/linux-units.log",
+      "log_sha256": "01a8e5851eb42cfb50726cc6769069bdf2253976cf2e712191ac65c6c68bb08a",
+      "results_path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-bhnsf492/results.json",
+      "results_sha256": "d29858e38c901d51f26e9fa74a122f7767c4fa5163261a8ad0b12af281c0f9b8",
+      "cases": [
+        {
+          "name": "completion_locals",
+          "status": "passed"
+        },
+        {
+          "name": "completion_c_locals",
+          "status": "passed"
+        },
+        {
+          "name": "call_targets",
+          "status": "passed"
+        },
+        {
+          "name": "signature_help",
+          "status": "passed"
+        },
+        {
+          "name": "editor_signatures",
+          "status": "passed"
+        },
+        {
+          "name": "module_signatures",
+          "status": "passed"
+        },
+        {
+          "name": "language_lexer",
+          "status": "passed"
+        },
+        {
+          "name": "language_parser",
+          "status": "passed"
+        },
+        {
+          "name": "language_checker",
+          "status": "passed"
+        },
+        {
+          "name": "language_editor_bindings",
+          "status": "passed"
+        }
+      ],
+      "model_stdout": "Signature model: 50 C/Physim API/user/header/scope/ownership vectors passed\nSignature model: exact revision/owner/cursor, module/display reuse and call exit passed\nSignature model: C 60/60 allocation failures preserve old snapshot, clear stale matching and retry\nSignature model: Physim 8/8 allocation failures preserve old snapshot, clear stale matching and retry\nSignature model: function value 9/9 allocation failures preserve old snapshot, clear stale matching and retry\nSignature model: 4/4 borrowed source/module failure paths preserve old ownership and retry\nSignature model: all16 user parameters survive for both languages; no five-entry cap\nSignature catalog: 370 C and 396 compiler-registered Physim formal calls resolved; 190 special/property/documentation entries explicitly unresolved\nSignature model: inner target/scope changes invalidate cache; C mask and Physim inner-to-outer resume passed\nSignature model: invalid prefix hides display; returning to valid point restores the call\n"
+    },
+    "linux-gui": {
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "signature_help_workflow",
+        "--test-filter",
+        "completion_locals_workflow"
+      ],
+      "exit_code": 0,
+      "filters": [
+        "signature_help_workflow",
+        "completion_locals_workflow"
+      ],
+      "app_sha256": "7d94661b065ff31de3d325997e078d52ecc9bedec0082ff039336db69dd1a5bd",
+      "note": "Leak-tagged Linux data cases enable detect_leaks=1 inside the native runner; GUI external graphics runtime uses0.",
+      "log": "build/validation/signature-function-values-2026-11-05/linux-gui.log",
+      "log_sha256": "926d0b2f3ae5788e10861635df5f6545d1f330e50e2595cc5dcaff273cd85de9",
+      "results_path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-uikhv_un/results.json",
+      "results_sha256": "06bc6edf9c4745e1d2823d32f601597175d08b6475518c2237b74a302729fb8e",
+      "cases": [
+        {
+          "name": "signature_help_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "completion_locals_workflow",
+          "status": "passed"
+        }
+      ],
+      "new_actual_paint_sequences": [
+        "SIGNATURE FUNCTION VALUE target=0 written-types=1 unnamed-honest=1 first-second-active=1 full-syntax=1 footer=1",
+        "SIGNATURE FUNCTION VALUE target=1 written-types=1 unnamed-honest=1 first-second-active=1 full-syntax=1 footer=1",
+        "SIGNATURE FUNCTION VALUE target=2 written-types=1 unnamed-honest=1 first-second-active=1 full-syntax=1 footer=1"
+      ]
+    }
+  },
+  "prebuild": {
+    "owned_inputs": 307,
+    "changed": {
+      "app/signature_help.c": "9129893381c2a8dc9c0277215e9406ed1627e134e3b9bac11d0843dd26e3c3e9",
+      "app/signature_help.h": "62aca22239cbdea5a257baefc3ffc49c884f67b4b76e6c2f974d920ac9b6bdfe",
+      "src/language/parser.c": "d9d6b642928ba71cd647cd1219ce8e1f8ca8ca0fa9b6ff278e81df8ddc3a2bc6",
+      "src/language/editor_signatures.h": "ff688a54e72f6919e386084cadad0356de682e5df69f9ccdc533b1167aa680b1",
+      "tests/test_editor_signatures.c": "9a1f86e6a3d912e91035a5b793a2308bf5be2b382f3a7b46eeb652b011c9629a",
+      "tests/test_signature_help.c": "6662f3f1263a862db4a2fb0c11e273c6b02f68869e77ca92469778a206895985",
+      "app/signature_tests.inc": "3db419887c6479ef72d33a471ff215aa1c80e069bc5109d8728d7886007b4bcb",
+      "tests/check_display_workflow.py": "889da24ea6dcc8d22b420b4ae53cb2fa2e1bb0b79abf8367bd21d9a990c8cc83"
+    },
+    "all_root_isolation_manifest_equal": true,
+    "baseline": "direct strict ASan/UBSan build passed, vector38 failed with MASKED instead of written callable signature"
+  },
+  "final_manual_overlay": {
+    "owned_inputs": 307,
+    "all_root_isolation_manifest_equal": true,
+    "only_post_gui_change": "docs/workspace.md",
+    "manual_native_parse": "manual-native-policy.json",
+    "manual_sha256": "a69090234714ce9f8dd979367026741a325ada4ecf1c48c04e7e68ea29ab0497",
+    "new_code_and_gui_checked_before_manual_text_update": true
+  },
+  "limits": [
+    "190 special/property/catalog contracts remain unresolved; intrinsics, imports/aliases, unannotated value/return inference and C preprocessing remain open.",
+    "New hosted macOS/glibc execution of this function-value change is not yet accepted.",
+    "No physical keyboard/IME/screenreader acceptance inferred from scripted native paint/input tests.",
+    "New code and parser passed strict Werror; unchanged documentation.c:411 causes a pre-existing misleading-indentation warning, so manual parsing used normal native warning policy after the failed stricter probe. Both original results retained."
+  ]
+}

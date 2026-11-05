@@ -37,7 +37,9 @@ typedef struct {
  * Same exact owner/language/source/cursor reuses state without allocation.
  * Same document with a different cursor reuses owned module headers. Failure
  * preserves old state: caller must compare identity to current input and hide a
- * stale display. No user initializer, include, value/type/overload inference.
+ * stale display. Written Physim function-value annotations expose their real
+ * unnamed parameter types and result; nominal/optional/array types stay masked.
+ * No user initializer, include, value/type/overload inference.
  * API fallback is forbidden for an actually shadowing declaration. Unknown or
  * ambiguous targets publish no display. active_parameter is SIZE_MAX for excess
  * arguments, unknown C prototypes, and variadic tail; never clamps to the last.

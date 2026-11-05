@@ -44,6 +44,18 @@ static const example cases[]={
  {"func step():\n    Array(repeating: |)\n","",true,PS_SIGNATURE_UNKNOWN,0,0,SIZE_MAX},
  {"func step():\n    absent(|)\n","",true,PS_SIGNATURE_UNKNOWN,0,0,SIZE_MAX},
  {"func same(x: Int64):\n    return\nfunc same(x: Float64):\n    return\nfunc step():\n    same(|)\n","",true,PS_SIGNATURE_AMBIGUOUS,0,0,SIZE_MAX},
+ {"func step(cb: func(Int64, Float64) -> String):\n    cb(1, |)\n","cb(Int64, Float64) -> String",true,PS_SIGNATURE_READY,2,1,1},
+ {"func step(cb: func() -> Void):\n    cb(|)\n","cb() -> Void",true,PS_SIGNATURE_READY,0,0,SIZE_MAX},
+ {"func step(cb: (func((Int64), [Float64]?) -> (String))):\n    cb(|)\n","cb((Int64), [Float64]?) -> (String)",true,PS_SIGNATURE_READY,2,0,0},
+ {"func step(cb: func(func(Int64) -> String, [Vec3?]) -> Bool):\n    cb(1, |)\n","cb(func(Int64) -> String, [Vec3?]) -> Bool",true,PS_SIGNATURE_READY,2,1,1},
+ {"func step(sin: func(Int64) -> Bool):\n    sin(|)\n","sin(Int64) -> Bool",true,PS_SIGNATURE_READY,1,0,0},
+ {"func step(cb: func(Int64) -> Bool):\n    cb(1, |)\n","cb(Int64) -> Bool",true,PS_SIGNATURE_READY,1,1,SIZE_MAX},
+ {"func step(cb: (func(Int64) -> Bool)?):\n    cb(|)\n","",true,PS_SIGNATURE_MASKED,0,0,SIZE_MAX},
+ {"func step(cb: [func(Int64) -> Bool]):\n    cb(|)\n","",true,PS_SIGNATURE_MASKED,0,0,SIZE_MAX},
+ {"func step(cb: Callback):\n    cb(|)\n","",true,PS_SIGNATURE_MASKED,0,0,SIZE_MAX},
+ {"func step(cb: func(Int64) -> Bool):\n    let cb: Int64 = 1\n    cb(|)\n","",true,PS_SIGNATURE_MASKED,0,0,SIZE_MAX},
+ {"func convert(value: Int64) -> String:\n    return \"\"\nfunc step():\n    let cb: func(Int64) -> String = convert\n    cb(|)\n","cb(Int64) -> String",true,PS_SIGNATURE_READY,1,0,0},
+ {"func convert(value: Int64) -> String:\n    return \"\"\nfunc step():\n    let cb = convert\n    cb(|)\n","",true,PS_SIGNATURE_MASKED,0,0,SIZE_MAX},
 };
 static int fixture(ps_completion_locals *l,const void *owner,const char *marked,bool language){
     const char *point=strchr(marked,'|');if(!point)return 0;size_t size=strlen(marked),cursor=(size_t)(point-marked);
@@ -98,9 +110,10 @@ static int transition(void){
     ps_completion_locals_destroy(&l);ps_signature_help_destroy(&h);CHECK(!a.live_bytes && !a.invalid);
     puts("Signature model: exact revision/owner/cursor, module/display reuse and call exit passed");return 0;
 }
-static int faults(bool language){
+static int faults(bool language,bool function_value){
     const char *old=language?"func old():\n    return\nfunc step():\n    old(|)\n":"int old(void);void f(){old(|);}";
     const char *fresh=language?"func new(value: Float64):\n    return\nfunc step():\n    new(|)\n":"void f(){ps_v3(|);}";
+    if(function_value)fresh="func step(cb: func(Int64, Float64) -> String):\n    cb(|)\n";
     ps_completion_locals baseline={0},target={0};int owner=0;CHECK(fixture(&baseline,&owner,old,language));CHECK(fixture(&target,&owner,fresh,language));
     test_allocator a={0};ps_signature_help h={.allocator=test_domain(&a)};
     CHECK(ps_signature_help_update(&h,&baseline)==PS_OK && h.state==PS_SIGNATURE_READY);
@@ -118,7 +131,7 @@ static int faults(bool language){
     }
     if(!language)CHECK(ps_c_bindings_source_lookup(target.c_source,target.cursor,"ps_v3",5,NULL,0,(ps_allocator){0}).status==PS_OK);
     ps_completion_locals_destroy(&target);ps_completion_locals_destroy(&baseline);
-    printf("Signature model: %s %zu/%zu allocation failures preserve old snapshot, clear stale matching and retry\n",language?"Physim":"C",count,count);return 0;
+    printf("Signature model: %s %zu/%zu allocation failures preserve old snapshot, clear stale matching and retry\n",function_value?"function value":language?"Physim":"C",count,count);return 0;
 }
 static ps_lang_type checked_owner(const char *name){
     char text[192];const char *annotation=!strcmp(name,"array")?"[Float64]":!strcmp(name,"text")?"String":name;
@@ -224,4 +237,4 @@ static int invalid_transition(void){
     ps_completion_locals_destroy(&l);ps_signature_help_destroy(&h);CHECK(!a.live_bytes && !a.live_blocks && !a.invalid);
     puts("Signature model: invalid prefix hides display; returning to valid point restores the call");return 0;
 }
-int main(void){CHECK(!vectors());CHECK(!transition());CHECK(!faults(false));CHECK(!faults(true));CHECK(!borrowed_faults());CHECK(!complete_counts());CHECK(!catalog());CHECK(!nested_transition());CHECK(!invalid_transition());return 0;}
+int main(void){CHECK(!vectors());CHECK(!transition());CHECK(!faults(false,false));CHECK(!faults(true,false));CHECK(!faults(true,true));CHECK(!borrowed_faults());CHECK(!complete_counts());CHECK(!catalog());CHECK(!nested_transition());CHECK(!invalid_transition());return 0;}

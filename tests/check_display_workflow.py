@@ -1103,6 +1103,9 @@ def signature_help_workflow(flow,directory):
                     "Stale HUD after failure-preserving locals update")
             require(f"SIGNATURE INPUT language={language} target={target} automatic-query-keeps-editor=1" in output,
                     "Automatic suggestion refresh changed editor keyboard ownership")
+            if language=='phys':
+                require(f"SIGNATURE FUNCTION VALUE target={target} written-types=1 unnamed-honest=1 first-second-active=1 full-syntax=1 footer=1" in output,
+                        'Missing actual function-value signature paint and active argument transition')
         require((root/"signature-first.bmp").is_file(),"Missing representative native signature image")
         require(f"SIGNATURE LONG language={language} all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1 thumb-drag=1 outside-drag-editor-preserved=1 typing-after-drag=1" in output,
                 "Missing long native signature viewport/keyboard/zero-argument workflow")

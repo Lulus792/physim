@@ -43,4 +43,21 @@ ps_lang_editor_signatures_result ps_lang_editor_module_signatures(
     const void *source,size_t size,ps_lang_node *nodes,size_t node_capacity,
     ps_lang_editor_function *functions,size_t function_capacity,
     ps_lang_editor_parameter *parameters,size_t parameter_capacity);
+
+typedef struct {
+    ps_lang_editor_status status;
+    size_t parameter_count,result_start,result_end;
+    int callable;
+    ps_lang_token diagnostic;
+} ps_lang_editor_function_type_result;
+/* Parse one complete written type through the real type production. Direct or
+ * grouped function types are callable; optional/array/nominal types are not.
+ * Unnamed parameters have name_start/name_end=0. All spans borrow this input;
+ * no alias/value/type inference, source rewriting, heap or I/O. A NULL/0 output
+ * queries the count. Insufficient output capacity reports LIMIT and required
+ * count without writing parameters; syntax/lexical/node/depth failures publish
+ * no signature. Nodes>=2, input<=256KiB, no embedded NUL. */
+ps_lang_editor_function_type_result ps_lang_editor_function_type(
+    const void *source,size_t size,ps_lang_node *nodes,size_t node_capacity,
+    ps_lang_editor_parameter *parameters,size_t parameter_capacity);
 #endif

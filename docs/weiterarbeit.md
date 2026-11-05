@@ -7,6 +7,23 @@ Maßgeblich bleiben [AGENTS.md](../AGENTS.md) und der
 
 ## Aktueller geprüfter Schritt
 
+[Parameterhilfe für geschriebene Funktionswerte](verification/signature-function-values-2026-11-05.md):
+echte Typ-Produktion liefert unbenannte Parameter-/Rückgabespannen. Windows Release
+und Alpine/X11 ASan/UBSan jeweils10/10 Daten+2/2 UI.50 Modellfälle,9 neue
+Allokationsfehler samt Rollback/Wiederholung, sechs neue native Zeichen-/Argument-
+Sequenzen.294 strikte AST-/Präfixvergleiche erhalten. Anleitung in workspace.md
+korrigiert und separat nativ geparst; unveränderter Dokumentationsparser hat eine
+bestehende Werror-Warnung, beide Befunde protokolliert.
+
+Warmstand **signature-function-values-final**, **307 eigene Eingaben**. Acht
+Code-/Testdateien vor Build in Root/Isolation/Manifest geprüft, danach nur die
+separat geparste Anleitung ergänzt. Finaler Snapshot erfasst neun Änderungen;
+Quell-/Runtimearchive zurückgelesen. Windows98881 und Linux63692 sowie Freeze41597
+terminal/erfolgreich. **Nicht allein aus Kontext wiederholen.** Detailstand:
+`build/validation/signature-function-values-2026-11-05/STATE.md`.
+
+## Vorherige F1-Korrekturen
+
 [F1-Linkfehler außerhalb der Ansicht](verification/f1-error-semantics-2026-11-05.md):
 vorhandenes Status-/Fehlerlabel mit echten Offscreen-Zuständen veröffentlichen,
 ohne Zeichen-/Layoutänderung. Windows UIA/Tastatur/Metadaten3/3; Linux Tastatur/
@@ -20,7 +37,7 @@ Folgeframe messen. Zwischenfehler und Geometriespur sind dokumentiert.
 Settings-Fenster öffnen, Allokationsfehler erreichen und Rollback/Entwurf prüfen.
 Vorher beide Stufe3 negativ, nachher Windows/Linux je3/3. Produktfonts unverändert.
 
-Warmstand **f1-error-semantics-final**, **307 eigene Eingaben**. Alle berührten
+Voriger Warmstand **f1-error-semantics-final**, **307 eigene Eingaben**. Alle berührten
 Eingaben vor Build/Prüfung in Root/Isolation/Manifest abgeglichen; Font- und
 Link-Quell-/Runtimearchive vollständig zurückgelesen. Alle lokalen Sessions
 terminal, inklusive finalem Client52151, Gegenprobe17087 und Freeze33045.
@@ -61,24 +78,33 @@ terminal, inklusive finalem Client52151, Gegenprobe17087 und Freeze33045.
 
 ## Nächste konkrete Aufgaben
 
-1. Die neuen tatsächlichen Plattformläufe zum gepushten F1-Quellcommit verfolgen,
-   insbesondere glibc-Font-/Linkprüfung und korrigiertes SDK-Prüfkit auf frischen
-   Debian-/Ubuntu-Verbrauchern. Handles aus `f1-error-semantics-2026-11-05/new-runs.json`
+1. Die neuen tatsächlichen Plattformläufe zum gepushten Funktionswert-Quellcommit
+   verfolgen, insbesondere Signatur-Daten/HUD und korrigiertes SDK-Prüfkit auf
+   frischen Debian-/Ubuntu-Verbrauchern. Handles aus `signature-function-values-2026-11-05/new-runs.json`
    im lokalen Validationordner verwenden; kein Neustart wegen Beobachtungsfrist.
-2. Frühere Quelle01d2c0d0 zuletzt: MacWorkspace42090594627 Intel/ARM in der echten
+2. [F1-Quelle dc6d3264](verification/f1-glibc-followup-2026-11-05.json): LinuxUI42097105709
+   vollständig terminal, beide Originaljoblogs gelesen. Clang127489909944
+   26/26+48/48, GCC127489909305 26/26+47/48. Font- und Linkfehler in beiden bestanden.
+   GCC-grabFocus in test_accessibility_atspi.py:200 liefert erneut false;
+   konkrete neue Fehlerbelege liegen vor, nicht als behoben/abgenommen erklären.
+   Nicht weiter pollen oder große ZIPs allein aus Kontext erneut laden.
+   Paket42097104928 hatte zuletzt jobs[]; tatsächlichen neuen Zustand prüfen.
+   Frühere Quelle01d2c0d0 zuletzt: MacWorkspace42090594627 Intel/ARM in der echten
    34-Projekt-Matrix, Editor42090594861 Intel aktiv/ARMqueued; Paket42090594644
    jobs[], GeneralCI42090594659 mehrere Compilerjobs aktiv. NativeMenüs42090594773
    und Typografie42090594756 beide Architekturen laut Job-API success, deren
    Originalartefakte noch nicht gelesen. Nicht als vollständige neue Abnahme führen.
    Linux-UI42090594921 ist vollständig terminal; nicht erneut pollen. Der ältere
-   GCC-grabFocus-Fehler tritt in dessen neuen beiden Jobs nicht auf: nicht auf
-   Verdacht reparieren. Neue F1-Korrekturen brauchen ihre eigene glibc-Abnahme.
+   damalige GCC-grabFocus-Fehler trat in diesen beiden älteren Jobs nicht auf;
+   die neue dc6-GCC-Probe zeigt ihn wieder. Fremdes AT-SPI-/Orca-WIP erhalten.
 3. Native Accessibility-/Screenreader-Aufgaben, physische Eingabe und Capture
    außerhalb einer OS-Fenstergrenze; gesamte freigegebene Gestaltung A2/B2,
    Kontextmenüs A, Einstellungen, Aufgabenfenster und F1 weiter abgleichen.
    Die geskripteten SDL-Ereignisse und engen Teilprüfungen ersetzen diese Abnahme nicht.
-4. Die190Signaturverträge weiter auf Intrinsics, Funktionswerte, Importaliases und
-   ausgelassene Rückgabetypen prüfen. Große C-Änderungen parsen noch vollständig;
+4. Die190Signaturverträge weiter auf Intrinsics, Importaliases und ausgelassene
+   Rückgabetypen prüfen. Schriftlich annotierte Funktionswerte sind jetzt im
+   genannten Umfang geprüft; Initialisierer-/Typinferenz bleibt offen.
+   Große C-Änderungen parsen noch vollständig;
    16,7ms erfordern inkrementelle Edits mit Frischvergleich und atomaren Fehlerpfaden.
    Rechnen & Geräte A folgt nach der UI (ADR025).
 
