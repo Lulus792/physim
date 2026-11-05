@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "6e455e9cc2aec1a4cd8e8116ee7d83dc46dbb373",
+  "remotes": {
+    "origin": "6e455e9cc2aec1a4cd8e8116ee7d83dc46dbb373",
+    "upstream": "6e455e9cc2aec1a4cd8e8116ee7d83dc46dbb373"
+  },
+  "all1252_tested_input_git_blobs_read": true,
+  "source_match_sha256": "aa0b146bb1b1724165ec61652f8fb48d93918222dad824f0a0d6722e32217f9d",
+  "original_proof_sha256": "e3ebb6d72f9e1cf627b74bdf9c8f3917ea58dd7a2a6d713a9092d87f62b1c309",
+  "all_original_proof_artifact_bytes_reread": true,
+  "hosted_followup": {
+    "repo": "Lulus792/physim",
+    "run": 42005020387,
+    "source_commit": "6e455e9cc2aec1a4cd8e8116ee7d83dc46dbb373",
+    "status": "queued",
+    "jobs": [
+      {
+        "id": 127169469653,
+        "name": "editor (macos-15)",
+        "status": "in_progress",
+        "conclusion": null,
+        "active_step": "Actual signature, call-target and revision data"
+      },
+      {
+        "id": 127169470123,
+        "name": "editor (macos-15-intel)",
+        "status": "queued",
+        "conclusion": null
+      }
+    ],
+    "expected": "10 direct data groups plus8 GUI groups per architecture; model not wired into HUD, no full UI acceptance"
+  },
+  "private_mac": "OFF, untouched",
+  "scope": "Common native model core only,370C/396formalPh.190special/property/documentation entries and other compiler intrinsics/function annotations, visible HUD, full UI/performance/physical acceptance remain open."
+}

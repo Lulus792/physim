@@ -21,9 +21,9 @@ Direkt strikt C17/Werror/ASan/UBSan/LSan; [Stufen/Hashes](verification/signature
 Vorbereitung künftig auf **`signature-model-closed`** aufbauen: 294 eigene /1.233
 Compiler-Testeingaben, alle 1.252 mit Git abgeglichen; Archive geprüft. Keine neuen
 Bilder; 10 ersetzte temporäre Programme/Objekte entfernt, 124.082.744 logische Bytes.
-Lokale Handles beendet. Details: `build/validation/signature-model-2026-11-05/STATE.md`.
-Neuer Mac-Quellnachlauf noch offen; nach Push echte Kennung anhand Quellcommit
-erheben (erwartet 10 Daten +8 GUI je Architektur). Alte C-/Modulnachläufe abgeschlossen.
+Lokale Handles beendet. Quelle **`6e455e9c`**, beide Remotes; [Commitabgleich](verification/signature-model-commit-2026-11-05.json).
+Mac-Nachlauf **42005020387**: ARM127169469653 läuft, Intel127169470123 wartet.
+Genau diesen Lauf mit 10 Daten +8 GUI je Architektur samt Originalartefakten weiter prüfen.
 
 ## Nächste konkrete Schritte
 
