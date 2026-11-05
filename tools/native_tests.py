@@ -96,6 +96,7 @@ def catalog():
     cases.append(Case("completion_locals", ("tests/test_completion_locals.c", "app/completion_locals.c", "app/completion.c","app/c_bindings.c","app/c_syntax.c","app/c_grammar.c"),libraries=("language","core"),leak_check=True))
     cases.append(Case("completion_c_locals", ("tests/test_completion_c_locals.c", "app/completion_locals.c", "app/completion.c","app/c_bindings.c","app/c_syntax.c","app/c_grammar.c"),libraries=("language","core"),leak_check=True))
     cases.append(Case("call_targets", ("tests/test_call_targets.c", "app/completion_locals.c", "app/completion.c","app/c_bindings.c","app/c_syntax.c","app/c_grammar.c"),libraries=("language","core"),leak_check=True))
+    cases.append(Case("signature_help", ("tests/test_signature_help.c", "app/signature_help.c", "app/completion_locals.c", "app/completion.c","app/c_bindings.c","app/c_syntax.c","app/c_grammar.c"),libraries=("language","core"),leak_check=True))
     cases.append(Case("editor_signatures", ("tests/test_editor_signatures.c",),libraries=("language","core"),leak_check=True))
     cases.append(Case("module_signatures", ("tests/test_module_signatures.c",),libraries=("language","core"),leak_check=True))
     cases.append(Case("completion_info", ("tests/test_completion_info.c", "app/completion_info.c")))

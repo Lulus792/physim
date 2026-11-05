@@ -1,0 +1,289 @@
+{
+  "date": "2026-11-05",
+  "base_commit": "ac353d1ab72384ee06dfd5a4d3057972c5c9ba36",
+  "scope": "Owned common signature-model core, not visible native parameter HUD or complete API/UI acceptance.370C/396registered formalPh calls;190special/property/documentation entries explicitly unresolved. Intrinsics outside catalog, function-value annotations/import/alias semantics and full edited-text performance remain open.",
+  "reason": "New model/catalog extraction/App build registration; shared compiler checker capture initializer changed to equivalent designated zero initialization. New immutable-call cache subsequently tested after precise3-allocation counterexample; no other production path changed after the10-unit matrix.",
+  "platforms": [
+    {
+      "platform": "windows",
+      "initial_passed": 10,
+      "initial_total": 10,
+      "initial_results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-ft54eg11/results.json",
+        "sha256": "6af874f9576e6dae0de98957362d47b75552ea8789d7997ffcd4cad6bdf48dc3"
+      },
+      "initial_app_sha256": "935c2e8f29c023a0b2fd7660793d58143cab6bf028403a855675ddd7fe15aa72",
+      "final_cache_passed": 1,
+      "final_cache_total": 1,
+      "final_results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-ukkiz_n5/results.json",
+        "bytes": 1205,
+        "sha256": "f470ecdce4777f65f9d6b48d36f3297b1bb42db756835f5d01c9fd71a0ec2983"
+      },
+      "final_app": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/bin/physim.exe",
+        "bytes": 4597760,
+        "sha256": "2592a5d869ff9cffba7f3622953b8b4665517ed8ac9574054e9e6c1605ea942b"
+      },
+      "final_model_program": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/bin/physim-test-signature_help.exe",
+        "bytes": 1612800,
+        "sha256": "37a7428fb861aaa656fbb9f85fe537eee66afdb1979e33872144b1e083766311"
+      },
+      "gui_run": false
+    },
+    {
+      "platform": "linux",
+      "initial_passed": 10,
+      "initial_total": 10,
+      "initial_results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-__vjijv6/results.json",
+        "sha256": "ed337d447f15225bf27388e7f089fc846dab5bbaae54ff2247b4345d19345770"
+      },
+      "initial_app_sha256": "a5a452e52440dcfe268517169d6b73140592311848087263c2d74da8452f4751",
+      "final_cache_passed": 1,
+      "final_cache_total": 1,
+      "final_results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-fkpxo5aa/results.json",
+        "bytes": 1182,
+        "sha256": "ba51e9b14579ca1c8e3eb6f2b425c2eb3657a133ab69f2114dbaeeafaaa3b337"
+      },
+      "final_app": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+        "bytes": 63364464,
+        "sha256": "35cef8a86d74a7317cb4c2f900e4c2473c9c31deae3f1b4d76f5bac9142c0978"
+      },
+      "final_model_program": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim-test-signature_help",
+        "bytes": 13737816,
+        "sha256": "310beae550c51ae0b5cc943d3b3865ab243ba1d5e03e24d53f2f7dc77cc95519"
+      },
+      "gui_run": false
+    }
+  ],
+  "final_data": {
+    "behavior_vectors": 38,
+    "catalog_c_formal_calls": 370,
+    "catalog_physim_formal_calls": 396,
+    "catalog_special_property_documentation_unresolved": 190,
+    "cold_c_allocation_failures": 60,
+    "cold_physim_allocation_failures": 8,
+    "borrowed_cache_allocation_failures": 4,
+    "all16_parameters_each_language": true,
+    "excess_variadic_unspecified_no_false_last": true,
+    "unchanged_source_same_call_cursor_update_no_model_allocation": true,
+    "inner_scope_and_invalid_return_verified": true
+  },
+  "direct": {
+    "report": {
+      "path": "build/validation/signature-model-2026-11-05/closed.json",
+      "bytes": 3810,
+      "sha256": "d5f6f6ede87cadd1c529290d6bc8278f1cb50be3a796dbde5b0ef532a421a232"
+    },
+    "program": {
+      "path": "build/validation/signature-model-2026-11-05/closed",
+      "bytes": 13737072,
+      "sha256": "746b13e718dc04165a25dc4d5942b097ecc3a44f47c949d8698f2e3ab3c6d4f9"
+    },
+    "strict_c17_wall_wextra_werror": true,
+    "asan_ubsan_lsan": true,
+    "checker_initial_warning_and_final_designated_fix_preserved": true
+  },
+  "counterexamples": {
+    "cache_before": {
+      "path": "build/validation/signature-model-2026-11-05/cache-before.json",
+      "bytes": 3110,
+      "sha256": "5bdea4f1ee44d38ca151c219c4103a3e594362ef982bbd0eb006facac5b21a21"
+    },
+    "cache_before_program": {
+      "path": "build/validation/signature-model-2026-11-05/cache-before",
+      "bytes": 13710584,
+      "sha256": "fabd0cabde88c719928896f0c1147070a4398a46d65a0fb9605d914a8b3d0dc9"
+    },
+    "clean_final_rejections": [
+      {
+        "tag": "closed-ignore-mask",
+        "exit_code": 1,
+        "subject_sha256": "5efb2574d12f487a9b5e2676bc52a8a2981a3f7360c7890b217704b308c0021b",
+        "program_sha256": "e95789c8c5ab68e224d88850d73d77664ca71bb43d596a62992fdc0ce55d5891"
+      },
+      {
+        "tag": "closed-wrong-name-point",
+        "exit_code": 1,
+        "subject_sha256": "288affd405ac834e0e4e829962fc0d3af90c6c3dbaee84b93540b0dce0e306a5",
+        "program_sha256": "8fa4123439885adb34d2efa79a49fbee0014911a66363b7153e6368a3b571e5b"
+      },
+      {
+        "tag": "closed-clamp-last",
+        "exit_code": 1,
+        "subject_sha256": "4b5609a8c7a90fb10713bbc44e2e2656ce8d644ef8c9faece6ad633ebdb474d9",
+        "program_sha256": "7d193df65e01630027e97a27f5bc5570a8f94a18807e89138d0ee9b3d005d4f5"
+      },
+      {
+        "tag": "closed-reparse-same-call",
+        "exit_code": 1,
+        "subject_sha256": "408ecec530281f49fe13c6112c4e7870797e33f22b9db8fa5682308c0a1af785",
+        "program_sha256": "2ecc38f46c657cee0b650318f58819afb5abb77b1875db092ff95766c94e1d75"
+      },
+      {
+        "tag": "closed-invent-overload",
+        "exit_code": 1,
+        "subject_sha256": "ff7d11a38c903f3b31e87af36a41ee57840f1a6a23afd617c88b8e5bdf564cbc",
+        "program_sha256": "f31a60f55dfc175ef7ca19d0a65a5cac5e810071740f80fdb21fe85812ae2e96"
+      }
+    ],
+    "final_report": {
+      "path": "build/validation/signature-model-2026-11-05/negative-closed.json",
+      "bytes": 8998,
+      "sha256": "0a2a1caad47e55a6bc9ba15c6976960d3beb4e381e9c419371ba696e312c2c1d"
+    },
+    "initial_negative_recipe_marker_mismatch_not_counted": true
+  },
+  "source": {
+    "tag": "signature-model-closed",
+    "own_inputs": 294,
+    "compiler_test_inputs": 1233,
+    "unique_git_inputs": 1252,
+    "source_manifest": {
+      "path": "build/validation/explorer-inline-2026-10-29/signature-model-closed-compiler-source.json",
+      "bytes": 133029,
+      "sha256": "ae6af85782eb7d7e5cd42bd66ce589085385afa95a9d91de4822180d247f2205"
+    },
+    "own_manifest": {
+      "path": "build/validation/explorer-inline-2026-10-29/signature-model-closed-inputs.json",
+      "bytes": 32665,
+      "sha256": "d246a449c52ca386f2e1224ecd27e741bb80b73df0dea160953d755799192a7e"
+    },
+    "runtime_manifest": {
+      "path": "build/validation/explorer-inline-2026-10-29/signature-model-closed-runtime.json",
+      "bytes": 88433,
+      "sha256": "7bdb76fbd587c4472ec4cd47366af29e2ff2bf879b4b6e06d95798358c28ba82"
+    },
+    "runtime_index": {
+      "path": "build/validation/explorer-inline-2026-10-29/signature-model-closed-byte-index.json",
+      "bytes": 230733,
+      "sha256": "404ce1526e41c9b8875f0c1ce64251324e164396924909507a74bfd8b6d78cda"
+    },
+    "runtime_files": {
+      "windows": 641,
+      "linux": 155
+    },
+    "all_referenced_archive_bytes_read": true
+  },
+  "reference_generation": {
+    "unchanged_completion_symbols": true,
+    "unchanged_language_reference_bytes": true,
+    "root_linkcheck_preexisting_foreign_status_link_failure": {
+      "path": "build/validation/signature-model-2026-11-05/reference-baseline.json",
+      "bytes": 813,
+      "sha256": "e9da628db85847d7aaa0aed68a8a9f04c72b4f49bdf6c5d40a62ae2ac24dfef2"
+    },
+    "own_isolated_source_excludes_foreign_status_wip": true
+  },
+  "cleanup": {
+    "receipt": {
+      "path": "build/validation/signature-model-2026-11-05/intermediate-cleanup.json",
+      "bytes": 3246,
+      "sha256": "2e3fc7550215537858253cf39b34e75ac6ad67b0f77ee5b33cd0bf887350789a"
+    },
+    "removed_files": 10,
+    "logical_bytes": 124082744,
+    "retained_final_or_counterexample_programs": 7,
+    "all_source_variants_raw_reports_preserved": true,
+    "images_created": 0
+  },
+  "artifacts": [
+    {
+      "path": "build/validation/signature-model-2026-11-05/first.json",
+      "bytes": 3137,
+      "sha256": "7189f14866686c7165ac6b6289e2a7e5625c64a6915dbf098f2bc35606a3c077"
+    },
+    {
+      "path": "build/validation/signature-model-2026-11-05/catalog.json",
+      "bytes": 3511,
+      "sha256": "9c17ea6b462ead9bed87d086d4be46f9079a3c008fd6aacc2ba6442532d742ba"
+    },
+    {
+      "path": "build/validation/signature-model-2026-11-05/catalog2.json",
+      "bytes": 3687,
+      "sha256": "74eb96fbb25880872dd9a3d81bc78bd240c222709c309c23b1629671d866930b"
+    },
+    {
+      "path": "build/validation/signature-model-2026-11-05/strict.json",
+      "bytes": 3609,
+      "sha256": "3b05a75b6b62b8a56814d576dc67572ce85acaed7ecb5c3d9760341e610a17ad"
+    },
+    {
+      "path": "build/validation/signature-model-2026-11-05/cache-before.json",
+      "bytes": 3110,
+      "sha256": "5bdea4f1ee44d38ca151c219c4103a3e594362ef982bbd0eb006facac5b21a21"
+    },
+    {
+      "path": "build/validation/signature-model-2026-11-05/cache-after.json",
+      "bytes": 3614,
+      "sha256": "4c05085c05d0312efd9e4c5b004d8a159ba7fefd3d4fdfee71b012f4b3e21476"
+    },
+    {
+      "path": "build/validation/signature-model-2026-11-05/nested.json",
+      "bytes": 3719,
+      "sha256": "a19ff3cbf8d94dfe09fb3a3d1e275cd826ffccdc43a513714df56dab7bf22caa"
+    },
+    {
+      "path": "build/validation/signature-model-2026-11-05/closed.json",
+      "bytes": 3810,
+      "sha256": "d5f6f6ede87cadd1c529290d6bc8278f1cb50be3a796dbde5b0ef532a421a232"
+    },
+    {
+      "path": "build/validation/signature-model-2026-11-05/negative.json",
+      "bytes": 7092,
+      "sha256": "1cecd3f32e2b01ff9c8e7690c6c4b07960dfc792ecb468c28364fc1f65cd0874"
+    },
+    {
+      "path": "build/validation/signature-model-2026-11-05/negative-closed.json",
+      "bytes": 8998,
+      "sha256": "0a2a1caad47e55a6bc9ba15c6976960d3beb4e381e9c419371ba696e312c2c1d"
+    },
+    {
+      "path": "build/validation/signature-model-2026-11-05/initial-matrices.json",
+      "bytes": 4487,
+      "sha256": "4ee74ef6e2046a8f915985f60382c3d2f15be459eaa4b81c7fa5a6bf3e481c93"
+    },
+    {
+      "path": "build/validation/signature-model-2026-11-05/index-match.json",
+      "bytes": 302519,
+      "sha256": "681ce45692c82a4b66e34945da18ccb178d8485e6a66f7743f62fe4e0b661efd"
+    },
+    {
+      "path": "build/validation/signature-model-2026-11-05/reference-baseline.json",
+      "bytes": 813,
+      "sha256": "e9da628db85847d7aaa0aed68a8a9f04c72b4f49bdf6c5d40a62ae2ac24dfef2"
+    },
+    {
+      "path": "build/validation/signature-model-2026-11-05/intermediate-cleanup.json",
+      "bytes": 3246,
+      "sha256": "2e3fc7550215537858253cf39b34e75ac6ad67b0f77ee5b33cd0bf887350789a"
+    },
+    {
+      "path": "build/validation/signature-model-2026-11-05/windows.json",
+      "bytes": 1547,
+      "sha256": "cff8994d30eed7777528a32e5e0a53b75c07060b9041124ed46dab47cdc32fb4"
+    },
+    {
+      "path": "build/validation/signature-model-2026-11-05/linux.json",
+      "bytes": 1352,
+      "sha256": "b5d91765c730e6c0812565010cd10be04dea26f5f75af4b5435076dbfac66dcd"
+    },
+    {
+      "path": "build/validation/signature-model-2026-11-05/final-windows.json",
+      "bytes": 865,
+      "sha256": "b955c47488b61126f08424068c1c142d1b518a21c5184ec1b063d932d8369ab0"
+    },
+    {
+      "path": "build/validation/signature-model-2026-11-05/final-linux.json",
+      "bytes": 701,
+      "sha256": "e9a30fa8a7dcfbc82402375055ed522cf41ed1bb537e302049306a5aec1c7bed"
+    }
+  ],
+  "mac": "User MacOFF/untouched. PreviousClookup41992949589 closed with9data+8GUI/arch and originalZIPs read; does not prove this new model. New hosted model source followup expected10data+8GUI after push, not observed yet.",
+  "next": "Wire independent HUD byADR023 with same code roles, full signature/active param, list separation, Escape/manual/IME/focus/selection/revision/AX. Classify actual special/overload/property contracts; add real compiler intrinsics/function annotations without guessed types. Full approved UI/performance/physical acceptance remains open."
+}

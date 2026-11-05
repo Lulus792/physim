@@ -162,7 +162,7 @@ static void capture_local(checker *c, size_t lambda, size_t decl, size_t use) {
         return;
     }
     size_t capture = c->count++;
-    c->nodes[capture] = (ps_lang_node){PS_AST_CAPTURE, c->nodes[use].token, 0, 0, 0, 0};
+    c->nodes[capture] = (ps_lang_node){.kind=PS_AST_CAPTURE, .token=c->nodes[use].token};
     memset(&c->info[capture], 0, sizeof c->info[capture]);
     c->info[capture].binding = decl;
     c->info[capture].type = c->info[decl].type;

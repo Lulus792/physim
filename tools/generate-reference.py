@@ -722,7 +722,7 @@ LANG_DESCRIPTIONS.update({
 })
 
 
-def language_reference():
+def language_reference(signature_rows=None):
     source = (ROOT / 'src/language/builtins.c').read_text(encoding='utf-8')
     table = source.split('library[] = {', 1)[1].split('static const ps_lang_builtin *library_find', 1)[0]
     pattern = re.compile(r'\{\s*"(\w+)"\s*,\s*"\w+"\s*,\s*(\w+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*\{([^}]+)\}\s*,\s*\{([^}]+)\}\s*\}', re.S)
@@ -755,20 +755,31 @@ def language_reference():
               '## Werte und Grenzen',
               'Vektoren haben die Komponenten x/y/z/w, Quantity die Felder value und unit. Measurement enthält value (Quantity), standardUncertainty (Float64 in der Sensoreinheit), time (Float64 in Sekunden), state, index und skipped (Int64). Nur isValid() bestätigt einen verwendbaren Messwert. In der Szene gelten Meter, Y nach oben, höchstens 32 Objekte und insgesamt 96 Polyline-Punkte. Analysehandles leben im Analysecontext; nach release/close dürfen sie nicht erneut verwendet werden. Plotvorschauen sind auf 2048 Punkte pro Kurve begrenzt; export der Reihe erhält alle Werte. Arrayoperationen, eigene Methoden, Schleifen und Konvertierungen erklärt die Wertsemantik-Anleitung.']
     entries = []
+    type_macros = dict(re.findall(r'^#define\s+(\w+)\s+(\w+)\s*$', source, re.M))
     for name, ret, count, host, args, labels in pattern.findall(table):
         count = int(count)
         params = list(zip(re.findall(r'"([^"]+)"', labels), args.replace(' ', '').split(',')))[:count]
         aliases = []
+        owners = {}
         for method, fn, owner, receiver in methods:
             if fn == name:
                 slot = 0 if 'MUTATING' in receiver else int(receiver.strip())
-                aliases.append((types[owner] + '.' + method, [p for i, p in enumerate(params) if i != slot]))
+                display = types[owner] + '.' + method
+                aliases.append((display, [p for i, p in enumerate(params) if i != slot]))
+                owners[display] = (types[owner], type_macros.get(owner, owner))
         for owner, method, fn in factories:
             if fn == name: aliases.append((owner + '.' + method, params))
         if not aliases: aliases = [(name, params)]
         assert name in LANG_DESCRIPTIONS, f'Missing teaching description: {name}'
         for display, parameters in aliases:
             signature = display + '(' + ', '.join(label + ': ' + types[t] for label, t in parameters) + ')'
+            if signature_rows is not None:
+                signature_rows.append(dict(name=display, definition=name,
+                    signature=signature + ' -> ' + types[ret],
+                    parameters=[(label, types[t]) for label, t in parameters],
+                    parameter_types=[type_macros.get(t, t) for label, t in parameters],
+                    result_type=type_macros.get(ret, ret),
+                    owner=owners.get(display, ('', 'PS_TYPE_NONE'))))
             context = ['Überall verfügbar.', 'Experimentmodul erforderlich.', 'Analysemodul erforderlich.'][int(host)]
             entry = f'## {display}\n\n```text\n{signature} -> {types[ret]}\n```\n\n{LANG_DESCRIPTIONS[name]}\n\n{context}'
             if display in LANG_EDITOR_EXAMPLES:

@@ -7,36 +7,37 @@ Vollständige Umsetzung und Abnahme bleiben das Ziel; Teiltests sind keine volle
 
 ## Aktueller Abschluss
 
-[Tatsächliches C-Aufrufziel](verification/c-lookup-2026-11-05.md): getrennte
-Namensabfrage im vorhandenen C-Snapshot. Vollständige Deklaratoren verdecken API-
-Namen bereits in ihrer unfertigen Initialisierung; Typedef/Enum/Parameter ebenso.
-Direkt geschriebene vollständige Funktions-/Zeigerköpfe nutzen die gemeinsame
-Signaturprojektion. Alte Vorschlags-/Signatur-API unverändert; kein Resolver/HUD.
+[Gemeinsamer Datenkern der Parameterhilfe](verification/signature-model-2026-11-05.md):
+eigener Quell-/Header-/Displaybesitz, C-Zielabfrage am Callee-Namensort, echte Ph-
+Modul-/Präfixdaten. 370 C- und 396 formale Ph-API-Aufrufe, eigene Funktionen/Methoden;
+190 Spezial-/Property-/Dokueinträge ausdrücklich ungeklärt. **Noch kein sichtbarer HUD.**
 
-Windows/Linux zunächst je **8/8 Daten**; danach zwei nur die neue Abfrage
-betreffende Bereichslücken belegt/korrigiert. Endgültig **52 Fälle**, zwei Scratch-
-Fehler, vier saubere gezielte Ablehnungen; finale Testdatei auf beiden Plattformen
-und direkt strikt C17/ASan/UBSan/LSan bestanden. Testfehler-Bereinigung separat
-nachgewiesen; keine erneute unveränderte GUI. [Stufen/Hashes](verification/c-lookup-2026-11-05.json).
+Windows/Linux App+zunächst je **10/10 Daten**; danach neuer Cache desselben
+unveränderten Aufrufs, final je **1/1 Modellgruppe**. 38 Fälle, 16 Parameter je Sprache,
+60 C-/8 Ph-/4 geliehene Cache-OOM-Pfade, fünf saubere Gegenprogramme; Cursorwechsel
+im selben Aufruf ohne weitere Modellallokation. Nested-/Invalid-Rückkehr geprüft.
+Direkt strikt C17/Werror/ASan/UBSan/LSan; [Stufen/Hashes](verification/signature-model-2026-11-05.json).
 
-Vorbereitung künftig auf **`c-lookup-closed`** aufbauen: 290 eigene /1.229 Compiler-
-Testeingaben, alle1.248 mit Git abgeglichen; Archive geprüft. Lokale Handles beendet.
-Keine neuen Bilder. Details: `build/validation/c-lookup-2026-11-05/STATE.md`.
-Quellcommit **`d75da866`**, beide Remotes; [Commitabgleich](verification/c-lookup-commit-2026-11-05.json).
-Mac-Nachlauf **41992949589 abgeschlossen**: Intel/ARM je **9/9 Daten +8/8 GUI**.
-Beide Original-ZIPs/GitHub-Digests/alle Einträge gelesen: [Mac-Nachweis](verification/c-lookup-macos-2026-11-05.json).
-Nicht erneut pollen/starten. Aktuell gemeinsames Modell in Arbeit, noch ungeprüft.
+Vorbereitung künftig auf **`signature-model-closed`** aufbauen: 294 eigene /1.233
+Compiler-Testeingaben, alle 1.252 mit Git abgeglichen; Archive geprüft. Keine neuen
+Bilder; 10 ersetzte temporäre Programme/Objekte entfernt, 124.082.744 logische Bytes.
+Lokale Handles beendet. Details: `build/validation/signature-model-2026-11-05/STATE.md`.
+Neuer Mac-Quellnachlauf noch offen; nach Push echte Kennung anhand Quellcommit
+erheben (erwartet 10 Daten +8 GUI je Architektur). Alte C-/Modulnachläufe abgeschlossen.
 
 ## Nächste konkrete Schritte
 
-1. Gemeinsamen tatsächlichen C-/Physim-Signaturresolver anbinden: API und eigene
-   Funktionen, Scopes/Überdeckung, keine erfundenen Typen/Überladungen. C-Lookup
-   am ursprünglichen Callee-Namensort verwenden, nicht am Editorcursor in einem
-   inneren Argumentblock. Gefundene gewöhnliche Namen verhindern API-Rückfall.
-2. Unabhängigen nativen Parameter-HUD vollständig nach ADR 023/APPROVED:
+1. Den vorhandenen Modellkern in den unabhängigen nativen Parameter-HUD nach
+   ADR 023/APPROVED einbinden. Locals/Modell gegen echte aktuelle Eingabe prüfen;
+   Speicherfehler erhalten alte Daten, dürfen aber keinen veralteten HUD zeigen.
    volle Signatur, gemeinsame Syntaxrollen, aktiver Parameter A2/fett/Unterkante,
    innere/überzählige Argumente, automatisch/manuell, normale Liste darunter,
    getrenntes Annehmen/Schließen, Escape, Fokus/IME/Revision und Accessibility.
+2. 190 Einträge nach echten Spezialaufrufen/Overloads/Optionen und Eigenschaften
+   unterscheiden; Compilerintrinsics außerhalb Katalog (print/assert/Konvertierung)
+   aus echten Verträgen ergänzen. Funktionswert-Annotationen/Import-/Aliasfälle
+   und ausgelassene Rückgabeannotationen klären. Keine Beispieltypen oder
+   Empfängertypen aus Initialisierern erfinden; vollständiger Resolver bleibt offen.
 3. Übrige freigegebene UI (A2, Kontextmenüs A, B2, Aufgabenfenster, Settings/AX,
    Gesamtgestaltung) und tatsächliche Plattform-/physische Abnahme fortsetzen.
    Linux-Explorer bei22: Dateierweiterungen umbrechen; Analyseaufnahme erhalten.
@@ -55,14 +56,16 @@ konkreter Code-/Abhängigkeitsänderung, neuem Fehler oder offener Prüfdimensio
 wiederholen; Anlass/Umfang vor dem Lauf nennen. Insbesondere die Protokoll-
 Trennlinie ist seit `ef1f3321` behoben: kein neuer Test allein wegen Kontextwechsel.
 
-- Frühere C-/Physim-Mac-Nachläufe41980836062/41976275068 geschlossen, Originale
-  geprüft; siehe Prüfindex. Alten Intel-Fristfehler41972622898 seit7a3e7950
-  erfolgreich nachgeprüft. Diese Läufe nicht erneut pollen/starten.
+- Frühere C-/Ph-Nachläufe sind im Prüfindex geschlossen; Originale geprüft.
+  Alten Intel-Fristfehler seit `7a3e7950` nachgeprüft. Keine neue Beobachtung.
 - Modulabfrage `ec7824ca`, Lauf41986344544: [ARM/Intel je8 Daten +8 GUI](verification/module-signatures-macos-2026-11-05.json),
   beide Original-ZIPs/Digests/Einträge gelesen. Abgeschlossen, nicht erneut pollen.
+- C-Lookup `d75da866`, Lauf41992949589: [ARM/Intel je9 Daten +8 GUI](verification/c-lookup-macos-2026-11-05.json),
+  beide Original-ZIPs/Digests/Einträge gelesen. Abgeschlossen, nicht erneut pollen.
 
-Diese Belege bestätigen den C-Lookup, noch keinen gemeinsamen Resolver/HUD
-oder die vollständige UI-Abnahme. Alter Modulnachweis bleibt im Prüfindex.
+Diese Mac-Belege bestätigen den Modellkern/HUD noch nicht. Root-Linkcheck findet
+vorhandenen fremden Status-WIP-Link zur internen Wartungsnotiz: gleicher Fehler
+vor/nach Generatorpatch belegt, fremde Dateien erhalten. Ohne neue Änderung nicht wiederholen.
 
 ## Dokumentation und Speicherpflege abgeschlossen
 
