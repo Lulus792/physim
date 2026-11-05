@@ -12,6 +12,7 @@ static size_t signature_text_bytes(const char *text,size_t bytes){
 static void *signature_deny_allocate(void *user,size_t bytes){(void)user;(void)bytes;return NULL;}
 static void signature_deny_free(void *user,void *pointer,size_t bytes){(void)user;(void)pointer;(void)bytes;abort();}
 static void signature_test_draw(app *a){
+    a->signature_test_paint_window=SDL_GetWindowID(a->window);
     signature_generation++;signature_painted_bytes=signature_bold_bytes=0;signature_function_ink=false;
     signature_code_text[0]=0;signature_arrow_broken=signature_arrow_seen=signature_footer_error=false;signature_footer_bytes=0;
     signature_thumb_bounds=nk_rect(0,0,0,0);

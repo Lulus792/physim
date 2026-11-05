@@ -1,0 +1,210 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "27ffb2f6522c97ecf0695b9dbe638472366f318d",
+  "run": 42037853611,
+  "url": "https://github.com/Lulus792/physim/actions/runs/42037853611",
+  "private_user_mac": "OFF; untouched",
+  "scope": "Hosted native main-window workflows, including card-boundary drag and typing. No detached/OS-window-capture/physical-input/assistive-technology acceptance.",
+  "platforms": [
+    {
+      "platform": "intel",
+      "job": 127280563043,
+      "conclusion": "success",
+      "artifact": 13420616619,
+      "bytes": 359789,
+      "zip_sha256": "c8020349d53de4ba647d402542705b9c908bf64e67d01910e7d2cd9b600d4dfe",
+      "all_original_entries_read_and_hashed": true,
+      "entry_hashes": {
+        "Release/test-results/run-n5vq6cen/results.json": "8d12b5617990b2cf74e2b743e4a5dca56849b749b46c25afc339ca9a87be3e7e",
+        "Release/test-results/run-n5vq6cen/signature_help_workflow/files ä/workflow ä/c/signature-first.bmp": "f99d1a570e01b8f9b20a6a149947f20251ce72999312cbdb9b2b31cdfaa7a5fd",
+        "Release/test-results/run-fpgbknnc/results.json": "fb0af36430d820893eec49170d7e34a5f1dc8e4d1229bad4718752e244b71237",
+        "Release/test-results/run-n5vq6cen/signature_help_workflow/files ä/workflow ä/c/signature-long.bmp": "facb10eb17c3e3b5b0cbc27aeb2d59873559d5080c0fd9a49566d781a18036c4",
+        "Release/test-results/run-n5vq6cen/signature_help_workflow/files ä/workflow ä/phys/signature-first.bmp": "4ed9852a7a489c80a08b1f7dad8e1035407cb89a328c5eccbe9a5db8d8c25a07",
+        "Release/test-results/run-n5vq6cen/signature_help_workflow/files ä/workflow ä/phys/signature-long.bmp": "77164837a96ca7eb5274231753c30f86cd4d8060b585a4f7753f2084130acea0"
+      },
+      "groups": [
+        {
+          "path": "Release/test-results/run-n5vq6cen/results.json",
+          "passed": 9,
+          "total": 9,
+          "names": [
+            "documents_small",
+            "documents_large",
+            "completion_workflow",
+            "completion_automatic_workflow",
+            "api_reference_workflow",
+            "signature_help_workflow",
+            "completion_info_workflow",
+            "completion_automatic_deadline_workflow",
+            "completion_locals_workflow"
+          ]
+        },
+        {
+          "path": "Release/test-results/run-fpgbknnc/results.json",
+          "passed": 11,
+          "total": 11,
+          "names": [
+            "c_call_context",
+            "c_signatures",
+            "c_lookup",
+            "signature_wrap",
+            "completion_locals",
+            "completion_c_locals",
+            "call_targets",
+            "signature_help",
+            "editor_signatures",
+            "module_signatures",
+            "completion_info"
+          ]
+        }
+      ],
+      "signature_markers": [
+        "SIGNATURE INPUT language=c target=0 automatic-query-keeps-editor=1",
+        "SIGNATURE HUD language=c target=0 theme=0 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=c target=0 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE INPUT language=c target=1 automatic-query-keeps-editor=1",
+        "SIGNATURE HUD language=c target=1 theme=1 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=c target=1 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE INPUT language=c target=2 automatic-query-keeps-editor=1",
+        "SIGNATURE HUD language=c target=2 theme=2 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=c target=2 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE WINDOW language=c requested=800x540 actual=800x540 test-only-minimum=1",
+        "SIGNATURE LONG language=c all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1 thumb-drag=1 outside-drag-editor-preserved=1 typing-after-drag=1",
+        "SIGNATURE HUD SELF-TEST: PASSED",
+        "SIGNATURE INPUT language=phys target=0 automatic-query-keeps-editor=1",
+        "SIGNATURE HUD language=phys target=0 theme=0 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=phys target=0 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE INPUT language=phys target=1 automatic-query-keeps-editor=1",
+        "SIGNATURE HUD language=phys target=1 theme=1 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=phys target=1 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE INPUT language=phys target=2 automatic-query-keeps-editor=1",
+        "SIGNATURE HUD language=phys target=2 theme=2 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=phys target=2 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE WINDOW language=phys requested=800x540 actual=800x540 test-only-minimum=1",
+        "SIGNATURE LONG language=phys all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1 thumb-drag=1 outside-drag-editor-preserved=1 typing-after-drag=1",
+        "SIGNATURE HUD SELF-TEST: PASSED"
+      ],
+      "all_four_actual_native_images_opened": true,
+      "images": [
+        {
+          "entry": "Release/test-results/run-n5vq6cen/signature_help_workflow/files ä/workflow ä/c/signature-first.bmp",
+          "sha256": "f99d1a570e01b8f9b20a6a149947f20251ce72999312cbdb9b2b31cdfaa7a5fd"
+        },
+        {
+          "entry": "Release/test-results/run-n5vq6cen/signature_help_workflow/files ä/workflow ä/c/signature-long.bmp",
+          "sha256": "facb10eb17c3e3b5b0cbc27aeb2d59873559d5080c0fd9a49566d781a18036c4"
+        },
+        {
+          "entry": "Release/test-results/run-n5vq6cen/signature_help_workflow/files ä/workflow ä/phys/signature-first.bmp",
+          "sha256": "4ed9852a7a489c80a08b1f7dad8e1035407cb89a328c5eccbe9a5db8d8c25a07"
+        },
+        {
+          "entry": "Release/test-results/run-n5vq6cen/signature_help_workflow/files ä/workflow ä/phys/signature-long.bmp",
+          "sha256": "77164837a96ca7eb5274231753c30f86cd4d8060b585a4f7753f2084130acea0"
+        }
+      ],
+      "original_report": "build/validation/signature-outside-macos-2026-11-05/intel-original.json",
+      "original_report_sha256": "6c8964336c43ed47d70b89cd56ba3d8120536e1eacda1d056e3c075545c2352a"
+    },
+    {
+      "platform": "arm",
+      "job": 127280562388,
+      "conclusion": "success",
+      "artifact": 13419442611,
+      "bytes": 359593,
+      "zip_sha256": "bbb741771a15cfbcd22af87c00f0a4fdd88ddfd62ee4387adbe2130d4a0add3f",
+      "all_original_entries_read_and_hashed": true,
+      "entry_hashes": {
+        "Release/test-results/run-4q0senib/results.json": "5e68196702c68355d23140f279d77e7244e95c07e26958f9cb1c32530e1518ed",
+        "Release/test-results/run-4q0senib/signature_help_workflow/files ä/workflow ä/c/signature-first.bmp": "f99d1a570e01b8f9b20a6a149947f20251ce72999312cbdb9b2b31cdfaa7a5fd",
+        "Release/test-results/run-4q0senib/signature_help_workflow/files ä/workflow ä/c/signature-long.bmp": "facb10eb17c3e3b5b0cbc27aeb2d59873559d5080c0fd9a49566d781a18036c4",
+        "Release/test-results/run-4q0senib/signature_help_workflow/files ä/workflow ä/phys/signature-first.bmp": "4ed9852a7a489c80a08b1f7dad8e1035407cb89a328c5eccbe9a5db8d8c25a07",
+        "Release/test-results/run-4q0senib/signature_help_workflow/files ä/workflow ä/phys/signature-long.bmp": "77164837a96ca7eb5274231753c30f86cd4d8060b585a4f7753f2084130acea0",
+        "Release/test-results/run-mbsflzj5/results.json": "75d892b83fceea0f29596cf46293150060f6ce0e02a39f077eee04cacae83c08"
+      },
+      "groups": [
+        {
+          "path": "Release/test-results/run-4q0senib/results.json",
+          "passed": 9,
+          "total": 9,
+          "names": [
+            "documents_small",
+            "documents_large",
+            "completion_workflow",
+            "completion_automatic_workflow",
+            "api_reference_workflow",
+            "signature_help_workflow",
+            "completion_info_workflow",
+            "completion_automatic_deadline_workflow",
+            "completion_locals_workflow"
+          ]
+        },
+        {
+          "path": "Release/test-results/run-mbsflzj5/results.json",
+          "passed": 11,
+          "total": 11,
+          "names": [
+            "c_call_context",
+            "c_signatures",
+            "c_lookup",
+            "signature_wrap",
+            "completion_locals",
+            "completion_c_locals",
+            "call_targets",
+            "signature_help",
+            "editor_signatures",
+            "module_signatures",
+            "completion_info"
+          ]
+        }
+      ],
+      "signature_markers": [
+        "SIGNATURE INPUT language=c target=0 automatic-query-keeps-editor=1",
+        "SIGNATURE HUD language=c target=0 theme=0 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=c target=0 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE INPUT language=c target=1 automatic-query-keeps-editor=1",
+        "SIGNATURE HUD language=c target=1 theme=1 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=c target=1 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE INPUT language=c target=2 automatic-query-keeps-editor=1",
+        "SIGNATURE HUD language=c target=2 theme=2 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=c target=2 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE WINDOW language=c requested=800x540 actual=800x540 test-only-minimum=1",
+        "SIGNATURE LONG language=c all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1 thumb-drag=1 outside-drag-editor-preserved=1 typing-after-drag=1",
+        "SIGNATURE HUD SELF-TEST: PASSED",
+        "SIGNATURE INPUT language=phys target=0 automatic-query-keeps-editor=1",
+        "SIGNATURE HUD language=phys target=0 theme=0 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=phys target=0 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE INPUT language=phys target=1 automatic-query-keeps-editor=1",
+        "SIGNATURE HUD language=phys target=1 theme=1 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=phys target=1 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE INPUT language=phys target=2 automatic-query-keeps-editor=1",
+        "SIGNATURE HUD language=phys target=2 theme=2 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=phys target=2 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE WINDOW language=phys requested=800x540 actual=800x540 test-only-minimum=1",
+        "SIGNATURE LONG language=phys all16=1 active-last=1 footer-fixed=1 wheel-editor-preserved=1 keyboard-home-end=1 manual-reveal=1 list-disjoint=1 zero-excess=1 row-cache-reused=1 thumb-drag=1 outside-drag-editor-preserved=1 typing-after-drag=1",
+        "SIGNATURE HUD SELF-TEST: PASSED"
+      ],
+      "all_four_actual_native_images_opened": true,
+      "images": [
+        {
+          "entry": "Release/test-results/run-4q0senib/signature_help_workflow/files ä/workflow ä/c/signature-first.bmp",
+          "sha256": "f99d1a570e01b8f9b20a6a149947f20251ce72999312cbdb9b2b31cdfaa7a5fd"
+        },
+        {
+          "entry": "Release/test-results/run-4q0senib/signature_help_workflow/files ä/workflow ä/c/signature-long.bmp",
+          "sha256": "facb10eb17c3e3b5b0cbc27aeb2d59873559d5080c0fd9a49566d781a18036c4"
+        },
+        {
+          "entry": "Release/test-results/run-4q0senib/signature_help_workflow/files ä/workflow ä/phys/signature-first.bmp",
+          "sha256": "4ed9852a7a489c80a08b1f7dad8e1035407cb89a328c5eccbe9a5db8d8c25a07"
+        },
+        {
+          "entry": "Release/test-results/run-4q0senib/signature_help_workflow/files ä/workflow ä/phys/signature-long.bmp",
+          "sha256": "77164837a96ca7eb5274231753c30f86cd4d8060b585a4f7753f2084130acea0"
+        }
+      ],
+      "original_report": "build/validation/signature-outside-macos-2026-11-05/arm-original.json",
+      "original_report_sha256": "bbcad33f0286880ec7ebee4b1fffda9404779af3cb2b3f59dcab764e38df2c97"
+    }
+  ]
+}

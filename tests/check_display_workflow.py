@@ -1109,6 +1109,20 @@ def signature_help_workflow(flow,directory):
                 "Native long-signature stress window was clamped to the shipping minimum")
 
 
+def signature_detached_workflow(flow,directory):
+    for language in ("c","phys"):
+        root=directory/language;root.mkdir(parents=True)
+        flow.run("--workspace-state-test",root,"signature-hud-detached-"+language,timeout=75,marker="SIGNATURE DETACHED SELF-TEST: PASSED")
+        output=flow.steps[-1]["stdout"]
+        for target in range(3):
+            require(f"SIGNATURE DETACHED language={language} target={target} actual-child-context=1 auto-open=1 list-disjoint=1 child-typing=1 native-return=1 source-caret-layout-preserved=1 primary-typing=1" in output,
+                    "Missing actual child-window signature/input/return sequence")
+        require(f"SIGNATURE DETACHED language={language} target=2 actual-child-context=1 long16=1 thumb-over-editor=1 outside-drag-preserved=1 typing-after-drag=1" in output,
+                "Missing overlapping detached signature drag and subsequent editor input")
+        for name in ("signature-detached-normal.bmp","signature-detached-long.bmp"):
+            require((root/name).is_file(),"Missing actual auxiliary-window image: "+name)
+
+
 def completion_info_workflow(flow,directory):
     for language in ("c","phys"):
         root=directory/language;root.mkdir(parents=True)
@@ -2105,6 +2119,7 @@ SPECIAL["completion_automatic_workflow"]=completion_automatic
 SPECIAL["completion_automatic_deadline_workflow"]=lambda flow,directory:completion_automatic(flow,directory,True)
 SPECIAL["completion_info_workflow"]=completion_info_workflow
 SPECIAL["signature_help_workflow"]=signature_help_workflow
+SPECIAL["signature_detached_workflow"]=signature_detached_workflow
 SPECIAL["completion_locals_workflow"]=completion_locals_workflow
 SPECIAL["settings_keyboard_paced"]=lambda flow,directory: settings_keyboard(flow,directory,True)
 SPECIAL["settings_a_window"]=settings_a_window

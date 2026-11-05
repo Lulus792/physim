@@ -11,6 +11,18 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
 
 ## Neuere Editorprüfungen
 
+- [Parameterhilfe im nativen Zusatzfenster](verification/signature-detached-2026-11-05.md):
+  zwei Fokuskorrekturen; Windows Release und Linux ASan/UBSan jeweils7/7.
+  C/Ph je drei Editoren, echter Zusatzkontext, Überlappung/Scrollgriff/Tippen
+  und Rückkehr samt Quelle/Cursor/Auswahl/Anordnung; acht finale Bilder geöffnet.
+  Test-Selektions- und Resize-Sequenz anhand ursprünglicher Befunde präzisiert.
+  [Befehle, Quellen und Grenzen](verification/signature-detached-2026-11-05.json).
+- [Gehosteter Mac-Nachlauf der Kartenüberschreitung](verification/signature-outside-macos-2026-11-05.json),
+  Quelle27ffb2f6, Lauf42037853611: Intel/ARM jeweils11/11 Daten und9/9 GUI.
+  Beide Original-ZIPs samt veröffentlichtem Digest und allen sechs Einträgen
+  je Archiv gelesen; acht native Bilder tatsächlich geöffnet, Workspace ohne
+  Häkchen. Hauptfenster-Drag und anschließende Eingabe belegt. Beide Jobs
+  geschlossen; keine Abnahme des herausgelösten Workspaces daraus ableiten.
 - [Parameterhilfe: über den Kartenrand ziehen](verification/signature-outside-2026-11-05.md):
   Hauptfenster, C/Ph: Griff halten, über den Quelleditor ziehen, dort loslassen,
   Erhaltung von Cursor/Auswahl/Scroll und anschließendes Tippen/Löschen geprüft.

@@ -1,0 +1,40 @@
+{
+  "date": "2026-11-05",
+  "reason": "Four byte-identical extracted ARM images after both original ZIPs were verified and all eight actual images opened; canonical Intel images and both originals retained",
+  "removed_files": 4,
+  "freed_bytes": 9850152,
+  "paths": [
+    {
+      "path": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\arm\\c-signature-first.bmp",
+      "canonical": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\intel\\c-signature-first.bmp",
+      "bytes": 3196938,
+      "sha256": "f99d1a570e01b8f9b20a6a149947f20251ce72999312cbdb9b2b31cdfaa7a5fd",
+      "original_zip": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\artifact-13419442611.zip",
+      "entry": "Release/test-results/run-4q0senib/signature_help_workflow/files ä/workflow ä/c/signature-first.bmp"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\arm\\c-signature-long.bmp",
+      "canonical": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\intel\\c-signature-long.bmp",
+      "bytes": 1728138,
+      "sha256": "facb10eb17c3e3b5b0cbc27aeb2d59873559d5080c0fd9a49566d781a18036c4",
+      "original_zip": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\artifact-13419442611.zip",
+      "entry": "Release/test-results/run-4q0senib/signature_help_workflow/files ä/workflow ä/c/signature-long.bmp"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\arm\\phys-signature-first.bmp",
+      "canonical": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\intel\\phys-signature-first.bmp",
+      "bytes": 3196938,
+      "sha256": "4ed9852a7a489c80a08b1f7dad8e1035407cb89a328c5eccbe9a5db8d8c25a07",
+      "original_zip": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\artifact-13419442611.zip",
+      "entry": "Release/test-results/run-4q0senib/signature_help_workflow/files ä/workflow ä/phys/signature-first.bmp"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\arm\\phys-signature-long.bmp",
+      "canonical": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\intel\\phys-signature-long.bmp",
+      "bytes": 1728138,
+      "sha256": "77164837a96ca7eb5274231753c30f86cd4d8060b585a4f7753f2084130acea0",
+      "original_zip": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\artifact-13419442611.zip",
+      "entry": "Release/test-results/run-4q0senib/signature_help_workflow/files ä/workflow ä/phys/signature-long.bmp"
+    }
+  ]
+}

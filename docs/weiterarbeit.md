@@ -7,13 +7,24 @@ Vollständige Umsetzung und Abnahme bleiben das Ziel; Teiltests sind keine volle
 
 ## Aktueller Abschluss
 
+[Parameterhilfe im herausgelösten Workspace](verification/signature-detached-2026-11-05.md):
+zwei reproduzierte Fokusfehler korrigiert, keine neue sichtbare UI.
+Windows Release7/7 run-69j1crw4, Linux ASan/UBSan7/7 run-xh60v0jy;
+acht finale Zusatzfensterbilder tatsächlich geöffnet. C/Ph jeweils drei Ziele,
+exakte Quelle/Cursor/Auswahl/Anordnung, überlappender Scrollgriff und Tippen nach
+Drag sowie Rückkehr geprüft. [Originale und Grenzen](verification/signature-detached-2026-11-05.json).
+Warmstand **signature-detached-checked**,301 eigene Eingaben. Detailstand und
+späterer Mac-Handle: `build/validation/signature-detached-2026-11-05/STATE.md`.
+
 [Kartenüberschreitung im Hauptfenster](verification/signature-outside-2026-11-05.md):
 C/Ph samt Tippen nach Release, Windows gleicher Build direkt nach Fokusaktivierung,
 Linux1/1; acht aktuelle Bilder ohne Workspace-Häkchen. Test-Gesamtfrist korrigiert,
 normales Appverhalten unverändert. [Originalversuche und Grenzen](verification/signature-outside-2026-11-05.json).
 [Quelle27ffb2f6, beide Remotes](verification/signature-outside-commit-2026-11-05.json).
-Neuer Mac-Lauf42037853611: ARM127280562388 im Datenstep, Intel127280563043 queued;
-zuletzt per Jobtool belegt. Diesen neuen Quellstand getrennt nachverfolgen.
+[Mac-Lauf42037853611](verification/signature-outside-macos-2026-11-05.json)
+zu27ffb2f6 geschlossen: ARM127280562388 und Intel127280563043 jeweils11/11 Daten
+und9/9 GUI. Original-ZIPs/Digests/alle sechs Einträge je Archiv gelesen, acht
+tatsächliche HUD-Bilder ohne Workspace-Häkchen geöffnet. Nicht erneut pollen.
 
 [Workspace ohne Häkchen](verification/workspace-no-checks-2026-11-05.md):
 ausdrücklicher Nutzerwunsch vom5.11. Checkboxzeichnung UND reservierte Spalte
@@ -22,8 +33,8 @@ ADR016 und A2-Spezifikation festgehalten; Häkchen dort nicht wieder einbauen.
 Windows Release **2/2 run-wepdvezc**, Linux ASan/UBSan **2/2 run-2n0icoeu**;
 vorhandene Datei-/Projektbaumabläufe und vier gezielte Bilder geprüft.
 [Befehle, Programme und Grenzen](verification/workspace-no-checks-2026-11-05.json).
-Warmstand jetzt **`signature-outside-checked`**, 300 eigene Eingaben. Source-/Runtime-
-Archive eingefroren und gegen Git gelesen; lokale Jobs beendet.
+Dieser abgeschlossene Workspace-Stand umfasste300 eigene Eingaben; Source-/Runtime-
+Archive eingefroren und gegen Git gelesen. Aktuelle Proben: siehe STATE oben.
 [Quelle0ddfe287, beide Remotes](verification/workspace-no-checks-commit-2026-11-05.json).
 
 [Scrollgriff und Editor-Eingabe](verification/signature-thumb-2026-11-05.md):
@@ -41,10 +52,9 @@ Auch [Vorgänger42026549588](verification/signature-wrap-macos-first-2026-11-05.
 
 ## Nächste konkrete Schritte
 
-1. Jetzt OS-Fenstergrenze, herausgelöster Workspace, stärkere Überlappungsfälle,
-   Fokuswechsel und
+1. Jetzt Capture außerhalb einer OS-Fenstergrenze, externe Fokuswechsel und
    Accessibility-/Screenreader-Aufgaben. Detailstand und aktuelle Mac-Handles:
-   `build/validation/signature-outside-2026-11-05/STATE.md` zuerst lesen.
+   `build/validation/signature-detached-2026-11-05/STATE.md` zuerst lesen.
    Mac-Nachlauf des jeweils neuen Quellstands getrennt verfolgen;
    Original-ZIPs/Digests lesen. Alte geschlossene Läufe nicht neu starten.
 2. 190 Einträge nach echten Spezialaufrufen/Overloads/Optionen und Eigenschaften

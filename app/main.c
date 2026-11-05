@@ -679,6 +679,8 @@ typedef struct {
     size_t signature_layout_parameter;
     nk_uint signature_scroll_x,signature_scroll_y;
     bool signature_reveal,signature_suppressed_language;
+    bool signature_detached_test_active;
+    SDL_WindowID signature_test_paint_window;
     unsigned completion_visible_rows;
     bool completion_reveal,completion_scroll_drag,completion_info_visible,completion_pointer_capture;
     ps_completion_help completion_help;
@@ -3246,6 +3248,7 @@ static void panel_pull_handle(app *a,unsigned panel,struct nk_rect bounds);
 static void panel_pull_input(app *a,float width,float height);
 static void panel_pull_cancel(app *a);
 static void timeline_design_draw(app *a);
+static void signature_detached_draw(app *a);
 static void panel_windows_destroy(app *a);
 #include "editor_search_ui.inc"
 static bool documentation_fonts_prepare(app *a,unsigned size,unsigned code_size);
@@ -3666,6 +3669,7 @@ static bool native_test_keyboard_command(app *a,toolbar_action action,int *stage
 #include "completion_info_tests.inc"
 #include "completion_locals_tests.inc"
 #include "signature_tests.inc"
+#include "signature_detached_tests.inc"
 #include "source_outline_tests.inc"
 #include "file_tabs_tests.inc"
 #include "workbench_tests.inc"
@@ -4294,7 +4298,10 @@ int main(int argc, char **argv) {
                  (workspace_state_test && strncmp(argv[3],"native-dialog",13) &&
                   strcmp(argv[3],"documents-unfiltered") && strcmp(argv[3],"protocol-ui-interactive"))) && test_scripted_external_input(&e) &&
                 !(workspace_state_test && !strcmp(argv[3],"timeline-design") && timeline_design.sink &&
-                  e.type==SDL_EVENT_WINDOW_FOCUS_LOST && e.window.windowID==SDL_GetWindowID(a->window))) continue;
+                  e.type==SDL_EVENT_WINDOW_FOCUS_LOST && e.window.windowID==SDL_GetWindowID(a->window)) &&
+                !(workspace_state_test && a->signature_detached_test_active && e.type==SDL_EVENT_WINDOW_FOCUS_LOST &&
+                  (e.window.windowID==SDL_GetWindowID(a->primary_window) ||
+                   (a->panels[PS_DOCK_WORKSPACE].window && e.window.windowID==SDL_GetWindowID(a->panels[PS_DOCK_WORKSPACE].window))))) continue;
             if (self_test && e.type == SDL_EVENT_TEXT_INPUT) {
                 doc_input_events++;
                 doc_input_bytes += (unsigned)strlen(e.text.text);
@@ -4337,7 +4344,12 @@ int main(int argc, char **argv) {
             if(event_window==a->doc_window && a->doc_ui && documentation_actions_event(a,&e))continue;
             if(event_window==a->doc_window && a->doc_ui && nk_sdl_accessibility_event(a->doc_ui,&e))continue;
             if (event_window == a->window && e.type == SDL_EVENT_WINDOW_FOCUS_LOST)
-                { a->completion_composing=false;completion_close(a);toolbar_keyboard_close(a); }
+                {
+                    /* A delayed primary-window blur must not cancel the
+                     * editor now owned by the detached Workspace window. */
+                    if(!panel_is_detached(a,PS_DOCK_WORKSPACE)){a->completion_composing=false;completion_close(a);}
+                    toolbar_keyboard_close(a);
+                }
             if(event_window==a->window && e.type==SDL_EVENT_MOUSE_BUTTON_DOWN)completion_pointer_event(a,&e.button);
             if (a->doc_window && event_window == a->doc_window) {
                 if (e.type == SDL_EVENT_WINDOW_CLOSE_REQUESTED)
@@ -5578,7 +5590,8 @@ int main(int argc, char **argv) {
         if(workspace_state_test && (!strcmp(argv[3],"completion-c") || !strcmp(argv[3],"completion-phys")))completion_syntax_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"completion-info-",16))completion_info_test_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"completion-locals-",18))completion_locals_draw(a);
-        if(workspace_state_test && !strncmp(argv[3],"signature-hud-",14))signature_test_draw(a);
+        if(workspace_state_test && !strncmp(argv[3],"signature-hud-",14) &&
+           (!a->signature_detached_test_active || !panel_is_detached(a,PS_DOCK_WORKSPACE)))signature_test_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"completion-auto-",16))completion_auto_draw(a,test_stage);
         if(workspace_state_test && !strncmp(argv[3],"outline-hover-",14))outline_hover_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"analysis-layout-",16))analysis_workspace_test_draw(a,test_stage);

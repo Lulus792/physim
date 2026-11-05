@@ -58,7 +58,7 @@ static void panel_window_return(app *a,unsigned panel) {
     ps_panel_window *p=&a->panels[panel];if(!p->detached)return;
     if(a->workspace_tip.owner==p->ui){a->workspace_tip.visible=false;a->workspace_tip.input_held=false;}
     if(panel==PS_DOCK_WORKSPACE && editor_search_target(a)) {
-        a->completion_focus_edit=editor_search_target(a);nk_window_set_focus(a->ui,"workspace");
+        completion_return_focus(a,editor_search_target(a));
     }
     if(p->resize){a->laboratory_curve_ratio=p->resize_original;p->resize=0;p->resize_cancelled=true;SDL_CaptureMouse(false);}
     if(panel<PS_DOCK_PANELS && p->ui) {
@@ -252,7 +252,7 @@ static bool panel_windows_render(app *a) {
                 a->dock_panels[i].y+=heading;a->dock_panels[i].h-=heading;
             }
             if(i==PS_DOCK_WORKSPACE && p->restore_editor_focus && nk_window_find(p->ui,"workspace")) {
-                nk_window_set_focus(p->ui,"workspace");a->completion_focus_edit=editor_search_target(a);p->restore_editor_focus=false;
+                completion_return_focus(a,editor_search_target(a));p->restore_editor_focus=false;
             }
             if(i==PS_DOCK_SIDEBAR)sidebar_panel(a);
             else if(i==PS_DOCK_WORKSPACE){
@@ -263,6 +263,11 @@ static bool panel_windows_render(app *a) {
                 if(covered){memset(p->ui->input.mouse.buttons,0,sizeof p->ui->input.mouse.buttons);p->ui->input.mouse.pos=nk_vec2(-1,-1);p->ui->input.mouse.scroll_delta=nk_vec2(0,0);}
                 workspace_panel(a);editor_search_view(a);
                 p->ui->input.mouse=pointer;completion_view(a,w,h);
+                /* Dock routing temporarily changes the active window for
+                 * pointer input. Preserve the source's explicit keyboard
+                 * owner before selecting this OS window's SDL input channel. */
+                if(a->outline_keyboard || a->file_tab_keyboard_edit || a->completion_keyboard_edit)
+                    p->ui->active=nk_window_find(p->ui,"workspace");
             }
             else if(i==PS_DOCK_LOG)log_panel(a);else inspector_panel(a);
         } else if(laboratory_begin(a,"panel-content",nk_rect(0,0,(float)w,(float)h),NK_WINDOW_NO_SCROLLBAR)) {
@@ -286,6 +291,7 @@ static bool panel_windows_render(app *a) {
         }
         workspace_tip_frame_end(a);
         if(a->timeline_design_active && i==PS_PANEL_TIMELINE)timeline_design_draw(a);
+        if(a->signature_detached_test_active && i==PS_DOCK_WORKSPACE)signature_detached_draw(a);
         nk_sdl_update_TextInput(p->ui);
         memcpy(p->splitters,a->laboratory_splitters,sizeof p->splitters);
         if(i==PS_PANEL_MEASURE){p->measure_bounds=a->laboratory_measure_bounds;p->measure_width=a->laboratory_measure_width;}

@@ -46,6 +46,13 @@ die gemeinsame WSL-VM und fremde aktive Arbeiten bleiben erhalten.
 
 ## Reproduzierbare Nachweise
 
+Späterer, getrennter Abschluss des gehosteten Mac-Laufs42037853611:
+[vier bytegleiche entpackte ARM-Bildkopien entfernt](verification/signature-outside-macos-cleanup-2026-11-05.json),
+**9.850.152 Bytes**. Alle acht tatsächlichen Bilder waren zuvor geöffnet;
+kanonische Intel-Bilder und beide vollständig geprüften Original-ZIPs bleiben
+erhalten. Dies ändert keine eingefrorenen Originalberichte und zählt keine
+frühere Bereinigung erneut.
+
 Dateigenaue Pläne, Hashlisten, Prüfscripte und Löschquittung liegen unter
 `D:/Physim/build/maintenance/docs-cleanup-2026-11-05` und sind über
 [den kompakten Bericht](verification/storage-maintenance-2026-11-05.json)
