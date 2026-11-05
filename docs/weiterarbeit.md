@@ -24,6 +24,11 @@ Finale Vorbereitung künftig auf **`module-signatures-final`** aufbauen.
 alle Archive geprüft. Alle lokalen Handles beendet. 34 bytegleiche BMPs /
 108.695.892 Bytes entfernt, Referenzen/Fehler erhalten.
 Details: `build/validation/module-signatures-2026-11-05/STATE.md`.
+Quellcommit **`ec7824ca`**, in beide Repositories gepusht;
+[Commitabgleich](verification/module-signatures-commit-2026-11-05.json).
+Aktueller gehosteter Lauf **`41986344544`**: ARM `127107852822` läuft in den
+Daten-Units; Intel `127107853216` wartet. Genau diesen Lauf mit acht Daten- und
+acht GUI-Gruppen samt Originalartefakten weiter prüfen, nicht neu starten.
 
 ## Nächste konkrete Schritte
 
@@ -66,8 +71,8 @@ Trennlinie ist seit `ef1f3321` behoben: kein neuer Test allein wegen Kontextwech
   und erfolgreich nachgeprüft. Kein weiterer Nachlauf dieses alten Standes.
 
 Diese Belege bestätigen die neue Dokumentabfrage/den Resolver/HUD nicht.
-Mac-Nachlauf der aktuellen Quelle: acht Daten-Units und acht GUI-Gruppen
-konfiguriert; tatsächlicher Quelllauf/Originalartefakte noch offen.
+Mac-Nachlauf der aktuellen Quelle läuft unter obiger Kennung; Originalartefakte
+noch nicht ausgewertet.
 
 ## Umgebung und Schutz
 
