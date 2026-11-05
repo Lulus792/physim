@@ -7,32 +7,30 @@ Vollständige Umsetzung und Abnahme bleiben das Ziel; Teiltests sind keine volle
 
 ## Aktueller Abschluss
 
-[Gemeinsamer Datenkern der Parameterhilfe](verification/signature-model-2026-11-05.md):
-eigener Quell-/Header-/Displaybesitz, C-Zielabfrage am Callee-Namensort, echte Ph-
-Modul-/Präfixdaten. 370 C- und 396 formale Ph-API-Aufrufe, eigene Funktionen/Methoden;
-190 Spezial-/Property-/Dokueinträge ausdrücklich ungeklärt. **Noch kein sichtbarer HUD.**
+[Sichtbare native Parameterhilfe](verification/signature-hud-2026-11-05.md):
+erster integrierter Stand nach ADR023, unabhängig von Liste/Kurzinfo. Volle getestete
+Signaturen, aktive A2-/Semibold-Syntax, Auto/Strg+Umschalt+Leertaste, Escape,
+Übernahme, innere/überzählige Argumente, IME/Auswahl und OOM-Veröffentlichung geprüft.
+Windows Release **6/6 GUI run-rg_b7qhf**, Linux ASan/UBSan **6/6 run-46yp8mpv**;
+je C/Ph in drei Editorzielen. Zehn gezielte Bilder geöffnet, übrige Ergebnisse als JSON.
+GDB-Negativbeleg: gleicher Text/alteBreite am Ursprung28px, Bildschirmort56px;
+relative Stift-/Zeilenrechnung liefert nun28/28 und28 sichtbare Bytes. Kein neuer
+Test allein wegen Kontextwechsel; [Phasen und Grenzen](verification/signature-hud-2026-11-05.json).
 
-Windows/Linux App+zunächst je **10/10 Daten**; danach neuer Cache desselben
-unveränderten Aufrufs, final je **1/1 Modellgruppe**. 38 Fälle, 16 Parameter je Sprache,
-60 C-/8 Ph-/4 geliehene Cache-OOM-Pfade, fünf saubere Gegenprogramme; Cursorwechsel
-im selben Aufruf ohne weitere Modellallokation. Nested-/Invalid-Rückkehr geprüft.
-Direkt strikt C17/Werror/ASan/UBSan/LSan; [Stufen/Hashes](verification/signature-model-2026-11-05.json).
-
-Vorbereitung künftig auf **`signature-model-closed`** aufbauen: 294 eigene /1.233
-Compiler-Testeingaben, alle 1.252 mit Git abgeglichen; Archive geprüft. Keine neuen
-Bilder; 10 ersetzte temporäre Programme/Objekte entfernt, 124.082.744 logische Bytes.
-Lokale Handles beendet. Quelle **`6e455e9c`**, beide Remotes; [Commitabgleich](verification/signature-model-commit-2026-11-05.json).
-Mac-Nachlauf **42005020387**: ARM/Intel abgeschlossen, je **10/10 Daten +8/8 GUI**.
-[Original-ZIPs/Digests und alle Einträge geprüft](verification/signature-model-macos-2026-11-05.json); nicht erneut pollen.
+Warmstand künftig **`signature-hud-5`**,296 eigene Eingaben; Source-/Runtime-
+Deltas aller Stufen gelesen. Lokale Builds/Tests/GDB-Prozesse beendet.
+[Modellkern](verification/signature-model-2026-11-05.md) und dessen
+[Mac-Nachlauf42005020387](verification/signature-model-macos-2026-11-05.json) geschlossen:
+ARM/Intel10/10 Daten +8/8 GUI, Originale geprüft. Kein sichtbarer HUD im alten Mac-Stand.
 
 ## Nächste konkrete Schritte
 
-1. Den vorhandenen Modellkern in den unabhängigen nativen Parameter-HUD nach
-   ADR 023/APPROVED einbinden. Locals/Modell gegen echte aktuelle Eingabe prüfen;
-   Speicherfehler erhalten alte Daten, dürfen aber keinen veralteten HUD zeigen.
-   volle Signatur, gemeinsame Syntaxrollen, aktiver Parameter A2/fett/Unterkante,
-   innere/überzählige Argumente, automatisch/manuell, normale Liste darunter,
-   getrenntes Annehmen/Schließen, Escape, Fokus/IME/Revision und Accessibility.
+1. HUD-Feinschliff: Wort-/Tokengrenzen statt Auftrennung von `->` (Linux22px-Bild),
+   ehrlichen Exzesshinweis mit freigegebenem Fehlerton zeichnen. Lange16Parameter,
+   kleine Fenster/Scroll und aktiven Parameter nativ prüfen; dann herausgelöster
+   Workspace, echte Fokuswechsel und Accessibility-/Screenreader-Aufgaben.
+   Detailstand unter `build/validation/signature-hud-2026-11-05/STATE.md`; den
+   neuen gehosteten HUD-Mac-Nachlauf nach Quellpush unter seiner Kennung verfolgen.
 2. 190 Einträge nach echten Spezialaufrufen/Overloads/Optionen und Eigenschaften
    unterscheiden; Compilerintrinsics außerhalb Katalog (print/assert/Konvertierung)
    aus echten Verträgen ergänzen. Funktionswert-Annotationen/Import-/Aliasfälle

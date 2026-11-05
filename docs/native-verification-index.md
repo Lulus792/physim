@@ -11,6 +11,14 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
 
 ## Neuere Editorprüfungen
 
+- [Erste sichtbare native Parameterhilfe](verification/signature-hud-2026-11-05.md):
+  Windows Release/Linux ASan-UBSan jeweils6/6 GUI; C/Ph je Modell/Analyse/Datei,
+  reale SDL-Eingaben, aktive Semibold-Syntaxglyphen/Clips, Auto/manuell/Escape,
+  innere/überzählige Argumente, unabhängige Übernahme und alter Locals-/Modell-
+  Zustand bei OOM. Echter nativer Float-/Umbruch-Gegenbeleg28/56px, korrigiert28/28.
+  Zehn gezielte Bilder geprüft. Wort-/Tokengrenzen, lange/kleine Layouts, Detached,
+  Fensterfokus, AX/physische Abnahme und weitere Verträge offen; keine volle UI-Abnahme.
+  [Quellen/Programme/Prüfstufen](verification/signature-hud-2026-11-05.json).
 - [Gemeinsamer Datenkern der Parameterhilfe](verification/signature-model-2026-11-05.md):
   C-/Physim-Quellbesitz, tatsächliche Ziele,370C-/396formalePh-API-Aufrufe sowie
   eigene Funktionen/Methoden. Windows/Linux App+je10/10 Daten, final neuer

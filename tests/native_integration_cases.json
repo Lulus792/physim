@@ -14922,6 +14922,36 @@
       ]
     },
     {
+      "name": "signature_help_workflow",
+      "app": true,
+      "display": true,
+      "targets": [
+        "python",
+        "physim"
+      ],
+      "steps": [
+        {
+          "program": "python",
+          "arguments": [
+            "{root}/tests/check_display_workflow.py",
+            "signature_help_workflow",
+            "--app",
+            "{physim}",
+            "--work",
+            "{work}",
+            "--root",
+            "{root}",
+            "--cc",
+            "{cc}"
+          ],
+          "timeout": 160,
+          "files": [
+            "app-steps.json"
+          ]
+        }
+      ]
+    },
+    {
       "name": "completion_info_workflow",
       "app": true,
       "display": true,

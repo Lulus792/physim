@@ -1089,6 +1089,19 @@ def completion(flow,directory):
             require((root/name).is_file(),"Missing actual completion view: "+name)
 
 
+def signature_help_workflow(flow,directory):
+    for language in ("c","phys"):
+        root=directory/language;root.mkdir(parents=True)
+        flow.run("--workspace-state-test",root,"signature-hud-"+language,timeout=75,marker="SIGNATURE HUD SELF-TEST: PASSED")
+        output=flow.steps[-1]["stdout"]
+        for target in range(3):
+            require(f"SIGNATURE HUD language={language} target={target} theme={target} auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1" in output,
+                    "Missing native signature input/paint/ownership sequence")
+            require(f"SIGNATURE HUD language={language} target={target} retained-old-locals-model-hidden-on-oom=1 recovered=1" in output,
+                    "Stale HUD after failure-preserving locals update")
+        require((root/"signature-first.bmp").is_file(),"Missing representative native signature image")
+
+
 def completion_info_workflow(flow,directory):
     for language in ("c","phys"):
         root=directory/language;root.mkdir(parents=True)
@@ -2084,6 +2097,7 @@ SPECIAL["settings_transactions"]=settings_transactions
 SPECIAL["completion_automatic_workflow"]=completion_automatic
 SPECIAL["completion_automatic_deadline_workflow"]=lambda flow,directory:completion_automatic(flow,directory,True)
 SPECIAL["completion_info_workflow"]=completion_info_workflow
+SPECIAL["signature_help_workflow"]=signature_help_workflow
 SPECIAL["completion_locals_workflow"]=completion_locals_workflow
 SPECIAL["settings_keyboard_paced"]=lambda flow,directory: settings_keyboard(flow,directory,True)
 SPECIAL["settings_a_window"]=settings_a_window

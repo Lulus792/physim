@@ -199,6 +199,7 @@ static void completion_commit(app *a) {
 static bool completion_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
     struct nk_text_edit *edit=completion_target(a);
     if(a->completion_active && edit!=a->completion_edit)completion_close(a);
+    if(signature_keyboard_key(a,key))return true;
     if(edit && document_language(a,edit)>=0 && (edit->active || a->completion_active) && key->key==SDLK_SPACE && (key->mod&SDL_KMOD_CTRL) &&
        !(key->mod&(SDL_KMOD_ALT|SDL_KMOD_GUI|SDL_KMOD_SHIFT))) {
         if(!key->repeat){if(a->completion_active)completion_info_toggle(a);else completion_open(a,edit);}return true;
@@ -247,8 +248,8 @@ static bool completion_keyboard_key(app *a,const SDL_KeyboardEvent *key) {
 }
 static void completion_pointer_event(app *a,const SDL_MouseButtonEvent *event) {
     if(!a->completion_active){if(a->completion_focus_edit)completion_close(a);return;}
-    const struct nk_rect regions[]={a->source_editor_bounds,a->completion_list_bounds,a->completion_info_bounds,a->completion_button_bounds,a->api_reference_button_bounds};
-    for(unsigned i=0;i<5;i++)if(event->x>=regions[i].x && event->x<regions[i].x+regions[i].w &&
+    const struct nk_rect regions[]={a->source_editor_bounds,a->completion_list_bounds,a->completion_info_bounds,a->completion_button_bounds,a->api_reference_button_bounds,a->signature_hud_bounds};
+    for(unsigned i=0;i<6;i++)if(event->x>=regions[i].x && event->x<regions[i].x+regions[i].w &&
         event->y>=regions[i].y && event->y<regions[i].y+regions[i].h)return;
     completion_close(a);
 }
@@ -393,6 +394,7 @@ static float completion_help_content(app *a,const ps_completion_symbol *symbol,f
 }
 static void completion_view(app *a,int width,int height) {
     struct nk_context *ui=a->ui;
+    signature_view(a,width,height);
     struct nk_text_edit *target=completion_target(a);
     if(!a->dock_visible[PS_DOCK_WORKSPACE] || (a->completion_pending_edit && a->completion_pending_edit!=target) ||
        (a->completion_active && a->completion_edit!=target) ||
@@ -409,13 +411,18 @@ static void completion_view(app *a,int width,int height) {
     float editor_top=fmaxf(8,a->source_editor_bounds.y),editor_bottom=fminf(height-8.f,a->source_editor_bounds.y+a->source_editor_bounds.h);
     float below=fmaxf(0,editor_bottom-(a->editor_caret.y+a->editor_caret.h+4));
     float above=fmaxf(0,a->editor_caret.y-editor_top-4);
+    struct nk_rect signature=a->signature_hud_bounds;
+    bool hud=signature.w>0;
+    float list_below=hud?signature.y+signature.h+6:a->editor_caret.y+a->editor_caret.h+4;
+    if(hud)below=fmaxf(0,editor_bottom-list_below);
+    if(hud && signature.y<a->editor_caret.y)above=fmaxf(0,signature.y-editor_top-6);
     unsigned room=(unsigned)fmaxf(1,floorf((fmaxf(below,above)-footer-8)/row_height));
     if(rows>room)rows=room;
     if(rows!=a->completion_visible_rows)a->completion_reveal=true;
     a->completion_visible_rows=rows;
     float h=rows*row_height+footer+8;
-    float x=fmaxf(8,fminf(a->editor_caret.x,(float)width-w-8)),y=a->editor_caret.y+a->editor_caret.h+4;
-    if(h>below)y=fmaxf(editor_top,a->editor_caret.y-h-4);
+    float x=fmaxf(8,fminf(a->editor_caret.x,(float)width-w-8)),y=list_below;
+    if(h>below)y=fmaxf(editor_top,(hud && signature.y<a->editor_caret.y?signature.y-6:a->editor_caret.y-4)-h);
     a->completion_list_bounds=nk_rect(x,y,w,h);
     size_t max_first=a->completion_count-rows;
     if(!max_first)a->completion_scroll_drag=false;

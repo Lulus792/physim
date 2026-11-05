@@ -1238,9 +1238,10 @@ static void workspace_draw_ui(app *a, int width, int height) {
     /* Completion overlays own their mouse route before underlying dock groups
      * can consume wheel/clicks. Keyboard input continues to reach the editor. */
     struct nk_mouse completion_pointer=ui->input.mouse;
-    bool completion_hover=a->completion_active && !panel_is_detached(a,PS_DOCK_WORKSPACE) &&
-        (nk_input_is_mouse_hovering_rect(&ui->input,a->completion_list_bounds) ||
-         (a->completion_info_visible && nk_input_is_mouse_hovering_rect(&ui->input,a->completion_info_bounds)));
+    bool completion_hover=!panel_is_detached(a,PS_DOCK_WORKSPACE) &&
+        ((a->completion_active && (nk_input_is_mouse_hovering_rect(&ui->input,a->completion_list_bounds) ||
+         (a->completion_info_visible && nk_input_is_mouse_hovering_rect(&ui->input,a->completion_info_bounds)))) ||
+         (a->signature_visible && nk_input_is_mouse_hovering_rect(&ui->input,a->signature_hud_bounds)));
     bool completion_mask=completion_hover || a->completion_pointer_capture || a->completion_scroll_drag;
     a->completion_pointer_capture=completion_pointer.buttons[NK_BUTTON_LEFT].down && (completion_hover || a->completion_pointer_capture);
     if(completion_mask){

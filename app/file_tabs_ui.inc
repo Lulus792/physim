@@ -10,6 +10,7 @@ static unsigned file_tab_active(const app *a) {
 }
 static void file_tab_select(app *a,unsigned key) {
     completion_close(a);
+    signature_clear(a);
     if(key>=2)document_select(a,key-2);
     else {
         a->source_tab_closed[key]=false;a->tab=key==0?0:2;if(key==1)a->analysis_tab=1;

@@ -1,0 +1,357 @@
+{
+  "date": "2026-11-05",
+  "source_snapshot": "signature-hud-5",
+  "own_inputs": 296,
+  "all_own_worktree_and_isolated_bytes_match": true,
+  "reports": [
+    {
+      "platform": "windows",
+      "configuration": "Release/MSVC/Windows",
+      "gui_leak_detection": null,
+      "passed": 6,
+      "total": 6,
+      "run": "run-rg_b7qhf",
+      "app_sha256": "a74a4c718070240084b653c476eae14e4f21b68361d86c37e90078e9fe7e28c3",
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-rg_b7qhf/results.json",
+        "sha256": "19cd0f76c99280d3828a5c36e96ecc8504a39c6d05c404205d9f6ef5afe18819"
+      },
+      "actual_app_steps": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-rg_b7qhf/signature_help_workflow/files \u00e4/app-steps.json",
+        "sha256": "b2f2497656b543553e8519d1eed369c5aa27ced55a677d5c704f752d77b9d3b1"
+      },
+      "cases": [
+        "completion_workflow",
+        "completion_automatic_workflow",
+        "api_reference_workflow",
+        "signature_help_workflow",
+        "completion_info_workflow",
+        "completion_locals_workflow"
+      ],
+      "actual_markers": [
+        "SIGNATURE HUD language=c target=0 theme=0 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=c target=0 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE HUD language=c target=1 theme=1 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=c target=1 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE HUD language=c target=2 theme=2 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=c target=2 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE HUD language=phys target=0 theme=0 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=phys target=0 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE HUD language=phys target=1 theme=1 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=phys target=1 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE HUD language=phys target=2 theme=2 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=phys target=2 retained-old-locals-model-hidden-on-oom=1 recovered=1"
+      ],
+      "representative_images": [
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-rg_b7qhf/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-first.bmp",
+          "sha256": "7a4b76a73206faa49d14a6087400241d54d7404dab667c04f84fc1b54d52e002"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-rg_b7qhf/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-first.bmp",
+          "sha256": "85235772e79b2c393bf86ad835a8cd3af397a7a794ac041e21899a13d8259248"
+        }
+      ],
+      "composition_images": [
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-rg_b7qhf/completion_locals_workflow/files \u00e4/workflow \u00e4/c/locals-model.bmp",
+          "sha256": "2657ad4e7a09028f37865f0c4f37a662b49a6bf9611b6df56075f62715a6b3c1"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-rg_b7qhf/completion_locals_workflow/files \u00e4/workflow \u00e4/c/locals-analysis.bmp",
+          "sha256": "e7be1bf28a34647a283d16e909fd852c22b88b852eae1d6e1e1f2d4add361d64"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-rg_b7qhf/completion_locals_workflow/files \u00e4/workflow \u00e4/c/locals-document.bmp",
+          "sha256": "f21227ddb6f5f236239de216f21d447010547cabd4e3e9a2942db4ab143cabd7"
+        }
+      ],
+      "images_actually_opened_and_reviewed": true,
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "signature_help_workflow",
+        "--test-filter",
+        "completion_workflow",
+        "--test-filter",
+        "completion_automatic_workflow",
+        "--test-filter",
+        "completion_info_workflow",
+        "--test-filter",
+        "completion_locals_workflow",
+        "--test-filter",
+        "api_reference_workflow"
+      ],
+      "log": {
+        "path": "build/validation/signature-hud-2026-11-05/fifth-windows.log",
+        "sha256": "e68a9342d205dcab4a5e69f41853abba160db64b071478a754b3ade46dedd96e"
+      }
+    },
+    {
+      "platform": "linux",
+      "configuration": "Debug/GCC/ASan/UBSan/X11/Xvfb1600x1000",
+      "gui_leak_detection": false,
+      "passed": 6,
+      "total": 6,
+      "run": "run-46yp8mpv",
+      "app_sha256": "ee358bbd06166b75681a5551dafa62088c41f420cb8c373327ffd69f9a322544",
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-46yp8mpv/results.json",
+        "sha256": "567d7a2a29f5cdbc81494fae4ac9b2afaef3981b75593443acfd761892bf59c4"
+      },
+      "actual_app_steps": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-46yp8mpv/signature_help_workflow/files \u00e4/app-steps.json",
+        "sha256": "15a063d249872c1348ba54e8e29e1d7cf2c7c2c315d9eb5a9fc376358f959632"
+      },
+      "cases": [
+        "completion_workflow",
+        "completion_automatic_workflow",
+        "api_reference_workflow",
+        "signature_help_workflow",
+        "completion_info_workflow",
+        "completion_locals_workflow"
+      ],
+      "actual_markers": [
+        "SIGNATURE HUD language=c target=0 theme=0 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=c target=0 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE HUD language=c target=1 theme=1 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=c target=1 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE HUD language=c target=2 theme=2 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=c target=2 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE HUD language=phys target=0 theme=0 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=phys target=0 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE HUD language=phys target=1 theme=1 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=phys target=1 retained-old-locals-model-hidden-on-oom=1 recovered=1",
+        "SIGNATURE HUD language=phys target=2 theme=2 auto-open=1 full-syntax=1 active-semibold=1 list-separated=1 escape-order=1 suppressed-across-comma=1 manual-reopen=1 excess-honest=1 nested-return=1 acceptance-independent=1 ime-selection=1",
+        "SIGNATURE HUD language=phys target=2 retained-old-locals-model-hidden-on-oom=1 recovered=1"
+      ],
+      "representative_images": [
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-46yp8mpv/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-first.bmp",
+          "sha256": "daf52f2fea9e5885001a65a4ba193c47656af7b4a43b60085b13047b878f0528"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-46yp8mpv/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-first.bmp",
+          "sha256": "197940dce0b939d213649d1dbc09c40b75c82586678ceb9f551ed699a2dc3c3e"
+        }
+      ],
+      "composition_images": [
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-46yp8mpv/completion_locals_workflow/files \u00e4/workflow \u00e4/c/locals-model.bmp",
+          "sha256": "07935c67c8d423fb8e7137be4ad0c87c487a5296c4734a01ca9a47a4c56b6ca1"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-46yp8mpv/completion_locals_workflow/files \u00e4/workflow \u00e4/c/locals-analysis.bmp",
+          "sha256": "17527c3b47cddca0522c36798769248be069950be9034420862935e9cf8f8e56"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-46yp8mpv/completion_locals_workflow/files \u00e4/workflow \u00e4/c/locals-document.bmp",
+          "sha256": "f00ffc1d478091945ec161800211b44e4982d9f4f64d02776ca3925c47240434"
+        }
+      ],
+      "images_actually_opened_and_reviewed": true,
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "signature_help_workflow",
+        "--test-filter",
+        "completion_workflow",
+        "--test-filter",
+        "completion_automatic_workflow",
+        "--test-filter",
+        "completion_info_workflow",
+        "--test-filter",
+        "completion_locals_workflow",
+        "--test-filter",
+        "api_reference_workflow"
+      ],
+      "log": {
+        "path": "build/validation/signature-hud-2026-11-05/fifth-linux.log",
+        "sha256": "32f0e39dc6de4fc7f7760e9ec107eb89538a771d0305c4920c5a609456bdb279"
+      }
+    }
+  ],
+  "snapshots": {
+    "signature-hud": [
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-hud-inputs.json",
+        "sha256": "f861d04af5e6febc98101577cad2dfef393981ee664a89100a3b8cac3a26e6f2"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-hud-compiler-source.json",
+        "sha256": "435639560b32ad7d959098fc57e2fb079507edd852b4211b404c11baa66dbbac"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-hud-runtime.json",
+        "sha256": "7fd99154dc0dee5e10c71202e64d3d7a1bce4210da82f07e90b733900a509270"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-hud-byte-index.json",
+        "sha256": "dbe90c2f31c57aad169de370464f8bf6b7a79f6f04af0401cc69e084f4737e52"
+      }
+    ],
+    "signature-hud-2": [
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-hud-2-inputs.json",
+        "sha256": "32298579a9462ffb8e3b64bde87ee363ad43633598811414fbdc7b447cf15aee"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-hud-2-compiler-source.json",
+        "sha256": "6fd55264d9cf823fdc6d03f56ccb11d6d5c442315f5fa62cf9cb9c4c673fbcf8"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-hud-2-runtime.json",
+        "sha256": "ce1d6d2993b20e74bd45bd8b0f75ca5a766d24df0196ad9e6a2885c22a96f0e6"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-hud-2-byte-index.json",
+        "sha256": "16930c8b8137536b3d9081722f41a2f7fd9297e9ec71a3c317a9cc6e0371cf8f"
+      }
+    ],
+    "signature-hud-3": [
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-hud-3-inputs.json",
+        "sha256": "df93c937cc0ae84553ea4f2903d157269b8fdf2cfeaa9ded7f177ce1a0f8f338"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-hud-3-compiler-source.json",
+        "sha256": "cf144a0afbe7bec0c31bce864efe2a745fde8ddda0ddf082171244e0fe604ae9"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-hud-3-runtime.json",
+        "sha256": "b0ef01fd2ecac58365e75b4677b7fe752c1ea5e3444b8cdc882bcd03afadfa9e"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-hud-3-byte-index.json",
+        "sha256": "a57c6f3415a2f039423ada8ca64dc3653b1057b34705cfe37a545498431f68a8"
+      }
+    ],
+    "signature-hud-4": [
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-hud-4-inputs.json",
+        "sha256": "ceccf0bd80a61fc078341b3761a994dd35d9f218e8fb55ca81f25d8f8bb3c9b0"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-hud-4-compiler-source.json",
+        "sha256": "e99dd1b8beec353632a4db3146de5224b080820d9f4c123f9f9a553f7b48e774"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-hud-4-runtime.json",
+        "sha256": "3bfd3b44403440c41c330be382b1f9b0542c440c894dd51663bd700b70499a10"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-hud-4-byte-index.json",
+        "sha256": "403c896a3150f764eff80253138b56bd6a368e03495f8c7fef84431588d1edbd"
+      }
+    ],
+    "signature-hud-5": [
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-hud-5-inputs.json",
+        "sha256": "d6010ba8616f0fe565781b09491bba5f300d6176e8b23032f6b1418661f240c6"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-hud-5-compiler-source.json",
+        "sha256": "3003c557e373dc2d745a0e7a38880e0bb8c96166a7fd34b622255880f02bde8b"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-hud-5-runtime.json",
+        "sha256": "609a2a5d1c0526757927f46f7ecf21ce93f3f7e2c56b3047d0957dcc046076c6"
+      },
+      {
+        "path": "build/validation/explorer-inline-2026-10-29/signature-hud-5-byte-index.json",
+        "sha256": "b5195f4615a499d1e7e1446581fa053236ea6e17ed45052bf92abe4fa9029ce4"
+      }
+    ]
+  },
+  "native_origin_counterexample": {
+    "old_source_snapshot": "signature-hud-4",
+    "old_app_sha256": "f5ad278a597b64b74dc2f2c0c3b03e82286ebbe3b149cdc1fc0df0b3e267a1d6",
+    "actual_old_log": {
+      "path": "build/validation/signature-hud-2026-11-05/clip-gdb.log",
+      "sha256": "12ca5b07d34180d9d8faacad6679bc06e369eb6141a62b95a7b1d28177568897"
+    },
+    "old_measure_height": 28,
+    "old_positioned_height": 56,
+    "actual_new_log": {
+      "path": "build/validation/signature-hud-2026-11-05/origin-control.log",
+      "sha256": "462f305850a0ab32f65ede9c0857beb178ca819c77d91ce1d469a65861c1b03c"
+    },
+    "same_fixed_width": 318.593964,
+    "same_screen_x": 605.593994,
+    "same_screen_y": 220.5,
+    "new_measure_height": 28,
+    "new_positioned_height": 28,
+    "new_actual_painted_bytes": 28,
+    "scope": "Actual existing native ELF under GDB, same written signature/font22/fixed width and origin versus actual screen offset. Deliberately quit both diagnostic inferiors; no sanitizer/full-workflow acceptance inferred from GDB."
+  },
+  "earlier_attempts": [
+    {
+      "phase": "signature-hud",
+      "reason": "New C nested-call fixture referenced undeclared/noncatalog sin; correct UNKNOWN. Fixture changed to actual ps_vlength.",
+      "windows": "run-jhsuueof",
+      "linux": "run-86ud567i"
+    },
+    {
+      "phase": "signature-hud-2",
+      "reason": "Windows initial host-focus failure, identical-app direct retry reached new OOM test. New test strlen on non-NUL Nuklear buffer: actual Linux ASan heap overflow at signature_tests:114. Corrected exact owned byte length and restored active editor before injection.",
+      "windows": "run-p5lfsvuq",
+      "linux": "run-ho2_1xsa"
+    },
+    {
+      "phase": "signature-hud-3",
+      "reason": "Five existing regressions passed on both. Windows HUD C0/1 passed; new document fixture used nonexistent signature.c. Linux C0 passed, C1 actual 27/28 inner signature bytes exposed clipping at22px. Old glyph-count probe did not fully check canvas scissor. Fixed real reserved6px gutter and strengthened native glyph/clip checker.",
+      "windows": "run-h4za5pw2",
+      "linux": "run-62pqgbzs"
+    },
+    {
+      "phase": "signature-hud-4",
+      "windows": "run-tyaunn_o",
+      "linux": "run-sntuqd66",
+      "reason": "Windows6/6. Linux existing5/6 passed; tightened real canvas/glyph probe rejects inner C signature at22px with27/28 bytes. GDB proves absolute floating-point pen causes measured28 versus positioned56px. Final relative pen/line implementation and origin-invariance regression pass6/6 on both. Same fixed-width GDB control28/28 and actual28painted bytes."
+    }
+  ],
+  "scope": "First visible independent native HUD integration, C/Physim three editor targets, themes dark/light22/highcontrast, exact source gating, full visible tested signatures and active semibold syntax glyphs against actual canvas clips; real SDL event routing, manual/list/escape/nested/excess/acceptance/IME-selection/OOM-recovery workflows. No full UI/physical/assistive/performance acceptance.",
+  "open": [
+    "Long16parameter HUD scrolling/small windows and word-boundary wrapping",
+    "Detached workspace and actual cross-window focus tasks",
+    "Native AX consumers/live announcements and physical screenreader/installed IME/DPI",
+    "Honest excess footer currently muted; approved overflow error tone still to apply",
+    "190 special/property/documentation entries and extra intrinsics/function-valued/import/alias contracts",
+    "Large-edit16.7ms performance and full approved UI"
+  ],
+  "private_user_mac": "OFF; untouched",
+  "hosted_model_mac": {
+    "commit": "6e455e9cc2aec1a4cd8e8116ee7d83dc46dbb373",
+    "run": 42005020387,
+    "proof": "docs/verification/signature-model-macos-2026-11-05.json"
+  },
+  "new_hud_mac": "Not yet run at report creation",
+  "storage": "D only. Preserve frozen proofs, open failures, VM, dependencies and foreign WIP."
+}

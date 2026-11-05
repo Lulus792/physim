@@ -8,6 +8,8 @@ on:
       - app/document_tests.inc
       - app/completion*
       - app/signature_help*
+      - app/signature_ui.inc
+      - app/signature_tests.inc
       - app/syntax*
       - app/design_tokens.h
       - src/language/builtin_type_names.inc
@@ -67,7 +69,7 @@ jobs:
       - name: Actual signature, call-target and revision data
         run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test --test-filter signature_help --test-filter c_lookup --test-filter module_signatures --test-filter c_signatures --test-filter editor_signatures --test-filter call_targets --test-filter c_call_context --test-filter completion_c_locals --test-filter completion_locals --test-filter completion_info
       - name: Actual document, completion and API reference workflows
-        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test-display --test-filter documents_small --test-filter documents_large --test-filter completion_workflow --test-filter completion_automatic_workflow --test-filter completion_automatic_deadline_workflow --test-filter completion_info_workflow --test-filter completion_locals_workflow --test-filter api_reference_workflow
+        run: python3 tools/build.py --compiler clang --config Release --jobs 4 --sdl "$PWD/build/sdl-install" --test-display --test-filter documents_small --test-filter documents_large --test-filter completion_workflow --test-filter completion_automatic_workflow --test-filter completion_automatic_deadline_workflow --test-filter completion_info_workflow --test-filter completion_locals_workflow --test-filter signature_help_workflow --test-filter api_reference_workflow
       - name: Compact native results
         if: always()
         uses: actions/upload-artifact@v4

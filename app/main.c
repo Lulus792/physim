@@ -23,6 +23,7 @@
 #include "completion_help.h"
 #include "completion_info.h"
 #include "completion_locals.h"
+#include "signature_help.h"
 #include "syntax.h"
 #include "editor_search.h"
 #include "source_outline.h"
@@ -663,6 +664,14 @@ typedef struct {
     ps_completion_query completion_query;
     size_t *completion_indices,completion_count,completion_selected,completion_first,completion_capacity;
     ps_completion_locals completion_locals;
+    ps_signature_help signature_help;
+    bool signature_visible;
+    const void *signature_suppressed_owner;
+    size_t signature_suppressed_open;
+    char *signature_suppressed_callee;
+    size_t signature_suppressed_bytes;
+    char *signature_status;
+    struct nk_rect signature_hud_bounds,signature_field_bounds,signature_status_bounds;
     unsigned completion_visible_rows;
     bool completion_reveal,completion_scroll_drag,completion_info_visible,completion_pointer_capture;
     ps_completion_help completion_help;
@@ -790,6 +799,7 @@ static void timeline_toggle_play(app *a) {
 static void refresh_library(app *a);
 static void open_library(app *a);
 static void completion_close(app *a);
+static void signature_clear(app *a);
 static bool api_reference_open(app *a,const ps_completion_symbol *symbol);
 static void api_reference_from_editor(app *a,struct nk_text_edit *edit);
 static float documentation_height(const struct nk_user_font *font,const char *text,size_t n,float width);
@@ -1413,6 +1423,7 @@ static void clear_project(app *a) {
     model_edit_clear(a);
     completion_close(a);
     ps_completion_locals_destroy(&a->completion_locals);
+    signature_clear(a);
     a->source_tab_closed[0]=a->source_tab_closed[1]=false;
     a->file_tab_keyboard_edit=NULL;
     a->caret_edit=NULL;
@@ -3075,7 +3086,11 @@ static void syntax_text(app *a,struct nk_text_edit *edit,struct nk_rect bounds){
     if(edit==a->completion_edit)a->syntax_commands_end=ui->memory.allocated;
     nk_push_scissor(canvas,previous);
 }
+static void signature_update(app *a,struct nk_text_edit *edit,bool manual);
+static bool signature_keyboard_key(app *a,const SDL_KeyboardEvent *key);
+static void signature_view(app *a,int width,int height);
 #include "completion_ui.inc"
+#include "signature_ui.inc"
 static void editor_caret(app *a,struct nk_text_edit *edit,struct nk_rect bounds,bool changed) {
     struct nk_context *ui=a->ui;const struct nk_user_font *font=ui->style.font;
     const char *text=nk_str_get_const(&edit->string);if(!text)text="";
@@ -3146,7 +3161,7 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
     if(search_pointer && nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT))a->search_keyboard=true;
     if(a->show_search && nk_input_is_mouse_pressed(&ui->input,NK_BUTTON_LEFT) && !search_pointer &&
        nk_input_is_mouse_hovering_rect(&ui->input,editor_bounds))a->search_keyboard=false;
-    bool covered=search_pointer || (a->completion_active && (a->completion_scroll_drag ||
+    bool covered=search_pointer || (a->signature_visible && nk_input_is_mouse_hovering_rect(&ui->input,a->signature_hud_bounds)) || (a->completion_active && (a->completion_scroll_drag ||
         nk_input_is_mouse_hovering_rect(&ui->input,a->completion_list_bounds) ||
         nk_input_is_mouse_hovering_rect(&ui->input,a->completion_info_bounds)));
     struct nk_keyboard keyboard=ui->input.keyboard;
@@ -3196,6 +3211,7 @@ static void editor(app *a, struct nk_text_edit *edit, float height) {
         } else document_changed(a, edit);
     }
     completion_auto_update(a,edit,changed && !accepted);
+    signature_update(a,edit,false);
     a->completion_typed=false;
     nk_layout_row_end(ui);
     struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
@@ -3642,6 +3658,7 @@ static bool native_test_keyboard_command(app *a,toolbar_action action,int *stage
 #include "completion_auto_tests.inc"
 #include "completion_info_tests.inc"
 #include "completion_locals_tests.inc"
+#include "signature_tests.inc"
 #include "source_outline_tests.inc"
 #include "file_tabs_tests.inc"
 #include "workbench_tests.inc"
@@ -5553,6 +5570,7 @@ int main(int argc, char **argv) {
         if(workspace_state_test && (!strcmp(argv[3],"completion-c") || !strcmp(argv[3],"completion-phys")))completion_syntax_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"completion-info-",16))completion_info_test_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"completion-locals-",18))completion_locals_draw(a);
+        if(workspace_state_test && !strncmp(argv[3],"signature-hud-",14))signature_test_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"completion-auto-",16))completion_auto_draw(a,test_stage);
         if(workspace_state_test && !strncmp(argv[3],"outline-hover-",14))outline_hover_draw(a);
         if(workspace_state_test && !strncmp(argv[3],"analysis-layout-",16))analysis_workspace_test_draw(a,test_stage);
@@ -5733,6 +5751,7 @@ int main(int argc, char **argv) {
         SDL_WaitThread(a->library_thread, NULL);
     completion_close(a);
     ps_completion_locals_destroy(&a->completion_locals);
+    signature_clear(a);
     ps_library_destroy(a->pending_library);
     ps_library_destroy(a->library);
     ps_report_destroy(a->pending_report);

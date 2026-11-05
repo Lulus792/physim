@@ -7,6 +7,7 @@ static void document_select(app *a, unsigned index) {
         return;
     completion_close(a);
     ps_completion_locals_destroy(&a->completion_locals);
+    signature_clear(a);
     a->document_active = index;
     a->document_pending = 0;
     a->tab = 8;
@@ -222,6 +223,7 @@ static bool documents_save_all(app *a) {
 static void document_remove(app *a) {
     completion_close(a);
     ps_completion_locals_destroy(&a->completion_locals);
+    signature_clear(a);
     unsigned index = a->document_active;
     workspace_document *doc = active_document(a);
     if (!doc)
