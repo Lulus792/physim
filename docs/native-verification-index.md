@@ -11,6 +11,12 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
 
 ## Neuere Editorprüfungen
 
+- [Mac-Intel-Dateireiterquelle13cc4422](verification/macos-workspace-13cc-intel-2026-11-05.json):
+  erster Schritt 3/3 und Matrix 1/1, tatsächlich 68 Projekte gebaut, aufgezeichnet
+  und ausgewertet; Indizes 00..33 exakt zweimal bei 16/22 px. Original-ZIP,
+  Digest und beide Einträge gelesen. ARM vor Teststart abgebrochen, keine
+  ARM-Abnahme; gezielter Retry mit HTTP 403 mangels Actions-Schreibrechten
+  verweigert, kein Neustart erfolgt.
 - [glibc-Endianschnittstellen im C-Parser](verification/glibc-endian-2026-11-05.md):
   tatsächlicher Clang-Kompilierfehler/Ubuntu und GCC-Linkfehler/Debian eingegrenzt;
   `_DEFAULT_SOURCE` im projektseitigen Linux-Adapter vor Systemheadern setzen.

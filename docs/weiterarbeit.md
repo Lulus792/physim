@@ -77,10 +77,13 @@ pollen oder neu starten. Diese alte Quelle belegt nicht die spätere Fokuskorrek
    Dieselben Handles weiterverfolgen, nicht neu starten. Erst tatsächliche
    Ubuntu-/Debian-Ergebnisse belegen die Korrektur unter glibc.
    [Quell-/Run-Nachweis](verification/glibc-endian-commit-2026-11-05.json).
-   Dateireiterquelle13cc4422: Mac-Workspace **42073119561** weiterverfolgen.
-   Intel127406074781 zuletzt in der68-Projekt-Matrix; erster3er-Schritt erfolgreich,
-   ARM127406075215 inzwischen vor dem Teststart cancelled. Keine ARM-Abnahme;
-   keine vollständige neue Mac-Abnahme behaupten. Intelhandle weiter beobachten.
+   Dateireiterquelle13cc4422: Mac-Workspace **42073119561** jetzt terminal.
+   [Intel127406074781 vollständig 4/4 samt 68-Projekt-Matrix](verification/macos-workspace-13cc-intel-2026-11-05.json),
+   Original-ZIP, Digest und beide Einträge gelesen; 00..33 exakt zweimal bei 16/22 px.
+   ARM127406075215 vor dem Teststart cancelled, keine ARM-Abnahme. Gezielter
+   ARM-Retry vom GitHub-Connector mit 403/FORBIDDEN verweigert (fehlende Actions-
+   Schreibrechte), CLI nicht installiert; kein Neustart erfolgt. Nicht erneut
+   denselben 403-Aufruf versuchen, geschlossenen Intel-Nachweis nicht weiter pollen.
    Weitere bekannte CI-Handles derselben Quelle:42073119608 (CI),42073119770
    (Linux-UI-Sanitizer),42073119600 (Linux-Paket). Paketjob127406074505 terminal/
    failure und Clang-UI127406075360 terminal/failure durch oben dokumentierte

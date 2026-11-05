@@ -1,0 +1,49 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "13cc442226bf8405b5bdf5950818b551bd2fe5ab",
+  "workflow_run": 42073119561,
+  "attempt": 1,
+  "intel": {
+    "job": 127406074781,
+    "conclusion": "success",
+    "groups": "3/3+1/1",
+    "artifact": 13439281504,
+    "zip": "build/validation/macos-workspace-13cc-2026-11-05/artifact-13439281504.zip",
+    "zip_sha256": "f9896a1b17f22172e16a0a8486aef76c506c9c350058701a800e3ebdbf2ff65f",
+    "bytes": 21256,
+    "all2entries_read": true,
+    "entries": {
+      "Release/test-results/run-_cnldwep/results.json": "631e9b69a9c9cba55029bbc8f92682338acb99a398c4f968f7474af664d818a8",
+      "Release/test-results/run-juh8slgs/results.json": "63a19ceac79dda6a4018f399c46bb62f7ac0eaf577037b430231a480e6c9d471"
+    },
+    "original_manifest": "build/validation/macos-workspace-13cc-2026-11-05/intel-original.json",
+    "manifest_sha256": "62e868991f169602c6bbb13f11ccdb1c99a5018fda84e3999f0a299b2d524590",
+    "matrix": {
+      "actual_projects": 68,
+      "indices": "00..33 exactly twice",
+      "ui_sizes": [
+        16,
+        22
+      ],
+      "completed_matrix_processes": 2,
+      "all_built_recorded_analyzed": true
+    },
+    "automatic_completion_marker_verified": true
+  },
+  "arm": {
+    "job": 127406075215,
+    "conclusion": "cancelled",
+    "steps_executed": 0,
+    "acceptance": "missing; no ARM test result",
+    "targeted_retry": {
+      "result": "HTTP 403 / FORBIDDEN: Resource not accessible by integration",
+      "new_attempt_started": false,
+      "github_cli_available": false,
+      "original_response": "build/validation/macos-workspace-13cc-2026-11-05/arm-retry.json",
+      "original_response_sha256": "49c34f2a63b222c5d54593d632f1963dcdd8eab8bd87ae3b5c753c339ee719ea",
+      "next_action": "Keep ARM acceptance open; do not repeat the denied API request."
+    }
+  },
+  "scope": "Actual hosted Intel corrected file-tabs/settings/project-errors and full68project matrix at16/22px. No full current Mac dual-architecture acceptance, physical keyboard or screenreader acceptance.",
+  "private_user_mac": "OFF; no connection/probe/upload"
+}
