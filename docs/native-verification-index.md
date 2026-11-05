@@ -8,6 +8,12 @@ wegen Kontextwechsel erneut anfangen; die ursprünglichen Nachweise unverändert
 
 ## Neuere Editorprüfungen
 
+- [C-Backend-Performance-Baseline](verification/completion-perf-2026-11-05.md):
+  Anwendungscode `694bb586` unverändert, Windows Release sechs Quellen und getrennte
+  Syntax-/Binding-/Modell-/Cache-Messungen. Große frische/Cursor-Fälle verfehlen
+  die technische 16,7-ms-Prüfmarke; **keine erfolgreiche Performance-Abnahme**.
+  Neue Mess-CLI Windows/Linux je 47 Fälle geprüft, Linux ASan/UBSan/Leakprüfung.
+  Keine neuen GUI-/Mac-Prüfungen, keine Bilder oder Beschleunigung behauptet.
 - [Native C-Locals](verification/completion-c-2026-11-05.md), `694bb586`: Windows/Linux je
   Unit 8/8 + GUI 6/6, C/Physim über drei Editorziele, 121/121 C-Modellfehler erhalten
   den Snapshot; Typ-/Quellkarte, Unicode, lokale API-Abschirmung, Ersetzen/Undo und

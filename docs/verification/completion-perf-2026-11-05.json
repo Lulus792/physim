@@ -1,0 +1,1342 @@
+{
+  "date": "2026-11-05",
+  "production_code_commit": "694bb5862fa507d4d0a4e6c7974e6910c9190b3e",
+  "starting_head": "a5abb359619031eef5b879911083a5e4131d255f",
+  "scope": "Backend-only baseline/localization. Production/UI unchanged, no optimization/speedup/whole-UI acceptance. Private Mac off, no access.",
+  "target": "Declared engineering review target before baseline: cache p95<=1ms; fresh/cursor p95<=16.7ms. Sampled large files FAIL fresh/cursor target. Not a frame-rate contract.",
+  "platform": {
+    "name": "Windows-11-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 85 Stepping 4, GenuineIntel",
+    "logical_cpus": 8,
+    "configuration": "Windows Release MSVC /O2; original frozen backend objects for baseline/layers; same current production sources freshly compiled for repro. QPC wall time."
+  },
+  "samples": {
+    "baseline": 378,
+    "layers": 1260,
+    "fresh_repro": 1260,
+    "instrumented_syntax": 126,
+    "final_cli": 30
+  },
+  "method": {
+    "warmup": "Warm OS/process, first fresh call retained. No machine cold-start claim.",
+    "percentiles": "Nearest rank p95, median p50; 21 samples per measurement; CLI smoke 3.",
+    "memory": "Explicit allocator requested-live bytes, outer tracker header excluded, inner parser tracking included. 64MiB outer guard. Not RSS.",
+    "cursor": "Original baseline includes one cache hit; enhanced layers/repro use 21/21 forced cursor reparses. Final tool uses adjacent UTF-8 boundaries and supports EOF.",
+    "phases": "Separate process invocations and observed wall-time variation do not establish allocator-overhead ratios or subtractions. Temporary copy inside/ adds only four stage clocks; same-call stages separately recorded.",
+    "storage": "All retained outputs on D. Initial Windows manual baseline/layers/repro builds inherited OS TEMP/TMP on C; temporary-file creation there was not audited. Final standalone tool explicitly places compiler scratch under its D work directory; confirmed final CLI report. No F access."
+  },
+  "cases": [
+    {
+      "name": "pendulum",
+      "source_bytes": 13767,
+      "source_sha256": "2e0cb1e1f7311ba73fb6d0d748d5be56728739da3fa0ebe63b7376698ffb2b1e",
+      "cursor": 11613,
+      "default_allocator": {
+        "syntax": {
+          "p50_ms": 3.9623999999999997,
+          "p95_ms": 5.2269,
+          "max_ms": 6.4117999999999995,
+          "counts": [
+            4218
+          ],
+          "syntax_statuses": [
+            1
+          ]
+        },
+        "bindings": {
+          "p50_ms": 5.0927999999999995,
+          "p95_ms": 5.8306000000000004,
+          "max_ms": 5.9288,
+          "counts": [
+            18
+          ],
+          "syntax_statuses": [
+            1
+          ]
+        },
+        "cold": {
+          "p50_ms": 5.6347000000000005,
+          "p95_ms": 5.963900000000001,
+          "max_ms": 6.009399999999999,
+          "counts": [
+            18
+          ],
+          "syntax_statuses": [
+            1
+          ]
+        },
+        "cursor": {
+          "p50_ms": 5.5821000000000005,
+          "p95_ms": 6.105,
+          "max_ms": 6.1163,
+          "counts": [
+            18
+          ],
+          "syntax_statuses": [
+            1
+          ]
+        },
+        "cached": {
+          "p50_ms": 0.0011,
+          "p95_ms": 0.0017000000000000001,
+          "max_ms": 0.0062,
+          "counts": [
+            18
+          ],
+          "syntax_statuses": [
+            1
+          ]
+        }
+      },
+      "tracked_allocator": {
+        "cold": {
+          "peak_requested_bytes": 5813032,
+          "live_requested_bytes": [
+            19037
+          ],
+          "allocations": [
+            4269
+          ],
+          "denied": 0
+        },
+        "cursor": {
+          "peak_requested_bytes": 5832069,
+          "live_requested_bytes": [
+            19037
+          ],
+          "allocations": [
+            4269
+          ],
+          "denied": 0
+        },
+        "cached": {
+          "peak_requested_bytes": 19037,
+          "live_requested_bytes": [
+            19037
+          ],
+          "allocations": [
+            0
+          ],
+          "denied": 0
+        }
+      },
+      "instrumented_syntax_stage_medians_ms": {
+        "setup": 0.0022,
+        "parse": 2.8495,
+        "flat": 0.7615999999999999,
+        "destroy": 0.30219999999999997
+      },
+      "baseline_tracked_model": {
+        "cold": {
+          "p50_ms": 5.8401,
+          "p95_ms": 6.629099999999999,
+          "max_ms": 8.0145,
+          "peak_requested_bytes": 5813032,
+          "counts": [
+            18
+          ],
+          "statuses": [
+            [
+              0,
+              1
+            ]
+          ],
+          "allocations": [
+            4269
+          ]
+        },
+        "cursor": {
+          "p50_ms": 5.8125,
+          "p95_ms": 6.1019000000000005,
+          "max_ms": 6.4876,
+          "peak_requested_bytes": 5832069,
+          "counts": [
+            18
+          ],
+          "statuses": [
+            [
+              0,
+              1
+            ]
+          ],
+          "allocations": [
+            0,
+            4269
+          ]
+        },
+        "cached": {
+          "p50_ms": 0.0012,
+          "p95_ms": 0.0022,
+          "max_ms": 0.0055,
+          "peak_requested_bytes": 19037,
+          "counts": [
+            18
+          ],
+          "statuses": [
+            [
+              0,
+              1
+            ]
+          ],
+          "allocations": [
+            0
+          ]
+        }
+      },
+      "layers_default_model": {
+        "cold": {
+          "p50_ms": 5.6778,
+          "p95_ms": 6.1976,
+          "max_ms": 6.2119,
+          "counts": [
+            18
+          ],
+          "syntax_statuses": [
+            1
+          ],
+          "peak_requested_bytes": null,
+          "allocations": null
+        },
+        "cursor": {
+          "p50_ms": 5.5912,
+          "p95_ms": 5.933,
+          "max_ms": 6.1688,
+          "counts": [
+            18
+          ],
+          "syntax_statuses": [
+            1
+          ],
+          "peak_requested_bytes": null,
+          "allocations": null
+        },
+        "cached": {
+          "p50_ms": 0.0011,
+          "p95_ms": 0.0017000000000000001,
+          "max_ms": 0.006,
+          "counts": [
+            18
+          ],
+          "syntax_statuses": [
+            1
+          ],
+          "peak_requested_bytes": null,
+          "allocations": null
+        }
+      }
+    },
+    {
+      "name": "locals-64",
+      "source_bytes": 1692,
+      "source_sha256": "114c108b0365a02ea24fdf51e9594e6fba5f08f8c17efada115580e59d6c15a9",
+      "cursor": 1685,
+      "default_allocator": {
+        "syntax": {
+          "p50_ms": 0.5275,
+          "p95_ms": 0.6447999999999999,
+          "max_ms": 0.8219,
+          "counts": [
+            661
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        },
+        "bindings": {
+          "p50_ms": 0.7025,
+          "p95_ms": 0.7793,
+          "max_ms": 1.038,
+          "counts": [
+            65
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        },
+        "cold": {
+          "p50_ms": 0.8465,
+          "p95_ms": 1.209,
+          "max_ms": 1.2621,
+          "counts": [
+            65
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        },
+        "cursor": {
+          "p50_ms": 0.8058,
+          "p95_ms": 0.8669,
+          "max_ms": 0.8862,
+          "counts": [
+            65
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        },
+        "cached": {
+          "p50_ms": 0.00019999999999999998,
+          "p95_ms": 0.0003,
+          "max_ms": 0.0022,
+          "counts": [
+            65
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        }
+      },
+      "tracked_allocator": {
+        "cold": {
+          "peak_requested_bytes": 742605,
+          "live_requested_bytes": [
+            19585
+          ],
+          "allocations": [
+            705
+          ],
+          "denied": 0
+        },
+        "cursor": {
+          "peak_requested_bytes": 762190,
+          "live_requested_bytes": [
+            19585
+          ],
+          "allocations": [
+            705
+          ],
+          "denied": 0
+        },
+        "cached": {
+          "peak_requested_bytes": 19585,
+          "live_requested_bytes": [
+            19585
+          ],
+          "allocations": [
+            0
+          ],
+          "denied": 0
+        }
+      },
+      "instrumented_syntax_stage_medians_ms": {
+        "setup": 0.0013,
+        "parse": 0.3887,
+        "flat": 0.1189,
+        "destroy": 0.0387
+      },
+      "baseline_tracked_model": {
+        "cold": {
+          "p50_ms": 0.9254,
+          "p95_ms": 1.1833,
+          "max_ms": 1.6852,
+          "peak_requested_bytes": 742605,
+          "counts": [
+            65
+          ],
+          "statuses": [
+            [
+              0,
+              0
+            ]
+          ],
+          "allocations": [
+            705
+          ]
+        },
+        "cursor": {
+          "p50_ms": 0.7849,
+          "p95_ms": 0.9049,
+          "max_ms": 0.9353,
+          "peak_requested_bytes": 762190,
+          "counts": [
+            65
+          ],
+          "statuses": [
+            [
+              0,
+              0
+            ]
+          ],
+          "allocations": [
+            0,
+            705
+          ]
+        },
+        "cached": {
+          "p50_ms": 0.00019999999999999998,
+          "p95_ms": 0.00019999999999999998,
+          "max_ms": 0.0033,
+          "peak_requested_bytes": 19585,
+          "counts": [
+            65
+          ],
+          "statuses": [
+            [
+              0,
+              0
+            ]
+          ],
+          "allocations": [
+            0
+          ]
+        }
+      },
+      "layers_default_model": {
+        "cold": {
+          "p50_ms": 0.8344999999999999,
+          "p95_ms": 1.1294,
+          "max_ms": 1.161,
+          "counts": [
+            65
+          ],
+          "syntax_statuses": [
+            0
+          ],
+          "peak_requested_bytes": null,
+          "allocations": null
+        },
+        "cursor": {
+          "p50_ms": 0.7696,
+          "p95_ms": 0.8513999999999999,
+          "max_ms": 0.8829,
+          "counts": [
+            65
+          ],
+          "syntax_statuses": [
+            0
+          ],
+          "peak_requested_bytes": null,
+          "allocations": null
+        },
+        "cached": {
+          "p50_ms": 0.00019999999999999998,
+          "p95_ms": 0.0003,
+          "max_ms": 0.0021,
+          "counts": [
+            65
+          ],
+          "syntax_statuses": [
+            0
+          ],
+          "peak_requested_bytes": null,
+          "allocations": null
+        }
+      }
+    },
+    {
+      "name": "locals-512",
+      "source_bytes": 13752,
+      "source_sha256": "1aad658753d7185efda4d2abdba0107a9df81f85588efe49a1af7b489688de52",
+      "cursor": 13745,
+      "default_allocator": {
+        "syntax": {
+          "p50_ms": 4.3773,
+          "p95_ms": 5.2225,
+          "max_ms": 5.3870000000000005,
+          "counts": [
+            5141
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        },
+        "bindings": {
+          "p50_ms": 5.387099999999999,
+          "p95_ms": 5.7804,
+          "max_ms": 6.1318,
+          "counts": [
+            513
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        },
+        "cold": {
+          "p50_ms": 6.397500000000001,
+          "p95_ms": 7.6841,
+          "max_ms": 8.437800000000001,
+          "counts": [
+            513
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        },
+        "cursor": {
+          "p50_ms": 6.3413,
+          "p95_ms": 8.0816,
+          "max_ms": 9.7225,
+          "counts": [
+            513
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        },
+        "cached": {
+          "p50_ms": 0.0021,
+          "p95_ms": 0.0031,
+          "max_ms": 0.0087,
+          "counts": [
+            513
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        }
+      },
+      "tracked_allocator": {
+        "cold": {
+          "peak_requested_bytes": 5953105,
+          "live_requested_bytes": [
+            155293
+          ],
+          "allocations": [
+            5189
+          ],
+          "denied": 0
+        },
+        "cursor": {
+          "peak_requested_bytes": 6108398,
+          "live_requested_bytes": [
+            155293
+          ],
+          "allocations": [
+            5189
+          ],
+          "denied": 0
+        },
+        "cached": {
+          "peak_requested_bytes": 155293,
+          "live_requested_bytes": [
+            155293
+          ],
+          "allocations": [
+            0
+          ],
+          "denied": 0
+        }
+      },
+      "instrumented_syntax_stage_medians_ms": {
+        "setup": 0.0022,
+        "parse": 3.1252,
+        "flat": 0.9309000000000001,
+        "destroy": 0.3348
+      },
+      "baseline_tracked_model": {
+        "cold": {
+          "p50_ms": 6.4384999999999994,
+          "p95_ms": 7.5526,
+          "max_ms": 7.5643,
+          "peak_requested_bytes": 5953105,
+          "counts": [
+            513
+          ],
+          "statuses": [
+            [
+              0,
+              0
+            ]
+          ],
+          "allocations": [
+            5189
+          ]
+        },
+        "cursor": {
+          "p50_ms": 6.4665,
+          "p95_ms": 7.906399999999999,
+          "max_ms": 8.7024,
+          "peak_requested_bytes": 6108398,
+          "counts": [
+            513
+          ],
+          "statuses": [
+            [
+              0,
+              0
+            ]
+          ],
+          "allocations": [
+            0,
+            5189
+          ]
+        },
+        "cached": {
+          "p50_ms": 0.0011,
+          "p95_ms": 0.0015999999999999999,
+          "max_ms": 0.0048,
+          "peak_requested_bytes": 155293,
+          "counts": [
+            513
+          ],
+          "statuses": [
+            [
+              0,
+              0
+            ]
+          ],
+          "allocations": [
+            0
+          ]
+        }
+      },
+      "layers_default_model": {
+        "cold": {
+          "p50_ms": 6.1654,
+          "p95_ms": 6.652,
+          "max_ms": 6.7949,
+          "counts": [
+            513
+          ],
+          "syntax_statuses": [
+            0
+          ],
+          "peak_requested_bytes": null,
+          "allocations": null
+        },
+        "cursor": {
+          "p50_ms": 6.1221000000000005,
+          "p95_ms": 6.337,
+          "max_ms": 6.402900000000001,
+          "counts": [
+            513
+          ],
+          "syntax_statuses": [
+            0
+          ],
+          "peak_requested_bytes": null,
+          "allocations": null
+        },
+        "cached": {
+          "p50_ms": 0.001,
+          "p95_ms": 0.0011,
+          "max_ms": 0.0067,
+          "counts": [
+            513
+          ],
+          "syntax_statuses": [
+            0
+          ],
+          "peak_requested_bytes": null,
+          "allocations": null
+        }
+      }
+    },
+    {
+      "name": "locals-2048",
+      "source_bytes": 56272,
+      "source_sha256": "c47dceaef26514592085895c5fb0459eab9f4e8820a40ac52f33579998c4b9e8",
+      "cursor": 56265,
+      "default_allocator": {
+        "syntax": {
+          "p50_ms": 18.2503,
+          "p95_ms": 20.4462,
+          "max_ms": 20.6692,
+          "counts": [
+            20501
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        },
+        "bindings": {
+          "p50_ms": 21.6553,
+          "p95_ms": 22.7462,
+          "max_ms": 26.0536,
+          "counts": [
+            2049
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        },
+        "cold": {
+          "p50_ms": 35.1087,
+          "p95_ms": 45.3574,
+          "max_ms": 63.2158,
+          "counts": [
+            2049
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        },
+        "cursor": {
+          "p50_ms": 23.7241,
+          "p95_ms": 33.4079,
+          "max_ms": 36.0845,
+          "counts": [
+            2049
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        },
+        "cached": {
+          "p50_ms": 0.0067,
+          "p95_ms": 0.0118,
+          "max_ms": 0.0263,
+          "counts": [
+            2049
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        }
+      },
+      "tracked_allocator": {
+        "cold": {
+          "peak_requested_bytes": 15245033,
+          "live_requested_bytes": [
+            621749
+          ],
+          "allocations": [
+            20552
+          ],
+          "denied": 0
+        },
+        "cursor": {
+          "peak_requested_bytes": 15866782,
+          "live_requested_bytes": [
+            621749
+          ],
+          "allocations": [
+            20552
+          ],
+          "denied": 0
+        },
+        "cached": {
+          "peak_requested_bytes": 621749,
+          "live_requested_bytes": [
+            621749
+          ],
+          "allocations": [
+            0
+          ],
+          "denied": 0
+        }
+      },
+      "instrumented_syntax_stage_medians_ms": {
+        "setup": 0.0049,
+        "parse": 12.293800000000001,
+        "flat": 3.8089,
+        "destroy": 1.3247
+      },
+      "baseline_tracked_model": {
+        "cold": {
+          "p50_ms": 23.7482,
+          "p95_ms": 24.939200000000003,
+          "max_ms": 25.6918,
+          "peak_requested_bytes": 15245033,
+          "counts": [
+            2049
+          ],
+          "statuses": [
+            [
+              0,
+              0
+            ]
+          ],
+          "allocations": [
+            20552
+          ]
+        },
+        "cursor": {
+          "p50_ms": 23.1315,
+          "p95_ms": 23.942,
+          "max_ms": 24.148300000000003,
+          "peak_requested_bytes": 15866782,
+          "counts": [
+            2049
+          ],
+          "statuses": [
+            [
+              0,
+              0
+            ]
+          ],
+          "allocations": [
+            0,
+            20552
+          ]
+        },
+        "cached": {
+          "p50_ms": 0.0043,
+          "p95_ms": 0.0044,
+          "max_ms": 0.0157,
+          "peak_requested_bytes": 621749,
+          "counts": [
+            2049
+          ],
+          "statuses": [
+            [
+              0,
+              0
+            ]
+          ],
+          "allocations": [
+            0
+          ]
+        }
+      },
+      "layers_default_model": {
+        "cold": {
+          "p50_ms": 23.0473,
+          "p95_ms": 23.8764,
+          "max_ms": 24.5575,
+          "counts": [
+            2049
+          ],
+          "syntax_statuses": [
+            0
+          ],
+          "peak_requested_bytes": null,
+          "allocations": null
+        },
+        "cursor": {
+          "p50_ms": 22.7433,
+          "p95_ms": 24.305500000000002,
+          "max_ms": 24.7567,
+          "counts": [
+            2049
+          ],
+          "syntax_statuses": [
+            0
+          ],
+          "peak_requested_bytes": null,
+          "allocations": null
+        },
+        "cached": {
+          "p50_ms": 0.0043,
+          "p95_ms": 0.0044,
+          "max_ms": 0.011399999999999999,
+          "counts": [
+            2049
+          ],
+          "syntax_statuses": [
+            0
+          ],
+          "peak_requested_bytes": null,
+          "allocations": null
+        }
+      }
+    },
+    {
+      "name": "locals-4096",
+      "source_bytes": 113616,
+      "source_sha256": "c6a7be323a7ab5b5cd00083d9201a3abca05afbd4ae89253daff9d90b54c1648",
+      "cursor": 113609,
+      "default_allocator": {
+        "syntax": {
+          "p50_ms": 36.030899999999995,
+          "p95_ms": 38.803999999999995,
+          "max_ms": 41.7549,
+          "counts": [
+            40981
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        },
+        "bindings": {
+          "p50_ms": 41.2999,
+          "p95_ms": 44.5662,
+          "max_ms": 44.676500000000004,
+          "counts": [
+            4097
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        },
+        "cold": {
+          "p50_ms": 44.0517,
+          "p95_ms": 47.0679,
+          "max_ms": 47.8866,
+          "counts": [
+            4097
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        },
+        "cursor": {
+          "p50_ms": 59.9782,
+          "p95_ms": 95.6931,
+          "max_ms": 107.1263,
+          "counts": [
+            4097
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        },
+        "cached": {
+          "p50_ms": 0.0168,
+          "p95_ms": 0.0252,
+          "max_ms": 0.0444,
+          "counts": [
+            4097
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        }
+      },
+      "tracked_allocator": {
+        "cold": {
+          "peak_requested_bytes": 17899241,
+          "live_requested_bytes": [
+            1244341
+          ],
+          "allocations": [
+            41033
+          ],
+          "denied": 0
+        },
+        "cursor": {
+          "peak_requested_bytes": 19143582,
+          "live_requested_bytes": [
+            1244341
+          ],
+          "allocations": [
+            41033
+          ],
+          "denied": 0
+        },
+        "cached": {
+          "peak_requested_bytes": 1244341,
+          "live_requested_bytes": [
+            1244341
+          ],
+          "allocations": [
+            0
+          ],
+          "denied": 0
+        }
+      },
+      "instrumented_syntax_stage_medians_ms": {
+        "setup": 0.0115,
+        "parse": 25.1439,
+        "flat": 8.2641,
+        "destroy": 3.3833
+      },
+      "baseline_tracked_model": {
+        "cold": {
+          "p50_ms": 45.612100000000005,
+          "p95_ms": 46.4011,
+          "max_ms": 48.0968,
+          "peak_requested_bytes": 17899241,
+          "counts": [
+            4097
+          ],
+          "statuses": [
+            [
+              0,
+              0
+            ]
+          ],
+          "allocations": [
+            41033
+          ]
+        },
+        "cursor": {
+          "p50_ms": 44.943999999999996,
+          "p95_ms": 47.3511,
+          "max_ms": 48.5661,
+          "peak_requested_bytes": 19143582,
+          "counts": [
+            4097
+          ],
+          "statuses": [
+            [
+              0,
+              0
+            ]
+          ],
+          "allocations": [
+            0,
+            41033
+          ]
+        },
+        "cached": {
+          "p50_ms": 0.0087,
+          "p95_ms": 0.0088,
+          "max_ms": 0.041,
+          "peak_requested_bytes": 1244341,
+          "counts": [
+            4097
+          ],
+          "statuses": [
+            [
+              0,
+              0
+            ]
+          ],
+          "allocations": [
+            0
+          ]
+        }
+      },
+      "layers_default_model": {
+        "cold": {
+          "p50_ms": 45.802099999999996,
+          "p95_ms": 48.6966,
+          "max_ms": 50.5429,
+          "counts": [
+            4097
+          ],
+          "syntax_statuses": [
+            0
+          ],
+          "peak_requested_bytes": null,
+          "allocations": null
+        },
+        "cursor": {
+          "p50_ms": 43.556,
+          "p95_ms": 48.5632,
+          "max_ms": 51.4224,
+          "counts": [
+            4097
+          ],
+          "syntax_statuses": [
+            0
+          ],
+          "peak_requested_bytes": null,
+          "allocations": null
+        },
+        "cached": {
+          "p50_ms": 0.0087,
+          "p95_ms": 0.0214,
+          "max_ms": 0.0361,
+          "counts": [
+            4097
+          ],
+          "syntax_statuses": [
+            0
+          ],
+          "peak_requested_bytes": null,
+          "allocations": null
+        }
+      }
+    },
+    {
+      "name": "locals-6144",
+      "source_bytes": 170960,
+      "source_sha256": "3266a17b41f19c0eae13bbd763c0eaa49b7cb5aaa8b93b1c2837690bfae3563f",
+      "cursor": 170953,
+      "default_allocator": {
+        "syntax": {
+          "p50_ms": 96.2827,
+          "p95_ms": 100.6673,
+          "max_ms": 107.911,
+          "counts": [
+            61461
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        },
+        "bindings": {
+          "p50_ms": 65.82469999999999,
+          "p95_ms": 86.3432,
+          "max_ms": 101.7532,
+          "counts": [
+            6145
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        },
+        "cold": {
+          "p50_ms": 69.0392,
+          "p95_ms": 75.96990000000001,
+          "max_ms": 80.3591,
+          "counts": [
+            6145
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        },
+        "cursor": {
+          "p50_ms": 93.14189999999999,
+          "p95_ms": 120.8433,
+          "max_ms": 124.59870000000001,
+          "counts": [
+            6145
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        },
+        "cached": {
+          "p50_ms": 0.0131,
+          "p95_ms": 0.0208,
+          "max_ms": 0.047,
+          "counts": [
+            6145
+          ],
+          "syntax_statuses": [
+            0
+          ]
+        }
+      },
+      "tracked_allocator": {
+        "cold": {
+          "peak_requested_bytes": 20528873,
+          "live_requested_bytes": [
+            1801397
+          ],
+          "allocations": [
+            61513
+          ],
+          "denied": 0
+        },
+        "cursor": {
+          "peak_requested_bytes": 22330270,
+          "live_requested_bytes": [
+            1801397
+          ],
+          "allocations": [
+            61513
+          ],
+          "denied": 0
+        },
+        "cached": {
+          "peak_requested_bytes": 1801397,
+          "live_requested_bytes": [
+            1801397
+          ],
+          "allocations": [
+            0
+          ],
+          "denied": 0
+        }
+      },
+      "instrumented_syntax_stage_medians_ms": {
+        "setup": 0.011399999999999999,
+        "parse": 37.6693,
+        "flat": 12.5029,
+        "destroy": 5.0644
+      },
+      "baseline_tracked_model": {
+        "cold": {
+          "p50_ms": 66.4792,
+          "p95_ms": 70.0539,
+          "max_ms": 70.5531,
+          "peak_requested_bytes": 20528873,
+          "counts": [
+            6145
+          ],
+          "statuses": [
+            [
+              0,
+              0
+            ]
+          ],
+          "allocations": [
+            61513
+          ]
+        },
+        "cursor": {
+          "p50_ms": 68.24170000000001,
+          "p95_ms": 71.279,
+          "max_ms": 74.9655,
+          "peak_requested_bytes": 22330270,
+          "counts": [
+            6145
+          ],
+          "statuses": [
+            [
+              0,
+              0
+            ]
+          ],
+          "allocations": [
+            0,
+            61513
+          ]
+        },
+        "cached": {
+          "p50_ms": 0.0131,
+          "p95_ms": 0.0132,
+          "max_ms": 0.0482,
+          "peak_requested_bytes": 1801397,
+          "counts": [
+            6145
+          ],
+          "statuses": [
+            [
+              0,
+              0
+            ]
+          ],
+          "allocations": [
+            0
+          ]
+        }
+      },
+      "layers_default_model": {
+        "cold": {
+          "p50_ms": 72.90960000000001,
+          "p95_ms": 85.0873,
+          "max_ms": 92.30030000000001,
+          "counts": [
+            6145
+          ],
+          "syntax_statuses": [
+            0
+          ],
+          "peak_requested_bytes": null,
+          "allocations": null
+        },
+        "cursor": {
+          "p50_ms": 69.8669,
+          "p95_ms": 76.4721,
+          "max_ms": 76.4863,
+          "counts": [
+            6145
+          ],
+          "syntax_statuses": [
+            0
+          ],
+          "peak_requested_bytes": null,
+          "allocations": null
+        },
+        "cached": {
+          "p50_ms": 0.0131,
+          "p95_ms": 0.0133,
+          "max_ms": 0.0351,
+          "counts": [
+            6145
+          ],
+          "syntax_statuses": [
+            0
+          ],
+          "peak_requested_bytes": null,
+          "allocations": null
+        }
+      }
+    }
+  ],
+  "production_sources_git_match": {
+    "app/completion_locals.c": {
+      "working_sha256": "fc2fd5be5a601f2bf8cdfb4402bed4005f654a079bce00def2396ec1387c95a1",
+      "git_blob_sha256": "fc2fd5be5a601f2bf8cdfb4402bed4005f654a079bce00def2396ec1387c95a1",
+      "comparison": "CRLF/LF normalized only"
+    },
+    "app/completion.c": {
+      "working_sha256": "1c3455f72e9f966ad76bc7733c2d8d6613ff7e54aee624292f6a9ce69d167977",
+      "git_blob_sha256": "2184ee4b113c732bf69b4524fc39147e50e2b2328fa03b930a17dc857b919404",
+      "comparison": "CRLF/LF normalized only"
+    },
+    "app/c_bindings.c": {
+      "working_sha256": "25f7067c07e4edd2c57ed128a21ad90c79d22111375e0480fc8813783e6fa2f4",
+      "git_blob_sha256": "25f7067c07e4edd2c57ed128a21ad90c79d22111375e0480fc8813783e6fa2f4",
+      "comparison": "CRLF/LF normalized only"
+    },
+    "app/c_syntax.c": {
+      "working_sha256": "215fcd47ba050a689c9f8633c7e3a0839b5c98afb2c5362855bb13da51249b63",
+      "git_blob_sha256": "215fcd47ba050a689c9f8633c7e3a0839b5c98afb2c5362855bb13da51249b63",
+      "comparison": "CRLF/LF normalized only"
+    },
+    "app/c_grammar.c": {
+      "working_sha256": "ac9447c2fd6edd4997b0bf28c037c6a805cee3a788695f5e0f18cbae53e85513",
+      "git_blob_sha256": "ac9447c2fd6edd4997b0bf28c037c6a805cee3a788695f5e0f18cbae53e85513",
+      "comparison": "CRLF/LF normalized only"
+    },
+    "src/memory.c": {
+      "working_sha256": "28051ac112e004c566dd05d67ee5c44753d425726655f05573c3dca4bb80b811",
+      "git_blob_sha256": "58d1066ef2d857962f4bd53c79b329fda0615cf1f7d3990c545386027b6384e3",
+      "comparison": "CRLF/LF normalized only"
+    },
+    "src/language/lexer.c": {
+      "working_sha256": "f98a62ae0bfed722a6d7a513b860b315b48a9b493c82ceae5e147ba8fb61ccff",
+      "git_blob_sha256": "f98a62ae0bfed722a6d7a513b860b315b48a9b493c82ceae5e147ba8fb61ccff",
+      "comparison": "CRLF/LF normalized only"
+    },
+    "src/language/parser.c": {
+      "working_sha256": "0486cfba0123ade1fb7704d52cd8c7848b970d351441383aa8fddf429a9fff4b",
+      "git_blob_sha256": "0486cfba0123ade1fb7704d52cd8c7848b970d351441383aa8fddf429a9fff4b",
+      "comparison": "CRLF/LF normalized only"
+    }
+  },
+  "final_tools": {
+    "tools/profile_completion.c": "9385e6e2672d5e2854a79525eece9f55407b682480a963e977f56f6a15962c27",
+    "tools/profile_completion.py": "d47776a6d1ae3be4c01aea679aadd383916c9e74ff619611b2062babc69425e2"
+  },
+  "tool_checks": {
+    "cases": 94,
+    "per_platform": 47,
+    "passed": true,
+    "windows": "Release, profiler C strictly compiled /W4 /WX in inside phase",
+    "linux": "GCC -O1 -Wall -Wextra -Werror, ASan/UBSan, detect_leaks=1; all expected exits and no sanitizer diagnostics",
+    "final_runner": "Fresh standalone Release build + Unicode/EOF workload, 10 mode/allocator combinations x3 samples; D compiler scratch explicitly recorded. Oversized manual --cursor47 correctly rejected before output creation; then corrected to exact EOF46."
+  },
+  "raw_reports": {
+    "build/validation/completion-perf-2026-11-05/baseline.json": {
+      "bytes": 166447,
+      "sha256": "16b0c950f8c211331917220c1540ac603ec93d4ec5980893818212359e491424"
+    },
+    "build/validation/completion-perf-2026-11-05/layers.json": {
+      "bytes": 596278,
+      "sha256": "bcdc5eb692ebc87b4faf3a4a8bf3643404594ece676a2d2f58f0ac4e060c06da"
+    },
+    "build/validation/completion-perf-2026-11-05/repro-final/report.json": {
+      "bytes": 982415,
+      "sha256": "cb83cf38d88109eec1be567f19608f683f55c6243ddc0f975c6a792ffdf5edaf"
+    },
+    "build/validation/completion-perf-2026-11-05/inside.json": {
+      "bytes": 90134,
+      "sha256": "6f48c1b79961a97ded776f99acf08b0f8b8b732cc8c3125716f37796188f4952"
+    },
+    "build/validation/completion-perf-2026-11-05/repro-cli/report.json": {
+      "bytes": 76926,
+      "sha256": "ebac7b025a4cf59a9866bcf021788c1bd016f1916809699ed3c74200509b1d83"
+    },
+    "build/validation/completion-perf-2026-11-05/tool-check.json": {
+      "bytes": 99645,
+      "sha256": "50ed9eb4382be0d438597ebd0660d343a4d126b28af60d32c2b8ff3eaacf9344"
+    },
+    "build/validation/completion-perf-2026-11-05/baseline.py": {
+      "bytes": 4023,
+      "sha256": "fbddd0054f59e5a807ac783773860f2934e17cefd30f2e947228aba0871ffc59"
+    },
+    "build/validation/completion-perf-2026-11-05/layers.py": {
+      "bytes": 4872,
+      "sha256": "b62407bfc9badee5aec38d3a1abe86ad4460ee5139c1ef0ba72d4f6cf5aa79d8"
+    },
+    "build/validation/completion-perf-2026-11-05/inside.py": {
+      "bytes": 4416,
+      "sha256": "bd1d0bde7f46bfaf4a0a5d7ff165a9e21eba39ed81aaa60d372b31f852329898"
+    },
+    "build/validation/completion-perf-2026-11-05/check_tool.py": {
+      "bytes": 3644,
+      "sha256": "da660a2b4e4a0190cbb7443cca0bb260e576ce30804578aac33d56bd87b8e43b"
+    },
+    "build/validation/completion-perf-2026-11-05/report.py": {
+      "bytes": 6944,
+      "sha256": "725f886753657dbf3c986ee0eccc3f42c01ad1c9726f11ded93df82d92ea90fd"
+    },
+    "build/validation/completion-perf-2026-11-05/baseline/profile_completion.c": {
+      "bytes": 3567,
+      "sha256": "5d4a5cf0bc548787d31d1b93adb327b7b72b43b65a32867f81173bb0dfaaf359"
+    },
+    "build/validation/completion-perf-2026-11-05/layers/profile_completion.c": {
+      "bytes": 5189,
+      "sha256": "4eb6967cc08c11bb5547a0bc6a2f9ffe143a4494961e949907f4b03bdcade8db"
+    },
+    "build/validation/completion-perf-2026-11-05/inside/c_syntax.c": {
+      "bytes": 7111,
+      "sha256": "92769edf9aaaee7c63f60a8054bbafc65cce06a90c15c3024a8712492fa639b7"
+    }
+  },
+  "remaining": [
+    "Large-file fresh/cursor latency unresolved; do not narrow candidates or weaken grammar/scopes/resource/failure semantics.",
+    "No typing-edit workload yet: new byte sequences and rapid revision changes required before an incremental-parser optimization can be accepted.",
+    "Separate signature/parameter HUD remains open.",
+    "No Linux/macOS performance baseline or new GUI/platform/physical acceptance. Existing closed UI proofs not rerun."
+  ]
+}

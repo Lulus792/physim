@@ -7,6 +7,17 @@ vollständige Umsetzung/Abnahme; keine volle Punktzahl oder gesamte grüne CI be
 
 ## Aktueller Anschluss
 
+[C-Performance-Baseline](verification/completion-perf-2026-11-05.md) abgeschlossen:
+Anwendungscode unverändert `694bb586`, neue CLI-Werkzeuge und kompakter JSON-Beleg.
+Windows Release, sechs Quellen/21 Aufrufe pro Modus/Allocator; Cache p95 <0,04 ms,
+große frische/Cursor-Auswertungen verfehlen die vorher gewählte 16,7-ms-Prüfmarke.
+Im größten Fall Syntaxmedian: Parsen 37,67 / Knotenliste 12,50 / Freigabe 5,06 ms;
+maximal 22.330.270 angeforderte Bytes. Keine Optimierung/gesamte UI-Abnahme daraus
+ableiten. Werkzeug Windows/Linux je 47 Fälle, Linux ASan/UBSan mit Leakprüfung;
+abschließender Python-CLI-Check frisch gebaut. Rohwerte/STATE unter
+`build/validation/completion-perf-2026-11-05/`, keine neuen Bilder. Geschlossene
+App-/GUI-/Mac-Prüfungen nicht wiederholt; Nutzer-Mac ausdrücklich weiter aus.
+
 [Native C-Locals](verification/completion-c-2026-11-05.md) sind jetzt in Modell und
 GUI angeschlossen: geschriebene Typ-/Deklarations-/Quellkarte, Besitzer-/Sprach-/
 Revisionscache, lokale Namen vor API, volle Trefferzahl, UTF-8/UCN, leere Argumente,
@@ -40,8 +51,12 @@ Details: `build/validation/completion-c-2026-11-05/STATE.md`; Helfer unter
 
 1. C-Locals-Schritt einschließlich gehostetem Mac-Nachlauf abgeschlossen;
    keine unveränderten lokalen/CI-Prüfungen allein wegen Kontextwechsel wiederholen.
-2. Native C-Integration lokal abgeschlossen; großes Quellprogramm auf UI-Latenz/
-   Speicherbedarf prüfen, bevor eine vollständige Performance-Abnahme behauptet wird.
+2. C-Backend-Baseline abgeschlossen, große frische/Cursor-Auswertungen noch langsam.
+   Nächster begrenzter Ansatz: echte Tipp-/Editierfolgen mit wechselnden Quelldateibytes
+   und unabhängigen Ergebnisvergleichen ergänzen; danach sichere Syntaxwiederverwendung
+   als Hypothese prüfen. Keine Ergebnis-/Scopeverkürzung, neuen Provider-Worker oder
+   geschwächten Fehler-/Budgetvertrag. Nur neue Produktionsänderungen begründen eine
+   erneute passende App-Regression. Keine UI-Latenz-/Linux-/Mac-Performance-Abnahme.
 3. Separate Aufruf-/Parameterhilfe einschließlich Benutzerfunktionen
    ergänzen; weitere Codekontexte und semantische Rollen vervollständigen. Keine
    Typinferenz/Includes/Werte vortäuschen, kein Browser-Lexer/Dienst/Provider-Worker.
