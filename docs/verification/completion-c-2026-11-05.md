@@ -68,13 +68,15 @@ ICU-Lizenz bytegenau vorhanden. ELF-/PE-Prüfung der Apps: keine dynamischen
 Tree-sitter-Exporte. Snapshots `completion-c-first`/`completion-c-restored`: jeweils
 281 eigene / 1.220 Compiler-/Testeingaben; alle referenzierten Archivbytes gelesen.
 Keine Wiederholung geschlossener F1-/Protokoll-/Settings-Matrizen. Gehosteter
-Mac-Nachlauf dieser Änderung ist noch offen; der Nutzer-Mac blieb aus und unberührt.
+Der Nutzer-Mac blieb aus und unberührt; gehosteter Mac-Abschluss siehe unten.
 
 Gehosteter Intel-Nachlauf `41960990299` / Job `127027035424` zu Quellcommit
 `694bb586`: **8/8** tatsächlich bestanden, Original-ZIP/Digest/alle Einträge gelesen;
 C und Physim jeweils über drei Editorziele. [Intel-Originalauswertung](completion-c-macos-intel-2026-11-05.json).
-ARM-Job `127027035143` ist noch nicht abgeschlossen. Daraus keine gesamte
-Mac-, physische oder neue Mac-Allokationsfehler-Abnahme ableiten.
+Anschließend ARM-Job `127027035143` ebenfalls **8/8**. Beide Original-ZIPs,
+Digests und alle Einträge gelesen; C/Physim in beiden Architekturen über je drei
+Ziele bestätigt. [Gemeinsamer Mac-Abschluss](completion-c-macos-2026-11-05.json).
+Daraus keine gesamte Mac-, physische oder neue Mac-Allokationsfehler-Abnahme ableiten.
 
 Quellcommit **`694bb586`** in beiden Repositories gepusht. Alle **1.239** erfassten
 Eingaben gegen tatsächliche Git-Blobs gelesen, Vendor bytegenau, sonst nur CRLF/LF

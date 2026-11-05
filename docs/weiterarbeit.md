@@ -18,12 +18,12 @@ mit Snapshot-Erhaltung, 38 Aufrufkontexte. Paket/6.422 Dateien und drei Lizenzen
 geprüft, keine dynamischen Parser-Exporte. Quellcommit **`694bb586`**, beide Repos;
 alle **1.239** erfassten Eingaben gegen Git-Blobs gelesen. [Commitabschluss](verification/completion-c-commit-2026-11-05.json).
 
-**Offener gehosteter Mac-Nachlauf:** `41960990299`, Source/Head `694bb586`;
-ARM-Job `127027035143` zuletzt tatsächlich queued. Intel `127027035424` beendet:
-[8/8, ZIP/Digest/alle Originaleinträge gelesen](verification/completion-c-macos-intel-2026-11-05.json),
-einschließlich C/Physim über je drei Ziele. Nur den ARM-Anschluss weiterverfolgen;
-keine gesamte Mac-/physische Abnahme behaupten. Nutzer-Mac aus und unberührt.
-Die alten Läufe `41947340908` und frühere sind geschlossen; nicht erneut pollen.
+**Gehosteter Mac-Nachlauf geschlossen:** `41960990299`, Source/Head `694bb586`;
+ARM `127027035143` / Intel `127027035424` jeweils
+[8/8, beide ZIPs/Digests/alle Originaleinträge gelesen](verification/completion-c-macos-2026-11-05.json),
+einschließlich C/Physim über je drei Ziele. Keine gesamte Mac-/physische oder neue
+Mac-Allokationsfehler-Abnahme behaupten. Nutzer-Mac aus und unberührt. Diesen Lauf
+und die alten Läufe `41947340908`/frühere nicht erneut starten oder pollen.
 
 Eingefrorener lokaler Anschluss: `completion-c-restored`, 281 eigene / 1.220
 Compiler-/Testeingaben, 623 Windows-/143 Linux-Laufzeitdateien; Archive gelesen,
@@ -38,8 +38,8 @@ Details: `build/validation/completion-c-2026-11-05/STATE.md`; Helfer unter
 
 ## Nächste Arbeit und verbleibender Umfang
 
-1. Neuen gehosteten Mac-Editorlauf oben bis zu tatsächlichen Originalergebnissen
-   verfolgen; keine unveränderten lokalen Prüfungen allein wegen Kontextwechsel wiederholen.
+1. C-Locals-Schritt einschließlich gehostetem Mac-Nachlauf abgeschlossen;
+   keine unveränderten lokalen/CI-Prüfungen allein wegen Kontextwechsel wiederholen.
 2. Native C-Integration lokal abgeschlossen; großes Quellprogramm auf UI-Latenz/
    Speicherbedarf prüfen, bevor eine vollständige Performance-Abnahme behauptet wird.
 3. Separate Aufruf-/Parameterhilfe einschließlich Benutzerfunktionen

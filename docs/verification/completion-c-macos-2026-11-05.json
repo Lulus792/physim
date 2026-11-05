@@ -1,0 +1,179 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "694bb5862fa507d4d0a4e6c7974e6910c9190b3e",
+  "run": 41960990299,
+  "reports": [
+    {
+      "architecture": "arm",
+      "job": 127027035143,
+      "artifact": 13385603400,
+      "zip_path": "build/validation/completion-c-2026-11-05/mac-arm.zip",
+      "zip_sha256": "58bfd1745fdf2c2e30d04b6e47972cbb0e39e711353fb7445dafbeef831588be",
+      "github_digest_matches": true,
+      "all_original_entries_read": {
+        "Release/test-results/run-hsl0lxax/results.json": "d344d9bfdb900bbca63b02673b933c11c86f98ebfb3d5aec574dee024934ba13"
+      },
+      "cases": [
+        {
+          "name": "documents_small",
+          "status": "passed",
+          "seconds": 6.394
+        },
+        {
+          "name": "documents_large",
+          "status": "passed",
+          "seconds": 5.379
+        },
+        {
+          "name": "completion_workflow",
+          "status": "passed",
+          "seconds": 15.856
+        },
+        {
+          "name": "completion_automatic_workflow",
+          "status": "passed",
+          "seconds": 22.509
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed",
+          "seconds": 10.641
+        },
+        {
+          "name": "completion_info_workflow",
+          "status": "passed",
+          "seconds": 35.82
+        },
+        {
+          "name": "completion_automatic_deadline_workflow",
+          "status": "passed",
+          "seconds": 23.42
+        },
+        {
+          "name": "completion_locals_workflow",
+          "status": "passed",
+          "seconds": 14.978
+        }
+      ],
+      "passed": 8,
+      "total": 8,
+      "app_sha256": "bf4b70176e96d5c7e240e2ed885759802ec2b8349609c495ec99606567c954d3",
+      "actual_local_model_markers": [
+        {
+          "language": "c",
+          "target": 0
+        },
+        {
+          "language": "c",
+          "target": 1
+        },
+        {
+          "language": "c",
+          "target": 2
+        },
+        {
+          "language": "phys",
+          "target": 0
+        },
+        {
+          "language": "phys",
+          "target": 1
+        },
+        {
+          "language": "phys",
+          "target": 2
+        }
+      ]
+    },
+    {
+      "architecture": "intel",
+      "job": 127027035424,
+      "artifact": 13385443975,
+      "zip_path": "build/validation/completion-c-2026-11-05/mac-intel.zip",
+      "zip_sha256": "4d134c8a00145d75a64af978e5fee8b7fd9ecacdbf743ab945fc66bac6463ee8",
+      "github_digest_matches": true,
+      "all_original_entries_read": {
+        "Release/test-results/run-zp0foqpi/results.json": "f766cafc3ca8bffa6f3da8482142d1ef2f9cde9012e7326dd47a1bc083bb3155"
+      },
+      "cases": [
+        {
+          "name": "documents_small",
+          "status": "passed",
+          "seconds": 6.682
+        },
+        {
+          "name": "documents_large",
+          "status": "passed",
+          "seconds": 7.04
+        },
+        {
+          "name": "completion_workflow",
+          "status": "passed",
+          "seconds": 16.36
+        },
+        {
+          "name": "completion_automatic_workflow",
+          "status": "passed",
+          "seconds": 22.229
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed",
+          "seconds": 11.237
+        },
+        {
+          "name": "completion_info_workflow",
+          "status": "passed",
+          "seconds": 39.342
+        },
+        {
+          "name": "completion_automatic_deadline_workflow",
+          "status": "passed",
+          "seconds": 23.468
+        },
+        {
+          "name": "completion_locals_workflow",
+          "status": "passed",
+          "seconds": 17.856
+        }
+      ],
+      "passed": 8,
+      "total": 8,
+      "app_sha256": "2de3205062e45d1a2a114a64e48f74eb04e15bd0dd80a36d6bc7b25c8d2f112c",
+      "actual_local_model_markers": [
+        {
+          "language": "c",
+          "target": 0
+        },
+        {
+          "language": "c",
+          "target": 1
+        },
+        {
+          "language": "c",
+          "target": 2
+        },
+        {
+          "language": "phys",
+          "target": 0
+        },
+        {
+          "language": "phys",
+          "target": 1
+        },
+        {
+          "language": "phys",
+          "target": 2
+        }
+      ]
+    }
+  ],
+  "hosted_only": true,
+  "private_mac": "OFF; no access/probes",
+  "all_jobs_terminal": true,
+  "limits": [
+    "GUI workflow evidence only, no new Mac allocation-fault unit coverage",
+    "No separate user-function signature help or physical/AT/DPI/monitor/fullscreen/full UI acceptance",
+    "User-guide prose correction after tested source commit is separately recorded"
+  ]
+}

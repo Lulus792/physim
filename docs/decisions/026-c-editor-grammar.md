@@ -2,7 +2,8 @@
 
 Date: 2026-11-05. Syntax foundation, lexical scope collector and subsequent C
 completion-model/GUI integration are implemented and tested on Windows/Linux.
-New macOS acceptance and separate signature help remain open.
+Hosted macOS ARM/Intel GUI follow-up passed; separate signature help and physical
+acceptance remain open.
 Selected completion design D / ADR 023 is unchanged.
 
 ## Requirement and choice
@@ -67,7 +68,9 @@ This does not establish macOS or GUI acceptance of the new backend.
 The subsequent linked-app proof is separate from the original syntax-only test:
 Windows/Linux each8/8 units and6/6 GUI groups, installed three-license bytes and
 private app symbol audits. The GUI-independent core remains independent. No new
-private-Mac access; current hosted macOS follow-up is still required.
+private-Mac access. The [subsequent hosted ARM/Intel follow-up](../verification/completion-c-macos-2026-11-05.json)
+passed8/8 each, including actual C/Physim locals through three editor targets.
+No new Mac allocation-fault or physical/full UI acceptance is inferred.
 
 Primary sources inspected 2026-11-05: [runtime release](https://github.com/tree-sitter/tree-sitter/releases/tag/v0.27.1),
 [grammar release](https://github.com/tree-sitter/tree-sitter-c/releases/tag/v0.24.2),
