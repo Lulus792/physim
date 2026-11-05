@@ -1,0 +1,847 @@
+{
+  "date": "2026-11-05",
+  "parent_source": "0602a30253a18eae6c501bbd9771ebc97819de8d",
+  "scope": "Two test files only; real Settings task window exercised; existing allocation rollback, retry, size independence and density assertions retained.",
+  "runs": {
+    "before-windows": {
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "documentation_font_demand"
+      ],
+      "exit_code": 1,
+      "filters": [
+        "documentation_font_demand"
+      ],
+      "app_sha256": "b0d175665f738c67d6d7acf09b799d798e96c19b9ce35001a4e66ddb732e4555",
+      "display": null,
+      "asan_options": "detect_leaks=0:halt_on_error=1",
+      "log": "build/validation/font-settings-fault-2026-11-05/before-windows.log",
+      "log_sha256": "ede9ad9facfd4a141a593db22c427f4b1ef1880df0802c299ac4e104e9d64e49",
+      "results_path": "D:/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-sf2sbl8b/results.json",
+      "results_sha256": "0bab368ff72682ce20ad040c56f1657035da9b0e65815c2492a3ff99826df758",
+      "cases": [
+        {
+          "name": "documentation_font_demand",
+          "status": "failed"
+        }
+      ]
+    },
+    "before-linux": {
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "documentation_font_demand"
+      ],
+      "exit_code": 1,
+      "filters": [
+        "documentation_font_demand"
+      ],
+      "app_sha256": "173be39f173254af6927909fb13ce76741747c1499939f3e1e24e51b530582af",
+      "display": ":102",
+      "asan_options": "detect_leaks=0:halt_on_error=1",
+      "log": "build/validation/font-settings-fault-2026-11-05/before-linux.log",
+      "log_sha256": "0ac1454c3eaa44697c0c33aec889af7e66003fb080c181f21b7f2f5f85694b1b",
+      "results_path": "D:/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-nqjzjjus/results.json",
+      "results_sha256": "2df159b7c160b076f823421915aaa57beaad46ee628dc7739788f71bd947aa56",
+      "cases": [
+        {
+          "name": "documentation_font_demand",
+          "status": "failed"
+        }
+      ]
+    },
+    "after-windows": {
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "documentation_font_demand",
+        "--test-filter",
+        "settings_keyboard_workflow",
+        "--test-filter",
+        "documentation_zoom"
+      ],
+      "exit_code": 0,
+      "filters": [
+        "documentation_font_demand",
+        "settings_keyboard_workflow",
+        "documentation_zoom"
+      ],
+      "app_sha256": "19992506389ed9b11624c7df7fb15dacc59bf45e65da158418c16f63e0815df6",
+      "display": null,
+      "asan_options": "detect_leaks=0:halt_on_error=1",
+      "log": "build/validation/font-settings-fault-2026-11-05/after-windows.log",
+      "log_sha256": "26b807d2deda0e1bd595e15880db8317d22127b14ed87132763e052a6c7407fe",
+      "results_path": "D:/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-4jnmxccs/results.json",
+      "results_sha256": "d416328ebb453848721874ff35fc6c5154bcfa3fcc4ecdc8cc12008fb0528150",
+      "cases": [
+        {
+          "name": "settings_keyboard_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_zoom",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_font_demand",
+          "status": "passed"
+        }
+      ],
+      "font_markers": [
+        "FONT DEMAND: initial variants=7",
+        "FONT DEMAND SETTINGS: actual-window=1 allocation-requests=4 failed-with-draft=1 active-file-fonts-context-preserved=1",
+        "FONT DEMAND: failed zoom/settings preserve fonts, context, values and preference file",
+        "FONT DEMAND: independent sizes ui=22 code=18 variants=17",
+        "DOCUMENTATION RASTER TARGET: logical=760x540 pixels=1520x1080 density=2.000",
+        "FONT DEMAND: populated bank retired at density 2 and rebuilt at density 1",
+        "DOCUMENTATION FONT DEMAND SELF-TEST: PASSED"
+      ]
+    },
+    "after-linux": {
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "documentation_font_demand",
+        "--test-filter",
+        "settings_keyboard_workflow",
+        "--test-filter",
+        "documentation_zoom"
+      ],
+      "exit_code": 0,
+      "filters": [
+        "documentation_font_demand",
+        "settings_keyboard_workflow",
+        "documentation_zoom"
+      ],
+      "app_sha256": "15d1e390ca46f8db21feb6df5aec9fd68db0cb95028cb9d002e1f132eb70d590",
+      "display": ":102",
+      "asan_options": "detect_leaks=0:halt_on_error=1",
+      "log": "build/validation/font-settings-fault-2026-11-05/after-linux.log",
+      "log_sha256": "ae5ec24fb0298893e59ecfdd0fcda2f4baab09e668b0f788dbc1564f3e98e4af",
+      "results_path": "D:/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-n1igqds8/results.json",
+      "results_sha256": "a665d09e953c35e74dbcb4a2ee9bdb542df6831edb0775115c77b9010504453b",
+      "cases": [
+        {
+          "name": "settings_keyboard_workflow",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_zoom",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_font_demand",
+          "status": "passed"
+        }
+      ],
+      "font_markers": [
+        "FONT DEMAND: initial variants=7",
+        "FONT DEMAND SETTINGS: actual-window=1 allocation-requests=4 failed-with-draft=1 active-file-fonts-context-preserved=1",
+        "FONT DEMAND: failed zoom/settings preserve fonts, context, values and preference file",
+        "FONT DEMAND: independent sizes ui=22 code=18 variants=17",
+        "DOCUMENTATION RASTER TARGET: logical=760x540 pixels=1520x1080 density=2.000",
+        "FONT DEMAND: populated bank retired at density 2 and rebuilt at density 1",
+        "DOCUMENTATION FONT DEMAND SELF-TEST: PASSED"
+      ]
+    }
+  },
+  "hosted_prior_source": {
+    "head_sha": "01d2c0d043af601804825c155d3bfb7fba535049",
+    "run_id": 42090594921,
+    "jobs": [
+      {
+        "compiler": "gcc",
+        "job_id": 127467266200,
+        "log": "build/validation/font-settings-fault-2026-11-05/hosted-127467266200.log",
+        "decoded_log_sha256": "94ce0fd5fac62ecb1fdfa22d948249faeec5997cec55291eaa0a9dda113e3543",
+        "data_passed": 26,
+        "gui_passed": 46,
+        "gui_total": 48,
+        "cases": [
+          {
+            "name": "accessibility_text_index",
+            "status": "passed"
+          },
+          {
+            "name": "project_display",
+            "status": "passed"
+          },
+          {
+            "name": "utf8_string_bounds",
+            "status": "passed"
+          },
+          {
+            "name": "scene_view",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_document",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_tables",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_suspend",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_edit",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_options",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_focus",
+            "status": "passed"
+          },
+          {
+            "name": "parameter_catalog",
+            "status": "passed"
+          },
+          {
+            "name": "documentation",
+            "status": "passed"
+          },
+          {
+            "name": "project_file",
+            "status": "passed"
+          },
+          {
+            "name": "editor_clipboard",
+            "status": "passed"
+          },
+          {
+            "name": "editor_readonly",
+            "status": "passed"
+          },
+          {
+            "name": "editor_scroll",
+            "status": "passed"
+          },
+          {
+            "name": "font_shape",
+            "status": "passed"
+          },
+          {
+            "name": "font_atlas_limits",
+            "status": "passed"
+          },
+          {
+            "name": "font_fallback",
+            "status": "passed"
+          },
+          {
+            "name": "font_sources",
+            "status": "passed"
+          },
+          {
+            "name": "font_faces",
+            "status": "passed"
+          },
+          {
+            "name": "font_density",
+            "status": "passed"
+          },
+          {
+            "name": "native_project_build",
+            "status": "passed"
+          },
+          {
+            "name": "material_property_examples",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_anchors",
+            "status": "passed"
+          },
+          {
+            "name": "font_bank_ui",
+            "status": "passed"
+          },
+          {
+            "name": "floating_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "project_settings_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "language_full_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "language_mixed_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_atspi",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_tables_atspi",
+            "status": "passed"
+          },
+          {
+            "name": "project_tree_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "build_controls_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "completion_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "api_reference_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "parameter_form_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "spring_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "camera_plane_16",
+            "status": "passed"
+          },
+          {
+            "name": "camera_plane_22",
+            "status": "passed"
+          },
+          {
+            "name": "project_display_16",
+            "status": "passed"
+          },
+          {
+            "name": "project_display_22",
+            "status": "passed"
+          },
+          {
+            "name": "scene_visibility_16",
+            "status": "passed"
+          },
+          {
+            "name": "scene_visibility_22",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_media_16",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_media_22",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_anchors_16",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_anchors_22",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_history",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_math",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_zoom",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_font_demand",
+            "status": "failed"
+          },
+          {
+            "name": "documentation_inline",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_density",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_navigation",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_document_atspi",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_edit_atspi",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_links_atspi",
+            "status": "failed"
+          },
+          {
+            "name": "documentation_sidebar",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_typeset",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_formula_catalog",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_formula_physics",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_formula_narrow",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_detail",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_formula_models",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_formula_models_narrow",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_formula_mechanics",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_formula_mechanics_narrow",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_formula_basics",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_formula_basics_narrow",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_inline_math",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_panes",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_h",
+            "status": "passed"
+          }
+        ],
+        "failures": [
+          "documentation_font_demand",
+          "accessibility_links_atspi"
+        ],
+        "artifact_zip_not_downloaded": true
+      },
+      {
+        "compiler": "clang",
+        "job_id": 127467266784,
+        "log": "build/validation/font-settings-fault-2026-11-05/hosted-127467266784.log",
+        "decoded_log_sha256": "4ee3a86e9ac3b23a646c115c968a6fc45c31ce6b06b794e960439c987e6d7d0d",
+        "data_passed": 26,
+        "gui_passed": 46,
+        "gui_total": 48,
+        "cases": [
+          {
+            "name": "accessibility_text_index",
+            "status": "passed"
+          },
+          {
+            "name": "project_display",
+            "status": "passed"
+          },
+          {
+            "name": "utf8_string_bounds",
+            "status": "passed"
+          },
+          {
+            "name": "scene_view",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_document",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_tables",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_suspend",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_edit",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_options",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_focus",
+            "status": "passed"
+          },
+          {
+            "name": "parameter_catalog",
+            "status": "passed"
+          },
+          {
+            "name": "documentation",
+            "status": "passed"
+          },
+          {
+            "name": "project_file",
+            "status": "passed"
+          },
+          {
+            "name": "editor_clipboard",
+            "status": "passed"
+          },
+          {
+            "name": "editor_readonly",
+            "status": "passed"
+          },
+          {
+            "name": "editor_scroll",
+            "status": "passed"
+          },
+          {
+            "name": "font_shape",
+            "status": "passed"
+          },
+          {
+            "name": "font_atlas_limits",
+            "status": "passed"
+          },
+          {
+            "name": "font_fallback",
+            "status": "passed"
+          },
+          {
+            "name": "font_sources",
+            "status": "passed"
+          },
+          {
+            "name": "font_faces",
+            "status": "passed"
+          },
+          {
+            "name": "font_density",
+            "status": "passed"
+          },
+          {
+            "name": "native_project_build",
+            "status": "passed"
+          },
+          {
+            "name": "material_property_examples",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_anchors",
+            "status": "passed"
+          },
+          {
+            "name": "font_bank_ui",
+            "status": "passed"
+          },
+          {
+            "name": "floating_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "project_settings_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "language_full_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "language_mixed_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_atspi",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_tables_atspi",
+            "status": "passed"
+          },
+          {
+            "name": "project_tree_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "build_controls_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "completion_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "api_reference_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "parameter_form_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "spring_workflow",
+            "status": "passed"
+          },
+          {
+            "name": "camera_plane_16",
+            "status": "passed"
+          },
+          {
+            "name": "camera_plane_22",
+            "status": "passed"
+          },
+          {
+            "name": "project_display_16",
+            "status": "passed"
+          },
+          {
+            "name": "project_display_22",
+            "status": "passed"
+          },
+          {
+            "name": "scene_visibility_16",
+            "status": "passed"
+          },
+          {
+            "name": "scene_visibility_22",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_media_16",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_media_22",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_anchors_16",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_anchors_22",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_history",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_math",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_zoom",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_font_demand",
+            "status": "failed"
+          },
+          {
+            "name": "documentation_inline",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_density",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_navigation",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_document_atspi",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_edit_atspi",
+            "status": "passed"
+          },
+          {
+            "name": "accessibility_links_atspi",
+            "status": "failed"
+          },
+          {
+            "name": "documentation_sidebar",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_typeset",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_formula_catalog",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_formula_physics",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_formula_narrow",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_detail",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_formula_models",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_formula_models_narrow",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_formula_mechanics",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_formula_mechanics_narrow",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_formula_basics",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_formula_basics_narrow",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_inline_math",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_panes",
+            "status": "passed"
+          },
+          {
+            "name": "documentation_h",
+            "status": "passed"
+          }
+        ],
+        "failures": [
+          "documentation_font_demand",
+          "accessibility_links_atspi"
+        ],
+        "artifact_zip_not_downloaded": true
+      }
+    ]
+  },
+  "limits": [
+    "Linux GUI ASan/UBSan uses detect_leaks=0 for external graphics runtime; no LeakSanitizer acceptance.",
+    "No physical keyboard or complete assistive-technology acceptance.",
+    "Native product design/renderer unchanged."
+  ],
+  "prebuild": {
+    "owned_inputs_verified": 306,
+    "all_root_isolation_manifest_equal": true,
+    "changed_files": [
+      "app/documentation_keyboard_tests.inc",
+      "tests/check_display_workflow.py"
+    ],
+    "review": "size_t counters use %zu; no changed-binary run yet"
+  }
+}

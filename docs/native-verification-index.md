@@ -11,6 +11,18 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
 
 ## Neuere Editorprüfungen
 
+- [F1-Linkfehler außerhalb der Ansicht](verification/f1-error-semantics-2026-11-05.md):
+  vorhandenes Fehlerlabel mit echten Offscreen-Zuständen veröffentlichen.
+  Windows UIA/Tastatur/Metadaten3/3; Linux Tastatur/Metadaten und finaler unabhängiger
+  AT-SPI-Client bestanden. Derselbe Client erkennt den Fehler am alten Programm.
+  Native Fokus-/Positionsausrichtung vor exakter Endmessung abwarten; ursprüngliche
+  Zwischenfehler erhalten. Ein nativer Fokuszustand als gesamte BMP bytegleich.
+- [F1-Schriftfehler im tatsächlichen Einstellungsfenster](verification/font-settings-fault-2026-11-05.md):
+  alte Probe auf Windows/Linux Stufe3 negativ; nach Korrektur beide je3/3.
+  Tatsächliche Allokationsanfragen, erhaltener Entwurf/Fehler und unveränderte
+  aktive Datei/Fonts/GL-Kontext geprüft. Produktlayout unverändert.
+  Neue glibc-Joblogs zur bisherigen Quelle: GCC/Clang jeweils26/26+46/48;
+  nur Fontprobe und Linkfehlerhinweis offen.
 - [Aktuelle Berichtsexport-Abläufe](verification/report-export-workflow-2026-11-05.md):
   Windows und Alpine/X11 ASan/UBSan je 5/5, 24 echte Grafikdateien zusätzlich
   geprüft. Eigene OS-Exportfenster, asynchrones Speichern, genaue Quellziel-

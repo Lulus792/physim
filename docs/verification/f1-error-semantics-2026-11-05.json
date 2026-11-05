@@ -1,0 +1,271 @@
+{
+  "date": "2026-11-05",
+  "parent_source": "0602a30253a18eae6c501bbd9771ebc97819de8d",
+  "scope": "Retain existing F1 metadata/status/error in native accessibility snapshots when scrolled out; actual offscreen state, painting, layout and native invocation behavior retained.",
+  "runs": {
+    "before-linux": {
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/test_accessibility_links_atspi.py",
+        "--app",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+        "--work",
+        "/mnt/d/Physim/build/validation/f1-error-semantics-2026-11-05/before-linux"
+      ],
+      "exit_code": 1,
+      "app_sha256": "15d1e390ca46f8db21feb6df5aec9fd68db0cb95028cb9d002e1f132eb70d590",
+      "script_sha256": "f08a5ba7b4a8d80e7e1871445a15fb27ff6a61a0d4de8fb024a17b848c287793",
+      "log": "build/validation/f1-error-semantics-2026-11-05/before-linux.log",
+      "log_sha256": "87ee8adb42610b88c17a4300e78f06229873da274b67357457e9c02bc33897fb"
+    },
+    "after-linux": {
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/test_accessibility_links_atspi.py",
+        "--app",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+        "--work",
+        "/mnt/d/Physim/build/validation/f1-error-semantics-2026-11-05/after-linux"
+      ],
+      "exit_code": 1,
+      "app_sha256": "713d1e420578eea45e842aba21b00926df163deaa1c9902222339f003e78945a",
+      "script_sha256": "c7b0b78a1bef6cc8d6c8a801a8a1e6b2a89002f85c754f534385bc710919e7ba",
+      "log": "build/validation/f1-error-semantics-2026-11-05/after-linux.log",
+      "log_sha256": "9bfccc1b30ff3148c1be558f6666b1fc7ffcf47f0dc6de2f2ed8cad36f41a608"
+    },
+    "diagnostic-linux": {
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/tests/test_accessibility_links_atspi.py",
+        "--app",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+        "--work",
+        "/mnt/d/Physim/build/validation/f1-error-semantics-2026-11-05/diagnostic-linux"
+      ],
+      "exit_code": 1,
+      "app_sha256": "713d1e420578eea45e842aba21b00926df163deaa1c9902222339f003e78945a",
+      "script_sha256": "9bce981485591a2e6bc95419308c58b1c7197e007ca93e3885446fdc08a119a1",
+      "log": "build/validation/f1-error-semantics-2026-11-05/diagnostic-linux.log",
+      "log_sha256": "fb7ecfc1509644863f75f21623de866a706025df1f60786b2dd7181b9e9717ef"
+    },
+    "geometry-linux": {
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/f1-error-semantics-2026-11-05/observe-geometry.py",
+        "--app",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+        "--work",
+        "/mnt/d/Physim/build/validation/f1-error-semantics-2026-11-05/geometry-linux"
+      ],
+      "exit_code": 0,
+      "app_sha256": "713d1e420578eea45e842aba21b00926df163deaa1c9902222339f003e78945a",
+      "script_sha256": "23759db09633dba87b8399287fadc7915186627f04aad780a44e3053b83999e8",
+      "log": "build/validation/f1-error-semantics-2026-11-05/geometry-linux.log",
+      "log_sha256": "9efb2aeee84a42d824c1587a1d85eea0e536d4286dd59f8a8c9284fd58f2cf69"
+    },
+    "final-linux": {
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/test_accessibility_links_atspi.py",
+        "--app",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/bin/physim",
+        "--work",
+        "/mnt/d/Physim/build/validation/f1-error-semantics-2026-11-05/final-linux"
+      ],
+      "exit_code": 0,
+      "app_sha256": "713d1e420578eea45e842aba21b00926df163deaa1c9902222339f003e78945a",
+      "script_sha256": "281e492874df0c71d3b2a838c296a7795c923ab1a0e9ec0e0a6a8b87c14e729a",
+      "log": "build/validation/f1-error-semantics-2026-11-05/final-linux.log",
+      "log_sha256": "c6a0e01528dfaabd1b56eea31602038cf157869e279ed31e46444dd515e92997"
+    },
+    "counterexample-linux": {
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tests/test_accessibility_links_atspi.py",
+        "--app",
+        "/mnt/d/Physim/build/validation/f1-error-semantics-2026-11-05/unfixed/physim",
+        "--work",
+        "/mnt/d/Physim/build/validation/f1-error-semantics-2026-11-05/counterexample-linux"
+      ],
+      "exit_code": 1,
+      "app_sha256": "15d1e390ca46f8db21feb6df5aec9fd68db0cb95028cb9d002e1f132eb70d590",
+      "script_sha256": "281e492874df0c71d3b2a838c296a7795c923ab1a0e9ec0e0a6a8b87c14e729a",
+      "log": "build/validation/f1-error-semantics-2026-11-05/counterexample-linux.log",
+      "log_sha256": "31715fdfb386b33c34628f7f20ad05bfdb97b3c9c62e9a97ea694fb35d9b1804"
+    }
+  },
+  "final_independent_client": {
+    "path": "build/validation/f1-error-semantics-2026-11-05/final-linux/results.json",
+    "sha256": "ba795bdcd1b1ff7f1357f33097fbc66276b4e1a7184686eccf67f446e8cdc4ab",
+    "observations": {
+      "independent_client": true,
+      "ordered_links": [
+        "C-Lernweg",
+        "C"
+      ],
+      "scalar_ranges": true,
+      "uris": true,
+      "offscreen_focus": true,
+      "actual_geometry": true,
+      "invalid_navigation_rejected": true,
+      "offscreen_error_readable": true,
+      "error_does_not_steal_focus": true,
+      "failed_navigation_preserves_viewport": true,
+      "native_navigation": true,
+      "obsolete_links_rejected": true,
+      "table_grid": true,
+      "table_headers": true,
+      "table_cell_coordinates": true,
+      "table_nested_links": true,
+      "obsolete_tables_rejected": true
+    },
+    "event_counts": {
+      "object:children-changed:add": 141,
+      "object:bounds-changed": 152,
+      "object:state-changed:showing": 49,
+      "object:children-changed:remove": 25,
+      "object:state-changed:focused": 5
+    },
+    "original_events_retained_in_hashed_results": true
+  },
+  "native_regressions": {
+    "windows": {
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "accessibility_links_windows",
+        "--test-filter",
+        "documentation_detail",
+        "--test-filter",
+        "documentation_keyboard"
+      ],
+      "exit_code": 0,
+      "filters": [
+        "accessibility_links_windows",
+        "documentation_detail",
+        "documentation_keyboard"
+      ],
+      "app_sha256": "e58c2bf30b9e2b02d7c0277111a0c4439e5ac89495056356222d048742efb758",
+      "asan_options": "detect_leaks=0:halt_on_error=1",
+      "log": "build/validation/f1-error-semantics-2026-11-05/native-after-windows.log",
+      "log_sha256": "06e856cf37806dc9ddde6052182fefb2f64360ba572fd25f8bbe1ac96ed3a403",
+      "results_path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build\\test-results\\run-t_ptvyug\\results.json",
+      "results_sha256": "6fcfb7a9fd5f9e2bb463683aa05530c1292fc6895e5f232ee4c69d54a2f38cd3",
+      "cases": [
+        {
+          "name": "documentation_keyboard",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_links_windows",
+          "status": "passed"
+        },
+        {
+          "name": "documentation_detail",
+          "status": "passed"
+        }
+      ]
+    },
+    "linux": {
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "accessibility_links_atspi",
+        "--test-filter",
+        "documentation_detail",
+        "--test-filter",
+        "documentation_keyboard"
+      ],
+      "exit_code": 1,
+      "filters": [
+        "accessibility_links_atspi",
+        "documentation_detail",
+        "documentation_keyboard"
+      ],
+      "app_sha256": "713d1e420578eea45e842aba21b00926df163deaa1c9902222339f003e78945a",
+      "asan_options": "detect_leaks=0:halt_on_error=1",
+      "log": "build/validation/f1-error-semantics-2026-11-05/native-after-linux.log",
+      "log_sha256": "83d03049da3012f8f4fa6d5e5f45ecb1ad1a1afdf0caf813680156a734743de1",
+      "results_path": "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\linux-build\\test-results\\run-0rmkvatx\\results.json",
+      "results_sha256": "4680d995a09e22e67e90690da42df00e5b098ebe6d93a4f525e04e3f65077cb2",
+      "cases": [
+        {
+          "name": "documentation_keyboard",
+          "status": "passed"
+        },
+        {
+          "name": "accessibility_links_atspi",
+          "status": "failed"
+        },
+        {
+          "name": "documentation_detail",
+          "status": "passed"
+        }
+      ]
+    }
+  },
+  "focus_image_comparison": {
+    "before": "build/validation/f1-error-semantics-2026-11-05/before-linux/reader/docs-native-link-focus.bmp",
+    "after": "build/validation/f1-error-semantics-2026-11-05/final-linux/reader/docs-native-link-focus.bmp",
+    "before_sha256": "614610b62ac890ec8831bc5f9b6e1de01ed98064e6ee59328600c445e835efe7",
+    "after_sha256": "614610b62ac890ec8831bc5f9b6e1de01ed98064e6ee59328600c445e835efe7",
+    "whole_bmp_byte_equal": true,
+    "scope": "One native link-focus state; not full design acceptance."
+  },
+  "test_setup_correction": {
+    "first_failure": "Expected focus on a different, previously selected link; native press deliberately focuses/reveals the activated source.",
+    "final_setup": "Focus/reveal the source before invoking, require unfocused offscreen error, and wait boundedly for exact original geometry after queued native reveal. No position tolerance added.",
+    "geometry_observation": "Initial y60, one transitional y79, then all24 remaining observations y60. Original log retained.",
+    "intermediate_native_result": "Linux2/3; only the client assertion failed. Same unchanged product then passed final independent client; other two groups already passed."
+  },
+  "prebuild": {
+    "owned_inputs_verified": 307,
+    "changed_inputs": {
+      "app/documentation_ui.inc": "fbad7aa66ddec13576c1557b42a64305004705a8b6846a981ba89243719bc07a",
+      "tests/test_accessibility_links_atspi.py": "95f59851446d73a7cd1587e0a187c66dac7be82068386f233cb9fea6880e7735"
+    },
+    "all_root_isolation_manifest_equal": true,
+    "baseline_exit": 1,
+    "cause": "Clipped article status was omitted from native controls; use existing full publication with actual offscreen state."
+  },
+  "final_source_check": {
+    "owned_inputs_verified": 307,
+    "all_root_isolation_manifest_equal": true,
+    "product_binaries_unchanged": true,
+    "changed_checker": "tests/test_accessibility_links_atspi.py",
+    "reason": "Native activation deliberately focuses/reveals its source link. Focus it before invoking, then wait for its exact original geometry after the queued reveal; no relaxed geometry tolerance."
+  },
+  "limits": [
+    "WindowsRelease UIA and Alpine/X11 ASan/UBSan; new glibc/macOS execution of this change still open.",
+    "No full screenreader task or physical keyboard acceptance.",
+    "GUI ASan uses detect_leaks=0; no LeakSanitizer claim.",
+    "Transient native reveal intermediate frame observed, final geometry verified exactly."
+  ]
+}

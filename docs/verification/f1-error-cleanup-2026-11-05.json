@@ -1,0 +1,90 @@
+{
+  "scope": "D:\\Physim\\build\\validation\\f1-error-semantics-2026-11-05",
+  "files": [
+    {
+      "path": "D:\\Physim\\build\\validation\\f1-error-semantics-2026-11-05\\unfixed\\physim",
+      "sha256": "15d1e390ca46f8db21feb6df5aec9fd68db0cb95028cb9d002e1f132eb70d590",
+      "logical_bytes": 64352736,
+      "allocated_bytes": 20602880,
+      "purpose": "Temporary single executable restored only for the now completed counterexample; original frozen archive retained.",
+      "reference": {
+        "archive": "build/validation/explorer-inline-2026-10-29/font-settings-fault-reviewed-runtime-linux.zip",
+        "entry": "bin/physim",
+        "sha256": "15d1e390ca46f8db21feb6df5aec9fd68db0cb95028cb9d002e1f132eb70d590"
+      }
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\f1-error-semantics-2026-11-05\\after-linux\\reader\\docs-native-link-focus.bmp",
+      "sha256": "614610b62ac890ec8831bc5f9b6e1de01ed98064e6ee59328600c445e835efe7",
+      "logical_bytes": 1641738,
+      "allocated_bytes": 278528,
+      "purpose": "Exact duplicate diagnostic image; final reference and original logs retained.",
+      "reference": {
+        "path": "build/validation/f1-error-semantics-2026-11-05/final-linux/reader/docs-native-link-focus.bmp",
+        "sha256": "614610b62ac890ec8831bc5f9b6e1de01ed98064e6ee59328600c445e835efe7"
+      }
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\f1-error-semantics-2026-11-05\\diagnostic-linux\\reader\\docs-native-link-focus.bmp",
+      "sha256": "614610b62ac890ec8831bc5f9b6e1de01ed98064e6ee59328600c445e835efe7",
+      "logical_bytes": 1641738,
+      "allocated_bytes": 278528,
+      "purpose": "Exact duplicate diagnostic image; final reference and original logs retained.",
+      "reference": {
+        "path": "build/validation/f1-error-semantics-2026-11-05/final-linux/reader/docs-native-link-focus.bmp",
+        "sha256": "614610b62ac890ec8831bc5f9b6e1de01ed98064e6ee59328600c445e835efe7"
+      }
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\f1-error-semantics-2026-11-05\\geometry-linux\\reader\\docs-native-link-failed.bmp",
+      "sha256": "169b54f550466e4d4b4c92d0c5d7708619ba7d93a3b50d768c4560c6d66812de",
+      "logical_bytes": 1641738,
+      "allocated_bytes": 307200,
+      "purpose": "Exact duplicate diagnostic image; final reference and original logs retained.",
+      "reference": {
+        "path": "build/validation/f1-error-semantics-2026-11-05/final-linux/reader/docs-native-link-failed.bmp",
+        "sha256": "169b54f550466e4d4b4c92d0c5d7708619ba7d93a3b50d768c4560c6d66812de"
+      }
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\f1-error-semantics-2026-11-05\\geometry-linux\\reader\\docs-native-link-focus.bmp",
+      "sha256": "614610b62ac890ec8831bc5f9b6e1de01ed98064e6ee59328600c445e835efe7",
+      "logical_bytes": 1641738,
+      "allocated_bytes": 278528,
+      "purpose": "Exact duplicate diagnostic image; final reference and original logs retained.",
+      "reference": {
+        "path": "build/validation/f1-error-semantics-2026-11-05/final-linux/reader/docs-native-link-focus.bmp",
+        "sha256": "614610b62ac890ec8831bc5f9b6e1de01ed98064e6ee59328600c445e835efe7"
+      }
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\f1-error-semantics-2026-11-05\\geometry-linux\\reader\\docs-native-link-open.bmp",
+      "sha256": "9c2abb45b49eebeeada75f2a33fb4c97baf055dfe52890e302696c984257de85",
+      "logical_bytes": 1641738,
+      "allocated_bytes": 315392,
+      "purpose": "Exact duplicate diagnostic image; final reference and original logs retained.",
+      "reference": {
+        "path": "build/validation/f1-error-semantics-2026-11-05/final-linux/reader/docs-native-link-open.bmp",
+        "sha256": "9c2abb45b49eebeeada75f2a33fb4c97baf055dfe52890e302696c984257de85"
+      }
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\f1-error-semantics-2026-11-05\\counterexample-linux\\reader\\docs-native-link-focus.bmp",
+      "sha256": "614610b62ac890ec8831bc5f9b6e1de01ed98064e6ee59328600c445e835efe7",
+      "logical_bytes": 1641738,
+      "allocated_bytes": 278528,
+      "purpose": "Exact duplicate diagnostic image; final reference and original logs retained.",
+      "reference": {
+        "path": "build/validation/f1-error-semantics-2026-11-05/final-linux/reader/docs-native-link-focus.bmp",
+        "sha256": "614610b62ac890ec8831bc5f9b6e1de01ed98064e6ee59328600c445e835efe7"
+      }
+    }
+  ],
+  "logical_bytes": 74203164,
+  "allocated_bytes": 22339584,
+  "date": "2026-11-05",
+  "deletion_performed": false,
+  "freed_allocated_bytes": 0,
+  "automatic_review": "Deletion command rejected: blocked by policy. No retry or alternative deletion attempted.",
+  "all_planned_files_still_present": true
+}

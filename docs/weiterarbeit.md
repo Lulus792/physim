@@ -7,32 +7,36 @@ Maßgeblich bleiben [AGENTS.md](../AGENTS.md) und der
 
 ## Aktueller geprüfter Schritt
 
-[Berichtsexport über die heutigen Aufgabenfenster](verification/report-export-workflow-2026-11-05.md):
-Windows Release und Alpine/X11 ASan/UBSan jeweils **5/5**. Auftrieb, Feder,
-Plot, Pendel-Energie sowie Pendel mit Medium; beide Pendelsprachen enthalten.
-24 gespeicherte Grafiken zusätzlich gelesen, SVG-XML/Geometrie und vollständige
-PNG-Daten geprüft; zwei repräsentative PNGs geöffnet.
-Nur Testabläufe/Erwartungen angepasst: tatsächliches Exportfenster, letzte
-Quelldatei, Rohdatenaktion aus Messdaten. Renderer und Design erhalten.
-[Originale und Grenzen](verification/report-export-workflow-2026-11-05.json).
-[Quelle 01d2c0d0 und beide Remotes geprüft](verification/report-export-commit-2026-11-05.json):
-alle 1.257 verwendeten Eingaben gegen den tatsächlichen Commit gelesen.
+[F1-Linkfehler außerhalb der Ansicht](verification/f1-error-semantics-2026-11-05.md):
+vorhandenes Status-/Fehlerlabel mit echten Offscreen-Zuständen veröffentlichen,
+ohne Zeichen-/Layoutänderung. Windows UIA/Tastatur/Metadaten3/3; Linux Tastatur/
+Metadaten und finaler unabhängiger AT-SPI-Client bestanden. Derselbe endgültige
+Client erkennt den fehlenden Hinweis am archivierten alten Programm.
+Ein nativer Fokuszustand als vollständige BMP bytegleich. Native Aktivierung
+fokussiert/revealt ihre Quelle; die exakte Endposition erst nach dem eingereihten
+Folgeframe messen. Zwischenfehler und Geometriespur sind dokumentiert.
 
-Warmstand **report-export-accepted**, **306 eigene Eingaben**. Alle sechs seit
-dem vorherigen Warmstand berührten Eingaben vor Build zwischen Root, Isolation
-und Manifest bytegleich. Sämtliche Zwischenstände und Runtimearchive eingefroren.
-Windows-Run `run-kbdk8vph`, Linux `run-oal6k0k9`; alle lokalen Test-/Freeze-
-Sessions terminal. Nicht aus Kontext erneut starten, vorbereiten oder einfrieren.
-Detailstand: `build/validation/report-export-workflow-2026-11-05/STATE.md`.
+[F1-Fontprobe](verification/font-settings-fault-2026-11-05.md): tatsächlich separates
+Settings-Fenster öffnen, Allokationsfehler erreichen und Rollback/Entwurf prüfen.
+Vorher beide Stufe3 negativ, nachher Windows/Linux je3/3. Produktfonts unverändert.
 
-Die POSIX-Sicherheitsprüfung blieb aktiv: DrvFS liefert nach chmod0700 weiterhin
-0777, die private ext4-Fixture korrekt0700. Die zwei eigenen temporären Abbilder
-wurden nach vollständiger Archivierung und Prüfung auf offene Nutzung entfernt:
-[191.393.792 zugeordnete Dateibytes](verification/report-export-filesystem-cleanup-2026-11-05.json).
-Originalarchive und Referenzen bleiben erhalten; keine gemeinsame WSL-Änderung.
+Warmstand **f1-error-semantics-final**, **307 eigene Eingaben**. Alle berührten
+Eingaben vor Build/Prüfung in Root/Isolation/Manifest abgeglichen; Font- und
+Link-Quell-/Runtimearchive vollständig zurückgelesen. Alle lokalen Sessions
+terminal, inklusive finalem Client52151, Gegenprobe17087 und Freeze33045.
+**Nicht allein aus Kontext wiederholen.** Detailstand:
+`build/validation/f1-error-semantics-2026-11-05/STATE.md`.
 
 ## Weitere aktuelle Abschlüsse
 
+- [Berichtsexport](verification/report-export-workflow-2026-11-05.md):
+  Windows Release/Alpine/X11 ASan/UBSan je5/5,24 Grafikdateien geprüft.
+  Quelle01d2c0d0 und beide Remotes samt1257Eingaben nachgewiesen.
+  Linux-UI42090594921 inzwischen terminal: GCC/Clang je26/26 Daten+46/48 UI,
+  nur die jetzt lokal korrigierten Font-/Linkprüfungen fehlgeschlagen; beide
+  Originaljoblogs vollständig gelesen, keine großen ZIPs zusätzlich geladen.
+  POSIX-Sicherheitsprüfung erhalten, eigene Testabbilder nach Archivprüfung
+  [aufgeräumt](verification/report-export-filesystem-cleanup-2026-11-05.json).
 - [SDK-Prüfbaukasten](verification/verification-kit-import-2026-11-05.md),
   [Quelle7bbc5f13 und beide Remotes geprüft](verification/verification-kit-import-commit-2026-11-05.json):
   fehlendes lokales artifact_paths.py aufgenommen; isolierter Import auf Windows/
@@ -57,20 +61,18 @@ Originalarchive und Referenzen bleiben erhalten; keine gemeinsame WSL-Änderung.
 
 ## Nächste konkrete Aufgaben
 
-1. Quelle01d2c0d0 ist geprüft und in beiden Remotes. Neue tatsächliche Läufe:
-   Linux-UI42090594921 in_progress, Paket42090594644 und CI42090594659 pending.
-   Mac-Editor42090594861 und Workspace42090594627 queued; weitere neue Mac-Runs
-   samt Quellbindung stehen im Commitnachweis. Dieselben Handles weiterverfolgen,
-   kein Neustart wegen Beobachtungsfrist. Kit-Quelle7bbc5f13 hatte zuvor
-   Paket42082675664 und CI42082675610; neue Quelle enthält diesen Fix ebenfalls.
-2. Übrige bestätigte glibc-CI-Fehler anhand gesicherter Originale bearbeiten:
-   font_demand Stufe3, accessibility_links_atspi fehlende Fehlermeldung und
-   GCC zusätzlich accessibility_atspi.py:200, reader.grabFocus() liefert false.
-   Alte Auftriebs-/Federfehler Stufe34 sind lokal behoben; neue glibc-Abnahme
-   ist noch nicht bewiesen. Quelle df9927c6 / Linux-UI42076708745 ist vollständig
-   terminal (Clang44/48, GCC43/48, jeweils26/26Daten).
-   Clang-Archiv im [Nachweis](verification/glibc-endian-clang-2026-11-05.md),
-   vollständiges GCC-Joblog unter `verification-kit-import-2026-11-05`.
+1. Die neuen tatsächlichen Plattformläufe zum gepushten F1-Quellcommit verfolgen,
+   insbesondere glibc-Font-/Linkprüfung und korrigiertes SDK-Prüfkit auf frischen
+   Debian-/Ubuntu-Verbrauchern. Handles aus `f1-error-semantics-2026-11-05/new-runs.json`
+   im lokalen Validationordner verwenden; kein Neustart wegen Beobachtungsfrist.
+2. Frühere Quelle01d2c0d0 zuletzt: MacWorkspace42090594627 Intel/ARM in der echten
+   34-Projekt-Matrix, Editor42090594861 Intel aktiv/ARMqueued; Paket42090594644
+   jobs[], GeneralCI42090594659 mehrere Compilerjobs aktiv. NativeMenüs42090594773
+   und Typografie42090594756 beide Architekturen laut Job-API success, deren
+   Originalartefakte noch nicht gelesen. Nicht als vollständige neue Abnahme führen.
+   Linux-UI42090594921 ist vollständig terminal; nicht erneut pollen. Der ältere
+   GCC-grabFocus-Fehler tritt in dessen neuen beiden Jobs nicht auf: nicht auf
+   Verdacht reparieren. Neue F1-Korrekturen brauchen ihre eigene glibc-Abnahme.
 3. Native Accessibility-/Screenreader-Aufgaben, physische Eingabe und Capture
    außerhalb einer OS-Fenstergrenze; gesamte freigegebene Gestaltung A2/B2,
    Kontextmenüs A, Einstellungen, Aufgabenfenster und F1 weiter abgleichen.
@@ -101,6 +103,9 @@ Abgelehnte Löschziele nicht erneut versuchen oder mit anderem Werkzeug umgehen:
 - `build/validation/completion-c-2026-11-05/restored-portable-windows`
 - `build/validation/signature-focus-2026-11-05/xauth-verified`
 - `build/validation/signature-focus-2026-11-05/xauth-accepted`
+- Die sieben konkreten Dateien im [neuen abgelehnten Bereinigungsplan](verification/f1-error-cleanup-2026-11-05.json).
+  Ein wiederhergestelltes temporäres Programm und sechs bytegleiche Diagnosebilder;
+  automatische Ablehnung „blocked by policy“, alle erhalten,0Bytes freigegeben.
 
 Letztere wurden automatisch mit „blocked by policy“ abgelehnt; diese Ablehnung
 ist kein Auftrag für einen anderen Löschweg.

@@ -1296,7 +1296,15 @@ static struct nk_rect documentation_detail_label(app *a,const char *text) {
     ui->current->layout->row.height=height+ui->style.window.spacing.y;
     enum nk_widget_layout_states visible=nk_widget(&bounds,ui);
     bounds.x+=12;bounds.w=width;
+    /* Keep the article's status/error readable by assistive clients after a
+     * link lower down has scrolled this row out of view. The existing full
+     * publication path retains its real clipped/offscreen state; it neither
+     * draws outside the viewport nor moves the reader's focus or position. */
+    ps_ui_font_layout *layout=ui->userdata.ptr;
+    bool previous_full=layout->accessibility_full_controls;
+    layout->accessibility_full_controls=true;
     ps_ui_accessibility_label(ui,bounds,text);
+    layout->accessibility_full_controls=previous_full;
     if(visible==NK_WIDGET_INVALID)return bounds;
     size_t at=0,length=strlen(text);float y=bounds.y+(line-font->height)/2;
     do {

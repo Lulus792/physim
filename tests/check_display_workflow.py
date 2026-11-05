@@ -148,6 +148,8 @@ def documentation_font_demand(flow,directory):
     output=flow.steps[-1]['stdout']
     require('FONT DEMAND: initial variants=7' in output,'Initial F1 fonts were not limited to the needed sizes')
     require('failed zoom/settings preserve fonts, context, values and preference file' in output,'Missing actual failed font transaction')
+    fault=re.search(r'FONT DEMAND SETTINGS: actual-window=1 allocation-requests=(\d+) failed-with-draft=1 active-file-fonts-context-preserved=1',output)
+    require(fault and int(fault.group(1))>=3,'Settings font failure did not reach allocation in a real open task window')
     require('FONT DEMAND: independent sizes ui=22 code=18 variants=17' in output,'Independent UI/code sizes or cache reuse missing')
     require('FONT DEMAND: populated bank retired at density 2 and rebuilt at density 1' in output,'Populated font bank did not survive density replacement')
     require('DOCUMENTATION RASTER TARGET: logical=760x540 pixels=1520x1080 density=2.000' in output,'Missing doubled framebuffer after populated-bank replacement')

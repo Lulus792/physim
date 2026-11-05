@@ -918,18 +918,32 @@ static void documentation_font_demand_test(app *a,int *stage,int *code,const cha
         *capture="docs-font-demand-failed.bmp";break;
     }
     case 3: {
+        open_settings(a);
+        if(!a->settings_open || !a->settings_window || a->settings_window==a->window || a->settings_ui==a->ui){ok=false;break;}
         ps_preferences disk_before={0},disk_after={0};ps_result before=ps_preferences_read(a->preferences_path,&disk_before);
         documentation_font_failure failure={0};failure.fail_after=3;
         struct nk_allocator allocator={nk_handle_ptr(&failure),documentation_font_allocate,documentation_font_release};
         a->settings_draft=a->preferences;a->settings_draft.ui_size=22;a->settings_draft.editor_size=18;
+        SDL_GLContext context_before=SDL_GL_GetCurrentContext();
         a->doc_test_font_allocator=&allocator;settings_commit(a);a->doc_test_font_allocator=NULL;
         ps_result after=ps_preferences_read(a->preferences_path,&disk_after);
         ok=before==after && (before!=PS_OK || !memcmp(&disk_before,&disk_after,sizeof disk_before)) &&
            a->preferences.ui_size==initial.ui_size && a->preferences.editor_size==initial.editor_size && a->doc_font_ui==original &&
-           documentation_font_variants(a)==7 && !failure.live && a->preferences_error[0];
+           a->doc_ui->style.font==original && a->doc_reading_version==version && SDL_GL_GetCurrentContext()==context_before &&
+           documentation_font_variants(a)==7 && !failure.live && failure.requests>=3 && a->preferences_error[0] &&
+           a->settings_open && !a->settings_close_pending && a->settings_draft.ui_size==22 && a->settings_draft.editor_size==18;
+        if(ok)printf("FONT DEMAND SETTINGS: actual-window=1 allocation-requests=%zu failed-with-draft=1 active-file-fonts-context-preserved=1\n",failure.requests);
+        else fprintf(stderr,"Font demand settings: open=%d requests=%zu live=%zu draft=%u/%u error=%s\n",a->settings_open,failure.requests,failure.live,a->settings_draft.ui_size,a->settings_draft.editor_size,a->preferences_error);
         puts("FONT DEMAND: failed zoom/settings preserve fonts, context, values and preference file");
-        break;
+        *stage=30;break;
     }
+    case 30:
+        /* Let the real task window paint its retained error and draft once;
+         * cancellation must precede the existing font retry/density probes. */
+        ok=a->settings_open && !a->settings_close_pending && a->preferences_error[0] &&
+           a->settings_draft.ui_size==22 && a->settings_draft.editor_size==18 &&
+           a->preferences.ui_size==initial.ui_size && a->preferences.editor_size==initial.editor_size && a->doc_font_ui==original;
+        settings_close(a);*stage=4;break;
     case 4:
         documentation_zoom(a,1);
         ok=documentation_font_size(a)==18 && a->doc_font_ui->height==18 &&

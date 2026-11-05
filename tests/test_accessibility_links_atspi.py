@@ -118,8 +118,21 @@ try:
     assert document.queryComponent().getAccessibleAtPoint(box[0]+2,box[1]+2,pyatspi.WINDOW_COORDS)==table_cells[3]
     (a.work/'reader/link-focus-done').write_text('verified',encoding='utf-8')
     wait(lambda:marker('LINKS READY INVALID'),'invalid link phase')
-    assert links[0].getObject(0).queryAction().doAction(0)
-    wait(lambda:any('nicht in der mitgelieferten' in n.name for n in w),'actual link error')
+    invalid_target=links[0].getObject(0)
+    assert invalid_target.queryComponent().grabFocus()
+    wait(lambda:invalid_target.getState().contains(pyatspi.STATE_FOCUSED) and invalid_target.getState().contains(pyatspi.STATE_SHOWING),'invalid source link focused and revealed')
+    link_bounds=tuple(invalid_target.queryComponent().getExtents(pyatspi.WINDOW_COORDS))
+    assert invalid_target.queryAction().doAction(0)
+    error_node=wait(lambda:next((n for n in w if 'nicht in der mitgelieferten' in n.name),None),'actual link error')
+    assert error_node.getRole()==pyatspi.ROLE_LABEL
+    assert not error_node.getState().contains(pyatspi.STATE_SHOWING),'scrolled status must retain its actual offscreen state'
+    assert not error_node.getState().contains(pyatspi.STATE_FOCUSED),'error must not take the reading focus'
+    assert invalid_target.getState().contains(pyatspi.STATE_FOCUSED)
+    # Native activation queues a reveal for the following UI frame. Require the
+    # exact original geometry after that request, rather than sampling mid-frame.
+    wait(lambda:tuple(invalid_target.queryComponent().getExtents(pyatspi.WINDOW_COORDS))==link_bounds,'failed navigation retained the source link position')
+    after_bounds=tuple(invalid_target.queryComponent().getExtents(pyatspi.WINDOW_COORDS))
+    assert after_bounds==link_bounds,('failed navigation moved the article',link_bounds,after_bounds)
     assert links[0].isValid() and text.getText(0,-1)==content
     (a.work/'reader/link-invalid-done').write_text('verified',encoding='utf-8')
     wait(lambda:marker('LINKS READY INVOKE'),'valid link phase')
@@ -141,6 +154,7 @@ try:
     assert any(e['type'].startswith('object:state-changed:focused') for e in events)
     (a.work/'results.json').write_text(json.dumps(dict(independent_client=True,ordered_links=names,
         scalar_ranges=True,uris=True,offscreen_focus=True,actual_geometry=True,invalid_navigation_rejected=True,
+        offscreen_error_readable=True,error_does_not_steal_focus=True,failed_navigation_preserves_viewport=True,
         native_navigation=True,obsolete_links_rejected=True,table_grid=True,table_headers=True,
         table_cell_coordinates=True,table_nested_links=True,obsolete_tables_rejected=True,
         events=events),ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
