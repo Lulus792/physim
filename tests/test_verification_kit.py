@@ -5,6 +5,8 @@ import importlib.util
 import json
 from pathlib import Path
 import shutil
+import subprocess
+import sys
 import tarfile
 import tempfile
 
@@ -52,6 +54,12 @@ assert archive.read_bytes()==original
 fixture=root/'fixture';fixture.mkdir()
 for name in names:
     target=fixture/name;target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(repo/name,target)
+# Import exactly the relocated driver used by verify-native-sdk.py. Isolated
+# Python cannot accidentally satisfy its local imports from this checkout.
+import_driver = "import importlib.util,sys; from pathlib import Path; s=importlib.util.spec_from_file_location('relocated_build',sys.argv[1]); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); assert m.artifact_paths.PROJECT.resolve()==Path(sys.argv[1]).resolve().parents[1]; print('Relocated build driver import: passed')"
+loaded=subprocess.run([sys.executable,'-I','-X','utf8','-B','-c',import_driver,str(fixture/'tools/build.py')],cwd=fixture,capture_output=True,text=True,encoding='utf-8')
+assert loaded.returncode==0,loaded.stdout+loaded.stderr
+assert 'Relocated build driver import: passed' in loaded.stdout
 missing=fixture/'tools/sdk_series_probe.c';missing.unlink()
 try:kit.package(fixture,root/'incomplete.tar.gz');raise AssertionError('Missing probe was packaged')
 except ValueError as error:assert 'sdk_series_probe.c' in str(error)

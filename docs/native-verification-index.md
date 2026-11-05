@@ -11,6 +11,12 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
 
 ## Neuere Editorprüfungen
 
+- [Verschobenes SDK-Prüfarchiv](verification/verification-kit-import-2026-11-05.md):
+  fehlendes lokales `artifact_paths.py` in beiden frischen Installationssystemen
+  nachgewiesen; isolierter Treiberimport auf Windows/Linux vor Fix negativ,
+  danach positiv. Alle 212 Verbraucherdateien gegen Git gelesen. Originaler
+  Debian-Release-Build tatsächlich 789/789; Appstart ohne Python auf beiden
+  Systemen erfolgreich. Vollständiger korrigierter Verbraucher-Nachlauf offen.
 - [Suchfokus nach Anwendungswechsel](verification/search-focus-2026-11-05.md):
   echter Verlust des Schaltflächenfokus auf Windows/Linux reproduziert und im
   SDL-Adapter korrigiert. Beide Plattformen je 4/4 Daten und 3/3 UI-Gruppen,

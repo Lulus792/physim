@@ -1,0 +1,186 @@
+{
+  "date": "2026-11-05",
+  "baseline_source": "df9927c68d2295ce0ad4f4ada689f774cfa281ac",
+  "local_parent_commit": "8c2b24b3f183bd88fd8a0fea9c18506a07d8e5ab",
+  "cause": "Independent kit omitted tools/artifact_paths.py required by relocated tools/build.py.",
+  "fix": "Include the local storage module and import the actual relocated build driver in isolated Python.",
+  "local": {
+    "windows": {
+      "before": {
+        "result": "build/validation/verification-kit-import-2026-11-05/before-windows.json",
+        "result_sha256": "a4925140025caa8994a9a32371c83abf6e678298a344fb6c49b5bda9b9d3b2ec",
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\Physim\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\Physim\\tests\\test_verification_kit.py",
+          "--work",
+          "D:\\Physim\\build\\validation\\verification-kit-import-2026-11-05\\before-windows"
+        ],
+        "exit_code": 1,
+        "source_hashes": {
+          "tools/package-verification-kit.py": "cc6f8a1a463a17708d14a13fb7bf694d9a0b72a0724a945427bb4d672e67b033",
+          "tests/test_verification_kit.py": "d91946c8f24768b36c93391c4adfbc1671114493114c5376e06ebe1a95a49cda"
+        },
+        "log_sha256": "86dab52c3002e9d2ea38b213549d1d10cdc0f95da56f5cbfeaff23078d5695da"
+      },
+      "after": {
+        "result": "build/validation/verification-kit-import-2026-11-05/after-windows.json",
+        "result_sha256": "8b1bbbac7fca3b0618a93b3508e1f3a50c511b6f9efc886f457e627f01deb930",
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\Physim\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-X",
+          "utf8",
+          "-B",
+          "D:\\Physim\\tests\\test_verification_kit.py",
+          "--work",
+          "D:\\Physim\\build\\validation\\verification-kit-import-2026-11-05\\after-windows"
+        ],
+        "exit_code": 0,
+        "source_hashes": {
+          "tools/package-verification-kit.py": "86df4f266de402bcc812de9d0663fbc207b4234d3b04650ac24df27a290df996",
+          "tests/test_verification_kit.py": "d91946c8f24768b36c93391c4adfbc1671114493114c5376e06ebe1a95a49cda"
+        },
+        "log_sha256": "995392ce1ddf30c711cf7ca665c5dba5754e4967a9bc3779e059abe3ceb5540e"
+      }
+    },
+    "linux": {
+      "before": {
+        "result": "build/validation/verification-kit-import-2026-11-05/before-linux.json",
+        "result_sha256": "30126fb217a01c0691674c24846645e21f81709ebe3356c921ffbd0520ba3773",
+        "command": [
+          "/usr/bin/python3",
+          "-X",
+          "utf8",
+          "-B",
+          "/mnt/d/Physim/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "-X",
+          "utf8",
+          "-B",
+          "/mnt/d/Physim/tests/test_verification_kit.py",
+          "--work",
+          "/mnt/d/Physim/build/validation/verification-kit-import-2026-11-05/before-linux"
+        ],
+        "exit_code": 1,
+        "source_hashes": {
+          "tools/package-verification-kit.py": "cc6f8a1a463a17708d14a13fb7bf694d9a0b72a0724a945427bb4d672e67b033",
+          "tests/test_verification_kit.py": "d91946c8f24768b36c93391c4adfbc1671114493114c5376e06ebe1a95a49cda"
+        },
+        "log_sha256": "d8b73ccfdb875e5396c4991ef4e6b85dc9162f013b88832fb6cee4cd93b9f7cd"
+      },
+      "after": {
+        "result": "build/validation/verification-kit-import-2026-11-05/after-linux.json",
+        "result_sha256": "a7a9a8c7e064c8cfe1822add86805101cb2edbc1630b6cba6ccc3eddf0fbee01",
+        "command": [
+          "/usr/bin/python3",
+          "-X",
+          "utf8",
+          "-B",
+          "/mnt/d/Physim/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "-X",
+          "utf8",
+          "-B",
+          "/mnt/d/Physim/tests/test_verification_kit.py",
+          "--work",
+          "/mnt/d/Physim/build/validation/verification-kit-import-2026-11-05/after-linux"
+        ],
+        "exit_code": 0,
+        "source_hashes": {
+          "tools/package-verification-kit.py": "86df4f266de402bcc812de9d0663fbc207b4234d3b04650ac24df27a290df996",
+          "tests/test_verification_kit.py": "d91946c8f24768b36c93391c4adfbc1671114493114c5376e06ebe1a95a49cda"
+        },
+        "log_sha256": "88a748a8f402b27168b16161a7fb744d3f007be7f9940a512035cc4d36d37543"
+      }
+    }
+  },
+  "kit_audit": {
+    "files": 212,
+    "all_hashes_read": true,
+    "all_consumer_bytes_match_parent_git": true,
+    "nonvendor_crlf_normalized_only": true,
+    "no_foreign_wip": true
+  },
+  "original_artifacts": [
+    {
+      "id": 13442315281,
+      "name": "linux-package-verification-kit",
+      "source": "df9927c68d2295ce0ad4f4ada689f774cfa281ac",
+      "sha256": "1e015e04424baa6f98a012f6622da55705aa073edb569b13062b233d337b6389",
+      "bytes": 355516,
+      "entries": 1,
+      "groups": []
+    },
+    {
+      "id": 13442110552,
+      "name": "linux-release-build-tests",
+      "source": "df9927c68d2295ce0ad4f4ada689f774cfa281ac",
+      "sha256": "fec22cd8dc44016601cbdf91dfd790d4421d94ea3df46b6a7c96e1b536b98ccf",
+      "bytes": 140257,
+      "entries": 3,
+      "groups": [
+        {
+          "entry": "run-ebpif788/results.json",
+          "passed": 789,
+          "total": 789,
+          "failures": []
+        }
+      ]
+    },
+    {
+      "id": 13441395645,
+      "name": "installed-linux-debian-12",
+      "source": "df9927c68d2295ce0ad4f4ada689f774cfa281ac",
+      "sha256": "e46687f6be22fbc821bcefc58707ea00114f9199e7fe12da7df81cc32e51d8a4",
+      "bytes": 9102,
+      "entries": 5,
+      "groups": []
+    },
+    {
+      "id": 13441220870,
+      "name": "installed-linux-ubuntu-24.04",
+      "source": "df9927c68d2295ce0ad4f4ada689f774cfa281ac",
+      "sha256": "008be8a65e84a9ba8c6b1bb05155cf3b82f597e64e0b1a2864a301ceacd99ff5",
+      "bytes": 8408,
+      "entries": 5,
+      "groups": []
+    }
+  ],
+  "original_manifest": {
+    "path": "build/validation/verification-kit-import-2026-11-05/original-artifacts.json",
+    "sha256": "200c121c7759fe05345b5ef4c1bccfb835777c5190f37b514c13328c14368da2"
+  },
+  "debian_release_data": "789/789 actual native cases passed",
+  "installed_startup": {
+    "installed (debian:bookworm, debian-12)": {
+      "job": 127435054249,
+      "app_start_without_python": "passed",
+      "later_failure": "Missing verifier/tools/artifact_paths.py"
+    },
+    "installed (ubuntu:24.04, ubuntu-24.04)": {
+      "job": 127435054258,
+      "app_start_without_python": "passed",
+      "later_failure": "Missing verifier/tools/artifact_paths.py"
+    }
+  },
+  "limits": [
+    "Fresh Debian/Ubuntu complete SDK consumer run remains open until a new corrected-kit CI run.",
+    "Package and UI implementation unchanged;789/789 is data/build scope, not full native UI acceptance."
+  ]
+}

@@ -7,6 +7,14 @@ Projektumsetzung bleiben offen; Teilprüfungen sind keine volle Punktzahl.
 
 ## Letzter geprüfter Schritt
 
+[Verschobenes SDK-Prüfarchiv](verification/verification-kit-import-2026-11-05.md):
+Originaler Debian-Release-Build df9927c6 besteht tatsächlich789/789. Beide frischen
+Installationssysteme starten die App ohne Compiler/Python, scheitern danach am
+fehlenden lokalen artifact_paths.py im Prüfbaukasten. Modul jetzt aufgenommen;
+isolierter Import vor Fix auf Windows/Linux negativ, danach beide positiv.
+Alle212Verbraucherdateien gegen Git gelesen, keine fremden WIP-Bytes. Neue
+vollständige Verbraucherabnahme noch offen. Keine neue GUI-Wiederholung.
+
 [Suchfokus nach Anwendungswechsel](verification/search-focus-2026-11-05.md):
 Schaltflächenfokus ging im SDL-Adapter beim echten OS-Fokusverlust verloren.
 Alte Quelle auf Windows und Linux mit neuer Probe exakt an Stufe 50 verworfen.
@@ -96,10 +104,12 @@ pollen oder neu starten. Diese alte Quelle belegt nicht die spätere Fokuskorrek
    Fehler Stufe34, font_demand Stufe3, accessibility_links_atspi fehlende Meldung.
    Original-ZIP/Digest/alle2365Einträge gelesen, keine Bildextraktion. Nicht
    erneut aus Kontext herunterladen. Ursachenprüfung anhand gesicherter Originale.
-   **Linux-Paket42076708931**: Buildjob127418724841 jetzt terminal/success;
-   tatsächliche Ergebnisarchive noch nachlesen. Installationsprüfungen laufen
-   als Debian127435054249 und Ubuntu127435054258. **Linux-UI42076708745** jetzt
-   beide terminal/failure; GCC127418724267-Originale noch nicht gelesen.
+   **Linux-Paket42076708931** jetzt vollständig terminal: Buildjob127418724841
+   success, Original789/789 gelesen. Debian127435054249/Ubuntu127435054258 failure
+   durch oben korrigierten Prüfbaukastenimport; vier Original-ZIPs/Digests/alle
+   Einträge gelesen. Nicht weiter pollen oder aus Kontext herunterladen.
+   **Linux-UI42076708745** ebenfalls beide terminal/failure; GCC127418724267-
+   Original-Joblog gelesen und unter verification-kit-import gesichert,43/48UI.
    Clang-Originale sind oben gesichert. Diesen geschlossenen UI-Run nicht weiter
    pollen. **CI42076708718** zuletzt pending, noch keine Jobs. Dieselben aktiven
    Handles weiterverfolgen, nicht neu starten. Ubuntu-Clang belegt die

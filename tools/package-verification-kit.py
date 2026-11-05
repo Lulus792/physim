@@ -16,7 +16,9 @@ import tarfile
 
 ROOT = Path(__file__).resolve().parent.parent
 ENTRY_POINTS = ("tools/verify-native-sdk.py", "tools/wait-window-manager.py",
-                "tests/test_linux_native_dialogs.py")
+                "tests/test_linux_native_dialogs.py",
+                # Imported by the relocated build driver, not a repo / path.
+                "tools/artifact_paths.py")
 
 
 def repository_paths(source):
