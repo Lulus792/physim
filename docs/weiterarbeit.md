@@ -10,6 +10,9 @@ Prüfung oder Protokoll-Trennlinie allein wegen Kompaktierung erneut beginnen.
 **Nutzer-Mac aus; keine Zugriffe/Erreichbarkeitsproben.**
 **Eingefroren: `completion-locals-final`, 178 eigene Eingaben / 1.128 Compiler-/
 Testdateien; alle lokalen Handles beendet, Quell-/Laufzeit-/Archivbytes gelesen.**
+Quellcommit **`072c06f5`**; sämtliche **1.136** eindeutigen Compiler-/Test-/eigenen
+Eingaben gegen tatsächliche Git-Blobs abgeglichen, nur CRLF/LF normalisiert.
+[Commitabschluss](verification/completion-locals-commit-2026-11-05.json).
 Eigene Scope-Kopie aus echtem Parser, lokale Variablen/Parameter vor API-Namen,
 geschriebener Typ/Quellzeile, Unicode-Präfix mit echtem fetten Font, neutrale Karte
 ohne falschen API-Link, exakter Ersatz/Undo. Grammatisch bestätigte leere Argumente

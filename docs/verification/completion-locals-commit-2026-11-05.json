@@ -1,0 +1,16 @@
+{
+  "phase": "completion-locals-final",
+  "revision": "HEAD",
+  "compiler_and_test_count": 1128,
+  "own_input_count": 178,
+  "unique_files": 1136,
+  "all_tested_input_bytes_match_git": true,
+  "crlf_normalized_only": true,
+  "source_commit": "072c06f5bf6b7e75a967b1e6fc34a6f2684ea70c",
+  "original_match": {
+    "path": "build/validation/completion-locals-2026-11-05/commit-match.json",
+    "sha256": "4c8bc78a4d8cf2627b33130523496472d788db4bb1d3d853f7afd1f7a0e3f858"
+  },
+  "local_handles": "all terminal",
+  "mac": "private Mac OFF; no access or probes; no new hosted result claimed"
+}
