@@ -15,7 +15,9 @@ typedef struct {
     ps_lang_editor_parameter *parameters;
     size_t function_count,function_capacity,parameter_count,parameter_capacity;
     size_t scope_start,scope_depth;
-    int limited;
+    int limited, module_only, lexical_error;
+    ps_lang_token recovery_record;
+    size_t recovery_indent,resume_after;
 } editor_signatures;
 typedef struct parser {
     ps_lang_lexer lexer;
@@ -148,7 +150,8 @@ static size_t expression(parser *p, int minimum, int multiline);
 static void signature_header(parser *p, ps_lang_token name, size_t parameters,
                              size_t result, int method, int generic) {
     editor_signatures *s = p->signatures;
-    if (!s || p->error.kind == PS_LANG_ERROR || p->current.kind != PS_LANG_COLON)
+    if (!s || (s->module_only && s->scope_depth) ||
+        p->error.kind == PS_LANG_ERROR || p->current.kind != PS_LANG_COLON)
         return;
     ps_lang_editor_function f = {
         .name_start = name.offset, .name_end = name.offset + name.length,
@@ -746,6 +749,17 @@ static size_t binding_block(parser *p, size_t parent_indent, size_t parameters,
 static size_t block(parser *p, size_t parent_indent) {
     return binding_block(p, parent_indent, 0, 0, NULL);
 }
+static void signature_record(parser *p,ps_lang_token name,size_t parent_indent){
+    editor_signatures *s=p->signatures;
+    if(s && s->module_only && !s->scope_depth && !parent_indent){
+        s->recovery_record=name;s->recovery_indent=p->indent;
+    }
+}
+static void signature_record_end(parser *p,size_t parent_indent){
+    editor_signatures *s=p->signatures;
+    if(s && s->module_only && !s->scope_depth && !parent_indent && p->error.kind!=PS_LANG_ERROR)
+        s->recovery_record=(ps_lang_token){0};
+}
 static size_t function(parser *p, size_t parent_indent, int method);
 static size_t conditional_condition(parser *p) {
     if (p->current.kind != PS_LANG_LET && p->current.kind != PS_LANG_VAR)
@@ -780,6 +794,7 @@ static size_t record(parser *p, size_t parent_indent) {
     }
     ps_lang_token saved_record = p->record_name;
     p->record_name = name;
+    signature_record(p, name, parent_indent);
     size_t indentation = p->indent, first = 0, last = 0;
     size_t methods = 0, last_method = 0;
     while (p->current.kind != PS_LANG_EOF && p->indent > parent_indent &&
@@ -826,6 +841,7 @@ static size_t record(parser *p, size_t parent_indent) {
     size_t signature = generic ? node(p, PS_AST_GENERIC_SIGNATURE, name,
                                       type_parameters, 0, template_start) : 0;
     p->record_name = saved_record;
+    signature_record_end(p, parent_indent);
     return node(p, generic ? PS_AST_GENERIC_STRUCT : PS_AST_STRUCT,
                 name, first, methods, signature);
 }
@@ -848,6 +864,7 @@ static size_t enumeration(parser *p, size_t parent_indent) {
     }
     ps_lang_token saved_record = p->record_name;
     p->record_name = name;
+    signature_record(p, name, parent_indent);
     size_t indentation = p->indent, first = 0, last = 0;
     size_t methods = 0, last_method = 0;
     while (p->current.kind != PS_LANG_EOF && p->indent > parent_indent &&
@@ -899,6 +916,7 @@ static size_t enumeration(parser *p, size_t parent_indent) {
     size_t signature = generic ? node(p, PS_AST_GENERIC_SIGNATURE, name,
                                       type_parameters, 0, template_start) : 0;
     p->record_name = saved_record;
+    signature_record_end(p, parent_indent);
     return node(p, generic ? PS_AST_GENERIC_ENUM : PS_AST_ENUM,
                 name, first, methods, signature);
 }
@@ -957,6 +975,7 @@ static size_t selection(parser *p, ps_lang_token keyword, size_t parent_indent) 
 }
 static size_t function(parser *p, size_t parent_indent, int method) {
     ps_lang_token name = p->current;
+    if(p->signatures && p->signatures->module_only)p->signatures->resume_after=name.offset;
     expect(p, PS_LANG_IDENTIFIER, "Expected function name");
     size_t template_start = p->count, type_parameters = 0, last_type_parameter = 0;
     int generic = accept(p, PS_LANG_LT);
@@ -1121,6 +1140,46 @@ static size_t statement(parser *p) {
     p->depth--;
     return id;
 }
+static int signature_method_at(const parser *p){
+    const editor_signatures *s=p->signatures;
+    if(!s || !s->module_only || !s->recovery_record.length ||
+       p->indent!=s->recovery_indent || p->current.column!=p->indent+1)return 0;
+    return p->current.kind==PS_LANG_FUNC?1:p->current.kind==PS_LANG_MUTATING?2:p->current.kind==PS_LANG_STATIC?3:0;
+}
+static int signature_resume(parser *p){
+    editor_signatures *s=p->signatures;
+    /* An unfinished call can consume the next line's `func` as a lambda token
+     * before failing at its name. Revisit that ORIGINAL line with the lexer;
+     * never revisit the header currently being parsed. */
+    size_t begin=p->current.offset-(p->current.column-1),indent=begin;
+    while(indent<p->lexer.size && p->lexer.source[indent]==' ')indent++;
+    if(indent>s->resume_after && indent<p->current.offset){
+        ps_lang_lexer line;ps_lang_lexer_init(&line,p->lexer.source,p->lexer.size);
+        line.offset=begin;line.line=p->current.line;line.column=1;
+        ps_lang_token first=ps_lang_lexer_next(&line),next;
+        ps_lang_lexer probe=line;next=ps_lang_lexer_next(&probe);
+        int module=first.column==1 && (first.kind==PS_LANG_FUNC || first.kind==PS_LANG_STRUCT || first.kind==PS_LANG_ENUM || first.kind==PS_LANG_IMPORT) && next.kind==PS_LANG_IDENTIFIER;
+        int method=s->recovery_record.length && first.column==s->recovery_indent+1 &&
+            ((first.kind==PS_LANG_FUNC && next.kind==PS_LANG_IDENTIFIER) ||
+             ((first.kind==PS_LANG_STATIC || first.kind==PS_LANG_MUTATING) && next.kind==PS_LANG_FUNC));
+        if(first.offset==indent && (module || method)){
+            p->lexer=line;p->current=first;p->indent=first.column-1;p->indent_line=first.line;return 1;
+        }
+    }
+    while(p->current.kind!=PS_LANG_EOF && p->current.kind!=PS_LANG_ERROR){
+        if(p->current.column==1 && p->current.kind!=PS_LANG_NEWLINE &&
+           p->current.kind!=PS_LANG_RPAREN && p->current.kind!=PS_LANG_RBRACKET && p->current.kind!=PS_LANG_COMMA){
+            s->recovery_record=(ps_lang_token){0};
+            if(p->current.kind==PS_LANG_FUNC || p->current.kind==PS_LANG_STRUCT || p->current.kind==PS_LANG_ENUM || p->current.kind==PS_LANG_IMPORT){
+                parser probe=*p;advance(&probe);
+                if(probe.current.kind==PS_LANG_IDENTIFIER)return 1;
+            }
+        }
+        if(signature_method_at(p))return 1;
+        advance(p);
+    }
+    return 0;
+}
 static ps_lang_parse_result parse(const void *source, size_t size, ps_lang_node *nodes,
                                   size_t capacity, editor_bindings *editor,
                                   editor_signatures *signatures) {
@@ -1137,12 +1196,35 @@ static ps_lang_parse_result parse(const void *source, size_t size, ps_lang_node 
     else
         memset(&nodes[0], 0, sizeof(nodes[0]));
     ps_lang_token start = p.current;
+    ps_lang_token first_error = {0};
     size_t first = 0, last = 0;
     separators(&p);
-    while (p.current.kind != PS_LANG_EOF && p.error.kind != PS_LANG_ERROR) {
+    while (p.current.kind != PS_LANG_EOF) {
+        if(p.error.kind==PS_LANG_ERROR){
+            if(!signatures || !signatures->module_only || signatures->limited || p.lexer.failure.kind==PS_LANG_ERROR)break;
+            if(first_error.kind!=PS_LANG_ERROR)first_error=p.error;
+            p.error=(ps_lang_token){0};p.depth=0;p.index_range_depth=0;
+            signatures->scope_start=signatures->scope_depth=0;
+            if(!signature_resume(&p))break;
+        }
+        int method=signature_method_at(&p);
+        if(method){
+            ps_lang_token saved_record=p.record_name;p.record_name=signatures->recovery_record;
+            size_t indentation=p.indent;advance(&p);
+            if(method!=1)expect(&p,PS_LANG_FUNC,"Expected func after method modifier");
+            function(&p,indentation,method);p.record_name=saved_record;
+            separators(&p);continue;
+        }
         if (p.indent != 0) {
             error(&p, "Unexpected indentation at module scope");
+            if(signatures && signatures->module_only)continue;
             break;
+        }
+        if(signatures && signatures->module_only){
+            signatures->recovery_record=(ps_lang_token){0};
+            /* Includes failed struct/enum/import headers: recovery must never
+             * revisit its current declaration even when it produced no nodes. */
+            signatures->resume_after=p.current.offset;
         }
         if (p.current.kind == PS_LANG_IMPORT) {
             advance(&p);
@@ -1170,6 +1252,10 @@ static ps_lang_parse_result parse(const void *source, size_t size, ps_lang_node 
         } else
             append(&p, &first, &last, statement(&p));
         separators(&p);
+    }
+    if(signatures && signatures->module_only){
+        signatures->lexical_error=p.lexer.failure.kind==PS_LANG_ERROR;
+        if(first_error.kind==PS_LANG_ERROR)p.error=first_error;
     }
     size_t root = node(&p, PS_AST_MODULE, start, first, 0, 0);
     return (ps_lang_parse_result){p.error.kind == PS_LANG_ERROR ? 0 : root, p.count, p.error};
@@ -1216,10 +1302,10 @@ ps_lang_editor_bindings_result ps_lang_editor_bindings(
     }
     return result;
 }
-ps_lang_editor_signatures_result ps_lang_editor_signatures(
+static ps_lang_editor_signatures_result signature_query(
     const void *source, size_t size, ps_lang_node *nodes, size_t node_capacity,
     ps_lang_editor_function *functions, size_t function_capacity,
-    ps_lang_editor_parameter *parameters, size_t parameter_capacity) {
+    ps_lang_editor_parameter *parameters, size_t parameter_capacity,int module_only) {
     ps_lang_editor_signatures_result result = {.status = PS_LANG_EDITOR_INVALID};
     if (size > 256u * 1024u) {
         result.status = PS_LANG_EDITOR_LIMIT;
@@ -1231,7 +1317,8 @@ ps_lang_editor_signatures_result ps_lang_editor_signatures(
         return result;
     editor_signatures s = {
         .functions = functions, .parameters = parameters,
-        .function_capacity = function_capacity, .parameter_capacity = parameter_capacity
+        .function_capacity = function_capacity, .parameter_capacity = parameter_capacity,
+        .module_only = module_only
     };
     ps_lang_parse_result parsed = parse(source, size, nodes, node_capacity, NULL, &s);
     result.diagnostic = parsed.diagnostic;
@@ -1239,7 +1326,7 @@ ps_lang_editor_signatures_result ps_lang_editor_signatures(
         result.status = PS_LANG_EDITOR_LIMIT;
         return result;
     }
-    if (!parsed.root && parsed.diagnostic.offset != size)
+    if (s.lexical_error || (!module_only && !parsed.root && parsed.diagnostic.offset != size))
         return result;
     result.status = parsed.root ? PS_LANG_EDITOR_OK : PS_LANG_EDITOR_PREFIX;
     result.function_count = s.function_count;
@@ -1248,4 +1335,16 @@ ps_lang_editor_signatures_result ps_lang_editor_signatures(
         (s.function_count > function_capacity || s.parameter_count > parameter_capacity))
         result.status = PS_LANG_EDITOR_LIMIT;
     return result;
+}
+ps_lang_editor_signatures_result ps_lang_editor_signatures(
+    const void *source,size_t size,ps_lang_node *nodes,size_t node_capacity,
+    ps_lang_editor_function *functions,size_t function_capacity,
+    ps_lang_editor_parameter *parameters,size_t parameter_capacity){
+    return signature_query(source,size,nodes,node_capacity,functions,function_capacity,parameters,parameter_capacity,0);
+}
+ps_lang_editor_signatures_result ps_lang_editor_module_signatures(
+    const void *source,size_t size,ps_lang_node *nodes,size_t node_capacity,
+    ps_lang_editor_function *functions,size_t function_capacity,
+    ps_lang_editor_parameter *parameters,size_t parameter_capacity){
+    return signature_query(source,size,nodes,node_capacity,functions,function_capacity,parameters,parameter_capacity,1);
 }

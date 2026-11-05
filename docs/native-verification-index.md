@@ -8,6 +8,13 @@ wegen Kontextwechsel erneut anfangen; die ursprünglichen Nachweise unverändert
 
 ## Neuere Editorprüfungen
 
+- [Physim-Modulköpfe während unvollständiger Eingabe](verification/module-signatures-2026-11-05.md):
+  echte Parser-/Lexer-Wiederaufnahme für spätere Modul-/Methodenköpfe, lokale
+  Funktionen weiter über Cursor-Präfix. Windows/Linux erster Stand je17/17 Daten
+  und6/6 GUI, endgültige mode-only-Sicherung je5/5 Daten.13 Fälle/70 Präfixe,
+  drei beschädigte Namespace-Köpfe, vier gezielte Ablehnungen und alter begrenzter
+  Timeout. Strikte AST-/Präfixverträge erhalten. **Gemeinsamer Resolver, HUD,
+  aktueller Mac-Quellnachlauf und Gesamt-/physische Abnahme offen.**
 - [Geschriebene C-Funktionssignaturen](verification/c-signatures-2026-11-05.md):
   tatsächliche Deklaratoren/Prototypen/einfache Zeiger/Definitionsparameter und
   alte geschriebene Typen aus dem unveränderten C-Snapshot. Endgültig Windows/Linux

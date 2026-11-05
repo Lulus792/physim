@@ -31,4 +31,16 @@ ps_lang_editor_signatures_result ps_lang_editor_signatures(
     const void *source,size_t size,ps_lang_node *nodes,size_t node_capacity,
     ps_lang_editor_function *functions,size_t function_capacity,
     ps_lang_editor_parameter *parameters,size_t parameter_capacity);
+/* Document lookup for hoisted module functions/methods while another body is
+ * being edited. Uses real productions and original lexer tokens to resume at
+ * module declaration boundaries or the recorded struct/enum method indentation.
+ * Only complete written headers are published; local functions are deliberately
+ * excluded (use the cursor-prefix query above for their actual lexical scopes).
+ * PREFIX means a syntax error was recovered anywhere, NOT a valid AST. Lexical
+ * failure/resource exhaustion still discard all output. Same ownership/limits/
+ * count-query/capacity contracts. Strict compiler and prefix APIs are unchanged. */
+ps_lang_editor_signatures_result ps_lang_editor_module_signatures(
+    const void *source,size_t size,ps_lang_node *nodes,size_t node_capacity,
+    ps_lang_editor_function *functions,size_t function_capacity,
+    ps_lang_editor_parameter *parameters,size_t parameter_capacity);
 #endif

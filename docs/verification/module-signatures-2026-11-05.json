@@ -1,0 +1,725 @@
+{
+  "date": "2026-11-05",
+  "scope": "Actual hoisted Physim module/method header availability through incomplete editing. Necessary prerequisite for full common resolver/native HUD; neither implemented/accepted by this step.",
+  "behavior": "Separate module-only real parser observation. Original lexer/grammar resumes at module declarations or recorded actual struct/enum method indentation. Complete headers only; local functions excluded and retain separate cursor-prefix API. Syntax recovery PREFIX is not valid AST/compiler acceptance. Lexical/resource failure discards output. Monotonic declaration floor prevents revisiting malformed namespace/import headers without node production.",
+  "tests": {
+    "platforms": [
+      {
+        "platform": "windows",
+        "first_app_sha256": "52c860ab5ffafcd3c41788a7e2c47a20d2f370cc2511a16fa1f446dc50f003b4",
+        "final_app_sha256": "8db455202c26dd9dafceee4ceb751216dc0fb019bab761b902ba0f88d4e838c3",
+        "runs": [
+          {
+            "phase": "native",
+            "run": "run-j8ez662z",
+            "passed": 17,
+            "total": 17,
+            "cases": [
+              "c_bindings",
+              "c_call_context",
+              "c_signatures",
+              "completion",
+              "completion_help",
+              "completion_locals",
+              "completion_c_locals",
+              "call_targets",
+              "editor_signatures",
+              "module_signatures",
+              "completion_info",
+              "syntax",
+              "api_reference",
+              "language_lexer",
+              "language_parser",
+              "language_checker",
+              "language_editor_bindings"
+            ],
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-j8ez662z/results.json",
+              "bytes": 8681,
+              "sha256": "13fa04759f0aa2fe593304e50dce0f8f0b1ae620d90dddddc553e16d35306020"
+            }
+          },
+          {
+            "phase": "native",
+            "run": "run-bfdq67ry",
+            "passed": 6,
+            "total": 6,
+            "cases": [
+              "completion_workflow",
+              "completion_automatic_workflow",
+              "api_reference_workflow",
+              "completion_info_workflow",
+              "completion_automatic_deadline_workflow",
+              "completion_locals_workflow"
+            ],
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bfdq67ry/results.json",
+              "bytes": 143909,
+              "sha256": "b2f72678bb1ba4a9f0210d67c52da4ea61b4adf8a85992688c6abcf9027e7a9d"
+            }
+          },
+          {
+            "phase": "final",
+            "run": "run-lq0hmvsc",
+            "passed": 5,
+            "total": 5,
+            "cases": [
+              "call_targets",
+              "editor_signatures",
+              "module_signatures",
+              "language_parser",
+              "language_editor_bindings"
+            ],
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-lq0hmvsc/results.json",
+              "bytes": 2572,
+              "sha256": "93b14c64d9e0a879c63b9d7b90008bd09eec541f528f53ca51d7efd9e101424b"
+            }
+          }
+        ]
+      },
+      {
+        "platform": "linux",
+        "first_app_sha256": "078680eb425d8a2f1cf94d6393f01323562aeb8d6b767e519d2b8faac06592f6",
+        "final_app_sha256": "7b20259f8816e0a5059c39cd3f314e95fdbd3b811b36b75cf2801313cbf6e45e",
+        "runs": [
+          {
+            "phase": "native",
+            "run": "run-u4ytqfa4",
+            "passed": 17,
+            "total": 17,
+            "cases": [
+              "c_bindings",
+              "c_call_context",
+              "c_signatures",
+              "completion",
+              "completion_help",
+              "completion_locals",
+              "completion_c_locals",
+              "call_targets",
+              "editor_signatures",
+              "module_signatures",
+              "completion_info",
+              "syntax",
+              "api_reference",
+              "language_lexer",
+              "language_parser",
+              "language_checker",
+              "language_editor_bindings"
+            ],
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-u4ytqfa4/results.json",
+              "bytes": 8321,
+              "sha256": "5cd148c67c96af80a2c120f3bf1214d05f47085d2aeb5cd77ba4f5e3503095b4"
+            }
+          },
+          {
+            "phase": "native",
+            "run": "run-5_7z5dvu",
+            "passed": 6,
+            "total": 6,
+            "cases": [
+              "completion_workflow",
+              "completion_automatic_workflow",
+              "api_reference_workflow",
+              "completion_info_workflow",
+              "completion_automatic_deadline_workflow",
+              "completion_locals_workflow"
+            ],
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5_7z5dvu/results.json",
+              "bytes": 141877,
+              "sha256": "ae8607a14115df691f3cbc820f553456ebe8606c8c30da985571903709009457"
+            }
+          },
+          {
+            "phase": "final",
+            "run": "run-6ivhqkjb",
+            "passed": 5,
+            "total": 5,
+            "cases": [
+              "call_targets",
+              "editor_signatures",
+              "module_signatures",
+              "language_parser",
+              "language_editor_bindings"
+            ],
+            "results": {
+              "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-6ivhqkjb/results.json",
+              "bytes": 2462,
+              "sha256": "86b83e37db9b20d8192ce7f0a152e7f97bd725670312cc8a4753daf346ba4e80"
+            }
+          }
+        ]
+      }
+    ],
+    "direct_strict_gcc": {
+      "path": "build/validation/module-signatures-2026-11-05/namespace-fixed.json",
+      "bytes": 1507,
+      "sha256": "04c633bc429fbe37a085ecd0c70ff9262b6f31a9a4bbbe82706b15689d6a79b5"
+    },
+    "vectors": 13,
+    "prefix_header_comparisons": 70,
+    "malformed_namespace_cases": 3,
+    "negative": {
+      "old_commit": "f3ed4068",
+      "old_original_sha256": "06f06fef8708febcf5a834b58cb901e89c5136985ffb484cca38bf0eeb48fa13",
+      "negative_only_adapter": "\nps_lang_editor_signatures_result ps_lang_editor_module_signatures(const void*s,size_t n,ps_lang_node*v,size_t c,ps_lang_editor_function*f,size_t fc,ps_lang_editor_parameter*p,size_t pc){return ps_lang_editor_signatures(s,n,v,c,f,fc,p,pc);}\n",
+      "reports": [
+        {
+          "tag": "old-query-bridge",
+          "command": [
+            "wsl",
+            "-d",
+            "Alpine-Dev",
+            "--exec",
+            "env",
+            "TMPDIR=/mnt/d/Physim/build/validation/module-signatures-2026-11-05",
+            "gcc",
+            "-std=c17",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-g",
+            "-fsanitize=address,undefined",
+            "-fno-sanitize-recover=all",
+            "-I/mnt/d/Physim/src",
+            "-I/mnt/d/Physim/src/language",
+            "/mnt/d/Physim/tests/test_module_signatures.c",
+            "/mnt/d/Physim/src/language/lexer.c",
+            "/mnt/d/Physim/build/validation/module-signatures-2026-11-05/old-query-bridge-final.c",
+            "-o",
+            "/mnt/d/Physim/build/validation/module-signatures-2026-11-05/old-query-bridge-final"
+          ],
+          "compile_exit": 0,
+          "compile_stderr": "",
+          "source_sha256": "dab8b132215957c6994ca81949db32adc068f8b01dabf11e750f71ab794c930f",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "Module vector 0 status=2 names= owners= diagnostic=Expected '(' after anonymous func\nModule signatures line 71: !vectors()\n"
+        },
+        {
+          "tag": "no-line-revisit",
+          "command": [
+            "wsl",
+            "-d",
+            "Alpine-Dev",
+            "--exec",
+            "env",
+            "TMPDIR=/mnt/d/Physim/build/validation/module-signatures-2026-11-05",
+            "gcc",
+            "-std=c17",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-g",
+            "-fsanitize=address,undefined",
+            "-fno-sanitize-recover=all",
+            "-I/mnt/d/Physim/src",
+            "-I/mnt/d/Physim/src/language",
+            "/mnt/d/Physim/tests/test_module_signatures.c",
+            "/mnt/d/Physim/src/language/lexer.c",
+            "/mnt/d/Physim/build/validation/module-signatures-2026-11-05/no-line-revisit-final.c",
+            "-o",
+            "/mnt/d/Physim/build/validation/module-signatures-2026-11-05/no-line-revisit-final"
+          ],
+          "compile_exit": 0,
+          "compile_stderr": "",
+          "source_sha256": "8b783fd9fdfcfc4202d31b3d76a136889b1bf3ad916ae2e76480a52f1806a763",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "Module vector 0 status=1 names=step owners= diagnostic=Expected '(' after anonymous func\nModule signatures line 71: !vectors()\n"
+        },
+        {
+          "tag": "no-namespace",
+          "command": [
+            "wsl",
+            "-d",
+            "Alpine-Dev",
+            "--exec",
+            "env",
+            "TMPDIR=/mnt/d/Physim/build/validation/module-signatures-2026-11-05",
+            "gcc",
+            "-std=c17",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-g",
+            "-fsanitize=address,undefined",
+            "-fno-sanitize-recover=all",
+            "-I/mnt/d/Physim/src",
+            "-I/mnt/d/Physim/src/language",
+            "/mnt/d/Physim/tests/test_module_signatures.c",
+            "/mnt/d/Physim/src/language/lexer.c",
+            "/mnt/d/Physim/build/validation/module-signatures-2026-11-05/no-namespace-final.c",
+            "-o",
+            "/mnt/d/Physim/build/validation/module-signatures-2026-11-05/no-namespace-final"
+          ],
+          "compile_exit": 0,
+          "compile_stderr": "",
+          "source_sha256": "eb3c28e5b704fb616ec50817c2f5e887f3f56b4e89d6aacbaba7f7a475e41dc0",
+          "exit_code": 1,
+          "stdout": "",
+          "stderr": "Module vector 3 status=1 names=step,after owners=Particle, diagnostic=Expected '(' after anonymous func\nModule signatures line 71: !vectors()\n"
+        },
+        {
+          "tag": "swallowed-budget",
+          "command": [
+            "wsl",
+            "-d",
+            "Alpine-Dev",
+            "--exec",
+            "env",
+            "TMPDIR=/mnt/d/Physim/build/validation/module-signatures-2026-11-05",
+            "gcc",
+            "-std=c17",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-g",
+            "-fsanitize=address,undefined",
+            "-fno-sanitize-recover=all",
+            "-I/mnt/d/Physim/src",
+            "-I/mnt/d/Physim/src/language",
+            "/mnt/d/Physim/tests/test_module_signatures.c",
+            "/mnt/d/Physim/src/language/lexer.c",
+            "/mnt/d/Physim/build/validation/module-signatures-2026-11-05/swallowed-budget-final.c",
+            "-o",
+            "/mnt/d/Physim/build/validation/module-signatures-2026-11-05/swallowed-budget-final"
+          ],
+          "compile_exit": 0,
+          "compile_stderr": "",
+          "source_sha256": "17ace40ae74e99b678316a1190d561cea94c00e81213efd3035b90055238f2ae",
+          "exit_code": 1,
+          "stdout": "Module signatures: 13 actual parser recovery/header/namespace vectors passed\n",
+          "stderr": "Module signatures line 46: r.status==PS_LANG_EDITOR_PREFIX && r.function_count==2 && r.parameter_count==2\nModule signatures line 71: !bounds()\n"
+        }
+      ]
+    },
+    "timeout_negative": {
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "TMPDIR=/mnt/d/Physim/build/validation/module-signatures-2026-11-05",
+        "gcc",
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-g",
+        "-fsanitize=address,undefined",
+        "-I/mnt/d/Physim/src",
+        "-I/mnt/d/Physim/src/language",
+        "/mnt/d/Physim/tests/test_module_signatures.c",
+        "/mnt/d/Physim/src/language/lexer.c",
+        "/mnt/d/Physim/build/validation/module-signatures-2026-11-05/before-floor.c",
+        "-o",
+        "/mnt/d/Physim/build/validation/module-signatures-2026-11-05/before-floor"
+      ],
+      "compile_exit": 0,
+      "run_command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "env",
+        "ASAN_OPTIONS=detect_leaks=1:halt_on_error=1",
+        "/mnt/d/Physim/build/validation/module-signatures-2026-11-05/before-floor",
+        "namespace"
+      ],
+      "timeout_seconds": 3,
+      "terminated_by_harness": true
+    },
+    "timeout_stop": {
+      "command": [
+        "wsl",
+        "-d",
+        "Alpine-Dev",
+        "--exec",
+        "ps",
+        "-eo",
+        "pid,args"
+      ],
+      "matching_processes": [],
+      "observed_no_remaining_negative_process": true,
+      "before_source_sha256": "ea3037826d48607300814ca305d69f2066572eeb74d294982335be05f0a970cf",
+      "scope": "Expected negative exceeded3s; subprocess wrapper killed client; actual Linux process absence verified separately. No LSan-clean-exit claim for timed-out fixture."
+    },
+    "timeout_scope": "Expected previous new-query implementation exceeded3s at malformed struct. Harness ended client and actual Linux process absence was checked; no clean LSan-exit claim for killed fixture. Positive new query and four clean failing variants retain ASan/UBSan/LSan1.",
+    "final_regression_scope": "Initial shared-parser change:17data+6GUI eachhost. Additional guard only in new module_only entry, not yet called from UI; final5 targeted data groups eachhost (new query, prior exact AST signatures, call targets, strict parser, variable scopes). Unchanged GUI/C/checker matrices not repeated solely for this mode-only guard; do not claim same appSHA/full final GUI acceptance."
+  },
+  "snapshot": {
+    "final": "module-signatures-final",
+    "compiler_test_inputs": 1227,
+    "owned_inputs": 288,
+    "unique_inputs": 1246,
+    "all_input_bytes_match_git_index": true,
+    "all_referenced_archive_bytes_read": true
+  },
+  "cleanup": {
+    "removed": [
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bfdq67ry/api_reference_workflow/files ä/workflow ä/c/api-reference-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "35f0f073984fdf014c6c72719afd5006a4e8b282533f756c770ee272b6a14d0e",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/c/api-reference-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bfdq67ry/api_reference_workflow/files ä/workflow ä/c/api-reference-document.bmp",
+        "bytes": 3196938,
+        "sha256": "2dcfeba839ce3dda98f483c55a758a49d7594d8a12dc0feadd5cb2306924333f",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/c/api-reference-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bfdq67ry/api_reference_workflow/files ä/workflow ä/c/api-reference-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "b32898a1e9da3f92ed46549f587cf5c09af8ed99742bfb9d94e17be422cc32c2",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/c/api-reference-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bfdq67ry/api_reference_workflow/files ä/workflow ä/phys/api-reference-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "eb781e69082e545bd3299d61395921e39977039287a30dac59a759f03d307e4c",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/phys/api-reference-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bfdq67ry/api_reference_workflow/files ä/workflow ä/phys/api-reference-document.bmp",
+        "bytes": 3196938,
+        "sha256": "e18723da22f0bf14e108e4412886053bfc778e52b1ed6a22aa51f98becda7b62",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/phys/api-reference-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bfdq67ry/api_reference_workflow/files ä/workflow ä/phys/api-reference-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "ff4dd9abc68e0bcc7dbc81eebb3b98dc4d449b1a45b063b27877aa8c57f13301",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/api_reference_workflow/files ä/workflow ä/phys/api-reference-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bfdq67ry/completion_locals_workflow/files ä/workflow ä/c/locals-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "d206b8a7c3bcf09878bb653a690ff621ac4dcaf85589574bc94793b5410879fa",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mxoufvz4/completion_locals_workflow/files ä/workflow ä/c/locals-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bfdq67ry/completion_locals_workflow/files ä/workflow ä/c/locals-document.bmp",
+        "bytes": 3196938,
+        "sha256": "c701c35c2e2de7748ee1f9143ece7f3e4a87e8efda44cd76f756c6b52f20c5df",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mxoufvz4/completion_locals_workflow/files ä/workflow ä/c/locals-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bfdq67ry/completion_locals_workflow/files ä/workflow ä/c/locals-model.bmp",
+        "bytes": 3196938,
+        "sha256": "0042f02d41897e4213d636305837504ad6d1c544394491c4f7f6dd86833cb3a0",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-mxoufvz4/completion_locals_workflow/files ä/workflow ä/c/locals-model.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bfdq67ry/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "8f9bfe6f5a0ff6ee16a04eac288d09d17e64ee9e01d8d0c92f4f498c8f4101c1",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bfdq67ry/completion_workflow/files ä/workflow ä/c/completion-document.bmp",
+        "bytes": 3196938,
+        "sha256": "4f54e16e5de74b48a3fa3e46ab8eba44b124e767bf1ec9fd070541b1eba26657",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/c/completion-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bfdq67ry/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "15fecc83b3c2f7d6893aef222a21c400b28b01eafb4fc5c9666a3fc5a0447e0d",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bfdq67ry/completion_workflow/files ä/workflow ä/c/completion-reference-error.bmp",
+        "bytes": 3196938,
+        "sha256": "952047d0d6bd41484c7aac4566616355acc360ce2331d26be9fc091ccc63588c",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/c/completion-reference-error.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bfdq67ry/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "e11aa9a3942b9a03cc2c981478943d9003639a0c8eba6e0b74bf183c23a3ddbb",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bfdq67ry/completion_workflow/files ä/workflow ä/phys/completion-document.bmp",
+        "bytes": 3196938,
+        "sha256": "57dfb4f827ac5fbdac7bb72e1f07bb2e5644faaccc03e3582c881b46844c6931",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/phys/completion-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bfdq67ry/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "ba8aa091274f0a74f029bc84747bf4a64519d29b8a80d658ff352789f4dc90c3",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bfdq67ry/completion_workflow/files ä/workflow ä/phys/completion-reference-error.bmp",
+        "bytes": 3196938,
+        "sha256": "c4bd5a3ac058e09503ee761a8351264a1db1b40c046bfe44c26643f129ca8d43",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-thhiuzvj/completion_workflow/files ä/workflow ä/phys/completion-reference-error.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5_7z5dvu/api_reference_workflow/files ä/workflow ä/c/api-reference-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "a3151fba54c4ffc73c27cf9693535da1b456e87307804f96e1e568b98cf7d8a7",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/workflow ä/c/api-reference-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5_7z5dvu/api_reference_workflow/files ä/workflow ä/c/api-reference-document.bmp",
+        "bytes": 3196938,
+        "sha256": "785d69709a33a1e01d04ceb19187613cb6ab5bc655b28035b1eefd1d98028cf1",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/workflow ä/c/api-reference-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5_7z5dvu/api_reference_workflow/files ä/workflow ä/c/api-reference-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "78add32d17f9b2fe76dfd12f51fea297416884f28e5ea169f0af1bd3253d6168",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/workflow ä/c/api-reference-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5_7z5dvu/api_reference_workflow/files ä/workflow ä/phys/api-reference-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "9c3d685bee93d272b9bd05297c029ce9e4eaad1b641ee3cc650f680cede89d5d",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/workflow ä/phys/api-reference-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5_7z5dvu/api_reference_workflow/files ä/workflow ä/phys/api-reference-document.bmp",
+        "bytes": 3196938,
+        "sha256": "e21d1d8845e0b86fd54a6e1f32f6396fd2ec78e9137ca8bf766fa6efc37de501",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2rj1yemb/api_reference_workflow/files ä/workflow ä/phys/api-reference-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5_7z5dvu/api_reference_workflow/files ä/workflow ä/phys/api-reference-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "02d012a16af3e88763a5ce2d2d7a49666240aec16464a81acfadfd3f4d6c669d",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/api_reference_workflow/files ä/workflow ä/phys/api-reference-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5_7z5dvu/completion_locals_workflow/files ä/workflow ä/c/locals-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "91a68926cbc83746adc7de9bf9690922a544a7de7829da168a4eb30259c3cf6a",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-pqjm5dl2/completion_locals_workflow/files ä/workflow ä/c/locals-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5_7z5dvu/completion_locals_workflow/files ä/workflow ä/c/locals-document.bmp",
+        "bytes": 3196938,
+        "sha256": "fff0aaf9afa1286d3b21b486a834c22062de244575297b1e1e7342d4dfcc80d0",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-pqjm5dl2/completion_locals_workflow/files ä/workflow ä/c/locals-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5_7z5dvu/completion_locals_workflow/files ä/workflow ä/c/locals-model.bmp",
+        "bytes": 3196938,
+        "sha256": "3d0d4321285424d98e1f66c10dc9a4d43a004153dd2728ac1f1cd0b1f50d0c9a",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-pqjm5dl2/completion_locals_workflow/files ä/workflow ä/c/locals-model.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5_7z5dvu/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "54029509eabb27fce79fac18071d7b9d0e99137783aacb6b7ffd93d443ab7637",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/c/completion-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5_7z5dvu/completion_workflow/files ä/workflow ä/c/completion-document.bmp",
+        "bytes": 3196938,
+        "sha256": "ef262e11585ffe742af3578c949a7537b703de9ec3c32db5f3ccbe5877e31c5a",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/c/completion-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5_7z5dvu/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "a07b8577698a0baecaac7c5b62b0c22307d50eb05aea1e5dd3eafe9d9a4f9b10",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/c/completion-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5_7z5dvu/completion_workflow/files ä/workflow ä/c/completion-reference-error.bmp",
+        "bytes": 3196938,
+        "sha256": "66238798df72a2f947647243012350331580c91f92f20f5f68a6ff1cb5292dd5",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/c/completion-reference-error.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5_7z5dvu/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp",
+        "bytes": 3196938,
+        "sha256": "eb85fd3e395468c72b4f8caa2107513d0821b2ea1cca282b276e9bad01d77786",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/phys/completion-analysis.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5_7z5dvu/completion_workflow/files ä/workflow ä/phys/completion-document.bmp",
+        "bytes": 3196938,
+        "sha256": "4e7116dc23fd810107f8f34b951bf965107f3d9da24b16bb6b4840511d8d1fe6",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/phys/completion-document.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5_7z5dvu/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp",
+        "bytes": 3196938,
+        "sha256": "be131389628a4f164a8ecd36315460e6fe36a5b75bbec03672ddf712637e3a44",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/phys/completion-experiment.bmp"
+      },
+      {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5_7z5dvu/completion_workflow/files ä/workflow ä/phys/completion-reference-error.bmp",
+        "bytes": 3196938,
+        "sha256": "6d7c691cf0625f24b11de507532b2ae2c8fed5d03f9b58021179e2d19b0b9efa",
+        "reference": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xpjl39wh/completion_workflow/files ä/workflow ä/phys/completion-reference-error.bmp"
+      }
+    ],
+    "kept": [],
+    "bytes_freed": 108695892,
+    "reason": "All local first/final jobs terminal; exact byte-identical BMPs matched protected references. Final mode-only guard tested with5data groups eachhost, no repeated GUI/newimage series. All source/runtime archives, errors/logs/references retained. No SDK/cache/VM/foreign data removed."
+  },
+  "raw": [
+    {
+      "path": "build/validation/module-signatures-2026-11-05/namespace-fixed.json",
+      "bytes": 1507,
+      "sha256": "04c633bc429fbe37a085ecd0c70ff9262b6f31a9a4bbbe82706b15689d6a79b5"
+    },
+    {
+      "path": "build/validation/module-signatures-2026-11-05/negative-final.json",
+      "bytes": 5148,
+      "sha256": "1e3865d7ac360d7d11fad6dc47e6e7699cf9e7ed1291a1fc02fbd9428423c564"
+    },
+    {
+      "path": "build/validation/module-signatures-2026-11-05/before-floor.json",
+      "bytes": 953,
+      "sha256": "52d87bccf6497390bf3cbfb3b5e306013d490841ea21b1d303aff1d644f053ea"
+    },
+    {
+      "path": "build/validation/module-signatures-2026-11-05/timeout-stop.json",
+      "bytes": 473,
+      "sha256": "b9aa80cd80281520a1ccda6912ad47e7c3a269ca173425fc99591975c1eca3ea"
+    },
+    {
+      "path": "build/validation/module-signatures-2026-11-05/index-match.json",
+      "bytes": 301113,
+      "sha256": "e1fa3b353113f0070fcf5d58c6fd29ea65a62f47c2229868482ad0b4b2b011e5"
+    },
+    {
+      "path": "build/validation/module-signatures-2026-11-05/cleanup.json",
+      "bytes": 17130,
+      "sha256": "3a14b5afa555332096d145d7861ff3daa2f88e072896084e1c5bb3410898de73"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-j8ez662z/results.json",
+      "bytes": 8681,
+      "sha256": "13fa04759f0aa2fe593304e50dce0f8f0b1ae620d90dddddc553e16d35306020"
+    },
+    {
+      "path": "build/validation/module-signatures-2026-11-05/native-windows.log",
+      "bytes": 71703,
+      "sha256": "f189d8cbf9a810ca0f9705f41c15dcaebc11252a1a2ef8bc895d33ef72ac693f"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-bfdq67ry/results.json",
+      "bytes": 143909,
+      "sha256": "b2f72678bb1ba4a9f0210d67c52da4ea61b4adf8a85992688c6abcf9027e7a9d"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-lq0hmvsc/results.json",
+      "bytes": 2572,
+      "sha256": "93b14c64d9e0a879c63b9d7b90008bd09eec541f528f53ca51d7efd9e101424b"
+    },
+    {
+      "path": "build/validation/module-signatures-2026-11-05/final-windows.log",
+      "bytes": 805,
+      "sha256": "3a9157444159d0c80950e9215f2c02ece816ac86fa4ad6d52439cfd5759bd148"
+    },
+    {
+      "path": "build/validation/module-signatures-2026-11-05/native-windows.json",
+      "bytes": 2904,
+      "sha256": "3caa0e9105158ba60d8e6f814d29817a7aba66fcd75d7ead3e02cb1acde19d78"
+    },
+    {
+      "path": "build/validation/module-signatures-2026-11-05/final-windows.json",
+      "bytes": 1105,
+      "sha256": "02c11f30045677ef7188044652283b4a50258ade93917793cb724c9d47d70e90"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-u4ytqfa4/results.json",
+      "bytes": 8321,
+      "sha256": "5cd148c67c96af80a2c120f3bf1214d05f47085d2aeb5cd77ba4f5e3503095b4"
+    },
+    {
+      "path": "build/validation/module-signatures-2026-11-05/native-linux.log",
+      "bytes": 303970,
+      "sha256": "29b40d9c8176305f33c3549c4bd475722bf69a48d4c51d1c73368ade6e602220"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-5_7z5dvu/results.json",
+      "bytes": 141877,
+      "sha256": "ae8607a14115df691f3cbc820f553456ebe8606c8c30da985571903709009457"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-6ivhqkjb/results.json",
+      "bytes": 2462,
+      "sha256": "86b83e37db9b20d8192ce7f0a152e7f97bd725670312cc8a4753daf346ba4e80"
+    },
+    {
+      "path": "build/validation/module-signatures-2026-11-05/final-linux.log",
+      "bytes": 728,
+      "sha256": "566c957b6054dccd5b8d6c99be53ece4b02809c1eb8fb986bf8e3ab8a439b5a2"
+    },
+    {
+      "path": "build/validation/module-signatures-2026-11-05/native-linux.json",
+      "bytes": 2537,
+      "sha256": "aee3f1f380b14cf170228529f9bab9f3f27d38f1a5e4da234615b3bc72b00b10"
+    },
+    {
+      "path": "build/validation/module-signatures-2026-11-05/final-linux.json",
+      "bytes": 934,
+      "sha256": "1750bf61a086296c3ac74102ab7f1debb22151b2d4f57060f5a99b4492d07523"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/module-signatures-inputs.json",
+      "bytes": 32074,
+      "sha256": "e6776b16f496c88ede0bc96fcaeb9d79fc7db2264244ed56460ce5deabba843f"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/module-signatures-first-compiler-source.json",
+      "bytes": 132272,
+      "sha256": "eb7075fff6bc435ae5fab0b7b06433a19a1c44d03a62905ca90bfd57fc964ec5"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/module-signatures-first-runtime.json",
+      "bytes": 87331,
+      "sha256": "4b3ac740aa2e50cd7c7e8577ec7f871027160557d601638d06c3d9d0d40e1942"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/module-signatures-first-byte-index.json",
+      "bytes": 228009,
+      "sha256": "0ddb81736612f34cf1e0f3983aa060bf9712b9b96047765ebd9c3698122d1e9f"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/module-signatures-final-inputs.json",
+      "bytes": 32074,
+      "sha256": "191e54258f44d3959a6d562b1b2bbf69457ddee04313f6c0ecb37a6c95dc8ec4"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/module-signatures-final-compiler-source.json",
+      "bytes": 132206,
+      "sha256": "6c595b018bc4b942948937c218367b3a5b5d538475e28701dffbc2e9a944213f"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/module-signatures-final-runtime.json",
+      "bytes": 87331,
+      "sha256": "8369ee9f982dc3535c75fd601733d7d86852652a41c15bad5d378c154ec8efb0"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/module-signatures-final-byte-index.json",
+      "bytes": 228009,
+      "sha256": "8c55e4b35543013ba6d9da7ab25c268fa3aee1339b47622370d907c8df1deaa0"
+    }
+  ],
+  "mac": {
+    "private": "OFF, untouched",
+    "previous": "f3ed4068 hosted41980836062 closed ARM/Intel7units+8GUI, originalZIPs verified; excludes this parser API.",
+    "current": "Workflow8data+8GUI configured; actual source execution pending commit/push and original artifact verification."
+  },
+  "remaining": [
+    "Actual shared C/Physim user/API resolver with scopes/shadows, C own initializer/type/enum masks and honest unknowns.",
+    "Independent native signature HUD per ADR023 full text/sharedsyntax/activeA2/bold/underline, auto/manual, nested/too-many, list independence, Escape, focus/IME/source revision/accessibility.",
+    "Large edit performance and all remaining approved UI/platform/physical acceptance."
+  ]
+}
