@@ -14,6 +14,8 @@ C17-ASan/UBSan-Test bestanden. Windows/Linux danach jeweils **Unit 5/5 + GUI 6/6
 einschließlich automatischer/manueller Unterdrückung und Wiederaufnahme außerhalb.
 Keine Optik-/Friständerung, kein neuer Dienst; C-Verhalten erhalten. Kein nativer
 Vorherlauf behauptet. [Umfang/Kommandos/Grenzen](verification/completion-literals-2026-11-05.md).
+Quellcommit **`7f2cb2fc`**, alle **1.136** Eingaben gegen tatsächliche Git-Blobs
+gelesen, nur CRLF/LF normalisiert. [Commitabschluss](verification/completion-literals-commit-2026-11-05.json).
 
 Die vorherige [native Locals-Integration](verification/completion-locals-2026-11-05.md)
 ist unter Windows/Linux geprüft. Gehosteter Nachlauf **`41945223855`** zu `b64cc8ca`
@@ -34,7 +36,7 @@ Shared Baum: `build/validation/protocol-wrap-2026-10-26/3-isolated/` mit `src`,
 
 ## Nächste Arbeit und verbleibender Umfang
 
-1. Geprüfte Stringkorrektur committen/pushen, tatsächlichen neuen gehosteten
+1. Nach Push der geprüften Stringkorrektur tatsächlichen neuen gehosteten
    Editorlauf beobachten und Originalergebnisse lesen; keine Wiederholung unveränderter lokaler Prüfungen.
 2. Die beiden obigen Mac-Läufe sind beendet; nicht neu starten oder pollen.
    Die neue Stringkorrektur benötigt nach lokalem Abschluss ihren eigenen Nachlauf.

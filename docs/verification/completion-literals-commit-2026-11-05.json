@@ -1,0 +1,16 @@
+{
+  "phase": "completion-literals-first",
+  "revision": "HEAD",
+  "compiler_and_test_count": 1128,
+  "own_input_count": 178,
+  "unique_files": 1136,
+  "all_tested_input_bytes_match_git": true,
+  "crlf_normalized_only": true,
+  "source_commit": "7f2cb2fcb4c20abd3bd065e0609cc61b1524f853",
+  "original_match": {
+    "path": "build/validation/completion-literals-2026-11-05/commit-match.json",
+    "sha256": "704040ffe10d809a39788a2a578d43c421725679a1041441958eb93df5c9aea9"
+  },
+  "local_handles": "all terminal",
+  "private_mac": "OFF; no access or probes"
+}
