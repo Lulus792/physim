@@ -1,0 +1,103 @@
+{
+  "date": "2026-11-05",
+  "snapshot": "completion-locals-command",
+  "source_base": "ae331255e3c8d4c2f87bf16aaa21673ef8085338",
+  "scope": "Two native fixture Undo modifiers only, no production/timeouts/assertion change",
+  "local_handles": "all terminal",
+  "records": [
+    {
+      "platform": "windows",
+      "case": "completion_locals_workflow",
+      "passed": 1,
+      "total": 1,
+      "original": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-s422uc0n/results.json",
+      "original_sha256": "4594d7b5f3b77de2e627d8af7aaafb2c586653d130d4c20cc2ff1794875b88f5",
+      "invocation": {
+        "command": [
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+          "--",
+          "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+          "--build-dir",
+          "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+          "--config",
+          "Release",
+          "--jobs",
+          "4",
+          "--sdl",
+          "D:\\Physim\\third_party\\SDL3-3.2.30",
+          "--test-display",
+          "--test-filter",
+          "completion_locals_workflow"
+        ],
+        "exit_code": 0,
+        "app_sha256": "5489c437727bcefd47a0b0e7ba526fd358750a7483101b6dd9ecde8cfd86dbf9"
+      },
+      "log_sha256": "9794409fe06c5bbfaf253949f7b4f7fc5a8dc774fd0a0c3bbaee83f6bb649343",
+      "markers": [
+        "COMPLETION LOCALS target=0 theme=0 unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1",
+        "COMPLETION LOCALS target=0 exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1",
+        "COMPLETION LOCALS target=1 theme=1 unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1",
+        "COMPLETION LOCALS target=1 exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1",
+        "COMPLETION LOCALS target=2 theme=2 unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1",
+        "COMPLETION LOCALS target=2 exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1",
+        "COMPLETION LOCALS SELF-TEST: PASSED"
+      ]
+    },
+    {
+      "platform": "linux",
+      "case": "completion_locals_workflow",
+      "passed": 1,
+      "total": 1,
+      "original": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-iqxgva07/results.json",
+      "original_sha256": "f294bb6e371e6de43ee4510db1f0ea0be4417905c3176611fa97f7bb60b27af5",
+      "invocation": {
+        "command": [
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+          "--",
+          "/usr/bin/python3",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+          "--build-dir",
+          "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+          "--config",
+          "Debug",
+          "--jobs",
+          "4",
+          "--sdl",
+          "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+          "--test-display",
+          "--sanitizers",
+          "--test-filter",
+          "completion_locals_workflow"
+        ],
+        "exit_code": 0,
+        "app_sha256": "3a47819ab7732ae4b7c77561a9f86b4531fc1ffac83af2b1a003e0703e6eda65"
+      },
+      "log_sha256": "6a213903b29744399bdaf4d730207fd5794a585991803b46cdd56c4c7f4e62aa",
+      "markers": [
+        "COMPLETION LOCALS target=0 theme=0 unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1",
+        "COMPLETION LOCALS target=0 exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1",
+        "COMPLETION LOCALS target=1 theme=1 unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1",
+        "COMPLETION LOCALS target=1 exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1",
+        "COMPLETION LOCALS target=2 theme=2 unicode-prefix=1 actual-semibold=1 variable-list=1 signature=1 source=1 no-fake-reference=1",
+        "COMPLETION LOCALS target=2 exact-replace=1 undo=1 shadow-catalog=1 nearest-scope=1 exclude-foreign-future=1 locals-first=1 all-results=1 empty-open=1 empty-comma=1",
+        "COMPLETION LOCALS SELF-TEST: PASSED"
+      ]
+    }
+  ],
+  "compiler_test_count": 1128,
+  "owned_input_count": 178,
+  "all_source_runtime_and_referenced_archive_bytes_read": true,
+  "private_mac": "OFF; no access/probes",
+  "hosted_before": "completion-locals-macos-before-2026-11-05.json",
+  "hosted_after": "Pending new-source actual run; not claimed",
+  "unit_or_other_gui_repetition": "Not repeated; unchanged source modules and assertions. Prior scoped evidence preserved.",
+  "visual": "No visual renderer changes; final prior six reviewed references retained, no new visual acceptance claimed.",
+  "cleanup": {
+    "path": "docs/verification/completion-locals-command-cleanup-2026-11-05.json",
+    "sha256": "1b386b4acee643151219888d3b5604db6931855d0df546a7a022ef6baaf1c0f1",
+    "freed_bytes": 19181628
+  }
+}

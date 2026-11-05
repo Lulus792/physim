@@ -1,0 +1,39 @@
+{
+  "reason": "Test-only Undo modifier change; production/renderers unchanged. Six duplicate raw views removed; prior final six reviewed references and original failing Mac reports retained.",
+  "resolved_paths_inside_own_test_runs": true,
+  "all_local_handles_terminal": true,
+  "removed": [
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-s422uc0n/completion_locals_workflow/files ä/workflow ä/locals-model.bmp",
+      "bytes": 3196938,
+      "sha256": "7b1435f20ecef373aa10c41e713a5f650dbe45115377affac0b99e7b4e6819a2"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-s422uc0n/completion_locals_workflow/files ä/workflow ä/locals-analysis.bmp",
+      "bytes": 3196938,
+      "sha256": "4355fe40ef34637cc3c7a74c9e204dde2aa995b4d47d06493026a6945565ac83"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-s422uc0n/completion_locals_workflow/files ä/workflow ä/locals-document.bmp",
+      "bytes": 3196938,
+      "sha256": "4008c1d85b4eb9c673c932d713a50d5de2fdcfa61baae5ad538f213859ef4279"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-iqxgva07/completion_locals_workflow/files ä/workflow ä/locals-model.bmp",
+      "bytes": 3196938,
+      "sha256": "ccfa00df24f26fe59bd1708c5aad05aa7142d39708ab28c1d7273d7a17f865e7"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-iqxgva07/completion_locals_workflow/files ä/workflow ä/locals-analysis.bmp",
+      "bytes": 3196938,
+      "sha256": "cc3e0ab453cc7591f75086f14ba768f899aa5a63a073ea647471de2dd6f1c164"
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-iqxgva07/completion_locals_workflow/files ä/workflow ä/locals-document.bmp",
+      "bytes": 3196938,
+      "sha256": "382ffa2643d63b3250e85a104fe86ac99eb310a854a7d0689b3be02ce8a13e46"
+    }
+  ],
+  "freed_bytes": 19181628,
+  "retained_visual_report": "completion-locals-2026-11-05.json"
+}

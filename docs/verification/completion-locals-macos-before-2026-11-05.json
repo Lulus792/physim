@@ -1,0 +1,120 @@
+{
+  "date": "2026-11-05",
+  "run": 41943245186,
+  "head_sha": "ae331255e3c8d4c2f87bf16aaa21673ef8085338",
+  "hosted_only": true,
+  "private_mac": "OFF; no access or probes",
+  "reports": [
+    {
+      "architecture": "arm",
+      "job": 126969009301,
+      "artifact": 13377237267,
+      "zip_path": "build/validation/completion-locals-2026-11-05/locals-arm.zip",
+      "zip_sha256": "5f06efb4a62a1c2ae894adb54775cd525c7cd5dc7ddd151e5653aad8ee85db79",
+      "all_original_entries_read": {
+        "Release/test-results/run-88_kenvb/results.json": "e3d51defcb2d82c92beee24278609aa106c88c6d6428ebfe3373846175a8fe4c"
+      },
+      "cases": [
+        {
+          "name": "documents_small",
+          "status": "passed",
+          "seconds": 6.008
+        },
+        {
+          "name": "documents_large",
+          "status": "passed",
+          "seconds": 5.234
+        },
+        {
+          "name": "completion_workflow",
+          "status": "passed",
+          "seconds": 15.298
+        },
+        {
+          "name": "completion_automatic_workflow",
+          "status": "passed",
+          "seconds": 20.065
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed",
+          "seconds": 8.456
+        },
+        {
+          "name": "completion_info_workflow",
+          "status": "passed",
+          "seconds": 34.605
+        },
+        {
+          "name": "completion_automatic_deadline_workflow",
+          "status": "passed",
+          "seconds": 20.282
+        },
+        {
+          "name": "completion_locals_workflow",
+          "status": "failed",
+          "seconds": 6.122
+        }
+      ],
+      "failure": "Completion locals target=0 stage=7 active=0 count=0 locals=0 selected=0 first=0 call=0/0/0 ink=0/0/0/0/0/0 cursor=366",
+      "original_record_sha256": "099c66b87d285f00b9dbd36c65b845ab28905ee8671faee62acdf06e0928c9bc"
+    },
+    {
+      "architecture": "intel",
+      "job": 126969009667,
+      "artifact": 13378710044,
+      "zip_path": "build/validation/completion-locals-2026-11-05/locals-intel.zip",
+      "zip_sha256": "307e866ac4c1a98841fd22cd7f236f045f175012fa0424ac3cf0fa2453f1d6c8",
+      "all_original_entries_read": {
+        "Release/test-results/run-c2hrwth5/results.json": "8fe505958331c2ab0de4aa05f0f703c423dc6bc9e4d27656a8985e4e54b89d25"
+      },
+      "cases": [
+        {
+          "name": "documents_small",
+          "status": "passed",
+          "seconds": 10.115
+        },
+        {
+          "name": "documents_large",
+          "status": "passed",
+          "seconds": 8.934
+        },
+        {
+          "name": "completion_workflow",
+          "status": "passed",
+          "seconds": 21.521
+        },
+        {
+          "name": "completion_automatic_workflow",
+          "status": "passed",
+          "seconds": 27.503
+        },
+        {
+          "name": "api_reference_workflow",
+          "status": "passed",
+          "seconds": 15.494
+        },
+        {
+          "name": "completion_info_workflow",
+          "status": "passed",
+          "seconds": 49.102
+        },
+        {
+          "name": "completion_automatic_deadline_workflow",
+          "status": "passed",
+          "seconds": 25.869
+        },
+        {
+          "name": "completion_locals_workflow",
+          "status": "failed",
+          "seconds": 6.527
+        }
+      ],
+      "failure": "Completion locals target=0 stage=7 active=0 count=0 locals=0 selected=0 first=0 call=0/0/0 ink=0/0/0/0/0/0 cursor=366",
+      "original_record_sha256": "fd83485bb25cf3156e7bf8438353009fdc857066550b0c219d2e383b44593e06"
+    }
+  ],
+  "source_backed_cause": "New fixture sends Ctrl+Z but macOS backend requires Command+Z (PS_UI_COMMAND_MOD). Existing automatic fixture already uses that modifier.",
+  "fix_scope": "Two test key modifiers only; production/timeouts/assertions unchanged.",
+  "after_fix_macos_acceptance": "Not yet executed or claimed"
+}

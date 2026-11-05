@@ -77,7 +77,7 @@ static void completion_locals_frame(app *a,int *stage,int *code,const char **cap
         LOCAL_KEY(SDLK_TAB,0);LOCAL_NEXT(6);break;
     case 6:
         LOCAL_WAIT(!a->completion_active && completion_test_equal(edit,changed));
-        LOCAL_KEY(SDLK_Z,SDL_KMOD_CTRL);LOCAL_NEXT(7);break;
+        LOCAL_KEY(SDLK_Z,PS_UI_COMMAND_MOD);LOCAL_NEXT(7);break;
     case 7:
         LOCAL_WAIT(completion_test_equal(edit,original));
         ok=completion_locals_seed(a,edit,"(siOLD, gravity)","OLD");LOCAL_NEXT(8);break;
@@ -110,7 +110,7 @@ static void completion_locals_frame(app *a,int *stage,int *code,const char **cap
     case 14:{
         char text[2048];snprintf(text,sizeof text,"%s(sin",LOCALS_SOURCE);
         LOCAL_WAIT(!a->completion_active && completion_test_equal(edit,text));
-        LOCAL_KEY(SDLK_Z,SDL_KMOD_CTRL);LOCAL_NEXT(15);break;}
+        LOCAL_KEY(SDLK_Z,PS_UI_COMMAND_MOD);LOCAL_NEXT(15);break;}
     case 15:{
         char text[2048];snprintf(text,sizeof text,"%s(",LOCALS_SOURCE);LOCAL_WAIT(completion_test_equal(edit,text));
         completion_auto_text(a,"velocity,");locals_wait_generation=locals_draw_generation+2;LOCAL_NEXT(16);break;}
