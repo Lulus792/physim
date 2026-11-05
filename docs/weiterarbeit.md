@@ -24,6 +24,8 @@ Jetzt ausschließlich die zwei Undo-Teststellen auf `PS_UI_COMMAND_MOD` korrigie
 Produktcode, Assertions und Fristen unverändert. Windows/Linux gezielt je **GUI 1/1**,
 `run-s422uc0n` / `run-iqxgva07`. [Prüfnachweis](verification/completion-locals-command-2026-11-05.json).
 Ein neuer gehosteter Lauf mit dieser Fassung steht noch aus; keine neue Mac-Abnahme.
+Testkorrektur-Quellcommit **`e27fc144`**, alle **1.136** Eingaben gegen Git gelesen;
+[Commitnachweis](verification/completion-locals-command-commit-2026-11-05.json).
 
 Eingefrorener lokaler Anschluss: `completion-locals-command`, 178 eigene Eingaben /
 1.128 Compiler-/Testdateien, 248 Windows-/135 Linux-Laufzeitdateien; alle Quell-/
@@ -35,7 +37,7 @@ Shared Baum: `build/validation/protocol-wrap-2026-10-26/3-isolated/` mit `src`,
 
 ## Nächste Arbeit und verbleibender Umfang
 
-1. Geprüfte Testkorrektur committen/pushen, tatsächlichen neuen Mac-Lauf verfolgen;
+1. Tatsächlichen neuen Mac-Lauf nach Push der geprüften Testkorrektur verfolgen;
    ursprünglichen beendeten Lauf nicht erneut starten. Ergebnisse/Archive lesen.
 2. Neuer konkreter Fehler: `completion_prepare` erlaubt `Ve` innerhalb eines
    mehrzeiligen Physim-Strings mit enthaltenem Anführungszeichen; echter Lexer

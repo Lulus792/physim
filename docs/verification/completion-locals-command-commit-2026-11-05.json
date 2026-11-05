@@ -1,0 +1,14 @@
+{
+  "phase": "completion-locals-command",
+  "revision": "HEAD",
+  "compiler_and_test_count": 1128,
+  "own_input_count": 178,
+  "unique_files": 1136,
+  "all_tested_input_bytes_match_git": true,
+  "crlf_normalized_only": true,
+  "source_commit": "e27fc14440c4da31b74d48fa4a02de67ca10b8cf",
+  "original_match": {
+    "path": "build/validation/completion-locals-2026-11-05/command-commit-match.json",
+    "sha256": "9ee87874a3c2fb5899e1c36778366e33e341c726c1fb59d51f3ead70bb9f83dc"
+  }
+}
