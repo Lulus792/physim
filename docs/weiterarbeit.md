@@ -7,21 +7,25 @@ Projektumsetzung bleiben offen; Teilprüfungen sind keine volle Punktzahl.
 
 ## Letzter geprüfter Schritt
 
-[OS-Fokus im Zusatzfenster](verification/signature-focus-2026-11-05.md):
-echter Windows-Fehler reproduziert, aktiven Quelleditor beim tatsächlichen
-OS-Fokusgewinn wieder zuordnen. Windows Release **2/2 GUI-Gruppen run-8aio6i_b**,
-Linux ASan/UBSan **2/2 run-dx4glpkf**, privater Xvfb-/Openbox-Desktop. C/Ph je
-Modell-/Analyse-/Dateieditor, tatsächliche Fenster-/Peerprozess-Rückkehr, Textkanal,
-Quelle/Cursor/Anker/Scroll und nichtleere Auswahl. Acht finale Bilder bytegleich
-zu erhaltenen, bereits geöffneten Referenzen; nur neue Kopien entfernt.
-[Originale, Fehlversuche und Grenzen](verification/signature-focus-2026-11-05.json).
+[Dateireiter und automatische Vorschläge](verification/file-tabs-auto-2026-11-05.md):
+alter Test prüfte vor Ablauf des140ms-Timers. Gleiche Stufe27 auf Mac Intel/ARM
+und lokalen unveränderten Windows-/Linux-Programmen reproduziert. Jetzt begrenzt
+auf echtes automatisches Öffnen warten und Quelle/Editor/Präfix/Geometrie prüfen.
+**App/Design/140ms-Timer unverändert.** Windows Release3/3 run-iuqaftzp und Linux
+ASan/UBSan3/3 run-gd7xo029, jeweils inklusive separater Auto-/Fristgruppen.
+Beide vorhandenen Listenansichten geöffnet; keine neue Bildserie.
+[Originale und Grenzen](verification/file-tabs-auto-2026-11-05.json).
 
-Warmstand **signature-focus-accepted**,303 ausdrücklich erfasste Eingaben;
-alle vier eigenen Quell-/Testdateien vor Build Root/Isolation/Manifest bytegleich.
-Windows07535014… und Linux54f6e72f…; Source-/Runtimearchive vollständig gelesen.
-[Quelle8bf467ce in beiden Remotes](verification/signature-focus-commit-2026-11-05.json),
-alle1257 Eingaben gegen Index und tatsächlichen Commit gelesen.
-Details: `build/validation/signature-focus-2026-11-05/STATE.md`.
+Warmstand **file-tabs-auto**,303 Eingaben; die eine geänderte Testdatei vor Build
+Root/Isolation/Manifest bytegleich. Source-/Runtimearchive vollständig gelesen.
+Detailstand: `build/validation/file-tabs-auto-2026-11-05/STATE.md`.
+
+Zuvor [OS-Fokus im Zusatzfenster](verification/signature-focus-2026-11-05.md):
+Quelle8bf467ce, Windows Release/Linux ASan/UBSan je2/2. Eigener Peerprozess,
+Quelle/Cursor/Anker/Scroll und nichtleere Auswahl über echte OS-Fokuswechsel.
+[Alle1257Quellen gegen tatsächlichen Commit gelesen, beide Remotes](verification/signature-focus-commit-2026-11-05.json).
+Nicht wegen Kontext erneut prüfen; der neue Dateireitertest ändert diesen
+Productfix nicht. Vollständige physische/assistive Abnahme bleibt offen.
 
 [Mac-Nachlauf42059129050 zu0d3f4a65 abgeschlossen](verification/filename-wrap-macos-2026-11-05.json):
 Intel127355571409 und ARM127355571940 **terminal/success**, jeweils14/14 Daten+
@@ -56,13 +60,15 @@ pollen oder neu starten. Diese alte Quelle belegt nicht die spätere Fokuskorrek
 
 ## Nächste konkrete Aufgaben
 
-1. Fokusquelle8bf467ce: gehosteter Editorlauf **42069271439 queued**, bei
-   Beobachtung noch keine Jobs zugeteilt; erwartet je14 Daten+12 GUI. Ebenfalls
-   queued zu derselben Quelle: Typografie42069010306, Workspace42068991869,
-   natives Menü42068975965. Diese Handles verfolgen, nicht neu starten.
-   [Source-/Run-Nachweis](verification/signature-focus-commit-2026-11-05.json).
-   Geschlossenen Lauf42059129050 und seine22 Originaleinträge nicht erneut prüfen.
-   Fehlende neue Architekturabnahme ehrlich offen halten.
+1. Fokusquelle8bf467ce: Editor42069271439 ARM127393419021 **14/14Daten+12/12GUI**,
+   Original-ZIP/11Einträge gelesen,6Focus+6Auswahlmarker,9Bilder bytegleich zu
+   behaltenen Referenzen ohne neue Extraktionen. Intel127393460439 zuletzt noch
+   im GUI-Schritt; denselben Handle verfolgen, nicht neu starten.
+   Typografie42069010306 inzwischen beide16/16; natives Menü42068975965 beide7/7.
+   Alle Original-ZIPs/Einträge gelesen. Diese beiden Läufe nicht weiter pollen.
+   Workspace42068991869 beide terminal/failure2/3 durch alten Dateireitertest;
+   neue korrigierte Quelle separat auf Mac abnehmen,68-Projekt-Matrix war übersprungen.
+   Geschlossene Quelle0d3f4a65/42059129050 und ihre22Originaleinträge nicht neu prüfen.
 2. Fokuswechsel aus Suchinsel/anderen Controls, Capture außerhalb einer
    OS-Fenstergrenze und native Accessibility-/Screenreader-Aufgaben. Die neue
    Peerprobe verwendet einen eigenen Prozess derselben Binärdatei und geskriptete

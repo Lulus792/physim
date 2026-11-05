@@ -15,6 +15,7 @@ static bool file_tabs_test_start(app *a,const char *root) {
 }
 static void file_tabs_test_frame(app *a,int *stage,int *code,const char **capture) {
     static double ready;static unsigned repeats;
+    static bool completion_waited;
 #ifdef __APPLE__
     static uint32_t experiment_crc,analysis_crc;
 #endif
@@ -75,12 +76,25 @@ static void file_tabs_test_frame(app *a,int *stage,int *code,const char **captur
     case 25: {
         workspace_document *doc=active_document(a);ok=doc && doc->edit.active;
         if(ok){ok=set_editor_text(&doc->edit,"// α\nps_v",strlen("// α\nps_v"));doc->edit.cursor=doc->edit.select_start=doc->edit.select_end=nk_str_len(&doc->edit.string);}
+        completion_waited=false;ready=ps_clock()+3;
         SDL_Event event={0};event.type=SDL_EVENT_TEXT_INPUT;event.text.windowID=SDL_GetWindowID(a->window);event.text.text="l";SDL_PushEvent(&event);break;
     }
     case 26:break;
-    case 27:
-        ok=a->completion_active && a->completion_list_bounds.y>=a->editor_caret.y+a->editor_caret.h && a->completion_list_bounds.y<a->editor_caret.y+40;
+    case 27: {
+        workspace_document *doc=active_document(a);
+        /* Input is processed in the previous draw. Automatic completion has a
+         * real debounce; a single following frame need not reach its deadline. */
+        if(!a->completion_active && ps_clock()<ready){
+            if(!completion_waited)printf("FILE TABS AUTO PENDING: owner=%d cursor=%d remaining-ms=%.3f\n",doc && a->completion_pending_edit==&doc->edit,doc && a->completion_pending_cursor==doc->edit.cursor,(a->completion_due-ps_clock())*1000);
+            completion_waited=true;--*stage;return;
+        }
+        const char *expected="// α\nps_vl";
+        ok=doc && a->completion_active && !a->completion_manual && a->completion_edit==&doc->edit &&
+            (size_t)nk_str_len_char(&doc->edit.string)==strlen(expected) && !memcmp(nk_str_get_const(&doc->edit.string),expected,strlen(expected)) &&
+            !strcmp(a->completion_query.prefix,"ps_vl") && a->completion_list_bounds.y>=a->editor_caret.y+a->editor_caret.h && a->completion_list_bounds.y<a->editor_caret.y+40;
+        if(ok)puts("FILE TABS AUTO: real-text-event=1 automatic-open=1 exact-source-owner-prefix=1 below-caret=1");
         *capture="inline-completion.bmp";test_window_key_mod(a->window,SDLK_ESCAPE,0);break;
+    }
     case 28:ok=!a->completion_active;test_key(a,SDLK_S);break;
     case 29:break;
     case 30:

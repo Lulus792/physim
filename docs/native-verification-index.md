@@ -11,6 +11,11 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
 
 ## Neuere Editorprüfungen
 
+- [Dateireiter und automatische Vorschläge](verification/file-tabs-auto-2026-11-05.md):
+  dieselbe Stufe27 auf Mac Intel/ARM und lokalen unveränderten Windows-/Linux-
+  Programmen reproduziert. Probe wartet begrenzt auf echtes automatisches Öffnen,
+  prüft Quelle/Editor/Präfix/Geometrie. App und140ms-Timer unverändert.
+  Lokal Windows Release/Linux ASan/UBSan je3/3; neue Mac-Abnahme noch offen.
 - [OS-Fokus und Texteingabe im Zusatzfenster](verification/signature-focus-2026-11-05.md):
   echter Windows-Gegenfall, Quelleditor bei realem Fokusgewinn wieder zuordnen;
   Windows Release/Linux ASan/UBSan jeweils2/2 GUI-Gruppen. Je C/Ph drei Editoren,

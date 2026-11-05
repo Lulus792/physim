@@ -1,0 +1,225 @@
+{
+  "date": "2026-11-05",
+  "scope": "Synchronize the existing file-tabs integration probe with actual automatic completion, retaining real text input, automatic request, exact source/owner/prefix and below-caret geometry checks. Product timing and UI unchanged.",
+  "source_snapshot": "file-tabs-auto",
+  "baseline_source_commit": "8bf467ce8519906ff8d96f52e98c7149f41b5185",
+  "cause": "Old case27 checked one frame after processing the typed suffix, before the existing140ms debounce expired. Both platforms reproduce stage27 with the same previously verified binaries. The new probe observes the actual still-pending owner/cursor/deadline and allows at most3s for real automatic opening; no manual completion or direct model-opening call.",
+  "production_behavior_changed": false,
+  "originals": [
+    {
+      "phase": "baseline",
+      "platform": "windows",
+      "source_snapshot": "signature-focus-accepted",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "file_tabs_workflow"
+      ],
+      "app_sha256": "0753501405c6ee3a6e3eeb171a1f17986a896be676f2d84b9d91a60c3067add0",
+      "exit_code": 1,
+      "passed": 0,
+      "total": 1,
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-37rm3k1e/results.json",
+      "results_sha256": "5aa5b45406d5520de980e2304cb07781169ff8d323e7332f15a1379082c0f6f6",
+      "steps": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-37rm3k1e/file_tabs_workflow/files ä/app-steps.json",
+      "steps_sha256": "19bea3d91857608c54c5198d0bffc2e6aa92794f5ab63f30427f3d30095ca9dd",
+      "log": "build/validation/file-tabs-auto-2026-11-05/baseline-windows.log",
+      "log_sha256": "efdbbf59d3ef86dbd9115f8804defdc81140e7cd0a46ed2d18e9a2f48933a2d7",
+      "markers": [],
+      "failures": [
+        "File tabs failure stage 27 active=17 count=16 drag=0 pending=0 completion=0"
+      ]
+    },
+    {
+      "phase": "baseline",
+      "platform": "linux",
+      "source_snapshot": "signature-focus-accepted",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "file_tabs_workflow"
+      ],
+      "app_sha256": "54f6e72f564c8a4f2693c39d4aa84354e494c1c543ff74e9c37272ac43bcd7fc",
+      "exit_code": 1,
+      "passed": 0,
+      "total": 1,
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-knc_q5im/results.json",
+      "results_sha256": "559cbadff699dc9d22f3ae9ebdbd3531882de156226c73001f42427cdecd475c",
+      "steps": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-knc_q5im/file_tabs_workflow/files ä/app-steps.json",
+      "steps_sha256": "f1e2fbf5dc93a4ef651021fa22b6a4cf76f4f060886b165fb3a466cda9863239",
+      "log": "build/validation/file-tabs-auto-2026-11-05/baseline-linux.log",
+      "log_sha256": "13ac6851e69045bb529244e7fbf41a1d83e400a74289a4734541a83a982e25b8",
+      "markers": [],
+      "failures": [
+        "File tabs failure stage 27 active=17 count=16 drag=0 pending=0 completion=0"
+      ]
+    },
+    {
+      "phase": "final",
+      "platform": "windows",
+      "source_snapshot": "file-tabs-auto",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "file_tabs_workflow",
+        "--test-filter",
+        "completion_automatic_workflow",
+        "--test-filter",
+        "completion_automatic_deadline_workflow"
+      ],
+      "app_sha256": "9abe49cb51e4e2e697c465c0e6c30ee8cdfb4b143fc403b730d2bbce3ec6b6b9",
+      "exit_code": 0,
+      "passed": 3,
+      "total": 3,
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-iuqaftzp/results.json",
+      "results_sha256": "89d838454e10127596e8be420baa7217dc39772c6427e5f7b414b6c78dfe7635",
+      "steps": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-iuqaftzp/file_tabs_workflow/files ä/app-steps.json",
+      "steps_sha256": "8451a09abc49255a2522c7673621ff2299f8b339ce572e2ec33c68364f439fcc",
+      "log": "build/validation/file-tabs-auto-2026-11-05/final-windows.log",
+      "log_sha256": "2485cd1d78cd25a9b4c6d2d58e5478d8e5ccb41912a74c4170fd9e8291b66db7",
+      "markers": [
+        "FILE TABS AUTO PENDING: owner=1 cursor=1 remaining-ms=123.742",
+        "FILE TABS AUTO: real-text-event=1 automatic-open=1 exact-source-owner-prefix=1 below-caret=1",
+        "FILE TABS SELF-TEST: PASSED"
+      ],
+      "failures": [],
+      "observed_pending_ms_remaining": 123.742
+    },
+    {
+      "phase": "final",
+      "platform": "linux",
+      "source_snapshot": "file-tabs-auto",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "file_tabs_workflow",
+        "--test-filter",
+        "completion_automatic_workflow",
+        "--test-filter",
+        "completion_automatic_deadline_workflow"
+      ],
+      "app_sha256": "7a489133c00129741a8ddfd2ac6ef80b9f80ce63f78b9549b22d4d9820104b43",
+      "exit_code": 0,
+      "passed": 3,
+      "total": 3,
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gd7xo029/results.json",
+      "results_sha256": "bd2a26ac7f31c23c77e91f8ca79c8230338809f765c00ea435f0108006b465fc",
+      "steps": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gd7xo029/file_tabs_workflow/files ä/app-steps.json",
+      "steps_sha256": "c188e90f53b00ae325f5838808db4f872e0202be185d3fec9a89f192702268c6",
+      "log": "build/validation/file-tabs-auto-2026-11-05/final-linux.log",
+      "log_sha256": "79a8df9003cc05c601183fa9c9038db24529ccec5344a9beb3aedebb1f36d7b3",
+      "markers": [
+        "FILE TABS AUTO PENDING: owner=1 cursor=1 remaining-ms=106.568",
+        "FILE TABS AUTO: real-text-event=1 automatic-open=1 exact-source-owner-prefix=1 below-caret=1",
+        "FILE TABS SELF-TEST: PASSED"
+      ],
+      "failures": [],
+      "observed_pending_ms_remaining": 106.568
+    }
+  ],
+  "images": [
+    {
+      "platform": "windows",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-iuqaftzp/file_tabs_workflow/files ä/workflow ä/inline-completion.bmp",
+      "sha256": "309a9f698bf072a127451734132d9ba2e4e146c895db59c4453ffd491f9e7665",
+      "actually_opened": true
+    },
+    {
+      "platform": "linux",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-gd7xo029/file_tabs_workflow/files ä/workflow ä/inline-completion.bmp",
+      "sha256": "a067e2a8ca7768ef4e3e7aa0d0170d7f7a3b1daf05a2a1536fc80129cd31769c",
+      "actually_opened": true
+    }
+  ],
+  "prebuild_audit": {
+    "path": "build/validation/file-tabs-auto-2026-11-05/prebuild-audit.json",
+    "sha256": "888e8855e839d28658a1286b8791d9a49407b550c6b9c101e749a53406dffa29"
+  },
+  "manifests": [
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/file-tabs-auto-inputs.json",
+      "sha256": "8cfa2e3b45dc1c22750e7124a7365c16a3aa64f1477c744d1d1687e08d1f525f"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/file-tabs-auto-compiler-source.json",
+      "sha256": "fdf23937c3d030840d7e0780c3d54b28c8bf1069ef495f8293987a7bd2911c5c"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/file-tabs-auto-runtime.json",
+      "sha256": "3ad9118015e4220cad12e2b62bbaeee32cb068ce43b3724a47fbdbe1ea2ed39e"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/file-tabs-auto-byte-index.json",
+      "sha256": "a86f24dffe44d153f127413cc22d4b5ab62422811febec73a8d29252089668c4"
+    }
+  ],
+  "macos": {
+    "old_source_run": 42068991869,
+    "source": "8bf467ce",
+    "intel_job": 127391856678,
+    "arm_job": 127391917413,
+    "each": "2/3; same file_tabs_workflow stage27 failure, next68-project matrix skipped",
+    "original_intel": "build/validation/macos-workspace-8bf-2026-11-05/intel-original.json",
+    "original_arm": "build/validation/macos-8bf-2026-11-05/13436061355-original.json",
+    "corrected_source_acceptance": "pending new source push and actual hosted results"
+  },
+  "limits": [
+    "Local GUI assertions use scripted SDL input, not physical keyboard or screenreader acceptance.",
+    "This test-only change does not prove the complete approved native UI or all platform requirements.",
+    "Private user Mac remains OFF; no probe or connection."
+  ]
+}
