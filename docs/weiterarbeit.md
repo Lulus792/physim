@@ -18,6 +18,8 @@ Beide vorhandenen Listenansichten geöffnet; keine neue Bildserie.
 
 Warmstand **file-tabs-auto**,303 Eingaben; die eine geänderte Testdatei vor Build
 Root/Isolation/Manifest bytegleich. Source-/Runtimearchive vollständig gelesen.
+[Quelle13cc4422 in beiden Remotes](verification/file-tabs-auto-commit-2026-11-05.json),
+alle1257Eingaben gegen Index und tatsächlichen Commit gelesen.
 Detailstand: `build/validation/file-tabs-auto-2026-11-05/STATE.md`.
 
 Zuvor [OS-Fokus im Zusatzfenster](verification/signature-focus-2026-11-05.md):
@@ -60,15 +62,18 @@ pollen oder neu starten. Diese alte Quelle belegt nicht die spätere Fokuskorrek
 
 ## Nächste konkrete Aufgaben
 
-1. Fokusquelle8bf467ce: Editor42069271439 ARM127393419021 **14/14Daten+12/12GUI**,
-   Original-ZIP/11Einträge gelesen,6Focus+6Auswahlmarker,9Bilder bytegleich zu
-   behaltenen Referenzen ohne neue Extraktionen. Intel127393460439 zuletzt noch
-   im GUI-Schritt; denselben Handle verfolgen, nicht neu starten.
-   Typografie42069010306 inzwischen beide16/16; natives Menü42068975965 beide7/7.
-   Alle Original-ZIPs/Einträge gelesen. Diese beiden Läufe nicht weiter pollen.
-   Workspace42068991869 beide terminal/failure2/3 durch alten Dateireitertest;
-   neue korrigierte Quelle separat auf Mac abnehmen,68-Projekt-Matrix war übersprungen.
-   Geschlossene Quelle0d3f4a65/42059129050 und ihre22Originaleinträge nicht neu prüfen.
+1. Dateireiterquelle13cc4422: Mac-Workspace **42073119561** weiterverfolgen.
+   Intel127406074781 zuletzt in der68-Projekt-Matrix; erster3er-Schritt erfolgreich,
+   ARM127406075215 queued. Noch keine vollständige neue Mac-Abnahme behaupten.
+   Weitere bekannte CI-Handles derselben Quelle:42073119608 (CI),42073119770
+   (Linux-UI-Sanitizer),42073119600 (Linux-Paket), zuletzt noch nicht terminal.
+   [Quell-/Run-Nachweis](verification/file-tabs-auto-commit-2026-11-05.json).
+   Fokusquelle8bf467ce ist jetzt [vollständig nachgelesen](verification/macos-8bf-2026-11-05.json):
+   Editor beide14/14Daten+12/12GUI, Typografie beide16/16, Menü beide7/7;
+   alter Workspace beide2/3 durch Stufe27, nächste Matrix übersprungen.
+   Alle vier8bf-Läufe terminal;8ZIPs/Digests/34Einträge gelesen.18Bildinhalte
+   bytegleich zu behaltenen Referenzen, keine Extraktionen. Nicht weiter pollen
+   oder erneut lesen. Ebenso geschlossene Quelle0d3f4a65/42059129050 erhalten.
 2. Fokuswechsel aus Suchinsel/anderen Controls, Capture außerhalb einer
    OS-Fenstergrenze und native Accessibility-/Screenreader-Aufgaben. Die neue
    Peerprobe verwendet einen eigenen Prozess derselben Binärdatei und geskriptete

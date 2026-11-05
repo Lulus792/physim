@@ -11,6 +11,13 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
 
 ## Neuere Editorprüfungen
 
+- [Mac-Quelle8bf467ce](verification/macos-8bf-2026-11-05.json): beide Architekturen
+  Editor14/14 Daten+12/12 GUI einschließlich echter Fokus-/Auswahlrückkehr;
+  Typografie/Einstellungen16/16 und native AppKit-Menüs7/7. Alle acht Original-ZIPs/
+  Digests und34Einträge gelesen.18Bildinhalte bytegleich zu behaltenen geöffneten
+  Referenzen, keine neuen Kopien extrahiert. Workspace je2/3 wegen alter Stufe27,
+  nachfolgende68-Projekt-Matrix übersprungen; neue Dateireiterquelle separat prüfen.
+  Alle vier alten Läufe terminal, nicht weiter pollen.
 - [Dateireiter und automatische Vorschläge](verification/file-tabs-auto-2026-11-05.md):
   dieselbe Stufe27 auf Mac Intel/ARM und lokalen unveränderten Windows-/Linux-
   Programmen reproduziert. Probe wartet begrenzt auf echtes automatisches Öffnen,

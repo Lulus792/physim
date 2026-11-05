@@ -1,0 +1,899 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "8bf467ce8519906ff8d96f52e98c7149f41b5185",
+  "runs": [
+    {
+      "id": 42069271439,
+      "scope": "editor/signatures",
+      "jobs": [
+        127393419021,
+        127393460439
+      ],
+      "conclusion": "success",
+      "each": "14/14data+12/12GUI"
+    },
+    {
+      "id": 42069010306,
+      "scope": "typography/settings/units/preferences",
+      "jobs": [
+        127391363553,
+        127391364309
+      ],
+      "conclusion": "success",
+      "each": "16/16 in four groups"
+    },
+    {
+      "id": 42068975965,
+      "scope": "native AppKit menus",
+      "jobs": [
+        127391226668,
+        127391966149
+      ],
+      "conclusion": "success",
+      "each": "7/7"
+    },
+    {
+      "id": 42068991869,
+      "scope": "workspace",
+      "jobs": [
+        127391856678,
+        127391917413
+      ],
+      "conclusion": "failure",
+      "each": "2/3; file-tabs stage27; next68-project matrix skipped"
+    }
+  ],
+  "all_runs_terminal_do_not_poll_again": true,
+  "artifacts": [
+    {
+      "id": 13436316099,
+      "name": "native-menu-macos-15-intel",
+      "zip": "build/validation/macos-8bf-2026-11-05/artifact-13436316099.zip",
+      "zip_sha256": "dc75b8d169a8d72ed3687e43c734ae3528798403052f2965a2c990b18defd66b",
+      "bytes": 4575,
+      "all_entries_read": true,
+      "entries": {
+        "Release/test-results/run-en_tywp8/results.json": "b3664ee19ecbc993eb109a91ad2cdc348d6234ee633f252d33a51e904a0ee9e2"
+      },
+      "groups": [
+        {
+          "entry": "Release/test-results/run-en_tywp8/results.json",
+          "passed": 7,
+          "total": 7,
+          "tests": [
+            {
+              "name": "native_menu",
+              "status": "passed"
+            },
+            {
+              "name": "window_smoke",
+              "status": "passed"
+            },
+            {
+              "name": "toolbar_small",
+              "status": "passed"
+            },
+            {
+              "name": "toolbar_large",
+              "status": "passed"
+            },
+            {
+              "name": "toolbar_input_isolation",
+              "status": "passed"
+            },
+            {
+              "name": "keyboard_menu_small",
+              "status": "passed"
+            },
+            {
+              "name": "keyboard_menu_large",
+              "status": "passed"
+            }
+          ],
+          "failures": []
+        }
+      ],
+      "focus_markers": 0,
+      "selection_markers": 0,
+      "images": [],
+      "original_manifest": "build/validation/macos-8bf-2026-11-05/13436316099-original.json",
+      "original_manifest_sha256": "a6f1043751e0fd284efb1fb73a988d17116d3b4c7645b7d5607ccf9f9ea2bc74"
+    },
+    {
+      "id": 13433579895,
+      "name": "native-menu-macos-15",
+      "zip": "build/validation/macos-8bf-2026-11-05/artifact-13433579895.zip",
+      "zip_sha256": "e07b2de8b538d2290bbf331566ef1072f5bbc79e038cfd91ca6b4e19ec66fdb3",
+      "bytes": 4415,
+      "all_entries_read": true,
+      "entries": {
+        "Release/test-results/run-ezwqqkq6/results.json": "05bb9bf2181e434a0c3443a3615cc0c22c59a11d4441b88d5638bbaa76a2f414"
+      },
+      "groups": [
+        {
+          "entry": "Release/test-results/run-ezwqqkq6/results.json",
+          "passed": 7,
+          "total": 7,
+          "tests": [
+            {
+              "name": "native_menu",
+              "status": "passed"
+            },
+            {
+              "name": "window_smoke",
+              "status": "passed"
+            },
+            {
+              "name": "toolbar_small",
+              "status": "passed"
+            },
+            {
+              "name": "toolbar_large",
+              "status": "passed"
+            },
+            {
+              "name": "toolbar_input_isolation",
+              "status": "passed"
+            },
+            {
+              "name": "keyboard_menu_small",
+              "status": "passed"
+            },
+            {
+              "name": "keyboard_menu_large",
+              "status": "passed"
+            }
+          ],
+          "failures": []
+        }
+      ],
+      "focus_markers": 0,
+      "selection_markers": 0,
+      "images": [],
+      "original_manifest": "build/validation/macos-8bf-2026-11-05/13433579895-original.json",
+      "original_manifest_sha256": "2c6e13cc7ecf802a110e0718c25698a6728b15ce8705269c1f0527b9ba67576f"
+    },
+    {
+      "id": 13436831426,
+      "name": "native-typography-menu-macos-15-intel",
+      "zip": "build/validation/macos-8bf-2026-11-05/artifact-13436831426.zip",
+      "zip_sha256": "1f482899a8de736882474416e8cd3249956feab4ee62d7735f915520861e1ca1",
+      "bytes": 27445,
+      "all_entries_read": true,
+      "entries": {
+        "Release/test-results/run-9lbgykcn/results.json": "3a6f38ac70130e87361ad1b1c23d28b68f6ede4a7a70f938461fb7a4ce083478",
+        "Release/test-results/run-g2u8b3ih/results.json": "1448cb72bf58cb21ec493cf3a94aea5bb231281311c81c046f31e812733b4c57",
+        "Release/test-results/run-l99dhv0_/results.json": "cbbad8449324c5a37b7799eb8a1b84e0925fcfbf68e94d160cf0efad38e9d939",
+        "Release/test-results/run-u6ykiypa/results.json": "5dc9c6219e62e8795e5a35330dbe6e86219fd9101f30ef8d4b6ab567668f68f4"
+      },
+      "groups": [
+        {
+          "entry": "Release/test-results/run-9lbgykcn/results.json",
+          "passed": 1,
+          "total": 1,
+          "tests": [
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed"
+            }
+          ],
+          "failures": []
+        },
+        {
+          "entry": "Release/test-results/run-g2u8b3ih/results.json",
+          "passed": 3,
+          "total": 3,
+          "tests": [
+            {
+              "name": "shell_theme_dark",
+              "status": "passed"
+            },
+            {
+              "name": "shell_theme_light_large_narrow",
+              "status": "passed"
+            },
+            {
+              "name": "shell_theme_contrast",
+              "status": "passed"
+            }
+          ],
+          "failures": []
+        },
+        {
+          "entry": "Release/test-results/run-l99dhv0_/results.json",
+          "passed": 11,
+          "total": 11,
+          "tests": [
+            {
+              "name": "settings_transactions",
+              "status": "passed"
+            },
+            {
+              "name": "settings_a_window",
+              "status": "passed"
+            },
+            {
+              "name": "settings_search_keyboard",
+              "status": "passed"
+            },
+            {
+              "name": "unit_task_window",
+              "status": "passed"
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "settings_keyboard_paced",
+              "status": "passed"
+            },
+            {
+              "name": "analysis_units_dark",
+              "status": "passed"
+            },
+            {
+              "name": "analysis_units_light_large_narrow",
+              "status": "passed"
+            },
+            {
+              "name": "inspector_channel",
+              "status": "passed"
+            }
+          ],
+          "failures": []
+        },
+        {
+          "entry": "Release/test-results/run-u6ykiypa/results.json",
+          "passed": 1,
+          "total": 1,
+          "tests": [
+            {
+              "name": "preferences",
+              "status": "passed"
+            }
+          ],
+          "failures": []
+        }
+      ],
+      "focus_markers": 0,
+      "selection_markers": 0,
+      "images": [],
+      "original_manifest": "build/validation/macos-8bf-2026-11-05/13436831426-original.json",
+      "original_manifest_sha256": "2611ef2bcdb3ae56e7fe40f5bd05bd6eadfd0d8f35a40acb40ba6672c74bf25f"
+    },
+    {
+      "id": 13436772651,
+      "name": "native-typography-menu-macos-15",
+      "zip": "build/validation/macos-8bf-2026-11-05/artifact-13436772651.zip",
+      "zip_sha256": "7dc620ee55ef1a755d96445cccaa228adaa53e0c8374fcc23eb3b92c47acbb42",
+      "bytes": 27122,
+      "all_entries_read": true,
+      "entries": {
+        "Release/test-results/run-dn67xaln/results.json": "d38d5408add586b4bffa0131105b6a418a421144b7daafe08d82a84062697a03",
+        "Release/test-results/run-yls6mvnp/results.json": "35c38ae447a55cba6100b944f75bf000868a7918cf08eac28e46a3bf344dcd64",
+        "Release/test-results/run-y0wv1_ne/results.json": "21450c86d06b36d7a5bd4cf821c73d0c3f71afb448b24b297a6c2c5b4cd2c738",
+        "Release/test-results/run-niz_syi8/results.json": "8e519ba1a9a14a4b9c1b2b0ebd038e35f1c4dc847c9d70692bf20dab0d563d3e"
+      },
+      "groups": [
+        {
+          "entry": "Release/test-results/run-dn67xaln/results.json",
+          "passed": 1,
+          "total": 1,
+          "tests": [
+            {
+              "name": "ui_typography_workflow",
+              "status": "passed"
+            }
+          ],
+          "failures": []
+        },
+        {
+          "entry": "Release/test-results/run-yls6mvnp/results.json",
+          "passed": 11,
+          "total": 11,
+          "tests": [
+            {
+              "name": "settings_transactions",
+              "status": "passed"
+            },
+            {
+              "name": "settings_a_window",
+              "status": "passed"
+            },
+            {
+              "name": "settings_search_keyboard",
+              "status": "passed"
+            },
+            {
+              "name": "unit_task_window",
+              "status": "passed"
+            },
+            {
+              "name": "themes_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "channel_units_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "settings_keyboard_paced",
+              "status": "passed"
+            },
+            {
+              "name": "analysis_units_dark",
+              "status": "passed"
+            },
+            {
+              "name": "analysis_units_light_large_narrow",
+              "status": "passed"
+            },
+            {
+              "name": "inspector_channel",
+              "status": "passed"
+            }
+          ],
+          "failures": []
+        },
+        {
+          "entry": "Release/test-results/run-y0wv1_ne/results.json",
+          "passed": 1,
+          "total": 1,
+          "tests": [
+            {
+              "name": "preferences",
+              "status": "passed"
+            }
+          ],
+          "failures": []
+        },
+        {
+          "entry": "Release/test-results/run-niz_syi8/results.json",
+          "passed": 3,
+          "total": 3,
+          "tests": [
+            {
+              "name": "shell_theme_dark",
+              "status": "passed"
+            },
+            {
+              "name": "shell_theme_light_large_narrow",
+              "status": "passed"
+            },
+            {
+              "name": "shell_theme_contrast",
+              "status": "passed"
+            }
+          ],
+          "failures": []
+        }
+      ],
+      "focus_markers": 0,
+      "selection_markers": 0,
+      "images": [],
+      "original_manifest": "build/validation/macos-8bf-2026-11-05/13436772651-original.json",
+      "original_manifest_sha256": "da08f01b027e8a6598598c2a01e5414a21db8804df8ba98f7fe1bc222ba8a1d8"
+    },
+    {
+      "id": 13436061355,
+      "name": "native-workspace-menu-macos-15",
+      "zip": "build/validation/macos-8bf-2026-11-05/artifact-13436061355.zip",
+      "zip_sha256": "d09ef7b5cb4915680a217d941899d72b31be0a7d80b57375b4cb75de0a819f1c",
+      "bytes": 4588,
+      "all_entries_read": true,
+      "entries": {
+        "Release/test-results/run-f88crjtr/results.json": "62e1af982fcf6a64cb9b42e25a1f4f13b5dd0fbadd1ed9aeab80119f479b931d"
+      },
+      "groups": [
+        {
+          "entry": "Release/test-results/run-f88crjtr/results.json",
+          "passed": 2,
+          "total": 3,
+          "tests": [
+            {
+              "name": "file_tabs_workflow",
+              "status": "failed"
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "project_manager_keyboard_errors",
+              "status": "passed"
+            }
+          ],
+          "failures": [
+            {
+              "name": "file_tabs_workflow",
+              "observed": [
+                "File tabs failure stage 27 active=17 count=16 drag=0 pending=0 completion=0"
+              ]
+            }
+          ]
+        }
+      ],
+      "focus_markers": 0,
+      "selection_markers": 0,
+      "images": [],
+      "original_manifest": "build/validation/macos-8bf-2026-11-05/13436061355-original.json",
+      "original_manifest_sha256": "e0c8e4fa1a43a757eedfe1f9a845b46b2cee1c8e9d5794978866a263bf75785f"
+    },
+    {
+      "id": 13435897044,
+      "name": "native-editor-menu-macos-15",
+      "zip": "build/validation/macos-8bf-2026-11-05/artifact-13435897044.zip",
+      "zip_sha256": "46e07f320ea4e7bbbe0267c9669e16957aae7afe0876d3dc412761dff2b5b349",
+      "bytes": 584999,
+      "all_entries_read": true,
+      "entries": {
+        "Release/test-results/run-8lgfvqnp/results.json": "35805241749e99ed31a3e26ed0f426361fcd1b91de9f38ec2144e44d059b9c49",
+        "Release/test-results/run-csapyofe/project_tree_workflow/files \u00e4/workflow \u00e4/project-tree-large-name.bmp": "7d45158ef064a90c80cd05794cdeb72bf2cb7cf43cb6915574b3268f8d3a93e9",
+        "Release/test-results/run-csapyofe/results.json": "5e3ea21edbd7eca40c474d4f012f785915608d7644067407c57ce5d022e590e5",
+        "Release/test-results/run-csapyofe/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-long.bmp": "99e0c1f42bf2949f31902a00fcbc4e8f793d41634462637cf5b4afd6e4c27d69",
+        "Release/test-results/run-csapyofe/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-normal.bmp": "29e0bcde0de8e0833a86dc17dee33f690bbee922ad667e8fc5c2113d9c969bdd",
+        "Release/test-results/run-csapyofe/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-long.bmp": "79e02df38c51b42ed2679d4eb13297e1f9b609621ad2f1b1f49d2afd45133132",
+        "Release/test-results/run-csapyofe/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-normal.bmp": "fe707e5f335b1dd950481a8ef3bb3b08c230871f2a11ea104cb4487672c4b145",
+        "Release/test-results/run-csapyofe/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-first.bmp": "f99d1a570e01b8f9b20a6a149947f20251ce72999312cbdb9b2b31cdfaa7a5fd",
+        "Release/test-results/run-csapyofe/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-long.bmp": "facb10eb17c3e3b5b0cbc27aeb2d59873559d5080c0fd9a49566d781a18036c4",
+        "Release/test-results/run-csapyofe/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-first.bmp": "e6601de2391aef682ba2e3f23bb28b0fa440900bd151d14b4cd4681830f6ef94",
+        "Release/test-results/run-csapyofe/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-long.bmp": "12e8f3336c089117cf0a9eabeb4033319a15695975b7bbd5f8058b8439f8a060"
+      },
+      "groups": [
+        {
+          "entry": "Release/test-results/run-8lgfvqnp/results.json",
+          "passed": 14,
+          "total": 14,
+          "tests": [
+            {
+              "name": "c_call_context",
+              "status": "passed"
+            },
+            {
+              "name": "c_signatures",
+              "status": "passed"
+            },
+            {
+              "name": "c_lookup",
+              "status": "passed"
+            },
+            {
+              "name": "code_preview",
+              "status": "passed"
+            },
+            {
+              "name": "code_wrap",
+              "status": "passed"
+            },
+            {
+              "name": "signature_wrap",
+              "status": "passed"
+            },
+            {
+              "name": "text_wrap",
+              "status": "passed"
+            },
+            {
+              "name": "completion_locals",
+              "status": "passed"
+            },
+            {
+              "name": "completion_c_locals",
+              "status": "passed"
+            },
+            {
+              "name": "call_targets",
+              "status": "passed"
+            },
+            {
+              "name": "signature_help",
+              "status": "passed"
+            },
+            {
+              "name": "editor_signatures",
+              "status": "passed"
+            },
+            {
+              "name": "module_signatures",
+              "status": "passed"
+            },
+            {
+              "name": "completion_info",
+              "status": "passed"
+            }
+          ],
+          "failures": []
+        },
+        {
+          "entry": "Release/test-results/run-csapyofe/results.json",
+          "passed": 12,
+          "total": 12,
+          "tests": [
+            {
+              "name": "workspace_tree_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "documents_small",
+              "status": "passed"
+            },
+            {
+              "name": "documents_large",
+              "status": "passed"
+            },
+            {
+              "name": "project_tree_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_automatic_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "api_reference_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "signature_help_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_info_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_automatic_deadline_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_locals_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "signature_detached_workflow",
+              "status": "passed"
+            }
+          ],
+          "failures": []
+        }
+      ],
+      "focus_markers": 6,
+      "selection_markers": 6,
+      "images": [
+        {
+          "entry": "Release/test-results/run-csapyofe/project_tree_workflow/files \u00e4/workflow \u00e4/project-tree-large-name.bmp",
+          "sha256": "7d45158ef064a90c80cd05794cdeb72bf2cb7cf43cb6915574b3268f8d3a93e9",
+          "canonical": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\project-tree-large-name.bmp",
+          "original_and_canonical_bytes_read": true
+        },
+        {
+          "entry": "Release/test-results/run-csapyofe/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-long.bmp",
+          "sha256": "99e0c1f42bf2949f31902a00fcbc4e8f793d41634462637cf5b4afd6e4c27d69",
+          "canonical": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\c-signature-detached-long.bmp",
+          "original_and_canonical_bytes_read": true
+        },
+        {
+          "entry": "Release/test-results/run-csapyofe/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-normal.bmp",
+          "sha256": "29e0bcde0de8e0833a86dc17dee33f690bbee922ad667e8fc5c2113d9c969bdd",
+          "canonical": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\c-signature-detached-normal.bmp",
+          "original_and_canonical_bytes_read": true
+        },
+        {
+          "entry": "Release/test-results/run-csapyofe/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-long.bmp",
+          "sha256": "79e02df38c51b42ed2679d4eb13297e1f9b609621ad2f1b1f49d2afd45133132",
+          "canonical": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\phys-signature-detached-long.bmp",
+          "original_and_canonical_bytes_read": true
+        },
+        {
+          "entry": "Release/test-results/run-csapyofe/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-normal.bmp",
+          "sha256": "fe707e5f335b1dd950481a8ef3bb3b08c230871f2a11ea104cb4487672c4b145",
+          "canonical": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\phys-signature-detached-normal.bmp",
+          "original_and_canonical_bytes_read": true
+        },
+        {
+          "entry": "Release/test-results/run-csapyofe/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-first.bmp",
+          "sha256": "f99d1a570e01b8f9b20a6a149947f20251ce72999312cbdb9b2b31cdfaa7a5fd",
+          "canonical": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\intel\\c-signature-first.bmp",
+          "original_and_canonical_bytes_read": true
+        },
+        {
+          "entry": "Release/test-results/run-csapyofe/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-long.bmp",
+          "sha256": "facb10eb17c3e3b5b0cbc27aeb2d59873559d5080c0fd9a49566d781a18036c4",
+          "canonical": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\intel\\c-signature-long.bmp",
+          "original_and_canonical_bytes_read": true
+        },
+        {
+          "entry": "Release/test-results/run-csapyofe/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-first.bmp",
+          "sha256": "e6601de2391aef682ba2e3f23bb28b0fa440900bd151d14b4cd4681830f6ef94",
+          "canonical": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\phys-signature-first.bmp",
+          "original_and_canonical_bytes_read": true
+        },
+        {
+          "entry": "Release/test-results/run-csapyofe/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-long.bmp",
+          "sha256": "12e8f3336c089117cf0a9eabeb4033319a15695975b7bbd5f8058b8439f8a060",
+          "canonical": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\phys-signature-long.bmp",
+          "original_and_canonical_bytes_read": true
+        }
+      ],
+      "original_manifest": "build/validation/macos-8bf-2026-11-05/13435897044-original.json",
+      "original_manifest_sha256": "9f494e408cf73e76bb43403dd0d8bd27887d1225271375d6858e58de7a194fa5"
+    },
+    {
+      "id": 13435683530,
+      "name": "native-editor-menu-macos-15-intel",
+      "zip": "build/validation/macos-8bf-2026-11-05/artifact-13435683530.zip",
+      "zip_sha256": "14a344086c87b39ba82f57e71ff2e7e2d71a87be75ea2713a6b01aa4d6235126",
+      "bytes": 585400,
+      "all_entries_read": true,
+      "entries": {
+        "Release/test-results/run-dvdkvp01/project_tree_workflow/files \u00e4/workflow \u00e4/project-tree-large-name.bmp": "7d45158ef064a90c80cd05794cdeb72bf2cb7cf43cb6915574b3268f8d3a93e9",
+        "Release/test-results/run-dvdkvp01/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-long.bmp": "99e0c1f42bf2949f31902a00fcbc4e8f793d41634462637cf5b4afd6e4c27d69",
+        "Release/test-results/run-dvdkvp01/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-normal.bmp": "29e0bcde0de8e0833a86dc17dee33f690bbee922ad667e8fc5c2113d9c969bdd",
+        "Release/test-results/run-dvdkvp01/results.json": "7466d92b374e760ab235c0d4930d1337ef045a655aefc27a3be34522d3a417b2",
+        "Release/test-results/run-dvdkvp01/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-long.bmp": "79e02df38c51b42ed2679d4eb13297e1f9b609621ad2f1b1f49d2afd45133132",
+        "Release/test-results/run-dvdkvp01/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-normal.bmp": "fe707e5f335b1dd950481a8ef3bb3b08c230871f2a11ea104cb4487672c4b145",
+        "Release/test-results/run-dvdkvp01/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-first.bmp": "f99d1a570e01b8f9b20a6a149947f20251ce72999312cbdb9b2b31cdfaa7a5fd",
+        "Release/test-results/run-dvdkvp01/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-long.bmp": "facb10eb17c3e3b5b0cbc27aeb2d59873559d5080c0fd9a49566d781a18036c4",
+        "Release/test-results/run-dvdkvp01/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-first.bmp": "e6601de2391aef682ba2e3f23bb28b0fa440900bd151d14b4cd4681830f6ef94",
+        "Release/test-results/run-dvdkvp01/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-long.bmp": "12e8f3336c089117cf0a9eabeb4033319a15695975b7bbd5f8058b8439f8a060",
+        "Release/test-results/run-i2u5g40l/results.json": "72a274724c693f8859401ca364212480ee251e97e51fdaf388627c72dea6461e"
+      },
+      "groups": [
+        {
+          "entry": "Release/test-results/run-dvdkvp01/results.json",
+          "passed": 12,
+          "total": 12,
+          "tests": [
+            {
+              "name": "workspace_tree_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "documents_small",
+              "status": "passed"
+            },
+            {
+              "name": "documents_large",
+              "status": "passed"
+            },
+            {
+              "name": "project_tree_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_automatic_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "api_reference_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "signature_help_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_info_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_automatic_deadline_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "completion_locals_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "signature_detached_workflow",
+              "status": "passed"
+            }
+          ],
+          "failures": []
+        },
+        {
+          "entry": "Release/test-results/run-i2u5g40l/results.json",
+          "passed": 14,
+          "total": 14,
+          "tests": [
+            {
+              "name": "c_call_context",
+              "status": "passed"
+            },
+            {
+              "name": "c_signatures",
+              "status": "passed"
+            },
+            {
+              "name": "c_lookup",
+              "status": "passed"
+            },
+            {
+              "name": "code_preview",
+              "status": "passed"
+            },
+            {
+              "name": "code_wrap",
+              "status": "passed"
+            },
+            {
+              "name": "signature_wrap",
+              "status": "passed"
+            },
+            {
+              "name": "text_wrap",
+              "status": "passed"
+            },
+            {
+              "name": "completion_locals",
+              "status": "passed"
+            },
+            {
+              "name": "completion_c_locals",
+              "status": "passed"
+            },
+            {
+              "name": "call_targets",
+              "status": "passed"
+            },
+            {
+              "name": "signature_help",
+              "status": "passed"
+            },
+            {
+              "name": "editor_signatures",
+              "status": "passed"
+            },
+            {
+              "name": "module_signatures",
+              "status": "passed"
+            },
+            {
+              "name": "completion_info",
+              "status": "passed"
+            }
+          ],
+          "failures": []
+        }
+      ],
+      "focus_markers": 6,
+      "selection_markers": 6,
+      "images": [
+        {
+          "entry": "Release/test-results/run-dvdkvp01/project_tree_workflow/files \u00e4/workflow \u00e4/project-tree-large-name.bmp",
+          "sha256": "7d45158ef064a90c80cd05794cdeb72bf2cb7cf43cb6915574b3268f8d3a93e9",
+          "canonical": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\project-tree-large-name.bmp",
+          "original_and_canonical_bytes_read": true
+        },
+        {
+          "entry": "Release/test-results/run-dvdkvp01/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-long.bmp",
+          "sha256": "99e0c1f42bf2949f31902a00fcbc4e8f793d41634462637cf5b4afd6e4c27d69",
+          "canonical": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\c-signature-detached-long.bmp",
+          "original_and_canonical_bytes_read": true
+        },
+        {
+          "entry": "Release/test-results/run-dvdkvp01/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-normal.bmp",
+          "sha256": "29e0bcde0de8e0833a86dc17dee33f690bbee922ad667e8fc5c2113d9c969bdd",
+          "canonical": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\c-signature-detached-normal.bmp",
+          "original_and_canonical_bytes_read": true
+        },
+        {
+          "entry": "Release/test-results/run-dvdkvp01/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-long.bmp",
+          "sha256": "79e02df38c51b42ed2679d4eb13297e1f9b609621ad2f1b1f49d2afd45133132",
+          "canonical": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\phys-signature-detached-long.bmp",
+          "original_and_canonical_bytes_read": true
+        },
+        {
+          "entry": "Release/test-results/run-dvdkvp01/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-normal.bmp",
+          "sha256": "fe707e5f335b1dd950481a8ef3bb3b08c230871f2a11ea104cb4487672c4b145",
+          "canonical": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\phys-signature-detached-normal.bmp",
+          "original_and_canonical_bytes_read": true
+        },
+        {
+          "entry": "Release/test-results/run-dvdkvp01/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-first.bmp",
+          "sha256": "f99d1a570e01b8f9b20a6a149947f20251ce72999312cbdb9b2b31cdfaa7a5fd",
+          "canonical": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\intel\\c-signature-first.bmp",
+          "original_and_canonical_bytes_read": true
+        },
+        {
+          "entry": "Release/test-results/run-dvdkvp01/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-long.bmp",
+          "sha256": "facb10eb17c3e3b5b0cbc27aeb2d59873559d5080c0fd9a49566d781a18036c4",
+          "canonical": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\intel\\c-signature-long.bmp",
+          "original_and_canonical_bytes_read": true
+        },
+        {
+          "entry": "Release/test-results/run-dvdkvp01/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-first.bmp",
+          "sha256": "e6601de2391aef682ba2e3f23bb28b0fa440900bd151d14b4cd4681830f6ef94",
+          "canonical": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\phys-signature-first.bmp",
+          "original_and_canonical_bytes_read": true
+        },
+        {
+          "entry": "Release/test-results/run-dvdkvp01/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-long.bmp",
+          "sha256": "12e8f3336c089117cf0a9eabeb4033319a15695975b7bbd5f8058b8439f8a060",
+          "canonical": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\phys-signature-long.bmp",
+          "original_and_canonical_bytes_read": true
+        }
+      ],
+      "original_manifest": "build/validation/macos-8bf-2026-11-05/13435683530-original.json",
+      "original_manifest_sha256": "f14d1deb491f039b76b93577e55c98d84ceb1887dd22686dee7b5c5230dae3a1"
+    },
+    {
+      "id": 13435197463,
+      "name": "native-workspace-menu-macos-15-intel",
+      "zip": "build/validation/macos-workspace-8bf-2026-11-05/artifact-13435197463.zip",
+      "zip_sha256": "f399f2724105cbcaaa891bebf90a295aa8313b2716968aac8a87e76a6c4774ce",
+      "bytes": 4618,
+      "all_entries_read": true,
+      "entries": {
+        "Release/test-results/run-q8659ta0/results.json": "0f48a6df90b9e594b077e3ee29e5b7b838761b67abc243158a4bf15727734288"
+      },
+      "groups": [
+        {
+          "entry": "Release/test-results/run-q8659ta0/results.json",
+          "passed": 2,
+          "total": 3,
+          "tests": [
+            {
+              "name": "file_tabs_workflow",
+              "status": "failed"
+            },
+            {
+              "name": "settings_keyboard_workflow",
+              "status": "passed"
+            },
+            {
+              "name": "project_manager_keyboard_errors",
+              "status": "passed"
+            }
+          ],
+          "failures": [
+            {
+              "name": "file_tabs_workflow",
+              "observed": [
+                "File tabs failure stage 27 active=17 count=16 drag=0 pending=0 completion=0"
+              ]
+            }
+          ]
+        }
+      ],
+      "focus_markers": 0,
+      "selection_markers": 0,
+      "images": [],
+      "original_manifest": "build/validation/macos-workspace-8bf-2026-11-05/intel-original.json",
+      "original_manifest_sha256": "aa0974a6626fbc5e06e925b49e6aa8bdd020dda5ec4154f1494f26faf2b850b2"
+    }
+  ],
+  "images": {
+    "original_bmp_entries_read": 18,
+    "all_byte_identical_to_retained_opened_references": true,
+    "extracted_new_copies": 0,
+    "canonical_source": "docs/verification/filename-wrap-macos-2026-11-05.json"
+  },
+  "workspace_correction": "docs/verification/file-tabs-auto-2026-11-05.md; corrected source13cc4422 requires separate actual Mac acceptance",
+  "limits": [
+    "These executed hosted jobs and artifacts prove only their named source-specific tasks, not full native UI or physical input or screenreader acceptance.",
+    "Focus peer is separate process of same executable; typed/key events scripted SDL.",
+    "No private user Mac connection, probe or upload; that machine stays OFF."
+  ]
+}

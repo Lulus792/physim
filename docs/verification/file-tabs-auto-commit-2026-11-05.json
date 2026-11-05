@@ -1,0 +1,175 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "13cc442226bf8405b5bdf5950818b551bd2fe5ab",
+  "branch": "codex/f1-design-h",
+  "both_remote_tracking_refs_match_at_source_push": true,
+  "remotes": [
+    "origin",
+    "upstream"
+  ],
+  "own_inputs": 303,
+  "compiler_and_test_inputs": 1238,
+  "unique_input_files": 1257,
+  "all_tested_input_bytes_read_against_index_and_actual_commit": true,
+  "matches": [
+    {
+      "path": "build/validation/file-tabs-auto-2026-11-05/index-match.json",
+      "sha256": "130c4b6a9fc5b214f99872c0b3bd98197d8af65aebfc2553c8458d5f5ca61cee"
+    },
+    {
+      "path": "build/validation/file-tabs-auto-2026-11-05/commit-match.json",
+      "sha256": "025680023afd3a5106163598a5b67ee5d1f93da0b3181b7a73ce7ef9950560b0"
+    },
+    {
+      "path": "build/validation/file-tabs-auto-2026-11-05/prebuild-audit.json",
+      "sha256": "888e8855e839d28658a1286b8791d9a49407b550c6b9c101e749a53406dffa29"
+    }
+  ],
+  "proof": "docs/verification/file-tabs-auto-2026-11-05.json",
+  "local_results": {
+    "windows": {
+      "config": "Release",
+      "groups": "3/3",
+      "run": "run-iuqaftzp",
+      "app_sha256": "9abe49cb51e4e2e697c465c0e6c30ee8cdfb4b143fc403b730d2bbce3ec6b6b9"
+    },
+    "linux": {
+      "config": "Debug ASan/UBSan",
+      "groups": "3/3",
+      "run": "run-gd7xo029",
+      "app_sha256": "7a489133c00129741a8ddfd2ac6ef80b9f80ce63f78b9549b22d4d9820104b43"
+    }
+  },
+  "source_scope": "Only file_tabs_test_frame test synchronization/stronger assertions; normal UI and140ms debounce unchanged.",
+  "older_mac_closed": {
+    "source_commit": "8bf467ce8519906ff8d96f52e98c7149f41b5185",
+    "proof": "docs/verification/macos-8bf-2026-11-05.json",
+    "all4runs_terminal": true,
+    "no_further_polling": true,
+    "editor_each": "14/14data+12/12GUI",
+    "typography_each": "16/16",
+    "native_menus_each": "7/7",
+    "workspace_each": "2/3; same stale stage27; next matrix skipped"
+  },
+  "new_runs": {
+    "source_commit": "13cc442226bf8405b5bdf5950818b551bd2fe5ab",
+    "runs": [
+      {
+        "id": 42073119608,
+        "status": "pending",
+        "conclusion": null,
+        "head_sha": "13cc442226bf8405b5bdf5950818b551bd2fe5ab",
+        "path": ".github/workflows/ci.yml",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/42073119608"
+      },
+      {
+        "id": 42073119770,
+        "status": "in_progress",
+        "conclusion": null,
+        "head_sha": "13cc442226bf8405b5bdf5950818b551bd2fe5ab",
+        "path": ".github/workflows/linux-ui-sanitizers.yml",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/42073119770"
+      },
+      {
+        "id": 42073119600,
+        "status": "in_progress",
+        "conclusion": null,
+        "head_sha": "13cc442226bf8405b5bdf5950818b551bd2fe5ab",
+        "path": ".github/workflows/linux-package.yml",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/42073119600"
+      },
+      {
+        "id": 42073119561,
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "13cc442226bf8405b5bdf5950818b551bd2fe5ab",
+        "path": ".github/workflows/macos-workspace-menu.yml",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/42073119561"
+      }
+    ],
+    "mac_jobs": [
+      {
+        "id": 127406074781,
+        "name": "editor (macos-15-intel)",
+        "status": "in_progress",
+        "conclusion": null,
+        "run_id": 42073119561,
+        "logs_url": null,
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2
+          },
+          {
+            "name": "SDL cache identity",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3
+          },
+          {
+            "name": "Restore pinned SDL install",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4
+          },
+          {
+            "name": "Pinned SDL3",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 5
+          },
+          {
+            "name": "Save pinned SDL install",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 6
+          },
+          {
+            "name": "Actual file tabs, project errors and settings keyboard workflows",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7
+          },
+          {
+            "name": "Complete 34-project keyboard matrix at both font sizes",
+            "status": "in_progress",
+            "conclusion": null,
+            "number": 8
+          },
+          {
+            "name": "Compact native results",
+            "status": "pending",
+            "conclusion": null,
+            "number": 9
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "pending",
+            "conclusion": null,
+            "number": 18
+          }
+        ]
+      },
+      {
+        "id": 127406075215,
+        "name": "editor (macos-15)",
+        "status": "queued",
+        "conclusion": null,
+        "run_id": 42073119561,
+        "logs_url": null,
+        "steps": null
+      }
+    ]
+  },
+  "new_mac_acceptance": "pending actual corrected-source workspace and68-project matrix results; follow existing42073119561, not a restart",
+  "private_user_mac": "OFF; no connection/probe/upload",
+  "scope_limit": "Not complete native UI/design, physical keyboard or screenreader acceptance; search/control-focus return remains open."
+}
