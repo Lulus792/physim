@@ -1,0 +1,53 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "9cc445085ac8dc6c34f16aa010f9bc88f6c6c1de",
+  "branch": "codex/f1-design-h",
+  "both_remote_tracking_refs_match_at_source_push": true,
+  "remotes": [
+    "origin",
+    "upstream"
+  ],
+  "own_inputs": 301,
+  "compiler_and_test_inputs": 1238,
+  "unique_input_files": 1257,
+  "all_tested_input_bytes_read_against_git_index_and_actual_commit": true,
+  "normalization": "CRLF/LF only for nonvendor source; raw upstream parser bytes exact.",
+  "matches": [
+    {
+      "path": "build/validation/signature-detached-2026-11-05/index-match.json",
+      "sha256": "94aaea49f14033dc62aa41a4b430a6dcb6e9b66a6521ca6211865028c95e2b34"
+    },
+    {
+      "path": "build/validation/signature-detached-2026-11-05/commit-match.json",
+      "sha256": "6fa84765994d800365bfad448f27b2258cd4be424cac2626ad1e33101708cf2d"
+    }
+  ],
+  "proof": "docs/verification/signature-detached-2026-11-05.json",
+  "local_results": {
+    "windows": "Release7/7 run-69j1crw4",
+    "linux": "Debug ASan/UBSan7/7 run-xh60v0jy"
+  },
+  "new_hosted_macos": {
+    "run": 42049114569,
+    "source_commit": "9cc445085ac8dc6c34f16aa010f9bc88f6c6c1de",
+    "expected_per_architecture": {
+      "data": 11,
+      "gui": 10
+    },
+    "jobs": [
+      {
+        "id": 127320087545,
+        "platform": "arm",
+        "observed_status": "queued"
+      },
+      {
+        "id": 127320087841,
+        "platform": "intel",
+        "observed_status": "queued"
+      }
+    ],
+    "acceptance": "pending; continue these same handles, do not restart on observation timeout"
+  },
+  "private_user_mac": "OFF; untouched",
+  "scope": "Two explicit editor-focus fixes and actual detached-window native workflow. No appearance change. No full UI/platform/physical/assistive/capture-beyond-OS-window acceptance."
+}

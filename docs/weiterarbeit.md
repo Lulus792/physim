@@ -15,6 +15,10 @@ exakte Quelle/Cursor/Auswahl/Anordnung, überlappender Scrollgriff und Tippen na
 Drag sowie Rückkehr geprüft. [Originale und Grenzen](verification/signature-detached-2026-11-05.json).
 Warmstand **signature-detached-checked**,301 eigene Eingaben. Detailstand und
 späterer Mac-Handle: `build/validation/signature-detached-2026-11-05/STATE.md`.
+[Quelle9cc44508, beide Remotes](verification/signature-detached-commit-2026-11-05.json):
+alle1.257 Eingaben gegen Index und tatsächlichen Commit gelesen. Neuer gehosteter
+Mac-Lauf42049114569: ARM127320087545 und Intel127320087841 zuletzt queued;
+erwartet je11 Daten+10 GUI. Diesen Stand getrennt verfolgen, noch keine Abnahme.
 
 [Kartenüberschreitung im Hauptfenster](verification/signature-outside-2026-11-05.md):
 C/Ph samt Tippen nach Release, Windows gleicher Build direkt nach Fokusaktivierung,
