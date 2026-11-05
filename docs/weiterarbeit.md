@@ -27,6 +27,12 @@ Windows `run-bx1hn8_m` / `run-caqjhctl`, Linux `run-g7rdvvr5` / `run-r90u_b6w`;
 Alle lokalen Handles beendet; 68 bytegleiche BMPs/217.391.784 Bytes entfernt,
 Referenzen und Originalberichte erhalten. Neuer Mac-Nachlauf offen, Workflow
 sieben Daten-Units + acht GUI-Gruppen. Keine gesamte UI-/Performance-/physische Abnahme.
+Quellcommit **`f3ed4068`**, normal in beide Repositories gepusht;
+[Commitabgleich und Mac-Anschluss](verification/c-signatures-commit-2026-11-05.json).
+Neuer gehosteter Lauf **`41980836062`** zu genau diesem Quellstand: ARM
+`127090312595` läuft (Daten-Units), Intel `127090312320` wartet. Diesen Lauf weiter
+prüfen: je sieben Daten-Units und acht GUI-Gruppen, tatsächliche Originalartefakte
+lesen. Frühere sechs-Unit-Nachläufe bestätigen diese neue C-Projektion nicht.
 
 [Geschriebene Physim-Signaturen](verification/signature-declarations-2026-11-05.md):
 echter Parser veröffentlicht vollständige Köpfe mit Parametern/Typen/Rückgabe,

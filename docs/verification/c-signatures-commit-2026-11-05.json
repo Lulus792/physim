@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "f3ed4068607580e3cf23e89a53a88a941c1e0f89",
+  "remotes": {
+    "origin": "f3ed4068607580e3cf23e89a53a88a941c1e0f89",
+    "upstream": "f3ed4068607580e3cf23e89a53a88a941c1e0f89"
+  },
+  "all1245compiler_test_owned_git_blobs_read": true,
+  "all_original_report_bytes_reread": true,
+  "source_match_report_sha256": "05e972fa192f28df517fe80111a1da92d12560f808dd4f53b0625916b7402b5f",
+  "hosted_mac": {
+    "repo": "Lulus792/physim",
+    "run": 41980836062,
+    "head_sha": "f3ed4068607580e3cf23e89a53a88a941c1e0f89",
+    "arm_job": 127090312595,
+    "arm_status": "in_progress",
+    "arm_active_step": "Actual signature, call-target and revision data",
+    "intel_job": 127090312320,
+    "intel_status": "queued",
+    "expected": "7 direct C/Physim signature/call/revision/info units and8 GUI groups per architecture; actual results pending"
+  },
+  "private_mac": "OFF, untouched",
+  "scope": "Actual written C signature data prerequisite; common resolution/native HUD/large edit performance/full UI and physical acceptance remain open"
+}
