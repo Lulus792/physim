@@ -1,0 +1,57 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "0d3f4a65288897032dbcfc76ed2ad6f0d27a36e3",
+  "branch": "codex/f1-design-h",
+  "both_remote_tracking_refs_match_at_source_push": true,
+  "remotes": [
+    "origin",
+    "upstream"
+  ],
+  "own_inputs": 303,
+  "compiler_and_test_inputs": 1238,
+  "unique_input_files": 1257,
+  "all_tested_input_bytes_read_against_index_and_actual_commit": true,
+  "normalization": "CRLF/LF only for nonvendor source; raw upstream parser bytes exact.",
+  "matches": [
+    {
+      "path": "build/validation/filename-wrap-2026-11-05/index-match.json",
+      "sha256": "3e386e0396c85a2bfe9410374a2ed1b5351b7428566e4db32ce5648a1e5f0982"
+    },
+    {
+      "path": "build/validation/filename-wrap-2026-11-05/commit-match.json",
+      "sha256": "c172c1ec297358c32a282df36b2ec3ee9a29c983c6ff39055bc786d712eb45aa"
+    },
+    {
+      "path": "build/validation/filename-wrap-2026-11-05/owned-input-audit.json",
+      "sha256": "f6ed6433ec7750a45cc75b405b12833d0cf58cac1aa4b409457f84e71a04b5de"
+    }
+  ],
+  "proof": "docs/verification/filename-wrap-2026-11-05.json",
+  "local_results": {
+    "windows": "Release data4/4 run-mcqp7r4k; GUI3/3 run-x47ka1pt",
+    "linux": "Debug ASan/UBSan data4/4 run-qzioq4l4; GUI3/3 run-5vvltg9o"
+  },
+  "new_hosted_macos": {
+    "run": 42059129050,
+    "source_commit": "0d3f4a65288897032dbcfc76ed2ad6f0d27a36e3",
+    "expected_per_architecture": {
+      "data": 14,
+      "gui": 12
+    },
+    "jobs": [
+      {
+        "id": 127355571409,
+        "platform": "intel",
+        "observed_status": "queued"
+      },
+      {
+        "id": 127355571940,
+        "platform": "arm",
+        "observed_status": "queued"
+      }
+    ],
+    "acceptance": "pending; follow these handles, not terminal source9cc run"
+  },
+  "private_user_mac": "OFF; untouched",
+  "scope": "Filename layout and actual22px native source/paint/clip/open workflow, existing shared wrap modes and Workbench fixture alignment. No full UI/platform/physical/assistive acceptance."
+}

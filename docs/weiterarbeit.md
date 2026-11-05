@@ -18,9 +18,11 @@ Werkbankgruppe korrigiert; normale Protokollimplementierung unverändert.
 
 Warmstand **filename-wrap-owned**,303 ausdrücklich erfasste Eingaben.
 Vor dem Build alle neun eigenen Quell-/Test-/Workflowdateien bytegleich gegen
-Arbeitsbaum, Isolation und Manifest gelesen. Eigene Änderungen und Nachweise
-gezielt committen; fremdes WIP erhalten. Detailstand und aktueller Mac-Handle:
+Arbeitsbaum, Isolation und Manifest gelesen. [Quelle0d3f4a65, beide Remotes](verification/filename-wrap-commit-2026-11-05.json);
+alle1257 Eingaben gegen Index und tatsächlichen Commit gelesen. Detailstand:
 `build/validation/filename-wrap-2026-11-05/STATE.md`.
+Mac-Lauf42059129050: Intel127355571409 und ARM127355571940 zuletzt queued;
+erwartet je14 Daten+12 GUI. Diese neue Quelle ist auf Mac noch nicht abgenommen.
 
 ## Vorherige Abschlüsse erhalten
 
@@ -67,6 +69,8 @@ gezielt committen; fremdes WIP erhalten. Detailstand und aktueller Mac-Handle:
 vollständiger Physim-Anteil. Lange Testpfade nacherfasst, danach0Fehler.
 Keine erneute Inventur allein wegen Kontextwechsel. Bereinigungen und erhaltene
 Referenzen: [Wartungsbericht](storage-maintenance-2026-11-05.md).
+[Vier weitere identische Mac-Extraktionsbilder entfernt](verification/signature-detached-macos-cleanup-2026-11-05.json):
+9.850.152Bytes, Original-ZIP und kanonische Bildinhalte erhalten.
 
 Nur **D:**; F: weder lesen noch schreiben. Generiertes unter `build`; gemeinsame
 WSL **Alpine-Dev**, VM, Offline-Abhängigkeiten, Nutzdaten und offene Fehler erhalten.
