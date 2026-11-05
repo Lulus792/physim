@@ -1,0 +1,126 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "8bf467ce8519906ff8d96f52e98c7149f41b5185",
+  "branch": "codex/f1-design-h",
+  "both_remote_tracking_refs_match_at_source_push": true,
+  "remotes": [
+    "origin",
+    "upstream"
+  ],
+  "own_inputs": 303,
+  "compiler_and_test_inputs": 1238,
+  "unique_input_files": 1257,
+  "all_tested_input_bytes_read_against_index_and_actual_commit": true,
+  "normalization": "CRLF/LF only for nonvendor source; raw upstream parser bytes exact.",
+  "matches": [
+    {
+      "path": "build/validation/signature-focus-2026-11-05/index-match.json",
+      "sha256": "c72732316e03cad2630905088b9236317d9602d7005e63c78363bbd9847cd4da"
+    },
+    {
+      "path": "build/validation/signature-focus-2026-11-05/commit-match.json",
+      "sha256": "c9705dfb14b9b12cb494abbf0e9891e5e89997cd7e04da696be6501ffb53f542"
+    },
+    {
+      "path": "build/validation/signature-focus-2026-11-05/signature-focus-accepted-audit.json",
+      "sha256": "465510bc0fcdfa13c19d1b365fd1b0930d9686d2b0cad5c6435fad911c64f3e8"
+    },
+    {
+      "path": "build/validation/signature-focus-2026-11-05/checks.json",
+      "sha256": "16514c40848c3b40e5a22613c10ed29165a8054b31222f860eda19df76067a2e"
+    }
+  ],
+  "proof": "docs/verification/signature-focus-2026-11-05.json",
+  "local_results": {
+    "windows": {
+      "config": "Release",
+      "groups": "2/2",
+      "run": "run-8aio6i_b",
+      "app_sha256": "0753501405c6ee3a6e3eeb171a1f17986a896be676f2d84b9d91a60c3067add0"
+    },
+    "linux": {
+      "config": "Debug ASan/UBSan",
+      "groups": "2/2",
+      "run": "run-dx4glpkf",
+      "app_sha256": "54f6e72f564c8a4f2693c39d4aa84354e494c1c543ff74e9c37272ac43bcd7fc",
+      "desktop": "private Xvfb/Openbox"
+    }
+  },
+  "closed_older_mac": {
+    "source_commit": "0d3f4a65288897032dbcfc76ed2ad6f0d27a36e3",
+    "run": 42059129050,
+    "jobs": [
+      127355571409,
+      127355571940
+    ],
+    "each": "14/14data+12/12GUI; all22original entries read;4new unique images opened;14same canonical bytes",
+    "proof": "docs/verification/filename-wrap-macos-2026-11-05.json",
+    "do_not_poll_again": true
+  },
+  "new_source_macos": {
+    "acceptance": "pending; newly queued hosted workflow, no jobs allocated at observation",
+    "source_commit": "8bf467ce8519906ff8d96f52e98c7149f41b5185",
+    "run": 42069271439,
+    "status": "queued",
+    "jobs": [],
+    "expected_per_architecture": {
+      "data": 14,
+      "gui": 12
+    },
+    "all_source_run_handles": [
+      {
+        "id": 42069271439,
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "8bf467ce8519906ff8d96f52e98c7149f41b5185",
+        "path": ".github/workflows/macos-editor-menu.yml",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/42069271439"
+      },
+      {
+        "id": 42069010306,
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "8bf467ce8519906ff8d96f52e98c7149f41b5185",
+        "path": ".github/workflows/macos-typography-menu.yml",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/42069010306"
+      },
+      {
+        "id": 42068991869,
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "8bf467ce8519906ff8d96f52e98c7149f41b5185",
+        "path": ".github/workflows/macos-workspace-menu.yml",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/42068991869"
+      },
+      {
+        "id": 42068975965,
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "8bf467ce8519906ff8d96f52e98c7149f41b5185",
+        "path": ".github/workflows/macos-native-menu.yml",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/42068975965"
+      }
+    ],
+    "workflow": ".github/workflows/macos-editor-menu.yml",
+    "do_not_restart_on_observation_timeout": true
+  },
+  "duplicate_images": {
+    "count": 22,
+    "removed_logical_file_bytes": 29123036,
+    "actual_ntfs_allocation_freed_bytes": null,
+    "receipts": [
+      "docs/verification/filename-wrap-macos-cleanup-2026-11-05.json",
+      "docs/verification/signature-focus-images-cleanup-2026-11-05.json"
+    ]
+  },
+  "denied_cleanup": {
+    "targets": [
+      "build/validation/signature-focus-2026-11-05/xauth-verified",
+      "build/validation/signature-focus-2026-11-05/xauth-accepted"
+    ],
+    "reason": "blocked by policy; no more detailed reason supplied",
+    "not_retried_or_routed_around": true
+  },
+  "private_user_mac": "OFF; untouched",
+  "limits": "No full UI/design, physical/OS keyboard, unrelated-app, search/control-return or screenreader acceptance. New helper is separate process of same executable; text input events scripted SDL."
+}

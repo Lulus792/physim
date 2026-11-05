@@ -19,6 +19,8 @@ zu erhaltenen, bereits geöffneten Referenzen; nur neue Kopien entfernt.
 Warmstand **signature-focus-accepted**,303 ausdrücklich erfasste Eingaben;
 alle vier eigenen Quell-/Testdateien vor Build Root/Isolation/Manifest bytegleich.
 Windows07535014… und Linux54f6e72f…; Source-/Runtimearchive vollständig gelesen.
+[Quelle8bf467ce in beiden Remotes](verification/signature-focus-commit-2026-11-05.json),
+alle1257 Eingaben gegen Index und tatsächlichen Commit gelesen.
 Details: `build/validation/signature-focus-2026-11-05/STATE.md`.
 
 [Mac-Nachlauf42059129050 zu0d3f4a65 abgeschlossen](verification/filename-wrap-macos-2026-11-05.json):
@@ -54,9 +56,13 @@ pollen oder neu starten. Diese alte Quelle belegt nicht die spätere Fokuskorrek
 
 ## Nächste konkrete Aufgaben
 
-1. Neue Fokusquelle auf gehostetem Mac prüfen; neue Handles nach Quellpush
-   festhalten. Geschlossenen Lauf42059129050 und seine22 Originaleinträge nicht
-   erneut prüfen. Fehlende neue Architekturabnahme ehrlich offen halten.
+1. Fokusquelle8bf467ce: gehosteter Editorlauf **42069271439 queued**, bei
+   Beobachtung noch keine Jobs zugeteilt; erwartet je14 Daten+12 GUI. Ebenfalls
+   queued zu derselben Quelle: Typografie42069010306, Workspace42068991869,
+   natives Menü42068975965. Diese Handles verfolgen, nicht neu starten.
+   [Source-/Run-Nachweis](verification/signature-focus-commit-2026-11-05.json).
+   Geschlossenen Lauf42059129050 und seine22 Originaleinträge nicht erneut prüfen.
+   Fehlende neue Architekturabnahme ehrlich offen halten.
 2. Fokuswechsel aus Suchinsel/anderen Controls, Capture außerhalb einer
    OS-Fenstergrenze und native Accessibility-/Screenreader-Aufgaben. Die neue
    Peerprobe verwendet einen eigenen Prozess derselben Binärdatei und geskriptete
