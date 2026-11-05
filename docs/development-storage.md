@@ -63,7 +63,20 @@ Linux-Dateisystem und werden nach dem Lauf entfernt. `XDG_RUNTIME_DIR` wird
 deshalb nicht auf das Windows-Laufwerk gesetzt. Große Bild-, Log- oder
 Compilerdateien gehören nicht in diese Laufzeitverzeichnisse.
 
+Der [Nachlauf vom 5. November](storage-maintenance-2026-11-05.md) entfernt nur
+einen ersetzten Analyse-Objektcache (248 Dateien, 105.475.284 logische Bytes).
+99 Programme/Bibliotheksdateien bleiben hashgleich; aktuelle Buildcaches,
+Referenzbilder und eingefrorene Nachweise bleiben erhalten.
+
 ## Nachweise mit weniger Bildern
+
+Für die regelmäßige Pflege gelten die
+[Dokumentations- und Übergaberegeln](development-workflow.md). Aktuellen Status im
+kurzen Arbeitsstand halten, abgeschlossene Einzelheiten im Prüfindex verlinken.
+Vor dem Einfrieren großer Laufzeitarchive ihren konkreten Beweis- oder
+Wiederherstellungszweck prüfen; Text, Hashliste und vorhandene identische
+Laufzeitreferenz genügen, wenn damit der tatsächliche Prüfumfang erhalten bleibt.
+Bestehende ausdrücklich eingefrorene Archive werden dadurch nicht freigegeben.
 
 Für neue native Prüfungen die [Berichtsvorlage](templates/native-validation.md)
 und bei längeren Zustandsfolgen die [JSON-Vorlage](templates/native-validation.json)

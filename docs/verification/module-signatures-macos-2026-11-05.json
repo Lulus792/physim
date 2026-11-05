@@ -1,0 +1,125 @@
+{
+  "date": "2026-11-05",
+  "repo": "Lulus792/physim",
+  "run": 41986344544,
+  "source_commit": "ec7824ca20a9de8058fcdfc9a9507ea63acd129d",
+  "all_jobs_terminal": true,
+  "reports": [
+    {
+      "architecture": "intel",
+      "job": 127107853216,
+      "artifact": 13397190145,
+      "zip_path": "build/validation/module-signatures-2026-11-05/native-editor-menu-macos-15-intel.zip",
+      "zip_sha256": "55fdd4fb6e1a00db1c0044b07543fa4abc648dcc3279d1c84d63fec2ba1cc8b2",
+      "github_digest_verified": true,
+      "all_original_entries_read": {
+        "Release/test-results/run-7fvjcpym/results.json": "3dcbf2b3dbeb4066aae4f96a75474ee629835146eacb3e2e8dd76bbc5acb3ac9",
+        "Release/test-results/run-ttmy44wt/results.json": "d5fb57f3838042ee7f0cf9e11bfde4d64bd6101c7a86fa19506fba3b916b1579"
+      },
+      "units_passed": 8,
+      "units_total": 8,
+      "unit_cases": [
+        "c_call_context",
+        "c_signatures",
+        "completion_locals",
+        "completion_c_locals",
+        "call_targets",
+        "editor_signatures",
+        "module_signatures",
+        "completion_info"
+      ],
+      "actual_unit_markers": [
+        "33 actual declarator/prototype/pointer/legacy/recovery vectors",
+        "205 every-byte inputs",
+        "775 cursor/name comparisons",
+        "3/3 clean counts",
+        "294 strict-AST/prefix byte comparisons passed",
+        "36 actual C/Physim grammar vectors",
+        "887 fresh-reference comparisons",
+        "123/123 preserve snapshot",
+        "7/7 preserve source/syntax/results",
+        "87/87 preserve source/syntax/results",
+        "Completion info: exact delay boundary",
+        "13 actual parser recovery/header/namespace vectors",
+        "70 original-span prefix/header comparisons",
+        "3 malformed namespace headers resume with bounded forward progress"
+      ],
+      "gui_passed": 8,
+      "gui_total": 8,
+      "gui_cases": [
+        "documents_small",
+        "documents_large",
+        "completion_workflow",
+        "completion_automatic_workflow",
+        "api_reference_workflow",
+        "completion_info_workflow",
+        "completion_automatic_deadline_workflow",
+        "completion_locals_workflow"
+      ],
+      "actual_obsolete_deadline_rejected_markers": 6,
+      "actual_cache_c_physim_targets": 3,
+      "app_sha256": "394999d980ab99ed7de3c76fd576e9e9f482cd1110955d76d9534833504948d8"
+    },
+    {
+      "architecture": "arm",
+      "job": 127107852822,
+      "artifact": 13395749673,
+      "zip_path": "build/validation/module-signatures-2026-11-05/native-editor-menu-macos-15.zip",
+      "zip_sha256": "4debd4f7beff3c4d4a30bf7ab5845258c79b82b73dddf41797a797f83f0fa094",
+      "github_digest_verified": true,
+      "all_original_entries_read": {
+        "Release/test-results/run-hcim58f1/results.json": "ba5b0e935bae564af08374d3fc5ae0bd1839230c4399105a54c3748196b7fdc7",
+        "Release/test-results/run-zbu_ntch/results.json": "24628aafc09295b3d1621c3b016c4f273f08815d2ff66dd41e784287d495bb75"
+      },
+      "units_passed": 8,
+      "units_total": 8,
+      "unit_cases": [
+        "c_call_context",
+        "c_signatures",
+        "completion_locals",
+        "completion_c_locals",
+        "call_targets",
+        "editor_signatures",
+        "module_signatures",
+        "completion_info"
+      ],
+      "actual_unit_markers": [
+        "33 actual declarator/prototype/pointer/legacy/recovery vectors",
+        "205 every-byte inputs",
+        "775 cursor/name comparisons",
+        "3/3 clean counts",
+        "294 strict-AST/prefix byte comparisons passed",
+        "36 actual C/Physim grammar vectors",
+        "887 fresh-reference comparisons",
+        "123/123 preserve snapshot",
+        "7/7 preserve source/syntax/results",
+        "87/87 preserve source/syntax/results",
+        "Completion info: exact delay boundary",
+        "13 actual parser recovery/header/namespace vectors",
+        "70 original-span prefix/header comparisons",
+        "3 malformed namespace headers resume with bounded forward progress"
+      ],
+      "gui_passed": 8,
+      "gui_total": 8,
+      "gui_cases": [
+        "documents_small",
+        "documents_large",
+        "completion_workflow",
+        "completion_automatic_workflow",
+        "api_reference_workflow",
+        "completion_info_workflow",
+        "completion_automatic_deadline_workflow",
+        "completion_locals_workflow"
+      ],
+      "actual_obsolete_deadline_rejected_markers": 6,
+      "actual_cache_c_physim_targets": 3,
+      "app_sha256": "ec757da0c7da74b87293984db5dcfbfc9cd3ea0b551d69dfbe32a02d558434ec"
+    }
+  ],
+  "temporary_signed_config_removed": true,
+  "original_json": {
+    "path": "build/validation/module-signatures-2026-11-05/mac-original-report.json",
+    "sha256": "35c2e330b2d7a0e0024e565867aa34ccb42ccd0d7e34290026901caa6e903575"
+  },
+  "scope": "Actual module13/70/3 and C33/205/775/3, Ph294/call/revision/info data8/8 both architectures plusGUI8/8; six obsolete-deadline checks and C/Physim3target cache/reopen. No common resolver/native HUD/full UI/physical/performance acceptance. Private user MacOFF/untouched."
+}

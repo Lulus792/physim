@@ -26,30 +26,25 @@ alle Archive geprüft. Alle lokalen Handles beendet. 34 bytegleiche BMPs /
 Details: `build/validation/module-signatures-2026-11-05/STATE.md`.
 Quellcommit **`ec7824ca`**, in beide Repositories gepusht;
 [Commitabgleich](verification/module-signatures-commit-2026-11-05.json).
-Aktueller gehosteter Lauf **`41986344544`**: ARM `127107852822` läuft in den
-Daten-Units; Intel `127107853216` wartet. Genau diesen Lauf mit acht Daten- und
-acht GUI-Gruppen samt Originalartefakten weiter prüfen, nicht neu starten.
+Gehosteter Lauf **`41986344544` abgeschlossen**: ARM/Intel je **8/8 Daten +8/8 GUI**,
+Original-ZIPs, GitHub-Digests und alle Einträge gelesen. [Mac-Nachlauf](verification/module-signatures-macos-2026-11-05.json).
+Nicht erneut pollen/starten; der Nutzer-Mac bleibt ausgeschaltet/unberührt.
 
 ## Nächste konkrete Schritte
 
-1. **Nutzerauftrag vom 5. November:** Nach diesem Abschluss die Dokumentation
-   verbessern und ihre Pflege künftig vereinfachen; ersetzte, nachweislich nicht
-   mehr benötigte Bilder, Builds und temporäre Dateien auf D: prüfen/aufräumen.
-   Quellen, aktive Arbeit, Referenzen, Fehlerbelege, eingefrorene Nachweise,
-   benötigte Programme/Symbole, Offline-Abhängigkeiten und VM schützen.
-2. Gemeinsamen tatsächlichen C-/Physim-Signaturresolver anbinden: API und eigene
+1. Gemeinsamen tatsächlichen C-/Physim-Signaturresolver anbinden: API und eigene
    Funktionen, Scopes/Überdeckung, keine erfundenen Typen/Überladungen. C-eigene
    unvollständige Initialisierer sowie Typ-/Enum-Namen brauchen echte Zielmasken;
    die Vorschlagsliste allein ist dafür kein vollständiger Scope-Nachweis.
-3. Unabhängigen nativen Parameter-HUD vollständig nach ADR 023/APPROVED:
+2. Unabhängigen nativen Parameter-HUD vollständig nach ADR 023/APPROVED:
    volle Signatur, gemeinsame Syntaxrollen, aktiver Parameter A2/fett/Unterkante,
    innere/überzählige Argumente, automatisch/manuell, normale Liste darunter,
    getrenntes Annehmen/Schließen, Escape, Fokus/IME/Revision und Accessibility.
-4. Übrige freigegebene UI (A2, Kontextmenüs A, B2, Aufgabenfenster, Settings/AX,
+3. Übrige freigegebene UI (A2, Kontextmenüs A, B2, Aufgabenfenster, Settings/AX,
    Gesamtgestaltung) und tatsächliche Plattform-/physische Abnahme fortsetzen.
    Linux-Explorer bei22: Dateierweiterungen umbrechen; Analyseaufnahme erhalten.
    Vor Layoutkorrektur Explorer A lesen. Rechnen & Geräte A erst danach (ADR 025).
-5. Große C-Textänderungen parsen weiterhin vollständig. Cursorcache allein
+4. Große C-Textänderungen parsen weiterhin vollständig. Cursorcache allein
    erfüllt die16,7-ms-Marke nicht zuverlässig. Inkrementelle Edits nur mit
    unabhängigem Frischvergleich/atomaren Fehlerpfaden und Messung; kein Provider-
    Worker oder gekürzter Ergebnis-/Scopebestand. Weitere offene Befunde stehen
@@ -63,16 +58,22 @@ konkreter Code-/Abhängigkeitsänderung, neuem Fehler oder offener Prüfdimensio
 wiederholen; Anlass/Umfang vor dem Lauf nennen. Insbesondere die Protokoll-
 Trennlinie ist seit `ef1f3321` behoben: kein neuer Test allein wegen Kontextwechsel.
 
-- C-Signaturgrundlage `f3ed4068`: [ARM/Intel je Daten7/7 + GUI8/8](verification/c-signatures-macos-2026-11-05.json),
-  Lauf41980836062, beide ZIPs/Digests/Originaleinträge gelesen. Nicht erneut pollen.
-- Physim-Signaturgrundlage `7a3e7950`: [ARM/Intel je6/6 +8/8](verification/signature-declarations-macos-2026-11-05.json),
-  Lauf41976275068 geschlossen. C-/Physim-Aufrufdaten und Cachevorläufer über Index.
-- Alter Intel-Fehler41972622898 bleibt belegt; Fristprüfer in7a3e7950 korrigiert
-  und erfolgreich nachgeprüft. Kein weiterer Nachlauf dieses alten Standes.
+- Frühere C-/Physim-Mac-Nachläufe41980836062/41976275068 geschlossen, Originale
+  geprüft; siehe Prüfindex. Alten Intel-Fristfehler41972622898 seit7a3e7950
+  erfolgreich nachgeprüft. Diese Läufe nicht erneut pollen/starten.
 
-Diese Belege bestätigen die neue Dokumentabfrage/den Resolver/HUD nicht.
-Mac-Nachlauf der aktuellen Quelle läuft unter obiger Kennung; Originalartefakte
-noch nicht ausgewertet.
+Der oben verlinkte aktuelle Mac-Nachlauf bestätigt die Dokumentabfrage,
+noch keinen gemeinsamen Resolver/HUD oder die vollständige UI-Abnahme.
+
+## Dokumentation und Speicherpflege abgeschlossen
+
+[Entwicklungsleitfaden](development-workflow.md), AGENTS, Speicherregeln und
+Prüfvorlage führen jetzt kurze ersetzte Übergaben, klaren Prüfanlass und einmalige
+Text-/JSON-Nachweise. [Bereinigung vom 5. November](storage-maintenance-2026-11-05.md):
+248 ersetzte Compiler-/Cachedateien, 105.475.284 logische Bytes entfernt;
+99 Programm-/Bibliotheksdateien vorher/nachher hashgleich. Zusätzliche Bildprüfung
+ohne weitere sichere Duplikate; Referenzen/Fehler geschützt. Kein App-Neubau
+für diese Dokumentationskorrektur. Details/Quittungen im verlinkten Bericht.
 
 ## Umgebung und Schutz
 

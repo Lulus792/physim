@@ -1,0 +1,92 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "c82b62194800aefd3ad63c11158fdfd54a5c5862",
+  "scope": "Documentation/process and verified obsolete compiler-cache cleanup only; no application source/build/GUI test changed. No image removal in this cleanup.",
+  "removed": {
+    "files": 248,
+    "logical_bytes": 105475284,
+    "target": "build/native/Design-analysis-linux/obj",
+    "d_free_before": 4933767168,
+    "d_free_after": 4963205120,
+    "observed_free_increase": 29437952,
+    "retained_runtime_files_verified_before_after": 99
+  },
+  "image_audit": {
+    "reports": 58,
+    "read_bytes": 1711383666,
+    "removed": 0,
+    "errors": 0
+  },
+  "checks": {
+    "relative_documentation_links": 106,
+    "git_diff_check": {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "AGENTS.md",
+        "docs/development-workflow.md",
+        "docs/development-storage.md",
+        "docs/templates/native-validation.md",
+        "docs/native-verification-index.md",
+        "docs/weiterarbeit.md",
+        "docs/storage-maintenance-2026-11-05.md"
+      ],
+      "exit_code": 0
+    },
+    "workstate_lines": 98,
+    "all_deleted_files_absent": true
+  },
+  "artifacts": [
+    {
+      "path": "build/maintenance/docs-cleanup-2026-11-05/inventory.py",
+      "sha256": "3ad6beac8146c98b6c3fdd79f2bdd0b264e104b56874b89f7e82a71ca537fb2e"
+    },
+    {
+      "path": "build/maintenance/docs-cleanup-2026-11-05/inventory.json",
+      "sha256": "0a5a2fe10f89d96095f66305053af31ac56b95675bc84c2f25cfbbe6bd218b5f"
+    },
+    {
+      "path": "build/maintenance/docs-cleanup-2026-11-05/audit-images.py",
+      "sha256": "af7d4077fd13ece3ee7b39831bff55545d8fb06fd2b48ec0858c7e32b83aa33d"
+    },
+    {
+      "path": "build/maintenance/docs-cleanup-2026-11-05/image-plan.json",
+      "sha256": "348eb6d49d6e645c8186faec11974718c039483150bdd8de05b09e886c3511be"
+    },
+    {
+      "path": "build/maintenance/docs-cleanup-2026-11-05/plan-objects.py",
+      "sha256": "c211eac98c382b27816539d54e01afdc0feaa862354dc5307a563669031312b9"
+    },
+    {
+      "path": "build/maintenance/docs-cleanup-2026-11-05/objects-plan.json",
+      "sha256": "8878d7571d83df11ffcdf2abcd4786dc806a849bd64b7a2bf37e918812e08093"
+    },
+    {
+      "path": "build/maintenance/docs-cleanup-2026-11-05/remove-objects.ps1",
+      "sha256": "b3106fa006a10bd7ac9e731eec4e6c55c5ca855927301c344a582468fae467c0"
+    },
+    {
+      "path": "build/maintenance/docs-cleanup-2026-11-05/objects-removed.json",
+      "sha256": "d3ffa8c00a6f5db38a67756fde2b2221d0b8a92b214bac9455d4fa6be74b351d"
+    },
+    {
+      "path": "build/maintenance/docs-cleanup-2026-11-05/verify-docs.py",
+      "sha256": "c3110d65c9f17b5c164c1ddf417ca8196d95f6d1346a381860dc38c6569a3bd8"
+    }
+  ],
+  "preserved": [
+    "All images in this cleanup",
+    "Current isolated Windows/Linux compiler caches",
+    "99 old analysis bin/lib files including embedded symbols",
+    "References/failure proofs/frozen archives",
+    "Both prior rejected deletion paths",
+    "User builds/source/data/offline dependencies/VM",
+    "Foreign active work"
+  ],
+  "never_accessed": [
+    "F:",
+    "Private powered-off user Mac"
+  ]
+}

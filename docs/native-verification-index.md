@@ -5,6 +5,9 @@ Quellstand und Umfang. Sie beweisen keine vollständige aktuelle UI-, Plattform-
 oder physische Abnahme. Eine Wiederholung benötigt eine relevante Änderung,
 einen neuen Fehlerbeleg oder eine bislang offene Prüfdimension. Nicht allein
 wegen Kontextwechsel erneut anfangen; die ursprünglichen Nachweise unverändert lassen.
+Statusaussagen in älteren Einträgen beziehen sich auf ihren Belegstand. Den
+heutigen nächsten Schritt nennt ausschließlich der [kurze Arbeitsstand](weiterarbeit.md);
+spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
 
 ## Neuere Editorprüfungen
 
@@ -13,8 +16,9 @@ wegen Kontextwechsel erneut anfangen; die ursprünglichen Nachweise unverändert
   Funktionen weiter über Cursor-Präfix. Windows/Linux erster Stand je17/17 Daten
   und6/6 GUI, endgültige mode-only-Sicherung je5/5 Daten.13 Fälle/70 Präfixe,
   drei beschädigte Namespace-Köpfe, vier gezielte Ablehnungen und alter begrenzter
-  Timeout. Strikte AST-/Präfixverträge erhalten. **Gemeinsamer Resolver, HUD,
-  aktueller Mac-Quellnachlauf und Gesamt-/physische Abnahme offen.**
+  Timeout. Strikte AST-/Präfixverträge erhalten. [Gehosteter Mac-Quellnachlauf:
+  ARM/Intel je8/8 Daten +8/8 GUI, Originalarchive geprüft](verification/module-signatures-macos-2026-11-05.json).
+  **Gemeinsamer Resolver, HUD und Gesamt-/physische Abnahme offen.**
 - [Geschriebene C-Funktionssignaturen](verification/c-signatures-2026-11-05.md):
   tatsächliche Deklaratoren/Prototypen/einfache Zeiger/Definitionsparameter und
   alte geschriebene Typen aus dem unveränderten C-Snapshot. Endgültig Windows/Linux

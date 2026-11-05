@@ -2,6 +2,7 @@
 
 Auftrag: <konkretes Verhalten und freigegebene Vorlage>.
 Geprüfter Stand: <Commit und Hashliste der zusätzlichen lokalen Änderungen>.
+Prüfanlass: <relevante Änderung/neuer Fehler/offene Dimension; kein Kontextwechsel allein>.
 Umgebung: <Betriebssystem, Compiler/SDK, Buildvariante, Skalierung und Theme>.
 
 ## Reproduzieren
@@ -53,6 +54,9 @@ Einen aktuellen Einstiegspunkt pflegen, der den letzten gültigen Bericht und
 die offenen Befunde verlinkt. Neue Ergebnisse als eigenen Nachlauf anlegen;
 eingefrorene Berichte nicht überschreiben. Ein noch ungeprüfter lokaler Patch
 gehört nicht zum zuletzt bestandenen Quellstand.
+Den Arbeitsstand ersetzen und kurz halten; abgeschlossene Details im Prüfindex
+verlinken. Dazu die [Dokumentations- und Übergaberegeln](../development-workflow.md)
+verwenden. Keine vollständige Fall-/Messwertliste an mehreren Stellen fortschreiben.
 
 Für längere Bedienfolgen genügt eine kleine JSON-Datei mit Quellstand,
 Laufzeitreferenz und Fällen. Pro Fall Aktion, Soll, Ist, Ergebnis und den

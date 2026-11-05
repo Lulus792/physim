@@ -22,6 +22,10 @@
   vor der Ausführung festhalten. Erforderliche Regressionsprüfungen bleiben bestehen.
 - Den kurzen Arbeitsstand beim Abschluss eines Schritts aktualisieren:
   Ergebnis, Commit/Nachweis, offene Punkte und der nächste konkrete Schritt.
+- Den Arbeitsstand kurz halten und ersetzen, statt abgeschlossene Berichte
+  fortlaufend anzuhängen. Historische Details im Prüfindex verlinken; Originalbelege
+  unverändert lassen. [Dokumentations- und Übergaberegeln](docs/development-workflow.md)
+  beachten, einschließlich Prüfanlass und Aufbewahrungsentscheidung.
 
 ## Lokale macOS-Prüfungen
 
