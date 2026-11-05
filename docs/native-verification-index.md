@@ -8,7 +8,7 @@ wegen Kontextwechsel erneut anfangen; die ursprünglichen Nachweise unverändert
 
 ## Neuere Editorprüfungen
 
-- [C-Scope-Sammlung](verification/c-bindings-2026-11-05.md): Windows/Linux je Unit
+- [C-Scope-Sammlung](verification/c-bindings-2026-11-05.md), `37cb80dd`: Windows/Linux je Unit
   1/1, final 35 Codefälle, 182 Cursor-/Dokumentpaare, 65/65 Allokationsfehler und
   1.024 fehlerhafte Eingaben; echte Schleifenkopf-/Zeiger-Rückgabe-Regressionen und
   gezielt verworfene Bereichs-Gegenprobe. **Completion-Modell/GUI und Mac noch offen.**

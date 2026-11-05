@@ -61,3 +61,10 @@ Archivbytes gelesen. Das Laufzeitinventar enthält unveränderte ältere Program
 und ist keine erneute Testausführung dieser Fälle. Keine neuen Bilder, keine
 Wiederholung abgeschlossener F1-/Protokoll-/Settings-Prüfungen. Der Nutzer-Mac blieb
 aus und unberührt; neue macOS-, GUI-, Leistungs- und physische Abnahme sind offen.
+
+Quellcommit **`37cb80dd`** in beiden Repositories gepusht; alle **1.236** eindeutigen
+erfassten Eingaben gegen tatsächliche Git-Blobs gelesen, Vendor bytegenau, sonst
+nur CRLF/LF normalisiert. [Commitabschluss](c-bindings-commit-2026-11-05.json).
+Drei ersetzte erfolgreiche Testprogramme/**17.734.624 Bytes** entfernt;
+alle Ergebnisse, negative Originalfälle und aktuelle Referenzen erhalten.
+[Bereinigungsbeleg](c-bindings-cleanup-2026-11-05.json).

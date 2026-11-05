@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "37cb80dda8519e2614414ced2064c4a1f9bc32de",
+  "reason": "Three superseded own successful direct-test executables; final strict 35-vector binary and both native final runs preserved",
+  "running_use_check": "WSL /proc executable and maps scanned; no uses of the three exact paths",
+  "files": [
+    {
+      "path": "D:\\Physim\\build\\validation\\c-bindings-2026-11-05\\first",
+      "bytes": 5865728,
+      "sha256": "8ad0b65e9669cc55d62a8f31222fa8ea0c813ba2dcc9b221fdd5975d38e3c7a7",
+      "retained_result": "D:\\Physim\\build\\validation\\c-bindings-2026-11-05\\first.json",
+      "result_sha256": "7d762dca5d8cfd32fcf8e2670e4aeef1d0ff10bcd7f308694418b1518df0bdaa"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\c-bindings-2026-11-05\\loop-recovery",
+      "bytes": 5924040,
+      "sha256": "d54dbfa0b9b54588815b2b29c19ca73689d119d9acdb9afbf383d6d13986d2ba",
+      "retained_result": "D:\\Physim\\build\\validation\\c-bindings-2026-11-05\\loop-recovery.json",
+      "result_sha256": "79361bc396eb2c31b616306ac1bfe0d0890d40fcfb9c93d1de27a137c57c1876"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\c-bindings-2026-11-05\\legacy",
+      "bytes": 5944856,
+      "sha256": "55d1f89666de8b389f9bbc742abd658c0c093b63d58fb67d1b286754048d9442",
+      "retained_result": "D:\\Physim\\build\\validation\\c-bindings-2026-11-05\\legacy.json",
+      "result_sha256": "4c593f0f847238731f3ef3f35d98548ae604bef6f0f6ea36119920ed4620a11f"
+    }
+  ],
+  "replacement": "D:\\Physim\\build\\validation\\c-bindings-2026-11-05\\declarators",
+  "replacement_sha256": "44930f61b36a15ef9e7e88b5e14059bbf6f219a504ae83f62189053807df3daf",
+  "bytes_to_free": 17734624,
+  "preserved": "All original JSON results, negative-case executables, current strict/native binaries, compiler/runtime/source archives, grammar probes, foreign work",
+  "files_removed": 3,
+  "bytes_freed": 17734624,
+  "all_retained_results_still_present": true
+}

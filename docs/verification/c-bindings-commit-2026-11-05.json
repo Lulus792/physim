@@ -1,0 +1,25 @@
+{
+  "phase": "c-bindings-final",
+  "revision": "HEAD",
+  "compiler_and_test_count": 1217,
+  "own_input_count": 278,
+  "unique_files": 1236,
+  "all_tested_input_bytes_match_git": true,
+  "nonvendor_crlf_normalized_only": true,
+  "source_commit": "37cb80dda8519e2614414ced2064c4a1f9bc32de",
+  "date": "2026-11-05",
+  "complete_input_match_path": "build/validation/c-bindings-2026-11-05/commit-match.json",
+  "complete_input_match_sha256": "b79aebdd7047a8f21d7bf71461ba90450d5510c83139793fe076775d38372704",
+  "source_pushed_to": [
+    "origin/codex/f1-design-h",
+    "upstream/codex/f1-design-h"
+  ],
+  "source_pushes_exit_code": 0,
+  "private_mac": "OFF; no access/probes",
+  "cleanup": {
+    "report": "docs/verification/c-bindings-cleanup-2026-11-05.json",
+    "files_removed": 3,
+    "bytes_freed": 17734624
+  },
+  "scope": "Actual C lexical bindings/written type forms only; model/call-context/GUI/signature integration and new Mac acceptance remain open; no full-score claim"
+}

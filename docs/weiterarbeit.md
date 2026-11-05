@@ -16,7 +16,11 @@ Speicherfehler und 1.024 fehlerhafte Eingaben. Strenger direkter C17-Build besta
 Schleifenkopf-/Zeiger-Rückgabe-Regressionen und Bereichs-Gegenprobe tatsächlich
 abgelehnt, korrigierter Stand bestanden. **Noch nicht in Completion-Modell/GUI
 verknüpft.** Keine C-Aufruf-/Parameterhilfe oder neue Mac-Abnahme daraus ableiten.
-[ADR 026](decisions/026-c-editor-grammar.md). Git-Abgleich/Commitabschluss folgt.
+[ADR 026](decisions/026-c-editor-grammar.md). Quellcommit **`37cb80dd`**, beide
+Repositories gepusht, alle **1.236** erfassten Eingaben gegen Git-Blobs gelesen.
+[Commitabschluss](verification/c-bindings-commit-2026-11-05.json).
+Drei ersetzte erfolgreiche Programme/**17.734.624 Bytes** entfernt; Ergebnisse,
+negative Originalfälle, aktuelle Binaries und Quellen erhalten.
 
 Die [Syntaxgrundlage](verification/c-syntax-foundation-2026-11-05.md) ist unter
 `a25683ef`/`9827831b` geschlossen, beide Repositories; 91 unveränderte Upstream-
@@ -38,8 +42,8 @@ Shared Baum: `build/validation/protocol-wrap-2026-10-26/3-isolated/` mit `src`,
 
 ## Nächste Arbeit und verbleibender Umfang
 
-1. C-Scope-Sammlung mit Git-Abgleich abschließen. Keine erneute Prüfung
-   unveränderter Syntax-/GUI-Fälle; keine C-Vervollständigung daraus ableiten.
+1. C-Scope-Sammlung abgeschlossen. Keine erneute Prüfung unveränderter Syntax-/
+   GUI-Fälle; keine sichtbare C-Vervollständigung daraus ableiten. Anschluss: Punkt 3.
 2. Alle obigen Mac-Läufe sind beendet; nicht neu starten oder pollen.
 3. C-Scope-Daten ins Completion-Modell und die GUI integrieren: Besitzer/Revision,
    Cache und Speicherfehler, vollständige lokale Treffer, geschriebene Typ-/Quellkarte,
