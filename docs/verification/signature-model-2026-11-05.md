@@ -74,6 +74,16 @@ interne Wartungsnotiz außerhalb der gebündelten F1-Themen. Vorher-/Nachher-Feh
 und identische erzeugte Sprachreferenz sind belegt. Der isoliert geprüfte eigene
 Quellstand enthält diese fremde Änderung nicht; sie wurde nicht überschrieben.
 
+## Gehosteter macOS-Nachlauf
+
+Quellstand `6e455e9cc2aec1a4cd8e8116ee7d83dc46dbb373`, Lauf42005020387:
+Intel und ARM bestehen jeweils zehn Datengruppen und acht bestehende GUI-Gruppen.
+Die Original-ZIPs wurden gegen die GitHub-Digests geprüft und alle Einträge
+gelesen; Modellmarker einschließlich38 Fällen,16 Parametern und60/8/4 Fehlerpfaden
+sowie die tatsächlichen GUI-Ergebnisse sind im [Nachweis](signature-model-macos-2026-11-05.json)
+erfasst. Beide Jobs sind beendet. Der sichtbare Parameter-HUD war in diesem
+Quellstand noch nicht angeschlossen. Der ausgeschaltete Nutzer-Mac blieb unberührt.
+
 ## Noch zu erledigen
 
 Den separaten HUD vollständig nach ADR 023 anschließen: aktuelle Syntaxrollen,

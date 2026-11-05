@@ -22,8 +22,8 @@ Vorbereitung künftig auf **`signature-model-closed`** aufbauen: 294 eigene /1.2
 Compiler-Testeingaben, alle 1.252 mit Git abgeglichen; Archive geprüft. Keine neuen
 Bilder; 10 ersetzte temporäre Programme/Objekte entfernt, 124.082.744 logische Bytes.
 Lokale Handles beendet. Quelle **`6e455e9c`**, beide Remotes; [Commitabgleich](verification/signature-model-commit-2026-11-05.json).
-Mac-Nachlauf **42005020387**: ARM127169469653 läuft, Intel127169470123 wartet.
-Genau diesen Lauf mit 10 Daten +8 GUI je Architektur samt Originalartefakten weiter prüfen.
+Mac-Nachlauf **42005020387**: ARM/Intel abgeschlossen, je **10/10 Daten +8/8 GUI**.
+[Original-ZIPs/Digests und alle Einträge geprüft](verification/signature-model-macos-2026-11-05.json); nicht erneut pollen.
 
 ## Nächste konkrete Schritte
 
@@ -63,7 +63,7 @@ Trennlinie ist seit `ef1f3321` behoben: kein neuer Test allein wegen Kontextwech
 - C-Lookup `d75da866`, Lauf41992949589: [ARM/Intel je9 Daten +8 GUI](verification/c-lookup-macos-2026-11-05.json),
   beide Original-ZIPs/Digests/Einträge gelesen. Abgeschlossen, nicht erneut pollen.
 
-Diese Mac-Belege bestätigen den Modellkern/HUD noch nicht. Root-Linkcheck findet
+Der neueste Mac-Beleg bestätigt den Datenkern, keinen sichtbaren HUD. Root-Linkcheck findet
 vorhandenen fremden Status-WIP-Link zur internen Wartungsnotiz: gleicher Fehler
 vor/nach Generatorpatch belegt, fremde Dateien erhalten. Ohne neue Änderung nicht wiederholen.
 

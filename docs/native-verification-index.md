@@ -16,8 +16,9 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
   eigene Funktionen/Methoden. Windows/Linux App+je10/10 Daten, final neuer
   unveränderter-Aufruf-Cache je1/1;38 Fälle,16Parameter,72OOM-Pfade, fünf
   gezielte Ablehnungen. Keine Bilder/neue GUI.190Spezial-/Property-/Dokueinträge,
-  weitere Intrinsics/Funktionswerte und sichtbarer HUD noch offen. Neuer Mac-
-  Quellnachlauf offen. [Stufen/Hashes](verification/signature-model-2026-11-05.json).
+  weitere Intrinsics/Funktionswerte und sichtbarer HUD noch offen. [Mac-Nachlauf
+  ARM/Intel je10/10 Daten +8/8 GUI, Originalarchive geprüft](verification/signature-model-macos-2026-11-05.json).
+  [Stufen/Hashes](verification/signature-model-2026-11-05.json).
 - [Tatsächliches C-Aufrufziel und Namensüberdeckung](verification/c-lookup-2026-11-05.md):
   getrennte Abfrage auf dem vorhandenen C-Snapshot, eigene unfertige Initialisierer,
   Typedefs/Enum/Parameter, vollständige direkte Funktions-/Zeigerköpfe. Windows/Linux
