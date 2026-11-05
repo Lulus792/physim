@@ -4,6 +4,13 @@
 A · Sanfte Fläche. [ADR 016](../../decisions/016-selected-marking-a2.md).
 Im bestehenden nativen Auftrag mit umsetzen; keine erneute Designentscheidung.
 
+**Nutzerpräzisierung vom 5. November 2026:** Im **Workspace-Dateibaum** keine
+Häkchen oder Checkboxen anzeigen und keine freie Checkboxspalte reservieren.
+Die aktive Datei behält ihre Zeilenhervorhebung; Dateisymbole, Hierarchie und
+Tastaturfokus bleiben erhalten. Diese ausdrückliche Ausnahme ersetzt dort die
+unten beschriebene Häkchendarstellung. Historische Vergleichsbilder bleiben
+unverändert; sie sind keine Anweisung, die Häkchen wieder einzubauen.
+
 [Freigegebene interaktive Referenz](index.html?approved=1&context=code) ·
 [Text dunkel](review/a2/text-a2-dark.png) · [Text hell](review/a2/text-a2-light.png)
 

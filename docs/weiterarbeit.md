@@ -7,33 +7,34 @@ Vollständige Umsetzung und Abnahme bleiben das Ziel; Teiltests sind keine volle
 
 ## Aktueller Abschluss
 
-[Scrollgriff und Editor-Eingabe](verification/signature-thumb-2026-11-05.md):
-zwei echte Produktfehler behoben. Scrollgruppe übernimmt die Eingabe nur für
-ihren Griff; automatische Vorschlagsabfrage erhält den bisherigen Editorbesitzer.
-GDB/Watchpoint belegt zuvor sechs ankommende Textbytes, Workspace-ROM und
-gelöschten Besitzer durch completion_open_kind → completion_close.
-Windows Release **6/6 run-9euexj2y**, Linux ASan/UBSan **6/6 run-h3atr8no**;
-C/Ph je drei Editorziele, automatische Abfrage, Griff-Down/Move/Up, fester Hinweis,
-Editorerhaltung, Nullparameter und Fehlerfarbe. Kein vollständiger UI-Abschluss.
-[Befehle, Phasen und Quellen](verification/signature-thumb-2026-11-05.json).
-
-Warmstand **`signature-thumb-input`**, 300 eigene Eingaben. Source-/Runtime-
+[Workspace ohne Häkchen](verification/workspace-no-checks-2026-11-05.md):
+ausdrücklicher Nutzerwunsch vom5.11. Checkboxzeichnung UND reservierte Spalte
+entfernt; aktive Zeile, Symbole und Hierarchie erhalten. Ausnahme in AGENTS,
+ADR016 und A2-Spezifikation festgehalten; Häkchen dort nicht wieder einbauen.
+Windows Release **2/2 run-wepdvezc**, Linux ASan/UBSan **2/2 run-2n0icoeu**;
+vorhandene Datei-/Projektbaumabläufe und vier gezielte Bilder geprüft.
+[Befehle, Programme und Grenzen](verification/workspace-no-checks-2026-11-05.json).
+Warmstand **`workspace-no-checks`**, 300 eigene Eingaben. Source-/Runtime-
 Archive eingefroren und gegen Git gelesen; lokale Jobs beendet.
-[Umbruch-/16-Parameter-Grundlage](verification/signature-wrap-2026-11-05.md)
-bleibt eigener Belegstand; deren acht geöffnete Bilder sind Vergleichsreferenzen.
-Der zusätzliche Warteschritt allein löste den Eingabefehler nicht; die Ursache
-ist die automatische Abfrage, nicht ein vermeintlich verlorenes SDL-Ereignis.
 
-[Mac-Lauf42026549588 zu ba95641f](verification/signature-wrap-macos-first-2026-11-05.json)
-beendet: ARM/Intel je11/11 Daten,8/9 GUI, Original-ZIPs/alle Einträge gelesen.
-Beide Diagnosen belegen current1/focus0 und deshalb korrekt pausierten HUD.
-Nicht erneut pollen. Neues Testsetup fordert echten Fokus an und wartet bis30s;
-keine synthetischen Fokusereignisse oder Umgehung des Guards. Eigener Mac-Nachlauf
-des neuen Quellstands bleibt offen; private Nutzerhardware bleibt ausgeschaltet.
+[Scrollgriff und Editor-Eingabe](verification/signature-thumb-2026-11-05.md):
+vorherige zwei Produktkorrekturen, Windows **6/6 run-9euexj2y**, Linux **6/6 run-h3atr8no**.
+Echter Griff-Drag und Editorbesitzer über Auto-Refresh; GDB/Watchpoint belegt
+zuvor sechs Textbytes bei Workspace-ROM und gelöschtem Besitzer.
+[Quelle05e43dc0, beide Remotes](verification/signature-thumb-commit-2026-11-05.json);
+alle1.256 Eingaben gelesen. Acht Bilder bytegleich zu geöffneten Referenzen.
+Behoben durch Erhalt des Editorbesitzers beim Auffrischen; Warten allein half nicht.
+
+Gehosteter Editor-Mac-Nachlauf **42031236181 zu05e43dc0**: Intel127257917635/
+ARM127257917828 zuletzt tatsächlichqueued geprüft;11Daten+9GUI und gezielteBMPs.
+Er enthält die anschließende Workspace-Häkchenentfernung noch nicht.
+[Vorgänger42026549588](verification/signature-wrap-macos-first-2026-11-05.json)
+geschlossen: beide11/11Daten,8/9GUI, echte focus0-Diagnose; Original-ZIPs gelesen.
+Alte Läufe nicht pollen; neuer Fokuswunsch wartet real bis30s, kein Guard-Bypass.
 
 ## Nächste konkrete Schritte
 
-1. HUD: Scrollleisten-Drag, herausgelöster Workspace, echte Fokuswechsel und
+1. HUD: Drag außerhalb der Karte/Fenstergrenze, herausgelöster Workspace, Fokuswechsel und
    Accessibility-/Screenreader-Aufgaben. Detailstand und aktuelle Mac-Handles:
    `build/validation/signature-wrap-2026-11-05/STATE.md` zuerst lesen.
    Neuer Mac-Nachlauf muss11 Daten+9 GUI und gezielte HUD-Bilder liefern;

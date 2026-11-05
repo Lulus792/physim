@@ -11,6 +11,11 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
 
 ## Neuere Editorprüfungen
 
+- [Workspace ohne Häkchen](verification/workspace-no-checks-2026-11-05.md):
+  Nutzerpräzisierung vom5.11. nativ umgesetzt; Checkboxzeichnung und reservierte
+  Spalte entfernt, aktive Zeile/Symbole/Hierarchie erhalten. Windows Release und
+  Linux ASan/UBSan je2/2 vorhandene Dateibaum-/Projektbaumabläufe; vier gezielte
+  Bilder geöffnet. [Quellen und Grenzen](verification/workspace-no-checks-2026-11-05.json).
 - [Scrollgriff und Editor-Eingabe](verification/signature-thumb-2026-11-05.md):
   Windows Release und Linux ASan/UBSan jeweils **6/6 GUI** nach zwei Produktkorrekturen.
   Echter alter Drag-Fehler abgewiesen; automatische Vorschlagsabfrage erhält den
@@ -18,6 +23,7 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
   zweite Ursache. C/Ph je drei Ziele, Griff-Drücken/Bewegen/Loslassen und Erhaltung.
   Acht Bilder bytegleich zu geöffneten Referenzen; ein gezieltes Fehlerbild erhalten.
   [Quellen, Phasen und Grenzen](verification/signature-thumb-2026-11-05.json).
+  [Quellcommit05e43dc0 und gehosteter Nachlauf42031236181](verification/signature-thumb-commit-2026-11-05.json).
   [Mac-Lauf42026549588](verification/signature-wrap-macos-first-2026-11-05.json)
   zum vorherigen Quellstand beendet: beide11/11 Daten,8/9 GUI; tatsächlicher
   OS-Fokus0 bei gültiger Quelle. Original-ZIPs gelesen; keine HUD-Abnahme.

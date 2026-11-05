@@ -29,3 +29,12 @@ bleiben verbindlich. Die Freigabe ist kein Nachweis fertiger nativer Umsetzung.
 Die [Gesamtübergabe](../visuals/unified-workspace/NEXT-CHAT.md) enthält die
 Entscheidung und den Umsetzungsauftrag. Der neue [UI-Designbacklog](../visuals/unified-workspace/UI-DESIGN-BACKLOG.md)
 dokumentiert weitere Gestaltungsarbeit getrennt von dieser abgeschlossenen Auswahl.
+
+## Nutzerpräzisierung vom 5. November 2026
+
+Der Nutzer hat die Häkchen im Workspace-Dateibaum ausdrücklich abgelehnt und
+ihre vollständige Entfernung verlangt. Dort entfallen Häkchen/Checkboxen samt
+reservierter Spalte. Die Zeilenhervorhebung der aktiven Datei, Hierarchie,
+Dateisymbole und Tastaturbedienung bleiben. Die frühere allgemeine Listenregel
+ist für diesen Bereich entsprechend eingeschränkt; historische Bilder bleiben
+unverändert. Maßgeblich ist die ergänzte A2-Spezifikation.

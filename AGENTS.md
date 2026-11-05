@@ -80,6 +80,9 @@
   A2 nativ mit umsetzen; keine erneute Variantenentscheidung vorschalten.
   Linksauswahl zeigt keine automatische Aktionsleiste; Aktionen über Rechtsklick,
   Menütaste oder Umschalt+F10. Bestehende Designfreigaben bleiben erhalten.
+  Nutzerpräzisierung vom 5. November: **keine Häkchen/Checkboxen im Workspace-
+  Dateibaum, auch keine reservierte Checkboxspalte**. Aktive Zeilenhervorhebung
+  bleibt; die ergänzte A2-Spezifikation hat für diesen Bereich Vorrang.
 
 ## Verbindliche Designfreigabe: Dateisicherheit B2
 

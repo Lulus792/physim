@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "05e43dc076bc6f5578df8399056b8bc20b94a97c",
+  "branch": "codex/f1-design-h",
+  "both_remote_tracking_refs_match_at_source_push": true,
+  "remotes": [
+    "origin",
+    "upstream"
+  ],
+  "own_inputs": 300,
+  "compiler_and_test_inputs": 1237,
+  "unique_input_files": 1256,
+  "all_tested_input_bytes_read_against_git_index_and_actual_commit": true,
+  "normalization": "Only CRLF/LF normalization for nonvendor source; raw vendor bytes exact.",
+  "index_match": {
+    "path": "build/validation/signature-thumb-2026-11-05/index-match.json",
+    "sha256": "84a0c719787e6d27faca611d0d34928223db7122039364280f88b4ae147556f1"
+  },
+  "commit_match": {
+    "path": "build/validation/signature-thumb-2026-11-05/commit-match.json",
+    "sha256": "2f85717b7b5416d384fc2bc795386bfbc85429d4d0c4c355f337de46c79c4f2a"
+  },
+  "proof": "docs/verification/signature-thumb-2026-11-05.json",
+  "prior_mac_closed": "docs/verification/signature-wrap-macos-first-2026-11-05.json",
+  "hosted_mac": {
+    "run": 42031236181,
+    "name": "Native macOS editor menu workflows",
+    "path": ".github/workflows/macos-editor-menu.yml",
+    "source_commit": "05e43dc076bc6f5578df8399056b8bc20b94a97c",
+    "status": "queued",
+    "conclusion": null,
+    "url": "https://github.com/Lulus792/physim/actions/runs/42031236181",
+    "jobs": [
+      {
+        "id": 127257917635,
+        "name": "editor (macos-15-intel)",
+        "status": "queued",
+        "conclusion": null
+      },
+      {
+        "id": 127257917828,
+        "name": "editor (macos-15)",
+        "status": "queued",
+        "conclusion": null
+      }
+    ],
+    "expected": "11data+9GUI,4 targeted normal BMPs perarchitecture and a targeted failureBMP only if a failure occurs; pending"
+  },
+  "private_user_mac": "OFF; untouched",
+  "scope": "Source05e43dc0 input/grip fixes; does not include subsequent user-requested Workspace checkbox removal."
+}

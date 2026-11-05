@@ -69,8 +69,8 @@ static void workspace_tree_view(app *a) {
             nk_label_colored(ui, "Hinzugefügt", NK_TEXT_LEFT, muted());
         }
         float f=a->preferences.ui_size/16.f,width=nk_window_get_content_region(ui).w;
-        float indent = fminf((float)entry->depth * (compact?12:16)*f, fmaxf(0,width-(64+PS_SELECTION_COLUMN)*f));
-        float inset=(entry->directory?(entry->depth?30:18):25)*f+PS_SELECTION_COLUMN*f;
+        float indent = fminf((float)entry->depth * (compact?12:16)*f, fmaxf(0,width-64*f));
+        float inset=(entry->directory?(entry->depth?30:18):25)*f;
         const char *name=workspace_name(entry->path);
         const struct nk_user_font *font=compact && !entry->depth?&a->workbench_fonts[3]:ui->style.font;
         float text_width=fmaxf(1,width-indent-(entry->depth?ui->style.window.spacing.x:0)-inset-3*f);
@@ -94,7 +94,6 @@ static void workspace_tree_view(app *a) {
         nk_widget(&bounds,ui);struct nk_command_buffer *canvas=nk_window_get_canvas(ui);
         if(selected)ps_ui_selection_row(canvas,row,4*f,f,ui_palette);
         else if(!entry->directory && nk_input_is_mouse_hovering_rect(&ui->input,row))nk_fill_rect(canvas,row,4*f,UI_COLOR(button_hover));
-        if(!entry->directory)ps_ui_selection_check(canvas,nk_rect(row.x+13*f,row.y+(row.h-15*f)/2,15*f,15*f),f,selected,ui_palette);
         workbench_card_text(canvas,font,nk_rect(bounds.x+inset,bounds.y+(bounds.h-text_height)/2,text_width,text_height),name,!entry->depth || !compact?UI_COLOR(text):UI_COLOR(muted));
         bool focused=false,clicked=ps_ui_button_at_custom_focus(ui,row,compact?name:label,selected,&focused);
         if(focused)ps_ui_selection_focus(canvas,row,f,ui_palette);
@@ -102,19 +101,19 @@ static void workspace_tree_view(app *a) {
         nk_layout_row_end(ui);
         struct nk_command_buffer *guides=nk_window_get_canvas(ui);
         for(unsigned depth=0;depth<entry->depth;depth++) {
-            float gx=bounds.x-indent+((float)depth*(compact?12:16)+8+PS_SELECTION_COLUMN)*f;
+            float gx=bounds.x-indent+((float)depth*(compact?12:16)+8)*f;
             nk_stroke_line(guides,gx,bounds.y,gx,bounds.y+bounds.h,1,UI_COLOR(divider));
         }
-        if(compact && !entry->directory && !entry->missing)workbench_file_icon(a,guides,entry->path,nk_rect(bounds.x+(7+PS_SELECTION_COLUMN)*f,bounds.y,14*f,bounds.h),UI_COLOR(accent));
-        else if(compact && entry->directory && entry->depth && !entry->missing)workbench_icon(guides,PS_ICON_FOLDER,nk_rect(bounds.x+(9+PS_SELECTION_COLUMN)*f,bounds.y,14*f,bounds.h),UI_COLOR(muted));
+        if(compact && !entry->directory && !entry->missing)workbench_file_icon(a,guides,entry->path,nk_rect(bounds.x+7*f,bounds.y,14*f,bounds.h),UI_COLOR(accent));
+        else if(compact && entry->directory && entry->depth && !entry->missing)workbench_icon(guides,PS_ICON_FOLDER,nk_rect(bounds.x+9*f,bounds.y,14*f,bounds.h),UI_COLOR(muted));
         else if(!compact || entry->depth || entry->missing)ps_ui_draw_icon(nk_window_get_canvas(ui),entry->missing?PS_ICON_ERROR:entry->directory?PS_ICON_FOLDER:PS_ICON_FILE,
-                        nk_rect(bounds.x+((entry->directory?14:4)+PS_SELECTION_COLUMN)*f,bounds.y,(compact?14:20)*f,bounds.h),entry->missing?UI_COLOR(error):UI_COLOR(muted));
+                        nk_rect(bounds.x+(entry->directory?14:4)*f,bounds.y,(compact?14:20)*f,bounds.h),entry->missing?UI_COLOR(error):UI_COLOR(muted));
         if (entry->directory) {
             struct nk_command_buffer *canvas = nk_window_get_canvas(ui);
-            float x = bounds.x + (8+PS_SELECTION_COLUMN)*f, y = bounds.y + bounds.h * .5f;
+            float x = bounds.x + 8*f, y = bounds.y + bounds.h * .5f;
             struct nk_color color=UI_COLOR(muted);
             if(compact && entry->depth) {
-                x=bounds.x+(PS_SELECTION_COLUMN-4)*f;
+                x=bounds.x-4*f;
                 /* CSS puts the disclosure on the path guide, with its own
                  * window-colored backing so the guide cannot cross it. */
                 nk_fill_rect(canvas,nk_rect(x-5.5f*f,y-8*f,11*f,16*f),0,UI_COLOR(window));

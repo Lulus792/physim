@@ -1,0 +1,141 @@
+{
+  "date": "2026-11-05",
+  "source_snapshot": "workspace-no-checks",
+  "request": "Remove all checkmarks/checkboxes and reserved checkbox column from Workspace file tree; preserve active row highlight, file/folder icons, hierarchy and navigation.",
+  "own_inputs": 300,
+  "all_owned_root_and_isolated_bytes_match": true,
+  "reports": [
+    {
+      "platform": "windows",
+      "passed": 2,
+      "total": 2,
+      "run": "run-wepdvezc",
+      "app_sha256": "3a13947c779fe29f3834c9f9fe66447fc8dfe3bee646e4e402c9e2d0d1b90601",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "workspace_tree_workflow",
+        "--test-filter",
+        "project_tree_workflow"
+      ],
+      "receipt": {
+        "path": "build/validation/workspace-no-checks-2026-11-05/windows.json",
+        "sha256": "babbc2362c9bcb68947309552a1c40abb160e20f4854bb9a066534dd4b1faeb9"
+      },
+      "log": {
+        "path": "build/validation/workspace-no-checks-2026-11-05/windows.log",
+        "sha256": "d85a15d8db81f91cc244f89f5ccd3e725afe591ff6432f1a02348d10afa8298f"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wepdvezc/results.json",
+        "sha256": "635d301b4bf3f771a5fd8365cd92f648305210c4eafcd70a467cbf27d539772b"
+      },
+      "representative_images_opened_and_reviewed": [
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wepdvezc/workspace_tree_workflow/files \u00e4/workflow \u00e4/workspace-tree-open.bmp",
+          "sha256": "a1f82336d24b2425604bc6ac060ef8b9b561813c1805edfd0430960903033eda"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-wepdvezc/project_tree_workflow/files \u00e4/workflow \u00e4/project-tree-files.bmp",
+          "sha256": "f75c103340f6d20a8bf88149ec05c1f64328f12934c76ab4b0bfa3c61c9b4352"
+        }
+      ],
+      "gui_leak_detection": null
+    },
+    {
+      "platform": "linux",
+      "passed": 2,
+      "total": 2,
+      "run": "run-2n0icoeu",
+      "app_sha256": "148f964600758c168a5edafdd6e7be02e03feddbe74eb54ea1ba37b72cdfd843",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "workspace_tree_workflow",
+        "--test-filter",
+        "project_tree_workflow"
+      ],
+      "receipt": {
+        "path": "build/validation/workspace-no-checks-2026-11-05/linux.json",
+        "sha256": "8b4b4a28ea4098d92d3951a0b355a373151b3172e62a1679dcfba45a5a197701"
+      },
+      "log": {
+        "path": "build/validation/workspace-no-checks-2026-11-05/linux.log",
+        "sha256": "2d496623cd2c5216c3bd69ecbee3cacc589ae480f11a91e927b355abea5b8ba8"
+      },
+      "results": {
+        "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2n0icoeu/results.json",
+        "sha256": "14411564cf0c2db49ae4c3184a96664c8654b711460c22cb14312c1d4e559aa6"
+      },
+      "representative_images_opened_and_reviewed": [
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2n0icoeu/workspace_tree_workflow/files \u00e4/workflow \u00e4/workspace-tree-open.bmp",
+          "sha256": "c87c3bace24a4849450c6b112847896fb5ee6facd7b84fe5f25f5e5d6eb7a269"
+        },
+        {
+          "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-2n0icoeu/project_tree_workflow/files \u00e4/workflow \u00e4/project-tree-files.bmp",
+          "sha256": "f239ea96e90385a5ff6abe3720653ce3481cf6935a318df760df4b06f3167969"
+        }
+      ],
+      "gui_leak_detection": false
+    }
+  ],
+  "snapshot": [
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/workspace-no-checks-inputs.json",
+      "sha256": "b4d4485ca5d9959fed8ca91b013333643f8eeaf3f2b2f10c77251484ac9f6481"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/workspace-no-checks-compiler-source.json",
+      "sha256": "a35aefdfc7d41549e09b5179dc49eb141a8bf39cfc1918b28ef9801fd8e8e84c"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/workspace-no-checks-runtime.json",
+      "sha256": "01f9f889ea6961eada37de528037b1376045ae76533afe3e442193d44a94b164"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/workspace-no-checks-byte-index.json",
+      "sha256": "ba693b82fa581a3dcea3647f140a05221806f08c2641dfe8ee04d3135056f90d"
+    }
+  ],
+  "design_rule": [
+    "AGENTS.md",
+    "docs/decisions/016-selected-marking-a2.md",
+    "docs/visuals/selection-options/APPROVED.md"
+  ],
+  "scope": "Existing native unloaded/nested workspace and loaded project tree workflows; path opening, asset editing/folder collapse/run loading/invalid-run preservation. Two representative dark/native16px images per platform inspected for absent boxes/no empty selection gutter and intact active row/icons/guides. No new mirror test for reversible low-impact drawing removal; existing interaction regression used.",
+  "prior_completion_checkpoint": "docs/verification/signature-thumb-commit-2026-11-05.json",
+  "open": [
+    "New source macOS visual/runtime acceptance",
+    "Physical DPI/theme/font matrix and AX/screenreader tasks",
+    "Other approved native UI and full project goal"
+  ],
+  "storage": "Donly; no F access or privateMac activity. Historical design images/frozen evidence unchanged."
+}
