@@ -1117,6 +1117,10 @@ def signature_detached_workflow(flow,directory):
         for target in range(3):
             require(f"SIGNATURE DETACHED language={language} target={target} actual-child-context=1 auto-open=1 list-disjoint=1 child-typing=1 native-return=1 source-caret-layout-preserved=1 primary-typing=1" in output,
                     "Missing actual child-window signature/input/return sequence")
+            require(f"SIGNATURE FOCUS language={language} target={target} main-child=1 separate-process=1 actual-blur=1 hud-hidden=1 source-caret-selection-scroll=1 resumed-typing=1" in output,
+                    "Missing actual main/child/external-process focus and preserved editor input")
+            require(f"SIGNATURE FOCUS SELECTION language={language} target={target} nonempty-range=1 actual-return=1 source-caret-anchors-scroll=1" in output,
+                    "OS focus return changed the source selection or did not restore its text channel")
         require(f"SIGNATURE DETACHED language={language} target=2 actual-child-context=1 long16=1 thumb-over-editor=1 outside-drag-preserved=1 typing-after-drag=1" in output,
                 "Missing overlapping detached signature drag and subsequent editor input")
         for name in ("signature-detached-normal.bmp","signature-detached-long.bmp"):

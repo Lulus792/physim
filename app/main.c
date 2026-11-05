@@ -100,6 +100,7 @@ typedef struct {
     struct nk_context *ui;
     int tab;
     bool detached, restore_scroll, restore_editor_focus;
+    struct nk_text_edit *blurred_editor;
     nk_uint scroll_x,scroll_y;
     struct nk_rect action, home;
     struct nk_rect splitters[3];
@@ -3782,6 +3783,7 @@ static bool test_general_balance_report(const app *a) {
     ps_run_reader_close(&reader);return ok;
 }
 int main(int argc, char **argv) {
+    if(argc==3 && !strcmp(argv[1],"--signature-focus-peer"))return signature_focus_peer(argv[2]);
     if(argc==3 && !strcmp(argv[1],"--protocol-output-fixture") &&
        (!strcmp(argv[2],"complete") || !strcmp(argv[2],"cancel")))return protocol_output_fixture(!strcmp(argv[2],"cancel"));
     double profile_app_started = ps_clock();
@@ -4307,6 +4309,7 @@ int main(int argc, char **argv) {
                 doc_input_bytes += (unsigned)strlen(e.text.text);
             }
             SDL_Window *event_window = SDL_GetWindowFromEvent(&e);
+            signature_detached_focus_event(a,&e);
             if(browser_event(a,&e,event_window))continue;
             if(project_manager_event(a,&e,event_window))continue;
             if(settings_event(a,&e,event_window))continue;

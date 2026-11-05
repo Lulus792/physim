@@ -11,6 +11,17 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
 
 ## Neuere Editorprüfungen
 
+- [OS-Fokus und Texteingabe im Zusatzfenster](verification/signature-focus-2026-11-05.md):
+  echter Windows-Gegenfall, Quelleditor bei realem Fokusgewinn wieder zuordnen;
+  Windows Release/Linux ASan/UBSan jeweils2/2 GUI-Gruppen. Je C/Ph drei Editoren,
+  eigenes Peerprozess-Fenster und nichtleere Auswahl erhalten. Acht Bilder
+  vollständig bytegleich zu erhaltenen Referenzen; nur neue Kopien entfernt.
+  Physische Eingabe, Controls/Screenreader und neue Mac-Abnahme bleiben offen.
+- [Mac-Abschluss der Dateinamenquelle0d3f4a65](verification/filename-wrap-macos-2026-11-05.json):
+  Lauf42059129050 Intel/ARM jeweils14/14 Daten+12/12 GUI, beide Jobs terminal/success.
+  Original-ZIPs/Digests und alle22 Einträge gelesen; vier neue Bildinhalte geöffnet,
+  weitere14 bytegleich zu erhaltenen Referenzen. Keine Wiederholung oder weiteres
+  Pollen dieses Laufs; keine Abnahme der späteren Fokuskorrektur daraus ableiten.
 - [Dateinamen bei großer Schrift](verification/filename-wrap-2026-11-05.md):
   Windows Release/Linux ASan/UBSan jeweils4/4 Daten und3/3 GUI-Gruppen.
   Ganze Erweiterung/letzter Namensteil, exakte Spannen und echter22px-Draw/Clip

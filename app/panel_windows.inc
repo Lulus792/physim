@@ -65,7 +65,7 @@ static void panel_window_return(app *a,unsigned panel) {
         struct nk_window *body=nk_window_find(p->ui,dock_windows[panel]);
         if(body){p->scroll_x=body->scrollbar.x;p->scroll_y=body->scrollbar.y;}
     }
-    p->restore_scroll=true;p->detached=false;
+    p->restore_scroll=true;p->detached=false;p->blurred_editor=NULL;
     if(panel<PS_DOCK_PANELS && !(panel==PS_DOCK_LOG && a->show_log)) {
         a->preferences.dock.hidden&=~(1u<<panel);
     }
@@ -78,6 +78,7 @@ static void panel_window_return(app *a,unsigned panel) {
 static bool panel_window_open(app *a,unsigned panel) {
     ps_panel_window *p=&a->panels[panel];
     if(p->detached){SDL_ShowWindow(p->window);SDL_RaiseWindow(p->window);return true;}
+    p->blurred_editor=NULL;
     p->tab=a->tab;
     p->restore_editor_focus=panel==PS_DOCK_WORKSPACE && editor_search_target(a) && editor_search_target(a)->active;
     if(panel<PS_DOCK_PANELS)p->home=laboratory_visible(a) && panel==PS_DOCK_WORKSPACE?a->laboratory_scene_frame:a->dock_panels[panel];
@@ -172,7 +173,20 @@ static bool panel_window_event(app *a,SDL_Event *event,SDL_Window *window) {
                 (completion_keyboard_key(a,&event->key) || editor_search_key(a,&event->key) || file_tabs_keyboard(a,&event->key));
             if(event->type==SDL_EVENT_TEXT_INPUT){completion_edit_input(a);a->completion_typed=true;a->completion_composing=false;}
             if(event->type==SDL_EVENT_TEXT_EDITING){a->completion_composing=event->edit.text && *event->edit.text;if(a->completion_composing)completion_close(a);}
-            if(event->type==SDL_EVENT_WINDOW_FOCUS_LOST){completion_close(a);a->signature_visible=false;a->completion_composing=false;}
+            if(event->type==SDL_EVENT_WINDOW_FOCUS_LOST){
+                struct nk_text_edit *edit=editor_search_target(a);
+                /* Closing transient suggestions releases their shared owner.
+                 * Keep this window's actual source owner for a later OS focus
+                 * return; a focused search/control must not become a source. */
+                p->blurred_editor=edit && edit->active && !a->search_keyboard && !a->search_focus &&
+                    (a->completion_keyboard_edit==edit || (p->ui->active && p->ui->active==nk_window_find(p->ui,"workspace") && p->ui->active->edit.active))?edit:NULL;
+                completion_close(a);a->signature_visible=false;a->completion_composing=false;
+            }
+            if(event->type==SDL_EVENT_WINDOW_FOCUS_GAINED){
+                struct nk_text_edit *edit=p->blurred_editor;p->blurred_editor=NULL;
+                if(edit && edit==editor_search_target(a) && edit->active && !a->search_keyboard && !a->search_focus)
+                    completion_return_focus(a,edit);
+            }
             if(event->type==SDL_EVENT_MOUSE_BUTTON_DOWN)completion_pointer_event(a,&event->button);
             if(!handled)a->tab=tab;a->ui=ui;a->window=win;if(handled)return true;
         }

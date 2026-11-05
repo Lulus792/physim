@@ -1,0 +1,59 @@
+{
+  "date": "2026-11-05",
+  "reason": "All8final detached-window captures are byte-identical to retained, already opened source9cc reference BMPs. Keep native result/steps/log reports and input/runtime archives; remove only duplicate image extractions.",
+  "deleted": [
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-dx4glpkf/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-normal.bmp",
+      "canonical": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xh60v0jy/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-normal.bmp",
+      "sha256": "9d3831542991da417a0607c2826f6253890c4896aa7662396805f4686d6e9251",
+      "bytes": 832138
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-dx4glpkf/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-long.bmp",
+      "canonical": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xh60v0jy/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-long.bmp",
+      "sha256": "3b9ea85a5574be19ef7931eeba2c740ff6d48e51615169220a14ee687c725b9b",
+      "bytes": 665738
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-dx4glpkf/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-normal.bmp",
+      "canonical": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xh60v0jy/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-normal.bmp",
+      "sha256": "59bf8b2f3ee143ed8143c8c90e6d395d5b738b3831633d0f92fc6e9a202423ac",
+      "bytes": 832138
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-dx4glpkf/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-long.bmp",
+      "canonical": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-xh60v0jy/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-long.bmp",
+      "sha256": "a4e052256d3039f5dc68de697afdb5b6ca5e9da8882cdd5e55815b03986cf7d6",
+      "bytes": 665738
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-8aio6i_b/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-normal.bmp",
+      "canonical": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-69j1crw4/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-normal.bmp",
+      "sha256": "7831636fcfcc5175cdc99c778b6bfcbc7432360858a0dcfb3fe648b12be7099a",
+      "bytes": 832138
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-8aio6i_b/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-long.bmp",
+      "canonical": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-69j1crw4/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-long.bmp",
+      "sha256": "98cfa61e49cf392de118cfe26989aefc68116788a5cffcb7a11a58ba5a8f28bc",
+      "bytes": 665738
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-8aio6i_b/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-normal.bmp",
+      "canonical": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-69j1crw4/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-normal.bmp",
+      "sha256": "664cc75e22943b40c65cd1f36c116d7b1da0137000bc5074b8ecf81254db6bde",
+      "bytes": 832138
+    },
+    {
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-8aio6i_b/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-long.bmp",
+      "canonical": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-69j1crw4/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-long.bmp",
+      "sha256": "7199fb45dfb8c63369a7edda063afde4cb380130581ca1282f73e703cb681807",
+      "bytes": 665738
+    }
+  ],
+  "all_original_and_canonical_bytes_read_before_delete": true,
+  "no_recursive_delete": true,
+  "removed_logical_file_bytes": 5991504,
+  "actual_ntfs_allocation_freed_bytes": null,
+  "metric_note": "File lengths removed; NTFS allocation was not measured before these deletions."
+}

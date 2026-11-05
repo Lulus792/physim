@@ -1,0 +1,619 @@
+{
+  "date": "2026-11-05",
+  "source_snapshot": "signature-focus-accepted",
+  "scope": "Real OS focus transitions from detached editor to primary window, back to editor, to a separate helper process and back. C/Physim model, analysis and file editors. Actual child blur and peer focus acknowledgement, closed completion list, no painted HUD while unfocused, unchanged source/caret/selection anchors/editor scroll, active SDL text channel and subsequent scripted input. Additional real nonempty selection preserved across a primary/child focus roundtrip. Existing main/child signature and drag workflows remain included.",
+  "product_changes": "Detached source window remembers its actual source owner before transient completion cleanup and restores it only on real OS focus gain, if it is still the active target and search does not own input. Clear remembered owner on return/reopen. Use normal editor ownership path, not a forced SDL input channel.",
+  "test_fixture_corrections": [
+    "First probe wrongly treated the internal signature_visible eligibility/cache flag as actual visibility. The existing renderer already pauses on real focus loss. Final assertion observes zero HUD geometry and no painted signature/footer bytes.",
+    "Second probe attempted manual completion after a numeric literal. ps_completion_prepare deliberately rejects that position. Final sequence leaves the list open at its valid original argument position before changing focus.",
+    "The first final attempt overlaps Windows and Linux WSLg windows. Linux lacked the requested primary-window focus and its source changed; the main signature group also lost actual focus. These Linux results are not a valid product counterexample. The fixed Linux run uses a private Xvfb/Openbox desktop. The Windows counterexample does have actual returned child focus with its text channel stopped."
+  ],
+  "originals": [
+    {
+      "phase": "probe",
+      "platform": "windows",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "signature_detached_workflow"
+      ],
+      "exit_code": 1,
+      "passed": 0,
+      "total": 1,
+      "app_sha256": "0c2790e20591d254bd5930e35cba6ce94cfb085f96aa8ac5a26e3b5c17a143d9",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-rqgokeck/results.json",
+      "results_sha256": "3e680a08f7dc0b1acf2b78f2550b160a40cdceaf7828e6f5c947505856107f59",
+      "steps": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-rqgokeck/signature_detached_workflow/files ä/app-steps.json",
+      "steps_sha256": "ed7114507e447170b724393a7cab9cd0bcdc9e186a71ebc50b7317dd8b6c4b2a",
+      "log": "build/validation/signature-focus-2026-11-05/probe-windows.log",
+      "log_sha256": "85ee0a37a371dcfcb26286d83a2f51e9f171017e0a95e73713b151ff46099834",
+      "focus_markers": [],
+      "failures": [
+        "Signature detached failure: language=0 target=0 stage=31 detached=1 child=4 paint=4 focus=3 current=4 active=1 cursor=16 expected=16 bytes=16 expected-bytes=16 pending=0000000000000000 visible=1 bounds=0.000/0.000/0.000/0.000 scroll=0 max=0.000 footer=0 text=[]"
+      ]
+    },
+    {
+      "phase": "probe",
+      "platform": "linux",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "signature_detached_workflow"
+      ],
+      "exit_code": 1,
+      "passed": 0,
+      "total": 1,
+      "app_sha256": "91d721eb62d72302d8c3ecda0156d03f4766005f9ad3c34d5e34dab46dac2fcb",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-v07qil6w/results.json",
+      "results_sha256": "ce9f40dda334f180a46935f493404cfd345f298e51aca5d03d953e31ab01f875",
+      "steps": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-v07qil6w/signature_detached_workflow/files ä/app-steps.json",
+      "steps_sha256": "6bf382fde4a3434799bfe373043e7186824af167ea05eadc3a353299b322f3e2",
+      "log": "build/validation/signature-focus-2026-11-05/probe-linux.log",
+      "log_sha256": "479381ac42c72d622915c3e9111b004a32e80ed4179549672e58a5500f143ce8",
+      "focus_markers": [],
+      "failures": [
+        "Signature detached failure: language=0 target=0 stage=30 detached=1 child=4 paint=4 focus=4 current=4 active=1 cursor=16 expected=16 bytes=16 expected-bytes=16 pending=0 visible=1 bounds=155.302/67.500/301.000/61.641 scroll=0 max=0.000 footer=23 text=[ps_vec3 ps_v3(double x, double y, double z)]"
+      ]
+    },
+    {
+      "phase": "observed",
+      "platform": "windows",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "signature_detached_workflow"
+      ],
+      "exit_code": 1,
+      "passed": 0,
+      "total": 1,
+      "app_sha256": "4fb573458668e1a3eaa4662a4f713beb356299c37a18c22076b4a46c315f1d5e",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-hff8suvb/results.json",
+      "results_sha256": "6c542431794f3146b14d927a512265e43f6a0c59e0efbbc4632f952652581ac7",
+      "steps": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-hff8suvb/signature_detached_workflow/files ä/app-steps.json",
+      "steps_sha256": "85b080ef3d9f122d83d2a43a54ce38e38bbb28468593e4d94f149fd9e527e8f1",
+      "log": "build/validation/signature-focus-2026-11-05/observed-windows.log",
+      "log_sha256": "a185f0c3c086bf90425dcacd97de1b3745edadad4e11aec7849b69d9a82ced4a",
+      "focus_markers": [],
+      "failures": [
+        "Signature detached failure: language=0 target=0 stage=37 detached=1 child=4 paint=4 focus=4 current=4 active=1 cursor=16 expected=16 bytes=16 expected-bytes=16 pending=0000000000000000 visible=1 bounds=161.562/67.500/318.000/63.301 scroll=0 max=0.000 footer=23 text=[ps_vec3 ps_v3(double x, double y, double z)]"
+      ]
+    },
+    {
+      "phase": "observed",
+      "platform": "linux",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "signature_detached_workflow"
+      ],
+      "exit_code": 1,
+      "passed": 0,
+      "total": 1,
+      "app_sha256": "9fafe8e18bec3cc5ca85d047b69fc3d30a1120dd933b5b2139a4a8a776f8461e",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-_hf5v71j/results.json",
+      "results_sha256": "c118165ced2bd4ecf8093c46862e74bd07c8b332567873ca4adf9f9ad81a4af8",
+      "steps": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-_hf5v71j/signature_detached_workflow/files ä/app-steps.json",
+      "steps_sha256": "44a4bf853ce7fa7ecf81b07f450fae848a2bf1ce858b68e592d61de02718f999",
+      "log": "build/validation/signature-focus-2026-11-05/observed-linux.log",
+      "log_sha256": "e7b9c4b488b4f7798aa8db8ea3e7986840a94ca614f3d3c9fc551d307fb12090",
+      "focus_markers": [],
+      "failures": [
+        "Signature detached failure: language=0 target=0 stage=37 detached=1 child=4 paint=4 focus=4 current=4 active=1 cursor=16 expected=16 bytes=16 expected-bytes=16 pending=0 visible=1 bounds=155.302/67.500/301.000/61.641 scroll=0 max=0.000 footer=23 text=[ps_vec3 ps_v3(double x, double y, double z)]"
+      ]
+    },
+    {
+      "phase": "final",
+      "platform": "windows",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "signature_detached_workflow",
+        "--test-filter",
+        "signature_help_workflow"
+      ],
+      "exit_code": 1,
+      "passed": 1,
+      "total": 2,
+      "app_sha256": "6b7aaa6ade01d98f077e39e37d0da1d62dcf353d5efdaeb1343fd3e0379d78ba",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-qd34pas1/results.json",
+      "results_sha256": "a089fdcb9a3b100564abd280f61987284ccbf828ede831ce0f4df2b7679815cb",
+      "steps": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-qd34pas1/signature_detached_workflow/files ä/app-steps.json",
+      "steps_sha256": "ef7328f5aa8759051fda198daa5fcb82d100799a58997f5049f3aa76186d16af",
+      "log": "build/validation/signature-focus-2026-11-05/final-windows.log",
+      "log_sha256": "5a3a45cbf96d6834dc4166186bea17debe9079890e090da70ee37c891abe0e26",
+      "focus_markers": [],
+      "failures": [
+        "Signature detached failure: language=0 target=0 stage=31 detached=1 child=4 paint=4 focus=4 current=4 active=1 cursor=15 expected=15 bytes=15 expected-bytes=15 pending=0000000000000000 visible=1 bounds=154.965/67.500/318.000/63.301 scroll=0 max=0.000 footer=23 text=[ps_vec3 ps_v3(double x, double y, double z)]"
+      ]
+    },
+    {
+      "phase": "final",
+      "platform": "linux",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "signature_detached_workflow",
+        "--test-filter",
+        "signature_help_workflow"
+      ],
+      "exit_code": 1,
+      "passed": 0,
+      "total": 2,
+      "app_sha256": "14e11a749c1b3a8c5e78bc39430fdf6c90c7c4560d5ea6397c45990fa28efa86",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-x5qehhly/results.json",
+      "results_sha256": "8c122e256fb490e0a913e118b41b4d2b736995709767946140369796d24e85cd",
+      "steps": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-x5qehhly/signature_detached_workflow/files ä/app-steps.json",
+      "steps_sha256": "2aed15bdbf8c5e79b6673cc8a15f09825adb0826324d0e91ab7c91fd505f90ac",
+      "log": "build/validation/signature-focus-2026-11-05/final-linux.log",
+      "log_sha256": "0dcbaf1a0b6c8add61d23d49c1f2ec663efb6f93e45407e619530539e8de3fb3",
+      "focus_markers": [],
+      "failures": [
+        "Signature detached failure: language=0 target=0 stage=30 detached=1 child=4 paint=4 focus=4 current=4 active=1 cursor=14 expected=15 bytes=14 expected-bytes=15 pending=0 visible=0 bounds=0.000/0.000/0.000/0.000 scroll=0 max=0.000 footer=0 text=[]"
+      ]
+    },
+    {
+      "phase": "fixed",
+      "platform": "windows",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "signature_detached_workflow",
+        "--test-filter",
+        "signature_help_workflow"
+      ],
+      "exit_code": 1,
+      "passed": 1,
+      "total": 2,
+      "app_sha256": "e1bfe2bc4241e08a49466ec196aedd12a73fe65764079178a077ab0b28073cfa",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-ddug8p1e/results.json",
+      "results_sha256": "b6c879b87f5b213a6bf6c69a12a5e78d30f6a44718aad31727486254113bc618",
+      "steps": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-ddug8p1e/signature_detached_workflow/files ä/app-steps.json",
+      "steps_sha256": "e3f25acf08798d7abf429a5d0379d405124bf367ef37dff6dfc20c31fca89a22",
+      "log": "build/validation/signature-focus-2026-11-05/fixed-windows.log",
+      "log_sha256": "9e3cd78af15280f8804370d11a0b8ee12d3546db4f59988954eed2dc6283c231",
+      "focus_markers": [],
+      "failures": [
+        "Signature detached failure: language=0 target=0 stage=33 detached=1 child=4 paint=4 focus=0 current=4 active=1 cursor=15 expected=15 bytes=15 expected-bytes=15 pending=0000000000000000 visible=0 bounds=154.965/67.500/318.000/63.301 scroll=0 max=0.000 footer=23 text=[ps_vec3 ps_v3(double x, double y, double z)]"
+      ]
+    },
+    {
+      "phase": "fixed",
+      "platform": "linux",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "signature_detached_workflow",
+        "--test-filter",
+        "signature_help_workflow"
+      ],
+      "exit_code": 1,
+      "passed": 1,
+      "total": 2,
+      "app_sha256": "4d1eb3679632fea554f22950b2b6d70acdb83799fc31accf4ed340b809692ab6",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-96yj4ka3/results.json",
+      "results_sha256": "cd941134afacd669ced049eee63dfe83acb878f50e7631cf9108785717ad5543",
+      "steps": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-96yj4ka3/signature_detached_workflow/files ä/app-steps.json",
+      "steps_sha256": "3f0ac795d7a527f5a8802c1500c9dbb6489652bd3b2ac077bdb593ca123d2ceb",
+      "log": "build/validation/signature-focus-2026-11-05/fixed-linux.log",
+      "log_sha256": "79ca311e649cee2b94b8ec1a5c6776a9b88d60bd7861a4547d7cf8f959309e7d",
+      "focus_markers": [],
+      "failures": [
+        "Signature detached failure: language=0 target=0 stage=33 detached=1 child=3 paint=3 focus=0 current=3 active=1 cursor=15 expected=15 bytes=15 expected-bytes=15 pending=0 visible=0 bounds=149.096/67.500/301.000/61.641 scroll=0 max=0.000 footer=23 text=[ps_vec3 ps_v3(double x, double y, double z)]"
+      ]
+    },
+    {
+      "phase": "verified",
+      "platform": "windows",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "signature_detached_workflow",
+        "--test-filter",
+        "signature_help_workflow"
+      ],
+      "exit_code": 1,
+      "passed": 1,
+      "total": 2,
+      "app_sha256": "4863f071d14543f2a6c2b42682813aa03dc64748941f19ed73ff9f6d52a7ea0b",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-iab0g1n1/results.json",
+      "results_sha256": "042fd290bfd497a0fbe28440bc91c6337fc16e1e8bdb3973a6c5a31ca1d15d57",
+      "steps": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-iab0g1n1/signature_detached_workflow/files ä/app-steps.json",
+      "steps_sha256": "6a26eb9f2da9852eb82d7433b071c98b3116d5f0d73897b756fb83e11601bc1e",
+      "log": "build/validation/signature-focus-2026-11-05/verified-windows.log",
+      "log_sha256": "f1b4ead6e80a24a3ddf8a03a32912a96e343938c98e635d79a0d7d6d446f6b96",
+      "focus_markers": [
+        "SIGNATURE FOCUS language=c target=0 main-child=1 separate-process=1 actual-blur=1 hud-hidden=1 source-caret-selection-scroll=1 resumed-typing=1"
+      ],
+      "failures": [
+        "Signature detached failure: language=0 target=0 stage=8 detached=1 child=4 paint=4 focus=4 current=4 active=1 cursor=16 expected=14 bytes=16 expected-bytes=15 pending=0000000000000000 visible=1 bounds=161.562/67.500/318.000/63.301 scroll=0 max=0.000 footer=23 text=[ps_vec3 ps_v3(double x, double y, double z)]"
+      ]
+    },
+    {
+      "phase": "verified",
+      "platform": "linux",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "signature_detached_workflow",
+        "--test-filter",
+        "signature_help_workflow"
+      ],
+      "exit_code": 1,
+      "passed": 1,
+      "total": 2,
+      "app_sha256": "607560815543a0eeac45ad2050abfe5a16d69ff80dac292618b2f53379bf4074",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-hsecsggd/results.json",
+      "results_sha256": "8189973b31ba06fdd56ddedca081e5c3c72899c76a38f221298a7769e0d05c56",
+      "steps": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-hsecsggd/signature_detached_workflow/files ä/app-steps.json",
+      "steps_sha256": "fe9b3741f1bda9b7ac13205ee106a025cea1b030f4b63e689584d70808135f62",
+      "log": "build/validation/signature-focus-2026-11-05/verified-linux.log",
+      "log_sha256": "774a5ee60b6a97e88c08bb4dcb2f1440bc6d1a69e1d1022c353f7df23bcc3a50",
+      "focus_markers": [
+        "SIGNATURE FOCUS language=c target=0 main-child=1 separate-process=1 actual-blur=1 hud-hidden=1 source-caret-selection-scroll=1 resumed-typing=1"
+      ],
+      "failures": [
+        "Signature detached failure: language=0 target=0 stage=8 detached=1 child=3 paint=3 focus=3 current=3 active=1 cursor=16 expected=14 bytes=16 expected-bytes=15 pending=0 visible=1 bounds=155.302/67.500/301.000/61.641 scroll=0 max=0.000 footer=23 text=[ps_vec3 ps_v3(double x, double y, double z)]"
+      ]
+    },
+    {
+      "phase": "accepted",
+      "platform": "windows",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "signature_detached_workflow",
+        "--test-filter",
+        "signature_help_workflow"
+      ],
+      "exit_code": 1,
+      "passed": 0,
+      "total": 2,
+      "app_sha256": "0753501405c6ee3a6e3eeb171a1f17986a896be676f2d84b9d91a60c3067add0",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-_zsx86pn/results.json",
+      "results_sha256": "abee44f49939fcf3bb528ca768e00cd75ae7b069d83cb04b0cec012c80d5e93b",
+      "steps": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-_zsx86pn/signature_detached_workflow/files ä/app-steps.json",
+      "steps_sha256": "e29c60b3af126ca436bea998e030ddf928163b644a7ba04a40e977d12779a3a5",
+      "log": "build/validation/signature-focus-2026-11-05/accepted-windows.log",
+      "log_sha256": "c8786fbf2b0d42b41e52fc5f588ca385d675078888252e6bafb7705d680573ff",
+      "focus_markers": [],
+      "failures": [
+        "Signature detached failure: language=0 target=0 stage=3 detached=1 child=4 paint=4 focus=0 current=4 active=1 cursor=14 expected=0 bytes=14 expected-bytes=0 pending=0000000000000000 visible=0 bounds=0.000/0.000/0.000/0.000 scroll=0 max=0.000 footer=0 text=[]"
+      ]
+    },
+    {
+      "phase": "accepted",
+      "platform": "linux",
+      "command": [
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/with-artifacts.py",
+        "--",
+        "/usr/bin/python3",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/src/tools/build.py",
+        "--build-dir",
+        "/mnt/d/Physim/build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build",
+        "--config",
+        "Debug",
+        "--jobs",
+        "4",
+        "--sdl",
+        "/mnt/d/Physim/build/dependencies/SDL3-linux-3.2.30",
+        "--sanitizers",
+        "--test-display",
+        "--test-filter",
+        "signature_detached_workflow",
+        "--test-filter",
+        "signature_help_workflow"
+      ],
+      "exit_code": 0,
+      "passed": 2,
+      "total": 2,
+      "app_sha256": "54f6e72f564c8a4f2693c39d4aa84354e494c1c543ff74e9c37272ac43bcd7fc",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-dx4glpkf/results.json",
+      "results_sha256": "1593b552e91ecedb1ae2797ba02fbf12b37fb9254aa3312eb89ef975ba9cd94d",
+      "steps": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-dx4glpkf/signature_detached_workflow/files ä/app-steps.json",
+      "steps_sha256": "ea6f3eca09acf3f21720c4de67981109a3a2ae210427dfcf20c8f6fab8ea72f8",
+      "log": "build/validation/signature-focus-2026-11-05/accepted-linux.log",
+      "log_sha256": "9929e11145e24a65ffced5e320f8923d7e2ecaad5c2cb4fb10c4737330ea25bb",
+      "focus_markers": [
+        "SIGNATURE FOCUS language=c target=0 main-child=1 separate-process=1 actual-blur=1 hud-hidden=1 source-caret-selection-scroll=1 resumed-typing=1",
+        "SIGNATURE FOCUS language=c target=1 main-child=1 separate-process=1 actual-blur=1 hud-hidden=1 source-caret-selection-scroll=1 resumed-typing=1",
+        "SIGNATURE FOCUS language=c target=2 main-child=1 separate-process=1 actual-blur=1 hud-hidden=1 source-caret-selection-scroll=1 resumed-typing=1",
+        "SIGNATURE FOCUS language=phys target=0 main-child=1 separate-process=1 actual-blur=1 hud-hidden=1 source-caret-selection-scroll=1 resumed-typing=1",
+        "SIGNATURE FOCUS language=phys target=1 main-child=1 separate-process=1 actual-blur=1 hud-hidden=1 source-caret-selection-scroll=1 resumed-typing=1",
+        "SIGNATURE FOCUS language=phys target=2 main-child=1 separate-process=1 actual-blur=1 hud-hidden=1 source-caret-selection-scroll=1 resumed-typing=1"
+      ],
+      "failures": []
+    },
+    {
+      "phase": "focused",
+      "platform": "windows",
+      "command": [
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\with-artifacts.py",
+        "--",
+        "C:\\Users\\angel\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\src\\tools\\build.py",
+        "--build-dir",
+        "D:\\Physim\\build\\validation\\protocol-wrap-2026-10-26\\3-isolated\\windows-build",
+        "--config",
+        "Release",
+        "--jobs",
+        "4",
+        "--sdl",
+        "D:\\Physim\\third_party\\SDL3-3.2.30",
+        "--test-display",
+        "--test-filter",
+        "signature_detached_workflow",
+        "--test-filter",
+        "signature_help_workflow"
+      ],
+      "exit_code": 0,
+      "passed": 2,
+      "total": 2,
+      "app_sha256": "0753501405c6ee3a6e3eeb171a1f17986a896be676f2d84b9d91a60c3067add0",
+      "results": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-8aio6i_b/results.json",
+      "results_sha256": "d534e4df97adeaf381fbaea52ef41f8ae2b43e4067e52df59adf040c2b704072",
+      "steps": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-8aio6i_b/signature_detached_workflow/files ä/app-steps.json",
+      "steps_sha256": "fee0a19a761899a214451b387684b470c7b58dbdcff456f99e895f3153933313",
+      "log": "build/validation/signature-focus-2026-11-05/focused-windows.log",
+      "log_sha256": "8aecffed298c06452f18a5147456880e829a85697ed38f839b4312da2d2bb060",
+      "focus_markers": [
+        "SIGNATURE FOCUS language=c target=0 main-child=1 separate-process=1 actual-blur=1 hud-hidden=1 source-caret-selection-scroll=1 resumed-typing=1",
+        "SIGNATURE FOCUS language=c target=1 main-child=1 separate-process=1 actual-blur=1 hud-hidden=1 source-caret-selection-scroll=1 resumed-typing=1",
+        "SIGNATURE FOCUS language=c target=2 main-child=1 separate-process=1 actual-blur=1 hud-hidden=1 source-caret-selection-scroll=1 resumed-typing=1",
+        "SIGNATURE FOCUS language=phys target=0 main-child=1 separate-process=1 actual-blur=1 hud-hidden=1 source-caret-selection-scroll=1 resumed-typing=1",
+        "SIGNATURE FOCUS language=phys target=1 main-child=1 separate-process=1 actual-blur=1 hud-hidden=1 source-caret-selection-scroll=1 resumed-typing=1",
+        "SIGNATURE FOCUS language=phys target=2 main-child=1 separate-process=1 actual-blur=1 hud-hidden=1 source-caret-selection-scroll=1 resumed-typing=1"
+      ],
+      "failures": []
+    }
+  ],
+  "captures": [
+    {
+      "platform": "linux",
+      "language": "c",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-dx4glpkf/signature_detached_workflow/files ä/workflow ä/c/signature-detached-normal.bmp",
+      "sha256": "9d3831542991da417a0607c2826f6253890c4896aa7662396805f4686d6e9251"
+    },
+    {
+      "platform": "linux",
+      "language": "c",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-dx4glpkf/signature_detached_workflow/files ä/workflow ä/c/signature-detached-long.bmp",
+      "sha256": "3b9ea85a5574be19ef7931eeba2c740ff6d48e51615169220a14ee687c725b9b"
+    },
+    {
+      "platform": "linux",
+      "language": "phys",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-dx4glpkf/signature_detached_workflow/files ä/workflow ä/phys/signature-detached-normal.bmp",
+      "sha256": "59bf8b2f3ee143ed8143c8c90e6d395d5b738b3831633d0f92fc6e9a202423ac"
+    },
+    {
+      "platform": "linux",
+      "language": "phys",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/linux-build/test-results/run-dx4glpkf/signature_detached_workflow/files ä/workflow ä/phys/signature-detached-long.bmp",
+      "sha256": "a4e052256d3039f5dc68de697afdb5b6ca5e9da8882cdd5e55815b03986cf7d6"
+    },
+    {
+      "platform": "windows",
+      "language": "c",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-8aio6i_b/signature_detached_workflow/files ä/workflow ä/c/signature-detached-normal.bmp",
+      "sha256": "7831636fcfcc5175cdc99c778b6bfcbc7432360858a0dcfb3fe648b12be7099a"
+    },
+    {
+      "platform": "windows",
+      "language": "c",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-8aio6i_b/signature_detached_workflow/files ä/workflow ä/c/signature-detached-long.bmp",
+      "sha256": "98cfa61e49cf392de118cfe26989aefc68116788a5cffcb7a11a58ba5a8f28bc"
+    },
+    {
+      "platform": "windows",
+      "language": "phys",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-8aio6i_b/signature_detached_workflow/files ä/workflow ä/phys/signature-detached-normal.bmp",
+      "sha256": "664cc75e22943b40c65cd1f36c116d7b1da0137000bc5074b8ecf81254db6bde"
+    },
+    {
+      "platform": "windows",
+      "language": "phys",
+      "path": "build/validation/protocol-wrap-2026-10-26/3-isolated/windows-build/test-results/run-8aio6i_b/signature_detached_workflow/files ä/workflow ä/phys/signature-detached-long.bmp",
+      "sha256": "7199fb45dfb8c63369a7edda063afde4cb380130581ca1282f73e703cb681807"
+    }
+  ],
+  "prebuild_audits": [
+    {
+      "path": "build/validation/signature-focus-2026-11-05/signature-focus-probe-audit.json",
+      "sha256": "669710aa768b14a61153da0597725bd3450f6e5ce8af2d0d4395b3a0f70d58bd"
+    },
+    {
+      "path": "build/validation/signature-focus-2026-11-05/signature-focus-observed-audit.json",
+      "sha256": "dc7292622dbdb9ab7af8694748ba24494912e04f3f2dfb6f70c61262d4924dbd"
+    },
+    {
+      "path": "build/validation/signature-focus-2026-11-05/signature-focus-final-audit.json",
+      "sha256": "feaf22a98d4b778bff9ca848955317efa87c27247725837480d0d82ac7fe9870"
+    },
+    {
+      "path": "build/validation/signature-focus-2026-11-05/signature-focus-fixed-audit.json",
+      "sha256": "683c27899788b2c5412b082b6174aebdff82dd97541197f2685ef556485499f4"
+    },
+    {
+      "path": "build/validation/signature-focus-2026-11-05/signature-focus-verified-audit.json",
+      "sha256": "f8d55754c6f0c5c952018f2fc278dad24b0e92d2ab9605fe3a74a26d2b32e456"
+    },
+    {
+      "path": "build/validation/signature-focus-2026-11-05/signature-focus-accepted-audit.json",
+      "sha256": "465510bc0fcdfa13c19d1b365fd1b0930d9686d2b0cad5c6435fad911c64f3e8"
+    }
+  ],
+  "source_manifests": [
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/signature-focus-accepted-inputs.json",
+      "sha256": "47ecf7575b35e907e1e3269ec1ccaa919234e64fa1d93aff7990a16dae35ac06"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/signature-focus-accepted-compiler-source.json",
+      "sha256": "501485e863d200ad03ea7a81c17664643423172918b856bce4737b7949036c34"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/signature-focus-accepted-runtime.json",
+      "sha256": "56ea7533fe195810b9d157a7e489589c24e5bbb5854464a241a1f5121fe62aa1"
+    },
+    {
+      "path": "build/validation/explorer-inline-2026-10-29/signature-focus-accepted-byte-index.json",
+      "sha256": "650eb3428c42134c6d346142bf8ad778fc98c6412b5996ce2d8745639094d821"
+    }
+  ],
+  "limits": [
+    "Keyboard and text events are still scripted SDL events, not physical or OS-injected keyboard acceptance.",
+    "The peer is a separate process running a dedicated focus-only entry point of the same executable, not an unrelated installed application.",
+    "No screenreader, native accessibility or full UI/design acceptance follows.",
+    "Current-source macOS focus transitions are unverified; private user Mac remains OFF."
+  ]
+}

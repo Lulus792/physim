@@ -46,6 +46,20 @@ die gemeinsame WSL-VM und fremde aktive Arbeiten bleiben erhalten.
 
 ## Reproduzierbare Nachweise
 
+Zusätzlicher Abschluss der Dateinamen-/Fokusprüfungen: [14 identische
+Mac-Extraktionsbilder](verification/filename-wrap-macos-cleanup-2026-11-05.json)
+und [acht identische lokale Bildkopien](verification/signature-focus-images-cleanup-2026-11-05.json)
+entfernt. Zusammen **29.123.036 Bytes logische Dateigröße**; die tatsächlich
+freigegebene NTFS-Zuordnung wurde für diese einzelnen Löschungen nicht gemessen.
+Original-ZIPs, Hashlisten, eindeutige neue Bilder und sämtliche kanonischen
+Referenzbilder bleiben erhalten. Ein eigener verwaister Xvfb-Server des beendeten
+Zwischenlaufs wurde nach PID-/Argumentprüfung beendet; fremde Server und Arbeiten
+blieben erhalten. Diese Schritte zählen keine frühere Bereinigung erneut.
+Die automatische Freigabeprüfung blockierte anschließend die geplante Löschung
+der zwei eigenen `xauth-verified`-/`xauth-accepted`-Dateien im Fokus-Prüfordner
+mit „blocked by policy“, ohne nähere Begründung. Diese Ziele bleiben unangetastet;
+die Ablehnung wird nicht durch andere Werkzeuge umgangen.
+
 Späterer, getrennter Abschluss des gehosteten Mac-Laufs42037853611:
 [vier bytegleiche entpackte ARM-Bildkopien entfernt](verification/signature-outside-macos-cleanup-2026-11-05.json),
 **9.850.152 Bytes**. Alle acht tatsächlichen Bilder waren zuvor geöffnet;

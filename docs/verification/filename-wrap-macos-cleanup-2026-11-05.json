@@ -1,0 +1,99 @@
+{
+  "date": "2026-11-05",
+  "reason": "Remove only byte-identical extracted BMP copies after source-specific hosted Mac acceptance; keep original ZIPs, manifests and all unique opened/canonical image contents.",
+  "deleted": [
+    {
+      "path": "build/validation/filename-wrap-macos-2026-11-05/intel/c-signature-detached-long.bmp",
+      "bytes": 665738,
+      "sha256": "99e0c1f42bf2949f31902a00fcbc4e8f793d41634462637cf5b4afd6e4c27d69",
+      "canonical": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\c-signature-detached-long.bmp"
+    },
+    {
+      "path": "build/validation/filename-wrap-macos-2026-11-05/intel/c-signature-detached-normal.bmp",
+      "bytes": 832138,
+      "sha256": "29e0bcde0de8e0833a86dc17dee33f690bbee922ad667e8fc5c2113d9c969bdd",
+      "canonical": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\c-signature-detached-normal.bmp"
+    },
+    {
+      "path": "build/validation/filename-wrap-macos-2026-11-05/intel/phys-signature-detached-long.bmp",
+      "bytes": 665738,
+      "sha256": "79e02df38c51b42ed2679d4eb13297e1f9b609621ad2f1b1f49d2afd45133132",
+      "canonical": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\phys-signature-detached-long.bmp"
+    },
+    {
+      "path": "build/validation/filename-wrap-macos-2026-11-05/intel/c-signature-first.bmp",
+      "bytes": 3196938,
+      "sha256": "f99d1a570e01b8f9b20a6a149947f20251ce72999312cbdb9b2b31cdfaa7a5fd",
+      "canonical": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\intel\\c-signature-first.bmp"
+    },
+    {
+      "path": "build/validation/filename-wrap-macos-2026-11-05/intel/c-signature-long.bmp",
+      "bytes": 1728138,
+      "sha256": "facb10eb17c3e3b5b0cbc27aeb2d59873559d5080c0fd9a49566d781a18036c4",
+      "canonical": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\intel\\c-signature-long.bmp"
+    },
+    {
+      "path": "build/validation/filename-wrap-macos-2026-11-05/arm/project-tree-large-name.bmp",
+      "bytes": 3196938,
+      "sha256": "7d45158ef064a90c80cd05794cdeb72bf2cb7cf43cb6915574b3268f8d3a93e9",
+      "canonical": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\project-tree-large-name.bmp"
+    },
+    {
+      "path": "build/validation/filename-wrap-macos-2026-11-05/arm/c-signature-detached-long.bmp",
+      "bytes": 665738,
+      "sha256": "99e0c1f42bf2949f31902a00fcbc4e8f793d41634462637cf5b4afd6e4c27d69",
+      "canonical": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\c-signature-detached-long.bmp"
+    },
+    {
+      "path": "build/validation/filename-wrap-macos-2026-11-05/arm/c-signature-detached-normal.bmp",
+      "bytes": 832138,
+      "sha256": "29e0bcde0de8e0833a86dc17dee33f690bbee922ad667e8fc5c2113d9c969bdd",
+      "canonical": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\c-signature-detached-normal.bmp"
+    },
+    {
+      "path": "build/validation/filename-wrap-macos-2026-11-05/arm/phys-signature-detached-long.bmp",
+      "bytes": 665738,
+      "sha256": "79e02df38c51b42ed2679d4eb13297e1f9b609621ad2f1b1f49d2afd45133132",
+      "canonical": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\phys-signature-detached-long.bmp"
+    },
+    {
+      "path": "build/validation/filename-wrap-macos-2026-11-05/arm/phys-signature-detached-normal.bmp",
+      "bytes": 832138,
+      "sha256": "fe707e5f335b1dd950481a8ef3bb3b08c230871f2a11ea104cb4487672c4b145",
+      "canonical": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\phys-signature-detached-normal.bmp"
+    },
+    {
+      "path": "build/validation/filename-wrap-macos-2026-11-05/arm/c-signature-first.bmp",
+      "bytes": 3196938,
+      "sha256": "f99d1a570e01b8f9b20a6a149947f20251ce72999312cbdb9b2b31cdfaa7a5fd",
+      "canonical": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\intel\\c-signature-first.bmp"
+    },
+    {
+      "path": "build/validation/filename-wrap-macos-2026-11-05/arm/c-signature-long.bmp",
+      "bytes": 1728138,
+      "sha256": "facb10eb17c3e3b5b0cbc27aeb2d59873559d5080c0fd9a49566d781a18036c4",
+      "canonical": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\intel\\c-signature-long.bmp"
+    },
+    {
+      "path": "build/validation/filename-wrap-macos-2026-11-05/arm/phys-signature-first.bmp",
+      "bytes": 3196938,
+      "sha256": "e6601de2391aef682ba2e3f23bb28b0fa440900bd151d14b4cd4681830f6ef94",
+      "canonical": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\phys-signature-first.bmp"
+    },
+    {
+      "path": "build/validation/filename-wrap-macos-2026-11-05/arm/phys-signature-long.bmp",
+      "bytes": 1728138,
+      "sha256": "12e8f3336c089117cf0a9eabeb4033319a15695975b7bbd5f8058b8439f8a060",
+      "canonical": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\phys-signature-long.bmp"
+    }
+  ],
+  "original_zips_retained": [
+    "build/validation/filename-wrap-macos-2026-11-05/artifact-13431593415.zip",
+    "build/validation/filename-wrap-macos-2026-11-05/artifact-13432233246.zip"
+  ],
+  "all_canonicals_verified_before_delete": true,
+  "no_recursive_directory_cleanup": true,
+  "removed_logical_file_bytes": 23131532,
+  "actual_ntfs_allocation_freed_bytes": null,
+  "metric_note": "File lengths removed; NTFS allocation was not measured before these deletions."
+}

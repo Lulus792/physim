@@ -1,0 +1,286 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "0d3f4a65288897032dbcfc76ed2ad6f0d27a36e3",
+  "workflow_run": 42059129050,
+  "jobs": [
+    {
+      "id": 127355571409,
+      "runner": "macos-15-intel",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 127355571940,
+      "runner": "macos-15",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "scope": "Source0d3f4a65 filename wrapping and existing signature/editor/return workflows on hosted macOS jobs. Each14data+12GUI, all original ZIP bytes/digests and11entries per archive read. Four new unique image contents actually opened;14 other extracted image copies fully byte-identical to retained, already opened canonical references. No current uncommitted focus-peer workflow or full UI/physical/assistive acceptance.",
+  "artifacts": [
+    {
+      "platform": "intel",
+      "id": 13431593415,
+      "name": "native-editor-menu-macos-15-intel",
+      "zip": "build/validation/filename-wrap-macos-2026-11-05/artifact-13431593415.zip",
+      "sha256": "4f235ae7cc47337d19d1e50276173d4502feca0013498fd868906f8c09be12ef",
+      "bytes": 595982,
+      "all_11_entries_read": true,
+      "entries": {
+        "Release/test-results/run-irinh2yg/project_tree_workflow/files \u00e4/workflow \u00e4/project-tree-large-name.bmp": "7d45158ef064a90c80cd05794cdeb72bf2cb7cf43cb6915574b3268f8d3a93e9",
+        "Release/test-results/run-irinh2yg/results.json": "770632dec0848dd02b546d1dd47255307c3142f45249c565b931c1e412e2ff4b",
+        "Release/test-results/run-irinh2yg/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-long.bmp": "99e0c1f42bf2949f31902a00fcbc4e8f793d41634462637cf5b4afd6e4c27d69",
+        "Release/test-results/run-irinh2yg/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-normal.bmp": "29e0bcde0de8e0833a86dc17dee33f690bbee922ad667e8fc5c2113d9c969bdd",
+        "Release/test-results/run-irinh2yg/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-long.bmp": "79e02df38c51b42ed2679d4eb13297e1f9b609621ad2f1b1f49d2afd45133132",
+        "Release/test-results/run-irinh2yg/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-first.bmp": "f99d1a570e01b8f9b20a6a149947f20251ce72999312cbdb9b2b31cdfaa7a5fd",
+        "Release/test-results/run-irinh2yg/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-normal.bmp": "921b2b5bb990aebd956512c946e924c6e512a6a7d6591ef696d2c85f2b2cac3d",
+        "Release/test-results/run-irinh2yg/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-long.bmp": "facb10eb17c3e3b5b0cbc27aeb2d59873559d5080c0fd9a49566d781a18036c4",
+        "Release/test-results/run-irinh2yg/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-first.bmp": "e6601de2391aef682ba2e3f23bb28b0fa440900bd151d14b4cd4681830f6ef94",
+        "Release/test-results/run-irinh2yg/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-long.bmp": "12e8f3336c089117cf0a9eabeb4033319a15695975b7bbd5f8058b8439f8a060",
+        "Release/test-results/run-qrwrp2jl/results.json": "3c80563d9512435a3948faf7ec05739ccde14db9e1d43727583022b43e985cdd"
+      },
+      "groups": [
+        {
+          "path": "Release/test-results/run-irinh2yg/results.json",
+          "passed": 12,
+          "total": 12,
+          "tests": [
+            "workspace_tree_workflow",
+            "documents_small",
+            "documents_large",
+            "project_tree_workflow",
+            "completion_workflow",
+            "completion_automatic_workflow",
+            "api_reference_workflow",
+            "signature_help_workflow",
+            "completion_info_workflow",
+            "completion_automatic_deadline_workflow",
+            "completion_locals_workflow",
+            "signature_detached_workflow"
+          ]
+        },
+        {
+          "path": "Release/test-results/run-qrwrp2jl/results.json",
+          "passed": 14,
+          "total": 14,
+          "tests": [
+            "c_call_context",
+            "c_signatures",
+            "c_lookup",
+            "code_preview",
+            "code_wrap",
+            "signature_wrap",
+            "text_wrap",
+            "completion_locals",
+            "completion_c_locals",
+            "call_targets",
+            "signature_help",
+            "editor_signatures",
+            "module_signatures",
+            "completion_info"
+          ]
+        }
+      ],
+      "original_manifest": "build/validation/filename-wrap-macos-2026-11-05/intel-original.json",
+      "original_manifest_sha256": "713dd47002e9eacb6154a302a01ae1011596d1fa5827354fc2c42a686c099a82"
+    },
+    {
+      "platform": "arm",
+      "id": 13432233246,
+      "name": "native-editor-menu-macos-15",
+      "zip": "build/validation/filename-wrap-macos-2026-11-05/artifact-13432233246.zip",
+      "sha256": "675e2c8ff93c7ead99fbb2a1fa3f0e120b038a61c051d93aa6a21bb0dc2d8c5e",
+      "bytes": 583777,
+      "all_11_entries_read": true,
+      "entries": {
+        "Release/test-results/run-tfbv86ti/results.json": "c64e8c25b525bd2376244f7a6d6bb34f7c691efb460bb5faf6f99f22d026e649",
+        "Release/test-results/run-uk9wov4_/project_tree_workflow/files \u00e4/workflow \u00e4/project-tree-large-name.bmp": "7d45158ef064a90c80cd05794cdeb72bf2cb7cf43cb6915574b3268f8d3a93e9",
+        "Release/test-results/run-uk9wov4_/results.json": "b37d4000ba6104f620cf0ad141f415fac574a3f0fac294a465cab7a9107ce820",
+        "Release/test-results/run-uk9wov4_/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-long.bmp": "99e0c1f42bf2949f31902a00fcbc4e8f793d41634462637cf5b4afd6e4c27d69",
+        "Release/test-results/run-uk9wov4_/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-normal.bmp": "29e0bcde0de8e0833a86dc17dee33f690bbee922ad667e8fc5c2113d9c969bdd",
+        "Release/test-results/run-uk9wov4_/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-long.bmp": "79e02df38c51b42ed2679d4eb13297e1f9b609621ad2f1b1f49d2afd45133132",
+        "Release/test-results/run-uk9wov4_/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-normal.bmp": "fe707e5f335b1dd950481a8ef3bb3b08c230871f2a11ea104cb4487672c4b145",
+        "Release/test-results/run-uk9wov4_/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-first.bmp": "f99d1a570e01b8f9b20a6a149947f20251ce72999312cbdb9b2b31cdfaa7a5fd",
+        "Release/test-results/run-uk9wov4_/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-long.bmp": "facb10eb17c3e3b5b0cbc27aeb2d59873559d5080c0fd9a49566d781a18036c4",
+        "Release/test-results/run-uk9wov4_/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-first.bmp": "e6601de2391aef682ba2e3f23bb28b0fa440900bd151d14b4cd4681830f6ef94",
+        "Release/test-results/run-uk9wov4_/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-long.bmp": "12e8f3336c089117cf0a9eabeb4033319a15695975b7bbd5f8058b8439f8a060"
+      },
+      "groups": [
+        {
+          "path": "Release/test-results/run-tfbv86ti/results.json",
+          "passed": 14,
+          "total": 14,
+          "tests": [
+            "c_call_context",
+            "c_signatures",
+            "c_lookup",
+            "code_preview",
+            "code_wrap",
+            "signature_wrap",
+            "text_wrap",
+            "completion_locals",
+            "completion_c_locals",
+            "call_targets",
+            "signature_help",
+            "editor_signatures",
+            "module_signatures",
+            "completion_info"
+          ]
+        },
+        {
+          "path": "Release/test-results/run-uk9wov4_/results.json",
+          "passed": 12,
+          "total": 12,
+          "tests": [
+            "workspace_tree_workflow",
+            "documents_small",
+            "documents_large",
+            "project_tree_workflow",
+            "completion_workflow",
+            "completion_automatic_workflow",
+            "api_reference_workflow",
+            "signature_help_workflow",
+            "completion_info_workflow",
+            "completion_automatic_deadline_workflow",
+            "completion_locals_workflow",
+            "signature_detached_workflow"
+          ]
+        }
+      ],
+      "original_manifest": "build/validation/filename-wrap-macos-2026-11-05/arm-original.json",
+      "original_manifest_sha256": "f87c797d0c96f72878adc339a18c58bb93ffb3d0f1d1183a8bf2c3e521f93eff"
+    }
+  ],
+  "images": [
+    {
+      "path": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\project-tree-large-name.bmp",
+      "sha256": "7d45158ef064a90c80cd05794cdeb72bf2cb7cf43cb6915574b3268f8d3a93e9",
+      "entry": "Release/test-results/run-irinh2yg/project_tree_workflow/files \u00e4/workflow \u00e4/project-tree-large-name.bmp",
+      "platform": "intel",
+      "requires_open": true
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\c-signature-detached-long.bmp",
+      "sha256": "99e0c1f42bf2949f31902a00fcbc4e8f793d41634462637cf5b4afd6e4c27d69",
+      "entry": "Release/test-results/run-irinh2yg/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-long.bmp",
+      "platform": "intel",
+      "canonical_opened_reference": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\c-signature-detached-long.bmp"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\c-signature-detached-normal.bmp",
+      "sha256": "29e0bcde0de8e0833a86dc17dee33f690bbee922ad667e8fc5c2113d9c969bdd",
+      "entry": "Release/test-results/run-irinh2yg/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-normal.bmp",
+      "platform": "intel",
+      "canonical_opened_reference": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\c-signature-detached-normal.bmp"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\phys-signature-detached-long.bmp",
+      "sha256": "79e02df38c51b42ed2679d4eb13297e1f9b609621ad2f1b1f49d2afd45133132",
+      "entry": "Release/test-results/run-irinh2yg/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-long.bmp",
+      "platform": "intel",
+      "canonical_opened_reference": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\phys-signature-detached-long.bmp"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\c-signature-first.bmp",
+      "sha256": "f99d1a570e01b8f9b20a6a149947f20251ce72999312cbdb9b2b31cdfaa7a5fd",
+      "entry": "Release/test-results/run-irinh2yg/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-first.bmp",
+      "platform": "intel",
+      "canonical_opened_reference": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\intel\\c-signature-first.bmp"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\phys-signature-detached-normal.bmp",
+      "sha256": "921b2b5bb990aebd956512c946e924c6e512a6a7d6591ef696d2c85f2b2cac3d",
+      "entry": "Release/test-results/run-irinh2yg/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-normal.bmp",
+      "platform": "intel",
+      "requires_open": true
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\c-signature-long.bmp",
+      "sha256": "facb10eb17c3e3b5b0cbc27aeb2d59873559d5080c0fd9a49566d781a18036c4",
+      "entry": "Release/test-results/run-irinh2yg/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-long.bmp",
+      "platform": "intel",
+      "canonical_opened_reference": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\intel\\c-signature-long.bmp"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\phys-signature-first.bmp",
+      "sha256": "e6601de2391aef682ba2e3f23bb28b0fa440900bd151d14b4cd4681830f6ef94",
+      "entry": "Release/test-results/run-irinh2yg/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-first.bmp",
+      "platform": "intel",
+      "requires_open": true
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\phys-signature-long.bmp",
+      "sha256": "12e8f3336c089117cf0a9eabeb4033319a15695975b7bbd5f8058b8439f8a060",
+      "entry": "Release/test-results/run-irinh2yg/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-long.bmp",
+      "platform": "intel",
+      "requires_open": true
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\arm\\project-tree-large-name.bmp",
+      "sha256": "7d45158ef064a90c80cd05794cdeb72bf2cb7cf43cb6915574b3268f8d3a93e9",
+      "entry": "Release/test-results/run-uk9wov4_/project_tree_workflow/files \u00e4/workflow \u00e4/project-tree-large-name.bmp",
+      "platform": "arm",
+      "canonical_opened_reference": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\project-tree-large-name.bmp"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\arm\\c-signature-detached-long.bmp",
+      "sha256": "99e0c1f42bf2949f31902a00fcbc4e8f793d41634462637cf5b4afd6e4c27d69",
+      "entry": "Release/test-results/run-uk9wov4_/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-long.bmp",
+      "platform": "arm",
+      "canonical_opened_reference": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\c-signature-detached-long.bmp"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\arm\\c-signature-detached-normal.bmp",
+      "sha256": "29e0bcde0de8e0833a86dc17dee33f690bbee922ad667e8fc5c2113d9c969bdd",
+      "entry": "Release/test-results/run-uk9wov4_/signature_detached_workflow/files \u00e4/workflow \u00e4/c/signature-detached-normal.bmp",
+      "platform": "arm",
+      "canonical_opened_reference": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\c-signature-detached-normal.bmp"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\arm\\phys-signature-detached-long.bmp",
+      "sha256": "79e02df38c51b42ed2679d4eb13297e1f9b609621ad2f1b1f49d2afd45133132",
+      "entry": "Release/test-results/run-uk9wov4_/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-long.bmp",
+      "platform": "arm",
+      "canonical_opened_reference": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\phys-signature-detached-long.bmp"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\arm\\phys-signature-detached-normal.bmp",
+      "sha256": "fe707e5f335b1dd950481a8ef3bb3b08c230871f2a11ea104cb4487672c4b145",
+      "entry": "Release/test-results/run-uk9wov4_/signature_detached_workflow/files \u00e4/workflow \u00e4/phys/signature-detached-normal.bmp",
+      "platform": "arm",
+      "canonical_opened_reference": "D:\\Physim\\build\\validation\\signature-detached-macos-2026-11-05\\intel\\phys-signature-detached-normal.bmp"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\arm\\c-signature-first.bmp",
+      "sha256": "f99d1a570e01b8f9b20a6a149947f20251ce72999312cbdb9b2b31cdfaa7a5fd",
+      "entry": "Release/test-results/run-uk9wov4_/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-first.bmp",
+      "platform": "arm",
+      "canonical_opened_reference": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\intel\\c-signature-first.bmp"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\arm\\c-signature-long.bmp",
+      "sha256": "facb10eb17c3e3b5b0cbc27aeb2d59873559d5080c0fd9a49566d781a18036c4",
+      "entry": "Release/test-results/run-uk9wov4_/signature_help_workflow/files \u00e4/workflow \u00e4/c/signature-long.bmp",
+      "platform": "arm",
+      "canonical_opened_reference": "D:\\Physim\\build\\validation\\signature-outside-macos-2026-11-05\\intel\\c-signature-long.bmp"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\arm\\phys-signature-first.bmp",
+      "sha256": "e6601de2391aef682ba2e3f23bb28b0fa440900bd151d14b4cd4681830f6ef94",
+      "entry": "Release/test-results/run-uk9wov4_/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-first.bmp",
+      "platform": "arm",
+      "canonical_opened_reference": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\phys-signature-first.bmp"
+    },
+    {
+      "path": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\arm\\phys-signature-long.bmp",
+      "sha256": "12e8f3336c089117cf0a9eabeb4033319a15695975b7bbd5f8058b8439f8a060",
+      "entry": "Release/test-results/run-uk9wov4_/signature_help_workflow/files \u00e4/workflow \u00e4/phys/signature-long.bmp",
+      "platform": "arm",
+      "canonical_opened_reference": "D:\\Physim\\build\\validation\\filename-wrap-macos-2026-11-05\\intel\\phys-signature-long.bmp"
+    }
+  ],
+  "new_unique_images_actually_opened": 4,
+  "byte_identical_images": 14,
+  "duplicate_extraction_cleanup": "docs/verification/filename-wrap-macos-cleanup-2026-11-05.json",
+  "private_user_mac": "OFF; no connection, probe or upload"
+}

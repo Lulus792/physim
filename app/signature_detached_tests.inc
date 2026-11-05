@@ -6,12 +6,41 @@ static struct {
     double deadline;
     char root[4096],source[4096],main_capture[4096];
     size_t bytes;
-    int cursor,select_start,select_end;
+    int cursor,select_start,select_end,resume_cursor;
     struct nk_vec2 scroll;
     struct nk_rect thumb,outside;
     ps_dock_layout layout;
+    SDL_Process *peer;
+    bool peer_ready;
+    char release[4096];
+    unsigned child_blurs;
 } signature_detached;
+/* A separate process is essential: another SDL window in this process would
+ * not exercise loss of application focus. The peer acknowledges real OS focus
+ * on its pipe and stays alive until the controller releases it. */
+static int signature_focus_peer(const char *release){
+    if(!SDL_Init(SDL_INIT_VIDEO))return 2;
+    SDL_Window *window=SDL_CreateWindow("Physim focus test peer",320,120,0);
+    if(!window){SDL_Quit();return 2;}
+    SDL_RaiseWindow(window);Uint64 deadline=SDL_GetTicks()+15000;bool ready=false;
+    int result=1;
+    while(SDL_GetTicks()<deadline){
+        SDL_Event event;while(SDL_PollEvent(&event)){}
+        if(!ready && SDL_GetKeyboardFocus()==window){putchar('R');fflush(stdout);ready=true;}
+        if(ready && exists(release)){result=0;break;}
+        SDL_Delay(10);
+    }
+    SDL_DestroyWindow(window);SDL_Quit();return result;
+}
+static void signature_detached_focus_event(app *a,const SDL_Event *event){
+    if(a->signature_detached_test_active && event->type==SDL_EVENT_WINDOW_FOCUS_LOST &&
+       a->panels[PS_DOCK_WORKSPACE].window && event->window.windowID==SDL_GetWindowID(a->panels[PS_DOCK_WORKSPACE].window))
+        signature_detached.child_blurs++;
+}
 static void signature_detached_draw(app *a){signature_test_draw(a);}
+static bool signature_detached_hidden(app *a){
+    return a->signature_hud_bounds.w==0 && !signature_painted_bytes && !signature_footer_bytes;
+}
 static struct nk_text_edit *signature_detached_edit(app *a){
     workspace_document *doc=active_document(a);
     return signature_detached.target==0?&a->experiment:signature_detached.target==1?&a->analysis:doc?&doc->edit:NULL;
@@ -97,7 +126,8 @@ static void signature_detached_inner(app *a,bool language,int *stage,int *code){
     case 6:
         SD_WAIT(a->completion_active && signature_test_full(a,0));
         {struct nk_rect h=a->signature_hud_bounds,l=a->completion_list_bounds;ok=l.y>=h.y+h.h+5 || l.y+l.h<=h.y-5;}
-        SD_KEY(SDLK_ESCAPE,0);SD_NEXT(7,5);break;
+        ok=ok && signature_detached_remember(edit);signature_detached.child_blurs=0;
+        ok=ok && SDL_RaiseWindow(a->primary_window);SD_NEXT(30,15);break;
     case 7:
         SD_WAIT(!a->completion_active && signature_test_full(a,0) && a->completion_focus_edit!=edit);
         completion_auto_text(a,"1");SD_NEXT(8,5);break;
@@ -149,6 +179,66 @@ static void signature_detached_inner(app *a,bool language,int *stage,int *code){
         printf("SIGNATURE DETACHED language=%s target=%u actual-child-context=1 auto-open=1 list-disjoint=1 child-typing=1 native-return=1 source-caret-layout-preserved=1 primary-typing=1\n",language?"phys":"c",signature_detached.target);
         if(signature_detached.target<2){signature_detached.target++;SD_NEXT(0,5);}else a->quitting=true;
         break;
+    case 30:
+        SD_WAIT(SDL_GetKeyboardFocus()==a->primary_window && signature_detached.child_blurs>0);
+        ok=signature_detached_preserved(edit,true) && !a->completion_active && signature_detached_hidden(a);
+        if(ok)ok=SDL_RaiseWindow(p->window);SD_NEXT(31,15);break;
+    case 31:
+        SD_WAIT(SDL_GetKeyboardFocus()==p->window && SDL_TextInputActive(p->window) && signature_test_full(a,0));
+        ok=signature_detached_preserved(edit,true);
+        {char executable[4096];join(signature_detached.release,sizeof signature_detached.release,signature_detached.root,"signature-focus-release");
+         if(exists(signature_detached.release))ok=ok && remove(signature_detached.release)==0;
+         ok=ok && ps_executable_path(executable,sizeof executable);
+         if(ok){const char *args[]={executable,"--signature-focus-peer",signature_detached.release,NULL};
+             signature_detached.child_blurs=0;signature_detached.peer_ready=false;
+             signature_detached.peer=SDL_CreateProcess(args,true);ok=signature_detached.peer!=NULL;}}
+        SD_NEXT(32,15);break;
+    case 32:
+        if(!signature_detached.peer_ready){char ready=0;size_t count=SDL_ReadIO(SDL_GetProcessOutput(signature_detached.peer),&ready,1);
+            signature_detached.peer_ready=count==1 && ready=='R';}
+        SD_WAIT(signature_detached.peer_ready);
+        SD_WAIT(!SDL_GetKeyboardFocus() && signature_detached.child_blurs>0);
+        /* The OS acknowledgement can arrive after the last child paint.
+         * Observe fresh child commands after the actual blur, not the old HUD
+         * geometry from just before SDL delivered that event. */
+        SD_NEXT(38,5);break;
+    case 38:
+        SD_WAIT(!SDL_GetKeyboardFocus() && signature_detached.child_blurs>0);
+        ok=signature_detached_preserved(edit,true) && !a->completion_active && signature_detached_hidden(a);
+        {FILE *release=fopen(signature_detached.release,"wb");if(!release)ok=false;else if(fclose(release))ok=false;}
+        SD_NEXT(33,5);break;
+    case 33:
+        {int exit_code=-1;SD_WAIT(SDL_WaitProcess(signature_detached.peer,false,&exit_code));ok=exit_code==0;
+         SDL_DestroyProcess(signature_detached.peer);signature_detached.peer=NULL;}
+        ok=ok && remove(signature_detached.release)==0 && SDL_RaiseWindow(p->window);SD_NEXT(34,15);break;
+    case 34:
+        SD_WAIT(SDL_GetKeyboardFocus()==p->window && SDL_TextInputActive(p->window) && signature_test_full(a,0));
+        ok=signature_detached_preserved(edit,true);completion_auto_text(a,"3");SD_NEXT(35,5);break;
+    case 35:
+        SD_WAIT(edit->cursor==signature_detached.cursor+1 && signature_current(a,edit));
+        SD_KEY(SDLK_BACKSPACE,0);SD_NEXT(36,5);break;
+    case 36:
+        SD_WAIT(signature_detached_preserved(edit,true) && signature_current(a,edit));
+        printf("SIGNATURE FOCUS language=%s target=%u main-child=1 separate-process=1 actual-blur=1 hud-hidden=1 source-caret-selection-scroll=1 resumed-typing=1\n",language?"phys":"c",signature_detached.target);
+        signature_detached.resume_cursor=edit->cursor;SD_KEY(SDLK_LEFT,SDL_KMOD_SHIFT);SD_NEXT(40,5);
+        break;
+    case 40:
+        SD_WAIT(edit->select_start!=edit->select_end && edit->cursor==signature_detached.resume_cursor-1);
+        ok=signature_detached_remember(edit);signature_detached.child_blurs=0;
+        ok=ok && SDL_RaiseWindow(a->primary_window);SD_NEXT(41,15);break;
+    case 41:
+        SD_WAIT(SDL_GetKeyboardFocus()==a->primary_window && signature_detached.child_blurs>0);
+        ok=signature_detached_preserved(edit,true);if(ok)ok=SDL_RaiseWindow(p->window);SD_NEXT(42,15);break;
+    case 42:
+        SD_WAIT(SDL_GetKeyboardFocus()==p->window && SDL_TextInputActive(p->window) && a->completion_focus_edit!=edit);
+        ok=signature_detached_preserved(edit,true) && signature_detached_hidden(a);
+        if(ok)printf("SIGNATURE FOCUS SELECTION language=%s target=%u nonempty-range=1 actual-return=1 source-caret-anchors-scroll=1\n",language?"phys":"c",signature_detached.target);
+        SD_KEY(SDLK_RIGHT,0);SD_NEXT(43,5);break;
+    case 43:
+        SD_WAIT(edit->cursor==signature_detached.resume_cursor && edit->select_start==edit->select_end && signature_test_full(a,0));
+        ok=(size_t)nk_str_len_char(&edit->string)==signature_detached.bytes &&
+            !memcmp(nk_str_get_const(&edit->string),signature_detached.source,signature_detached.bytes) && signature_detached_remember(edit);
+        SD_NEXT(7,5);break;
     }
 done:
     if(!ok){
@@ -158,7 +248,10 @@ done:
         fprintf(stderr,"Signature detached failure: language=%d target=%u stage=%d detached=%d child=%u paint=%u focus=%u current=%u active=%d cursor=%d expected=%d bytes=%d expected-bytes=%zu pending=%p visible=%d bounds=%.3f/%.3f/%.3f/%.3f scroll=%u max=%.3f footer=%zu text=[%s]\n",language,signature_detached.target,*stage,p->detached,p->window?SDL_GetWindowID(p->window):0,a->signature_test_paint_window,SDL_GetKeyboardFocus()?SDL_GetWindowID(SDL_GetKeyboardFocus()):0,SDL_GetWindowID(a->window),edit?edit->active:0,edit?edit->cursor:-1,signature_detached.cursor,edit?nk_str_len_char(&edit->string):-1,signature_detached.bytes,(void*)a->completion_focus_edit,a->signature_visible,a->signature_hud_bounds.x,a->signature_hud_bounds.y,a->signature_hud_bounds.w,a->signature_hud_bounds.h,a->signature_scroll_y,a->signature_scroll_max,signature_footer_bytes,signature_code_text);
         *code=1;a->quitting=true;
     }
-    if(a->quitting)printf("SIGNATURE DETACHED SELF-TEST: %s\n",*code?"FAILED":"PASSED");
+    if(a->quitting){
+        if(signature_detached.peer){SDL_KillProcess(signature_detached.peer,true);SDL_WaitProcess(signature_detached.peer,true,NULL);SDL_DestroyProcess(signature_detached.peer);signature_detached.peer=NULL;}
+        printf("SIGNATURE DETACHED SELF-TEST: %s\n",*code?"FAILED":"PASSED");
+    }
 #undef SD_NEXT
 #undef SD_WAIT
 #undef SD_KEY
