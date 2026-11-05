@@ -16,6 +16,7 @@ vorhandene Datei-/Projektbaumabläufe und vier gezielte Bilder geprüft.
 [Befehle, Programme und Grenzen](verification/workspace-no-checks-2026-11-05.json).
 Warmstand **`workspace-no-checks`**, 300 eigene Eingaben. Source-/Runtime-
 Archive eingefroren und gegen Git gelesen; lokale Jobs beendet.
+[Quelle0ddfe287, beide Remotes](verification/workspace-no-checks-commit-2026-11-05.json).
 
 [Scrollgriff und Editor-Eingabe](verification/signature-thumb-2026-11-05.md):
 vorherige zwei Produktkorrekturen, Windows **6/6 run-9euexj2y**, Linux **6/6 run-h3atr8no**.

@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "0ddfe2871e2e01629e11317a5eacd77ddd8e8055",
+  "branch": "codex/f1-design-h",
+  "both_remote_tracking_refs_match_at_source_push": true,
+  "remotes": [
+    "origin",
+    "upstream"
+  ],
+  "own_inputs": 300,
+  "compiler_and_test_inputs": 1237,
+  "unique_input_files": 1256,
+  "all_tested_input_bytes_read_against_git_index_and_actual_commit": true,
+  "normalization": "Only CRLF/LF normalization for nonvendor source; raw vendor bytes exact.",
+  "index_match": {
+    "path": "build/validation/workspace-no-checks-2026-11-05/index-match.json",
+    "sha256": "e681b1149018bc0a3d05887a662c44ea8c08c2518ab1df3f359a4f4e61f64a67"
+  },
+  "commit_match": {
+    "path": "build/validation/workspace-no-checks-2026-11-05/commit-match.json",
+    "sha256": "c3eee86922d175702a04666d6cf8058a8ce9b095fdfd2a44bc5876eab670d37c"
+  },
+  "proof": "docs/verification/workspace-no-checks-2026-11-05.json",
+  "prior_completion_source": "05e43dc076bc6f5578df8399056b8bc20b94a97c",
+  "prior_completion_proof": "docs/verification/signature-thumb-commit-2026-11-05.json",
+  "private_user_mac": "OFF; untouched",
+  "scope": "Workspace checkmark drawing and reserved column removed under explicit user override. Windows/Linux2/2 native tree workflows and4 images reviewed. No new macOS acceptance implied; existing hosted editor run42031236181 belongs to earlier input/grip source05e43dc0."
+}
