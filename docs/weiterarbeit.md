@@ -31,15 +31,19 @@ Phasen gleich. C/Physim, normaler/erzwungener Automatikablauf und Info-Gruppe;
 keine neuen Bilder. Register-/Harness-Selbstprüfung Exit 0; Mockfehler sind keine
 Produktfehler. [Phasen, Originalbefunde und Grenzen](verification/auto-info-deadline-2026-11-05.md).
 
-**Nächster konkreter Schritt:** gehosteten Editorlauf **`41935266700`** mit sieben
-Gruppen anhand der Originalartefakte bewerten: ARM **`126942020658`**, Intel
-**`126942021220`**, zuletzt beide queued. Keine aktuelle Mac-Abnahme behaupten,
-keinen Ersatzlauf starten. Nutzer-Mac bleibt
-unberührt. Danach native lokale Namen/Quellstellen-Karte/Einfügen/Undo/leere
+**Gehosteter Abschluss zu `0c525422`:** Editorlauf **`41935266700`** beendet,
+ARM **`126942020658`** und Intel **`126942021220`** tatsächlich je **7/7**.
+Beide ZIPs/Digests/alle Originaleinträge gelesen, einschließlich normalem und
+erzwungenem Automatikablauf. [Mac-Abschluss](verification/auto-info-deadline-macos-2026-11-05.json).
+Diese Matrix nicht wegen Kontextwechsel wiederholen. Kein Nachweis der gerade
+entstehenden lokalen Vorschläge oder voller D-/UI-/physischer Abnahme.
+**Nächster konkreter Schritt:** native lokale Namen/Quellstellen-Karte/Einfügen/Undo/leere
 Argumentauslöser, echte C-Scopes und separate Parameterhilfe fortsetzen.
 Keine volle D-/UI-Punktzahl oder neue manuelle/assistive/DPI-Abnahme. Keine
 geschlossenen F1-/Protokoll-/Settings-Matrizen wegen Kontextwechsel wiederholen.
 Notiz: `build/validation/auto-info-deadline-2026-11-05/STATE.md`.
+Aktuelle Anschlussarbeit mit noch uncommitteter Parser-Aufrufposition und eigener
+Scope-Kandidatenkopie: `build/validation/completion-locals-2026-11-05/STATE.md`.
 
 ## Abgeschlossen: Physim-Scopes als Parsergrundlage
 

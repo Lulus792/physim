@@ -80,8 +80,11 @@ Objekt-, Abhängigkeits- oder VM-Bereinigung. Nur D:, kein Zugriff auf F:.
 ## Weitere Abnahme
 
 Die gehostete Editorgruppe enthält nun zusätzlich die Fristvariante: sieben
-Gruppen je Mac-Runner. Aktuelle Mac-Ergebnisse erst nach tatsächlicher Ausführung
-und Lesen der Originalartefakte bewerten. Der Nutzer-Mac bleibt ausgeschaltet;
+Gruppen je Mac-Runner. Lauf **`41935266700`** auf `0c525422` inzwischen tatsächlich
+abgeschlossen: **ARM und Intel je 7/7**. Beide Archive/Digests und alle Original-
+einträge gelesen; [gesonderter Abschluss](auto-info-deadline-macos-2026-11-05.json).
+Keine Abnahme der nachfolgenden lokalen Kandidaten daraus ableiten.
+Der Nutzer-Mac bleibt ausgeschaltet;
 kein Zugriff oder Erreichbarkeitstest. Der historische ARM-Vorgang bleibt ohne
 zusätzliche damalige Telemetrie begrenzt erklärbar.
 

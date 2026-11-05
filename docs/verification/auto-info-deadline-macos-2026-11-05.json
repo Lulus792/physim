@@ -1,0 +1,126 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "0c5254225e19ebd82726437f5b4afbe4dd9d56cc",
+  "run_id": 41935266700,
+  "user_mac": "off; never contacted or probed",
+  "hosted_only": true,
+  "editor_jobs_terminal": true,
+  "reports": [
+    {
+      "architecture": "arm",
+      "job_id": 126942020658,
+      "artifact_id": 13374548030,
+      "zip_sha256": "e79a2c875b735248e3c054f008a03770c3da1ffabc5e180a7b21247c6dbff65f",
+      "digest_matches_github": true,
+      "original_zip": "build/validation/completion-locals-2026-11-05/deadline-arm.zip",
+      "all_entries_read": {
+        "Release/test-results/run-suin0zie/results.json": "b73c58c04741ab497935b884587275180004a87c2f552863120036ec78747abd"
+      },
+      "results": [
+        {
+          "path": "Release/test-results/run-suin0zie/results.json",
+          "cases": [
+            {
+              "name": "documents_small",
+              "status": "passed",
+              "seconds": 4.526
+            },
+            {
+              "name": "documents_large",
+              "status": "passed",
+              "seconds": 4.307
+            },
+            {
+              "name": "completion_workflow",
+              "status": "passed",
+              "seconds": 16.649
+            },
+            {
+              "name": "completion_automatic_workflow",
+              "status": "passed",
+              "seconds": 21.526
+            },
+            {
+              "name": "api_reference_workflow",
+              "status": "passed",
+              "seconds": 8.308
+            },
+            {
+              "name": "completion_info_workflow",
+              "status": "passed",
+              "seconds": 34.821
+            },
+            {
+              "name": "completion_automatic_deadline_workflow",
+              "status": "passed",
+              "seconds": 20.295
+            }
+          ]
+        }
+      ],
+      "passed": 7,
+      "count": 7
+    },
+    {
+      "architecture": "intel",
+      "job_id": 126942021220,
+      "artifact_id": 13373534565,
+      "zip_sha256": "35fd401be43a2b009e5ed12d3e5bf3ad6b2ff010f191af4e52d92d07222d52d2",
+      "digest_matches_github": true,
+      "original_zip": "build/validation/completion-locals-2026-11-05/deadline-intel.zip",
+      "all_entries_read": {
+        "Release/test-results/run-7b4jpm9f/results.json": "7e251f64161b3c0ad5a40e616b6e1cf4603a19127a763449fa9e6bc1175b5fb5"
+      },
+      "results": [
+        {
+          "path": "Release/test-results/run-7b4jpm9f/results.json",
+          "cases": [
+            {
+              "name": "documents_small",
+              "status": "passed",
+              "seconds": 12.258
+            },
+            {
+              "name": "documents_large",
+              "status": "passed",
+              "seconds": 10.717
+            },
+            {
+              "name": "completion_workflow",
+              "status": "passed",
+              "seconds": 24.503
+            },
+            {
+              "name": "completion_automatic_workflow",
+              "status": "passed",
+              "seconds": 29.668
+            },
+            {
+              "name": "api_reference_workflow",
+              "status": "passed",
+              "seconds": 18.234
+            },
+            {
+              "name": "completion_info_workflow",
+              "status": "passed",
+              "seconds": 53.575
+            },
+            {
+              "name": "completion_automatic_deadline_workflow",
+              "status": "passed",
+              "seconds": 29.481
+            }
+          ]
+        }
+      ],
+      "passed": 7,
+      "count": 7
+    }
+  ],
+  "includes_uncommitted_local_candidates": false,
+  "conclusion": "Both actual editor groups7/7 incl normal automatic and forced info deadline; earlier ARM5/6 exact event sequence not retrospectively observed",
+  "limitations": [
+    "No native local variable UI implementation or parameter help acceptance.",
+    "No physical input, VoiceOver, DPI/fullscreen or complete UI acceptance."
+  ]
+}
