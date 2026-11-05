@@ -22,6 +22,8 @@ Warmstand **glibc-endian**,303 Eingaben, eine geänderte Adapterdatei vor Build
 Root/Isolation/Manifest bytegleich, zwei Upstream-Header roh gegen Git geprüft.
 Source-/Runtimearchive vollständig gelesen. Detailstand:
 `build/validation/glibc-endian-2026-11-05/STATE.md`.
+[Quelledf9927c6 in beiden Remotes](verification/glibc-endian-commit-2026-11-05.json),
+alle1257Eingaben gegen Index und tatsächlichen Commit gelesen.
 
 Zuvor [Dateireiter-Auto-Completion](verification/file-tabs-auto-2026-11-05.md),
 [Quelle13cc4422 in beiden Remotes](verification/file-tabs-auto-commit-2026-11-05.json):
@@ -69,7 +71,13 @@ pollen oder neu starten. Diese alte Quelle belegt nicht die spätere Fokuskorrek
 
 ## Nächste konkrete Aufgaben
 
-1. Dateireiterquelle13cc4422: Mac-Workspace **42073119561** weiterverfolgen.
+1. glibc-Quelledf9927c6: **Linux-Paket42076708931**, Job127418724841 zuletzt im
+   Release-Build/Test; **Linux-UI42076708745**, GCC127418724267 bei Abhängigkeiten,
+   Clang127418724879 beim SDL-Build. **CI42076708718** pending, noch keine Jobs.
+   Dieselben Handles weiterverfolgen, nicht neu starten. Erst tatsächliche
+   Ubuntu-/Debian-Ergebnisse belegen die Korrektur unter glibc.
+   [Quell-/Run-Nachweis](verification/glibc-endian-commit-2026-11-05.json).
+   Dateireiterquelle13cc4422: Mac-Workspace **42073119561** weiterverfolgen.
    Intel127406074781 zuletzt in der68-Projekt-Matrix; erster3er-Schritt erfolgreich,
    ARM127406075215 inzwischen vor dem Teststart cancelled. Keine ARM-Abnahme;
    keine vollständige neue Mac-Abnahme behaupten. Intelhandle weiter beobachten.

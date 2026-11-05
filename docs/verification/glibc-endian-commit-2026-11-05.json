@@ -1,0 +1,285 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "df9927c68d2295ce0ad4f4ada689f774cfa281ac",
+  "branch": "codex/f1-design-h",
+  "both_remote_tracking_refs_match_at_source_push": true,
+  "remotes": [
+    "origin",
+    "upstream"
+  ],
+  "own_inputs": 303,
+  "compiler_and_test_inputs": 1238,
+  "unique_input_files": 1257,
+  "all_tested_input_bytes_read_against_index_and_actual_commit": true,
+  "matches": [
+    {
+      "path": "build/validation/glibc-endian-2026-11-05/index-match.json",
+      "sha256": "7d0a4af403ef5e7ba1b7f61650c90052ca1ce2e68559636d0c1a55f3bff8a281"
+    },
+    {
+      "path": "build/validation/glibc-endian-2026-11-05/commit-match.json",
+      "sha256": "02e145c077585d42bbd62dabeb478cbca1009fa185306104409649259e6a504d"
+    },
+    {
+      "path": "build/validation/glibc-endian-2026-11-05/prebuild-audit.json",
+      "sha256": "e809b969616b774db4eeb7786a34d94cf8d5af1631c5b82943cd4e57d2b6f49c"
+    }
+  ],
+  "proof": "docs/verification/glibc-endian-2026-11-05.json",
+  "local_results": {
+    "windows": {
+      "config": "Release",
+      "data": "8/8 run-ms_cod0i",
+      "gui": "2/2 run-fw347tfd",
+      "app_sha256": "a078257707bf0602da446c50881294fe2d7689d5e15c27f463107d628723affc"
+    },
+    "linux": {
+      "libc": "musl",
+      "config": "Debug ASan/UBSan; data detect_leaks=1",
+      "data": "8/8 run-07qrdp6f",
+      "gui": "2/2 run-syykpp1q",
+      "app_sha256": "ac29b27d61c4c777dfc63f0c61212293c2be625517ad43438187dc962c549b84"
+    }
+  },
+  "scope": "Linux-only feature test macro before all headers in project adapter; no vendor, build flags or UI changes.",
+  "new_runs": {
+    "source_commit": "df9927c68d2295ce0ad4f4ada689f774cfa281ac",
+    "runs": [
+      {
+        "id": 42076708931,
+        "status": "in_progress",
+        "conclusion": null,
+        "head_sha": "df9927c68d2295ce0ad4f4ada689f774cfa281ac",
+        "path": ".github/workflows/linux-package.yml",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/42076708931"
+      },
+      {
+        "id": 42076708745,
+        "status": "queued",
+        "conclusion": null,
+        "head_sha": "df9927c68d2295ce0ad4f4ada689f774cfa281ac",
+        "path": ".github/workflows/linux-ui-sanitizers.yml",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/42076708745"
+      },
+      {
+        "id": 42076708718,
+        "status": "pending",
+        "conclusion": null,
+        "head_sha": "df9927c68d2295ce0ad4f4ada689f774cfa281ac",
+        "path": ".github/workflows/ci.yml",
+        "html_url": "https://github.com/Lulus792/physim/actions/runs/42076708718"
+      }
+    ]
+  },
+  "new_job_snapshots": [
+    {
+      "run": 42076708931,
+      "jobs": [
+        {
+          "id": 127418724841,
+          "name": "package",
+          "status": "in_progress",
+          "conclusion": null,
+          "run_id": 42076708931,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Initialize containers",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Build dependencies",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 4
+            },
+            {
+              "name": "SDL3 pinned source",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 5
+            },
+            {
+              "name": "Build and test the Release package",
+              "status": "in_progress",
+              "conclusion": null,
+              "number": 6
+            },
+            {
+              "name": "Upload Release package",
+              "status": "pending",
+              "conclusion": null,
+              "number": 7
+            },
+            {
+              "name": "Upload independent verification kit",
+              "status": "pending",
+              "conclusion": null,
+              "number": 8
+            },
+            {
+              "name": "Archive package build evidence",
+              "status": "pending",
+              "conclusion": null,
+              "number": 9
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "pending",
+              "conclusion": null,
+              "number": 17
+            },
+            {
+              "name": "Stop containers",
+              "status": "pending",
+              "conclusion": null,
+              "number": 18
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "run": 42076708745,
+      "jobs": [
+        {
+          "id": 127418724267,
+          "name": "linux-ui (gcc)",
+          "status": "in_progress",
+          "conclusion": null,
+          "run_id": 42076708745,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Platform dependencies",
+              "status": "in_progress",
+              "conclusion": null,
+              "number": 3
+            },
+            {
+              "name": "SDL3 pinned source",
+              "status": "pending",
+              "conclusion": null,
+              "number": 4
+            },
+            {
+              "name": "Sanitized UTF-8 and editor primitives",
+              "status": "pending",
+              "conclusion": null,
+              "number": 5
+            },
+            {
+              "name": "Sanitized project-tree, reference and pendulum-analysis workflows",
+              "status": "pending",
+              "conclusion": null,
+              "number": 6
+            },
+            {
+              "name": "Archive focused evidence",
+              "status": "pending",
+              "conclusion": null,
+              "number": 7
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "pending",
+              "conclusion": null,
+              "number": 14
+            }
+          ]
+        },
+        {
+          "id": 127418724879,
+          "name": "linux-ui (clang)",
+          "status": "in_progress",
+          "conclusion": null,
+          "run_id": 42076708745,
+          "logs_url": null,
+          "steps": [
+            {
+              "name": "Set up job",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 1
+            },
+            {
+              "name": "Run actions/checkout@v4",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 2
+            },
+            {
+              "name": "Platform dependencies",
+              "status": "completed",
+              "conclusion": "success",
+              "number": 3
+            },
+            {
+              "name": "SDL3 pinned source",
+              "status": "in_progress",
+              "conclusion": null,
+              "number": 4
+            },
+            {
+              "name": "Sanitized UTF-8 and editor primitives",
+              "status": "pending",
+              "conclusion": null,
+              "number": 5
+            },
+            {
+              "name": "Sanitized project-tree, reference and pendulum-analysis workflows",
+              "status": "pending",
+              "conclusion": null,
+              "number": 6
+            },
+            {
+              "name": "Archive focused evidence",
+              "status": "pending",
+              "conclusion": null,
+              "number": 7
+            },
+            {
+              "name": "Post Run actions/checkout@v4",
+              "status": "pending",
+              "conclusion": null,
+              "number": 14
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "run": 42076708718,
+      "jobs": []
+    }
+  ],
+  "glibc_positive_acceptance": "pending actual new-source Ubuntu/Debian compile/link/runtime results; musl is not a substitute",
+  "private_user_mac": "OFF; no connection/probe/upload",
+  "limits": "No full UI, physical keyboard or screenreader acceptance. Source13cc Mac workspace Intel matrix still open and ARM cancelled before tests at last observation."
+}
