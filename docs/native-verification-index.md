@@ -17,6 +17,7 @@ spätere Nachläufe ändern die ursprünglichen Originalberichte nicht.
   tatsächliche800×540/22px,16Parameter, fester Hinweis, Mausrad/Alt-Navigation,
   unveränderter Editor, Nullparameter und Fehlerfarbe. Acht gezielte Bilder geöffnet.
   [Quellen, Phasen und Grenzen](verification/signature-wrap-2026-11-05.json).
+  [Quellcommit ba95641f und neuer gehosteter Mac-Lauf42026549588](verification/signature-wrap-commit-2026-11-05.json).
   [Älterer erster HUD-Mac-Lauf](verification/signature-hud-macos-first-2026-11-05.json)
   beendet: ARM/Intel10/10 Daten,8/9 GUI; Fokus-/Darstellungskontrolle offen,
   Original-ZIPs gelesen. Kein Beweis für den neuen Umbruchstand.

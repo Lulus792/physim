@@ -17,14 +17,17 @@ HUD-Ablauf gesondert je1/1. Acht gezielte Bilder geöffnet; keine volle UI-Abnah
 Testannahmen zu fraktionalem Y, SDL-Mindestgröße und Rückgabetyp in eigener
 Zeile korrigiert; Alt+Pos1 war bereits korrekt. [Phasen/Hashes/Grenzen](verification/signature-wrap-2026-11-05.json).
 
-Warmstand **`signature-wrap-final`**,300 eigene Eingaben; Source-/Runtime-Deltas
-eingefroren und gegen Git abgeglichen. Lokale Tests beendet. Frühere
+Warmstand **`signature-wrap-final`**,300 eigene/1.237 Compiler-Testeingaben;
+alle1.256 gegen Git gelesen, Source-/Runtime-Deltas eingefroren.
+[Quelle ba95641f, beide Remotes](verification/signature-wrap-commit-2026-11-05.json).
+Lokale Tests beendet. Frühere
 [HUD-Integration](verification/signature-hud-2026-11-05.md) und
 [Modellkern](verification/signature-model-2026-11-05.md) bleiben eigene Belegstände.
 [Erster HUD-Mac-Lauf42015203815](verification/signature-hud-macos-first-2026-11-05.json)
 zu `caa1faf8` beendet: ARM/Intel10/10 Daten,8/9 GUI; Original-ZIPs gelesen.
 Intel-Fokus und ARM-Darstellungskontrolle fehlgeschlagen; nicht erneut pollen.
-Der neue Quellstand benötigt einen eigenen gehosteten Mac-Nachlauf.
+Neuer gehosteter Mac-Nachlauf **42026549588** zu `ba95641f` läuft:
+Intel127242076163/ARM127242076701, jeweils Datenstep tatsächlich aktiv geprüft.
 
 ## Nächste konkrete Schritte
 

@@ -1,0 +1,51 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "ba95641f29eb8c18de9b2e3d4d5c3585daedf1a8",
+  "branch": "codex/f1-design-h",
+  "both_remote_tracking_refs_match": true,
+  "remotes": [
+    "origin",
+    "upstream"
+  ],
+  "own_inputs": 300,
+  "compiler_and_test_inputs": 1237,
+  "unique_input_files": 1256,
+  "all_tested_input_bytes_read_against_git_index_and_actual_commit": true,
+  "normalization": "Only CRLF/LF normalization for nonvendor source; raw vendor bytes exact.",
+  "index_match": {
+    "path": "build/validation/signature-wrap-2026-11-05/index-match.json",
+    "sha256": "ed74ccfe9967d35b51227896c3cda9ef61f2131e50e359c5fa2d38e1379483f3"
+  },
+  "commit_match": {
+    "path": "build/validation/signature-wrap-2026-11-05/commit-match.json",
+    "sha256": "2202a1f408d01714935e66037b6af6996a5188b9cef48947fe8bed6e92b35cc9"
+  },
+  "proof": "docs/verification/signature-wrap-2026-11-05.json",
+  "first_hud_mac": "docs/verification/signature-hud-macos-first-2026-11-05.json",
+  "hosted_mac": {
+    "run": 42026549588,
+    "name": "Native macOS editor menu workflows",
+    "path": ".github/workflows/macos-editor-menu.yml",
+    "source_commit": "ba95641f29eb8c18de9b2e3d4d5c3585daedf1a8",
+    "status": "in_progress",
+    "conclusion": null,
+    "url": "https://github.com/Lulus792/physim/actions/runs/42026549588",
+    "jobs": [
+      {
+        "id": 127242076163,
+        "name": "editor (macos-15-intel)",
+        "status": "in_progress",
+        "conclusion": null
+      },
+      {
+        "id": 127242076701,
+        "name": "editor (macos-15)",
+        "status": "in_progress",
+        "conclusion": null
+      }
+    ],
+    "expected": "11 data +9GUI and4 targeted native BMPs per architecture; pending, no result inferred"
+  },
+  "private_user_mac": "OFF; untouched",
+  "all_local_test_handles_terminal": true
+}
