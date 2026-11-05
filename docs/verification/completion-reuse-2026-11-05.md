@@ -4,6 +4,8 @@ Stand: 5. November 2026. **Cursorwechsel und erneutes Öffnen der Liste verwende
 die unveränderte Syntax wieder. Große Textänderungen bleiben langsam.**
 [Nachweis mit Originalberichten, Quellhashes und Grenzen](completion-reuse-2026-11-05.json).
 Die [vorherige Baseline](completion-perf-2026-11-05.md) bleibt unverändert.
+Quellcommit **`9292b67e`** in beiden Repositories;
+[Commitabgleich und gehosteter Mac-Anschluss](completion-reuse-commit-2026-11-05.json).
 
 ## Änderung und Besitz
 

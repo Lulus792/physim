@@ -23,6 +23,10 @@ Cursor-Messung nur 7 Allokationen; größter p95 je Lauf 10,20 bzw.22,95 ms, Tex
 weiter langsam; 16,7-ms-Ziel **nicht zuverlässig erfüllt**. Ein Cache kostet im
 größten Beispiel 6.166.734 gehaltene Bytes. Kein neuer Worker oder Designwechsel.
 Neue gehostete Mac-Abnahme nach Quellpush noch offen; privater Mac aus/unberührt.
+Quellcommit **`9292b67e`**, beide Repositories; [Commitabschluss](verification/completion-reuse-commit-2026-11-05.json).
+Neuer gehosteter Lauf **`41968549203`** zu genau diesem Quellstand:
+Intel `127051147984` läuft, ARM `127051148217` wartet auf Runner. Beim Anschluss
+diese Jobs prüfen; keine alten geschlossenen Läufe neu starten/pollen.
 
 [C-Performance-Baseline](verification/completion-perf-2026-11-05.md) abgeschlossen:
 Anwendungscode unverändert `694bb586`, neue CLI-Werkzeuge und kompakter JSON-Beleg.

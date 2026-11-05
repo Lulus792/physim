@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-05",
+  "source_commit": "9292b67e9981521524434eb83d6c9723f09c6c3b",
+  "remotes": {
+    "origin": "9292b67e9981521524434eb83d6c9723f09c6c3b",
+    "upstream": "9292b67e9981521524434eb83d6c9723f09c6c3b"
+  },
+  "all1239compiler_test_owned_git_blobs_read": true,
+  "all_raw_report_bytes_reread": true,
+  "profile_tool_git_blobs_match": true,
+  "match_report_sha256": "9edc69c586125d636d6f8d361a91b073414a3eb5d9d05ffb9b0f5c55d18849e9",
+  "hosted_mac": {
+    "repo": "Lulus792/physim",
+    "run": 41968549203,
+    "head_sha": "9292b67e9981521524434eb83d6c9723f09c6c3b",
+    "intel_job": 127051147984,
+    "intel_status": "in_progress",
+    "arm_job": 127051148217,
+    "arm_status": "queued",
+    "acceptance": "pending; do not infer success from job state or old closed runs"
+  },
+  "private_mac": "OFF; no access, probes or uploads",
+  "goal": "active; large typing/edit performance, full UI and physical/platform acceptance remain open"
+}
