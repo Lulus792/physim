@@ -65,3 +65,39 @@ aktive Buildstände und die früher automatisch abgelehnten Löschziele blieben
 erhalten. Die Inventur und dieser gezielte Schritt ersetzen keine vollständige
 inhaltliche Prüfung sämtlicher 542.908 Dateien. Es wurden keine neuen Produkt-
 oder Plattformtests ausgeführt; die Löschung ändert keine Quellen.
+
+## Nachlauf: alte MSBuild-Nachverfolgung
+
+Anschließend wurden im Physim-Bestand
+`build-clang-ninja/language-ui/<Testprojekt>/build` **50.048 Dateien mit
+193.157.127 logischen Bytes** aus 1.088 alten Testprojekten entfernt. Die Auswahl
+war auf reguläre `*.tlog`-Dateien in MSBuild-`*.tlog`-Verzeichnissen beschränkt:
+erzeugte Compiler-, Linker- und CustomBuild-Abhängigkeits-/Befehlsnachverfolgung
+für inkrementelle Builds. Erzeugte Projekte, Simulationsergebnisse, Testlogs,
+Programme, Bibliotheken und PDB-Dateien waren nicht Teil des Löschplans. Ein
+erneuter MSBuild-Lauf muss die entfernte Nachverfolgung neu aufbauen.
+
+Vorher wurden Pfade, Dateityp, Linkzahl und SHA-256 einzeln erfasst und vor jedem
+Löschen überprüft; Verknüpfungen wurden nicht verfolgt. Der Abschlussvergleich
+bestätigt 50.048 geplante und 50.048 quittierte Einträge mit identischen Inhalten
+und 193.157.127 logischen Bytes; jeder entfernte Pfad wurde unmittelbar nach dem
+Entfernen auf Abwesenheit geprüft. Windows-Prozessliste und Alpine-Prozessliste
+zeigten vorab keinen Physim-Buildprozess. Es wurden keine Verzeichnisse gelöscht.
+
+D: meldete vor diesem Nachlauf 6.815.805.440 und nachher 7.066.652.672 freie
+Bytes, eine beobachtete Zunahme von 250.847.232 Bytes. Dieser Unterschied ist
+wegen paralleler Laufwerksaktivität kein isolierter Löschmesswert. Die plan- und
+quittungsidentischen lokalen JSONL-Dateien liegen unter `build/maintenance` und
+heißen `language-tlogs-2026-11-18-plan.jsonl` und
+`language-tlogs-2026-11-18-removed.jsonl`; beide haben
+SHA-256 `dd06ecb572fbd2f6721d7bfd73ac419ec220cd13ca0d0ed4240018ecb86cb46`.
+Die lokalen Werkzeuge `plan-language-tlogs-2026-11-18.py` und
+`remove-language-tlogs-2026-11-18.py` haben die SHA-256-Werte
+`6ca2678a3664fbe08c097f565254fd47e29ada04ec115d487449d2ab031f1c15` und
+`e010c2ccdb50b9a4fa79ffb12b95a7bbecf5476fb56690b8fab5c9b0ba64e9cc`.
+
+Eine zwischenzeitlich begonnene Prüfsummenaufnahme zur möglichen Kompression
+wurde auf Nutzerhinweis vor jeder Kompression beendet; eigene unvollständige
+Hilfsdateien wurden entfernt. Weitere Physim-Buildbäume, insbesondere ihre
+Ergebnis- und Symbolbestände, bleiben einzeln auf Zweck und Entbehrlichkeit zu
+prüfen. Der Nachlauf behauptet keine vollständige inhaltliche Abnahme.
