@@ -98,6 +98,29 @@ Die lokalen Werkzeuge `plan-language-tlogs-2026-11-18.py` und
 
 Eine zwischenzeitlich begonnene Prüfsummenaufnahme zur möglichen Kompression
 wurde auf Nutzerhinweis vor jeder Kompression beendet; eigene unvollständige
-Hilfsdateien wurden entfernt. Weitere Physim-Buildbäume, insbesondere ihre
-Ergebnis- und Symbolbestände, bleiben einzeln auf Zweck und Entbehrlichkeit zu
-prüfen. Der Nachlauf behauptet keine vollständige inhaltliche Abnahme.
+Hilfsdateien wurden entfernt. Nach Nutzerpräzisierung, dass Kompression zusätzlich
+zum Aussortieren erwünscht ist, folgte die unten beschriebene begrenzte Maßnahme.
+Weitere Physim-Buildbäume, insbesondere ihre Ergebnis- und Symbolbestände,
+bleiben einzeln auf Zweck und Entbehrlichkeit zu prüfen. Der Nachlauf behauptet
+keine vollständige inhaltliche Abnahme.
+
+## Zusätzlich: Debugsymbole platzsparend aufbewahrt
+
+Im alten Physim-Testbaum `build-clang-ninja/language-ui` wurden ausschließlich
+5.440 vorhandene `.pdb`-Dateien transparent mit NTFS komprimiert. Der Aufruf
+`compact.exe /C /A /S /Q '*.pdb'` lief im genannten Verzeichnis und endete mit
+Exitcode 0. Vorher wurden alle Dateien und Verzeichnisse dort auf Reparse-Punkte
+geprüft, die Symboldateien zusätzlich auf regulären Dateityp und einfache
+Linkzahl. Jedes Symbol wurde vor und nach dem Lauf vollständig mit SHA-256
+gelesen: 5.440 Dateien, 3.005.054.976 logische Bytes, alle Pfade und Inhalte
+identisch. Keine Symboldatei wurde entfernt.
+
+`compact` meldete 1.409.998.848 gespeicherte Bytes für diese Symbole. D: meldete
+vorher 7.064.854.528 und nachher 8.579.051.520 freie Bytes, eine beobachtete
+Zunahme von 1.514.196.992 Bytes; parallele Nutzung beeinflusst diese Differenz.
+Das lokale Hashmanifest `build/maintenance/compress-symbols-2026-11-18.jsonl`
+hat SHA-256 `fc4e590d31f37a952ca94b0b0013c5a718f3a5677865bdafefcfb2504881ed22`,
+das Prüfprogramm `compress-symbols-check-2026-11-18.py` hat SHA-256
+`c70d880df638966c861325b7467ffce6e65b376e52279ec69c97fa21416582b3`.
+Die Kompression ist eine zusätzliche Speichermaßnahme und kein Ersatz für die
+noch offene Prüfung der übrigen Bestände.
